@@ -86,7 +86,7 @@ myApp.service('UserData',['UserAuthorizationInfo', function(UserAuthorizationInf
 		var Email;
 		var TelNum;
 		this.userAuthorized=UserAuthorizationInfo.authorization;
-		var firebaseLink=new Firebase('https://blazing-inferno-1723.firebaseio.com/users/'+UserAuthorizationInfo.UserName+'/fields');
+		var firebaseLink=new Firebase('https://luminous-heat-8715.firebaseio.com/users/'+UserAuthorizationInfo.UserName+'/fields');
 			firebaseLink.on('value',function(snapshot){
   				var newPost=snapshot.val();
   								/*snapshot.forEach(function(data){

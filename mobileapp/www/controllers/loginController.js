@@ -5,7 +5,7 @@ angular.module('app')
 		$scope.userId="asdas";
 		
 		//Creating reference to firebase link
-		var myDataRef = new Firebase('https://blazing-inferno-1723.firebaseio.com/users');
+		var myDataRef = new Firebase('https://luminous-heat-8715.firebaseio.com/users');
 		$scope.submit=function(){
     		var username=$scope.signup.email;
     		var password=$scope.signup.password;	
