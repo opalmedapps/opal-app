@@ -3,7 +3,7 @@
 //  Copyright (c) 2015 David Herrera. All rights reserved.
 //
 
-angular.module('app').controller('loadingController',['Auth','UserData', '$state','$scope', function(UserData, Auth, $state,$scope){
+angular.module('app').controller('loadingController',['UserData', '$state','$scope', function(UserData, $state,$scope){
 	//console.log(this.FirstName);
 	var count=0;
 	var Waiting=function(){
