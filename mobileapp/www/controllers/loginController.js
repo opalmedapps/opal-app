@@ -1,3 +1,8 @@
+//
+//  Created by David Herrera on 2015-05-04.
+//  Copyright (c) 2015 David Herrera. All rights reserved.
+//
+
 angular.module('app')
 	.controller('loginController',['$scope','$state','UserAuthorizationInfo',function($scope,$state,UserAuthorizationInfo){
 		$scope.name="David";
@@ -21,13 +26,13 @@ angular.module('app')
   						var data=userId+"/fields";
   						var userRef=myDataRef.child(data);
   						userRef.update({logged: 'true'});
-  						UserAuthorizationInfo.setUserAuthData(authData.uid,authData.token,true);
+  					UserAuthorizationInfo.setUserAuthData(authData.uid,authData.token,true);
 						userRef.onDisconnect().set({logged: 'false'});
 						console.log(UserAuthorizationInfo.UserName);
 						console.log(UserAuthorizationInfo.UserToken);
 						
   						//quickWriteUp(data);
-  						$state.go('Home');
+  						$state.go('loading');
   						console.log("Authenticated successfully with payload:", authData);
  						}
 					}
