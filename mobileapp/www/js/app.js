@@ -113,10 +113,7 @@ myApp.service('UserData',['UserAuthorizationInfo', function(UserAuthorizationInf
 		var TelNum;
 		this.userAuthorized=UserAuthorizationInfo.authorization;
 		var firebaseLink=new Firebase('https://luminous-heat-8715.firebaseio.com/users/'+UserAuthorizationInfo.UserName+'/fields');
-<<<<<<< HEAD:Guillaume&David/js/app.js
 			
-=======
->>>>>>> origin/master:mobileapp/www/js/app.js
 			firebaseLink.on('value',function(snapshot){
   				var newPost=snapshot.val();
   								/*snapshot.forEach(function(data){

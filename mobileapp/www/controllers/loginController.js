@@ -10,7 +10,7 @@ angular.module('app')
 		$scope.userId="asdas";
 		
 		//Creating reference to firebase link
-		var myDataRef = new Firebase('https://luminous-heat-8715.firebaseio.com/users');
+		var myDataRef = new Firebase('https://luminous-heat-8715.firebaseio.com');
 		$scope.submit=function(){
     		var username=$scope.signup.email;
     		var password=$scope.signup.password;	
@@ -24,7 +24,7 @@ angular.module('app')
   						setTimeout(function () {$scope.$apply(function () {$scope.userId=authData.uid;});}, 500);
   						userId=authData.uid;
   						var data=userId+"/fields";
-  						var userRef=myDataRef.child(data);
+  						var userRef=myDataRef.child('users').child(data);
   						userRef.update({logged: 'true'});
   					UserAuthorizationInfo.setUserAuthData(authData.uid,authData.token,true);
 						userRef.onDisconnect().set({logged: 'false'});
