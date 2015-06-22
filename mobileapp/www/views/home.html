@@ -1,6 +1,6 @@
-<ons-page>
+<ons-page ng-controller="homeController">
   <ons-toolbar>
-    <div class="left">
+   <div class="left">
       <ons-toolbar-button ng-click="menu.toggle()">
         <ons-icon icon="ion-navicon" size="28px" fixed-width="false"></ons-icon>
       </ons-toolbar-button>
@@ -8,7 +8,15 @@
     <div class="center">Home</div>
   </ons-toolbar>
 
-  <ons-row style="margin-top: 100px; text-align: center;">
+          <ons-pull-hook ng-action="load($done)" var="loader">
+        <span ng-switch="loader.getCurrentState()">
+          <span ng-switch-when="initial"><ons-icon size="35px" icon="ion-arrow-down-a"></ons-icon> Pull down to refresh</span>
+          <span ng-switch-when="preaction"><ons-icon size="35px" icon="ion-arrow-up-a"></ons-icon> Release to refresh</span>
+          <span ng-switch-when="action"><ons-icon size="35px" spin="true" icon="ion-load-d"></ons-icon> Loading data...</span>
+        </span>
+      </ons-pull-hook>
+
+  <ons-row align="center" style="margin-left:30px; text-align: center;">
     <ons-col>
 <div class="jumbotron">
   <div >
@@ -17,7 +25,6 @@
     <h4>My Telephone number is: {{TelNum}}</h4>
    <img ng-src="{{picture}}" alt="Description" />
   </div>
-</div>
-    </ons-col>
+      </ons-col>
   </ons-row>
 </ons-page>

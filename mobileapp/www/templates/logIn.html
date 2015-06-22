@@ -1,35 +1,5 @@
-		<div class="jumbotron"  align="center" style="margin-top:170px">
-			
-			<!--Logos for app-->
-			<img src="img/muhc-logo-text.png">
-			<h5 style="color:#2E8AE6">Medical Physics and Radiation Oncology</h5>
-			<!--<p ng-if="2+2===4">{{name}}</p>-->
-			
-			
-			<!--Creates form with pertinent fields, submits via submit-->
-			<form name="form" ng-submit="submit()" novalidate>
-				
-				<label name="text">Enter your username and password:</label><br>
-				<div class="input-group" align="center"  >
-                  <!--  <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>-->
-               
-				<input id="emailField" type="email" name="email" ng-model="signup.email" placeholder="Email Address" /><br>
-				</div>
-				<div class="input-group" >
-                           <!-- <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i> </span>-->
-				<input 
-						id="passwordField"
-						type="password"
-						placeholder="Password" 
-						name="password"
-						ng-model="signup.password" 
-						ng-minlength=3 
-						ng-maxlength=20 
-						required /><br>
-					</div>
-				<br><input class="btn btn-primary" type="submit" id="submit" value="Login" />
-			</form>
-			<!--<p>{{userId}}</p>-->
-			<div id="addMe"></div>
-			
+		<div style="position:relative;margin-top:170px">
+		<div class="jumbotron"  align="center" >
+			<div ui-view></div>		
 		</div>
+		<div>

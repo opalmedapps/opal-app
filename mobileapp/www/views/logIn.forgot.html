@@ -1,0 +1,20 @@
+		
+			<!--Logos for app-->
+			<img src="./img/muhc-logo-text.png">
+			<h5 style="color:#2E8AE6">Medical Physics and Radiation Oncology</h5>
+			<form name="form" ng-submit="submitPasswordReset()" novalidate>
+				
+				
+				<div class="input-group" align="center"  >
+                  <!--  <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>-->
+               <label name="text">Enter your Email Address:</label><br>
+				<input class="text-input" type="email" name="email" ng-model="forgotPassword.email" placeholder="Email Address" />
+				&nbsp;&nbsp;<input class="btn btn-primary" type="submit" id="submitForgot" value="Reset Password" />
+				</div>
+					
+			</form>
+			<br>
+			<div > <ons-icon  icon="fa fa-arrow-circle-left" fixed-width="true"></ons-icon>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="forgotPassword" href style="position:relative;text-align:left;font-size:10px;margin-left:-25px;color:#0066FF" ng-click="$state.go('logIn.enter')">Return to Login Page</a><br></div>
+			<div class="addMe"></div>
+			<!--<p ng-if="2+2===4">{{name}}</p>-->
+	
