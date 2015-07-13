@@ -1,0 +1,86 @@
+
+<!--*******************************************************************************-->
+
+
+
+
+
+	<!-- C O L U M N 2  LIST VIEW -->
+	<div class="col-sm-6" id="listTop" >
+		<div style="margin-top:23%;padding:5px;position:fixed;">
+			<button  class="btn btn-sm btn-info" style='width:50%;box-shadow: 0 0 10px black'>Refresh</button>
+			<button class="btn btn-sm btn-info" style='width:50%;box-shadow: 0 0 10px black' ng-click="gotoTop()"><span class="glyphicon glyphicon-arrow-up"></span></button>
+		</div>
+
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h4 class="text-info"><strong>Pending Requests Inbox</strong></h4>
+				<br>
+				<label class="text-info">Sort by : </label>
+				<select ng-model="sortBy" >
+						<option value="date">Date Submitted</option>
+						<option value="new">New First</option>
+						<option value="old">Old First</option>
+				</select>
+				<label>Search by Name: <input ng-model="searchText"></label>
+
+
+			</div>
+			<div class="panel-body">
+
+
+			</div>
+
+			<!-- Table -->
+			<table class="table" style='text-align:left'>
+				<th>#</th>
+				<th>Name</th>
+				<th>Type</th>
+				<th>Date Submitted</th>
+				<tr ng-repeat="(key,value) in Requests" ng-click="setCurrentReq(key)">
+					<td>{{$index+1}}</td>
+					<td>{{value.patientName}}</td>
+					<td>{{value.reqType}}</td>
+					<td>{{value.dateSubmitted }}</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+
+
+<!-- C O L U M N 1  HALF OF THE TICKETS-->
+		<div class="container-fluid">
+				<div class="col-sm-6">
+						<div  class="jumbotron"  style="box-shadow: 0 0 30px black;text-align:center;margin-top:0px;" >
+					 	<h2><span ng-show="Requests[key].reqType==='Question'" class="label label-info">#{{$index+1}} {{ Requests[key].reqType }} </span></h2>
+					 	<h2><span ng-show="Requests[key].reqType==='ChangeAppointment'" class="label label-warning">#{{$index+1}} {{ Requests[key].reqType }} </span></h2>
+						<h3 ng-show="Requests[key].reqType==='ChangeAppointment'" ><small>{{Requests[key].patientName}} Wants to change an appointment:</small></h3><br>
+						<h3 ng-show="Requests[key].reqType==='Question'" ><small>{{Requests[key].patientName}} Asked a Question:</small></h3><br>
+						<!--in Case of a question -->
+						<code><p class="text-warning well well-sm" style="text-align:left"> {{ Requests[key].reqContent}}</p></code><br>
+						<textarea placeholder="Enter your message to be delivered here "ng-model="response" rows="4" cols="30">
+						</textarea><br>
+						<element nv-file-drop uploader="{uploader}"></element>
+						<button ng-show="value.reqType!=='ChangeAppointment'" class="btn btn-sm btn-success">Send</button>
+
+						<br>
+
+						<!--in Case of a appointment change request-->
+						<select ng-show="Requests[key].reqType==='ChangeAppointment'" ng-model="changeAppointment">
+						<option value="Yes">Yes</option>
+						<option value="No">No</option>
+						</select>
+									<div ng-show="changeAppointment==='Yes'">
+									<p class="text-info">Please enter the new appointments Date and Time : </p><br>
+									Date :<input type="date"  ng-model="newDate"><br><br>
+									Time : <input type="time" ng-model="newTime">
+									</div>
+						<button ng-show="Requests[key].reqType==='ChangeAppointment'" class="btn btn-sm btn-success">Apply</button>
+						</div>
+				</div>
+
+
+
+				</div>
+<!--*******************************************************************************-->
+<!--*******************************************************************************-->
