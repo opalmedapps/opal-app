@@ -1,0 +1,19 @@
+<div style="margin-top:10%;text-align:center;" >
+<form novalidate>
+  <label>Username : <input type="text" ng-model="user.username"></label>
+  <br>
+  {{user.username}}
+  <br>
+  <label>Password : <input type="password" ng-model="user.password"></label>
+  <br>
+  {{user.password}}
+  <br>
+  <button ng-click="login(user.username,user.password)" class="btn btn-danger">Sign in</button>
+  <br>
+  <br>
+  <!--<button type="button" class="btn btn-danger" ng-click="cancel()">Cancel</button>-->
+  <br>
+  {{message}}
+</form>
+
+</div>
