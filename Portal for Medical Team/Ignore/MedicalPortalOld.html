@@ -1,0 +1,161 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>Qplus Medical Team Portal</title>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+	<script src= "http://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular.min.js"></script>
+	<script src="http://cdnjs.cloudflare.com/ajax/libs/angular-poller/0.3.2/angular-poller.js"></script>
+	<!--CSS-->
+	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+	<style media="screen">
+		body {
+			background-color:#CBCCDA;
+		}
+	</style>
+  <script>
+    var app = angular.module('myApp', []);
+    app.controller('myCtrl', function($scope,$location,$anchorScroll) {
+	        $scope.Requests={
+          req1:{patientName:"Clarc rookie", reqType:"Question",reqContent:"What is the answer to this awful condition?",dateSubmitted:"20141404"},
+          req2:{patientName:"Marc Antony", reqType:"Question",reqContent:"What is the answer to this real condition?",dateSubmitted:"20141404"},
+          req3:{patientName:"John Bloomington", reqType:"Question",reqContent:"What is the answer to this good condition?",dateSubmitted:"20151404"},
+          req4:{patientName:"Fred Flinstone", reqType:"Question",reqContent:"What is the answer to this bad condition?",dateSubmitted:"20141204"},
+          req5:{patientName:"Rodrigo Mendez", reqType:"ChangeAppointment",reqContent:"Can I change my appointment please please please please please PLEASE PLEASE PLEASEEEEEEEEEEE?",dateSubmitted:"20141404"},
+					req6:{patientName:"Albus Dumbledore", reqType:"Question",reqContent:"What is the answer to this good condition?",dateSubmitted:"20141004"},
+          req7:{patientName:"Ian Summerhandler", reqType:"Question",reqContent:"What is the answer to this bad condition?",dateSubmitted:"20141204"},
+					req8:{patientName:"Fred Flinstone", reqType:"Question",reqContent:"What is the answer to this bad condition?",dateSubmitted:"20141204"},
+          req9:{patientName:"Rodrigo Mendez", reqType:"ChangeAppointment",reqContent:"Can I change my appointment please please please please please PLEASE PLEASE PLEASEEEEEEEEEEE?",dateSubmitted:"20141404"},
+					req10:{patientName:"Albus Dumbledore", reqType:"Question",reqContent:"What is the answer to this good condition?",dateSubmitted:"20141004"},
+          req11:{patientName:"Ian Summerhandler", reqType:"Question",reqContent:"What is the answer to this bad condition?",dateSubmitted:"20141204"},
+          req12:{patientName:"Jian Ghomayshi", reqType:"ChangeAppointment",reqContent:"Can I change the appointment?",dateSubmitted:"20151404"}
+          };
+        console.log($scope.Requests);
+				$scope.gotoAnchor = function(x) {
+		      var newHash = x;
+		      if ($location.hash() !== newHash) {
+		        $location.hash(x);
+		      } else {
+		        $anchorScroll();
+		      }
+		    };
+				$scope.gotoTop = function() {
+					if ($location.hash() !== "listTop" ){
+						$location.hash("listTop");
+					} else {
+						$anchorScroll();
+					}
+				};
+    });
+    </script>
+</head>
+<!--*******************************************************************************-->
+<body style="text-align:center" ng-app="myApp" ng-controller="myCtrl">
+	<img src="Images/MUHC-Logo.png">
+	<h4 class="text-info">Department of Radiation Oncology</h4>
+	<h1><kbd><strong>Pending Requests from Mobile App Users</strong></kbd></h1><br>
+
+
+
+<!-- C O L U M N 1  HALF OF THE TICKETS-->
+		<div class="container-fluid">
+
+				<div class="col-sm-4">
+						<div ng-if="$odd"  class="jumbotron" ng-repeat="(key,value) in Requests" id="{{key}}"  style="box-shadow: 0 0 30px black;text-align:center;" >
+					 	<h2><span ng-show="value.reqType==='Question'" class="label label-info">#{{$index+1}} {{ value.reqType }} </span></h2>
+					 	<h2><span ng-show="value.reqType==='ChangeAppointment'" class="label label-warning">#{{$index+1}} {{ value.reqType }} </span></h2>
+						<h3 ng-show="value.reqType==='ChangeAppointment'" ><small>{{value.patientName}} Wants to change an appointment:</small></h3><br>
+						<!--in Case of a question -->
+						<h3 ng-show="value.reqType==='Question'"><small>{{value.patientName}} asked a question:<small></h3><br>
+						<code><p class="text-warning well well-sm" style="text-align:left"> {{ value.reqContent}}</p></code><br>
+						<textarea placeholder="Enter your message to be delivered here "ng-model="response" rows="4" cols="30">
+						</textarea><br>
+						<button ng-show="value.reqType!=='ChangeAppointment'" class="btn btn-sm btn-success">Send</button>
+
+						<br>
+
+						<!--in Case of a appointment change request-->
+						<select ng-show="value.reqType==='ChangeAppointment'" ng-model="changeAppointment">
+						<option value="Yes">Yes</option>
+						<option value="No">No</option>
+						</select>
+									<div ng-show="changeAppointment==='Yes'">
+									<p class="text-info">Please enter the new appointments Date and Time : </p><br>
+									Date :<input type="date"  ng-model="newDate"><br>
+									Time : <input type="time" ng-model="newTime">
+									</div>
+						<button ng-show="value.reqType==='ChangeAppointment'" class="btn btn-sm btn-success">Apply</button>
+						</div>
+				</div>
+<!-- C O L U M N 2  LIST VIEW -->
+				<div class="col-sm-4" id="listTop" >
+					<div style="position:fixed;margin-top:23%;padding:5px;">
+						<button  class="btn btn-sm btn-info" style='width:20%;box-shadow: 0 0 10px black'>Refresh</button>
+						<button class="btn btn-sm btn-danger" style='width:35%;box-shadow: 0 0 10px black'>Sort by: Date</button>
+						<button class="btn btn-sm btn-danger" style='width:20%;box-shadow: 0 0 10px black'>Type</button>
+						<button class="btn btn-sm btn-danger" style='width:20%;box-shadow: 0 0 10px black'>Priority</button>
+						<button class="btn btn-sm btn-info" style='width:20%;box-shadow: 0 0 10px black' ng-click="gotoTop()"><span class="glyphicon glyphicon-arrow-up"></span></button>
+					</div>
+
+					<div class="panel panel-default">
+						<div class="panel-heading"><h3 class="text-info">Pending Requests List</h3></div>
+						<div class="panel-body">
+							<p>Below is a brief list of all the open requests right now. You can change the order using the menu at the bottom and click on a row to scroll to the corresponding ticket.</p>
+							<label>Search by Name: <input ng-model="searchText"></label>
+						</div>
+
+						<!-- Table -->
+						<table class="table" style='text-align:left'>
+							<th>#</th>
+							<th>Name</th>
+							<th>Type</th>
+							<th>Date Submitted</th>
+							<tr ng-repeat="(key,value) in Requests | filter:searchText" ng-click="gotoAnchor(key)">
+								<td>{{$index+1}}</td>
+								<td>{{value.patientName}}</td>
+								<td>{{value.reqType}}</td>
+								<td>{{value.dateSubmitted}}</td>
+							</tr>
+						</table>
+					</div>
+				</div>
+
+<!-- C O L U M N 3 OTHER HALF OF TICKETS -->
+				<div class="col-sm-4 ">
+										  <div ng-if="$even" class="jumbotron" ng-repeat="(key,value) in Requests" id="{{key}}" style="box-shadow: 0 0 30px black;text-align:center;"  >
+											 <h2><span ng-show="value.reqType==='Question'" class="label label-info">#{{$index+1}} {{ value.reqType }} </span></h2>
+											 <h2><span ng-show="value.reqType==='ChangeAppointment'" class="label label-warning">#{{$index+1}} {{ value.reqType }} </span></h2>
+												<h3 ng-show="value.reqType==='ChangeAppointment'" ><small>{{value.patientName}} Wants to change an appointment:</small></h3><br>
+										  <!--in Case of a question -->
+											<h3 ng-show="value.reqType==='Question'"><small>{{value.patientName}} asked a question:</small></h3><br>
+											<code><p class="text-warning well well-sm" style="text-align:left"> {{ value.reqContent}}</p></code><br>
+											<textarea spellcheck="true" placeholder="Enter your message to be delivered here "ng-model="response" rows="4" cols="30"></textarea><br>
+											<button ng-show="value.reqType!=='ChangeAppointment'" class="btn btn-sm btn-success">Send</button>
+
+										  <br>
+
+										  <!--in Case of a appointment change request-->
+
+											<select ng-show="value.reqType==='ChangeAppointment'" ng-model="changeAppointment">
+										  <option value="Yes">Yes</option>
+										  <option value="No">No</option>
+										  </select>
+										        <div ng-show="changeAppointment==='Yes'">
+										        <p class="text-info">Please enter the new appointments Date and Time : </p><br>
+										        Date :<input type="date"  ng-model="newDate"><br>
+														Time : <input type="time" ng-model="newTime">
+										        </div>
+										  <button ng-show="value.reqType==='ChangeAppointment'" class="btn btn-sm btn-success">Apply</button>
+										  </div>
+					</div>
+				</div>
+<!--*******************************************************************************-->
+</body>
+<!--*******************************************************************************-->
+<footer>
+	<center>
+		<p>Mehryar Keshavarz</p>
+		<p> Contact information:<br> <a href="mailto:mehryar.keshavarz@mail.mcgill.ca">mehryar.keshavarz@mail.mcgill.ca</a>.</p>
+	</center>
+</footer>
+</html>
