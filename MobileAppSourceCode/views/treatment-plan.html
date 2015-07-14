@@ -1,0 +1,88 @@
+<ons-page ng-controller="TreatmentPlanController">
+    <ons-toolbar>
+        <div class="left">
+            <ons-toolbar-button ng-click="menu.toggle()">
+                <ons-icon icon="ion-navicon" size="28px" fixed-width="false"></ons-icon>
+            </ons-toolbar-button>
+        </div>
+        <div class="center">Treatment Plan</div>
+    </ons-toolbar>
+    <div class="container">
+     <a  href ng-click="menu.setMainPage('views/notifications.html',{closeMenu:true})">
+        <alert align="center" ng-show="showAlert&&Notifications>1" ng-model="alert" type="success" close="closeAlert()">You have {{Notifications}} unseen notifications. <span class="hidden-xs">Go to your Notifications page under the menu on the left.</span>
+        </alert>
+        <alert align="center" ng-show="showAlert&&Notifications<=1" ng-model="alert" type="success" close="closeAlert()">You have {{Notifications}} unseen notification. <span class="hidden-xs">Go to your Notifications page under the menu on the left.</span>
+        </alert></a>
+    </div>
+    <div class="jumbotron container"; style="margin-top:3%">
+    <span style="text-align:left"><h5>Status:</h5></span>
+   <p class="lead"><small> You have finished the {{lastFinished}} stage, awaiting for the {{currentStage}} stage, as of today you have completed {{message}}.
+    Your estimating time until the end of treatment is:(insert time)</small></p>
+
+    </div>
+        <div id="barID" class="checkout-wrap hidden-xs hidden-lg hidden-sm">
+            <ul class="checkout-bar">
+                <li class="visited first"> <a href="#">Consult<br> Appointment</a>
+
+                </li>
+                <li class="visited">Ct-Sim</li>
+                <li class="previous visited">Ready For Contour</li>
+                <li class="active">Ready for MD Contour</li>
+                <li class="next">Ready for
+                    <br>Physics QA</li>
+                <li class="">End Of
+                    <br>Treatment
+                    <br>Note</li>
+            </ul>
+        <br>
+        <hr>
+        <br>
+        <br>
+        <br>
+   
+          </div>
+<!--ct-sim md contour, ready dose calculation, ready to show, ready for physics QA, ready for treatment, treatment-->
+<div class="container">
+<progressbar class="progress-striped" value="dynamic" type="{{type}}">{{dynamic}}% completed <i ng-show="showWarning">!!! Watch out !!!</i></progressbar></div>
+        <div style="padding-right:1%;padding-left:1%;" align="center">
+    <div class="navigation-bar" >
+        <div class="navigation-bar__center">
+            <!-- segment control -->
+            <div class="button-bar" style="width:200px; margin:8px auto 0;">
+                <div class="button-bar__item">
+                    <input type="radio" name="navi-segment-a" checked>
+                    <div class="button-bar__button">Past</div>
+                </div>
+                <div class="button-bar__item">
+                    <input type="radio" name="navi-segment-a">
+                    <div class="button-bar__button">Next</div>
+                </div>
+                 <div class="button-bar__item">
+                    <input type="radio" name="navi-segment-a">
+                    <div class="button-bar__button">All</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <ons-list class="plan-list">
+        <ons-list-item  class="plan" modifier="chevron" ng-repeat="app in appointments">
+            <ons-row>
+                <ons-col width="80px" class="plan-left">
+                    <div class="plan-date" ng-show="app.Status!='Future'">{{app.Date|date:'MMM d'}}</div>
+                    <div class="plan-duration" ng-show="app.Status!='Future'&&app.Status!='Next'">{{(timeBetweenAppointments[$index]).TimeDiffInDays | number:1}} <span >days</span></div>
+                </ons-col>
+                <ons-col width="6px" class="plan-center" ng-style="{ 'background-color': getStyle($index) }"></ons-col>
+                <ons-col class="plan-right">
+                    <div class="plan-name">{{app.Name}}</div>
+                    <div class="plan-info">
+                        <div ng-hide="a % 4 == 0">
+                            <ons-icon icon="fa-calendar"></ons-icon>&nbsp;{{app.Date|date:"EEEE MMMM d, yyyy 'at' h:mm a"}}</div>
+                        <div ng-hide="a % 3 == 0">
+                            <ons-icon icon="fa-map-marker"></ons-icon>Room L3212</div>
+                    </div>
+                </ons-col>
+            </ons-row>
+        </ons-list-item>
+    </ons-list>
+        </div>
+</ons-page>
