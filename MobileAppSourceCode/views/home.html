@@ -1,0 +1,105 @@
+<ons-navigator title="Navigator" var="myNavigator">
+<ons-page ng-controller="homeController">
+  <ons-toolbar>
+   <div class="left">
+      <ons-toolbar-button ng-click="menu.toggle()">
+        <ons-icon icon="ion-navicon" size="28px" fixed-width="false"></ons-icon>
+      </ons-toolbar-button>
+    </div>
+    <div class="center">Home</div>
+  </ons-toolbar>
+          <ons-pull-hook ng-action="load($done)" var="loader">
+        <span ng-switch="loader.getCurrentState()">
+          <span ng-switch-when="initial"><ons-icon size="35px" icon="ion-arrow-down-a"></ons-icon> Pull down to refresh</span>
+          <span ng-switch-when="preaction"><ons-icon size="35px" icon="ion-arrow-up-a"></ons-icon> Release to refresh</span>
+          <span ng-switch-when="action"><ons-icon size="35px" spin="true" icon="ion-load-d"></ons-icon> Loading data...</span>
+        </span>
+      </ons-pull-hook>
+          <div class="container">
+<a style="text-decoration:none" href ng-click="menu.setMainPage('views/notifications.html',{closeMenu:true})">
+        <alert align="center" ng-show="showAlert&&Notifications>1" ng-model="alert" type="success" close="closeAlert()">You have {{Notifications}} unseen notifications. <span class="hidden-xs">Go to your Notifications page under the menu on the left.</span>
+        </alert>
+        <alert align="center" ng-show="showAlert&&Notifications<=1" ng-model="alert" type="success" close="closeAlert()">You have {{Notifications}} unseen notification. <span class="hidden-xs">Go to your Notifications page under the menu on the left.</span>
+        </alert></a>
+ </div>
+      <div class="container" align="center">
+      <!--<img  style="max-width: 100%;height:auto;" ng-src="./img/muhc-logo-text.png" >-->
+      </div>
+       <div class="profile-card" >
+
+        
+        <div  align="center" style="text-align:left;margin-left:5%;margin-right:10%" >
+        <strong>{{dateToday|date:"EEEE MMMM d, yyyy"}}</strong><br>
+      <h2>Welcome, <span style="color:#2B6197"> {{FirstName}} {{LastName}}</span></h2> <br>
+        <div ng-show="showNextAppointment">
+          <span class="profile-name"><strong>Next Appointment:</strong></span><br>
+          <span style="margin-left:5%">{{NextAppointmentDate|date:"EEEE MMMM d, yyyy 'at' h:mm a"}}</span>.
+        </div>
+        <div>  
+     <span class="profile-name"><strong>Status:</strong></span><p style="margin-left:5%">You have finished the MD Countour stage, awaiting for the PhysicsQA stage, as of today you have completed three out of the six stages.
+     Your estimating time until the end of treatment is:(insert time)</p><br>
+     </div>
+
+      </div>
+      </div>
+      <ons-list modifier="inset" style="margin-top: 10px" class="prop-desc">
+       <ons-list-item modifier="chevron" ng-click="menu.setMainPage('views/checkin.html', {closeMenu: true})">
+          <i class="fa fa-check-square-o" ></i>&nbsp;Check In
+        </ons-list-item>
+        <ons-list-item modifier="chevron" ng-click="goContact('Physician')" >
+          <ons-icon icon="ion-android-people"></ons-icon>&nbsp;<span style="color:black">Contact Primary Physician</span>
+        </ons-list-item>
+
+        <ons-list-item modifier="chevron" ng-click="goContact('Oncologist')" >
+          <ons-icon icon="ion-android-people"></ons-icon></i>&nbsp;<span style="color:black">Contact Oncologist</span>
+        </ons-list-item>
+      </ons-list>
+</ons-page>
+<ons-template id="page2.html">
+  <ons-page ng-controller="ContactDoctorController">
+    <ons-toolbar>
+      <div class="left"><ons-back-button>Back</ons-back-button></div>
+      <div class="center">{{header}}</div>
+    </ons-toolbar>
+     <div class="profile-cardContact">
+
+        <img src="img/logo.png" class="profile-image">
+        <div class="profile-name">Dave Graham</div>
+        <div class="profile-id">@davegraham</div>
+        <div class="profile-desc">Freelance designer, software engineer and cyclist</div>
+
+      </div>
+
+        <ons-list style="margin-top: 12px;">
+          <ons-list-item modifier="chevron">
+            <div class="prop-desc">
+              <ons-icon icon="fa-map-marker"></ons-icon>
+              <span style="color:black" >Medical Physics Unit, L5-122. Montreal General Hospital</span>
+            </div>
+          </ons-list-item>
+
+          <ons-list-item modifier="chevron">
+            <div class="prop-desc">
+              <ons-icon icon="fa-mobile"></ons-icon>
+              <span style="color:black" >(514) 123-1234</span>
+            </div>
+          </ons-list-item>
+
+          <ons-list-item modifier="chevron">
+            <div class="prop-desc">
+              <ons-icon icon="fa-phone"></ons-icon>
+              
+               <span style="color:black" >(514) 123-1234</span>
+            </div>
+          </ons-list-item>
+
+          <ons-list-item modifier="chevron">
+            <div class="prop-desc">
+              <ons-icon icon=" fa-envelope-o"></ons-icon>
+              <span style="color:black" >dahhir@gmail.com</span>
+            </div>
+          </ons-list-item>
+        </ons-list>
+
+  </ons-page>
+</ons-template>
