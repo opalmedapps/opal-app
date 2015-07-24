@@ -7,6 +7,10 @@ function ($firebaseAuth) {
     return $firebaseAuth(ref);
 }]);
 myApp.run(function ($rootScope, $state, $stateParams,$q) {
+
+
+
+  // Se
     $rootScope.$state = $state;
     $rootScope.$stateParams = $stateParams;
     $rootScope.$on("$stateChangeError", function(event, toState, toParams, fromState, fromParams, error) {
@@ -23,21 +27,59 @@ myApp.run(function ($rootScope, $state, $stateParams,$q) {
 
         var redirect=redirectPage();
         redirect.then(setTimeout(function(){location.reload()},100));
-        
+
 }
 });
 });
+myApp.service('LocalStorage',['$rootScope',function($rootScope)
+{
+  return{
+    set:function(thingstoset) // thingstoset is an object
+    {
+      for ( var key in thingstoset)
+      {
+        var value=thingstoset[String(key)];
+        if( typeof value === "object")
+        {
+          value=JSON.stringify(value);
+        }
+        if ( value !== null && value !== undefined)
+        {
+          try
+          {
+            window.localStorage.setItem(String(key), String(value));
+          } catch (e)
+          {
+            alert("Exceeded Storage Quota!");
+          }
+        } else
+        {
+          console.log('cant save null to localStorage');
+        }
+      }
+    },
+    get:function(key)
+    {
+      return window.localStorage.getItem(key);
+    }
+  };
 
-myApp.service('UserNotifications',['UserDataMutable','$rootScope',function(UserDataMutable,$rootScope){
+}]);
+
+myApp.service('UserNotifications',['UserDataMutable','$rootScope','LocalStorage',function(UserDataMutable,$rootScope,LocalStorage){
     this.notifications={};
     return{
         setUserNotifications:function(object){
 
             var keys=Object.keys(object);
-            
+
             if(this.firebaseNotificationNumber===undefined){
                 this.notifications=object;
                 this.NotificationNumber=keys.length;
+                LocalStorage.set({
+                  Notifications : this.notifications ,
+                  NotificationNumber : this.NotificationNumber
+                });
             }else if(this.firebaseNotificationNumber!==keys.length){
                 var newNot=keys.length-this.firebaseNotificationNumber;
                 if(newNot>0){
@@ -46,14 +88,29 @@ myApp.service('UserNotifications',['UserDataMutable','$rootScope',function(UserD
                 }
                 this.notifications=object;
                 this.NotificationNumber=keys.length;
+                LocalStorage.set({
+                  Notifications : this.notifications ,
+                  NotificationNumber : this.NotificationNumber
+                });
             }
             this.firebaseNotificationNumber=keys.length;
+            LocalStorage.set({
+              firebaseNotificationNumber : this.firebaseNotificationNumber
+            });
         },
+         loadUserNotifications: function () {
+           this.notifications=JSON.parse(LocalStorage.get('Notifications'));
+           this.NotificationNumber=LocalStorage.get('NotificationNumber');
+           this.firebaseNotificationNumber= LocalStorage.get('firebaseNotificationNumber');
+           this.NotificationsObjectArray=LocalStorage.get('NotificationsObjectArray');
+         },
          getUserNotifications:function(){
             return this.notifications;
         },
         setNotificationReadStatus:function(notification,status){
             this.notifications[notification].ReadStatus=status;
+            var updatedNotification = JSON.parse(window.localStorage['Notifications']).ReadStatus=status;
+            window.localStorage['Notifications']= JSON.stringify(updatedNotification);
 
         },
         getNotificationUnreadStatus:function(notification){
@@ -76,6 +133,7 @@ myApp.service('UserNotifications',['UserDataMutable','$rootScope',function(UserD
         },
         setNotificationsObjectArray:function(object){
             this.NotificationsObjectArray=object;
+            LocalStorage.set({ NotificationsObjectArray:this.NotificationsObjectArray});
         },
         updateNotificationsFromFirebase:function(){
 
@@ -86,8 +144,8 @@ myApp.service('UserNotifications',['UserDataMutable','$rootScope',function(UserD
 
 }]);
 
-myApp.service('UserTasksAndAppointments',['$filter',function($filter){
-    
+myApp.service('UserTasksAndAppointments',['$filter','LocalStorage',function($filter,LocalStorage){
+
     return{
 
         setUserTasksAndAppointments:function(tasksAndAppointments){
@@ -99,7 +157,7 @@ myApp.service('UserTasksAndAppointments',['$filter',function($filter){
 
                //console.log(tasksAndAppointments[keysArray[i]]);
                var date=$filter('formatDate')(tasksAndAppointments[keysArray[i]]);
-               //console.log(date.getDate());         
+               //console.log(date.getDate());
                 var dateDiff=((new Date()) - date);
                 if(dateDiff<0){
                     dateDiff=dateDiff*-1;
@@ -107,20 +165,26 @@ myApp.service('UserTasksAndAppointments',['$filter',function($filter){
                 if((new Date())<date){
                     var sta='Future';
                     var tmp=min;
-                    min=Math.min(min,dateDiff);  
+                    min=Math.min(min,dateDiff);
                     if(tmp!==min){
                         index=i;
-                    }   
+                    }
                }else{
                     var sta='Past';
-               }       
+               }
                (this.TasksAndAppointmentsObject).push({Name:keysArray[i],Date:date,Status:sta});
             };
             this.TasksAndAppointmentsObject[index].Status='Next';
             this.CurrentTaskOrAppointmentIndex=index;
             this.TasksAndAppointmentsObject=$filter('orderBy')(this.TasksAndAppointmentsObject,'Date');
-
-            
+            LocalStorage.set({
+              CurrentTaskOrAppointmentIndex : this.CurrentTaskOrAppointmentIndex ,
+              TasksAndAppointmentsObject : this.TasksAndAppointmentsObject
+            });
+        },
+        loadUserTasksAndAppointments: function () {
+          this.CurrentTaskOrAppointmentIndex = Number(LocalStorage.get('CurrentTaskOrAppointmentIndex'));
+          this.TasksAndAppointmentsObject = JSON.parse(LocalStorage.get('TasksAndAppointmentsObject')) ;
         },
         getUserTasksAndAppointments:function(){
             return this.TasksAndAppointmentsObject;
@@ -132,7 +196,7 @@ myApp.service('UserTasksAndAppointments',['$filter',function($filter){
 
                 if(timeFrame==='Day'){
                     var dateDiff=(this.TasksAndAppointmentsObject[i+1].Date - this.TasksAndAppointmentsObject[i].Date)/(1000*60*60*24);
-                    this.timeDiff[i]={Stages: this.TasksAndAppointmentsObject[i].Name +'-'+ this.TasksAndAppointmentsObject[i+1].Name, TimeDiffInDays:dateDiff};                
+                    this.timeDiff[i]={Stages: this.TasksAndAppointmentsObject[i].Name +'-'+ this.TasksAndAppointmentsObject[i+1].Name, TimeDiffInDays:dateDiff};
                 }else if(timeFrame==='Hour'){
                      var dateDiff=(this.TasksAndAppointmentsObject[i+1].Date - this.TasksAndAppointmentsObject[i].Date)/(1000*60*60);
                     this.timeDiff[i]={Stages: this.TasksAndAppointmentsObject[i].Name +'-'+ this.TasksAndAppointmentsObject[i+1].Name, TimeDiffInDays:dateDiff};
@@ -140,7 +204,7 @@ myApp.service('UserTasksAndAppointments',['$filter',function($filter){
             };
 
             return this.timeDiff;
-            
+
        },
        getCurrentTaskOrAppointment:function(){
         if(this.TasksAndAppointmentsObject){
@@ -156,7 +220,7 @@ myApp.service('UserTasksAndAppointments',['$filter',function($filter){
 }]);
 
 //This service will have the user preferences for language and sent sms feature. To be used in account settings.
-myApp.service('UserPreferences', function(){
+myApp.service('UserPreferences',['LocalStorage', function(LocalStorage){
     return{
         setLanguage:function(lan){
             if(lan!=='EN'||lan!=='FR'){
@@ -183,16 +247,23 @@ myApp.service('UserPreferences', function(){
         setUserPreferences:function(smsPreference, lan){
             if(smsPreference==='Enable'){
                 this.SMS=smsPreference;
+                LocalStorage.set({ Sms : this.SMS});
             }else if(smsPreference==='Disable'){
                 this.SMS=smsPreference;
+                LocalStorage.set({ Sms : this.SMS});
             }
             if(lan==='EN'||lan==='FR'){
                 this.Language=lan;
-                
+                LocalStorage.set({ Language : this.Language});
+
             }else{
               return;
             }
             //console.log(this.SMS + this.Language);
+        },
+        loadUserPreferences : function () {
+          this.SMS=LocalStorage.get('Sms');
+          this.Language= LocalStorage.get('Language');
         },
         getUserPreferences:function(){
             return {
@@ -205,12 +276,19 @@ myApp.service('UserPreferences', function(){
 
 
 
-});
+}]);
 
 
 
 myApp.service('UpdateUI', ['UserPreferences', 'UserDataMutable', 'UserAuthorizationInfo', '$q', 'UserNotifications', 'UserTasksAndAppointments', function (UserPreferences, UserDataMutable, UserAuthorizationInfo, $q, UserNotifications, UserTasksAndAppointments) {
     return {
+        loadLocally : function () {
+          UserDataMutable.loadData();
+          UserPreferences.loadUserPreferences();
+          UserNotifications.loadUserNotifications();
+          UserTasksAndAppointments.loadUserTasksAndAppointments();
+          UserAuthorizationInfo.loadUserAuthData();
+        },
         UpdateUserFields: function () {
             //Firebase.goOnline();
             var count=0;
@@ -220,7 +298,7 @@ myApp.service('UpdateUI', ['UserPreferences', 'UserDataMutable', 'UserAuthorizat
             obtainDataLoop();
            function obtainDataLoop(){
             firebaseLink.once('value', function (snapshot) {
-               
+
                 var values = snapshot.val();
                 if(values.fields.FirstName===undefined){
                     count++;
@@ -228,7 +306,7 @@ myApp.service('UpdateUI', ['UserPreferences', 'UserDataMutable', 'UserAuthorizat
                     firebaseLink.child('fields').update({logged:'true'});
                     obtainDataLoop();
                 }else{
-                    UserDataMutable.setData(values.fields.FirstName, values.fields.LastName, values.fields.picture, values.fields.TelNum, values.fields.Email, values.NextAppointment.CheckIn, values.NextAppointment.Date, values.images, values.AppointmentsAndTasks, values.Notifications);
+                                    UserDataMutable.setData(values.fields.FirstName, values.fields.LastName, values.fields.picture, values.fields.TelNum, values.fields.Email, values.NextAppointment.CheckIn, values.NextAppointment.Date, values.images, values.AppointmentsAndTasks, values.Notifications);
                                     UserPreferences.setUserPreferences(values.UserPreferences.EnableSMS, values.UserPreferences.Language);
                                     UserNotifications.setUserNotifications(values.Notifications);
                                     UserTasksAndAppointments.setUserTasksAndAppointments(values.AppointmentsAndTasks);
@@ -248,17 +326,17 @@ myApp.service('UpdateUI', ['UserPreferences', 'UserDataMutable', 'UserAuthorizat
 
                                     };
                                     r.resolve(dataValues);
-            
+
 
                 }
-            
+
         },function(error){
 
             r.reject(error);
-            
+
             });
 
-    
+
     }
     return r.promise;
 }
@@ -266,10 +344,10 @@ myApp.service('UpdateUI', ['UserPreferences', 'UserDataMutable', 'UserAuthorizat
 }]);
 
 //This is our main object where we will define the user data and all the appropiate variables
-myApp.service('UserDataMutable', ['UserPreferences','UserAuthorizationInfo','$q',function (UserPreferences, UserAuthorizationInfo,$q) {
+myApp.service('UserDataMutable', ['UserPreferences','UserAuthorizationInfo','$q','LocalStorage',function (UserPreferences, UserAuthorizationInfo,$q,LocalStorage) {
     return {
 
-        //This function obtains any field for the patient from firebase, type specifies the type of field, so update, check in, or image, or 
+        //This function obtains any field for the patient from firebase, type specifies the type of field, so update, check in, or image, or
         //simply user fields, while the field is the actual name.
         getFirebaseField:function(type,field){
             var r=$q.defer();
@@ -278,7 +356,7 @@ myApp.service('UserDataMutable', ['UserPreferences','UserAuthorizationInfo','$q'
                 firebaseLink.once('value',function(snapshot){
                     console.log(snapshot.val());
                     r.resolve(snapshot.val());
-                    
+
                 },function(error){r.reject(error)});
                 return r.promise;
             }else if(type!==undefined&&field!==undefined){
@@ -295,9 +373,9 @@ myApp.service('UserDataMutable', ['UserPreferences','UserAuthorizationInfo','$q'
         },
         setFirebaseField:function(type,value,field){
         //Example: UserDataMutable.setFirebaseField('Update','LastName'); Here the field was undefined, so it will update Update:FistName, check firebase
-        //for structure of database. 
+        //for structure of database.
         //UserDataMutable.setFirebaseField('fields','FirstName','Andrew'); Here it will go into fields and update the FirstName field to Andrew.
-        //Notice how only allowed values will be updated. 
+        //Notice how only allowed values will be updated.
             if(value===undefined) return;
             if(field===undefined&&type!==undefined){
                 var firebaseLink = new Firebase('https://luminous-heat-8715.firebaseio.com/users/' + UserAuthorizationInfo.UserName);
@@ -348,7 +426,7 @@ myApp.service('UserDataMutable', ['UserPreferences','UserAuthorizationInfo','$q'
             return this.LastName;
         },
         getEmail: function () {
-            
+
             return this.Email;
         },
         getPictures: function () {
@@ -369,8 +447,34 @@ myApp.service('UserDataMutable', ['UserPreferences','UserAuthorizationInfo','$q'
             this.NextAppointment=nextappointment;
             this.AppointmentsAndTasks=appointmentsAndtasks;
             this.UserNotifications=usernotifications;
+            LocalStorage.set(
+              {
+                FirstName : firstName ,
+                LastName : lastName,
+                Pictures : pictures,
+                Photos : images,
+                TelNum : telNum,
+                Email : email ,
+                CheckIn : checkin,
+                NextAppointment : nextappointment,
+                appointmentsAndtasks : appointmentsAndtasks,
+                UserNotifications : usernotifications
+              });
             r.resolve;
             return r.promise;
+        },
+        loadData : function ()
+        {
+          this.FirstName = LocalStorage.get('FirstName');
+          this.LastName = LocalStorage.get('LastName');
+          this.Pictures = LocalStorage.get('Pictures');
+          this.Photos=JSON.parse(LocalStorage.get('Photos'));
+          this.TelNum = LocalStorage.get('TelNum');
+          this.Email = LocalStorage.get('Email');
+          this.CheckIn = LocalStorage.get('CheckIn');
+          this.NextAppointment = LocalStorage.get('Nextappointment');
+          this.AppointmentsAndTasks = JSON.parse(LocalStorage.get('AppointmentsAndtasks'));
+          this.UserNotifications = JSON.parse(LocalStorage.get('UserNotifications'));
         },
         setPhotos:function(photos){
             this.Photos=photos;
@@ -406,15 +510,28 @@ myApp.service('UserDataMutable', ['UserPreferences','UserAuthorizationInfo','$q'
     };
 }]);
 //Defines the authorization parameters for the user serssion
-myApp.service('UserAuthorizationInfo',['$q','$state', function ($q) {
+myApp.service('UserAuthorizationInfo',['$q','$state','LocalStorage', function ($q,$state,LocalStorage) {
 
 
     return {
-        setUserAuthData: function (username, token, authorize) {
-            this.UserName = username;
-            this.UserToken = token;
-            this.authorization = authorize;
-        },
+      setUserAuthData: function (username, token, authorize)
+      {
+          this.UserName = username;
+          this.UserToken = token;
+          this.authorization = authorize;
+          LocalStorage.set(
+            {
+            UserName : username,
+            UserToken : token,
+            Authorization: authorize
+            });
+      },
+      loadUserAuthData: function ()
+      {
+          this.UserName = LocalStorage.get('UserName');
+          this.UserToken = LocalStorage.get('UserToken');
+          this.authorization = LocalStorage.get('Authorization');
+      },
         getUserAuthData: function () {
             return {
                 UserName: this.UserName,

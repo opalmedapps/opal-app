@@ -1,22 +1,118 @@
-<ons-page>
-  <ons-toolbar>
-    <div class="left">
-      <ons-toolbar-button ng-click="menu.toggle()">
-        <ons-icon icon="ion-navicon" size="28px" fixed-width="false"></ons-icon>
-      </ons-toolbar-button>
-    </div>
-    <div class="center">Hospital Maps</div>
-  </ons-toolbar>
-   <div class="container">
+<ons-navigator title="Navigator" var="myNavigatorMaps">
+<ons-page ng-controller="MapsController">
+    <ons-toolbar>
+        <div class="left">
+            <ons-toolbar-button ng-click="menu.toggle()">
+                <ons-icon icon="ion-navicon" size="28px" fixed-width="false"></ons-icon><div class="notification menu-notification">{{Notifications}}</div>
+            </ons-toolbar-button>
+        </div>
+        <div class="center">Hospital Maps</div>
+    </ons-toolbar>
+    <ons-pull-hook ng-action="loadDocu($done)" var="loader">
+        <span ng-switch="loader.getCurrentState()">
+          <span ng-switch-when="initial"><ons-icon size="35px" icon="ion-arrow-down-a"></ons-icon> Pull down to refresh</span>
+          <span ng-switch-when="preaction"><ons-icon size="35px" icon="ion-arrow-up-a"></ons-icon> Release to refresh</span>
+          <span ng-switch-when="action"><ons-icon size="35px" spin="true" icon="ion-load-d"></ons-icon> Loading data...</span>
+        </span>
+</ons-pull-hook>
+   <div class="container" style="margin-top:20px">
 <a style="text-decoration:none" href ng-click="menu.setMainPage('views/notifications.html',{closeMenu:true})">
         <alert align="center" ng-show="showAlert&&Notifications>1" ng-model="alert" type="success" close="closeAlert()">You have {{Notifications}} unseen notifications. <span class="hidden-xs">Go to your Notifications page under the menu on the left.</span>
         </alert>
         <alert align="center" ng-show="showAlert&&Notifications<=1" ng-model="alert" type="success" close="closeAlert()">You have {{Notifications}} unseen notification. <span class="hidden-xs">Go to your Notifications page under the menu on the left.</span>
         </alert></a>
  </div>
-  <ons-row style="margin-top: 100px; text-align: center;">
-    <ons-col>
-      <p style="color: #999; font-size: 13px;">● General hospital <br>● Cedars Cancer Centre (various levels)</p>
-    </ons-col>
-  </ons-row>
+    <ons-row>
+        <ons-col>
+        <div class="container">
+
+        <div class="col-md-4 col-sm-4 col-xs-6 col-lg-4" align="center">
+            <div class="thumbnail" style="width:180px">
+            <a href ng-click="myNavigatorMaps.pushPage('pageMap1.html', {param:type},{ animation : 'slide' } )">
+                <img width="120px" height="auto" ng-src="./img/D-S1_map_RadOnc-MedPhys_16June2015_en.png" alt="Starter template example">
+
+          <div class="caption">
+            <h5>D S1</h5>
+          <p>Radiation Oncology/Caner Care Clinic</p>
+           
+          </div>
+          </a>
+        </div>
+        </div>
+         <div class="col-md-4 col-sm-4 col-xs-6 col-lg-4" align="center">
+            <div class="thumbnail" style="width:180px">
+            <a href ng-click="myNavigatorMaps.pushPage('pageMap2.html', {param:type},{ animation : 'slide' } )">
+                <img width="120px" height="auto" ng-src="./img/D2_Palliative_psychoncology_16June2015_en.png" alt="Starter template example">
+
+          <div class="caption">
+            <h5>D2</h5>
+          <p>Palliative Care Day Hospital and Physhosocial Oncology</p>
+           
+          </div>
+          </a>
+        </div>
+        </div>
+         <div class="col-md-4 col-sm-4 col-xs-6 col-lg-4" align="center">
+            <div class="thumbnail" style="width:180px">
+            <a href ng-click="myNavigatorMaps.pushPage('pageMap3.html', {param:type},{ animation : 'slide' } )">
+                <img width="120px" height="auto" ng-src="./img/D-RC_ODC_16June2015_en_FNL.png" alt="Starter template example">
+
+          <div class="caption">
+            <h5>D-RC</h5>
+          <p>Oncology Date Centre and Cancer Care Clinic</p>
+           
+          </div>
+          </a>
+        </div>
+        </div>
+                <br>
+             
+
+                </div>
+            </div>
+        </ons-col>
+    </ons-row>
 </ons-page>
+<ons-template id="pageMap1.html">
+  <ons-page>
+    <ons-toolbar>
+      <div class="left"><ons-back-button>Back</ons-back-button></div>
+      <div class="center">{{header}}</div>
+    </ons-toolbar>
+     <div class="panel panel-default">
+  <div class="panel-body">
+    <img class="img-responsive" ng-src="./img/D-S1_map_RadOnc-MedPhys_16June2015_en.png" alt="Starter template example">
+  </div>
+  </div>
+     
+  </ons-page>
+</ons-template>
+<ons-template id="pageMap2.html">
+  <ons-page>
+    <ons-toolbar>
+      <div class="left"><ons-back-button>Back</ons-back-button></div>
+      <div class="center">{{header}}</div>
+    </ons-toolbar>
+     <div class="panel panel-default">
+  <div class="panel-body">
+    <img class="img-responsive" ng-src="./img/D2_Palliative_psychoncology_16June2015_en.png" alt="Starter template example">
+  </div>
+  </div>
+     
+  </ons-page>
+</ons-template>
+<ons-template id="pageMap3.html">
+  <ons-page>
+    <ons-toolbar>
+      <div class="left"><ons-back-button>Back</ons-back-button></div>
+      <div class="center">{{header}}</div>
+    </ons-toolbar>
+     <div class="panel panel-default">
+  <div class="panel-body">
+    <img class="img-responsive" ng-src="./img/D-RC_ODC_16June2015_en_FNL.png" alt="Starter template example">
+  </div>
+  </div>
+     
+  </ons-page>
+</ons-template>
+</ons-navigator>

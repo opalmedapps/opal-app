@@ -22,11 +22,6 @@
 a:hover {
     text-decoration: none;
 }
-img {
-    max-width: 100%;
-    height:auto;
-    margin:0 0 10px 0;
-}
 
 body {
     -webkit-touch-callout: none;                /* prevent callout to copy image, etc when tap to hold */
@@ -480,7 +475,7 @@ ul.checkout-bar a {
 }
 
 .plan-right {
-  padding: 10px 40px 10px 10px;
+  padding: 10px 0px 10px 10px;
 }
 
 .plan-date {
@@ -506,5 +501,189 @@ ul.checkout-bar a {
   line-height: 1.4;
 }
 
+/*
+  Message cloud in the patientPortal Controller
+*/
 
-  
+.triangle-border {
+  position:relative;
+  padding:15px;
+  margin:1em 0 3em;
+  border:5px solid #5a8f00;
+  color:#333;
+  background:#fff;
+  /* css3 */
+  -webkit-border-radius:10px;
+  -moz-border-radius:10px;
+  border-radius:10px;
+}
+
+/* Variant : for left positioned triangle
+------------------------------------------ */
+
+.triangle-border.left {
+  margin-left:30px;
+}
+
+/* Variant : for right positioned triangle
+------------------------------------------ */
+
+.triangle-border.right {
+  margin-right:30px;
+}
+.triangle-border:before {
+  content:"";
+  position:absolute;
+  bottom:-20px; /* value = - border-top-width - border-bottom-width */
+  left:40px; /* controls horizontal position */
+  border-width:20px 20px 0;
+  border-style:solid;
+  border-color:#5a8f00 transparent;
+  /* reduce the damage in FF3.0 */
+  display:block;
+  width:0;
+}
+
+/* creates the smaller  triangle */
+.triangle-border:after {
+  content:"";
+  position:absolute;
+  bottom:-13px; /* value = - border-top-width - border-bottom-width */
+  left:47px; /* value = (:before left) + (:before border-left) - (:after border-left) */
+  border-width:13px 13px 0;
+  border-style:solid;
+  border-color:#fff transparent;
+  /* reduce the damage in FF3.0 */
+  display:block;
+  width:0;
+}
+/* Variant : left
+------------------------------------------ */
+
+/* creates the larger triangle */
+.triangle-border.left:before {
+  top:10px; /* controls vertical position */
+  bottom:auto;
+  left:-30px; /* value = - border-left-width - border-right-width */
+  border-width:15px 30px 15px 0;
+  border-color:transparent #5a8f00;
+}
+
+/* creates the smaller  triangle */
+.triangle-border.left:after {
+  top:16px; /* value = (:before top) + (:before border-top) - (:after border-top) */
+  bottom:auto;
+  left:-21px; /* value = - border-left-width - border-right-width */
+  border-width:9px 21px 9px 0;
+  border-color:transparent #fff;
+}
+
+/* Variant : right
+------------------------------------------ */
+
+/* creates the larger triangle */
+.triangle-border.right:before {
+  top:10px; /* controls vertical position */
+  bottom:auto;
+  left:auto;
+  right:-30px; /* value = - border-left-width - border-right-width */
+  border-width:15px 0 15px 30px;
+  border-color:transparent #5a8f00;
+}
+
+/* creates the smaller  triangle */
+.triangle-border.right:after {
+  top:16px; /* value = (:before top) + (:before border-top) - (:after border-top) */
+  bottom:auto;
+  left:auto;
+  right:-21px; /* value = - border-left-width - border-right-width */
+  border-width:9px 0 9px 21px;
+  border-color:transparent #fff;
+}
+/*
+* Messages to Doctor
+*/
+
+.list-item-container {
+  line-height: 1;
+  font-size: 14px;
+  padding: 15px 0px 15px 15px;
+}
+
+.list-item-left {
+  width: 60px;
+  margin-right: -60px;
+  float: left;
+}
+
+.list-item-right {
+  width: 100%;
+  float: right;
+}
+
+.list-item-content {
+  margin-left: 50px;
+  margin-right: 30px;
+}
+
+.avator {
+  width: 40px;
+  height: 40px;
+  border-radius: 3px;
+  -webkit-border-radius: 3px;
+}
+
+.name {
+  font-weight: 500;
+  line-height: 16px;
+  font-size: 15px;
+  margin-bottom: 6px;
+}
+
+.desc {
+  line-height: 16px;
+}
+
+.lucent {
+  opacity: 0.4;
+}
+/*
+*Second App Idea for messages
+*/
+.timeline {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.timeline-li {
+  line-height: 1;
+  padding: 10px;
+}
+
+
+.timeline-date {
+  float: right;
+  font-size: 12px;
+  opacity: 0.35;
+}
+
+.timeline-from {
+  margin: 10px 0 6px 0;
+}
+
+.timeline-name {
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.timeline-id {
+  font-size: 14px;
+  opacity: 0.4;
+}
+
+.timeline-message {
+  margin-top: 4px;
+  font-size: 14px;
+  opacity: 0.8;
+  line-height: 1.15;
+}

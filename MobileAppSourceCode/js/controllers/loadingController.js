@@ -3,7 +3,7 @@
 //  Copyright (c) 2015 David Herrera. All rights reserved.
 //
 
-angular.module('app').controller('loadingController', ['$rootScope','$state', '$scope','UpdateUI', 'UserAuthorizationInfo','UserPreferences', '$q', function ($rootScope,$state, $scope, UpdateUI, UserAuthorizationInfo, UserPreferences, $q) {
+angular.module('app').controller('loadingController', ['$rootScope','$state', '$scope','UpdateUI', 'UserAuthorizationInfo','UserPreferences', '$q','LocalStorage','$http', function ($rootScope,$state, $scope, UpdateUI, UserAuthorizationInfo, UserPreferences, $q,LocalStorage,$http) {
 
 
     var Pictures;
@@ -13,9 +13,15 @@ angular.module('app').controller('loadingController', ['$rootScope','$state', '$
     var TelNum;
     var variableCountToGoHome = 0;
     var flagCompleted = 0;
+    if (!UserAuthorizationInfo.UserName) {
+      UserAuthorizationInfo.loadUserAuthData;
+    }
     var firebaseLink = new Firebase('https://luminous-heat-8715.firebaseio.com/users/' + UserAuthorizationInfo.UserName + '/fields');
-    
+
     function mainLoadingFunction() {
+      $http.get("http://www.httpbin.org/ip")
+      .success( function(data) {
+        console.log("you are connected to internet with ip : ",data);
         firebaseLink.once("value", function (snapshot) {
             var newPost = snapshot.val();
             if(newPost.FirstName===undefined){
@@ -28,11 +34,22 @@ angular.module('app').controller('loadingController', ['$rootScope','$state', '$
             console.log("The read failed: " + errorObject.code);
             $state.go('logIn');
         });
+      })
+      .error(function(data){
+        console.log("No internet , trying to load from localStorage");
+        if ( LocalStorage.get('UserName') ) {
+             UpdateUI.loadLocally();
+             $state.go('Home');
+        } else {
+        $state.go('logIn');
+      }
+      });
+
     }
 
     mainLoadingFunction();
 
-    
+
     var firebaseUserInformation = function (nameOfFirebaseField, stringFirebaseValueContent) {
         if (nameOfFirebaseField !== "logged") {
             if (nameOfFirebaseField === "FirstName") {
@@ -65,7 +82,7 @@ angular.module('app').controller('loadingController', ['$rootScope','$state', '$
                 $state.go('Home');
             },function(error){
                 console.log(error);
-                $state.go('logIn');
+
             });
             //flagCompleted=1;
             //return r;
@@ -73,7 +90,7 @@ angular.module('app').controller('loadingController', ['$rootScope','$state', '$
 
 
     };
-    
+
 
 
     function writeErrorMessage(){

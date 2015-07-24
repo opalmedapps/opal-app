@@ -3,7 +3,7 @@
 //  Copyright (c) 2015 David Herrera. All rights reserved.
 //
 var myApp = angular.module('app');
-myApp.controller('homeController', ['$scope', 'UserDataMutable','UpdateUI', '$timeout','$filter','$cordovaNetwork','UserTasksAndAppointments',function ($scope, UserDataMutable,UpdateUI,$timeout,$filter,$cordovaNetwork,UserTasksAndAppointments) {
+myApp.controller('homeController', ['$scope', 'UserDataMutable','UpdateUI', '$timeout','$filter','$cordovaNetwork','UserTasksAndAppointments','LocalStorage',function ($scope, UserDataMutable,UpdateUI,$timeout,$filter,$cordovaNetwork,UserTasksAndAppointments,LocalStorage) {
     var updatedField=null;
         function loadInfo(){
 
@@ -28,7 +28,7 @@ myApp.controller('homeController', ['$scope', 'UserDataMutable','UpdateUI', '$ti
           $timeout(function() {
             loadInfo();
                 $done();
-                
+
           }, 1000);
         };
 
@@ -50,7 +50,7 @@ myApp.controller('homeController', ['$scope', 'UserDataMutable','UpdateUI', '$ti
 }]);
 
 myApp.controller('ContactDoctorController',['$scope',function($scope){
- 
+
  var page = myNavigator.getCurrentPage();
  var parameters=page.options.param;
  $scope.header=parameters;
