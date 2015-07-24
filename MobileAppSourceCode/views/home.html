@@ -3,7 +3,7 @@
   <ons-toolbar>
    <div class="left">
       <ons-toolbar-button ng-click="menu.toggle()">
-        <ons-icon icon="ion-navicon" size="28px" fixed-width="false"></ons-icon>
+        <ons-icon icon="ion-navicon" size="28px" fixed-width="false"></ons-icon><div class="notification menu-notification">{{Notifications}}</div>
       </ons-toolbar-button>
     </div>
     <div class="center">Home</div>
@@ -32,12 +32,16 @@
         <strong>{{dateToday|date:"EEEE MMMM d, yyyy"}}</strong><br>
       <h2>Welcome, <span style="color:#2B6197"> {{FirstName}} {{LastName}}</span></h2> <br>
         <div ng-show="showNextAppointment">
-          <span class="profile-name"><strong>Next Appointment:</strong></span><br>
-          <span style="margin-left:5%">{{NextAppointmentDate|date:"EEEE MMMM d, yyyy 'at' h:mm a"}}</span>.
+         <span class="profile-name"><strong>Status:</strong></span><p style="margin-left:5%">
+       You are currently on the planning stage.
+     </p>
+          <span class="profile-name"><strong>You have a radiotherapy appointment on:</strong></span>
+          <span>{{NextAppointmentDate|date:"EEEE MMMM d, yyyy 'at' h:mm a"}}</span>.<br>
+          <a style="margin-left:5%;font-size:14px" href ng-click="menu.setMainPage('views/maps.html', {closeMenu: true})">Check appointment location&raquo;</a><br>
+          <a style="margin-left:5%;font-size:14px" ng-click="menu.setMainPage('views/schedule.html', {closeMenu: true})" href >Check appointment details&raquo;</a>
         </div>
         <div>  
-     <span class="profile-name"><strong>Status:</strong></span><p style="margin-left:5%">You have finished the MD Countour stage, awaiting for the PhysicsQA stage, as of today you have completed three out of the six stages.
-     Your estimating time until the end of treatment is:(insert time)</p><br>
+    
      </div>
 
       </div>
@@ -47,14 +51,15 @@
           <i class="fa fa-check-square-o" ></i>&nbsp;Check In
         </ons-list-item>
         <ons-list-item modifier="chevron" ng-click="goContact('Physician')" >
-          <ons-icon icon="ion-android-people"></ons-icon>&nbsp;<span style="color:black">Contact Primary Physician</span>
+          <ons-icon icon="ion-android-people"></ons-icon>&nbsp;<span style="color:black">Contact {{primaryPhysician}}</span>
         </ons-list-item>
 
         <ons-list-item modifier="chevron" ng-click="goContact('Oncologist')" >
-          <ons-icon icon="ion-android-people"></ons-icon></i>&nbsp;<span style="color:black">Contact Oncologist</span>
+          <ons-icon icon="ion-android-people"></ons-icon></i>&nbsp;<span style="color:black">Contact {{oncologist}}</span>
         </ons-list-item>
       </ons-list>
 </ons-page>
+</ons-navigator>
 <ons-template id="page2.html">
   <ons-page ng-controller="ContactDoctorController">
     <ons-toolbar>

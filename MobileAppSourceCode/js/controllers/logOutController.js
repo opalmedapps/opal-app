@@ -13,16 +13,17 @@ angular.module('app').controller('logOutController',['Auth','UserAuthorizationIn
 		var authData = firebaseLink.getAuth();
 		console.log(authData);
 		firebaseLink.unauth();
+		window.localStorage.clear()
 		console.log(authData);
 
-		
+
 
 		console.log(UserDataMutable);
 		delete UserDataMutable;
 		delete UserAuthorizationInfo;
 		console.log(UserDataMutable);
 		console.log(authData);
-		
+
 		function redirectPage(){
 			Auth.$unauth();
 			var r=$q.defer();
@@ -41,6 +42,6 @@ angular.module('app').controller('logOutController',['Auth','UserAuthorizationIn
 			},500);
 			$state.go('logIn.enter');
 		}*/
-		
-		
+
+
 }]);

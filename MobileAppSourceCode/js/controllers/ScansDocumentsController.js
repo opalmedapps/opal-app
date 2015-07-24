@@ -120,3 +120,8 @@ $scope.clickBack=function(){
           }
           $scope.date=new Date();
   }]);
+
+ myApp.controller('SingleDocumentController',function($timeout,$scope){
+  console.log('Simgle Document Controller');
+
+});

@@ -5,10 +5,9 @@
 
 
 //Routes for angular views
-var myApp = angular.module('app', [
-    'ui.router', 'onsen', 'firebase','highcharts-ng','ui.bootstrap','app.filters','ngCordova'])
+var myApp = angular.module('app', ['ui.router', 'onsen', 'firebase','ui.bootstrap','app.filters','ngCordova'])
     .config(['$urlRouterProvider', '$stateProvider', function ($urlRouterProvider, $stateProvider) {
-    $urlRouterProvider.otherwise('/');
+    $urlRouterProvider.otherwise('/loading');
     $stateProvider.state('logIn', {
         url: '/',
         templateUrl: 'templates/logIn.html',
@@ -60,7 +59,7 @@ var myApp = angular.module('app', [
         return Auth.$requireAuth();
       }]
     }
-       
+
     }).state('logOut', {
         url: '/LogOut',
         templateUrl: 'templates/logOut.html',
@@ -73,8 +72,19 @@ var myApp = angular.module('app', [
         return Auth.$requireAuth();
       }]
     }
+    }).state('Portal', {
+        url: '/Portal',
+        templateUrl: 'templates/patientPortal.html',
+        controller: 'PatientPortalController',
+           resolve: {
+      // controller will not be loaded until $waitForAuth resolves
+      // Auth refers to our $firebaseAuth wrapper in the example above
+      "currentAuth": ["Auth", function(Auth) {
+        // $waitForAuth returns a promise so the resolve waits for it to complete
+        return Auth.$requireAuth();
+      }]
+    }
     });
 
 
 }]);
-
