@@ -111,7 +111,10 @@ h1 {
     50% { opacity: 0.4; }
     to { opacity: 1.0; }
 }
- 
+/*
+Password view
+
+*/
 .blink {
     animation:fade 3000ms infinite;
     -webkit-animation:fade 3000ms infinite;
@@ -121,7 +124,7 @@ h1 {
 
 
 }
-
+/*Loading view */
 .glyphicon-refresh-animate {
     -animation: spin .7s infinite linear;
     -ms-animation: spin .7s infinite linear;
@@ -143,7 +146,73 @@ h1 {
     from { -moz-transform: rotate(0deg);}
     to { -moz-transform: rotate(360deg);}
 }
+/*Images*/
+img
+{
+    max-width: 100%;
+    height: auto;
+}
 
+/*
+  Main menu css
+*/
+.page--menu-page__background {
+  background-color: #333;
+}
+
+.page--menu-page__content {
+  color: white;
+}
+
+.menu-close,
+.menu-close > .toolbar-button {
+  color: #999;
+}
+
+.menu-list,
+.menu-item:first-child,
+.menu-item:last-child,
+.menu-item {
+  background-color: transparent;
+  background-image: none !important;
+  border-color: transparent;
+  color: #fff;
+}
+
+.menu-item {
+  padding: 0 0 0 20px;
+  line-height: 52px;
+  height: 52px;
+  text-shadow: rgba(0, 0, 0, 0.4) 0px 1px 0px;
+}
+
+.menu-item:active {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.menu-notification {
+  display: inline-block;
+  margin-top: 12px;
+  font-size: 14px;
+  height: 16px;
+  line-height: 16px;
+  min-width: 16px;
+  font-weight: 600;
+}
+
+.bottom-menu-list,
+.bottom-menu-item:first-child,
+.bottom-menu-item:last-child,
+.bottom-menu-item {
+  border-color: #393939;
+  background-color: transparent;
+  background-image: none !important;
+  color: #ccc;
+}
+
+.bottom-menu-item:active {
+  background-color: rgba(255, 255, 255, 0.1);
+}
 .editFirstNameIcon:hover{
     display:none;
 }
@@ -490,7 +559,7 @@ ul.checkout-bar a {
   opacity: 0.4;
 }
 
-.plan-name {
+.plan-name{
   font-size: 17px;
   margin-bottom: 8px;
 }
@@ -687,3 +756,143 @@ ul.checkout-bar a {
   opacity: 0.8;
   line-height: 1.15;
 }
+/*
+
+*Calendar view
+
+*/
+
+  .full button {
+    opacity: 0.6;
+    filter: alpha(opacity=60);
+    color: #fff;
+    background-color: blue !important;
+    border-color: blue !important;
+  }
+
+  .partially button {
+    opacity: 0.6;
+    filter: alpha(opacity=60);
+    color: #fff;
+    background-color: red !important;
+    border-color: red !important;
+  }
+  .today button {
+    opacity: 0.6;
+    filter: alpha(opacity=60);
+     background-color: limegreen;
+    border-color: limegreen;
+    color: #fff;
+  }
+  .plan-name-calendar {
+  font-size: 17px;
+}
+.plan-date-calendar{
+  font-size: 14px;
+  opacity: 0.8;
+  font-weight: 500;
+}
+
+/*
+* Messages highlighting
+*/
+
+.my-class{
+  padding: 10px 0px 10px 10px;
+  background-color: #C8C8C8;
+  font-size:10%;
+}
+/*
+*Account Settings Mobile Portrait view account settings
+*
+*/
+
+.profile-wrapper {
+  padding: 16px 10px 0 10px;
+}
+
+.profile-image-account {
+  width: 50px;
+  height: 50px;
+  border-radius: 4px;
+  -webkit-border-radius: 4px;
+  border: inset 1px rgba(0, 0, 0, 0.3);
+}
+
+.profile-name-account{
+  font-size: 18px;
+  padding: 4px 0 2px 0;
+}
+
+.profile-email-account {
+  font-size: 15px;
+  opacity: 0.4;
+}
+
+.switch--list-item {
+  margin-right: 0px;
+}
+
+.settings-header {
+  font-weight: 500;
+  font-size: 14px;
+  opacity: 0.4;
+  padding: 10px 0 0px 10px;
+  margin-bottom: -4px;
+}
+
+.settings-list {
+  margin-top: 10px;
+}
+
+.list-item-note {
+  position: absolute;
+  right: 36px;
+  top: 0px;
+  font-size: 14px;
+}
+
+.lucent {
+  opacity: 0.4;
+}
+/*
+*Feedback page
+*
+*/
+.to-wrapper {
+  line-height: 1;
+  height: 62px;
+  padding: 10px;
+}
+
+.to-image {
+  width: 42px;
+  height: 42px;
+  border-radius: 4px;
+  margin-left:5px;
+  -webkit-border-radius: 4px;
+}
+.to-email {
+  font-size: 14px;
+  opacity: 0.4;
+}
+
+.textarea-feedback {
+  margin-top: 4px;
+}
+.updateMessage-success{
+  border:1px solid;
+  border-radius:5px;
+  border-color: #3c763d;
+  color: #3c763d;
+  padding:1vh;
+}
+.updateMessage-error{
+  border:1px solid;
+  border-radius:5px;
+  border-color: #a94442;
+  color: #a94442;
+  padding:1vh;
+}
+
+
