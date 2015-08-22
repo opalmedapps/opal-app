@@ -2,22 +2,23 @@
     <ons-toolbar>
         <div class="left">
             <ons-toolbar-button ng-click="menu.toggle()">
-                <ons-icon icon="ion-navicon" size="28px" fixed-width="false"></ons-icon>
+                <ons-icon icon="ion-navicon" size="28px" fixed-width="false"></ons-icon><div class="notification menu-notification">{{Notifications}}</div>
             </ons-toolbar-button>
         </div>
         <div class="center">Treatment Plan</div>
     </ons-toolbar>
-    <div class="container">
-     <a  href ng-click="menu.setMainPage('views/notifications.html',{closeMenu:true})">
-        <alert align="center" ng-show="showAlert&&Notifications>1" ng-model="alert" type="success" close="closeAlert()">You have {{Notifications}} unseen notifications. <span class="hidden-xs">Go to your Notifications page under the menu on the left.</span>
+<div class="container" ng-hide="noNotifications">
+<a style="text-decoration:none" href ng-click="menu.setMainPage('views/notifications.html',{closeMenu:true})">
+        <alert align="center" ng-show="showAlert&&(Notifications==1)" ng-model="alert" type="success" close="closeAlert()">You have {{Notifications}} unseen notifications. <span class="hidden-xs">Go to your Notifications page under the menu on the left.</span>
         </alert>
-        <alert align="center" ng-show="showAlert&&Notifications<=1" ng-model="alert" type="success" close="closeAlert()">You have {{Notifications}} unseen notification. <span class="hidden-xs">Go to your Notifications page under the menu on the left.</span>
+        <alert align="center" ng-show="showAlert&&(Notifications>1)" ng-model="alert" type="success" close="closeAlert()">You have {{Notifications}} unseen notification. <span class="hidden-xs">Go to your Notifications page under the menu on the left.</span>
         </alert></a>
-    </div>
+ </div>
     <div class="jumbotron container"; style="margin-top:3%">
     <span style="text-align:left"><h5>Status:</h5></span>
-   <p class="lead"><small> You have finished the {{lastFinished}} stage, awaiting for the {{currentStage}} stage, as of today you have completed {{message}}.
+   <p class="lead" ng-show="!finishedTreatment"><small> You have finished the {{lastFinished}} stage, awaiting for the {{currentStage}} stage, as of today you have completed {{message}}.
     Your estimating time until the end of treatment is:(insert time)</small></p>
+ <p class="lead" ng-show="finishedTreatment"><small>You have finished your treatment! </small></p>
 
     </div>
         <div id="barID" class="checkout-wrap hidden-xs hidden-lg hidden-sm">

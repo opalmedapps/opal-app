@@ -1,4 +1,4 @@
-angular.module('app').controller('forgotPasswordController', ['$scope', '$state', function ($scope, $state) {
+angular.module('MUHCApp').controller('forgotPasswordController', ['$scope', '$state', function ($scope, $state) {
     console.log("boom");
     //$scope.forgotPassword.email=" ";
 

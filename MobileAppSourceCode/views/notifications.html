@@ -3,7 +3,7 @@
   <ons-toolbar>
     <div class="left">
       <ons-toolbar-button ng-click="menu.toggle()">
-        <ons-icon icon="ion-navicon" size="28px" fixed-width="false"></ons-icon>
+        <ons-icon icon="ion-navicon" size="28px" fixed-width="false"></ons-icon><div class="notification menu-notification">{{Notifications}}</div>
       </ons-toolbar-button>
     </div>
     <div class="center">Notifications</div>
@@ -18,25 +18,23 @@
 
     <div  ng-hide="noNotifications">
    
-   <ons-list-item ng-repeat="(key, val) in arr" ng-show="key!=0" ng-click="goToNotification(key)" modifier="chevron" class="list-item-container">
+   <ons-list-item ng-repeat="notification in NotificationsArray" ng-click="goToNotification($index,notification)" modifier="chevron" class="list-item-container">
           <ons-row >
             <ons-col class="hidden-xs col-sm-4 col-lg-4">
-
-             <img src="img/logo.png" class="thumbnail2">
-
+             <img src="img/logo.png" class="thumbnail2 img-responsive">
             </ons-col>
             <ons-col class="col-xs-10 col-sm-6 col-lg-6">
               <div class="name" >
-                {{val.Type}}:
+                {{notification.Name}}
               </div>
               <div class="location">
-                <i class="fa fa-calendar"></i> {{val.DateAdded}}
+                <i class="fa fa-calendar"></i> {{notification.DateTime|date:"EEEE MMMM d, yyyy 'at' h:mm a"}}
               </div>
               <div class="desc">
-                Source: {{val.Source}}
+                Issued By: {{notification.IssuedBy}}
               </div>
             </ons-col>
-            <ons-col width="20%" class="col-xs-2 col-sm-6 col-lg-2  "><p align="right" style="text-align:right;color:grey" ng-show="!val.ReadStatus">UNREAD</p></ons-col>
+            <ons-col width="20%" class="col-xs-2 col-sm-6 col-lg-2  "><p align="right" style="text-align:right;color:grey" ng-show="notification.ReadStatus===0">UNREAD</p></ons-col>
           </ons-row>
         </ons-list-item>
 </div>
@@ -47,12 +45,15 @@
   <ons-page ng-controller="IndividualNotificationController">
     <ons-toolbar>
       <div class="left"><ons-back-button>Back</ons-back-button></div>
-      <div class="center">{{notification.Type}}</div>
+      <div class="center">Notification</div>
     </ons-toolbar>
-    <div class="container jumbotron" style="text-align: left">
+    <div class="container jumbotron" style="text-align: left;padding:2vw">
       <br />
-      <h4>{{notification.DateAdded|date}}</h4>
-     <p> <strong>{{notification.Source}}:</strong> {{notification.Description}}</p>
+      <strong>Date:</strong>{{notification.DateTime|date:"EEEE MMMM d, yyyy"}} <br>
+      <strong>Time:</strong>{{notification.DateTime|date:"h:mm a"}}<br>
+      <strong>Type: </strong> {{notification.Name}}<br>
+      <strong>Issued By: </strong>{{notification.IssuedBy}}<br>
+      <strong>Description:</strong> {{notification.Description}}
     </div>
   </ons-page>
 </ons-template>

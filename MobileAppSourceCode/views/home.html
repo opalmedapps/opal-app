@@ -1,12 +1,12 @@
 <ons-navigator title="Navigator" var="myNavigator">
-<ons-page ng-controller="homeController">
+<ons-page ng-controller="HomeController">
   <ons-toolbar>
    <div class="left">
       <ons-toolbar-button ng-click="menu.toggle()">
-        <ons-icon icon="ion-navicon" size="28px" fixed-width="false"></ons-icon><div class="notification menu-notification">{{Notifications}}</div>
+        <ons-icon icon="ion-navicon" size="28px" fixed-width="false"></ons-icon><div class="notification menu-notification">{{TotalNumberOfNews}}</div>
       </ons-toolbar-button>
     </div>
-    <div class="center">Home</div>
+    <div class="center">{{'HEADER_MESSAGE_HOME'|translate}}</div>
   </ons-toolbar>
           <ons-pull-hook ng-action="load($done)" var="loader">
         <span ng-switch="loader.getCurrentState()">
@@ -15,53 +15,77 @@
           <span ng-switch-when="action"><ons-icon size="35px" spin="true" icon="ion-load-d"></ons-icon> Loading data...</span>
         </span>
       </ons-pull-hook>
-          <div class="container">
+          <div class="container" ng-hide="noNotifications">
 <a style="text-decoration:none" href ng-click="menu.setMainPage('views/notifications.html',{closeMenu:true})">
-        <alert align="center" ng-show="showAlert&&Notifications>1" ng-model="alert" type="success" close="closeAlert()">You have {{Notifications}} unseen notifications. <span class="hidden-xs">Go to your Notifications page under the menu on the left.</span>
+        <alert align="center" ng-show="showAlert&&(Notifications==1)" ng-model="alert" type="success" close="closeAlert()">You have {{Notifications}} unseen notifications. <span class="hidden-xs">Go to your Notifications page under the menu on the left.</span>
         </alert>
-        <alert align="center" ng-show="showAlert&&Notifications<=1" ng-model="alert" type="success" close="closeAlert()">You have {{Notifications}} unseen notification. <span class="hidden-xs">Go to your Notifications page under the menu on the left.</span>
+        <alert align="center" ng-show="showAlert&&(Notifications>1)" ng-model="alert" type="success" close="closeAlert()">You have {{Notifications}} unseen notification. <span class="hidden-xs">Go to your Notifications page under the menu on the left.</span>
         </alert></a>
  </div>
-      <div class="container" align="center">
-      <!--<img  style="max-width: 100%;height:auto;" ng-src="./img/muhc-logo-text.png" >-->
+ <ons-gesture-detector ng-swipeleft="doSomething()">
+      <div id="detect-area" class="container" align="center">
+        <img ng-src="./img/muhc-logo-text.png" >
       </div>
-       <div class="profile-card" >
-
-        
+</ons-gesture-detector>
+       <div class="profile-card" style="padding-bottom:10vh">
         <div  align="center" style="text-align:left;margin-left:5%;margin-right:10%" >
         <strong>{{dateToday|date:"EEEE MMMM d, yyyy"}}</strong><br>
-      <h2>Welcome, <span style="color:#2B6197"> {{FirstName}} {{LastName}}</span></h2> <br>
-        <div ng-show="showNextAppointment">
-         <span class="profile-name"><strong>Status:</strong></span><p style="margin-left:5%">
-       You are currently on the planning stage.
+      <h3>{{'WELCOME_MESSAGE'| translate}}, <span style="color:#2B6197"> {{FirstName}} {{LastName}}</span></h3>
+        <div >
+         <span class="profile-name"><strong>{{'STATUS'|translate}}:</strong></span><p style="margin-left:5%">
+       {{'STATUS_CONTENT'|translate}}
      </p>
-          <span class="profile-name"><strong>You have a radiotherapy appointment on:</strong></span>
-          <span>{{NextAppointmentDate|date:"EEEE MMMM d, yyyy 'at' h:mm a"}}</span>.<br>
-          <a style="margin-left:5%;font-size:14px" href ng-click="menu.setMainPage('views/maps.html', {closeMenu: true})">Check appointment location&raquo;</a><br>
-          <a style="margin-left:5%;font-size:14px" ng-click="menu.setMainPage('views/schedule.html', {closeMenu: true})" href >Check appointment details&raquo;</a>
+          <span class="profile-name"><strong>{{"UPCOMING_NAME"|translate}} {{NextAppointmentType}} {{"UPCOMING_APPOINT"|translate}}:</strong></span>
+          <span>{{NextAppointmentDate|date:"EEEE MMMM d, yyyy 'at' h:mm a"}}</span>.<br><br>
+         <!-- <select ng-model="locale" class="form-control"
+            ng-change="updateLocale(locale)"
+            ng-options="locale.id as locale.name for locale in locales">
+        </select>-->
+        <br>
+          <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6" aling="center">
+            <button class="btn btn-primary" ng-click="menu.setMainPage('views/checkin.html', {closeMenu: true})"><ons-icon icon="fa-check-square-o" fixed-width="true"></ons-icon>{{"CHECKIN_BUTTON"|translate}}</button>
+          </div>
+          <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6" align="center">
+             <button class="btn btn-primary" ng-click="menu.setMainPage('views/schedule.html', {closeMenu: true})" href ><ons-icon icon="ion-ios-paper-outline" fixed-width="true"></ons-icon>{{"DETAILS_BUTTON"|translate}}</button>
+          </div>
         </div>
-        <div>  
-    
-     </div>
-
       </div>
       </div>
       <ons-list modifier="inset" style="margin-top: 10px" class="prop-desc">
-       <ons-list-item modifier="chevron" ng-click="menu.setMainPage('views/checkin.html', {closeMenu: true})">
-          <i class="fa fa-check-square-o" ></i>&nbsp;Check In
+       <ons-list-item modifier="chevron" ng-click="menu.setMainPage('views/schedule.html', {closeMenu: true})">
+          <i class="fa fa-check-square-o" ></i>&nbsp;{{"GO_TO_APPOINTMENTS_TAP"|translate}}
         </ons-list-item>
-        <ons-list-item modifier="chevron" ng-click="goContact('Physician')" >
-          <ons-icon icon="ion-android-people"></ons-icon>&nbsp;<span style="color:black">Contact {{primaryPhysician}}</span>
-        </ons-list-item>
-
-        <ons-list-item modifier="chevron" ng-click="goContact('Oncologist')" >
-          <ons-icon icon="ion-android-people"></ons-icon></i>&nbsp;<span style="color:black">Contact {{oncologist}}</span>
+        <ons-list-item modifier="chevron" ng-click="myNavigator.pushPage('page1.html', { animation : 'slide' } );" >
+          <ons-icon icon="ion-android-people"></ons-icon>&nbsp;<span style="color:black">{{"CONTACT_DOCTORS_TAP"|translate}}</span>
         </ons-list-item>
       </ons-list>
 </ons-page>
 </ons-navigator>
+<ons-template id="page1.html">
+  <ons-page ng-controller="ContactDoctorsController">
+    <ons-toolbar>
+      <div class="left"><ons-back-button>Back</ons-back-button></div>
+      <div class="center">Doctors</div>
+    </ons-toolbar>
+    <ons-list >
+      <ons-list-header >Primary Doctor</ons-list-header>
+
+      <ons-list-item ng-click="goDoctorContact()" modifier="chevron">{{primaryPhysician.FirstName}} {{primaryPhysician.LastName}}</ons-list-item>
+
+      <ons-list-header ng-show="oncologists.length>0">Oncologists</ons-list-header>
+
+      <ons-list-item ng-repeat="doctor in oncologists"ng-click="goDoctorContact(doctor)" modifier="chevron"> {{doctor.FirstName}} {{doctor.LastName}}</ons-list-item>
+      
+      <ons-list-header ng-show="otherDoctors.length>0">Other</ons-list-header>
+      <ons-list-item ng-repeat="doctor in otherDoctors" ng-click="goDoctorContact(doctor)" modifier="chevron"> {{doctor.FirstName}} {{doctor.LastName}}</ons-list-item>
+
+    </ons-list>
+
+
+  </ons-page>
+</ons-template>
 <ons-template id="page2.html">
-  <ons-page ng-controller="ContactDoctorController">
+  <ons-page ng-controller="ContactIndividualDoctorController">
     <ons-toolbar>
       <div class="left"><ons-back-button>Back</ons-back-button></div>
       <div class="center">{{header}}</div>
@@ -69,9 +93,8 @@
      <div class="profile-cardContact">
 
         <img src="img/logo.png" class="profile-image">
-        <div class="profile-name">Dave Graham</div>
-        <div class="profile-id">@davegraham</div>
-        <div class="profile-desc">Freelance designer, software engineer and cyclist</div>
+        <div class="profile-name">{{doctor.FirstName}} {{doctor.LastName}}</div>
+        <div class="profile-desc">{{header}}</div>
 
       </div>
 
@@ -79,32 +102,36 @@
           <ons-list-item modifier="chevron">
             <div class="prop-desc">
               <ons-icon icon="fa-map-marker"></ons-icon>
-              <span style="color:black" >Medical Physics Unit, L5-122. Montreal General Hospital</span>
+              <span style="color:black" >{{doctor.Address}}</span>
             </div>
           </ons-list-item>
 
           <ons-list-item modifier="chevron">
-            <div class="prop-desc">
+             <a href="tel:{{doctor.phone}}" style="text-decoration:none"><div class="prop-desc">
               <ons-icon icon="fa-mobile"></ons-icon>
-              <span style="color:black" >(514) 123-1234</span>
-            </div>
-          </ons-list-item>
-
-          <ons-list-item modifier="chevron">
-            <div class="prop-desc">
-              <ons-icon icon="fa-phone"></ons-icon>
               
-               <span style="color:black" >(514) 123-1234</span>
-            </div>
+               <span style="color:black" >{{doctor.Phone}}</span>
+            </div></a>
           </ons-list-item>
 
           <ons-list-item modifier="chevron">
+          <a href="mailto:{{doctor.Email}}">
             <div class="prop-desc">
               <ons-icon icon=" fa-envelope-o"></ons-icon>
-              <span style="color:black" >dahhir@gmail.com</span>
+              <span style="color:black" >{{doctor.Email}}</span>
             </div>
+            </a>
+          </ons-list-item>
+        <ons-list-item modifier="chevron">
+          <a ng-click="menu.setMainPage('views/patientPortal.html',{closedMenu:true})">
+            <div class="prop-desc">
+              <ons-icon icon="ion-ios-chatbubble-outline" fixed-width="false" size="17px"></ons-icon>
+              <span style="color:black" >Message {{doctor.FirstName}} {{doctor.LastName}}</span>
+            </div>
+            </a>
           </ons-list-item>
         </ons-list>
+
 
   </ons-page>
 </ons-template>

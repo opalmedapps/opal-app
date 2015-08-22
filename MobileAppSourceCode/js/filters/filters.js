@@ -1,4 +1,4 @@
-var myApp=angular.module('app.filters',[]);
+var myApp=angular.module('MUHCApp.filters',[]);
 	myApp.filter('notifications',function(){
 		return function(input){
 			if(input==='DoctorNote'){
@@ -14,11 +14,32 @@ var myApp=angular.module('app.filters',[]);
 
 
 	});
+  myApp.filter('formatDateToFirebaseString',function(){
+    return function(date){
+      var month=date.getMonth()+1;
+      var year=date.getFullYear();
+      var day=date.getDate();
+      var minutes=date.getMinutes();
+      var seconds=date.getSeconds();
+      var hours=date.getHours();
+      var string= year+'-'+month+'-'+day+'T'+hours+':'+ minutes +':'+seconds+'.000'+'Z';
+      return string;
+
+
+
+
+    }
+
+  });
+
+
 	myApp.filter('formatDate',function(){
 		return function(str) {
         if(typeof str==='string'){
-
-            var res = str.split("  ");
+            str=str.replace('T',' ');
+            str=str.replace('Z','');
+            return new Date(str);
+            /*var res = str.split("  ");
            var res1=res[1].split(" ");
             var res2 = (res[0]).split("-");
             //console.log(res2);
@@ -48,9 +69,38 @@ var myApp=angular.module('app.filters',[]);
             }
             var d = new Date(parseInt(year1), parseInt(month1) - 1, parseInt(day1), parseInt(hours1), parseInt(minutes1));
             return d;
-        }else{ return new Date();}
+        }else{ return new Date();}*/
+        }
+      }
+	});
+
+myApp.filter('propsFilter', function() {
+  return function(items, props) {
+    var out = [];
+
+    if (angular.isArray(items)) {
+      items.forEach(function(item) {
+        var itemMatches = false;
+
+        var keys = Object.keys(props);
+        for (var i = 0; i < keys.length; i++) {
+          var prop = keys[i];
+          var text = props[prop].toLowerCase();
+          if (item[prop].toString().toLowerCase().indexOf(text) !== -1) {
+            itemMatches = true;
+            break;
+          }
         }
 
+        if (itemMatches) {
+          out.push(item);
+        }
+      });
+    } else {
+      // Let the output be the input untouched
+      out = items;
+    }
 
-
-	});
+    return out;
+  }
+});
