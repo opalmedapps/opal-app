@@ -1,0 +1,112 @@
+<h1><code ng:non-bindable="">Qplus Firebase Listener</code>
+<div><span class="hint"></span>
+</div>
+</h1>
+<div><h2 id="description">Description</h2>
+<div class="description"><div class="qplus-firebase-listener-page"><p>The request listener , written in Node.js fits right in with firebase&#39;s powerful API.
+It uses firebase&#39;s .on(&#39;child_added&#39;) Method to watch the &quot;requests&quot; subtree of our Qplus firebase DB.
+Every time there is a new request submitted to firebase, the listener will read the contents of the request object ( using  .once(&#39;value&#39;) and snapshot.val() ) and trigger the proper tasks and queries based on it&#39;s type ( if statements ).
+Node&#39;s mysql module is used to establish a connection to hospital&#39;s MySQL and send queries which will send or receive information ,
+process it and eventually send back the proper response to firebase which then will be received by the mobile app itself. The most important request is login as it involves the highest amount of data that needs to be fetched and handled. The queries to different tables are nested in each other, Each of them happens after the previous one is successful.</p>
+</div></div>
+<h2 id="dependencies">Dependencies</h2>
+<ul class="dependencies"><li><code ng:non-bindable=""><a href="#/api/mysql">mysql</a></code>
+<div class="qplus-firebase-listener-page"><ul>
+<li>npm install mysql :  node module to connect to MySQL databases.</li>
+</ul>
+</div></li>
+<li><code ng:non-bindable=""><a href="#/api/firebase">firebase</a></code>
+<div class="qplus-firebase-listener-page"><ul>
+<li>npm install firebase : node  module that provides firebase&#39;s real-time API.</li>
+</ul>
+</div></li>
+<li><code ng:non-bindable=""><a href="#/api/fs">fs</a></code>
+<div class="qplus-firebase-listener-page"><ul>
+<li>Included with node.js :  node module to manipulate the local file system.</li>
+</ul>
+</div></li>
+<li><code ng:non-bindable=""><a href="#/api/q">q</a></code>
+<div class="qplus-firebase-listener-page"><ul>
+<li>npm install q : node  module for implementing promises(Asynchronous Calls in functions).</li>
+</ul>
+</div></li>
+<li><code ng:non-bindable=""><a href="#/api/crypto-js">crypto-js</a></code>
+<div class="qplus-firebase-listener-page"><ul>
+<li>npm install crypto-js : node  module used for encryption of data.</li>
+</ul>
+</div></li>
+</ul>
+<div class="member method"><h2 id="methods">Methods</h2>
+<ul class="methods"><li><h3 id="methods_accountchangedatahandler">AccountChangeDataHandler()</h3>
+<div class="accountchangedatahandler"><div class="accountchangedatahandler-page"><p>Sends data to firebase as a response to a change of account information request.</p>
+</div></div>
+</li>
+<li><h3 id="methods_appointmentchangedatahandler">AppointmentChangeDataHandler()</h3>
+<div class="appointmentchangedatahandler"><div class="appointmentchangedatahandler-page"><p>Sends data to firebase as a response to a change of appointment request.</p>
+</div></div>
+</li>
+<li><h3 id="methods_checkindatahandler">CheckinDataHandler()</h3>
+<div class="checkindatahandler"><div class="checkindatahandler-page"><p>Sends data to firebase as a response to a checkin request.</p>
+</div></div>
+</li>
+<li><h3 id="methods_feedbackdatahandler">FeedbackDataHandler()</h3>
+<div class="feedbackdatahandler"><div class="feedbackdatahandler-page"><p>Sends data to firebase as a response to a Feedback message request.</p>
+</div></div>
+</li>
+<li><h3 id="methods_loadattachments">LoadAttachments()</h3>
+<div class="loadattachments"><div class="loadattachments-page"><p>Uses the q module to make a promise to load attachments. The promise is resolved after all of them have been read from file system using the fs module. The code continues to run only if the promise is resolved.</p>
+</div></div>
+</li>
+<li><h3 id="methods_loadimages">LoadImages()</h3>
+<div class="loadimages"><div class="loadimages-page"><p>Uses the q module to make a promise to load images. The promise is resolved after all of them have been read from file system using the fs module. The code continues to run only if the promise is resolved.</p>
+</div></div>
+</li>
+<li><h3 id="methods_logoutdatahandler">LogoutDataHandler()</h3>
+<div class="logoutdatahandler"><div class="logoutdatahandler-page"><p>Sends data to firebase as a response to a logout request.</p>
+</div></div>
+</li>
+<li><h3 id="methods_messagedatahandler">MessageDataHandler()</h3>
+<div class="messagedatahandler"><div class="messagedatahandler-page"><p>Sends data to firebase as a response to a message delivery request.</p>
+</div></div>
+</li>
+<li><h3 id="methods_messagereaddatahandler">MessageReadDataHandler()</h3>
+<div class="messagereaddatahandler"><div class="messagereaddatahandler-page"><p>Sends data to firebase as a response to a message read request.</p>
+</div></div>
+</li>
+<li><h3 id="methods_notificationreaddatahandler">NotificationReadDataHandler()</h3>
+<div class="notificationreaddatahandler"><div class="notificationreaddatahandler-page"><p>Sends data to firebase as a response to a notification read request.</p>
+</div></div>
+</li>
+<li><h3 id="methods_refreshdatahandler">RefreshDataHandler()</h3>
+<div class="refreshdatahandler"><div class="refreshdatahandler-page"><p>Sends data to firebase as a response to a information refresh request.</p>
+</div></div>
+</li>
+<li><h3 id="methods_completerequest">completeRequest(dataHandlerFunction, UserID, Request)</h3>
+<div class="completerequest"><div class="completerequest-page"><p>Calls the corresponding datahandler function and logs the activity in MySQL&#39;s activitylog table. It will remove the submitted request from the firebase subtree after it&#39;s processed successfully.</p>
+</div><h5 id="methods_completerequest_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>dataHandlerFunction</td><td><a href="" class="label type-hint type-hint-function">function</a></td><td><div class="completerequest-page"><ul>
+<li>a function that sends data feedback based on the type of the request</li>
+</ul>
+</div></td></tr><tr><td>UserID</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="completerequest-page"><ul>
+<li>A user&#39;s firebase login id</li>
+</ul>
+</div></td></tr><tr><td>Request</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="completerequest-page"><ul>
+<li>Type of the request that&#39;s being processed</li>
+</ul>
+</div></td></tr></tbody></table></div>
+</li>
+<li><h3 id="methods_getdatetime">getDateTime()</h3>
+<div class="getdatetime"><div class="getdatetime-page"><p>Gets the current time and date from the system. This function can be used as a part of all of the dataHandler functions to timestamp user&#39;s timestamp sub-field in firebase ,
+keeping a record of the time of the most recent request of any type. This will help make sure that the most recent request has gone through.
+If the timestamp doesn&#39;t update it means the request has failed and needs to be re-submitted. ( Not used in the code yet).</p>
+</div><h5 id="methods_getdatetime_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="getdatetime-page"><ul>
+<li>Current date-time as a string.</li>
+</ul>
+</div></td></tr></table></div>
+</li>
+<li><h3 id="methods_logindatahandler">loginDataHandler()</h3>
+<div class="logindatahandler"><div class="logindatahandler-page"><p>Sends data to firebase as a response to a login request.</p>
+</div></div>
+</li>
+</ul>
+</div>
+</div>
