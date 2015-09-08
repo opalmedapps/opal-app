@@ -1,0 +1,21 @@
+<div class="jumbotron" style="margin-top:10%;text-align:center;box-shadow: 2px 2 px 2px 2px grey;" >
+<form novalidate>
+  <p class="text-danger"><Strong> You need to login! </Strong></p>
+  <br>
+<div style="width:90%;position:relative;left:27px;">
+  <div class="input-group" >
+    <span class="input-group-addon" id="basic-addon1"><span class="glyphicon glyphicon-user"></span>Username</span>
+    <input type="text" class="form-control" ng-model="user.username">
+  </div>
+  <div class="input-group">
+    <span class="input-group-addon" id="basic-addon1"><span class="glyphicon glyphicon-lock"></span>Password</span>
+    <input type="password" class="form-control" ng-model="user.password">
+  </div>
+  <br>
+  <button ng-click="login(user.username,user.password)" class="btn btn-info" style="width:100%;">Sign in</button>
+  <br>
+  <alert ng-repeat="alert in alerts" type="{{alert.type}}">{{alert.message}}</alert>
+</div>
+
+</form>
+</div>

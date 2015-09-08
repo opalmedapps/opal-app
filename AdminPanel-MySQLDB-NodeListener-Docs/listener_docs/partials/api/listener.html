@@ -1,0 +1,53 @@
+<h1><code ng:non-bindable="">listener</code>
+<div><span class="hint"></span>
+</div>
+</h1>
+<div><h2 id="description">Description</h2>
+<div class="description"><div class="listener-page"><p>firebase .on() API</p>
+</div></div>
+<div class="member method"><h2 id="methods">Methods</h2>
+<ul class="methods"><li><h3 id="methods_accountchangedatahandler">accountchangeDataHandler()</h3>
+<div class="accountchangedatahandler"><div class="accountchangedatahandler-page"><p>Sends data to firebase as a response to a change of account information request.</p>
+</div></div>
+</li>
+<li><h3 id="methods_appointmentchangedatahandler">appointmentchangeDataHandler()</h3>
+<div class="appointmentchangedatahandler"><div class="appointmentchangedatahandler-page"><p>Sends data to firebase as a response to a change of appointment request.</p>
+</div></div>
+</li>
+<li><h3 id="methods_checkindatahandler">checkinDataHandler()</h3>
+<div class="checkindatahandler"><div class="checkindatahandler-page"><p>Sends data to firebase as a response to a checkin request.</p>
+</div></div>
+</li>
+<li><h3 id="methods_completerequest">completeRequest(dataHandlerFunction, UserID, Request)</h3>
+<div class="completerequest"><div class="completerequest-page"><p>Calls the corresponding datahandler function and logs the activity in MySQL&#39;s activitylog table. It will remove the submitted request from the firebase subtree after it&#39;s processed successfully.</p>
+</div><h5 id="methods_completerequest_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>dataHandlerFunction</td><td><a href="" class="label type-hint type-hint-function">function</a></td><td><div class="completerequest-page"><ul>
+<li>a function that sends data feedback based on the type of the request</li>
+</ul>
+</div></td></tr><tr><td>UserID</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="completerequest-page"><ul>
+<li>A user&#39;s firebase login id</li>
+</ul>
+</div></td></tr><tr><td>Request</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="completerequest-page"><p>= Type of the request that&#39;s being processed</p>
+</div></td></tr></tbody></table></div>
+</li>
+<li><h3 id="methods_getdatetime">getDateTime()</h3>
+<div class="getdatetime"><div class="getdatetime-page"><p>Gets the current time and date from the system.</p>
+</div><h5 id="methods_getdatetime_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="getdatetime-page"><ul>
+<li>Current time as a string.</li>
+</ul>
+</div></td></tr></table></div>
+</li>
+<li><h3 id="methods_logindatahandler">loginDataHandler()</h3>
+<div class="logindatahandler"><div class="logindatahandler-page"><p>Sends data to firebase as a response to a login request.</p>
+</div></div>
+</li>
+<li><h3 id="methods_logoutdatahandler">logoutDataHandler()</h3>
+<div class="logoutdatahandler"><div class="logoutdatahandler-page"><p>Sends data to firebase as a response to a logout request.</p>
+</div></div>
+</li>
+<li><h3 id="methods_messagedatahandler">messageDataHandler()</h3>
+<div class="messagedatahandler"><div class="messagedatahandler-page"><p>Sends data to firebase as a response to a message delivery request.</p>
+</div></div>
+</li>
+</ul>
+</div>
+</div>
