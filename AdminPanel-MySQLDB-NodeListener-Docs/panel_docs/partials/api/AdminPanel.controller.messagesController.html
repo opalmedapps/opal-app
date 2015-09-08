@@ -1,0 +1,66 @@
+<h1><code ng:non-bindable="">messagesController</code>
+<div><span class="hint">controller in module <code ng:non-bindable="">AdminPanel</code>
+</span>
+</div>
+</h1>
+<div><h2 id="description">Description</h2>
+<div class="description"><div class="adminpanel-controller-page adminpanel-controller-messagescontroller-page"><p>Controller for the messaging view.</p>
+</div></div>
+<h2 id="dependencies">Dependencies</h2>
+<ul class="dependencies"><li><code ng:non-bindable=""><a href="#/api/ng.$http">$http</a></code>
+</li>
+<li><code ng:non-bindable=""><a href="#/api/ng.$rootScope">$rootScope</a></code>
+</li>
+<li><code ng:non-bindable=""><a href="#/api/ng.$scope">$scope</a></code>
+</li>
+<li><code ng:non-bindable=""><a href="#/api/ng.$timeout">$timeout</a></code>
+</li>
+<li><code ng:non-bindable=""><a href="#/api/Upload">Upload</a></code>
+</li>
+</ul>
+<div class="member method"><h2 id="methods">Methods</h2>
+<ul class="methods"><li><h3 id="methods_findpatient">FindPatient()</h3>
+<div class="findpatient"><div class="findpatient-page"><p>looks for patient in the MySQL database based on last name and saves it to the $scope. This method is used to then create a new conversation with an arbitrary patient.</p>
+</div><h5 id="methods_findpatient_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-object">Object</a></td><td><div class="findpatient-page"><p>$scope.Patients</p>
+</div></td></tr></table></div>
+</li>
+<li><h3 id="methods_getmessages">GetMessages()</h3>
+<div class="getmessages"><div class="getmessages-page"><p>Saves all messages relevant to the current administrator to the $scope. It then sorts them into different conversations between admin and each individual user.</p>
+</div><h5 id="methods_getmessages_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-string">String</a></td><td><div class="getmessages-page"><p>$scope.Conversations</p>
+</div></td></tr></table></div>
+</li>
+<li><h3 id="methods_newconversation">NewConversation(patient)</h3>
+<div class="newconversation"><div class="newconversation-page"><p>Creates a new conversation and sets the $scope.currentConversation afterwards or if the  conversation with that patient already exists. Makes use of SetCurrentConversation method.</p>
+</div><h5 id="methods_newconversation_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>patient</td><td><a href="" class="label type-hint type-hint-object">Object</a></td><td><div class="newconversation-page"><p>Object containing patient&#39;s general information.</p>
+</div></td></tr></tbody></table></div>
+</li>
+<li><h3 id="methods_readmessages">ReadMessages(currentconversation)</h3>
+<div class="readmessages"><div class="readmessages-page"><p>Sets the ReadStatus of all of messages in the selected conversation to read.</p>
+</div><h5 id="methods_readmessages_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>currentconversation</td><td><a href="" class="label type-hint type-hint-integer">Integer</a></td><td><div class="readmessages-page"><p>key of the selected conversation in $scope.Conversations.</p>
+</div></td></tr></tbody></table><h5 id="methods_readmessages_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-string">String</a></td><td><div class="readmessages-page"><p>message.ReadStatus</p>
+</div></td></tr></table></div>
+</li>
+<li><h3 id="methods_sendfile">SendFile(file)</h3>
+<div class="sendfile"><div class="sendfile-page"><p>Sends a message with an attachment to MySQL with a POST request (using the Upload service ).The attachment is saved to &#39;PatientFiles/^patientsernum^/Attachment&#39;, It then adds the new message to the Conversations inside the scope.</p>
+</div><h5 id="methods_sendfile_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>file</td><td><a href="" class="label type-hint type-hint-object">Object</a></td><td><div class="sendfile-page"><p>file selected by user</p>
+</div></td></tr></tbody></table><h5 id="methods_sendfile_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-string">String</a></td><td><div class="sendfile-page"><p>$scope.errorMsg</p>
+</div></td></tr></table></div>
+</li>
+<li><h3 id="methods_sendmessage">SendMessage()</h3>
+<div class="sendmessage"><div class="sendmessage-page"><p>Sends a new message to the messages table in MySQL database. It also adds it to the $scope.Conversations locally.</p>
+</div></div>
+</li>
+<li><h3 id="methods_setcurrentconversation">SetCurrentConversation(key)</h3>
+<div class="setcurrentconversation"><div class="setcurrentconversation-page"><p>Sets the current conversation&#39;s key to the $scope.</p>
+</div><h5 id="methods_setcurrentconversation_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>key</td><td><a href="" class="label type-hint type-hint-integer">Integer</a></td><td><div class="setcurrentconversation-page"><p>key of the a conversation in $scope.Conversations which is equal to patient&#39;s patientsernum. It makes use of the ReadMessages method.</p>
+</div></td></tr></tbody></table><h5 id="methods_setcurrentconversation_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-string">String</a></td><td><div class="setcurrentconversation-page"><p>$scope.currentConversation</p>
+</div></td></tr></table></div>
+</li>
+<li><h3 id="methods_togglefiles">ToggleFiles()</h3>
+<div class="togglefiles"><div class="togglefiles-page"><p>Sets the value of $scope.WantToSend to false if its true and vice versa.</p>
+</div><h5 id="methods_togglefiles_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-string">String</a></td><td><div class="togglefiles-page"><p>$scope.WantToSend</p>
+</div></td></tr></table></div>
+</li>
+</ul>
+</div>
+</div>

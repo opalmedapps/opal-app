@@ -1,0 +1,82 @@
+<br>
+<p> <span class="glyphicon glyphicon-search"></span> - <strong>Use Patient I.D. number or Last name to search :</strong></p>
+<br>
+<div style="width:250px;margin-left:40%">
+<div class="input-group">
+  <span class="input-group-addon" id="basic-addon1">Patient ID#</span>
+  <input type="text" ng-model="PatientId" class='form-control' ng-change="FindPatient()" ng-model-options="{debounce: 750}">
+</div>
+<div class="input-group">
+<span class="input-group-addon" id="basic-addon1">Last Name</span>
+<input type="text" ng-model="LastName" class="form-control" ng-change="FindPatient()" ng-model-options="{debounce: 750}">
+</div>
+</div>
+<br>
+  <alert  ng-repeat='alert in alerts' type="{{alert.type}}"><h3>{{alert.message}}</h3></alert>
+<br>
+<div class="btn btn-danger btn-md" ng-disabled='!patientFound' ng-click="RemoveUser()"><p>Remove User <span class="glyphicon glyphicon-remove-sign"></span></p></div>
+<div ng-show='patientFound'>
+  <tabset justified="true" style="text-align:left;margin-top:0px;">
+    <tab heading="Patient Information" style="margin-left:10%;">
+      <p class="text-info">You can try changing patient's basic information by clicking on each field</p>
+      <table class="table table-bordered">
+        <tr ng-repeat="(key,value) in PatientInfo['0']" ng-click="ChangeValue(key)">
+          <td><strong> {{ key + ': '}}</strong></td>
+          <td> {{value || 'NA'}} </td>
+        </tr>
+      </table>
+    </tab>
+    <tab heading="Patient's Doctors">
+      <table class="table table-bordered">
+        <tr>
+          <th>First Name</th>
+          <th>Last Name</th>
+          <th>Phone Number</th>
+        </tr>
+        <tr ng-repeat="Doctor in Doctors">
+          <td> {{ Doctor.FirstName}} </td>
+          <td> {{Doctor.LastName}} </td>
+          <td> {{Doctor.Phone}} </td>
+        </tr>
+      </table>
+    </tab>
+    <tab heading="Activity Log">
+      <table class="table table-bordered">
+        <tr>
+          <th>Activity</th>
+          <th>Description</th>
+          <th>Date-Time</th>
+        </tr>
+        <tr ng-repeat="Activity in Activities">
+          <td> {{ Activity.ActivityType}} </td>
+          <td> {{Activity.ActivityDescription}} </td>
+          <td> {{Activity.ActivityDateTime}} </td>
+        </tr>
+      </table>
+    </tab>
+    <tab heading="Appointments">
+      <table class="table table-bordered">
+        <tr>
+          <th>Appointment</th>
+          <th>Start</th>
+          <th>End</th>
+          <th>Checked in</th>
+          <th>Location</th>
+          <th>Change Requested</th>
+          <th>Resource</th>
+        </tr>
+        <tr ng-repeat="Appointment in Appointments">
+          <td> {{ Appointment.ExpressionName}} </td>
+          <td> {{Appointment.ScheduledStartTime}} </td>
+          <td> {{Appointment.ScheduledEndTime}} </td>
+          <td> {{ Appointment.Checkin}} </td>
+          <td> {{Appointment.Location}} </td>
+          <td> {{Appointment.ChangeRequest}} </td>
+          <td> {{Appointment.ResourceName}} </td>
+        </tr>
+      </table>
+    </tab>
+  </tabset>
+
+<p ng-show='false'>{{patientFound}} </p>
+</div>

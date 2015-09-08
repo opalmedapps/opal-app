@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Qplus Admin Portal</title>
+<!-- Libraries -->
+	<script src="./js/jquery.min.js"></script>
+	<script src= "./js/angular.js"></script>
+	<script src="./js/angular-poller.js"></script>
+	<script src="./js/angular-ui-router.js"></script>
+	<script src="./js/bootstrap.min.js"></script>
+	<script src="./js/jquery-1.11.1.min.js"></script>
+	<script src="./js/ui-bootstrap-tpls.js"></script>
+	<script src="./js/ng-file-upload-shim.js"></script>
+	<script src="./js/ng-file-upload.min.js"></script>
+	<script src="./js/angular-animate.js"></script>
+	<script src="./js/app.js"></script>
+	<script src="./js/custom.js"></script>
+	<!--Controllers-->
+	<script src="./controllers/adminController.js"></script>
+	<script src="./controllers/appointmentController.js"></script>
+	<script src="./controllers/feedbackController.js"></script>
+	<script src="./controllers/loginModalController.js"></script>
+	<script src="./controllers/managementController.js"></script>
+	<script src="./controllers/messageController.js"></script>
+	<script src="./controllers/registerController.js"></script>
+	<script src="./controllers/welcomeController.js"></script>
+	<!--CSS-->
+	<link rel="stylesheet" href="./css/bootstrap.min.css">
+	<link rel="stylesheet" href="./css/font-awesome.css" >
+	<link rel="stylesheet" href="./css/custom.css" >
+</head>
+  <body style="text-align:center" ng-app="myApp" >
+		<img src="Images/FinalLogo.png">
+		<h5 style="color:#2E8AE6">Departments of Medical Physics and Radiation Oncology</h5>
+		<div class="container-fluid" style="left-margin:10%">
+			<nav  class="navbar navbar-default" style="text-align:center">
+				<div class="navbar-header text-danger">
+					 <a class="navbar-brand" href="#"><span class="glyphicon glyphicon-user"></span>{{ currentUser || "Not logged in"}} </a>
+				 </div>
+				 <div  id='cssmenu'>
+					 <ul class="nav navbar-nav">
+						 <li ui-sref-active="active"><a ui-sref="welcome"><span class=" glyphicon glyphicon-chevron-right"></span>Home</a></li>
+						 <li ui-sref-active="active"><a ui-sref="registration"><span class=" glyphicon glyphicon-chevron-right"></span>Patient Registration</a></li>
+						 <li ui-sref-active="active"><a ui-sref="usermanagement"><span class=" glyphicon glyphicon-chevron-right"></span>Patient Manager</a></li>
+						 <li ui-sref-active="active"><a ui-sref="appointments"><span class=" glyphicon glyphicon-chevron-right"></span>Requests</a></li>
+						 <li ui-sref-active="active"><a ui-sref="messaging"><span class=" glyphicon glyphicon-chevron-right"></span>Messages</a></li>
+						 <li ui-sref-active="active"><a ui-sref="feedback"><span class=" glyphicon glyphicon-chevron-right"></span>Feedback</a></li>
+						 <li ui-sref-active="active"><a ui-sref="admins"><span class=" glyphicon glyphicon-chevron-right"></span>Admins</a></li>
+					 </ul>
+				 </div>
+				</nav>
+		  </div>
+
+		<div class="span12 ui-view-container">
+		<div class="well" ui-view></div>
+	</div>
+  </body>
+</html>
+<footer>
+	<center>
+		<p>Qplus Development Team - Summer 2015</p>
+		<p> Contact information:<br> <a href="mailto:mehryar.keshavarz@mail.mcgill.ca">mehryar.keshavarz@mail.mcgill.ca</a>.</p>
+	</center>
+</footer>

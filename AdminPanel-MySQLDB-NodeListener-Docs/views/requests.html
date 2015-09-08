@@ -1,0 +1,65 @@
+<div class="col-sm-12" id="listTop" >
+		<div style="margin-top:23%;padding:5px;position:fixed;">
+			<button  class="btn btn-sm btn-info" style='width:50%;box-shadow: 0 0 10px black'>Refresh</button>
+			<button class="btn btn-sm btn-info" style='width:50%;box-shadow: 0 0 10px black' ng-click="gotoTop()"><span class="glyphicon glyphicon-arrow-up"></span></button>
+		</div>
+
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h4 class="text-info"><strong>Pending Requests</strong></h4>
+				<br>
+				<label>Search by Name: <input ng-model="searchText"></label>
+			</div>
+			<div class="panel-body">
+					<p class="text-info"> Please remove each request when a decision has been made.</p>
+			</div>
+			<!-- Table -->
+			<table class="table" style='text-align:left'>
+				<th>#</th>
+				<th>Submitted By</th>
+				<th>Appointment</th>
+				<th>Scheduled Time</th>
+				<th>Preferred Time and Date</th>
+				<th>Remove</th>
+				<tr ng-repeat="(key,value) in Requests | filter:searchText" ng-click="setCurrentReq(key)">
+					<td>{{$index+1}}</td>
+					<td>{{value.FirstName+" "+value.LastName}}</td>
+					<td>{{value.AppointmentType}}</td>
+					<td>{{value.ScheduledStartTime}}</td>
+					<td>{{value.PreferredStartDate+" to "+value.PreferredEndDate+"-"+value.TimeOfDay}}</td>
+					<td><span class="glyphicon glyphicon-remove" ng-click="RemoveAppointmentRequest(key)"></span></td>
+				</tr>
+			</table>
+		</div>
+	</div>
+	<!--	<div class="container-fluid">
+				<div class="col-sm-6">
+						<div  class="jumbotron"  style="box-shadow: 0 0 30px black;text-align:center;margin-top:0px;" >
+							<h3  ><small><p class="text-info">{{Requests[key].FirstName+" "+Requests[key].LastName}}</p> wants to change the time for appointment : <p class="text-danger">{{Requests[key].AppointmentType}}</p>, currently scheduled for :<p class="text-danger">{{Requests[key].ScheduledStartTime}}</p></small></h3>
+							<br>
+							<p class="text-info"><strong>Do you want to change the time of this appointment?</strong> </p>
+							<select ng-model="changeAppointment">
+							<option value="Yes">Yes</option>
+							<option value="No">No</option>
+							</select>
+							<div ng-show="changeAppointment==='No'">
+								<br>
+								<button ng-click="RemoveAppointmentRequest()" class="btn btn-sm btn-danger">Remove the Request</button>
+							</div>
+								<div ng-show="changeAppointment==='Yes'" style="box-shadow: 0 0 30x black;padding:25px">
+								<p class="text-info">Please enter the new date and time for the appointment  : </p>
+								<br>
+								<div style="display:inline-block; min-height:290px;">
+							       <datepicker ng-model="newStartTime" ng-change="SyncEndDate()" show-weeks="true" class="well well-sm"></datepicker>
+										<label> Start Time: <timepicker ng-model="newStartTime" show-meridian="false"></timepicker></label>
+							  </div>
+								<br>
+								<label>End Time :
+								<timepicker ng-model="newEndTime"   show-meridian="false"></timepicker></label>
+								<br>
+								<button ng-click="ChangeAppointment()" class="btn btn-sm btn-success">Change Appointment Schedule</button>
+							</div>
+
+						</div>
+				</div>
+			</div>-->

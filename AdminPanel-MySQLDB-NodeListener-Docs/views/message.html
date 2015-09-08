@@ -1,0 +1,115 @@
+<div class="row">
+        <div class="col-lg-3">
+            <div class="btn-panel btn-panel-conversation">
+                <!--<a href="" class="btn  col-lg-6 send-message-btn " role="button"><i class="fa fa-search"></i> Search:</a>-->
+                <p><small><strong>Search by last name:</strong></small></p>
+                <input type="text" class="form-control" ng-model="LastName" ng-change="FindPatient()"></input>
+            </div>
+            <div ng-show="patientFound" ng-repeat="patient in Patients" style="box-shadow:0 0 2px;padding:2px;">
+              <table>
+                <tr>
+                  <td><p  class="text-success"><small> {{patient.FirstName+" "+patient.LastName}}<small></p></td>
+                  <td>  <a  ng-click="NewConversation(patient)" href="" class="btn  col-lg-6  send-message-btn pull-right" role="button"><i class="fa fa-plus"></i> New Message</a></td>
+                </tr>
+              </table>
+            </div>
+        </div>
+        <br>
+      <!--  <div class="col-lg-offset-1 col-lg-7">
+            <div class="btn-panel btn-panel-msg">
+
+                <a href="" class="btn  col-lg-3  send-message-btn pull-right" role="button"><i class="fa fa-gears"></i> Settings</a>
+            </div>
+        </div>-->
+    </div>
+    <div class="row">
+
+        <div class="conversation-wrap col-lg-3">
+
+            <div ng-class="{'selected-conversation' : key==currentConversation}" class="media conversation" ng-repeat="(key,value) in Conversations | filter:SearchName" ng-click="SetCurrentConversation(key)" href='#'>
+                  <a class="pull-left" href="#">
+                  <!--  <img class="media-object" data-src="holder.js/64x64" alt="64x64" style="width: 50px; height: 50px;" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAMAAACdt4HsAAAAe1BMVEX///8Ah50Am60AmqwAjKEAiJ4AhpwAmasAl6oAjaIAip8Ai6AAmKsAjqMAkKQAkaUAk6YAkqYAlagAj6QAlKdVsb9Vusd5ws15yNLm9Pb3+/zX7fA0p7e94uc/rLru9/mIytRuws2d09uv2+GHx9LR7O85pLVetcJPrrxOWtDsAAABf0lEQVRYhe2WWY+DIBSFKdiKigtIXRD3uvz/Xzi2TTptB5WkmZeG82CCyf24nHuigNPpcDgcj0f36Lqu53nWIsdxfN8P4jgI4jCMKI0iyjlnjOGbbEJsmyCEIITAAAzAAL4QcAbaSpSA+VMA7YReueig2gNrynXq8wStmOi5Y7/bhOirNRPH2fLIZYcgGolJItVTqC+R55+HDYQYEhvDJlebuIyxHx1rXPdSdJLZVb82hWsOhsmyeLriZZ5BjNsBbAFA3WArnlXHEENlM9jUYBsAQDkHDunq9/q6gwxX5X2xCQBFSx3eFq/1RYs4fLzcBlw3c0JZPteXFebyt60dwLLfTH3WPLzMG0LJ+amnXQDIU+LzabgvhoREMHsezT5gSSwK4vF2jFLSCL5mXAOwNDHxmKVFkWFKkrdkaAGWSMAglDKKZPM+VD0AEKW8ftJk+SdWmoDlGF1VNYpgawPWZAAG8I8AlKqUZdnt8SL1j0XjfoAhRB9dMAzAAAzgmwE/JoJ6huUl0F0AAAAASUVORK5CYII=" />-->
+                  <span class="glyphicon glyphicon-comment"></span>
+                  </a>
+                <div class="media-body">
+                   <h5 class="media-heading">{{value[0].PatientFirstName+" "+value[0].PatientLastName}}</h5>
+                  <small>Hello</small>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="message-wrap col-lg-8">
+            <div class="msg-wrap">
+
+              <!--  <div class="alert alert-info msg-date">
+                    <strong>Today</strong>
+                </div>-->
+                <div class="media msg" ng-repeat="message in Conversations[currentConversation] | orderBy:'MessageDate'">
+                  <!--  <a class="pull-left" href="#">
+                        <img class="media-object" data-src="holder.js/64x64" alt="64x64" style="width: 32px; height: 32px;" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAACqUlEQVR4Xu2Y60tiURTFl48STFJMwkQjUTDtixq+Av93P6iBJFTgg1JL8QWBGT4QfDX7gDIyNE3nEBO6D0Rh9+5z9rprr19dTa/XW2KHl4YFYAfwCHAG7HAGgkOQKcAUYAowBZgCO6wAY5AxyBhkDDIGdxgC/M8QY5AxyBhkDDIGGYM7rIAyBgeDAYrFIkajEYxGIwKBAA4PDzckpd+322243W54PJ5P5f6Omh9tqiTAfD5HNpuFVqvFyckJms0m9vf3EY/H1/u9vb0hn89jsVj8kwDfUfNviisJ8PLygru7O4TDYVgsFtDh9Xo9NBrNes9cLgeTybThgKenJ1SrVXGf1WoVDup2u4jFYhiPx1I1P7XVBxcoCVCr1UBfTqcTrVYLe3t7OD8/x/HxsdiOPqNGo9Eo0un02gHkBhJmuVzC7/fj5uYGXq8XZ2dnop5Mzf8iwMPDAxqNBmw2GxwOBx4fHzGdTpFMJkVzNB7UGAmSSqU2RoDmnETQ6XQiOyKRiHCOSk0ZEZQcUKlU8Pz8LA5vNptRr9eFCJQBFHq//szG5eWlGA1ywOnpqQhBapoWPfl+vw+fzweXyyU+U635VRGUBOh0OigUCggGg8IFK/teXV3h/v4ew+Hwj/OQU4gUq/w4ODgQrkkkEmKEVGp+tXm6XkkAOngmk4HBYBAjQA6gEKRmyOL05GnR99vbW9jtdjEGdP319bUIR8oA+pnG5OLiQoghU5OElFlKAtCGr6+vKJfLmEwm64aosd/XbDbbyIBSqSSeNKU+HXzlnFAohKOjI6maMs0rO0B20590n7IDflIzMmdhAfiNEL8R4jdC/EZIJj235R6mAFOAKcAUYApsS6LL9MEUYAowBZgCTAGZ9NyWe5gCTAGmAFOAKbAtiS7TB1Ng1ynwDkxRe58vH3FfAAAAAElFTkSuQmCC">
+                    </a> -->
+                    <div class="media-body" >
+                        <small class="pull-right time"><img src="./Images/message-read.png" style="width:20px;height:20px;" ng-show="message.SenderRole=='Admin' && message.ReadStatus==1" /><i class="fa fa-clock-o"></i> {{message.MessageDate}}</small>
+                        <h5 ng-show="message.SenderRole=='Admin'" class="media-heading">You</h5>
+                        <h5 ng-show="message.SenderRole=='Patient'" class="media-heading">{{message.PatientFirstName}}</h5>
+                        <small class="col-lg-10">{{message.MessageContent}}</small>
+
+                        <a ng-show="message.Attachment && message.Attachment!=='No'"  href="{{message.Attachment}}" download><img style="width:40px;height:40px;" src="./Images/attachment_icon.png"></a>
+                        <br>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="send-wrap ">
+
+                <textarea class="form-control send-message" rows="3" placeholder="Write a reply..." ng-model="newMessage"></textarea>
+
+
+            </div>
+            <div class="btn-panel">
+                <a href="" ng-click="ToggleFiles()" class=" col-lg-3 btn   send-message-btn " role="button"><i class="fa fa-cloud-upload"></i> Send a File</a>
+
+                <a href="" class=" col-lg-4 text-right btn   send-message-btn pull-right" ng-click="SendMessage()" role="button"><i class="fa fa-plus"></i> Send Message</a>
+            </div>
+            <div id="fileDiv" ng-show="WantToSend">
+              <br>
+              <!-- for debug<form action="SendFile.php" method="POST" enctype="multipart/form-data">
+                <input type="file" name="file"></input>
+                <input type="text" name="message[0]" />
+                <input type="text" name="message[1]" />
+                <input type="text" name="message[2]" />
+                <input type="submit" value="send"></input>
+              </form>-->
+              <form name="myForm" method="POST" enctype="multipart/form-data" style="text-align:center;">
+                  <fieldset>
+                    <br>
+                    <input type="file" ngf-select ng-model="file" name="file"
+                           accept="image/*" ngf-max-size="'5MB'" required>
+                    <i ng-show="myForm.file.$error.required" class="text-danger">*required</i><br>
+                    <i ng-show="myForm.file.$error.maxSize" class="text-danger">File too large
+                        {{picFile.size / 1000000|number:1}}MB: max {{picFile.$errorParam}}</i>
+                    <br>
+                    <button class="btn btn-info" ng-disabled="myForm.file.$error.maxSize || myForm.file.$error.required" ng-click="SendFile(file)">Send</button>
+                    <br>
+                    <br>
+                    <progressbar ng-show="picFile.progress >= 0" class="progress-striped active" value="picFile.progress" type="info">{{picFile.progress}}</progressbar>
+                    <span class="text-info" ng-show="picFile.result">Upload Successful!</span>
+                    <span class="err" ng-show="errorMsg">{{errorMsg}}</span>
+                  </fieldset>
+                  <br>
+                </form>
+                <br>
+                <ul>
+                  <li ng-repeat="f in files" style="font:smaller">{{f.name}} {{f.$error}} {{f.$errorParam}}
+                    <span class="progress" ng-show="f.progress >= 0">
+                      <div style="background:yellow;width:{{f.progress}}%;"
+                          ng-bind="f.progress + '%'"></div>
+                    </span>
+                  </li>
+                </ul>
+                {{errorMsg}}
+            </div>
+        </div>
+    </div>

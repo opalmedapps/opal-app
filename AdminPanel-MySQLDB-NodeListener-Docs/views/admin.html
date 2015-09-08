@@ -1,0 +1,44 @@
+<tabset justified="true" style="text-align:left;margin-top:0px;">
+  <tab heading="Admins List" style="margin-left:10%;">
+    <table class="table table-bordered">
+      <tr ng-repeat="Admin in Admins" >
+        <td><strong> <span class="glyphicon glyphicon-user"></span>{{ Admin.FirstName +" "+ Admin.LastName }}</strong></td>
+        <td ng-click="RemoveAdmin(Admin.AdminSerNum)"><span class="glyphicon glyphicon-remove"></span></td>
+      </tr>
+    </table>
+  </tab>
+  <tab heading="Create New Admin" style="text-align:center;">
+    <br>
+    <div id="AdminDiv" style="width:25%;">
+    <form name="myForm" novalidate ng-submit='CreateAdmin(FirstName,LastName,Username,Password,PasswordConfirm)'>
+      <br>
+      <label class="control-label"><strong>First Name <em>(required)</em> </strong></label><br>
+      <input type="text" class="form-control" ng-model="FirstName" required>
+      <br>
+      <label class="control-label"><strong>Last Name <em>(required)</em> </strong></label><br>
+      <input type="text" class="form-control" ng-model="LastName" required>
+      <br>
+      <div class="form-group" ng-class="{ 'has-error': myForm.formUsername.$invalid, 'has-success':myForm.formUsername.$valid }">
+      <span class="glyphicon glyphicon-user"></span><label class="control-label"><strong>Username <em>(required)</em> </strong></label><br>
+      <input type="text" class="form-control" name="formUsername" ng-model="Username" required>
+    </div>
+      <div role='alert'>
+        <span class="error" style="color:#8A0808" ng-show="myForm.formUsername.$error.required"> Username is required. </span>
+      </div>
+
+      <div class="form-group" ng-class="{ 'has-error': myForm.formPassword.$invalid, 'has-success':myForm.formPassword.$valid }">
+        <span class="glyphicon glyphicon-lock"></span><label class="control-label"><strong>Password <em>(required)</em> </strong></label><br>
+        <input type="password" class="form-control" name="formPassword" ng-model="Password" required>
+      </div>
+          <div role='alert'>
+            <span class="error" style="color:#8A0808" ng-show="myForm.formPassword.$error.required"> Password is required. </span>
+          </div>	 <br>
+      <label>Confirm Password</label><br>
+      <input type="password" class="form-control" ng-model="PasswordConfirm" required>	<br>
+      <button class="btn  btn-lg btn-info" type='submit'>Create Admin </button>
+      <br>
+      <alert  ng-repeat='alert in alerts' type="{{alert.type}}"><h3>{{alert.message}}</h3></alert>
+    </form>
+  </div>
+  </tab>
+</tabset>
