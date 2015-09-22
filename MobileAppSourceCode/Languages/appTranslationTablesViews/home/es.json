@@ -1,0 +1,12 @@
+{
+	"HEADER_MESSAGE_HOME":"Entrada",
+	"WELCOME_MESSAGE":"Bienvenido",
+	"STATUS":"Estado",
+	"STATUS_CONTENT":"Se encuentra en el estado de planeacion de su tratamiento.",
+	"UPCOMING_NAME":"Usted tiene su próxima",
+	"UPCOMING_APPOINT":"cita el",
+	"CHECKIN_BUTTON":"Registrarme",
+	"DETAILS_BUTTON":"Detalles",
+	"GO_TO_APPOINTMENTS_TAP":"Ve a mis citas",
+	"CONTACT_DOCTORS_TAP":"Contacto Doctores"
+}

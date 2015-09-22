@@ -1,0 +1,28 @@
+<ons-page ng-controller="CheckInController">
+  <ons-toolbar>
+    <div class="left">
+      <ons-toolbar-button ng-click="menu.toggle()">
+        <ons-icon icon="ion-navicon" size="28px" fixed-width="false"></ons-icon><div class="notification menu-notification">{{TotalNumberOfNews}}</div>
+      </ons-toolbar-button>
+    </div>
+    <div class="center">Check In</div>
+  </ons-toolbar>
+<div class="container" ng-hide="noNotifications">
+<a style="text-decoration:none" href ng-click="menu.setMainPage('views/notifications.html',{closeMenu:true})">
+        <alert align="center" ng-show="showAlert&&(Notifications==1)" ng-model="alert" type="success" close="closeAlert()">You have {{Notifications}} unseen notifications. <span class="hidden-xs">Go to your Notifications page under the menu on the left.</span>
+        </alert>
+        <alert align="center" ng-show="showAlert&&(Notifications>1)" ng-model="alert" type="success" close="closeAlert()">You have {{Notifications}} unseen notification. <span class="hidden-xs">Go to your Notifications page under the menu on the left.</span>
+        </alert></a>
+ </div>
+    <div align="center" style="margin-top:25vh;width:100%" class="container" >
+      <p ng-hide="noFutureAppointments" align="center" style="color: #999; font-size: 13px;">The Date and Time Of Your Next Appointment is: {{nextAppointmentDate|date}} at {{nextAppointmentDate|date:'h:mm a'}}</p>
+      <p align="center" ng-show="noFutureAppointments" style="color: #999; font-size: 13px;">The Date and Time Of Your Last Appointment was: {{lastAppointmentDate|date}} at {{lastAppointmentDate|date:'h:mm a'}}</p>
+      <ons-icon ng-show="sameDay && !infoReady" icon="spinner" size="40px" spin="true"  fixed-width="true"></ons-icon>
+      <button type="button" ng-show="infoReady" ng-disabled="disableButton" ng-click="checkInButton()" class="btn btn-success btn-circle btn-xl"><i class="glyphicon glyphicon-ok"></i>&nbsp;Check-In</button>
+      <p ng-show="sameDay && !checkInAllowed && !firebaseCheckInUpdated &&infoReady">Today is your appointment date, check in allowed once you are in the vecinity of the cancer center.</p>
+      <p ng-show="!sameDay ">Checkin allowed on the day of your appointment.</p>
+      <p ng-show="sameDay && checkInAllowed && !firebaseCheckInUpdated">Check in to your appointment.</p>
+      <p ng-show="sameDay && firebaseCheckInUpdated">You have successfully checked in, proceed to waiting room.</p>
+      <p ng-show="errorFirebase">No upcoming or past appointments</p>
+    </div>
+</ons-page>

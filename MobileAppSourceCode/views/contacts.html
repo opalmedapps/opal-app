@@ -1,0 +1,77 @@
+<ons-navigator title="Navigator" var="myNavigatorContacts">
+<ons-page ng-controller="ContactsController">
+    <ons-toolbar>
+   <div class="left">
+      <ons-toolbar-button ng-click="menu.toggle()">
+        <ons-icon icon="ion-navicon" size="28px" fixed-width="false"></ons-icon><div class="notification menu-notification">{{TotalNumberOfNews}}</div>
+      </ons-toolbar-button>
+    </div>
+    <div class="center">Contacts</div>
+  </ons-toolbar>
+    <ons-list >
+      <ons-list-header >Primary Doctor</ons-list-header>
+
+      <ons-list-item ng-click="goDoctorContact()" modifier="chevron">{{primaryPhysician.FirstName}} {{primaryPhysician.LastName}}</ons-list-item>
+
+      <ons-list-header ng-show="oncologists.length>0">Oncologists</ons-list-header>
+
+      <ons-list-item ng-repeat="doctor in oncologists" ng-click="goDoctorContact(doctor)" modifier="chevron"> {{doctor.FirstName}} {{doctor.LastName}}</ons-list-item>
+      
+      <ons-list-header ng-show="otherDoctors.length>0">Other</ons-list-header>
+      <ons-list-item ng-repeat="doctor in otherDoctors" ng-click="goDoctorContact(doctor)" modifier="chevron"> {{doctor.FirstName}} {{doctor.LastName}}</ons-list-item>
+
+    </ons-list>
+  </ons-page>
+
+<ons-template id="page2.html">
+  <ons-page ng-controller="ContactIndividualDoctorController">
+    <ons-toolbar>
+      <div class="left"><ons-back-button>Back</ons-back-button></div>
+      <div class="center">{{header}}</div>
+    </ons-toolbar>
+     <div class="profile-cardContact">
+
+        <img src="img/logo.png" class="profile-image">
+        <div class="profile-name">{{doctor.FirstName}} {{doctor.LastName}}</div>
+        <div class="profile-desc">{{header}}</div>
+
+      </div>
+
+        <ons-list style="margin-top: 12px;">
+          <ons-list-item modifier="chevron">
+            <div class="prop-desc">
+              <ons-icon icon="fa-map-marker"></ons-icon>
+              <span style="color:black" >{{doctor.Address}}</span>
+            </div>
+          </ons-list-item>
+
+          <ons-list-item modifier="chevron">
+             <a href="tel:{{doctor.phone}}" style="text-decoration:none"><div class="prop-desc">
+              <ons-icon icon="fa-mobile"></ons-icon>
+              
+               <span style="color:black" >{{doctor.Phone}}</span>
+            </div></a>
+          </ons-list-item>
+
+          <ons-list-item modifier="chevron">
+          <a href="mailto:{{doctor.Email}}">
+            <div class="prop-desc">
+              <ons-icon icon=" fa-envelope-o"></ons-icon>
+              <span style="color:black" >{{doctor.Email}}</span>
+            </div>
+            </a>
+          </ons-list-item>
+        <ons-list-item modifier="chevron">
+          <a ng-click="menu.setMainPage('views/patientPortal.html',{closedMenu:true})">
+            <div class="prop-desc">
+              <ons-icon icon="ion-ios-chatbubble-outline" fixed-width="false" size="17px"></ons-icon>
+              <span style="color:black" >Message {{doctor.FirstName}} {{doctor.LastName}}</span>
+            </div>
+            </a>
+          </ons-list-item>
+        </ons-list>
+
+
+  </ons-page>
+</ons-template>
+</ons-navigator>
