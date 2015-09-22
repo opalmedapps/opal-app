@@ -19,12 +19,14 @@ the app
 $cordova platform add android
 $cordova platform add ios
 ```
->If you already have it use, you may have to do it anyways.
+**If you already have it use, you may have to do it anyways.**
 ```
     $ sudo npm update -g cordova
     $ cordova platform update android
     $ cordova platform update ios
 ```
+
+
 4. Add plugins:
 
 The command to add plugins is:
