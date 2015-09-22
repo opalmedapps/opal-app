@@ -42,10 +42,10 @@ The plugins are:
     - org.apache.cordova.device 0.3.0 "Device"
     - org.apache.cordova.dialogs 0.3.0 "Notification"
     - org.apache.cordova.file 1.3.3 "File"
-    - org.apache.cordova.file-transfer 0.5.0 "File Transfer"
-    - org.apache.cordova.geolocation 0.3.12 "Geolocation"
-    - org.apache.cordova.network-information 0.2.15 "Network Information"
-    - org.apache.cordova.vibration 0.3.13 "Vibration"
+ org.apache.cordova.file-transfer 0.5.0 "File Transfer"
+ org.apache.cordova.geolocation 0.3.12 "Geolocation"
+ org.apache.cordova.network-information 0.2.15 "Network Information"
+ org.apache.cordova.vibration 0.3.13 "Vibration"
 
 >You probably will not need fileOpener, vibration and Notification for now until we register the app for push notifications.
 
@@ -64,7 +64,7 @@ to run the code in a device remove the attribute ng-app="MUHCApp", right above i
 when the device plugins and everything is ready. If you are on the other hand developing and running on a server on the web,
 keep the tag as Angular only runs when the document is ready anyways. 
 
-- You may also have to tell it where the Android SDK is, [Cordova](https://cordova.apache.org/docs/en/2.5.0/guide_getting-started_android_index.md.html)
+- You may also have to tell it where the Android SDK is, [Cordova Reference](https://cordova.apache.org/docs/en/2.5.0/guide_getting-started_android_index.md.html)
 
 ##References:
     - [Cordova Docs] (https://cordova.apache.org/docs/en/4.0.0/) Cordova docs page
