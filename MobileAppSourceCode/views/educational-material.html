@@ -1,0 +1,31 @@
+<ons-page ng-controller="EducationalMaterialController">
+  <ons-toolbar>
+    <div class="left">
+      <ons-toolbar-button ng-click="menu.toggle()">
+        <ons-icon icon="ion-navicon" size="28px" fixed-width="false"></ons-icon><div class="notification menu-notification">{{TotalNumberOfNews}}</div>
+      </ons-toolbar-button>
+    </div>
+    <div class="center">Educational Material</div>
+  </ons-toolbar>
+  <div class="container" ng-hide="noNotifications">
+<a style="text-decoration:none" href ng-click="menu.setMainPage('views/notifications.html',{closeMenu:true})">
+        <alert align="center" ng-show="showAlert&&(Notifications==1)" ng-model="alert" type="success" close="closeAlert()">You have {{Notifications}} unseen notifications. <span class="hidden-xs">Go to your Notifications page under the menu on the left.</span>
+        </alert>
+        <alert align="center" ng-show="showAlert&&(Notifications>1)" ng-model="alert" type="success" close="closeAlert()">You have {{Notifications}} unseen notification. <span class="hidden-xs">Go to your Notifications page under the menu on the left.</span>
+        </alert></a>
+ </div>
+  
+        <div class="col-md-4 col-sm-4 col-xs-12 col-lg-4" align="center">
+            <div class="thumbnail" style="width:180px">
+            <a href ng-click="openPDF()">
+                <img width="120px" height="auto" ng-src="./img/booklet_radiotherapy.png" alt="Starter template example">
+
+          <div class="caption">
+            <h5>D S1</h5>
+          <p>Radiation Oncology/Caner Care Clinic</p>
+           
+          </div>
+          </a>
+        </div>
+        </div>
+</ons-page>

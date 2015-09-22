@@ -1,0 +1,22 @@
+<ons-page ng-controller="TreatmentPlanController">
+    <ons-toolbar>
+        <div class="left">
+            <ons-toolbar-button ng-click="menu.toggle()">
+                <ons-icon icon="ion-navicon" size="28px" fixed-width="false"></ons-icon><div class="notification menu-notification">{{TotalNumberOfNews}}</div>
+            </ons-toolbar-button>
+        </div>
+        <div class="center">Treatment Plan</div>
+    </ons-toolbar>
+<div class="container" ng-hide="noNotifications">
+<a style="text-decoration:none" href ng-click="menu.setMainPage('views/notifications.html',{closeMenu:true})">
+        <alert align="center" ng-show="showAlert&&(Notifications==1)" ng-model="alert" type="success" close="closeAlert()">You have {{Notifications}} unseen notifications. <span class="hidden-xs">Go to your Notifications page under the menu on the left.</span>
+        </alert>
+        <alert align="center" ng-show="showAlert&&(Notifications>1)" ng-model="alert" type="success" close="closeAlert()">You have {{Notifications}} unseen notification. <span class="hidden-xs">Go to your Notifications page under the menu on the left.</span>
+        </alert></a>
+ </div>
+ <!-- Prerequisite=This example use ionicons(http://ionicons.com) to display icons. -->
+ <ons-tabbar>
+    <ons-tab page="./templates/treatment-plan/treatmentPlanStatus.html" label="Status" icon="ion-ios-list-outline" active="true"></ons-tab>
+    <ons-tab page="./templates/treatment-plan/treatmentPlanStages.html" label="Treatment Plan" icon="ion-calendar"></ons-tab>
+</ons-tabbar>     
+</ons-page>

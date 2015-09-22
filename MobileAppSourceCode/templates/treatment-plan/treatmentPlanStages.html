@@ -1,0 +1,60 @@
+
+<ons-page ng-controller="TreatmentPlanStagesController">
+  <div style="padding-right:1%;padding-left:1%;" align="center">
+    <div class="navigation-bar">
+      <div class="navigation-bar__center">
+        <div class="button-bar" style="width:200px;margin:0 auto;margin-top:7px">
+          <div class="button-bar__item">
+            <input type="radio" ng-model="treatment.choice" value="All" name="navi-segment-a" checked>
+            <div class="button-bar__button">All</div>
+          </div>
+
+          <div class="button-bar__item">
+            <input type="radio" ng-model="treatment.choice" value="Past" name="navi-segment-a">
+            <div class="button-bar__button">Past</div>
+          </div>
+          <div class="button-bar__item">
+            <input type="radio" ng-model="treatment.choice" value="Next" name="navi-segment-a">
+            <div class="button-bar__button">Next</div>
+          </div>
+          <div class="button-bar__item">
+            <input type="radio" ng-model="treatment.choice" value="Future" name="navi-segment-a">
+            <div class="button-bar__button">Future</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div style="overflow-y:hidden">
+    <ons-list class="plan-list">
+        <ons-list-item  class="plan" modifier="tappable" ng-click="menu.setMainPage('views/educational-material.html',{closedMenu:true})" ng-repeat="app in stages">
+            <ons-row>
+                <ons-col width="80px" class="plan-left">
+                    <div class="plan-date" ng-show="app.Status!='Future'">{{app.Date|date:'MMM d'}}</div>
+                    <div class="plan-duration" ng-show="$index!=0&&app.Status!='Future'&&app.Status!='Next'">{{app.StageLength | number:1}} <span >days</span></div>
+                    <div ng-show="$index==0&&(treatment.choice=='All'||treatment.choice=='Past')" class="plan-duration">Start</div>
+                </ons-col>
+                <ons-col width="6px" class="plan-center" ng-style="{ 'background-color': getStyle($index) }"></ons-col>
+                <ons-col class="plan-right">
+                    <div class="plan-name">{{app.Name}}</div>
+                    <div class="plan-info">
+                        <div ng-show="app.Type=='Appointment'">
+                            <ons-icon icon="fa-calendar"></ons-icon>&nbsp;{{app.Date|date:"EEEE MMMM d, yyyy 'at' h:mm a"}}
+                        </div>
+                        <div ng-show="app.Type=='Task'&&app.Status=='Past'">
+                        <strong>Task completed on: </strong>{{app.Date|date:"EEEE MMMM d, yyyy 'at' h:mm a"}}
+                        </div>
+                        <div ng-show="app.Type=='Task'&&app.Status=='Future'">
+                        <strong>Pending </strong>
+                        </div>
+                        <div ng-show="app.Type=='Task'&&app.Status=='Next'">
+                        <strong>In progress</strong>
+                        </div>
+                    </div>
+                </ons-col>
+            </ons-row>
+        </ons-list-item>
+    </ons-list>
+    </div>
+</div>
+</ons-page>
