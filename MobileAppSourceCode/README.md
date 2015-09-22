@@ -82,8 +82,17 @@ Use ngdocs
 
 ### Web
 
+Install [http-server] (https://www.npmjs.com/package/http-server).
+
+Run
+
 ```
-- Install [http-server] (https://www.npmjs.com/package/http-server).
+$http-server
+```
+###Login Details:
+
+User Name: muhc.app.mobile@gmail.com    
+Password: 12345
 
 
 
