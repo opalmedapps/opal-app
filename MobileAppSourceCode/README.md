@@ -80,6 +80,11 @@ keep the tag as Angular only runs when the document is ready anyways.
 
 Use ngdocs
 
+### Web
+
+```
+- Install [http-server] (https://www.npmjs.com/package/http-server).
+
 
 
 
