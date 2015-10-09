@@ -1,0 +1,32 @@
+  <ons-page ng-controller="CalendarController">
+       <div align="center">
+       <div style="text-align:center;display:inline-block;font-size:10px"><div style="width:10px;height:10px;background-color:#5CE68A;display:inline-block;border:1px solid #000;"></div>&nbsp;<strong>Past</strong></div>&nbsp;&nbsp;<div style="text-align:center;display:inline-block;font-size:10px"><div style="width:10px;height:10px;background:#3399ff;border:1px solid #000;display:inline-block"></div>&nbsp;<strong>Today</strong></div>&nbsp;&nbsp;<div style="text-align:center;display:inline-block;font-size:10px"><div style="width:10px;height:10px;border:1px solid #000;background:grey;display:inline-block"></div>&nbsp;<strong>Upcoming</strong></div>
+       <div>
+      <datepicker ng-model="dt"  datepicker-mode="calendarMode" show-weeks="false" class="well well-sm" custom-class="getDayClass(date, mode)"></datepicker></div>
+    </div>
+ <div class="panel-default">
+ <div class="panel-body" style="padding:0">
+          <ons-list class="plan-list " >
+          <ons-list-item style="1px solid black" modifier="chevron" ng-repeat="app in calendarDayAppointments"  ng-click="myNavigator.pushPage('./templates/appointments/individual-appointment.html', {param:app},{ animation : 'slide' } )" >
+            <ons-row>
+              <ons-col style="opacity: 0.6;
+    filter: alpha(opacity=60);" width="10px" class="plan-left" ng-style="{ 'background-color': getStyle($index) }">
+              </ons-col>
+
+              <ons-col class="plan-right">
+                <div class="plan-name-calendar">{{app.ScheduledStartTime|date:"dd/MM/yyyy 'at' h:mm a"}}</div>
+                <div class="plan-info">
+                 <div >
+                    {{app.AppointmentType}}
+                  </div>
+                  <div>
+                    <ons-icon icon="ion-person" size="90%">&nbsp;</ons-icon>{{app.ResourceName}}
+                  </div>
+                </div>
+              </ons-col>
+            </ons-row>
+          </ons-list-item> 
+          </ons-list>
+</div>
+</div>
+  </ons-page>

@@ -1,0 +1,37 @@
+  <ons-page ng-controller="SingleDocumentController">
+    <ons-toolbar >
+      <div class="left"><ons-back-button>Back</ons-back-button></div>
+      <div class="center">Document</div>
+    </ons-toolbar>
+    <!--<div class="container jumbotron" style="text-align: left;padding:5% 2% 5% 2%">-->
+    <div class='container' style="margin-top:3vh">
+    <div class="btn my-home-profile" ng-click="openDocument()">
+      <ons-row >
+        <ons-col width="30px">
+          <div align="right" >
+            <i class="fa fa-hospital-o iconHomeView"></i>
+          </div>
+        </ons-col>
+        <ons-col>
+        <div  align="middle" style="margin-left:5px">
+          <span class="profile-name">{{documentObject.Name}}</span><br>
+          <div style="margin-top:30px">
+          <img height="200px" width="100%" ng-src="{{documentObject.Content}}">
+          </div>
+            <div align="center">
+      <!--{{documentObject.date|date:"EEEE MMMM d, yyyy"}}--><br>
+     {{documentObject.Description}}<br>
+     Oct 3, 2015
+ 
+         </div>
+          
+          </div>
+          </ons-col>
+      </ons-row>
+     </div>
+     </div>
+     <!--<div align="center">
+     <button ng-show="futureAppointment" class="btn btn-sm btn-success" ng-click="requestChange()" value="maps">Request Change</button>
+     </div>-->
+    <!--</div>-->
+  </ons-page>

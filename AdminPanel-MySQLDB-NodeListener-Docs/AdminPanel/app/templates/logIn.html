@@ -1,0 +1,66 @@
+		<div style="position:relative;margin-top:25vh">
+    <div class="container">
+		<div ng-show="!platformBoolean" class="jumbotron col-lg-offset-3 col-lg-6 col-sm-offset-3 col-sm-8 col-md-offset-3 col-md-6"  align="center" >
+			<img src="./img/muhc-logo-text.png">
+<h5 style="color:#2E8AE6">Cedars Cancer Center</h5>
+<!--<p ng-if="2+2===4">{{name}}</p>-->
+
+
+  <!--Creates form with pertinent fields, submits via submit-->
+
+    <!--<label name="text">Enter your username and password:</label>-->
+    <div class="input-group">
+      <!--  <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>-->
+
+   
+      <button ng-click="submit()" class="btn btn-primary btn-group btn-group-justified">Login</button>
+
+
+    </div>
+    <!--Creates form with pertinent fields, submits via submit
+  <form name="form" ng-submit="submit(signup.email, signup.password)" novalidate>
+
+    <div class="input-group">
+      
+      <input class="text-input" id="emailField" type="email" name="email" ng-model="signup.email" placeholder="Email Address" />
+      <br>
+
+      <input class="text-input" id="passwordField" type="password" placeholder="Password" name="password" ng-model="signup.password" />
+      <br>
+      <br>
+
+   
+      <button class="btn btn-primary btn-group btn-group-justified" type="submit" id="submit">Login</button>
+
+
+
+     
+         <div style="text-align:center;padding:10px" align="left" ><a class="left" role="button" href  style="font-size:11px;color:#0066FF" ng-click="$state.go('forgotPassword');">Forgot Password?</a></div><br>
+    </div>
+
+  </form>
+  -->
+
+
+    <!--<p>{{userId}}</p>-->
+    <div class="danger" style="text-align:center"><p>{{ErrorMessageLogIn}}</p></div>
+    <div id="addMe"></div>	
+		</div>
+      <div ng-hide="!platformBoolean" align="center">
+
+      <img src="./img/logo.png" width="300px" height="auto" style="width=300px;height:auto">
+      <div class="login-form">
+      <form name="form" ng-submit="submit()" novalidate>
+        <input type="email" class="text-input--underbar" placeholder="Email" value="" ng-model="signup.email">
+        <input type="password" class="text-input--underbar" placeholder="Password" value="" ng-model="signup.password">
+        <br><br>
+        <ons-button type="submit" id="submit" modifier="large" class="login-button">Log In</ons-button>
+        <br><br>
+        <ons-button ng-click="$state.go('forgotPassword');" modifier="quiet" class="forgot-password">Forgot password?</ons-button>
+        </form>
+      </div>
+
+  </div>
+
+		</div>
+    </div>
