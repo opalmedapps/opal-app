@@ -1,6 +1,6 @@
 #MUHC Oncology Patient Application
-![Opal](/mobile/img/muhc-logo-text.png)
-
+![MUHC](/mobile/img/muhc-logo-text.png)
+[OPAL]: /mobile/img/opal.png "Opal"
 Opal - the MUHC Oncology Patient Application for mobile phones and the web - is a product that has arisen from the winning project of the 2014 MUHC Q+ initiative. The project proposal was submitted by the Health Informatics Group (HIG, see below) and was entitled “Realistic knowledge-based waiting time estimates for radiation oncology patients - addressing the pain of waiting”. It had as its goal the provision of waiting time estimates to radiation oncology patients. 
 
 ###Quick app deployment, Simple App displayed in browser
