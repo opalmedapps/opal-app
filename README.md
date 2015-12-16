@@ -1,1 +1,1 @@
-![GitHub Logo](/mobile/img/muhc.png)
+![GitHub Logo](/mobile/img/opal.png)
