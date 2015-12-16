@@ -10,6 +10,9 @@ This document will walk through the interaction between the server data and how 
 4. Once UpdateUI has the information, either offline or online, it distributes this information to all the services for the views i.e. it grabs the patient information and sends it to the Patient service, grabs the doctors information and sends it to the Doctor service, it grabs the patient documents and sends it to the Documents service.
 5. At this point, UpdateUI waits for all the services to process this data and return to tell the loading controller to send the user to the home page.
 6. Once in the home page, the home view uses the HomeController, the HomeController grabs the information from the services, at this point that information is already processed and ready to use by the controller and the view.
+
+
+
 ###Case 2: Request from view to update server
 Imagine you want to send something to the server in order to update the information in the server tables, examples of this would be sending a message, checking in to an appointment, reading a message, reading a notification, etc.
 ###Steps:
