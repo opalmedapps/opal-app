@@ -1,0 +1,166 @@
+<ons-page ng-controller="ScheduleController">
+  <ons-toolbar>
+    <div class="left">
+      <ons-toolbar-button ng-click="menu.toggle()">
+        <ons-icon icon="ion-navicon" size="28px" fixed-width="false"></ons-icon><div class="notification menu-notification">{{TotalNumberOfNews}}</div>
+      </ons-toolbar-button>
+    </div>
+    <div class="center">Appointment Schedule</div>
+  </ons-toolbar>
+
+
+  <div class="container" ng-hide="noNotifications">
+<a style="text-decoration:none" href ng-click="menu.setMainPage('views/notifications.html',{closeMenu:true})">
+        <alert align="center" ng-show="showAlert&&(Notifications==1)" ng-model="alert" type="success" close="closeAlert()">You have {{Notifications}} unseen notifications. <span class="hidden-xs">Go to your Notifications page under the menu on the left.</span>
+        </alert>
+        <alert align="center" ng-show="showAlert&&(Notifications>1)" ng-model="alert" type="success" close="closeAlert()">You have {{Notifications}} unseen notification. <span class="hidden-xs">Go to your Notifications page under the menu on the left.</span>
+        </alert></a>
+ </div>
+ <ons-tabbar>
+    <ons-tab page="./templates/appointments/appointments-list.html" label="List" icon="ion-ios-list-outline" active="true"></ons-tab>
+    <ons-tab page="./templates/appointments/appointments-calendar.html" label="Calendar" icon="ion-calendar"></ons-tab>
+</ons-tabbar>
+
+<!--THE NEXT APPOINTMENT DIV FOR ALL VIEWS, IT TAKES THE WHOLE SCREEN FOR MOBILE AND PORTRAIT TABLET VIEW-->
+<!--<div class="container-fluid hidden-xs hidden-sm" style="padding:1%" >
+<ons-split-view
+  main-page="pageAppointmentList.html"
+  secondary-page="mainAppointmentPage.html"
+  main-page-width="50%"
+  collapse="portrait">
+</ons-split-view>
+
+
+
+</div>
+ <div ng-controller="ScheduleController" style="text-align:left" class="container  col-xs-12 col-md-12 hidden-md hidden-lg" >
+
+      <div style="margin-top:3vh">
+        <div class="panel panel-default">
+          <div class="panel-body" style="text-align: left;padding:5% 2% 5% 2%;">
+            <h4>Your Next Appointment,</h4>
+        
+            <div class"description">
+                <p><strong>Type: </strong>{{nextAppointment.AppointmentType}}</p>
+
+            </div>
+            <div class="resource">
+               <p><strong>Physician: </strong>{{nextAppointment.ResourceName}}.</p>
+            </div>
+            <div class="NextAppointmentDate">
+               <p> <strong>Date: </strong> {{nextAppointment.ScheduledStartTime|date:"EEEE MMMM d, yyyy"}}</p>
+               <p> <strong>Start Time: </strong> {{nextAppointment.ScheduledStartTime|date:"h:mm a"}}</p>
+               <p> <strong>End Time: </strong>{{nextAppointment.ScheduledEndTime|date: "h:mm a" }}</p>
+            </div>
+            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6" align="center">
+            <button ng-click="menu.setMainPage('views/checkin.html',{closedMenu:true})" class="btn btn-sm btn-success"><i class="fa fa-check-square-o" ></i> Check In</button>
+            </div>
+            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6" align="center">
+            <button ng-click="calendarView()" class="btn btn-sm btn-success"><i class="ion-map" ></i> Location</button>
+            </div>
+            </div>
+            </div>
+            </div>
+            <br>
+
+  -->
+
+
+
+<!--DIV LINKS TO CALENDAR AND LIST OF APPOINTMENTS VIEW FOR SMALL AND PORTRAIT TABLET VIEWS-->
+
+<!--<ons-list modifier="inset" style="margin-top: 10px" class="prop-desc">
+        <ons-list-item modifier="chevron" ng-click="myNavigatorAppointments.pushPage('pageCalendar.html', {param:type},{ animation : 'slide' } )" >
+          <ons-icon icon="ion-calendar"></ons-icon>&nbsp;<span style="color:black">Check My Calendar</span>
+        </ons-list-item>
+
+        <ons-list-item modifier="chevron" ng-click="myNavigatorAppointments.pushPage('pageAppointmentList.html', {param:type},{ animation : 'slide' } )" >
+          <ons-icon icon="ion-ios-list-outline"></ons-icon>&nbsp;<span style="color:black">Check List of Appointments</span>
+        </ons-list-item>
+</ons-list>
+
+
+
+
+</div>-->
+
+
+<!--
+    <ons-list class="plan-list">
+        <ons-list-item  modifier="chevron" class="plan" ng-repeat="app in appointments">
+            <ons-row>
+                <ons-col width="80px" class="plan-left">
+                    <div class="plan-date" ng-show="app.Status!='Future'">{{app.Date|date:'MMM d'}}</div>
+                    <div class="plan-duration" ng-show="app.Status!='Future'&&app.Status!='Next'">{{(timeBetweenAppointments[$index]).TimeDiffInDays | number:1}} <span >days</span></div>
+                </ons-col>
+                <ons-col width="6px" class="plan-center" ng-style="{ 'background-color': getStyle($index) }"></ons-col>
+                <ons-col class="plan-right">
+                    <div class="plan-name">{{app.Name}}</div>
+                    <div class="plan-info">
+                        <div>
+                            <ons-icon icon="fa-calendar"></ons-icon>&nbsp;{{app.Date|date:"EEEE MMMM d, yyyy 'at' h:mm a"}}</div>
+                        <div >
+                            <ons-icon icon="fa-map-marker"></ons-icon>Room L3212</div>
+                    </div>
+                </ons-col>
+            </ons-row>
+        </ons-list-item>-->
+</ons-page>
+
+
+<!-- CALENDAR VIEW FOR MOBILE AND PORTRAIT TABLET, ALSO TO BE USED IN DESKTOP WITH SOME MODIFICATIONS THAT WILL COME LATER-->
+<!--
+<ons-template id="mainAppointmentPage.html" >
+<ons-page ng-controller="ScheduleController">
+ <div style="text-align:left" class="container  col-xs-12 col-sm-12 col-md-12 col-lg-12" >
+
+      <div style="margin-top:3vh">
+        <div class="panel panel-default">
+          <div class="panel-body" style="text-align: left;padding:5% 2% 5% 2%;">
+            <h4>Your Next Appointment,</h4>
+        
+            <div class"description">
+                <p><strong>Type: </strong>{{nextAppointment.AppointmentType}}</p>
+
+            </div>
+            <div class="resource">
+               <p><strong>Physician: </strong>{{nextAppointment.ResourceName}}.</p>
+            </div>
+            <div class="NextAppointmentDate">
+               <p> <strong>Date: </strong> {{nextAppointment.ScheduledStartTime|date:"EEEE MMMM d, yyyy"}}</p>
+               <p> <strong>Start Time: </strong> {{nextAppointment.ScheduledStartTime|date:"h:mm a"}}</p>
+               <p> <strong>End Time: </strong>{{nextAppointment.ScheduledEndTime|date: "h:mm a" }}</p>
+            </div>
+            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6" align="center">
+            <button ng-click="menu.setMainPage('views/checkin.html',{closedMenu:true})" class="btn btn-sm btn-success"><i class="fa fa-check-square-o" ></i> Check In</button>
+            </div>
+            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6" align="center">
+            <button ng-click="calendarView()" class="btn btn-sm btn-success"><i class="ion-map" ></i> Location</button>
+            </div>
+            </div>
+            </div>
+            </div>
+            <br>-->
+
+  
+
+
+
+<!--DIV LINKS TO CALENDAR AND LIST OF APPOINTMENTS VIEW FOR SMALL AND PORTRAIT TABLET VIEWS-->
+
+<!--<ons-list modifier="inset" style="margin-top: 10px" class="prop-desc">
+        <ons-list-item modifier="chevron" ng-click="myNavigatorAppointments.pushPage('pageCalendar.html', {param:type},{ animation : 'slide' } )" >
+          <ons-icon icon="ion-calendar"></ons-icon>&nbsp;<span style="color:black">Check My Calendar</span>
+        </ons-list-item>
+
+        <ons-list-item modifier="chevron" ng-click="myNavigatorAppointments.pushPage('pageAppointmentList.html', {param:type},{ animation : 'slide' } )" >
+          <ons-icon icon="ion-ios-list-outline"></ons-icon>&nbsp;<span style="color:black">Check List of Appointments</span>
+        </ons-list-item>
+</ons-list>
+
+
+
+
+</div>
+</ons-page>
+

@@ -1,0 +1,262 @@
+<ons-navigator title="Navigator"  var="myNavigatorMaps">
+<ons-page ng-controller="MapsController">
+    <ons-toolbar>
+        <div class="left">
+            <ons-toolbar-button ng-click="menu.toggle()">
+              <ons-icon icon="ion-navicon" size="28px" fixed-width="false"></ons-icon><div class="notification menu-notification">{{TotalNumberOfNews}}</div>
+            </ons-toolbar-button>
+        </div>
+        <div class="center">Hospital Maps</div>
+    </ons-toolbar>
+  <div class="container" ng-hide="noNotifications">
+<a style="text-decoration:none" href ng-click="menu.setMainPage('views/notifications.html',{closeMenu:true})">
+        <alert align="center" ng-show="showAlert&&(Notifications==1)" ng-model="alert" type="success" close="closeAlert()">You have {{Notifications}} unseen notifications. <span class="hidden-xs">Go to your Notifications page under the menu on the left.</span>
+        </alert>
+        <alert align="center" ng-show="showAlert&&(Notifications>1)" ng-model="alert" type="success" close="closeAlert()">You have {{Notifications}} unseen notification. <span class="hidden-xs">Go to your Notifications page under the menu on the left.</span>
+        </alert></a>
+ </div>
+
+ <div style="padding:0 8px 0 8px ">
+ <div class="btn my-home-profile"  ng-click="showMap('./img/D-S1_map_RadOnc-MedPhys_16June2015_en.png')" style="margin:5px 0 5px 0;width:100%;padding:10px">
+   <div style="width:100%;display:table;">
+     <ons-row >
+     <ons-col width="30px">
+       <div align="right" >
+         <i class="fa fa-globe iconHomeView"></i>
+       </div>
+     </ons-col>
+     <ons-col>
+     <div  align="middle" style="margin-left:5px">
+       <span class="profile-name" style="font-size:14px">Radiation Oncology/Cancer<br> Care Clinic<br> </span>
+         <img width="100px" height="80px" ng-src="./img/D-S1_map_RadOnc-MedPhys_16June2015_en.png" alt="DS 1">
+     </div>
+     </ons-col>
+     <ons-col width="3px" >
+     <div align="right" style="margin-top:40px">
+             <i class="ion-chevron-right" style="font-size:20px;opacity:0.2"></i>
+    </div>
+     </ons-col>
+     </ons-row>
+   </div>
+
+ </div>
+ </div>
+ <div style="padding:0 8px 0 8px ">
+ <div class="btn my-home-profile" ng-click="showMap('./img/D2_Palliative_psychoncology_16June2015_en.png')" style="margin:5px 0 5px 0;width:100%;padding:10px">
+   <div style="width:100%;display:table;">
+     <ons-row >
+     <ons-col width="30px">
+       <div align="right" >
+         <i class="fa fa-globe iconHomeView"></i>
+       </div>
+     </ons-col>
+     <ons-col>
+     <div  align="middle" style="margin-left:5px">
+       <span class="profile-name" style="font-size:14px">Palliative Care Day Hospital<br> and Physhosocial Oncology<br></span>
+       <img width="100px" height="80px" ng-src="./img/D2_Palliative_psychoncology_16June2015_en.png" alt="D2">
+     </div>
+     </ons-col>
+     <ons-col width="3px" >
+     <div align="right" style="margin-top:40px">
+             <i class="ion-chevron-right" style="font-size:20px;opacity:0.2"></i>
+    </div>
+     </ons-col>
+     </ons-row>
+   </div>
+
+ </div>
+ </div>
+ <div style="padding:0 8px 0 8px ">
+ <div class="btn my-home-profile" ng-click="showMap('./img/D-RC_ODC_16June2015_en_FNL.png')" style="margin:5px 0 5px 0;width:100%;padding:10px">
+   <div style="width:100%;display:table;">
+     <ons-row >
+     <ons-col width="30px">
+       <div align="right" >
+         <i class="fa fa-globe iconHomeView"></i>
+       </div>
+     </ons-col>
+     <ons-col>
+     <div  align="middle" style="margin-left:5px">
+       <span class="profile-name" style="font-size:14px">Oncology Date Centre and <br>Cancer Care Clinic<br></span>
+       <img width="100px" height="80px" ng-src="./img/D-RC_ODC_16June2015_en_FNL.png" alt="D-RC">
+     </div>
+     </ons-col>
+     <ons-col width="3px" >
+     <div align="right" style="margin-top:40px">
+             <i class="ion-chevron-right" style="font-size:20px;opacity:0.2"></i>
+    </div>
+     </ons-col>
+     </ons-row>
+   </div>
+
+ </div>
+ </div>
+ <!--
+ <ul class="list list--inset"  style="margin-top:5px" ng-click="showMap('./img/D-S1_map_RadOnc-MedPhys_16June2015_en.png')">
+   <li class="list__item list--inset__item list__item--chevron">
+     <div style="padding:8px;">
+       <ons-row>
+         <ons-col width="30px">
+           <div align="right" >
+             <i class="fa fa-globe iconHomeView"></i>
+           </div>
+         </ons-col>
+         <ons-col>
+         <div  align="middle" style="margin-left:5px">
+            <div class="profile-name" style="font-size:13px" >
+                Radiation Oncology/Cancer Care Clinic
+               </div>
+           <div class="desc">
+                <img width="100px" height="80px" ng-src="./img/D-S1_map_RadOnc-MedPhys_16June2015_en.png" alt="DS 1">
+               </div>
+        </div>
+         </ons-col>
+         </ons-row>
+         </div>
+   </li>
+ </ul>
+ <ul class="list list--inset"  style="margin-top:5px" ng-click="showMap('./img/D2_Palliative_psychoncology_16June2015_en.png')">
+   <li class="list__item list--inset__item list__item--chevron">
+     <div style="padding:8px;">
+       <ons-row>
+         <ons-col width="30px">
+           <div align="right" >
+             <i class="fa fa-globe iconHomeView"></i>
+           </div>
+         </ons-col>
+         <ons-col>
+         <div  align="middle" style="margin-left:5px">
+            <div class="profile-name"  style="font-size:9px" >
+                Palliative Care Day Hospital and Physhosocial Oncology
+               </div>
+           <div class="desc">
+              <img width="100px" height="80px" ng-src="./img/D2_Palliative_psychoncology_16June2015_en.png" alt="D2">
+               </div>
+        </div>
+         </ons-col>
+         </ons-row>
+         </div>
+   </li>
+ </ul>
+ <ul class="list list--inset"  style="margin-top:5px"  ng-click="showMap('./img/D-RC_ODC_16June2015_en_FNL.png')">
+   <li class="list__item list--inset__item list__item--chevron">
+     <div style="padding:8px;">
+       <ons-row>
+         <ons-col width="30px">
+           <div align="right" >
+             <i class="fa fa-globe iconHomeView"></i>
+           </div>
+         </ons-col>
+         <ons-col>
+         <div  align="middle" style="margin-left:5px">
+            <div class="profile-name"  style="font-size:11px">
+                 Oncology Date Centre and Cancer Care Clinic
+               </div>
+           <div class="desc">
+                <img width="100px" height="80px" ng-src="./img/D-RC_ODC_16June2015_en_FNL.png" alt="D-RC">
+               </div>
+        </div>
+         </ons-col>
+         </ons-row>
+         </div>
+   </li>
+ </ul>-->
+
+        <!--<div class="container" align="center" >
+
+        <div class="col-md-4 col-sm-4 col-xs-12 col-lg-4" align="center">
+            <div class="thumbnail" style="width:180px">
+            <a href ng-click="showMap('./img/D-S1_map_RadOnc-MedPhys_16June2015_en.png')">
+                <img width="120px" height="auto" ng-src="./img/D-S1_map_RadOnc-MedPhys_16June2015_en.png" alt="D2">
+
+          <div class="caption">
+            <h5>D S1</h5>
+          <p>Radiation Oncology/Caner Care Clinic</p>
+
+          </div>
+          </a>
+        </div>
+        </div>
+         <div class="col-md-4 col-sm-4 col-xs-12 col-lg-4" align="center">
+            <div class="thumbnail" style="width:180px">
+            <a href ng-click="showMap('./img/D2_Palliative_psychoncology_16June2015_en.png')">
+                <img width="120px" height="auto" ng-src="./img/D2_Palliative_psychoncology_16June2015_en.png" alt="Starter template example">
+
+          <div class="caption">
+            <h5>D2</h5>
+          <p>Palliative Care Day Hospital and Physhosocial Oncology</p>
+
+          </div>
+          </a>
+        </div>
+        </div>
+         <div class="col-md-4 col-sm-4 col-xs-12 col-lg-4" align="center">
+            <div class="thumbnail" style="width:180px">
+            <a href ng-click="showMap('./img/D-RC_ODC_16June2015_en_FNL.png')">
+                <img width="120px" height="auto" ng-src="./img/D-RC_ODC_16June2015_en_FNL.png" alt="Starter template example">
+
+          <div class="caption">
+            <h5>D-RC</h5>
+          <p>Oncology Date Centre and Cancer Care Clinic</p>
+
+          </div>
+          </a>
+        </div>
+        </div>
+                <br>
+
+
+              </div>
+            </div>-->
+
+<!--</ons-page>
+<ons-template id="pageMap1.html">
+  <ons-page ng-controller="IndividualMapController">
+    <ons-toolbar>
+      <div class="left"><ons-back-button>Back</ons-back-button></div>
+      <div class="center">{{header}}</div>
+    </ons-toolbar>
+     <div class="panel panel-default">
+  <div class="panel-body" align="center" style="width: 100%; height: 100%" >
+    <div  style="width: 100%; height: 100%">
+        <canvas id="mycanvas" style="width: 90%; height: 500px"></canvas>
+    </div>
+
+</div>
+  </div>
+
+  </ons-page>
+</ons-template>
+<ons-template id="pageMap2.html">
+  <ons-page ng-controller="IndividualMapController1">
+    <ons-toolbar>
+      <div class="left"><ons-back-button>Back</ons-back-button></div>
+      <div class="center">{{header}}</div>
+    </ons-toolbar>
+     <div class="panel panel-default">
+  <div class="panel-body">
+    <div  style="width: 100%; height: 100%">
+        <canvas id="mycanvas1" style="width: 90%; height: 500px"></canvas>
+    </div>
+  </div>
+  </div>
+
+  </ons-page>
+</ons-template>
+<ons-template id="pageMap3.html">
+  <ons-page ng-controller="IndividualMapController2">
+    <ons-toolbar>
+      <div class="left"><ons-back-button>Back</ons-back-button></div>
+      <div class="center">{{header}}</div>
+    </ons-toolbar>
+     <div class="panel panel-default">
+  <div class="panel-body">
+<div  style="width: 100%; height: 100%">
+        <canvas id="mycanvas2" style="width: 90%; height: 500px"></canvas>
+    </div>
+      </div>
+  </div>
+
+  </ons-page>
+</ons-template>
+</ons-navigator>-->

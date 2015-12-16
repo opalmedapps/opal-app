@@ -1,0 +1,25 @@
+<div class="modal-header" align="center">
+    <h4 class="modal-title">Login</h4>
+</div>
+<div class="modal-body">
+<form novalidate>
+  <p class="text-danger" align="center"><Strong> You need to login! </Strong></p>
+  <br>
+<div align="center" style="width:70%;text-align:center;margin:0 auto">
+  <div class="input-group" >
+    <span class="input-group-addon" id="basic-addon1"><span class="glyphicon glyphicon-user"></span>Username</span>
+    <input type="text" class="form-control" ng-model="user.username">
+  </div>
+  <br>
+  <div class="input-group">
+    <span class="input-group-addon" id="basic-addon1"><span class="glyphicon glyphicon-lock"></span>&nbsp;Password</span>
+    <input type="password" class="form-control" ng-model="user.password">
+  </div>
+  <br>
+  <button ng-click="login(user.username,user.password)" class="btn btn-info" style="width:100%;">Log in</button>
+  <br>
+  <uib-alert ng-repeat="alert in alerts" type="{{alert.type}}">{{alert.message}}</uib-alert>
+</div>
+
+</form>
+</div>

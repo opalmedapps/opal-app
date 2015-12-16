@@ -1,0 +1,165 @@
+<ons-navigator title="Navigator" var="myNavigatorAccount">
+<ons-page ng-controller="accountSettingController">
+  <ons-toolbar>
+    <div class="left">
+      <ons-toolbar-button ng-click="menu.toggle()">
+        <ons-icon icon="ion-navicon" size="28px" fixed-width="false"></ons-icon><div class="notification menu-notification">{{TotalNumberOfNews}}</div>
+      </ons-toolbar-button>
+    </div>
+    <div class="center">Settings</div>
+  </ons-toolbar>
+<ons-pull-hook ng-action="load2($done)" var="loader">
+        <span ng-switch="loader.getCurrentState()">
+          <span ng-switch-when="initial"><ons-icon size="35px" icon="ion-arrow-down-a"></ons-icon> Pull down to refresh</span>
+          <span ng-switch-when="preaction"><ons-icon size="35px" icon="ion-arrow-up-a"></ons-icon> Release to refresh</span>
+          <span ng-switch-when="action"><ons-icon size="35px" spin="true" icon="ion-load-d"></ons-icon> Loading data...</span>
+        </span>
+</ons-pull-hook>
+  <div class="container" ng-hide="noNotifications">
+<a style="text-decoration:none" href ng-click="menu.setMainPage('views/notifications.html',{closeMenu:true})">
+        <alert align="center" ng-show="showAlert&&(Notifications==1)" ng-model="alert" type="success" close="closeAlert()">You have {{Notifications}} unseen notifications. <span class="hidden-xs">Go to your Notifications page under the menu on the left.</span>
+        </alert>
+        <alert align="center" ng-show="showAlert&&(Notifications>1)" ng-model="alert" type="success" close="closeAlert()">You have {{Notifications}} unseen notification. <span class="hidden-xs">Go to your Notifications page under the menu on the left.</span>
+        </alert></a>
+ </div>
+    <div class="container">
+    <div hm-tap="chedkboxModel=1">
+      <ons-row class="profile-wrapper">
+        <ons-col width="60px" class="profile-image-wrapper">
+          <img src="{{ProfilePicture}}" class="profile-image-account">
+        </ons-col>
+
+        <ons-col>
+          <div class="profile-name-account">{{FirstName}} {{LastName}}</div>
+          <div class="profile-email-account">{{Email}}</div>
+        </ons-col>
+
+      </ons-row>
+      </div>
+
+      <div class="settings-header">Personal</div>
+
+      <ons-list modifier="inset" class="settings-list">
+       <ons-list-item modifier="chevron" ng-click="myNavigatorAccount.pushPage('pageAccount.html', {param:'First Name'},{ animation : 'slide' } )">
+          First Name
+          <span class="list-item-note lucent">{{FirstName|limitTo:7}}</span>
+        </ons-list-item>
+
+        <ons-list-item modifier="chevron" ng-click="myNavigatorAccount.pushPage('pageAccount.html', {param:'Last Name'},{ animation : 'slide' } )">
+          Last Name
+          <span class="list-item-note lucent">{{LastName|limitTo:7}}</span>
+        </ons-list-item>
+
+        <ons-list-item modifier="chevron" ng-click="myNavigatorAccount.pushPage('pageAccount.html', {param:'Email'},{ animation : 'slide' } )">
+          Email
+          <span class="list-item-note lucent">{{Email|limitTo:7}}...</span>
+        </ons-list-item>
+        <ons-list-item modifier="chevron" ng-click="myNavigatorAccount.pushPage('pageAccount.html', {param:'Password'},{ animation : 'slide' } )">
+          Password
+          <span type="password" class="list-item-note lucent">{{passFill|limitTo:passwordLength}}</span>
+        </ons-list-item>
+        <ons-list-item modifier="chevron" ng-click="myNavigatorAccount.pushPage('pageAccount.html', {param:'Tel. Number'},{ animation : 'slide' } )">
+          Phone Number
+          <span class="list-item-note lucent">{{TelNum}}</span>
+        </ons-list-item>
+      </ons-list>
+
+      <div class="settings-header">Preferences</div>
+
+      <ons-list modifier="inset" class="settings-list">
+        <ons-list-item modifier="chevron" ng-click="myNavigatorAccount.pushPage('pageAccount.html', {param:'Language'},{ animation : 'slide' } )">
+          Language
+           <span class="list-item-note lucent">{{Language}}</span>
+        </ons-list-item modifier="chevron">
+        <ons-list-item>
+          Enable SMS
+        <label class="switch switch--list-item">
+          <input type="checkbox" ng-model="checkboxModel" ng-change="saveSettings('EnableSMS')" ng-true-value="1" ng-false-value="0" class="switch__input">
+          <div class="switch__toggle"></div>
+        </label>
+          <!--<span class="list-item-note lucent">{{smsPreference}}</span>-->
+        </ons-list-item>
+        <ons-list-item ><!--ng-show="mobilePlatform"-->
+          Calendar Access
+        <label class="switch switch--list-item">
+          <input type="checkbox" ng-model="checkboxModelCalendar" ng-change="saveSettings('Calendar')" ng-true-value="1" ng-false-value="0" class="switch__input">
+          <div class="switch__toggle"></div>
+        </label>
+          <!--<span class="list-item-note lucent">{{smsPreference}}</span>-->
+        </ons-list-item>
+      </ons-list>
+
+      <br>
+
+
+      <ons-list modifier="inset" class="settings-list">
+        <ons-list-item ng-click="$state.go('logOut')" modifier="tappable">
+          <ons-icon icon="ion-log-out" style="opacity: 0.8"></ons-icon>
+          Sign out
+        </ons-list-item>
+      </ons-list>
+    </div>
+</ons-page>
+<ons-template id="pageAccount.html">
+  <ons-page ng-controller="ChangingSettingController">
+    <ons-toolbar>
+      <div class="left"><ons-back-button>Back</ons-back-button></div>
+      <div class="center">{{value}}</div>
+    </ons-toolbar>
+
+    <div ng-show="personal">
+    <div class="lucent" style="margin-left:2vw;margin-top:10vh">
+          <p class="note">{{instruction}}</p>
+    </div>
+     <ons-list modifier="noborder" class="settings-list" style="margin-top:5vh">
+        <ons-list-item >
+          <input ng-minlength="1" type="{{type1}}" class="text-input text-input--transparent width-full" placeholder="Enter new {{value}}" value="{{value}}" ng-model="newValue">
+          <a ng-click="newValue=''" ><span class="list-item-note lucent"><ons-icon icon="ion-close-circled"></ons-icon></span></a>
+        </ons-list-item>
+      </ons-list>
+      <div ng-show="value=='Password'||value=='Email'">
+         <div class="lucent" style="margin-left:2vw;margin-top:2vh">
+          <p class="note">{{instructionOld}}</p>
+    </div>
+     <ons-list modifier="noborder" class="settings-list" style="margin-top:5vh">
+        <ons-list-item >
+          <input ng-minlength="1" type="{{type2}}" class="text-input text-input--transparent width-full" placeholder="{{placeHolder}}" value="{{value}}" ng-model="oldValue">
+          <a ng-click="oldValue=''" ><span class="list-item-note lucent"><ons-icon icon="ion-close-circled"></ons-icon></span></a>
+        </ons-list-item>
+      </ons-list>
+      </div>
+      <div ng-show="newUpdate" style="margin-left:2vw;margin-top:2vh;">
+        <p class="{{alertClass}}">{{updateMessage}}</p>
+      </div>
+      <div class="container" style="margin-top:10vh">
+        <button class="button button--large" ng-disabled="newUpdate" ng-click="updateValue(value)"  style="margin: 0 auto;">Update {{value}}</button><br>
+      </div>
+      </div>
+    <div ng-hide="personal">
+    <div class="lucent" style="margin-left:2vw;margin-top:2vh">
+          <p class="note">{{instruction}}</p>
+    </div>
+      <ul class="list" style="margin-top:10vh">
+  <li class="list__header">Select Language</li>
+  <li class="list__item list__item--tappable" >
+    <label  class="radio-button radio-button--list-item">
+      <input ng-change="changeLanguage('EN')" ng-model="pickOption" type="radio" value="{{firstOption}}" name="b" >
+      <div class="radio-button__checkmark radio-button--list-item__checkmark"></div>
+      {{firstOption}}
+    </label>
+  </li>
+
+  <li class="list__item list__item--tappable" >
+    <label  class="radio-button radio-button--list-item">
+      <input ng-change="changeLanguage('FR')" ng-model="pickOption" type="radio" value="{{secondOption}}" name="b">
+      <div class="radio-button__checkmark radio-button--list-item__checkmark"></div>
+      {{secondOption}}
+    </label>
+  </li>
+</ul>
+</div>
+
+
+  </ons-page>
+</ons-template>
+</ons-navigator>

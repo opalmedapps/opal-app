@@ -1,0 +1,79 @@
+<html>
+  <head>
+    <title>MUHC Listener</title>
+    <script src="./jquery.min.js">  </script>
+    <script src="./firebase.js"></script>
+    <script src="./aes.js"></script>
+      <script src="./mode-cfb-min.js"/></script>
+      <script src="./bower_components/angular/angular.min.js"/></script>
+      <link href="./styles.css" rel="stylesheet" type="text/css">
+      <script src="./bower_components/bootstrap/dist/js/bootstrap.min.js"/></script>
+      <link href="./bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+      <script src="./bower_components/cryptojs/mode-cfb-min.js"/></script>
+      <script src="./bower_components/cryptojs/sha256.js"/></script>
+      <script src="./bower_components/cryptojs/aes.js"/></script>
+
+      <style>
+
+      </style>
+  </head>
+  <body ng-app="MUHCAppListener" ng-controller="MainController">
+    <div class="container jumbotron" align="center" style="margin-top:20px">
+<img class="img-responsive" src="./muhc-logo-text.png">
+      <h2 style="color:#2B6197">MUHC App Listener</h2>
+<div class="text-center">
+  <select style="margin:10 10 10 10" name="repeatSelect" id="repeatSelect" ng-model="selectTimeline">
+    <option value="All">All</option>
+    <option value="Today">Today</option>
+    <option value="Last 7 days">Last 7 days</option>
+    <option value="Last 15 days">Last 15 days</option>
+  </select>
+</div>
+</div>
+<div class="container ">
+  <div class="row">
+    <div class="col-xs-4">
+    <input type="search" ng-model="searchUser" placeholder="Search" class="search-input">
+    </div>
+  </div>
+</div>
+
+<div class="container" style="margin-top:10px">
+  <div class="collapse" id="collapseExample">
+  <div class="panel panel-default">
+    <div class="panel-body">
+<p>
+  <h2>Request Parameters</h2>
+{{parameters}}
+</p>
+</div>
+  </div>
+</div>
+      <table class="table table-hover table-striped table-bordered">
+        <!-- On rows -->
+        <tr>
+        <th>Request</th>
+        <th>UserID </th>
+        <th>DeviceID</th>
+        <th>Date</th>
+        <th>Parameters</th>
+        <th>Status</th>
+      </tr>
+      <tr ng-repeat="request in requests|filterRequests:selectTimeline|filter:searchUser">
+        <td>{{request.Request}}</td>
+        <td>{{request.UserID}} </td>
+        <td>{{request.DeviceId}}</td>
+        <td>{{request.time|date:'M/d/yy h:mm a'}}</td>
+        <td style="max-width: 200px;
+    word-wrap: break-word">{{request.Parameters}}</td>
+        <td ng-class="(request.response=='Success')?'success':'danger'" ng-style="(request.response=='Success')?{color:'green'}:{color:'red'}">{{request.response}}</td>
+      </tr>
+        <!-- On cells (`td` or `th`) -->
+      </table>
+    </div>
+  </body>
+  <!-- Latest compiled and minified CSS -->
+<!-- Optional theme -->
+  <script src="./listener.js"></script>
+
+</html>

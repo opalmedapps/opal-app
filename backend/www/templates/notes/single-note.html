@@ -1,0 +1,61 @@
+  <ons-page ng-controller="SingleNoteController">
+    <ons-toolbar >
+      <div class="left"><ons-back-button>Back</ons-back-button></div>
+      <div class="center">Note</div>
+      <div class="right"><ons-toolbar-button ng-disabled="Note.NoteSerNum=='undefined'" ng-click="myNavigator.pushPage('./templates/notes/edit-note.html',{param:{Type:'edit',Note: Note}})">Edit</ons-toolbar-button></div>
+    </ons-toolbar>
+    <!--<div class="container jumbotron" style="text-align: left;padding:5% 2% 5% 2%">-->
+    <div class='container' style="margin-top:3vh">
+    <div align="center" style="color:grey;">{{Note.DateAdded|formatDateAppointmentTask}}<br><strong>{{Note.Title}} </strong></div>
+
+    <hr>
+    <div class="panel panel-default">
+  <div class="panel-body" style="text-align: left;padding:5% 2% 5% 2%;">
+      <div align="center">
+     {{Note.Content}}
+     </div>
+     </div>
+     </div>
+<div class="bottom-bar">
+
+  <div class="bottom-bar__line-height" style="text-align:center">
+<ons-row>
+<ons-col align="center" style="text-align:center">
+  <div>
+  <a href ng-disabled="Note.NoteSerNum=='undefined'" ng-click="deleteNoteAlert=true">
+      <i ng-disabled="Note.NoteSerNum=='undefined'" class="ion-trash-a iconHomeView " style="font-size:28px"></i>
+      </a>
+  </div>
+</ons-col>
+<ons-col align="center" style="text-align:center">
+  <div>
+    <a href ng-click="myNavigator.pushPage('./templates/notes/edit-note.html',{param:{Type:'edit',Note: Note}})">
+      <i class="ion-compose iconHomeView" style="font-size:28px"></i>
+      </a>
+  </div>
+</ons-col>
+</ons-row>
+  </div>
+</div>
+<div ng-show="deleteNoteAlert">
+<div class="alert-dialog-mask"></div>
+
+<div class="alert-dialog">
+  <div class="alert-dialog-title">Delete Note</div>
+
+  <div class="alert-dialog-content">
+    Are you sure you want to delete this note?
+  </div>
+
+  <div class="alert-dialog-footer alert-dialog-footer--one">
+
+    <button  ng-click="deleteNote()" class="alert-dialog-button
+      alert-dialog-button--one">Delete</button>
+
+    <button ng-click="deleteNoteAlert=false" class="alert-dialog-button alert-dialog-button--primal
+      alert-dialog-button--one">Cancel</button>
+
+  </div>
+</div>
+</div>
+  </ons-page>

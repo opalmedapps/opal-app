@@ -1,0 +1,33 @@
+  <ons-page ng-controller="EditNoteController">
+    <ons-toolbar >
+      <div class="left"><ons-back-button ng-hide="showWaiting">Back</ons-back-button></div>
+      <div class="center">{{Type}} Note</div>
+    </ons-toolbar>
+    <!--<div class="container jumbotron" style="text-align: left;padding:5% 2% 5% 2%">-->
+    <div style="margin-top:3vh">
+
+    <ul class="list" align="center">
+   		<li >
+   			<div style="width:100;margin-left:2px" align="center">
+				<h4>Title</h4>
+
+				<div style="width:100">
+				<input ng-model="NoteTitle" style="width:95%" type="text" class="text-input" placeholder="Title" value=""><br>
+				</div>
+				<br>
+				<h4>Content</h4>
+				
+				<div width="100%">
+				<textarea ng-model="NoteContent" style="width:95%" class="textarea" rows="5" placeholder="Content"></textarea>
+				</div>
+				<br>
+				<br>
+			</div>
+		</li>
+   	</ul>
+<br>
+   		<button class="button button--large" ng-click="editNote()" ng-disabled="!fieldsFilled||showWaiting">{{Type}} Note</button><br>
+
+   		<div align="center" ng-show="showWaiting"><ons-icon icon="ion-ios-reload" size="40px" spin="true"></ons-icon></div>
+     </div>
+  </ons-page>
