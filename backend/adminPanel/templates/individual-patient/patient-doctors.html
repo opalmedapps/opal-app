@@ -1,0 +1,87 @@
+<div style="padding:5px">
+<h4>Primary Doctor:</h4>
+<div align="center" ng-hide="primary.length>0"><p>No primary doctor assigned.</p></div>
+<table ng-show="primary.length>0" class="table table-bordered table-hover" >
+  <thead>
+    <tr>
+    <th class="active" style="text-align:center">
+    Doctor Aria Ser
+    </th>
+    <th class="active"style="text-align:center">
+      First Name
+    </th>
+    <th class="active"style="text-align:center">
+    Last Name
+    </th>
+    <th class="active"style="text-align:center">
+    Email
+    </th>
+    <th class="active"style="text-align:center">
+    Phone
+    </th>
+  </tr>
+</thead>
+<tbody>
+    <tr align="center" ng-repeat="doctor in primary">
+        <td>{{doctor.DoctorAriaSer}}</td>
+        <td>{{doctor.FirstName}}</td>
+        <td>{{doctor.LastName}}</td>
+        <td>{{doctor.Email}}</td>
+        <td>{{doctor.Phone}}</td>
+    </tr>
+</tbody>
+</table>
+<h4>Oncologists:</h4>
+<div align="center" ng-hide="oncologists.length>0"><p> No oncologists available for the patient.</p></div>
+<table ng-show="oncologists.length>0" class="table table-bordered table-hover" >
+    <th class="active" style="text-align:center">
+    Doctor Aria Ser
+    </th>
+    <th class="active"style="text-align:center">
+      First Name
+    </th>
+    <th class="active"style="text-align:center">
+    Last Name
+    </th>
+    <th class="active"style="text-align:center">
+    Email
+    </th>
+    <th class="active"style="text-align:center">
+    Phone
+    </th>
+    <tr align="center" ng-repeat="doctor in oncologists">
+        <td>{{doctor.DoctorAriaSer}}</td>
+        <td>{{doctor.FirstName}}</td>
+        <td>{{doctor.LastName}}</td>
+        <td>{{doctor.Email}}</td>
+        <td>{{doctor.Phone}}</td>
+    </tr>
+</table>
+<div ng-show="otherdoctors.length>0" >
+<h4>Other:</h4>
+<table class="table table-bordered table-hover" >
+    <th class="active" style="text-align:center">
+    Doctor Aria Ser
+    </th>
+    <th class="active"style="text-align:center">
+      First Name
+    </th>
+    <th class="active"style="text-align:center">
+    Last Name
+    </th>
+    <th class="active"style="text-align:center">
+    Email
+    </th>
+    <th class="active"style="text-align:center">
+    Phone
+    </th>
+    <tr align="center" ng-repeat="doctor in otherdoctors">
+        <td>{{doctor.DoctorAriaSer}}</td>
+        <td>{{doctor.FirstName}}</td>
+        <td>{{doctor.LastName}}</td>
+        <td>{{doctor.Email}}</td>
+        <td>{{doctor.Phone}}</td>
+    </tr>
+</table>
+</div>
+</div>

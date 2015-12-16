@@ -1,0 +1,156 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width">
+    <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+    <!-- build:css(.) styles/vendor.css -->
+    <!-- bower:css -->
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css" />
+    <link rel="stylesheet" href="bower_components/ionicons/css/ionicons.min.css"/>
+
+    <!-- endbower -->
+    <!-- endbuild -->
+    <!-- build:css(.tmp) styles/main.css -->
+    <link rel="stylesheet" href="styles/main.css">
+    <!-- endbuild -->
+  </head>
+  <body ng-app="adminPanelApp">
+    <!--[if lte IE 8]>
+      <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+    <![endif]-->
+
+    <!-- Add your site or application content here -->
+    <div ng-controller="MainController">
+    <div class="container" align="center" >
+      <img class="img-responsive" src="./img/muhc-logo-text.png">
+    <span style="color:#2E8AE6"><strong>Portal MUHC Oncology Patient Application</strong></span><br><br>
+    </div>
+
+    <div class="header"  align="center">
+      <div class="navbar navbar-default" role="navigation" style="width:85vw;box-shadow: 0 0 20px lightgrey;" >
+        <div class="container" align="center">
+          <div class="navbar-header" >
+
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#js-navbar-collapse">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+
+            <a class="navbar-brand" ui-sref="home"><img width="35px" style="margin-top:-5px" src="./img/opal.png"> </a>
+          </div>
+
+          <div class="collapse navbar-collapse" id="js-navbar-collapse">
+
+            <ul class="nav navbar-nav">
+              <li class="main-theme-font-color" ui-sref-active="active">
+                <a ui-sref="home"><span class="item-menu-size"><i class="ion-home"></i> <strong>Home</strong></span></a>
+              </li>
+              <li ng-show="userType!=='Doctor'" class="main-theme-font-color item-menu-size" ui-sref-active="active">
+                <a ui-sref="registration"><span class="item-menu-size"><i class="icon ion-clipboard"></i>  <strong>Registration</strong></a>
+              </li>
+              <li ng-show="userType!=='Staff'" class="main-theme-font-color item-menu-size" ui-sref-active="active">
+                <a ui-sref="patients.search-patients"><span class="item-menu-size"><i class="ion-ios-people" ></i> <strong>Patients</strong></span></a>
+              </li>
+
+              <li ng-show="userType!=='Staff'" class="main-theme-font-color item-menu-size" ui-sref-active="active">
+                <a ui-sref="messages"><span class="item-menu-size"><i class="ion-email"></i><i class="{{}}"></i>  <strong>Messages  <span class="badge" ng-show="NumberOfNewMessages!==0">{{NumberOfNewMessages}}</span></a></strong></span></a>
+              </li>
+
+            <!--  <li class="main-theme-font-color item-menu-size" ng-class="activeClasses[3]">
+                <a ui-sref="requests"><span class="item-menu-size"><i class="ion-ios-information"></i> <strong>Requests</strong></span></a>
+              </li>-->
+              <li class="main-theme-font-color item-menu-size" ui-sref-active="active"><a ui-sref="account"><span class="item-menu-size"><i class="ion-gear-a"></i>  <strong>Account</strong></span></a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+            <li ng-show="currentUser" class="dropdown" >
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="item-menu-size" ><i class="ion-person"></i></span><span > {{currentUser.Username}}</span><span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                  <li align="center"><a ng-click="logout()"><span class="item-menu-size" ><i class="ion-log-out"></i></span> Logout</a></li>
+                </ul>
+            </li>
+        <li ng-hide="currentUser"><a ui-sref="account"><span class="item-menu-size" ><i class="ion-person"></i></span><span > Log In</span></a></li>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="container-fluid">
+    <div ui-view></div>
+    </div>
+    </div>
+</div>
+    <div class="footer">
+      <div class="container" align="center">
+        <p><span class="item-menu-size">MUHC 2015</span></p>
+      </div>
+    </div>
+
+    <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
+     <script>
+       !function(A,n,g,u,l,a,r){A.GoogleAnalyticsObject=l,A[l]=A[l]||function(){
+       (A[l].q=A[l].q||[]).push(arguments)},A[l].l=+new Date,a=n.createElement(g),
+       r=n.getElementsByTagName(g)[0],a.src=u,r.parentNode.insertBefore(a,r)
+       }(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+       ga('create', 'UA-XXXXX-X');
+       ga('send', 'pageview');
+    </script>
+
+    <!-- build:js(.) scripts/vendor.js -->
+    <!-- bower:js -->
+    <script src="bower_components/jquery/dist/jquery.js"></script>
+    <script src="bower_components/angular/angular.js"></script>
+    <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="bower_components/angular-animate/angular-animate.js"></script>
+    <script src="bower_components/angular-cookies/angular-cookies.js"></script>
+    <script src="bower_components/angular-resource/angular-resource.js"></script>
+    <script src="bower_components/angular-route/angular-route.js"></script>
+    <script src="bower_components/angular-scroll-glue/src/scrollglue.js"></script>
+    <script src="bower_components/angular-ui-router/release/angular-ui-router.min.js"></script>
+    <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
+    <script src="bower_components/angular-touch/angular-touch.js"></script>
+    <script src="bower_components/firebase/firebase.js"></script>
+    <script src="bower_components/angular-bootstrap/ui-bootstrap.min.js"></script>
+    <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
+    <!--Crypto libraries-->
+    <script src="bower_components/cryptojs/aes.js"></script>
+    <script src="bower_components/cryptojs/mode-cfb-min.js"></script>
+    <script src="bower_components/cryptojs/sha256.js"></script>
+
+
+    <!-- endbower -->
+    <!-- endbuild -->
+
+        <!-- build:js({.tmp,app}) scripts/scripts.js -->
+        <!--Routing, app init, run loop-->
+        <script src="scripts/app.js"></script>
+
+        <!--Controller-->
+
+        <script src="scripts/controllers/LoginModalController.js"></script>
+        <script src="scripts/controllers/AccountController.js"></script>
+        <script src="scripts/controllers/SearchPatientsController.js"></script>
+        <script src="scripts/controllers/IndividualPatientController.js"></script>
+         <script src="scripts/controllers/MainController.js"></script>
+        <script src="scripts/controllers/MessagesController.js"></script>
+        <script src="scripts/controllers/PatientsController.js"></script>
+        <script src="scripts/controllers/RequestsController.js"></script>
+        <script src="scripts/controllers/RegistrationController.js"></script>
+
+        <script src="scripts/controllers/patient.js"></script>
+
+        <!--services-->
+        <script src="scripts/services/API.js"></script>
+          <script src="scripts/services/validate.js"></script>
+        <!--filters-->
+        <script src="scripts/filters.js"></script>
+        <!--directives-->
+        <script src="scripts/directives/fileUpload.js"></script>
+
+        <!-- endbuild -->
+</body>
+</html>

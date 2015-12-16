@@ -1,0 +1,60 @@
+<div class="main-div-container">
+
+  <uib-tabset>
+    <uib-tab active="home" ng-hide="admin">
+   <tab-heading>
+     Home
+   </tab-heading>
+   <div ng-show="loggedin" style="margin-left:20px;margin-top:20px">
+     <h4>{{date|date:'EEEE MM dd'}}</h4>
+     <h2>
+       Welcome, {{currentUser.FirstName}} {{currentUser.LastName}}
+     </h2>
+     <ul>
+       <li ng-show="userType=='Doctor'"> {{TotalNumberOfDoctorPatients}} of your patients are currently registered for the app</li>
+     </ul>
+     <p ng-show="NumberOfNewMessages>0">
+       <span style="font-size:30px"><i class="ion-email"></i></span>  You have {{NumberOfNewMessages}} new {{messages}} <a href="#/messages">Go to my messages &raquo;</a>
+     </p>
+     <p>
+
+
+     </p>
+
+
+   </div>
+     <div  ng-show="!loggedin" class="container" align="center">
+       <h3>You are not currently signed in!</h3>
+            <br>
+       <button class="btn btn-primary btn-block btn-lg" name="button" ng-click="signin()">Sign in</button>
+     </div>
+
+
+
+   </uib-tab>
+          <uib-tab active="about">
+          <tab-heading>
+             About
+          </tab-heading>
+          <div style="margin:20px 0 0 20px">
+          <h3>About Opal</h3>
+	Opal is a multiplatform application that allows patients to obtain
+	information about their treatment and their waiting times. <br>
+	These tool will allow you as a doctor or administrator to obtain all the information that is
+  currently being shown to the patient.<br>
+  These tool will allow you to:
+  <ul>
+			<li>Obtain a real time view of the information that is currently shared with the patients.</li>
+			<li> Keep an open channel of communication with the patients via chat message.</li>
+			<li> 	See all the documents that have currently being published to the patients.</li>
+			<li>A look at a patient's treatment plan.</li>
+			<li>Update the information that is currently being shown to the patient about you.</li>
+  </ul>
+<h3>FAQ</h3>
+	- There are currently {{TotalNumberOfPatients}} patients registered for the app.
+</div>
+          </uib-tab>
+
+  </uib-tabset>
+
+</div>

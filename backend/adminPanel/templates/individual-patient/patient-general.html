@@ -1,0 +1,47 @@
+<div class="container">
+  <div class="col-xs-12 col-sm-3" style="border:1px solid grey; border-radius:3px">
+    <img src="{{patientImage}}" width="90%" height="auto">
+  </div>
+  <div class="col-xs-12 col-sm-9">
+    <div><strong>Patient Name: </strong>{{patientGeneral.FirstName}} {{patientGeneral.LastName}}</div>
+    <div><strong>Patient AriaSer: </strong>{{patientGeneral.PatientId}}</div>
+    <div><strong>Patient Email: </strong>{{patientGeneral.Email}}</div>
+    <div><strong>Most Recent Diagnosis: </strong>
+      <ul>
+        <li><strong>Type: </strong>{{diagnosis[0].Description_EN}}</li>
+        <li><strong>Creation Date: </strong>{{diagnosis[0].CreationDate|date:'EEE, MMM dd yyyy'}}</li>
+        <li><strong>AriaSer: </strong>{{diagnosis[0].DiagnosisAriaSer}}</li>
+      </ul>
+    </div>
+    <div ng-show="diagnosis.length>1"><a  href ng-click='seeOtherDiagnosis=true'> See past diagnoses</a></div>
+  <div ng-show="!noNextAppointment">
+  <strong>{{shownAppointmentMessage}}:</strong> <a href="#/patients/patient/appointments">See Appointments &raquo;</a>
+      <ul>
+        <li><strong>Type: </strong>{{shownAppointment.ExpressionName}}</li>
+        <li><strong>Start Time:</strong>{{shownAppointment.ScheduledStartTime|date:'EEE, MMM dd yyyy'}}</li>
+        <li><strong>AriaSer: </strong>{{shownAppointment.AppointmentAriaSer}}</li>
+      </ul>
+  </div>
+  <div ng-show="noNextAppointment"><strong>Next Appointment:</strong> Patient has no appointments available</div>
+    <div><strong>Treatment Plan Stage:</strong>{{patient.TreatmentPlanStage}}: (available soon) <a href="#/patients/patient/treatmentplan">Link &raquo;</a></div>
+  </div>
+  <div class="col-xs-10" align="center" ng-show="seeOtherDiagnosis">
+  <table class="table table-bordered table-hover">
+    <thead>
+      <tr>
+    <th>Diagosis Aria Ser</th>
+    <th>Description</th>
+    <th>Creation Date</th>
+  </tr>
+</thead>
+<tbody>
+    <tr align="center" ng-repeat="diagnose in diagnosis">
+        <td>{{diagnose.DiagnosisAriaSer}}</td>
+        <td>{{diagnose.Description_EN}}</td>
+        <td>{{diagnose.CreationDate|date:'EEE, MMM dd yyyy'}}</td>
+    </tr>
+  </tbody>
+  </table>
+<button class="btn btn-primary" ng-click='seeOtherDiagnosis=false'>Hide</button>
+</div>
+</div>

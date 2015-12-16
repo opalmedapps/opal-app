@@ -1,0 +1,109 @@
+<ons-page ng-controller="EducationalMaterialController">
+  <ons-toolbar>
+    <div class="left">
+      <ons-toolbar-button ng-click="menu.toggle()">
+        <ons-icon icon="ion-navicon" size="28px" fixed-width="false"></ons-icon>
+        <div class="notification menu-notification">{{TotalNumberOfNews}}</div>
+      </ons-toolbar-button>
+    </div>
+    <div class="center">Educational Material</div>
+  </ons-toolbar>
+  <div class="container" ng-hide="noNotifications">
+    <a style="text-decoration:none" href ng-click="menu.setMainPage('views/notifications.html',{closeMenu:true})">
+      <alert align="center" ng-show="showAlert&&(Notifications==1)" ng-model="alert" type="success" close="closeAlert()">You have {{Notifications}} unseen notifications.
+        <span class="hidden-xs">Go to your Notifications page under the menu on the left.</span>
+      </alert>
+      <alert align="center" ng-show="showAlert&&(Notifications>1)" ng-model="alert" type="success" close="closeAlert()">You have {{Notifications}} unseen notification.
+        <span class="hidden-xs">Go to your Notifications page under the menu on the left.</span>
+      </alert>
+    </a>
+  </div>
+  <ul class="list list--inset" style="margin-top:5px" ng-click="openPDF()">
+    <li class="list__item list--inset__item list__item--chevron">
+      <div style="padding:8px;">
+        <ons-row>
+          <ons-col width="30px">
+            <div align="right">
+              <i class="ion-android-map iconHomeView"></i>
+            </div>
+          </ons-col>
+          <ons-col>
+            <div align="middle" style="margin-left:5px">
+              <div class="name">
+                Radiotherapy at the Cedars Cancer Centre
+              </div>
+              <div class="desc">
+                Booklet
+              </div>
+          </ons-col>
+        </ons-row>
+        </div>
+    </li>
+  </ul>
+  <ul class="list list--inset" style="margin-top:5px" ng-click="openVideo()">
+    <li class="list__item list--inset__item list__item--chevron">
+      <div style="padding:8px;">
+        <ons-row>
+          <ons-col width="30px">
+            <div align="right">
+              <i class="ion-ios-film iconHomeView"></i>
+            </div>
+          </ons-col>
+          <ons-col>
+            <div align="middle" style="margin-left:5px">
+              <div class="name">
+                Planning for your radiotherapy
+              </div>
+              <div class="desc">
+                Video
+              </div>
+          </ons-col>
+        </ons-row>
+        </div>
+    </li>
+  </ul>
+  <ul class="list list--inset" style="margin-top:5px" ng-click="openPDF()">
+    <li class="list__item list--inset__item list__item--chevron">
+      <div style="padding:8px;">
+        <ons-row>
+          <ons-col width="30px">
+            <div align="right">
+              <i class="ion-ios-paper-outline iconHomeView"></i>
+            </div>
+          </ons-col>
+          <ons-col>
+            <div align="middle" style="margin-left:5px">
+              <div class="name">
+                Prostate
+              </div>
+              <div class="desc">
+                Treatment guidelines
+              </div>
+          </ons-col>
+        </ons-row>
+        </div>
+    </li>
+  </ul>
+  <ul class="list list--inset" style="margin-top:5px" ng-click="openPDF()">
+    <li class="list__item list--inset__item list__item--chevron">
+      <div style="padding:8px;">
+        <ons-row>
+          <ons-col width="30px">
+            <div align="right">
+              <i class="ion-ios-list-outline iconHomeView"></i>
+            </div>
+          </ons-col>
+          <ons-col>
+            <div align="middle" style="margin-left:5px">
+              <div class="name">
+                When radiotherapy treatment ends
+              </div>
+              <div class="desc">
+                Factsheet
+              </div>
+          </ons-col>
+        </ons-row>
+        </div>
+    </li>
+  </ul>
+</ons-page>
