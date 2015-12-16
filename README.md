@@ -30,11 +30,12 @@ Instructions are based from [Cordova get started page!](https://cordova.apache.o
  $ cordova add platform android
  $ cordova add platform browser
 ```
-7. Build your basic app via:
-``` $ cordova build```
+7.Build your basic app via: `$ cordova build`.
   * For an specific platform build use:
-``` $ cordova build <nameOfPlatform>```
-8. Add all the app plugins using the command:
+``` 
+$ cordova build <nameOfPlatform>
+```
+8.Add all the app plugins using the command:
 ```
 $cordova plugin add <nameOfPlugin>
 ```
