@@ -1,0 +1,23 @@
+<div class="container-fluid">
+  <div class="col-xs-offset-1 col-xs-12 col-sm-10" align="center">
+    <div class="btn btn-block div-container-section" ng-click="goToNotification($index,notification)"  ng-repeat="notification in notifications">
+      <div class="row">
+        <div class="col-xs-2" align="center">
+          <i class="iconThemeViews fa fa-dropbox"></i>
+          <span style="color:grey" ng-show="notification.ReadStatus=='0'">UNREAD</span><br>
+
+        </div>
+        <div class="col-xs-8" align="center">
+          {{notification.Name}}<br>
+          <span style="color:grey" >{{notification.Content}}</span>
+        </div>
+        <div class="col-xs-2" align="center">
+        <span style="color:grey" >{{notification.DateAdded|dateEmail}}</span><br>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>

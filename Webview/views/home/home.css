@@ -1,0 +1,38 @@
+
+/*
+*Icons
+*/
+.iconThemeViews{
+  margin-top:5px;
+  font-size:18px;
+  font-weight: 600;
+  color: #2B6197;
+  text-align: center;
+}
+/**
+*Status bar for progress
+*
+*/
+.progressStatus {
+    height: 200px;
+}
+
+.progressStatus > svg {
+    height: 100%;
+    display: block;
+}
+.progressStatusTextBox{
+  margin-top:-160px;
+  z-index:122312;
+  text-align:center;
+  font-size:12px;
+  width:140px;
+  height:115px;
+}
+.iconStatusBox{
+  margin-top:5px;
+  font-size:13px;
+  font-weight: 600;
+  color: #2B6197;
+  text-align: center;
+}

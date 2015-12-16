@@ -1,0 +1,92 @@
+
+<div style="overflow-y:hidden;height:100vh">
+
+<div align="center">
+<img class="img-responsive" ng-src="./img/muhc-logo-text.png" width="300px"/>
+</div>
+<nav class="navbar navbar-default">
+<div class="container-fluid">
+  <!-- Brand and toggle get grouped for better mobile display -->
+  <div class="navbar-header">
+    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+      <span class="sr-only">Toggle navigation</span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </button>
+    <a ui-sref="Home" class="navbar-brand">
+      <img alt="Brand" src="./img/logo.png"  height="30px">
+    </a>
+  </div>
+
+  <!-- Collect the nav links, forms, and other content for toggling -->
+  <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+    <ul class="nav navbar-nav">
+      <li ui-sref-active="active"><a status="active" ui-sref="app.Home" href><i class="fa fa-home iconMenuBar"></i> Home</a></li>
+            <li ui-sref-active="active"><a ui-sref="app.Contacts" href><i class="ion-android-people iconMenuBar"></i> Contacts</a></li>
+      <li ui-sref-active="active"><a ui-sref="app.Appointments" href><i class="fa fa-calendar iconMenuBar"></i> Appointments</a></li>
+       <li ui-sref-active="active"><a ui-sref="app.TreatmentPlan" href><i class="fa fa-tasks iconMenuBar"></i> Treatment Plan</a></li>
+      <li ui-sref-active="active"><a ui-sref="app.Documents" href><i class="fa fa-folder iconMenuBar"></i> Documents</a></li>
+      <li ui-sref-active="active"><a ui-sref="app.Messages" href><i class="fa fa-envelope iconMenuBar"></i> Messages <span class="badge">{{NumberOfNewMessages}}</span></a></li>
+
+      <li ui-sref-active="active"><a ui-sref="app.Maps" href><i class="fa fa-hospital-o iconMenuBar"></i> Maps</a></li>
+      <li ui-sref-active="active"><a ui-sref="app.Educational" href><i class="fa fa-book iconMenuBar"></i> Educational</a></li>
+  </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li ui-sref-active="active" class="dropdown dropdown-lg " ng-controller="NotificationsController">
+          <a  href class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" ng-click="Notifications=''"><i class="fa fa-bell iconMenuBar" ng-class="(Notifications>0?'iconThemeViews':'')"></i><span class="badge">{{Notifications}}</span></a>
+          <ul class="dropdown-menu dropdown-menu-lg row"  align="center">
+            <hr style="margin:5px 0 5px 0;padding:0">
+            <li ng-repeat="notification in notifications" ng-class="(notification.ReadStatus=='0')?'unreadNotification':''" ng-click="goToNotification($index,notification)" class="list__item--tappable">
+              <div class="row" >
+              <div class="col-xs-1" align="center" >
+                <div style="margin-left:5px">
+                  <i class="fa fa-bell iconThemeViews"></i>
+                </div>
+
+              </div>
+              <div class="col-xs-8" align="center">
+                <div class="profile-name" >
+                {{notification.Name}}
+              </div>
+          <div class="desc">
+                {{notification.IssuedBy}}
+                <div style=" color:grey;">{{notification.Content}}</div>
+              </div>
+              </div>
+              <div class="col-xs-3" >
+                {{notification.DateAdded|dateEmail}}
+              </div>
+            </div>
+            <hr style="margin:5px 0 5px 0;padding:0">
+            </li>
+            <li>
+              <div class="row">
+              <div class="col-xs-12" align="center">
+
+                <a href ui-sref="app.Notifications">See all &raquo;</a>
+              </div>
+            </div>
+            </li>
+              </ul>
+        </li>
+      <li ui-sref-active="active" class="dropdown">
+        <a  href class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><img  style="width:40px" ng-src="{{profileImage}}" class="img-circle" > <span class="caret"></span></a>
+        <ul class="dropdown-menu">
+        <li><a  ui-sref="app.Account"> <i class="fa fa-cog iconThemeViews"></i> Personal Account</a></li>
+          <li role="separator" class="divider"></li>
+          <li><a ng-click="logout()"> <i class="fa fa-sign-out iconThemeViews"></i> Log Out</a></li>
+
+        </ul>
+      </li>
+  </ul>
+  </div><!-- /.navbar-collapse -->
+</div><!-- /.container-fluid -->
+</nav>
+<div style="margin-top:-10px" >
+<div ui-view></div>
+</div>
+<footer class="navbar-fixed-bottom" style="text-align:center;display:block;background-color:#ececec;border-color:#a5a7ac;color:#3d5da9;height:17px">
+    <p>MUHC 2015<br>
+</footer>
+</div>
