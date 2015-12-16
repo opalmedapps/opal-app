@@ -1,0 +1,10 @@
+#spinningIcon{
+  animation: spin 3s linear infinite;
+
+}
+@keyframes spin
+{
+	from { transform: rotate(0deg);   opacity: 0.6; }
+	50%  { transform: rotate(180deg); opacity: 0.6; }
+	to   { transform: rotate(360deg); opacity: 0.6; }
+}

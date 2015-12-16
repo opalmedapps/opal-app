@@ -1,0 +1,101 @@
+<div class="hidden-xs hidden-sm" align="center" >
+
+
+    <div align="left" style="text-align:left"><h3><strong>General Account Settings</strong></h3></div>
+
+    <div class="div-container-section" style="padding:20px;height:70vh">
+      <div class="container">
+        <hr />
+    <div style="text-align: left" class="col-xs-4 col-sm-4 col-lg-4">
+      <p>Email:</p>
+    </div>
+    <div style="text-align: center" class="col-xs-4 col-sm-4  col-lg-4">
+      <p class="text-muted">{{Email}}</p>
+    </div>
+    <div style="text-align: right" class="col-xs-4 col-sm-4  col-lg-4">
+     <i class="fa fa-pencil" size="12px" style="color:#0066FF">&nbsp;</i><a class="forgotPassword" href style="position:relative;text-align:right;font-size:10px;color:#0066FF" ng-click="editingDiv.editEmailDiv=true;hideSectionsBut('editEmailDiv')">Edit</a>
+  </div>
+  <br>
+   <div class="col-xs-12 col-xs-offset-4 col-sm-8 col-lg-8" ng-show="editingDiv.editEmailDiv" style="text-align:left;margin-left:30px">
+      <form name="form" ng-submit="changeField('Email')" novalidate><br>
+      <strong>Enter your new email:</strong>&nbsp;<input class="text-input" id="firstNameField" type="text" name="editEmail" ng-model="account.Email" placeholder="Email"/>
+      <br><strong>Enter your password:</strong>&nbsp;<input id="firstNameField" class="text-input" type="password" name="editPasswordEmail" ng-model="account.emailPassword" style="margin-left:2px" placeholder="Password"/>&nbsp;<br><input class="btn btn-primary" type="submit" id="submit" value="Submit"/>&nbsp;<a class="btn btn-primary" id="cancelEdit" ng-click="editingDiv.editEmailDiv=false">Cancel</a></form>
+    </div>
+    <br>
+    <hr />
+    <div style="text-align: left" class="col-xs-4 col-sm-4 col-lg-4">
+      <p>Password:</p>
+    </div>
+    <div style="text-align: center" class="col-xs-4 col-sm-4 col-lg-4">
+      <p class="text-muted">-</p>
+    </div>
+    <div style="text-align: right" class="col-xs-4 col-sm-4 col-lg-4">
+     <i class="fa fa-pencil" size="12px" style="color:#0066FF">&nbsp;</i><a class="forgotPassword" href style="position:relative;text-align:right;font-size:10px;color:#0066FF" ng-click="editingDiv.editPasswordDiv=true;hideSectionsBut('editPasswordDiv')">Edit</a>
+  </div>
+  <br>
+   <div class="col-xs-12 col-sm-12 col-lg-12" ng-show="editingDiv.editPasswordDiv" style="text-align:left;margin-left:30px">
+      <form name="form" ng-submit="changeField('Password')" novalidate><br>&nbsp;&nbsp;<strong>Enter old password:</strong>&nbsp;<input id="passwordField" class="text-input" type="password" name="editPassword" ng-model="account.oldPassword" placeholder="Password"/><br>
+      <strong>Enter new password:</strong>&nbsp;<input id="passwordField" style="margin-left:1px" type="password" name="editPassword" class="text-input" ng-model="account.newPassword" placeholder="Password"/><br>
+     &nbsp;&nbsp;<strong>Re-enter password:</strong>&nbsp;<input id="passwordField" class="text-input" style="margin-left:3px" type="password" name="editPassword" ng-model="account.rePassword" placeholder="Password"/><br>&nbsp;
+     <div style="margin-left=30px"><input class="btn btn-primary" type="submit" id="submit" value="Submit"/>&nbsp;<a class="btn btn-primary" id="cancelEdit" ng-click="editingDiv.editPasswordDiv=false">Cancel</a></div></form>
+    </div>
+    <hr/>
+    <div style="text-align: left" class="col-xs-4 col-sm-4 col-lg-4">
+      <p>Receive SMS:</p>
+    </div>
+    <div style="text-align: center" class="col-xs-4 col-sm-4 col-lg-4">
+      <p class="text-muted">{{smsPreference}}</p>
+    </div>
+    <div style="text-align: right" class="col-xs-4 col-sm-4 col-lg-4">
+     <i class="fa fa-pencil" size="12px" style="color:#0066FF">&nbsp;</i><a class="editSMSButton" href style="position:relative;text-align:right;font-size:10px;color:#0066FF" ng-click="editingDiv.editSMSDiv=true;hideSectionsBut('editSMSDiv')">Edit</a>
+  </div>
+  <br>
+    <div class="col-xs-12 col-sm-12 col-lg-12" ng-show="editingDiv.editSMSDiv" align="left" style="text-align:left;margin-left:30px">
+     <br> <form name="form" ng-submit="changeImage('SMS')" align="left" novalidate><strong>SMS Notifications:</strong>&nbsp;
+        <select name="Language" ng-model="account.SMSPreference">
+              <option value="Enable">Enable</option>
+              <option value="Disable">Disable</option>
+          </select>
+      <input class="btn btn-primary" type="submit" id="submitLanChange" value="Submit" />&nbsp;<a class="btn btn-primary" id="cancelEdit" ng-click="editingDiv.editSMSDiv=false">Cancel</a><br>
+
+
+      </form>
+    </div>
+      <hr/>
+    <div style="text-align: left" class="col-xs-4 col-sm-4 col-lg-4">
+      <p>Telephone Number:</p>
+    </div>
+    <div style="text-align: center" class="col-xs-4 col-sm-4 col-lg-4">
+      <p class="text-muted">{{TelNum}}</p>
+    </div>
+    <div style="text-align: right" class="col-xs-4 col-sm-4 col-lg-4">
+     <i class="fa fa-pencil" size="12px" style="color:#0066FF">&nbsp;</i><a class="forgotPassword" href style="position:relative;text-align:right;font-size:10px;color:#0066FF" ng-click="editingDiv.editTelNumDiv=true;hideSectionsBut('editTelNumDiv')">Edit</a>
+  </div>
+  <br>
+   <div class="col-xs-12 col-sm-12 col-lg-12" ng-show="editingDiv.editTelNumDiv" style="text-align:left;margin-left:30px">
+      <form name="form" ng-submit="changeField('TelNum')" novalidate><br><strong>Enter New Telephone Number:&nbsp;</strong><input id="firstNameField" class="text-input" type="text" name="editFirstName" ng-model="account.editFirstName" size="21" placeholder="Telephone Number"/>&nbsp;<input class="btn btn-primary" type="submit" id="submit" value="Submit"/>&nbsp;<a class="btn btn-primary" id="cancelEdit" ng-click="editingDiv.editTelNumDiv=false">Cancel</a></form>
+    </div>
+    <hr />
+     <div style="text-align: left" class="col-xs-4 col-sm-4 col-lg-4">
+      <p>Language:</p>
+    </div>
+    <div style="text-align: center;" class="col-xs-4 col-sm-4 col-lg-4">
+      <p class="text-muted">{{Language}}</p>
+    </div>
+    <div style="text-align: right" class="col-xs-4 col-sm-4 col-lg-4">
+     <i class="fa fa-pencil" size="12px" style="color:#0066FF">&nbsp;</i><a class="forgotPassword" href style="position:relative;text-align:right;font-size:10px;color:#0066FF" ng-click="editingDiv.editLanDiv=true;hideSectionsBut('editLanDiv')">Edit</a>
+  </div>
+  <br>
+   <div class="col-xs-12 col-sm-12 col-lg-12" ng-show="editingDiv.editLanDiv" style="text-align:left;margin-left:30px">
+      <form name="form" ng-submit="changeField('Lan')" novalidate><br><strong>Language:</strong>&nbsp;
+          <select name="Language"  ng-model="account.LanguagePreference">
+              <option value="English">EN</option>
+              <option value="French">FR</option>
+          </select>
+          <input class="btn btn-primary" type="submit" id="submitLanChange" value="Submit" />&nbsp;<a class="btn btn-primary" id="cancelEdit" ng-click="editingDiv.editLanDiv=false">Cancel</a><br>
+      </form>
+    </div>
+    <hr />
+  </div>
+  </div>
+    </div>
