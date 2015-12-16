@@ -13,9 +13,7 @@ Opal - the MUHC Oncology Patient Application for mobile phones and the web - is 
 5. Go to localhost:8080 in your browser and the app should display.
 
 ###Cordova Projects
-Mobile apps with HTML, CSS & JS
-Target multiple platforms with one code base
-Free and open source
+Apache Cordova enables software programmers to build applications for mobile devices using JavaScript, HTML5, and CSS3, instead of relying on platform-specific APIs like those in Android, iOS, or Windows Phone. It enables wrapping up of CSS, HTML, and JavaScript code depending upon the platform of the device. It extends the features of HTML and JavaScript to work with the device. The resulting applications are hybrid.
 [Main Site!](https://cordova.apache.org/)
 ####Steps:
 Instructions are based from [Cordova get started page!](https://cordova.apache.org/#getstarted)
