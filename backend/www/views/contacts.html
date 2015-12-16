@@ -1,0 +1,31 @@
+
+<ons-page ng-controller="ContactsController">
+    <ons-toolbar>
+   <div class="left">
+      <ons-toolbar-button ng-click="menu.toggle()">
+        <ons-icon icon="ion-navicon" size="28px" fixed-width="false"></ons-icon><div class="notification menu-notification">{{TotalNumberOfNews}}</div>
+      </ons-toolbar-button>
+    </div>
+    <div class="center">Contacts</div>
+  </ons-toolbar>
+      <ons-pull-hook ng-action="load($done)" var="loader" height="100px">
+        <span ng-switch="loader.getCurrentState()">
+          <span ng-switch-when="initial"><ons-icon size="35px" icon="ion-arrow-down-a"></ons-icon> Pull down to refresh</span>
+          <span ng-switch-when="preaction"><ons-icon size="35px" icon="ion-arrow-up-a"></ons-icon> Release to refresh</span>
+          <span ng-switch-when="action"><ons-icon size="35px" spin="true" icon="ion-load-d"></ons-icon> Loading data...</span>
+        </span>
+      </ons-pull-hook>
+    <ons-list >
+      <ons-list-header ng-show="primaryPhysician.length>0">Primary Doctor</ons-list-header>
+
+      <ons-list-item ng-show="primaryPhysician.length>0" ng-click="goDoctorContact()" modifier="chevron">{{primaryPhysician[0].FirstName}} {{primaryPhysician[0].LastName}}</ons-list-item>
+
+      <ons-list-header ng-show="oncologists.length>0">Oncologists</ons-list-header>
+
+      <ons-list-item ng-repeat="doctor in oncologists" ng-click="goDoctorContact(doctor)" modifier="chevron"> {{doctor.FirstName}} {{doctor.LastName}}</ons-list-item>
+
+      <ons-list-header ng-show="otherDoctors.length>0">Other</ons-list-header>
+      <ons-list-item ng-repeat="doctor in otherDoctors" ng-click="goDoctorContact(doctor)" modifier="chevron"> {{doctor.FirstName}} {{doctor.LastName}}</ons-list-item>
+
+    </ons-list>
+  </ons-page>
