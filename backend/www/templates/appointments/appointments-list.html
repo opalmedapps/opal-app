@@ -1,0 +1,57 @@
+  <ons-page ng-controller="AppointmentListController">
+ <div>
+ <div align="center">
+       <div style="text-align:center;display:inline-block;font-size:10px"><div style="width:10px;height:10px;background-color:#5CE68A;display:inline-block;border:1px solid #000;"></div>&nbsp;<strong>Past</strong></div>&nbsp;&nbsp;<div style="text-align:center;display:inline-block;font-size:10px"><div style="width:10px;height:10px;background:#3399ff;border:1px solid #000;display:inline-block"></div>&nbsp;<strong>Today</strong></div>&nbsp;&nbsp;<div style="text-align:center;display:inline-block;font-size:10px"><div style="width:10px;height:10px;border:1px solid #000;background:#D3D3D3;display:inline-block"></div>&nbsp;<strong>Upcoming</strong></div>
+  <div class="navigation-bar">
+      <div class="navigation-bar__center">
+        <div class="button-bar" style="width:230px;margin:0 auto;margin-top:7px">
+          <div class="button-bar__item">
+            <input type="radio" ng-model="radioModel" value="All" name="navi-segment-a" checked>
+            <div class="button-bar__button">All</div>
+          </div>
+
+          <div class="button-bar__item">
+            <input type="radio" ng-model="radioModel" value="Past" name="navi-segment-a">
+            <div class="button-bar__button">Past</div>
+          </div>
+          <div class="button-bar__item">
+            <input type="radio" ng-model="radioModel" value="Today" name="navi-segment-a">
+            <div class="button-bar__button">Today</div>
+          </div>
+          <div class="button-bar__item">
+            <input type="radio" ng-model="radioModel" value="Upcoming" name="navi-segment-a">
+            <div class="button-bar__button">Future</div>
+          </div>
+        </div>
+      </div>
+    </div>
+ </div>
+ </div>
+ <div style="padding:0">
+          <ons-list class="plan-list " >
+          <ons-list-item style="1px solid black" modifier="chevron" ng-repeat="app in appointments"  ng-click="myNavigator.pushPage('./templates/appointments/individual-appointment.html', {param:app},{ animation : 'slide' } )" >
+            <ons-row>
+              <ons-col style="opacity: 0.6;
+    filter: alpha(opacity=60);" width="10px" class="plan-left" ng-style="{ 'background-color': getStyle($index) }">
+              </ons-col>
+
+              <ons-col class="plan-right">
+                <div style="font-size:15px">
+                {{app.AppointmentType_EN}}
+              </div>
+                <div class="plan-info">
+                 <div >
+                   <div ng-show="app.sessionNumber!==undefined"><strong>{{app.sessionNumber}}</strong></div>
+                 <i class="fa fa-calendar" style="color:#2B6197"></i>&nbsp;{{app.ScheduledStartTime|formatDateAppointmentTask}}
+
+                  </div>
+                  <div>
+                    <i class="ion-person iconHomeView"></i>&nbsp;{{app.ResourceName}}
+                  </div>
+                </div>
+              </ons-col>
+            </ons-row>
+          </ons-list-item>
+          </ons-list>
+</div>
+  </ons-page>

@@ -1,0 +1,48 @@
+<ons-page ng-controller="ContactIndividualDoctorController">
+    <ons-toolbar>
+      <div class="left"><ons-back-button>Back</ons-back-button></div>
+      <div class="center">{{header}}</div>
+    </ons-toolbar>
+     <div class="profile-cardContact">
+
+        <!--<img ng-show="!doctor.Image" src="img/logo.png" class="profile-image">-->
+        <img ng-src="data:image/jpg;base64,{{doctor.ProfileImage}}" class="profile-image">
+        <div class="profile-name">{{doctor.FirstName}} {{doctor.LastName}}</div>
+        <div class="profile-desc">{{header}}</div>
+
+      </div>
+
+        <ons-list style="margin-top: 12px;">
+          <ons-list-item modifier="chevron" ng-show="doctor.Address" >
+            <div class="prop-desc">
+              <ons-icon icon="fa-map-marker" size="25px"></ons-icon>
+              <span style="color:black" >{{doctor.Address}}</span>
+            </div>
+          </ons-list-item>
+
+          <ons-list-item ng-show="doctor.Phone" modifier="chevron">
+             <a href="tel:{{doctor.phone}}" style="text-decoration:none"><div class="prop-desc">
+              <ons-icon icon="fa-mobile" size="25px"></ons-icon>
+
+               <span style="color:black" >{{doctor.Phone}}</span>
+            </div></a>
+          </ons-list-item>
+
+          <ons-list-item ng-show="doctor.Email" modifier="chevron">
+          <a href="mailto:{{doctor.Email}}">
+            <div class="prop-desc">
+              <ons-icon icon=" fa-envelope-o" size="20px"></ons-icon>
+              <span style="color:black" >{{doctor.Email}}</span>
+            </div>
+            </a>
+          </ons-list-item>
+        <ons-list-item modifier="chevron" ng-show="showMessageInApp">
+          <a ng-click="goToConversation(doctor)">
+            <div class="prop-desc">
+              <ons-icon icon="ion-ios-chatbubble-outline " size="25px" fixed-width="false"></ons-icon>
+              <span style="color:black" >Message {{doctor.FirstName}} {{doctor.LastName}}</span>
+            </div>
+            </a>
+          </ons-list-item>
+        </ons-list>
+  </ons-page>
