@@ -1,0 +1,56 @@
+
+<ons-navigator title="NavigatorForms" var="navigatorForms">
+<ons-page>
+	 <ons-toolbar>
+		 <div class="center">Login</div>
+	 </ons-toolbar>
+	 <div class="container" align="center" style="margin-top:5vh">
+		 <img src="./img/muhc-logo-text.png">
+		 <h5 style="color:#2E8AE6">Cedars Cancer Center</h5>
+		 	 <img ng-src="./img/opal.png" style="width:50px">
+
+		<div align="center" >
+
+
+<!--<p ng-if="2+2===4">{{name}}</p>-->
+
+
+  <!--Creates form with pertinent fields, submits via submit-->
+
+    <!--<label name="text">Enter your username and password:</label>-->
+
+      <!--  <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>-->
+
+
+      <!--<button ng-click="submit()" class="btn btn-primary btn-group btn-group-justified">Login</button>-->
+
+    <!--Creates form with pertinent fields, submits via submit-->
+  <form name="form" ng-submit="submit(email, password)" novalidate>
+    <div class="form-group">
+
+      <!--<input class="text-input" id="emailField" type="email" name="email" ng-model="signup.email" placeholder="Email Address" />
+      <br>
+
+      <input class="text-input" id="passwordField" type="password" placeholder="Password" name="password" ng-model="signup.password" />
+      <br>
+      <br>-->
+<span>
+	<br/>
+  <input class="text-input--material" placeholder="Email" name="email" ng-model="email" type="email" required>
+  <br /><br />
+  <input class="text-input--material" name="password" ng-model="password" placeholder="Password" type="password" required>
+	<br/><br/>
+</span>
+<alert ng-show="alert.type" type="{{alert.type}}">{{alert.content}}</alert>
+<div style="max-width:400px">
+	<button class="button button--large" type="submit" id="submit">Login</button>
+</div>
+        <!--<a class="left" role="button" href  style="font-size:11px;color:#0066FF" ng-click="$state.go('forgotPassword');">Forgot Password?</a>-->
+    </div>
+
+  </form>
+	 <div style="text-align:center;" ><button class="button button--large--quiet" ng-click="navigatorForms.pushPage('./templates/forms/forgot-password.html',{})">Forgot Password?</button></div><br>
+		</div>
+			 </div>
+</ons-page>
+</ons-navigator>

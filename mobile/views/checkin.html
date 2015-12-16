@@ -1,0 +1,44 @@
+<ons-page ng-controller="CheckInController">
+  <ons-toolbar>
+    <div class="left">
+      <ons-toolbar-button ng-click="menu.toggle()">
+        <ons-icon icon="ion-navicon" size="28px" fixed-width="false"></ons-icon>
+        <div class="notification menu-notification">{{TotalNumberOfNews}}</div>
+      </ons-toolbar-button>
+    </div>
+    <div class="center">Check In</div>
+  </ons-toolbar>
+  <ons-pull-hook ng-action="load($done)" var="loader" >
+<span ng-switch="loader.getCurrentState()">
+  <span ng-switch-when="initial"><ons-icon size="35px" icon="ion-arrow-down-a"></ons-icon> Pull down to refresh</span>
+  <span ng-switch-when="preaction"><ons-icon size="35px" icon="ion-arrow-up-a"></ons-icon> Release to refresh</span>
+  <span ng-switch-when="action"><ons-icon size="35px" spin="true" icon="ion-load-d"></ons-icon> Loading data...</span>
+</span>
+</ons-pull-hook>
+
+  <div class="container" ng-hide="noNotifications">
+    <a style="text-decoration:none" href ng-click="menu.setMainPage('views/notifications.html',{closeMenu:true})">
+      <alert align="center" ng-show="showAlert&&(Notifications==1)" ng-model="alert" type="success" close="closeAlert()">You have {{Notifications}} unseen notifications.
+        <span class="hidden-xs">Go to your Notifications page under the menu on the left.</span>
+      </alert>
+      <alert align="center" ng-show="showAlert&&(Notifications>1)" ng-model="alert" type="success" close="closeAlert()">You have {{Notifications}} unseen notification.
+        <span class="hidden-xs">Go to your Notifications page under the menu on the left.</span>
+      </alert>
+    </a>
+  </div>
+  <div >
+  <div align="center" style="width:100%;padding-top:25vh" class="container">
+    <p style="color:grey;font-size:13px">{{shownAppointmentText}}</p>
+    <ons-icon ng-show="sameDay && !infoReady" icon="spinner" size="40px" spin="true" fixed-width="true"></ons-icon>
+    <button type="button" ng-disabled='!enableCheckin' class="btn btn-primary btn-circle btn-xl" ng-click="checkin()"><i class="fa fa-check-square-o"></i>
+      <br>Checkin</button>
+    <p style="font-size:13px">{{alert.message}}</p>
+    <div ng-show="loading">
+      <div class="progress-bar progress-bar--indeterminate">
+        <div class="progress-bar__primary"></div>
+        <div class="progress-bar__secondary"></div>
+      </div>
+    </div>
+  </div>
+</div>
+</ons-page>

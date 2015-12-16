@@ -1,0 +1,108 @@
+  <ons-sliding-menu
+    menu-page="menu.html" main-page="views/home.html" side="left"
+    var="menu" type="reveal" max-slide-distance="250px" swipe-target-width="100" swipeable="true">
+  </ons-sliding-menu>
+  <ons-template id="menu.html">
+    <ons-page modifier="menu-page">
+      <ons-row style="margin-left:5px">
+        <ons-col width="95%">
+          <div >
+              <img ng-src="./img/muhc-logo-text.png" class="img-responsive" >
+          </div>
+        </ons-col>
+      </ons-row>
+      <ons-row style='border-top:1px solid lightgrey;border-bottom:1px solid lightgrey;margin-left:5px'>
+        <ons-col width="30%">
+          <img width="50px" height="50px" src="img/opal.png">
+        </ons-col>
+        <ons-col width="60%">
+          <span style="color:grey">MUHC Oncology Patient Application</span>
+        </ons-col>
+      </ons-row>
+      <ons-list class="menu-list" >
+          <ons-list-item class="menu-item" ng-click="menu.setMainPage('views/home.html', {closeMenu: true})">
+        <ons-icon icon="fa-home" fixed-width="true"></ons-icon>
+          HOME
+        </ons-list-item>
+        <ons-list-item class="menu-item" ng-click="menu.setMainPage('views/checkin.html', {closeMenu: true})">
+          <ons-icon icon="fa-check-square-o" fixed-width="true"></ons-icon>
+          CHECK IN
+        </ons-list-item>
+        <ons-list-item class="menu-item" ng-click="menu.setMainPage('views/contacts.html', {closeMenu: true})">
+          <ons-icon icon="ion-android-people" fixed-width="true"></ons-icon>
+          CONTACTS
+        </ons-list-item>
+        <ons-list-item class="menu-item" ng-click="menu.setMainPage('views/notifications.html', {closeMenu: true})">
+          <ons-icon icon="fa-bell" fixed-width="true"></ons-icon>
+          NOTIFICATIONS
+          <div class="notification menu-notification">{{Notifications}}</div>
+        </ons-list-item>
+
+        <ons-list-item class="menu-item" ng-click="menu.setMainPage('views/schedule.html', {closeMenu: true})">
+          <ons-icon icon="fa-calendar" fixed-width="true"></ons-icon>
+          APPOINTMENTS
+        </ons-list-item>
+
+
+        <ons-list-item class="menu-item" ng-click="menu.setMainPage('views/treatment-plan.html', {closeMenu: true})">
+          <ons-icon icon="fa-tasks" fixed-width="true"></ons-icon>
+          TREATMENT PLAN
+        </ons-list-item>
+
+      <ons-list-item class="menu-item" ng-click="menu.setMainPage('views/documents.html', {closeMenu: true})">
+          <ons-icon icon="fa-folder" fixed-width="true"></ons-icon>
+          DOCUMENTS
+        </ons-list-item>
+        <ons-list-item class="menu-item" ng-click="menu.setMainPage('views/patientPortal.html', {closeMenu: true})">
+          <ons-icon icon="fa-envelope" fixed-width="true"></ons-icon>
+          MESSAGES
+          <div class="notification menu-notification">{{NumberOfNewMessages}}</div>
+        </ons-list-item>
+
+        <ons-list-item class="menu-item" ng-click="menu.setMainPage('views/educational-material.html', {closeMenu: true})">
+          <ons-icon icon="fa-book" fixed-width="true"></ons-icon>
+          EDUCATIONAL
+        </ons-list-item>
+
+
+        <ons-list-item class="menu-item" ng-click="menu.setMainPage('views/maps.html', {closeMenu: true})">
+          <ons-icon icon="fa-hospital-o" fixed-width="true"></ons-icon>
+          MAPS
+        </ons-list-item>
+
+        <ons-list-item class="menu-item" ng-click="menu.setMainPage('views/notes.html', {closeMenu: true})">
+          <ons-icon icon="fa-pencil" fixed-width="true"></ons-icon>
+          NOTES
+        </ons-list-item>
+      </ons-list>
+
+      <br>
+
+      <ons-list class="bottom-menu-list">
+        <ons-list-item class="bottom-menu-item" ng-click="menu.setMainPage('views/help.html', {closeMenu: true})">
+          <ons-icon icon="fa-question" fixed-width="true"></ons-icon>
+          HELP
+        </ons-list-item>
+
+        <ons-list-item class="bottom-menu-item" ng-click="menu.setMainPage('views/about.html', {closeMenu: true})">
+          <ons-icon icon="fa-info" fixed-width="true"></ons-icon>
+          ABOUT
+        </ons-list-item>
+        <ons-list-item class="bottom-menu-item"  ng-click="menu.setMainPage('views/accountSettings.html', {closeMenu: true})">
+          <ons-icon icon="fa-cog" fixed-width="true"></ons-icon>
+          ACCOUNT SETTINGS
+        </ons-list-item>
+
+        <ons-list-item class="bottom-menu-item" ng-click="menu.setMainPage('views/feedback.html', {closeMenu: true})">
+          <ons-icon icon="fa-comments" fixed-width="true"></ons-icon>
+          GIVE FEEDBACK
+
+        </ons-list-item>
+
+        <ons-list-item class="bottom-menu-item" ng-click="$state.go('logOut')">
+          <ons-icon icon="fa-sign-out" fixed-width="true"></ons-icon>
+          LOG OUT
+        </ons-list-item>
+      </ons-list>
+    </ons-page>
+  </ons-template>
