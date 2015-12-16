@@ -20,16 +20,16 @@ Free and open source
 Instructions are based from [Cordova get started page!](https://cordova.apache.org/#getstarted)
 1. In the command line, go to the folder location where you would like your cordova project to take place.
 2. Install NodeJS and NPM as per the instructions above
-3. Install Cordova
+3. Install Cordova.
  ```$ npm install -g cordova```
-4.  Create a Cordova Project
+4.  Create a Cordova Project.
 ```$ cordova create NameOfProject```
-5. Change directory to your newly created cordova project
+5. Change directory to your newly created cordova project.
 ``` $ cd NameOfProject```
 6. Add platforms to your project:
-``` $ cordova add platform ios```
-``` $ cordova add platform android```
-``` $ cordova add platform browser```
+``` $ cordova add platform ios```.
+``` $ cordova add platform android```.
+``` $ cordova add platform browser```.
 7. Build your basic app via:
 ``` $ cordova build```
   * For an specific platform build use:
