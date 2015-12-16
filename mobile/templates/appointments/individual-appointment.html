@@ -1,0 +1,40 @@
+  <ons-page ng-controller="IndividualAppointmentController">
+    <ons-toolbar >
+      <div class="left"><ons-back-button>Back</ons-back-button></div>
+      <div class="center">Appointment</div>
+    </ons-toolbar>
+    <!--<div class="container jumbotron" style="text-align: left;padding:5% 2% 5% 2%">-->
+    <div class='container' style="margin-top:3vh">
+    <div class="panel panel-default">
+  <div class="panel-body" style="text-align: left;padding:5% 2% 5% 2%;">
+      <br />
+
+      <div align="center">
+      <strong>{{app.AppointmentType_EN}} </strong><a href ng-click="menu.setMainPage('views/educational-material.html',{closedMenu:true})"><i class="ion-help-circled iconHomeView"></i></a><br>
+      {{app.ScheduledStartTime|formatDateAppointmentTask}}<br>
+     {{app.ResourceName}}<br>
+      <i class="icon ion-ios-location iconHomeView"></i> {{app.Location}}</div>
+     <br>
+     <br>
+     </div>
+     </div>
+     </div>
+     <!--<div align="center">
+     <button ng-show="futureAppointment" class="btn btn-sm btn-success" ng-click="requestChange()" value="maps">Request Change</button>
+     </div>-->
+    <!--</div>-->
+     <ons-list modifier="inset" style="margin-top: 10px" class="prop-desc">
+     <ons-list-item ng-show="appointmentToday" modifier="chevron" ng-click="goToCheckIn()" >
+          <ons-icon icon="fa fa-check-square-o"></ons-icon>&nbsp;<span style="color:black">Check In</span>
+        </ons-list-item>
+
+        <ons-list-item modifier="chevron" ng-click="myNavigator.popPage({animation:'slide'});menu.setMainPage('views/maps.html', {param:app.Location},{ animation : 'slide' } )" >
+          <ons-icon icon="ion-map"></ons-icon>&nbsp;<span style="color:black">Show Location in Map</span>
+        </ons-list-item>
+        <ons-list-item ng-show="futureAppointment&&false" modifier="chevron" ng-click="myNavigator.pushPage('templates/appointments/request-change-appointment.html', {param:app},{ animation : 'slide' } )" >
+          <ons-icon icon="ion-shuffle"></ons-icon>&nbsp;<span style="color:black">Request Change</span>
+        </ons-list-item>
+
+
+      </ons-list>
+  </ons-page>

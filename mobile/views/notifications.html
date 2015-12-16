@@ -1,0 +1,57 @@
+<ons-navigator title="Navigator" var="myNavigatorNotifications">
+<ons-page ng-controller="NotificationsController">
+  <ons-toolbar>
+    <div class="left">
+      <ons-toolbar-button ng-click="menu.toggle()">
+        <ons-icon icon="ion-navicon" size="28px" fixed-width="false"></ons-icon><div class="notification menu-notification">{{Notifications}}</div>
+      </ons-toolbar-button>
+    </div>
+    <div class="center">Notifications</div>
+  </ons-toolbar>
+  <ons-pull-hook ng-action="load($done)" var="loader">
+        <span ng-switch="loader.getCurrentState()">
+          <span ng-switch-when="initial"><ons-icon size="35px" icon="ion-arrow-down-a"></ons-icon> Pull down to refresh</span>
+          <span ng-switch-when="preaction"><ons-icon size="35px" icon="ion-arrow-up-a"></ons-icon> Release to refresh</span>
+          <span ng-switch-when="action"><ons-icon size="35px" spin="true" icon="ion-load-d"></ons-icon> Loading data...</span>
+        </span>
+</ons-pull-hook>
+<div ng-hide="noNotifications">
+  <ul class="list list--inset" ng-repeat="notification in NotificationsArray" style="margin-top:5px" ng-click="goToNotification($index,notification)">
+  <li class="list__item list--inset__item list__item--chevron">
+    <div style="padding:8px;">
+      <ons-row >
+        <ons-col width="30px">
+          <div align="right" >
+            <i class="fa fa-bell iconHomeView"></i>
+          </div>
+        </ons-col>
+        <ons-col>
+        <div  align="middle" style="margin-left:5px">
+           <div class="profile-name" >
+                {{notification.Name}}
+              </div>
+          <div class="desc">
+                {{notification.IssuedBy}}
+                <div style=" color:grey;">{{notification.Content}}</div>
+              </div>
+              </div>
+        </ons-col>
+        <ons-col width="30px">
+        <div align="right" >
+           <div class="location" align="right" style="font-size:12px;margin-left:-10px;margin-top:-15px">
+               {{notification.DateAdded|dateEmail}}
+              </div>
+            <p align="right" style="font-size:10px;text-align:right;margin-left:-13px;color:grey" ng-show="notification.ReadStatus==='0'">UNREAD</p>
+                </div>
+        </ons-col>
+        </ons-row>
+        </div>
+  </li>
+</ul>
+</div>
+<div class="container" align="center">
+  <p style="margin-top:25vh;color:grey" ng-show="noNotifications">No notifications</p>
+</div>
+
+</ons-page>
+</ons-navigator >

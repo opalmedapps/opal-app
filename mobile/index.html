@@ -1,0 +1,192 @@
+<!--//
+//  Created by David Herrera on 2015-05-04.
+//  Copyright (c) 2015 David Herrera. All rights reserved.
+//
+-->
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+	<title>MUHC App</title>
+ <!-- The above is equivalent to these three declarations -->
+<allow-navigation href="http://*/*" />
+<allow-navigation href="https://*/*" />
+<allow-navigation href="data:*" />
+  <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, minimum-scale=1, maximum-scale=1.5, user-scalable=1">
+	<!--<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular.min.js"></script>-->
+
+  <!--<link rel="stylesheet" type="text/css"href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">-->
+     <script src="lib/bower_components/angular/angular.min.js"></script>
+  <script src="lib/bower_components/angular-animate/angular-animate.min.js"></script>
+    <script src="lib/bower_components/angular-sanitize/angular-sanitize.min.js"></script>
+   <script src="./lib/js/jquery.min.js"></script>
+
+  <link rel="stylesheet" type="text/css"href="lib/css/bootstrap.min.css">
+
+<!-- Language translation and what not-->
+<script src="lib/bower_components/angular-translate/angular-translate.min.js"></script>
+<script src="lib/bower_components/angular-translate-loader-partial/angular-translate-loader-partial.min.js"></script>
+<script src="lib/bower_components/angular-dynamic-locale/tmhDynamicLocale.min.js"></script>
+
+<!--Progress circle bar -->
+    <script src="./lib/bower_components/progressbar.js/dist/progressbar.min.js"/></script>
+  <!--<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>-->
+  <script src="lib/js/bootstrap.min.js"></script>
+
+  <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.15/angular-ui-router.min.js"></script>-->
+  <script src="lib/js/angular-ui-router.min.js"></script>
+  <!-- Firebase -->
+  <!--<script src="https://cdn.firebase.com/js/client/2.2.4/firebase.js"></script>-->
+  <script src="bower_components/firebase/firebase.js"></script>
+  <!-- AngularFire -->
+  <!--<script src="https://cdn.firebase.com/libs/angularfire/1.1.1/angularfire.min.js"></script>-->
+  <script src="bower_components/angularfire/dist/angularfire.min.js"></script>
+
+    <script src="lib/js/ng-cordova.min.js"></script>
+
+  <!--Select library for searching emails and names of a field-->
+   <script src="lib/js/select2.min.js"></script>
+  <script src="lib/js/angular-ui-select.js"></script>
+  <link rel="stylesheet"  href="lib/css/select.css">
+   <link rel="stylesheet" href="lib/css/select2.css">
+
+  <!--Encryption and Decryption libraries-->
+  <script src="lib/js/aes.js"/></script>
+  <script src="lib/js/mode-cfb-min.js"/></script>
+	<!--<script src="lib/js/md5KeyEncryption.js"></script>-->
+	<script src='lib/js/sha256.js'></script>
+
+   <!--Library to zoom in to images-->
+   <script src="lib/js/image-touch-canvas.js"></script>
+
+   <!--Text area auto grow-->
+   <script src="bower_components/angular-elastic-master/elastic.js"/></script>
+
+   <!--New idea for calendar-->
+    <script src="lib/bower_components/moment/min/moment.min.js"/></script>
+    <link rel="stylesheet" href="lib/bower_components/ion.calendar/css/ion.calendar.css">
+   <script src="lib/bower_components/ion.calendar/js/ion.calendar.min.js"/></script>
+
+   <script src="lib/bower_components/ion.calendar/js/moment-with-locales.min.js"/></script>
+   <link href="lib/bower_components/ion.calendar/css/ion.calendar.css">
+
+<!--Library used to scroll all the way to bottom of div anytime there is a change in a model of the div -->
+<script src="lib/js/scrollglue.js"></script>
+
+<!--UI bootstrap-->
+  <script src="lib/js/ui-bootstrap-tpls-0.13.0.min.js"></script>
+
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <title>OPAL</title>
+
+  <!--Libraries for OnsenUI-->
+  <link rel="stylesheet" href="bower_components/OnsenUI/build/css/onsen-css-components-blue-basic-theme.css">
+  <link rel="stylesheet" href="bower_components/OnsenUI/build/css/onsenui.css"/>
+  <script src="bower_components/OnsenUI/build/js/onsenui.js"></script>
+
+<!-- css stylesheets for the project-->
+  <link rel="stylesheet" href="styles/css/app.css"/>
+	<link rel="stylesheet" href="styles/css/login.css"/>
+
+  <link rel="stylesheet" href="styles/css/index.css"/>
+
+  <script src="cordova.js"></script>
+
+  <script type="text/javascript">
+  var app = document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'https://' ) === -1;
+  if(app){
+    document.addEventListener("deviceready", function() {
+
+    //Your code
+
+    // Find the DOM element where you want to add ng-app
+    var element = document.getElementById('boots');
+    angular.bootstrap(element, ["MUHCApp"]); //Or simple document in place of element
+}, false);
+  }
+
+  </script>
+</head>
+<body id='boots' ng-app="MUHCApp">
+<!--Loading Modal for the initial loading screen-->
+<ons-modal var="modal">
+        <ons-icon icon="ion-load-c" spin="true"></ons-icon>
+        <br><br>
+        <div class="container" align="center">
+        <img ng-src="./img/muhc-logo-text.png" >
+
+      </div>
+        Loading data...
+</ons-modal>
+
+  <div ng-controller="MainController" >
+  <ons-navigator title="Navigator" var="myNavigator">
+	 <div ui-view></div>
+   </ons-navigator>
+<div class="container">
+		<footer ng-include="'templates/footer.html'"></footer>
+</div>
+   <!--App flow code-->
+		<script src="js/app.js" type="text/javascript"></script>
+    <script src="js/services/services.js" type="text/javascript"></script>
+      <script src="js/index.js" type="text/javascript"></script>
+    <!--App controllers-->
+		<script src="js/controllers/LoginController.js"></script>
+		<script src="js/controllers/SetNewPasswordController.js"></script>
+		<script src="js/controllers/homeController.js"></script>
+    <script src="js/controllers/logOutController.js"></script>
+     <script src="js/controllers/loadingController.js"></script>
+     <script src="js/controllers/MainController.js"></script>
+     <script src="js/controllers/ForgotPasswordController.js"></script>
+     <script src="js/controllers/accountSettingsController.js"></script>
+     <script src="js/controllers/DocumentsController.js"></script>
+    <script src="js/controllers/CheckInController.js"></script>
+    <script src="js/controllers/TreatmentPlanController.js"></script>
+    <script src="js/controllers/NotificationsController.js"></script>
+    <script src="js/controllers/PatientPortalController.js"></script>
+     <script src="js/controllers/ScheduleController.js"></script>
+    <script src="js/controllers/MapsController.js"></script>
+    <script src="js/controllers/FeedbackController.js"></script>
+    <script src="js/controllers/ContactsController.js"></script>
+     <script src="lib/js/cordovaDeviceModule.min.js"></script>
+    <script src="js/controllers/EducationalMaterialController.js"></script>
+     <script src="js/controllers/NotesController.js"></script>
+
+    <!--App services-->
+    <script src="js/services/messagesService.js"></script>
+    <script src="js/services/appointmentsService.js"></script>
+    <script src="js/services/notificationsService.js"></script>
+    <script src="js/services/patientService.js"></script>
+    <script src="js/services/doctorsService.js"></script>
+    <script src="js/services/userPreferencesService.js"></script>
+    <script src="js/services/userAuthorizationInfoService.js"></script>
+    <script src="js/services/updateUIService.js"></script>
+    <script src="js/services/documentsService.js"></script>
+    <script src="js/services/requestToServerService.js"></script>
+    <script src="js/services/userPlanWorkflowService.js"></script>
+    <script src="js/services/encryptionService.js"></script>
+    <script src="js/services/angularPushService.js"></script>
+    <script src="js/services/services.js"></script>
+    <script src="js/services/notesService.js"></script>
+		<script src="js/services/checkinService.js"></script>
+		<sciprt src="js/services/fileManagerService.js"></script>
+    <script src="js/services/localStorageService.js"></script>
+		<script src="js/services/resetPasswordService.js"></script>
+
+
+    <script src="js/Directives/changeHeightDiv.js"/></script>
+
+    <!--App filters-->
+    <script src="js/filters/filters.js"></script>
+    <!--App directives-->
+    <script src="js/Directives/fileReaderDirective.js"></script>
+
+
+
+
+	</div>
+
+</body>
+</html>
