@@ -9,6 +9,7 @@ myApp.service('Documents',['UserPreferences', '$cordovaDevice','$cordovaNetwork'
 	return{
 		setDocumentsOnline:function(documents, mode){
 			var r=$q.defer();
+			photos=[];
 			console.log(documents);
 			this.Photos=[];
 			if(!documents) return;
@@ -26,7 +27,7 @@ myApp.service('Documents',['UserPreferences', '$cordovaDevice','$cordovaNetwork'
 							var platform=$cordovaDevice.getPlatform();
 							var targetPath='';
 							if(platform==='Android'){
-						    	targetPath = cordova.file.dataDirectory+'Documents/docMUHC'+documents[keysDocuments[i]].DocumentSerNum+"."+documents[keysDocuments[i]].DocumentType;
+						    	targetPath = cordova.file.externalRootDirectory+'Documents/docMUHC'+documents[keysDocuments[i]].DocumentSerNum+"."+documents[keysDocuments[i]].DocumentType;
 							}else if(platform==='iOS'){
 								targetPath = cordova.file.documentsDirectory+ 'Documents/docMUHC'+documents[keysDocuments[i]].DocumentSerNum+"."+documents[keysDocuments[i]].DocumentType;
 							}

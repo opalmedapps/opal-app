@@ -23,14 +23,48 @@ angular.module('MUHCApp').controller('LoadingController', ['$rootScope','$state'
 				var user=window.localStorage.getItem('UserAuthorizationInfo');
 				user=JSON.parse(user);
 				storage=window.localStorage.getItem(user.UserName);
-				if(storage){
-					var app = document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'https://' ) === -1;
-					if(app){
-					{
-						console.log('Inside notification!');
-					}
-
+				var mod=undefined;
+				if(ons.platform.isAndroid())
+				{
+					mod='material'
 				}
+				modal.hide();
+				if(storage){
+
+				    ons.notification.confirm({
+				      message: 'Problems with server, would you like to load your most recent saved data from the device?',
+				      modifier: mod,
+				      callback: function(idx) {
+								console.log('I am in there?')
+				        switch (idx) {
+				          case 0:
+										$state.go('logOut');
+				            /*ons.notification.alert({
+				              message: 'You pressed "Cancel".',
+				              modifier: mod
+				            });*/
+				            break;
+				          case 1:
+									modal.show();
+									console.log('I am in there?')
+									UpdateUI.UpdateOffline('All').then(function(){
+										modal.hide();
+										$state.go('Home');
+									});
+				          break;
+				        }
+				      }
+				    });
+
+
+			}else{
+				ons.notification.confirm({
+					message: 'Problems with server, could not fetch data, try again later?',
+					modifier: mod,
+					callback: function(idx) {
+						$state.go('logOut');
+					}
+				});
 			}
 		}
 		},15000);
