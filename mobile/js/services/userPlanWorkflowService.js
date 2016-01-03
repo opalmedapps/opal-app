@@ -328,7 +328,7 @@ myApp.service('UserPlanWorkflow',['$filter',function($filter){
         getTreatmentPlans:function()
         {
           return treatmentPlansArray;
-        }
+        },
         isEmpty:function()
         {
           if(this.TasksAndAppointmentsArray.length==0)

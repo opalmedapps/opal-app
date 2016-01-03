@@ -36,7 +36,7 @@ myApp.controller('DocumentsController', ['Patient', 'Documents', 'UpdateUI', '$s
   };
 }]);
 
-myApp.controller('SingleDocumentController', ['Documents', '$timeout', '$scope', '$cordovaEmailComposer','FileManagerService','$sce',function(Documents, $timeout, $scope,$cordovaEmailComposer, FileManagerService,$sce) {
+myApp.controller('SingleDocumentController', ['Documents', '$timeout', '$scope', '$cordovaEmailComposer','$cordovaFileOpener2','FileManagerService','Patient',function(Documents, $timeout, $scope,$cordovaEmailComposer,$cordovaFileOpener2, FileManagerService,Patient) {
   console.log('Simgle Document Controller');
   var page = myNavigator.getCurrentPage();
   var image = page.options.param;
@@ -46,7 +46,7 @@ myApp.controller('SingleDocumentController', ['Documents', '$timeout', '$scope',
   }else{
     image.PreviewContent=image.Content;
   }
-
+  console.log(image);
   $scope.documentObject=image;
   $scope.shareViaEmail=function()
   {
@@ -79,7 +79,20 @@ myApp.controller('SingleDocumentController', ['Documents', '$timeout', '$scope',
   $scope.openDocument = function() {
       var app = document.URL.indexOf('http://') === -1 && document.URL.indexOf('https://') === -1;
       if (app) {
-        var ref = cordova.InAppBrowser.open(image.Content, '_blank', 'EnableViewPortScale=yes');
+        if(ons.platform.isAndroid()){
+          $cordovaFileOpener2.open(
+              image.PathFileSystem,
+              'application/pdf'
+            ).then(function() {
+                // file opened successfully
+            }, function(err) {
+              console.log('boom');
+                // An error occurred. Show a message to the user
+          });
+          //var ref = cordova.InAppBrowser.open(image.Content, '_system', 'location=yes');
+        }else{
+            var ref = cordova.InAppBrowser.open(image.Content, '_blank', 'EnableViewPortScale=yes');
+        }
       } else {
         window.open(image.Content);
       }

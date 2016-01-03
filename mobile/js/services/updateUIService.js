@@ -1,7 +1,15 @@
 var myApp=angular.module('MUHCApp');
 
 
-myApp.service('UpdateUI', ['EncryptionService','$http', 'Patient','Doctors','Appointments','Messages','Documents','UserPreferences', 'UserAuthorizationInfo', '$q', 'Notifications', 'UserPlanWorkflow','$cordovaNetwork', 'Notes', 'LocalStorage','RequestToServer','$filter',function (EncryptionService,$http, Patient,Doctors, Appointments,Messages, Documents, UserPreferences, UserAuthorizationInfo, $q, Notifications, UserPlanWorkflow,$cordovaNetwork,Notes,LocalStorage,RequestToServer,$filter) {
+myApp.service('UpdateUI', ['EncryptionService','$http', 'Patient','Doctors','Appointments','Messages','Documents','UserPreferences', 'UserAuthorizationInfo', '$q', 'Notifications', 'UserPlanWorkflow','$cordovaNetwork', 'Notes', 'LocalStorage','RequestToServer','$filter','LabResults',function (EncryptionService,$http, Patient,Doctors, Appointments,Messages, Documents, UserPreferences, UserAuthorizationInfo, $q, Notifications, UserPlanWorkflow,$cordovaNetwork,Notes,LocalStorage,RequestToServer,$filter,LabResults) {
+    function updateTestResultsService(){
+      var testResultFirebaseLink = new Firebase('https://blinding-fire-4647.firebaseio.com/m/requests');
+      testResultFirebaseLink.once('value', function (snapshot) {
+          var data = snapshot.val();
+          LabResults.setTestResults(data);
+      });
+    }
+
     function updateAllServices(dataUserObject,mode){
         console.log(mode);
         var promises=[];
@@ -45,6 +53,7 @@ myApp.service('UpdateUI', ['EncryptionService','$http', 'Patient','Doctors','App
             valAdded+=2;
             plan[key].Date=$filter('formatDateToFirebaseString')(tmp);
           }
+          	LabResults.setTestResults(dataUserObject.LabTests);
             console.log(plan);
             UserPlanWorkflow.setUserPlanWorkflow(plan);
             UserPreferences.setUserPreferences(dataUserObject.Patient.Language,dataUserObject.Patient.EnableSMS);

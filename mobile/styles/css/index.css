@@ -299,6 +299,9 @@ img
   box-shadow:rgba(0, 0, 0, 0.2) 0px 2px 0px 0px;
   -webkit-box-shadow:rgba(0, 0, 0, 0.2) 0px 2px 0px 0px;
 }
+a.muhcapp-home-account:link, a.muhcapp-home-account:hover{
+  text-decoration: none;
+}
 
 .profile-name {
   margin: -3px 0 0 0;
@@ -1385,4 +1388,28 @@ loading bar check in
     left: 107%;
     right: -8%;
   }
+}
+/* Lab results specific classes */
+
+.lab-results-new-result {
+  display: inline;
+}
+
+.lab-results-test-high {
+  color: red;
+}
+
+.lab-results-test-low {
+  color: orange;
+}
+
+.list-item-note {
+  position: absolute;
+  right: 36px;
+  top: 0px;
+  font-size: 14px;
+}
+
+.lucent {
+  opacity: 0.4;
 }

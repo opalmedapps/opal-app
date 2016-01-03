@@ -21,6 +21,10 @@ myApp.service('Doctors',function($q,$filter,FileManagerService,$cordovaDevice){
             this.Oncologists=[];
             this.OtherDoctors=[];
             this.PrimaryPhysician=[];
+            Doctors=[];
+            Oncologists=[];
+            OtherDoctors=[];
+            PrimaryPhysician=[];
             var promises=[];
             if(typeof doctors!=='undefined'&&doctors){
 

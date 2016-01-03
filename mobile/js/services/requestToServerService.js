@@ -70,6 +70,10 @@ myApp.service('RequestToServer',function(UserAuthorizationInfo, EncryptionServic
                 else if (typeOfRequest=='NotificationRead')
                 {
                   Ref.push({ 'Request' : encryptedRequestType, 'DeviceId':identifier,'UserID':userID, 'Parameters':{'NotificationSerNum' : content }});
+                }else if (typeOfRequest=='TestResult')
+                {
+                  testResultRef.push({ 'Request': typeOfRequest, 'DeviceId':identifier, 'UserID': userId, 'Content': content});
+
                 }
               }else{
                 //  navigator.notification.alert('No changes will be reflected at the hospital. Connect to the internet to perform this action, ',function(){},'Internet Connectivity','Ok');
@@ -102,6 +106,9 @@ myApp.service('RequestToServer',function(UserAuthorizationInfo, EncryptionServic
             else if (typeOfRequest=='NotificationRead')
             {
               Ref.push({ 'Request' : encryptedRequestType, 'DeviceId':identifier,'UserID':userID, 'Parameters':{'NotificationSerNum' : content }});
+            }else if (typeOfRequest=='TestResult')
+            {
+              testResultRef.push({ 'Request': typeOfRequest, 'DeviceId':identifier, 'UserID': userId, 'Content': content}); 
             }
 
 

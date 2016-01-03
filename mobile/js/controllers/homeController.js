@@ -46,6 +46,7 @@ myApp.controller('HomeController', ['$state','Appointments', 'CheckinService','$
           });
        }
         function homePageInit(){
+          $scope.noUpcomingAppointments=false;
           //Setting up status
           if(UserPlanWorkflow.isEmpty())
           {
@@ -66,6 +67,8 @@ myApp.controller('HomeController', ['$state','Appointments', 'CheckinService','$
                 $scope.appointmentShown=nextAppointment;
                 $scope.titleAppointmentsHome='Next Appointment';
             }else{
+              console.log('boom');
+              $scope.noUpcomingAppointments=true;
               var lastAppointment=Appointments.getLastAppointmentCompleted();
               $scope.nextAppointmentIsToday=false;
               $scope.appointmentShown=lastAppointment;

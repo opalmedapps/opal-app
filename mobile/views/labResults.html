@@ -1,0 +1,265 @@
+<ons-navigator title="Navigator" var="myNavigatorLabResults">
+<ons-page ng-controller="LabResultsController" ng-init="init()">
+
+  <!--Depending on the selected view, either display Menu icon or Back button-->
+  <ons-toolbar>
+    <div class="left">
+      <ons-toolbar-button ng-click="menu.toggle()" ng-if="(isNotificationView && radioModel=='Date') || (isListView && radioModel=='AllTests') || (isListViewFavorites &&radioModel=='Favorites')">
+        <ons-icon icon="ion-navicon" size="28px" fixed-width="false"></ons-icon>
+        <div class="notification menu-notification">{{TotalNumberOfNews}}</div>
+      </ons-toolbar-button>
+      <ons-toolbar-button ng-click="goBack()" ng-if="(!isNotificationView  && radioModel=='Date') || (!isListView && radioModel=='AllTests') || (!isListViewFavorites && radioModel=='Favorites')">
+        <span class="glyphicon glyphicon-menu-left" size="28px" color="blue"></span>
+      </ons-toolbar-button>
+    </div>
+    <div class="center">Lab Results</div>
+  </ons-toolbar>
+
+
+  <!-- TABS FOR DIFFERENT VIEWS -->
+  <div align="center">
+    <div class="navigation-bar">
+      <div class="navigation-bar__center">
+        <div class="button-bar" style="width:230px;margin:0 auto;margin-top:7px">
+          <div class="button-bar__item">
+            <input type="radio" ng-model="radioModel" value="Date" name="navi-segment-a" checked>
+            <div class="button-bar__button">Date</div>
+          </div>
+          <div class="button-bar__item">
+            <input type="radio" ng-model="radioModel" value="AllTests" name="navi-segment-a">
+            <div class="button-bar__button">All</div>
+          </div>
+          <div class="button-bar__item">
+            <input type="radio" ng-model="radioModel" value="Favorites" name="navi-segment-a">
+            <div class="button-bar__button">Favorites</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DATE TAB: Notification view -->
+  <!-- TODO: Add an icon for the most recent test result -->
+  <!--span class="lab-results-new-result glyphicon glyphicon-circle-arrow-right" style="color:green" ng-if="testNotification.isMostRecent"></span-->
+  <div ng-if="radioModel=='Date' && isNotificationView">
+    <ons-list>
+      <ons-list-item ng-repeat="testResultByDate in testResultsByDate | orderBy:'testDate'" ng-click="goToTestsView(testResultByDate.testResults, testResultByDate.testDate)" modifier="tappable" class="list-item-container">
+        <ons-row>
+          <ons-col class="col-xs-10 col-sm-6 col-lg-6">
+            <div class="lab-results-new-result name">{{testsReceived}}</div>
+            <div class="desc">{{testResultByDate.testDate}}</div>
+          </ons-col>
+          <ons-col width="30%" style="margin-left: -10px" class="col-xs-2 col-sm-6 col-lg-6">
+            <div class="location" align="right" style="margin-left: -10px">{{testResultByDate.testDate}}</div>
+          </ons-col>
+        </ons-row>
+      </ons-list-item>
+    </ons-list>
+  </div>
+
+  <!-- DATE TAB : testsView -->
+  <div ng-if="radioModel=='Date' && isTestsView">
+    <ons-col>
+      <!-- SEARCH BAR -->
+      <div class="navigation-bar">
+        <div class="navigation-bar__center">
+          <input ng-model="searchText" type="search" class="search-input" style="width: 96%; margin: 6px auto 6px auto;" placeholder="Search">
+        </div>
+      </div>
+      <ons-list>
+        <ons-list-item ng-repeat="test in selectedLabResults | filter: searchText | orderBy:['-AbnormalFlag', 'testCategory']" ng-click="goToSpecificTestView(test)" modified="tappable" class="list-item-container">
+          <ons-row>
+            <ons-col class="col-xs-10 col-sm-6 col-lg-6">
+              <div ng-if="test.AbnormalFlag && test.AbnormalFlag=='H'" class="name lab-results-test-high">
+                {{test.FacComponentName}}
+              </div>
+              <div ng-if="test.AbnormalFlag && test.AbnormalFlag=='L'" class="name lab-results-test-low">
+                {{test.FacComponentName}}
+              </div>
+              <div ng-if="!test.AbnormalFlag" class="name">
+                {{test.FacComponentName}}
+              </div>
+              <div class="desc">
+                {{test.TestValue}} {{test.UnitDescription}}
+              </div>
+            </ons-col>
+            <ons-col width="30%" style="margin-left: -10px" class="col-xs-2 col-sm-6 col-lg-6">
+              <div class="location" align="right" style="margin-left: -10px">
+                {{testDate}}
+              </div>
+            </ons-col>
+          </ons-row>
+        </ons-list-item>
+      </ons-list>
+    </ons-col>
+  </div>
+
+  <!-- DATE TAB: specific test view -->
+  <div ng-if="radioModel=='Date' && isSpecificTestView">
+    <ons-col>
+      <line-plus-bar-chart height="250px" data="data"></line-plus-bar-chart>
+      <ons-list>
+        <ons-list-header>Test Information</ons-list>
+        <ons-list-item modifier="tappable">
+          Test Name
+          <span class="list-item-note lucent">{{selectedTest.ComponentName}}</span>
+        </ons-list-item>
+        <ons-list-item modifier="tappable">
+          Result
+          <span class="list-item-note lucent">{{selectedTest.TestValue}} {{selectedTest.UnitDescription}}</span>
+        </ons-list-item>
+        <ons-list-item modifier="tappable">
+          Minimum
+          <span class="list-item-note lucent">{{selectedTest.MinNorm}} {{selectedTest.UnitDescription}}</span>
+        </ons-list-item>
+        <ons-list-item modifier="tappable">
+          Maximum
+          <span class="list-item-note lucent">{{selectedTest.MaxNorm}} {{selectedTest.UnitDescription}}</span>
+        </ons-list-item>
+        <ons-list-item modifier="tappable">
+          Test Date
+          <span class="list-item-note lucent">{{selectedTest.TestDate}}</span>
+        </ons-list-item>
+        <ons-list-item modifier="chevron">
+          About this test
+        </ons-list-item>
+      </ons-list>
+      <div style="padding: 10px 9px">
+        <ons-button ng-click="goToTimeView(selectedTest.FacComponentName)"modifier="large" style="margin: 0 auto;">
+          View past results
+        </ons-button>
+      </div>
+    </ons-col>
+  </div>
+
+  <!-- DATE TAB: historic time view -->
+  <div ng-if="(radioModel=='Date' && isTimeView) || (radioModel=='Groups' && isTimeViewGroups)">
+    <ons-col>
+      <line-chart height="250px" data="data"></line-chart>
+       <ons-list>
+        <ons-list-header>Test Information</ons-list>
+        <ons-list-item modifier="tappable">
+          Test Name
+          <span class="list-item-note lucent">{{testInformation.ComponentName}}</span>
+        </ons-list-item>
+        <ons-list-item modifier="tappable">
+          Minimum
+          <span class="list-item-note lucent">{{testInformation.MinNorm}} {{testInformation.UnitDescription}}</span>
+        </ons-list-item>
+        <ons-list-item modifier="tappable">
+          Maximum
+          <span class="list-item-note lucent">{{testInformation.MaxNorm}} {{testInformation.UnitDescription}}</span>
+        </ons-list-item>
+         <ons-list-item modifier="chevron">
+          About this test
+        </ons-list-item>
+      </ons-list>
+    </ons-col>
+  </div>
+
+  <!--ALL TAB: main view-->
+  <div ng-if="radioModel=='AllTests' && isListView">
+    <div class="navigation-bar">
+      <div class="navigation-bar__center">
+        <input ng-model="searchTextAllView" type="text" class="search-input" style="width: 96%; margin: 6px auto 6px auto;" placeholder="Search">
+      </div>
+    </div>
+    <div style="padding:0">
+      <ons-list class="plan-list " >
+        <ons-list ng-repeat="testCategory in testResultsByCategory">
+          <ons-list-header>{{testCategory.testCategory}}</ons-list-header>
+          <ons-list-item style="1px solid black" modifier="chevron" ng-repeat="testResult in testResultsByType | filter: searchTextAllView" ng-click="goToTimeView(testResult.testName)" modified="tappable" class="list-item-container" ng-if="testResult.testCategory == testCategory.testCategory">
+            <ons-row>
+              <ons-col class="col-xs-10 col-sm-6 col-lg-6">
+              <span class="glyphicon glyphicon-star-empty" ng-if="!testResult.isFavorite || testResult.isFavorite==false" ng-click="testResult.isFavorite = true; $event.stopPropagation()" style="display:inline-block"></span>
+              <span class="glyphicon glyphicon-star" ng-if="testResult.isFavorite" ng-click="testResult.isFavorite = false; $event.stopPropagation()" style="display:inline-block; color:blue"></span>
+              <div class="name" style="display:inline-block">{{testResult.testName}}</div>
+              </ons-col>
+            </ons-row>
+          </ons-list-item>
+        </ons-list>
+      </ons-list>
+    </div>
+  </div>
+
+  <!-- ALL VIEW: historic time view -->
+  <div ng-if="radioModel=='AllTests' && isTimeViewAll">
+    <ons-col>
+      <line-chart height="250px" data="data"></line-chart>
+      <ons-list>
+        <ons-list-header>Test Information</ons-list>
+        <ons-list-item modifier="tappable">
+          Test Name
+          <span class="list-item-note lucent">
+            {{testInformation.ComponentName}}
+          </span>
+        </ons-list-item>
+        <ons-list-item modifier="tappable">
+          Minimum
+          <span class="list-item-note lucent">
+            {{testInformation.MinNorm}} {{testInformation.UnitDescription}}
+          </span>
+        </ons-list-item>
+        <ons-list-item modifier="tappable">
+          Maximum
+          <span class="list-item-note lucent">
+            {{testInformation.MaxNorm}} {{testInformation.UnitDescription}}
+          </span>
+        </ons-list-item>
+        <ons-list-item modifier="chevron">
+          About this test
+        </ons-list-item>
+      </ons-list>
+    </ons-col>
+  </div>
+
+  <!--FAVORITES TAB: main view-->
+  <div ng-if="radioModel=='Favorites' && isListViewFavorites">
+    <div style="padding:0">
+      <ons-list class="plan-list " >
+        <ons-list-item style="1px solid black" modifier="chevron" ng-repeat="testResultByType in testResultsByType | filter: searchTextAllView"  ng-click="goToTimeView(testResultByType.testName)" modified="tappable" class="list-item-container" ng-if="testResultByType.isFavorite == true">
+          <ons-row>
+            <ons-col class="col-xs-10 col-sm-6 col-lg-6">
+              <div class="name" style="display:inline-block">{{testResultByType.testName}}</div>
+              <span class="glyphicon glyphicon-star-empty" ng-if="!testResultByType.isFavorite || testResultByType.isFavorite==false" ng-click="testResultByType.isFavorite = true; $event.stopPropagation()" style="display:inline-block"></span>
+              <span class="glyphicon glyphicon-star" ng-if="testResultByType.isFavorite" ng-click="testResultByType.isFavorite = false; $event.stopPropagation()" style="display:inline-block; color:blue"></span>
+            </ons-col>
+          </ons-row>
+        </ons-list-item>
+      </ons-list>
+    </div>
+  </div>
+
+  <!-- FAVORITES TAB: historic time view -->
+  <div ng-if="radioModel=='Favorites' && isTimeViewFavorites">
+    <ons-col>
+      <line-chart height="250px" data="data"></line-chart>
+      <ons-list>
+        <ons-list-header>Test Information</ons-list>
+        <ons-list-item modifier="tappable">
+          Test Name
+          <span class="list-item-note lucent">
+            {{testInformation.ComponentName}}
+          </span>
+        </ons-list-item>
+        <ons-list-item modifier="tappable">
+          Minimum
+          <span class="list-item-note lucent">
+            {{testInformation.MinNorm}} {{testInformation.UnitDescription}}
+          </span>
+        </ons-list-item>
+        <ons-list-item modifier="tappable">
+          Maximum
+          <span class="list-item-note lucent">
+            {{testInformation.MaxNorm}} {{testInformation.UnitDescription}}
+          </span>
+        </ons-list-item>
+        <ons-list-item modifier="chevron">
+          About this test
+        </ons-list-item>
+      </ons-list>
+    </ons-col>
+  </div>
+
+</ons-page>
+</ons-navigator>

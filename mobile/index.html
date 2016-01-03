@@ -79,6 +79,11 @@
 
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="mobile-web-app-capable" content="yes">
+
+	<!--Lab Results graphing libraries-->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/nvd3/1.8.1/nv.d3.min.js"></script>
+ 	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/nvd3/1.8.1/nv.d3.min.css">
   <title>OPAL</title>
 
   <!--Libraries for OnsenUI-->
@@ -98,9 +103,7 @@
   var app = document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'https://' ) === -1;
   if(app){
     document.addEventListener("deviceready", function() {
-
     //Your code
-
     // Find the DOM element where you want to add ng-app
     var element = document.getElementById('boots');
     angular.bootstrap(element, ["MUHCApp"]); //Or simple document in place of element
@@ -153,6 +156,8 @@
      <script src="lib/js/cordovaDeviceModule.min.js"></script>
     <script src="js/controllers/EducationalMaterialController.js"></script>
      <script src="js/controllers/NotesController.js"></script>
+		 <script src="js/controllers/LabResultsController.js"></script>
+
 
     <!--App services-->
     <script src="js/services/messagesService.js"></script>
@@ -174,6 +179,7 @@
 		<sciprt src="js/services/fileManagerService.js"></script>
     <script src="js/services/localStorageService.js"></script>
 		<script src="js/services/resetPasswordService.js"></script>
+		<script src="js/services/labResultsService.js"></script>
 
 
     <script src="js/Directives/changeHeightDiv.js"/></script>
@@ -182,7 +188,8 @@
     <script src="js/filters/filters.js"></script>
     <!--App directives-->
     <script src="js/Directives/fileReaderDirective.js"></script>
-
+		<script src="js/Directives/lineChartDirective.js"></script>
++    <script src="js/Directives/linePlusBarChartDirective.js"></script>
 
 
 
