@@ -12,6 +12,6 @@ able to compile php requests to read from the mysql database, if you already hav
 Follow instructions above to get API running.
 The api is under the listener folder, there are two ways to run the api.
 1. Via website server:
-    To get a website server running, run script called server.js, this contains a script that uses a library called express.js and allows     you to connect your website to your backend given that you are hosting them both at the same place using node.js. Express basically      creates a channel of communication through a port and your website sends requests through this port, the backend scripts written in      NodeJS receive the request, queries tables, and then sends the response back to the website. For more information look up             ![express](http://expressjs.com/) and check the server.js file, the last lines is the initializing of the port.
+    To get a website server running, run script called server.js, this contains a script that uses a library called express.js and allows     you to connect your website to your backend given that you are hosting them both at the same place using node.js. Express basically      creates a channel of communication through a port and your website sends requests through this port, the backend scripts written in      NodeJS receive the request, queries tables, and then sends the response back to the website. For more information look up             [express](http://expressjs.com/) and check the server.js file, the last lines is the initializing of the port.
 2. 
 
