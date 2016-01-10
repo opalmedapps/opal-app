@@ -148,6 +148,9 @@ myApp.service('UpdateUI', ['EncryptionService','$http', 'Patient','Doctors','App
             case 'Notes':
                 Notes.setNotes(data);
                 break;
+            case 'LabTests':
+                LabResults.setTestResults(data);
+                break;
             case 'UserPlanWorkflow':
             //To be done eventually!!!
             break;
@@ -207,6 +210,9 @@ myApp.service('UpdateUI', ['EncryptionService','$http', 'Patient','Doctors','App
                         break;
                     case 'Notes':
                         Notes.setNotes(data);
+                        break;
+                    case 'LabTests':
+                        LabResults.setTestResults(data);
                         break;
                     case 'UserPlanWorkflow':
                     //To be done eventually!!!

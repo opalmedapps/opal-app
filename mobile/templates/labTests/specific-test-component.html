@@ -1,0 +1,40 @@
+<ons-page ng-controller="SpecificTestComponentController">
+  <ons-toolbar>
+    <div class="left"><ons-back-button>Back</ons-back-button></div>
+    <div class="center">{{title}}</div>
+  </ons-toolbar>
+  <ons-col>
+    <line-plus-bar-chart height="250px" data="data"></line-plus-bar-chart>
+    <ons-list>
+      <ons-list-header>Test Information</ons-list>
+      <ons-list-item >
+        Test Name
+        <span class="list-item-note lucent">{{selectedTest.ComponentName}}</span>
+      </ons-list-item>
+      <ons-list-item >
+        Result
+        <span class="list-item-note lucent">{{selectedTest.TestValue}} {{selectedTest.UnitDescription}}</span>
+      </ons-list-item>
+      <ons-list-item >
+        Minimum
+        <span class="list-item-note lucent">{{selectedTest.MinNorm}} {{selectedTest.UnitDescription}}</span>
+      </ons-list-item>
+      <ons-list-item >
+        Maximum
+        <span class="list-item-note lucent">{{selectedTest.MaxNorm}} {{selectedTest.UnitDescription}}</span>
+      </ons-list-item>
+      <ons-list-item >
+        Test Date
+        <span class="list-item-note lucent">{{selectedTest.TestDate}}</span>
+      </ons-list-item>
+      <ons-list-item modifier="chevron">
+        About this test
+      </ons-list-item>
+    </ons-list>
+    <div style="padding: 10px 9px">
+      <ons-button ng-click="myNavigatorLabResults.pushPage('./templates/labTests/timeline-test-component.html',{param:selectedTest.FacComponentName})" modifier="large" style="margin: 0 auto;">
+        View past results
+      </ons-button>
+    </div>
+  </ons-col>
+</ons-page>

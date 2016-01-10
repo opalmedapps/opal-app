@@ -26,17 +26,12 @@ myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$root
   if(authInfo){
       var authInfoObject=JSON.parse(authInfo);
       console.log(authInfoObject);
-      UserAuthorizationInfo.setUserAuthData(authInfoObject.UserName, authInfoObject.Password, authInfoObject.Expires);
-      RequestToServer.setIdentifier().then(function(uuid)
+      var password=window.localStorage.getItem('pass');
+      if(password)
       {
-        console.log(uuid);
-        RequestToServer.sendRequest('Login');
-        $state.go('loading');
-      });
-
+        signin(authInfoObject.Email,password);
+      }
   }
-  console.log(CryptoJS.SHA256('12345').toString());
-  console.log(CryptoJS.SHA256('1234').toString());
   //Creating reference to firebase link
   $scope.submit = function (email,password) {
     console.log(password);
@@ -51,6 +46,8 @@ myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$root
 
       var username = email;
       var password = password;
+      $scope.email=email;
+      $scope.password=password;
       if(typeof email=='undefined'||email=='')
       {
           $scope.alert.type='danger';
@@ -98,6 +95,7 @@ myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$root
             });
         }
     } else {
+      console.log(authData);
         var temporary=authData.password.isTemporaryPassword;
         console.log(temporary);
         if(temporary){
@@ -115,10 +113,10 @@ myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$root
           var patientLoginRequest='request/'+userId;
           var patientDataFields='Users/'+userId;
           //Updating Patients references to signal backend to upload data
-          myDataRef.child(patientLoginRequest).update({LogIn:true});
+          //myDataRef.child(patientLoginRequest).update({LogIn:true});
           //Setting The User Object for global Application Use
-          authenticationToLocalStorage={};
-          authenticationToLocalStorage={
+          console.log($scope.email);
+          var authenticationToLocalStorage={
                   UserName:authData.uid,
                   Password: CryptoJS.SHA256($scope.password).toString(),
                   Expires:authData.expires,
@@ -126,7 +124,7 @@ myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$root
           }
           $rootScope.refresh=true;
           window.localStorage.setItem('UserAuthorizationInfo', JSON.stringify(authenticationToLocalStorage));
-          window.localStorage.setItem('pass', CryptoJS.SHA256($scope.password).toString());
+          window.localStorage.setItem('pass', $scope.password);
           console.log(UserAuthorizationInfo.getUserAuthData());
           console.log("Authenticated successfully with payload:", authData);
           RequestToServer.setIdentifier().then(function(uuid)

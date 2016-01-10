@@ -1,0 +1,39 @@
+<ons-page ng-controller="IndividualLabTestController">
+  <ons-toolbar>
+    <div class="left"><ons-back-button>Back</ons-back-button></div>
+    <div class="center">{{title}}</div>
+  </ons-toolbar>
+  <ons-col>
+    <!-- SEARCH BAR -->
+    <div class="navigation-bar">
+      <div class="navigation-bar__center">
+        <input ng-model="searchText" type="search" class="search-input" style="width: 96%; margin: 6px auto 6px auto;" placeholder="Search">
+      </div>
+    </div>
+    <ons-list>
+      <ons-list-item modifier="tappable" ng-repeat="test in selectedLabResults | filter: searchText | orderBy:['-AbnormalFlag', 'testCategory']" ng-click="goToSpecificTestView(test)"  class="list-item-container">
+        <ons-row>
+          <ons-col class="col-xs-10 col-sm-6 col-lg-6">
+            <div ng-if="test.AbnormalFlag && test.AbnormalFlag=='H'" class="name lab-results-test-high">
+              {{test.FacComponentName}}
+            </div>
+            <div ng-if="test.AbnormalFlag && test.AbnormalFlag=='L'" class="name lab-results-test-low">
+              {{test.FacComponentName}}
+            </div>
+            <div ng-if="!test.AbnormalFlag" class="name">
+              {{test.FacComponentName}}
+            </div>
+            <div class="desc">
+              {{test.TestValue}} {{test.UnitDescription}}
+            </div>
+          </ons-col>
+          <ons-col width="30%" style="margin-left: -10px" class="col-xs-2 col-sm-6 col-lg-6">
+            <div class="location" align="right" style="margin-left: -10px">
+              {{testDate}}
+            </div>
+          </ons-col>
+        </ons-row>
+      </ons-list-item>
+    </ons-list>
+  </ons-col>
+</ons-page>

@@ -1,5 +1,5 @@
 var myApp = angular.module('MUHCApp');
-myApp.controller('LabResultsController', ['RequestToServer','Notifications', 'UpdateUI', '$scope', '$timeout','$rootScope', 'UserPreferences', 'LabResults', function (RequestToServer, Notifications, UpdateUI, $scope,$timeout,$rootScope, UserPreferences, LabResults) {
+myApp.controller('LabResultsControllerCopy', ['RequestToServer','Notifications', 'UpdateUI', '$scope', '$timeout','$rootScope', 'UserPreferences', 'LabResults', function (RequestToServer, Notifications, UpdateUI, $scope,$timeout,$rootScope, UserPreferences, LabResults) {
 
   $scope.load = function($done) {
     RequestToServer.sendRequest('Refresh','LabTests');
@@ -44,6 +44,9 @@ myApp.controller('LabResultsController', ['RequestToServer','Notifications', 'Up
     $scope.testResultsByDate = LabResults.getTestResultsByDate();
     $scope.testResultsByType = LabResults.getTestResultsByType();
     $scope.testResultsByCategory = LabResults.getTestResultsByCategory();
+    console.log($scope.testResultsByDate);
+    console.log($scope.testResultsByType);
+    console.log($scope.testResultsByCategory);
 
 
     $scope.init = function() {
@@ -61,7 +64,7 @@ myApp.controller('LabResultsController', ['RequestToServer','Notifications', 'Up
       $scope.isTimeViewFavorites = false;
       // Initialize messages
       $scope.title = 'Lab Results';
-      $scope.testsReceived = 'Your lab results are in';
+      $scope.testsReceived = 'Lab results';
 
       // Start in DATE tab
       $scope.radioModel = 'Date';
@@ -205,8 +208,122 @@ myApp.controller('LabResultsController', ['RequestToServer','Notifications', 'Up
 
 
     $scope.$watch('radioModel',function(){
-        $timeout(function(){
            // selectTestResultsToLoad();
-        });
     });
+}]);
+myApp.controller('AllTestsController',['$scope','$timeout','LabResults',function($scope,$timeout,LabResults){
+  //Enter code here!!
+    $scope.testResultsByCategory = LabResults.getTestResultsByCategory();
+    $scope.testResultsByType = LabResults.getTestResultsArrayByType();
+    console.log($scope.testResultsByType);
+  }]);
+myApp.controller('FavoritesTestsController',['$scope','$timeout','LabResults',function($scope,$timeout,LabResults){
+  //Enter code here!!
+  $scope.testResultsByCategory = LabResults.getTestResultsByCategory();
+  $scope.testResultsByType = LabResults.getTestResultsByType();
+  $scope.testsReceived = 'Your lab results are in';
+
+
+}]);
+myApp.controller('ByDateTestsController',['$scope','$timeout','LabResults','$filter',function($scope,$timeout,LabResults,$filter){
+  //Enter code here!!
+
+  //Initializing option
+  $scope.radioModel='All';
+
+  $scope.testResultsByDateArray=LabResults.getTestResultsArrayByDate();
+  $scope.selectedTests=$scope.testResultsByDateArray;
+  //$scope.testResultsByDate = LabResults.getTestResultsByDate();
+  $scope.testsReceived = 'Lab results';
+  $scope.goToTestsView=function(test){
+    myNavigatorLabResults.pushPage('./templates/labTests/test-view',{param:test});
+  }
+  $scope.$watch('radioModel',function(){
+    console.log('inside');
+      $scope.selectedTests=$filter('filterDateLabTests')($scope.testResultsByDateArray, $scope.radioModel);
+    });
+}]);
+
+
+myApp.controller('IndividualLabTestController',['$scope','$timeout',function($scope,$timeout){
+  var page = myNavigatorLabResults.getCurrentPage();
+  var test = page.options.param;
+  if (test.testResults) {
+    $scope.selectedLabResults = test.testResults;
+    $scope.testDate = test.testDate;
+  }
+  /*if(test.testCategory) {
+    $scope.selectedCategory = testCategory;
+  }*/
+
+  // Update title
+  $scope.title = 'Lab Results - ' + $scope.testDate;
+  $scope.goToSpecificTestView=function(test)
+  {
+    myNavigatorLabResults.pushPage('./templates/labTests/specific-test-component.html',{param:test});
+  }
+}]);
+
+myApp.controller('SpecificTestComponentController',['$scope','$timeout',function($scope,$timeout){
+  var page = myNavigatorLabResults.getCurrentPage();
+  var test = page.options.param;
+  $scope.selectedTest = test;
+  $scope.testName = test.ComponentName;
+  $scope.testValue = test.TestValue;
+  // Update title
+  $scope.title = $scope.selectedTest.FacComponentName;
+  var maxNorm = [];
+  var minNorm = [];
+  var result = [];
+  for (var i=0; i<100; i++) {
+    maxNorm.push({x: i, y: $scope.selectedTest.MaxNorm});
+    minNorm.push({x: i, y: $scope.selectedTest.MinNorm});
+  }
+  for (var i=20; i<80; i++){
+    result.push({x: i, y: $scope.selectedTest.TestValue});
+  }
+
+  $scope.data = [
+    {
+      values: maxNorm,
+      key: 'Max Norm',
+      color: '#000000',
+      area: false
+    },
+    {
+      values: minNorm,
+      key: 'Min Norm',
+      color: '#000000',
+      area: false
+    }
+    ,{
+      key: 'Result',
+      values: result,
+      color: '#ff7f0e',
+      area: true
+    }
+  ];
+}]);
+myApp.controller('TimelineTestComponentController',['$scope','$timeout','LabResults',function($scope,$timeout,LabResults){
+  var page = myNavigatorLabResults.getCurrentPage();
+  var testName = page.options.param;
+  $scope.testResultsByType = LabResults.getTestResultsByType();
+  $scope.testInformation = $scope.testResultsByType[testName].testResults[0];
+  $scope.title = testName;
+  var testResults = $scope.testResultsByType[testName].testResults;
+  $scope.historicViewTestResult = $scope.testResultsByType[testName].testResults;
+
+  // Chart
+  $scope.data = [{
+    key: 'Data',
+    values: []
+  }];
+  for (var i=0; i<testResults.length; i++) {
+    $scope.data[0].values[i] = {
+      x: i,
+      y: testResults[i].TestValue
+    };
+  }
+
+
 }]);
