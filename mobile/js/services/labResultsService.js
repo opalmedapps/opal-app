@@ -1,5 +1,5 @@
 var myApp=angular.module('MUHCApp');
-myApp.service('LabResults',function(){
+myApp.service('LabResults',['$filter',function($filter){
 	return{
 
 		setTestResults:function(tests){
@@ -23,9 +23,12 @@ myApp.service('LabResults',function(){
 			this.testResultsByDate = {};
 			this.testResultsByType = {};
 			this.testResultsByCategory = {};
+			this.testResultsByDateArray=[];
+			this.testResultsByTypeArray=[];
 
 			for (var key=0;key< tests.length;key++) {
 				var testResult = tests[key];
+				testResult.TestDateFormat=$filter('formatDate')(testResult.TestDate);
 				var testResultDate = testResult.TestDate.replace(/ /g,'');
 				var testResultType = testResult.FacComponentName;
 				var testCategory = undefined;
@@ -47,6 +50,7 @@ myApp.service('LabResults',function(){
 					this.testResultsByDate[testResultDate] = {};
 					this.testResultsByDate[testResultDate].testCategory = testCategory;
 					this.testResultsByDate[testResultDate].testDate = testResult.TestDate;
+					this.testResultsByDate[testResultDate].testDateFormat = $filter('formatDate')(testResult.TestDate);
 					this.testResultsByDate[testResultDate].testResults = [];
 					this.testResultsByDate[testResultDate].testResults.push(testResult);
 				} else {
@@ -73,15 +77,31 @@ myApp.service('LabResults',function(){
 				} else {
 					this.testResultsByCategory[testCategory].testResults.push(testResult);
 				}
-
 				this.testResults.push(testResult);
 			}
+
+			for (var keyType in this.testResultsByType) {
+				this.testResultsByTypeArray.push(this.testResultsByType[keyType]);
+			}
+			console.log(this.testResultsByTypeArray);
+			for (var key in this.testResultsByDate) {
+				this.testResultsByDateArray.push(this.testResultsByDate[key]);
+			}
+			this.testResultsByDateArray=$filter('orderBy')(this.testResultsByDateArray,'testDateFormat',true);
+			console.log(this.testResultsByDateArray);
 		},
 
 		getTestResults:function(){
 			return this.testResults;
 		},
-
+		getTestResultsArrayByType:function()
+		{
+			return this.testResultsByTypeArray;
+		},
+		getTestResultsArrayByDate:function()
+		{
+			return this.testResultsByDateArray;
+		},
 		getTestResultsByDate:function(){
 			return this.testResultsByDate;
 		},
@@ -93,4 +113,4 @@ myApp.service('LabResults',function(){
 			return this.testResultsByCategory;
 		}
 	}
-});
+}]);

@@ -1,0 +1,23 @@
+<ons-page ng-controller="AllTestsController">
+  <div class="navigation-bar">
+    <div class="navigation-bar__center">
+      <input ng-model="searchTextAllView" type="text" class="search-input" style="width: 96%; margin: 6px auto 6px auto;" placeholder="Search">
+    </div>
+  </div>
+  <div style="padding:0">
+    <ons-list class="plan-list " >
+      <ons-list ng-repeat="testCategory in testResultsByCategory">
+        <ons-list-header>{{testCategory.testCategory}}</ons-list-header>
+        <ons-list-item ng-repeat="testResult in testResultsByType | filter: searchTextAllView" style="1px solid black" modifier="chevron"  ng-click="myNavigatorLabResults.pushPage('./templates/labTests/timeline-test-component.html',{param:testResult.testName})" modified="tappable" class="list-item-container" ng-if="testResult.testCategory == testCategory.testCategory">
+          <ons-row>
+            <ons-col class="col-xs-10 col-sm-6 col-lg-6">
+            <!--<span class="glyphicon glyphicon-star-empty" ng-if="!testResult.isFavorite || testResult.isFavorite==false" ng-click="testResult.isFavorite = true; $event.stopPropagation()" style="display:inline-block"></span>
+            <span class="glyphicon glyphicon-star" ng-if="testResult.isFavorite" ng-click="testResult.isFavorite = false; $event.stopPropagation()" style="display:inline-block; color:blue"></span>-->
+            <div class="name" style="display:inline-block">{{testResult.testName}}</div>
+            </ons-col>
+          </ons-row>
+        </ons-list-item>
+      </ons-list>
+    </ons-list>
+  </div>
+</ons-page>

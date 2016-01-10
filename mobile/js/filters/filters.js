@@ -136,3 +136,34 @@ myApp.filter('propsFilter', function() {
     return out;
   }
 });
+myApp.filter('filterDateLabTests',function()
+{
+return function(items,option)
+{
+	var ret=[];
+	if(option=='All')
+	{
+		return items;
+	}else if(option=='LastTwoMonths'){
+		var lastTwoMonths=new Date();
+		lastTwoMonths.setMonth(lastTwoMonths.getMonth()-2);
+		for (var i = 0; i < items.length; i++) {
+			if(items[i].testDateFormat > lastTwoMonths)
+			{
+				ret.push(items[i]);
+			}
+		}
+		return ret;
+}else if(option=='LastTwelveMonths'){
+	var lastTwelveMonths=new Date();
+	lastTwelveMonths.setFullYear(lastTwelveMonths.getFullYear()-1);
+	for (var i = 0; i < items.length; i++) {
+		if(items[i].testDateFormat>lastTwelveMonths)
+		{
+			ret.push(items[i]);
+		}
+	}
+	return ret;
+	}
+};
+});

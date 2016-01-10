@@ -1,0 +1,38 @@
+<ons-page ng-controller="ByDateTestsController">
+  <div align="center" style="padding:10px 0 10px 0">
+    <div class="button-bar" style="width:350px;">
+      <div class="button-bar__item" >
+        <input type="radio" name="segment-a" value="All" ng-model="radioModel">
+        <button class="button-bar__button">All</button>
+      </div>
+      <div class="button-bar__item">
+        <input type="radio" name="segment-a" value="LastTwoMonths" ng-model="radioModel" >
+        <button class="button-bar__button">Last 2 Months</button>
+      </div>
+
+      <div class="button-bar__item">
+        <input type="radio" name="segment-a" value="LastTwelveMonths" ng-model="radioModel">
+        <button class="button-bar__button">Last 12 Months</button>
+      </div>
+
+
+    </div>
+  </div>
+  <ons-list>
+    <ons-list-item ng-repeat="testResultByDate in selectedTests" ng-click="goToTestsView(testResultByDate)" modifier="tappable" class="list-item-container">
+      <ons-row align="center">
+        <ons-col width="20px">
+          <div>
+            <i class="fa fa-circle iconHomeView"></i>
+          </div>
+        </ons-col>
+        <ons-col>
+          <div class="lab-results-new-result name">{{testsReceived}}</div>
+        </ons-col>
+        <ons-col width="50%" >
+          <div class="location" align="right" style="margin-left: 0px">{{testResultByDate.testDateFormat|formatDateAppointmentTask}}</div>
+        </ons-col>
+      </ons-row>
+    </ons-list-item>
+  </ons-list>
+</ons-page>
