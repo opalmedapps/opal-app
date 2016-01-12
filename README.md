@@ -58,10 +58,12 @@ $cordova run <platform>
   * For webview `$cordova run browser`
   * For IOS `$cordova run ios`(See below for problems)
   * For Android `$cordova run android` (See below for problems)
+
 ####Problems
 In this section problems that might be encountered will be discussed 
 #####IOS
 * If you are not running from an Apple computer a build and run for ios is not possible as it requires XCode to compile
+
 #####Android
 * You have to have install the AndroidSDK with the most updated version, follow instructions given by [Android developer!](http://developer.android.com/sdk/installing/index.html)
 * Once the SDK is install you have to tell cordova where to find the SDK, via the bash_profile folder, for instructions on this:
