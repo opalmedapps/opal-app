@@ -29,7 +29,10 @@ myApp.service('RequestToServer',function(UserAuthorizationInfo, EncryptionServic
           var uuid=String(uniqueIdentifier.query);
           uuid=uuid.replace(/\./g, "-");
           console.log(uuid);
-          r.resolve(uuid);
+          //Change this line when your backend is running, demo stays always in firebase, do not modify demo!!!
+          //Change this line when your backend is running!
+          r.resolve('demo');
+          //r.resolve(uuid);
         });
       return r.promise;
     }
@@ -108,7 +111,7 @@ myApp.service('RequestToServer',function(UserAuthorizationInfo, EncryptionServic
               Ref.push({ 'Request' : encryptedRequestType, 'DeviceId':identifier,'UserID':userID, 'Parameters':{'NotificationSerNum' : content }});
             }else if (typeOfRequest=='TestResult')
             {
-              testResultRef.push({ 'Request': typeOfRequest, 'DeviceId':identifier, 'UserID': userId, 'Content': content}); 
+              testResultRef.push({ 'Request': typeOfRequest, 'DeviceId':identifier, 'UserID': userId, 'Content': content});
             }
 
 
@@ -127,7 +130,9 @@ myApp.service('RequestToServer',function(UserAuthorizationInfo, EncryptionServic
             getIdentifierWeb().then(function(uuid){
               console.log(uuid);
               identifier=uuid;
-              r.resolve(uuid);
+              //Change this line when your backend is running, demo stays always in firebase, do not modify demo!!!
+              //r.resolve(uuid);
+              r.resolve('demo');
             });
           }
           return r.promise;
