@@ -1,0 +1,65 @@
+<ons-page ng-controller="DocumentsController">
+  <ons-toolbar>
+    <div class="left">
+      <ons-toolbar-button ng-click="menu.toggle()">
+        <ons-icon icon="ion-navicon" size="28px" fixed-width="false"></ons-icon>
+        <div class="notification menu-notification">{{TotalNumberOfNews}}</div>
+      </ons-toolbar-button>
+    </div>
+    <div class="center">Patient Documents</div>
+  </ons-toolbar>
+  <ons-pull-hook ng-action="refreshDocuments($done)" var="loader">
+    <span ng-switch="loader.getCurrentState()">
+      <span ng-switch-when="initial">
+        <ons-icon size="35px" icon="ion-arrow-down-a"></ons-icon> Pull down to refresh</span>
+      <span ng-switch-when="preaction">
+        <ons-icon size="35px" icon="ion-arrow-up-a"></ons-icon> Release to refresh</span>
+      <span ng-switch-when="action">
+        <ons-icon size="35px" spin="true" icon="ion-load-d"></ons-icon> Loading data...</span>
+    </span>
+  </ons-pull-hook>
+  <div class="row" style="margin:0px;padding:0px" ng-hide="noNotifications">
+    <a style="text-decoration:none" href ng-click="menu.setMainPage('views/notifications.html',{closeMenu:true})">
+      <alert align="center" ng-show="showAlert&&(Notifications==1)" ng-model="alert" type="success" close="closeAlert()">You have {{Notifications}} unseen notifications.
+        <span class="hidden-xs">Go to your Notifications page under the menu on the left.</span>
+      </alert>
+      <alert align="center" ng-show="showAlert&&(Notifications>1)" ng-model="alert" type="success" close="closeAlert()">You have {{Notifications}} unseen notification.
+        <span class="hidden-xs">Go to your Notifications page under the menu on the left.</span>
+      </alert>
+    </a>
+  </div>
+  <div class="container">
+    <alert align="center" ng-show="showAlertDoc" ng-model="alert" type="success" close="closeAlertDocs()">
+      <i class="ion-information-circled"></i> This demo version does not use real patient images or data.
+    </alert>
+  </div>
+  <div style="margin-top:10px">
+    <div style="color:grey" ng-show="noDocuments" align="center">
+      No patient documents available!
+    </div>
+    <ul class="list list--inset" ng-repeat="document in documents" style="margin-top:5px" ng-click="myNavigator.pushPage('./templates/documents/individual-document.html',{param:document});">
+      <li class="list__item list--inset__item list__item--chevron">
+        <div style="padding:8px;">
+          <ons-row>
+            <ons-col width="30px">
+              <div align="right">
+                <i class="ion-document-text iconHomeView"></i>
+              </div>
+            </ons-col>
+            <ons-col>
+              <div align="middle" style="margin-left:5px">
+                <div class="profile-name themeCardTitle">
+                  {{document.Name}}
+                </div>
+                <div class="desc">
+                  {{document.DateAdded|formatDateAppointmentTask}}
+                  <div style=" color:grey;">{{document.Description}}</div>
+                </div>
+              </div>
+            </ons-col>
+          </ons-row>
+        </div>
+      </li>
+    </ul>
+  </div>
+</ons-page>

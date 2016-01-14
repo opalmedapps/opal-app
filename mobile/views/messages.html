@@ -1,0 +1,95 @@
+<ons-page ng-controller="MessagePageController">
+  <ons-toolbar>
+    <div class="left"><ons-back-button>Back</ons-back-button></div>
+    <div class="center">{{conversationName}}</div>
+    <div class="right"><ons-toolbar-button ng-click="goToContact()">Details</ons-toolbar-button></div>
+  </ons-toolbar>
+<div style="height:100vh;width:100vw">
+   <div class="my-message-container"  >
+
+ <div style="overflow-y:scroll" height-change="heightContainer" scroll-glue-bottom="glue">
+
+       <div  ng-repeat="mes in conversation" ng-init="(mes.Role=='1' ? messageName='User' : messageName=messages[selectedIndex].MessageRecipient)">
+         <br>
+    <div style="height: 1px; background-color: #C1C1C1; text-align: center">
+<span style="font-size:12px;background-color: white; position: relative; top: -1.5em;color:#C1C1C1">
+  {{mes.Date|date:'dd/MM/yyyy'}}
+</span>
+</div>
+<br>
+
+    <div class="row" >
+      <!--<div class="hidden-xs col-sm-1 col-md-1 col-lg-1">
+
+          </div>-->
+          <div class="col-xs-2 col-md-2 col-sm-2 col-lg-2" >
+              <img  style="border-radius:4px" width="40px" height="auto" ng-hide="mes.Role=='1'" ng-src="./img/doctor.png">
+              <img  width="40px" height="auto" ng-hide="mes.Role=='0'" ng-src="./img/patient.png">
+
+          </div>
+
+          <div class="col-xs-9 col-md-9 col-sm-8 col-lg-8" style="margin-left:-7%">
+             <div  class="timline-from" >
+                <span class="timeline-name">{{messageName}}</span>
+                <span class="timeline-id">{{mes.Date|date:'h:mm a'}}</span>
+              </div>
+              <div  class="timeline-message ">
+                <p>{{mes.MessageContent}}</p>
+              </div>
+              <div>
+              <a ng-click="messageAttachmentOpener(mes)">
+                <img ng-src="{{mes.Attachment}}" style="max-width:250px" class="img-responsive">
+              </a>
+              </div>
+          </div>
+          </div>
+    </div>
+
+</div>
+</div>
+<div class="bottom-bar" style="text-align: center;height:108px">
+  <div class="bottom-bar__line-height">
+    <div class="my-message-container" style="margin:0;padding:0;">
+    <div align="center" class="container" >
+    <div class="row">
+      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+      <p ng-show="showAttachment" style="text-align:left"><i class="ion-paperclip"></i> Attachment</p>
+      </div>
+    </div>
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12"></div>
+    <div class="row">
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12"></div>
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="padding:0;margin-top:20px">
+          <textarea  style="width:100%;max-height:150px" id="textareaDesktop" ng-model="newMessageMobile" class="textarea" row="1" msd-elastic placeholder="Message">
+          </textarea>
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12"></div>
+    </div>
+    <div class="row">
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12"></div>
+      <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
+          <div align="left">
+              <span class="btn btn-default btn-file">
+                <ons-icon icon="ion-paperclip"></ons-icon><input type="file" id="browseBtn" accept=".gif, .jpg, .png, .pdf|image/*"/ fileread="upload.Document">
+              </span>
+          </div>
+      </div>
+      <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
+          <div  align="left">
+            &nbsp;
+          </div>
+       </div>
+       <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+            <div align="center">
+          <button type="submit" class="button button--quiet" ng-disabled="sendButtonDisabled" ng-click="submitMessage()">Send</button>
+          </div>
+      </div>
+    </div>
+
+    </div>
+     </div>
+  </div>
+</div>
+
+</div>
+</ons-page>

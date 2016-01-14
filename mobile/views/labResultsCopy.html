@@ -1,0 +1,17 @@
+<ons-navigator title="Navigator" var="myNavigatorLabResults">
+<ons-page ng-controller="LabResultsControllerCopy">
+  <ons-toolbar>
+   <div class="left">
+      <ons-toolbar-button ng-click="menu.toggle()">
+        <ons-icon icon="ion-navicon" size="28px" fixed-width="false"></ons-icon><div class="notification menu-notification">{{TotalNumberOfNews}}</div>
+      </ons-toolbar-button>
+    </div>
+    <div class="center">Lab Results</div>
+  </ons-toolbar>
+  <ons-tabbar>
+    <ons-tab page="./templates/labTests/date-tests.html" label="By Date" icon="ion-calendar" active="true"></ons-tab>
+     <ons-tab page="./templates/labTests/all-tests.html" label="By Category" icon="ion-ios-list-outline" ></ons-tab>
+     <ons-tab page="./templates/labTests/favorite-tests.html" label="Favorites" icon="fa-star"></ons-tab>
+ </ons-tabbar>
+</ons-page>
+</ons-navigator>
