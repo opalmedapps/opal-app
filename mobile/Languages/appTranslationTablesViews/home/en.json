@@ -1,0 +1,12 @@
+{
+	"HEADER_MESSAGE_HOME":"Home",
+	"WELCOME_MESSAGE":"Welcome",
+	"STATUS":"Status",
+	"STATUS_CONTENT":"You are currently on the planning stage.",
+	"UPCOMING_NAME":"You have an upcoming",
+	"UPCOMING_APPOINT":"appointment on",
+	"CHECKIN_BUTTON":"Check-in",
+	"DETAILS_BUTTON":"Details",
+	"GO_TO_APPOINTMENTS_TAP":"Go To My Appointments",
+	"CONTACT_DOCTORS_TAP":"Contact Doctors"
+}
