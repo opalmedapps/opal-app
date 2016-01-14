@@ -219,7 +219,7 @@ myApp.service('UpdateUI', ['EncryptionService','$http', 'Patient','Doctors','App
                     break;
                 }
                 console.log(data);
-                ref.child(pathToSection).set(null);
+                //ref.child(pathToSection).set(null);
                 ref.child(pathToSection).off();
 
                 r.resolve(true);
