@@ -50,6 +50,8 @@ List of plugins to be downloaded:
 * cordova-plugin-network-information 1.1.0 "Network Information"
 * cordova-plugin-whitelist 1.0.0 "Whitelist"
 * de.appplant.cordova.plugin.email-composer 0.8.3dev "EmailComposer"
+
+
 9. Add the contents of the mobile folder to the www folder in your cordova project.
 10. To run your project run:
 ```
