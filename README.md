@@ -34,26 +34,32 @@ Instructions are based from [Cordova get started page!](https://cordova.apache.o
 ``` 
 $ cordova build <nameOfPlatform>
 ```
-8.Add all the app plugins using the command:
+8.Add all the app plugins using the command on the list below.
+9. Add the contents of the mobile folder to the www folder in your cordova project.
+10. To run your project run:
+
+
+###List of plugins to be downloaded:
+
+####Command:
 ```
 $cordova plugin add <nameOfPlugin>
 ```
-List of plugins to be downloaded:
-* cordova-plugin-battery-status 1.1.1 "Battery"
-* cordova-plugin-calendar 4.4.4 "Calendar"
-* cordova-plugin-device 1.1.0 "Device"
-* cordova-plugin-dialogs 1.2.0 "Notification"
-* cordova-plugin-file 3.0.0 "File"
-* cordova-plugin-file-transfer 1.4.0 "File Transfer"
-* cordova-plugin-geolocation 2.0.0 "Geolocation"
-* cordova-plugin-inappbrowser 1.1.0 "InAppBrowser"
-* cordova-plugin-network-information 1.1.0 "Network Information"
-* cordova-plugin-whitelist 1.0.0 "Whitelist"
-* de.appplant.cordova.plugin.email-composer 0.8.3dev "EmailComposer"
+####Plugin:
+ * cordova-plugin-battery-status 1.1.1 "Battery"
+ * cordova-plugin-calendar 4.4.4 "Calendar"
+ * cordova-plugin-device 1.1.0 "Device"
+ * cordova-plugin-dialogs 1.2.0 "Notification"
+ * cordova-plugin-file 3.0.0 "File"
+ * cordova-plugin-file-transfer 1.4.0 "File Transfer"
+ * cordova-plugin-geolocation 2.0.0 "Geolocation"
+ * cordova-plugin-inappbrowser 1.1.0 "InAppBrowser"
+ * cordova-plugin-network-information 1.1.0 "Network Information"
+ * cordova-plugin-whitelist 1.0.0 "Whitelist"
+ * de.appplant.cordova.plugin.email-composer 0.8.3dev "EmailComposer"
 
 
-9. Add the contents of the mobile folder to the www folder in your cordova project.
-10. To run your project run:
+
 ```
 $cordova run <platform>
 ```
