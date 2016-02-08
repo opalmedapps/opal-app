@@ -28,17 +28,17 @@ Instructions are based from [Cordova get started page!](https://cordova.apache.o
    $ cordova add platform ios
    $ cordova add platform android
    $ cordova add platform browser
-  ```
+```
 7. Build your basic app via: `$ cordova build`.
   * For an specific platform build use:
-``` 
+  ``` 
 $ cordova build <nameOfPlatform>
 ```
 
 8. Add all the app plugins using the command on the list below.
 9. Add the contents of the mobile folder to the www folder in your cordova project.
 10. To run your project run:
-```
+  ```
 $cordova run <platform>
 ```
   * For webview `$cordova run browser`
