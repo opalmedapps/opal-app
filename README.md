@@ -24,11 +24,11 @@ Instructions are based from [Cordova get started page!](https://cordova.apache.o
 4.  Create a Cordova Project `$ cordova create <NameOfProject>`.
 5. Change directory to your newly created cordova project ` $ cd <NameOfProject>`.
 6. Add platforms to your project:
-```
- $ cordova add platform ios
- $ cordova add platform android
- $ cordova add platform browser
-```
+  ```
+   $ cordova add platform ios
+   $ cordova add platform android
+   $ cordova add platform browser
+  ```
 7. Build your basic app via: `$ cordova build`.
   * For an specific platform build use:
 ``` 
