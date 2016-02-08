@@ -1,0 +1,28 @@
+  <ons-page ng-controller="IndividualAppointmentController">
+    <ons-toolbar >
+      <div class="left"><ons-back-button>Back</ons-back-button></div>
+      <div class="center">Appointment</div>
+    </ons-toolbar>
+    <div style="margin-top:5vh">
+    <ons-list>
+      <ons-list-item class="item">
+        <div style="line-height:1" align="left">
+          <header>
+              <span class="item-title">{{app.AppointmentType_EN}}</span>
+
+          </header>
+          <p class="item-desc">{{app.ScheduledStartTime|formatDateAppointmentTask}}</p>
+          <p class="item-desc">{{app.ResourceName}}</p>
+        </div>
+      </ons-list-item>
+    </ons-list>
+
+    <ons-list class="settings-list" ng-if="showTab">
+       <ons-list-item >
+         <div class="text-center">
+           <a href ng-click="tabbar.setActiveTab(1)">Go to my chart &raquo;</a>
+         </div>
+        </ons-list-item>
+    </ons-list>
+  </div>
+  </ons-page>

@@ -1,0 +1,78 @@
+<ons-navigator var="educationNavigator">
+<ons-page ng-controller="EducationalMaterialController" ng-device-backbutton="educationDeviceBackButton()">
+  <ons-toolbar>
+      <div class="left">
+        <ons-back-button>Back</ons-back-button>
+      </div>
+
+    <div class="center">Education</div>
+    <div class="right"><ons-toolbar-button ng-click="educationNavigator.pushPage('views/info-page-tabs.html',{param:home})"><ons-icon icon="ion-ios-information-outline"></ons-icon></ons-toolbar-button></div>
+
+  </ons-toolbar>
+  <ons-list style="margin: 0px 0">
+    <ons-list-header class="person-list-header">Prior to Treatment</ons-list-header>
+    <ons-list-item modifier="chevron" class="item" ng-click="openPDF('RadBook')">
+      <ons-row align="center" >
+        <ons-col width="60px" align="center">
+          <div>
+            <i class="ion-android-map iconHomeView" style="color:SeaGreen"></i>
+          </div>
+        </ons-col>
+        <ons-col>
+          <header>
+            <span class="item-title">Radiotherapy at the Cedars Cancer Centre</span>
+          </header>
+          <p class="item-desc">Booklet</p>
+        </ons-col>
+      </ons-row>
+    </ons-list-item>
+    <ons-list-item modifier="chevron" class="item" ng-click="openVideo()">
+      <ons-row align="center" >
+        <ons-col width="60px" align="center">
+          <div >
+            <i class="ion-ios-film iconHomeView" style="color:red"></i>
+          </div>
+        </ons-col>
+        <ons-col>
+          <header>
+            <span class="item-title">Planning for your radiotherapy</span>
+          </header>
+          <p class="item-desc">Video</p>
+        </ons-col>
+      </ons-row>
+    </ons-list-item>
+    <ons-list-header class="person-list-header">During Treatment</ons-list-header>
+    <ons-list-item modifier="chevron" class="item" ng-click="openPDF('RadBreast')">
+      <ons-row align="center" style="height:40px">
+        <ons-col width="60px" align="center">
+          <div >
+            <i class="ion-ios-list-outline iconHomeView" style="color:SaddleBrown "></i>
+          </div>
+        </ons-col>
+        <ons-col>
+          <header>
+            <span class="item-title">Breast Cancer</span>
+          </header>
+          <p class="item-desc">Treatment guidelines</p>
+        </ons-col>
+      </ons-row>
+    </ons-list-item>
+    <ons-list-header class="person-list-header">After Treatment</ons-list-header>
+    <ons-list-item modifier="chevron" class="item" ng-click="openPDF('RadEnd')">
+      <ons-row align="center">
+        <ons-col width="60px" align="center">
+          <div >
+            <i class="ion-ios-list-outline iconHomeView" style="color:SaddleBrown"></i>
+          </div>
+        </ons-col>
+        <ons-col>
+          <header>
+            <span class="item-title">When Radiotherapy Treatment Ends</span>
+          </header>
+          <p class="item-desc">Factsheet</p>
+        </ons-col>
+      </ons-row>
+    </ons-list-item>
+  </ons-list>
+</ons-page>
+</ons-navigator>

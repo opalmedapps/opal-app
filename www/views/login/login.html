@@ -1,0 +1,48 @@
+<ons-navigator title="NavigatorForms" var="navigatorForms">
+    <ons-page style="background-color:white;width:100vw;height100vh">
+        <ons-toolbar>
+            <div class="center">Login</div>
+        </ons-toolbar>
+        <div align="center">
+            <img src="./img/ceadarsLogo.png" style="width:90vw;height:auto;max-width:800px">
+        </div>
+        <div class="container" align="center" style="margin-top:20px">
+            <div align="center">
+                <!--<p ng-if="2+2===4">{{name}}</p>-->
+                <!--Creates form with pertinent fields, submits via submit-->
+                <!--<label name="text">Enter your username and password:</label>-->
+                <!--  <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>-->
+                <!--<button ng-click="submit()" class="btn btn-primary btn-group btn-group-justified">Login</button>-->
+                <!--Creates form with pertinent fields, submits via submit-->
+                <form name="form" ng-submit="submit(email, password)" novalidate>
+                    <div class="form-group">
+                        <!--<input class="text-input" id="emailField" type="email" name="email" ng-model="signup.email" placeholder="Email Address" />
+      <br>
+
+      <input class="text-input" id="passwordField" type="password" placeholder="Password" name="password" ng-model="signup.password" />
+      <br>
+      <br>-->
+                        <span>
+  <br/>
+  <i class="iconHomeView ion-person"></i>
+  <input class="text-input" placeholder="Email" name="email" ng-model="email" type="email" required>
+  <br /><br />
+  <i class="iconHomeView ion-ios-locked"></i>
+  <input class="text-input" name="password" ng-model="password" placeholder="Password" type="password" required>
+  <br/><br/>
+</span>
+                        <div style="max-width:400px">
+                            <button class="button button--large" type="submit" id="submit">Login</button>
+                        </div>
+                        <uib-alert ng-show="alert.type" type="{{alert.type}}">{{alert.content}}</uib-alert>
+                        <!--<a class="left" role="button" href  style="font-size:11px;color:#0066FF" ng-click="$state.go('forgotPassword');">Forgot Password?</a>-->
+                    </div>
+                </form>
+                <div style="text-align:center;">
+                    <button class="button button--large--quiet" ng-click="navigatorForms.pushPage('./templates/forms/forgot-password.html',{})">Forgot Password?</button>
+                </div>
+                <br>
+            </div>
+        </div>
+    </ons-page>
+</ons-navigator>
