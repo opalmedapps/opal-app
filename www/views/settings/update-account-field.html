@@ -1,0 +1,58 @@
+<ons-page ng-controller="ChangingSettingController">
+  <ons-toolbar>
+    <div class="left"><ons-back-button>Back</ons-back-button></div>
+    <div class="center">{{value}}</div>
+  </ons-toolbar>
+
+  <div ng-show="personal">
+  <div class="lucent" style="margin-left:2vw;margin-top:10vh">
+        <p class="note">{{instruction}}</p>
+  </div>
+   <ons-list modifier="noborder" class="settings-list" style="margin-top:5vh">
+      <ons-list-item >
+        <input ng-minlength="1" type="{{type1}}" class="text-input text-input--transparent width-full" placeholder="Enter new {{value}}" value="{{value}}" ng-model="newValue">
+        <a ng-click="newValue=''" ><span class="list-item-note lucent"><ons-icon icon="ion-close-circled"></ons-icon></span></a>
+      </ons-list-item>
+    </ons-list>
+    <div ng-show="value=='Password'||value=='Email'">
+       <div class="lucent" style="margin-left:2vw;margin-top:2vh">
+        <p class="note">{{instructionOld}}</p>
+  </div>
+   <ons-list modifier="noborder" class="settings-list" style="margin-top:5vh">
+      <ons-list-item >
+        <input ng-minlength="1" type="{{type2}}" class="text-input text-input--transparent width-full" placeholder="{{placeHolder}}" value="{{value}}" ng-model="oldValue">
+        <a ng-click="oldValue=''" ><span class="list-item-note lucent"><ons-icon icon="ion-close-circled"></ons-icon></span></a>
+      </ons-list-item>
+    </ons-list>
+    </div>
+    <div ng-show="newUpdate" style="margin-left:2vw;margin-top:2vh;">
+      <p class="{{alertClass}}">{{updateMessage}}</p>
+    </div>
+    <div class="container" style="margin-top:10vh">
+      <button class="button button--large" ng-disabled="newUpdate" ng-click="updateValue(value)"  style="margin: 0 auto;">Update {{value}}</button><br>
+    </div>
+    </div>
+  <div ng-hide="personal">
+  <div class="lucent" style="margin-left:2vw;margin-top:2vh">
+        <p class="note">{{instruction}}</p>
+  </div>
+    <ul class="list" style="margin-top:10vh">
+<li class="list__header">Select Language</li>
+<li class="list__item list__item--tappable" >
+  <label  class="radio-button radio-button--list-item">
+    <input ng-change="changeLanguage('EN')" ng-model="pickOption" type="radio" value="{{firstOption}}" name="b" >
+    <div class="radio-button__checkmark radio-button--list-item__checkmark"></div>
+    {{firstOption}}
+  </label>
+</li>
+
+<li class="list__item list__item--tappable" >
+  <label  class="radio-button radio-button--list-item">
+    <input ng-change="changeLanguage('FR')" ng-model="pickOption" type="radio" value="{{secondOption}}" name="b">
+    <div class="radio-button__checkmark radio-button--list-item__checkmark"></div>
+    {{secondOption}}
+  </label>
+</li>
+</ul>
+</div>
+</ons-page>

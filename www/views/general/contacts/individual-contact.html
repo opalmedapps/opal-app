@@ -1,0 +1,48 @@
+<ons-page ng-controller="ContactIndividualDoctorController">
+    <ons-toolbar>
+      <div class="left"><ons-back-button>Back</ons-back-button></div>
+      <div class="center">{{header}}</div>
+    </ons-toolbar>
+     <div class="profile-cardContact">
+
+        <!--<img ng-show="!doctor.Image" src="img/logo.png" class="profile-image">-->
+        <div ng-show="doctor.ProfileImage"><img ng-src="{{doctor.ProfileImage}}" class="profile-image"></div>
+        <div class="profile-name">{{doctor.FirstName}} {{doctor.LastName}}</div>
+        <div class="profile-desc">{{header}}</div>
+
+      </div>
+
+        <ons-list style="margin-top: 12px;">
+          <ons-list-item modifier="chevron" ng-show="doctor.Address" >
+            <div class="prop-desc">
+              <i class="fa fa-map-marker iconHomeView" style="margin:0"></i>
+              <span style="color:black" >{{doctor.Address}}</span>
+            </div>
+          </ons-list-item>
+
+          <ons-list-item ng-show="doctor.Phone" modifier="chevron">
+             <a href="tel:{{doctor.Phone}}" style="text-decoration:none"><div class="prop-desc">
+              <i class="fa fa-mobile iconHomeView" style="margin:0"></i>
+
+               <span style="color:black" >{{doctor.Phone|FormatPhoneNumber}}</span>
+            </div></a>
+          </ons-list-item>
+
+          <ons-list-item ng-show="doctor.Email" modifier="chevron">
+          <a href="mailto:{{doctor.Email}}">
+            <div class="prop-desc">
+              <i class="fa fa-envelope-o iconHomeView" style="margin:0"></i>
+              <span style="color:black" >{{doctor.Email}}</span>
+            </div>
+            </a>
+          </ons-list-item>
+        <ons-list-item modifier="chevron" ng-show="inContacts">
+          <a ng-click="generalNavigator.pushPage('views/personal/messages/individual-conversation.html',{param: doctor})">
+            <div class="prop-desc">
+              <i class="ion-ios-chatbubble-outline iconHomeView" style="margin:0"></i>
+              <span style="color:black" >Message {{doctor.FirstName}} {{doctor.LastName}}</span>
+            </div>
+            </a>
+          </ons-list-item>
+        </ons-list>
+  </ons-page>

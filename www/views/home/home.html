@@ -1,0 +1,104 @@
+<ons-navigator var="homeNavigator">
+  <ons-page ng-controller="HomeController" ng-device-backbutton="homeDeviceBackButton()">
+    <ons-toolbar>
+      <div class="center">Home</div>
+      <div class="right">
+        <ons-toolbar-button ng-click="homeNavigator.pushPage('views/info-page-tabs.html',{param:home})">
+          <ons-icon icon="ion-ios-information-outline"></ons-icon>
+        </ons-toolbar-button>
+      </div>
+    </ons-toolbar>
+    <ons-pull-hook ng-action="load($done)" var="loader" height="100px">
+      <span ng-switch="loader.getCurrentState()">
+                      <span ng-switch-when="initial"><ons-icon size="35px" icon="ion-arrow-down-a"></ons-icon> Pull down to refresh</span>
+      <span ng-switch-when="preaction"><ons-icon size="35px" icon="ion-arrow-up-a"></ons-icon> Release to refresh</span>
+      <span ng-switch-when="action"><ons-icon size="35px" spin="true" icon="ion-load-d"></ons-icon> Loading data...</span>
+      </span>
+    </ons-pull-hook>
+    <div class="container text-center" align="center">
+      <img src="img/muhc-logo-text.png" style="width:98vw;max-width:500px">
+    </div>
+    <div class="container">
+      <a ng-click="tabbar.setActiveTab(4)">
+        <ons-row style="padding:5px">
+          <ons-col width="70px">
+            <div class="image-profile-wrapper">
+              <img ng-src="{{ProfileImage}}" class="image-profile">
+            </div>
+          </ons-col>
+          <ons-col>
+            <div>
+              <p><strong>{{FirstName}} {{LastName}}</strong>
+                <br>
+                <span class="profile-id">Patient ID: {{PatientId}}</span>
+              </p>
+            </div>
+          </ons-col>
+        </ons-row>
+      </a>
+    </div>
+    <ons-list style="margin: 0px 0">
+      <ons-list-item modifier="chevron" class="item" ng-click="homeNavigator.pushPage('views/home/welcome-home.html')">
+        <ons-row align="center" style="height:50px">
+          <ons-col width="60px" align="center">
+            <div>
+              <i class="fa fa-hospital-o iconHomeView" style="color:DarkSlateBlue"></i>
+            </div>
+          </ons-col>
+          <ons-col>
+            <header>
+              <span class="item-title">Welcome</span>
+            </header>
+            <p class="item-desc">A message from your treating team...</p>
+          </ons-col>
+        </ons-row>
+      </ons-list-item>
+      <ons-list-item modifier="chevron" class="item" ng-click="homeNavigator.pushPage('views/general/announcements/individual-notification.html')">
+        <ons-row align="center" style="height:50px">
+          <ons-col width="60px">
+            <div>
+              <i class="ion-android-notifications iconHomeView" style="color:DarkRed"></i><span class="notification">1</span>
+            </div>
+          </ons-col>
+          <ons-col>
+            <header>
+              <span class="item-title">Annoucements</span>
+            </header>
+            <p class="item-desc">The Ceadars Cancer Center will be closed on...</p>
+          </ons-col>
+        </ons-row>
+      </ons-list-item>
+      <ons-list-item modifier="chevron" class="item" ng-click="homeNavigator.pushPage('views/home/status/status.html')">
+        <ons-row align="center">
+          <ons-col width="60px" align="center">
+            <div>
+              <i class="ion-medkit iconHomeView" style="color:darkgreen"></i>
+            </div>
+          </ons-col>
+          <ons-col>
+            <header>
+              <span class="item-title">Status</span>
+            </header>
+            <p class="item-desc">{{status}}</p>
+            <p class="item-desc" ng-if="!noUpcomingAppointments&&!showAppointmentTab">{{titleAppointmentsHome}}: {{appointmentShown.ScheduledStartTime|formatDateAppointmentTask}}</p>
+          </ons-col>
+        </ons-row>
+      </ons-list-item>
+      <ons-list-item ng-if="showAppointmentTab" modifier="chevron" class="item" ng-click="homeNavigator.pushPage('views/personal/appointments/individual-appointment.html')">
+        <ons-row align="center">
+          <ons-col width="60px">
+            <div>
+              <i class="fa fa-calendar-o iconHomeView"></i>
+            </div>
+          </ons-col>
+          <ons-col>
+            <header>
+              <span class="item-title">Appointments</span>
+            </header>
+            <p class="item-desc">{{titleAppointmentsHome}}: {{appointmentShown.ScheduledStartTime|formatDateAppointmentTask}}</p>
+          </ons-col>
+        </ons-row>
+      </ons-list-item>
+    </ons-list>
+  </ons-page>
+</ons-navigator>

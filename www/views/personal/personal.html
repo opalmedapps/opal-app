@@ -1,0 +1,103 @@
+<ons-navigator var="personalNavigator">
+<ons-page ng-controller="personalTabController" ng-device-backbutton="personalDeviceBackButton()">
+  <ons-toolbar>
+    <div class="left">
+      <ons-back-button>Back</ons-back-button>
+    </div>
+    <div class="center">My Chart</div>
+    <div class="right"><ons-toolbar-button ng-click="personalNavigator.pushPage('views/info-page-tabs.html',{param:home})"><ons-icon icon="ion-ios-information-outline"></ons-icon></ons-toolbar-button></div>
+  </ons-toolbar>
+    <ons-list style="margin: 0px 0">
+      <ons-list-item modifier="chevron" class="item" ng-click="personalNavigator.pushPage('views/personal/appointments/appointments.html')">
+        <ons-row align="center">
+          <ons-col width="60px">
+            <div>
+              <i class="fa fa-calendar-o iconHomeView"></i>
+            </div>
+          </ons-col>
+          <ons-col>
+            <header>
+              <span class="item-title">Appointments</span>
+            </header>
+            <p class="item-desc">{{appointmentTitle}} {{appointment.ScheduledStartTime|formatDateAppointmentTask}}</p>
+          </ons-col>
+        </ons-row>
+      </ons-list-item>
+      <ons-list-item modifier="chevron" class="item" ng-click="personalNavigator.pushPage('views/personal/treatment-plan/treatment-plan.html')">
+        <ons-row align="center" style="height:40px">
+          <ons-col width="60px" align="center">
+            <div style="margin-left:5px">
+              <img src="img/draft.png" style="width:25px;height:auto">
+            </div>
+          </ons-col>
+          <ons-col>
+            <header>
+              <span class="item-title">Treatment Planning</span>
+            </header>
+            <p class="item-desc">{{nameCurrentStage}} {{outOf}}</p>
+          </ons-col>
+        </ons-row>
+      </ons-list-item>
+      <ons-list-item modifier="chevron" class="item" ng-click="personalNavigator.pushPage('views/personal/my-chart/documents.html')">
+        <ons-row align="center" style="height:40px">
+          <ons-col width="60px" align="center">
+            <div>
+              <i class="ion-ios-folder iconHomeView" style="color:DarkGoldenRod"></i>
+            </div>
+          </ons-col>
+          <ons-col>
+            <header>
+              <span class="item-title">My Documents</span>
+            </header>
+            <p class="item-desc"></p>
+          </ons-col>
+        </ons-row>
+      </ons-list-item>
+      <ons-list-item modifier="chevron" class="item" ng-click="personalNavigator.pushPage('views/personal/lab-results/lab-results.html')">
+        <ons-row align="center" style="height:40px">
+          <ons-col width="60px" align="center">
+            <div>
+              <i class="ion-erlenmeyer-flask iconHomeView" style="color:darkmagenta "></i>
+            </div>
+          </ons-col>
+          <ons-col>
+            <header>
+              <span class="item-title">Lab Results</span>
+            </header>
+            <p class="item-desc"></p>
+          </ons-col>
+        </ons-row>
+      </ons-list-item>
+      <ons-list-item modifier="chevron" class="item" ng-click="personalNavigator.pushPage('views/personal/messages/messages.html')">
+          <ons-row align="center"  style="height:40px" >
+              <ons-col width="60px" align="center">
+                  <div >
+                    <i class="ion-android-chat iconHomeView" style="color:DarkTurquoise"></i>
+                  </div>
+              </ons-col>
+              <ons-col>
+                  <header>
+                      <span class="item-title">Messages</span>
+                  </header>
+                  <p class="item-desc"></p>
+              </ons-col>
+          </ons-row>
+      </ons-list-item>
+      <ons-list-item modifier="chevron" class="item" ng-click="personalNavigator.pushPage('views/personal/questionnaires.html')">
+        <ons-row align="center" style="height:40px">
+          <ons-col width="60px" align="center">
+            <div>
+              <i class="ion-help-circled iconHomeView" style="color:DarkSlateGray"></i>
+            </div>
+          </ons-col>
+          <ons-col>
+            <header>
+              <span class="item-title">Questionnaires</span>
+            </header>
+            <p class="item-desc"></p>
+          </ons-col>
+        </ons-row>
+      </ons-list-item>
+    </ons-list>
+</ons-page>
+</ons-navigator>

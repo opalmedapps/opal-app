@@ -1,0 +1,40 @@
+  <ons-page ng-controller="SingleDocumentController">
+    <ons-toolbar >
+      <div class="left"><ons-back-button>Back</ons-back-button></div>
+      <div class="center">Document</div>
+    </ons-toolbar>
+    <div style="margin-top:5vh">
+    <ons-list>
+      <ons-list-item class="item">
+        <div style="line-height:1" align="left">
+          <header>
+              <span class="item-title">{{documentObject.Name}}</span>
+
+          </header>
+          <p class="item-desc">{{documentObject.DateAdded|formatDateAppointmentTask}}</p>
+          <p class="item-desc">{{documentObject.Description}}</p>
+        </div>
+      </ons-list-item>
+    </ons-list>
+    <ons-list class="settings-list">
+      <ons-list-item class="item" ng-click="openDocument()">
+        <div align="center">
+          <div  ng-if="documentObject.DocumentType=='pdf'">
+          <img height="200px" width="100%" style="max-width:180px" ng-src="{{documentObject.PreviewContent}}">
+          </div>
+          <div  ng-if="documentObject.DocumentType!=='pdf'">
+          <img height="200px" width="100%" style="max-width:300px" ng-src="{{documentObject.PreviewContent}}">
+          </div>
+        </div>
+      </ons-list-item>
+    </ons-list>
+
+    <ons-list class="settings-list">
+       <ons-list-item >
+         <div class="text-center">
+           <a ng-click="shareViaEmail()" style="font-size:18px"><i class="ion-share"></i> Share via email</a>
+         </div>
+        </ons-list-item>
+    </ons-list>
+  </div>
+  </ons-page>

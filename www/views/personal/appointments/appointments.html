@@ -1,0 +1,66 @@
+<ons-page ng-controller="CalendarController" >
+  <ons-toolbar>
+    <div class="left">
+      <ons-back-button ng-show="!showCalendarButton">Back</ons-back-button>
+      <ons-toolbar-button ng-show="showCalendarButton" ng-click="backToTop()"><strong><i class="ion-chevron-left" style="font-size:15px"></i></strong>  <span style="margin-top:10px">Calendar</span></ons-toolbar-button>
+    </div>
+    <div class="center">Appointments</div>
+  </ons-toolbar>
+  <div id="firstAnchor"></div>
+    <div align="center" class="calendar--appointments" style="margin-top:5px" height-element>
+     <div class="calendar-list">
+    <uib-datepicker id="scrollTo" ng-model="dt"  datepicker-mode="calendarMode" show-weeks="false" custom-class="getDayClass(date, mode)" style="width:100vw" ></uib-datepicker></div>
+    </div>
+
+<!--<ons-list>
+  <ons-list-item style="font-size:14px"><div class="text-center"><a ng-click="personalNavigator.pushPage('views/personal/appointments/appointments-list.html')" >see list of appointments &raquo;</a><div></ons-list-item>
+</ons-list>-->
+<ons-scroller id="scrollerAppointments" style="margin-top:5px">
+  <div id="topListAnchor"></div>
+<ons-list  ng-repeat="app in appointments"  ng-click="personalNavigator.pushPage('./views/personal/appointments/individual-appointment.html', {param:app,flag:'Appointments'},{ animation : 'slide' } )" >
+  <ons-list-header  ng-if="setHeaderPickedDay($index)" style="color:red">{{dt|date:'EEE MMM dd yyyy'}}</ons-list-header>
+    <ons-list-header class="person-list-header" ng-if="setHeader($index)">{{app.ScheduledStartTime|date:'EEE MMM dd yyyy'}}</ons-list-header>
+    <ons-list-item modifier="chevron">
+  <ons-row id="anchorAppointments{{$index}}">
+    <ons-col width="5px">
+    </ons-col>
+    <ons-col align="center" width="50px">
+      <div align="center" style="line-height:1" >
+        <span style="color:grey;font-size:12px">{{app.ScheduledStartTime|date:'h:mm a'}}</span>
+      </div>
+    </ons-col>
+    <ons-col width="5px" style="opacity:0.8" ng-style="{ 'background-color': getStyle($index) }"></ons-col>
+    <ons-col>
+      <div style="line-height:1;padding:2px">
+        <header>
+            <span class="item-title" >{{app.AppointmentType_EN}}</span>
+        </header>
+        <p class="item-desc">{{app.ResourceName}}</p>
+      </div>
+    </ons-col>
+  </ons-row>
+ </ons-list-item>
+ </ons-list>
+ <ons-list>
+   <ons-list-header id="lastAnchor" ng-if="pickLastHeader()" style="color:red">{{dt|date:'EEE MMM dd yyyy'}}</ons-list-header>
+ </ons-list>
+ </ons-scroller>
+</ons-page>
+<!--<ons-page ng-controller="ScheduleController">
+  <ons-toolbar>
+    <div class="left">
+      <ons-back-button>Back</ons-back-button>
+    </div>
+    <div class="center">Appointments</div>
+  </ons-toolbar>
+  <div class="container" ng-hide="noNotifications">
+<a style="text-decoration:none" href ng-click="menu.setMainPage('views/notifications.html',{closeMenu:true})">
+        <alert align="center" ng-show="showAlert&&(Notifications==1)" ng-model="alert" type="success" close="closeAlert()">You have {{Notifications}} unseen notifications. <span class="hidden-xs">Go to your Notifications page under the menu on the left.</span>
+        </alert>
+        <alert align="center" ng-show="showAlert&&(Notifications>1)" ng-model="alert" type="success" close="closeAlert()">You have {{Notifications}} unseen notification. <span class="hidden-xs">Go to your Notifications page under the menu on the left.</span>
+        </alert></a>
+ </div>
+ <ons-tabbar>
+    <ons-tab page="./views/personal/appointments/appointments-list.html" label="List" icon="ion-ios-list-outline" active="true"></ons-tab>
+    <ons-tab page="./views/personal/appointments/appointments-calendar.html" label="Calendar" icon="ion-calendar"></ons-tab>
+</ons-tabbar>-->
