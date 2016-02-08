@@ -75,7 +75,7 @@ In this section problems that might be encountered will be discussed
 [Cordova and Android!](https://cordova.apache.org/docs/en/2.5.0/guide/getting-started/android/). 
 
 ###Quirks
-The body tag on the index.html file contains the ng-app attribute to initialize the AngularJS code. It turns out that if you don't bootstrap AngularJS manually when the device is ready. The AngularJS code will run before the device is ready and crash, because is trying to use some of the plugins that are not yet available. Therefore, whenever you run the code in a browser, keep the ng-app="MUHCApp" attribute, but if you want to run in your device, delete the attribute from the body element.  
+The body tag on the index.html file contains the ng-app attribute to initialize the AngularJS code. It turns out that if you don't bootstrap AngularJS manually when the device is ready the AngularJS code will run and crash before the device is ready because is trying to use some of the plugins that are not yet made available by the device. Therefore, whenever you run the code in a browser, keep the ng-app="MUHCApp" attribute, but if you want to run it on your device, delete the attribute from the body element.  
 
 
 
