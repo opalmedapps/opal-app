@@ -29,15 +29,21 @@ Instructions are based from [Cordova get started page!](https://cordova.apache.o
  $ cordova add platform android
  $ cordova add platform browser
 ```
-7.Build your basic app via: `$ cordova build`.
+7. Build your basic app via: `$ cordova build`.
   * For an specific platform build use:
 ``` 
 $ cordova build <nameOfPlatform>
 ```
-8.Add all the app plugins using the command on the list below.
+
+8. Add all the app plugins using the command on the list below.
 9. Add the contents of the mobile folder to the www folder in your cordova project.
 10. To run your project run:
-
+```
+$cordova run <platform>
+```
+  * For webview `$cordova run browser`
+  * For IOS `$cordova run ios`(See below for problems)
+  * For Android `$cordova run android` (See below for problems)
 
 ###List of plugins to be downloaded:
 
@@ -57,15 +63,6 @@ $cordova plugin add <nameOfPlugin>
  * cordova-plugin-network-information 1.1.0 "Network Information"
  * cordova-plugin-whitelist 1.0.0 "Whitelist"
  * de.appplant.cordova.plugin.email-composer 0.8.3dev "EmailComposer"
-
-
-
-```
-$cordova run <platform>
-```
-  * For webview `$cordova run browser`
-  * For IOS `$cordova run ios`(See below for problems)
-  * For Android `$cordova run android` (See below for problems)
 
 ####Problems
 In this section problems that might be encountered will be discussed 
