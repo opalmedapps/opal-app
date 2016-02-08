@@ -35,8 +35,8 @@ Instructions are based from [Cordova get started page!](https://cordova.apache.o
 $ cordova build <nameOfPlatform>
 ```
 
-8. Add all the app plugins using the command on the list below.
-9. Add the contents of the mobile folder to the www folder in your cordova project.
+8. Add all the app plugins from the list below under plugins to be downloaded.
+9. Add the contents of the www folder to the www folder in your cordova project.
 10. To run your project run:
   ```
 $cordova run <platform>
@@ -70,9 +70,12 @@ In this section problems that might be encountered will be discussed
 * If you are not running from an Apple computer a build and run for ios is not possible as it requires XCode to compile
 
 #####Android
-* You have to have install the AndroidSDK with the most updated version, follow instructions given by [Android developer!](http://developer.android.com/sdk/installing/index.html)
-* Once the SDK is install you have to tell cordova where to find the SDK, via the bash_profile folder, for instructions on this:
+* You have to have installed the AndroidSDK with the most updated version, follow instructions given by [Android developer!](http://developer.android.com/sdk/installing/index.html)
+* Once the SDK is installed you have to tell cordova where to find the SDK, via the bash_profile folder, for instructions on this:
 [Cordova and Android!](https://cordova.apache.org/docs/en/2.5.0/guide/getting-started/android/). 
+
+###Quirks
+The body tag on the index.html file contains the ng-app attribute to initialize the AngularJS code. It turns out that if you don't bootstrap AngularJS manually when the device is ready. The AngularJS code will run before the device is ready and crash, because is trying to use some of the plugins that are not yet available. Therefore, whenever you run the code in a browser, keep the ng-app="MUHCApp" attribute, but if you want to run in your device, delete the attribute from the body element.  
 
 
 
