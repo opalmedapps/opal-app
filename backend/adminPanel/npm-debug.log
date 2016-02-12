@@ -1,0 +1,65 @@
+0 info it worked if it ends with ok
+1 verbose cli [ '/usr/bin/node', '/usr/bin/npm', 'install', 'bower' ]
+2 info using npm@2.11.3
+3 info using node@v0.12.7
+4 verbose install initial load of /var/www/package.json
+5 verbose installManyTop reading scoped package data from /var/www/node_modules/faye-websocket/package.json
+6 verbose installManyTop reading scoped package data from /var/www/node_modules/firebase/package.json
+7 verbose installManyTop reading scoped package data from /var/www/node_modules/mailgun/package.json
+8 verbose installManyTop reading scoped package data from /var/www/node_modules/mssql/package.json
+9 verbose installManyTop reading scoped package data from /var/www/node_modules/ng-audio_min/package.json
+10 verbose installManyTop reading scoped package data from /var/www/node_modules/ngAudio-1.6.2/package.json
+11 verbose installManyTop reading scoped package data from /var/www/node_modules/ngAudio-1.6.2.tar.gz/package.json
+12 verbose installManyTop reading scoped package data from /var/www/node_modules/node-mysql/package.json
+13 verbose installManyTop reading scoped package data from /var/www/node_modules/smtp-connection/package.json
+14 info package.json firebase@2.2.7 No license field.
+15 info package.json ng-audio@0.0.2 No license field.
+16 info package.json node-mysql@0.4.2 No license field.
+17 info package.json faye-websocket@0.10.0 bugs['name'] should probably be bugs['url'].
+18 info package.json mailgun@0.5.0 No license field.
+19 info package.json mssql@2.1.3 No license field.
+20 info package.json angular-audio@0.0.0 No repository field.
+21 info package.json angular-audio@0.0.0 No license field.
+22 verbose readDependencies loading dependencies from /var/www/package.json
+23 silly cache add args [ 'bower', null ]
+24 verbose cache add spec bower
+25 silly cache add parsed spec { raw: 'bower',
+25 silly cache add   scope: null,
+25 silly cache add   name: 'bower',
+25 silly cache add   rawSpec: '',
+25 silly cache add   spec: '*',
+25 silly cache add   type: 'range' }
+26 silly addNamed bower@*
+27 verbose addNamed "*" is a valid semver range for bower
+28 silly addNameRange { name: 'bower', range: '*', hasData: false }
+29 silly mapToRegistry name bower
+30 silly mapToRegistry using default registry
+31 silly mapToRegistry registry https://registry.npmjs.org/
+32 silly mapToRegistry uri https://registry.npmjs.org/bower
+33 verbose addNameRange registry:https://registry.npmjs.org/bower not in flight; fetching
+34 verbose request uri https://registry.npmjs.org/bower
+35 verbose request no auth needed
+36 info attempt registry request try #1 at 11:29:35 AM
+37 verbose request id 84eaef2d66dea931
+38 http request GET https://registry.npmjs.org/bower
+39 info retry will retry, error on last attempt: Error: unable to verify the first certificate
+40 info attempt registry request try #2 at 11:29:45 AM
+41 http request GET https://registry.npmjs.org/bower
+42 info retry will retry, error on last attempt: Error: unable to verify the first certificate
+43 info attempt registry request try #3 at 11:30:45 AM
+44 http request GET https://registry.npmjs.org/bower
+45 verbose stack Error: unable to verify the first certificate
+45 verbose stack     at Error (native)
+45 verbose stack     at TLSSocket.<anonymous> (_tls_wrap.js:929:36)
+45 verbose stack     at TLSSocket.emit (events.js:104:17)
+45 verbose stack     at TLSSocket._finishInit (_tls_wrap.js:460:8)
+46 verbose cwd /var/www/devDocuments/david/muhc/qplus/adminPanel
+47 error Linux 3.2.0-43-generic
+48 error argv "/usr/bin/node" "/usr/bin/npm" "install" "bower"
+49 error node v0.12.7
+50 error npm  v2.11.3
+51 error code UNABLE_TO_VERIFY_LEAF_SIGNATURE
+52 error unable to verify the first certificate
+53 error If you need help, you may report this error at:
+53 error     <https://github.com/npm/npm/issues>
+54 verbose exit [ 1, true ]
