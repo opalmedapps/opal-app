@@ -6,10 +6,10 @@ Opal - the MUHC Oncology Patient Application for mobile phones and the web - is 
 
 ###Quick app deployment, Simple App displayed in browser
 ####Steps:
-1. Download the mobile app code from the mobile folder in the repository.
+1. Download the www app code from the www folder in the repository.
 2. Download NodeJS following the instructions in this manual [Install Node!](https://nodejs.org/en/download/).
 3. Install the node package http-server to create a localhost for the app, via ` npm install http-server -g`
-4. Go to the folder where the mobile app code was donwloaded and simply type the command `http-server`;
+4. Go to the folder where the www app code was donwloaded and simply type the command `http-server`;
 5. Go to localhost:8080 in your browser and the app should display.
 
 ###Cordova Projects
