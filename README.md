@@ -45,7 +45,7 @@ $cordova run <platform>
   * For Android `$cordova run android` (See below for problems)
 
 ###List of plugins to be downloaded:
- * #### NOTE: Try downloading the latest version of these plugins, keep in mind that some of them are updated and the README.md file may not be up to date, in other words, install the latest version of these plugins, if you have a problem with them, report the problem.
+#### NOTE: Try downloading the latest version of these plugins, keep in mind that some of them are updated and the README.md file may not be up to date, in other words, install the latest version of these plugins, if you have a problem with them, report the problem.
 ####Command:
 ```
 $cordova plugin add <nameOfPlugin>
