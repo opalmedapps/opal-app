@@ -45,24 +45,23 @@ $cordova run <platform>
   * For Android `$cordova run android` (See below for problems)
 
 ###List of plugins to be downloaded:
-
+ * #### NOTE: Try downloading the latest version of these plugins, keep in mind that some of them are updated and the README.md file may not be up to date, in other words, install the latest version of these plugins, if you have a problem with them, report the problem.
 ####Command:
 ```
 $cordova plugin add <nameOfPlugin>
 ```
 ####Plugin:
- * cordova-plugin-battery-status 1.1.1 "Battery"
- * cordova-plugin-calendar 4.4.4 "Calendar"
- * cordova-plugin-device 1.1.0 "Device"
+ * cordova-plugin-calendar 4.4.7 "Calendar"
+ * cordova-plugin-device 1.1.1 "Device"
  * cordova-plugin-dialogs 1.2.0 "Notification"
- * cordova-plugin-file 3.0.0 "File"
- * cordova-plugin-file-transfer 1.4.0 "File Transfer"
- * cordova-plugin-geolocation 2.0.0 "Geolocation"
- * cordova-plugin-inappbrowser 1.1.0 "InAppBrowser"
- * cordova-plugin-network-information 1.1.0 "Network Information"
- * cordova-plugin-whitelist 1.0.0 "Whitelist"
- * de.appplant.cordova.plugin.email-composer 0.8.3dev "EmailComposer"
-
+ * cordova-plugin-email 1.1.0 "EmailComposer"
+ * cordova-plugin-file 4.1.0 "File"
+ * cordova-plugin-file-opener2 2.0.2 "File Opener2"
+ * cordova-plugin-file-transfer 1.5.0 "File Transfer"
+ * cordova-plugin-geolocation 2.1.0 "Geolocation"
+ * cordova-plugin-inappbrowser 1.2.0 "InAppBrowser"
+ * cordova-plugin-network-information 1.2.0 "Network Information"
+ * cordova-plugin-whitelist 1.2.1 "Whitelist"
 ####Problems
 In this section problems that might be encountered will be discussed 
 #####IOS
