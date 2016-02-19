@@ -45,7 +45,7 @@ $cordova run <platform>
   * For Android `$cordova run android` (See below for problems)
 
 ###List of plugins to be downloaded:
-#### NOTE: Try downloading the latest version of these plugins, keep in mind that some of them are updated and the README.md file may not be up to date, in other words, install the latest version of these plugins, if you have a problem with them, report the problem.
+#### NOTE: Try downloading the latest version of these plugins, keep in mind that some of them have been updated since, as a consequence the README.md file may not be up to date, in other words, install the latest version of these plugins, if you have a problem with them, install the version stated on this file if you still have a problem, report the problem.
 ####Command:
 ```
 $cordova plugin add <nameOfPlugin>
@@ -62,8 +62,10 @@ $cordova plugin add <nameOfPlugin>
  * cordova-plugin-inappbrowser 1.2.0 "InAppBrowser"
  * cordova-plugin-network-information 1.2.0 "Network Information"
  * cordova-plugin-whitelist 1.2.1 "Whitelist"
+
+
 ####Problems
-In this section problems that might be encountered will be discussed 
+
 #####IOS
 * If you are not running from an Apple computer a build and run for ios is not possible as it requires XCode to compile
 
