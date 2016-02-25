@@ -63,7 +63,9 @@ $cordova plugin add <nameOfPlugin>
  * cordova-plugin-network-information 1.2.0 "Network Information"
  * cordova-plugin-whitelist 1.2.1 "Whitelist"
 
-
+####Credentials
+ * email:muhc.app.mobile@gmail.com
+ * password:12345
 ####Problems
 
 #####IOS
