@@ -3,6 +3,37 @@ myApp.service('EncryptionService',function(UserAuthorizationInfo){
 	function decryptObject(object)
 	    {
 				var secret=UserAuthorizationInfo.getPassword();
+
+				if(typeof object =='string')
+				{
+					var decipherbytes = CryptoJS.AES.decrypt(object, secret);
+					object=decipherbytes.toString(CryptoJS.enc.Utf8);
+				}else{
+					for (var key in object)
+					{
+						if (typeof object[key]=='object')
+						{
+							decryptObject(object[key],secret);
+						} else
+						{
+							if (key=='UserID')
+							{
+								object[key]=object[key];
+							}else if(key=='DeviceId')
+							{
+								object[key]=object[key];
+							}
+							else
+							{
+								var decipherbytes = CryptoJS.AES.decrypt(object[key], secret);
+								object[key]=decipherbytes.toString(CryptoJS.enc.Utf8);
+							}
+						}
+					}
+				}
+				return object;
+				/*
+				var secret=UserAuthorizationInfo.getPassword();
 		       	for (var key in object)
 		       	{
 			        if (typeof object[key]=='object')
@@ -24,7 +55,7 @@ myApp.service('EncryptionService',function(UserAuthorizationInfo){
 			        }
 		       	}
 
-		 	 return object;
+		 	 return object;*/
 	    };
     function encryptObject(object)
 	{

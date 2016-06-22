@@ -1,9 +1,17 @@
 var myApp=angular.module('MUHCApp');
-myApp.controller('ForgotPasswordController', ['$scope', '$state','$timeout', function ($scope, $state,$timeout) {
+myApp.controller('ForgotPasswordController', ['$scope', 'FirebaseService','$state','$timeout', function ($scope,FirebaseService, $state,$timeout) {
     $scope.email="";
     $scope.alert={};
+    $scope.$watch('email',function()
+    {
+      if($scope.alert.hasOwnProperty('type'))
+      {
+        delete $scope.alert.type;
+        delete $scope.alert.content;
+      }
+    });
     $scope.submitPasswordReset = function (email) {
-        var ref = new Firebase("https://brilliant-inferno-7679.firebaseio.com/");
+        var ref = new Firebase(FirebaseService.getFirebaseUrl());
         console.log(email);
         try{
           ref.resetPassword({
@@ -15,7 +23,7 @@ myApp.controller('ForgotPasswordController', ['$scope', '$state','$timeout', fun
                   console.log("The specified user account does not exist.");
                   $timeout(function(){
                     $scope.alert.type="danger";
-                    $scope.alert.content="The specified user account does not exist.";
+                    $scope.alert.content="INVALID_USER";
                   });
 
                   break;
@@ -23,14 +31,14 @@ myApp.controller('ForgotPasswordController', ['$scope', '$state','$timeout', fun
                   console.log(error);
                   $timeout(function(){
                     $scope.alert.type="danger";
-                    $scope.alert.content="Enter a valid email address";
+                    $scope.alert.content="INVALID_EMAIL";
                   });
               }
             } else {
               console.log("Password reset email sent successfully!");
               $timeout(function(){
                 $scope.alert.type="success";
-                $scope.alert.content="Password has been reset sucessfully, check your email for your temporary password!";
+                $scope.alert.content="EMAILPASSWORDSENT";
               });
             }
           });
@@ -38,7 +46,7 @@ myApp.controller('ForgotPasswordController', ['$scope', '$state','$timeout', fun
           console.log(err);
           $timeout(function(){
             $scope.alert.type="danger";
-            $scope.alert.content="Enter a valid email address";
+            $scope.alert.content="INVALID_EMAIL";
           });
         }
 

@@ -4,138 +4,125 @@ var myApp=angular.module('MUHCApp');
 *
 *
 **/
-myApp.service('RequestToServer',function(UserAuthorizationInfo, EncryptionService, $http,$q,$cordovaNetwork){
-    function getIdentifierWeb()
-    {
-      var r=$q.defer();
-      /*$http({
-        method:'GET',
-        url:'https://depdocs.com/opal/getPublicIpAddress.php'}).then(function(data){
-          data=data.data;
-          data=data.substring(2, data.length-2);
-          var uniqueIdentifier=JSON.parse(data);
-          var uuid=String(uniqueIdentifier.query);
-          uuid=uuid.replace(/\./g, "-");
-          console.log(uuid);
-          r.resolve(uuid);
-        });*/
-    $http({
-        method: 'GET',
-        url: 'http://ip-api.com/json/?callback=?'
-        }).then(function(data){
-          data=data.data;
-          data=data.substring(2, data.length-2);
-          var uniqueIdentifier=JSON.parse(data);
-          var uuid=String(uniqueIdentifier.query);
-          uuid=uuid.replace(/\./g, "-");
-          console.log(uuid);
-          //Change this line when your backend is running, demo stays always in firebase, do not modify demo!!!
-          //Change this line when your backend is running!
-          r.resolve('demo');
-          //r.resolve(uuid);
-        });
-      return r.promise;
-    }
+myApp.service('RequestToServer',function(UserAuthorizationInfo, EncryptionService, FirebaseService, $http,$q,$cordovaNetwork){
     var identifier='';
+    var Ref=new Firebase(FirebaseService.getFirebaseUrl()+'requests');
+     var app = document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'https://' ) === -1;
+      if(app){
+          identifier=device.uuid;
+      }else{
+          identifier='browser';
+      }
+    function updateTimestamps(typeOfRequest,content)
+    {
+      var time=(new Date()).getTime();
+      var timestamp = null;
+      if(typeOfRequest=='Login'||typeOfRequest=='Resume')
+      {
+          initTimestamps(time);
+      }else if(typeOfRequest=='Refresh')
+      {
+        if(!lastUpdateTimestamp.hasOwnProperty('All')) initTimestampsFromLocalStorage();
+        timestamp=obtainTimestamp(content);
+        console.log(lastUpdateTimestamp);
+      }
+      return timestamp;
+    }
+    var lastUpdateTimestamp={};
+    function sendRequest(typeOfRequest,content)
+    {
+          //Credentials for request
+          var userID=UserAuthorizationInfo.UserName;
+          var token=UserAuthorizationInfo.Token;
+          var encryptedRequestType=EncryptionService.encryptData(typeOfRequest);
+          var timestamp = updateTimestamps(typeOfRequest,content);
+          content= EncryptionService.encryptData(content);
+          //Push the request to firebase
+          var pushID =  Ref.push({ 'Request' : encryptedRequestType,'DeviceId':identifier,'Token':token,  'UserID': userID, 'Parameters':content,'Timestamp':timestamp});
+          return pushID.key();
+    }
+    function initTimestampsFromLocalStorage()
+    {
+      lastUpdateTimestamp=JSON.parse(window.localStorage.getItem(UserAuthorizationInfo.UserName+'/Timestamps'));
+    }
+    function initTimestamps(time)
+    {
+
+      lastUpdateTimestamp={
+        'All':time,
+        'Appointments':time,
+        'Messages':time,
+        'Documents':time,
+        'Tasks':time,
+        'Doctors':time,
+        'LabTests':time,
+        'Patient':time,
+        'Notifications':time,
+        'EducationalMaterial':time
+      };
+      window.localStorage.setItem(UserAuthorizationInfo.UserName+'/Timestamps',JSON.stringify(lastUpdateTimestamp));
+    }
+    function obtainTimestamp(content)
+    {
+      if(typeof content=='undefined')
+      {
+        return lastUpdateTimestamp.All;
+      }else if(angular.isArray(content))
+      {
+        var min=Infinity;
+        for (var i = 0; i < content.length; i++) {
+          if(min>lastUpdateTimestamp[content[i]])
+          {
+            min=lastUpdateTimestamp[content[i]];
+          }
+        }
+        return min;
+      }else{
+        return lastUpdateTimestamp[content];
+      }
+    }
     return{
-        sendRequest:function(typeOfRequest,content){
-          var app = document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'https://' ) === -1;
-          if(app){
-              if($cordovaNetwork.isOnline()){
-
-                var Ref=new Firebase('https://brilliant-inferno-7679.firebaseio.com/requests');
-                var userID=UserAuthorizationInfo.UserName;
-                console.log(identifier);
-                var encryptedRequestType=EncryptionService.encryptData(typeOfRequest);
-                content= EncryptionService.encryptData(content);
-
-                console.log(content);
-
-                if(typeOfRequest=='Login'||typeOfRequest=='Logout')
-                {
-                  Ref.push({ 'Request' : encryptedRequestType,'DeviceId':identifier,  'UserID': userID })
-                }else if(typeOfRequest=='Refresh')
-                {
-                  Ref.push({ 'Request' : encryptedRequestType,'DeviceId':identifier,  'UserID': userID, 'Parameters':content })
-                }
-                else if (typeOfRequest=="NewNote"||typeOfRequest=="EditNote"||typeOfRequest=="DeleteNote"||typeOfRequest=="AccountChange"||typeOfRequest=="AppointmentChange"||typeOfRequest=="Message"||typeOfRequest=="Feedback")
-                {
-                  Ref.push({'Request': encryptedRequestType,'DeviceId':identifier, 'UserID':userID, 'Parameters':content});
-                }
-                else if (typeOfRequest=='Checkin')
-                {
-                  Ref.push({ 'Request' : encryptedRequestType, 'DeviceId':identifier,'UserID':userID, 'Parameters':{'AppointmentSerNum' : content}});
-                }
-                else if (typeOfRequest=='MessageRead')
-                {
-                  Ref.push({ 'Request' : encryptedRequestType, 'DeviceId':identifier,'UserID':userID, 'Parameters':{'MessageSerNum' : content }});
-                }
-                else if (typeOfRequest=='NotificationRead')
-                {
-                  Ref.push({ 'Request' : encryptedRequestType, 'DeviceId':identifier,'UserID':userID, 'Parameters':{'NotificationSerNum' : content }});
-                }else if (typeOfRequest=='TestResult')
-                {
-                  testResultRef.push({ 'Request': typeOfRequest, 'DeviceId':identifier, 'UserID': userId, 'Content': content});
-
-                }
-              }else{
-                //  navigator.notification.alert('No changes will be reflected at the hospital. Connect to the internet to perform this action, ',function(){},'Internet Connectivity','Ok');
-              }
-          }else{
-            var Ref=new Firebase('https://brilliant-inferno-7679.firebaseio.com/requests');
-            var userID=UserAuthorizationInfo.UserName;
-            console.log(identifier);
-            var encryptedRequestType=EncryptionService.encryptData(typeOfRequest);
-            content= EncryptionService.encryptData(content);
-            if(typeOfRequest=='Login'||typeOfRequest=='Logout')
-            {
-              Ref.push({ 'Request' : encryptedRequestType,'DeviceId':identifier,  'UserID': userID })
-            }else if(typeOfRequest=='Refresh')
-            {
-              Ref.push({ 'Request' : encryptedRequestType,'DeviceId':identifier,  'UserID': userID, 'Parameters':content })
-            }
-            else if (typeOfRequest=="NewNote"||typeOfRequest=="EditNote"||typeOfRequest=="DeleteNote"||typeOfRequest=="AccountChange"||typeOfRequest=="AppointmentChange"||typeOfRequest=="Message"||typeOfRequest=="Feedback")
-            {
-              Ref.push({'Request': encryptedRequestType,'DeviceId':identifier, 'UserID':userID, 'Parameters':content});
-            }
-            else if (typeOfRequest=='Checkin')
-            {
-              Ref.push({ 'Request' : encryptedRequestType, 'DeviceId':identifier,'UserID':userID, 'Parameters':{'AppointmentSerNum' : content}});
-            }
-            else if (typeOfRequest=='MessageRead')
-            {
-              Ref.push({ 'Request' : encryptedRequestType, 'DeviceId':identifier,'UserID':userID, 'Parameters':{'MessageSerNum' : content }});
-            }
-            else if (typeOfRequest=='NotificationRead')
-            {
-              Ref.push({ 'Request' : encryptedRequestType, 'DeviceId':identifier,'UserID':userID, 'Parameters':{'NotificationSerNum' : content }});
-            }else if (typeOfRequest=='TestResult')
-            {
-              testResultRef.push({ 'Request': typeOfRequest, 'DeviceId':identifier, 'UserID': userId, 'Content': content});
-            }
-
-
-          }
-
-
-        },
-        setIdentifier:function()
+        sendRequestWithResponse:function(typeOfRequest, content,callback)
         {
-          var r=$q.defer();
-          var app = document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'https://' ) === -1;
-          if(app){
-            identifier=device.uuid;
-            r.resolve(device.uuid);
+          //Sends request and gets random key for request
+          var key = sendRequest(typeOfRequest,content);
+          //Sets the reference to fetch data for that request
+          var refPathRequest = Ref.child(UserAuthorizationInfo.UserName+'/'+key);
+          //Waits to obtain the request data.
+          refPathRequest.on('value',function(snapshot){
+            if(snapshot.exists())
+            {
+              console.log(snapshot.val());
+              //If data exists, obtain data, delete firebase fields and clean off the link
+              refPathRequest.set(null);
+              refPathRequest.off();
+              callback(snapshot.val());
+            }
+          });
+          //If request takes longer than 20000 to come back with timedout request, delete reference 
+          setTimeout(function()
+          {
+            refPathRequest.off();
+            callback({response:'timedout'});
+          },20000);
+        },
+        sendRequest:function(typeOfRequest,content){
+          sendRequest(typeOfRequest,content);
+        },
+        updateTimestamps:function(content,time)
+        {
+          if(content=='All')
+          {
+            initTimestamps(time);
+          }else if(angular.isArray(content))
+          {
+            for (var i = 0; i < content.length; i++) {
+              lastUpdateTimestamp[content[i]]=time;
+            }
           }else{
-            getIdentifierWeb().then(function(uuid){
-              console.log(uuid);
-              identifier=uuid;
-              //Change this line when your backend is running, demo stays always in firebase, do not modify demo!!!
-              //r.resolve(uuid);
-              r.resolve('demo');
-            });
+            lastUpdateTimestamp[content]=time;
           }
-          return r.promise;
+          window.localStorage.setItem(UserAuthorizationInfo.UserName+'/Timestamps',JSON.stringify(lastUpdateTimestamp));
         },
         getIdentifier:function()
         {

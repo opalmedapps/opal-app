@@ -33,10 +33,19 @@ myApp.service('UserAuthorizationInfo', function () {
         *@methodOf MUHCApp.services:UserAuthorizationInfo
         *@description Sets all the user authorization.Called by the {@link MUHCApp.controller:LoginController LoginController} right after user enters credentials.
         */
-        setUserAuthData: function (username, password, expires) {
+        setLastUpdateTime:function(timestamp)
+        {
+          this.lastUpdateTime=timestamp;
+        },
+        getLastUpdateTime:function(timestamp)
+        {
+          this.lastUpdateTime=timestamp;
+        },
+        setUserAuthData: function (username, password, expires,token) {
             this.UserName = username;
             this.Expires = expires;
             this.Password=password;
+            this.Token=token;
         },
         setPassword:function(password){
             password=CryptoJS.SHA256(password).toString();
@@ -59,7 +68,8 @@ myApp.service('UserAuthorizationInfo', function () {
             return {
                 UserName: this.UserName,
                 Expires: this.Expires,
-                Password:this.Password
+                Password:this.Password,
+                Token:this.Token
             };
         },
         getHashPassword:function()
@@ -74,6 +84,16 @@ myApp.service('UserAuthorizationInfo', function () {
         */
         getUserName:function(){
             return this.UserName;
+        },
+        getDeviceIdentifier:function()
+        {
+            var app = document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'https://' ) === -1;
+            if(app){
+                this.identifier=device.uuid;
+            }else{
+                this.identifier='browser';
+            }
+            return this.identifier;
         },
         /**
         *@ngdoc method
@@ -92,6 +112,10 @@ myApp.service('UserAuthorizationInfo', function () {
         */
         getExpires:function(){
             return this.Expires;
+        },
+        getToken:function()
+        {
+          return this.Token;
         }
 
 

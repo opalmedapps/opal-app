@@ -1,5 +1,5 @@
 var myApp=angular.module('MUHCApp');
-myApp.controller('TreatmentPlanController',['$rootScope','$scope','$timeout', 'UserPlanWorkflow',function($rootScope,$scope,$timeout, UserPlanWorkflow){
+myApp.controller('TreatmentPlanController',['$rootScope','$scope','$timeout', 'UserPlanWorkflow','$anchorScroll','$location',function($rootScope,$scope,$timeout, UserPlanWorkflow,$anchorScroll,$location){
   initTreatmentPlanStatus();
   initTreatmentList();
   $scope.indexPage=0;
@@ -23,8 +23,8 @@ $scope.pickPagePagination=function(index)
   }
 }
   $scope.load = function($done) {
+    RequestToServer.sendRequest('Refresh','All');
     $timeout(function() {
-      RequestToServer.sendRequest('Refresh','All');
       loadInfo();
           $done();
     }, 3000);
@@ -44,7 +44,11 @@ $scope.pickPagePagination=function(index)
       $scope.stages=UserPlanWorkflow.getPlanWorkflow();
 
     }
-
+    var divTreatment=document.getElementById('divTreatmentPlan');
+    console.log(divTreatment);
+    var heightTreatment=document.documentElement.clientHeight-335;
+    divTreatment.style.height=heightTreatment+'px';
+    console.log(divTreatment.style.height);
 
     /*$scope.$watch('treatment.choice',function(){
         if($scope.treatment.choice=='Past'){
@@ -82,7 +86,7 @@ $scope.pickPagePagination=function(index)
               $scope.noTreatmentPlan=true;
       }else{
           if(nextStageIndex==stages.length){
-              $scope.outOf=nextStageIndex +' out of '+ stages.length;
+              $scope.outOf=nextStageIndex +' of '+ stages.length;
               $scope.treatmentPlanCompleted=true;
               $scope.percentage=100;
               $scope.completionDate=stages[nextStageIndex-1].Date;
@@ -94,7 +98,7 @@ $scope.pickPagePagination=function(index)
               console.log($scope.percentage);
               console.log(stages.lenght);
               console.log(nextStageIndex);
-              $scope.outOf=nextStageIndex +' out of '+ stages.length;
+              $scope.outOf=nextStageIndex +' of '+ stages.length;
               var lastStageFinishedPercentage=Math.floor((100*(nextStageIndex-1))/stages.length);
               var circle2 = new ProgressBar.Circle('#progressStatusPastStages', {
                   color: startColor,
@@ -124,6 +128,32 @@ $scope.pickPagePagination=function(index)
               to: {color: endColor}
           });
       }
+      console.log('initiating');
+      var anchor="treatmentPlanStage"+nextStageIndex;
+      setTimeout(function(){
+        $location.hash(anchor);
+        $anchorScroll();
+      },400)
     }
 
 }]);
+myApp.controller('IndividualStageController',['$scope','$timeout','UserPlanWorkflow',function($scope,$timeout,UserPlanWorkflow){
+  if(typeof personalNavigator!=='undefined'&&typeof personalNavigator.getCurrentPage()!=='undefined')
+  {
+    var page = personalNavigator.getCurrentPage();
+    if(page.options.flag=='TreatmentPlan')
+    {
+      delete page.options.flag;
+      var stage = page.options.param;
+      console.log(stage);
+      $scope.stage=stage;
+      $scope.showTab=false;
+    }else{
+      $scope.stage=UserPlanWorkflow.getNextStage();
+      $scope.showTab=true;
+    }
+  }else{
+    $scope.stage=UserPlanWorkflow.getNextStage();
+    $scope.showTab=true;
+  }
+  }]);

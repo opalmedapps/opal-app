@@ -14,7 +14,34 @@ var myApp=angular.module('MUHCApp.filters',[]);
 
 
 	});
-
+	
+	myApp.filter('removeTitleEducationalMaterial',function()
+	{
+		return function(string)
+		{
+			var length = string.indexOf("titleMaterialId");
+			if(length>-1)
+			{
+				var preceding = string.substring(0,length+1);
+				//Index for first instance of < for heading tag
+				var lastIndex = preceding.lastIndexOf('<');
+				var preceding = preceding.substring(0,preceding.lastIndexOf('<'));
+				//index of next closing tag
+				var proceeding = string.substring(string.indexOf('>',length+1)+2);
+				proceeding = proceeding.substring(proceeding.indexOf('>')+1);
+				return preceding.concat(proceeding);
+			}else{
+				return string;
+			}
+			
+		};
+	});
+	myApp.filter('trustThisUrl',['$sce',function($sce){
+		return function(url)
+		{
+			return $sce.trustAsResourceUrl(url);
+		}
+	}]);
 	myApp.filter('formatDateAppointmentTask',function($filter){
 		return function(dateApp)
 		{
@@ -63,6 +90,14 @@ var myApp=angular.module('MUHCApp.filters',[]);
         }
       }
 	});
+	myApp.filter('ellipsis', function () {
+	    return function (text, length) {
+	        if (text.length > length) {
+	            return text.substr(0, length) + "...";
+	        }
+	        return text;
+	    }
+	});
 myApp.filter('dateEmail',function($filter){
   return function(date){
 		if(Object.prototype.toString.call(date) === '[object Date]')
@@ -75,7 +110,7 @@ myApp.filter('dateEmail',function($filter){
 			{
 				if(day==newDate.getDate())
 				{
-					return $filter('date')(date, 'h:mma');
+					return 'Today, ' +$filter('date')(date, 'h:mm a');
 				}else if(day-newDate.getDate()==1){
 					return 'Yesterday';
 				}else{
@@ -98,7 +133,7 @@ myApp.filter('dateEmail',function($filter){
 myApp.filter('limitLetters',function($filter){
 	return function(string,num)
 	{
-		if(typeof string!=='undefined'&&string.length>num)
+		if(string&&typeof string!=='undefined'&&string.length>num)
 		{
 			string=$filter('limitTo')(string,num);
 			string=string+'...';
@@ -166,4 +201,24 @@ return function(items,option)
 	return ret;
 	}
 };
+});
+
+myApp.filter('FormatPhoneNumber',function(){
+	return function(phone)
+	{
+		console.log(typeof(phone));
+		if(typeof phone =='string'&&phone.length==10)
+		{
+			console.log('Inside string equal ten');
+			var firstDigits=phone.substring(0,3);
+			var secondDigits=phone.substring(3,6);
+			var thirdDigits=phone.substring(6,phone.length);
+			console.log("("+firstDigits+")"+" "+secondDigits+"-"+thirdDigits);
+			return "("+firstDigits+")"+" "+secondDigits+"-"+thirdDigits;
+		}else{
+			console.log(phone)
+			return phone;
+		}
+	};
+
 });

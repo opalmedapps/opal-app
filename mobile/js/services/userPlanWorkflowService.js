@@ -58,6 +58,10 @@ myApp.service('UserPlanWorkflow',['$filter',function($filter){
     var futureStages=[];
     var pastStages=[];
     var treatmentPlansArray=[];
+    this.TasksAndAppointmentsArray=[];
+    this.FutureStages=[];
+    this.PastStages=[];
+    this.CurrentTaskOrAppointmentIndex=-1;
 
     function fillStagesLeft(tracker, planSoFar)
     {
@@ -69,12 +73,40 @@ myApp.service('UserPlanWorkflow',['$filter',function($filter){
         planSoFar[i]=objectStage;
       }
     }
+    function stageDate(array)
+    {
+      
+    }
+    function cleanDuplicates(array)
+    {
+      
+    }
+    function setCorrectOrder(array)
+    {
+      
+    }
+    function determineLastCompletedTask(array)
+    {
+      
+    }
 
 
 
 
 
     return{
+        setTreatmentPlanNew:function(tasks,appointments)
+        {
+          var steps = [];
+          //Get interested appointments, tasks, appointments.
+          steps = tasks.concat(appointments);
+          //Clean duplicates
+          
+          //Set correct order
+          
+          //Determine the last completed task.
+          
+        },
         /**
         *@ngdoc method
         *@name setUserPlanWorkflow
@@ -310,14 +342,19 @@ myApp.service('UserPlanWorkflow',['$filter',function($filter){
         if(this.TasksAndAppointmentsArray){
             return this.TasksAndAppointmentsArray[this.CurrentTaskOrAppointmentIndex];
         }else{
-            return {Name:"boom", Date:new Date()};
+            return -1;
         }
         },
         getNextStageIndex:function(){
             return this.CurrentTaskOrAppointmentIndex;
         },
         getNextStage:function(){
-            return this.TasksAndAppointmentsArray[this.CurrentTaskOrAppointmentIndex];
+          if(this.FutureStages.length==0)
+          {
+            return -1;
+          }else{
+            return this.FutureStages[0];
+          }
         },
         getFutureStages:function(){
             return this.FutureStages;
@@ -333,10 +370,15 @@ myApp.service('UserPlanWorkflow',['$filter',function($filter){
         {
           if(this.TasksAndAppointmentsArray.length==0)
           {
-            return false;
-          }else{
             return true;
+          }else{
+            return false;
           }
+        },
+        getCompletionDate:function()
+        {
+          //Fix when estimated time is actually gathered
+          return this.TasksAndAppointmentsArray[0].Date;
         },
         isCompleted:function()
         {
