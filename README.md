@@ -10,7 +10,7 @@ Opal - the MUHC Oncology Patient Application for mobile phones and the web - is 
 2. Download NodeJS following the instructions in this manual [Install Node!](https://nodejs.org/en/download/).
 3. Install the node package http-server to create a localhost for the app, via ` npm install http-server -g`
 4. Go to the folder where the mobile app code was donwloaded and simply type the command `http-server`;
-5. Go to localhost:8080 in your browser and the app should display.
+5. Navigate to localhost:8080 in your browser, a webview version of the app should be shown.
 
 ###Cordova Projects
 Apache Cordova enables software programmers to build applications for mobile devices using JavaScript, HTML5, and CSS3, instead of relying on platform-specific APIs like those in Android, iOS, or Windows Phone. It enables wrapping up of CSS, HTML, and JavaScript code depending upon the platform of the device. It extends the features of HTML and JavaScript to work with the device. The resulting applications are hybrid.
