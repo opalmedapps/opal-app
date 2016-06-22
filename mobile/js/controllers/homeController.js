@@ -2,120 +2,242 @@
 //  Created by David Herrera on 2015-05-04.
 //  Copyright (c) 2015 David Herrera. All rights reserved.
 //
-/**
-*@ngdoc controller
-*@name MUHCApp.controller:HomeController
-*@scope
-*@requires $scope
-*@requires $timeout
-*@requires $filter
-*@requires $cordovaNetwork
-*@requires MUHCApp.services.Patient
-*@requires MUHCApp.services.UpdateUI
-*@requires MUHCApp.services.UserPlanWorkflow
-*@element textarea
-*@description
-*Manages the logic of the home screen after log in, instatiates
-*/
 var myApp = angular.module('MUHCApp');
-myApp.controller('HomeController', ['$state','Appointments', 'CheckinService','$scope','Patient','UpdateUI', '$timeout','$filter','$cordovaNetwork','UserPlanWorkflow','$rootScope', 'tmhDynamicLocale','$translate', '$translatePartialLoader','RequestToServer', function ($state,Appointments,CheckinService, $scope, Patient,UpdateUI,$timeout,$filter,$cordovaNetwork,UserPlanWorkflow, $rootScope,tmhDynamicLocale, $translate, $translatePartialLoader,RequestToServer) {
-       /**
-        * @ngdoc method
-        * @name load
-        * @methodOf MUHCApp.controller:HomeController
-        * @callback MUHCApp.controller:HomeController.loadInfo
-        * @description
-        * Pull to refresh functionality, calls {@link MUHCApp.service:UpdateUI} service through the callback to update all the fields, then using
-        * the {@link MUHCApp.service:UpdateUI} callback it updates the scope of the HomeController.
-        *
-        *
-        */
+myApp.controller('HomeController', ['$state','Appointments', 'CheckinService','$scope','Patient','UpdateUI', '$timeout','$filter','UserPreferences','UserPlanWorkflow','$rootScope', 'tmhDynamicLocale','$translate','RequestToServer', '$location','Documents','Notifications','NavigatorParameters','NativeNotification',
+'NewsBanner','DeviceIdentifiers','$anchorScroll',function ($state,Appointments,CheckinService, $scope, Patient,UpdateUI,$timeout,$filter,UserPreferences,UserPlanWorkflow, $rootScope,tmhDynamicLocale, $translate,RequestToServer,$location,Documents,Notifications,NavigatorParameters,NativeNotification,NewsBanner,DeviceIdentifiers,$anchorScroll) {
+      NewsBanner.setAlert();
+      //Check if device identifier has been sent, if not sent, send it to backend.
+      var app = document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'https://' ) === -1;
+      if(app) DeviceIdentifiers.checkSendStatus();  
+        $scope.homeDeviceBackButton=function()
+        {
+          console.log('device button pressed do nothing');
+          NativeNotification.showNotificationConfirm('Are you sure you want to exit Opal?',function(){
+            if(ons.platform.isAndroid())
+            {
+              navigator.app.exitApp();
+            }
+          },function(){
+            console.log('cancel exit');
+          });
+          console.log(homeNavigator.getDeviceBackButtonHandler());
+        };
+        
         homePageInit();
         $scope.load = function($done) {
           RequestToServer.sendRequest('Refresh','All');
-          $timeout(function() {
-            loadInfo();
-                $done();
-          }, 3000);
+          var updated=false;
+          UpdateUI.update('All').then(function()
+          {
+              updated=true;
+              homePageInit();
+              $done();
+          });
+          $timeout(function(){
+              $done();
+          },5000);
         };
 
-        function loadInfo(){
-          UpdateUI.UpdateSection('All').then(function()
-          {
-            homePageInit();
-          });
-       }
         function homePageInit(){
+
+          //Basic patient information
+          $scope.PatientId=Patient.getPatientId();
+          $scope.Email=Patient.getEmail();
+          $scope.FirstName = Patient.getFirstName();
+          $scope.LastName = Patient.getLastName();
+          $scope.ProfileImage=Patient.getProfileImage();
           $scope.noUpcomingAppointments=false;
+          //Setting up appointments tab
+          setTabViews();
           //Setting up status
-          if(UserPlanWorkflow.isEmpty())
-          {
-            if(UserPlanWorkflow.isCompleted()){
-              $scope.status='In Treatment';
-            }else{
-              $scope.status='Radiotherapy Treatment Planning';
-            }
-          }else{
-            $scope.status='No treatment plan available!';
-          }
-          //Next appointment information
-          if(Appointments.isThereAppointments())
-          {
-            if(Appointments.isThereNextAppointment()){
-                var nextAppointment=Appointments.getUpcomingAppointment();
-                $scope.noAppointments=false;
-                $scope.appointmentShown=nextAppointment;
-                $scope.titleAppointmentsHome='Next Appointment';
-            }else{
-              console.log('boom');
-              $scope.noUpcomingAppointments=true;
-              var lastAppointment=Appointments.getLastAppointmentCompleted();
-              $scope.nextAppointmentIsToday=false;
-              $scope.appointmentShown=lastAppointment;
-              $scope.titleAppointmentsHome='Last Appointment';
-            }
-          }else{
-              $scope.noAppointments=true;
-          }
-          //Checking if user is allowed to checkin
-          $scope.enableCheckin=false;
-          if(CheckinService.haveNextAppointmentToday())
-          {
-            if(!CheckinService.isAlreadyCheckedin())
-            {
-              $scope.loading=true;
-              CheckinService.isAllowedToCheckin().then(function(response)
-              {
-                if(response)
+          settingStatus();
+          //Setting up next appointment
+          setUpNextAppointment();
+          //start by initilizing variables
+          setNotifications();
+          //setUpCheckin();
+          setUpCheckin();
+        }
+    $scope.goToView=function(param)
+    {
+      if(Appointments.isThereNextAppointment())
+      {
+        if(UserPlanWorkflow.isCompleted())
+        {
+          //Status goes to next appointment details
+          homeNavigator.pushPage('views/personal/appointment/individual-appointment.html');
+        }else{
+        homeNavigator.pushPage('views/personal/treatment-plan/individual-stage.html');
+        }
+      }else{
+        if(UserPlanWorkflow.isCompleted())
+        {
+          //set active tab to personal, no future appointments, treatment plan completed
+          tabbar.setActiveTab(1);
+        }else{
+          homeNavigator.pushPage('views/personal/treatment-plan/individual-stage.html');
+
+        }
+      }
+    };
+    $scope.goToStatus = function()
+    {
+      NavigatorParameters.setParameters({'Navigator':'homeNavigator'});
+      homeNavigator.pushPage('views/home/status/status.html');
+    };
+
+    //Set notifications function
+    function setNotifications()
+    {
+      //Obtaining new documents and setting the number and value for last document, obtains unread notifications every time it reads
+      $scope.notifications = Notifications.getUnreadNotifications();
+      if($scope.notifications.length>0)
+      {
+        if(app)
+        {
+           NewsBanner.showNotificationAlert($scope.notifications.length,function(result){
+              if (result && result.event) {
+                console.log("The toast was tapped or got hidden, see the value of result.event");
+                console.log("Event: " + result.event); // "touch" when the toast was touched by the user or "hide" when the toast geot hidden
+                console.log("Message: " + result.message); // will be equal to the message you passed in
+                //console.log("data.foo: " + result.data.foo); // .. retrieve passed in data here
+
+                if (result.event === 'hide') {
+                  console.log("The toast has been shown");
+                } 
+                if(result.event == 'touch')
                 {
-                  console.log(response);
-                  $timeout(function(){
-                    $scope.enableCheckin=true;
-                    $scope.loading=false;
-                  });
-                }else{
-                  $scope.loading=false;
-                  $scope.enableCheckin=false;
+                  console.log('going to the bottom');
+                  $location.hash("bottomNotifications");
+                  $anchorScroll();
                 }
-              });
-            }else{
-              $scope.enableCheckin=false;
-            }
-          }else{
-            $scope.enableCheckin=false;
-          }
-
-
-        //Basic patient information
-        $scope.Email=Patient.getEmail();
-        $scope.FirstName = Patient.getFirstName();
-        $scope.LastName = Patient.getLastName();
-        $scope.ProfileImage=Patient.getProfileImage();
+              }
+          });
+        }
+       
+      }
+      console.log($scope.notifications);
+      //Sets language for the notification
+      $scope.notifications = Notifications.setNotificationsLanguage($scope.notifications);
     }
-    $scope.checkin=function(){
-      CheckinService.checkinToAppointment();
-      $scope.alert.message='You have successfully checked in to your appointment, proceed to waiting room';
-      $scope.enableCheckin=false;
+
+    //Goes to specific notification
+    $scope.goToNotification=function(index, notification){
+      $scope.notifications[index].Number = 0;
+      console.log(notification.NotificationSerNum);
+      Notifications.readNotification(index, notification);
+      console.log(notification);
+      var post = (notification.hasOwnProperty('Post')) ? notification.Post : Notifications.getPost(notification);
+      if(notification.hasOwnProperty('PageUrl'))
+      {
+        NavigatorParameters.setParameters({'Navigator':'homeNavigator', 'Post':post});
+        homeNavigator.pushPage(notification.PageUrl);
+      }else{
+          var result = Notifications.goToPost(notification.NotificationType, post);
+          console.log(result);
+        if(result !== -1  )
+        {
+          console.log(notification.Post);
+          NavigatorParameters.setParameters({'Navigator':'homeNavigator', 'Post':post});
+          homeNavigator.pushPage(result.Url);
+        }
+      }
+    }
+    $scope.goToNextAppointment=function(appointment)
+    {
+      NavigatorParameters.setParameters({'Navigator':'homeNavigator', 'Post':appointment});
+      homeNavigator.pushPage('./views/personal/appointments/individual-appointment.html');
+    }
+
+    function settingStatus()
+    {
+      if(!UserPlanWorkflow.isEmpty())
+      {
+        if(UserPlanWorkflow.isCompleted()){
+          $scope.statusDescription = "INTREATMENT";
+        }else{
+          $scope.statusDescription = "PLANNING";
+        }
+      }else{
+        $scope.statusDescription = "NOPLANNING";
+      }
+    }
+    function setTabViews()
+    {
+      if(Appointments.isThereNextAppointment())
+      {
+        if(UserPlanWorkflow.isCompleted())
+        {
+          $scope.showAppointmentTab=false;
+        }else{
+          $scope.showAppointmentTab=true;
+        }
+      }else{
+        $scope.showAppointmentTab=false;
+      }
+    }
+    function setUpNextAppointment()
+    {
+      //Next appointment information
+      if(Appointments.isThereAppointments())
+      {
+        $scope.noAppointments=false;
+        if(Appointments.isThereNextAppointment()){
+            $scope.thereIsNextAppointment = true;
+            var nextAppointment=Appointments.getUpcomingAppointment();
+            $scope.appointmentShown=nextAppointment;
+            $scope.titleAppointmentsHome='Next Appointment';
+
+        }else{
+          $scope.thereIsNextAppointment = false;
+        }
+      }else{
+          $scope.noAppointments=true;
+      }
+    }
+
+    function setUpCheckin()
+    {
+      //Get checkin appointment for the day, gets the closest appointment to right now
+      var checkInAppointment = Appointments.getCheckinAppointment();
+      console.log(checkInAppointment);
+      if(checkInAppointment)
+      {
+        //If there is an appointment shows checkin tab on home page otherwise it does not
+        $scope.showCheckin = true;
+        $scope.checkInAppointment = checkInAppointment;
+        //Case 1:Appointment checkin is 0, not checked-in
+        if(checkInAppointment.Checkin == '0')
+        {
+          //Checkin message before appointment gets set and is changed only if appointment was checked into already from Aria
+          $rootScope.checkInMessage = "CHECKIN_MESSAGE_BEFORE";
+          $rootScope.showHomeScreenUpdate = false;
+
+          //Queries the server to find out whether or not an appointment was checked into
+          CheckinService.checkCheckinServer(checkInAppointment).then(function(data)
+          {
+            //If it has, then it simply changes the message to checkedin and queries to get an update
+            if(data=='success')
+            {
+              console.log('Returning home');
+              $timeout(function()
+              {
+                $rootScope.checkInMessage = "CHECKIN_MESSAGE_AFTER";
+                $rootScope.showHomeScreenUpdate = true;
+                CheckinService.getCheckinUpdates(checkInAppointment);
+              });
+            }
+          });
+        }else{
+          //Case:2 Appointment already checked-in show the message for 'you are checked in...' and query for estimate
+          $rootScope.checkInMessage = "CHECKIN_MESSAGE_AFTER";
+          $rootScope.showHomeScreenUpdate = true;
+          CheckinService.getCheckinUpdates(checkInAppointment);
+        }
+      }else{
+        //Case where there are no appointments that day
+        $scope.showCheckin = false;
+      }
     }
 
 //Sets all the variables in the view.

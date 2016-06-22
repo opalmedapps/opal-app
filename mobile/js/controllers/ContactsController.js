@@ -7,9 +7,11 @@
 * the {@link MUHCApp.controller:HomeController HomeController} view.
 *
 **/
-myApp.controller('ContactsController',['$scope','Doctors','$timeout','UpdateUI', 'RequestToServer', function($scope,Doctors,$timeout,UpdateUI,RequestToServer){
+myApp.controller('ContactsController',['$scope','Doctors','$timeout','UpdateUI', 'RequestToServer', 'NavigatorParameters', function($scope,Doctors,$timeout,UpdateUI,RequestToServer,NavigatorParameters){
     doctorsInit();
     function doctorsInit(){
+      $scope.noContacts = !Doctors.isThereDoctors();
+      console.log($scope.noContacts);
       $scope.oncologists=Doctors.getOncologists();
       $scope.primaryPhysician=Doctors.getPrimaryPhysician();
       $scope.otherDoctors=Doctors.getOtherDoctors();
@@ -24,13 +26,15 @@ myApp.controller('ContactsController',['$scope','Doctors','$timeout','UpdateUI',
     };
 
     function loadInfo(){
-       var dataVal= UpdateUI.UpdateSection('Doctors').
+       var dataVal= UpdateUI.update('Doctors').
        then(function(){
             doctorsInit();
        });
    }
     $scope.goDoctorContact=function(doctor){
-        myNavigator.pushPage('templates/contacts/individual-contact.html', {param:{doctor:doctor,flagInConversation:0}},{ animation : 'slide' } );
+      
+      NavigatorParameters.setParameters({Navigator:'generalNavigator',Data:doctor});
+        generalNavigator.pushPage('views/general/contacts/individual-contact.html', {param:doctor},{ animation : 'slide' } );
     };
 }]);
 /**
@@ -42,16 +46,29 @@ myApp.controller('ContactsController',['$scope','Doctors','$timeout','UpdateUI',
 * the {@link MUHCApp.controller:HomeController HomeController} view.
 *
 **/
-myApp.controller('ContactIndividualDoctorController',['$scope','$q',function($scope,$q){
-
-  var page = myNavigator.getCurrentPage();
-  var parameters=page.options.param;
-  if(parameters.flagInConversation==1){
-     $scope.showMessageInApp=false;
-  }else{
-     $scope.showMessageInApp=true;
-  }
-  $scope.doctor=parameters.doctor;
+myApp.controller('ContactIndividualDoctorController',['$scope','$q','NavigatorParameters', function($scope,$q,NavigatorParameters){
+  
+  var params = NavigatorParameters.getParameters();
+  $scope.doctor = params.Data;
+  $scope.inContacts = (params.Navigator == 'generalNavigator')?true:false;
+  /*if(typeof personalNavigator!=='undefined'&&typeof personalNavigator.getCurrentPage()!=='undefined'&&typeof personalNavigator.getCurrentPage().options.param!=='undefined')
+  {
+    var page = personalNavigator.getCurrentPage();
+    var parameters=page.options.param;
+    delete page.options.param;
+    delete page.options.param;
+    $scope.inContacts=false;
+    $scope.doctor=parameters;
+  }else if(typeof generalNavigator!=='undefined'&&typeof generalNavigator.getCurrentPage()!=='undefined'&typeof generalNavigator.getCurrentPage().options.param!=='undefined')
+  {
+    var page = generalNavigator.getCurrentPage();
+    var parameters=page.options.param;
+    delete page.options.param;
+    delete page.options.param;
+    console.log(parameters);
+    $scope.doctor=parameters;
+    $scope.inContacts=true;
+  }*/
   if($scope.doctor.PrimaryFlag===1){
      $scope.header='Primary Physician';
   }else if($scope.doctor.OncologistFlag===1){
@@ -59,18 +76,4 @@ myApp.controller('ContactIndividualDoctorController',['$scope','$q',function($sc
   }else{
      $scope.header='Doctor';
   }
-
- $scope.goToConversation=function(doctor){
-    param=doctor;
-    function goToMessage(){
-        var r=$q.defer();
-        myNavigator.popPage({animation:'none'});
-        r.resolve(true);
-        return r.promise;
-    }
-    goToMessage().then(function(){
-        menu.setMainPage('views/patientPortal.html',{param: doctor},{closedMenu:true});
-    });
- };
-
 }]);

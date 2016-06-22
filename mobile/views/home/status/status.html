@@ -1,0 +1,204 @@
+<ons-page ng-controller="StatusController" style="overcroll-y:none">
+    <ons-toolbar>
+          <div class="left">
+            <ons-back-button>{{"BACK"|translate}}</ons-back-button>
+          </div>
+        <div class="center">{{"STATUS"|translate}}</div>
+    </ons-toolbar>
+    <!--<div class="container" style="margin-top:20px">
+   <div class="col-xs-12" >
+     <div align="center">
+       <span ng-repeat="i in [0,1]">
+         <i ng-class="pickPagePagination($index)"></i>
+       </span>
+     </div>
+   </div>
+ </div>-->
+    <!--<ons-carousel var="myCarousel" style="width: 100vw; height: 100vh;overflow-y:scroll" swipeable overscrollable auto-scroll >
+   <ons-carousel-item>-->
+   <ons-carousel  var="myCarousel" fullscreen>
+    <ons-carousel-item >
+      <div style="overcroll-y:none">
+      <div class="container">
+       <div style="margin-top:1px">
+           <div ng-show="noTreatmentPlan" class="btn my-home-profile">
+               <div class="plan-info" style="width:100%">
+                   <ons-row>
+                       <ons-col width="40px">
+                           <div class="">
+                               <i class="ion-clipboard iconHomeView"></i>
+                           </div>
+                       </ons-col>
+                       <ons-col>
+                           <div class="">
+                               {{"NOTREATMENTPLAN"|translate}}
+                          
+                           </div>
+                       </ons-col>
+                   </ons-row>
+               </div>
+           </div>
+           <div ng-hide="noTreatmentPlan">
+               <div class="my-home-profile" style="height:220px;">
+                   <ons-row style="margin:0;padding:0">
+                       <ons-col align="center">
+                         <div ng-show="!treatmentPlanCompleted" class="progressStatus" id="progressStatusStage" >
+                         </div>
+                           <div class="progressStatus" id="progressStatusPresentStage2" style="margin-top:-200px">
+                           </div>
+                           <div ng-show="!treatmentPlanCompleted" class="progressStatus" id="progressStatusPastStages2" style="margin-top:-200px">
+                           </div>
+
+                           <div align="center">
+                               <div class="progressStatusTextBox" style="font-size:15px">
+                                   <strong>{{"STEP"|translate}} {{outOf}} </strong>
+                                   <div ng-show="!treatmentPlanCompleted" align="middle" style="margin-left:5px">
+                                       {{currentStage}}
+                                       <br>
+                                       <strong>{{"STARTTREATMENT"|translate}}:</strong>
+                                       <br> {{stages[stages.length-1].Date|date:'MMM d'}} <a href ng-click="menu.setMainPage('views/educational-material.html',{closedMenu:true})"><i class="ion-help-circled iconStatusBox"></i></a>
+                                       <br>
+                                       <span style="color:grey;font-size:13px" >({{"ESTIMATED"|translate}})</span>
+                                   </div>
+                                   <div ng-show='treatmentPlanCompleted' align="middle" style="margin-left:5px">
+                                       <p><i class="ion-checkmark-circled iconStatusBox"></i>{{"TREATMENTPLANCOMPLETEDON"|translate}}
+                                           <br><strong>{{completionDate|date:'EEE MMM dd yyyy'}}</strong></p>
+                                   </div>
+                               </div>
+                           </div>
+                       </ons-col>
+                   </ons-row>
+               </div>
+           </div>
+       </div>
+       </div>
+       <div style="padding:2px">
+           <div class="my-home-profile" ng-show="!noTreatmentPlan" style="padding:0">
+               <div id="divTreatmentPlan" style="overflow-y:auto">
+                   <ons-list class="plan-list" style="margin:0;padding:0">
+                       <ons-list-item class="plan" modifier="tappable" ng-click="goToStep(app)" ng-repeat="app in stages">
+                           <ons-row id="statusStep{{$index}}">
+                               <ons-col width="50px" class="plan-left" align="center">
+                                   <div class="plan-date" ng-show="app.Status=='Past'"><img ng-src="./img/checkedbox.png" width="20px" height="20px"></div>
+                                   <div class="plan-duration" ng-show="app.Status=='Future'||app.Status=='Next'">
+                                       <img ng-src="./img/uncheckedbox.png" width="20px" height="20px">
+                                   </div>
+                               </ons-col>
+                               <ons-col width="6px" class="plan-center" ng-style="{ 'background-color': getStyle(app) }"></ons-col>
+                               <ons-col class="plan-right">
+                                   <div class="plan-name" ng-class="fontSizeTitle"> <span style="text-align:left"><strong>{{$index+1}}</strong></span> {{app.Name}}</div>
+                                   <div class="plan-info" ng-class="fontSizeDesc">
+                                       <div ng-show="app.Type=='Appointment'">
+                                           <strong>{{"COMPLETED"|translate}}: </strong>{{app.Date|date:'EEE MMM dd yyyy'}}
+                                       </div>
+                                       <div ng-show="app.Type=='Task'&&app.Status=='Past'">
+                                           <strong>{{"COMPLETED"|translate}}: </strong>{{app.Date|date:'EEE MMM dd yyyy'}}
+                                       </div>
+                                       <div ng-show="app.Type=='Task'&&app.Status=='Future'">
+                                           <strong>{{"PENDING"|translate}} </strong>
+                                       </div>
+                                       <div ng-show="app.Type=='Task'&&app.Status=='Next'">
+                                           <strong>{{"INPROGRESS"|translate}}...</strong>
+                                       </div>
+                                   </div>
+                               </ons-col>
+                           </ons-row>
+                       </ons-list-item>
+                   </ons-list>
+               </div>
+           </div>
+       </div>
+       </div>
+    </ons-carousel-item>
+    <ons-carousel-item>
+      <div style="overcroll-y:none">
+      <div class="container">
+       <div style="margin-top:1px">
+           <div ng-show="noTreatmentPlan" class="btn my-home-profile">
+               <div class="plan-info" style="width:100%">
+                   <ons-row>
+                       <ons-col width="40px">
+                           <div class="">
+                               <i class="ion-clipboard iconHomeView"></i>
+                           </div>
+                       </ons-col>
+                       <ons-col>
+                           <div class="">
+                               
+                               {{"NOTREATMENTPLAN"|translate}}
+                           </div>
+                       </ons-col>
+                   </ons-row>
+               </div>
+           </div>
+           <div ng-hide="noTreatmentPlan">
+               <div class="my-home-profile" style="height:220px;">
+                   <ons-row style="margin:0;padding:0">
+                       <ons-col align="center">
+                         <div>
+                           <div ng-show="!treatmentPlanCompleted" class="progressStatus" id="progressStatusSession" >
+                           </div>
+                         <div class="progressStatus" style="margin-top:-200px" id="progressStatusPresentStage3">
+                           </div>
+                           <div ng-show="!treatmentPlanCompleted" class="progressStatus" id="progressStatusPastStage3" style="margin-top:-200px;position:realative;z-index:3">
+                           </div>
+
+                         </div>
+                           <div align="center">
+                               <div class="progressStatusTextBox" style="font-size:15px">
+                                   <strong>{{"STEP"|translate}} {{stepStatusTreatment}} </strong>
+                                   <div ng-show="!treatmentPlanCompleted" align="middle" style="margin-left:5px">
+                                       <strong>{{"UPCOMING"|translate}}:</strong><br>
+                                      {{currentState.Title}}<br>
+                                     <strong>{{"TREATMENTENDS"|translate}}:</strong><br>
+                                     {{endingDate|date:'EEE MMM dd yyyy'}}
+                                   </div>
+                                   <div ng-show="treatmentPlanCompleted">
+                                       <strong>{{"TREATMENTPLANCOMPLETEDON"|translate}}:</strong><br>
+                                       {{endingDate|date:'EEE MMM dd yyyy'}}
+                                   </div>
+                               </div>
+                           </div>
+                       </ons-col>
+                   </ons-row>
+               </div>
+           </div>
+       </div>
+       </div>
+       <div style="padding:2px">
+           <div class="my-home-profile" ng-show="!noTreatmentPlan" style="padding:0">
+               <div id="divTreatmentSessions" style="overflow-y:auto">
+                   <ons-list class="plan-list" style="margin:0;padding:0">
+                       <ons-list-item class="plan" modifier="tappable"  ng-click="goToAppointment(session)" ng-repeat="session in sessionList">
+                           <ons-row id="statusStepSessions{{$index}}">
+                               <ons-col width="50px" class="plan-left" align="center">
+                                   <div class="plan-date" ng-show="session.TimeStatus=='Past'"><img ng-src="./img/checkedbox.png" width="20px" height="20px"></div>
+                                   <div class="plan-duration" ng-show="session.TimeStatus=='Future'||session.TimeStatus=='Next'">
+                                       <img ng-src="./img/uncheckedbox.png" width="20px" height="20px">
+                                   </div>
+                               </ons-col>
+                               <ons-col width="6px" class="plan-center" ng-style="{ 'background-color': getStyle(session) }"></ons-col>
+                               <ons-col class="plan-right">
+                                   <div class="plan-name" ng-class="fontSizeTitle"> <span style="text-align:left"><strong>{{$index+1}}</strong></span> {{session.Title}}</div>
+                                   <div class="plan-info" ng-class="fontSizeDesc">
+                                       <div ng-show="session.TimeStatus=='Past'">
+                                           <strong>{{"COMPLETED"|translate}}: </strong>{{session.ScheduledStartTime|date:'EEE MMM dd yyyy'}}
+                                       </div>
+                                       <div ng-show="session.TimeStatus == 'Next'">
+                                           <strong>{{"PENDING"|translate}} </strong>
+                                       </div>
+                                       <div ng-show="session.TimeStatus=='Future'">
+                                           <strong>{{"INPROGRESS"|translate}}...</strong>
+                                       </div>
+                                   </div>
+                               </ons-col>
+                           </ons-row>
+                       </ons-list-item>
+                   </ons-list>
+               </div>
+           </div>
+       </div>
+       </div>
+    </ons-carousel-item>
+  </ons-carousel>
+</ons-page>

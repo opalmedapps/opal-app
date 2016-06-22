@@ -1,0 +1,32 @@
+<ons-page ng-controller="DiagnosesController" ng-device-backbutton="educationDeviceBackButton()">
+  <ons-toolbar>
+      <div class="left">
+        <ons-back-button>Back</ons-back-button>
+      </div>
+    <div class="center"> Diagnosis</div>
+  </ons-toolbar>
+  <div style="margin-top:5vh">
+    <ons-list class="settings-list" >
+      <ons-list-item class="item" ng-repeat="diagnosis in diagnoses">
+        <ons-row style="padding:5px;">
+          <ons-col width="50px" align="center">
+            <i class="ion-ios-medical iconHomeView" style="color:darkblue"></i>
+          </ons-col>
+            <ons-col align="center">
+               <span class="item-title" ng-class="fontSizeTitle"> Name:</span>
+                <span class="item-desc" ng-class="fontSizeDesc">
+                  {{diagnosis.Description_EN}}
+                </span><br>
+               <span class="item-title" ng-class="fontSizeTitle"> Diagnosis Date:</span>
+                  <span class="item-desc" ng-class="fontSizeDesc">
+                      {{diagnosis.CreationDate|date}}
+                  </span>
+            </ons-col>
+        </ons-row>
+      </ons-list-item>
+    </ons-list>
+
+</div>
+
+
+</ons-page>

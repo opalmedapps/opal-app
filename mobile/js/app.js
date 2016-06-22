@@ -106,64 +106,71 @@ NOTE: Once in the Home page, the routing is dealt by onsen functions. Link to ex
 */
 
 //Routes for angular views
-var myApp = angular.module('MUHCApp', ['tmh.dynamicLocale','pascalprecht.translate','ngAnimate','luegg.directives','ngSanitize','ui.select','ui.router', 'onsen', 'firebase','ui.bootstrap','MUHCApp.filters','ngCordova','monospaced.elastic'])
+var myApp = angular.module('MUHCApp', ['tmh.dynamicLocale','pascalprecht.translate','ngAnimate','luegg.directives','ngSanitize','ui.router', 'onsen', 'ngTouch','firebase','ui.bootstrap','MUHCApp.filters','ngCordova','monospaced.elastic'])
     .config(['$urlRouterProvider', 'tmhDynamicLocaleProvider','$stateProvider', '$translateProvider', '$translatePartialLoaderProvider', function ($urlRouterProvider, tmhDynamicLocaleProvider, $stateProvider, $translateProvider, $translatePartialLoaderProvider) {
 
     $urlRouterProvider.otherwise('/');
     $stateProvider.state('logIn', {
-        url: '/',
-        templateUrl: 'templates/logIn.html',
+        url: '/login',
+        templateUrl: 'views/login/login.html',
         controller: 'LoginController',
         resolve: {
       // controller will not be loaded until $waitForAuth resolves
       // Auth refers to our $firebaseAuth wrapper in the example above
-      "currentAuth": ["Auth", function(Auth) {
+      "currentAuth": ["FirebaseService", function(FirebaseService) {
         // $waitForAuth returns a promise so the resolve waits for it to complete
-        return Auth.$waitForAuth();
+        return FirebaseService.getAuthentication().$waitForAuth();
+      }]
+    }
+
+    })
+    $stateProvider.state('init', {
+        url: '/',
+        templateUrl: 'views/init/init-screen.html',
+        controller: 'InitScreenController',
+        resolve: {
+      // controller will not be loaded until $waitForAuth resolves
+      // Auth refers to our $firebaseAuth wrapper in the example above
+      "currentAuth": ["FirebaseService", function(FirebaseService) {
+        // $waitForAuth returns a promise so the resolve waits for it to complete
+        return FirebaseService.getAuthentication().$waitForAuth();
       }]
     }
 
     })
     .state('loading', {
         url: '/loading',
-        templateUrl: 'templates/loading.html',
+        templateUrl: 'views/login/loading.html',
         controller: 'LoadingController',
         resolve: {
       // controller will not be loaded until $waitForAuth resolves
       // Auth refers to our $firebaseAuth wrapper in the example above
-      "currentAuth": ["Auth", function(Auth) {
+      "currentAuth": ["FirebaseService", function(FirebaseService) {
         // $waitForAuth returns a promise so the resolve waits for it to complete
-        return Auth.$requireAuth();
+        return FirebaseService.getAuthentication().$requireAuth();
       }]
     }
     })
         .state('Home', {
         url: '/Home',
-        templateUrl: 'templates/menu.html',
-        controller: 'HomeController',
+        templateUrl: 'views/tabs/tabs.html',
+        controller: 'TabsController',
            resolve: {
       // controller will not be loaded until $waitForAuth resolves
       // Auth refers to our $firebaseAuth wrapper in the example above
-      "currentAuth": ["Auth", function(Auth) {
+      "currentAuth": ["FirebaseService", function(FirebaseService) {
         // $waitForAuth returns a promise so the resolve waits for it to complete
-        return Auth.$requireAuth();
+        return FirebaseService.getAuthentication().$requireAuth();
       }]
     }
 
-    }).state('logOut', {
-        url: '/LogOut',
-        templateUrl: 'templates/logOut.html',
-        controller: 'logOutController',
-           resolve: {
-      // controller will not be loaded until $waitForAuth resolves
-      // Auth refers to our $firebaseAuth wrapper in the example above
-      "currentAuth": ["Auth", function(Auth) {
-        // $waitForAuth returns a promise so the resolve waits for it to complete
-        return Auth.$requireAuth();
-      }]
-    }
+    })
+    .state('logOut', {
+        url: '/Logout',
+        templateUrl: 'views/logOut.html',
+        controller: 'logOutController'
   });
-    $translatePartialLoaderProvider.addPart('home');
+    $translateProvider.useSanitizeValueStrategy('sanitizeParameters');
     $translateProvider.useLoader('$translatePartialLoader', {
       urlTemplate: './Languages/appTranslationTablesViews/{part}/{lang}.json'
     });
@@ -173,21 +180,41 @@ var myApp = angular.module('MUHCApp', ['tmh.dynamicLocale','pascalprecht.transla
 
 }]);
 
+myApp.config( [
+'$compileProvider',
+function($compileProvider)
+  {
+    $compileProvider.imgSrcSanitizationWhitelist(/^\s*(https?|file|blob|cdvfile):|data:image\//);
+  }
+]);
 
+myApp.config(function ($translateProvider) {
+    $translateProvider.useMissingTranslationHandlerLog();
+})
 /**
 *@ngdoc service
 *@name MUHCApp.run
 *@description Service is in charge of checking that the user is authorized at every state change by checking the parameters stored
 in the Firebase localstorage,  Check run service on angular {{link}}
 **/
-myApp.run(function ($rootScope, $state, $stateParams,$q, $rootScope,$translate) {
+myApp.run(function ($state, $stateParams,$q, $rootScope,$translate, Patient,$location) {
 
+
+  $rootScope.$on('$stateChangeStart',function(event,toState,toParams)
+  {
+    var firstName = Patient.getFirstName();
+     if((typeof firstName =='undefined'|| firstName == '')&&toState.name == 'Home')
+     {
+       $location.path('/init');
+     }
+  });
     $rootScope.$on('$translatePartialLoaderStructureChanged', function () {
       $translate.refresh();
      });
     $rootScope.$state = $state;
     $rootScope.$stateParams = $stateParams;
     $rootScope.$on("$stateChangeError", function(event, toState, toParams, fromState, fromParams, error) {
+      console.log(error);
   // We can catch the error thrown when the $requireAuth promise is rejected
   // and redirect the user back to the home page
   $state.go('logIn');

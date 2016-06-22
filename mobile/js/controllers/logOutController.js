@@ -3,38 +3,18 @@
 //  Created by David Herrera on 2015-05-04.
 //  Copyright (c) 2015 David Herrera. All rights reserved.
 //
-angular.module('MUHCApp').controller('logOutController',['Auth','$rootScope','UserAuthorizationInfo', '$state','$q','RequestToServer', function(Auth, $rootScope, UserAuthorizationInfo,$state,$q,RequestToServer){
-		console.log(Auth);
-		/*if($rootScope.refresh!==true){
-			var redirect=redirectPage();
-			redirect.then(setTimeout(function(){location.reload()},100));
-		}*/
-	//this.firebaseLink.set({logged: 'false'});
-		var firebaseLink=new Firebase('https://brilliant-inferno-7679.firebaseio.com/');
-
-		//firebaseLink.child('Users/'+UserAuthorizationInfo.UserName).set({Logged: 'false'});
-		var authData = firebaseLink.getAuth();
-		firebaseLink.unauth();
-		window.localStorage.removeItem('UserAuthorizationInfo');
-		window.localStorage.removeItem('pass');
-		window.localStorage.removeItem(UserAuthorizationInfo.UserName);
+angular.module('MUHCApp').controller('logOutController',['FirebaseService','$rootScope','UserAuthorizationInfo', '$state','$q','RequestToServer','LocalStorage', function(FirebaseService, $rootScope, UserAuthorizationInfo,$state,$q,RequestToServer,LocalStorage){
+		console.log(FirebaseService);
+		var firebaseLink=new Firebase(FirebaseService.getFirebaseUrl());
+		redirectPage().then(setTimeout(function(){location.reload()},100))
 		function redirectPage(){
-			Auth.$unauth();
+			RequestToServer.sendRequest('Logout');
+			firebaseLink.unauth();
+			LocalStorage.resetUserLocalStorage();
+			FirebaseService.getAuthentication().$unauth();
 			var r=$q.defer();
-			$state.go('logIn')
+			$state.go('init')
 			r.resolve;
 			return r.promise;
 		}
-		RequestToServer.sendRequest('Logout');
-		var redirect=redirectPage();
-		$rootScope.refresh=null;
-		redirect.then(setTimeout(function(){location.reload()},100));
-		/*if(!authData){
-			setTimeout(function(){
-				location.reload();
-			},500);
-			$state.go('logIn.enter');
-		}*/
-
-
 }]);

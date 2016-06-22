@@ -1,42 +1,46 @@
-angular.module('MUHCApp')
-
-    .controller('accountSettingController', ['Patient', 'UserPreferences','$scope','$timeout','UpdateUI', 'RequestToServer','$timeout', function (Patient, UserPreferences, $scope, $timeout,UpdateUI, RequestToServer,$timeout) {
+var myApp=angular.module('MUHCApp')
+myApp.controller('accountSettingController', ['Patient', 'UserPreferences','$scope','$timeout','UpdateUI', 'RequestToServer', '$filter','NavigatorParameters',function (Patient, UserPreferences, $scope, $timeout,UpdateUI, RequestToServer,$filter,NavigatorParameters) {
     //Patient.setData($rootScope.FirstName, $rootScope.LastName, $rootScope.Pictures, $rootScope.TelNum, $rootScope.Email);
     //console.log(Patient.getFirstName());
     //var setNameFunction= Patient.setFirstName('as');
+
     $scope.closeAlert = function () {
 
         $rootScope.showAlert=false;
     };
-        function loadInfo(){
-                var UserData=UpdateUI.UpdateSection('Patient');
-                UserData.then(function(){
-                            $scope.FirstName = Patient.getFirstName();
-                            $scope.LastName = Patient.getLastName();
-                            $scope.Alias=Patient.getAlias();
-                            $scope.Email = Patient.getEmail();
-                            $scope.TelNum = Patient.getTelNum();
-                            $scope.smsPreference=UserPreferences.getEnableSMS();
-                            $scope.Language=UserPreferences.getLanguage();
-                            $scope.passwordLength=(window.localStorage.getItem('pass')).length;
-                            $scope.ProfilePicture=Patient.getProfileImage();
-                });
-        };
+    $scope.accountDeviceBackButton=function()
+    {
+      console.log('device button pressed do nothing');
 
+    }
+    $scope.goToGeneralSettings = function()
+    {
+      NavigatorParameters.setParameters({'Navigator':'settingsNavigator'});
+      settingsNavigator.pushPage('./views/init/init-settings.html')
+    }
+    function loadInfo(){
+        UpdateUI.update('Patient').then(function(){
+            accountInit();
+        });
+    };
+    
 
          $scope.load2 = function($done) {
         RequestToServer.sendRequest('Refresh','Patient');
           $timeout(function() {
             loadInfo();
                 $done();
-          }, 3000);
+          }, 500);
         };
     accountInit();
-    myNavigatorAccount.on('postpop',function(){
+    settingsNavigator.on('postpop',function(){
       $timeout(function(){
         accountInit();
       });
 
+    });
+    $scope.$on('destroy',function(){
+       settingsNavigator.off('postpop'); 
     });
     function accountInit(){
       var nativeCalendar=Number(window.localStorage.getItem('NativeCalendar'));
@@ -46,17 +50,14 @@ angular.module('MUHCApp')
       $scope.checkboxModel=UserPreferences.getEnableSMS();
       $scope.FirstName = Patient.getFirstName();
       $scope.LastName = Patient.getLastName();
+      $scope.PatientId=Patient.getPatientId();
       $scope.Alias=Patient.getAlias();
       $scope.Email = Patient.getEmail();
       $scope.TelNum = Patient.getTelNum();
       $scope.Language=UserPreferences.getLanguage();
+      console.log(UserPreferences.getLanguage());
       $scope.ProfilePicture=Patient.getProfileImage();
-
-      if((window.localStorage.getItem('pass')).length>7){
-          $scope.passwordLength=7;
-      }else{
-          $scope.passwordLength=window.localStorage.getItem('pass').length;
-      }
+      $scope.passwordLength=7;
     }
 
     $scope.saveSettings=function(option){
@@ -64,11 +65,11 @@ angular.module('MUHCApp')
             var message=''
             if(option==='EnableSMS'){
                 if($scope.checkboxModel===1){
-                    message='Would you like to enable your SMS messaging notifications?';
+                    message=$filter('translate')("ENABLESMSNOTIFICATIONQUESTION");
                 }else{
-                    message='Would you like to disable your SMS messaging notifications?';
+                    message=$filter('translate')("DISABLESMSNOTIFICATIONQUESTION");
                 }
-                navigator.notification.confirm(message, confirmCallbackSMS, 'Language Setting', ['Continue', 'Cancel'] );
+                navigator.notification.confirm(message, confirmCallbackSMS, $filter('translate')("CONFIRMALERTSMSLABEL"), [$filter('translate')("CONTINUE"), $filter('translate')("CANCEL")] );
                 function confirmCallbackSMS(index){
                     console.log(index);
                     if(index==1){
@@ -87,11 +88,11 @@ angular.module('MUHCApp')
                 }
             }else if(option==='Calendar'){
                 if($scope.checkboxModelCalendar===1){
-                    message='Would you like save your appointment schedule in your phone calendar?';
+                    message = $filter('translate')("ENABLECALENDARACCESSQUESTION");
                 }else{
-                    message='Would you like to disable your SMS messaging notifications?';
+                    message=$filter('translate')("DISABLECALENDARACCESSQUESTION");
                 }
-                navigator.notification.confirm(message, confirmCallbackCalendar, 'Calendar Setting', ['Continue', 'Cancel'] );
+                navigator.notification.confirm(message, confirmCallbackCalendar, $filter('translate')("CONFIRMALERTCALENDARLABEL"), [$filter('translate')("CONTINUE"),$filter('translate')("CANCEL")] );
                 function confirmCallbackCalendar(index){
                     console.log(index);
                     if(index==1){
@@ -119,79 +120,119 @@ angular.module('MUHCApp')
 
 
 
-myApp.controller('ChangingSettingController',function(tmhDynamicLocale, $translate, UserPreferences,Patient,RequestToServer,$scope,$timeout,UpdateUI, UserAuthorizationInfo){
+myApp.controller('ChangingSettingController',function($filter,$rootScope,FirebaseService, $translate, UserPreferences,Patient,RequestToServer,$scope,$timeout,UpdateUI, UserAuthorizationInfo){
   console.log(UserAuthorizationInfo);
-
     accountChangeSetUp();
-
     function accountChangeSetUp(){
-    var page = myNavigatorAccount.getCurrentPage();
+    var fieldsMappings = {"Font-size":"FONTSIZE","Language":"LANGUAGE","Tel. Number" :"PHONENUMBER","Password":"PASSWORD","Email":"EMAIL","Alias":"ALIAS"};
+    var page = settingsNavigator.getCurrentPage();
     var parameters=page.options.param;
+    $scope.actualValue = '';
     $scope.alertClass="bg-success updateMessage-success";
+    $scope.disableButton = true;
     $scope.value=parameters;
+    console.log(fieldsMappings);
+    $scope.valueLabel = $filter('translate')(fieldsMappings[parameters]);
     $scope.personal=true;
     $scope.type1='text';
-    $scope.updateMessage='Your '+ $scope.value+' has been updated!';
+    $scope.updateMessage="HASBEENUPDATED";
+    $scope.$watchGroup(['newValue','oldValue'],function(){
+        $scope.newUpdate=false;
+        if(parameters !=='Language'&&parameters!=='Font-size')
+        {
+            if(parameters == 'Email')
+            {
+                $scope.disableButton  = !validateEmail();
+            }else if(parameters == 'Password')
+            {
+                console.log(validatePassword());
+                $scope.disableButton  = !validatePassword();
+            }else if(parameters == 'Tel. Number')
+            {
+                $scope.disableButton = !validateTelNum();
+            }else{
+                console.log('alias, boom', $scope.actualValue, $scope.newValue);
+                $scope.disableButton = !validateAlias();
+            }  
+        }
+         
+    });
     if(parameters==='Alias'){
-        $scope.newValue=Patient.getAlias();
-        $scope.instruction='Enter your new alias:'
-    }else if(parameters==='Last Name'){
-        $scope.newValue=Patient.getLastName();
-        $scope.instruction='Enter your new last name:'
+        $scope.actualValue = Patient.getAlias();
+        $scope.newValue=$scope.actualValue;
+        $scope.instruction="ENTERYOURALIAS";
     }else if(parameters==='Tel. Number'){
-        $scope.newValue=Patient.getTelNum();
-        $scope.instruction='Enter your new telephone number:'
+        $scope.actualValue = Patient.getTelNum();
+        $scope.newValue=$scope.actualValue;
+        $scope.instruction="ENTERNEWTELEPHONE";
     }else if(parameters==='Email'){
         $scope.type1='email';
         $scope.type2='password';
         $scope.newValue='';
         $scope.oldValue='';
-        $scope.placeHolder='Enter your Password';
-        $scope.instruction='Enter your new email address:'
-        $scope.instructionOld='Enter your password:'
+        $scope.placeHolder=$filter('translate')("ENTERPASSWORD");
+        $scope.instruction="ENTEREMAILADDRESS";
+        $scope.instructionOld="ENTERPASSWORD";
     }else if(parameters==='Password'){
         $scope.type1='password';
         $scope.type2='password';
         $scope.newValue='';
         $scope.oldValue='';
-        $scope.placeHolder='Enter your old '+$scope.value;
-        $scope.instruction='Enter your new password:'
-        $scope.instructionOld='Enter your old password:'
+        var label = $filter('translate')('ENTEROLD')
+        $scope.placeHolder=label +$scope.valueLabel;
+        $scope.instruction="ENTERNEWPASSWORD";
+        $scope.instructionOld="ENTEROLDPASSWORD";
     }else if(parameters==='Language'){
         var value=UserPreferences.getLanguage();
-        $scope.instruction==='Select language:'
+        $scope.instruction='SELECTLANGUAGE';
         $scope.personal=false;
-        $scope.pickOption=value;
+        $scope.fontUpdated=false;
+        $scope.pickLanguage=value;
         $scope.firstOption='EN';
         $scope.secondOption='FR';
+    }else if(parameters==='Font-size')
+    {
+        var value=UserPreferences.getFontSize();
+         $scope.firstOption='medium';
+        $scope.secondOption='large';
+        $scope.instruction="SELECTFONTSIZE";
+        $scope.personal=false;
+        $scope.fontUpdated=true;
+        $scope.pickFont=value;
     }
 }
 
     $scope.updateValue=function(val){
+        var objectToSend={};
+        objectToSend.NewValue=$scope.newValue;
+        
         if(val=='Password'){
             changePassword();
         }else if(val=='Email'){
             changeEmail();
-        }else{
-            objectToSend={};
-            valChange=val.replace(' ','');
-            if(val=='Tel. Number'){
-                valChange=valChange.replace('.','');
-                valChange=valChange.substring(0,6);
-                objectToSend.FieldToChange=valChange;
-            }else{
-                objectToSend.FieldToChange=valChange;
-            }
-
-            objectToSend.NewValue=$scope.newValue;
+        }else if(val=='Tel. Number')
+        {
+            var valChange=val.replace(' ','');
+            valChange=valChange.replace('.','');
+            valChange=valChange.substring(0,6);
+            objectToSend.FieldToChange=valChange;
+            Patient.setTelNum($scope.newValue);
             RequestToServer.sendRequest('AccountChange',objectToSend);
-            $timeout(function(){
-                RequestToServer.sendRequest('Refresh','Patient');
-                $scope.newUpdate=true;
-                UpdateUI.UpdateSection('Patient');
-            },2000);
+            $scope.actualValue = $scope.newValue;
+        }else if(val=='Alias')
+        {
+            objectToSend.FieldToChange=val;
+            Patient.setAlias($scope.newValue);
+            $scope.actualValue = $scope.newValue;
+            RequestToServer.sendRequest('AccountChange',objectToSend);
         }
+         $scope.disableButton = true;
+         $scope.newUpdate=true;
     };
+    $scope.changeFont=function(newVal)
+    {
+      UserPreferences.setFontSize(newVal);
+    }
     $scope.changeLanguage=function(val){
         console.log(val);
         var objectToSend={};
@@ -199,32 +240,26 @@ myApp.controller('ChangingSettingController',function(tmhDynamicLocale, $transla
         objectToSend.FieldToChange='Language';
         RequestToServer.sendRequest('AccountChange',objectToSend);
         UserPreferences.setLanguage(val);
-        if(val==='EN'){
-            tmhDynamicLocale.set('en');
-            $translate.use('en');
-        }else{
-            tmhDynamicLocale.set('fr');
-            $translate.use('fr');
-        }
         $scope.newUpdate=true;
 
     };
 
 
     function changePassword() {
-        var ref = new Firebase("https://brilliant-inferno-7679.firebaseio.com/");
+        var ref = new Firebase(FirebaseService.getFirebaseUrl());
             ref.changePassword({
                 email: Patient.getEmail(),
                 oldPassword: $scope.oldValue,
                 newPassword: $scope.newValue
             }, function(error) {
                 if (error) {
+                  $scope.newUpdate=true;
                   switch (error.code) {
                     case "INVALID_PASSWORD":
                       console.log("The specified user account password is incorrect.");
                       $timeout(function(){
-                          $scope.alertClass="danger";
-                          $scope.updateMessage='Password is invalid!';
+                          $scope.alertClass="bg-danger updateMessage-error";
+                          $scope.updateMessage='is invalid!';
                       });
                       break;
                     case "INVALID_USER":
@@ -233,8 +268,8 @@ myApp.controller('ChangingSettingController',function(tmhDynamicLocale, $transla
                     default:
                       console.log("Error changing password:", error);
                       $timeout(function(){
-                          $scope.alertClass="danger";
-                         $scope.updateMessage='Error changing your Password!';
+                          $scope.alertClass="bg-danger updateMessage-error";
+                         $scope.updateMessage='update error!';
                       });
                   }
                 } else {
@@ -244,17 +279,18 @@ myApp.controller('ChangingSettingController',function(tmhDynamicLocale, $transla
                   objectToSend.NewValue=$scope.newValue;
                   RequestToServer.sendRequest('AccountChange',objectToSend);
                   UserAuthorizationInfo.setPassword($scope.newValue);
+                  $scope.newUpdate=true;
                   $timeout(function(){
                       $scope.alertClass="bg-success updateMessage-success";
                       $scope.updateMessage='User password was successfully changed!';
-                      $scope.newUpdate=true;
+                      
                   });
                 }
               });
             };
 
     function changeEmail() {
-        var ref = new Firebase("https://brilliant-inferno-7679.firebaseio.com/");
+        var ref = new Firebase(FirebaseService.getFirebaseUrl());
 
         ref.changeEmail({
             oldEmail: Patient.getEmail(),
@@ -265,7 +301,7 @@ myApp.controller('ChangingSettingController',function(tmhDynamicLocale, $transla
                   $timeout(function(){
                    $scope.alertClass="bg-danger updateMessage-error";
                    $scope.newUpdate=true;
-                   $scope.updateMessage='Password is not correct!';
+                   $scope.updateMessage=' is not correct!';
                 });
                 console.log("Error changing email:", error);
             } else {
@@ -274,14 +310,32 @@ myApp.controller('ChangingSettingController',function(tmhDynamicLocale, $transla
                 objectToSend.NewValue=$scope.newValue;
                 Patient.setEmail($scope.newValue);
                 RequestToServer.sendRequest('AccountChange',objectToSend);
-                $timeout(function(){
-                    UpdateUI.UpdateUserFields().then(function(){
-                        $scope.updateMessage='User email was successfully updated!';
-                        $scope.newUpdate=true;
-                    });
-                },2000);
+                $timeout(function()
+                {
+                    $scope.updateMessage='User email was successfully updated!';
+                    $scope.newUpdate=true;  
+                });
+                
             }
         });
+    }
+    function validateTelNum()
+    {
+       var regex = /^[0-9]{10}$/
+       return ($scope.actualValue!==$scope.newValue&&regex.test($scope.newValue));
+    }
+    function validateEmail()
+    {
+        var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        return ($scope.newValue!==$scope.actualValue&& re.test($scope.newValue)&&$scope.oldValue.length>3);
+    }
+    function validatePassword()
+    {
+        return ($scope.newValue.length>3 && $scope.oldValue.length>3);
+    }
+    function validateAlias()
+    {
+        return ($scope.actualValue!==$scope.newValue&&$scope.newValue.length>3);
     }
 
 });

@@ -1,0 +1,36 @@
+<ons-page ng-controller="AppointmentOptionsController">
+  <ons-toolbar >
+    <div class="left"><ons-back-button>{{"BACK"|translate}}</ons-back-button></div>
+    <div class="center">{{"APPOINTMENT"|translate}}</div>
+  </ons-toolbar>
+  <div style="margin-top:5vh">
+  <ons-list class="settings-list" >
+    <ons-list-item ng-class="fontSizeDesc"><!--ng-show="mobilePlatform"-->
+      {{"PHONECALENDARACCESS"|translate}}
+    <label class="switch switch--list-item">
+      <input type="checkbox" ng-model="checkboxModelCalendar" ng-change="saveSettings()" ng-true-value="1" ng-false-value="0" class="switch__input">
+      <div class="switch__toggle"></div>
+    </label>
+      <!--<span class="list-item-note lucent">{{smsPreference}}</span>-->
+    </ons-list-item>
+  </ons-list>
+  <ons-list class="settings-list" style="margin-top:30px" >
+    <ons-list-header class="person-list-header" >{{"LABELS"|translate}} </ons-list-header>
+    <ons-list-item >
+      <div class="text-left"  ng-class="fontSizeDesc">
+        <i class="ion-record" style="color:#5CE68A"></i> {{"PAST"|translate}}
+      </div>
+     </ons-list-item>
+     <ons-list-item >
+       <div class="text-left" ng-class="fontSizeDesc">
+         <i class="ion-record" style="color:#3399ff"></i> {{"TODAY"|translate}}
+       </div>
+    </ons-list-item>
+    <ons-list-item >
+      <div class="text-left"  ng-class="fontSizeDesc">
+        <i class="ion-record" style="color:#cf5c4c"></i> {{"FUTURE"|translate}}
+      </div>
+     </ons-list-item>
+  </ons-list>
+</div>
+</ons-page>
