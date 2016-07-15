@@ -1,0 +1,15 @@
+sudo: false
+language: node_js
+node_js:
+  - "0.12"
+branches:
+  only:
+    - master
+before_script:
+  - npm install -g bower
+  - npm install -g gulp
+  - npm install phantomjs
+  - npm install -g karma
+  - bower install
+script: gulp
+after_script: "npm install coveralls@2 && cat ./test/coverage/**/lcov.info | coveralls"
