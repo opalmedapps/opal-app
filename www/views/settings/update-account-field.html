@@ -5,9 +5,21 @@
   </ons-toolbar>
      
   <div ng-show="personal">
-  <div class="lucent" style="margin-left:2vw;margin-top:10vh">
+     <div ng-show="value=='Password'||value=='Email'">
+       <div class="lucent" style="margin-left:2vw;margin-top:10vh">
+        <p class="note" translate ="{{instructionOld}}"></p>
+      </div>
+   <ons-list modifier="noborder" class="settings-list" style="margin-top:5vh">
+      <ons-list-item >
+        <input ng-minlength="1" type="{{type2}}" class="text-input text-input--transparent width-full" placeholder="{{placeHolder}}" value="{{valueLabel}}" ng-model="oldValue">
+        <a ng-click="oldValue=''" ><span class="list-item-note lucent"><ons-icon icon="ion-close-circled"></ons-icon></span></a>
+      </ons-list-item>
+    </ons-list>
+    </div>
+  <div class="lucent" style="margin-left:2vw;margin-top:2vh">
         <p class="note" translate ="{{instruction}}"></p>
   </div>
+  
    <ons-list modifier="noborder" class="settings-list" style="margin-top:5vh">
       <ons-list-item ng-show="value!=='Tel. Number'">
         <input ng-minlength="1" phone-input type="{{type1}}" class="text-input text-input--transparent width-full" placeholder="{{'ENTERNEW'|translate}} {{valueLabel}}" value="{{valueLabel}}" ng-model="newValue">
@@ -18,17 +30,6 @@
         <a ng-click="newValue=''" ><span class="list-item-note lucent"><ons-icon icon="ion-close-circled"></ons-icon></span></a>
       </ons-list-item>
     </ons-list>
-    <div ng-show="value=='Password'||value=='Email'">
-       <div class="lucent" style="margin-left:2vw;margin-top:2vh">
-        <p class="note" translate ="{{instructionOld}}"></p>
-  </div>
-   <ons-list modifier="noborder" class="settings-list" style="margin-top:5vh">
-      <ons-list-item >
-        <input ng-minlength="1" type="{{type2}}" class="text-input text-input--transparent width-full" placeholder="{{placeHolder}}" value="{{valueLabel}}" ng-model="oldValue">
-        <a ng-click="oldValue=''" ><span class="list-item-note lucent"><ons-icon icon="ion-close-circled"></ons-icon></span></a>
-      </ons-list-item>
-    </ons-list>
-    </div>
     <div  style="margin-left:2vw;margin-top:2vh;">
       <p ng-show="newUpdate" class="{{alertClass}}" >{{value}}  <span translate ="{{updateMessage}}"></span></p>
     </div>
