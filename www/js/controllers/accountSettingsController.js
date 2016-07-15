@@ -250,11 +250,10 @@ myApp.controller('ChangingSettingController', function($filter, $rootScope, Fire
             newPassword: $scope.newValue
         }, function(error) {
             if (error) {
-                $scope.newUpdate = true;
                 switch (error.code) {
                     case "INVALID_PASSWORD":
-                        console.log("The specified user account password is incorrect.");
                         $timeout(function() {
+                            $scope.newUpdate = true;
                             $scope.alertClass = "bg-danger updateMessage-error";
                             $scope.updateMessage = 'is invalid!';
                         });
@@ -265,6 +264,7 @@ myApp.controller('ChangingSettingController', function($filter, $rootScope, Fire
                     default:
                         console.log("Error changing password:", error);
                         $timeout(function() {
+                            $scope.newUpdate = true;
                             $scope.alertClass = "bg-danger updateMessage-error";
                             $scope.updateMessage = 'update error!';
                         });
@@ -276,8 +276,8 @@ myApp.controller('ChangingSettingController', function($filter, $rootScope, Fire
                 objectToSend.NewValue = $scope.newValue;
                 RequestToServer.sendRequest('AccountChange', objectToSend);
                 UserAuthorizationInfo.setPassword($scope.newValue);
-                $scope.newUpdate = true;
                 $timeout(function() {
+                    $scope.newUpdate = true;
                     $scope.alertClass = "bg-success updateMessage-success";
                     $scope.updateMessage = 'User password was successfully changed!';
 
