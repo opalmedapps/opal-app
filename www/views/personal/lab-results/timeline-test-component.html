@@ -1,0 +1,27 @@
+<ons-page ng-controller="TimelineTestComponentController">
+  <ons-toolbar>
+    <div class="left"><ons-back-button>Back</ons-back-button></div>
+    <div class="center">{{title}}</div>
+  </ons-toolbar>
+  <ons-col>
+    <line-chart height="250px" data="data"></line-chart>
+     <ons-list>
+      <ons-list-header>Test Information</ons-list>
+      <ons-list-item>
+        Test Name
+        <span class="list-item-note lucent">{{testInformation.ComponentName}}</span>
+      </ons-list-item>
+      <ons-list-item >
+        Minimum
+        <span class="list-item-note lucent">{{testInformation.MinNorm}} {{testInformation.UnitDescription}}</span>
+      </ons-list-item>
+      <ons-list-item >
+        Maximum
+        <span class="list-item-note lucent">{{testInformation.MaxNorm}} {{testInformation.UnitDescription}}</span>
+      </ons-list-item>
+       <ons-list-item modifier="chevron">
+        About this test
+      </ons-list-item>
+    </ons-list>
+  </ons-col>
+</ons-page>

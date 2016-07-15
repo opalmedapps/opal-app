@@ -1,0 +1,71 @@
+
+<ons-page ng-controller="ContactsController" >
+    <ons-toolbar>
+    <div class="left">
+        <ons-back-button>{{"BACK"|translate}}</ons-back-button>
+    </div>
+    <div class="center">{{"CONTACTS"|translate}}</div>
+  </ons-toolbar>
+   <div style="color:grey;margin-top:25vh" ng-show="noContacts" align="center" ng-class="fontSizeTitle">
+      {{"NOCONTACTSAVAILABLE"|translate}}
+    </div>
+    <ons-list ng-hide="noContacts">
+      <ons-list-header class="person-list-header" ng-show="primaryPhysician.length>0" ng-class="fontSizeTitle">{{"PRIMARYDOCTOR"|translate}}</ons-list-header>
+      <ons-list-item modifier="chevron" ng-repeat="doctor in primaryPhysician" ng-click="goDoctorContact(doctor)">
+        <ons-row>
+          <ons-col width="5px">
+          </ons-col>
+          <ons-col width="40px" align="center">
+            <div style="padding:5px">
+            <img ng-src="{{doctor.ProfileImage}}" class="image-conversation">
+          </div>
+          </ons-col>
+          <ons-col align="center">
+            <div style="padding:4px;line-height:1">
+              <div class="item-title" ng-class="fontSizeTitle">{{doctor.FirstName}} {{doctor.LastName}}
+              </div>
+              <span class="item-desc" ng-class="fontSizeDesc">{{"DOCTOR"|translate}}</span>
+            </div>
+          </ons-col>
+        </ons-row>
+      </ons-list-item>
+      <ons-list-header class="person-list-header" ng-show="oncologists.length>0" ng-class="fontSizeTitle">{{"ONCOLOGIST"|translate}}</ons-list-header>
+      <ons-list-item modifier="chevron" ng-repeat="doctor in oncologists" ng-click="goDoctorContact(doctor)" >
+        <ons-row>
+          <ons-col width="5px">
+          </ons-col>
+          <ons-col width="40px" align="center">
+            <div style="padding:5px">
+            <img ng-src="{{doctor.ProfileImage}}" class="image-conversation">
+          </div>
+          </ons-col>
+          <ons-col align="center">
+            <div style="padding:4px;line-height:1">
+              <div class="item-title" ng-class="fontSizeTitle">{{doctor.FirstName}} {{doctor.LastName}}
+              </div>
+              <span class="item-desc" ng-class="fontSizeDesc">{{"DOCTOR"|translate}}</span>
+            </div>
+          </ons-col>
+        </ons-row>
+      </ons-list-item>
+      <ons-list-header class="person-list-header" ng-show="otherDoctors.length>0" ng-class="fontSizeTitle">{{"OTHER"|translate}}</ons-list-header>
+        <ons-list-item modifier="chevron" ng-repeat="doctor in otherDoctors" ng-click="goDoctorContact(doctor)">
+          <ons-row>
+            <ons-col width="5px">
+            </ons-col>
+            <ons-col width="40px" align="center">
+              <div style="padding:5px">
+              <img ng-src="{{doctor.ProfileImage}}" class="image-conversation">
+            </div>
+            </ons-col>
+            <ons-col align="center">
+              <div style="padding:4px;line-height:1">
+                <div class="item-title" ng-class="fontSizeTitle">{{doctor.FirstName}} {{doctor.LastName}}
+                </div>
+                <span class="item-desc" ng-class="fontSizeDesc">{{"DOCTOR"|translate}}</span>
+              </div>
+            </ons-col>
+          </ons-row>
+      </ons-list-item>
+    </ons-list>
+  </ons-page>

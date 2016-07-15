@@ -1,0 +1,77 @@
+<ons-page ng-controller="IndividualStageController">
+  <ons-toolbar >
+    <div class="left"><ons-back-button>Back</ons-back-button></div>
+    <div class="center">Treatment Stage</div>
+  </ons-toolbar>
+  <!--<div class="container jumbotron" style="text-align: left;padding:5% 2% 5% 2%">-->
+  <div style="margin-top:5vh">
+    <ons-list class="settings-list">
+      <ons-list-item class="item">
+        <div style="line-height:1" align="left">
+          <header>
+              <span class="item-title">{{stage.Name}}</span>
+              <div class="plan-info">
+                  <div ng-show="stage.Type=='Appointment'">
+                      <ons-icon icon="fa-calendar " style="color:#2B6197;font-size:13px"></ons-icon>&nbsp;{{stage.Date|formatDateAppointmentTask}}
+                  </div>
+                  <div ng-show="stage.Type=='Task'&&stage.Status=='Past'">
+                  <strong><i class="ion-compose iconHomeView" style="font-size:13px" ></i>&nbsp;Stage completed: </strong>{{stage.Date|formatDateAppointmentTask}}
+                  </div>
+                  <div ng-show="stage.Type=='Task'&&stage.Status=='Future'">
+                  <strong>Pending </strong>
+                  </div>
+                  <div ng-show="stage.Type=='Task'&&stage.Status=='Next'">
+                  <strong><i class="ion-loop iconHomeView" style="font-size:13px"></i>&nbsp;In progress...</strong>
+                  </div>
+              </div>
+          </header>
+
+          <p class="item-desc">{{stage.Description}}</p>
+        </div>
+      </ons-list-item>
+    </ons-list>
+    <ons-list class="settings-list" ng-show="showTab">
+      <ons-list-item class="item" ng-click="openDocument()" style="height:220px">
+        <ons-row style="padding:5px;">
+            <ons-col align="center">
+                <div class="progressStatus" id="progressStatusPresentStage2">
+                </div>
+                <div ng-show="!treatmentPlanCompleted" class="progressStatus" id="progressStatusPastStages2" style="margin-top:-200px">
+                </div>
+                <div align="center">
+                    <div class="progressStatusTextBox" style="font-size:15px">
+                        <strong>Stage {{outOf}} </strong>
+                        <div ng-show="!treatmentPlanCompleted" align="middle" style="margin-left:5px">
+                            {{currentStage}}
+                            <br><br>
+                            <strong>Starting Treatment:</strong>
+                            <br> {{completionDate|date:'MMM d'}} <a href ng-click="menu.setMainPage('views/educational-material.html',{closedMenu:true})"><i class="ion-help-circled iconStatusBox"></i></a>
+                            <br>
+                            <span style="color:grey;font-size:13px">(Estimated)</span>
+                        </div>
+                        <div ng-show='treatmentPlanCompleted' align="middle" style="margin-left:5px">
+                            <p><i class="ion-checkmark-circled iconStatusBox"></i> Treatment plan completed on
+                                <br><strong>{{completionDate|formatDateAppointmentTask}}</strong></p>
+                        </div>
+                    </div>
+                </div>
+            </ons-col>
+        </ons-row>
+      </ons-list-item>
+    </ons-list>
+
+
+
+  <ons-list class="settings-list" ng-if="showTab">
+     <ons-list-item >
+       <div class="text-center">
+         <a href ng-click="tabbar.setActiveTab(1)">Go to my chart &raquo;</a>
+       </div>
+      </ons-list-item>
+  </ons-list>
+</div>
+   <!--<div align="center">
+   <button ng-show="futurestageointment" class="btn btn-sm btn-success" ng-click="requestChange()" value="maps">Request Change</button>
+   </div>-->
+  <!--</div>-->
+</ons-page>

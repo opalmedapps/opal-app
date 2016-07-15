@@ -1,0 +1,88 @@
+  <ons-page ng-controller="AppointmentListController">
+    <ons-toolbar>
+      <div class="left">
+        <ons-back-button>Back</ons-back-button>
+      </div>
+      <div class="center">Appointment List</div>
+    </ons-toolbar>
+       <div class="navigation-bar" style="height:70px;width:100vw">
+         <div class="navigation-bar__center" style="padding:10px 0 10px 10px">
+         <ons-row align="center">
+           <ons-col width="5px">
+           </ons-col>
+           <ons-col align="center">
+             <div align="center">
+               <button ng-click="radioModel='Past'" class="button--appointments-past--cta" style="width:100px">Past</button>
+             </div>
+           </ons-col>
+           <ons-col align="center">
+             <div align="center">
+               <button class="button--appointments-future--cta" ng-click="radioModel='Upcoming'"  style="width:100px">Future</button>
+             </div>
+           </ons-col>
+           <ons-col align="center">
+             <div align="center">
+               <button class="button" ng-click="radioModel='All'"  style="width:100px">All </button>
+             </div>
+           </ons-col>
+
+         </ons-row>
+         </div>
+           <!--
+             <div class="button-bar" style="width:230px;margin:0 auto;margin-top:7px">
+               <div class="button-bar__item">
+                 <input type="radio" ng-model="radioModel" value="All" name="navi-segment-a" checked>
+                 <div class="button-bar__button">All</div>
+               </div>
+
+               <div class="button-bar__item">
+                 <input type="radio" ng-model="radioModel" value="Past" name="navi-segment-a">
+                 <div class="button-bar__button">Past</div>
+               </div>
+               <div class="button-bar__item">
+                 <input type="radio" ng-model="radioModel" value="Today" name="navi-segment-a">
+                 <div class="button-bar__button">Today</div>
+               </div>
+               <div class="button-bar__item">
+                 <input type="radio" ng-model="radioModel" value="Upcoming" name="navi-segment-a">
+                 <div class="button-bar__button">Future</div>
+               </div>
+             </div>
+           -->
+         </div>
+ <div>
+   <div ng-show="appointments.length==0&&radioModel=='All'">
+     <p style="margin-top:25vh;color:lightgrey">No appointments</p>
+   </div>
+   <div ng-show="appointments.length==0&&radioModel=='Today'">
+     <p style="margin-top:25vh;color:lightgrey">No appointemnts today</p>
+   </div>
+   <div ng-show="appointments.length==0&&radioModel=='Upcoming'">
+     <p style="margin-top:25vh;color:lightgrey">No Upcoming appointments</p>
+   </div>
+   <ons-list style="line-height:0.5" ng-repeat="app in appointments"  ng-click="myNavigator.pushPage('./views/personal/appointments/individual-appointment.html', {param:app},{ animation : 'slide' } )">
+        <ons-list-header ng-if="setHeader($index)">{{app.ScheduledStartTime|date:'EEE MMM dd yyyy'}}</ons-list-header>
+        <ons-list-header ng-if="headerToday($index)">{{app.ScheduledStartTime|date:'EEE MMM dd yyyy'}}</ons-list-header>
+        <ons-list-item modifier="chevron">
+      <ons-row id="anchorAppointments{{$index}}">
+        <ons-col width="5px">
+        </ons-col>
+        <ons-col align="center" width="50px">
+          <div align="center" style="line-height:1" >
+            <span style="color:grey;font-size:12px">{{app.ScheduledStartTime|date:'h:mm a'}}</span>
+          </div>
+        </ons-col>
+        <ons-col width="5px" style="opacity:0.8" ng-style="{ 'background-color': getStyle($index) }"></ons-col>
+        <ons-col>
+          <div style="line-height:1;padding:2px">
+            <header>
+                <span class="item-title" >{{app.AppointmentType_EN}}</span>
+            </header>
+            <p class="item-desc">{{app.ResourceName}}</p>
+          </div>
+        </ons-col>
+      </ons-row>
+     </ons-list-item>
+     </ons-list>
+</div>
+  </ons-page>
