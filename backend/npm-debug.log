@@ -1,0 +1,138 @@
+0 info it worked if it ends with ok
+1 verbose cli [ 'node', '/usr/local/bin/npm', 'install', 'pdf-image', '-g' ]
+2 info using npm@2.13.4
+3 info using node@v0.12.7
+4 verbose install initial load of /usr/local/lib/package.json
+5 verbose readDependencies loading dependencies from /usr/local/lib/package.json
+6 silly cache add args [ 'pdf-image', null ]
+7 verbose cache add spec pdf-image
+8 silly cache add parsed spec { raw: 'pdf-image',
+8 silly cache add   scope: null,
+8 silly cache add   name: 'pdf-image',
+8 silly cache add   rawSpec: '',
+8 silly cache add   spec: '*',
+8 silly cache add   type: 'range' }
+9 silly addNamed pdf-image@*
+10 verbose addNamed "*" is a valid semver range for pdf-image
+11 silly addNameRange { name: 'pdf-image', range: '*', hasData: false }
+12 silly mapToRegistry name pdf-image
+13 silly mapToRegistry using default registry
+14 silly mapToRegistry registry https://registry.npmjs.org/
+15 silly mapToRegistry uri https://registry.npmjs.org/pdf-image
+16 verbose addNameRange registry:https://registry.npmjs.org/pdf-image not in flight; fetching
+17 verbose request uri https://registry.npmjs.org/pdf-image
+18 verbose request no auth needed
+19 info attempt registry request try #1 at 12:34:05 PM
+20 verbose request id 2d6443c37de33aab
+21 http request GET https://registry.npmjs.org/pdf-image
+22 http 200 https://registry.npmjs.org/pdf-image
+23 silly get cb [ 200,
+23 silly get   { server: 'CouchDB/1.5.0 (Erlang OTP/R16B03)',
+23 silly get     etag: '"9QBYTI2G5SSUO4LPEE523OYF"',
+23 silly get     'content-type': 'application/json',
+23 silly get     'cache-control': 'max-age=300',
+23 silly get     'content-length': '3402',
+23 silly get     'accept-ranges': 'bytes',
+23 silly get     date: 'Mon, 14 Dec 2015 17:34:06 GMT',
+23 silly get     via: '1.1 varnish',
+23 silly get     age: '0',
+23 silly get     connection: 'keep-alive',
+23 silly get     'x-served-by': 'cache-atl6232-ATL',
+23 silly get     'x-cache': 'MISS',
+23 silly get     'x-cache-hits': '0',
+23 silly get     'x-timer': 'S1450114446.029575,VS0,VE103',
+23 silly get     vary: 'Accept' } ]
+24 verbose get saving pdf-image to /Users/davidherrera/.npm/registry.npmjs.org/pdf-image/.cache.json
+25 silly addNameRange number 2 { name: 'pdf-image', range: '*', hasData: true }
+26 silly addNameRange versions [ 'pdf-image', [ '0.0.1', '1.0.1' ] ]
+27 silly addNamed pdf-image@1.0.1
+28 verbose addNamed "1.0.1" is a plain semver version for pdf-image
+29 silly mapToRegistry name pdf-image
+30 silly mapToRegistry using default registry
+31 silly mapToRegistry registry https://registry.npmjs.org/
+32 silly mapToRegistry uri https://registry.npmjs.org/pdf-image
+33 verbose addRemoteTarball https://registry.npmjs.org/pdf-image/-/pdf-image-1.0.1.tgz not in flight; adding
+34 verbose addRemoteTarball [ 'https://registry.npmjs.org/pdf-image/-/pdf-image-1.0.1.tgz',
+34 verbose addRemoteTarball   'c25e6fb28ac8a5ce4a16a08f4428a0b53845f09b' ]
+35 info retry fetch attempt 1 at 12:34:06 PM
+36 info attempt registry request try #1 at 12:34:06 PM
+37 http fetch GET https://registry.npmjs.org/pdf-image/-/pdf-image-1.0.1.tgz
+38 http fetch 200 https://registry.npmjs.org/pdf-image/-/pdf-image-1.0.1.tgz
+39 silly fetchAndShaCheck shasum c25e6fb28ac8a5ce4a16a08f4428a0b53845f09b
+40 verbose addTmpTarball /var/folders/fw/g8jwflsj4v32gt1tyg4j8ng00000gn/T/npm-5010-b47cf600/registry.npmjs.org/pdf-image/-/pdf-image-1.0.1.tgz not in flight; adding
+41 verbose addTmpTarball already have metadata; skipping unpack for pdf-image@1.0.1
+42 silly cache afterAdd pdf-image@1.0.1
+43 verbose afterAdd /Users/davidherrera/.npm/pdf-image/1.0.1/package/package.json not in flight; writing
+44 verbose afterAdd /Users/davidherrera/.npm/pdf-image/1.0.1/package/package.json written
+45 silly install resolved [ { name: 'pdf-image',
+45 silly install resolved     version: '1.0.1',
+45 silly install resolved     main: 'index.js',
+45 silly install resolved     repository:
+45 silly install resolved      { type: 'git',
+45 silly install resolved        url: 'https://github.com/mooz/node-pdf-image.git' },
+45 silly install resolved     bugs: { url: 'https://github.com/mooz/node-pdf-image/issues' },
+45 silly install resolved     homepage: 'https://github.com/mooz/node-pdf-image#readme',
+45 silly install resolved     dependencies: { 'es6-promise': '~2.0.0', chai: '~1.9.2' },
+45 silly install resolved     gitHead: '2ec8c3e58097711a0ecae653c188723a46c69629',
+45 silly install resolved     description: 'Provides an interface to convert PDF\'s pages to png files in Node.js by using ImageMagick.',
+45 silly install resolved     _id: 'pdf-image@1.0.1',
+45 silly install resolved     scripts: {},
+45 silly install resolved     _shasum: 'c25e6fb28ac8a5ce4a16a08f4428a0b53845f09b',
+45 silly install resolved     _from: 'pdf-image@*',
+45 silly install resolved     _npmVersion: '1.4.28',
+45 silly install resolved     _npmUser: { name: 'mooz', email: 'stillpedant@gmail.com' },
+45 silly install resolved     maintainers: [ [Object] ],
+45 silly install resolved     dist:
+45 silly install resolved      { shasum: 'c25e6fb28ac8a5ce4a16a08f4428a0b53845f09b',
+45 silly install resolved        tarball: 'http://registry.npmjs.org/pdf-image/-/pdf-image-1.0.1.tgz' },
+45 silly install resolved     directories: {},
+45 silly install resolved     _resolved: 'https://registry.npmjs.org/pdf-image/-/pdf-image-1.0.1.tgz' } ]
+46 info install pdf-image@1.0.1 into /usr/local/lib
+47 info installOne pdf-image@1.0.1
+48 verbose installOne of pdf-image to /usr/local/lib not in flight; installing
+49 verbose lock using /Users/davidherrera/.npm/_locks/pdf-image-5117beaa12a0f65c.lock for /usr/local/lib/node_modules/pdf-image
+50 silly install write writing pdf-image 1.0.1 to /usr/local/lib/node_modules/pdf-image
+51 verbose unbuild lib/node_modules/pdf-image
+52 silly gentlyRm /usr/local/lib/node_modules/pdf-image is being purged from base /usr/local
+53 verbose gentlyRm don't care about contents; nuking /usr/local/lib/node_modules/pdf-image
+54 verbose tar unpack /Users/davidherrera/.npm/pdf-image/1.0.1/package.tgz
+55 verbose tar unpacking to /usr/local/lib/node_modules/pdf-image
+56 silly gentlyRm /usr/local/lib/node_modules/pdf-image is being purged
+57 verbose gentlyRm don't care about contents; nuking /usr/local/lib/node_modules/pdf-image
+58 silly gunzTarPerm modes [ '755', '644' ]
+59 error tar.unpack untar error /Users/davidherrera/.npm/pdf-image/1.0.1/package.tgz
+60 verbose unlock done using /Users/davidherrera/.npm/_locks/pdf-image-5117beaa12a0f65c.lock for /usr/local/lib/node_modules/pdf-image
+61 verbose fstream_path /usr/local/lib/node_modules/pdf-image
+62 verbose fstream_type Directory
+63 verbose fstream_class DirWriter
+64 verbose stack Error: EACCES, mkdir '/usr/local/lib/node_modules/pdf-image'
+64 verbose stack     at Error (native)
+65 verbose fstream_stack /usr/local/lib/node_modules/npm/node_modules/fstream/lib/dir-writer.js:35:25
+65 verbose fstream_stack /usr/local/lib/node_modules/npm/node_modules/mkdirp/index.js:47:53
+65 verbose fstream_stack FSReqWrap.oncomplete (fs.js:95:15)
+66 verbose cwd /Applications/MAMP/htdocs/muhc/copyServer/qplus
+67 error Darwin 15.0.0
+68 error argv "node" "/usr/local/bin/npm" "install" "pdf-image" "-g"
+69 error node v0.12.7
+70 error npm  v2.13.4
+71 error path /usr/local/lib/node_modules/pdf-image
+72 error code EACCES
+73 error errno -13
+74 error Error: EACCES, mkdir '/usr/local/lib/node_modules/pdf-image'
+74 error     at Error (native)
+74 error  { [Error: EACCES, mkdir '/usr/local/lib/node_modules/pdf-image']
+74 error   errno: -13,
+74 error   code: 'EACCES',
+74 error   path: '/usr/local/lib/node_modules/pdf-image',
+74 error   fstream_type: 'Directory',
+74 error   fstream_path: '/usr/local/lib/node_modules/pdf-image',
+74 error   fstream_class: 'DirWriter',
+74 error   fstream_stack:
+74 error    [ '/usr/local/lib/node_modules/npm/node_modules/fstream/lib/dir-writer.js:35:25',
+74 error      '/usr/local/lib/node_modules/npm/node_modules/mkdirp/index.js:47:53',
+74 error      'FSReqWrap.oncomplete (fs.js:95:15)' ] }
+75 error Please try running this command again as root/Administrator.
+76 verbose exit [ -13, true ]
+77 verbose unbuild lib/node_modules/pdf-image
+78 silly gentlyRm /usr/local/lib/node_modules/pdf-image is being purged from base /usr/local
+79 verbose gentlyRm don't care about contents; nuking /usr/local/lib/node_modules/pdf-image

@@ -1,0 +1,76 @@
+<ons-page ng-controller="ChangingSettingController" ng-cloak>
+  <ons-toolbar>
+    <div class="left"><ons-back-button>{{"BACK"|translate}}</ons-back-button></div>
+    <div class="center" >{{valueLabel}}</div>
+  </ons-toolbar>
+     
+  <div ng-show="personal">
+  <div class="lucent" style="margin-left:2vw;margin-top:10vh">
+        <p class="note" translate ="{{instruction}}"></p>
+  </div>
+   <ons-list modifier="noborder" class="settings-list" style="margin-top:5vh">
+      <ons-list-item ng-show="value!=='Tel. Number'">
+        <input ng-minlength="1" phone-input type="{{type1}}" class="text-input text-input--transparent width-full" placeholder="{{'ENTERNEW'|translate}} {{valueLabel}}" value="{{valueLabel}}" ng-model="newValue">
+        <a ng-click="newValue=''" ><span class="list-item-note lucent"><ons-icon icon="ion-close-circled"></ons-icon></span></a>
+      </ons-list-item>
+      <ons-list-item ng-hide="value!=='Tel. Number'" >
+        <input phone-input type="{{type1}}" class="text-input text-input--transparent width-full" placeholder="{{'ENTERNEW'|translate}} {{valueLabel}}" value="{{valueLabel}}" ng-model="newValue">
+        <a ng-click="newValue=''" ><span class="list-item-note lucent"><ons-icon icon="ion-close-circled"></ons-icon></span></a>
+      </ons-list-item>
+    </ons-list>
+    <div ng-show="value=='Password'||value=='Email'">
+       <div class="lucent" style="margin-left:2vw;margin-top:2vh">
+        <p class="note" translate ="{{instructionOld}}"></p>
+  </div>
+   <ons-list modifier="noborder" class="settings-list" style="margin-top:5vh">
+      <ons-list-item >
+        <input ng-minlength="1" type="{{type2}}" class="text-input text-input--transparent width-full" placeholder="{{placeHolder}}" value="{{valueLabel}}" ng-model="oldValue">
+        <a ng-click="oldValue=''" ><span class="list-item-note lucent"><ons-icon icon="ion-close-circled"></ons-icon></span></a>
+      </ons-list-item>
+    </ons-list>
+    </div>
+    <div  style="margin-left:2vw;margin-top:2vh;">
+      <p ng-show="newUpdate" class="{{alertClass}}" >{{value}}  <span translate ="{{updateMessage}}"></span></p>
+    </div>
+    <div class="container" style="margin-top:10px">
+      <button class="button button--large" ng-disabled="disableButton" ng-click="updateValue(value)"  style="margin: 0 auto;">{{"UPDATE"|translate}} {{valueLabel}}</button><br>
+    </div>
+    </div>
+  <div ng-hide="personal">
+    <ul class="list" style="margin-top:10vh">
+<li class="list__header" translate ="{{instruction}}"></li>
+<div  ng-hide="fontUpdated">
+<li class="list__item list__item--tappable" >
+  <label  class="radio-button radio-button--list-item">
+    <input ng-change="changeLanguage('EN')" ng-model="pickLanguage" type="radio" value="{{firstOption}}" name="b" >
+    <div class="radio-button__checkmark radio-button--list-item__checkmark fontDescMedium"></div>
+      EN
+  </label>
+</li>
+<li  class="list__item list__item--tappable" >
+  <label  class="radio-button radio-button--list-item">
+    <input ng-change="changeLanguage('FR')" ng-model="pickLanguage" type="radio" value="{{secondOption}}" name="b">
+    <div class="radio-button__checkmark radio-button--list-item__checkmark fontDescLarge"></div>
+      FR
+  </label>
+</li>
+</div>
+<div ng-show="fontUpdated">
+<li  class="list__item list__item--tappable" >
+  <label  class="radio-button radio-button--list-item">
+    <input ng-change="changeFont('medium')" ng-model="pickFont" type="radio" value="{{firstOption}}" name="b" >
+    <div class="radio-button__checkmark radio-button--list-item__checkmark fontDescMedium"></div>
+      <span class="fontDescMedium">{{"FONTSIZE"|translate}}</span>
+  </label>
+</li>
+<li class="list__item list__item--tappable" >
+  <label  class="radio-button radio-button--list-item">
+    <input ng-change="changeFont('large')" ng-model="pickFont" type="radio" value="{{secondOption}}" name="b">
+    <div class="radio-button__checkmark radio-button--list-item__checkmark fontDescLarge"></div>
+      <span class="fontDescLarge">{{"FONTSIZE"|translate}}</span >
+  </label>
+</li>
+</div>
+</ul>
+</div>
+</ons-page>
