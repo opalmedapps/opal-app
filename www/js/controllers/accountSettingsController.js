@@ -1,29 +1,22 @@
-var myApp = angular.module('MUHCApp')
+var myApp = angular.module('MUHCApp');
 myApp.controller('accountSettingController', ['Patient', 'UserPreferences', '$scope', '$timeout', 'UpdateUI', 'RequestToServer', '$filter', 'NavigatorParameters', function(Patient, UserPreferences, $scope, $timeout, UpdateUI, RequestToServer, $filter, NavigatorParameters) {
-    //Patient.setData($rootScope.FirstName, $rootScope.LastName, $rootScope.Pictures, $rootScope.TelNum, $rootScope.Email);
-    //console.log(Patient.getFirstName());
-    //var setNameFunction= Patient.setFirstName('as');
 
-    $scope.closeAlert = function() {
-
-        $rootScope.showAlert = false;
-    };
     $scope.accountDeviceBackButton = function() {
         console.log('device button pressed do nothing');
 
-    }
+    };
     $scope.goToGeneralSettings = function() {
         NavigatorParameters.setParameters({
             'Navigator': 'settingsNavigator'
         });
-        settingsNavigator.pushPage('./views/init/init-settings.html')
-    }
+        settingsNavigator.pushPage('./views/init/init-settings.html');
+    };
 
     function loadInfo() {
         UpdateUI.update('Patient').then(function() {
             accountInit();
         });
-    };
+    }
 
 
     $scope.load2 = function($done) {
@@ -49,7 +42,7 @@ myApp.controller('accountSettingController', ['Patient', 'UserPreferences', '$sc
         $scope.calendarPreference = nativeCalendar;
         $scope.passFill = '********';
         $scope.mobilePlatform = (ons.platform.isIOS() || ons.platform.isAndroid());
-        (nativeCalendar) ? $scope.checkboxModelCalendar = nativeCalendar: $scope.checkboxModelCalendar = 0;
+        $scope.checkboxModelCalendar = (nativeCalendar) ? nativeCalendar:0;
         $scope.checkboxModel = UserPreferences.getEnableSMS();
         $scope.smsPreference = UserPreferences.getEnableSMS();
         $scope.FirstName = Patient.getFirstName();
@@ -106,7 +99,7 @@ myApp.controller('accountSettingController', ['Patient', 'UserPreferences', '$sc
             window.localStorage.setItem('NativeCalendar', $scope.checkboxModelCalendar);
         } else {
             $timeout(function() {
-                ($scope.checkboxModelCalendar == 1) ? $scope.checkboxModelCalendar = 0: $scope.checkboxModelCalendar = 1;
+                $scope.checkboxModelCalendar = ($scope.checkboxModelCalendar == 1)?0:1;
             });
         }
     }
@@ -242,7 +235,7 @@ myApp.controller('ChangingSettingController', function($filter, $rootScope, Fire
     };
     $scope.changeFont = function(newVal) {
         UserPreferences.setFontSize(newVal);
-    }
+    };
     $scope.changeLanguage = function(val) {
         console.log(val);
         var objectToSend = {};
@@ -297,7 +290,7 @@ myApp.controller('ChangingSettingController', function($filter, $rootScope, Fire
                 });
             }
         });
-    };
+    }
 
     function changeEmail() {
         var ref = new Firebase(FirebaseService.getFirebaseUrl());
