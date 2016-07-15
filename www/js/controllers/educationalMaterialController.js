@@ -1,11 +1,27 @@
 var myApp = angular.module('MUHCApp');
-myApp.controller('EducationalMaterialController', function (NavigatorParameters, $scope, $timeout, $cordovaFileOpener2, $cordovaDevice, $cordovaDatePicker, FileManagerService, EducationalMaterial, UserPreferences) {
+myApp.controller('EducationalMaterialController', function (NavigatorParameters, $scope, $timeout,UpdateUI, RequestToServer, $cordovaFileOpener2, $cordovaDevice, $cordovaDatePicker, FileManagerService, EducationalMaterial, UserPreferences) {
 
 	//Android device backbutton
 	$scope.educationDeviceBackButton = function () {
 		console.log('device back button pressed do nothing');
 
-	}
+	};
+	//Pull to refresh function
+	$scope.load = function($done) {
+      RequestToServer.sendRequest('Refresh','All');
+      UpdateUI.update('All').then(function()
+      {
+          updated=true;
+          $timeout(function()
+          {
+            init();
+          });
+          $done();
+      });
+      $timeout(function(){
+          $done();
+      },5000);
+    };
 	init();
 	//Init function
 	function init() {
