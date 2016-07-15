@@ -39,12 +39,12 @@ myApp.controller('accountSettingController', ['Patient', 'UserPreferences', '$sc
 
     function accountInit() {
         var nativeCalendar = Number(window.localStorage.getItem('NativeCalendar'));
-        $scope.calendarPreference = nativeCalendar;
         $scope.passFill = '********';
         $scope.mobilePlatform = (ons.platform.isIOS() || ons.platform.isAndroid());
         $scope.checkboxModelCalendar = (nativeCalendar) ? nativeCalendar:0;
+        $scope.calendarPreference = $scope.checkboxModelCalendar;
         $scope.checkboxModel = UserPreferences.getEnableSMS();
-        $scope.smsPreference = UserPreferences.getEnableSMS();
+        $scope.smsPreference = $scope.checkboxModel;
         $scope.FirstName = Patient.getFirstName();
         $scope.LastName = Patient.getLastName();
         $scope.PatientId = Patient.getPatientId();
@@ -60,17 +60,14 @@ myApp.controller('accountSettingController', ['Patient', 'UserPreferences', '$sc
     $scope.saveSettings = function(option) {
 
         if ($scope.mobilePlatform) {
-            if (!changeMade) {
                 var message = '';
                 if (option === 'EnableSMS') {
-                    if ($scope.checkboxModel !== $scope.smsPreference) {
-                        if ($scope.checkboxModel === 1) {
-                            message = $filter('translate')("ENABLESMSNOTIFICATIONQUESTION");
-                        } else {
-                            message = $filter('translate')("DISABLESMSNOTIFICATIONQUESTION");
-                        }
-                        navigator.notification.confirm(message, confirmCallbackSMS, $filter('translate')("CONFIRMALERTSMSLABEL"), [$filter('translate')("CONTINUE"), $filter('translate')("CANCEL")]);
+                    if ($scope.checkboxModel === 1) {
+                        message = $filter('translate')("ENABLESMSNOTIFICATIONQUESTION");
+                    } else {
+                        message = $filter('translate')("DISABLESMSNOTIFICATIONQUESTION");
                     }
+                    navigator.notification.confirm(message, confirmCallbackSMS, $filter('translate')("CONFIRMALERTSMSLABEL"), [$filter('translate')("CONTINUE"), $filter('translate')("CANCEL")]);
 
                 } else if (option === 'Calendar') {
                     if ($scope.checkboxModelCalendar === 1) {
@@ -80,7 +77,6 @@ myApp.controller('accountSettingController', ['Patient', 'UserPreferences', '$sc
                     }
                     navigator.notification.confirm(message, confirmCallbackCalendar, $filter('translate')("CONFIRMALERTCALENDARLABEL"), [$filter('translate')("CONTINUE"), $filter('translate')("CANCEL")]);
                 }
-            }
         } else {
             if (option === 'EnableSMS') {
                 var objectToSend = {};
@@ -95,7 +91,6 @@ myApp.controller('accountSettingController', ['Patient', 'UserPreferences', '$sc
     function confirmCallbackCalendar(index) {
         console.log(index);
         if (index == 1) {
-            $scope.checkboxModelCalendar = $scope.calendarPreference;
             window.localStorage.setItem('NativeCalendar', $scope.checkboxModelCalendar);
         } else {
             $timeout(function() {
@@ -108,7 +103,6 @@ myApp.controller('accountSettingController', ['Patient', 'UserPreferences', '$sc
         console.log(index);
         if (index == 1) {
             var objectToSend = {};
-            $scope.checkboxModel = $scope.smsPreference;
             objectToSend.FieldToChange = 'EnableSMS';
             objectToSend.NewValue = $scope.checkboxModel;
             UserPreferences.setEnableSMS(objectToSend.NewValue);

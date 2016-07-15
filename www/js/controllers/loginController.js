@@ -189,11 +189,11 @@ myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$root
           //Setting The User Object for global Application Use
           console.log($scope.email);
           var authenticationToLocalStorage={
-                  UserName:authData.uid,
-                  Password: CryptoJS.SHA256($scope.password).toString(),
-                  Expires:authData.expires,
-                  Email:$scope.email,
-                  Token:authData.token
+              UserName:authData.uid,
+              Password: CryptoJS.SHA256($scope.password).toString(),
+              Expires:authData.expires,
+              Email:$scope.email,
+              Token:authData.token
           };
           $rootScope.refresh=true;
           window.localStorage.setItem('UserAuthorizationInfo', JSON.stringify(authenticationToLocalStorage));

@@ -65,13 +65,20 @@
            <ons-list-item modifier="chevron" ng-click="settingsNavigator.pushPage('views/settings/update-account-field.html', {param:'Font-size'},{ animation : 'slide' } )" ng-class="fontSizeDesc">
              {{"FONTSIZE"|translate}}
           </ons-list-item>
-          <ons-list-item ng-class="fontSizeDesc" >
+          <ons-list-item>
             {{"ENABLESMS"|translate}}
-            <ons-switch ng-model="checkboxModel" modifier="list-item" ng-change="saveSettings('EnableSMS')" ng-true-value="1" ng-false-value="0"></ons-switch>
+          <label class="switch switch--list-item">
+            <input type="checkbox" ng-model="checkboxModel" ng-change="saveSettings('EnableSMS')" ng-true-value="1" ng-false-value="0" class="switch__input">
+            <div class="switch__toggle"></div>
+          </label>
           </ons-list-item>
-          <ons-list-item ng-class="fontSizeDesc" style="overscroll-y:hidden"><!--ng-show="mobilePlatform"-->
+          <ons-list-item ><!--ng-show="mobilePlatform"-->
             {{"CALENDARACCESS"|translate}}
-             <ons-switch ng-model="checkboxModelCalendar" modifier="list-item" ng-change="saveSettings('Calendar')" ng-true-value="1" ng-false-value="0"></ons-switch>
+          <label class="switch switch--list-item">
+            <input type="checkbox" ng-model="checkboxModelCalendar" ng-change="saveSettings('Calendar')" ng-true-value="1" ng-false-value="0" class="switch__input">
+            <div class="switch__toggle"></div>
+          </label>
+            <!--<span class="list-item-note lucent">{{smsPreference}}</span>-->
           </ons-list-item>
         </ons-list>
         <ons-list modifier="inset" class="settings-list" ng-class="fontSizeDesc">
