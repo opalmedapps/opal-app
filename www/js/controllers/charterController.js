@@ -2,6 +2,7 @@ myApp.controller('CharterController',function($scope, $timeout, NavigatorParamet
 {
     $scope.loading = true;
     var navigatorName = NavigatorParameters.getParameters();
+    console.log(navigatorName);
     $scope.navigatorName = navigatorName;
     $scope.navigator = window[navigatorName];
     var language = UserPreferences.getLanguage();

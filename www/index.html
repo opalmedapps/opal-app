@@ -105,16 +105,22 @@
   var app = document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'https://' ) === -1;
   if(app){
     document.addEventListener("deviceready", function() {
-    //Your code
-    // Find the DOM element where you want to add ng-app
-    var element = document.getElementById('boots');
-    angular.bootstrap(element, ["MUHCApp"]); //Or simple document in place of element
+      var loadingElement = document.getElementById('loadingData');
+      loadingElement.style.display = 'block';
+      //Your code
+      // Find the DOM element where you want to add ng-app
+      var element = document.getElementById('boots');
+      angular.bootstrap(element, ["MUHCApp"]); //Or simple document in place of element
+    //loading data ng-cloak
 }, false);
+  }else{
+    var loadingElement = document.getElementById('loadingData');
+    loadingElement.style.display = 'block';
   }
 
   </script>
 </head> 
-<body id="boots" >
+<body id="boots" ng-app="MUHCApp" >
 	    <!--[if lte IE 8]>
 <!--Loading Modal for the initial loading screen-->
 <ons-modal var="modal">
@@ -122,8 +128,7 @@
         <br><br>
         <div class="container text-center" align="center">
         <img ng-src="./img/muhc-logo-text.png" ><br>
-        {{"LOADINGDATA"|translate}}...
-				<!--{{statusRoot}}-->
+        <p id="loadingData" style="display:none">{{"LOADINGDATA"|translate}}...</p>
       </div>
 </ons-modal>
 

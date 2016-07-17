@@ -321,7 +321,7 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','EncryptionService',
       }
       $timeout(function(){
         r.resolve(true);
-      },5000);
+      },40000);
 
       return r.promise;
     }

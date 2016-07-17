@@ -35,7 +35,7 @@ angular.module('MUHCApp').controller('MainController', ["$state",'$timeout', '$r
 
 //     startTimer();
 // }
-
+    
     $translatePartialLoader.addPart('top-view');
     //$state.transitionTo('logIn');
     var app = document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'https://' ) === -1;
@@ -94,18 +94,11 @@ angular.module('MUHCApp').controller('MainController', ["$state",'$timeout', '$r
     }else{
       window.addEventListener('online',  function(){
         console.log('online');
-        $timeout(function()
-        {
-            $rootScope.alertBanner = 'connected';
-        })
+        $rootScope.alertBanner = 'connected';
       });
       window.addEventListener('offline', function(){
         console.log('offline');
-        $timeout(function()
-        {
-            $rootScope.alertBanner = 'nointernet';   
-        })
-        
+        $rootScope.alertBanner = 'nointernet';   
       });
     }
 
