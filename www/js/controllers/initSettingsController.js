@@ -48,7 +48,7 @@ function settingsFail() {
 }
 
 function openSettingsNow() {
-    cordova.plugins.settings.openSetting("application",settingsSuccess,settingsFail);
+    cordova.plugins.settings.openSetting("application_details",settingsSuccess,settingsFail);
 }
     $scope.openDeviceSettings = function()
     {

@@ -29,11 +29,12 @@ myApp.service('Patient',['$q','$cordovaFileTransfer','$cordovaDevice','FileManag
             Email=patientFields.Email;
             PatientId=patientFields.PatientId;
             UserSerNum=patientFields.PatientSerNum;
-            ProfileImage=(patientFields.ProfileImage)?'data:image/'+patientFields.DocumentType+';base64,'+patientFields.ProfileImage:'./img/patient.png';
+            console.log(patientFields.ProfileImage);
             var app = document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'https://' ) === -1;
             if(app){
                 if(typeof patientFields.ProfileImage!=='undefined'||patientFields.ProfileImage=='')
                 {
+                  ProfileImage=(patientFields.ProfileImage)?'data:image/'+patientFields.DocumentType+';base64,'+patientFields.ProfileImage:'./img/patient.png';
                   patientFields.ProfileImage='data:image/'+patientFields.DocumentType+';base64,'+patientFields.ProfileImage;
                   patientFields.NameFileSystem='patient'+patientFields.PatientSerNum+"."+patientFields.DocumentType;
                   var platform=$cordovaDevice.getPlatform();
@@ -48,7 +49,7 @@ myApp.service('Patient',['$q','$cordovaFileTransfer','$cordovaDevice','FileManag
                   }
                   var url = patientFields.ProfileImage;
                   delete patientFields.ProfileImage;
-                  var trustHosts = true
+                  var trustHosts = true;
                   var options = {};
                   CDVfilePath=patientFields.CDVfilePath;
                   NameFileSystem='patient'+patientFields.PatientSerNum+"."+patientFields.DocumentType;
@@ -71,7 +72,6 @@ myApp.service('Patient',['$q','$cordovaFileTransfer','$cordovaDevice','FileManag
                 if(!patientFields.ProfileImage||typeof patientFields.ProfileImage=='undefined'||patientFields.ProfileImage=='')
                 {
                   ProfileImage='./img/patient.png';
-
                 }
                 delete patientFields.ProfileImage;
                 LocalStorage.WriteToLocalStorage('Patient',[patientFields]);
@@ -94,6 +94,7 @@ myApp.service('Patient',['$q','$cordovaFileTransfer','$cordovaDevice','FileManag
           Email=patientFields.Email;
           PatientId=patientFields.PatientId;
           UserSerNum=patientFields.PatientSerNum;
+          console.log(patientFields.ProfileImage);
           ProfileImage= (patientFields.ProfileImage)?patientFields.ProfileImage:'./img/patient.png';
           Alias=patientFields.Alias;
           if(patientFields.PathFileSystem)

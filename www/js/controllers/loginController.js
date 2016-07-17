@@ -56,13 +56,7 @@ myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$root
       {
         if(authInfoLocalStorage){
             var authInfoObject=JSON.parse(authInfoLocalStorage);
-            console.log(authInfoObject);
-            console.log(authData);
             UserAuthorizationInfo.setUserAuthData(authData.auth.uid,authInfoObject.Password , authData.expires,authData.token);
-            userId = authData.uid;
-            var patientLoginRequest='request/'+userId;
-            var patientDataFields='Users/'+userId;
-            console.log(authData.token.length);
             var authenticationToLocalStorage={
                     UserName:authData.uid,
                     Password: authInfoObject.Password ,
@@ -89,6 +83,8 @@ myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$root
           console.log('here state');
           LocalStorage.resetUserLocalStorage();
           $state.go('logOut');
+        }else{
+          $state.go('init');
         }
       }
     }else{
@@ -180,12 +176,6 @@ myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$root
             initNavigator.pushPage('views/login/verify-ssn.html');
         }else{
           UserAuthorizationInfo.setUserAuthData(authData.auth.uid, CryptoJS.SHA256($scope.password).toString(), authData.expires,authData.token);
-          userId = authData.uid;
-          //Obtaining fields links for patient's firebase
-          var patientLoginRequest='request/'+userId;
-          var patientDataFields='Users/'+userId;
-          //Updating Patients references to signal backend to upload data
-          //myDataRef.child(patientLoginRequest).update({LogIn:true});
           //Setting The User Object for global Application Use
           console.log($scope.email);
           var authenticationToLocalStorage={

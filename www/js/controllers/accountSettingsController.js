@@ -1,10 +1,20 @@
 var myApp = angular.module('MUHCApp');
 myApp.controller('accountSettingController', ['Patient', 'UserPreferences', '$scope', '$timeout', 'UpdateUI', 'RequestToServer', '$filter', 'NavigatorParameters', function(Patient, UserPreferences, $scope, $timeout, UpdateUI, RequestToServer, $filter, NavigatorParameters) {
 
+
+    //Backbutton android pressed action
+    var backButtonPressed = 0;
     $scope.accountDeviceBackButton = function() {
         console.log('device button pressed do nothing');
+        backButtonPressed++;
+		if(backButtonPressed==2)
+		{
+			tabbar.setActiveTab(0);
+			backButtonPressed = 0;
+		}
 
     };
+    //General device settings and privacy settings
     $scope.goToGeneralSettings = function() {
         NavigatorParameters.setParameters({
             'Navigator': 'settingsNavigator'
@@ -12,31 +22,33 @@ myApp.controller('accountSettingController', ['Patient', 'UserPreferences', '$sc
         settingsNavigator.pushPage('./views/init/init-settings.html');
     };
 
-    function loadInfo() {
+
+    //Pull to refresh function
+    $scope.load2 = function($done) {
+        RequestToServer.sendRequest('Refresh', 'Patient');
         UpdateUI.update('Patient').then(function() {
             accountInit();
         });
-    }
-
-
-    $scope.load2 = function($done) {
-        RequestToServer.sendRequest('Refresh', 'Patient');
         $timeout(function() {
-            loadInfo();
             $done();
-        }, 500);
+        }, 2000);
     };
+    //Initiate account settings function
     accountInit();
+
+    //On postpop initialize the account settings to make sure the changes went through
     settingsNavigator.on('postpop', function() {
         $timeout(function() {
+            backButtonPressed = 0;
             accountInit();
         });
 
     });
+    //On destroy, dettach listener
     $scope.$on('destroy', function() {
         settingsNavigator.off('postpop');
     });
-
+    //Initializing all the user preferences
     function accountInit() {
         var nativeCalendar = Number(window.localStorage.getItem('NativeCalendar'));
         $scope.passFill = '********';
