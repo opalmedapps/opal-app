@@ -2,10 +2,22 @@ var myApp = angular.module('MUHCApp');
 myApp.controller('EducationalMaterialController', function (NavigatorParameters, $scope, $timeout,UpdateUI, RequestToServer, $cordovaFileOpener2, $cordovaDevice, $cordovaDatePicker, FileManagerService, EducationalMaterial, UserPreferences) {
 
 	//Android device backbutton
+	var backButtonPressed = 0;
 	$scope.educationDeviceBackButton = function () {
-		console.log('device back button pressed do nothing');
-
+		backButtonPressed++;
+		if(backButtonPressed==2)
+		{
+			tabbar.setActiveTab(0);
+			backButtonPressed = 0;
+		}
 	};
+
+	//On pre-pop initializae materials;
+	educationNavigator.on('prepop',function()
+	{
+		backButtonPressed = 0;
+		init();
+	});
 	//Pull to refresh function
 	$scope.load = function($done) {
       RequestToServer.sendRequest('Refresh','All');
@@ -26,7 +38,7 @@ myApp.controller('EducationalMaterialController', function (NavigatorParameters,
 	//Init function
 	function init() {
 		//Obtaining materials from service
-		$scope.noMaterials = !EducationalMaterial.isThereEducationalMaterial()
+		$scope.noMaterials = !EducationalMaterial.isThereEducationalMaterial();
 		var materials = EducationalMaterial.getEducationalMaterial();
 		console.log(materials);
 		//Setting the language for view
@@ -43,7 +55,7 @@ myApp.controller('EducationalMaterialController', function (NavigatorParameters,
 			return true;
 		}
 		return false;
-	}
+	};
 	/**
 	 * @method goToEducationalMaterial
 	 * @description If not read reads material, then it opens the material into its individual controller
@@ -57,6 +69,13 @@ myApp.controller('EducationalMaterialController', function (NavigatorParameters,
 		NavigatorParameters.setParameters({ 'Navigator': 'educationNavigator', 'Post': edumaterial });
 		educationNavigator.pushPage('./views/education/individual-material.html');
 	};
+
+	//Cleaning up
+	$scope.$on('$destroy',function()
+	{
+		educationNavigator.off('prepop');
+	});
+
 
 });
 /**

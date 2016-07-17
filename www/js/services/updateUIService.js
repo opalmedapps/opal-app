@@ -239,9 +239,9 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','EncryptionService',
                 }
               //Delete the data now that it has been proccessed, and dettaches the firebase ref.
               console.log(pathToSection);
-              // ref.child(pathToSection).set(null,function(as){
-              //   console.log(as);
-              // });
+              ref.child(pathToSection).set(null,function(as){
+                console.log(as);
+              });
               ref.child(pathToSection).off();
               //Resolve our promise to finish the loading and get the application going.
               console.log('About to return',sections, data);
@@ -325,81 +325,6 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','EncryptionService',
 
       return r.promise;
     }
-
-
-    /*function UpdateSectionOnline(section)
-    {
-        var r=$q.defer();
-        var ref= new Firebase(FirebaseService.getFirebaseUrl()+'Users/');
-        var pathToSection=''
-        var username=UserAuthorizationInfo.getUserName();
-        var key=CryptoJS.SHA256(UserAuthorizationInfo.Token).toString();
-        var deviceId=RequestToServer.getIdentifier();
-        console.log(deviceId);
-        if(section!=='UserPreferences'){
-            pathToSection=username+'/'+deviceId+'/'+section;
-        }else{
-           pathToSection=username+'/'+deviceId+'/'+'Patient';
-        }
-        if(section=='All')
-        {
-            pathToSection=username+'/'+deviceId+'/All';
-        }
-        console.log(pathToSection);
-        ref.child(pathToSection).on('value',function(snapshot){
-            var data=snapshot.val();
-            console.log(typeof data);
-            if(data&&typeof data!=='undefined'){
-                console.log(data);
-                data=EncryptionService.decryptData(data);
-                console.log(data);
-                switch(section){
-                    case 'All':
-                        setAllServices(data, 'Online');
-                        break;
-                    case 'Doctors':
-                        Doctors.setUserContactsOnline(data);
-                        break;
-                    case 'Patient':
-                        Patient.setUserFieldsOnline(data);
-                        break;
-                    case 'Appointments':
-                        Appointments.setUserAppointments(data);
-                        break;
-                    case 'Messages':
-                        Messages.setUserMessages(data);
-                        break;
-                    case 'Documents':
-                        Documents.setDocumentsOnline(data,'Online');
-                        break;
-                    case 'UserPreferences':
-                        UserPreferences.setUserPreferences(data.Language,data.EnableSMS);
-                        break;
-                    case 'Notifications':
-                        Notifications.setUserNotifications(data);
-                        break;
-                    case 'Notes':
-                        Notes.setNotes(data);
-                        break;
-                    case 'LabTests':
-                        LabResults.setTestResults(data);
-                        break;
-                    case 'MapLocation':
-                        MapLocation.setMapLocation(data);
-                        break;
-                    case 'UserPlanWorkflow':
-                    //To be done eventually!!!
-                    break;
-                }
-                console.log(data);
-                ref.child(pathToSection).set(null);
-                ref.child(pathToSection).off();
-                r.resolve(true);
-            }
-        });
-
-        return r.promise;
-    }*/
 
     return {
         UpdateOffline:function(section)

@@ -11,6 +11,7 @@ myApp.controller('personalTabController',['$scope','$timeout','Appointments','$t
   //Its possible for a notification to have been read such as a document since this controller has already been instantiated
   // we will have to check to sync that number on the badges for the tabs on the personal page.
   personalNavigator.on('prepop',function(){
+    backButtonPressed = 0;
     setNewsNumbers();
   });
   $scope.load = function($done) {
@@ -28,8 +29,7 @@ myApp.controller('personalTabController',['$scope','$timeout','Appointments','$t
           $done();
       },5000);
     };
-  //Sets appointments and treatment plan stage tab
-  initPersonalTab();
+  
 
   //Setting up numbers on the
   function setNewsNumbers()
@@ -59,11 +59,13 @@ myApp.controller('personalTabController',['$scope','$timeout','Appointments','$t
       backButtonPressed = 0;
     }
   };
-
+  //Sets appointments and treatment plan stage tab
+  initPersonalTab();
   //Init function for this controller
   function initPersonalTab()
   {
       //Setting up Appointments status
+      backButtonPressed = 0;
       if(Appointments.isThereAppointments())
       {
         if(Appointments.isThereNextAppointment())
@@ -78,7 +80,6 @@ myApp.controller('personalTabController',['$scope','$timeout','Appointments','$t
       //Setting up status of treament plan
       if(UserPlanWorkflow.isCompleted())
       {
-        console.log('completed')
         $scope.nameCurrentStage="COMPLETED";
       }else{
         var index=UserPlanWorkflow.getNextStageIndex();
@@ -102,6 +103,7 @@ $scope.load = function($done) {
       UpdateUI.update('All').then(function()
       {
           updated=true;
+          backButtonPressed = 0;
           $timeout(function()
           {
             setNewsNumbers();
@@ -152,19 +154,21 @@ $scope.goToParking = function()
 {
   NavigatorParameters.setParameters('generalNavigator');
   generalNavigator.pushPage('views/general/parking/parking.html')
-}
+};
 function setNewsNumbers()
 {
   $scope.announcementsUnreadNumber = Announcements.getNumberUnreadAnnouncements();
 }
+var backButtonPressed = 0;
 $scope.generalDeviceBackButton=function()
 {
   console.log('device button pressed do nothing');
-
-};
-$scope.backButtonPressed=function()
-{
-  console.log('backbuttonpressed');
+  backButtonPressed++;
+  if(backButtonPressed==2)
+  {
+    tabbar.setActiveTab(0);
+    backButtonPressed = 0;
+  }
 };
 
 
