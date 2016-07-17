@@ -1,8 +1,8 @@
 var myApp=angular.module('MUHCApp');
 myApp.controller('TabsController',['$scope','$timeout','$translate','$translatePartialLoader',function($scope,$timeout,$translate,$translatePartialLoader){
   //Enter code here!!
-  console.log('inside tabs controller');
   $translatePartialLoader.addPart('all-views');
+ 
 
 
   }]);
@@ -118,7 +118,7 @@ $scope.load = function($done) {
 $scope.goToPatientCharter = function()
 {
     console.log('heading to charter');
-    NavigatorParameters.setParameters('initNavigator');
+    NavigatorParameters.setParameters('generalNavigator');
     generalNavigator.pushPage('./views/general/charter/charter.html');
 };
 $scope.goToGeneralSettings = function()

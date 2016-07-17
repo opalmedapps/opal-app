@@ -2,24 +2,29 @@ var app = angular.module('MUHCApp');
 
 app.controller('InitScreenController',function($scope, $timeout, NavigatorParameters,$translatePartialLoader, UserPreferences, $filter)
 {
+  //Add the login translation
+    $translatePartialLoader.addPart('login');
+    //Check if device or browser
     var app = document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'https://' ) === -1;
    
+   //Do not show the list breaking, equivalent of ng-cloak for angularjs, LOOK IT UP!!! https://docs.angularjs.org/api/ng/directive/ngCloak
     setTimeout(function(){
        $("#listInitApp").css({display:'block'});
     },10);
-    $translatePartialLoader.addPart('login');
+
+    //Initialize language if not initialized
     UserPreferences.initializeLanguage();
+    console.log('Initializing language');
     $scope.goToParking = function()
     {
-        console.log('heading there')
         NavigatorParameters.setParameters('initNavigator');
         initNavigator.pushPage('./views/general/parking/parking.html',{animation:'lift'})
-    }
+    };
     $scope.goToGeneralSettings = function()
     {
       NavigatorParameters.setParameters({'Navigator':'initNavigator'});
       initNavigator.pushPage('./views/init/init-settings.html',{animation:'lift'})
-    }
+    };
     $scope.goToPatientCharter = function()
     {
         console.log('heading to charter');

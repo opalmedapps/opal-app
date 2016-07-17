@@ -29,12 +29,11 @@ myApp.service('Patient',['$q','$cordovaFileTransfer','$cordovaDevice','FileManag
             Email=patientFields.Email;
             PatientId=patientFields.PatientId;
             UserSerNum=patientFields.PatientSerNum;
-            console.log(patientFields.ProfileImage);
+            ProfileImage=(patientFields.ProfileImage&&typeof patientFields.ProfileImage!=='undefined'&&patientFields.ProfileImage!=='')?'data:image/'+patientFields.DocumentType+';base64,'+patientFields.ProfileImage:'./img/patient.png';
             var app = document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'https://' ) === -1;
             if(app){
-                if(typeof patientFields.ProfileImage!=='undefined'||patientFields.ProfileImage=='')
+                if(patientFields.ProfileImage&&typeof patientFields.ProfileImage!=='undefined'&&patientFields.ProfileImage!=='')
                 {
-                  ProfileImage=(patientFields.ProfileImage)?'data:image/'+patientFields.DocumentType+';base64,'+patientFields.ProfileImage:'./img/patient.png';
                   patientFields.ProfileImage='data:image/'+patientFields.DocumentType+';base64,'+patientFields.ProfileImage;
                   patientFields.NameFileSystem='patient'+patientFields.PatientSerNum+"."+patientFields.DocumentType;
                   var platform=$cordovaDevice.getPlatform();
@@ -65,11 +64,12 @@ myApp.service('Patient',['$q','$cordovaFileTransfer','$cordovaDevice','FileManag
             				r.resolve(patientFields);
             			});
                 }else{
-                  ProfileImage='./img/patient.png';
+                  delete patientFields.ProfileImage;
+                  LocalStorage.WriteToLocalStorage('Patient',[patientFields]);
                   r.resolve(patientFields);
                 }
               }else{
-                if(!patientFields.ProfileImage||typeof patientFields.ProfileImage=='undefined'||patientFields.ProfileImage=='')
+                if(!patientFields.ProfileImage||typeof patientFields.ProfileImage =='undefined'||patientFields.ProfileImage ==='')
                 {
                   ProfileImage='./img/patient.png';
                 }
@@ -77,7 +77,6 @@ myApp.service('Patient',['$q','$cordovaFileTransfer','$cordovaDevice','FileManag
                 LocalStorage.WriteToLocalStorage('Patient',[patientFields]);
                 r.resolve(patientFields);
               }
-            console.log(UserPreferences.getLanguage());
             return r.promise;
         },
         setUserFieldsOffline:function(patientFields)
@@ -94,7 +93,6 @@ myApp.service('Patient',['$q','$cordovaFileTransfer','$cordovaDevice','FileManag
           Email=patientFields.Email;
           PatientId=patientFields.PatientId;
           UserSerNum=patientFields.PatientSerNum;
-          console.log(patientFields.ProfileImage);
           ProfileImage= (patientFields.ProfileImage)?patientFields.ProfileImage:'./img/patient.png';
           Alias=patientFields.Alias;
           if(patientFields.PathFileSystem)
@@ -112,8 +110,11 @@ myApp.service('Patient',['$q','$cordovaFileTransfer','$cordovaDevice','FileManag
               console.log(error);
               r.resolve(patientFields);
             });*/
+            console.log('line 113 patient service');
             r.resolve(true);
           }else{
+            console.log('line 116 patient service');
+
             ProfileImage='./img/patient.png';
             r.resolve(true);
           }

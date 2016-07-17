@@ -22,10 +22,10 @@
   
    <ons-list modifier="noborder" class="settings-list" style="margin-top:5vh">
       <ons-list-item ng-show="value!=='Tel. Number'">
-        <input ng-minlength="1" phone-input type="{{type1}}" class="text-input text-input--transparent width-full" placeholder="{{'ENTERNEW'|translate}} {{valueLabel}}" value="{{valueLabel}}" ng-model="newValue">
+        <input ng-minlength="1" type="{{type1}}" class="text-input text-input--transparent width-full" placeholder="{{'ENTERNEW'|translate}} {{valueLabel}}" value="{{valueLabel}}" ng-model="newValue">
         <a ng-click="newValue=''" ><span class="list-item-note lucent"><ons-icon icon="ion-close-circled"></ons-icon></span></a>
       </ons-list-item>
-      <ons-list-item ng-hide="value!=='Tel. Number'" >
+      <ons-list-item ng-show="value =='Tel. Number'" >
         <input phone-input type="{{type1}}" class="text-input text-input--transparent width-full" placeholder="{{'ENTERNEW'|translate}} {{valueLabel}}" value="{{valueLabel}}" ng-model="newValue">
         <a ng-click="newValue=''" ><span class="list-item-note lucent"><ons-icon icon="ion-close-circled"></ons-icon></span></a>
       </ons-list-item>
