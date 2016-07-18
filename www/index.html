@@ -114,13 +114,18 @@
     //loading data ng-cloak
 }, false);
   }else{
-    var loadingElement = document.getElementById('loadingData');
-    loadingElement.style.display = 'block';
+    $('document').ready(function(){
+      var element = document.getElementById('boots');
+      angular.bootstrap(element, ["MUHCApp"]);
+      var loadingElement = document.getElementById('loadingData');
+      loadingElement.style.display = 'block';
+      $('#loadingData').css({'display':'block'});
+    });
   }
 
   </script>
 </head> 
-<body id="boots" ng-app="MUHCApp" >
+<body id="boots">
 	    <!--[if lte IE 8]>
 <!--Loading Modal for the initial loading screen-->
 <ons-modal var="modal">
