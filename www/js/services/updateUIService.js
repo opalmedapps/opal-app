@@ -198,6 +198,8 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','EncryptionService',
         }*/
       }
       //Connection to Firebase
+      console.log('waiting for data from Firebase');
+      
       ref.child(pathToSection).on('value',function(snapshot){
           var data=snapshot.val();
           //Only if data is defined as firebase also calls value first time when data is undefined
@@ -270,9 +272,9 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','EncryptionService',
             //Data decryption
               data=EncryptionService.decryptData(data);
               //Initializing all the services
-              sectionServiceMappings['All'].init(data, 'Online');
+              sectionServiceMappings.All.init(data, 'Online');
               //Detaching and deleting ref and data respectively
-              //ref.child(pathToSection).set(null);
+              ref.child(pathToSection).set(null);
               ref.child(pathToSection).off();
               //returning the promise of work done
               r.resolve(true);
@@ -306,14 +308,17 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','EncryptionService',
       var app = document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'https://' ) === -1;
       if(app){
           if($cordovaNetwork.isOnline()){
+            console.log('I am right before sending the request for all the things');
             updateSection('All').then(function()
             {
+              console.log('I am finising updating everything, logging in now');
               r.resolve(true);
             }).catch(function(error){
               console.log(error);
               r.resolve(true);
             });
           }else{
+            console.log('Offline resolving');
             r.resolve(true);
           }
       }else{

@@ -7,7 +7,7 @@ myApp.service('LocalStorage',['UserAuthorizationInfo', 'EncryptionService',funct
 			 var user=window.localStorage.getItem('UserAuthorizationInfo');
 			 user=JSON.parse(user);
 			 storage=window.localStorage.getItem(user.UserName);
-
+			 console.log(storage);
 			 storage = JSON.parse(storage);
 			 console.log(storage);
 			 EncryptionService.decryptData(storage);
@@ -64,11 +64,25 @@ myApp.service('LocalStorage',['UserAuthorizationInfo', 'EncryptionService',funct
 		{
 			return readLocalStorage(section);
 		},
+		updateLocalStorageAfterPasswordChange:function(oldPassword, newPassword)
+		{
+			var user=window.localStorage.getItem('UserAuthorizationInfo');
+			user=JSON.parse(user);
+			storage=window.localStorage.getItem(user.UserName);
+			storage = JSON.parse(storage);
+			EncryptionService.decryptWithKey(storage,oldPassword);
+			console.log(storage);
+			EncryptionService.encryptWithKey(storage,newPassword);
+			console.log(storage);
+			window.localStorage.setItem(user.UserName,JSON.stringify(storage));
+			console.log(window.localStorage.getItem(user.UserName));
+		},
 		resetUserLocalStorage:function()
 		{
 			window.localStorage.removeItem('UserAuthorizationInfo');
 			window.localStorage.removeItem(UserAuthorizationInfo.UserName);
 			window.localStorage.removeItem(UserAuthorizationInfo.UserName+'/Timestamps');
+			
 		}
 
 

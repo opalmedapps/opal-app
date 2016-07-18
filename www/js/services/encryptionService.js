@@ -3,7 +3,6 @@ myApp.service('EncryptionService',function(UserAuthorizationInfo){
 	function decryptObject(object)
 	    {
 				var secret=UserAuthorizationInfo.getPassword();
-
 				if(typeof object =='string')
 				{
 					var decipherbytes = CryptoJS.AES.decrypt(object, secret);
@@ -87,7 +86,7 @@ myApp.service('EncryptionService',function(UserAuthorizationInfo){
 
 			return object;
 		}
-	};
+	}
 	return{
 		decryptData:function(object,secret)
 	    {
@@ -106,11 +105,11 @@ myApp.service('EncryptionService',function(UserAuthorizationInfo){
 					decryptObject(object[key],secret);
 				}else
 				{
-					if(object[key]!='')
+					if(object[key]!=='')
 					{
 						try {
 							var decipherbytes = CryptoJS.AES.decrypt(object[key], secret);
-							object[key]=decipherbytes.toString(CryptoJS.enc.Utf8)
+							object[key]=decipherbytes.toString(CryptoJS.enc.Utf8);
 							}
 							catch(err) {
 									console.log(err);
@@ -121,11 +120,38 @@ myApp.service('EncryptionService',function(UserAuthorizationInfo){
 			}
 
 	 return object;
+	},
+	encryptWithKey:function(object, secret)
+	{
+		if (typeof object=='string'){
+	 		var ciphertext = CryptoJS.AES.encrypt(object, secret);
+	 		var encryptedString=ciphertext.toString();
+
+	 		return encryptedString;
+	 	}else if(typeof object!=='string'&& typeof object!=='object'){
+	 		object=String(object);
+	 		var ciphertext = CryptoJS.AES.encrypt(object, secret);
+	 		var encryptedString=ciphertext.toString();
+	 		console.log(encryptedString);
+	 		return encryptedString;
+	 	}else{
+			for (var key in object)
+			{
+				if (typeof object[key]=='object')
+			    {
+			      encryptObject(object[key],secret);
+			    }else
+			    {
+			      if (typeof object[key] !=='string') object[key]=String(object[key]);
+			      var ciphertext = CryptoJS.AES.encrypt(object[key],secret );
+			      object[key]=ciphertext.toString();
+			    }
+			}
+
+			return object;
+		}
 	}
-
-
-
-	}
+	};
 
 
 });

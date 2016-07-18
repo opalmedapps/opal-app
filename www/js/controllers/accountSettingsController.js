@@ -129,7 +129,7 @@ myApp.controller('accountSettingController', ['Patient', 'UserPreferences', '$sc
 
 
 
-myApp.controller('ChangingSettingController', function($filter, $rootScope, FirebaseService, $translate, UserPreferences, Patient, RequestToServer, $scope, $timeout, UpdateUI, UserAuthorizationInfo) {
+myApp.controller('ChangingSettingController', function($filter, $rootScope, FirebaseService, $translate, UserPreferences, Patient, RequestToServer, $scope, $timeout, UpdateUI, UserAuthorizationInfo,LocalStorage) {
     console.log(UserAuthorizationInfo);
     accountChangeSetUp();
 
@@ -282,16 +282,21 @@ myApp.controller('ChangingSettingController', function($filter, $rootScope, Fire
                         });
                 }
             } else {
-                console.log("User password changed successfully!");
                 var objectToSend = {};
                 objectToSend.FieldToChange = 'Password';
                 objectToSend.NewValue = $scope.newValue;
                 RequestToServer.sendRequest('AccountChange', objectToSend);
+                var oldPassword= UserAuthorizationInfo.getPassword();
+                console.log(oldPassword);
+                LocalStorage.updateLocalStorageAfterPasswordChange(oldPassword,$scope.newValue);
                 UserAuthorizationInfo.setPassword($scope.newValue);
+                var newPassword = UserAuthorizationInfo.getPassword();
+                console.log(newPassword);
                 $timeout(function() {
-                    $scope.newUpdate = true;
+                    
                     $scope.alertClass = "bg-success updateMessage-success";
                     $scope.updateMessage = 'User password was successfully changed!';
+                    $scope.newUpdate = true;
 
                 });
             }
