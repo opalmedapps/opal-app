@@ -1,4 +1,3 @@
-<ons-navigator var="personalNavigator">
 <ons-page ng-controller="personalTabController" ng-device-backbutton="personalDeviceBackButton()">
   <ons-toolbar>
     <div class="left">
@@ -7,16 +6,16 @@
     <div class="center">{{"MYCHART"|translate}}</div>
     <div class="right"><ons-toolbar-button ng-click="personalNavigator.pushPage('views/tabs/info-page-tabs.html',{param:home})"><ons-icon icon="ion-ios-information-outline"></ons-icon></ons-toolbar-button></div>
   </ons-toolbar>
-  <ons-pull-hook ng-action="load($done)" var="loader" height="100px">
+  <ons-pull-hook ng-action="load($done)" var="loader">
     <span ng-switch="loader.getCurrentState()">
-                <span ng-switch-when="initial"><ons-icon size="35px" icon="ion-arrow-down-a"></ons-icon> Pull down to refresh</span>
-    <span ng-switch-when="preaction"><ons-icon size="35px" icon="ion-arrow-up-a"></ons-icon> Release to refresh</span>
-    <span ng-switch-when="action"><ons-icon size="35px" spin="true" icon="ion-load-d"></ons-icon> Loading data...</span>
+            <span ng-switch-when="initial"><ons-icon size="35px" spin="true" icon="ion-load-d"></ons-icon> {{"LOADINGDATA"|translate}}...</span>
+            <span ng-switch-when="preaction"><ons-icon size="35px" spin="true" icon="ion-load-d"></ons-icon> {{"LOADINGDATA"|translate}}...</span>
+            <span ng-switch-when="action"><ons-icon size="35px" spin="true" icon="ion-load-d"></ons-icon> {{"LOADINGDATA"|translate}}...</span>
     </span>
 </ons-pull-hook>
 
     <ons-list style="margin: 0px 0">
-      <ons-list-item modifier="chevron" class="item" >
+      <!--<ons-list-item modifier="chevron" class="item" >
         <ons-row align="center">
           <ons-col width="60px">
             <div>
@@ -30,7 +29,7 @@
             <p class="item-desc" ng-class="fontSizeDesc"></p>
           </ons-col>
         </ons-row>
-      </ons-list-item>
+      </ons-list-item>-->
  <ons-list-item modifier="chevron" class="item" ng-click="personalNavigator.pushPage('views/general/notifications/notifications.html')">
       <ons-row align="center" >
           <ons-col width="60px" >
@@ -91,7 +90,7 @@
           </ons-col>
         </ons-row>
       </ons-list-item>
-      <ons-list-item modifier="chevron" class="item" >
+      <!--<ons-list-item modifier="chevron" class="item" >
         <ons-row align="center" >
           <ons-col width="60px" align="center">
             <div>
@@ -105,7 +104,7 @@
             <p class="item-desc" ng-class="fontSizeDesc"></p>
           </ons-col>
         </ons-row>
-      </ons-list-item>
+      </ons-list-item>-->
       <ons-list-item modifier="chevron" class="item" ng-click="personalNavigator.pushPage('views/personal/treatment-team-messages/team-messages.html')">
         <ons-row align="center" >
           <ons-col width="60px" align="center">
@@ -122,7 +121,7 @@
         </ons-row>
       </ons-list-item>
 
-     <ons-list-item modifier="chevron" class="item" >
+     <!--<ons-list-item modifier="chevron" class="item" >
           <ons-row align="center"  >
               <ons-col width="60px" align="center">
                   <div >
@@ -136,8 +135,8 @@
                   <p class="item-desc" ng-class="fontSizeDesc"></p>
               </ons-col>
           </ons-row>
-    </ons-list-item>
-      <ons-list-item modifier="chevron" class="item" ng-click="personalNavigator.pushPage('views/personal/questionnaires/questionnaires.html')">
+    </ons-list-item>-->
+      <ons-list-item modifier="chevron" class="item" ng-click="personalNavigator.pushPage('views/personal/questionnaires/questionnairesList.html')">
         <ons-row align="center">
           <ons-col width="60px" align="center">
             <div>
@@ -154,4 +153,3 @@
       </ons-list-item>
     </ons-list>
 </ons-page>
-</ons-navigator>

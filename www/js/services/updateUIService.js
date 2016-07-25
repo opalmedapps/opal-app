@@ -3,25 +3,39 @@ var myApp=angular.module('MUHCApp');
 
 myApp.service('UpdateUI', ['Announcements','TxTeamMessages','EncryptionService','$timeout', '$rootScope','Patient','Doctors','Appointments','Messages','Documents','EducationalMaterial','UserPreferences', 'UserAuthorizationInfo', '$q', 'Notifications', 'UserPlanWorkflow','$cordovaNetwork', 'LocalStorage','RequestToServer','$filter','Diagnoses','FirebaseService','MapLocation','Questionnaires',
 'NativeNotification',function (Announcements, TxTeamMessages, EncryptionService,$timeout, $rootScope, Patient,Doctors, Appointments,Messages, Documents, EducationalMaterial, UserPreferences, UserAuthorizationInfo, $q, Notifications, UserPlanWorkflow,$cordovaNetwork,LocalStorage,RequestToServer,$filter,Diagnoses,FirebaseService,MapLocation,Questionnaires, NativeNotification ) {
+  var lastUpdateTimestamp={
+        'All':0,
+        'Appointments':0,
+        'Messages':0,
+        'Documents':0,
+        'Tasks':0,
+        'Doctors':0,
+        'LabTests':0,
+        'Patient':0,
+        'Notifications':0,
+        'EducationalMaterial':0,
+        'Questionnaires':0
+  };
+  var promiseFields = ['Doctors', 'Patient', 'Documents'];
   var sectionServiceMappings={
     'All':
       {
-        init:setAllServices,
-        update:updateAllServices
+        init:setServices,
+        update:updateServices
       },
     'Documents':
     {
-      init:Documents.setDocumentsOnline,
+      setOnline:Documents.setDocumentsOnline,
       update:Documents.updateDocuments,
       setOffline:Documents.setDocumentsOffline
     },
     'Patient':{
-      init:Patient.setUserFieldsOnline,
+      setOnline:Patient.setUserFieldsOnline,
       update:Patient.setUserFieldsOnline,
       setOffline:Patient.setUserFieldsOffline
     },
     'Doctors':{
-      init:Doctors.setUserContactsOnline,
+      setOnline:Doctors.setUserContactsOnline,
       update:Doctors.updateUserContacts,
       setOffline:Doctors.setUserContactsOffline
     },
@@ -38,23 +52,6 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','EncryptionService',
       init:LabResults.setTestResults,
       update:LabResults.updateTestResults
     },*/
-    'MapLocation':
-    {
-      update:MapLocation.updateMapLocation,
-      live:true
-    },
-    'Checkin':
-    {
-      live:true
-    },
-    'CheckinUpdate':
-    {
-      live:true
-    },
-    'CheckCheckin':
-    {
-      live:true
-    },
     'Diagnosis':
     {
       init:Diagnoses.setDiagnoses,
@@ -86,6 +83,15 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','EncryptionService',
       update:Notifications.updateUserNotifications
     }
   };
+  function setPromises(type, dataUserObject)
+    {
+      var promises = [];
+      for(var i = 0;i<promiseFields.length;i++)
+      {
+        if(dataUserObject.hasOwnProperty(promiseFields[i])) promises.push(sectionServiceMappings[promiseFields[i]][type](dataUserObject[promiseFields[i]]));
+      }
+      return promises;
+    }
   function initLocalStorage()
   {
     var objectToLocalStorage={};
@@ -94,259 +100,248 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','EncryptionService',
     }
     LocalStorage.WriteToLocalStorage('All',objectToLocalStorage);
   }
-    function setAllServices(dataUserObject,mode)
+    function setServices(dataUserObject,mode)
     {
-
-      console.log(mode);
-      var promises=[];
-      console.log(dataUserObject);
-      if(mode=='Online')
-      {
-        console.log('boom');
-        initLocalStorage();
-        console.log('I am in there');
-        var documents=dataUserObject.Documents;
-        var documentProm=Documents.setDocumentsOnline(documents);
-        var doctors=dataUserObject.Doctors;
-        var doctorProm=Doctors.setUserContactsOnline(doctors);
-        var patientFields=dataUserObject.Patient;
-        var patientProm=Patient.setUserFieldsOnline(patientFields);
-        console.log(patientProm);
-        promises=[doctorProm,documentProm,patientProm];
-      }else{
-        $rootScope.statusRoot="Mode offline";
-        var documentProm=Documents.setDocumentsOffline(dataUserObject.Documents);
-        var doctorProm=Doctors.setUserContactsOffline(dataUserObject.Doctors);
-        var patientProm=Patient.setUserFieldsOffline(dataUserObject.Patient);
-        promises=[documentProm,doctorProm,patientProm];
-      }
+      var r = $q.defer();
+      if(mode=='setOnline') initLocalStorage();
+      var promises = setPromises(mode,dataUserObject);
       $q.all(promises).then(function(){
-        
-        UserPlanWorkflow.setTreatmentPlan(dataUserObject.Tasks, dataUserObject.Appointments);
-        var plan={
-            '1':{'Name':'CT for Radiotherapy Planning','Date':'2015-10-19T09:00:00Z','Description':' CT simulation includes a CT scan of the area of your body to be treated with radiation. The CT images acquired during your scan will be reconstructed and used to design the best and most precise treatment plan for you.','Type': 'Appointment'},
-            '2':{'Name':'Physician Plan Preparation','Date':'2015-10-21T09:15:00Z','Description':'During this stage countoring of area is performed by Medical Physicist and approved by physician','Type':'Task'},
-            '3':{'Name':'Calculation of Dose & Physician Review','Date':'2015-10-23T09:15:00Z','Description':'The dose is calculated the physician reviews and approves the treatment plan.','Type':'Task'},
-            '4':{'Name':'Physics Quality Control','Date':'2015-10-28T10:15:00Z','Description':'In the QA stage, the physicians plan is compared to previous plans performed for similar patients to make sure everything is normal and the plan fits the standards','Type':'Task'},
-            '5':{'Name':'Scheduling','Date':'2015-10-30T09:15:00Z','Description':'At this stage, the scheduling of the treatment appointments is done.','Type':'Task'},
-            '6':{'Name':'First Treatment','Date':'2015-11-02T09:15:00Z','Description':'First treatment for radiation','Type':'Task'}
-        };
-        var newDate=new Date();
-        var valAdded=-6;
-
-        for (var key in plan) {
-          var tmp=new Date(newDate);
-          tmp.setDate(tmp.getDate()+valAdded);
-          valAdded+=2;
-          plan[key].Date=$filter('formatDateToFirebaseString')(tmp);
-        }
-          Questionnaires.setPatientQuestionnaires(dataUserObject.Questionnaires);
-          EducationalMaterial.setEducationalMaterial(dataUserObject.EducationalMaterial);
-          TxTeamMessages.setTxTeamMessages(dataUserObject.TxTeamMessages);
-          Announcements.setAnnouncements(dataUserObject.Announcements);
-          Diagnoses.setDiagnoses(dataUserObject.Diagnosis);
-          /*LabResults.setTestResults(dataUserObject.LabTests);
-          Messages.setUserMessages(dataUserObject.Messages);*/
-          UserPlanWorkflow.setUserPlanWorkflow(plan);
-          //UserPreferences.setUserPreferences(dataUserObject.Patient[0].Language,dataUserObject.Patient[0].EnableSMS);
-          UserPreferences.getFontSize();
-          Appointments.setUserAppointments(dataUserObject.Appointments);
-          Notifications.setUserNotifications(dataUserObject.Notifications);
-          console.log(dataUserObject);
-        /*if(mode=='Online')
+          for(var key in dataUserObject)
           {
-            LocalStorage.WriteToLocalStorage('All',dataUserObject);
-          }*/
-
-      });
-    }
-    function updateAllServices(dataUserObject){
-        var promises=[];
-        console.log(dataUserObject);
-        for(var key in dataUserObject)
-        {
-          if(sectionServiceMappings.hasOwnProperty(key))
-          {
-            sectionServiceMappings[key].update(dataUserObject[key]);
+            if(sectionServiceMappings.hasOwnProperty(key)&&promiseFields.indexOf(key)==-1)
+            {
+              sectionServiceMappings[key].init(dataUserObject[key]);
+            }
           }
-        }
-    }
-
-
-    function updateSection(sections, parameters)
-    {
-
-      //Start promise
-      var r=$q.defer();
-      //Firebase url
-      var ref= new Firebase(FirebaseService.getFirebaseUrl()+'Users/');
-      var pathToSection='';
-      var username=UserAuthorizationInfo.getUserName();
-      var deviceId=RequestToServer.getIdentifier();
-      //Set path to read data
-      if(sections=='All')
+          UserPlanWorkflow.setUserPlanWorkflow();
+          r.resolve(true);
+      }).catch(function(error)
       {
-        pathToSection=username+'/'+deviceId+'/All';
-      }else if(sections=='ArrayFields'){
-        pathToSection=username+'/'+deviceId+'/ArrayFields';
-      }else{
-        pathToSection=username+'/'+deviceId+'/Field/'+sections;
-        /*if(sections!=='UserPreferences'){
-
-        }else{
-           pathToSection=username+'/'+deviceId+'/'+'Patient';
-        }*/
-      }
-      //Connection to Firebase
-      console.log('waiting for data from Firebase');
-      
-      ref.child(pathToSection).on('value',function(snapshot){
-          var data=snapshot.val();
-          //Only if data is defined as firebase also calls value first time when data is undefined
-          if(data&&typeof data!=='undefined'){
-              //Decrypts incoming data
-              var time=(new Date()).getTime();
-              data=EncryptionService.decryptData(data);
-              console.log(sections, data);
-              if(data.Response=='No Results')
-              {
-                console.log('Deleting response');
-                //ref.child(pathToSection).set(null);
-                ref.child(pathToSection).off();
-                r.resolve('No new results');
-              }
-              //To update all, searches into the appropiate table mappings and update appropiate sections
-              else if(sections=='All')
-              {
-                RequestToServer.updateTimestamps('All',time);
-                sectionServiceMappings[sections]['update'](data,'Online');
-                //updateAllServices(data, 'Online');
-              }else if(sections=='ArrayFields'){
-                RequestToServer.updateTimestamps(parameters,time);
-
-
-                //Updates an array of fields, e.g. ['Messages','Documents'];
-                for (var i = 0; i < paramaters.length; i++) {
-                  sectionServiceMappings[paramaters[i]]['update'](data[paramaters[i]],'Online');
-                }
-              }else{
-                  if(!sectionServiceMappings[sections].hasOwnProperty('live'))
-                  {
-                      RequestToServer.updateTimestamps(sections,time);
-                  }
-                  if(sectionServiceMappings[sections].hasOwnProperty('update'))
-                  {
-                      sectionServiceMappings[sections]['update'](data);
-                  }
-                }
-              //Delete the data now that it has been proccessed, and dettaches the firebase ref.
-              console.log(pathToSection);
-              ref.child(pathToSection).set(null,function(as){
-                console.log(as);
-              });
-              ref.child(pathToSection).off();
-              //Resolve our promise to finish the loading and get the application going.
-              console.log('About to return',sections, data);
-              r.resolve(data);
-          }
-      },function(error){
         console.log(error);
         r.reject(error);
       });
       return r.promise;
     }
+    function updateServices(dataUserObject){
+         var r = $q.defer();
+        $q.all(setPromises('update', dataUserObject)).then(function(result)
+        {
+          for(var key in dataUserObject)
+          {
+            if(sectionServiceMappings.hasOwnProperty(key)&&promiseFields.indexOf(key)==-1)
+            {
+              sectionServiceMappings[key].update(dataUserObject[key]);
+            }
+          }
+          r.resolve(true);
+        }).catch(function(error)
+        {
+          console.log(error);
+          r.reject(error);
+        });
+        return r.promise;
+    }
+    
 
+
+    /**
+     * Initialize sections
+     */
     //Initiatiates all the services online at either login, or simple entering the app once
     //patient is already register
-    function initServicesOnline()
+    function initServicesFromServer(type)
     {
       //Sets the path for data fetching
       var r=$q.defer();
-      var ref= new Firebase(FirebaseService.getFirebaseUrl()+'Users/');
-      var username=UserAuthorizationInfo.getUserName();
-      var deviceId=RequestToServer.getIdentifier();
-      var pathToSection=username+'/'+deviceId+'/All';
-      ref.child(pathToSection).on('value',function(snapshot){
-          var data=snapshot.val();
-          if(data&&typeof data!=='undefined'){
-            //Data decryption
-              data=EncryptionService.decryptData(data);
-              //Initializing all the services
-              sectionServiceMappings.All.init(data, 'Online');
-              //Detaching and deleting ref and data respectively
-              ref.child(pathToSection).set(null);
-              ref.child(pathToSection).off();
-              //returning the promise of work done
-              r.resolve(true);
-            }
-            /*setTimeout(function(){
-              ref.child(pathToSection).set(null);
-              ref.child(pathToSection).off();
-              r.resolve(true);
-            },40000);*/
+      //Initializing all the services
+      RequestToServer.sendRequestWithResponse(type).then(function(response)
+      {
+        if(response.Response !=='timeout')
+        {
+          setServices(response.Data, 'setOnline').then(function()
+          {
+            initTimestamps(response.Timestamp);
+            r.resolve(true);
           });
-        return r.promise;
-    }
-    //Initiating services offline
-    function initServicesOffline()
-    {
-
-      var r=$q.defer();
-      console.log('Inside the init offline function');
-      data=LocalStorage.ReadLocalStorage('All');
-      console.log(data);
-      sectionServiceMappings.All.init(data, 'Offline');
-      r.resolve(true);
+        }
+      }).catch(function(error) {
+        console.log(error);
+        r.reject(false);
+      });   
       return r.promise;
     }
+
     function initServicesFromLocalStorage()
     {
       var r=$q.defer();
       data=LocalStorage.ReadLocalStorage('All');
+      
       console.log(data);
-      sectionServiceMappings.All.init(data, 'Offline');
-      var app = document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'https://' ) === -1;
-      if(app){
-          if($cordovaNetwork.isOnline()){
-            console.log('I am right before sending the request for all the things');
-            updateSection('All').then(function()
-            {
-              console.log('I am finising updating everything, logging in now');
-              r.resolve(true);
-            }).catch(function(error){
-              console.log(error);
-              r.resolve(true);
-            });
+      sectionServiceMappings.All.init(data, 'setOffline').then(function()
+      {
+          var timestampLastUpdate = initTimestampsFromLocalStorage();
+          var app = document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'https://' ) === -1;
+          if(app){
+              if($cordovaNetwork.isOnline()){
+                console.log('I am right before sending the request for all the things');
+                RequestToServer.sendRequestWithResponse('Refresh',{Fields:'All',Timestamp:timestampLastUpdate}).then(
+                function(response)
+                {
+                  updateServices(response.Data);
+                  updateTimestamps('All',response.Timestamp);
+                  clearTimeout(timeOut);
+                  r.resolve(true);
+                }).catch(function(error)
+                {
+                  clearTimeout(timeOut);
+                  console.log(error);
+                  r.resolve(true);
+                });
+              }else{
+                clearTimeout(timeOut);
+                console.log('Offline resolving');
+                r.resolve(true);
+              }
           }else{
-            console.log('Offline resolving');
             r.resolve(true);
           }
-      }else{
-        r.resolve(true);
-      }
-      $timeout(function(){
+      }).catch(function(error)
+      {
+        r.reject(error);
+      });
+      var timeOut = setTimeout(function(){
         r.resolve(true);
       },40000);
 
       return r.promise;
     }
+    function initTimestampsFromLocalStorage()
+    {
+      lastUpdateTimestamp=JSON.parse(window.localStorage.getItem(UserAuthorizationInfo.UserName+'/Timestamps'));
+      return findSmallestTimestamp('All');
+    }
 
+    function initTimestamps(time)
+    {
+      console.log(time);
+      for(var field in lastUpdateTimestamp)
+      {
+        lastUpdateTimestamp[field] = time;
+      }
+      window.localStorage.setItem(UserAuthorizationInfo.UserName+'/Timestamps',JSON.stringify(lastUpdateTimestamp));
+    }
+
+
+    /**
+     * Update sections
+     */
+    function updateSection(parameters)
+    {
+      var r = $q.defer();
+      console.log(parameters);
+      console.log(findSmallestTimestamp(parameters));
+      RequestToServer.sendRequestWithResponse('Refresh',{Fields:parameters, Timestamp:findSmallestTimestamp(parameters)}).then(
+      function(data)
+      {
+        console.log(data);
+        if(data.Data =="Empty")
+        {
+          updateTimestamps(parameters, data.Timestamp);
+          r.resolve(true);
+        }else{
+          updateServices(data.Data).then(function()
+          {
+            updateTimestamps(parameters, data.Timestamp);
+            r.resolve(true);
+          });
+        }
+      }).catch(function(error)
+      {
+        console.log(error);
+        r.reject(error);
+      });
+      return r.promise;
+    }
+    
+    function updateTimestamps(content,time)
+    {
+      if(content=='All')
+      {
+        lastUpdateTimestamp.All = time;
+      }else if(angular.isArray(content))
+      {
+        var min=Infinity;
+        for (var i = 0; i < content.length; i++) {
+          lastUpdateTimestamp[content[i]] = time;
+        }
+      }else{
+        lastUpdateTimestamp[content] = time;
+      }
+      window.localStorage.setItem(UserAuthorizationInfo.UserName+'/Timestamps',JSON.stringify(lastUpdateTimestamp));
+    }
+    /**
+     * Reset sections
+     */
+    function resetSection()
+    {
+      var r = $q.defer();
+      RequestToServer.sendRequestWithResponse('Refresh',{Fields:parameters}).then(
+      function(data)
+      {
+        if(data.Data =="Empty")
+        {
+          updateTimestamps(parameters, data.Timestamp);
+          r.resolve(true);
+        }else{
+          setServices(data.Data,'setOnline').then(function()
+          {
+            updateTimestamps(parameters, data.Timestamp);
+            r.resolve(true);
+          });
+        }
+      }).catch(function(error)
+      {
+        console.log(error);
+        r.reject(error);
+      });
+      return r.promise;
+    }
+    /**
+     * Helper functions
+     */
+    function findSmallestTimestamp(content)
+    {
+      console.log(content);
+      if(content=='All')
+      {
+        return lastUpdateTimestamp.All;
+      }else if(angular.isArray(content))
+      {
+        var min=Infinity;
+        for (var i = 0; i < content.length; i++) {
+          if(min>lastUpdateTimestamp[content[i]])
+          {
+            min=lastUpdateTimestamp[content[i]];
+          }
+        }
+        return min;
+      }else{
+        return lastUpdateTimestamp[content];
+      }
+    }
+    
     return {
-        UpdateOffline:function(section)
-        {
-          return UpdateSectionOffline(section);
-        },
-        UpdateOnline:function(section)
-        {
-          return UpdateSectionOnline(section);
-        },
         //Function to update fields in the app, it does not initialize them, it only updates the new fields.
         //Parameter only defined when its a particular array of values.
-        update:function(section,parameters)
+        update:function(parameters)
         {
-           return updateSection(section,parameters);
+           return updateSection(parameters);
         },
-        init:function()
+        reset:function(parameters)
+        {
+          return resetSection(parameters);
+        },
+        init:function(type)
         {
           var r=$q.defer();
           var app = document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'https://' ) === -1;
@@ -356,39 +351,12 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','EncryptionService',
                   {
                     return initServicesFromLocalStorage();
                   }else{
-                    return initServicesOnline();
+                    return initServicesFromServer(type);
                   }
           }else{
               //Computer check if online
-              return initServicesOnline();
+              return initServicesFromServer(type);
            }
-        },
-        UpdateSection:function(section,onDemand)
-        {
-            var r=$q.defer();
-            var app = document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'https://' ) === -1;
-            if(app){
-                if($cordovaNetwork.isOnline()){
-                    return UpdateSectionOnline(section);
-                }else{
-                    if(onDemand)
-                    {
-                      r.reject('No internet connection');
-                    }else{
-                      return UpdateSectionOffline(section);
-                    }
-                }
-            }else{
-                //Computer check if online
-                if(navigator.onLine){
-                    console.log('online website');
-                    return UpdateSectionOnline(section);
-                }else{
-                    console.log('offline website');
-                    return UpdateSectionOffline(section);
-                }
-             }
-            return r.promise;
         }
     };
 

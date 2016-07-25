@@ -48,11 +48,7 @@
 	"APPVERSION":"App Version",
 	"LANGUAGE":"Language",
 	"SECUREYOURDEVICE":"Secure Your Device",
-	"PATIENTCHARTER":"Patient Charter"
-
-	
-	
-
-
-
+	"PATIENTCHARTER":"Patient Charter",
+	"SIGNOUT":"Sign out",
+	"HOME":"Home"
 }

@@ -6,124 +6,70 @@ var myApp=angular.module('MUHCApp');
 **/
 myApp.service('RequestToServer',function(UserAuthorizationInfo, EncryptionService, FirebaseService, $http,$q,$cordovaNetwork){
     var identifier='';
-    var Ref=new Firebase(FirebaseService.getFirebaseUrl()+'requests');
+    var Ref=new Firebase(FirebaseService.getFirebaseUrl());
+    var refRequests = Ref.child('requests');
+    var refUsers = Ref.child('users');
      var app = document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'https://' ) === -1;
       if(app){
           identifier=device.uuid;
       }else{
           identifier='browser';
       }
-    function updateTimestamps(typeOfRequest,content)
+    
+    function sendRequest(typeOfRequest,parameters)
     {
-      var time=(new Date()).getTime();
-      var timestamp = null;
-      if(typeOfRequest=='Login'||typeOfRequest=='Resume')
-      {
-          initTimestamps(time);
-      }else if(typeOfRequest=='Refresh')
-      {
-        if(!lastUpdateTimestamp.hasOwnProperty('All')) initTimestampsFromLocalStorage();
-        timestamp=obtainTimestamp(content);
-        console.log(lastUpdateTimestamp);
-      }
-      return timestamp;
+         //Push the request to firebase
+        var pushID =  refRequests.push({ 'Request' : EncryptionService.encryptData(typeOfRequest),'DeviceId':identifier,'Token':UserAuthorizationInfo.Token,  'UserID': UserAuthorizationInfo.UserName, 'Parameters':EncryptionService.encryptData(parameters),'Timestamp':Firebase.ServerValue.TIMESTAMP});
+        return pushID.key();
     }
-    var lastUpdateTimestamp={};
-    function sendRequest(typeOfRequest,content)
-    {
-          //Credentials for request
-          var userID=UserAuthorizationInfo.UserName;
-          var token=UserAuthorizationInfo.Token;
-          var encryptedRequestType=EncryptionService.encryptData(typeOfRequest);
-          var timestamp = updateTimestamps(typeOfRequest,content);
-          content= EncryptionService.encryptData(content);
-          //Push the request to firebase
-          var pushID =  Ref.push({ 'Request' : encryptedRequestType,'DeviceId':identifier,'Token':token,  'UserID': userID, 'Parameters':content,'Timestamp':timestamp});
-          return pushID.key();
-    }
-    function initTimestampsFromLocalStorage()
-    {
-      lastUpdateTimestamp=JSON.parse(window.localStorage.getItem(UserAuthorizationInfo.UserName+'/Timestamps'));
-    }
-    function initTimestamps(time)
-    {
 
-      lastUpdateTimestamp={
-        'All':time,
-        'Appointments':time,
-        'Messages':time,
-        'Documents':time,
-        'Tasks':time,
-        'Doctors':time,
-        'LabTests':time,
-        'Patient':time,
-        'Notifications':time,
-        'EducationalMaterial':time,
-        'Questionnaires':time
-      };
-      window.localStorage.setItem(UserAuthorizationInfo.UserName+'/Timestamps',JSON.stringify(lastUpdateTimestamp));
-    }
-    function obtainTimestamp(content)
-    {
-      if(typeof content=='undefined')
-      {
-        return lastUpdateTimestamp.All;
-      }else if(angular.isArray(content))
-      {
-        var min=Infinity;
-        for (var i = 0; i < content.length; i++) {
-          if(min>lastUpdateTimestamp[content[i]])
-          {
-            min=lastUpdateTimestamp[content[i]];
-          }
-        }
-        return min;
-      }else{
-        return lastUpdateTimestamp[content];
-      }
-    }
+   
+  
     return{
-        sendRequestWithResponse:function(typeOfRequest, content,callback)
+        sendRequestWithResponse:function(typeOfRequest, parameters)
         {
+          var r = $q.defer();
           //Sends request and gets random key for request
-          var key = sendRequest(typeOfRequest,content);
+          var key = sendRequest(typeOfRequest,parameters);
           //Sets the reference to fetch data for that request
-          var refPathRequest = Ref.child(UserAuthorizationInfo.UserName+'/'+key);
+          var refRequestResponse = refUsers.child(UserAuthorizationInfo.UserName+'/'+key);
+          console.log(refRequestResponse.toString());
           //Waits to obtain the request data.
-          refPathRequest.on('value',function(snapshot){
+          console.log('users/'+UserAuthorizationInfo.UserName+'/'+key);
+          refRequestResponse.on('value',function(snapshot){
             if(snapshot.exists())
             {
-              console.log(snapshot.val());
-              //If data exists, obtain data, delete firebase fields and clean off the link
-              refPathRequest.set(null);
-              refPathRequest.off();
-              callback(snapshot.val());
+              var data = snapshot.val();
+              var timestamp = data.Timestamp;
+              
+              data = EncryptionService.decryptData(data);
+              data.Timestamp = timestamp;
+              console.log(data);
+              clearTimeout(timeOut);
+              refRequestResponse.set(null);
+              refRequestResponse.off();
+              if(data.Code =='3')
+              {
+                r.resolve(data);
+              }else if(data.Code == '2'){
+                r.reject(data);
+              }              
             }
+          },function(error)
+          {
+            console.log(error);
+            r.reject(error);
           });
           //If request takes longer than 20000 to come back with timedout request, delete reference 
-          setTimeout(function()
+          var timeOut = setTimeout(function()
           {
-            refPathRequest.off();
-            callback({response:'timedout'});
-          },20000);
+            refRequestResponse.off();
+            r.resolve({Response:'timeout'});
+          },10000);
+          return r.promise;
         },
         sendRequest:function(typeOfRequest,content){
           sendRequest(typeOfRequest,content);
-        },
-        updateTimestamps:function(content,time)
-        {
-          if(content=='All')
-          {
-            initTimestamps(time);
-          }else if(angular.isArray(content))
-          {
-            for (var i = 0; i < content.length; i++) {
-              lastUpdateTimestamp[content[i]]=time;
-            }
-          }else{
-            lastUpdateTimestamp[content]=time;
-          }
-          window.localStorage.setItem(UserAuthorizationInfo.UserName+'/Timestamps',JSON.stringify(lastUpdateTimestamp));
         },
         getIdentifier:function()
         {

@@ -175,7 +175,7 @@ myApp.service('Notifications',['$rootScope','$filter','RequestToServer','LocalSt
         },
         getLastNotification:function()
         {
-          if(Notifications.length==0)
+          if(Notifications.length===0)
           {
             return -1;
           }else{
@@ -290,9 +290,18 @@ myApp.service('Notifications',['$rootScope','$filter','RequestToServer','LocalSt
         setNotificationsLanguage:function(notifications)
         {
           var language = UserPreferences.getLanguage();
-          for (var i = 0; i < notifications.length; i++) {
+          for (var i = notifications.length-1; i >=0; i--) {
+              console.log(notifications[i]);
               notifications[i].Title = (language=='EN') ?   notifications[i].Name_EN : notifications[i].Name_FR;
-              notifications[i].Desc = (language=='EN') ?  notifications[i].Content.NameEN : notifications[i].Content.NameFR;
+              console.log(notifications[i].RefTableRowSerNum);
+              try{
+                if(typeof notifications[i].Content == 'undefined') notifications[i].Content = notificationTypes[notifications[i].NotificationType].namesFunction(notifications[i].RefTableRowSerNum);
+                notifications[i].Desc = (language=='EN') ?  notifications[i].Content.NameEN : notifications[i].Content.NameFR;
+              }catch(e){
+                notifications.splice(i,1);
+                console.log(e);
+              }
+              
 
           }
           return notifications;

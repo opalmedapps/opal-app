@@ -12,28 +12,91 @@ var myApp=angular.module('MUHCApp');
 myApp.service('Appointments', ['$q', 'RequestToServer','$cordovaCalendar','UserAuthorizationInfo', '$filter', 'UserPreferences','LocalStorage',function ($q,RequestToServer, $cordovaCalendar, UserAuthorizationInfo, $filter,UserPreferences,LocalStorage) {
     /**
     *@ngdoc property
-    *@name  UserAppointmentsArray
+    *@name  userAppointmentsArray
     *@propertyOf MUHCApp.services:PatientAppointments
     *@description Array that contains all user appointments organized chronologically from most recent to least recent.
     **/
     var UserAppointmentsInNativeCalendar=[];
-    var UserAppointmentsArray = [];
+    var userAppointmentsArray = [];
+    var treatmentSessionsObject = {};
     var appointmentsLocalStorage=[];
+    
     var calendar={};
     var numberOfSessions=0;
     function searchAppointmentsAndDelete(appointments)
     {
       for (var i = 0; i < appointments.length; i++) {
-        for (var j = 0; j < UserAppointmentsArray.length; j++) {
-           if(UserAppointmentsArray[j].AppointmentSerNum==appointments[i].AppointmentSerNum)
+        for (var j = 0; j < userAppointmentsArray.length; j++) {
+           if(userAppointmentsArray[j].AppointmentSerNum==appointments[i].AppointmentSerNum)
            {
-             UserAppointmentsArray.splice(j,1);
+             userAppointmentsArray.splice(j,1);
              appointmentsLocalStorage.splice(j,1);
              break;
            }
         }
 
       }
+    }
+    /*
+      * Setting User Calendar
+      //This function takes the results from the sorted by date appointments and organizes them into an object with
+        //hierarchical structure year->month->day->appointments for the day, the dayly appointments are arrays.
+
+    */
+    function setCalendar(appointments)
+    {
+      
+      //Initializing local variables
+      var year = -1;
+      var month = -1;
+      var day = -1;
+      calendar = {};
+      var calendarYear = {};
+      var calendarMonth = {};
+      //Loop goes through all the appointments in the sorted array of appointments, remember this only works if ap
+      //appointments are already sorted
+      for (var i = 0; i < appointments.length; i++) {
+
+        //Gets year, month and day for appointment
+        var tmpYear = (appointments[i].ScheduledStartTime).getFullYear();
+        var tmpMonth = (appointments[i].ScheduledStartTime).getMonth() + 1;
+        var tmpDay = (appointments[i].ScheduledStartTime).getDate();
+
+        //if month has changed, since appointments in order, add the resulting appointments to for that month to the correspongding
+        //calendar year.
+        if (month !== tmpMonth || (month === tmpMonth && year !== tmpYear)) {
+            if (i > 0) {
+                calendarYear[month] = {};
+                calendarYear[month] = calendarMonth;
+                calendarMonth = {};
+            }
+            month = tmpMonth;
+        }
+
+        //if year has changed, add year to the calendar object and changed the year to the year it changed too
+        if (year !== tmpYear) {
+            if (i > 0) {
+                calendar[year] = {};
+                calendar[year] = calendarYear;
+                calendarYear = {};
+                calendarMonth = {};
+            }
+            year = tmpYear;
+
+        }
+
+        //If statement just to defined objects and prevent exception in case certain day does not
+        //have any appointments yet. It then adds to the calendaMonth object for that day the
+        //appointment
+        if (calendarMonth[tmpDay] === undefined) calendarMonth[tmpDay] = [];
+        calendarMonth[tmpDay].push(appointments[i]);
+
+      }
+      //Last Month, of year
+      calendarYear[month] = {};
+      calendarYear[month] = calendarMonth;
+      calendar[year] = {};
+      calendar[year] = calendarYear;
     }
     function findClosestAppointmentForCheckin(todayAppointments)
     {
@@ -77,19 +140,19 @@ myApp.service('Appointments', ['$q', 'RequestToServer','$cordovaCalendar','UserA
       //If sorting=false then latest appointment will be last, else it will be first
       if(period=='Past') sorting=true;
       var array=[];
-      for (var i = 0; i < UserAppointmentsArray.length; i++) {
-        var date=UserAppointmentsArray[i].ScheduledStartTime;
+      for (var i = 0; i < userAppointmentsArray.length; i++) {
+        var date=userAppointmentsArray[i].ScheduledStartTime;
         //If appointment is the same date add it to the array
           if(period=='Today'&&date.getDate() == day && date.getFullYear() == year && date.getMonth() == month)
           {
-            array.push(UserAppointmentsArray[i]);
+            array.push(userAppointmentsArray[i]);
             //If appointment is in the future add it to the array
           }else if(period=='Future'&&time<date.getTime())
           {
-            array.push(UserAppointmentsArray[i]);
+            array.push(userAppointmentsArray[i]);
           //ditto
           }else if(period=='Past'&&date.getTime()<=time){
-            array.push(UserAppointmentsArray[i]);
+            array.push(userAppointmentsArray[i]);
           }
       }
       //Sort it correctly for each case
@@ -107,89 +170,24 @@ myApp.service('Appointments', ['$q', 'RequestToServer','$cordovaCalendar','UserA
       numberOfSessions=0;
       appointmentsLocalStorage=appointmentsLocalStorage.concat(appointments);
       LocalStorage.WriteToLocalStorage('Appointments',appointmentsLocalStorage);
-      var today = new Date();
-      today.setDate(today.getDate()-10);
+      // var today = new Date();
+      // today.setDate(today.getDate()-10);
       for (var i = 0; i < appointments.length; i++) {
           appointments[i].ResourceName = (appointments[i].Resource.hasOwnProperty('Machine')) ? '':appointments[i].Resource.Doctor;
           appointments[i].ScheduledStartTime = $filter('formatDate')(appointments[i].ScheduledStartTime);
-          appointments[i].ScheduledStartTime = new Date(today);
+          //appointments[i].ScheduledStartTime = new Date(today);
           appointments[i].ScheduledEndTime =  $filter('formatDate')(appointments[i].ScheduledEndTime);
-          appointments[i].ScheduledEndTime  = new Date(today);
-          appointments[i].ScheduledEndTime.setMinutes(appointments[i].ScheduledEndTime.getMinutes()+15);
-          today.setDate(today.getDate()+1);
-          UserAppointmentsArray[i] = appointments[i];
-          if(appointments[i].AppointmentType_EN=='Daily Radiotherapy Treatment'||appointments[i].AppointmentType_EN=='First Radiotherapy Treatment Session'||appointments[i].AppointmentType_EN=='Final Radiotherapy Treatment Session')
-          {
-            numberOfSessions++;
-          }
+          // appointments[i].ScheduledEndTime  = new Date(today);
+          // appointments[i].ScheduledEndTime.setMinutes(appointments[i].ScheduledEndTime.getMinutes()+15);
+          // today.setDate(today.getDate()+1);
+          userAppointmentsArray.push(appointments[i]);
       }
       //Sort Appointments chronologically most recent first
-      UserAppointmentsArray = $filter('orderBy')(UserAppointmentsArray, 'ScheduledStartTime', false);
-      var sessionNumber = 1;
-      for (var j = 0; j < UserAppointmentsArray.length; j++) {
-        if(UserAppointmentsArray[j].AppointmentType_EN=='Daily Radiotherapy Treatment'||UserAppointmentsArray[j].AppointmentType_EN=='Final Radiotherapy Treatment Session'||UserAppointmentsArray[j].AppointmentType_EN=='First Radiotherapy Treatment Session')
-        {
-          UserAppointmentsArray[j].sessionNumber="Session "+sessionNumber+ " of "+ numberOfSessions;
-          sessionNumber++;
-        }
-      }
-      /*
-        * Setting User Calendar
-        //The rest of this function takes the results from the sorted by date appointments and organizes them into an object with
-         //hierarchical structure year->month->day->appointments for the day, the dayly appointments are arrays.
-
-      */
-      //Initializing local variables
-      var year = -1;
-      var month = -1;
-      var day = -1;
-      calendar = {};
-      var calendarYear = {};
-      var calendarMonth = {};
-      //Loop goes through all the appointments in the sorted array of appointments, remember this only works if ap
-      //appointments are already sorted
-      for (var i = 0; i < UserAppointmentsArray.length; i++) {
-
-        //Gets year, month and day for appointment
-        var tmpYear = (UserAppointmentsArray[i].ScheduledStartTime).getFullYear();
-        var tmpMonth = (UserAppointmentsArray[i].ScheduledStartTime).getMonth() + 1;
-        var tmpDay = (UserAppointmentsArray[i].ScheduledStartTime).getDate();
-
-        //if month has changed, since appointments in order, add the resulting appointments to for that month to the correspongding
-        //calendar year.
-        if (month !== tmpMonth || (month === tmpMonth && year !== tmpYear)) {
-            if (i > 0) {
-                calendarYear[month] = {};
-                calendarYear[month] = calendarMonth;
-                calendarMonth = {};
-            }
-            month = tmpMonth;
-        }
-
-        //if year has changed, add year to the calendar object and changed the year to the year it changed too
-        if (year !== tmpYear) {
-            if (i > 0) {
-                calendar[year] = {};
-                calendar[year] = calendarYear;
-                calendarYear = {};
-                calendarMonth = {};
-            }
-            year = tmpYear;
-
-        }
-
-        //If statement just to defined objects and prevent exception in case certain day does not
-        //have any appointments yet. It then adds to the calendaMonth object for that day the
-        //appointment
-        if (calendarMonth[tmpDay] === undefined) calendarMonth[tmpDay] = [];
-        calendarMonth[tmpDay].push(UserAppointmentsArray[i]);
-
-      }
-      //Last Month, of year
-      calendarYear[month] = {};
-      calendarYear[month] = calendarMonth;
-      calendar[year] = {};
-      calendar[year] = calendarYear;
+      userAppointmentsArray = $filter('orderBy')(userAppointmentsArray, 'ScheduledStartTime', false);
+      //Extracts treatment session appointments
+      treatmentSessionsObject = setTreatmentSessions(userAppointmentsArray);
+      //Sets the calendar for easy extraction in the calendar view
+      setCalendar(userAppointmentsArray);
     }
       function findAppointmentIndexInArray(array, serNum)
       {
@@ -202,9 +200,39 @@ myApp.service('Appointments', ['$q', 'RequestToServer','$cordovaCalendar','UserA
         return -1;
 
       }
+      function setTreatmentSessions(appointments)
+      {
+        var array = [];
+          var number = 0;
+          var completedBoolean = false;
+          var currentAppointment = {};
+          var Index = 0;
+          var todayTime = (new Date()).getTime();
+          for (var i = 0; i < userAppointmentsArray.length; i++) {
+            if(userAppointmentsArray[i].AliasSerNum =='6'||userAppointmentsArray[i].AliasSerNum=='7'||userAppointmentsArray[i].AliasSerNum=='9')
+            {
+              number++;
+              if(userAppointmentsArray[i].ScheduledStartTime.getTime() > todayTime)
+              {
+                  if(!completedBoolean)
+                  {
+                      userAppointmentsArray[i].TimeStatus = 'Next';
+                      currentAppointment = userAppointmentsArray[i];
+                      Index = number;
+                      completedBoolean = true;
+                  }else{
+                    userAppointmentsArray[i].TimeStatus = 'Future';
+                  }
+              }else{
+                userAppointmentsArray[i].TimeStatus = 'Past';
+              }
+              array.push(userAppointmentsArray[i]);
+            }
+          }
+          return {Total: number, CurrentAppointment:{ Index: Index, Appointment: currentAppointment}, AppointmentList:array, Completed: !completedBoolean};
+      }
       function manageAppointmentsInNativeCalendar(appointments,index)
       {
-        //var appointments=UserAppointmentsArray;
         var indexValue=index;
         var r=$q.defer();
         var today=new Date();
@@ -295,13 +323,13 @@ myApp.service('Appointments', ['$q', 'RequestToServer','$cordovaCalendar','UserA
         *@name setUserAppoinments
         *@methodOf MUHCApp.services:UserAppointments
         *@param {Object} appointments Appointment object obtain from Firebase
-        *@description Function is called from the {@link MUHCApp.services:UpdateUI}. The function sets the UserAppointmentsArray, TodayAppointments, FutureAppointments, PastAppointments for the Appointment List used in
+        *@description Function is called from the {@link MUHCApp.services:UpdateUI}. The function sets the userAppointmentsArray, TodayAppointments, FutureAppointments, PastAppointments for the Appointment List used in
         the {@link MUHCApp.controller:AppointmentListController AppointmentListController}, and calendar object used in the {@link MUHCApp.controller:CalendarController CalendarController}.
         **/
         setUserAppointments: function (appointments) {
         //Initializing Variables
             UserAppointmentsInNativeCalendar=[];
-            UserAppointmentsArray = [];
+            userAppointmentsArray = [];
             appointmentsLocalStorage=[];
             calendar={};
             addAppointmentsToService(appointments);
@@ -313,7 +341,7 @@ myApp.service('Appointments', ['$q', 'RequestToServer','$cordovaCalendar','UserA
         },
         isThereNextAppointment:function(){
           var FutureAppointments=getAppointmentsInPeriod('Future');
-          if(FutureAppointments.length==0)
+          if(FutureAppointments.length===0)
           {
             return false;
           }else{
@@ -322,7 +350,7 @@ myApp.service('Appointments', ['$q', 'RequestToServer','$cordovaCalendar','UserA
         },
         isThereAppointments:function()
         {
-          if(UserAppointmentsArray.length==0)
+          if(userAppointmentsArray.length===0)
           {
             return false;
           }else{
@@ -339,11 +367,11 @@ myApp.service('Appointments', ['$q', 'RequestToServer','$cordovaCalendar','UserA
           }
         },
         getAppointmentBySerNum:function(serNum){
-            for (var i = 0; i < UserAppointmentsArray.length; i++) {
-                if(UserAppointmentsArray[i].AppointmentSerNum==serNum){
-                    return angular.copy(UserAppointmentsArray[i]);
+            for (var i = 0; i < userAppointmentsArray.length; i++) {
+                if(userAppointmentsArray[i].AppointmentSerNum==serNum){
+                    return angular.copy(userAppointmentsArray[i]);
                 }
-            };
+            }
         },
         /**
         *@ngdoc method
@@ -354,7 +382,7 @@ myApp.service('Appointments', ['$q', 'RequestToServer','$cordovaCalendar','UserA
         **/
         getUserAppointments: function () {
 
-            return UserAppointmentsArray;
+            return userAppointmentsArray;
         },
          /**
         *@ngdoc method
@@ -387,10 +415,10 @@ myApp.service('Appointments', ['$q', 'RequestToServer','$cordovaCalendar','UserA
           return getAppointmentsInPeriod('Past');
         },
         setAppointmentCheckin:function(serNum){
-              var appointments=UserAppointmentsArray;
+              var appointments=userAppointmentsArray;
             for(var i=0;i<appointments.length;i++){
                 if(appointments[i].AppointmentSerNum==serNum){
-                    UserAppointmentsArray[i].Checkin='1';
+                    userAppointmentsArray[i].Checkin='1';
                     appointmentsLocalStorage[i].Checkin = '1';
                     LocalStorage.WriteToLocalStorage('Appoinments',appointmentsLocalStorage);
                 }
@@ -420,10 +448,10 @@ myApp.service('Appointments', ['$q', 'RequestToServer','$cordovaCalendar','UserA
             return calendar;
         },
         setChangeRequest:function(index,value){
-            var appointments=UserAppointmentsArray;
+            var appointments=userAppointmentsArray;
             for(var i=0;i<appointments.length;i++){
                 if(appointments.AppointmentSerNum==index){
-                    UserAppointmentsArray[i].ChangeRequest=value;
+                    userAppointmentsArray[i].ChangeRequest=value;
                 }
             }
         },
@@ -437,11 +465,11 @@ myApp.service('Appointments', ['$q', 'RequestToServer','$cordovaCalendar','UserA
         },
         setCheckinAppointmentAsClosed:function(serNum)
         {
-          for (var i = 0; i < UserAppointmentsArray.length; i++)
+          for (var i = 0; i < userAppointmentsArray.length; i++)
           {
-            if(UserAppointmentsArray[i].AppointmentSerNum == serNum)
+            if(userAppointmentsArray[i].AppointmentSerNum == serNum)
             {
-              UserAppointmentsArray[i].StatusClose = true;
+              userAppointmentsArray[i].StatusClose = true;
               appointmentsLocalStorage[i].StatusClose = true;
             }
             LocalStorage.WriteToLocalStorage('Appointments', appointmentsLocalStorage);
@@ -466,21 +494,21 @@ myApp.service('Appointments', ['$q', 'RequestToServer','$cordovaCalendar','UserA
         getAppointmentName:function(serNum)
         {
           console.log(serNum);
-          console.log(UserAppointmentsArray);
-          for (var i = 0; i < UserAppointmentsArray.length; i++) {
-            if(UserAppointmentsArray[i].AppointmentSerNum == serNum)
+          console.log(userAppointmentsArray);
+          for (var i = 0; i < userAppointmentsArray.length; i++) {
+            if(userAppointmentsArray[i].AppointmentSerNum == serNum)
             {
-              console.log({NameEN:UserAppointmentsArray[i].AppointmentType_EN, NameFR: UserAppointmentsArray[i].AppointmentType_FR });
-              return {NameEN:UserAppointmentsArray[i].AppointmentType_EN, NameFR: UserAppointmentsArray[i].AppointmentType_FR };
+              console.log({NameEN:userAppointmentsArray[i].AppointmentType_EN, NameFR: userAppointmentsArray[i].AppointmentType_FR });
+              return {NameEN:userAppointmentsArray[i].AppointmentType_EN, NameFR: userAppointmentsArray[i].AppointmentType_FR };
             }
           }
         },
         readAppointmentBySerNum:function(serNum)
         {
-          for (var i = 0; i < UserAppointmentsArray.length; i++) {
-            if(UserAppointmentsArray[i].AppointmentSerNum == serNum)
+          for (var i = 0; i < userAppointmentsArray.length; i++) {
+            if(userAppointmentsArray[i].AppointmentSerNum == serNum)
             {
-              UserAppointmentsArray[i].ReadStatus = '1';
+              userAppointmentsArray[i].ReadStatus = '1';
               appointmentsLocalStorage[i].ReadStatus = '1';
               RequestToServer.sendRequest('Read',{"Id":serNum, "Field": "Appointments"});
               LocalStorage.WriteToLocalStorage('Appointments', appointmentsLocalStorage);
@@ -489,10 +517,10 @@ myApp.service('Appointments', ['$q', 'RequestToServer','$cordovaCalendar','UserA
         },
         checkAndAddAppointmentsToCalendar:function(){
           var r=$q.defer();
-          if(UserAppointmentsArray.length>0)
+          if(userAppointmentsArray.length>0)
           {
-            console.log(UserAppointmentsArray.length);
-            manageAppointmentsInNativeCalendar(UserAppointmentsArray,0).then(
+            console.log(userAppointmentsArray.length);
+            manageAppointmentsInNativeCalendar(userAppointmentsArray,0).then(
               function(app){
                 r.resolve(app);
               });
@@ -508,43 +536,22 @@ myApp.service('Appointments', ['$q', 'RequestToServer','$cordovaCalendar','UserA
         //Getting radiotherapy treatment appointments
         getTreatmentAppointments:function()
         {
-          var array = [];
-          var number = 0;
-          var completedBoolean = false;
-          var currentAppointment = {};
-          var Index = 0;
-          var todayTime = (new Date()).getTime();
-          for (var i = 0; i < UserAppointmentsArray.length; i++) {
-            if(UserAppointmentsArray[i].AliasSerNum =='6'||UserAppointmentsArray[i].AliasSerNum=='7'||UserAppointmentsArray[i].AliasSerNum=='9')
-            {
-              number++;
-              if(UserAppointmentsArray[i].ScheduledStartTime.getTime() > todayTime)
-              {
-                  if(!completedBoolean)
-                  {
-                      UserAppointmentsArray[i].TimeStatus = 'Next';
-                      currentAppointment = UserAppointmentsArray[i];
-                      Index = number;
-                      console.log(UserAppointmentsArray[i]);
-                      completedBoolean = true;
-                  }else{
-                    UserAppointmentsArray[i].TimeStatus = 'Future';
-                  }
-              }else{
-                UserAppointmentsArray[i].TimeStatus = 'Past';
-              }
-              array.push(UserAppointmentsArray[i]);
-            }
-          }
-          return {Total: number, CurrentAppointment:{ Index: Index, Appointment: currentAppointment}, AppointmentList:array, Completed: !completedBoolean};
+         if(treatmentSessionsObject.Total === 0||treatmentSessionsObject.Completed) return treatmentSessionsObject;
+         var current = treatmentSessionsObject.CurrentAppointment.Appointment;
+         if(current.ScheduledStartTime.getTime()<=(new Date()).getTime())
+         {
+           return setTreatmentSessions(userAppointmentsArray);
+         }else{
+           return treatmentSessionsObject;
+         }
         },
         //Get number of unread news
         getNumberUnreadAppointments:function()
         {
           var array = [];
           var number = 0;
-          for (var i = 0; i < UserAppointmentsArray.length; i++) {
-            if(UserAppointmentsArray[i].ReadStatus == '0')
+          for (var i = 0; i < userAppointmentsArray.length; i++) {
+            if(userAppointmentsArray[i].ReadStatus == '0')
             {
               number++;
             }
@@ -561,7 +568,7 @@ myApp.service('Appointments', ['$q', 'RequestToServer','$cordovaCalendar','UserA
               //set language
               if(!array[i].hasOwnProperty('Title')||!array[i].hasOwnProperty('Description')||!array[i].hasOwnProperty('ResourceName'))
               {
-                if( array[i].Resource.hasOwnProperty('Machine')||Object.keys(array[i].Resource).length == 0)
+                if( array[i].Resource.hasOwnProperty('Machine')||Object.keys(array[i].Resource).length === 0)
                 {
                   array[i].ResourceName = (language =='EN')? array[i].MapName_EN : array[i].MapName_FR;
                 }else if(array[i].Resource.hasOwnProperty('Doctor')){

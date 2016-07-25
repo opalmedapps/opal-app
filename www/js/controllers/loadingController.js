@@ -2,35 +2,28 @@
 //  Created by David Herrera on 2015-05-04.
 //  Copyright (c) 2015 David Herrera. All rights reserved.
 //
-angular.module('MUHCApp').controller('LoadingController', ['$rootScope','$state', '$scope','UpdateUI', 'UserAuthorizationInfo','UserPreferences', '$q','Patient', 'Messages', '$timeout','LocalStorage',function ($rootScope,$state, $scope, UpdateUI, UserAuthorizationInfo, UserPreferences, $q, Patient, Messages,$timeout,LocalStorage){
-		$timeout(function()
+angular.module('MUHCApp').controller('LoadingController', ['$rootScope','$state', '$scope','UpdateUI', 'UserAuthorizationInfo','UserPreferences', '$q','Patient', 'Messages', '$timeout','LocalStorage','NavigatorParameters','RequestToServer',function ($rootScope,$state, $scope, UpdateUI, UserAuthorizationInfo, UserPreferences, $q, Patient, Messages,$timeout,LocalStorage,NavigatorParameters,RequestToServer){
+		modal.show();
+		var loadingParameter = NavigatorParameters.getParameters();
+		var userAuthorizationInfo = UserAuthorizationInfo.getUserAuthData();
+		if(typeof userAuthorizationInfo == 'undefined'||!userAuthorizationInfo) $state.go('init');
+		setTimeout(function()
 		{
-			modal.show();
-		});
-		
-		if(LocalStorage.isUserDataDefined())
-		{
-			$timeout(function()
+			UpdateUI.init(loadingParameter).then(function()
 			{
-				UpdateUI.init().then(function(){
-					$rootScope.refresh=true;
-						$state.go('Home');
-						modal.hide();
-				});
-			},200);
-		}else{
-			UpdateUI.init().then(function(){
-			$rootScope.refresh=true;
-				$state.go('Home');
 				modal.hide();
+				clearTimeout(timeOut);
+				$state.go('Home');	
 			});
-		}
-		setTimeout(function(){
+		},200);
+		
+
+		var timeOut = setTimeout(function(){ 
 			console.log(typeof Patient.getFirstName());
-			if(typeof Patient.getFirstName()=='undefined'||Patient.getFirstName()==''){
+			if(typeof Patient.getFirstName()=='undefined'||Patient.getFirstName()===''){
 				console.log('Inside alert');
 				console.log('we meet again');
-				var mod=undefined;
+				var mod;
 				if(ons.platform.isAndroid())
 				{
 					mod='material';
@@ -48,6 +41,6 @@ angular.module('MUHCApp').controller('LoadingController', ['$rootScope','$state'
 						}
 					}
 				});
-		}
-		},40000);
+			}
+		},80000);
 }]);

@@ -5,14 +5,7 @@ myApp.controller('accountSettingController', ['Patient', 'UserPreferences', '$sc
     //Backbutton android pressed action
     var backButtonPressed = 0;
     $scope.accountDeviceBackButton = function() {
-        console.log('device button pressed do nothing');
-        backButtonPressed++;
-		if(backButtonPressed==2)
-		{
-			tabbar.setActiveTab(0);
-			backButtonPressed = 0;
-		}
-
+        tabbar.setActiveTab(0);
     };
     //General device settings and privacy settings
     $scope.goToGeneralSettings = function() {
@@ -25,13 +18,24 @@ myApp.controller('accountSettingController', ['Patient', 'UserPreferences', '$sc
 
     //Pull to refresh function
     $scope.load2 = function($done) {
-        RequestToServer.sendRequest('Refresh', 'Patient');
-        UpdateUI.update('Patient').then(function() {
-            accountInit();
-        });
-        $timeout(function() {
-            $done();
-        }, 2000);
+        UpdateUI.update('All').then(function()
+		{
+			$timeout(function()
+			{
+				updated=true;
+				backButtonPressed = 0;
+				accountInit();
+				clearTimeout(timeOut);
+				$done();
+			});
+		}).catch(function(error){
+			console.log(error);
+			clearTimeout(timeOut);
+			$done();
+		});
+		var timeOut = setTimeout(function(){
+			$done();
+		},5000);
     };
     //Initiate account settings function
     accountInit();

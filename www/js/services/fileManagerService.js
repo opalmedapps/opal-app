@@ -48,7 +48,13 @@ return {
   {
     var r=$q.defer();
     var fileTransfer = new FileTransfer();
-    fileTransfer.download(url, targetPath,
+    window.resolveLocalFileSystemURL(targetPath,function(fileEntry)
+    {
+      console.log(fileEntry);
+      r.resolve(true);
+    },function()
+    {
+      fileTransfer.download(url, targetPath,
       function(entry) {
         console.log(entry);
         r.resolve(entry);
@@ -57,6 +63,9 @@ return {
         console.log(err);
         r.reject(err);
       });
+    });
+    return r.rpomise;
+    
   },
   shareDocument:function(name, url)
   {
@@ -65,20 +74,21 @@ return {
       
       //Set the subject for the document
       var options = {subject: name};
-      //Determine if its a document, if it is, allow printing
-      if(isPDFDocument(url))
-      {
-        options.files = [url];
-      }else{
-        options.url = url;
-      }
+      //Determine if its a document, if it is, download document and print otherwise, simple sahre the url link
+      // if(isPDFDocument(url))
+      // {
+      //   options.files = [url];
+      // }else{
+      //   options.url = url;
+      // }
+      options.url = url;
       var onSuccess = function(result) {
       console.log("Share completed? " + result.completed); // On Android apps mostly return false even while it's true
       console.log("Shared to app: " + result.app); // On Android result.app is currently empty. On iOS it's empty when sharing is cancelled (result.completed=false)
-      }
+      };
       var onError = function(msg) {
       console.log("Sharing failed with message: " + msg);
-        }
+        };
       window.plugins.socialsharing.shareWithOptions(options, onSuccess, onError);
 		} else {
 			ons.notification.alert({ message: $filter('translate')('AVAILABLEDEVICES')});

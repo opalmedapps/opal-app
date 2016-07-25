@@ -1,8 +1,31 @@
 var myApp=angular.module('MUHCApp');
-myApp.controller('TabsController',['$scope','$timeout','$translate','$translatePartialLoader',function($scope,$timeout,$translate,$translatePartialLoader){
+myApp.controller('TabsController',['$scope','$timeout','$translate','$translatePartialLoader','$rootScope',function($scope,$timeout,$translate,$translatePartialLoader,$rootScope){
   //Enter code here!!
   $translatePartialLoader.addPart('all-views');
- 
+  // document.addEventListener('ons-tabbar:init', tabbarInit);
+  // var navigators = [{name:'homeNavigator',homePage:'./views/home/home.html'},{name:'personalNavigator',homePage:'./views/personal/personal.html'},{name:'generalNavigator',homePage:'./views/general/general.html'},{name:'educationNavigator',homePage:'./views/education/education.html'},{name:'settingsNavigator',homePage:'./views/settings/settings.html'}];
+  // function tabbarInit(ev) {
+  //   tabbar.on('reactive',function(event)
+  //   {
+  //     var navigator = window[navigators[event.index].name];
+  //     var pages = navigator.getPages();
+  //     if(pages.length>1)navigator.resetToPage(navigators[event.index].homePage,{'animation':'fade'});
+  //   });
+  // }
+  // $scope.$on('$destroy',function()
+  // {
+  //   tabbar.off('reactive');
+  //   document.removeEventListener('ons-tabbar:init',tabbarInit);
+  // });
+  var gestureDetector = document.querySelector('ons-gesture-detector');
+  console.log(gestureDetector);
+  document.addEventListener('ons-gesture-detector:swiperight','#detect-area',function(event)
+  {
+    cnsole.log(event);
+  });
+  $(document).on('swiperight', '#detect-area', function() {
+    console.log('Swipe left is detected.');
+  });
 
 
   }]);
@@ -11,23 +34,26 @@ myApp.controller('personalTabController',['$scope','$timeout','Appointments','$t
   //Its possible for a notification to have been read such as a document since this controller has already been instantiated
   // we will have to check to sync that number on the badges for the tabs on the personal page.
   personalNavigator.on('prepop',function(){
-    backButtonPressed = 0;
     setNewsNumbers();
   });
   $scope.load = function($done) {
-      RequestToServer.sendRequest('Refresh','All');
-      UpdateUI.update('All').then(function()
-      {
-          updated=true;
-          $timeout(function()
-          {
-            initPersonalTab();
-          });
+    UpdateUI.update('All').then(function()
+    {
+        updated=true;
+        $timeout(function()
+        {
+          initPersonalTab();
+          clearTimeout(timeOut);
           $done();
-      });
-      $timeout(function(){
-          $done();
-      },5000);
+        });
+    }).catch(function(error){
+      console.log(error);
+      clearTimeout(timeOut);
+      $done();
+    });
+    var timeOut = setTimeout(function(){
+        $done();
+    },5000);
     };
   
 
@@ -52,12 +78,7 @@ myApp.controller('personalTabController',['$scope','$timeout','Appointments','$t
   var backButtonPressed = 0;
   $scope.personalDeviceBackButton=function()
   {
-    backButtonPressed++;
-    if(backButtonPressed==2)
-    {
-      tabbar.setActiveTab(0);
-      backButtonPressed = 0;
-    }
+    tabbar.setActiveTab(0);
   };
   //Sets appointments and treatment plan stage tab
   initPersonalTab();
@@ -99,20 +120,24 @@ generalNavigator.on('prepop',function(){
 });
 
 $scope.load = function($done) {
-      RequestToServer.sendRequest('Refresh','All');
-      UpdateUI.update('All').then(function()
-      {
+    UpdateUI.update('All').then(function()
+    {
+        $timeout(function()
+        {
           updated=true;
           backButtonPressed = 0;
-          $timeout(function()
-          {
-            setNewsNumbers();
-          });
+          setNewsNumbers();
+          clearTimeout(timeOut);
           $done();
-      });
-      $timeout(function(){
-          $done();
-      },5000);
+        });
+    }).catch(function(error){
+      console.log(error);
+      clearTimeout(timeOut);
+      $done();
+    });
+    var timeOut = setTimeout(function(){
+        $done();
+    },5000);
     };
     
 $scope.goToPatientCharter = function()
@@ -162,13 +187,7 @@ function setNewsNumbers()
 var backButtonPressed = 0;
 $scope.generalDeviceBackButton=function()
 {
-  console.log('device button pressed do nothing');
-  backButtonPressed++;
-  if(backButtonPressed==2)
-  {
-    tabbar.setActiveTab(0);
-    backButtonPressed = 0;
-  }
+  tabbar.setActiveTab(0);
 };
 
 
