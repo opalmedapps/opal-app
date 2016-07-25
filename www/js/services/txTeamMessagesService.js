@@ -54,7 +54,7 @@ myApp.service('TxTeamMessages', ['$filter','RequestToServer','LocalStorage', 'Us
     //Gets Last message to display on main tab pages
     getLastTxTeamMessage:function()
     {
-      if(txTeamMessagesArray.length==0) return null;
+      if(txTeamMessagesArray.length === 0) return null;
       return txTeamMessagesArray[0];
     },
     //Gets unread messages for notifications and badges
@@ -84,6 +84,8 @@ myApp.service('TxTeamMessages', ['$filter','RequestToServer','LocalStorage', 'Us
     //Obtain a team message by ser num
     getTxTeamMessageBySerNum:function(serNum)
     {
+      console.log(serNum);
+      console.log(txTeamMessagesArray);
       for (var i = 0; i < txTeamMessagesArray.length; i++) {
         if(txTeamMessagesArray[i].TxTeamMessageSerNum==serNum)
         {
@@ -117,8 +119,9 @@ myApp.service('TxTeamMessages', ['$filter','RequestToServer','LocalStorage', 'Us
     getTxTeamMessageName:function(serNum)
     {
       console.log(txTeamMessagesArray);
+      console.log(serNum);
       for (var i = 0; i < txTeamMessagesArray.length; i++) {
-        if(txTeamMessagesArray[i].TxTeamMessageSerNum==serNum)
+        if(txTeamMessagesArray[i].TxTeamMessageSerNum === serNum)
         {
           console.log({ NameEN: txTeamMessagesArray[i].PostName_EN, NameFR:txTeamMessagesArray[i].PostName_FR});
           return { NameEN: txTeamMessagesArray[i].PostName_EN, NameFR:txTeamMessagesArray[i].PostName_FR};

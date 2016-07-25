@@ -2427,8 +2427,3 @@ transform: translate(0px,-50px);
   -o-transition: width .6s ease;
   transition: width .6s ease;
 }
-.leesFooter {
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-}

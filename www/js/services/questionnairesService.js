@@ -2,42 +2,43 @@
 var myApp = angular.module('MUHCApp');
 
 myApp.service('Questionnaires', ['RequestToServer','$filter', 'Patient','LocalStorage',function(RequestToServer,$filter,Patient,LocalStorage){
-		var questionnairesArray = [];
 		var questionnaireAnswers = {};
 		var questionnairesObject = {};
 		function findAndReplacePatientQuestionnaires(questionnaires)
 		{
-			for(var i in questionnaires)
+			var questionnairesObjectRef =questionnaires.Questionnaires;
+			var patientQuestionnaireObject =questionnaires.PatientQuestionnaires;
+			for(var serDBNum in questionnairesObjectRef)
 			{
-				for(var j = 0;j<questionnairesArray.length;j++)
+				var questionCopy = questionnairesObjectRef[serNum];
+				if(questionnairesObject.hasOwnProperty(serNum)&&questionCopy.QuestionnaireDBSerNum == questionnairesObject[serNum].QuestionnaireDBSerNum)
 				{
-					if(questionnairesArray[j].QuestionnaireSerNum == questionnaires[i].QuestionnaireSerNum)
-					{
-						questionnairesArray.splice(j,1);
-						break;
-					}
+					questionnairesObject[serNum] = questionCopy;
 				}
 			}
+			for(var serNum in patientQuestionnaireObject)
+			{
+				var questionAnswerCopy = questionnairesObjectRef[serNum];
+				if(questionnairesObject.hasOwnProperty(serNum)&&questionAnswerCopy.QuestionnaireSerNum == questionnairesObject[serNum].QuestionnaireSerNum)
+				{
+					questionnairesObject[serNum] = questionAnswerCopy;
+				}
+			}
+		
 			
 		}
 		function addToQuestionnaireObject(questionnaires)
 		{
-			for(var key in questionnaires)
+			for(var key in questionnaires.PatientQuestionnaires)
 			{
-				questionnairesObject[key]=questionnaires[key];
+				if(questionnaires.PatientQuestionnaires[key]) questionnairesObject.PatientQuestionnaires[key] = questionnaires.PatientQuestionnaires[key];
 			}
-			console.log(questionnairesObject);			
+			questionnairesObject.Questionnaires = questionnaires.Questionnaires;
+			
+					
+			LocalStorage.WriteToLocalStorage('Questionnaires',questionnairesObject);	
 		}
-		function fortmatQuestionnaires(questionnaires)
-		{
-			addToQuestionnaireObject(questionnaires);
-			for(var key in questionnaires)
-			{
-				questionnairesArray.push(questionnaires[key]);
-			}
-			LocalStorage.WriteToLocalStorage('Questionnaires',questionnairesObject);
-			return questionnairesArray;
-		}
+
 	return {
 		updatePatientQuestionnaires:function(questionnaires)
 		{
@@ -45,40 +46,49 @@ myApp.service('Questionnaires', ['RequestToServer','$filter', 'Patient','LocalSt
 			{
 				
 				findAndReplacePatientQuestionnaires(questionnaires);
-				fortmatQuestionnaires(questionnaires);
+				addToQuestionnaireObject(questionnaires);
 			}
 		},
 		setPatientQuestionnaires:function(questionnaires)
 		{
-			questionnairesArray = [];
-			questionnairesObject = {};
-			console.log(questionnaires);
-			
-			if(questionnaires&&typeof questionnaires !=='undefined') questionnairesArray = fortmatQuestionnaires(questionnaires);
+			questionnairesObject = {};	
+			questionnairesObject.PatientQuestionnaires = {};
+			questionnairesObject.Questionnaires = {};
+			if(questionnaires&&typeof questionnaires !=='undefined') addToQuestionnaireObject(questionnaires);
 			console.log(questionnairesObject);
-			console.log(questionnairesArray);
 		},
 		getPatientQuestionnaires:function()
 		{
-			return questionnairesArray;
+			console.log(questionnairesObject);
+			return questionnairesObject;
 		},
-		setQuestionnaireAnswers:function(Answer, questionSerNum, questionnaireSerNum) 
+		setQuestionnaireAnswers:function(Answer, questionnaireQuestionSerNum, questionnaireDBSerNum, questionnaireSerNum) 
 		{
 			if((Object.keys(questionnaireAnswers).length == 0 ) || (Object.keys(questionnaireAnswers[questionnaireSerNum]).length == 0)) {
 				questionnaireAnswers[questionnaireSerNum] = {};
-				console.log(questionnairesArray[0]);
-				console.log(questionnaireSerNum);
-				questionnaireAnswers[questionnaireSerNum].QuestionnaireSerNum = questionnairesArray[questionnaireSerNum].QuestionnaireSerNum;
-				questionnaireAnswers[questionnaireSerNum].Answers = new Array(questionnairesArray[questionnaireSerNum].Questions.length);
+				console.log(questionnairesObject[questionnaireDBSerNum]);
+				console.log(questionnaireDBSerNum);
+				console.log(questionnairesObject.Questionnaires[questionnaireDBSerNum]);
+				questionnaireAnswers[questionnaireSerNum].QuestionnaireDBSerNum = questionnairesObject.Questionnaires[questionnaireDBSerNum].QuestionnaireDBSerNum;
+				questionnaireAnswers[questionnaireSerNum].CompletedFlag = questionnairesObject.PatientQuestionnaires[questionnaireSerNum].CompletedFlag;;
+				questionnaireAnswers[questionnaireSerNum].Answers = {};
+				questionnaireAnswers[questionnaireSerNum].QuestionnaireSerNum = questionnaireSerNum;
 			}
-			questionnaireAnswers[questionnaireSerNum].Answers[questionSerNum] = {
+			questionnaireAnswers[questionnaireSerNum].Answers[questionnaireQuestionSerNum] = {
 				Answer: Answer,
-				QuestionType: questionnairesArray[questionnaireSerNum].Questions[questionSerNum].QuestionType,
-				QuestionnaireQuestionSerNum: questionnairesArray[questionnaireSerNum].Questions[questionSerNum].QuestionnaireQuestionSerNum
+				QuestionType: questionnairesObject.Questionnaires[questionnaireDBSerNum].Questions[questionnaireQuestionSerNum].QuestionType,
+				QuestionnaireQuestionSerNum: questionnairesObject.Questionnaires[questionnaireDBSerNum].Questions[questionnaireQuestionSerNum].QuestionnaireQuestionSerNum
 			};
+			console.log(questionnaireAnswers);
 		},
 		getQuestionnaireAnswers:function(questionnaireSerNum)
 		{
+			if (questionnaireAnswers == undefined) {
+				return undefined;
+			}
+			if(questionnaireAnswers[questionnaireSerNum] == undefined) {
+				return undefined;
+			}
 			if((Object.keys(questionnaireAnswers).length == 0 ) || (Object.keys(questionnaireAnswers[questionnaireSerNum]).length == 0)) {
 				console.log('undefined');
 				return undefined;
@@ -87,14 +97,17 @@ myApp.service('Questionnaires', ['RequestToServer','$filter', 'Patient','LocalSt
 				return questionnaireAnswers[questionnaireSerNum];
 			}
 		},
-		submitQuestionnaire:function(questionnaireSerNum) { 
+		submitQuestionnaire:function(questionnaireDBSerNum, questionnaireSerNum) { 
 			questionnaireAnswers[questionnaireSerNum].PatientId = Patient.getPatientId();
-			questionnaireAnswers[questionnaireSerNum].DateCompleted = $filter('date')(new Date(),'yyyy-MM-dd HH:mm:ss');
-			questionnaireAnswers[questionnaireSerNum].OpalQuestionnaireSerNum = questionnairesArray[questionnaireSerNum].OpalQuestionnaireSerNum;
-			RequestToServer.sendRequest('QuestionnaireAnswers', questionnaireAnswers[questionnaireSerNum]);
+			dateCompleted = $filter('date')(new Date(),'yyyy-MM-dd HH:mm:ss');
+			questionnaireAnswers[questionnaireSerNum].DateCompleted = dateCompleted;
+			questionnairesObject.PatientQuestionnaires[questionnaireSerNum].CompletionDate = dateCompleted;
+			questionnaireAnswers[questionnaireSerNum].CompletedFlag = 1;
+			questionnairesObject.PatientQuestionnaires[questionnaireSerNum].CompletedFlag = 1;
+			console.log(questionnairesObject);
 			console.log(questionnaireAnswers[questionnaireSerNum]);
-			questionnaireAnswers = {};
-
+			submittableQuestionnaire = angular.copy(questionnaireAnswers[questionnaireSerNum]);
+			RequestToServer.sendRequest('QuestionnaireAnswers', submittableQuestionnaire);
 		},
 		getNumberOfUnreadQuestionnaires:function()
 		{
@@ -108,10 +121,16 @@ myApp.service('Questionnaires', ['RequestToServer','$filter', 'Patient','LocalSt
 		},
 		isQuestionnaireComplete:function(questionnaireSerNum) {
 			if(typeof questionnaireAnswers[questionnaireSerNum] !== 'undefined') {
-				
 				return questionnaireAnswers[questionnaireSerNum].CompletedFlag;
 			} else {
-				return undefined;
+				return questionnairesObject[questionnaireSerNum].CompletedFlag;;
+			}
+		},
+		isQuestionnaireInProgress:function(questionnaireSerNum) {
+			if(typeof questionnaireAnswers[questionnaireSerNum] == 'undefined') {
+				return false;
+			} else {
+				return true;
 			}
 		},
 		isEmpty:function()

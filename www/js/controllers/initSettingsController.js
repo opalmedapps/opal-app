@@ -1,6 +1,6 @@
 var myApp = angular.module('MUHCApp');
 
-myApp.controller('InitSettingsController',function($scope, $timeout, NavigatorParameters, UserPreferences)
+myApp.controller('InitSettingsController',function($scope, FirebaseService,$timeout, NavigatorParameters, UserPreferences)
 {
    var app = document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'https://' ) === -1;
 
@@ -12,7 +12,9 @@ myApp.controller('InitSettingsController',function($scope, $timeout, NavigatorPa
  
     function initSettings()
     {
-       $scope.languageSwitch  = (UserPreferences.initializeLanguage()=='EN')?false:true;
+        var authData = FirebaseService.getAuthentication().$getAuth();
+        $scope.authenticated = !!authData;
+       $scope.languageSwitch  = (UserPreferences.getLanguage()=='EN')?false:true;
        if(app){
         cordova.getAppVersion.getVersionNumber(function (version) {
             $timeout(function()
@@ -33,6 +35,14 @@ myApp.controller('InitSettingsController',function($scope, $timeout, NavigatorPa
     }else{
       UserPreferences.setLanguage('EN');
     }
+    if($scope.authenticated)
+    {
+        var objectToSend = {};
+        objectToSend.NewValue = (value)?'FR':'EN';
+        objectToSend.FieldToChange = 'Language';
+        RequestToServer.sendRequest('AccountChange', objectToSend);
+    }
+    
   };
     
     $scope.goToRateThisApp = function()
@@ -41,15 +51,18 @@ myApp.controller('InitSettingsController',function($scope, $timeout, NavigatorPa
     };
     function settingsSuccess() {
     console.log('settings opened');
-}
+    }
 
-function settingsFail() {
-    console.log('open settings failed');
-}
+    function settingsFail() {
+        console.log('open settings failed');
+    }
 
-function openSettingsNow() {
-    cordova.plugins.settings.openSetting("application_details",settingsSuccess,settingsFail);
-}
+    function openSettingsNow() {
+        console.log('opening settings');
+        if(ons.platform.isAndroid())cordova.plugins.settings.openSetting("application_details",settingsSuccess,settingsFail);
+        else cordova.plugins.settings.open(settingsSuccess,settingsFail);
+        
+    }
     $scope.openDeviceSettings = function()
     {
         if(app && typeof cordova.plugins.settings.openSetting !== undefined){
@@ -66,7 +79,7 @@ function openSettingsNow() {
     
     $scope.openPageLegal = function(type)
     {
-        if(type == 0)
+        if(type === 0)
         {
              NavigatorParameters.setParameters({type:type, title:'Terms of Use',Navigator:$scope.navigatorName}); 
              $scope.navigator.pushPage('./views/init/init-legal.html');

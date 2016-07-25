@@ -1,4 +1,3 @@
-<ons-navigator var="educationNavigator">
 <ons-page ng-controller="EducationalMaterialController" ng-device-backbutton="educationDeviceBackButton()">
   <ons-toolbar>
       <div class="left">
@@ -9,16 +8,17 @@
 
     <!--<div class="right"><ons-toolbar-button ng-click="educationNavigator.pushPage('views/info-page-tabs.html',{param:home})"><ons-icon icon="ion-ios-information-outline"></ons-icon></ons-toolbar-button></div>-->
   </ons-toolbar>
-  <ons-pull-hook ng-action="load($done)" var="loader" height="100px">
+  <ons-pull-hook ng-action="load($done)" var="loader" >
     <span ng-switch="loader.getCurrentState()">
-                <span ng-switch-when="initial"><ons-icon size="35px" icon="ion-arrow-down-a"></ons-icon> Pull down to refresh</span>
-    <span ng-switch-when="preaction"><ons-icon size="35px" icon="ion-arrow-up-a"></ons-icon> Release to refresh</span>
-    <span ng-switch-when="action"><ons-icon size="35px" spin="true" icon="ion-load-d"></ons-icon> Loading data...</span>
+                <span ng-switch-when="initial"><ons-icon size="35px" spin="true" icon="ion-load-d"></ons-icon> {{"LOADINGDATA"|translate}}...</span>
+            <span ng-switch-when="preaction"><ons-icon size="35px" spin="true" icon="ion-load-d"></ons-icon> {{"LOADINGDATA"|translate}}...</span>
+            <span ng-switch-when="action"><ons-icon size="35px" spin="true" icon="ion-load-d"></ons-icon> {{"LOADINGDATA"|translate}}...</span>
     </span>
 </ons-pull-hook>
   <div style="color:grey;margin-top:25vh" ng-show="noMaterials" align="center" ng-class="fontSizeTitle">
       {{"NOEDUCATIONALMATERIAL"|translate}}
     </div>
+   
   <ons-list style="margin: 0px 0">
     <ons-list-header ng-repeat-start = "edumaterial in edumaterials" class="person-list-header" ng-class="fontSizeTitle"  ng-if = "showHeader($index)">{{edumaterial.PhaseInTreatment}}</ons-list-header>
     <ons-list-item modifier="chevron" class="item" ng-repeat-end ng-click="goToEducationalMaterial(edumaterial)">
@@ -37,5 +37,5 @@
         </ons-row>
     </ons-list-item >
   </ons-list>
+  <div>&nbsp;</div>
 </ons-page>
-</ons-navigator>

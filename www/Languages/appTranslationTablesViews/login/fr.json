@@ -48,7 +48,9 @@
 	"APPVERSION":"App Version",
 	"LANGUAGE":"Langage",
 	"SECUREYOURDEVICE":"Sécuriser Votre Appareil",
-    "PATIENTCHARTER":"Charte Du Patient"
+    "PATIENTCHARTER":"Charte Du Patient",
+	"SIGNOUT":"Se déconnecter",
+	"HOME":"Accueil"
 
 
 }

@@ -1,5 +1,5 @@
 <ons-navigator var ="initNavigator" >
-<ons-page ng-controller="InitScreenController" >
+<ons-page ng-controller="InitScreenController" id="popoverLanguage">
     <div>
         <div style="position:absolute;z-index:2;width:100vw" align="center" >
             <div style="margin-top:20vw" align="center" >
@@ -173,29 +173,30 @@
         <!-- Version 3-->
         <ons-list class="person-list" id = "listInitApp" style="display:none" translate-cloak>
             <ons-list-item class="person" modifier="tappable" ng-click="initNavigator.pushPage('./views/login/login.html',{animation:'lift'})">
-                <ons-row align="middle" style="height:50px;">
+                <ons-row align="middle" style="height:40px;">
                     <ons-col align="center" width="40px">
                         <div style="margin-left:10px;text-align:left;display:inline-block">                                
                             <ons-icon icon = "fa fa-user" style="font-size:20px;color:darkblue"></ons-icon>
                         </div>
                      </ons-col>
                     <ons-col  align="center">
-                        <div class="text-align:left" align="center" >
+                        <div align="center" >
                             <!--<ons-icon icon = "fa fa-user" style="font-size:20px;color:darkblue"></ons-icon>-->
-                            {{"HEADER_MESSAGE_LOGIN"|translate}}
+                            <span ng-hide="authenticated">{{"HEADER_MESSAGE_LOGIN"|translate}}</span>
+                            <span ng-show="authenticated">{{"HOME"|translate}}</span>
                         </div>
                     </ons-col>
                 </ons-row>
             </ons-list-item>
             <ons-list-item class="person" modifier="tappable" ng-click="goToParking()">
-                <ons-row align="middle" style="height:50px;">
+                <ons-row align="middle" style="height:40px;">
                     <ons-col align="center" width="40px">
                         <div style="margin-left:10px;text-align:left;display:inline-block">
                             <ons-icon icon = "ion-android-car" style="font-size:25px;color:red" ></ons-icon>
                         </div>
                      </ons-col>
                     <ons-col  align="center">
-                        <div class="text-align:left" align="center" >
+                        <div  align="center" >
                           <!--<ons-icon icon = "ion-android-car" style="font-size:25px;color:red" ></ons-icon>-->
                             {{"PARKING"|translate}}
                         </div>
@@ -203,14 +204,14 @@
                 </ons-row>
             </ons-list-item>
             <ons-list-item class="person" modifier="tappable" ng-click="goToPatientCharter()">
-                <ons-row align="middle" style="height:50px;">
+                <ons-row align="middle" style="height:40px;">
                     <ons-col align="center" width="40px">
                         <div style="margin-left:10px;text-align:left;display:inline-block">
                             <ons-icon icon = "ion-android-list" style="font-size:20px;color:saddlebrown"></ons-icon>
                         </div>
                      </ons-col>
                     <ons-col  align="center">
-                        <div class="text-align:left;" style="line-height:1" align="center">
+                        <div  style="line-height:1" align="center">
                            <!--<ons-icon icon = "ion-bug" style="font-size:20px;color:purple"></ons-icon>-->
                             {{"PATIENTCHARTER"|translate}}
                         </div>
@@ -218,35 +219,50 @@
                 </ons-row>
             </ons-list-item>
             <ons-list-item class="person" modifier="tappable" ng-click="reportIssuesMail()">
-                <ons-row align="middle" style="height:50px;">
+                <ons-row align="middle" style="height:40px;">
                     <ons-col align="center" width="40px">
                         <div style="margin-left:10px;text-align:left;display:inline-block">
                             <ons-icon icon = "ion-bug" style="font-size:20px;color:purple"></ons-icon>
                         </div>
                      </ons-col>
                     <ons-col  align="center">
-                        <div class="text-align:left" align="center">
+                        <div  align="center">
                            <!--<ons-icon icon = "ion-bug" style="font-size:20px;color:purple"></ons-icon>-->
                             {{"REPORTISSUES"|translate}}
                         </div>
                     </ons-col>
                 </ons-row>
             </ons-list-item>
-            <ons-list-item class="person" modifier="tappable" ng-click="goToGeneralSettings()">
-                <ons-row align="middle" style="height:50px;">
+            <ons-list-item class="person" modifier="tappable" ng-click="goToGeneralSettings()" >
+                <ons-row align="middle" style="height:40px">
                     <ons-col align="center" width="40px">
                         <div style="margin-left:10px;text-align:left;display:inline-block">
                             <ons-icon icon = "ion-gear-a" style="font-size:30px;color:grey"></ons-icon>
                         </div>
                      </ons-col>
-                    <ons-col  align="center">
-                        <div class="text-align:left" align="center">                            
-                            <!--<ons-icon icon = "ion-gear-a" style="font-size:30px;color:grey"></ons-icon>-->
+                    <ons-col  align="center" >
+                        <div   align="center">        
                            {{"SETTINGS"|translate}}
                         </div>
                     </ons-col>
                 </ons-row>
             </ons-list-item>
+            <ons-list-item class="person" modifier="tappable" ng-click="$state.go('logOut')" ng-show="authenticated">
+                <ons-row align="middle" style="height:40px;">
+                    <ons-col align="center" width="40px">
+                        <div style="margin-left:10px;text-align:left;display:inline-block">
+                            <ons-icon icon = "ion-log-out" style="font-size:30px;color:#BADA55"></ons-icon>
+                        </div>
+                     </ons-col>
+                    <ons-col  align="center">
+                        <div  align="center">                            
+                           {{"SIGNOUT"|translate}}
+                        </div>
+                    </ons-col>
+                </ons-row>
+            </ons-list-item>
+       
+               
             
         </ons-list>
     </div>

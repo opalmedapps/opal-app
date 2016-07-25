@@ -4,7 +4,7 @@ myApp.controller('NotificationsController', ['RequestToServer','Notifications', 
 
   function init()
   {
-     $scope.noNotifications = true;
+    $scope.noNotifications = true;
     var notifications = Notifications.getUserNotifications();
     if (notifications.length > 0)  $scope.noNotifications = false;
     notifications = Notifications.setNotificationsLanguage(notifications);
@@ -24,7 +24,7 @@ myApp.controller('NotificationsController', ['RequestToServer','Notifications', 
       var current = (new Date($scope.notifications[index].DateAdded)).setHours(0,0,0,0);
       return (previous == current) ?  false : true;
     }
-  }
+  };
     $scope.goToNotification=function(index,notification){
       console.log(notification);
       console.log(index);

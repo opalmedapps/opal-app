@@ -1,4 +1,4 @@
-<ons-page ng-controller="BookletEduMaterialController">
+<ons-page ng-controller="BookletEduMaterialController" style="background-color:white">
   <ons-toolbar fixed-style modifier="transparent">
       <div class="left">
         <ons-back-button ng-show="!isFullscreen">{{"BACK"|translate}}</ons-back-button>
@@ -15,16 +15,18 @@
      </div>
   </div>
   
-  <ons-carousel style="width: 100vw;overflow-y:scroll;opacity:1.0;" id="contentMaterial" swipeable overscrollable auto-scroll auto-scroll-ratio="0.3" class="gpu_efficiency">
+  <ons-carousel style="width: 100vw;opacity:1.0;" id="contentMaterial" swipeable overscrollable auto-scroll auto-scroll-ratio="0.3" class="gpu_efficiency">
     <ons-carousel-item ng-repeat="section in tableOfContents" >
+      <ons-page>
         <div  align="center" style="margin-top:10vh" ng-show="!section.Content">
           <svg class="progress-circular">
                 <circle class="progress-circular__primary" cx="50%" cy="50%" r="40%" fill="none" stroke-width="10%" stroke-miterlimit="10"/>
           </svg>
         </div>
-        <div class="container" style="background-color:white;overflow-y:scroll"  ng-style="{height:heightSection}"  ng-show="section.Content">
+        <div class="container" style="background-color:white;"  ng-show="section.Content">
              <div ng-bind-html="section.Content" ></div>
        </div>
+       </ons-page>
     </ons-carousel-item>
   </ons-carousel>
   <!--<div id="frameEducational">

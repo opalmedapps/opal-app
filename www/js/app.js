@@ -123,7 +123,7 @@ var myApp = angular.module('MUHCApp', ['tmh.dynamicLocale','pascalprecht.transla
       }]
     }
 
-    })
+    });
     $stateProvider.state('init', {
         url: '/',
         templateUrl: 'views/init/init-screen.html',
@@ -203,7 +203,7 @@ myApp.run(function ($state, $stateParams,$q, $rootScope,$translate, Patient,$loc
   $rootScope.$on('$stateChangeStart',function(event,toState,toParams)
   {
     var firstName = Patient.getFirstName();
-     if((typeof firstName =='undefined'|| firstName == '')&&toState.name == 'Home')
+     if((typeof firstName =='undefined'|| firstName === '')&&toState.name == 'Home')
      {
        $location.path('/init');
      }

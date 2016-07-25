@@ -18,7 +18,7 @@ var myApp=angular.module('MUHCApp');
     *takes credentials and places them in the UserAuthorizationInfo service, it also sends the login request to Firebase,
     *and finally it redirects the app to the loading screen.
 */
-myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$rootScope', '$state', 'UserAuthorizationInfo', 'RequestToServer', 'FirebaseService','LocalStorage','tmhDynamicLocale','DeviceIdentifiers','UserPreferences',function LoginController(ResetPassword,$scope,$timeout, $rootScope, $state, UserAuthorizationInfo,RequestToServer,FirebaseService,LocalStorage,tmhDynamicLocale,DeviceIdentifiers,UserPreferences) {
+myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$rootScope', '$state', 'UserAuthorizationInfo', 'RequestToServer', 'FirebaseService','LocalStorage','tmhDynamicLocale','DeviceIdentifiers','UserPreferences','NavigatorParameters',function LoginController(ResetPassword,$scope,$timeout, $rootScope, $state, UserAuthorizationInfo,RequestToServer,FirebaseService,LocalStorage,tmhDynamicLocale,DeviceIdentifiers,UserPreferences,NavigatorParameters) {
   var myDataRef = new Firebase(FirebaseService.getFirebaseUrl());
   //demoSignIn();
   /*checkForSessionEnd=function()
@@ -68,13 +68,15 @@ myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$root
             window.localStorage.setItem('UserAuthorizationInfo', JSON.stringify(authenticationToLocalStorage));
             console.log(UserAuthorizationInfo.getUserAuthData());
             console.log("Authenticated successfully with payload:", authData);
-            if(app){
-              RequestToServer.sendRequest('Refresh','All');
-            }else{
-              //RequestToServer.sendRequest('Refresh','All');
-              console.log(DeviceIdentifiers.getDeviceIdentifiers());
-              RequestToServer.sendRequest('Resume', DeviceIdentifiers.getDeviceIdentifiers());
-            }
+            NavigatorParameters.setParameters('Resume');
+             
+
+            //   RequestToServer.sendRequest('Refresh','All');
+            // }else{
+            //   //RequestToServer.sendRequest('Refresh','All');
+            //   console.log(DeviceIdentifiers.getDeviceIdentifiers());
+            //   RequestToServer.sendRequest('Resume', DeviceIdentifiers.getDeviceIdentifiers());
+            // }
             $state.go('loading');
         }
       }else{
@@ -190,7 +192,7 @@ myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$root
           console.log(UserAuthorizationInfo.getUserAuthData());
           console.log("Authenticated successfully with payload:", authData);
           $rootScope.activeLogin='false';
-          RequestToServer.sendRequest('Login');
+          NavigatorParameters.setParameters('Login');
           $state.go('loading');
         }
 

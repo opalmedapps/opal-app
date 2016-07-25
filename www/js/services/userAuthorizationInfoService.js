@@ -53,9 +53,14 @@ myApp.service('UserAuthorizationInfo', function () {
             console.log(this.Password);
             window.localStorage.setItem('pass',password);
             var passString=window.localStorage.getItem('UserAuthorizationInfo');
-            passObject=JSON.parse(passString);
-            passObject.Password=password;
-            window.localStorage.setItem('UserAuthorizationInfo', JSON.stringify(passObject));
+            var passObject=JSON.parse(passString);
+            if(passObject)
+            {
+                passObject=JSON.parse(passString);
+                passObject.Password=password;
+                window.localStorage.setItem('UserAuthorizationInfo', JSON.stringify(passObject));
+            }
+           
         },
           /**
         }

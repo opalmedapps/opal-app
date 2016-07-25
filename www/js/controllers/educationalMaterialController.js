@@ -1,17 +1,11 @@
 var myApp = angular.module('MUHCApp');
-myApp.controller('EducationalMaterialController', function (NavigatorParameters, $scope, $timeout,UpdateUI, RequestToServer, $cordovaFileOpener2, $cordovaDevice, $cordovaDatePicker, FileManagerService, EducationalMaterial, UserPreferences) {
+myApp.controller('EducationalMaterialController', function (NavigatorParameters, $scope, $timeout,UpdateUI, RequestToServer, $cordovaFileOpener2, $cordovaDevice, $cordovaDatePicker, FileManagerService, EducationalMaterial, UserPreferences,$rootScope) {
 
 	//Android device backbutton
 	var backButtonPressed = 0;
 	$scope.educationDeviceBackButton = function () {
-		backButtonPressed++;
-		if(backButtonPressed==2)
-		{
-			tabbar.setActiveTab(0);
-			backButtonPressed = 0;
-		}
+		tabbar.setActiveTab(0);
 	};
-
 	//On pre-pop initializae materials;
 	educationNavigator.on('prepop',function()
 	{
@@ -20,19 +14,24 @@ myApp.controller('EducationalMaterialController', function (NavigatorParameters,
 	});
 	//Pull to refresh function
 	$scope.load = function($done) {
-      RequestToServer.sendRequest('Refresh','All');
-      UpdateUI.update('All').then(function()
-      {
-          updated=true;
-          $timeout(function()
-          {
-            init();
-          });
-          $done();
-      });
-      $timeout(function(){
-          $done();
-      },5000);
+		UpdateUI.update('All').then(function()
+		{
+			$timeout(function()
+			{
+				updated=true;
+				backButtonPressed = 0;
+				init();
+				clearTimeout(timeOut);
+				$done();
+			});
+		}).catch(function(error){
+			console.log(error);
+			clearTimeout(timeOut);
+			$done();
+		});
+		var timeOut = setTimeout(function(){
+			$done();
+		},5000);
     };
 	init();
 	//Init function
@@ -107,7 +106,7 @@ myApp.controller('IndividualEducationalMaterialController', ['$scope', '$timeout
 	
 	//If its a booklet, translate table of contents
 	if (isBooklet) {
-		$scope.tableOfContents = $scope.edumaterial['TableContents'];
+		$scope.tableOfContents = $scope.edumaterial.TableContents;
 		$scope.tableOfContents = EducationalMaterial.setLanguageEduationalMaterial($scope.tableOfContents);
 	}
 	
@@ -124,6 +123,7 @@ myApp.controller('IndividualEducationalMaterialController', ['$scope', '$timeout
 			window[navigatorPage].pushPage(nextStatus.Url);
 		}
 	};
+	
 	//Instantiating popover controller
 	$timeout(function () {
 		ons.createPopover('./views/education/popover-material-options.html',{parentScope: $scope}).then(function (popover) {
@@ -139,7 +139,7 @@ myApp.controller('IndividualEducationalMaterialController', ['$scope', '$timeout
 		
 	//Function to share material, if shareable
 	$scope.shareMaterial = function () {
-		FileManagerService.shareDocument($scope.edumaterial.Name, $scope.edumaterial.ShareURL);
+	FileManagerService.shareDocument($scope.edumaterial.Name, $scope.edumaterial.ShareURL);
 		$scope.popoverSharing.hide();
 	};
 
@@ -245,6 +245,21 @@ myApp.controller('BookletEduMaterialController', ['$scope', '$timeout', 'Navigat
 	//Obtaining educational material parameters
 	var parameters = NavigatorParameters.getParameters();
 	var navigatorName = parameters.Navigator;
+	// var text = (new Array(100)).join('Lorem ipsum dolor sit amet. ');
+	// var each = function(selector, f) {
+    // [].forEach.call(document.querySelectorAll(selector), f);
+	// };
+
+	// ons.ready(function() {
+	// each('.lorem', function(element) {
+	// 	element.innerHTML = text;
+	// });
+	// each('.page__content', function(element, i) {
+	// 	element.addEventListener('scroll', function(){
+	// 	console.log(i);
+	// 	})
+	// });
+	// });
 
 	initBooklet();
 
@@ -389,8 +404,6 @@ myApp.controller('BookletEduMaterialController', ['$scope', '$timeout', 'Navigat
 			setHeightElement();
 
 		}, 10);
-
-		console.log('done lazy instantiation', parameters.Index)
 		if (app) {
 			ons.orientation.on("change", function (event) {
 				console.log(event.isPortrait); // e.g. portrait

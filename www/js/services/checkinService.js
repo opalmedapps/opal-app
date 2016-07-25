@@ -30,25 +30,28 @@ myApp.factory('CheckinService', ['$q', 'RequestToServer', 'Appointments', '$time
     {
       if(checkinUpdatesInterval)
       {
-        clearInterval(checkinUpdatesInterval);
+        clearTimeout(checkinUpdatesInterval);
       }
-      RequestToServer.sendRequest('CheckinUpdate', {AppointmentSerNum:nextAppointment.AppointmentSerNum});
-      checkinUpdatesInterval = setInterval(function(){
-          RequestToServer.sendRequest('CheckinUpdate', {AppointmentSerNum:nextAppointment.AppointmentSerNum});
+
+      RequestToServer.sendRequestWithResponse('CheckinUpdate', {AppointmentSerNum:nextAppointment.AppointmentSerNum}).then(
+        function(response)
+        {
+          var data = response.Data;
+          if(data.response.type == 'close')
+          {
+            //Close request and do not send messages anymore.
+            Appointments.setCheckinAppointmentAsClosed(nextAppointment.AppointmentSerNum);
+            clearTimeout(checkinUpdatesInterval);
+          }else if(data.response.type == 'error')
+          {
+            //setErrorMessage(data);
+          }else{
+            setLanguageCheckin(data);
+          }
+        });
+      checkinUpdatesInterval = setTimeout(function(){
+        liveCheckinUpdates(nextAppointment);
       },120000);
-      UpdateUI.update('CheckinUpdate').then(function(data){
-       if(data.response.type == 'close')
-        {
-          //Close request and do not send messages anymore.
-          Appointments.setCheckinAppointmentAsClosed(nextAppointment.AppointmentSerNum);
-          clearInterval(checkinUpdatesInterval);
-        }else if(data.response.type == 'error')
-        {
-          //setErrorMessage(data);
-        }else{
-           setLanguageCheckin(data);
-        }
-      });
     }
 
     //Helper methods
@@ -120,22 +123,22 @@ myApp.factory('CheckinService', ['$q', 'RequestToServer', 'Appointments', '$time
       {
         var r = $q.defer();
         //Request is sent with the AppointmentSerNum
-        RequestToServer.sendRequest('CheckCheckin', {AppointmentSerNum:appointment.AppointmentSerNum});
-        //Update is expected to read from firebase in order to obtain update
-        UpdateUI.update('CheckCheckin').then(function(data)
-        {
-          //Response is either success or failure with the appointmentSerNum again in the data object
-          console.log('CheckCheckin coming back from backend', data);
-          if(data.response =='success')
+        RequestToServer.sendRequestWithResponse('CheckCheckin', {AppointmentSerNum:appointment.AppointmentSerNum}).then(
+          function(response)
           {
-            //If success, then set checkin for services, i.e. synchronize app
-            Appointments.setAppointmentCheckin(appointment.AppointmentSerNum);
-            //resolve with response
-            r.resolve(data.response);
-          }else{
-            r.resolve(data.response);
-          }
-        });
+            console.log(response);
+            //Response is either success or failure with the appointmentSerNum again in the data object
+            console.log('CheckCheckin coming back from backend', data);
+            if(response.Response =='success')
+            {
+              //If success, then set checkin for services, i.e. synchronize app
+              Appointments.setAppointmentCheckin(appointment.AppointmentSerNum);
+              //resolve with response
+              r.resolve(data.response);
+            }else{
+              r.resolve(data.response);
+            }
+          });
         //If it has not come back yet assumed that they have not checked in
         setTimeout(function(){
           r.resolve('failure');
@@ -153,26 +156,27 @@ myApp.factory('CheckinService', ['$q', 'RequestToServer', 'Appointments', '$time
         objectToSend.AppointmentSerNum = nextAppointment.AppointmentSerNum;
         console.log(objectToSend);
         //Request to Checkin sent
-        RequestToServer.sendRequest('Checkin', objectToSend);
-        //Listen for callback of this request, if success, successfuly checked in
-        //and ask for live update of time estimates, if not the simply tell patient to
-        //Checkin at the cancer center.
-        UpdateUI.update('Checkin').then(function(data)
-        {
-          console.log('Checkin service, return from checkin request', data);
-          data = data.response;
-          if(data == 'success')
+
+        RequestToServer.sendRequestWithResponse('Checkin', objectToSend).then(
+          function(response)
           {
-            var nextAppointment=Appointments.getCheckinAppointment();
-            Appointments.setAppointmentCheckin(nextAppointment.AppointmentSerNum);
-            var objectToSend = angular.copy(positionCheckinAppointment);
-            objectToSend.AppointmentSerNum = nextAppointment.AppointmentSerNum
-            liveCheckinUpdates(nextAppointment);
-            r.resolve(data);
-          }else{
-            r.reject(data);
-          }
-        });
+            //Listen for callback of this request, if success, successfuly checked in
+            //and ask for live update of time estimates, if not the simply tell patient to
+            //Checkin at the cancer center.
+            console.log('Checkin service, return from checkin request', data);
+            data = data.Response;
+            if(data == 'success')
+            {
+              var nextAppointment=Appointments.getCheckinAppointment();
+              Appointments.setAppointmentCheckin(nextAppointment.AppointmentSerNum);
+              var objectToSend = angular.copy(positionCheckinAppointment);
+              objectToSend.AppointmentSerNum = nextAppointment.AppointmentSerNum;
+              liveCheckinUpdates(nextAppointment);
+              r.resolve(data);
+            }else{
+              r.reject(data);
+            }
+          });
         return r.promise;
       },
       //Gets live estimate updates
