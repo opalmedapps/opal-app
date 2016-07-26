@@ -8,13 +8,13 @@ angular.module('MUHCApp').controller('logOutController',['FirebaseService','$roo
 		var firebaseLink=new Firebase(FirebaseService.getFirebaseUrl());
 		redirectPage().then(setTimeout(function(){location.reload()},100))
 		function redirectPage(){
+			var r=$q.defer();
 			RequestToServer.sendRequest('Logout');
 			firebaseLink.unauth();
 			LocalStorage.resetUserLocalStorage();
 			FirebaseService.getAuthentication().$unauth();
-			var r=$q.defer();
-			$state.go('init')
-			r.resolve;
+			$state.go('init');
+			r.resolve('true');
 			return r.promise;
 		}
 }]);

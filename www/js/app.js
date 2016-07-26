@@ -113,29 +113,13 @@ var myApp = angular.module('MUHCApp', ['tmh.dynamicLocale','pascalprecht.transla
     $stateProvider.state('logIn', {
         url: '/login',
         templateUrl: 'views/login/login.html',
-        controller: 'LoginController',
-        resolve: {
-      // controller will not be loaded until $waitForAuth resolves
-      // Auth refers to our $firebaseAuth wrapper in the example above
-      "currentAuth": ["FirebaseService", function(FirebaseService) {
-        // $waitForAuth returns a promise so the resolve waits for it to complete
-        return FirebaseService.getAuthentication().$waitForAuth();
-      }]
-    }
+        controller: 'LoginController'
 
     });
     $stateProvider.state('init', {
         url: '/',
         templateUrl: 'views/init/init-screen.html',
-        controller: 'InitScreenController',
-        resolve: {
-      // controller will not be loaded until $waitForAuth resolves
-      // Auth refers to our $firebaseAuth wrapper in the example above
-      "currentAuth": ["FirebaseService", function(FirebaseService) {
-        // $waitForAuth returns a promise so the resolve waits for it to complete
-        return FirebaseService.getAuthentication().$waitForAuth();
-      }]
-    }
+        controller: 'InitScreenController'
 
     })
     .state('loading', {
@@ -168,7 +152,15 @@ var myApp = angular.module('MUHCApp', ['tmh.dynamicLocale','pascalprecht.transla
     .state('logOut', {
         url: '/Logout',
         templateUrl: 'views/logOut.html',
-        controller: 'logOutController'
+        controller: 'logOutController',
+        resolve: {
+      // controller will not be loaded until $waitForAuth resolves
+      // Auth refers to our $firebaseAuth wrapper in the example above
+      "currentAuth": ["FirebaseService", function(FirebaseService) {
+        // $waitForAuth returns a promise so the resolve waits for it to complete
+        return FirebaseService.getAuthentication().$requireAuth();
+      }]
+    }
   });
     $translateProvider.useSanitizeValueStrategy('sanitizeParameters');
     $translateProvider.useLoader('$translatePartialLoader', {
@@ -190,7 +182,7 @@ function($compileProvider)
 
 myApp.config(function ($translateProvider) {
     $translateProvider.useMissingTranslationHandlerLog();
-})
+});
 /**
 *@ngdoc service
 *@name MUHCApp.run
@@ -217,7 +209,7 @@ myApp.run(function ($state, $stateParams,$q, $rootScope,$translate, Patient,$loc
       console.log(error);
   // We can catch the error thrown when the $requireAuth promise is rejected
   // and redirect the user back to the home page
-  $state.go('logIn');
+  $state.go('init');
   //console.log('listening');
   if (error === "AUTH_REQUIRED") {
     /**
@@ -230,7 +222,7 @@ myApp.run(function ($state, $stateParams,$q, $rootScope,$translate, Patient,$loc
     */
     function redirectPage(){
             var r=$q.defer();
-            $state.go('logIn');
+            $state.go('init');
             r.resolve;
             return r.promise;
         }

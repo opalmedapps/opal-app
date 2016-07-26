@@ -1,8 +1,11 @@
 var myApp = angular.module('MUHCApp');
 
-myApp.controller('InitScreenController',function($scope, $timeout, NavigatorParameters,$translatePartialLoader, UserPreferences, $filter,FirebaseService, UserAuthorizationInfo,$state)
-{
-  
+myApp.controller('InitScreenController',function($scope, $timeout, NavigatorParameters,$translatePartialLoader, UserPreferences, $filter,FirebaseService, UserAuthorizationInfo,$state,LocalStorage)
+{ 
+    //Firebase reference to check authentication
+    var myDataRef = new Firebase(FirebaseService.getFirebaseUrl());
+
+ 
   //Add the login translation
     $translatePartialLoader.addPart('login');
     //Check if device or browser
@@ -67,27 +70,41 @@ myApp.controller('InitScreenController',function($scope, $timeout, NavigatorPara
           });
        } 
     };
-    //Check authentication state
-    var boolAuth = authenticate();
-    checkNewVersions(boolAuth);
-    //Check new version of the app and if authenticated log user out to start fresh version
-    function checkNewVersions(authBool)
+
+    $scope.goToUserView = function()
     {
-      var version = window.localStorage.getItem('AppVersion');
-      console.log(authBool);
-      console.log('line 71', version, typeof version);
-      if(authBool&&!version&&version!== '1')
+      if($scope.authenticated)
       {
-        window.localStorage.setItem('AppVersion','1');
-        $state.go('logOut');
-      }
-    }
+        NavigatorParameters.setParameters('Resume');
+        $state.go('loading');
+      }else{
+        initNavigator.pushPage('./views/login/login.html',{animation:'lift'});
+      } 
+    };
+
+   
+    //Check authentication state
+    //var boolAuth = authenticate();
+    // checkNewVersions(boolAuth);
+    // //Check new version of the app and if authenticated log user out to start fresh version
+    // function checkNewVersions(authBool)
+    // {
+    //   var version = window.localStorage.getItem('AppVersion');
+    //   console.log(authBool);
+    //   console.log('line 71', version, typeof version);
+    //   if(authBool&&!version&&version!== '1')
+    //   {
+    //     window.localStorage.setItem('AppVersion','1');
+    //     $state.go('logOut');
+    //   }
+    // }
     
-    function authenticate()
+    function authenticate(authData)
     {
       //Get Firebase authentication state
-      var authData = FirebaseService.getAuthentication().$getAuth();
+      
       $scope.authenticated = !!authData;
+      console.log($scope.authenticated );
       //If authenticated update the user authentication state
       if( $scope.authenticated)
       {
@@ -107,6 +124,25 @@ myApp.controller('InitScreenController',function($scope, $timeout, NavigatorPara
       }
       return $scope.authenticated;
     }
+       //Listen to authentication state, if user get's unauthenticated log user out.
+    myDataRef.onAuth(function(authData){
+
+    console.log('dasdasdas',authData);
+    var  authInfoLocalStorage=window.localStorage.getItem('UserAuthorizationInfo');
+      if(authData)
+      {
+        authenticate(authData);
+      }else{
+        if($state.current.name=='Home')
+        {
+          console.log('here state');
+          $state.go('logOut');
+        }else if(authInfoLocalStorage)
+        {
+          LocalStorage.resetUserLocalStorage();
+        }
+      }
+  });
    
 
 });

@@ -44,6 +44,10 @@ $scope.goNext = function()
 function initCarouselCallback(ev) {
     $scope.carousel = ev.component;
     setCarouselParameters(boolStatus);
+    console.log(ev);
+    var carouselElement = ev.target;
+    carouselElement.style.height=(document.documentElement.clientHeight-91)+'px';
+    console.log(carouselElement);
     setStatusPage();
 }
 function setCarouselParameters(bool)
