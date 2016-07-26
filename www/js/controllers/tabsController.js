@@ -17,13 +17,15 @@ myApp.controller('TabsController',['$scope','$timeout','$translate','$translateP
   //   tabbar.off('reactive');
   //   document.removeEventListener('ons-tabbar:init',tabbarInit);
   // });
-  var gestureDetector = document.querySelector('ons-gesture-detector');
+  var gestureDetector = document.querySelectorAll('ons-gesture-detector');
   console.log(gestureDetector);
-  document.addEventListener('ons-gesture-detector:swiperight','#detect-area',function(event)
+  document.addEventListener('ons-gesture-detector:swiperight',function(event)
   {
     cnsole.log(event);
   });
-  $(document).on('swiperight', '#detect-area', function() {
+  $(document).on('swiperight', '#detect-area', function(event) {
+    console.log(event);
+    homeNavigator.popPage();
     console.log('Swipe left is detected.');
   });
 

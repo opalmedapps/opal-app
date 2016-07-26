@@ -17,7 +17,7 @@ angular.module('MUHCApp').controller('LoadingController', ['$rootScope','$state'
 			});
 		},200);
 		
-
+		//Timeout to show, alerting user of server problems.
 		var timeOut = setTimeout(function(){ 
 			console.log(typeof Patient.getFirstName());
 			if(typeof Patient.getFirstName()=='undefined'||Patient.getFirstName()===''){
