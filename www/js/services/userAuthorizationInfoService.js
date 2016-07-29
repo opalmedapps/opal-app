@@ -25,7 +25,11 @@ myApp.service('UserAuthorizationInfo', function () {
     *@propertyOf MUHCApp.services:UserAuthorizationInfo
     *@description Contains when the user authorization expires based on Firebase settings
     */
-
+    var username = '';
+    var expires = '';
+    var password='';
+    var token='';
+    var identifier = '';
     return {
         /**
         *@ngdoc method
@@ -33,24 +37,17 @@ myApp.service('UserAuthorizationInfo', function () {
         *@methodOf MUHCApp.services:UserAuthorizationInfo
         *@description Sets all the user authorization.Called by the {@link MUHCApp.controller:LoginController LoginController} right after user enters credentials.
         */
-        setLastUpdateTime:function(timestamp)
-        {
-          this.lastUpdateTime=timestamp;
+        setUserAuthData: function (user, pass, exp, tok) {
+            username= user;
+            expires = exp;
+            password=pass;
+            token=tok;
+            console.log(username, expires, password, token);
         },
-        getLastUpdateTime:function(timestamp)
-        {
-          this.lastUpdateTime=timestamp;
-        },
-        setUserAuthData: function (username, password, expires,token) {
-            this.UserName = username;
-            this.Expires = expires;
-            this.Password=password;
-            this.Token=token;
-        },
-        setPassword:function(password){
-            password=CryptoJS.SHA256(password).toString();
-            this.Password=password;
-            console.log(this.Password);
+        setPassword:function(pass){
+            pass=CryptoJS.SHA256(pass).toString();
+            password=pass;
+            console.log(password);
             window.localStorage.setItem('pass',password);
             var passString=window.localStorage.getItem('UserAuthorizationInfo');
             var passObject=JSON.parse(passString);
@@ -71,15 +68,11 @@ myApp.service('UserAuthorizationInfo', function () {
         */
         getUserAuthData: function () {
             return {
-                UserName: this.UserName,
-                Expires: this.Expires,
-                Password:this.Password,
-                Token:this.Token
+                UserName: username,
+                Expires: expires,
+                Password:password,
+                Token:token
             };
-        },
-        getHashPassword:function()
-        {
-          return this.HashPassword;
         },
         /**
         *@ngdoc method
@@ -87,18 +80,18 @@ myApp.service('UserAuthorizationInfo', function () {
         *@methodOf MUHCApp.services:UserAuthorizationInfo
         *@returns {string} User Id in Firebase.
         */
-        getUserName:function(){
-            return this.UserName;
+        getUsername:function(){
+            return username;
         },
         getDeviceIdentifier:function()
         {
             var app = document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'https://' ) === -1;
             if(app){
-                this.identifier=device.uuid;
+                identifier=device.uuid;
             }else{
-                this.identifier='browser';
+                identifier='browser';
             }
-            return this.identifier;
+            return identifier;
         },
         /**
         *@ngdoc method
@@ -107,7 +100,7 @@ myApp.service('UserAuthorizationInfo', function () {
         *@returns {string} Password User Password in Firebase for Encryption.
         */
         getPassword:function(){
-            return this.Password;
+            return password;
         },
         /**
         *@ngdoc method
@@ -116,14 +109,22 @@ myApp.service('UserAuthorizationInfo', function () {
         *@returns {number} Date Milliseconds from 1970 of the expiration time for authorization.
         */
         getExpires:function(){
-            return this.Expires;
+            return expires;
         },
         getToken:function()
         {
-          return this.Token;
+          return token;
+        },
+        clearUserAuthorizationInfo:function()
+        {
+             username = '';
+             expires = '';
+             password='';
+             token='';
+             identifier = '';
         }
 
 
-}
+};
 
 });

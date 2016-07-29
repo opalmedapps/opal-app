@@ -136,6 +136,11 @@ myApp.service('Questionnaires', ['RequestToServer','$filter', 'Patient','LocalSt
 		isEmpty:function()
 		{
 			return (Object.keys(questionnairesObject).length === 0);
+		},
+		clearQuestionnaires:function()
+		{
+			questionnaireAnswers = {};
+			questionnairesObject = {};
 		}
 	};
 }]);

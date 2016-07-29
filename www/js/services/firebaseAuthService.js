@@ -17,7 +17,7 @@ myApp.factory("FirebaseService", ['$firebaseAuth','UserAuthorizationInfo','$q',
       },
       getFirebaseUserFieldsUrl:function()
       {
-        var username=UserAuthorizationInfo.UserName;
+        var username=UserAuthorizationInfo.getUsername();
         var deviceId=UserAuthorizationInfo.getDeviceIdentifier();
         return firebaseUrl+'Users/'+username+'/'+deviceId;
       }

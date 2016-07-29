@@ -1,17 +1,16 @@
 var myApp=angular.module('MUHCApp');
 myApp.service('Documents',['UserPreferences', '$cordovaDevice','$cordovaNetwork', 'UserAuthorizationInfo','$q', '$filter','FileManagerService','RequestToServer','LocalStorage',function(UserPreferences,$cordovaDevice,$cordovaNetwork,UserAuthorizationInfo,$q,$filter,FileManagerService,RequestToServer,LocalStorage){
-	//Array photos contains all the documents for the patient
-	var photos=[];
-	var documentsNoFiles=[];
-	//Check document, if its an update delete it from photos
+	//Array documentsArray contains all the documents for the patient
+	var documentsArray=[];
+	//Check document, if its an update delete it from documentsArray
 	function searchDocumentsAndDelete(documents)
 	{
 		var tmp=[];
 		for (var i = 0; i < documents.length; i++) {
-			for (var j = 0; j < photos.length; j++) {
-				if(photos[j].DocumentSerNum==documents[i].DocumentSerNum)
+			for (var j = 0; j < documentsArray.length; j++) {
+				if(documentsArray[j].DocumentSerNum==documents[i].DocumentSerNum)
 				{
-					photos.splice(j,1);
+					documentsArray.splice(j,1);
 					break;
 				}
 			}
@@ -28,107 +27,41 @@ myApp.service('Documents',['UserPreferences', '$cordovaDevice','$cordovaNetwork'
 	}
 	//Checks to see if a documents
 	function isDocumentStored(serNum){
-		var user=UserAuthorizationInfo.getUserName();
+		var user=UserAuthorizationInfo.getUsername();
 		var key=user+Documents;
 
 	}
 	function addDocumentsToService(documents)
 	{
-		var r=$q.defer();
 		if(!documents) return;
-			var promises=[];
-			for (var i = 0; i < documents.length; i++) {
-				//Get document type to build base64 string
-				if(documents[i].DocumentType=='pdf')
-				{
-					documents[i].Content='data:application/pdf;base64,'+documents[i].Content;
-				}else{
-					documents[i].Content='data:image/'+documents[i].DocumentType+';base64,'+documents[i].Content;
-				}
-				//If app check to save in filesystem.
-				var app = document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'https://' ) === -1;
-				if(app){
-						var platform=$cordovaDevice.getPlatform();
-						var targetPath='';
-						if(platform==='Android'){
-								targetPath = cordova.file.externalRootDirectory+'Documents/docMUHC'+documents[i].DocumentSerNum+"."+documents[i].DocumentType;
-								documents[i].NameFileSystem='docMUHC'+documents[i].DocumentSerNum+"."+documents[i].DocumentType;
-								documents[i].CDVfilePath=" cdvfile://localhost/sdcard/Documents/"+documents[i].NameFileSystem;
-						}else if(platform==='iOS'){
-							targetPath = cordova.file.documentsDirectory+ 'Documents/docMUHC'+documents[i].DocumentSerNum+"."+documents[i].DocumentType;
-							documents[i].NameFileSystem='docMUHC'+documents[i].DocumentSerNum+"."+documents[i].DocumentType;
-							documents[i].CDVfilePath="cdvfile://localhost/persistent/Documents/"+documents[i].NameFileSystem;
-							//no sync, no icloud storage
-							//targetPath = cordova.file.dataDirectory+ 'Documents/docMUHC'+documents[keysDocuments[i]].DocumentSerNum+"."+documents[keysDocuments[i]].DocumentType;
-						}
-						var url = documents[i].Content;
-							var trustHosts = true;
-							var options = {};
-							documentsNoFiles.push(documents[i]);
-							documents[i].PathFileSystem=targetPath;
-							promises.push(FileManagerService.downloadFileIntoStorage(url, targetPath));
-				}else{
-					//Add to localStorage array
-					documentsNoFiles.push(documents[i]);
-				}
-				var imageToPhotoObject={};
-				var url = documents[i].Content;
-				imageToPhotoObject=copyObject(documents[i]);
-				delete documents[i].Content;
-				delete documents[i].PathLocation;
-				imageToPhotoObject.Content=url;
-				imageToPhotoObject.DateAdded=$filter('formatDate')(imageToPhotoObject.DateAdded);
-				photos.push(imageToPhotoObject);
-				photos=$filter('orderBy')(photos,'DateAdded',false);
-			}
-			LocalStorage.WriteToLocalStorage('Documents',documentsNoFiles);
-			$q.all(promises).then(function(results){
-				r.resolve(documents);
-			});
-			return r.promise;
+		for (var i = 0; i < documents.length; i++) {
+			documents[i].DateAdded = $filter('formatDate')(documents[i].DateAdded);
+			delete documents[i].Content;
+			documentsArray.push(documents[i]);
+		}
+		documentsArray = $filter('orderBy')(documentsArray,'DateAdded');
+		LocalStorage.WriteToLocalStorage('Documents',documentsArray);
+		return documents;
 	}
 	return{
-		setDocumentsOnline:function(documents){
-			var r=$q.defer();
-			photos=[];
-			documentsNoFiles=[];
-			//searchDocumentsAndDelete(documents);
+		setDocuments:function(documents){
+			documentsArray=[];
 			return addDocumentsToService(documents);
 		},
 		updateDocuments:function(documents)
 		{
-			var r=$q.defer();
 			if(documents) searchDocumentsAndDelete(documents);
 			return addDocumentsToService(documents);
 		},
-		setDocumentsOffline:function(documents)
-		{
-			var r=$q.defer();
-			photos=[];
-			//documentsNoFiles = [];
-			if(!documents) return;
-			//var promises=[];
-			for (var i = 0; i < documents.length; i++) {
-				// var temp = angular.copy(documents);
-				// documentsNoFiles.push(temp);
-				var imageToPhotoObject={};
-				documents[i].DateAdded=$filter('formatDate')(documents[i].DateAdded);
-				//promises.push(FileManagerService.getFileUrl(documents[i].PathFileSystem));
-				documents[i].Content=documents[i].CDVfilePath;
-				photos.push(documents[i]);
-			}
-			r.resolve(documents);
-			 return r.promise;
-		},
 		getDocuments:function(){
-			return photos;
+			return documentsArray;
 		},
 		getUnreadDocuments:function()
 		{
 			var array=[];
-			for (var i = 0; i < photos.length; i++) {
-				if(photos[i].ReadStatus=='0'){
-					array.push(photos[i]);
+			for (var i = 0; i < documentsArray.length; i++) {
+				if(documentsArray[i].ReadStatus=='0'){
+					array.push(documentsArray[i]);
 				}
 			}
 			array=$filter('orderBy')(array,'DateAdded');
@@ -138,8 +71,8 @@ myApp.service('Documents',['UserPreferences', '$cordovaDevice','$cordovaNetwork'
 		getNumberUnreadDocuments:function()
 		{
 			var number = 0;
-			for (var i = 0; i < photos.length; i++) {
-				if(photos[i].ReadStatus == '0')
+			for (var i = 0; i < documentsArray.length; i++) {
+				if(documentsArray[i].ReadStatus == '0')
 				{
 					number++;
 				}
@@ -148,34 +81,51 @@ myApp.service('Documents',['UserPreferences', '$cordovaDevice','$cordovaNetwork'
 		},
 		readDocument:function(serNum)
 		{
-			for (var i = 0; i < photos.length; i++) {
-				if(photos[i].DocumentSerNum==serNum){
-					photos[i].ReadStatus='1';
-					documentsNoFiles[i].ReadStatus = '1';
-					LocalStorage.WriteToLocalStorage('Documents', documentsNoFiles);
+			for (var i = 0; i < documentsArray.length; i++) {
+				if(documentsArray[i].DocumentSerNum==serNum){
+					documentsArray[i].ReadStatus='1';
+					LocalStorage.WriteToLocalStorage('Documents', documentsArray);
 					RequestToServer.sendRequest('Read',{'Field':'Documents', Id:serNum});
 				}
 			}
 		},
 		getDocumentNames:function(serNum)
 		{
-			for (var i = 0; i < photos.length; i++) {
-				if(photos[i].DocumentSerNum==serNum){
-					return {NameEN: photos[i].AliasName_EN, NameFR:photos[i].AliasName_FR};
+			for (var i = 0; i < documentsArray.length; i++) {
+				if(documentsArray[i].DocumentSerNum==serNum){
+					return {NameEN: documentsArray[i].AliasName_EN, NameFR:documentsArray[i].AliasName_FR};
 				}
 			}
 		},
 		getDocumentBySerNum:function(serNum)
 		{
-			for (var i = 0; i < photos.length; i++) {
-				if(photos[i].DocumentSerNum==serNum){
-					return photos[i];
+			for (var i = 0; i < documentsArray.length; i++) {
+				if(documentsArray[i].DocumentSerNum==serNum){
+					return documentsArray[i];
 				}
 			}
 		},
 		getDocumentUrl:function(serNum)
 		{
 			return './views/personal/my-chart/individual-document.html';
+		},
+		downloadDocumentFromServer:function(serNum)
+		{
+			var r = $q.defer();
+			RequestToServer.sendRequestWithResponse('DocumentContent',[serNum]).then(function(response)
+			{
+				if(response.Code ==='3'&& response.Data!=='DocumentNotFound')
+				{
+					r.resolve(response.Data);
+				}else{
+					r.reject(response);
+				}
+				
+			}).catch(function(error)
+			{
+				r.reject(error);
+			});
+			return r.promise;
 		},
 		//array can be string or array
 		setDocumentsLanguage:function(array)
@@ -196,6 +146,10 @@ myApp.service('Documents',['UserPreferences', '$cordovaDevice','$cordovaNetwork'
 				array.Title = (language=='EN')? array.AliasName_EN : array.AliasName_FR;
 			}
 			return array;
+		},
+		clearDocuments:function()
+		{
+			documentsArray=[];
 		}
 
 	};

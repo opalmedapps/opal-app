@@ -144,7 +144,7 @@ myApp.controller('ChangingSettingController', function($filter, $rootScope, Fire
             "Tel. Number": "PHONENUMBER",
             "Password": "PASSWORD",
             "Email": "EMAIL",
-            "Alias": "ALIAS"
+            "Nickname": "ALIAS"
         };
         var page = settingsNavigator.getCurrentPage();
         var parameters = page.options.param;
@@ -174,7 +174,8 @@ myApp.controller('ChangingSettingController', function($filter, $rootScope, Fire
             }
 
         });
-        if (parameters === 'Alias') {
+
+        if (parameters === 'Nickname') {
             $scope.actualValue = Patient.getAlias();
             $scope.newValue = $scope.actualValue;
             $scope.instruction = "ENTERYOURALIAS";
@@ -234,7 +235,7 @@ myApp.controller('ChangingSettingController', function($filter, $rootScope, Fire
             Patient.setTelNum($scope.newValue);
             RequestToServer.sendRequest('AccountChange', objectToSend);
             $scope.actualValue = $scope.newValue;
-        } else if (val == 'Alias') {
+        } else if (val == 'Nickname') {
             objectToSend.FieldToChange = val;
             Patient.setAlias($scope.newValue);
             $scope.actualValue = $scope.newValue;

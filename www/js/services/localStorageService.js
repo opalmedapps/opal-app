@@ -33,27 +33,27 @@ myApp.service('LocalStorage',['UserAuthorizationInfo', 'EncryptionService',funct
 			temp = EncryptionService.encryptData(temp);
 			if(section=='All')
 			{
-				 window.localStorage.setItem(UserAuthorizationInfo.UserName, JSON.stringify(temp));
+				 window.localStorage.setItem(UserAuthorizationInfo.getUsername(), JSON.stringify(temp));
 			}else{
-				var storage=window.localStorage.getItem(UserAuthorizationInfo.UserName);
+				var storage=window.localStorage.getItem(UserAuthorizationInfo.getUsername());
 				storage=JSON.parse(storage);
 
 				if(!storage)
 				{
 					var object={};
 					object[section]=temp;
-					window.localStorage.setItem(UserAuthorizationInfo.UserName,JSON.stringify(object));
+					window.localStorage.setItem(UserAuthorizationInfo.getUsername(),JSON.stringify(object));
 
 				}else{
 					storage[section]=temp;
-					window.localStorage.setItem(UserAuthorizationInfo.UserName,JSON.stringify(storage));
+					window.localStorage.setItem(UserAuthorizationInfo.getUsername(),JSON.stringify(storage));
 				}
 			}
 
 		},
 		isUserDataDefined:function()
 		{
-			var storage=window.localStorage.getItem(UserAuthorizationInfo.UserName);
+			var storage=window.localStorage.getItem(UserAuthorizationInfo.getUsername());
 				if(!storage||typeof storage=='undefined'){
 					return false;
 				}else{
@@ -80,8 +80,8 @@ myApp.service('LocalStorage',['UserAuthorizationInfo', 'EncryptionService',funct
 		resetUserLocalStorage:function()
 		{
 			window.localStorage.removeItem('UserAuthorizationInfo');
-			window.localStorage.removeItem(UserAuthorizationInfo.UserName);
-			window.localStorage.removeItem(UserAuthorizationInfo.UserName+'/Timestamps');
+			window.localStorage.removeItem(UserAuthorizationInfo.getUsername());
+			window.localStorage.removeItem(UserAuthorizationInfo.getUsername()+'/Timestamps');
 			
 		}
 

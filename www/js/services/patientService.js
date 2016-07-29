@@ -19,7 +19,6 @@ myApp.service('Patient',['$q','$cordovaFileTransfer','$cordovaDevice','FileManag
             
             UserPreferences.setEnableSMS(patientFields.EnableSMS);
             UserPreferences.setLanguage(patientFields.Language);
-            console.log(UserPreferences.getLanguage());
             UserPreferences.getFontSize();
             if(typeof patientFields=='undefined') return;
             FirstName=patientFields.FirstName;
@@ -165,6 +164,20 @@ myApp.service('Patient',['$q','$cordovaFileTransfer','$cordovaDevice','FileManag
         },
         getStatus:function(){
             return Status;
+        },
+        clearPatient:function()
+        {
+            ProfileImage='';
+            FirstName='';
+            LastName='';
+            Alias='';
+            TelNum='';
+            Email='';
+            PatientId='';
+            UserSerNum='';
+            NameFileSystem='';
+            PathFileSystem='';
+            CDVfilePath='';
         }
     };
 }]);

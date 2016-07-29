@@ -206,6 +206,10 @@ myApp.service('EducationalMaterial',['$filter','LocalStorage','FileManagerServic
     {
       console.log('Inside language edumat');
       return setLanguageEduMaterial(array);
+    },
+    clearEducationalMaterial:function()
+    {
+      educationalMaterialArray=[];
     }
   };
 

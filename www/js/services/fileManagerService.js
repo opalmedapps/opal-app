@@ -3,6 +3,23 @@ var myApp=angular.module('MUHCApp');
 myApp.service('FileManagerService',function($q, $cordovaFileOpener2,$filter ){
   var file='';
   var app = document.URL.indexOf('http://') === -1 && document.URL.indexOf('https://') === -1;
+
+  //Obtaining device paths for documents
+  var urlDeviceDocuments = '';
+  var urlCDVPathDocuments = '';
+  if(app)
+  {
+    if(ons.platform.isAndroid())
+    {
+      urlDeviceDocuments = cordova.file.externalRootDirectory+'/Documents/';
+      urlCDVPathDocuments = "cdvfile://localhost/sdcard/Documents/";
+    }else{
+      urlDeviceDocuments = cordova.file.documentsDirectory+'/Documents/';
+      urlCDVPathDocuments = "cdvfile://localhost/persistent/Documents/";
+    } 
+    console.log(urlDeviceDocuments, urlDeviceDocuments);
+  } 
+  //Tell me whether a url is a pdf link
   function isPDFDocument(url)
   {
     	var index = url.lastIndexOf('.');
@@ -10,40 +27,35 @@ myApp.service('FileManagerService',function($q, $cordovaFileOpener2,$filter ){
       console.log(substring);
       return (substring=='pdf')?true:false;
   }
-  function readDataUrl(file,response) {
+
+  //Reads data from file an return base64 representation
+  function readDataAsUrl(file)
+  {
     var r=$q.defer();
       var reader = new FileReader();
       var img='';
       reader.onloadend = function(evt) {
           console.log("Read as data URL");
-          r.resolve(response(evt.target.result));
+          r.resolve(evt.target.result);
       };
     reader.readAsDataURL(file);
     return r.promise;
   }
-  function callback(fileURL)
-  {
-    var r=$q.defer();
-    file=fileURL;
-    r.resolve(fileURL);
-    return r.promise;
-  }
-  function gotFile(file){
-      var r=$q.defer();
-      r.resolve(readDataUrl(file,callback));
-      return r.promise;
-  }
+ 
 return {
+  //Obtains file type
   getFileType:function(url)
   {
     var index = url.lastIndexOf('.');
     var substring = url.substring(index+1,url.length);
     return substring;
   },
+  //Public function to determine whether a link is a url
   isPDFDocument:function(url)
   {
     return isPDFDocument(url);
   },
+  //Downloads a document into the device storage
   downloadFileIntoStorage:function(url,targetPath)
   {
     var r=$q.defer();
@@ -64,9 +76,10 @@ return {
         r.reject(err);
       });
     });
-    return r.rpomise;
+    return r.promise;
     
   },
+  //Shares a url using the social sharing options
   shareDocument:function(name, url)
   {
     //Check if its an app
@@ -96,13 +109,14 @@ return {
 
 
   },
+  //Gets the base64 representation of a file in the cordova file storage
   getFileUrl:function(filePath)
   {
     var r=$q.defer();
     console.log(filePath);
     window.resolveLocalFileSystemURL(filePath, function(fileEntry){
       fileEntry.file(function(file){
-        r.resolve(gotFile(file));
+        r.resolve(readDataAsUrl(file));
       },function(error)
       {
         r.reject(error);
@@ -114,6 +128,7 @@ return {
     });
     return r.promise;
   },
+  //Opens a pdf depending on the device or browser
     openPDF:function(url)
     {
       console.log(url);
@@ -133,7 +148,7 @@ return {
                 }else{
                   	ons.notification.alert({ message:$filter('traslate')('UNABLETOOPEN') });
                 }
-            }, function(error){ons.notification.alert({ message:$filter('traslate')('UNABLETOOPEN') });});;
+            }, function(error){ons.notification.alert({ message:$filter('traslate')('UNABLETOOPEN') });});
           }else{
             var ref = cordova.InAppBrowser.open(url, '_blank', 'EnableViewPortScale=yes');
           }
@@ -141,6 +156,53 @@ return {
         window.open(url);
       }
     },
+    //Gets document file storage url
+    getDocumentUrls:function(document)
+    {
+      var documentName = 'docMUHC'+document.DocumentSerNum+"."+document.DocumentType;
+      var urlCDV = urlCDVPathDocuments+documentName;
+      var urlPathFile = urlDeviceDocuments+documentName;
+      return {cdvUrl:urlCDV,urlPathFile:urlPathFile};
+    },
+    //Gets the absolute path for file storage
+    getFilePathForDocument:function(document)
+    {
+      var documentName = 'docMUHC'+document.DocumentSerNum+"."+document.DocumentType;
+      return urlDeviceDocuments+documentName;
+    },
+    //Gets the CDVFile representation for the document
+    getCDVFilePathForDocument:function(document)
+    {
+      var documentName = 'docMUHC'+document.DocumentSerNum+"."+document.DocumentType;
+      return urlCDVPathDocuments+documentName;
+    },
+    //Gets an incomplete base64 string and adds the specific string to it
+    setBase64Document:function(document)
+    {
+      if(document.DocumentType=='pdf')
+      {
+        document.Content='data:application/pdf;base64,'+document.Content;
+      }else{
+        document.Content='data:image/'+document.DocumentType+';base64,'+document.Content;
+      }
+      return document;
+    },
+    //Determines whether a document has been saved the device
+    findDocumentInDevice:function(type, documentSerNum)
+    {
+      var r = $q.defer();
+      var documentName = 'docMUHC'+documentSerNum+"."+type;
+      var urlCDV = urlCDVPathDocuments+documentName;
+      var urlPathFile = urlDeviceDocuments+documentName;
+      window.resolveLocalFileSystemURL(urlCDV,function(fileEntry)
+      {
+        r.resolve({cdvUrl:urlCDV,urlPathFile:urlPathFile});
+      },function(error){
+        r.reject(error);
+      });
+      return r.promise;
+    },
+    //Opens the url for a document
     openUrl:function(url)
     {
       var app = document.URL.indexOf('http://') === -1 && document.URL.indexOf('https://') === -1;

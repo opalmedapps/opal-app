@@ -186,57 +186,6 @@ myApp.service('Notifications',['$rootScope','$filter','RequestToServer','LocalSt
         {
           readNotification(index, notification);
         },
-        /*getGroupNotifications:function()
-        {
-          groupNotifications={};
-          var language = UserPreferences.getLanguage();
-          for (var i = 0; i < Notifications.length; i++) {
-            if(Notifications[i].ReadStatus == '0')
-            {
-              if(!groupNotifications.hasOwnProperty(Notifications[i].NotificationType))
-              {
-                groupNotifications[Notifications[i].NotificationType]={};
-                console.log(Notifications[i]);
-                var not=notificationTypes[Notifications[i].NotificationType]['searchFunction'](Notifications[i].RefTableRowSerNum);
-                console.log(not);
-                (language=='EN')? not.Name=not[notificationTypes[Notifications[i].NotificationType]['NameEN']]:not.Name=not[notificationTypes[Notifications[i].NotificationType]['NameFR']];
-                groupNotifications[Notifications[i].NotificationType].Notifications=[not];
-                groupNotifications[Notifications[i].NotificationType].Icon = notificationTypes[Notifications[i].NotificationType].icon;
-                groupNotifications[Notifications[i].NotificationType].Color = notificationTypes[Notifications[i].NotificationType].color;
-                groupNotifications[Notifications[i].NotificationType].PageUrl = notificationTypes[Notifications[i].NotificationType].PageUrl;
-                var content = '';
-                (language=='EN') ? content = Notifications[i].Name_EN : content = Notifications[i].Name_FR;
-                groupNotifications[Notifications[i].NotificationType].Title = content;
-                groupNotifications[Notifications[i].NotificationType].Number = 1;
-              }else{
-                groupNotifications[Notifications[i].NotificationType].Notifications.push(notificationTypes[Notifications[i].NotificationType]['searchFunction'](Notifications[i].RefTableRowSerNum));
-                groupNotifications[Notifications[i].NotificationType].Number++;
-              }
-            }
-          }
-          return groupNotifications;
-        },
-      readGroupNotifications:function(notificationType)
-      {
-        console.log(notificationType);
-        console.log('Im In there');
-          for (var i = 0; i < groupNotifications[notificationType].Notifications.length; i++) {
-            for (var j = 0; j < Notifications.length; j++) {
-              console.log('About to change read status');
-              console.log(Notifications[j]);
-              console.log(Notifications[j].RefTableRowSerNum);
-              console.log(groupNotifications[notificationType].Notifications[i]);
-              console.log(groupNotifications[notificationType].Notifications[i][notificationTypes[notificationType].SerNum]);
-                if(Notifications[j].RefTableRowSerNum == groupNotifications[notificationType].Notifications[i][notificationTypes[notificationType].SerNum])
-                {
-                  console.log('Changing read status');
-                  //  Notifications[j].ReadStatus = '1';
-                    console.log(Notifications);
-                    RequestToServer.sendRequest('Read',{'Id':Notifications[j].NotificationSerNum, 'Field':'Notifications'});
-                }
-            }
-          }
-        },*/
         //Get number of unread news
         getNumberUnreadNotifications:function()
         {
@@ -305,6 +254,12 @@ myApp.service('Notifications',['$rootScope','$filter','RequestToServer','LocalSt
 
           }
           return notifications;
+        },
+        clearNotifications:function()
+        {
+          var Notifications=[];
+          var notificationsLocalStorage=[];
+          var groupNotifications={};
         }
 
     };

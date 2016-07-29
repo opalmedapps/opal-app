@@ -26,7 +26,7 @@ angular.module('MUHCApp')
           // Your GCM push server needs to know the regID before it can push to this device
           // here is where you might want to send it the regID for later use.
           console.log("regID = " + event.regid);
-          var firebaseLink = new Firebase('https://luminous-heat-8715.firebaseio.com/users/' + UserAuthorizationInfo.UserName + '/fields');
+          var firebaseLink = new Firebase('https://luminous-heat-8715.firebaseio.com/users/' + UserAuthorizationInfo.getUsername() + '/fields');
           firebaseLink.update({userInfoNotifications:result});
 
           //send device reg id to server

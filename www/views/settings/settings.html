@@ -37,7 +37,7 @@
         <div class="settings-header" ng-class="fontSizeTitle">{{"PERSONAL"|translate}}</div>
 
         <ons-list modifier="inset" class="settings-list">
-         <ons-list-item modifier="chevron" ng-click="settingsNavigator.pushPage('views/settings/update-account-field.html', {param:'Alias'},{ animation : 'slide' } )" ng-class="fontSizeDesc">
+         <ons-list-item modifier="chevron" ng-click="settingsNavigator.pushPage('views/settings/update-account-field.html', {param:'Nickname'},{ animation : 'slide' } )" ng-class="fontSizeDesc">
             {{"ALIAS"|translate}}
             <span class="list-item-note lucent">{{Alias|limitLetters:7}}</span>
           </ons-list-item>
@@ -82,7 +82,7 @@
         </ons-list>
         <ons-list modifier="inset" class="settings-list" ng-class="fontSizeDesc">
           <ons-list-item ng-click="$state.go('logOut')" modifier="tappable">
-            <ons-icon icon="ion-log-out" style="opacity: 0.8"></ons-icon>
+            <ons-icon icon="fa fa-sign-out" style="opacity: 0.8"></ons-icon>
             {{"SIGNOUT"|translate}}
           </ons-list-item>
         </ons-list>
