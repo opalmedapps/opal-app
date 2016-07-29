@@ -6,7 +6,7 @@
 var myApp=angular.module('MUHCApp');
 
 //Login controller
-myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$rootScope', '$state', 'UserAuthorizationInfo', 'RequestToServer', 'FirebaseService','LocalStorage','tmhDynamicLocale','DeviceIdentifiers','UserPreferences','NavigatorParameters',function LoginController(ResetPassword,$scope,$timeout, $rootScope, $state, UserAuthorizationInfo,RequestToServer,FirebaseService,LocalStorage,tmhDynamicLocale,DeviceIdentifiers,UserPreferences,NavigatorParameters) {
+myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$rootScope', '$state', 'UserAuthorizationInfo', 'RequestToServer', 'FirebaseService','LocalStorage','$filter','DeviceIdentifiers','UserPreferences','NavigatorParameters',function LoginController(ResetPassword,$scope,$timeout, $rootScope, $state, UserAuthorizationInfo,RequestToServer,FirebaseService,LocalStorage,$filter,DeviceIdentifiers,UserPreferences,NavigatorParameters) {
   
   //demoSignIn();
 
@@ -19,7 +19,13 @@ myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$root
         delete $scope.alert.content;
       }
   });
-
+  //Obtain email from localStorage and show that email
+  var savedEmail = window.localStorage.getItem('Email');
+  if(savedEmail)
+  {
+    $scope.email = savedEmail;
+  }
+ 
   //demoSignIn();
   //Demo automatic sign in
   function demoSignIn()
@@ -33,6 +39,7 @@ myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$root
 
   var myDataRef = new Firebase(FirebaseService.getFirebaseUrl());
   $scope.submit = function (email,password) {
+    if(savedEmail) email = savedEmail;
     $scope.email=email;
     $scope.password=password;
     if(typeof email=='undefined'||email ==='')
@@ -59,6 +66,7 @@ myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$root
       console.log(authData);
         var temporary=authData.password.isTemporaryPassword;
         console.log(temporary);
+        window.localStorage.setItem('Email',$scope.email);
         if(temporary){
             ResetPassword.setUsername(authData.auth.uid);
             ResetPassword.setToken(authData.token);
@@ -115,5 +123,12 @@ myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$root
         });
     }
   }
+  $scope.signInDifferentAccount = function()
+  {
+    $scope.savedEmail ='';
+    $scope.email='';
+    $scope.password='';
+    window.localStorage.removeItem('Email');
+  };
 
 }]);

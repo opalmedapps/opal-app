@@ -19,7 +19,7 @@ myApp.service('RequestToServer',function(UserAuthorizationInfo, EncryptionServic
     function sendRequest(typeOfRequest,parameters)
     {
          //Push the request to firebase
-        var pushID =  refRequests.push({ 'Request' : EncryptionService.encryptData(typeOfRequest),'DeviceId':identifier,'Token':UserAuthorizationInfo.Token,  'UserID': UserAuthorizationInfo.UserName, 'Parameters':EncryptionService.encryptData(parameters),'Timestamp':Firebase.ServerValue.TIMESTAMP});
+        var pushID =  refRequests.push({ 'Request' : EncryptionService.encryptData(typeOfRequest),'DeviceId':identifier,'Token':UserAuthorizationInfo.getToken(),  'UserID': UserAuthorizationInfo.getUsername(), 'Parameters':EncryptionService.encryptData(parameters),'Timestamp':Firebase.ServerValue.TIMESTAMP});
         return pushID.key();
     }
 
@@ -32,10 +32,10 @@ myApp.service('RequestToServer',function(UserAuthorizationInfo, EncryptionServic
           //Sends request and gets random key for request
           var key = sendRequest(typeOfRequest,parameters);
           //Sets the reference to fetch data for that request
-          var refRequestResponse = refUsers.child(UserAuthorizationInfo.UserName+'/'+key);
+          var refRequestResponse = refUsers.child(UserAuthorizationInfo.getUsername()+'/'+key);
           console.log(refRequestResponse.toString());
           //Waits to obtain the request data.
-          console.log('users/'+UserAuthorizationInfo.UserName+'/'+key);
+          console.log('users/'+UserAuthorizationInfo.getUsername()+'/'+key);
           refRequestResponse.on('value',function(snapshot){
             if(snapshot.exists())
             {
@@ -65,7 +65,7 @@ myApp.service('RequestToServer',function(UserAuthorizationInfo, EncryptionServic
           {
             refRequestResponse.off();
             r.resolve({Response:'timeout'});
-          },10000);
+          },30000);
           return r.promise;
         },
         sendRequest:function(typeOfRequest,content){

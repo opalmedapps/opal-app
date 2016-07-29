@@ -34,18 +34,23 @@ myApp.service('Diagnoses',function($filter,LocalStorage){
       {
         diagnoses=[];
         diagnosesToLocalStorage=[];
-        addDiagnosis(diag)
+        addDiagnosis(diag);
       },
       updateDiagnoses:function(diag)
       {
         searchAndDeleteDiagnoses(diag);
-        addDiagnosis(diag)
+        addDiagnosis(diag);
       },
       getDiagnoses:function()
       {
         return diagnoses;
+      },
+      clearDiagnoses:function()
+      {
+          diagnoses=[];
+          diagnosesToLocalStorage=[];
       }
-    }
+    };
 
 
 

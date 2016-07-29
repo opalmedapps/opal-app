@@ -2,12 +2,19 @@ var myApp=angular.module('MUHCApp');
 //This service will have the user preferences for language and sent sms feature. To be used in account settings.
 myApp.service('UserPreferences',[ 'UserAuthorizationInfo','$rootScope','tmhDynamicLocale','$translate','$q', function(UserAuthorizationInfo,$rootScope,tmhDynamicLocale,$translate,$q){
     var app = document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'https://' ) === -1;
+    
+    //Fields for user preference and authentication
+    var fontSize = '';
+    var calendarOption = '';
+    var language = '';
+    var enableSMS = '';
+    
     return{
         setFontSize:function(size)
         {
-            var username=UserAuthorizationInfo.UserName;
+            var username=UserAuthorizationInfo.getUsername();
             window.localStorage.setItem(username+'fontSize',size);
-            this.FontSize=size;
+            fontSize=size;
             if(size=='medium')
             {
                 $rootScope.fontSizeDesc='fontDescMedium';
@@ -19,26 +26,26 @@ myApp.service('UserPreferences',[ 'UserAuthorizationInfo','$rootScope','tmhDynam
         },
         getFontSize:function()
         {
-            var username=UserAuthorizationInfo.UserName;
-            this.FontSize='large';
+            var username=UserAuthorizationInfo.getUsername();
+            fontSize='large';
             $rootScope.fontSizeDesc='fontDescLarge';
             $rootScope.fontSizeTitle='fontTitleLarge';
             var fontSize=window.localStorage.getItem(username+'fontSize');
             if(fontSize&&typeof fontSize!=='undefined'&&fontSize=='medium')
             {
-                this.FontSize=fontSize;
+                fontSize=fontSize;
                 $rootScope.fontSizeDesc='fontDescMedium';
                 $rootScope.fontSizeTitle='fontTitleMedium';
             }
-            return this.FontSize;
+            return fontSize;
         },
-        setNativeCalendarOption:function(calendarOption){
-            if(calendarOption){
-                this.calendarOption=calendarOption;
+        setNativeCalendarOption:function(option){
+            if(option){
+                calendarOption = option;
             }
         },
         getNativeCalendarOption:function(){
-            return this.calendarOption;
+            return calendarOption;
         },
         initializeLanguage:function()
         {
@@ -82,7 +89,7 @@ myApp.service('UserPreferences',[ 'UserAuthorizationInfo','$rootScope','tmhDynam
                 tmhDynamicLocale.set('fr');
                 $translate.use('fr');
             }
-            this.Language = lan;
+            language = lan;
             r.resolve(lan);
            }
            return r.promise;
@@ -98,24 +105,31 @@ myApp.service('UserPreferences',[ 'UserAuthorizationInfo','$rootScope','tmhDynam
                 $translate.use('fr');
             }
             window.localStorage.setItem('Language', lan);
-            this.Language=lan;
+            language=lan;
         },
         setEnableSMS:function(){
-            return this.EnableSMS;
+            return enableSMS;
         },
         getLanguage:function(){
-            return this.Language;
+            return language;
 
         },
         getEnableSMS:function(){
-            return this.EnableSMS;
+            return enableSMS;
         },
         setUserPreferences:function(preferences){
-            this.Language=preferences.Language;
-            this.EnableSMS=preferences.EnableSMS;
+            language=preferences.Language;
+            enableSMS=preferences.EnableSMS;
+        },
+        clearUserPreferences:function()
+        {
+            fontSize = '';
+            calendarOption = '';
+            language = '';
+            enableSMS = '';
         }
 
-    }
+    };
 
 
 

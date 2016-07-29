@@ -1,5 +1,5 @@
 var myApp=angular.module('MUHCApp');
-myApp.controller('InfoTabController',['$scope','$timeout',function($scope,$timeout){
+myApp.controller('InfoTabController',['$scope','$timeout','$filter','$sce',function($scope,$timeout,$filter,$sce){
   var tab=tabbar.getActiveTabIndex();
   console.log('inside tabs controller');
   var views=[
@@ -28,5 +28,10 @@ myApp.controller('InfoTabController',['$scope','$timeout',function($scope,$timeo
       description:"EDUCATION_DESCRIPTION"
     },
   ];
-  $scope.view=views[tab];
+  $scope.trustAsHtml = function(string) {
+    return $sce.trustAsHtml(string);
+};
+  $scope.view = views[tab];
+  $scope.view.description = $filter('translate')($scope.view.description );
+  console.log($scope.view.description);
   }]);

@@ -17,7 +17,7 @@
     <!--<ons-carousel var="myCarousel" style="width: 100vw; height: 100vh;overflow-y:scroll" swipeable overscrollable auto-scroll >
    <ons-carousel-item>-->
    
-   <ons-carousel  var="myCarousel" style="" id="carouselStatus">
+   <ons-carousel  var="myCarousel" id="carouselStatus" fullscreen>
     <ons-carousel-item >
     <div style="background-color:white;margin:0;width:100vw;border-bottom:1px solid #f1f1f1" ng-show="navigator!=='personalNavigator'">
        <div style="line-height:1;padding:5px" align="center" >
@@ -64,7 +64,7 @@
                                        {{currentStage}}
                                        <br>
                                        <strong>{{"STARTTREATMENT"|translate}}:</strong>
-                                       <br> {{stages[stages.length-1].Date|date:'MMM d'}} <a href ng-click="menu.setMainPage('views/educational-material.html',{closedMenu:true})"><i class="ion-help-circled iconStatusBox"></i></a>
+                                       <br> {{stages[stages.length-1].Date|date:'MMM d'}} 
                                        <br>
                                        <span style="color:grey;font-size:13px" >({{"ESTIMATED"|translate}})</span>
                                    </div>

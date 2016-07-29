@@ -148,6 +148,10 @@ myApp.service('TxTeamMessages', ['$filter','RequestToServer','LocalStorage', 'Us
         array.Body = (language == 'EN')? array.Body_EN: array.Body_FR;
       }
       return array;
+    },
+    clearTxTeamMessages:function()
+    {
+        txTeamMessagesArray=[];
     }
 
   };

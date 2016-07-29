@@ -10,6 +10,6 @@
         <i ng-class="view.icon" ng-style="{color:view.color}" style="font-size:80px"></i>
       </div>
       <p class="item-title" style="font-size:30px" ng-style="{color:view.color}" translate= "{{view.name}}"></p>
-      <p style="text-align:center;color:grey:padding-left:20px;padding-right:20px" translate = "{{view.description}}" ></p>
+      <div style="text-align:center;:padding-left:20px;padding-right:20px" ng-bind-html="trustAsHtml(view.description)"></div>
     </div>
  </ons-page>

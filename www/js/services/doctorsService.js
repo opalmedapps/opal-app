@@ -185,54 +185,6 @@ myApp.service('Doctors',['$q','LocalStorage','$filter','FileManagerService','$co
               Doctors=$filter('orderBy')(Doctors,'LastName',false);
               OtherDoctors=$filter('orderBy')(OtherDoctors,'LastName',false);
               r.resolve(true);
-              /*for (var i = 0; i < doctorKeyArray.length; i++) {
-                if(doctors[i].PathFileSystem){
-                  promises.push(FileManagerService.getFileUrl(doctors[i].PathFileSystem));
-                }
-              }
-
-              $q.all(promises).then(function(results){
-                var tracker=0;
-                for (var i = 0; i < doctors.length; i++) {
-                  var copyDoctor=angular.copy(doctors[i]);
-                  if(doctors[i].PathFileSystem)
-                  {
-                    copyDoctor.ProfileImage=results[tracker];
-                    tracker++;
-                  }else{
-                    copyDoctor.ProfileImage='./img/doctor.png';
-                  }
-                   if(copyDoctor.PrimaryFlag=='1'&&copyDoctor.OncologistFlag=='0'){
-                        PrimaryPhysician.push(copyDoctor);
-                   }else if(copyDoctor.OncologistFlag=='1')
-                   {
-                        Oncologists.push(copyDoctor);
-                   }else{
-                     OtherDoctors.push(copyDoctor);
-                   }
-                   Doctors.push(copyDoctor);
-                };
-                Oncologists=$filter('orderBy')(Oncologists,'LastName',false);
-                Doctors=$filter('orderBy')(Doctors,'LastName',false);
-                OtherDoctors=$filter('orderBy')(OtherDoctors,'LastName',false);
-                r.resolve(true);
-              },function(error){
-                for (var i = 0; i < doctors.length; i++) {
-                  var copyDoctor=angular.copy(doctors[i]);
-                  copyDoctor.ProfileImage='./img/doctor.png';
-                   if(copyDoctor.PrimaryFlag=='1'&&copyDoctor.OncologistFlag=='0'){
-                        PrimaryPhysician.push(copyDoctor);
-                   }else if(copyDoctor.OncologistFlag=='1')
-                   {
-                        Oncologists.push(copyDoctor);
-                   }else{
-                     OtherDoctors.push(copyDoctor);
-                   }
-                   Doctors.push(copyDoctor);
-                };
-                console.log(error);
-        				r.resolve(true);
-        			});*/
             }else{
               r.resolve(true);
             }
@@ -241,7 +193,7 @@ myApp.service('Doctors',['$q','LocalStorage','$filter','FileManagerService','$co
         },
         isEmpty:function()
         {
-          if(Doctors.length==0)
+          if(Doctors.length===0)
           {
             return true;
           }else{
@@ -271,7 +223,7 @@ myApp.service('Doctors',['$q','LocalStorage','$filter','FileManagerService','$co
                     console.log(Doctors[i]);
                     return Doctors[i];
                 }
-            };
+            }
         },
         getDoctorIndexBySerNum:function(userSerNum){
             for (var i = 0; i < Doctors.length; i++) {
@@ -280,8 +232,16 @@ myApp.service('Doctors',['$q','LocalStorage','$filter','FileManagerService','$co
                     console.log(i);
                     return i;
                 }
-            };
+            }
+        },
+        clearDoctors:function()
+        {
+            Doctors=[];
+            Oncologists=[];
+            OtherDoctors=[];
+            PrimaryPhysician=[];
+            doctorsStorage=[];
         }
 
-    }
+    };
 }]);

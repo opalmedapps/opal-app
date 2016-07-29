@@ -1,5 +1,6 @@
 {
 	"HEADER_MESSAGE_LOGIN":"Login",
+	"SIGNINDIFFERENTACCOUNT":"Sign in with a different account",
 	"FORGOTPASSWORD":"Forgot Password",
 	"INVALID_USER":"User does not exist",
 	"INVALID_PASSWORD":"Invalid Password",

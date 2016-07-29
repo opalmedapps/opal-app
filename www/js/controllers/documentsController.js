@@ -8,14 +8,7 @@ myApp.controller('DocumentsController', ['Patient', 'Documents', 'UpdateUI', '$s
     $scope.documents = Documents.getDocuments();
     $scope.documents = Documents.setDocumentsLanguage($scope.documents);
     if($scope.documents.length === 0) $scope.noDocuments=true;
-      for (var i = 0; i < $scope.documents.length; i++) {
-        if($scope.documents[i].DocumentType=='pdf')
-        {
-          $scope.documents[i].PreviewContent = './img/pdf-icon.png';
-        }else{
-          $scope.documents[i].PreviewContent=$scope.documents[i].Content;
-        }
-    }
+
   }
   //Go to document function, if not read, read it, then set parameters for navigation
   $scope.goToDocument=function(doc)
@@ -40,6 +33,10 @@ myApp.controller('DocumentsController', ['Patient', 'Documents', 'UpdateUI', '$s
       $done();
     }, 5000);
   };
+  $scope.saveDocuments = function()
+  {
+
+  };
 }]);
 
 /**
@@ -50,25 +47,92 @@ myApp.controller('SingleDocumentController', ['NavigatorParameters','Documents',
   
   //Obtain navigator parameters.
   var parameters = NavigatorParameters.getParameters();
+  var app = document.URL.indexOf('http://') === -1 && document.URL.indexOf('https://') === -1;
+
   var image = Documents.setDocumentsLanguage(parameters.Post);
-  
-  //Determine if its a pdf or an image for small window preview.
-  if(image.DocumentType=='pdf')
+
+  $scope.documentObject = image;
+  $scope.loading = true;
+  initializeDocument(image);
+  //Checks if document exists if it does not it downloads the document from the server
+  function initializeDocument(document)
   {
-    image.PreviewContent='./img/pdf-icon.png';
-  }else{
-    image.PreviewContent=image.Content;
-  }
-  console.log(image);
+    if(app)
+    {
+        FileManagerService.findDocumentInDevice(document.DocumentType, document.DocumentSerNum).then(function(url)
+        {
+          setDocumentForShowing(document, url);
+        }).catch(function(error)
+        {
+          console.log('File not found', error);
+          Documents.downloadDocumentFromServer(document.DocumentSerNum).then(function(doc)
+          {
+            var targetPath = FileManagerService.getFilePathForDocument(document);
+            console.log(targetPath);
+            doc = FileManagerService.setBase64Document(doc);
+            
+            FileManagerService.downloadFileIntoStorage(doc.Content, targetPath).then(function()
+            {
+              setDocumentForShowing(document, FileManagerService.getDocumentUrls(document));
+              console.log('success');
+
+            }).catch(function(error)
+            {
+              console.log('Unable to save document on server',error);
+              //Unable to save document on server
+            });
+          }).catch(function(error){
+            //Unable to get document from server
+            console.log('Unable to get document from server',error);
+          });
+        });
+    }else{
+          Documents.downloadDocumentFromServer(document.DocumentSerNum).then(function(doc)
+          {
+            doc = FileManagerService.setBase64Document(doc);            
+            document.Content = doc.Content;
+            setDocumentForShowing(document);
+          }).catch(function(error){
+            //unable to fetch document from server
+            console.log(error);
+          });
+    }
   
-  //Set the documentObject
-  $scope.documentObject=image;
+  }
+  // function simply sets document for showing
+  function setDocumentForShowing(document, url)
+  {
+    console.log(url);
+    //Determine if its a pdf or an image for small window preview.
+    if(document.DocumentType=='pdf')
+    {
+      document.PreviewContent='./img/pdf-icon.png';
+    }else{
+      if(app) document.PreviewContent=url.cdvUrl;
+      else document.PreviewContent = document.Content;
+    }
+    if(app)
+    {
+      document.CDVfilePath = url.cdvUrl;
+      document.PathFileSystem = url.urlPathFile;
+      document.Content =  url.cdvUrl;
+    }
+    
+    console.log(document);
+
+        //Set the documentObject
+    $timeout(function()
+      {
+        $scope.loading = false;
+        $scope.documentObject = document;
+      });
+   
+  }
   
   //Share via email function, detemines if its an app, sets the parameters for the email and formats depending on whether is a
   //base64 string or a simple attachment and depending on whether is an Android device or an iOS device
   $scope.shareViaEmail=function()
   {
-    var app = document.URL.indexOf('http://') === -1 && document.URL.indexOf('https://') === -1;
     if (app) {
 
           var attachment='';
@@ -171,6 +235,7 @@ myApp.controller('SingleDocumentController', ['NavigatorParameters','Documents',
     }
   };
   console.log(FileManagerService);
+
   
   //Open document function: Opens document depending on the format
   $scope.openDocument = function() {
@@ -206,6 +271,10 @@ myApp.controller('SingleDocumentController', ['NavigatorParameters','Documents',
       } else {
         window.open(image.Content);
       }
+    };
+    $scope.saveDocument = function()
+    {
+
     };
     /*var gesturableImg = new ImgTouchCanvas({
             canvas: document.getElementById('mycanvas2'),

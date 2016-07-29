@@ -1,40 +1,48 @@
 angular.module('MUHCApp').controller('MainController', ["$state",'$timeout', '$rootScope','FirebaseService','NativeNotification','DeviceIdentifiers','$translatePartialLoader','NewsBanner', function ($state,$timeout,$rootScope,FirebaseService,NativeNotification,DeviceIdentifiers,$translatePartialLoader,NewsBanner) {
-//     var timeoutID;
+    var timeoutID;
 
-// function setup() {
-//     this.addEventListener('touchstart',resetTimer,false);
-//     this.addEventListener('touchend',resetTimer,false);
-//     this.addEventListener("mousemove", resetTimer, false);
-//     this.addEventListener("mousedown", resetTimer, false);
+function setup() {
+    this.addEventListener('touchstart',resetTimer,false);
+    //this.addEventListener("mousedown", resetTimer, false);
+    document.addEventListener("pause", pause, false);
+    document.addEventListener("resume",pause, false);
+    startTimer();
+}
+setup();
 
-//     startTimer();
-// }
-// setup();
+function pause(ev)
+{
 
-// function startTimer() {
+    console.log('Pause/resume event',ev);
+}
+function startTimer() {
     
-//     // wait 2 seconds before calling goInactive
-//     timeoutID = window.setTimeout(goInactive, 300000);
-// }
+    // wait 2 seconds before calling goInactive
+    timeoutID = window.setTimeout(goInactive, 300000);
+}
+setInterval(function()
+{
+    console.log('Check activity');
+},20000);
+function resetTimer(e) {
+    console.log(e.type);
+    window.clearTimeout(timeoutID);
 
-// function resetTimer(e) {
-//     console.log(e.type);
-//     window.clearTimeout(timeoutID);
+    goActive();
+}
 
-//     goActive();
-// }
+function goInactive() {
+    //window.localStorage.removeItem('OpalAdminPanelPatient');
+    //window.localStorage.removeItem('OpalAdminPanelUser');
+    console.log('Going inactive');
+    //location.reload();
+}
 
-// function goInactive() {
-//     //window.localStorage.removeItem('OpalAdminPanelPatient');
-//     //window.localStorage.removeItem('OpalAdminPanelUser');
-//     location.reload();
-// }
+function goActive() {
+    // do something
 
-// function goActive() {
-//     // do something
-
-//     startTimer();
-// }
+    startTimer();
+}
     
     $translatePartialLoader.addPart('top-view');
     //$state.transitionTo('logIn');

@@ -9,7 +9,7 @@ var myApp=angular.module('MUHCApp.filters',[]);
 				return 'Appointment Change';
 			}
 
-		}
+		};
 
 
 
@@ -57,7 +57,7 @@ var myApp=angular.module('MUHCApp.filters',[]);
 				return '';
 			}
 
-		}
+		};
 
 
 	});
@@ -88,7 +88,7 @@ var myApp=angular.module('MUHCApp.filters',[]);
           var d=new Date (a[0],a[1]-1,a[2],a[3],a[4],a[5] );
         return d;
         }
-      }
+      };
 	});
 	myApp.filter('ellipsis', function () {
 	    return function (text, length) {
@@ -96,7 +96,27 @@ var myApp=angular.module('MUHCApp.filters',[]);
 	            return text.substr(0, length) + "...";
 	        }
 	        return text;
-	    }
+	    };
+	});
+		myApp.filter('emailElongator', function () {
+	    return function (text) {
+					
+	        if(text&&typeof text === 'string'&&text.length<18)
+					{
+						console.log(text);
+						total = "";
+						for (var i = 0; i < 21-text.length; i++) {
+							console.log(text);
+							total+=" ";
+						}
+						text+=total;
+						console.log(text.length);
+						return text;
+					}else{
+						return text;
+					}
+	        
+	    };
 	});
 myApp.filter('dateEmail',function($filter){
   return function(date){
@@ -139,7 +159,7 @@ myApp.filter('limitLetters',function($filter){
 			string=string+'...';
 		}
 		return string;
-	}
+	};
 });
 myApp.filter('propsFilter', function() {
   return function(items, props) {

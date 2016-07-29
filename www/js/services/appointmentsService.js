@@ -249,7 +249,7 @@ myApp.service('Appointments', ['$q', 'RequestToServer','$cordovaCalendar','UserA
             var endDate = tmp.setHours(startDate.getHours()+1);
             eventToCalendar.startDate=startDate;
             eventToCalendar.endDate=endDate;
-            (UserPreferences.getLanguage()=='EN')?eventToCalendar.title=appointments[indexValue].AppointmentType_EN:eventToCalendar.title=appointments[indexValue].AppointmentType_FR;
+            eventToCalendar.title = (UserPreferences.getLanguage()=='EN')?appointments[indexValue].AppointmentType_EN:appointments[indexValue].AppointmentType_FR;
             eventToCalendar.location=appointments[index].Location;
             eventToCalendar.notes='Source: ' +appointments[indexValue].ResourceName;
             if(isAppointmentInNativeCalendar(appointments[indexValue].AppointmentSerNum))
@@ -589,6 +589,15 @@ myApp.service('Appointments', ['$q', 'RequestToServer','$cordovaCalendar','UserA
             }
           }
           return array;
+        },
+        clearAppointments:function()
+        {
+           UserAppointmentsInNativeCalendar=[];
+           userAppointmentsArray = [];
+           treatmentSessionsObject = {};
+           appointmentsLocalStorage=[];
+           calendar={};
+           numberOfSessions=0;
         }
     };
 }]);

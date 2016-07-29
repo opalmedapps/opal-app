@@ -6,17 +6,17 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','EncryptionService',
   var lastUpdateTimestamp={
         'All':0,
         'Appointments':0,
-        'Messages':0,
+        //'Messages':0,
         'Documents':0,
         'Tasks':0,
         'Doctors':0,
-        'LabTests':0,
+        //'LabTests':0,
         'Patient':0,
         'Notifications':0,
         'EducationalMaterial':0,
         'Questionnaires':0
   };
-  var promiseFields = ['Doctors', 'Patient', 'Documents'];
+  var promiseFields = ['Doctors', 'Patient'];
   var sectionServiceMappings={
     'All':
       {
@@ -25,9 +25,8 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','EncryptionService',
       },
     'Documents':
     {
-      setOnline:Documents.setDocumentsOnline,
-      update:Documents.updateDocuments,
-      setOffline:Documents.setDocumentsOffline
+      init:Documents.setDocuments,
+      update:Documents.updateDocuments
     },
     'Patient':{
       setOnline:Patient.setUserFieldsOnline,
@@ -217,7 +216,7 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','EncryptionService',
     }
     function initTimestampsFromLocalStorage()
     {
-      lastUpdateTimestamp=JSON.parse(window.localStorage.getItem(UserAuthorizationInfo.UserName+'/Timestamps'));
+      lastUpdateTimestamp=JSON.parse(window.localStorage.getItem(UserAuthorizationInfo.getUsername()+'/Timestamps'));
       return findSmallestTimestamp('All');
     }
 
@@ -228,7 +227,7 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','EncryptionService',
       {
         lastUpdateTimestamp[field] = time;
       }
-      window.localStorage.setItem(UserAuthorizationInfo.UserName+'/Timestamps',JSON.stringify(lastUpdateTimestamp));
+      window.localStorage.setItem(UserAuthorizationInfo.getUsername()+'/Timestamps',JSON.stringify(lastUpdateTimestamp));
     }
 
 
@@ -277,7 +276,7 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','EncryptionService',
       }else{
         lastUpdateTimestamp[content] = time;
       }
-      window.localStorage.setItem(UserAuthorizationInfo.UserName+'/Timestamps',JSON.stringify(lastUpdateTimestamp));
+      window.localStorage.setItem(UserAuthorizationInfo.getUsername()+'/Timestamps',JSON.stringify(lastUpdateTimestamp));
     }
     /**
      * Reset sections
@@ -357,6 +356,22 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','EncryptionService',
               //Computer check if online
               return initServicesFromServer(type);
            }
+        },
+        clearUpdateUI:function()
+        {
+           lastUpdateTimestamp={
+                'All':0,
+                'Appointments':0,
+                //'Messages':0,
+                'Documents':0,
+                'Tasks':0,
+                'Doctors':0,
+                //'LabTests':0,
+                'Patient':0,
+                'Notifications':0,
+                'EducationalMaterial':0,
+                'Questionnaires':0
+          };
         }
     };
 

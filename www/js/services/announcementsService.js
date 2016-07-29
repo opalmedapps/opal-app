@@ -142,6 +142,10 @@ myApp.service('Announcements', ['RequestToServer','$filter','LocalStorage','User
     getAnnouncementUrl:function(serNum)
     {
       return './views/general/announcements/individual-announcement.html';
+    },
+    clearAnnouncements:function()
+    {
+      announcementsArray=[];
     }
   };
   }]);

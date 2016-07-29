@@ -4,6 +4,7 @@
 	"INVALID_USER":"L'utilisateur n'existe pas!",
 	"INVALID_PASSWORD":"Mot de passe incorrect!",
 	"INVALID_EMAIL":"Email invalide!",
+	"SIGNINDIFFERENTACCOUNT":"Se connecter avec un compte différent",
 	"INTERNETERROR":"Erreur de serveur, vérifiez votre connexion Internet.",
 	"EMAILPASSWORDSENT":"Mot de passe réinitialisé avec succès, vérifiez votre email pour votre mot de passe temporaire!",
 	"ENTEREMAIL":"Entrez votre adresse email:",

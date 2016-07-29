@@ -14,11 +14,12 @@
           <p class="item-desc" ng-class="fontSizeDesc">{{documentObject.DateAdded|formatDateAppointmentTask}}</p>
           <p class="item-desc" ng-class="fontSizeDesc">{{documentObject.Description}}</p>
         </div>
+        
       </ons-list-item>
     </ons-list>
     <ons-list class="settings-list">
       <ons-list-item class="item" ng-click="openDocument()">
-        <div align="center">
+        <div align="center" ng-hide="loading">
           <div  ng-if="documentObject.DocumentType=='pdf'">
           <img height="200px" width="100%" style="max-width:180px" ng-src="{{documentObject.PreviewContent}}">
           </div>
@@ -26,6 +27,15 @@
           <img height="200px" width="100%" style="max-width:300px" ng-src="{{documentObject.PreviewContent}}">
           </div>
         </div>
+        <div ng-show="loading" align="center" style="margin-top:10px">
+          <div>
+          <svg class="progress-circular">
+                <circle class="progress-circular__primary" cx="50%" cy="50%" r="40%" fill="none" stroke-width="10%" stroke-miterlimit="10"/>
+          </svg>
+        </div>
+        </div>
+        <!--<p class="item-desc text-center"  ng-class="fontSizeDesc">* Saved documents will be available offline</p>-->
+
       </ons-list-item>
     </ons-list>
 

@@ -94,7 +94,7 @@ function setStatusPage()
     //Gets and sets the heights of the table based on the size of the viewport.
     var divTreatment=document.getElementById('divTreatmentPlan');
     var divTreatmentSessions = document.getElementById('divTreatmentSessions');
-    var heightTreatment= ($scope.navigator=='personalNavigator')?document.documentElement.clientHeight-340:document.documentElement.clientHeight-360;
+    var heightTreatment= ($scope.navigator=='personalNavigator')?document.documentElement.clientHeight-330:document.documentElement.clientHeight-330;
     divTreatment.style.height=heightTreatment+'px';
     divTreatmentSessions.style.height = heightTreatment+'px';
 
