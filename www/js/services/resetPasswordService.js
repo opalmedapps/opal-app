@@ -1,5 +1,6 @@
 var myApp=angular.module('MUHCApp');
 myApp.service('ResetPassword',function(RequestToServer, FirebaseService){
+   var Ref=new Firebase(FirebaseService.getFirebaseUrl()+'requests');
   return{
     setTemporaryPassword:function(temp)
     {
@@ -61,25 +62,20 @@ myApp.service('ResetPassword',function(RequestToServer, FirebaseService){
     {
       if(type=='VerifySSN')
       {
-        var Ref=new Firebase(FirebaseService.getFirebaseUrl()+'requests');
+       
         parameter=CryptoJS.AES.encrypt(parameter,parameter).toString();
         console.log(parameter);
         Ref.push({ 'Request' : 'VerifySSN', 'DeviceId':RequestToServer.getIdentifier(),'Token':this.Token, 'UserID':this.Username, 'Parameters':{'SSN' : parameter }});
         Ref.off();
       }else if(type=='SetNewPassword'){
-        var Ref=new Firebase(FirebaseService.getFirebaseUrl()+'requests');
         console.log(this.Answer);
         parameter=CryptoJS.AES.encrypt(parameter,this.Answer).toString();
         Ref.push({ 'Request' : 'SetNewPassword', 'DeviceId':RequestToServer.getIdentifier(),'Token':this.Token, 'UserID':this.Username, 'Parameters':{'NewPassword' : parameter }});
         Ref.off();
       }else if(type=='VerifyAnswer')
       {
-        var Ref=new Firebase(FirebaseService.getFirebaseUrl()+'requests');
-        console.log(this.SSN);
-        console.log(parameter);
         parameter.Answer=CryptoJS.AES.encrypt(parameter.Answer,this.SSN).toString();
         parameter.Question=CryptoJS.AES.encrypt(parameter.Question,this.SSN).toString();
-
         Ref.push({ 'Request' : 'VerifySecurityAnswer', 'DeviceId':RequestToServer.getIdentifier(),'Token':this.Token, 'UserID':this.Username, 'Parameters':parameter});
         Ref.off();
       }

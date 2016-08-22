@@ -1,5 +1,5 @@
 var myApp=angular.module('MUHCApp');
-myApp.controller('StatusController',['$rootScope','$scope','$timeout', 'UserPlanWorkflow','$anchorScroll','$location','Appointments','NavigatorParameters', function($rootScope,$scope,$timeout, UserPlanWorkflow,$anchorScroll,$location,Appointments,NavigatorParameters){
+myApp.controller('StatusController',['$rootScope','$scope','$timeout', 'UserPlanWorkflow','$anchorScroll','$location','Appointments','NavigatorParameters', '$filter',function($rootScope,$scope,$timeout, UserPlanWorkflow,$anchorScroll,$location,Appointments,NavigatorParameters,$filter){
   //Grabbing navigation parameters for controller
   var param = NavigatorParameters.getParameters(); 
   
@@ -11,15 +11,20 @@ myApp.controller('StatusController',['$rootScope','$scope','$timeout', 'UserPlan
   // var heightTreatment=document.documentElement.clientHeight-118;
   // divTreatment.style.height=heightTreatment+'px';
   
-  $scope.viewsTitles = ['Treatment plan status', 'Treatment sessions status'];
+  $scope.viewsTitles = [$filter('translate')('TREATMENTPLANNING'), $filter('translate')('TREATMENTSESSION')];
 //Initializing the carousel item 
 document.addEventListener('ons-carousel:init',initCarouselCallback);
 document.addEventListener('ons-carousel:postchange',postChangeCarousel);
 ons.orientation.on("change", function (event) {
-  console.log(event.isPortrait); // e.g. portrait
-  var i = $scope.carousel._scroll / $scope.carousel._currentElementSize;
-  delete $scope.carousel._currentElementSize;
-  $scope.carousel.setActiveCarouselItemIndex(i);
+  $timeout(function()
+  {
+    console.log(event.isPortrait); // e.g. portrait
+    var i = $scope.carousel._scroll / $scope.carousel._currentElementSize;
+    setHeightElement();
+    delete $scope.carousel._currentElementSize;
+    $scope.carousel.setActiveCarouselItemIndex(i);
+  });
+
 });
 
 function postChangeCarousel(ev)
@@ -47,6 +52,11 @@ function initCarouselCallback(ev) {
     console.log(ev);
     var carouselElement = ev.target;
     carouselElement.style.height=(document.documentElement.clientHeight-91)+'px';
+    $timeout(function()
+    {
+      $scope.activeIndex = 0;
+    },200);
+    
     console.log(carouselElement);
     setStatusPage();
 }
@@ -62,6 +72,7 @@ $scope.$on('$destroy',function()
   document.removeEventListener('ons-carousel:init',initCarouselCallback);
   document.removeEventListener('ons-carousel:postchange',postChangeCarousel);
   ons.orientation.off("change");
+  
 });
 
 //Sets the entire status page
@@ -76,11 +87,43 @@ function setStatusPage()
   if(appointmentsSession.Total !== 0&&boolStatus)
   {
     appointmentsSession.AppointmentList = Appointments.setAppointmentsLanguage(appointmentsSession.AppointmentList);
-    if(stages.length == nextStageIndex)$scope.carousel.setActiveCarouselItemIndex(1);
+    if(stages.length == nextStageIndex){
+      $scope.carousel.setActiveCarouselItemIndex(1);
+      $scope.activeIndex = 1;
+    }
     initTreatmentSessions(appointmentsSession);
+    
+    
   }
 }
+setHeightElement();
 
+      function setHeightElement()
+      {
+            //Gets and sets the heights of the table based on the size of the viewport.
+            var divTreatment=document.getElementById('divTreatmentPlan');
+            var divTreatmentSessions = document.getElementById('divTreatmentSessions');
+            var heightTreatment= 0;
+            if($scope.navigator=='personalNavigator')
+            {
+              heightTreatment= document.documentElement.clientHeight-355;
+              if(ons.orientation.isPortrait())
+              {
+                heightTreatment= document.documentElement.clientHeight-355;
+              }else{
+                heightTreatment= document.documentElement.clientWidth-355;
+              }
+            }else{
+              if(ons.orientation.isPortrait())
+              {
+                heightTreatment= (ons.platform.isIOS())?document.documentElement.clientHeight-375:document.documentElement.clientHeight-365;
+              }else{
+                heightTreatment= (ons.platform.isIOS())?document.documentElement.clientWidth-375:document.documentElement.clientWidth-365;
+              }
+            }
+            divTreatment.style.height=heightTreatment+'px';
+            divTreatmentSessions.style.height = heightTreatment+'px';
+      }
   //Goes to a particular appointment 
     $scope.goToAppointment=function(appointment)
     {
@@ -91,12 +134,7 @@ function setStatusPage()
       NavigatorParameters.setParameters({'Navigator':'homeNavigator', 'Post':appointment});
       homeNavigator.pushPage('./views/personal/appointments/individual-appointment.html');
     };
-    //Gets and sets the heights of the table based on the size of the viewport.
-    var divTreatment=document.getElementById('divTreatmentPlan');
-    var divTreatmentSessions = document.getElementById('divTreatmentSessions');
-    var heightTreatment= ($scope.navigator=='personalNavigator')?document.documentElement.clientHeight-330:document.documentElement.clientHeight-330;
-    divTreatment.style.height=heightTreatment+'px';
-    divTreatmentSessions.style.height = heightTreatment+'px';
+
 
     //Gets the colors of the table cells 
     $scope.getStyle=function(app){

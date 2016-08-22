@@ -1,8 +1,25 @@
 var myApp=angular.module('MUHCApp');
-//Service that deals with the announcement information for the patient
+/**
+*@ngdoc service
+*@name MUHCApp.service:Announcements
+*@requires $filter
+*@requires MUHCApp.service:RequestToServer
+*@requires $q
+*@requires MUHCApp.service:UserPreferences
+*@requires MUHCApp.service:LocalStorage
+*@description Service that deals with the announcement information for the patient
+**/
 myApp.service('Announcements', ['RequestToServer','$filter','LocalStorage','UserPreferences',function(RequestToServer,$filter, LocalStorage,UserPreferences){
-  //Initializing array that represents all the informations for Announcements
+  
+/**
+  *@ngdoc property
+  *@name  MUHCApp.service.#announcementsArray
+  *@propertyOf MUHCApp.service:Announcements
+  *@description Initializing array that represents all the information for Announcements, this array is passed to appropiate controllers.
+  **/
   var announcementsArray=[];
+
+
   //When there is an update, find the matching message and delete it, its added later by findAndDeleteAnnouncements function
   function findAndDeleteAnnouncements(announcements)
   {
@@ -31,13 +48,27 @@ myApp.service('Announcements', ['RequestToServer','$filter','LocalStorage','User
     LocalStorage.WriteToLocalStorage('Announcements',announcementsArray);
   }
   return {
-    //Setter the announcements from 0
+     /**
+      *@ngdoc method
+      *@name setAnnouncements
+      *@methodOf MUHCApp.service:Announcements
+      *@param {Array} announcements announcements array that containts the new announcements
+      *@description Setter method for announcements
+      **/
     setAnnouncements:function(announcements)
     {
+      //Cleaning the announcements array
       announcementsArray=[];
-      addAnnouncements(announcements)
+      //Adding annoucements
+      addAnnouncements(announcements);
     },
-    //Update the announcements
+    /**
+      *@ngdoc method
+      *@name updateAnnouncements
+      *@methodOf MUHCApp.service:Announcements
+      *@param {Array} announcements Finds announcements to update or adds new announcements if not found
+      *@description Updates the announcementsArray with the new information contained in the announcement parameter
+      **/
     updateAnnouncements:function(announcements)
     {
       //Find and delete to be added later
@@ -45,21 +76,30 @@ myApp.service('Announcements', ['RequestToServer','$filter','LocalStorage','User
       //Call formatting function
       addAnnouncements(announcements);
     },
-    //Getter for the main array
+     /**
+      *@ngdoc method
+      *@name getAnnouncements
+      *@methodOf MUHCApp.service:Announcements
+      *@description Getter for the announcementsArray
+      *@returns {Array} announcementsArray
+      **/
     getAnnouncements:function()
     {
       return announcementsArray;
     },
-    //Gets Last Announcement to display on main tab pages
-    getLastAnnouncements:function()
-    {
-      if(announcementsArray.length==0) return null;
-      return announcementsArray[0];
-    },
-    //Gets unread announcements
+    
+    /**
+    *@ngdoc method
+    *@name getUnreadAnnouncements
+    *@methodOf MUHCApp.service:Announcements
+    *@description Gets unread announcements
+    *@returns {Array} Returns all the unread annoucements
+    **/
     getUnreadAnnouncements:function()
     {
+      //Initializing array to return 
       var array=[];
+      //Iterating and finding annoucements that have not been read
       for (var i = 0; i < announcementsArray.length; i++) {
         if(announcementsArray[i].ReadStatus=='0')
         {
@@ -68,7 +108,14 @@ myApp.service('Announcements', ['RequestToServer','$filter','LocalStorage','User
       }
       return array;
     },
-    //Get number of unread news
+    
+    /**
+    *@ngdoc method
+    *@name getNumberUnreadAnnouncements
+    *@methodOf MUHCApp.service:Announcements
+    *@description Iterates through array object and returns the number of unread announcements
+    *@returns {Number} Returns number of unread news
+    **/
     getNumberUnreadAnnouncements:function()
     {
       var number = 0;
@@ -80,6 +127,14 @@ myApp.service('Announcements', ['RequestToServer','$filter','LocalStorage','User
       }
       return number;
     },
+     /**
+    *@ngdoc method
+    *@name getAnnouncementBySerNum
+    *@methodOf MUHCApp.service:Announcements
+    *@param {String} serNum AnnouncementSerNum to be looked for
+    *@description Iterates through the annoucements array and returns annoucement object matching the serNum
+    *@returns {Object} Returns object containing annoucement
+    **/
     getAnnouncementBySerNum:function(serNum)
     {
       for (var i = 0; i < announcementsArray.length; i++) {
@@ -89,7 +144,13 @@ myApp.service('Announcements', ['RequestToServer','$filter','LocalStorage','User
         }
       }
     },
-    //Reads announcement and sends request to backend
+    /**
+    *@ngdoc method
+    *@name readAnnouncementBySerNum
+    *@methodOf MUHCApp.service:Announcements
+    *@param {String} serNum AnnouncementSerNum to be read
+    *@description Sets ReadStatus in announcement to 1, sends request to backend, and syncs with device storage
+    **/
     readAnnouncementBySerNum:function(serNum)
     {
       for (var i = 0; i < announcementsArray.length; i++) {
@@ -102,14 +163,28 @@ myApp.service('Announcements', ['RequestToServer','$filter','LocalStorage','User
         }
       }
     },
-    //Read announcement by index of announcement array and ser num
+     /**
+    *@ngdoc method
+    *@name readAnnouncement
+    *@methodOf MUHCApp.service:Announcements
+    *@param {String} index index in the annoucement array to be read
+    *@param {String} serNum AnnouncementSerNum to be read
+    *@description Faster method to read an announcement, no iteration required.
+    **/
     readAnnouncement:function(index, serNum)
     {
       announcementsArray[index].ReadStatus = '1';
       LocalStorage.WriteToLocalStorage('Announcements',announcementsArray);
       RequestToServer.sendRequest('Read',{'Id':serNum, 'Field':'Announcements'});
     },
-    //Get names for notifications
+     /**
+    *@ngdoc method
+    *@name getAnnouncementName
+    *@methodOf MUHCApp.service:Announcements
+    *@param {String} serNum AnnouncementSerNum to be read
+    *@description Gets the PostName_EN, and PostName_FR for the notifications
+    *@returns {Object} Returns object containing only the names for a particular announcement, used by the {@link MUHCApp.service:Notifications Notifications Service} 
+    **/
     getAnnouncementName:function(serNum)
     {
       console.log(announcementsArray);
@@ -121,6 +196,14 @@ myApp.service('Announcements', ['RequestToServer','$filter','LocalStorage','User
         }
       }
     },
+    /**
+    *@ngdoc method
+    *@name setLanguageAnnouncements
+    *@methodOf MUHCApp.service:Announcements
+    *@param {Array} array Array with annoucements
+    *@description Translates the array parameter containing announcements to appropiate preferred language specified in {@link MUHCApp.service:UserPreferences UserPreferences}.
+    *@returns {Array} Returns array with translated values
+    **/
     setLanguageAnnouncements:function(array)
     {
       var language = UserPreferences.getLanguage();
@@ -139,10 +222,23 @@ myApp.service('Announcements', ['RequestToServer','$filter','LocalStorage','User
       console.log(array);
       return array;
     },
-    getAnnouncementUrl:function(serNum)
+     /**
+    *@ngdoc method
+    *@name getAnnouncementUrl
+    *@methodOf MUHCApp.service:Announcements
+    *@description Returns announcements url to be used by the {@link MUHCApp.service:Notifications Notifications Service}.
+    *@returns {String} Returns Url for individual annoucements
+    **/
+    getAnnouncementUrl:function()
     {
       return './views/general/announcements/individual-announcement.html';
     },
+     /**
+    *@ngdoc method
+    *@name clearAnnouncements
+    *@methodOf MUHCApp.service:Announcements
+    *@description Clears the service of any saved state, function used by the {@link MUHCApp.controller:LogoutController LogoutController}
+    **/
     clearAnnouncements:function()
     {
       announcementsArray=[];

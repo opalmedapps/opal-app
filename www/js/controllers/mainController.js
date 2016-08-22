@@ -1,46 +1,84 @@
-angular.module('MUHCApp').controller('MainController', ["$state",'$timeout', '$rootScope','FirebaseService','NativeNotification','DeviceIdentifiers','$translatePartialLoader','NewsBanner', function ($state,$timeout,$rootScope,FirebaseService,NativeNotification,DeviceIdentifiers,$translatePartialLoader,NewsBanner) {
-    var timeoutID;
+angular.module('MUHCApp').controller('MainController', ["$state",'$timeout', '$rootScope','FirebaseService','NativeNotification','DeviceIdentifiers','$translatePartialLoader','NewsBanner', "UpdateUI","Patient",function ($state,$timeout,$rootScope,FirebaseService,NativeNotification,DeviceIdentifiers,$translatePartialLoader,NewsBanner,UpdateUI,Patient) {
+   
 
-function setup() {
+ var myDataRef = new Firebase(FirebaseService.getFirebaseUrl());
+    //Listen to authentication state, if user get's unauthenticated log user out
+myDataRef.onAuth(function(authData){
+    var  authInfoLocalStorage=window.localStorage.getItem('UserAuthorizationInfo');
+    if(!authData)
+    {
+        if($state.current.name=='Home')
+        {
+            console.log('here state');
+            $state.go('logOut');
+        }else if(authInfoLocalStorage)
+        {
+            LocalStorage.resetUserLocalStorage();
+        }
+    }
+});
+//Ask for an update every 2 minutes
+setInterval(function()
+{   
+    backbroundRefresh();
+},120000);
+
+//On resume, make a background refresh check.
+document.addEventListener("resume", onResume, false);
+function onResume() {
+    setTimeout(function() {
+        backbroundRefresh();
+    });
+}
+var patientFirstName = Patient.getFirstName();
+function backbroundRefresh()
+{
+    if(FirebaseService.getAuthenticationCredentials()&&typeof patientFirstName !=='undefined'&&patientFirstName)
+    {
+        console.log('refreshing');
+        UpdateUI.update('All');
+    }
+}
+//TimeoutID for locking user out
+ var timeoutID;
+function setupInactivityChecks() {
     this.addEventListener('touchstart',resetTimer,false);
-    //this.addEventListener("mousedown", resetTimer, false);
-    document.addEventListener("pause", pause, false);
-    document.addEventListener("resume",pause, false);
+    this.addEventListener("mousedown", resetTimer, false);
     startTimer();
 }
-setup();
 
-function pause(ev)
-{
+setupInactivityChecks();
 
-    console.log('Pause/resume event',ev);
-}
 function startTimer() {
     
     // wait 2 seconds before calling goInactive
     timeoutID = window.setTimeout(goInactive, 300000);
 }
-setInterval(function()
-{
-    console.log('Check activity');
-},20000);
+
 function resetTimer(e) {
-    console.log(e.type);
+    console.log('resetting timer');
     window.clearTimeout(timeoutID);
 
     goActive();
 }
 
 function goInactive() {
-    //window.localStorage.removeItem('OpalAdminPanelPatient');
-    //window.localStorage.removeItem('OpalAdminPanelUser');
-    console.log('Going inactive');
+    console.log('Currently going inactive');
+    resetTimer();
+    if($state.current.name=='Home')
+    {
+        
+        $state.go('init');
+        //window.localStorage.removeItem('OpalAdminPanelPatient');
+        //window.localStorage.removeItem('OpalAdminPanelUser');
+        console.log('Going inactive');
+    }
+    
     //location.reload();
 }
 
 function goActive() {
     // do something
-
     startTimer();
 }
     

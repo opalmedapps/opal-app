@@ -1,24 +1,36 @@
 var myApp=angular.module('MUHCApp');
 /**
 *@ngdoc service
-*@name MUHCApp.services:PatientAppointments
+*@name MUHCApp.service:Appointments
 *@requires $filter
 *@requires MUHCApp.service:RequestToServer
 *@requires $q
 *@requires MUHCApp.service:UserAuthorizationInfo
 *@requires $cordovaCalendar
-*@description Sets the User appointment objects for the different views.
+*@description Sets the appointments and provides an API to access them
 **/
 myApp.service('Appointments', ['$q', 'RequestToServer','$cordovaCalendar','UserAuthorizationInfo', '$filter', 'UserPreferences','LocalStorage',function ($q,RequestToServer, $cordovaCalendar, UserAuthorizationInfo, $filter,UserPreferences,LocalStorage) {
-    /**
+
+      /**
     *@ngdoc property
-    *@name  userAppointmentsArray
-    *@propertyOf MUHCApp.services:PatientAppointments
+    *@name  MUHCApp.service.#userAppointmentsArray
+    *@propertyOf MUHCApp.service:Appointments
     *@description Array that contains all user appointments organized chronologically from most recent to least recent.
     **/
-    var UserAppointmentsInNativeCalendar=[];
     var userAppointmentsArray = [];
+      /**
+    *@ngdoc property
+    *@name  MUHCApp.service.#treatmentSessionsObject
+    *@propertyOf MUHCApp.service:Appointments
+    *@description Object that contains three properties, all treatment sessions, the current treatment session, and step in treatment session.
+    **/
     var treatmentSessionsObject = {};
+      /**
+    *@ngdoc property
+    *@name  MUHCApp.service.#appointmentsLocalStorage
+    *@propertyOf MUHCApp.service:Appointments
+    *@description Array that contains all user appointments that go in the native calendar organized chronologically from most recent to least recent.
+    **/
     var appointmentsLocalStorage=[];
     
     var calendar={};
@@ -41,7 +53,6 @@ myApp.service('Appointments', ['$q', 'RequestToServer','$cordovaCalendar','UserA
       * Setting User Calendar
       //This function takes the results from the sorted by date appointments and organizes them into an object with
         //hierarchical structure year->month->day->appointments for the day, the dayly appointments are arrays.
-
     */
     function setCalendar(appointments)
     {
@@ -317,28 +328,50 @@ myApp.service('Appointments', ['$q', 'RequestToServer','$cordovaCalendar','UserA
             }
         }
     return {
-
          /**
         *@ngdoc method
         *@name setUserAppoinments
-        *@methodOf MUHCApp.services:UserAppointments
-        *@param {Object} appointments Appointment object obtain from Firebase
-        *@description Function is called from the {@link MUHCApp.services:UpdateUI}. The function sets the userAppointmentsArray, TodayAppointments, FutureAppointments, PastAppointments for the Appointment List used in
-        the {@link MUHCApp.controller:AppointmentListController AppointmentListController}, and calendar object used in the {@link MUHCApp.controller:CalendarController CalendarController}.
+        *@methodOf MUHCApp.service:Appointments
+        *@param {Array} appointments Appointments array obtain from Firebase
+        *@description Function is called from the {@link MUHCApp.services:UpdateUI}. The function is an initializer for the service, it sets all the properties for the appointment list and calendar used in
+        the {@link MUHCApp.controller:ScheduleController ScheduleController}.
         **/
         setUserAppointments: function (appointments) {
         //Initializing Variables
-            UserAppointmentsInNativeCalendar=[];
             userAppointmentsArray = [];
             appointmentsLocalStorage=[];
             calendar={};
             addAppointmentsToService(appointments);
         },
+        /**
+        *@ngdoc method
+        *@name updateUserAppoinments
+        *@methodOf MUHCApp.service:Appointments
+        *@param {Object} appointments Appointments array that containts the new appointments
+        *@description Updates the userAppointmentsArray by replacing or adding appointments to sync the model with the server
+        **/
         updateUserAppointments:function(appointments)
         {
           searchAppointmentsAndDelete(appointments);
           addAppointmentsToService(appointments);
         },
+          /**
+        *@ngdoc method
+        *@name getUserAppointments
+        *@methodOf MUHCApp.service:Appointments
+        *@returns {Boolean} Returns the userAppointmentsArray
+        **/
+        getUserAppointments: function () {
+
+            return userAppointmentsArray;
+        },
+         /**
+        *@ngdoc method
+        *@name isThereNextAppointment
+        *@methodOf MUHCApp.service:Appointments
+        *@param {Object} appointments Appointments array that containts the new appointments
+        *@returns {Boolean} Returns whether there is a next appointment for the user
+        **/
         isThereNextAppointment:function(){
           var FutureAppointments=getAppointmentsInPeriod('Future');
           if(FutureAppointments.length===0)
@@ -348,6 +381,13 @@ myApp.service('Appointments', ['$q', 'RequestToServer','$cordovaCalendar','UserA
             return true;
           }
         },
+         /**
+        *@ngdoc method
+        *@name isThereAppointments
+        *@methodOf MUHCApp.service:Appointments
+        *@param {Object} appointments Appointments array that containts the new appointments
+        *@returns {Boolean} Returns whether the user has any appointments
+        **/
         isThereAppointments:function()
         {
           if(userAppointmentsArray.length===0)
@@ -357,15 +397,13 @@ myApp.service('Appointments', ['$q', 'RequestToServer','$cordovaCalendar','UserA
             return true;
           }
         },
-        isThereFirstTreatmentAppointment:function()
-        {
-          if(numberOfSessions>0)
-          {
-            return true;
-          }else{
-            return false;
-          }
-        },
+         /**
+        *@ngdoc method
+        *@name getAppointmentBySerNum
+        *@methodOf MUHCApp.service:Appointments
+        *@param {string} serNum AppointmentSerNum
+        *@returns {Object} Returns appointment object that matches the AppointmentSerNum parameter
+        **/
         getAppointmentBySerNum:function(serNum){
             for (var i = 0; i < userAppointmentsArray.length; i++) {
                 if(userAppointmentsArray[i].AppointmentSerNum==serNum){
@@ -373,47 +411,41 @@ myApp.service('Appointments', ['$q', 'RequestToServer','$cordovaCalendar','UserA
                 }
             }
         },
-        /**
-        *@ngdoc method
-        *@name getUserAppointment
-        *@methodOf MUHCApp.services:UserAppointments
-        *@returns {Array} UserAppointmentArray
-        *@description Returns the Array of Appointments organized chronologically.
-        **/
-        getUserAppointments: function () {
-
-            return userAppointmentsArray;
-        },
-         /**
+          /**
         *@ngdoc method
         *@name getTodaysAppointments
-        *@methodOf MUHCApp.services:UserAppointments
-        *@returns {Array} TodayAppointments
-        *@description Returns an Array with appointments for the day.
+        *@methodOf MUHCApp.service:Appointments
+        *@param {string} serNum AppointmentSerNum
+        *@returns {Array} Returns array of appointments for the day
         **/
         getTodaysAppointments: function () {
           return getAppointmentsInPeriod('Today');
         },
-         /**
+           /**
         *@ngdoc method
         *@name getFutureAppointments
-        *@methodOf MUHCApp.services:UserAppointments
-        *@returns {Array} FutureAppointments
-        *@description Returns array of future appointments.
+        *@methodOf MUHCApp.service:Appointments
+        *@returns {Array} Returns the future appointments for the patient
         **/
         getFutureAppointments: function () {
           return getAppointmentsInPeriod('Future');
         },
-          /**
+        /**
         *@ngdoc method
         *@name getPastAppointments
-        *@methodOf MUHCApp.services:UserAppointments
-        *@returns {Array} PastAppointments
-        *@description Returns array of past appointments.
+        *@methodOf MUHCApp.service:Appointments
+        *@returns {Array} Returns the past appointments for the patient
         **/
         getPastAppointments: function () {
           return getAppointmentsInPeriod('Past');
         },
+        /**
+        *@ngdoc method
+        *@name setAppointmentCheckin
+        *@methodOf MUHCApp.service:Appointments
+        *@param {string} serNum AppointmentSerNum
+        *@description Sets the checkin to 1 for a particular appointments making sure fields are synced
+        **/
         setAppointmentCheckin:function(serNum){
               var appointments=userAppointmentsArray;
             for(var i=0;i<appointments.length;i++){
@@ -424,45 +456,58 @@ myApp.service('Appointments', ['$q', 'RequestToServer','$cordovaCalendar','UserA
                 }
             }
         },
-         /**
-        }
-        }
+        /**
         *@ngdoc method
-        *@name getUserCalendar
-        *@methodOf MUHCApp.services:UserAppointments
-        *@returns {Object} calendar
-        *@description Returns the calendar object.
+        *@name getLastAppointmentCompleted
+        *@methodOf MUHCApp.service:Appointments
+        *@returns {Object} Returns last completed appointment object
         **/
         getLastAppointmentCompleted:function(){
           var pastApp= getAppointmentsInPeriod('Past');
           if(pastApp.length === 0) return -1;
           return pastApp[0];
         },
+        /**
+        *@ngdoc method
+        *@name getUpcomingAppointment
+        *@methodOf MUHCApp.service:Appointments
+        *@param {string} serNum AppointmentSerNum
+        *@returns {Object} Returns upcoming appointment object
+        **/
         getUpcomingAppointment:function()
         {
           var FutureAppointments=getAppointmentsInPeriod('Future');
           if(FutureAppointments.length ===0) return -1;
           return FutureAppointments[0];
         },
+           /**
+        *@ngdoc method
+        *@name getUserCalendar
+        *@methodOf MUHCApp.service:Appointments
+        *@param {string} serNum AppointmentSerNum
+        *@returns {Object} Returns object containing the calendar representation for appointments i.e. {'2015':'May':{[AppointmentObject]}}
+        **/
         getUserCalendar:function(){
             return calendar;
         },
-        setChangeRequest:function(index,value){
-            var appointments=userAppointmentsArray;
-            for(var i=0;i<appointments.length;i++){
-                if(appointments.AppointmentSerNum==index){
-                    userAppointmentsArray[i].ChangeRequest=value;
-                }
-            }
-        },
-        getAppointmentsToday:function()
-        {
-           return getAppointmentsInPeriod('Today');
-        },
+              /**
+        *@ngdoc method
+        *@name getCheckinAppointment
+        *@methodOf MUHCApp.service:Appointments
+        *@param {string} serNum AppointmentSerNum
+        *@returns {Object} Returns object containing checkin appointment 
+        **/
         getCheckinAppointment:function()
         {
           return getCheckinAppointment();
         },
+         /**
+        *@ngdoc method
+        *@name setCheckinAppointmentAsClosed
+        *@methodOf MUHCApp.service:Appointments
+        *@param {string} serNum AppointmentSerNum
+        *@description Sets the appointment as closed so that if a next the app shows the appropiate user appointment
+        **/
         setCheckinAppointmentAsClosed:function(serNum)
         {
           for (var i = 0; i < userAppointmentsArray.length; i++)
@@ -475,6 +520,13 @@ myApp.service('Appointments', ['$q', 'RequestToServer','$cordovaCalendar','UserA
             LocalStorage.WriteToLocalStorage('Appointments', appointmentsLocalStorage);
           }
         },
+           /**
+        *@ngdoc method
+        *@name isCheckinAppointment
+        *@methodOf MUHCApp.service:Appointments
+        *@param {Object} appointment Appointment object
+        *@returns {Boolean} Returns whether an appointment is the checkin appointment
+        **/
         isCheckinAppointment:function(appointment)
         {
           var checkInAppointment = getCheckinAppointment();
@@ -491,6 +543,13 @@ myApp.service('Appointments', ['$q', 'RequestToServer','$cordovaCalendar','UserA
           }
 
         },
+        /**
+        *@ngdoc method
+        *@name getAppointmentName
+        *@methodOf MUHCApp.service:Appointments
+        *@param {Object} serNum AppointmentSerNum
+        *@returns {Boolean} Returns an object with the labels for the appointments.
+        **/
         getAppointmentName:function(serNum)
         {
           console.log(serNum);
@@ -503,6 +562,13 @@ myApp.service('Appointments', ['$q', 'RequestToServer','$cordovaCalendar','UserA
             }
           }
         },
+        /**
+        *@ngdoc method
+        *@name readAppointmentBySerNum
+        *@methodOf MUHCApp.service:Appointments
+        *@param {Object} serNum AppointmentSerNum
+        *@description Sets ReadStatus to 1 to all the states of data. i.e. database, device, and device storage.
+        **/
         readAppointmentBySerNum:function(serNum)
         {
           for (var i = 0; i < userAppointmentsArray.length; i++) {
@@ -515,6 +581,13 @@ myApp.service('Appointments', ['$q', 'RequestToServer','$cordovaCalendar','UserA
             }
           }
         },
+        /**
+        *@ngdoc method
+        *@name checkAndAddAppointmentsToCalendar
+        *@methodOf MUHCApp.service:Appointments
+        *@description Goes through appointmentsArray and checks if the appointments are already in the calendar, if any are not it proceeds to add them
+        *@returns {Promise} Resolves to success if added successfully or to failure with an error if an error occurs
+        **/
         checkAndAddAppointmentsToCalendar:function(){
           var r=$q.defer();
           if(userAppointmentsArray.length>0)
@@ -529,11 +602,26 @@ myApp.service('Appointments', ['$q', 'RequestToServer','$cordovaCalendar','UserA
           }
           return r.promise;
         },
+         /**
+        *@ngdoc method
+        *@name getAppointmentUrl
+        *@methodOf MUHCApp.service:Appointments
+        *@param {Object} serNum AppointmentSerNum
+        *@description The function returns a url that the Notifications service uses to identify the page to send a certain notification
+        *@returns {Promise} Returns the url correspoding to the page for individual-appointments
+        **/
         getAppointmentUrl:function(serNum)
         {
           return './views/personal/appointments/individual-appointment.html';
         },
         //Getting radiotherapy treatment appointments
+        /**
+        *@ngdoc method
+        *@name getTreatmentAppointments
+        *@methodOf MUHCApp.service:Appointments
+        *@description The function checks that the treatment appointments are still in the valid range, if not it reinstantiates the object to add the right treatment sessions.
+        *@returns {String} Returns all the treatment appointments
+        **/
         getTreatmentAppointments:function()
         {
          if(treatmentSessionsObject.Total === 0||treatmentSessionsObject.Completed) return treatmentSessionsObject;
@@ -546,6 +634,13 @@ myApp.service('Appointments', ['$q', 'RequestToServer','$cordovaCalendar','UserA
          }
         },
         //Get number of unread news
+         /**
+        *@ngdoc method
+        *@name getNumberUnreadAppointments
+        *@methodOf MUHCApp.service:Appointments
+        *@param {Object} serNum AppointmentSerNum
+        *@returns {String} Returns the number of unseen appointments
+        **/
         getNumberUnreadAppointments:function()
         {
           var array = [];
@@ -559,6 +654,14 @@ myApp.service('Appointments', ['$q', 'RequestToServer','$cordovaCalendar','UserA
           return number;
         },
         //Input array or string sets the language of the appointments for controllers to use
+         /**
+        *@ngdoc method
+        *@name setAppointmentsLanguage
+        *@methodOf MUHCApp.service:Appointments
+        *@param {Array} array Array containing appointments to be translated
+        *@description Checks the current language in  UserPreferences service and sets appropiate language for each appointment in the array
+        *@returns {String} Returns the array with the proper up to date translations
+        **/
         setAppointmentsLanguage:function(array)
         {
           var language = UserPreferences.getLanguage();
@@ -590,9 +693,14 @@ myApp.service('Appointments', ['$q', 'RequestToServer','$cordovaCalendar','UserA
           }
           return array;
         },
+         /**
+        *@ngdoc method
+        *@name setAppointmentsLanguage
+        *@methodOf MUHCApp.service:Appointments
+        *@description Cleans all the Appointments service state and reinstantiates.
+        **/
         clearAppointments:function()
         {
-           UserAppointmentsInNativeCalendar=[];
            userAppointmentsArray = [];
            treatmentSessionsObject = {};
            appointmentsLocalStorage=[];

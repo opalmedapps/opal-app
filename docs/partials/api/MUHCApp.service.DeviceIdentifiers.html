@@ -1,0 +1,49 @@
+<h1><code ng:non-bindable="">DeviceIdentifiers</code>
+<div><span class="hint">service in module <code ng:non-bindable="">MUHCApp</code>
+</span>
+</div>
+</h1>
+<div><h2 id="description">Description</h2>
+<div class="description"><div class="muhcapp-service-page muhcapp-service-deviceidentifiers-page"><p>Service that deals with the device identifiers, sends the identifiers to backend to be used by the push notifications system.</p>
+</div></div>
+<h2 id="dependencies">Dependencies</h2>
+<ul class="dependencies"><li><code ng:non-bindable=""><a href="api/MUHCApp.service:RequestToServer">RequestToServer</a></code>
+</li>
+</ul>
+<div class="member method"><h2 id="methods">Methods</h2>
+<ul class="methods"><li><h3 id="methods_getdeviceidentifiers">getDeviceIdentifiers()</h3>
+<div class="getdeviceidentifiers"><h5 id="methods_getdeviceidentifiers_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-object">Object</a></td><td><div class="getdeviceidentifiers-page"><p>Returns deviceIdentifiers object.</p>
+</div></td></tr></table></div>
+</li>
+<li><h3 id="methods_sendidentifierstoserver">sendIdentifiersToServer()</h3>
+<div class="sendidentifierstoserver"><div class="sendidentifierstoserver-page"><p>If the device identifiers are set and have not been sent, it sends the device identifiers.</p>
+</div></div>
+</li>
+<li><h3 id="methods_setdeviceidentifiers">setDeviceIdentifiers()</h3>
+<div class="setdeviceidentifiers"><div class="setdeviceidentifiers-page"><p>Sets the deviceIdentifiers property.</p>
+</div></div>
+</li>
+<li><h3 id="methods_setidentifier">setIdentifier(identifierType, value)</h3>
+<div class="setidentifier"><div class="setidentifier-page"><p>Sets the identifierType property for the deviceIdentifiers object</p>
+</div><h5 id="methods_setidentifier_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>identifierType</td><td><a href="" class="label type-hint type-hint-string">String</a></td><td><div class="setidentifier-page"><p>Name of one of the three properties for the deviceIdentifiers object.</p>
+</div></td></tr><tr><td>value</td><td><a href="" class="label type-hint type-hint-string">String</a></td><td><div class="setidentifier-page"><p>new value for field.</p>
+</div></td></tr></tbody></table></div>
+</li>
+<li><h3 id="methods_setsendstatus">setSendStatus()</h3>
+<div class="setsendstatus"><div class="setsendstatus-page"><p>Sets the haveBeenSent flag</p>
+</div></div>
+</li>
+</ul>
+</div>
+<div class="member property"><h2 id="properties">Properties</h2>
+<ul class="properties"><li><h3 id="properties_deviceidentifiers">deviceIdentifiers</h3>
+<div class="deviceidentifiers"><div class="muhcapp-service-deviceidentifiers-page"><p>Object contains three properties registrationId, deviceUUID, and deviceType, the object is sent to the server to update the devices for a particular user.</p>
+</div></div>
+</li>
+<li><h3 id="properties_havebeensent">haveBeenSent</h3>
+<div class="havebeensent"><div class="muhcapp-service-havebeensent-page"><p>Flag to check whether the device identifiers have been sent</p>
+</div></div>
+</li>
+</ul>
+</div>
+</div>

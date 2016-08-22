@@ -31,7 +31,7 @@
       </ons-list-item>
     </ons-list>
     <div  style="margin-left:2vw;margin-top:2vh;">
-      <p ng-show="newUpdate" class="{{alertClass}}" >{{value}}  <span translate ="{{updateMessage}}"></span></p>
+      <p ng-show="newUpdate" ng-class="alertClass" >{{updateMessage}}</p>
     </div>
     <div class="container" style="margin-top:10px">
       <button class="button button--large" ng-disabled="disableButton" ng-click="updateValue(value)"  style="margin: 0 auto;">{{"UPDATE"|translate}} {{valueLabel}}</button><br>

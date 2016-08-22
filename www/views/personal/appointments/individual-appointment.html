@@ -37,7 +37,7 @@
     </ons-list>
     <ons-list class="settings-list" ng-show="showCheckin">
       <ons-list-item class="item" ng-click="openDocument()">
-            <div ng-show="loading" align="center">
+            <div ng-show="loading&&!errorMessage" align="center">
               <svg class="progress-circular">
                 <circle class="progress-circular__primary" cx="50%" cy="50%" r="40%" fill="none" stroke-width="10%" stroke-miterlimit="10"/>
               </svg>
@@ -48,6 +48,9 @@
                 <span style="font-size:20px"><i class="iconHomeView ion-android-checkbox" style="color:white"></i><br>{{"CHECKIN"|translate}}</span>
             </button>
             </div>
+            <div ng-show="errorMessage" style="padding:20px"><p class="item-desc" ng-class="fontSizeTitle">{{errorMessage}}</p></div>
+
+         
             <div align="center" style="height:310px" ng-show="!loading&&showLiveUpdate">
             <p class="item-desc" ng-class="fontSizeDesc" style="font-size:20px"><img ng-src="./img/checkedbox.png" width="20px" height="20px"> {{checkInMessage}}</p>
               <div style="width:200px" >

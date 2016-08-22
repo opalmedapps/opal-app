@@ -32,7 +32,7 @@ myApp.controller('NotificationsController', ['RequestToServer','Notifications', 
             RequestToServer.sendRequest('Read',{"Id":notification.NotificationSerNum, "Field":"Notifications"});
             Notifications.readNotification(index,notification);
         }
-        var post = (notification.hasOwnProperty('Post')) ? notification.Post : Notifications.getPost(notification);
+        var post = (notification.hasOwnProperty('Post')) ? notification.Post : Notifications.getNotificationPost(notification);
         if(notification.hasOwnProperty('PageUrl'))
         {
           NavigatorParameters.setParameters({'Navigator':'personalNavigator', 'Post':post});

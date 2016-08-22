@@ -1,8 +1,10 @@
 var myApp=angular.module('MUHCApp');
-myApp.controller('SetNewPasswordController',['$scope','$timeout','ResetPassword','RequestToServer','EncryptionService','FirebaseService',function($scope,$timeout,ResetPassword,RequestToServer,EncryptionService,FirebaseService){
+myApp.controller('SetNewPasswordController',['$scope','$timeout','ResetPassword','RequestToServer','EncryptionService','FirebaseService','NavigatorParameters',function($scope,$timeout,ResetPassword,RequestToServer,EncryptionService,FirebaseService,NavigatorParameters){
   //Enter code here!!
   $scope.alert={};
   console.log('Inside set new password');
+  var parameters = NavigatorParameters.getParameters();
+  console.log(parameters);
   $scope.$watch('ssn',function()
   {
       if($scope.alert.hasOwnProperty('type'))
@@ -11,81 +13,73 @@ myApp.controller('SetNewPasswordController',['$scope','$timeout','ResetPassword'
         delete $scope.alert.content;
       }
   });
-  var ref=new Firebase(FirebaseService.getFirebaseUrl());
-  $scope.submitSSN=function(ssn){
-    if(ssn==''||typeof ssn=='undefined')
+  function validateSSN(ssn)
+  {
+    if(ssn===''||typeof ssn=='undefined')
     {
       $scope.alert.type='danger';
       $scope.alert.content="ERRORENTERSSNNUMBER";
+      return false;
     }else if(ssn.length!==12){
       $scope.alert.type='danger';
       $scope.alert.content="ERRORENTERVALIDSSN";
-    }else{
-      var objectToSend={};
-      ResetPassword.sendRequest('VerifySSN',ssn);
-      $scope.loading=true;
-      var path='Users/'+ResetPassword.getUsername()+'/'+RequestToServer.getIdentifier()+'/Field/ResetPassword';
-      console.log(path);
-      ref.child(path).on('value',function(snapshot)
+      return false;
+    }
+    return true;
+    
+  }
+  var ref=new Firebase(FirebaseService.getFirebaseUrl());
+  $scope.submitSSN=function(ssn){
+    console.log(ssn);
+    if(validateSSN(ssn))
+    {
+       $scope.loading=true;
+      RequestToServer.sendRequestWithResponse('VerifySSN',{'SSN':ssn},ssn).then(function(data)
       {
-        console.log(snapshot.val());
-        var response=snapshot.val();
-
-        console.log(response);
-        if(response&&typeof response.type!=='undefined')
+        console.log(data);
+        if(data.Data.ValidSSN=="true")
         {
-          response=EncryptionService.decryptWithKey(response,ssn);
-          if(response.type=='error')
-          {
+          parameters.SSN = ssn;
+          parameters.Question = data.Data.Question;
+          console.log(parameters);
+          NavigatorParameters.setParameters(parameters);
+          initNavigator.pushPage('./views/login/security-question.html');
+        }else{
             $timeout(function(){
               $scope.alert.type="danger";
               $scope.alert.content="ERRORINCORRECTSSN";
               $scope.loading=false;
             });
-            ref.child(path).set({});
-            ref.child(path).off();
-          }else{
-            console.log(ssn);
-
-            console.log(response);
-            ResetPassword.setSSN(ssn);
-            initNavigator.pushPage('./views/login/security-question.html',{param:{Question:response.Question}},{ animation : 'slide' } );
-            $timeout(function(){
+        }
+      }).catch(function(error){
+         $timeout(function(){
+              $scope.alert.type="danger";
+              $scope.alert.content="ERRORCONTACTINGHOSPITAL";
               $scope.loading=false;
             });
-            ref.child(path).set({});
-            ref.child(path).off();
-          }
-        }
-
-
-
       });
     }
-
-
-
   };
 
   }]);
-  myApp.controller('SecurityQuestionController',['$scope','$timeout','ResetPassword','RequestToServer','FirebaseService','EncryptionService',function($scope,$timeout,ResetPassword,RequestToServer,FirebaseService,EncryptionService){
-    var page=initNavigator.getCurrentPage();
-    var params=page.options.param;
-    console.log(params);
+  myApp.controller('SecurityQuestionController',['$scope','$timeout','ResetPassword','RequestToServer','FirebaseService','EncryptionService','NavigatorParameters',function($scope,$timeout,ResetPassword,RequestToServer,FirebaseService,EncryptionService,NavigatorParameters){
+    var params=NavigatorParameters.getParameters();
     $scope.Question=params.Question;
+    $scope.ssn = params.SSN;
+    console.log($scope.ssn);
     $scope.tryReset=0;
     $scope.$watch('answer',function()
-  {
-      if($scope.alert.hasOwnProperty('type'))
-      {
-        delete $scope.alert.type;
-        delete $scope.alert.content;
-      }
-  });
+    {
+        if($scope.alert.hasOwnProperty('type'))
+        {
+          delete $scope.alert.type;
+          delete $scope.alert.content;
+        }
+    });
     var ref=new Firebase(FirebaseService.getFirebaseUrl());
     $scope.submitAnswer=function(answer)
     {
-      if(!answer||answer==''||typeof answer=='undefined')
+      if(!answer||answer===''||typeof answer=='undefined')
       {
         $scope.alert.type='danger';
         $scope.alert.content='ENTERANANSWER';
@@ -93,55 +87,54 @@ myApp.controller('SetNewPasswordController',['$scope','$timeout','ResetPassword'
         var objectToSend={};
         answer=answer.toUpperCase();
         var hash=CryptoJS.SHA256(answer).toString();
-        ResetPassword.sendRequest('VerifyAnswer',{Question:$scope.Question, Answer:hash});
         $scope.loading=true;
-        var path='Users/'+ResetPassword.getUsername()+'/'+RequestToServer.getIdentifier()+'/Field/VerifySecurityAnswer';
-        console.log(path);
-        ref.child(path).on('value',function(snapshot)
+        RequestToServer.sendRequestWithResponse('VerifyAnswer',{Question:$scope.Question, Answer:hash},$scope.ssn).then(function(data)
         {
-          console.log(snapshot.val());
-          var response=snapshot.val();
-          console.log(response);
-          if(response&&typeof response.type!=='undefined')
+          console.log(data);
+          $timeout(function(){
+            $scope.loading=false;
+          });
+          console.log(data.Data);
+          if(data.Data.AnswerVerified=="true")
           {
-            response=EncryptionService.decryptWithKey(response,ResetPassword.getSSN());
-            if(response.type=='error')
+            var hash=CryptoJS.SHA256(answer).toString();
+            params.Answer = hash;
+            NavigatorParameters.setParameters(params);
+            initNavigator.pushPage('./views/login/new-password.html');
+          }else if(data.Data.AnswerVerified=="false"){
+            $scope.tryReset++;
+            $timeout(function()
             {
-              $timeout(function(){
+               if($scope.tryReset>=3)
+              {
+                $scope.alert.type='danger';
+                $scope.alert.content="CONTACTHOSPITAL";
+                $scope.threeTries=true;
+              }else{
                 $scope.alert.type='danger';
                 $scope.alert.content="ERRORANSWERNOTMATCH";
-                $scope.tryReset++;
-                if($scope.tryReset>3)
-                {
-                  $scope.alert.type='danger';
-                  $scope.alert.content="CONTACTHOSPITAL";
-                  $scope.threeTries=true;
-                }
-              });
-              ref.child(path).set({});
-              ref.child(path).off();
-            }else if(response.type=='Success'){
-              $timeout(function(){
-                $scope.loading=false;
-              });
-              var hash=CryptoJS.SHA256(answer).toString();
-              ResetPassword.setAnswer(hash);
-              ref.child(path).set({});
-              ref.child(path).off();
-              initNavigator.pushPage('./views/login/new-password.html',{ animation : 'slide' } );
+              }
+            });
 
-            }
           }
+        }).catch(function()
+        {
+          $timeout(function()
+          {
+            $scope.alert.type='danger';
+            $scope.alert.content="CONTACTHOSPITAL";
+          });
         });
       }
-    }
+    };
     }]);
-    myApp.controller('NewPasswordController',['$scope','$timeout','Patient','ResetPassword','FirebaseService',function($scope,$timeout,Patient,ResetPassword,FirebaseService){
-      $scope.reloadPage=function()
+    myApp.controller('NewPasswordController',['$scope','$timeout','Patient','ResetPassword','FirebaseService','NavigatorParameters','RequestToServer','$state','UserAuthorizationInfo',function($scope,$timeout,Patient,ResetPassword,FirebaseService,NavigatorParameters,RequestToServer,$state,UserAuthorizationInfo){
+      $scope.goToLogin=function()
       {
-        console.log('boom');
-        location.reload();
+        UserAuthorizationInfo.clearUserAuthorizationInfo();
+        $state.go('init');
       };
+      var parameters = NavigatorParameters.getParameters();
       $scope.alert={};
       $scope.$watch('newValue',function()
       {
@@ -154,14 +147,16 @@ myApp.controller('SetNewPasswordController',['$scope','$timeout','ResetPassword'
       var ref=new Firebase(FirebaseService.getFirebaseUrl());
       $scope.submitNewPassword=function(newValue)
       {
-        if(newValue==''||typeof newValue=='undefined')
+        if(newValue===''||typeof newValue=='undefined')
         {
           $scope.alert.type='danger';
           $scope.alert.content = "ENTERVALIDPASSWORD";
         }else{
+        
+             
           ref.changePassword({
-            email: ResetPassword.getEmail(),
-            oldPassword: ResetPassword.getTemporaryPassword(),
+            email: parameters.Email,
+            oldPassword: parameters.TempPassword,
             newPassword: newValue
           }, function(error) {
             if (error) {
@@ -171,20 +166,33 @@ myApp.controller('SetNewPasswordController',['$scope','$timeout','ResetPassword'
                   $scope.alert.content="SERVERPROBLEM";
                 });
             } else {
-              ResetPassword.sendRequest('SetNewPassword', newValue);
-              $timeout(function(){
-                $scope.alert.type='success';
-                $scope.alert.content="PASSWORDSUCCESSRESET";
-              });
-              $timeout(function(){
-                location.reload();
-              },2000)
-
-
+                RequestToServer.sendRequestWithResponse('SetNewPassword',{'NewPassword':newValue},parameters.Answer).then(
+                function(data)
+                {
+                  console.log(data);
+                  if(data.hasOwnProperty('Data')&&data.Data.PasswordReset=="true")
+                  { 
+                     $timeout(function(){
+                        $scope.alert.type='success';
+                        $scope.alert.content="PASSWORDSUCCESSRESET";
+                      });
+                  }else{
+                    $timeout(function(){
+                        $scope.alert.type='success';
+                        $scope.alert.content="CONTACTHOSPITAL";
+                      });
+                  }
+                }).catch(function(error)
+                {
+                   $timeout(function(){
+                        $scope.alert.type='success';
+                        $scope.alert.content="CONTACTHOSPITAL";
+                      });
+                });
             }
           });
         }
-      }
+      };
 
 
       }]);

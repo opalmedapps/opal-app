@@ -22,8 +22,7 @@
                     <ons-col  align="center">
                         <div align="center" >
                             <!--<ons-icon icon = "fa fa-user" style="font-size:20px;color:darkblue"></ons-icon>-->
-                            <span ng-hide="authenticated">{{"HEADER_MESSAGE_LOGIN"|translate}}</span>
-                            <span ng-show="authenticated">{{"HOME"|translate}}</span>
+                            <span>{{"HEADER_MESSAGE_LOGIN"|translate}}</span>
                         </div>
                     </ons-col>
                 </ons-row>
@@ -83,20 +82,6 @@
                     <ons-col  align="center" >
                         <div   align="center">        
                            {{"SETTINGS"|translate}}
-                        </div>
-                    </ons-col>
-                </ons-row>
-            </ons-list-item>
-            <ons-list-item class="person" modifier="tappable" ng-click="$state.go('logOut')" ng-show="authenticated">
-                <ons-row align="middle" style="height:40px;">
-                    <ons-col align="center" width="40px">
-                        <div style="margin-left:10px;text-align:left;display:inline-block">
-                            <ons-icon icon = "fa fa-sign-out" style="font-size:28px;color:darkgreen"></ons-icon>
-                        </div>
-                     </ons-col>
-                    <ons-col  align="center">
-                        <div  align="center">                            
-                           {{"SIGNOUT"|translate}}
                         </div>
                     </ons-col>
                 </ons-row>

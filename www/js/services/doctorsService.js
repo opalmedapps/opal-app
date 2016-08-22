@@ -1,10 +1,44 @@
 var myApp=angular.module('MUHCApp');
-myApp.service('Doctors',['$q','LocalStorage','$filter','FileManagerService','$cordovaDevice', function($q,LocalStorage,$filter,FileManagerService,$cordovaDevice){
+/**
+*@ngdoc service
+*@name MUHCApp.service:Doctors
+*@requires MUHCApp.service:LocalStorage
+*@requires MUHCApp.service:RequestToServer
+*@requires MUHCApp.service:FileManagerService
+*@requires $q
+*@requires $filter
+*@description Sets the doctors and contacts and provides an API to interact with them and the server
+**/
+myApp.service('Doctors',['$q','LocalStorage','$filter','FileManagerService', function($q,LocalStorage,$filter,FileManagerService){
 
   //Arrays containining the different doctors.
+   /**
+  *@ngdoc property
+  *@name  MUHCApp.service.#Doctors
+  *@propertyOf MUHCApp.service:Doctors
+  *@description Array of all doctors
+  **/
   var Doctors=[];
+    /**
+  *@ngdoc property
+  *@name  MUHCApp.service.#Oncologists
+  *@propertyOf MUHCApp.service:Doctors
+  *@description Array of Oncologists
+  **/
   var Oncologists=[];
+    /**
+  *@ngdoc property
+  *@name  MUHCApp.service.#OtherDoctors
+  *@propertyOf MUHCApp.service:Doctors
+  *@description Array of other doctors
+  **/
   var OtherDoctors=[];
+    /**
+  *@ngdoc property
+  *@name  MUHCApp.service.#PrimaryPhysician
+  *@propertyOf MUHCApp.service:Doctors
+  *@description Array of primary doctors
+  **/
   var PrimaryPhysician=[];
 
   //Array without the actually doctor pictures that goes into the localStarge
@@ -78,15 +112,14 @@ myApp.service('Doctors',['$q','LocalStorage','$filter','FileManagerService','$co
           var app = document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'https://' ) === -1;
           if(app){
             for (var i = 0; i < doctorKeyArray.length; i++) {
-              if(typeof doctors[doctorKeyArray[i]].ProfileImage!=='undefined'&&doctors[doctorKeyArray[i]].ProfileImage!=='' )
+              if(typeof doctors[doctorKeyArray[i]].ProfileImage!=='undefined'&&doctors[doctorKeyArray[i]].ProfileImage!=='')
               {
-                var platform=$cordovaDevice.getPlatform();
                 var targetPath='';
                 doctors[i].NameFileSystem='doctor'+doctors[i].DoctorSerNum+"."+doctors[i].DocumentType;
-                if(platform==='Android'){
+                if(ons.platform.isAndroid()){
                     targetPath = cordova.file.dataDirectory+'Doctors/doctor'+doctors[doctorKeyArray[i]].DoctorSerNum+"."+doctors[doctorKeyArray[i]].DocumentType;
                     doctors[i].CDVfilePath="cdvfile://localhost/files/Doctors/"+doctors[i].NameFileSystem;
-                }else if(platform==='iOS'){
+                }else if(ons.platform.isIOS()){
                   targetPath = cordova.file.documentsDirectory+ 'Doctors/doctor'+doctors[doctorKeyArray[i]].DoctorSerNum+"."+doctors[doctorKeyArray[i]].DocumentType;
                   doctors[i].CDVfilePath="cdvfile://localhost/persistent/Doctors/"+doctors[i].NameFileSystem;
                 }
@@ -130,6 +163,14 @@ myApp.service('Doctors',['$q','LocalStorage','$filter','FileManagerService','$co
       return r.promise;
     }
     return{
+        /**
+        *@ngdoc method
+        *@name setUserContactsOnline
+        *@methodOf MUHCApp.service:Doctors
+        *@param {Array} doctors Array of doctors
+        *@description Instatiates properties with the doctors Online
+        *@returns {Promise} Returns a promise after saving the doctors images.
+        **/
         setUserContactsOnline:function(doctors)
         {
             var r=$q.defer();
@@ -142,16 +183,32 @@ myApp.service('Doctors',['$q','LocalStorage','$filter','FileManagerService','$co
             return addPatientContacts(doctors);
 
         },
+         /**
+        *@ngdoc method
+        *@name updateUserContacts
+        *@methodOf MUHCApp.service:Doctors
+        *@param {Array} doctors Array of doctors
+        *@description Updates all the array properties, finds and replaces the old ones and adds the new doctors
+        *@returns {Promise} Returns a promise after saving the doctors images.
+        **/
         updateUserContacts:function(doctors)
         {
           var r=$q.defer();
           searchDoctorsAndDelete(doctors);
           return addPatientContacts(doctors);
         },
+          /**
+        *@ngdoc method
+        *@name setUserContactsOffline
+        *@methodOf MUHCApp.service:Doctors
+        *@param {Array} doctors Array of doctors
+        *@description Gets the doctors from localStorage and sets the object, thus 'offline'
+        *@returns {Promise} Returns a promise after obtaining the images
+        **/
         setUserContactsOffline:function(doctors)
         {
             var r=$q.defer();
-            Doctors=[];
+            Doctors=[]; 
             Oncologists=[];
             OtherDoctors=[];
             PrimaryPhysician=[];
@@ -191,6 +248,12 @@ myApp.service('Doctors',['$q','LocalStorage','$filter','FileManagerService','$co
 
             return r.promise;
         },
+         /**
+        *@ngdoc method
+        *@name isEmpty
+        *@methodOf MUHCApp.service:Doctors
+        *@returns {Boolean} Returns whether there are no contacts
+        **/
         isEmpty:function()
         {
           if(Doctors.length===0)
@@ -200,22 +263,50 @@ myApp.service('Doctors',['$q','LocalStorage','$filter','FileManagerService','$co
             return false;
           }
         },
-        isThereDoctors:function()
-        {
-          return (Doctors.length>0)?true:false;
-        },
+         /**
+        *@ngdoc method
+        *@name getContacts
+        *@methodOf MUHCApp.service:Doctors
+        *@returns {Array} Returns array of Doctors
+        **/
         getContacts:function(){
             return Doctors;
         },
+         /**
+        *@ngdoc method
+        *@name getPrimaryPhysician
+        *@methodOf MUHCApp.service:Doctors
+        *@returns {Array} Returns array of primary physicians
+        **/
         getPrimaryPhysician:function(){
             return PrimaryPhysician;
         },
+         /**
+        *@ngdoc method
+        *@name getOncologists
+        *@methodOf MUHCApp.service:Doctors
+        *@returns {Array} Returns array of oncologists
+        **/
         getOncologists:function(){
             return Oncologists;
         },
+        /**
+        *@ngdoc method
+        *@name getOtherDoctors
+        *@methodOf MUHCApp.service:Doctors
+        *@returns {Array} Returns array of other doctors
+        **/
         getOtherDoctors:function(){
             return OtherDoctors;
         },
+         /**
+        *@ngdoc method
+        *@name getDoctorBySerNum
+        *@methodOf MUHCApp.service:Doctors
+        *@param {String} userSerNum DoctorSerNum to match
+        *@description Iterates through doctor array until a doctor matches the DoctorSerNum
+        *@returns {Object} Returns doctor whose DoctorSerNum matches the doctorSerNum parameter
+        **/
         getDoctorBySerNum:function(userSerNum){
             for (var i = 0; i < Doctors.length; i++) {
                 if(Doctors[i].DoctorSerNum===userSerNum)
@@ -225,6 +316,14 @@ myApp.service('Doctors',['$q','LocalStorage','$filter','FileManagerService','$co
                 }
             }
         },
+         /**
+        *@ngdoc method
+        *@name getDoctorIndexBySerNum
+        *@methodOf MUHCApp.service:Doctors
+        *@param {String} userSerNum DoctorSerNum to match
+        *@description Filters doctors array by DoctorsSerNum and returns the index
+        *@returns {Number} Returns index of matching doctor
+        **/
         getDoctorIndexBySerNum:function(userSerNum){
             for (var i = 0; i < Doctors.length; i++) {
                 if(Doctors[i].DoctorSerNum===userSerNum)
@@ -234,6 +333,13 @@ myApp.service('Doctors',['$q','LocalStorage','$filter','FileManagerService','$co
                 }
             }
         },
+         /**
+        *@ngdoc method
+        *@name clearDoctors
+        *@methodOf MUHCApp.service:Doctors
+        *@params {Array} Array of doctors
+        *@description Reinstantiates or empties the doctors service. Used by the Logout Controller
+        **/
         clearDoctors:function()
         {
             Doctors=[];

@@ -34,6 +34,9 @@
           </svg>
         </div>
         </div>
+        <div ng-show="!loading&&errorDownload">
+          <p clas="lucent">{{"ERROROBTAININGDOCUMENT"|translate}}</p>
+        </div>
         <!--<p class="item-desc text-center"  ng-class="fontSizeDesc">* Saved documents will be available offline</p>-->
 
       </ons-list-item>

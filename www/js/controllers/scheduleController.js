@@ -613,12 +613,12 @@ function ($scope,$timeout, Appointments,$location,$anchorScroll) {
       }else{
         return true;
       }
-    }
+    };
 }]);
-myApp.controller('IndividualAppointmentController', ['NavigatorParameters','$scope','$timeout', '$rootScope','Appointments', 'CheckinService','$q','NewsBanner','$filter',
-    function (NavigatorParameters,$scope, $timeout, $rootScope, Appointments,CheckinService, $q, NewsBanner,$filter) {
+myApp.controller('IndividualAppointmentController', ['NavigatorParameters','NativeNotification','$scope','$timeout', '$rootScope','Appointments', 'CheckinService','$q','NewsBanner','$filter',
+    function (NavigatorParameters,NativeNotification,$scope, $timeout, $rootScope, Appointments,CheckinService, $q, NewsBanner,$filter) {
         //Information of current appointment
-        NewsBanner.setAlert();
+        NewsBanner.setAlertOffline();
         var parameters = NavigatorParameters.getParameters();
         console.log(parameters);
         var navigatorName = parameters.Navigator;
@@ -633,7 +633,7 @@ myApp.controller('IndividualAppointmentController', ['NavigatorParameters','$sco
         {
           NavigatorParameters.setParameters($scope.app);
           window[navigatorName].pushPage('./views/general/maps/individual-map.html');
-        }
+        };
 
         //Function to checkin for appointment after pressing checked in inside invidivual appointment
         $scope.checkinToAppointment = function()
@@ -660,9 +660,9 @@ myApp.controller('IndividualAppointmentController', ['NavigatorParameters','$sco
               $scope.enableCheckinButton = false;
               $scope.checkInMessage = $filter('translate')("CHECKIN_ERROR");
             });
-          })
+          });
 
-        }
+        };
         //Sets up checkin
         function setUpCheckin()
         {
@@ -672,7 +672,7 @@ myApp.controller('IndividualAppointmentController', ['NavigatorParameters','$sco
           if(Appointments.isCheckinAppointment($scope.app))
           {
             //If it is, show checkin, as in show checkin div, go into loading do not show live udpates and disable the checkin button
-            var checkInAppointment = $scope.app
+            var checkInAppointment = $scope.app;
             $scope.showCheckin = true;
             $scope.enableCheckinButton = false;
             $scope.loading = true;
@@ -688,8 +688,9 @@ myApp.controller('IndividualAppointmentController', ['NavigatorParameters','$sco
               {
                 //If they have checked in to Aria, set loading to false, update chackin message in both
                 //Home screen and individual-appointment page, activate the live updates
-                if(data == 'success')
+                if(data)
                 {
+                  console.log(data);
                   $scope.loading = false;
                   $scope.checkInMessage =  $filter('translate')("CHECKIN_MESSAGE_AFTER");
                   $rootScope.checkInMessage = "CHECKIN_MESSAGE_AFTER";
@@ -719,6 +720,10 @@ myApp.controller('IndividualAppointmentController', ['NavigatorParameters','$sco
                       });
                     });
                 }
+              }).catch(function(error)
+              {
+                //NativeNotification.showNotificationAlert($filter('translate')("ERRORCONTACTINGHOSPITAL"));
+                $scope.errorMessage = $filter('translate')("ERRORCONTACTINGHOSPITAL");
               });
             }else{
               //Case where the user is already checked in, ask for an update, set bar.

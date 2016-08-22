@@ -22,7 +22,12 @@
   "homepage": "https://github.com/Sable/qplus#readme",
   "devDependencies": {
     "gulp": "^3.9.1",
+    "gulp-concat": "^2.6.0",
+    "gulp-connect": "^5.0.0",
     "gulp-jshint": "^2.0.1",
-    "jshint": "^2.9.2"
+    "gulp-ngdocs": "^0.2.13",
+    "gulp-uglify": "^2.0.0",
+    "jshint": "^2.9.2",
+    "marked": "^0.3.6"
   }
 }
