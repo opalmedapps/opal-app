@@ -1,0 +1,50 @@
+<h1><code ng:non-bindable="">UserPlanWorkflow</code>
+<div><span class="hint">service in module <code ng:non-bindable="">MUHCApp</code>
+</span>
+</div>
+</h1>
+<div><h2 id="description">Description</h2>
+<div class="description"><div class="muhcapp-services-page muhcapp-services-userplanworkflow-page"><p>Organizes task and appointments for the plan workflow and sets properties ready for usage in the
+Treatment Plan view.</p>
+</div></div>
+<h2 id="dependencies">Dependencies</h2>
+<ul class="dependencies"><li><code ng:non-bindable=""><a href="api/ng.$filter">$filter</a></code>
+</li>
+</ul>
+<div class="member method"><h2 id="methods">Methods</h2>
+<ul class="methods"><li><h3 id="methods_getcurrenttaskorappointment">getCurrentTaskOrAppointment()</h3>
+<div class="getcurrenttaskorappointment"><h5 id="methods_getcurrenttaskorappointment_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-array">Array</a></td><td><div class="getcurrenttaskorappointment-page"><p>Returns array with the tasks and appointments for the plan workflow organized chronologically</p>
+</div></td></tr></table></div>
+</li>
+<li><h3 id="methods_gettimebetweenevents">getTimeBetweenEvents()</h3>
+<div class="gettimebetweenevents"><h5 id="methods_gettimebetweenevents_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-object">Object</a></td><td><div class="gettimebetweenevents-page"><p>Returns the timeDiff object property properly initialized.</p>
+</div></td></tr></table></div>
+</li>
+<li><h3 id="methods_setuserplanworkflow">setUserPlanWorkflow(tasksAndAppointments)</h3>
+<div class="setuserplanworkflow"><div class="setuserplanworkflow-page"><p>Obtains plan workflow object from Firebase through the <a href="api/MUHCApp.services:UpdateUI">UpdateUI</a> service. Defines the TasksAndAppointmentsArray
+by organizing the stages chronologically. Sets the current stage by finding the min time between today and the available stages, and setting CurrentTaskOrAppointmentIndex.</p>
+</div><h5 id="methods_setuserplanworkflow_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>tasksAndAppointments</td><td><a href="" class="label type-hint type-hint-object">Object</a></td><td><div class="setuserplanworkflow-page"><p>Object contains user&#39;s plan workflow.</p>
+</div></td></tr></tbody></table></div>
+</li>
+<li><h3 id="methods_setuserplanworkflow">setUserPlanWorkflow()</h3>
+<div class="setuserplanworkflow"><h5 id="methods_setuserplanworkflow_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-array">Array</a></td><td><div class="setuserplanworkflow-page"><p>Returns the TasksAndAppointmentsArray property.</p>
+</div></td></tr></table></div>
+</li>
+</ul>
+</div>
+<div class="member property"><h2 id="properties">Properties</h2>
+<ul class="properties"><li><h3 id="properties_currenttaskorappointmentindex">CurrentTaskOrAppointmentIndex</h3>
+<div class="currenttaskorappointmentindex"><div class="currenttaskorappointmentindex-page"><p>Contains index of current stage in the TasksAndAppointmentsArray</p>
+</div></div>
+</li>
+<li><h3 id="properties_tasksandappointmentsarray">TasksAndAppointmentsArray</h3>
+<div class="tasksandappointmentsarray"><div class="tasksandappointmentsarray-page"><p>Contains stages of the plan workflow organized choronologically</p>
+</div></div>
+</li>
+<li><h3 id="properties_timediff">timeDiff</h3>
+<div class="timediff"><div class="timediff-page"><p>An array that contains the time difference between two events, structure dateDiff[i]={Stages: nameStage[i+1]-nameStage[i], timeDiffInDays:date}</p>
+</div></div>
+</li>
+</ul>
+</div>
+</div>
