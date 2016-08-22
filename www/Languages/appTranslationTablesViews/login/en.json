@@ -5,6 +5,7 @@
 	"INVALID_USER":"User does not exist",
 	"INVALID_PASSWORD":"Invalid Password",
 	"INVALID_EMAIL":"Invalid e-mail",
+	"LIMITS_EXCEEDED":"Password tries exceeded, try resetting your password",
 	"INTERNETERROR":"Sever error, please check your internet connection",
 	"EMAILPASSWORDSENT":"Password has been reset sucessfully, check your email for your temporary password",
 	"ENTEREMAIL":"Enter your Email Address:",
@@ -20,6 +21,9 @@
 	"ENTERSSNLABEL":"Enter your SSN Health Care ID:",
 	"ENTERSSNPLACEHOLDER":"Enter SSN...",
 	"CONTINUE":"Continue",
+	"NOINTERNETCONNECTION":"No internet connection",
+	"CONNECTED":"Connected",
+	"NEWNOTIFICATIONS":"New Notifications",
 	"SECURITYQUESTION":"Security Question",
 	"ENTERANSWERPLACEHOLDER":"Enter your answer...",
 	"ERRORENTERSSNNUMBER":"Enter an SSN number",
@@ -51,5 +55,12 @@
 	"SECUREYOURDEVICE":"Secure Your Device",
 	"PATIENTCHARTER":"Patient Charter",
 	"SIGNOUT":"Sign out",
-	"HOME":"Home"
+	"HOME":"Home",
+	"LOCKEDOUT":"Locked out due to inactivity",
+	"ERRORCONTACTINGHOSPITAL":"Error connecting with the hospital, contact hospital",
+	"AUTHENTICATIONERROR":"Authentication error, please login again",
+	"ERROROBTAININGDOCUMENT":"Error obtaining document from server"
+
+
+
 }

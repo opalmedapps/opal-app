@@ -15,6 +15,8 @@
 	"SHAREVIAEMAIL":"Share via e-mail",
 	"SHARE":"Share",
 	"PRINTDOCUMENT":"Print Document",
+	"TREATMENTSESSION":"Treatment Sessions",
+	"UNABLETOSHAREMATERIAL":"Unable to share document",
 	"STAGE":"Step",
 	"STAGEOF":"Step {{index}} of {{total}}",
 	"PENDING":"Pending",
@@ -69,6 +71,13 @@
 	"NEWS":"News",
 	"PERSONAL":"Personal",
 	"ALIAS":"Nickname",
+	"INVALID_PASSWORD":"Password is invalid",
+	"INTERNETERROR":"Internet error occured try again later",
+	"INVALID_USER":"User does not exist",
+	"PASSWORDUPDATED":"Password has been updated",
+	"PROBLEM_UPDATING_PASSWORD":"Problem updating password",
+	"UPDATED_EMAIL":"Email successfully updated",
+	"EMAIL_TAKEN":"E-mail has already been taken",
 	"EMAIL":"Email",
 	"PASSWORD":"Password",
 	"PHONENUMBER":"Phone Number",
@@ -80,7 +89,7 @@
 	"SIGNOUT":"Sign out",
 	"ENTERNEW":"Enter new",
 	"UPDATE":"Update",
-	"HASBEENUPDATED":"has been updated",
+	"FIELD_UPDATED":"Field has been updated",
 	"ENTERYOURALIAS":"Enter your new nickname",
 	"SMALL":"Small",
 	"LARGE":"Large",
@@ -88,7 +97,7 @@
 	"ENABLESMSNOTIFICATIONQUESTION":"Would you like to enable your SMS messaging notifications?",
 	"DISABLESMSNOTIFICATIONQUESTION":"Would you like to disable your SMS messaging notifications?",
 	"ENABLECALENDARACCESSQUESTION":"Would you like save your appointment schedule in your phone calendar?",
-	"DISABLECALENDARACCESSQUESTION":"Would you like to saving your appointments to your phone calendar?",
+	"DISABLECALENDARACCESSQUESTION":"Would you like to disable saving your appointments to your phone calendar?",
 	"CONTINUE":"Continue",
 	"CONFIRMALERTCALENDARLABEL":"Calendar Setting",
 	"CONFIRMALERTSMSLABEL":"SMS settings",
@@ -152,7 +161,12 @@
 	"UNABLETOOPENINSTALL":"Unable to open, install a program that opens PDFs",
 	"FEEDBACK":"Feedback",
 	"LEAVEMESSAGE":"Leave us a message!",
-	"ENTERTENPHONE":"Enter a ten digit phone number"
+	"ENTERTENPHONE":"Enter a ten digit phone number",
+	"LOCKEDOUT":"Locked out due to inactivity",
+	"ERRORCONTACTINGHOSPITAL":"Error contacting the hospital. Try again later",
+	"AUTHENTICATIONERROR":"Authentication error, please login again",
+	"ERROROBTAININGDOCUMENT":"Error obtaining document from server"
+
 	
 	
 

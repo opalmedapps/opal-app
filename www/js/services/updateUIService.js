@@ -1,8 +1,48 @@
 var myApp=angular.module('MUHCApp');
-
-
-myApp.service('UpdateUI', ['Announcements','TxTeamMessages','EncryptionService','$timeout', '$rootScope','Patient','Doctors','Appointments','Messages','Documents','EducationalMaterial','UserPreferences', 'UserAuthorizationInfo', '$q', 'Notifications', 'UserPlanWorkflow','$cordovaNetwork', 'LocalStorage','RequestToServer','$filter','Diagnoses','FirebaseService','MapLocation','Questionnaires',
-'NativeNotification',function (Announcements, TxTeamMessages, EncryptionService,$timeout, $rootScope, Patient,Doctors, Appointments,Messages, Documents, EducationalMaterial, UserPreferences, UserAuthorizationInfo, $q, Notifications, UserPlanWorkflow,$cordovaNetwork,LocalStorage,RequestToServer,$filter,Diagnoses,FirebaseService,MapLocation,Questionnaires, NativeNotification ) {
+/**
+*@ngdoc service
+*@name MUHCApp.service:UpdateUI
+*@requires MUHCApp.service:Announcements
+*@requires MUHCApp.service:TxTeamMessages
+*@requires MUHCApp.service:Patient
+*@requires MUHCApp.service:Doctors
+*@requires MUHCApp.service:Appointments
+*@requires MUHCApp.service:Messages
+*@requires MUHCApp.service:Documents
+*@requires MUHCApp.service:EducationalMaterial
+*@requires MUHCApp.service:Notifications
+*@requires MUHCApp.service:UserPlanWorkflow
+*@requires MUHCApp.service:LocalStorage
+*@requires MUHCApp.service:RequestToServer
+*@requires MUHCApp.service:Diagnoses
+*@requires MUHCApp.service:Questionnaires
+*@requires MUHCApp.service:NativeNotification
+*@requires $q
+*@requires $cordovaNetwork
+*@requires $filter
+*@description API service used to update the whole application. The UpdateUI service is in charge of timestamps for updates of sections, set up or any update to the user fields.
+**/
+myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors','Appointments','Messages','Documents','EducationalMaterial', 'UserAuthorizationInfo', '$q', 'Notifications', 'UserPlanWorkflow','$cordovaNetwork', 'LocalStorage','RequestToServer','$filter','Diagnoses','Questionnaires',
+'NativeNotification',function (Announcements, TxTeamMessages, Patient,Doctors, Appointments,Messages, Documents, EducationalMaterial, UserAuthorizationInfo, $q, Notifications, UserPlanWorkflow,$cordovaNetwork,LocalStorage,RequestToServer,$filter,Diagnoses,Questionnaires, NativeNotification ) {
+  /**
+  *@ngdoc property
+  *@name  MUHCApp.service.#lastUpdateTimestamp
+  *@propertyOf MUHCApp.service:UpdateUI
+  *@description Initiatiates object with all the timestamps
+  <pre> var lastUpdateTimestamp={
+        'All':0,
+        'Appointments':0,
+        //'Messages':0,
+        'Documents':0,
+        'Tasks':0,
+        'Doctors':0,
+        //'LabTests':0,
+        'Patient':0,
+        'Notifications':0,
+        'EducationalMaterial':0,
+        'Questionnaires':0
+  };</pre>
+  **/
   var lastUpdateTimestamp={
         'All':0,
         'Appointments':0,
@@ -16,7 +56,31 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','EncryptionService',
         'EducationalMaterial':0,
         'Questionnaires':0
   };
+  /**
+  *@ngdoc property
+  *@name  MUHCApp.service.#promiseFields
+  *@propertyOf MUHCApp.service:UpdateUI
+  *@description Array contains the fields for the patient that perform asynchronous operations. This is done so that we have a generic way to make sure we wait for them whenever we are setting or updating patient information. In the current case
+  we have to wait for the fields to download the images into the device storage
+  <pre>
+  //Contents so far:
+  var promiseFields =  ['Doctors', 'Patient'];
+  **/
   var promiseFields = ['Doctors', 'Patient'];
+   /**
+  *@ngdoc property
+  *@name  MUHCApp.service.#sectionServiceMappings
+  *@propertyOf MUHCApp.service:UpdateUI
+  *@description Array contains all the details concerning setting or update for patient fields, or patient modules
+  <pre>
+  //Example:
+  var sectionServiceMappings={
+  'Patient':{
+      setOnline:Patient.setUserFieldsOnline,
+      update:Patient.setUserFieldsOnline,
+      setOffline:Patient.setUserFieldsOffline
+    },...
+  **/
   var sectionServiceMappings={
     'All':
       {
@@ -155,16 +219,17 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','EncryptionService',
       //Initializing all the services
       RequestToServer.sendRequestWithResponse(type).then(function(response)
       {
-        if(response.Response !=='timeout')
-        {
           setServices(response.Data, 'setOnline').then(function()
           {
             initTimestamps(response.Timestamp);
             r.resolve(true);
           });
-        }
       }).catch(function(error) {
         console.log(error);
+        if(error.Code=='2')
+        {
+          NativeNotification.showNotificationAlert($filter('translate')("ERRORCONTACTINGHOSPITAL"));
+        }
         r.reject(false);
       });   
       return r.promise;
@@ -192,6 +257,7 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','EncryptionService',
                   r.resolve(true);
                 }).catch(function(error)
                 {
+                  if(error.Code =='2')  NativeNotification.showNotificationAlert($filter('translate')("ERRORCONTACTINGHOSPITAL"));
                   clearTimeout(timeOut);
                   console.log(error);
                   r.resolve(true);
@@ -210,7 +276,7 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','EncryptionService',
       });
       var timeOut = setTimeout(function(){
         r.resolve(true);
-      },40000);
+      },30000);
 
       return r.promise;
     }
@@ -256,6 +322,12 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','EncryptionService',
         }
       }).catch(function(error)
       {
+        if(typeof error =='object'&&error.Response=='timeout')
+        {
+          NativeNotification.showNotificationAlert($filter('translate')("ERRORCONTACTINGHOSPITAL"));
+        }else{
+          if(error.Code =='2') NativeNotification.showNotificationAlert($filter('translate')("ERRORCONTACTINGHOSPITAL"));
+        }
         console.log(error);
         r.reject(error);
       });
@@ -301,6 +373,7 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','EncryptionService',
       }).catch(function(error)
       {
         console.log(error);
+        if(error.Code =='2'||error.Response == 'timeout') NativeNotification.showNotificationAlert($filter('translate')("ERRORCONTACTINGHOSPITAL"));
         r.reject(error);
       });
       return r.promise;
@@ -332,14 +405,36 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','EncryptionService',
     return {
         //Function to update fields in the app, it does not initialize them, it only updates the new fields.
         //Parameter only defined when its a particular array of values.
+         /**
+      *@ngdoc method
+      *@name update
+      *@methodOf MUHCApp.service:UpdateUI
+      *@param {String||Array} parameters Could be a string or an array, parameter signifying the sections to update, i.e. 'All', or ['Appointments','Documents'].
+      *@description  asks the backend for the most recent data in the parameters 
+      object, gets the data and updates the corresponding services with this new data.
+      **/
         update:function(parameters)
         {
            return updateSection(parameters);
         },
+        /**
+      *@ngdoc method
+      *@name reset
+      *@methodOf MUHCApp.service:UpdateUI
+      *@param {String,Array} parameters Could be a string or an array, parameter signifying the sections to update, i.e. 'All', or ['Appointments','Documents'].
+      *@description Completely reinstantiates services specified by the parameter by obtaining all the data from the Hospital and re-setting them.
+      **/
         reset:function(parameters)
         {
           return resetSection(parameters);
         },
+        /**
+      *@ngdoc method
+      *@name init
+      *@methodOf MUHCApp.service:UpdateUI
+      *@param {String} type Online or Offline init
+      *@description Initializes app by querying the hospital for all the data and setting the services.
+      **/
         init:function(type)
         {
           var r=$q.defer();
@@ -357,6 +452,12 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','EncryptionService',
               return initServicesFromServer(type);
            }
         },
+         /**
+      *@ngdoc method
+      *@name clearUpdateUI
+      *@methodOf MUHCApp.service:UpdateUI
+      *@description Clears all the timestamps.
+      **/
         clearUpdateUI:function()
         {
            lastUpdateTimestamp={

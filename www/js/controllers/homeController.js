@@ -5,10 +5,10 @@
 var myApp = angular.module('MUHCApp');
 myApp.controller('HomeController', ['$state','Appointments', 'CheckinService','$scope','Patient','UpdateUI', '$timeout','$filter','UserPreferences','UserPlanWorkflow','$rootScope', 'tmhDynamicLocale','$translate','RequestToServer', '$location','Documents','Notifications','NavigatorParameters','NativeNotification',
 'NewsBanner','DeviceIdentifiers','$anchorScroll',function ($state,Appointments,CheckinService, $scope, Patient,UpdateUI,$timeout,$filter,UserPreferences,UserPlanWorkflow, $rootScope,tmhDynamicLocale, $translate,RequestToServer,$location,Documents,Notifications,NavigatorParameters,NativeNotification,NewsBanner,DeviceIdentifiers,$anchorScroll) {
-      NewsBanner.setAlert();
+      NewsBanner.setAlertOffline();
       //Check if device identifier has been sent, if not sent, send it to backend.
       var app = document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'https://' ) === -1;
-      if(app) DeviceIdentifiers.checkSendStatus();  
+      if(app) DeviceIdentifiers.sendIdentifiersToServer();  
         $scope.homeDeviceBackButton=function()
         {
           console.log('device button pressed do nothing');
@@ -128,7 +128,7 @@ myApp.controller('HomeController', ['$state','Appointments', 'CheckinService','$
       console.log(notification.NotificationSerNum);
       Notifications.readNotification(index, notification);
       console.log(notification);
-      var post = (notification.hasOwnProperty('Post')) ? notification.Post : Notifications.getPost(notification);
+      var post = (notification.hasOwnProperty('Post')) ? notification.Post : Notifications.getNotificationPost(notification);
       if(notification.hasOwnProperty('PageUrl'))
       {
         NavigatorParameters.setParameters({'Navigator':'homeNavigator', 'Post':post});
@@ -218,7 +218,7 @@ myApp.controller('HomeController', ['$state','Appointments', 'CheckinService','$
           CheckinService.checkCheckinServer(checkInAppointment).then(function(data)
           {
             //If it has, then it simply changes the message to checkedin and queries to get an update
-            if(data=='success')
+            if(data)
             {
               console.log('Returning home');
               $timeout(function()

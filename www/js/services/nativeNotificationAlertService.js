@@ -1,7 +1,25 @@
 var myApp=angular.module('MUHCApp');
-myApp.service('NativeNotification',[function(){
+/**
+*@ngdoc service
+*@name MUHCApp.service:NativeNotification
+*@description API to display native looking alert, it's more code but makes it easier to use and cleaner in my opinion. Reference {@link https://onsen.io/v1/reference/ons-alert-dialog.html Onsen Alert Dialog}
+**/
+myApp.service('NativeNotification',function(){
+   /**
+  *@ngdoc property
+  *@name  MUHCApp.service.#mod
+  *@propertyOf MUHCApp.service:NativeNotification
+  *@description string representing the style for the alert, 'material' for Android and undefined for IOS
+  **/
   var mod= (ons.platform.isAndroid())?'material' : undefined;
   return {
+    /**
+		*@ngdoc method
+		*@name showNotificationAlert
+		*@methodOf MUHCApp.service:NativeNotification
+		*@param {String} message Alert message to be displayed
+		*@description Displays message as a native looking alert
+		**/
     showNotificationAlert:function(message)
     {
       ons.notification.alert({
@@ -9,9 +27,17 @@ myApp.service('NativeNotification',[function(){
         modifier: mod
       });
     },
+    /**
+		*@ngdoc method
+		*@name showNotificationConfirm
+		*@methodOf MUHCApp.service:NativeNotification
+		*@param {String} url url to check and extract file type
+    *@param {Function} confirmCallback If user pressed ok callback
+    *@param {Function} cancelCallback If user pressed cancel callback
+		*@description Prompts the user with an OK, Cancel alert.
+		**/
     showNotificationConfirm:function(message,confirmCallback, cancelCallback)
     {
-      var message = (message)? message:'Problems with server, would you like to load your most recent saved data from the device?';
       ons.notification.confirm({
         message: message,
         modifier: mod,
@@ -27,8 +53,8 @@ myApp.service('NativeNotification',[function(){
         }
       });
     }
-  }
+  };
 
 
 
-  }]);
+  });

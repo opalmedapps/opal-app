@@ -1,34 +1,38 @@
 var myApp=angular.module('MUHCApp');
 /**
 *@ngdoc service
-*@name MUHCApp.services:UserMessages
+*@name MUHCApp.services:Messages
 *@requires $filter
+*@requires $rootScope
 *@requires MUHCApp.service:UserAuthorizationInfo
+*@requires MUHCApp.service:Patient
+*@requires MUHCApp.service:Doctors
+*@requires MUHCApp.service:LocalStorage
 *@description Service deals with patient/doctor messaging portal, parses Firebase object into the appropiate format
 *             and defines methods for sending messages back to Firebase.
 **/
 myApp.service('Messages', ['$filter', 'UserAuthorizationInfo', 'Patient', 'Doctors','$rootScope','LocalStorage', function($filter, UserAuthorizationInfo, Patient,Doctors,$rootScope,LocalStorage){
 /**
 *@ngdoc property
-*@name  UserConversationsArray
+*@name  MUHCApp.service#UserConversationsArray
 *@propertyOf MUHCApp.services:Messages
 *@description Contains all the conversations for the User, UserConversationsArray[0] contains the first conversation.
 *
 **/
+var UserConversationsArray=[];
 /**
 *@ngdoc property
-*@name  UserMessagesLastUpdated
-*@propertyOf MUHCApp.services:UserMessages
-*@description Date of the last message.
+*@name  MUHCApp.service#messagesLocalStorage
+*@propertyOf MUHCApp.services:Messages
+*@description Contains localStorage representation of messages
 *
 **/
-var UserConversationsArray=[];
 var messagesLocalStorage=[];
     return {
         /**
         *@ngdoc method
-        *@name MUHCApp.UserMessages#setUserMessages
-        *@methodOf MUHCApp.services:UserMessages
+        *@name setUserMessages
+        *@methodOf MUHCApp.services:Messages
         *@description Parses message into right format, parses Date of messages to a Javascript date, organizes the messages in coversation in chronological order,
         then instatiates UserMessages property UserConversationsArray and lastly instiates UserMessages property
         *UserMessagesLastUpdated
@@ -64,7 +68,7 @@ var messagesLocalStorage=[];
                 conversation.Role='Doctor';
                 conversation.UserSerNum=doctors[i].DoctorSerNum;
                 this.ConversationsObject[doctors[i].DoctorSerNum]=conversation;
-            };
+            }
             for (var i = 0; i < keysArray.length; i++) {
                 var Message={};
                 var message=angular.copy(messages[i]);
@@ -101,11 +105,19 @@ var messagesLocalStorage=[];
                 UserConversationsArray.push(this.ConversationsObject[keysArrayConvo[i]]);
 
 
-            };
+            }
 
             LocalStorage.WriteToLocalStorage('Messages',messagesLocalStorage);
             console.log(UserConversationsArray);
         },
+         /**
+        *@ngdoc method
+        *@name updateUserMessages
+        *@methodOf MUHCApp.services:Messages
+        *@description Parses message into right format, parses Date of messages to a Javascript date, organizes the messages in coversation in chronological order,
+        then updates UserConversationsArray
+        *@param {string} messages {@link MUHCApp.services:UpdateUI UpdateUI} calls setUserMessages with the object Message obtained from the Firebase user fields.
+        **/
       updateUserMessages:function(messages)
       {
           if(typeof messages=='undefined') return;
@@ -133,29 +145,26 @@ var messagesLocalStorage=[];
         /**
         *@ngdoc method
         *@name getUserMessages
-        *@methodOf MUHCApp.services:UserMessages
+        *@methodOf MUHCApp.services:Messages
         *@returns {Array} Returns the UserConversationsArray.
         **/
         getUserMessages:function(){
 
             return UserConversationsArray;
         },
+        /**
+        *@ngdoc method
+        *@name setDateOfLastMessage
+        *@methodOf MUHCApp.services:Messages
+        *@description Sets the date for the last message in conversation
+        **/
         setDateOfLastMessage:function(index, date){
             UserConversationsArray[index].DateOfLastMessage=date;
         },
         /**
         *@ngdoc method
-        *@name getUserMessagesLastUpdated
-        *@methodOf MUHCApp.services:UserMessages
-        *@returns {Array} Returns the UserMessagesLastUpdated.
-        **/
-        getUserMessagesLastUpdated:function(){
-            return this.UserMessagesLastUpdated;
-        },
-        /**
-        *@ngdoc method
         *@name addNewMessageToConversation
-        *@methodOf MUHCApp.services:UserMessages
+        *@methodOf MUHCApp.services:Messages
         *@param {number} conversationIndex Index of conversation in the UserConversationsArray
         *@param {string} senderRole User or Doctor
         *@param {string} messageCotent Content of message
@@ -178,7 +187,7 @@ var messagesLocalStorage=[];
             UserConversationsArray[conversationIndex].ReadStatus=1;
             for (var i = 0; i < UserConversationsArray[conversationIndex].Messages.length; i++) {
                 UserConversationsArray[conversationIndex].Messages[i].ReadStatus=1;
-            };
+            }
         },
         getConversationBySerNum:function(role, serNum)
         {

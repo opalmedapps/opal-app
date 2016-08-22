@@ -1,7 +1,21 @@
 var myApp=angular.module('MUHCApp');
-//Service that deals with the treatment team message information
+/**
+*@ngdoc service
+*@name MUHCApp.service:TxTeamMessages
+*@requires $filter
+*@requires MUHCApp.service:RequestToServer
+*@requires MUHCApp.service:UserPreferences
+*@requires MUHCApp.service:LocalStorage
+*@description Service that deals with the treatment team message information
+**/
 myApp.service('TxTeamMessages', ['$filter','RequestToServer','LocalStorage', 'UserPreferences', function($filter,RequestToServer, LocalStorage,UserPreferences){
   //Initializing array that represents all the informations for TxTeamMessages
+  /**
+  *@ngdoc property
+  *@name  MUHCApp.service.#txTeamMessagesArray
+  *@propertyOf MUHCApp.service:TxTeamMessages
+  *@description Initializing array that represents all the information for TxTeamMessages, this array is passed to appropiate controllers.
+  **/
   var txTeamMessagesArray=[];
 
   //When there is an update, find the matching message and delete it, its added later by addToTreatmentTeamMessages function
@@ -33,12 +47,26 @@ myApp.service('TxTeamMessages', ['$filter','RequestToServer','LocalStorage', 'Us
   }
   return {
     //Setter the messages from 0
+     /**
+      *@ngdoc method
+      *@name setTxTeamMessages
+      *@methodOf MUHCApp.service:TxTeamMessages
+      *@param {Object} messages messages array that containts the new messages
+      *@description Setter method for TxTeamMessages
+      **/
     setTxTeamMessages:function(messages)
     {
       txTeamMessagesArray=[];
       addTreatmentTeamMessages(messages);
     },
     //Update the messages
+    /**
+      *@ngdoc method
+      *@name updateTxTeamMessages
+      *@methodOf MUHCApp.service:TxTeamMessages
+      *@param {Object} messages Finds messages to update or adds new messages if not found
+      *@description Updates the txTeamMessagesArray with the new information contained in the messages parameter
+      **/
     updateTxTeamMessages:function(messages)
     {
       //Find and delete to be added later
@@ -47,17 +75,25 @@ myApp.service('TxTeamMessages', ['$filter','RequestToServer','LocalStorage', 'Us
       addTreatmentTeamMessages(messages);
     },
     //Getter for the main array
+      /**
+      *@ngdoc method
+      *@name getTxTeamMessages
+      *@methodOf MUHCApp.service:TxTeamMessages
+      *@description Getter for the txTeamMessagesArray
+      *@returns {Array} txTeamMessagesArray
+      **/
     getTxTeamMessages:function()
     {
       return txTeamMessagesArray;
     },
-    //Gets Last message to display on main tab pages
-    getLastTxTeamMessage:function()
-    {
-      if(txTeamMessagesArray.length === 0) return null;
-      return txTeamMessagesArray[0];
-    },
     //Gets unread messages for notifications and badges
+       /**
+    *@ngdoc method
+    *@name getUnreadTxTeamMessages
+    *@methodOf MUHCApp.service:TxTeamMessages
+    *@description Gets unread tx team messages
+    *@returns {Array} Returns all the unread messages
+    **/
     getUnreadTxTeamMessages:function()
     {
         var array=[];
@@ -70,6 +106,13 @@ myApp.service('TxTeamMessages', ['$filter','RequestToServer','LocalStorage', 'Us
         return array;
     },
     //Get number of unread news
+     /**
+    *@ngdoc method
+    *@name getNumberUnreadTxTeamMessages
+    *@methodOf MUHCApp.service:TxTeamMessages
+    *@description Iterates through array object and returns the number of unread messages
+    *@returns {Number} Returns number of unread news
+    **/
     getNumberUnreadTxTeamMessages:function()
     {
       var number = 0;
@@ -82,6 +125,14 @@ myApp.service('TxTeamMessages', ['$filter','RequestToServer','LocalStorage', 'Us
       return number;
     },
     //Obtain a team message by ser num
+      /**
+    *@ngdoc method
+    *@name getTxTeamMessageBySerNum
+    *@methodOf MUHCApp.service:TxTeamMessages
+    *@param {String} serNum TxTeamMessageSerNum to be looked for
+    *@description Iterates through the TxTeamMessages array and returns TxTeamMessage object matching the serNum
+    *@returns {Object} Returns object containing TxTeamMessage
+    **/
     getTxTeamMessageBySerNum:function(serNum)
     {
       console.log(serNum);
@@ -94,6 +145,13 @@ myApp.service('TxTeamMessages', ['$filter','RequestToServer','LocalStorage', 'Us
       }
     },
     //Reads the treatment team message and sends it to backend for processing
+     /**
+    *@ngdoc method
+    *@name readTxTeamMessageBySerNum
+    *@methodOf MUHCApp.service:TxTeamMessages
+    *@param {String} serNum TxTeamMessageSerNum to be read
+    *@description Sets ReadStatus in TxTeamMessage to 1, sends request to backend, and syncs with device storage
+    **/
     readTxTeamMessageBySerNum:function(serNum)
     {
       for (var i = 0; i < txTeamMessagesArray.length; i++) {
@@ -104,6 +162,14 @@ myApp.service('TxTeamMessages', ['$filter','RequestToServer','LocalStorage', 'Us
         }
       }
     },
+    /**
+    *@ngdoc method
+    *@name readTxTeamMessage
+    *@methodOf MUHCApp.service:TxTeamMessages
+    *@param {String} index index in the TxTeamMessages array to be read
+    *@param {String} serNum TxTeamMessageSerNum to be read
+    *@description Faster method to read an TxTeamMessages, no iteration required.
+    **/
     readTxTeamMessage:function(serNum)
     {
       for (var i = 0; i < txTeamMessagesArray.length; i++) {
@@ -116,6 +182,14 @@ myApp.service('TxTeamMessages', ['$filter','RequestToServer','LocalStorage', 'Us
         }
       }
     },
+     /**
+    *@ngdoc method
+    *@name getTxTeamMessageName
+    *@methodOf MUHCApp.service:TxTeamMessages
+    *@param {String} serNum TxTeamMessageSerNum to be read
+    *@description Gets the PostName_EN, and PostName_FR for the notifications
+    *@returns {Object} Returns object containing only the names for a particular TxTeamMessage, used by the {@link MUHCApp.service:Notifications Notifications Service} 
+    **/
     getTxTeamMessageName:function(serNum)
     {
       console.log(txTeamMessagesArray);
@@ -128,10 +202,25 @@ myApp.service('TxTeamMessages', ['$filter','RequestToServer','LocalStorage', 'Us
         }
       }
     },
+     /**
+    *@ngdoc method
+    *@name getTxTeamMessageUrl
+    *@methodOf MUHCApp.service:TxTeamMessages
+    *@description Returns TxTeamMessage url to be used by the {@link MUHCApp.service:Notifications Notifications Service}.
+    *@returns {String} Returns Url for individual TxTeamMessages
+    **/
     getTxTeamMessageUrl:function(serNum)
     {
       return './views/personal/treatment-team-messages/individual-team-message.html';
     },
+      /**
+    *@ngdoc method
+    *@name setLanguageTxTeamMessages
+    *@methodOf MUHCApp.service:TxTeamMessages
+    *@param {Array} array Array with TxTeamMessages
+    *@description Translates the array parameter containing announcements to appropiate preferred language specified in {@link MUHCApp.service:UserPreferences UserPreferences}.
+    *@returns {Array} Returns array with translated values
+    **/
     setLanguageTxTeamMessages :function(array)
     {
       var language = UserPreferences.getLanguage();
@@ -149,6 +238,12 @@ myApp.service('TxTeamMessages', ['$filter','RequestToServer','LocalStorage', 'Us
       }
       return array;
     },
+     /**
+    *@ngdoc method
+    *@name clearTxTeamMessages
+    *@methodOf MUHCApp.service:TxTeamMessages
+    *@description Clears the service of any saved state, function used by the {@link MUHCApp.controller:LogoutController LogoutController}
+    **/
     clearTxTeamMessages:function()
     {
         txTeamMessagesArray=[];

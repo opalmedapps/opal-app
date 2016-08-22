@@ -1,11 +1,29 @@
 var myApp=angular.module('MUHCApp');
+/**
+*@ngdoc service
+*@name MUHCApp.service:CheckinService
+*@requires MUHCApp.service:RequestToServer
+*@requires MUHCApp.service:Appointments
+*@requires MUHCApp.service:FirebaseService
+*@requires MUHCApp.service:EncryptionService
+*@requires MUHCApp.service:UserPreferences
+*@requires $filter
+*@requires $q
+*@requires $rootScope
+*@requires $timeout
+*@description Service that deals with the checkin functionality for the app
+**/
+myApp.factory('CheckinService', ['$q', 'RequestToServer', 'Appointments', '$timeout','FirebaseService','EncryptionService', '$rootScope','UserPreferences',function ($q, RequestToServer, Appointments,$timeout,FirebaseService,EncryptionService,$rootScope,UserPreferences) {
 
-
-myApp.factory('CheckinService', ['$q', 'RequestToServer', 'Appointments', '$timeout','FirebaseService','EncryptionService', '$rootScope','UserPreferences','UpdateUI',function ($q, RequestToServer, Appointments,$timeout,FirebaseService,EncryptionService,$rootScope,UserPreferences,UpdateUI) {
-
+    /**
+  *@ngdoc property
+  *@name  MUHCApp.service.#positionCheckinAppointment
+  *@propertyOf MUHCApp.service:CheckinService
+  *@description Object contains the last GPS position used when the patient tried to checkin to an appointment
+  **/
+    //The last updated GPS coordinates are stored
     var positionCheckinAppointment = {};
 
-    //The last updated GPS coordinates are stored
     var checkinUpdatesInterval = null;
 
     //Set up the language for this life updates!
@@ -104,9 +122,14 @@ myApp.factory('CheckinService', ['$q', 'RequestToServer', 'Appointments', '$time
        return deg * (Math.PI / 180);
    }
     return {
-      /*Function determines geographically whether user is allow to check-in. works under the
-      * assumption that all the checks to see if an appointment is already done, have been done!
-      */
+      /**
+        *@ngdoc method
+        *@name isAllowedToCheckin
+        *@methodOf MUHCApp.service:CheckinService
+        *@description Function determines geographically whether user is allow to check-in. Works under the
+        * assumption that all the checks to see if an appointment is today and open have already been done! It also updates the positionCheckinAppointment property of the CheckinService.
+        *@returns {Promise} Returns a promise that resolves to success if the user is allowed to checkin based on whether the user is within a 300m radius of the hospital, or rejects the promise if the patient is not in the vecinity of the hospital or if there is an error while checkin location
+        **/
       isAllowedToCheckin:function()
       {
         var r =$q.defer();
@@ -118,7 +141,14 @@ myApp.factory('CheckinService', ['$q', 'RequestToServer', 'Appointments', '$time
         });
         return r.promise;
       },
-      //Checks by querying the server if user has already checked in, perhaps from another device or simply the kiosk, or desk.
+      /**
+        *@ngdoc method
+        *@name checkCheckinServer
+        *@methodOf MUHCApp.service:CheckinService
+        *@param {Object} appointment Appointment object
+        *@description Checks by querying the server if user has already checked in, perhaps from another device or simply the kiosk, or desk.
+        *@returns {Promise} Returns a promise that resolves to success if the user has indeed already checked in, or resolves to failure if the patient is not in the vecinity of the hospital
+        **/
       checkCheckinServer:function(appointment)
       {
         var r = $q.defer();
@@ -128,24 +158,36 @@ myApp.factory('CheckinService', ['$q', 'RequestToServer', 'Appointments', '$time
           {
             console.log(response);
             //Response is either success or failure with the appointmentSerNum again in the data object
-            console.log('CheckCheckin coming back from backend', data);
-            if(response.Response =='success')
-            {
-              //If success, then set checkin for services, i.e. synchronize app
-              Appointments.setAppointmentCheckin(appointment.AppointmentSerNum);
-              //resolve with response
-              r.resolve(data.response);
+            console.log('CheckCheckin coming back from backend', response);
+            if(response.hasOwnProperty('Data')&&response.Data.hasOwnProperty('CheckedIn')){
+              console.log(typeof response.Data.CheckedIn, response.Data.CheckedIn);
+              
+              if(response.Data.CheckedIn =='true')
+              {
+                //If success, then set checkin for services, i.e. synchronize app
+                Appointments.setAppointmentCheckin(appointment.AppointmentSerNum);
+                //resolve with response
+                r.resolve(true);
+              }else{
+                r.resolve(false);
+              }          
             }else{
-              r.resolve(data.response);
+              r.resolve(false);
             }
+          }).catch(function(error)
+          {
+            console.log(error);
+            r.reject(false);
           });
-        //If it has not come back yet assumed that they have not checked in
-        setTimeout(function(){
-          r.resolve('failure');
-        },20000);
         return r.promise;
       },
-      //Function to check a user into an appointment
+       /**
+        *@ngdoc method
+        *@name checkinToAppointment
+        *@methodOf MUHCApp.service:CheckinService
+        *@description Function to check a user into an appointment.
+        *@returns {Promise} Returns a promise that resolves to success if the user has indeed checked in, and resolves to failure if the patient is not been able to checkin. It also opens the connection to get time estimates from the backend
+        **/
       checkinToAppointment:function(nextAppointment)
       {
 
@@ -176,10 +218,19 @@ myApp.factory('CheckinService', ['$q', 'RequestToServer', 'Appointments', '$time
             }else{
               r.reject(data);
             }
+          }).catch(function(error)
+          {
+            r.reject(error);
           });
         return r.promise;
       },
-      //Gets live estimate updates
+       /**
+        *@ngdoc method
+        *@name getCheckinUpdates
+        *@methodOf MUHCApp.service:CheckinService
+        *@description Gets live waiting estimate from the backend, sends a request every two seconds and updates variables attached to rootScope to propagate this result.
+        **/
+      //
       getCheckinUpdates:function(nextappointment)
       {
         liveCheckinUpdates(nextappointment);

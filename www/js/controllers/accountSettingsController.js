@@ -135,9 +135,13 @@ myApp.controller('accountSettingController', ['Patient', 'UserPreferences', '$sc
 
 myApp.controller('ChangingSettingController', function($filter, $rootScope, FirebaseService, $translate, UserPreferences, Patient, RequestToServer, $scope, $timeout, UpdateUI, UserAuthorizationInfo,LocalStorage) {
     console.log(UserAuthorizationInfo);
+    
+    //Function sets account
     accountChangeSetUp();
 
+    //Sets all the account settings depeding on the field that needs to be changed
     function accountChangeSetUp() {
+        //Mappings between parameters and translation
         var fieldsMappings = {
             "Font-size": "FONTSIZE",
             "Language": "LANGUAGE",
@@ -146,17 +150,20 @@ myApp.controller('ChangingSettingController', function($filter, $rootScope, Fire
             "Email": "EMAIL",
             "Nickname": "ALIAS"
         };
+        //Navigator parameter
         var page = settingsNavigator.getCurrentPage();
         var parameters = page.options.param;
+        //Actual Value
         $scope.actualValue = '';
-        $scope.alertClass = "bg-success updateMessage-success";
+
+        //Instantiates values and parameters
         $scope.disableButton = true;
         $scope.value = parameters;
         console.log(fieldsMappings);
         $scope.valueLabel = $filter('translate')(fieldsMappings[parameters]);
         $scope.personal = true;
         $scope.type1 = 'text';
-        $scope.updateMessage = "HASBEENUPDATED";
+        //Sets a watch on the values typed and runs the validation scripts for the respective values
         $scope.$watchGroup(['newValue', 'oldValue'], function() {
             $scope.newUpdate = false;
             if (parameters !== 'Language' && parameters !== 'Font-size') {
@@ -175,6 +182,7 @@ myApp.controller('ChangingSettingController', function($filter, $rootScope, Fire
 
         });
 
+        //Sets the instructions depending on the value to update
         if (parameters === 'Nickname') {
             $scope.actualValue = Patient.getAlias();
             $scope.newValue = $scope.actualValue;
@@ -218,7 +226,7 @@ myApp.controller('ChangingSettingController', function($filter, $rootScope, Fire
             $scope.pickFont = value;
         }
     }
-
+    //Function to update new value
     $scope.updateValue = function(val) {
         var objectToSend = {};
         objectToSend.NewValue = $scope.newValue;
@@ -227,26 +235,36 @@ myApp.controller('ChangingSettingController', function($filter, $rootScope, Fire
             changePassword();
         } else if (val == 'Email') {
             changeEmail();
-        } else if (val == 'Tel. Number') {
-            var valChange = val.replace(' ', '');
-            valChange = valChange.replace('.', '');
-            valChange = valChange.substring(0, 6);
-            objectToSend.FieldToChange = valChange;
-            Patient.setTelNum($scope.newValue);
-            RequestToServer.sendRequest('AccountChange', objectToSend);
-            $scope.actualValue = $scope.newValue;
-        } else if (val == 'Nickname') {
-            objectToSend.FieldToChange = val;
-            Patient.setAlias($scope.newValue);
-            $scope.actualValue = $scope.newValue;
-            RequestToServer.sendRequest('AccountChange', objectToSend);
+        }else{
+            changeField(val, $scope.newValue);
         }
         $scope.disableButton = true;
-        $scope.newUpdate = true;
     };
+    //Function to change Nickname and phone number
+    function changeField(type, value)
+    {
+        var typeVal = (type == 'Nickname')?'Alias':'TelNum';
+        var objectToSend = {};
+        objectToSend.NewValue = value;
+        objectToSend.FieldToChange = typeVal;
+        RequestToServer.sendRequest('AccountChange', objectToSend);
+        if (type == 'Nickname') Patient.setAlias(value);
+        else Patient.setTelNum(value);
+        $scope.actualValue = value;
+        $scope.newUpdate = true;
+        $scope.alertClass = "bg-success updateMessage-success";
+        $scope.updateMessage = $filter('translate')("FIELD_UPDATED");
+        console.log($scope.updateMessage, $scope.alertClass);
+        
+    }
+
+    //Function to change font size
     $scope.changeFont = function(newVal) {
         UserPreferences.setFontSize(newVal);
     };
+
+
+    //FUnction to change the language
     $scope.changeLanguage = function(val) {
         console.log(val);
         var objectToSend = {};
@@ -254,11 +272,9 @@ myApp.controller('ChangingSettingController', function($filter, $rootScope, Fire
         objectToSend.FieldToChange = 'Language';
         RequestToServer.sendRequest('AccountChange', objectToSend);
         UserPreferences.setLanguage(val);
-        $scope.newUpdate = true;
-
     };
 
-
+    //Change password function
     function changePassword() {
         var ref = new Firebase(FirebaseService.getFirebaseUrl());
         ref.changePassword({
@@ -272,22 +288,21 @@ myApp.controller('ChangingSettingController', function($filter, $rootScope, Fire
                         $timeout(function() {
                             $scope.newUpdate = true;
                             $scope.alertClass = "bg-danger updateMessage-error";
-                            $scope.updateMessage = 'is invalid!';
+                            $scope.updateMessage = $filter('translate')("INVALID_PASSWORD");
                         });
                         break;
                     case "INVALID_USER":
                         console.log("The specified user account does not exist.");
                         break;
                     default:
-                        console.log("Error changing password:", error);
                         $timeout(function() {
                             $scope.newUpdate = true;
                             $scope.alertClass = "bg-danger updateMessage-error";
-                            $scope.updateMessage = 'update error!';
+                            $scope.updateMessage = $filter('translate')("INTERNETERROR");
                         });
                 }
             } else {
-                var objectToSend = {};
+                var objectToSend = {};	
                 objectToSend.FieldToChange = 'Password';
                 objectToSend.NewValue = $scope.newValue;
                 RequestToServer.sendRequest('AccountChange', objectToSend);
@@ -300,7 +315,7 @@ myApp.controller('ChangingSettingController', function($filter, $rootScope, Fire
                 $timeout(function() {
                     
                     $scope.alertClass = "bg-success updateMessage-success";
-                    $scope.updateMessage = 'User password was successfully changed!';
+                    $scope.updateMessage = $filter('translate')("PASSWORDUPDATED");
                     $scope.newUpdate = true;
 
                 });
@@ -308,6 +323,7 @@ myApp.controller('ChangingSettingController', function($filter, $rootScope, Fire
         });
     }
 
+    //Change email function
     function changeEmail() {
         var ref = new Firebase(FirebaseService.getFirebaseUrl());
 
@@ -317,26 +333,51 @@ myApp.controller('ChangingSettingController', function($filter, $rootScope, Fire
             password: $scope.oldValue
         }, function(error) {
             if (error) {
-                $timeout(function() {
-                    $scope.alertClass = "bg-danger updateMessage-error";
-                    $scope.newUpdate = true;
-                    $scope.updateMessage = ' is not correct!';
-                });
+                console.log(error.code);
+                switch (error.code) {
+                    case "INVALID_PASSWORD":
+                        $timeout(function() {
+                            $scope.alertClass = "bg-danger updateMessage-error";
+                            $scope.newUpdate = true;
+                            $scope.updateMessage = $filter('translate')("INVALID_PASSWORD");
+                        });
+                        break;
+                     case "EMAIL_TAKEN":
+                        $timeout(function() {
+                            $scope.alertClass = "bg-danger updateMessage-error";
+                            $scope.newUpdate = true;
+                            $scope.updateMessage = $filter('translate')("EMAIL_TAKEN");
+                        });
+                        break;
+                    default:
+                        $timeout(function() {
+                            $scope.alertClass = "bg-danger updateMessage-error";
+                            $scope.newUpdate = true;
+                            $scope.updateMessage = $filter('translate')("PROBLEM_UPDATING_PASSWORD");
+                        });
+                        break;
+                }
+                
                 console.log("Error changing email:", error);
             } else {
                 var objectToSend = {};
                 objectToSend.FieldToChange = 'Email';
                 objectToSend.NewValue = $scope.newValue;
                 Patient.setEmail($scope.newValue);
+                window.localStorage.setItem('Email',$scope.newValue);
                 RequestToServer.sendRequest('AccountChange', objectToSend);
                 $timeout(function() {
-                    $scope.updateMessage = 'User email was successfully updated!';
+                    $scope.alertClass = "bg-success updateMessage-success";
+                    $scope.updateMessage = $filter('translate')("UPDATED_EMAIL");
                     $scope.newUpdate = true;
                 });
 
             }
         });
     }
+
+
+    //Validating fields functions
 
     function validateTelNum() {
         var regex = /^[0-9]{10}$/;

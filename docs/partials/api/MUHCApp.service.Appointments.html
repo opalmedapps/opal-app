@@ -1,0 +1,157 @@
+<h1><code ng:non-bindable="">Appointments</code>
+<div><span class="hint">service in module <code ng:non-bindable="">MUHCApp</code>
+</span>
+</div>
+</h1>
+<div><h2 id="description">Description</h2>
+<div class="description"><div class="muhcapp-service-page muhcapp-service-appointments-page"><p>Sets the appointments and provides an API to access them</p>
+</div></div>
+<h2 id="dependencies">Dependencies</h2>
+<ul class="dependencies"><li><code ng:non-bindable=""><a href="api/ng.$filter">$filter</a></code>
+</li>
+<li><code ng:non-bindable=""><a href="api/MUHCApp.service:RequestToServer">RequestToServer</a></code>
+</li>
+<li><code ng:non-bindable=""><a href="api/ng.$q">$q</a></code>
+</li>
+<li><code ng:non-bindable=""><a href="api/MUHCApp.service:UserAuthorizationInfo">UserAuthorizationInfo</a></code>
+</li>
+<li><code ng:non-bindable=""><a href="api/ng.$cordovaCalendar">$cordovaCalendar</a></code>
+</li>
+</ul>
+<div class="member method"><h2 id="methods">Methods</h2>
+<ul class="methods"><li><h3 id="methods_checkandaddappointmentstocalendar">checkAndAddAppointmentsToCalendar()</h3>
+<div class="checkandaddappointmentstocalendar"><div class="checkandaddappointmentstocalendar-page"><p>Goes through appointmentsArray and checks if the appointments are already in the calendar, if any are not it proceeds to add them</p>
+</div><h5 id="methods_checkandaddappointmentstocalendar_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-promise">Promise</a></td><td><div class="checkandaddappointmentstocalendar-page"><p>Resolves to success if added successfully or to failure with an error if an error occurs</p>
+</div></td></tr></table></div>
+</li>
+<li><h3 id="methods_getappointmentbysernum">getAppointmentBySerNum(serNum)</h3>
+<div class="getappointmentbysernum"><h5 id="methods_getappointmentbysernum_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>serNum</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="getappointmentbysernum-page"><p>AppointmentSerNum</p>
+</div></td></tr></tbody></table><h5 id="methods_getappointmentbysernum_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-object">Object</a></td><td><div class="getappointmentbysernum-page"><p>Returns appointment object that matches the AppointmentSerNum parameter</p>
+</div></td></tr></table></div>
+</li>
+<li><h3 id="methods_getappointmentname">getAppointmentName(serNum)</h3>
+<div class="getappointmentname"><h5 id="methods_getappointmentname_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>serNum</td><td><a href="" class="label type-hint type-hint-object">Object</a></td><td><div class="getappointmentname-page"><p>AppointmentSerNum</p>
+</div></td></tr></tbody></table><h5 id="methods_getappointmentname_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-boolean">Boolean</a></td><td><div class="getappointmentname-page"><p>Returns an object with the labels for the appointments.</p>
+</div></td></tr></table></div>
+</li>
+<li><h3 id="methods_getappointmenturl">getAppointmentUrl(serNum)</h3>
+<div class="getappointmenturl"><div class="getappointmenturl-page"><p>The function returns a url that the Notifications service uses to identify the page to send a certain notification</p>
+</div><h5 id="methods_getappointmenturl_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>serNum</td><td><a href="" class="label type-hint type-hint-object">Object</a></td><td><div class="getappointmenturl-page"><p>AppointmentSerNum</p>
+</div></td></tr></tbody></table><h5 id="methods_getappointmenturl_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-promise">Promise</a></td><td><div class="getappointmenturl-page"><p>Returns the url correspoding to the page for individual-appointments</p>
+</div></td></tr></table></div>
+</li>
+<li><h3 id="methods_getcheckinappointment">getCheckinAppointment(serNum)</h3>
+<div class="getcheckinappointment"><h5 id="methods_getcheckinappointment_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>serNum</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="getcheckinappointment-page"><p>AppointmentSerNum</p>
+</div></td></tr></tbody></table><h5 id="methods_getcheckinappointment_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-object">Object</a></td><td><div class="getcheckinappointment-page"><p>Returns object containing checkin appointment</p>
+</div></td></tr></table></div>
+</li>
+<li><h3 id="methods_getfutureappointments">getFutureAppointments()</h3>
+<div class="getfutureappointments"><h5 id="methods_getfutureappointments_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-array">Array</a></td><td><div class="getfutureappointments-page"><p>Returns the future appointments for the patient</p>
+</div></td></tr></table></div>
+</li>
+<li><h3 id="methods_getlastappointmentcompleted">getLastAppointmentCompleted()</h3>
+<div class="getlastappointmentcompleted"><h5 id="methods_getlastappointmentcompleted_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-object">Object</a></td><td><div class="getlastappointmentcompleted-page"><p>Returns last completed appointment object</p>
+</div></td></tr></table></div>
+</li>
+<li><h3 id="methods_getnumberunreadappointments">getNumberUnreadAppointments(serNum)</h3>
+<div class="getnumberunreadappointments"><h5 id="methods_getnumberunreadappointments_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>serNum</td><td><a href="" class="label type-hint type-hint-object">Object</a></td><td><div class="getnumberunreadappointments-page"><p>AppointmentSerNum</p>
+</div></td></tr></tbody></table><h5 id="methods_getnumberunreadappointments_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-string">String</a></td><td><div class="getnumberunreadappointments-page"><p>Returns the number of unseen appointments</p>
+</div></td></tr></table></div>
+</li>
+<li><h3 id="methods_getpastappointments">getPastAppointments()</h3>
+<div class="getpastappointments"><h5 id="methods_getpastappointments_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-array">Array</a></td><td><div class="getpastappointments-page"><p>Returns the past appointments for the patient</p>
+</div></td></tr></table></div>
+</li>
+<li><h3 id="methods_gettodaysappointments">getTodaysAppointments(serNum)</h3>
+<div class="gettodaysappointments"><h5 id="methods_gettodaysappointments_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>serNum</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="gettodaysappointments-page"><p>AppointmentSerNum</p>
+</div></td></tr></tbody></table><h5 id="methods_gettodaysappointments_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-array">Array</a></td><td><div class="gettodaysappointments-page"><p>Returns array of appointments for the day</p>
+</div></td></tr></table></div>
+</li>
+<li><h3 id="methods_gettreatmentappointments">getTreatmentAppointments()</h3>
+<div class="gettreatmentappointments"><div class="gettreatmentappointments-page"><p>The function checks that the treatment appointments are still in the valid range, if not it reinstantiates the object to add the right treatment sessions.</p>
+</div><h5 id="methods_gettreatmentappointments_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-string">String</a></td><td><div class="gettreatmentappointments-page"><p>Returns all the treatment appointments</p>
+</div></td></tr></table></div>
+</li>
+<li><h3 id="methods_getupcomingappointment">getUpcomingAppointment(serNum)</h3>
+<div class="getupcomingappointment"><h5 id="methods_getupcomingappointment_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>serNum</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="getupcomingappointment-page"><p>AppointmentSerNum</p>
+</div></td></tr></tbody></table><h5 id="methods_getupcomingappointment_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-object">Object</a></td><td><div class="getupcomingappointment-page"><p>Returns upcoming appointment object</p>
+</div></td></tr></table></div>
+</li>
+<li><h3 id="methods_getuserappointments">getUserAppointments()</h3>
+<div class="getuserappointments"><h5 id="methods_getuserappointments_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-boolean">Boolean</a></td><td><div class="getuserappointments-page"><p>Returns the userAppointmentsArray</p>
+</div></td></tr></table></div>
+</li>
+<li><h3 id="methods_getusercalendar">getUserCalendar(serNum)</h3>
+<div class="getusercalendar"><h5 id="methods_getusercalendar_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>serNum</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="getusercalendar-page"><p>AppointmentSerNum</p>
+</div></td></tr></tbody></table><h5 id="methods_getusercalendar_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-object">Object</a></td><td><div class="getusercalendar-page"><p>Returns object containing the calendar representation for appointments i.e. {&#39;2015&#39;:&#39;May&#39;:{[AppointmentObject]}}</p>
+</div></td></tr></table></div>
+</li>
+<li><h3 id="methods_ischeckinappointment">isCheckinAppointment(appointment)</h3>
+<div class="ischeckinappointment"><h5 id="methods_ischeckinappointment_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>appointment</td><td><a href="" class="label type-hint type-hint-object">Object</a></td><td><div class="ischeckinappointment-page"><p>Appointment object</p>
+</div></td></tr></tbody></table><h5 id="methods_ischeckinappointment_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-boolean">Boolean</a></td><td><div class="ischeckinappointment-page"><p>Returns whether an appointment is the checkin appointment</p>
+</div></td></tr></table></div>
+</li>
+<li><h3 id="methods_isthereappointments">isThereAppointments(appointments)</h3>
+<div class="isthereappointments"><h5 id="methods_isthereappointments_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>appointments</td><td><a href="" class="label type-hint type-hint-object">Object</a></td><td><div class="isthereappointments-page"><p>Appointments array that containts the new appointments</p>
+</div></td></tr></tbody></table><h5 id="methods_isthereappointments_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-boolean">Boolean</a></td><td><div class="isthereappointments-page"><p>Returns whether the user has any appointments</p>
+</div></td></tr></table></div>
+</li>
+<li><h3 id="methods_istherenextappointment">isThereNextAppointment(appointments)</h3>
+<div class="istherenextappointment"><h5 id="methods_istherenextappointment_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>appointments</td><td><a href="" class="label type-hint type-hint-object">Object</a></td><td><div class="istherenextappointment-page"><p>Appointments array that containts the new appointments</p>
+</div></td></tr></tbody></table><h5 id="methods_istherenextappointment_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-boolean">Boolean</a></td><td><div class="istherenextappointment-page"><p>Returns whether there is a next appointment for the user</p>
+</div></td></tr></table></div>
+</li>
+<li><h3 id="methods_readappointmentbysernum">readAppointmentBySerNum(serNum)</h3>
+<div class="readappointmentbysernum"><div class="readappointmentbysernum-page"><p>Sets ReadStatus to 1 to all the states of data. i.e. database, device, and device storage.</p>
+</div><h5 id="methods_readappointmentbysernum_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>serNum</td><td><a href="" class="label type-hint type-hint-object">Object</a></td><td><div class="readappointmentbysernum-page"><p>AppointmentSerNum</p>
+</div></td></tr></tbody></table></div>
+</li>
+<li><h3 id="methods_setappointmentcheckin">setAppointmentCheckin(serNum)</h3>
+<div class="setappointmentcheckin"><div class="setappointmentcheckin-page"><p>Sets the checkin to 1 for a particular appointments making sure fields are synced</p>
+</div><h5 id="methods_setappointmentcheckin_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>serNum</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="setappointmentcheckin-page"><p>AppointmentSerNum</p>
+</div></td></tr></tbody></table></div>
+</li>
+<li><h3 id="methods_setappointmentslanguage">setAppointmentsLanguage(array)</h3>
+<div class="setappointmentslanguage"><div class="setappointmentslanguage-page"><p>Checks the current language in  UserPreferences service and sets appropiate language for each appointment in the array</p>
+</div><h5 id="methods_setappointmentslanguage_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>array</td><td><a href="" class="label type-hint type-hint-array">Array</a></td><td><div class="setappointmentslanguage-page"><p>Array containing appointments to be translated</p>
+</div></td></tr></tbody></table><h5 id="methods_setappointmentslanguage_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-string">String</a></td><td><div class="setappointmentslanguage-page"><p>Returns the array with the proper up to date translations</p>
+</div></td></tr></table></div>
+</li>
+<li><h3 id="methods_setappointmentslanguage">setAppointmentsLanguage()</h3>
+<div class="setappointmentslanguage"><div class="setappointmentslanguage-page"><p>Cleans all the Appointments service state and reinstantiates.</p>
+</div></div>
+</li>
+<li><h3 id="methods_setcheckinappointmentasclosed">setCheckinAppointmentAsClosed(serNum)</h3>
+<div class="setcheckinappointmentasclosed"><div class="setcheckinappointmentasclosed-page"><p>Sets the appointment as closed so that if a next the app shows the appropiate user appointment</p>
+</div><h5 id="methods_setcheckinappointmentasclosed_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>serNum</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="setcheckinappointmentasclosed-page"><p>AppointmentSerNum</p>
+</div></td></tr></tbody></table></div>
+</li>
+<li><h3 id="methods_setuserappoinments">setUserAppoinments(appointments)</h3>
+<div class="setuserappoinments"><div class="setuserappoinments-page"><p>Function is called from the <a href="api/MUHCApp.services:UpdateUI">MUHCApp.services:UpdateUI</a>. The function is an initializer for the service, it sets all the properties for the appointment list and calendar used in
+the <a href="api/MUHCApp.controller:ScheduleController">ScheduleController</a>.</p>
+</div><h5 id="methods_setuserappoinments_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>appointments</td><td><a href="" class="label type-hint type-hint-array">Array</a></td><td><div class="setuserappoinments-page"><p>Appointments array obtain from Firebase</p>
+</div></td></tr></tbody></table></div>
+</li>
+<li><h3 id="methods_updateuserappoinments">updateUserAppoinments(appointments)</h3>
+<div class="updateuserappoinments"><div class="updateuserappoinments-page"><p>Updates the userAppointmentsArray by replacing or adding appointments to sync the model with the server</p>
+</div><h5 id="methods_updateuserappoinments_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>appointments</td><td><a href="" class="label type-hint type-hint-object">Object</a></td><td><div class="updateuserappoinments-page"><p>Appointments array that containts the new appointments</p>
+</div></td></tr></tbody></table></div>
+</li>
+</ul>
+</div>
+<div class="member property"><h2 id="properties">Properties</h2>
+<ul class="properties"><li><h3 id="properties_appointmentslocalstorage">appointmentsLocalStorage</h3>
+<div class="appointmentslocalstorage"><div class="muhcapp-service-appointmentslocalstorage-page"><p>Array that contains all user appointments that go in the native calendar organized chronologically from most recent to least recent.</p>
+</div></div>
+</li>
+<li><h3 id="properties_treatmentsessionsobject">treatmentSessionsObject</h3>
+<div class="treatmentsessionsobject"><div class="muhcapp-service-treatmentsessionsobject-page"><p>Object that contains three properties, all treatment sessions, the current treatment session, and step in treatment session.</p>
+</div></div>
+</li>
+<li><h3 id="properties_userappointmentsarray">userAppointmentsArray</h3>
+<div class="userappointmentsarray"><div class="muhcapp-service-userappointmentsarray-page"><p>Array that contains all user appointments organized chronologically from most recent to least recent.</p>
+</div></div>
+</li>
+</ul>
+</div>
+</div>

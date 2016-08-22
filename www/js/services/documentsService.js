@@ -1,6 +1,24 @@
 var myApp=angular.module('MUHCApp');
-myApp.service('Documents',['UserPreferences', '$cordovaDevice','$cordovaNetwork', 'UserAuthorizationInfo','$q', '$filter','FileManagerService','RequestToServer','LocalStorage',function(UserPreferences,$cordovaDevice,$cordovaNetwork,UserAuthorizationInfo,$q,$filter,FileManagerService,RequestToServer,LocalStorage){
+/**
+*@ngdoc service
+*@name MUHCApp.service:Documents
+*@requires MUHCApp.service:UserPreferences
+*@requires MUHCApp.service:RequestToServer
+*@requires MUHCApp.service:LocalStorage
+*@requires MUHCApp.service:FileManagerService
+*@requires MUHCApp.service:UserAuthorizationInfo
+*@requires $q
+*@requires $filter
+*@description Sets the documents and provides an API to interact with them and the server
+**/
+myApp.service('Documents',['UserPreferences', 'UserAuthorizationInfo','$q', '$filter','FileManagerService','RequestToServer','LocalStorage',function(UserPreferences,UserAuthorizationInfo,$q,$filter,FileManagerService,RequestToServer,LocalStorage){
 	//Array documentsArray contains all the documents for the patient
+	/**
+  *@ngdoc property
+  *@name  MUHCApp.service.#documentsArray
+  *@propertyOf MUHCApp.service:Documents
+  *@description Initializing array that represents all the information for documents, this array is passed to appropiate controllers.
+  **/
 	var documentsArray=[];
 	//Check document, if its an update delete it from documentsArray
 	function searchDocumentsAndDelete(documents)
@@ -36,7 +54,7 @@ myApp.service('Documents',['UserPreferences', '$cordovaDevice','$cordovaNetwork'
 		if(!documents) return;
 		for (var i = 0; i < documents.length; i++) {
 			documents[i].DateAdded = $filter('formatDate')(documents[i].DateAdded);
-			delete documents[i].Content;
+			documents[i].DocumentType = FileManagerService.getFileType(documents[i].FinalFileName);
 			documentsArray.push(documents[i]);
 		}
 		documentsArray = $filter('orderBy')(documentsArray,'DateAdded');
@@ -44,15 +62,36 @@ myApp.service('Documents',['UserPreferences', '$cordovaDevice','$cordovaNetwork'
 		return documents;
 	}
 	return{
+		/**
+		*@ngdoc method
+		*@name setDocuments
+		*@methodOf MUHCApp.service:Documents
+		*@param {Object} documents Documents to be added to the model for the patient.
+		*@description Setter method for documents
+		**/
 		setDocuments:function(documents){
 			documentsArray=[];
 			return addDocumentsToService(documents);
 		},
+		/**
+		*@ngdoc method
+		*@name updateDocuments
+		*@methodOf MUHCApp.service:Documents
+		*@param {Object} documents Latest documents to be added to the model for the patient.
+		*@description Updates the documentsArray with the new information contained in the documents parameter
+		**/
 		updateDocuments:function(documents)
 		{
 			if(documents) searchDocumentsAndDelete(documents);
 			return addDocumentsToService(documents);
 		},
+		 /**
+		*@ngdoc method
+		*@name getDocuments
+		*@methodOf MUHCApp.service:Documents
+		*@description Getter for the documentsArray
+		*@returns {Array} documentsArray
+		**/
 		getDocuments:function(){
 			return documentsArray;
 		},
@@ -68,6 +107,13 @@ myApp.service('Documents',['UserPreferences', '$cordovaDevice','$cordovaNetwork'
 			return array;
 		},
 		//Get number of unread news
+		/**
+		*@ngdoc method
+		*@name getNumberUnreadDocuments
+		*@methodOf MUHCApp.service:Documents
+		*@description Gets unread documents
+		*@returns {Array} Returns all the unread documents
+		**/
 		getNumberUnreadDocuments:function()
 		{
 			var number = 0;
@@ -79,6 +125,13 @@ myApp.service('Documents',['UserPreferences', '$cordovaDevice','$cordovaNetwork'
 			}
 			return number;
 		},
+		/**
+		*@ngdoc method
+		*@name readDocument
+		*@methodOf MUHCApp.service:Documents
+		*@param {String} serNum DocumentSerNum to be read
+		*@description Sets ReadStatus in documents to 1, sends request to backend, and syncs with device storage
+		**/
 		readDocument:function(serNum)
 		{
 			for (var i = 0; i < documentsArray.length; i++) {
@@ -89,6 +142,14 @@ myApp.service('Documents',['UserPreferences', '$cordovaDevice','$cordovaNetwork'
 				}
 			}
 		},
+		 /**
+		*@ngdoc method
+		*@name getDocumentNames
+		*@methodOf MUHCApp.service:Documents
+		*@param {String} serNum DocumentSerNum to be read
+		*@description Gets the AliasName_EN, and AliasName_FR for the notifications
+		*@returns {Object} Returns object containing only the names for a particular document, used by the {@link MUHCApp.service:Notifications Notifications Service} 
+		**/
 		getDocumentNames:function(serNum)
 		{
 			for (var i = 0; i < documentsArray.length; i++) {
@@ -97,6 +158,14 @@ myApp.service('Documents',['UserPreferences', '$cordovaDevice','$cordovaNetwork'
 				}
 			}
 		},
+		/**
+		*@ngdoc method
+		*@name getDocumentBySerNum
+		*@methodOf MUHCApp.service:Documents
+		*@param {String} serNum DocumentSerNum to be looked for
+		*@description Iterates through the documents array and returns document object matching the serNum
+		*@returns {Object} Returns object containing document
+		**/
 		getDocumentBySerNum:function(serNum)
 		{
 			for (var i = 0; i < documentsArray.length; i++) {
@@ -105,10 +174,25 @@ myApp.service('Documents',['UserPreferences', '$cordovaDevice','$cordovaNetwork'
 				}
 			}
 		},
+		/**
+		*@ngdoc method
+		*@name getDocumentUrl
+		*@methodOf MUHCApp.service:Documents
+		*@description Returns documents url to be used by the {@link MUHCApp.service:Notifications Notifications Service}.
+		*@returns {String} Returns Url for individual documents
+		**/
 		getDocumentUrl:function(serNum)
 		{
 			return './views/personal/my-chart/individual-document.html';
 		},
+		/**
+		*@ngdoc method
+		*@name downloadDocumentFromServer
+		*@methodOf MUHCApp.service:Documents
+		*@param {String} serNum DocumentSerNum
+		*@description Downloads the document that matches that DocumentSerNum parameter from the server
+		*@returns {Promise} Promise successful upon correct arrival of document, rejected if error in server, or request timeout
+		**/
 		downloadDocumentFromServer:function(serNum)
 		{
 			var r = $q.defer();
@@ -127,7 +211,14 @@ myApp.service('Documents',['UserPreferences', '$cordovaDevice','$cordovaNetwork'
 			});
 			return r.promise;
 		},
-		//array can be string or array
+		 /**
+		*@ngdoc method
+		*@name setDocumentsLanguage
+		*@methodOf MUHCApp.service:Documents
+		*@param {Array} array Array with documents
+		*@description Translates the array parameter containing documents to appropiate preferred language specified in {@link MUHCApp.service:UserPreferences UserPreferences}.
+		*@returns {Array} Returns array with translated values
+		**/
 		setDocumentsLanguage:function(array)
 		{
 			//Get language
@@ -147,6 +238,12 @@ myApp.service('Documents',['UserPreferences', '$cordovaDevice','$cordovaNetwork'
 			}
 			return array;
 		},
+		/**
+		*@ngdoc method
+		*@name clearDocuments
+		*@methodOf MUHCApp.service:Documents
+		*@description Clears the service of any saved state, function used by the {@link MUHCApp.controller:LogoutController LogoutController}
+		**/
 		clearDocuments:function()
 		{
 			documentsArray=[];

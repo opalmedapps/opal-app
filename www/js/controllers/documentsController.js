@@ -53,13 +53,15 @@ myApp.controller('SingleDocumentController', ['NavigatorParameters','Documents',
 
   $scope.documentObject = image;
   $scope.loading = true;
+  $scope.errorDownload = false;
   initializeDocument(image);
   //Checks if document exists if it does not it downloads the document from the server
   function initializeDocument(document)
   {
+    console.log(document); 
     if(app)
     {
-        FileManagerService.findDocumentInDevice(document.DocumentType, document.DocumentSerNum).then(function(url)
+        FileManagerService.findPatientDocumentInDevice(document.DocumentType, document.DocumentSerNum).then(function(url)
         {
           setDocumentForShowing(document, url);
         }).catch(function(error)
@@ -83,6 +85,8 @@ myApp.controller('SingleDocumentController', ['NavigatorParameters','Documents',
             });
           }).catch(function(error){
             //Unable to get document from server
+            $scope.loading = false;
+            $scope.errorDownload = true;
             console.log('Unable to get document from server',error);
           });
         });
@@ -106,7 +110,7 @@ myApp.controller('SingleDocumentController', ['NavigatorParameters','Documents',
     //Determine if its a pdf or an image for small window preview.
     if(document.DocumentType=='pdf')
     {
-      document.PreviewContent='./img/pdf-icon.png';
+      document.PreviewContent=(ons.platform.isIOS()&&app)?url.cdvUrl:'./img/pdf-icon.png';
     }else{
       if(app) document.PreviewContent=url.cdvUrl;
       else document.PreviewContent = document.Content;

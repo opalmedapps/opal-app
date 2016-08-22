@@ -63,6 +63,10 @@
 	"FORGOTPASSWORD":"Mot de passe oublié",
 	"INVALID_USER":"L'utilisateur n'existe pas",
 	"INVALID_PASSWORD":"Mot de passe invalide",
+    "PASSWORDUPDATED":"Mot de passe a été mis à jour",
+	"PROBLEM_UPDATING_PASSWORD":"Problème de mise à jour le mot de passe",
+	"UPDATED_EMAIL":"Email mis à jour avec succès",
+	"EMAIL_TAKEN":"Cet e-mail a déjà été pris",
 	"INVALID_EMAIL":"Courriel invalide",
 	"INTERNETERROR":"Erreur de serveur, vérifiez votre connexion Internet.",
 	"EMAILPASSWORDSENT":"Mot de passe réinitialisé avec succès, vérifiez votre courriel pour votre mot de passe temporaire",
@@ -102,7 +106,9 @@
   	"SIGNOUT":"Se déconnecter",
   	"ENTERNEW":"Entrez nouveau",
   	"UPDATE":"Mettre à jour",
-  	"HASBEENUPDATED":"a été mise à jour",
+  	"FIELD_UPDATED":"Le domain a été mis à jour",
+	"TREATMENTSESSION":"Sessions de Traitement",
+	"UNABLETOSHAREMATERIAL":"Impossible de partager le document",
   	"ENTERYOURALIAS":"Entrez votre nouveau pseudonyme",
   	"ENTERYOURLASTNAME":"Entrez votre nouveau nom de famille",
 	"SMALL":"Petit",
@@ -186,7 +192,15 @@
 	"UNABLETOOPENINSTALL":"Impossible d'ouvrir , installer un programme qui ouvre les fichiers PDF",
 	"FEEDBACK":"Retour d'information",
 	"LEAVEMESSAGE":"Laissez-nous un message!",
-	"ENTERTENPHONE":"Entrer un numéro de téléphone á dix chiffres"
+	"ENTERTENPHONE":"Entrer un numéro de téléphone á dix chiffres",
+	"LOCKEDOUT":"Verrouillé en raison de l'inactivité",
+	"ERRORCONTACTINGHOSPITAL":"Erreur en contact avec l'hôpital , le système pourrait être en raison de maintainance . Réessayez plus tard",
+	"AUTHENTICATIONERROR":"Erreur d'authentification , s'il vous plaît vous connecter à nouveau",
+	"ERROROBTAININGDOCUMENT":"Erreur obtenir le document à partir du serveur"
+
+
+
+
 
 
 

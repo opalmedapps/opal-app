@@ -1,9 +1,15 @@
 <ons-page ng-controller="StatusController" style="overcroll-y:none" >
-    <ons-toolbar ng-style="navigator !=='personalNavigator' && {'background-image':'none'}" fixed-style>
+    <ons-toolbar  fixed-style ng-style="navigator!=='personalNavigator' && {'height':'70px'}  || navigator=='personalNavigator'&& {'height':'48px'}">
           <div class="left">
             <ons-back-button>{{"BACK"|translate}}</ons-back-button>
           </div>
-              <div class="center"  ><span ng-show="navigator!=='personalNavigator'"><ons-toolbar-button ng-click="goBack()" ng-disabled="activeIndex==0" ><i class="ion-chevron-left"></i></ons-toolbar-button><span >{{activeIndex+1}}/2</span><ons-toolbar-button  ng-disabled="activeIndex==1" ng-click="goNext()"><i class="ion-chevron-right"></i></ons-toolbar-button></span><span ng-show="navigator =='personalNavigator'">{{"TREATMENTPLANNING"|translate}}</span></div>
+              <div class="center"  ><span ng-show="navigator!=='personalNavigator'"><ons-toolbar-button ng-click="goBack()" ng-disabled="activeIndex==0" ><i class="ion-chevron-left"></i></ons-toolbar-button><span >{{activeIndex+1}}/2</span><ons-toolbar-button  ng-disabled="activeIndex==1" ng-click="goNext()"><i class="ion-chevron-right"></i></ons-toolbar-button></span><span ng-show="navigator =='personalNavigator'">{{"TREATMENTPLANNING"|translate}}</span>
+              <div style="line-height:1;margin-left:-5px" align="center" ng-show="navigator!=='personalNavigator'" >
+        <header>
+              <span class="item-title" ng-class="fontSizeTitle" style="font-size:19px">{{viewsTitles[activeIndex]}}</span>
+         </header>
+     </div>
+              </div>
     </ons-toolbar>
     <!--<div class="container" style="margin-top:20px">
    <div class="col-xs-12" >
@@ -18,15 +24,8 @@
    <ons-carousel-item>-->
    
    <ons-carousel  var="myCarousel" id="carouselStatus" fullscreen>
-    <ons-carousel-item >
-    <div style="background-color:white;margin:0;width:100vw;border-bottom:1px solid #f1f1f1" ng-show="navigator!=='personalNavigator'">
-       <div style="line-height:1;padding:5px" align="center" >
-        <header>
-              <span class="item-title" ng-class="fontSizeTitle" style="font-size:19px">{{viewsTitles[0]}}</span>
-         </header>
-     </div>
-  </div>
-      <div style="overcroll-y:none;" ng-style="navigator!=='personalNavigator' && {'margin-top':'0px'}  || navigator=='personalNavigator'&& {'margin-top':'20px'}">
+    <ons-carousel-item style="overflow-y:none">
+      <div style="overcroll-y:scroll;margin-top:30px" >
       <div class="container">
        <div style="margin-top:1px">
            <div ng-show="noTreatmentPlan" class="btn my-home-profile">
@@ -82,7 +81,7 @@
        </div>
        <div style="padding:2px">
            <div class="my-home-profile" ng-show="!noTreatmentPlan" style="padding:0">
-               <div id="divTreatmentPlan" style="overflow-y:auto">
+               <div id="divTreatmentPlan" style="overflow-y:scroll">
                    <ons-list class="plan-list" style="margin:0;padding:0">
                        <ons-list-item class="plan" modifier="tappable" ng-click="goToStep(app)" ng-repeat="app in stages" id="treatmentSessions{{$index}}">
                            <ons-row id="statusStep{{$index}}">
@@ -118,15 +117,8 @@
        </div>
        </div>
     </ons-carousel-item>
-    <ons-carousel-item >
-         <div style="background-color:white;margin:0;width:100vw;border-bottom:1px solid #f1f1f1" >
-       <div style="line-height:1;padding:5px" align="center" >
-        <header>
-              <span class="item-title" ng-class="fontSizeTitle" style="font-size:19px">{{viewsTitles[1]}}</span><!--<span style="float:right;margin-top:-10px" class="navigation-bar__line-height"><button class="button--quiet" ng-click="fullScreenToggle()"  style="font-size:30px;padding:0 0 0 10px"><i class="ion-arrow-shrink" style="font-size:32px; vertical-align:-6px;" ng-show="isFullscreen"></i><i ng-show="!isFullscreen" style="font-size:32px" class="ion-arrow-expand"></i></button></span>-->
-         </header>
-     </div>
-  </div>
-      <div style="overcroll-y:none">
+    <ons-carousel-item style="overflow-y:none">
+      <div style="overcroll-y:none;margin-top:30px">
       <div class="container">
        <div  >
            <div  style="margin-top:20vh" ng-show="!showTreatments">
@@ -177,7 +169,7 @@
        </div>
        <div style="padding:2px">
            <div class="my-home-profile" ng-show="showTreatments" style="padding:0">
-               <div id="divTreatmentSessions" style="overflow-y:auto">
+               <div id="divTreatmentSessions" style="overflow-y:scroll">
                    <ons-list class="plan-list" style="margin:0;padding:0">
                        <ons-list-item class="plan" modifier="tappable"  ng-click="goToAppointment(session)" ng-repeat="session in sessionList">
                            <ons-row id="statusStepSessions{{$index}}">

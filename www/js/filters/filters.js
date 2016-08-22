@@ -25,7 +25,7 @@ var myApp=angular.module('MUHCApp.filters',[]);
 				var preceding = string.substring(0,length+1);
 				//Index for first instance of < for heading tag
 				var lastIndex = preceding.lastIndexOf('<');
-				var preceding = preceding.substring(0,preceding.lastIndexOf('<'));
+				preceding = preceding.substring(0,preceding.lastIndexOf('<'));
 				//index of next closing tag
 				var proceeding = string.substring(string.indexOf('>',length+1)+2);
 				proceeding = proceeding.substring(proceeding.indexOf('>')+1);
@@ -98,26 +98,7 @@ var myApp=angular.module('MUHCApp.filters',[]);
 	        return text;
 	    };
 	});
-		myApp.filter('emailElongator', function () {
-	    return function (text) {
-					
-	        if(text&&typeof text === 'string'&&text.length<18)
-					{
-						console.log(text);
-						total = "";
-						for (var i = 0; i < 21-text.length; i++) {
-							console.log(text);
-							total+=" ";
-						}
-						text+=total;
-						console.log(text.length);
-						return text;
-					}else{
-						return text;
-					}
-	        
-	    };
-	});
+
 myApp.filter('dateEmail',function($filter){
   return function(date){
 		if(Object.prototype.toString.call(date) === '[object Date]')
@@ -189,7 +170,7 @@ myApp.filter('propsFilter', function() {
     }
 
     return out;
-  }
+  };
 });
 myApp.filter('filterDateLabTests',function()
 {

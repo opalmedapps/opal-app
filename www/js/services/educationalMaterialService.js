@@ -1,6 +1,31 @@
 var myApp=angular.module('MUHCApp');
+/**
+*@ngdoc service
+*@name MUHCApp.service:EducationalMaterial
+*@requires MUHCApp.service:UserPreferences
+*@requires MUHCApp.service:RequestToServer
+*@requires MUHCApp.service:LocalStorage
+*@requires MUHCApp.service:FileManagerService
+*@requires $filter
+*@description Sets the educational material and provides an API to interact with it and the server
+**/
 myApp.service('EducationalMaterial',['$filter','LocalStorage','FileManagerService', 'UserPreferences', 'RequestToServer',function ($filter, LocalStorage, FileManagerService,UserPreferences,RequestToServer) {
+  
+  /**
+  *@ngdoc property
+  *@name  MUHCApp.service.#educationalMaterialArray
+  *@propertyOf MUHCApp.service:EducationalMaterial
+  *@description Initializing array that represents all the information regarding educational material for the patient, this array is passed to appropiate controllers.
+  **/
+    //Initializing array that represents all the informations for Announcements
+  var educationalMaterialArray=[];
   //Types of educational material
+  /**
+  *@ngdoc property
+  *@name  MUHCApp.service.#educationalMaterialType
+  *@propertyOf MUHCApp.service:EducationalMaterial
+  *@description Object contains the mapping betweem the type of educational material and the icon and color of the icon for that particular educational material.
+  **/
   var educationalMaterialType={
     'Video':{
       icon:'ion-social-youtube',
@@ -59,8 +84,7 @@ myApp.service('EducationalMaterial',['$filter','LocalStorage','FileManagerServic
   				return substring;
   			}
   }
-  //Initializing array that represents all the informations for Announcements
-  var educationalMaterialArray=[];
+
 
   //When there is an update, find the matching material and delete it, its later added by addEducationalMaterial function
   function findAndDeleteEducationalMaterial(edumaterial)
@@ -96,18 +120,38 @@ myApp.service('EducationalMaterial',['$filter','LocalStorage','FileManagerServic
     LocalStorage.WriteToLocalStorage('EducationalMaterial',educationalMaterialArray);
   }
   return {
-    //Setter the announcements from 0
+    /**
+		*@ngdoc method
+		*@name setEducationalMaterial
+		*@methodOf MUHCApp.service:EducationalMaterial
+		*@param {Object} edumaterial Educational Material array from firebase used to set the educational materials for the patient
+		*@description Setter method for educational materials, orders the materials chronogically descending, and converts dates to javascript date objects
+		**/
     setEducationalMaterial:function(edumaterial)
     {
       console.log(edumaterial);
       educationalMaterialArray=[];
-      addEducationalMaterial(edumaterial)
+      addEducationalMaterial(edumaterial);
     },
+     /**
+		*@ngdoc method
+		*@name isThereEducationalMaterial
+		*@methodOf MUHCApp.service:EducationalMaterial
+		*@description Setter method for educational material
+    *@return {Boolean} Returns whether the patient has any educational material available.
+		**/
     isThereEducationalMaterial:function()
     {
+      //Check if the educationa material array has any elements
       return educationalMaterialArray.length>0;
     },
-    //Update the announcements
+      /**
+		*@ngdoc method
+		*@name updateEducationalMaterial
+		*@methodOf MUHCApp.service:EducationalMaterial
+    *@param {Array} edumaterial Array containing latest educational material to add or update existing array of materials.
+		*@description Update method for educational material
+		**/
     updateEducationalMaterial:function(edumaterial)
     {
       //Find and delete to be added later
@@ -117,17 +161,24 @@ myApp.service('EducationalMaterial',['$filter','LocalStorage','FileManagerServic
       addEducationalMaterial(edumaterial);
     },
     //Getter for the main array
+    /**
+		*@ngdoc method
+		*@name getEducationalMaterial
+		*@methodOf MUHCApp.service:EducationalMaterial
+    *@description Getter for the educational material
+		*@returns {Array} Returns array containing educational material
+		**/
     getEducationalMaterial:function()
     {
       return educationalMaterialArray;
     },
-    //Gets Last Announcement to display on main tab pages
-    getLastEducationalMaterial:function()
-    {
-      if(educationalMaterialArray.length==0) return null;
-      return educationalMaterialArray[0];
-    },
-    //Gets unread announcements
+      /**
+		*@ngdoc method
+		*@name getUnreadEducationalMaterials
+		*@methodOf MUHCApp.service:EducationalMaterial
+    *@description Filters the educationalMaterialArray by a ReadStatus of '0'.
+		*@returns {Array} Returns array containing unread educational material
+		**/
     getUnreadEducationalMaterials:function()
     {
       var array=[];
@@ -139,6 +190,13 @@ myApp.service('EducationalMaterial',['$filter','LocalStorage','FileManagerServic
       }
       return array;
     },
+    /**
+		*@ngdoc method
+		*@name getEducationaMaterialBySerNum
+		*@methodOf MUHCApp.service:EducationalMaterial
+    *@params {String} serNum EducationalMaterialSerNum
+		*@returns {Object} Returns educational material object matching that EducationalMaterialSerNum parameter
+		**/
     getEducationaMaterialBySerNum:function(serNum)
     {
       console.log(serNum);
@@ -150,6 +208,14 @@ myApp.service('EducationalMaterial',['$filter','LocalStorage','FileManagerServic
         }
       }
     },
+    /**
+		*@ngdoc method
+		*@name getEducationalMaterialName
+		*@methodOf MUHCApp.service:EducationalMaterial
+		*@param {String} serNum EducationalMaterialSerNum to be read
+		*@description Gets the Name_EN, and Name_FR for the notifications
+		*@returns {Object} Returns object containing only the names for a particular educational material, used by the {@link MUHCApp.service:Notifications Notifications Service} 
+		**/
     getEducationalMaterialName:function(serNum)
     {
       for (var i = 0; i < educationalMaterialArray.length; i++) {
@@ -160,7 +226,15 @@ myApp.service('EducationalMaterial',['$filter','LocalStorage','FileManagerServic
       }
     },
     //Reads announcement and sends request to backend
+    /**
+		*@ngdoc method
+		*@name readEducationalMaterial
+		*@methodOf MUHCApp.service:EducationalMaterial
+		*@param {String} serNum EducationalMaterialSerNum to be read
+		*@description Sets ReadStatus in educational material to 1, sends request to backend, and syncs with device storage
+		**/
     readEducationalMaterial:function(serNum)
+    
     {
       for (var i = 0; i < educationalMaterialArray.length; i++) {
         if(educationalMaterialArray[i].EducationalMaterialSerNum==serNum)
@@ -171,28 +245,55 @@ myApp.service('EducationalMaterial',['$filter','LocalStorage','FileManagerServic
         }
       }
     },
+    /**
+		*@ngdoc method
+		*@name readEducationalMaterial
+		*@methodOf MUHCApp.service:EducationalMaterial
+		*@param {Object} edumaterial EducationalMaterialSerNum
+		*@description Obtains the type for that particular educational material
+    *@returns {String} Returns string containing the appropiate type or link to open the educational material
+		**/
     getTypeEducationaMaterial:function(edumaterial)
     {
       return getTypeMaterial(edumaterial);
     },  
-    openEducationalMaterial:function(edumaterial)
+    /**
+		*@ngdoc method
+		*@name getEducationalMaterialUrl
+		*@methodOf MUHCApp.service:EducationalMaterial
+		*@description Returns educational material url to be used by the {@link MUHCApp.service:Notifications Notifications Service}.
+		*@returns {String} Returns Url for individual educational materials
+		**/
+    getEducationalMaterialUrl:function()
     {
 		  return {Url:'./views/education/individual-material.html'};
     },
+    /**
+		*@ngdoc method
+		*@name openEducationalMaterialDetails
+		*@methodOf MUHCApp.service:EducationalMaterial
+    *@param {Object} edumaterial Educational material to be opened
+    *@returns {Object} Return -1 if the material is to be opened by a cordova plugin, or the url the opening page if its to be opened and displayed by the app.
+		*@description Opens educational material in parameter.
+		**/
     openEducationalMaterialDetails:function(edumaterial)
     {
+      //Get type of material
       var type = getTypeMaterial(edumaterial);
       if (edumaterial.hasOwnProperty('TableContents'))
       {
+        //If its a booklet return url to redirect
         return {Url:'./views/education/education-booklet.html'};
       }else{
         if(type == 'url')
         {
+          //If its a url, set the language, then open the url in another page
           edumaterial = setLanguageEduMaterial(edumaterial);
           FileManagerService.openUrl(edumaterial.Url);
           return -1;
         }else if (type == 'pdf')
         {
+          //If its a pdf, the use the file manager service to open the material and return -1
           FileManagerService.openPDF(edumaterial.Url);
           return -1;
         }
@@ -202,11 +303,25 @@ myApp.service('EducationalMaterial',['$filter','LocalStorage','FileManagerServic
         }
       }
     },
+     /**
+		*@ngdoc method
+		*@name setLanguageEduationalMaterial
+		*@methodOf MUHCApp.service:EducationalMaterial
+		*@param {Array} array Array with educational material
+		*@description Translates the array parameter containing educational material to appropiate preferred language specified in {@link MUHCApp.service:UserPreferences UserPreferences}.
+		*@returns {Array} Returns array with translated values
+		**/
     setLanguageEduationalMaterial:function(array)
     {
       console.log('Inside language edumat');
       return setLanguageEduMaterial(array);
     },
+    /**
+		*@ngdoc method
+		*@name clearEducationalMaterial
+		*@methodOf MUHCApp.service:EducationalMaterial
+		*@description Clears the service of any saved state, function used by the {@link MUHCApp.controller:LogoutController LogoutController}
+		**/
     clearEducationalMaterial:function()
     {
       educationalMaterialArray=[];

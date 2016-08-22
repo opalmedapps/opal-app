@@ -6,6 +6,6 @@ angular.module('MUHCApp').directive( 'height-element', function() {
             scope.heightCalendar=oldHeight-newHeight;
          } );
         }
-    }
+    };
 
-} )
+} );

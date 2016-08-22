@@ -5,7 +5,6 @@ myApp.controller('InitScreenController',function($scope, $timeout, NavigatorPara
     //Firebase reference to check authentication
     var myDataRef = new Firebase(FirebaseService.getFirebaseUrl());
 
- 
   //Add the login translation
     $translatePartialLoader.addPart('login');
     //Check if device or browser
@@ -22,7 +21,7 @@ myApp.controller('InitScreenController',function($scope, $timeout, NavigatorPara
       console.log(lan);
     }).catch(function(error)
     {
-       
+       console.log(error);
     });
     console.log('Initializing language');
 
@@ -73,13 +72,7 @@ myApp.controller('InitScreenController',function($scope, $timeout, NavigatorPara
 
     $scope.goToUserView = function()
     {
-      if($scope.authenticated)
-      {
-        NavigatorParameters.setParameters('Resume');
-        $state.go('loading');
-      }else{
         initNavigator.pushPage('./views/login/login.html',{animation:'lift'});
-      } 
     };
 
    
@@ -99,50 +92,8 @@ myApp.controller('InitScreenController',function($scope, $timeout, NavigatorPara
     //   }
     // }
     
-    function authenticate(authData)
-    {
-      //Get Firebase authentication state
-      
-      $scope.authenticated = !!authData;
-      console.log($scope.authenticated );
-      //If authenticated update the user authentication state
-      if( $scope.authenticated)
-      {
-        var  authInfoLocalStorage=window.localStorage.getItem('UserAuthorizationInfo');
-        if(authInfoLocalStorage){
-            var authInfoObject=JSON.parse(authInfoLocalStorage);
-            UserAuthorizationInfo.setUserAuthData(authData.auth.uid,authInfoObject.Password , authData.expires,authData.token);
-            var authenticationToLocalStorage={
-                    UserName:authData.uid,
-                    Password: authInfoObject.Password ,
-                    Expires:authData.expires,
-                    Email:authData.password.email,
-                    Token:authData.token
-            };
-            window.localStorage.setItem('UserAuthorizationInfo', JSON.stringify(authenticationToLocalStorage));
-        }      
-      }
-      return $scope.authenticated;
-    }
-       //Listen to authentication state, if user get's unauthenticated log user out.
-    myDataRef.onAuth(function(authData){
 
-    console.log('dasdasdas',authData);
-    var  authInfoLocalStorage=window.localStorage.getItem('UserAuthorizationInfo');
-      if(authData)
-      {
-        authenticate(authData);
-      }else{
-        if($state.current.name=='Home')
-        {
-          console.log('here state');
-          $state.go('logOut');
-        }else if(authInfoLocalStorage)
-        {
-          LocalStorage.resetUserLocalStorage();
-        }
-      }
-  });
+   
    
 
 });

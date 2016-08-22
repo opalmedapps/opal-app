@@ -2,40 +2,55 @@
 var myApp=angular.module('MUHCApp');
 /**
 *@ngdoc service
-*@name MUHCApp.services:UserAuthorizationInfo
-*@description Contains all the authorization data for the user. Used in the {@link MUHCApp.services:UpdateUI UpdateUI}, {@link MUHCApp.controller:LogOutController LogOutController}, and {@link MUHCApp.services:UserMessages UserMessages}.
-*initially set up in the {@link MUHCApp.controller:LoginController LoginController} after user enters credentials.
+*@name MUHCApp.service:UserAuthorizationInfo
+*@description Contains all the authorization data for the user
 **/
 myApp.service('UserAuthorizationInfo', function () {
     /**
-    *@ngdoc property
-    *@name UserName
-    *@propertyOf MUHCApp.services:UserAuthorizationInfo
-    *@description Contains Firebase user id.
-    */
-     /**
-    *@ngdoc property
-    *@name Password
-    *@propertyOf MUHCApp.services:UserAuthorizationInfo
-    *@description Contains user password for encryption
-    */
-     /**
-    *@ngdoc property
-    *@name Expires
-    *@propertyOf MUHCApp.services:UserAuthorizationInfo
-    *@description Contains when the user authorization expires based on Firebase settings
-    */
+     *@ngdoc property
+    *@name  MUHCApp.service.#username
+    *@propertyOf MUHCApp.service:UserAuthorizationInfo
+    *@description Firebase Username property 
+    **/
     var username = '';
+    /**
+     *@ngdoc property
+    *@name  MUHCApp.service.#expires
+    *@propertyOf MUHCApp.service:UserAuthorizationInfo
+    *@description Firebase Username property 
+    **/
     var expires = '';
+    /**
+     *@ngdoc property
+    *@name  MUHCApp.service.#password
+    *@propertyOf MUHCApp.service:UserAuthorizationInfo
+    *@description Firebase session time expiration in milliseconds since epoch 
+    **/
     var password='';
+    /**
+     *@ngdoc property
+    *@name  MUHCApp.service.#token
+    *@propertyOf MUHCApp.service:UserAuthorizationInfo
+    *@description Hashed of password property
+    **/
     var token='';
+    /**
+     *@ngdoc property
+    *@name  MUHCApp.service.#identifier
+    *@propertyOf MUHCApp.service:UserAuthorizationInfo
+    *@description Device identifier property
+    */
     var identifier = '';
     return {
         /**
         *@ngdoc method
         *@name setUserAuthData
-        *@methodOf MUHCApp.services:UserAuthorizationInfo
-        *@description Sets all the user authorization.Called by the {@link MUHCApp.controller:LoginController LoginController} right after user enters credentials.
+        *@methodOf MUHCApp.service:UserAuthorizationInfo
+        *@param {String} user Username
+        *@param {String} pass Hashed of password
+        *@param {String} exp  Expires
+        *@param {String} tok  Authentication token
+        *@description Sets all the user authorization.
         */
         setUserAuthData: function (user, pass, exp, tok) {
             username= user;
@@ -44,26 +59,34 @@ myApp.service('UserAuthorizationInfo', function () {
             token=tok;
             console.log(username, expires, password, token);
         },
+        /**
+        *@ngdoc method
+        *@name setPassword
+        *@methodOf MUHCApp.service:UserAuthorizationInfo
+        *@param {String} pass Hashed of password
+        *@description Sets the user hashed password representation.
+        */
         setPassword:function(pass){
+            //Encode password
             pass=CryptoJS.SHA256(pass).toString();
             password=pass;
-            console.log(password);
-            window.localStorage.setItem('pass',password);
+            //Retrieve UserAuthorizationInfo
             var passString=window.localStorage.getItem('UserAuthorizationInfo');
-            var passObject=JSON.parse(passString);
-            if(passObject)
+            var passObject = {};
+            if(passString)
             {
+                 //Parse to convert to object
                 passObject=JSON.parse(passString);
                 passObject.Password=password;
+                //Save in storage
                 window.localStorage.setItem('UserAuthorizationInfo', JSON.stringify(passObject));
             }
            
         },
-          /**
-        }
+        /**
         *@ngdoc method
         *@name getUserAuthData
-        *@methodOf MUHCApp.services:UserAuthorizationInfo
+        *@methodOf MUHCApp.service:UserAuthorizationInfo
         *@returns {Object} Returns all the properties of the service as a single object.
         */
         getUserAuthData: function () {
@@ -77,12 +100,18 @@ myApp.service('UserAuthorizationInfo', function () {
         /**
         *@ngdoc method
         *@name getUserName
-        *@methodOf MUHCApp.services:UserAuthorizationInfo
-        *@returns {string} User Id in Firebase.
+        *@methodOf MUHCApp.service:UserAuthorizationInfo
+        *@returns {string} Returns Firebase username.
         */
         getUsername:function(){
             return username;
         },
+        /**
+        *@ngdoc method
+        *@name getUserName
+        *@methodOf MUHCApp.service:UserAuthorizationInfo
+        *@returns {string} Returns device identifier.
+        */
         getDeviceIdentifier:function()
         {
             var app = document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'https://' ) === -1;
@@ -96,8 +125,8 @@ myApp.service('UserAuthorizationInfo', function () {
         /**
         *@ngdoc method
         *@name getPassword
-        *@methodOf MUHCApp.services:UserAuthorizationInfo
-        *@returns {string} Password User Password in Firebase for Encryption.
+        *@methodOf MUHCApp.service:UserAuthorizationInfo
+        *@returns {string} Returns hashed of user password for encryption
         */
         getPassword:function(){
             return password;
@@ -105,16 +134,28 @@ myApp.service('UserAuthorizationInfo', function () {
         /**
         *@ngdoc method
         *@name getExpires
-        *@methodOf MUHCApp.services:UserAuthorizationInfo
-        *@returns {number} Date Milliseconds from 1970 of the expiration time for authorization.
+        *@methodOf MUHCApp.service:UserAuthorizationInfo
+        *@returns {number} Returns date in milliseconds
         */
         getExpires:function(){
             return expires;
         },
+        /**
+        *@ngdoc method
+        *@name getToken
+        *@methodOf MUHCApp.service:UserAuthorizationInfo
+        *@returns {string} Returns authentication token
+        */
         getToken:function()
         {
           return token;
         },
+        /**
+        *@ngdoc method
+        *@name clearUserAuthorizationInfo
+        *@methodOf MUHCApp.service:UserAuthorizationInfo
+        *@description Clears service
+        */
         clearUserAuthorizationInfo:function()
         {
              username = '';

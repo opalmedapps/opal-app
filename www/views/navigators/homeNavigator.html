@@ -1,5 +1,8 @@
-<ons-gesture-detector>
-  <div id="home-area" style="width: 100vw; height: 90vh;">
+<ons-gesture-detector ng-swipeleft="onGestureHome('Swipe Left')"
+                      ng-swiperight="onGestureHome('Swipe Right')"
+                      ng-swipedown="onGestureHome('Swipe Down')"
+                      ng-swipeup="onGestureHome('Swipe Up')"
+                      ng-hold="onGestureHome('Hold')"
+                      ng-doubletap="onGestureHome('Double Tap')">
     <ons-navigator var="homeNavigator" page="./views/home/home.html"></ons-navigator>
-  </div>
 </ons-gesture-detector>

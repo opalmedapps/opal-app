@@ -3,46 +3,25 @@
 //  Copyright (c) 2015 David Herrera. All rights reserved.
 //
 /**
- * @author MUHC Hospital, David Herrera, John Kildea
- * @copyright 2015 MUHC Hospital
+ * @author MUHC Hospital, David Herrera
+ * @copyright 2016 MUHC Hospital
  *
  */
+
 /**
  * @ngdoc overview
- * @name MUHCPatientApp
- * @description
- * A multiplatform application built using {@link https://cordova.apache.org Apache Cordova}. The project was  written using {@link https://angularjs.org/ AngularJS} framework , and {@link https://onsen.io/ OnsenUI} Framework. This project aims to aid patients in radiation oncology
- * at the Glen Hospital in Montreal, Quebec. The app features: Ability for patients to obtain their documents, such as their images, and test results. Look up of their Appointment calendar and details with a checkin for appointment capability, patient message system with their doctors, a treatment plan overview and progress,
-    educational material about the hospital and specific to their illness, maps of the hospitals.
-   Additionally the patient can make changes to their personal account, and request changes to appointments.
-   They will also be able to add their upcoming appointments to their native device calendar.
-   The main module for the project: {@link MUHCApp}.
+ * @name MUHCApp
+*@description <img src="img/Opal_Logo_Full_2.png" alt="MUHCLogo" /><br>
+A multiplatform application built using {@link https://cordova.apache.org Apache Cordova}. The main frameworks for the project are {@link https://angularjs.org/ AngularJS} framework , {@link https://onsen.io/ OnsenUI} Framework, and {@link https://cordova.apache.org Apache Cordova} This project aims to aid patients in radiation oncology
+ * at the Glen Hospital in Montreal, Quebec. This guide is the first version of the documentation for the Opal Hybrid Mobile app
+   Main module for the project: {@link MUHCApp}.
    The external dependecies for the project: {@link ProjectDependencies}.
- *
- *
- *
  **/
-/**
-*@ngdoc object
-*@name MUHCApp
-*@description
-*      Main module for the app, all the external angular dependencies of the application are loaded here.
-*      The routes for the first initial login, loading, forgot password, and home templates are also defined here.
-*@requires ProjectDependencies.lueggdirectives
-*@requires ProjectDependencies.ngSanitize
-*@requires ProjectDependencies.uiselect
-*@requires ProjectDependencies.uirouter
-*@requires ProjectDependencies.onsen
-*@requires ProjectDependencies.firebase
-*@requires ProjectDependencies.uibootstrap
-*@requires ProjectDependencies.app.filters
-*@requires ProjectDependencies.ngCordova
-**/
 
 /**
 *@ngdoc object
 *@name ProjectDependencies
-*@description All the AngularJS external dependencies for the application:{@link ProjectDependencies.#ngAnimate}
+*@description All the third party dependencies for the application dependencies for the application
 */
 
 /**
