@@ -1,6 +1,5 @@
 //
-//  Created by David Herrera on 2015-05-04.
-//  Copyright (c) 2015 David Herrera. All rights reserved.
+// Author: David Herrera on Summer 2016, Email:davidfherrerar@gmail.com
 //
 angular.module('MUHCApp').controller('LoadingController', ['$rootScope','$state', '$scope','UpdateUI', 'UserAuthorizationInfo','UserPreferences', '$q','Patient', 'Messages', '$timeout','LocalStorage','NavigatorParameters','RequestToServer',function ($rootScope,$state, $scope, UpdateUI, UserAuthorizationInfo, UserPreferences, $q, Patient, Messages,$timeout,LocalStorage,NavigatorParameters,RequestToServer){
 		modal.show();
@@ -33,7 +32,7 @@ angular.module('MUHCApp').controller('LoadingController', ['$rootScope','$state'
 					message: 'Problems with server, could not fetch data, try again later',
 					modifier: mod,
 					callback: function(idx) {
-						if(typeof Patient.getFirstName()=='undefined'||Patient.getFirstName()=='')
+						if(typeof Patient.getFirstName()=='undefined'||Patient.getFirstName()==='')
 						{
 							$state.go('logOut');
 						}else{

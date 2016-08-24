@@ -1,3 +1,6 @@
+//
+// Author David Herrera on Summer 2016, Email:davidfherrerar@gmail.com
+//
 //Defines the authorization parameters for the user serssion
 var myApp=angular.module('MUHCApp');
 /**

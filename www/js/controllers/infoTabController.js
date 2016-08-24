@@ -1,3 +1,6 @@
+//
+// Author: David Herrera on Summer 2016, Email:davidfherrerar@gmail.com
+//
 var myApp=angular.module('MUHCApp');
 myApp.controller('InfoTabController',['$scope','$timeout','$filter','$sce',function($scope,$timeout,$filter,$sce){
   var tab=tabbar.getActiveTabIndex();

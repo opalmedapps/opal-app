@@ -1,4 +1,9 @@
 'use strict';
+/*
+*Code by David Herrera May 20, 2015
+*Github: dherre3
+*Email:davidfherrerar@gmail.com
+*/
 /**
  * @ngdoc directive
  * @name bannersProjectApp.directive:newsBanner

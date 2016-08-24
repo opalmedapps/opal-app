@@ -1,3 +1,6 @@
+//
+// Author: David Herrera on Summer 2016, Email:davidfherrerar@gmail.com
+//
 myApp.controller('CharterController',function($scope, $timeout, NavigatorParameters, UserPreferences)
 {
     $scope.loading = true;

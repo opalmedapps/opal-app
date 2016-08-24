@@ -1,4 +1,6 @@
-
+//
+// Author David Herrera on Summer 2016, Email:davidfherrerar@gmail.com
+//
 //Defines the module for the app services.
 var myApp=angular.module('MUHCApp');
 //Factory service made to transport the firebase link as a dependency

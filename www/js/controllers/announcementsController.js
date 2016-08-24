@@ -1,3 +1,6 @@
+//
+// Author: David Herrera on Summer 2016, Email:davidfherrerar@gmail.com
+//
 var myApp=angular.module('MUHCApp');
 myApp.controller('AnnouncementsController',['$scope','$timeout','Announcements','UserPreferences','NavigatorParameters',function($scope,$timeout,Announcements,UserPreferences,NavigatorParameters){
   init();

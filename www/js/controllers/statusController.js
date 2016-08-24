@@ -1,3 +1,8 @@
+/*
+*Code by David Herrera May 20, 2015
+*Github: dherre3
+*Email:davidfherrerar@gmail.com
+*/
 var myApp=angular.module('MUHCApp');
 myApp.controller('StatusController',['$rootScope','$scope','$timeout', 'UserPlanWorkflow','$anchorScroll','$location','Appointments','NavigatorParameters', '$filter',function($rootScope,$scope,$timeout, UserPlanWorkflow,$anchorScroll,$location,Appointments,NavigatorParameters,$filter){
   //Grabbing navigation parameters for controller

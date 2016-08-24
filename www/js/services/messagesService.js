@@ -11,6 +11,9 @@ var myApp=angular.module('MUHCApp');
 *@description Service deals with patient/doctor messaging portal, parses Firebase object into the appropiate format
 *             and defines methods for sending messages back to Firebase.
 **/
+//
+// Author David Herrera on Summer 2016, Email:davidfherrerar@gmail.com
+//
 myApp.service('Messages', ['$filter', 'UserAuthorizationInfo', 'Patient', 'Doctors','$rootScope','LocalStorage', function($filter, UserAuthorizationInfo, Patient,Doctors,$rootScope,LocalStorage){
 /**
 *@ngdoc property

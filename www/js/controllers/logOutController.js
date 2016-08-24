@@ -1,8 +1,8 @@
-
-//
-//  Created by David Herrera on 2015-05-04.
-//  Copyright (c) 2015 David Herrera. All rights reserved.
-//
+/*
+*Code by David Herrera May 20, 2015
+*Github: dherre3
+*Email:davidfherrerar@gmail.com
+*/
 angular.module('MUHCApp').controller('logOutController',['FirebaseService','UserAuthorizationInfo', '$state','RequestToServer','LocalStorage', 'Documents','Diagnoses','Appointments','Patient','Doctors','TxTeamMessages','Questionnaires','Announcements','EducationalMaterial','Notifications','UserPreferences','UpdateUI',function(FirebaseService, UserAuthorizationInfo,$state,RequestToServer,LocalStorage,Documents,Diagnoses,Appointments,Patient,Doctors,TxTeamMessages,Questionnaires,Announcements,EducationalMaterial,Notifications,UserPreferences,UpdateUI){
 		RequestToServer.sendRequest('Logout');
 		LocalStorage.resetUserLocalStorage();

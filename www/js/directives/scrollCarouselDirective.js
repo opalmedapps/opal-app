@@ -1,5 +1,9 @@
 var app = angular.module('MUHCApp');
-
+/*
+*Code by David Herrera May 20, 2015
+*Github: dherre3
+*Email:davidfherrerar@gmail.com
+*/
 
 app.directive('scrollCarousel',function()
 {

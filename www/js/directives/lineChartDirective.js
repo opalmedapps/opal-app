@@ -1,3 +1,8 @@
+/*
+*Code by David Herrera May 20, 2015
+*Github: dherre3
+*Email:davidfherrerar@gmail.com
+*/
 angular.module('MUHCApp')
   .factory('d3', [function() {
     return d3;

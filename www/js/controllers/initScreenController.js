@@ -1,3 +1,6 @@
+//
+// Author: David Herrera on Summer 2016, Email:davidfherrerar@gmail.com
+//
 var myApp = angular.module('MUHCApp');
 
 myApp.controller('InitScreenController',function($scope, $timeout, NavigatorParameters,$translatePartialLoader, UserPreferences, $filter,FirebaseService, UserAuthorizationInfo,$state,LocalStorage)

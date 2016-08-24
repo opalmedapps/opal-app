@@ -1,9 +1,8 @@
-/**
- * @name rate-material
- * @description Directive is the components in charge of the 5 start rating system, takes an educationalMaterialControlSerNum as parameter.
- * 
- * 
- */
+/*
+*Code by David Herrera May 20, 2015
+*Github: dherre3
+*Email:davidfherrerar@gmail.com
+*/
 angular.module('MUHCApp')
 .directive('rateMaterial', function(Patient, RequestToServer) {
   return {

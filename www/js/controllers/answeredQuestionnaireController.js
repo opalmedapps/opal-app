@@ -1,3 +1,7 @@
+//
+//  Created by David Herrera on 2016-06-15.
+//  Modified Lee Dennis Summer 2016
+//
 var app1 = angular.module('MUHCApp');
 app1.controller('answeredQuestionnaireController', function($scope, Questionnaires, NavigatorParameters, Questionnaires, $filter) {
   var params = NavigatorParameters.getParameters();
