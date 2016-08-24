@@ -1,3 +1,6 @@
+//
+// Author David Herrera on Summer 2016, Email:davidfherrerar@gmail.com
+//
 var myApp=angular.module('MUHCApp');
 myApp.service('ResetPassword',function(RequestToServer, FirebaseService){
    var Ref=new Firebase(FirebaseService.getFirebaseUrl()+'requests');

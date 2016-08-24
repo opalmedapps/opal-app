@@ -1,6 +1,6 @@
 var myApp=angular.module('MUHCApp');
 myApp.service('MapLocation',function(){
-	var map={}
+	var map={};
 	return{
 		updateMapLocation:function(maplocation)
 		{

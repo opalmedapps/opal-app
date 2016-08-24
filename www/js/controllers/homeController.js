@@ -1,14 +1,57 @@
 //
-//  Created by David Herrera on 2015-05-04.
-//  Copyright (c) 2015 David Herrera. All rights reserved.
+// Author: David Herrera on Summer 2016, Email:davidfherrerar@gmail.com
 //
+/**
+ * @ngdoc controller
+ * @name MUHCApp.controller:HomeController
+ * @description
+ * # HomeController
+ * Controller is responsible for the main news and status page for the patients, the notifications will appear here at first, the checkin functionality will be available from here
+ * 
+ * @requires $state
+ * @requires $scope
+ * @requires $timeout
+ * @requires $rootScope
+ * @requires $anchorScroll
+ * @requires $location
+ * @requires MUHCApp.service:Appointments
+*@requires MUHCApp.service:CheckinService
+*@requires MUHCApp.service:UpdateUI
+*@requires MUHCApp.service:UserPreferences
+*@requires MUHCApp.service:Notifications
+*@requires MUHCApp.service:NavigatorParameters
+*@requires MUHCApp.service:NativeNotification
+*@requires MUHCApp.service:NewsBanner
+*@requires MUHCApp.service:DeviceIdentifiers
+ * @property {String} PatientId: Patient ID
+ * @property {String} FirstName: Patient first name
+ * @property {String} LastName: Patient last name
+ * @property {String} ProfileImage: Path for image, or base64 representation
+ * @property {array} roomDetails:array This holds the room details object. This will be a fresh object coming from service response and will be manipulated as per the view model.
+ * @property {boolean} submitted:boolean Holds the submitted boolean flag. Initialized with false. Changes to true when we store the details.
+ * @property {number} reservationId:number Gets the reservation id from the route params.
+ * @property {date} minDate:date Date filled in the minimum date vatiable
+ * @property {boolean} isRoomDetailsVisible:boolean Controls the boolean flag for visibility of room details. Initialized with false.
+ * @property {array} roomTypes:array Holds types of rooms from JSON.
+ * @property {array} expirymonth:array Months from Jan to Dec
+ * @property {array} expiryYear:array Years of a particular range
+ * @property {array} cardtype:array Type of cards
+ */
 var myApp = angular.module('MUHCApp');
-myApp.controller('HomeController', ['$state','Appointments', 'CheckinService','$scope','Patient','UpdateUI', '$timeout','$filter','UserPreferences','UserPlanWorkflow','$rootScope', 'tmhDynamicLocale','$translate','RequestToServer', '$location','Documents','Notifications','NavigatorParameters','NativeNotification',
-'NewsBanner','DeviceIdentifiers','$anchorScroll',function ($state,Appointments,CheckinService, $scope, Patient,UpdateUI,$timeout,$filter,UserPreferences,UserPlanWorkflow, $rootScope,tmhDynamicLocale, $translate,RequestToServer,$location,Documents,Notifications,NavigatorParameters,NativeNotification,NewsBanner,DeviceIdentifiers,$anchorScroll) {
+myApp.controller('HomeController', ['$state','Appointments', 'CheckinService','$scope','Patient','UpdateUI', '$timeout','$filter','UserPlanWorkflow','$rootScope', 'tmhDynamicLocale','$translate', '$location','Notifications','NavigatorParameters','NativeNotification',
+'NewsBanner','DeviceIdentifiers','$anchorScroll',function ($state,Appointments,CheckinService, $scope, Patient,UpdateUI,$timeout,$filter,UserPlanWorkflow, $rootScope,tmhDynamicLocale, $translate,$location,Notifications,NavigatorParameters,NativeNotification,NewsBanner,DeviceIdentifiers,$anchorScroll) {
       NewsBanner.setAlertOffline();
       //Check if device identifier has been sent, if not sent, send it to backend.
       var app = document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'https://' ) === -1;
+
+      //If app, check if the device identifiers have been sent
       if(app) DeviceIdentifiers.sendIdentifiersToServer();  
+      /**
+       * @ngdoc method
+       * @name $scope.homeDeviceBackButton
+       * @methodOf MUHCApp.controller:HomeController
+       * @description asdas
+       */
         $scope.homeDeviceBackButton=function()
         {
           console.log('device button pressed do nothing');
@@ -43,7 +86,6 @@ myApp.controller('HomeController', ['$state','Appointments', 'CheckinService','$
 
           //Basic patient information
           $scope.PatientId=Patient.getPatientId();
-          $scope.Email=Patient.getEmail();
           $scope.FirstName = Patient.getFirstName();
           $scope.LastName = Patient.getLastName();
           $scope.ProfileImage=Patient.getProfileImage();
@@ -240,14 +282,4 @@ myApp.controller('HomeController', ['$state','Appointments', 'CheckinService','$
         $scope.showCheckin = false;
       }
     }
-
-//Sets all the variables in the view.
-
 }]);
-
-
-myApp.controller('WelcomeHomeController',function($scope,Patient){
-    $scope.FirstName = Patient.getFirstName();
-    $scope.LastName = Patient.getLastName();
-    $scope.welcomeMessage="We are happy to please you with some quality service";
-});

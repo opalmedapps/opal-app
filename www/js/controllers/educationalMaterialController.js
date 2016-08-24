@@ -1,3 +1,6 @@
+//
+// Author: David Herrera on Summer 2016, Email:davidfherrerar@gmail.com
+//
 var myApp = angular.module('MUHCApp');
 myApp.controller('EducationalMaterialController', function (NavigatorParameters, $scope, $timeout,UpdateUI, RequestToServer, $cordovaFileOpener2, $cordovaDevice, $cordovaDatePicker, FileManagerService, EducationalMaterial, UserPreferences,$rootScope) {
 

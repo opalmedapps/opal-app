@@ -1,4 +1,6 @@
-
+//
+// Author David Herrera on Summer 2016, Email:davidfherrerar@gmail.com
+//
 var myApp = angular.module('MUHCApp');
 
 myApp.service('Questionnaires', ['RequestToServer','$filter', 'Patient','LocalStorage',function(RequestToServer,$filter,Patient,LocalStorage){

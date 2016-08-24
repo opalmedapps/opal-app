@@ -1,7 +1,8 @@
-//
-//  Created by David Herrera on 2015-05-04.
-//  Copyright (c) 2015 David Herrera. All rights reserved.
-//
+/*
+*Code by David Herrera May 20, 2015
+*Github: dherre3
+*Email:davidfherrerar@gmail.com
+*/
 /**
  * @author MUHC Hospital, David Herrera
  * @copyright 2016 MUHC Hospital

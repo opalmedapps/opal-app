@@ -14,6 +14,15 @@ NG_DOCS={
     },
     {
       "section": "api",
+      "id": "MUHCApp.controller:HomeController",
+      "shortName": "HomeController",
+      "type": "controller",
+      "moduleName": "MUHCApp",
+      "shortDescription": "HomeController",
+      "keywords": "$anchorscroll $location $rootscope $scope $state $timeout api appear asdas base64 boolean cards cardtype changes checkin class coming controller controls dec details expirymonth expiryyear false filled firstname flag fresh functionality holds homecontroller homedevicebackbutton image initialized isroomdetailsvisible jan json lastname main manipulated method mindate minimum model months muhcapp muhcapp-controller-homecontroller-page muhcapp-controller-page news notifications object params path patient patientid patients profileimage range representation reservation reservationid response responsible room roomdetails rooms roomtypes route service status store submitted true type types vatiable view visibility years"
+    },
+    {
+      "section": "api",
       "id": "MUHCApp.run",
       "shortName": "MUHCApp.run",
       "type": "service",
@@ -154,7 +163,7 @@ NG_DOCS={
       "type": "service",
       "moduleName": "MUHCApp",
       "shortDescription": "API services used to display message banner alerts for the app, e.g. internet connectivity banners, notification banners, etc. For more information on the plugin, Cordova Toast Plugin",
-      "keywords": "$cordovanetwork $filter $translatepartialloader alert alerts alerttypes api app banner banners based callback color colorf connected connectivity cordova display displays duration function https internet mappings message method milliseconds muhcapp nointernet notification notifications number numberofnotifications object online parameters plugin property returns service services setalertonline setcustomalert showalert shownotificationalert specific three toast type types"
+      "keywords": "$cordovanetwork $filter $translatepartialloader alert alerts alerttypes api app banner banners based callback color colorf connected connectivity cordova display displays duration function https internet mappings message method milliseconds muhcapp nointernet notification notifications number numberofnotifications object online parameters plugin property returns service services setalertonline showalert showcustombanner shownotificationalert specific three toast type types"
     },
     {
       "section": "api",
@@ -181,7 +190,7 @@ NG_DOCS={
       "type": "service",
       "moduleName": "MUHCApp",
       "shortDescription": "API service used to send requests to the server. Every request is encrypted and sent.",
-      "keywords": "$filter $q api awaits backend code data defined encrypted encryption encryptionkey error firebase hashed key method muhcapp object parameter parameters password processed property reference refrequests refusers rejects request requests resolves response returns send sendrequest sendrequestwithresponse sends server service type typeofrequest user"
+      "keywords": "$filter $q $state api awaits backend code data defined encrypted encryption encryptionkey error firebase hashed key method muhcapp object parameter parameters password processed property reference refrequests refusers rejects request requests resolves response returns send sendrequest sendrequestwithresponse sends server service type typeofrequest user"
     },
     {
       "section": "api",

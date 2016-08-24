@@ -1,8 +1,8 @@
-
-/**
-*
-*
-**/
+/*
+*Code by David Herrera May 20, 2015
+*Github: dherre3
+*Email:davidfherrerar@gmail.com
+*/
 var myApp=angular.module('MUHCApp');
 myApp.controller('MessagesController',function(UpdateUI, RequestToServer, $filter, $rootScope, UserAuthorizationInfo,$location,$anchorScroll,$timeout,$scope,Messages, Patient, Doctors){
   $rootScope.NumberOfNewMessages='';

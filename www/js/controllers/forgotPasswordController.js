@@ -1,3 +1,6 @@
+//
+// Author: David Herrera on Summer 2016, Email:davidfherrerar@gmail.com
+//
 var myApp=angular.module('MUHCApp');
 myApp.controller('ForgotPasswordController', ['$scope', 'FirebaseService','$state','$timeout', function ($scope,FirebaseService, $state,$timeout) {
     $scope.email="";

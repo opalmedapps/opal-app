@@ -1,5 +1,9 @@
 
-
+/*
+*Code by David Herrera May 20, 2015
+*Github: dherre3
+*Email:davidfherrerar@gmail.com
+*/
 var myApp = angular.module('MUHCApp');
 myApp.directive('phoneInput', function($filter, $browser) {
     return {

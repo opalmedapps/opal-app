@@ -1,3 +1,8 @@
+/*
+*Code by David Herrera May 20, 2015
+*Github: dherre3
+*Email:davidfherrerar@gmail.com
+*/
 var myApp=angular.module('MUHCApp');
 myApp.controller('TreatmentPlanController',['$rootScope','$scope','$timeout', 'UserPlanWorkflow','$anchorScroll','$location',function($rootScope,$scope,$timeout, UserPlanWorkflow,$anchorScroll,$location){
   initTreatmentPlanStatus();

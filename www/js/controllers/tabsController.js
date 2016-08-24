@@ -1,22 +1,12 @@
+/*
+*Code by David Herrera May 20, 2015
+*Github: dherre3
+*Email:davidfherrerar@gmail.com
+*/
 var myApp=angular.module('MUHCApp');
 myApp.controller('TabsController',['$scope','$timeout','$translate','$translatePartialLoader','$rootScope',function($scope,$timeout,$translate,$translatePartialLoader,$rootScope){
   //Enter code here!!
   $translatePartialLoader.addPart('all-views');
-  // document.addEventListener('ons-tabbar:init', tabbarInit);
-  // var navigators = [{name:'homeNavigator',homePage:'./views/home/home.html'},{name:'personalNavigator',homePage:'./views/personal/personal.html'},{name:'generalNavigator',homePage:'./views/general/general.html'},{name:'educationNavigator',homePage:'./views/education/education.html'},{name:'settingsNavigator',homePage:'./views/settings/settings.html'}];
-  // function tabbarInit(ev) {
-  //   tabbar.on('reactive',function(event)
-  //   {
-  //     var navigator = window[navigators[event.index].name];
-  //     var pages = navigator.getPages();
-  //     if(pages.length>1)navigator.resetToPage(navigators[event.index].homePage,{'animation':'fade'});
-  //   });
-  // }
-  // $scope.$on('$destroy',function()
-  // {
-  //   tabbar.off('reactive');
-  //   document.removeEventListener('ons-tabbar:init',tabbarInit);
-  // });
 
   $scope.onGestureHome = function(gesture) {
     console.log('line22',gesture);

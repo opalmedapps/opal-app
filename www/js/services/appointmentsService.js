@@ -1,3 +1,6 @@
+//
+// Author David Herrera on Summer 2016
+//
 var myApp=angular.module('MUHCApp');
 /**
 *@ngdoc service

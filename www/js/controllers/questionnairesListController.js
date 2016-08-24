@@ -1,3 +1,8 @@
+/*
+*Code by David Herrera May 20, 2015
+*Github: dherre3
+*Email:davidfherrerar@gmail.com
+*/
 var app1 = angular.module('MUHCApp');
 app1.controller('questionnairesListController', function($scope, $rootScope, Questionnaires, $location, NavigatorParameters, $timeout) {
 

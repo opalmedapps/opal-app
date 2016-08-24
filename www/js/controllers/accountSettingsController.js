@@ -1,3 +1,6 @@
+//
+// Author: David Herrera on Summer 2016, Email:davidfherrerar@gmail.com
+//
 var myApp = angular.module('MUHCApp');
 myApp.controller('accountSettingController', ['Patient', 'UserPreferences', '$scope', '$timeout', 'UpdateUI', 'RequestToServer', '$filter', 'NavigatorParameters', function(Patient, UserPreferences, $scope, $timeout, UpdateUI, RequestToServer, $filter, NavigatorParameters) {
 
