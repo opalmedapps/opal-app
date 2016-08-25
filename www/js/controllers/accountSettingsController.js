@@ -125,6 +125,7 @@ myApp.controller('accountSettingController', ['Patient', 'UserPreferences', '$sc
             objectToSend.FieldToChange = 'EnableSMS';
             objectToSend.NewValue = $scope.checkboxModel;
             UserPreferences.setEnableSMS(objectToSend.NewValue);
+            $scope.smsPreference = $scope.checkboxModel;
             RequestToServer.sendRequest('AccountChange', objectToSend);
         } else {
             $timeout(function() {

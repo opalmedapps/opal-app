@@ -123,10 +123,6 @@ myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$root
         console.log(temporary);
         window.localStorage.setItem('Email',$scope.email);
         if(temporary){
-            // ResetPassword.setUsername(authData.auth.uid);
-            // ResetPassword.setToken(authData.token);
-            // ResetPassword.setEmail($scope.email);
-            // ResetPassword.setTemporaryPassword($scope.password);
             UserAuthorizationInfo.setUserAuthData(authData.auth.uid,authData.token, $scope.password, authData.expires,authData.token);
             NavigatorParameters.setParameters({Username:authData.auth.uid,Token:authData.token,Email:$scope.email,TempPassword:$scope.password});
             initNavigator.pushPage('views/login/verify-ssn.html');

@@ -1,5 +1,7 @@
 //
-// Author David Herrera on Summer 2016
+// Author David Herrera on Summer 2016, 
+// Github:dherre3
+//Email:davidfherrerar@gmail.com
 //
 var myApp=angular.module('MUHCApp');
 /**
