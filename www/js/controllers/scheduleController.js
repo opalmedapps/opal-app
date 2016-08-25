@@ -739,7 +739,6 @@ myApp.controller('IndividualAppointmentController', ['NavigatorParameters','Nati
               $rootScope.showHomeScreenUpdate = true;
               ProgressBarStatus('#statusBarCheckin', 100,'#006400','#006400',200);
             }
-            console.log(checkInAppointment);
           }else{
               $scope.showLiveUpdate = false;
               $scope.showCheckin = false;

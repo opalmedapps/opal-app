@@ -32,18 +32,21 @@ myApp.factory('CheckinService', ['$q', 'RequestToServer', 'Appointments', '$time
     //Set up the language for this life updates!
     function setLanguageCheckin(value)
     {
+      console.log(value);
       var language = UserPreferences.getLanguage();
       $timeout(function(){
           if(language =='EN')
           {
-            $rootScope.precedingPatientsLabel = value.preceding.EN;
-            $rootScope.checkinEstimate = value.estimate.EN;
-            $rootScope.scheduleAhead = value.schedule.EN;
+            $rootScope.precedingPatientsLabel =value.preceding.actual.text.EN +'. '+value.preceding.scheduled.text.EN;
+            $rootScope.checkinEstimate = value.estimate_display.range;
+            $rootScope.scheduleAhead = value.schedule_detail.text.EN;
           }else{
-            $rootScope.precedingPatientsLabel = value.preceding.FR;
-            $rootScope.checkinEstimate = value.estimate.FR;
-            $rootScope.scheduleAhead = value.schedule.FR;
+            $rootScope.precedingPatientsLabel = value.actual.text.EN +','+ value.preceding.text.EN;
+            $rootScope.checkinEstimate = value.estimate_display.range;
+            $rootScope.scheduleAhead = value.schedule_detail.text.FR;
           }
+
+          console.log($rootScope);
       });
     }
     //To get the live estimates, send a CheckinUpdate request and listen to its response, send request every two minutes.
@@ -58,15 +61,12 @@ myApp.factory('CheckinService', ['$q', 'RequestToServer', 'Appointments', '$time
         function(response)
         {
           var data = response.Data;
-          if(data.response.type == 'close')
+          if(data.details.status == 'Close')
           {
             //Close request and do not send messages anymore.
             Appointments.setCheckinAppointmentAsClosed(nextAppointment.AppointmentSerNum);
             clearTimeout(checkinUpdatesInterval);
-          }else if(data.response.type == 'error')
-          {
-            //setErrorMessage(data);
-          }else{
+          }else if(data.details.status == 'Open'){
             setLanguageCheckin(data);
           }
         });
@@ -203,7 +203,7 @@ myApp.factory('CheckinService', ['$q', 'RequestToServer', 'Appointments', '$time
         //Request to Checkin sent
 
         RequestToServer.sendRequestWithResponse('Checkin', objectToSend).then(
-          function(response)
+          function(data)
           {
             //Listen for callback of this request, if success, successfuly checked in
             //and ask for live update of time estimates, if not the simply tell patient to

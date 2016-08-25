@@ -23,7 +23,6 @@ myApp.service('LocalStorage',['UserAuthorizationInfo', 'EncryptionService',funct
 			 storage = JSON.parse(storage);
 			 console.log(storage);
 			 EncryptionService.decryptData(storage);
-			 console.log('asdas');
 			 return storage;
 		}else{
 			user=window.localStorage.getItem('UserAuthorizationInfo');
@@ -49,6 +48,11 @@ myApp.service('LocalStorage',['UserAuthorizationInfo', 'EncryptionService',funct
 			//Make copy of data
 			temp = angular.copy(data);
 
+			//Convert into string
+			temp = JSON.stringify(temp);
+
+			//Parse 
+			temp = JSON.parse(temp);
 			//Encrypt data
 			temp = EncryptionService.encryptData(temp);
 
