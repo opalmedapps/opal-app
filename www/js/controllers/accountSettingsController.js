@@ -280,7 +280,7 @@ myApp.controller('ChangingSettingController', function($filter, $rootScope, Fire
 
     //Change password function
     function changePassword() {
-        var ref = new Firebase(FirebaseService.getFirebaseUrl());
+        var ref = firebase.database().ref('dev2/');
         ref.changePassword({
             email: Patient.getEmail(),
             oldPassword: $scope.oldValue,
@@ -329,7 +329,7 @@ myApp.controller('ChangingSettingController', function($filter, $rootScope, Fire
 
     //Change email function
     function changeEmail() {
-        var ref = new Firebase(FirebaseService.getFirebaseUrl());
+        var ref = firebase.database().ref('dev2/');
 
         ref.changeEmail({
             oldEmail: Patient.getEmail(),

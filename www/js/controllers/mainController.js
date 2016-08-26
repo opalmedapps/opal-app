@@ -7,9 +7,9 @@
 angular.module('MUHCApp').controller('MainController', ["$state",'$timeout', '$rootScope','FirebaseService','NativeNotification','DeviceIdentifiers','$translatePartialLoader','NewsBanner', "UpdateUI","Patient","LocalStorage",function ($state,$timeout,$rootScope,FirebaseService,NativeNotification,DeviceIdentifiers,$translatePartialLoader,NewsBanner,UpdateUI,Patient,LocalStorage) {
    
 
- var myDataRef = new Firebase(FirebaseService.getFirebaseUrl());
+ //var myDataRef = new Firebase(FirebaseService.getFirebaseUrl());
     //Listen to authentication state, if user get's unauthenticated log user out
-myDataRef.onAuth(function(authData){
+    firebase.auth().onAuthStateChanged(function(authData){
     var  authInfoLocalStorage=window.localStorage.getItem('UserAuthorizationInfo');
     if(!authData)
     {
@@ -25,7 +25,7 @@ myDataRef.onAuth(function(authData){
 });
 //Ask for an update every 2 minutes
 setInterval(function()
-{   
+{
     backbroundRefresh();
 },120000);
 
@@ -56,7 +56,7 @@ function setupInactivityChecks() {
 setupInactivityChecks();
 
 function startTimer() {
-    
+
     // wait 2 seconds before calling goInactive
     timeoutID = window.setTimeout(goInactive, 300000);
 }
@@ -73,13 +73,13 @@ function goInactive() {
     resetTimer();
     if($state.current.name=='Home')
     {
-        
+
         $state.go('init');
         //window.localStorage.removeItem('OpalAdminPanelPatient');
         //window.localStorage.removeItem('OpalAdminPanelUser');
         console.log('Going inactive');
     }
-    
+
     //location.reload();
 }
 
@@ -87,7 +87,7 @@ function goActive() {
     // do something
     startTimer();
 }
-    
+
     $translatePartialLoader.addPart('top-view');
     //$state.transitionTo('logIn');
     var app = document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'https://' ) === -1;
@@ -150,7 +150,7 @@ function goActive() {
       });
       window.addEventListener('offline', function(){
         console.log('offline');
-        $rootScope.alertBanner = 'nointernet';   
+        $rootScope.alertBanner = 'nointernet';
       });
     }
 

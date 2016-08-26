@@ -3,7 +3,7 @@
 //
 var myApp=angular.module('MUHCApp');
 myApp.service('ResetPassword',function(RequestToServer, FirebaseService){
-   var Ref=new Firebase(FirebaseService.getFirebaseUrl()+'requests');
+   var Ref= firebase.database().ref('dev2/requests');
   return{
     setTemporaryPassword:function(temp)
     {
