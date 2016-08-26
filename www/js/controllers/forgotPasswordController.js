@@ -14,7 +14,7 @@ myApp.controller('ForgotPasswordController', ['$scope', 'FirebaseService','$stat
       }
     });
     $scope.submitPasswordReset = function (email) {
-        var ref = new Firebase(FirebaseService.getFirebaseUrl());
+        var ref = firebase.database().ref('dev2/');
         console.log(email);
         try{
           ref.resetPassword({

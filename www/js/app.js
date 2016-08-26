@@ -163,6 +163,17 @@ function($compileProvider)
 myApp.config(function ($translateProvider) {
     $translateProvider.useMissingTranslationHandlerLog();
 });
+
+myApp.config(function () {
+    // Initialize Firebase
+    var config = {
+        apiKey: "AIzaSyCxV6VuVWtKg5wkeReqzQNfRULwkvVXkos",
+        authDomain: "brilliant-inferno-7679.firebaseapp.com",
+        databaseURL: "https://brilliant-inferno-7679.firebaseio.com",
+    };
+    firebase.initializeApp(config);
+});
+
 /**
 *@ngdoc service
 *@name MUHCApp.run

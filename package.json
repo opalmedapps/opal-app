@@ -50,5 +50,9 @@
     "karma-spec-reporter": "0.0.26",
     "marked": "^0.3.6",
     "phantomjs-prebuilt": "^2.1.12"
+  },
+  "dependencies": {
+    "angularfire": "^2.0.2",
+    "firebase": "^3.3.0"
   }
 }

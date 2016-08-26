@@ -45,8 +45,8 @@ myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$root
     $scope.submit(email, password);
   }
 
-  var myDataRef = new Firebase(FirebaseService.getFirebaseUrl());
-
+  //var myDataRef = firebase.database().ref('dev2/');
+    var myAuth = firebase.auth();
 
 
   $scope.submit = function (email,password) {
@@ -90,35 +90,39 @@ myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$root
 
             }else{
                //Otherwise even if they are logged out, try to authenticate them.
-              myDataRef.authWithPassword({
+              /*myDataRef.signIn({
                 email: email,
                 password: password
-              }, authHandler);
+              }, authHandler);*/
+                myAuth.signInWithEmailAndPassword(email,password).then(authHandler).catch(handleError);
             }
            
           }
         }else{
           //Show appropiate error
-           myDataRef.authWithPassword({
+           /*myDataRef.authWithPassword({
               email: email,
               password: password
-            }, authHandler);
+            }, authHandler);*/
+            myAuth.signInWithEmailAndPassword(email,password).then(authHandler).catch(handleError);
         }
       //If not authenticated, simply try to authenticate
       }else{
-        myDataRef.authWithPassword({
+        /*myDataRef.authWithPassword({
           email: email,
           password: password
-        }, authHandler);
+        }, authHandler);*/
+          myAuth.signInWithEmailAndPassword(email,password).then(authHandler).catch(handleError);
       }
       
     }
   };
   //Handles authentication
-  function authHandler(error, authData) {
-    if (error){
+  function authHandler(/*error, */authData) {
+    /*if (error){
        handleError(error);
-    }else {
+    }else {*/
+        console.log('In Auth Handler')
         var temporary=authData.password.isTemporaryPassword;
         console.log(temporary);
         window.localStorage.setItem('Email',$scope.email);
@@ -147,7 +151,7 @@ myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$root
          
         }
 
-    }
+    /*}*/
   } 
 
   //Handles login error's;
@@ -155,6 +159,7 @@ myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$root
   function handleError(error)
   {
     $scope.alert.type='danger';
+      console.log(error);
     switch (error.code) {
       case "INVALID_EMAIL":
         console.log("The specified user account email is invalid.");
