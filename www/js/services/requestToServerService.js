@@ -23,6 +23,7 @@ myApp.service('RequestToServer',['$filter','$state','NewsBanner','UserAuthorizat
     *@description Firebase reference
     **/
     var Ref= firebase.database().ref('dev2/');
+    console.log("Ref is " + Ref);
     /**
     *@ngdoc property
     *@name  MUHCApp.service.#refRequests
@@ -53,9 +54,9 @@ myApp.service('RequestToServer',['$filter','$state','NewsBanner','UserAuthorizat
           requestParameters = EncryptionService.encryptData(parameters);
         }
          //Push the request to firebase
-         console.log({ 'Request' : requestType,'DeviceId':(app)?device.uuid:'browser','Token':UserAuthorizationInfo.getToken(),  'UserID': UserAuthorizationInfo.getUsername(), 'Parameters':requestParameters,'Timestamp':Firebase.ServerValue.TIMESTAMP});
-        var pushID =  refRequests.push({ 'Request' : requestType,'DeviceId':(app)?device.uuid:'browser','Token':UserAuthorizationInfo.getToken(),  'UserID': UserAuthorizationInfo.getUsername(), 'Parameters':requestParameters,'Timestamp':Firebase.ServerValue.TIMESTAMP});
-        return pushID.key();
+         console.log({ 'Request' : requestType,'DeviceId':(app)?device.uuid:'browser','Token':UserAuthorizationInfo.getToken(),  'UserID': UserAuthorizationInfo.getUsername(), 'Parameters':requestParameters,'Timestamp':firebase.database.ServerValue.TIMESTAMP});
+        var pushID =  refRequests.push({ 'Request' : requestType,'DeviceId':(app)?device.uuid:'browser','Token':UserAuthorizationInfo.getToken(),  'UserID': UserAuthorizationInfo.getUsername(), 'Parameters':requestParameters,'Timestamp':firebase.database.ServerValue.TIMESTAMP});
+        return pushID.key;
     }
 
     return{

@@ -13,7 +13,7 @@ var myApp=angular.module('MUHCApp');
 **/
 myApp.factory("FirebaseService", ['$firebaseAuth','$firebaseObject','UserAuthorizationInfo',
   function ($firebaseAuth,UserAuthorizationInfo) {
-    //var firebaseUrl="https://brilliant-inferno-7679.firebaseio.com/dev2/";
+    var firebaseUrl="https://brilliant-inferno-7679.firebaseio.com/dev2/";
     //var ref = new Firebase(firebaseUrl);
     var ref = firebase.database().ref('dev2/');
     return {
@@ -36,7 +36,7 @@ myApp.factory("FirebaseService", ['$firebaseAuth','$firebaseObject','UserAuthori
 		**/
       getAuthenticationCredentials:function()
       {
-        return $firebaseAuth().$getAuth();
+        return $firebaseAuth();
       },
        /**
 		*@ngdoc method

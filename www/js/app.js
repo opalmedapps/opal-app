@@ -111,7 +111,7 @@ var myApp = angular.module('MUHCApp', ['tmh.dynamicLocale','pascalprecht.transla
       // Auth refers to our $firebaseAuth wrapper in the example above
       "currentAuth": ["FirebaseService", function(FirebaseService) {
         // $waitForAuth returns a promise so the resolve waits for it to complete
-        return FirebaseService.getAuthentication().$requireAuth();
+        return FirebaseService.getAuthentication().$requireSignIn();
       }]
     }
     })
@@ -124,7 +124,7 @@ var myApp = angular.module('MUHCApp', ['tmh.dynamicLocale','pascalprecht.transla
       // Auth refers to our $firebaseAuth wrapper in the example above
       "currentAuth": ["FirebaseService", function(FirebaseService) {
         // $waitForAuth returns a promise so the resolve waits for it to complete
-        return FirebaseService.getAuthentication().$requireAuth();
+        return FirebaseService.getAuthentication().$requireSignIn();
       }]
     }
 
@@ -138,7 +138,7 @@ var myApp = angular.module('MUHCApp', ['tmh.dynamicLocale','pascalprecht.transla
       // Auth refers to our $firebaseAuth wrapper in the example above
       "currentAuth": ["FirebaseService", function(FirebaseService) {
         // $waitForAuth returns a promise so the resolve waits for it to complete
-        return FirebaseService.getAuthentication().$requireAuth();
+        return FirebaseService.getAuthentication().$requireSignIn();
       }]
     }
   });

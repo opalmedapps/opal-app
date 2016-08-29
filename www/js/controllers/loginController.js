@@ -6,11 +6,11 @@
 var myApp=angular.module('MUHCApp');
 
 //Login controller
-myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$rootScope', '$state', 'UserAuthorizationInfo', 'RequestToServer', 'FirebaseService','LocalStorage','$filter','DeviceIdentifiers','UserPreferences','NavigatorParameters','Patient','NewsBanner',function LoginController(ResetPassword,$scope,$timeout, $rootScope, $state, UserAuthorizationInfo,RequestToServer,FirebaseService,LocalStorage,$filter,DeviceIdentifiers,UserPreferences,NavigatorParameters,Patient, NewsBanner) {
-  
+myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$rootScope', '$state', 'UserAuthorizationInfo', 'RequestToServer', 'FirebaseService','LocalStorage','$filter','DeviceIdentifiers','UserPreferences','NavigatorParameters','Patient','NewsBanner', '$firebaseAuth',function LoginController(ResetPassword,$scope,$timeout, $rootScope, $state, UserAuthorizationInfo,RequestToServer,FirebaseService,LocalStorage,$filter,DeviceIdentifiers,UserPreferences,NavigatorParameters,Patient, NewsBanner,$firebaseAuth) {
+
   //Check if device or browser
     var app = document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'https://' ) === -1;
-   
+
   //Watch email and password for error cleaning
   $scope.$watchGroup(['email','password'],function()
   {
@@ -31,7 +31,7 @@ myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$root
   var patientFirstName = Patient.getFirstName();
   //Locked out alert
   if(typeof patientFirstName !=='undefined'&&patientFirstName) NewsBanner.showCustomBanner($filter('translate')('LOCKEDOUT'),'black', null, 2000);
-  
+
   //demoSignIn();
   //Demo automatic sign in
     //demoSignIn();
@@ -46,7 +46,7 @@ myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$root
   }
 
   //var myDataRef = firebase.database().ref('dev2/');
-    var myAuth = firebase.auth();
+    var myAuth = $firebaseAuth();
 
 
   $scope.submit = function (email,password) {
@@ -84,7 +84,7 @@ myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$root
             console.log(auth);
             if(app&&authenticate(auth)&&LocalStorage.isUserDataDefined())
             {
-             console.log('In there'); 
+             console.log('In there');
               NavigatorParameters.setParameters('Resume');
               $state.go('loading');
 
@@ -94,9 +94,9 @@ myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$root
                 email: email,
                 password: password
               }, authHandler);*/
-                myAuth.signInWithEmailAndPassword(email,password).then(authHandler).catch(handleError);
+                myAuth.$signInWithEmailAndPassword(email,password).then(authHandler).catch(handleError);
             }
-           
+
           }
         }else{
           //Show appropiate error
@@ -104,7 +104,7 @@ myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$root
               email: email,
               password: password
             }, authHandler);*/
-            myAuth.signInWithEmailAndPassword(email,password).then(authHandler).catch(handleError);
+            myAuth.$signInWithEmailAndPassword(email,password).then(authHandler).catch(handleError);
         }
       //If not authenticated, simply try to authenticate
       }else{
@@ -112,18 +112,19 @@ myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$root
           email: email,
           password: password
         }, authHandler);*/
-          myAuth.signInWithEmailAndPassword(email,password).then(authHandler).catch(handleError);
+          myAuth.$signInWithEmailAndPassword(email,password).then(authHandler).catch(handleError);
       }
-      
+
     }
   };
   //Handles authentication
-  function authHandler(/*error, */authData) {
+  function authHandler(/*error, */firebaseUser) {
     /*if (error){
        handleError(error);
     }else {*/
         console.log('In Auth Handler')
-        var temporary=authData.password.isTemporaryPassword;
+        // TODO temporary false fix this
+        var temporary= false; //firebaseUser.password.isTemporaryPassword;
         console.log(temporary);
         window.localStorage.setItem('Email',$scope.email);
         if(temporary){
@@ -131,28 +132,28 @@ myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$root
             NavigatorParameters.setParameters({Username:authData.auth.uid,Token:authData.token,Email:$scope.email,TempPassword:$scope.password});
             initNavigator.pushPage('views/login/verify-ssn.html');
         }else{
-             UserAuthorizationInfo.setUserAuthData(authData.auth.uid, CryptoJS.SHA256($scope.password).toString(), authData.expires,authData.token);
+             UserAuthorizationInfo.setUserAuthData(firebaseUser.uid, CryptoJS.SHA256($scope.password).toString(), myAuth.$getAuth().expires,firebaseUser.getToken());
             //Setting The User Object for global Application Use
             console.log($scope.email);
             var authenticationToLocalStorage={
-                UserName:authData.uid,
+                UserName:firebaseUser.uid,
                 Password: CryptoJS.SHA256($scope.password).toString(),
-                Expires:authData.expires,
+                Expires:myAuth.$getAuth().expires,
                 Email:$scope.email,
-                Token:authData.token
+                Token:firebaseUser.token
             };
             $rootScope.refresh=true;
             window.localStorage.setItem('UserAuthorizationInfo', JSON.stringify(authenticationToLocalStorage));
             console.log(UserAuthorizationInfo.getUserAuthData());
-            console.log("Authenticated successfully with payload:", authData);
+            console.log("Authenticated successfully with payload:", firebaseUser);
             NavigatorParameters.setParameters('Login');
             $state.go('loading');
-          
-         
+
+
         }
 
     /*}*/
-  } 
+  }
 
   //Handles login error's;
 
@@ -161,18 +162,18 @@ myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$root
     $scope.alert.type='danger';
       console.log(error);
     switch (error.code) {
-      case "INVALID_EMAIL":
+      case "auth/invalid-email":
         console.log("The specified user account email is invalid.");
         $timeout(function(){
           $scope.alert.content="INVALID_EMAIL";
         });
         break;
-      case "INVALID_PASSWORD":
+      case "auth/wrong-password":
       $timeout(function(){
         $scope.alert.content="INVALID_PASSWORD";
       });
         break;
-      case "INVALID_USER":
+      case "auth/user-not-found":
         $timeout(function(){
           $scope.alert.content="INVALID_USER";
         });
@@ -193,11 +194,11 @@ myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$root
         });
     }
   }
-      function authenticate(authData)
+      function authenticate(firebaseUser)
     {
 
       //Get Firebase authentication state
-      $scope.authenticated = !!authData;
+      $scope.authenticated = !!firebaseUser;
       console.log($scope.authenticated );
       //If authenticated update the user authentication state
       if( $scope.authenticated)
@@ -205,18 +206,18 @@ myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$root
         var  authInfoLocalStorage=window.localStorage.getItem('UserAuthorizationInfo');
         if(authInfoLocalStorage){
             var authInfoObject=JSON.parse(authInfoLocalStorage);
-            UserAuthorizationInfo.setUserAuthData(authData.auth.uid,authInfoObject.Password , authData.expires,authData.token);
+            UserAuthorizationInfo.setUserAuthData(firebaseUser.uid, authInfoObject.Password , myAuth.$getAuth().expires,firebaseUser.token);
             var authenticationToLocalStorage={
-                    UserName:authData.uid,
+                    UserName:firebaseUser.uid,
                     Password: authInfoObject.Password ,
-                    Expires:authData.expires,
-                    Email:authData.password.email,
-                    Token:authData.token
+                    Expires:myAuth.$getAuth().expires,
+                    Email:firebaseUser.email,
+                    Token:firebaseUser.token
             };
             window.localStorage.setItem('UserAuthorizationInfo', JSON.stringify(authenticationToLocalStorage));
         }else{
           return false;
-        }      
+        }
       }
       return $scope.authenticated;
     }

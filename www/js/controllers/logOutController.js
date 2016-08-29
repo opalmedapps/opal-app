@@ -19,6 +19,6 @@ angular.module('MUHCApp').controller('logOutController',['FirebaseService','User
 		UserPreferences.clearUserPreferences();
 		UserAuthorizationInfo.clearUserAuthorizationInfo();	
 		UpdateUI.clearUpdateUI();	
-		FirebaseService.getAuthentication().$unauth();
+		FirebaseService.getAuthentication().$signOut();
 		$state.go('init');
 }]);
