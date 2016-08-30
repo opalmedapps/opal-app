@@ -54,6 +54,7 @@ myApp.service('Documents',['UserPreferences', 'UserAuthorizationInfo','$q', '$fi
 	}
 	function addDocumentsToService(documents)
 	{
+		console.log(documents);
 		if(!documents) return;
 		for (var i = 0; i < documents.length; i++) {
 			documents[i].DateAdded = $filter('formatDate')(documents[i].DateAdded);

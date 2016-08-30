@@ -7,7 +7,7 @@
     </div>
     <div class="center">Messages</div>
     <div class="right" ng-show="searchingMask">
-      <ons-toolbar-button ng-click="closeSearchMask()">Cancel</div>
+      <ons-toolbar-button ng-click="closeSearchMask()">Cancel</ons-toolbar-button></div>
   </ons-toolbar>
   <ons-pull-hook ng-hide="searchingMask" ng-action="load($done)" var="loader">
     <span ng-switch="loader.getCurrentState()">
@@ -159,7 +159,7 @@
               <div class="col-xs-1">
                 <span class=" btn btn-default btn-file">
                   <ons-icon icon="ion-paperclip"></ons-icon>
-                  <input type="file" id="browseBtn" accept="image/*" / fileread="upload.Document">
+                  <input type="file" id="browseBtn" accept="image/*" fileread="upload.Document">
                   <br>
                 </span>
                 <div ng-show="showAttachment">
