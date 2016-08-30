@@ -140,7 +140,7 @@ myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$root
                 Password: CryptoJS.SHA256($scope.password).toString(),
                 Expires:myAuth.$getAuth().expires,
                 Email:$scope.email,
-                Token:firebaseUser.token
+                Token:firebaseUser.getToken()
             };
             $rootScope.refresh=true;
             window.localStorage.setItem('UserAuthorizationInfo', JSON.stringify(authenticationToLocalStorage));
@@ -206,13 +206,13 @@ myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$root
         var  authInfoLocalStorage=window.localStorage.getItem('UserAuthorizationInfo');
         if(authInfoLocalStorage){
             var authInfoObject=JSON.parse(authInfoLocalStorage);
-            UserAuthorizationInfo.setUserAuthData(firebaseUser.uid, authInfoObject.Password , myAuth.$getAuth().expires,firebaseUser.token);
+            UserAuthorizationInfo.setUserAuthData(firebaseUser.uid, authInfoObject.Password , myAuth.$getAuth().expires,firebaseUser.getToken());
             var authenticationToLocalStorage={
                     UserName:firebaseUser.uid,
                     Password: authInfoObject.Password ,
                     Expires:myAuth.$getAuth().expires,
                     Email:firebaseUser.email,
-                    Token:firebaseUser.token
+                    Token:firebaseUser.getToken()
             };
             window.localStorage.setItem('UserAuthorizationInfo', JSON.stringify(authenticationToLocalStorage));
         }else{
