@@ -1,5 +1,3 @@
-
-  
 describe('Documents Service for Opal',function()
 { 
   var Documents;

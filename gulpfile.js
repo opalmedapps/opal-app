@@ -9,9 +9,11 @@ var cleanCSS = require('gulp-clean-css');
 var karma = require('gulp-karma');
 var htmlmin = require('gulp-htmlmin');
 var importCss = require('gulp-import-css');
-var bytediff = require('gulp-bytediff');
+//var bytediff = require('gulp-bytediff');
 var imagemin = require('gulp-imagemin');
 var cache = require('gulp-cache');
+var size = require('gulp-size');
+var notify = require('gulp-notify');
 //Set the cordova folder path here
 var cordovaFolderPath = '/Users/davidherrera/Documents/Projects/muhc/www';
 //Linting applied to files for better format
@@ -22,21 +24,17 @@ gulp.task('lint', function() {
 });
 gulp.task('minify-images', function(){
   return gulp.src('www/img/*.+(png|jpg|jpeg|gif|svg)')
-  .pipe(bytediff.start())
   // Caching images that ran through imagemin
   .pipe(cache(imagemin({
       interlaced: true
     })))
-  .pipe(bytediff.stop(bytediffFormatter))
   .pipe(gulp.dest(cordovaFolderPath+'/img'));
 });
 //Minifying app css task
 gulp.task('minify-css', function() {
   return gulp.src('www/css/*.css')
     .pipe(concat('app.min.css'))
-    .pipe(bytediff.start())
     .pipe(cleanCSS({compatibility: 'ie8'}))
-    .pipe(bytediff.stop(bytediffFormatter))
     .pipe(gulp.dest(cordovaFolderPath+'/css'));
 });
 
@@ -55,7 +53,7 @@ gulp.task('copyToCordovaFolder',function()
 //Minifies all the app code, concatanates and adds to cordova folder
 gulp.task('minify-js',function()
 {
-    gulp.src('./www/js/**/*').pipe(concat('app.min.js')).pipe(bytediff.start()).pipe(ngAnnotate()).pipe(uglify()).pipe(bytediff.stop(bytediffFormatter)).pipe(gulp.dest(cordovaFolderPath+'/js'));
+    gulp.src('./www/js/**/*').pipe(concat('app.min.js')).pipe(ngAnnotate()).pipe(uglify()).pipe(gulp.dest(cordovaFolderPath+'/js'));
 });
 
 //Minifies all vendor files, could be improved by writing a proper bower.json file for the project
@@ -86,7 +84,7 @@ gulp.task('minify-vendor-js',function()
   'www/lib/bower_components/angular-tek-progress-bar/dist/tek.progress-bar.js',
    'www/lib/js/scrollglue/scrollglue.js',
   'www/lib/bower_components/angularfire/dist/angularfire.js',
-  'www/lib/bower_components/angular-mocks/angular-mocks.js']).pipe(concat('vendorjs.min.js')).pipe(bytediff.start()).pipe(uglify()).pipe(bytediff.stop(bytediffFormatter)).pipe(gulp.dest(cordovaFolderPath+'/lib'));
+  'www/lib/bower_components/angular-mocks/angular-mocks.js']).pipe(concat('vendorjs.min.js')).pipe(uglify()).pipe(gulp.dest(cordovaFolderPath+'/lib'));
 });
 
 // //Does not work, problems with import statement
@@ -172,9 +170,27 @@ gulp.task('copy-non-minifiable-content',function()
     return gulp.src(['www/sounds/**/*','www/Languages/**/*'],{base:'www'}).pipe(gulp.dest(cordovaFolderPath));
 });
 gulp.task('default',['watch']);
+gulp.task('size-prebuild', function() {
+    var s = size();
+    return gulp.src('www/**/*')
+        .pipe(s)
+        .pipe(notify({
+            onLast: true,
+            message:function(){ console.log("Total size pre-built: " + s.prettySize);}
+        }));
+});
+gulp.task('size-postbuild', function() {
+    var s = size();
+    return gulp.src(cordovaFolderPath+'/**/*')
+        .pipe(s)
+        .pipe(notify({
+            onLast: true,
+            message:function(){ console.log("Total size post-built: " + s.prettySize);}
+        }));
+});
 
 //Build and transfer into cordova project anytime there is a change
-gulp.task('build',['minify-js','minify-css','minify-vendor-js','minify-html','minify-images','copy-non-minifiable-content','copy-vendor-css']);
+gulp.task('build',['minify-js','minify-css','minify-vendor-js','minify-html','minify-images','copy-non-minifiable-content','copy-vendor-css','size-prebuild','size-postbuild']);
 
 function bytediffFormatter(data) {
 	var formatPercent = function(num, precision) {
