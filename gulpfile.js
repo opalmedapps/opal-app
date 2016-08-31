@@ -15,14 +15,173 @@ var cache = require('gulp-cache');
 var size = require('gulp-size');
 var notify = require('gulp-notify');
 var changed = require('gulp-changed');
+
+
 //Set the cordova folder path here
 var cordovaFolderPath = '/Users/davidherrera/Documents/Projects/muhc/www';
-//Linting applied to files for better format
+
+/**
+ * 
+ * Cordova project management for development
+ */
+
+//Default task, watches your src and copies changed files to cordova project folder
+gulp.task('default',['watch-src']);
+
+gulp.task('watch-src',function()
+{
+    gulp.watch(['www/**/*'],['copy-changed-files']); 
+});
+//Copies only changed files into folder to cordova project
+gulp.task('copy-changed-files',function()
+{
+    gulp.src('./www/**/*').pipe(changed(cordovaFolderPath)).pipe(gulp.dest(cordovaFolderPath));
+});
+
+//Copies entire folder to cordova project
+gulp.task('copy-all-files',function()
+{
+    gulp.src('./www/**/*').pipe(gulp.dest(cordovaFolderPath));
+});
+
+/**
+ * Automatic testing of services and controllers
+ */
+gulp.task('test', function() {
+  // Be sure to return the stream
+  // NOTE: Using the fake './foobar' so as to run the files
+  // listed in karma.conf.js INSTEAD of what was passed to
+  // gulp.src !
+return gulp.src('./foobar')
+    .pipe(karma({
+    configFile: 'karma.conf.js',
+    action: 'run'
+    }))
+    .on('error', function(err) {
+    // Make sure failed tests cause gulp to exit non-zero
+    console.log(err);
+    this.emit('end'); //instead of erroring the stream, end it
+    });
+});
+//Watch files and run test
+gulp.task('autotest', function() {
+return gulp.watch(['www/js/**/*.js', 'test/spec/*.js'], ['test']);
+});
+
+/**
+ * 
+ * Linting of js files for better formatting and use
+ */
 gulp.task('lint', function() {
     return gulp.src(['www/js/**/*.js', './test/**/*.js'])
         .pipe(jshint())
         .pipe(jshint.reporter('jshint-stylish'));
 });
+
+//Watch linting task
+gulp.task('watch-lint', function() {
+    gulp.watch(['www/**/*'], ['lint']);
+});
+
+/**
+ * 
+ * Documentation tasks
+ */
+gulp.task('ngdocs', [], function () {
+    var options = {
+    html5Mode: true,
+    scripts: [
+      'http://ajax.googleapis.com/ajax/libs/angularjs/1.5.1/angular.min.js',
+      'http://ajax.googleapis.com/ajax/libs/angularjs/1.5.1/angular-animate.min.js'
+    ],
+    startPage: '/api/MUHCApp',
+    title: "Opal Mobile App",
+    titleLink: "/api/MUHCApp"
+  };
+  return gulp.src(['www/js/services/*.js', 'www/js/app.js','www/js/controllers/homeController.js'])
+    .pipe(gulpDocs.process(options))
+    .pipe(gulp.dest('./docs'));
+});
+//Watch changes to files in order to write up documentation
+gulp.task('watch-docs',function(){
+     gulp.watch(['www/js/**/*.js'],['ngdocs']);
+});
+
+//Create a server to show ngdocs
+gulp.task('connect_ngdocs', function() {
+
+  connect.server({
+    root: 'docs',
+    livereload: false,
+    fallback: 'docs/index.html',
+    port: 8083
+  });
+});
+
+//Find out the size of the original folder
+gulp.task('size-prebuild', function() {
+    var s = size();
+    return gulp.src('www/**/*')
+        .pipe(s)
+        .pipe(notify({
+            onLast: true,
+            message:function(){ console.log("Total size pre-built: " + s.prettySize);}
+        }));
+});
+//Find out the size of the post build
+gulp.task('size-postbuild', function() {
+    var s = size();
+    return gulp.src(cordovaFolderPath+'/**/*')
+        .pipe(s)
+        .pipe(notify({
+            onLast: true,
+            message:function(){ console.log("Total size post-built: " + s.prettySize);}
+        }));
+});
+
+/**
+ *  
+ * Creating server for project to watch files and re-load (not necessary)
+ * 
+ */
+gulp.task('connect', function() {
+  connect.server({
+    root: 'www',
+    livereload: true,
+    port:9000
+  });
+});
+
+gulp.task('reload-code', function () {
+  gulp.src('./www/**/*')
+    .pipe(connect.reload());
+});
+ 
+gulp.task('watch-files', function () {
+  gulp.watch(['./www/js/**/*'], ['reload-code']);
+});
+ 
+gulp.task('serve', ['connect', 'watch-files']);
+
+/**
+ * 
+ * BUILDING TASKS: Minify Images, minify css, minify js and concatanate, minify third party js files, copying vendor css files. 
+ * 
+ */
+//Main building task for production
+gulp.task('build',['minify-js','minify-css','minify-vendor-js','minify-html','minify-images','copy-non-minifiable-content','copy-vendor-css','size-prebuild','size-postbuild']);
+
+function bytediffFormatter(data) {
+	var formatPercent = function(num, precision) {
+		return (num * 100).toFixed(precision);
+	};
+    var difference = (data.savings > 0) ? ' smaller.' : ' larger.';
+    
+    return data.fileName + ' went from ' +
+        (data.startSize / 1000).toFixed(2) + ' kB to ' + (data.endSize / 1000).toFixed(2) + ' kB' +
+        ' and is ' + formatPercent(1 - data.percent, 2) + '%' + difference;
+}
+//Minifying images task
 gulp.task('minify-images', function(){
   return gulp.src('www/img/*.+(png|jpg|jpeg|gif|svg)')
   // Caching images that ran through imagemin
@@ -37,24 +196,6 @@ gulp.task('minify-css', function() {
     .pipe(concat('app.min.css'))
     .pipe(cleanCSS({compatibility: 'ie8'}))
     .pipe(gulp.dest(cordovaFolderPath+'/css'));
-});
-
-//Watch linting task
-gulp.task('watch-lint', function() {
-    gulp.watch(['www/**/*'], ['lint']);
-});
-
-
-//Copies only changed files into folder to cordova project
-gulp.task('copy-changed-files',function()
-{
-    gulp.src('./www/**/*').pipe(changed(cordovaFolderPath)).pipe(gulp.dest(cordovaFolderPath));
-});
-
-//Copies entire folder to cordova project
-gulp.task('copy-all-files',function()
-{
-    gulp.src('./www/**/*').pipe(gulp.dest(cordovaFolderPath));
 });
 //Minifies all the app code, concatanates and adds to cordova folder
 gulp.task('minify-js',function()
@@ -93,69 +234,6 @@ gulp.task('minify-vendor-js',function()
   'www/lib/bower_components/angular-mocks/angular-mocks.js']).pipe(concat('vendorjs.min.js')).pipe(uglify()).pipe(gulp.dest(cordovaFolderPath+'/lib'));
 });
 
-// //Does not work, problems with import statement
-// gulp.task('minify-vendor-css',function()
-// {
-//     return gulp.src(['www/lib/bower_components/angular/angular-csp.css','www/lib/bower_components/font-awesome/css/font-awesome.min.css','www/lib/bower_components/bootstrap/dist/css/bootstrap.min.css', 'www/lib/js/onsenui/css/onsen-css-components-blue-basic-theme.css','www/lib/js/onsenui/css/onsenui.css']).pipe(importCss()).pipe(concat('vendorcss.min.css')).pipe(cleanCSS({compatibility: 'ie8'})).pipe(gulp.dest(cordovaFolderPath+'/lib'));
-// });
-
-/**
- * Automatic testing of services and controllers
- */
-gulp.task('test', function() {
-  // Be sure to return the stream
-  // NOTE: Using the fake './foobar' so as to run the files
-  // listed in karma.conf.js INSTEAD of what was passed to
-  // gulp.src !
-return gulp.src('./foobar')
-    .pipe(karma({
-    configFile: 'karma.conf.js',
-    action: 'run'
-    }))
-    .on('error', function(err) {
-    // Make sure failed tests cause gulp to exit non-zero
-    console.log(err);
-    this.emit('end'); //instead of erroring the stream, end it
-    });
-});
-//Watch files and run test
-gulp.task('autotest', function() {
-return gulp.watch(['www/js/**/*.js', 'test/spec/*.js'], ['test']);
-});
-
-//Automatic documentation angular project
-gulp.task('ngdocs', [], function () {
-    var options = {
-    html5Mode: true,
-    scripts: [
-      'http://ajax.googleapis.com/ajax/libs/angularjs/1.5.1/angular.min.js',
-      'http://ajax.googleapis.com/ajax/libs/angularjs/1.5.1/angular-animate.min.js'
-    ],
-    startPage: '/api/MUHCApp',
-    title: "Opal Mobile App",
-    titleLink: "/api/MUHCApp"
-  };
-  return gulp.src(['www/js/services/*.js', 'www/js/app.js','www/js/controllers/homeController.js'])
-    .pipe(gulpDocs.process(options))
-    .pipe(gulp.dest('./docs'));
-});
-//Watch changes to files in order to write up documentation
-gulp.task('watch-docs',function(){
-     gulp.watch(['www/js/**/*.js'],['ngdocs']);
-});
-
-//Create a server to show ngdocs
-gulp.task('connect_ngdocs', function() {
-
-  connect.server({
-    root: 'docs',
-    livereload: false,
-    fallback: 'docs/index.html',
-    port: 8083
-  });
-});
-
-
 //Copy css files
 gulp.task('copy-vendor-css',function()
 {
@@ -168,51 +246,13 @@ gulp.task('minify-html', function() {
     .pipe(htmlmin({collapseWhitespace: true}))
     .pipe(gulp.dest(cordovaFolderPath+'/views'));
 });
-
-
 //Copy non-minifiable content from folder
 gulp.task('copy-non-minifiable-content',function()
 {
     return gulp.src(['www/sounds/**/*','www/Languages/**/*'],{base:'www'}).pipe(gulp.dest(cordovaFolderPath));
 });
-gulp.task('default',['watch']);
-
-gulp.task('watch-src',function()
-{
-    gulp.watch(['www/**/*'],['copy-changed-files']); 
-});
-
-//Find out the size of the original folder
-gulp.task('size-prebuild', function() {
-    var s = size();
-    return gulp.src('www/**/*')
-        .pipe(s)
-        .pipe(notify({
-            onLast: true,
-            message:function(){ console.log("Total size pre-built: " + s.prettySize);}
-        }));
-});
-//Find out the size of the post build
-gulp.task('size-postbuild', function() {
-    var s = size();
-    return gulp.src(cordovaFolderPath+'/**/*')
-        .pipe(s)
-        .pipe(notify({
-            onLast: true,
-            message:function(){ console.log("Total size post-built: " + s.prettySize);}
-        }));
-});
-
-//Build and transfer into cordova project anytime there is a change
-gulp.task('build',['minify-js','minify-css','minify-vendor-js','minify-html','minify-images','copy-non-minifiable-content','copy-vendor-css','size-prebuild','size-postbuild']);
-
-function bytediffFormatter(data) {
-	var formatPercent = function(num, precision) {
-		return (num * 100).toFixed(precision);
-	};
-    var difference = (data.savings > 0) ? ' smaller.' : ' larger.';
-    
-    return data.fileName + ' went from ' +
-        (data.startSize / 1000).toFixed(2) + ' kB to ' + (data.endSize / 1000).toFixed(2) + ' kB' +
-        ' and is ' + formatPercent(1 - data.percent, 2) + '%' + difference;
-}
+// //Does not work, problems with import statement
+// gulp.task('minify-vendor-css',function()
+// {
+//     return gulp.src(['www/lib/bower_components/angular/angular-csp.css','www/lib/bower_components/font-awesome/css/font-awesome.min.css','www/lib/bower_components/bootstrap/dist/css/bootstrap.min.css', 'www/lib/js/onsenui/css/onsen-css-components-blue-basic-theme.css','www/lib/js/onsenui/css/onsenui.css']).pipe(importCss()).pipe(concat('vendorcss.min.css')).pipe(cleanCSS({compatibility: 'ie8'})).pipe(gulp.dest(cordovaFolderPath+'/lib'));
+// });
