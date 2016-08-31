@@ -14,6 +14,7 @@ var imagemin = require('gulp-imagemin');
 var cache = require('gulp-cache');
 var size = require('gulp-size');
 var notify = require('gulp-notify');
+var changed = require('gulp-changed');
 //Set the cordova folder path here
 var cordovaFolderPath = '/Users/davidherrera/Documents/Projects/muhc/www';
 //Linting applied to files for better format
@@ -44,12 +45,17 @@ gulp.task('watch-lint', function() {
 });
 
 
+//Copies only changed files into folder to cordova project
+gulp.task('copy-changed-files',function()
+{
+    gulp.src('./www/**/*').pipe(changed(cordovaFolderPath)).pipe(gulp.dest(cordovaFolderPath));
+});
+
 //Copies entire folder to cordova project
-gulp.task('copyToCordovaFolder',function()
+gulp.task('copy-all-files',function()
 {
     gulp.src('./www/**/*').pipe(gulp.dest(cordovaFolderPath));
 });
-
 //Minifies all the app code, concatanates and adds to cordova folder
 gulp.task('minify-js',function()
 {
@@ -170,6 +176,13 @@ gulp.task('copy-non-minifiable-content',function()
     return gulp.src(['www/sounds/**/*','www/Languages/**/*'],{base:'www'}).pipe(gulp.dest(cordovaFolderPath));
 });
 gulp.task('default',['watch']);
+
+gulp.task('watch-src',function()
+{
+    gulp.watch(['www/**/*'],['copy-changed-files']); 
+});
+
+//Find out the size of the original folder
 gulp.task('size-prebuild', function() {
     var s = size();
     return gulp.src('www/**/*')
@@ -179,6 +192,7 @@ gulp.task('size-prebuild', function() {
             message:function(){ console.log("Total size pre-built: " + s.prettySize);}
         }));
 });
+//Find out the size of the post build
 gulp.task('size-postbuild', function() {
     var s = size();
     return gulp.src(cordovaFolderPath+'/**/*')
