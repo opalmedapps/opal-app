@@ -42,7 +42,9 @@ $cordova run <platform>
   * For webview `$cordova run browser`
   * For IOS `$cordova run ios`(See below for problems)
   * For Android `$cordova run android` (See below for problems)
-11. Lastly, copy the res folder to the cordova folder project, and replace the xml file with the xml in this repository.
+11. Lastly, copy the res folder to the cordova folder project, and replace the xml file in the cordova project with the xml file in this repository.
+
+
 ###List of plugins to be downloaded:
 ##### NOTE: Try downloading the latest version of these plugins, keep in mind that some of them have been updated since, as a consequence the README.md file may not be up to date, in other words, install the latest version of these plugins, if you have a problem with them, install the version stated on this file if you still have a problem, report the problem. This might require that you go into the repositories where the plugins are hosted.
 ####Command:
