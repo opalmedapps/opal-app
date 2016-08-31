@@ -38,6 +38,7 @@
     "gulp-ngdocs": "^0.2.13",
     "gulp-ngmin": "^0.3.0",
     "gulp-notify": "^2.2.0",
+    "gulp-open": "^2.0.0",
     "gulp-size": "^2.1.0",
     "gulp-uglify": "^2.0.0",
     "jasmine": "^2.4.1",

@@ -1,3 +1,10 @@
+/**
+ * Author:David Herrera, August 2016
+ * Github: dherre3
+ * E-mail: davidfherrerar@gmail.com
+ * 
+ */
+
 var gulp = require('gulp');
 var jshint = require('gulp-jshint');
 var gulpDocs = require('gulp-ngdocs');
@@ -15,6 +22,7 @@ var cache = require('gulp-cache');
 var size = require('gulp-size');
 var notify = require('gulp-notify');
 var changed = require('gulp-changed');
+var open = require('gulp-open');
 
 
 //Set the cordova folder path here
@@ -47,30 +55,32 @@ gulp.task('copy-all-files',function()
 /**
  * Automatic testing of services and controllers
  */
+
 gulp.task('test', function() {
   // Be sure to return the stream
   // NOTE: Using the fake './foobar' so as to run the files
   // listed in karma.conf.js INSTEAD of what was passed to
   // gulp.src !
-return gulp.src('./foobar')
-    .pipe(karma({
-    configFile: 'karma.conf.js',
-    action: 'run'
-    }))
-    .on('error', function(err) {
-    // Make sure failed tests cause gulp to exit non-zero
-    console.log(err);
-    this.emit('end'); //instead of erroring the stream, end it
-    });
+    return gulp.src('./foobar')
+        .pipe(karma({
+        configFile: 'karma.conf.js',
+        action: 'run'
+        }))
+        .on('error', function(err) {
+        // Make sure failed tests cause gulp to exit non-zero
+        console.log(err);
+        this.emit('end'); //instead of erroring the stream, end it
+        });
 });
-//Watch files and run test
+
+//Watch files and run tests
 gulp.task('autotest', function() {
-return gulp.watch(['www/js/**/*.js', 'test/spec/*.js'], ['test']);
+    return gulp.watch(['www/js/**/*.js', 'test/spec/*.js'], ['test']);
 });
 
 /**
  * 
- * Linting of js files for better formatting and use
+ * Linting of js files for better formatting and conventions
  */
 gulp.task('lint', function() {
     return gulp.src(['www/js/**/*.js', './test/**/*.js'])
@@ -118,50 +128,38 @@ gulp.task('connect_ngdocs', function() {
   });
 });
 
-//Find out the size of the original folder
-gulp.task('size-prebuild', function() {
-    var s = size();
-    return gulp.src('www/**/*')
-        .pipe(s)
-        .pipe(notify({
-            onLast: true,
-            message:function(){ console.log("Total size pre-built: " + s.prettySize);}
-        }));
-});
-//Find out the size of the post build
-gulp.task('size-postbuild', function() {
-    var s = size();
-    return gulp.src(cordovaFolderPath+'/**/*')
-        .pipe(s)
-        .pipe(notify({
-            onLast: true,
-            message:function(){ console.log("Total size post-built: " + s.prettySize);}
-        }));
-});
 
 /**
  *  
- * Creating server for project to watch files and re-load (not necessary)
+ * SERVER CREATION FOR DISPLAYING PROJECT: Creating server for project to watch files and re-load (not necessary)
  * 
  */
 gulp.task('connect', function() {
   connect.server({
     root: 'www',
+    //Change this flag if livereload annoys you
     livereload: true,
     port:9000
   });
 });
-
+//Open server
+gulp.task('open',function()
+{
+    gulp.src('./www/index.html').pipe(open({uri: 'http://localhost:9000', app: 'Google Chrome'}));
+});
+//Reload all the files in www
 gulp.task('reload-code', function () {
   gulp.src('./www/**/*')
     .pipe(connect.reload());
 });
- 
+
+//Watch files and reload code if something happens
 gulp.task('watch-files', function () {
   gulp.watch(['./www/js/**/*'], ['reload-code']);
 });
- 
-gulp.task('serve', ['connect', 'watch-files']);
+
+//Make server connection and set to watch files for reload
+gulp.task('serve', ['connect','open', 'watch-files']);
 
 /**
  * 
@@ -256,3 +254,24 @@ gulp.task('copy-non-minifiable-content',function()
 // {
 //     return gulp.src(['www/lib/bower_components/angular/angular-csp.css','www/lib/bower_components/font-awesome/css/font-awesome.min.css','www/lib/bower_components/bootstrap/dist/css/bootstrap.min.css', 'www/lib/js/onsenui/css/onsen-css-components-blue-basic-theme.css','www/lib/js/onsenui/css/onsenui.css']).pipe(importCss()).pipe(concat('vendorcss.min.css')).pipe(cleanCSS({compatibility: 'ie8'})).pipe(gulp.dest(cordovaFolderPath+'/lib'));
 // });
+
+//Find out the size of the original folder
+gulp.task('size-prebuild', function() {
+    var s = size();
+    return gulp.src('www/**/*')
+        .pipe(s)
+        .pipe(notify({
+            onLast: true,
+            message:function(){ console.log("Total size pre-built: " + s.prettySize);}
+        }));
+});
+//Find out the size of the post build
+gulp.task('size-postbuild', function() {
+    var s = size();
+    return gulp.src(cordovaFolderPath+'/**/*')
+        .pipe(s)
+        .pipe(notify({
+            onLast: true,
+            message:function(){ console.log("Total size post-built: " + s.prettySize);}
+        }));
+});
