@@ -1,8 +1,8 @@
 /**
  * Created by rob on 01/09/16.
  */
-
-myApp.service('requestService',['$filter','UserAuthorizationInfo','EncryptionService','FirebaseService','$q',
+var myApp=angular.module('PasswordReset');
+myApp.service('requestService',['$filter','EncryptionService','FirebaseService','$q',
     function($filter,UserAuthorizationInfo, EncryptionService, $q){
 
         function validateSSN(ssn) {

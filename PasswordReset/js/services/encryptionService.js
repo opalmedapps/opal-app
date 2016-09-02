@@ -7,7 +7,7 @@ var myApp=angular.module('PasswordReset');
 *@name MUHCApp.service:EncryptionService
 *@description Provides an API to encrypt and decrypt objects, arrays, or strings.
 **/
-myApp.service('EncryptionService',function(){
+myApp.service('EncryptionService',[function(){
 	function decryptObject(object,secret)
 	{
 		if(typeof object =='string')
@@ -100,4 +100,4 @@ myApp.service('EncryptionService',function(){
 	};
 
 
-});
+}]);

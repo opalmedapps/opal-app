@@ -1,7 +1,7 @@
 var myApp = angular.module('PasswordReset');
 
-myApp.controller('resetController',['firebase','$location','$scope','$q','$timeout',/*'requestService',*/
-    function (firebase, $location, $scope, $q, $timeout /*, requestService*/) {
+myApp.controller('resetController',['firebase','$firebaseAuth','$location','$scope','$q','$timeout',/*'requestService',*/
+    function (firebase, $firebaseAuth, $location, $scope, $q, $timeout /*, requestService*/) {
         $scope.alert = {};
         //Get the query string from the URL of the reset email
         var queryStringParameters = $location.search();
@@ -10,7 +10,11 @@ myApp.controller('resetController',['firebase','$location','$scope','$q','$timeo
 
         switch (/*queryStringParameters.mode*/ 'resetPassword') {
             case 'resetPassword':
-                handleResetPassword(auth, queryStringParameters.actionCode);
+                // riH5-6pIzHkyDgVTSZjOEJGSSWk
+                //(auth, queryStringParameters.actionCode);
+                $firebaseAuth().$signOut();
+                console.log(auth);
+                handleResetPassword(auth, 'fY8TxN-sxhRQ710D_dnfeEQYJ0E');
                 break;
 
             //For potential future use...
@@ -28,52 +32,13 @@ myApp.controller('resetController',['firebase','$location','$scope','$q','$timeo
                 console.log('Invalid mode. Got ' + queryStringParameters.mode);
         }
 
-        $scope.submitSSN = function(ssn){
-
-            requestService.submitSSNToServer(ssn).then(function (question) {
-                $scope.question = question;
-                $scope.template = 'templates/question.html';
-            }).catch();
-
-        };
-
-        $scope.submitAnswer = function (answer){
-
-        };
-
-        $scope.submitNewPassword = function (newPassword) {
-
-            auth.confirmPasswordReset(actionCode, newPassword).then(function (response) {
-                // TODO show success, link to open app
-            }).catch(function (error) {
-                switch (error.code){
-                    case "auth/expired-action-code":
-                        $timeout(function () {
-                            $scope.alert.content = "CODE_EXPIRED";
-                        });
-                        break;
-                    case "auth/weak-password":
-                        $timeout(function () {
-                            $scope.alert.content = "WEAK_PASSWORD";
-                        });
-                        break;
-                    default:
-                        $timeout(function () {
-                            $scope.alert.content = "SERVERPROBLEM";
-                        });
-                }
-            });
-
-        };
-
-        // BReak into verify
-        // Submit SSN
-        // Submit Answer
-        // Submit and confirm pwd reset
-
         function handleResetPassword(auth, actionCode){
             try {
                 auth.verifyPasswordResetCode(actionCode).then(function (email) {
+
+
+
+                    console.log(email);
                     $scope.template = 'templates/ssn.html';
                     $scope.accountEmail = email;
                 }).catch(function (error) {
@@ -114,5 +79,48 @@ myApp.controller('resetController',['firebase','$location','$scope','$q','$timeo
                 $scope.alert.content = error.code;
             }
         }
+
+        $scope.submitSSN = function(ssn){
+
+            requestService.submitSSNToServer(ssn).then(function (question) {
+                $scope.question = question;
+                $scope.template = 'templates/question.html';
+            }).catch();
+
+        };
+
+        $scope.submitAnswer = function (answer){
+
+        };
+
+        $scope.submitNewPassword = function (newPassword) {
+
+            auth.confirmPasswordReset(queryStringParameters.actionCode, newPassword).then(function (response) {
+                // TODO show success, link to open app
+            }).catch(function (error) {
+                switch (error.code){
+                    case "auth/expired-action-code":
+                        $timeout(function () {
+                            $scope.alert.content = "CODE_EXPIRED";
+                        });
+                        break;
+                    case "auth/weak-password":
+                        $timeout(function () {
+                            $scope.alert.content = "WEAK_PASSWORD";
+                        });
+                        break;
+                    default:
+                        $timeout(function () {
+                            $scope.alert.content = "SERVERPROBLEM";
+                        });
+                }
+            });
+
+        };
+
+        // BReak into verify
+        // Submit SSN
+        // Submit Answer
+        // Submit and confirm pwd reset
 
     }]);

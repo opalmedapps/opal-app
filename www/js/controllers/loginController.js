@@ -122,7 +122,7 @@ myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$root
         /*if (error){
          handleError(error);
          }else {*/
-        firebaseUser.getToken().then(function(sessionToken){
+        firebaseUser.getToken(true).then(function(sessionToken){
             console.log('In Auth Handler')
             // TODO temporary false fix this
             var temporary= false; //firebaseUser.password.isTemporaryPassword;
@@ -139,7 +139,7 @@ myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$root
             }else{
                 UserAuthorizationInfo.setUserAuthData(firebaseUser.uid, CryptoJS.SHA256($scope.password).toString(), myAuth.$getAuth().expires,sessionToken);
                 //Setting The User Object for global Application Use
-                console.log($scope.email);
+                console.log("Users email is" + $scope.email);
                 var authenticationToLocalStorage={
                     UserName:firebaseUser.uid,
                     Password: CryptoJS.SHA256($scope.password).toString(),

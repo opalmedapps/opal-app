@@ -1,4 +1,4 @@
-var myApp = angular.module('PasswordReset', ['firebase','ui.bootstrap', 'encryptionService', 'ResetPasswordRequests', 'requestsService']);
+var myApp = angular.module('PasswordReset', ['firebase','ui.bootstrap']);
 
 myApp.config(function () {
     // Initialize Firebase
