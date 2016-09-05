@@ -2,6 +2,31 @@
 CHANGELOG
 ====
 
+v1.3.17
+----
+* ons-tabbar: Remove previous page when using `loadPage()`.
+
+v1.3.16
+----
+* ons-pull-hook: Fix flickering in iOS.
+
+v1.3.14
+----
+* ons-tabbar: Fixed [#963](https://github.com/OnsenUI/OnsenUI/issues/963).
+
+v1.3.13
+----
+* ons-carousel: Fixed [#929](https://github.com/OnsenUI/OnsenUI/issues/929).
+* dependencies: Fixed [#936](https://github.com/OnsenUI/OnsenUI/issues/936).
+* ons-lazy-repeat: Fixed [#966](https://github.com/OnsenUI/OnsenUI/issues/966).
+* ons-sliding-menu: Fixed [#967](https://github.com/OnsenUI/OnsenUI/issues/967).
+* ons-pull-hook: Fixed [#969](https://github.com/OnsenUI/OnsenUI/issues/969).
+* ons-navigator: Fixed [#1018](https://github.com/OnsenUI/OnsenUI/issues/1018).
+
+v1.3.12
+----
+* ons-page: Fix status bar fill for iOS9.
+
 v1.3.11
 ----
 * ons-tabbar: Remove flickering when navigator is a child of tabbar.

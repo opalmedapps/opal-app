@@ -2,7 +2,7 @@
 # AngularFire
 
 [![Build Status](https://travis-ci.org/firebase/angularfire.svg?branch=master)](https://travis-ci.org/firebase/angularfire)
-[![Coverage Status](https://img.shields.io/coveralls/firebase/angularfire.svg?branch=master&style=flat)](https://coveralls.io/r/firebase/angularfire)
+[![Coverage Status](https://coveralls.io/repos/firebase/angularfire/badge.svg?branch=master&service=github)](https://coveralls.io/github/firebase/angularfire?branch=master)
 [![Version](https://badge.fury.io/gh/firebase%2Fangularfire.svg)](http://badge.fury.io/gh/firebase%2Fangularfire)
 
 AngularFire is the officially supported [AngularJS](http://angularjs.org/) binding for
@@ -22,13 +22,13 @@ In order to use AngularFire in your project, you need to include the following f
 
 ```html
 <!-- AngularJS -->
-<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular.min.js"></script>
 
 <!-- Firebase -->
-<script src="https://cdn.firebase.com/js/client/2.2.5/firebase.js"></script>
+<script src="https://cdn.firebase.com/js/client/2.4.0/firebase.js"></script>
 
 <!-- AngularFire -->
-<script src="https://cdn.firebase.com/libs/angularfire/1.1.3/angularfire.min.js"></script>
+<script src="https://cdn.firebase.com/libs/angularfire/1.1.4/angularfire.min.js"></script>
 ```
 
 Use the URL above to download both the minified and non-minified versions of AngularFire from the
@@ -81,9 +81,7 @@ environment set up:
 $ git clone https://github.com/firebase/angularfire.git
 $ cd angularfire            # go to the angularfire directory
 $ npm install -g grunt-cli  # globally install grunt task runner
-$ npm install -g bower      # globally install Bower package manager
 $ npm install               # install local npm build / test dependencies
-$ bower install             # install local JavaScript dependencies
 $ grunt install             # install Selenium server for end-to-end tests
 $ grunt watch               # watch for source file changes
 ```

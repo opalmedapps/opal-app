@@ -1,30 +1,16 @@
 {
   "name": "angular-tek-progress-bar",
-  "version": "0.2.1",
+  "version": "0.2.0",
   "description": "angular-tek-progress-bar is an AngularJS module to create and controls progress bar.",
   "homepage": "https://github.com/TekVanDo/Angular-Tek-Progress-bar",
-  "main": "dist/tek.progress-bar.min.js",
-  "author": {
-    "name": "Alexander Strochkov",
-    "email": "tek@inbox.ru"
-  },
-  "keywords": [
-    "angular",
-    "progress",
-    "progress-bar",
-    "bar",
-    "loading",
-    "loader",
-    "bootstrap"
-  ],
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/TekVanDo/Angular-Tek-Progress-bar.git"
-  },
+  "main": "gulpfile.js",
   "directories": {
     "example": "examples"
   },
-  "dependencies": {},
+  "dependencies": {
+    "gulp": "^3.9.0",
+    "karma": "^0.13.7"
+  },
   "devDependencies": {
     "browser-sync": "^2.8.2",
     "gulp": "^3.9.0",
@@ -57,33 +43,6 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "license": "MIT",
-  "gitHead": "4fadf8c947bab0bae4e8c50fd33f781d08ac7d9c",
-  "bugs": {
-    "url": "https://github.com/TekVanDo/Angular-Tek-Progress-bar/issues"
-  },
-  "_id": "angular-tek-progress-bar@0.2.1",
-  "_shasum": "986693af2801ebc0f3bbb610cd1ea3cd09e0c7e8",
-  "_from": "angular-tek-progress-bar@*",
-  "_npmVersion": "3.7.2",
-  "_nodeVersion": "4.3.0",
-  "_npmUser": {
-    "name": "tekvando",
-    "email": "tek@inbox.ru"
-  },
-  "dist": {
-    "shasum": "986693af2801ebc0f3bbb610cd1ea3cd09e0c7e8",
-    "tarball": "https://registry.npmjs.org/angular-tek-progress-bar/-/angular-tek-progress-bar-0.2.1.tgz"
-  },
-  "maintainers": [
-    {
-      "name": "tekvando",
-      "email": "tek@inbox.ru"
-    }
-  ],
-  "_npmOperationalInternal": {
-    "host": "packages-12-west.internal.npmjs.com",
-    "tmp": "tmp/angular-tek-progress-bar-0.2.1.tgz_1457964180974_0.9916156360413879"
-  },
-  "_resolved": "https://registry.npmjs.org/angular-tek-progress-bar/-/angular-tek-progress-bar-0.2.1.tgz"
+  "author": "Alexander Strochkov <tek@inbox.ru>",
+  "license": "MIT"
 }

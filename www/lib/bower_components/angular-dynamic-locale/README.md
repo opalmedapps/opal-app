@@ -1,8 +1,5 @@
 # Angular Dynamic Locale
 
-***
-
-## Usage
 
 ### Requirements
 
@@ -50,12 +47,46 @@ exactly as performing `tmhDynamicLocaleProvider.useStorage('$cookieStore')`
 
 ## Installation
 
-Add the module to your dependencies
+Using npm:
+
+`npm install angular-dynamic-locale`
+
+Using bower:
+
+`bower install angular-dynamic-locale`
+
+## Usage
+
+Add the js file to your html:
+
+```html
+<script src="myPath/tmhDynamicLocale.js"></script>
+```
+
+Add the module to your dependencies:
 
 ```javascript
 angular.module('myApp', ['tmh.dynamicLocale', ...])
 ```
 
+Inject `tmhDynamicLocale` to your controller and set the desired locale:
+
+```javascript
+angular.module('myApp').controller('myController', [..., 'tmhDynamicLocale',
+  function(..., tmhDynamicLocale) {
+    tmhDynamicLocale.set('en');
+  }
+])
+```
+
+Also, here's an example of how you may optionally override the default path (`angular/i18n/angular-locale_{{locale}}.js`) to the stored Angular i18n locale files in your project:
+
+```javascript
+angular.module('myApp', ['tmh.dynamicLocale'])
+  .config(function(tmhDynamicLocaleProvider) {
+    tmhDynamicLocaleProvider.localeLocationPattern('/base/node_modules/angular-i18n/angular-locale_{{locale}}.js');
+  });
+```
 
 ## Development
 

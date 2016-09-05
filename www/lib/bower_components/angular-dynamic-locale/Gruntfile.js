@@ -59,7 +59,8 @@
       uglify: {
         all: {
           files: {
-            'tmhDynamicLocale.min.js': ['src/*.js']
+            'tmhDynamicLocale.min.js': ['src/*.js'],
+            'dist/tmhDynamicLocale.min.js': ['src/*.js']
           },
           options: {
             banner: BANNER,
@@ -81,7 +82,7 @@
          }
       }
     });
-    grunt.registerTask('release', ['jshint', 'jscs', 'karma:unit', 'uglify:all', 'karma:unit.min', 'publish']);
+    grunt.registerTask('release', ['jshint', 'jscs', 'karma:unit', 'concat', 'uglify:all', 'karma:unit.min', 'publish']);
   };
 }());
 
