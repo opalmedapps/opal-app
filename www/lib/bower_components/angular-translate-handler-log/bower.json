@@ -1,12 +1,17 @@
 {
   "name": "angular-translate-handler-log",
   "description": "A plugin for Angular Translate",
-  "version": "2.11.0",
+  "version": "2.7.2",
   "main": "./angular-translate-handler-log.js",
+  "dependencies": {
+    "angular-translate": "~2.7.2"
+  },
   "ignore": [],
   "author": "Pascal Precht",
-  "license": "MIT",
-  "dependencies": {
-    "angular-translate": "~2.11.0"
-  }
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "http://www.opensource.org/licenses/MIT"
+    }
+  ]
 }

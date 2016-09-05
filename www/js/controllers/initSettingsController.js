@@ -3,7 +3,7 @@
 //
 var myApp = angular.module('MUHCApp');
 
-myApp.controller('InitSettingsController',function($scope, FirebaseService,$timeout, NavigatorParameters, UserPreferences)
+myApp.controller('InitSettingsController',function($scope, FirebaseService,$timeout, NavigatorParameters, UserPreferences,RequestToServer)
 {
    var app = document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'https://' ) === -1;
 
@@ -101,4 +101,4 @@ myApp.controller('InitSettingsController',function($scope, FirebaseService,$time
 
 myApp.controller('LegalController',function(){
     
-})
+});

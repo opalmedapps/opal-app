@@ -4,9 +4,9 @@
  * provides you with the $firebase service which allows you to easily keep your $scope
  * variables in sync with your Firebase backend.
  *
- * AngularFire 1.1.3
+ * AngularFire 1.1.4
  * https://github.com/firebase/angularfire/
- * Date: 09/29/2015
+ * Date: 02/22/2016
  * License: MIT
  */
 (function(exports) {
@@ -1517,6 +1517,7 @@
                     delete rec.$value;
                     delete parsed(scope).$value;
                   }
+                  setScope(rec);
                 }
               );
             }, 50, 500);
@@ -2255,7 +2256,7 @@ if ( typeof Object.getPrototypeOf !== "function" ) {
           /**
            * AngularFire version number.
            */
-          VERSION: '1.1.3',
+          VERSION: '1.1.4',
 
           allPromises: $q.all.bind($q)
         };

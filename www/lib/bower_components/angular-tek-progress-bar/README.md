@@ -34,12 +34,6 @@ Install through bower:
 bower install --save angular-tek-progress-bar
 ```
 
-or via npm
-
-```
-npm install --save angular-tek-progress-bar
-```
-
 or [download](https://github.com/TekVanDo/Angular-Tek-Progress-bar/archive/master.zip)
 
 Initialize the plugin by referencing the necessary files:
@@ -48,7 +42,7 @@ Initialize the plugin by referencing the necessary files:
 <script src="dist/tek.progress-bar.min.js"></script>
 ```
 
-if you want you can use my progress-bar [styles](https://github.com/TekVanDo/Angular-Tek-Progress-bar/blob/3a17ff0f00a5df8ae38e3b3b59d05eb5b00ec43b/examples/css/default-angular-bar.css) 
+if tou want you can use my progress-bar [styles](https://github.com/TekVanDo/Angular-Tek-Progress-bar/blob/3a17ff0f00a5df8ae38e3b3b59d05eb5b00ec43b/examples/css/default-angular-bar.css) 
 
 Define module in your app:
 

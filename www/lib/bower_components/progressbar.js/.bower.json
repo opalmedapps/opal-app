@@ -38,8 +38,7 @@
     "tag": "0.9.0",
     "commit": "2af42a3a48979a72a93b989a00bf3e8e75f9f22d"
   },
-  "_source": "git://github.com/kimmobrunfeldt/progressbar.js.git",
+  "_source": "https://github.com/kimmobrunfeldt/progressbar.js.git",
   "_target": "~0.9.0",
-  "_originalSource": "progressbar.js",
-  "_direct": true
+  "_originalSource": "progressbar.js"
 }
