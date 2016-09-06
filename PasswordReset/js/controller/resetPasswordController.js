@@ -32,8 +32,10 @@ myApp.controller('resetController',['firebase','$firebaseAuth','$location','$sco
         function handleResetPassword(auth, actionCode){
             try {
                 auth.verifyPasswordResetCode(actionCode).then(function (email) {
-                    console.log(email);
-                    $scope.template = 'templates/ssn.html';
+                    console.log("Reset code verified successfully: ");
+                    $timeout(function () {
+                        $scope.template = './templates/ssn.html';
+                    });
                     $scope.accountEmail = email;
                 }).catch(function (error) {
                     $scope.isNotValid = true;
@@ -92,8 +94,11 @@ myApp.controller('resetController',['firebase','$firebaseAuth','$location','$sco
             $scope.ssn = ssn;
             if(validateSSN(ssn)) {
                 requestService.submitSSNToServer(ssn).then(function (question) {
+                    $scope.success = true;
                     $scope.question = question;
-                    $scope.template = 'templates/question.html';
+                    $timeout(function () {
+                        $scope.template = './templates/question.html';
+                    });
                 }).catch(function(error){
                     $scope.alert.type='danger';
                     $scope.alert.content=error.code;
@@ -109,8 +114,12 @@ myApp.controller('resetController',['firebase','$firebaseAuth','$location','$sco
                 $scope.alert.content='ENTERANANSWER';
             }else {
                 requestService.submitAnswerToServer(answer, $scope.ssn).then(function (data) {
-                    $scope.template = 'templates/newpassword.html';
+                    $scope.success = true;
+                    $timeout(function () {
+                        $scope.template = './templates/newpassword.html';
+                    });
                 }).catch(function (error) {
+                    $scope.success = false;
                     $scope.alert = error.alert;
                 })
             }
