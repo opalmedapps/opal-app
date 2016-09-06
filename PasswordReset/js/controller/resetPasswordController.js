@@ -8,13 +8,10 @@ myApp.controller('resetController',['firebase','$firebaseAuth','$location','$sco
         console.log(queryStringParameters);
         var auth = firebase.app().auth();
 
-        switch (/*queryStringParameters.mode*/ 'resetPassword') {
+        switch (queryStringParameters.mode) {
             case 'resetPassword':
-                // riH5-6pIzHkyDgVTSZjOEJGSSWk
-                //(auth, queryStringParameters.actionCode);
-                $firebaseAuth().$signOut();
-                console.log(auth);
-                handleResetPassword(auth, 'fY8TxN-sxhRQ710D_dnfeEQYJ0E');
+                console.log(queryStringParameters.oobCode);
+                handleResetPassword(auth, queryStringParameters.oobCode);
                 break;
 
             //For potential future use...
@@ -35,9 +32,6 @@ myApp.controller('resetController',['firebase','$firebaseAuth','$location','$sco
         function handleResetPassword(auth, actionCode){
             try {
                 auth.verifyPasswordResetCode(actionCode).then(function (email) {
-
-
-
                     console.log(email);
                     $scope.template = 'templates/ssn.html';
                     $scope.accountEmail = email;
@@ -80,41 +74,82 @@ myApp.controller('resetController',['firebase','$firebaseAuth','$location','$sco
             }
         }
 
+        function validateSSN(ssn) {
+            if(ssn===''||typeof ssn=='undefined')
+            {
+                $scope.alert.type='danger';
+                $scope.alert.content="ERRORENTERSSNNUMBER";
+                return false;
+            }else if(ssn.length!==12){
+                $scope.alert.type='danger';
+                $scope.alert.content="ERRORENTERVALIDSSN";
+                return false;
+            }
+            return true;
+        }
+
         $scope.submitSSN = function(ssn){
-
-            requestService.submitSSNToServer(ssn).then(function (question) {
-                $scope.question = question;
-                $scope.template = 'templates/question.html';
-            }).catch();
-
+            $scope.ssn = ssn;
+            if(validateSSN(ssn)) {
+                requestService.submitSSNToServer(ssn).then(function (question) {
+                    $scope.question = question;
+                    $scope.template = 'templates/question.html';
+                }).catch(function(error){
+                    $scope.alert.type='danger';
+                    $scope.alert.content=error.code;
+                });
+            }
         };
 
         $scope.submitAnswer = function (answer){
 
+            if(!answer||answer===''||typeof answer=='undefined')
+            {
+                $scope.alert.type='danger';
+                $scope.alert.content='ENTERANANSWER';
+            }else {
+                requestService.submitAnswerToServer(answer, $scope.ssn).then(function (data) {
+                    $scope.template = 'templates/newpassword.html';
+                }).catch(function (error) {
+                    $scope.alert = error.alert;
+                })
+            }
         };
 
         $scope.submitNewPassword = function (newPassword) {
 
-            auth.confirmPasswordReset(queryStringParameters.actionCode, newPassword).then(function (response) {
-                // TODO show success, link to open app
-            }).catch(function (error) {
-                switch (error.code){
-                    case "auth/expired-action-code":
-                        $timeout(function () {
-                            $scope.alert.content = "CODE_EXPIRED";
-                        });
-                        break;
-                    case "auth/weak-password":
-                        $timeout(function () {
-                            $scope.alert.content = "WEAK_PASSWORD";
-                        });
-                        break;
-                    default:
-                        $timeout(function () {
-                            $scope.alert.content = "SERVERPROBLEM";
-                        });
-                }
-            });
+            if(newPassword===''||typeof newPassword=='undefined')
+            {
+                $scope.alert.type='danger';
+                $scope.alert.content = "ENTERVALIDPASSWORD";
+            }else {
+
+                auth.confirmPasswordReset(queryStringParameters.actionCode, newPassword).then(function (response) {
+                    // TODO show success, link to open app
+
+                    requestService.submitNewPasswordToServer(newPassword).then(function (data) {
+                        $scope.alert = data.alert;
+                    })
+
+                }).catch(function (error) {
+                    switch (error.code) {
+                        case "auth/expired-action-code":
+                            $timeout(function () {
+                                $scope.alert.content = "CODE_EXPIRED";
+                            });
+                            break;
+                        case "auth/weak-password":
+                            $timeout(function () {
+                                $scope.alert.content = "WEAK_PASSWORD";
+                            });
+                            break;
+                        default:
+                            $timeout(function () {
+                                $scope.alert.content = "SERVERPROBLEM";
+                            });
+                    }
+                });
+            }
 
         };
 

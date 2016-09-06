@@ -16,29 +16,15 @@ var myApp=angular.module('PasswordReset');
  **/
 myApp.service('ResetPasswordRequests',['EncryptionService','firebase','$q', function(EncryptionService, firebase,$q){
 
-    /**
-     *@ngdoc property
-     *@name  MUHCApp.service.#Ref
-     *@propertyOf MUHCApp.service:RequestToServer
-     *@description Firebase reference
-     **/
     var Ref= firebase.database().ref('dev2/');
     console.log("Ref is " + Ref);
-    /**
-     *@ngdoc property
-     *@name  MUHCApp.service.#refRequests
-     *@propertyOf MUHCApp.service:RequestToServer
-     *@description Firebase reference requests
-     **/
-    var refRequests = Ref.child('requests');
-    /**
-     *@ngdoc property
-     *@name  MUHCApp.service.#refUsers
-     *@propertyOf MUHCApp.service:RequestToServer
-     *@description Firebase reference user response
-     **/
-    var refUsers = Ref.child('users');
+
+    var refPassResetRequest = Ref.child('passwordResetRequests');
+
+    var refPassResponse = Ref.child('refPassResetResponse');
+
     var app = document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'https://' ) === -1;
+
     function sendRequest(typeOfRequest,parameters, encryptionKey)
     {
         var requestType = '';
@@ -54,8 +40,8 @@ myApp.service('ResetPasswordRequests',['EncryptionService','firebase','$q', func
             requestParameters = EncryptionService.encryptData(parameters);*/
         }
         //Push the request to firebase
-        console.log({ 'Request' : requestType,'DeviceId':(app)?device.uuid:'browser','Token':UserAuthorizationInfo.getToken(),  'UserID': UserAuthorizationInfo.getUsername(), 'Parameters':requestParameters,'Timestamp':firebase.database.ServerValue.TIMESTAMP});
-        var pushID =  refRequests.push({ 'Request' : requestType,'DeviceId':(app)?device.uuid:'browser','Token':UserAuthorizationInfo.getToken(),  'UserID': UserAuthorizationInfo.getUsername(), 'Parameters':requestParameters,'Timestamp':firebase.database.ServerValue.TIMESTAMP});
+        console.log({ 'Request' : requestType,'DeviceId':(app)?device.uuid:'browser','Parameters':requestParameters,'Timestamp':firebase.database.ServerValue.TIMESTAMP});
+        var pushID =  refPassResetRequest.push({ 'Request' : requestType,'DeviceId':(app)?device.uuid:'browser', 'Parameters':requestParameters,'Timestamp':firebase.database.ServerValue.TIMESTAMP});
         return pushID.key;
     }
 
@@ -79,10 +65,10 @@ myApp.service('ResetPasswordRequests',['EncryptionService','firebase','$q', func
             //Sends request and gets random key for request
             var key = sendRequest(typeOfRequest,parameters,encryptionKey);
             //Sets the reference to fetch data for that request
-            var refRequestResponse = refUsers.child(UserAuthorizationInfo.getUsername()+'/'+key);
+            var refRequestResponse = refPassResponse.child(email+'/'+key);
             console.log(refRequestResponse.toString());
             //Waits to obtain the request data.
-            console.log('users/'+UserAuthorizationInfo.getUsername()+'/'+key);
+            console.log('passwordResetResponses/'+email+'/'+key);
             refRequestResponse.on('value',function(snapshot){
                 if(snapshot.exists())
                 {
@@ -91,11 +77,9 @@ myApp.service('ResetPasswordRequests',['EncryptionService','firebase','$q', func
                     var timestamp = data.Timestamp;
                     if(data.Code =='1')
                     {
-                        NewsBanner.showCustomBanner($filter('translate')("AUTHENTICATIONERROR"),'#333333',null,20000);
-                        $state.go('logOut');
                         r.reject({Response:'AUTH_ERROR'});
                     }else{
-                        if(!encryptionKey||typeof encryptionKey == 'undefined') data = EncryptionService.decryptData(data);
+                        if(!encryptionKey||typeof encryptionKey == 'undefined') //data = EncryptionService.decryptData(data);
                         data.Timestamp = timestamp;
                         console.log(data);
                         clearTimeout(timeOut);
