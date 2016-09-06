@@ -21,7 +21,7 @@ myApp.service('ResetPasswordRequests',['EncryptionService','firebase','$q', func
 
     var refPassResetRequest = Ref.child('passwordResetRequests');
 
-    var refPassResponse = Ref.child('refPassResetResponse');
+    var refPassResponse = Ref.child('refPassResetResponses');
 
     var app = document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'https://' ) === -1;
 
