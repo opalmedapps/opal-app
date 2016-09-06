@@ -5,54 +5,87 @@ var myApp=angular.module('PasswordReset');
 myApp.service('requestService',['$filter','EncryptionService','FirebaseService','$q',
     function($filter,UserAuthorizationInfo, EncryptionService, $q){
 
-        function validateSSN(ssn) {
-            if(ssn===''||typeof ssn=='undefined')
-            {
-                $scope.alert.type='danger';
-                $scope.alert.content="ERRORENTERSSNNUMBER";
-                return false;
-            }else if(ssn.length!==12){
-                $scope.alert.type='danger';
-                $scope.alert.content="ERRORENTERVALIDSSN";
-                return false;
-            }
-            return true;
-        }
+        var tryReset = 0;
 
         return {
-            submitSSNToServer : function(ssn){
+            submitSSNToServer: function (ssn) {
                 var defer = $q.defer();
                 console.log(ssn);
-                if(validateSSN(ssn))
-                {
-                    $scope.loading=true;
-                    ResetPasswordRequests.sendRequestWithResponse('VerifySSN',{'SSN':ssn},ssn).then(function(data) {
+                ResetPasswordRequests.sendRequestWithResponse('VerifySSN', {'SSN': ssn}, ssn).then(function (data) {
+                    console.log(data);
+                    if (data.Data.ValidSSN == "true") {
+                        question = data.Data.Question;
+                        return defer.resolve(question);
+                    } else {
+                        return defer.reject("ERRORENTERVALIDSSN");
+                    }
+                }).catch(function (error) {
+                    console.log(error);
+                    return defer.reject("SERVERPROBLEM");
+                });
+            },
+
+            submitAnswerToServer: function (answer, ssn) {
+                var defer = $q.defer();
+                answer = answer.toUpperCase();
+                var hash = CryptoJS.SHA256(answer).toString();
+                ResetPasswordRequests.sendRequestWithResponse('VerifyAnswer', {
+                    Question: $scope.Question,
+                    Answer: hash
+                }, ssn).then(function (data) {
+                    console.log(data);
+                    if (data.Data.AnswerVerified == "true") {
+                        hash = CryptoJS.SHA256(answer).toString();
+                        return defer.resolve(question);
+                    } else if (data.Data.AnswerVerified == "false") {
+                        var errorData = {
+                            attempts: tryReset++,
+                            alert: {
+                                type: 'danger',
+                                content: "CONTACTHOSPITAL"
+                            },
+                            threeTries: tryReset >= 3
+                        };
+                        return defer.reject(errorData);
+                    }
+                }).catch(function () {
+                    return defer.reject({alert:{type:'danger',content:"SERVERPROBLEM"}});
+                });
+            },
+
+            submitNewPasswordToServer: function (newValue) {
+                var defer = $q.defer();
+                RequestToServer.sendRequestWithResponse('SetNewPassword', {'NewPassword': newValue}, parameters.Answer).then(
+                    function (data) {
                         console.log(data);
-                        if(data.Data.ValidSSN=="true") {
-                            question = data.Data.Question;
-                            return defer.resolve(question);
-                        }else{
-                            return defer.reject();
+                        if (data.hasOwnProperty('Data') && data.Data.PasswordReset == "true") {
+                            var successData = {
+                                alert: {
+                                    type: 'success',
+                                    content: "PASSWORDSUCCESSRESET"
+                                }
+                            };
+                            return defer.resolve(successData);
+                        } else {
+                            var errorData = {
+                                alert: {
+                                    type: 'danger',
+                                    content: "CONTACTHOSPITAL"
+                                }
+                            };
+                            return defer.reject(errorData);
                         }
-                    }).catch(function(error){
-                        console.log(error);
-                        return defer.reject();
+                    }).catch(
+                    function (error) {
+                        var errorData = {
+                            errorCode : error.code,
+                            alert: {
+                                type: 'danger',
+                                content: "CONTACTHOSPITAL"
+                            }
+                        };
+                        return defer.reject(errorData);
                     });
-                } else {
-                    return defer.reject();
-                }
-            },
-
-            submitAnswerToServer : function(answer){
-                //$scope.loading=true;
-
-
-            },
-
-            submitNewPasswordToServer: function(newValue){
-                //$scope.loading=true;
-
-
             }
         }
     }]);
