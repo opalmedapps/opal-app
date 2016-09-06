@@ -2,16 +2,16 @@
  * Created by rob on 01/09/16.
  */
 var myApp=angular.module('PasswordReset');
-myApp.service('requestService',['$filter','EncryptionService','FirebaseService','$q',
-    function($filter,UserAuthorizationInfo, EncryptionService, $q){
+myApp.service('requestService',['$filter','EncryptionService','$q', 'ResetPasswordRequests',
+    function($filter,EncryptionService,ResetPasswordRequests, $q){
 
         var tryReset = 0;
 
         return {
-            submitSSNToServer: function (ssn) {
+            submitSSNToServer: function (ssn, email) {
                 var defer = $q.defer();
                 console.log(ssn);
-                ResetPasswordRequests.sendRequestWithResponse('VerifySSN', {'SSN': ssn}, ssn).then(function (data) {
+                ResetPasswordRequests.sendRequestWithResponse('VerifySSN', {'SSN': ssn, 'Email': email}, ssn).then(function (data) {
                     console.log(data);
                     if (data.Data.ValidSSN == "true") {
                         question = data.Data.Question;
