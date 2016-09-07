@@ -40,7 +40,7 @@ myApp.service('ResetPasswordRequests',['EncryptionService','firebase','$q', func
             requestParameters = EncryptionService.encryptData(parameters);*/
         }
         //Push the request to firebase
-        console.log({ 'Request' : requestType,'DeviceId':(app)?device.uuid:'browser', 'UserEmail': email, 'Parameters':requestParameters,'Timestamp':firebase.database.ServerValue.TIMESTAMP});
+        console.log({ 'Request' : requestType,'DeviceId':(app)?device.uuid:'browser', 'UserEmail': parameters.Email, 'Parameters':requestParameters,'Timestamp':firebase.database.ServerValue.TIMESTAMP});
         var pushID =  refPassResetRequest.push({ 'Request' : requestType,'DeviceId':(app)?device.uuid:'browser', 'UserEmail':email, 'Parameters':requestParameters,'Timestamp':firebase.database.ServerValue.TIMESTAMP});
         return pushID.key;
     }

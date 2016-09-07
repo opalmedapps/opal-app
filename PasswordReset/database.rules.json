@@ -1,6 +1,87 @@
 {
   "rules": {
-    ".read": "auth != null",
-    ".write": "auth != null"
+    "dev": {
+      "Users": {
+        "$user_id": {
+          ".write": "$user_id === auth.uid",
+          ".read": "$user_id === auth.uid"
+        }
+      },
+      "requests": {
+        "$pushId": {
+          ".read": "auth!==null",
+          ".write": "auth!==null",
+          ".validate": "newData.hasChildren(['Request', 'DeviceId', 'Token', 'UserID'])"
+        }
+      }
+    },
+    "VWR": {
+      ".write": "true",
+      ".read": "true"
+    },
+    "Users": {
+      "$user_id": {
+        "demo": {
+          ".write": "true",
+          ".read": "true"
+        },
+        ".write": "$user_id === auth.uid",
+        ".read": "$user_id === auth.uid"
+      }
+    },
+    "test": {
+      "requests": {
+        "$request_id": {
+          ".write": "auth.uid !== null",
+          ".read": "auth.uid !== null",
+          ".validate": "newData.hasChildren(['Request', 'DeviceId', 'Token', 'UserID'])&& newData.child('UserID').val() === auth.uid"
+        }
+      },
+      "users": {
+        "$user_id": {
+          "$request_id": {
+            ".write": "auth.uid === $user_id",
+            ".read": "auth.uid === $user_id"
+          }
+        }
+      }
+    },
+    "NF": {
+      ".read": true,
+      ".write": true
+    },
+    "dev2": {
+      "requests": {
+        "$request_id": {
+          ".write": "auth.uid !== null",
+          ".read": "auth.uid !== null",
+          ".validate": "newData.hasChildren(['Request', 'DeviceId', 'Token', 'UserID'])&& newData.child('UserID').val() === auth.uid"
+        }
+      },
+      "passwordResetRequests": {
+        "$user_email": {
+          ".write": "true",
+          ".read": "true"
+        }
+      },
+      "passwordResetResponses": {
+        "$user_email": {
+          ".write": "true",
+          ".read": "true"
+        }
+      },
+      "users": {
+        "$user_id": {
+          "$request_id": {
+            ".write": "auth.uid === $user_id",
+            ".read": "auth.uid === $user_id"
+          }
+        }
+      }
+    },
+    "requests": {
+      ".read": "auth!==null",
+      ".write": "true"
+    }
   }
 }
