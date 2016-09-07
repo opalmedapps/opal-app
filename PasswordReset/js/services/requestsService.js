@@ -3,7 +3,7 @@
  */
 var myApp=angular.module('PasswordReset');
 myApp.service('requestService',['$filter','EncryptionService','$q', 'ResetPasswordRequests',
-    function($filter,EncryptionService,ResetPasswordRequests, $q){
+    function($filter,EncryptionService,$q,ResetPasswordRequests){
 
         var tryReset = 0;
 
