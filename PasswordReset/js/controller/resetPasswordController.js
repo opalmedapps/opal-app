@@ -37,6 +37,7 @@ myApp.controller('resetController',['firebase','$firebaseAuth','$location','$sco
                         $scope.template = './templates/ssn.html';
                     });
                     $scope.accountEmail = email;
+                    requestService.setUserEmail(email);
                 }).catch(function (error) {
                     $scope.isNotValid = true;
                     console.log(error.code);
@@ -90,10 +91,10 @@ myApp.controller('resetController',['firebase','$firebaseAuth','$location','$sco
             return true;
         }
 
-        $scope.submitSSN = function(ssn, email){
+        $scope.submitSSN = function(ssn){
             $scope.ssn = ssn;
             if(validateSSN(ssn)) {
-                requestService.submitSSNToServer(ssn, email).then(function (question) {
+                requestService.submitSSNToServer(ssn).then(function (question) {
                     $scope.success = true;
                     $scope.question = question;
                     $timeout(function () {
@@ -113,7 +114,8 @@ myApp.controller('resetController',['firebase','$firebaseAuth','$location','$sco
                 $scope.alert.type='danger';
                 $scope.alert.content='ENTERANANSWER';
             }else {
-                requestService.submitAnswerToServer(answer, $scope.question, $scope.ssn).then(function (data) {
+                requestService.setUserAnswer(answer);
+                requestService.submitAnswerToServer($scope.question, $scope.ssn).then(function (data) {
                     $scope.success = true;
                     $timeout(function () {
                         $scope.template = './templates/newpassword.html';
@@ -133,11 +135,12 @@ myApp.controller('resetController',['firebase','$firebaseAuth','$location','$sco
                 $scope.alert.content = "ENTERVALIDPASSWORD";
             }else {
 
-                auth.confirmPasswordReset(queryStringParameters.actionCode, newPassword).then(function (response) {
+                auth.confirmPasswordReset(queryStringParameters.oobCode, newPassword).then(function (response) {
                     // TODO show success, link to open app
-
+                    console.log("Successfully changed password on firebase");
                     requestService.submitNewPasswordToServer(newPassword).then(function (data) {
                         $scope.alert = data.alert;
+                        console.log("Successfully changed password on opal");
                     })
 
                 }).catch(function (error) {

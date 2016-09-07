@@ -6,12 +6,23 @@ myApp.service('requestService',['$filter','EncryptionService','$q', 'ResetPasswo
     function($filter,EncryptionService,$q,ResetPasswordRequests){
 
         var tryReset = 0;
+        var userEmail = '';
+        var userAnswer = '';
 
         return {
-            submitSSNToServer: function (ssn, email) {
+
+            setUserEmail : function(email){
+                userEmail = email;
+            },
+
+            setUserAnswer : function(answer){
+                userAnswer = answer;
+            },
+
+            submitSSNToServer: function (ssn) {
                 var defer = $q.defer();
                 console.log(ssn);
-                ResetPasswordRequests.sendRequestWithResponse('VerifySSN', {'SSN': ssn, 'Email': email}, ssn).then(function (data) {
+                ResetPasswordRequests.sendRequestWithResponse('VerifySSN', {'SSN': ssn, 'Email': userEmail}, ssn).then(function (data) {
                     console.log(data);
                     if (data.Data.ValidSSN == "true") {
                         question = data.Data.Question;
@@ -26,17 +37,18 @@ myApp.service('requestService',['$filter','EncryptionService','$q', 'ResetPasswo
                 return defer.promise;
             },
 
-            submitAnswerToServer: function (answer, question, ssn) {
+            submitAnswerToServer: function (question, ssn) {
                 var defer = $q.defer();
-                answer = answer.toUpperCase();
-                var hash = CryptoJS.SHA256(answer).toString();
+                userAnswer = userAnswer.toUpperCase();
+                var hash = CryptoJS.SHA256(userAnswer).toString();
                 ResetPasswordRequests.sendRequestWithResponse('VerifyAnswer', {
-                    Question: Question,
-                    Answer: hash
+                    Question: question,
+                    Answer: hash,
+                    Email: userEmail
                 }, ssn).then(function (data) {
                     console.log(data);
                     if (data.Data.AnswerVerified == "true") {
-                        hash = CryptoJS.SHA256(answer).toString();
+                        hash = CryptoJS.SHA256(userAnswer).toString();
                         return defer.resolve(question);
                     } else if (data.Data.AnswerVerified == "false") {
                         var errorData = {
@@ -57,7 +69,8 @@ myApp.service('requestService',['$filter','EncryptionService','$q', 'ResetPasswo
 
             submitNewPasswordToServer: function (newValue) {
                 var defer = $q.defer();
-                RequestToServer.sendRequestWithResponse('SetNewPassword', {'NewPassword': newValue}, parameters.Answer).then(
+                RequestToServer.sendRequestWithResponse('SetNewPassword', {
+                    'NewPassword': newValue, 'Email': userEmail}, userAnswer).then(
                     function (data) {
                         console.log(data);
                         if (data.hasOwnProperty('Data') && data.Data.PasswordReset == "true") {
