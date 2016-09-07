@@ -1,6 +1,6 @@
 var myApp = angular.module('PasswordReset');
 
-myApp.controller('resetController',['firebase','$firebaseAuth','$location','$scope','$q','$timeout','requestService',/*'requestService',*/
+myApp.controller('resetController',['firebase','$firebaseAuth','$location','$scope','$q','$timeout','requestService',
     function (firebase, $firebaseAuth, $location, $scope, $q, $timeout ,requestService) {
         $scope.alert = {};
         //Get the query string from the URL of the reset email
@@ -113,7 +113,7 @@ myApp.controller('resetController',['firebase','$firebaseAuth','$location','$sco
                 $scope.alert.type='danger';
                 $scope.alert.content='ENTERANANSWER';
             }else {
-                requestService.submitAnswerToServer(answer, $scope.ssn).then(function (data) {
+                requestService.submitAnswerToServer(answer, $scope.question, $scope.ssn).then(function (data) {
                     $scope.success = true;
                     $timeout(function () {
                         $scope.template = './templates/newpassword.html';
