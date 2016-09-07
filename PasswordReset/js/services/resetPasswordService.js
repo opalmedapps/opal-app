@@ -21,12 +21,14 @@ myApp.service('ResetPasswordRequests',['EncryptionService','firebase','$q', func
 
     var refPassResetRequest = Ref.child('passwordResetRequests');
 
-    var refPassResponse = Ref.child('refPassResetResponses');
+    var refPassResponse = Ref.child('passwordResetResponses');
 
     var app = document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'https://' ) === -1;
 
     function sendRequest(typeOfRequest,parameters, encryptionKey)
     {
+        var parameterCopy = {};
+        angular.copy(parameters, parameterCopy);
         var requestType = '';
         var requestParameters;
         console.log(typeOfRequest);
@@ -40,8 +42,8 @@ myApp.service('ResetPasswordRequests',['EncryptionService','firebase','$q', func
             requestParameters = EncryptionService.encryptData(parameters);*/
         }
         //Push the request to firebase
-        console.log({ 'Request' : requestType,'DeviceId':(app)?device.uuid:'browser', 'UserEmail': parameters.Email, 'Parameters':requestParameters,'Timestamp':firebase.database.ServerValue.TIMESTAMP});
-        var pushID =  refPassResetRequest.push({ 'Request' : requestType,'DeviceId':(app)?device.uuid:'browser', 'UserEmail':email, 'Parameters':requestParameters,'Timestamp':firebase.database.ServerValue.TIMESTAMP});
+        console.log({ 'Request' : requestType,'DeviceId':(app)?device.uuid:'browser', 'UserEmail': parameterCopy.Email, 'Parameters':requestParameters,'Timestamp':firebase.database.ServerValue.TIMESTAMP});
+        var pushID =  refPassResetRequest.push({ 'Request' : requestType,'DeviceId':(app)?device.uuid:'browser', 'UserEmail': parameterCopy.Email, 'Parameters':requestParameters,'Timestamp':firebase.database.ServerValue.TIMESTAMP});
         return pushID.key;
     }
 
@@ -63,12 +65,14 @@ myApp.service('ResetPasswordRequests',['EncryptionService','firebase','$q', func
             console.log(encryptionKey);
             console.log(typeOfRequest);
             //Sends request and gets random key for request
+            var parameterCopy = {};
+            angular.copy(parameters, parameterCopy);
             var key = sendRequest(typeOfRequest,parameters,encryptionKey);
             //Sets the reference to fetch data for that request
-            var refRequestResponse = refPassResponse.child(email+'/'+key);
+            var refRequestResponse = refPassResponse.child('/'+key);
             console.log(refRequestResponse.toString());
             //Waits to obtain the request data.
-            console.log('passwordResetResponses/'+email+'/'+key);
+            console.log('passwordResetResponses/'+key);
             refRequestResponse.on('value',function(snapshot){
                 if(snapshot.exists())
                 {

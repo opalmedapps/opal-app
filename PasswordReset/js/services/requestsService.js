@@ -23,14 +23,15 @@ myApp.service('requestService',['$filter','EncryptionService','$q', 'ResetPasswo
                     console.log(error);
                     return defer.reject("SERVERPROBLEM");
                 });
+                return defer.promise;
             },
 
-            submitAnswerToServer: function (answer, ssn) {
+            submitAnswerToServer: function (answer, question, ssn) {
                 var defer = $q.defer();
                 answer = answer.toUpperCase();
                 var hash = CryptoJS.SHA256(answer).toString();
                 ResetPasswordRequests.sendRequestWithResponse('VerifyAnswer', {
-                    Question: $scope.Question,
+                    Question: Question,
                     Answer: hash
                 }, ssn).then(function (data) {
                     console.log(data);
@@ -51,6 +52,7 @@ myApp.service('requestService',['$filter','EncryptionService','$q', 'ResetPasswo
                 }).catch(function () {
                     return defer.reject({alert:{type:'danger',content:"SERVERPROBLEM"}});
                 });
+                return defer.promise;
             },
 
             submitNewPasswordToServer: function (newValue) {
@@ -86,6 +88,7 @@ myApp.service('requestService',['$filter','EncryptionService','$q', 'ResetPasswo
                         };
                         return defer.reject(errorData);
                     });
+                return defer.promise;
             }
         }
     }]);
