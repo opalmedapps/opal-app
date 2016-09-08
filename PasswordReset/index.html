@@ -46,7 +46,9 @@
             </div>
         </form>
         <br/>
-        <div class="alert alert-{{alert.type}}" ng-if="isNotValid" style="text-align: center">{{alert.content}}. Please resubmit a password request.</div>
+        <div class="form-group col-sm-4 col-sm-offset-4" align="center"  >
+            <div class="alert alert-{{alert.type}}" ng-if="alert.show" style="text-align: center">{{alert.content}}. Please resubmit a password request.</div>
+        </div>
     </div>
 </div>
 
