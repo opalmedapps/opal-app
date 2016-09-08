@@ -48,8 +48,7 @@ myApp.service('requestService',['$filter','EncryptionService','$q', 'ResetPasswo
                 }, ssn).then(function (data) {
                     console.log(data);
                     if (data.Data.AnswerVerified == "true") {
-                        hash = CryptoJS.SHA256(userAnswer).toString();
-                        return defer.resolve(question);
+                        return defer.resolve(data);
                     } else if (data.Data.AnswerVerified == "false") {
                         var errorData = {
                             attempts: tryReset++,
