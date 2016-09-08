@@ -69,8 +69,10 @@ myApp.service('requestService',['$filter','EncryptionService','$q', 'ResetPasswo
 
             submitNewPasswordToServer: function (newValue) {
                 var defer = $q.defer();
-                RequestToServer.sendRequestWithResponse('SetNewPassword', {
-                    'NewPassword': newValue, 'Email': userEmail}, userAnswer).then(
+                console.log(userAnswer);
+                var answerhash = CryptoJS.SHA256(userAnswer).toString();
+                ResetPasswordRequests.sendRequestWithResponse('SetNewPassword', {
+                    'NewPassword': newValue, 'Email': userEmail}, answerhash).then(
                     function (data) {
                         console.log(data);
                         if (data.hasOwnProperty('Data') && data.Data.PasswordReset == "true") {

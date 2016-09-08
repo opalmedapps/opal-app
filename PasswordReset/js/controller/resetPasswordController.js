@@ -165,9 +165,4 @@ myApp.controller('resetController',['firebase','$firebaseAuth','$location','$sco
 
         };
 
-        // BReak into verify
-        // Submit SSN
-        // Submit Answer
-        // Submit and confirm pwd reset
-
     }]);
