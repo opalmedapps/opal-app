@@ -33,6 +33,7 @@ myApp.controller('resetController',['firebase','$firebaseAuth','$location','$sco
             try {
                 auth.verifyPasswordResetCode(actionCode).then(function (email) {
                     console.log("Reset code verified successfully: ");
+                    console.log(auth);
                     $timeout(function () {
                         $scope.template = './templates/ssn.html';
                     });
