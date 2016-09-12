@@ -36,7 +36,7 @@ myApp.factory("FirebaseService", ['$firebaseAuth','$firebaseObject','UserAuthori
 		**/
       getAuthenticationCredentials:function()
       {
-        return $firebaseAuth();
+        return $firebaseAuth().$getAuth();
       },
        /**
 		*@ngdoc method
