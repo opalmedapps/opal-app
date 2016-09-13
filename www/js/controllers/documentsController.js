@@ -3,9 +3,28 @@
 //
 var myApp = angular.module('MUHCApp');
 myApp.controller('DocumentsController', ['Patient', 'Documents', 'UpdateUI', '$scope', '$timeout', 'UserPreferences', 'RequestToServer', '$cordovaFile','UserAuthorizationInfo','$q','$filter','NavigatorParameters',function(Patient, Documents, UpdateUI, $scope, $timeout, UserPreferences, RequestToServer,$cordovaFile,UserAuthorizationInfo,$q,$filter,NavigatorParameters){
-  
+
+  var app = document.URL.indexOf('http://') === -1 && document.URL.indexOf('https://') === -1;
+  if(app) {
+    if (ons.platform.isAndroid()) {
+      var permissions = window.cordova.plugins.permissions;
+      permissions.hasPermission(permissions.WRITE_EXTERNAL_STORAGE, function (status) {
+        if (!status.hasPermission) {
+          var errorCallback = function () {
+            console.warn('Storage permission is not turned on. You will not be able to view any documents.');
+          };
+
+          permissions.requestPermission(permissions.WRITE_EXTERNAL_STORAGE, function (status) {
+            if (!status.hasPermission) errorCallback();
+          }, errorCallback());
+
+        }
+      }, null);
+    }
+  }
+
   documentsInit();
-  
+
   //Initialize documents, determine if there are documents, set language, determine if content has preview
   function documentsInit() {
     $scope.documents = Documents.getDocuments();
