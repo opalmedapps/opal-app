@@ -26,7 +26,7 @@ var myApp=angular.module('MUHCApp');
 *@description API service used to update the whole application. The UpdateUI service is in charge of timestamps for updates of sections, set up or any update to the user fields.
 **/
 myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors','Appointments','Messages','Documents','EducationalMaterial', 'UserAuthorizationInfo', '$q', 'Notifications', 'UserPlanWorkflow','$cordovaNetwork', 'LocalStorage','RequestToServer','$filter','Diagnoses','Questionnaires',
-'NativeNotification',function (Announcements, TxTeamMessages, Patient,Doctors, Appointments,Messages, Documents, EducationalMaterial, UserAuthorizationInfo, $q, Notifications, UserPlanWorkflow,$cordovaNetwork,LocalStorage,RequestToServer,$filter,Diagnoses,Questionnaires, NativeNotification ) {
+'NativeNotification','LabResults',function (Announcements, TxTeamMessages, Patient,Doctors, Appointments,Messages, Documents, EducationalMaterial, UserAuthorizationInfo, $q, Notifications, UserPlanWorkflow,$cordovaNetwork,LocalStorage,RequestToServer,$filter,Diagnoses,Questionnaires, NativeNotification,LabResults ) {
   /**
   *@ngdoc property
   *@name  MUHCApp.service.#lastUpdateTimestamp
@@ -113,11 +113,11 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors',
     {
       init:Messages.setUserMessages,
       update:Messages.updateUserMessages
-    },
-    /*'LabTests': {
+    },*/
+    'LabTests': {
       init:LabResults.setTestResults,
       update:LabResults.updateTestResults
-    },*/
+    },
     'Diagnosis':
     {
       init:Diagnoses.setDiagnoses,
