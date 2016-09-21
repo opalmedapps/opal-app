@@ -40,9 +40,9 @@ myApp.service('FileManagerService',function($q, $cordovaFileOpener2,$filter,News
     }else{
       urlDeviceDocuments = cordova.file.documentsDirectory+'/Documents/';
       urlCDVPathDocuments = "cdvfile://localhost/persistent/Documents/";
-    } 
+    }
     console.log(urlDeviceDocuments, urlDeviceDocuments);
-  } 
+  }
   //Tell me whether a url is a pdf link
   function isPDFDocument(url)
   {
@@ -65,7 +65,7 @@ myApp.service('FileManagerService',function($q, $cordovaFileOpener2,$filter,News
     reader.readAsDataURL(file);
     return r.promise;
   }
- 
+
 return {
   //Obtains file type
   /**
@@ -126,7 +126,7 @@ return {
       });
     });
     return r.promise;
-    
+
   },
   //Shares a url using the social sharing options
   /**
@@ -141,7 +141,7 @@ return {
   {
     //Check if its an app
     if (app) {
-      
+
       //Set the subject for the document
       var options = {subject: name};
       options.url = url;
@@ -150,7 +150,7 @@ return {
       console.log("Share completed? " + result.completed); // On Android apps mostly return false even while it's true
       console.log("Shared to app: " + result.app); // On Android result.app is currently empty. On iOS it's empty when sharing is cancelled (result.completed=false)
       };
-      //Defines on error function 
+      //Defines on error function
       var onError = function(msg) {
         //Show alert banner with error
       NewsBanner.showCustomBanner($filter('translate')("UNABLETOSHAREMATERIAL"),'#f2dede', null, 2000);
@@ -169,7 +169,7 @@ return {
 		*@methodOf MUHCApp.service:FileManagerService
 		*@param {String} filePath File path to look for in storage
 		*@description Opens file from device storage and converts into base64 format, it returns the base64 representation via promises
-    *@return {Promise} If fulfilled document base64 representation returned correctly, otherwise, rejects promise with appropiate error. 
+    *@return {Promise} If fulfilled document base64 representation returned correctly, otherwise, rejects promise with appropiate error.
 		**/
   getFileUrl:function(filePath)
   {
