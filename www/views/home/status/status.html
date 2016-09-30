@@ -1,4 +1,4 @@
-<ons-page ng-controller="StatusController" style="overcroll-y:none" >
+<ons-page ng-controller="StatusController as status" style="overcroll-y:none" >
     <ons-toolbar>
         <div class="left">
             <ons-back-button>{{"BACK"|translate}}</ons-back-button>
@@ -7,7 +7,7 @@
     <div style="overcroll-y:scroll" >
         <div class="container">
             <div style="margin-top:1px">
-                <div ng-show="noData" class="btn my-home-profile">
+                <div ng-show="status.noData" class="btn my-home-profile">
                     <div class="plan-info" style="width:100%">
                         <ons-row>
                             <ons-col width="40px">
@@ -24,7 +24,7 @@
                         </ons-row>
                     </div>
                 </div>
-                <div ng-hide="noData">
+                <div ng-hide="status.noData">
                     <div class="my-home-profile" style="height:220px;">
                         <ons-row style="margin:0;padding:0">
                             <ons-col align="center">
@@ -38,26 +38,26 @@
                                 <div align="center">
                                     <div class="progressStatusTextBox" style="font-size:15px">
                                         <div style="vertical-align: middle">
-                                            <strong>{{"STEP"|translate}} {{eventIndex}} of {{totalEvents}} </strong>
-                                            <div ng-show="!planningCompleted" align="middle" style="margin-left:5px; vertical-align: middle">
-                                                {{currentEvent}}
+                                            <strong>{{"STEP"|translate}} {{status.eventIndex}} of {{status.totalEvents}} </strong>
+                                            <div ng-show="!status.planningCompleted" align="middle" style="margin-left:5px; vertical-align: middle">
+                                                {{status.currentEvent}}
                                                 <!--<br>
                                                 <strong>{{"STARTTREATMENT"|translate}}:</strong>
                                                 <br> {{stages[stages.length-1].Date|date:'MMM d'}}
                                                 <br>
                                                 <span style="color:grey;font-size:13px" >({{"ESTIMATED"|translate}})</span>-->
                                             </div>
-                                            <div ng-show="!treatmentCompleted" align="middle" style="margin-left:5px; vertical-align: middle">
+                                            <div ng-show="!status.treatmentCompleted" align="middle" style="margin-left:5px; vertical-align: middle">
                                                 <strong>{{"UPCOMING"|translate}}:</strong><br>
-                                                {{currentEvent.Title}}<br>
+                                                {{status.currentEvent.Title}}<br>
                                                 <strong>{{"TREATMENTENDS"|translate}}:</strong><br>
-                                                {{endingDate|date:'EEE MMM dd yyyy'}}
+                                                {{status.endingDate|date:'EEE MMM dd yyyy'}}
                                             </div>
 
-                                            <div ng-show="completed" align="middle" style="margin-left:5px">
+                                            <!--<div ng-show="completed" align="middle" style="margin-left:5px">
                                                 <p><i class="ion-checkmark-circled iconStatusBox"></i>{{"TREATMENTPLANCOMPLETEDON"|translate}}
                                                     <br><strong>{{completionDate|date:'EEE MMM dd yyyy'}}</strong></p>
-                                            </div>
+                                            </div>-->
                                         </div>
                                     </div>
                                 </div>
@@ -68,10 +68,10 @@
             </div>
         </div>
         <div style="padding:2px">
-            <div class="my-home-profile" ng-show="!noTreatmentPlan" style="padding:0">
+            <div class="my-home-profile" ng-show="!status.noTreatmentPlan" style="padding:0">
                 <div id="divTreatmentPlan" style="overflow-y:scroll">
                     <ons-list class="plan-list" style="margin:0;padding:0">
-                        <ons-list-item class="plan" modifier="tappable" ng-click="goTo(eventType, app)" ng-repeat="app in events" id="treatmentSessions{{$index}}">
+                        <ons-list-item class="plan" modifier="tappable" ng-click="status.goTo(status.eventType, app)" ng-repeat="app in status.events" id="treatmentSessions{{$index}}">
                             <ons-row id="statusStep{{$index}}">
                                 <ons-col width="50px" class="plan-left" align="center">
                                     <div class="plan-date" ng-show="app.Status=='Past' || app.TimeStatus=='Past'"><img ng-src="./img/checkedbox.png" width="20px" height="20px"></div>
