@@ -1,7 +1,9 @@
 /*
- *Code by David Herrera May 20, 2015, refactored by Robert September 30
- *Github: dherre3, blakholesun
- *Email:davidfherrerar@gmail.com, robert.maglieri@gmail.com
+ *  Code by David Herrera May 20, 2015, refactored by Robert September 30
+ *  Github: dherre3, blakholesun
+ *  Email:davidfherrerar@gmail.com, robert.maglieri@gmail.com
+ *  Description: Controller for the patient's status. Will display plan or treatment status
+ *  based on the patient's current situation.
  */
 
 (function() {
@@ -11,8 +13,8 @@
         .module('MUHCApp')
         .controller('StatusController', StatusController);
 
-    StatusController.$inject = ['$rootScope','$scope','$timeout', 'UserPlanWorkflow',
-        '$anchorScroll','$location','Appointments','NavigatorParameters', '$filter'];
+    StatusController.$inject = ['UserPlanWorkflow','$anchorScroll','$location','Appointments',
+        'NavigatorParameters', '$filter'];
 
     function StatusController(UserPlanWorkflow,$anchorScroll,$location,Appointments,NavigatorParameters,$filter)
     {
@@ -42,6 +44,8 @@
         statusVm.goTo = goTo;                   // function which provides details on the event
 
         activate();                             // initializes status page
+
+
 
         function activate()
         {

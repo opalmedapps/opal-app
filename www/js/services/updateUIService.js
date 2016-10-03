@@ -114,10 +114,10 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors',
        init:Messages.setUserMessages,
        update:Messages.updateUserMessages
        },*/
-      'LabTests': {
+      /*'LabTests': {
         init:LabResults.setTestResults,
         update:LabResults.updateTestResults
-      },
+      },*/
       'Diagnosis':
       {
         init:Diagnoses.setDiagnoses,
@@ -128,11 +128,11 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors',
         init:TxTeamMessages.setTxTeamMessages,
         update:TxTeamMessages.updateTxTeamMessages
       },
-      'Questionnaires':
+      /*'Questionnaires':
       {
         init:Questionnaires.setPatientQuestionnaires,
         update:Questionnaires.updatePatientQuestionnaires
-      },
+      },*/
       'Announcements':
       {
         init:Announcements.setAnnouncements,
@@ -474,7 +474,7 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors',
           'Patient':0,
           'Notifications':0,
           'EducationalMaterial':0,
-          'Questionnaires':0
+          //'Questionnaires':0
         };
       }
     };
