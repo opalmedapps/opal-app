@@ -1,7 +1,7 @@
 /*
- *Code by David Herrera May 20, 2015
- *Github: dherre3
- *Email:davidfherrerar@gmail.com
+ *Code by David Herrera May 20, 2015, refactored by Robert September 30
+ *Github: dherre3, blakholesun
+ *Email:davidfherrerar@gmail.com, robert.maglieri@gmail.com
  */
 
 (function() {
@@ -14,8 +14,7 @@
     StatusController.$inject = ['$rootScope','$scope','$timeout', 'UserPlanWorkflow',
         '$anchorScroll','$location','Appointments','NavigatorParameters', '$filter'];
 
-    function StatusController($rootScope,$scope,$timeout, UserPlanWorkflow,$anchorScroll,
-                              $location,Appointments,NavigatorParameters,$filter)
+    function StatusController(UserPlanWorkflow,$anchorScroll,$location,Appointments,NavigatorParameters,$filter)
     {
         /* jshint validthis: true */
         var statusVm = this;
@@ -23,29 +22,28 @@
         var params =NavigatorParameters.getParameters();
         var boolStatus = params.Navigator == 'homeNavigator';
 
-        statusVm.navigator = params.Navigator;
+
+        statusVm.navigator = params.Navigator;  // getting the navigator from the service
         statusVm.viewTitles = [$filter('translate')('TREATMENTPLANNING'), $filter('translate')('TREATMENTSESSION')];
-        statusVm.noData = false;
+        statusVm.noData = false;                // presence of planning or session data
         statusVm.planningCompleted = true;
         statusVm.treatmentCompleted = true;
-        statusVm.events = {};
-        statusVm.eventType = '';
-        statusVm.eventIndex = 0;
-        statusVm.totalEvents= 0;
-        statusVm.percentage=0;
-        statusVm.completionDate='';
-        statusVm.currentEvent='';
-        statusVm.endingDate = '';
+        statusVm.events = {};                   // planning or treatment event list
+        statusVm.eventType = '';                // determines event type plan or treatment
+        statusVm.eventIndex = 0;                // tracker for the events
+        statusVm.totalEvents= 0;                // total number of events
+        statusVm.percentage=0;                  // percentage completion for each eventtype
+        statusVm.completionDate='';             // date of plan completion
+        statusVm.currentEvent='';               // current event in sequence
+        statusVm.endingDate = '';               // treatment end date
 
 
-        statusVm.getStyle = getStyle;
-        statusVm.goTo = goTo;
+        statusVm.getStyle = getStyle;           // function which determines style
+        statusVm.goTo = goTo;                   // function which provides details on the event
 
-        setStatusPage();
-        setHeightElement();
+        activate();                             // initializes status page
 
-
-        function setStatusPage()
+        function activate()
         {
             //Check for PlanWorkflow completion and populate with that otherwise start with treatment sessions
             var events;
@@ -65,6 +63,7 @@
                     initTreatmentSessions(events);
                 }
             }
+            setHeightElement();
         }
 
         function setHeightElement()
