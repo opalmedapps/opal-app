@@ -1,0 +1,6 @@
+# ignore gvim swap files
+*.swp
+*.swo
+
+# Ignore config module
+modules/Configs.pm
