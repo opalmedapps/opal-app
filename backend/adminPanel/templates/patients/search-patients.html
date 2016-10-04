@@ -1,13 +1,19 @@
-<div class="main-div-container">
-  <div>
-    <div class="col-xs-4" stylw="margin-bottom:30px">
-
-      <div>
-      <h3>Search Patient: </h3><input type="search" value="" placeholder="Search" class="search-input" ng-model="searchPatient">
+<div class="main-div-container animated zoomIn">
+  <div style="padding:20px">
+  <div class='widget'>
+    <div class="widget-header">
+      <div class="row">
+        <div class="pull-left" style="font-size:20px;margin-left:10px">
+          <i class="ion-ios-people"></i> <strong>Patients</strong>
+        </div>
+        <div class="pull-right col-xs-6 col-sm-4">
+          <input type="search" value="" placeholder="Search" class="search-input" ng-model="searchPatient">
+        </div>
+      </div>
     </div>
-    </div>
-    <div style="margin-top:30px">
-      <table class="table table-bordered table-hover" style="padding:20px">
+    <div class="widget-body no-padding">
+          <div class="table-responsive">
+      <table class="table table-hover" >
           <th class="active" style="text-align:center">
           Patient ID #
           </th>
@@ -26,23 +32,25 @@
           <th class="active"style="text-align:center">
           Email
           </th>
-          <th class="active"style="text-align:center">
-          Status
-          </th>
-          <th class="active">
-          </th>
 
-          <tr align="center" ng-repeat="patient in patients|filter:searchPatient">
+          <tr class="unfocus" align="center" ng-click="goToPatient(patient)" ng-repeat-start="patient in patients|filter:searchPatient">
               <td>{{patient.PatientId}}</td>
               <td>{{patient.PatientAriaSer}}</td>
               <td>{{patient.FirstName}}</td>
               <td>{{patient.LastName}}</td>
               <td>{{patient.SSN}}</td>
               <td>{{patient.Email}}</td>
-              <td>{{patient.Status_EN}}</td>
-              <td align="center"><button class="btn btn-primary" ng-click="goToPatient(patient)">Go To Patient &raquo;</button></td>
+          </tr>
+          <tr uib-collapse="!patient.expanded" ng-repeat-end="">
+            <td colspan="6" >
+              <div  style="margin: 0 auto;margin-top:5px; width:350px; height:500px;">
+                <!--<load-app src='appFolder'></load-app>-->
+              </div>
+            </td>
           </tr>
       </table>
     </div>
+    </div>
+  </div>
   </div>
 </div>
