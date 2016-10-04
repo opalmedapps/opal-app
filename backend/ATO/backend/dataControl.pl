@@ -7,12 +7,8 @@
 #
 # We use our custom Perl Modules to help us with getting information and 
 # setting them into the appropriate place. 
-
-# DEV
-use lib '/usr/lib/cgi-bin/dev/ATO/modules'; # specify where are modules are
-
-# PRO
-# use lib '/usr/lib/cgi-bin/DB/ATOules'; # specify where are modules are
+use File::Basename;
+use lib dirname($0) . '/modules'; # specify where are modules are -- $0 = this script's location
 
 #-----------------------------------------------------------------------
 # Packages/Modules
@@ -23,6 +19,8 @@ use Time::Piece;
 use POSIX;
 use Storable qw(dclone);
 
+
+use Configs; # custom Configs.pm
 use Database; # custom Database.pm
 use Patient; # custom Patient.pm
 use Task; # custom Task.pm
