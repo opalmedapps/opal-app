@@ -8,8 +8,13 @@
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
     <!-- build:css(.) styles/vendor.css -->
     <!-- bower:css -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="bower_components/main.min.css"/>
+    <link rel="stylesheet" href="bower_components/angular-material/angular-material.min.css" type="text/css">
     <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css" />
     <link rel="stylesheet" href="bower_components/ionicons/css/ionicons.min.css"/>
+    <link rel="stylesheet" href="styles/animate.css"/>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
     <!-- endbower -->
     <!-- endbuild -->
@@ -17,19 +22,176 @@
     <link rel="stylesheet" href="styles/main.css">
     <!-- endbuild -->
   </head>
-  <body ng-app="adminPanelApp">
+  <script>
+  var timeoutID;
+
+function setup() {
+    this.addEventListener("mousemove", resetTimer, false);
+    this.addEventListener("mousedown", resetTimer, false);
+    this.addEventListener("keypress", resetTimer, false);
+    this.addEventListener("DOMMouseScroll", resetTimer, false);
+    this.addEventListener("mousewheel", resetTimer, false);
+    this.addEventListener("touchmove", resetTimer, false);
+    this.addEventListener("MSPointerMove", resetTimer, false);
+
+    startTimer();
+}
+setup();
+
+function startTimer() {
+    // wait 2 seconds before calling goInactive
+    timeoutID = window.setTimeout(goInactive, 300000);
+}
+
+function resetTimer(e) {
+    window.clearTimeout(timeoutID);
+
+    goActive();
+}
+
+function goInactive() {
+    window.localStorage.removeItem('OpalAdminPanelPatient');
+    window.localStorage.removeItem('OpalAdminPanelUser');
+    location.reload();
+}
+
+function goActive() {
+    // do something
+
+    startTimer();
+}
+
+  </script>
+  <body ng-app="adminPanelApp" ng-controller="MainController">
+    <div id="page-wrapper" ng-class="{'open': toggle}" ng-cloak>
+
+    <!-- Sidebar -->
+    <div id="sidebar-wrapper">
+      <ul class="sidebar">
+        <li class="sidebar-main">
+          <a ng-click="toggleSidebar()">
+            OPAL
+            <span class="menu-icon glyphicon glyphicon-transfer"></span>
+          </a>
+        </li>
+        <li class="sidebar-title" style="height:auto;padding:5px" align="center"><div class="text-center" style="background-color:white" align="center">
+          <img class="img-responsive" style="width:100%" src="./img/logo_cedars.png">
+          </div></li>
+        <li class="sidebar-list">
+          <a href="#">Home <span class="menu-icon glyphicon glyphicon-home"></span></a>
+        </li>
+        <li class="sidebar-list">
+          <a href="#/patients/search-patients">Patients<span class="menu-icon  glyphicon glyphicon-user" style="font-size:20px"></span></a>
+        </li>
+        <li class="sidebar-list">
+          <a href="#/patients/patient-activity">Activity <span class="menu-icon glyphicon glyphicon-stats"></span></a>
+        </li>
+        <li class="sidebar-list">
+          <a href="#/registration">Registration <span class="menu-icon glyphicon glyphicon-list-alt"></span></a>
+        </li>
+        <li class="sidebar-list">
+          <a href="#/messages">Messages <span class="menu-icon glyphicon glyphicon-envelope"></span></a>
+        </li>
+        <li class="sidebar-list">
+          <a href="#/feedback">Feedback <span class="menu-icon glyphicon glyphicon-thumbs-up"></span></a>
+        </li>
+        
+      </ul>
+      <div class="sidebar-footer">
+        <div class="col-xs-12">
+          <a href="https://github.com/rdash/rdash-angular" target="_blank">
+            MUHC 2016
+          </a>
+        </div>
+        <!--<div class="col-xs-4">
+          <a href="https://github.com/rdash/rdash-angular/README.md" target="_blank">
+            About
+          </a>
+        </div>
+        <div class="col-xs-4">
+          <a href="#">
+            Support
+          </a>
+        </div>-->
+      </div>
+    </div>
+    <!-- End Sidebar -->
+
+    <div id="content-wrapper">
+      <div class="page-content">
+
+        <!-- Header Bar -->
+        <div class="row header">
+          <div class="col-xs-12">
+            <div class="user pull-right">
+              <div class="item dropdown" uib-dropdown>
+                <a href="#" class="dropdown-toggle" uib-dropdown-toggle>
+                  <img src="img/avatar.jpg">
+                </a>
+                <ul class="dropdown-menu dropdown-menu-right">
+                  <li class="dropdown-header">
+                    {{currentUser.Username}}
+                  </li>
+                  <li class="divider"></li>
+                  <li class="link">
+                    <a href="#/account">
+                      Profile
+                    </a>
+                  </li>
+                  <li class="divider"></li>
+                  <li class="link">
+                    <a href ng-click="logout()">
+                      Logout
+                    </a>
+                  </li>
+                </ul>
+              </div>
+              <div class="item dropdown" uib-dropdown>
+               <a href="#" class="dropdown-toggle" uib-dropdown-toggle>
+                  <i class="ion-ios-bell"></i>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-right">
+                  <li class="dropdown-header">
+                    Notifications
+                  </li>
+                  <li class="divider"></li>
+                  <li>
+                    <a href="#">Server Down!</a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div class="meta">
+              <div class="page" id="stateName" style="display:none">
+                Oncology Patient Application - {{stateName}}
+              </div>
+              <div class="breadcrumb-links">
+              
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- End Header Bar -->
+
+
+        <!-- Main Content -->
+        <div ui-view></div>
+
+      </div><!-- End Page Content -->
+    </div><!-- End Content Wrapper -->
+  </div>
     <!--[if lte IE 8]>
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
 
     <!-- Add your site or application content here -->
-    <div ng-controller="MainController">
+    <!--<div >
     <div class="container" align="center" >
       <img class="img-responsive" src="./img/muhc-logo-text.png">
     <span style="color:#2E8AE6"><strong>Portal MUHC Oncology Patient Application</strong></span><br><br>
     </div>
 
-    <div class="header"  align="center">
+    <div  id="menuDiv" class="header"  align="center"  style="display:none">
       <div class="navbar navbar-default" role="navigation" style="width:85vw;box-shadow: 0 0 20px lightgrey;" >
         <div class="container" align="center">
           <div class="navbar-header" >
@@ -53,18 +215,25 @@
               <li ng-show="userType!=='Doctor'" class="main-theme-font-color item-menu-size" ui-sref-active="active">
                 <a ui-sref="registration"><span class="item-menu-size"><i class="icon ion-clipboard"></i>  <strong>Registration</strong></a>
               </li>
-              <li ng-show="userType!=='Staff'" class="main-theme-font-color item-menu-size" ui-sref-active="active">
+              <li ng-show="userType!=='Staff'&&userType!=='Admin'" class="main-theme-font-color item-menu-size" ui-sref-active="active">
                 <a ui-sref="patients.search-patients"><span class="item-menu-size"><i class="ion-ios-people" ></i> <strong>Patients</strong></span></a>
               </li>
+                <li ng-show="userType!=='Staff'&&userType!=='Doctor'" class="dropdown " ui-sref-active="active">
+                <a  ui-sref="patients.search-patients" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="item-menu-size main-theme-font-color" ><i class="ion-ios-people"></i></span><span class="main-theme-font-color"> <strong>Patients</strong></span><span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                  <li ><a ui-sref="patients.activity"><span class="item-menu-size main-theme-font-color" ><i class="ion-arrow-graph-up-right"></i></span>  Activity</a></li>
+                  <li><a ui-sref="patients.search-patients"><span class="item-menu-size main-theme-font-color" ><i class="ion-search"></i></span> Search Patient</a></li>
+                </ul>
+            </li>
 
-              <li ng-show="userType!=='Staff'" class="main-theme-font-color item-menu-size" ui-sref-active="active">
+              <li ng-show="userType==='Doctor'" class="main-theme-font-color item-menu-size" ui-sref-active="active">
                 <a ui-sref="messages"><span class="item-menu-size"><i class="ion-email"></i><i class="{{}}"></i>  <strong>Messages  <span class="badge" ng-show="NumberOfNewMessages!==0">{{NumberOfNewMessages}}</span></a></strong></span></a>
               </li>
 
             <!--  <li class="main-theme-font-color item-menu-size" ng-class="activeClasses[3]">
                 <a ui-sref="requests"><span class="item-menu-size"><i class="ion-ios-information"></i> <strong>Requests</strong></span></a>
               </li>-->
-              <li class="main-theme-font-color item-menu-size" ui-sref-active="active"><a ui-sref="account"><span class="item-menu-size"><i class="ion-gear-a"></i>  <strong>Account</strong></span></a></li>
+              <!--<li class="main-theme-font-color item-menu-size" ui-sref-active="active"><a ui-sref="account"><span class="item-menu-size"><i class="ion-gear-a"></i>  <strong>Account</strong></span></a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
             <li ng-show="currentUser" class="dropdown" >
@@ -77,17 +246,12 @@
           </div>
         </div>
       </div>
-    </div>
+    </div
     <div class="container-fluid">
     <div ui-view></div>
     </div>
     </div>
-</div>
-    <div class="footer">
-      <div class="container" align="center">
-        <p><span class="item-menu-size">MUHC 2015</span></p>
-      </div>
-    </div>
+</div>>-->
 
     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
      <script>
@@ -104,6 +268,7 @@
     <!-- bower:js -->
     <script src="bower_components/jquery/dist/jquery.js"></script>
     <script src="bower_components/angular/angular.js"></script>
+
     <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
     <script src="bower_components/angular-animate/angular-animate.js"></script>
     <script src="bower_components/angular-cookies/angular-cookies.js"></script>
@@ -116,11 +281,20 @@
     <script src="bower_components/firebase/firebase.js"></script>
     <script src="bower_components/angular-bootstrap/ui-bootstrap.min.js"></script>
     <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
+    <script src="bower_components/angular-aria/angular-aria.js"></script>
+    <script src="bower_components/angular-animate/angular-animate.js"></script>
+    <script src="bower_components/angular-material/angular-material.js"></script>
+    <script src="https://cdn.gitcdn.xyz/cdn/angular/bower-material/v1.0.5/angular-material.js"></script>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+
     <!--Crypto libraries-->
     <script src="bower_components/cryptojs/aes.js"></script>
     <script src="bower_components/cryptojs/mode-cfb-min.js"></script>
     <script src="bower_components/cryptojs/sha256.js"></script>
-
+    <!-- SCRIPTS -->
+    <!-- Custom Scripts -->
+    <!--<script type="text/javascript" src="bower_components/dashboard.min.js"></script>-->
 
     <!-- endbower -->
     <!-- endbuild -->
@@ -132,6 +306,7 @@
         <!--Controller-->
 
         <script src="scripts/controllers/LoginModalController.js"></script>
+        <script src="scripts/controllers/activityController.js"></script>
         <script src="scripts/controllers/AccountController.js"></script>
         <script src="scripts/controllers/SearchPatientsController.js"></script>
         <script src="scripts/controllers/IndividualPatientController.js"></script>
@@ -140,16 +315,29 @@
         <script src="scripts/controllers/PatientsController.js"></script>
         <script src="scripts/controllers/RequestsController.js"></script>
         <script src="scripts/controllers/RegistrationController.js"></script>
+        <script src="scripts/controllers/FeedbackController.js"></script>
+
 
         <script src="scripts/controllers/patient.js"></script>
 
         <!--services-->
         <script src="scripts/services/API.js"></script>
+        <script src="scripts/services/messageService.js"></script>
+        <script src="scripts/services/patientService.js"></script>
+        <script src="scripts/services/urlsService.js"></script>
+        <script src="scripts/services/userService.js"></script>
+        <script src="scripts/services/allPatients.js"></script>
           <script src="scripts/services/validate.js"></script>
+        <script src="scripts/services/activityLogService.js"></script>
+        <script src="scripts/services/feedbackService.js"></script>
+
+        <script src="../credentialsService.js"></script>
+
         <!--filters-->
         <script src="scripts/filters.js"></script>
         <!--directives-->
         <script src="scripts/directives/fileUpload.js"></script>
+        <script src="scripts/directives/rateDirective.js"></script>
 
         <!-- endbuild -->
 </body>

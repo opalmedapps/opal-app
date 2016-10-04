@@ -1,0 +1,91 @@
+<div >
+
+  <md-content >
+    <md-tabs md-dynamic-height md-border-bottom>
+      <md-tab label="App">
+
+        <md-content class="md-padding">
+        <md-card > 
+        <md-toolbar md-scroll-shrink ng-if="true" >
+    <div class="md-toolbar-tools">
+      <h3>
+        <span>App Feedback</span> </h3>
+        <span flex></span>
+         
+        <md-input-container>
+        <md-select ng-model="filterOption" ng-change="applyFilter(filterOption)">
+          <md-option ng-repeat="option in optionsFilterAppFeedback" value="{{option}}">
+            {{option}}
+          </md-option>
+        </md-select>
+      </md-input-container>
+     
+    </div>
+  </md-toolbar>
+  <md-card-content style="padding:0;min-height:500px;height:70vh;overflow-y:scroll">
+          <md-list flex>
+        <md-list-item class="md-3-line md-long-text" ng-repeat="feedback in feedbackArray">
+          <div class="md-list-item-text">
+            <h4>PatientId:{{feedback.PatientId}} Date: {{feedback.DateAdded}}</h4>
+            
+              <h5>Rating: <stars number="{{feedback.AppRating}}"></stars> </h5>
+              <p>{{feedback.FeedbackContent}}
+            </p>
+          </div>
+          <md-divider ></md-divider>
+        </md-list-item>
+    </md-list>
+  </md-card-content>
+</md-card>
+        </md-content>
+
+      </md-tab>
+      <md-tab label="Educational Material">
+      <div class="col-xs-12 col-sm-4" style="padding:0;margin:0">
+        <md-content class="md-padding">
+        <md-card style="padding:0;min-height:500px;height:80vh">
+        <md-toolbar md-scroll-shrink ng-if="true" >
+    <div class="md-toolbar-tools">
+      <h3>
+        <span>Educational Material</span>
+      </h3>
+    </div>
+  </md-toolbar>
+        <md-card-content style="padding:0">
+        <md-list>
+          <md-list-item class="md-3-line md-long-text" ng-repeat="material in educationalFeedbackArray" ng-click="goToGraph($index, material)" style="padding:0;margin:0" ng-class="(selectedIndex==$index)?'conversationSelected':''">
+          <div class="md-list-item-text">
+            <h4>{{material.EducationalMaterialName}}</h4>
+              <h5>Avg. Rating: <stars number="{{material.AverageRating}}"></stars>({{material.AverageRating}}) </h5>
+              <p>Link: <a ng-click="goToLink(material)">Educational Material Link</a></p>
+          </div>
+        </md-list-item>
+      </md-list>
+      </md-card-content>
+      </md-card>
+     
+        </md-content>
+      </div>
+      <div class="col-xs-12 col-sm-8" style="padding:0;margin:0">
+        <md-content class="md-padding">
+        <md-card style="padding:0;min-height:500px;height:80vh;overflow-y:scroll">
+        <md-toolbar md-scroll-shrink ng-if="true" >
+    <div class="md-toolbar-tools">
+      <h3>
+        <span>{{title}}</span>
+      </h3>
+    </div>
+  </md-toolbar>
+        <md-card-content style="padding:0">
+            <div id="containerGraphFeedback" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+
+      </md-card-content>
+      </md-card>
+     
+        </md-content>
+      </div>
+      </md-tab>
+    </md-tabs>
+  </md-content>
+  </div>
+</div>

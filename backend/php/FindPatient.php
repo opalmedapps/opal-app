@@ -1,18 +1,9 @@
-<?php
-// Connection to MSSQL 2008 R2 ( ARIA )
-define( "DB_USERNAME", "root" );
-define( "DB_PASSWORD", "service" );
-define( "HOST", "172.26.66.41" );
-define( "PORT", "22" );
-define( "HOST_USERNAME", "webdb" );
-define( "HOST_PASSWORD", "service" );
-define( "ARIA_DB", "172.16.220.56:1433\\database" );
-define( "ARIA_USERNAME", "reports" );
-define( "ARIA_PASSWORD", "reports" );
+    <?php
+
 // Parse the Parameters
 //$Data=file_get_contents("php://input");
 //$request=json_decode($Data);
-
+include "config.php";
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && empty($_POST)) $_POST = json_decode(file_get_contents('php://input'), true);
 $PatientSSN=$_POST["PatientSSN"];
 //echo "$_POST[patientId]";
@@ -24,31 +15,35 @@ if (!$link) {
     die('Unable to connect or select database!');
 }
 // Query the appointments associated with the specific patient.
-$sql = "
-SELECT DISTINCT
-     Patient.PatientSer,
- 	 Patient.LastName AS PatientLastName,
-	 Patient.FirstName AS PatientFirstName,
-	 Doctor.FirstName AS DoctorFirstName,
-	 Doctor.LastName AS DoctorLastName,
-	 PatientDoctor.PrimaryFlag,
-	 PatientDoctor.OncologistFlag,
-	 Patient.SSN,
-	 Patient.PatientId,
-	 Diagnosis.Description
-	 FROM
-	 variansystem.dbo.Patient Patient,
-	 variansystem.dbo.Diagnosis Diagnosis,
-	 variansystem.dbo.PatientActuals PatientActuals,
-	 variansystem.dbo.PatientDoctor PatientDoctor,
-	 variansystem.dbo.Doctor Doctor
-	 WHERE
-	 Patient.SSN LIKE '%".$PatientSSN."%'
-	 AND Patient.SSN=PatientActuals.SSN
-	 AND PatientActuals.PatientSer=Diagnosis.PatientSer
-	 AND PatientActuals.PatientSer=PatientDoctor.PatientSer
-	 AND Doctor.ResourceSer=PatientDoctor.ResourceSer
-";
+$sql ="SELECT Patient.PatientSer, Patient.LastName AS PatientLastName, Patient.FirstName AS PatientFirstName, Photo.Picture, Patient.SSN, Patient.PatientId FROM variansystem.dbo.Patient Patient LEFT JOIN variansystem.dbo.Photo Photo ON  Photo.PatientSer = Patient.PatientSer WHERE Patient.SSN LIKE '%".$PatientSSN."%';";
+
+// SELECT DISTINCT 
+//      Patient.PatientSer, 
+//  	 Patient.LastName AS PatientLastName, 
+// 	 Patient.FirstName AS PatientFirstName, 
+// 	 Doctor.FirstName AS DoctorFirstName, 
+// 	 Doctor.LastName AS DoctorLastName, 
+// 	 PatientDoctor.PrimaryFlag, 
+// 	 PatientDoctor.OncologistFlag, 
+//      Photo.Picture, 
+// 	 Patient.SSN, 
+// 	 Patient.PatientId, 
+// 	 Diagnosis.Description 
+// 	 FROM 
+// 	 variansystem.dbo.Patient Patient, 
+//      variansystem.dbo.Photo Photo, 
+// 	 variansystem.dbo.Diagnosis Diagnosis, 
+// 	 variansystem.dbo.PatientActuals PatientActuals, 
+// 	 variansystem.dbo.PatientDoctor PatientDoctor, 
+// 	 variansystem.dbo.Doctor Doctor
+// 	 WHERE 
+// 	 Patient.SSN LIKE '%".$PatientSSN."%' 
+//      AND Photo.PatientSer = Patient.PatientSer 
+// 	 AND Patient.SSN=PatientActuals.SSN 
+// 	 AND PatientActuals.PatientSer=Diagnosis.PatientSer 
+// 	 AND PatientActuals.PatientSer=PatientDoctor.PatientSer 
+// 	 AND Doctor.ResourceSer=PatientDoctor.ResourceSer 
+// ";
 if (isset($PatientSSN) ){
 
     $all = MSSQL_Query($sql);
@@ -60,10 +55,13 @@ else {
     $json= array();
     while ($row=mssql_fetch_array($all,MSSQL_ASSOC))
     {
+        $row["Picture"] = base64_encode($row["Picture"]);
     	$json[]=$row;
+        
     }
     //Prepare JSON output and extract PatientId for lookup in mySQL
-    $PatientId=$json[0]["PatientId"];
+    $PatientId=$json[0]["PatientId"]; 
+    //echo json_encode(utf8_encode($json[0]["Picture"]));
     $patientData= json_encode($json);
     // Query mySQL to see if the patient is already registered
     $conn=new mysqli("localhost","root","service","QPlusApp");
@@ -76,9 +74,9 @@ else {
      ";
 
     $lookupresult= $conn->query($sqllookup);
-    if ( $lookupresult->num_rows===1) { 
+    if ( $lookupresult->num_rows===1) {
         $row=$lookupresult->fetch_assoc();
-        $row['response']="Patient has already been registered!";
+        $row['response']="PatientAlreadyRegistered";
         echo json_encode($row);
 
     }
@@ -90,5 +88,14 @@ die('Query Failed!');
 }
 // Clean up
 mssql_free_result($all);
-
+function utf8ize($d) {
+    if (is_array($d)) {
+        foreach ($d as $k => $v) {
+            $d[$k] = utf8ize($v);
+        }
+    } else if (is_string ($d)) {
+        return utf8_encode($d);
+    }
+    return $d;
+}
 ?>
