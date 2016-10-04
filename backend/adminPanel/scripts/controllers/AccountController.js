@@ -1,66 +1,145 @@
-app.controller('AccountController',function ($rootScope, $scope,User, $timeout, fieldsValidate) {
-
-  User.getUserFromServer().then(function(response)
+var myApp=angular.module('adminPanelApp');
+myApp.controller('ToastController',function($mdToast,$scope){
+  $scope.closeToast=function()
   {
-    console.log(response);
-    User.setUserSerNum(response.UserSerNum);
-  });
-
-  $scope.accountFields=User.getAccountFields();
-  $scope.password=User.getUserPassword();
-  $scope.username=User.AccountObject['Username'];
-  var fields=User.getUserFields();
-  if(fields.DoctorAriaSer){
-    $scope.doctorAriaSer=fields.DoctorAriaSer;
+    $mdToast.hide();
   }
-
+});
+myApp.controller('AccountController',function ($rootScope, URLs,$scope,User, $timeout, fieldsValidate,$mdToast,$document) {
+  $scope.showCustomToast = function() {
+    $mdToast.show({
+      controller:'ToastController',
+      templateUrl: 'toast-template.html',
+      parent : $document[0].querySelector('#showToast'),
+      hideDelay: 3000,
+      position: 'top right'
+    });
+  };
+  setUpAccountSettings();
   $scope.update=function(key, value)
   {
+    $rootScope.checkSession()
     console.log(value);
     var result=fieldsValidate.validateString(key,value);
-    $timeout(function(){
-      $scope.alert={};
-      $scope.alert[key]=result;
-      $scope.alert[key].show=true;
-    });
+    /*$timeout(function(){
+      $scope.alertField={};
+      $scope.alertField[key]=result;
+      $scope.alertField[key].show=true;
+    });*/
     if(result.type=='success')
     {
-      User.updateFieldInServer(key, value);
-      User.updateUserField(key,value);
-      $scope.closeAllOtherFields();
+      User.updateFieldInServer(key, value).then(function(data)
+      {
+        $timeout(function(){
+          if(data=='Update Complete')
+          {
+            $scope.alertField={};
+            $scope.alertField[key]=result;
+            $scope.alertField[key].show=true;
+            User.updateUserField(key,value);
+            $scope.accountFields[key].Value=value;
+            $scope.accountFields[key].newValue=value;
+            $scope.showCustomToast();
+          }
+        });
+      },function(error){
+        $timeout(function(){
+              $scope.alertField={};
+              $scope.alertField[key].alertType='danger';
+              $scope.alertField[key].reason='Server error';
+              $scope.alertField[key].show=true;
+        })
+      });
+      //User.updateUserField(key,value);
+      //$scope.accountFields[key].Value=value;
+      //$scope.accountFields[key].newValue=value;
+      //$scope.closeAllOtherFields();
+    }else{
+      $timeout(function(){
+        $scope.alertField={};
+        $scope.alertField[key]=result;
+        $scope.alertField[key].show=true;
+      });
     }
   };
   $scope.updatePassword=function(){
-    var result=fieldsValidate.validatePassword($scope.password.oldValue,  $scope.password.newValue,$scope.password);
-    $timeout(function(){
-      $scope.alert={};
-      $scope.alert['Password']=result;
-      $scope.alert['Password'].show=true;
-    });
-    if(result.type=='success')
-    {
-      User.updateFieldInServer('Password', $scope.password.newValue);
-      User.updateUserField('Password',$scope.password.newValue);
-      $scope.closeAllOtherFields()
-    }
+    $rootScope.checkSession();
+    fieldsValidate.validatePassword($scope.accountFields['Password'].Value,$scope.accountFields['Password'].newValue).then(function(result){
+      if(result.type=='success')
+      {
+        User.updateFieldInServer('Password', $scope.accountFields['Password'].newValue).then(
+          function(data){
+            if(data=='Update Complete')
+            {
+              $timeout(function(){
+                $scope.alertField={};
+                $scope.alertField['Password']=result;
+                $scope.alertField['Password'].show=true;
+                //User.updateUserField('Password',$scope.password.newValue);
+                $scope.accountFields['Password'].Value='';
+                $scope.accountFields['Password'].newValue='';
+                $scope.showCustomToast();
+              })
+            }
+            
+          },
+          function(error){
+            $timeout(function(){
+              $scope.alertField={};
+              $scope.alertField[key].alertType='danger';
+              $scope.alertField[key].reason='Server error';
+              $scope.alertField[key].show=true;
+            });
+            
+          })
 
-    console.log(result);
+      }else{
+        $timeout(function(){
+          $scope.alertField={};
+          $scope.alertField['Password']=result;
+          $scope.alertField['Password'].show=true;
+        });
+      }
+      console.log(result);
+    });
+
+
   };
   $scope.$watch('uploadProfilePic',function(){
     console.log($scope.uploadProfilePic);
   });
+
   $scope.updateUsername=function(){
-      var result=fieldsValidate.validateString('Username',  $scope.username.newValue);
-      $timeout(function(){
-        $scope.alert={};
-        $scope.alert['Username']=result;
-        $scope.alert['Username'].show=true;
-      });
+      var result=fieldsValidate.validateString('Username',  $scope.accountFields['Username'].newValue);
       if(result.type=='success')
       {
-        User.updateFieldInServer('Username', $scope.username.newValue);
-        User.updateUserField('Username',$scope.username.newValue);
-        $scope.closeAllOtherFields();
+        User.updateFieldInServer('Username', $scope.accountFields['Username'].newValue).then(
+          function(data){
+            $timeout(function(){
+              User.updateUserField('Username',$scope.accountFields['Username'].newValue);
+              $scope.accountFields['Username'].Value=$scope.accountFields['Username'].newValue;
+              $scope.accountFields['Username'].newValue=$scope.accountFields['Username'].newValue;
+              $scope.alertField={};
+              $scope.alertField['Username']=result;
+              $scope.alertField['Username'].show=true;
+              $scope.showCustomToast();
+            });
+          },function(error){
+              $timeout(function(){
+                $scope.alertField={};
+                $scope.alertField[key].alertType='danger';
+                $scope.alertField[key].reason='Server error';
+                $scope.alertField[key].show=true;
+              });
+          });
+        
+        //$scope.closeAllOtherFields();
+      }else{
+        $timeout(function(){
+          $scope.alertField={};
+          $scope.alertField['Username']=result;
+          $scope.alertField['Username'].show=true;
+        });
       }
   }
   $scope.closeAllOtherFields=function(fieldName)
@@ -71,5 +150,46 @@ app.controller('AccountController',function ($rootScope, $scope,User, $timeout, 
       }
     }
   }
+  function setUpAccountSettings()
+  {
 
-});
+    var userFields=User.getUserFields();
+    $scope.userFields=userFields;
+    console.log(userFields);
+    var accountObject={};
+    $scope.alertField={};
+    for (var key in userFields) { 
+      $scope.alertField[key]={};
+      $scope.alertField[key].alertType='';
+      $scope.alertField[key].reason='';
+      $scope.alertField[key].show=false;
+      if(key!=='Image'&&key!=='UserTypeSerNum'&&key!=='DoctorAriaSer'&&key!=='Role'&&key!=='StaffID')
+      {
+        accountObject[key]=
+        {
+          'Value':userFields[key],
+          'Edit':false,
+          'newValue':userFields[key]
+        }
+      }else if(key=='Image')
+      {
+        accountObject[key]=
+        {
+          'Value':URLs.getDoctorImageUrl()+userFields[key],
+          'Edit':false,
+          'newValue':URLs.getDoctorImageUrl()+userFields[key]
+        }
+      }else if(key=='Password')
+      {
+        accountObject[key]=
+        {
+          'Value':'',
+          'Edit':false,
+          'newValue':''
+        }
+      }
+    };
+    $scope.accountFields=accountObject;
+  }
+})
+

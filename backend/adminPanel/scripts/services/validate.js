@@ -1,5 +1,5 @@
 var app=angular.module('adminPanelApp');
-app.service('fieldsValidate',function ($rootScope, $http,$q) {
+app.service('fieldsValidate',function ($rootScope, $http,$q,api,URLs,User) {
   return{
     validateString:function(field, value, revalue)
     {
@@ -62,29 +62,38 @@ app.service('fieldsValidate',function ($rootScope, $http,$q) {
       }
       return objectResponse;
     },
-    validatePassword:function(oldValue,value,password)
+    validatePassword:function(oldValue,value)
     {
+      var r=$q.defer();
       var objectResponse={};
       if(value.length>=4)
       {
         objectResponse.type='success';
         objectResponse.alertType='success';
+        var object={};
+        object.Password=oldValue;
+        object.Username=User.getUsername();
+        api.getFieldFromServer(URLs.getValidatePasswordUrl(),object).then(function(response){
+        console.log(response);
+        if(response=='Valid Password')
+        {
+            objectResponse.reason="Field has been updated!";
+            r.resolve(objectResponse);  
+        }else{
+          objectResponse.type='error';
+          objectResponse.alertType='danger';
+          objectResponse.reason="Passwords don\'t match";
+          r.resolve(objectResponse);
+        }
+        });
       }else{
         objectResponse.type='error';
         objectResponse.alertType='danger';
         objectResponse.reason='Password must be longer than 3 characters';
+        r.resolve(objectResponse);
       }
-      if(password.Value!==oldValue)
-      {
-        console.log(password);
-        objectResponse.type='error';
-        objectResponse.alertType='danger';
-        objectResponse.reason="Passwords don\'t match";
-      }
-      if(objectResponse.type=='success'){
-        objectResponse.reason="Field has been updated!"
-      }
-      return objectResponse;
+      return r.promise;
+     
     }
 
 

@@ -8,7 +8,6 @@ $conn = new mysqli("localhost", DB_USERNAME, DB_PASSWORD, MYSQL_DB);
 if ($conn->connect_error) {
     die("<br>Connection failed: " . $conn->connect_error);
 }
-echo($_POST['Alias']);
 if(isset($_POST['Alias']))
 {	
 	$sqlLookupAlias="

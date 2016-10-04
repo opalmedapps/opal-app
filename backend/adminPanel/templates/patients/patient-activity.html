@@ -1,0 +1,129 @@
+<div class='main-div-container animated zoomIn'>
+	  <div style="padding:20px">
+  <div class='widget'>
+    <div class="widget-header">
+      <div class="row" style="font-size:20px;">
+        <div class="pull-left" style="font-size:20px;margin-left:10px">
+         <div class="form-group">
+    <label ><i class="ion-search"></i> Search Patient: </label>
+    <input type="search" value="" placeholder="Search" class="form-control"  ng-model="searchPatient">
+  </div>
+        </div>
+        <div class="pull-left col-xs-12 col-sm-2">
+           <div class="form-group">
+    <label ><i class="ion-ios-settings-strong"></i> Filter:</label>
+    <select class="form-control" ng-model="dateFilter">
+      <option value="all">All</option>
+      <option value="range">Choose Date Range</option>
+
+    </select>
+  </div>
+        </div>
+        <div ng-show  ="dateFilter=='range'" class="col-xs-12 col-sm-7" >
+          <div class="pull-left col-sm-4 col-xs-12">
+            <label ><i class="ion-calendar"></i> Start Date:</label>
+            <md-content style="border:2px solid grey">
+                <md-datepicker ng-model="startDateFilter" md-placeholder="Enter start date"></md-datepicker>
+            </md-content>
+          </div>
+          <div class="pull-left col-sm-4 col-xs-12">
+            <label ><i class="ion-calendar"></i> End Date:</label>
+            <md-content style="border:2px solid grey">
+                <md-datepicker ng-model="endDateFilter" md-placeholder="Enter end date"></md-datepicker>
+            </md-content>
+          </div>
+          <div class="col-sm-4 col-xs-12">
+            <br>
+            <md-button class="md-primary md-raised" ng-disabled="checkDates()" ng-click="applyDateFilter()">Search</md-button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="widget-body no-padding">
+          <div class="table-responsive" style="padding:0 10px 10px 10px;background: #fff;">
+      <table class="table table-hover" >
+          <th class="active" style="text-align:center">
+          Patient ID #
+          </th>
+          <th class="active"style="text-align:center">
+          First Name
+          </th>
+          <th class="active"style="text-align:center">
+          Last Name
+          </th>
+           <th class="active"style="text-align:center">
+          Device Id
+          </th>
+           <th class="active"style="text-align:center">
+          Login Time
+          </th>
+          <th class="active"style="text-align:center">
+          Logout Time
+          </th>
+          <tr class="unfocus" align="center" ng-if="activityLogArray.length==0">
+              <td class="text-center" colspan="6"><div class="text-center" style="margin-top:30px" ><strong>No Activity Found!</strong></div></td>
+          </tr>
+          <tr class="unfocus" align="center"  ng-repeat-start="value in activityLogArray|filter:searchPatient" ng-init="value.expanded=false" ng-click="searchActivity(value)">
+            {{value}}
+              <td>{{value.PatientId}}</td>
+              <td>{{value.FirstName}}</td>
+              <td>{{value.LastName}}</td>
+              <td>{{value.DeviceId|limitTo:30}}...</td>
+              <td>{{value.LoginTime|date:'dd/MM/yy h:mm a'}}</td>
+              <td>{{value.LogoutTime|date:'dd/MM/yy h:mm a'}}</td>
+          </tr>
+          
+          <tr ng-if="value.expanded" ng-repeat-end="" style="background-color:lightgrey ">
+            <td>
+            </td>
+            <td colspan="6" >
+              <div class="col-xs-10 text-center" ng-if="session.inserts.length==0&&session.updates.length==0&&!loading"><strong>No Activity!</strong></div> 
+              <div class="col-xs-10 text-center" ng-if="loading" align="center">
+                <div layout="row" layout-sm="column" layout-align="space-around">
+      <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+    </div></div> 
+              <div ng-if='session.inserts.length>0'>
+              <strong>Inserts</strong>
+              <div class="row" ng-repeat="insert in session.inserts">
+                  <table class="table">
+                  <tr >
+                  <th ng-repeat="(field,val) in insert"  ng-if="field!=='SessionId'">{{field}}</th>
+                  </tr>
+                  <tr >
+                  <td ng-repeat="(field,val) in insert"  ng-if="field!=='SessionId'">
+                    <p ng-if="field!=='LastUpdated'" style="text-wrap:break-word">{{val}}</p>
+                    <p ng-if="field=='LastUpdated'" style="text-wrap:break-word">{{val|date:'dd/MM/yy h:mm a'}}</p>
+                  <td>
+                  </tr>
+                  </table>
+
+              </div>
+            </div>
+            <div ng-if="session.updates.length>0">
+             <strong>Updates</strong>
+              <table class='table table-bordered' >
+                <tr>
+                  <th>Table</th>
+                  <th>Field</th>
+                  <th>Old Value</th>
+                  <th>New Value</th>
+                  <th>Time</th>
+                </tr>
+                <tr ng-repeat="update in session.updates">
+                  <td>{{update.table}}</td>
+                  <td>{{update.field}}</td>
+                  <td>{{update.oldValue}}</td>
+                  <td>{{update.newValue}}</td>
+                  <td>{{update.time|date:'dd/MM/yy h:mm a'}}</td>
+                </tr>
+              </table>
+            </div>
+            </td>
+          </tr>
+      </table>
+    </div>
+    </div>
+  </div>  
+  </div>
+
+</div>
