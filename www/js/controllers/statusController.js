@@ -52,7 +52,7 @@
             var events;
             statusVm.planningCompleted = true;
             statusVm.treatmentCompleted = true;
-            if (UserPlanWorkflow.isCompleted() || params.Navigator ==='personalNavigator'){
+            if (UserPlanWorkflow.isCompleted() || !boolStatus){
                 events=UserPlanWorkflow.getPlanWorkflow();
                 var nextStageIndex=UserPlanWorkflow.getNextStageIndex();
                 initTreatmentPlanStatus(events,nextStageIndex);
@@ -247,6 +247,7 @@
                 NavigatorParameters.setParameters({'Navigator':'homeNavigator','Post':step})
                 homeNavigator.pushPage('./views/home/status/individual-step.html');
             }else{
+                console.log(step);
                 NavigatorParameters.setParameters({'Navigator':'personalNavigator','Post':step})
                 personalNavigator.pushPage('./views/home/status/individual-step.html');
             }

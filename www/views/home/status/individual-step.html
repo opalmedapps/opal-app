@@ -1,4 +1,4 @@
-<ons-page ng-controller="IndividualStepController">
+<ons-page ng-controller="IndividualStepController as step">
   <ons-toolbar >
     <div class="left"><ons-back-button>{{"BACK"|translate}}</ons-back-button></div>
     <div class="center">{{"TREATMENTSTAGE"|translate}}</div>
@@ -9,24 +9,24 @@
       <ons-list-item class="item">
         <div style="line-height:1" align="left">
           <header>
-              <span class="item-title" ng-class="fontSizeTitle">{{stage.Name}}</span>
+              <span class="item-title" ng-class="fontSizeTitle">{{step.stage.Name}}</span>
               <div class="plan-info">
-                  <div ng-show="stage.Type=='Appointment'" ng-class="fontSizeDesc">
-                      <ons-icon icon="fa-calendar " style="color:#2B6197;" ng-class="fontSizeDesc"></ons-icon>&nbsp;{{stage.Date|formatDateAppointmentTask}}
+                  <div ng-show="step.stage.Type=='Appointment'" ng-class="fontSizeDesc">
+                      <ons-icon icon="fa-calendar " style="color:#2B6197;" ng-class="fontSizeDesc"></ons-icon>&nbsp;{{step.stage.Date|formatDateAppointmentTask}}
                   </div>
-                  <div ng-show="stage.Type=='Task'&&stage.Status=='Past'">
-                  <strong><i class="ion-compose iconHomeView" ng-class="fontSizeDesc" ></i>&nbsp;{{"STAGECOMPLETED"|translate}}: </strong>{{stage.Date|formatDateAppointmentTask}}
+                  <div ng-show="step.stage.Type=='Task'&&step.stage.Status=='Past'">
+                  <strong><i class="ion-compose iconHomeView" ng-class="fontSizeDesc" ></i>&nbsp;{{"STAGECOMPLETED"|translate}}: </strong>{{step.stage.Date|formatDateAppointmentTask}}
                   </div>
-                  <div ng-show="stage.Type=='Task'&&stage.Status=='Future'">
+                  <div ng-show="step.stage.Type=='Task'&&step.stage.Status=='Future'">
                   <strong>{{"PENDING"|translate}}</strong>
                   </div>
-                  <div ng-show="stage.Type=='Task'&&stage.Status=='Next'">
+                  <div ng-show="step.stage.Type=='Task'&&step.stage.Status=='Next'">
                   <strong><i class="ion-loop iconHomeView" ng-class="fontSizeDesc"></i>&nbsp;{{INPROGRESS}}</strong>
                   </div>
               </div>
           </header>
 
-          <p class="item-desc" ng-class="fontSizeDesc">{{stage.Description}}</p>
+          <p class="item-desc" ng-class="fontSizeDesc">{{step.stage.Description}}</p>
         </div>
       </ons-list-item>
     </ons-list>
