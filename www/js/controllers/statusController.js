@@ -24,7 +24,6 @@
         var params =NavigatorParameters.getParameters();
         var boolStatus = params.Navigator == 'homeNavigator';
 
-
         statusVm.navigator = params.Navigator;  // getting the navigator from the service
         statusVm.viewTitles = [$filter('translate')('TREATMENTPLANNING'), $filter('translate')('TREATMENTSESSION')];
         statusVm.noData = false;                // presence of planning or session data
@@ -53,7 +52,7 @@
             var events;
             statusVm.planningCompleted = true;
             statusVm.treatmentCompleted = true;
-            if (UserPlanWorkflow.isCompleted()){
+            if (UserPlanWorkflow.isCompleted() || params.Navigator ==='personalNavigator'){
                 events=UserPlanWorkflow.getPlanWorkflow();
                 var nextStageIndex=UserPlanWorkflow.getNextStageIndex();
                 initTreatmentPlanStatus(events,nextStageIndex);
