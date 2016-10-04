@@ -472,7 +472,7 @@ sub compareWith
 
 	# Original Task...
 	my $Oduedatetime	= $OriginalTask->getTaskDueDateTime();
-	my $Oaliasexpressionser	= $OriginalTask->getTaskAliasExpressioSer();
+	my $Oaliasexpressionser	= $OriginalTask->getTaskAliasExpressionSer();
     my $Opriorityser        = $OriginalTask->getTaskPrioritySer();
     my $Odiagnosisser       = $OriginalTask->getTaskDiagnosisSer();
 
