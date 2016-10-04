@@ -55,14 +55,16 @@
         <th>Request</th>
         <th>UserID </th>
         <th>DeviceID</th>
+        <th>SessionId</th>
         <th>Date</th>
         <th>Parameters</th>
         <th>Status</th>
       </tr>
-      <tr ng-repeat="request in requests|filterRequests:selectTimeline|filter:searchUser">
+      <tr ng-repeat="request in requests|orderBy:'time':true|filterRequests:selectTimeline|filter:searchUser">
         <td>{{request.Request}}</td>
         <td>{{request.UserID}} </td>
         <td>{{request.DeviceId}}</td>
+        <td ><div style="max-height:100px;overflow-y:scroll;max-width:20vw;word-wrap:break-word">{{request.Token}}</div></td>
         <td>{{request.time|date:'M/d/yy h:mm a'}}</td>
         <td style="max-width: 200px;
     word-wrap: break-word">{{request.Parameters}}</td>
