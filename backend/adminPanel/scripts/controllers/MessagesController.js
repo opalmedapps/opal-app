@@ -11,12 +11,11 @@ app.controller('MessagesController',function ($scope, Messages,api,AllPatients,$
 				Messages.getMessagesFromServer().then(function(messagesFromService){
 				Messages.setMessages(messagesFromService);
 				$timeout(function(){
-					$scope.selectedIndex=0;
 					$scope.chat=Messages.getMessages();
-					$scope.conversation=$scope.chat[0].Messages;
-					$scope.chat[0].ReadStatus=1;
+					console.log($scope.chat);
 					$rootScope.NumberOfNewMessages=0;
-
+					$scope.goToConversation(0);
+					
 				});
 			 });
 			});
@@ -24,14 +23,21 @@ app.controller('MessagesController',function ($scope, Messages,api,AllPatients,$
 
 $scope.goToConversation=function(index)
 {
-	$timeout(function(){
-		$scope.selectedIndex=index;
-		$scope.conversation=$scope.chat[index].Messages;
-		$scope.conversation.ReadStatus=1;
-	});
+
+	$scope.selectedIndex=index;
+	$scope.conversation=$scope.chat[index].Messages;
+	//$scope.conversation.ReadStatus=1;
+	console.log($scope.conversation);
+	if($scope.chat[index].ReadStatus==0)
+	{
+		$scope.chat[index].ReadStatus=1;
+		Messages.readConversation(index);
+
+	}
+
 }
 $scope.sendMessage=function(index){
-
+	$rootScope.checkSession();
 	var messageToSend={};
 	console.log(Messages.getMessages());
  var messageDate=new Date();

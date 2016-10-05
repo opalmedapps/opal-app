@@ -1,4 +1,4 @@
-<div class="main-div-container" align="center" style="box-shadow: 0 0 20px lightgrey;">
+<div class="main-div-container animated zoomIn" align="center">
 <div  style="width:30%;margin-top:30px">
 
   <!--<div class="col-xs-12" style="margin:20px">
@@ -26,19 +26,37 @@
 <table class="table table-bordered table-condensed" align="center">
   <tr align="center">
     <th>
+      Patient Id
+    </th>
+    <th>
+      AriaSer  
+    </th>
+    <th>
+      SSN
+    </th>
+    <th>
       First Name
     </th>
     <th>
       Last Name
     </th>
     <th>
-      SSN
+      Email
     </th>
-    <th>
+    <!--<th>
       Reset Password
-    </th>
+    </th>-->
   </tr>
   <tr align="center">
+    <td>
+      {{ariaResponse.PatientId}}
+    </td>
+    <td>
+      {{ariaResponse.PatientAriaSer}}
+    </td>
+    <td>
+      {{ariaResponse.SSN}}
+    </td>
     <td>
       {{ariaResponse.FirstName}}
     </td>
@@ -46,11 +64,11 @@
       {{ariaResponse.LastName}}
     </td>
     <td>
-      {{ariaResponse.SSN}}
+      {{ariaResponse.Email}}
     </td>
-    <td>
+    <!--<td>
       <button class="btn btn-primary" ng-click="resetPassword()">Reset Password</button>
-    </td>
+    </td>-->
   </tr>
 
 </table>
@@ -61,6 +79,300 @@
   <h3 style="color:#04B45F">Patient Found : {{ariaResponse["0"]["PatientLastName"]}} , {{ariaResponse["0"]["PatientFirstName"]}}</h3>
   <br>
     <p> Fill in the information below to complete the registration: </p><br>
+    <!--<uib-progressbar animate="true" value="dynamic" type="success"><b>Step {{selectedIndex+1}} of 4</b></uib-progressbar>
+<div layout="column" ng-cloak="">
+    <md-content class="md-padding">
+        <md-tabs md-selected="selectedIndex" md-border-bottom="" md-autoselect="" md-dynamic-height>
+
+            <md-tab ng-disabled="tabs[0].disabled" label="{{tabs[0].title}}">
+                <div class="demo-tab" style="padding: 10px; text-align: left;">
+                    <form name="userEmailForm">
+                        <div class="col-xs-10">
+                            <md-card>
+                                <md-card-content>
+                                    <p>E-mail for app authentication</p>
+                                    <div class="col-xs-6">
+                                        <md-input-container>
+                                            <label>Enter E-mail </label>
+                                            <input ng-model="user.email" type="email" required minlength="1" maxlength="100" name="userEmail" ng-pattern="/^.+@.+\..+$/">
+                                            <div ng-messages="userEmailForm.userEmail.$error" role="alert">
+                                                <div ng-message-exp="['required', 'minlength', 'maxlength', 'pattern']">
+                                                    Your email must be between 10 and 100 characters long and look like an e-mail address.
+                                                </div>
+                                            </div>
+                                        </md-input-container>
+                                    </div>
+                                    <div class="col-xs-6">
+
+                                        <md-input-container>
+                                            <label>Confirm E-mail </label>
+                                            <input ng-model="user.reemail" name="userReEmail" type="email" required minlength="1" maxlength="100" ng-pattern="/^.+@.+\..+$/">
+                                            <div ng-messages="userEmailForm.userReEmail.$error" role="alert">
+                                                <div ng-message-exp="['required', 'minlength', 'maxlength', 'pattern']">
+                                                    Your email must be between 10 and 100 characters long and look like an e-mail address.
+                                                </div>
+                                            </div>
+                                        </md-input-container>
+                                    </div>
+                                    <div class="col-xs-12" style="margin-top:-20px">
+                                        <p style="color:red">{{errorMessageEmail}}</p>
+                                    </div>
+                                </md-card-content>
+                            </md-card>
+                        </div>
+                        <div class="col-xs-2">
+
+                            <md-button class="md-primary md-raised" ng-click="checkEmail(user.email, user.reemail)" ng-disabled="userEmailForm.$invalid">Next &raquo;</md-button>
+                        </div>
+                    </form>
+
+
+
+
+                </div>
+            </md-tab>
+            <md-tab ng-disabled="tabs[1].disabled" label="{{tabs[1].title}}">
+                <div class="demo-tab" style="padding: 25px; text-align: left;">
+                    <form name="userPasswordForm">
+                        <div class="col-xs-10">
+                            <md-card>
+                                <md-card-content>
+                                    <p>Password authentication for the app</p>
+                                    <div class="col-xs-6">
+                                        <md-input-container>
+                                            <label>Enter Password</label>
+                                            <input ng-model="user.password" type="password" name="userPassword" minlength="5" required ng-pattern="/^(?=.*[0-9])(?=.*[a-zA-Z])([a-zA-Z0-9]+)$/">
+                                            <div ng-messages="userPasswordForm.userPassword.$error" multiple role="alert">
+                                                <div ng-message="required">
+                                                    Enter Password
+                                                </div>
+                                                <div ng-message="minlength">
+                                                    Password should be longer than five characters.
+                                                </div>
+                                                <div ng-message="pattern">
+                                                    Password should have at least one number and at least one letter.
+                                                </div>
+                                            </div>
+                                        </md-input-container>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <md-input-container>
+                                            <label>Re-Enter Password</label>
+                                            <input ng-model="user.repassword" type="password" name="userRePassword" ng-pattern="\b{{user.password}}\b" required>
+                                            <div ng-messages="userPasswordForm.userRePassword.$error" role="alert" multiple>
+                                                <div ng-message="pattern">
+                                                    Passwords do not match
+                                                </div>
+                                            </div>
+
+                                        </md-input-container>
+                                    </div>
+                                    <div class="col-xs-12" style="margin-top:-20px">
+                                        <p style="color:red">{{errorMessagePassword}}</p>
+                                    </div>
+                                </md-card-content>
+                            </md-card>
+                        </div>
+                        <div class="col-xs-2">
+                            <md-button class="md-primary md-raised" ng-click="checkPassword(user.password, user.repassword)" ng-disabled="userPasswordForm.$invalid">Next &raquo;</md-button>
+                        </div>
+                    </form>
+                </div>
+            </md-tab>
+            <md-tab ng-disabled="tabs[2].disabled" label="{{tabs[2].title}}">
+                <div class="demo-tab" style="text-align:center;padding:25px" align="center">
+                    <div class="col-xs-10">
+                        <form name="preferencesForm">
+                        <div class="col-xs-12" style="text-align:left">
+                            <md-card>
+                                <md-card-content>
+                                    <p>Default Language for the App</p>
+                                    <div class="col-xs-12" style="margin-top:10px" >
+                                        <md-input-container>
+                                            <label>Default Language</label>
+                                            <md-select ng-model="user.language" name ="language" required>
+                                                <md-option value="EN">
+                                                    EN
+                                                </md-option>
+                                                <md-option value="FR">
+                                                    FR
+                                                </md-option>
+                                            </md-select>
+                                            <div class="errors" ng-messages="preferencesForm.language.$error" ng-if="preferencesForm.$dirty">
+                                                <div ng-message="required">Required</div>
+                                            </div>
+                                        </md-input-container>
+                                    </div>
+
+                                </md-card-content>
+                            </md-card>
+
+                        </div>
+                        <div class="col-xs-12" style="text-align:left">
+                            <md-card>
+                                <md-card-content>
+                                    <p>Alias to use as your name for the screens in the Waiting room (optional)</p>
+                                    <div class="col-xs-12">
+                                        <md-input-container>
+                                            <label>Enter Alias</label>
+                                            <input ng-model="user.Alias">
+                                        </md-input-container>
+                                    </div>
+
+                                </md-card-content>
+                            </md-card>
+                        </div>
+
+                        <div class="col-xs-12" style="text-align:left">
+                            <md-card>
+                                <md-card-content>
+                                    <p>Phone Number to receive notifications via text message</p>
+                                    <div class="col-xs-12">
+                                        <md-input-container>
+                                            <label>Enter Phone number</label>
+                                            <input ng-model="user.phoneNumber" type="text" name="phone" ng-pattern="/^[0-9]{10}$/" >
+                                            <div class="errors" ng-messages="preferencesForm.phone.$error" ng-if="preferencesForm.$dirty">
+                                                <div ng-message="pattern">Enter a ten digit phone number, no spaces or special characters</div>
+                                            </div>
+                                        </md-input-container>
+                                    </div>
+
+                                </md-card-content>
+                            </md-card>
+
+                        </div>
+                        </form>
+                    </div>
+                    <div class="col-xs-2">
+                        <div class="col-xs-12" style="text-align:left">
+                            <md-input-container>
+                                <md-button class="md-primary md-raised" ng-click="checkUserPreferences()" ng-disabled="preferencesForm.$invalid">Next &raquo;</md-button>
+                            </md-input-container>
+                        </div>
+                    </div>
+                </div>
+            </md-tab>
+            <md-tab ng-disabled="tabs[3].disabled" label="{{tabs[3].title}}">
+                <form name="questionsForm">
+                <md-content class="md-padding">
+                    <div class="text-center" style="color:red" ng-show="incorrectQuestions">**Questions must be different</div>
+                    <div class="demo-tab">
+                        <div class="col-xs-10">
+                        <md-card>
+                            <md-card-title>
+                                <md-card-title-text>
+                                    <span class="md-headline">Question 1</span>
+                                </md-card-title-text>
+                            </md-card-title>
+                            <md-card-content>
+                                <div class="col-xs-12">
+                                    <md-input-container class="md-block" flex-gt-sm>
+                                        <label>Question 1</label>
+                                        <md-select ng-model="user.question1" name="question1" required>
+                                            <md-option ng-repeat="question in questions" value="{{question.id}}">
+                                                {{question.Question}}
+                                            </md-option>
+                                        </md-select>
+                                        <div ng-messages="questionsForm.question1.$error" role="alert">
+                                        <div ng-message="required" class="my-message">Select a question</div>
+                                        </div>
+                                    </md-input-container>
+                                    
+                                </div>
+                                <div class="col-xs-12">
+                                    <md-input-container class="md-block" flex-gt-sm>
+                                        <label>Answer Question 1</label>
+                                        <input ng-model="user.answer1" type="text" name="answer2" required minlenght="1">
+                                        <div ng-messages="questionsForm.answer1.$error" role="alert">
+                                        <div ng-message-exp="['required','minlength']" class="my-message">Enter an answer</div>
+                                        </div>
+                                    </md-input-container>
+                                </div>
+
+                            </md-card-content>
+                        </md-card>
+                        <md-card>
+                            <md-card-title>
+                                <md-card-title-text>
+                                    <span class="md-headline">Question 2</span>
+                                </md-card-title-text>
+                            </md-card-title>
+                            <md-card-content>
+                                <div class="col-xs-12">
+                                    <md-input-container class="md-block" flex-gt-sm>
+                                        <label>Question 2</label>
+                                        <md-select ng-model="user.question2" name = "question2" required>
+                                            <md-option ng-repeat="question in questions" value="{{question.id}}">
+                                                {{question.Question}}
+                                            </md-option>
+                                        </md-select>
+                                         <div ng-messages="questionsForm.question2.$error" role="alert">
+                                        <div ng-message-exp="required" class="my-message">Select a question</div>
+                                        </div>
+                                    </md-input-container>
+                                   
+                                </div>
+                                <div class="col-xs-12">
+                                    <md-input-container class="md-block" flex-gt-sm>
+                                        <label>Answer Question 2</label>
+                                        <input ng-model="user.answer2" type="text" name="answer2" required minlenght="1">
+                                        <div ng-messages="questionsForm.answer2.$error" role="alert">
+                                        <div ng-message-exp="['required','minlength']" class="my-message">Enter an answer</div>
+                                        </div>
+                                    </md-input-container>
+                                </div>
+
+                            </md-card-content>
+                        </md-card>
+                        <md-card>
+                            <md-card-title>
+                                <md-card-title-text>
+                                    <span class="md-headline">Question 3</span>
+                                </md-card-title-text>
+                            </md-card-title>
+                            <md-card-content>
+                                <div class="col-xs-12">
+                                    <md-input-container class="md-block" flex-gt-sm>
+                                        <label>Question 3</label>
+                                        <md-select ng-model="user.question3" name="question3" required>
+                                            <md-option ng-repeat="question in questions" value="{{question.id}}">
+                                                {{question.Question}}
+                                            </md-option>
+                                        </md-select>
+                                        <div ng-messages="questionsForm.question3.$error" role="alert">
+                                        <div ng-message-exp="required" class="my-message">Select a question</div>
+                                        </div>
+                                    </md-input-container>
+                                </div>
+                                <div class="col-xs-12">
+                                    <md-input-container class="md-block" flex-gt-sm>
+                                        <label>Answer Question 3</label>
+                                        <input ng-model="user.answer3" type="text" name="answer3" required md-minlength="1">
+                                         <div ng-messages="questionsForm.answer3.$error" role="alert">
+                                        <div ng-message-exp="['required','minlength']" class="my-message">Enter an answer</div>
+                                        </div>
+                                        
+                                    
+                                    </md-input-container>
+                                   
+                                </div>
+
+                            </md-card-content>
+                        </md-card>
+                        </div>
+                        <div class="col-xs-2" style="text-align:center">
+                            <md-input-container>
+                                <md-button class="md-primary md-raised" ng-click="registerPatient(user)" ng-disabled="questionsForm.$invalid">Register</md-button>
+                            </md-input-container>
+                        </div>     
+                    </div>
+                </md-content>
+                </form>
+            </md-tab>
+        </md-tabs>
+    </md-content>
+</div>-->
+
     <!--REGISTRATION FORM-->
     <div class="btn-group">
     <label class="btn btn-success" ng-model="currentPage" uib-btn-radio="1">1</label>
@@ -91,7 +403,7 @@
     <input type="password" class="form-control" ng-model="PasswordConfirm" required>	<br>
 
     <div class="control-group">
-      <!-- Password-->
+      
       <label class="control-label" for="password">Alias</label>
       <div class="controls">
         <input ng-model="Alias" type="text"  name="alias" placeholder="Katy Bell" class="form-control">
