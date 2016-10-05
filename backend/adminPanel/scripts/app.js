@@ -15,11 +15,13 @@ var app=angular
     'ngResource',
     'ngRoute',
     'ngSanitize',
-    'ngTouch',
     'ui.router',
     'ui.bootstrap',
-    'luegg.directives'
+    'luegg.directives',
+    'CredentialsAdminPanel',
+    'ngMaterial'
   ]);
+
 app.config(['$urlRouterProvider', '$stateProvider', function ($urlRouterProvider, $stateProvider) {
       $urlRouterProvider.otherwise("/");
   $stateProvider
@@ -29,7 +31,8 @@ app.config(['$urlRouterProvider', '$stateProvider', function ($urlRouterProvider
       controller: 'MainController',
       data:
       {
-        requireLogin:true
+        requireLogin:true,
+        label:'Home'
       }
     })
     .state('registration',{
@@ -37,7 +40,8 @@ app.config(['$urlRouterProvider', '$stateProvider', function ($urlRouterProvider
       templateUrl:'views/registration.html',
       controller:'RegistrationController',
       data:{
-        requireLogin:true
+        requireLogin:true,
+        label:'Register Patient'
       }
     })
     .state('patients',{
@@ -46,7 +50,8 @@ app.config(['$urlRouterProvider', '$stateProvider', function ($urlRouterProvider
       controller:'PatientsController',
       abstract:true,
       data:{
-        requireLogin:true
+        requireLogin:true,
+        label:'Patient'
       }
     })
     .state('messages',{
@@ -54,7 +59,17 @@ app.config(['$urlRouterProvider', '$stateProvider', function ($urlRouterProvider
       templateUrl:'views/messages.html',
       controller:'MessagesController',
       data:{
-        requireLogin:true
+        requireLogin:true,
+        label:'Messages'
+      }
+    })
+    .state('feedback',{
+      url:'/feedback',
+      templateUrl:'views/feedback.html',
+      controller:'FeedbackController',
+      data:{
+        requireLogin:true,
+        label:'Feedback'
       }
     })
     .state('requests',{
@@ -62,15 +77,27 @@ app.config(['$urlRouterProvider', '$stateProvider', function ($urlRouterProvider
       templateUrl:'views/requests.html',
       controller:'RequestsController',
       data:{
-        requireLogin:true
+        requireLogin:true,
+        label:'Account Settings'
       }
     })
+    .state('patients.activity',{
+      url:'/patient-activity',
+      templateUrl:'templates/patients/patient-activity.html',
+      controller:'ActivityController',
+      data:{
+        requireLogin:true,
+        label:'Patient Activity'
+      }
+    })
+
     .state('patients.search-patients',{
       url:'/search-patients',
       templateUrl:'templates/patients/search-patients.html',
       controller:'SearchPatientsController',
       data:{
-        requireLogin:true
+        requireLogin:true,
+        label:'Search Patients'
       }
     })
     .state('patients.patient',{
@@ -79,8 +106,19 @@ app.config(['$urlRouterProvider', '$stateProvider', function ($urlRouterProvider
       controller:'IndividualPatientController',
       //abstract:true,
       data:{
-        requireLogin:true
+        requireLogin:true,
+        label:'Account Settings'
       }
+    })
+    .state('hospital-maps',{
+        url:'/hospital-maps',
+        templateUrl:'views/maps.html',
+        controller:'MapsController',
+        data:{
+          requireLogin:true,
+          label:'Hospital Maps'
+        }
+
     })
     /*.state('patients.patient.general',{
       url:'/general',
@@ -145,7 +183,8 @@ app.config(['$urlRouterProvider', '$stateProvider', function ($urlRouterProvider
       controller: 'AccountController',
       data:
       {
-        requireLogin:true
+        requireLogin:true,
+        label:'Account Settings'
       }
     })
   }]);
@@ -174,7 +213,7 @@ app.service('LoginModal', function ($rootScope,$uibModal)
   });
 
 // RUN
-app.run(function ($rootScope, $state,LoginModal,$timeout)
+app.run(function ($rootScope, $state,LoginModal,$timeout,URLs,api,User)
 {
   /**
   * @ngdoc service
@@ -185,14 +224,31 @@ app.run(function ($rootScope, $state,LoginModal,$timeout)
   * @description
   * Sets an interceptor for the app. Whenever a state change happens if data.requireLogin is set to true for that state it will prevent the user from switching to that view and prompt them to log in. If authenticated, it will go the chosen state, goes to home view otherwise.
   */
+  $('#stateName').css('display','block');
   $state.go('home');
   $rootScope.$on('$stateChangeStart', function (event, toState, toParams)
   {
+    $rootScope.checkSession();
     var requireLogin = toState.data.requireLogin;
+    if($rootScope.isUserCheckedIn())
+    {
+      var user=window.localStorage.getItem('OpalAdminPanelUser');
+      user=JSON.parse(user);
+      api.getFieldFromServer(URLs.getUserUrl(),{Username:user.Username}).then(function(responseUser){
+        console.log(responseUser);
+        api.getFieldFromServer(URLs.getUserInformation(),{UserType:responseUser.UserType,UserTypeSerNum:responseUser.UserTypeSerNum})
+        .then(function(response){
+          User.setUserFields(response,responseUser.Username,responseUser.UserSerNum);
+          console.log(response);
+        });
+      });
+    }
 
+    $rootScope.stateName=toState.data.label;
 
     if (requireLogin && typeof $rootScope.currentUser === 'undefined')
     {
+      console.log($rootScope.currentUser);
       event.preventDefault();
       LoginModal()
       .then(function () {
@@ -200,7 +256,6 @@ app.run(function ($rootScope, $state,LoginModal,$timeout)
       })
       .catch(function ()
       {
-        setMenuClasses('home');
         return $state.go('home');
       });
 

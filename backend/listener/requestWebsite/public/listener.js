@@ -1,88 +1,98 @@
 var app=angular.module('MUHCAppListener',[]);
 app.controller('MainController',['$scope','$timeout',function($scope,$timeout){
   $scope.requests=[];
-  console.log(CryptoJS.SHA256('12345').toString());
   $scope.selectTimeline='All';
-  setInterval(function(){
-    location.reload();
-  },1296000000);
-  var ref=new Firebase('https://brilliant-inferno-7679.firebaseio.com/');
-  ref.child('requests').on('child_added',function(request){
-    $.post("http://172.26.66.41:8010/login",{key: request.key(),objectRequest: request.val()}, function(data){
-      console.log(data);
-      if(data.type=='UploadToFirebase')
-      {
-        uploadToFirebase(data.requestKey, data.encryptionKey,data.requestObject, data.object);
-      }else if(data.type=='CompleteRequest')
-      {
-        completeRequest(data.requestKey,data.requestObject,data.Invalid);
-      }else if(data.type=='ResetPasswordError')
-      {
-        resetPasswordError(data.requestKey,data.requestObject);
-      }
+  var ref=new Firebase('https://brilliant-inferno-7679.firebaseio.com/dev2');
+  ref.auth('9HeH3WPYe4gdTuqa88dtE3KmKy7rqfb4gItDRkPF');
+  setInterval(function(){ 
+       clearTimeoutRequests();
+  },30000);
 
+function clearTimeoutRequests()
+{
+    ref.child('users').once('value',function(snapshot){
+       console.log('I am inside deleting requests');
+        var now=(new Date()).getTime();
+        var usersData=snapshot.val();
+        for (var user in usersData) {
+          for(var requestKey in usersData[user])
+          {
+            if(usersData[user][requestKey].hasOwnProperty('Timestamp')&&now-usersData[user][requestKey].Timestamp>60000)
+            {
+              console.log('I am deleting requests');
+              ref.child('users/'+user+'/'+requestKey).set(null);
+            }
+          }
+         
+        }
     });
+}
+ 
+
+  ref.child('requests').on('child_added',function(request){
+    console.log(request.val());
+    var headers = {key: request.key(),objectRequest: request.val()}
+      $.post("http://172.26.66.41:8020/login",headers, function(response){
+        uploadToFirebase(response);
+      });
+   
   });
-
-
-  function uploadToFirebase(requestKey,encryptionKey,requestObject,object)
+  function uploadToFirebase(response)
   {
     console.log('I am about to go to into encrypting');
-    //console.log(request);
-    object=encryptObject(object,encryptionKey);
-    //console.log(object);
-    var deviceId=requestObject.DeviceId;
-    var UserID=requestObject.UserID;
-    var userFieldsPath='Users/'+UserID+'/'+deviceId;
-      console.log('I am about to write to firebase');
-    ref.child(userFieldsPath).update(object, function(){
+
+    var headers = angular.copy(response.Headers);
+    var success = response.Response;
+    var requestKey = headers.RequestKey;
+    var userId = headers.RequestObject.UserID;
+    var encryptionKey = response.EncryptionKey;
+    console.log(encryptionKey);
+    delete response.EncryptionKey;
+    if(typeof encryptionKey!=='undefined' && encryptionKey!=='') response = encryptObject(response, encryptionKey);
+    response.Timestamp = Firebase.ServerValue.TIMESTAMP;
+    console.log(response);
+    ref.child('users/'+userId+'/'+requestKey).set(response, function(){
       console.log('I just finished writing to firebase');
-      completeRequest(requestKey, requestObject);
-      //logRequest(requestObject);
+      completeRequest(headers,success);
     });
   }
-  function resetPasswordError(requestKey,requestObject)
+
+   /**
+   * @name EncryptObject
+   * @description Deletes the request from Firebase and displays it on the screen
+   * 
+   */
+  function completeRequest(headers, success)
   {
-    var response={};
-    response.ResetPassword={};
-    response.ResetPassword.type='error';
-    var deviceId=requestObject.DeviceId;
-    var UserID=requestObject.UserID;
-    var userFieldsPath='Users/'+UserID+'/'+deviceId;
-      console.log('I am about to write to firebase');
-    ref.child(userFieldsPath).update(response, function(){
-      console.log('I just finished writing to firebase');
-      completeRequest(requestKey, requestObject);
-      //logRequest(requestObject);
-    });
-  }
-  function completeRequest(requestKey, requestObject, invalid)
-  {
+    var requestKey = headers.RequestKey;
+    var requestObject  = headers.RequestObject;
     requestObject.Parameters=JSON.stringify(requestObject.Parameters);
     requestObject.time=new Date();
-
-    if(invalid!==undefined)
+    if(success == 'error')
     {
       requestObject.response='Failure';
     }else{
       requestObject.response='Success';
     }
     $timeout(function(){
+      if($scope.requests.length>20)
+      {
+        $scope.requests = [];
+      }
       $scope.requests.push(requestObject);
       console.log($scope.requests);
     });
-    //Clear request
     ref.child('requests').child(requestKey).set(null);
-    //Log Request
   }
 
-
+  /**
+   * @name EncryptObject
+   * @description performs the AES encryption recursively given an object and a key for encryption 
+   * 
+   */
   function encryptObject(object,secret)
   {
-    /*console.log(object.Appointments[0].ScheduledStartTime);
-    var dateString=object.Appointments[0].ScheduledStartTime.toISOString();
-    console.log(dateString);*/
-    //var object=JSON.parse(JSON.stringify(object));
+
     if(typeof object=='string')
     {
       var ciphertext = CryptoJS.AES.encrypt(object, secret);
@@ -120,6 +130,7 @@ app.controller('MainController',['$scope','$timeout',function($scope,$timeout){
     }
 
   };
+
 
   }]);
   app.filter('filterRequests', function() {

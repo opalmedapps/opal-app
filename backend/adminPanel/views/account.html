@@ -1,7 +1,12 @@
-<div class="main-div-container">
+<div class="main-div-container animated zoomIn">
   <div class="container">
-    <div ><h4>Role: {{userType}}</h4></div>
-    <div ng-show="userType=='Doctor'"><h4>Doctor Aria Ser: {{doctorAriaSer}}</h4></div>
+  <div class="col-xs-offset-7 col-xs-5" id="showToast">
+
+    
+  </div>
+    <div ><h4>Role: {{userFields.Role}}</h4></div>
+    <div ng-show="userFields.Role=='Doctor'"><h4>Doctor Aria Ser: {{userFields.DoctorAriaSer}}</h4></div>
+    <div ng-show="userFields.Role=='Staff'"><h4>StaffID: {{userFields.StaffID}}</h4></div>
 
     <h3>Personal App Information</h3>
     <p style="color:grey">The information below is the personal information shared with the patients about you.</p>
@@ -12,13 +17,13 @@
         <th></th>
       </thead>
       <tbody>
-        <tr align="center" ng-repeat="(key, value) in accountFields" ng-show="key!=='Username'">
-          <td><strong>{{key|formatFieldsAccount}}</strong>
+        <tr  align="center" ng-repeat="(key, value) in accountFields" ng-if="key!=='Password'&&key!=='Username'">
+          <td class="text-left"><strong>{{key|formatFieldsAccount}}</strong>
           <div ng-show="value.Edit" style="margin-top:15px">
             <strong> Enter your new {{key|formatFieldsAccount}}: </strong>
           </div></td>
-          <td ng-show="key!=='Image'">{{value.Value|formatTelNum}}
-            <div ng-show="value.Edit" style="margin-top:15px">
+          <td class="text-center" ng-if="key!=='Image'">{{value.Value|formatTelNum}}
+            <div ng-if="value.Edit" style="margin-top:15px">
               <div class="row">
                 <div style="margin-left:100px">
               <div class="col-xs-6">
@@ -33,17 +38,17 @@
               <div class="row">
             <div class="col-xs-12">
               <button class="btn btm-sm btn-success" autofocus="" ng-disabled="value.Value==value.newValue" ng-click="update(key, value.newValue)"> Update</button>&nbsp;
-              <button class="btn btm-sm btn-danger" ng-click="value.Edit=false;value.newValue=value.Value;alert[key].show=false"> Cancel</button>
+              <button class="btn btm-sm btn-danger" ng-click="value.Edit=false;value.newValue=value.Value;alertField[key].show=false;"> Cancel</button>
             </div>
           </div>
-          <div ng-show="alert[key].show==true">
-            <uib-alert type="{{alert[key].alertType}}">{{alert[key].reason}}</uib-alert>
+          <div ng-if="alertField[key].show==true">
+            <uib-alert type="{{alertField[key].alertType}}">{{alertField[key].reason}}</uib-alert>
           </div>
         </div>
           </td>
-          <td ng-show="key=='Image'">
+          <td ng-if="key=='Image'">
             <img ng-src="{{value.Value}}" width="40px">
-            <div ng-show="value.Edit">
+            <div ng-if="value.Edit">
               <div class="col-xs-12">
                 <span class="btn btn-primary btn-file" style="margin:5px 0 5px 0">
                     Browse <input type="file" accept="image/*" fileread="uploadProfilePic">
@@ -55,7 +60,13 @@
               </div>
             </div>
           </td>
-          <td align="right"><a href ng-click="value.Edit=true;closeAllOtherFields(key)"><i class="icon-edit-account icon ion-edit"></i></a></td>
+          <td align="right" >
+            <a href ng-click="(value.Edit==true)?value.Edit=false:value.Edit=true;closeAllOtherFields(key)">
+              <md-button class="md-fab md-mini md-primary" aria-label="Eat cake" style="margin-top:-5px">
+                <md-icon class="material-icons">mode_edit</md-icon>
+              </md-button>
+            </a>
+          </td>
         </tr>
       </tbody>
     </table>
@@ -68,66 +79,80 @@
         </thead>
         <tbody>
           <tr align="center">
-            <td><strong>Username</strong></td>
-            <td> {{username.Value}}
-              <div ng-show="username.Edit">
+            <td class="text-left"><strong>Username</strong></td>
+            <td class="text-center"> {{accountFields.Username.Value}}
+              <div ng-if="accountFields.Username.Edit">
                 <div class="row">
                   <div style="margin-left:100px">
                 <div class="col-xs-6">
-                <input ng-minlength="1" type="text" placeholder="Enter new username" value="username" ng-model="username.newValue"><br>
+                <input ng-minlength="1" type="text" placeholder="Enter new username" value="username" ng-model="accountFields.Username.newValue"><br>
               </div>
               <div class="col-xs-2">
-                <a ng-click="username.newValue=''" ><span class="list-item-note lucent"><i class="icon ion-close-circled"></i></span></a><br>
+                <a ng-click="accountFields.Username.newValue=''" ><span class="list-item-note lucent"><i class="icon ion-close-circled"></i></span></a><br>
               </div>
             </div>
                 </div>
                 <br>
                 <div class="row">
               <div class="col-xs-12">
-                <button class="btn btm-sm btn-success" ng-click="updateUsername()"> Update</button>&nbsp;
-                <button class="btn btm-sm btn-danger" ng-click="username.Edit=false;username.newValue=value.Value;alert['username'].show=false"> Cancel</button>
+                <button class="btn btm-sm btn-success" ng-disabled="accountFields.Username.Value==accountFields.Username.newValue" ng-click="updateUsername()"> Update</button>&nbsp;
+                <button class="btn btm-sm btn-danger" ng-click="accountFields.Username.Edit=false;accountFields.Username.newValue=accountFields.Username.Value;alertField['Username'].show=false"> Cancel</button>
               </div>
 
             </div>
-            <div ng-show="alert['Username'].show==true">
-              <uib-alert type="{{alert['Username'].alertType}}">{{alert['Username'].reason}}</uib-alert>
+            <div ng-if="alertField['Username'].show==true">
+              <uib-alert type="{{alertField['Username'].alertType}}">{{alertField['Username'].reason}}</uib-alert>
             </div>
           </div>
             </td>
-            <td align="right"><a href ng-click="username.Edit=true"><i class="icon-edit-account icon ion-edit"></i></a></td>
+            <td align="right"><a href ng-click="accountFields.Username.Edit?accountFields.Username.Edit=false:accountFields.Username.Edit=true;closeAllOtherFields('Username')">
+              <md-button class="md-fab md-mini md-primary" aria-label="Eat cake" style="margin-top:-5px">
+                <md-icon class="material-icons">mode_edit</md-icon>
+              </md-button>
+            </a></td>
           </tr>
           <tr align="center">
-            <td><strong>Password</strong></td>
-            <td> *****
-              <div ng-show="password.Edit">
+            <td class="text-left"><strong>Password</strong></td>
+            <td class="text-center"> *****
+              <div ng-if="accountFields.Password.Edit">
                 <div class="row">
                   <div style="margin-left:100px">
                 <div class="col-xs-6">
-                <input ng-minlength="1" type="Password" placeholder="Enter old password" value="Password" ng-model="password.oldValue"><br>
-                <input ng-minlength="1" type="Password" placeholder="Enter new password" value="Password" ng-model="password.newValue">
+                <input ng-minlength="1" type="Password" placeholder="Enter old password" value="Password" ng-model="accountFields.Password.Value"><br>
+                <input ng-minlength="1" type="Password" placeholder="Enter new password" value="Password" ng-model="accountFields.Password.newValue">
               </div>
               <div class="col-xs-2">
-                <a ng-click="password.newValue=''" ><span class="list-item-note lucent"><i class="icon ion-close-circled"></i></span></a><br>
-                <a ng-click="password.renewValue=''" ><span class="list-item-note lucent"><i class="icon ion-close-circled"></i></span></a>
+                <a ng-click="accountFields.Password.Value=''" ><span class="list-item-note lucent"><i class="icon ion-close-circled"></i></span></a><br>
+                <a ng-click="accountFields.Password.newValue=''" ><span class="list-item-note lucent"><i class="icon ion-close-circled"></i></span></a>
               </div>
             </div>
                 </div>
                 <br>
                 <div class="row">
-              <div class="col-xs-12">
+              <div class="col-xs-12" align="center">
                 <button class="btn btm-sm btn-success" ng-click="updatePassword()"> Update</button>&nbsp;
-                <button class="btn btm-sm btn-danger" ng-click="password.Edit=false;password.newValue=value.Value;alert['Password'].show=false"> Cancel</button>
+                <button class="btn btm-sm btn-danger" ng-click="accountFields.Password.Edit=false;accountFields.Password.newValue=accountFields.Password.Value;alertField['Password'].show=false"> Cancel</button>
               </div>
 
             </div>
-            <div ng-show="alert['Password'].show==true">
-              <uib-alert type="{{alert['Password'].alertType}}">{{alert['Password'].reason}}</uib-alert>
+            <div ng-if="alertField['Password'].show==true">
+              <uib-alert type="{{alertField['Password'].alertType}}">{{alertField['Password'].reason}}</uib-alert>
             </div>
           </div>
             </td>
-            <td align="right"><a href ng-click="password.Edit=true"><i class="icon-edit-account icon ion-edit"></i></a></td>
+            <td align="right"><a href ng-click="accountFields.Password.Edit?accountFields.Password.Edit=false:accountFields.Password.Edit=true;closeAllOtherFields('Password')">
+              <md-button class="md-fab md-mini md-primary" aria-label="Eat cake" style="margin-top:-5px">
+                <md-icon class="material-icons">mode_edit</md-icon>
+              </md-button></a></td>
           </tr>
         </tbody>
       </table>
   </div>
 </div>
+<script type="text/ng-template" id="toast-template.html"><md-toast>
+  <span flex>Field has been updated!</span>
+  <md-button ng-click="closeToast()">
+    Close
+  </md-button>
+</md-toast>
+</script>
