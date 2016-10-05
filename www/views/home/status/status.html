@@ -39,25 +39,32 @@
                                     <div class="progressStatusTextBox" style="font-size:15px">
                                         <div style="vertical-align: middle">
                                             <strong>{{"STEP"|translate}} {{status.eventIndex}} of {{status.totalEvents}} </strong>
-                                            <div ng-show="!status.planningCompleted" align="middle" style="margin-left:5px; vertical-align: middle">
-                                                {{status.currentEvent}}
-                                                <!--<br>
-                                                <strong>{{"STARTTREATMENT"|translate}}:</strong>
-                                                <br> {{stages[stages.length-1].Date|date:'MMM d'}}
-                                                <br>
-                                                <span style="color:grey;font-size:13px" >({{"ESTIMATED"|translate}})</span>-->
+                                            <div ng-show="status.eventType === 'plan'">
+                                                <div ng-show="!status.planningCompleted" align="middle" style="margin-left:5px; vertical-align: middle">
+                                                    {{status.currentEvent}}
+                                                    <!--<br>
+                                                    <strong>{{"STARTTREATMENT"|translate}}:</strong>
+                                                    <br> {{stages[stages.length-1].Date|date:'MMM d'}}
+                                                    <br>
+                                                    <span style="color:grey;font-size:13px" >({{"ESTIMATED"|translate}})</span>-->
+                                                </div>
+                                                <div ng-show="status.planningCompleted" align="middle" style="margin-left:5px">
+                                                    <p><i class="ion-checkmark-circled iconStatusBox"></i>{{"TREATMENTPLANCOMPLETEDON"|translate}}
+                                                        <br><strong>{{status.completionDate|date:'EEE MMM dd yyyy'}}</strong></p>
+                                                </div>
                                             </div>
-                                            <div ng-show="!status.treatmentCompleted" align="middle" style="margin-left:5px; vertical-align: middle">
-                                                <strong>{{"UPCOMING"|translate}}:</strong><br>
-                                                {{status.currentEvent.Title}}<br>
-                                                <strong>{{"TREATMENTENDS"|translate}}:</strong><br>
-                                                {{status.endingDate|date:'EEE MMM dd yyyy'}}
+                                            <div ng-show="status.eventType === 'treatment'">
+                                                <div ng-show="!status.treatmentCompleted" align="middle" style="margin-left:5px; vertical-align: middle">
+                                                    <strong>{{"UPCOMING"|translate}}:</strong><br>
+                                                    {{status.currentEvent.Title}}<br>
+                                                    <strong>{{"TREATMENTENDS"|translate}}:</strong><br>
+                                                    {{status.endingDate|date:'EEE MMM dd yyyy'}}
+                                                </div>
+                                                <div ng-show="status.treatmentCompleted" align="middle" style="margin-left:5px">
+                                                    <p><i class="ion-checkmark-circled iconStatusBox"></i>{{"TREATMENTPLANCOMPLETEDON"|translate}}
+                                                        <br><strong>{{status.endingDate|date:'EEE MMM dd yyyy'}}</strong></p>
+                                                </div>
                                             </div>
-
-                                            <!--<div ng-show="completed" align="middle" style="margin-left:5px">
-                                                <p><i class="ion-checkmark-circled iconStatusBox"></i>{{"TREATMENTPLANCOMPLETEDON"|translate}}
-                                                    <br><strong>{{completionDate|date:'EEE MMM dd yyyy'}}</strong></p>
-                                            </div>-->
                                         </div>
                                     </div>
                                 </div>
