@@ -63,8 +63,9 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors',
      *@ngdoc property
      *@name  MUHCApp.service.#promiseFields
      *@propertyOf MUHCApp.service:UpdateUI
-     *@description Array contains the fields for the patient that perform asynchronous operations. This is done so that we have a generic way to make sure we wait for them whenever we are setting or updating patient information. In the current case
-     we have to wait for the fields to download the images into the device storage
+     *@description Array contains the fields for the patient that perform asynchronous operations.
+     * This is done so that we have a generic way to make sure we wait for them whenever we are setting or updating patient information.
+     * In the current case we have to wait for the fields to download the images into the device storage
      <pre>
      //Contents so far:
      var promiseFields =  ['Doctors', 'Patient'];
@@ -224,7 +225,9 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors',
       {
         setServices(response.Data, 'setOnline').then(function()
         {
+            console.log(response.Timestamp);
           initTimestamps(response.Timestamp);
+            console.log(lastUpdateTimestamp);
           r.resolve(true);
         });
       }).catch(function(error) {

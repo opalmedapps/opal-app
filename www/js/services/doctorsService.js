@@ -49,6 +49,7 @@ myApp.service('Doctors',['$q','LocalStorage','$filter','FileManagerService', fun
 
   //Function finds if there are doctors that had their fields updated and deletes them from the appropiate arrays.
   function searchDoctorsAndDelete(doctors)
+  //TODO change function to an update.
   {
     //Go through the new doctors
     for (var i = 0; i < doctors.length; i++) {
@@ -93,6 +94,7 @@ myApp.service('Doctors',['$q','LocalStorage','$filter','FileManagerService', fun
   }
   //Adds array of doctors to doctor array and downloads the doctor pictures into storage.
     function addPatientContacts(doctors)
+    // TODO should always append doctors to the list
     {
       var r=$q.defer();
       var promises=[];
