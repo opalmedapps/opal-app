@@ -22,7 +22,8 @@
             setPlanningTasks: setPlanningTasks,
             getPlanningTasks: getPlanningTasks,
             deletePlanningTasks: deletePlanningTasks,
-            getAllRecentTasks: getAllRecentTasks
+            getAllRecentTasks: getAllRecentTasks,
+            getRecentPhysicianTask: getRecentPhysicianTask
         };
 
         return service;
@@ -82,8 +83,8 @@
                 if (planningTasks[task].DueDateTime > physicianTask.DueDateTime
                     && planningTasks[task].TaskName_EN === 'Physician Plan Preparation'){
                     physicianTask = planningTasks[task];
+                    index++;
                 }
-                index++;
             }
             return {
                 physicianTask: physicianTask,
@@ -98,8 +99,11 @@
 
         // Returns all tasks starting from the most recent Physician plan prep.
         function getAllRecentTasks(){
+
             var physicianTask = getRecentPhysicianTask();
-            return planningTasks.slice(physicianTask.index, planningTasks.length-1);
+            console.log(planningTasks);
+            console.log(physicianTask);
+            return planningTasks.slice(physicianTask.index, planningTasks.length);
         }
     }
 

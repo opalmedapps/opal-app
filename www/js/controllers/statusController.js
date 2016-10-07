@@ -14,9 +14,10 @@
         .controller('StatusController', StatusController);
 
     StatusController.$inject = ['UserPlanWorkflow','$anchorScroll','$location','Appointments',
-        'NavigatorParameters', '$filter'];
+        'NavigatorParameters', '$filter', 'PlanningSteps'];
 
-    function StatusController(UserPlanWorkflow,$anchorScroll,$location,Appointments,NavigatorParameters,$filter)
+    function StatusController(UserPlanWorkflow,$anchorScroll,$location,
+                              Appointments,NavigatorParameters,$filter, PlanningSteps)
     {
         /* jshint validthis: true */
         var statusVm = this;
@@ -52,7 +53,8 @@
             var events;
             statusVm.planningCompleted = true;
             statusVm.treatmentCompleted = true;
-            if (UserPlanWorkflow.isCompleted() || !boolStatus){
+            PlanningSteps.initializePlanningSequence();
+            if (!UserPlanWorkflow.isCompleted() || !boolStatus){
                 events=UserPlanWorkflow.getPlanWorkflow();
                 var nextStageIndex=UserPlanWorkflow.getNextStageIndex();
                 initTreatmentPlanStatus(events,nextStageIndex);
