@@ -11,6 +11,7 @@
     function PlanningSteps(Tasks, Appointments) {
 
         var currentStep = -1;
+        var totalEvents = 0;
         var sequence = {
             1: {name: 'CT for Radiotherapy Planning', events: []},
             2: {name: 'Physician Plan Preparation', events: []},
