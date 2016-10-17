@@ -76,7 +76,7 @@ myApp.controller('accountSettingController', ['Patient', 'UserPreferences', '$sc
         $scope.passwordLength = 7;
     }
     //Function changes the enableSMS for the sms notifications and Calendar settings for the device calendar 
-    $scope.saveSettings = function(option) {
+/*    $scope.saveSettings = function(option) {
 
         if ($scope.mobilePlatform) {
                 var message = '';
@@ -132,7 +132,7 @@ myApp.controller('accountSettingController', ['Patient', 'UserPreferences', '$sc
                 $scope.checkboxModel = ($scope.checkboxModel == 1)?0:1;
             });
         }
-    }
+    }*/
 }]);
 
 

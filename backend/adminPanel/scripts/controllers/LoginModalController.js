@@ -1,5 +1,5 @@
 var app=angular.module('adminPanelApp');
-app.controller('LoginModalController',function ($scope, $modalInstance,$rootScope,$http,User, api, Messages, $timeout, AllPatients,URLs) {
+app.controller('LoginModalController',function ($scope, $modalInstance,$rootScope,$http,User, api, Messages, $timeout, AllPatients,URLs,$q) {
 
     /**
   * @ngdoc controller
@@ -17,28 +17,37 @@ app.controller('LoginModalController',function ($scope, $modalInstance,$rootScop
     function checkForUserAlreadyLoggedIn()
     {
       
-      var user=window.localStorage.getItem('OpalPanelUser');
+      var user=window.localStorage.getItem('OpalAdminPanelUser');
       if(user)
       {
         user=JSON.parse(user);
         console.log(user);
-        signinUser(user);
-        $modalInstance.close(response);
-        var date=new Date(user.timestamp);
-        if(date>new Date())
-        {
-          
+        var date=new Date(user.expires);
+        var diff=(new Date()-date)/1000;
 
+        console.log(diff);
+        if(diff<$rootScope.userExpiration)
+        {
+          signinUser(user).then(function(){$modalInstance.close(user);});
         }else{
-          $modalInstance.close(user);
-        }
-        
+          window.localStorage.removeItem('OpalAdminPanelUser');
+
+        }    
       }
 
     }
+
+    $scope.onEnter=function(event)
+    {
+      console.log(event.keyCode);
+      if(event.keyCode==13)
+      {
+        $scope.login($scope.user.username, $scope.user.password);
+      }
+    }
     function signinUser(response)
     {
-
+      var r=$q.defer();
       if(response.AdminSerNum)
       {
         $rootScope.userType='Admin';
@@ -79,20 +88,12 @@ app.controller('LoginModalController',function ($scope, $modalInstance,$rootScop
 
       }
       $modalInstance.close(response);
+      r.resolve(true);
+      return r.promise;
     }
     $rootScope.login = function (username,password)
     {
-      /**
-     * @ngdoc method
-     * @name login
-     * @methodOf AdminPanel.controller:loginModalController
-     * @description
-     * Logs the user in instantly if the super user credentials are used. For other users it will authenticate them using the admin table in MySQL and saves admin's information to $rootScope.
-     * @param {String} username username specified by the user.
-     * @param {String} password password specified by the user.
-     * @returns {Object} $rootScope.Admin
-     */
-      // Authentication for normal users
+
       if (typeof username !== 'undefined' )
       {
         api.getFieldFromServer(URLs.getUserAuthenticationUrl(),{Username:username, Password:password}).then(function(response)
@@ -101,12 +102,9 @@ app.controller('LoginModalController',function ($scope, $modalInstance,$rootScop
           if ( response.AdminSerNum ||response.DoctorSerNum||response.StaffSerNum)
           {
             console.log(response);
-            var date=new Date();
-            date.setHours(date.getHours()+24);
-            response.timestamp=date;
             response.Username=username;
-            response.Password=password;
-            window.localStorage.setItem('OpalPanelUser',JSON.stringify(response));
+            response.expires=new Date();
+            window.localStorage.setItem('OpalAdminPanelUser',JSON.stringify(response));
             signinUser(response);
           }else if(response=="")
           {
