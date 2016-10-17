@@ -1,12 +1,22 @@
 <?php
-
+/**
+ * CronControl class
+ *
+ */
 class CronControl {
 
+    /**
+     *
+     * Gets cron details in the database
+     *
+     * @return array
+     */    
 	public function getCronDetails () {
-		$cronDetails;
+		$cronDetails = array();
 		try {
 			$connect = new PDO( DB_DSN, DB_USERNAME, DB_PASSWORD );
-			$connect->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );
+            $connect->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );
+
 			$sql = "
 				SELECT DISTINCT 
 					Cron.CronSerNum,
@@ -23,7 +33,7 @@ class CronControl {
 
 			$data = $query->fetch(PDO::FETCH_NUM, PDO::FETCH_ORI_NEXT);
 
-			$cronSer	= $data[0];
+			$cronSer	    = $data[0];
 			$nextCronDate	= $data[1];
 			$repeatUnits	= $data[2];
 			$nextCronTime	= $data[3];
@@ -37,15 +47,24 @@ class CronControl {
 				'repeatInterval'=> $repeatInterval
 			);
 
-			return $cronDetails;
+            return $cronDetails;
+
 		} catch (PDOException $e) {
 			echo $e->getMessage();
 			return $cronDetails;
 		}
-	}
+    }
 
-	public function updateCron($cronArray) {
-		$cronSer	= 1;
+    /**
+     *
+     * Updates cron settings in the database and sets the crontab
+     *
+     * @param array $cronArray : cron details
+     * @return void
+     */
+    public function updateCron( $cronArray ) {
+
+		$cronSer	    = 1;
 		$nextCronDate	= $cronArray['nextCronDate'];
 		$repeatUnits	= $cronArray['repeatUnits'];
 		$nextCronTime	= $cronArray['nextCronTime'];
@@ -72,13 +91,11 @@ class CronControl {
 
 			/* Build our custom cronjobs for crontab
 			 * In this case, we are concerned about triggering the next cron
-			 * so we gather the date and time from the $nextCron
-			 * variable and write two cronjobs to execute on that given
-			 * date. 
+             *
 			 * One cronjob will be the execution of the dataControl.pl script itself.
 			 * And the second job will be a php script (updateCrontab() method below)
 			 * that modifies the first job based on the repeat options. 
-			 * Again, we are writing two cronjobs that will fire on the nextCron variable.
+			 * Again, we are writing two cronjobs that will fire on the nextCron variables.
 			 */ 
 	
 			// Parse date
@@ -122,6 +139,13 @@ class CronControl {
 		}
 	}
 
+    /**
+     *
+     * Updates the crontab
+     *
+     * @param integer $cronSer : the cron serial number
+     */
+
 	public function updateCrontab($cronSer) {
 
 		$nextCronDate; 
@@ -133,9 +157,9 @@ class CronControl {
 
 			$cronDetails = CronControl::getCronDetails($cronSer);
 
-			$nextCronDate = $cronDetails['nextCronDate'];
-			$repeatUnits = $cronDetails['repeatUnits'];
-			$nextCronTime = $cronDetails['nextCronTime'];
+			$nextCronDate   = $cronDetails['nextCronDate'];
+			$repeatUnits    = $cronDetails['repeatUnits'];
+			$nextCronTime   = $cronDetails['nextCronTime'];
 			$repeatInterval = $cronDetails['repeatInterval'];
 
 			// Initialize a date object for setting the next scheduled

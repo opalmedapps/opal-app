@@ -1,7 +1,18 @@
 <?php
 
+/**
+ * TestResult class
+ *
+ */
 class TestResult {
 
+    /**
+     *
+     * Updates the publish flag(s) in the database
+     *
+     * @param array $testResultList : a list of test results
+     * @return array : response
+     */
     public function updatePublishFlags( $testResultList ) {
         $response = array(
             'value'     => 0,
@@ -24,17 +35,23 @@ class TestResult {
 	            $query = $connect->prepare( $sql );
 				$query->execute();
             }
-            $response['value'] = 1;
+            $response['value'] = 1; // Success
             return $response;
 		} catch( PDOException $e) {
 		    $response['message'] = $e->getMessage();
-			return $response;
+			return $response; // Fail
 		}
 	}
 
-
+    /**
+     *
+     * Gets details on a particular test result
+     *
+     * @param integer $serial : the serial number of the test result
+     * @return array
+     */
     public function getTestResultDetails ($serial) {
-        $testResultDetails;
+        $testResultDetails = array();
  		try {
 			$connect = new PDO( DB_DSN, DB_USERNAME, DB_PASSWORD );
             $connect->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );
@@ -103,8 +120,12 @@ class TestResult {
 		}
 	}
 
-
-
+    /**
+     *
+     * Gets a list of test result groups
+     *
+     * @return array
+     */
     public function getTestResultGroups () {
 
         $groups = array (
@@ -150,6 +171,12 @@ class TestResult {
 		}
     }
 
+    /**
+     *
+     * Gets a list of test result names from ARIA
+     *
+     * @return array
+     */    
     public function getTestNames() {
         $testNames = array();
 
@@ -183,6 +210,12 @@ class TestResult {
 		}
     }
 
+    /**
+     *
+     * Inserts a test result into the database
+     *
+     * @param array $testResultArray : the test result details
+     */
     public function insertTestResult ($testResultArray) {
 
         $name_EN            = $testResultArray['name_EN'];
@@ -192,6 +225,7 @@ class TestResult {
         $group_EN           = $testResultArray['group_EN'];
         $group_FR           = $testResultArray['group_FR'];
         $tests              = $testResultArray['tests'];
+
 		try {
 			$connect = new PDO( DB_DSN, DB_USERNAME, DB_PASSWORD );
 			$connect->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );
@@ -250,9 +284,16 @@ class TestResult {
 
     }
 
+    /**
+     *
+     * Gets a list of existing test results in the database
+     *
+     * @return array
+     */    
     public function getExistingTestResults () { 
 
         $testResultList = array();
+
  		try {
 			$connect = new PDO( DB_DSN, DB_USERNAME, DB_PASSWORD );
             $connect->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );
@@ -328,6 +369,13 @@ class TestResult {
 		}
 	}
 
+    /**
+     *
+     * Updates test result details in the database
+     *
+     * @param array $testResultArray : the test result details 
+     * @return array : response
+     */    
     public function updateTestResult ($testResultArray) {
 
         $name_EN            = $testResultArray['name_EN'];
@@ -340,6 +388,7 @@ class TestResult {
         $tests              = $testResultArray['tests'];
 
         $existingTests      = array();
+
         $response = array(
             'value'     => 0,
             'message'   => ''
@@ -379,6 +428,7 @@ class TestResult {
                 array_push($existingTests, $data[0]);
             }
 
+            // If old test names not in new test names, delete from database
             foreach ($existingTests as $existingTestName) {
                 if (!in_array($existingTestName, $tests)) {
                     $sql = "
@@ -394,6 +444,7 @@ class TestResult {
 				}
 			}
 
+            // If new test names, insert into database
             foreach ($tests as $test) {
                 $testName = $test['name'];
                 if(!in_array($test, $existingTests)) {
@@ -413,20 +464,29 @@ class TestResult {
 					$query->execute();
 				}
 			}
-            $response['value'] = 1;
+            $response['value'] = 1; // Success
             return $response;
 		
 		} catch( PDOException $e) {
 		    $response['message'] = $e->getMessage();
-			return $response;
+			return $response; // Fail
 		}
 	}
 
+    /**
+     *
+     * Removes a test result from the database
+     *
+     * @param integer $testResultSer : the serial number of the test result
+     * @return array : response
+     */    
     public function removeTestResult ($testResultSer) {
+
         $response = array(
             'value'     => 0,
             'message'   => ''
         );
+
 	    try {
 			$connect = new PDO( DB_DSN, DB_USERNAME, DB_PASSWORD );
 			$connect->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );
@@ -457,11 +517,6 @@ class TestResult {
 			return $response;
 		}
 	}
-
-
-	
-                
-
 }
 
 ?>

@@ -1,5 +1,13 @@
 <?php session_start();
-	if (!isset($_SESSION['ATO_DEV_loginAttempt'])) {
+
+    $currentFile = __FILE__; // Get location of this script
+
+    // Find config file based on this location 
+    $configFile = substr($currentFile, 0, strpos($currentFile, "ATO")) . "ATO/php/config.php";
+	// Include config file 
+	include_once($configFile);
+
+	if (!isset($_SESSION[SESSION_KEY_LOGIN])) {
 		echo "<script>
 			window.location.href = 'php/user/logout.php';
 		      </script> ";
