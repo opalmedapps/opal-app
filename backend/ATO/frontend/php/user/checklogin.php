@@ -2,13 +2,12 @@
 
 	/* To call Users Object to validate login */
 
-	// Include config module
-	// DEV
-	include_once("config_ATO_DEV.php");
+    $currentFile = __FILE__; // Get location of this script
 
-	/* PRO
-	 *include_once("config_AEHRA_PRO.php");
-	 */
+    // Find config file based on this location 
+    $configFile = substr($currentFile, 0, strpos($currentFile, "ATO")) . "ATO/php/config.php";
+	// Include config file 
+	include_once($configFile);
 
 	$usr = new Users; // Object 
 	
@@ -20,9 +19,9 @@
 	
 	    session_start(); // Begin session
 		// Add session params
-		$_SESSION['ATO_DEV_username'] = $usr->username; 
-		$_SESSION['ATO_DEV_loginAttempt'] = 1;
-		$_SESSION['ATO_DEV_userid'] = $usr->userid;
+		$_SESSION[SESSION_KEY_NAME] = $usr->username; 
+		$_SESSION[SESSION_KEY_LOGIN] = 1;
+		$_SESSION[SESSION_KEY_USERID] = $usr->userid;
 
         print 1;
 	} else { // Failed login

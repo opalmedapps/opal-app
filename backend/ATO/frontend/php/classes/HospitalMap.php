@@ -1,7 +1,20 @@
 <?php
 include(ABS_PATH.'php/lib/phpqrcode/qrlib.php');
+
+/**
+ * HospitalMap class
+ *
+ */
 class HospitalMap {
 
+    /**
+     *
+     * Generates a QRCode
+     *
+     * @param string $qrid : the string to QR-ify
+     * @param string $oldqrid : the previous string that was QR'ed
+     * @return array : qrcode with path
+     */    
     public function generateQRCode($qrid, $oldqrid) {
 
         if($oldqrid) {
@@ -27,7 +40,14 @@ class HospitalMap {
         return $qrArray;
     }
 
+    /**
+     *
+     * Inserts hospital map info
+     *
+     * @param array $hosMapArray : the hospital map details
+     */
     public function insertHospitalMap ($hosMapArray) {
+
         $name_EN            = $hosMapArray['name_EN'];
         $name_FR            = $hosMapArray['name_FR'];
         $description_EN     = $hosMapArray['description_EN'];
@@ -68,6 +88,12 @@ class HospitalMap {
 
     }
 
+    /**
+     *
+     * Gets a list of existing hospital maps
+     *
+     * @return array
+     */
     public function getHospitalMaps() {
         $hosMapList = array();
  		try {
@@ -123,8 +149,17 @@ class HospitalMap {
 		}
 	}
 
+    /**
+     *
+     * Gets details on a particular hospital map 
+     *
+     * @param integer $serial : the hospital map serial number
+     * @return array
+     */    
     public function getHospitalMapDetails ($serial) {
-        $hosMapDetails;
+
+        $hosMapDetails = array();
+
 	    try {
 			$connect = new PDO( DB_DSN, DB_USERNAME, DB_PASSWORD );
             $connect->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );
@@ -176,7 +211,12 @@ class HospitalMap {
 		}
 	}
 
-
+    /**
+     *
+     * Updates hospital map's details
+     *
+     * @param array $hosMapArray : the hospital map details
+     */
     public function updateHospitalMap ($hosMapArray) {
 
         $name_EN            = $hosMapArray['name_EN'];
@@ -214,6 +254,12 @@ class HospitalMap {
 		}
 	}
 
+    /**
+     *
+     * Removes a hospital map from the database
+     *
+     * @param integer $serial : the hospital map serial number
+     */    
     public function removeHospitalMap ($serial) {
         try {
 			$connect = new PDO( DB_DSN, DB_USERNAME, DB_PASSWORD );
@@ -232,10 +278,6 @@ class HospitalMap {
 			return $e->getMessage();
 		}
 	}
-
-
-
-            
 }
 
 ?>

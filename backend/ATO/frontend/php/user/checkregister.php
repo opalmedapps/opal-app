@@ -2,14 +2,12 @@
 
 	/* To call Users Object to validate registration to application */
 
+    $currentFile = __FILE__; // Get location of this script
 
-	// Include config module
-	// DEV
-	include_once("config_ATO_DEV.php");
-
-	/* PRO
-	 *include_once("config_AEHRA_PRO.php");
-	 */
+    // Find config file based on this location 
+    $configFile = substr($currentFile, 0, strpos($currentFile, "ATO")) . "ATO/php/config.php";
+	// Include config file 
+	include_once($configFile);
 
 	$usr = new Users; // Object
 
@@ -20,7 +18,7 @@
 	if( $_POST['password'] == $_POST['passConfirm'] ) {
 		$usr->register($_POST);	// Register User
 	    session_start(); // Start a session
-		$_SESSION['ATO_DEV_registerAttempt'] = 1;
+		$_SESSION[SESSION_KEY_REGISTER] = 1;
 	
         print 1;
 
