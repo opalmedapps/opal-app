@@ -26,7 +26,7 @@ var open = require('gulp-open');
 
 
 //Set the cordova folder path here
-var cordovaFolderPath = '/Users/davidherrera/Documents/Projects/muhc/www';
+var cordovaFolderPath = '/home/rob/Opal/www';
 
 /**
  * 

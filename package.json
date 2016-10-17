@@ -53,6 +53,7 @@
   },
   "dependencies": {
     "angularfire": "^2.0.2",
-    "firebase": "^3.3.0"
+    "firebase": "^3.3.0",
+    "pdfobject": "^2.0.201604172"
   }
 }
