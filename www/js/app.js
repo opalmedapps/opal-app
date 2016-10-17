@@ -111,7 +111,7 @@ var myApp = angular.module('MUHCApp', ['tmh.dynamicLocale','pascalprecht.transla
                     // Auth refers to our $firebaseAuth wrapper in the example above
                     "currentAuth": ["FirebaseService", function(FirebaseService) {
                         // $waitForAuth returns a promise so the resolve waits for it to complete
-                        return FirebaseService.getAuthentication().$requireAuth();
+                        return FirebaseService.getAuthentication().$requireSignIn();
                     }]
                 }
             })
@@ -124,7 +124,7 @@ var myApp = angular.module('MUHCApp', ['tmh.dynamicLocale','pascalprecht.transla
                     // Auth refers to our $firebaseAuth wrapper in the example above
                     "currentAuth": ["FirebaseService", function(FirebaseService) {
                         // $waitForAuth returns a promise so the resolve waits for it to complete
-                        return FirebaseService.getAuthentication().$requireAuth();
+                        return FirebaseService.getAuthentication().$requireSignIn();
                     }]
                 }
 
@@ -138,7 +138,7 @@ var myApp = angular.module('MUHCApp', ['tmh.dynamicLocale','pascalprecht.transla
                     // Auth refers to our $firebaseAuth wrapper in the example above
                     "currentAuth": ["FirebaseService", function(FirebaseService) {
                         // $waitForAuth returns a promise so the resolve waits for it to complete
-                        return FirebaseService.getAuthentication().$requireAuth();
+                        return FirebaseService.getAuthentication().$requireSignIn();
                     }]
                 }
             });
@@ -198,7 +198,7 @@ myApp.run(function ($state, $stateParams,$q, $rootScope,$translate, Patient,$loc
     $rootScope.$stateParams = $stateParams;
     $rootScope.$on("$stateChangeError", function(event, toState, toParams, fromState, fromParams, error) {
         console.log(error);
-        // We can catch the error thrown when the $requireAuth promise is rejected
+        // We can catch the error thrown when the $requireSignIn() promise is rejected
         // and redirect the user back to the home page
         $state.go('init');
         //console.log('listening');
