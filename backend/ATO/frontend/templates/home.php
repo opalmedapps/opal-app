@@ -1,8 +1,16 @@
 <?php session_start();
-	$username 	    = $_SESSION['ATO_DEV_username'];
-	$loginAttempt 	= $_SESSION['ATO_DEV_loginAttempt'];
-	$registerAttempt= $_SESSION['ATO_DEV_registerAttempt'];
-	$userid		    = $_SESSION['ATO_DEV_userid'];
+
+    $currentFile = __FILE__; // Get location of this script
+
+    // Find config file based on this location 
+    $configFile = substr($currentFile, 0, strpos($currentFile, "ATO")) . "ATO/php/config.php";
+	// Include config file 
+	include_once($configFile);
+
+	$username 	    = $_SESSION[SESSION_KEY_NAME];
+	$loginAttempt 	= $_SESSION[SESSION_KEY_LOGIN];
+	$registerAttempt= $_SESSION[SESSION_KEY_REGISTER];
+	$userid		    = $_SESSION[SESSION_KEY_USERID];
  ?>
 
   <div id="main">

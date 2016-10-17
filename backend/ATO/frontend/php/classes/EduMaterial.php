@@ -1,18 +1,33 @@
 <?php
-
+/**
+ *
+ * EduMaterial class
+ */
 class EduMaterial {
 
+    /**
+     *
+     * Updates the publish flags in the database
+     *
+     * @param array $eduMatList : the list of educational materials
+     * @return array : response
+     */    
     public function updatePublishFlags( $eduMatList ) {
+
+        // Initialize response array
         $response = array(
             'value'     => 0,
             'message'   => ''
         );
 		try {
 			$connect = new PDO( DB_DSN, DB_USERNAME, DB_PASSWORD );
-			$connect->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );
-			foreach ($eduMatList as $edumat) {
-				$eduMatPublish = $edumat['publish'];
-				$eduMatSer = $edumat['serial'];
+            $connect->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );
+
+            foreach ($eduMatList as $edumat) {
+
+				$eduMatPublish  = $edumat['publish'];
+                $eduMatSer      = $edumat['serial'];
+
 				$sql = "
 					UPDATE 
 						EducationalMaterialControl 	
@@ -25,19 +40,28 @@ class EduMaterial {
 				$query = $connect->prepare( $sql );
 				$query->execute();
             }
-            $response['value'] = 1;
+
+            $response['value'] = 1; // Success
             return $response;
+
 		} catch( PDOException $e) {
 		    $response['message'] = $e->getMessage();
-			return $response;
+			return $response; // Fail
 		}
 	}
 
+    /**
+     *
+     * Gets a list of distinct phases in treatment defined in the database
+     *
+     * @return array
+     */
     public function getPhaseInTreatments() {
         $phases = array();
         try {
 			$connect = new PDO( DB_DSN, DB_USERNAME, DB_PASSWORD );
             $connect->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );
+
             $sql = "
                 SELECT DISTINCT 
                     p.PhaseInTreatmentSerNum,
@@ -58,14 +82,24 @@ class EduMaterial {
 
                 array_push($phases, $phaseArray); 
             }
+
             return $phases;
+
         } catch (PDOException $e) {
 			echo $e->getMessage();
 			return $phases;
 		}
     }
 
+    /**
+     *
+     * Gets a list of educational material types
+     *
+     * @return array
+     */
     public function getEducationalMaterialTypes() {
+
+        // Initialize list of types, separate languages
         $types = array(
             'EN'    => array(),
             'FR'    => array()
@@ -104,15 +138,24 @@ class EduMaterial {
             }
 
             return $types;
+
 	    } catch (PDOException $e) {
 			echo $e->getMessage();
 			return $types;
 		}
     }
 
-
+    /**
+     *
+     * Gets educational material details
+     *
+     * @param integer $eduMatSer : the educational material serial number
+     * @return array
+     */
     public function getEducationalMaterialDetails ($eduMatSer) {
-        $eduMatDetails;
+
+        $eduMatDetails = array();
+
  		try {
 			$connect = new PDO( DB_DSN, DB_USERNAME, DB_PASSWORD );
             $connect->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );
@@ -134,7 +177,7 @@ class EduMaterial {
                     PhaseInTreatment phase
                 WHERE
                     em.EducationalMaterialControlSerNum = $eduMatSer
-                AND phase.PhaseInTreatmentSerNum = em.PhaseInTreatmentSerNum
+                AND phase.PhaseInTreatmentSerNum        = em.PhaseInTreatmentSerNum
             ";
 			$query = $connect->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_SCROLL));
 			$query->execute();
@@ -153,7 +196,7 @@ class EduMaterial {
             $shareURL_EN            = $data[9];
             $shareURL_FR            = $data[10];
             $filters                = array();
-            $tocs                   = array();
+            $tocs                   = array(); // Table of contents
 
             $sql = "
                 SELECT DISTINCT 
@@ -163,11 +206,11 @@ class EduMaterial {
                     EducationalMaterialControl em,
                     Filters
                 WHERE
-                    em.EducationalMaterialControlSerNum    = $eduMatSer
-                AND Filters.ControlTable             = 'EducationalMaterialControl'
-                AND Filters.ControlTableSerNum       = em.EducationalMaterialControlSerNum
-                AND Filters.FilterType              != ''
-                AND Filters.FilterId                != ''
+                    em.EducationalMaterialControlSerNum     = $eduMatSer
+                AND Filters.ControlTable                    = 'EducationalMaterialControl'
+                AND Filters.ControlTableSerNum              = em.EducationalMaterialControlSerNum
+                AND Filters.FilterType                      != ''
+                AND Filters.FilterId                        != ''
             ";
             $query = $connect->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_SCROLL));
 	    	$query->execute();
@@ -255,7 +298,12 @@ class EduMaterial {
 		}
 	}
 
-                   
+     /**
+     *
+     * Gets a list of existing educational materials
+     *
+     * @return array
+     */                  
     public function getExistingEducationalMaterials() {
         $eduMatList = array();
  		try {
@@ -298,7 +346,7 @@ class EduMaterial {
                 $phaseSer               = $data[7];
                 $phaseName_EN           = $data[8];
                 $phaseName_FR           = $data[9];
-                $publish               = $data[10];
+                $publish                = $data[10];
                 $parentFlag             = $data[11];
                 $shareURL_EN            = $data[12];
                 $shareURL_FR            = $data[13];
@@ -313,11 +361,11 @@ class EduMaterial {
                         EducationalMaterialControl em,
                         Filters
                     WHERE   
-                        em.EducationalMaterialControlSerNum    = $eduMatSer
-                    AND Filters.ControlTable             = 'EducationalMaterialControl'
-                    AND Filters.ControlTableSerNum       = em.EducationalMaterialControlSerNum
-                    AND Filters.FilterType              != ''
-                    AND Filters.FilterId                != ''
+                        em.EducationalMaterialControlSerNum     = $eduMatSer
+                    AND Filters.ControlTable                    = 'EducationalMaterialControl'
+                    AND Filters.ControlTableSerNum              = em.EducationalMaterialControlSerNum
+                    AND Filters.FilterType                      != ''
+                    AND Filters.FilterId                        != ''
                 ";
                 $secondQuery = $connect->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_SCROLL));
 				$secondQuery->execute();
@@ -349,7 +397,7 @@ class EduMaterial {
                         EducationalMaterialTOC toc,
                         EducationalMaterialControl em
                     WHERE
-                        toc.EducationalMaterialControlSerNum   = em.EducationalMaterialControlSerNum
+                        toc.EducationalMaterialControlSerNum    = em.EducationalMaterialControlSerNum
                     AND toc.ParentSerNum                        = $eduMatSer
                     ORDER BY
                         toc.OrderNum
@@ -409,6 +457,12 @@ class EduMaterial {
 		}
 	}
 
+    /**
+     *
+     * Inserts educational material into the database
+     *
+     * @param array $eduMatArray : the educational material details
+     */
     public function insertEducationalMaterial ( $eduMatArray ) {
 
         $name_EN        = $eduMatArray['name_EN'];
@@ -487,6 +541,7 @@ class EduMaterial {
 				    $query->execute();
                 }
             }
+
             if($tocs) {
                 foreach ($tocs as $toc) {
 
@@ -554,6 +609,13 @@ class EduMaterial {
 
     }
 
+    /**
+     *
+     * Updates educational material details in the database
+     *
+     * @param array $eduMatArray : the educational material details
+     * @return array : response
+     */
     public function updateEducationalMaterial ($eduMatArray) {
 
         $name_EN            = $eduMatArray['name_EN'];
@@ -568,6 +630,7 @@ class EduMaterial {
         $phaseSer           = $eduMatArray['phase_serial'];
 		$existingFilters	= array();
         $existingTOCs       = array();
+
         $response = array(
             'value'     => 0,
             'message'   => ''
@@ -619,6 +682,8 @@ class EduMaterial {
             }
 
             if($existingFilters) { 
+
+                // If old filters not in new filter list, then remove
     	    	foreach ($existingFilters as $existingFilter) {
                     $id     = $existingFilter['id'];
                     $type   = $existingFilter['type'];
@@ -640,6 +705,8 @@ class EduMaterial {
 	    	}
 
             if($filters) {
+
+                // If new filters (i.e. not in old list), then insert
     			foreach ($filters as $filter) {
                     $id     = $filter['id'];
                     $type   = $filter['type'];
@@ -674,7 +741,7 @@ class EduMaterial {
                     EducationalMaterialTOC toc
                 WHERE
                     em.EducationalMaterialControlSerNum = toc.EducationalMaterialControlSerNum
-                AND toc.ParentSerNum = $eduMatSer
+                AND toc.ParentSerNum                    = $eduMatSer
             ";
             $query = $connect->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_SCROLL));
 			$query->execute();
@@ -759,16 +826,25 @@ class EduMaterial {
 			    	$query->execute();
                 }
             }
-            $response['value'] = 1;
+
+            $response['value'] = 1; // Success
             return $response;
 
 		} catch( PDOException $e) {
 		    $response['message'] = $e->getMessage();
-			return $response;
+			return $response; // Fail
 		}
 	}
 
+    /**
+     *
+     * Removes educational material from the database
+     *
+     * @param integer $eduMatSer : the educational material serial
+     * @return array : response
+     */
     public function removeEducationalMaterial ( $eduMatSer ){
+
         $response = array(
             'value'     => 0,
             'message'   => ''
@@ -839,7 +915,15 @@ class EduMaterial {
 		}
 	}
 
-
+    /**
+     *
+     * Does a nested search for match
+     *
+     * @param string $id    : the needle id
+     * @param string $type  : the needle type
+     * @param array $array  : the key-value haystack
+     * @return boolean
+     */
     public function nestedSearch($id, $type, $array) {
         if(empty($array) || !$id || !$type){
             return 0;

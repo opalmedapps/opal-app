@@ -1,8 +1,16 @@
 <?php session_start();
-	$username 	= $_SESSION['ATO_DEV_username'];
-	$loginAttempt 	= $_SESSION['ATO_DEV_loginAttempt'];
-	$registerAttempt= $_SESSION['ATO_DEV_registerAttempt'];
-	$userid		= $_SESSION['ATO_DEV_userid'];
+
+    $currentFile = __FILE__; // Get location of this script
+
+    // Find config file based on this location 
+    $configFile = substr($currentFile, 0, strpos($currentFile, "ATO")) . "ATO/php/config.php";
+	// Include config file 
+	include_once($configFile);
+
+	$username 	= $_SESSION[SESSION_KEY_NAME];
+	$loginAttempt 	= $_SESSION[SESSION_KEY_LOGIN];
+	$registerAttempt= $_SESSION[SESSION_KEY_REGISTER];
+	$userid		= $_SESSION[SESSION_KEY_USERID];
 ?>
 <!DOCTYPE html>
 <!--[if lt IE 7 ]> <html lang="en" class="no-js ie6 lt8"> <![endif]-->
@@ -63,18 +71,18 @@
  	<script type="text/javascript" src="js/config.js"></script>
 	
 	<!-- Stylesheets -->
-	<link media="all" type="text/css" rel="stylesheet" href="css/jquery-ui.css">
-	<link media="all" type="text/css" rel="stylesheet" href="css/bootstrap.css">
-	<link media="all" type="text/css" rel="stylesheet" href="css/bootstrap-datetimepicker.css">
-	<link media="all" type="text/css" rel="stylesheet" href="css/ui-grid.css">
-	<link media="all" type="text/css" rel="stylesheet" href="css/animate.css">
-	<link media="all" type="text/css" rel="stylesheet" href="css/livicon.css">
-	<link media="all" type="text/css" rel="stylesheet" href="css/prettify.css">
-	<link media="all" type="text/css" rel="stylesheet" href="css/docs.min.css">
-	<link media="all" type="text/css" rel="stylesheet" href="css/style.css">
-	<link media="all" type="text/css" rel="stylesheet" href="css/font-awesome.min.css">
-	<link media="all" type="text/css" rel="stylesheet" href="css/textAngular.css">
+	<link media="all" type="text/css" rel="stylesheet" href="css/lib/jquery-ui.css">
+	<link media="all" type="text/css" rel="stylesheet" href="css/lib/bootstrap.css">
+	<link media="all" type="text/css" rel="stylesheet" href="css/lib/bootstrap-datetimepicker.css">
+	<link media="all" type="text/css" rel="stylesheet" href="css/lib/ui-grid.css">
+	<link media="all" type="text/css" rel="stylesheet" href="css/lib/animate.css">
+	<link media="all" type="text/css" rel="stylesheet" href="css/lib/livicon.css">
+	<link media="all" type="text/css" rel="stylesheet" href="css/lib/prettify.css">
+	<link media="all" type="text/css" rel="stylesheet" href="css/lib/docs.min.css">
+	<link media="all" type="text/css" rel="stylesheet" href="css/lib/font-awesome.min.css">
+	<link media="all" type="text/css" rel="stylesheet" href="css/lib/textAngular.css">
 
+	<link media="all" type="text/css" rel="stylesheet" href="css/style.css">
 
 </head>
 <body ng-app="ATO_InterfaceApp">

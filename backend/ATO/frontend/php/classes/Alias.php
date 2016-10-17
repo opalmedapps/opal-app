@@ -1,9 +1,20 @@
 <?php
 
+/**
+ * Alias class
+ *
+ */
 class Alias {
 
+    /**
+     *
+     * Gets a list of expressions from ARIA
+     *
+     * @param string $type : the type of expressions to look out for
+     * @return array
+     */
 	public function getExpressions ($type) {
-        $expressionList = array(); 
+        $expressionList = array();
         try {
             $aria_link = mssql_connect(ARIA_DB, ARIA_USERNAME, ARIA_PASSWORD);
 
@@ -35,7 +46,7 @@ class Alias {
 
                 }
 
-            } else if ($type == "Document") {
+            } else {
 
                 $sql = "
                     SELECT DISTINCT
@@ -68,18 +79,29 @@ class Alias {
 		}
 	}
 
+    /**
+     *
+     * Updates AliasUpdate flag in MySQL
+     *
+     * @param array $aliasList : a list of aliases
+     * @return array : response
+     */
     public function updateAliasControls( $aliasList ) {
-        
+
+        // Initialize a response array
         $response = array(
             'value'     => 0,
             'message'   => ''
         );
 		try {
 			$connect = new PDO( DB_DSN, DB_USERNAME, DB_PASSWORD );
-			$connect->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );
-			foreach ($aliasList as $alias) {
-				$aliasUpdate = $alias['update'];
-				$aliasSer = $alias['serial'];
+            $connect->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );
+
+            foreach ($aliasList as $alias) {
+
+				$aliasUpdate    = $alias['update'];
+                $aliasSer       = $alias['serial'];
+
 				$sql = "
 					UPDATE 
 						Alias 	
@@ -92,19 +114,28 @@ class Alias {
 				$query = $connect->prepare( $sql );
 				$query->execute();
             }
-            $response['value'] = 1;
+
+            $response['value'] = 1; // Success
             return $response;
+
 		} catch( PDOException $e) {
 			$response['message'] = $e->getMessage();
-			return $response;
+			return $response; // Fail
 		}
 	}
 
+    /**
+     *
+     * Gets a list of existing aliases
+     *
+     * @return array
+     */
 	public function getExistingAliases() {
 		$aliasList = array();
 		try {
 			$connect = new PDO( DB_DSN, DB_USERNAME, DB_PASSWORD );
-			$connect->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );
+            $connect->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );
+
 			$sql = "
 				SELECT DISTINCT 
 					Alias.AliasSerNum, 
@@ -124,16 +155,16 @@ class Alias {
 
 			while ($data = $query->fetch(PDO::FETCH_NUM, PDO::FETCH_ORI_NEXT)) {
 
-				$aliasSer 	= $data[0];
-				$aliasType	= $data[1];
+				$aliasSer 	    = $data[0];
+				$aliasType	    = $data[1];
 				$aliasName_FR	= $data[2];
 				$aliasName_EN	= $data[3];
 				$aliasDesc_FR	= $data[4];
                 $aliasDesc_EN	= $data[5];
                 $aliasUpdate    = $data[6];
                 $aliasEduMatSer = $data[7];
-                $aliasTerms	= array();
-                $aliasEduMat = "";
+                $aliasTerms	    = array();
+                $aliasEduMat    = "";
 
 				$sql = "
 					SELECT DISTINCT 
@@ -142,8 +173,8 @@ class Alias {
 						Alias, 
 						AliasExpression 
 					WHERE 
-						Alias.AliasSerNum 		= $aliasSer 
-					AND 	AliasExpression.AliasSerNum 	= Alias.AliasSerNum
+						Alias.AliasSerNum 		        = $aliasSer 
+					AND AliasExpression.AliasSerNum 	= Alias.AliasSerNum
 				";
 
 				$secondQuery = $connect->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_SCROLL));
@@ -165,34 +196,42 @@ class Alias {
                 }
                             
 				$aliasArray = array(
-					'name_FR' 		=> $aliasName_FR, 
-					'name_EN' 		=> $aliasName_EN, 
-					'serial' 		=> $aliasSer, 
-                    'type'			=> $aliasType, 
-                    'update'        => $aliasUpdate,
+					'name_FR' 		    => $aliasName_FR, 
+					'name_EN' 		    => $aliasName_EN, 
+					'serial' 		    => $aliasSer, 
+                    'type'			    => $aliasType, 
+                    'update'            => $aliasUpdate,
                     'eduMat'            => $aliasEduMat,
 					'description_EN' 	=> $aliasDesc_EN, 
 					'description_FR' 	=> $aliasDesc_FR, 
-					'count' 		=> count($aliasTerms), 
-					'terms' 		=> $aliasTerms
+					'count' 		    => count($aliasTerms), 
+					'terms' 		    => $aliasTerms
 				);
 
 				array_push($aliasList, $aliasArray);
-			}
-			return $aliasList;
+            }
+            return $aliasList;
+
 		} catch (PDOException $e) {
 			echo $e->getMessage();
 			return $aliasList;
 		}
 	}
 
-			
-	public function getAliasDetails ($ser) { 
-		$aliasDetails;
+    /**
+     *
+     * Gets details for one particular alias
+     *
+     * @param integer $ser : the alias serial number
+     * @return array
+     */			
+    public function getAliasDetails ($ser) { 
 
+		$aliasDetails = array();
 		try {
 			$connect = new PDO( DB_DSN, DB_USERNAME, DB_PASSWORD );
-			$connect->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );
+            $connect->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );
+
 			$sql = "
 				SELECT DISTINCT 
 					Alias.AliasType, 
@@ -213,7 +252,7 @@ class Alias {
 
 			$data = $query->fetch(PDO::FETCH_NUM, PDO::FETCH_ORI_NEXT);
 
-			$aliasType	= $data[0];
+			$aliasType	    = $data[0];
 			$aliasName_FR	= $data[1];
 			$aliasName_EN	= $data[2];
 			$aliasDesc_FR	= $data[3];
@@ -221,7 +260,7 @@ class Alias {
             $aliasUpdate    = $data[5];
             $aliasEduMatSer = $data[6];
             $aliasEduMat    = "";
-			$aliasTerms	= array();
+			$aliasTerms	    = array();
 
 			$sql = "
 				SELECT DISTINCT 
@@ -251,34 +290,41 @@ class Alias {
             }
                          
 			$aliasDetails = array(
-				'name_FR' 		=> $aliasName_FR, 
-				'name_EN' 		=> $aliasName_EN, 
-				'serial' 		=> $ser, 
-                'type'			=> $aliasType, 
-                'update'        => $aliasUpdate,
+				'name_FR' 		    => $aliasName_FR, 
+				'name_EN' 		    => $aliasName_EN, 
+				'serial' 		    => $ser, 
+                'type'			    => $aliasType, 
+                'update'            => $aliasUpdate,
                 'eduMat'            => $aliasEduMat,
 				'description_EN' 	=> $aliasDesc_EN, 
 				'description_FR' 	=> $aliasDesc_FR, 
-				'count' 		=> count($aliasTerms), 
-				'terms' 		=> $aliasTerms
+				'count' 		    => count($aliasTerms), 
+				'terms' 		    => $aliasTerms
 			);
 		
-			return $aliasDetails;
+            return $aliasDetails;
+
 		} catch (PDOException $e) {
 			echo $e->getMessage();
 			return $aliasDetails;
 		}
 	}
 
-
+    /**
+     *
+     * Inserts an alias into the database
+     *
+     * @param array $aliasArray : the alias details
+     * @return void
+     */
 	public function insertAlias( $aliasArray ) {
 
 		$aliasName_EN 	= $aliasArray['name_EN'];
 		$aliasName_FR 	= $aliasArray['name_FR'];
 		$aliasDesc_EN	= $aliasArray['description_EN'];
 		$aliasDesc_FR	= $aliasArray['description_FR'];
-		$aliasType	= $aliasArray['type'];
-		$aliasTerms	= $aliasArray['terms'];
+		$aliasType	    = $aliasArray['type'];
+		$aliasTerms	    = $aliasArray['terms'];
         $aliasEduMatSer = $aliasArray['edumat']['serial'];
 
 		try {
@@ -339,7 +385,16 @@ class Alias {
 		}
 	}
 
+    /**
+     *
+     * Deletes an alias from the database
+     *
+     * @param integer $aliasSer : the alias serial number
+     * @return array : response
+     */
     public function removeAlias( $aliasSer ) {
+
+        // Initialize a response array
         $response = array(
             'value'     => 0,
             'message'   => ''
@@ -369,24 +424,35 @@ class Alias {
 			$query->execute();
 
 	
-            $response['value'] = 1;
+            $response['value'] = 1; // Success
             return $response;	
+
 		} catch( PDOException $e) {
             $response['message'] = $e->getMessage();
-			return $response;
+			return $response; // Fail
 		}
 	}
-	
-	public function updateAlias( $aliasArray ) {
+
+    /**
+     *
+     * Updates an alias in the database
+     *
+     * @param array $aliasArray : the alias details
+     * @return array : response
+     */    
+    public function updateAlias( $aliasArray ) {
+
 		$aliasName_EN 	= $aliasArray['name_EN'];
 		$aliasName_FR 	= $aliasArray['name_FR'];
 		$aliasDesc_EN	= $aliasArray['description_EN'];
 		$aliasDesc_FR	= $aliasArray['description_FR'];
-		$aliasSer	= $aliasArray['serial'];
-        $aliasTerms	= $aliasArray['terms'];
+		$aliasSer	    = $aliasArray['serial'];
+        $aliasTerms	    = $aliasArray['terms'];
         $aliasEduMatSer = $aliasArray['edumat']['serial'];
 
         $existingTerms	= array();
+
+        // Initialize a response array
         $response = array(
             'value'     => 0,
             'message'   => ''
@@ -398,11 +464,11 @@ class Alias {
 				UPDATE 
 					Alias 
 				SET 
-					Alias.AliasName_EN 		= \"$aliasName_EN\", 
-					Alias.AliasName_FR 		= \"$aliasName_FR\", 
-					Alias.AliasDescription_EN	= \"$aliasDesc_EN\",
-                    Alias.AliasDescription_FR	= \"$aliasDesc_FR\",
-                    Alias.EducationalMaterialControlSerNum = '$aliasEduMatSer'
+					Alias.AliasName_EN 		                = \"$aliasName_EN\", 
+					Alias.AliasName_FR 		                = \"$aliasName_FR\", 
+					Alias.AliasDescription_EN	            = \"$aliasDesc_EN\",
+                    Alias.AliasDescription_FR	            = \"$aliasDesc_FR\",
+                    Alias.EducationalMaterialControlSerNum  = '$aliasEduMatSer'
 				WHERE 
 					Alias.AliasSerNum = $aliasSer
 			";
@@ -427,6 +493,8 @@ class Alias {
 				array_push($existingTerms, $data[0]);
 			}
 
+            // This loop compares the old terms with the new
+            // If old terms not in new, then remove old
 			foreach ($existingTerms as $existingTermName) {
 				if (!in_array($existingTermName, $aliasTerms)) {
 					$sql = "
@@ -442,6 +510,7 @@ class Alias {
 				}
 			}
 
+            // If new terms, then insert
 			foreach ($aliasTerms as $term) {
 				if (!in_array($term, $existingTerms)) {
                     $sql = "
@@ -460,13 +529,14 @@ class Alias {
 					$query = $connect->prepare( $sql );
 					$query->execute();
 				}
-			}
-            $response['value'] = 1;
+            }
+
+            $response['value'] = 1; // Success
             return $response;
 		
 		} catch( PDOException $e) {
 		    $response['message'] = $e->getMessage();
-			return $response;
+			return $response; // Fail
 		}
 	}
 

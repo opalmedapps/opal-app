@@ -1,7 +1,17 @@
 <?php
 
+/**
+ * Filter class
+ *
+ */
 class Filter {
 
+    /**
+     *
+     * Gets a list of possible filters 
+     *
+     * @return array
+     */
     public function getFilters () {
         $filters = array(
             'expressions'   => array(),

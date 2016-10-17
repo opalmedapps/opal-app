@@ -1,13 +1,12 @@
 <?php
 	/* To get details on a particular post */
 
-	// Include config module 
-	// DEV
-	include_once("config_ATO_DEV.php");
+    $currentFile = __FILE__; // Get location of this script
 
-	/* PRO
-	 * include_once("config_ATO_PRO.php");
-	 */
+    // Find config file based on this location 
+    $configFile = substr($currentFile, 0, strpos($currentFile, "ATO")) . "ATO/php/config.php";
+	// Include config file 
+	include_once($configFile);
 
 	// Retrieve FORM params
 	$callback = $_GET['callback'];
