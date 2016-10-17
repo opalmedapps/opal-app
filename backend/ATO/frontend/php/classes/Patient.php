@@ -1,8 +1,17 @@
 <?php
 
+/**
+ * Patient class
+ *
+ */
 class Patient {
 
-
+    /**
+     *
+     * Updates the patient transfer flags in the database
+     *
+     * @param array $patientList : a list of patients
+     */
     public function updatePatientTransferFlags( $patientList ) {
 
 		try {
@@ -28,6 +37,12 @@ class Patient {
 		}
     }
 
+    /**
+     *
+     * Gets a list of existing patients in the database
+     *
+     * @return array
+     */    
     public function getExistingPatients() {
         $patientList = array();
         try {

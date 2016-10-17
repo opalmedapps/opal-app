@@ -1,7 +1,17 @@
 <?php
 
+/**
+ * Notification class
+ *
+ */
 class Notification {
 
+    /**
+     *
+     * Gets a list of existing notifications
+     *
+     * @return array
+     */    
     public function getNotifications() {
         $notificationList = array();
         try {
@@ -49,8 +59,15 @@ class Notification {
 		}
 	}
 
+    /**
+     *
+     * Gets details of a particular notification 
+     *
+     * @param integer $serial : the notification serial number
+     * @return array
+     */        
     public function getNotificationDetails ($serial) {
-        $notificationDetails;
+        $notificationDetails = array();
         try {
 			$connect = new PDO( DB_DSN, DB_USERNAME, DB_PASSWORD );
             $connect->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );
@@ -94,6 +111,12 @@ class Notification {
 		}
 	}
 
+    /**
+     *
+     * Gets the types of notifications from the database
+     *
+     * @return array
+     */        
     public function getNotificationTypes () {
         $types = array();
 	    try {
@@ -129,7 +152,14 @@ class Notification {
 		}
 	}
 
+     /**
+     *
+     * Inserts a notification into the database
+     *
+     * @param array $notification : the notification details
+     */       
     public function insertNotification($notification) {
+
         $name_EN            = $notification['name_EN'];
         $name_FR            = $notification['name_FR'];
         $description_EN     = $notification['description_EN'];
@@ -166,17 +196,27 @@ class Notification {
 
     }
 
+    /**
+     *
+     * Updates the notification in the database
+     *
+     * @param array $notification : the notification details
+     * @return array : response
+     */        
     public function updateNotification($notification) {
+
         $name_EN            = $notification['name_EN'];
         $name_FR            = $notification['name_FR'];
         $description_EN     = $notification['description_EN'];
         $description_FR     = $notification['description_FR'];
         $serial             = $notification['serial'];
+
         $response = array(
             'value'     => 0,
             'message'   => ''
         );
-	    try {
+
+        try {
 			$connect = new PDO( DB_DSN, DB_USERNAME, DB_PASSWORD );
             $connect->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );
             $sql = "
@@ -203,11 +243,20 @@ class Notification {
 		}
 	}
 
+    /**
+     *
+     * Removes a notification from the database
+     *
+     * @param integer $serial : the notification serial number
+     * @return array : response
+     */        
     public function removeNotification($serial) {
+
         $response = array(
             'value'     => 0,
             'message'   => ''
         );
+
         try {
 			$connect = new PDO( DB_DSN, DB_USERNAME, DB_PASSWORD );
 			$connect->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );

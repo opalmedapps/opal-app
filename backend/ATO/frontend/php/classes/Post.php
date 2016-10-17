@@ -1,13 +1,25 @@
 <?php
 
+/**
+ * Post class
+ *
+ */
 class Post {
 
-
+    /**
+     *
+     * Updates the publish flags in the database
+     *
+     * @param array $postList : the list of posts
+     * @return array : response
+     */    
     public function updatePostPublishFlags( $postList ) {
+
         $response = array(
             'value'     => 0,
             'message'   => ''
         );
+
 		try {
 			$connect = new PDO( DB_DSN, DB_USERNAME, DB_PASSWORD );
 			$connect->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );
@@ -26,14 +38,20 @@ class Post {
 				$query = $connect->prepare( $sql );
 				$query->execute();
 			}
-            $response['value'] = 1;
+            $response['value'] = 1; // Success
             return $response;
 		} catch( PDOException $e) {
             $response['message'] = $e->getMessage();
-			return $response;
+			return $response; // Fail
 		}
 	}
 
+    /**
+     *
+     * Gets a list of existing posts
+     *
+     * @return array
+     */        
 	public function getExistingPosts() {
 		$postList = array();
 		try {
@@ -120,9 +138,16 @@ class Post {
 		}
 	}
 
-			
-	public function getPostDetails ($postSer) {
-		$postDetails;
+    /**
+     *
+     * Gets details on a particular post
+     *
+     * @param integer $postSer : the post serial number
+     * @return array
+     */    			
+    public function getPostDetails ($postSer) {
+
+		$postDetails = array();
 
 		try {
 			$connect = new PDO( DB_DSN, DB_USERNAME, DB_PASSWORD );
@@ -164,9 +189,9 @@ class Post {
 						PostControl, 
 						Filters 
 					WHERE 
-                            PostControl.PostControlSerNum 		        = $postSer 
-                    AND     Filters.ControlTable             = 'PostControl'
-                    AND     Filters.ControlTableSerNum       = PostControl.PostControlSerNum
+                            PostControl.PostControlSerNum   = $postSer 
+                    AND     Filters.ControlTable            = 'PostControl'
+                    AND     Filters.ControlTableSerNum      = PostControl.PostControlSerNum
                     AND     Filters.FilterType              != ''
                     AND     Filters.FilterId                != ''
 
@@ -195,7 +220,7 @@ class Post {
 				'name_EN' 		    => $postName_EN, 
 				'serial' 		    => $postSer, 
                 'type'			    => $postType, 
-                'publish'          => $postPublish,
+                'publish'           => $postPublish,
 				'body_EN' 	        => $postBody_EN, 
                 'body_FR' 	        => $postBody_FR,
                 'publish_date'      => $postPublishDate,
@@ -209,7 +234,12 @@ class Post {
 		}
 	}
 
-
+    /**
+     *
+     * Inserts a post into the database
+     *
+     * @param array $postArray : the post details
+     */    
 	public function insertPost( $postArray ) {
 
 		$postName_EN 	= $postArray['name_EN'];
@@ -281,11 +311,20 @@ class Post {
 		}
 	}
 
-	public function removePost( $postSer ) {
+    /**
+     *
+     * Removes a post from the database
+     *
+     * @param integer $postSer : the post serial number
+     * @return array : response
+     */        
+    public function removePost( $postSer ) {
+
         $response = array(
             'value'     => 0,
             'message'   => ''
         );
+
 		try {
 			$connect = new PDO( DB_DSN, DB_USERNAME, DB_PASSWORD );
 			$connect->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );
@@ -317,7 +356,14 @@ class Post {
 			return $response;
 		}
 	}
-	
+
+    /**
+     *
+     * Updates a post's details in the database
+     *
+     * @param array $postArray : the post details
+     * @return array : response
+     */        
     public function updatePost( $postArray ) {
 
 		$postName_EN 	    = $postArray['name_EN'];
@@ -328,11 +374,13 @@ class Post {
         $postPublishDate    = $postArray['publish_date'];
 		$postFilters	    = $postArray['filters'];
 
-		$existingFilters	= array();
+        $existingFilters	= array();
+
         $response = array(
             'value'     => 0,
             'message'   => ''
         );
+
 		try {
 			$connect = new PDO( DB_DSN, DB_USERNAME, DB_PASSWORD );
 			$connect->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );
@@ -342,9 +390,9 @@ class Post {
 				SET 
 					PostControl.PostName_EN 		= \"$postName_EN\", 
 					PostControl.PostName_FR 		= \"$postName_FR\", 
-					PostControl.Body_EN	        = \"$postBody_EN\",
-                    PostControl.Body_FR	        = \"$postBody_FR\",
-                    PostControl.PublishDate        = '$postPublishDate'
+					PostControl.Body_EN	            = \"$postBody_EN\",
+                    PostControl.Body_FR	            = \"$postBody_FR\",
+                    PostControl.PublishDate         = '$postPublishDate'
 				WHERE 
 					PostControl.PostControlSerNum = $postSer
 			";
@@ -378,26 +426,29 @@ class Post {
 				array_push($existingFilters, $filterArray);
 			}
 
-			foreach ($existingFilters as $existingFilter) {
-                $id     = $existingFilter['id'];
-                $type   = $existingFilter['type'];
-                if (!Post::nestedSearch($id, $type, $postFilters)) {
-					$sql = "
-                        DELETE FROM 
-							Filters
-						WHERE
-                            Filters.FilterId            = \"$id\"
-                        AND Filters.FilterType          = '$type'
-                        AND Filters.ControlTableSerNum   = $postSer
-                        AND Filters.ControlTable         = 'PostControl'
-					";
-
-					$query = $connect->prepare( $sql );
-					$query->execute();
-				}
-			}
-
+            if (!empty($existingFilters)) {
+                // If old filters not in new, remove from DB
+	    		foreach ($existingFilters as $existingFilter) {
+                    $id     = $existingFilter['id'];
+                    $type   = $existingFilter['type'];
+                    if (!Post::nestedSearch($id, $type, $postFilters)) {
+					    $sql = "
+                            DELETE FROM 
+	    						Filters
+		    				WHERE
+                                Filters.FilterId            = \"$id\"
+                            AND Filters.FilterType          = '$type'
+                            AND Filters.ControlTableSerNum   = $postSer
+                            AND Filters.ControlTable         = 'PostControl'
+    					";
+    
+	    				$query = $connect->prepare( $sql );
+		    			$query->execute();
+			    	}
+    			}   
+            }
             if (!empty($postFilters)) {
+                // If new filters, insert into DB
     			foreach ($postFilters as $filter) {
                     $id     = $filter['id'];
                     $type   = $filter['type'];
@@ -431,7 +482,8 @@ class Post {
             $response['message'] = $e->getMessage();
 			return $response;
 		}
-	}
+    }
+
     public function nestedSearch($id, $type, $array) {
         if(empty($array) || !$id || !$type){
             return 0;

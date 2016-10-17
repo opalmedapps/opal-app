@@ -4,13 +4,12 @@
 	 * has been changed
 	 */
 
-	// Include config module
-	// DEV
-	include_once("config_ATO_DEV.php");
-	
-	/* PRO
-	 *include_once("config_ATO_PRO.php");
-	 */
+    $currentFile = __FILE__; // Get location of this script
+
+    // Find config file based on this location 
+    $configFile = substr($currentFile, 0, strpos($currentFile, "ATO")) . "ATO/php/config.php";
+	// Include config file 
+	include_once($configFile);
 
 	$testResultObject = new TestResult; // Object
 
@@ -26,7 +25,7 @@
 
 	// Call function
     $response = $testResultObject->updatePublishFlags($testResultList);
-    print json_encode($response);
+    print json_encode($response); // Return response
 ?>
 
 
