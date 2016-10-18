@@ -233,7 +233,7 @@ myApp.service('Doctors',['$q','LocalStorage','$filter','FileManagerService', fun
                 }else{
                   copyDoctor.ProfileImage='./img/doctor.png';
                 }
-                 if(copyDoctor.PrimaryFlag=='1'&&copyDoctor.OncologistFlag=='0'){
+                 if(copyDoctor.PrimaryFlag=='1'&&copyDoctor.OncologistFlag=='1'){
                       PrimaryPhysician.push(copyDoctor);
                  }else if(copyDoctor.OncologistFlag=='1')
                  {

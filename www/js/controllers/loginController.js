@@ -47,7 +47,7 @@ myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$root
 
     //var myDataRef = firebase.database().ref('dev2/');
     var myAuth = $firebaseAuth();
-
+    console.log(myAuth);
 
     $scope.submit = function (email,password) {
         $scope.email=email;
@@ -63,7 +63,6 @@ myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$root
         }else{
             //Getting authentication status
             var auth = FirebaseService.getAuthenticationCredentials();
-
             //Getting authentication info from local storage
             var authDetails = window.localStorage.getItem('UserAuthorizationInfo');
             //Auth details defined
@@ -125,37 +124,37 @@ myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$root
         firebaseUser.getToken(true).then(function(sessionToken){
             console.log('In Auth Handler')
             // TODO temporary false fix this
-            var temporary= false; //firebaseUser.password.isTemporaryPassword;
-            console.log(temporary);
+            /*var temporary= false; //firebaseUser.password.isTemporaryPassword;
+             console.log(temporary);*/
             window.localStorage.setItem('Email',$scope.email);
-            if(temporary){
-                // ResetPassword.setUsername(firebaseUser.auth.uid);
-                // ResetPassword.setToken(firebaseUser.token);
-                // ResetPassword.setEmail($scope.email);
-                // ResetPassword.setTemporaryPassword($scope.password);
-                UserAuthorizationInfo.setUserAuthData(firebaseUser.uid, $scope.password, myAuth.getAuth().expires, sessionToken);
-                NavigatorParameters.setParameters({Username:firebaseUser.uid,Token:sessionToken,Email:$scope.email,TempPassword:$scope.password});
-                initNavigator.pushPage('views/login/verify-ssn.html');
-            }else{
-                UserAuthorizationInfo.setUserAuthData(firebaseUser.uid, CryptoJS.SHA256($scope.password).toString(), myAuth.$getAuth().expires,sessionToken);
-                //Setting The User Object for global Application Use
-                console.log("Users email is" + $scope.email);
-                var authenticationToLocalStorage={
-                    UserName:firebaseUser.uid,
-                    Password: CryptoJS.SHA256($scope.password).toString(),
-                    Expires:myAuth.$getAuth().expires,
-                    Email:$scope.email,
-                    Token:sessionToken
-                };
-                $rootScope.refresh=true;
-                window.localStorage.setItem('UserAuthorizationInfo', JSON.stringify(authenticationToLocalStorage));
-                console.log(UserAuthorizationInfo.getUserAuthData());
-                console.log("Authenticated successfully with payload:", firebaseUser);
-                NavigatorParameters.setParameters('Login');
-                $state.go('loading');
+            /*if(temporary){
+             // ResetPassword.setUsername(firebaseUser.auth.uid);
+             // ResetPassword.setToken(firebaseUser.token);
+             // ResetPassword.setEmail($scope.email);
+             // ResetPassword.setTemporaryPassword($scope.password);
+             UserAuthorizationInfo.setUserAuthData(firebaseUser.uid, $scope.password, myAuth.getAuth().expires, sessionToken);
+             NavigatorParameters.setParameters({Username:firebaseUser.uid,Token:sessionToken,Email:$scope.email,TempPassword:$scope.password});
+             initNavigator.pushPage('views/login/verify-ssn.html');
+             }else{*/
+            UserAuthorizationInfo.setUserAuthData(firebaseUser.uid, CryptoJS.SHA256($scope.password).toString(), myAuth.$getAuth().expires,sessionToken);
+            //Setting The User Object for global Application Use
+            console.log("Users email is" + $scope.email);
+            var authenticationToLocalStorage={
+                UserName:firebaseUser.uid,
+                Password: CryptoJS.SHA256($scope.password).toString(),
+                Expires:myAuth.$getAuth().expires,
+                Email:$scope.email,
+                Token:sessionToken
+            };
+            $rootScope.refresh=true;
+            window.localStorage.setItem('UserAuthorizationInfo', JSON.stringify(authenticationToLocalStorage));
+            console.log(UserAuthorizationInfo.getUserAuthData());
+            console.log("Authenticated successfully with payload:", firebaseUser);
+            NavigatorParameters.setParameters('Login');
+            $state.go('loading');
 
 
-            }
+
         });
         /*}*/
     }
