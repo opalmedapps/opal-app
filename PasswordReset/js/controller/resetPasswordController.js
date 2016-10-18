@@ -108,9 +108,8 @@ myApp.controller('resetController',['firebase','$firebaseAuth','$location','$sco
                     });
                 }).catch(function(error){
                     $scope.loading = false;
+                    $scope.alert = error.alert;
                     $scope.alert.show = true;
-                    $scope.alert.type='danger';
-                    $scope.alert.content=error.code;
                 });
             }
         };
