@@ -28,11 +28,23 @@ myApp.service('requestService',['$filter','EncryptionService','$q', 'ResetPasswo
                         question = data.Data.Question;
                         return defer.resolve(question);
                     } else {
-                        return defer.reject("ERRORENTERVALIDSSN");
+                        var errorData = {
+                            alert: {
+                                type: 'danger',
+                                content: "ERRORENTERVALIDSSN"
+                            }
+                        };
+                        return defer.reject(errorData);
                     }
                 }).catch(function (error) {
+                    var errorData = {
+                        alert: {
+                            type: 'danger',
+                            content: "SERVERPROBLEM"
+                        }
+                    };
                     console.log(error);
-                    return defer.reject("SERVERPROBLEM");
+                    return defer.reject(errorData);
                 });
                 return defer.promise;
             },

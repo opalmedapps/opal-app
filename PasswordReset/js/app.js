@@ -5,7 +5,7 @@ myApp.config(function () {
     var config = {
         apiKey: "AIzaSyCxV6VuVWtKg5wkeReqzQNfRULwkvVXkos",
         authDomain: "brilliant-inferno-7679.firebaseapp.com",
-        databaseURL: "https://brilliant-inferno-7679.firebaseio.com",
+        databaseURL: "https://brilliant-inferno-7679.firebaseio.com"
     };
     firebase.initializeApp(config);
 });
