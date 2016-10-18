@@ -22,23 +22,23 @@ myApp.controller('accountSettingController', ['Patient', 'UserPreferences', '$sc
     //Pull to refresh function
     $scope.load2 = function($done) {
         UpdateUI.update('All').then(function()
-		{
-			$timeout(function()
-			{
-				updated=true;
-				backButtonPressed = 0;
-				accountInit();
-				clearTimeout(timeOut);
-				$done();
-			});
-		}).catch(function(error){
-			console.log(error);
-			clearTimeout(timeOut);
-			$done();
-		});
-		var timeOut = setTimeout(function(){
-			$done();
-		},5000);
+        {
+            $timeout(function()
+            {
+                updated=true;
+                backButtonPressed = 0;
+                accountInit();
+                clearTimeout(timeOut);
+                $done();
+            });
+        }).catch(function(error){
+            console.log(error);
+            clearTimeout(timeOut);
+            $done();
+        });
+        var timeOut = setTimeout(function(){
+            $done();
+        },5000);
     };
     //Initiate account settings function
     accountInit();
@@ -76,70 +76,70 @@ myApp.controller('accountSettingController', ['Patient', 'UserPreferences', '$sc
         $scope.passwordLength = 7;
     }
     //Function changes the enableSMS for the sms notifications and Calendar settings for the device calendar 
-/*    $scope.saveSettings = function(option) {
+    /*    $scope.saveSettings = function(option) {
 
-        if ($scope.mobilePlatform) {
-                var message = '';
-                if (option === 'EnableSMS') {
-                    if ($scope.checkboxModel === 1) {
-                        message = $filter('translate')("ENABLESMSNOTIFICATIONQUESTION");
-                    } else {
-                        message = $filter('translate')("DISABLESMSNOTIFICATIONQUESTION");
-                    }
-                    navigator.notification.confirm(message, confirmCallbackSMS, $filter('translate')("CONFIRMALERTSMSLABEL"), [$filter('translate')("CONTINUE"), $filter('translate')("CANCEL")]);
+     if ($scope.mobilePlatform) {
+     var message = '';
+     if (option === 'EnableSMS') {
+     if ($scope.checkboxModel === 1) {
+     message = $filter('translate')("ENABLESMSNOTIFICATIONQUESTION");
+     } else {
+     message = $filter('translate')("DISABLESMSNOTIFICATIONQUESTION");
+     }
+     navigator.notification.confirm(message, confirmCallbackSMS, $filter('translate')("CONFIRMALERTSMSLABEL"), [$filter('translate')("CONTINUE"), $filter('translate')("CANCEL")]);
 
-                } else if (option === 'Calendar') {
-                    if ($scope.checkboxModelCalendar === 1) {
-                        message = $filter('translate')("ENABLECALENDARACCESSQUESTION");
-                    } else {
-                        message = $filter('translate')("DISABLECALENDARACCESSQUESTION");
-                    }
-                    navigator.notification.confirm(message, confirmCallbackCalendar, $filter('translate')("CONFIRMALERTCALENDARLABEL"), [$filter('translate')("CONTINUE"), $filter('translate')("CANCEL")]);
-                }
-        } else {
-            if (option === 'EnableSMS') {
-                var objectToSend = {};
-                objectToSend.FieldToChange = 'EnableSMS';
-                objectToSend.NewValue = $scope.checkboxModel;
-                UserPreferences.setEnableSMS(objectToSend.NewValue);
-                RequestToServer.sendRequest('AccountChange', objectToSend);
-            }
-        }
-    };
+     } else if (option === 'Calendar') {
+     if ($scope.checkboxModelCalendar === 1) {
+     message = $filter('translate')("ENABLECALENDARACCESSQUESTION");
+     } else {
+     message = $filter('translate')("DISABLECALENDARACCESSQUESTION");
+     }
+     navigator.notification.confirm(message, confirmCallbackCalendar, $filter('translate')("CONFIRMALERTCALENDARLABEL"), [$filter('translate')("CONTINUE"), $filter('translate')("CANCEL")]);
+     }
+     } else {
+     if (option === 'EnableSMS') {
+     var objectToSend = {};
+     objectToSend.FieldToChange = 'EnableSMS';
+     objectToSend.NewValue = $scope.checkboxModel;
+     UserPreferences.setEnableSMS(objectToSend.NewValue);
+     RequestToServer.sendRequest('AccountChange', objectToSend);
+     }
+     }
+     };
 
-    function confirmCallbackCalendar(index) {
-        console.log(index);
-        if (index == 1) {
-            window.localStorage.setItem('NativeCalendar', $scope.checkboxModelCalendar);
-        } else {
-            $timeout(function() {
-                $scope.checkboxModelCalendar = ($scope.checkboxModelCalendar == 1)?0:1;
-            });
-        }
-    }
+     function confirmCallbackCalendar(index) {
+     console.log(index);
+     if (index == 1) {
+     window.localStorage.setItem('NativeCalendar', $scope.checkboxModelCalendar);
+     } else {
+     $timeout(function() {
+     $scope.checkboxModelCalendar = ($scope.checkboxModelCalendar == 1)?0:1;
+     });
+     }
+     }
 
-    function confirmCallbackSMS(index) {
-        console.log(index);
-        if (index == 1) {
-            var objectToSend = {};
-            objectToSend.FieldToChange = 'EnableSMS';
-            objectToSend.NewValue = $scope.checkboxModel;
-            UserPreferences.setEnableSMS(objectToSend.NewValue);
-            $scope.smsPreference = $scope.checkboxModel;
-            RequestToServer.sendRequest('AccountChange', objectToSend);
-        } else {
-            $timeout(function() {
-                $scope.checkboxModel = ($scope.checkboxModel == 1)?0:1;
-            });
-        }
-    }*/
+     function confirmCallbackSMS(index) {
+     console.log(index);
+     if (index == 1) {
+     var objectToSend = {};
+     objectToSend.FieldToChange = 'EnableSMS';
+     objectToSend.NewValue = $scope.checkboxModel;
+     UserPreferences.setEnableSMS(objectToSend.NewValue);
+     $scope.smsPreference = $scope.checkboxModel;
+     RequestToServer.sendRequest('AccountChange', objectToSend);
+     } else {
+     $timeout(function() {
+     $scope.checkboxModel = ($scope.checkboxModel == 1)?0:1;
+     });
+     }
+     }*/
 }]);
 
 
 
 myApp.controller('ChangingSettingController', function($filter, $rootScope, FirebaseService, $translate, UserPreferences, Patient, RequestToServer, $scope, $timeout, UpdateUI, UserAuthorizationInfo,LocalStorage) {
     console.log(UserAuthorizationInfo);
-    
+
     //Function sets account
     accountChangeSetUp();
 
@@ -259,7 +259,7 @@ myApp.controller('ChangingSettingController', function($filter, $rootScope, Fire
         $scope.alertClass = "bg-success updateMessage-success";
         $scope.updateMessage = $filter('translate')("FIELD_UPDATED");
         console.log($scope.updateMessage, $scope.alertClass);
-        
+
     }
 
     //Function to change font size
@@ -280,104 +280,101 @@ myApp.controller('ChangingSettingController', function($filter, $rootScope, Fire
 
     //Change password function
     function changePassword() {
-        var ref = firebase.database().ref('dev2/');
-        ref.changePassword({
-            email: Patient.getEmail(),
-            oldPassword: $scope.oldValue,
-            newPassword: $scope.newValue
-        }, function(error) {
-            if (error) {
-                switch (error.code) {
-                    case "INVALID_PASSWORD":
-                        $timeout(function() {
-                            $scope.newUpdate = true;
-                            $scope.alertClass = "bg-danger updateMessage-error";
-                            $scope.updateMessage = $filter('translate')("INVALID_PASSWORD");
-                        });
-                        break;
-                    case "INVALID_USER":
-                        console.log("The specified user account does not exist.");
-                        break;
-                    default:
-                        $timeout(function() {
-                            $scope.newUpdate = true;
-                            $scope.alertClass = "bg-danger updateMessage-error";
-                            $scope.updateMessage = $filter('translate')("INTERNETERROR");
-                        });
-                }
-            } else {
-                var objectToSend = {};	
-                objectToSend.FieldToChange = 'Password';
-                objectToSend.NewValue = $scope.newValue;
-                RequestToServer.sendRequest('AccountChange', objectToSend);
-                var oldPassword= UserAuthorizationInfo.getPassword();
-                console.log(oldPassword);
-                LocalStorage.updateLocalStorageAfterPasswordChange(oldPassword,$scope.newValue);
-                UserAuthorizationInfo.setPassword($scope.newValue);
-                var newPassword = UserAuthorizationInfo.getPassword();
-                console.log(newPassword);
-                $timeout(function() {
-                    
-                    $scope.alertClass = "bg-success updateMessage-success";
-                    $scope.updateMessage = $filter('translate')("PASSWORDUPDATED");
-                    $scope.newUpdate = true;
 
-                });
+        var user = FirebaseService.getAuthenticationCredentials();
+        var credential = firebase.auth.EmailAuthProvider.credential(user.email, $scope.oldValue);
+
+        user.reauthenticate(credential).then(function () {
+            user.updatePassword($scope.newValue).then(updateOnServer).catch(handleError);
+        }).catch(handleAuthenticationError);
+
+        function updateOnServer(){
+            var objectToSend = {};
+            objectToSend.FieldToChange = 'Password';
+            objectToSend.NewValue = $scope.newValue;
+            RequestToServer.sendRequest('AccountChange', objectToSend);
+            var oldPassword= UserAuthorizationInfo.getPassword();
+            console.log(oldPassword);
+            LocalStorage.updateLocalStorageAfterPasswordChange(oldPassword,$scope.newValue);
+            UserAuthorizationInfo.setPassword($scope.newValue);
+            var newPassword = UserAuthorizationInfo.getPassword();
+            console.log(newPassword);
+            $timeout(function() {
+
+                $scope.alertClass = "bg-success updateMessage-success";
+                $scope.updateMessage = $filter('translate')("PASSWORDUPDATED");
+                $scope.newUpdate = true;
+            });
+        }
+
+        function handleError(error){
+            switch (error.code) {
+                case "auth/weak-password":
+                    $timeout(function () {
+                        $scope.newUpdate = true;
+                        $scope.alertClass = "bg-danger updateMessage-error";
+                        $scope.updateMessage = $filter('translate')("INVALID_PASSWORD");
+                    });
+                    break;
+                default:
+                    $timeout(function () {
+                        $scope.newUpdate = true;
+                        $scope.alertClass = "bg-danger updateMessage-error";
+                        $scope.updateMessage = $filter('translate')("INTERNETERROR");
+                    });
             }
-        });
+        }
     }
 
     //Change email function
     function changeEmail() {
-        var ref = firebase.database().ref('dev2/');
 
-        ref.changeEmail({
-            oldEmail: Patient.getEmail(),
-            newEmail: $scope.newValue,
-            password: $scope.oldValue
-        }, function(error) {
-            if (error) {
-                console.log(error.code);
-                switch (error.code) {
-                    case "INVALID_PASSWORD":
-                        $timeout(function() {
-                            $scope.alertClass = "bg-danger updateMessage-error";
-                            $scope.newUpdate = true;
-                            $scope.updateMessage = $filter('translate')("INVALID_PASSWORD");
-                        });
-                        break;
-                     case "EMAIL_TAKEN":
-                        $timeout(function() {
-                            $scope.alertClass = "bg-danger updateMessage-error";
-                            $scope.newUpdate = true;
-                            $scope.updateMessage = $filter('translate')("EMAIL_TAKEN");
-                        });
-                        break;
-                    default:
-                        $timeout(function() {
-                            $scope.alertClass = "bg-danger updateMessage-error";
-                            $scope.newUpdate = true;
-                            $scope.updateMessage = $filter('translate')("PROBLEM_UPDATING_PASSWORD");
-                        });
-                        break;
-                }
-                
-                console.log("Error changing email:", error);
-            } else {
-                var objectToSend = {};
-                objectToSend.FieldToChange = 'Email';
-                objectToSend.NewValue = $scope.newValue;
-                Patient.setEmail($scope.newValue);
-                window.localStorage.setItem('Email',$scope.newValue);
-                RequestToServer.sendRequest('AccountChange', objectToSend);
-                $timeout(function() {
-                    $scope.alertClass = "bg-success updateMessage-success";
-                    $scope.updateMessage = $filter('translate')("UPDATED_EMAIL");
-                    $scope.newUpdate = true;
-                });
+        var user = FirebaseService.getAuthenticationCredentials();
+        var credential = firebase.auth.EmailAuthProvider.credential(user.email, $scope.oldValue);
 
+        user.reauthenticate(credential).then(function () {
+            user.updateEmail($scope.newValue).then(updateOnServer).catch(handleError);
+        }).catch(handleAuthenticationError);
+
+        function updateOnServer(){
+            var objectToSend = {};
+            objectToSend.FieldToChange = 'Email';
+            objectToSend.NewValue = $scope.newValue;
+            Patient.setEmail($scope.newValue);
+            window.localStorage.setItem('Email',$scope.newValue);
+            RequestToServer.sendRequest('AccountChange', objectToSend);
+            $timeout(function() {
+                $scope.alertClass = "bg-success updateMessage-success";
+                $scope.updateMessage = $filter('translate')("UPDATED_EMAIL");
+                $scope.newUpdate = true;
+            });
+        }
+
+        function handleError(){
+            switch (error.code) {
+                case "auth/invalid-email":
+                    $timeout(function() {
+                        $scope.alertClass = "bg-danger updateMessage-error";
+                        $scope.newUpdate = true;
+                        $scope.updateMessage = $filter('translate')("INVALID_EMAIL");
+                    });
+                    break;
+                case "auth/email-already-in-use":
+                    $timeout(function() {
+                        $scope.alertClass = "bg-danger updateMessage-error";
+                        $scope.newUpdate = true;
+                        $scope.updateMessage = $filter('translate')("EMAIL_TAKEN");
+                    });
+                    break;
+                default:
+                    $timeout(function() {
+                        $scope.alertClass = "bg-danger updateMessage-error";
+                        $scope.newUpdate = true;
+                        $scope.updateMessage = $filter('translate')("INTERNETERROR");
+                    });
+                    break;
             }
-        });
+        }
     }
 
 
@@ -399,6 +396,52 @@ myApp.controller('ChangingSettingController', function($filter, $rootScope, Fire
 
     function validateAlias() {
         return ($scope.actualValue !== $scope.newValue && $scope.newValue.length > 3);
+    }
+
+    function handleAuthenticationError(error) {
+        switch(error.code){
+            case "auth/user-mismatch":
+                $timeout(function () {
+                    $scope.newUpdate = true;
+                    $scope.alertClass = "bg-danger updateMessage-error";
+                    $scope.updateMessage = $filter('translate')("INVALID_ASSOCIATION");
+                });
+                break;
+            case "auth/user-not-found":
+                $timeout(function () {
+                    $scope.newUpdate = true;
+                    $scope.alertClass = "bg-danger updateMessage-error";
+                    $scope.updateMessage = $filter('translate')("INVALID_USER");
+                });
+                break;
+            case "auth/invalid-credential":
+                $timeout(function () {
+                    $scope.newUpdate = true;
+                    $scope.alertClass = "bg-danger updateMessage-error";
+                    $scope.updateMessage = $filter('translate')("INVALID_CREDENTIAL");
+                });
+                break;
+            case "auth/invalid-email":
+                $timeout(function () {
+                    $scope.newUpdate = true;
+                    $scope.alertClass = "bg-danger updateMessage-error";
+                    $scope.updateMessage = $filter('translate')("INVALID_EMAIL");
+                });
+                break;
+            case "auth/wrong-password":
+                $timeout(function () {
+                    $scope.newUpdate = true;
+                    $scope.alertClass = "bg-danger updateMessage-error";
+                    $scope.updateMessage = $filter('translate')("INVALID_PASSWORD");
+                });
+                break;
+            default:
+                $timeout(function () {
+                    $scope.newUpdate = true;
+                    $scope.alertClass = "bg-danger updateMessage-error";
+                    $scope.updateMessage = $filter('translate')("INTERNETERROR");
+                });
+        }
     }
 
 });
