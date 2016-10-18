@@ -34,19 +34,19 @@
 
 <div class="container" ng-controller="resetController">
     <div class="row">
-        <div class="col-sm-6 col-sm-offset-3">
+        <div class="col-sm-10 col-sm-offset-1">
             <img class="img-responsive" src="img/Opal_Logo_Full_2.png" style="display: block; margin: 0 auto">
         </div>
     </div>
 
     <div class="row">
         <form name="formPassword"  novalidate>
-            <div class="form-group col-sm-4 col-sm-offset-4" align="center"  >
+            <div class="form-group col-sm-10 col-sm-offset-1" align="center"  >
                 <div ng-include="template"></div>
             </div>
         </form>
         <br/>
-        <div class="form-group col-sm-4 col-sm-offset-4" align="center"  >
+        <div class="form-group col-sm-10 col-sm-offset-1" align="center"  >
             <div class="alert alert-{{alert.type}}" ng-if="alert.show" style="text-align: center">{{alert.content}}. Please resubmit a password request.</div>
         </div>
     </div>
