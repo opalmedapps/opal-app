@@ -107,10 +107,10 @@ var myApp = angular.module('MUHCApp', ['tmh.dynamicLocale','pascalprecht.transla
                 templateUrl: 'views/login/loading.html',
                 controller: 'LoadingController',
                 resolve: {
-                    // controller will not be loaded until $waitForAuth resolves
+                    // controller will not be loaded until $requireSignIn resolves
                     // Auth refers to our $firebaseAuth wrapper in the example above
                     "currentAuth": ["FirebaseService", function(FirebaseService) {
-                        // $waitForAuth returns a promise so the resolve waits for it to complete
+                        // $requireSignIn returns a promise so the resolve waits for it to complete
                         return FirebaseService.getAuthentication().$requireSignIn();
                     }]
                 }
@@ -120,10 +120,10 @@ var myApp = angular.module('MUHCApp', ['tmh.dynamicLocale','pascalprecht.transla
                 templateUrl: 'views/tabs/tabs.html',
                 controller: 'TabsController',
                 resolve: {
-                    // controller will not be loaded until $waitForAuth resolves
+                    // controller will not be loaded until $requireSignIn resolves
                     // Auth refers to our $firebaseAuth wrapper in the example above
                     "currentAuth": ["FirebaseService", function(FirebaseService) {
-                        // $waitForAuth returns a promise so the resolve waits for it to complete
+                        // $requireSignIn returns a promise so the resolve waits for it to complete
                         return FirebaseService.getAuthentication().$requireSignIn();
                     }]
                 }
@@ -134,10 +134,10 @@ var myApp = angular.module('MUHCApp', ['tmh.dynamicLocale','pascalprecht.transla
                 templateUrl: 'views/logOut.html',
                 controller: 'logOutController',
                 resolve: {
-                    // controller will not be loaded until $waitForAuth resolves
+                    // controller will not be loaded until $requireSignIn resolves
                     // Auth refers to our $firebaseAuth wrapper in the example above
                     "currentAuth": ["FirebaseService", function(FirebaseService) {
-                        // $waitForAuth returns a promise so the resolve waits for it to complete
+                        // $requireSignIn returns a promise so the resolve waits for it to complete
                         return FirebaseService.getAuthentication().$requireSignIn();
                     }]
                 }
