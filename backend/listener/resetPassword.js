@@ -45,10 +45,10 @@ exports.verifySecurityAnswer=function(requestKey,requestObject,patient)
     var flag=false;
     for (var i = 0; i < questions.length; i++) {
 
-        if(unencrypted.Question==questions[i].Question&&questions[i].Answer==unencrypted.Answer)
+        if(unencrypted.Question==questions[i].QuestionText&&questions[i].AnswerText==unencrypted.Answer)
         {
-          console.log(questions[i].Question);
-          console.log(questions[i].Answer);
+          console.log(questions[i].QuestionText);
+          console.log(questions[i].AnswerText);
           flag=true;
           break;
         }
@@ -76,10 +76,10 @@ exports.setNewPassword=function(requestKey, requestObject,patient)
       var flag=false;
       var newPassword='';
       for (var i = 0; i < questions.length; i++) {
-        console.log(questions[i].Answer);
+        console.log(questions[i].AnswerText);
         var password={NewPassword:requestObject.Parameters.NewPassword};
         console.log(password);
-        password=utility.decryptObject(password,questions[i].Answer);
+        password=utility.decryptObject(password,questions[i].AnswerText);
         console.log(password);
         if(typeof password.NewPassword!=='undefined'&&password.NewPassword!==''){
           console.log(password.NewPassword);
