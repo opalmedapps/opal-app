@@ -454,7 +454,7 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors',
              **/
             init:function(type)
             {
-                var r=$q.defer();
+                //var r=$q.defer();
                 var app = document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'https://' ) === -1;
                 if(app){
                     console.log(LocalStorage.isUserDataDefined());

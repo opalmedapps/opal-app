@@ -404,7 +404,7 @@ myApp.controller('CalendarController', ['Appointments', '$scope','$timeout', '$f
 
         return '';
     };*/
-    addEventsToNativeCalendar();
+    //addEventsToNativeCalendar();
 
     /**
     *@ngdoc method

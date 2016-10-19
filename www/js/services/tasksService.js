@@ -42,7 +42,7 @@
                 tasks[task].DueDateTime = convertDateToJSDate(tasks[task].DueDateTime);
             }
             planningTasks = tasks;
-            Storage.write('tasks', planningTasks);
+            //Storage.write('tasks', planningTasks);
             console.log(planningTasks);
         }
 
