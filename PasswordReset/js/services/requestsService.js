@@ -25,7 +25,7 @@ myApp.service('requestService',['$filter','EncryptionService','$q', 'ResetPasswo
                 ResetPasswordRequests.sendRequestWithResponse('VerifySSN', {'SSN': ssn, 'Email': userEmail}, ssn).then(function (data) {
                     console.log(data);
                     if (data.Data.ValidSSN == "true") {
-                        question = data.Data.Question;
+                        question = data.Data.QuestionText;
                         return defer.resolve(question);
                     } else {
                         var errorData = {
