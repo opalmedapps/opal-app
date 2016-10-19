@@ -8,14 +8,14 @@ var exports=module.exports={};
 exports.resetPasswordRequest=function(requestKey, requestObject)
 {
   var r=q.defer();
-  console.log(requestObject.UserID);
+  console.log(requestObject.UserEmail);
   var responseObject = {};
   //Get the patient fields to verify the credentials
-  sqlInterface.getPatientFieldsForPasswordReset(requestObject.UserID).then(function(patient){
+  sqlInterface.getPatientFieldsForPasswordReset(requestObject.UserEmail).then(function(patient){
     //Check for injection attacks by the number of rows the result is returning
     if(patient.length>1||patient.lenght === 0)
     {
-      responseObject = { Headers:{RequestKey:requestKey,RequestObject:requestObject}, Code: 2, Data:{},Response:'error', Reason:'Injection attack, incorrect UserID'};       
+      responseObject = { Headers:{RequestKey:requestKey,RequestObject:requestObject}, Code: 2, Data:{},Response:'error', Reason:'Injection attack, incorrect Email'};       
       r.resolve(responseObject);
     }else{
       //If the request is not erroneus simply direct the request to appropiate function based on the request mapping object
@@ -45,7 +45,7 @@ exports.verifySecurityAnswer=function(requestKey,requestObject,patient)
     var flag=false;
     for (var i = 0; i < questions.length; i++) {
 
-        if(unencrypted.Question==questions[i].Question&&questions[i].Answer==unencrypted.Answer)
+        if(unencrypted.Question==questions[i].QuestionText&&questions[i].AnswerText==unencrypted.Answer)
         {
           console.log(questions[i].Question);
           console.log(questions[i].Answer);
@@ -76,10 +76,10 @@ exports.setNewPassword=function(requestKey, requestObject,patient)
       var flag=false;
       var newPassword='';
       for (var i = 0; i < questions.length; i++) {
-        console.log(questions[i].Answer);
+        console.log(questions[i].AnswerText);
         var password={NewPassword:requestObject.Parameters.NewPassword};
         console.log(password);
-        password=utility.decryptObject(password,questions[i].Answer);
+        password=utility.decryptObject(password,questions[i].AnswerText);
         console.log(password);
         if(typeof password.NewPassword!=='undefined'&&password.NewPassword!==''){
           console.log(password.NewPassword);
