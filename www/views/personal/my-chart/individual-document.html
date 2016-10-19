@@ -11,7 +11,8 @@
               <span class="item-title" ng-class="fontSizeTitle">{{documentObject.Title}}</span>
 
           </header>
-          <p class="item-desc" ng-class="fontSizeDesc">{{documentObject.DateAdded|formatDateAppointmentTask}}</p>
+          <p class="item-desc" ng-class="fontSizeDesc">Added to my chart on: {{documentObject.DateAdded|formatDateAppointmentTask}}</p>
+          <p class="item-desc" ng-class="fontSizeDesc">Last updated on: {{documentObject.LastUpdated|formatDateAppointmentTask}}</p>
           <p class="item-desc" ng-class="fontSizeDesc">{{documentObject.Description}}</p>
         </div>
         

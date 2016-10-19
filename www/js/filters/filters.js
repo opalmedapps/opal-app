@@ -54,9 +54,9 @@ var myApp=angular.module('MUHCApp.filters',[]);
 			if(typeof dateApp!=='undefined'){
 				if(dateApp.getFullYear()==today.getFullYear())
 				{
-					return $filter('date')(dateApp,"EEEE MMM d 'at' h:mm a");
+					return $filter('date')(dateApp,"EEE MMM d 'at' h:mm a");
 				}else{
-					return $filter('date')(dateApp,"EEEE MMM d yyyy");
+					return $filter('date')(dateApp,"EEE MMM d yyyy");
 				}
 			}else{
 				return '';
