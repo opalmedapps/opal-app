@@ -66,14 +66,14 @@ exports.patientQuestionnaireTableFields = function()
 {
   return "SELECT Questionnaire.CompletedFlag, Questionnaire.DateAdded, Questionnaire.PatientQuestionnaireDBSerNum, Questionnaire.CompletionDate, Questionnaire.QuestionnaireSerNum, QuestionnaireControl.QuestionnaireDBSerNum FROM QuestionnaireControl, Questionnaire, Patient, Users WHERE QuestionnaireControl.QuestionnaireControlSerNum = Questionnaire.QuestionnaireControlSerNum AND Questionnaire.PatientSerNum = Patient.PatientSerNum AND Users.UserTypeSerNum = Patient.PatientSerNum AND Users.Username = ? AND QuestionnaireControl.LastUpdated > ? AND Questionnaire.LastUpdated > ?";
 };
-exports.getPatientFieldsForPasswordReset=function(userID)
+/*exports.getPatientFieldsForPasswordReset=function(userID)
 {
   return 'SELECT Patient.SSN, Patient.PatientSerNum FROM Patient, Users WHERE Users.Username LIKE '+"\'"+ userID+"\'"+'AND Users.UserTypeSerNum = Patient.PatientSerNum';
-};
-/*exports.getPatientFieldsForPasswordReset=function(email)
+};*/
+exports.getPatientFieldsForPasswordReset=function(email)
 {
   return 'SELECT Patient.SSN, Patient.PatientSerNum FROM Patient WHERE Patient.Email LIKE '+"\'"+ email +"\'"+'';
-};*/
+};
 exports.setNewPassword=function(password,patientSerNum, token)
 {
   return "UPDATE Users SET Password='"+password+"', SessionId='"+token+"' WHERE UserType = 'Patient' AND UserTypeSerNum="+patientSerNum;
@@ -131,7 +131,7 @@ exports.userPassword=function(username)
 };
 exports.getSecurityQuestions=function(serNum)
 {
-  return "SELECT Question, Answer FROM SecurityQuestion WHERE PatientSerNum="+serNum;
+  return "SELECT SecurityQuestion.QuestionText, SecurityAnswer.AnswerText FROM SecurityQuestion, SecurityAnswer WHERE SecurityAnswer.PatientSerNum="+serNum +" AND SecurityQuestion.SecurityQuestionSerNum = SecurityAnswer.SecurityQuestionSerNum";
 };
 
 
