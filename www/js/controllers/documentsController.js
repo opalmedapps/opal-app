@@ -155,9 +155,15 @@ myApp.controller('SingleDocumentController', ['NavigatorParameters','Documents',
 
   }
 
+  $timeout(function () {
+    ons.createPopover('./views/education/popover-material-options.html',{parentScope: $scope}).then(function (popover) {
+      $scope.popoverSharing = popover;
+    });
+  }, 300);
+
   //Share via email function, detemines if its an app, sets the parameters for the email and formats depending on whether is a
   //base64 string or a simple attachment and depending on whether is an Android device or an iOS device
-  $scope.shareViaEmail=function()
+  $scope.share =function()
   {
     if (app) {
 
@@ -220,7 +226,7 @@ myApp.controller('SingleDocumentController', ['NavigatorParameters','Documents',
   };
 
   //Print document function, if its an image it puts it into an html tag and prints that html, if its a pdf, it simple prints the pdf
-  $scope.printDocument=function()
+  $scope.print=function()
   {
     var options = {
   			// type of content, use either 'Data' or 'File'

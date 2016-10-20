@@ -10,7 +10,7 @@
       {{"NOPATIENTDOCUMENTSAVAILABLE"|translate}}
     </div>
     <ons-list ng-repeat="document in documents">
-      <ons-list-header class="person-list-header" ng-class="fontSizeTitle">{{document.DateAdded|date:'EEE MMM dd yyyy'}}<span class="pull-right" ng-show= "document.ReadStatus =='0'">{{"UNREAD"|translate}}</span></ons-list-header>
+      <!--<ons-list-header class="person-list-header" ng-class="fontSizeTitle">{{document.DateAdded|date:'EEE MMM dd yyyy'}}</ons-list-header>-->
       <ons-list-item modifier="chevron" ng-click="goToDocument(document)">
         <ons-row>
           <ons-col width="6px">
@@ -20,11 +20,14 @@
               <img ng-src="./img/pdf-icon.png" style="witdth:55px;height:55px">
             </div>
           </ons-col>
-          <ons-col>
-            <div style="line-height:1;padding:5px" >
-              <p ng-class="fontSizeTitle"> <strong>{{document.Title}}</strong><p>
-              <p class="item-desc" ng-class="fontSizeDesc">{{document.Description}}</p>
+          <ons-col align="center">
+            <div style="line-height:1;padding:5px;" >
+              <span ng-class="fontSizeTitle"> <strong>{{document.Title}}</strong></span> <br>
+              <span class="item-desc" ng-class="fontSizeDesc">{{document.DateAdded|date:'EEE MMM dd yyyy'}}</span>
             </div>
+          </ons-col>
+          <ons-col width="15%">
+            <span class="pull-right" ng-show= "document.ReadStatus =='0'">{{"UNREAD"|translate}}</span>
           </ons-col>
         </ons-row>
       </ons-list-item>

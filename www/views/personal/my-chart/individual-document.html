@@ -1,58 +1,64 @@
-  <ons-page ng-controller="SingleDocumentController">
+<ons-page ng-controller="SingleDocumentController">
     <ons-toolbar >
-      <div class="left"><ons-back-button>{{"BACK"|translate}}</ons-back-button></div>
-      <div class="center">{{"DOCUMENT"|translate}}</div>
+        <div class="left"><ons-back-button>{{"BACK"|translate}}</ons-back-button></div>
+        <div class="center">{{"DOCUMENT"|translate}}</div>
+        <div class="right">
+            <ons-toolbar-button ng-click="popoverSharing.show('#buttonShareMaterial');" id="buttonShareMaterial">
+                <i class="ion-share" style="font-size:30px"></i>
+            </ons-toolbar-button>
+        </div>
     </ons-toolbar>
-    <div style="margin-top:5vh">
-    <ons-list>
-      <ons-list-item class="item">
-        <div style="line-height:1" align="left">
-          <header>
-              <span class="item-title" ng-class="fontSizeTitle">{{documentObject.Title}}</span>
 
-          </header>
-          <p class="item-desc" ng-class="fontSizeDesc">Added to my chart on: {{documentObject.DateAdded|formatDateAppointmentTask}}</p>
-          <p class="item-desc" ng-class="fontSizeDesc">Last updated on: {{documentObject.LastUpdated|formatDateAppointmentTask}}</p>
-          <p class="item-desc" ng-class="fontSizeDesc">{{documentObject.Description}}</p>
-        </div>
-        
-      </ons-list-item>
-    </ons-list>
-    <ons-list class="settings-list">
-      <ons-list-item class="item" ng-click="openDocument()">
-        <div align="center" ng-hide="loading">
-         
-          <img height="200px" width="100%" style="max-width:300px" ng-src="{{documentObject.PreviewContent}}">
-          
-        </div>
-        <div ng-show="loading" align="center" style="margin-top:10px">
-          <div>
-          <svg class="progress-circular">
+    <!--<ons-list class="settings-list">
+<ons-list-item class="item" ">-->
+    <div align="center" ng-hide="loading" style="margin:5vh">
+
+        <img class="animated pulse" height="50%" width="50%" ng-src="{{documentObject.PreviewContent}}" ng-click="openDocument()">
+
+    </div>
+    <div ng-show="loading" align="center" style="margin:10px">
+        <div>
+            <svg class="progress-circular">
                 <circle class="progress-circular__primary" cx="50%" cy="50%" r="40%" fill="none" stroke-width="10%" stroke-miterlimit="10"/>
-          </svg>
+            </svg>
         </div>
-        </div>
-        <div ng-show="!loading&&errorDownload">
-          <p clas="lucent">{{"ERROROBTAININGDOCUMENT"|translate}}</p>
-        </div>
-        <!--<p class="item-desc text-center"  ng-class="fontSizeDesc">* Saved documents will be available offline</p>-->
+    </div>
+    <div ng-show="!loading&&errorDownload">
+        <p clas="lucent">{{"ERROROBTAININGDOCUMENT"|translate}}</p>
+    </div>
+    <!--<p class="item-desc text-center"  ng-class="fontSizeDesc">* Saved documents will be available offline</p>-->
 
-      </ons-list-item>
+    <!-- </ons-list-item>
+   </ons-list>-->
+
+    <ons-list>
+        <ons-list-item class="item">
+            <div style="line-height:1" align="center">
+                <header>
+                    <strong><span class="item-title" ng-class="fontSizeTitle">{{documentObject.Title}}</span></strong>
+
+                </header>
+                <p class="item-desc" ng-class="fontSizeDesc"><strong>Added to chart on:</strong> <br>{{documentObject.DateAdded|formatDateAppointmentTask}}</p>
+                <p class="item-desc" ng-class="fontSizeDesc"><strong>Last updated on:</strong> <br>{{documentObject.LastUpdated|formatDateAppointmentTask}}</p>
+                <p class="item-desc" ng-class="fontSizeDesc">{{documentObject.Description}}</p>
+            </div>
+
+        </ons-list-item>
     </ons-list>
+    >
 
-    <ons-list class="settings-list">
+    <!--<ons-list class="settings-list">
        <ons-list-item >
          <div class="text-center">
-           <a ng-click="shareViaEmail()" style="font-size:18px"><i class="ion-share"></i> {{"SHAREVIAEMAIL"|translate}}</a>
+           <a ng-click="share()" style="font-size:18px"><i class="ion-share"></i> {{"SHAREVIAEMAIL"|translate}}</a>
          </div>
         </ons-list-item>
     </ons-list>
     <ons-list class="settings-list">
        <ons-list-item >
          <div class="text-center">
-           <a ng-click="printDocument()" style="font-size:18px"><i class="ion-printer"></i> {{"PRINTDOCUMENT"|translate}}</a>
+           <a ng-click="print()" style="font-size:18px"><i class="ion-printer"></i> {{"PRINTDOCUMENT"|translate}}</a>
          </div>
         </ons-list-item>
-    </ons-list>
-  </div>
-  </ons-page>
+    </ons-list>-->
+</ons-page>
