@@ -141,13 +141,13 @@ myApp.controller('IndividualEducationalMaterialController', ['$scope', '$timeout
 	});
 		
 	//Function to share material, if shareable
-	$scope.shareMaterial = function () {
+	$scope.share = function () {
 	FileManagerService.shareDocument($scope.edumaterial.Name, $scope.edumaterial.ShareURL);
 		$scope.popoverSharing.hide();
 	};
 
 	//If material is printable, i.e. is a pdf, download material and print it.
-	$scope.printMaterial = function()
+	$scope.print = function()
 	{
 		//If no connection then simply alert the user to connect to the internet
 		$scope.popoverSharing.hide();
