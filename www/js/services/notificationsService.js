@@ -67,6 +67,18 @@ myApp.service('Notifications',['$filter','RequestToServer','LocalStorage','Annou
         namesFunction:Documents.getDocumentNames,
         PageUrl:Documents.getDocumentUrl
       },
+        'UpdDocument':
+        {
+            icon:'fa fa-folder',
+            color:'orange',
+            NameEN:'AliasName_EN',
+            NameFR:'AliasName_FR',
+            SerNum:'DocumentSerNum',
+            readFunction:Documents.readDocument,
+            searchFunction:Documents.getDocumentBySerNum,
+            namesFunction:Documents.getDocumentNames,
+            PageUrl:Documents.getDocumentUrl
+        },
       'TxTeamMessage':
       {
         icon:'fa fa-user-md ',
