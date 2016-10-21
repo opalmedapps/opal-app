@@ -131,7 +131,7 @@ exports.userPassword=function(username)
 };
 exports.getSecurityQuestions=function(serNum)
 {
-  return "SELECT Question, Answer FROM SecurityQuestion WHERE PatientSerNum="+serNum;
+  return "SELECT SecurityQuestion.QuestionText, SecurityAnswer.AnswerText FROM SecurityQuestion, SecurityAnswer WHERE SecurityAnswer.PatientSerNum="+serNum +" AND SecurityQuestion.SecurityQuestionSerNum = SecurityAnswer.SecurityQuestionSerNum";
 };
 
 
