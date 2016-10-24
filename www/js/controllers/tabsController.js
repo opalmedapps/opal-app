@@ -88,7 +88,7 @@ myApp.controller('personalTabController',['$scope','$timeout','Appointments','$t
   $scope.goToStatus = function()
   {
     NavigatorParameters.setParameters({'Navigator':'personalNavigator'});
-    personalNavigator.pushPage('views/home/status/status.html');
+    personalNavigator.pushPage('views/home/status/status_new.html');
   };
 
   //Creating a device button

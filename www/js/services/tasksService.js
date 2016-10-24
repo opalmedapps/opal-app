@@ -68,7 +68,8 @@
          *@description Removes the tasks from localStorage.
          **/
         function deletePlanningTasks(){
-            Storage.remove('tasks')
+            //Storage.remove('tasks')
+            tasks = [];
         }
 
         function getTasksInCourse(courseID){
@@ -79,16 +80,18 @@
         function getRecentPhysicianTask(){
             var physicianTask = planningTasks[0];
             var index = 0;
+            var mdIndex = 0;
             for (var task in planningTasks ){
                 if (planningTasks[task].DueDateTime > physicianTask.DueDateTime
                     && planningTasks[task].TaskName_EN === 'Physician Plan Preparation'){
                     physicianTask = planningTasks[task];
-                    index++;
+                    mdIndex = index;
                 }
+                index++;
             }
             return {
                 physicianTask: physicianTask,
-                index: index
+                index: mdIndex
             };
         }
 

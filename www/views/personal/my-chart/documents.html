@@ -15,9 +15,9 @@
         <ons-row>
           <ons-col width="6px">
           </ons-col>
-          <ons-col width="60px" align="center">
+          <ons-col width="65px" align="center">
             <div style="padding:5px">
-              <img ng-src="./img/pdf-icon.png" style="witdth:55px;height:55px">
+              <img ng-src="./img/pdf-icon.png" style="height:55px">
             </div>
           </ons-col>
           <ons-col align="center">
@@ -26,8 +26,8 @@
               <span class="item-desc" ng-class="fontSizeDesc">{{document.DateAdded|date:'EEE MMM dd yyyy'}}</span>
             </div>
           </ons-col>
-          <ons-col width="15%">
-            <span class="pull-right" ng-show= "document.ReadStatus =='0'">{{"UNREAD"|translate}}</span>
+          <ons-col width="15%" align="center">
+            <i class="fa fa-exclamation-circle fa-lg" aria-hidden="true" style="color: forestgreen" ng-show= "document.ReadStatus =='0'"></i>
           </ons-col>
         </ons-row>
       </ons-list-item>

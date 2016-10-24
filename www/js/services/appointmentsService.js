@@ -638,6 +638,9 @@ myApp.service('Appointments', ['$q', 'RequestToServer','$cordovaCalendar','UserA
            return treatmentSessionsObject;
          }
         },
+        isThereNextTreatment:function(){
+            return !angular.equals({}, treatmentSessionsObject.CurrentAppointment.Appointment);
+        },
         //Get number of unread news
          /**
         *@ngdoc method

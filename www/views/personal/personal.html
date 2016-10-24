@@ -1,155 +1,149 @@
 <ons-page ng-controller="personalTabController" ng-device-backbutton="personalDeviceBackButton()">
-  <ons-toolbar>
-    <div class="left">
-      <ons-back-button>{{"BACK"|translate}}</ons-back-button>
-    </div>
-    <div class="center">{{"MYCHART"|translate}}</div>
-    <div class="right"><ons-toolbar-button ng-click="personalNavigator.pushPage('views/tabs/info-page-tabs.html',{param:home})"><ons-icon icon="ion-ios-information-outline"></ons-icon></ons-toolbar-button></div>
-  </ons-toolbar>
-  <ons-pull-hook ng-action="load($done)" var="loader">
+    <ons-toolbar>
+        <div class="left">
+            <ons-back-button>{{"BACK"|translate}}</ons-back-button>
+        </div>
+        <div class="center">{{"MYCHART"|translate}}</div>
+        <div class="right"><ons-toolbar-button ng-click="personalNavigator.pushPage('views/tabs/info-page-tabs.html',{param:home})"><ons-icon icon="ion-ios-information-outline"></ons-icon></ons-toolbar-button></div>
+    </ons-toolbar>
+    <ons-pull-hook ng-action="load($done)" var="loader">
     <span ng-switch="loader.getCurrentState()">
             <span ng-switch-when="initial"><ons-icon size="35px" spin="true" icon="ion-load-d"></ons-icon> {{"LOADINGDATA"|translate}}...</span>
             <span ng-switch-when="preaction"><ons-icon size="35px" spin="true" icon="ion-load-d"></ons-icon> {{"LOADINGDATA"|translate}}...</span>
             <span ng-switch-when="action"><ons-icon size="35px" spin="true" icon="ion-load-d"></ons-icon> {{"LOADINGDATA"|translate}}...</span>
     </span>
-</ons-pull-hook>
+    </ons-pull-hook>
 
     <ons-list style="margin: 0px 0">
-      <!--<ons-list-item modifier="chevron" class="item" >
-        <ons-row align="center">
-          <ons-col width="60px">
-            <div>
-              <i class="ion-heart iconHomeView" style="color:darkred"></i>
-            </div>
-          </ons-col>
-          <ons-col>
-            <header>
-              <span class="item-title" ng-class="fontSizeTitle">Diagnosis </span>
-            </header>
-            <p class="item-desc" ng-class="fontSizeDesc"></p>
-          </ons-col>
-        </ons-row>
-      </ons-list-item>-->
- <ons-list-item modifier="chevron" class="item" ng-click="personalNavigator.pushPage('views/general/notifications/notifications.html')">
-      <ons-row align="center" >
-          <ons-col width="60px" >
+        <!--<ons-list-item modifier="chevron" class="item" >
+          <ons-row align="center">
+            <ons-col width="60px">
               <div>
-                <i class="ion-android-notifications iconHomeView" style="color:orange"></i><span class="notification" ng-show="notificationsUnreadNumber>0">{{notificationsUnreadNumber}}</span>
+                <i class="ion-heart iconHomeView" style="color:darkred"></i>
               </div>
-          </ons-col>
-          <ons-col>
+            </ons-col>
+            <ons-col>
               <header>
-                  <span class="item-title" ng-class="fontSizeTitle">{{"NOTIFICATIONS"|translate}}</span>
+                <span class="item-title" ng-class="fontSizeTitle">Diagnosis </span>
               </header>
               <p class="item-desc" ng-class="fontSizeDesc"></p>
-          </ons-col>
-      </ons-row>
-  </ons-list-item>
-      <ons-list-item modifier="chevron" class="item" ng-click="personalNavigator.pushPage('views/personal/appointments/appointments.html')">
-        <ons-row align="center">
-          <ons-col width="60px">
-            <div>
-              <i class="fa fa-calendar-o iconHomeView"></i>
-            </div>
-          </ons-col>
-          <ons-col>
-            <header>
-              <span class="item-title" ng-class="fontSizeTitle">{{"APPOINTMENTS"|translate}}</span>
-            </header>
-            <!--<p class="item-desc" ng-class="fontSizeDesc" ng-show="appointmentTitle!=='undefined'"><span translate= "{{appointmentTitle}}"></span> {{appointment.ScheduledStartTime|formatDateAppointmentTask}}</p>-->
-          </ons-col>
-        </ons-row>
-      </ons-list-item>
-      <ons-list-item modifier="chevron" class="item" ng-click="goToStatus()">
-        <ons-row align="center" style="height:40px">
-          <ons-col width="60px" align="center">
-            <div style="margin-left:5px">
-              <img src="img/draft.png" style="width:25px;height:auto">
-            </div>
-          </ons-col>
-          <ons-col>
-            <header>
-              <span class="item-title" ng-class="fontSizeTitle">{{"TREATMENTPLANNING"|translate}}</span>
-            </header>
-            <!--<p class="item-desc" ng-class="fontSizeDesc">{{ 'STAGEOF' | translate:outOf}}</p>-->
-          </ons-col>
-        </ons-row>
-      </ons-list-item>
-      <ons-list-item modifier="chevron" class="item" ng-click="personalNavigator.pushPage('views/personal/my-chart/documents.html')">
-        <ons-row align="center" >
-          <ons-col width="60px" align="center">
-            <div>
-              <i class="ion-ios-folder iconHomeView" style="color:DarkGoldenRod"></i><span class="notification" ng-show="documentsUnreadNumber>0">{{documentsUnreadNumber}}</span>
-            </div>
-          </ons-col>
-          <ons-col>
-            <header>
-              <span class="item-title" ng-class="fontSizeTitle">{{"MYDOCUMENTS"|translate}}</span>
-            </header>
-            <p class="item-desc" ng-class="fontSizeDesc"></p>
-          </ons-col>
-        </ons-row>
-      </ons-list-item>
-      <!--<ons-list-item modifier="chevron" class="item" ng-click="personalNavigator.pushPage('views/personal/lab-results/lab-results.html')" >
-        <ons-row align="center" >
-          <ons-col width="60px" align="center">
-            <div>
-              <i class="ion-erlenmeyer-flask iconHomeView" style="color:darkmagenta "></i>
-            </div>
-          </ons-col>
-          <ons-col>
-            <header>
-              <span class="item-title" ng-class="fontSizeTitle">Lab Results</span>
-            </header>
-            <p class="item-desc" ng-class="fontSizeDesc"></p>
-          </ons-col>
-        </ons-row>
-      </ons-list-item>-->
-      <ons-list-item modifier="chevron" class="item" ng-click="personalNavigator.pushPage('views/personal/treatment-team-messages/team-messages.html')">
-        <ons-row align="center" >
-          <ons-col width="60px" align="center">
-            <div>
-              <i class="fa fa-user-md  iconHomeView" style="color:Olive "></i><span class="notification" ng-show="txTeamMessagesUnreadNumber>0">{{txTeamMessagesUnreadNumber}}</span>
-            </div>
-          </ons-col>
-          <ons-col>
-            <header>
-              <span class="item-title" ng-class="fontSizeTitle">{{"TREATINGTEAMNOTIFICATIONS"|translate}}</span>
-            </header>
-            <p class="item-desc" ng-class="fontSizeDesc"></p>
-          </ons-col>
-        </ons-row>
-      </ons-list-item>
-
-     <!--<ons-list-item modifier="chevron" class="item" >
-          <ons-row align="center"  >
-              <ons-col width="60px" align="center">
-                  <div >
-                    <i class="ion-android-chat iconHomeView" style="color:DarkTurquoise"></i>
-                  </div>
-              </ons-col>
-              <ons-col>
-                  <header>
-                      <span class="item-title" ng-class="fontSizeTitle">Messages</span>
-                  </header>
-                  <p class="item-desc" ng-class="fontSizeDesc"></p>
-              </ons-col>
+            </ons-col>
           </ons-row>
-    </ons-list-item>-->
-      <!--<ons-list-item modifier="chevron" class="item" ng-click="personalNavigator.pushPage('views/personal/questionnaires/questionnairesList.html')">
-        <ons-row align="center">
-          <ons-col width="60px" align="center">
-            <div>
-              <i class="ion-help-circled iconHomeView" style="color:DarkSlateGray"></i><span class="notification" ng-show="questionnairesUnreadNumber>0">{{questionnairesUnreadNumber}}</span>
-            </div>
-          </ons-col>
-          <ons-col>
-            <header>
-              <span class="item-title" ng-class="fontSizeTitle">{{"QUESTIONNAIRES"|translate}}</span>
-            </header>
-            <p class="item-desc" ng-class="fontSizeDesc"></p>
-          </ons-col>
-        </ons-row>
-      </ons-list-item>-->
+        </ons-list-item>-->
+        <ons-list-item modifier="chevron" class="item" ng-click="personalNavigator.pushPage('views/general/notifications/notifications.html')">
+            <ons-row align="center" >
+                <ons-col width="60px" align="center">
+                        <i class="ion-android-notifications iconHomeView" style="color:orange"></i><span class="notification" ng-show="notificationsUnreadNumber>0">{{notificationsUnreadNumber}}</span>
+                </ons-col>
+                <ons-col>
+                    <header>
+                        <span class="item-title" ng-class="fontSizeTitle">{{"NOTIFICATIONS"|translate}}</span>
+                    </header>
+                    <p class="item-desc" ng-class="fontSizeDesc"></p>
+                </ons-col>
+            </ons-row>
+        </ons-list-item>
+        <ons-list-item modifier="chevron" class="item" ng-click="personalNavigator.pushPage('views/personal/appointments/appointments.html')">
+            <ons-row align="center">
+                <ons-col width="60px" align="center">
+                        <i class="fa fa-calendar-o iconHomeView"></i>
+                </ons-col>
+                <ons-col>
+                    <header>
+                        <span class="item-title" ng-class="fontSizeTitle">{{"APPOINTMENTS"|translate}}</span>
+                    </header>
+                    <!--<p class="item-desc" ng-class="fontSizeDesc" ng-show="appointmentTitle!=='undefined'"><span translate= "{{appointmentTitle}}"></span> {{appointment.ScheduledStartTime|formatDateAppointmentTask}}</p>-->
+                </ons-col>
+            </ons-row>
+        </ons-list-item>
+        <ons-list-item modifier="chevron" class="item" ng-click="goToStatus()">
+            <ons-row align="center">
+                <ons-col width="60px" align="center">
+                    <i class="fa fa-tasks iconHomeView" aria-hidden="true" style="color: #00ACEE"></i>
+                </ons-col>
+                <ons-col>
+                    <header>
+                        <span class="item-title" ng-class="fontSizeTitle">{{"TREATMENTPLANNING"|translate}}</span>
+                    </header>
+                    <!--<p class="item-desc" ng-class="fontSizeDesc">{{ 'STAGEOF' | translate:outOf}}</p>-->
+                </ons-col>
+            </ons-row>
+        </ons-list-item>
+        <ons-list-item modifier="chevron" class="item" ng-click="personalNavigator.pushPage('views/personal/my-chart/documents.html')">
+            <ons-row align="center" >
+                <ons-col width="60px" align="center">
+                    <div>
+                        <i class="ion-ios-folder iconHomeView" style="color:DarkGoldenRod"></i><span class="notification" ng-show="documentsUnreadNumber>0">{{documentsUnreadNumber}}</span>
+                    </div>
+                </ons-col>
+                <ons-col>
+                    <header>
+                        <span class="item-title" ng-class="fontSizeTitle">{{"MYDOCUMENTS"|translate}}</span>
+                    </header>
+                    <p class="item-desc" ng-class="fontSizeDesc"></p>
+                </ons-col>
+            </ons-row>
+        </ons-list-item>
+        <!--<ons-list-item modifier="chevron" class="item" ng-click="personalNavigator.pushPage('views/personal/lab-results/lab-results.html')" >
+          <ons-row align="center" >
+            <ons-col width="60px" align="center">
+              <div>
+                <i class="ion-erlenmeyer-flask iconHomeView" style="color:darkmagenta "></i>
+              </div>
+            </ons-col>
+            <ons-col>
+              <header>
+                <span class="item-title" ng-class="fontSizeTitle">Lab Results</span>
+              </header>
+              <p class="item-desc" ng-class="fontSizeDesc"></p>
+            </ons-col>
+          </ons-row>
+        </ons-list-item>-->
+        <ons-list-item modifier="chevron" class="item" ng-click="personalNavigator.pushPage('views/personal/treatment-team-messages/team-messages.html')">
+            <ons-row align="center" >
+                <ons-col width="60px" align="center">
+                    <div>
+                        <i class="fa fa-user-md  iconHomeView" style="color:Olive "></i><span class="notification" ng-show="txTeamMessagesUnreadNumber>0">{{txTeamMessagesUnreadNumber}}</span>
+                    </div>
+                </ons-col>
+                <ons-col>
+                    <header>
+                        <span class="item-title" ng-class="fontSizeTitle">{{"TREATINGTEAMNOTIFICATIONS"|translate}}</span>
+                    </header>
+                    <p class="item-desc" ng-class="fontSizeDesc"></p>
+                </ons-col>
+            </ons-row>
+        </ons-list-item>
+
+        <!--<ons-list-item modifier="chevron" class="item" >
+             <ons-row align="center"  >
+                 <ons-col width="60px" align="center">
+                     <div >
+                       <i class="ion-android-chat iconHomeView" style="color:DarkTurquoise"></i>
+                     </div>
+                 </ons-col>
+                 <ons-col>
+                     <header>
+                         <span class="item-title" ng-class="fontSizeTitle">Messages</span>
+                     </header>
+                     <p class="item-desc" ng-class="fontSizeDesc"></p>
+                 </ons-col>
+             </ons-row>
+       </ons-list-item>-->
+        <!--<ons-list-item modifier="chevron" class="item" ng-click="personalNavigator.pushPage('views/personal/questionnaires/questionnairesList.html')">
+          <ons-row align="center">
+            <ons-col width="60px" align="center">
+              <div>
+                <i class="ion-help-circled iconHomeView" style="color:DarkSlateGray"></i><span class="notification" ng-show="questionnairesUnreadNumber>0">{{questionnairesUnreadNumber}}</span>
+              </div>
+            </ons-col>
+            <ons-col>
+              <header>
+                <span class="item-title" ng-class="fontSizeTitle">{{"QUESTIONNAIRES"|translate}}</span>
+              </header>
+              <p class="item-desc" ng-class="fontSizeDesc"></p>
+            </ons-col>
+          </ons-row>
+        </ons-list-item>-->
     </ons-list>
 </ons-page>

@@ -77,29 +77,30 @@
         <div style="padding:2px">
             <div class="my-home-profile" ng-show="!status.noTreatmentPlan" style="padding:0">
                 <div id="divTreatmentPlan" style="overflow-y:scroll">
+
+
+
+
                     <ons-list class="plan-list" style="margin:0;padding:0">
-                        <ons-list-item class="plan" modifier="tappable" ng-click="status.goTo(status.eventType, app)" ng-repeat="(step, event) in status.events" id="treatmentSessions{{$index}}">
+                        <ons-list-item class="plan" modifier="tappable" ng-click="status.goTo(status.eventType, events[0])" ng-repeat="(step, events) in status.events" id="treatmentSessions{{$index}}">
                             <ons-row id="statusStep{{$index}}">
                                 <ons-col width="50px" class="plan-left" align="center">
-                                    <div class="plan-date" ng-show="app.Status=='Past' || app.TimeStatus=='Past'"><img ng-src="./img/checkedbox.png" width="20px" height="20px"></div>
-                                    <div class="plan-duration" ng-show="app.Status=='Future'||app.Status=='Next'||app.TimeStatus=='Next'||app.TimeStatus=='Future'">
+                                    <div class="plan-date" ng-show="status.eventIndex > status.stepMapping[step]"><img ng-src="./img/checkedbox.png" width="20px" height="20px"></div>
+                                    <div class="plan-duration" ng-show="status.eventIndex <= status.stepMapping[step]">
                                         <img ng-src="./img/uncheckedbox.png" width="20px" height="20px">
                                     </div>
                                 </ons-col>
-                                <ons-col width="6px" class="plan-center" ng-style="{ 'background-color': getStyle(app) }"></ons-col>
+                                <ons-col width="6px" class="plan-center" ng-style="{ 'background-color': getStyle(events[0]) }"></ons-col>
                                 <ons-col class="plan-right">
-                                    <div class="plan-name" ng-class="fontSizeTitle"> <span style="text-align:left"><strong>{{$index+1}}</strong></span> {{app.Name || app.Title}}</div>
+                                    <div class="plan-name" ng-class="fontSizeTitle"> <span style="text-align:left"><strong>{{$index+1}}</strong></span> {{step}}</div>
                                     <div class="plan-info" ng-class="fontSizeDesc">
-                                        <div ng-show="app.Type=='Appointment'">
-                                            <strong>{{"COMPLETED"|translate}}: </strong>{{app.Date|date:'EEE MMM dd yyyy'}}
+                                        <div ng-if="(status.eventIndex > status.stepMapping[step] && events[0].ScheduledStartTime < status.today)">
+                                            <strong>{{"COMPLETED"|translate}}: </strong>{{events[0].ScheduledStartTime|date:'EEE MMM dd yyyy'}}
                                         </div>
-                                        <div ng-show="app.Type=='Task'&&app.Status=='Past' || app.TimeStatus=='Past'">
-                                            <strong>{{"COMPLETED"|translate}}: </strong>{{(app.Date||app.ScheduledStartTime)|date:'EEE MMM dd yyyy'}}
-                                        </div>
-                                        <div ng-show="app.Type=='Task'&&app.Status=='Future'|| app.TimeStatus=='Future'">
+                                        <div ng-if="status.eventIndex == status.stepMapping[step]">
                                             <strong>{{"PENDING"|translate}} </strong>
                                         </div>
-                                        <div ng-show="app.Type=='Task'&&app.Status=='Next'|| app.TimeStatus=='Next'">
+                                        <div ng-if="status.eventIndex < status.stepMapping[step]">
                                             <strong>{{"INPROGRESS"|translate}}...</strong>
                                         </div>
                                     </div>
@@ -107,6 +108,9 @@
                             </ons-row>
                         </ons-list-item>
                     </ons-list>
+
+
+
                 </div>
             </div>
         </div>
