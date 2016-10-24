@@ -94,8 +94,9 @@
                                 <ons-col class="plan-right">
                                     <div class="plan-name" ng-class="fontSizeTitle"> <span style="text-align:left"><strong>{{$index+1}}</strong></span> {{step}}</div>
                                     <div class="plan-info" ng-class="fontSizeDesc">
-                                        <div ng-if="(status.eventIndex > status.stepMapping[step] && events[0].ScheduledStartTime < status.today)">
-                                            <strong>{{"COMPLETED"|translate}}: </strong>{{events[0].ScheduledStartTime|date:'EEE MMM dd yyyy'}}
+                                        <div ng-if="(status.eventIndex > status.stepMapping[step] && (events[0].ScheduledStartTime || events[0].DueDateTime)< status.today)">
+                                            <strong>{{"COMPLETED"|translate}}: </strong>
+                                            {{(events[0].ScheduledStartTime || events[0].DueDateTime)|date:'EEE MMM dd yyyy'}}
                                         </div>
                                         <div ng-if="status.eventIndex == status.stepMapping[step]">
                                             <strong>{{"PENDING"|translate}} </strong>
