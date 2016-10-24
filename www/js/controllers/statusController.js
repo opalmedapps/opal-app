@@ -38,14 +38,21 @@
         statusVm.completionDate='';             // date of plan completion
         statusVm.currentEvent='';               // current event in sequence
         statusVm.endingDate = '';               // treatment end date
-
+        statusVm.today = new Date();
+        statusVm.stepMapping = {
+            'CT for Radiotherapy Planning': 1,
+            'Physician Plan Preparation': 2,
+            'Calculation of Dose': 3,
+            'Physics Quality Control': 4,
+            'Scheduling': 5
+        }
 
         statusVm.getStyle = getStyle;           // function which determines style
         statusVm.goTo = goTo;                   // function which provides details on the event
 
         activate();                             // initializes status page
 
-
+        console.log(statusVm.events);
 
         function activate()
         {
@@ -53,12 +60,16 @@
             var events;
             statusVm.planningCompleted = true;
             statusVm.treatmentCompleted = true;
-            PlanningSteps.initializePlanningSequence();
-            if (!UserPlanWorkflow.isCompleted() || !boolStatus){
-                events=UserPlanWorkflow.getPlanWorkflow();
-                var nextStageIndex=UserPlanWorkflow.getNextStageIndex();
-                initTreatmentPlanStatus(events,nextStageIndex);
-            } else{
+            console.log(PlanningSteps.isCompleted());
+
+            if (PlanningSteps.isCompleted() || !boolStatus){
+                events = PlanningSteps.getPlanningSequence();
+                var currentStep = PlanningSteps.getCurrentStep();
+                console.log(currentStep);
+                initTreatmentPlanStatus(events,currentStep);
+
+            } /*else{
+
                 events = Appointments.getTreatmentAppointments();
                 //If the treatment sessions are not empty adds them to
                 if(events.Total !== 0&&boolStatus)
@@ -67,7 +78,7 @@
                         events.AppointmentList);
                     initTreatmentSessions(events);
                 }
-            }
+            }*/
             setHeightElement();
         }
 
@@ -98,37 +109,40 @@
             //divTreatmentSessions.style.height = heightTreatment+'px';
         }
 
-        function initTreatmentPlanStatus(stages, nextStageIndex){
+        function initTreatmentPlanStatus(stages, currentStep){
+            console.log('Inside Status init');
             statusVm.events=stages;
             statusVm.eventType = 'plan';
+            statusVm.totalEvents = 5;
+
+            var nextStepIndex = statusVm.stepMapping[currentStep] + 1;
+            console.log(nextStepIndex);
+            statusVm.eventIndex = nextStepIndex;
             //statusVm.estimatedTime='3 days';
             //statusVm.finishedTreatment=false;
             var startColor='#5CE68A';
             var endColor='#3399ff';
-            if(stages.length === 0){
+
+            if(stages['CT for Radiotherapy Planning'].length === 0){
                 statusVm.noData=true;
             }else{
-                if(nextStageIndex==stages.length){
-                    statusVm.eventIndex = nextStageIndex;
-                    statusVm.totalEvents=stages.length;
+                if(PlanningSteps.isCompleted()){
                     statusVm.planningCompleted=true;
                     statusVm.percentage=100;
-                    statusVm.completionDate=stages[nextStageIndex-1].Date;
+                    statusVm.completionDate=stages['Scheduling'][stages['Scheduling'].length-1].DueDateTime;
                     endColor='#5CE68A';
                 }else{
-                    statusVm.currentEvent=stages[nextStageIndex-1].Name;
+                    statusVm.currentEvent=stages[currentStep];
                     statusVm.planningCompleted=false;
-                    statusVm.percentage=Math.floor((100*(nextStageIndex))/stages.length);
-                    statusVm.eventIndex = nextStageIndex;
-                    statusVm.totalEvents=stages.length;
-                    var lastStageFinishedPercentage=Math.floor((100*(nextStageIndex-1))/stages.length);
+                    statusVm.percentage=Math.floor((100*(nextStepIndex))/stages.length);
+                    var lastStageFinishedPercentage=Math.floor((100*(nextStepIndex))/5);
                     var circlePast = ProgressBarStatus('#progressStatusPastStages2', lastStageFinishedPercentage, startColor, startColor, 2000);
                 }
                 var circleCurrent = new ProgressBarStatus('#progressStatusPresentStage2', statusVm.percentage, startColor, endColor, 2000);
                 var circleCurrent = new ProgressBarStatus('#progressStatusStage', 100, '#ccc', '#ccc', 2000);
             }
             console.log('initiating');
-            var anchor="statusStep"+nextStageIndex;
+            var anchor="statusStep"+nextStepIndex;
             setTimeout(function(){
                 $location.hash(anchor);
                 $anchorScroll();
@@ -137,7 +151,7 @@
         }
 
 
-        function initTreatmentSessions(sessions)
+        /*function initTreatmentSessions(sessions)
         {
             var startColor='#5CE68A';
             var endColor='#3399ff';
@@ -154,8 +168,8 @@
                     statusVm.eventIndex = sessions.CurrentAppointment.Index;
                     statusVm.totalEvents = sessions.Total;
                     statusVm.treatmentCompleted = true;
-                    /*                statusVm.totalTreatments = sessions.Total;
-                     statusVm.stepStatusTreatment = sessions.Total +' of '+sessions.Total;*/
+                    /!*                statusVm.totalTreatments = sessions.Total;
+                     statusVm.stepStatusTreatment = sessions.Total +' of '+sessions.Total;*!/
                     var circleCurrent = new ProgressBarStatus('#progressStatusPresentStage2',100, startColor, startColor, 2000);
                     var anchor = 'treatmentSessions'+sessions.Total-1;
                     setTimeout(function(){
@@ -184,7 +198,7 @@
                     },400);
                 }
             }
-        }
+        }*/
 
         function ProgressBarStatus(id, percentage,startColor,endColor,duration)
         {
@@ -244,13 +258,14 @@
 
         function goToStep(step)
         {
+            console.log(step);
             if(boolStatus)
             {
-                NavigatorParameters.setParameters({'Navigator':'homeNavigator','Post':step})
+                NavigatorParameters.setParameters({'Navigator':'homeNavigator','Post':step});
                 homeNavigator.pushPage('./views/home/status/individual-step.html');
             }else{
                 console.log(step);
-                NavigatorParameters.setParameters({'Navigator':'personalNavigator','Post':step})
+                NavigatorParameters.setParameters({'Navigator':'personalNavigator','Post':step});
                 personalNavigator.pushPage('./views/home/status/individual-step.html');
             }
 

@@ -9,11 +9,8 @@
       <ons-list-item class="item">
         <div style="line-height:1" align="left">
           <header>
-              <span class="item-title" ng-class="fontSizeTitle">{{step.stage.Name}}</span>
-              <div class="plan-info">
-                  <div ng-show="step.stage.Type=='Appointment'" ng-class="fontSizeDesc">
-                      <ons-icon icon="fa-calendar " style="color:#2B6197;" ng-class="fontSizeDesc"></ons-icon>&nbsp;{{step.stage.Date|formatDateAppointmentTask}}
-                  </div>
+              <span class="item-title" ng-class="fontSizeTitle">{{step.stage.TaskName_EN || step.stage.AppointmentType_EN}}</span>
+              <!--<div class="plan-info">
                   <div ng-show="step.stage.Type=='Task'&&step.stage.Status=='Past'">
                   <strong><i class="ion-compose iconHomeView" ng-class="fontSizeDesc" ></i>&nbsp;{{"STAGECOMPLETED"|translate}}: </strong>{{step.stage.Date|formatDateAppointmentTask}}
                   </div>
@@ -23,10 +20,10 @@
                   <div ng-show="step.stage.Type=='Task'&&step.stage.Status=='Next'">
                   <strong><i class="ion-loop iconHomeView" ng-class="fontSizeDesc"></i>&nbsp;{{INPROGRESS}}</strong>
                   </div>
-              </div>
+              </div>-->
           </header>
 
-          <p class="item-desc" ng-class="fontSizeDesc">{{step.stage.Description}}</p>
+          <p class="item-desc" ng-class="fontSizeDesc">{{step.stage.AppointmentDescription_EN || step.stage.TaskDescription_EN}}</p>
         </div>
       </ons-list-item>
     </ons-list>

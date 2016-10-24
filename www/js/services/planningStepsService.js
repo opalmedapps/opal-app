@@ -10,20 +10,24 @@
     /* @ngInject */
     function PlanningSteps(Tasks, Appointments) {
 
-        var currentStep = -1;
-        var totalEvents = 0;
+        var currentStep = '';
         var sequence = {
-            1: {name: 'CT for Radiotherapy Planning', events: []},
-            2: {name: 'Physician Plan Preparation', events: []},
-            3: {name: 'Calculation of Dose', events: []},
-            4: {name: 'Quality Control', events: []},
-            5: {name: 'Scheduling', events: []}
+            'CT for Radiotherapy Planning': [],
+            'Physician Plan Preparation': [],
+            'Calculation of Dose': [],
+            'Physics Quality Control': [],
+            'Scheduling': []
         };
 
         var service = {
             getPlanningSequence: getPlanningSequence,
-            initializePlanningSequence: initializePlanningSequence
+            initializePlanningSequence: initializePlanningSequence,
+            getCurrentStep: getCurrentStep,
+            isCompleted: isCompleted,
         };
+
+        // Initilaize the sequence
+        initializePlanningSequence();
 
         return service;
 
@@ -37,13 +41,22 @@
             var ctAppointment = getCTSimAppointment();
             var planningTasks = Tasks.getAllRecentTasks();
 
+            console.log(ctAppointment);
             planningTasks.unshift(ctAppointment);
 
-            console.log(planningTasks);
+            for (var task in planningTasks){
 
-            /*for (var event in events){
-                sequence[events[event].TaskName_EN].push(events[event]);
-            }*/
+                //Checking to see if appointment or task since they have different properties.
+                if (planningTasks[task].hasOwnProperty('TaskName_EN')){
+                    sequence[planningTasks[task].TaskName_EN].push(planningTasks[task]);
+
+                } else if (planningTasks[task].hasOwnProperty('AppointmentType_EN')){
+                    sequence[planningTasks[task].AppointmentType_EN].push(planningTasks[task]);
+
+                }
+            }
+            currentStep = planningTasks[task];
+            console.log(sequence);
 
         }
 
@@ -52,15 +65,16 @@
 
             var appointments = Appointments.getUserAppointments();
             var mdTask = Tasks.getRecentPhysicianTask();
-
             var ctAppointment = {};
-
-            for (var appointment in appointments){
-                if (appointments[appointment].TaskName_EN === 'CT for Radiotherapy Planning'
-                    && appointments[appointment].ScheduledStartTime
+            //console.log(mdTask);
+            // Appointments are sorted, so scanning starts at the end
+            for (var i = appointments.length-1; i!=0; i--){
+                //console.log(appointments[i]);
+                if (appointments[i].AppointmentType_EN === 'CT for Radiotherapy Planning'
+                    && appointments[i].ScheduledStartTime
                         < mdTask.physicianTask.DueDateTime) {
 
-                    ctAppointment = appointments[appointment];
+                    ctAppointment = appointments[i];
                     break;
 
                 }
@@ -70,11 +84,11 @@
         }
 
         function isCompleted(){
-            return sequence[5].length > 0;
+            return sequence['Scheduling'].length > 0;
         }
 
         function getCurrentStep(){
-            return currentStep;
+            return currentStep.TaskName_EN || currentStep.AppointmentType_EN;
         }
     }
 

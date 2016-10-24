@@ -119,7 +119,7 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors',
             },
             'Tasks':{
                 init: Tasks.setPlanningTasks,
-                update:Tasks.setPlanningTasks,
+                update:Tasks.setPlanningTasks
             },
             /*'Messages':
              {

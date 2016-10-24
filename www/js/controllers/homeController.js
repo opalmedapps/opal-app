@@ -39,7 +39,11 @@
  */
 var myApp = angular.module('MUHCApp');
 myApp.controller('HomeController', ['$state','Appointments', 'CheckinService','$scope','Patient','UpdateUI', '$timeout','$filter','UserPlanWorkflow','$rootScope', 'tmhDynamicLocale','$translate', '$location','Notifications','NavigatorParameters','NativeNotification',
-    'NewsBanner','DeviceIdentifiers','$anchorScroll',function ($state,Appointments,CheckinService, $scope, Patient,UpdateUI,$timeout,$filter,UserPlanWorkflow, $rootScope,tmhDynamicLocale, $translate,$location,Notifications,NavigatorParameters,NativeNotification,NewsBanner,DeviceIdentifiers,$anchorScroll) {
+    'NewsBanner','DeviceIdentifiers','$anchorScroll', 'PlanningSteps',
+    function ($state,Appointments,CheckinService, $scope, Patient,UpdateUI,$timeout,
+              $filter,UserPlanWorkflow, $rootScope,tmhDynamicLocale, $translate,$location,
+              Notifications,NavigatorParameters,NativeNotification,NewsBanner,DeviceIdentifiers,
+              $anchorScroll,PlanningSteps) {
         NewsBanner.setAlertOffline();
         //Check if device identifier has been sent, if not sent, send it to backend.
         var app = document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'https://' ) === -1;
@@ -101,7 +105,7 @@ myApp.controller('HomeController', ['$state','Appointments', 'CheckinService','$
             //setUpCheckin();
             setUpCheckin();
         }
-        $scope.goToView=function(param)
+        /*$scope.goToView=function(param)
         {
             if(Appointments.isThereNextAppointment())
             {
@@ -122,11 +126,16 @@ myApp.controller('HomeController', ['$state','Appointments', 'CheckinService','$
 
                 }
             }
-        };
+        };*/
         $scope.goToStatus = function()
         {
             NavigatorParameters.setParameters({'Navigator':'homeNavigator'});
-            homeNavigator.pushPage('views/home/status/status.html');
+            //console.log(PlanningSteps.isCompleted());
+            if(PlanningSteps.isCompleted()) {
+                homeNavigator.pushPage('views/personal/appointments/appointments.html')
+            } else{
+                homeNavigator.pushPage('views/home/status/status_new.html');
+            }
         };
 
         //Set notifications function
@@ -194,14 +203,11 @@ myApp.controller('HomeController', ['$state','Appointments', 'CheckinService','$
 
         function settingStatus()
         {
-            if(!UserPlanWorkflow.isEmpty())
-            {
-                if(UserPlanWorkflow.isCompleted()){
-                    $scope.statusDescription = "INTREATMENT";
-                }else{
-                    $scope.statusDescription = "PLANNING";
-                }
-            }else{
+            if(!PlanningSteps.isCompleted()) {
+                $scope.statusDescription = "PLANNING";
+            } else if (Appointments.isThereNextTreatment()){
+                $scope.statusDescription = "INTREATMENT";
+            } else {
                 $scope.statusDescription = "NOPLANNING";
             }
         }
