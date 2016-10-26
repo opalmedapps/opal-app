@@ -38,7 +38,9 @@
  * @property {array} cardtype:array Type of cards
  */
 var myApp = angular.module('MUHCApp');
-myApp.controller('HomeController', ['$state','Appointments', 'CheckinService','$scope','Patient','UpdateUI', '$timeout','$filter','UserPlanWorkflow','$rootScope', 'tmhDynamicLocale','$translate', '$location','Notifications','NavigatorParameters','NativeNotification',
+myApp.controller('HomeController', ['$state','Appointments', 'CheckinService','$scope','Patient',
+    'UpdateUI', '$timeout','$filter','UserPlanWorkflow','$rootScope', 'tmhDynamicLocale','$translate',
+    '$location','Notifications','NavigatorParameters','NativeNotification',
     'NewsBanner','DeviceIdentifiers','$anchorScroll', 'PlanningSteps',
     function ($state,Appointments,CheckinService, $scope, Patient,UpdateUI,$timeout,
               $filter,UserPlanWorkflow, $rootScope,tmhDynamicLocale, $translate,$location,
