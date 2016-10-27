@@ -2432,7 +2432,14 @@ transform: translate(0px,-50px);
     border-radius: 25px;
     background: #73AD21;
     padding: 20px;
-    width: 80%;
+    width: 90%;
     height: 60%;
     margin: auto;
+    position: relative;
+}
+
+#tourButtons{
+    position: absolute;
+    bottom: 0;
+    text-align: center;
 }
