@@ -2427,3 +2427,12 @@ transform: translate(0px,-50px);
   -o-transition: width .6s ease;
   transition: width .6s ease;
 }
+
+#rcorners {
+    border-radius: 25px;
+    background: #73AD21;
+    padding: 20px;
+    width: 80%;
+    height: 60%;
+    margin: auto;
+}
