@@ -1,24 +1,25 @@
 <ons-modal var="tourModal">
 
     <div id="rcorners">
-        <ons-carousel swipeable overscrollable style="height: 50%" var="tourCarousel">
+        <ons-carousel swipeable overscrollable auto-scroll style="height: 90%" var="tourCarousel">
             <ons-carousel-item>
                 <h3>Welcome to Opal!</h3>
-                <img src="img/Opal_Logo_Full_2.png" alt="">
+                <span>You can find all your data through this app. To get started click on the arrow to change slide.</span>
             </ons-carousel-item>
             <ons-carousel-item>
-                <img src="img/MUHC.png" alt="">
+                <img src="img/TabBar_Home_EN.png" height="60px">
+                In your <strong>Home</strong> tab you will be provided with <strong>news</strong> about
+                your medical status, <strong>documents</strong> and <strong>appointments</strong>
             </ons-carousel-item>
         </ons-carousel>
 
-
-        <ons-button ng-click="tourModal.hide()">Skip</ons-button>
-        <ons-button modifier="light" ng-click="tourCarousel.prev()">
-            <i class="fa fa-arrow-left" aria-hidden="true" style="color:lightgrey"></i>
-        </ons-button>
-        <ons-button modifier="light" ng-click="tourCarousel.next()">
-            <i class="fa fa-arrow-right" aria-hidden="true" style="color:lightgrey"></i>
-        </ons-button>
+        <div id="tourButtons">
+            <ons-button ng-click="tourModal.hide()">Skip</ons-button>
+            <div >
+            <i class="fa fa-arrow-left" aria-hidden="true" style="color:white" ng-click="tourCarousel.prev()"></i>
+            <i class="fa fa-arrow-right" aria-hidden="true" style="color:white" ng-click="tourCarousel.next()"></i>
+            </div>
+        </div>
     </div>
 </ons-modal>
 
