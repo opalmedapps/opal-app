@@ -6,10 +6,14 @@
 var myApp=angular.module('MUHCApp');
 myApp.controller('TabsController',['$scope','$timeout','$translate','$translatePartialLoader','$rootScope',function($scope,$timeout,$translate,$translatePartialLoader,$rootScope){
     //Enter code here!!
-    $timeout(function () {
-       tourModal.show();
-    }, 500);
 
+    if (!localStorage.getItem('firstInstall')){
+        $scope.tour = './views/home/tour/tour.html';
+        localStorage.setItem('firstInstall', '1');
+        $timeout(function () {
+            tourModal.show();
+        },500);
+    }
 
     $translatePartialLoader.addPart('all-views');
 
