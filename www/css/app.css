@@ -2430,7 +2430,7 @@ transform: translate(0px,-50px);
 
 #rcorners {
     border-radius: 25px;
-    background: #73AD21;
+    background: rgba(0,0,0,0.8);
     padding: 20px;
     width: 90%;
     height: 60%;
@@ -2442,4 +2442,10 @@ transform: translate(0px,-50px);
     position: absolute;
     bottom: 0;
     text-align: center;
+    width: 85%;
+}
+
+.tour-icon{
+    font-size: 500%;
+    color: white;
 }
