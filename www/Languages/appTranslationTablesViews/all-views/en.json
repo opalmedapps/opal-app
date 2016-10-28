@@ -66,6 +66,7 @@
 	"CHECKIN_ERROR":"Error occurred, check-in at the cancer center",
 	"NOPLANNING":"No treatment plan available",
 	"PLANNING":"Radiotherapy treatment planning",
+	"PLANNING_TITLE": "Planning",
 	"INTREATMENT":"In Treatment",
 	"NEXTAPPOINTMENT":"Next Appointment",
 	"NEWS":"News",

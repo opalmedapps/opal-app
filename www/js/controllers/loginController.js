@@ -8,6 +8,10 @@ var myApp=angular.module('MUHCApp');
 //Login controller
 myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$rootScope', '$state', 'UserAuthorizationInfo', 'RequestToServer', 'FirebaseService','LocalStorage','$filter','DeviceIdentifiers','UserPreferences','NavigatorParameters','Patient','NewsBanner', '$firebaseAuth',function LoginController(ResetPassword,$scope,$timeout, $rootScope, $state, UserAuthorizationInfo,RequestToServer,FirebaseService,LocalStorage,$filter,DeviceIdentifiers,UserPreferences,NavigatorParameters,Patient, NewsBanner,$firebaseAuth) {
 
+    $timeout(function () {
+        securityModal.show();
+    },200);
+
     //Check if device or browser
     var app = document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'https://' ) === -1;
 
