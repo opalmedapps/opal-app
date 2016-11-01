@@ -404,7 +404,7 @@ myApp.controller('CalendarController', ['Appointments', '$scope','$timeout', '$f
 
         return '';
     };*/
-    addEventsToNativeCalendar();
+    //addEventsToNativeCalendar();
 
     /**
     *@ngdoc method
@@ -470,7 +470,7 @@ function ($rootScope, UserPreferences, Appointments,$cordovaCalendar,$scope) {
     $scope.closeAlert = function () {
         $rootScope.showAlert = false;
     };
-    addEventsToNativeCalendar();
+    //addEventsToNativeCalendar();
 
     /**
     *@ngdoc method
@@ -765,7 +765,7 @@ myApp.controller('IndividualAppointmentController', ['NavigatorParameters','Nati
 
 myApp.controller('AppointmentOptionsController',['$scope','$timeout','$filter',function($scope,$timeout,$filter){
   //Enter code here!!
-  var nativeCalendar=Number(window.localStorage.getItem('NativeCalendar'));
+  /*var nativeCalendar=Number(window.localStorage.getItem('NativeCalendar'));
   (nativeCalendar)?$scope.checkboxModelCalendar=nativeCalendar:$scope.checkboxModelCalendar=0;
   $scope.saveSettings=function(){
       if(ons.platform.isIOS()||ons.platform.isAndroid()){
@@ -789,7 +789,7 @@ myApp.controller('AppointmentOptionsController',['$scope','$timeout','$filter',f
 
       }
 
-  };
+  };*/
 
 
 }]);

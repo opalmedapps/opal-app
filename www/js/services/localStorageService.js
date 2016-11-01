@@ -87,7 +87,7 @@ myApp.service('LocalStorage',['UserAuthorizationInfo', 'EncryptionService',funct
 		isUserDataDefined:function()
 		{
 			var storage=window.localStorage.getItem(UserAuthorizationInfo.getUsername());
-			console.log(storage);
+			//console.log(Object.keys(storage));
 				if(!storage||typeof storage=='undefined'){
 					return false;
 				}else{

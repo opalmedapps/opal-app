@@ -6,7 +6,7 @@ var myApp = angular.module('MUHCApp');
 myApp.controller('InitScreenController',function($scope, $timeout, NavigatorParameters,$translatePartialLoader, UserPreferences, $filter,FirebaseService, UserAuthorizationInfo,$state,LocalStorage)
 { 
     //Firebase reference to check authentication
-    var myDataRef = new Firebase(FirebaseService.getFirebaseUrl());
+    var myDataRef = firebase.database().ref('dev2/');
 
   //Add the login translation
     $translatePartialLoader.addPart('login');

@@ -33,7 +33,7 @@ myApp.controller('SetNewPasswordController',['$scope','$timeout','ResetPassword'
     return true;
     
   }
-  var ref=new Firebase(FirebaseService.getFirebaseUrl());
+  var ref=firebase.database().ref('dev2/');
   $scope.submitSSN=function(ssn){
     console.log(ssn);
     if(validateSSN(ssn))
@@ -81,7 +81,7 @@ myApp.controller('SetNewPasswordController',['$scope','$timeout','ResetPassword'
           delete $scope.alert.content;
         }
     });
-    var ref=new Firebase(FirebaseService.getFirebaseUrl());
+    var ref=firebase.database().ref('dev2/');
     $scope.submitAnswer=function(answer)
     {
       if(!answer||answer===''||typeof answer=='undefined')
@@ -149,7 +149,7 @@ myApp.controller('SetNewPasswordController',['$scope','$timeout','ResetPassword'
             delete $scope.alert.content;
           }
       });
-      var ref=new Firebase(FirebaseService.getFirebaseUrl());
+      var ref=firebase.database().ref('dev2/');
       $scope.submitNewPassword=function(newValue)
       {
         if(newValue===''||typeof newValue=='undefined')

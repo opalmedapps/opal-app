@@ -390,6 +390,7 @@ myApp.service('UserPlanWorkflow',['$filter',function($filter){
         },
         isCompleted:function()
         {
+            console.log(this.FutureStages);
             if(this.FutureStages.length==0)
             {
                 return true;

@@ -66,7 +66,7 @@ myApp.controller('DocumentsController', ['Patient', 'Documents', 'UpdateUI', '$s
  * @description Responsible for displaying, sharing and printing document
  */
 myApp.controller('SingleDocumentController', ['NavigatorParameters','Documents', '$timeout', '$scope', '$cordovaEmailComposer','$cordovaFileOpener2','FileManagerService','Patient','NativeNotification','$filter',function(NavigatorParameters, Documents, $timeout, $scope,$cordovaEmailComposer,$cordovaFileOpener2, FileManagerService,Patient,NativeNotification,$filter) {
-  
+
   //Obtain navigator parameters.
   var parameters = NavigatorParameters.getParameters();
   var app = document.URL.indexOf('http://') === -1 && document.URL.indexOf('https://') === -1;
@@ -80,7 +80,7 @@ myApp.controller('SingleDocumentController', ['NavigatorParameters','Documents',
   //Checks if document exists if it does not it downloads the document from the server
   function initializeDocument(document)
   {
-    console.log(document); 
+    console.log(document);
     if(app)
     {
         FileManagerService.findPatientDocumentInDevice(document.DocumentType, document.DocumentSerNum).then(function(url)
@@ -94,7 +94,7 @@ myApp.controller('SingleDocumentController', ['NavigatorParameters','Documents',
             var targetPath = FileManagerService.getFilePathForDocument(document);
             console.log(targetPath);
             doc = FileManagerService.setBase64Document(doc);
-            
+
             FileManagerService.downloadFileIntoStorage(doc.Content, targetPath).then(function()
             {
               setDocumentForShowing(document, FileManagerService.getDocumentUrls(document));
@@ -115,7 +115,7 @@ myApp.controller('SingleDocumentController', ['NavigatorParameters','Documents',
     }else{
           Documents.downloadDocumentFromServer(document.DocumentSerNum).then(function(doc)
           {
-            doc = FileManagerService.setBase64Document(doc);            
+            doc = FileManagerService.setBase64Document(doc);
             document.Content = doc.Content;
             setDocumentForShowing(document);
           }).catch(function(error){
@@ -123,7 +123,7 @@ myApp.controller('SingleDocumentController', ['NavigatorParameters','Documents',
             console.log(error);
           });
     }
-  
+
   }
   // function simply sets document for showing
   function setDocumentForShowing(document, url)
@@ -143,7 +143,7 @@ myApp.controller('SingleDocumentController', ['NavigatorParameters','Documents',
       document.PathFileSystem = url.urlPathFile;
       document.Content =  url.cdvUrl;
     }
-    
+
     console.log(document);
 
         //Set the documentObject
@@ -152,9 +152,9 @@ myApp.controller('SingleDocumentController', ['NavigatorParameters','Documents',
         $scope.loading = false;
         $scope.documentObject = document;
       });
-   
+
   }
-  
+
   //Share via email function, detemines if its an app, sets the parameters for the email and formats depending on whether is a
   //base64 string or a simple attachment and depending on whether is an Android device or an iOS device
   $scope.shareViaEmail=function()
@@ -262,7 +262,7 @@ myApp.controller('SingleDocumentController', ['NavigatorParameters','Documents',
   };
   console.log(FileManagerService);
 
-  
+
   //Open document function: Opens document depending on the format
   $scope.openDocument = function() {
       var app = document.URL.indexOf('http://') === -1 && document.URL.indexOf('https://') === -1;

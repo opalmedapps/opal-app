@@ -23,7 +23,8 @@ app.post('/login',function(req,res,next){
   var request=req.body.objectRequest;
   var requestObject={};
   requestObject=request;
-  console.log(requestObject.Parameters);
+  console.log("----------------------------------REQUEST OBJECT --------------------------------------")
+  console.log(requestObject);
 
 
     if(requestObject.Request=='VerifySSN'||requestObject.Request=='SetNewPassword'||requestObject.Request=='VerifyAnswer')
@@ -45,6 +46,6 @@ app.post('/login',function(req,res,next){
     }
 });
 
-app.listen(8020,function(){
-  console.log("Started on PORT 8020");
+app.listen(8030,function(){
+  console.log("Started on PORT 8030");
 });
