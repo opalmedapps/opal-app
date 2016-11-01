@@ -8,14 +8,14 @@ var exports=module.exports={};
 exports.resetPasswordRequest=function(requestKey, requestObject)
 {
   var r=q.defer();
-  console.log(requestObject.UserID);
+  console.log(requestObject.UserEmail);
   var responseObject = {};
   //Get the patient fields to verify the credentials
-  sqlInterface.getPatientFieldsForPasswordReset(requestObject.UserID).then(function(patient){
+  sqlInterface.getPatientFieldsForPasswordReset(requestObject.UserEmail).then(function(patient){
     //Check for injection attacks by the number of rows the result is returning
     if(patient.length>1||patient.lenght === 0)
     {
-      responseObject = { Headers:{RequestKey:requestKey,RequestObject:requestObject}, Code: 2, Data:{},Response:'error', Reason:'Injection attack, incorrect UserID'};       
+      responseObject = { Headers:{RequestKey:requestKey,RequestObject:requestObject}, Code: 2, Data:{},Response:'error', Reason:'Injection attack, incorrect Email'};       
       r.resolve(responseObject);
     }else{
       //If the request is not erroneus simply direct the request to appropiate function based on the request mapping object

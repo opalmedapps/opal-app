@@ -86,22 +86,6 @@
                 </ons-col>
             </ons-row>
         </ons-list-item>
-        <!--STATUS-->
-        <ons-list-item modifier="chevron" class="item" ng-click="goToStatus()">
-            <ons-row align="center">
-                <ons-col width="60px" align="center">
-                    <div>
-                        <i class="ion-medkit iconHomeView" style="color:darkgreen"></i>
-                    </div>
-                </ons-col>
-                <ons-col>
-                    <header>
-                        <span class="item-title" ng-class="fontSizeTitle">{{"STATUS"|translate}}</span>
-                    </header>
-                    <p class="item-desc" ng-class="fontSizeDesc" translate ="{{statusDescription}}"></p>
-                </ons-col>
-            </ons-row>
-        </ons-list-item>
           <!-- NEXT APPOINTMENT INFORMATION-->
           <ons-list-item ng-if="thereIsNextAppointment" modifier="chevron" class="item" ng-click="goToNextAppointment(appointmentShown)">
               <ons-row align="center">
@@ -115,6 +99,22 @@
                           <span class="item-title" ng-class="fontSizeTitle">{{"NEXTAPPOINTMENT"|translate}}</span>
                       </header>
                       <p class="item-desc" ng-class="fontSizeDesc">{{appointmentShown.ScheduledStartTime|formatDateAppointmentTask}}</p>
+                  </ons-col>
+              </ons-row>
+          </ons-list-item>
+          <!--STATUS-->
+          <ons-list-item modifier="chevron" class="item" ng-click="goToStatus()">
+              <ons-row align="center">
+                  <ons-col width="60px" align="center">
+                      <div>
+                          <i class="ion-medkit iconHomeView" style="color:darkgreen"></i>
+                      </div>
+                  </ons-col>
+                  <ons-col>
+                      <header>
+                          <span class="item-title" ng-class="fontSizeTitle">{{"STATUS"|translate}}</span>
+                      </header>
+                      <p class="item-desc" ng-class="fontSizeDesc" translate ="{{statusDescription}}"></p>
                   </ons-col>
               </ons-row>
           </ons-list-item>

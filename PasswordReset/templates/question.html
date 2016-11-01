@@ -1,0 +1,8 @@
+<div>
+    <label for="answer">{{question}}</label><br/>
+    <!--<input class="text-input form-control" type="text" name="answer" id="answer" ng-model="answer" placeholder="{{'ENTERANSWERPLACEHOLDER'|translate}}" />-->
+    <input class="text-input form-control" type="text" name="answer" id="answer" ng-model="answer" placeholder="Some Answer" />
+    <br/><br/>
+    <!--<button class="btn btn-primary" type="submit" value="Save" style="background-color:#387A36" ng-disabled="loading" ng-click="submitSSN(ssn)">{{"CONTINUE"|translate}}</button>-->
+    <button class="btn btn-primary" type="submit" value="Save" style="background-color:#387A36" ng-disabled="loading" ng-click="submitAnswer(answer)">Continue</button>
+</div>

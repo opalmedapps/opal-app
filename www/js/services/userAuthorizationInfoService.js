@@ -60,7 +60,7 @@ myApp.service('UserAuthorizationInfo', function () {
             expires = exp;
             password=pass;
             token=tok;
-            console.log(username, expires, password, token);
+            //console.log(username, expires, password, token);
         },
         /**
         *@ngdoc method

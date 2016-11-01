@@ -67,7 +67,7 @@ var requestMappings=
   {
     sql:queries.patientDocumentTableFields(),
     numberOfLastUpdated:2,
-    processFunction:LoadDocuments,
+    //processFunction:LoadDocuments,
     table:'Document',
     serNum:'DocumentSerNum'
   },
@@ -113,11 +113,11 @@ var requestMappings=
     sql:queries.patientTasksTableFields(),
     numberOfLastUpdated:2
   },
-//  'TreatmentPlanning':
-//  {
-//    processFunction:planningStepsAndEstimates,
-//    numberOfLastUpdated:0
-//  },
+  /*'TreatmentPlanning':
+  {
+    processFunction:planningStepsAndEstimates,
+    numberOfLastUpdated:0
+  },*/
   'LabTests':{
     sql:queries.patientTestResultsTableFields(),
     numberOfLastUpdated:1
@@ -525,9 +525,10 @@ exports.addToActivityLog=function(requestObject)
 exports.getUsersPassword=function(username)
 {
   var r=Q.defer();
+  console.log("USERNAME IS " + username);
   connection.query(queries.userPassword(username),function(error,rows,fields)
   {
-
+    console.log("PASSWORD IS " + rows);
     if(error) r.reject(error);
     r.resolve(rows);
   });
@@ -574,10 +575,10 @@ exports.getMapLocation=function(requestObject)
   return r.promise;
 };
 //Api call to get patient fields for password reset
-exports.getPatientFieldsForPasswordReset=function(userID)
+exports.getPatientFieldsForPasswordReset=function(email)
 {
   var r=Q.defer();
-  connection.query(queries.getPatientFieldsForPasswordReset(userID),function(error,rows,fields)
+  connection.query(queries.getPatientFieldsForPasswordReset(email),function(error,rows,fields)
   {
     if(error) r.reject(error);
     r.resolve(rows);
