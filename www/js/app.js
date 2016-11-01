@@ -116,7 +116,7 @@ var myApp = angular.module('MUHCApp', ['tmh.dynamicLocale','pascalprecht.transla
                     }]
                 }
             })
-            .state('home', {
+            .state('Home', {
                 url: '/Home',
                 templateUrl: 'views/tabs/tabs.html',
                 controller: 'TabsController',
@@ -125,7 +125,7 @@ var myApp = angular.module('MUHCApp', ['tmh.dynamicLocale','pascalprecht.transla
                     // Auth refers to our $firebaseAuth wrapper in the example above
                     "currentAuth": ["FirebaseService", function(FirebaseService) {
                         // $requireSignIn returns a promise so the resolve waits for it to complete
-                        console.log(FirebaseService.getAuthenticationCredentials());
+                        console.log(FirebaseService.getAuthentication().$requireSignIn());
                         return FirebaseService.getAuthentication().$requireSignIn();
                     }]
                 }
@@ -187,8 +187,8 @@ myApp.run(function ($state, $stateParams,$q, $rootScope,$translate, Patient,$loc
 
     $rootScope.$on('$stateChangeStart',function(event,toState,toParams)
     {
-        var firstName = Patient.getFirstName();
-        if((typeof firstName =='undefined'|| firstName === '')&&toState.name == 'Home')
+        var serialNum = Patient.getUserSerNum();
+        if((typeof serialNum =='undefined'|| serialNum === '')&&toState.name == 'Home')
         {
             $location.path('/init');
         }
