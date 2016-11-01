@@ -47,6 +47,9 @@ myApp.controller('HomeController', ['$state','Appointments', 'CheckinService','$
               Notifications,NavigatorParameters,NativeNotification,NewsBanner,DeviceIdentifiers,
               $anchorScroll,PlanningSteps) {
         NewsBanner.setAlertOffline();
+
+        console.log('Got home safely');
+
         //Check if device identifier has been sent, if not sent, send it to backend.
         var app = document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'https://' ) === -1;
 
