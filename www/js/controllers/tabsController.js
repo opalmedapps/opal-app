@@ -58,7 +58,7 @@ myApp.controller('TabsController',['$scope','$timeout','$translate','$translateP
 
 }]);
 
-myApp.controller('personalTabController',['$scope','$timeout','Appointments','$translate','UserPlanWorkflow','TxTeamMessages','Documents','$location','RequestToServer','UpdateUI','NavigatorParameters','Notifications','Questionnaires',function($scope,$timeout,Appointments,$translate, UserPlanWorkflow,TxTeamMessages,Documents,$location,RequestToServer,UpdateUI,NavigatorParameters,Notifications,Questionnaires){
+myApp.controller('personalTabController',['$scope','$timeout','Appointments','$translate','TxTeamMessages','Documents','$location','RequestToServer','UpdateUI','NavigatorParameters','Notifications','Questionnaires',function($scope,$timeout,Appointments,$translate, TxTeamMessages,Documents,$location,RequestToServer,UpdateUI,NavigatorParameters,Notifications,Questionnaires){
 
     //Its possible for a notification to have been read such as a document since this controller has already been instantiated
     // we will have to check to sync that number on the badges for the tabs on the personal page.
@@ -128,13 +128,13 @@ myApp.controller('personalTabController',['$scope','$timeout','Appointments','$t
             }
         }
         //Setting up status of treament plan
-        if(UserPlanWorkflow.isCompleted())
+        /*if(UserPlanWorkflow.isCompleted())
         {
             $scope.nameCurrentStage="COMPLETED";
         }else{
             var index=UserPlanWorkflow.getNextStageIndex();
             $scope.outOf={index:index, total:6};
-        }
+        }*/
         //Setting up badges
         setNewsNumbers();
     }
