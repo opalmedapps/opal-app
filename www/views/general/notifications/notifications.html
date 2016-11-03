@@ -11,8 +11,8 @@
         </span>
 </ons-pull-hook>-->
 <div ng-hide="noNotifications">
-  <ons-list ng-repeat="notification in notifications | orderBy:'-DateAdded' " ng-click="goToNotification($index,notification)">
-  <ons-list-header class="person-list-header" ng-show="showHeader($index)" style="text-align:right">{{notification.DateAdded|date:'EEE MMM dd yyyy'}}</ons-list-header>
+  <ons-list ng-repeat="notification in notifications" ng-click="goToNotification($index,notification)">
+  <ons-list-header class="person-list-header" ng-show="showHeader($index, notifications.length)" style="text-align:right">{{notification.DateAdded|date:'EEE MMM dd yyyy'}}</ons-list-header>
   <ons-list-item modifier="chevron" class="item" >
     <ons-row align="center" >
       <ons-col width="80px" align="center">
