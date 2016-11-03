@@ -4,7 +4,11 @@
 *Email:davidfherrerar@gmail.com
 */
 var myApp = angular.module('MUHCApp');
-myApp.controller('NotificationsController', ['RequestToServer','Notifications', 'UpdateUI', '$scope', '$timeout','$rootScope', 'UserPreferences', 'Appointments', 'Documents','NavigatorParameters', function (RequestToServer, Notifications, UpdateUI, $scope,$timeout,$rootScope, UserPreferences, Appointments, Documents, NavigatorParameters) {
+myApp.controller('NotificationsController', ['RequestToServer','Notifications', 'UpdateUI',
+  '$scope', '$timeout','$rootScope', 'UserPreferences', 'Appointments',
+  'Documents','NavigatorParameters', 'Permissions',
+  function (RequestToServer, Notifications, UpdateUI, $scope,$timeout,$rootScope,
+            UserPreferences, Appointments, Documents, NavigatorParameters, Permissions) {
   init();
 
   function init()
@@ -15,6 +19,7 @@ myApp.controller('NotificationsController', ['RequestToServer','Notifications', 
     notifications = Notifications.setNotificationsLanguage(notifications);
     $scope.notifications = notifications;
     console.log($scope.notifications);
+    Permissions.enablePermission('WRITE_EXTERNAL_STORAGE', 'Storage access disabled. Unable to write documents.');
   }
 
 
