@@ -41,11 +41,14 @@ handleDisconnect(connection);
 //Queties to obtain the questions and question choices for questionnaires
 var queryQuestions = "SELECT DISTINCT Questionnaire.QuestionnaireSerNum as QuestionnaireDBSerNum, Questionnaire.QuestionnaireName, QuestionnaireQuestion.OrderNum, QuestionnaireQuestion.QuestionnaireQuestionSerNum, Question.QuestionSerNum, Question.isPositiveQuestion, Question.QuestionQuestion as QuestionText_EN, Question.QuestionName as Asseses_EN, Question.QuestionName_FR as Asseses_FR, Question.QuestionQuestion_FR as QuestionText_FR, QuestionType.QuestionType, QuestionType.QuestionTypeSerNum FROM Questionnaire, Question, QuestionType, Patient, QuestionnaireQuestion WHERE QuestionnaireQuestion.QuestionnaireSerNum = Questionnaire.QuestionnaireSerNum AND QuestionnaireQuestion.QuestionSerNum = Question.QuestionSerNum AND Question.QuestionTypeSerNum = QuestionType.QuestionTypeSerNum AND Questionnaire.QuestionnaireSerNum IN ? ORDER BY QuestionnaireDBSerNum, OrderNum";
 var queryQuestionChoices = "SELECT QuestionSerNum, MCSerNum as OrderNum, MCDescription as ChoiceDescription_EN, MCDescription_FR as ChoiceDescription_FR  FROM QuestionMC WHERE QuestionSerNum IN ? UNION ALL SELECT * FROM QuestionCheckbox WHERE QuestionSerNum IN ? UNION ALL SELECT * FROM QuestionMinMax WHERE QuestionSerNum IN ? ORDER BY QuestionSerNum, OrderNum DESC";
-var queryAnswersPatientQuestionnaire = "SELECT QuestionnaireQuestionSerNum,  GROUP_CONCAT(Answer SEPARATOR ', ') as Answer, PatientQuestionnaireSerNum as PatientQuestionnaireDBSerNum FROM Answer WHERE PatientQuestionnaireSerNum IN ? GROUP BY QuestionnaireQuestionSerNum ORDER BY PatientQuestionnaireDBSerNum;"
+var queryAnswersPatientQuestionnaire = "SELECT QuestionnaireQuestionSerNum, Answer.Answer, PatientQuestionnaireSerNum as PatientQuestionnaireDBSerNum FROM Answer WHERE PatientQuestionnaireSerNum IN ? ORDER BY PatientQuestionnaireDBSerNum;"
+
+
+/*SELECT QuestionnaireQuestionSerNum,  GROUP_CONCAT(Answer SEPARATOR ', ') as Answer, PatientQuestionnaireSerNum as PatientQuestionnaireDBSerNum FROM Answer WHERE PatientQuestionnaireSerNum IN ? GROUP BY QuestionnaireQuestionSerNum ORDER BY PatientQuestionnaireDBSerNum;"*/
 exports.getPatientQuestionnaires = function (rows)
 {
   var r = q.defer();
-  console.log(rows);
+  console.log('QUESTIONNAIRE ROWS=====================================================',rows);
   if(rows.length!== 0)
   {
     var questionnaireDBSerNumArray = getQuestionnaireDBSerNums(rows);
@@ -168,6 +171,7 @@ function attachingQuestionnaireAnswers(opalDB)
   {
     var quer = connection.query(queryAnswersPatientQuestionnaire, [[patientQuestionnaireSerNumArray]],function(err, rows, fields)
     {
+      console.log("QUESTIONNAIRE ANSWERS======================================================", rows);
       console.log(quer.sql);
       console.log('line 169', err);
       if(err) r.reject(err);

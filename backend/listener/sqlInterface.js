@@ -67,7 +67,7 @@ var requestMappings=
   {
     sql:queries.patientDocumentTableFields(),
     numberOfLastUpdated:2,
-    processFunction:LoadDocuments,
+    //processFunction:LoadDocuments,
     table:'Document',
     serNum:'DocumentSerNum'
   },
@@ -164,6 +164,7 @@ exports.runSqlQuery = function(query, parameters, processRawFunction)
           r.resolve(result);
         });
       }else{
+        //console.log(rows);
         r.resolve(rows);
       }
     }else{
@@ -229,6 +230,9 @@ function processSelectRequest(table, userId, timestamp)
      exports.runSqlQuery(requestMappingObject.sql,paramArray,
       requestMappingObject.processFunction).then(function(rows)
       {
+        if (table === 'Questionnaires'){
+          console.log(rows);
+        }
          r.resolve(rows);
       },function(err)
       {
