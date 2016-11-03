@@ -41,14 +41,18 @@ var myApp = angular.module('MUHCApp');
 myApp.controller('HomeController', ['$state','Appointments', 'CheckinService','$scope','Patient',
     'UpdateUI', '$timeout','$filter','$rootScope', 'tmhDynamicLocale','$translate',
     '$location','Notifications','NavigatorParameters','NativeNotification',
-    'NewsBanner','DeviceIdentifiers','$anchorScroll', 'PlanningSteps',
+    'NewsBanner','DeviceIdentifiers','$anchorScroll', 'PlanningSteps', 'Permissions',
     function ($state,Appointments,CheckinService, $scope, Patient,UpdateUI,$timeout,
               $filter, $rootScope,tmhDynamicLocale, $translate,$location,
               Notifications,NavigatorParameters,NativeNotification,NewsBanner,DeviceIdentifiers,
-              $anchorScroll,PlanningSteps) {
+              $anchorScroll,PlanningSteps, Permissions) {
+
         NewsBanner.setAlertOffline();
 
         console.log('Got home safely');
+
+        // Need to allow external storage write for documents notifications.
+        Permissions.enablePermission('WRITE_EXTERNAL_STORAGE', 'Storage access disabled. Unable to write documents.');
 
         //Check if device identifier has been sent, if not sent, send it to backend.
         var app = document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'https://' ) === -1;

@@ -13,10 +13,10 @@
         .module('MUHCApp')
         .controller('StatusController', StatusController);
 
-    StatusController.$inject = ['UserPlanWorkflow','$anchorScroll','$location','Appointments',
+    StatusController.$inject = ['$anchorScroll','$location','Appointments',
         'NavigatorParameters', '$filter', 'PlanningSteps'];
 
-    function StatusController(UserPlanWorkflow,$anchorScroll,$location,
+    function StatusController($anchorScroll,$location,
                               Appointments,NavigatorParameters,$filter, PlanningSteps)
     {
         /* jshint validthis: true */
