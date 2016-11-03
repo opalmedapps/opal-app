@@ -19,9 +19,9 @@ myApp.service('LocalStorage',['UserAuthorizationInfo', 'EncryptionService',funct
 			user=window.localStorage.getItem('UserAuthorizationInfo');
 			 user=JSON.parse(user);
 			 storage=window.localStorage.getItem(user.UserName);
-			 console.log(storage);
+			 //console.log(storage);
 			 storage = JSON.parse(storage);
-			 console.log(storage);
+			 //console.log(storage);
 			 EncryptionService.decryptData(storage);
 			 return storage;
 		}else{

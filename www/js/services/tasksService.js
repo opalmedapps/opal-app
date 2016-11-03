@@ -11,10 +11,10 @@
         .module('MUHCApp')
         .factory('Tasks', Tasks);
 
-    Tasks.$inject = ['Storage', '$filter'];
+    Tasks.$inject = ['Storage', '$filter', 'LocalStorage'];
 
     /* @ngInject */
-    function Tasks(Storage, $filter) {
+    function Tasks(Storage, $filter, LocalStorage) {
 
         var planningTasks = [];
 
@@ -42,7 +42,7 @@
                 tasks[task].DueDateTime = convertDateToJSDate(tasks[task].DueDateTime);
             }
             planningTasks = tasks;
-            //Storage.write('tasks', planningTasks);
+            LocalStorage.WriteToLocalStorage('Tasks', planningTasks);
             console.log(planningTasks);
         }
 
@@ -58,7 +58,7 @@
         }
 
         function getPlanningTasksFromStorage(){
-            return Storage.read('tasks');
+            return LocalStorage.ReadLocalStorage('Tasks');
         }
 
         /**

@@ -76,11 +76,8 @@
             </div>
         </div>
         <div style="padding:2px">
-            <div class="my-home-profile" ng-show="!status.noTreatmentPlan" style="padding:0">
+            <div class="my-home-profile" ng-hide="status.noData" style="padding:0">
                 <div id="divTreatmentPlan" style="overflow-y:scroll">
-
-
-
 
                     <ons-list class="plan-list" style="margin:0;padding:0">
                         <ons-list-item class="plan" modifier="tappable" ng-click="status.goTo(status.eventType, events[0])" ng-repeat="(step, events) in status.events" id="treatmentSessions{{$index}}">
