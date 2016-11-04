@@ -32,7 +32,7 @@ function listenAndSend(){
     ref.on('child_added', function(snapshot){
         snapshot.forEach(function(childSnapshot){
             var headers = {key: childSnapshot.key(),objectRequest: childSnapshot.val()}
-            var response = processRequest(headers);
+            //var response = processRequest(headers);
             if(!(snapshot.key() === "users" || snapshot.key() === "passwordResetResponses")){
                 console.log('Got' + snapshot.key());
                 //uploadToFirebase(response, snapshot.key());
