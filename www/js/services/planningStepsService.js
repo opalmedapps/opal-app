@@ -23,10 +23,10 @@
             getPlanningSequence: getPlanningSequence,
             initializePlanningSequence: initializePlanningSequence,
             getCurrentStep: getCurrentStep,
-            isCompleted: isCompleted,
+            isCompleted: isCompleted
         };
 
-        // Initilaize the sequence
+        // Initilaize the sequence when app is loaded
         initializePlanningSequence();
 
         return service;
@@ -52,7 +52,6 @@
 
                 } else if (planningTasks[task].hasOwnProperty('AppointmentType_EN')){
                     sequence[planningTasks[task].AppointmentType_EN].push(planningTasks[task]);
-
                 }
             }
             currentStep = planningTasks[task];
@@ -71,8 +70,7 @@
             for (var i = appointments.length-1; i!=0; i--){
                 //console.log(appointments[i]);
                 if (appointments[i].AppointmentType_EN === 'CT for Radiotherapy Planning'
-                    && appointments[i].ScheduledStartTime
-                        < mdTask.physicianTask.DueDateTime) {
+                    && appointments[i].ScheduledStartTime < mdTask.physicianTask.DueDateTime) {
 
                     ctAppointment = appointments[i];
                     break;

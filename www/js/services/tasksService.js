@@ -11,10 +11,10 @@
         .module('MUHCApp')
         .factory('Tasks', Tasks);
 
-    Tasks.$inject = ['Storage', '$filter', 'LocalStorage'];
+    Tasks.$inject = ['LocalStorage'];
 
     /* @ngInject */
-    function Tasks(Storage, $filter, LocalStorage) {
+    function Tasks(LocalStorage) {
 
         var planningTasks = [];
 
@@ -47,11 +47,12 @@
         }
 
         /**
-         *@ngdoc method
-         *@name getPlanningTasks
-         *@methodOf MUHCApp.services:Tasks
-         *@returns {Array} the array of planning tasks.
-         *@description Returns an array of the planning tasks
+         * @ngdoc method
+         * @name getPlanningTasks
+         * @methodOf MUHCApp.services:Tasks
+         * @returns {Array} the array of planning tasks.
+         * @description Returns an array of the planning tasks
+         * @returns
          **/
         function getPlanningTasks() {
             return planningTasks;
@@ -62,21 +63,24 @@
         }
 
         /**
-         *@ngdoc method
-         *@name deletePlanningTasks
-         *@methodOf MUHCApp.services:Tasks
-         *@description Removes the tasks from localStorage.
+         * @ngdoc method
+         * @name deletePlanningTasks
+         * @methodOf MUHCApp.services:Tasks
+         * @description Sets the local storage value to null
          **/
         function deletePlanningTasks(){
-            //Storage.remove('tasks')
-            tasks = [];
+            planningTasks = null;
+            LocalStorage.WriteToLocalStorage('Tasks', planningTasks);
         }
 
-        function getTasksInCourse(courseID){
-
-        }
-
-        // Scans the task list for Physician Plan Preparation and returns the most recent task.
+        /**
+         * @ngdoc method
+         * @name setPlanningTasks
+         * @methodOf MUHCApp.services:Tasks
+         * @param {Array} tasks Array of task objects.
+         * @description Sets the tasks member in the model and writes it to localstorage.
+         * @returns {Object} The task and its index in the task array.
+        **/
         function getRecentPhysicianTask(){
             var physicianTask = planningTasks[0];
             var index = 0;
