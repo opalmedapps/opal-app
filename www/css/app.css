@@ -841,7 +841,7 @@ a.muhcapp-home-account:link, a.muhcapp-home-account:hover{
 }
 
 .settings-list {
-  margin-top: 10px;
+  margin-top: 0px;
 }
 
 .list-item-note {
@@ -1573,9 +1573,6 @@ Button appointments
    height: 69px;
    width:69px;
    border-radius: 50%;
- }
- .settings-list {
-     margin-top: 10px;
  }
 
  .item {

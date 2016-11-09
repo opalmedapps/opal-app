@@ -361,9 +361,9 @@ myApp.service('Notifications',['$filter','RequestToServer','LocalStorage','Annou
         {
             var language = UserPreferences.getLanguage();
             for (var i = notifications.length-1; i >=0; i--) {
-                console.log(notifications[i]);
+                //console.log(notifications[i]);
                 notifications[i].Title = (language=='EN') ?   notifications[i].Name_EN : notifications[i].Name_FR;
-                console.log(notifications[i].RefTableRowSerNum);
+                //console.log(notifications[i].RefTableRowSerNum);
                 try{
                     if(typeof notifications[i].Content == 'undefined') notifications[i].Content = notificationTypes[notifications[i].NotificationType].namesFunction(notifications[i].RefTableRowSerNum);
                     notifications[i].Desc = (language=='EN') ?  notifications[i].Content.NameEN : notifications[i].Content.NameFR;
