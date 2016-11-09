@@ -29,16 +29,12 @@
 
     <ons-list>
         <ons-list-item class="item">
-            <div style="line-height:1" align="center">
-                <header>
-                    <strong><span class="item-title" ng-class="fontSizeTitle">{{documentObject.Title}}</span></strong>
-
-                </header>
-                <p class="item-desc" ng-class="fontSizeDesc"><strong>Added to chart on:</strong> <br>{{documentObject.DateAdded|formatDateAppointmentTask}}</p>
-                <p class="item-desc" ng-class="fontSizeDesc"><strong>Last updated on:</strong> <br>{{documentObject.LastUpdated|formatDateAppointmentTask}}</p>
-                <p class="item-desc" ng-class="fontSizeDesc">{{documentObject.Description}}</p>
+            <div style="line-height:1">
+                <p class="item-desc" ng-class="fontSizeDesc"><strong>Created on:</strong> {{documentObject.DateAdded|formatDateAppointmentTask}}</p>
+                <p class="item-desc" ng-class="fontSizeDesc"><strong>Updated on:</strong> {{documentObject.LastUpdated|formatDateAppointmentTask}}</p>
+                <p class="item-desc" ng-class="fontSizeDesc"><strong>Signed by:</strong> INSERT PERSON HERE</p>
+                <p class="item-desc" ng-class="fontSizeDesc"><strong>About this document</strong></p>
             </div>
-
         </ons-list-item>
     </ons-list>
     >
