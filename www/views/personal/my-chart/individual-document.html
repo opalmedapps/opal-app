@@ -1,7 +1,7 @@
 <ons-page ng-controller="SingleDocumentController">
     <ons-toolbar >
         <div class="left"><ons-back-button>{{"BACK"|translate}}</ons-back-button></div>
-        <div class="center">{{"DOCUMENT"|translate}}</div>
+        <div class="center">{{documentObject.Title|translate}}</div>
         <div class="right">
             <ons-toolbar-button ng-click="popoverSharing.show('#buttonShareMaterial');" id="buttonShareMaterial">
                 <i class="ion-share" style="font-size:30px"></i>
@@ -9,20 +9,16 @@
         </div>
     </ons-toolbar>
 
-    <!--<ons-list class="settings-list">
-<ons-list-item class="item" ">-->
     <div align="center" ng-hide="loading" style="margin:5vh">
-
         <img class="animated pulse" height="50%" width="50%" ng-src="{{documentObject.PreviewContent}}" ng-click="openDocument()">
 
     </div>
     <div ng-show="loading" align="center" style="margin:10px">
-        <div>
-            <svg class="progress-circular">
-                <circle class="progress-circular__primary" cx="50%" cy="50%" r="40%" fill="none" stroke-width="10%" stroke-miterlimit="10"/>
-            </svg>
-        </div>
+        <svg class="progress-circular">
+            <circle class="progress-circular__primary" cx="50%" cy="50%" r="40%" fill="none" stroke-width="10%" stroke-miterlimit="10"/>
+        </svg>
     </div>
+
     <div ng-show="!loading&&errorDownload">
         <p clas="lucent">{{"ERROROBTAININGDOCUMENT"|translate}}</p>
     </div>
