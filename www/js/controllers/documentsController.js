@@ -305,9 +305,9 @@ myApp.controller('SingleDocumentController', ['NavigatorParameters','Documents',
             window.open(image.Content);
         }
     };
-    $scope.saveDocument = function()
-    {
-
+    $scope.goToEducationalMaterial = function () {
+        // Need to provide
+        EducationalMaterial.openEducationalMaterialDetails($scope.edumaterial);
     };
     /*var gesturableImg = new ImgTouchCanvas({
      canvas: document.getElementById('mycanvas2'),
