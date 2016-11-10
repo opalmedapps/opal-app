@@ -3,6 +3,7 @@
 	"LOGIN": "Login",
 	"SIGNINDIFFERENTACCOUNT":"Sign in with a different account",
 	"FORGOTPASSWORD":"Forgot Password",
+	"INVALID_EMAIL_OR_PWD":"Email or password is incorrect.",
 	"INVALID_USER":"User does not exist",
 	"INVALID_PASSWORD":"Invalid Password",
 	"INVALID_EMAIL":"Invalid e-mail",
