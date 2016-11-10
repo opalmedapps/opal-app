@@ -3,6 +3,7 @@
 	"LOGIN": "Connexion",
 	"FORGOTPASSWORD":"Mot de passe oublié",
 	"INVALID_USER":"L'utilisateur n'existe pas!",
+	"INVALID_EMAIL_OR_PWD":"Addresse courriel ou mot de passe invalide",
 	"INVALID_PASSWORD":"Mot de passe incorrect!",
 	"INVALID_EMAIL":"Email invalide!",
 	"LIMITS_EXCEEDED":"Limite de mot de passe dépassé, essayez de réinitialiser votre mot de passe",

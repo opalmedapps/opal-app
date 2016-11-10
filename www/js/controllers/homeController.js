@@ -217,9 +217,9 @@ myApp.controller('HomeController', ['$state','Appointments', 'CheckinService','$
             } else if (Appointments.isThereNextTreatment()){
                 $scope.statusDescription = "INTREATMENT";
             } else if (PlanningSteps.isCompleted()){
-                $scope.statusDescription = "PLANNING_COMPLETE";
+                $scope.statusDescription = null;
             } else {
-                $scope.statusDescription = "NOPLANNING";
+                $scope.statusDescription = null;
             }
         }
         function setTabViews()

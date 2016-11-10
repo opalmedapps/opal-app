@@ -59,11 +59,11 @@ myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$root
         if(typeof email=='undefined'||email ==='')
         {
             $scope.alert.type='danger';
-            $scope.alert.content="INVALID_EMAIL";
+            $scope.alert.content="INVALID_EMAIL_OR_PWD";
         }else if(typeof password=='undefined'||password ==='')
         {
             $scope.alert.type='danger';
-            $scope.alert.content="INVALID_PASSWORD";
+            $scope.alert.content="INVALID_EMAIL_OR_PWD";
         }else{
             //Getting authentication status
             var auth = FirebaseService.getAuthenticationCredentials();
@@ -171,19 +171,10 @@ myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$root
         console.log(error);
         switch (error.code) {
             case "auth/invalid-email":
-                console.log("The specified user account email is invalid.");
-                $timeout(function(){
-                    $scope.alert.content="INVALID_EMAIL";
-                });
-                break;
             case "auth/wrong-password":
-                $timeout(function(){
-                    $scope.alert.content="INVALID_PASSWORD";
-                });
-                break;
             case "auth/user-not-found":
                 $timeout(function(){
-                    $scope.alert.content="INVALID_USER";
+                    $scope.alert.content="INVALID_EMAIL_OR_PWD";
                 });
                 break;
             case "LIMITS_EXCEEDED":
