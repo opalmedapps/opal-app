@@ -216,7 +216,7 @@ myApp.factory('CheckinService', ['$q', 'RequestToServer', 'Appointments', '$time
               Appointments.setAppointmentCheckin(nextAppointment.AppointmentSerNum);
               var objectToSend = angular.copy(positionCheckinAppointment);
               objectToSend.AppointmentSerNum = nextAppointment.AppointmentSerNum;
-              liveCheckinUpdates(nextAppointment);
+              //liveCheckinUpdates(nextAppointment);
               r.resolve(data);
             }else{
               r.reject(data);
