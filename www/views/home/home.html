@@ -69,21 +69,21 @@
         <div style="margin-top:0px;position:relative;z-index:3;padding-top:0px;" >
             <div style="margin-top:10px;position:relative;z-index:3;padding-top:5px;" class="settings-header" ng-class="fontSizeTitle">{{"OVERVIEW"|translate}}</div>
             <ons-list style="margin-top:5px;position:relative;z-index:2">
-                <!--CHECKIN TO APPOINTMENT-->
-                <ons-list-item modifier="chevron" class="item" ng-show="showCheckin" ng-click="goToNextAppointment(checkInAppointment)">
+                <!--CHECKIN TO APPOINTMENTS-->
+                <ons-list-item modifier="chevron" class="item" ng-repeat="appointment in todaysAppointments" ng-show="showCheckin" ng-click="goToNextAppointment(appointment)">
                     <ons-row align="center">
                         <ons-col width="60px" align="center">
                             <div>
-                                <i class="ion-android-checkbox-outline iconHomeView" style="color:orange"></i><span class="notification" ng-show="checkInAppointment.Checkin == 0">1</span>
+                                <i class="ion-android-checkbox-outline iconHomeView" style="color:orange"></i><span class="notification" ng-show="appointment.Checkin == 0">1</span>
                             </div>
                         </ons-col>
                         <ons-col>
                             <header>
 
-                                <span class="item-title" ng-class="fontSizeTitle" translate = "{{checkInMessage}}"></span>
+                                <span class="item-title" ng-class="fontSizeTitle" translate = "{{appointment.checkInMessage}}"></span>
                             </header>
-                            <p class="item-desc" ng-class="fontSizeDesc">{{checkInAppointment.ScheduledStartTime|formatDateAppointmentTask}} </p>
-                            <p class="item-desc" ng-class="fontSizeDesc" style="color:orange" ng-show ="checkinEstimate&&showHomeScreenUpdate">{{"ESTIMATEDWAIT"|translate}}: {{checkinEstimate}} minutes</p>
+                            <p class="item-desc" ng-class="fontSizeDesc">{{appointment.ScheduledStartTime|formatDateAppointmentTask}} </p>
+                            <!--<p class="item-desc" ng-class="fontSizeDesc" style="color:orange" ng-show ="checkinEstimate&&showHomeScreenUpdate">{{"ESTIMATEDWAIT"|translate}}: {{checkinEstimate}} minutes</p>-->
                         </ons-col>
                     </ons-row>
                 </ons-list-item>

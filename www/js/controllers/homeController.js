@@ -259,40 +259,39 @@ myApp.controller('HomeController', ['$state','Appointments', 'CheckinService','$
         function setUpCheckin()
         {
             //Get checkin appointment for the day, gets the closest appointment to right now
-            var checkInAppointment = Appointments.getCheckinAppointment();
-            console.log(checkInAppointment);
-            if(checkInAppointment)
+            var todaysAppointmentsToCheckIn = Appointments.getCheckinAppointment();
+            console.log(todaysAppointmentsToCheckIn);
+            $scope.todaysAppointments = todaysAppointmentsToCheckIn;
+            if(todaysAppointmentsToCheckIn)
             {
-                //If there is an appointment shows checkin tab on home page otherwise it does not
-                $scope.showCheckin = true;
-                $scope.checkInAppointment = checkInAppointment;
-                //Case 1:Appointment checkin is 0, not checked-in
-                if(checkInAppointment.Checkin == '0')
-                {
-                    //Checkin message before appointment gets set and is changed only if appointment was checked into already from Aria
-                    $rootScope.checkInMessage = "CHECKIN_MESSAGE_BEFORE";
-                    $rootScope.showHomeScreenUpdate = false;
+                for (appointment in todaysAppointmentsToCheckIn) {
+                    //If there is an appointment shows checkin tab on home page otherwise it does not
+                    $scope.showCheckin = true;
+                    //Case 1:Appointment checkin is 0, not checked-in
+                    if (todaysAppointmentsToCheckIn[appointment].Checkin == '0') {
+                        //Checkin message before appointment gets set and is changed only if appointment was checked into already from Aria
+                        todaysAppointmentsToCheckIn[appointment].checkInMessage = "CHECKIN_MESSAGE_BEFORE";
+                        $rootScope.showHomeScreenUpdate = false;
 
-                    //Queries the server to find out whether or not an appointment was checked into
-                    CheckinService.checkCheckinServer(checkInAppointment).then(function(data)
-                    {
-                        //If it has, then it simply changes the message to checkedin and queries to get an update
-                        if(data)
-                        {
-                            console.log('Returning home');
-                            $timeout(function()
-                            {
-                                $rootScope.checkInMessage = "CHECKIN_MESSAGE_AFTER";
-                                $rootScope.showHomeScreenUpdate = true;
-                                CheckinService.getCheckinUpdates(checkInAppointment);
-                            });
-                        }
-                    });
-                }else{
-                    //Case:2 Appointment already checked-in show the message for 'you are checked in...' and query for estimate
-                    $rootScope.checkInMessage = "CHECKIN_MESSAGE_AFTER";
-                    $rootScope.showHomeScreenUpdate = true;
-                    CheckinService.getCheckinUpdates(checkInAppointment);
+                        //Queries the server to find out whether or not an appointment was checked into
+                        CheckinService.checkCheckinServer(appointment).then(function (data) {
+                            //If it has, then it simply changes the message to checkedin and queries to get an update
+                            if (data) {
+                                console.log('Returning home');
+                                $timeout(function () {
+                                    todaysAppointmentsToCheckIn[appointment].checkInMessage = "CHECKIN_MESSAGE_AFTER";
+                                    $rootScope.showHomeScreenUpdate = true;
+                                    //CheckinService.getCheckinUpdates(appointment);
+                                });
+                            }
+                        });
+                    } else {
+                        //Case:2 Appointment already checked-in show the message for 'you are checked in...' and query for estimate
+                        todaysAppointmentsToCheckIn[appointment].checkInMessage = "CHECKIN_MESSAGE_AFTER";
+                        $rootScope.showHomeScreenUpdate = true;
+                        //CheckinService.getCheckinUpdates(appointment);
+                    }
+                    //console.log(todaysAppointmentsToCheckIn[appointment].checkInMessage);
                 }
             }else{
                 //Case where there are no appointments that day
