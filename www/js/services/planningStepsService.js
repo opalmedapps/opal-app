@@ -70,7 +70,8 @@
             for (var i = appointments.length-1; i!=0; i--){
                 //console.log(appointments[i]);
                 if (appointments[i].AppointmentType_EN === 'CT for Radiotherapy Planning'
-                    && appointments[i].ScheduledStartTime < mdTask.physicianTask.DueDateTime) {
+                    && appointments[i].ScheduledStartTime < mdTask.physicianTask.DueDateTime
+                    && appointments[i].Status.toLowerCase().indexOf('completed') !== -1) {
 
                     ctAppointment = appointments[i];
                     break;

@@ -130,11 +130,11 @@ myApp.controller('CalendarController', ['Appointments', '$scope','$timeout', '$f
           }
         }
         return 'topListAnchor';
-      } 
+      }
     }else{
        return 'topListAnchor';
     }
-   
+
 
 
   }
@@ -293,7 +293,7 @@ myApp.controller('CalendarController', ['Appointments', '$scope','$timeout', '$f
       }else{
         return false;
       }
-      
+
     };
 
     $scope.setHeaderPickedDay=function(index)
