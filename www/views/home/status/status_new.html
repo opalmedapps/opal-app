@@ -43,18 +43,13 @@
                                             <div ng-show="status.eventType === 'plan'">
                                                 <div ng-show="!status.planningCompleted" align="middle" style="margin-left:5px; vertical-align: middle">
                                                     {{status.currentEvent}}
-                                                    <!--<br>
-                                                    <strong>{{"STARTTREATMENT"|translate}}:</strong>
-                                                    <br> {{stages[stages.length-1].Date|date:'MMM d'}}
-                                                    <br>
-                                                    <span style="color:grey;font-size:13px" >({{"ESTIMATED"|translate}})</span>-->
                                                 </div>
                                                 <div ng-show="status.planningCompleted" align="middle" style="margin-left:5px">
                                                     <p><i class="ion-checkmark-circled iconStatusBox"></i>{{"TREATMENTPLANCOMPLETEDON"|translate}}
                                                         <br><strong>{{status.completionDate|date:'EEE MMM dd yyyy'}}</strong></p>
                                                 </div>
                                             </div>
-                                            <div ng-show="status.eventType === 'treatment'">
+                                            <!--<div ng-show="status.eventType === 'treatment'">
                                                 <div ng-show="!status.treatmentCompleted" align="middle" style="margin-left:5px; vertical-align: middle">
                                                     <strong>{{"UPCOMING"|translate}}:</strong><br>
                                                     {{status.currentEvent.Title}}<br>
@@ -65,7 +60,7 @@
                                                     <p><i class="ion-checkmark-circled iconStatusBox"></i>{{"TREATMENTPLANCOMPLETEDON"|translate}}
                                                         <br><strong>{{status.endingDate|date:'EEE MMM dd yyyy'}}</strong></p>
                                                 </div>
-                                            </div>
+                                            </div>-->
                                         </div>
                                     </div>
                                 </div>

@@ -216,6 +216,8 @@ myApp.controller('HomeController', ['$state','Appointments', 'CheckinService','$
                 $scope.statusDescription = "PLANNING";
             } else if (Appointments.isThereNextTreatment()){
                 $scope.statusDescription = "INTREATMENT";
+            } else if (PlanningSteps.isCompleted()){
+                $scope.statusDescription = "PLANNING_COMPLETE";
             } else {
                 $scope.statusDescription = "NOPLANNING";
             }
