@@ -39,7 +39,8 @@
          **/
         function setPlanningTasks(tasks) {
             for (var task in tasks){
-                tasks[task].DueDateTime = convertDateToJSDate(tasks[task].DueDateTime);
+                // Convert string date to JS date
+                tasks[task].DueDateTime = new Date(tasks[task].DueDateTime);
             }
             planningTasks = tasks;
             LocalStorage.WriteToLocalStorage('Tasks', planningTasks);
@@ -97,11 +98,6 @@
                 physicianTask: physicianTask,
                 index: mdIndex
             };
-        }
-
-        // Helper function that converts a string date to JS Date
-        function convertDateToJSDate(stringDate){
-            return new Date(stringDate);
         }
 
         // Returns all tasks starting from the most recent Physician plan prep.
