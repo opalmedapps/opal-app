@@ -1,0 +1,62 @@
+/**/
+
+.login-form {
+  text-align: center;
+  width: 80%;
+  margin: 60px auto 0;
+}
+
+input[type=email], input[type=password] {
+  display: block;
+  width: 100%;
+  margin: 0 auto;
+  outline: none;
+  height: 100%;
+  padding-top: 15px;
+  padding-bottom: 16px;
+}
+
+.login-button {
+  width: 100%;
+  margin: 0 auto;
+}
+
+.forgot-password {
+  display: block;
+  margin: 8px auto 0 auto;
+  font-size: 14px;
+}
+/* Lab results specific classes */
+
+.lab-results-new-result {
+  display: inline;
+}
+
+.lab-results-test-high {
+  color: red;
+}
+
+.lab-results-test-low {
+  color: orange;
+}
+
+.list-item-note {
+  position: absolute;
+  right: 36px;
+  top: 20px;
+  font-size: 14px;
+}
+
+.lucent {
+  opacity: 0.4;
+}
+.contact-block {
+  background-color: white;
+  margin: 12px 8px 12px 8px;
+  border: 1px solid #ddd;
+  border-top: none;
+  -webkit-border-radius: 4px;
+  border-radius: 2px;
+  background-image: none;
+  box-shadow: 0 3px 2px -2px rgba(0, 0, 0, 0.33);
+}
