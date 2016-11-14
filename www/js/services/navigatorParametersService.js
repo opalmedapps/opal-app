@@ -32,7 +32,7 @@ myApp.service('NavigatorParameters',function(){
 		*@ngdoc method
 		*@name getParameters
 		*@methodOf MUHCApp.service:NavigatorParameters
-		*@return {Object} Returns parameter object and reinstantiates the object as an empty object.
+		*@return {Object} Returns parameter object.
 		**/
     getParameters:function()
     {
