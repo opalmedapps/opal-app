@@ -46,7 +46,7 @@
                                                 </div>
                                                 <div ng-show="status.planningCompleted" align="middle" style="margin-left:5px">
                                                     <p><i class="ion-checkmark-circled iconStatusBox"></i>{{"TREATMENTPLANCOMPLETEDON"|translate}}
-                                                        <br><strong>{{status.completionDate|date:'EEE MMM dd yyyy'}}</strong></p>
+                                                        <br><strong>{{status.completionDate|date:'fullDate'}}</strong></p>
                                                 </div>
                                             </div>
                                             <!--<div ng-show="status.eventType === 'treatment'">
@@ -89,7 +89,7 @@
                                     <div class="plan-info" ng-class="fontSizeDesc">
                                         <div ng-if="(status.eventIndex > status.stepMapping[step] && (events[0].ScheduledStartTime || events[0].DueDateTime)< status.today)">
                                             <strong>{{"COMPLETED"|translate}}: </strong>
-                                            {{(events[0].ScheduledStartTime || events[0].DueDateTime)|date:'EEE MMM dd yyyy'}}
+                                            {{(events[0].ScheduledStartTime || events[0].DueDateTime)|date:'fullDate'}}
                                         </div>
                                         <div ng-if="status.eventIndex == status.stepMapping[step]">
                                             <strong>{{"PENDING"|translate}} </strong>

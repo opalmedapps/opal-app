@@ -9,8 +9,8 @@
   "LIMITS_EXCEEDED":"Limite de mot de passe dépassé, essayez de réinitialiser votre mot de passe",
   "SIGNINDIFFERENTACCOUNT":"Se connecter avec un compte différent",
   "INTERNETERROR":"Erreur de serveur, vérifiez votre connexion Internet.",
-  "EMAILPASSWORDSENT":"Mot de passe réinitialisé avec succès, vérifiez votre email pour votre mot de passe temporaire!",
-  "ENTEREMAIL":"Entrez votre adresse email:",
+  "EMAILPASSWORDSENT":"Mot de passe réinitialisé avec succès, vérifiez votre courriel pour votre mot de passe temporaire!",
+  "ENTEREMAIL":"Entrez votre adresse corriel:",
   "CANCERCENTER":"Centre du cancer des Cèdres",
   "RESETPASSWORD":"Réinitialiser le mot de Passe",
   "LOADING":"Chargement",
@@ -64,7 +64,9 @@
   "ERROROBTAININGDOCUMENT":"Erreur obtenir le document à partir du serveur",
   "MUHC": "CUSM",
   "SECURE_PHONE": "N'oubliez pas de protéger votre appareil avec un mot de passe!",
-  "UNATTENDED": "Ne laisser pas l'appareil tout seul."
+  "UNATTENDED": "Ne laissez pas votre appareil sans surveillance.",
+  "PASSWORD": "Mot de passe",
+  "EMAIL": "Courriel"
 
 
 

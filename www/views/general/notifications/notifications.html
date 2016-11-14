@@ -13,7 +13,7 @@
     <div ng-hide="noNotifications">
         <ons-list ng-repeat="notification in notifications" ng-click="goToNotification($index,notification)">
             <ons-list-header class="person-list-header" ng-show="showHeader($index, notifications.length)" ng-class="fontSizeTitle">
-                {{notification.DateAdded|standardDate}}
+                {{notification.DateAdded|date:'fullDate'}}
             </ons-list-header>
             <ons-list-item modifier="chevron" class="item" >
                 <ons-row align="center" >
