@@ -204,7 +204,8 @@
   "ERROROBTAININGDOCUMENT":"Erreur obtenir le document à partir du serveur",
   "MAPS": "Plan",
   "UNATTENDED": "Ne laissez pas votre appareil sans surveillance.",
-  "MUHC": "CUSM"
+  "MUHC": "CUSM",
+  "PLANNING_TITLE": "Planification"
 
 
 
