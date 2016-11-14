@@ -36,9 +36,9 @@ myApp.service('NavigatorParameters',function(){
 		**/
     getParameters:function()
     {
-      var object=angular.copy(parameters);
-      parameters={};
-      return object;
+      return parameters;
+      /*parameters={};
+      return object;*/
     }
   };
 
