@@ -40,27 +40,27 @@ $provide.value("$locale", {
       "d\u00e9cembre"
     ],
     "SHORTDAY": [
-      "dim.",
-      "lun.",
-      "mar.",
-      "mer.",
-      "jeu.",
-      "ven.",
-      "sam."
+      "Dim",
+      "Lun",
+      "Mar",
+      "Mer",
+      "Jeu",
+      "Ven",
+      "Sam"
     ],
     "SHORTMONTH": [
-      "janv.",
-      "f\u00e9vr.",
+      "janv",
+      "f\u00e9vr",
       "mars",
-      "avr.",
+      "avr",
       "mai",
       "juin",
-      "juil.",
+      "juil",
       "ao\u00fbt",
-      "sept.",
-      "oct.",
-      "nov.",
-      "d\u00e9c."
+      "sept",
+      "oct",
+      "nov",
+      "d\u00e9c"
     ],
     "WEEKENDRANGE": [
       5,

@@ -170,7 +170,8 @@
   "LOCKEDOUT":"Locked out due to inactivity",
   "ERRORCONTACTINGHOSPITAL":"Error contacting the hospital. Try again later",
   "AUTHENTICATIONERROR":"Authentication error, please login again",
-  "ERROROBTAININGDOCUMENT":"Error obtaining document from server"
+  "ERROROBTAININGDOCUMENT":"Error obtaining document from server",
+  "MAPS": "Map"
 
 
 

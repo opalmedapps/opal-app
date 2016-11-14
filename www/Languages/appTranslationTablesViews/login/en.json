@@ -2,7 +2,7 @@
 	"HEADER_MESSAGE_LOGIN":"Retrieve your data!",
 	"LOGIN": "Login",
 	"SIGNINDIFFERENTACCOUNT":"Sign in with a different account",
-	"FORGOTPASSWORD":"Forgot Password",
+	"FORGOTPASSWORD":"Forgot Password?",
 	"INVALID_EMAIL_OR_PWD":"Email or password is incorrect.",
 	"INVALID_USER":"User does not exist",
 	"INVALID_PASSWORD":"Invalid Password",
@@ -61,7 +61,10 @@
 	"LOCKEDOUT":"Locked out due to inactivity",
 	"ERRORCONTACTINGHOSPITAL":"Error connecting with the hospital, contact hospital",
 	"AUTHENTICATIONERROR":"Authentication error, please login again",
-	"ERROROBTAININGDOCUMENT":"Error obtaining document from server"
+	"ERROROBTAININGDOCUMENT":"Error obtaining document from server",
+	"MUHC": "MUHC",
+	"SECURE_PHONE": "Remember to secure your information by protecting your phone with a passphrase!",
+	"UNATTENDED": "Do not leave your phone unattended."
 
 
 
