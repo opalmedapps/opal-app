@@ -115,27 +115,27 @@ myApp.controller('HomeController', ['$state','Appointments', 'CheckinService','$
             setUpCheckin();
         }
         /*$scope.goToView=function(param)
-        {
-            if(Appointments.isThereNextAppointment())
-            {
-                if(UserPlanWorkflow.isCompleted())
-                {
-                    //Status goes to next appointment details
-                    homeNavigator.pushPage('views/personal/appointment/individual-appointment.html');
-                }else{
-                    homeNavigator.pushPage('views/personal/treatment-plan/individual-stage.html');
-                }
-            }else{
-                if(UserPlanWorkflow.isCompleted())
-                {
-                    //set active tab to personal, no future appointments, treatment plan completed
-                    tabbar.setActiveTab(1);
-                }else{
-                    homeNavigator.pushPage('views/personal/treatment-plan/individual-stage.html');
+         {
+         if(Appointments.isThereNextAppointment())
+         {
+         if(UserPlanWorkflow.isCompleted())
+         {
+         //Status goes to next appointment details
+         homeNavigator.pushPage('views/personal/appointment/individual-appointment.html');
+         }else{
+         homeNavigator.pushPage('views/personal/treatment-plan/individual-stage.html');
+         }
+         }else{
+         if(UserPlanWorkflow.isCompleted())
+         {
+         //set active tab to personal, no future appointments, treatment plan completed
+         tabbar.setActiveTab(1);
+         }else{
+         homeNavigator.pushPage('views/personal/treatment-plan/individual-stage.html');
 
-                }
-            }
-        };*/
+         }
+         }
+         };*/
         $scope.goToStatus = function()
         {
             NavigatorParameters.setParameters({'Navigator':'homeNavigator'});
@@ -208,7 +208,13 @@ myApp.controller('HomeController', ['$state','Appointments', 'CheckinService','$
         {
             NavigatorParameters.setParameters({'Navigator':'homeNavigator', 'Post':appointment});
             homeNavigator.pushPage('./views/personal/appointments/individual-appointment.html');
-        }
+        };
+
+        $scope.goToAppointments=function()
+        {
+            NavigatorParameters.setParameters({'Navigator':'homeNavigator'});
+            homeNavigator.pushPage('./views/personal/appointments/appointments.html');
+        };
 
         function settingStatus()
         {
@@ -256,6 +262,18 @@ myApp.controller('HomeController', ['$state','Appointments', 'CheckinService','$
             }
         }
 
+        $scope.goToCheckinAppointments = function (todaysAppointments) {
+            NavigatorParameters.setParameters({'Navigator':'homeNavigator', 'Post':todaysAppointments});
+            homeNavigator.pushPage('./views/home/checkin/checkin-list.html');
+        };
+
+        function setPlural(apps) {
+            if (apps.length > 1) {
+                return "_PLURAL";
+            }
+            return "";
+        }
+
         function setUpCheckin()
         {
             //Get checkin appointment for the day, gets the closest appointment to right now
@@ -264,35 +282,32 @@ myApp.controller('HomeController', ['$state','Appointments', 'CheckinService','$
             $scope.todaysAppointments = todaysAppointmentsToCheckIn;
             if(todaysAppointmentsToCheckIn)
             {
-                for (appointment in todaysAppointmentsToCheckIn) {
-                    //If there is an appointment shows checkin tab on home page otherwise it does not
-                    $scope.showCheckin = true;
-                    //Case 1:Appointment checkin is 0, not checked-in
-                    if (todaysAppointmentsToCheckIn[appointment].Checkin == '0') {
-                        //Checkin message before appointment gets set and is changed only if appointment was checked into already from Aria
-                        todaysAppointmentsToCheckIn[appointment].checkInMessage = "CHECKIN_MESSAGE_BEFORE";
-                        $rootScope.showHomeScreenUpdate = false;
+                $scope.showCheckin = true;
+                //Case 1:Appointment checkin is 0, not checked-in
+                if (todaysAppointmentsToCheckIn[0].Checkin == '0') {
+                    //Checkin message before appointment gets set and is changed only if appointment was checked into already from Aria
+                    $scope.todaysAppointments.checkInMessage = "CHECKIN_MESSAGE_AFTER" + setPlural(todaysAppointmentsToCheckIn);
+                    $rootScope.showHomeScreenUpdate = false;
 
-                        //Queries the server to find out whether or not an appointment was checked into
-                        CheckinService.checkCheckinServer(appointment).then(function (data) {
-                            //If it has, then it simply changes the message to checkedin and queries to get an update
-                            if (data) {
-                                console.log('Returning home');
-                                $timeout(function () {
-                                    todaysAppointmentsToCheckIn[appointment].checkInMessage = "CHECKIN_MESSAGE_AFTER";
-                                    $rootScope.showHomeScreenUpdate = true;
-                                    //CheckinService.getCheckinUpdates(appointment);
-                                });
-                            }
-                        });
-                    } else {
-                        //Case:2 Appointment already checked-in show the message for 'you are checked in...' and query for estimate
-                        todaysAppointmentsToCheckIn[appointment].checkInMessage = "CHECKIN_MESSAGE_AFTER";
-                        $rootScope.showHomeScreenUpdate = true;
-                        //CheckinService.getCheckinUpdates(appointment);
-                    }
-                    //console.log(todaysAppointmentsToCheckIn[appointment].checkInMessage);
+                    //Queries the server to find out whether or not an appointment was checked into
+                    CheckinService.checkCheckinServer(appointment).then(function (data) {
+                        //If it has, then it simply changes the message to checkedin and queries to get an update
+                        if (data) {
+                            console.log('Returning home');
+                            $timeout(function () {
+                                $scope.todaysAppointments.checkInMessage = "CHECKIN_MESSAGE_AFTER" + setPlural(todaysAppointmentsToCheckIn);
+                                $rootScope.showHomeScreenUpdate = true;
+                                //CheckinService.getCheckinUpdates(appointment);
+                            });
+                        }
+                    });
+                } else {
+                    //Case:2 Appointment already checked-in show the message for 'you are checked in...' and query for estimate
+                    $scope.todaysAppointments.checkInMessage = "CHECKIN_MESSAGE_AFTER" + setPlural(todaysAppointmentsToCheckIn);
+                    $rootScope.showHomeScreenUpdate = true;
+                    //CheckinService.getCheckinUpdates(appointment);
                 }
+                //console.log(todaysAppointmentsToCheckIn[appointment].checkInMessage);
             }else{
                 //Case where there are no appointments that day
                 $scope.showCheckin = false;
