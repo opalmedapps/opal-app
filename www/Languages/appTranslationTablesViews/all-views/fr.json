@@ -1,9 +1,9 @@
 {
 	"_COMMENT4":"Ma page de documents",
 	"APPOINTMENTS":"Rendez-vous",
-	"MYCHART":"Données",
+	"MYCHART":"Dossier",
 	"TREATMENTPLANNING":"Planification de traîtement",
-	"CLINICAL_NOTES":"Notes médicaux",
+	"CLINICAL_NOTES":"Notes médicales",
 	"TREATINGTEAMNOTIFICATIONS":"Notifications de l'équipe de traitement",
 	"QUESTIONNAIRES":"Questionnaires",
 	"TEAMMESSAGES":"Messages d'équipe",
@@ -41,7 +41,7 @@
 	"NONOTIFICATIONS":"Aucune notification",
 	"GENERALANNOUNCEMENTS":"Annonces générales",
 	"PARKING":"Stationnement",
-	"CONTACTS":"Mon équipe de traîtement",
+	"CONTACTS":"Mon équipe soignante",
 	"PRIMARYDOCTOR":"Oncologue principal",
 	"ONCOLOGIST":"Oncologues",
 	"OTHER":"Autres",
@@ -176,9 +176,9 @@
 	
 	"_COMMENT5":"Settings",
 	"OPALPROBLEMSUBJECT":"Trouvé un bug / problème en utilisant OPAL",
-	"REPORTISSUES":"Questions Rapport",
+	"REPORTISSUES":"Questions",
 	"GENERALSETTINGS":"Réglages Généraux",
-	"ACCOUNT":"Compte",
+	"ACCOUNT":"Réglages",
 	"ABOUT":"Sur",
 	"SENDFEEDBACK":"Envoyer Des Commentaires",
 	"SEND":"Envoyer",
@@ -194,13 +194,14 @@
 	"PRINTINTUNAVAILABLE":"Impression indisponible",
 	"UNABLETOOPEN":"Problème , incapable d'ouvrir",
 	"UNABLETOOPENINSTALL":"Impossible d'ouvrir , installer un programme qui ouvre les fichiers PDF",
-	"FEEDBACK":"Retour d'information",
+	"FEEDBACK":"Commentaires",
 	"LEAVEMESSAGE":"Laissez-nous un message!",
 	"ENTERTENPHONE":"Entrer un numéro de téléphone á dix chiffres",
 	"LOCKEDOUT":"Verrouillé en raison de l'inactivité",
 	"ERRORCONTACTINGHOSPITAL":"Erreur en contact avec l'hôpital , le système pourrait être en raison de maintainance . Réessayez plus tard",
 	"AUTHENTICATIONERROR":"Erreur d'authentification , s'il vous plaît vous connecter à nouveau",
-	"ERROROBTAININGDOCUMENT":"Erreur obtenir le document à partir du serveur"
+	"ERROROBTAININGDOCUMENT":"Erreur obtenir le document à partir du serveur",
+	"MAPS": "Plan"
 
 
 

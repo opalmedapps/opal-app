@@ -1,7 +1,7 @@
 {
-  "HEADER_MESSAGE_LOGIN":"Accédez à vos données!",
+  "HEADER_MESSAGE_LOGIN":"Accédez à votre dossier!",
   "LOGIN": "Connexion",
-  "FORGOTPASSWORD":"Mot de passe oublié",
+  "FORGOTPASSWORD":"Mot de passe oublié?",
   "INVALID_USER":"L'utilisateur n'existe pas!",
   "INVALID_EMAIL_OR_PWD":"Addresse courriel ou mot de passe invalide",
   "INVALID_PASSWORD":"Mot de passe incorrect!",
@@ -35,7 +35,7 @@
   "PASSWORDSUCCESSRESET":"Votre mot de passe a été changé avec succès, redirection vers la page de connexion.",
   "LOADINGDATA":"Chargement...",
   "OPALPROBLEMSUBJECT":"Trouvé un bug / problème en utilisant OPAL",
-  "REPORTISSUES":"Commentaires, plaintes",
+  "REPORTISSUES":"Questions",
   "SETTINGS":"Réglages",
   "PARKING":"Stationnement",
   "HOSPITALPARKING":"Stationnement générale",
@@ -62,7 +62,9 @@
   "ERRORCONTACTINGHOSPITAL":"Erreur en contact avec l'hôpital , le système pourrait être en raison de maintainance . Réessayez plus tard",
   "AUTHENTICATIONERROR":"Erreur d'authentification , s'il vous plaît vous connecter à nouveau",
   "ERROROBTAININGDOCUMENT":"Erreur obtenir le document à partir du serveur",
-  "MUHC": "CUSM"
+  "MUHC": "CUSM",
+  "SECURE_PHONE": "N'oubliez pas de protéger votre appareil avec un mot de passe!",
+  "UNATTENDED": "Ne laisser pas l'appareil tout seul."
 
 
 
