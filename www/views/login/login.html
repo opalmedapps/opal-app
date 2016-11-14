@@ -18,7 +18,7 @@
 
                             <div>
                                 <div style="margin-bottom:10px;display:inline-block;vertical-align:bottom"><i class="iconHomeView ion-person" style="color:#387A36"></i></div>
-                                <div style="padding-bottom:15px;display:inline-block"><input class="text-input" placeholder="Email" name="email" ng-model="email" type="email" required></div>
+                                <div style="padding-bottom:15px;display:inline-block"><input class="text-input" placeholder='{{"EMAIL"|translate}}' name="email" ng-model="email" type="email" required></div>
                                 <div style="margin-bottom:10px;padding-bottom:10px;display:inline-block;vertical-align:bottom"><span class="lucent" ng-show="!email||email.length===0">&nbsp;&nbsp;&nbsp;&nbsp;</span>
                                     <a ng-click="email=''" class="lucent" ng-show="email&&email.length>0">
                                         <ons-icon icon="ion-close-circled"></ons-icon>
@@ -27,7 +27,7 @@
 
                                 <br />
                                 <div style="margin-bottom:10px;display:inline-block;vertical-align:bottom"><i class="iconHomeView ion-ios-locked" style="color:#387A36"></i></div>
-                                <div style="padding-bottom:15px;display:inline-block"><input class="text-input" style="margin-top:5px" name="password" ng-model="password" placeholder="Password" type="password" required></div>
+                                <div style="padding-bottom:15px;display:inline-block"><input class="text-input" style="margin-top:5px" name="password" ng-model="password" placeholder='{{"PASSWORD"|translate}}' type="password" required></div>
                                 <div style="margin-bottom:10px;padding-bottom:10px;display:inline-block;vertical-align:bottom"><span class="lucent" ng-show="!password||password.length===0">&nbsp;&nbsp;&nbsp;&nbsp;</span>
                                     <a ng-click="password=''" class="lucent" ng-show="password&&password.length>0">
                                         <ons-icon icon="ion-close-circled"></ons-icon>

@@ -99,7 +99,7 @@
                             <header>
                                 <span class="item-title" ng-class="fontSizeTitle">{{"NEXTAPPOINTMENT"|translate}}</span>
                             </header>
-                            <p class="item-desc" ng-class="fontSizeDesc">{{appointmentShown.ScheduledStartTime|formatDateAppointmentTask}}</p>
+                            <p class="item-desc" ng-class="fontSizeDesc">{{appointmentShown.ScheduledStartTime|date:'medium'}}</p>
                         </ons-col>
                     </ons-row>
                 </ons-list-item>

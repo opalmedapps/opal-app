@@ -286,11 +286,11 @@ myApp.controller('HomeController', ['$state','Appointments', 'CheckinService','$
                 //Case 1:Appointment checkin is 0, not checked-in
                 if (todaysAppointmentsToCheckIn[0].Checkin == '0') {
                     //Checkin message before appointment gets set and is changed only if appointment was checked into already from Aria
-                    $scope.todaysAppointments.checkInMessage = "CHECKIN_MESSAGE_AFTER" + setPlural(todaysAppointmentsToCheckIn);
+                    $scope.todaysAppointments.checkInMessage = "CHECKIN_MESSAGE_BEFORE" + setPlural(todaysAppointmentsToCheckIn);
                     $rootScope.showHomeScreenUpdate = false;
 
                     //Queries the server to find out whether or not an appointment was checked into
-                    CheckinService.checkCheckinServer(appointment).then(function (data) {
+                    CheckinService.checkCheckinServer(todaysAppointmentsToCheckIn[0]).then(function (data) {
                         //If it has, then it simply changes the message to checkedin and queries to get an update
                         if (data) {
                             console.log('Returning home');

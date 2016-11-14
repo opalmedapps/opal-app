@@ -11,7 +11,7 @@
         </div>
         <ons-list ng-repeat="doc in documents" ng-click="goToDocument(doc)">
             <ons-list-header class="person-list-header" ng-class="fontSizeTitle" ng-show="showHeader($index, documents.length)">
-                {{doc.DateAdded|standardDate}}
+                {{doc.DateAdded|date:'fullDate'}}
             </ons-list-header>
             <ons-list-item modifier="chevron">
                 <ons-row>

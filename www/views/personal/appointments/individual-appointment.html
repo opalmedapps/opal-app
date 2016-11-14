@@ -8,9 +8,9 @@
             <ons-list-item class="item" >
                 <div style="line-height:1" align="left">
                     <header>
-                        <span class="item-title" ng-class="fontSizeTitle">{{app.Title}}</span>
+                        <span class="item-title" ng-class="fontSizeTitle">{{app.AppointmentType_EN}}</span>
                     </header>
-                    <p class="item-desc" ng-class="fontSizeDesc">{{app.ScheduledStartTime|formatDateAppointmentTask}}</p>
+                    <p class="item-desc" ng-class="fontSizeDesc">{{app.ScheduledStartTime|date:'medium'}}</p>
                     <!--<p class="item-desc" ng-class="fontSizeDesc">{{app.ResourceName}}</p>-->
                 </div>
             </ons-list-item>
@@ -42,7 +42,7 @@
                         <circle class="progress-circular__primary" cx="50%" cy="50%" r="40%" fill="none" stroke-width="10%" stroke-miterlimit="10"/>
                     </svg>
                 </div>
-                <div align="center" ng-show="!loading&&">
+                <div align="center" ng-show="!loading">
                     <p class="item-desc" ng-class="fontSizeTitle">{{checkInMessage}}</p><br>
                     <button class="button checkin-button" ng-click="checkinToAppointment()" ng-disabled="!enableCheckinButton">
                         <span style="font-size:20px"><i class="iconHomeView ion-android-checkbox" style="color:white"></i><br>{{"CHECKIN"|translate}}</span>
