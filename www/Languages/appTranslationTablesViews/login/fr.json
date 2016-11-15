@@ -1,5 +1,5 @@
 {
-  "HEADER_MESSAGE_LOGIN":"Accédez à votre dossier!",
+  "HEADER_MESSAGE_LOGIN":"Accédez à mon dossier!",
   "LOGIN": "Connexion",
   "FORGOTPASSWORD":"Mot de passe oublié?",
   "INVALID_USER":"L'utilisateur n'existe pas!",
@@ -10,9 +10,9 @@
   "SIGNINDIFFERENTACCOUNT":"Se connecter avec un compte différent",
   "INTERNETERROR":"Erreur de serveur, vérifiez votre connexion Internet.",
   "EMAILPASSWORDSENT":"Mot de passe réinitialisé avec succès, vérifiez votre courriel pour votre mot de passe temporaire!",
-  "ENTEREMAIL":"Entrez votre adresse corriel:",
+  "ENTEREMAIL":"Entrez votre adresse corriel",
   "CANCERCENTER":"Centre du cancer des Cèdres",
-  "RESETPASSWORD":"Réinitialiser le mot de Passe",
+  "RESETPASSWORD":"Réinitialiser mon mot de passe",
   "LOADING":"Chargement",
   "NEWPASSWORD":"Créer mot de passe",
   "SETPASSWORDLABEL":"Nouveau mot de passe",
