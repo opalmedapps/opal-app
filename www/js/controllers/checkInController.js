@@ -33,6 +33,11 @@
                 console.log("Allowed to Check in",response);
                 verifyCheckIn(Appointments.setAppointmentsLanguage(Appointments.getCheckinAppointment()));
             }).catch(function (error) {
+                if (error.code == "Check-in allowed in the vicinity of the Cancer Center"){
+                    NewsBanner.showCustomBanner($filter('translate')("NOT_ALLOWED"), '#333333', function(){}, 3000);
+                } else {
+                    NewsBanner.showCustomBanner($filter('translate')("CHECKIN_ERROR"), '#333333', function(){}, 3000);
+                }
                 console.log(error);
             });
 
@@ -55,7 +60,7 @@
             $q.all(promises).then(function (dataArray) {
                 checkInButton.stopSpin();
                 vm.checkInMessage = "CHECKED_IN";
-                var message = $filter('translate')("SUCCESSFULL_CHECKIN");
+                var message = $filter('translate')("CHECKED_IN");
                 NewsBanner.showCustomBanner(message, '#333333', function(){}, 500);
 
             }).catch(function (error) {
@@ -84,7 +89,7 @@
                 }
 
             }).catch(function (error) {
-                vm.error = "SERVERPROBLEM";
+                NewsBanner.showCustomBanner($filter('translate')("CHECKIN_ERROR"), '#333333', function(){}, 3000);
                 console.log("Cannot verify checkin", error);
             });
         }
