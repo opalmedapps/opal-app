@@ -172,7 +172,8 @@
   "ERRORCONTACTINGHOSPITAL":"Error contacting the hospital. Try again later",
   "AUTHENTICATIONERROR":"Authentication error, please login again",
   "ERROROBTAININGDOCUMENT":"Error obtaining document from server",
-  "MAPS": "Map"
+  "MAPS": "Map",
+  "CREATED": "Created"
 
 
 
