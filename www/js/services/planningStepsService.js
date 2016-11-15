@@ -16,7 +16,7 @@
             'Physician Plan Preparation': [],
             'Calculation of Dose': [],
             'Physics Quality Control': [],
-            'Scheduling': []
+            'Scheduling Treatments': []
         };
 
         var service = {
@@ -41,20 +41,20 @@
             var ctAppointment = getCTSimAppointment();
             var planningTasks = Tasks.getAllRecentTasks();
 
-            console.log(ctAppointment);
             planningTasks.unshift(ctAppointment);
 
-            for (var task in planningTasks){
+            for (var i = 0; i!=planningTasks.length; ++i){
 
                 //Checking to see if appointment or task since they have different properties.
-                if (planningTasks[task].hasOwnProperty('TaskName_EN')){
-                    sequence[planningTasks[task].TaskName_EN].push(planningTasks[task]);
+                if (planningTasks[i].hasOwnProperty('TaskName_EN')){
+                    sequence[planningTasks[i].TaskName_EN].push(planningTasks[i]);
 
-                } else if (planningTasks[task].hasOwnProperty('AppointmentType_EN')){
-                    sequence[planningTasks[task].AppointmentType_EN].push(planningTasks[task]);
+                } else if (planningTasks[i].hasOwnProperty('AppointmentType_EN')){
+                    sequence[planningTasks[i].AppointmentType_EN].push(planningTasks[i]);
                 }
+                //console.log(sequence);
             }
-            currentStep = planningTasks[task];
+            currentStep = planningTasks[i];
             console.log(sequence);
 
         }
@@ -83,7 +83,7 @@
         }
 
         function isCompleted(){
-            return sequence['Scheduling'].length > 0;
+            return sequence['Scheduling Treatments'].length > 0;
         }
 
         function getCurrentStep(){
