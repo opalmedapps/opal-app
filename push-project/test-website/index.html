@@ -1,0 +1,99 @@
+<html>
+  <head>
+    <title>MUHC Listener</title>
+    <script src="./public/jquery.min.js">  </script>
+    <script src="./public/firebase.js"></script>
+    <script src="./public/aes.js"></script>
+      <script src="./public/mode-cfb-min.js"></script>
+      <script src="./public/bower_components/angular/angular.min.js"></script>
+      <link href="./public/styles.css" rel="stylesheet" type="text/css">
+      <script src="./public/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+      <link href="./public/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+      <script src="./public/bower_components/cryptojs/mode-cfb-min.js"></script>
+      <script src="./public/bower_components/cryptojs/sha256.js"></script>
+      <script src="./public/bower_components/cryptojs/aes.js"></script>
+    <script src="./public/bower_components/angular-aria/angular-aria.js"></script>
+    <script src="./public/bower_components/angular-animate/angular-animate.js"></script>
+    <script src="./public/bower_components/angular-material/angular-material.js"></script>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no" />
+  <link rel="stylesheet" href="./public/bower_components/angular-material/angular-material.css">
+
+  </head>
+  <body ng-app="MUHCPushNotifications" ng-controller="MainController">
+    <div layout="column" style="height:100vh;" ng-cloak>
+  <section layout="row" flex>
+    <md-content flex>
+      <div layout="column" layout-fill layout-align="top center">
+        <md-card style="width:70%">
+        <md-card-title style="padding:0">
+          <md-toolbar class="md-hue-2">
+            <div class="md-toolbar-tools">
+              <md-button class="md-icon-button" aria-label="Settings" ng-disabled="true">
+                <md-icon md-svg-icon="img/icons/menu.svg"></md-icon>
+              </md-button>
+              <h2>
+                <span>Notification Types</span>          
+
+              </h2>
+              <span flex></span>
+
+            </div>
+          </md-toolbar>
+        </md-card-title>
+        <md-card-content style="overflow-y:scroll">
+          
+          <md-list flex >
+            
+       <md-subheader class="md-no-sticky">Push Notifications Try</md-subheader>
+       <md-list-item class="md-3-line" >
+          <md-button class="md-raised md-primary" ng-click="pushNotificationApi('SendNotification')">Send Notification</md-button><br>
+          
+       </md-list-item>
+       <md-list-item class="md-3-line" >
+          <md-button class="md-raised md-primary" ng-click="pushNotificationApi('RoomAssignedNotification')">Send Room Assigned Notification</md-button>
+       </md-list-item>
+       
+       <md-list-item class="md-3-line" >
+          <md-button class="md-raised md-primary" ng-click="pushNotificationApi('SendNotificationMultipleDevices')">Send Notification Multiple Devices</md-button>
+       </md-list-item>
+       <md-list-item class="md-3-line" >
+          <md-button class="md-raised md-primary" ng-click="pushNotificationApi('SendNotificationUsingPatientId')">Send Notification Using PatientId</md-button>
+       </md-list-item>
+     </md-list>
+          <h4>Type: </h4>
+          {{type}}
+          <h4>Parameters:</h4>
+          <div style="width:100%;border:1px solid black;overflow-x:scroll;word-wrap: break-word;">
+            <ul >
+              <li ng-repeat="(key,value) in params">
+                {{key}}:{{value}}
+              </li>
+            </ul>
+             </div>
+          <h4>Response: </h4>
+
+          <div style="width:100%;border:1px solid black;overflow-x:scroll;word-wrap: break-word;">
+            <ul >
+              <li ng-repeat="(key,value) in response">
+                {{key}}:{{value}}
+              </li>
+            </ul>
+          </div>
+        </md-card-content>
+        <md-card-actions layout="row" layout-align="end center">
+
+        </md-card-actions>
+      </md-card>
+
+
+      </div>
+      <div flex></div>
+    </md-content>
+  </section>
+</div>
+  </body>
+  <!-- Latest compiled and minified CSS -->
+<!-- Optional theme -->
+  <script src="./public/listener.js"></script>
+
+</html>
