@@ -1,0 +1,87 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Lab Opal</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta access-control-allow-origin="*">
+    <!--<script src="components/loader.js"></script>-->
+    <script src="lib/angular/angular.min.js"></script>
+    <script src="lib/onsenui/js/onsenui.min.js"></script>
+    <script src="lib/onsenui/js/angular-onsenui.min.js"></script>
+    <script src="lib/bower_components/highcharts/highcharts.js"></script>
+    <!--<script src="https://code.highcharts.com/highcharts.js"></script>-->
+    <!--<script src="https://code.highcharts.com/modules/exporting.js"></script>-->
+    <script type="text/javascript" src="lib/bower_components/crypto-js/crypto-js.js"></script>
+    <!--<link rel="stylesheet" href="components/loader.css">-->
+    <link rel="stylesheet" href="lib/onsenui/css/onsenui.css">
+    <link rel="stylesheet" href="lib/onsenui/css/onsen-css-components.css">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="lib/bower_components/firebase/firebase.js"></script>
+	<!--Lab Results graphing libraries-->
+  <script src="lib/bower_components/d3/d3.js"></script>
+<script src="lib/bower_components/nvd3/build/nv.d3.js"></script> 
+<link rel="stylesheet" href="lib/bower_components/nvd3/build/nv.d3.css">
+<!-- AngularFire -->
+<!--<script src="https://cdn.firebase.com/libs/angularfire/2.0.2/angularfire.min.js"></script>-->
+<script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyCxV6VuVWtKg5wkeReqzQNfRULwkvVXkos",
+    authDomain: "brilliant-inferno-7679.firebaseapp.com",
+    databaseURL: "https://brilliant-inferno-7679.firebaseio.com",
+    storageBucket: "firebase-brilliant-inferno-767.appspot.com",
+    messagingSenderId: "810896751588"
+  };
+  firebase.initializeApp(config);
+</script>
+
+    <script src="js/app.js"></script>
+</head>
+<body id="bootstrap" ng-app="myApp">
+  <ons-modal id="modal" style="background:rgba(255,255,255,0.6)">
+    <ons-progress-circular indeterminate></ons-progress-circular>
+</ons-modal>
+    <ons-navigator
+      var="navi"
+      page="./views/login.html"
+      ng-controller="AppController as app"
+      ons-postpush="app.pushes = app.pushes + 1"
+      ons-postpop="app.pops = app.pops + 1">
+    </ons-navigator>
+
+    <ons-template id="page.html">
+      <ons-page>
+        <ons-toolbar>
+          <div class="left">
+            <ons-back-button>Back</ons-back-button>
+          </div>
+          <div class="center">Navigation</div>
+        </ons-toolbar>
+
+        <section style="padding: 10px">
+          <ons-button ng-click="navi.pushPage('page.html')">
+            Push Page
+          </ons-button>
+
+          <p>
+            You have pushed {{ app.pushes }} times and popped {{ app.pops }} times.
+          </p>
+        </section>
+      </ons-page>
+    </ons-template>
+    <script src="js/loginController.js"></script>
+    <script src="js/labResultsController.js"></script>
+    <script src="js/userAuthorizationInfoService.js"></script>
+    <script src="js/firebaseService.js"></script>
+    <script src="js/requestToServerService.js"></script>
+    <script src="js/labResultsService.js"></script>
+    <script src="js/encryptionService.js"></script>
+    <script src="js/filters.js"></script>
+    <script src="js/lineChartDirective.js"></script>
+    <script src="js/linePlusBarChartDirective.js"></script>
+    <script src="js/directivesGraphingLibraries.js"></script>
+
+
+</body>
+</html>

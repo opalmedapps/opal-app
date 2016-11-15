@@ -27,7 +27,7 @@ exports.patientAppointmentsTableFields=function()
 
 exports.patientDocumentTableFields=function()
 {
-  return "SELECT Document.FinalFileName, Alias.AliasName_EN, Alias.AliasName_FR, Document.ReadStatus, Alias.AliasDescription_EN, Alias.AliasDescription_FR, Document.DocumentSerNum, Document.DateAdded, Document.LastUpdated FROM Document, Patient, Alias, AliasExpression, Users WHERE Document.AliasExpressionSerNum=AliasExpression.AliasExpressionSerNum AND AliasExpression.AliasSerNum=Alias.AliasSerNum AND Patient.PatientSerNum=Document.PatientSerNum AND Users.UserTypeSerNum=Patient.PatientSerNum AND Users.Username LIKE ? AND (Document.LastUpdated > ? OR Alias.LastUpdated > ?);";
+  return "SELECT Document.FinalFileName, Alias.AliasName_EN, Alias.AliasName_FR, Document.ReadStatus, Alias.AliasDescription_EN, Alias.AliasDescription_FR, Document.DocumentSerNum, Document.DateAdded, Document.LastUpdated, Document.ApprovedTimeStamp FROM Document, Patient, Alias, AliasExpression, Users WHERE Document.AliasExpressionSerNum=AliasExpression.AliasExpressionSerNum AND AliasExpression.AliasSerNum=Alias.AliasSerNum AND Patient.PatientSerNum=Document.PatientSerNum AND Users.UserTypeSerNum=Patient.PatientSerNum AND Users.Username LIKE ? AND (Document.LastUpdated > ? OR Alias.LastUpdated > ?);";
 };
 exports.getDocumentsContentQuery = function()
 {
