@@ -68,7 +68,8 @@ myApp.controller('HomeController', ['$state','Appointments', 'CheckinService','$
         $scope.homeDeviceBackButton=function()
         {
             console.log('device button pressed do nothing');
-            NativeNotification.showNotificationConfirm('Are you sure you want to exit Opal?',function(){
+            var message = $filter('translate')('EXIT_APP');
+            NativeNotification.showNotificationConfirm(message,function(){
                 if(ons.platform.isAndroid())
                 {
                     navigator.app.exitApp();
