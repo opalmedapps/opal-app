@@ -54,7 +54,7 @@
                 }
                 //console.log(sequence);
             }
-            currentStep = planningTasks[i];
+            currentStep = planningTasks[i-1];
             console.log(sequence);
 
         }
@@ -73,7 +73,7 @@
                     && appointments[i].ScheduledStartTime < mdTask.physicianTask.DueDateTime
                     && appointments[i].Status.toLowerCase().indexOf('completed') !== -1) {
 
-                    ctAppointment = appointments[i];
+                    ctAppointment = appointments[i];u
                     break;
 
                 }
@@ -87,6 +87,7 @@
         }
 
         function getCurrentStep(){
+            console.log("Current Step is: ", currentStep);
             return currentStep.TaskName_EN || currentStep.AppointmentType_EN;
         }
     }
