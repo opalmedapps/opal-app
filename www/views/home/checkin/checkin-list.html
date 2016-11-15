@@ -14,7 +14,7 @@
             <ons-col align="center">
                 <div style="line-height:1;padding:5px;" >
                     <span ng-class="fontSizeTitle">
-                        {{app.AppointmentDescription_EN}} <br>
+                        {{app.Title}} <br>
                         {{app.ScheduledStartTime | date:'shortTime'}}
                     </span> <br>
                     <span class="item-desc" ng-class="fontSizeDesc">{{app.MapName_EN}}</span>
@@ -24,9 +24,9 @@
     </ons-list>
     <br>
     <div style="text-align: center">
-        <ons-button style="font-size: x-large" should-spin="false" var="checkInButton"
-                    ng-click="checkIn.checkInToAll()">
-            {{"CHECKIN_TO_ALL"|translate}}
+        <ons-button style="font-size: x-large" should-spin="false" var="checkInButton" disabled
+                    ng-click="checkIn.checkInToAll(checkIn.apps)">
+            {{checkIn.checkInMessage|translate}}
         </ons-button>
     </div>
 
