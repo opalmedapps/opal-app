@@ -64,7 +64,9 @@
 	"ERROROBTAININGDOCUMENT":"Error obtaining document from server",
 	"MUHC": "MUHC",
 	"SECURE_PHONE": "Remember to secure your information by protecting your phone with a passphrase!",
-	"UNATTENDED": "Do not leave your phone unattended."
+	"UNATTENDED": "Do not leave your phone unattended.",
+	"PASSWORD": "Password",
+	"EMAIL": "Email"
 
 
 
