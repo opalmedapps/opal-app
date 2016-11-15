@@ -295,7 +295,7 @@ myApp.controller('HomeController', ['$state','Appointments', 'CheckinService','$
                 //Case 1:Appointment checkin is 0, not checked-in
                 if (!allCheckedIn) {
                     //Checkin message before appointment gets set and is changed only if appointment was checked into already from Aria
-                    $rootScope.todaysAppointments.checkInMessage = "CHECKIN_MESSAGE_BEFORE" + setPlural(todaysAppointmentsToCheckIn);
+                    $scope.todaysAppointments.checkInMessage = "CHECKIN_MESSAGE_BEFORE" + setPlural(todaysAppointmentsToCheckIn);
                     $rootScope.showHomeScreenUpdate = false;
 
                     //Queries the server to find out whether or not an appointment was checked into
@@ -304,7 +304,7 @@ myApp.controller('HomeController', ['$state','Appointments', 'CheckinService','$
                         if (data) {
                             console.log('Returning home');
                             $timeout(function () {
-                                $rootScope.todaysAppointments.checkInMessage = "CHECKIN_MESSAGE_AFTER" + setPlural(todaysAppointmentsToCheckIn);
+                                $scope.todaysAppointments.checkInMessage = "CHECKIN_MESSAGE_AFTER" + setPlural(todaysAppointmentsToCheckIn);
                                 $rootScope.showHomeScreenUpdate = true;
                                 //CheckinService.getCheckinUpdates(appointment);
                             });
@@ -312,7 +312,7 @@ myApp.controller('HomeController', ['$state','Appointments', 'CheckinService','$
                     });
                 } else {
                     //Case:2 Appointment already checked-in show the message for 'you are checked in...' and query for estimate
-                    $rootScope.todaysAppointments.checkInMessage = "CHECKIN_MESSAGE_AFTER" + setPlural(todaysAppointmentsToCheckIn);
+                    $scope.todaysAppointments.checkInMessage = "CHECKIN_MESSAGE_AFTER" + setPlural(todaysAppointmentsToCheckIn);
                     $rootScope.showHomeScreenUpdate = true;
                     //CheckinService.getCheckinUpdates(appointment);
                 }
