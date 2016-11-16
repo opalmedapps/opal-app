@@ -14,10 +14,10 @@
         .controller('StatusController', StatusController);
 
     StatusController.$inject = ['$anchorScroll','$location','Appointments',
-        'NavigatorParameters', '$filter', 'PlanningSteps'];
+        'NavigatorParameters', '$filter', 'PlanningSteps', 'UserPreferences'];
 
-    function StatusController($anchorScroll,$location,
-                              Appointments,NavigatorParameters,$filter, PlanningSteps)
+    function StatusController($anchorScroll,$location, Appointments,
+                              NavigatorParameters,$filter, PlanningSteps, UserPreferences)
     {
         /* jshint validthis: true */
         var statusVm = this;
@@ -39,12 +39,13 @@
         statusVm.currentEvent='';               // current event in sequence
         statusVm.endingDate = '';               // treatment end date
         statusVm.today = new Date();
+        statusVm.language = UserPreferences.getLanguage();
         statusVm.stepMapping = {
             'CT for Radiotherapy Planning': 1,
             'Physician Plan Preparation': 2,
             'Calculation of Dose': 3,
             'Physics Quality Control': 4,
-            'Scheduling': 5
+            'Scheduling Treatments': 5
         }
 
         statusVm.getStyle = getStyle;           // function which determines style
@@ -62,7 +63,7 @@
             statusVm.treatmentCompleted = true;
             console.log(PlanningSteps.isCompleted());
 
-            if (PlanningSteps.isCompleted() || !boolStatus){
+            if (!PlanningSteps.isCompleted() || !boolStatus){
                 events = PlanningSteps.getPlanningSequence();
                 var currentStep = PlanningSteps.getCurrentStep();
                 console.log(currentStep);
@@ -132,7 +133,8 @@
                     statusVm.completionDate=stages['Scheduling'][stages['Scheduling'].length-1].DueDateTime;
                     endColor='#5CE68A';
                 }else{
-                    statusVm.currentEvent=stages[currentStep];
+                    statusVm.currentEvent=currentStep;
+                    console.log(statusVm.currentEvent);
                     statusVm.planningCompleted=false;
                     statusVm.percentage=Math.floor((100*(nextStepIndex))/stages.length);
                     var lastStageFinishedPercentage=Math.floor((100*(nextStepIndex))/5);

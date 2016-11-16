@@ -148,7 +148,7 @@ var myApp = angular.module('MUHCApp', ['tmh.dynamicLocale','pascalprecht.transla
         $translateProvider.useLoader('$translatePartialLoader', {
             urlTemplate: './Languages/appTranslationTablesViews/{part}/{lang}.json'
         });
-        $translateProvider.preferredLanguage('en');
+        $translateProvider.preferredLanguage('fr');
 
         tmhDynamicLocaleProvider.localeLocationPattern('./Languages/angular-locales/angular-locale_{{locale}}.js');
 

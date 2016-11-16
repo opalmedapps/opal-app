@@ -24,7 +24,7 @@
   "ERRORINCORRECTSSN": "Le numéro de sécurité sociale saisi ne correspond pas à celui de nos fichiers, merci de réessayer",
   "ERROROBTAININGDOCUMENT": "Erreur obtenir le document à partir du serveur",
   "FORGOTPASSWORD": "Mot de passe oublié?",
-  "HEADER_MESSAGE_LOGIN": "Accédez à mon dossier!",
+  "HEADER_MESSAGE_LOGIN": "Accéder à mon dossier!",
   "HOME": "Accueil",
   "HOSPITALPARKING": "Stationnement générale",
   "INTERNETERROR": "Erreur de serveur, vérifiez votre connexion Internet.",
