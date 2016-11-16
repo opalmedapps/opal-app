@@ -92,10 +92,10 @@
                                             {{(events[0].ScheduledStartTime || events[0].DueDateTime)|date:'fullDate'}}
                                         </div>
                                         <div ng-if="status.eventIndex == status.stepMapping[step]">
-                                            <strong>{{"PENDING"|translate}} </strong>
+                                            <strong>{{"INPROGRESS"|translate}} </strong>
                                         </div>
                                         <div ng-if="status.eventIndex < status.stepMapping[step]">
-                                            <strong>{{"INPROGRESS"|translate}}...</strong>
+                                            <strong>{{"PENDING"|translate}}...</strong>
                                         </div>
                                     </div>
                                 </ons-col>
