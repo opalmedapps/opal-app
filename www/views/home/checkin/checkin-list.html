@@ -14,10 +14,10 @@
             <ons-col align="center">
                 <div style="line-height:1;padding:5px;" >
                     <span ng-class="fontSizeTitle">
-                        {{app["AppointmentType_"+language]}} <br>
+                        {{app["AppointmentType_"+checkIn.language]}} <br>
                         {{app.ScheduledStartTime | date:'shortTime'}}
                     </span> <br>
-                    <span class="item-desc" ng-class="fontSizeDesc">{{app["MapName_"+language]}}</span>
+                    <span class="item-desc" ng-class="fontSizeDesc">{{app["MapName_"+checkIn.language]}}</span>
                 </div>
             </ons-col>
         </ons-list-item>
