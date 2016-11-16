@@ -61,6 +61,8 @@ myApp.service('Documents',['UserPreferences', 'UserAuthorizationInfo','$q', '$fi
 			documents[i].LastUpdated = new Date(documents[i].LastUpdated);
 			documents[i].ApprovedTimeStamp = new Date(documents[i].ApprovedTimeStamp);
 			documents[i].DocumentType = FileManagerService.getFileType(documents[i].FinalFileName);
+			documents[i].FirstName = documents[i].FirstName.trim();
+			documents[i].LastName = documents[i].LastName.trim();
 			documentsArray.push(documents[i]);
 		}
 		documentsArray = $filter('orderBy')(documentsArray,'-DateAdded');
