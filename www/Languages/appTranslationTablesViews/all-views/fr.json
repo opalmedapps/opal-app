@@ -1,6 +1,7 @@
 {
   "ABOUT": "À propos",
   "ACCOUNT": "Réglages",
+  "ADDED": "Ajouté à",
   "ALIAS": "Pseudonyme",
   "APPOINTMENT": "Rendez-vous",
   "APPOINTMENTS": "Rendez-vous",
@@ -109,7 +110,7 @@
   "NEWNOTIFICATIONS": "Nouvelle Notifications",
   "NEWPASSWORD": "Créer un mot de passe",
   "NEWS": "Actualité",
-  "NEXTAPPOINTMENT": "Prochain rendez-vous",
+  "NEXTAPPOINTMENT": "Vos rendez-vous",
   "NOANNOUNCEMENTS": "Pas d'annonces",
   "NOAPPOINTMENTS": "Sans rendez-vous",
   "NOCONTACTSAVAILABLE": "Pas de contacts disponibles",

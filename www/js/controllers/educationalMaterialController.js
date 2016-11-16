@@ -99,7 +99,9 @@ myApp.controller('IndividualEducationalMaterialController', ['$scope', '$timeout
 	$scope.edumaterial =EducationalMaterial.setLanguageEduationalMaterial(param.Post);
 	
 	//Determine if material has a ShareURL and is printable
-	if($scope.edumaterial.hasOwnProperty('ShareURL')&&$scope.edumaterial.ShareURL !=="") $scope.isPrintable = FileManagerService.isPDFDocument($scope.edumaterial.ShareURL);
+	if($scope.edumaterial.hasOwnProperty('ShareURL')&&$scope.edumaterial.ShareURL !=="") {
+		$scope.isPrintable = FileManagerService.isPDFDocument($scope.edumaterial.ShareURL);
+    }
 	
 	//Determine if material is a booklet
 	var isBooklet = $scope.edumaterial.hasOwnProperty('TableContents');

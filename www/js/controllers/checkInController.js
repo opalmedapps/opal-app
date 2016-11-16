@@ -62,6 +62,7 @@
                 vm.checkInMessage = "CHECKED_IN";
                 var message = $filter('translate')("CHECKED_IN");
                 NewsBanner.showCustomBanner(message, '#333333', function(){}, 500);
+                console.log(dataArray);
 
             }).catch(function (error) {
                 console.log("CheckIn failed: ", error);
