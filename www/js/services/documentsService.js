@@ -59,6 +59,7 @@ myApp.service('Documents',['UserPreferences', 'UserAuthorizationInfo','$q', '$fi
 		for (var i = 0; i < documents.length; i++) {
 			documents[i].DateAdded = $filter('formatDate')(documents[i].DateAdded);
 			documents[i].LastUpdated = new Date(documents[i].LastUpdated);
+			documents[i].ApprovedTimeStamp = new Date(documents[i].ApprovedTimeStamp);
 			documents[i].DocumentType = FileManagerService.getFileType(documents[i].FinalFileName);
 			documentsArray.push(documents[i]);
 		}
