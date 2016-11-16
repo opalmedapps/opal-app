@@ -45,10 +45,10 @@
                     <strong>{{"DOC_SIGNED"|translate}}</strong>
                     {{documentObject.ApprovedBy}} {{documentObject.FirstName}} {{documentObject.LastName}}
                 </p>
-                <button class="button button--quiet" style="padding: 0px" ng-click="goToExternalSource(documentObject)">
-                    <strong>{{"DOC_ABOUT"|translate}}</strong>
-                </button>
             </div>
+        </ons-list-item>
+        <ons-list-item modifier="tappable chevron" ng-click="goToExternalSource(documentObject)">
+                <strong>{{"DOC_ABOUT"|translate}}</strong>
         </ons-list-item>
     </ons-list>
     >
