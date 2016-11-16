@@ -18,13 +18,18 @@ var myApp = angular.module('MUHCApp');
  *Controller manages the logic in the schedule appointment main view, it as as "child" controllers,
  */
 //Logic for the calendar controller view
-myApp.controller('CalendarController', ['Appointments', '$scope','$timeout', '$filter', '$location','$anchorScroll','NavigatorParameters',function (Appointments, $scope,$timeout,$filter,$location,$anchorScroll,NavigatorParameters) {
+myApp.controller('CalendarController', ['Appointments', '$scope','$timeout', '$filter', '$location',
+    '$anchorScroll','NavigatorParameters', 'UserPreferences',
+    function (Appointments, $scope,$timeout,$filter,$location,
+              $anchorScroll,NavigatorParameters,UserPreferences) {
     var divTreatment=document.getElementById('scrollerAppointments');
     var heightTreatment=document.documentElement.clientHeight-document.documentElement.clientHeight*0.35-180;
     divTreatment.style.height=heightTreatment+'px';
     $scope.appointments=Appointments.getUserAppointments();
     $scope.noAppointments = ($scope.appointments.length === 0);
-    $scope.appointments = Appointments.setAppointmentsLanguage($scope.appointments);
+    $scope.language = UserPreferences.getLanguage();
+    console.log($scope.language);
+    //$scope.appointments = Appointments.setAppointmentsLanguage($scope.appointments);
     $scope.dt = new Date();
     $scope.todayDate=new Date();
     var flag=false;
@@ -633,8 +638,12 @@ myApp.controller('AppointmentListController', ['$scope','$timeout','Appointments
             }
         };
     }]);
-myApp.controller('IndividualAppointmentController', ['NavigatorParameters','NativeNotification','$scope','$timeout', '$rootScope','Appointments', 'CheckinService','$q','NewsBanner','$filter',
-    function (NavigatorParameters,NativeNotification,$scope, $timeout, $rootScope, Appointments,CheckinService, $q, NewsBanner,$filter) {
+myApp.controller('IndividualAppointmentController', ['NavigatorParameters','NativeNotification','$scope',
+    '$timeout', '$rootScope','Appointments', 'CheckinService','$q',
+    'NewsBanner','$filter', 'UserPreferences',
+    function (NavigatorParameters,NativeNotification,$scope,
+              $timeout, $rootScope, Appointments,CheckinService, $q,
+              NewsBanner,$filter, UserPreferences) {
         //Information of current appointment
         NewsBanner.setAlertOffline();
         var parameters = NavigatorParameters.getParameters();
@@ -642,8 +651,9 @@ myApp.controller('IndividualAppointmentController', ['NavigatorParameters','Nati
         var navigatorName = parameters.Navigator;
         console.log(navigatorName);
         $scope.app = parameters.Post;
+        $scope.language = UserPreferences.getLanguage();
         console.log($scope.app);
-        $scope.app = Appointments.setAppointmentsLanguage($scope.app);
+        //$scope.app = Appointments.setAppointmentsLanguage($scope.app);
 
         setUpCheckin()
 

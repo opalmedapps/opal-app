@@ -31,7 +31,7 @@
             vm.language = UserPreferences.getLanguage();
             CheckinService.isAllowedToCheckin().then(function (response) {
                 console.log("Allowed to Check in",response);
-                verifyCheckIn(Appointments.setAppointmentsLanguage(Appointments.getCheckinAppointment()));
+                verifyCheckIn(Appointments.getCheckinAppointment());
             }).catch(function (error) {
                 if (error.code == "Check-in allowed in the vicinity of the Cancer Center"){
                     NewsBanner.showCustomBanner($filter('translate')("NOT_ALLOWED"), '#333333', function(){}, 3000);

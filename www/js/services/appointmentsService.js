@@ -673,8 +673,10 @@ myApp.service('Appointments', ['$q', 'RequestToServer','$cordovaCalendar','UserA
         setAppointmentsLanguage:function(array)
         {
             var language = UserPreferences.getLanguage();
+            console.log(language);
             //Check if array
-            if (Object.prototype.toString.call( array ) === '[object Array]') {
+            if (Array.isArray(array)) {
+                console.log("Is array now setting language")
                 for (var i = 0; i < array.length; i++) {
                     //set language
                     if(!array[i].hasOwnProperty('Title')||!array[i].hasOwnProperty('Description')||!array[i].hasOwnProperty('ResourceName'))
