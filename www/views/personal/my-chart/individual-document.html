@@ -31,15 +31,15 @@
         <ons-list-item class="item">
             <div style="line-height:1">
                 <p class="item-desc" ng-class="fontSizeDesc">
-                    <strong>{{"CREATED"|translate}}</strong>
+                    <strong>{{"RECEIVED_DOC"|translate}}:</strong>
                     {{documentObject.ApprovedTimeStamp|date:'medium'}}
                 </p>
                 <p class="item-desc" ng-class="fontSizeDesc">
-                    <strong>{{"UPDATED"|translate}}</strong>
+                    <strong>{{"UPDATED_DOC"|translate}}</strong>
                     {{documentObject.LastUpdated|date:'medium'}}
                 </p>
                 <p class="item-desc" ng-class="fontSizeDesc">
-                    <strong>{{"SIGNED"|translate}}</strong>
+                    <strong>{{"SIGNED_DOC"|translate}}</strong>
                     {{documentObject.ApprovedBy}}
                 </p>
                 <a ng-href="" class="item-desc" ng-class="fontSizeDesc" ng-click="goToExternalSource(documentObject)">
