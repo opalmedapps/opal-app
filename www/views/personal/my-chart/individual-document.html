@@ -30,10 +30,21 @@
     <ons-list>
         <ons-list-item class="item">
             <div style="line-height:1">
-                <p class="item-desc" ng-class="fontSizeDesc"><strong>Created on:</strong> {{documentObject.DateAdded|date:'medium'}}</p>
-                <p class="item-desc" ng-class="fontSizeDesc"><strong>Updated on:</strong> {{documentObject.LastUpdated|date:'medium'}}</p>
-                <p class="item-desc" ng-class="fontSizeDesc"><strong>Signed by:</strong> INSERT PERSON HERE</p>
-                <p class="item-desc" ng-class="fontSizeDesc"><strong>About this document</strong></p>
+                <p class="item-desc" ng-class="fontSizeDesc">
+                    <strong>{{"CREATED"|translate}}</strong>
+                    {{documentObject.ApprovedTimeStamp|date:'medium'}}
+                </p>
+                <p class="item-desc" ng-class="fontSizeDesc">
+                    <strong>{{"UPDATED"|translate}}</strong>
+                    {{documentObject.LastUpdated|date:'medium'}}
+                </p>
+                <p class="item-desc" ng-class="fontSizeDesc">
+                    <strong>{{"SIGNED"|translate}}</strong>
+                    {{documentObject.ApprovedBy}}
+                </p>
+                <a ng-href="" class="item-desc" ng-class="fontSizeDesc" ng-click="goToExternalSource(documentObject)">
+                    <strong>{{"ABOUT_DOC"|translate}}</strong>
+                </a>
             </div>
         </ons-list-item>
     </ons-list>
