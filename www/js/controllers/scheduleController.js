@@ -163,6 +163,7 @@ myApp.controller('CalendarController', ['Appointments', '$scope','$timeout', '$f
     };
     $scope.goToCalendarOptions = function()
     {
+        console.log(NavigatorParameters.getParameters());
         if(NavigatorParameters.getParameters().Navigator == 'homeNavigator'){
             homeNavigator.pushPage('./views/personal/appointments/calendar-options.html');
         } else{
