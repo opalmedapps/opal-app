@@ -50,7 +50,7 @@ myApp.controller('HomeController', ['$state','Appointments', 'CheckinService','$
         NewsBanner.setAlertOffline();
 
         console.log('Got home safely');
-
+        NavigatorParameters.setParameters({'Navigator':'homeNavigator'});
         // Need to allow external storage write for documents notifications.
         Permissions.enablePermission('WRITE_EXTERNAL_STORAGE', 'Storage access disabled. Unable to write documents.');
 
