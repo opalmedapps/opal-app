@@ -250,6 +250,8 @@ myApp.controller('BookletEduMaterialController', ['$scope', '$timeout', 'Navigat
 	//Obtaining educational material parameters
 	var parameters = NavigatorParameters.getParameters();
 	var navigatorName = parameters.Navigator;
+
+	console.log("Navigator paranms",parameters);
 	// var text = (new Array(100)).join('Lorem ipsum dolor sit amet. ');
 	// var each = function(selector, f) {
     // [].forEach.call(document.querySelectorAll(selector), f);
