@@ -42,7 +42,7 @@
                                             <strong>{{"STEP"|translate}} {{status.eventIndex}} {{"OF"|translate}} {{status.totalEvents}} </strong>
                                             <div ng-show="status.eventType === 'plan'">
                                                 <div ng-show="!status.planningCompleted" align="middle" style="margin-left:5px; vertical-align: middle">
-                                                    {{status.currentEvent}}
+                                                    {{status.currentEvent | translate}}
                                                 </div>
                                                 <div ng-show="status.planningCompleted" align="middle" style="margin-left:5px">
                                                     <p><i class="ion-checkmark-circled iconStatusBox"></i>{{"TREATMENTPLANCOMPLETEDON"|translate}}
@@ -85,7 +85,7 @@
                                 </ons-col>
                                 <ons-col width="6px" class="plan-center" ng-style="{ 'background-color': getStyle(events[0]) }"></ons-col>
                                 <ons-col class="plan-right">
-                                    <div class="plan-name" ng-class="fontSizeTitle"> <span style="text-align:left"><strong>{{$index+1}}</strong></span> {{step}}</div>
+                                    <div class="plan-name" ng-class="fontSizeTitle"> <span style="text-align:left"><strong>{{$index+1}}</strong></span> {{step | translate}}</div>
                                     <div class="plan-info" ng-class="fontSizeDesc">
                                         <div ng-if="(status.eventIndex > status.stepMapping[step] && (events[0].ScheduledStartTime || events[0].DueDateTime)< status.today)">
                                             <strong>{{"COMPLETED"|translate}}: </strong>

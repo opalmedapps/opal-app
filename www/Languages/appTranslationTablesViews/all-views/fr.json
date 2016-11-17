@@ -76,7 +76,7 @@
   "FIELD_UPDATED": "Le domaine a été mis à jour",
   "FONTSIZE": "Taille de la police",
   "FORGOTPASSWORD": "Mot de passe oublié",
-  "FUTURE": "À venire",
+  "FUTURE": "À venir",
   "GENERAL": "Général",
   "GENERALANNOUNCEMENTS": "Annonces générales",
   "GENERALSETTINGS": "Réglages Généraux",
@@ -215,5 +215,10 @@
   "_COMMENT2": "Options page appointment",
   "_COMMENT3": "Page de planification de traitement",
   "_COMMENT4": "Ma page de documents",
-  "_COMMENT5": "Settings"
+  "_COMMENT5": "Settings",
+  "CT for Radiotherapy Planning": "Scan pour votre traitment",
+  "Physician Plan Preparation": "Préparation de votre traitement",
+  "Calculation of Dose": "Calculation de la dose",
+  "Physics Quality Control": "Contrôle de qualité",
+  "Scheduling Treatments": "Prise de rendez-vous"
 }

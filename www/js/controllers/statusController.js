@@ -116,7 +116,7 @@
             statusVm.eventType = 'plan';
             statusVm.totalEvents = 5;
 
-            var nextStepIndex = statusVm.stepMapping[currentStep] + 1;
+            var nextStepIndex = statusVm.stepMapping[currentStep];
             console.log(nextStepIndex);
             statusVm.eventIndex = nextStepIndex;
             //statusVm.estimatedTime='3 days';

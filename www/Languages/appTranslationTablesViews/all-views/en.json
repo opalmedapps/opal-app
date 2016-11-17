@@ -183,5 +183,10 @@
   "_COMMENT2": "Options page appointment",
   "_COMMENT3": "Treatment Planning Page",
   "_COMMENT4": "My chart Page",
-  "_COMMENT5": "Settings"
+  "_COMMENT5": "Settings",
+  "CT for Radiotherapy Planning": "CT for Radiotherapy Planning",
+  "Physician Plan Preparation": "Physician Plan Preparation",
+  "Calculation of Dose": "Calculation of Dose",
+  "Physics Quality Control": "Physics Quality Control",
+  "Scheduling Treatments": "Scheduling Treatments"
 }
