@@ -4,6 +4,7 @@
 var myApp = angular.module('MUHCApp');
 myApp.controller('accountSettingController', ['Patient', 'UserPreferences', '$scope', '$timeout', 'UpdateUI', 'RequestToServer', '$filter', 'NavigatorParameters', function(Patient, UserPreferences, $scope, $timeout, UpdateUI, RequestToServer, $filter, NavigatorParameters) {
 
+    NavigatorParameters.setParameters({'Navigator':'settingsNavigator'});
 
     //Backbutton android pressed action, only Android devices
     var backButtonPressed = 0;

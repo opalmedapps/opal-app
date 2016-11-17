@@ -62,6 +62,7 @@ myApp.controller('personalTabController',['$scope','$timeout','Appointments','$t
 
     //Its possible for a notification to have been read such as a document since this controller has already been instantiated
     // we will have to check to sync that number on the badges for the tabs on the personal page.
+    NavigatorParameters.setParameters({'Navigator':'personalNavigator'});
     personalNavigator.on('prepop',function(){
         setNewsNumbers();
     });
@@ -142,6 +143,9 @@ myApp.controller('personalTabController',['$scope','$timeout','Appointments','$t
 
 
 myApp.controller('generalTabController',['$scope','$timeout','Announcements','RequestToServer','UpdateUI','Notifications','NavigatorParameters','$filter',function($scope,$timeout,Announcements,RequestToServer,UpdateUI,Notifications,NavigatorParameters,$filter){
+
+    NavigatorParameters.setParameters({'Navigator':'generalNavigator'});
+
     var app = document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'https://' ) === -1;
     setNewsNumbers();
     generalNavigator.on('prepop',function(){
