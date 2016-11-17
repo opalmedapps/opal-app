@@ -24,7 +24,7 @@
           </svg>
         </div>
         <div class="container" style="background-color:white;"  ng-show="section.Content">
-             <div ng-bind-html="section.Content" ></div>
+             <div ng-bind-html="section.Content | toTrusted" ></div>
        </div>
        </ons-page>
     </ons-carousel-item>
