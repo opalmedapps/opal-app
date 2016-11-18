@@ -1,22 +1,27 @@
 
 // Import necessary libraries
 
-var mainRequestApi      =   require('./main.js');
-var resetPasswordApi    =   require('./resetPassword.js');
-var firebase            =   require("firebase");
-var utility            =   require('./utility.js');
+var mainRequestApi      =   	require('./main.js');
+var resetPasswordApi    =   	require('./resetPassword.js');
+var admin            	=   	require("firebase-admin");
+var utility            	=   	require('./utility.js');
+var q 			=	require("q");
 
 // Initialize firebase connection
 
-firebase.initializeApp({
-    serviceAccount: "path/to/serviceAccount.json",
-    databaseUrl: "https://opal-dev.firebaseio.com"
+//admin.database.enableLogging(true);
+
+var serviceAccount = require("/home/robert/firebase_account/opal-dev-firebase-adminsdk-73h8x-5c71c7ec12.json");
+
+admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount),
+    databaseURL: "https://opal-dev.firebaseio.com"
 });
 
 // Get reference to correct data element
 
-var db = firebase.database();
-var ref = db.ref("'https://opal-dev.firebaseio.com/dev2'");
+var db = admin.database();
+var ref = db.ref("/dev2");
 
 // Clear requests that are still on Firebase
 
@@ -31,13 +36,18 @@ listenAndSend();
 function listenAndSend(){
     ref.on('child_added', function(snapshot){
         snapshot.forEach(function(childSnapshot){
-            var headers = {key: childSnapshot.key(),objectRequest: childSnapshot.val()}
-            //var response = processRequest(headers);
-            if(!(snapshot.key() === "users" || snapshot.key() === "passwordResetResponses")){
-                console.log('Got' + snapshot.key());
-                //uploadToFirebase(response, snapshot.key());
-            }
-        });
+            	var headers = {key: childSnapshot.key,objectRequest: childSnapshot.val()};
+		console.log("Toplevel snapshot key", snapshot.key);
+		console.log("Childlevel snapshot key", childSnapshot.key);
+		if(!(snapshot.key === "users" || snapshot.key === "passwordResetResponses")){
+            		processRequest(headers).then(function(response){
+				console.log('Got' + snapshot.key);
+                		uploadToFirebase(response, snapshot.key);
+			}).catch(function(error){
+				console.log("Error processing request!", error);
+			});
+		}
+	});
 
     });
 }
@@ -45,7 +55,7 @@ function listenAndSend(){
 function clearTimeoutRequests()
 {
     ref.child('users').once('value').then(function(snapshot){
-        console.log('I am inside deleting requests');
+        //console.log('I am inside deleting requests');
         var now=(new Date()).getTime();
         var usersData=snapshot.val();
         for (var user in usersData) {
@@ -53,7 +63,7 @@ function clearTimeoutRequests()
             {
                 if(usersData[user][requestKey].hasOwnProperty('Timestamp')&&now-usersData[user][requestKey].Timestamp>60000)
                 {
-                    console.log('I am deleting requests');
+                    console.log('I am deleting leftover requests');
                     ref.child('users/'+user+'/'+requestKey).set(null);
                 }
             }
@@ -63,42 +73,46 @@ function clearTimeoutRequests()
 }
 
 function processRequest(headers){
+	
+    var r = q.defer(); 
     var requestKey = headers.key;
     var requestObject= headers.objectRequest;
     console.log("----------------------------------REQUEST OBJECT --------------------------------------")
     console.log(requestObject);
+    console.log("----------------------------------REQUEST OBJECT END --------------------------------------")
+
 
     if(requestObject.Request=='VerifySSN'||requestObject.Request=='SetNewPassword'||requestObject.Request=='VerifyAnswer')
     {
-        console.log(requestObject);
+        //console.log(requestObject);
         resetPasswordApi.resetPasswordRequest(requestKey,requestObject).then(function(results)
         {
             console.log('Reset Password ');
-            console.log(results);
-            return results;
+            //console.log(results);
+            r.resolve(results);
         });
 
     }else{
         mainRequestApi.apiRequestFormatter(requestKey, requestObject).then(function(results){
             console.log('Api call from server.js');
-            console.log(results);
-            return results;
+            //console.log(results);
+            r.resolve(results);
         });
     }
+    return r.promise;
 }
 
 function uploadToFirebase(response, key)
 {
     console.log('I am about to go to into encrypting regular upload');
-
-    var headers = Object.assign({}, response.Headers);
+    var headers = JSON.parse(JSON.stringify(response.Headers));
     var success = response.Response;
     var requestKey = headers.RequestKey;
     var encryptionKey = response.EncryptionKey;
     console.log(encryptionKey);
     delete response.EncryptionKey;
     if(typeof encryptionKey!=='undefined' && encryptionKey!=='') response = utility.encryptObject(response, encryptionKey);
-    response.Timestamp = firebase.database.ServerValue.TIMESTAMP;
+    response.Timestamp = admin.database.ServerValue.TIMESTAMP;
     console.log(response);
 
     var path = '';
