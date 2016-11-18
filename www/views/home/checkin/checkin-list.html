@@ -1,0 +1,33 @@
+<ons-page ng-controller="CheckInController as checkIn">
+    <ons-toolbar>
+        <div class="left">
+            <ons-back-button>{{"BACK"|translate}}</ons-back-button>
+        </div>
+        <div class="center">{{"CHECKIN"|translate}}</div>
+    </ons-toolbar>
+    ons
+    <ons-list >
+        <ons-list-header class="person-list-header" ng-class="fontSizeTitle">
+            {{"APPOINTMENTS"|translate}}
+        </ons-list-header>
+        <ons-list-item modifier="tappable chevron" ng-repeat="app in checkIn.apps" ng-click="checkIn.goToAppointment(app)">
+            <ons-col align="center">
+                <div style="line-height:1;padding:5px;" >
+                    <span ng-class="fontSizeTitle">
+                        {{app["AppointmentType_"+checkIn.language]}} <br>
+                        {{app.ScheduledStartTime | date:'shortTime'}}
+                    </span> <br>
+                    <span class="item-desc" ng-class="fontSizeDesc">{{app["MapName_"+checkIn.language]}}</span>
+                </div>
+            </ons-col>
+        </ons-list-item>
+    </ons-list>
+    <br>
+    <div style="text-align: center">
+        <ons-button style="font-size: x-large" should-spin="false" var="checkInButton" disabled
+                    ng-click="checkIn.checkInToAll(checkIn.apps)">
+            {{checkIn.checkInMessage|translate}}
+        </ons-button>
+    </div>
+
+</ons-page>

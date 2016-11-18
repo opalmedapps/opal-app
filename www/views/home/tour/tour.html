@@ -1,0 +1,46 @@
+<ons-modal var="tourModal">
+    <div id="rcorners">
+        <ons-carousel swipeable overscrollable auto-scroll style="height: 90%" var="tourCarousel">
+            <ons-carousel-item>
+                <h3>Welcome to Opal!</h3>
+                <span>You can find all your radiotherapy data through this app. To get started, click on the arrow to change slide.</span>
+            </ons-carousel-item>
+            <ons-carousel-item>
+                <ons-icon icon="fa fa-home tour-icon" aria-hidden="true"></ons-icon>
+                <br>
+                In your <strong>Home</strong> tab, you will be provided with <strong>news</strong> about
+                your medical status, <strong>documents</strong> and <strong>appointments</strong>.
+            </ons-carousel-item>
+            <ons-carousel-item>
+                <ons-icon icon="ion-android-person tour-icon" class="tab-icon"></ons-icon>
+                <br>
+                In your <strong>My Chart</strong> tab, you can see your <strong>appointments</strong>,
+                <strong>documents</strong> and any other chart information.
+            </ons-carousel-item>
+            <ons-carousel-item>
+                <ons-icon icon="ion-ios-book tour-icon" class="tab-icon"></ons-icon>
+                <br>
+                In your <strong>General</strong> tab, you can see your <strong>treating team</strong>,
+                <strong>announcements</strong> and <strong>parking</strong>. You can also provide us feedback on the app!
+            </ons-carousel-item>
+            <ons-carousel-item>
+                <ons-icon icon="ion-university tour-icon" class="tab-icon"></ons-icon>
+                <br>
+                In your <strong>Education</strong> tab, you will receive educational material as you progress
+                through your radiotherapy. We will show you videos, booklets and documents specific to you.
+            </ons-carousel-item>
+            <ons-carousel-item>
+                <ons-icon icon="ion-ios-information-outline tour-icon"></ons-icon>
+                <br>
+                The <strong>Information</strong> button will give you any extra information if you need it!Press
+                close if you want to exit the tour or you can press the left arrow to see the previous tips.
+            </ons-carousel-item>
+        </ons-carousel>
+
+        <div id="tourButtons">
+            <span><i class="fa fa-arrow-left" aria-hidden="true" style="color:white" ng-click="tourCarousel.prev()"></i></span>
+            <ons-button modifier="cta" ng-click="tourModal.hide()" style="background-color: inherit; font-size: 125%">Close</ons-button>
+            <i class="fa fa-arrow-right" aria-hidden="true" style="color:white" ng-click="tourCarousel.next()"></i>
+        </div>
+    </div>
+</ons-modal>

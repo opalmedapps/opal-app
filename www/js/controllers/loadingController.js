@@ -12,7 +12,9 @@ angular.module('MUHCApp').controller('LoadingController', ['$rootScope','$state'
 			{
 				modal.hide();
 				clearTimeout(timeOut);
-				$state.go('Home');	
+				console.log('Going home');
+				console.log($state.go('Home'));
+				console.log('Supposed to be home.')
 			});
 		},200);
 		

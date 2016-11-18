@@ -841,7 +841,7 @@ a.muhcapp-home-account:link, a.muhcapp-home-account:hover{
 }
 
 .settings-list {
-  margin-top: 10px;
+  margin-top: 0px;
 }
 
 .list-item-note {
@@ -1573,9 +1573,6 @@ Button appointments
    height: 69px;
    width:69px;
    border-radius: 50%;
- }
- .settings-list {
-     margin-top: 10px;
  }
 
  .item {
@@ -2426,4 +2423,26 @@ transform: translate(0px,-50px);
   -webkit-transition: width .6s ease;
   -o-transition: width .6s ease;
   transition: width .6s ease;
+}
+
+#rcorners {
+    border-radius: 25px;
+    background: rgba(0,0,0,0.8);
+    padding: 20px;
+    width: 90%;
+    height: 60%;
+    margin: auto;
+    position: relative;
+}
+
+#tourButtons{
+    position: absolute;
+    bottom: 0;
+    text-align: center;
+    width: 85%;
+}
+
+.tour-icon{
+    font-size: 500%;
+    color: white;
 }

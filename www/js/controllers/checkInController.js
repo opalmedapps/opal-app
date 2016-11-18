@@ -1,71 +1,100 @@
-angular.module('MUHCApp')
-    .controller('CheckInController', ['$scope', 'CheckinService','$timeout','Appointments', '$filter', 'RequestToServer','UpdateUI', function ($scope, CheckinService,$timeout,Appointments,$filter,RequestToServer,UpdateUI) {
+(function () {
+    'use strict';
 
-      initCheckin();
-      $scope.load = function($done) {
-        $timeout(function() {
-          RequestToServer.sendRequest('Refresh','Appointments');
-          loadInfo();
-              $done();
-        }, 3000);
-      };
-      function loadInfo(){
-        UpdateUI.UpdateSection('Appointments').then(function()
-        {
-          initCheckin();
-        });
-     }
-      function initCheckin(){
-        $scope.alert={};
-        if(Appointments.isThereNextAppointment())
-        {
-          $scope.shownAppointmentText='The date and time of your next appointment is, '+$filter('formatDateAppointmentTask')((Appointments.getUpcomingAppointment()).ScheduledStartTime);
-        }else{
-          if(Appointments.isThereAppointments())
-          {
-            $scope.shownAppointmentText='The date and time of your last appointment is, '+"\n"+ $filter('formatDateAppointmentTask')((Appointments.getLastAppointmentCompleted()).ScheduledStartTime);
-          }else{
-            $scope.shownAppointmentText='No appointments available';
-          }
-        }
-        $scope.enableCheckin=false;
-        if(CheckinService.haveNextAppointmentToday())
-        {
-          if(!CheckinService.isAlreadyCheckedin())
-          {
-            $scope.alert.message='You have an appointment today, checking your location...';
-            $scope.loading=true;
-            CheckinService.isAllowedToCheckin().then(function(response)
-            {
-              if(response)
-              {
-                console.log(response);
-                $timeout(function(){
-                  $scope.enableCheckin=true;
-                  $scope.loading=false;
-                  $scope.alert.message='Checkin to your appointment';
-                });
-              }else{
-                $scope.alert.message='You have an appointment today, checkin allowed in the vecinity of the cancer center';
-                $scope.loading=false;
-                $scope.enableCheckin=false;
-              }
+    angular
+        .module('MUHCApp')
+        .controller('CheckInController', CheckInController);
+
+    CheckInController.$inject = ['CheckinService', 'NavigatorParameters', 'UserPreferences',
+        '$q', 'Appointments', 'NewsBanner'];
+
+    /* @ngInject */
+    function CheckInController(CheckinService, NavigatorParameters, UserPreferences,
+                               $q, Appointments, NewsBanner) {
+        var vm = this;
+        vm.title = 'CheckInController';
+        vm.apps = [];
+        vm.language = 'EN';
+        vm.response = '';
+        vm.error = '';
+        vm.checkInMessage = "CHECKED_IN";
+        vm.goToAppointment = goToAppointment;
+        vm.checkInToAll = checkInToAll;
+
+        activate();
+
+        ////////////////
+
+        function activate() {
+            vm.apps = NavigatorParameters.getParameters().Post;
+            console.log(vm.apps);
+            vm.language = UserPreferences.getLanguage();
+            CheckinService.isAllowedToCheckin().then(function (response) {
+                console.log("Allowed to Check in",response);
+                verifyCheckIn(Appointments.getCheckinAppointment());
+            }).catch(function (error) {
+                if (error.code == "Check-in allowed in the vicinity of the Cancer Center"){
+                    NewsBanner.showCustomBanner($filter('translate')("NOT_ALLOWED"), '#333333', function(){}, 3000);
+                } else {
+                    NewsBanner.showCustomBanner($filter('translate')("CHECKIN_ERROR"), '#333333', function(){}, 3000);
+                }
+                console.log(error);
             });
-          }else{
-            $scope.enableCheckin=false;
-            $scope.alert.message='You have checked in to your appointment, procceed to waiting room';
-          }
-        }else{
-          $scope.enableCheckin=false;
-          $scope.alert.message='Checkin allowed on the day of your appointment';
+
         }
-      }
 
-      $scope.checkin=function()
-      {
-        CheckinService.checkinToAppointment();
-        $scope.alert.message='You have successfully checked in to your appointment, proceed to waiting room';
-        $scope.enableCheckin=false;
+        function goToAppointment(appointment){
+            NavigatorParameters.setParameters({'Navigator':'homeNavigator', 'Post':appointment});
+            homeNavigator.pushPage('./views/personal/appointments/individual-appointment.html');
+        }
 
-      }
-}]);
+        function checkInToAll(appointments){
+            checkInButton.startSpin();
+            checkInButton.setDisabled(true);
+
+            var promises = [];
+            for (var i=0;  i !=appointments.length; i++){
+                promises.push(CheckinService.checkinToAppointment(appointments[i]));
+            }
+
+            $q.all(promises).then(function (dataArray) {
+                checkInButton.stopSpin();
+                vm.checkInMessage = "CHECKED_IN";
+                var message = $filter('translate')("CHECKED_IN");
+                NewsBanner.showCustomBanner(message, '#333333', function(){}, 500);
+                console.log(dataArray);
+
+            }).catch(function (error) {
+                console.log("CheckIn failed: ", error);
+                vm.error = "SERVERPROBLEM";
+            });
+            
+        }
+
+        function verifyCheckIn(appointments){
+            var promises = [];
+
+            for (var i=0; i !=appointments.length; i++){
+                promises.push(CheckinService.checkCheckinServer(appointments[i]));
+            }
+
+            $q.all(promises).then(function (dataArray) {
+                console.log("Success checkin verify", dataArray);
+
+                for (var checkedIn in dataArray){
+                    if (dataArray[checkedIn] === false){
+                        checkInButton.setDisabled(false);
+                        vm.checkInMessage = "CHECKIN_TO_ALL";
+                        break;
+                    }
+                }
+
+            }).catch(function (error) {
+                NewsBanner.showCustomBanner($filter('translate')("CHECKIN_ERROR"), '#333333', function(){}, 3000);
+                console.log("Cannot verify checkin", error);
+            });
+        }
+    }
+
+})();
+

@@ -14,34 +14,35 @@ module.exports = function(config) {
 
 
     // list of files / patterns to load in the browser
-    files:[ 
-  './www/lib/bower_components/angular/angular.js',
-  './www/lib/bower_components/jquery/dist/jquery.js',
-  './www/lib/bower_components/angular-animate/angular-animate.js',
-  './www/lib/bower_components/angular-dynamic-locale/src/tmhDynamicLocale.js',
-  './www/lib/bower_components/angular-elastic/elastic.js',
-  './www/lib/bower_components/angular-sanitize/angular-sanitize.js',
-  './www/lib/bower_components/angular-touch/angular-touch.js',
-  './www/lib/bower_components/angular-translate/angular-translate.js',
-  './www/lib/bower_components/angular-translate-handler-log/angular-translate-handler-log.js',
-  './www/lib/bower_components/angular-translate-loader-partial/angular-translate-loader-partial.js',
-  './www/lib/bower_components/angular-translate-loader-url/angular-translate-loader-url.js',
-  './www/lib/bower_components/angular-ui-router/release/angular-ui-router.js',
-  './www/lib/bower_components/firebase/firebase.js',
-  './www/lib/js/cryptojs/aes.js',
-  './www/lib/js/cryptojs/mode-cfb-min.js',
-  './www/lib/js/cryptojs/sha256.js', 
-  './www/lib/bower_components/progressbar.js/dist/progressbar.js',
-  './www/lib/bower_components/ngCordova/dist/ng-cordova.js',
-  './www/lib/bower_components/bootstrap/dist/js/bootstrap.js',
-  './www/lib/bower_components/onsenui/build/js/onsenui.js',
-  './www/lib/js/angular-bootstrap/ui-bootstrap-tpls-1.1.2.js',
-  './www/lib/js/cryptojs/*.js',
-  './www/lib/bower_components/angular-tek-progress-bar/dist/tek.progress-bar.js',
-   './www/lib/js/scrollglue/scrollglue.js',
-  './www/lib/bower_components/angularfire/dist/angularfire.js',
-  './www/lib/bower_components/angular-mocks/angular-mocks.js',
-  './www/js/*.js','./www/js/controllers/*.js','./www/js/services/*.js','./www/js/directives/*.js','./www/js/filters/*.js', './test/spec/**/*.js'],
+    files:[
+      './www/lib/bower_components/angular/angular.js',
+      './www/lib/bower_components/jquery/dist/jquery.js',
+      './www/lib/bower_components/angular-animate/angular-animate.js',
+      './www/lib/bower_components/angular-sanitize/angular-sanitize.js',
+      './www/lib/bower_components/angular-translate/angular-translate.js',
+      './www/lib/bower_components/angular-translate-handler-log/angular-translate-handler-log.js',
+      './www/lib/bower_components/angular-translate-loader-partial/angular-translate-loader-partial.js',
+      './www/lib/bower_components/angular-dynamic-locale/src/tmhDynamicLocale.js',
+      './www/lib/bower_components/progressbar.js/dist/progressbar.js',
+      './www/lib/bower_components/angular-ui-router/release/angular-ui-router.js',
+      './www/lib/bower_components/angular-touch/angular-touch.js',
+      './www/lib/bower_components/firebase/firebase.js',
+      './www/lib/bower_components/angularfire/dist/angularfire.js',
+      './www/lib/bower_components/ngCordova/dist/ng-cordova.js',
+      './www/lib/bower_components/crypto-js/crypto-js.js',
+      './www/lib/bower_components/angular-elastic/elastic.js',
+      './www/lib/bower_components/angular-scroll-glue/src/scrollglue.js',
+      './www/lib/bower_components/angular-bootstrap/ui-bootstrap-tpls.js',
+      './www/lib/bower_components/angular-tek-progress-bar/dist/tek.progress-bar.js',
+      './www/lib/bower_components/onsenui/js/onsenui.js',
+      './www/lib/bower_components/angular-mocks/angular-mocks.js',
+      './www/js/*.js',
+      './www/js/controllers/*.js',
+      './www/js/services/*.js',
+      './www/js/directives/*.js',
+      './www/js/filters/*.js',
+      './test/spec/*.spec.js'
+    ],
 
     // list of files to exclude
     exclude: [
@@ -82,10 +83,10 @@ module.exports = function(config) {
     // start these browsers
     // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
     browsers: [
-        'PhantomJS'
-        // , 'Chrome'
-        // , 'Firefox'
-        // , 'Safari'
+      'PhantomJS'
+      // 'Chrome'
+      // , 'Firefox'
+      // , 'Safari'
     ],
 
 

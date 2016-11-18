@@ -1,57 +1,38 @@
 <ons-page ng-controller="DocumentsController">
-  <ons-toolbar>
-    <div class="left">
-      <ons-back-button>{{"BACK"|translate}}</ons-back-button>
-    </div>
-    <div class="center">{{"PATIENTDOCUMENTS"|translate}}</div>
-  </ons-toolbar>
-  <div>
-    <div style="color:grey;margin-top:25vh" ng-show="noDocuments" align="center" ng-class="fontSizeTitle">
-      {{"NOPATIENTDOCUMENTSAVAILABLE"|translate}}
-    </div>
-    <ons-list ng-repeat="document in documents">
-      <ons-list-header class="person-list-header" ng-class="fontSizeTitle">{{document.DateAdded|date:'EEE MMM dd yyyy'}}<span class="pull-right" ng-show= "document.ReadStatus =='0'">{{"UNREAD"|translate}}</span></ons-list-header>
-      <ons-list-item modifier="chevron" ng-click="goToDocument(document)">
-        <ons-row>
-          <ons-col width="6px">
-          </ons-col>
-          <ons-col width="60px" align="center">
-            <div style="padding:5px">
-              <img ng-src="./img/pdf-icon.png" style="witdth:55px;height:55px">
-            </div>
-          </ons-col>
-          <ons-col>
-            <div style="line-height:1;padding:5px" >
-              <p ng-class="fontSizeTitle"> <strong>{{document.Title}}</strong><p>
-              <p class="item-desc" ng-class="fontSizeDesc">{{document.Description}}</p>
-            </div>
-          </ons-col>
-        </ons-row>
-      </ons-list-item>
-    </ons-list>
-    <!--<ul class="list list--inset" ng-repeat="document in documents" style="margin-top:5px" ng-click="personalNavigator.pushPage('./views/personal/my-chart/individual-document.html',{param:document});">
-      <li class="list__item list--inset__item list__item--chevron">
-        <div style="padding:8px;">
-          <ons-row>
-            <ons-col width="30px">
-              <div align="right">
-                <i class="ion-document-text iconHomeView"></i>
-              </div>
-            </ons-col>
-            <ons-col>
-              <div align="middle" style="margin-left:5px">
-                <div class="profile-name themeCardTitle">
-                  {{document.Name}}
-                </div>
-                <div class="desc">
-                  {{document.DateAdded|formatDateAppointmentTask}}
-                  <div style=" color:grey;">{{document.Description}}</div>
-                </div>
-              </div>
-            </ons-col>
-          </ons-row>
+    <ons-toolbar>
+        <div class="left">
+            <ons-back-button>{{"BACK"|translate}}</ons-back-button>
         </div>
-      </li>
-    </ul>-->
-  </div>
+        <div class="center">{{"CLINICAL_NOTES"|translate}}</div>
+    </ons-toolbar>
+    <div>
+        <div style="color:grey;margin-top:25vh" ng-show="noDocuments" align="center" ng-class="fontSizeTitle">
+            {{"NOPATIENTDOCUMENTSAVAILABLE"|translate}}
+        </div>
+        <ons-list ng-repeat="doc in documents" ng-click="goToDocument(doc)">
+            <ons-list-header class="person-list-header" ng-class="fontSizeTitle" ng-show="showHeader($index, documents.length)">
+                {{doc.DateAdded|date:'fullDate'}}
+            </ons-list-header>
+            <ons-list-item modifier="chevron">
+                <ons-row>
+                    <ons-col width="6px">
+                    </ons-col>
+                    <ons-col width="65px" align="center">
+                        <div style="padding:5px">
+                            <img ng-src="./img/pdf-icon.png" style="height:55px">
+                        </div>
+                    </ons-col>
+                    <ons-col align="center">
+                        <div style="line-height:1;padding:5px;" >
+                            <span ng-class="fontSizeTitle"> <strong>{{doc.Title}}</strong></span> <br>
+                            <span class="item-desc" ng-class="fontSizeDesc">{{"ADDED"|translate}} {{doc.DateAdded|date:'shortTime'}}</span>
+                        </div>
+                    </ons-col>
+                    <ons-col width="15%" align="center">
+                        <i class="fa fa-exclamation-circle fa-lg" aria-hidden="true" style="color: forestgreen" ng-show= "doc.ReadStatus =='0'"></i>
+                    </ons-col>
+                </ons-row>
+            </ons-list-item>
+        </ons-list>
+    </div>
 </ons-page>

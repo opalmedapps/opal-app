@@ -164,6 +164,7 @@ exports.runSqlQuery = function(query, parameters, processRawFunction)
           r.resolve(result);
         });
       }else{
+        //console.log(rows);
         r.resolve(rows);
       }
     }else{
@@ -229,6 +230,9 @@ function processSelectRequest(table, userId, timestamp)
      exports.runSqlQuery(requestMappingObject.sql,paramArray,
       requestMappingObject.processFunction).then(function(rows)
       {
+        if (table === 'Questionnaires'){
+          console.log(rows);
+        }
          r.resolve(rows);
       },function(err)
       {
@@ -324,14 +328,14 @@ exports.checkinUpdate = function(requestObject)
     connection.query(queries.getAppointmentAriaSer(),[requestObject.UserID,requestObject.Parameters.AppointmentSerNum],function(error,rows,fields)
     {
       if(error||rows.length==0) r.reject({'Response':'error'});
-      console.log(rows);
+      console.log('AppAriaSerNums',rows);
       var appointmentAriaSer = rows[0].AppointmentAriaSer;
       exports.getTimeEstimate(appointmentAriaSer).then(function(data)
       {
         r.resolve(data);
       }).catch(function(error)
       { 
-        r.reject({'Response':'error'});
+        r.reject({'Response':'Problem resolving time estimate.'});
       });
     });
     // exports.runSqlQuery(queries.getAppointmentAriaSer(),[requestObject.UserID,requestObject.Parameters.AppointmentSerNum], exports.getTimeEstimate).then(
@@ -849,14 +853,17 @@ exports.getTimeEstimate = function(appointmentAriaSer)
   var url = 'http://172.26.66.41/devDocuments/WTSim/api/getEstimate.php?appt_aria_ser='+appointmentAriaSer;
     request(url,function(error, response, body)
     {
-      if(error){console.log('line814,sqlInterface',error);r.reject(error);}
+      if(error){console.log('getTimeEstimate,sqlInterface',error);r.reject(error);}
       if(!error&&response.statusCode=='200')
       {
-        console.log(body);
+        console.log('Time Estimate ', body);
         body = JSON.parse(body);
 
-        if(body.length>1)r.resolve(body[0]);
-        else r.reject({Response:'error'})
+        if(body.length>1){
+          r.resolve(body[0]);
+        } else{
+          r.reject({Response:'No data from getEstimate script'});
+        }
       }else{
         r.resolve(error);
       }

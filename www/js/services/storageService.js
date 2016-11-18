@@ -28,7 +28,7 @@
         }
 
         function hasKey(key) {
-            return localStorage.hasOwnProperty(key);
+            return localStorage.getItem(key);
         }
 
         function remove(key) {
