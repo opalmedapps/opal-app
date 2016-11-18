@@ -11,7 +11,7 @@
         </div>
     </div>
     <div>
-        <ons-list class="person-list" id = "listInitApp" style="display:none" translate-cloak>
+        <ons-list  class="person-list" id = "listInitApp" style="display:none" translate-cloak>
             <!--<ons-list-item class="person" modifier="tappable" ng-click="goToUserView()" style="background-color: #387A36">
                 <ons-row align="middle" style="height:40px">
                     <ons-col align="center" width="40px">
@@ -27,7 +27,7 @@
                     </ons-col>
                 </ons-row>
             </ons-list-item>-->
-            <ons-list-item class="person" modifier="tappable" ng-click="goToParking()">
+            <ons-list-item class="person" modifier="tappable chevron" ng-click="goToParking()">
                 <ons-row align="middle" style="height:40px;">
                     <ons-col align="center" width="40px">
                         <div style="margin-left:10px;text-align:left;display:inline-block">
@@ -42,7 +42,7 @@
                     </ons-col>
                 </ons-row>
             </ons-list-item>
-            <ons-list-item class="person" modifier="tappable" ng-click="goToPatientCharter()">
+            <ons-list-item class="person" modifier="tappable chevron" ng-click="goToPatientCharter()">
                 <ons-row align="middle" style="height:40px;">
                     <ons-col align="center" width="40px">
                         <div style="margin-left:10px;text-align:left;display:inline-block">
@@ -57,11 +57,11 @@
                     </ons-col>
                 </ons-row>
             </ons-list-item>
-            <ons-list-item class="person" modifier="tappable" ng-click="reportIssuesMail()">
+            <ons-list-item class="person" modifier="tappable chevron" ng-click="reportIssuesMail()">
                 <ons-row align="middle" style="height:40px;">
                     <ons-col align="center" width="40px">
                         <div style="margin-left:10px;text-align:left;display:inline-block">
-                            <ons-icon icon = "ion-bug" style="font-size:20px;color:purple"></ons-icon>
+                            <ons-icon icon = "fa fa-comment" style="font-size:20px;color:purple"></ons-icon>
                         </div>
                      </ons-col>
                     <ons-col  align="center">
@@ -72,7 +72,7 @@
                     </ons-col>
                 </ons-row>
             </ons-list-item>
-            <ons-list-item class="person" modifier="tappable" ng-click="goToGeneralSettings()" >
+            <ons-list-item class="person" modifier="tappable chevron" ng-click="goToGeneralSettings()" >
                 <ons-row align="middle" style="height:40px">
                     <ons-col align="center" width="40px">
                         <div style="margin-left:10px;text-align:left;display:inline-block">
@@ -93,7 +93,7 @@
     </div>
     <br>
     <div style="text-align: center">
-        <ons-button class="animated bounceInUp" modifier="normal" style="font-size: x-large; font-weight: bolder; background-color: #387A36" ng-click="goToUserView()">{{"HEADER_MESSAGE_LOGIN"|translate}}</ons-button>
+        <ons-button class="animated pulse" modifier="normal" style="font-size: x-large; font-weight: bolder; background-color: #387A36" ng-click="goToUserView()">{{"HEADER_MESSAGE_LOGIN"|translate}}</ons-button>
     </div>
 </ons-page>
 </ons-navigator>

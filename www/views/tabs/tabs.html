@@ -1,33 +1,36 @@
-<ons-tabbar var="tabbar">
-       <ons-tab active="true" page="views/navigators/homeNavigator.html"  >
-           <div class="tab">
-               <ons-icon icon="fa-home" class="tab-icon"></ons-icon>
-               <div class="tab-label">{{"HOME"|translate}}</div>
-           </div>
-       </ons-tab>
 
-       <ons-tab page="views/navigators/personalNavigator.html" >
-           <div class="tab">
-               <ons-icon icon="ion-android-person" class="tab-icon"></ons-icon>
-               <div class="tab-label">{{"MYCHART"|translate}}</div>
-           </div>
-       </ons-tab>
-       <ons-tab page="views/navigators/generalNavigator.html" >
-           <div class="tab">
-               <ons-icon icon="ion-ios-book" class="tab-icon"></ons-icon>
-               <div class="tab-label">{{"GENERAL"|translate}}</div>
-           </div>
-       </ons-tab>
-       <ons-tab page="views/navigators/educationNavigator.html" >
-           <div class="tab">
-               <ons-icon icon="ion-university" class="tab-icon"></ons-icon>
-               <div class="tab-label">{{"EDUCATION"|translate}}</div>
-           </div>
-       </ons-tab>
-       <ons-tab page="views/navigators/settingsNavigator.html" >
-           <div class="tab">
-               <ons-icon icon="ion-gear-a" class="tab-icon"></ons-icon>
-               <div class="tab-label">{{"ACCOUNT"|translate}}</div>
-           </div>
-       </ons-tab>
+<div ng-include="tour"></div>
+
+<ons-tabbar var="tabbar">
+    <ons-tab active="true" page="views/navigators/homeNavigator.html"  >
+        <div class="tab">
+            <ons-icon icon="fa fa-home" class="tab-icon"></ons-icon>
+            <div class="tab-label">{{"HOME"|translate}}</div>
+        </div>
+    </ons-tab>
+
+    <ons-tab page="views/navigators/personalNavigator.html" >
+        <div class="tab">
+            <ons-icon icon="ion-android-person" class="tab-icon"></ons-icon>
+            <div class="tab-label">{{"MYCHART"|translate}}</div>
+        </div>
+    </ons-tab>
+    <ons-tab page="views/navigators/generalNavigator.html" >
+        <div class="tab">
+            <ons-icon icon="ion-ios-book" class="tab-icon"></ons-icon>
+            <div class="tab-label">{{"GENERAL"|translate}}</div>
+        </div>
+    </ons-tab>
+    <ons-tab page="views/navigators/educationNavigator.html" >
+        <div class="tab">
+            <ons-icon icon="ion-university" class="tab-icon"></ons-icon>
+            <div class="tab-label">{{"EDUCATION"|translate}}</div>
+        </div>
+    </ons-tab>
+    <ons-tab page="views/navigators/settingsNavigator.html" >
+        <div class="tab">
+            <ons-icon icon="ion-gear-a" class="tab-icon"></ons-icon>
+            <div class="tab-label">{{"ACCOUNT"|translate}}</div>
+        </div>
+    </ons-tab>
 </ons-tabbar>

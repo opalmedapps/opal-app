@@ -90,7 +90,7 @@ angular.module('MUHCApp').controller('MainController', ["$state",'$timeout', '$r
 
     $translatePartialLoader.addPart('top-view');
     //$state.transitionTo('logIn');
-    var app = document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'https://' ) === -1;
+    /*var app = document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'https://' ) === -1;
     if(app)
     {
         var push = PushNotification.init({
@@ -152,7 +152,7 @@ angular.module('MUHCApp').controller('MainController', ["$state",'$timeout', '$r
             console.log('offline');
             $rootScope.alertBanner = 'nointernet';
         });
-    }
+    }*/
 
     //Firebase.getDefaultConfig().setPersistenceEnabled(true);
 }]);

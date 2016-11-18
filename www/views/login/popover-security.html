@@ -1,9 +1,8 @@
-
-  <ons-popover direction="up down" cancelable>
-    <div style="text-align: center; opacity: 0.5;">
-       <i class="ion-unlocked" style="font-size:80px"></i>
-       <i class="ion-locked" style="font-size:80px"></i>
-      <p>Remember to secure your information!</p>
-      <p><small>Do not leave your phone unattended.</small></p>
+<ons-modal var="securityModal">
+    <div id="rcorners">
+        <i class="ion-locked" style="font-size:80px"></i>
+        <p>{{"SECURE_PHONE"|translate}}</p>
+        <p><small>{{"UNATTENDED"|translate}}</small></p>
+        <ons-button ng-click="securityModal.hide()">{{"CLOSE"|translate}}</ons-button>
     </div>
-  </ons-popover>
+</ons-modal>

@@ -38,9 +38,22 @@
  * @property {array} cardtype:array Type of cards
  */
 var myApp = angular.module('MUHCApp');
-myApp.controller('HomeController', ['$state','Appointments', 'CheckinService','$scope','Patient','UpdateUI', '$timeout','$filter','UserPlanWorkflow','$rootScope', 'tmhDynamicLocale','$translate', '$location','Notifications','NavigatorParameters','NativeNotification',
-    'NewsBanner','DeviceIdentifiers','$anchorScroll',function ($state,Appointments,CheckinService, $scope, Patient,UpdateUI,$timeout,$filter,UserPlanWorkflow, $rootScope,tmhDynamicLocale, $translate,$location,Notifications,NavigatorParameters,NativeNotification,NewsBanner,DeviceIdentifiers,$anchorScroll) {
+myApp.controller('HomeController', ['$state','Appointments', 'CheckinService','$scope','Patient',
+    'UpdateUI', '$timeout','$filter','$rootScope', 'tmhDynamicLocale','$translate',
+    '$location','Notifications','NavigatorParameters','NativeNotification',
+    'NewsBanner','DeviceIdentifiers','$anchorScroll', 'PlanningSteps', 'Permissions',
+    function ($state,Appointments,CheckinService, $scope, Patient,UpdateUI,$timeout,
+              $filter, $rootScope,tmhDynamicLocale, $translate,$location,
+              Notifications,NavigatorParameters,NativeNotification,NewsBanner,DeviceIdentifiers,
+              $anchorScroll,PlanningSteps, Permissions) {
+
         NewsBanner.setAlertOffline();
+
+        console.log('Got home safely');
+        NavigatorParameters.setParameters({'Navigator':'homeNavigator'});
+        // Need to allow external storage write for documents notifications.
+        Permissions.enablePermission('WRITE_EXTERNAL_STORAGE', 'Storage access disabled. Unable to write documents.');
+
         //Check if device identifier has been sent, if not sent, send it to backend.
         var app = document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'https://' ) === -1;
 
@@ -55,7 +68,8 @@ myApp.controller('HomeController', ['$state','Appointments', 'CheckinService','$
         $scope.homeDeviceBackButton=function()
         {
             console.log('device button pressed do nothing');
-            NativeNotification.showNotificationConfirm('Are you sure you want to exit Opal?',function(){
+            var message = $filter('translate')('EXIT_APP');
+            NativeNotification.showNotificationConfirm(message,function(){
                 if(ons.platform.isAndroid())
                 {
                     navigator.app.exitApp();
@@ -101,32 +115,37 @@ myApp.controller('HomeController', ['$state','Appointments', 'CheckinService','$
             //setUpCheckin();
             setUpCheckin();
         }
-        $scope.goToView=function(param)
-        {
-            if(Appointments.isThereNextAppointment())
-            {
-                if(UserPlanWorkflow.isCompleted())
-                {
-                    //Status goes to next appointment details
-                    homeNavigator.pushPage('views/personal/appointment/individual-appointment.html');
-                }else{
-                    homeNavigator.pushPage('views/personal/treatment-plan/individual-stage.html');
-                }
-            }else{
-                if(UserPlanWorkflow.isCompleted())
-                {
-                    //set active tab to personal, no future appointments, treatment plan completed
-                    tabbar.setActiveTab(1);
-                }else{
-                    homeNavigator.pushPage('views/personal/treatment-plan/individual-stage.html');
+        /*$scope.goToView=function(param)
+         {
+         if(Appointments.isThereNextAppointment())
+         {
+         if(UserPlanWorkflow.isCompleted())
+         {
+         //Status goes to next appointment details
+         homeNavigator.pushPage('views/personal/appointment/individual-appointment.html');
+         }else{
+         homeNavigator.pushPage('views/personal/treatment-plan/individual-stage.html');
+         }
+         }else{
+         if(UserPlanWorkflow.isCompleted())
+         {
+         //set active tab to personal, no future appointments, treatment plan completed
+         tabbar.setActiveTab(1);
+         }else{
+         homeNavigator.pushPage('views/personal/treatment-plan/individual-stage.html');
 
-                }
-            }
-        };
+         }
+         }
+         };*/
         $scope.goToStatus = function()
         {
             NavigatorParameters.setParameters({'Navigator':'homeNavigator'});
-            homeNavigator.pushPage('views/home/status/status.html');
+            //console.log(PlanningSteps.isCompleted());
+            if(PlanningSteps.isCompleted()) {
+                homeNavigator.pushPage('views/personal/appointments/appointments.html')
+            } else{
+                homeNavigator.pushPage('views/home/status/status_new.html');
+            }
         };
 
         //Set notifications function
@@ -190,26 +209,31 @@ myApp.controller('HomeController', ['$state','Appointments', 'CheckinService','$
         {
             NavigatorParameters.setParameters({'Navigator':'homeNavigator', 'Post':appointment});
             homeNavigator.pushPage('./views/personal/appointments/individual-appointment.html');
-        }
+        };
+
+        $scope.goToAppointments=function()
+        {
+            NavigatorParameters.setParameters({'Navigator':'homeNavigator'});
+            homeNavigator.pushPage('./views/personal/appointments/appointments.html');
+        };
 
         function settingStatus()
         {
-            if(!UserPlanWorkflow.isEmpty())
-            {
-                if(UserPlanWorkflow.isCompleted()){
-                    $scope.statusDescription = "INTREATMENT";
-                }else{
-                    $scope.statusDescription = "PLANNING";
-                }
-            }else{
-                $scope.statusDescription = "NOPLANNING";
+            if(!PlanningSteps.isCompleted()) {
+                $scope.statusDescription = "PLANNING";
+            } else if (Appointments.isThereNextTreatment()){
+                $scope.statusDescription = "INTREATMENT";
+            } else if (PlanningSteps.isCompleted()){
+                $scope.statusDescription = null;
+            } else {
+                $scope.statusDescription = null;
             }
         }
         function setTabViews()
         {
             if(Appointments.isThereNextAppointment())
             {
-                if(UserPlanWorkflow.isCompleted())
+                if(PlanningSteps.isCompleted())
                 {
                     $scope.showAppointmentTab=false;
                 }else{
@@ -239,44 +263,61 @@ myApp.controller('HomeController', ['$state','Appointments', 'CheckinService','$
             }
         }
 
+        $scope.goToCheckinAppointments = function (todaysAppointments) {
+            NavigatorParameters.setParameters({'Navigator':'homeNavigator', 'Post':todaysAppointments});
+            homeNavigator.pushPage('./views/home/checkin/checkin-list.html');
+        };
+
+        function setPlural(apps) {
+            if (apps.length > 1) {
+                return "_PLURAL";
+            }
+            return "";
+        }
+
         function setUpCheckin()
         {
             //Get checkin appointment for the day, gets the closest appointment to right now
-            var checkInAppointment = Appointments.getCheckinAppointment();
-            console.log(checkInAppointment);
-            if(checkInAppointment)
+            var todaysAppointmentsToCheckIn = Appointments.getCheckinAppointment();
+            console.log(todaysAppointmentsToCheckIn);
+            $scope.todaysAppointments = todaysAppointmentsToCheckIn;
+            if(todaysAppointmentsToCheckIn)
             {
-                //If there is an appointment shows checkin tab on home page otherwise it does not
                 $scope.showCheckin = true;
-                $scope.checkInAppointment = checkInAppointment;
+
+                var allCheckedIn = true;
+                for (var app in todaysAppointmentsToCheckIn){
+                    console.log(todaysAppointmentsToCheckIn[app].Checkin);
+                    if (todaysAppointmentsToCheckIn[app].Checkin == '0'){
+                        allCheckedIn = false;
+                    }
+                }
+
                 //Case 1:Appointment checkin is 0, not checked-in
-                if(checkInAppointment.Checkin == '0')
-                {
+                if (!allCheckedIn) {
                     //Checkin message before appointment gets set and is changed only if appointment was checked into already from Aria
-                    $rootScope.checkInMessage = "CHECKIN_MESSAGE_BEFORE";
+                    $scope.todaysAppointments.checkInMessage = "CHECKIN_MESSAGE_BEFORE" + setPlural(todaysAppointmentsToCheckIn);
                     $rootScope.showHomeScreenUpdate = false;
 
                     //Queries the server to find out whether or not an appointment was checked into
-                    CheckinService.checkCheckinServer(checkInAppointment).then(function(data)
-                    {
+                    CheckinService.checkCheckinServer(todaysAppointmentsToCheckIn[0]).then(function (data) {
                         //If it has, then it simply changes the message to checkedin and queries to get an update
-                        if(data)
-                        {
+                        if (data) {
                             console.log('Returning home');
-                            $timeout(function()
-                            {
-                                $rootScope.checkInMessage = "CHECKIN_MESSAGE_AFTER";
+                            $timeout(function () {
+                                $scope.todaysAppointments.checkInMessage = "CHECKIN_MESSAGE_AFTER" + setPlural(todaysAppointmentsToCheckIn);
                                 $rootScope.showHomeScreenUpdate = true;
-                                CheckinService.getCheckinUpdates(checkInAppointment);
+                                //CheckinService.getCheckinUpdates(appointment);
                             });
                         }
                     });
-                }else{
+                } else {
                     //Case:2 Appointment already checked-in show the message for 'you are checked in...' and query for estimate
-                    $rootScope.checkInMessage = "CHECKIN_MESSAGE_AFTER";
+                    $scope.todaysAppointments.checkInMessage = "CHECKIN_MESSAGE_AFTER" + setPlural(todaysAppointmentsToCheckIn);
                     $rootScope.showHomeScreenUpdate = true;
-                    CheckinService.getCheckinUpdates(checkInAppointment);
+                    //CheckinService.getCheckinUpdates(appointment);
                 }
+                //console.log(todaysAppointmentsToCheckIn[appointment].checkInMessage);
             }else{
                 //Case where there are no appointments that day
                 $scope.showCheckin = false;

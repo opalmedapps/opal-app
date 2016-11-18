@@ -11,10 +11,10 @@
         .module('MUHCApp')
         .factory('Tasks', Tasks);
 
-    Tasks.$inject = ['Storage', '$filter'];
+    Tasks.$inject = ['LocalStorage'];
 
     /* @ngInject */
-    function Tasks(Storage, $filter) {
+    function Tasks(LocalStorage) {
 
         var planningTasks = [];
 
@@ -39,62 +39,65 @@
          **/
         function setPlanningTasks(tasks) {
             for (var task in tasks){
-                tasks[task].DueDateTime = convertDateToJSDate(tasks[task].DueDateTime);
+                // Convert string date to JS date
+                tasks[task].DueDateTime = new Date(tasks[task].DueDateTime);
             }
             planningTasks = tasks;
-            //Storage.write('tasks', planningTasks);
+            LocalStorage.WriteToLocalStorage('Tasks', planningTasks);
             console.log(planningTasks);
         }
 
         /**
-         *@ngdoc method
-         *@name getPlanningTasks
-         *@methodOf MUHCApp.services:Tasks
-         *@returns {Array} the array of planning tasks.
-         *@description Returns an array of the planning tasks
+         * @ngdoc method
+         * @name getPlanningTasks
+         * @methodOf MUHCApp.services:Tasks
+         * @returns {Array} the array of planning tasks.
+         * @description Returns an array of the planning tasks
+         * @returns
          **/
         function getPlanningTasks() {
             return planningTasks;
         }
 
         function getPlanningTasksFromStorage(){
-            return Storage.read('tasks');
+            return LocalStorage.ReadLocalStorage('Tasks');
         }
 
         /**
-         *@ngdoc method
-         *@name deletePlanningTasks
-         *@methodOf MUHCApp.services:Tasks
-         *@description Removes the tasks from localStorage.
+         * @ngdoc method
+         * @name deletePlanningTasks
+         * @methodOf MUHCApp.services:Tasks
+         * @description Sets the local storage value to null
          **/
         function deletePlanningTasks(){
-            Storage.remove('tasks')
+            planningTasks = null;
+            LocalStorage.WriteToLocalStorage('Tasks', planningTasks);
         }
 
-        function getTasksInCourse(courseID){
-
-        }
-
-        // Scans the task list for Physician Plan Preparation and returns the most recent task.
+        /**
+         * @ngdoc method
+         * @name setPlanningTasks
+         * @methodOf MUHCApp.services:Tasks
+         * @param {Array} tasks Array of task objects.
+         * @description Sets the tasks member in the model and writes it to localstorage.
+         * @returns {Object} The task and its index in the task array.
+        **/
         function getRecentPhysicianTask(){
             var physicianTask = planningTasks[0];
             var index = 0;
+            var mdIndex = 0;
             for (var task in planningTasks ){
                 if (planningTasks[task].DueDateTime > physicianTask.DueDateTime
                     && planningTasks[task].TaskName_EN === 'Physician Plan Preparation'){
                     physicianTask = planningTasks[task];
-                    index++;
+                    mdIndex = index;
                 }
+                index++;
             }
             return {
                 physicianTask: physicianTask,
-                index: index
+                index: mdIndex
             };
-        }
-
-        // Helper function that converts a string date to JS Date
-        function convertDateToJSDate(stringDate){
-            return new Date(stringDate);
         }
 
         // Returns all tasks starting from the most recent Physician plan prep.

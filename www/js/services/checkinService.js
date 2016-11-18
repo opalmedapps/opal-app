@@ -100,9 +100,9 @@ myApp.factory('CheckinService', ['$q', 'RequestToServer', 'Appointments', '$time
                 'Longitude':position.coords.longitude,
                 'Accuracy':position.coords.accuracy
               };
-              r.resolve('Check-in to your Appointment');
+              r.resolve('Check in to your Appointment');
           } else {
-              r.reject('Checkin allowed in the vecinity of the Cancer Center');
+              r.reject('Check-in allowed in the vicinity of the Cancer Center');
           }
 
         }, function(error){
@@ -216,7 +216,7 @@ myApp.factory('CheckinService', ['$q', 'RequestToServer', 'Appointments', '$time
               Appointments.setAppointmentCheckin(nextAppointment.AppointmentSerNum);
               var objectToSend = angular.copy(positionCheckinAppointment);
               objectToSend.AppointmentSerNum = nextAppointment.AppointmentSerNum;
-              liveCheckinUpdates(nextAppointment);
+              //liveCheckinUpdates(nextAppointment);
               r.resolve(data);
             }else{
               r.reject(data);

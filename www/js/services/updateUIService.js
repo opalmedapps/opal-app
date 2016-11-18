@@ -26,12 +26,12 @@ var myApp=angular.module('MUHCApp');
  *@description API service used to update the whole application. The UpdateUI service is in charge of timestamps for updates of sections, set up or any update to the user fields.
  **/
 myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors','Appointments','Messages',
-    'Documents','EducationalMaterial', 'UserAuthorizationInfo', '$q', 'Notifications', 'UserPlanWorkflow',
+    'Documents','EducationalMaterial', 'UserAuthorizationInfo', '$q', 'Notifications',
     '$cordovaNetwork', 'LocalStorage','RequestToServer','$filter','Diagnoses','Questionnaires',
     'NativeNotification','LabResults', 'Tasks',
 
     function (Announcements, TxTeamMessages, Patient,Doctors, Appointments,Messages, Documents,
-              EducationalMaterial, UserAuthorizationInfo, $q, Notifications, UserPlanWorkflow,
+              EducationalMaterial, UserAuthorizationInfo, $q, Notifications,
               $cordovaNetwork,LocalStorage,RequestToServer,$filter,Diagnoses,Questionnaires,
               NativeNotification,LabResults, Tasks ) {
         /**
@@ -119,7 +119,7 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors',
             },
             'Tasks':{
                 init: Tasks.setPlanningTasks,
-                update:Tasks.setPlanningTasks,
+                update:Tasks.setPlanningTasks
             },
             /*'Messages':
              {
@@ -140,11 +140,11 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors',
                 init:TxTeamMessages.setTxTeamMessages,
                 update:TxTeamMessages.updateTxTeamMessages
             },
-            /*'Questionnaires':
+            'Questionnaires':
              {
              init:Questionnaires.setPatientQuestionnaires,
              update:Questionnaires.updatePatientQuestionnaires
-             },*/
+             },
             'Announcements':
             {
                 init:Announcements.setAnnouncements,
@@ -191,7 +191,7 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors',
                         sectionServiceMappings[key].init(dataUserObject[key]);
                     }
                 }
-                UserPlanWorkflow.setUserPlanWorkflow(Appointments);
+                //UserPlanWorkflow.setUserPlanWorkflow(Appointments);
                 r.resolve(true);
             }).catch(function(error)
             {

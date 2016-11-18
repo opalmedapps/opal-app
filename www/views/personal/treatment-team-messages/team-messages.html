@@ -5,7 +5,7 @@
   </ons-toolbar>
 <div ng-hide="noMessages">
   <ons-list  ng-repeat="message in txTeamMessages" ng-click="goToTeamMessage(message)">
-  <ons-list-header class="person-list-header" style="text-align:right">{{message.DateAdded|date:'EEE MMM dd yyyy'}}</ons-list-header>
+  <ons-list-header class="person-list-header" ng-class="fontSizeTitle">{{message.DateAdded|date:'fullDate'}}</ons-list-header>
   <ons-list-item modifier="chevron" class="item">
     <ons-row align="center" >
       <ons-col width="60px" align="center">
@@ -17,7 +17,7 @@
         <header>
           <span class="item-title" ng-class="fontSizeTitle">{{message.Title}}</span>
         </header>
-        <p class="item-desc" ng-class="fontSizeDesc" ng-bind-html = "message.Body| ellipsis: 40" ></p>
+        <!--<p class="item-desc" ng-class="fontSizeDesc" ng-bind-html = "message.Body| ellipsis: 40" ></p>-->
       </ons-col>
     </ons-row>
   </ons-list-item>

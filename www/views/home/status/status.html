@@ -78,7 +78,7 @@
             <div class="my-home-profile" ng-show="!status.noTreatmentPlan" style="padding:0">
                 <div id="divTreatmentPlan" style="overflow-y:scroll">
                     <ons-list class="plan-list" style="margin:0;padding:0">
-                        <ons-list-item class="plan" modifier="tappable" ng-click="status.goTo(status.eventType, app)" ng-repeat="app in status.events" id="treatmentSessions{{$index}}">
+                        <ons-list-item class="plan" modifier="tappable" ng-click="status.goTo(status.eventType, app)" ng-repeat="(step, event) in status.events" id="treatmentSessions{{$index}}">
                             <ons-row id="statusStep{{$index}}">
                                 <ons-col width="50px" class="plan-left" align="center">
                                     <div class="plan-date" ng-show="app.Status=='Past' || app.TimeStatus=='Past'"><img ng-src="./img/checkedbox.png" width="20px" height="20px"></div>

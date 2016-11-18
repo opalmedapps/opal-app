@@ -3,7 +3,7 @@
     <div class="left"><ons-back-button>{{"BACK"|translate}}</ons-back-button></div>
     <div class="center">{{message.Name}}</div>
   </ons-toolbar>
-  <div style="margin-top:5vh">
+  <div>
     <ons-list>
       <ons-list-item class="item">
         <div style="line-height:1" align="left">
@@ -11,13 +11,13 @@
               <span class="item-title" ng-class="fontSizeTitle">{{message.Title}}</span>
 
           </header>
-          <p class="item-desc" ng-class="fontSizeDesc">{{message.DateAdded|formatDateAppointmentTask}}</p>
+          <p class="item-desc" ng-class="fontSizeDesc">{{message.DateAdded|date:'medium'}}</p>
         </div>
       </ons-list-item>
     </ons-list>
     <ons-list class="settings-list">
       <ons-list-item class="item" ng-click="openDocument()">
-        <div align="left"><h4>{{"DEAR"|translate}} {{FirstName}},</h4></div>
+        <div align="left"><h4>{{"DEAR"|translate}} {{FirstName|capitalizeFirstLetter}},</h4></div>
           <div ng-bind-html="message.Body" style =" word-wrap: break-word;" ng-class="fontSizeDesc" ></div>
       </ons-list-item>
     </ons-list>

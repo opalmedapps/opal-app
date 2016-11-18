@@ -5,6 +5,9 @@ var myApp = angular.module('MUHCApp');
 myApp.controller('EducationalMaterialController', function (NavigatorParameters, $scope, $timeout,UpdateUI, RequestToServer, $cordovaFileOpener2, $cordovaDevice, $cordovaDatePicker, FileManagerService, EducationalMaterial, UserPreferences,$rootScope) {
 
 	//Android device backbutton
+
+    NavigatorParameters.setParameters({'Navigator':'educationNavigator'});
+
 	var backButtonPressed = 0;
 	$scope.educationDeviceBackButton = function () {
 		tabbar.setActiveTab(0);
@@ -99,7 +102,9 @@ myApp.controller('IndividualEducationalMaterialController', ['$scope', '$timeout
 	$scope.edumaterial =EducationalMaterial.setLanguageEduationalMaterial(param.Post);
 	
 	//Determine if material has a ShareURL and is printable
-	if($scope.edumaterial.hasOwnProperty('ShareURL')&&$scope.edumaterial.ShareURL !=="") $scope.isPrintable = FileManagerService.isPDFDocument($scope.edumaterial.ShareURL);
+	if($scope.edumaterial.hasOwnProperty('ShareURL')&&$scope.edumaterial.ShareURL !=="") {
+		$scope.isPrintable = FileManagerService.isPDFDocument($scope.edumaterial.ShareURL);
+    }
 	
 	//Determine if material is a booklet
 	var isBooklet = $scope.edumaterial.hasOwnProperty('TableContents');
@@ -141,13 +146,13 @@ myApp.controller('IndividualEducationalMaterialController', ['$scope', '$timeout
 	});
 		
 	//Function to share material, if shareable
-	$scope.shareMaterial = function () {
+	$scope.share = function () {
 	FileManagerService.shareDocument($scope.edumaterial.Name, $scope.edumaterial.ShareURL);
 		$scope.popoverSharing.hide();
 	};
 
 	//If material is printable, i.e. is a pdf, download material and print it.
-	$scope.printMaterial = function()
+	$scope.print = function()
 	{
 		//If no connection then simply alert the user to connect to the internet
 		$scope.popoverSharing.hide();
@@ -248,6 +253,8 @@ myApp.controller('BookletEduMaterialController', ['$scope', '$timeout', 'Navigat
 	//Obtaining educational material parameters
 	var parameters = NavigatorParameters.getParameters();
 	var navigatorName = parameters.Navigator;
+
+	console.log("Navigator paranms",parameters);
 	// var text = (new Array(100)).join('Lorem ipsum dolor sit amet. ');
 	// var each = function(selector, f) {
     // [].forEach.call(document.querySelectorAll(selector), f);

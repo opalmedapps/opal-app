@@ -128,23 +128,23 @@ myApp.service('UserPreferences',[ 'UserAuthorizationInfo','$rootScope','tmhDynam
                         //Set language
                         if(lan=='en')
                         {
-                            tmhDynamicLocale.set('en');
+                            tmhDynamicLocale.set('en-ca');
                             $translate.use('en');
                             window.localStorage.setItem('Language','EN');
                             r.resolve('EN');
                         }else if(lan=='fr'){
-                            tmhDynamicLocale.set('fr');
+                            tmhDynamicLocale.set('fr-ca');
                             $translate.use('fr');
                             window.localStorage.setItem('Language','FR');
                             r.resolve('FR');
                         }else{
-                            tmhDynamicLocale.set('en');
+                            tmhDynamicLocale.set('en-cs');
                             $translate.use('en');
                             window.localStorage.setItem('Language','EN');
                             r.resolve('EN');
                         }
                     },function(error){
-                        tmhDynamicLocale.set('en');
+                        tmhDynamicLocale.set('en-cs');
                         $translate.use('en');
                         window.localStorage.setItem('Language','EN');
                         r.reject({error:error});
@@ -152,10 +152,10 @@ myApp.service('UserPreferences',[ 'UserAuthorizationInfo','$rootScope','tmhDynam
            }else{
             if(lan == 'EN')
             {
-                tmhDynamicLocale.set('en');
+                tmhDynamicLocale.set('en-ca');
                 $translate.use('en');
             }else{
-                tmhDynamicLocale.set('fr');
+                tmhDynamicLocale.set('fr-ca');
                 $translate.use('fr');
             }
             language = lan;
@@ -174,10 +174,10 @@ myApp.service('UserPreferences',[ 'UserAuthorizationInfo','$rootScope','tmhDynam
             console.log(lan);
              if(lan == 'EN')
             {
-                tmhDynamicLocale.set('en');
+                tmhDynamicLocale.set('en-ca');
                 $translate.use('en');
             }else{
-                tmhDynamicLocale.set('fr');
+                tmhDynamicLocale.set('fr-ca');
                 $translate.use('fr');
             }
             window.localStorage.setItem('Language', lan);

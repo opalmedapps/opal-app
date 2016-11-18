@@ -96,7 +96,8 @@ var myApp = angular.module('MUHCApp', ['tmh.dynamicLocale','pascalprecht.transla
             controller: 'LoginController'
 
         });
-        $stateProvider.state('init', {
+        $stateProvider
+            .state('init', {
             url: '/',
             templateUrl: 'views/init/init-screen.html',
             controller: 'InitScreenController'
@@ -107,10 +108,10 @@ var myApp = angular.module('MUHCApp', ['tmh.dynamicLocale','pascalprecht.transla
                 templateUrl: 'views/login/loading.html',
                 controller: 'LoadingController',
                 resolve: {
-                    // controller will not be loaded until $waitForAuth resolves
+                    // controller will not be loaded until $requireSignIn resolves
                     // Auth refers to our $firebaseAuth wrapper in the example above
                     "currentAuth": ["FirebaseService", function(FirebaseService) {
-                        // $waitForAuth returns a promise so the resolve waits for it to complete
+                        // $requireSignIn returns a promise so the resolve waits for it to complete
                         return FirebaseService.getAuthentication().$requireSignIn();
                     }]
                 }
@@ -120,10 +121,11 @@ var myApp = angular.module('MUHCApp', ['tmh.dynamicLocale','pascalprecht.transla
                 templateUrl: 'views/tabs/tabs.html',
                 controller: 'TabsController',
                 resolve: {
-                    // controller will not be loaded until $waitForAuth resolves
+                    // controller will not be loaded until $requireSignIn resolves
                     // Auth refers to our $firebaseAuth wrapper in the example above
                     "currentAuth": ["FirebaseService", function(FirebaseService) {
-                        // $waitForAuth returns a promise so the resolve waits for it to complete
+                        // $requireSignIn returns a promise so the resolve waits for it to complete
+                        console.log(FirebaseService.getAuthentication().$requireSignIn());
                         return FirebaseService.getAuthentication().$requireSignIn();
                     }]
                 }
@@ -134,10 +136,10 @@ var myApp = angular.module('MUHCApp', ['tmh.dynamicLocale','pascalprecht.transla
                 templateUrl: 'views/logOut.html',
                 controller: 'logOutController',
                 resolve: {
-                    // controller will not be loaded until $waitForAuth resolves
+                    // controller will not be loaded until $requireSignIn resolves
                     // Auth refers to our $firebaseAuth wrapper in the example above
                     "currentAuth": ["FirebaseService", function(FirebaseService) {
-                        // $waitForAuth returns a promise so the resolve waits for it to complete
+                        // $requireSignIn returns a promise so the resolve waits for it to complete
                         return FirebaseService.getAuthentication().$requireSignIn();
                     }]
                 }
@@ -146,7 +148,7 @@ var myApp = angular.module('MUHCApp', ['tmh.dynamicLocale','pascalprecht.transla
         $translateProvider.useLoader('$translatePartialLoader', {
             urlTemplate: './Languages/appTranslationTablesViews/{part}/{lang}.json'
         });
-        $translateProvider.preferredLanguage('en');
+        $translateProvider.preferredLanguage('fr');
 
         tmhDynamicLocaleProvider.localeLocationPattern('./Languages/angular-locales/angular-locale_{{locale}}.js');
 
@@ -187,8 +189,8 @@ myApp.run(function ($state, $stateParams,$q, $rootScope,$translate, Patient,$loc
 
     $rootScope.$on('$stateChangeStart',function(event,toState,toParams)
     {
-        var firstName = Patient.getFirstName();
-        if((typeof firstName =='undefined'|| firstName === '')&&toState.name == 'Home')
+        var serialNum = Patient.getUserSerNum();
+        if((typeof serialNum =='undefined'|| serialNum === '')&&toState.name == 'Home')
         {
             $location.path('/init');
         }
