@@ -90,20 +90,27 @@ angular.module('MUHCApp').controller('MainController', ["$state",'$timeout', '$r
 
     $translatePartialLoader.addPart('top-view');
     //$state.transitionTo('logIn');
-    /*var app = document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'https://' ) === -1;
+    var app = document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'https://' ) === -1;
     if(app)
     {
         var push = PushNotification.init({
             ios: {
-                alert: "true",
+                alert: true,
                 badge: true,
-                sound: 'true',
-                clearBadge:'true'
+                sound: true
             },
             android: {
+                icon: "/img/OpalHealth_App_Apple_Icon_2",
                 senderID: "840430637971"
             }
         });
+
+        PushNotification.hasPermission(function(data) {
+            if (data.isEnabled) {
+                console.log('isEnabled');
+            }
+        });
+
         //dX5oUernHF4:APA91bEWkdACR0Ra81mAECXn5rPNyoUYx3ijC9UdzJ_26MqjYa0OBaQRzD2n7VCk_PCcsnvsZz7bEA5Aq1pSV9iABRxSPCjFlBJh7ogiqWs8Ex4COf7H2xWHrz_16CJMlNKljffpNf8q
         push.on('notification', function(data) {
             NativeNotification.showNotificationAlert(data.message);
@@ -121,29 +128,24 @@ angular.module('MUHCApp').controller('MainController', ["$state",'$timeout', '$r
         push.on('error', function(e) {
             console.log(e);
         });
-        push.setApplicationIconBadgeNumber(function() {
+        /*push.setApplicationIconBadgeNumber(function() {
             console.log('success');
         }, function() {
             console.log('error');
-        }, 3);
-        PushNotification.hasPermission(function(data) {
-            if (data.isEnabled) {
-                console.log('isEnabled');
-            }
-        });
+        }, 3);*/
         push.on('registration', function(data) {
             console.log(data.registrationId);
             DeviceIdentifiers.setDeviceIdentifiers(data.registrationId);
         });
-        document.addEventListener("offline", function(){
+        /*document.addEventListener("offline", function(){
             NewsBanner.showAlert('nointernet');
             console.log('offline');
         }, false);
         document.addEventListener("online", function(){
             NewsBanner.showAlert('connected');
             console.log('online');
-        }, false);
-    }else{
+        }, false);*/
+    }/*else{
         window.addEventListener('online',  function(){
             console.log('online');
             $rootScope.alertBanner = 'connected';
