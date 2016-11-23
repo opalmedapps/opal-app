@@ -108,6 +108,7 @@ angular.module('MUHCApp').controller('MainController', ["$state",'$timeout', '$r
             },
             android: {
                 icon: "opal_notification",
+                iconColor: "#74A333",
                 senderID: "810896751588"
             }
         });
