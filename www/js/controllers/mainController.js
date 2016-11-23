@@ -26,20 +26,20 @@ angular.module('MUHCApp').controller('MainController', ["$state",'$timeout', '$r
 //Ask for an update every 2 minutes
     setInterval(function()
     {
-        backbroundRefresh();
+        backgroundRefresh();
     },120000);
 
 //On resume, make a background refresh check.
     document.addEventListener("resume", onResume, false);
     function onResume() {
         setTimeout(function() {
-            backbroundRefresh();
+            backgroundRefresh();
         });
     }
-    var patientFirstName = Patient.getFirstName();
-    function backbroundRefresh()
+    var serialNum = Patient.getUserSerNum();
+    function backgroundRefresh()
     {
-        if(FirebaseService.getAuthenticationCredentials()&&typeof patientFirstName !=='undefined'&&patientFirstName)
+        if(FirebaseService.getAuthenticationCredentials()&&typeof serialNum !=='undefined'&&serialNum)
         {
             console.log('refreshing');
             UpdateUI.update('All');
@@ -107,7 +107,7 @@ angular.module('MUHCApp').controller('MainController', ["$state",'$timeout', '$r
                 sound: true
             },
             android: {
-                icon: "ic_opalhealth_app_apple_icon_2",
+                icon: "opal_notification",
                 senderID: "810896751588"
             }
         });
