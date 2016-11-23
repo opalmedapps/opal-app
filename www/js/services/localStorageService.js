@@ -49,6 +49,7 @@ myApp.service('LocalStorage',['UserAuthorizationInfo', 'EncryptionService',funct
 			temp = angular.copy(data);
 
 			//Convert into string
+			//console.log(temp);
 			temp = JSON.stringify(temp);
 
 			//Parse 
