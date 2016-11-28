@@ -1,5 +1,4 @@
 #MUHC Oncology Patient Application
-![MUHC](/www/img/Opal_Logo_Full_2.png)
 Opal - the MUHC Oncology Patient Application for mobile phones and the web - is a product that has arisen from the winning project of the 2014 MUHC Q+ initiative. The project proposal was submitted by the Health Informatics Group (HIG, see below) and was entitled “Realistic knowledge-based waiting time estimates for radiation oncology patients - addressing the pain of waiting”. It had as its goal the provision of waiting time estimates to radiation oncology patients. 
 
 ###Quick app deployment, Simple App displayed in browser
@@ -99,5 +98,6 @@ $cordova plugin add <nameOfPlugin>
 ###Quirks
 The body tag on the index.html file contains the ng-app attribute to initialize the AngularJS code. It turns out that if you don't bootstrap AngularJS manually when the device is ready the AngularJS code will run and crash before the device is ready because is trying to use some of the plugins that are not yet made available by the device. Therefore, whenever you run the code in a browser, keep the ng-app="MUHCApp" attribute, but if you want to run it on your device, delete the attribute from the body element.  
 
-
+##Adding to the repo
+If you would like add your code to the repository, create a new branch and submit a pull request. One of our team will review your code before merging.
 
