@@ -29,12 +29,14 @@ class PushNotifications {
 	public function android($data, $reg_id) {
 	        $url = 'https://fcm.googleapis.com/fcm/send';
 	        $message = array(
-	            'title' => $data['mtitle'],
-	            'message' => $data['mdesc'],
-	            'subtitle' => '',
-	            'tickerText' => '',
-	            'msgcnt' => 1,
-	            'vibrate' => 1
+                'title'         => $data['mtitle'],
+	            'message'       => $data['mdesc'],
+	            'style'         => 'inbox',
+	            'summaryText'   => 'You have %n% new notifications'
+	            //'subtitle'      => '',
+	            //'tickerText'    => '',
+	            //'msgcnt'        => 1,
+	            //'vibrate'       => 1
 	        );
 	        
 	        $headers = array(

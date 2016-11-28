@@ -102,7 +102,7 @@ myApp.service('Patient',['$q','$cordovaDevice','FileManagerService','LocalStorag
             var r=$q.defer();
             patientFields=patientFields[0];
             UserPreferences.setEnableSMS(patientFields.EnableSMS);
-            UserPreferences.setLanguage(patientFields.Language);
+            //UserPreferences.setLanguage(patientFields.Language);
             UserPreferences.getFontSize();
             if(typeof patientFields=='undefined') return;
             FirstName=patientFields.FirstName;
@@ -174,7 +174,7 @@ myApp.service('Patient',['$q','$cordovaDevice','FileManagerService','LocalStorag
           var r=$q.defer();
           patientFields=patientFields[0];
           UserPreferences.setEnableSMS(patientFields.EnableSMS);
-          UserPreferences.setLanguage(patientFields.Language);
+          //UserPreferences.setLanguage(patientFields.Language);
           UserPreferences.getFontSize();
           FirstName=patientFields.FirstName;
           LastName=patientFields.LastName;
