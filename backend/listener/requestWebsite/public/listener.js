@@ -2,11 +2,11 @@ var app=angular.module('MUHCAppListener',[]);
 app.controller('MainController',['$scope','$timeout',function($scope,$timeout){
   $scope.requests=[];
   $scope.selectTimeline='All';
-  var ref=new Firebase('https://brilliant-inferno-7679.firebaseio.com/dev2');
-  ref.auth('9HeH3WPYe4gdTuqa88dtE3KmKy7rqfb4gItDRkPF');
+  var ref=new Firebase('https://opal-dev.firebaseio.com/dev2');
+  ref.auth('wX6RW5wPthYjEuUxfAviFa2BwXPdjuLEVcCIV7dB');
   setInterval(function(){ 
        clearTimeoutRequests();
-  },30000);
+  },10000);
 
 function clearTimeoutRequests()
 {
@@ -29,32 +29,64 @@ function clearTimeoutRequests()
 }
  
 
-  ref.child('requests').on('child_added',function(request){
+  ref.on('child_added',function(request){
     console.log(request.val());
-    var headers = {key: request.key(),objectRequest: request.val()}
-      $.post("http://172.26.66.41:8020/login",headers, function(response){
-        uploadToFirebase(response);
-      });
+    console.log("insidelistener");
+
+    request.forEach(function(childSnapshot){
+      console.log(childSnapshot.key());
+      var headers = {key: childSnapshot.key(),objectRequest: childSnapshot.val()}
+      console.log(headers);
+      if(!(request.key() === "users" || request.key() === "passwordResetResponses")){
+        $.post("http://172.26.66.41:8030/login", headers, function(response){
+          console.log(request.key());
+          if (request.key() === "requests") uploadToFirebase(response);
+          if (request.key() === "passwordResetRequests") uploadToFirebasePasswordReset(response);
+        });
+        // Exit the loop
+      }
+    });
    
   });
-  function uploadToFirebase(response)
+
+  function uploadToFirebasePasswordReset(response)
   {
-    console.log('I am about to go to into encrypting');
+    console.log('I am about to go to into encrypting regular upload: PasswordReset');
 
     var headers = angular.copy(response.Headers);
     var success = response.Response;
     var requestKey = headers.RequestKey;
-    var userId = headers.RequestObject.UserID;
     var encryptionKey = response.EncryptionKey;
     console.log(encryptionKey);
     delete response.EncryptionKey;
     if(typeof encryptionKey!=='undefined' && encryptionKey!=='') response = encryptObject(response, encryptionKey);
     response.Timestamp = Firebase.ServerValue.TIMESTAMP;
     console.log(response);
+    var email = headers.RequestObject.UserEmail;
+    ref.child('passwordResetResponses/'+requestKey).set(response, function(){
+      console.log('I just finished writing to firebase');
+      completeRequestPasswordReset(headers,success);
+    });
+  }
+
+  function uploadToFirebase(response)
+  {
+    console.log('I am about to go to into encrypting regular upload');
+
+    var headers = angular.copy(response.Headers);
+    var success = response.Response;
+    var requestKey = headers.RequestKey;
+    var encryptionKey = response.EncryptionKey;
+    console.log(encryptionKey);
+    delete response.EncryptionKey;
+    if(typeof encryptionKey!=='undefined' && encryptionKey!=='') response = encryptObject(response, encryptionKey);
+    response.Timestamp = Firebase.ServerValue.TIMESTAMP;
+    console.log(response);
+    var userId = headers.RequestObject.UserID;
     ref.child('users/'+userId+'/'+requestKey).set(response, function(){
       console.log('I just finished writing to firebase');
       completeRequest(headers,success);
-    });
+    });    
   }
 
    /**
@@ -82,7 +114,31 @@ function clearTimeoutRequests()
       $scope.requests.push(requestObject);
       console.log($scope.requests);
     });
-    ref.child('requests').child(requestKey).set(null);
+    
+      ref.child('requests').child(requestKey).set(null);
+  }
+
+  function completeRequestPasswordReset(headers, success)
+  {
+    var requestKey = headers.RequestKey;
+    var requestObject  = headers.RequestObject;
+    requestObject.Parameters=JSON.stringify(requestObject.Parameters);
+    requestObject.time=new Date();
+    if(success == 'error')
+    {
+      requestObject.response='Failure';
+    }else{
+      requestObject.response='Success';
+    }
+    $timeout(function(){
+      if($scope.requests.length>20)
+      {
+        $scope.requests = [];
+      }
+      $scope.requests.push(requestObject);
+      console.log($scope.requests);
+    });
+      ref.child('passwordResetRequests').child(requestKey).set(null);
   }
 
   /**

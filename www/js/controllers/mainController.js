@@ -26,20 +26,20 @@ angular.module('MUHCApp').controller('MainController', ["$state",'$timeout', '$r
 //Ask for an update every 2 minutes
     setInterval(function()
     {
-        backgroundRefresh();
+        backbroundRefresh();
     },120000);
 
 //On resume, make a background refresh check.
     document.addEventListener("resume", onResume, false);
     function onResume() {
         setTimeout(function() {
-            backgroundRefresh();
+            backbroundRefresh();
         });
     }
-    var serialNum = Patient.getUserSerNum();
-    function backgroundRefresh()
+    var patientFirstName = Patient.getFirstName();
+    function backbroundRefresh()
     {
-        if(FirebaseService.getAuthenticationCredentials()&&typeof serialNum !=='undefined'&&serialNum)
+        if(FirebaseService.getAuthenticationCredentials()&&typeof patientFirstName !=='undefined'&&patientFirstName)
         {
             console.log('refreshing');
             UpdateUI.update('All');
@@ -112,6 +112,13 @@ angular.module('MUHCApp').controller('MainController', ["$state",'$timeout', '$r
                 senderID: "810896751588"
             }
         });
+
+        PushNotification.hasPermission(function(data) {
+            if (data.isEnabled) {
+                console.log('isEnabled');
+            }
+        });
+
         //dX5oUernHF4:APA91bEWkdACR0Ra81mAECXn5rPNyoUYx3ijC9UdzJ_26MqjYa0OBaQRzD2n7VCk_PCcsnvsZz7bEA5Aq1pSV9iABRxSPCjFlBJh7ogiqWs8Ex4COf7H2xWHrz_16CJMlNKljffpNf8q
         push.on('notification', function(data) {
 
