@@ -93,6 +93,12 @@ angular.module('MUHCApp').controller('MainController', ["$state",'$timeout', '$r
     var app = document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'https://' ) === -1;
     if(app)
     {
+        PushNotification.hasPermission(function(data) {
+            if (data.isEnabled) {
+                console.log('isEnabled');
+            }
+        });
+
         var push = PushNotification.init({
             ios: {
                 alert: true,
@@ -100,8 +106,9 @@ angular.module('MUHCApp').controller('MainController', ["$state",'$timeout', '$r
                 sound: true
             },
             android: {
-                icon: "/img/OpalHealth_App_Apple_Icon_2",
-                senderID: "840430637971"
+                icon: "opal_notification",
+                iconColor: "#74A333",
+                senderID: "810896751588"
             }
         });
 
@@ -109,21 +116,6 @@ angular.module('MUHCApp').controller('MainController', ["$state",'$timeout', '$r
             if (data.isEnabled) {
                 console.log('isEnabled');
             }
-        });
-
-        //dX5oUernHF4:APA91bEWkdACR0Ra81mAECXn5rPNyoUYx3ijC9UdzJ_26MqjYa0OBaQRzD2n7VCk_PCcsnvsZz7bEA5Aq1pSV9iABRxSPCjFlBJh7ogiqWs8Ex4COf7H2xWHrz_16CJMlNKljffpNf8q
-        push.on('notification', function(data) {
-            NativeNotification.showNotificationAlert(data.message);
-            var urlMedia = 'sounds/'+data.sound;
-            var media = new Media(urlMedia);
-            media.play();
-            console.log(data.message);
-            media.play({ numberOfLoops: 2 });
-            console.log(data.title);
-            console.log(data.count);
-            console.log(data.sound);
-            console.log(data.image);
-            console.log(data.additionalData);
         });
         push.on('error', function(e) {
             console.log(e);
