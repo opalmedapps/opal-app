@@ -488,7 +488,7 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors',
                     'Patient':0,
                     'Notifications':0,
                     'EducationalMaterial':0,
-                    //'Questionnaires':0
+                    'Questionnaires':0
                 };
             }
         };
