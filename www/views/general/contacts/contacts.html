@@ -1,10 +1,9 @@
-
 <ons-page ng-controller="ContactsController" >
     <ons-toolbar>
     <div class="left">
         <ons-back-button>{{"BACK"|translate}}</ons-back-button>
     </div>
-    <div class="center">{{"CONTACTS"|translate}}</div>
+    <div class="center" ng-class="fontSizeTitle">{{"CONTACTS"|translate}}</div>
   </ons-toolbar>
    <div style="color:grey;margin-top:25vh" ng-show="noContacts" align="center" ng-class="fontSizeTitle">
       {{"NOCONTACTSAVAILABLE"|translate}}
