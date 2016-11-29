@@ -6,45 +6,43 @@
         <div class="center">{{"LOGIN"|translate}}</div>
     </ons-toolbar>
     <div ng-include="'./views/login/popover-security.html'"></div>
-    <ons-row align="center" style="height:80vh;margin:0;top:0">
+    <ons-row align="center" style="height:70vh;margin:0;top:0">
         <ons-col align="center">
             <div align="center">
                 <img src="./img/ceadarsLogo.png" style="max-width:300px;width:90vw;height:auto">
             </div>
-            <div class="container" align="center" style="margin-top:10px">
+            <div class="container" style="margin-top:20px">
                 <div align="center">
-                    <form name="form" ng-submit="submit(email, password)" novalidate>
-                        <div class="form-group">
 
-                            <div>
-                                <div style="margin-bottom:10px;display:inline-block;vertical-align:bottom"><i class="iconHomeView ion-person" style="color:#387A36"></i></div>
-                                <div style="padding-bottom:15px;display:inline-block"><input class="text-input" placeholder='{{"EMAIL"|translate}}' name="email" ng-model="email" type="email" required></div>
-                                <div style="margin-bottom:10px;padding-bottom:10px;display:inline-block;vertical-align:bottom"><span class="lucent" ng-show="!email||email.length===0">&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                                    <a ng-click="email=''" class="lucent" ng-show="email&&email.length>0">
-                                        <ons-icon icon="ion-close-circled"></ons-icon>
-                                    </a>
-                                </div>
+                        <div>
+                            <!--<div style="margin-bottom:10px;display:inline-block;vertical-align:bottom"><i class="iconHomeView ion-person" style="color:#387A36"></i></div>-->
+                            <div style="width: 100%" class="style-4">
+                                <input placeholder='{{"EMAIL"|translate}}' name="email" ng-model="email" type="email" required></div>
+                            <!--<div style="margin-bottom:10px;padding-bottom:10px;display:inline-block;vertical-align:bottom"><span class="lucent" ng-show="!email||email.length===0">&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                <a ng-click="email=''" class="lucent" ng-show="email&&email.length>0">
+                                    <ons-icon icon="ion-close-circled"></ons-icon>
+                                </a>
+                            </div>-->
 
-                                <br />
-                                <div style="margin-bottom:10px;display:inline-block;vertical-align:bottom"><i class="iconHomeView ion-ios-locked" style="color:#387A36"></i></div>
-                                <div style="padding-bottom:15px;display:inline-block"><input class="text-input" style="margin-top:5px" name="password" ng-model="password" placeholder='{{"PASSWORD"|translate}}' type="password" required></div>
-                                <div style="margin-bottom:10px;padding-bottom:10px;display:inline-block;vertical-align:bottom"><span class="lucent" ng-show="!password||password.length===0">&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                                    <a ng-click="password=''" class="lucent" ng-show="password&&password.length>0">
-                                        <ons-icon icon="ion-close-circled"></ons-icon>
-                                    </a>
-                                </div>
+                            <br />
+                            <!--<div style="margin-bottom:10px;display:inline-block;vertical-align:bottom"><i class="iconHomeView ion-ios-locked" style="color:#387A36"></i></div>-->
+                            <div style="width: 100%" class="style-4">
+                                <input name="password" ng-model="password" placeholder='{{"PASSWORD"|translate}}' type="password" required></div>
+                            <!--<div style="margin-bottom:10px;padding-bottom:10px;display:inline-block;vertical-align:bottom"><span class="lucent" ng-show="!password||password.length===0">&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                <a ng-click="password=''" class="lucent" ng-show="password&&password.length>0">
+                                    <ons-icon icon="ion-close-circled"></ons-icon>
+                                </a>
+                            </div>-->
 
-                                <br/>
-                                <div ng-show="alert.type">
-                                    <uib-alert type="{{alert.type}}">{{alert.content|translate}}</uib-alert>
-                                </div>
-                            </div>
-                            <div style="max-width:400px">
-                                <button class="button button--large" style="background-color:#387A36" type="submit" id="submit">{{"LOGIN"|translate}}</button>
+                            <br/>
+                            <div ng-show="alert.type">
+                                <uib-alert type="{{alert.type}}">{{alert.content|translate}}</uib-alert>
                             </div>
                         </div>
+                        <div style="max-width:400px">
+                            <ons-button modifier="large" style="background-color:#387A36; font-size: x-large; font-weight: bolder;" ng-click="submit(email, password)">{{"LOGIN"|translate}}</ons-button>
+                        </div>
 
-                    </form>
                     <div style="text-align:center;">
                         <button class="button button--large--quiet" ng-click="initNavigator.pushPage('./views/login/forgot-password.html',{})" >
                             {{"FORGOTPASSWORD"|translate}}

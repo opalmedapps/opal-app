@@ -67,9 +67,24 @@
         </div>
 
         <div style="margin-top:0px;position:relative;z-index:3;padding-top:0px;" >
-            <div style="margin-top:10px;position:relative;z-index:3;padding-top:5px;" class="settings-header" ng-class="fontSizeTitle">{{"OVERVIEW"|translate}}</div>
+
             <ons-list style="margin-top:5px;position:relative;z-index:2">
+                <ons-list-item modifier="chevron tappable" class="item" ng-click="homeNavigator.pushPage('views/home/about/about.html')">
+                    <ons-row align="center">
+                        <ons-col width="60px" align="center" style="text-align: center">
+                                <i class="fa fa-info fa-2x" style="color: darkblue"></i>
+                        </ons-col>
+                        <ons-col>
+                            <header>
+                                <span class="item-title" ng-class="fontSizeTitle">{{"OPAL_ABOUT"|translate}}</span>
+                            </header>
+                            <!--<p class="item-desc" ng-class="fontSizeDesc">{{appointment.ScheduledStartTime|formatDateAppointmentTask}} </p>-->
+                            <!--<p class="item-desc" ng-class="fontSizeDesc" style="color:orange" ng-show ="checkinEstimate&&showHomeScreenUpdate">{{"ESTIMATEDWAIT"|translate}}: {{checkinEstimate}} minutes</p>-->
+                        </ons-col>
+                    </ons-row>
+                </ons-list-item>
                 <!--CHECKIN TO APPOINTMENTS-->
+                <ons-list-header class="person-list-header" ng-class="fontSizeTitle">{{"OVERVIEW"|translate}}</ons-list-header>
                 <ons-list-item modifier="chevron" class="item" ng-show="showCheckin" ng-click="goToCheckinAppointments(todaysAppointments)">
                     <ons-row align="center">
                         <ons-col width="60px" align="center">
@@ -90,9 +105,9 @@
                 <!-- NEXT APPOINTMENT INFORMATION-->
                 <ons-list-item modifier="chevron" class="item" ng-click="goToAppointments()">
                     <ons-row align="center">
-                        <ons-col width="60px">
+                        <ons-col width="60px" style="text-align: center">
                             <div>
-                                <i class="fa fa-calendar-o iconHomeView"></i>
+                                <i class="fa fa-calendar-o fa-2x" style="color: #0a6ebd"></i>
                             </div>
                         </ons-col>
                         <ons-col>
@@ -108,9 +123,9 @@
                 <!--STATUS-->
                 <ons-list-item modifier="chevron" class="item" ng-show="statusDescription" ng-click="goToStatus()">
                     <ons-row align="center">
-                        <ons-col width="60px" align="center">
+                        <ons-col width="60px" align="center" style="text-align: center">
                             <div>
-                                <i class="ion-medkit iconHomeView" style="color:darkgreen"></i>
+                                <i class="fa fa-medkit fa-2x" style="color:darkgreen"></i>
                             </div>
                         </ons-col>
                         <ons-col>
