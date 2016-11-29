@@ -3,20 +3,20 @@
         <div class="left">
             <ons-back-button>{{"BACK"|translate}}</ons-back-button>
         </div>
-        <div class="center">{{"ABOUT"|translate}}</div>
+        <div class="center">{{"OPAL_ABOUT"|translate}}</div>
     </ons-toolbar>
     <ons-list >
         <ons-list-item modifier="tappable chevron" ng-click="tourModal.show()">
             {{"OPAL_TOUR"|translate}}
         </ons-list-item>
         <ons-list-item modifier="tappable chevron" ng-click="homeNavigator.pushPage('')">
-            {{"ACKNOWLEDGMENTS"|translate}}
+            {{"OPAL_ACKNOWLEDGEMENTS"|translate}}
         </ons-list-item>
-        <ons-list-item modifier="tappable chevron" ng-click="">
-            {{"SUPPORT_OPAL"|translate}}
+        <ons-list-item modifier="tappable chevron" onclick="window.open('https://www.cedars.ca/cedars/en/donate/donate_online');">
+            {{"OPAL_SUPPORT"|translate}}
         </ons-list-item>
-        <ons-list-item modifier="tappable chevron">
-            {{"HIG"|translate}}
+        <ons-list-item modifier="tappable chevron" ng-click="homeNavigator.pushPage('')">
+            {{"OPAL_HIG"|translate}}
         </ons-list-item>
     </ons-list>
 
