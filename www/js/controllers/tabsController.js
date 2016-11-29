@@ -8,7 +8,7 @@ myApp.controller('TabsController',['$scope','$timeout','$translate','$translateP
     //Enter code here!!
 
     console.log('got to tabs controllers')
-
+    $scope.tour = './views/home/tour/tour.html';
     if (!localStorage.getItem('firstInstall')){
         $scope.tour = './views/home/tour/tour.html';
         localStorage.setItem('firstInstall', '1');
