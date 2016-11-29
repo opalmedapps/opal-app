@@ -93,28 +93,16 @@ myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$root
 
                         }else{
                             //Otherwise even if they are logged out, try to authenticate them.
-                            /*myDataRef.signIn({
-                             email: email,
-                             password: password
-                             }, authHandler);*/
                             myAuth.$signInWithEmailAndPassword(email,password).then(authHandler).catch(handleError);
                         }
 
                     }
                 }else{
                     //Show appropiate error
-                    /*myDataRef.authWithPassword({
-                     email: email,
-                     password: password
-                     }, authHandler);*/
                     myAuth.$signInWithEmailAndPassword(email,password).then(authHandler).catch(handleError);
                 }
                 //If not authenticated, simply try to authenticate
             }else{
-                /*myDataRef.authWithPassword({
-                 email: email,
-                 password: password
-                 }, authHandler);*/
                 myAuth.$signInWithEmailAndPassword(email,password).then(authHandler).catch(handleError);
             }
 
@@ -122,24 +110,14 @@ myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$root
     };
     //Handles authentication
     function authHandler(/*error, */firebaseUser) {
-        /*if (error){
-         handleError(error);
-         }else {*/
+
         firebaseUser.getToken(true).then(function(sessionToken){
             console.log('In Auth Handler')
             // TODO temporary false fix this
             /*var temporary= false; //firebaseUser.password.isTemporaryPassword;
              console.log(temporary);*/
             window.localStorage.setItem('Email',$scope.email);
-            /*if(temporary){
-             // ResetPassword.setUsername(firebaseUser.auth.uid);
-             // ResetPassword.setToken(firebaseUser.token);
-             // ResetPassword.setEmail($scope.email);
-             // ResetPassword.setTemporaryPassword($scope.password);
-             UserAuthorizationInfo.setUserAuthData(firebaseUser.uid, $scope.password, myAuth.getAuth().expires, sessionToken);
-             NavigatorParameters.setParameters({Username:firebaseUser.uid,Token:sessionToken,Email:$scope.email,TempPassword:$scope.password});
-             initNavigator.pushPage('views/login/verify-ssn.html');
-             }else{*/
+
             UserAuthorizationInfo.setUserAuthData(firebaseUser.uid, CryptoJS.SHA256($scope.password).toString(), myAuth.$getAuth().expires,sessionToken);
             //Setting The User Object for global Application Use
             console.log("Users email is" + $scope.email);

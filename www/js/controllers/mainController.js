@@ -26,12 +26,14 @@ angular.module('MUHCApp').controller('MainController', ["$state",'$timeout', '$r
 //Ask for an update every 2 minutes
     setInterval(function()
     {
+        console.log("calling  refresh bg");
         backgroundRefresh();
     },120000);
 
 //On resume, make a background refresh check.
     document.addEventListener("resume", onResume, false);
     function onResume() {
+        console.log("Called resume")
         setTimeout(function() {
             backgroundRefresh();
         });
