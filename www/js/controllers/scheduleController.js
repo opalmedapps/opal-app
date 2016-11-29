@@ -664,6 +664,12 @@ myApp.controller('IndividualAppointmentController', ['NavigatorParameters','Nati
             window[navigatorName].pushPage('./views/general/maps/individual-map.html');
         };
 
+        $scope.goToCheckIn=function()
+        {
+            //NavigatorParameters.setParameters({Post:[$scope.app]});
+            window[navigatorName].pushPage('./views/home/checkin/checkin-list.html');
+        }
+
         //Function to checkin for appointment after pressing checked in inside invidivual appointment
         $scope.checkinToAppointment = function()
         {

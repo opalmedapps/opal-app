@@ -264,7 +264,7 @@ myApp.controller('HomeController', ['$state','Appointments', 'CheckinService','$
         }
 
         $scope.goToCheckinAppointments = function (todaysAppointments) {
-            NavigatorParameters.setParameters({'Navigator':'homeNavigator', 'Post':todaysAppointments});
+            NavigatorParameters.setParameters({'Navigator':'homeNavigator'});
             homeNavigator.pushPage('./views/home/checkin/checkin-list.html');
         };
 
