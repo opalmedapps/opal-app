@@ -3,7 +3,7 @@
     <div class="left">
       <ons-back-button>{{"BACK"|translate}}</ons-back-button>
     </div>
-    <div class="center">{{"FEEDBACK"|translate}}</div>
+    <div class="center" ng-class="fontSizeTitle">{{"FEEDBACK"|translate}}</div>
     <div class="right">
       <ons-toolbar-button ng-click="submitFeedback()" ng-disabled="!enableSend||submitted">{{"SEND"|translate}}</ons-toolbar-button>
     </div>
