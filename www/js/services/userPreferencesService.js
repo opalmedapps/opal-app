@@ -61,6 +61,9 @@ myApp.service('UserPreferences',[ 'UserAuthorizationInfo','$rootScope','tmhDynam
             }else if(size=='large'){
                 $rootScope.fontSizeDesc='fontDescLarge';
                 $rootScope.fontSizeTitle='fontTitleLarge';
+            }else if(size=='xlarge'){
+                $rootScope.fontSizeDesc='fontDescXLarge';
+                $rootScope.fontSizeTitle='fontTitleXLarge';
             }
         },
         /**
@@ -71,17 +74,20 @@ myApp.service('UserPreferences',[ 'UserAuthorizationInfo','$rootScope','tmhDynam
          **/
         getFontSize:function()
         {
-            var username=UserAuthorizationInfo.getUsername();
-            fontSize='large';
+            /*var username=UserAuthorizationInfo.getUsername();
+            var appfontSize='large';
             $rootScope.fontSizeDesc='fontDescLarge';
             $rootScope.fontSizeTitle='fontTitleLarge';
             var fontSize=window.localStorage.getItem(username+'fontSize');
             if(fontSize&&typeof fontSize!=='undefined'&&fontSize=='medium')
             {
-                fontSize=fontSize;
+                fontSize=appfontSize;
                 $rootScope.fontSizeDesc='fontDescMedium';
                 $rootScope.fontSizeTitle='fontTitleMedium';
-            }
+            }*/
+            var font = fontSize.charAt(0).toUpperCase() + fontSize.slice(1);
+            $rootScope.fontSizeDesc= 'fontDesc'+ font;
+            $rootScope.fontSizeTitle= 'fontTitle'+font;
             return fontSize;
         },
         /**

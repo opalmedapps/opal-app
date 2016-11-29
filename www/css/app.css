@@ -1720,10 +1720,16 @@ Button appointments
   font-size:16px;
 }
 .fontDescLarge{
-  font-size: 17px;
+  font-size: 20px;
 }
 .fontTitleLarge{
-  font-size:18px;
+  font-size: 21px;
+}
+.fontDescXLarge{
+    font-size: 23px;
+}
+.fontTitleXLarge{
+    font-size: 24px;
 }
 /*
 Home screen checkin button

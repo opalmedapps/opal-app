@@ -12,7 +12,9 @@ var myApp=angular.module('MUHCApp');
  *@requires MUHCApp.service:LocalStorage
  *@description API service used to access the patient fields.
  **/
-myApp.service('Patient',['$q','$cordovaDevice','FileManagerService','LocalStorage','UserPreferences',function($q, $cordovaDevice,FileManagerService,LocalStorage,UserPreferences){
+myApp.service('Patient',['$q','$cordovaDevice','FileManagerService','LocalStorage',
+    'UserPreferences', 'UserAuthorizationInfo',
+    function($q, $cordovaDevice,FileManagerService,LocalStorage,UserPreferences, UserAuthorizationInfo){
     /**
      *@ngdoc property
      *@name  MUHCApp.service.#ProfileImage
@@ -110,7 +112,9 @@ myApp.service('Patient',['$q','$cordovaDevice','FileManagerService','LocalStorag
             patientFields=patientFields[0];
             UserPreferences.setEnableSMS(patientFields.EnableSMS);
             //UserPreferences.setLanguage(patientFields.Language);
-            UserPreferences.getFontSize();
+            var font = window.localStorage.getItem(UserAuthorizationInfo.getUsername() + 'fontSize');
+            console.log(font);
+            UserPreferences.setFontSize(font||'large');
             if(typeof patientFields=='undefined') return;
             FirstName=patientFields.FirstName;
             LastName=patientFields.LastName;
@@ -183,7 +187,9 @@ myApp.service('Patient',['$q','$cordovaDevice','FileManagerService','LocalStorag
             patientFields=patientFields[0];
             UserPreferences.setEnableSMS(patientFields.EnableSMS);
             //UserPreferences.setLanguage(patientFields.Language);
-            UserPreferences.getFontSize();
+            var font = window.localStorage.getItem(UserAuthorizationInfo.getUsername() + 'fontSize');
+            console.log(font);
+            UserPreferences.setFontSize(font||'large');
             FirstName=patientFields.FirstName;
             LastName=patientFields.LastName;
             accessLevel=patientFields.AccessLevel;
