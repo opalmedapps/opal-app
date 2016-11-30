@@ -149,9 +149,11 @@
                         </ons-col>
                         <ons-col>
                             <header>
-                                <span class="item-title" ng-class="fontSizeTitle">{{notification.Title}}</span>
+                                <span class="item-title" ng-class="fontSizeTitle">{{notification["Name_"+language]}}</span>
                             </header>
-                            <p class="item-desc" ng-class="fontSizeDesc" ng-show="notification.Number<=1">{{notification.Desc}}</p>
+                            <p class="item-desc" ng-class="fontSizeDesc" ng-show="notification.Number<=1">
+                                {{notification["Description_"+language]}}
+                            </p>
                         </ons-col>
                     </ons-row>
                 </ons-list-item>

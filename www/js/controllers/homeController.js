@@ -41,13 +41,15 @@ var myApp = angular.module('MUHCApp');
 myApp.controller('HomeController', ['$state','Appointments', 'CheckinService','$scope','Patient',
     'UpdateUI', '$timeout','$filter','$rootScope', 'tmhDynamicLocale','$translate',
     '$location','Notifications','NavigatorParameters','NativeNotification',
-    'NewsBanner','DeviceIdentifiers','$anchorScroll', 'PlanningSteps', 'Permissions',
+    'NewsBanner','DeviceIdentifiers','$anchorScroll', 'PlanningSteps', 'Permissions', 'UserPreferences',
     function ($state,Appointments,CheckinService, $scope, Patient,UpdateUI,$timeout,
               $filter, $rootScope,tmhDynamicLocale, $translate,$location,
               Notifications,NavigatorParameters,NativeNotification,NewsBanner,DeviceIdentifiers,
-              $anchorScroll,PlanningSteps, Permissions) {
+              $anchorScroll,PlanningSteps, Permissions, UserPreferences) {
 
         NewsBanner.setAlertOffline();
+
+        $scope.language = UserPreferences.getLanguage();
 
         console.log('Got home safely');
         NavigatorParameters.setParameters({'Navigator':'homeNavigator'});
@@ -153,6 +155,7 @@ myApp.controller('HomeController', ['$state','Appointments', 'CheckinService','$
         {
             //Obtaining new documents and setting the number and value for last document, obtains unread notifications every time it reads
             $scope.notifications = Notifications.getUnreadNotifications();
+            console.log($scope.notifications);
             if($scope.notifications.length>0)
             {
                 if(app)
@@ -180,7 +183,7 @@ myApp.controller('HomeController', ['$state','Appointments', 'CheckinService','$
             }
             console.log($scope.notifications);
             //Sets language for the notification
-            $scope.notifications = Notifications.setNotificationsLanguage($scope.notifications);
+            //$scope.notifications = Notifications.setNotificationsLanguage($scope.notifications);
         }
 
         //Goes to specific notification
