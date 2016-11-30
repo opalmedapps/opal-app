@@ -193,7 +193,7 @@ myApp.service('Appointments', ['$q', 'RequestToServer','$cordovaCalendar','UserA
             appointments[i].ScheduledStartTime = $filter('formatDate')(appointments[i].ScheduledStartTime);
             //appointments[i].ScheduledStartTime = new Date(today);
             appointments[i].ScheduledEndTime =  $filter('formatDate')(appointments[i].ScheduledEndTime);
-            appointments[i].RoomLocation = appointments[i].RooomLocation
+            appointments[i].RoomLocation = appointments[i].RoomLocation;
             // appointments[i].ScheduledEndTime  = new Date(today);
             // appointments[i].ScheduledEndTime.setMinutes(appointments[i].ScheduledEndTime.getMinutes()+15);
             // today.setDate(today.getDate()+1);
