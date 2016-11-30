@@ -1,5 +1,5 @@
 <ons-page ng-controller="HomeController" ng-device-backbutton="homeDeviceBackButton()">
-    <ons-toolbar>
+    <ons-toolbar fixed-style>
         <div class="center" ng-class="fontSizeTitle">{{"HEADER_MESSAGE_HOME"|translate}}</div>
         <div class="right">
             <ons-toolbar-button ng-click="homeNavigator.pushPage('views/tabs/info-page-tabs.html',{param:home})">

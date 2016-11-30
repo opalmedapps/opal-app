@@ -1,9 +1,9 @@
 <ons-page style="background-color:white;width:100vw;height:100vh" ng-controller="LoginController">
-    <ons-toolbar>
+    <ons-toolbar fixed-style>
         <div class="left">
             <ons-toolbar-button ng-click="initNavigator.popPage()">{{"CLOSE"|translate}}</ons-toolbar-button>
         </div>
-        <div class="center">{{"LOGIN"|translate}}</div>
+        <div class="center" >{{"LOGIN"|translate}}</div>
     </ons-toolbar>
     <div ng-include="'./views/login/popover-security.html'"></div>
     <ons-row align="center" style="height:70vh;margin:0;top:0">
