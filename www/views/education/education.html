@@ -1,9 +1,9 @@
 <ons-page ng-controller="EducationalMaterialController" ng-device-backbutton="educationDeviceBackButton()">
-  <ons-toolbar>
+  <ons-toolbar fixed-style>
       <div class="left">
         <ons-back-button>{{"BACK"|translate}}</ons-back-button>
       </div>
-    <div class="center">{{"EDUCATION"|translate}}</div>
+    <div class="center" ng-class="fontSizeTitle">{{"EDUCATION"|translate}}</div>
     <div class="right"><ons-toolbar-button ng-click="educationNavigator.pushPage('./views/tabs/info-page-tabs.html')"><ons-icon icon="ion-ios-information-outline"></ons-icon></ons-toolbar-button></div>
 
     <!--<div class="right"><ons-toolbar-button ng-click="educationNavigator.pushPage('views/info-page-tabs.html',{param:home})"><ons-icon icon="ion-ios-information-outline"></ons-icon></ons-toolbar-button></div>-->

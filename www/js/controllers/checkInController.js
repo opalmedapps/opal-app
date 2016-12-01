@@ -14,7 +14,7 @@
         var vm = this;
         vm.title = 'CheckInController';
         vm.apps = [];
-        vm.language = 'EN';
+        vm.language = '';
         vm.response = '';
         vm.error = '';
         vm.checkInMessage = "CHECKED_IN";
@@ -26,7 +26,7 @@
         ////////////////
 
         function activate() {
-            vm.apps = NavigatorParameters.getParameters().Post;
+            vm.apps = Appointments.getCheckinAppointment();
             console.log(vm.apps);
             vm.language = UserPreferences.getLanguage();
             CheckinService.isAllowedToCheckin().then(function (response) {

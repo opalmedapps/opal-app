@@ -1720,10 +1720,16 @@ Button appointments
   font-size:16px;
 }
 .fontDescLarge{
-  font-size: 17px;
+  font-size: 20px;
 }
 .fontTitleLarge{
-  font-size:18px;
+  font-size: 21px;
+}
+.fontDescXLarge{
+    font-size: 23px;
+}
+.fontTitleXLarge{
+    font-size: 24px;
 }
 /*
 Home screen checkin button
@@ -2445,4 +2451,29 @@ transform: translate(0px,-50px);
 .tour-icon{
     font-size: 500%;
     color: white;
+}
+
+input {
+    display: block;
+    margin: 0;
+    width: 100%;
+    font-family: sans-serif;
+    font-size: 18px;
+    appearance: none;
+    box-shadow: none;
+    border-radius: none;
+}
+input:focus {
+    outline: none;
+}
+
+.style-4 input {
+    padding: 10px;
+    border: none;
+    border-bottom: solid 2px #c9c9c9;
+    transition: border 0.3s;
+}
+.style-4 input:focus,
+.style-4 input.focus {
+    border-bottom: solid 2px #969696;
 }
