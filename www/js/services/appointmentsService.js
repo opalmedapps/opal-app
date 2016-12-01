@@ -193,7 +193,8 @@ myApp.service('Appointments', ['$q', 'RequestToServer','$cordovaCalendar','UserA
             appointments[i].ScheduledStartTime = $filter('formatDate')(appointments[i].ScheduledStartTime);
             //appointments[i].ScheduledStartTime = new Date(today);
             appointments[i].ScheduledEndTime =  $filter('formatDate')(appointments[i].ScheduledEndTime);
-            appointments[i].RoomLocation = appointments[i].RoomLocation;
+            appointments[i].LastUpdated =  $filter('formatDate')(appointments[i].LastUpdated);
+            //appointments[i].RoomLocation = appointments[i].RoomLocation
             // appointments[i].ScheduledEndTime  = new Date(today);
             // appointments[i].ScheduledEndTime.setMinutes(appointments[i].ScheduledEndTime.getMinutes()+15);
             // today.setDate(today.getDate()+1);
@@ -721,19 +722,27 @@ myApp.service('Appointments', ['$q', 'RequestToServer','$cordovaCalendar','UserA
 
         getRecentCalledAppointment: function () {
             var todaysAppointments = getAppointmentsInPeriod('Past');
+            console.log(todaysAppointments);
             var now=new Date();
-            var min = todaysAppointments.map(function (obj) {
+
+
+            // Calculate difference between now and all appointments that are checked in and have a room
+            var timeDiff = todaysAppointments.map(function (obj) {
                 if (obj.Checkin == '1' && obj.RoomLocation) {
-                    return now - obj.LastUpdated;
+                    return Math.abs(now - obj.LastUpdated);
                 } else {
                     return Infinity;
                 }
-            }).reduce(function (min, cur, ind) {
-                Math.min(min,cur);
-                return ind;
             });
-            console.log(min);
-            return todaysAppointments[min];
+
+            // Find the min difference, this is the one you are called to.
+            var lowest = 0;
+            for (var i = 1; i < timeDiff.length; i++) {
+                if (timeDiff[i] < timeDiff[lowest]) lowest = i;
+            }
+
+            console.log(lowest);
+            return todaysAppointments[lowest];
         }
 
     };

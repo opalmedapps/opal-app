@@ -11,6 +11,12 @@
             {{"APPOINTMENTS"|translate}}
         </ons-list-header>
         <ons-list-item modifier="tappable chevron" ng-repeat="app in checkIn.apps" ng-click="checkIn.goToAppointment(app)">
+            <ons-col width="50px" class="plan-left" align="center">
+                <div class="plan-date" ng-show="app.RoomLocation"><img ng-src="./img/checkedbox.png" width="20px" height="20px"></div>
+                <div class="plan-duration" ng-hide="app.RoomLocation">
+                    <img ng-src="./img/uncheckedbox.png" width="20px" height="20px">
+                </div>
+            </ons-col>
             <ons-col align="center">
                 <div style="line-height:1;padding:5px;" >
                     <span ng-class="fontSizeTitle">

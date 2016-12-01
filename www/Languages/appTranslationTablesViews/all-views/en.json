@@ -15,6 +15,7 @@
   "CANCEL": "Cancel",
   "CHECKED_IN": "You are checked in!",
   "CHECKIN": "Check-in",
+  "CHECKIN_CALLED": "Please go to: ",
   "CHECKIN_ERROR": "Error occurred, check in at the cancer center",
   "CHECKIN_MESSAGE_AFTER": "You are checked in to your appointment!",
   "CHECKIN_MESSAGE_AFTER_PLURAL": "You are checked in to your appointments!",
