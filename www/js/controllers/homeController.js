@@ -294,10 +294,12 @@ myApp.controller('HomeController', ['$state','Appointments', 'CheckinService','$
                         console.log(todaysAppointmentsToCheckIn[app].Checkin);
                         if (todaysAppointmentsToCheckIn[app].Checkin == '0'){
                             allCheckedIn = false;
+                            $scope.allCheckedIn = allCheckedIn;
                         }
                     }
 
                     //Case 1: An Appointment has checkin 0, not checked-in
+                    console.log(allCheckedIn);
                     if (!allCheckedIn) {
 
                         //Checkin message before appointment gets set and is changed only if appointment was checked into already from Aria
@@ -320,6 +322,8 @@ myApp.controller('HomeController', ['$state','Appointments', 'CheckinService','$
                         //Case:2 Appointment already checked-in show the message for 'you are checked in...' and query for estimate
 
                         var calledApp = Appointments.getRecentCalledAppointment();
+                        console.log(calledApp);
+                        $scope.calledApp = calledApp;
                         $rootScope.checkInMessage = calledApp.RoomLocation ? "CHECKIN_CALLED":"CHECKIN_MESSAGE_AFTER" + setPlural(todaysAppointmentsToCheckIn);
                         $rootScope.RoomLocation = calledApp.RoomLocation;
                         $rootScope.showHomeScreenUpdate = true;
@@ -332,8 +336,6 @@ myApp.controller('HomeController', ['$state','Appointments', 'CheckinService','$
 
             }else{
                 //Case where there are no appointments that day
-                var called = Appointments.getRecentCalledAppointment();
-                console.log(called);
                 $rootScope.checkInMessage = "CHECKIN_NONE";
                 //$scope.showCheckin = false;
             }

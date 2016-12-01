@@ -721,14 +721,14 @@ myApp.service('Appointments', ['$q', 'RequestToServer','$cordovaCalendar','UserA
         },
 
         getRecentCalledAppointment: function () {
-            var todaysAppointments = getAppointmentsInPeriod('Past');
+            var todaysAppointments = getAppointmentsInPeriod('Today');
             console.log(todaysAppointments);
             var now=new Date();
 
 
             // Calculate difference between now and all appointments that are checked in and have a room
             var timeDiff = todaysAppointments.map(function (obj) {
-                if (obj.Checkin == '1' && obj.RoomLocation) {
+                if (obj.Checkin == '1' && obj.RoomLocation && obj.Status.toLowerCase().indexOf('completed') != -1) {
                     return Math.abs(now - obj.LastUpdated);
                 } else {
                     return Infinity;
@@ -741,7 +741,12 @@ myApp.service('Appointments', ['$q', 'RequestToServer','$cordovaCalendar','UserA
                 if (timeDiff[i] < timeDiff[lowest]) lowest = i;
             }
 
+            if (!!timeDiff.reduce(function(a, b){ return (a === b) ? a : NaN; })){
+                return {RoomLocation: ""};
+            }
+
             console.log(lowest);
+
             return todaysAppointments[lowest];
         }
 
