@@ -93,6 +93,7 @@ angular.module('MUHCApp').controller('MainController', ["$state",'$timeout', '$r
     var app = document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'https://' ) === -1;
     if(app)
     {
+
         PushNotification.hasPermission(function(data) {
             if (data.isEnabled) {
                 console.log('isEnabled');
@@ -112,10 +113,13 @@ angular.module('MUHCApp').controller('MainController', ["$state",'$timeout', '$r
             }
         });
 
-        PushNotification.hasPermission(function(data) {
-            if (data.isEnabled) {
-                console.log('isEnabled');
-            }
+        //dX5oUernHF4:APA91bEWkdACR0Ra81mAECXn5rPNyoUYx3ijC9UdzJ_26MqjYa0OBaQRzD2n7VCk_PCcsnvsZz7bEA5Aq1pSV9iABRxSPCjFlBJh7ogiqWs8Ex4COf7H2xWHrz_16CJMlNKljffpNf8q
+        push.on('notification', function(data) {
+
+            //Need to check if logged in, locked out and what to do in each case.
+
+            //NativeNotification.showNotificationAlert(data.message);
+            console.log(data);
         });
         push.on('error', function(e) {
             console.log(e);
@@ -125,6 +129,7 @@ angular.module('MUHCApp').controller('MainController', ["$state",'$timeout', '$r
         }, function() {
             console.log('error');
         }, 3);*/
+
         push.on('registration', function(data) {
             console.log(data.registrationId);
             DeviceIdentifiers.setDeviceIdentifiers(data.registrationId);
