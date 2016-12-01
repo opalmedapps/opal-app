@@ -319,8 +319,9 @@ myApp.controller('HomeController', ['$state','Appointments', 'CheckinService','$
                     } else {
                         //Case:2 Appointment already checked-in show the message for 'you are checked in...' and query for estimate
 
-                        var called = Appointments.getRecentCalledAppointment();
-                        $rootScope.checkInMessage = called ? "CHECKIN_CALLED":"CHECKIN_MESSAGE_AFTER" + setPlural(todaysAppointmentsToCheckIn);
+                        var calledApp = Appointments.getRecentCalledAppointment();
+                        $rootScope.checkInMessage = calledApp.RoomLocation ? "CHECKIN_CALLED":"CHECKIN_MESSAGE_AFTER" + setPlural(todaysAppointmentsToCheckIn);
+                        $rootScope.RoomLocation = calledApp.RoomLocation;
                         $rootScope.showHomeScreenUpdate = true;
                         //CheckinService.getCheckinUpdates(appointment);
                     }
