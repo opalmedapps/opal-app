@@ -286,44 +286,55 @@ myApp.controller('HomeController', ['$state','Appointments', 'CheckinService','$
             $scope.todaysAppointments = todaysAppointmentsToCheckIn;
             if(todaysAppointmentsToCheckIn)
             {
-                $scope.showCheckin = true;
+                //$scope.showCheckin = true;
 
-                var allCheckedIn = true;
-                for (var app in todaysAppointmentsToCheckIn){
-                    console.log(todaysAppointmentsToCheckIn[app].Checkin);
-                    if (todaysAppointmentsToCheckIn[app].Checkin == '0'){
-                        allCheckedIn = false;
-                    }
-                }
-
-                //Case 1:Appointment checkin is 0, not checked-in
-                if (!allCheckedIn) {
-                    //Checkin message before appointment gets set and is changed only if appointment was checked into already from Aria
-                    $scope.todaysAppointments.checkInMessage = "CHECKIN_MESSAGE_BEFORE" + setPlural(todaysAppointmentsToCheckIn);
-                    $rootScope.showHomeScreenUpdate = false;
-
-                    //Queries the server to find out whether or not an appointment was checked into
-                    CheckinService.checkCheckinServer(todaysAppointmentsToCheckIn[0]).then(function (data) {
-                        //If it has, then it simply changes the message to checkedin and queries to get an update
-                        if (data) {
-                            console.log('Returning home');
-                            $timeout(function () {
-                                $scope.todaysAppointments.checkInMessage = "CHECKIN_MESSAGE_AFTER" + setPlural(todaysAppointmentsToCheckIn);
-                                $rootScope.showHomeScreenUpdate = true;
-                                //CheckinService.getCheckinUpdates(appointment);
-                            });
+                CheckinService.isAllowedToCheckin().then(function (response) {
+                    var allCheckedIn = true;
+                    for (var app in todaysAppointmentsToCheckIn){
+                        console.log(todaysAppointmentsToCheckIn[app].Checkin);
+                        if (todaysAppointmentsToCheckIn[app].Checkin == '0'){
+                            allCheckedIn = false;
                         }
-                    });
-                } else {
-                    //Case:2 Appointment already checked-in show the message for 'you are checked in...' and query for estimate
-                    $scope.todaysAppointments.checkInMessage = "CHECKIN_MESSAGE_AFTER" + setPlural(todaysAppointmentsToCheckIn);
-                    $rootScope.showHomeScreenUpdate = true;
-                    //CheckinService.getCheckinUpdates(appointment);
-                }
-                //console.log(todaysAppointmentsToCheckIn[appointment].checkInMessage);
+                    }
+
+                    //Case 1: An Appointment has checkin 0, not checked-in
+                    if (!allCheckedIn) {
+
+                        //Checkin message before appointment gets set and is changed only if appointment was checked into already from Aria
+                        $rootScope.checkInMessage = "CHECKIN_MESSAGE_BEFORE" + setPlural(todaysAppointmentsToCheckIn);
+                        $rootScope.showHomeScreenUpdate = false;
+
+                        //Queries the server to find out whether or not an appointment was checked into
+                        CheckinService.checkCheckinServer(todaysAppointmentsToCheckIn[0]).then(function (data) {
+                            //If it has, then it simply changes the message to checkedin and queries to get an update
+                            if (data) {
+                                console.log('Returning home');
+                                $timeout(function () {
+                                    $rootScope.checkInMessage = "CHECKIN_MESSAGE_AFTER" + setPlural(todaysAppointmentsToCheckIn);
+                                    $rootScope.showHomeScreenUpdate = true;
+                                    //CheckinService.getCheckinUpdates(appointment);
+                                });
+                            }
+                        });
+                    } else {
+                        //Case:2 Appointment already checked-in show the message for 'you are checked in...' and query for estimate
+
+                        var called = Appointments.getRecentCalledAppointment();
+                        $rootScope.checkInMessage = called ? "CHECKIN_CALLED":"CHECKIN_MESSAGE_AFTER" + setPlural(todaysAppointmentsToCheckIn);
+                        $rootScope.showHomeScreenUpdate = true;
+                        //CheckinService.getCheckinUpdates(appointment);
+                    }
+                    //console.log(todaysAppointmentsToCheckIn[appointment].checkInMessage);
+                }).catch(function(error){
+                    $rootScope.checkInMessage = "CHECKIN_IN_HOSPITAL_ONLY";
+                });
+
             }else{
                 //Case where there are no appointments that day
-                $scope.showCheckin = false;
+                var called = Appointments.getRecentCalledAppointment();
+                console.log(called);
+                $rootScope.checkInMessage = "CHECKIN_NONE";
+                //$scope.showCheckin = false;
             }
         }
     }]);
