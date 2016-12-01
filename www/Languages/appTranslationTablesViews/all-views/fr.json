@@ -102,7 +102,7 @@
   "LEAVEMESSAGE": "Laissez-nous un message!",
   "LOADING": "Chargement",
   "LOADINGDATA": "Chargement des données",
-  "LOCATION": "Localisation",
+  "LOCATION": "Lieu d'attente",
   "LOCKEDOUT": "Verrouillé en raison de l'inactivité",
   "MAPS": "Plan",
   "MINUTES": "Minutes",
@@ -236,5 +236,6 @@
   "TOUR_MYCHART":"Dans l'onglet Dossier, vous trouverez vos rendez-vous, documents et toutes autres informations.",
   "TOUR_GENERAL": "Dans l'onglet Général, vous trouverez votre équipe soignante, des annonces générales et l'informations concernant le stationnement. Vous pouvez aussi nous laisser des commentaires!",
   "TOUR_EDUCATION": "Dans l'onglet Éducation, vous allez recevoir du matériel éducatif tout au long de votre trajet en radiothérapie. Nous allons vous envoyer des vidéos, pamphlets, brochures et documents personalisés.",
-  "TOUR_INFO": "Sélectionnez le boutton Information si vous avez besoin plus d'information! Sélectionnez fermer si vous êtes prêt à explorer Opal!"
+  "TOUR_INFO": "Sélectionnez le boutton Information si vous avez besoin plus d'information! Sélectionnez fermer si vous êtes prêt à explorer Opal!",
+  "GOTO_ROOM": "Salle de rendez-vous: "
 }
