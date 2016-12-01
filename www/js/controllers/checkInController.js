@@ -6,11 +6,11 @@
         .controller('CheckInController', CheckInController);
 
     CheckInController.$inject = ['CheckinService', 'NavigatorParameters', 'UserPreferences',
-        '$q', 'Appointments', 'NewsBanner'];
+        '$q', 'Appointments', 'NewsBanner','$filter'];
 
     /* @ngInject */
     function CheckInController(CheckinService, NavigatorParameters, UserPreferences,
-                               $q, Appointments, NewsBanner) {
+                               $q, Appointments, NewsBanner, $filter) {
         var vm = this;
         vm.title = 'CheckInController';
         vm.apps = [];
@@ -49,8 +49,8 @@
         }
 
         function checkInToAll(appointments){
-            checkInButton.setDisabled(true);
-            checkInButton.startSpin();
+            //checkInButton.setDisabled(true);
+            //checkInButton.startSpin();
 
             var promises = [];
             for (var i=0;  i !=appointments.length; i++){
@@ -58,7 +58,7 @@
             }
 
             $q.all(promises).then(function (dataArray) {
-                checkInButton.stopSpin();
+               // checkInButton.stopSpin();
                 vm.checkInMessage = "CHECKED_IN";
                 var message = $filter('translate')("CHECKED_IN");
                 NewsBanner.showCustomBanner(message, '#333333', function(){}, 500);
@@ -88,7 +88,7 @@
 
                 for (var checkedIn in dataArray){
                     if (dataArray[checkedIn] === false){
-                        checkInButton.setDisabled(false);
+                        //checkInButton.setDisabled(false);
                         vm.checkInMessage = "CHECKIN_TO_ALL";
                         break;
                     }
