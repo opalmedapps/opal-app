@@ -89,14 +89,15 @@
                     <ons-row align="center">
                         <ons-col width="60px" align="center">
                             <div>
-                                <i class="ion-android-checkbox-outline iconHomeView" style="color:orange"></i><span class="notification" ng-show="todaysAppointments[0].Checkin == '0'">1</span>
+                                <i class="ion-android-checkbox-outline iconHomeView" style="color:orange"></i><span class="notification" ng-show="!allCheckedIn">1</span>
                             </div>
                         </ons-col>
                         <ons-col>
                             <header>
                                 <span class="item-title" ng-class="fontSizeTitle">{{"CHECKIN"|translate}}</span>
                             </header>
-                            <p class="item-desc" ng-class="fontSizeDesc">{{checkInMessage|translate}} </p>
+                            <p class="item-desc" ng-class="fontSizeDesc">{{checkInMessage|translate}} {{RoomLocation}}</p>
+                            <p class="item-desc" ng-class="fontSizeDesc">{{calledApp["AppointmentType_"+language]}}</p>
                             <!--<p class="item-desc" ng-class="fontSizeDesc" style="color:orange" ng-show ="checkinEstimate&&showHomeScreenUpdate">{{"ESTIMATEDWAIT"|translate}}: {{checkinEstimate}} minutes</p>-->
                         </ons-col>
                     </ons-row>
