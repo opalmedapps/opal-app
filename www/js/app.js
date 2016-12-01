@@ -86,73 +86,82 @@
  */
 
 //Routes for angular views
-var myApp = angular.module('MUHCApp', ['tmh.dynamicLocale','pascalprecht.translate','ngAnimate','luegg.directives','ngSanitize','ui.router', 'onsen', 'ngTouch','firebase','ui.bootstrap','MUHCApp.filters','ngCordova','monospaced.elastic','Tek.progressBar'])
-    .config(['$urlRouterProvider', 'tmhDynamicLocaleProvider','$stateProvider', '$translateProvider', '$translatePartialLoaderProvider', function ($urlRouterProvider, tmhDynamicLocaleProvider, $stateProvider, $translateProvider, $translatePartialLoaderProvider) {
+var myApp = angular.module('MUHCApp', ['tmh.dynamicLocale','pascalprecht.translate','ngAnimate','luegg.directives','ngSanitize','ui.router', 'onsen', 'ngTouch','firebase','ui.bootstrap','MUHCApp.filters','ngCordova','monospaced.elastic','Tek.progressBar']);
 
-        $urlRouterProvider.otherwise('/');
-        $stateProvider.state('logIn', {
+myApp.config(['$urlRouterProvider', '$stateProvider', function ($urlRouterProvider, $stateProvider) {
+
+    $urlRouterProvider.otherwise('/');
+    $stateProvider
+        .state('logIn', {
             url: '/login',
             templateUrl: 'views/login/login.html',
             controller: 'LoginController'
 
-        });
-        $stateProvider
-            .state('init', {
+        })
+        .state('init', {
             url: '/',
             templateUrl: 'views/init/init-screen.html',
             controller: 'InitScreenController'
 
         })
-            .state('loading', {
-                url: '/loading',
-                templateUrl: 'views/login/loading.html',
-                controller: 'LoadingController',
-                resolve: {
-                    // controller will not be loaded until $requireSignIn resolves
-                    // Auth refers to our $firebaseAuth wrapper in the example above
-                    "currentAuth": ["FirebaseService", function(FirebaseService) {
-                        // $requireSignIn returns a promise so the resolve waits for it to complete
-                        return FirebaseService.getAuthentication().$requireSignIn();
-                    }]
-                }
-            })
-            .state('Home', {
-                url: '/Home',
-                templateUrl: 'views/tabs/tabs.html',
-                controller: 'TabsController',
-                resolve: {
-                    // controller will not be loaded until $requireSignIn resolves
-                    // Auth refers to our $firebaseAuth wrapper in the example above
-                    "currentAuth": ["FirebaseService", function(FirebaseService) {
-                        // $requireSignIn returns a promise so the resolve waits for it to complete
-                        console.log(FirebaseService.getAuthentication().$requireSignIn());
-                        return FirebaseService.getAuthentication().$requireSignIn();
-                    }]
-                }
+        .state('loading', {
+            url: '/loading',
+            templateUrl: 'views/login/loading.html',
+            controller: 'LoadingController',
+            resolve: {
+                // controller will not be loaded until $requireSignIn resolves
+                // Auth refers to our $firebaseAuth wrapper in the example above
+                "currentAuth": ["FirebaseService", function(FirebaseService) {
+                    // $requireSignIn returns a promise so the resolve waits for it to complete
+                    return FirebaseService.getAuthentication().$requireSignIn();
+                }]
+            }
+        })
+        .state('Home', {
+            url: '/Home',
+            templateUrl: 'views/tabs/tabs.html',
+            controller: 'TabsController',
+            resolve: {
+                // controller will not be loaded until $requireSignIn resolves
+                // Auth refers to our $firebaseAuth wrapper in the example above
+                "currentAuth": ["FirebaseService", function(FirebaseService) {
+                    // $requireSignIn returns a promise so the resolve waits for it to complete
+                    console.log(FirebaseService.getAuthentication().$requireSignIn());
+                    return FirebaseService.getAuthentication().$requireSignIn();
+                }]
+            }
 
-            })
-            .state('logOut', {
-                url: '/Logout',
-                templateUrl: 'views/logOut.html',
-                controller: 'logOutController',
-                resolve: {
-                    // controller will not be loaded until $requireSignIn resolves
-                    // Auth refers to our $firebaseAuth wrapper in the example above
-                    "currentAuth": ["FirebaseService", function(FirebaseService) {
-                        // $requireSignIn returns a promise so the resolve waits for it to complete
-                        return FirebaseService.getAuthentication().$requireSignIn();
-                    }]
-                }
-            });
-        $translateProvider.useSanitizeValueStrategy('sanitizeParameters');
-        $translateProvider.useLoader('$translatePartialLoader', {
-            urlTemplate: './Languages/appTranslationTablesViews/{part}/{lang}.json'
+        })
+        .state('logOut', {
+            url: '/Logout',
+            templateUrl: 'views/logOut.html',
+            controller: 'logOutController',
+            resolve: {
+                // controller will not be loaded until $requireSignIn resolves
+                // Auth refers to our $firebaseAuth wrapper in the example above
+                "currentAuth": ["FirebaseService", function(FirebaseService) {
+                    // $requireSignIn returns a promise so the resolve waits for it to complete
+                    return FirebaseService.getAuthentication().$requireSignIn();
+                }]
+            }
         });
-        $translateProvider.preferredLanguage('fr');
 
-        tmhDynamicLocaleProvider.localeLocationPattern('./Languages/angular-locales/angular-locale_{{locale}}.js');
+}]);
 
-    }]);
+myApp.config(['tmhDynamicLocaleProvider','$translateProvider','Constants', function (tmhDynamicLocaleProvider, $translateProvider, Constants) {
+    $translateProvider.useSanitizeValueStrategy('sanitizeParameters');
+    $translateProvider.useLoader('$translatePartialLoader', {
+        urlTemplate: './Languages/appTranslationTablesViews/{part}/{lang}.json'
+    });
+
+    //$translateProvider.preferredLanguage('fr');
+
+    tmhDynamicLocaleProvider.localeLocationPattern('./Languages/angular-locales/angular-locale_{{locale}}.js');
+}]);
+
+myApp.constant('Constants', {
+    app: document.URL.indexOf('http://') === -1 && document.URL.indexOf('https://') === -1
+});
 
 myApp.config( [
     '$compileProvider',
@@ -216,7 +225,7 @@ myApp.run(function ($state, $stateParams,$q, $rootScope,$translate, Patient,$loc
             function redirectPage(){
                 var r=$q.defer();
                 $state.go('init');
-                r.resolve;
+                r.resolve('Went Init');
                 return r.promise;
             }
 
@@ -227,4 +236,4 @@ myApp.run(function ($state, $stateParams,$q, $rootScope,$translate, Patient,$loc
     });
 });
 
-var param={};
+

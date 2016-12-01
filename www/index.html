@@ -85,8 +85,6 @@
     <!-- css stylesheets for the project-->
     <link rel="stylesheet" href="css/app.css"/>
     <script src="cordova.js"></script>
-
-    <script type="text/javascript" src="js/init.js"></script>
 </head>
 
 <body id="boots">
@@ -103,8 +101,8 @@
 <div ng-controller="MainController" >
     <div ui-view></div>
     <!--App flow code-->
+    <!--<script src="js/index.js" type="text/javascript"></script>-->
     <script src="js/app.js" type="text/javascript"></script>
-    <script src="js/index.js" type="text/javascript"></script>
 
     <!--App controllers-->
     <script src="js/controllers/loginController.js"></script>
@@ -193,4 +191,19 @@
 </div>
 
 </body>
+
+<script type="text/javascript">
+    var app = document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'https://' ) === -1;
+    if (app){
+        document.addEventListener("deviceready", function() {
+            angular.bootstrap(document, ["MUHCApp"]);
+        }, false);
+    }
+    else {
+        $('document').ready(function(){
+            angular.bootstrap(document, ["MUHCApp"]);
+        })
+    }
+</script>
+
 </html>

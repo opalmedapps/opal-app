@@ -52,45 +52,57 @@ myApp.service('Notifications',['$filter','RequestToServer','LocalStorage','Annou
         namesFunction:Documents.getDocumentNames,
         PageUrl:Documents.getDocumentUrl
       }...
-  </pre>
-  **/
+    </pre>
+    **/
     var notificationTypes={
         'Document':
-        {
-            icon:'fa fa-folder',
-            color:'darkorange',
-            NameEN:'AliasName_EN',
-            NameFR:'AliasName_FR',
-            SerNum:'DocumentSerNum',
-            readFunction:Documents.readDocument,
-            searchFunction:Documents.getDocumentBySerNum,
-            namesFunction:Documents.getDocumentNames,
-            PageUrl:Documents.getDocumentUrl
-        },
+            {
+                icon:'fa fa-folder',
+                color:'darkorange',
+                NameEN:'AliasName_EN',
+                NameFR:'AliasName_FR',
+                SerNum:'DocumentSerNum',
+                readFunction:Documents.readDocument,
+                searchFunction:Documents.getDocumentBySerNum,
+                namesFunction:Documents.getDocumentNames,
+                PageUrl:Documents.getDocumentUrl
+            },
         'UpdDocument':
-        {
-            icon:'fa fa-folder',
-            color:'orange',
-            NameEN:'AliasName_EN',
-            NameFR:'AliasName_FR',
-            SerNum:'DocumentSerNum',
-            readFunction:Documents.readDocument,
-            searchFunction:Documents.getDocumentBySerNum,
-            namesFunction:Documents.getDocumentNames,
-            PageUrl:Documents.getDocumentUrl
-        },
+            {
+                icon:'fa fa-folder',
+                color:'orange',
+                NameEN:'AliasName_EN',
+                NameFR:'AliasName_FR',
+                SerNum:'DocumentSerNum',
+                readFunction:Documents.readDocument,
+                searchFunction:Documents.getDocumentBySerNum,
+                namesFunction:Documents.getDocumentNames,
+                PageUrl:Documents.getDocumentUrl
+            },
+        'RoomAssignment':
+            {
+                icon:'fa fa-calendar-o',
+                color:'red',
+                NameEN:'Description_EN',
+                NameFR: 'Description_FR',
+                SerNum:'AppointmentSerNum',
+                readFunction:Appointments.readAppointmentBySerNum,
+                searchFunction:Appointments.getAppointmentBySerNum,
+                namesFunction:Appointments.getAppointmentName,
+                PageUrl:Appointments.getAppointmentUrl
+            },
         'TxTeamMessage':
-        {
-            icon:'fa fa-user-md ',
-            color:'Olive',
-            NameEN:'PostName_EN',
-            NameFR: 'PostName_FR',
-            SerNum:'TxTeamMessageSerNum',
-            searchFunction:TxTeamMessages.getTxTeamMessageBySerNum,
-            namesFunction:TxTeamMessages.getTxTeamMessageName,
-            readFunction:TxTeamMessages.readTxTeamMessage,
-            PageUrl:TxTeamMessages.getTxTeamMessageUrl
-        },
+            {
+                icon:'fa fa-user-md ',
+                color:'Olive',
+                NameEN:'PostName_EN',
+                NameFR: 'PostName_FR',
+                SerNum:'TxTeamMessageSerNum',
+                searchFunction:TxTeamMessages.getTxTeamMessageBySerNum,
+                namesFunction:TxTeamMessages.getTxTeamMessageName,
+                readFunction:TxTeamMessages.readTxTeamMessage,
+                PageUrl:TxTeamMessages.getTxTeamMessageUrl
+            },
         'Announcement':{
             icon:'ion-speakerphone',
             color:'navy',
@@ -211,7 +223,10 @@ myApp.service('Notifications',['$filter','RequestToServer','LocalStorage','Annou
             temp[i].Custom =  notificationTypes[temp[i].NotificationType].Custom;
             temp[i].Icon = notificationTypes[temp[i].NotificationType].icon;
             temp[i].Color = notificationTypes[temp[i].NotificationType].color;
-            if(!notificationTypes[temp[i].NotificationType].hasOwnProperty('openFunction')) temp[i].PageUrl = notificationTypes[temp[i].NotificationType].PageUrl(temp[i].RefTableRowSerNum);
+            console.log(temp[i].NotificationType, notificationTypes[temp[i].NotificationType].hasOwnProperty('openFunction'));
+            if(!notificationTypes[temp[i].NotificationType].hasOwnProperty('openFunction')){
+                temp[i].PageUrl = notificationTypes[temp[i].NotificationType].PageUrl(temp[i].RefTableRowSerNum);
+            }
             temp[i].Content = notificationTypes[temp[i].NotificationType].namesFunction(temp[i].RefTableRowSerNum);
             //console.log(temp[i].Content);
             temp[i].DateAdded=$filter('formatDate')(temp[i].DateAdded);
@@ -305,11 +320,15 @@ myApp.service('Notifications',['$filter','RequestToServer','LocalStorage','Annou
                 //If ReadStatus is 0, then find actual post for notification
                 if(Notifications[i].ReadStatus == '0')
                 {
+                    // Attach room number
+
                     console.log(Notifications[i]);
                     //Finding post
                     var post = notificationTypes[Notifications[i].NotificationType].searchFunction(Notifications[i].RefTableRowSerNum);
+                    Notifications[i].Description_EN = Notifications[i].Description_EN.replace(/\$\w+/, post.RoomLocation||"");
+                    console.log(Notifications[i].NotificationType);
                     //If ReadStatus in post is also 0, Set the notification for showing in the controller
-                    if(post.ReadStatus == '0' )
+                    if(post.ReadStatus == '0' || Notifications[i].NotificationType == "RoomAssignment")
                     {
                         console.log(post);
                         Notifications[i].Post = post;
