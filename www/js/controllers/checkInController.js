@@ -49,8 +49,8 @@
         }
 
         function checkInToAll(appointments){
-            checkInButton.startSpin();
             checkInButton.setDisabled(true);
+            checkInButton.startSpin();
 
             var promises = [];
             for (var i=0;  i !=appointments.length; i++){
@@ -73,6 +73,11 @@
 
         function verifyCheckIn(appointments){
             var promises = [];
+
+            if (!appointments){
+                vm.checkInMessage = "CHECKIN_NONE";
+                return;
+            }
 
             for (var i=0; i !=appointments.length; i++){
                 promises.push(CheckinService.checkCheckinServer(appointments[i]));

@@ -193,7 +193,7 @@ myApp.service('Appointments', ['$q', 'RequestToServer','$cordovaCalendar','UserA
             appointments[i].ScheduledStartTime = $filter('formatDate')(appointments[i].ScheduledStartTime);
             //appointments[i].ScheduledStartTime = new Date(today);
             appointments[i].ScheduledEndTime =  $filter('formatDate')(appointments[i].ScheduledEndTime);
-            appointments[i].RoomLocation = appointments[i].RooomLocation
+            appointments[i].RoomLocation = appointments[i].RooomLocation;
             // appointments[i].ScheduledEndTime  = new Date(today);
             // appointments[i].ScheduledEndTime.setMinutes(appointments[i].ScheduledEndTime.getMinutes()+15);
             // today.setDate(today.getDate()+1);
@@ -717,6 +717,24 @@ myApp.service('Appointments', ['$q', 'RequestToServer','$cordovaCalendar','UserA
             appointmentsLocalStorage=[];
             calendar={};
             numberOfSessions=0;
+        },
+        
+        getRecentCalledAppointment: function () {
+            var todaysAppointments = getAppointmentsInPeriod('Past');
+            var now=new Date();
+            var min = todaysAppointments.map(function (obj) {
+                if (obj.Checkin == '1' && obj.RoomLocation) {
+                    return now - obj.LastUpdated;
+                } else {
+                    return Infinity;
+                }
+            }).reduce(function (min, cur, ind) {
+                Math.min(min,cur);
+                return ind;
+            });
+            console.log(min);
+            return todaysAppointments[min];
         }
+        
     };
 }]);

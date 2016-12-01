@@ -85,7 +85,7 @@
                 </ons-list-item>
                 <!--CHECKIN TO APPOINTMENTS-->
                 <ons-list-header class="person-list-header" ng-class="fontSizeTitle">{{"OVERVIEW"|translate}}</ons-list-header>
-                <ons-list-item modifier="chevron" class="item" ng-show="showCheckin" ng-click="goToCheckinAppointments(todaysAppointments)">
+                <ons-list-item modifier="tappable chevron" class="item" ng-click="goToCheckinAppointments(todaysAppointments)">
                     <ons-row align="center">
                         <ons-col width="60px" align="center">
                             <div>
@@ -94,10 +94,9 @@
                         </ons-col>
                         <ons-col>
                             <header>
-
-                                <span class="item-title" ng-class="fontSizeTitle">{{todaysAppointments.checkInMessage|translate}}</span>
+                                <span class="item-title" ng-class="fontSizeTitle">{{"CHECKIN"|translate}}</span>
                             </header>
-                            <!--<p class="item-desc" ng-class="fontSizeDesc">{{appointment.ScheduledStartTime|formatDateAppointmentTask}} </p>-->
+                            <p class="item-desc" ng-class="fontSizeDesc">{{checkInMessage|translate}} </p>
                             <!--<p class="item-desc" ng-class="fontSizeDesc" style="color:orange" ng-show ="checkinEstimate&&showHomeScreenUpdate">{{"ESTIMATEDWAIT"|translate}}: {{checkinEstimate}} minutes</p>-->
                         </ons-col>
                     </ons-row>

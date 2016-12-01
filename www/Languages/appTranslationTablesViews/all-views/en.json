@@ -20,6 +20,7 @@
   "CHECKIN_MESSAGE_AFTER_PLURAL": "You are checked in to your appointments!",
   "CHECKIN_MESSAGE_BEFORE": "Check in to your appointment!",
   "CHECKIN_MESSAGE_BEFORE_PLURAL": "Check in to your appointments!",
+  "CHECKIN_NONE": "There are no appointments today",
   "CHECKIN_TO_ALL": "Check me In!",
   "CLINICAL_NOTES": "Clinical Notes",
   "COMPLETED": "Completed",
