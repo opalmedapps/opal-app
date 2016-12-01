@@ -225,6 +225,7 @@ myApp.controller('ChangingSettingController', function($filter, $rootScope, Fire
             var value = UserPreferences.getFontSize();
             $scope.firstOption = 'medium';
             $scope.secondOption = 'large';
+            $scope.thirdOption = 'xlarge';
             $scope.instruction = "SELECTFONTSIZE";
             $scope.personal = false;
             $scope.fontUpdated = true;

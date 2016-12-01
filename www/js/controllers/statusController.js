@@ -29,7 +29,7 @@
         statusVm.viewTitles = [$filter('translate')('TREATMENTPLANNING'), $filter('translate')('TREATMENTSESSION')];
         statusVm.noData = false;                // presence of planning or session data
         statusVm.planningCompleted = true;
-        statusVm.treatmentCompleted = true;
+        //statusVm.treatmentCompleted = true;
         statusVm.events = {};                   // planning or treatment event list
         statusVm.eventType = '';                // determines event type plan or treatment
         statusVm.eventIndex = 0;                // tracker for the events
@@ -124,7 +124,7 @@
             var startColor='#5CE68A';
             var endColor='#3399ff';
 
-            if(stages['CT for Radiotherapy Planning'].length === 0){
+            if(stages['CT for Radiotherapy Planning'].length == 0){
                 statusVm.noData=true;
             }else{
                 if(PlanningSteps.isCompleted()){

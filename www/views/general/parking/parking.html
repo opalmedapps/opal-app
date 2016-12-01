@@ -1,17 +1,17 @@
 <ons-page ng-controller="ParkingController">
-    <ons-toolbar>
+    <ons-toolbar fixed-style>
         <div class="left">
             <span ng-show="navigatorName == 'generalNavigator'"><ons-back-button>{{"BACK"|translate}}</ons-back-button></span>
             <span ng-show="navigatorName !=='generalNavigator'"><ons-toolbar-button ng-click="navigator.popPage()">{{"CLOSE"|translate}}</ons-toolbar-button></span>
         </div>
-        <div class="center">{{"PARKING"|translate}}</div>
+        <div class="center" ng-class="fontSizeTitle">{{"PARKING"|translate}}</div>
     </ons-toolbar>
     <ons-list-header  ng-class="fontSizeTitle">{{"PARKINGINFORMATION"|translate}}</ons-list-header>
       <ons-list modifier="chevron tappable" class="settings-list">
-        <ons-list-item modifier="chevron" ng-click="goToParkingLink('general')">
+        <ons-list-item modifier="chevron" ng-click="goToParkingLink('general')" ng-class="fontSizeTitle">
           {{"HOSPITALPARKING"|translate}}
         </ons-list-item>            
-        <ons-list-item modifier="chevron" ng-click="goToParkingLink('oncology')">
+        <ons-list-item modifier="chevron" ng-click="goToParkingLink('oncology')" ng-class="fontSizeTitle">
           {{"ONCOLOGYPARKING"|translate}}
         </ons-list-item>
       </ons-list>

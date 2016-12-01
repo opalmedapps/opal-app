@@ -3,15 +3,14 @@
 //
 var myApp = angular.module('MUHCApp');
 
-myApp.controller('InitScreenController',function($scope, $timeout, NavigatorParameters,$translatePartialLoader, UserPreferences, $filter,FirebaseService, UserAuthorizationInfo,$state,LocalStorage)
+myApp.controller('InitScreenController',
+    function($scope, $timeout, NavigatorParameters, $translatePartialLoader, UserPreferences, $filter, Constants)
 { 
     //Firebase reference to check authentication
     var myDataRef = firebase.database().ref('dev2/');
 
   //Add the login translation
     $translatePartialLoader.addPart('login');
-    //Check if device or browser
-    var app = document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'https://' ) === -1;
    
    //Do not show the list breaking, equivalent of ng-cloak for angularjs, LOOK IT UP!!! https://docs.angularjs.org/api/ng/directive/ngCloak
     setTimeout(function(){
@@ -51,7 +50,7 @@ myApp.controller('InitScreenController',function($scope, $timeout, NavigatorPara
     //Report issues function
     $scope.reportIssuesMail = function()
     {
-       if(app){
+       if(Constants.app){
            var email = {
             to: 'muhc.app.mobile@gmail.com',
             cc: '',

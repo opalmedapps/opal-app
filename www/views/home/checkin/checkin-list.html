@@ -1,9 +1,9 @@
 <ons-page ng-controller="CheckInController as checkIn">
-    <ons-toolbar>
+    <ons-toolbar fixed-style>
         <div class="left">
-            <ons-back-button>{{"BACK"|translate}}</ons-back-button>
+            <ons-back-button ng-class="fontSizeDesc">{{"BACK"|translate}}</ons-back-button>
         </div>
-        <div class="center">{{"CHECKIN"|translate}}</div>
+        <div class="center" ng-class="fontSizeTitle">{{"CHECKIN"|translate}}</div>
     </ons-toolbar>
     ons
     <ons-list >
@@ -23,9 +23,9 @@
         </ons-list-item>
     </ons-list>
     <br>
-    <div style="text-align: center">
-        <ons-button style="font-size: x-large" should-spin="false" var="checkInButton" disabled
-                    ng-click="checkIn.checkInToAll(checkIn.apps)">
+    <div style="text-align: center; width: 90%; margin: auto">
+        <ons-button modifier="large" style="font-size: x-large" should-spin="false" var="checkInButton" disabled
+                    ng-click="checkIn.checkInToAll(checkIn.apps)" ng-class="fontSizeTitle">
             {{checkIn.checkInMessage|translate}}
         </ons-button>
     </div>

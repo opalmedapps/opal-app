@@ -1,7 +1,7 @@
 <ons-page ng-controller="NotificationsController">
-    <ons-toolbar>
+    <ons-toolbar fixed-style>
         <div class="left"><ons-back-button>{{"BACK"|translate}}</ons-back-button></div>
-        <div class="center">{{"NOTIFICATIONS"|translate}}</div>
+        <div class="center" ng-class="fontSizeTitle">{{"NOTIFICATIONS"|translate}}</div>
     </ons-toolbar>
     <!--<ons-pull-hook ng-action="load($done)" var="loader">
           <span ng-switch="loader.getCurrentState()">

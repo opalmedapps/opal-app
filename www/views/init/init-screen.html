@@ -1,100 +1,99 @@
 <ons-navigator var ="initNavigator" >
-    <ons-page ng-controller="InitScreenController" id="popoverLanguage">
-        <div>
-            <div style="position:absolute;z-index:2;width:100vw" align="center" >
-                <div style="margin-top:15vw" align="center" >
-                    <img src="img/opal_banner_transparent.png" style="width:70vw;height:auto">
-                </div>
-            </div>
-            <div>
-                <img src="img/opal-init-photo.jpg" style="width:100vw;height:auto">
+<ons-page ng-controller="InitScreenController" id="popoverLanguage">
+    <div>
+        <div style="position:absolute;z-index:2;width:100vw" align="center" >
+            <div style="margin-top:15vw" align="center" >
+            <img src="img/opal_banner_transparent.png" style="width:70vw;height:auto">
             </div>
         </div>
         <div>
-            <ons-list  class="person-list" id = "listInitApp" style="display:none" translate-cloak>
-                <!--<ons-list-item class="person" modifier="tappable" ng-click="goToUserView()" style="background-color: #387A36">
-                    <ons-row align="middle" style="height:40px">
-                        <ons-col align="center" width="40px">
-                            <div style="margin-left:10px;text-align:left;display:inline-block">
-                                <ons-icon icon = "fa fa-user" style="font-size:20px;color:white"></ons-icon>
-                            </div>
-                         </ons-col>
-                        <ons-col  align="center">
-                            <div align="center" >
-                                &lt;!&ndash;<ons-icon icon = "fa fa-user" style="font-size:20px;color:darkblue"></ons-icon>&ndash;&gt;
-                                <span style="color: white">{{"HEADER_MESSAGE_LOGIN"|translate}}</span>
-                            </div>
-                        </ons-col>
-                    </ons-row>
-                </ons-list-item>-->
-                <ons-list-item class="person" modifier="tappable chevron" ng-click="goToParking()">
-                    <ons-row align="middle" style="height:40px;">
-                        <ons-col align="center" width="40px">
-                            <div style="margin-left:10px;text-align:left;display:inline-block">
-                                <ons-icon icon = "ion-android-car" style="font-size:25px;color:red" ></ons-icon>
-                            </div>
-                        </ons-col>
-                        <ons-col  align="center">
-                            <div  align="center" >
-                                <!--<ons-icon icon = "ion-android-car" style="font-size:25px;color:red" ></ons-icon>-->
-                                {{"PARKING"|translate}}
-                            </div>
-                        </ons-col>
-                    </ons-row>
-                </ons-list-item>
-                <ons-list-item class="person" modifier="tappable chevron" ng-click="goToPatientCharter()">
-                    <ons-row align="middle" style="height:40px;">
-                        <ons-col align="center" width="40px">
-                            <div style="margin-left:10px;text-align:left;display:inline-block">
-                                <ons-icon icon = "ion-android-list" style="font-size:20px;color:saddlebrown"></ons-icon>
-                            </div>
-                        </ons-col>
-                        <ons-col  align="center">
-                            <div  style="line-height:1" align="center">
-                                <!--<ons-icon icon = "ion-bug" style="font-size:20px;color:purple"></ons-icon>-->
-                                {{"PATIENTCHARTER"|translate}}
-                            </div>
-                        </ons-col>
-                    </ons-row>
-                </ons-list-item>
-                <ons-list-item class="person" modifier="tappable chevron" ng-click="reportIssuesMail()">
-                    <ons-row align="middle" style="height:40px;">
-                        <ons-col align="center" width="40px">
-                            <div style="margin-left:10px;text-align:left;display:inline-block">
-                                <ons-icon icon = "fa fa-comment" style="font-size:20px;color:purple"></ons-icon>
-                            </div>
-                        </ons-col>
-                        <ons-col  align="center">
-                            <div  align="center">
-                                <!--<ons-icon icon = "ion-bug" style="font-size:20px;color:purple"></ons-icon>-->
-                                {{"REPORTISSUES"|translate}}
-                            </div>
-                        </ons-col>
-                    </ons-row>
-                </ons-list-item>
-                <ons-list-item class="person" modifier="tappable chevron" ng-click="goToGeneralSettings()" >
-                    <ons-row align="middle" style="height:40px">
-                        <ons-col align="center" width="40px">
-                            <div style="margin-left:10px;text-align:left;display:inline-block">
-                                <ons-icon icon = "ion-gear-a" style="font-size:30px;color:grey"></ons-icon>
-                            </div>
-                        </ons-col>
-                        <ons-col  align="center" >
-                            <div   align="center">
-                                {{"SETTINGS"|translate}}
-                            </div>
-                        </ons-col>
-                    </ons-row>
-                </ons-list-item>
-
-                <ons-list-item>
-                    <div style="text-align: center; padding: 20px;">
-                        <ons-button class="animated pulse" modifier="normal" style="font-size: x-large; font-weight: bolder; background-color: #387A36" ng-click="goToUserView()">{{"HEADER_MESSAGE_LOGIN"|translate}}</ons-button>
-                    </div>
-                </ons-list-item>
-
-            </ons-list>
+            <img src="img/opal-init-photo.jpg" style="width:100vw;height:auto">
         </div>
+    </div>
+    <div>
+        <ons-list  class="person-list" id = "listInitApp" style="display:none" translate-cloak>
+            <!--<ons-list-item class="person" modifier="tappable" ng-click="goToUserView()" style="background-color: #387A36">
+                <ons-row align="middle" style="height:40px">
+                    <ons-col align="center" width="40px">
+                        <div style="margin-left:10px;text-align:left;display:inline-block">                                
+                            <ons-icon icon = "fa fa-user" style="font-size:20px;color:white"></ons-icon>
+                        </div>
+                     </ons-col>
+                    <ons-col  align="center">
+                        <div align="center" >
+                            &lt;!&ndash;<ons-icon icon = "fa fa-user" style="font-size:20px;color:darkblue"></ons-icon>&ndash;&gt;
+                            <span style="color: white">{{"HEADER_MESSAGE_LOGIN"|translate}}</span>
+                        </div>
+                    </ons-col>
+                </ons-row>
+            </ons-list-item>-->
+            <ons-list-item class="person" modifier="tappable chevron" ng-click="goToParking()" style="font-size: ;">
+                <ons-row align="middle" style="height:40px;">
+                    <ons-col align="center" width="40px">
+                        <div style="margin-left:10px;text-align:left;display:inline-block">
+                            <ons-icon icon = "ion-android-car" style="font-size:25px;color:red" ></ons-icon>
+                        </div>
+                     </ons-col>
+                    <ons-col  align="center">
+                        <div  align="center" >
+                          <!--<ons-icon icon = "ion-android-car" style="font-size:25px;color:red" ></ons-icon>-->
+                            {{"PARKING"|translate}}
+                        </div>
+                    </ons-col>
+                </ons-row>
+            </ons-list-item>
+            <ons-list-item class="person" modifier="tappable chevron" ng-click="goToPatientCharter()">
+                <ons-row align="middle" style="height:40px;">
+                    <ons-col align="center" width="40px">
+                        <div style="margin-left:10px;text-align:left;display:inline-block">
+                            <ons-icon icon = "ion-android-list" style="font-size:20px;color:saddlebrown"></ons-icon>
+                        </div>
+                     </ons-col>
+                    <ons-col  align="center">
+                        <div  style="line-height:1" align="center">
+                           <!--<ons-icon icon = "ion-bug" style="font-size:20px;color:purple"></ons-icon>-->
+                            {{"PATIENTCHARTER"|translate}}
+                        </div>
+                    </ons-col>
+                </ons-row>
+            </ons-list-item>
+            <ons-list-item class="person" modifier="tappable chevron" ng-click="reportIssuesMail()">
+                <ons-row align="middle" style="height:40px;">
+                    <ons-col align="center" width="40px">
+                        <div style="margin-left:10px;text-align:left;display:inline-block">
+                            <ons-icon icon = "fa fa-comment" style="font-size:20px;color:purple"></ons-icon>
+                        </div>
+                     </ons-col>
+                    <ons-col  align="center">
+                        <div  align="center">
+                           <!--<ons-icon icon = "ion-bug" style="font-size:20px;color:purple"></ons-icon>-->
+                            {{"REPORTISSUES"|translate}}
+                        </div>
+                    </ons-col>
+                </ons-row>
+            </ons-list-item>
+            <ons-list-item class="person" modifier="tappable chevron" ng-click="goToGeneralSettings()" >
+                <ons-row align="middle" style="height:40px">
+                    <ons-col align="center" width="40px">
+                        <div style="margin-left:10px;text-align:left;display:inline-block">
+                            <ons-icon icon = "ion-gear-a" style="font-size:30px;color:grey"></ons-icon>
+                        </div>
+                     </ons-col>
+                    <ons-col  align="center" >
+                        <div   align="center">
+                           {{"SETTINGS"|translate}}
+                        </div>
+                    </ons-col>
+                </ons-row>
+            </ons-list-item>
 
-    </ons-page>
+
+
+        </ons-list>
+    </div>
+    <br>
+    <div style="text-align: center; width: 90%; margin: auto">
+        <ons-button class="animated pulse" modifier="large" style="font-size: x-large; font-weight: bolder; background-color: #387A36" ng-click="goToUserView()">{{"HEADER_MESSAGE_LOGIN"|translate}}</ons-button>
+    </div>
+</ons-page>
 </ons-navigator>

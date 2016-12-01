@@ -1,5 +1,5 @@
 <ons-page ng-controller="IndividualAppointmentController">
-    <ons-toolbar >
+    <ons-toolbar fixed-style>
         <div class="left"><ons-back-button>{{"BACK"|translate}}</ons-back-button></div>
         <div class="center">{{"APPOINTMENT"|translate}}</div>
     </ons-toolbar>
@@ -11,7 +11,7 @@
                         <span class="item-title" ng-class="fontSizeTitle">{{app["AppointmentType_"+language]}}</span>
                     </header>
                     <p class="item-desc" ng-class="fontSizeDesc">{{app.ScheduledStartTime|date:'medium'}}</p>
-                    <!--<p class="item-desc" ng-class="fontSizeDesc">{{app.ResourceName}}</p>-->
+                    <p class="item-desc" ng-class="fontSizeDesc">{{app.RoomLocation}}</p>
                 </div>
             </ons-list-item>
             <ons-list-item modifier="chevron" ng-click="goToMap()">
@@ -35,7 +35,7 @@
             </ons-list-item>
 
         </ons-list>
-        <ons-list class="settings-list" ng-show="showCheckin">
+        <!--<ons-list class="settings-list" ng-show="showCheckin">
             <ons-list-item class="item"">
                 <div ng-show="loading&&!errorMessage" align="center">
                     <svg class="progress-circular">
@@ -44,14 +44,14 @@
                 </div>
                 <div align="center" ng-show="!loading">
                     <p class="item-desc" ng-class="fontSizeTitle">{{checkInMessage}}</p><br>
-                    <button class="button checkin-button" ng-click="checkinToAppointment()" ng-disabled="!enableCheckinButton">
+                    <button class="button checkin-button" ng-click="goToCheckIn()" ng-disabled="!enableCheckinButton">
                         <span style="font-size:20px"><i class="iconHomeView ion-android-checkbox" style="color:white"></i><br>{{"CHECKIN"|translate}}</span>
                     </button>
                 </div>
                 <div ng-show="errorMessage" style="padding:20px"><p class="item-desc" ng-class="fontSizeTitle">{{errorMessage}}</p></div>
 
 
-                <!--<div align="center" style="height:310px" ng-show="!loading&&showLiveUpdate">
+                &lt;!&ndash;<div align="center" style="height:310px" ng-show="!loading&&showLiveUpdate">
                     <p class="item-desc" ng-class="fontSizeDesc" style="font-size:20px"><img ng-src="./img/checkedbox.png" width="20px" height="20px"> {{checkInMessage}}</p>
                     <div style="width:200px" >
                         <div id = "statusBarCheckin"></div>
@@ -69,9 +69,9 @@
                             <p class="item-title"   ng-class="fontSizeTitle"> {{scheduleAhead}}</p>
                         </div>
                     </div>
-                </div>-->
+                </div>&ndash;&gt;
 
-            </ons-list-item>
+            </ons-list-item>-->
         </ons-list>
 
     </div>
