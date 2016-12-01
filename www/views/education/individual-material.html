@@ -1,5 +1,5 @@
   <ons-page ng-controller="IndividualEducationalMaterialController">
-    <ons-toolbar >
+    <ons-toolbar fixed-style>
       <div class="left"><ons-back-button>{{"BACK"|translate}}</ons-back-button></div>
       <div class="center">{{edumaterial.Type}}</div>
       <div class="right" ng-show="edumaterial.ShareURL_EN && edumaterial.ShareURL_EN!==''"><ons-toolbar-button ng-click="popoverSharing.show('#buttonShareMaterial');" id="buttonShareMaterial"><i class="ion-share" style="font-size:30px"></i></ons-toolbar-button></div>

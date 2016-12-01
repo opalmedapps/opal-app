@@ -1,7 +1,13 @@
 //
 // Author: David Herrera on Summer 2016, Email:davidfherrerar@gmail.com
 //
-angular.module('MUHCApp').controller('LoadingController', ['$rootScope','$state', '$scope','UpdateUI', 'UserAuthorizationInfo','UserPreferences', '$q','Patient', 'Messages', '$timeout','LocalStorage','NavigatorParameters','RequestToServer',function ($rootScope,$state, $scope, UpdateUI, UserAuthorizationInfo, UserPreferences, $q, Patient, Messages,$timeout,LocalStorage,NavigatorParameters,RequestToServer){
+angular.module('MUHCApp').controller('LoadingController',
+	['$rootScope','$state', '$scope','UpdateUI',
+	'UserAuthorizationInfo','UserPreferences', '$q','Patient', 'Messages', '$timeout','LocalStorage',
+	'NavigatorParameters','RequestToServer',
+	function ($rootScope,$state, $scope, UpdateUI,
+			  UserAuthorizationInfo, UserPreferences, $q, Patient, Messages,$timeout,LocalStorage,
+			  NavigatorParameters,RequestToServer){
 		modal.show();
 		var loadingParameter = NavigatorParameters.getParameters();
 		var userAuthorizationInfo = UserAuthorizationInfo.getUserAuthData();
@@ -10,6 +16,10 @@ angular.module('MUHCApp').controller('LoadingController', ['$rootScope','$state'
 		{
 			UpdateUI.init(loadingParameter).then(function()
 			{
+				var objectToSend = {};
+                objectToSend.NewValue = UserPreferences.getLanguage();
+                objectToSend.FieldToChange = 'Language';
+                RequestToServer.sendRequest('AccountChange', objectToSend);
 				modal.hide();
 				clearTimeout(timeOut);
 				console.log('Going home');

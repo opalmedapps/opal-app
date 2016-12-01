@@ -8,7 +8,7 @@ myApp.controller('TabsController',['$scope','$timeout','$translate','$translateP
     //Enter code here!!
 
     console.log('got to tabs controllers')
-
+    $scope.tour = './views/home/tour/tour.html';
     if (!localStorage.getItem('firstInstall')){
         $scope.tour = './views/home/tour/tour.html';
         localStorage.setItem('firstInstall', '1');
@@ -58,7 +58,13 @@ myApp.controller('TabsController',['$scope','$timeout','$translate','$translateP
 
 }]);
 
-myApp.controller('personalTabController',['$scope','$timeout','Appointments','$translate','TxTeamMessages','Documents','$location','RequestToServer','UpdateUI','NavigatorParameters','Notifications','Questionnaires',function($scope,$timeout,Appointments,$translate, TxTeamMessages,Documents,$location,RequestToServer,UpdateUI,NavigatorParameters,Notifications,Questionnaires){
+myApp.controller('personalTabController',
+    ['$scope','$timeout','Appointments','$translate','TxTeamMessages','Documents',
+        '$location','RequestToServer','UpdateUI','NavigatorParameters',
+        'Notifications','Questionnaires', 'Patient',
+        function($scope,$timeout,Appointments,$translate, TxTeamMessages,Documents,
+                 $location,RequestToServer,UpdateUI,NavigatorParameters,
+                 Notifications,Questionnaires,Patient){
 
     //Its possible for a notification to have been read such as a document since this controller has already been instantiated
     // we will have to check to sync that number on the badges for the tabs on the personal page.
@@ -86,7 +92,7 @@ myApp.controller('personalTabController',['$scope','$timeout','Appointments','$t
         },5000);
     };
 
-
+    $scope.censor = Patient.getAccessLevel() == 3;
     //Setting up numbers on the
     function setNewsNumbers()
     {

@@ -1,9 +1,9 @@
 <ons-page ng-controller="DocumentsController">
-    <ons-toolbar>
+    <ons-toolbar fixed-style>
         <div class="left">
             <ons-back-button>{{"BACK"|translate}}</ons-back-button>
         </div>
-        <div class="center">{{"CLINICAL_NOTES"|translate}}</div>
+        <div class="center" ng-class="fontSizeTitle">{{"CLINICAL_NOTES"|translate}}</div>
     </ons-toolbar>
     <div>
         <div style="color:grey;margin-top:25vh" ng-show="noDocuments" align="center" ng-class="fontSizeTitle">

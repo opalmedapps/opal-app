@@ -38,9 +38,9 @@
          *@description Sets the tasks member in the model and writes it to localstorage.
          **/
         function setPlanningTasks(tasks) {
-            for (var task in tasks){
+            for (var i = 0; i!=tasks.length; ++i){
                 // Convert string date to JS date
-                tasks[task].DueDateTime = $filter('formatDate')(tasks[task].DueDateTime);
+                tasks[i].DueDateTime = $filter('formatDate')(tasks[i].DueDateTime);
             }
             planningTasks = tasks;
             LocalStorage.WriteToLocalStorage('Tasks', planningTasks);
@@ -86,10 +86,10 @@
             var physicianTask = planningTasks[0];
             var index = 0;
             var mdIndex = 0;
-            for (var task in planningTasks ){
-                if (planningTasks[task].DueDateTime > physicianTask.DueDateTime
-                    && planningTasks[task].TaskName_EN === 'Physician Plan Preparation'){
-                    physicianTask = planningTasks[task];
+            for (var i=0; i!=planningTasks.length; ++i ){
+                if (planningTasks[i].DueDateTime > physicianTask.DueDateTime
+                    && planningTasks[i].TaskName_EN === 'Physician Plan Preparation'){
+                    physicianTask = planningTasks[i];
                     mdIndex = index;
                 }
                 index++;
