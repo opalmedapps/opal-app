@@ -287,7 +287,7 @@ myApp.controller('HomeController', ['$state','Appointments', 'CheckinService','$
             if(todaysAppointmentsToCheckIn)
             {
                 //$scope.showCheckin = true;
-
+                console.log('pass check for apps');
                 CheckinService.isAllowedToCheckin().then(function (response) {
                     var allCheckedIn = true;
                     for (var app in todaysAppointmentsToCheckIn){
@@ -335,6 +335,7 @@ myApp.controller('HomeController', ['$state','Appointments', 'CheckinService','$
                 });
 
             }else{
+                console.log("MEssage none");
                 //Case where there are no appointments that day
                 $rootScope.checkInMessage = "CHECKIN_NONE";
                 //$scope.showCheckin = false;
