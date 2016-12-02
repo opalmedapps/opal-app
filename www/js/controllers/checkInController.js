@@ -34,7 +34,7 @@
                 console.log("Allowed to Check in",response);
                 verifyCheckIn(Appointments.getCheckinAppointment());
             }).catch(function (error) {
-                if (error.code == "Check-in allowed in the vicinity of the Cancer Center"){
+                if (error == "Check-in allowed in the vicinity of the Cancer Center"){
                     NewsBanner.showCustomBanner($filter('translate')("NOT_ALLOWED"), '#333333', function(){}, 3000);
                 } else {
                     NewsBanner.showCustomBanner($filter('translate')("CHECKIN_ERROR"), '#333333', function(){}, 3000);
