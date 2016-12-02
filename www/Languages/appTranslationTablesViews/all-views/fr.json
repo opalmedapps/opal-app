@@ -19,6 +19,7 @@
   "CHECKIN": "Enregistrement",
   "CHECKIN_CALLED": "Veuillez vous dirigez vers: ",
   "CHECKIN_ERROR": "Erreur lors de l'enregistrement",
+  "CHECKIN_IN_HOSPITAL_ONLY": "Vous devez être à l'hopital pour vous enregistrer",
   "CHECKIN_MESSAGE_AFTER": "Vous êtes enregistré au rendez-vous d'aujourd'hui!",
   "CHECKIN_MESSAGE_AFTER_PLURAL": "Vous êtes enregistré aux rendez-vous d'aujourd'hui!",
   "CHECKIN_MESSAGE_BEFORE": "Enregistrez-vous à votre rendez-vous!",
