@@ -20,6 +20,7 @@
         vm.checkInMessage = "CHECKED_IN";
         vm.goToAppointment = goToAppointment;
         vm.checkInToAll = checkInToAll;
+        vm.testButton = testButton;
 
         activate();
 
@@ -39,6 +40,8 @@
                     NewsBanner.showCustomBanner($filter('translate')("CHECKIN_ERROR"), '#333333', function(){}, 3000);
                 }
                 console.log(error);
+                console.log(checkInButton);
+                checkInButton.setDisabled(true);
             });
 
         }
@@ -49,8 +52,8 @@
         }
 
         function checkInToAll(appointments){
-            //checkInButton.setDisabled(true);
-            //checkInButton.startSpin();
+            checkInButton.setDisabled(true);
+            checkInButton.startSpin();
 
             var promises = [];
             for (var i=0;  i !=appointments.length; i++){
@@ -58,7 +61,7 @@
             }
 
             $q.all(promises).then(function (dataArray) {
-               // checkInButton.stopSpin();
+                checkInButton.stopSpin();
                 vm.checkInMessage = "CHECKED_IN";
                 var message = $filter('translate')("CHECKED_IN");
                 NewsBanner.showCustomBanner(message, '#333333', function(){}, 500);
@@ -73,7 +76,7 @@
 
         function verifyCheckIn(appointments){
             var promises = [];
-
+            checkInButton.setDisabled(true);
             if (!appointments){
                 vm.checkInMessage = "CHECKIN_NONE";
                 return;
@@ -88,7 +91,7 @@
 
                 for (var checkedIn in dataArray){
                     if (dataArray[checkedIn] === false){
-                        //checkInButton.setDisabled(false);
+                        checkInButton.setDisabled(false);
                         vm.checkInMessage = "CHECKIN_TO_ALL";
                         break;
                     }
@@ -99,6 +102,12 @@
                 console.log("Cannot verify checkin", error);
             });
         }
+
+        /*function testButton(){
+            checkInButton.setDisabled(true);
+            console.log("Button works");
+            checkInButton.startSpin();
+        }*/
     }
 
 })();

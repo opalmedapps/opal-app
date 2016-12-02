@@ -17,6 +17,7 @@
   "CHECKIN": "Check-in",
   "CHECKIN_CALLED": "Please go to: ",
   "CHECKIN_ERROR": "Error occurred, check in at the cancer center",
+  "CHECKIN_IN_HOSPITAL_ONLY": "You must be at the hospital to checkin",
   "CHECKIN_MESSAGE_AFTER": "You are checked in to your appointment!",
   "CHECKIN_MESSAGE_AFTER_PLURAL": "You are checked in to your appointments!",
   "CHECKIN_MESSAGE_BEFORE": "Check in to your appointment!",
