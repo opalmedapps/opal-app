@@ -20,7 +20,7 @@
         vm.checkInMessage = "CHECKED_IN";
         vm.goToAppointment = goToAppointment;
         vm.checkInToAll = checkInToAll;
-        vm.testButton = testButton;
+        //vm.testButton = testButton;
 
         activate();
 
