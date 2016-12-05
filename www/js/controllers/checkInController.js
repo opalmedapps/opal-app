@@ -17,9 +17,10 @@
         vm.language = '';
         vm.response = '';
         vm.error = '';
-        vm.checkInMessage = "CHECKED_IN";
+        vm.checkInMessage = "";
+        vm.alertType = "";
         vm.goToAppointment = goToAppointment;
-        vm.checkInToAll = checkInToAll;
+        //vm.checkInToAll = checkInToAll;
         //vm.testButton = testButton;
 
         activate();
@@ -30,19 +31,41 @@
             vm.apps = Appointments.getCheckinAppointment();
             console.log(vm.apps);
             vm.language = UserPreferences.getLanguage();
-            CheckinService.isAllowedToCheckin().then(function (response) {
-                console.log("Allowed to Check in",response);
-                verifyCheckIn(Appointments.getCheckinAppointment());
-            }).catch(function (error) {
-                if (error == "Check-in allowed in the vicinity of the Cancer Center"){
-                    NewsBanner.showCustomBanner($filter('translate')("NOT_ALLOWED"), '#333333', function(){}, 3000);
-                } else {
-                    NewsBanner.showCustomBanner($filter('translate')("CHECKIN_ERROR"), '#333333', function(){}, 3000);
-                }
-                console.log(error);
-                console.log(checkInButton);
-                checkInButton.setDisabled(true);
-            });
+            CheckinService.isAllowedToCheckin()
+                .then(function (response) {
+                    console.log("Allowed to Check in", response);
+                    return CheckinService.verifyAllCheckIn(vm.apps);
+                })
+                .then(function (response){
+                    if (reponse == null){
+                        vm.alertType = "info";
+                        vm.message = "CHECKIN_NONE";
+                    } else if (response){
+                        vm.alertType = "success";
+                        vm.message = "CHECKED_IN";
+                    } else {
+                        console.log("Will call checkin");
+                        /*CheckinService.checkinToAllAppointments()
+                            .then(function () {
+                                vm.alertType = "success";
+                                vm.message = "CHECKED_IN";
+                            })
+                            .catch(function (error) {
+                                console.log(error);
+                                vm.message = "CHECKIN_ERROR";
+                            });*/
+                    }
+                })
+                .catch(function (error) {
+                    if (error == "Check-in allowed in the vicinity of the Cancer Center"){
+                        NewsBanner.showCustomBanner($filter('translate')("NOT_ALLOWED"), '#333333', function(){}, 3000);
+                        vm.alertType = "warning";
+                        vm.checkInMessage = "CHECKIN_IN_HOSPITAL_ONLY";
+                    } else {
+                        vm.alertType = "danger";
+                        NewsBanner.showCustomBanner($filter('translate')("CHECKIN_ERROR"), '#333333', function(){}, 3000);
+                    }
+                });
 
         }
 
@@ -51,9 +74,7 @@
             homeNavigator.pushPage('./views/personal/appointments/individual-appointment.html');
         }
 
-        function checkInToAll(appointments){
-            checkInButton.setDisabled(true);
-            checkInButton.startSpin();
+/*        function checkInToAll(appointments){
 
             var promises = [];
             for (var i=0;  i !=appointments.length; i++){
@@ -71,43 +92,14 @@
                 console.log("CheckIn failed: ", error);
                 vm.error = "SERVERPROBLEM";
             });
-            
-        }
 
-        function verifyCheckIn(appointments){
-            var promises = [];
-            checkInButton.setDisabled(true);
-            if (!appointments){
-                vm.checkInMessage = "CHECKIN_NONE";
-                return;
-            }
-
-            for (var i=0; i !=appointments.length; i++){
-                promises.push(CheckinService.checkCheckinServer(appointments[i]));
-            }
-
-            $q.all(promises).then(function (dataArray) {
-                console.log("Success checkin verify", dataArray);
-
-                for (var checkedIn in dataArray){
-                    if (dataArray[checkedIn] === false){
-                        checkInButton.setDisabled(false);
-                        vm.checkInMessage = "CHECKIN_TO_ALL";
-                        break;
-                    }
-                }
-
-            }).catch(function (error) {
-                NewsBanner.showCustomBanner($filter('translate')("CHECKIN_ERROR"), '#333333', function(){}, 3000);
-                console.log("Cannot verify checkin", error);
-            });
-        }
+        }*/
 
         /*function testButton(){
-            checkInButton.setDisabled(true);
-            console.log("Button works");
-            checkInButton.startSpin();
-        }*/
+         checkInButton.setDisabled(true);
+         console.log("Button works");
+         checkInButton.startSpin();
+         }*/
     }
 
 })();
