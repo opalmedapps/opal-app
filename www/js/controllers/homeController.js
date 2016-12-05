@@ -55,6 +55,7 @@ myApp.controller('HomeController', ['$state','Appointments', 'CheckinService','$
         NavigatorParameters.setParameters({'Navigator':'homeNavigator'});
         // Need to allow external storage write for documents notifications.
         Permissions.enablePermission('WRITE_EXTERNAL_STORAGE', 'Storage access disabled. Unable to write documents.');
+        Permissions.enablePermission('ACCESS_FINE_LOCATION', 'Location access denied wont be able to checkin.');
 
         //Check if device identifier has been sent, if not sent, send it to backend.
         var app = document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'https://' ) === -1;
@@ -97,6 +98,13 @@ myApp.controller('HomeController', ['$state','Appointments', 'CheckinService','$
                 $done();
             },5000);
         };
+
+        homeNavigator.on('prepop', function(event) {
+
+            console.log('prepop');
+            homePageInit();
+        });
+
 
         function homePageInit(){
 
@@ -236,12 +244,7 @@ myApp.controller('HomeController', ['$state','Appointments', 'CheckinService','$
         {
             if(Appointments.isThereNextAppointment())
             {
-                if(PlanningSteps.isCompleted())
-                {
-                    $scope.showAppointmentTab=false;
-                }else{
-                    $scope.showAppointmentTab=true;
-                }
+                $scope.showAppointmentTab = !PlanningSteps.isCompleted();
             }else{
                 $scope.showAppointmentTab=false;
             }
