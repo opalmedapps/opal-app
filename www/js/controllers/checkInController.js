@@ -6,11 +6,11 @@
         .controller('CheckInController', CheckInController);
 
     CheckInController.$inject = ['CheckinService', 'NavigatorParameters', 'UserPreferences',
-        '$q', 'Appointments', 'NewsBanner'];
+        '$q', 'Appointments', 'NewsBanner','$filter'];
 
     /* @ngInject */
     function CheckInController(CheckinService, NavigatorParameters, UserPreferences,
-                               $q, Appointments, NewsBanner) {
+                               $q, Appointments, NewsBanner, $filter) {
         var vm = this;
         vm.title = 'CheckInController';
         vm.apps = [];
@@ -20,6 +20,7 @@
         vm.checkInMessage = "CHECKED_IN";
         vm.goToAppointment = goToAppointment;
         vm.checkInToAll = checkInToAll;
+        //vm.testButton = testButton;
 
         activate();
 
@@ -33,12 +34,14 @@
                 console.log("Allowed to Check in",response);
                 verifyCheckIn(Appointments.getCheckinAppointment());
             }).catch(function (error) {
-                if (error.code == "Check-in allowed in the vicinity of the Cancer Center"){
+                if (error == "Check-in allowed in the vicinity of the Cancer Center"){
                     NewsBanner.showCustomBanner($filter('translate')("NOT_ALLOWED"), '#333333', function(){}, 3000);
                 } else {
                     NewsBanner.showCustomBanner($filter('translate')("CHECKIN_ERROR"), '#333333', function(){}, 3000);
                 }
                 console.log(error);
+                console.log(checkInButton);
+                checkInButton.setDisabled(true);
             });
 
         }
@@ -49,8 +52,8 @@
         }
 
         function checkInToAll(appointments){
-            checkInButton.startSpin();
             checkInButton.setDisabled(true);
+            checkInButton.startSpin();
 
             var promises = [];
             for (var i=0;  i !=appointments.length; i++){
@@ -73,6 +76,11 @@
 
         function verifyCheckIn(appointments){
             var promises = [];
+            checkInButton.setDisabled(true);
+            if (!appointments){
+                vm.checkInMessage = "CHECKIN_NONE";
+                return;
+            }
 
             for (var i=0; i !=appointments.length; i++){
                 promises.push(CheckinService.checkCheckinServer(appointments[i]));
@@ -94,6 +102,12 @@
                 console.log("Cannot verify checkin", error);
             });
         }
+
+        /*function testButton(){
+            checkInButton.setDisabled(true);
+            console.log("Button works");
+            checkInButton.startSpin();
+        }*/
     }
 
 })();
