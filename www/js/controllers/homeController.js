@@ -281,6 +281,8 @@ myApp.controller('HomeController', ['$state','Appointments', 'CheckinService','$
             return "";
         }
 
+        $scope.allCheckedIn = true;
+
         function setUpCheckin()
         {
             //Get checkin appointment for the day, gets the closest appointment to right now
@@ -296,10 +298,12 @@ myApp.controller('HomeController', ['$state','Appointments', 'CheckinService','$
                     for (var app in todaysAppointmentsToCheckIn){
                         console.log(todaysAppointmentsToCheckIn[app].Checkin);
                         if (todaysAppointmentsToCheckIn[app].Checkin == '0'){
+                            console.log("Hes not checked in Jim")
                             allCheckedIn = false;
-                            $scope.allCheckedIn = allCheckedIn;
                         }
                     }
+
+                    $scope.allCheckedIn = allCheckedIn;
 
                     //Case 1: An Appointment has checkin 0, not checked-in
                     console.log(allCheckedIn);
