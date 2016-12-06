@@ -1,7 +1,7 @@
 
 angular.module('MUHCApp')
-  .factory('highcharts', [function() {
-    return highcharts;
+  .factory('highstock', [function() {
+    return highstock;
   }])
 
 
