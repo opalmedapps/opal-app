@@ -16,7 +16,7 @@ myApp.service('LabResults',['$filter','LocalStorage',function($filter,LocalStora
 	var CATEGORY_FOUR = 'Tumor markers'; //CEA, CA 15-3, CA-125
 	var categoryOneTests = ['WBC', 'RBC', 'HGB', 'HCT', 'Platelet Count', 'Neutrophils', 'Eosinophils'];
 	var categoryTwoTests = ['Sodium', 'Potassium', 'Glucose, Random', 'Creatinine', 'Calcium', 'Corrected Calcium', 'Magnesium'];
-	var categoryThreeTests = ['LDH', 'T4', 'T4, Free', 'TSH', 'Albumin', 'Protein, Total', 'AST (SGOT)', 'ALT (SGPT)', 'Alkaline Phosphatase', 'BUN'];
+	var categoryThreeTests = ['LDH', 'T4', 'T4, Free', 'TSH', 'Albumin', 'Protein, Total', 'AST (SGOT)', 'ALT (SGPT)', 'Alkaline Phosphatase'];
 	var categoryFourTests = ['CEA', 'CA 15-3', 'CA-125'];
 
  function addTestResults(tests) {
@@ -29,10 +29,6 @@ myApp.service('LabResults',['$filter','LocalStorage',function($filter,LocalStora
 			var testResultDate = testResult.TestDate.replace(/ /g,'');
 			var testResultType = testResult.FacComponentName;
 			var testCategory = undefined;
-
-		
-			
-
 
 			// Assign test to category
 			if (categoryOneTests.indexOf(testResultType) > -1) {
@@ -89,6 +85,7 @@ myApp.service('LabResults',['$filter','LocalStorage',function($filter,LocalStora
 			testResultsByDateArray.push(testResultsByDate[key]);
 		}
 		testResultsByDateArray=$filter('orderBy')(testResultsByDateArray,'testDateFormat',true);
+		console.log(testResultsByDateArray);
 		LocalStorage.WriteToLocalStorage('LabTests',testResultsToLocalStorage);
  }
 	return{
