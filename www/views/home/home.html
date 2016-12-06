@@ -87,9 +87,9 @@
                 <ons-list-header class="person-list-header" ng-class="fontSizeTitle">{{"OVERVIEW"|translate}}</ons-list-header>
                 <ons-list-item modifier="tappable chevron" class="item" ng-click="goToCheckinAppointments(todaysAppointments)">
                     <ons-row align="center">
-                        <ons-col width="60px" align="center">
+                        <ons-col width="60px" style="text-align: center">
                             <div>
-                                <i class="ion-android-checkbox-outline iconHomeView" style="color:orange"></i><span class="notification" ng-show="!allCheckedIn">1</span>
+                                <i class="fa fa-check-square-o fa-2x" style="color:orange"></i><span class="notification" ng-hide="allCheckedIn">1</span>
                             </div>
                         </ons-col>
                         <ons-col>
