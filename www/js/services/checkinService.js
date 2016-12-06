@@ -239,12 +239,17 @@ myApp.factory('CheckinService', ['$q', 'RequestToServer', 'Appointments', '$time
             liveCheckinUpdates(nextappointment);
         },
 
-        checkinToAllAppointments: function (){
+        checkinToAllAppointments: function (appointments){
 
             //Create a promise so this can be run asynchronously
             var defer = $q.defer();
 
             var objectToSend = positionCheckinAppointment;
+            objectToSend.AppointmentSerNum = [];
+
+            for (appointment in appointments){
+                objectToSend.AppointmentSerNum.push(appointments[appointment].AppointmentSerNum);
+            }
 
             RequestToServer.sendRequestWithResponse('Checkin', objectToSend)
                 .then( function (response) {
@@ -271,7 +276,7 @@ myApp.factory('CheckinService', ['$q', 'RequestToServer', 'Appointments', '$time
             }
 
             for (var i=0; i !=appointments.length; i++){
-                promises.push(CheckinService.checkCheckinServer(appointments[i]));
+                promises.push(this.checkCheckinServer(appointments[i]));
             }
 
             $q.all(promises).then(function (dataArray) {
