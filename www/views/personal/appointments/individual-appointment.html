@@ -11,7 +11,9 @@
                         <span class="item-title" ng-class="fontSizeTitle">{{app["AppointmentType_"+language]}}</span>
                     </header>
                     <p class="item-desc" ng-class="fontSizeDesc">{{app.ScheduledStartTime|date:'medium'}}</p>
-                    <p class="item-desc" ng-class="fontSizeDesc">{{app.RoomLocation}}</p>
+                    <p class="item-desc" ng-class="fontSizeDesc" ng-show="app.RoomLocation">
+                        {{"GOTO_ROOM"|translate}}{{app.RoomLocation}}
+                    </p>
                 </div>
             </ons-list-item>
             <ons-list-item modifier="chevron" ng-click="goToMap()">
