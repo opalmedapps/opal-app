@@ -1160,17 +1160,20 @@ p{
   text-align: center;
 }
 
-/* Lab results specific classes */
+* Lab results specific classes */
+.name1 {
+  color: blue;
+}
 
 .lab-results-new-result {
   display: inline;
 }
 
-.lab-results-test-high {
+.lab-results-test-out5 {
   color: red;
 }
 
-.lab-results-test-low {
+.lab-results-test-in5 {
   color: orange;
 }
 
@@ -1183,6 +1186,31 @@ p{
 
 .lucent {
   opacity: 0.4;
+}
+
+.descOut5 {
+  color: red;
+}
+
+.descIn5{
+  color: orange;
+}
+
+.chartArea{
+  position: relative;
+  height: 100%;
+  min-height: 50%;
+  width: 100%;
+  min-width: 50%;
+
+}
+
+
+.chart-wrapper {
+    float: left;
+    padding-bottom: 40%;
+    position: relative;
+    width: 45%;
 }
 /*
 *Tight list css for all views
