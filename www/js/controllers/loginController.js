@@ -113,9 +113,6 @@ myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$root
 
         firebaseUser.getToken(true).then(function(sessionToken){
             console.log('In Auth Handler')
-            // TODO temporary false fix this
-            /*var temporary= false; //firebaseUser.password.isTemporaryPassword;
-             console.log(temporary);*/
             window.localStorage.setItem('Email',$scope.email);
 
             UserAuthorizationInfo.setUserAuthData(firebaseUser.uid, CryptoJS.SHA256($scope.password).toString(), myAuth.$getAuth().expires,sessionToken);
