@@ -132,10 +132,10 @@ myApp.service('LocalStorage',['UserAuthorizationInfo', 'EncryptionService',funct
 		**/
 		resetUserLocalStorage:function()
 		{
-			window.localStorage.removeItem('UserAuthorizationInfo');
+			/*window.localStorage.removeItem('UserAuthorizationInfo');
 			window.localStorage.removeItem(UserAuthorizationInfo.getUsername());
-			window.localStorage.removeItem(UserAuthorizationInfo.getUsername()+'/Timestamps');
-			
+			window.localStorage.removeItem(UserAuthorizationInfo.getUsername()+'/Timestamps');*/
+			localStorage.clear();
 		}
 
 
