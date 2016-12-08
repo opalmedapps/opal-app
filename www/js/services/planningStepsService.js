@@ -23,7 +23,8 @@
             getPlanningSequence: getPlanningSequence,
             initializePlanningSequence: initializePlanningSequence,
             getCurrentStep: getCurrentStep,
-            isCompleted: isCompleted
+            isCompleted: isCompleted,
+            destroy: destroy
         };
 
         // Initilaize the sequence when app is loaded
@@ -90,6 +91,13 @@
         function getCurrentStep(){
             console.log("Current Step is: ", currentStep);
             return currentStep.TaskName_EN || currentStep.AppointmentType_EN;
+        }
+
+        function destroy(){
+            currentStep = '';
+            for (var step in sequence){
+                sequence[step] = [];
+            }
         }
     }
 

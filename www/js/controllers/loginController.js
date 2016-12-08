@@ -8,9 +8,12 @@ var myApp=angular.module('MUHCApp');
 //Login controller
 myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$rootScope', '$state', 'UserAuthorizationInfo', 'RequestToServer', 'FirebaseService','LocalStorage','$filter','DeviceIdentifiers','UserPreferences','NavigatorParameters','Patient','NewsBanner', '$firebaseAuth',function LoginController(ResetPassword,$scope,$timeout, $rootScope, $state, UserAuthorizationInfo,RequestToServer,FirebaseService,LocalStorage,$filter,DeviceIdentifiers,UserPreferences,NavigatorParameters,Patient, NewsBanner,$firebaseAuth) {
 
-    $timeout(function () {
-        securityModal.show();
-    },200);
+    if(!localStorage.getItem('login')){
+        $timeout(function () {
+            securityModal.show();
+        },200);
+    }
+
 
     //Check if device or browser
     var app = document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'https://' ) === -1;
@@ -121,7 +124,6 @@ myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$root
             var authenticationToLocalStorage={
                 UserName:firebaseUser.uid,
                 Password: CryptoJS.SHA256($scope.password).toString(),
-                Expires:myAuth.$getAuth().expires,
                 Email:$scope.email,
                 Token:sessionToken
             };
@@ -172,10 +174,10 @@ myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$root
     {
 
         //Get Firebase authentication state
-        $scope.authenticated = !!firebaseUser;
+        var authenticated = !!firebaseUser;
         console.log($scope.authenticated );
         //If authenticated update the user authentication state
-        if( $scope.authenticated)
+        if( authenticated)
         {
             firebaseUser.getToken().then(function(sessionToken){
                 var  authInfoLocalStorage=window.localStorage.getItem('UserAuthorizationInfo');
@@ -195,7 +197,7 @@ myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$root
                 }
             });
         }
-        return $scope.authenticated;
+        return authenticated;
     }
 
 }]);

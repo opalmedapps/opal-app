@@ -72,6 +72,7 @@ myApp.controller('personalTabController',
     personalNavigator.on('prepop',function(){
         setNewsNumbers();
     });
+
     $scope.load = function($done) {
         UpdateUI.update('All').then(function()
         {
