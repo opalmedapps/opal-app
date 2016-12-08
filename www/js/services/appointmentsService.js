@@ -728,7 +728,7 @@ myApp.service('Appointments', ['$q', 'RequestToServer','$cordovaCalendar','UserA
 
             // Calculate difference between now and all appointments that are checked in and have a room
             var timeDiff = todaysAppointments.map(function (obj) {
-                if (obj.Checkin == '1' && obj.RoomLocation && obj.Status.toLowerCase().indexOf('completed') != -1) {
+                if (obj.Checkin == '1' && obj.RoomLocation_EN && obj.Status.toLowerCase().indexOf('completed') != -1) {
                     return Math.abs(now - obj.LastUpdated);
                 } else {
                     return Infinity;
@@ -742,7 +742,7 @@ myApp.service('Appointments', ['$q', 'RequestToServer','$cordovaCalendar','UserA
             }
 
             if (!!timeDiff.reduce(function(a, b){ return (a === b) ? a : NaN; })){
-                return {RoomLocation: ""};
+                return {RoomLocation_EN: ""};
             }
 
             console.log(lowest);
