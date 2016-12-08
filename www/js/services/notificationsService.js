@@ -325,8 +325,8 @@ myApp.service('Notifications',['$filter','RequestToServer','LocalStorage','Annou
                     console.log(Notifications[i]);
                     //Finding post
                     var post = notificationTypes[Notifications[i].NotificationType].searchFunction(Notifications[i].RefTableRowSerNum);
-                    Notifications[i].Description_EN = Notifications[i].Description_EN.replace(/\$\w+/, post.RoomLocation||"");
-                    Notifications[i].Description_FR = Notifications[i].Description_FR.replace(/\$\w+/, post.RoomLocation||"");
+                    Notifications[i].Description_EN = Notifications[i].Description_EN.replace(/\$\w+/, post.RoomLocation_EN||"");
+                    Notifications[i].Description_FR = Notifications[i].Description_FR.replace(/\$\w+/, post.RoomLocation_FR||"");
                     console.log(Notifications[i].NotificationType);
                     //If ReadStatus in post is also 0, Set the notification for showing in the controller
                     if(post.ReadStatus == '0' || Notifications[i].NotificationType == "RoomAssignment")
