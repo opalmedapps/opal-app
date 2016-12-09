@@ -191,13 +191,8 @@ myApp.service('Appointments', ['$q', 'RequestToServer','$cordovaCalendar','UserA
         for (var i = 0; i < appointments.length; i++) {
             appointments[i].ResourceName = (appointments[i].Resource.hasOwnProperty('Machine')) ? '':appointments[i].Resource.Doctor;
             appointments[i].ScheduledStartTime = $filter('formatDate')(appointments[i].ScheduledStartTime);
-            //appointments[i].ScheduledStartTime = new Date(today);
             appointments[i].ScheduledEndTime =  $filter('formatDate')(appointments[i].ScheduledEndTime);
             appointments[i].LastUpdated =  $filter('formatDate')(appointments[i].LastUpdated);
-            //appointments[i].RoomLocation = appointments[i].RoomLocation
-            // appointments[i].ScheduledEndTime  = new Date(today);
-            // appointments[i].ScheduledEndTime.setMinutes(appointments[i].ScheduledEndTime.getMinutes()+15);
-            // today.setDate(today.getDate()+1);
             userAppointmentsArray.push(appointments[i]);
         }
         //Sort Appointments chronologically most recent first

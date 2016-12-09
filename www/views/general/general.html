@@ -2,7 +2,7 @@
   <ons-toolbar fixed-style>
     <div class="left"><ons-back-button>{{"BACK"|translate}}</ons-back-button></div>
       <div class="center" ng-class="fontSizeTitle">{{"GENERAL"|translate}}</div>
-      <div class="right"><ons-toolbar-button ng-click="generalNavigator.pushPage('./views/tabs/info-page-tabs.html')"><ons-icon icon="ion-ios-information-outline"></ons-icon></ons-toolbar-button></div>
+      <div class="right"><ons-toolbar-button ng-click="generalNavigator.pushPage('./views/tabs/info-page-tabs.html')"><ons-icon icon="fa fa-info-circle"></ons-icon></ons-toolbar-button></div>
   </ons-toolbar>
   <ons-pull-hook ng-action="load($done)" var="loader">
     <span ng-switch="loader.getCurrentState()">
@@ -16,7 +16,7 @@
       <ons-row align="center"   >
           <ons-col width="60px" align="center">
               <div >
-                <i class="ion-person-stalker iconHomeView" style="color:Amethyst"></i>
+                <i class="fa fa-address-book iconHomeView" style="color:Amethyst"></i>
               </div>
           </ons-col>
           <ons-col>
@@ -31,7 +31,7 @@
       <ons-row align="center" >
           <ons-col width="60px" >
               <div>
-                <i class="ion-speakerphone iconHomeView" style="color:DarkSlateBlue"></i><span class="notification" ng-show="announcementsUnreadNumber>0">{{announcementsUnreadNumber}}</span>
+                <i class="fa fa-bullhorn iconHomeView" style="color:DarkSlateBlue"></i><span class="notification" ng-show="announcementsUnreadNumber>0">{{announcementsUnreadNumber}}</span>
               </div>
           </ons-col>
           <ons-col>
@@ -76,7 +76,7 @@
       <ons-row align="center"   >
           <ons-col width="60px" align="center">
               <div >
-                <i class="ion-android-car iconHomeView" style="color:red"></i>
+                <i class="fa fa-car iconHomeView" style="color:red"></i>
               </div>
           </ons-col>
           <ons-col>
@@ -91,7 +91,7 @@
       <ons-row align="center"   >
           <ons-col width="60px" align="center">
               <div >
-                <i class="ion-ios-chatbubble iconHomeView" style="color:green"></i>
+                <i class="fa fa-thumbs-o-up iconHomeView" style="color:green"></i>
               </div>
           </ons-col>
           <ons-col>
@@ -106,7 +106,7 @@
       <ons-row align="center"   >
           <ons-col width="60px" align="center">
               <div >
-                <i class="ion-bug iconHomeView" style="color:purple"></i>
+                <i class="fa fa-exclamation-circle iconHomeView" style="color:purple"></i>
               </div>
           </ons-col>
           <ons-col>
