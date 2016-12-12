@@ -12,9 +12,9 @@ Install bower
 ```
 npm install -g bower
 ```
-Clone the git repository
+Clone a single branch from the git repository.
 ```
-git clone <repository>
+git clone -b <remote_branch_name> --single-branch git@github.com:Sable/qplus.git
 ```
 Navigate to qplus folder and install missing librairies
 ```
