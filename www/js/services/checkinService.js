@@ -270,31 +270,35 @@ myApp.factory('CheckinService', ['$q', 'RequestToServer', 'Appointments', '$time
             var promises = [];
             var allCheckedIn;
 
+            console.log(appointments);
+
             if (!appointments){
                 allCheckedIn = null;
+                console.log(!appointments);
                 defer.resolve(allCheckedIn);
-            }
+            } else {
 
-            for (var i=0; i !=appointments.length; i++){
-                promises.push(this.checkCheckinServer(appointments[i]));
-            }
-
-            $q.all(promises).then(function (dataArray) {
-                console.log("Response from checkin check", dataArray);
-                allCheckedIn = true;
-                for (var checkedIn in dataArray){
-                    if (dataArray[checkedIn] === false){
-                        allCheckedIn = false;
-                        break;
-                    }
+                for (var i = 0; i != appointments.length; i++) {
+                    promises.push(this.checkCheckinServer(appointments[i]));
                 }
 
-                defer.resolve(allCheckedIn);
+                $q.all(promises).then(function (dataArray) {
+                    console.log("Response from checkin check", dataArray);
+                    allCheckedIn = true;
+                    for (var checkedIn in dataArray) {
+                        if (dataArray[checkedIn] === false) {
+                            allCheckedIn = false;
+                            break;
+                        }
+                    }
 
-            }).catch(function (error) {
-                console.log("Cannot verify checkin", error);
-                defer.reject("Cannot verify checkin")
-            });
+                    defer.resolve(allCheckedIn);
+
+                }).catch(function (error) {
+                    console.log("Cannot verify checkin", error);
+                    defer.reject("Cannot verify checkin")
+                });
+            }
 
             return defer.promise;
         }
