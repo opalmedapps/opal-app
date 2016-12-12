@@ -45,5 +45,9 @@
     "angular-scroll-glue": "^2.0.7",
     "crypto-js": "^3.1.6",
     "firebase": "^3.6.3"
+  },
+  "resolutions": {
+    "angular": "1.6.0"
   }
+
 }
