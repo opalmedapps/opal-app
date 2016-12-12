@@ -89,25 +89,32 @@ myApp.controller('HomeController', ['$state','Appointments', 'CheckinService','$
 
         homePageInit();
         $scope.load = function($done) {
-            UpdateUI.update('All').then(function()
-            {
-                //updated=true;
-                homePageInit();
-                $done();
-            }).catch(function(error){
-                console.log(error);
-                $done();
-            });
-            $timeout(function(){
-                $done();
-            },5000);
+            refresh($done);
         };
 
         homeNavigator.on('prepop', function(event) {
 
             console.log('prepop');
-            homePageInit();
+            refresh();
         });
+
+        function refresh(done){
+            console.log(done);
+            done == undefined ? done = function () {} : done;
+
+            UpdateUI.update('All').then(function()
+            {
+                //updated=true;
+                homePageInit();
+                done();
+            }).catch(function(error){
+                console.log(error);
+                done();
+            });
+            $timeout(function(){
+                done();
+            },5000);
+        }
 
 
         function homePageInit(){
