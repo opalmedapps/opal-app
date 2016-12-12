@@ -42,8 +42,9 @@ Most broswers come with Javascript developer consoles built in. These can be use
 ###Browser/Mobile View
 [Cordova](https://cordova.apache.org/) enables software programmers to build applications for mobile devices using JavaScript, HTML5, and CSS3, instead of relying on platform-specific APIs like those in Android, iOS, or Windows Phone. It enables wrapping up of CSS, HTML, and JavaScript code depending upon the platform of the device. It extends the features of HTML and JavaScript to work with the device. The resulting applications are a hybrid between web and native.
 
-Cordova has the ability to build applications for iOS, Android and browsers using one code base
-Instructions are based from [Cordova get started page!](https://cordova.apache.org/#getstarted)
+Cordova has the ability to build applications for iOS, Android and browsers using one code base.
+
+Instructions are based on [Cordova get started page!](https://cordova.apache.org/#getstarted)
 
 1. Follow instructions in the [Installation](#installation) section
 3. Install Cordova via `npm install -g cordova`.
@@ -51,7 +52,7 @@ Instructions are based from [Cordova get started page!](https://cordova.apache.o
 5. Change directory to your newly created cordova project `cd <NameOfProject>`.
 6. Add all the cordova plugins from the [list](#plugins) below.
  ```
-$cordova plugin add <nameOfPlugin>
+cordova plugin add <nameOfPlugin>
 ```
 7. Add platforms to your project:
   * `cordova platform add ios`
@@ -63,9 +64,9 @@ $cordova plugin add <nameOfPlugin>
 cordova build <platform>
 ```
 9. Add the contents of the www folder to the www folder in your cordova project.
-10. To run your project run: 
+10. To run your project run:
  ```
-$cordova run <platform>
+cordova run <platform>
 ```
 11. Lastly, copy the res folder to the cordova folder project, and replace the xml file in the cordova project with the xml file in this repository.
 
