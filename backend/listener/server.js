@@ -5,20 +5,20 @@ var mainRequestApi      =   	require('./main.js');
 var resetPasswordApi    =   	require('./resetPassword.js');
 var admin            	=   	require("firebase-admin");
 var utility            	=   	require('./utility.js');
-var q 			=	require("q");
+var q 			        =      	require("q");
 
 // Initialize firebase connection
 
-//admin.database.enableLogging(true);
+admin.database.enableLogging(true);
 
 var serviceAccount = require("/home/robert/firebase_account/opal-dev-firebase-adminsdk-73h8x-5c71c7ec12.json");
 
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
     databaseURL: "https://opal-dev.firebaseio.com",
-    databaseAuthVariableOverride: {
+    /*databaseAuthVariableOverride: {
         uid: "backend-worker"
-    }
+    }*/
 });
 
 // Get reference to correct data element
