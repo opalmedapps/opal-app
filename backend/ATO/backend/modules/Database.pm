@@ -4,43 +4,30 @@
 # A.Joseph 18-Dec-2013 ++ File: Database.pm
 #---------------------------------------------------------------------------------
 # Perl module that creates a database class. It connects first to the ARIA 
-# database. A database object is created for the second database connection.
+# database. A database object is created for the MySQL database connection.
 # This module calls a constructor to create this object and then calls a 
 # subroutine to connect to the MySQL database with the parameters given.
-#
-# It is assumed that the host, username and password will remain the same 
-# through the whole process so we pre-define those variables in the contructor.
-# However, when creating a new database object, we pass the database name 
-# as an argument incase we wish to quickly change the database name when modifying 
-# this module. 
 #
 # Although all these object variables are set within this module, I provide 
 # setter subroutines in case the user wishes to changed the object variables.
 
 package Database; # Declare package name
 
+use Configs; # Custom Config.pm to get constants (i.e. configurations)
 use Exporter; # To export subroutines and variables
 use DBI;
 use DBD::Sybase;
 
-# Connect to the ARIA database
-# DEV
-our $sourceDatabase = DBI->connect_cached("DBI:Sybase:aria11","reports","reports")
-	or die "Could not connect to the source database: " . DBI-errstr;
-
-# PRO
-# our $sourceDatabase = DBI->connect_cached("DBI:Sybase:pro","reports","reports")
-#	or die "Could not connect to the source database: " . DBI-errstr;
-	$sourceDatabase->do("use variansystem");
 # Create a database object
-# DEV
-our $databaseObject = new Database("QPlusApp");
-
-# PRO
-# our $databaseObject = new Database("AEHRA");
+our $databaseObject = new Database(
+        $Configs::SERVER_DB_NAME_HOST,
+        $Configs::SERVER_DB_HOST,
+        $Configs::SERVER_DB_USER,
+        $Configs::SERVER_DB_PASS
+    );
 
 # Connect to our MySQL database
-our $targetDatabase = $databaseObject->connectToDatabase();
+our $targetDatabase = $databaseObject->connectToTargetDatabase();
 
 #====================================================================================
 # Constructor for our Databases class 
@@ -50,9 +37,9 @@ sub new
 	my $class = shift;
 	my $database = {
 		_name		=> shift,
-		_host		=> "localhost",
-		_user		=> "readonly",
-		_password	=> "readonly",
+		_host		=> shift,
+		_user		=> shift,
+		_password	=> shift,
 	};
 
 	# bless associates an object with a class so Perl knows which package to search for
@@ -62,12 +49,35 @@ sub new
 }
 
 #======================================================================================
+# Subroutine to connect to the source database
+#======================================================================================
+sub connectToSourceDatabase
+{
+	my ($sourceDBser) = @_; # source database serial
+
+    my $sourceDBCredentials = Configs::fetchSourceCredentials($sourceDBser);
+
+    my $db_connect = DBI->connect_cached(
+            $sourceDBCredentials->{_name},
+            $sourceDBCredentials->{_user},
+            $sourceDBCredentials->{_password},
+        )
+	    or die "Could not connect to the source database: " . DBI->errstr;
+
+	return $db_connect;
+}
+
+#======================================================================================
 # Subroutine to connect to the MySQL database
 #======================================================================================
-sub connectToDatabase
+sub connectToTargetDatabase
 {
 	my ($database) = @_; # database object	
-	my $db_connect = DBI->connect_cached("DBI:mysql:database=$database->{_name};host=$database->{_host}",$database->{_user},$database->{_password})
+	my $db_connect = DBI->connect_cached(
+            $database->{_name},
+            $database->{_user},
+            $database->{_password}
+        )
 		or die "Could not connect to the MySQL db: " . DBI->errstr;
 	return $db_connect;
 }

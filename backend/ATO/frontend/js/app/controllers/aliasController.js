@@ -37,7 +37,7 @@ angular.module('ATO_InterfaceApp.controllers.aliasController', ['ngAnimate', 'ui
         $scope.changesMade = false;
 
 		// Templates for alias table
-		var cellTemplateName = '<div style="cursor:pointer; padding-top: 5px;" ' + 
+		var cellTemplateName = '<div style="cursor:pointer;" class="ui-grid-cell-contents"' + 
             'ng-click="grid.appScope.editAlias(row.entity)">' + 
             '<a href="">{{row.entity.name_EN}} / {{row.entity.name_FR}}</a></div>';
       	var checkboxCellTemplate = '<div style="text-align: center; cursor: pointer;" ' +
@@ -77,9 +77,10 @@ angular.module('ATO_InterfaceApp.controllers.aliasController', ['ngAnimate', 'ui
 			data: 'aliasList',
 			columnDefs: [
 				{field:'name_EN', displayName:'Alias (EN / FR)', cellTemplate:cellTemplateName, width:'405'},
-				{field:'type', displayName:'Type', width:'175'},
+				{field:'type', displayName:'Type', width:'145'},
                 {field:'update', displayName:'Update', width:'80', cellTemplate:checkboxCellTemplate},
 				{field:'count', displayName:'# of terms', width:'90'},
+				{field:'source_db.name', displayName:'Source DB', width:'120'},
 				{name:'Operations', cellTemplate:cellTemplateOperations, sortable:false}
 			],
             useExternalFiltering: true,
@@ -265,7 +266,7 @@ angular.module('ATO_InterfaceApp.controllers.aliasController', ['ngAnimate', 'ui
 
 
 				// Call our API service to get the list of alias expressions
-				aliasAPIservice.getExpressions($scope.alias.type).success(function (response) {
+				aliasAPIservice.getExpressions($scope.alias.source_db.serial, $scope.alias.type).success(function (response) {
 					$scope.termList = response; // Assign value
 
                     processingModal.close(); // hide modal
@@ -516,7 +517,7 @@ angular.module('ATO_InterfaceApp.controllers.aliasController', ['ngAnimate', 'ui
                         }
                         else {
                             $scope.setBannerClass('danger');
-                            $scope.bannerMessage = response.message;
+                            $scope.$parent.bannerMessage = response.message;
                         }
                         $scope.showBanner();
 						$uibModalInstance.close();
