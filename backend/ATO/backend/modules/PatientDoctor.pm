@@ -23,8 +23,6 @@ use Doctor; # Our Doctor module
 #---------------------------------------------------------------------------------
 # Connect to the databases
 #---------------------------------------------------------------------------------
-
-my $sourceDatabase	= $Database::sourceDatabase;
 my $SQLDatabase		= $Database::targetDatabase;
 
 #====================================================================================
@@ -34,10 +32,10 @@ sub new
 {
 	my $class = shift;
 	my $patientdoctor = {
-		_ser		=> undef,
-		_patientser	=> undef,
-		_doctorser	=> undef,
-		_oncflag	=> undef,
+		_ser		    => undef,
+		_patientser	    => undef,
+		_doctorser	    => undef,
+		_oncflag	    => undef,
 		_primaryflag	=> undef,
 	};
 	# bless associates an object with a class so Perl knows which package to search for
@@ -154,48 +152,54 @@ sub getPatientDoctorsFromSourceDB
 	
 	foreach my $Patient (@patientList) {
 
-		my $patientSer		= $Patient->getPatientSer();
-		my $ariaSer		= $Patient->getPatientAriaSer(); 
-		my $lastUpdated		= $Patient->getPatientLastUpdated();
+		my $patientSer		    = $Patient->getPatientSer();
+		my $patientSourceUID	= $Patient->getPatientSourceUID(); 
+        my $sourceDBSer         = $Patient->getPatientSourceDatabaseSer();
+		my $lastTransfer	    = $Patient->getPatientLastTransfer();
 
-		my $pd_sql = "
-			SELECT DISTINCT
-				Doctor.ResourceSer,
-				PatientDoctor.OncologistFlag,
-				PatientDoctor.PrimaryFlag
-			FROM	
-				Doctor,
-				PatientDoctor
-			WHERE
-				PatientDoctor.PatientSer	= '$ariaSer'
-			AND	Doctor.ResourceSer		= PatientDoctor.ResourceSer
-			AND	PatientDoctor.HstryDateTime	> '$lastUpdated'
-		";
+        # ARIA
+        if ($sourceDBSer eq 1) {
 
-		# prepare query
-		my $query = $sourceDatabase->prepare($pd_sql)
-			or die "Could not prepare query: " . $sourceDatabase->errstr;
+            my $sourceDatabase = Database::connectToSourceDatabase($sourceDBSer);
+    		my $pd_sql = "
+	    		SELECT DISTINCT
+		    		dr.ResourceSer,
+			    	pd.OncologistFlag,
+				    pd.PrimaryFlag
+    			FROM	
+	    			variansystem.dbo.Doctor dr,
+		    		variansystem.dbo.PatientDoctor pd
+			    WHERE
+    				pd.PatientSer	    = '$patientSourceUID'
+	    		AND	dr.ResourceSer	    = pd.ResourceSer
+		    	AND	pd.HstryDateTime	> '$lastTransfer'
+    		";  
+    
+	    	# prepare query
+		    my $query = $sourceDatabase->prepare($pd_sql)
+			    or die "Could not prepare query: " . $sourceDatabase->errstr;
+        
+    		# execute query
+	        $query->execute()
+		    	or die "Could not execute query: " . $query->errstr;
 
-		# execute query
-		$query->execute()
-			or die "Could not execute query: " . $query->errstr;
-
-		while (my @data = $query->fetchrow_array()) {
+    		while (my @data = $query->fetchrow_array()) {
 	
-			my $patientdoctor = new PatientDoctor(); # new PD object
-	
-			$doctorsernum	= Doctor::reassignDoctor($data[0]);
-			$oncflag	= $data[1];
-			$primaryflag	= $data[2];
-	
-			# set PD information
-			$patientdoctor->setPatientDoctorPatientSer($patientSer);
-			$patientdoctor->setPatientDoctorDoctorSer($doctorsernum);
-			$patientdoctor->setPatientDoctorOncFlag($oncflag);
-			$patientdoctor->setPatientDoctorPrimaryFlag($primaryflag);
-	
-			push(@PDList, $patientdoctor);
-		}
+	    		my $patientdoctor = new PatientDoctor(); # new PD object
+	    
+		    	$doctorsernum	= Doctor::reassignDoctor($data[0], $sourceDBSer);
+			    $oncflag	    = $data[1];
+    			$primaryflag	= $data[2];
+	    
+		    	# set PD information
+			    $patientdoctor->setPatientDoctorPatientSer($patientSer);
+    			$patientdoctor->setPatientDoctorDoctorSer($doctorsernum);
+	    		$patientdoctor->setPatientDoctorOncFlag($oncflag);
+		    	$patientdoctor->setPatientDoctorPrimaryFlag($primaryflag);
+    	
+	    		push(@PDList, $patientdoctor);
+		    }
+        }
 	}
 
 	return @PDList;

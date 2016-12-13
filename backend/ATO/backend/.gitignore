@@ -1,6 +1,12 @@
-# ignore gvim swap files
+# ignore gvim swap files (& recursively)
 *.swp
 *.swo
+./**/*.swp
+./**/*.swo
 
-# Ignore config module
+# ignore config module
 modules/Configs.pm
+php/config.php
+
+# ignore version control script
+bumpversion.sh

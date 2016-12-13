@@ -18,7 +18,7 @@ angular.module('ATO_InterfaceApp.controllers.hospitalMapController', ['ngAnimate
         };
 
         // Templates for the table
-		var cellTemplateName = '<div style="cursor:pointer; padding-top: 5px;" ' + 
+		var cellTemplateName = '<div style="cursor:pointer;" class="ui-grid-cell-contents" ' + 
             'ng-click="grid.appScope.editHosMap(row.entity)">' + 
             '<a href="">{{row.entity.name_EN}} / {{row.entity.name_FR}}</a></div>';
 		var cellTemplateOperations = '<div style="text-align:center; padding-top: 5px;">' +

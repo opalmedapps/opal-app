@@ -25,8 +25,6 @@ use Patient; # our custom patient module
 #---------------------------------------------------------------------------------
 # Connect to the databases
 #---------------------------------------------------------------------------------
-
-my $sourceDatabase	= $Database::sourceDatabase;
 my $SQLDatabase		= $Database::targetDatabase;
 
 #====================================================================================
@@ -37,7 +35,8 @@ sub new
 	my $class = shift;
 	my $diagnosis = {
 		_ser		    => undef,
-		_ariaser	    => undef,
+		_sourceuid	    => undef,
+        _sourcedbser    => undef,
 		_patientser	    => undef,
 		_datestamp	    => undef,
 		_description	=> undef,
@@ -61,13 +60,23 @@ sub setDiagnosisSer
 }
 
 #====================================================================================
-# Subroutine to set the diagnosis Aria serial
+# Subroutine to set the diagnosis source database serial 
 #====================================================================================
-sub setDiagnosisAriaSer
+sub setDiagnosisSourceDatabaseSer
 {
-	my ($diagnosis, $ariaser) = @_; # diagnosis object with provided serial in arguments
-	$diagnosis->{_ariaser} = $ariaser; # set the serial
-	return $diagnosis->{_ariaser};
+	my ($diagnosis, $sourcedbser) = @_; # diagnosis object with provided serial in arguments
+	$diagnosis->{_sourcedbser} = $sourcedbser; # set the serial
+	return $diagnosis->{_sourcedbser};
+}
+
+#====================================================================================
+# Subroutine to set the diagnosis source uid
+#====================================================================================
+sub setDiagnosisSourceUID
+{
+	my ($diagnosis, $sourceuid) = @_; # diagnosis object with provided uid in arguments
+	$diagnosis->{_sourceuid} = $sourceuid; # set the uid
+	return $diagnosis->{_sourceuid};
 }
 
 #====================================================================================
@@ -120,12 +129,21 @@ sub getDiagnosisSer
 }
 
 #======================================================================================
-# Subroutine to get the diagnosis ARIA serial
+# Subroutine to get the diagnosis source database serial
 #======================================================================================
-sub getDiagnosisAriaSer
+sub getDiagnosisSourceDatabaseSer
 {
 	my ($diagnosis) = @_; # our diagnosis object
-	return $diagnosis->{_ariaser};
+	return $diagnosis->{_sourcedbser};
+}
+
+#======================================================================================
+# Subroutine to get the diagnosis source uid
+#======================================================================================
+sub getDiagnosisSourceUID
+{
+	my ($diagnosis) = @_; # our diagnosis object
+	return $diagnosis->{_sourceuid};
 }
 
 #======================================================================================
@@ -173,58 +191,68 @@ sub getDiagnosesFromSourceDB
 	my @diagnosisList = (); # initialize a list for diagnosis objects
 	
 	# for query results
-	my ($ariaser, $datestamp, $description, $code);
+	my ($sourceuid, $datestamp, $description, $code);
 
 	foreach my $Patient (@patientList) { 
 
-		my $patientSer		= $Patient->getPatientSer(); # get patient ser
-		my $ariaSer		= $Patient->getPatientAriaSer(); # get patient aria ser
-		my $lastUpdated		= $Patient->getPatientLastUpdated(); # get last updated
+		my $patientSer		    = $Patient->getPatientSer(); # get patient ser
+		my $patientSourceUID    = $Patient->getPatientSourceUID(); # get patient uid
+		my $lastTransfer	    = $Patient->getPatientLastTransfer(); # get last transfer
+        my $sourceDBSer         = $Patient->getPatientSourceDatabaseSer();
 
-		# query for primary diagnosis
-		my $diagInfo_sql = "
-			SELECT DISTINCT
-				Diagnosis.DiagnosisSer,
-				Diagnosis.DateStamp,
-				RTRIM(REPLACE(REPLACE(Diagnosis.Description,'Malignant neoplasm','malignant neoplasm'),'malignant neoplasm','Ca')),
-                Diagnosis.DiagnosisId
-			FROM
-				Diagnosis,
-				Patient
-			WHERE
-				Diagnosis.PatientSer		= Patient.PatientSer
-			AND	Patient.PatientSer		= '$ariaSer'
-			AND	Diagnosis.Description 		NOT LIKE '%ERROR%'
-			AND	Diagnosis.HstryDateTime		> '$lastUpdated'
-			AND 	Diagnosis.DateStamp		> '1970-01-01 00:00:00'
-		";
-		# prepare query
-		my $query = $sourceDatabase->prepare($diagInfo_sql)
-			or die "Could not prepare query: " . $sourceDatabase->errstr;
+        # ARIA
+        if ($sourceDBSer eq 1) {
+            
+            my $sourceDatabase = Database::connectToSourceDatabase($sourceDBSer);
 
-		# execute query
-		$query->execute()
-			or die "Could not execute query: " . $query->errstr;
+    		# query for primary diagnosis
+	    	my $diagInfo_sql = "
+		    	SELECT DISTINCT
+			    	dx.DiagnosisSer,
+				    dx.DateStamp,
+    				RTRIM(REPLACE(REPLACE(dx.Description,'Malignant neoplasm','malignant neoplasm'),'malignant neoplasm','Ca')),
+                    dx.DiagnosisId
+		    	FROM
+			    	variansystem.dbo.Diagnosis dx,
+				    variansystem.dbo.Patient pt
+    			WHERE
+	    			dx.PatientSer		= pt.PatientSer
+		    	AND	pt.PatientSer		= '$patientSourceUID'
+			    AND	dx.Description 		NOT LIKE '%ERROR%'
+    			AND	dx.HstryDateTime    > '$lastTransfer'
+	    		AND dx.DateStamp		> '1970-01-01 00:00:00'
+		    ";
+    		# prepare query
+	    	my $query = $sourceDatabase->prepare($diagInfo_sql)
+		    	or die "Could not prepare query: " . $sourceDatabase->errstr;
+    
+		    # execute query
+	    	$query->execute()
+			    or die "Could not execute query: " . $query->errstr;
 
-		while (my @data = $query->fetchrow_array()) {
+            my $data = $query->fetchall_arrayref();
+            foreach my $row (@$data) {
 
-			my $diagnosis = new Diagnosis(); # new diagnosis object
+    			my $diagnosis = new Diagnosis(); # new diagnosis object
 
-			$ariaser		= $data[0];
-			$datestamp		= convertDateTime($data[1]);
-			$description		= $data[2];
-            $code           = $data[3];
+	    		$sourceuid		= $row->[0];
+		    	$datestamp		= convertDateTime($row->[1]);
+			    $description	= $row->[2];
+                $code           = $row->[3];
+    
+	    		# set diagnostic information
+		    	$diagnosis->setDiagnosisSourceUID($sourceuid);
+			    $diagnosis->setDiagnosisDateStamp($datestamp);
+    			$diagnosis->setDiagnosisDescription($description);
+	    		$diagnosis->setDiagnosisPatientSer($patientSer);
+                $diagnosis->setDiagnosisCode($code);
+                $diagnosis->setDiagnosisSourceDatabaseSer($sourceDBSer);
+    
+	    		push(@diagnosisList, $diagnosis);
+		    }
 
-			# set diagnostic information
-			$diagnosis->setDiagnosisAriaSer($ariaser);
-			$diagnosis->setDiagnosisDateStamp($datestamp);
-			$diagnosis->setDiagnosisDescription($description);
-			$diagnosis->setDiagnosisPatientSer($patientSer);
-            $diagnosis->setDiagnosisCode($code);
-
-			push(@diagnosisList, $diagnosis);
-		}
-
+            $sourceDatabase->disconnect();
+        }
 	}
 	return @diagnosisList;
 }
@@ -348,15 +376,55 @@ sub getDiagnosisNameFromOurDB
 }
 
 #======================================================================================
+# Subroutine to get diagnosis names from our db given a patient serial
+#======================================================================================
+sub getPatientsDiagnosesFromOurDB
+{
+    my ($patientSer) = @_; # args
+
+    my @diagnoses = (); # initialize list 
+
+    my $select_sql = "
+        SELECT DISTINCT
+            dxt.AliasName
+        FROM
+            Diagnosis dx,
+            DiagnosisTranslation dxt
+        WHERE
+            dx.PatientSerNum            = '$patientSer'
+        AND dx.DiagnosisCode            = dxt.DiagnosisCode
+
+    ";
+
+    # prepare query
+	my $query = $SQLDatabase->prepare($select_sql)
+		or die "Could not prepare query: " . $SQLDatabase->errstr;
+
+	# execute query
+	$query->execute()
+		or die "Could not execute query: " . $query->errstr;
+
+	while (my @data = $query->fetchrow_array()) {
+
+        push(@diagnoses, $data[0]);
+
+    }
+
+    return @diagnoses;
+
+}
+
+#======================================================================================
 # Subroutine to check if our diagnosis exists in our MySQL db
 #	@return: diagnosis object (if exists) .. NULL otherwise
 #======================================================================================
 sub inOurDatabase
 {
 	my ($diagnosis) = @_; # our diagnosis object
-	my $ariaser = $diagnosis->getDiagnosisAriaSer(); # retrieve the serial from our object
+	my $sourceuid   = $diagnosis->getDiagnosisSourceUID(); # retrieve the uid from our object
+    my $sourcedbser = $diagnosis->getDiagnosisSourceDatabaseSer();
 
-	my $DiagnosisAriaSerInDB = 0; # false by default. Will be true if diagnosis exists
+	my $DiagnosisSourceUIDInDB = 0; # false by default. Will be true if diagnosis exists
 	my $ExistingDiagnosis = (); # data to be entered if diagnosis exists
 	
 	# Other diagnosis variables, if diagnosis exists
@@ -373,7 +441,8 @@ sub inOurDatabase
 		FROM
 			Diagnosis
 		WHERE
-			Diagnosis.DiagnosisAriaSer	= '$ariaser'
+			Diagnosis.DiagnosisAriaSer	    = '$sourceuid'
+        AND Diagnosis.SourceDatabaseSerNum  = '$sourcedbser'
 	";
 	
 	# prepare query
@@ -386,20 +455,21 @@ sub inOurDatabase
 
 	while (my @data = $query->fetchrow_array()) {
 		
-		$ser			= $data[0];
-		$DiagnosisAriaSerInDB 	= $data[1];
-		$datestamp		= $data[2];
-		$description		= $data[3];
-		$patientser		= $data[4];
-        $code           = $data[5];
+		$ser			        = $data[0];
+		$DiagnosisSourceUIDInDB = $data[1];
+		$datestamp		        = $data[2];
+		$description		    = $data[3];
+		$patientser		        = $data[4];
+        $code                   = $data[5];
 
 	}
 
-	if ($DiagnosisAriaSerInDB) {
+	if ($DiagnosisSourceUIDInDB) {
 		
 		$ExistingDiagnosis = new Diagnosis(); # initialize diagnosis object
 
-		$ExistingDiagnosis->setDiagnosisAriaSer($DiagnosisAriaSerInDB); # set the id from our retrieved id 
+		$ExistingDiagnosis->setDiagnosisSourceUID($DiagnosisSourceUIDInDB); # set the id from our retrieved id 
+		$ExistingDiagnosis->setDiagnosisSourceDatabaseSer($sourcedbser);
 		$ExistingDiagnosis->setDiagnosisSer($ser);
 		$ExistingDiagnosis->setDiagnosisDateStamp($datestamp);
 		$ExistingDiagnosis->setDiagnosisDescription($description);
@@ -421,7 +491,8 @@ sub insertDiagnosisIntoOurDB
 	my ($diagnosis) = @_; # our diagnosis object serial
 	
 	my $patientser		= $diagnosis->getDiagnosisPatientSer();
-	my $ariaser		    = $diagnosis->getDiagnosisAriaSer();
+	my $sourceuid	    = $diagnosis->getDiagnosisSourceUID();
+    my $sourcedbser     = $diagnosis->getDiagnosisSourceDatabaseSer();
 	my $datestamp		= $diagnosis->getDiagnosisDateStamp();
 	my $description		= $diagnosis->getDiagnosisDescription();
 	my $code	    	= $diagnosis->getDiagnosisCode();
@@ -432,6 +503,7 @@ sub insertDiagnosisIntoOurDB
 			Diagnosis (
 				DiagnosisSerNum,
 				PatientSerNum,
+                SourceDatabaseSerNum,
 				DiagnosisAriaSer,
 				CreationDate,
                 DiagnosisCode,
@@ -441,7 +513,8 @@ sub insertDiagnosisIntoOurDB
 		VALUES (
 			NULL,
 			'$patientser',
-			'$ariaser',
+            '$sourcedbser',
+			'$sourceuid',
 			'$datestamp',
             '$code',
 			\"$description\",
@@ -473,7 +546,8 @@ sub updateDatabase
 {
 	my ($diagnosis) = @_; # our diagnosis object to update
 
-	my $ariaser		= $diagnosis->getDiagnosisAriaSer();
+	my $sourceuid		= $diagnosis->getDiagnosisSourceUID();
+    my $sourcedbser     = $diagnosis->getDiagnosisSourceDatabaseSer();
 	my $datestamp		= $diagnosis->getDiagnosisDateStamp();
 	my $description		= $diagnosis->getDiagnosisDescription();
     my $code            = $diagnosis->getDiagnosisCode();
@@ -487,7 +561,8 @@ sub updateDatabase
 			Description_EN		= \"$description\",
             DiagnosisCode       = '$code'
 		WHERE
-			DiagnosisAriaSer	= '$ariaser'
+			DiagnosisAriaSer	    = '$sourceuid'
+        AND SourceDatabaseSerNum    = '$sourcedbser'
 	";
 
 	# prepare query

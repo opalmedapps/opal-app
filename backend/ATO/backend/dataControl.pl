@@ -19,8 +19,7 @@ use Time::Piece;
 use POSIX;
 use Storable qw(dclone);
 
-
-use Configs; # custom Configs.pm
+use Configs; # custom Config.pm
 use Database; # custom Database.pm
 use Patient; # custom Patient.pm
 use Task; # custom Task.pm
@@ -55,7 +54,8 @@ Cron::setCronLog("Started", $start_datetime);
 #-----------------------------------------------------------------------
 # Parameters
 #-----------------------------------------------------------------------
-my @patientListForUpdate = (); # this will hold the list of patients scheduled for update
+my @registeredPatients = (); # this will hold the list of patients scheduled for update
+my @patientList = (); 
 my @PDList = (); 
 my @TaskList = (); 
 my @ApptList = (); 
@@ -68,15 +68,55 @@ my @RAList = ();
 #=========================================================================================
 # Retrieve all patients that are marked for update
 #=========================================================================================
-@patientListForUpdate = Patient::getPatientsMarkedForUpdate(); 
+@registeredPatients = Patient::getPatientsMarkedForUpdate(); 
 
 print "Got patients\n";
+#=========================================================================================
+# Loop over each patient. 
+#=========================================================================================
+foreach my $Patient (@registeredPatients) {
+
+    # retrieve information from source databases
+    my @sourcePatients = $Patient->getPatientInfoFromSourceDBs();
+
+    foreach my $SourcePatient (@sourcePatients) {
+
+        # check if patient exists in our database
+        my $patientExists = $SourcePatient->inOurDatabase();
+
+        if ($patientExists) { # patient exists
+
+            my $ExistingPatient = dclone($patientExists); # reassign variable
+
+            # compare our source patient with the existing patient
+            # update is done on the existing patient
+            my $UpdatedPatient = $SourcePatient->compareWith($ExistingPatient);
+
+	        # after updating our Patient object, update the database
+	        $UpdatedPatient->updateDatabase();
+
+            # push to patient list 
+            push(@patientList, $UpdatedPatient);
+
+        } else { # patient DNE 
+
+    		# insert Patient into our database
+	    	$SourcePatient = $SourcePatient->insertPatientIntoOurDB();
+
+            # push to patient list 
+            push(@patientList, $SourcePatient);
+
+	    }
+    }
+}
+
+
 ##########################################################################################
 # 
 # Data Retrieval PATIENTDOCTORS - get list of patient-doctor info updated since last update
 #
 ##########################################################################################
-@PDList = PatientDoctor::getPatientDoctorsFromSourceDB(@patientListForUpdate);
+@PDList = PatientDoctor::getPatientDoctorsFromSourceDB(@patientList);
 #=========================================================================================
 # Loop over each PD. Various functions are done.
 #=========================================================================================
@@ -109,7 +149,7 @@ print "Got PDs\n";
 # Data Retrieval DIAGNOSES - get list of diagnosis info updated since last update
 #
 ##########################################################################################
-@DiagnosisList = Diagnosis::getDiagnosesFromSourceDB(@patientListForUpdate);
+@DiagnosisList = Diagnosis::getDiagnosesFromSourceDB(@patientList);
 
 #=========================================================================================
 # Loop over each diagnosis. Various functions are done.
@@ -144,7 +184,7 @@ print "Got diagnosis\n";
 # Data Retrieval PRIORITIES - get list of priority info updated since last update
 #
 ##########################################################################################
-@PriorityList = Priority::getPrioritiesFromSourceDB(@patientListForUpdate);
+@PriorityList = Priority::getPrioritiesFromSourceDB(@patientList);
 
 #=========================================================================================
 # Loop over each priority. Various functions are done.
@@ -180,7 +220,7 @@ print "Got priority\n";
 # Data Retrieval TASKS - get list of patients with tasks updated since last update
 #
 ##########################################################################################
-@TaskList = Task::getTasksFromSourceDB(@patientListForUpdate);
+@TaskList = Task::getTasksFromSourceDB(@patientList);
 
 #=========================================================================================
 # Loop over each task. Various functions are done.
@@ -215,7 +255,7 @@ print "Got tasks\n";
 # Data Retrieval APPOINTMENTS - get list of patients with appointments updated since last update
 #
 ##########################################################################################
-@ApptList = Appointment::getApptsFromSourceDB(@patientListForUpdate);
+@ApptList = Appointment::getApptsFromSourceDB(@patientList);
 
 #=========================================================================================
 # Loop over each patient. Various functions are done.
@@ -249,7 +289,7 @@ print "Got appointments\n";
 # Data Retrieval RESOURCEAPPOINTMENT - get list of resourceappt info updated since last update
 #
 ##########################################################################################
-@RAList = ResourceAppointment::getResourceAppointmentsFromSourceDB(@patientListForUpdate);
+@RAList = ResourceAppointment::getResourceAppointmentsFromSourceDB(@patientList);
 
 print "RA List\n";
 #=========================================================================================
@@ -286,7 +326,7 @@ print "Got RAs\n";
 # Data Retrieval DOCUMENTS - get list of patients with documents updated since last update
 #
 ##########################################################################################
-@DocList = Document::getDocsFromSourceDB(@patientListForUpdate);
+@DocList = Document::getDocsFromSourceDB(@patientList);
 
 # Transfer and log patient documents
 Document::transferPatientDocuments(@DocList);
@@ -299,7 +339,7 @@ print "Got documents\n";
 # Data Retrieval TESTRESULTS - get list of patients with test results updated since last update
 #
 ##########################################################################################
-@TRList = TestResult::getTestResultsFromSourceDB(@patientListForUpdate);
+@TRList = TestResult::getTestResultsFromSourceDB(@patientList);
 
 #=========================================================================================
 # Loop over each test result. Various functions are done.
@@ -334,7 +374,7 @@ print "Got test results\n";
 # Publishing ANNOUNCEMENTS 
 #
 ##########################################################################################
-Announcement::publishAnnouncements(@patientListForUpdate);
+Announcement::publishAnnouncements(@patientList);
 
 print "Got announcements\n";
 
@@ -343,7 +383,7 @@ print "Got announcements\n";
 # Publishing TREATMENT TEAM MESSAGES
 #
 ##########################################################################################
-TxTeamMessage::publishTxTeamMessages(@patientListForUpdate);
+TxTeamMessage::publishTxTeamMessages(@patientList);
 
 print "Got TTM\n";
 
@@ -352,7 +392,7 @@ print "Got TTM\n";
 # Publishing EDUCATIONAL MATERIALS
 #
 ##########################################################################################
-EducationalMaterial::publishEducationalMaterials(@patientListForUpdate);
+EducationalMaterial::publishEducationalMaterials(@patientList);
 
 print "Got Educational materials\n";
 
@@ -360,7 +400,7 @@ print "Got Educational materials\n";
 # Patient control
 Patient::setPatientLastTransferredIntoOurDB($start_datetime);
 # Alias control
-Alias::setAliasLastUpdatedIntoOurDB($start_datetime);
+Alias::setAliasLastTransferIntoOurDB($start_datetime);
 # Post control
 PostControl::setPostControlLastPublishedIntoOurDB($start_datetime);
 # Educational material control

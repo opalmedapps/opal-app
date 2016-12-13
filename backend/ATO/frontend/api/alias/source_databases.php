@@ -1,5 +1,5 @@
 <?php
-	/* To get a list of ARIA expressions */
+	/* To get a list of source databases */
 
     $currentFile = __FILE__; // Get location of this script
 
@@ -9,16 +9,15 @@
 	include_once($configFile);
 
 	// Retrieve FORM param
-	$callback       = $_GET['callback'];
-    $sourceDBSer    = $_GET['sourcedbser'];
-	$type           = $_GET['type'];
+	$callback = $_GET['callback'];
+	$type = $_GET['type'];
 
 	$alias = new Alias; // Object
 
 	// Call function
-	$expressionList = $alias->getExpressions($sourceDBSer, $type);
+	$sourceDBList = $alias->getSourceDatabases();
 
 	// Callback to http request
-	print $callback.'('.json_encode($expressionList).')';
+	print $callback.'('.json_encode($sourceDBList).')';
 
 ?>
