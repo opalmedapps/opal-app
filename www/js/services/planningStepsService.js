@@ -84,7 +84,7 @@
         }
 
         function isCompleted(){
-            return sequence['Scheduling Treatments'].length > 0;
+            return sequence['Scheduling Treatments'].length > 0 && sequence['CT for Radiotherapy Planning'].length > 0;
         }
 
         function getCurrentStep(){

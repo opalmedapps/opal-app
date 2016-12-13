@@ -363,28 +363,35 @@ exports.checkIn=function(requestObject)
   var session = requestObject.Token;
   var deviceId = requestObject.DeviceId;
   //Getting the appointment ariaSer to checkin to aria
-  getAppointmentAriaSer(username, serNum).then(function(response){
-    var ariaSerNum = response[0].AppointmentAriaSer;
-    console.log('Appointment aria ser', ariaSerNum);
+  getAriaPatientId(username).then(function(response){
+    var patientId = response[0].PatientId;
+    console.log(response, ' patientId', patientId, ' username ', username);
     //Check in to aria using Johns script
-    checkIntoAria(ariaSerNum).then(function(response){
+    checkIntoAria(patientId,serNum).then(function(response){
       if(response)
       {
         console.log('Checked in successfully done in aria', response);
         //If successfully checked in change field in mysql
-        exports.runSqlQuery(queries.checkin(),[session, serNum, username]).then(function(result){
-          console.log('Checkin to appointment in sql', result);
-          exports.runSqlQuery(queries.logCheckin(),[serNum, deviceId,latitude, longitude, accuracy, new Date()]).then(function(response){
+        var promises = []
+
+        for (var i=0; i!=serNum.length; ++i){
+          console.log(serNum[i]);
+          promises.push(
+            exports.runSqlQuery(queries.checkin(),[session, serNum[i], username])
+              .then(exports.runSqlQuery(queries.logCheckin(),[serNum[i], deviceId,latitude, longitude, accuracy, new Date()])));
+        }
+
+        Q.all(promises)
+          .then(function(response){
             console.log('Checkin done successfully', 'Finished writint to database');
             r.resolve({Response:'success'});
-          }).catch(function(error){
-            console.log('error login checkin', error);
-            r.reject({Response:'error',Reason:'Unable to logCheckin parameters due to '+error});
+          })
+          .catch(function(error){
+            console.log('error checkin dur to', error);
+            r.reject({Response:'error',Reason:'CheckIn error due to '+error});
           });
-        }).catch(function(error){
-          console.log('Error inserting in sql', error);
-          r.reject({Response:'error',Reason:'Unable to Checkin patient into Opal due to,'+error});
-        });
+        
+
       }else{
         r.reject({Response:'error', Reason:'Unable to checkin Aria'});
       }
@@ -805,26 +812,40 @@ function getAppointmentAriaSer(username, appSerNum)
 {
   return exports.runSqlQuery(queries.getAppointmentAriaSer(),[username, appSerNum]);
 }
+
+function getAriaPatientId(username)
+{
+  return exports.runSqlQuery(queries.getPatientId(),[username]);
+}
+
 //Checks user into Aria
-function checkIntoAria(patientActivitySerNum)
+function checkIntoAria(patientId, serNum, username)
 {
   var r = Q.defer();
-    var url = 'http://172.26.66.41/devDocuments/screens/php/checkInPatient_David.php?CheckinVenue=8225&ScheduledActivitySer='+patientActivitySerNum;
+    var url = 'http://172.26.66.41/devDocuments/devscreens/php/checkInPatientAriaMedi.php?CheckinVenue=S1%20RECEPTION&PatientId='+patientId;
   //making request to checkin
   console.log(url);
-   request(url,function(error, response, body)
+  getAppointmentAriaSer(username, serNum).then(function(res){
+    var ariaSerNum = res[0].AppointmentAriaSer;
+    request(url,function(error, response, body)
     {
       if(error){console.log('line770,sqlInterface',error);r.reject(error);}
       if(!error&&response.statusCode=='200')
       {
-        checkIfCheckedIntoAriaHelper(patientActivitySerNum).then(function(response){
+        var promises = [];
+        for (var i=0; i!=serNum.length; ++i){
+          promises.push(checkIfCheckedIntoAriaHelper(ariaSerNum));
+        }
+        Q.all(promises).then(function(response){
               r.resolve(response);
         }).catch(function(error){
            console.log('line778',error);
           r.reject(error);
         });
+          //r.resolve(true);
       }
     });
+  });
   return r.promise;
 }
 
