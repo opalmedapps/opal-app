@@ -3,7 +3,8 @@
   "description": "Oncology Portal and Application",
   "main": "index.js",
   "authors": [
-    "David Herrera"
+    "David Herrera",
+    "Robert Maglieri"
   ],
   "license": "ISC",
   "keywords": [
@@ -21,29 +22,32 @@
     "tests"
   ],
   "dependencies": {
-    "angular-animate": "~1.4.12",
-    "angular-dynamic-locale": "~0.1.27",
-    "angular-scroll": "~1.0.0",
-    "angular-mocks": "1.4.12",
-    "angular-translate-handler-log": "2.7.2",
-    "angular-touch": "~1.4.12",
-    "angular-ui-router": "0.2.13",
-    "angular-translate-loader-partial": "~2.7.2",
-    "angular": "^1.4.12",
-    "angular-translate-loader-url": "~2.7.2",
+    "angular-animate": "^1.6.0",
+    "angular-dynamic-locale": "^0.1.27",
+    "angular-scroll": "^1.0.0",
+    "angular-mocks": "^1.6.0",
+    "angular-translate-handler-log": "^2.7.2",
+    "angular-touch": "^1.6.0",
+    "angular-ui-router": "^0.2.13",
+    "angular-translate-loader-partial": "^2.7.2",
+    "angular": "^1.6.0",
+    "angular-translate-loader-url": "^2.7.2",
     "bootstrap": "^3.3.6",
-    "angularfire": ">=1.1.3",
+    "angularfire": "^2.1.0",
     "font-awesome": "^4.6.1",
-    "ngCordova": "~0.1.24-alpha",
-    "onsenui": "~1.3.11",
-    "progressbar.js": "~0.9.0",
+    "ngCordova": "^0.1.24-alpha",
+    "onsenui": "^1.3.11",
+    "progressbar.js": "^0.9.0",
     "angular-tek-progress-bar": "^0.2.0",
-    "angular-sanitize": "~1.4.12",
+    "angular-sanitize": "^1.6.0",
     "angular-elastic": "^2.5.1",
     "angular-bootstrap": "^2.1.3",
     "angular-scroll-glue": "^2.0.7",
     "crypto-js": "^3.1.6",
-    "pdfobject": "pdfobject2#*",
-    "pdfjs-dist": "^1.6.214"
+    "firebase": "^3.6.3"
+  },
+  "resolutions": {
+    "angular": "1.6.0"
   }
+
 }
