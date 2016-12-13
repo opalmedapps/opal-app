@@ -49,6 +49,10 @@ myApp.controller('HomeController', ['$state','Appointments', 'CheckinService','$
 
         NewsBanner.setAlertOffline();
 
+        if(!localStorage.getItem('login')){
+            localStorage.setItem('login', new Date().getUTCMilliseconds());
+        }
+
         $scope.language = UserPreferences.getLanguage();
 
         console.log('Got home safely');
@@ -85,25 +89,32 @@ myApp.controller('HomeController', ['$state','Appointments', 'CheckinService','$
 
         homePageInit();
         $scope.load = function($done) {
-            UpdateUI.update('All').then(function()
-            {
-                updated=true;
-                homePageInit();
-                $done();
-            }).catch(function(error){
-                console.log(error);
-                $done();
-            });
-            $timeout(function(){
-                $done();
-            },5000);
+            refresh($done);
         };
 
         homeNavigator.on('prepop', function(event) {
 
             console.log('prepop');
-            homePageInit();
+            refresh();
         });
+
+        function refresh(done){
+            console.log(done);
+            done == undefined ? done = function () {} : done;
+
+            UpdateUI.update('All').then(function()
+            {
+                //updated=true;
+                homePageInit();
+                done();
+            }).catch(function(error){
+                console.log(error);
+                done();
+            });
+            $timeout(function(){
+                done();
+            },5000);
+        }
 
 
         function homePageInit(){
@@ -298,7 +309,7 @@ myApp.controller('HomeController', ['$state','Appointments', 'CheckinService','$
                     for (var app in todaysAppointmentsToCheckIn){
                         console.log(todaysAppointmentsToCheckIn[app].Checkin);
                         if (todaysAppointmentsToCheckIn[app].Checkin == '0'){
-                            console.log("Hes not checked in Jim")
+                            console.log("Hes not checked in Jim");
                             allCheckedIn = false;
                         }
                     }
