@@ -17,12 +17,15 @@
   "CANCERCENTER": "Centre du cancer des Cèdres",
   "CHECKED_IN": "Vous êtes enregistré!",
   "CHECKIN": "Enregistrement",
+  "CHECKIN_CALLED": "Veuillez vous dirigez vers: ",
   "CHECKIN_ERROR": "Erreur lors de l'enregistrement",
+  "CHECKIN_IN_HOSPITAL_ONLY": "Vous devez être à l'hopital pour vous enregistrer",
   "CHECKIN_MESSAGE_AFTER": "Vous êtes enregistré au rendez-vous d'aujourd'hui!",
   "CHECKIN_MESSAGE_AFTER_PLURAL": "Vous êtes enregistré aux rendez-vous d'aujourd'hui!",
   "CHECKIN_MESSAGE_BEFORE": "Enregistrez-vous à votre rendez-vous!",
   "CHECKIN_MESSAGE_BEFORE_PLURAL": "Enregistrez-vous à vos rendez-vous!",
   "CHECKIN_TO_ALL": "Je m'enregistre!",
+  "CHECKIN_NONE": "Aucun rendez-vous aujourd'hui",
   "CLINICAL_NOTES": "Notes médicales",
   "CLOSE": "Fermer",
   "COMPLETED": "Complété",
@@ -101,7 +104,7 @@
   "LEAVEMESSAGE": "Laissez-nous un message!",
   "LOADING": "Chargement",
   "LOADINGDATA": "Chargement des données",
-  "LOCATION": "Localisation",
+  "LOCATION": "Lieu d'attente",
   "LOCKEDOUT": "Verrouillé en raison de l'inactivité",
   "MAPS": "Plan",
   "MINUTES": "Minutes",
@@ -235,5 +238,6 @@
   "TOUR_MYCHART":"Dans l'onglet Dossier, vous trouverez vos rendez-vous, documents et toutes autres informations.",
   "TOUR_GENERAL": "Dans l'onglet Général, vous trouverez votre équipe soignante, des annonces générales et l'informations concernant le stationnement. Vous pouvez aussi nous laisser des commentaires!",
   "TOUR_EDUCATION": "Dans l'onglet Éducation, vous allez recevoir du matériel éducatif tout au long de votre trajet en radiothérapie. Nous allons vous envoyer des vidéos, pamphlets, brochures et documents personalisés.",
-  "TOUR_INFO": "Sélectionnez le boutton Information si vous avez besoin plus d'information! Sélectionnez fermer si vous êtes prêt à explorer Opal!"
+  "TOUR_INFO": "Sélectionnez le boutton Information si vous avez besoin plus d'information! Sélectionnez fermer si vous êtes prêt à explorer Opal!",
+  "GOTO_ROOM": "Salle de rendez-vous: "
 }

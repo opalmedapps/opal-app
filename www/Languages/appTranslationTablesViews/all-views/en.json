@@ -15,11 +15,14 @@
   "CANCEL": "Cancel",
   "CHECKED_IN": "You are checked in!",
   "CHECKIN": "Check-in",
+  "CHECKIN_CALLED": "Please go to: ",
   "CHECKIN_ERROR": "Error occurred, check in at the cancer center",
-  "CHECKIN_MESSAGE_AFTER": "You are checked in to your appointment!",
-  "CHECKIN_MESSAGE_AFTER_PLURAL": "You are checked in to your appointments!",
-  "CHECKIN_MESSAGE_BEFORE": "Check in to your appointment!",
-  "CHECKIN_MESSAGE_BEFORE_PLURAL": "Check in to your appointments!",
+  "CHECKIN_IN_HOSPITAL_ONLY": "You must be at the hospital to check in",
+  "CHECKIN_MESSAGE_AFTER": "You are checked in for your appointment!",
+  "CHECKIN_MESSAGE_AFTER_PLURAL": "You are checked in for your appointments!",
+  "CHECKIN_MESSAGE_BEFORE": "Check in for your appointment!",
+  "CHECKIN_MESSAGE_BEFORE_PLURAL": "Check in for your appointments!",
+  "CHECKIN_NONE": "There are no appointments today",
   "CHECKIN_TO_ALL": "Check me In!",
   "CLINICAL_NOTES": "Clinical Notes",
   "COMPLETED": "Completed",
@@ -81,7 +84,7 @@
   "LASTAPPOINTMENT": "Last Appointment",
   "LEAVEMESSAGE": "Leave us a message!",
   "LOADINGDATA": "Loading Data",
-  "LOCATION": "Location",
+  "LOCATION": "Waiting Location",
   "LOCKEDOUT": "Locked out due to inactivity",
   "MAPS": "Map",
   "MINUTES": "Minutes",
@@ -203,6 +206,6 @@
   "TOUR_MYCHART":"In your My Chart tab, you can see your appointments, documents and any other chart information.",
   "TOUR_GENERAL": "In your General tab, you can see your treating team, announcements and parking. You can also provide us feedback on the app!",
   "TOUR_EDUCATION": "In your Education tab, you will receive educational material as you progress through your radiotherapy. We will show you videos, booklets and documents specific to you.",
-  "TOUR_INFO": "The Information button will give you any extra information if you need it! Press close if you want to exit the tour or you can press the left arrow to see the previous tips."
-
+  "TOUR_INFO": "The Information button will give you any extra information if you need it! Press close if you want to exit the tour or you can press the left arrow to see the previous tips.",
+  "GOTO_ROOM": "Appointment Room: "
 }

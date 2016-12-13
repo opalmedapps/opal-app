@@ -193,7 +193,8 @@ myApp.service('Appointments', ['$q', 'RequestToServer','$cordovaCalendar','UserA
             appointments[i].ScheduledStartTime = $filter('formatDate')(appointments[i].ScheduledStartTime);
             //appointments[i].ScheduledStartTime = new Date(today);
             appointments[i].ScheduledEndTime =  $filter('formatDate')(appointments[i].ScheduledEndTime);
-            appointments[i].RoomLocation = appointments[i].RooomLocation
+            appointments[i].LastUpdated =  $filter('formatDate')(appointments[i].LastUpdated);
+            //appointments[i].RoomLocation = appointments[i].RoomLocation
             // appointments[i].ScheduledEndTime  = new Date(today);
             // appointments[i].ScheduledEndTime.setMinutes(appointments[i].ScheduledEndTime.getMinutes()+15);
             // today.setDate(today.getDate()+1);
@@ -717,6 +718,37 @@ myApp.service('Appointments', ['$q', 'RequestToServer','$cordovaCalendar','UserA
             appointmentsLocalStorage=[];
             calendar={};
             numberOfSessions=0;
+        },
+
+        getRecentCalledAppointment: function () {
+            var todaysAppointments = getAppointmentsInPeriod('Today');
+            console.log(todaysAppointments);
+            var now=new Date();
+
+
+            // Calculate difference between now and all appointments that are checked in and have a room
+            var timeDiff = todaysAppointments.map(function (obj) {
+                if (obj.Checkin == '1' && obj.RoomLocation && obj.Status.toLowerCase().indexOf('completed') != -1) {
+                    return Math.abs(now - obj.LastUpdated);
+                } else {
+                    return Infinity;
+                }
+            });
+
+            // Find the min difference, this is the one you are called to.
+            var lowest = 0;
+            for (var i = 1; i < timeDiff.length; i++) {
+                if (timeDiff[i] < timeDiff[lowest]) lowest = i;
+            }
+
+            if (!!timeDiff.reduce(function(a, b){ return (a === b) ? a : NaN; })){
+                return {RoomLocation: ""};
+            }
+
+            console.log(lowest);
+
+            return todaysAppointments[lowest];
         }
+
     };
 }]);

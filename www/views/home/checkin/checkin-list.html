@@ -23,11 +23,18 @@
         </ons-list-item>
     </ons-list>
     <br>
-    <div style="text-align: center; width: 90%; margin: auto">
-        <ons-button modifier="large" style="font-size: x-large" should-spin="false" var="checkInButton" disabled
-                    ng-click="checkIn.checkInToAll(checkIn.apps)" ng-class="fontSizeTitle">
+
+
+    <div uib-alert ng-show="checkIn.alert.type" style="text-align: center; width: 90%; margin: auto" type="{{checkIn.alert.type}}" class="{{fontSizeTitle}}" >
             {{checkIn.checkInMessage|translate}}
-        </ons-button>
     </div>
+
+    <div ng-hide="checkIn.alert.type" align="center" style="margin:10px">
+        <svg class="progress-circular">
+            <circle class="progress-circular__primary" cx="50%" cy="50%" r="40%" fill="none" stroke-width="10%" stroke-miterlimit="10"/>
+        </svg>
+    </div>
+
+
 
 </ons-page>
