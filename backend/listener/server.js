@@ -15,7 +15,10 @@ var serviceAccount = require("/home/robert/firebase_account/opal-dev-firebase-ad
 
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
-    databaseURL: "https://opal-dev.firebaseio.com"
+    databaseURL: "https://opal-dev.firebaseio.com",
+    databaseAuthVariableOverride: {
+        uid: "backend-worker"
+    }
 });
 
 // Get reference to correct data element
