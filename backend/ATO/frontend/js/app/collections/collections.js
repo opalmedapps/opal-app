@@ -30,10 +30,18 @@ angular.module('ATO_InterfaceApp.collections', []).
 		}
 
 		// Function to get a list of unassigned expressions
-		aliasAPI.getExpressions = function(type) { 
+		aliasAPI.getExpressions = function(sourcedbser, type) { 
 			return $http({
 				method: 'JSONP',
-				url: URLPATH+"api/alias/expressions.php?callback=JSON_CALLBACK&type="+type
+				url: URLPATH+"api/alias/expressions.php?callback=JSON_CALLBACK&sourcedbser="+sourcedbser+"&type="+type
+			});
+		}
+        
+        // Function to get a list of source databases
+        aliasAPI.getSourceDatabases = function() {
+			return $http({
+				method: 'JSONP',
+				url: URLPATH+"api/alias/source_databases.php?callback=JSON_CALLBACK"
 			});
 		}
 

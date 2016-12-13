@@ -17,25 +17,8 @@ use Database; # Use our custom database module Database.pm
 use Time::Piece; # To parse and convert date time
 
 #---------------------------------------------------------------------------------
-# Definitions:
-#	@EXPORT: 	contains a list of functions that we export by default, in this case nothing. 
-#			This avoids accidentally clashing with functions defined in the script using the module.
-#	@EXPORT_OK: 	contains a list of variables that we export on demand (ie. if we specifically requested to in another script) 
-#	%EXPORT_TAGS:	define a set of export tags. The ':AllSubs' tag exports all subroutines. This is nice 
-#			because we don't have to reveal the names of the subroutines in the other scripts that use this module. 
-#			In this case, the arrays are anonymous.
-#----------------------------------------------------------------------------------
-
-# WE EXPORT ALL SUBROUNTINES BY DEFAULT SO NO NEED TO SPECIFY
-
-#our @EXPORT		= (); 
-#our @EXPORT_OK		= ();
-#our %EXPORT_TAGS	= ( AllSubs => [qw()]);
-
-#---------------------------------------------------------------------------------
 # Connect to the database
 #---------------------------------------------------------------------------------
-
 my $SQLDatabase		= $Database::targetDatabase;
 
 #====================================================================================
@@ -45,11 +28,12 @@ sub new
 {
 	my $class = shift;
 	my $alias = {
-		_ser		=> undef,
-		_name		=> undef,
-		_type		=> undef,
-		_update		=> undef,
-		_lastupdated	=> undef,
+		_ser		    => undef,
+		_name		    => undef,
+		_type		    => undef,
+		_update		    => undef,
+		_lasttransfer	=> undef,
+        _sourcedbser    => undef,
 		_expressions	=> undef,
 	};
 
@@ -65,7 +49,7 @@ sub new
 sub setAliasSer
 {
 	my ($alias, $ser) = @_; # alias object with provided serial in arguments
-	$alias->{_ser} = $ser if defined($ser); # set the serial
+	$alias->{_ser} = $ser; # set the serial
 	return $alias->{_ser};
 }
 
@@ -75,7 +59,7 @@ sub setAliasSer
 sub setAliasName
 {
 	my ($alias, $name) = @_; # alias object with provided name in arguments
-	$alias->{_name} = $name if defined($name); # set the name
+	$alias->{_name} = $name; # set the name
 	return $alias->{_name};
 }
 
@@ -85,7 +69,7 @@ sub setAliasName
 sub setAliasType
 {
 	my ($alias, $type) = @_; # alias object with provided type in arguments
-	$alias->{_type} = $type if defined($type); # set the type
+	$alias->{_type} = $type; # set the type
 	return $alias->{_type};
 }
 
@@ -95,18 +79,28 @@ sub setAliasType
 sub setAliasUpdate
 {
 	my ($alias, $update) = @_; # alias object with provided update in arguments
-	$alias->{_update} = $update if defined($update); # set the update
+	$alias->{_update} = $update; # set the update
 	return $alias->{_update};
 }
 
 #======================================================================================
-# Subroutine to set the alias last updated
+# Subroutine to set the alias last transfer
 #======================================================================================
-sub setAliasLastUpdated
+sub setAliasLastTransfer
 {
-	my ($alias, $lastupdated) = @_; # alias object with provided LU in arguments
-	$alias->{_lastupdated} = $lastupdated if defined($lastupdated); # set the LU
-	return $alias->{_lastupdated};
+	my ($alias, $lasttransfer) = @_; # alias object with provided LT in arguments
+	$alias->{_lasttransfer} = $lasttransfer; # set the LT
+	return $alias->{_lasttransfer};
+}
+
+#======================================================================================
+# Subroutine to set the source db serial
+#======================================================================================
+sub setAliasSourceDatabaseSer
+{
+	my ($alias, $sourcedbser) = @_; # alias object with provided id in arguments
+	$alias->{_sourcedbser} = $sourcedbser; # set the serial
+	return $alias->{_sourcedbser};
 }
 
 #======================================================================================
@@ -115,7 +109,7 @@ sub setAliasLastUpdated
 sub setAliasExpressions
 {
 	my ($alias, @expressions) = @_; # alias object with provided expressions in arguments
-	@{$alias->{_expressions}} = @expressions if (@expressions); # set the expressions array
+	@{$alias->{_expressions}} = @expressions; # set the expressions array
 	return @{$alias->{_expressions}};
 }
 
@@ -156,12 +150,21 @@ sub getAliasUpdate
 }
 
 #======================================================================================
-# Subroutine to get the alias last updated
+# Subroutine to get the alias last transfer
 #======================================================================================
-sub getAliasLastUpdated
+sub getAliasLastTransfer
 {
 	my ($alias) = @_; # our alias object
-	return $alias->{_lastupdated};
+	return $alias->{_lasttransfer};
+}
+
+#======================================================================================
+# Subroutine to get the alias source database serial
+#======================================================================================
+sub getAliasSourceDatabaseSer
+{
+	my ($alias) = @_; # our alias object
+	return $alias->{_sourcedbser};
 }
 
 #======================================================================================
@@ -180,7 +183,7 @@ sub getAliasesMarkedForUpdate
 {
 	my ($aliasType) = @_; # the type of alias from args
 	my @aliasList = (); # initialize our list of alias objects
-	my ($ser, $type, $lastupdated);
+	my ($ser, $type, $sourcedbser, $lasttransfer);
 	my @expressions;
 
 	#======================================================================================
@@ -190,7 +193,8 @@ sub getAliasesMarkedForUpdate
 		SELECT DISTINCT
 			Alias.AliasSerNum,
 			Alias.AliasType,
-			Alias.LastTransferred
+			Alias.LastTransferred,
+            Alias.SourceDatabaseSerNum
 		FROM
 			Alias
 		WHERE
@@ -211,14 +215,16 @@ sub getAliasesMarkedForUpdate
 
 		my $Alias = new Alias(); # alias object
 
-		$ser		= $data[0];
-		$type		= $data[1];
-		$lastupdated	= $data[2];
+		$ser		    = $data[0];
+		$type		    = $data[1];
+		$lasttransfer	= $data[2];
+        $sourcedbser    = $data[3];
 
 		# set alias information
 		$Alias->setAliasSer($ser);
 		$Alias->setAliasType($type);
-		$Alias->setAliasLastUpdated($lastupdated);
+		$Alias->setAliasLastTransfer($lasttransfer);
+        $Alias->setAliasSourceDatabaseSer($sourcedbser);
 
 		# get expressions for this alias
 		@expressions	= $Alias->getAliasExpressionsFromOurDB();
@@ -255,8 +261,8 @@ sub getAliasExpressionsFromOurDB
 			Alias,
 			AliasExpression
 		WHERE
-			Alias.AliasSerNum		= $ser
-		AND 	AliasExpression.AliasSerNum	= Alias.AliasSerNum
+			Alias.AliasSerNum		    = $ser
+		AND AliasExpression.AliasSerNum	= Alias.AliasSerNum
 	";
 
 	# prepare query
@@ -281,7 +287,7 @@ sub getAliasExpressionsFromOurDB
 #======================================================================================
 # Subroutine to set/update the "last transferred" field to current time 
 #======================================================================================
-sub setAliasLastUpdatedIntoOurDB
+sub setAliasLastTransferIntoOurDB
 {	
 	my ($current_datetime) = @_; # our current datetime in arguments
 

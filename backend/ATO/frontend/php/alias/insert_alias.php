@@ -17,6 +17,7 @@
 	$aliasSer 	    = $_POST['serial'];
 	$aliasType 	    = $_POST['type'];
     $aliasEduMat    = $_POST['eduMat'];
+    $aliasSourceDB  = $_POST['source_db'];
 	$aliasTerms	    = $_POST['terms'];
 
 	// Construct array
@@ -28,6 +29,7 @@
  		'serial' 	        => $aliasSer,
         'type' 		        => $aliasType,
         'edumat'            => $aliasEduMat,
+        'source_db'         => $aliasSourceDB,
 		'terms' 	        => $aliasTerms
 	);
 
