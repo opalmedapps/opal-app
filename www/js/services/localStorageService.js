@@ -46,14 +46,14 @@ myApp.service('LocalStorage',['UserAuthorizationInfo', 'EncryptionService',funct
 		WriteToLocalStorage:function(section, data)
 		{
 			//Make copy of data
-			temp = angular.copy(data);
+			var temp = angular.copy(data);
 
 			//Convert into string
 			console.log(temp);
-			temp = JSON.stringify(temp);
+			/*temp = JSON.stringify(temp);
 
 			//Parse 
-			temp = JSON.parse(temp);
+			temp = JSON.parse(temp);*/
 			//Encrypt data
 			temp = EncryptionService.encryptData(temp);
 
@@ -73,6 +73,8 @@ myApp.service('LocalStorage',['UserAuthorizationInfo', 'EncryptionService',funct
 					window.localStorage.setItem(UserAuthorizationInfo.getUsername(),JSON.stringify(object));
 
 				}else{
+					console.log("Overwriting section");
+
 					storage[section]=temp;
 					window.localStorage.setItem(UserAuthorizationInfo.getUsername(),JSON.stringify(storage));
 				}
@@ -132,10 +134,10 @@ myApp.service('LocalStorage',['UserAuthorizationInfo', 'EncryptionService',funct
 		**/
 		resetUserLocalStorage:function()
 		{
-			window.localStorage.removeItem('UserAuthorizationInfo');
+			/*window.localStorage.removeItem('UserAuthorizationInfo');
 			window.localStorage.removeItem(UserAuthorizationInfo.getUsername());
-			window.localStorage.removeItem(UserAuthorizationInfo.getUsername()+'/Timestamps');
-			
+			window.localStorage.removeItem(UserAuthorizationInfo.getUsername()+'/Timestamps');*/
+			localStorage.clear();
 		}
 
 

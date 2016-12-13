@@ -187,6 +187,10 @@ myApp.config(function () {
     firebase.initializeApp(config);
 });
 
+myApp.config(['$qProvider', function ($qProvider) {
+    $qProvider.errorOnUnhandledRejections(false);
+}]);
+
 /**
  *@ngdoc service
  *@name MUHCApp.run

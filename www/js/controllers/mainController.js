@@ -26,7 +26,7 @@ angular.module('MUHCApp').controller('MainController', ["$state",'$timeout', '$r
 //Ask for an update every 2 minutes
     setInterval(function()
     {
-        console.log("calling  refresh bg");
+        //console.log("calling  refresh bg");
         backgroundRefresh();
     },120000);
 
@@ -64,14 +64,14 @@ angular.module('MUHCApp').controller('MainController', ["$state",'$timeout', '$r
     }
 
     function resetTimer(e) {
-        console.log('resetting timer');
+        //console.log('resetting timer');
         window.clearTimeout(timeoutID);
 
         goActive();
     }
 
     function goInactive() {
-        console.log('Currently going inactive');
+        //console.log('Currently going inactive');
         resetTimer();
         if($state.current.name=='Home')
         {
