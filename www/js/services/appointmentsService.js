@@ -736,6 +736,7 @@ myApp.service('Appointments', ['$q', 'RequestToServer','$cordovaCalendar','UserA
                 if (timeDiff[i] < timeDiff[lowest]) lowest = i;
             }
 
+            // Check if all array elements are the same.
             if (!!timeDiff.reduce(function(a, b){ return (a === b) ? a : NaN; })){
                 return {RoomLocation_EN: ""};
             }
