@@ -26,10 +26,8 @@ use Priority; # Our priority module
 use Diagnosis; # Our diagnosis module
 
 #---------------------------------------------------------------------------------
-# Connect to the databases
+# Connect to our database
 #---------------------------------------------------------------------------------
-
-my $sourceDatabase	= $Database::sourceDatabase;
 my $SQLDatabase		= $Database::targetDatabase;
 
 #====================================================================================
@@ -40,12 +38,17 @@ sub new
 	my $class = shift;
 	my $task = {
 		_ser			    => undef,
-		_ariaser		    => undef,
+        _sourcedbser        => undef,
+		_sourceuid		    => undef,
 		_patientser		    => undef,
 		_aliasexpressionser	=> undef,
 		_duedatetime		=> undef,
         _diagnosisser       => undef,
         _priorityser        => undef,
+		_creationdate		=> undef,
+		_status			    => undef,
+        _state              => undef,
+		_completiondate		=> undef,    
 	};
 
 	# bless associates an object with a class so Perl knows which package to search for
@@ -65,6 +68,16 @@ sub setTaskSer
 }
 
 #====================================================================================
+# Subroutine to set the task source database serial
+#====================================================================================
+sub setTaskSourceDatabaseSer
+{
+	my ($task, $sourcedbser) = @_; # task object with provided serial in arguments
+	$task->{_sourcedbser} = $sourcedbser; # set the ser
+	return $task->{_sourcedbser};
+}
+
+#====================================================================================
 # Subroutine to set the task patient serial
 #====================================================================================
 sub setTaskPatientSer
@@ -75,13 +88,13 @@ sub setTaskPatientSer
 }
 
 #====================================================================================
-# Subroutine to set the task aria serial
+# Subroutine to set the task uid
 #====================================================================================
-sub setTaskAriaSer
+sub setTaskSourceUID
 {
-	my ($task, $ariaser) = @_; # task object with provided serial in arguments
-	$task->{_ariaser} = $ariaser; # set the ser
-	return $task->{_ariaser};
+	my ($task, $sourceuid) = @_; # task object with provided id in arguments
+	$task->{_sourceuid} = $sourceuid; # set the id
+	return $task->{_sourceuid};
 }
 
 #====================================================================================
@@ -102,6 +115,46 @@ sub setTaskDueDateTime
 	my ($task, $duedatetime) = @_; # task object with provided due datetime in arguments
 	$task->{_duedatetime} = $duedatetime; # set the due datetime
 	return $task->{_duedatetime};
+}
+
+#====================================================================================
+# Subroutine to set the task creation date
+#====================================================================================
+sub setTaskCreationDate
+{
+	my ($task, $creationdate) = @_; # task object with provided creation date in arguments
+	$task->{_creationdate} = $creationdate; # set the creation date
+	return $task->{_creationdate};
+}
+
+#====================================================================================
+# Subroutine to set the task status
+#====================================================================================
+sub setTaskStatus
+{
+	my ($task, $status) = @_; # task object with provided status in arguments
+	$task->{_status} = $status; # set the status
+	return $task->{_status};
+}
+
+#====================================================================================
+# Subroutine to set the task state
+#====================================================================================
+sub setTaskState
+{
+	my ($task, $state) = @_; # task object with provided state in arguments
+	$task->{_state} = $state; # set the state
+	return $task->{_state};
+}
+
+#====================================================================================
+# Subroutine to set the task completion date
+#====================================================================================
+sub setTaskCompletionDate
+{
+	my ($task, $completiondate) = @_; # task object with provided completion date in arguments
+	$task->{_completiondate} = $completiondate; # set the date
+	return $task->{_completiondate};
 }
 
 #====================================================================================
@@ -134,6 +187,15 @@ sub getTaskSer
 }
 
 #====================================================================================
+# Subroutine to get the Task source database serial
+#====================================================================================
+sub getTaskSourceDatabaseSer
+{
+	my ($task) = @_; # our task object
+	return $task->{_sourcedbser};
+}
+
+#====================================================================================
 # Subroutine to get the Task patient serial
 #====================================================================================
 sub getTaskPatientSer
@@ -143,12 +205,12 @@ sub getTaskPatientSer
 }
 
 #====================================================================================
-# Subroutine to get the task aria serial
+# Subroutine to get the task uid
 #====================================================================================
-sub getTaskAriaSer
+sub getTaskSourceUID
 {
 	my ($task) = @_; # our task object
-	return $task->{_ariaser};
+	return $task->{_sourceuid};
 }
 
 #====================================================================================
@@ -170,6 +232,42 @@ sub getTaskDueDateTime
 }
 
 #====================================================================================
+# Subroutine to get the task creation date 
+#====================================================================================
+sub getTaskCreationDate
+{
+	my ($task) = @_; # our task object
+	return $task->{_creationdate};
+}
+
+#====================================================================================
+# Subroutine to get the task status
+#====================================================================================
+sub getTaskStatus
+{
+	my ($task) = @_; # our task object
+	return $task->{_status};
+}
+
+#====================================================================================
+# Subroutine to get the task state
+#====================================================================================
+sub getTaskState
+{
+	my ($task) = @_; # our task object
+	return $task->{_state};
+}
+
+#====================================================================================
+# Subroutine to get the task completion date 
+#====================================================================================
+sub getTaskCompletionDate
+{
+	my ($task) = @_; # our task object
+	return $task->{_completiondate};
+}
+
+#====================================================================================
 # Subroutine to get the Task priority serial
 #====================================================================================
 sub getTaskPrioritySer
@@ -188,7 +286,7 @@ sub getTaskDiagnosisSer
 }
 
 #======================================================================================
-# Subroutine to get tasks from the ARIA db for automatic cron
+# Subroutine to get tasks from the source db
 #======================================================================================
 sub getTasksFromSourceDB
 {
@@ -197,8 +295,9 @@ sub getTasksFromSourceDB
 	my @taskList = (); # initialize a list for task objects
 
 	# when we retrieve query results
-	my ($ariaser, $expressionname, $duedatetime, $priorityser, $diagnosisser); 
-    my $lastupdated;
+	my ($sourceuid, $expressionname, $duedatetime, $priorityser, $diagnosisser); 
+    my ($creationdate, $status, $state, $completiondate);
+    my $lasttransfer;
 
     # retrieve all aliases that are marked for update
     my @aliasList = Alias::getAliasesMarkedForUpdate('Task');
@@ -206,90 +305,138 @@ sub getTasksFromSourceDB
 	foreach my $Patient (@patientList) {
 
 		my $patientSer		    = $Patient->getPatientSer(); # get patient serial
-		my $ariaSer		        = $Patient->getPatientAriaSer(); # get aria serial
-		my $patientlastupdated	= $Patient->getPatientLastUpdated(); # get last updated
+		my $patientSourceUID    = $Patient->getPatientSourceUID(); # get patient uid
+		my $patientLastTransfer	= $Patient->getPatientLastTransfer(); # get last transfer
 
         foreach my $Alias (@aliasList) {
 
             my $aliasSer            = $Alias->getAliasSer(); # get alias serial
             my @expressions         = $Alias->getAliasExpressions(); 
-            my $aliaslastupdated    = $Alias->getAliasLastUpdated();
+            my $sourceDBSer         = $Alias->getAliasSourceDatabaseSer();
+            my $aliasLastTransfer   = $Alias->getAliasLastTransfer();
+
 	        # convert expression list into a string enclosed in quotes
 		    my $expressionText = join ',', map { qq/'$_->{_name}'/ } @expressions;
 
             # compare last updates to find the earliest date 
-            my $formatted_PLU = Time::Piece->strptime($patientlastupdated, "%Y-%m-%d %H:%M:%S");
-            my $formatted_ALU = Time::Piece->strptime($aliaslastupdated, "%Y-%m-%d %H:%M:%S");
+            my $formatted_PLU = Time::Piece->strptime($patientLastTransfer, "%Y-%m-%d %H:%M:%S");
+            my $formatted_ALU = Time::Piece->strptime($aliasLastTransfer, "%Y-%m-%d %H:%M:%S");
             # get the diff in seconds
             my $date_diff = $formatted_PLU - $formatted_ALU;
             if ($date_diff < 0) {
-                $lastupdated = $patientlastupdated;
+                $lasttransfer = $patientLastTransfer;
             } else {
-                $lastupdated = $aliaslastupdated;
+                $lasttransfer = $aliasLastTransfer;
             }
 
-    		my $taskInfo_sql = "
-	    		SELECT DISTINCT
-		    		NonScheduledActivity.NonScheduledActivitySer,
-			    	vv_ActivityLng.Expression1, 
-				    NonScheduledActivity.DueDateTime
-    			FROM  
-	    			Patient,
-		    		NonScheduledActivity,
-			    	ActivityInstance,
-           		    Activity,
-    	           	vv_ActivityLng
-            	WHERE     
-                     		NonScheduledActivity.ActivityInstanceSer 	= ActivityInstance.ActivityInstanceSer
-	                AND 	ActivityInstance.ActivitySer 			    = Activity.ActivitySer
-        	        AND 	Activity.ActivityCode 				        = vv_ActivityLng.LookupValue
-    	    		AND 	Patient.PatientSer 				            = NonScheduledActivity.PatientSer     
-	    		    AND	    Patient.PatientSer				            = '$ariaSer'
-		        	AND 	NonScheduledActivity.ObjectStatus 		    != 'Deleted' 
-			        AND 	NonScheduledActivity.HstryDateTime		    > '$lastupdated' 
-                    AND     vv_ActivityLng.Expression1                  IN ($expressionText)
-      		";
-	    	# prepare query
-    		my $query = $sourceDatabase->prepare($taskInfo_sql)
-	    		or die "Could not prepare query: " . $sourceDatabase->errstr;
+            # ARIA 
+            if ($sourceDBSer eq 1) {
 
-		    # execute query
-    		$query->execute()
-	    		or die "Could not execute query: " . $query->errstr;
+                my $sourceDatabase = Database::connectToSourceDatabase($sourceDBSer);
+        		my $taskInfo_sql = "
+                    use variansystem;
+                    WITH a AS (
+        	    		SELECT DISTINCT
+	        	    		NonScheduledActivity.NonScheduledActivitySer,
+		        	    	vv_ActivityLng.Expression1, 
+			        	    NonScheduledActivity.DueDateTime,
+                            NonScheduledActivity.CreationDate,
+                            NonScheduledActivity.NonScheduledActivityCode,
+                            NonScheduledActivity.ObjectStatus
+            			FROM  
+	            			Patient,
+		            		NonScheduledActivity,
+			            	ActivityInstance,
+           		            Activity,
+    	           	        vv_ActivityLng
+                    	WHERE     
+                         	NonScheduledActivity.ActivityInstanceSer 	= ActivityInstance.ActivityInstanceSer
+	                    AND ActivityInstance.ActivitySer 			    = Activity.ActivitySer
+    	                AND Activity.ActivityCode 				        = vv_ActivityLng.LookupValue
+    	    	        AND Patient.PatientSer 				            = NonScheduledActivity.PatientSer     
+	    		        AND	Patient.PatientSer				            = '$patientSourceUID'
+	        	        AND NonScheduledActivity.HstryDateTime		    > '$lasttransfer' 
+                        AND vv_ActivityLng.Expression1                  IN ($expressionText)
+                    ), b AS (
+                  
+                        SELECT DISTINCT
+                            MIN(CONVERT(VARCHAR(19), NonScheduledActivityMH.HstryDateTime, 100)) HstryDateTime,
+                            NonScheduledActivityMH.NonScheduledActivitySer
+                        FROM
+                            NonScheduledActivityMH,
+                            a
+                        WHERE
+                            NonScheduledActivityMH.NonScheduledActivitySer  = a.NonScheduledActivitySer
+                        AND NonScheduledActivityMH.NonScheduledActivityCode = 'Completed'
+                        GROUP BY
+                            NonScheduledActivityMH.NonScheduledActivitySer
+                    )
+               	    SELECT DISTINCT
+	        	    	a.NonScheduledActivitySer,
+		        	   	a.Expression1, 
+    		            a.DueDateTime,
+                        a.CreationDate,
+                        a.NonScheduledActivityCode,
+                        a.ObjectStatus,
+                        b.HstryDateTime
+                    FROM
+                        a
+                    LEFT JOIN b
+                    ON
+                        a.NonScheduledActivitySer   = b.NonScheduledActivitySer
+         		";
+	        	# prepare query
+    		    my $query = $sourceDatabase->prepare($taskInfo_sql)
+	    		    or die "Could not prepare query: " . $sourceDatabase->errstr;
 
-            my $data = $query->fetchall_arrayref();
-    		foreach my $row (@$data) {
+    		    # execute query
+        		$query->execute()
+	        		or die "Could not execute query: " . $query->errstr;
+
+                my $data = $query->fetchall_arrayref();
+        		foreach my $row (@$data) {
 		
-	    		my $task = new Task(); # new task object
+	        		my $task = new Task(); # new task object
 
-    			$ariaser	    = $row->[0];
-    			$expressionname	= $row->[1];
-	    		$duedatetime	= convertDateTime($row->[2]); # convert date format
-			
-                $priorityser	= Priority::getClosestPriority($patientSer, $duedatetime);
-    			$diagnosisser	= Diagnosis::getClosestDiagnosis($patientSer, $duedatetime);
+    		    	$sourceuid	    = $row->[0];
+    			    $expressionname	= $row->[1];
+    	    		$duedatetime	= convertDateTime($row->[2]); # convert date format
+              	    $creationdate   = convertDateTime($row->[3]);
+                    $status         = $row->[4];
+                    $state          = $row->[5];
+                    $completiondate = convertDateTime($row->[6]);
 
-                # Search through alias expression list to find associated
-    			# expression serial number (in our DB)
-	    		my $expressionser;
-		    	foreach my $checkExpression (@expressions) {
+                    $priorityser	= Priority::getClosestPriority($patientSer, $duedatetime);
+    		    	$diagnosisser	= Diagnosis::getClosestDiagnosis($patientSer, $duedatetime);
     
-	    			if ($checkExpression->{_name} eq $expressionname) { # match
-    
-		    			$expressionser = $checkExpression->{_ser};
-			    		last; # break out of loop
-				    }
-    			}
+                    # Search through alias expression list to find associated
+    	    		# expression serial number (in our DB)
+	    	    	my $expressionser;
+		    	    foreach my $checkExpression (@expressions) {
+        
+	        			if ($checkExpression->{_name} eq $expressionname) { # match
+        
+		        			$expressionser = $checkExpression->{_ser};
+			        		last; # break out of loop
+				        }
+        			}
+        	       
+        			$task->setTaskPatientSer($patientSer);
+	        		$task->setTaskSourceUID($sourceuid); # assign id
+                    $task->setTaskSourceDatabaseSer($sourceDBSer);
+		        	$task->setTaskAliasExpressionSer($expressionser); # assign expression serial
+			        $task->setTaskDueDateTime($duedatetime); # assign duedatetime
+    				$task->setTaskPrioritySer($priorityser);
+	    		    $task->setTaskDiagnosisSer($diagnosisser);
+			        $task->setTaskCreationDate($creationdate); # assign creation date
+    			    $task->setTaskStatus($status); # assign status
+	    		    $task->setTaskCompletionDate($completiondate); # assign completion date
+		    	    $task->setTaskState($state); # assign state
 
-    			$task->setTaskPatientSer($patientSer);
-	    		$task->setTaskAriaSer($ariaser); # assign id
-		    	$task->setTaskAliasExpressionSer($expressionser); # assign expression serial
-			    $task->setTaskDueDateTime($duedatetime); # assign duedatetime
-				$task->setTaskPrioritySer($priorityser);
-			    $task->setTaskDiagnosisSer($diagnosisser);
-
-    			push(@taskList, $task);
-				
+        			push(@taskList, $task);
+		    		
+                }
+	    	 				
 	    	}
 
         }
@@ -304,14 +451,17 @@ sub getTasksFromSourceDB
 #======================================================================================
 sub inOurDatabase
 {
-	my ($task) = @_; # our task object	
-	my $ariaser = $task->getTaskAriaSer(); # retrieve Task aria serial
+	my ($task) = @_; # our task object
 
-	my $TaskAriaSerInDB = 0; # false by default. Will be true if task exists
+	my $sourceuid   = $task->getTaskSourceUID(); # retrieve Task uid
+    my $sourcedbser = $task->getTaskSourceDatabaseSer();
+
+	my $TaskSourceUIDInDB = 0; # false by default. Will be true if task exists
 	my $ExistingTask = (); # data to be entered if task exists
 
 	# Other task variable, if task exists
 	my ($ser, $patientser, $aliasexpressionser, $duedatetime, $priorityser, $diagnosisser);
+    my ($creationdate, $status, $state, $completiondate);
 
 	my $inDB_sql = "
 		SELECT
@@ -321,11 +471,15 @@ sub inOurDatabase
 			Task.TaskSerNum,
 			Task.PatientSerNum,
             Task.PrioritySerNum,
-            Task.DiagnosisSerNum
+            Task.DiagnosisSerNum,
+            Task.CreationDate,
+            Task.Status,
+            Task.State,
+            Task.CompletionDate
 		FROM
 			Task
 		WHERE
-			Task.TaskAriaSer = $ariaser
+			Task.TaskAriaSer = $sourceuid
 	";
 
 	# prepare query
@@ -338,27 +492,36 @@ sub inOurDatabase
 	
 	while (my @data = $query->fetchrow_array()) {
 
-		$TaskAriaSerInDB	= $data[0];
+		$TaskSourceUIDInDB	= $data[0];
 		$aliasexpressionser	= $data[1];
 		$duedatetime		= $data[2];
 		$ser			    = $data[3];
 		$patientser		    = $data[4];
         $priorityser        = $data[5];
         $diagnosisser       = $data[6];
+        $creationdate       = $data[7];
+        $status             = $data[8];
+        $state              = $data[9];
+        $completiondate     = $data[10];
 	}
 
-	if ($TaskAriaSerInDB) {
+	if ($TaskSourceUIDInDB) {
 
 		$ExistingTask = new Task(); # initialize task object
 
-		$ExistingTask->setTaskAriaSer($TaskAriaSerInDB); # set the task aria serial
+		$ExistingTask->setTaskSourceUID($TaskSourceUIDInDB); # set the task uid
+        $ExistingTask->setTaskSourceDatabaseSer($sourcedbser);
 		$ExistingTask->setTaskAliasExpressionSer($aliasexpressionser); # set the expression serial
 		$ExistingTask->setTaskDueDateTime($duedatetime); # set the due datetime
 		$ExistingTask->setTaskSer($ser);
 		$ExistingTask->setTaskPatientSer($patientser);
         $ExistingTask->setTaskPrioritySer($priorityser);
         $ExistingTask->setTaskDiagnosisSer($diagnosisser);
-		
+		$ExistingTask->setTaskStatus($status); # set the status
+		$ExistingTask->setTaskCreationDate($creationdate); # set the creation date
+		$ExistingTask->setTaskCompletionDate($completiondate); # set the completion date
+		$ExistingTask->setTaskState($state); # set the state
+
 		return $ExistingTask; # this is true (ie. task exists, return object)
 	}
 	
@@ -373,28 +536,43 @@ sub insertTaskIntoOurDB
 	my ($task) = @_; # our task object to insert
 
 	my $patientser		    = $task->getTaskPatientSer();
-	my $ariaser		        = $task->getTaskAriaSer();
+	my $sourceuid           = $task->getTaskSourceUID();
+    my $sourcedbser         = $task->getTaskSourceDatabaseSer();
 	my $aliasexpressionser	= $task->getTaskAliasExpressionSer();
 	my $duedatetime		    = $task->getTaskDueDateTime();
 	my $diagnosisser		= $task->getTaskDiagnosisSer();
 	my $priorityser		    = $task->getTaskPrioritySer();
+	my $creationdate	    = $task->getTaskCreationDate();
+	my $status		        = $task->getTaskStatus();
+	my $completiondate	    = $task->getTaskCompletionDate();
+	my $state		        = $task->getTaskState();
 
 	my $insert_sql = "
 		INSERT INTO 
 			Task (
 				PatientSerNum,
+                SourceDatabaseSerNum,
 				TaskAriaSer,
 				AliasExpressionSerNum,
 				DueDateTime,
+                CreationDate,
+                Status,
+                State,
+                CompletionDate,
                 PrioritySerNum,
                 DiagnosisSerNum,
                 DateAdded
 			)
 		VALUES (
 			'$patientser',
-			'$ariaser',
+            '$sourcedbser',
+			'$sourceuid',
 			'$aliasexpressionser',
 			'$duedatetime',
+            '$creationdate',
+            '$status',
+            '$state',
+            '$completiondate',
             '$priorityser',
             '$diagnosisser',
             NOW()
@@ -425,11 +603,16 @@ sub updateDatabase
 {
 	my ($task) = @_; # our task object to update
 
-	my $ariaser		        = $task->getTaskAriaSer();
+	my $sourceuid	        = $task->getTaskSourceUID();
+    my $sourcedbser         = $task->getTaskSourceDatabaseSer();
 	my $aliasexpressionser	= $task->getTaskAliasExpressionSer();
 	my $duedatetime		    = $task->getTaskDueDateTime();
 	my $diagnosisser		= $task->getTaskDiagnosisSer();
 	my $priorityser		    = $task->getTaskPrioritySer();
+	my $creationdate	    = $task->getTaskCreationDate();
+	my $status		        = $task->getTaskStatus();
+	my $completiondate	    = $task->getTaskCompletionDate();
+	my $state		        = $task->getTaskState();
 
 	my $update_sql = "
 		
@@ -438,10 +621,15 @@ sub updateDatabase
 		SET
 			AliasExpressionSerNum	= '$aliasexpressionser',
 			DueDateTime		        = '$duedatetime',
+ 			Status			        = '$status',
+            State                   = '$state',
+			CreationDate		    = '$creationdate',
+			CompletionDate		    = '$completiondate',           
             PrioritySerNum          = '$priorityser',
             DiagnosisSerNum         = '$diagnosisser'
 		WHERE
-			TaskAriaSer		= '$ariaser'
+			TaskAriaSer		        = '$sourceuid'
+        AND SourceDatabaseSerNum    = '$sourcedbser'
 	";
 
 	# prepare query
@@ -465,19 +653,26 @@ sub compareWith
 
 	# retrieve parameters
 	# Suspect Task...
-	my $Sduedatetime	= $SuspectTask->getTaskDueDateTime();
+	my $Sduedatetime	    = $SuspectTask->getTaskDueDateTime();
 	my $Saliasexpressionser	= $SuspectTask->getTaskAliasExpressionSer();
     my $Spriorityser        = $SuspectTask->getTaskPrioritySer();
     my $Sdiagnosisser       = $SuspectTask->getTaskDiagnosisSer();
+	my $Screationdate	    = $SuspectTask->getTaskCreationDate();
+	my $Sstatus		        = $SuspectTask->getTaskStatus();
+	my $Scompletiondate	    = $SuspectTask->getTaskCompletionDate();
+	my $Sstate		        = $SuspectTask->getTaskState();
 
 	# Original Task...
-	my $Oduedatetime	= $OriginalTask->getTaskDueDateTime();
+	my $Oduedatetime	    = $OriginalTask->getTaskDueDateTime();
 	my $Oaliasexpressionser	= $OriginalTask->getTaskAliasExpressionSer();
     my $Opriorityser        = $OriginalTask->getTaskPrioritySer();
     my $Odiagnosisser       = $OriginalTask->getTaskDiagnosisSer();
+	my $Ocreationdate	    = $OriginalTask->getTaskCreationDate();
+	my $Ostatus		        = $OriginalTask->getTaskStatus();
+	my $Ocompletiondate	    = $OriginalTask->getTaskCompletionDate();
+	my $Ostate	    	    = $OriginalTask->getTaskState();
 
 	# go through each parameter
-	
 	if ($Sduedatetime ne $Oduedatetime) {
 
 		print "Task Due Date has changed from '$Oduedatetime' to '$Sduedatetime'\n";
@@ -501,6 +696,30 @@ sub compareWith
 		print "Task Diagnosis serial has changed from '$Odiagnosisser' to '$Sdiagnosisser'\n";
 		my $updatedDiagnosisSer = $UpdatedTask->setTaskDiagnosisSer($Sdiagnosisser); # update 
 		print "Will update database entry to '$updatedDiagnosisSer'.\n";
+	}
+	if ($Screationdate ne $Ocreationdate) {
+
+		print "Task Creation Date has changed from '$Ocreationdate' to '$Screationdate'\n";
+		my $updatedCreationDate = $UpdatedTask->setTaskCreationDate($Screationdate); # update 
+		print "Will update database entry to '$updatedCreationDate'.\n";
+	}
+	if ($Sstatus ne $Ostatus) {
+
+		print "Task Status has changed from '$Ostatus' to '$Sstatus'\n";
+		my $updatedStatus = $UpdatedTask->setTaskStatus($Sstatus); # update 
+		print "Will update database entry to '$updatedStatus'.\n";
+	}
+    if ($Sstate ne $Ostate) {
+
+		print "Task State has changed from '$Ostate' to '$Sstate'\n";
+		my $updatedState = $UpdatedTask->setTaskState($Sstate); # update 
+		print "Will update database entry to '$updatedState'.\n";
+	}
+	if ($Scompletiondate ne $Ocompletiondate) {
+
+		print "Task Completion Date has changed from '$Ocompletiondate' to '$Scompletiondate'\n";
+		my $updatedCompletionDate = $UpdatedTask->setTaskCompletionDate($Scompletiondate); # update 
+		print "Will update database entry to '$updatedCompletionDate'.\n";
 	}
 
 	return $UpdatedTask;

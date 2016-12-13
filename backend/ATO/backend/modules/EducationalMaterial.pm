@@ -24,11 +24,11 @@ use Diagnosis; # Diagnosis.pm
 use Appointment; # Our custom appointment module
 use Filter; # Our custom filter module
 use EducationalMaterialControl; # Our custom educatinal material control module
+use PushNotification;
 
 #---------------------------------------------------------------------------------
 # Connect to the databases
 #---------------------------------------------------------------------------------
-my $sourceDatabase	= $Database::sourceDatabase;
 my $SQLDatabase		= $Database::targetDatabase;
 
 #====================================================================================
@@ -158,7 +158,7 @@ sub publishEducationalMaterials
 
             # Retrieve all patient's appointment(s) up until tomorrow
             my @patientAppointments = Appointment::getAllPatientsAppointmentsFromOurDB($patientSer);
-            if (!@patientAppointments) {next;}
+            #if (!@patientAppointments) {next;}
 
             my @expressionNames = ();
             my @diagnosisNames = ();
@@ -195,7 +195,7 @@ sub publishEducationalMaterials
                 # Finding the intersection of the patient's diagnosis and the diagnosis filters
                 # If there is an intersection, then patient is part of this publishing announcement
                 # If not, then continue to next announcement
-                if (!intersect(@dignosisFilters, @diagnosisNames)) {next;} 
+                if (!intersect(@diagnosisFilters, @diagnosisNames)) {next;} 
             }
 
             # Fetch doctor filters (if any)
@@ -220,7 +220,13 @@ sub publishEducationalMaterials
 
             if (!$eduMat->inOurDatabase()) {
     
-                $eduMat->insertEducationalMaterialIntoOurDB();
+                $eduMat = $eduMat->insertEducationalMaterialIntoOurDB();
+    
+                # send push notification
+                my $eduMatSer = $eduMat->getEduMatSer();
+                my $patientSer = $eduMat->getEduMatPatientSer();
+                PushNotification::sendPushNotification($patientSer, $eduMatSer, 'EducationalMaterial');
+
             }
 
         } # End forEach Educational Material Control   
