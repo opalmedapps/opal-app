@@ -9,7 +9,7 @@ var q 			        =      	require("q");
 
 // Initialize firebase connection
 
-admin.database.enableLogging(true);
+//admin.database.enableLogging(true);
 
 var serviceAccount = require("/home/robert/firebase_account/firebase-brilliant-inferno-767-firebase-adminsdk-dtkoi-829de7ac9e.json");
 
@@ -30,26 +30,37 @@ setInterval(function(){
 },30000);
 
 // Listen for firebase changes and send responses for requests
+console.log('Initialize listeners: ');
+listenForRegularRequest();
+listenForResetPassword();
 
-listenAndSend();
-
-function listenAndSend(){
-    ref.on('child_added', function(snapshot){
-        snapshot.forEach(function(childSnapshot){
-            	var headers = {key: childSnapshot.key,objectRequest: childSnapshot.val()};
-		console.log("Toplevel snapshot key", snapshot.key);
-		console.log("Childlevel snapshot key", childSnapshot.key);
-		if(!(snapshot.key === "users" || snapshot.key === "passwordResetResponses")){
-            		processRequest(headers).then(function(response){
-				console.log('Got' + snapshot.key);
-                		uploadToFirebase(response, snapshot.key);
-			}).catch(function(error){
-				console.log("Error processing request!", error);
-			});
-		}
-	});
-
+function listenForRegularRequest(){
+    console.log('Starting regular request listener.');
+    var requestType = 'requests';
+    ref.child('requests').on('child_added', function(snapshot){
+        handleRequest(requestType,snapshot);
+        
     });
+}
+
+function listenForResetPassword(){
+    console.log('Starting password reset listener.')
+    var requestType = 'passwordResetRequests';
+    ref.child('passwordResetRequests').on('child_added', function(snapshot){
+        handleRequest(requestType, snapshot);
+    });
+}
+
+function handleRequest(requestType, snapshot){
+    var headers = {key: snapshot.key, objectRequest: snapshot.val()};
+        console.log("Toplevel snapshot key", snapshot.key);
+        //console.log("Childlevel snapshot key", childSnapshot.key);
+        processRequest(headers).then(function(response){
+            console.log('Got ' + requestType);
+            uploadToFirebase(response, requestType);
+        }).catch(function(error){
+            console.log("Error processing request!", error);
+        });
 }
 
 function clearTimeoutRequests()
@@ -152,4 +163,4 @@ function completeRequest(headers, success, key)
     ref.child(key).child(requestKey).set(null);
 }
 
-console.log('Listener is started.')
+
