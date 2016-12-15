@@ -5,7 +5,14 @@
     </div>
     <div class="center">Lab Results</div>
   </ons-toolbar>
-  <ons-tabbar position="top">
+    <div ng-show="loading" align="center" style="margin:10px">
+        <svg class="progress-circular">
+            <circle class="progress-circular__primary" cx="50%" cy="50%" r="40%" fill="none" stroke-width="10%" stroke-miterlimit="10"/>
+        </svg>
+        <br>
+        Getting your lab tests. Please wait...
+    </div>
+  <ons-tabbar position="top" ng-hide="loading">
     <ons-tab page="./views/personal/lab-results/date-tests.html" label="By Date" icon="ion-calendar" active="true"></ons-tab>
      <ons-tab page="./views/personal/lab-results/all-tests.html" label="By Category" icon="ion-ios-list-outline" ></ons-tab>
      <ons-tab page="./views/personal/lab-results/favorite-tests.html" label="Favorites" icon="fa-star"></ons-tab>
