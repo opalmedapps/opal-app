@@ -119,10 +119,10 @@ var requestMappings=
          processFunction:planningStepsAndEstimates,
          numberOfLastUpdated:0
          },*/
-        'LabTests':{
+        /*'LabTests':{
             sql:queries.patientTestResultsTableFields(),
             numberOfLastUpdated:1
-        },
+        },*/
         'TxTeamMessages':{
             sql:queries.patientTeamMessagesTableFields(),
             numberOfLastUpdated:2,
