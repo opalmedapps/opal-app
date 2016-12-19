@@ -9,10 +9,10 @@
         .module('MUHCApp')
         .factory('Permissions', Permissions);
 
-    Permissions.$inject = [];
+    Permissions.$inject = ['Constants'];
 
     /* @ngInject */
-    function Permissions() {
+    function Permissions(Constants) {
         var service = {
             enablePermission: enablePermission
         };
@@ -23,9 +23,7 @@
         //Check for user permissions to write/read from storage, required for android 6+
         function enablePermission(permission_type, msg) {
 
-            var app = document.URL.indexOf('http://') === -1 && document.URL.indexOf('https://') === -1;
-
-            if(app) {
+            if(Constants.app) {
                 if (ons.platform.isAndroid()) {
                     var permissions = window.cordova.plugins.permissions;
                     permissions.hasPermission(permissions[permission_type], function (status) {

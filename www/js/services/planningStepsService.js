@@ -69,7 +69,7 @@
             console.log(mdTask);
             // Appointments are sorted, so scanning starts at the end
             for (var i = appointments.length-1; i>=0; i--){
-                console.log(i, appointments[i].Status.toLowerCase());
+                //console.log(i, appointments[i].Status.toLowerCase());
                 if (appointments[i].AppointmentType_EN === 'CT for Radiotherapy Planning'
                     && appointments[i].ScheduledStartTime < mdTask.physicianTask.DueDateTime
                     && appointments[i].Status.toLowerCase().indexOf('completed') !== -1) {
