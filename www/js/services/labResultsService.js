@@ -94,22 +94,12 @@ myApp.service('LabResults',['$filter','LocalStorage','RequestToServer','$q',
             //LocalStorage.WriteToLocalStorage('LabResults', testResultsToLocalStorage);
         }
 
-        function makeArray(obj){
-            var array = [];
-            for(var key in obj){
-                if (obj[key].hasOwnProperty('TestDate')){
-                    array.push(obj[key]);
-                }
-            }
-            return array;
-        }
-
         return{
             updateTestResults:function()
             {
                 var deferred = $q.defer();
                 //
-                if (new Date - uptodate < 1800000 && testResults.length>0){
+                if (new Date - uptodate < 300000 && testResults.length>0){
                     deferred.resolve({Success: true, Location: 'Service'});
                 /*}
                 else if (LocalStorage.isUserSectionDefined('LabResults')){
@@ -124,11 +114,7 @@ myApp.service('LabResults',['$filter','LocalStorage','RequestToServer','$q',
                     RequestToServer.sendRequestWithResponse('LabResults')
                         .then(function (response) {
                             if (response.Code == '3') {
-                                //console.log(response);
-                                var tests = makeArray(response);
-
-                                //console.log(tests);
-                                addTestResults(tests);
+                                addTestResults(response.labResults);
                                 deferred.resolve({Success: true, Location: 'Server'});
                                 uptodate = new Date();
                             }
