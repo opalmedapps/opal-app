@@ -165,6 +165,7 @@ myApp.service('LabResults',['$filter','LocalStorage','RequestToServer','$q',
                 return testResultsByCategory;
             },
             destroy:function () {
+                uptodate = new Date();
                 testResults = [];
                 testResultsByDate = {};
                 testResultsByType = {};
