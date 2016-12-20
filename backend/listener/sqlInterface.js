@@ -368,7 +368,7 @@ exports.checkIn=function(requestObject)
         var patientId = response[0].PatientId;
         console.log(response, ' patientId', patientId, ' username ', username);
         //Check in to aria using Johns script
-        checkIntoAria(patientId,serNum).then(function(response){
+        checkIntoAria(patientId,serNum, username).then(function(response){
             if(response)
             {
                 console.log('Checked in successfully done in aria', response);
@@ -825,11 +825,13 @@ function checkIntoAria(patientId, serNum, username)
     var r = Q.defer();
     var url = 'http://172.26.66.41/devDocuments/devscreens/php/checkInPatientAriaMedi.php?CheckinVenue=S1%20RECEPTION&PatientId='+patientId;
     //making request to checkin
-    console.log(url);
+    console.log(url, username, serNum);
     getAppointmentAriaSer(username, serNum).then(function(res){
+        console.log(res);
         var ariaSerNum = res[0].AppointmentAriaSer;
         request(url,function(error, response, body)
         {
+            console.log(ariaSerNum,response);
             if(error){console.log('line770,sqlInterface',error);r.reject(error);}
             if(!error&&response.statusCode=='200')
             {
@@ -846,6 +848,9 @@ function checkIntoAria(patientId, serNum, username)
                 //r.resolve(true);
             }
         });
+    }).catch(function(error){
+        console.log('line778',error);
+        r.reject(error);
     });
     return r.promise;
 }
@@ -861,8 +866,8 @@ function checkIfCheckedIntoAriaHelper(patientActivitySerNum)
         if(!error&&response.statusCode=='200')
         {
             body = JSON.parse(body);
-            console.log(body);
-            if(body.length>0) r.resolve(true);
+            console.log("checkin checks bro", body);
+            if(body.length>0 && body.CheckedInFlag == 1) r.resolve(true);
             else r.resolve(false);
         }
     });
@@ -977,7 +982,9 @@ exports.getLabResults = function(requestObject)
     console.log('LabResults ', labResults);
     exports.runSqlQuery(queries.patientTestResultsTableFields(),[userID, requestObject.Timestamp])
         .then(function (queryRows) {
-            r.resolve(queryRows);
+            var labs={};
+            labs.labResults = queryRows;
+            r.resolve(labs);
         })
         .catch(function (error) {
             r.reject({Response:'error', Reason:'Error getting lab results due to '+error});
