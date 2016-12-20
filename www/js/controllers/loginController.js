@@ -175,7 +175,7 @@ myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$root
 
         //Get Firebase authentication state
         var authenticated = !!firebaseUser;
-        console.log($scope.authenticated );
+        //console.log($scope.authenticated );
         //If authenticated update the user authentication state
         if( authenticated)
         {
