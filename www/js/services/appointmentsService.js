@@ -191,13 +191,8 @@ myApp.service('Appointments', ['$q', 'RequestToServer','$cordovaCalendar','UserA
         for (var i = 0; i < appointments.length; i++) {
             appointments[i].ResourceName = (appointments[i].Resource.hasOwnProperty('Machine')) ? '':appointments[i].Resource.Doctor;
             appointments[i].ScheduledStartTime = $filter('formatDate')(appointments[i].ScheduledStartTime);
-            //appointments[i].ScheduledStartTime = new Date(today);
             appointments[i].ScheduledEndTime =  $filter('formatDate')(appointments[i].ScheduledEndTime);
             appointments[i].LastUpdated =  $filter('formatDate')(appointments[i].LastUpdated);
-            //appointments[i].RoomLocation = appointments[i].RoomLocation
-            // appointments[i].ScheduledEndTime  = new Date(today);
-            // appointments[i].ScheduledEndTime.setMinutes(appointments[i].ScheduledEndTime.getMinutes()+15);
-            // today.setDate(today.getDate()+1);
             userAppointmentsArray.push(appointments[i]);
         }
         //Sort Appointments chronologically most recent first
@@ -726,9 +721,9 @@ myApp.service('Appointments', ['$q', 'RequestToServer','$cordovaCalendar','UserA
             var now=new Date();
 
 
-            // Calculate difference between now and all appointments that are checked in and have a room
+            // Calculate difference between now and all todays appointments that are checked in, have a room and not completed
             var timeDiff = todaysAppointments.map(function (obj) {
-                if (obj.Checkin == '1' && obj.RoomLocation && obj.Status.toLowerCase().indexOf('completed') != -1) {
+                if (obj.Checkin == '1' && obj.RoomLocation_EN && obj.Status.toLowerCase().indexOf('completed') == -1) {
                     return Math.abs(now - obj.LastUpdated);
                 } else {
                     return Infinity;
@@ -741,8 +736,9 @@ myApp.service('Appointments', ['$q', 'RequestToServer','$cordovaCalendar','UserA
                 if (timeDiff[i] < timeDiff[lowest]) lowest = i;
             }
 
+            // Check if all array elements are the same.
             if (!!timeDiff.reduce(function(a, b){ return (a === b) ? a : NaN; })){
-                return {RoomLocation: ""};
+                return {RoomLocation_EN: ""};
             }
 
             console.log(lowest);

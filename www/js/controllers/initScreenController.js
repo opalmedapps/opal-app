@@ -5,7 +5,7 @@ var myApp = angular.module('MUHCApp');
 
 myApp.controller('InitScreenController',
     function($scope, $timeout, NavigatorParameters, $translatePartialLoader, UserPreferences, $filter, Constants)
-{ 
+{
     //Firebase reference to check authentication
     var myDataRef = firebase.database().ref('dev2/');
 

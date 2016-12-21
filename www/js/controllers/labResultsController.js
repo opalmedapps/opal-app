@@ -1,27 +1,32 @@
 var myApp = angular.module('MUHCApp');
 myApp.controller('LabResultsControllerCopy', ['RequestToServer','Notifications', 'UpdateUI', '$scope', '$timeout','$rootScope', 'UserPreferences', 'LabResults', function (RequestToServer, Notifications, UpdateUI, $scope,$timeout,$rootScope, UserPreferences, LabResults) {
-  $scope.load = function($done) {
-    RequestToServer.sendRequest('Refresh','LabTests');
-    $timeout(function() {
-      loadInfo();
-          $done();
-    }, 3000);
-  };
 
-  function loadInfo(){
-    UpdateUI.UpdateSection('LabTests').then(function()
-    {
-      $scope.init();
-    });
-  }
-  // Constants
-  var DATE_TAB = 'Date';
-  var ALL_TESTS_TAB = 'AllTests';
-  var GROUPS_TAB = 'Groups';
-  var FAVORITES_TAB = 'Favorites';
+    $scope.load = function($done) {
+        RequestToServer.sendRequest('Refresh','LabTests');
+        $timeout(function() {
+            loadInfo();
+            $done();
+        }, 3000);
+    };
 
-  $scope.selectedLabResults = undefined;
-  $scope.selectedTest = undefined;
+    function loadInfo(){
+        UpdateUI.UpdateSection('LabTests').then(function()
+        {
+            $scope.init();
+        });
+    }
+    // Constants
+    var DATE_TAB = 'Date';
+    var ALL_TESTS_TAB = 'AllTests';
+    var GROUPS_TAB = 'Groups';
+    var FAVORITES_TAB = 'Favorites';
+
+    activate();
+
+    $scope.loading = true;
+
+    $scope.selectedLabResults = undefined;
+    $scope.selectedTest = undefined;
 
   // Flags for defining various views
   $scope.isNotificationView = undefined;
@@ -40,65 +45,76 @@ myApp.controller('LabResultsControllerCopy', ['RequestToServer','Notifications',
   $scope.testResultsByDate = LabResults.getTestResultsByDate();
   $scope.testResultsByType = LabResults.getTestResultsByType();
   $scope.testResultsByCategory = LabResults.getTestResultsByCategory();
- 
 
-  $scope.init = function() {
-    // DATE tab
-    $scope.isNotificationView = true;
-    $scope.isTestsView = false;
-    //$scope.isSpecificTestView = false;
-    $scope.isTimeView = false;
-    //about this test
-    $scope.isTestInformationView = false;
-    // ALL tab
-    $scope.isListView = true;
-    $scope.isTimeViewAll = false;
-    // FAVORITES tab
-    $scope.isListViewFavorites = true;
-    $scope.isTimeViewFavorites = false;
-    // Initialize messages
-    $scope.title = 'Lab Results';
-    $scope.testsReceived = 'Lab results';
 
-    // Start in DATE tab
-    $scope.radioModel = 'Date';
-  };
 
-  $scope.goToNotificationView = function() {
-    if($scope.radioModel === DATE_TAB) {
-      $scope.isNotificationView = true;
-      $scope.isTestsView = false;
-      $scope.isSpecificTestView = false;
-      $scope.isTimeView = false;
-    } 
-    else if($scope.radioModel === ALL_TESTS_TAB) {
-      $scope.isListView = true;
-      $scope.isTimeViewAll = false;
-    } else if($scope.radioModel === FAVORITES_TAB) {
-      $scope.isListViewFavorites = true;
-      $scope.isTimeViewFavorites = false;
-    }
-  };
-
-  $scope.goToTestsView = function(testResult, testDate, testCategory) {
-    if (testResult) {
-      $scope.selectedLabResults = testResult;
-      $scope.testDate = testDate;
-    }
-    if(testCategory) {
-      $scope.selectedCategory = testCategory;
+    function activate() {
+        LabResults.updateTestResults()
+            .then(function (response) {
+                console.log(response);
+                $scope.loading = false;
+            })
+            .catch(function (error) {
+                $scope.loading = true;
+            });
     }
 
-    // Update title
-    $scope.title = 'Lab Results - ' + $scope.testDate;
+    $scope.init = function() {
 
-    if ($scope.radioModel === DATE_TAB){
-      $scope.isNotificationView = false;
-      $scope.isTestsView = true;
-      $scope.isSpecificTestView = false;
-      $scope.isTimeView = false;
-    }
-  };
+        // DATE tab
+        $scope.isNotificationView = true;
+        $scope.isTestsView = false;
+        //$scope.isSpecificTestView = false;
+        $scope.isTimeView = false;
+        // ALL tab
+        $scope.isListView = true;
+        $scope.isTimeViewAll = false;
+        // FAVORITES tab
+        $scope.isListViewFavorites = true;
+        $scope.isTimeViewFavorites = false;
+        // Initialize messages
+        $scope.title = 'Lab Results';
+        $scope.testsReceived = 'Lab results';
+
+        // Start in DATE tab
+        $scope.radioModel = 'Date';
+    };
+
+    $scope.goToNotificationView = function() {
+      if($scope.radioModel === DATE_TAB) {
+        $scope.isNotificationView = true;
+        $scope.isTestsView = false;
+        $scope.isSpecificTestView = false;
+        $scope.isTimeView = false;
+      } else if($scope.radioModel === ALL_TESTS_TAB) {
+        $scope.isListView = true;
+        $scope.isTimeViewAll = false;
+      } else if($scope.radioModel === FAVORITES_TAB) {
+        $scope.isListViewFavorites = true;
+        $scope.isTimeViewFavorites = false;
+      }
+    };
+
+
+    $scope.goToTestsView = function(testResult, testDate, testCategory) {
+      if (testResult) {
+        $scope.selectedLabResults = testResult;
+        $scope.testDate = testDate;
+      }
+      if(testCategory) {
+        $scope.selectedCategory = testCategory;
+      }
+
+      // Update title
+      $scope.title = 'Lab Results - ' + $scope.testDate;
+
+      if ($scope.radioModel === DATE_TAB){
+        $scope.isNotificationView = false;
+        $scope.isTestsView = true;
+        $scope.isSpecificTestView = false;
+        $scope.isTimeView = false;
+      }
+    };
 
   //about this test
   $scope.goToTestInformationView = function(testName) {
@@ -218,14 +234,17 @@ myApp.controller('LabResultsControllerCopy', ['RequestToServer','Notifications',
 }]);
 
 myApp.controller('AllTestsController',['$scope','$timeout','LabResults',function($scope,$timeout,LabResults){
-  $scope.testResultsByCategory = LabResults.getTestResultsByCategory();
-  $scope.testResultsByType = LabResults.getTestResultsArrayByType();
-}]);
+
+    $scope.testResultsByCategory = LabResults.getTestResultsByCategory();
+    $scope.testResultsByType = LabResults.getTestResultsArrayByType();
+    }]);
 
 myApp.controller('FavoritesTestsController',['$scope','$timeout','LabResults',function($scope,$timeout,LabResults){
+
   $scope.testResultsByCategory = LabResults.getTestResultsByCategory();
   $scope.testResultsByType = LabResults.getTestResultsByType();
   $scope.testsReceived = 'Your lab results are in';
+
 }]);
 
 myApp.controller('ByDateTestsController',['$scope','$timeout','LabResults','$filter',function($scope,$timeout,LabResults,$filter){
@@ -240,14 +259,14 @@ myApp.controller('ByDateTestsController',['$scope','$timeout','LabResults','$fil
 myApp.controller('IndividualLabTestController',['$scope','$timeout','LabResults',function($scope,$timeout,LabResults){
   var page = personalNavigator.getCurrentPage();
   var test = page.options.param;
-  
+
   if (test.testResults) {
     $scope.selectedLabResults = test.testResults;
     $scope.testDate = test.testDate;
     $scope.testResultsByCategory = LabResults.getTestResultsByCategory();
     $scope.testResultsByType = LabResults.getTestResultsArrayByType();
   }
- 
+
   // Update title
   $scope.title = 'Lab Results - ' + $scope.testDate;
   $scope.goToSpecificTestView=function(test)
@@ -285,7 +304,7 @@ myApp.controller('TimelineTestComponentController',['$scope','$timeout','LabResu
   {
     dateArray.push($scope.testResultsByDateArray[key]);
   }
-  
+
   // Chart
   $scope.data = [{
     key: 'Data',
@@ -310,9 +329,9 @@ myApp.controller('TimelineTestComponentController',['$scope','$timeout','LabResu
     mi[1] = parseFloat($scope.minNorm);
     reformedData.push(dv);
     maxRange.push(ma);
-    minRange.push(mi);    
+    minRange.push(mi);
   }
-      
+
   $scope.recentValue = parseFloat(testResults[0].TestValue);
   var windowWidth = $(window).width();
   var windowHeight = $(window).height();
@@ -399,5 +418,3 @@ myApp.controller('TimelineTestComponentController',['$scope','$timeout','LabResu
     }]
   };
 }]);
-
-

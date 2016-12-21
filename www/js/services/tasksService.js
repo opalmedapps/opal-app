@@ -23,7 +23,8 @@
             getPlanningTasks: getPlanningTasks,
             deletePlanningTasks: deletePlanningTasks,
             getAllRecentTasks: getAllRecentTasks,
-            getRecentPhysicianTask: getRecentPhysicianTask
+            getRecentPhysicianTask: getRecentPhysicianTask,
+            destroy: destroy
         };
 
         return service;
@@ -107,6 +108,10 @@
             console.log(planningTasks);
             console.log(physicianTask);
             return planningTasks.slice(physicianTask.index, planningTasks.length);
+        }
+
+        function destroy(){
+            planningTasks = [];
         }
     }
 

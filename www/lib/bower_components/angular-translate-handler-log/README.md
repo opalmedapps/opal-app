@@ -14,6 +14,12 @@ Please file any issues and bugs in our main repository at [angular-translate/ang
 $ bower install angular-translate-handler-log
 ```
 
+### via NPM
+
+```bash
+$ npm install angular-translate-handler-log
+```
+
 ### via cdnjs
 
 Please have a look at https://cdnjs.com/libraries/angular-translate-handler-log for specific versions.

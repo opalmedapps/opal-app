@@ -118,6 +118,7 @@ myApp.service('RequestToServer',['$filter','$state','NewsBanner','UserAuthorizat
           var timeOut = setTimeout(function()
           {
             console.log('Inside timeout function');
+            refRequestResponse.set(null);
             refRequestResponse.off();
             r.reject({Response:'timeout'});
           },30000);

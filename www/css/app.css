@@ -1122,10 +1122,9 @@ p{
 }
 
 .iconHomeView{
-  margin-top:5px;
   margin-left: 10px;
   font-size:28px;
-  font-weight: 600;
+  font-weight: 300;
   color: #2B6197;
   text-align: center;
 }
@@ -1528,7 +1527,7 @@ Button appointments
      }
 
  .tab-icon {
-     font-size: 24px;
+     font-size: 30px;
      padding: 0;
      margin: 0;
      vertical-align: top;

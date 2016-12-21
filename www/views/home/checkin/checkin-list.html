@@ -11,23 +11,39 @@
             {{"APPOINTMENTS"|translate}}
         </ons-list-header>
         <ons-list-item modifier="tappable chevron" ng-repeat="app in checkIn.apps" ng-click="checkIn.goToAppointment(app)">
-            <ons-col align="center">
-                <div style="line-height:1;padding:5px;" >
+
+            <ons-row>
+                <ons-col width="50px" align="center" style="text-align: center;">
+                    <div class="plan-date" ng-show="app.Checkin == 1"><img ng-src="./img/checkedbox.png" width="30px" height="30px"></div>
+                    <div class="plan-duration" ng-show="app.Checkin == 0">
+                        <img ng-src="./img/uncheckedbox.png" width="20px" height="20px">
+                    </div>
+                </ons-col>
+                <ons-col align="center">
+                    <div style="line-height:1;padding:5px;" >
                     <span ng-class="fontSizeTitle">
                         {{app["AppointmentType_"+checkIn.language]}} <br>
                         {{app.ScheduledStartTime | date:'shortTime'}}
                     </span> <br>
-                    <span class="item-desc" ng-class="fontSizeDesc">{{app["MapName_"+checkIn.language]}}</span>
-                </div>
-            </ons-col>
+                        <span class="item-desc" ng-class="fontSizeDesc">{{app["MapName_"+checkIn.language]}}</span>
+                    </div>
+                </ons-col>
+            </ons-row>
         </ons-list-item>
     </ons-list>
     <br>
-    <div style="text-align: center; width: 90%; margin: auto">
-        <ons-button modifier="large" style="font-size: x-large" should-spin="false" var="checkInButton"
-                    ng-click="checkIn.checkInToAll(checkIn.apps)" ng-class="fontSizeTitle">
-            {{checkIn.checkInMessage|translate}}
-        </ons-button>
+
+
+    <div uib-alert ng-show="checkIn.alert.type" style="text-align: center; width: 90%; margin: auto" type="{{checkIn.alert.type}}" class="{{fontSizeTitle}}" >
+        {{checkIn.checkInMessage|translate}}
     </div>
+
+    <div ng-hide="checkIn.alert.type" align="center" style="margin:10px">
+        <svg class="progress-circular">
+            <circle class="progress-circular__primary" cx="50%" cy="50%" r="40%" fill="none" stroke-width="10%" stroke-miterlimit="10"/>
+        </svg>
+    </div>
+
+
 
 </ons-page>
