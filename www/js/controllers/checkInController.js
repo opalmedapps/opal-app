@@ -5,12 +5,15 @@
         .module('MUHCApp')
         .controller('CheckInController', CheckInController);
 
-    CheckInController.$inject = ['CheckinService', 'NavigatorParameters', 'UserPreferences',
-        '$q', 'Appointments', 'NewsBanner','$filter', '$scope'];
+    CheckInController.$inject =
+        [
+        'CheckinService', 'NavigatorParameters', 'UserPreferences',
+        'Appointments', 'NewsBanner','$filter',
+        ];
 
     /* @ngInject */
     function CheckInController(CheckinService, NavigatorParameters, UserPreferences,
-                               $q, Appointments, NewsBanner, $filter, $scope) {
+                               Appointments, NewsBanner, $filter) {
         var vm = this;
         vm.title = 'CheckInController';
         vm.apps = [];
@@ -20,8 +23,6 @@
         vm.checkInMessage = "";
         vm.alert = {};
         vm.goToAppointment = goToAppointment;
-        //vm.checkInToAll = checkInToAll;
-        //vm.testButton = testButton;
 
         activate();
 
@@ -78,32 +79,6 @@
             homeNavigator.pushPage('./views/personal/appointments/individual-appointment.html');
         }
 
-/*        function checkInToAll(appointments){
-
-            var promises = [];
-            for (var i=0;  i !=appointments.length; i++){
-                promises.push(CheckinService.checkinToAppointment(appointments[i]));
-            }
-
-            $q.all(promises).then(function (dataArray) {
-                checkInButton.stopSpin();
-                vm.checkInMessage = "CHECKED_IN";
-                var message = $filter('translate')("CHECKED_IN");
-                NewsBanner.showCustomBanner(message, '#333333', function(){}, 500);
-                console.log(dataArray);
-
-            }).catch(function (error) {
-                console.log("CheckIn failed: ", error);
-                vm.error = "SERVERPROBLEM";
-            });
-
-        }*/
-
-        /*function testButton(){
-         checkInButton.setDisabled(true);
-         console.log("Button works");
-         checkInButton.startSpin();
-         }*/
     }
 
 })();
