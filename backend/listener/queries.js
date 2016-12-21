@@ -22,7 +22,7 @@ exports.patientMessageTableFields=function()
 
 exports.patientAppointmentsTableFields=function()
 {
-  return "SELECT Appointment.AppointmentSerNum, Alias.AliasSerNum, Alias.AliasName_EN AS AppointmentType_EN, Alias.AliasName_FR AS AppointmentType_FR, Alias.AliasDescription_EN AS AppointmentDescription_EN, Alias.AliasDescription_FR AS AppointmentDescription_FR, Appointment.ScheduledStartTime, Appointment.ScheduledEndTime, Appointment.Checkin,Appointment.ReadStatus, Resource.ResourceName, Resource.ResourceType, HospitalMap.MapUrl,HospitalMap.MapName_EN,HospitalMap.MapName_FR,HospitalMap.MapDescription_EN,HospitalMap.MapDescription_FR, Appointment.Status, Appointment.RoomLocation FROM Appointment, AliasExpression, Alias,Resource, Patient, HospitalMap, ResourceAppointment,  Users WHERE HospitalMap.HospitalMapSerNum = Appointment.Location AND ResourceAppointment.AppointmentSerNum = Appointment.AppointmentSerNum AND ResourceAppointment.ResourceSerNum = Resource.ResourceSerNum AND Patient.PatientSerNum = Appointment.PatientSerNum AND AliasExpression.AliasExpressionSerNum=Appointment.AliasExpressionSerNum AND AliasExpression.AliasSerNum=Alias.AliasSerNum AND Users.UserTypeSerNum=Patient.PatientSerNum AND Users.Username = ? AND Appointment.State = 'Active' AND (Appointment.LastUpdated > ? OR Alias.LastUpdated > ? OR AliasExpression.LastUpdated > ? OR Resource.LastUpdated > ? OR HospitalMap.LastUpdated > ?) ORDER BY Appointment.AppointmentSerNum, ScheduledStartTime;";
+  return "SELECT Appointment.AppointmentSerNum, Alias.AliasSerNum, Alias.AliasName_EN AS AppointmentType_EN, Alias.AliasName_FR AS AppointmentType_FR, Alias.AliasDescription_EN AS AppointmentDescription_EN, Alias.AliasDescription_FR AS AppointmentDescription_FR, Appointment.ScheduledStartTime, Appointment.ScheduledEndTime, Appointment.Checkin,Appointment.ReadStatus, Resource.ResourceName, Resource.ResourceType, HospitalMap.MapUrl,HospitalMap.MapName_EN,HospitalMap.MapName_FR,HospitalMap.MapDescription_EN,HospitalMap.MapDescription_FR, Appointment.Status, Appointment.RoomLocation_EN, Appointment.RoomLocation_FR, Appointment.LastUpdated FROM Appointment, AliasExpression, Alias,Resource, Patient, HospitalMap, ResourceAppointment,  Users WHERE HospitalMap.HospitalMapSerNum = Appointment.Location AND ResourceAppointment.AppointmentSerNum = Appointment.AppointmentSerNum AND ResourceAppointment.ResourceSerNum = Resource.ResourceSerNum AND Patient.PatientSerNum = Appointment.PatientSerNum AND AliasExpression.AliasExpressionSerNum=Appointment.AliasExpressionSerNum AND AliasExpression.AliasSerNum=Alias.AliasSerNum AND Users.UserTypeSerNum=Patient.PatientSerNum AND Users.Username = ? AND Appointment.State = 'Active' AND (Appointment.LastUpdated > ? OR Alias.LastUpdated > ? OR AliasExpression.LastUpdated > ? OR Resource.LastUpdated > ? OR HospitalMap.LastUpdated > ?) ORDER BY Appointment.AppointmentSerNum, ScheduledStartTime;";
 };
 
 exports.patientDocumentTableFields=function()
@@ -66,14 +66,14 @@ exports.patientQuestionnaireTableFields = function()
 {
   return "SELECT Questionnaire.CompletedFlag, Questionnaire.DateAdded, Questionnaire.PatientQuestionnaireDBSerNum, Questionnaire.CompletionDate, Questionnaire.QuestionnaireSerNum, QuestionnaireControl.QuestionnaireDBSerNum FROM QuestionnaireControl, Questionnaire, Patient, Users WHERE QuestionnaireControl.QuestionnaireControlSerNum = Questionnaire.QuestionnaireControlSerNum AND Questionnaire.PatientSerNum = Patient.PatientSerNum AND Users.UserTypeSerNum = Patient.PatientSerNum AND Users.Username = ? AND QuestionnaireControl.LastUpdated > ? AND Questionnaire.LastUpdated > ?";
 };
-exports.getPatientFieldsForPasswordReset=function(userID)
+/*exports.getPatientFieldsForPasswordReset=function(userID)
 {
   return 'SELECT Patient.SSN, Patient.PatientSerNum FROM Patient, Users WHERE Users.Username LIKE '+"\'"+ userID+"\'"+'AND Users.UserTypeSerNum = Patient.PatientSerNum';
-};
-/*exports.getPatientFieldsForPasswordReset=function(email)
+};*/
+exports.getPatientFieldsForPasswordReset=function(email)
 {
   return 'SELECT Patient.SSN, Patient.PatientSerNum FROM Patient WHERE Patient.Email LIKE '+"\'"+ email +"\'"+'';
-};*/
+};
 exports.setNewPassword=function(password,patientSerNum, token)
 {
   return "UPDATE Users SET Password='"+password+"', SessionId='"+token+"' WHERE UserType = 'Patient' AND UserTypeSerNum="+patientSerNum;
@@ -170,4 +170,9 @@ exports.setQuestionnaireCompletedQuery = function()
 exports.getPatientAriaSerQuery = function()
 {
   return "SELECT Patient.PatientAriaSer FROM Patient, Users WHERE Patient.PatientSerNum = Users.UserTypeSerNum && Users.Username = ?"
+};
+
+exports.getPatientId= function()
+{
+  return "SELECT Patient.PatientId FROM Patient, Users WHERE Patient.PatientSerNum = Users.UserTypeSerNum && Users.Username = ?"
 }

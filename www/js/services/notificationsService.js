@@ -220,6 +220,7 @@ myApp.service('Notifications',['$filter','RequestToServer','LocalStorage','Annou
         if(typeof notifications==='undefined') return;
         var temp=angular.copy(notifications);
         for (var i = 0; i < notifications.length; i++) {
+            //if (temp[i].NotificationType == 'RoomAssignment') continue;
             temp[i].Custom =  notificationTypes[temp[i].NotificationType].Custom;
             temp[i].Icon = notificationTypes[temp[i].NotificationType].icon;
             temp[i].Color = notificationTypes[temp[i].NotificationType].color;
@@ -325,8 +326,8 @@ myApp.service('Notifications',['$filter','RequestToServer','LocalStorage','Annou
                     console.log(Notifications[i]);
                     //Finding post
                     var post = notificationTypes[Notifications[i].NotificationType].searchFunction(Notifications[i].RefTableRowSerNum);
-                    Notifications[i].Description_EN = Notifications[i].Description_EN.replace(/\$\w+/, post.RoomLocation||"");
-                    Notifications[i].Description_FR = Notifications[i].Description_FR.replace(/\$\w+/, post.RoomLocation||"");
+                    Notifications[i].Description_EN = Notifications[i].Description_EN.replace(/\$\w+/, post.RoomLocation_EN||"");
+                    Notifications[i].Description_FR = Notifications[i].Description_FR.replace(/\$\w+/, post.RoomLocation_FR||"");
                     console.log(Notifications[i].NotificationType);
                     //If ReadStatus in post is also 0, Set the notification for showing in the controller
                     if(post.ReadStatus == '0' || Notifications[i].NotificationType == "RoomAssignment")
@@ -381,7 +382,7 @@ myApp.service('Notifications',['$filter','RequestToServer','LocalStorage','Annou
         {
             var language = UserPreferences.getLanguage();
             for (var i = notifications.length-1; i >=0; i--) {
-                //console.log(notifications[i]);
+                console.log(notifications[i]);
                 notifications[i].Title = (language=='EN') ?   notifications[i].Name_EN : notifications[i].Name_FR;
                 //console.log(notifications[i].RefTableRowSerNum);
                 try{

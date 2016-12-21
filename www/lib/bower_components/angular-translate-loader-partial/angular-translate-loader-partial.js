@@ -1,7 +1,7 @@
 /*!
- * angular-translate - v2.7.2 - 2015-06-01
- * http://github.com/angular-translate/angular-translate
- * Copyright (c) 2015 ; Licensed MIT
+ * angular-translate - v2.13.1 - 2016-12-06
+ * 
+ * Copyright (c) 2016 The angular-translate team, Pascal Precht; Licensed MIT
  */
 (function (root, factory) {
   if (typeof define === 'function' && define.amd) {
@@ -72,34 +72,34 @@ function $translatePartialLoader() {
   };
 
   Part.prototype.getTable = function(lang, $q, $http, $httpOptions, urlTemplate, errorHandler) {
-    var deferred = $q.defer();
 
     if (!this.tables[lang]) {
       var self = this;
 
-      $http(angular.extend({
+      return $http(angular.extend({
         method : 'GET',
         url: this.parseUrl(urlTemplate, lang)
-      }, $httpOptions)).success(function(data){
-        self.tables[lang] = data;
-        deferred.resolve(data);
-      }).error(function() {
-        if (errorHandler) {
-          errorHandler(self.name, lang).then(function(data) {
-            self.tables[lang] = data;
-            deferred.resolve(data);
-          }, function() {
-            deferred.reject(self.name);
-          });
-        } else {
-          deferred.reject(self.name);
-        }
-      });
+      }, $httpOptions))
+        .then(function(result){
+          self.tables[lang] = result.data;
+          return result.data;
+        }, function(response) {
+          if (errorHandler) {
+            return errorHandler(self.name, lang, response)
+              .then(function(data) {
+                self.tables[lang] = data;
+                return data;
+              }, function() {
+                return $q.reject(self.name);
+              });
+          } else {
+            return $q.reject(self.name);
+          }
+        });
 
     } else {
-      deferred.resolve(this.tables[lang]);
+      return $q.when(this.tables[lang]);
     }
-    return deferred.promise;
   };
 
   var parts = {};
@@ -316,7 +316,6 @@ function $translatePartialLoader() {
       }
 
       var loaders = [],
-          deferred = $q.defer(),
           prioritizedParts = getPrioritizedParts();
 
       angular.forEach(prioritizedParts, function(part) {
@@ -326,20 +325,17 @@ function $translatePartialLoader() {
         part.urlTemplate = options.urlTemplate;
       });
 
-      $q.all(loaders).then(
-        function() {
+      return $q.all(loaders)
+        .then(function() {
           var table = {};
+          prioritizedParts = getPrioritizedParts();
           angular.forEach(prioritizedParts, function(part) {
             deepExtend(table, part.tables[options.key]);
           });
-          deferred.resolve(table);
-        },
-        function() {
-          deferred.reject(options.key);
-        }
-      );
-
-      return deferred.promise;
+          return table;
+        }, function() {
+          return $q.reject(options.key);
+        });
     };
 
     /**

@@ -26,7 +26,7 @@ angular.module('MUHCApp').controller('MainController', ["$state",'$timeout', '$r
 //Ask for an update every 2 minutes
     setInterval(function()
     {
-        console.log("calling  refresh bg");
+        //console.log("calling  refresh bg");
         backgroundRefresh();
     },120000);
 
@@ -64,14 +64,14 @@ angular.module('MUHCApp').controller('MainController', ["$state",'$timeout', '$r
     }
 
     function resetTimer(e) {
-        console.log('resetting timer');
+        //console.log('resetting timer');
         window.clearTimeout(timeoutID);
 
         goActive();
     }
 
     function goInactive() {
-        console.log('Currently going inactive');
+        //console.log('Currently going inactive');
         resetTimer();
         if($state.current.name=='Home')
         {
@@ -114,6 +114,7 @@ angular.module('MUHCApp').controller('MainController', ["$state",'$timeout', '$r
                 senderID: "810896751588"
             }
         });
+
         //dX5oUernHF4:APA91bEWkdACR0Ra81mAECXn5rPNyoUYx3ijC9UdzJ_26MqjYa0OBaQRzD2n7VCk_PCcsnvsZz7bEA5Aq1pSV9iABRxSPCjFlBJh7ogiqWs8Ex4COf7H2xWHrz_16CJMlNKljffpNf8q
         push.on('notification', function(data) {
 

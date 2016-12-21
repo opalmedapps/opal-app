@@ -31,19 +31,19 @@ myApp.service('EducationalMaterial',['$filter','LocalStorage','FileManagerServic
   **/
   var educationalMaterialType={
     'Video':{
-      icon:'ion-social-youtube',
+      icon:'fa fa-youtube-play',
       color:'red'
     },
     'Factsheet':{
-      icon:'ion-ios-list-outline',
+      icon:'fa fa-list',
       color:'DarkSlateBlue'
     },
     'Booklet':{
-      icon:'ion-android-map',
+      icon:'fa fa-map',
       color:'SeaGreen'
     },
     'Treatment Guidelines':{
-      icon:'ion-android-list',
+      icon:'fa fa-list-ol',
       color:'SaddleBrown'
     },
     'Other':{

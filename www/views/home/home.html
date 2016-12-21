@@ -1,9 +1,9 @@
-<ons-page ng-controller="HomeController" ng-device-backbutton="homeDeviceBackButton()">
+<ons-page ng-controller="HomeController as h" ng-device-backbutton="homeDeviceBackButton()">
     <ons-toolbar fixed-style>
         <div class="center" ng-class="fontSizeTitle">{{"HEADER_MESSAGE_HOME"|translate}}</div>
         <div class="right">
             <ons-toolbar-button ng-click="homeNavigator.pushPage('views/tabs/info-page-tabs.html',{param:home})">
-                <ons-icon icon="ion-ios-information-outline"></ons-icon>
+                <ons-icon icon="fa fa-info-circle"></ons-icon>
             </ons-toolbar-button>
         </div>
     </ons-toolbar>
@@ -48,7 +48,7 @@
         <div style="position:relative;z-index:1">
             <img src="img/cedarCancer.jpg" style="max-width:100vw">
             <div class="image-profile-wrapper-home text-center" align="center" style="margin-top:-160px;margin-left:auto;margin-right:auto;position:relative;z-index:4;">
-                <img ng-src="{{ProfileImage}}" style="margin-left:auto;margin-right:auto;" class="image-profile-home">
+                <img ng-src="{{h.ProfileImage}}" style="margin-left:auto;margin-right:auto;" class="image-profile-home">
             </div>
             <div style="margin-top:0px">
 
@@ -56,9 +56,9 @@
                     <div class="item item-text-wrap " style="margin-top:-10px;margin-bottom:0px;padding-bottom: 1px">
                         <div>
                             <p class="text-center">
-                                <strong ng-class="fontSizeTitle" style="color:white">{{FirstName}} {{LastName}}</strong><br>
+                                <strong ng-class="fontSizeTitle" style="color:white">{{h.FirstName}} {{h.LastName}}</strong><br>
 
-                                <span style="color:white" ng-class="fontSizeDesc"> {{"PATIENTID"|translate}} {{PatientId}}</span><br>
+                                <span style="color:white" ng-class="fontSizeDesc"> {{"PATIENTID"|translate}} {{h.PatientId}}</span><br>
                             </p>
                         </div>
                     </div>
@@ -85,25 +85,25 @@
                 </ons-list-item>
                 <!--CHECKIN TO APPOINTMENTS-->
                 <ons-list-header class="person-list-header" ng-class="fontSizeTitle">{{"OVERVIEW"|translate}}</ons-list-header>
-                <ons-list-item modifier="tappable chevron" class="item" ng-click="goToCheckinAppointments(todaysAppointments)">
+                <ons-list-item modifier="tappable chevron" class="item" ng-click="h.goToCheckinAppointments(h.todaysAppointments)">
                     <ons-row align="center">
-                        <ons-col width="60px" align="center">
+                        <ons-col width="60px" style="text-align: center">
                             <div>
-                                <i class="ion-android-checkbox-outline iconHomeView" style="color:orange"></i><span class="notification" ng-show="!allCheckedIn">1</span>
+                                <i class="fa fa-check-square-o fa-2x" style="color:orange"></i><span class="notification" ng-hide="h.allCheckedIn">1</span>
                             </div>
                         </ons-col>
                         <ons-col>
                             <header>
                                 <span class="item-title" ng-class="fontSizeTitle">{{"CHECKIN"|translate}}</span>
                             </header>
-                            <p class="item-desc" ng-class="fontSizeDesc">{{checkInMessage|translate}} {{RoomLocation}}</p>
-                            <p class="item-desc" ng-class="fontSizeDesc">{{calledApp["AppointmentType_"+language]}}</p>
+                            <p class="item-desc" ng-class="fontSizeDesc">{{h.checkInMessage|translate}} {{RoomLocation}}</p>
+                            <p class="item-desc" ng-class="fontSizeDesc">{{h.calledApp["AppointmentType_"+language]}}</p>
                             <!--<p class="item-desc" ng-class="fontSizeDesc" style="color:orange" ng-show ="checkinEstimate&&showHomeScreenUpdate">{{"ESTIMATEDWAIT"|translate}}: {{checkinEstimate}} minutes</p>-->
                         </ons-col>
                     </ons-row>
                 </ons-list-item>
-                <!-- NEXT APPOINTMENT INFORMATION-->
-                <ons-list-item modifier="chevron" class="item" ng-click="goToAppointments()">
+                <!-- APPOINTMENT INFORMATION-->
+                <ons-list-item modifier="chevron" class="item" ng-click="h.goToAppointments()">
                     <ons-row align="center">
                         <ons-col width="60px" style="text-align: center">
                             <div>
@@ -114,14 +114,14 @@
                             <header>
                                 <span class="item-title" ng-class="fontSizeTitle">{{"NEXTAPPOINTMENT"|translate}}</span>
                             </header>
-                            <p class="item-desc" ng-class="fontSizeDesc" ng-show="appointmentShown.ScheduledStartTime">
-                                {{"UPCOMING"|translate}}: {{appointmentShown.ScheduledStartTime|date:'medium'}}
+                            <p class="item-desc" ng-class="fontSizeDesc" ng-show="h.appointmentShown.ScheduledStartTime">
+                                {{"UPCOMING"|translate}}: {{h.appointmentShown.ScheduledStartTime|date:'medium'}}
                             </p>
                         </ons-col>
                     </ons-row>
                 </ons-list-item>
                 <!--STATUS-->
-                <ons-list-item modifier="chevron" class="item" ng-show="statusDescription" ng-click="goToStatus()">
+                <ons-list-item modifier="chevron" class="item" ng-show="h.statusDescription" ng-click="h.goToStatus()">
                     <ons-row align="center">
                         <ons-col width="60px" align="center" style="text-align: center">
                             <div>
@@ -132,15 +132,15 @@
                             <header>
                                 <span class="item-title" ng-class="fontSizeTitle">{{"STATUS"|translate}}</span>
                             </header>
-                            <p class="item-desc" ng-class="fontSizeDesc" translate ="{{statusDescription}}"></p>
+                            <p class="item-desc" ng-class="fontSizeDesc" translate ="{{h.statusDescription}}"></p>
                         </ons-col>
                     </ons-row>
                 </ons-list-item>
             </ons-list>
-            <div  style="padding-top:5px;" class="settings-header" ng-class="fontSizeTitle" ng-show = "notifications.length !== 0">{{"NEWS"|translate}}</div>
+            <div  style="padding-top:5px;" class="settings-header" ng-class="fontSizeTitle" ng-show = "h.notifications.length !== 0">{{"NEWS"|translate}}</div>
             <!--Making new set up for notifications-->
             <ons-list style="margin-top:5px;">
-                <ons-list-item modifier="chevron" class="item" ng-repeat="(type, notification) in notifications" ng-click="goToNotification($index, notification)">
+                <ons-list-item modifier="chevron" class="item" ng-repeat="(type, notification) in h.notifications" ng-click="h.goToNotification($index, notification)">
                     <ons-row align="center">
                         <ons-col width="60px" align="center">
                             <div>
