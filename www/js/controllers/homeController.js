@@ -202,7 +202,8 @@
                         vm.showHomeScreenUpdate = true;
                     }
                 }).catch(function(error){
-                    vm.checkInMessage = "CHECKIN_IN_HOSPITAL_ONLY";
+                    console.log(error);
+                    NewsBanner.showCustomBanner($filter('translate')(error), '#333333', function(){}, 3000);
                 });
 
             }else{

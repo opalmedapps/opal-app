@@ -67,8 +67,8 @@
                         vm.checkInMessage = "CHECKIN_IN_HOSPITAL_ONLY";
                     } else {
                         vm.alert.type = "danger";
-                        vm.checkInMessage = "CHECKIN_ERROR";
-                        NewsBanner.showCustomBanner($filter('translate')("CHECKIN_ERROR"), '#333333', function(){}, 3000);
+                        vm.checkInMessage = error;
+                        NewsBanner.showCustomBanner($filter('translate')(error), '#333333', function(){}, 3000);
                     }
                 });
 
