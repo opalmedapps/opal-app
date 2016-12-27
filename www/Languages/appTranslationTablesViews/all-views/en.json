@@ -85,7 +85,7 @@
   "LEAVEMESSAGE": "Leave us a message!",
   "LOADINGDATA": "Loading Data",
   "LOCATION": "Waiting Location",
-  "LOCATION_DIABLED" : "Your location is disabled. Please enable it and restart the application.",
+  "LOCATION_ERROR" : "Your location is disabled. Please enable it before trying to check in.",
   "LOCKEDOUT": "Locked out due to inactivity",
   "MAPS": "Map",
   "MINUTES": "Minutes",
