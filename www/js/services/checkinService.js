@@ -16,7 +16,11 @@ var myApp=angular.module('MUHCApp');
  *@requires $timeout
  *@description Service that deals with the checkin functionality for the app
  **/
-myApp.factory('CheckinService', ['$q', 'RequestToServer', 'Appointments', '$timeout','FirebaseService','EncryptionService', '$rootScope','UserPreferences',function ($q, RequestToServer, Appointments,$timeout,FirebaseService,EncryptionService,$rootScope,UserPreferences) {
+myApp.factory('CheckinService',
+    ['$q', 'RequestToServer', 'Appointments', '$timeout',
+    'FirebaseService','EncryptionService', '$rootScope','UserPreferences', 'Permissions',
+    function ($q, RequestToServer, Appointments,$timeout,
+              FirebaseService,EncryptionService,$rootScope,UserPreferences,Permissions) {
 
     /**
      *@ngdoc property
@@ -100,14 +104,14 @@ myApp.factory('CheckinService', ['$q', 'RequestToServer', 'Appointments', '$time
                     'Longitude':position.coords.longitude,
                     'Accuracy':position.coords.accuracy
                 };
-                r.resolve('Check in to your Appointment');
+                r.resolve('CHECK_IN_PERMITTED');
             } else {
-                r.reject('Check-in allowed in the vicinity of the Cancer Center');
+                r.reject('NOT_ALLOWED');
             }
 
         }, function(error){
             console.log(error.code);
-            r.reject('Could not obtain location');
+            r.reject('LOCATION_ERROR');
         });
         return r.promise;
     }
@@ -135,14 +139,15 @@ myApp.factory('CheckinService', ['$q', 'RequestToServer', 'Appointments', '$time
          **/
         isAllowedToCheckin:function()
         {
-            var r =$q.defer();
+           /* var r =$q.defer();
+
             isWithinAllowedRange().then(function(response)
             {
                 r.resolve(response);
             },function(response){
                 r.reject(response);
-            });
-            return r.promise;
+            });*/
+            return isWithinAllowedRange();
         },
         /**
          *@ngdoc method

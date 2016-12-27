@@ -105,6 +105,7 @@
   "LOADING": "Chargement",
   "LOADINGDATA": "Chargement des données",
   "LOCATION": "Lieu d'attente",
+  "LOCATION_DIABLED" : "Vous devez activer la localisation de votre téléphone avant de pouvoir vous enregistrer ",
   "LOCKEDOUT": "Verrouillé en raison de l'inactivité",
   "MAPS": "Plan",
   "MINUTES": "Minutes",
