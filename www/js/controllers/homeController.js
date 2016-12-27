@@ -58,7 +58,7 @@
 
             // Store the login time
             if(!localStorage.getItem('login')){
-                localStorage.setItem('login', new Date().getUTCMilliseconds());
+                localStorage.setItem('login', new Date().valueOf());
             }
 
             // Sending registration id to server for push notifications.
@@ -70,9 +70,11 @@
                 refresh();
             });
 
-            // Need to allow external storage write for documents notifications. Need to allow location for checkin
-            Permissions.enablePermission('WRITE_EXTERNAL_STORAGE', 'Storage access disabled. Unable to write documents.');
-            Permissions.enablePermission('ACCESS_FINE_LOCATION', 'Location access denied wont be able to checkin.');
+            Permissions.enablePermission('WRITE_EXTERNAL_STORAGE', 'PERMISSION_STORAGE_DENIED')
+                .catch(function (response) {
+                    console.log(response);
+                    NewsBanner.showCustomBanner($filter('translate')(response.Message), '#333333', function(){}, 5000);
+                });
 
             // Initialize the page data
             homePageInit();

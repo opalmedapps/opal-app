@@ -61,7 +61,7 @@
                     }
                 })
                 .catch(function (error) {
-                    if (error == "Check-in allowed in the vicinity of the Cancer Center"){
+                    if (error == "NOT_ALLOWED"){
                         NewsBanner.showCustomBanner($filter('translate')("NOT_ALLOWED"), '#333333', function(){}, 3000);
                         vm.alert.type = "warning";
                         vm.checkInMessage = "CHECKIN_IN_HOSPITAL_ONLY";

@@ -4,7 +4,7 @@
 var myApp = angular.module('MUHCApp');
 
 myApp.controller('InitScreenController',
-    function($scope, $timeout, NavigatorParameters, $translatePartialLoader, UserPreferences, $filter, Constants)
+    function($scope, $timeout, NavigatorParameters, $translatePartialLoader, UserPreferences, $filter, Constants, Permissions)
 {
     //Firebase reference to check authentication
     var myDataRef = firebase.database().ref('dev2/');
@@ -77,6 +77,11 @@ myApp.controller('InitScreenController',
         initNavigator.pushPage('./views/login/login.html',{animation:'lift'});
     };
 
+    Permissions.enablePermission('ACCESS_FINE_LOCATION', 'LOCATION_PERMISSION_DENIED')
+        .catch(function (response) {
+            console.log(response);
+            NewsBanner.showCustomBanner($filter('translate')(response.Message), '#333333', function(){}, 5000);
+        });
    
     //Check authentication state
     //var boolAuth = authenticate();

@@ -21,7 +21,7 @@ myApp.service('LocalStorage',['UserAuthorizationInfo', 'EncryptionService',funct
             storage=window.localStorage.getItem(user.UserName);
             //console.log(storage);
             storage = JSON.parse(storage);
-            //console.log(storage);
+            console.log(storage);
             EncryptionService.decryptData(storage);
             return storage;
         }else{
@@ -50,10 +50,10 @@ myApp.service('LocalStorage',['UserAuthorizationInfo', 'EncryptionService',funct
 
             //Convert into string
             //console.log(temp);
-            /*temp = JSON.stringify(temp);
+            temp = JSON.stringify(temp);
 
             //Parse
-            temp = JSON.parse(temp);*/
+            temp = JSON.parse(temp);
             //Encrypt data
             temp = EncryptionService.encryptData(temp);
 
@@ -146,10 +146,10 @@ myApp.service('LocalStorage',['UserAuthorizationInfo', 'EncryptionService',funct
          **/
         resetUserLocalStorage:function()
         {
-            /*window.localStorage.removeItem('UserAuthorizationInfo');
-             window.localStorage.removeItem(UserAuthorizationInfo.getUsername());
-             window.localStorage.removeItem(UserAuthorizationInfo.getUsername()+'/Timestamps');*/
-            localStorage.clear();
+            window.localStorage.removeItem('UserAuthorizationInfo');
+            window.localStorage.removeItem(UserAuthorizationInfo.getUsername());
+            window.localStorage.removeItem(UserAuthorizationInfo.getUsername()+'/Timestamps');
+            //localStorage.clear();
         }
 
 
