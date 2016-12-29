@@ -88,6 +88,7 @@
             vm.LastName = Patient.getLastName();
             vm.ProfileImage=Patient.getProfileImage();
             vm.language = UserPreferences.getLanguage();
+            console.log(vm.language);
             vm.noUpcomingAppointments=false;
             //Setting up status
             settingStatus();
