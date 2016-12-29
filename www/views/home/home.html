@@ -97,7 +97,7 @@
                                 <span class="item-title" ng-class="fontSizeTitle">{{"CHECKIN"|translate}}</span>
                             </header>
                             <p class="item-desc" ng-class="fontSizeDesc">{{h.checkInMessage|translate}} {{RoomLocation}}</p>
-                            <p class="item-desc" ng-class="fontSizeDesc">{{h.calledApp["AppointmentType_"+language]}}</p>
+                            <p class="item-desc" ng-class="fontSizeDesc">{{h.calledApp["AppointmentType_"+h.language]}}</p>
                             <!--<p class="item-desc" ng-class="fontSizeDesc" style="color:orange" ng-show ="checkinEstimate&&showHomeScreenUpdate">{{"ESTIMATEDWAIT"|translate}}: {{checkinEstimate}} minutes</p>-->
                         </ons-col>
                     </ons-row>
@@ -149,10 +149,10 @@
                         </ons-col>
                         <ons-col>
                             <header>
-                                <span class="item-title" ng-class="fontSizeTitle">{{notification["Name_"+language]}}</span>
+                                <span class="item-title" ng-class="fontSizeTitle">{{notification["Name_"+h.language]}}</span>
                             </header>
                             <p class="item-desc" ng-class="fontSizeDesc" ng-show="notification.Number<=1">
-                                {{notification["Description_"+language]}}
+                                {{notification["Description_"+h.language]}}
                             </p>
                         </ons-col>
                     </ons-row>
