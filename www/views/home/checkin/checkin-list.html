@@ -38,6 +38,10 @@
         {{checkIn.checkInMessage|translate}}
     </div>
 
+    <div uib-alert ng-show="checkIn.alert.type && checkIn.additionalInfo" style="text-align: center; width: 90%; margin: auto" type="info" class="{{fontSizeTitle}}" >
+        {{checkIn.additionalInfo|translate}}
+    </div>
+
     <div ng-hide="checkIn.alert.type" align="center" style="margin:10px">
         <svg class="progress-circular">
             <circle class="progress-circular__primary" cx="50%" cy="50%" r="40%" fill="none" stroke-width="10%" stroke-miterlimit="10"/>
