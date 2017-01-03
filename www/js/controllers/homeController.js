@@ -204,7 +204,7 @@
                     }
                 }).catch(function(error){
                     console.log(error);
-                    NewsBanner.showCustomBanner($filter('translate')(error), '#333333', function(){}, 3000);
+                    //NewsBanner.showCustomBanner($filter('translate')(error), '#333333', function(){}, 3000);
                 });
 
             }else{

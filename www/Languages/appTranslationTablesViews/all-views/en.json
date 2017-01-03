@@ -15,6 +15,7 @@
   "CANCEL": "Cancel",
   "CHECKED_IN": "You are checked in!",
   "CHECKIN": "Check-in",
+  "CHECKIN_ADDITIONAL": "You will be called to your appointment(s) via the waiting room screens and via an alert on your phone. Please ensure that you are connected to wifi or that you have a cell phone signal in order to receive the alert to your phone.",
   "CHECKIN_CALLED": "Please go to: ",
   "CHECKIN_ERROR": "Error occurred, check in at the cancer center",
   "CHECKIN_IN_HOSPITAL_ONLY": "You must be at the hospital to check in",

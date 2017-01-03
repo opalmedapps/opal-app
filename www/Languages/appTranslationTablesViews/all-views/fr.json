@@ -17,6 +17,7 @@
   "CANCERCENTER": "Centre du cancer des Cèdres",
   "CHECKED_IN": "Vous êtes enregistré!",
   "CHECKIN": "Enregistrement",
+  "CHECKIN_ADDITIONAL": "Vous serez appelé à votre rendez-vous à travers les écrans à la salle d'attente et par votre téléphone. Assurez-vous que votre téléphone ait accès à l'internet.",
   "CHECKIN_CALLED": "Veuillez vous dirigez vers: ",
   "CHECKIN_ERROR": "Erreur lors de l'enregistrement",
   "CHECKIN_IN_HOSPITAL_ONLY": "Vous devez être à l'hopital pour vous enregistrer",

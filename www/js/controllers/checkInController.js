@@ -8,7 +8,7 @@
     CheckInController.$inject =
         [
         'CheckinService', 'NavigatorParameters', 'UserPreferences',
-        'Appointments', 'NewsBanner','$filter',
+        'Appointments', 'NewsBanner','$filter'
         ];
 
     /* @ngInject */
@@ -21,6 +21,7 @@
         vm.response = '';
         vm.error = '';
         vm.checkInMessage = "";
+        vm.additionalInfo = "";
         vm.alert = {};
         vm.goToAppointment = goToAppointment;
 
@@ -32,6 +33,8 @@
             vm.apps = Appointments.getCheckinAppointment();
             console.log(vm.apps);
             vm.language = UserPreferences.getLanguage();
+
+            // Ensure that user is within range of the hospital
             CheckinService.isAllowedToCheckin()
                 .then(function (response) {
                     console.log("Allowed to Check in", response);
@@ -45,6 +48,7 @@
                     } else if (response){
                         vm.alert.type = "success";
                         vm.checkInMessage = "CHECKED_IN";
+                        vm.additionalInfo = "CHECKIN_ADDITIONAL";
                     } else {
                         console.log("Will call checkin");
                         CheckinService.checkinToAllAppointments(vm.apps)
@@ -52,6 +56,7 @@
                                 console.log("success");
                                 vm.alert.type = "success";
                                 vm.checkInMessage = "CHECKED_IN";
+                                vm.additionalInfo = "CHECKIN_ADDITIONAL";
                             })
                             .catch(function (error) {
                                 console.log(error);
