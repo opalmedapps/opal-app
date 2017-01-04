@@ -34,6 +34,13 @@
             console.log(vm.apps);
             vm.language = UserPreferences.getLanguage();
 
+            // Check if there are appointments
+            if (vm.apps.length == 0){
+                vm.alert.type = "info";
+                vm.checkInMessage = "CHECKIN_NONE";
+                return;
+            }
+
             // Ensure that user is within range of the hospital
             CheckinService.isAllowedToCheckin()
                 .then(function (response) {
