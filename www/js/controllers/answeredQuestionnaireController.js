@@ -14,7 +14,9 @@ app1.controller('answeredQuestionnaireController', function($scope, Questionnair
   $scope.questionnaire = Questionnaires.getPatientQuestionnaires().Questionnaires[$scope.questionnaireDBSerNum];
   $scope.patientQuestionnaire = Questionnaires.getPatientQuestionnaires().PatientQuestionnaires[$scope.questionnaireSerNum];
   $scope.questionsObject = $scope.questionnaire.Questions;
-  $scope.questionsObject = $filter('orderBy')($scope.questionsObject, 'OrderNum', false);
+  console.log($scope.patientQuestionnaire);
+  console.log($scope.questionsObject);
+  //$scope.questionsObject = $filter('orderBy')($scope.questionsObject, 'OrderNum', false);
   $scope.questions = [];
 
   for (key in $scope.questionsObject) {

@@ -42,13 +42,15 @@ myApp.service('Appointments', ['$q', 'RequestToServer','$cordovaCalendar','UserA
     var numberOfSessions=0;
     function searchAppointmentsAndDelete(appointments)
     {
+        console.log(appointments);
+        console.log(userAppointmentsArray);
         for (var i = 0; i < appointments.length; i++) {
-            for (var j = 0; j < userAppointmentsArray.length; j++) {
+            var j = userAppointmentsArray.length;
+            while(j--){
                 if(userAppointmentsArray[j].AppointmentSerNum==appointments[i].AppointmentSerNum)
                 {
                     userAppointmentsArray.splice(j,1);
                     appointmentsLocalStorage.splice(j,1);
-                    break;
                 }
             }
 
@@ -134,8 +136,7 @@ myApp.service('Appointments', ['$q', 'RequestToServer','$cordovaCalendar','UserA
         var todayAppointments = getAppointmentsInPeriod('Today');
         console.log(todayAppointments);
         todayAppointments = todayAppointments.filter(function(appointment){
-            if(appointment.hasOwnProperty('StatusClose')) return false;
-            else return true;
+            return !appointment.hasOwnProperty('StatusClose');
         });
         if(todayAppointments.length >0)
         {
@@ -147,6 +148,8 @@ myApp.service('Appointments', ['$q', 'RequestToServer','$cordovaCalendar','UserA
     function getAppointmentsInPeriod(period)
     {
         //Variables for comparing dates
+        //console.log(userAppointmentsArray);
+        //console.log(appointmentsLocalStorage);
         var today=new Date();
         var day=today.getDate();
         var month=today.getMonth();
@@ -716,7 +719,8 @@ myApp.service('Appointments', ['$q', 'RequestToServer','$cordovaCalendar','UserA
         },
 
         getRecentCalledAppointment: function () {
-            var todaysAppointments = getAppointmentsInPeriod('Today');
+            var todaysAppointments = [];
+            todaysAppointments = getAppointmentsInPeriod('Today');
             console.log(todaysAppointments);
             var now=new Date();
 

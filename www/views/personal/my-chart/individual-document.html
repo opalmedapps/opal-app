@@ -12,6 +12,7 @@
         <img class="animated pulse" height="50%" width="50%" ng-src="{{documentObject.PreviewContent}}" ng-click="openDocument()">
 
     </div>
+    <div ons-if-platform="android" align="center" ng-class="fontSizeTitle">{{"TAP_DL"|translate}}</div>
     <div ng-show="loading" align="center" style="margin:10px">
         <svg class="progress-circular">
             <circle class="progress-circular__primary" cx="50%" cy="50%" r="40%" fill="none" stroke-width="10%" stroke-miterlimit="10"/>
