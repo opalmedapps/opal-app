@@ -114,7 +114,7 @@ myApp.factory('CheckinService',
                     r.reject('LOCATION_ERROR');
                 }, {
                     maximumAge: 3000,
-                    timeout: 3000,
+                    timeout: 10000,
                     enableHighAccuracy: true
                 });
                 return r.promise;

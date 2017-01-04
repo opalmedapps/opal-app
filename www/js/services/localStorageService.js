@@ -46,6 +46,8 @@ myApp.service('LocalStorage',['UserAuthorizationInfo', 'EncryptionService',funct
         WriteToLocalStorage:function(section, data)
         {
             //Make copy of data
+            //console.log(section);
+            //console.log(data);
             var temp = angular.copy(data);
 
             //Convert into string

@@ -102,14 +102,13 @@
 
         function settingStatus()
         {
+            console.log('Completed planning? ', PlanningSteps.isCompleted());
             if(!PlanningSteps.isCompleted()) {
                 vm.statusDescription = "PLANNING";
-            } else if (Appointments.isThereNextTreatment()){
-                vm.statusDescription = "INTREATMENT";
-            } else if (PlanningSteps.isCompleted()){
-                vm.statusDescription = null;
+            }else if (Appointments.isThereNextTreatment()){
+                vm.statusDescription = "PLANNING_COMPLETE";
             } else {
-                vm.statusDescription = null;
+                vm.statusDescription = '';
             }
         }
 
@@ -252,11 +251,8 @@
 
         function goToStatus()
         {
-            if(PlanningSteps.isCompleted()) {
-                homeNavigator.pushPage('views/personal/appointments/appointments.html')
-            } else{
-                homeNavigator.pushPage('views/home/status/status_new.html');
-            }
+            homeNavigator.pushPage('views/home/status/status_new.html');
+
         }
 
         function goToNotification(index, notification){
