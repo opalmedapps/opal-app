@@ -37,9 +37,19 @@ myApp.controller('CalendarController', ['Appointments', '$scope','$timeout', '$f
         console.log(NavigatorParameters.getParameters());
 
         $scope.$watch('dt',function(){
-            var anchor=findClosestAnchor();
-            $location.hash(anchor);
-            $anchorScroll();
+            if(!flag)
+            {
+                setTimeout(function () {
+                    var anchor=findClosestAnchor();
+                    $location.hash(anchor);
+                    $anchorScroll();
+                }, 500);
+            }else{
+                var anchor=findClosestAnchor();
+                $location.hash(anchor);
+                $anchorScroll();
+            }
+            flag=true;
 
         });
 

@@ -45,12 +45,12 @@ myApp.service('Appointments', ['$q', 'RequestToServer','$cordovaCalendar','UserA
         console.log(appointments);
         console.log(userAppointmentsArray);
         for (var i = 0; i < appointments.length; i++) {
-            var j = userAppointmentsArray.length;
-            while(j--){
+            for (var j = 0; j < userAppointmentsArray.length; j++) {
                 if(userAppointmentsArray[j].AppointmentSerNum==appointments[i].AppointmentSerNum)
                 {
                     userAppointmentsArray.splice(j,1);
                     appointmentsLocalStorage.splice(j,1);
+                    break;
                 }
             }
 
@@ -187,8 +187,8 @@ myApp.service('Appointments', ['$q', 'RequestToServer','$cordovaCalendar','UserA
         //Format date to javascript date
         var index=-1;
         numberOfSessions=0;
-        appointmentsLocalStorage=appointmentsLocalStorage.concat(appointments);
-        LocalStorage.WriteToLocalStorage('Appointments',appointmentsLocalStorage);
+        // appointmentsLocalStorage=appointmentsLocalStorage.concat(appointments);
+        // LocalStorage.WriteToLocalStorage('Appointments',appointmentsLocalStorage);
         // var today = new Date();
         // today.setDate(today.getDate()-10);
         for (var i = 0; i < appointments.length; i++) {
@@ -198,6 +198,9 @@ myApp.service('Appointments', ['$q', 'RequestToServer','$cordovaCalendar','UserA
             appointments[i].LastUpdated =  $filter('formatDate')(appointments[i].LastUpdated);
             userAppointmentsArray.push(appointments[i]);
         }
+
+        LocalStorage.WriteToLocalStorage('Appointments',userAppointmentsArray);
+
         //Sort Appointments chronologically most recent first
         userAppointmentsArray = $filter('orderBy')(userAppointmentsArray, 'ScheduledStartTime', false);
         //Extracts treatment session appointments
@@ -357,7 +360,9 @@ myApp.service('Appointments', ['$q', 'RequestToServer','$cordovaCalendar','UserA
          **/
         updateUserAppointments:function(appointments)
         {
+            console.log("called update user appointments");
             searchAppointmentsAndDelete(appointments);
+            //this.clearAppointments();
             addAppointmentsToService(appointments);
         },
         /**
@@ -457,7 +462,7 @@ myApp.service('Appointments', ['$q', 'RequestToServer','$cordovaCalendar','UserA
                 if(appointments[i].AppointmentSerNum==serNum){
                     userAppointmentsArray[i].Checkin='1';
                     appointmentsLocalStorage[i].Checkin = '1';
-                    LocalStorage.WriteToLocalStorage('Appoinments',appointmentsLocalStorage);
+                    LocalStorage.WriteToLocalStorage('Appointments',appointmentsLocalStorage);
                 }
             }
         },

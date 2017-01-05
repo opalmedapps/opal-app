@@ -90,6 +90,10 @@
             vm.language = UserPreferences.getLanguage();
             console.log(vm.language);
             vm.noUpcomingAppointments=false;
+
+            //Initialize Planning steps
+            PlanningSteps.initializePlanningSequence();
+
             //Setting up status
             settingStatus();
             //Setting up next appointment
