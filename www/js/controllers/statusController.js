@@ -58,6 +58,7 @@
         function activate()
         {
             //Check for PlanWorkflow completion and populate with that otherwise start with treatment sessions
+            PlanningSteps.initializePlanningSequence();
             var events;
             statusVm.planningCompleted = true;
             statusVm.treatmentCompleted = true;

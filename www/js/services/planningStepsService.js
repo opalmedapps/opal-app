@@ -28,7 +28,7 @@
         };
 
         // Initilaize the sequence when app is loaded
-        initializePlanningSequence();
+        //initializePlanningSequence();
 
         return service;
 
@@ -39,6 +39,7 @@
         }
 
         function initializePlanningSequence(){
+            destroy();
             var ctAppointment = getCTSimAppointment();
             var planningTasks = Tasks.getAllRecentTasks();
 
