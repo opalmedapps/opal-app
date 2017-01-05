@@ -77,6 +77,7 @@ angular.module('MUHCApp').controller('MainController', ["$state",'$timeout', '$r
         {
 
             $state.go('init');
+            localStorage.setItem('locked',1);
             //window.localStorage.removeItem('OpalAdminPanelPatient');
             //window.localStorage.removeItem('OpalAdminPanelUser');
             console.log('Going inactive');

@@ -39,7 +39,7 @@
                                 <div align="center">
                                     <div class="progressStatusTextBox" style="font-size:15px">
                                         <div style="vertical-align: middle">
-                                            <strong>{{"STEP"|translate}} {{status.eventIndex}} {{"OF"|translate}} {{status.totalEvents}} </strong>
+                                            <strong>{{"STEP"|translate}} {{status.eventIndex - 1}} {{"OF"|translate}} {{status.totalEvents}} </strong>
                                             <div ng-show="status.eventType === 'plan'">
                                                 <div ng-show="!status.planningCompleted" align="middle" style="margin-left:5px; vertical-align: middle">
                                                     {{status.currentEvent | translate}}
@@ -75,7 +75,7 @@
                 <div id="divTreatmentPlan" style="overflow-y:scroll">
 
                     <ons-list class="plan-list" style="margin:0;padding:0">
-                        <ons-list-item class="plan" modifier="tappable" ng-click="status.goTo(status.eventType, events[0])" ng-repeat="(step, events) in status.events" id="treatmentSessions{{$index}}">
+                        <ons-list-item class="plan" modifier="tappable" ng-click="status.goTo(status.eventType, events[events.length-1])" ng-repeat="(step, events) in status.events" id="treatmentSessions{{$index}}">
                             <ons-row id="statusStep{{$index}}">
                                 <ons-col width="50px" class="plan-left" align="center">
                                     <div class="plan-date" ng-show="status.eventIndex > status.stepMapping[step]"><img ng-src="./img/checkedbox.png" width="20px" height="20px"></div>
@@ -83,13 +83,13 @@
                                         <img ng-src="./img/uncheckedbox.png" width="20px" height="20px">
                                     </div>
                                 </ons-col>
-                                <ons-col width="6px" class="plan-center" ng-style="{ 'background-color': getStyle(events[0]) }"></ons-col>
+                                <ons-col width="6px" class="plan-center" ng-style="{ 'background-color': getStyle(events[events.length-1]) }"></ons-col>
                                 <ons-col class="plan-right">
                                     <div class="plan-name" ng-class="fontSizeTitle"> <span style="text-align:left"><strong>{{$index+1}}</strong></span> {{step | translate}}</div>
                                     <div class="plan-info" ng-class="fontSizeDesc">
-                                        <div ng-if="(status.eventIndex > status.stepMapping[step] && (events[0].ScheduledStartTime || events[0].DueDateTime)< status.today)">
+                                        <div ng-if="(status.eventIndex > status.stepMapping[step] && (events[events.length-1].ScheduledStartTime || events[events.length-1].DueDateTime)< status.today)">
                                             <strong>{{"COMPLETED"|translate}}: </strong>
-                                            {{(events[0].ScheduledStartTime || events[0].DueDateTime)|date:'fullDate'}}
+                                            {{(events[events.length-1].ScheduledStartTime || events[events.length-1].DueDateTime)|date:'fullDate'}}
                                         </div>
                                         <div ng-if="status.eventIndex == status.stepMapping[step]">
                                             <strong>{{"INPROGRESS"|translate}} </strong>
