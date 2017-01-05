@@ -57,8 +57,8 @@
             NewsBanner.setAlertOffline();
 
             // Store the login time
-            if(!localStorage.getItem('login')){
-                localStorage.setItem('login', new Date().valueOf());
+            if(localStorage.getItem('locked')){
+                localStorage.removeItem('locked');
             }
 
             // Sending registration id to server for push notifications.

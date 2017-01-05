@@ -35,7 +35,7 @@
             vm.language = UserPreferences.getLanguage();
 
             // Check if there are appointments
-            if (vm.apps.length == 0){
+            if (!vm.apps || vm.apps.length == 0){
                 vm.alert.type = "info";
                 vm.checkInMessage = "CHECKIN_NONE";
                 return;

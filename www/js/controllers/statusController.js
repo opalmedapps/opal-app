@@ -64,23 +64,23 @@
             statusVm.treatmentCompleted = true;
             console.log(PlanningSteps.isCompleted());
 
-            if (!PlanningSteps.isCompleted() || !boolStatus){
+            // if (!PlanningSteps.isCompleted() || !boolStatus){
                 events = PlanningSteps.getPlanningSequence();
                 var currentStep = PlanningSteps.getCurrentStep();
                 console.log(currentStep);
                 initTreatmentPlanStatus(events,currentStep);
 
-            } /*else{
-
-                events = Appointments.getTreatmentAppointments();
-                //If the treatment sessions are not empty adds them to
-                if(events.Total !== 0&&boolStatus)
-                {
-                    events.AppointmentList = Appointments.setAppointmentsLanguage(
-                        events.AppointmentList);
-                    initTreatmentSessions(events);
-                }
-            }*/
+            // } /*else{
+            //
+            //     events = Appointments.getTreatmentAppointments();
+            //     //If the treatment sessions are not empty adds them to
+            //     if(events.Total !== 0&&boolStatus)
+            //     {
+            //         events.AppointmentList = Appointments.setAppointmentsLanguage(
+            //             events.AppointmentList);
+            //         initTreatmentSessions(events);
+            //     }
+            // }*/
             setHeightElement();
         }
 
@@ -114,10 +114,11 @@
         function initTreatmentPlanStatus(stages, currentStep){
             console.log('Inside Status init');
             statusVm.events=stages;
+            console.log(stages);
             statusVm.eventType = 'plan';
             statusVm.totalEvents = 5;
 
-            var nextStepIndex = statusVm.stepMapping[currentStep];
+            var nextStepIndex = statusVm.stepMapping[currentStep] + 1;
             console.log(nextStepIndex);
             statusVm.eventIndex = nextStepIndex;
             //statusVm.estimatedTime='3 days';
@@ -131,7 +132,7 @@
                 if(PlanningSteps.isCompleted()){
                     statusVm.planningCompleted=true;
                     statusVm.percentage=100;
-                    statusVm.completionDate=stages['Scheduling'][stages['Scheduling'].length-1].DueDateTime;
+                    statusVm.completionDate=stages['Scheduling Treatments'][stages['Scheduling Treatments'].length-1].DueDateTime;
                     endColor='#5CE68A';
                 }else{
                     statusVm.currentEvent=currentStep;
