@@ -12,9 +12,15 @@ Install bower
 ```
 npm install -g bower
 ```
-Clone the git repository
+Clone from github 
 ```
-git clone <repository>
+git clone git@github.com:Sable/qplus.git
+```
+If you are running ubuntu and you try to clone to your encrypted home directory, some filenames will be too long and git will throw an error. You should then only clone the master or opal_dev branches. 
+
+To clone a single branch from the git repository.
+```
+git clone -b <remote_branch_name> --single-branch git@github.com:Sable/qplus.git
 ```
 Navigate to qplus folder and install missing librairies
 ```
