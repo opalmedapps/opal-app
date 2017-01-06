@@ -18,10 +18,8 @@ use Database; # Use our custom database module Database.pm
 use Storable qw(dclone); # for deep copies
 
 #---------------------------------------------------------------------------------
-# Connect to the databases
+# Connect to our database
 #---------------------------------------------------------------------------------
-
-my $sourceDatabase	= $Database::sourceDatabase;
 my $SQLDatabase		= $Database::targetDatabase;
 
 #====================================================================================
@@ -31,12 +29,12 @@ sub new
 {
 	my $class = shift;
 	my $staff = {
-		_ser		=> undef,
-		_aliasser	=> undef,
-		_id		=> undef,
-		_firstname	=> undef,
-		_lastname	=> undef,
-		_initials	=> undef,
+		_ser		    => undef,
+        _sourcedbser    => undef,
+		_sourceuid		=> undef,
+		_firstname	    => undef,
+		_lastname	    => undef,
+		_initials	    => undef,
 	};
 	# bless associates an object with a class so Perl knows which package to search for
 	# when a method is envoked on this object
@@ -55,23 +53,23 @@ sub setStaffSer
 }
 
 #====================================================================================
-# Subroutine to set the staff alias serial
+# Subroutine to set the staff source database serial
 #====================================================================================
-sub setStaffAliasSer
+sub setStaffSourceDatabaseSer
 {
-	my ($staff, $aliasser) = @_; # staff object with provided serial in arguments
-	$staff->{_aliasser} = $aliasser; # set the ser
-	return $staff->{_aliasser};
+	my ($staff, $sourcedbser) = @_; # staff object with provided serial in arguments
+	$staff->{_sourcedbser} = $sourcedbser; # set the ser
+	return $staff->{_sourcedbser};
 }
 
 #====================================================================================
-# Subroutine to set the staff id
+# Subroutine to set the staff source uid
 #====================================================================================
-sub setStaffId
+sub setStaffSourceUID
 {
-	my ($staff, $id) = @_; # staff object with provided id in arguments
-	$staff->{_id} = $id; # set the id
-	return $staff->{_id};
+	my ($staff, $sourceuid) = @_; # staff object with provided id in arguments
+	$staff->{_sourceuid} = $sourceuid; # set the id
+	return $staff->{_sourceuid};
 }
 
 #====================================================================================
@@ -114,21 +112,21 @@ sub getStaffSer
 }
 
 #====================================================================================
-# Subroutine to get the staff alias ser
+# Subroutine to get the staff source database ser
 #====================================================================================
-sub getStaffAliasSer
+sub getStaffSourceDatabaseSer
 {
 	my ($staff) = @_; # our staff object
-	return $staff->{_aliasser};
+	return $staff->{_sourcedbser};
 }
 
 #====================================================================================
-# Subroutine to get the staff id
+# Subroutine to get the staff source uid
 #====================================================================================
-sub getStaffId
+sub getStaffSourceUID
 {
 	my ($staff) = @_; # our staff object
-	return $staff->{_id};
+	return $staff->{_sourceuid};
 }
 
 #====================================================================================
@@ -158,109 +156,56 @@ sub getStaffInitials
 	return $staff->{_initials};
 }
 
-#====================================================================================
-# Subroutine to get staff information from the ARIA db since last cron
-#====================================================================================
-sub getStaffFromSourceDB
-{
-	my (@CoreAliasList) = @_; # core alias object
-	my @staffList = (); # initialize a list for Staff objects
-	
-	# when we retrieve query results
-	my ($id, $firstname, $lastname, $initials);
-
-	foreach my $Alias (@CoreAliasList) {
-
-		my $aliasSer		= $Alias->getAliasSer(); # get alias ser
-		my $lastUpdated		= $Alias->getAliasLastUpdated(); # get last updated
-
-		my $staffInfo_sql = "
-
-			SELECT DISTINCT
-				userid.stkh_id,
-				userid.user_first_name,
-				userid.user_last_name,
-				userid.user_initial
-			FROM 
-				varianenm.dbo.userid userid
-			WHERE
-				userid.trans_log_mtstamp > '$lastUpdated'
-		";
-
-		# prepare query
-		my $query = $sourceDatabase->prepare($staffInfo_sql)
-			or die "Could not prepare query: " . $sourceDatabase->errstr;
-
-		# execute query
-		$query->execute()
-			or die "Could not execute query: " . $query->errstr;
-
-		my $data = $query->fetchall_arrayref();
-		foreach my $row (@$data) {
-			
-			my $staff = new Staff(); # new staff object
-			
-			# query results	
-			$id		= $row->[0];
-			$firstname	= $row->[1];
-			$lastname	= $row->[2];
-			$initials	= $row->[3];
-
-			$staff->setStaffId($id);	
-			$staff->setStaffFirstName($firstname);
-			$staff->setStaffLastName($lastname);
-			$staff->setStaffInitials($initials);
-			$staff->setStaffAliasSer($aliasSer);
-
-			push(@staffList, $staff); # append staff to list
-		}
-	}
-	return @staffList;
-}
 
 #====================================================================================
-# Subroutine to get staff information from the ARIA db given an id
+# Subroutine to get staff information from the source db given an id
 #====================================================================================
 sub getStaffInfoFromSourceDB
 {
 	my ($Staff) = @_; # Staff object
 		
-	my $id = $Staff->getStaffId();
+	my $sourceuid   = $Staff->getStaffSourceUID();
+    my $sourcedbser = $Staff->getStaffSourceDatabaseSer();
 
 	# when we retrieve query results
 	my ($firstname, $lastname, $initials);
 
-	my $staffInfo_sql = "
+    # ARIA
+    if ($sourcedbser eq 1) {
 
-		SELECT
-			userid.user_first_name,
-			userid.user_last_name,
-			userid.user_initial
-		FROM 
-			varianenm.dbo.userid userid
-		WHERE
-			userid.stkh_id = '$id'
-	";
+        my $sourceDatabase = Database::connectToSourceDatabase($sourcedbser);
+        my $staffInfo_sql = "
+    		SELECT
+	    		userid.user_first_name,
+		    	userid.user_last_name,
+			    userid.user_initial
+    		FROM 
+	    		varianenm.dbo.userid userid
+		    WHERE
+			    userid.stkh_id = '$id'
+    	";
 
-	# prepare query
-	my $query = $sourceDatabase->prepare($staffInfo_sql)
-		or die "Could not prepare query: " . $sourceDatabase->errstr;
+    	# prepare query
+	    my $query = $sourceDatabase->prepare($staffInfo_sql)
+		    or die "Could not prepare query: " . $sourceDatabase->errstr;
 
-	# execute query
-	$query->execute()
-		or die "Could not execute query: " . $query->errstr;
+    	# execute query
+	    $query->execute()
+		    or die "Could not execute query: " . $query->errstr;
 
-	while (my @data = $query->fetchrow_array()) {
+    	while (my @data = $query->fetchrow_array()) {
+    
+	    	$firstname	= $data[0];
+		    $lastname	= $data[1];
+    		$initials	= $data[2];
+	    
+		    $Staff->setStaffFirstName($firstname);
+    		$Staff->setStaffLastName($lastname);
+	    	$Staff->setStaffInitials($initials);
+    	}
 
-		$firstname	= $data[0];
-		$lastname	= $data[1];
-		$initials	= $data[2];
-	
-		$Staff->setStaffFirstName($firstname);
-		$Staff->setStaffLastName($lastname);
-		$Staff->setStaffInitials($initials);
-	}
-
+        $sourceDatabase->disconnect();
+    }
 	return $Staff;
 }
 
@@ -271,9 +216,11 @@ sub getStaffInfoFromSourceDB
 sub inOurDatabase
 {
 	my ($staff) = @_;
-	my $staffId = $staff->getStaffId(); # retrieve staff id
 
-	my $StaffIdInDB = 0; # false by default. Will be true if staff exists
+	my $sourceuid   = $staff->getStaffSourceUID(); # retrieve staff id
+    my $sourcedbser = $staff->getStaffSourceDatabaseSer();
+
+	my $StaffSourceUIDInDB = 0; # false by default. Will be true if staff exists
 	my $ExistingStaff = (); # data to be entered if staff exists
 
 	# other staff variables, if it exists
@@ -288,8 +235,9 @@ sub inOurDatabase
 		FROM
 			Staff
 		WHERE 
-			Staff.StaffId = '$staffId'
-		";
+			Staff.StaffId               = '$sourceuid'
+        AND Staff.SourceDatabaseSerNum  = '$sourcedbser'
+	";
 
 	# prepare query
 	my $query = $SQLDatabase->prepare($inDB_sql)
@@ -301,18 +249,19 @@ sub inOurDatabase
 	
 	while (my @data = $query->fetchrow_array()) {
 
-		$ser		= $data[0];
-		$StaffIdInDB	= $data[1];
-		$firstname	= $data[2];
-		$lastname	= $data[3];
+		$ser		        = $data[0];
+		$StaffSourceUIDInDB	= $data[1];
+		$firstname	        = $data[2];
+		$lastname	        = $data[3];
 	}
 
-	if ($StaffIdInDB) {
+	if ($StaffSourceUIDInDB) {
 
 		$ExistingStaff = new Staff(); # initialize new staff object
 
 		$ExistingStaff->setStaffSer($ser);
-		$ExistingStaff->setStaffId($StaffIdInDB);
+		$ExistingStaff->setStaffSourceUID($StaffSourceUIDInDB);
+        $ExistingStaff->setStaffSourceDatabaseSer($sourcedbser);
 		$ExistingStaff->setStaffFirstName($firstname);
 		$ExistingStaff->setStaffLastName($lastname);
 
@@ -329,14 +278,16 @@ sub insertStaffIntoOurDB
 {
 	my ($staff) = @_; # our staff object
 
-	my $id		= $staff->getStaffId();
-	my $firstname	= $staff->getStaffFirstName();
-	my $lastname	= $staff->getStaffLastName();
+	my $sourceuid		= $staff->getStaffSourceUID();
+    my $sourcedbser     = $staff->getStaffSourceDatabaseSer();
+	my $firstname	    = $staff->getStaffFirstName();
+	my $lastname	    = $staff->getStaffLastName();
 
 	my $insert_sql = "
 		INSERT INTO 
 			Staff (
 				StaffSerNum, 
+                SourceDatabaseSerNum,
 				StaffId, 
 				FirstName, 	
 				LastName, 
@@ -344,7 +295,8 @@ sub insertStaffIntoOurDB
 			)
 		VALUES (
 			NULL,
-			'$id',
+            '$sourcedbser',
+			'$sourceuid',
 			\"$firstname\",
 			\"$lastname\",
 			NULL
@@ -375,9 +327,10 @@ sub updateDatabase
 {
 	my ($staff) = @_; # our staff object to update
 
-	my $id		= $staff->getStaffId();
-	my $firstname	= $staff->getStaffFirstName();
-	my $lastname	= $staff->getStaffLastName();
+	my $sourceuid		= $staff->getStaffSourceUID();
+    my $sourcedbser     = $staff->getStaffSourceDatabaseSer();
+	my $firstname	    = $staff->getStaffFirstName();
+	my $lastname	    = $staff->getStaffLastName();
 
 	my $update_sql = "
 		UPDATE
@@ -386,8 +339,9 @@ sub updateDatabase
 			FirstName	= \"$firstname\",
 			LastName	= \"$lastname\",
 		WHERE
-			StaffId		= '$id'
-		";
+			StaffId		            = '$sourceuid'
+        AND SourceDatabaseSerNum    = '$sourcedbser'
+	";
 
 	# prepare query
 	my $query = $SQLDatabase->prepare($update_sql)
@@ -439,9 +393,9 @@ sub compareWith
 #======================================================================================
 sub reassignStaff
 {
-	my ($staffId) = @_; # staff id from arguments
+	my ($sourceuid, $sourcedbser) = @_; # staff id from arguments
 
-	if (!$staffId) { # there is no assigned staff
+	if (!$sourceuid) { # there is no assigned staff
 		return 0;
 	}
 
@@ -449,7 +403,8 @@ sub reassignStaff
 	    
         my $Staff = new Staff(); # initialize staff object
 		
-        $Staff->setStaffId($staffId); # assign our id
+        $Staff->setStaffSourceUID($sourceuid); # assign our id
+        $Staff->setStaffSourceDatabaseSer($sourcedbser);
 
 		# check if our staff exists in our database 
 		my $StaffExists = $Staff->inOurDatabase();

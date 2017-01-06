@@ -21,11 +21,11 @@ use Storable qw(dclone); # for deep copies
 use Appointment; # Our appointment module
 use Resource; # Our resource module
 
-#---------------------------------------------------------------------------------
-# Connect to the databases
-#---------------------------------------------------------------------------------
+use Data::Dumper;
 
-my $sourceDatabase	= $Database::sourceDatabase;
+#---------------------------------------------------------------------------------
+# Connect to our database
+#---------------------------------------------------------------------------------
 my $SQLDatabase		= $Database::targetDatabase;
 
 #====================================================================================
@@ -35,12 +35,11 @@ sub new
 {
 	my $class = shift;
 	my $resappt = {
-		_ser		=> undef,
+		_ser		    => undef,
 		_resourceser	=> undef,
 		_appointmentser	=> undef,
 		_exclusiveflag	=> undef,
 		_primaryflag	=> undef,
-		_aliasser	=> undef,
 	};
 	# bless associates an object with a class so Perl knows which package to search for
 	# when a method is envoked on this object
@@ -99,16 +98,6 @@ sub setResourceAppointmentPrimaryFlag
 }
 
 #====================================================================================
-# Subroutine to set the RA alias serial
-#====================================================================================
-sub setResourceAppointmentAliasSer
-{
-	my ($resappt, $aliasser) = @_; # RA object with provided serial in arguments
-	$resappt->{_aliasser} = $aliasser; # set the ser
-	return $resappt->{_aliasser};
-}
-
-#====================================================================================
 # Subroutine to get the RA serial
 #====================================================================================
 sub getResourceAppointmentSer
@@ -154,16 +143,7 @@ sub getResourceAppointmentPrimaryFlag
 }
 
 #====================================================================================
-# Subroutine to get the RA alias serial
-#====================================================================================
-sub getResourceAppointmentAliasSer
-{
-	my ($resappt) = @_; # our RA object
-	return $resappt->{_aliasser};
-}
-
-#====================================================================================
-# Subroutine to get all RA's from the ARIA db
+# Subroutine to get all RA's from the source db
 #====================================================================================
 sub getResourceAppointmentsFromSourceDB
 {
@@ -172,7 +152,7 @@ sub getResourceAppointmentsFromSourceDB
 	my @resapptList = (); # initialize a list for ResourceAppointment objects
 
 	my ($resourceser, $apptser, $exclusiveflag, $primaryflag); # for query results
-    my $lastupdated;
+    my $lasttransfer;
 
     my @aliasList = Alias::getAliasesMarkedForUpdate('Appointment');
 
@@ -181,86 +161,141 @@ sub getResourceAppointmentsFromSourceDB
 	foreach my $Patient (@patientList) {
 
         my $patientSer          = $Patient->getPatientSer(); 
-		my $ariaSer		        = $Patient->getPatientAriaSer(); # get aria serial
-		my $patientlastupdated	= $Patient->getPatientLastUpdated(); # get last updated
+		my $patientSSN          = $Patient->getPatientSSN(); # get patient ssn
+		my $patientLastTransfer	= $Patient->getPatientLastTransfer(); # get last transfer
 
         foreach my $Alias (@aliasList) {
 
     		my $aliasSer		    = $Alias->getAliasSer(); # get alias serial
+            my $sourceDBSer         = $Alias->getAliasSourceDatabaseSer();
 	    	my @expressions		    = $Alias->getAliasExpressions(); # get expressions
-		    my $aliaslastupdated	= $Alias->getAliasLastUpdated(); # get last updated
+		    my $aliasLastTransfer	= $Alias->getAliasLastTransfer(); # get last transfer
 
     		# convert expression list into a string enclosed in quotes
 	    	my $expressionText = join ',', map { qq/'$_->{_name}'/ } @expressions; 
 
             # compare last updates to find the earliest date 
-            my $formatted_PLU = Time::Piece->strptime($patientlastupdated, "%Y-%m-%d %H:%M:%S");
-            my $formatted_ALU = Time::Piece->strptime($aliaslastupdated, "%Y-%m-%d %H:%M:%S");
+            my $formatted_PLU = Time::Piece->strptime($patientLastTransfer, "%Y-%m-%d %H:%M:%S");
+            my $formatted_ALU = Time::Piece->strptime($aliasLastTransfer, "%Y-%m-%d %H:%M:%S");
             # get the diff in seconds
             my $date_diff = $formatted_PLU - $formatted_ALU;
             if ($date_diff < 0) {
-                $lastupdated = $patientlastupdated;
+                $lasttransfer = $patientLastTransfer;
             } else {
-                $lastupdated = $aliaslastupdated;
+                $lasttransfer = $aliasLastTransfer;
             }
 
-    		my $raInfo_sql = "
-	    		SELECT DISTINCT
-		    		ra.ResourceSer,
-			    	ra.ScheduledActivitySer,
-				    ra.ExclusiveFlag,
-    				ra.PrimaryFlag
-	    		FROM
-                    Patient AS pt,
-		    		ResourceActivity AS ra,
-			    	ScheduledActivity AS sa,
-				    ActivityInstance AS ai,
-    				Activity,
-	    			vv_ActivityLng AS va
-		    	WHERE
-			    	sa.ActivityInstanceSer		= ai.ActivityInstanceSer
-                AND sa.PatientSer               = pt.PatientSer
-                AND pt.PatientSer               = '$ariaSer'
-    			AND 	ai.ActivitySer			= Activity.ActivitySer
-	    		AND	Activity.ActivityCode		= va.LookupValue
-		    	AND	sa.ScheduledActivitySer		= ra.ScheduledActivitySer
-			    AND	ra.HstryDateTime		> '$lastupdated'
-	    		AND	va.Expression1			IN ($expressionText)
+            # ARIA 
+            if ($sourceDBSer eq 1) {
+
+                my $sourceDatabase = Database::connectToSourceDatabase($sourceDBSer);
+        		my $raInfo_sql = "
+                    use variansystem;
+	        		SELECT DISTINCT
+		        		ra.ResourceSer,
+			        	ra.ScheduledActivitySer,
+				        ra.ExclusiveFlag,
+    				    ra.PrimaryFlag
+    	    		FROM
+                        Patient AS pt,
+		        		ResourceActivity AS ra,
+			        	ScheduledActivity AS sa,
+				        ActivityInstance AS ai,
+    				    Activity,
+    	    			vv_ActivityLng AS va
+	    	    	WHERE
+		    	    	sa.ActivityInstanceSer		= ai.ActivityInstanceSer
+                    AND sa.PatientSer               = pt.PatientSer
+                    AND pt.SSN                      LIKE '$patientSSN%'
+        			AND ai.ActivitySer			    = Activity.ActivitySer
+	        		AND	Activity.ActivityCode		= va.LookupValue
+		        	AND	sa.ScheduledActivitySer		= ra.ScheduledActivitySer
+			        AND	ra.HstryDateTime		    > '$lasttransfer'
+	    		    AND	va.Expression1			    IN ($expressionText)
+        
+	        		ORDER BY 
+		        		ra.ScheduledActivitySer
+    		    ";
+                #print "$raInfo_sql\n";	
+	        	#print "Start query\n";
+		        # prepare query
+    		    my $query = $sourceDatabase->prepare($raInfo_sql)
+	    		    or die "Could not prepare query: " . $sourceDatabase->errstr;
+
+        		# execute query
+	        	$query->execute()
+		        	or die "Could not execute query: " . $query->errstr;
     
-	    		ORDER BY 
-		    		ra.ScheduledActivitySer
-    		";
-            #print "$raInfo_sql\n";	
-	    	#print "Start query\n";
-		    # prepare query
-    		my $query = $sourceDatabase->prepare($raInfo_sql)
-	    		or die "Could not prepare query: " . $sourceDatabase->errstr;
+        		# Fetched all data, instead of fetching each row
+        		my $data = $query->fetchall_arrayref();
+		        foreach my $row (@$data) {
+			    
+    			    my $resappt = new ResourceAppointment(); # new RA object
 
-    		# execute query
-	    	$query->execute()
-		    	or die "Could not execute query: " . $query->errstr;
+    	    		$resourceser			= Resource::reassignResource($row->[0], $sourceDBSer);
+        			$apptser			    = Appointment::reassignAppointment($row->[1], $sourceDBSer, $aliasSer, $patientSer);
+	        		$exclusiveflag			= $row->[2];
+		        	$primaryflag			= $row->[3];
 
-    		# Fetched all data, instead of fetching each row
-	    	# To test fetching of each row, replace $row->[] with $data[]
-		    # and comment the three appropriate lines below
-    		my $data = $query->fetchall_arrayref();
-	    	#while (my @data = $query->fetchrow_array()){
-		    foreach my $row (@$data) {
-			
-    			my $resappt = new ResourceAppointment(); # new RA object
+        			$resappt->setResourceAppointmentResourceSer($resourceser);
+	        		$resappt->setResourceAppointmentAppointmentSer($apptser);
+		        	$resappt->setResourceAppointmentExclusiveFlag($exclusiveflag);
+			        $resappt->setResourceAppointmentPrimaryFlag($primaryflag);
 
-	    		$resourceser			= Resource::reassignResource($row->[0]);
-    			$apptser			    = Appointment::reassignAppointment($row->[1]);
-	    		$exclusiveflag			= $row->[2];
-		    	$primaryflag			= $row->[3];
+    	    		push(@resapptList, $resappt);
+                }
 
-    			$resappt->setResourceAppointmentResourceSer($resourceser);
-	    		$resappt->setResourceAppointmentAppointmentSer($apptser);
-		    	$resappt->setResourceAppointmentExclusiveFlag($exclusiveflag);
-			    $resappt->setResourceAppointmentPrimaryFlag($primaryflag);
-
-	    		push(@resapptList, $resappt);
+                $sourceDatabase->disconnect();
             }
+
+            # WaitRoomManagement
+            if ($sourceDBSer eq 2) {
+  
+                my $sourceDatabase = Database::connectToSourceDatabase($sourceDBSer);
+        		my $raInfo_sql = "
+                    SELECT DISTINCT
+                        mval.AppointmentSerNum,
+                        mval.ClinicResourcesSerNum
+                    FROM
+                        MediVisitAppointmentList mval,
+                        Patient pt
+                    WHERE
+                        mval.PatientSerNum      = pt.PatientSerNum
+                    AND pt.SSN                  LIKE '$patientSSN%'
+                    AND mval.LastUpdated        > '$lasttransfer'
+                    AND mval.AppointmentCode    IN ($expressionText)
+                ";
+
+		        # prepare query
+    		    my $query = $sourceDatabase->prepare($raInfo_sql)
+	    		    or die "Could not prepare query: " . $sourceDatabase->errstr;
+
+        		# execute query
+	        	$query->execute()
+		        	or die "Could not execute query: " . $query->errstr;
+    
+        		# Fetched all data, instead of fetching each row
+        		my $data = $query->fetchall_arrayref();
+		        foreach my $row (@$data) {
+			    
+    			    my $resappt = new ResourceAppointment(); # new RA object
+
+                    $apptser                = Appointment::reassignAppointment($row->[0], $sourceDBSer, $aliasSer, $patientSer);
+                    $resourceser            = Resource::reassignResource($row->[1], $sourceDBSer);
+                    $exclusiveflag          = 1; # not defined yet in source db
+                    $primaryflag            = 0; # not defined yet in source db
+	
+                    $resappt->setResourceAppointmentResourceSer($resourceser);
+	        		$resappt->setResourceAppointmentAppointmentSer($apptser);
+		        	$resappt->setResourceAppointmentExclusiveFlag($exclusiveflag);
+			        $resappt->setResourceAppointmentPrimaryFlag($primaryflag);
+
+    	    		push(@resapptList, $resappt);
+                }
+
+                $sourceDatabase->disconnect();
+            }
+                
 		}
 	}
 
@@ -373,7 +408,7 @@ sub insertResourceAppointmentIntoOurDB
 	my ($resappt) = @_; # our RA object to insert
 
 	my $resourceSer		= $resappt->getResourceAppointmentResourceSer();
-	my $apptSer		= $resappt->getResourceAppointmentAppointmentSer();
+	my $apptSer		    = $resappt->getResourceAppointmentAppointmentSer();
 	my $exclusiveflag	= $resappt->getResourceAppointmentExclusiveFlag();
 	my $primaryflag		= $resappt->getResourceAppointmentPrimaryFlag();
 
@@ -415,7 +450,7 @@ sub updateDatabase
 
 	my $resourceApptSer	= $resappt->getResourceAppointmentSer();
 	my $resourceSer		= $resappt->getResourceAppointmentResourceSer();
-	my $apptSer		= $resappt->getResourceAppointmentAppointmentSer();
+	my $apptSer		    = $resappt->getResourceAppointmentAppointmentSer();
 	my $exclusiveflag	= $resappt->getResourceAppointmentExclusiveFlag();
 	my $primaryflag		= $resappt->getResourceAppointmentPrimaryFlag();
 
@@ -424,7 +459,7 @@ sub updateDatabase
 			ResourceAppointment
 		SET
 			ExclusiveFlag		= '$exclusiveflag',
-			PrimaryFlag		= '$primaryflag'
+			PrimaryFlag		    = '$primaryflag'
 		WHERE
 			ResourceAppointmentSerNum	= $resourceApptSer
 	";

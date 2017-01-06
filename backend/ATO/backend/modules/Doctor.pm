@@ -20,10 +20,8 @@ use Resource; # Resource.pm
 use Storable qw(dclone); # for deep copies
 
 #---------------------------------------------------------------------------------
-# Connect to the databases
+# Connect to our database
 #---------------------------------------------------------------------------------
-
-my $sourceDatabase	= $Database::sourceDatabase;
 my $SQLDatabase		= $Database::targetDatabase;
 
 #====================================================================================
@@ -33,12 +31,13 @@ sub new
 {
 	my $class = shift;
 	my $doctor = {
-		_ser		=> undef,
-		_ariaser	=> undef,
+		_ser		    => undef,
+		_sourceuid	    => undef,
+        _sourcedbser    => undef,
 		_resourceser	=> undef,
-		_firstname	=> undef,
-		_lastname	=> undef,
-        _email      => undef,
+		_firstname	    => undef,
+		_lastname	    => undef,
+        _email          => undef,
 	};
 	# bless associates an object with a class so Perl knows which package to search for
 	# when a method is envoked on this object
@@ -57,13 +56,23 @@ sub setDoctorSer
 }
 
 #====================================================================================
-# Subroutine to set the doctor aria serial
+# Subroutine to set the doctor source database serial 
 #====================================================================================
-sub setDoctorAriaSer
+sub setDoctorSourceDatabaseSer
 {
-	my ($doctor, $ariaser) = @_; # doctor object with provided serial in arguments
-	$doctor->{_ariaser} = $ariaser; # set the serial
-	return $doctor->{_ariaser};
+	my ($doctor, $sourcedbser) = @_; # doctor object with provided serial in arguments
+	$doctor->{_sourcedbser} = $sourcedbser; # set the serial
+	return $doctor->{_sourcedbser};
+}
+
+#====================================================================================
+# Subroutine to set the doctor source uid
+#====================================================================================
+sub setDoctorSourceUID
+{
+	my ($doctor, $sourceuid) = @_; # doctor object with provided id in arguments
+	$doctor->{_sourceuid} = $sourceuid; # set the id
+	return $doctor->{_sourceuid};
 }
 
 #====================================================================================
@@ -116,12 +125,21 @@ sub getDoctorSer
 }
 
 #======================================================================================
-# Subroutine to get the doctor aria serial
+# Subroutine to get the doctor source database serial
 #======================================================================================
-sub getDoctorAriaSer
+sub getDoctorSourceDatabaseSer
 {
 	my ($doctor) = @_; # our doctor object
-	return $doctor->{_ariaser};
+	return $doctor->{_sourcedbser};
+}
+
+#======================================================================================
+# Subroutine to get the doctor source uid
+#======================================================================================
+sub getDoctorSourceUID
+{
+	my ($doctor) = @_; # our doctor object
+	return $doctor->{_sourceuid};
 }
 
 #======================================================================================
@@ -160,136 +178,63 @@ sub getDoctorEmail
 	return $doctor->{_email};
 }
 
-
 #====================================================================================
-# Subroutine to get doctors from the ARIA db since last cron
-#====================================================================================
-=pod
-sub getDoctorsFromSourceDB
-{
-
-	my (@CoreAliasList) = @_; # Alias object
-	my @doctorList = (); # initialize a list for Doctor objects
-
-	# when we retrieve query results
-	my ($id, $firstname, $lastname);
-	
-	foreach my $DoctorAlias (@CoreAliasList) {
-
-		my $aliasSer		= $DoctorAlias->getAliasSer(); # get alias ser
-		my $lastUpdated		= $DoctorAlias->getAliasLastUpdated(); # get last updated
-		my $doctor_sql = "
-			SELECT DISTINCT
-				Doctor.DoctorId,
-				Doctor.FirstName,
-				Doctor.LastName,
-				Doctor.OncologistFlag,
-				Address.PostalCode
-			FROM 
-				Doctor,
-				ResourceAddress,
-				Address,
-				Resource
-			WHERE
-				Doctor.ResourceSer		= Resource.ResourceSer
-			AND	ResourceAddress.ResourceSer	= Resource.ResourceSer
-			AND	ResourceAddress.AddressSer	= Address.AddressSer
-			AND	ResourceAddress.PrimaryFlag	= 1
-			AND	Resource.HstryDateTime		> '$lastUpdated'
-		
-			ORDER BY
-				Doctor.DoctorId
-			
-		";
-
-		# prepare query
-		my $query = $sourceDatabase->prepare($doctor_sql)
-			or die "Could not prepare query: " . $sourceDatabase->errstr;
-
-		# execute query
-		$query->execute()
-			or die "Could not execute query: " . $query->errstr;
-
-		while (my @data = $query->fetchrow_array()) {
-	
-			my $doctor = new Doctor(); # new doctor object
-
-			# query results
-			$id 		= $data[0];
-			$firstname	= $data[1];
-			$lastname	= $data[2];
-			$oncflag	= $data[3];
-			$postalcode	= $data[4];
-
-			# set doctor information
-			$doctor->setDoctorId($id);
-			$doctor->setDoctorAliasSer($aliasSer);
-			$doctor->setDoctorFirstName($firstname);
-			$doctor->setDoctorLastName($lastname);
-			$doctor->setDoctorOncFlag($oncflag);
-			$doctor->setDoctorPostalCode($postalcode);
-	
-			push(@doctorList, $doctor); # append doctor to the list
-
-		}
-	}
-
-	return @doctorList;
-}
-=cut
-#====================================================================================
-# Subroutine to get doctor information from the ARIA db given a serial
+# Subroutine to get doctor information from the source db given an id
 #====================================================================================
 sub getDoctorInfoFromSourceDB
 {
 
 	my ($Doctor) = @_; # Doctor object
 
-	my $doctorAriaSer = $Doctor->getDoctorAriaSer();
+	my $doctoSourceUID      = $Doctor->getDoctorSourceUID();
+    my $doctorSourceDBSer   = $Doctor->getDoctorSourceDatabaseSer();
 
 	# when we retrieve query results
 	my ($resourcesernum, $firstname, $lastname, $email);
 	
-	my $doctor_sql = "
-		SELECT DISTINCT
-			Doctor.FirstName,
-			Doctor.LastName,
-            Address.EMailAddress
-		FROM 
-			Doctor
-        LEFT JOIN ResourceAddress 
-        ON ResourceAddress.ResourceSer      = Doctor.ResourceSer
-        LEFT JOIN Address
-        ON Address.AddressSer               = ResourceAddress.AddressSer
-		WHERE
-			Doctor.ResourceSer		= '$doctorAriaSer'
+    # ARIA
+    if ($doctorSourceDBSer eq 1) {
+
+        my $sourceDatabase = Database::connectToSourceDatabase($doctorSourceDBSer);
+    	my $doctor_sql = "
+	    	SELECT DISTINCT
+		    	dr.FirstName,
+			    dr.LastName,
+                addr.EMailAddress
+	    	FROM 
+		    	variansystem.dbo.Doctor dr
+            LEFT JOIN variansystem.dbo.ResourceAddress ra 
+            ON ra.ResourceSer       = dr.ResourceSer
+            LEFT JOIN variansystem.dbo.Address addr
+            ON addr.AddressSer      = ra.AddressSer
+	    	WHERE
+		    	dr.ResourceSer	    = '$doctorSourceUID'
+    		
+	    ";
+
+    	# prepare query
+	    my $query = $sourceDatabase->prepare($doctor_sql)
+		    or die "Could not prepare query: " . $sourceDatabase->errstr;
+
+    	# execute query
+	    $query->execute()
+		    or die "Could not execute query: " . $query->errstr;
+
+    	while (my @data = $query->fetchrow_array()) {
+	    
+		    # query results
+    		$firstname	= $data[0];
+	    	$lastname	= $data[1];
+            $email      = $data[2];
+
+    		$resourcesernum = Resource::reassignResource($doctorSourceUID, $doctorSourceDBSer);
 		
-	";
-
-	# prepare query
-	my $query = $sourceDatabase->prepare($doctor_sql)
-		or die "Could not prepare query: " . $sourceDatabase->errstr;
-
-	# execute query
-	$query->execute()
-		or die "Could not execute query: " . $query->errstr;
-
-	while (my @data = $query->fetchrow_array()) {
-	
-		# query results
-		$firstname	= $data[0];
-		$lastname	= $data[1];
-        $email      = $data[2];
-
-		$resourcesernum = Resource::reassignResource($doctorAriaSer);
-		
-
-		# set doctor information
-		$Doctor->setDoctorResourceSer($resourcesernum);
-		$Doctor->setDoctorFirstName($firstname);
-		$Doctor->setDoctorLastName($lastname);
-        $Doctor->setDoctorEmail($email);
-
+    		# set doctor information
+	    	$Doctor->setDoctorResourceSer($resourcesernum);
+		    $Doctor->setDoctorFirstName($firstname);
+    		$Doctor->setDoctorLastName($lastname);
+            $Doctor->setDoctorEmail($email);
+        }
 	}
 
 	return $Doctor;
@@ -303,9 +248,10 @@ sub getDoctorInfoFromSourceDB
 sub inOurDatabase
 {
 	my ($doctor) = @_;
-	my $doctorAriaSer = $doctor->getDoctorAriaSer(); # retrieve doctor aria serial
+	my $doctorSourceUID     = $doctor->getDoctorSourceUID(); # retrieve doctor uid
+    my $doctorSourceDBSer   = $doctor->getDoctorSourceDatabaseSer();
 
-	my $DoctorAriaSerInDB = 0; # false by default. Will be true if doctor exists
+	my $DoctorSourceUIDInDB = 0; # false by default. Will be true if doctor exists
 	my $ExistingDoctor = (); # data to be entered if doctor exists
 
 	# other doctor variables, if it exists
@@ -322,7 +268,8 @@ sub inOurDatabase
 		FROM	
 			Doctor
 		WHERE
-			Doctor.DoctorAriaSer = '$doctorAriaSer'
+			Doctor.DoctorAriaSer        = '$doctorSourceUID'
+        AND Doctor.SourceDatabaseSerNum = '$doctorSourceDBSer'
 		";
 
 	# prepare query
@@ -335,22 +282,23 @@ sub inOurDatabase
 	
 	while (my @data = $query->fetchrow_array()) {
 
-		$ser			= $data[0];
-		$resourceser		= $data[1];
-		$DoctorAriaSerInDB	= $data[2];
-		$firstname		= $data[3];
-		$lastname		= $data[4];
-        $email              = $data[5];
+		$ser			        = $data[0];
+		$resourceser		    = $data[1];
+		$DoctorSourceUIDInDB	= $data[2];
+		$firstname		        = $data[3];
+		$lastname		        = $data[4];
+        $email                  = $data[5];
 		
 	}
 
-	if ($DoctorAriaSerInDB) {
+	if ($DoctorSourceUIDInDB) {
 
 		$ExistingDoctor = new Doctor(); # initialize new doctor object
 
 		$ExistingDoctor->setDoctorSer($ser);
 		$ExistingDoctor->setDoctorResourceSer($resourceser);
-		$ExistingDoctor->setDoctorAriaSer($DoctorAriaSerInDB);
+		$ExistingDoctor->setDoctorSourceUID($DoctorSourceUIDInDB);
+        $ExistingDoctor->setDoctorSourceDatabaseSer($doctorSourceDBSer);
 		$ExistingDoctor->setDoctorFirstName($firstname);
 		$ExistingDoctor->setDoctorLastName($lastname);
         $ExistingDoctor->setDoctorEmail($email);
@@ -369,7 +317,8 @@ sub insertDoctorIntoOurDB
 	my ($doctor) = @_; # our doctor object
 	
 	# Retrieve all the necessary details from this object
-	my $ariaser	= $doctor->getDoctorAriaSer();
+	my $sourceuid	= $doctor->getDoctorSourceUID();
+    my $sourcedbser = $doctor->getDoctorSourceDatabaseSer();
 	my $resourceser	= $doctor->getDoctorResourceSer();
 	my $firstname	= $doctor->getDoctorFirstName();
 	my $lastname	= $doctor->getDoctorLastName();
@@ -379,6 +328,7 @@ sub insertDoctorIntoOurDB
 		INSERT INTO 
 			Doctor (
 				DoctorSerNum, 
+                SourceDatabaseSerNum,
 				DoctorAriaSer,
 				ResourceSerNum, 
 				FirstName, 
@@ -387,7 +337,8 @@ sub insertDoctorIntoOurDB
 			)
 		VALUES (
 			NULL,
-			'$ariaser',
+            '$sourcedbser',
+			'$sourceuid',
 			'$resourceser',
 			\"$firstname\",
 			\"$lastname\",
@@ -419,7 +370,8 @@ sub updateDatabase
 {
 	my ($doctor) = @_; # our doctor object to update 
 	
-	my $ariaser	= $doctor->getDoctorAriaSer();
+	my $sourceuid   = $doctor->getDoctorSourceUID();
+    my $sourcedbser = $doctor->getDoctorSourceDatabaseSer();
 	my $firstname	= $doctor->getDoctorFirstName();
 	my $lastname	= $doctor->getDoctorLastName();
     my $email       = $doctor->getDoctorEmail();
@@ -432,7 +384,8 @@ sub updateDatabase
 			LastName	= \"$lastname\",
             Email       = \"$email\"
 		WHERE
-			DoctorAriaSer	= '$ariaser'
+			DoctorAriaSer	        = '$sourceuid'
+        AND SourceDatabaseSerNum    = '$sourcedbser'
 		";
 	# prepare query
 	my $query = $SQLDatabase->prepare($update_sql)
@@ -489,11 +442,12 @@ sub compareWith
 #======================================================================================
 sub reassignDoctor
 {
-	my ($doctorAriaSer) = @_; # doctor aria serial from arguments
+	my ($doctorSourceUID, $doctorSourceDBSer) = @_; # doctor info from arguments
 	
 	my $Doctor = new Doctor(); # initialize doctor object
 
-	$Doctor->setDoctorAriaSer($doctorAriaSer); # assign our aria serial
+	$Doctor->setDoctorSourceUID($doctorSourceUID); # assign our uid
+    $Doctor->setDoctorSourceDatabaseSer($doctorSourceDBSer);
 
 	# check if our doctor exists in our database
 	my $DoctorExists = $Doctor->inOurDatabase();

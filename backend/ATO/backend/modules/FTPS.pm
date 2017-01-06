@@ -18,79 +18,20 @@
 
 package FTPS; # Declare package name
 
+use Configs; # Custom Configurations
 use Net::FTPSSL; # Perl's FTPSSL module
 use Net::FTP; # Perl's FTP module
 
-# Create a ftps object
-# PRO FTPS for Guy Mattieu's PROD Import
-#our $ftpsObject = new FTPS(
-#	"/mnt/VarianFILEDATA/documents/files",
-#	"/Aria",
-#	"/usr/lib/cgi-bin/DB/ATS/xmlFiles",
-#	"/usr/lib/cgi-bin/DB/ATS/pdfFiles",
-#	"172.26.188.167",
-#	"wnetvmap29\\ProdImport",
-#	"Importap29"
-#	);
-
-# DEV FTPS for Guy Mattieu's STRM Import
-#our $chartLevelFtpsObject = new FTPS(
-#	"/mnt/VarianFILEDATA/Documents/Files",
-#	"/Aria",
-#	"/usr/lib/cgi-bin/dev/ATS/xmlFiles",
-#	"/usr/lib/cgi-bin/dev/ATS/pdfFiles",
-#	"172.26.188.198",
-#	"wnetvmap08\\StrmImport",
-#	"Importap08"
-#	);
-
-# Connect to FTPSSL
-#our $chartLevelTargetFTPS = $chartLevelFtpsObject->connectToFTPSSL();
-#$chartLevelTargetFTPS->binary(); # super important convert to binary 
-
-#our $visitLevelFtpsObject = $chartLevelFtpsObject; ## this line is to send test visit level docs to Guy's interface, otherwise comment out 
-
-# DEV FTP for Yves' depository  
-#our $visitLevelFtpsObject = new FTPS(
-#	"/mnt/VarianFILEDATA/Documents/Files",
-#	".",
-#	"/usr/lib/cgi-bin/dev/ATS/xmlFiles",
-#	"/usr/lib/cgi-bin/dev/ATS/pdfFiles",
-#	"axap29.muhc.mcgill.ca",
-#	"ariarpt",
-#	"qdxt1X0"
-#	);
-
-# PRO FTP for Yves' Repository
-#our $visitLevelFtpsObject = new FTPS(
-#	"/mnt/VarianFILEDATA/Documents/Files",
-#	".",
-#	"/usr/lib/cgi-bin/dev/ATS/xmlFiles",
-#	"/usr/lib/cgi-bin/dev/ATS/pdfFiles",
-#	"qdxengine.muhc.mcgill.ca",
-#	"ariarpt",
-#	"qdxt1X0"
-#	);
-
-# Connect to FTP 
-#our $visitLevelTargetFTPS = $visitLevelFtpsObject->connectToFTPSSL(); ## Yves' PRO interface
-#our $visitLevelTargetFTPS = $visitLevelFtpsObject->connectToFTP(); ## Yves' DEV interface
-#$visitLevelTargetFTPS->binary(); # super important convert to binary 
-
-# DEV FTPS for testing 
+# FTPS object 
 our $ftpsObject = new FTPS(
-	"/mnt/VarianFILEDATA/Documents/Files",
-	".",
-	".",
-	"/home/VarianFILEDATA/Documents",
-	"172.26.66.41",
-	"webdb",
-	"service"
+	    $Configs::FTP_LOCAL_DIR,
+	    $Configs::FTP_REMOTE_DIR,
+	    $Configs::FTP_XML_DIR,
+	    $Configs::FTP_PDF_DIR,
+	    $Configs::FTP_HOST,
+	    $Configs::FTP_USER,
+	    $Configs::FTP_PASS
 	);
-
-# Connect to FTPSSL
-#our $targetFTPS = $ftpsObject->connectToFTP();
-#$targetFTPS->binary(); # super important convert to binary 
 
 #====================================================================================
 # Constructor for our FTPS class 
@@ -98,18 +39,7 @@ our $ftpsObject = new FTPS(
 sub new
 {
 	my $class = shift;
-	# PRO
-	#my $ftps = {
-	#	_localdir	=> shift,
-	#	_remotedir	=> shift,
-	#	_xmldir		=> shift,
-	#	_pdfdir		=> shift,
-	#	_host		=> shift,
-	#	_user		=> shift,
-	#	_password	=> shift,
-	#};
 
-	# DEV
 	my $ftps = {
 		_localdir	=> shift,
 		_remotedir	=> shift,
