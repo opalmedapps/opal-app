@@ -157,7 +157,7 @@ sub getPhotosFromSourceDB
 
 		my $patientSer		= $Patient->getPatientSer(); # get patient ser
 		my $ariaSer		    = $Patient->getPatientAriaSer(); # get patient aria ser
-		my $lastUpdated		= $Patient->getPatientLastUpdated(); # get last updated
+		my $lastTransfer		= $Patient->getPatientLastTransfer(); # get last updated
     
         # query 
         my $photoInfo_sql = "

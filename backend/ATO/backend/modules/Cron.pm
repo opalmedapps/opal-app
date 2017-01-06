@@ -11,6 +11,7 @@ package Cron; # Declare package name
 use Time::Piece;
 use Time::Seconds;
 use POSIX;
+use Database;
 
 #---------------------------------------------------------------------------------
 # Connect to the database

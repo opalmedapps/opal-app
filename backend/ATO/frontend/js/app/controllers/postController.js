@@ -40,7 +40,7 @@ angular.module('ATO_InterfaceApp.controllers.postController', ['ngAnimate', 'ngS
         $scope.changesMade = false;
 
     	// Templates for post table
-		var cellTemplateName = '<div style="cursor:pointer; padding-top: 5px;" ' + 
+		var cellTemplateName = '<div style="cursor:pointer;" class="ui-grid-cell-contents" ' + 
             'ng-click="grid.appScope.editPost(row.entity)">' + 
             '<a href="">{{row.entity.name_EN}} / {{row.entity.name_FR}}</a></div>';
       	var checkboxCellTemplate = '<div style="text-align: center; cursor: pointer;" ' +
