@@ -1,5 +1,5 @@
 <ons-navigator var ="initNavigator" >
-<ons-page ng-controller="InitScreenController" id="popoverLanguage">
+<ons-page id="popoverLanguage">
     <div>
         <div style="position:absolute;z-index:2;width:100vw" align="center" >
             <div style="margin-top:15vw" align="center" >
@@ -10,24 +10,9 @@
             <img src="img/opal-init-photo.jpg" style="width:100vw;height:auto">
         </div>
     </div>
-    <div>
+    <div ng-cloak>
         <ons-list  class="person-list" id = "listInitApp" style="display:none" translate-cloak>
-            <!--<ons-list-item class="person" modifier="tappable" ng-click="goToUserView()" style="background-color: #387A36">
-                <ons-row align="middle" style="height:40px">
-                    <ons-col align="center" width="40px">
-                        <div style="margin-left:10px;text-align:left;display:inline-block">                                
-                            <ons-icon icon = "fa fa-user" style="font-size:20px;color:white"></ons-icon>
-                        </div>
-                     </ons-col>
-                    <ons-col  align="center">
-                        <div align="center" >
-                            &lt;!&ndash;<ons-icon icon = "fa fa-user" style="font-size:20px;color:darkblue"></ons-icon>&ndash;&gt;
-                            <span style="color: white">{{"HEADER_MESSAGE_LOGIN"|translate}}</span>
-                        </div>
-                    </ons-col>
-                </ons-row>
-            </ons-list-item>-->
-            <ons-list-item class="person" modifier="tappable chevron" ng-click="goToParking()" style="font-size: ;">
+            <ons-list-item class="person" modifier="tappable chevron" ng-click="goToParking()">
                 <ons-row align="middle" style="height:40px;">
                     <ons-col align="center" width="40px">
                         <div style="margin-left:10px;text-align:left;display:inline-block">
@@ -86,14 +71,32 @@
                     </ons-col>
                 </ons-row>
             </ons-list-item>
-
+            <ons-list-item class="person" modifier="tappable chevron" ng-show="globalMessage" ng-click="goToMessage()" style="background-color: orange">
+                <ons-row align="middle" style="height:40px;">
+                    <ons-col align="center" width="40px">
+                        <div style="margin-left:10px;text-align:left;display:inline-block">
+                            <ons-icon icon = "fa fa-exclamation-triangle fa-lg" style="color:red" ></ons-icon>
+                        </div>
+                    </ons-col>
+                    <ons-col  align="center">
+                        <div  align="center" >
+                            <!--<ons-icon icon = "ion-android-car" style="font-size:25px;color:red" ></ons-icon>-->
+                            {{globalMessage}}
+                        </div>
+                    </ons-col>
+                </ons-row>
+            </ons-list-item>
 
 
         </ons-list>
+        <br>
+
+        <div style="text-align: center; width: 90%; margin: auto">
+            <ons-button class="animated pulse" modifier="large" style="font-size: x-large; font-weight: bolder; background-color: #387A36" ng-click="goToUserView()" var="initButton">{{"HEADER_MESSAGE_LOGIN"|translate}}</ons-button>
+        </div>
     </div>
-    <br>
-    <div style="text-align: center; width: 90%; margin: auto">
-        <ons-button class="animated pulse" modifier="large" style="font-size: x-large; font-weight: bolder; background-color: #387A36" ng-click="goToUserView()">{{"HEADER_MESSAGE_LOGIN"|translate}}</ons-button>
-    </div>
+
+
+
 </ons-page>
 </ons-navigator>
