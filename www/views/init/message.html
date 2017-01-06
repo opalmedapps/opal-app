@@ -1,0 +1,13 @@
+<ons-page>
+    <ons-toolbar fixed-style>
+        <div class="left">
+            <ons-back-button ng-class="fontSizeDesc">{{"BACK"|translate}}</ons-back-button>
+        </div>
+        <div class="center" ng-class="fontSizeTitle">{{globalMessage}}</div>
+    </ons-toolbar>
+
+    <div uib-alert style="text-align: center; width: 90%; margin: auto; margin-top: 10%" type="info" class="{{fontSizeTitle}}" >
+        {{globalMessageDescription}}
+    </div>
+
+</ons-page>
