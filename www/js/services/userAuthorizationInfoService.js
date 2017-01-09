@@ -74,16 +74,16 @@ myApp.service('UserAuthorizationInfo', function () {
             pass=CryptoJS.SHA256(pass).toString();
             password=pass;
             //Retrieve UserAuthorizationInfo
-            var passString=window.localStorage.getItem('UserAuthorizationInfo');
-            var passObject = {};
-            if(passString)
-            {
-                 //Parse to convert to object
-                passObject=JSON.parse(passString);
-                passObject.Password=password;
-                //Save in storage
-                window.localStorage.setItem('UserAuthorizationInfo', JSON.stringify(passObject));
-            }
+            // var passString=window.localStorage.getItem('UserAuthorizationInfo');
+            // var passObject = {};
+            // if(passString)
+            // {
+            //      //Parse to convert to object
+            //     passObject=JSON.parse(passString);
+            //     passObject.Password=password;
+            //     //Save in storage
+            //     window.localStorage.setItem('UserAuthorizationInfo', JSON.stringify(passObject));
+            // }
            
         },
         /**
