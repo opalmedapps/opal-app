@@ -27,7 +27,8 @@ var ref = db.ref("/dev2");
 
 setInterval(function(){
     clearTimeoutRequests();
-},30000);
+    clearClientRequests();
+},60000);
 
 // Listen for firebase changes and send responses for requests
 console.log('Initialize listeners: ');
@@ -39,7 +40,7 @@ function listenForRegularRequest(){
     var requestType = 'requests';
     ref.child('requests').on('child_added', function(snapshot){
         handleRequest(requestType,snapshot);
-        
+
     });
 }
 
@@ -53,14 +54,14 @@ function listenForResetPassword(){
 
 function handleRequest(requestType, snapshot){
     var headers = {key: snapshot.key, objectRequest: snapshot.val()};
-        console.log("Toplevel snapshot key", snapshot.key);
-        //console.log("Childlevel snapshot key", childSnapshot.key);
-        processRequest(headers).then(function(response){
-            console.log('Got ' + requestType);
-            uploadToFirebase(response, requestType);
-        }).catch(function(error){
-            console.log("Error processing request!", error);
-        });
+    console.log("Toplevel snapshot key", snapshot.key);
+    //console.log("Childlevel snapshot key", childSnapshot.key);
+    processRequest(headers).then(function(response){
+        console.log('Got ' + requestType);
+        uploadToFirebase(response, requestType);
+    }).catch(function(error){
+        console.log("Error processing request!", error);
+    });
 }
 
 function clearTimeoutRequests()
@@ -74,7 +75,7 @@ function clearTimeoutRequests()
             {
                 if(usersData[user][requestKey].hasOwnProperty('Timestamp')&&now-usersData[user][requestKey].Timestamp>60000)
                 {
-                    console.log('I am deleting leftover requests');
+                    console.log('I am deleting leftover responses');
                     ref.child('users/'+user+'/'+requestKey).set(null);
                 }
             }
@@ -83,9 +84,25 @@ function clearTimeoutRequests()
     });
 }
 
+function clearClientRequests(){
+    ref.child('requests').once('value').then(function(snapshot){
+        //console.log('I am inside deleting requests');
+        var now=(new Date()).getTime();
+        var requestData=snapshot.val();
+        for (var requestKey in requestData) {
+            if(requestData[requestKey].hasOwnProperty('Timestamp')&&now-requestData[requestKey].Timestamp>60000)
+            {
+                console.log('I am deleting leftover requests');
+                ref.child('requests/'+requestKey).set(null);
+            }
+
+        }
+    });
+}
+
 function processRequest(headers){
-	
-    var r = q.defer(); 
+
+    var r = q.defer();
     var requestKey = headers.key;
     var requestObject= headers.objectRequest;
     console.log("----------------------------------REQUEST OBJECT --------------------------------------")
