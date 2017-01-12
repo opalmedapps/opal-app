@@ -73,7 +73,9 @@ myApp.controller('SingleDocumentController', ['NavigatorParameters','Documents',
     var app = document.URL.indexOf('http://') === -1 && document.URL.indexOf('https://') === -1;
 
     var image = Documents.setDocumentsLanguage(parameters.Post);
+    var pdfdoc, canvas, ctx, scale = 0.5, container;
 
+    $scope.pageRendering = false;
     $scope.documentObject = image;
     $scope.loading = true;
     $scope.errorDownload = false;
@@ -92,20 +94,27 @@ myApp.controller('SingleDocumentController', ['NavigatorParameters','Documents',
                 console.log('File not found', error);
                 Documents.downloadDocumentFromServer(document.DocumentSerNum).then(function(doc)
                 {
-                    var targetPath = FileManagerService.getFilePathForDocument(document);
-                    console.log(targetPath);
-                    doc = FileManagerService.setBase64Document(doc);
+                    var uint8pf = FileManagerService.convertToUint8Array(doc.Content);
+                    PDFJS.getDocument(uint8pf)
+                        .then(function (pdfdoc) {
+                            console.log(pdfdoc);
+                        });
 
-                    FileManagerService.downloadFileIntoStorage(doc.Content, targetPath).then(function()
-                    {
-                        setDocumentForShowing(document, FileManagerService.getDocumentUrls(document));
-                        console.log('success');
 
-                    }).catch(function(error)
-                    {
-                        console.log('Unable to save document on server',error);
-                        //Unable to save document on server
-                    });
+                    /*var targetPath = FileManagerService.getFilePathForDocument(document);
+                     console.log(targetPath);
+                     doc = FileManagerService.setBase64Document(doc);
+
+                     FileManagerService.downloadFileIntoStorage(doc.Content, targetPath).then(function()
+                     {
+                     setDocumentForShowing(document, FileManagerService.getDocumentUrls(document));
+                     console.log('success');
+
+                     }).catch(function(error)
+                     {
+                     console.log('Unable to save document on server',error);
+                     //Unable to save document on server
+                     });*/
                 }).catch(function(error){
                     //Unable to get document from server
                     $scope.loading = false;
@@ -116,6 +125,31 @@ myApp.controller('SingleDocumentController', ['NavigatorParameters','Documents',
         }else{
             Documents.downloadDocumentFromServer(document.DocumentSerNum).then(function(doc)
             {
+                //console.log(doc);
+                var uint8pf = FileManagerService.convertToUint8Array(doc.Content);
+                PDFJS.getDocument(uint8pf)
+                    .then(function (_pdfdoc) {
+                        pdfdoc = _pdfdoc;
+                        renderPage(_pdfdoc.numPages);
+                        console.log(_pdfdoc.numPages);
+
+
+                        return pdfdoc.getPage(_pdfdoc.numPages).then(function (pdfPage) {
+                            var pdfPageView = new PDFJS.PDFPageView({
+                                container: container,
+                                id: _pdfdoc.numPages,
+                                scale: scale,
+                                defaultViewport: pdfdoc.getViewport(scale),
+                                // We can enable text/annotations layers, if needed
+                                textLayerFactory: new PDFJS.DefaultTextLayerFactory(),
+                                annotationLayerFactory: new PDFJS.DefaultAnnotationLayerFactory()
+                            });
+                            // Associates the actual page with the view, and drawing it
+                            pdfPageView.setPdfPage(pdfdoc);
+                            return pdfPageView.draw();
+                        });
+
+                    });
                 doc = FileManagerService.setBase64Document(doc);
                 document.Content = doc.Content;
                 setDocumentForShowing(document);
@@ -126,6 +160,36 @@ myApp.controller('SingleDocumentController', ['NavigatorParameters','Documents',
         }
 
     }
+
+    function renderPage(num) {
+        canvas = document.getElementById("the-canvas");
+        ctx = canvas.getContext("2d");
+
+        // Using promise to fetch the page
+        pdfdoc.getPage(num).then(function (page) {
+
+            var viewport = page.getViewport(scale);
+            canvas.height = viewport.height;
+            canvas.width = viewport.width;
+            // Render PDF page into canvas context
+            var renderContext = {
+                canvasContext: ctx,
+                viewport: viewport
+            };
+            var renderTask = page.render(renderContext);
+            // Wait for rendering to finish
+            renderTask.promise.then(function () {
+                pageRendering = false;
+                if (pageNumPending !== null) {
+                    // New page rendering is pending
+                    renderPage(pageNumPending);
+                    pageNumPending = null;
+                }
+            });
+
+        });
+    }
+
     // function simply sets document for showing
     function setDocumentForShowing(document, url)
     {
@@ -305,6 +369,10 @@ myApp.controller('SingleDocumentController', ['NavigatorParameters','Documents',
             window.open(image.Content);
         }
     };
+
+
+
+
     $scope.goToEducationalMaterial = function () {
         // Need to provide
         EducationalMaterial.openEducationalMaterialDetails($scope.edumaterial);

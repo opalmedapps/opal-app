@@ -332,11 +332,12 @@ return {
       }
     },
 
-    convertToUint8Array: function(dataURI){
-        var BASE64_MARKER = ';base64,';
-
-        var base64Index = dataURI.indexOf(BASE64_MARKER) + BASE64_MARKER.length;
-        var base64 = dataURI.substring(base64Index);
+    convertToUint8Array: function(base64){
+        //console.log(dataURI);
+        // var BASE64_MARKER = ';base64,';
+        //
+        // var base64Index = dataURI.indexOf(BASE64_MARKER) + BASE64_MARKER.length;
+        // var base64 = dataURI.substring(base64Index);
         var raw = window.atob(base64);
         var rawLength = raw.length;
         var array = new Uint8Array(new ArrayBuffer(rawLength));
