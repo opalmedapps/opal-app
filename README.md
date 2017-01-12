@@ -24,7 +24,6 @@ git clone -b <remote_branch_name> --single-branch git@github.com:Sable/qplus.git
 ```
 Navigate to qplus folder and install missing librairies
 ```
-npm install
 bower install
 ```
 ###Technologies
@@ -56,27 +55,28 @@ Instructions are based on [Cordova get started page!](https://cordova.apache.org
 3. Install Cordova via `npm install -g cordova`.
 4. Create a Cordova Project `cordova create <NameOfProject>`.
 5. Change directory to your newly created cordova project `cd <NameOfProject>`.
-6. Add all the cordova plugins from the [list](#plugins) below.
- ```
-cordova plugin add <nameOfPlugin>
-```
-7. Add platforms to your project:
+6. Add platforms to your project:
   * `cordova platform add ios`
   * `cordova platform add android`
   * `cordova platform add browser`
 
-8. Build your basic app via: `cordova build`. For an specific platform build use:
+7. Build your basic app via: `cordova build`. For an specific platform build use:
  ``` 
 cordova build <platform>
 ```
-9. Add the contents of the www folder to the www folder in your cordova project.
-10. To run your project run:
+8. Add the contents of the www folder to the www folder in your cordova project.
+9. To run your project run:
  ```
 cordova run <platform>
 ```
-11. Lastly, copy the res folder to the cordova folder project, and replace the xml file in the cordova project with the xml file in this repository.
+10. Lastly, copy the res folder to the cordova folder project, and replace the xml file in the cordova project with the xml file in this repository.
 
 ####Plugins:
+
+You should not need to worry about plugins, but in case something goes wrong, you will need to add them manually using
+ ```
+cordova plugin add <nameOfPlugin>
+```
 
 * phonegap-plugin-push --variable SENDER_ID="810896751588"
 * com-badrit-printplugin
