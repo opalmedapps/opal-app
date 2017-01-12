@@ -52,7 +52,7 @@ myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$root
         $scope.submit(email, password);
     }
 
-    //var myDataRef = firebase.database().ref('dev2/');
+    // Get the authentication state
     var myAuth = firebase.auth().currentUser;
     console.log(myAuth);
 
@@ -70,7 +70,14 @@ myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$root
         }else{
 
             var authDetails = window.localStorage.getItem('UserAuthorizationInfo');
-            if(myAuth && patientSerNum && authDetails){
+            if (authDetails) authDetails = JSON.parse(authDetails);
+
+            /*  Check if signed in (myAuth not undefined),
+             *  check if data is still in memory (patientSerNum not undefined),
+             *  check if there is any stored data (authDetails)
+             *  check if user trying to login is the same as locked out user
+             */
+            if(myAuth && patientSerNum && authDetails && authDetails.Email==$scope.email){
                 var cred = firebase.auth.EmailAuthProvider.credential($scope.email, $scope.password);
                 myAuth.reauthenticate(cred)
                     .then(function () {
@@ -129,7 +136,7 @@ myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$root
     function authHandler(/*error, */firebaseUser) {
 
         firebaseUser.getToken(true).then(function(sessionToken){
-            console.log('In Auth Handler')
+            console.log('In Auth Handler');
             window.localStorage.setItem('Email',$scope.email);
 
             UserAuthorizationInfo.setUserAuthData(firebaseUser.uid, CryptoJS.SHA256($scope.password).toString(), undefined, sessionToken);
