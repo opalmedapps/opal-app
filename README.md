@@ -52,24 +52,23 @@ Cordova has the ability to build applications for iOS, Android and browsers usin
 Instructions are based on [Cordova get started page!](https://cordova.apache.org/#getstarted)
 
 1. Follow instructions in the [Installation](#installation) section
-3. Install Cordova via `npm install -g cordova`.
-4. Create a Cordova Project `cordova create <NameOfProject>`.
-5. Change directory to your newly created cordova project `cd <NameOfProject>`.
-6. Add platforms to your project:
+2. Install Cordova via `npm install -g cordova`.
+3. Create a Cordova Project `cordova create <NameOfProject>`.
+4. Change directory to your newly created cordova project `cd <NameOfProject>`.
+5. Copy the res folder to the cordova folder project, and replace the config.xml file in the cordova project with the config.xml file in this repository.
+6. Add the contents of the www folder to the www folder in your cordova project.
+7. Add platforms to your project:
   * `cordova platform add ios`
   * `cordova platform add android`
   * `cordova platform add browser`
-
-7. Build your basic app via: `cordova build`. For an specific platform build use:
+8. Build your app via: `cordova build`. For an specific platform build use:
  ``` 
 cordova build <platform>
 ```
-8. Add the contents of the www folder to the www folder in your cordova project.
-9. To run your project run:
+9. Connect your phone via USB to your computer and run your project:
  ```
 cordova run <platform>
 ```
-10. Lastly, copy the res folder to the cordova folder project, and replace the xml file in the cordova project with the xml file in this repository.
 
 ####Plugins:
 
