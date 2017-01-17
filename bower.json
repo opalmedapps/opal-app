@@ -46,7 +46,8 @@
     "crypto-js": "^3.1.6",
     "firebase": "^3.6.3",
     "moment": "^2.17.1",
-    "pdfjs-dist": "^1.6.446"
+    "pdfjs-dist": "^1.6.446",
+    "pdfjs-viewer": "^1.0.1040"
   },
   "resolutions": {
     "angular": "1.6.0"

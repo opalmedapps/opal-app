@@ -19,12 +19,15 @@
         <p clas="lucent">{{"ERROROBTAININGDOCUMENT"|translate}}</p>
     </div>
 
-    <div class="content-scrollable" ng-hide="pageRendering||loading" align="center">
-        <canvas id="the-canvas" style="border:1px solid black"></canvas>
-    </div>
+    <!--<div class="content-scrollable" ng-hide="pageRendering||loading" align="center">-->
+        <!--<canvas id="the-canvas" style="border:1px solid black"></canvas>-->
+    <!--</div>-->
 
-    <div id="container" class="content-scrollable" ng-hide="loading" align="center">
-    </div>
+    <!--<div id="container" class="content-scrollable" ng-hide="loading" align="center">-->
+    <!--</div>-->
+
+    <iframe ng-hide="loading" id="pdfViewer" src="../../../lib/bower_components/pdfjs-viewer/web/viewer.html" style="width: 100%; height: 700px;" allowfullscreen="" webkitallowfullscreen=""></iframe>
+
     <!--<p class="item-desc text-center"  ng-class="fontSizeDesc">* Saved documents will be available offline</p>-->
 
     <!-- </ons-list-item>
