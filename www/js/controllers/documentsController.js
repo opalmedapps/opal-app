@@ -77,7 +77,7 @@ myApp.controller('SingleDocumentController', ['NavigatorParameters','Documents',
         var app = document.URL.indexOf('http://') === -1 && document.URL.indexOf('https://') === -1;
 
         var image = Documents.setDocumentsLanguage(parameters.Post);
-        var pdfdoc, canvas, ctx, scale = 1, uint8pf;
+        var pdfdoc, canvas, ctx, scale = 0.5, uint8pf;
         //Get viewer path
 
         $scope.documentObject = image;

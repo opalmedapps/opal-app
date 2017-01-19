@@ -98,7 +98,7 @@ myApp.factory('CheckinService',
                      'Speed: '             + position.coords.speed             + '\n' +
                      'Timestamp: '         + position.timestamp                + '\n');*/
                     console.log(position);
-                    if (distanceMeters <= 300) {
+                    if (distanceMeters <= 500) {
                         positionCheckinAppointment = {
                             'Latitude':position.coords.latitude,
                             'Longitude':position.coords.longitude,
@@ -113,8 +113,8 @@ myApp.factory('CheckinService',
                     console.log(error.code);
                     r.reject('LOCATION_ERROR');
                 }, {
-                    maximumAge: 3000,
-                    timeout: 10000,
+                    maximumAge: 10000,
+                    timeout: 15000,
                     enableHighAccuracy: true
                 });
                 return r.promise;
