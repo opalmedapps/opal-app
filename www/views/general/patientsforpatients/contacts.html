@@ -1,0 +1,39 @@
+
+<ons-page ng-controller="ContactsController" >
+    <ons-toolbar>
+    <div class="left">
+        <ons-back-button>{{"BACK"|translate}}</ons-back-button>
+    </div>
+    <div class="center">{{"Committee Members"|translate}}</div>
+  </ons-toolbar>
+   <div style="color:grey;margin-top:25vh" ng-show="noContacts" align="center" ng-class="fontSizeTitle">
+      {{"NOCONTACTSAVAILABLE"|translate}}
+    </div>
+    <ons-list ng-hide="noContacts">
+      <!--<ons-list-header class="person-list-header"  ng-class="fontSizeTitle">{{"PRIMARYDOCTOR"|translate}}</ons-list-header>-->
+      <ons-list-item modifier="chevron" class="item" ng-click="generalNavigator.pushPage('views/general/patientsforpatients/individual-contact.html')">
+      <ons-row align="center"   >
+          <ons-col width="10px">
+          </ons-col>
+          <ons-col>
+              <header>
+                  <span class="item-title" ng-class="fontSizeTitle">{{"John Doe"|translate}}</span>
+              </header>
+              <p class="item-desc"></p>
+          </ons-col>
+      </ons-row>
+  </ons-list-item>
+      <ons-list-item modifier="chevron" class="item" ng-click="generalNavigator.pushPage('views/general/patientsforpatients/individual-contact.html')">
+      <ons-row align="center"   >
+          <ons-col width="10px">
+          </ons-col>
+          <ons-col>
+              <header>
+                  <span class="item-title" ng-class="fontSizeTitle">{{"Jane Doe"|translate}}</span>
+              </header>
+              <p class="item-desc"></p>
+          </ons-col>
+      </ons-row>
+  </ons-list-item>
+    </ons-list>
+  </ons-page>
