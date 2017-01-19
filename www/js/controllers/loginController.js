@@ -35,9 +35,9 @@ myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$root
     }
 
 
-    var patientFirstName = Patient.getFirstName();
+    var patientSerNum = Patient.getUserSerNum();
     //Locked out alert
-    if(typeof patientFirstName !=='undefined'&&patientFirstName) NewsBanner.showCustomBanner($filter('translate')('LOCKEDOUT'),'black', null, 2000);
+    if(typeof patientSerNum !=='undefined'&&patientSerNum) NewsBanner.showCustomBanner($filter('translate')('LOCKEDOUT'),'black', null, 2000);
 
     //demoSignIn();
     //Demo automatic sign in
@@ -52,8 +52,8 @@ myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$root
         $scope.submit(email, password);
     }
 
-    //var myDataRef = firebase.database().ref('dev2/');
-    var myAuth = $firebaseAuth();
+    // Get the authentication state
+    var myAuth = firebase.auth().currentUser;
     console.log(myAuth);
 
     $scope.submit = function (email,password) {
@@ -68,46 +68,67 @@ myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$root
             $scope.alert.type='danger';
             $scope.alert.content="INVALID_EMAIL_OR_PWD";
         }else{
-            //Getting authentication status
-            var auth = FirebaseService.getAuthenticationCredentials();
-            //Getting authentication info from local storage
+
             var authDetails = window.localStorage.getItem('UserAuthorizationInfo');
-            //Auth details defined
-            if(authDetails) authDetails = JSON.parse(authDetails);
-            if(auth&&authDetails)
-            {
-                //If the password is correct and the patient fields are defined, means they are in the locked out state, allow them
-                //access
-                console.log(authDetails.Email);
-                console.log($scope.email);
-                if(authDetails.Password == CryptoJS.SHA256($scope.password).toString()&&authDetails.Email==$scope.email)
-                {
-                    console.log('Hello World');
-                    if(typeof patientFirstName!=='undefined'&&patientFirstName)
-                    {
+            if (authDetails) authDetails = JSON.parse(authDetails);
+
+            /*  Check if signed in (myAuth not undefined),
+             *  check if data is still in memory (patientSerNum not undefined),
+             *  check if there is any stored data (authDetails)
+             *  check if user trying to login is the same as locked out user
+             */
+            if(myAuth && patientSerNum && authDetails && authDetails.Email==$scope.email){
+                var cred = firebase.auth.EmailAuthProvider.credential($scope.email, $scope.password);
+                myAuth.reauthenticate(cred)
+                    .then(function () {
                         $state.go('Home');
-                    }else{
-                        console.log(auth);
-                        if(app&&authenticate(auth)&&LocalStorage.isUserDataDefined())
-                        {
-                            console.log('In there');
-                            NavigatorParameters.setParameters('Resume');
-                            $state.go('loading');
+                    })
+                    .catch(handleError);
 
-                        }else{
-                            //Otherwise even if they are logged out, try to authenticate them.
-                            myAuth.$signInWithEmailAndPassword(email,password).then(authHandler).catch(handleError);
-                        }
-
-                    }
-                }else{
-                    //Show appropiate error
-                    myAuth.$signInWithEmailAndPassword(email,password).then(authHandler).catch(handleError);
-                }
-                //If not authenticated, simply try to authenticate
-            }else{
-                myAuth.$signInWithEmailAndPassword(email,password).then(authHandler).catch(handleError);
+            } else{
+                firebase.auth().signInWithEmailAndPassword(email,password).then(authHandler).catch(handleError);
             }
+
+            //Getting authentication status
+            // var auth = FirebaseService.getAuthenticationCredentials();
+            // //Getting authentication info from local storage
+            // var authDetails = window.localStorage.getItem('UserAuthorizationInfo');
+            // //Auth details defined
+            // if(authDetails) authDetails = JSON.parse(authDetails);
+            // if(auth&&authDetails)
+            // {
+            //     //If the password is correct and the patient fields are defined, means they are in the locked out state, allow them
+            //     //access
+            //     console.log(authDetails.Email);
+            //     console.log($scope.email);
+            //     if(authDetails.Password == CryptoJS.SHA256($scope.password).toString()&&authDetails.Email==$scope.email)
+            //     {
+            //         console.log('Hello World');
+            //         if(typeof patientSerNum!=='undefined'&&patientSerNum)
+            //         {
+            //             $state.go('Home');
+            //         }else{
+            //             console.log(auth);
+            //             if(app&&authenticate(auth)&&LocalStorage.isUserDataDefined())
+            //             {
+            //                 console.log('In there');
+            //                 NavigatorParameters.setParameters('Resume');
+            //                 $state.go('loading');
+            //
+            //             }else{
+            //                 //Otherwise even if they are logged out, try to authenticate them.
+            //                 myAuth.$signInWithEmailAndPassword(email,password).then(authHandler).catch(handleError);
+            //             }
+            //
+            //         }
+            //     }else{
+            //         //Show appropiate error
+            //         myAuth.$signInWithEmailAndPassword(email,password).then(authHandler).catch(handleError);
+            //     }
+            //     //If not authenticated, simply try to authenticate
+            // }else{
+            //     myAuth.$signInWithEmailAndPassword(email,password).then(authHandler).catch(handleError);
+            // }
 
         }
     };
@@ -115,15 +136,15 @@ myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$root
     function authHandler(/*error, */firebaseUser) {
 
         firebaseUser.getToken(true).then(function(sessionToken){
-            console.log('In Auth Handler')
+            console.log('In Auth Handler');
             window.localStorage.setItem('Email',$scope.email);
 
-            UserAuthorizationInfo.setUserAuthData(firebaseUser.uid, CryptoJS.SHA256($scope.password).toString(), myAuth.$getAuth().expires,sessionToken);
+            UserAuthorizationInfo.setUserAuthData(firebaseUser.uid, CryptoJS.SHA256($scope.password).toString(), undefined, sessionToken);
             //Setting The User Object for global Application Use
             console.log("Users email is" + $scope.email);
             var authenticationToLocalStorage={
                 UserName:firebaseUser.uid,
-                Password: CryptoJS.SHA256($scope.password).toString(),
+                Password: undefined,
                 Email:$scope.email,
                 Token:sessionToken
             };
@@ -183,11 +204,10 @@ myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$root
                 var  authInfoLocalStorage=window.localStorage.getItem('UserAuthorizationInfo');
                 if(authInfoLocalStorage){
                     var authInfoObject=JSON.parse(authInfoLocalStorage);
-                    UserAuthorizationInfo.setUserAuthData(firebaseUser.uid, authInfoObject.Password , myAuth.$getAuth().expires,sessionToken);
+                    UserAuthorizationInfo.setUserAuthData(firebaseUser.uid, authInfoObject.Password , undefined,sessionToken);
                     var authenticationToLocalStorage={
                         UserName:firebaseUser.uid,
                         Password: authInfoObject.Password ,
-                        Expires:myAuth.$getAuth().expires,
                         Email:firebaseUser.email,
                         Token:sessionToken
                     };
