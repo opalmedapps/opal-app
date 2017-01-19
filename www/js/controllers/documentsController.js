@@ -78,9 +78,10 @@ myApp.controller('SingleDocumentController', ['NavigatorParameters','Documents',
 
         var image = Documents.setDocumentsLanguage(parameters.Post);
         var pdfdoc, canvas, ctx, scale = 0.5, uint8pf;
-        //Get viewer path
+        //Get pdfviewer path
 
         $scope.documentObject = image;
+        $scope.rendering = true;
         $scope.loading = true;
         $scope.errorDownload = false;
         initializeDocument(image);
@@ -106,9 +107,12 @@ myApp.controller('SingleDocumentController', ['NavigatorParameters','Documents',
                 PDFJS.getDocument(uint8pf)
                     .then(function (_pdfdoc) {
                         pdfdoc = _pdfdoc;
-                        renderPage(_pdfdoc.numPages);
-                        console.log(_pdfdoc.numPages);
-
+                        //$scope.rendering=true;
+                        return renderPage(_pdfdoc.numPages)
+                    })
+                    .then(function () {
+                        $scope.rendering = false;
+                        $scope.$apply();
                     });
 
                 /*var targetPath = FileManagerService.getFilePathForDocument(document);
@@ -188,7 +192,7 @@ myApp.controller('SingleDocumentController', ['NavigatorParameters','Documents',
                     canvasContext: ctx,
                     viewport: viewport
                 };
-                page.render(renderContext);
+                return page.render(renderContext);
                 // Wait for rendering to finish
                 // renderTask.promise.then(function () {
                 //     pageRendering = false;
@@ -205,7 +209,7 @@ myApp.controller('SingleDocumentController', ['NavigatorParameters','Documents',
         $scope.openPDF = function () {
             NavigatorParameters.setParameters({pdfdata:uint8pf});
             personalNavigator.pushPage('./views/personal/my-chart/pdfview.html');
-            // $scope.viewerPath = "./lib/bower_components/pdfjs-viewer/web/viewer.html";
+            // $scope.viewerPath = "./lib/bower_components/pdfjs-pdfviewer/web/pdfviewer.html";
             // var pdfjsframe = document.getElementById('pdfViewer');
             // $timeout(function () {
             //

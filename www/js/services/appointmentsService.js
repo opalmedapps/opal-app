@@ -42,8 +42,8 @@ myApp.service('Appointments', ['$q', 'RequestToServer','$cordovaCalendar','UserA
     var numberOfSessions=0;
     function searchAppointmentsAndDelete(appointments)
     {
-        console.log(appointments);
-        console.log(userAppointmentsArray);
+        //console.log(appointments);
+        //console.log(userAppointmentsArray);
         for (var i = 0; i < appointments.length; i++) {
             for (var j = 0; j < userAppointmentsArray.length; j++) {
                 if(userAppointmentsArray[j].AppointmentSerNum==appointments[i].AppointmentSerNum)
@@ -562,8 +562,8 @@ myApp.service('Appointments', ['$q', 'RequestToServer','$cordovaCalendar','UserA
          **/
         getAppointmentName:function(serNum)
         {
-            console.log(serNum);
-            console.log(userAppointmentsArray);
+            //console.log(serNum);
+            //console.log(userAppointmentsArray);
             for (var i = 0; i < userAppointmentsArray.length; i++) {
                 if(userAppointmentsArray[i].AppointmentSerNum == serNum)
                 {

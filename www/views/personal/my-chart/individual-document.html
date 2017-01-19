@@ -9,7 +9,7 @@
     </ons-toolbar>
 
     <!--<div ons-if-platform="android" align="center" ng-class="fontSizeTitle">{{"TAP_DL"|translate}}</div>-->
-    <div ng-show="loading" align="center" style="margin:10px">
+    <div ng-show="loading||rendering" align="center" style="margin:10px">
         <svg class="progress-circular">
             <circle class="progress-circular__primary" cx="50%" cy="50%" r="40%" fill="none" stroke-width="10%" stroke-miterlimit="10"/>
         </svg>
@@ -19,7 +19,7 @@
         <p clas="lucent">{{"ERROROBTAININGDOCUMENT"|translate}}</p>
     </div>
 
-    <div class="content-scrollable" ng-hide="loading" align="center" style="margin-top: 5px" style="width: 100%;">
+    <div class="content-scrollable" ng-hide="loading||rendering" align="center" style="margin-top: 5px" style="width: 100%;">
         <canvas id="the-canvas" style="border:1px solid black" ng-click="openPDF()" style="width:inherit;"></canvas>
     </div>
 
