@@ -66,8 +66,10 @@
 
             // Refresh the page on every pop
             homeNavigator.on('prepop', function(event) {
-                console.log('prepop');
-                refresh();
+                if (event.currentPage.name == "./views/home/checkin/checkin-list.html") {
+                    console.log('prepop');
+                    refresh();
+                }
             });
 
             Permissions.enablePermission('WRITE_EXTERNAL_STORAGE', 'PERMISSION_STORAGE_DENIED')
@@ -163,6 +165,7 @@
         function setUpCheckin()
         {
             //Get checkin appointment for the day, gets the closest appointment to right now
+            vm.checkInMessage = '';
             var todaysAppointmentsToCheckIn = Appointments.getCheckinAppointment();
             console.log(todaysAppointmentsToCheckIn);
             vm.todaysAppointments = todaysAppointmentsToCheckIn;
