@@ -415,7 +415,7 @@ myApp.controller('pdfViewController', ['NavigatorParameters','$scope', '$timeout
     function(NavigatorParameters,$scope, $timeout) {
         var parameters = NavigatorParameters.getParameters();
         console.log(parameters);
-        $scope.viewerPath = "./lib/bower_components/pdfjs-viewer/web/viewer.html";
+        $scope.viewerPath = "./lib/js/pdfjs-viewer/web/viewer.html";
         $timeout(function () {
             var pdfjsframe = document.getElementById('pdfViewer');
             console.log(pdfjsframe);

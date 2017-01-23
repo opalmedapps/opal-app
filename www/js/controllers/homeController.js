@@ -6,7 +6,7 @@
         .controller('HomeController', HomeController);
 
     HomeController.$inject = [
-        'Appointments', 'CheckinService', 'Patient',
+        'Appointments', 'CheckInService', 'Patient',
         'UpdateUI', '$timeout','$filter', '$location','Notifications','NavigatorParameters','NativeNotification',
         'NewsBanner','DeviceIdentifiers','$anchorScroll', 'PlanningSteps', 'Permissions',
         'UserPreferences', 'Constants'
@@ -14,7 +14,7 @@
 
     /* @ngInject */
     function HomeController(
-        Appointments, CheckinService, Patient,
+        Appointments, CheckInService, Patient,
         UpdateUI, $timeout, $filter, $location, Notifications, NavigatorParameters, NativeNotification,
         NewsBanner, DeviceIdentifiers, $anchorScroll, PlanningSteps, Permissions,
         UserPreferences, Constants)
@@ -64,11 +64,12 @@
             // Sending registration id to server for push notifications.
             if(Constants.app) DeviceIdentifiers.sendIdentifiersToServer();
 
-            // Refresh the page on every pop
+            // Refresh the page on coming back from checkin
             homeNavigator.on('prepop', function(event) {
                 if (event.currentPage.name == "./views/home/checkin/checkin-list.html") {
                     console.log('prepop');
-                    refresh();
+                    setUpCheckin();
+                    //refresh();
                 }
             });
 
@@ -166,12 +167,14 @@
         {
             //Get checkin appointment for the day, gets the closest appointment to right now
             vm.checkInMessage = '';
+            vm.allCheckedIn = true;
             var todaysAppointmentsToCheckIn = Appointments.getCheckinAppointment();
+            CheckInService.setCheckInApps(todaysAppointmentsToCheckIn);
             console.log(todaysAppointmentsToCheckIn);
             vm.todaysAppointments = todaysAppointmentsToCheckIn;
             if(todaysAppointmentsToCheckIn)
             {
-                CheckinService.isAllowedToCheckin().then(function (response) {
+                CheckInService.isAllowedToCheckIn().then(function (response) {
                     var allCheckedIn = true;
                     for (var app in todaysAppointmentsToCheckIn){
                         if (todaysAppointmentsToCheckIn[app].Checkin == '0'){
@@ -190,7 +193,7 @@
                         vm.showHomeScreenUpdate = false;
 
                         //Queries the server to find out whether or not an appointment was checked into
-                        CheckinService.checkCheckinServer(todaysAppointmentsToCheckIn[0]).then(function (data) {
+                        CheckInService.checkCheckinServer(todaysAppointmentsToCheckIn[0]).then(function (data) {
                             //If it has, then it simply changes the message to checkedin and queries to get an update
                             if (data) {
                                 $timeout(function () {
@@ -307,11 +310,11 @@
 
 /*
 var myApp = angular.module('MUHCApp');
-myApp.controller('HomeController', ['$state','Appointments', 'CheckinService','$scope','Patient',
+myApp.controller('HomeController', ['$state','Appointments', 'CheckInService','$scope','Patient',
     'UpdateUI', '$timeout','$filter','$rootScope', 'tmhDynamicLocale','$translate',
     '$location','Notifications','NavigatorParameters','NativeNotification',
     'NewsBanner','DeviceIdentifiers','$anchorScroll', 'PlanningSteps', 'Permissions', 'UserPreferences',
-    function ($state,Appointments,CheckinService, $scope, Patient,UpdateUI,$timeout,
+    function ($state,Appointments,CheckInService, $scope, Patient,UpdateUI,$timeout,
               $filter, $rootScope,tmhDynamicLocale, $translate,$location,
               Notifications,NavigatorParameters,NativeNotification,NewsBanner,DeviceIdentifiers,
               $anchorScroll,PlanningSteps, Permissions, UserPreferences) {
@@ -573,7 +576,7 @@ myApp.controller('HomeController', ['$state','Appointments', 'CheckinService','$
             {
                 //$scope.showCheckin = true;
                 console.log('pass check for apps');
-                CheckinService.isAllowedToCheckin().then(function (response) {
+                CheckInService.isAllowedToCheckin().then(function (response) {
                     var allCheckedIn = true;
                     for (var app in todaysAppointmentsToCheckIn){
                         console.log(todaysAppointmentsToCheckIn[app].Checkin);
@@ -594,14 +597,14 @@ myApp.controller('HomeController', ['$state','Appointments', 'CheckinService','$
                         $rootScope.showHomeScreenUpdate = false;
 
                         //Queries the server to find out whether or not an appointment was checked into
-                        CheckinService.checkCheckinServer(todaysAppointmentsToCheckIn[0]).then(function (data) {
+                        CheckInService.checkCheckinServer(todaysAppointmentsToCheckIn[0]).then(function (data) {
                             //If it has, then it simply changes the message to checkedin and queries to get an update
                             if (data) {
                                 console.log('Returning home');
                                 $timeout(function () {
                                     $rootScope.checkInMessage = "CHECKIN_MESSAGE_AFTER" + setPlural(todaysAppointmentsToCheckIn);
                                     $rootScope.showHomeScreenUpdate = true;
-                                    //CheckinService.getCheckinUpdates(appointment);
+                                    //CheckInService.getCheckinUpdates(appointment);
                                 });
                             }
                         });
@@ -614,7 +617,7 @@ myApp.controller('HomeController', ['$state','Appointments', 'CheckinService','$
                         $rootScope.checkInMessage = calledApp.RoomLocation ? "CHECKIN_CALLED":"CHECKIN_MESSAGE_AFTER" + setPlural(todaysAppointmentsToCheckIn);
                         $rootScope.RoomLocation = calledApp.RoomLocation;
                         $rootScope.showHomeScreenUpdate = true;
-                        //CheckinService.getCheckinUpdates(appointment);
+                        //CheckInService.getCheckinUpdates(appointment);
                     }
                     //console.log(todaysAppointmentsToCheckIn[appointment].checkInMessage);
                 }).catch(function(error){
