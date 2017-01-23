@@ -7,12 +7,12 @@
 
     CheckInController.$inject =
         [
-        'CheckinService', 'NavigatorParameters', 'UserPreferences',
+        'CheckInService', 'NavigatorParameters', 'UserPreferences',
         'Appointments', 'NewsBanner','$filter'
         ];
 
     /* @ngInject */
-    function CheckInController(CheckinService, NavigatorParameters, UserPreferences,
+    function CheckInController(CheckInService, NavigatorParameters, UserPreferences,
                                Appointments, NewsBanner, $filter) {
         var vm = this;
         vm.title = 'CheckInController';
@@ -30,7 +30,7 @@
         ////////////////
 
         function activate() {
-            vm.apps = Appointments.getCheckinAppointment();
+            vm.apps = CheckInService.getCheckInApps();
             console.log(vm.apps);
             vm.language = UserPreferences.getLanguage();
 
@@ -42,10 +42,11 @@
             }
 
             // Ensure that user is within range of the hospital
-            CheckinService.isAllowedToCheckin()
+            console.log(CheckInService);
+            CheckInService.isAllowedToCheckIn()
                 .then(function (response) {
                     console.log("Allowed to Check in", response);
-                    return CheckinService.verifyAllCheckIn(vm.apps);
+                    return CheckInService.verifyAllCheckIn();
                 })
                 .then(function (response){
                     console.log(response);
@@ -58,12 +59,13 @@
                         vm.additionalInfo = "CHECKIN_ADDITIONAL";
                     } else {
                         console.log("Will call checkin");
-                        CheckinService.checkinToAllAppointments(vm.apps)
+                        CheckInService.checkinToAllAppointments()
                             .then(function () {
                                 console.log("success");
                                 vm.alert.type = "success";
                                 vm.checkInMessage = "CHECKED_IN";
                                 vm.additionalInfo = "CHECKIN_ADDITIONAL";
+                                console.log(vm.apps);
                             })
                             .catch(function (error) {
                                 console.log(error);

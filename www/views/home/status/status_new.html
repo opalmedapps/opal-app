@@ -6,7 +6,7 @@
         <div class="center" ng-class="fontSizeTitle">{{"PLANNING_TITLE"|translate}}</div>
     </ons-toolbar>
     <div style="overcroll-y:scroll" >
-        <div class="container">
+        <div class="container" style="height: 30%">
             <div style="margin-top:1px">
                 <div ng-show="status.noData" class="btn my-home-profile">
                     <div class="plan-info" style="width:100%">
@@ -70,9 +70,9 @@
                 </div>
             </div>
         </div>
-        <div style="padding:2px">
+        <div style="padding:2px; height: 100%;">
             <div class="my-home-profile" ng-hide="status.noData" style="padding:0">
-                <div id="divTreatmentPlan" style="overflow-y:scroll">
+                <div id="divTreatmentPlan" style="overflow-y:scroll; height: 100%">
 
                     <ons-list class="plan-list" style="margin:0;padding:0">
                         <ons-list-item class="plan" modifier="tappable" ng-click="status.goTo(status.eventType, events[events.length-1])" ng-repeat="(step, events) in status.events" id="treatmentSessions{{$index}}">

@@ -640,10 +640,10 @@ myApp.controller('AppointmentListController', ['$scope','$timeout','Appointments
         };
     }]);
 myApp.controller('IndividualAppointmentController', ['NavigatorParameters','NativeNotification','$scope',
-    '$timeout', '$rootScope','Appointments', 'CheckinService','$q',
+    '$timeout', '$rootScope','Appointments', 'CheckInService','$q',
     'NewsBanner','$filter', 'UserPreferences',
     function (NavigatorParameters,NativeNotification,$scope,
-              $timeout, $rootScope, Appointments,CheckinService, $q,
+              $timeout, $rootScope, Appointments,CheckInService, $q,
               NewsBanner,$filter, UserPreferences) {
         //Information of current appointment
         NewsBanner.setAlertOffline();
@@ -656,7 +656,7 @@ myApp.controller('IndividualAppointmentController', ['NavigatorParameters','Nati
         console.log($scope.app);
         //$scope.app = Appointments.setAppointmentsLanguage($scope.app);
 
-        setUpCheckin()
+        //setUpCheckin()
 
         $scope.goToMap=function()
         {
@@ -664,133 +664,133 @@ myApp.controller('IndividualAppointmentController', ['NavigatorParameters','Nati
             window[navigatorName].pushPage('./views/general/maps/individual-map.html');
         };
 
-        $scope.goToCheckIn=function()
-        {
-            //NavigatorParameters.setParameters({Post:[$scope.app]});
-            window[navigatorName].pushPage('./views/home/checkin/checkin-list.html');
-        }
+        // $scope.goToCheckIn=function()
+        // {
+        //     //NavigatorParameters.setParameters({Post:[$scope.app]});
+        //     window[navigatorName].pushPage('./views/home/checkin/checkin-list.html');
+        // }
 
         //Function to checkin for appointment after pressing checked in inside invidivual appointment
-        $scope.checkinToAppointment = function()
-        {
-            //set the loading to true
-            $scope.loading = true;
-            //Try checking in,
-            CheckinService.checkinToAppointment($scope.app).then(function(response)
-            {
-                //If successfully checked in set loading to false, show live update, send live update request.
-                $timeout(function(){
-                    $scope.loading = false;
-                    $rootScope.showHomeScreenUpdate = true;
-                    $scope.showLiveUpdate = true;
-                    $scope.checkInMessage = $filter('translate')("CHECKIN_MESSAGE_AFTER");
-                    $rootScope.checkInMessage = "CHECKIN_MESSAGE_AFTER";
-                    //ProgressBarStatus('#statusBarCheckin', 100,'#006400','#006400',200);
-                });
-            }).catch(function(error){
-                $timeout(function(){
-                    //Else an error occure, check in at the cacner center
-                    $scope.loading = false;
-                    $rootScope.showHomeScreenUpdate = false;
-                    $scope.enableCheckinButton = false;
-                    $scope.checkInMessage = $filter('translate')("CHECKIN_ERROR");
-                });
-            });
-
-        };
+        // $scope.checkinToAppointment = function()
+        // {
+        //     //set the loading to true
+        //     $scope.loading = true;
+        //     //Try checking in,
+        //     CheckInService.checkinToAppointment($scope.app).then(function(response)
+        //     {
+        //         //If successfully checked in set loading to false, show live update, send live update request.
+        //         $timeout(function(){
+        //             $scope.loading = false;
+        //             $rootScope.showHomeScreenUpdate = true;
+        //             $scope.showLiveUpdate = true;
+        //             $scope.checkInMessage = $filter('translate')("CHECKIN_MESSAGE_AFTER");
+        //             $rootScope.checkInMessage = "CHECKIN_MESSAGE_AFTER";
+        //             //ProgressBarStatus('#statusBarCheckin', 100,'#006400','#006400',200);
+        //         });
+        //     }).catch(function(error){
+        //         $timeout(function(){
+        //             //Else an error occure, check in at the cacner center
+        //             $scope.loading = false;
+        //             $rootScope.showHomeScreenUpdate = false;
+        //             $scope.enableCheckinButton = false;
+        //             $scope.checkInMessage = $filter('translate')("CHECKIN_ERROR");
+        //         });
+        //     });
+        //
+        // };
         //Sets up checkin
-        function setUpCheckin()
-        {
-            //Do not show checkin, unless otherwise later specified
-            $scope.showCheckin = false;
-            //Check if the current appointment is the check-in appointment
-            if(Appointments.isCheckinAppointment($scope.app))
-            {
-                //If it is, show checkin, as in show checkin div, go into loading do not show live udpates and disable the checkin button
-                var checkInAppointment = $scope.app;
-                $scope.showCheckin = true;
-                $scope.enableCheckinButton = false;
-                $scope.loading = true;
-                $scope.showLiveUpdate = false;
-                $scope.checkInAppointment = checkInAppointment;
-
-                //If the checkin is not done yet
-                if(checkInAppointment.Checkin == '0')
-                {
-                    console.log('inside checkin = 0');
-                    //Check in server if checked in to Aria
-                    CheckinService.checkCheckinServer(checkInAppointment).then(function(data)
-                    {
-                        //If they have checked in to Aria, set loading to false, update chackin message in both
-                        //Home screen and individual-appointment page, activate the live updates
-                        if(data)
-                        {
-                            console.log(data);
-                            $scope.loading = false;
-                            $scope.checkInMessage =  $filter('translate')("CHECKIN_MESSAGE_AFTER");
-                            $rootScope.checkInMessage = "CHECKIN_MESSAGE_AFTER";
-                            $scope.showLiveUpdate = true;
-                            $rootScope.showHomeScreenUpdate = true;
-                            //ProgressBarStatus('#statusBarCheckin', 100,'#006400','#006400',200);
-                            //CheckinService.getCheckinUpdates(checkInAppointment);
-                        }else{
-                            //Check if the user is allowed to check in geographically
-                            CheckinService.isAllowedToCheckin().then(
-                                function(success){
-                                    //If allowed, set loading to false, Give them the checkin message and enable button
-                                    $timeout(function()
-                                    {
-                                        $scope.loading = false;
-                                        $scope.enableCheckinButton = true;
-                                        $scope.checkInMessage = success;
-                                        $rootScope.showHomeScreenUpdate = false;
-                                    });
-                                },function(failure){
-                                    //If not allowed, loading to false, give them the message to "Checkin in vecinity of..."
-                                    $timeout(function()
-                                    {
-                                        $scope.loading = false;
-                                        $scope.checkInMessage = failure;
-                                        $rootScope.showHomeScreenUpdate = false;
-                                    });
-                                });
-                        }
-                    }).catch(function(error)
-                    {
-                        //NativeNotification.showNotificationAlert($filter('translate')("ERRORCONTACTINGHOSPITAL"));
-                        $scope.errorMessage = $filter('translate')("ERRORCONTACTINGHOSPITAL");
-                    });
-                }else{
-                    //Case where the user is already checked in, ask for an update, set bar.
-                    //CheckinService.getCheckinUpdates(checkInAppointment);
-                    $scope.loading = false;
-                    $scope.checkInMessage =  $filter('translate')("CHECKIN_MESSAGE_AFTER");
-                    $scope.showLiveUpdate = true;
-                    $rootScope.showHomeScreenUpdate = true;
-                    //ProgressBarStatus('#statusBarCheckin', 100,'#006400','#006400',200);
-                }
-            }else{
-                $scope.showLiveUpdate = false;
-                $scope.showCheckin = false;
-
-            }
-        }
-        function ProgressBarStatus(id, percentage,startColor,endColor,duration)
-        {
-            var circle = new ProgressBar.Circle(id, {
-                color: endColor,
-                duration: duration,
-                easing: 'easeInOut',
-                strokeWidth: 5,
-                step: function(state, circle) {
-                    circle.path.setAttribute('stroke', state.color);
-                }
-            });
-            circle.animate(percentage/100, {
-                from: {color: startColor},
-                to: {color: endColor}
-            });
-        }
+        // function setUpCheckin()
+        // {
+        //     //Do not show checkin, unless otherwise later specified
+        //     $scope.showCheckin = false;
+        //     //Check if the current appointment is the check-in appointment
+        //     if(Appointments.isCheckinAppointment($scope.app))
+        //     {
+        //         //If it is, show checkin, as in show checkin div, go into loading do not show live udpates and disable the checkin button
+        //         var checkInAppointment = $scope.app;
+        //         $scope.showCheckin = true;
+        //         $scope.enableCheckinButton = false;
+        //         $scope.loading = true;
+        //         $scope.showLiveUpdate = false;
+        //         $scope.checkInAppointment = checkInAppointment;
+        //
+        //         //If the checkin is not done yet
+        //         if(checkInAppointment.Checkin == '0')
+        //         {
+        //             console.log('inside checkin = 0');
+        //             //Check in server if checked in to Aria
+        //             CheckInService.checkCheckinServer(checkInAppointment).then(function(data)
+        //             {
+        //                 //If they have checked in to Aria, set loading to false, update chackin message in both
+        //                 //Home screen and individual-appointment page, activate the live updates
+        //                 if(data)
+        //                 {
+        //                     console.log(data);
+        //                     $scope.loading = false;
+        //                     $scope.checkInMessage =  $filter('translate')("CHECKIN_MESSAGE_AFTER");
+        //                     $rootScope.checkInMessage = "CHECKIN_MESSAGE_AFTER";
+        //                     $scope.showLiveUpdate = true;
+        //                     $rootScope.showHomeScreenUpdate = true;
+        //                     //ProgressBarStatus('#statusBarCheckin', 100,'#006400','#006400',200);
+        //                     //CheckInService.getCheckinUpdates(checkInAppointment);
+        //                 }else{
+        //                     //Check if the user is allowed to check in geographically
+        //                     CheckInService.isAllowedToCheckin().then(
+        //                         function(success){
+        //                             //If allowed, set loading to false, Give them the checkin message and enable button
+        //                             $timeout(function()
+        //                             {
+        //                                 $scope.loading = false;
+        //                                 $scope.enableCheckinButton = true;
+        //                                 $scope.checkInMessage = success;
+        //                                 $rootScope.showHomeScreenUpdate = false;
+        //                             });
+        //                         },function(failure){
+        //                             //If not allowed, loading to false, give them the message to "Checkin in vecinity of..."
+        //                             $timeout(function()
+        //                             {
+        //                                 $scope.loading = false;
+        //                                 $scope.checkInMessage = failure;
+        //                                 $rootScope.showHomeScreenUpdate = false;
+        //                             });
+        //                         });
+        //                 }
+        //             }).catch(function(error)
+        //             {
+        //                 //NativeNotification.showNotificationAlert($filter('translate')("ERRORCONTACTINGHOSPITAL"));
+        //                 $scope.errorMessage = $filter('translate')("ERRORCONTACTINGHOSPITAL");
+        //             });
+        //         }else{
+        //             //Case where the user is already checked in, ask for an update, set bar.
+        //             //CheckInService.getCheckinUpdates(checkInAppointment);
+        //             $scope.loading = false;
+        //             $scope.checkInMessage =  $filter('translate')("CHECKIN_MESSAGE_AFTER");
+        //             $scope.showLiveUpdate = true;
+        //             $rootScope.showHomeScreenUpdate = true;
+        //             //ProgressBarStatus('#statusBarCheckin', 100,'#006400','#006400',200);
+        //         }
+        //     }else{
+        //         $scope.showLiveUpdate = false;
+        //         $scope.showCheckin = false;
+        //
+        //     }
+        // }
+        // function ProgressBarStatus(id, percentage,startColor,endColor,duration)
+        // {
+        //     var circle = new ProgressBar.Circle(id, {
+        //         color: endColor,
+        //         duration: duration,
+        //         easing: 'easeInOut',
+        //         strokeWidth: 5,
+        //         step: function(state, circle) {
+        //             circle.path.setAttribute('stroke', state.color);
+        //         }
+        //     });
+        //     circle.animate(percentage/100, {
+        //         from: {color: startColor},
+        //         to: {color: endColor}
+        //     });
+        // }
     }]);
 
 myApp.controller('AppointmentOptionsController',['$scope','$timeout','$filter',function($scope,$timeout,$filter){

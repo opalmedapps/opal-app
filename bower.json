@@ -46,7 +46,6 @@
     "firebase": "^3.6.3",
     "moment": "^2.17.1",
     "pdfjs-dist": "^1.6.446",
-    "pdfjs-viewer": "^1.0.1040",
     "progressbar.js": "^1.0.1"
   },
   "resolutions": {

@@ -23,8 +23,9 @@
                     <span ng-class="fontSizeTitle">
                         {{app["AppointmentType_"+checkIn.language]}} <br>
                         {{app.ScheduledStartTime | date:'shortTime'}}
+                        {{home.checkInMessage}}
                     </span> <br>
-                        <span class="item-desc" ng-class="fontSizeDesc" ng-show="app.RoomLocation_EN">{{"GOTO"|translate}} {{app["RoomLocation_"+checkIn.language]}}</span>
+                        <span class="item-desc" ng-class="fontSizeDesc" ng-show="app.RoomLocation_EN">{{"APPOINTMENT_ROOM"|translate}} {{app["RoomLocation_"+checkIn.language]}}</span>
                     </div>
                 </ons-col>
             </ons-row>
