@@ -9,7 +9,7 @@ myApp.controller('FeedbackController',['Patient', 'RequestToServer','$scope', fu
 	$scope.profilePicture=Patient.getProfileImage();
 	$scope.enableSend=false;
 	$scope.$watch('feedbackText',function(){
-		if(($scope.feedbackText===''||!$scope.feedbackText)||$scope.emptyRating)
+		if(($scope.feedbackText===''||!$scope.feedbackText))
 		{
 			$scope.enableSend=false;
 			if(!$scope.emptyRating) $scope.enableSend=true;
