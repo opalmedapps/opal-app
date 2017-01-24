@@ -191,30 +191,30 @@ myApp.controller('generalTabController',['$scope','$timeout','Announcements','Re
         NavigatorParameters.setParameters({'Navigator':'generalNavigator'});
         generalNavigator.pushPage('./views/init/init-settings.html')
     };
-    $scope.reportIssuesMail = function()
-    {
-
-        if(app){
-            var email = {
-                to: 'muhc.app.mobile@gmail.com',
-                cc: '',
-                bcc: [],
-                subject: $filter("translate")("OPALPROBLEMSUBJECT"),
-                body: '',
-                isHtml: true
-            };
-            cordova.plugins.email.isAvailable(function(isAvailable){
-                if(isAvailable)
-                {
-                    cordova.plugins.email.open(email,function(sent){
-                        console.log('email ' + (sent ? 'sent' : 'cancelled'));
-                    },this);
-                }else{
-                    console.log('is not available');
-                }
-            });
-        }
-    };
+    // $scope.reportIssuesMail = function()
+    // {
+    //
+    //     if(app){
+    //         var email = {
+    //             to: 'muhc.app.mobile@gmail.com',
+    //             cc: '',
+    //             bcc: [],
+    //             subject: $filter("translate")("OPALPROBLEMSUBJECT"),
+    //             body: '',
+    //             isHtml: true
+    //         };
+    //         cordova.plugins.email.isAvailable(function(isAvailable){
+    //             if(isAvailable)
+    //             {
+    //                 cordova.plugins.email.open(email,function(sent){
+    //                     console.log('email ' + (sent ? 'sent' : 'cancelled'));
+    //                 },this);
+    //             }else{
+    //                 console.log('is not available');
+    //             }
+    //         });
+    //     }
+    // };
     $scope.goToParking = function()
     {
         NavigatorParameters.setParameters('generalNavigator');

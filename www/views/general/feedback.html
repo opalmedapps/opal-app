@@ -5,35 +5,38 @@
     </div>
     <div class="center" ng-class="fontSizeTitle">{{"FEEDBACK"|translate}}</div>
     <div class="right">
-      <ons-toolbar-button ng-click="submitFeedback()" ng-disabled="!enableSend||submitted">{{"SEND"|translate}}</ons-toolbar-button>
+      <ons-toolbar-button ng-click="submitFeedback()" ng-disabled="submitted">{{"SEND"|translate}}</ons-toolbar-button>
     </div>
   </ons-toolbar>
-  <ons-row style="padding:0;margin:10px 0 0 0">
-    <ons-col width="60px" class="profile-image-wrapper">
-      <div>
-        <img style="margin-left:10px" ng-src="{{profilePicture}}" class="profile-image-account">
-      </div>
-    </ons-col>
-    <ons-col>
-      <div style="margin-left:10px;color:#2B6197;"><strong>{{FirstName}} {{LastName}}</strong></div>
-      <div style="margin-left:10px;color:grey;"></div>
-    </ons-col>
-  </ons-row>
+  <!--<ons-row style="padding:0;margin:10px 0 0 0">-->
+    <!--<ons-col width="60px" class="profile-image-wrapper">-->
+      <!--<div>-->
+        <!--<img style="margin-left:10px" ng-src="{{profilePicture}}" class="profile-image-account">-->
+      <!--</div>-->
+    <!--</ons-col>-->
+    <!--<ons-col>-->
+      <!--<div style="margin-left:10px;color:#2B6197;"><strong>{{FirstName}} {{LastName}}</strong></div>-->
+      <!--<div style="margin-left:10px;color:grey;"></div>-->
+    <!--</ons-col>-->
+  <!--</ons-row>-->
   <ons-list style="margin-top:10px">
-    <ons-list-item>
+    <ons-list-item style="line-height: 25px">
       <ons-row style="padding:0;margin:0">
-        <ons-col align="center">
-          <div ng-hide="submitted" align="center">
-            <div style="display:inline-block;vertical-align:top" align="top"><div><span style="color:grey;" >{{"RATETHISAPP"|translate}}</span></div></div>
-            <span style="display:inline-block;opacity:0.5;" ng-repeat="star in rate" ng-click="rateMaterial($index)">
-            <i ng-class="star.Icon" style="font-size:35px;color:#DAA520" ></i>
-        </span>
-          </div>
-          <div ng-show="submitted" style="margin-top:5px;text-align:center">
-            <p style="color:#5cb85c;opacity:0.8;">{{"THANKYOUFORFEEDBACK"|translate}}</p>
-          </div>
-        </ons-col>
+      <span>{{"FEEDBACK_MESSAGE"|translate}}</span>
       </ons-row>
+      <!--<ons-row style="padding:0;margin:0">-->
+        <!--<ons-col align="center">-->
+          <!--<div ng-hide="submitted" align="center">-->
+            <!--<div style="display:inline-block;vertical-align:top" align="top"><div><span style="color:grey;" >{{"RATETHISAPP"|translate}}</span></div></div>-->
+            <!--<span style="display:inline-block;opacity:0.5;" ng-repeat="star in rate" ng-click="rateMaterial($index)">-->
+            <!--<i ng-class="star.Icon" style="font-size:35px;color:#DAA520" ></i>-->
+        <!--</span>-->
+          <!--</div>-->
+          <!--<div ng-show="submitted" style="margin-top:5px;text-align:center">-->
+            <!--<p style="color:#5cb85c;opacity:0.8;">{{"THANKYOUFORFEEDBACK"|translate}}</p>-->
+          <!--</div>-->
+        <!--</ons-col>-->
+      <!--</ons-row>-->
 
     </ons-list-item>
   </ons-list>
