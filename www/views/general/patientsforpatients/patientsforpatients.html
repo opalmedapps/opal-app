@@ -1,27 +1,20 @@
 <ons-page ng-device-backbutton="generalDeviceBackButton()">
   <ons-toolbar>
     <div class="left"><ons-back-button>{{"BACK"|translate}}</ons-back-button></div>
-      <div class="center">{{"Patients for Patients"|translate}}</div>
-      <div class="right"><ons-toolbar-button ng-click="generalNavigator.pushPage('./views/tabs/info-page-tabs.html')"><ons-icon icon="ion-ios-information-outline"></ons-icon></ons-toolbar-button></div>
+      <div class="center">{{"PFP"|translate}}</div>
+      <div class="right"><ons-toolbar-button ng-click="generalNavigator.pushPage('./views/tabs/info-page-tabs.html')"><ons-icon icon="fa fa-info-circle"></ons-icon></ons-toolbar-button></div>
   </ons-toolbar>
-  <ons-pull-hook ng-action="load($done)" var="loader">
-    <span ng-switch="loader.getCurrentState()">
-        <span ng-switch-when="initial"><ons-icon size="35px" spin="true" icon="ion-load-d"></ons-icon> {{"LOADINGDATA"|translate}}...</span>
-        <span ng-switch-when="preaction"><ons-icon size="35px" spin="true" icon="ion-load-d"></ons-icon> {{"LOADINGDATA"|translate}}...</span>
-        <span ng-switch-when="action"><ons-icon size="35px" spin="true" icon="ion-load-d"></ons-icon> {{"LOADINGDATA"|translate}}...</span>
-    </span>
-</ons-pull-hook>
 <ons-list style="margin: 0px 0">
     <ons-list-item modifier="chevron" class="item" ng-click="generalNavigator.pushPage('views/general/patientsforpatients/mission.html')">
       <ons-row align="center"   >
           <ons-col width="60px" align="center">
               <div >
-                <i class="ion-document-text iconHomeView" style="color:Amethyst"></i>
+                <i class="fa fa-file-text iconHomeView" style="color: rebeccapurple"></i>
               </div>
           </ons-col>
           <ons-col>
               <header>
-                  <span class="item-title" ng-class="fontSizeTitle">{{"Mission"|translate}}</span>
+                  <span class="item-title" ng-class="fontSizeTitle">{{"PFP_MISSION"|translate}}</span>
               </header>
               <p class="item-desc"></p>
           </ons-col>
@@ -31,12 +24,12 @@
       <ons-row align="center" >
           <ons-col width="60px" >
               <div>
-                <i class="ion-speakerphone iconHomeView" style="color:DarkSlateBlue"></i><span class="notification" ng-show="announcementsUnreadNumber>0">{{announcementsUnreadNumber}}</span>
+                <i class="fa fa-bullhorn iconHomeView" style="color:DarkSlateBlue"></i><span class="notification" ng-show="announcementsUnreadNumber">{{announcementsUnreadNumber}}</span>
               </div>
           </ons-col>
           <ons-col>
               <header>
-                  <span class="item-title" ng-class="fontSizeTitle">{{"Announcements"|translate}}</span>
+                  <span class="item-title" ng-class="fontSizeTitle">{{"PFP_ANNOUNCEMENTS"|translate}}</span>
               </header>
               <p class="item-desc" ng-class="fontSizeDesc"></p>
           </ons-col>
@@ -46,12 +39,12 @@
       <ons-row align="center"   >
           <ons-col width="60px" align="center">
               <div >
-                <i class="ion-person-stalker iconHomeView" style="color:grey"></i>
+                <i class="fa fa-users iconHomeView" style="color:grey"></i>
               </div>
           </ons-col>
           <ons-col>
               <header>
-                  <span class="item-title" ng-class="fontSizeTitle">{{"Committee Members"|translate}}</span>
+                  <span class="item-title" ng-class="fontSizeTitle">{{"PFP_MEMBERS"|translate}}</span>
               </header>
               <p class="item-desc"></p>
           </ons-col>
@@ -62,12 +55,12 @@
       <ons-row align="center"   >
           <ons-col width="60px" align="center">
               <div >
-                <i class="ion-filing iconHomeView" style="color:green"></i>
+                <i class="fa fa-archive iconHomeView" style="color:green"></i>
               </div>
           </ons-col>
           <ons-col>
               <header>
-                  <span class="item-title" ng-class="fontSizeTitle">{{"Electronic Suggestion Box"|translate}}</span>
+                  <span class="item-title" ng-class="fontSizeTitle">{{"PFP_EBOX"|translate}}</span>
               </header>
               <p class="item-desc"></p>
           </ons-col>
@@ -77,12 +70,12 @@
       <ons-row align="center"   >
           <ons-col width="60px" align="center">
               <div >
-                <i class="ion-help-circled iconHomeView" style="color:DarkSlateGray"></i>
+                <i class="fa fa-question-circle iconHomeView" style="color:DarkSlateGray"></i>
               </div>
           </ons-col>
           <ons-col>
               <header>
-                  <span class="item-title" ng-class="fontSizeTitle">{{"QUESTIONNAIRES"|translate}}</span>
+                  <span class="item-title" ng-class="fontSizeTitle">{{"PFP_SURVEYS"|translate}}</span>
               </header>
               <p class="item-desc"></p>
           </ons-col>
@@ -92,12 +85,12 @@
       <ons-row align="center"   >
           <ons-col width="60px" align="center">
               <div >
-                <i class="ion-link iconHomeView" style="color:orange"></i>
+                <i class="fa fa-link iconHomeView" style="color:orange"></i>
               </div>
           </ons-col>
           <ons-col>
               <header>
-                  <span class="item-title" ng-class="fontSizeTitle" >{{"Resources"|translate}}</span>
+                  <span class="item-title" ng-class="fontSizeTitle" >{{"PFP_RESOURCES"|translate}}</span>
               </header>
               <p class="item-desc"></p>
           </ons-col>
