@@ -21,7 +21,7 @@ myApp.controller('FeedbackController',['Patient', 'RequestToServer','$scope', fu
 	$scope.submitFeedback=function(){
 		if($scope.enableSend)
 		{
-			RequestToServer.sendRequest('Feedback',{FeedbackContent: $scope.feedbackText, AppRating:$scope.ratingValue});
+			RequestToServer.sendRequest('Feedback',{FeedbackContent: $scope.feedbackText, AppRating:3});
 			$scope.feedbackText='';
 			$scope.submitted=true;
 			console.log('submmited');
