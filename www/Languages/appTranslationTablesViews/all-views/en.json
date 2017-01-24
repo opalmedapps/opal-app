@@ -39,6 +39,7 @@
   "DISABLESMSNOTIFICATIONQUESTION": "Would you like to disable your SMS messaging notifications?",
   "DOCTOR": "Doctor",
   "DOCUMENT": "Document",
+  "DOCUMENT_DOWNLOADED": "The document has been downloaded successfully to the /Documents folder.",
   "EDUCATION": "Education",
   "EDUCATION_DESCRIPTION": "In your <span style=\"color:Chocolate\"> Education</span> tab you will find educational material specific to your treatment and general to radiation oncology.",
   "EMAIL": "Email",

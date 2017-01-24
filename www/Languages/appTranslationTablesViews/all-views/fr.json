@@ -43,6 +43,7 @@
   "DISABLESMSNOTIFICATIONQUESTION": "Souhaitez-vous désactiver les notifications par sms?",
   "DOCTOR": "Médecin",
   "DOCUMENT": "Document",
+  "DOCUMENT_DOWNLOADED": "Téléchargement réussi. Le document est enregistré dans /Documents",
   "EDUCATION": "Éducation",
   "EDUCATION_DESCRIPTION": "Dans l'onglet <span style=\"color:Chocolate\"> Éducation</span>, vous trouverez des informations spécifiques sur votre traitement et des informations générales sur la radiothérapie.",
   "EMAIL": "Courriel",
