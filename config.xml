@@ -99,4 +99,5 @@
     <plugin name="cordova.custom.plugins.exitapp" spec="~1.0.0" />
     <plugin name="com.phonegap.plugins.nativesettingsopener" spec="~1.0.1" />
     <plugin name="cordova-plugin-email" spec="~1.2.6" />
+    <plugin name="cordova-plugin-x-socialsharing" spec="~5.1.5" />
 </widget>
