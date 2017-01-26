@@ -19,41 +19,41 @@ myApp.controller('TabsController',['$scope','$timeout','$translate','$translateP
 
     $translatePartialLoader.addPart('all-views');
 
-    $scope.onGestureHome = function(gesture) {
-        console.log('line22',gesture);
-        $timeout(function()
-        {
-            if(gesture=='Swipe Right'&&homeNavigator.getPages().length>1)homeNavigator.popPage();
-        },100);
-    };
-    $scope.onGesturePersonal = function(gesture) {
-        console.log('line26',gesture);
-        $timeout(function()
-        {
-            if(gesture=='Swipe Right'&&personalNavigator.getPages().length>1)personalNavigator.popPage();
-        },100);
-    };
-    $scope.onGestureGeneral = function(gesture) {
-        console.log('line30',gesture);
-        $timeout(function()
-        {
-            if(gesture=='Swipe Right'&&generalNavigator.getPages().length>1)generalNavigator.popPage();
-        },100);
-    };
-    $scope.onGestureEducation = function(gesture) {
-        console.log('line30',gesture);
-        $timeout(function()
-        {
-            if(gesture=='Swipe Right'&&educationNavigator.getPages().length>1)educationNavigator.popPage();
-        },100);
-    };
-    $scope.onGestureSettings = function(gesture) {
-        console.log('line34',gesture);
-        $timeout(function()
-        {
-            if(gesture=='Swipe Right'&&settingsNavigator.getPages().length>1)settingsNavigator.popPage();
-        },100);
-    };
+    // $scope.onGestureHome = function(gesture) {
+    //     console.log('line22',gesture);
+    //     $timeout(function()
+    //     {
+    //         if(gesture=='Swipe Right'&&homeNavigator.getPages().length>1)homeNavigator.popPage();
+    //     },100);
+    // };
+    // $scope.onGesturePersonal = function(gesture) {
+    //     console.log('line26',gesture);
+    //     $timeout(function()
+    //     {
+    //         if(gesture=='Swipe Right'&&personalNavigator.getPages().length>1)personalNavigator.popPage();
+    //     },100);
+    // };
+    // $scope.onGestureGeneral = function(gesture) {
+    //     console.log('line30',gesture);
+    //     $timeout(function()
+    //     {
+    //         if(gesture=='Swipe Right'&&generalNavigator.getPages().length>1)generalNavigator.popPage();
+    //     },100);
+    // };
+    // $scope.onGestureEducation = function(gesture) {
+    //     console.log('line30',gesture);
+    //     $timeout(function()
+    //     {
+    //         if(gesture=='Swipe Right'&&educationNavigator.getPages().length>1)educationNavigator.popPage();
+    //     },100);
+    // };
+    // $scope.onGestureSettings = function(gesture) {
+    //     console.log('line34',gesture);
+    //     $timeout(function()
+    //     {
+    //         if(gesture=='Swipe Right'&&settingsNavigator.getPages().length>1)settingsNavigator.popPage();
+    //     },100);
+    // };
 
 
 }]);

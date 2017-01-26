@@ -86,7 +86,10 @@
  */
 
 //Routes for angular views
-var myApp = angular.module('MUHCApp', ['tmh.dynamicLocale','pascalprecht.translate','ngAnimate','luegg.directives','ngSanitize','ui.router', 'onsen', 'ngTouch','firebase','ui.bootstrap','MUHCApp.filters','ngCordova','monospaced.elastic','Tek.progressBar']);
+var myApp = angular
+    .module('MUHCApp', ['tmh.dynamicLocale','pascalprecht.translate','ngAnimate','luegg.directives',
+        'ngSanitize','ui.router', 'onsen', 'ngTouch','firebase','ui.bootstrap','MUHCApp.filters',
+        'ngCordova','monospaced.elastic','Tek.progressBar']);
 
 myApp.config(['$urlRouterProvider', '$stateProvider', function ($urlRouterProvider, $stateProvider) {
 

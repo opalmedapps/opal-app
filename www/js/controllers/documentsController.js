@@ -68,21 +68,23 @@ myApp.controller('DocumentsController', ['Patient', 'Documents', 'UpdateUI', '$s
  */
 myApp.controller('SingleDocumentController', ['NavigatorParameters','Documents', '$timeout', '$scope',
     '$cordovaEmailComposer','$cordovaFileOpener2','FileManagerService','Patient','NativeNotification',
-    '$filter', 'Constants', 'NewsBanner',
+    '$filter', 'Constants', 'NewsBanner', '$q',
     function(NavigatorParameters, Documents, $timeout, $scope,$cordovaEmailComposer,$cordovaFileOpener2,
-             FileManagerService,Patient,NativeNotification,$filter, Constants, NewsBanner) {
+             FileManagerService,Patient,NativeNotification,$filter, Constants, NewsBanner, $q) {
 
         //Obtain navigator parameters.
         var parameters = NavigatorParameters.getParameters();
-        //var app = document.URL.indexOf('http://') === -1 && document.URL.indexOf('https://') === -1;
 
+        //PDF params
         var image = Documents.setDocumentsLanguage(parameters.Post);
-        var pdfdoc, canvas, ctx, scale = 0.5, uint8pf;
+        var pdfdoc, scale = 3, uint8pf;
+        var viewerSize = window.innerWidth;
         var content = "";
-        //Get pdfviewer path
-
+        //console.log(document.getElementById('topholder'));
+        var containerEl = document.getElementById('holder');
+        console.log(containerEl);
         $scope.viewerPath = "./lib/js/pdfjs-viewer/web/viewer.html";
-        var pdfjsframe = document.getElementById('pdfViewer');
+        //var pdfjsframe = document.getElementById('pdfViewer');
 
         $scope.documentObject = image;
         $scope.rendering = true;
@@ -107,18 +109,32 @@ myApp.controller('SingleDocumentController', ['NavigatorParameters','Documents',
                 $scope.loading = false;
                 content = doc.Content;
                 uint8pf = FileManagerService.convertToUint8Array(content);
-                pdfjsframe.contentWindow.PDFViewerApplication.open(uint8pf);
+                //pdfjsframe.contentWindow.PDFViewerApplication.open(uint8pf);
 
-                // PDFJS.getDocument(uint8pf)
-                //     .then(function (_pdfdoc) {
-                //         pdfdoc = _pdfdoc;
-                //         //$scope.rendering=true;
-                //         return renderPage(_pdfdoc.numPages)
-                //     })
-                //     .then(function () {
-                //         $scope.rendering = false;
-                //         $scope.$apply();
-                //     });
+                PDFJS.getDocument(uint8pf)
+                    .then(function (_pdfDoc) {
+
+                        console.log(window.innerHeight, window.innerWidth);
+
+                        var promises = [];
+
+                        for(var num = 1; num <= _pdfDoc.numPages; num++) {
+                            promises.push(renderPage(_pdfDoc, num, containerEl));
+                        }
+                        pdfdoc = _pdfDoc;
+                        //$scope.rendering=true;
+                        return $q.all(promises);
+                    })
+                    .then(function () {
+                        var canvasElements = containerEl.getElementsByTagName("canvas");
+
+                        while(canvasElements.length>0){
+                            console.log(canvasElements);
+                            canvasElements[0].replaceWith(convertCanvasToImage(canvasElements[0]));
+                        }
+                        $scope.rendering = false;
+                        $scope.$apply();
+                    });
 
                 /*var targetPath = FileManagerService.getFilePathForDocument(document);
                  console.log(targetPath);
@@ -182,34 +198,99 @@ myApp.controller('SingleDocumentController', ['NavigatorParameters','Documents',
 
         }
 
-        function renderPage() {
-            canvas = document.getElementById("the-canvas");
-            ctx = canvas.getContext("2d");
+        function convertCanvasToImage(canvas) {
+            var image = new Image();
+            image.src = canvas.toDataURL("image/png");
+            image.width = viewerSize;
+            image.height = 'auto';
+            image.style.border = "1px solid black";
+            image.onclick = function () {
+                if (Constants.app) {
+                    cordova.InAppBrowser.open(image.src, '_blank', 'location=no,enableViewportScale=true');
+                } else{
+                    window.open(image.src, '_blank', 'location=no,enableViewportScale=true');
+                }
+            }
+            return image;
+        }
+
+        function renderPage(pdfDoc, num, containerEl) {
+
+            var canvas = document.createElement('canvas');
+            var ctx = canvas.getContext('2d');
 
             // Using promise to fetch the page
-            pdfdoc.getPage(1).then(function (page) {
+            return pdfDoc.getPage(num).then(function (page) {
 
-                var viewport = page.getViewport(scale);
-                canvas.height = viewport.height;
-                canvas.width = viewport.width;
-                // Render PDF page into canvas context
-                var renderContext = {
-                    canvasContext: ctx,
-                    viewport: viewport
-                };
+                var renderContext = draw(page, canvas, ctx);
+
+                containerEl.appendChild(canvas);
                 return page.render(renderContext);
-                // Wait for rendering to finish
-                // renderTask.promise.then(function () {
-                //     pageRendering = false;
-                //     if (pageNumPending !== null) {
-                //         // New page rendering is pending
-                //         renderPage(pageNumPending);
-                //         pageNumPending = null;
-                //     }
-                // });
 
             });
         }
+
+        function draw(page, canvas, ctx) {
+            // var viewport = page.getViewport(scale);
+            //
+            // var rescale = viewerSize*0.95/viewport.width;
+
+            var scaledViewport = page.getViewport(scale);
+            canvas.height = scaledViewport.height;
+            canvas.width = scaledViewport.width;
+            //console.log(canvas);
+            // Render PDF page into canvas context
+            var renderContext = {
+                canvasContext: ctx,
+                viewport: scaledViewport
+            };
+
+            return renderContext;
+        }
+
+        // function resizeAllCanvas(){
+        //
+        //
+        //
+        //     var canvasElements = containerEl.getElementsByTagName("canvas");
+        //
+        //     console.log(canvasElements);
+        //     var promises = [];
+        //
+        //     for (var i=0; i!=canvasElements.length; ++i){
+        //         promises.push(
+        //             // Need to wrap in an anonymous function to capture the iterator.
+        //             (function(e) {
+        //                 pdfdoc.getPage(e + 1).then(function (page) {
+        //
+        //                     var renderContext = draw(page, canvasElements[e], canvasElements[e].getContext('2d'));
+        //                     return page.render(renderContext);
+        //
+        //                 })
+        //             })(i)
+        //         );
+        //     }
+        //
+        //     $q.all(promises)
+        //         .then(function () {
+        //
+        //         });
+        // }
+        //
+        //
+        // $scope.zoomOut = function () {
+        //     scale += 0.1;
+        //     console.log(scale);
+        //     if (scale >= 2) scale = 2;
+        //     //resizeAllCanvas();
+        // };
+        //
+        // $scope.zoomIn = function () {
+        //     scale -= 0.1;
+        //     console.log(scale);
+        //     if (scale <= 0.25) scale = 0.25;
+        //     //resizeAllCanvas();
+        // };
 
         $scope.openPDF = function () {
             NavigatorParameters.setParameters({pdfdata:uint8pf});
@@ -253,11 +334,11 @@ myApp.controller('SingleDocumentController', ['NavigatorParameters','Documents',
 
         }
 
-        $timeout(function () {
-            ons.createPopover('./views/education/popover-material-options.html',{parentScope: $scope}).then(function (popover) {
-                $scope.popoverSharing = popover;
-            });
-        }, 300);
+        // $timeout(function () {
+        //     ons.createPopover('./views/education/popover-material-options.html',{parentScope: $scope}).then(function (popover) {
+        //         $scope.popoverSharing = popover;
+        //     });
+        // }, 300);
 
         //Share via email function, detemines if its an app, sets the parameters for the email and formats depending on whether is a
         //base64 string or a simple attachment and depending on whether is an Android device or an iOS device
