@@ -3,16 +3,15 @@
         <div class="left"><ons-back-button>{{"BACK"|translate}}</ons-back-button></div>
         <div class="center">{{documentObject.Title|limitTo:25}}{{documentObject.Title.length > 25 ? '...' : ''}}</div>
         <div class="right">
-            <ons-toolbar-button ng-click="popoverSharing.show('#buttonShareMaterial');" id="buttonShareMaterial">
-                <ons-icon icon="fa-share-alt"
-                          size="20px"
+            <ons-toolbar-button ng-click="share()">
+                <ons-icon icon="fa-share"
                           fixed-width="false"></ons-icon>
             </ons-toolbar-button>
         </div>
     </ons-toolbar>
 
     <!--<div ons-if-platform="android" align="center" ng-class="fontSizeTitle">{{"TAP_DL"|translate}}</div>-->
-    <div ng-show="loading" align="center" style="margin:10px">
+    <div ng-show="loading||rendering" align="center" style="margin:10px">
         <svg class="progress-circular">
             <circle class="progress-circular__primary" cx="50%" cy="50%" r="40%" fill="none" stroke-width="10%" stroke-miterlimit="10"/>
         </svg>
@@ -23,11 +22,16 @@
     </div>
 
     <!--<div class="content-scrollable" ng-hide="loading||rendering" align="center" style="margin-top: 5px" style="width: 100%;">-->
-        <!--<canvas id="the-canvas" style="border:1px solid black" ng-click="openPDF()" style="width:inherit;"></canvas>-->
+        <!--<canvas id="the-canvas" style="border:1px solid black" style="width:inherit;"></canvas>-->
     <!--</div>-->
 
+    <ons-gesture-detector ng-hide="loading||rendering" id="holder"
+                          style="margin-top: 5px; overflow: scroll"
+                          align="center">
+    </ons-gesture-detector>
+
     <!--<div style="height: 100%">-->
-        <iframe ng-hide="loading" id="pdfViewer" src="{{viewerPath}}" style="width: 100%; height: 97%"></iframe>
+        <!--<iframe ng-hide="loading" id="pdfViewer" src="{{viewerPath}}" style="width: 100%; height: 97%"></iframe>-->
 
         <!--<p class="item-desc text-center"  ng-class="fontSizeDesc">* Saved documents will be available offline</p>-->
 
