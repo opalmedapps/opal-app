@@ -46,7 +46,8 @@
     "firebase": "^3.6.3",
     "moment": "^2.17.1",
     "pdfjs-dist": "^1.6.446",
-    "progressbar.js": "^1.0.1"
+    "progressbar.js": "^1.0.1",
+    "jquery.panzoom": "^3.2.2"
   },
   "resolutions": {
     "angular": "1.6.0"

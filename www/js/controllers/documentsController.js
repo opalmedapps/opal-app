@@ -84,6 +84,7 @@ myApp.controller('SingleDocumentController', ['NavigatorParameters','Documents',
         var containerEl = document.getElementById('holder');
         console.log(containerEl);
         $scope.viewerPath = "./lib/js/pdfjs-viewer/web/viewer.html";
+
         //var pdfjsframe = document.getElementById('pdfViewer');
 
         $scope.documentObject = image;
@@ -127,12 +128,59 @@ myApp.controller('SingleDocumentController', ['NavigatorParameters','Documents',
                     })
                     .then(function () {
                         var canvasElements = containerEl.getElementsByTagName("canvas");
-
-                        while(canvasElements.length>0){
-                            console.log(canvasElements);
-                            canvasElements[0].replaceWith(convertCanvasToImage(canvasElements[0]));
+                        //console.log(canvasElements);
+                        var viewerScale = viewerSize/canvasElements[0].width*0.95*100 + "%";
+                        // var translateY = canvasElements[0].height*(1-viewerSize/canvasElements[0].width);
+                        for (var i=0; i!=canvasElements.length; ++i){
+                            canvasElements[i].style.zoom = viewerScale;
+                            canvasElements[i].onclick = function (event) {
+                                console.log(event);
+                                var image = new Image();
+                                image.src = event.srcElement.toDataURL("image/png");
+                                if (Constants.app) {
+                                    cordova.InAppBrowser.open(image.src, '_blank', 'location=no,enableViewportScale=true');
+                                } else{
+                                    window.open(image.src, '_blank', 'location=no,enableViewportScale=true');
+                                }
+                            }
                         }
+
+                        // while(canvasElements.length>0){
+                        //     console.log(canvasElements);
+                        //     canvasElements[0].replaceWith(convertCanvasToImage(canvasElements[0]));
+                        // }
+
+                        // var pageContainer = $("#holder");
+                        // $(".panzoom-elements").panzoom({
+                        //     minScale: 1
+                        // });
+                        // pageContainer.on("panzoomstart", function (e, panzoom, event, touches) {
+                        //     console.log(e);
+                        //     console.log(panzoom);
+                        //     console.log(event);
+                        //     console.log(touches);
+                        // });
+
+                        // var mc = new Hammer(containerEl);
+                        // mc.on('pinchin', function (ev) {
+                        //     console.log(ev);
+                        // });
+                        //
+                        // mc.on('pinchout', function (ev) {
+                        //     console.log(ev);
+                        // });
+                        // mc.on('tap', function (ev) {
+                        //     containerEl.style.transform="scale(2)";
+                        //     containerEl.style.webkitTransform="scale(2)";
+                        //     containerEl.style.transformOrigin = "0 0";
+                        //     console.log(ev);
+                        // });
+                        // mc.on('pan', function (ev) {
+                        //     console.log(ev);
+                        // });
+
                         $scope.rendering = false;
+                        $scope.loading=false;
                         $scope.$apply();
                     });
 
@@ -156,45 +204,6 @@ myApp.controller('SingleDocumentController', ['NavigatorParameters','Documents',
                 $scope.errorDownload = true;
                 console.log('Unable to get document from server',error);
             });
-            // });
-            // }else{
-            //     Documents.downloadDocumentFromServer(document.DocumentSerNum).then(function(doc)
-            //     {
-            //         //console.log(doc);
-            //         $scope.loading = false;
-            //         var uint8pf = FileManagerService.convertToUint8Array(doc.Content);
-            //         pdfjsframe.contentWindow.PDFViewerApplication.open(uint8pf);
-            //         // PDFJS.getDocument(uint8pf)
-            //         //     .then(function (_pdfdoc) {
-            //         //         pdfdoc = _pdfdoc;
-            //         //         renderPage(_pdfdoc.numPages);
-            //         //         console.log(_pdfdoc.numPages);
-            //         //
-            //         //
-            //         //         return pdfdoc.getPage(_pdfdoc.numPages).then(function (pdfPage) {
-            //         //             var pdfPageView = new PDFJS.PDFPageView({
-            //         //                 container: container,
-            //         //                 id: _pdfdoc.numPages,
-            //         //                 scale: scale,
-            //         //                 defaultViewport: pdfdoc.getViewport(scale),
-            //         //                 // We can enable text/annotations layers, if needed
-            //         //                 textLayerFactory: new PDFJS.DefaultTextLayerFactory(),
-            //         //                 annotationLayerFactory: new PDFJS.DefaultAnnotationLayerFactory()
-            //         //             });
-            //         //             // Associates the actual page with the view, and drawing it
-            //         //             pdfPageView.setPdfPage(pdfdoc);
-            //         //             return pdfPageView.draw();
-            //         //         });
-            //         //
-            //         //     });
-            //         // doc = FileManagerService.setBase64Document(doc);
-            //         // document.Content = doc.Content;
-            //         // setDocumentForShowing(document);
-            //     }).catch(function(error){
-            //         //unable to fetch document from server
-            //         console.log(error);
-            //     });
-            // }
 
         }
 
@@ -204,13 +213,13 @@ myApp.controller('SingleDocumentController', ['NavigatorParameters','Documents',
             image.width = viewerSize;
             image.height = 'auto';
             image.style.border = "1px solid black";
-            image.onclick = function () {
-                if (Constants.app) {
-                    cordova.InAppBrowser.open(image.src, '_blank', 'location=no,enableViewportScale=true');
-                } else{
-                    window.open(image.src, '_blank', 'location=no,enableViewportScale=true');
-                }
-            }
+            // image.onclick = function () {
+            //     if (Constants.app) {
+            //         cordova.InAppBrowser.open(image.src, '_blank', 'location=no,enableViewportScale=true');
+            //     } else{
+            //         window.open(image.src, '_blank', 'location=no,enableViewportScale=true');
+            //     }
+            // }
             return image;
         }
 
@@ -231,9 +240,9 @@ myApp.controller('SingleDocumentController', ['NavigatorParameters','Documents',
         }
 
         function draw(page, canvas, ctx) {
-            // var viewport = page.getViewport(scale);
-            //
-            // var rescale = viewerSize*0.95/viewport.width;
+            //var viewport = page.getViewport(scale);
+
+            //var rescale = viewerSize*0.95/(viewport.width);
 
             var scaledViewport = page.getViewport(scale);
             canvas.height = scaledViewport.height;

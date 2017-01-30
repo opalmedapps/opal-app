@@ -24,11 +24,13 @@
     <!--<div class="content-scrollable" ng-hide="loading||rendering" align="center" style="margin-top: 5px" style="width: 100%;">-->
         <!--<canvas id="the-canvas" style="border:1px solid black" style="width:inherit;"></canvas>-->
     <!--</div>-->
+    <div id="holder" class="panzoom-elements" ng-hide="loading||rendering" align="center">
+    </div>
 
-    <ons-gesture-detector ng-hide="loading||rendering" id="holder"
-                          style="margin-top: 5px; overflow: scroll"
-                          align="center">
-    </ons-gesture-detector>
+    <!--<ons-gesture-detector ng-hide="loading||rendering" id="holder"-->
+                          <!--style="margin-top: 5px; overflow: scroll"-->
+                          <!--align="center">-->
+    <!--</ons-gesture-detector>-->
 
     <!--<div style="height: 100%">-->
         <!--<iframe ng-hide="loading" id="pdfViewer" src="{{viewerPath}}" style="width: 100%; height: 97%"></iframe>-->
