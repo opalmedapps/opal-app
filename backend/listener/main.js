@@ -34,6 +34,7 @@ exports.apiRequestFormatter=function(requestKey,requestObject)
         r.resolve(responseObject);
       }else{
         //Otherwise decrypt the parameters and send to process api request
+        console.log("Decrypting");
         requestObject.Parameters=utility.decryptObject(requestObject.Parameters,key);
         console.log('line38', requestObject.Parameters);
         

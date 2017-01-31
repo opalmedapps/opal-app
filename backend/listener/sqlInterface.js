@@ -541,7 +541,10 @@ exports.getUsersPassword=function(username)
     connection.query(queries.userPassword(username),function(error,rows,fields)
     {
         console.log("PASSWORD IS " + rows);
-        if(error) r.reject(error);
+        if(error) {
+            console.log("sumtingwong" + error);
+            r.reject(error);
+        }
         r.resolve(rows);
     });
     return r.promise;
@@ -823,7 +826,7 @@ function getAriaPatientId(username)
 function checkIntoAria(patientId, serNum, username)
 {
     var r = Q.defer();
-    var url = 'http://172.26.66.41/devDocuments/devscreens/php/checkInPatientAriaMedi.php?CheckinVenue=S1%20RECEPTION&PatientId='+patientId;
+    var url = 'http://172.26.66.41/devDocuments/devscreens/php/checkInPatientAriaMedi.php?CheckinVenue=OPAL%20PHONE%20APP&PatientId='+patientId;
     //making request to checkin
     console.log(url, username, serNum);
     getAppointmentAriaSer(username, serNum).then(function(res){
