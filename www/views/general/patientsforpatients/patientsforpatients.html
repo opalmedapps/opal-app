@@ -1,11 +1,11 @@
-<ons-page ng-device-backbutton="generalDeviceBackButton()">
+<ons-page>
   <ons-toolbar>
     <div class="left"><ons-back-button>{{"BACK"|translate}}</ons-back-button></div>
       <div class="center">{{"PFP"|translate}}</div>
       <div class="right"><ons-toolbar-button ng-click="generalNavigator.pushPage('./views/tabs/info-page-tabs.html')"><ons-icon icon="fa fa-info-circle"></ons-icon></ons-toolbar-button></div>
   </ons-toolbar>
 <ons-list style="margin: 0px 0">
-    <ons-list-item modifier="chevron" class="item" ng-click="generalNavigator.pushPage('views/general/patientsforpatients/mission.html')">
+    <ons-list-item modifier="chevron" class="item" ng-click="generalNavigator.pushPage('views/templates/content.html', {contentType: 'pfp_mission'})">
       <ons-row align="center"   >
           <ons-col width="60px" align="center">
               <div >
@@ -35,7 +35,7 @@
           </ons-col>
       </ons-row>
   </ons-list-item>
-  <ons-list-item modifier="chevron" class="item" ng-click="generalNavigator.pushPage('views/general/patientsforpatients/contacts.html')">
+  <ons-list-item modifier="chevron" class="item" ng-click="generalNavigator.pushPage('views/templates/content.html', {contentType: 'pfp_members'})">
       <ons-row align="center"   >
           <ons-col width="60px" align="center">
               <div >
@@ -81,7 +81,7 @@
           </ons-col>
       </ons-row>
   </ons-list-item>
-  <ons-list-item modifier="chevron" class="item" ng-click="generalNavigator.pushPage('views/general/patientsforpatients/resources.html')">
+  <ons-list-item modifier="chevron" class="item" ng-click="generalNavigator.pushPage('views/templates/content.html', {contentType: 'pfp_resources'})">
       <ons-row align="center"   >
           <ons-col width="60px" align="center">
               <div >
