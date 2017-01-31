@@ -4,27 +4,31 @@
 var myApp = angular.module('MUHCApp');
 
 myApp.controller('InitScreenController',
-    function($scope, $timeout, NavigatorParameters, $translatePartialLoader, UserPreferences, $filter, Constants, Permissions, $http)
+    function($scope, $timeout, NavigatorParameters, $translatePartialLoader, UserPreferences, $filter, Constants, Permissions, $http, DepDocsService)
     {
         //Firebase reference to check authentication
         //var myDataRef = firebase.database().ref('dev2/');
 
-        $http({
-            method: 'GET',
-            url: 'https://www.depdocs.com/opal/serviceStatus.php'
-        }).then(function successCallback(response) {
-            console.log(response.data);
-            for (var key in response.data){
-                console.log(response.data[key] != "");
-                if(response.data[key] !== ""){
-                    $scope.globalMessage = key;
-                    $scope.globalMessageDescription = response.data[key];
-                    break;
+        DepDocsService.initializeLinks()
+            .then(function (response) {
+                console.log(response);
+                DepDocsService.setContentData(response.data);
+                return DepDocsService.getPageContent('service');
+            })
+            .then(function successCallback(response) {
+                console.log(response.data);
+                for (var key in response.data){
+                    console.log(response.data[key] != "");
+                    if(response.data[key] !== ""){
+                        $scope.globalMessage = key;
+                        $scope.globalMessageDescription = response.data[key];
+                        break;
+                    }
                 }
-            }
-        }).catch(function errorCallback(error) {
-            console.log("There was a problem", error);
-        });
+            })
+            .catch(function errorCallback(error) {
+                console.log("There was a problem", error);
+            });
 
         $scope.goToMessage = function(){
             NavigatorParameters.setParameters('initNavigator');

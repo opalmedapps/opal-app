@@ -51,7 +51,7 @@
         function activate() {
 
             // Initialize the navigator for push and pop of pages.
-            NavigatorParameters.setParameters({'Navigator':'homeNavigator'});
+            NavigatorParameters.setParameters({'Navigator':'homeNavigator', nav:homeNavigator});
 
             // Banner alert for
             NewsBanner.setAlertOffline();

@@ -151,7 +151,7 @@ myApp.controller('personalTabController',
 
 myApp.controller('generalTabController',['$scope','$timeout','Announcements','RequestToServer','UpdateUI','Notifications','NavigatorParameters','$filter',function($scope,$timeout,Announcements,RequestToServer,UpdateUI,Notifications,NavigatorParameters,$filter){
 
-    NavigatorParameters.setParameters({'Navigator':'generalNavigator'});
+    NavigatorParameters.setParameters({'Navigator':'generalNavigator', nav: generalNavigator});
 
     var app = document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'https://' ) === -1;
     setNewsNumbers();
