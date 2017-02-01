@@ -39,9 +39,10 @@ app.service('DeviceIdentifiers', [ 'RequestToServer', function(RequestToServer)
         **/
      setDeviceIdentifiers:function(id, fingerprint)
      {
+         var device = device;
          deviceIdentifiers.registrationId = id;
-         deviceIdentifiers.deviceUUID = device.uuid || fingerprint;
-         deviceIdentifiers.deviceType = device.platform || 'browser';
+         deviceIdentifiers.deviceUUID = device ? device.uuid : fingerprint;
+         deviceIdentifiers.deviceType = device ? device.platform : 'browser';
          haveBeenSend = false;
          haveBeenSet = true;
      },
