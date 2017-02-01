@@ -22,7 +22,7 @@ var API = {
     'QuestionnaireAnswers':apiHospitalUpdate.inputQuestionnaireAnswers,
     'LabResults': apiPatientUpdate.getLabResults,
     'SecurityQuestion': apiPatientUpdate.getSecurityQuestion,
-    'IsTrustedDevice': apiPatientUpdate.isTrustedDevice,
+    'TrustedDevice': apiPatientUpdate.isTrustedDevice,
 };
 
 exports.processRequest=function(requestObject)

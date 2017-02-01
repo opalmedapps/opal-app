@@ -141,10 +141,10 @@ myApp.controller('SingleDocumentController', ['NavigatorParameters','Documents',
                                         image.src = event.srcElement.toDataURL("image/png");
                                         cordova.InAppBrowser.open(image.src, '_blank', 'location=no,enableViewportScale=true');
                                     }else{
-                                        cordova.InAppBrowser.open(content, '_blank', 'EnableViewPortScale=yes');
+                                        cordova.InAppBrowser.open("data:application/pdf;base64, "+content, '_blank', 'EnableViewPortScale=yes');
                                     }
                                 } else{
-                                    window.open(content, '_blank', 'location=no,enableViewportScale=true');
+                                    window.open("data:application/pdf;base64, "+content, '_blank', 'location=no,enableViewportScale=true');
                                 }
                             }
                         }
@@ -508,10 +508,10 @@ myApp.controller('SingleDocumentController', ['NavigatorParameters','Documents',
 
                     //var ref = cordova.InAppBrowser.open(image.Content, '_system', 'location=yes');
                 }else{
-                    var ref = cordova.InAppBrowser.open(image.Content, '_blank', 'EnableViewPortScale=yes');
+                    var ref = cordova.InAppBrowser.open("data:application/pdf;base64, " + image.Content, '_blank', 'EnableViewPortScale=yes');
                 }
             } else {
-                window.open(image.Content);
+                window.open("data:application/pdf;base64, " + image.Content);
             }
         };
 
