@@ -135,12 +135,16 @@ myApp.controller('SingleDocumentController', ['NavigatorParameters','Documents',
                             canvasElements[i].style.zoom = viewerScale;
                             canvasElements[i].onclick = function (event) {
                                 console.log(event);
-                                var image = new Image();
-                                image.src = event.srcElement.toDataURL("image/png");
                                 if (Constants.app) {
-                                    cordova.InAppBrowser.open(image.src, '_blank', 'location=no,enableViewportScale=true');
+                                    if(ons.platform.isAndroid()){
+                                        var image = new Image();
+                                        image.src = event.srcElement.toDataURL("image/png");
+                                        cordova.InAppBrowser.open(image.src, '_blank', 'location=no,enableViewportScale=true');
+                                    }else{
+                                        cordova.InAppBrowser.open(content, '_blank', 'EnableViewPortScale=yes');
+                                    }
                                 } else{
-                                    window.open(image.src, '_blank', 'location=no,enableViewportScale=true');
+                                    window.open(content, '_blank', 'location=no,enableViewportScale=true');
                                 }
                             }
                         }

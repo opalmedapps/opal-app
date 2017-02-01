@@ -10,8 +10,8 @@
             <img src="img/opal-init-photo.jpg" style="width:100vw;height:auto">
         </div>
     </div>
-    <div ng-cloak>
-        <ons-list  class="person-list" id = "listInitApp" style="display:none" translate-cloak>
+    <div id = "listInitApp" style="display:none">
+        <ons-list  class="person-list"  translate-cloak>
             <ons-list-item class="person" modifier="tappable chevron" ng-click="goToParking()">
                 <ons-row align="middle" style="height:40px;">
                     <ons-col align="center" width="40px">
@@ -92,7 +92,7 @@
         <br>
 
         <div style="text-align: center; width: 90%; margin: auto">
-            <ons-button class="animated pulse" modifier="large" style="font-size: x-large; font-weight: bolder; background-color: #387A36" ng-click="goToUserView()" var="initButton">{{"HEADER_MESSAGE_LOGIN"|translate}}</ons-button>
+            <ons-button class="animated pulse ng-cloak" modifier="large" style="font-size: x-large; font-weight: bolder; background-color: #387A36" ng-click="goToUserView()" var="initButton">{{"HEADER_MESSAGE_LOGIN"|translate}}</ons-button>
         </div>
     </div>
 
