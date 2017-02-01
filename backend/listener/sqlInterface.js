@@ -1027,9 +1027,9 @@ exports.isTrustedDevice = function (requestObject){
     console.log('Checking for trusted device');
     exports.runSqlQuery(queries.getTrustedDevice(),[userID, requestObject.DeviceId])
         .then(function (queryRows) {
-            if (queryRows.length != 1 ) r.reject({Response:'error', Reason:'More or less than one deviceID returned'});
+            if (queryRows.length >1 ) r.reject({Response:'error', Reason:'More than one deviceID returned'});
 
-            else if (queryRows.length == 0) {
+            else if (queryRows.length == 0 || (queryRows.length == 1 && queryRows[0].Trusted == 0)) {
                 obj.isTrusted = false;
                 console.log('Device is not trusted. Sending security question');
                 exports.getSecurityQuestion(requestObject)
