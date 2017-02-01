@@ -502,9 +502,13 @@ exports.updateDeviceIdentifier = function(requestObject)
 {
     var r = Q.defer();
     var identifiers = requestObject.Parameters;
-    var deviceType = (identifiers.deviceType == 'iOS')?0:1;
+    var deviceType = null;
 
-
+    if (identifiers.deviceType == 'browser') {
+        deviceType = 3
+    } else{
+        deviceType = (identifiers.deviceType == 'iOS')?0:1;
+    }
 
     getUserFromUserID(requestObject.UserID).then(function(user){
 
@@ -982,7 +986,7 @@ exports.getLabResults = function(requestObject)
     var labResults = requestObject.Parameters;
 
     var userID = requestObject.UserID;
-    console.log('LabResults ', labResults);
+    console.log('Getting LabResults ');
     exports.runSqlQuery(queries.patientTestResultsTableFields(),[userID, requestObject.Timestamp])
         .then(function (queryRows) {
             var labs={};
@@ -995,4 +999,57 @@ exports.getLabResults = function(requestObject)
 
     return r.promise;
 
+};
+
+exports.getSecurityQuestion = function (requestObject){
+    var r = Q.defer();
+
+    var userID = requestObject.UserID;
+    console.log('Getting Security Question');
+    exports.runSqlQuery(queries.getSecQuestion(),[userID])
+        .then(function (queryRows) {
+            if (queryRows.length != 1 ) r.reject({Response:'error', Reason:'More or less than one question returned'});
+            var obj={};
+            obj.securityQuestion = queryRows;
+            r.resolve(obj);
+        })
+        .catch(function (error) {
+            r.reject({Response:'error', Reason:'Error getting security question due to '+error});
+        });
+
+    return r.promise;
+};
+
+exports.isTrustedDevice = function (requestObject){
+    var r = Q.defer();
+    var obj = {};
+    var userID = requestObject.UserID;
+    console.log('Checking for trusted device');
+    exports.runSqlQuery(queries.getTrustedDevice(),[userID, requestObject.DeviceId])
+        .then(function (queryRows) {
+            if (queryRows.length != 1 ) r.reject({Response:'error', Reason:'More or less than one deviceID returned'});
+
+            else if (queryRows.length == 0) {
+                obj.isTrusted = false;
+                console.log('Device is not trusted. Sending security question');
+                exports.getSecurityQuestion(requestObject)
+                    .then(function (response) {
+                        obj.securityQuestion = response.securityQuestion;
+                        r.resolve(obj);
+                    })
+                    .catch(function (error) {
+                        r.reject({Response:'error', Reason: error.Reason});
+                    })
+            } else {
+                console.log('Device is trusted');
+                obj.isTrusted = true;
+                r.resolve(obj);
+            }
+
+        })
+        .catch(function (error) {
+            r.reject({Response:'error', Reason:'Error getting security question due to '+error});
+        });
+
+    return r.promise;
 };

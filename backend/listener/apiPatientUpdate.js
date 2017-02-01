@@ -108,4 +108,12 @@ exports.getDocumentsContent=function(requestObject)
 
 exports.getLabResults = function (requestObject) {
     return sqlInterface.getLabResults(requestObject);
-}
+};
+
+exports.getSecurityQuestion = function (requestObject) {
+    return sqlInterface.getSecurityQuestion(requestObject);
+};
+
+exports.isTrustedDevice = function (requestObject) {
+    return sqlInterface.isTrustedDevice(requestObject);
+};

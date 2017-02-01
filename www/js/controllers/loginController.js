@@ -141,7 +141,7 @@ myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$root
 
             UserAuthorizationInfo.setUserAuthData(firebaseUser.uid, CryptoJS.SHA256($scope.password).toString(), undefined, sessionToken);
             //Setting The User Object for global Application Use
-            console.log("Users email is" + $scope.email);
+            // console.log("Users email is" + $scope.email);
             var authenticationToLocalStorage={
                 UserName:firebaseUser.uid,
                 Password: undefined,
@@ -150,10 +150,22 @@ myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$root
             };
             $rootScope.refresh=true;
             window.localStorage.setItem('UserAuthorizationInfo', JSON.stringify(authenticationToLocalStorage));
-            console.log(UserAuthorizationInfo.getUserAuthData());
-            console.log("Authenticated successfully with payload:", firebaseUser);
+            // console.log(UserAuthorizationInfo.getUserAuthData());
+            // console.log("Authenticated successfully with payload:", firebaseUser);
             NavigatorParameters.setParameters('Login');
+
             $state.go('loading');
+
+            // RequestToServer.sendRequestWithResponse('TrustedDevice')
+            //     .then(function (response) {
+            //         if (response.data.isTrusted){
+            //             $state.go('loading');
+            //         } else{
+            //             initNavigator.pushPage('./views/login/security-question.html', {securityQuestion: response.data.securityQuestion});
+            //         }
+            //     });
+
+
 
 
 

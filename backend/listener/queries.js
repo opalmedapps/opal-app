@@ -134,6 +134,10 @@ exports.getSecurityQuestions=function(serNum)
   return "SELECT SecurityQuestion.QuestionText, SecurityAnswer.AnswerText FROM SecurityQuestion, SecurityAnswer WHERE SecurityAnswer.PatientSerNum="+serNum +" AND SecurityQuestion.SecurityQuestionSerNum = SecurityAnswer.SecurityQuestionSerNum";
 };
 
+exports.getSecQuestion=function()
+{
+    return "SELECT sq.QuestionText FROM SecurityQuestion sq, SecurityAnswer sa, Users u WHERE u.Username = ? AND sa.PatientSerNum= u.UserTypeSerNum AND sq.SecurityQuestionSerNum = sa.SecurityQuestionSerNum ORDER BY RAND() LIMIT 1";
+};
 
 exports.updateLogout=function(requestObject)
 {

@@ -37,11 +37,11 @@ app.service('DeviceIdentifiers', [ 'RequestToServer', function(RequestToServer)
         *@methodOf MUHCApp.service:DeviceIdentifiers
         *@description Sets the deviceIdentifiers property.
         **/
-     setDeviceIdentifiers:function(id)
+     setDeviceIdentifiers:function(id, fingerprint)
      {
          deviceIdentifiers.registrationId = id;
-         deviceIdentifiers.deviceUUID = device.uuid;
-         deviceIdentifiers.deviceType = device.platform;
+         deviceIdentifiers.deviceUUID = device.uuid || fingerprint;
+         deviceIdentifiers.deviceType = device.platform || 'browser';
          haveBeenSend = false;
          haveBeenSet = true;
      },
@@ -63,7 +63,7 @@ app.service('DeviceIdentifiers', [ 'RequestToServer', function(RequestToServer)
         *@methodOf MUHCApp.service:DeviceIdentifiers
         *@description Sets the identifierType property for the deviceIdentifiers object
         **/
-     setIdentifier:function(idetifierType, value)
+     setIdentifier:function(identifierType, value)
      {
          deviceIdentifiers[identifierType] = value;
      },
@@ -87,6 +87,7 @@ app.service('DeviceIdentifiers', [ 'RequestToServer', function(RequestToServer)
      {
         if(haveBeenSet&&!haveBeenSend)
         {
+            console.log(deviceIdentifiers);
             RequestToServer.sendRequest('DeviceIdentifier',deviceIdentifiers);
             haveBeenSend = true;
         }
