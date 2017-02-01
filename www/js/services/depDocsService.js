@@ -5,10 +5,10 @@
         .module('MUHCApp')
         .factory('DepDocsService', DepDocsService);
 
-    DepDocsService.$inject = ['$http'];
+    DepDocsService.$inject = ['$http','$q'];
 
     /* @ngInject */
-    function DepDocsService($http) {
+    function DepDocsService($http, $q) {
 
         var content = undefined;
 
@@ -24,7 +24,7 @@
         ////////////////
 
         function initializeLinks(){
-            if(content) return;
+            if(content) return $q.resolve({exists: true});
             return $http({
                 method: 'GET',
                 url: 'https://www.depdocs.com/opal/links/links.php'

@@ -12,7 +12,9 @@ myApp.controller('InitScreenController',
         DepDocsService.initializeLinks()
             .then(function (response) {
                 console.log(response);
-                DepDocsService.setContentData(response.data);
+                if(!response.exists){
+                    DepDocsService.setContentData(response.data);
+                }
                 return DepDocsService.getPageContent('service');
             })
             .then(function successCallback(response) {
