@@ -62,7 +62,7 @@
             }
 
             // Sending registration id to server for push notifications.
-            if(Constants.app) DeviceIdentifiers.sendIdentifiersToServer();
+           DeviceIdentifiers.sendIdentifiersToServer();
 
             // Refresh the page on coming back from checkin
             homeNavigator.on('prepop', function(event) {
@@ -93,9 +93,6 @@
             vm.language = UserPreferences.getLanguage();
             console.log(vm.language);
             vm.noUpcomingAppointments=false;
-
-            //Initialize Planning steps
-            PlanningSteps.initializePlanningSequence();
 
             //Setting up status
             settingStatus();

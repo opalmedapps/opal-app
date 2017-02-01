@@ -145,16 +145,17 @@ angular.module('MUHCApp').controller('MainController', ["$state",'$timeout', '$r
             NewsBanner.showAlert('connected');
             console.log('online');
         }, false);*/
-    }/*else{
-        window.addEventListener('online',  function(){
-            console.log('online');
-            $rootScope.alertBanner = 'connected';
-        });
-        window.addEventListener('offline', function(){
-            console.log('offline');
-            $rootScope.alertBanner = 'nointernet';
-        });
-    }*/
+    }else{
+        DeviceIdentifiers.setDeviceIdentifiers(undefined);
+        // window.addEventListener('online',  function(){
+        //     console.log('online');
+        //     $rootScope.alertBanner = 'connected';
+        // });
+        // window.addEventListener('offline', function(){
+        //     console.log('offline');
+        //     $rootScope.alertBanner = 'nointernet';
+        // });
+    }
 
     //Firebase.getDefaultConfig().setPersistenceEnabled(true);
 }]);

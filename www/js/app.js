@@ -105,7 +105,6 @@ myApp.config(['$urlRouterProvider', '$stateProvider', function ($urlRouterProvid
             url: '/',
             templateUrl: 'views/init/init-screen.html',
             controller: 'InitScreenController'
-
         })
         .state('loading', {
             url: '/loading',
