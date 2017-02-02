@@ -37,11 +37,11 @@ app.service('DeviceIdentifiers', [ 'RequestToServer', function(RequestToServer)
         *@methodOf MUHCApp.service:DeviceIdentifiers
         *@description Sets the deviceIdentifiers property.
         **/
-     setDeviceIdentifiers:function(id, fingerprint)
+     setDeviceIdentifiers:function(id, browserUUID)
      {
          var device = device;
          deviceIdentifiers.registrationId = id;
-         deviceIdentifiers.deviceUUID = device ? device.uuid : fingerprint;
+         deviceIdentifiers.deviceUUID = device ? device.uuid : browserUUID;
          deviceIdentifiers.deviceType = device ? device.platform : 'browser';
          haveBeenSend = false;
          haveBeenSet = true;
