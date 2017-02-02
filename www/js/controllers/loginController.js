@@ -6,7 +6,12 @@
 var myApp=angular.module('MUHCApp');
 
 //Login controller
-myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$rootScope', '$state', 'UserAuthorizationInfo', 'RequestToServer', 'FirebaseService','LocalStorage','$filter','DeviceIdentifiers','UserPreferences','NavigatorParameters','Patient','NewsBanner', '$firebaseAuth',function LoginController(ResetPassword,$scope,$timeout, $rootScope, $state, UserAuthorizationInfo,RequestToServer,FirebaseService,LocalStorage,$filter,DeviceIdentifiers,UserPreferences,NavigatorParameters,Patient, NewsBanner,$firebaseAuth) {
+myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$rootScope', '$state',
+    'UserAuthorizationInfo', 'RequestToServer', 'FirebaseService','LocalStorage','$filter','DeviceIdentifiers',
+    'UserPreferences','NavigatorParameters','Patient','NewsBanner', '$firebaseAuth', 'UUID',
+    function LoginController(ResetPassword,$scope,$timeout, $rootScope, $state, UserAuthorizationInfo,
+                             RequestToServer,FirebaseService,LocalStorage,$filter,DeviceIdentifiers,
+                             UserPreferences,NavigatorParameters,Patient, NewsBanner,$firebaseAuth, UUID) {
 
     if(!localStorage.getItem('locked')){
         $timeout(function () {
@@ -154,16 +159,21 @@ myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$root
             // console.log("Authenticated successfully with payload:", firebaseUser);
             NavigatorParameters.setParameters('Login');
 
-            $state.go('loading');
-
-            // RequestToServer.sendRequestWithResponse('TrustedDevice')
-            //     .then(function (response) {
-            //         if (response.data.isTrusted){
-            //             $state.go('loading');
-            //         } else{
-            //             initNavigator.pushPage('./views/login/security-question.html', {securityQuestion: response.data.securityQuestion});
-            //         }
-            //     });
+            //$state.go('loading');
+            if (browserID = localStorage.getItem("browserID")){
+                UUID.setUUID(browserID);
+            } else {
+                UUID.setUUID(UUID.generate());
+            }
+            RequestToServer.sendRequestWithResponse('TrustedDevice')
+                .then(function (response) {
+                    console.log(response);
+                    if (response.isTrusted == "true"){
+                        $state.go('loading');
+                    } else{
+                        initNavigator.pushPage('./views/login/security-question.html', {securityQuestion: response.securityQuestion[0]});
+                    }
+                });
 
 
 

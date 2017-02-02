@@ -14,7 +14,7 @@ exports.apiRequestFormatter=function(requestKey,requestObject)
   var responseObject = {};
   var encryptionKey = '';
   //Gets user password for decryptiong
-  sqlInterface.getUsersPassword(requestObject.UserID).then(function(rows){
+  sqlInterface.getEncryption(requestObject.UserID).then(function(rows){
     if(rows.length>1||rows.length === 0)
     {
       //Rejects requests if username returns more than one password

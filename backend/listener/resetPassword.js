@@ -19,7 +19,7 @@ exports.resetPasswordRequest=function(requestKey, requestObject)
       r.resolve(responseObject);
     }else{
       //If the request is not erroneus simply direct the request to appropiate function based on the request mapping object
-      var request = requestObject.Request;
+      //var request = requestObject.Request;
       console.log(requestMappings,requestMappings[requestObject.Request]);
       requestMappings[requestObject.Request](requestKey, requestObject,patient[0]).then(function(response){
             r.resolve(response);

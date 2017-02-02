@@ -66,5 +66,6 @@
 	"SIGNINDIFFERENTACCOUNT": "Sign in with a different account",
 	"SIGNOUT": "Sign out",
 	"TERMSOFUSE": "Terms of Use",
+	"TRUST_DEVICE": "Set this device as a trusted device? ",
 	"UNATTENDED": "Do not leave your phone unattended."
 }

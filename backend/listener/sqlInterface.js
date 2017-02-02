@@ -538,11 +538,11 @@ exports.addToActivityLog=function(requestObject)
     return r.promise;
 };
 //Gets user password for encrypting/decrypting
-exports.getUsersPassword=function(username)
+exports.getEncryption=function(username)
 {
     var r=Q.defer();
     console.log("USERNAME IS " + username);
-    connection.query(queries.userPassword(username),function(error,rows,fields)
+    connection.query(queries.userEncryption(),[username],function(error,rows,fields)
     {
         console.log("PASSWORD IS " + rows);
         if(error) {
@@ -554,16 +554,16 @@ exports.getUsersPassword=function(username)
     return r.promise;
 };
 //API call to get Security questions
-exports.getSecurityQuestions=function(PatientSerNum)
-{
-    var r=Q.defer();
-    connection.query(queries.getSecurityQuestions(PatientSerNum),function(error,rows,fields)
-    {
-        if(error) r.reject(error);
-        r.resolve(rows);
-    });
-    return r.promise;
-};
+// exports.getSecurityQuestions=function(PatientSerNum)
+// {
+//     var r=Q.defer();
+//     connection.query(queries.getSecurityQuestions(PatientSerNum),function(error,rows,fields)
+//     {
+//         if(error) r.reject(error);
+//         r.resolve(rows);
+//     });
+//     return r.promise;
+// };
 //Questionnaire Answers
 exports.inputQuestionnaireAnswers = function(requestObject)
 {
@@ -597,7 +597,7 @@ exports.getMapLocation=function(requestObject)
 exports.getPatientFieldsForPasswordReset=function(email)
 {
     var r=Q.defer();
-    connection.query(queries.getPatientFieldsForPasswordReset(email),function(error,rows,fields)
+    connection.query(queries.getPatientFieldsForPasswordReset(),[email],function(error,rows,fields)
     {
         if(error) r.reject(error);
         r.resolve(rows);
@@ -1022,7 +1022,8 @@ exports.getSecurityQuestion = function (requestObject){
 
 exports.isTrustedDevice = function (requestObject){
     var r = Q.defer();
-    var obj = {};
+    var obj = {}
+    var Data = {};
     var userID = requestObject.UserID;
     console.log('Checking for trusted device');
     exports.runSqlQuery(queries.getTrustedDevice(),[userID, requestObject.DeviceId])
@@ -1030,19 +1031,22 @@ exports.isTrustedDevice = function (requestObject){
             if (queryRows.length >1 ) r.reject({Response:'error', Reason:'More than one deviceID returned'});
 
             else if (queryRows.length == 0 || (queryRows.length == 1 && queryRows[0].Trusted == 0)) {
-                obj.isTrusted = false;
+                Data.isTrusted = false;
                 console.log('Device is not trusted. Sending security question');
                 exports.getSecurityQuestion(requestObject)
                     .then(function (response) {
-                        obj.securityQuestion = response.securityQuestion;
-                        r.resolve(obj);
+                        Data.securityQuestion = response.securityQuestion;
+                        obj.Data = Data;
+                        r.resolve(Data);
+                        exports.runSqlQuery(queries.setDeviceSecurityAnswer(),[response.securityQuestion[0].SecurityAnswerSerNum]);
                     })
                     .catch(function (error) {
                         r.reject({Response:'error', Reason: error.Reason});
                     })
             } else {
                 console.log('Device is trusted');
-                obj.isTrusted = true;
+                Data.isTrusted = true;
+                obj.Data = Data;
                 r.resolve(obj);
             }
 
