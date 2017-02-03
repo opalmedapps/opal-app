@@ -186,5 +186,9 @@ exports.getTrustedDevice = function () {
 };
 
 exports.setDeviceSecurityAnswer = function () {
-    return "UPDATE PatientDeviceIdentifier SET SecurityAnsSerNum = ? WHERE DeviceId = ?";
+    return "UPDATE PatientDeviceIdentifier SET SecurityAnswerSerNum = ? WHERE DeviceId = ?";
+};
+
+exports.setTrusted = function () {
+    return "UPDATE PatientDeviceIdentifier SET Trusted = 1 WHERE DeviceId = ?";
 };

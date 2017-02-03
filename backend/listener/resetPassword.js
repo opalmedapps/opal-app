@@ -21,6 +21,7 @@ exports.resetPasswordRequest=function(requestKey, requestObject)
       //If the request is not erroneus simply direct the request to appropiate function based on the request mapping object
       //var request = requestObject.Request;
       console.log(requestMappings,requestMappings[requestObject.Request]);
+      console.log(patient);
       requestMappings[requestObject.Request](requestKey, requestObject,patient[0]).then(function(response){
             r.resolve(response);
           });
@@ -42,32 +43,49 @@ exports.verifySecurityAnswer=function(requestKey,requestObject,patient)
 
   var unencrypted=utility.decryptObject(requestObject.Parameters,key);
   console.log(unencrypted);
-  sqlInterface.getSecurityQuestions(patient.PatientSerNum).then(function(questions)
-  {
-    console.log('line 44', questions);
-    var flag=false;
-    for (var i = 0; i < questions.length; i++) {
 
-        if(unencrypted.Question==questions[i].QuestionText&&questions[i].AnswerText==unencrypted.Answer)
-        {
-          console.log(questions[i].QuestionText);
-          console.log(questions[i].AnswerText);
-          flag=true;
-          break;
-        }
-    }
-    if(flag)
-    {
-      var response = { RequestKey:requestKey, Code:3,Data:{AnswerVerified:"true"}, Headers:{RequestKey:requestKey,RequestObject:requestObject},Response:'success'};
-      r.resolve(response);
-    }else{
-      var response = { RequestKey:requestKey, Code:3,Data:{AnswerVerified:"false"}, Headers:{RequestKey:requestKey,RequestObject:requestObject},Response:'success'};
-      r.resolve(response);
-    }
-  }).catch(function(error){
-    var response = { Headers:{RequestKey:requestKey,RequestObject:requestObject}, Code: 2, Data:{},Response:'error', Reason:'Could not obtain security questions'};       
+  var response = {};
+
+  if (unencrypted.Answer == patient.AnswerText){
+    response = { RequestKey:requestKey, Code:3,Data:{AnswerVerified:"true"}, Headers:{RequestKey:requestKey,RequestObject:requestObject},Response:'success'};
+    sqlInterface.setTrusted(requestObject)
+      .then(function(){
+        r.resolve(response);
+      })
+      .catch(function(error){
+        response = { Headers:{RequestKey:requestKey,RequestObject:requestObject}, Code: 2, Data:{},Response:'error', Reason:'Could not set trusted device'};
+      })
+    
+  } else {
+    response = { RequestKey:requestKey, Code:3,Data:{AnswerVerified:"false"}, Headers:{RequestKey:requestKey,RequestObject:requestObject},Response:'success'};
     r.resolve(response);
-  });
+  }
+  // sqlInterface.getSecurityQuestions(patient.PatientSerNum).then(function(questions)
+  // {
+  //   console.log('line 44', questions);
+  //   var flag=false;
+  //   for (var i = 0; i < questions.length; i++) {
+
+  //       if(unencrypted.Question==questions[i].QuestionText&&questions[i].AnswerText==unencrypted.Answer)
+  //       {
+  //         console.log(questions[i].QuestionText);
+  //         console.log(questions[i].AnswerText);
+  //         flag=true;
+  //         break;
+  //       }
+  //   }
+  //   if(flag)
+  //   {
+  //     var response = { RequestKey:requestKey, Code:3,Data:{AnswerVerified:"true"}, Headers:{RequestKey:requestKey,RequestObject:requestObject},Response:'success'};
+  //     r.resolve(response);
+  //   }else{
+  //     var response = { RequestKey:requestKey, Code:3,Data:{AnswerVerified:"false"}, Headers:{RequestKey:requestKey,RequestObject:requestObject},Response:'success'};
+  //     r.resolve(response);
+  //   }
+  // }).catch(function(error){
+  //   var response = { Headers:{RequestKey:requestKey,RequestObject:requestObject}, Code: 2, Data:{},Response:'error', Reason:'Could not obtain security questions'};       
+  //   r.resolve(response);
+  // });
   return r.promise;
 };
 exports.setNewPassword=function(requestKey, requestObject,patient)
