@@ -1022,7 +1022,7 @@ exports.getSecurityQuestion = function (requestObject){
 
 exports.isTrustedDevice = function (requestObject){
     var r = Q.defer();
-    var obj = {}
+    var obj = {};
     var Data = {};
     var userID = requestObject.UserID;
     console.log('Checking for trusted device');

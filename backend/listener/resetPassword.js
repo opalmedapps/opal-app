@@ -37,7 +37,10 @@ exports.resetPasswordRequest=function(requestKey, requestObject)
 exports.verifySecurityAnswer=function(requestKey,requestObject,patient)
 {
   var r=q.defer();
-  var unencrypted=utility.decryptObject(requestObject.Parameters,patient.SSN);
+
+  var key = CryptoJS.SHA256(patient.AnswerText+patient.Password).toString();
+
+  var unencrypted=utility.decryptObject(requestObject.Parameters,key);
   console.log(unencrypted);
   sqlInterface.getSecurityQuestions(patient.PatientSerNum).then(function(questions)
   {
