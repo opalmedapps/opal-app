@@ -168,10 +168,10 @@ myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$root
             RequestToServer.sendRequestWithResponse('TrustedDevice')
                 .then(function (response) {
                     console.log(response);
-                    if (response.isTrusted == "true"){
+                    if (response.Data.isTrusted == "true"){
                         $state.go('loading');
                     } else{
-                        initNavigator.pushPage('./views/login/security-question.html', {securityQuestion: response.securityQuestion[0]});
+                        initNavigator.pushPage('./views/login/security-question.html', {securityQuestion: response.Data.securityQuestion[0]});
                     }
                 });
 
