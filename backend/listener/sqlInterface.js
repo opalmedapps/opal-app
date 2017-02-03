@@ -1039,7 +1039,7 @@ exports.isTrustedDevice = function (requestObject){
                         Data.securityQuestion = response.securityQuestion;
                         obj.Data = Data;
                         console.log(response.securityQuestion[0].SecurityAnswerSerNum);
-                        exports.runSqlQuery(queries.setDeviceSecurityAnswer(), [response.securityQuestion[0].SecurityAnswerSerNum]);
+                        exports.runSqlQuery(queries.setDeviceSecurityAnswer(), [response.securityQuestion[0].SecurityAnswerSerNum, requestObject.DeviceId]);
                         r.resolve(obj);
                     })
                     .catch(function (error) {
