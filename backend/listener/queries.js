@@ -72,7 +72,7 @@ exports.patientQuestionnaireTableFields = function()
  };*/
 exports.getPatientFieldsForPasswordReset=function()
 {
-    return 'SELECT pat.Email, u.Password, u.UserTypeSerNum, sa.AnswerText FROM Users u, Patient pat, SecurityAnswer sa, PatientDeviceIndentifier pdi WHERE pat.Email LIKE ? AND pat.PatientSerNum = u.UserTypeSerNum AND u.UserTypeSerNum = sa.PatientSerNum AND pdi.SecurityAnswerSerNum = sa.SecurityAnswerSerNum';
+    return 'SELECT pat.Email, u.Password, u.UserTypeSerNum, sa.AnswerText FROM Users u, Patient pat, SecurityAnswer sa, PatientDeviceIdentifier pdi WHERE pat.Email LIKE ? AND pat.PatientSerNum = u.UserTypeSerNum AND u.UserTypeSerNum = sa.PatientSerNum AND pdi.SecurityAnswerSerNum = sa.SecurityAnswerSerNum';
 };
 exports.setNewPassword=function(password,patientSerNum, token)
 {
