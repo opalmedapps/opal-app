@@ -597,7 +597,7 @@ exports.getMapLocation=function(requestObject)
 exports.getPatientFieldsForPasswordReset=function(requestObject)
 {
     var r=Q.defer();
-
+    console.log(requestObject, requestObject.DeviceId);
     connection.query(queries.getPatientFieldsForPasswordReset(),[requestObject.UserEmail, requestObject.DeviceId],function(error,rows,fields)
     {
         if(error) r.reject(error);
@@ -1039,8 +1039,15 @@ exports.isTrustedDevice = function (requestObject){
                         Data.securityQuestion = response.securityQuestion;
                         obj.Data = Data;
                         console.log(response.securityQuestion[0].SecurityAnswerSerNum);
-                        exports.runSqlQuery(queries.setDeviceSecurityAnswer(), [response.securityQuestion[0].SecurityAnswerSerNum, requestObject.DeviceId]);
-                        r.resolve(obj);
+                        console.log(requestObject.DeviceId);
+                        exports.runSqlQuery(queries.setDeviceSecurityAnswer(), [response.securityQuestion[0].SecurityAnswerSerNum, requestObject.DeviceId])
+                            .then(function () {
+                                r.resolve(obj);
+                            })
+                            .catch(function(error){
+                                console.log({Response:'error', Reason: error});
+                            });
+                        
                     })
                     .catch(function (error) {
                         r.reject({Response:'error', Reason: error});
@@ -1058,4 +1065,20 @@ exports.isTrustedDevice = function (requestObject){
         });
 
     return r.promise;
+};
+
+exports.setTrusted = function(requestObject)
+{
+
+    var r = Q.defer();
+    exports.runSqlQuery(queries.setTrusted(),[requestObject.DeviceId])
+        .then(function (queryRows) {
+            r.resolve({Response:'success'});
+        })
+        .catch(function (error) {
+            r.reject({Response:'error', Reason:'Error getting lab results due to '+error});
+        });
+
+    return r.promise;
+
 };
