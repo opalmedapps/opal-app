@@ -1037,7 +1037,7 @@ exports.isTrustedDevice = function (requestObject){
                     .then(function (response) {
                         Data.securityQuestion = response.securityQuestion;
                         obj.Data = Data;
-                        r.resolve(Data);
+                        r.resolve(obj);
                         exports.runSqlQuery(queries.setDeviceSecurityAnswer(),[response.securityQuestion[0].SecurityAnswerSerNum]);
                     })
                     .catch(function (error) {
