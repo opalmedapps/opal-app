@@ -127,7 +127,7 @@ exports.logActivity=function(requestObject)
 
 exports.userEncryption=function()
 {
-    return "SELECT u.Password, sa.AnswerText FROM Users u, SecurityAnswer sa WHERE u.Username = ? AND sa.PatientSerNum = u.UserTypeSerNum AND sa.Salt = 1";
+    return "SELECT u.Password, sa.AnswerText FROM Users u, SecurityAnswer sa WHERE u.Username = ? AND sa.PatientSerNum = u.UserTypeSerNum";
 };
 exports.getSecurityQuestions=function(serNum)
 {
