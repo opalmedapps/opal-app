@@ -11,7 +11,7 @@ exports.resetPasswordRequest=function(requestKey, requestObject)
   console.log(requestObject.UserEmail);
   var responseObject = {};
   //Get the patient fields to verify the credentials
-  sqlInterface.getPatientFieldsForPasswordReset(requestObject.UserEmail).then(function(patient){
+  sqlInterface.getPatientFieldsForPasswordReset(requestObject).then(function(patient){
     //Check for injection attacks by the number of rows the result is returning
     if(patient.length>1||patient.lenght === 0)
     {
