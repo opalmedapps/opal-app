@@ -594,10 +594,11 @@ exports.getMapLocation=function(requestObject)
     return r.promise;
 };
 //Api call to get patient fields for password reset
-exports.getPatientFieldsForPasswordReset=function(email)
+exports.getPatientFieldsForPasswordReset=function(requestObject)
 {
     var r=Q.defer();
-    connection.query(queries.getPatientFieldsForPasswordReset(),[email],function(error,rows,fields)
+
+    connection.query(queries.getPatientFieldsForPasswordReset(),[requestObject.UserEmail, requestObject.DeviceId],function(error,rows,fields)
     {
         if(error) r.reject(error);
         r.resolve(rows);
@@ -1037,8 +1038,9 @@ exports.isTrustedDevice = function (requestObject){
                     .then(function (response) {
                         Data.securityQuestion = response.securityQuestion;
                         obj.Data = Data;
+                        return exports.runSqlQuery(queries.setDeviceSecurityAnswer(),[response.securityQuestion[0].SecurityAnswerSerNum])})
+                    .then(function () {
                         r.resolve(obj);
-                        exports.runSqlQuery(queries.setDeviceSecurityAnswer(),[response.securityQuestion[0].SecurityAnswerSerNum]);
                     })
                     .catch(function (error) {
                         r.reject({Response:'error', Reason: error.Reason});
