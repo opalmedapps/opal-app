@@ -1038,12 +1038,12 @@ exports.isTrustedDevice = function (requestObject){
                     .then(function (response) {
                         Data.securityQuestion = response.securityQuestion;
                         obj.Data = Data;
-                        return exports.runSqlQuery(queries.setDeviceSecurityAnswer(),[response.securityQuestion[0].SecurityAnswerSerNum])})
-                    .then(function () {
+                        console.log(response.securityQuestion[0].SecurityAnswerSerNum);
+                        exports.runSqlQuery(queries.setDeviceSecurityAnswer(), [response.securityQuestion[0].SecurityAnswerSerNum]);
                         r.resolve(obj);
                     })
                     .catch(function (error) {
-                        r.reject({Response:'error', Reason: error.Reason});
+                        r.reject({Response:'error', Reason: error});
                     })
             } else {
                 console.log('Device is trusted');
