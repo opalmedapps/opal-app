@@ -44,6 +44,13 @@ myApp.service('UserAuthorizationInfo', function () {
     *@description Device identifier property
     */
     var identifier = '';
+    /**
+     *@ngdoc property
+     *@name  MUHCApp.service.#email
+     *@propertyOf MUHCApp.service:UserAuthorizationInfo
+     *@description Email property
+     */
+    var email = '';
     return {
         /**
         *@ngdoc method
@@ -55,11 +62,12 @@ myApp.service('UserAuthorizationInfo', function () {
         *@param {String} tok  Authentication token
         *@description Sets all the user authorization.
         */
-        setUserAuthData: function (user, pass, exp, tok) {
+        setUserAuthData: function (user, pass, exp, tok, Email) {
             username= user;
             expires = exp;
             password=pass;
             token=tok;
+            email = Email;
             //console.log(username, expires, password, token);
         },
         /**
@@ -152,6 +160,16 @@ myApp.service('UserAuthorizationInfo', function () {
         getToken:function()
         {
           return token;
+        },
+        /**
+         *@ngdoc method
+         *@name getEmail
+         *@methodOf MUHCApp.service:UserAuthorizationInfo
+         *@returns {string} Returns user email
+         */
+        getEmail:function()
+        {
+            return email;
         },
         /**
         *@ngdoc method

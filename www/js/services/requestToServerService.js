@@ -57,7 +57,15 @@ myApp.service('RequestToServer',['$filter','$state','NewsBanner','UserAuthorizat
         }
          //Push the request to firebase
          console.log({ 'Request' : requestType,'DeviceId':(app)?device.uuid:UUID.getUUID(),'Token':UserAuthorizationInfo.getToken(),  'UserID': UserAuthorizationInfo.getUsername(), 'Parameters':requestParameters,'Timestamp':firebase.database.ServerValue.TIMESTAMP});
-        var pushID =  refRequests.push({ 'Request' : requestType,'DeviceId':(app)?device.uuid:UUID.getUUID(),'Token':UserAuthorizationInfo.getToken(),  'UserID': UserAuthorizationInfo.getUsername(), 'Parameters':requestParameters,'Timestamp':firebase.database.ServerValue.TIMESTAMP});
+        var pushID =  refRequests.push({
+            'Request' : requestType,
+            'DeviceId':(app)?device.uuid:UUID.getUUID(),
+            'Token':UserAuthorizationInfo.getToken(),
+            'UserID': UserAuthorizationInfo.getUsername(),
+            'Parameters':requestParameters,
+            'Timestamp':firebase.database.ServerValue.TIMESTAMP,
+            'UserEmail': UserAuthorizationInfo.getEmail()
+        });
         return pushID.key;
     }
 
