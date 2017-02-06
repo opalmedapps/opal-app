@@ -62,7 +62,7 @@
             }
 
             // Sending registration id to server for push notifications.
-           DeviceIdentifiers.sendIdentifiersToServer();
+            //DeviceIdentifiers.sendIdentifiersToServer();
 
             // Refresh the page on coming back from checkin
             homeNavigator.on('prepop', function(event) {

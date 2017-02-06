@@ -144,7 +144,7 @@ myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$root
             console.log('In Auth Handler');
             window.localStorage.setItem('Email',$scope.email);
 
-            UserAuthorizationInfo.setUserAuthData(firebaseUser.uid, CryptoJS.SHA256($scope.password).toString(), undefined, sessionToken);
+            UserAuthorizationInfo.setUserAuthData(firebaseUser.uid, CryptoJS.SHA256($scope.password).toString(), undefined, sessionToken, $scope.email);
             //Setting The User Object for global Application Use
             // console.log("Users email is" + $scope.email);
             var authenticationToLocalStorage={
@@ -165,7 +165,11 @@ myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$root
             } else {
                 UUID.setUUID(UUID.generate());
             }
-            RequestToServer.sendRequestWithResponse('TrustedDevice')
+
+            DeviceIdentifiers.sendIdentifiersToServer()
+                .then(function () {
+                    return RequestToServer.sendRequestWithResponse('TrustedDevice')
+                })
                 .then(function (response) {
                     console.log(response);
                     if (response.Data.isTrusted == "true"){
@@ -173,6 +177,12 @@ myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$root
                     } else{
                         initNavigator.pushPage('./views/login/security-question.html', {securityQuestion: response.Data.securityQuestion[0]});
                     }
+                })
+                .catch(function (error) {
+                    console.log(error);
+                    $timeout(function(){
+                        $scope.alert.content="INTERNETERROR";
+                    });
                 });
 
 
