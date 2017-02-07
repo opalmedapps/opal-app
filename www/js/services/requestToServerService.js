@@ -40,7 +40,9 @@ myApp.service('RequestToServer',['$filter','$state','NewsBanner','UserAuthorizat
     *@description Firebase reference user response
     **/
     var refUsers = Ref.child('users');
-     var app = Constants.app;
+
+    var app = Constants.app;
+
     function sendRequest(typeOfRequest,parameters, encryptionKey)
     {
         var requestType = '';

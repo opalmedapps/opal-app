@@ -78,31 +78,37 @@ myApp.controller('SecurityQuestionController',['$scope','$timeout','ResetPasswor
         var trusted = 0;
 
         $scope.Question= initNavigator.getCurrentPage().options.securityQuestion.QuestionText;
-        $scope.alert = undefined;
 
         $scope.tryReset=0;
-        // $scope.$watch('answer',function()
-        // {
-        //     if($scope.alert.hasOwnProperty('type'))
-        //     {
-        //         delete $scope.alert.type;
-        //         delete $scope.alert.content;
-        //     }
-        // });
+
+        $scope.$watch('answer',function()
+        {
+            if($scope.alert.hasOwnProperty('type'))
+            {
+                delete $scope.alert.type;
+            }
+        });
 
         $timeout(function () {
+
             mySwitch.on( 'change', function () {
                 if (mySwitch.isChecked()) {
                     console.log("Trusted", browserID);
-                    localStorage.setItem("browserID",browserID);
+                    localStorage.setItem(UserAuthorizationInfo.getUsername()+"/browserID",browserID);
                     trusted = 1;
                 } else {
                     console.log("Not Trusted");
-                    localStorage.removeItem("browserID");
+                    localStorage.removeItem(UserAuthorizationInfo.getUsername()+"/browserID");
                     trusted = 0;
                 }
             });
         });
+
+        // In case someone presses back button, need to remove the browserID and security answer.
+        initNavigator.once('prepop', function () {
+            localStorage.removeItem(UserAuthorizationInfo.getUsername()+"/browserID");
+            localStorage.removeItem(UserAuthorizationInfo.getUsername()+"/securityAns");
+        })
 
 
         $scope.submitAnswer=function(answer)
@@ -116,22 +122,24 @@ myApp.controller('SecurityQuestionController',['$scope','$timeout','ResetPasswor
                 var hash=CryptoJS.SHA256(answer).toString();
                 $scope.loading=true;
 
-                var key = CryptoJS.SHA256(hash+UserAuthorizationInfo.getPassword()).toString();
+                var key = hash+UserAuthorizationInfo.getPassword();
 
+                $scope.waiting = true;
                 RequestToServer.sendRequestWithResponse('VerifyAnswer',{Question:$scope.Question, Answer:hash, Trusted: trusted},key).then(function(data)
                 {
-                    console.log(data);
-                    $timeout(function(){
-                        $scope.loading=false;
-                    });
-                    console.log(data.Data);
+                    $scope.waiting = false;
                     if(data.Data.AnswerVerified=="true")
                     {
+                        if (trusted){
+                            localStorage.setItem(UserAuthorizationInfo.getUsername()+"/securityAns",CryptoJS.AES.encrypt(hash, UserAuthorizationInfo.getPassword()).toString());
+                        }
+                        RequestToServer.setSecurityAns(hash);
                         $state.go('loading');
                     }else if(data.Data.AnswerVerified=="false"){
                         $scope.tryReset++;
                         $timeout(function()
                         {
+                            $scope.alert = {};
                             if($scope.tryReset>=3)
                             {
                                 $scope.alert.type='danger';
@@ -146,6 +154,9 @@ myApp.controller('SecurityQuestionController',['$scope','$timeout','ResetPasswor
                     }
                 }).catch(function()
                 {
+                    $scope.waiting = false;
+                    localStorage.removeItem(UserAuthorizationInfo.getUsername()+"/browserID");
+                    localStorage.removeItem(UserAuthorizationInfo.getUsername()+"/securityAns");
                     $timeout(function()
                     {
                         $scope.alert.type='danger';
