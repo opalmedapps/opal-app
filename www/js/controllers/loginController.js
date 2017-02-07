@@ -160,30 +160,40 @@ myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$root
             NavigatorParameters.setParameters('Login');
 
             //$state.go('loading');
-            if (browserID = localStorage.getItem("browserID")){
+            if (browserID = localStorage.getItem(UserAuthorizationInfo.getUsername()+"/browserID")){
+
+                var ans = CryptoJS.AES.decrypt(localStorage.getItem(UserAuthorizationInfo.getUsername()+"/securityAns"),UserAuthorizationInfo.getPassword());
+
+                EncryptionService.setSecurityAns(ans);
                 UUID.setUUID(browserID);
+                DeviceIdentifiers.sendIdentifiersToServer()
+                    .then(function () {
+                        $state.go('loading');
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                        $timeout(function(){
+                            $scope.alert.content="INTERNETERROR";
+                        });
+                    });
+
             } else {
                 UUID.setUUID(UUID.generate());
-            }
-
-            DeviceIdentifiers.sendIdentifiersToServer()
-                .then(function () {
-                    return RequestToServer.sendRequestWithResponse('TrustedDevice')
-                })
-                .then(function (response) {
-                    console.log(response);
-                    if (response.Data.isTrusted == "true"){
-                        $state.go('loading');
-                    } else{
+                DeviceIdentifiers.sendIdentifiersToServer()
+                    .then(function () {
+                        return RequestToServer.sendRequestWithResponse('TrustedDevice')
+                    })
+                    .then(function (response) {
+                        console.log(response);
                         initNavigator.pushPage('./views/login/security-question.html', {securityQuestion: response.Data.securityQuestion[0]});
-                    }
-                })
-                .catch(function (error) {
-                    console.log(error);
-                    $timeout(function(){
-                        $scope.alert.content="INTERNETERROR";
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                        $timeout(function(){
+                            $scope.alert.content="INTERNETERROR";
+                        });
                     });
-                });
+            }
 
 
 
