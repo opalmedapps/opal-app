@@ -538,11 +538,11 @@ exports.addToActivityLog=function(requestObject)
     return r.promise;
 };
 //Gets user password for encrypting/decrypting
-exports.getEncryption=function(username)
+exports.getEncryption=function(requestObject)
 {
     var r=Q.defer();
-    console.log("USERNAME IS " + username);
-    connection.query(queries.userEncryption(),[username],function(error,rows,fields)
+    console.log("USERNAME IS " + requestObject.UserID);
+    connection.query(queries.userEncryption(),[requestObject.UserID],function(error,rows,fields)
     {
         console.log("PASSWORD IS " + rows);
         if(error) {
