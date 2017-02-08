@@ -69,12 +69,14 @@ myApp.controller('SetNewPasswordController',['$scope','$timeout','ResetPassword'
 }]);
 myApp.controller('SecurityQuestionController',['$scope','$timeout','ResetPassword','RequestToServer',
     'FirebaseService','EncryptionService','NavigatorParameters', 'UUID', 'UserAuthorizationInfo', '$state',
+    'Constants',
     function($scope,$timeout,ResetPassword,RequestToServer,
-             FirebaseService,EncryptionService,NavigatorParameters, UUID, UserAuthorizationInfo, $state){
+             FirebaseService,EncryptionService,NavigatorParameters, UUID, UserAuthorizationInfo, $state,
+            Constants){
         // var params=NavigatorParameters.getParameters();
         // $scope.ssn = params.SSN;
         // console.log($scope.ssn);
-        var browserID = UUID.getUUID();
+        var deviceID = (Constants.app) ? device.uuid : UUID.getUUID();
         var trusted = 0;
 
         $scope.Question= initNavigator.getCurrentPage().options.securityQuestion.QuestionText;
@@ -93,20 +95,20 @@ myApp.controller('SecurityQuestionController',['$scope','$timeout','ResetPasswor
 
             mySwitch.on( 'change', function () {
                 if (mySwitch.isChecked()) {
-                    console.log("Trusted", browserID);
-                    localStorage.setItem(UserAuthorizationInfo.getUsername()+"/browserID",browserID);
+                    console.log("Trusted", deviceID);
+                    localStorage.setItem(UserAuthorizationInfo.getUsername()+"/deviceID",deviceID);
                     trusted = 1;
                 } else {
                     console.log("Not Trusted");
-                    localStorage.removeItem(UserAuthorizationInfo.getUsername()+"/browserID");
+                    localStorage.removeItem(UserAuthorizationInfo.getUsername()+"/deviceID");
                     trusted = 0;
                 }
             });
         });
 
-        // In case someone presses back button, need to remove the browserID and security answer.
+        // In case someone presses back button, need to remove the deviceID and security answer.
         initNavigator.once('prepop', function () {
-            localStorage.removeItem(UserAuthorizationInfo.getUsername()+"/browserID");
+            localStorage.removeItem(UserAuthorizationInfo.getUsername()+"/deviceID");
             localStorage.removeItem(UserAuthorizationInfo.getUsername()+"/securityAns");
         })
 
@@ -122,7 +124,7 @@ myApp.controller('SecurityQuestionController',['$scope','$timeout','ResetPasswor
                 var hash=CryptoJS.SHA256(answer).toString();
                 $scope.loading=true;
 
-                var key = hash+UserAuthorizationInfo.getPassword();
+                var key = hash;
 
                 $scope.waiting = true;
                 RequestToServer.sendRequestWithResponse('VerifyAnswer',{Question:$scope.Question, Answer:hash, Trusted: trusted},key).then(function(data)
@@ -131,7 +133,7 @@ myApp.controller('SecurityQuestionController',['$scope','$timeout','ResetPasswor
                     if(data.Data.AnswerVerified=="true")
                     {
                         if (trusted){
-                            localStorage.setItem(UserAuthorizationInfo.getUsername()+"/securityAns",CryptoJS.AES.encrypt(hash, UserAuthorizationInfo.getPassword()).toString());
+                            localStorage.setItem(UserAuthorizationInfo.getUsername()+"/securityAns",CryptoJS.AES.encrypt(key, UserAuthorizationInfo.getPassword()).toString());
                         }
                         RequestToServer.setSecurityAns(hash);
                         $state.go('loading');
@@ -155,7 +157,7 @@ myApp.controller('SecurityQuestionController',['$scope','$timeout','ResetPasswor
                 }).catch(function()
                 {
                     $scope.waiting = false;
-                    localStorage.removeItem(UserAuthorizationInfo.getUsername()+"/browserID");
+                    localStorage.removeItem(UserAuthorizationInfo.getUsername()+"/deviceID");
                     localStorage.removeItem(UserAuthorizationInfo.getUsername()+"/securityAns");
                     $timeout(function()
                     {

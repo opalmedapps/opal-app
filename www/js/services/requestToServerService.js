@@ -141,11 +141,12 @@ myApp.service('RequestToServer',['$filter','$state','NewsBanner','UserAuthorizat
         *@name sendRequest
         *@methodOf MUHCApp.service:RequestToServer
         *@param {String} typeOfRequest Type of request
-        *@param {Object} parameters Object to be sent to backend as request parameter
+        *@param {Object} content Object to be sent to backend as request parameter
+          * @param {String} key Encryption key
         *@description Sends request to server
         **/
-        sendRequest:function(typeOfRequest,content){
-          sendRequest(typeOfRequest,content);
+        sendRequest:function(typeOfRequest,content,key){
+          sendRequest(typeOfRequest,content,key);
         }
     };
 
