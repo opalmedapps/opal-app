@@ -826,7 +826,7 @@ function getAriaPatientId(username)
 function checkIntoAria(patientId, serNum, username)
 {
     var r = Q.defer();
-    var url = 'http://172.26.66.41/devDocuments/devscreens/php/checkInPatientAriaMedi.php?CheckinVenue=OPAL%20PHONE%20APP&PatientId='+patientId;
+    var url = 'http://172.26.66.41/devDocuments/screens/php/checkInPatientAriaMedi.php?CheckinVenue=OPAL%20PHONE%20APP&PatientId='+patientId;
     //making request to checkin
     console.log(url, username, serNum);
     getAppointmentAriaSer(username, serNum).then(function(res){
