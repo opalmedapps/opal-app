@@ -12,11 +12,11 @@ var newLogin            =       require("./newLogin.js");
 
 //admin.database.enableLogging(true);
 
-var serviceAccount = require("/home/robert/firebase_account/firebase-brilliant-inferno-767-firebase-adminsdk-dtkoi-829de7ac9e.json");
+var serviceAccount = require("/home/robert/firebase_account/opal-dev-firebase-adminsdk-73h8x-3b90af80af.json");
 
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
-    databaseURL: "https://brilliant-inferno-7679.firebaseio.com"
+    databaseURL: "https://opal-dev.firebaseio.com"
 });
 
 // Get reference to correct data element
