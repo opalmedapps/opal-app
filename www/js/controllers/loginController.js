@@ -179,10 +179,7 @@ myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$root
 
             } else {
                 if (!Constants.app) UUID.setUUID(UUID.generate());
-                DeviceIdentifiers.sendIdentifiersToServer()
-                    .then(function () {
-                        return RequestToServer.sendRequestWithResponse('TrustedDevice')
-                    })
+                DeviceIdentifiers.sendFirstTimeIdentifierToServer()
                     .then(function (response) {
                         console.log(response);
                         initNavigator.pushPage('./views/login/security-question.html', {securityQuestion: response.Data.securityQuestion[0]});
