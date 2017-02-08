@@ -89,10 +89,8 @@ myApp.service('EncryptionService',function(UserAuthorizationInfo){
 		**/
 		decryptData:function(object)
 		{
-			//Get Password
-			var parta = UserAuthorizationInfo.getPassword();
 			//Decrypt
-			return decryptObject(object,parta+securityAnswerHash);
+			return decryptObject(object,securityAnswerHash);
 		},
 		/**
 		*@ngdoc method
@@ -104,9 +102,7 @@ myApp.service('EncryptionService',function(UserAuthorizationInfo){
 		**/
 		encryptData:function(object)
 		{
-            var parta = UserAuthorizationInfo.getPassword();
-            console.log("Part  is  ", parta, "Part B is ", securityAnswerHash);
-			return encryptObject(object,parta+securityAnswerHash);
+			return encryptObject(object,securityAnswerHash);
 		},
 		/**
 		*@ngdoc method

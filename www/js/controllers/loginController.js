@@ -8,10 +8,10 @@ var myApp=angular.module('MUHCApp');
 //Login controller
 myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$rootScope', '$state',
     'UserAuthorizationInfo', 'RequestToServer', 'FirebaseService','LocalStorage','$filter','DeviceIdentifiers',
-    'UserPreferences','NavigatorParameters','Patient','NewsBanner', '$firebaseAuth', 'UUID',
+    'UserPreferences','NavigatorParameters','Patient','NewsBanner', '$firebaseAuth', 'UUID', 'Constants',
     function LoginController(ResetPassword,$scope,$timeout, $rootScope, $state, UserAuthorizationInfo,
                              RequestToServer,FirebaseService,LocalStorage,$filter,DeviceIdentifiers,
-                             UserPreferences,NavigatorParameters,Patient, NewsBanner,$firebaseAuth, UUID) {
+                             UserPreferences,NavigatorParameters,Patient, NewsBanner,$firebaseAuth, UUID, Constants) {
 
     if(!localStorage.getItem('locked')){
         $timeout(function () {
@@ -158,14 +158,14 @@ myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$root
             // console.log(UserAuthorizationInfo.getUserAuthData());
             // console.log("Authenticated successfully with payload:", firebaseUser);
             NavigatorParameters.setParameters('Login');
-
+            var deviceID;
             //$state.go('loading');
-            if (browserID = localStorage.getItem(UserAuthorizationInfo.getUsername()+"/browserID")){
+            if (deviceID = localStorage.getItem(UserAuthorizationInfo.getUsername()+"/deviceID")){
 
                 var ans = CryptoJS.AES.decrypt(localStorage.getItem(UserAuthorizationInfo.getUsername()+"/securityAns"),UserAuthorizationInfo.getPassword());
 
                 EncryptionService.setSecurityAns(ans);
-                UUID.setUUID(browserID);
+                UUID.setUUID(deviceID);
                 DeviceIdentifiers.sendIdentifiersToServer()
                     .then(function () {
                         $state.go('loading');
@@ -178,7 +178,7 @@ myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$root
                     });
 
             } else {
-                UUID.setUUID(UUID.generate());
+                if (!Constants.app) UUID.setUUID(UUID.generate());
                 DeviceIdentifiers.sendIdentifiersToServer()
                     .then(function () {
                         return RequestToServer.sendRequestWithResponse('TrustedDevice')

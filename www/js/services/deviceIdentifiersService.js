@@ -90,7 +90,7 @@ app.service('DeviceIdentifiers', [ 'RequestToServer', '$q', function(RequestToSe
             if(haveBeenSet&&!haveBeenSend)
             {
                 console.log(deviceIdentifiers);
-                RequestToServer.sendRequest('DeviceIdentifier',deviceIdentifiers);
+                RequestToServer.sendRequest('DeviceIdentifier',deviceIdentifiers, "");
                 haveBeenSend = true;
             }
 
