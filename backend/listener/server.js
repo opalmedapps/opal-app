@@ -6,6 +6,7 @@ var resetPasswordApi    =   	require('./resetPassword.js');
 var admin            	=   	require("firebase-admin");
 var utility            	=   	require('./utility.js');
 var q 			        =      	require("q");
+var newLogin            =       require("./newLogin.js");
 
 // Initialize firebase connection
 
@@ -109,8 +110,16 @@ function processRequest(headers){
     console.log(requestObject);
     console.log("----------------------------------REQUEST OBJECT END --------------------------------------")
 
-
-    if(requestObject.Request=='VerifySSN'||requestObject.Request=='SetNewPassword'||requestObject.Request=='VerifyAnswer')
+    // Need to be able to send info
+    if(requestObject.Request == 'NewLoginDeviceIdentifier'){
+        newLogin.initializeNewLogin(requestKey,requestObject)
+            .then(function(response) {
+                console.log('New login initialized');
+                //console.log(results);
+                r.resolve(response);
+            });
+    }
+    else if(requestObject.Request=='VerifySSN'||requestObject.Request=='SetNewPassword'||requestObject.Request=='VerifyAnswer')
     {
         //console.log(requestObject);
         resetPasswordApi.resetPasswordRequest(requestKey,requestObject).then(function(results)

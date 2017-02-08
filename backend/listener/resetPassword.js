@@ -30,7 +30,7 @@ exports.resetPasswordRequest=function(requestKey, requestObject)
     console.log(error);
     //If there is an error with the queries reply with an error message
     responseObject = { Headers:{RequestKey:requestKey,RequestObject:requestObject}, Code: 2, Data:{},Response:'error', Reason:'Invalid arguments for query'};       
-    r.resolve(response);
+    r.resolve(responseObject);
   });
   return r.promise;
 
@@ -39,7 +39,7 @@ exports.verifySecurityAnswer=function(requestKey,requestObject,patient)
 {
   var r=q.defer();
 
-  var key = CryptoJS.SHA256(patient.AnswerText+patient.Password).toString();
+  var key = CryptoJS.SHA256(patient.AnswerText).toString();
 
   var unencrypted=utility.decryptObject(requestObject.Parameters,key);
   console.log(unencrypted);

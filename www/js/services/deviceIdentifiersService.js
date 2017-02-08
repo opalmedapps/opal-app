@@ -90,7 +90,27 @@ app.service('DeviceIdentifiers', [ 'RequestToServer', '$q', function(RequestToSe
             if(haveBeenSet&&!haveBeenSend)
             {
                 console.log(deviceIdentifiers);
-                RequestToServer.sendRequest('DeviceIdentifier',deviceIdentifiers, "");
+                RequestToServer.sendRequest('DeviceIdentifier',deviceIdentifiers);
+                haveBeenSend = true;
+            }
+
+            defer.resolve();
+
+            return defer.promise;
+        },
+        /**
+         *@ngdoc method
+         *@name sendIdentifiersToServer
+         *@methodOf MUHCApp.service:DeviceIdentifiers
+         *@description If the device identifiers are set and have not been sent, it sends the device identifiers.
+         **/
+        sendFirstTimeIdentifierToServer:function()
+        {
+            var defer = $q.defer();
+            if(haveBeenSet&&!haveBeenSend)
+            {
+                console.log(deviceIdentifiers);
+                RequestToServer.sendRequest('NewLoginDeviceIdentifier',deviceIdentifiers, 'none');
                 haveBeenSend = true;
             }
 
