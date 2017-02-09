@@ -1011,9 +1011,9 @@ exports.getSecurityQuestion = function (requestObject){
     exports.runSqlQuery(queries.getSecQuestion(),[userID])
         .then(function (queryRows) {
             if (queryRows.length != 1 ) r.reject({Response:'error', Reason:'More or less than one question returned'});
-            Data.securityQuestion = response.securityQuestion;
+            Data.securityQuestion = queryRows.securityQuestion;
             obj.Data = Data;
-            return exports.runSqlQuery(queries.setDeviceSecurityAnswer(), [response.securityQuestion[0].SecurityAnswerSerNum, requestObject.DeviceId])
+            return exports.runSqlQuery(queries.setDeviceSecurityAnswer(), [queryRows.securityQuestion[0].SecurityAnswerSerNum, requestObject.DeviceId])
         })
         .then(function () {
             r.resolve(obj);
