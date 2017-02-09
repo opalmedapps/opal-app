@@ -20,7 +20,7 @@ exports.resetPasswordRequest=function(requestKey, requestObject)
     }else{
       //If the request is not erroneus simply direct the request to appropiate function based on the request mapping object
       //var request = requestObject.Request;
-      console.log(requestMappings,requestMappings[requestObject.Request]);
+      console.log(requestObject.Request, requestObject.Parameters);
       console.log(patient);
       requestMappings[requestObject.Request](requestKey, requestObject,patient[0]).then(function(response){
             r.resolve(response);
@@ -39,10 +39,10 @@ exports.verifySecurityAnswer=function(requestKey,requestObject,patient)
 {
   var r=q.defer();
 
-  var key = CryptoJS.SHA256(patient.AnswerText).toString();
+  var key = patient.AnswerText;
 
   var unencrypted=utility.decryptObject(requestObject.Parameters,key);
-  console.log(unencrypted);
+  console.log("UNENCRYPTED request", unencrypted);
 
   var response = {};
 

@@ -10,10 +10,10 @@ exports.initializeNewLogin=function(requestKey,requestObject) {
             return sqlInterface.getSecurityQuestion(requestObject)
         })
         .then(function (response) {
-
+            console.log(response);
             r.resolve({
                 Code:3,
-                Data:{securityQuestion: response.securityQuestion},
+                Data:response.Data,
                 Headers:{RequestKey:requestKey,RequestObject:requestObject},
                 Response:'success'
             });
