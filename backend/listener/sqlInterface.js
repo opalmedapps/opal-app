@@ -542,7 +542,7 @@ exports.getEncryption=function(requestObject)
 {
     var r=Q.defer();
     console.log("USERNAME IS " + requestObject.UserID);
-    connection.query(queries.userEncryption(),[requestObject.UserID],function(error,rows,fields)
+    connection.query(queries.userEncryption(),[requestObject.UserID, requestObject.DeviceId],function(error,rows,fields)
     {
         console.log("PASSWORD IS " + rows);
         if(error) {

@@ -69,17 +69,32 @@ myApp.controller('SetNewPasswordController',['$scope','$timeout','ResetPassword'
 }]);
 myApp.controller('SecurityQuestionController',['$scope','$timeout','ResetPassword','RequestToServer',
     'FirebaseService','EncryptionService','NavigatorParameters', 'UUID', 'UserAuthorizationInfo', '$state',
-    'Constants',
+    'Constants', 'DeviceIdentifiers',
     function($scope,$timeout,ResetPassword,RequestToServer,
              FirebaseService,EncryptionService,NavigatorParameters, UUID, UserAuthorizationInfo, $state,
-            Constants){
+            Constants, DeviceIdentifiers){
         // var params=NavigatorParameters.getParameters();
         // $scope.ssn = params.SSN;
         // console.log($scope.ssn);
         var deviceID = (Constants.app) ? device.uuid : UUID.getUUID();
         var trusted = 0;
+        var passwordReset
 
-        $scope.Question= initNavigator.getCurrentPage().options.securityQuestion.QuestionText;
+        $scope.Question = initNavigator.getCurrentPage().options.securityQuestion;
+
+        if (!$scope.Question){
+            DeviceIdentifiers.sendFirstTimeIdentifierToServer()
+                .then(function (response) {
+                    $scope.Question = response.Data.securityQuestion;
+                    passwordReset = true;
+                })
+                .catch(function (response) {
+                    $timeout(function(){
+                        initNavigator.popPage();
+                        $scope.alert.content="INTERNETERROR";
+                    });
+                })
+        }
 
         $scope.tryReset=0;
 
@@ -129,14 +144,21 @@ myApp.controller('SecurityQuestionController',['$scope','$timeout','ResetPasswor
                 $scope.waiting = true;
                 RequestToServer.sendRequestWithResponse('VerifyAnswer',{Question:$scope.Question, Answer:hash, Trusted: trusted},key).then(function(data)
                 {
+                    console.log(data);
                     $scope.waiting = false;
                     if(data.Data.AnswerVerified=="true")
                     {
                         if (trusted){
                             localStorage.setItem(UserAuthorizationInfo.getUsername()+"/securityAns",CryptoJS.AES.encrypt(key, UserAuthorizationInfo.getPassword()).toString());
                         }
-                        RequestToServer.setSecurityAns(hash);
-                        $state.go('loading');
+                        EncryptionService.setSecurityAns(key);
+
+                        if(passwordReset){
+                            initNavigator.pushPage('./views/login/new-password.html');
+                        } else {
+                            $state.go('loading');
+                        }
+
                     }else if(data.Data.AnswerVerified=="false"){
                         $scope.tryReset++;
                         $timeout(function()
@@ -154,8 +176,9 @@ myApp.controller('SecurityQuestionController',['$scope','$timeout','ResetPasswor
                         });
 
                     }
-                }).catch(function()
+                }).catch(function(error)
                 {
+                    console.log(error);
                     $scope.waiting = false;
                     localStorage.removeItem(UserAuthorizationInfo.getUsername()+"/deviceID");
                     localStorage.removeItem(UserAuthorizationInfo.getUsername()+"/securityAns");

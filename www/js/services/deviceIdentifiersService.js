@@ -8,7 +8,8 @@ var app = angular.module('MUHCApp');
  *@requires MUHCApp.service:RequestToServer
  *@description Service that deals with the device identifiers, sends the identifiers to backend to be used by the push notifications system.
  **/
-app.service('DeviceIdentifiers', [ 'RequestToServer', '$q', function(RequestToServer,$q)
+app.service('DeviceIdentifiers', [ 'RequestToServer', '$q','Constants','UserAuthorizationInfo',
+    function(RequestToServer,$q, Constants, UserAuthorizationInfo)
 {
     /**
      *@ngdoc property
@@ -37,14 +38,22 @@ app.service('DeviceIdentifiers', [ 'RequestToServer', '$q', function(RequestToSe
          *@methodOf MUHCApp.service:DeviceIdentifiers
          *@description Sets the deviceIdentifiers property.
          **/
-        setDeviceIdentifiers:function(id, browserUUID)
+        setDeviceIdentifiers:function(browserUUID)
         {
-            var device = device;
-            deviceIdentifiers.registrationId = id;
-            deviceIdentifiers.deviceUUID = device ? device.uuid : browserUUID;
-            deviceIdentifiers.deviceType = device ? device.platform : 'browser';
+            deviceIdentifiers.deviceUUID = Constants.app ? device.uuid : browserUUID;
+            deviceIdentifiers.deviceType = Constants.app ? device.platform : 'browser';
             haveBeenSend = false;
             haveBeenSet = true;
+        },
+        /**
+         *@ngdoc method
+         *@name setDeviceIdentifiers
+         *@methodOf MUHCApp.service:DeviceIdentifiers
+         *@description Sets the deviceIdentifiers property.
+         **/
+        updateRegistrationId:function(id)
+        {
+            deviceIdentifiers.registrationId = id;
         },
         /**
          *@ngdoc method
@@ -102,21 +111,28 @@ app.service('DeviceIdentifiers', [ 'RequestToServer', '$q', function(RequestToSe
          *@ngdoc method
          *@name sendIdentifiersToServer
          *@methodOf MUHCApp.service:DeviceIdentifiers
-         *@description If the device identifiers are set and have not been sent, it sends the device identifiers.
+         *@description Sending the data on first login to the server.
          **/
         sendFirstTimeIdentifierToServer:function()
         {
-            var defer = $q.defer();
-            if(haveBeenSet&&!haveBeenSend)
-            {
-                console.log(deviceIdentifiers);
-                RequestToServer.sendRequest('NewLoginDeviceIdentifier',deviceIdentifiers, 'none');
-                haveBeenSend = true;
+            return RequestToServer.sendRequestWithResponse('NewLoginDeviceIdentifier',deviceIdentifiers, 'none');
+        },
+        /**
+         *@ngdoc method
+         *@name destroy
+         *@methodOf MUHCApp.service:DeviceIdentifiers
+         *@description Wipes all data and local storage
+         **/
+        destroy: function () {
+
+            for (var key in deviceIdentifiers){
+                if (deviceIdentifiers.hasOwnProperty(key)){
+                    deviceIdentifiers[key] = '';
+                }
             }
 
-            defer.resolve();
-
-            return defer.promise;
+            localStorage.removeItem(UserAuthorizationInfo.getUsername()+"/deviceID");
+            localStorage.removeItem(UserAuthorizationInfo.getUsername()+"/securityAns");
         }
     };
 }]);
