@@ -8,7 +8,7 @@ var exports=module.exports={};
 exports.resetPasswordRequest=function(requestKey, requestObject)
 {
   var r=q.defer();
-  console.log(requestObject.UserEmail);
+  //console.log(requestObject.UserEmail);
   var responseObject = {};
   //Get the patient fields to verify the credentials
   sqlInterface.getPatientFieldsForPasswordReset(requestObject).then(function(patient){
@@ -20,8 +20,8 @@ exports.resetPasswordRequest=function(requestKey, requestObject)
     }else{
       //If the request is not erroneus simply direct the request to appropiate function based on the request mapping object
       //var request = requestObject.Request;
-      console.log(requestObject.Request, requestObject.Parameters);
-      console.log(patient);
+      //console.log(requestObject.Request, requestObject.Parameters);
+      //console.log(patient);
       requestMappings[requestObject.Request](requestKey, requestObject,patient[0]).then(function(response){
             r.resolve(response);
           });
@@ -42,7 +42,7 @@ exports.verifySecurityAnswer=function(requestKey,requestObject,patient)
   var key = patient.AnswerText;
 
   var unencrypted=utility.decryptObject(requestObject.Parameters,key);
-  console.log("UNENCRYPTED request", unencrypted);
+  //console.log("UNENCRYPTED request", unencrypted);
 
   var response = {};
 
