@@ -24,6 +24,7 @@ exports.apiRequestFormatter=function(requestKey,requestObject)
       r.resolve(responseObject);
     }else{
       //Gets password and decrypts request
+      console.log(rows);
       var key=rows[0].AnswerText;
       requestObject.Request=utility.decryptObject(requestObject.Request,key);
       encryptionKey=key;

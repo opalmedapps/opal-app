@@ -511,7 +511,7 @@ exports.updateDeviceIdentifier = function(requestObject)
     }
 
     getUserFromUserID(requestObject.UserID).then(function(user){
-
+        console.log(user);
         exports.runSqlQuery(queries.updateDeviceIdentifiers(),[user.UserTypeSerNum, requestObject.DeviceId, identifiers.registrationId, deviceType,requestObject.Token, identifiers.registrationId, requestObject.Token]).then(function(response){
             r.resolve({Response:'success'});
         }).catch(function(error){
@@ -542,7 +542,7 @@ exports.getEncryption=function(requestObject)
 {
     var r=Q.defer();
     console.log("USERNAME IS " + requestObject.UserID);
-    connection.query(queries.userEncryption(),[requestObject.UserID],function(error,rows,fields)
+    connection.query(queries.userEncryption(),[requestObject.UserID, requestObject.DeviceId],function(error,rows,fields)
     {
         console.log("PASSWORD IS " + rows);
         if(error) {
