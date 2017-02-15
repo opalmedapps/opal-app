@@ -13,7 +13,7 @@ exports.resetPasswordRequest=function(requestKey, requestObject)
     //Get the patient fields to verify the credentials
     sqlInterface.getPatientFieldsForPasswordReset(requestObject).then(function(patient){
         //Check for injection attacks by the number of rows the result is returning
-        if(patient.length>1||patient.lenght === 0)
+        if(patient.length>1||patient.length === 0)
         {
             responseObject = { Headers:{RequestKey:requestKey,RequestObject:requestObject}, Code: 2, Data:{},Response:'error', Reason:'Injection attack, incorrect Email'};
             r.resolve(responseObject);
@@ -47,7 +47,7 @@ exports.verifySecurityAnswer=function(requestKey,requestObject,patient)
     var response = {};
 
     var isSSNValid = unencrypted.SSN == patient.SSN;
-    var isAnswerValid = unencrypted.Answer == patient.AnswerText
+    var isAnswerValid = unencrypted.Answer == patient.AnswerText;
     var isVerified = unencrypted.SSN ? isSSNValid && isAnswerValid : isAnswerValid;
 
     if (isVerified)
@@ -73,42 +73,20 @@ exports.verifySecurityAnswer=function(requestKey,requestObject,patient)
 exports.setNewPassword=function(requestKey, requestObject,patient)
 {
     var r=q.defer();
-    sqlInterface.getSecurityQuestions(patient.PatientSerNum).then(function(questions)
-    {
-        console.log(questions);
-        var flag=false;
-        var newPassword='';
-        for (var i = 0; i < questions.length; i++) {
-            console.log(questions[i].AnswerText);
-            var password={NewPassword:requestObject.Parameters.NewPassword};
-            console.log(password);
-            password=utility.decryptObject(password,questions[i].AnswerText);
-            console.log(password);
-            if(typeof password.NewPassword!=='undefined'&&password.NewPassword!==''){
-                console.log(password.NewPassword);
-                console.log('I am the truth');
-                newPassword=CryptoJS.SHA256(password.NewPassword).toString();
-                console.log(newPassword);
-                flag=true;
-            }
-        }
-        if(!flag)
-        {
-            var response = { RequestKey:requestKey, Code:3,Data:{PasswordReset:"false"}, Headers:{RequestKey:requestKey,RequestObject:requestObject},Response:'success'};
 
-            r.resolve(response);
-        }else{
-            sqlInterface.setNewPassword(newPassword,patient.PatientSerNum, requestObject.Token).then(function(){
-                var response = { RequestKey:requestKey, Code:3,Data:{PasswordReset:"true"}, Headers:{RequestKey:requestKey,RequestObject:requestObject},Response:'success'};
-                r.resolve(response);
-            }).catch(function(response){
-                console.log('Invalid setting password');
-                //completeRequest(requestKey,{},'Invalid');
-                var response = { Headers:{RequestKey:requestKey,RequestObject:requestObject}, Code: 2, Data:{},Response:'error', Reason:'Could not set password'};
-                r.resolve(response);
-            });
-        }
+    var key = patient.AnswerText;
+    var unencrypted=utility.decryptObject(requestObject.Parameters,key);
+
+    sqlInterface.setNewPassword(unencrypted.newPassword,patient.PatientSerNum, requestObject.Token).then(function(){
+        var response = { RequestKey:requestKey, Code:3,Data:{PasswordReset:"true"}, Headers:{RequestKey:requestKey,RequestObject:requestObject},Response:'success'};
+        r.resolve(response);
+    }).catch(function(response){
+        console.log('Invalid setting password');
+        //completeRequest(requestKey,{},'Invalid');
+        var response = { Headers:{RequestKey:requestKey,RequestObject:requestObject}, Code: 2, Data:{},Response:'error', Reason:'Could not set password'};
+        r.resolve(response);
     });
+
     return r.promise;
 };
 
