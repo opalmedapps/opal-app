@@ -2,11 +2,10 @@
 // Import necessary libraries
 
 var mainRequestApi      =   	require('./main.js');
-var resetPasswordApi    =   	require('./resetPassword.js');
+var securityApi    =   	require('./security.js');
 var admin            	=   	require("firebase-admin");
 var utility            	=   	require('./utility.js');
 var q 			        =      	require("q");
-var newLogin            =       require("./newLogin.js");
 
 // Initialize firebase connection
 
@@ -111,18 +110,18 @@ function processRequest(headers){
     console.log("----------------------------------REQUEST OBJECT END --------------------------------------")
 
     // Need to be able to send info
-    if(requestObject.Request == 'NewLoginDeviceIdentifier'){
-        newLogin.initializeNewLogin(requestKey,requestObject)
+    if(requestObject.Request == 'SecurityQuestion'){
+        securityApi.securityQuestion(requestKey,requestObject)
             .then(function(response) {
                 console.log('New login initialized');
                 //console.log(results);
                 r.resolve(response);
             });
     }
-    else if(requestObject.Request=='VerifySSN'||requestObject.Request=='SetNewPassword'||requestObject.Request=='VerifyAnswer')
+    else if(requestObject.Request=='PasswordReset'||requestObject.Request=='SetNewPassword'||requestObject.Request=='VerifyAnswer')
     {
         //console.log(requestObject);
-        resetPasswordApi.resetPasswordRequest(requestKey,requestObject).then(function(results)
+        securityApi.resetPasswordRequest(requestKey,requestObject).then(function(results)
         {
             console.log('Reset Password ');
             //console.log(results);
@@ -159,6 +158,8 @@ function uploadToFirebase(response, key)
     } else if (key === "passwordResetRequests") {
         path = 'passwordResetResponses/'+requestKey;
     }
+
+    delete response.RequestObject;
 
     ref.child(path).set(response).then(function(){
         console.log('I just finished writing to firebase');

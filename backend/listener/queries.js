@@ -72,7 +72,7 @@ exports.patientQuestionnaireTableFields = function()
  };*/
 exports.getPatientFieldsForPasswordReset=function()
 {
-    return 'SELECT DISTINCT pat.Email, u.Password, u.UserTypeSerNum, sa.AnswerText FROM Users u, Patient pat, SecurityAnswer sa, PatientDeviceIdentifier pdi WHERE pat.Email= ? AND pat.PatientSerNum = u.UserTypeSerNum AND pdi.DeviceId = ? AND sa.SecurityAnswerSerNum = pdi.SecurityAnswerSerNum';
+    return 'SELECT DISTINCT pat.SSN, pat.Email, u.Password, u.UserTypeSerNum, sa.AnswerText FROM Users u, Patient pat, SecurityAnswer sa, PatientDeviceIdentifier pdi WHERE pat.Email= ? AND pat.PatientSerNum = u.UserTypeSerNum AND pdi.DeviceId = ? AND sa.SecurityAnswerSerNum = pdi.SecurityAnswerSerNum';
 };
 exports.setNewPassword=function(password,patientSerNum, token)
 {
@@ -115,9 +115,9 @@ exports.sendMessage=function(objectRequest)
     var messageDate=objectRequest.MessageDate;
     return "INSERT INTO Messages (`MessageSerNum`, `SenderRole`,`ReceiverRole`, `SenderSerNum`, `ReceiverSerNum`,`MessageContent`,`ReadStatus`,`MessageDate`,`SessionId`,`LastUpdated`) VALUES (NULL,'"+senderRole+"','"+ receiverRole + "', '"+senderSerNum+"','"+ receiverSerNum +"','" +messageContent+"',0,'"+messageDate+"','"+token+"' ,CURRENT_TIMESTAMP )";
 };
-exports.getUserFromUserId=function(userID)
+exports.getUserFromEmail=function()
 {
-    return "SELECT UserTypeSerNum, UserSerNum FROM Users WHERE Username LIKE"+"\'"+ userID+"\'"+" AND UserType LIKE 'Patient'";
+    return "SELECT PatientSerNum FROM Patient WHERE Email = ?";
 };
 exports.logActivity=function(requestObject)
 {
@@ -136,7 +136,7 @@ exports.getSecurityQuestions=function(serNum)
 
 exports.getSecQuestion=function()
 {
-    return "SELECT sq.QuestionText, sa.SecurityAnswerSerNum FROM SecurityQuestion sq, SecurityAnswer sa, Users u WHERE u.Username = ? AND sa.PatientSerNum= u.UserTypeSerNum AND sq.SecurityQuestionSerNum = sa.SecurityQuestionSerNum ORDER BY RAND() LIMIT 1";
+    return "SELECT sq.QuestionText, sa.SecurityAnswerSerNum FROM SecurityQuestion sq, SecurityAnswer sa, Patient pat WHERE pat.Email = ? AND sa.PatientSerNum= pat.PatientSerNum AND sq.SecurityQuestionSerNum = sa.SecurityQuestionSerNum ORDER BY RAND() LIMIT 1";
 };
 
 exports.updateLogout=function()

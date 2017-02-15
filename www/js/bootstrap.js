@@ -12,6 +12,7 @@ else {
 
 function handleOpenURL(url) {
     setTimeout(function() {
-        initNavigator.pushPage("./views/login/security-question.html", {url: url});
+        alert(url);
+        initNavigator.pushPage("./views/login/security-question.html", {url: url, passwordReset: true});
     }, 0);
 }
