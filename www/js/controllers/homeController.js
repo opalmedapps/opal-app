@@ -107,9 +107,9 @@
         function settingStatus()
         {
             console.log('Completed planning? ', PlanningSteps.isCompleted());
-            if(!PlanningSteps.isCompleted()) {
+            if(!PlanningSteps.isCompleted() && PlanningSteps.hasCT()) {
                 vm.statusDescription = "PLANNING";
-            }else if (Appointments.isThereNextTreatment()){
+            }else if (PlanningSteps.isCompleted()){
                 vm.statusDescription = "PLANNING_COMPLETE";
             } else {
                 vm.statusDescription = '';

@@ -2,7 +2,7 @@ var sqlInterface=require('./sqlInterface.js');
 var q=require('q');
 var exports=module.exports={};
 
-exports.initializeNewLogin=function(requestKey,requestObject) {
+exports.securityQuestion=function(requestKey,requestObject) {
 
     var r = q.defer();
     sqlInterface.updateDeviceIdentifier(requestObject)

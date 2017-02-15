@@ -446,8 +446,8 @@ exports.getDocumentsContent = function(requestObject)
 exports.updateAccountField=function(requestObject)
 {
     var r=Q.defer();
-    var UserID=requestObject.UserID;
-    getUserFromUserID(UserID).then(function(user)
+    var UserEmail=requestObject.UserEmail;
+    getUserFromEmail(UserEmail).then(function(user)
     {
 
         var patientSerNum=user.UserTypeSerNum;
@@ -478,8 +478,8 @@ exports.updateAccountField=function(requestObject)
 exports.inputFeedback=function(requestObject)
 {
     var r =Q.defer();
-    var UserID=requestObject.UserID;
-    getUserFromUserID(UserID).then(function(user)
+    var UserEmail=requestObject.UserEmail;
+    getUserFromEmail(UserEmail).then(function(user)
     {
         var quer = connection.query(queries.inputFeedback(),[user.UserTypeSerNum,requestObject.Parameters.FeedbackContent,requestObject.Parameters.AppRating, requestObject.Token],
             function(error, rows, fields)
@@ -510,8 +510,15 @@ exports.updateDeviceIdentifier = function(requestObject)
         deviceType = (identifiers.deviceType == 'iOS')?0:1;
     }
 
+<<<<<<< HEAD
     getUserFromUserID(requestObject.UserID).then(function(user){
         console.log(user);
+=======
+    var UserEmail = requestObject.Parameters.email || requestObject.UserEmail;
+
+    getUserFromEmail(UserEmail).then(function(user){
+
+>>>>>>> 2f998795f1cad6603a2e28dc5260302715f486e0
         exports.runSqlQuery(queries.updateDeviceIdentifiers(),[user.UserTypeSerNum, requestObject.DeviceId, identifiers.registrationId, deviceType,requestObject.Token, identifiers.registrationId, requestObject.Token]).then(function(response){
             r.resolve({Response:'success'});
         }).catch(function(error){
@@ -553,18 +560,7 @@ exports.getEncryption=function(requestObject)
     });
     return r.promise;
 };
-//API call to get Security questions
-// exports.getSecurityQuestions=function(PatientSerNum)
-// {
-//     var r=Q.defer();
-//     connection.query(queries.getSecurityQuestions(PatientSerNum),function(error,rows,fields)
-//     {
-//         if(error) r.reject(error);
-//         r.resolve(rows);
-//     });
-//     return r.promise;
-// };
-//Questionnaire Answers
+
 exports.inputQuestionnaireAnswers = function(requestObject)
 {
     var r = Q.defer();
@@ -662,10 +658,10 @@ exports.updateLogout=function(fields)
     return r.promise;
 };
 
-function getUserFromUserID(UserID)
+function getUserFromEmail(email)
 {
     var r=Q.defer();
-    connection.query(queries.getUserFromUserId(UserID),function(error, rows, fields){
+    connection.query(queries.getUserFromEmail(),[email],function(error, rows, fields){
         if(error) r.reject(error);
         r.resolve(rows[0]);
     });
@@ -984,7 +980,7 @@ exports.getLabResults = function(requestObject)
 {
 
     var r = Q.defer();
-    var labResults = requestObject.Parameters;
+    //var labResults = requestObject.Parameters;
 
     var userID = requestObject.UserID;
     console.log('Getting LabResults ');
@@ -1006,9 +1002,9 @@ exports.getSecurityQuestion = function (requestObject){
     var r = Q.defer();
     var obj={};
     var Data = {};
-    var userID = requestObject.UserID;
+    var userEmail = requestObject.Parameters.email || requestObject.UserEmail;
     console.log('Getting Security Question');
-    exports.runSqlQuery(queries.getSecQuestion(),[userID])
+    exports.runSqlQuery(queries.getSecQuestion(),[userEmail])
         .then(function (queryRows) {
             console.log(queryRows);
             if (queryRows.length != 1 ) r.reject({Response:'error', Reason:'More or less than one question returned'});
