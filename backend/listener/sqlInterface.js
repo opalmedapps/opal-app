@@ -450,7 +450,7 @@ exports.updateAccountField=function(requestObject)
     getUserFromEmail(UserEmail).then(function(user)
     {
 
-        var patientSerNum=user.UserTypeSerNum;
+        var patientSerNum=user.PatientSerNum;
         var field=requestObject.Parameters.FieldToChange;
         var newValue=requestObject.Parameters.NewValue;
         if(field=='Password')
@@ -481,7 +481,7 @@ exports.inputFeedback=function(requestObject)
     var UserEmail=requestObject.UserEmail;
     getUserFromEmail(UserEmail).then(function(user)
     {
-        var quer = connection.query(queries.inputFeedback(),[user.UserTypeSerNum,requestObject.Parameters.FeedbackContent,requestObject.Parameters.AppRating, requestObject.Token],
+        var quer = connection.query(queries.inputFeedback(),[user.PatientSerNum,requestObject.Parameters.FeedbackContent,requestObject.Parameters.AppRating, requestObject.Token],
             function(error, rows, fields)
             {
                 if(error) r.reject({Response:'error',Reason:error});
@@ -513,7 +513,7 @@ exports.updateDeviceIdentifier = function(requestObject)
     var UserEmail = requestObject.Parameters.email || requestObject.UserEmail;
 
     getUserFromEmail(UserEmail).then(function(user){
-        exports.runSqlQuery(queries.updateDeviceIdentifiers(),[user.UserTypeSerNum, requestObject.DeviceId, identifiers.registrationId, deviceType,requestObject.Token, identifiers.registrationId, requestObject.Token]).then(function(response){
+        exports.runSqlQuery(queries.updateDeviceIdentifiers(),[user.PatientSerNum, requestObject.DeviceId, identifiers.registrationId, deviceType,requestObject.Token, identifiers.registrationId, requestObject.Token]).then(function(response){
             r.resolve({Response:'success'});
         }).catch(function(error){
             console.log("UPDATE USER IDENTIFIER requestObject: " + requestObject);
