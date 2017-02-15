@@ -109,13 +109,27 @@ app.service('DeviceIdentifiers', [ 'RequestToServer', '$q','Constants','UserAuth
         },
         /**
          *@ngdoc method
-         *@name sendIdentifiersToServer
+         *@name sendFirstTimeIdentifierToServer
          *@methodOf MUHCApp.service:DeviceIdentifiers
          *@description Sending the data on first login to the server.
          **/
         sendFirstTimeIdentifierToServer:function()
         {
-            return RequestToServer.sendRequestWithResponse('NewLoginDeviceIdentifier',deviceIdentifiers, 'none');
+            return RequestToServer.sendRequestWithResponse('SecurityQuestion',deviceIdentifiers, 'none');
+        },
+        /**
+         *@ngdoc method
+         *@name sendDevicePasswordRequest
+         *@methodOf MUHCApp.service:DeviceIdentifiers
+         *@description Makes a request to the server on password reset.
+         **/
+        sendDevicePasswordRequest:function(email)
+        {
+
+            var objectToSend = deviceIdentifiers;
+            objectToSend.email = email;
+
+            return RequestToServer.sendRequestWithResponse('SecurityQuestion', objectToSend, 'none', 'passwordResetRequests', 'passwordResetResponses');
         },
         /**
          *@ngdoc method

@@ -11,6 +11,12 @@
     <div class="container" align="center" style="margin-top:10px">
         <form name="formPassword"  novalidate>
             <div class="form-group" align="center"  style="margin-top: 20px">
+
+                <div ng-show="passwordReset" style="width: 100%; margin-top: 15px" class="style-4">
+                    <label name="text">{{"ENTERSSNLABEL"|translate}}</label><br/>
+                    <input class="text-input" type="text" name="text" ng-model="ssn" placeholder="{{'ENTERSSNPLACEHOLDER'|translate}}" />
+                </div>
+
                 <label name="text">{{Question}}</label><br/>
                 <div style="width: 100%; margin-top: 15px" class="style-4">
                     <input class="text-input" type="text" name="text" ng-model="answer" placeholder="{{'ENTERANSWERPLACEHOLDER'|translate}}" />

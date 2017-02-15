@@ -43,7 +43,7 @@ myApp.service('RequestToServer',['$filter','$state','NewsBanner','UserAuthorizat
 
         var app = Constants.app;
 
-        function sendRequest(typeOfRequest,parameters, encryptionKey) {
+        function sendRequest(typeOfRequest,parameters, encryptionKey, referenceField) {
             var requestType = '';
             var requestParameters;
             console.log(typeOfRequest);
@@ -59,7 +59,10 @@ myApp.service('RequestToServer',['$filter','$state','NewsBanner','UserAuthorizat
             }
             //Push the request to firebase
             console.log({ 'Request' : requestType,'DeviceId':(app)?device.uuid:UUID.getUUID(),'Token':UserAuthorizationInfo.getToken(),  'UserID': UserAuthorizationInfo.getUsername(), 'Parameters':requestParameters,'Timestamp':firebase.database.ServerValue.TIMESTAMP});
-            var pushID =  refRequests.push({
+
+            var reference = referenceField || 'requests';
+
+            var pushID =  Ref.child(reference).push({
                 'Request' : requestType,
                 'DeviceId':(app)?device.uuid:UUID.getUUID(),
                 'Token':UserAuthorizationInfo.getToken(),
@@ -69,6 +72,7 @@ myApp.service('RequestToServer',['$filter','$state','NewsBanner','UserAuthorizat
                 'UserEmail': UserAuthorizationInfo.getEmail()
             });
             return pushID.key;
+
         }
 
         return{
@@ -79,22 +83,32 @@ myApp.service('RequestToServer',['$filter','$state','NewsBanner','UserAuthorizat
              *@param {String} typeOfRequest Type of request
              *@param {Object} parameters Object to be sent to backend as request parameter
              *@param {String} encryptionKey If defined, its used as a encryption key for data, if not defined, the password hashed is used instead.
+             *@param {String} referenceField The reference to the request firebase field
+             *@param {String} responseField The reference to the response firebase field
              *@returns {Promise} If data returns and the data was processed with a code 1 then it resolves to the data, otherwise it rejects with the
              *error given by the request response
              *@description Sends request to server, awaits for response, and returns with the results from server.
              **/
-            sendRequestWithResponse:function(typeOfRequest, parameters, encryptionKey)
+            sendRequestWithResponse:function(typeOfRequest, parameters, encryptionKey, referenceField, responseField)
             {
                 var r = $q.defer();
                 console.log(encryptionKey);
                 console.log(typeOfRequest);
+
                 //Sends request and gets random key for request
-                var key = sendRequest(typeOfRequest,parameters,encryptionKey);
+                var key = sendRequest(typeOfRequest,parameters,encryptionKey, referenceField);
+
                 //Sets the reference to fetch data for that request
-                var refRequestResponse = refUsers.child(UserAuthorizationInfo.getUsername()+'/'+key);
+                var refRequestResponse;
+                if(!referenceField){
+                    refRequestResponse = refUsers.child(UserAuthorizationInfo.getUsername()+'/'+key);
+                } else {
+                    refRequestResponse = Ref.child(responseField).child(key);
+                }
+
                 console.log(refRequestResponse.toString());
                 //Waits to obtain the request data.
-                console.log('users/'+UserAuthorizationInfo.getUsername()+'/'+key);
+                //console.log('users/'+UserAuthorizationInfo.getUsername()+'/'+key);
                 refRequestResponse.on('value',function(snapshot){
                     if(snapshot.exists())
                     {
@@ -126,14 +140,14 @@ myApp.service('RequestToServer',['$filter','$state','NewsBanner','UserAuthorizat
                     console.log('Firebase reading error', error);
                     r.reject(error);
                 });
-                //If request takes longer than 20000 to come back with timedout request, delete reference
+                //If request takes longer than 30000 to come back with timedout request, delete reference
                 var timeOut = setTimeout(function()
                 {
                     console.log('Inside timeout function');
                     refRequestResponse.set(null);
                     refRequestResponse.off();
                     r.reject({Response:'timeout'});
-                },20000);
+                },30000);
                 return r.promise;
             },
             /**
