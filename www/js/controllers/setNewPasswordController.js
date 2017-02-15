@@ -69,19 +69,33 @@ myApp.controller('SetNewPasswordController',['$scope','$timeout','ResetPassword'
 }]);
 myApp.controller('SecurityQuestionController',['$scope','$timeout','ResetPassword','RequestToServer',
     'FirebaseService','EncryptionService','NavigatorParameters', 'UUID', 'UserAuthorizationInfo', '$state',
-    'Constants',
+    'Constants', 'DeviceIdentifiers',
     function($scope,$timeout,ResetPassword,RequestToServer,
              FirebaseService,EncryptionService,NavigatorParameters, UUID, UserAuthorizationInfo, $state,
-            Constants){
-        // var params=NavigatorParameters.getParameters();
-        // $scope.ssn = params.SSN;
-        // console.log($scope.ssn);
+             Constants, DeviceIdentifiers){
+
         var deviceID = (Constants.app) ? device.uuid : UUID.getUUID();
         var trusted = 0;
-
-        $scope.Question= initNavigator.getCurrentPage().options.securityQuestion.QuestionText;
-
+        var passwordReset;
         $scope.tryReset=0;
+        var parameters = initNavigator.getCurrentPage().options;
+        $scope.Question = parameters.securityQuestion;
+
+        if (parameters.passwordReset){
+            passwordReset = parameters.passwordReset;
+            $scope.passwordReset = passwordReset;
+
+            ResetPassword.verifyLinkCode(initNavigator.getCurrentPage().options.url)
+                .then(function (email) {
+                    return DeviceIdentifiers.sendDevicePasswordRequest(email);
+                })
+                .then(function (response) {
+                    console.log(response);
+                    $scope.Question = response.Data.securityQuestion;
+                })
+                .catch(handleError);
+
+        }
 
         $scope.$watch('answer',function()
         {
@@ -110,12 +124,12 @@ myApp.controller('SecurityQuestionController',['$scope','$timeout','ResetPasswor
         initNavigator.once('prepop', function () {
             localStorage.removeItem(UserAuthorizationInfo.getUsername()+"/deviceID");
             localStorage.removeItem(UserAuthorizationInfo.getUsername()+"/securityAns");
-        })
+        });
 
 
         $scope.submitAnswer=function(answer)
         {
-            if(!answer||answer===''||typeof answer=='undefined')
+            if(!answer || (!$scope.ssn && passwordReset))
             {
                 $scope.alert.type='danger';
                 $scope.alert.content='ENTERANANSWER';
@@ -127,16 +141,31 @@ myApp.controller('SecurityQuestionController',['$scope','$timeout','ResetPasswor
                 var key = hash;
 
                 $scope.waiting = true;
-                RequestToServer.sendRequestWithResponse('VerifyAnswer',{Question:$scope.Question, Answer:hash, Trusted: trusted},key).then(function(data)
+
+                var parameterObject = {
+                    Question:$scope.Question,
+                    Answer:hash,
+                    SSN: $scope.ssn,
+                    Trusted: trusted
+                };
+
+                RequestToServer.sendRequestWithResponse('VerifyAnswer',parameterObject,key).then(function(data)
                 {
+                    console.log(data);
                     $scope.waiting = false;
                     if(data.Data.AnswerVerified=="true")
                     {
                         if (trusted){
                             localStorage.setItem(UserAuthorizationInfo.getUsername()+"/securityAns",CryptoJS.AES.encrypt(key, UserAuthorizationInfo.getPassword()).toString());
                         }
-                        RequestToServer.setSecurityAns(hash);
-                        $state.go('loading');
+                        EncryptionService.setSecurityAns(key);
+
+                        if(passwordReset){
+                            initNavigator.pushPage('./views/login/new-password.html');
+                        } else {
+                            $state.go('loading');
+                        }
+
                     }else if(data.Data.AnswerVerified=="false"){
                         $scope.tryReset++;
                         $timeout(function()
@@ -154,8 +183,9 @@ myApp.controller('SecurityQuestionController',['$scope','$timeout','ResetPasswor
                         });
 
                     }
-                }).catch(function()
+                }).catch(function(error)
                 {
+                    console.log(error);
                     $scope.waiting = false;
                     localStorage.removeItem(UserAuthorizationInfo.getUsername()+"/deviceID");
                     localStorage.removeItem(UserAuthorizationInfo.getUsername()+"/securityAns");
@@ -167,6 +197,44 @@ myApp.controller('SecurityQuestionController',['$scope','$timeout','ResetPasswor
                 });
             }
         };
+
+
+        function handleError(error) {
+            $scope.alert.type='danger';
+
+            switch (error.code){
+                case "auth/expired-action-code":
+                    $timeout(function () {
+                        $scope.alert.content = "CODE_EXPIRED";
+                    });
+                    break;
+                case "auth/invalid-action-code":
+                    $timeout(function () {
+                        $scope.alert.content = "INVALID_CODE";
+                    });
+                    break;
+                case "auth/user-disabled":
+                    $timeout(function () {
+                        $scope.alert.content = "USER_DISABLED";
+                    });
+                    break;
+                case "auth/user-not-found":
+                    $timeout(function () {
+                        $scope.alert.content = "INVALID_USER";
+                    });
+                    break;
+                default:
+                    $timeout(function () {
+                        $scope.alert.content="INTERNETERROR";
+                    });
+            }
+
+            $timeout(function(){
+                initNavigator.popPage();
+            },5000);
+
+        }
+
     }]);
 myApp.controller('NewPasswordController',['$scope','$timeout','Patient','ResetPassword','FirebaseService','NavigatorParameters','RequestToServer','$state','UserAuthorizationInfo',function($scope,$timeout,Patient,ResetPassword,FirebaseService,NavigatorParameters,RequestToServer,$state,UserAuthorizationInfo){
     $scope.goToLogin=function()

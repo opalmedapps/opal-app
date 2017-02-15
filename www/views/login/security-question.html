@@ -1,29 +1,35 @@
 <ons-page ng-controller="SecurityQuestionController">
-	<ons-toolbar fixed-style>
-		<div class="left">
-			<ons-back-button>Back</ons-back-button>
-		</div>
-		<div class="center">{{"SECURITYQUESTION"|translate}}</div>
-	</ons-toolbar>
-	<div align="center">
-		<img src="./img/ceadarsLogo.png" style="width:90vw;height:auto;max-width:800px">
-	</div>
-	<div class="container" align="center" style="margin-top:10px">
-		<form name="formPassword"  novalidate>
-			<div class="form-group" align="center"  style="margin-top: 20px">
-				<label name="text">{{Question}}</label><br/>
-				<div style="width: 100%; margin-top: 15px" class="style-4">
-					<input class="text-input" type="text" name="text" ng-model="answer" placeholder="{{'ENTERANSWERPLACEHOLDER'|translate}}" />
-					<br/><br/>
-				</div>
-				<button class="button button--large" type="submit" value="Save" ng-disabled="waiting||threeTries" style="background-color:#387A36" ng-click="submitAnswer(answer)">{{"CONTINUE"|translate}}</button>
-				<uib-alert ng-show="alert.type" type="{{alert.type}}">{{alert.content|translate}}</uib-alert>
-			</div>
-		</form>
-		<div>{{"TRUST_DEVICE"|translate}}
-			<span><ons-switch var="mySwitch" onchange=""></ons-switch></span>
-		</div>
-	</div>
+    <ons-toolbar fixed-style>
+        <div class="left">
+            <ons-back-button>Back</ons-back-button>
+        </div>
+        <div class="center">{{"SECURITYQUESTION"|translate}}</div>
+    </ons-toolbar>
+    <div align="center">
+        <img src="./img/ceadarsLogo.png" style="width:90vw;height:auto;max-width:800px">
+    </div>
+    <div class="container" align="center" style="margin-top:10px">
+        <form name="formPassword"  novalidate>
+            <div class="form-group" align="center"  style="margin-top: 20px">
+
+                <div ng-show="passwordReset" style="width: 100%; margin-top: 15px" class="style-4">
+                    <label name="text">{{"ENTERSSNLABEL"|translate}}</label><br/>
+                    <input class="text-input" type="text" name="text" ng-model="ssn" placeholder="{{'ENTERSSNPLACEHOLDER'|translate}}" />
+                </div>
+
+                <label name="text">{{Question}}</label><br/>
+                <div style="width: 100%; margin-top: 15px" class="style-4">
+                    <input class="text-input" type="text" name="text" ng-model="answer" placeholder="{{'ENTERANSWERPLACEHOLDER'|translate}}" />
+                    <br/><br/>
+                </div>
+                <div>{{"TRUST_DEVICE"|translate}}
+                    <span><ons-switch var="mySwitch" onchange=""></ons-switch></span>
+                </div>
+                <button class="button button--large" type="submit" value="Save" ng-disabled="waiting||threeTries" style="background-color:#387A36" ng-click="submitAnswer(answer)">{{"CONTINUE"|translate}}</button>
+                <uib-alert ng-show="alert.type" type="{{alert.type}}">{{alert.content|translate}}</uib-alert>
+            </div>
+        </form>
+    </div>
 
 
 
