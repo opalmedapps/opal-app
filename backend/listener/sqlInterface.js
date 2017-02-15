@@ -510,15 +510,9 @@ exports.updateDeviceIdentifier = function(requestObject)
         deviceType = (identifiers.deviceType == 'iOS')?0:1;
     }
 
-<<<<<<< HEAD
-    getUserFromUserID(requestObject.UserID).then(function(user){
-        console.log(user);
-=======
     var UserEmail = requestObject.Parameters.email || requestObject.UserEmail;
 
     getUserFromEmail(UserEmail).then(function(user){
-
->>>>>>> 2f998795f1cad6603a2e28dc5260302715f486e0
         exports.runSqlQuery(queries.updateDeviceIdentifiers(),[user.UserTypeSerNum, requestObject.DeviceId, identifiers.registrationId, deviceType,requestObject.Token, identifiers.registrationId, requestObject.Token]).then(function(response){
             r.resolve({Response:'success'});
         }).catch(function(error){
