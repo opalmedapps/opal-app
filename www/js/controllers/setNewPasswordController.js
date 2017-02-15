@@ -85,7 +85,7 @@ myApp.controller('SecurityQuestionController',['$scope','$timeout','ResetPasswor
             passwordReset = parameters.passwordReset;
             $scope.passwordReset = passwordReset;
 
-            ResetPassword.verifyLinkCode(initNavigator.getCurrentPage().options.url)
+            ResetPassword.verifyLinkCode(parameters.url)
                 .then(function (email) {
                     return DeviceIdentifiers.sendDevicePasswordRequest(email);
                 })
@@ -161,7 +161,7 @@ myApp.controller('SecurityQuestionController',['$scope','$timeout','ResetPasswor
                         EncryptionService.setSecurityAns(key);
 
                         if(passwordReset){
-                            initNavigator.pushPage('./views/login/new-password.html');
+                            initNavigator.pushPage('./views/login/new-password.html', {oobCode: ResetPassword.getParameter("oobCode", parameters.url)});
                         } else {
                             $state.go('loading');
                         }
@@ -242,7 +242,9 @@ myApp.controller('NewPasswordController',['$scope','$timeout','Patient','ResetPa
         UserAuthorizationInfo.clearUserAuthorizationInfo();
         $state.go('init');
     };
-    var parameters = NavigatorParameters.getParameters();
+
+    var parameters = initNavigator.getCurrentPage().options;
+
     $scope.alert={};
     $scope.$watch('newValue',function()
     {
@@ -252,53 +254,41 @@ myApp.controller('NewPasswordController',['$scope','$timeout','Patient','ResetPa
             delete $scope.alert.content;
         }
     });
-    var ref=firebase.database().ref('dev2/');
+
     $scope.submitNewPassword=function(newValue)
     {
-        if(newValue===''||typeof newValue=='undefined')
+        if(!newValue)
         {
             $scope.alert.type='danger';
             $scope.alert.content = "ENTERVALIDPASSWORD";
         }else{
 
+            ResetPassword.completePasswordChange(parameters.oobCode, newValue)
+                .then(function (response) {
+                    console.log(response);
+                    $scope.alert.type='success';
+                    $scope.alert.content="PASSWORDUPDATED";
+                })
+                .catch(function (error) {
+                    $scope.alert.type='danger';
+                    switch (error.code) {
+                        case "auth/expired-action-code":
+                            $timeout(function () {
+                                $scope.alert.content = "CODE_EXPIRED";
+                            });
+                            break;
+                        case "auth/weak-password":
+                            $timeout(function () {
+                                $scope.alert.content = "WEAK_PASSWORD";
+                            });
+                            break;
+                        default:
+                            $timeout(function () {
+                                $scope.alert.content = "SERVERPROBLEM";
+                            });
+                    }
+                });
 
-            ref.changePassword({
-                email: parameters.Email,
-                oldPassword: parameters.TempPassword,
-                newPassword: newValue
-            }, function(error) {
-                if (error) {
-                    console.log(error);
-                    $timeout(function(){
-                        $scope.alert.type='danger';
-                        $scope.alert.content="SERVERPROBLEM";
-                    });
-                } else {
-                    RequestToServer.sendRequestWithResponse('SetNewPassword',{'NewPassword':newValue},parameters.Answer).then(
-                        function(data)
-                        {
-                            console.log(data);
-                            if(data.hasOwnProperty('Data')&&data.Data.PasswordReset=="true")
-                            {
-                                $timeout(function(){
-                                    $scope.alert.type='success';
-                                    $scope.alert.content="PASSWORDSUCCESSRESET";
-                                });
-                            }else{
-                                $timeout(function(){
-                                    $scope.alert.type='success';
-                                    $scope.alert.content="CONTACTHOSPITAL";
-                                });
-                            }
-                        }).catch(function(error)
-                    {
-                        $timeout(function(){
-                            $scope.alert.type='success';
-                            $scope.alert.content="CONTACTHOSPITAL";
-                        });
-                    });
-                }
-            });
         }
     };
 
