@@ -159,7 +159,7 @@ function uploadToFirebase(response, key)
         path = 'passwordResetResponses/'+requestKey;
     }
 
-    delete response.RequestObject;
+    delete response.Headers.RequestObject;
 
     ref.child(path).set(response).then(function(){
         console.log('I just finished writing to firebase');

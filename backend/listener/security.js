@@ -46,7 +46,12 @@ exports.verifySecurityAnswer=function(requestKey,requestObject,patient)
 
     var response = {};
 
-    if (unencrypted.Answer == patient.AnswerText){
+    var isSSNValid = unencrypted.SSN == patient.SSN;
+    var isAnswerValid = unencrypted.Answer == patient.AnswerText
+    var isVerified = unencrypted.SSN ? isSSNValid && isAnswerValid : isAnswerValid;
+
+    if (isVerified)
+    {
         response = { RequestKey:requestKey, Code:3,Data:{AnswerVerified:"true"}, Headers:{RequestKey:requestKey,RequestObject:requestObject},Response:'success'};
         sqlInterface.setTrusted(requestObject)
             .then(function(){
@@ -60,6 +65,9 @@ exports.verifySecurityAnswer=function(requestKey,requestObject,patient)
         response = { RequestKey:requestKey, Code:3,Data:{AnswerVerified:"false"}, Headers:{RequestKey:requestKey,RequestObject:requestObject},Response:'success'};
         r.resolve(response);
     }
+
+
+
     return r.promise;
 };
 exports.setNewPassword=function(requestKey, requestObject,patient)
