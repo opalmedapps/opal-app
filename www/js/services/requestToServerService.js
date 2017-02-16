@@ -52,12 +52,12 @@ myApp.service('RequestToServer',['$filter','$state','NewsBanner','UserAuthorizat
                 requestType = typeOfRequest;
                 requestParameters = EncryptionService.encryptWithKey(parameters, encryptionKey);
             }
-            else if(encryptionKey == 'none'){}
             else{
                 requestType = EncryptionService.encryptData(typeOfRequest);
                 requestParameters = EncryptionService.encryptData(parameters);
             }
             //Push the request to firebase
+
             console.log({ 'Request' : requestType,'DeviceId':(app)?device.uuid:UUID.getUUID(),'Token':UserAuthorizationInfo.getToken(),  'UserID': UserAuthorizationInfo.getUsername(), 'Parameters':requestParameters,'Timestamp':firebase.database.ServerValue.TIMESTAMP});
 
             var reference = referenceField || 'requests';

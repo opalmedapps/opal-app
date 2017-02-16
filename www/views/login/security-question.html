@@ -12,7 +12,7 @@
         <form name="formPassword"  novalidate>
             <div class="form-group" align="center"  style="margin-top: 20px">
 
-                <div ng-show="passwordReset" style="width: 100%; margin-top: 15px" class="style-4">
+                <div ng-show="passwordReset" style="width: 100%; margin-top: 15px; margin-bottom: 20px;" class="style-4">
                     <label name="text">{{"ENTERSSNLABEL"|translate}}</label><br/>
                     <input class="text-input" type="text" name="text" ng-model="ssn" placeholder="{{'ENTERSSNPLACEHOLDER'|translate}}" />
                 </div>
@@ -25,7 +25,7 @@
                 <div>{{"TRUST_DEVICE"|translate}}
                     <span><ons-switch var="mySwitch" onchange=""></ons-switch></span>
                 </div>
-                <button class="button button--large" type="submit" value="Save" ng-disabled="waiting||threeTries" style="background-color:#387A36" ng-click="submitAnswer(answer)">{{"CONTINUE"|translate}}</button>
+                <button class="button button--large" type="submit" value="Save" ng-disabled="waiting||threeTries||alert.type=='danger'" style="background-color:#387A36" ng-click="submitAnswer(answer)">{{"CONTINUE"|translate}}</button>
                 <uib-alert ng-show="alert.type" type="{{alert.type}}">{{alert.content|translate}}</uib-alert>
             </div>
         </form>

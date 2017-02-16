@@ -92,6 +92,7 @@ exports.setNewPassword=function(requestKey, requestObject,patient)
 
 exports.securityQuestion=function(requestKey,requestObject) {
 
+
     var r = q.defer();
     sqlInterface.updateDeviceIdentifier(requestObject)
         .then(function () {

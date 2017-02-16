@@ -2,8 +2,10 @@
 // Author David Herrera on Summer 2016, Email:davidfherrerar@gmail.com
 //
 var myApp=angular.module('MUHCApp');
-myApp.service('ResetPassword',function(RequestToServer, FirebaseService){
+myApp.service('ResetPassword',function(RequestToServer, $q){
     //var Ref= firebase.database().ref('dev2/requests');
+
+    var auth = firebase.app().auth();
 
     return{
         // setTemporaryPassword:function(temp)
@@ -93,23 +95,16 @@ myApp.service('ResetPassword',function(RequestToServer, FirebaseService){
          **/
         verifyLinkCode: function (url) {
 
-            var modeCode = this.getParameter('mode', url);
             var oobCode = this.getParameter('oobCode', url);
-            var auth = firebase.app().auth();
 
             return auth.verifyPasswordResetCode(oobCode[1]);
 
         },
 
-        completePasswordChange : function (url, newPassword) {
+        completePasswordChange : function (oobCode, newPassword) {
+            console.log(oobCode);
 
-            var oobCode = getParameter('oobCode', url);
-            var auth = firebase.app().auth();
-
-            return auth.confirmPasswordReset(oobCode, newPassword).then(function () {
-                console.log("Successfully changed password on firebase");
-                return RequestToServer.sendRequestWithResponse('SetNewPassword', {NewPassword: newPassword});
-            })
+            return auth.confirmPasswordReset(oobCode[1], newPassword)
         },
 
         getParameter: function(param, url){
