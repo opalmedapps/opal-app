@@ -47,8 +47,14 @@ exports.verifySecurityAnswer=function(requestKey,requestObject,patient)
     var response = {};
 
     var isSSNValid = unencrypted.SSN == patient.SSN;
+    console.log("SSNVALID "+unencrypted.SSN, isSSNValid);
     var isAnswerValid = unencrypted.Answer == patient.AnswerText;
-    var isVerified = unencrypted.SSN ? isSSNValid && isAnswerValid : isAnswerValid;
+    console.log("Answer valid ", isAnswerValid);
+    
+    var isVerified;
+    if (unencrypted.SSN == 'undefined' || unencrypted.SSN == '') isVerified = isAnswerValid;
+    else isVerified = isSSNValid && isAnswerValid;
+    console.log("Verified ", isVerified);
 
     if (isVerified)
     {
@@ -80,8 +86,8 @@ exports.setNewPassword=function(requestKey, requestObject,patient)
     sqlInterface.setNewPassword(unencrypted.newPassword,patient.PatientSerNum, requestObject.Token).then(function(){
         var response = { RequestKey:requestKey, Code:3,Data:{PasswordReset:"true"}, Headers:{RequestKey:requestKey,RequestObject:requestObject},Response:'success'};
         r.resolve(response);
-    }).catch(function(response){
-        console.log('Invalid setting password');
+    }).catch(function(error){
+        console.log('Invalid setting password', error);
         //completeRequest(requestKey,{},'Invalid');
         var response = { Headers:{RequestKey:requestKey,RequestObject:requestObject}, Code: 2, Data:{},Response:'error', Reason:'Could not set password'};
         r.resolve(response);
@@ -94,7 +100,12 @@ exports.securityQuestion=function(requestKey,requestObject) {
 
 
     var r = q.defer();
-    sqlInterface.updateDeviceIdentifier(requestObject)
+
+    var unencrypted=utility.decryptObject(requestObject.Parameters,'none');
+
+    console.log(requestObject);
+
+    sqlInterface.updateDeviceIdentifier(requestObject, unencrypted)
         .then(function () {
             return sqlInterface.getSecurityQuestion(requestObject)
         })
