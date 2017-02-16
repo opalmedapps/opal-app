@@ -74,9 +74,9 @@ exports.getPatientFieldsForPasswordReset=function()
 {
     return 'SELECT DISTINCT pat.SSN, pat.Email, u.Password, u.UserTypeSerNum, sa.AnswerText FROM Users u, Patient pat, SecurityAnswer sa, PatientDeviceIdentifier pdi WHERE pat.Email= ? AND pat.PatientSerNum = u.UserTypeSerNum AND pdi.DeviceId = ? AND sa.SecurityAnswerSerNum = pdi.SecurityAnswerSerNum';
 };
-exports.setNewPassword=function(password,patientSerNum, token)
+exports.setNewPassword=function()
 {
-    return "UPDATE Users SET Password='"+password+"', SessionId='"+token+"' WHERE UserType = 'Patient' AND UserTypeSerNum="+patientSerNum;
+    return "UPDATE Users SET Password=? WHERE UserTypeSerNum=?";
 };
 
 //For checkin
