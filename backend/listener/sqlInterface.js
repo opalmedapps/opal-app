@@ -498,20 +498,22 @@ exports.inputFeedback=function(requestObject)
  * @input {object} Object containing the device identifiers
  * @returns {promise} Promise with success or failure.
  */
-exports.updateDeviceIdentifier = function(requestObject)
+exports.updateDeviceIdentifier = function(requestObject, parameters)
 {
     var r = Q.defer();
-    var identifiers = requestObject.Parameters;
+    var identifiers = parameters || requestObject.Parameters;
     var deviceType = null;
 
+    console.log(identifiers);
+
     if (identifiers.deviceType == 'browser') {
-        deviceType = 3
+        deviceType = 3;
     } else{
         deviceType = (identifiers.deviceType == 'iOS')?0:1;
     }
 
-    var UserEmail = requestObject.Parameters.email || requestObject.UserEmail;
-
+    var UserEmail = requestObject.UserEmail;
+    console.log("Device Type is  ", deviceType);
     getUserFromEmail(UserEmail).then(function(user){
         exports.runSqlQuery(queries.updateDeviceIdentifiers(),[user.PatientSerNum, requestObject.DeviceId, identifiers.registrationId, deviceType,requestObject.Token, identifiers.registrationId, requestObject.Token]).then(function(response){
             r.resolve({Response:'success'});
@@ -543,6 +545,7 @@ exports.getEncryption=function(requestObject)
 {
     var r=Q.defer();
     console.log("USERNAME IS " + requestObject.UserID);
+    console.log("ID IS " + requestObject.DeviceId);
     connection.query(queries.userEncryption(),[requestObject.UserID, requestObject.DeviceId],function(error,rows,fields)
     {
         console.log("PASSWORD IS " + rows);
@@ -588,17 +591,22 @@ exports.getPatientFieldsForPasswordReset=function(requestObject)
 {
     var r=Q.defer();
     console.log(requestObject, requestObject.DeviceId);
-    connection.query(queries.getPatientFieldsForPasswordReset(),[requestObject.UserEmail, requestObject.DeviceId],function(error,rows,fields)
+
+    var UserEmail = requestObject.Parameters.email || requestObject.UserEmail;
+
+    console.log(UserEmail);
+
+    connection.query(queries.getPatientFieldsForPasswordReset(),[UserEmail, requestObject.DeviceId],function(error,rows,fields)
     {
         if(error) r.reject(error);
         r.resolve(rows);
     });
     return r.promise;
 };
-exports.setNewPassword=function(password,patientSerNum, token)
+exports.setNewPassword=function(password,patientSerNum)
 {
     var r=Q.defer();
-    connection.query(queries.setNewPassword(password,patientSerNum,token),function(error,rows,fields)
+    connection.query(queries.setNewPassword(),[password,patientSerNum],function(error,rows,fields)
     {
         if(error) r.reject(error);
         r.resolve(rows);
@@ -996,7 +1004,7 @@ exports.getSecurityQuestion = function (requestObject){
     var r = Q.defer();
     var obj={};
     var Data = {};
-    var userEmail = requestObject.Parameters.email || requestObject.UserEmail;
+    var userEmail = requestObject.UserEmail;
     console.log('Getting Security Question');
     exports.runSqlQuery(queries.getSecQuestion(),[userEmail])
         .then(function (queryRows) {
