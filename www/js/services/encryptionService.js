@@ -133,6 +133,10 @@ myApp.service('EncryptionService',function(UserAuthorizationInfo){
 
 		setSecurityAns: function (answer) {
 			securityAnswerHash = answer;
+        },
+
+		getSecurityAns: function () {
+			return securityAnswerHash;
         }
 
 	};
