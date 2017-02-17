@@ -116,6 +116,9 @@ function processRequest(headers){
                 console.log('New login initialized');
                 //console.log(results);
                 r.resolve(response);
+            })
+            .catch(function(error){
+                console.log("SecurityAnswer error", error)
             });
     }
     else if(requestObject.Request=='PasswordReset'||requestObject.Request=='SetNewPassword'||requestObject.Request=='VerifyAnswer')
@@ -125,7 +128,10 @@ function processRequest(headers){
         {
             console.log('Reset Password ');
             //console.log(results);
-            r.resolve(results);
+            r.resolve(results)
+            .catch(function(error){
+                console.log("PassRest, SetNewPass or VerifyAns error", error)
+            });
         });
 
     }else{
@@ -145,11 +151,11 @@ function uploadToFirebase(response, key)
     var success = response.Response;
     var requestKey = headers.RequestKey;
     var encryptionKey = response.EncryptionKey;
-    console.log(encryptionKey);
+    //console.log(encryptionKey);
     delete response.EncryptionKey;
     if(typeof encryptionKey!=='undefined' && encryptionKey!=='') response = utility.encryptObject(response, encryptionKey);
     response.Timestamp = admin.database.ServerValue.TIMESTAMP;
-    console.log(response);
+    console.log("upload to firebase", response);
 
     var path = '';
     if (key === "requests") {
@@ -188,6 +194,7 @@ function completeRequest(headers, success, key)
     }
 
     ref.child(key).child(requestKey).set(null);
+    //headers = {};
 }
 
 

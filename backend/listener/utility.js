@@ -112,6 +112,7 @@ exports.decryptObject=function(object,secret)
         }
         else
         {
+          //console.log("Decrypting", object[key]);
           var decipherbytes = CryptoJS.AES.decrypt(object[key], secret);
           object[key]= decipherbytes.toString(CryptoJS.enc.Utf8);
         }

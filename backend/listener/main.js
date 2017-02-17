@@ -50,7 +50,7 @@ exports.apiRequestFormatter=function(requestKey,requestObject)
             r.resolve(responseObject);
         }).catch(function(errorResponse){
           //There was an error processing the request with the parameters, delete request
-            console.log(errorResponse);
+            console.log("Error processing request", errorResponse);
             errorResponse.Code = 2;
             errorResponse.Reason = 'Server error, report the error to the hospital';
             errorResponse.Headers = {RequestKey:requestKey,RequestObject:requestObject};
@@ -60,7 +60,7 @@ exports.apiRequestFormatter=function(requestKey,requestObject)
       }
     }
   }).catch(function(error){
-    console.log(error);
+    console.log("Get encryption error: ",error);
     responseObject = { RequestKey:requestKey,EncryptionKey:encryptionKey, Code:2,Data:error, Headers:{RequestKey:requestKey,RequestObject:requestObject},Response:'error', Reason:'Server error, report the error to the hospital'};
     r.resolve(responseObject);
   });
