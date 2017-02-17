@@ -590,15 +590,19 @@ exports.getMapLocation=function(requestObject)
 exports.getPatientFieldsForPasswordReset=function(requestObject)
 {
     var r=Q.defer();
-    console.log(requestObject, requestObject.DeviceId);
+    //console.log(requestObject, requestObject.DeviceId);
 
-    var UserEmail = requestObject.Parameters.email || requestObject.UserEmail;
+    var UserEmail = requestObject.UserEmail;
 
-    console.log(UserEmail);
+    console.log("Inside get getPatientFields",UserEmail);
 
     connection.query(queries.getPatientFieldsForPasswordReset(),[UserEmail, requestObject.DeviceId],function(error,rows,fields)
     {
-        if(error) r.reject(error);
+        if(error) {
+            console.log("Error querying patient fields", error);
+            r.reject(error);
+        }
+        //console.log(rows);
         r.resolve(rows);
     });
     return r.promise;
