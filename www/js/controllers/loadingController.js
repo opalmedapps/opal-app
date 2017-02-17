@@ -14,22 +14,21 @@ angular.module('MUHCApp').controller('LoadingController',
             if(typeof userAuthorizationInfo == 'undefined'||!userAuthorizationInfo) $state.go('init');
             setTimeout(function()
             {
-                UpdateUI.init(loadingParameter).then(function()
-                {
-                    var objectToSend = {};
-                    objectToSend.NewValue = UserPreferences.getLanguage();
-                    objectToSend.FieldToChange = 'Language';
-                    RequestToServer.sendRequest('AccountChange', objectToSend);
+                UpdateUI.init(loadingParameter)
+                    .then(function() {
+                        var objectToSend = {};
+                        objectToSend.NewValue = UserPreferences.getLanguage();
+                        objectToSend.FieldToChange = 'Language';
+                        RequestToServer.sendRequest('AccountChange', objectToSend);
 
-                    PlanningSteps.initializePlanningSequence();
+                        PlanningSteps.initializePlanningSequence();
 
-
-                    modal.hide();
-                    clearTimeout(timeOut);
-                    console.log('Going home');
-                    console.log($state.go('Home'));
-                    console.log('Supposed to be home.')
-                });
+                        modal.hide();
+                        clearTimeout(timeOut);
+                        console.log('Going home');
+                        console.log($state.go('Home'));
+                        console.log('Supposed to be home.')
+                    });
             },200);
 
             //Timeout to show, alerting user of server problems.

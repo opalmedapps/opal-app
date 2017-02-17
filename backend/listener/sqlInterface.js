@@ -606,6 +606,12 @@ exports.getPatientFieldsForPasswordReset=function(requestObject)
 exports.setNewPassword=function(password,patientSerNum)
 {
     var r=Q.defer();
+
+    // Create a salt
+
+    // Use pbkdf2 algorithm to hash and store passwords
+
+
     connection.query(queries.setNewPassword(),[password,patientSerNum],function(error,rows,fields)
     {
         if(error) r.reject(error);
