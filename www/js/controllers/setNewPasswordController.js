@@ -191,14 +191,18 @@ myApp.controller('SecurityQuestionController',['$scope','$timeout','ResetPasswor
                     }
                 }).catch(function(error)
                 {
-                    console.log(error);
+                    console.log("Verify Answer error", error);
                     $scope.waiting = false;
                     localStorage.removeItem(UserAuthorizationInfo.getUsername()+"/deviceID");
                     localStorage.removeItem(UserAuthorizationInfo.getUsername()+"/securityAns");
                     $timeout(function()
                     {
                         $scope.alert.type='danger';
-                        $scope.alert.content="CONTACTHOSPITAL";
+                        if(error.Reason.toLowerCase().indexOf('malformed utf-8') == -1) {
+                            $scope.alert.content = "CONTACTHOSPITAL";
+                        } else {
+                            $scope.alert.content = "ERRORANSWERNOTMATCH";
+                        }
                     });
                 });
             }
@@ -291,10 +295,6 @@ myApp.controller('NewPasswordController',['$scope','$timeout','Patient','ResetPa
                         $scope.alert.type='success';
                         $scope.alert.content="PASSWORDUPDATED";
                     });
-
-                    $timeout(function () {
-                        $state.go('loading');
-                    },3000);
                 })
                 .catch(function (error) {
                     console.log(error);

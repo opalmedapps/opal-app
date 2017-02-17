@@ -178,7 +178,7 @@ myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$root
                         .catch(function (error) {
                             console.log(error);
                             $timeout(function(){
-                                $scope.alert.content="INTERNETERROR";
+                                initNavigator.pushPage('./views/login/security-question.html', {passwordReset: true});
                             });
                         });
 

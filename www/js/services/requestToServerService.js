@@ -58,11 +58,7 @@ myApp.service('RequestToServer',['$filter','$state','NewsBanner','UserAuthorizat
             }
             //Push the request to firebase
 
-            console.log({ 'Request' : requestType,'DeviceId':(app)?device.uuid:UUID.getUUID(),'Token':UserAuthorizationInfo.getToken(),  'UserID': UserAuthorizationInfo.getUsername(), 'Parameters':requestParameters,'Timestamp':firebase.database.ServerValue.TIMESTAMP});
-
-            var reference = referenceField || 'requests';
-
-            var pushID =  Ref.child(reference).push({
+            var toSend = {
                 'Request' : requestType,
                 'DeviceId':(app)?device.uuid:UUID.getUUID(),
                 'Token':UserAuthorizationInfo.getToken(),
@@ -70,7 +66,13 @@ myApp.service('RequestToServer',['$filter','$state','NewsBanner','UserAuthorizat
                 'Parameters':requestParameters,
                 'Timestamp':firebase.database.ServerValue.TIMESTAMP,
                 'UserEmail': UserAuthorizationInfo.getEmail()
-            });
+            };
+
+            console.log(toSend);
+
+            var reference = referenceField || 'requests';
+
+            var pushID =  Ref.child(reference).push(toSend);
             return pushID.key;
 
         }
