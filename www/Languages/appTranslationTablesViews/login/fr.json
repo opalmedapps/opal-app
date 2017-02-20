@@ -66,6 +66,7 @@
   "SIGNINDIFFERENTACCOUNT": "Se connecter avec un compte différent",
   "SIGNOUT": "Se déconnecter",
   "TERMSOFUSE": "Conditions d'utilisation",
-  "TRUST_DEVICE": " ",
+  "TOO_MANY_REQUESTS": "Vous avez essayé trops de fois. Veuillez réessayer plus tard.",
+  "TRUST_DEVICE": "Faire confiance à cet appareil?",
   "UNATTENDED": "Ne laissez pas votre appareil sans surveillance."
 }

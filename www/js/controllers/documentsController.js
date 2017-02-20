@@ -141,7 +141,7 @@ myApp.controller('SingleDocumentController', ['NavigatorParameters','Documents',
                                         image.src = event.srcElement.toDataURL("image/png");
                                         cordova.InAppBrowser.open(image.src, '_blank', 'location=no,enableViewportScale=true');
                                     }else{
-                                        cordova.InAppBrowser.open("data:application/pdf;base64, "+content, '_blank', 'EnableViewPortScale=yes');
+                                        cordova.InAppBrowser.open("data:application/pdf;base64,"+content, '_blank', 'EnableViewPortScale=yes');
                                     }
                                 } else{
                                     window.open("data:application/pdf;base64, "+content, '_blank', 'location=no,enableViewportScale=true');
