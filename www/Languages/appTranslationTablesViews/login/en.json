@@ -67,5 +67,6 @@
 	"SIGNOUT": "Sign out",
 	"TERMSOFUSE": "Terms of Use",
 	"TRUST_DEVICE": "Set this device as a trusted device? ",
+	"TOO_MANY_REQUESTS": "Too many login attempts. Please try again later.",
 	"UNATTENDED": "Do not leave your phone unattended."
 }

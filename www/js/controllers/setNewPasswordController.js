@@ -255,7 +255,7 @@ myApp.controller('NewPasswordController',['$scope','$timeout','Patient','ResetPa
     $scope.goToLogin=function()
     {
         UserAuthorizationInfo.clearUserAuthorizationInfo();
-        $state.go('init');
+        initNavigator.resetToPage('./views/init/init-screen.html');
     };
 
     var parameters = initNavigator.getCurrentPage().options;

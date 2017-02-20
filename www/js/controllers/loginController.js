@@ -220,6 +220,11 @@ myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$root
                         $scope.alert.content="INVALID_EMAIL_OR_PWD";
                     });
                     break;
+                case "auth/too-many-requests":
+                    $timeout(function () {
+                        $scope.alert.content="TOO_MANY_REQUESTS";
+                    });
+                    break;
                 case "LIMITS_EXCEEDED":
                     $timeout(function(){
                         $scope.alert.content="LIMITS_EXCEEDED";
