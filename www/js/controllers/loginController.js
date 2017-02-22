@@ -87,8 +87,7 @@ myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$root
                  *  check if user trying to login is the same as locked out user
                  */
                 if(myAuth && patientSerNum && authDetails && authDetails.Email==$scope.email){
-                    var cred = firebase.auth.EmailAuthProvider.credential($scope.email, $scope.password);
-                    myAuth.reauthenticate(cred)
+                    firebase.auth().signInWithEmailAndPassword(email,password)
                         .then(function () {
                             $state.go('Home');
                         })
