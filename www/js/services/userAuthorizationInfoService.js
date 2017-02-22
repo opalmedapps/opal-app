@@ -175,7 +175,7 @@ myApp.service('UserAuthorizationInfo', function () {
          *@ngdoc method
          *@name setEmail
          *@methodOf MUHCApp.service:UserAuthorizationInfo
-         *@returns  sets user email
+         *@description  Sets user email
          */
         setEmail:function(Email)
         {
