@@ -829,18 +829,18 @@ function checkIntoAria(patientId, serNum, username)
     var url = 'http://172.26.66.41/devDocuments/screens/php/checkInPatientAriaMedi.php?CheckinVenue=OPAL%20PHONE%20APP&PatientId='+patientId;
     //making request to checkin
     console.log(url, username, serNum);
-    getAppointmentAriaSer(username, serNum).then(function(res){
-        console.log(res);
-        var ariaSerNum = res[0].AppointmentAriaSer;
+    // getAppointmentAriaSer(username, serNum).then(function(res){
+    //     console.log(res);
+    //     var ariaSerNum = res[0].AppointmentAriaSer;
         request(url,function(error, response, body)
         {
-            console.log(ariaSerNum,response);
+            console.log(response);
             if(error){console.log('line770,sqlInterface',error);r.reject(error);}
             if(!error&&response.statusCode=='200')
             {
                 var promises = [];
                 for (var i=0; i!=serNum.length; ++i){
-                    promises.push(checkIfCheckedIntoAriaHelper(ariaSerNum));
+                    promises.push(checkIfCheckedIntoAriaHelper(serNum[i]));
                 }
                 Q.all(promises).then(function(response){
                     r.resolve(response);
@@ -851,10 +851,10 @@ function checkIntoAria(patientId, serNum, username)
                 //r.resolve(true);
             }
         });
-    }).catch(function(error){
-        console.log('line778',error);
-        r.reject(error);
-    });
+    // }).catch(function(error){
+    //     console.log('line778',error);
+    //     r.reject(error);
+    // });
     return r.promise;
 }
 
