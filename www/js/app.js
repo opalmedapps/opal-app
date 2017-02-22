@@ -1,8 +1,13 @@
 /*
- *Code by David Herrera May 20, 2015
- *Github: dherre3
- *Email:davidfherrerar@gmail.com
+ * Filename     :   app.js
+ * Description  :   Contains all app configuartions and routes.
+ * Created by   :   David Herrera, Robert Maglieri
+ * Date         :   July 2015
+ * Copyright    :   Copyright 2016, HIG, All rights reserved.
+ * Licence      :   This file is subject to the terms and conditions defined in
+ *                  file 'LICENSE.txt', which is part of this source code package.
  */
+
 /**
  * @author MUHC Hospital, David Herrera
  * @copyright 2016 MUHC Hospital

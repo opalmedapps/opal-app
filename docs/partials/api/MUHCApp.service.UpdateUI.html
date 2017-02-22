@@ -70,39 +70,40 @@ object, gets the data and updates the corresponding services with this new data.
 <div class="member property"><h2 id="properties">Properties</h2>
 <ul class="properties"><li><h3 id="properties_lastupdatetimestamp">lastUpdateTimestamp</h3>
 <div class="lastupdatetimestamp"><div class="muhcapp-service-lastupdatetimestamp-page"><p>Initiatiates object with all the timestamps
-<pre class="prettyprint linenums"> var lastUpdateTimestamp={
-      'All':0,
-      'Appointments':0,
-      //'Messages':0,
-      'Documents':0,
-      'Tasks':0,
-      'Doctors':0,
-      //'LabTests':0,
-      'Patient':0,
-      'Notifications':0,
-      'EducationalMaterial':0,
-      'Questionnaires':0
+ <pre class="prettyprint linenums"> var lastUpdateTimestamp={
+'All':0,
+'Appointments':0,
+//'Messages':0,
+'Documents':0,
+'Tasks':0,
+'Doctors':0,
+//'LabTests':0,
+'Patient':0,
+'Notifications':0,
+'EducationalMaterial':0,
+'Questionnaires':0
 };</pre>
 </div></div>
 </li>
 <li><h3 id="properties_promisefields">promiseFields</h3>
-<div class="promisefields"><div class="muhcapp-service-promisefields-page"><p>Array contains the fields for the patient that perform asynchronous operations. This is done so that we have a generic way to make sure we wait for them whenever we are setting or updating patient information. In the current case
-we have to wait for the fields to download the images into the device storage</p>
-<p><pre>
-//Contents so far:
-var promiseFields =  [&#39;Doctors&#39;, &#39;Patient&#39;];</p>
+<div class="promisefields"><div class="muhcapp-service-promisefields-page"><p>Array contains the fields for the patient that perform asynchronous operations.
+This is done so that we have a generic way to make sure we wait for them whenever we are setting or updating patient information.
+In the current case we have to wait for the fields to download the images into the device storage
+         <pre>
+         //Contents so far:
+         var promiseFields =  [&#39;Doctors&#39;, &#39;Patient&#39;];</p>
 </div></div>
 </li>
 <li><h3 id="properties_sectionservicemappings">sectionServiceMappings</h3>
-<div class="sectionservicemappings"><div class="muhcapp-service-sectionservicemappings-page"><p>Array contains all the details concerning setting or update for patient fields, or patient modules</p>
-<p><pre>
-//Example:
-var sectionServiceMappings={
+<div class="sectionservicemappings"><div class="muhcapp-service-sectionservicemappings-page"><p>Array contains all the details concerning setting or update for patient fields, or patient modules
+     <pre>
+     //Example:
+     var sectionServiceMappings={
 &#39;Patient&#39;:{
-    setOnline:Patient.setUserFieldsOnline,
-    update:Patient.setUserFieldsOnline,
-    setOffline:Patient.setUserFieldsOffline
-  },...</p>
+  setOnline:Patient.setUserFieldsOnline,
+  update:Patient.setUserFieldsOnline,
+  setOffline:Patient.setUserFieldsOffline
+},...</p>
 </div></div>
 </li>
 </ul>

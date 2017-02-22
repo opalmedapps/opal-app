@@ -23,17 +23,20 @@
 </li>
 </ul>
 <div class="member method"><h2 id="methods">Methods</h2>
-<ul class="methods"><li><h3 id="methods_sendrequest">sendRequest(typeOfRequest, parameters)</h3>
+<ul class="methods"><li><h3 id="methods_sendrequest">sendRequest(typeOfRequest, content, key)</h3>
 <div class="sendrequest"><div class="sendrequest-page"><p>Sends request to server</p>
 </div><h5 id="methods_sendrequest_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>typeOfRequest</td><td><a href="" class="label type-hint type-hint-string">String</a></td><td><div class="sendrequest-page"><p>Type of request</p>
-</div></td></tr><tr><td>parameters</td><td><a href="" class="label type-hint type-hint-object">Object</a></td><td><div class="sendrequest-page"><p>Object to be sent to backend as request parameter</p>
+</div></td></tr><tr><td>content</td><td><a href="" class="label type-hint type-hint-object">Object</a></td><td><div class="sendrequest-page"><p>Object to be sent to backend as request parameter</p>
+</div></td></tr><tr><td>key</td><td><a href="" class="label type-hint type-hint-string">String</a></td><td><div class="sendrequest-page"><p>Encryption key</p>
 </div></td></tr></tbody></table></div>
 </li>
-<li><h3 id="methods_sendrequestwithresponse">sendRequestWithResponse(typeOfRequest, parameters, encryptionKey)</h3>
+<li><h3 id="methods_sendrequestwithresponse">sendRequestWithResponse(typeOfRequest, parameters, encryptionKey, referenceField, responseField)</h3>
 <div class="sendrequestwithresponse"><div class="sendrequestwithresponse-page"><p>Sends request to server, awaits for response, and returns with the results from server.</p>
 </div><h5 id="methods_sendrequestwithresponse_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>typeOfRequest</td><td><a href="" class="label type-hint type-hint-string">String</a></td><td><div class="sendrequestwithresponse-page"><p>Type of request</p>
 </div></td></tr><tr><td>parameters</td><td><a href="" class="label type-hint type-hint-object">Object</a></td><td><div class="sendrequestwithresponse-page"><p>Object to be sent to backend as request parameter</p>
 </div></td></tr><tr><td>encryptionKey</td><td><a href="" class="label type-hint type-hint-string">String</a></td><td><div class="sendrequestwithresponse-page"><p>If defined, its used as a encryption key for data, if not defined, the password hashed is used instead.</p>
+</div></td></tr><tr><td>referenceField</td><td><a href="" class="label type-hint type-hint-string">String</a></td><td><div class="sendrequestwithresponse-page"><p>The reference to the request firebase field</p>
+</div></td></tr><tr><td>responseField</td><td><a href="" class="label type-hint type-hint-string">String</a></td><td><div class="sendrequestwithresponse-page"><p>The reference to the response firebase field</p>
 </div></td></tr></tbody></table><h5 id="methods_sendrequestwithresponse_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-promise">Promise</a></td><td><div class="sendrequestwithresponse-page"><p>If data returns and the data was processed with a code 1 then it resolves to the data, otherwise it rejects with the
 error given by the request response</p>
 </div></td></tr></table></div>
