@@ -883,7 +883,7 @@ function checkIfCheckedIntoAriaHelper(patientActivitySerNum)
         {
             body = JSON.parse(body);
             console.log("checkin checks bro", body);
-            if(body.length>0 && body.CheckedInFlag == 1) r.resolve(true);
+            if(body.length>0 && body[0].CheckedInFlag == 1) r.resolve(true);
             else r.resolve(false);
         }
     });
