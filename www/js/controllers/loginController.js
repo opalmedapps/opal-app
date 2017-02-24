@@ -217,6 +217,7 @@ myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$root
 
         function handleError(error)
         {
+            $scope.loading = false;
             $scope.alert.type='danger';
             console.log(error);
             switch (error.code) {
