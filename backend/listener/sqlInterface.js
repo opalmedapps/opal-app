@@ -33,6 +33,7 @@ var sqlConfig={
     database:credentials.MYSQL_DATABASE,
     dateStrings:true
 };
+console.log(sqlConfig);
 /*
  *Re-connecting the sql database, NodeJS has problems and disconnects if inactive,
  The handleDisconnect deals with that
