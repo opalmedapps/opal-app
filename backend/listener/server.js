@@ -11,11 +11,11 @@ var q 			        =      	require("q");
 
 //admin.database.enableLogging(true);
 
-var serviceAccount = require("/home/robert/firebase_account/opal-dev-firebase-adminsdk-73h8x-3b90af80af.json");
+var serviceAccount = require("/home/robert/firebase_account/firebase-brilliant-inferno-767-firebase-adminsdk-dtkoi-829de7ac9e.json");
 
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
-    databaseURL: "https://opal-dev.firebaseio.com"
+    databaseURL: "https://brilliant-inferno-7679.firebaseio.com"
 });
 
 // Get reference to correct data element
