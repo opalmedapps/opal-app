@@ -256,13 +256,16 @@ myApp.factory('CheckinService',
                     var objectToSend = positionCheckinAppointment;
                     objectToSend.AppointmentSerNum = [];
 
-                    for (appointment in appointments){
+                    for (var appointment in appointments){
                         objectToSend.AppointmentSerNum.push(appointments[appointment].AppointmentSerNum);
                     }
 
                     RequestToServer.sendRequestWithResponse('Checkin', objectToSend)
                         .then( function (response) {
                             console.log('Successfully checked in to all appointments');
+                            for (var appointment in appointments){
+                                Appointments.setAppointmentCheckin(appointments[appointment]);
+                            }
                             defer.resolve(response);
                         })
                         .catch(function (error) {
