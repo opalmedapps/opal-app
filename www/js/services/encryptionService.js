@@ -9,6 +9,10 @@ var myApp=angular.module('MUHCApp');
 *@description Provides an API to encrypt and decrypt objects, arrays, or strings.
 **/
 myApp.service('EncryptionService',function(UserAuthorizationInfo){
+
+	var securityAnswerHash = '';
+
+
 	function decryptObject(object,secret)
 	{
 		if(typeof object =='string')
@@ -85,10 +89,8 @@ myApp.service('EncryptionService',function(UserAuthorizationInfo){
 		**/
 		decryptData:function(object)
 		{
-			//Get Password
-			var secret=UserAuthorizationInfo.getPassword();
 			//Decrypt
-			return decryptObject(object,secret);
+			return decryptObject(object,securityAnswerHash);
 		},
 		/**
 		*@ngdoc method
@@ -100,8 +102,7 @@ myApp.service('EncryptionService',function(UserAuthorizationInfo){
 		**/
 		encryptData:function(object)
 		{
-			var secret=UserAuthorizationInfo.getPassword();
-			return encryptObject(object,secret);
+			return encryptObject(object,securityAnswerHash);
 		},
 		/**
 		*@ngdoc method
@@ -128,7 +129,16 @@ myApp.service('EncryptionService',function(UserAuthorizationInfo){
 		encryptWithKey:function(object, secret)
 		{
 			return encryptObject(object,secret);
-		}
+		},
+
+		setSecurityAns: function (answer) {
+			securityAnswerHash = answer;
+        },
+
+		getSecurityAns: function () {
+			return securityAnswerHash;
+        }
+
 	};
 
 

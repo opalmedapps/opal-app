@@ -44,6 +44,13 @@ myApp.service('UserAuthorizationInfo', function () {
     *@description Device identifier property
     */
     var identifier = '';
+    /**
+     *@ngdoc property
+     *@name  MUHCApp.service.#email
+     *@propertyOf MUHCApp.service:UserAuthorizationInfo
+     *@description Email property
+     */
+    var email = '';
     return {
         /**
         *@ngdoc method
@@ -55,11 +62,12 @@ myApp.service('UserAuthorizationInfo', function () {
         *@param {String} tok  Authentication token
         *@description Sets all the user authorization.
         */
-        setUserAuthData: function (user, pass, exp, tok) {
+        setUserAuthData: function (user, pass, exp, tok, Email) {
             username= user;
             expires = exp;
             password=pass;
             token=tok;
+            email = Email;
             //console.log(username, expires, password, token);
         },
         /**
@@ -74,16 +82,16 @@ myApp.service('UserAuthorizationInfo', function () {
             pass=CryptoJS.SHA256(pass).toString();
             password=pass;
             //Retrieve UserAuthorizationInfo
-            var passString=window.localStorage.getItem('UserAuthorizationInfo');
-            var passObject = {};
-            if(passString)
-            {
-                 //Parse to convert to object
-                passObject=JSON.parse(passString);
-                passObject.Password=password;
-                //Save in storage
-                window.localStorage.setItem('UserAuthorizationInfo', JSON.stringify(passObject));
-            }
+            // var passString=window.localStorage.getItem('UserAuthorizationInfo');
+            // var passObject = {};
+            // if(passString)
+            // {
+            //      //Parse to convert to object
+            //     passObject=JSON.parse(passString);
+            //     passObject.Password=password;
+            //     //Save in storage
+            //     window.localStorage.setItem('UserAuthorizationInfo', JSON.stringify(passObject));
+            // }
            
         },
         /**
@@ -152,6 +160,26 @@ myApp.service('UserAuthorizationInfo', function () {
         getToken:function()
         {
           return token;
+        },
+        /**
+         *@ngdoc method
+         *@name getEmail
+         *@methodOf MUHCApp.service:UserAuthorizationInfo
+         *@returns {string} Returns user email
+         */
+        getEmail:function()
+        {
+            return email;
+        },
+        /**
+         *@ngdoc method
+         *@name setEmail
+         *@methodOf MUHCApp.service:UserAuthorizationInfo
+         *@description  Sets user email
+         */
+        setEmail:function(Email)
+        {
+            email =  Email;
         },
         /**
         *@ngdoc method

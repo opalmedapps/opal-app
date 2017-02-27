@@ -10,13 +10,13 @@
     <content src="index.html" />
     <access origin="*" />
     <allow-navigation href="https://www.youtube.com/*" />
-    <allow-navigation href="*" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
     <allow-intent href="tel:*" />
     <allow-intent href="sms:*" />
     <allow-intent href="mailto:*" />
     <allow-intent href="geo:*" />
+    <allow-intent href="opal:" />
     <preference name="Orientation" value="default" />
     <preference name="SplashScreenDelay" value="5000" />
     <preference name="DisallowOverscroll" value="true" />
@@ -99,4 +99,11 @@
     <plugin name="cordova.custom.plugins.exitapp" spec="~1.0.0" />
     <plugin name="com.phonegap.plugins.nativesettingsopener" spec="~1.0.1" />
     <plugin name="cordova-plugin-email" spec="~1.2.6" />
+    <plugin name="cordova-plugin-x-socialsharing" spec="~5.1.5" />
+    <plugin name="cordova-plugin-customurlscheme" spec="~4.2.0">
+        <variable name="URL_SCHEME" value="opal" />
+        <variable name="ANDROID_SCHEME" value=" " />
+        <variable name="ANDROID_HOST" value=" " />
+        <variable name="ANDROID_PATHPREFIX" value="/" />
+    </plugin>
 </widget>

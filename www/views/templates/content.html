@@ -1,0 +1,18 @@
+<ons-page ng-controller="ContentController as about">
+    <ons-toolbar fixed-style>
+        <div class="left">
+            <ons-back-button ng-class="fontSizeDesc">{{"BACK"|translate}}</ons-back-button>
+        </div>
+        <div class="center" ng-class="fontSizeTitle">{{about.pageContent.title|translate}}</div>
+    </ons-toolbar>
+
+    <div ng-show="loading" align="center" style="margin:10px">
+        <svg class="progress-circular">
+            <circle class="progress-circular__primary" cx="50%" cy="50%" r="40%" fill="none" stroke-width="10%" stroke-miterlimit="10"/>
+        </svg>
+    </div>
+
+    <div ng-bind-html="about.pageContent.content"></div>
+    <uib-alert ng-show="about.alert.type" type="{{about.alert.type}}">{{about.alert.content|translate}}</uib-alert>
+
+</ons-page>

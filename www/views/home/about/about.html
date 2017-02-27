@@ -9,13 +9,13 @@
         <ons-list-item modifier="tappable chevron" ng-click="tourModal.show()" ng-class="fontSizeTitle">
             {{"OPAL_TOUR"|translate}}
         </ons-list-item>
-        <ons-list-item modifier="tappable chevron" ng-click="homeNavigator.pushPage('views/home/about/acknowledgements.html')" ng-class="fontSizeTitle">
+        <ons-list-item modifier="tappable chevron" ng-click="homeNavigator.pushPage('views/templates/content.html', {contentType: 'acknowledgements'});" ng-class="fontSizeTitle">
             {{"OPAL_ACKNOWLEDGEMENTS"|translate}}
         </ons-list-item>
         <ons-list-item modifier="tappable chevron" onclick="window.open('https://www.cedars.ca/cedars/en/donate/donate_online','_system');" ng-class="fontSizeTitle">
             {{"OPAL_SUPPORT"|translate}}
         </ons-list-item>
-        <ons-list-item modifier="tappable chevron" ng-click="homeNavigator.pushPage('views/home/about/hig.html')" ng-class="fontSizeTitle">
+        <ons-list-item modifier="tappable chevron" ng-click="homeNavigator.pushPage('views/templates/content.html', {contentType: 'hig'});" ng-class="fontSizeTitle">
             {{"OPAL_HIG"|translate}}
         </ons-list-item>
     </ons-list>

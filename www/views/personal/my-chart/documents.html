@@ -14,22 +14,19 @@
                 {{doc.DateAdded|date:'fullDate'}}
             </ons-list-header>
             <ons-list-item modifier="chevron">
-                <ons-row>
-                    <ons-col width="6px">
-                    </ons-col>
-                    <ons-col width="65px" align="center">
-                        <div style="padding:5px">
-                            <img ng-src="./img/pdf-icon.png" style="height:55px">
+
+                <ons-row align="center" >
+                    <ons-col width="60px" align="center">
+                        <div style="margin-left:10px">
+                            <i class="fa fa-file  iconHomeView" style="color:orange"></i><span class="notification" ng-if="doc.ReadStatus==='0'">1</span>
                         </div>
                     </ons-col>
-                    <ons-col align="center">
+                    <ons-col style="word-wrap: break-word;">
                         <div style="line-height:1;padding:5px;" >
                             <span ng-class="fontSizeTitle"> <strong>{{doc.Title}}</strong></span> <br>
                             <span class="item-desc" ng-class="fontSizeDesc">{{"ADDED"|translate}} {{doc.DateAdded|date:'shortTime'}}</span>
                         </div>
-                    </ons-col>
-                    <ons-col width="15%" align="center">
-                        <i class="fa fa-exclamation-circle fa-lg" aria-hidden="true" style="color: forestgreen" ng-show= "doc.ReadStatus =='0'"></i>
+                        <!--<p class="item-desc" ng-class="fontSizeDesc" ng-bind-html = "message.Body| ellipsis: 40" ></p>-->
                     </ons-col>
                 </ons-row>
             </ons-list-item>

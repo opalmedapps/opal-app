@@ -2,7 +2,7 @@ var Firebase    =require('firebase'),
     utility=require('./utility.js'),
     credentials=require('./credentials.js'),
     sqlInterface=require('./sqlInterface.js'),
-    resetPasswordApi=require('./resetPassword.js'),
+    resetPasswordApi=require('./security.js'),
     CryptoJS=require('crypto-js'),
     q=require('q'),
     processApiRequest=require('./processApiRequest.js');
@@ -14,7 +14,7 @@ exports.apiRequestFormatter=function(requestKey,requestObject)
   var responseObject = {};
   var encryptionKey = '';
   //Gets user password for decryptiong
-  sqlInterface.getUsersPassword(requestObject.UserID).then(function(rows){
+  sqlInterface.getEncryption(requestObject).then(function(rows){
     if(rows.length>1||rows.length === 0)
     {
       //Rejects requests if username returns more than one password
@@ -24,7 +24,8 @@ exports.apiRequestFormatter=function(requestKey,requestObject)
       r.resolve(responseObject);
     }else{
       //Gets password and decrypts request
-      var key=rows[0].Password;
+      console.log(rows);
+      var key=rows[0].AnswerText;
       requestObject.Request=utility.decryptObject(requestObject.Request,key);
       encryptionKey=key;
       //If requests after decryption is empty, key was incorrect, reject the request
@@ -49,7 +50,7 @@ exports.apiRequestFormatter=function(requestKey,requestObject)
             r.resolve(responseObject);
         }).catch(function(errorResponse){
           //There was an error processing the request with the parameters, delete request
-            console.log(errorResponse);
+            console.log("Error processing request", errorResponse);
             errorResponse.Code = 2;
             errorResponse.Reason = 'Server error, report the error to the hospital';
             errorResponse.Headers = {RequestKey:requestKey,RequestObject:requestObject};
@@ -59,7 +60,7 @@ exports.apiRequestFormatter=function(requestKey,requestObject)
       }
     }
   }).catch(function(error){
-    console.log(error);
+    console.log("Get encryption error: ",error);
     responseObject = { RequestKey:requestKey,EncryptionKey:encryptionKey, Code:2,Data:error, Headers:{RequestKey:requestKey,RequestObject:requestObject},Response:'error', Reason:'Server error, report the error to the hospital'};
     r.resolve(responseObject);
   });

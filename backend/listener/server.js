@@ -2,7 +2,7 @@
 // Import necessary libraries
 
 var mainRequestApi      =   	require('./main.js');
-var resetPasswordApi    =   	require('./resetPassword.js');
+var securityApi    =   	require('./security.js');
 var admin            	=   	require("firebase-admin");
 var utility            	=   	require('./utility.js');
 var q 			        =      	require("q");
@@ -27,7 +27,8 @@ var ref = db.ref("/dev2");
 
 setInterval(function(){
     clearTimeoutRequests();
-},30000);
+    clearClientRequests();
+},60000);
 
 // Listen for firebase changes and send responses for requests
 console.log('Initialize listeners: ');
@@ -39,7 +40,7 @@ function listenForRegularRequest(){
     var requestType = 'requests';
     ref.child('requests').on('child_added', function(snapshot){
         handleRequest(requestType,snapshot);
-        
+
     });
 }
 
@@ -53,14 +54,14 @@ function listenForResetPassword(){
 
 function handleRequest(requestType, snapshot){
     var headers = {key: snapshot.key, objectRequest: snapshot.val()};
-        console.log("Toplevel snapshot key", snapshot.key);
-        //console.log("Childlevel snapshot key", childSnapshot.key);
-        processRequest(headers).then(function(response){
-            console.log('Got ' + requestType);
-            uploadToFirebase(response, requestType);
-        }).catch(function(error){
-            console.log("Error processing request!", error);
-        });
+    console.log("Toplevel snapshot key", snapshot.key);
+    //console.log("Childlevel snapshot key", childSnapshot.key);
+    processRequest(headers).then(function(response){
+        console.log('Got ' + requestType);
+        uploadToFirebase(response, requestType);
+    }).catch(function(error){
+        console.log("Error processing request!", error);
+    });
 }
 
 function clearTimeoutRequests()
@@ -74,7 +75,7 @@ function clearTimeoutRequests()
             {
                 if(usersData[user][requestKey].hasOwnProperty('Timestamp')&&now-usersData[user][requestKey].Timestamp>60000)
                 {
-                    console.log('I am deleting leftover requests');
+                    console.log('I am deleting leftover responses');
                     ref.child('users/'+user+'/'+requestKey).set(null);
                 }
             }
@@ -83,24 +84,54 @@ function clearTimeoutRequests()
     });
 }
 
+function clearClientRequests(){
+    ref.child('requests').once('value').then(function(snapshot){
+        //console.log('I am inside deleting requests');
+        var now=(new Date()).getTime();
+        var requestData=snapshot.val();
+        for (var requestKey in requestData) {
+            if(requestData[requestKey].hasOwnProperty('Timestamp')&&now-requestData[requestKey].Timestamp>60000)
+            {
+                console.log('I am deleting leftover requests');
+                ref.child('requests/'+requestKey).set(null);
+            }
+
+        }
+    });
+}
+
 function processRequest(headers){
-	
-    var r = q.defer(); 
+
+    var r = q.defer();
     var requestKey = headers.key;
     var requestObject= headers.objectRequest;
     console.log("----------------------------------REQUEST OBJECT --------------------------------------")
     console.log(requestObject);
     console.log("----------------------------------REQUEST OBJECT END --------------------------------------")
 
-
-    if(requestObject.Request=='VerifySSN'||requestObject.Request=='SetNewPassword'||requestObject.Request=='VerifyAnswer')
+    // Need to be able to send info
+    if(requestObject.Request == 'SecurityQuestion'){
+        securityApi.securityQuestion(requestKey,requestObject)
+            .then(function(response) {
+                console.log('New login initialized');
+                //console.log(results);
+                r.resolve(response);
+            })
+            .catch(function(error){
+                console.log("SecurityAnswer error", error)
+            });
+    }
+    else if(requestObject.Request=='PasswordReset'||requestObject.Request=='SetNewPassword'||requestObject.Request=='VerifyAnswer')
     {
         //console.log(requestObject);
-        resetPasswordApi.resetPasswordRequest(requestKey,requestObject).then(function(results)
+        securityApi.resetPasswordRequest(requestKey,requestObject).then(function(results)
         {
             console.log('Reset Password ');
             //console.log(results);
-            r.resolve(results);
+            r.resolve(results)
+            .catch(function(error){
+                console.log("PassRest, SetNewPass or VerifyAns error", error)
+            });
         });
 
     }else{
@@ -120,11 +151,11 @@ function uploadToFirebase(response, key)
     var success = response.Response;
     var requestKey = headers.RequestKey;
     var encryptionKey = response.EncryptionKey;
-    console.log(encryptionKey);
+    //console.log(encryptionKey);
     delete response.EncryptionKey;
     if(typeof encryptionKey!=='undefined' && encryptionKey!=='') response = utility.encryptObject(response, encryptionKey);
     response.Timestamp = admin.database.ServerValue.TIMESTAMP;
-    console.log(response);
+    console.log("upload to firebase", response);
 
     var path = '';
     if (key === "requests") {
@@ -133,6 +164,8 @@ function uploadToFirebase(response, key)
     } else if (key === "passwordResetRequests") {
         path = 'passwordResetResponses/'+requestKey;
     }
+
+    delete response.Headers.RequestObject;
 
     ref.child(path).set(response).then(function(){
         console.log('I just finished writing to firebase');
@@ -161,6 +194,7 @@ function completeRequest(headers, success, key)
     }
 
     ref.child(key).child(requestKey).set(null);
+    //headers = {};
 }
 
 

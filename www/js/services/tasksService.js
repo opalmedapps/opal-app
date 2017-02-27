@@ -1,8 +1,8 @@
 /**
  *@ngdoc service
- *@name MUHCApp.services:TasksService
- *@requires Storage
- *@description Models patient tasks
+ *@name MUHCApp.service:Tasks
+ *@requires $filter
+ *@description Service used to store and manage treatment planning tasks
  **/
 (function () {
     'use strict';
@@ -34,7 +34,7 @@
         /**
          *@ngdoc method
          *@name setPlanningTasks
-         *@methodOf MUHCApp.services:Tasks
+         *@methodOf MUHCApp.service:Tasks
          *@param {Array} tasks Array of task objects.
          *@description Sets the tasks member in the model and writes it to localstorage.
          **/
@@ -51,10 +51,9 @@
         /**
          * @ngdoc method
          * @name getPlanningTasks
-         * @methodOf MUHCApp.services:Tasks
+         * @methodOf MUHCApp.service:Tasks
          * @returns {Array} the array of planning tasks.
          * @description Returns an array of the planning tasks
-         * @returns
          **/
         function getPlanningTasks() {
             return planningTasks;
@@ -67,7 +66,7 @@
         /**
          * @ngdoc method
          * @name deletePlanningTasks
-         * @methodOf MUHCApp.services:Tasks
+         * @methodOf MUHCApp.service:Tasks
          * @description Sets the local storage value to null
          **/
         function deletePlanningTasks(){
@@ -78,8 +77,7 @@
         /**
          * @ngdoc method
          * @name setPlanningTasks
-         * @methodOf MUHCApp.services:Tasks
-         * @param {Array} tasks Array of task objects.
+         * @methodOf MUHCApp.service:Tasks
          * @description Sets the tasks member in the model and writes it to localstorage.
          * @returns {Object} The task and its index in the task array.
         **/
