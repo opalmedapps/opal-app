@@ -463,6 +463,7 @@ myApp.service('Appointments', ['$q', 'RequestToServer','$cordovaCalendar','UserA
                     userAppointmentsArray[i].Checkin='1';
                     //appointmentsLocalStorage[i].Checkin = '1';
                     LocalStorage.WriteToLocalStorage('Appointments',userAppointmentsArray);
+                    break;
                 }
             }
         },
