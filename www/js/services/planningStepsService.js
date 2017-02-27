@@ -24,6 +24,7 @@
             initializePlanningSequence: initializePlanningSequence,
             getCurrentStep: getCurrentStep,
             isCompleted: isCompleted,
+            hasCT: hasCT,
             destroy: destroy
         };
 
@@ -100,6 +101,11 @@
                 sequence[step] = [];
             }
         }
+
+        function hasCT() {
+            return sequence['CT for Radiotherapy Planning'].length > 0;
+        }
+
     }
 
 })();

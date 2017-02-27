@@ -31,14 +31,15 @@
     "test",
     "tests"
   ],
-  "version": "0.9.0",
-  "_release": "0.9.0",
+  "version": "1.0.1",
+  "_release": "1.0.1",
   "_resolution": {
     "type": "version",
-    "tag": "0.9.0",
-    "commit": "2af42a3a48979a72a93b989a00bf3e8e75f9f22d"
+    "tag": "1.0.1",
+    "commit": "a007db85f12cd8123800e03a97e75e4389cf55b5"
   },
   "_source": "https://github.com/kimmobrunfeldt/progressbar.js.git",
-  "_target": "^0.9.0",
-  "_originalSource": "progressbar.js"
+  "_target": "^1.0.1",
+  "_originalSource": "progressbar.js",
+  "_direct": true
 }

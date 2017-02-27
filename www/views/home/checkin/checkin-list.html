@@ -13,9 +13,9 @@
 
             <ons-row>
                 <ons-col width="50px" align="center" style="text-align: center;">
-                    <div class="plan-date" ng-show="app.Checkin == 1"><img ng-src="./img/checkedbox.png" width="30px" height="30px"></div>
+                    <div class="plan-date" ng-show="app.Checkin == 1"><img ng-src="./img/checkedbox.png" width="25px" height="25px"></div>
                     <div class="plan-duration" ng-show="app.Checkin == 0">
-                        <img ng-src="./img/uncheckedbox.png" width="20px" height="20px">
+                        <img ng-src="./img/uncheckedbox.png" width="25px" height="25px">
                     </div>
                 </ons-col>
                 <ons-col align="center">
@@ -23,8 +23,9 @@
                     <span ng-class="fontSizeTitle">
                         {{app["AppointmentType_"+checkIn.language]}} <br>
                         {{app.ScheduledStartTime | date:'shortTime'}}
+                        {{home.checkInMessage}}
                     </span> <br>
-                        <span class="item-desc" ng-class="fontSizeDesc">{{app["MapName_"+checkIn.language]}}</span>
+                        <span class="item-desc" ng-class="fontSizeDesc" ng-show="app.RoomLocation_EN">{{"APPOINTMENT_ROOM"|translate}} {{app["RoomLocation_"+checkIn.language]}}</span>
                     </div>
                 </ons-col>
             </ons-row>
