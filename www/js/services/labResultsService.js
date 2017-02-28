@@ -90,7 +90,7 @@ myApp.service('LabResults',['$filter','LocalStorage','RequestToServer','$q',
             }
             testResultsByDateArray = $filter('orderBy')(testResultsByDateArray, 'testDateFormat', true);
             //console.log(testResultsByDateArray);
-            console.log(testResultsToLocalStorage);
+            //console.log(testResultsToLocalStorage);
             //LocalStorage.WriteToLocalStorage('LabResults', testResultsToLocalStorage);
         }
 
@@ -152,9 +152,11 @@ myApp.service('LabResults',['$filter','LocalStorage','RequestToServer','$q',
             },
             getTestResultsArrayByDate:function()
             {
+                console.log(testResultsByDateArray);
                 return testResultsByDateArray;
             },
             getTestResultsByDate:function(){
+                console.log(testResultsByDate);
                 return testResultsByDate;
             },
 
