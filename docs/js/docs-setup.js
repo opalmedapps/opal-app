@@ -5,21 +5,21 @@ NG_DOCS={
   "pages": [
     {
       "section": "api",
+      "id": "Globals",
+      "shortName": "Globals",
+      "type": "object",
+      "moduleName": "Globals",
+      "shortDescription": "Collection of all globally defined functions.",
+      "keywords": "api app collection customurlscheme defined email flag function functions globally globals handleopenurl initnavigator link object occurs opened password passwordreset plugin push reset stack url"
+    },
+    {
+      "section": "api",
       "id": "MUHCApp",
       "shortName": "MUHCApp",
       "type": "overview",
       "moduleName": "MUHCApp",
       "shortDescription": "",
       "keywords": "aid aims alt angularjs apache api app application built cordova dependecies documentation external framework frameworks glen guide hospital https hybrid img io main mobile module montreal muhcapp muhclogo multiplatform oncology onsenui opal org overview patients png project projectdependencies quebec radiation src version"
-    },
-    {
-      "section": "api",
-      "id": "MUHCApp.controller:HomeController",
-      "shortName": "HomeController",
-      "type": "controller",
-      "moduleName": "MUHCApp",
-      "shortDescription": "HomeController",
-      "keywords": "$anchorscroll $location $rootscope $scope $state $timeout api appear asdas base64 boolean cards cardtype changes checkin class coming controller controls dec details expirymonth expiryyear false filled firstname flag fresh functionality holds homecontroller homedevicebackbutton image initialized isroomdetailsvisible jan json lastname main manipulated method mindate minimum model months muhcapp muhcapp-controller-homecontroller-page muhcapp-controller-page news notifications object params path patient patientid patients profileimage range representation reservation reservationid response responsible room roomdetails rooms roomtypes route service status store submitted true type types vatiable view visibility years"
     },
     {
       "section": "api",
@@ -50,21 +50,12 @@ NG_DOCS={
     },
     {
       "section": "api",
-      "id": "MUHCApp.service:CheckinService",
-      "shortName": "CheckinService",
-      "type": "service",
-      "moduleName": "MUHCApp",
-      "shortDescription": "Service that deals with the checkin functionality for the app",
-      "keywords": "$filter $q $rootscope $timeout allow allowed api app appointment assumption attached backend based check check-in checkcheckinserver checked checkin checkinservice checkintoappointment checks connection deals desk determines device error estimate estimates failure function functionality geographically getcheckinupdates gps hospital isallowedtocheckin kiosk live location method muhcapp object open opens patient position positioncheckinappointment promise propagate property querying radius rejects request resolves result returns rootscope seconds sends server service simply success time today updates user variables vecinity waiting works"
-    },
-    {
-      "section": "api",
       "id": "MUHCApp.service:DeviceIdentifiers",
       "shortName": "DeviceIdentifiers",
       "type": "service",
       "moduleName": "MUHCApp",
       "shortDescription": "Service that deals with the device identifiers, sends the identifiers to backend to be used by the push notifications system.",
-      "keywords": "api backend check deals device deviceidentifiers devices devicetype deviceuuid field flag getdeviceidentifiers havebeensent identifiers identifiertype method muhcapp notifications object properties property push registrationid returns sendidentifierstoserver sends server service set setdeviceidentifiers setidentifier sets setsendstatus system three update user"
+      "keywords": "api backend check data deals destroy device deviceidentifiers devices devicetype deviceuuid field flag getdeviceidentifiers havebeensent identifiers identifiertype local login method muhcapp notifications object password properties property push registrationid request reset returns senddevicepasswordrequest sendfirsttimeidentifiertoserver sendidentifierstoserver sending sends server service set setdeviceidentifiers setidentifier sets setsendstatus storage system three update user wipes"
     },
     {
       "section": "api",
@@ -154,7 +145,7 @@ NG_DOCS={
       "type": "service",
       "moduleName": "MUHCApp",
       "shortDescription": "Used to pass parameters between Navigators, the Onsen navigator options are not good enough because the controller you navigate to has to know the navigator that&#39;s currently in, this is possible but the code becomes",
-      "keywords": "api bunch clauses cleaner code controller current currently empty getparameters good html https info io messy method muhcapp navigate navigation navigator navigators object onsen options param parameter parameters pass property reinstantiates represents returns service setparameters sets simple simply specifies things"
+      "keywords": "api bunch clauses cleaner code controller current currently getparameters good html https info io messy method muhcapp navigate navigation navigator navigators object onsen options param parameter parameters pass property represents returns service setparameters sets simple simply specifies things"
     },
     {
       "section": "api",
@@ -181,7 +172,7 @@ NG_DOCS={
       "type": "service",
       "moduleName": "MUHCApp",
       "shortDescription": "API service used to access the patient fields.",
-      "keywords": "$cordovadevice $q access alias api base64 cdv cdvfilepath cleans clearpatient content device email fields file firstname full getalias getemail getfirstname getlastname getpatientid getprofileimage gettelnum getusersernum image lastname method muhcapp namefilesystem nickname number offline path pathfilesystem patient patientfields patientid patientsernum pic picture profile profileimage property returns saves service setalias setemail sets settelnum setter setuserfieldsoffline setuserfieldsonline storage stroage tel telephone telnum usersernum"
+      "keywords": "$cordovadevice $q access alias api base64 cdv cdvfilepath cleans clearpatient content device email fields file firstname full getalias getemail getfirstname getlastname getpatientid getprofileimage gettelnum getusersernum image lastname level method muhcapp namefilesystem nickname number offline path pathfilesystem patient patientfields patientid patientsernum pic picture profile profileimage property returns saves service setalias setemail sets settelnum setter setuserfieldsoffline setuserfieldsonline storage stroage tel telephone telnum usersernum"
     },
     {
       "section": "api",
@@ -190,7 +181,25 @@ NG_DOCS={
       "type": "service",
       "moduleName": "MUHCApp",
       "shortDescription": "API service used to send requests to the server. Every request is encrypted and sent.",
-      "keywords": "$filter $q $state api awaits backend code data defined encrypted encryption encryptionkey error firebase hashed key method muhcapp object parameter parameters password processed property reference refrequests refusers rejects request requests resolves response returns send sendrequest sendrequestwithresponse sends server service type typeofrequest user"
+      "keywords": "$filter $q $state api awaits backend code content data defined encrypted encryption encryptionkey error field firebase hashed key method muhcapp object parameter parameters password processed property reference referencefield refrequests refusers rejects request requests resolves response responsefield returns send sendrequest sendrequestwithresponse sends server service type typeofrequest user"
+    },
+    {
+      "section": "api",
+      "id": "MUHCApp.service:ResetPassword",
+      "shortName": "ResetPassword",
+      "type": "service",
+      "moduleName": "MUHCApp",
+      "shortDescription": "Service used to verify and confirm password resets.",
+      "keywords": "api code confirm email firebase method muhcapp password provided redirect reset resets service url user verifies verify verifylinkcode"
+    },
+    {
+      "section": "api",
+      "id": "MUHCApp.service:Tasks",
+      "shortName": "Tasks",
+      "type": "service",
+      "moduleName": "MUHCApp",
+      "shortDescription": "Service used to store and manage treatment planning tasks",
+      "keywords": "$filter api array deleteplanningtasks getplanningtasks local localstorage manage member method model muhcapp null objects planning returns service setplanningtasks sets storage store task tasks treatment writes"
     },
     {
       "section": "api",
@@ -217,7 +226,7 @@ NG_DOCS={
       "type": "service",
       "moduleName": "MUHCApp",
       "shortDescription": "Contains all the authorization data for the user",
-      "keywords": "api authentication authorization clears clearuserauthorizationinfo data device encryption epoch exp expiration expires firebase getexpires getpassword gettoken getuserauthdata getusername hashed identifier method milliseconds muhcapp object pass password properties property representation returns service session setpassword sets setuserauthdata single time tok token user username"
+      "keywords": "api authentication authorization clears clearuserauthorizationinfo data device email encryption epoch exp expiration expires firebase getemail getexpires getpassword gettoken getuserauthdata getusername hashed identifier method milliseconds muhcapp object pass password properties property representation returns service session setemail setpassword sets setuserauthdata single time tok token user username"
     },
     {
       "section": "api",

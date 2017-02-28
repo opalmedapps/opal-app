@@ -40,7 +40,11 @@
                             </div>
                         </div>
                         <div style="max-width:400px">
-                            <ons-button modifier="large" style="background-color:#387A36; font-size: x-large; font-weight: bolder;" ng-click="submit(email, password)">{{"LOGIN"|translate}}</ons-button>
+                            <ons-button modifier="large" style="background-color:#387A36; font-size: x-large; font-weight: bolder;"
+                                        ng-click="submit(email, password)"
+                                        ng-disabled="loading">
+                                {{"LOGIN"|translate}}
+                            </ons-button>
                         </div>
 
                     <div style="text-align:center;">

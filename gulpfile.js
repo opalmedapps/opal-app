@@ -108,7 +108,7 @@ gulp.task('ngdocs', [], function () {
     title: "Opal Mobile App",
     titleLink: "/api/MUHCApp"
   };
-  return gulp.src(['www/js/services/*.js', 'www/js/app.js','www/js/controllers/homeController.js'])
+  return gulp.src(['www/js/services/*.js', 'www/js/app.js','www/js/bootstrap.js'])
     .pipe(gulpDocs.process(options))
     .pipe(gulp.dest('./docs'));
 });
