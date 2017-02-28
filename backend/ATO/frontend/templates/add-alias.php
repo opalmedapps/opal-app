@@ -33,6 +33,9 @@
                 </div>
                 <div class="panel-content" style="padding-top: 0">
                   <ul class="list-group">
+                    <li class="list-group-item" ng-show="newAlias.source_db">
+                      <strong>Source Database:</strong> {{newAlias.source_db.name}}
+                    </li>
                     <li class="list-group-item" ng-show="newAlias.name_EN || newAlias.name_FR">
                       <strong>Titles:</strong> EN: {{newAlias.name_EN}} | FR: {{newAlias.name_FR}}
                     </li>
@@ -77,7 +80,24 @@
           <div class="col-md-9 animated fadeInRight">
             <div class="panel-container" style="text-align: left">
               <uib-accordion close-others="true">
-                <uib-accordion-group ng-class="(newAlias.name_EN && newAlias.name_FR) ? 'panel-success': 'panel-danger'" is-open="true">
+                <uib-accordion-group ng-class="newAlias.source_db ? 'panel-success': 'panel-danger'" is-open="true">
+                  <uib-accordion-heading>
+                    <h2 class="panel-title"><strong>Select a source database</strong>
+                      <span ng-hide="newAlias.source_db" style="float:right"><em>Incomplete</em></span>
+                      <span ng-show="newAlias.source_db" style="float:right"><em>Complete</em></span>
+                    </h2>
+                  </uib-accordion-heading>
+                  <div class="panel-input">  
+                    <ul class="no-list">
+                      <li ng-repeat="sourceDB in sourceDBList">
+                        <label>
+                          <input type="radio" ng-model="newAlias.source_db" ng-change="sourceDBUpdate()" ng-value="sourceDB" /> {{sourceDB.name}}
+                        </label>
+                      </li>
+                    </ul>
+                  </div>
+                </uib-accordion-group>     
+                <uib-accordion-group ng-class="(newAlias.name_EN && newAlias.name_FR) ? 'panel-success': 'panel-danger'" is-open="statusA">
                   <uib-accordion-heading> 
                     <h2 class="panel-title"><strong>Assign EN/FR titles</strong>
                       <span ng-hide="newAlias.name_EN && newAlias.name_FR" style="float:right"><em>Incomplete</em></span>
@@ -170,7 +190,7 @@
                     </h2>
                   </uib-accordion-heading>
                   <div class="panel-input">  
-                    <div class="list-space">
+                    <div class="list-space" ng-show="newAlias.source_db && newAlias.type">
                       <div class="input-group">
                         <span class="input-group-addon"><span class="glyphicon glyphicon-search"></span></span>
                         <input class="form-control" type="text" ng-model="termFilter" ng-change="changeTermFilter(termFilter)" placeholder="Search Terms"/>
@@ -187,6 +207,9 @@
                           </label>
                         </li>
                       </ul>
+                    </div>
+                    <div style="text-align:center" ng-hide="newAlias.source_db && newAlias.type">
+                      <h1> ^^ Please select a source database AND assign an alias type! ^^</h1>
                     </div>
                   </div>
                 </uib-accordion-group>     

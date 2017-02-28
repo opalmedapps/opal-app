@@ -224,7 +224,7 @@ myApp.service('Notifications',['$filter','RequestToServer','LocalStorage','Annou
             temp[i].Custom =  notificationTypes[temp[i].NotificationType].Custom;
             temp[i].Icon = notificationTypes[temp[i].NotificationType].icon;
             temp[i].Color = notificationTypes[temp[i].NotificationType].color;
-            console.log(temp[i].NotificationType, notificationTypes[temp[i].NotificationType].hasOwnProperty('openFunction'));
+            //console.log(temp[i].NotificationType, notificationTypes[temp[i].NotificationType].hasOwnProperty('openFunction'));
             if(!notificationTypes[temp[i].NotificationType].hasOwnProperty('openFunction')){
                 temp[i].PageUrl = notificationTypes[temp[i].NotificationType].PageUrl(temp[i].RefTableRowSerNum);
             }

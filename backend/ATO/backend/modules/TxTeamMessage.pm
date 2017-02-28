@@ -29,7 +29,6 @@ use PostControl; # Our custom post control module
 #---------------------------------------------------------------------------------
 # Connect to the databases
 #---------------------------------------------------------------------------------
-my $sourceDatabase	= $Database::sourceDatabase;
 my $SQLDatabase		= $Database::targetDatabase;
 
 #====================================================================================
@@ -156,30 +155,27 @@ sub publishTxTeamMessages
             my $postControlSer          = $PostControl->getPostControlSer();
             my $postFilters             = $PostControl->getPostControlFilters();
 
-            # Retrieve the patient appointment(s) if one (or more) lands within one day of today
-            my @patientAppointments = Appointment::getPatientsAppointmentsFromDateInOurDB($patientSer, $today_date, 1);
-            if (!@patientAppointments) {next;}
-
             my @expressionNames = ();
-            my @diagnosisNames = ();
 
-            # we build all possible expression names, and diagnoses for each appointment found
-            foreach my $appointment (@patientAppointments) {
-
-                my $expressionSer = $appointment->getApptAliasExpressionSer();
-                my $expressionName = Alias::getExpressionNameFromOurDB($expressionSer);
-                push(@expressionNames, $expressionName) unless grep{$_ == $expressionName} @expressionNames;
-
-                my $diagnosisSer = $appointment->getApptDiagnosisSer();
-                my $diagnosisName = Diagnosis::getDiagnosisNameFromOurDB($diagnosisSer);
-                push(@diagnosisNames, $diagnosisName) unless grep{$_ == $diagnosisName} @diagnosisNames;
-            }
+            my @diagnosisNames = Diagnosis::getPatientsDiagnosesFromOurDB($patientSer);
 
             my @patientDoctors = PatientDoctor::getPatientsDoctorsFromOurDB($patientSer);
                 
             # Fetch expression filters (if any)
             my @expressionFilters =  $postFilters->getExpressionFilters();
             if (@expressionFilters) {
+  
+                # Retrieve the patient appointment(s) if one (or more) lands within one day of today
+                my @patientAppointments = Appointment::getPatientsAppointmentsFromDateInOurDB($patientSer, $today_date, 1);
+
+                # we build all possible expression names, and diagnoses for each appointment found
+                foreach my $appointment (@patientAppointments) {
+
+                    my $expressionSer = $appointment->getApptAliasExpressionSer();
+                    my $expressionName = Alias::getExpressionNameFromOurDB($expressionSer);
+                    push(@expressionNames, $expressionName) unless grep{$_ == $expressionName} @expressionNames;
+
+                }
 
                 # Finding the existence of the patient expressions in the expression filters
                 # If there is an intersection, then patient is part of this publishing announcement
@@ -194,7 +190,7 @@ sub publishTxTeamMessages
                 # Finding the intersection of the patient's diagnosis and the diagnosis filters
                 # If there is an intersection, then patient is part of this publishing announcement
                 # If not, then continue to next announcement
-                if (!intersect(@dignosisFilters, @diagnosisNames)) {next;} 
+                if (!intersect(@diagnosisFilters, @diagnosisNames)) {next;} 
             }
 
             # Fetch doctor filters (if any)
@@ -219,7 +215,14 @@ sub publishTxTeamMessages
 
             if (!$txTeamMessage->inOurDatabase()) {
     
-                $txTeamMessage->insertTxTeamMessageIntoOurDB();
+                $txTeamMessage = $txTeamMessage->insertTxTeamMessageIntoOurDB();
+
+                # send push notification
+                my $txTeamMessageSer = $txTeamMessage->getTTMSer();
+                my $patientSer = $txTeamMessage->getTTMPatientSer();
+                PushNotification::sendPushNotification($patientSer, $txTeamMessageSer, 'TxTeamMessage');
+
+
             }
 
         } # End forEach PostControl   

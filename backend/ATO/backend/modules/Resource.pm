@@ -16,10 +16,8 @@ use Database; # Use our custom database module Database.pm
 use Storable qw(dclone); # for deep copies
 
 #---------------------------------------------------------------------------------
-# Connect to the databases
+# Connect to our database
 #---------------------------------------------------------------------------------
-
-my $sourceDatabase	= $Database::sourceDatabase;
 my $SQLDatabase		= $Database::targetDatabase;
 
 #====================================================================================
@@ -29,10 +27,11 @@ sub new
 {
 	my $class = shift;
 	my $resource = {
-		_ser		=> undef,
-		_ariaser	=> undef,
-		_name		=> undef,
-        _type       => undef,
+		_ser		    => undef,
+        _sourcedbser    => undef,
+		_sourceuid	    => undef,
+		_name		    => undef,
+        _type           => undef,
 	};
 	# bless associates an object with a class so Perl knows which package to search for
 	# when a method is envoked on this object
@@ -51,13 +50,23 @@ sub setResourceSer
 }
 
 #====================================================================================
-# Subroutine to set the resource aria serial 
+# Subroutine to set the resource source database serial
 #====================================================================================
-sub setResourceAriaSer
+sub setResourceSourceDatabaseSer
 {
-	my ($resource, $ariaser) = @_; # resource object with provided serial in arguments
-	$resource->{_ariaser} = $ariaser; # set the serial
-	return $resource->{_ariaser};
+	my ($resource, $sourcedbser) = @_; # resource object with provided serial in arguments
+	$resource->{_sourcedbser} = $sourcedbser; # set the serial
+	return $resource->{_sourcedbser};
+}
+
+#====================================================================================
+# Subroutine to set the resource source uid
+#====================================================================================
+sub setResourceSourceUID
+{
+	my ($resource, $sourceuid) = @_; # resource object with provided uid in arguments
+	$resource->{_sourceuid} = $sourceuid; # set the uid
+	return $resource->{_sourceuid};
 }
 
 #====================================================================================
@@ -90,12 +99,21 @@ sub getResourceSer
 }
 
 #======================================================================================
-# Subroutine to get the resource aria serial
+# Subroutine to get the resource source database serial
 #======================================================================================
-sub getResourceAriaSer
+sub getResourceSourceDatabaseSer
 {
 	my ($resource) = @_; # our resource object
-	return $resource->{_ariaser};
+	return $resource->{_sourcedbser};
+}
+
+#======================================================================================
+# Subroutine to get the resource source uid
+#======================================================================================
+sub getResourceSourceUID
+{
+	my ($resource) = @_; # our resource object
+	return $resource->{_sourceuid};
 }
 
 #======================================================================================
@@ -117,45 +135,91 @@ sub getResourceType
 }
 
 #====================================================================================
-# Subroutine to get resource information from the ARIA db given a serial
+# Subroutine to get resource information from the source db given a serial
 #====================================================================================
 sub getResourceInfoFromSourceDB
 {
 	my ($Resource) = @_; # Resource object from args
 
-	my $ariaser = $Resource->getResourceAriaSer();
+	my $sourceuid   = $Resource->getResourceSourceUID();
+    my $sourcedbser = $Resource->getResourceSourceDatabaseSer();
 
 	# when we retrieve query result
 	my ($name, $type);
 
-	my $resource_sql = "
-		SELECT DISTINCT 
-			vv_ResourceName.ResourceName,
-            Resource.ResourceType
-		FROM
-			vv_ResourceName,
-            Resource
-		WHERE
-			vv_ResourceName.ResourceSer = '$ariaser'
-        AND vv_ResourceName.ResourceSer = Resource.ResourceSer
-	";
-	# prepare query
-	my $query = $sourceDatabase->prepare($resource_sql)
-		or die "Could not prepare query: " . $sourceDatabase->errstr;
+    # ARIA 
+    if ($sourcedbser eq 1) {
 
-	# execute query
-	$query->execute()
-		or die "Could not execute query: " . $query->errstr;
+        my $sourceDatabase = Database::connectToSourceDatabase($sourcedbser);
 
-	while (my @data = $query->fetchrow_array()) {
+    	my $resource_sql = "
+            use variansystem;
+	    	SELECT DISTINCT 
+		    	vv_ResourceName.ResourceName,
+                Resource.ResourceType
+	    	FROM
+		    	vv_ResourceName,
+                Resource
+    		WHERE
+	    		vv_ResourceName.ResourceSer = '$sourceuid'
+            AND vv_ResourceName.ResourceSer = Resource.ResourceSer
+    	";
+	    # prepare query
+    	my $query = $sourceDatabase->prepare($resource_sql)
+	    	or die "Could not prepare query: " . $sourceDatabase->errstr;
+    
+	    # execute query
+    	$query->execute()
+	    	or die "Could not execute query: " . $query->errstr;
 
-		# query results
-		$name = $data[0];
-        $type = $data[1];
+    	while (my @data = $query->fetchrow_array()) {
+    
+	    	# query results
+		    $name = $data[0];
+            $type = $data[1];
+    
+	    	$Resource->setResourceName($name);
+            $Resource->setResourceType($type);
+	    }
 
-		$Resource->setResourceName($name);
-        $Resource->setResourceType($type);
-	}
+        $sourceDatabase->disconnect();
+    }
+
+    # WaitRoomManagement
+    if ($sourcedbser eq 2) {
+
+        my $sourceDatabase = Database::connectToSourceDatabase($sourcedbser);
+
+    	my $resource_sql = "
+            SELECT DISTINCT
+                cr.ResourceName
+            FROM
+                ClinicResources cr
+            WHERE
+                cr.ClinicResourcesSerNum    = '$sourceuid'
+        ";
+
+        # prepare query
+    	my $query = $sourceDatabase->prepare($resource_sql)
+	    	or die "Could not prepare query: " . $sourceDatabase->errstr;
+    
+	    # execute query
+    	$query->execute()
+	    	or die "Could not execute query: " . $query->errstr;
+
+    	while (my @data = $query->fetchrow_array()) {
+    
+	    	# query results
+		    $name = $data[0];
+            $type = 'Other'; # resource type not defined yet in source db
+    
+	    	$Resource->setResourceName($name);
+            $Resource->setResourceType($type);
+	    }
+
+        $sourceDatabase->disconnect();
+    }
+
 
 	return $Resource;
 }
@@ -167,9 +231,11 @@ sub getResourceInfoFromSourceDB
 sub inOurDatabase
 {
 	my ($resource) = @_; # resource object from args
-	my $ariaser = $resource->getResourceAriaSer(); # get aria serial
 
-	my $ResourceAriaSerInDB = 0; # false by default. Will be true if resource exists
+	my $sourceuid   = $resource->getResourceSourceUID();
+    my $sourcedbser = $resource->getResourceSourceDatabaseSer();
+
+	my $ResourceSourceUIDInDB = 0; # false by default. Will be true if resource exists
 	my $ExistingResource = (); # data to be entered if resource exists
 
 	# vars
@@ -184,7 +250,8 @@ sub inOurDatabase
 		FROM
 			Resource
 		WHERE
-			Resource.ResourceAriaSer = '$ariaser'
+			Resource.ResourceAriaSer        = '$sourceuid'
+        AND Resource.SourceDatabaseSerNum   = '$sourcedbser'
 	";
 	# prepare query
 	my $query = $SQLDatabase->prepare($inDB_sql)
@@ -196,19 +263,20 @@ sub inOurDatabase
 	
 	while (my @data = $query->fetchrow_array()) {
 
-		$ser			= $data[0];
-		$ResourceAriaSerInDB	= $data[1];
-		$name			= $data[2];
-        $type           = $data[3];
+		$ser			        = $data[0];
+		$ResourceSourceUIDInDB	= $data[1];
+		$name			        = $data[2];
+        $type                   = $data[3];
 
 	}
 
-	if ($ResourceAriaSerInDB) {
+	if ($ResourceSourceUIDInDB) {
 		
 		$ExistingResource = new Resource(); # initialize new object
 
 		$ExistingResource->setResourceSer($ser);
-		$ExistingResource->setResourceAriaSer($ResourceAriaSerInDB);
+		$ExistingResource->setResourceSourceUID($ResourceSourceUIDInDB);
+        $ExistingResource->setResourceSourceDatabaseSer($sourcedbser);
 		$ExistingResource->setResourceName($name);
         $ExistingResource->setResourceType($type);
 
@@ -226,14 +294,16 @@ sub insertResourceIntoOurDB
 	my ($resource) = @_; # our resource object
 
 	# get all necessary details
-	my $ariaser	= $resource->getResourceAriaSer();
-	my $name	= $resource->getResourceName();
-    my $type    = $resource->getResourceType();
+	my $sourceuid   = $resource->getResourceSourceUID();
+    my $sourcedbser = $resource->getResourceSourceDatabaseSer();
+	my $name	    = $resource->getResourceName();
+    my $type        = $resource->getResourceType();
 
 	my $insert_sql = "
 		INSERT INTO
 			Resource (
 				ResourceSerNum,
+                SourceDatabaseSerNum,
 				ResourceAriaSer,
 				ResourceName,
                 ResourceType,
@@ -241,7 +311,8 @@ sub insertResourceIntoOurDB
 			)
 		VALUES (
 			NULL,
-			'$ariaser',
+            '$sourcedbser',
+			'$sourceuid',
 			\"$name\",
             '$type',
 			NULL
@@ -274,9 +345,10 @@ sub updateDatabase
 	my ($resource) = @_; # our resource object
 
 	# get all necessary details
-	my $ariaser	= $resource->getResourceAriaSer();
-	my $name	= $resource->getResourceName();
-    my $type    = $resource->getResourceType();
+	my $sourceuid	= $resource->getResourceSourceUID();
+    my $sourcedbser = $resource->getResourceSourceDatabaseSer();
+	my $name	    = $resource->getResourceName();
+    my $type        = $resource->getResourceType();
 
 	my $update_sql = "
 		UPDATE
@@ -285,7 +357,8 @@ sub updateDatabase
 			ResourceName	= \"$name\",
             ResourceType    = '$type'
 		WHERE
-			ResourceAriaSer	= '$ariaser'
+			ResourceAriaSer	        = '$sourceuid'
+        AND SourceDatabaseSerNum    = '$sourcedbser'
 	";
 	# prepare query
 	my $query = $SQLDatabase->prepare($update_sql)
@@ -335,19 +408,20 @@ sub compareWith
 #======================================================================================
 sub reassignResource
 {
-	my ($ariaser) = @_; # aria serial from arguments 
+	my ($sourceuid, $sourcedbser) = @_; # serial from arguments 
 
     # first check if the resource serial is defined
     # if not, return zero
-    if (!$ariaser) {
+    if (!$sourceuid) {
         return 0;
     }
 
 	my $Resource = new Resource(); # initialize resource object
 
-	$Resource->setResourceAriaSer($ariaser); # assign aria serial
+	$Resource->setResourceSourceUID($sourceuid);
+    $Resource->setResourceSourceDatabaseSer($sourcedbser);
 
-	# get resource info from source DB (ARIA)
+	# get resource info from source DB
 	$Resource = $Resource->getResourceInfoFromSourceDB();
 
 	# check if the resource exists in our database
@@ -367,9 +441,6 @@ sub reassignResource
 		return $resourceSer;
 	}
 	else { # resource DNE
-
-		# get resource info from source DB (ARIA)
-        #$Resource = $Resource->getResourceInfoFromSourceDB();
 
 		# insert resource into our DB
 		$Resource = $Resource->insertResourceIntoOurDB();

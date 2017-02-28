@@ -84,7 +84,7 @@
                 </ons-col>
             </ons-row>
         </ons-list-item>
-        <ons-list-item modifier="chevron" class="item" ng-click="personalNavigator.pushPage('views/personal/lab-results/lab-results.html')" >
+        <ons-list-item modifier="chevron" class="item" ng-if="censor" ng-click="personalNavigator.pushPage('views/personal/lab-results/lab-results.html')" >
           <ons-row align="center" >
             <ons-col width="60px" align="center">
               <div>

@@ -12,13 +12,18 @@ Install bower
 ```
 npm install -g bower
 ```
-Clone the git repository
+Clone from github 
 ```
-git clone <repository>
+git clone git@github.com:Sable/qplus.git
+```
+If you are running ubuntu and you try to clone to your encrypted home directory, some filenames will be too long and git will throw an error. You should then only clone the master or opal_dev branches. 
+
+To clone a single branch from the git repository.
+```
+git clone -b <remote_branch_name> --single-branch git@github.com:Sable/qplus.git
 ```
 Navigate to qplus folder and install missing librairies
 ```
-npm install
 bower install
 ```
 ###Technologies
@@ -47,30 +52,30 @@ Cordova has the ability to build applications for iOS, Android and browsers usin
 Instructions are based on [Cordova get started page!](https://cordova.apache.org/#getstarted)
 
 1. Follow instructions in the [Installation](#installation) section
-3. Install Cordova via `npm install -g cordova`.
-4. Create a Cordova Project `cordova create <NameOfProject>`.
-5. Change directory to your newly created cordova project `cd <NameOfProject>`.
-6. Add all the cordova plugins from the [list](#plugins) below.
- ```
-cordova plugin add <nameOfPlugin>
-```
+2. Install Cordova via `npm install -g cordova`.
+3. Create a Cordova Project `cordova create <NameOfProject>`.
+4. Change directory to your newly created cordova project `cd <NameOfProject>`.
+5. Copy the res folder to the cordova folder project, and replace the config.xml file in the cordova project with the config.xml file in this repository.
+6. Add the contents of the www folder to the www folder in your cordova project.
 7. Add platforms to your project:
   * `cordova platform add ios`
   * `cordova platform add android`
   * `cordova platform add browser`
-
-8. Build your basic app via: `cordova build`. For an specific platform build use:
+8. Build your app via: `cordova build`. For an specific platform build use:
  ``` 
 cordova build <platform>
 ```
-9. Add the contents of the www folder to the www folder in your cordova project.
-10. To run your project run:
+9. Connect your phone via USB to your computer and run your project:
  ```
 cordova run <platform>
 ```
-11. Lastly, copy the res folder to the cordova folder project, and replace the xml file in the cordova project with the xml file in this repository.
 
 ####Plugins:
+
+You should not need to worry about plugins, but in case something goes wrong, you will need to add them manually using
+ ```
+cordova plugin add <nameOfPlugin>
+```
 
 * phonegap-plugin-push --variable SENDER_ID="810896751588"
 * com-badrit-printplugin

@@ -15,6 +15,7 @@ angular.module('ATO_InterfaceApp.controllers.newAliasController', ['ngAnimate','
 
 		// completed steps in object notation
 		var steps = {
+            source: {completed: false},
 			title: {completed: false},
 			description: {completed: false},
 			type: {completed: false},
@@ -27,7 +28,7 @@ angular.module('ATO_InterfaceApp.controllers.newAliasController', ['ngAnimate','
 		$scope.numOfCompletedSteps = 0;
 	
 		// Default total number of steps
-		$scope.stepTotal = 4;
+		$scope.stepTotal = 5;
 
 		// Progress bar based on default completed steps and total
 		$scope.stepProgress = trackProgress($scope.numOfCompletedSteps, $scope.stepTotal);
@@ -47,6 +48,7 @@ angular.module('ATO_InterfaceApp.controllers.newAliasController', ['ngAnimate','
 			description_FR: null,
 			type: null,
             eduMat: null,
+            source_db: null,
 			terms: []
 		};
 
@@ -54,6 +56,8 @@ angular.module('ATO_InterfaceApp.controllers.newAliasController', ['ngAnimate','
 		$scope.termList = [];
         // Initialize list that will hold educational materials
         $scope.eduMatList = [];
+        // Initialize list that will hold source databases
+        $scope.sourceDBList
 				
 		$scope.termFilter = null;
         $scope.eduMatFilter = null;
@@ -74,6 +78,39 @@ angular.module('ATO_InterfaceApp.controllers.newAliasController', ['ngAnimate','
             $scope.eduMatList = response; // Assign value
         });
 
+        // Call our API service to get the list of source databases
+        aliasAPIservice.getSourceDatabases().success(function (response) {
+            $scope.sourceDBList = response; // Assign value
+        });
+
+        // Function to toggle necessary changes when updating the source database buttons
+        $scope.sourceDBUpdate = function () {
+
+            if ($scope.newAlias.source_db) { 
+		
+                // Toggle boolean
+				steps.source.completed = true;
+
+				// Count the number of completed steps
+				$scope.numOfCompletedSteps = stepsCompleted(steps);
+
+				// Change progress bar
+				$scope.stepProgress = trackProgress($scope.numOfCompletedSteps, $scope.stepTotal);
+              
+			}
+			else { // at least one textbox is empty
+
+				// Toggle boolean
+				steps.source.completed = false;
+				
+				// Count the number of completed steps
+				$scope.numOfCompletedSteps = stepsCompleted(steps);
+
+				// Change progress bar
+				$scope.stepProgress = trackProgress($scope.numOfCompletedSteps, $scope.stepTotal);
+			}
+		}
+  
 		// Function to toggle necessary changes when updating alias title
 		$scope.titleUpdate = function () {
 
@@ -87,8 +124,6 @@ angular.module('ATO_InterfaceApp.controllers.newAliasController', ['ngAnimate','
 
 				// Change progress bar
 				$scope.stepProgress = trackProgress($scope.numOfCompletedSteps, $scope.stepTotal);
-                
-
 
 			}
 			else { // at least one textbox is empty
@@ -149,30 +184,36 @@ angular.module('ATO_InterfaceApp.controllers.newAliasController', ['ngAnimate','
 				// Toggle boolean
 				steps.terms.completed = false;
             }
+
 	        $scope.showProcessingModal();
             
-            // Call our API service to get the list of alias expressions
-            aliasAPIservice.getExpressions($scope.newAlias.type).success(function (response) {
-	            $scope.termList = response; // Assign value
+            // Proceed with getting a list of alias expressions if a source database has been defined
+            if ($scope.newAlias.source_db) {
 
-                processingModal.close(); // hide modal
-                processingModal = null; // remove reference
+                // Call our API service to get the list of alias expressions
+                aliasAPIservice.getExpressions($scope.newAlias.source_db.serial, $scope.newAlias.type).success(function (response) {
 
-    		    // Set false for each term in termList
-	    		angular.forEach($scope.termList, function (term) {
-		    		term.added = false;
-        	    });
+	                $scope.termList = response; // Assign value
 
-    	        // Sort list
-	        	$scope.termList.sort(function(a,b) {
-		    	    var nameA = a.name.toLowerCase(), nameB = b.name.toLowerCase();
-		            if (nameA < nameB) // sort string ascending
-			            return -1;
-            		if (nameA > nameB)
-	        			return 1;
-            		else return 0 // no sorting
-			    });
-    		});
+                    processingModal.close(); // hide modal
+                    processingModal = null; // remove reference
+
+       		        // Set false for each term in termList
+	        		angular.forEach($scope.termList, function (term) {
+		        		term.added = false;
+        	        });
+
+        	        // Sort list
+	            	$scope.termList.sort(function(a,b) {
+		        	    var nameA = a.name.toLowerCase(), nameB = b.name.toLowerCase();
+		                if (nameA < nameB) // sort string ascending
+			                return -1;
+            		    if (nameA > nameB)
+	        			    return 1;
+                		else return 0 // no sorting
+	    		    });
+    	    	});
+            }
 
 			// Count the number of completed steps
 			$scope.numOfCompletedSteps = stepsCompleted(steps);
@@ -351,7 +392,8 @@ angular.module('ATO_InterfaceApp.controllers.newAliasController', ['ngAnimate','
         $scope.checkForm = function() {
             
             if ($scope.newAlias.name_EN && $scope.newAlias.name_FR && $scope.newAlias.description_EN 
-                    && $scope.newAlias.description_FR && $scope.newAlias.type && $scope.checkTermsAdded($scope.termList)) { 
+                    && $scope.newAlias.description_FR && $scope.newAlias.type && $scope.checkTermsAdded($scope.termList)
+                    && $scope.newAlias.source_db) { 
                 return true;
             }
             else

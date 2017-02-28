@@ -19,41 +19,41 @@ myApp.controller('TabsController',['$scope','$timeout','$translate','$translateP
 
     $translatePartialLoader.addPart('all-views');
 
-    $scope.onGestureHome = function(gesture) {
-        console.log('line22',gesture);
-        $timeout(function()
-        {
-            if(gesture=='Swipe Right'&&homeNavigator.getPages().length>1)homeNavigator.popPage();
-        },100);
-    };
-    $scope.onGesturePersonal = function(gesture) {
-        console.log('line26',gesture);
-        $timeout(function()
-        {
-            if(gesture=='Swipe Right'&&personalNavigator.getPages().length>1)personalNavigator.popPage();
-        },100);
-    };
-    $scope.onGestureGeneral = function(gesture) {
-        console.log('line30',gesture);
-        $timeout(function()
-        {
-            if(gesture=='Swipe Right'&&generalNavigator.getPages().length>1)generalNavigator.popPage();
-        },100);
-    };
-    $scope.onGestureEducation = function(gesture) {
-        console.log('line30',gesture);
-        $timeout(function()
-        {
-            if(gesture=='Swipe Right'&&educationNavigator.getPages().length>1)educationNavigator.popPage();
-        },100);
-    };
-    $scope.onGestureSettings = function(gesture) {
-        console.log('line34',gesture);
-        $timeout(function()
-        {
-            if(gesture=='Swipe Right'&&settingsNavigator.getPages().length>1)settingsNavigator.popPage();
-        },100);
-    };
+    // $scope.onGestureHome = function(gesture) {
+    //     console.log('line22',gesture);
+    //     $timeout(function()
+    //     {
+    //         if(gesture=='Swipe Right'&&homeNavigator.getPages().length>1)homeNavigator.popPage();
+    //     },100);
+    // };
+    // $scope.onGesturePersonal = function(gesture) {
+    //     console.log('line26',gesture);
+    //     $timeout(function()
+    //     {
+    //         if(gesture=='Swipe Right'&&personalNavigator.getPages().length>1)personalNavigator.popPage();
+    //     },100);
+    // };
+    // $scope.onGestureGeneral = function(gesture) {
+    //     console.log('line30',gesture);
+    //     $timeout(function()
+    //     {
+    //         if(gesture=='Swipe Right'&&generalNavigator.getPages().length>1)generalNavigator.popPage();
+    //     },100);
+    // };
+    // $scope.onGestureEducation = function(gesture) {
+    //     console.log('line30',gesture);
+    //     $timeout(function()
+    //     {
+    //         if(gesture=='Swipe Right'&&educationNavigator.getPages().length>1)educationNavigator.popPage();
+    //     },100);
+    // };
+    // $scope.onGestureSettings = function(gesture) {
+    //     console.log('line34',gesture);
+    //     $timeout(function()
+    //     {
+    //         if(gesture=='Swipe Right'&&settingsNavigator.getPages().length>1)settingsNavigator.popPage();
+    //     },100);
+    // };
 
 
 }]);
@@ -151,7 +151,7 @@ myApp.controller('personalTabController',
 
 myApp.controller('generalTabController',['$scope','$timeout','Announcements','RequestToServer','UpdateUI','Notifications','NavigatorParameters','$filter',function($scope,$timeout,Announcements,RequestToServer,UpdateUI,Notifications,NavigatorParameters,$filter){
 
-    NavigatorParameters.setParameters({'Navigator':'generalNavigator'});
+    NavigatorParameters.setParameters({'Navigator':'generalNavigator', nav: generalNavigator});
 
     var app = document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'https://' ) === -1;
     setNewsNumbers();
@@ -191,30 +191,30 @@ myApp.controller('generalTabController',['$scope','$timeout','Announcements','Re
         NavigatorParameters.setParameters({'Navigator':'generalNavigator'});
         generalNavigator.pushPage('./views/init/init-settings.html')
     };
-    $scope.reportIssuesMail = function()
-    {
-
-        if(app){
-            var email = {
-                to: 'muhc.app.mobile@gmail.com',
-                cc: '',
-                bcc: [],
-                subject: $filter("translate")("OPALPROBLEMSUBJECT"),
-                body: '',
-                isHtml: true
-            };
-            cordova.plugins.email.isAvailable(function(isAvailable){
-                if(isAvailable)
-                {
-                    cordova.plugins.email.open(email,function(sent){
-                        console.log('email ' + (sent ? 'sent' : 'cancelled'));
-                    },this);
-                }else{
-                    console.log('is not available');
-                }
-            });
-        }
-    };
+    // $scope.reportIssuesMail = function()
+    // {
+    //
+    //     if(app){
+    //         var email = {
+    //             to: 'muhc.app.mobile@gmail.com',
+    //             cc: '',
+    //             bcc: [],
+    //             subject: $filter("translate")("OPALPROBLEMSUBJECT"),
+    //             body: '',
+    //             isHtml: true
+    //         };
+    //         cordova.plugins.email.isAvailable(function(isAvailable){
+    //             if(isAvailable)
+    //             {
+    //                 cordova.plugins.email.open(email,function(sent){
+    //                     console.log('email ' + (sent ? 'sent' : 'cancelled'));
+    //                 },this);
+    //             }else{
+    //                 console.log('is not available');
+    //             }
+    //         });
+    //     }
+    // };
     $scope.goToParking = function()
     {
         NavigatorParameters.setParameters('generalNavigator');

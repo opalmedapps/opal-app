@@ -331,6 +331,7 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors',
                         updateTimestamps(parameters, data.Timestamp);
                         r.resolve(true);
                     }else{
+                        console.log("calling service updates")
                         updateServices(data.Data).then(function()
                         {
                             updateTimestamps(parameters, data.Timestamp);
@@ -432,6 +433,7 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors',
              **/
             update:function(parameters)
             {
+                console.log("Called update");
                 return updateSection(parameters);
             },
             /**
@@ -443,6 +445,7 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors',
              **/
             reset:function(parameters)
             {
+                console.log("Called reset");
                 return resetSection(parameters);
             },
             /**
@@ -455,6 +458,7 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors',
             init:function(type)
             {
                 //var r=$q.defer();
+                console.log("Called init");
                 var app = document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'https://' ) === -1;
                 if(app){
                     console.log(LocalStorage.isUserDataDefined());

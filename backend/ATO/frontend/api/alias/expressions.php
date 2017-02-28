@@ -9,13 +9,14 @@
 	include_once($configFile);
 
 	// Retrieve FORM param
-	$callback = $_GET['callback'];
-	$type = $_GET['type'];
+	$callback       = $_GET['callback'];
+    $sourceDBSer    = $_GET['sourcedbser'];
+	$type           = $_GET['type'];
 
 	$alias = new Alias; // Object
 
 	// Call function
-	$expressionList = $alias->getExpressions($type);
+	$expressionList = $alias->getExpressions($sourceDBSer, $type);
 
 	// Callback to http request
 	print $callback.'('.json_encode($expressionList).')';

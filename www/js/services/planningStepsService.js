@@ -24,11 +24,12 @@
             initializePlanningSequence: initializePlanningSequence,
             getCurrentStep: getCurrentStep,
             isCompleted: isCompleted,
+            hasCT: hasCT,
             destroy: destroy
         };
 
         // Initilaize the sequence when app is loaded
-        initializePlanningSequence();
+        //initializePlanningSequence();
 
         return service;
 
@@ -39,6 +40,7 @@
         }
 
         function initializePlanningSequence(){
+            destroy();
             var ctAppointment = getCTSimAppointment();
             var planningTasks = Tasks.getAllRecentTasks();
 
@@ -99,6 +101,11 @@
                 sequence[step] = [];
             }
         }
+
+        function hasCT() {
+            return sequence['CT for Radiotherapy Planning'].length > 0;
+        }
+
     }
 
 })();

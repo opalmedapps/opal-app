@@ -9,6 +9,10 @@ var myApp=angular.module('MUHCApp');
 *@description Provides an API to encrypt and decrypt objects, arrays, or strings.
 **/
 myApp.service('EncryptionService',function(UserAuthorizationInfo){
+
+	var securityAnswerHash = '';
+
+
 	function decryptObject(object,secret)
 	{
 		if(typeof object =='string')
@@ -18,6 +22,7 @@ myApp.service('EncryptionService',function(UserAuthorizationInfo){
 		}else{
 			for (var key in object)
 			{
+				//console.log(key);
 				if (typeof object[key]=='object')
 				{
 					decryptObject(object[key],secret);
@@ -33,7 +38,9 @@ myApp.service('EncryptionService',function(UserAuthorizationInfo){
 					else
 					{
 						var decipherbytes = CryptoJS.AES.decrypt(object[key], secret);
+						//console.log(decipherbytes);
 						object[key]=decipherbytes.toString(CryptoJS.enc.Utf8);
+						//console.log(object[key]);
 					}
 				}
 			}
@@ -44,14 +51,14 @@ myApp.service('EncryptionService',function(UserAuthorizationInfo){
 	{
 		
 	 	if (typeof object=='string'){
-	 		var ciphertext = CryptoJS.AES.encrypt(object, secret);
-	 		var encryptedString=ciphertext.toString();
+	 		return CryptoJS.AES.encrypt(object, secret).toString();
+	 		//var encryptedString=ciphertext.toString();
 
-	 		return encryptedString;
+	 		//return encryptedString;
 	 	}else if(typeof object!=='string'&& typeof object!=='object'){
 	 		object=String(object);
-	 		var ciphertext = CryptoJS.AES.encrypt(object, secret);
-	 		var encryptedString=ciphertext.toString();
+	 		var encryptedString = CryptoJS.AES.encrypt(object, secret).toString();
+	 		//var encryptedString=ciphertext.toString();
 	 		console.log(encryptedString);
 	 		return encryptedString;
 	 	}else{
@@ -63,8 +70,8 @@ myApp.service('EncryptionService',function(UserAuthorizationInfo){
 			    }else
 			    {
 			      if (typeof object[key] !=='string') object[key]=String(object[key]);
-			      var ciphertext = CryptoJS.AES.encrypt(object[key],secret );
-			      object[key]=ciphertext.toString();
+			      object[key] = CryptoJS.AES.encrypt(object[key],secret ).toString();
+			      //object[key]=ciphertext.toString();
 			    }
 			}
 
@@ -82,10 +89,8 @@ myApp.service('EncryptionService',function(UserAuthorizationInfo){
 		**/
 		decryptData:function(object)
 		{
-			//Get Password
-			var secret=UserAuthorizationInfo.getPassword();
 			//Decrypt
-			return decryptObject(object,secret);
+			return decryptObject(object,securityAnswerHash);
 		},
 		/**
 		*@ngdoc method
@@ -97,8 +102,7 @@ myApp.service('EncryptionService',function(UserAuthorizationInfo){
 		**/
 		encryptData:function(object)
 		{
-			var secret=UserAuthorizationInfo.getPassword();
-			return encryptObject(object,secret);
+			return encryptObject(object,securityAnswerHash);
 		},
 		/**
 		*@ngdoc method
@@ -125,7 +129,16 @@ myApp.service('EncryptionService',function(UserAuthorizationInfo){
 		encryptWithKey:function(object, secret)
 		{
 			return encryptObject(object,secret);
-		}
+		},
+
+		setSecurityAns: function (answer) {
+			securityAnswerHash = answer;
+        },
+
+		getSecurityAns: function () {
+			return securityAnswerHash;
+        }
+
 	};
 
 

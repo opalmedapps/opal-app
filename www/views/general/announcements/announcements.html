@@ -4,8 +4,8 @@
     <div class="center" ng-class="fontSizeTitle">{{"GENERALANNOUNCEMENTS"|translate}}</div>
   </ons-toolbar>
 <div ng-hide="noAnnouncements">
-  <ons-list  ng-repeat="announcement in announcements" ng-click="goToAnnouncement(announcement)">
-  <ons-list-header class="person-list-header" ng-class="fontSizeTitle">{{announcement.DateAdded|date:'fullDate'}}</ons-list-header>
+  <ons-list  ng-repeat="announcement in announcements | orderBy:'-DateAdded'" ng-click="goToAnnouncement(announcement)">
+  <ons-list-header class="person-list-header" ng-class="fontSizeTitle" ng-show="showHeader($index)">{{announcement.DateAdded|date:'fullDate'}}</ons-list-header>
   <ons-list-item modifier="chevron" class="item">
     <ons-row align="center" >
       <ons-col width="70px" align="center">

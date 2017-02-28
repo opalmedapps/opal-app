@@ -19,6 +19,7 @@
 	$aliasSer 	        = $_POST['serial'];
 	$aliasTerms	        = $_POST['terms'];
     $aliasEduMat        = $_POST['eduMat'];
+    $aliasSourceDB      = $_POST['source_db'];
 
 	$aliasArray	= array(
 		'name_EN' 	        => $aliasName_EN,
@@ -27,7 +28,8 @@
 		'description_FR'    => $aliasDesc_FR,
  		'serial' 	        => $aliasSer,
         'terms' 	        => $aliasTerms,
-        'edumat'            => $aliasEduMat
+        'edumat'            => $aliasEduMat,
+        'source_db'         => $aliasSourceDB
 	);
 
 	// Call function

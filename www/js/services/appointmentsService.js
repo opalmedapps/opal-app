@@ -42,6 +42,8 @@ myApp.service('Appointments', ['$q', 'RequestToServer','$cordovaCalendar','UserA
     var numberOfSessions=0;
     function searchAppointmentsAndDelete(appointments)
     {
+        //console.log(appointments);
+        //console.log(userAppointmentsArray);
         for (var i = 0; i < appointments.length; i++) {
             for (var j = 0; j < userAppointmentsArray.length; j++) {
                 if(userAppointmentsArray[j].AppointmentSerNum==appointments[i].AppointmentSerNum)
@@ -134,8 +136,7 @@ myApp.service('Appointments', ['$q', 'RequestToServer','$cordovaCalendar','UserA
         var todayAppointments = getAppointmentsInPeriod('Today');
         console.log(todayAppointments);
         todayAppointments = todayAppointments.filter(function(appointment){
-            if(appointment.hasOwnProperty('StatusClose')) return false;
-            else return true;
+            return !appointment.hasOwnProperty('StatusClose');
         });
         if(todayAppointments.length >0)
         {
@@ -147,6 +148,8 @@ myApp.service('Appointments', ['$q', 'RequestToServer','$cordovaCalendar','UserA
     function getAppointmentsInPeriod(period)
     {
         //Variables for comparing dates
+        //console.log(userAppointmentsArray);
+        //console.log(appointmentsLocalStorage);
         var today=new Date();
         var day=today.getDate();
         var month=today.getMonth();
@@ -184,8 +187,8 @@ myApp.service('Appointments', ['$q', 'RequestToServer','$cordovaCalendar','UserA
         //Format date to javascript date
         var index=-1;
         numberOfSessions=0;
-        appointmentsLocalStorage=appointmentsLocalStorage.concat(appointments);
-        LocalStorage.WriteToLocalStorage('Appointments',appointmentsLocalStorage);
+        // appointmentsLocalStorage=appointmentsLocalStorage.concat(appointments);
+        // LocalStorage.WriteToLocalStorage('Appointments',appointmentsLocalStorage);
         // var today = new Date();
         // today.setDate(today.getDate()-10);
         for (var i = 0; i < appointments.length; i++) {
@@ -195,6 +198,9 @@ myApp.service('Appointments', ['$q', 'RequestToServer','$cordovaCalendar','UserA
             appointments[i].LastUpdated =  $filter('formatDate')(appointments[i].LastUpdated);
             userAppointmentsArray.push(appointments[i]);
         }
+
+        LocalStorage.WriteToLocalStorage('Appointments',userAppointmentsArray);
+
         //Sort Appointments chronologically most recent first
         userAppointmentsArray = $filter('orderBy')(userAppointmentsArray, 'ScheduledStartTime', false);
         //Extracts treatment session appointments
@@ -354,7 +360,9 @@ myApp.service('Appointments', ['$q', 'RequestToServer','$cordovaCalendar','UserA
          **/
         updateUserAppointments:function(appointments)
         {
+            console.log("called update user appointments");
             searchAppointmentsAndDelete(appointments);
+            //this.clearAppointments();
             addAppointmentsToService(appointments);
         },
         /**
@@ -454,7 +462,7 @@ myApp.service('Appointments', ['$q', 'RequestToServer','$cordovaCalendar','UserA
                 if(appointments[i].AppointmentSerNum==serNum){
                     userAppointmentsArray[i].Checkin='1';
                     appointmentsLocalStorage[i].Checkin = '1';
-                    LocalStorage.WriteToLocalStorage('Appoinments',appointmentsLocalStorage);
+                    LocalStorage.WriteToLocalStorage('Appointments',userAppointmentsArray);
                 }
             }
         },
@@ -519,7 +527,7 @@ myApp.service('Appointments', ['$q', 'RequestToServer','$cordovaCalendar','UserA
                     userAppointmentsArray[i].StatusClose = true;
                     appointmentsLocalStorage[i].StatusClose = true;
                 }
-                LocalStorage.WriteToLocalStorage('Appointments', appointmentsLocalStorage);
+                LocalStorage.WriteToLocalStorage('Appointments', userAppointmentsArray);
             }
         },
         /**
@@ -554,8 +562,8 @@ myApp.service('Appointments', ['$q', 'RequestToServer','$cordovaCalendar','UserA
          **/
         getAppointmentName:function(serNum)
         {
-            console.log(serNum);
-            console.log(userAppointmentsArray);
+            //console.log(serNum);
+            //console.log(userAppointmentsArray);
             for (var i = 0; i < userAppointmentsArray.length; i++) {
                 if(userAppointmentsArray[i].AppointmentSerNum == serNum)
                 {
@@ -579,7 +587,7 @@ myApp.service('Appointments', ['$q', 'RequestToServer','$cordovaCalendar','UserA
                     userAppointmentsArray[i].ReadStatus = '1';
                     appointmentsLocalStorage[i].ReadStatus = '1';
                     RequestToServer.sendRequest('Read',{"Id":serNum, "Field": "Appointments"});
-                    LocalStorage.WriteToLocalStorage('Appointments', appointmentsLocalStorage);
+                    LocalStorage.WriteToLocalStorage('Appointments', userAppointmentsArray);
                 }
             }
         },
@@ -716,7 +724,8 @@ myApp.service('Appointments', ['$q', 'RequestToServer','$cordovaCalendar','UserA
         },
 
         getRecentCalledAppointment: function () {
-            var todaysAppointments = getAppointmentsInPeriod('Today');
+            var todaysAppointments = [];
+            todaysAppointments = getAppointmentsInPeriod('Today');
             console.log(todaysAppointments);
             var now=new Date();
 

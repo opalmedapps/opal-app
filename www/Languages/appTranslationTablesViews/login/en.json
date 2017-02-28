@@ -10,7 +10,7 @@
 	"CONTACTHOSPITAL": "Contact the hospital for assitance",
 	"CONTINUE": "Continue",
 	"EMAIL": "Email",
-	"EMAILPASSWORDSENT": "Password has been reset sucessfully, check your email for your temporary password",
+	"EMAILPASSWORDSENT": "A reset password link has been sent to your email. Please follow the instruction to reset your password",
 	"ENTERANANSWER": "Enter an answer",
 	"ENTERANSWERPLACEHOLDER": "Enter your answer...",
 	"ENTEREMAIL": "Enter your Email Address:",
@@ -18,7 +18,7 @@
 	"ENTERSSNPLACEHOLDER": "Enter SSN...",
 	"ENTERVALIDPASSWORD": "Enter a valid password",
 	"ERRORANSWERNOTMATCH": "Answer does not match our records",
-	"ERRORCONTACTINGHOSPITAL": "Error connecting with the hospital, contact hospital",
+	"ERRORCONTACTINGHOSPITAL": "Error contacting the hospital. Try again later",
 	"ERRORENTERSSNNUMBER": "Enter an SSN number",
 	"ERRORENTERVALIDSSN": "Enter Valid SSN",
 	"ERRORINCORRECTSSN": "The SSN enter does not much our records, try again",
@@ -66,5 +66,7 @@
 	"SIGNINDIFFERENTACCOUNT": "Sign in with a different account",
 	"SIGNOUT": "Sign out",
 	"TERMSOFUSE": "Terms of Use",
+	"TRUST_DEVICE": "Set this device as a trusted device? ",
+	"TOO_MANY_REQUESTS": "Too many login attempts. Please try again later.",
 	"UNATTENDED": "Do not leave your phone unattended."
 }

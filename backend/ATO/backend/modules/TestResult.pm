@@ -24,10 +24,8 @@ use Patient; # Our patient module
 use Alias; # Our Alias module
 
 #---------------------------------------------------------------------------------
-# Connect to the databases
+# Connect to our database
 #---------------------------------------------------------------------------------
-
-my $sourceDatabase	= $Database::sourceDatabase;
 my $SQLDatabase		= $Database::targetDatabase;
 
 #====================================================================================
@@ -38,7 +36,8 @@ sub new
 	my $class = shift;
     my $testresult = {
         _ser                => undef,
-        _ariaser            => undef,
+        _sourceuid          => undef,
+        _sourcedbser        => undef,
         _patientser         => undef,
         _name               => undef,
         _facname            => undef,
@@ -69,13 +68,23 @@ sub setTestResultSer
 }
 
 #====================================================================================
-# Subroutine to set the testresult aria serial
+# Subroutine to set the testresult source database serial
 #====================================================================================
-sub setTestResultAriaSer
+sub setTestResultSourceDatabaseSer
 {
-	my ($testresult, $ariaser) = @_; # object with provided serial in arguments
-	$testresult->{_ariaser} = $ariaser; # set the ser
-	return $testresult->{_ariaser};
+	my ($testresult, $sourcedbser) = @_; # object with provided serial in arguments
+	$testresult->{_sourcedbser} = $sourcedbser; # set the ser
+	return $testresult->{_sourcedbser};
+}
+
+#====================================================================================
+# Subroutine to set the testresult uid
+#====================================================================================
+sub setTestResultSourceUID
+{
+	my ($testresult, $sourceuid) = @_; # object with provided id in arguments
+	$testresult->{_sourceuid} = $sourceuid; # set the id
+	return $testresult->{_sourceuid};
 }
 
 #====================================================================================
@@ -208,12 +217,21 @@ sub getTestResultSer
 }
 
 #====================================================================================
-# Subroutine to get the testresult aria ser
+# Subroutine to get the testresult source database
 #====================================================================================
-sub getTestResultAriaSer
+sub getTestResultSourceDatabaseSer
 {
 	my ($testresult) = @_; # our testresult object
-	return $testresult->{_ariaser};
+	return $testresult->{_sourcedbser};
+}
+
+#====================================================================================
+# Subroutine to get the testresult source uid
+#====================================================================================
+sub getTestResultSourceUID
+{
+	my ($testresult) = @_; # our testresult object
+	return $testresult->{_sourceuid};
 }
 
 #====================================================================================
@@ -334,7 +352,7 @@ sub getTestResultsFromSourceDB
     my @TRList = (); # a list for test result objects
 
     # when we retrieve query results
-    my ($pt_id, $visit_id, $test_id, $tr_group_id, $tr_id, $ariaser, $name, $facname, $testdate);
+    my ($pt_id, $visit_id, $test_id, $tr_group_id, $tr_id, $sourceuid, $name, $facname, $testdate);
     my ($maxnorm, $minnorm, $apprvflag, $abnormalflag, $testvalue, $testvaluestring);
     my ($unitdesc, $validentry);
 
@@ -343,93 +361,98 @@ sub getTestResultsFromSourceDB
     # in order to search for the corresponding test result in the database
 	foreach my $Patient (@patientList) {
 
+		my $patientSer		    = $Patient->getPatientSer(); # get patient serial
+		my $patientSourceUID    = $Patient->getPatientSourceUID(); # get uid
+        my $sourceDBSer         = $Patient->getPatientSourceDatabaseSer(); 
+		my $lasttransfer	    = $Patient->getPatientLastTransfer(); # get last updated
 
-		my $patientSer		= $Patient->getPatientSer(); # get patient serial
-		my $patientAriaSer  = $Patient->getPatientAriaSer(); # get aria serial
-		my $lastupdated		= $Patient->getPatientLastUpdated(); # get last updated
+        # ARIA
+        if ($sourceDBSer eq 1) {
 
-        my $trInfo_sql = "
-            SELECT DISTINCT
-                tr.pt_id,
-                tr.pt_visit_id,
-                tr.test_id,
-                tr.test_result_group_id,
-                tr.test_result_id,
-                RTRIM(tr.abnormal_flag_cd),
-                RTRIM(tr.comp_name),
-                RTRIM(tr.fac_comp_name),
-                tr.date_test_pt_test,
-                tr.max_norm,
-                tr.min_norm,
-                tr.result_appr_ind,
-                tr.test_value,
-                tr.test_value_string,
-                RTRIM(tr.unit_desc),
-                tr.valid_entry_ind
+            my $sourceDatabase = Database::connectToSourceDatabase($sourceDBSer);
+            my $trInfo_sql = "
+                SELECT DISTINCT
+                    tr.pt_id,
+                    tr.pt_visit_id,
+                    tr.test_id,
+                    tr.test_result_group_id,
+                    tr.test_result_id,
+                    RTRIM(tr.abnormal_flag_cd),
+                    RTRIM(tr.comp_name),
+                    RTRIM(tr.fac_comp_name),
+                    tr.date_test_pt_test,
+                    tr.max_norm,
+                    tr.min_norm,
+                    tr.result_appr_ind,
+                    tr.test_value,
+                    tr.test_value_string,
+                    RTRIM(tr.unit_desc),
+                    tr.valid_entry_ind
+                FROM 
+                    varianenm.dbo.test_result tr,
+                    varianenm.dbo.pt pt,
+                    variansystem.dbo.Patient Patient
+                WHERE
+                    tr.pt_id                = pt.pt_id
+                AND pt.patient_ser          = Patient.PatientSer
+                AND Patient.PatientSer      = '$patientSourceUID'
+                --AND Patient.PatientId     = '1092300'
+                AND tr.trans_log_mtstamp    > '$lasttransfer'
 
-            FROM 
-                varianenm.dbo.test_result tr,
-                varianenm.dbo.pt pt,
-                Patient
-            WHERE
-                tr.pt_id                = pt.pt_id
-            AND pt.patient_ser          = Patient.PatientSer
-            AND Patient.PatientSer      = '$patientAriaSer'
-            --AND Patient.PatientId       = '1092300'
-            AND tr.trans_log_mtstamp    > '$lastupdated'
+            ";
 
-        ";
+            # prepare query
+	    	my $query = $sourceDatabase->prepare($trInfo_sql)
+		    	or die "Could not prepare query: " . $sourceDatabase->errstr;
 
-        # prepare query
-		my $query = $sourceDatabase->prepare($trInfo_sql)
-			or die "Could not prepare query: " . $sourceDatabase->errstr;
+    		# execute query
+	    	$query->execute()
+		    	or die "Could not execute query: " . $query->errstr;
 
-		# execute query
-		$query->execute()
-			or die "Could not execute query: " . $query->errstr;
+    		$data = $query->fetchall_arrayref(); 
+            foreach my $row (@$data) {
 
-		$data = $query->fetchall_arrayref(); 
+                my $testresult = new TestResult();
 
-        foreach my $row (@$data) {
+                $pt_id              = $row->[0];
+                $visit_id           = $row->[1];
+                $test_id            = $row->[2];
+                $tr_group_id        = $row->[3];
+                $tr_id              = $row->[4];
+                # combine the above id to create a unique id
+                $sourceuid          = $pt_id.$visit_id.$test_id.$tr_group_id.$tr_id;
+        
+                $abnormalflag       = $row->[5];
+                $name               = $row->[6];
+                $facname            = $row->[7];
+                $testdate           = convertDateTime($row->[8]);
+                $maxnorm            = $row->[9];
+                $minnorm            = $row->[10];
+                $apprvflag          = $row->[11];
+                $testvalue          = $row->[12];
+                $testvaluestring    = $row->[13];
+                $unitdesc           = $row->[14];
+                $validentry         = $row->[15];
+    
+                $testresult->setTestResultPatientSer($patientSer);
+                $testresult->setTestResultSourceDatabaseSer($sourceDBSer);
+                $testresult->setTestResultSourceUID($sourceuid);
+                $testresult->setTestResultName($name);
+                $testresult->setTestResultFacName($facname);
+                $testresult->setTestResultAbnormalFlag($abnormalflag);
+                $testresult->setTestResultTestDate($testdate);
+                $testresult->setTestResultMaxNorm($maxnorm);
+                $testresult->setTestResultMinNorm($minnorm);
+                $testresult->setTestResultApprovedFlag($apprvflag);
+                $testresult->setTestResultTestValue($testvalue);
+                $testresult->setTestResultTestValueString($testvaluestring);
+                $testresult->setTestResultUnitDesc($unitdesc);
+                $testresult->setTestResultValidEntry($validentry);
+           
+                push(@TRList, $testresult);
+            }
 
-            my $testresult = new TestResult();
-
-            $pt_id              = $row->[0];
-            $visit_id           = $row->[1];
-            $test_id            = $row->[2];
-            $tr_group_id        = $row->[3];
-            $tr_id              = $row->[4];
-            # combine the above id to create a unique id
-            $ariaser            = $pt_id.$visit_id.$test_id.$tr_group_id.$tr_id;
-
-            $abnormalflag       = $row->[5];
-            $name               = $row->[6];
-            $facname            = $row->[7];
-            $testdate           = convertDateTime($row->[8]);
-            $maxnorm            = $row->[9];
-            $minnorm            = $row->[10];
-            $apprvflag          = $row->[11];
-            $testvalue          = $row->[12];
-            $testvaluestring    = $row->[13];
-            $unitdesc           = $row->[14];
-            $validentry         = $row->[15];
-
-            $testresult->setTestResultPatientSer($patientSer);
-            $testresult->setTestResultAriaSer($ariaser);
-            $testresult->setTestResultName($name);
-            $testresult->setTestResultFacName($facname);
-            $testresult->setTestResultAbnormalFlag($abnormalflag);
-            $testresult->setTestResultTestDate($testdate);
-            $testresult->setTestResultMaxNorm($maxnorm);
-            $testresult->setTestResultMinNorm($minnorm);
-            $testresult->setTestResultApprovedFlag($apprvflag);
-            $testresult->setTestResultTestValue($testvalue);
-            $testresult->setTestResultTestValueString($testvaluestring);
-            $testresult->setTestResultUnitDesc($unitdesc);
-            $testresult->setTestResultValidEntry($validentry);
- 
-                
-            push(@TRList, $testresult);
+            $sourceDatabase->disconnect();
 
         }
 
@@ -446,9 +469,11 @@ sub getTestResultsFromSourceDB
 sub inOurDatabase
 {
     my ($testresult) = @_; # our object
-    my $ariaser = $testresult->getTestResultAriaSer(); 
 
-    my $TRAriaSerInDB = 0; # false by default. Will be tru if test result exists
+    my $sourceuid   = $testresult->getTestResultSourceUID();
+    my $sourcedbser = $testresult->getTestResultSourceDatabaseSer();
+
+    my $TRSourceUIDInDB = 0; # false by default. Will be tru if test result exists
     my $ExistingTR = (); # data to be entered if test result exists
 
     # Other variables, if it exists
@@ -474,7 +499,8 @@ sub inOurDatabase
         FROM
             TestResult AS tr
         WHERE
-            tr.TestResultAriaSer    = '$ariaser'
+            tr.TestResultAriaSer    = '$sourceuid'
+        AND tr.SourceDatabaseSerNum = '$sourcedbser'
     ";
 
     # prepare query
@@ -489,7 +515,7 @@ sub inOurDatabase
 
         $ser                = $data[0];
         $patientser         = $data[1];
-        $TRAriaSerInDB      = $data[2];
+        $TRSourceUIDInDB    = $data[2];
         $name               = $data[3];
         $facname            = $data[4];
         $abnormalflag       = $data[5];
@@ -503,13 +529,14 @@ sub inOurDatabase
         $validentry         = $data[13];
     }
 
-    if ($TRAriaSerInDB) {
+    if ($TRSourceUIDInDB) {
 
         $ExistingTR = new TestResult(); 
 
         $ExistingTR->setTestResultSer($ser);
         $ExistingTR->setTestResultPatientSer($patientser);
-        $ExistingTR->setTestResultAriaSer($TRAriaSerInDB);
+        $ExistingTR->setTestResultSourceUID($TRSourceUIDInDB);
+        $ExistingTR->setTestResultSourceDatabaseSer($sourcedbser);
         $ExistingTR->setTestResultName($name);
         $ExistingTR->setTestResultFacName($facname);
         $ExistingTR->setTestResultAbnormalFlag($abnormalflag);
@@ -536,7 +563,8 @@ sub insertTestResultIntoOurDB
     my ($testresult) = @_; # our object
 
     my $patientser              = $testresult->getTestResultPatientSer();
-    my $ariaser                 = $testresult->getTestResultAriaSer();
+    my $sourceuid               = $testresult->getTestResultSourceUID();
+    my $sourcedbser             = $testresult->getTestResultSourceDatabaseSer();
     my $name                    = $testresult->getTestResultName();
     my $facname                 = $testresult->getTestResultFacName();
     my $abnormalflag            = $testresult->getTestResultAbnormalFlag();
@@ -553,6 +581,7 @@ sub insertTestResultIntoOurDB
         INSERT INTO 
             TestResult (
                 PatientSerNum,
+                SourceDatabaseSerNum,
                 TestResultAriaSer,
                 ComponentName,
                 FacComponentName,
@@ -568,7 +597,8 @@ sub insertTestResultIntoOurDB
             )
         VALUES (
             '$patientser',
-            '$ariaser',
+            '$sourcedbser',
+            '$sourceuid',
             \"$name\",
             \"$facname\",
             '$abnormalflag',
@@ -609,7 +639,8 @@ sub updateDatabase
 {
     my ($testresult) = @_; # our object
 
-    my $ariaser                 = $testresult->getTestResultAriaSer();
+    my $sourceuid               = $testresult->getTestResultSourceUID();
+    my $sourcedbser             = $testresult->getTestResultSourceDatabaseSer();
     my $name                    = $testresult->getTestResultName();
     my $facname                 = $testresult->getTestResultFacName();
     my $abnormalflag            = $testresult->getTestResultAbnormalFlag();
@@ -638,7 +669,8 @@ sub updateDatabase
             UnitDescription         = '$unitdesc',
             ValidEntry              = '$validentry'
         WHERE
-            TestResultAriaSer       = '$ariaser'
+            TestResultAriaSer       = '$sourceuid'
+        AND SourceDatabaseSerNum    = '$sourcedbser'
     ";
 
     # prepare query

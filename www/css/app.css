@@ -2504,3 +2504,11 @@ input:focus {
 .style-4 input.focus {
     border-bottom: solid 2px #969696;
 }
+
+#holder{
+    margin-top: 5px;
+    position: relative;
+    overflow: scroll !important;
+    touch-action: manipulation !important;
+    -webkit-user-drag: element !important;
+}

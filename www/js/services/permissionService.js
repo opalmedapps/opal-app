@@ -9,10 +9,10 @@
         .module('MUHCApp')
         .factory('Permissions', Permissions);
 
-    Permissions.$inject = ['Constants'];
+    Permissions.$inject = ['$q', 'Constants'];
 
     /* @ngInject */
-    function Permissions(Constants) {
+    function Permissions($q, Constants) {
         var service = {
             enablePermission: enablePermission
         };
@@ -20,25 +20,36 @@
 
         ////////////////
 
-        //Check for user permissions to write/read from storage, required for android 6+
+        //Check if enable and , required for android 6+
         function enablePermission(permission_type, msg) {
 
-            if(Constants.app) {
+            var deferred = $q.defer();
+            if (Constants.app) {
                 if (ons.platform.isAndroid()) {
                     var permissions = window.cordova.plugins.permissions;
                     permissions.hasPermission(permissions[permission_type], function (status) {
                         if (!status.hasPermission) {
                             var errorCallback = function () {
                                 console.warn(msg);
+                                deferred.reject({Permission: permission_type, Success: false, Message: msg})
                             };
 
                             permissions.requestPermission(permissions[permission_type], function (status) {
-                                if (!status.hasPermission) errorCallback();
+                                if (!status.hasPermission) {
+                                    console.log("called in request permission")
+                                    errorCallback();
+                                }
+                                else deferred.resolve({Permission: permission_type, Success: true})
                             }, errorCallback());
                         }
                     }, null);
+                } else {
+                    deferred.resolve({Permission: permission_type, Success: true})
                 }
+            } else{
+                deferred.reject({Reason: 'Not a device'})
             }
+            return deferred.promise;
 
         }
     }

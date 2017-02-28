@@ -27,9 +27,8 @@ use Priority; # Priority.pm
 use Diagnosis; # Diagnosis.pm
 
 #---------------------------------------------------------------------------------
-# Connect to the databases
+# Connect to the database
 #---------------------------------------------------------------------------------
-my $sourceDatabase	= $Database::sourceDatabase;
 my $SQLDatabase		= $Database::targetDatabase;
 
 #====================================================================================
@@ -39,14 +38,20 @@ sub new
 {
 	my $class = shift;
 	my $appointment = {
-		_ser			=> undef,
-		_ariaser		=> undef,
-		_patientser		=> undef,
+		_ser			    => undef,
+        _sourcedbser        => undef,
+		_sourceuid	        => undef,
+		_patientser		    => undef,
+        _aliasser           => undef,
 		_aliasexpressionser	=> undef,
 		_startdatetime		=> undef,
 		_enddatetime		=> undef,
         _diagnosisser       => undef,
         _priorityser        => undef,
+        _status             => undef,
+        _state              => undef,
+        _actualstartdate    => undef,
+        _actualenddate      => undef,
 	};
 
 	# bless associates an object with a class so Perl knows which package to search for
@@ -55,6 +60,7 @@ sub new
 	return $appointment;
 }
 
+# HETR HJDEWS HJDE
 #====================================================================================
 # Subroutine to set the Appointment Serial
 #====================================================================================
@@ -65,14 +71,25 @@ sub setApptSer
 	return $appointment->{_ser};
 }
 
+
+#======================================================================================
+# Subroutine to set the Appointment Source DB Serial
 #====================================================================================
-# Subroutine to set the Appointment Aria serial
-#====================================================================================
-sub setApptAriaSer
+sub setApptSourceDatabaseSer
 {
-	my ($appointment, $ariaser) = @_; # appt object with provided serial in arguments
-	$appointment->{_ariaser} = $ariaser; # set the appt serial
-	return $appointment->{_ariaser};
+	my ($appointment, $sourcedbser) = @_; # appt object with provided serial in arguments
+	$appointment->{_sourcedbser} = $sourcedbser; # set the appt ser
+	return $appointment->{_sourcedbser};
+}
+#
+#==================================================================================
+# Subroutine to set the Appointment Source UID
+#====================================================================================
+sub setApptSourceUID
+{
+	my ($appointment, $sourceuid) = @_; # appt object with provided serial in arguments
+	$appointment->{_sourceuid} = $sourceuid; # set the appt serial
+	return $appointment->{_sourceuid};
 }
 
 #====================================================================================
@@ -85,7 +102,15 @@ sub setApptPatientSer
 	return $appointment->{_patientser};
 }
 
-
+#====================================================================================
+# Subroutine to set the Appointment Alias Ser
+#====================================================================================
+sub setApptAliasSer
+{
+	my ($appointment, $aliasser) = @_; # appt object with provided serial in arguments
+	$appointment->{_aliasser} = $aliasser;
+	return $appointment->{_aliasser};
+}
 
 #====================================================================================
 # Subroutine to set the Appointment Alias Expression Ser
@@ -95,6 +120,26 @@ sub setApptAliasExpressionSer
 	my ($appointment, $aliasexpressionser) = @_; # appt object with provided serial in arguments
 	$appointment->{_aliasexpressionser} = $aliasexpressionser;
 	return $appointment->{_aliasexpressionser};
+}
+
+#====================================================================================
+# Subroutine to set the Appointment Status
+#====================================================================================
+sub setApptStatus
+{
+	my ($appointment, $status) = @_; # appt object with provided status in arguments
+	$appointment->{_status} = $status; # set the appt status
+	return $appointment->{_status};
+}
+
+#====================================================================================
+# Subroutine to set the Appointment State
+#====================================================================================
+sub setApptState
+{
+	my ($appointment, $state) = @_; # appt object with provided state in arguments
+	$appointment->{_state} = $state; # set the appt state
+	return $appointment->{_state};
 }
 
 #====================================================================================
@@ -115,6 +160,26 @@ sub setApptEndDateTime
 	my ($appointment, $enddatetime) = @_; # appt object with provided datetime in arguments
 	$appointment->{_enddatetime} = $enddatetime; # set the appt datetime
 	return $appointment->{_enddatetime};
+}
+
+#====================================================================================
+# Subroutine to set the Appointment Actual Start DateTime
+#====================================================================================
+sub setApptActualStartDate
+{
+	my ($appointment, $actualstartdate) = @_; # appt object with provided datetime in arguments
+	$appointment->{_actualstartdate} = $actualstartdate; # set the appt datetime
+	return $appointment->{_actualstartdate};
+}
+
+#====================================================================================
+# Subroutine to set the Appointment Actual End DateTime
+#====================================================================================
+sub setApptActualEndDate
+{
+	my ($appointment, $actualenddate) = @_; # appt object with provided datetime in arguments
+	$appointment->{_actualenddate} = $actualenddate; # set the appt datetime
+	return $appointment->{_actualenddate};
 }
 
 #====================================================================================
@@ -147,12 +212,21 @@ sub getApptSer
 }
 
 #====================================================================================
-# Subroutine to get the Appointment aria serial
+# Subroutine to get the Appointment Source DB Serial
 #====================================================================================
-sub getApptAriaSer
+sub getApptSourceDatabaseSer
 {
 	my ($appointment) = @_; # our appt object
-	return $appointment->{_ariaser};
+	return $appointment->{_sourcedbser};
+}
+
+#====================================================================================
+# Subroutine to get the Appointment Source UID
+#====================================================================================
+sub getApptSourceUID
+{
+	my ($appointment) = @_; # our appt object
+	return $appointment->{_sourceuid};
 }
 
 #====================================================================================
@@ -165,12 +239,39 @@ sub getApptPatientSer
 }
 
 #====================================================================================
+# Subroutine to get the Appointment Alias Ser
+#====================================================================================
+sub getApptAliasSer
+{
+	my ($appointment) = @_; # our appt object
+	return $appointment->{_aliasser};
+}
+
+#====================================================================================
 # Subroutine to get the Appointment Alias Expression Ser
 #====================================================================================
 sub getApptAliasExpressionSer
 {
 	my ($appointment) = @_; # our appt object
 	return $appointment->{_aliasexpressionser};
+}
+
+#====================================================================================
+# Subroutine to get the Appointment Status
+#====================================================================================
+sub getApptStatus
+{
+	my ($appointment) = @_; # our appt object
+	return $appointment->{_status};
+}
+
+#====================================================================================
+# Subroutine to get the Appointment State
+#====================================================================================
+sub getApptState
+{
+	my ($appointment) = @_; # our appt object
+	return $appointment->{_state};
 }
 
 #====================================================================================
@@ -189,6 +290,24 @@ sub getApptEndDateTime
 {
 	my ($appointment) = @_; # our appt object
 	return $appointment->{_enddatetime};
+}
+
+#====================================================================================
+# Subroutine to get the Appointment Actual Start Date
+#====================================================================================
+sub getApptActualStartDate
+{
+	my ($appointment) = @_; # our appt object
+	return $appointment->{_actualstartdate};
+}
+
+#====================================================================================
+# Subroutine to get the Appointment Actual End Date
+#====================================================================================
+sub getApptActualEndDate
+{
+	my ($appointment) = @_; # our appt object
+	return $appointment->{_actualenddate};
 }
 
 #====================================================================================
@@ -219,8 +338,9 @@ sub getApptsFromSourceDB
 	my @apptList = (); # initialize a list for appointment objects
 
 	# when we retrieve query results
-	my ($ariaser, $expressionname, $startdatetime, $enddatetime, $resourceser, $priorityser, $diagnosisser);
-    my $lastupdated; 
+	my ($sourceuid, $expressionname, $startdatetime, $enddatetime, $resourceser, $priorityser, $diagnosisser);
+    my ($status, $state, $actualstartdate, $actualenddate);
+    my $lasttransfer; 
 
     # retrieve all aliases that are marked for update
     my @aliasList = Alias::getAliasesMarkedForUpdate('Appointment');
@@ -228,101 +348,186 @@ sub getApptsFromSourceDB
     foreach my $Patient (@patientList) {
 
 		my $patientSer		    = $Patient->getPatientSer(); # get patient serial
-		my $ariaSer		        = $Patient->getPatientAriaSer(); # get aria serial
-		my $patientlastupdated	= $Patient->getPatientLastUpdated(); # get last updated
+		my $patientSSN          = $Patient->getPatientSSN(); # get ssn
+		my $patientLastTransfer	= $Patient->getPatientLastTransfer(); # get last updated
 
         foreach my $Alias (@aliasList) {
 
-            my $aliasSer            = $Alias->getAliasSer(); # get alias serial
+            my $aliasSer            = $Alias->getAliasSer(); 
             my @expressions         = $Alias->getAliasExpressions(); 
-            my $aliaslastupdated    = $Alias->getAliasLastUpdated();
+            my $aliasLastTransfer   = $Alias->getAliasLastTransfer();
+            my $sourceDBSer         = $Alias->getAliasSourceDatabaseSer();
 	        # convert expression list into a string enclosed in quotes
 		    my $expressionText = join ',', map { qq/'$_->{_name}'/ } @expressions;
 
             # compare last updates to find the earliest date 
-            my $formatted_PLU = Time::Piece->strptime($patientlastupdated, "%Y-%m-%d %H:%M:%S");
-            my $formatted_ALU = Time::Piece->strptime($aliaslastupdated, "%Y-%m-%d %H:%M:%S");
+            my $formatted_PLU = Time::Piece->strptime($patientLastTransfer, "%Y-%m-%d %H:%M:%S");
+            my $formatted_ALU = Time::Piece->strptime($aliasLastTransfer, "%Y-%m-%d %H:%M:%S");
             # get the diff in seconds
             my $date_diff = $formatted_PLU - $formatted_ALU;
             if ($date_diff < 0) {
-                $lastupdated = $patientlastupdated;
+                $lasttransfer = $patientLastTransfer;
             } else {
-                $lastupdated = $aliaslastupdated;
+                $lasttransfer = $aliasLastTransfer;
             }
 
+            # ARIA
+            if ($sourceDBSer eq 1) {
 
-    		my $apptInfo_sql = "
-	    		SELECT DISTINCT
-		    		ScheduledActivity.ScheduledActivitySer,
-			    	vv_ActivityLng.Expression1,
-				    ScheduledActivity.ScheduledStartTime,
-    				ScheduledActivity.ScheduledEndTime
-		    	FROM 
-			    	Patient, 
-				    ScheduledActivity, 
-    				ActivityInstance, 
-	    			Activity, 
-		    		vv_ActivityLng, 
-			    	Resource,
-				    Attendee 
-    			WHERE 
-	    			ScheduledActivity.ActivityInstanceSer 		= ActivityInstance.ActivityInstanceSer 
-		    	AND 	ActivityInstance.ActivitySer 			= Activity.ActivitySer 
-			    AND 	Activity.ActivityCode 				    = vv_ActivityLng.LookupValue 
-    			AND 	Patient.PatientSer 				        = ScheduledActivity.PatientSer 
-	    		AND 	Patient.PatientSer				        = '$ariaSer'
-		    	AND 	Attendee.ActivityInstanceSer 	        = ScheduledActivity.ActivityInstanceSer
-    	    	AND 	Attendee.ResourceSer 		            = Resource.ResourceSer
- 	    		AND 	ScheduledActivity.ObjectStatus 			!= 'Deleted' 
-		    	AND 	ScheduledActivity.HstryDateTime	 		> '$lastupdated' 
-                AND     vv_ActivityLng.Expression1              IN ($expressionText)
+                my $sourceDatabase	= Database::connectToSourceDatabase($sourceDBSer);
+        		my $apptInfo_sql = "
+	        		SELECT DISTINCT
+		        		sa.ScheduledActivitySer,
+			        	vva.Expression1,
+				        sa.ScheduledStartTime,
+        				sa.ScheduledEndTime,
+                        sa.ScheduledActivityCode,
+                        sa.ObjectStatus,
+                        sa.ActualStartDate,
+                        sa.ActualEndDate
+	    	    	FROM 
+		    	    	variansystem.dbo.Patient pt, 
+			    	    variansystem.dbo.ScheduledActivity sa, 
+    			    	variansystem.dbo.ActivityInstance ai, 
+	    			    variansystem.dbo.Activity act, 
+    		    		variansystem.dbo.vv_ActivityLng vva, 
+	    		    	variansystem.dbo.Resource re,
+		    		    variansystem.dbo.Attendee att
+    		    	WHERE 
+	    		        sa.ActivityInstanceSer 		= ai.ActivityInstanceSer 
+    		    	AND ai.ActivitySer 			    = act.ActivitySer 
+	    		    AND act.ActivityCode 		    = vva.LookupValue 
+    	    		AND pt.PatientSer 				= sa.PatientSer 
+	    	    	AND pt.SSN				        LIKE '$patientSSN%'
+    		    	AND att.ActivityInstanceSer 	= sa.ActivityInstanceSer
+        	    	AND att.ResourceSer 		    = re.ResourceSer
+		        	AND sa.HstryDateTime	 		> '$lasttransfer' 
+                    AND vva.Expression1             IN ($expressionText)
 	
-    		";
-	    	#print "$apptInfo_sql\n";
-		    # prepare query
-    		my $query = $sourceDatabase->prepare($apptInfo_sql)
-	    		or die "Could not prepare query: " . $sourceDatabase->errstr;
+        		";
+                #print "$apptInfo_sql\n";
+		        # prepare query
+    		    my $query = $sourceDatabase->prepare($apptInfo_sql)
+	    		    or die "Could not prepare query: " . $sourceDatabase->errstr;
 
-		    # execute query
-    		$query->execute()
-	    		or die "Could not execute query: " . $query->errstr;
+    		    # execute query
+        		$query->execute()
+	        		or die "Could not execute query: " . $query->errstr;
 
-            my $data = $query->fetchall_arrayref();
-    		foreach my $row (@$data) {
+                my $data = $query->fetchall_arrayref();
+        		foreach my $row (@$data) {
 
-    			my $appointment = new Appointment(); # new appointment object 
-		
-			    $ariaser	    = $row->[0];
-			    $expressionname	= $row->[1];
-			    $startdatetime	= convertDateTime($row->[2]); 
-			    $enddatetime	= convertDateTime($row->[3]);
+    	    		my $appointment = new Appointment(); # new appointment object 
+		    
+			        $sourceuid	    = $row->[0];
+    			    $expressionname	= $row->[1];
+	    		    $startdatetime	= convertDateTime($row->[2]); 
+		    	    $enddatetime	= convertDateTime($row->[3]);
+                    $status         = $row->[4];
+                    $state          = $row->[5];
+                    $actualstartdate    = convertDateTime($row->[6]);
+                    $actualenddate      = convertDateTime($row->[7]);
 
-                $priorityser    = Priority::getClosestPriority($patientSer, $startdatetime);
-                $diagnosisser   = Diagnosis::getClosestDiagnosis($patientSer, $startdatetime);
-		
-		    	# Search through alias expression list to find associated
-    			# expression serial number (in our DB)
-	    		my $expressionser;
-		    	foreach my $checkExpression (@expressions) {
+                    $priorityser    = Priority::getClosestPriority($patientSer, $startdatetime);
+                    $diagnosisser   = Diagnosis::getClosestDiagnosis($patientSer, $startdatetime);
+    		
+	    	    	# Search through alias expression list to find associated
+    	    		# expression serial number (in our DB)
+	    	    	my $expressionser;
+		    	    foreach my $checkExpression (@expressions) {
     
-	    			if ($checkExpression->{_name} eq $expressionname) { # match
+    	    			if ($checkExpression->{_name} eq $expressionname) { # match
+        
+		        			$expressionser = $checkExpression->{_ser};
+			        		last; # break out of loop
+				        }
+        			}
+
+    	    		$appointment->setApptPatientSer($patientSer);
+	    	    	$appointment->setApptSourceUID($sourceuid);
+                    $appointment->setApptSourceDatabaseSer($sourceDBSer);
+		        	$appointment->setApptAliasExpressionSer($expressionser);
+		    	    $appointment->setApptStartDateTime($startdatetime); 
+    		    	$appointment->setApptEndDateTime($enddatetime); 
+                    $appointment->setApptPrioritySer($priorityser);
+                    $appointment->setApptDiagnosisSer($diagnosisser);
+    		        $appointment->setApptStatus($status);
+	    		    $appointment->setApptState($state);
+		    	    $appointment->setApptActualStartDate($actualstartdate); 
+			        $appointment->setApptActualEndDate($actualenddate);
     
-		    			$expressionser = $checkExpression->{_ser};
-			    		last; # break out of loop
-				    }
-    			}
+	        		push(@apptList, $appointment);
+    	    	}
 
-	    		$appointment->setApptPatientSer($patientSer);
-		    	$appointment->setApptAriaSer($ariaser); 
-		    	$appointment->setApptAliasExpressionSer($expressionser);
-		    	$appointment->setApptStartDateTime($startdatetime); 
-		    	$appointment->setApptEndDateTime($enddatetime); 
-                $appointment->setApptPrioritySer($priorityser);
-                $appointment->setApptDiagnosisSer($diagnosisser);
+                $sourceDatabase->disconnect();
+            }
 
-	    		push(@apptList, $appointment);
-    		}
+            # WaitRoomManagement
+            if ($sourceDBSer eq 2) {
 
+                my $sourceDatabase = Database::connectToSourceDatabase($sourceDBSer);
+        		my $apptInfo_sql = "
+                    SELECT DISTINCT
+                        mval.AppointmentSerNum,
+                        mval.AppointmentCode,
+                        mval.ScheduledDateTime,
+                        mval.Status
+                    FROM
+                        MediVisitAppointmentList mval,
+                        Patient pt
+                    WHERE
+                        mval.PatientSerNum      = pt.PatientSerNum
+                    AND pt.SSN                  LIKE '$patientSSN%'
+                    AND mval.LastUpdated        > '$lasttransfer'
+                    AND mval.AppointmentCode    IN ($expressionText)
+                ";
+                  		    
+                print "$apptInfo_sql\n";
+                my $query = $sourceDatabase->prepare($apptInfo_sql)
+	    		    or die "Could not prepare query: " . $sourceDatabase->errstr;
+
+    		    # execute query
+        		$query->execute()
+	        		or die "Could not execute query: " . $query->errstr;
+
+                my $data = $query->fetchall_arrayref();
+        		foreach my $row (@$data) {
+
+                    my $appointment = new Appointment(); # new appointment object
+
+                    $sourceuid      = $row->[0];
+                    $expressionname = $row->[1];
+                    $startdatetime  = $row->[2];
+                    $enddatetime    = $row->[2];
+                    $status         = $row->[3];
+
+                    # Search through alias expression list to find associated
+    	    		# expression serial number (in our DB)
+	    	    	my $expressionser;
+		    	    foreach my $checkExpression (@expressions) {
+    
+    	    			if ($checkExpression->{_name} eq $expressionname) { # match
+        
+		        			$expressionser = $checkExpression->{_ser};
+			        		last; # break out of loop
+				        }
+        			}
+
+                    $appointment->setApptPatientSer($patientSer);
+                    $appointment->setApptSourceUID($sourceuid);
+                    $appointment->setApptSourceDatabaseSer($sourceDBSer);
+                    $appointment->setApptAliasExpressionSer($expressionser);
+                    $appointment->setApptStartDateTime($startdatetime);
+                    $appointment->setApptEndDateTime($enddatetime);
+                    $appointment->setApptStatus($status);
+                    $appointment->setApptState('Active'); # Set default for WRM
+
+                    push(@apptList, $appointment);
+                }
+
+                $sourceDatabase->disconnect();
+            }
+       
         }
 	}
 
@@ -345,7 +550,8 @@ sub getPatientsAppointmentsFromDateInOurDB
             ap.AppointmentAriaSer,
             ap.ScheduledStartTime,
             ap.ScheduledEndTime,
-            ap.DiagnosisSerNum
+            ap.DiagnosisSerNum,
+            ap.SourceDatabaseSerNum
         FROM 
             Appointment ap
         WHERE
@@ -366,20 +572,22 @@ sub getPatientsAppointmentsFromDateInOurDB
 
         my $ser             = $data[0];
         my $expressionser   = $data[1];
-        my $ariaser         = $data[2];
+        my $sourceUID       = $data[2];
         my $scheduledST     = $data[3];
         my $scheduledET     = $data[4];
         my $diagnosisser    = $data[5];
+        my $sourceDBSer     = $data[6];
 
         $appointment = new Appointment();
 
         $appointment->setApptSer($ser);
         $appointment->setApptAliasExpressionSer($expressionser);
-        $appointment->setApptAriaSer($ariaser);
+        $appointment->setApptSourceUID($sourceUID);
         $appointment->setApptPatientSer($patientSer);
         $appointment->setApptStartDateTime($scheduledST);
         $appointment->setApptEndDateTime($scheduledET);
         $appointment->setApptDiagnosisSer($diagnosisser);
+        $appointment->setApptSourceDatabaseSer($sourceDBSer);
 
         push(@appointments, $appointment);
 
@@ -405,7 +613,8 @@ sub getAllPatientsAppointmentsFromOurDB
             ap.AppointmentAriaSer,
             ap.ScheduledStartTime,
             ap.ScheduledEndTime,
-            ap.DiagnosisSerNum
+            ap.DiagnosisSerNum,
+            ap.SourceDatabaseSerNum
         FROM
             Appointment ap
         WHERE
@@ -424,20 +633,22 @@ sub getAllPatientsAppointmentsFromOurDB
 
         my $ser             = $data[0];
         my $expressionser   = $data[1];
-        my $ariaser         = $data[2];
+        my $sourceUID       = $data[2];
         my $scheduledST     = $data[3];
         my $scheduledET     = $data[4];
         my $diagnosisser    = $data[5];
+        my $sourcedbser     = $data[6];
 
         $appointment = new Appointment();
 
         $appointment->setApptSer($ser);
         $appointment->setApptAliasExpressionSer($expressionser);
-        $appointment->setApptAriaSer($ariaser);
+        $appointment->setApptSourceUID($sourceUID);
         $appointment->setApptPatientSer($patientSer);
         $appointment->setApptStartDateTime($scheduledST);
         $appointment->setApptEndDateTime($scheduledET);
         $appointment->setApptDiagnosisSer($diagnosisser);
+        $appointment->setApptSourceDatabaseSer($sourcedbser);
 
         push(@appointments, $appointment);
 
@@ -448,14 +659,16 @@ sub getAllPatientsAppointmentsFromOurDB
 }
 
 #======================================================================================
-# Subroutine to get appointment info from the ARIA db given a serial
+# Subroutine to get appointment info from the source db given a serial
 #======================================================================================
 sub getApptInfoFromSourceDB 
 {
 
 	my ($appointment) = @_; # Appt object
-	my $apptAriaSer = $appointment->getApptAriaSer();
-	my $aliasSer	= $appointment->getApptAliasSer();
+	my $apptSourceUID   = $appointment->getApptSourceUID();
+	my $aliasSer	    = $appointment->getApptAliasSer();
+    my $apptSourceDBSer = $appointment->getApptSourceDatabaseSer();
+    my $patientSer      = $appointment->getApptPatientSer();
 
 	# get the list of expressions for this alias (they will be of appointment type)
 	my $alias = new Alias(); # initialize object
@@ -465,68 +678,136 @@ sub getApptInfoFromSourceDB
 	# when we retrieve query results
 	my ($expressionname, $startdatetime, $enddatetime);
 	my ($priorityser, $diagnosisser);
+    my ($status, $state, $actualstartdate, $actualenddate);
 
-	my $apptInfo_sql = "
-		SELECT DISTINCT
-			vv_ActivityLng.Expression1,
-			ScheduledActivity.ScheduledStartTime,
-			ScheduledActivity.ScheduledEndTime
-		FROM 
-			Patient , 
-			ScheduledActivity, 
-			ActivityInstance, 
-			Activity, 
-			vv_ActivityLng, 
-			Resource,
-			Attendee 
-		WHERE 
-		 	( ScheduledActivity.ActivityInstanceSer 	= ActivityInstance.ActivityInstanceSer) 
-		AND ( ActivityInstance.ActivitySer 			= Activity.ActivitySer) 
-		AND ( Activity.ActivityCode 				= vv_ActivityLng.LookupValue) 
-		AND ( Patient.PatientSer 				= ScheduledActivity.PatientSer) 
-		AND ( Attendee.ActivityInstanceSer 			= ScheduledActivity.ActivityInstanceSer)
-		AND ( Attendee.ResourceSer 				= Resource.ResourceSer)
- 		AND ( ScheduledActivity.ObjectStatus 			!= 'Deleted' )
-		AND ( ScheduledActivity.ScheduledActivitySer 		= '$apptAriaSer' ) 
-	
-	";
-	#print "$apptInfo_sql\n";
-	# prepare query
-	my $query = $sourceDatabase->prepare($apptInfo_sql)
-		or die "Could not prepare query: " . $sourceDatabase->errstr;
+    # ARIA
+    if ($apptSourceDBSer eq 1) {
+                
+        my $sourceDatabase	= Database::connectToSourceDatabase($sourceDBSer);
+    	my $apptInfo_sql = "
+	    	SELECT DISTINCT
+		    	vva.Expression1,
+			    sa.ScheduledStartTime,
+    			sa.ScheduledEndTime,
+                sa.ScheduledActivityCode,
+                sa.ObjectStatus,
+                sa.ActualStartDate,
+                sa.ActualEndDate
+	    	FROM 
+		    	variansystem.dbo.Patient pt, 
+			    variansystem.dbo.ScheduledActivity sa, 
+    			variansystem.dbo.ActivityInstance ai, 
+	    		variansystem.dbo.Activity act, 
+		    	variansystem.dbo.vv_ActivityLng vva, 
+			    variansystem.dbo.Resource re,
+    			variansystem.dbo.Attendee att 
+	    	WHERE 
+		        sa.ActivityInstanceSer 	    = ai.ActivityInstanceSer 
+    		AND au.ActivitySer 			    = act.ActivitySer 
+	    	AND act.ActivityCode 			= vva.LookupValue 
+		    AND pt.PatientSer 				= sa.PatientSer 
+    		AND att.ActivityInstanceSer 	= sa.ActivityInstanceSer
+	    	AND att.ResourceSer 			= re.ResourceSer
+    		AND sa.ScheduledActivitySer     = '$apptSourceUID'  
+	    
+    	";
+    	#print "$apptInfo_sql\n";
+	    # prepare query
+    	my $query = $sourceDatabase->prepare($apptInfo_sql)
+	    	or die "Could not prepare query: " . $sourceDatabase->errstr;
 
-	# execute query
-	$query->execute()
-		or die "Could not execute query: " . $query->errstr;
+    	# execute query
+	    $query->execute()
+		    or die "Could not execute query: " . $query->errstr;
 
-	while (my @data = $query->fetchrow_array()) {
+    	while (my @data = $query->fetchrow_array()) {
 
-		$expressionname	= $data[0];
-		$startdatetime	= convertDateTime($data[1]); 
-		$enddatetime	= convertDateTime($data[2]);
+    		$expressionname	= $data[0];
+	    	$startdatetime	= convertDateTime($data[1]); 
+		    $enddatetime	= convertDateTime($data[2]);
+            $status         = $data[3];
+            $state          = $data[4];
+            $actualstartdate    = convertDateTime($data[5]);
+            $actualenddate      = convertDateTime($data[6]);
 
-		$priorityser	= Priority::getClosestPriority($patientSer, $startdatetime);
-		$diagnosisser	= Diagnosis::getClosestDiagnosis($patientSer, $startdatetime);
+    		$priorityser	= Priority::getClosestPriority($patientSer, $startdatetime);
+	    	$diagnosisser	= Diagnosis::getClosestDiagnosis($patientSer, $startdatetime);
 				
-		# Search through alias expression list to find associated
-		# expression serial number (in our DB)
-		my $expressionSer;
-		foreach my $checkExpression (@expressions) {
+    		# Search through alias expression list to find associated
+	    	# expression serial number (in our DB)
+    		my $expressionSer;
+	    	foreach my $checkExpression (@expressions) {
+    
+	    		if ($checkExpression->{_name} eq $expressionname) { # match
+		    		$expressionSer = $checkExpression->{_ser};
+			    	last; # break out of loop
+    			}
+	    	}
 
-			if ($checkExpression->{_name} eq $expressionname) { # match
-				$expressionSer = $checkExpression->{_ser};
-				last; # break out of loop
-			}
-		}
+    		$appointment->setApptPatientSer($patientSer);
+	    	$appointment->setApptAliasExpressionSer($expressionSer);
+		    $appointment->setApptStartDateTime($startdatetime); 
+    		$appointment->setApptEndDateTime($enddatetime); 
+	    	$appointment->setApptPrioritySer($priorityser);
+		    $appointment->setApptDiagnosisSer($diagnosisser);
+    		$appointment->setApptState($state);
+	    	$appointment->setApptStatus($status);
+		    $appointment->setApptActualStartDate($actualstartdate); 
+    		$appointment->setApptActualEndDate($actualenddate); 
+    	}
 
-		$appointment->setApptPatientSer($patientSer);
-		$appointment->setApptAliasExpressionSer($expressionSer);
-		$appointment->setApptStartDateTime($startdatetime); 
-		$appointment->setApptEndDateTime($enddatetime); 
-		$appointment->setApptPrioritySer($priorityser);
-		$appointment->setApptDiagnosisSer($diagnosisser);
-	}
+        $sourceDatabase->disconnect();
 
+    }
+
+    # WaitRoomManagement
+    if ($apptSourceDBSer eq 2) {
+
+        my $sourceDatabase = Database::connectToSourceDatabase($sourceDBSer);
+        my $apptInfo_sql = "
+            SELECT DISTINCT
+                mval.AppointmentCode,
+                mval.ScheduledDateTime
+            FROM
+                MediVisitAppointmentList mval
+            WHERE
+                mval.AppointmentSerNum  = '$apptSourceUID'
+        ";
+                  		    
+        my $query = $sourceDatabase->prepare($apptInfo_sql)
+	    	or die "Could not prepare query: " . $sourceDatabase->errstr;
+
+        # execute query
+    	$query->execute()
+	        or die "Could not execute query: " . $query->errstr;
+
+        my $data = $query->fetchall_arrayref();
+    	foreach my $row (@$data) {
+
+            $expressionname = $row->[0];
+            $startdatetime  = $row->[1];
+            $enddatetime    = $row->[1];
+
+            # Search through alias expression list to find associated
+        	# expression serial number (in our DB)
+	        my $expressionser;
+	        foreach my $checkExpression (@expressions) {
+    
+    	    	if ($checkExpression->{_name} eq $expressionname) { # match
+        
+					$expressionser = $checkExpression->{_ser};
+	        		last; # break out of loop
+				}
+        	}
+
+            $appointment->setApptAliasExpressionSer($expressionser);
+            $appointment->setApptStartDateTime($startdatetime);
+            $appointment->setApptEndDateTime($enddatetime);
+                
+        }
+
+        $sourceDatabase->disconnect();
+    }
 
 	return $appointment;
 }
@@ -538,14 +819,16 @@ sub getApptInfoFromSourceDB
 sub inOurDatabase
 {
 	my ($appointment) = @_; # our appt object	
-	my $ariaser = $appointment->getApptAriaSer(); # retrieve appt aria serial
+	my $sourceUID   = $appointment->getApptSourceUID(); # retrieve appt source uid
+    my $sourceDBSer = $appointment->getApptSourceDatabaseSer(); 
 
-	my $ApptAriaSerInDB = 0; # false by default. Will be true if appointment exists
+	my $ApptSourceUIDInDB = 0; # false by default. Will be true if appointment exists
 	my $ExistingAppt = (); # data to be entered if appt exists
 
 	# Other appt variables, if appt exists
 	my ($ser, $patientser, $aliasexpressionser, $startdatetime, $enddatetime);
-    my ($priorityser, $diagnosisser);
+    my ($priorityser, $diagnosisser, $sourcedbser);
+    my ($status, $state, $actualstartdate, $actualenddate);
 
 	my $inDB_sql = "
 		SELECT
@@ -556,11 +839,17 @@ sub inOurDatabase
 			Appointment.AppointmentSerNum,
 			Appointment.PatientSerNum,
             Appointment.PrioritySerNum,
-            Appointment.DiagnosisSerNum
+            Appointment.DiagnosisSerNum,
+            Appointment.SourceDatabaseSerNum,
+            Appointment.Status,
+            Appointment.State,
+            Appointment.ActualStartDate,
+            Appointment.ActualEndDate
 		FROM
 			Appointment
 		WHERE
-			Appointment.AppointmentAriaSer = $ariaser
+			Appointment.AppointmentAriaSer      = $sourceUID
+        AND Appointment.SourceDatabaseSerNum    = $sourceDBSer
 	";
 
 	# prepare query
@@ -573,21 +862,26 @@ sub inOurDatabase
 	
 	while (my @data = $query->fetchrow_array()) {
 
-		$ApptAriaSerInDB	= $data[0];
+		$ApptSourceUIDInDB	= $data[0];
 		$aliasexpressionser	= $data[1];
 		$startdatetime		= $data[2];
 		$enddatetime		= $data[3];
 		$ser			    = $data[4];
 		$patientser		    = $data[5];
         $priorityser        = $data[6];
-        $resourceser        = $data[7];
+        $diagnosisser       = $data[7];
+        $sourcedbser        = $data[8];
+        $status             = $data[9];
+        $state              = $data[10];
+        $actualstartdate    = $data[11];
+        $actualenddate      = $data[12];
 	}
 
-	if ($ApptAriaSerInDB) {
+	if ($ApptSourceUIDInDB) {
 
 		$ExistingAppt = new Appointment(); # initialize appointment object
 
-		$ExistingAppt->setApptAriaSer($ApptAriaSerInDB); # set the Appt aria serial
+		$ExistingAppt->setApptSourceUID($ApptSourceUIDInDB); # set the Appt aria serial
 		$ExistingAppt->setApptAliasExpressionSer($aliasexpressionser); # set expression serial
 		$ExistingAppt->setApptStartDateTime($startdatetime); # set the appt start datetime
 		$ExistingAppt->setApptEndDateTime($enddatetime); # set the appt end datetime
@@ -595,7 +889,12 @@ sub inOurDatabase
 		$ExistingAppt->setApptPatientSer($patientser); 
         $ExistingAppt->setApptPrioritySer($priorityser);
         $ExistingAppt->setApptDiagnosisSer($diagnosisser);
-		
+        $ExistingAppt->setApptSourceDatabaseSer($sourcedbser);
+		$ExistingAppt->setApptStatus($status); # set the appt status
+		$ExistingAppt->setApptState($state); # set the appt state
+		$ExistingAppt->setApptActualStartDate($actualstartdate); # set the appt start datetime
+		$ExistingAppt->setApptActualEndDate($actualenddate); # set the appt end datetime
+
 		return $ExistingAppt; # this is true (ie. appt exists, return object)
 	}
 	
@@ -610,22 +909,32 @@ sub insertApptIntoOurDB
 	my ($appointment) = @_; # our appointment object 
 	
 	my $patientser		    = $appointment->getApptPatientSer();
-	my $ariaser		        = $appointment->getApptAriaSer();
+	my $sourceuid           = $appointment->getApptSourceUID();
+    my $sourcedbser         = $appointment->getApptSourceDatabaseSer();
 	my $aliasexpressionser	= $appointment->getApptAliasExpressionSer();
 	my $startdatetime	    = $appointment->getApptStartDateTime();
 	my $enddatetime		    = $appointment->getApptEndDateTime();
     my $priorityser         = $appointment->getApptPrioritySer();
     my $diagnosisser        = $appointment->getApptDiagnosisSer();
+	my $status		        = $appointment->getApptStatus();
+	my $state		        = $appointment->getApptState();
+	my $actualstartdate	    = $appointment->getApptActualStartDate();
+	my $actualenddate		= $appointment->getApptActualEndDate();
 
 	my $insert_sql = "
 		INSERT INTO 
 			Appointment (
 				AppointmentSerNum,
 				PatientSerNum,
+                SourceDatabaseSerNum,
 				AppointmentAriaSer,
 				AliasExpressionSerNum,
+                Status,
+                State,
 				ScheduledStartTime,		
 				ScheduledEndTime,
+                ActualStartDate,
+                ActualEndDate,
                 PrioritySerNum,
                 DiagnosisSerNum,
                 DateAdded,
@@ -634,10 +943,15 @@ sub insertApptIntoOurDB
 		VALUES (
 			NULL,
 			'$patientser',
-			'$ariaser',
+            '$sourcedbser',
+			'$sourceuid',
 			'$aliasexpressionser',
+            '$status',
+            '$state',
 			'$startdatetime',
 			'$enddatetime',
+            '$actualstartdate',
+            '$actualenddate',
             '$priorityser',
             '$diagnosisser',
             NOW(),
@@ -669,12 +983,17 @@ sub updateDatabase
 {
 	my ($appointment) = @_; # our appt object to update
 
-	my $ariaser		= $appointment->getApptAriaSer();
+	my $sourceuid	        = $appointment->getApptSourceUID();
+    my $sourcedbser         = $appointment->getApptSourceDatabaseSer();
 	my $aliasexpressionser	= $appointment->getApptAliasExpressionSer();
-	my $startdatetime	= $appointment->getApptStartDateTime();
-	my $enddatetime		= $appointment->getApptEndDateTime();
+	my $startdatetime	    = $appointment->getApptStartDateTime();
+	my $enddatetime		    = $appointment->getApptEndDateTime();
     my $priorityser         = $appointment->getApptPrioritySer();
     my $diagnosisser        = $appointment->getApptDiagnosisSer();
+	my $status		= $appointment->getApptStatus();
+	my $state		= $appointment->getApptState();
+	my $actualstartdate	= $appointment->getApptActualStartDate();
+	my $actualenddate		= $appointment->getApptActualEndDate();
 
 	my $update_sql = "
 
@@ -682,12 +1001,18 @@ sub updateDatabase
 			Appointment
 		SET
 			AliasExpressionSerNum	= '$aliasexpressionser',
+            Status                  = '$status',
+            State                   = '$state',
 			ScheduledStartTime	    = '$startdatetime',
 			ScheduledEndTime	    = '$enddatetime',
+            ActualStartDate         = '$actualstartdate',
+            ActualEndDate           = '$actualenddate',
             PrioritySerNum          = '$priorityser',
-            DiagnosisSerNum         = '$diagnosisser'
+            DiagnosisSerNum         = '$diagnosisser',
+            ReadStatus              = 0
 		WHERE
-			AppointmentAriaSer	= '$ariaser' 
+			AppointmentAriaSer	    = '$sourceuid'
+        AND SourceDatabaseSerNum    = '$sourcedbser'
 		";
 
 	# prepare query
@@ -716,6 +1041,10 @@ sub compareWith
 	my $SEndDateTime	    = $SuspectAppt->getApptEndDateTime();
     my $SPrioritySer        = $SuspectAppt->getApptPrioritySer();
     my $SDiagnosisSer       = $SuspectAppt->getApptDiagnosisSer();
+	my $SStatus		        = $SuspectAppt->getApptStatus();
+	my $SState		        = $SuspectAppt->getApptState();
+	my $SActualStartDate	= $SuspectAppt->getApptActualStartDate();
+    my $SActualEndDate	    = $SuspectAppt->getApptActualEndDate();
 
 	# Original Appointment...
 	my $OAliasExpressionSer	= $OriginalAppt->getApptAliasExpressionSer();
@@ -723,6 +1052,10 @@ sub compareWith
 	my $OEndDateTime	    = $OriginalAppt->getApptEndDateTime();
     my $OPrioritySer        = $OriginalAppt->getApptPrioritySer();
     my $ODiagnosisSer       = $OriginalAppt->getApptDiagnosisSer();
+	my $OStatus		        = $OriginalAppt->getApptStatus();
+	my $OState		        = $OriginalAppt->getApptState();
+	my $OActualStartDate	= $OriginalAppt->getApptActualStartDate();
+	my $OActualEndDate	    = $OriginalAppt->getApptActualEndDate();
 
 	# go through each parameter
 	
@@ -751,6 +1084,26 @@ sub compareWith
 		my $updatedDiagnosisSer = $UpdatedAppt->setApptDiagnosisSer($SDiagnosisSer); # update 
 		print "Will update database entry to '$updatedDiagnosisSer'.\n";
 	}
+	if ($SStatus ne $OStatus) {
+		print "Appointment Status has changed from '$OStatus' to '$SStatus'\n";
+		my $updatedStatus = $UpdatedAppt->setApptStatus($SStatus); # update status
+		print "Will update database entry to '$updatedStatus'.\n";
+	}
+    if ($SState ne $OState) {
+		print "Appointment State has changed from '$OState' to '$SState'\n";
+		my $updatedState = $UpdatedAppt->setApptState($SState); # update state
+		print "Will update database entry to '$updatedState'.\n";
+	}
+	if ($SActualStartDate ne $OActualStartDate) {
+		print "Appointment Actual Scheduled Start Date has change from '$OActualStartDate' to '$SActualStartDate'\n";
+		my $updatedSDT = $UpdatedAppt->setApptActualStartDate($SActualStartDate); # update start datetime
+		print "Will update database entry to '$updatedSDT'.\n";
+	}
+	if ($SActualEndDate ne $OActualEndDate) {
+		print "Appointment Actual Scheduled End Date has changed from '$OActualEndDate' to '$SActualEndDate'\n";
+		my $updatedEDT = $UpdatedAppt->setApptActualEndDate($SActualEndDate); # update end datetime
+		print "Will update database entry to '$updatedEDT'.\n";
+	}
 
 
 	return $UpdatedAppt;
@@ -777,11 +1130,14 @@ sub convertDateTime
 #======================================================================================
 sub reassignAppointment
 {
-	my ($apptSer) = @_; # appt ser from arguments
+	my ($sourceUID, $sourceDBSer, $aliasSer, $patientSer) = @_; # appt ser from arguments
 	
 	my $Appointment = new Appointment(); # initialize appt object
 
-	$Appointment->setApptAriaSer($apptSer); # assign our serial
+	$Appointment->setApptSourceUID($sourceUID); # assign our uid
+    $Appointment->setApptSourceDatabaseSer($sourceDBSer);
+    $Appointment->setApptAliasSer($aliasSer);
+    $Appointment->setApptPatientSer($patientSer);
 
 	# check if our appointment exists in our database
 	my $ApptExists = $Appointment->inOurDatabase();

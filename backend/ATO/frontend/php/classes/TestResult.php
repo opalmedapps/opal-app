@@ -181,7 +181,8 @@ class TestResult {
         $testNames = array();
 
         try {
-            $aria_link = mssql_connect(ARIA_DB, ARIA_USERNAME, ARIA_PASSWORD);
+	        $aria_link = new PDO( ARIA_DB , ARIA_USERNAME, ARIA_PASSWORD );
+            $aria_link->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );
 
 			$connect = new PDO( DB_DSN, DB_USERNAME, DB_PASSWORD );
             $connect->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );
@@ -193,8 +194,10 @@ class TestResult {
                 FROM
                     test_result tr
             ";
-            $query = mssql_query($sql);
-            while ($data = mssql_fetch_array($query)) {
+            $query = $aria_link->prepare( $sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_SCROLL) );
+           	$query->execute();
+            while ($data = $query->fetch(PDO::FETCH_NUM, PDO::FETCH_ORI_NEXT)) {
+   
                 $testArray = array(
                     'name'      => $data[0],
                     'id'        => $data[0],

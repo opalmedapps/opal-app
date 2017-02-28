@@ -1,68 +1,69 @@
-  <ons-page ng-controller="IndividualEducationalMaterialController">
+<ons-page ng-controller="IndividualEducationalMaterialController">
     <ons-toolbar fixed-style>
-      <div class="left"><ons-back-button>{{"BACK"|translate}}</ons-back-button></div>
-      <div class="center">{{edumaterial.Type}}</div>
-      <div class="right" ng-show="edumaterial.ShareURL_EN && edumaterial.ShareURL_EN!==''"><ons-toolbar-button ng-click="popoverSharing.show('#buttonShareMaterial');" id="buttonShareMaterial"><i class="ion-share" style="font-size:30px"></i></ons-toolbar-button></div>
+        <div class="left"><ons-back-button>{{"BACK"|translate}}</ons-back-button></div>
+        <div class="center">{{edumaterial.Type}}</div>
+        <div class="right" ng-show="edumaterial.ShareURL_EN && edumaterial.ShareURL_EN!==''"><ons-toolbar-button ng-click="popoverSharing.show('#buttonShareMaterial');" id="buttonShareMaterial"><ons-icon icon="fa-share"></ons-icon></ons-toolbar-button></div>
 
     </ons-toolbar>
     <div>
-    <ons-list>
-      <ons-list-item class="item">
-        <div style="line-height:1" align="center">
-        <header>
-            <span class="item-title" ng-class="fontSizeTitle" style="font-size:20px">{{edumaterial.Name}}</span>
-        </header>
-        <div style="text-align: center;margin-top:10px">
-           <rate-material ser-num="edumaterial.EducationalMaterialControlSerNum"></rate-material>
-        </div>
-      </div>
-      </ons-list-item>
-    </ons-list>
-    <ons-list class="settings-list" ng-hide="tableOfContents||edumaterial.Type == 'Video'||isIndividualHtmlPage">
-      <ons-list-item class="item" ng-click="goToEducationalMaterial()">
-        <div align="center">
-          <div>
-             <img height="200px" width="100%" style="max-width:180px" ng-src="./img/pdf-icon.png">
-          </div>
-        </div>
-      </ons-list-item>
-    </ons-list>
-    <ons-list style="margin: 10px 0 0 0" ng-hide="!tableOfContents">
-    <ons-list-header class="person-list-header" ng-class="fontSizeTitle"  >{{"TABLEOFCONTENTS"|translate}}</ons-list-header>
-    <ons-list-item modifier="chevron" ng-repeat= "edumaterial in tableOfContents" class="item" ng-click="goToEducationalMaterial($index)">
-        <ons-row align="center">
-            <ons-col width="60px" align="center">
-                <div style="margin-left:20px">
-                    <strong>{{$index+1}}</strong>
+        <ons-list>
+            <ons-list-item class="item">
+                <div style="line-height:1" align="center">
+                    <header>
+                        <span class="item-title" ng-class="fontSizeTitle" style="font-size:20px">{{edumaterial.Name}}</span>
+                    </header>
+                    <div style="text-align: center;margin-top:10px">
+                        <rate-material ser-num="edumaterial.EducationalMaterialControlSerNum"></rate-material>
+                    </div>
                 </div>
-            </ons-col>
-            <ons-col>
-                <header>
-                    <span class="item-title" ng-class="fontSizeTitle">{{edumaterial.Name}}</span>
-                </header>
-            </ons-col>
-        </ons-row>
-    </ons-list-item >
-  </ons-list>
-  <ons-list class="settings-list" ng-if="edumaterial.Type == 'Video'">
-      <ons-list-item class="item">
-        <div align="center" class="embed-responsive embed-responsive-16by9">
-          <iframe class="embed-responsive-item" ng-src="{{edumaterial.Url|trustThisUrl}}" allowfullscreen="allowfullscreen" mozallowfullscreen="mozallowfullscreen" msallowfullscreen="msallowfullscreen" oallowfullscreen="oallowfullscreen" webkitallowfullscreen="webkitallowfullscreen">
-          </iframe>
-        </div>
-      </ons-list-item>
-    </ons-list>
-    <ons-list class="settings-list" ng-if="isIndividualHtmlPage">
-      <ons-list-item class="item">
-       <div  align="center" style="margin-top:10vh" ng-show="!edumaterial.Content">
-          <svg class="progress-circular">
-                <circle class="progress-circular__primary" cx="50%" cy="50%" r="40%" fill="none" stroke-width="10%" stroke-miterlimit="10"/>
-          </svg>
-        </div>
-        <div class="container" style="background-color:white;overflow-y:scroll" ng-style="{height:heightSection}"   ng-show="edumaterial.Content">
-             <div ng-bind-html="edumaterial.Content" ></div>
-       </div>
-      </ons-list-item>
-    </ons-list>
-  </div>
-  </ons-page>
+            </ons-list-item>
+        </ons-list>
+        <ons-list class="settings-list" ng-hide="tableOfContents||edumaterial.Type == 'Video'||isIndividualHtmlPage">
+            <ons-list-item class="item" ng-click="goToEducationalMaterial()">
+                <div align="center">
+                    <div>
+                        <img class="animated pulse" height="200px" width="100%" style="max-width:180px" ng-src="./img/pdf-icon.png">
+                    </div>
+                    <h3 ons-if-platform="android" align="center" ng-class="fontSizeTitle">{{"TAP_DL"|translate}}</h3>
+                </div>
+            </ons-list-item>
+        </ons-list>
+        <ons-list style="margin: 10px 0 0 0" ng-hide="!tableOfContents">
+            <ons-list-header class="person-list-header" ng-class="fontSizeTitle"  >{{"TABLEOFCONTENTS"|translate}}</ons-list-header>
+            <ons-list-item modifier="chevron" ng-repeat= "edumaterial in tableOfContents" class="item" ng-click="goToEducationalMaterial($index)">
+                <ons-row align="center">
+                    <ons-col width="60px" align="center">
+                        <div style="margin-left:20px">
+                            <strong>{{$index+1}}</strong>
+                        </div>
+                    </ons-col>
+                    <ons-col>
+                        <header>
+                            <span class="item-title" ng-class="fontSizeTitle">{{edumaterial.Name}}</span>
+                        </header>
+                    </ons-col>
+                </ons-row>
+            </ons-list-item >
+        </ons-list>
+        <ons-list class="settings-list" ng-if="edumaterial.Type == 'Video'">
+            <ons-list-item class="item">
+                <div align="center" class="embed-responsive embed-responsive-16by9">
+                    <iframe class="embed-responsive-item" ng-src="{{edumaterial.Url|trustThisUrl}}" allowfullscreen="allowfullscreen" mozallowfullscreen="mozallowfullscreen" msallowfullscreen="msallowfullscreen" oallowfullscreen="oallowfullscreen" webkitallowfullscreen="webkitallowfullscreen">
+                    </iframe>
+                </div>
+            </ons-list-item>
+        </ons-list>
+        <ons-list class="settings-list" ng-if="isIndividualHtmlPage">
+            <ons-list-item class="item">
+                <div  align="center" style="margin-top:10vh" ng-show="!edumaterial.Content">
+                    <svg class="progress-circular">
+                        <circle class="progress-circular__primary" cx="50%" cy="50%" r="40%" fill="none" stroke-width="10%" stroke-miterlimit="10"/>
+                    </svg>
+                </div>
+                <div class="container" style="background-color:white;overflow-y:scroll" ng-style="{height:heightSection}"   ng-show="edumaterial.Content">
+                    <div ng-bind-html="edumaterial.Content" ></div>
+                </div>
+            </ons-list-item>
+        </ons-list>
+    </div>
+</ons-page>
