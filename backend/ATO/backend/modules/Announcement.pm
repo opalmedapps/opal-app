@@ -24,11 +24,11 @@ use Diagnosis; # Diagnosis.pm
 use Appointment; # Our custom appointment module
 use Filter; # Our custom filter module
 use PostControl; # Our custom post control module
+use PushNotification;
 
 #---------------------------------------------------------------------------------
 # Connect to the databases
 #---------------------------------------------------------------------------------
-my $sourceDatabase	= $Database::sourceDatabase;
 my $SQLDatabase		= $Database::targetDatabase;
 
 #====================================================================================
@@ -166,7 +166,7 @@ sub publishAnnouncements
                 
                 # Retrieve the patient's appointment if one (or more) lands on the publish date
                 my @patientAppointments = Appointment::getPatientsAppointmentsFromDateInOurDB($patientSer, $postPublishDate, 0);
-                if(!@patientAppointments) {next;}
+                #if(!@patientAppointments) {next;}
 
                 my @expressionNames = ();
                 my @diagnosisNames = ();
@@ -207,7 +207,7 @@ sub publishAnnouncements
                     # Finding the intersection of the patient's diagnosis and the diagnosis filters
                     # If there is an intersection, then patient is part of this publishing announcement
                     # If not, then continue to next announcement
-                    if (!intersect(@dignosisFilters, @diagnosisNames)) {next;} 
+                    if (!intersect(@diagnosisFilters, @diagnosisNames)) {next;} 
                 }
 
                 # Fetch doctor filters (if any)
@@ -243,7 +243,13 @@ sub publishAnnouncements
 
                 if (!$announcement->inOurDatabase()) {
     
-                    $announcement->insertAnnouncementIntoOurDB();
+                    $announcement = $announcement->insertAnnouncementIntoOurDB();
+
+                    # send push notification
+                    my $announcementSer = $announcement->getAnnouncementSer();
+                    my $patientSer = $announcement->getAnnouncementPatientSer();
+                    PushNotification::sendPushNotification($patientSer, $announcementSer, 'Announcement');
+
                 }
             } # End if postPublishDate
 

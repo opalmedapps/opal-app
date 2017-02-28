@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.hig.opal" version="0.1.24" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="com.hig.opal" version="0.1.281" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>Opal</name>
     <description>
         Opal - the MUHC Oncology Patient Application for mobile phones and the web - is a product that has arisen from the winning project of the 2014 MUHC Q+ initiative. The project proposal was submitted by the Health Informatics Group (HIG) and was entitled “Realistic knowledge-based waiting time estimates for radiation oncology patients - addressing the pain of waiting”. It had as its goal the provision of waiting time estimates to radiation oncology patients.
@@ -10,13 +10,13 @@
     <content src="index.html" />
     <access origin="*" />
     <allow-navigation href="https://www.youtube.com/*" />
-    <allow-navigation href="*" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
     <allow-intent href="tel:*" />
     <allow-intent href="sms:*" />
     <allow-intent href="mailto:*" />
     <allow-intent href="geo:*" />
+    <allow-intent href="opal:" />
     <preference name="Orientation" value="default" />
     <preference name="SplashScreenDelay" value="5000" />
     <preference name="DisallowOverscroll" value="true" />
@@ -40,30 +40,41 @@
         <allow-intent href="market:*" />
     </platform>
     <platform name="ios">
-        <splash height="480" src="/res/ios/screen/Default~iphone.png" width="320" />
-        <splash height="960" src="/res/ios/screen/Default@2x~iphone.png" width="640" />
-        <splash height="1136" src="/res/ios/screen/Default-568h@2x~iphone.png" width="640" />
-        <splash height="1334" src="/res/ios/screen/Default-667h.png" width="750" />
-        <splash height="2208" src="/res/ios/screen/Default-736h.png" width="1242" />
-        <splash height="1242" src="/res/ios/screen/Default-Landscape-736h.png" width="2208" />
-        <splash height="1024" src="/res/ios/screen/Default-Portrait~ipad.png" width="768" />
-        <splash height="768" src="/res/ios/screen/Default-Landscape~ipad.png" width="1024" />
-        <splash height="2048" src="/res/ios/screen/Default-Portrait@2x~ipad.png" width="1536" />
-        <splash height="1536" src="/res/ios/screen/Default-Landscape@2x~ipad.png" width="2048" />
+        <splash height="480" src="/res/screen/ios/iPhone4.png" width="320" />
+        <splash height="960" src="/res/screen/ios/iPhone4@2x.png" width="640" />
+        <splash height="1136" src="/res/screen/ios/iPhone5-4.png" width="640" />
+        <splash height="1334" src="/res/screen/ios/iPhone6-4.7.png" width="750" />
+        <splash height="2208" src="/res/screen/ios/iPhone6plus-5.5-Landscape.png" width="1242" />
+        <splash height="1242" src="/res/screen/ios/iPhone6plus-5.5-Portrait.png" width="2208" />
+        <splash height="1024" src="/res/screen/ios/iPad-Landscape.png" width="768" />
+        <splash height="768" src="/res/screen/ios/iPad-Landscape@2x.png" width="1024" />
+        <splash height="2048" src="/res/screen/ios/iPad-Portrait.png" width="1536" />
+        <splash height="1536" src="/res/screen/ios/iPad-Portrait@2x.png" width="2048" />
         <allow-intent href="itms:*" />
         <allow-intent href="itms-apps:*" />
+        <icon height="180" src="res/ios/Icon-60@3x.png" width="180" />
+        <icon height="60" src="res/ios/Icon-60.png" width="60" />
+        <icon height="120" src="res/ios/Icon-60@2x.png" width="120" />
+        <icon height="76" src="res/ios/Icon-76.png" width="76" />
+        <icon height="152" src="res/ios/Icon-76@2x.png" width="152" />
+        <icon height="40" src="res/ios/Icon-40.png" width="40" />
+        <icon height="80" src="res/ios/Icon-40@2x.png" width="80" />
+        <icon height="57" src="res/ios/Icon.png" width="57" />
+        <icon height="114" src="res/ios/Icon@2x.png" width="114" />
+        <icon height="72" src="res/ios/Icon-72.png" width="72" />
+        <icon height="144" src="res/ios/Icon-72@2x.png" width="144" />
+        <icon height="29" src="res/ios/Icon-small.png" width="29" />
+        <icon height="58" src="res/ios/Icon-small@2x.png" width="58" />
     </platform>
     <plugin name="phonegap-plugin-push" spec="~1.9.2">
         <variable name="SENDER_ID" value="810896751588" />
     </plugin>
     <plugin name="com-badrit-printplugin" spec="~0.2.0" />
-    <plugin name="com.phonegap.plugins.nativesettingsopener" spec="~1.0.1" />
     <plugin name="cordova-plugin-app-version" spec="~0.1.9" />
     <plugin name="cordova-plugin-calendar" spec="~4.5.5" />
     <plugin name="cordova-plugin-compat" spec="~1.1.0" />
     <plugin name="cordova-plugin-device" spec="~1.1.5-dev" />
     <plugin name="cordova-plugin-dialogs" spec="~1.3.1" />
-    <plugin name="cordova-plugin-email" spec="~1.2.2" />
     <plugin name="cordova-plugin-file" spec="~4.2.0" />
     <plugin name="cordova-plugin-file-opener2" spec="~2.0.3" />
     <plugin name="cordova-plugin-file-transfer" spec="~1.6.1" />
@@ -75,15 +86,24 @@
     <plugin name="cordova-plugin-print-pdf" spec="~4.0.0" />
     <plugin name="cordova-plugin-splashscreen" spec="~4.0.1" />
     <plugin name="cordova-plugin-x-toast" spec="~2.5.2" />
-    <plugin name="cordova.custom.plugins.exitapp" spec="~1.0.0" />
     <plugin name="de.appplant.cordova.plugin.printer" spec="~0.7.1" />
-    <plugin name="org.pbernasconi.progressindicator" spec="~1.1.0" />
     <plugin name="phonegap-plugin-barcodescanner" spec="~6.0.4" />
     <plugin name="cordova-plugin-android-permissions" spec="~0.10.0" />
-    <plugin name="cordova-fabric-plugin" spec="~1.1.1">
+    <plugin name="cordova-fabric-plugin" spec="1.1.1">
         <variable name="FABRIC_API_KEY" value="710b104a1e625dfb3b338b72b0bce05b0b5d644c" />
         <variable name="FABRIC_API_SECRET" value="0a1e191ff6a6adda560608fb68cc56f9e16624f531bdc62f0e261c0e688fbdea" />
     </plugin>
     <plugin name="cordova-plugin-inappbrowser" spec="~1.6.1" />
     <plugin name="cordova-plugin-whitelist" spec="~1.3.1" />
+    <plugin name="org.pbernasconi.progressindicator" spec="~1.1.0" />
+    <plugin name="cordova.custom.plugins.exitapp" spec="~1.0.0" />
+    <plugin name="com.phonegap.plugins.nativesettingsopener" spec="~1.0.1" />
+    <plugin name="cordova-plugin-email" spec="~1.2.6" />
+    <plugin name="cordova-plugin-x-socialsharing" spec="~5.1.5" />
+    <plugin name="cordova-plugin-customurlscheme" spec="~4.2.0">
+        <variable name="URL_SCHEME" value="opal" />
+        <variable name="ANDROID_SCHEME" value=" " />
+        <variable name="ANDROID_HOST" value=" " />
+        <variable name="ANDROID_PATHPREFIX" value="/" />
+    </plugin>
 </widget>

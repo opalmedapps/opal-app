@@ -15,7 +15,7 @@ myApp.factory("FirebaseService", ['$firebaseAuth','$firebaseObject','UserAuthori
   function ($firebaseAuth,UserAuthorizationInfo) {
     var firebaseUrl="https://brilliant-inferno-7679.firebaseio.com/dev2/";
     //var ref = new Firebase(firebaseUrl);
-    var ref = firebase.database().ref('dev2/');
+    //var ref = firebase.database().ref('dev2/');
     return {
        /**
 		*@ngdoc method

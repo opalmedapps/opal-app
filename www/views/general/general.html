@@ -87,6 +87,21 @@
           </ons-col>
       </ons-row>
   </ons-list-item>
+    <ons-list-item modifier="chevron" class="item" ng-click="generalNavigator.pushPage('views/general/patientsforpatients/patientsforpatients.html')">
+        <ons-row align="center"   >
+            <ons-col width="60px" align="center">
+                <div >
+                    <i class="fa fa-users iconHomeView" style="color:orange"></i>
+                </div>
+            </ons-col>
+            <ons-col>
+                <header>
+                    <span class="item-title" ng-class="fontSizeTitle" >{{"PFP"|translate}}</span>
+                </header>
+                <p class="item-desc"></p>
+            </ons-col>
+        </ons-row>
+    </ons-list-item>
     <ons-list-item modifier="chevron" class="item" ng-click="generalNavigator.pushPage('views/general/feedback.html')">
       <ons-row align="center"   >
           <ons-col width="60px" align="center">
@@ -102,20 +117,20 @@
           </ons-col>
       </ons-row>
   </ons-list-item>
-   <ons-list-item modifier="chevron" class="item" ng-click="reportIssuesMail()">
-      <ons-row align="center"   >
-          <ons-col width="60px" align="center">
-              <div >
-                <i class="fa fa-exclamation-circle iconHomeView" style="color:purple"></i>
-              </div>
-          </ons-col>
-          <ons-col>
-              <header>
-                  <span class="item-title" ng-class="fontSizeTitle"> {{"REPORTISSUES"|translate}}</span>
-              </header>
-              <p class="item-desc"></p>
-          </ons-col>
-      </ons-row>
-  </ons-list-item>
+   <!--<ons-list-item modifier="chevron" class="item" ng-click="reportIssuesMail()">-->
+      <!--<ons-row align="center"   >-->
+          <!--<ons-col width="60px" align="center">-->
+              <!--<div >-->
+                <!--<i class="fa fa-exclamation-circle iconHomeView" style="color:purple"></i>-->
+              <!--</div>-->
+          <!--</ons-col>-->
+          <!--<ons-col>-->
+              <!--<header>-->
+                  <!--<span class="item-title" ng-class="fontSizeTitle"> {{"REPORTISSUES"|translate}}</span>-->
+              <!--</header>-->
+              <!--<p class="item-desc"></p>-->
+          <!--</ons-col>-->
+      <!--</ons-row>-->
+  <!--</ons-list-item>-->
 </ons-list>
 </ons-page>

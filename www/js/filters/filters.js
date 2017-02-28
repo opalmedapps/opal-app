@@ -88,9 +88,12 @@ myApp.filter('formatDateToFirebaseString',function(){
 myApp.filter('formatDate',function(){
     return function(str) {
         if(typeof str==='string'){
-            var a = str.split(/[^0-9]/);
+            //console.log(str);
+            //var a = str.split(/[^0-9]/);
             //for (i=0;i<a.length;i++) { alert(a[i]); }
-            var d=new Date (a[0],a[1]-1,a[2],a[3],a[4],a[5] );
+            //var d=new Date (a[0],a[1]-1,a[2],a[3],a[4],a[5] );
+            var d = new Date(moment(str).format());
+            //console.log(d);
             return d;
         }
     };

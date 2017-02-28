@@ -155,7 +155,8 @@ class CronControl {
 	
 		try {
 
-			$cronDetails = CronControl::getCronDetails($cronSer);
+            $cronControlObj = new CronControl();
+			$cronDetails = $cronControlObj->getCronDetails($cronSer);
 
 			$nextCronDate   = $cronDetails['nextCronDate'];
 			$repeatUnits    = $cronDetails['repeatUnits'];

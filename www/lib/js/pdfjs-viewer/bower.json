@@ -1,0 +1,24 @@
+{
+  "name": "pdfjs-viewer",
+  "version": "1.0.1040",
+  "homepage": "https://github.com/travist/pdfjs-viewer",
+  "authors": [
+    "Travis Tidwell <codertravist@gmail.com>"
+  ],
+  "description": "A bower installation of PDFJS.",
+  "moduleType": [
+    "globals"
+  ],
+  "keywords": [
+    "PDF",
+    "PDFJS"
+  ],
+  "license": "Apache",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

@@ -86,7 +86,10 @@
  */
 
 //Routes for angular views
-var myApp = angular.module('MUHCApp', ['tmh.dynamicLocale','pascalprecht.translate','ngAnimate','luegg.directives','ngSanitize','ui.router', 'onsen', 'ngTouch','firebase','ui.bootstrap','MUHCApp.filters','ngCordova','monospaced.elastic','Tek.progressBar']);
+var myApp = angular
+    .module('MUHCApp', ['tmh.dynamicLocale','pascalprecht.translate','ngAnimate','luegg.directives',
+        'ngSanitize','ui.router', 'onsen', 'ngTouch','firebase','ui.bootstrap','MUHCApp.filters',
+        'ngCordova','monospaced.elastic','Tek.progressBar']);
 
 myApp.config(['$urlRouterProvider', '$stateProvider', function ($urlRouterProvider, $stateProvider) {
 
@@ -102,7 +105,6 @@ myApp.config(['$urlRouterProvider', '$stateProvider', function ($urlRouterProvid
             url: '/',
             templateUrl: 'views/init/init-screen.html',
             controller: 'InitScreenController'
-
         })
         .state('loading', {
             url: '/loading',
@@ -178,11 +180,11 @@ myApp.config(function ($translateProvider) {
 myApp.config(function () {
     // Initialize Firebase
     var config = {
-        apiKey: "AIzaSyCxV6VuVWtKg5wkeReqzQNfRULwkvVXkos",
-        authDomain: "brilliant-inferno-7679.firebaseapp.com",
-        databaseURL: "https://brilliant-inferno-7679.firebaseio.com",
-        storageBucket: "firebase-brilliant-inferno-767.appspot.com",
-        messagingSenderId: "810896751588"
+            apiKey: "AIzaSyAMIDdcQR8EiY9gjj4cgxp6Vu3xwa78Ww8",
+            authDomain: "opal-dev.firebaseapp.com",
+            databaseURL: "https://opal-dev.firebaseio.com",
+            storageBucket: "opal-dev.appspot.com",
+            messagingSenderId: "652464215237"
     };
     firebase.initializeApp(config);
 });

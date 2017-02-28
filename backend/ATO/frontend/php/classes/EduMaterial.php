@@ -687,7 +687,7 @@ class EduMaterial {
     	    	foreach ($existingFilters as $existingFilter) {
                     $id     = $existingFilter['id'];
                     $type   = $existingFilter['type'];
-                    if (!EduMaterial::nestedSearch($id, $type, $filters)) {
+                    if (!$this->nestedSearch($id, $type, $filters)) {
 				    	$sql = "
                             DELETE FROM 
     					    	Filters
@@ -710,7 +710,7 @@ class EduMaterial {
     			foreach ($filters as $filter) {
                     $id     = $filter['id'];
                     $type   = $filter['type'];
-                    if (!EduMaterial::nestedSearch($id, $type, $existingFilters)) {
+                    if (!$this->nestedSearch($id, $type, $existingFilters)) {
                         $sql = "
                             INSERT INTO 
                                 Filters (

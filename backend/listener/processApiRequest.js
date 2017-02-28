@@ -20,7 +20,7 @@ var API = {
     'DeviceIdentifier':apiHospitalUpdate.updateDeviceIdentifier,
     'QuestionnaireRating':apiHospitalUpdate.inputEducationalMaterialRating,
     'QuestionnaireAnswers':apiHospitalUpdate.inputQuestionnaireAnswers,
-    'LabResults': apiPatientUpdate.getLabResults
+    'LabResults': apiPatientUpdate.getLabResults,
 };
 
 exports.processRequest=function(requestObject)
