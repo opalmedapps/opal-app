@@ -1,9 +1,16 @@
 //
 // Author David Herrera on Summer 2016, Email:davidfherrerar@gmail.com
 //
+
+/**
+ *@ngdoc service
+ *@name MUHCApp.service:ResetPassword
+ *@requires Firebase
+ *@description Service used to verify and confirm password resets.
+ **/
+
 var myApp=angular.module('MUHCApp');
-myApp.service('ResetPassword',function(RequestToServer, $q){
-    //var Ref= firebase.database().ref('dev2/requests');
+myApp.service('ResetPassword',function(){
 
     var auth = firebase.app().auth();
 

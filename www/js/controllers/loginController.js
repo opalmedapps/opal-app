@@ -23,6 +23,8 @@ myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$root
             },200);
         }
 
+        $scope.loading = false;
+
 
         //Check if device or browser
         var app = document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'https://' ) === -1;
@@ -68,6 +70,7 @@ myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$root
         $scope.submit = function (email,password) {
             $scope.email=email;
             $scope.password=password;
+
             if(typeof email=='undefined'||email ==='')
             {
                 $scope.alert.type='danger';
@@ -77,7 +80,7 @@ myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$root
                 $scope.alert.type='danger';
                 $scope.alert.content="INVALID_EMAIL_OR_PWD";
             }else{
-
+                $scope.loading = true;
                 var authDetails = window.localStorage.getItem('UserAuthorizationInfo');
                 if (authDetails) authDetails = JSON.parse(authDetails);
 
@@ -87,9 +90,9 @@ myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$root
                  *  check if user trying to login is the same as locked out user
                  */
                 if(myAuth && patientSerNum && authDetails && authDetails.Email==$scope.email){
-                    var cred = firebase.auth.EmailAuthProvider.credential($scope.email, $scope.password);
-                    myAuth.reauthenticate(cred)
+                    firebase.auth().signInWithEmailAndPassword(email,password)
                         .then(function () {
+                            $scope.loading = false;
                             $state.go('Home');
                         })
                         .catch(handleError);
@@ -173,11 +176,13 @@ myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$root
                     UUID.setUUID(deviceID);
                     DeviceIdentifiers.sendIdentifiersToServer()
                         .then(function () {
+                            $scope.loading = false;
                             $state.go('loading');
                         })
                         .catch(function (error) {
                             console.log(error);
                             $timeout(function(){
+                                $scope.loading = false;
                                 initNavigator.pushPage('./views/login/security-question.html', {passwordReset: true});
                             });
                         });
@@ -187,11 +192,13 @@ myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$root
                     DeviceIdentifiers.sendFirstTimeIdentifierToServer()
                         .then(function (response) {
                             console.log(response);
+                            $scope.loading = false;
                             initNavigator.pushPage('./views/login/security-question.html', {securityQuestion: response.Data.securityQuestion});
                         })
                         .catch(function (error) {
                             console.log(error);
                             $timeout(function(){
+                                $scope.loading = false;
                                 initNavigator.popPage();
                                 $scope.alert.content="INTERNETERROR";
                             });
@@ -210,6 +217,7 @@ myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$root
 
         function handleError(error)
         {
+            $scope.loading = false;
             $scope.alert.type='danger';
             console.log(error);
             switch (error.code) {

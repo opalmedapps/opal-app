@@ -49,7 +49,7 @@ myApp.service('Appointments', ['$q', 'RequestToServer','$cordovaCalendar','UserA
                 if(userAppointmentsArray[j].AppointmentSerNum==appointments[i].AppointmentSerNum)
                 {
                     userAppointmentsArray.splice(j,1);
-                    appointmentsLocalStorage.splice(j,1);
+                    //appointmentsLocalStorage.splice(j,1);
                     break;
                 }
             }
@@ -461,8 +461,9 @@ myApp.service('Appointments', ['$q', 'RequestToServer','$cordovaCalendar','UserA
             for(var i=0;i<appointments.length;i++){
                 if(appointments[i].AppointmentSerNum==serNum){
                     userAppointmentsArray[i].Checkin='1';
-                    appointmentsLocalStorage[i].Checkin = '1';
+                    //appointmentsLocalStorage[i].Checkin = '1';
                     LocalStorage.WriteToLocalStorage('Appointments',userAppointmentsArray);
+                    break;
                 }
             }
         },
@@ -525,7 +526,7 @@ myApp.service('Appointments', ['$q', 'RequestToServer','$cordovaCalendar','UserA
                 if(userAppointmentsArray[i].AppointmentSerNum == serNum)
                 {
                     userAppointmentsArray[i].StatusClose = true;
-                    appointmentsLocalStorage[i].StatusClose = true;
+                    //appointmentsLocalStorage[i].StatusClose = true;
                 }
                 LocalStorage.WriteToLocalStorage('Appointments', userAppointmentsArray);
             }
@@ -585,7 +586,7 @@ myApp.service('Appointments', ['$q', 'RequestToServer','$cordovaCalendar','UserA
                 if(userAppointmentsArray[i].AppointmentSerNum == serNum)
                 {
                     userAppointmentsArray[i].ReadStatus = '1';
-                    appointmentsLocalStorage[i].ReadStatus = '1';
+                    //appointmentsLocalStorage[i].ReadStatus = '1';
                     RequestToServer.sendRequest('Read',{"Id":serNum, "Field": "Appointments"});
                     LocalStorage.WriteToLocalStorage('Appointments', userAppointmentsArray);
                 }
