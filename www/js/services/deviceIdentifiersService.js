@@ -1,6 +1,15 @@
-//
-// Author David Herrera on Summer 2016, Email:davidfherrerar@gmail.com
-//
+/*
+ * Filename     :   deviceIdentifiersService.js
+ * Description  :   Service that manages user device identifiers and registration ids for push notifications
+ * Created by   :   Robert Maglieri 
+ * Date         :   02 Mar 2017
+ * Copyright    :   Copyright 2016, HIG, All rights reserved.
+ * Licence      :   This file is subject to the terms and conditions defined in
+ *                  file 'LICENSE.txt', which is part of this source code package.
+ */
+ 
+ 
+ 
 var app = angular.module('MUHCApp');
 /**
  *@ngdoc service
