@@ -1,8 +1,13 @@
-//
-// Author David Herrera on Summer 2016, 
-// Github:dherre3
-//Email:davidfherrerar@gmail.com
-//
+/*
+ * Filename     :   appointmentsService.js
+ * Description  :   
+ * Created by   :   David Herrera, Robert Maglieri
+ * Date         :   Mar 2017
+ * Copyright    :   Copyright 2016, HIG, All rights reserved.
+ * Licence      :   This file is subject to the terms and conditions defined in
+ *                  file 'LICENSE.txt', which is part of this source code package.
+ */
+ 
 var myApp=angular.module('MUHCApp');
 /**
  *@ngdoc service

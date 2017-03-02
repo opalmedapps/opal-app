@@ -1,6 +1,6 @@
 /*
  * Filename     :   app.js
- * Description  :   Contains all app configuartions and routes.
+ * Description  :   Contains all app configurations and routes.
  * Created by   :   David Herrera, Robert Maglieri
  * Date         :   July 2015
  * Copyright    :   Copyright 2016, HIG, All rights reserved.
@@ -9,7 +9,7 @@
  */
 
 /**
- * @author MUHC Hospital, David Herrera
+ * @author MUHC Hospital, David Herrera, Robert Maglieri
  * @copyright 2016 MUHC Hospital
  *
  */
