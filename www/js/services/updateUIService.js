@@ -126,10 +126,10 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors',
              init:Messages.setUserMessages,
              update:Messages.updateUserMessages
              },*/
-            /*'LabTests': {
+            'LabTests': {
              init:LabResults.setTestResults,
              update:LabResults.updateTestResults
-             },*/
+             },
             'Diagnosis':
             {
                 init:Diagnoses.setDiagnoses,
