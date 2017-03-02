@@ -1,3 +1,22 @@
+/*
+ * Filename     :   checkinService.js
+ * Description  :   service that manages patient checkin
+ * Created by   :   David Herrera, Robert Maglieri
+ * Date         :   Mar 2017
+ * Copyright    :   Copyright 2016, HIG, All rights reserved.
+ * Licence      :   This file is subject to the terms and conditions defined in
+ *                  file 'LICENSE.txt', which is part of this source code package.
+ */
+
+/**
+ *@ngdoc service
+ *@name MUHCApp.service:CheckinService
+ *@requires MUHCApp.service:RequestToServer
+ *@requires MUHCApp.service:Appointments
+ *@requires $q
+ *@description Service that deals with the checkin functionality for the app
+ **/
+
 (function () {
     'use strict';
 
@@ -5,14 +24,25 @@
         .module('MUHCApp')
         .factory('CheckInService', CheckInService);
 
-    CheckInService.$inject = ['$q', 'RequestToServer', 'Appointments', '$timeout',
-        'FirebaseService','EncryptionService', '$rootScope','UserPreferences'];
+    CheckInService.$inject = ['$q', 'RequestToServer', 'Appointments'];
 
     /* @ngInject */
-    function CheckInService($q, RequestToServer, Appointments, $timeout,
-        FirebaseService,EncryptionService, $rootScope,UserPreferences) {
+    function CheckInService($q, RequestToServer, Appointments) {
 
+        /**
+         *@ngdoc property
+         *@name  MUHCApp.service.#positionCheckinAppointment
+         *@propertyOf MUHCApp.service:CheckinService
+         *@description Object contains the last GPS position used when the patient tried to checkin to an appointment
+         **/
         var positionCheckinAppointment = {};
+
+        /**
+         *@ngdoc property
+         *@name  MUHCApp.service.#checkinApps
+         *@propertyOf MUHCApp.service:CheckinService
+         *@description Array contains the appointments to check in to.
+         **/
         var checkinApps = [];
 
         var service = {
@@ -28,14 +58,35 @@
 
         ////////////////
 
+        /**
+         *@ngdoc method
+         *@name getCheckInApps
+         *@methodOf MUHCApp.service:CheckinService
+         *@description Function that gets the appointments
+         *@returns {Array}  Todays checkinable appointments
+         **/
         function getCheckInApps() {
             return checkinApps;
         }
 
+        /**
+         *@ngdoc method
+         *@name setCheckInApps
+         *@methodOf MUHCApp.service:CheckinService
+         *@description Function that sets todays appointments
+         **/
         function setCheckInApps(apps){
             checkinApps = apps;
         }
 
+        /**
+         *@ngdoc method
+         *@name isAllowedToCheckin
+         *@methodOf MUHCApp.service:CheckinService
+         *@description Function determines geographically whether user is allow to check-in. Works under the
+         * assumption that all the checks to see if an appointment is today and open have already been done! It also updates the positionCheckinAppointment property of the CheckinService.
+         *@returns {Promise} Returns a promise that resolves to success if the user is allowed to checkin based on whether the user is within a 300m radius of the hospital, or rejects the promise if the patient is not in the vecinity of the hospital or if there is an error while checkin location
+         **/
         function isAllowedToCheckIn()
         {
             var r=$q.defer();
@@ -64,40 +115,53 @@
             return r.promise;
         }
 
-        function checkCheckinServer(appoint)
-        {
+        /**
+         *@ngdoc method
+         *@name checkCheckinServer
+         *@methodOf MUHCApp.service:CheckinService
+         *@description Verifies if the user is already checked in for their appointment in the waiting room
+         *@returns {Promise} Returns a promise containing the CheckedIn boolean and the AppointmentSerNum.
+         **/
+        function checkCheckinServer(appoint) {
             var r = $q.defer();
             //Request is sent with the AppointmentSerNum
-            RequestToServer.sendRequestWithResponse('CheckCheckin', {AppointmentSerNum:appoint.AppointmentSerNum}).then(
-                function(response)
-                {
+            RequestToServer.sendRequestWithResponse('CheckCheckin', {
+                AppointmentSerNum: appoint.AppointmentSerNum
+            })
+                .then(function(response) {
                     console.log(response);
                     //Response is either success or failure with the appointmentSerNum again in the data object
                     console.log('CheckCheckin coming back from backend', response);
-                    if(response.hasOwnProperty('Data')&&response.Data.hasOwnProperty('CheckedIn')){
+                    if (response.hasOwnProperty('Data') && response.Data.hasOwnProperty('CheckedIn')) {
                         console.log(typeof response.Data.CheckedIn, response.Data.CheckedIn);
 
-                        if(response.Data.CheckedIn =='true')
-                        {
+                        if (response.Data.CheckedIn == 'true') {
                             //If success, then set checkin for services, i.e. synchronize app
                             Appointments.setAppointmentCheckin(appoint.AppointmentSerNum);
                             setCheckIn(appoint.AppointmentSerNum);
                             //resolve with response
                             r.resolve(true);
-                        }else{
+                        } else {
                             r.resolve(false);
                         }
-                    }else{
+                    } else {
                         r.resolve(false);
                     }
-                }).catch(function(error)
-            {
-                console.log(error);
-                r.reject(false);
-            });
+                })
+                .catch(function(error) {
+                    console.log(error);
+                    r.reject(false);
+                });
             return r.promise;
         }
 
+        /**
+         *@ngdoc method
+         *@name checkinToAllAppointments
+         *@methodOf MUHCApp.service:CheckinService
+         *@description Checks the users in to all todays appointments.
+         *@returns {Promise} Returns a promise containing the CheckedIn boolean and the AppointmentSerNum.
+         **/
         function checkinToAllAppointments(){
 
             //Create a promise so this can be run asynchronously
@@ -113,7 +177,6 @@
             RequestToServer.sendRequestWithResponse('Checkin', objectToSend)
                 .then( function (response) {
                     console.log('Successfully checked in to all appointments', response);
-                    //Appointments.setAppointmentCheckin(appoint.AppointmentSerNum);
                     setCheckIn();
                     defer.resolve(response);
                 })
@@ -125,7 +188,13 @@
             return defer.promise;
         }
 
-        // Will return true if all appointments are checked in, false if one is not checked in or null if there are no appointments
+        /**
+         *@ngdoc method
+         *@name verifyAllCheckIn
+         *@methodOf MUHCApp.service:CheckinService
+         *@description verifies that the user is checked in to all his appintments today
+         *@returns {Promise} Returns a promise containing true or an error code.
+         **/
         function verifyAllCheckIn() {
             var defer = $q.defer();
             var promises = [];
@@ -133,11 +202,15 @@
 
             console.log(checkinApps);
 
+
             if (!checkinApps){
                 allCheckedIn = null;
                 defer.resolve(allCheckedIn);
-            } else {
-
+            } else if (allCheckedInOnApp()) {
+                allCheckedIn = true;
+                defer.resolve(allCheckedIn);
+            }
+            else{
                 for (var i = 0; i != checkinApps.length; i++) {
                     promises.push(this.checkCheckinServer(checkinApps[i]));
                 }
@@ -162,11 +235,11 @@
 
             return defer.promise;
         }
-        
-        function setCheckIn(appointmentSerNum) {
+        //
+        function setCheckIn() {
             console.log("called set checkin");
             for (var appointment in checkinApps){
-                    checkinApps[appointment].Checkin='1';
+                checkinApps[appointment].Checkin='1';
             }
 
         }
@@ -184,6 +257,16 @@
         function deg2rad(deg) {
             return deg * (Math.PI / 180);
         }
+
+        function allCheckedInOnApp() {
+            for (var appointment in checkinApps){
+                if (checkinApps[appointment].Checkin !='1'){
+                    return false;
+                }
+            }
+            return true;
+        }
+
     }
 
 })();
