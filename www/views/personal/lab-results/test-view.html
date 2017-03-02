@@ -11,25 +11,66 @@
       </div>
     </div>
     <ons-list>
-      <ons-list-item modifier="tappable" ng-repeat="test in selectedLabResults | filter: searchText | orderBy:['-AbnormalFlag', 'testCategory']" ng-click="personalNavigator.pushPage('./views/personal/lab-results/specific-test-component.html',{param:test});"  class="list-item-container">
         <ons-row>
-          <ons-col class="col-xs-10 col-sm-6 col-lg-6">
-            <div ng-if="test.AbnormalFlag && test.AbnormalFlag=='H'" class="name lab-results-test-high">
-              {{test.FacComponentName}}
-            </div>
-            <div ng-if="test.AbnormalFlag && test.AbnormalFlag=='L'" class="name lab-results-test-low">
-              {{test.FacComponentName}}
-            </div>
-            <div ng-if="!test.AbnormalFlag" class="name">
-              {{test.FacComponentName}}
-            </div>
-            <div class="desc">
-              {{test.TestValue}} {{test.UnitDescription}}
+          <ons-col class="col-xs-3 col-sm-3 col-lg-3">
+            <div class="name1" align="left" style="margin-left: 8px">
+            Test name
             </div>
           </ons-col>
-          <ons-col width="30%" style="margin-left: -10px" class="col-xs-2 col-sm-6 col-lg-6">
-            <div class="location" align="right" style="margin-left: -10px">
-              {{testDate}}
+          <ons-col class="col-xs-3 col-sm-3 col-lg-3">
+            <div class="name1" align="center">
+            Your result
+            </div>
+          </ons-col>
+          <ons-col class="col-xs-6 col-sm-6 col-lg-6">
+            <div class="name1" align="right">
+            Normal range
+            </div>
+          </ons-col>
+        </ons-row>
+      <ons-list ng-repeat="testCategory in testResultsByCategory">
+      <ons-list-header>{{testCategory.testCategory}}</ons-list-header>
+      <ons-list-item modifier="tappable" ng-repeat="test in selectedLabResults | filter: searchText | orderBy:['testCategory']" ng-click="personalNavigator.pushPage('./views/personal/lab-results/timeline-test-component.html',{param:test});"  class="list-item-container" ng-if="test.testCategory == testCategory.testCategory">
+
+        <ons-row>
+          <ons-col class="col-xs-3 col-sm-3 col-lg-3">
+
+           <div ng-if="(test.AbnormalFlag) && ((test.TestValue < 0.95*test.MinNorm) || (test.TestValue > 1.05*test.MaxNorm))" class="lab-results-test-out5">
+              {{test.FacComponentName}} ({{test.AbnormalFlag}})
+            </div>
+            
+            <div ng-if="(test.AbnormalFlag) && ((test.TestValue >= 0.95*test.MinNorm) && (test.TestValue <= 1.05*test.MaxNorm))"  class="lab-results-test-in5">
+              {{test.FacComponentName}} ({{test.AbnormalFlag}})
+            </div>
+           
+            <div ng-if="(!test.AbnormalFlag)" class="name">
+              {{test.FacComponentName}} {{test.AbnormalFlag}}
+            </div>
+            <div class="desc">
+             ({{test.UnitDescription}})
+            </div>
+          </ons-col>
+
+          <ons-col class="col-xs-3 col-sm-3 col-lg-3">
+          <div ng-if="!test.AbnormalFlag" class="desc" align="center">
+              {{test.TestValue}}   
+              <!--This displays your test value after clicking a specific test-->           
+            </div>
+
+            <div ng-if="test.AbnormalFlag && ((test.TestValue < 0.95*test.MinNorm) || (test.TestValue > 1.05*test.MaxNorm))" class="descOut5" align="center">
+              {{test.TestValue}}   
+              <!--This displays your test value after clicking a specific test-->           
+            </div>
+           
+            <div ng-if="test.AbnormalFlag && ((test.TestValue >= 0.95*test.MinNorm) && (test.TestValue <= 1.05*test.MaxNorm))" class="descIn5" align="center">
+              {{test.TestValue}}   
+              <!--This displays your test value after clicking a specific test-->           
+            </div>
+          </ons-col>        
+          <ons-col class="col-xs-6 col-sm-6 col-lg-6">
+            <div class="desc" align="right">
+            {{test.MinNorm}} - {{test.MaxNorm}} 
+            <!--This displays MinNorm and MaxNorm after clicking a specific test-->
             </div>
           </ons-col>
         </ons-row>
