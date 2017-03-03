@@ -1,141 +1,94 @@
-//
-// Author: David Herrera on Summer 2016, Email:davidfherrerar@gmail.com
-//
-var myApp = angular.module('MUHCApp');
-myApp.controller('accountSettingController', ['Patient', 'UserPreferences', '$scope', '$timeout', 'UpdateUI', 'RequestToServer', '$filter', 'NavigatorParameters', function(Patient, UserPreferences, $scope, $timeout, UpdateUI, RequestToServer, $filter, NavigatorParameters) {
+/*
+ * Filename     :   accountSettingsController.js
+ * Description  :   Controllers that manage the account setting and subviews.
+ * Created by   :   David Herrera, Robert Maglieri
+ * Date         :   03 Mar 2017
+ * Copyright    :   Copyright 2016, HIG, All rights reserved.
+ * Licence      :   This file is subject to the terms and conditions defined in
+ *                  file 'LICENSE.txt', which is part of this source code package.
+ */
 
-    NavigatorParameters.setParameters({'Navigator':'settingsNavigator'});
+(function () {
+    'use strict';
 
-    //Backbutton android pressed action, only Android devices
-    var backButtonPressed = 0;
-    $scope.accountDeviceBackButton = function() {
-        tabbar.setActiveTab(0);
-    };
-    //General device settings and privacy settings
-    $scope.goToGeneralSettings = function() {
-        NavigatorParameters.setParameters({
-            'Navigator': 'settingsNavigator'
-        });
-        settingsNavigator.pushPage('./views/init/init-settings.html');
-    };
+    angular
+        .module('MUHCApp')
+        .controller('accountSettingController', accountSettingController);
 
+    accountSettingController.$inject = ['Patient', 'UserPreferences', '$scope', '$timeout', 'NavigatorParameters'];
 
-    //Pull to refresh function
-    $scope.load2 = function($done) {
-        UpdateUI.update('All').then(function()
-        {
-            $timeout(function()
-            {
-                updated=true;
-                backButtonPressed = 0;
-                accountInit();
-                clearTimeout(timeOut);
-                $done();
+    /* @ngInject */
+    function accountSettingController(Patient, UserPreferences, $scope, $timeout, NavigatorParameters) {
+
+        var vm = this;
+        vm.title = 'accountSettingController';
+        vm.passFill = '********';
+        vm.mobilePlatform = (ons.platform.isIOS() || ons.platform.isAndroid());
+        vm.FirstName = Patient.getFirstName();
+        vm.LastName = Patient.getLastName();
+        vm.PatientId = Patient.getPatientId();
+        vm.Email = Patient.getEmail();
+        vm.TelNum = Patient.getTelNum();
+        vm.Language = UserPreferences.getLanguage();
+        vm.ProfilePicture = Patient.getProfileImage();
+        vm.passwordLength = 6;
+
+        vm.accountDeviceBackButton = accountDeviceBackButton;
+        vm.goToGeneralSettings = goToGeneralSettings;
+
+        activate();
+
+        ////////////////
+
+        function activate() {
+
+            loadSettings();
+
+            // Setting our parameters for pushing and popping pages
+            NavigatorParameters.setParameters({
+                'Navigator':'settingsNavigator'
             });
-        }).catch(function(error){
-            console.log(error);
-            clearTimeout(timeOut);
-            $done();
-        });
-        var timeOut = setTimeout(function(){
-            $done();
-        },5000);
-    };
-    //Initiate account settings function
-    accountInit();
 
-    //On postpop initialize the account settings to make sure the changes went through
-    settingsNavigator.on('postpop', function() {
-        $timeout(function() {
-            backButtonPressed = 0;
-            accountInit();
-        });
+            // After a page is popped reintialize the settings.
+            settingsNavigator.on('postpop', function() {
+                $timeout(function() {
+                    loadSettings();
+                });
 
-    });
-    //On destroy, dettach listener
-    $scope.$on('destroy', function() {
-        settingsNavigator.off('postpop');
-    });
-    //Initializing all the user preferences
-    function accountInit() {
-        var nativeCalendar = Number(window.localStorage.getItem('NativeCalendar'));
-        $scope.passFill = '********';
-        $scope.mobilePlatform = (ons.platform.isIOS() || ons.platform.isAndroid());
-        $scope.checkboxModelCalendar = (nativeCalendar) ? nativeCalendar:0;
-        $scope.calendarPreference = $scope.checkboxModelCalendar;
-        $scope.checkboxModel = UserPreferences.getEnableSMS();
-        $scope.smsPreference = $scope.checkboxModel;
-        $scope.FirstName = Patient.getFirstName();
-        $scope.LastName = Patient.getLastName();
-        $scope.PatientId = Patient.getPatientId();
-        $scope.Alias = Patient.getAlias();
-        $scope.Email = Patient.getEmail();
-        $scope.TelNum = Patient.getTelNum();
-        $scope.Language = UserPreferences.getLanguage();
-        console.log(UserPreferences.getLanguage());
-        $scope.ProfilePicture = Patient.getProfileImage();
-        $scope.passwordLength = 7;
+            });
+
+            //On destroy, dettach listener
+            $scope.$on('destroy', function() {
+                settingsNavigator.off('postpop');
+            });
+
+        }
+
+        function accountDeviceBackButton() {
+            tabbar.setActiveTab(0);
+        }
+
+        function goToGeneralSettings() {
+            NavigatorParameters.setParameters({
+                'Navigator': 'settingsNavigator'
+            });
+            settingsNavigator.pushPage('./views/init/init-settings.html');
+        }
+
+        function loadSettings() {
+            vm.mobilePlatform = (ons.platform.isIOS() || ons.platform.isAndroid());
+            vm.FirstName = Patient.getFirstName();
+            vm.LastName = Patient.getLastName();
+            vm.PatientId = Patient.getPatientId();
+            vm.Email = Patient.getEmail();
+            vm.TelNum = Patient.getTelNum();
+            vm.Language = UserPreferences.getLanguage();
+            vm.ProfilePicture = Patient.getProfileImage();
+        }
+
     }
-    //Function changes the enableSMS for the sms notifications and Calendar settings for the device calendar 
-    /*    $scope.saveSettings = function(option) {
 
-     if ($scope.mobilePlatform) {
-     var message = '';
-     if (option === 'EnableSMS') {
-     if ($scope.checkboxModel === 1) {
-     message = $filter('translate')("ENABLESMSNOTIFICATIONQUESTION");
-     } else {
-     message = $filter('translate')("DISABLESMSNOTIFICATIONQUESTION");
-     }
-     navigator.notification.confirm(message, confirmCallbackSMS, $filter('translate')("CONFIRMALERTSMSLABEL"), [$filter('translate')("CONTINUE"), $filter('translate')("CANCEL")]);
-
-     } else if (option === 'Calendar') {
-     if ($scope.checkboxModelCalendar === 1) {
-     message = $filter('translate')("ENABLECALENDARACCESSQUESTION");
-     } else {
-     message = $filter('translate')("DISABLECALENDARACCESSQUESTION");
-     }
-     navigator.notification.confirm(message, confirmCallbackCalendar, $filter('translate')("CONFIRMALERTCALENDARLABEL"), [$filter('translate')("CONTINUE"), $filter('translate')("CANCEL")]);
-     }
-     } else {
-     if (option === 'EnableSMS') {
-     var objectToSend = {};
-     objectToSend.FieldToChange = 'EnableSMS';
-     objectToSend.NewValue = $scope.checkboxModel;
-     UserPreferences.setEnableSMS(objectToSend.NewValue);
-     RequestToServer.sendRequest('AccountChange', objectToSend);
-     }
-     }
-     };
-
-     function confirmCallbackCalendar(index) {
-     console.log(index);
-     if (index == 1) {
-     window.localStorage.setItem('NativeCalendar', $scope.checkboxModelCalendar);
-     } else {
-     $timeout(function() {
-     $scope.checkboxModelCalendar = ($scope.checkboxModelCalendar == 1)?0:1;
-     });
-     }
-     }
-
-     function confirmCallbackSMS(index) {
-     console.log(index);
-     if (index == 1) {
-     var objectToSend = {};
-     objectToSend.FieldToChange = 'EnableSMS';
-     objectToSend.NewValue = $scope.checkboxModel;
-     UserPreferences.setEnableSMS(objectToSend.NewValue);
-     $scope.smsPreference = $scope.checkboxModel;
-     RequestToServer.sendRequest('AccountChange', objectToSend);
-     } else {
-     $timeout(function() {
-     $scope.checkboxModel = ($scope.checkboxModel == 1)?0:1;
-     });
-     }
-     }*/
-}]);
-
+})();
 
 
 myApp.controller('ChangingSettingController', function($filter, $rootScope, FirebaseService, $translate, UserPreferences, Patient, RequestToServer, $scope, $timeout, UpdateUI, UserAuthorizationInfo,LocalStorage) {
