@@ -5,10 +5,10 @@
         .module('MUHCApp')
         .controller('ContentController', ContentController);
 
-    ContentController.$inject = ['DepDocsService', 'NavigatorParameters'];
+    ContentController.$inject = ['DynamicContentService', 'NavigatorParameters'];
 
     /* @ngInject */
-    function ContentController(DepDocsService, NavigatorParameters) {
+    function ContentController(DynamicContentService, NavigatorParameters) {
         var vm = this;
         vm.title = 'ContentController';
         vm.pageContent = {};
@@ -31,12 +31,12 @@
         function loadPageContent(contentType){
             // push the new page on the satck
 
-            var pageContent = DepDocsService.getContentData(contentType);
+            var pageContent = DynamicContentService.getContentData(contentType);
 
             vm.pageContent.title = pageContent.title;
 
             // get the content from depdocs
-            DepDocsService.getPageContent(contentType)
+            DynamicContentService.getPageContent(contentType)
                 .then(function (response) {
                     console.log(response);
                     vm.pageContent.content = response.data;

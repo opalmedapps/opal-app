@@ -4,18 +4,19 @@
 var myApp = angular.module('MUHCApp');
 
 myApp.controller('InitScreenController',
-    function($scope, $timeout, NavigatorParameters, $translatePartialLoader, UserPreferences, $filter, Constants, Permissions, $http, DepDocsService)
+    function($scope, $timeout, NavigatorParameters, $translatePartialLoader, UserPreferences, $filter, Constants, Permissions, $http, DynamicContentService)
     {
         //Firebase reference to check authentication
         //var myDataRef = firebase.database().ref('dev2/');
 
-        DepDocsService.initializeLinks()
+        // Initializing the dynamic links for Opal.
+        DynamicContentService.initializeLinks()
             .then(function (response) {
                 console.log(response);
                 if(!response.exists){
-                    DepDocsService.setContentData(response.data);
+                    DynamicContentService.setContentData(response.data);
                 }
-                return DepDocsService.getPageContent('service');
+                return DynamicContentService.getPageContent('service');
             })
             .then(function successCallback(response) {
                 console.log(response.data);
