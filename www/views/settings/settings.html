@@ -1,27 +1,20 @@
-<ons-page ng-controller="accountSettingController" ng-device-backbutton="accountDeviceBackButton()">
+<ons-page ng-controller="accountSettingController as asc" ng-device-backbutton="accountDeviceBackButton()">
 
     <ons-toolbar fixed-style>
         <div class="center" ng-class="fontSizeTitle">{{"ACCOUNT"|translate}}</div>
     </ons-toolbar>
-    <!--<ons-pull-hook ng-action="load2($done)" var="loader">
-            <span ng-switch="loader.getCurrentState()">
-              <span ng-switch-when="initial"><ons-icon size="35px" icon="ion-arrow-down-a"></ons-icon> {{"PULLDOWNTOREFRESH"|translate}}</span>
-              <span ng-switch-when="preaction"><ons-icon size="35px" icon="ion-arrow-up-a"></ons-icon>{{"RELEASETOREFRESH"|translate}}</span>
-              <span ng-switch-when="action"><ons-icon size="35px" spin="true" icon="ion-load-d"></ons-icon> {{"LOADINGDATA"|translate}}...</span>
-            </span>
-    </ons-pull-hook>-->
     <div class="container">
         <a ng-click="tabbar.setActiveTab(4)">
             <ons-row style="padding:5px">
                 <ons-col width="90px">
                     <div class="image-profile-wrapper">
-                        <img ng-src="{{ProfilePicture}}"  class="image-profile">
+                        <img ng-src="{{asc.ProfilePicture}}"  class="image-profile">
                     </div>
                 </ons-col>
                 <ons-col>
                     <div>
-                        <p><strong ng-class="fontSizeTitle">{{FirstName}} {{LastName}}</strong><br>
-                            <span class="profile-id" ng-class="fontSizeDesc">{{"PATIENTID"|translate}} {{PatientId}}</span>
+                        <p><strong ng-class="fontSizeTitle">{{asc.FirstName}} {{LastName}}</strong><br>
+                            <span class="profile-id" ng-class="fontSizeDesc">{{"PATIENTID"|translate}} {{asc.PatientId}}</span>
                         </p>
                     </div>
                 </ons-col>
@@ -30,7 +23,7 @@
     </div>
 
     <ons-list class="settings-list">
-        <ons-list-item modifier="chevron" ng-click="goToGeneralSettings()" ng-class="fontSizeDesc">
+        <ons-list-item modifier="chevron" ng-click="asc.goToGeneralSettings()" ng-class="fontSizeDesc">
             {{"ABOUT"|translate}}
         </ons-list-item>
     </ons-list>
@@ -43,15 +36,15 @@
          </ons-list-item>-->
         <ons-list-item modifier="chevron" ng-click="settingsNavigator.pushPage('views/settings/update-account-field.html', {param:'Email'},{ animation : 'slide' } )" ng-class="fontSizeDesc">
             {{"EMAIL"|translate}}
-            <span class="list-item-note lucent">{{Email|limitLetters:12}}</span>
+            <span class="list-item-note lucent">{{asc.Email|limitLetters:12}}</span>
         </ons-list-item>
         <ons-list-item modifier="chevron" ng-click="settingsNavigator.pushPage('views/settings/update-account-field.html', {param:'Password'},{ animation : 'slide' } )" ng-class="fontSizeDesc">
             {{"PASSWORD"|translate}}
-            <span type="password" class="list-item-note lucent">{{passFill|limitTo:7}}</span>
+            <span type="password" class="list-item-note lucent">{{asc.passFill|limitTo:6}}</span>
         </ons-list-item>
         <ons-list-item modifier="chevron" ng-click="settingsNavigator.pushPage('views/settings/update-account-field.html', {param:'Tel. Number'},{ animation : 'slide' } )" ng-class="fontSizeDesc">
             {{"PHONENUMBER"|translate}}
-            <span class="list-item-note lucent" >{{TelNum|FormatPhoneNumber}}</span>
+            <span class="list-item-note lucent" >{{asc.TelNum|FormatPhoneNumber}}</span>
         </ons-list-item>
     </ons-list>
 
