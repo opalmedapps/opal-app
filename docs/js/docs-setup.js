@@ -37,7 +37,7 @@ NG_DOCS={
       "type": "service",
       "moduleName": "MUHCApp",
       "shortDescription": "Service that deals with the announcement information for the patient",
-      "keywords": "$filter $q adds annoucement annoucements announcement announcements announcementsarray announcementsernum api appropiate array backend clearannouncements clears contained containts controller controllers deals device faster finds function getannouncementbysernum getannouncementname getannouncements getannouncementurl getnumberunreadannouncements getter getunreadannouncements individual initializing iterates iteration language logoutcontroller looked matching method muhcapp names news notifications number object parameter passed patient postname_en postname_fr preferred property read readannouncement readannouncementbysernum readstatus represents request required returns saved sends sernum service setannouncements setlanguageannouncements sets setter storage syncs translated translates unread update updateannouncements updates url userpreferences values"
+      "keywords": "$filter $q annoucement annoucements announcement announcements announcementsarray announcementsernum api appropiate appropriate array backend clearannouncements clears contained containts controller controllers deals faster function getannouncementbysernum getannouncementname getannouncements getannouncementurl getnumberunreadannouncements getter getunreadannouncements individual initializing iterates iteration language logoutcontroller looked matching method muhcapp names news notifications number object out-of-date parameter passed patient postname_en postname_fr preferred property read readannouncement readannouncementbysernum readstatus replace represents request required returns saved sends sernum service setannouncements setlanguageannouncements sets setter translated translates unread updateannouncements updates url userpreferences values"
     },
     {
       "section": "api",
@@ -47,6 +47,15 @@ NG_DOCS={
       "moduleName": "MUHCApp",
       "shortDescription": "Sets the appointments and provides an API to access them",
       "keywords": "$cordovacalendar $filter $q access add adding api app appointment appointments appointmentsarray appointmentsernum appointmentslocalstorage appropiate array calendar called checkandaddappointmentstocalendar checkin checks chronologically cleans closed completed containts controller correspoding current data database day device error failure fields firebase function future getappointmentbysernum getappointmentname getappointmenturl getcheckinappointment getfutureappointments getlastappointmentcompleted getnumberunreadappointments getpastappointments gettodaysappointments gettreatmentappointments getupcomingappointment getuserappointments getusercalendar identify individual-appointments initializer ischeckinappointment isthereappointments istherenextappointment labels language list making matches method model muhcapp native notification notifications number object occurs organized parameter patient proceeds proper properties property range readappointmentbysernum readstatus reinstantiates replacing representation resolves returns schedulecontroller send sernum server service services session sessions setappointmentcheckin setappointmentslanguage setcheckinappointmentasclosed sets setuserappoinments step storage success sync synced three translated translations treatment treatmentsessionsobject unseen upcoming updates updateuserappoinments url user userappointmentsarray userpreferences valid"
+    },
+    {
+      "section": "api",
+      "id": "MUHCApp.service:CheckinService",
+      "shortName": "CheckinService",
+      "type": "service",
+      "moduleName": "MUHCApp",
+      "shortDescription": "Service that deals with the checkin functionality for the app",
+      "keywords": "$q allow allowed api app appintments appointment appointments appointmentsernum array assumption based boolean check check-in checkcheckinserver checked checkedin checkin checkinable checkinapps checkinservice checkintoallappointments checks code deals determines error function functionality geographically getcheckinapps gps hospital isallowedtocheckin location method muhcapp object open patient position positioncheckinappointment promise property radius rejects resolves returns room service setcheckinapps sets success today todays true updates user users vecinity verifies verifyallcheckin waiting works"
     },
     {
       "section": "api",
@@ -86,6 +95,15 @@ NG_DOCS={
     },
     {
       "section": "api",
+      "id": "MUHCApp.service:DynamicContentService",
+      "shortName": "DynamicContentService",
+      "type": "service",
+      "moduleName": "MUHCApp",
+      "shortDescription": "Service that manages the dynamic html for Opal. It grabs data from depdocs.com",
+      "keywords": "$http $q api content contentdata contents contenttype data depdocs displayed dynamic external file function getcontentdata getpagecontent grabs html initialize initializelinks key links list loaded manages method muhcapp opal php property request requested requests returned server service setcontentdata sets title url view"
+    },
+    {
+      "section": "api",
       "id": "MUHCApp.service:EducationalMaterial",
       "shortName": "EducationalMaterial",
       "type": "service",
@@ -100,7 +118,7 @@ NG_DOCS={
       "type": "service",
       "moduleName": "MUHCApp",
       "shortDescription": "Provides an API to encrypt and decrypt objects, arrays, or strings.",
-      "keywords": "api arrays decrypt decryptdata decrypted decrypting decryptwithkey encrypt encryptdata encrypted encrypting encryptwithkey hashed key method muhcapp object objects parameter password returns secret service strings userauthorizationinfo"
+      "keywords": "answer api arrays communication decrypt decryptdata decrypted decrypting decryptwithkey encrypt encryptdata encrypted encrypting encryption encryptwithkey future getsecurityans hashed key method muhcapp object objects parameter password returns secret security service sets setsecurityans strings userauthorizationinfo"
     },
     {
       "section": "api",
@@ -119,6 +137,15 @@ NG_DOCS={
       "moduleName": "MUHCApp",
       "shortDescription": "Allows the app controllers or services obtain the authentication state and credentials, it also returns the urls inside for the firebase connection",
       "keywords": "$firebaseauth allows angular api app authentication connection controllers credentials fire firebase getauthentication getauthenticationcredentials getfirebaseurl inside method muhcapp object reference returns service services string url urls"
+    },
+    {
+      "section": "api",
+      "id": "MUHCApp.service:LabResults",
+      "shortName": "LabResults",
+      "type": "service",
+      "moduleName": "MUHCApp",
+      "shortDescription": "Service that requests and manages the lab results (blood tests) from the server.",
+      "keywords": "$filter $q api array category clears currently data destroy getter gettestresults gettestresultsarraybydate gettestresultsarraybytype gettestresultsbycategory gettestresultsbydate gettestresultsbytype grabbing implemented lab latest manages method muhcapp object promise property raw requests returns server service sets settestresults status testresults tests type updates updatetestresults"
     },
     {
       "section": "api",
@@ -176,6 +203,24 @@ NG_DOCS={
     },
     {
       "section": "api",
+      "id": "MUHCApp.service:Permissions",
+      "shortName": "Permissions",
+      "type": "service",
+      "moduleName": "MUHCApp",
+      "shortDescription": "Service that requests and manages the lab results (blood tests) from the server.",
+      "keywords": "$q android api asks checks constants device display enabled enablepermission lab manages message method msg muhcapp permission permission_type permissions promise requested requests required returns server service success tests type user"
+    },
+    {
+      "section": "api",
+      "id": "MUHCApp.service:PlanningSteps",
+      "shortName": "PlanningSteps",
+      "type": "service",
+      "moduleName": "MUHCApp",
+      "shortDescription": "Sets and determines the current planning step for the user. The planning sequence is defined as follows:",
+      "keywords": "api appointment appointments arrays calc calculated checks clears completed completion ct cts current currentstep defined destroy determines dose existence getctsimappointment getcurrentstep getplanningsequence hasct initializeplanningsequence initializes iscompleted list method muhcapp object patient physician physics plan planning prepares property qa qaed radiation ready return returns scan scans scheduling sequence service sets step steps tasks treatment treatments user"
+    },
+    {
+      "section": "api",
       "id": "MUHCApp.service:RequestToServer",
       "shortName": "RequestToServer",
       "type": "service",
@@ -190,7 +235,7 @@ NG_DOCS={
       "type": "service",
       "moduleName": "MUHCApp",
       "shortDescription": "Service used to verify and confirm password resets.",
-      "keywords": "api code confirm email firebase method muhcapp password provided redirect reset resets service url user verifies verify verifylinkcode"
+      "keywords": "api code completepasswordchange confirm confirms email expressions firebase getparameter method muhcapp newpassword oobcode param parameter parameters password promise provided query redirect regular reset resets returns scan scans search service string url user verifies verify verifylinkcode void"
     },
     {
       "section": "api",
@@ -199,7 +244,7 @@ NG_DOCS={
       "type": "service",
       "moduleName": "MUHCApp",
       "shortDescription": "Service used to store and manage treatment planning tasks",
-      "keywords": "$filter api array deleteplanningtasks getplanningtasks local localstorage manage member method model muhcapp null objects planning returns service setplanningtasks sets storage store task tasks treatment writes"
+      "keywords": "$filter api array clears deleteplanningtasks destroy getallrecenttasks getplanningtasks local localstorage manage member method model muhcapp null objects physician planning planningtasks property returns service setplanningtasks sets sgetrecentphysiciantask storage store task tasks treatment users writes"
     },
     {
       "section": "api",
@@ -239,21 +284,21 @@ NG_DOCS={
     },
     {
       "section": "api",
+      "id": "MUHCApp.service:UUID",
+      "shortName": "UUID",
+      "type": "service",
+      "moduleName": "MUHCApp",
+      "shortDescription": "Service used to generate UUIDs for browsers.",
+      "keywords": "api browser browsers generate generated generates getuuid method muhcapp property random service set sets setuuid uuid uuids"
+    },
+    {
+      "section": "api",
       "id": "MUHCApp.services:Messages",
       "shortName": "Messages",
       "type": "service",
       "moduleName": "MUHCApp",
       "shortDescription": "Service deals with patient/doctor messaging portal, parses Firebase object into the appropiate format",
       "keywords": "$filter $rootscope addnewmessagetoconversation api appropiate calls chronological content conversation conversationindex conversations coversation deals defines doctor fields firebase format getusermessages instatiates instiates javascript lastly localstorage message messagecotent messages messageslocalstorage messaging method methods muhcapp object order organizes parses patient portal property representation request returns senderrole sending sends service services setdateoflastmessage sets setusermessages updates updateui updateusermessages user userconversationsarray usermessages usermessageslastupdated"
-    },
-    {
-      "section": "api",
-      "id": "MUHCApp.services:UserPlanWorkflow",
-      "shortName": "UserPlanWorkflow",
-      "type": "service",
-      "moduleName": "MUHCApp",
-      "shortDescription": "Organizes task and appointments for the plan workflow and sets properties ready for usage in the",
-      "keywords": "$filter api appointments array choronologically chronologically current currenttaskorappointmentindex datediff defines difference events finding firebase getcurrenttaskorappointment gettimebetweenevents initialized method min muhcapp namestage object obtains organized organizes organizing plan properly properties property ready returns service services sets setting setuserplanworkflow stage stages structure task tasks tasksandappointments tasksandappointmentsarray time timediff timediffindays today treatment updateui usage user view workflow"
     },
     {
       "section": "api",
