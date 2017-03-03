@@ -1,7 +1,7 @@
 var exports = module.exports = {};
 var mysql = require('mysql');
 var q = require('q');
-var credentials = require('./credentials.js');
+var credentials = require('./config.json');
 
 /*var sqlConfig={
   port:'/Applications/MAMP/tmp/mysql/mysql.sock',

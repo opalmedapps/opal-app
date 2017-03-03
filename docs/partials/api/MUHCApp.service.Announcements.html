@@ -62,7 +62,7 @@
 </div></td></tr></tbody></table></div>
 </li>
 <li><h3 id="methods_readannouncementbysernum">readAnnouncementBySerNum(serNum)</h3>
-<div class="readannouncementbysernum"><div class="readannouncementbysernum-page"><p>Sets ReadStatus in announcement to 1, sends request to backend, and syncs with device storage</p>
+<div class="readannouncementbysernum"><div class="readannouncementbysernum-page"><p>Sets ReadStatus in announcement to 1, sends request to backend</p>
 </div><h5 id="methods_readannouncementbysernum_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>serNum</td><td><a href="" class="label type-hint type-hint-string">String</a></td><td><div class="readannouncementbysernum-page"><p>AnnouncementSerNum to be read</p>
 </div></td></tr></tbody></table></div>
 </li>
@@ -78,15 +78,17 @@
 </div></td></tr></table></div>
 </li>
 <li><h3 id="methods_updateannouncements">updateAnnouncements(announcements)</h3>
-<div class="updateannouncements"><div class="updateannouncements-page"><p>Updates the announcementsArray with the new information contained in the announcement parameter</p>
-</div><h5 id="methods_updateannouncements_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>announcements</td><td><a href="" class="label type-hint type-hint-array">Array</a></td><td><div class="updateannouncements-page"><p>Finds announcements to update or adds new announcements if not found</p>
+<div class="updateannouncements"><div class="updateannouncements-page"><p>Updates the announcementsArray with the new information contained in the announcement parameter.
+Will replace out-of-date announcements.</p>
+</div><h5 id="methods_updateannouncements_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>announcements</td><td><a href="" class="label type-hint type-hint-array">Array</a></td><td><div class="updateannouncements-page"><p>new announcements array</p>
 </div></td></tr></tbody></table></div>
 </li>
 </ul>
 </div>
 <div class="member property"><h2 id="properties">Properties</h2>
 <ul class="properties"><li><h3 id="properties_announcementsarray">announcementsArray</h3>
-<div class="announcementsarray"><div class="muhcapp-service-announcementsarray-page"><p>Initializing array that represents all the information for Announcements, this array is passed to appropiate controllers.</p>
+<div class="announcementsarray"><div class="muhcapp-service-announcementsarray-page"><p>Initializing array that represents all the information for Announcements, this array is passed to
+the appropriate controllers.</p>
 </div></div>
 </li>
 </ul>

@@ -11,36 +11,24 @@
 </li>
 <li><code ng:non-bindable=""><a href="api/MUHCApp.service:Appointments">Appointments</a></code>
 </li>
-<li><code ng:non-bindable=""><a href="api/MUHCApp.service:FirebaseService">FirebaseService</a></code>
-</li>
-<li><code ng:non-bindable=""><a href="api/MUHCApp.service:EncryptionService">EncryptionService</a></code>
-</li>
-<li><code ng:non-bindable=""><a href="api/MUHCApp.service:UserPreferences">UserPreferences</a></code>
-</li>
-<li><code ng:non-bindable=""><a href="api/ng.$filter">$filter</a></code>
-</li>
 <li><code ng:non-bindable=""><a href="api/ng.$q">$q</a></code>
-</li>
-<li><code ng:non-bindable=""><a href="api/ng.$rootScope">$rootScope</a></code>
-</li>
-<li><code ng:non-bindable=""><a href="api/ng.$timeout">$timeout</a></code>
 </li>
 </ul>
 <div class="member method"><h2 id="methods">Methods</h2>
-<ul class="methods"><li><h3 id="methods_checkcheckinserver">checkCheckinServer(appointment)</h3>
-<div class="checkcheckinserver"><div class="checkcheckinserver-page"><p>Checks by querying the server if user has already checked in, perhaps from another device or simply the kiosk, or desk.</p>
-</div><h5 id="methods_checkcheckinserver_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>appointment</td><td><a href="" class="label type-hint type-hint-object">Object</a></td><td><div class="checkcheckinserver-page"><p>Appointment object</p>
-</div></td></tr></tbody></table><h5 id="methods_checkcheckinserver_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-promise">Promise</a></td><td><div class="checkcheckinserver-page"><p>Returns a promise that resolves to success if the user has indeed already checked in, or resolves to failure if the patient is not in the vecinity of the hospital</p>
+<ul class="methods"><li><h3 id="methods_checkcheckinserver">checkCheckinServer()</h3>
+<div class="checkcheckinserver"><div class="checkcheckinserver-page"><p>Verifies if the user is already checked in for their appointment in the waiting room</p>
+</div><h5 id="methods_checkcheckinserver_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-promise">Promise</a></td><td><div class="checkcheckinserver-page"><p>Returns a promise containing the CheckedIn boolean and the AppointmentSerNum.</p>
 </div></td></tr></table></div>
 </li>
-<li><h3 id="methods_checkintoappointment">checkinToAppointment()</h3>
-<div class="checkintoappointment"><div class="checkintoappointment-page"><p>Function to check a user into an appointment.</p>
-</div><h5 id="methods_checkintoappointment_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-promise">Promise</a></td><td><div class="checkintoappointment-page"><p>Returns a promise that resolves to success if the user has indeed checked in, and resolves to failure if the patient is not been able to checkin. It also opens the connection to get time estimates from the backend</p>
+<li><h3 id="methods_checkintoallappointments">checkinToAllAppointments()</h3>
+<div class="checkintoallappointments"><div class="checkintoallappointments-page"><p>Checks the users in to all todays appointments.</p>
+</div><h5 id="methods_checkintoallappointments_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-promise">Promise</a></td><td><div class="checkintoallappointments-page"><p>Returns a promise containing the CheckedIn boolean and the AppointmentSerNum.</p>
 </div></td></tr></table></div>
 </li>
-<li><h3 id="methods_getcheckinupdates">getCheckinUpdates()</h3>
-<div class="getcheckinupdates"><div class="getcheckinupdates-page"><p>Gets live waiting estimate from the backend, sends a request every two seconds and updates variables attached to rootScope to propagate this result.</p>
-</div></div>
+<li><h3 id="methods_getcheckinapps">getCheckInApps()</h3>
+<div class="getcheckinapps"><div class="getcheckinapps-page"><p>Function that gets the appointments</p>
+</div><h5 id="methods_getcheckinapps_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-array">Array</a></td><td><div class="getcheckinapps-page"><p>Todays checkinable appointments</p>
+</div></td></tr></table></div>
 </li>
 <li><h3 id="methods_isallowedtocheckin">isAllowedToCheckin()</h3>
 <div class="isallowedtocheckin"><div class="isallowedtocheckin-page"><p>Function determines geographically whether user is allow to check-in. Works under the
@@ -48,10 +36,23 @@ assumption that all the checks to see if an appointment is today and open have a
 </div><h5 id="methods_isallowedtocheckin_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-promise">Promise</a></td><td><div class="isallowedtocheckin-page"><p>Returns a promise that resolves to success if the user is allowed to checkin based on whether the user is within a 300m radius of the hospital, or rejects the promise if the patient is not in the vecinity of the hospital or if there is an error while checkin location</p>
 </div></td></tr></table></div>
 </li>
+<li><h3 id="methods_setcheckinapps">setCheckInApps()</h3>
+<div class="setcheckinapps"><div class="setcheckinapps-page"><p>Function that sets todays appointments</p>
+</div></div>
+</li>
+<li><h3 id="methods_verifyallcheckin">verifyAllCheckIn()</h3>
+<div class="verifyallcheckin"><div class="verifyallcheckin-page"><p>verifies that the user is checked in to all his appintments today</p>
+</div><h5 id="methods_verifyallcheckin_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-promise">Promise</a></td><td><div class="verifyallcheckin-page"><p>Returns a promise containing true or an error code.</p>
+</div></td></tr></table></div>
+</li>
 </ul>
 </div>
 <div class="member property"><h2 id="properties">Properties</h2>
-<ul class="properties"><li><h3 id="properties_positioncheckinappointment">positionCheckinAppointment</h3>
+<ul class="properties"><li><h3 id="properties_checkinapps">checkinApps</h3>
+<div class="checkinapps"><div class="muhcapp-service-checkinapps-page"><p>Array contains the appointments to check in to.</p>
+</div></div>
+</li>
+<li><h3 id="properties_positioncheckinappointment">positionCheckinAppointment</h3>
 <div class="positioncheckinappointment"><div class="muhcapp-service-positioncheckinappointment-page"><p>Object contains the last GPS position used when the patient tried to checkin to an appointment</p>
 </div></div>
 </li>

@@ -1,3 +1,16 @@
+/*
+ * Filename     :   tasksService.js
+ * Description  :   Service that stores and manages patient tasks.
+ * Created by   :   David Herrera, Robert Maglieri
+ * Date         :   03 Mar 2017
+ * Copyright    :   Copyright 2016, HIG, All rights reserved.
+ * Licence      :   This file is subject to the terms and conditions defined in
+ *                  file 'LICENSE.txt', which is part of this source code package.
+ */
+
+
+
+
 /**
  *@ngdoc service
  *@name MUHCApp.service:Tasks
@@ -16,6 +29,12 @@
     /* @ngInject */
     function Tasks(LocalStorage, $filter) {
 
+        /**
+         *@ngdoc property
+         *@name  MUHCApp.service.#planningTasks
+         *@propertyOf MUHCApp.service:Tasks
+         *@description Array of all the users planning tasks
+         **/
         var planningTasks = [];
 
         var service = {
@@ -59,10 +78,6 @@
             return planningTasks;
         }
 
-        function getPlanningTasksFromStorage(){
-            return LocalStorage.ReadLocalStorage('Tasks');
-        }
-
         /**
          * @ngdoc method
          * @name deletePlanningTasks
@@ -76,9 +91,9 @@
 
         /**
          * @ngdoc method
-         * @name setPlanningTasks
+         * @name getRecentPhysicianTask
          * @methodOf MUHCApp.service:Tasks
-         * @description Sets the tasks member in the model and writes it to localstorage.
+         * @description Gets the most recent physician planning task.
          * @returns {Object} The task and its index in the task array.
         **/
         function getRecentPhysicianTask(){
@@ -99,7 +114,13 @@
             };
         }
 
-        // Returns all tasks starting from the most recent Physician plan prep.
+        /**
+         * @ngdoc method
+         * @name getAllRecentTasks
+         * @methodOf MUHCApp.service:Tasks
+         * @description Gets all the most recent tasks until the first physician planning task.
+         * @returns {Array} All the recent planning tasks.
+         **/
         function getAllRecentTasks(){
 
             var physicianTask = getRecentPhysicianTask();
@@ -108,6 +129,12 @@
             return planningTasks.slice(physicianTask.index, planningTasks.length);
         }
 
+        /**
+         * @ngdoc method
+         * @name destroy
+         * @methodOf MUHCApp.service:Tasks
+         * @description Clears all the planning tasks
+         **/
         function destroy(){
             planningTasks = [];
         }

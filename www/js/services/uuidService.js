@@ -1,3 +1,21 @@
+/*
+ * Filename     :   uuidService.js
+ * Description  :   Service that generates UUIDS for browsers. These are needed to uniquely identify browsers
+ *                  so they can be asscociated with specific security answers.
+ * Created by   :   David Herrera, Robert Maglieri
+ * Date         :   03 Mar 2017
+ * Copyright    :   Copyright 2016, HIG, All rights reserved.
+ * Licence      :   This file is subject to the terms and conditions defined in
+ *                  file 'LICENSE.txt', which is part of this source code package.
+ */
+
+
+/**
+ *@ngdoc service
+ *@name MUHCApp.service:UUID
+ *@description Service used to generate UUIDs for browsers.
+ **/
+
 (function () {
     'use strict';
 
@@ -10,10 +28,16 @@
     /* @ngInject */
     function UUID() {
 
+        /**
+         *@ngdoc property
+         *@name  MUHCApp.service.#uuid
+         *@propertyOf MUHCApp.service:UUID
+         *@description UUID for the browser
+         **/
         var uuid = '';
 
         var service = {
-            generate: b,
+            generate: generate,
             setUUID: setUUID,
             getUUID: getUUID
         };
@@ -21,8 +45,14 @@
 
         ////////////////
 
-        // See broofa/node-uuid
-        function b(a){
+        /**
+         * @ngdoc method
+         * @name generate
+         * @methodOf MUHCApp.service:UUID
+         * @description Generates a random UUID for a browser
+         * @returns {String} The UUID.
+         **/
+        function generate(a){
 
             return a           // if the placeholder was passed, return
                 ? (              // a random number from 0 to 15
@@ -43,10 +73,23 @@
                 )
         }
 
+        /**
+         * @ngdoc method
+         * @name setUUID
+         * @methodOf MUHCApp.service:UUID
+         * @param {String} UUID The UUID to set.
+         * @description Sets the previously generated UUID in the service.
+         **/
         function setUUID(UUID){
             uuid = UUID;
         }
 
+        /**
+         * @ngdoc method
+         * @name getUUID
+         * @methodOf MUHCApp.service:UUID
+         * @description Gets the previously generated UUID.
+         **/
         function getUUID(){
             return uuid;
         }

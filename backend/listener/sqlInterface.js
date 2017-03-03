@@ -3,7 +3,7 @@ var filesystem  =require('fs');
 var Q           =require('q');
 var utility = require('./utility.js');
 var queries=require('./queries.js');
-var credentials=require('./credentials.js');
+var config=require('./config.json');
 var CryptoJS=require('crypto-js');
 var buffer=require('buffer');
 var http = require('http');
@@ -27,10 +27,10 @@ var exec = require('child_process').exec;
  *Connecting to mysql database
  */
 var sqlConfig={
-    host:credentials.HOST,
-    user:credentials.MYSQL_USERNAME,
-    password:credentials.MYSQL_PASSWORD,
-    database:credentials.MYSQL_DATABASE,
+    host:config.HOST,
+    user:config.MYSQL_USERNAME,
+    password:config.MYSQL_PASSWORD,
+    database:config.MYSQL_DATABASE,
     dateStrings:true
 };
 console.log(sqlConfig);
@@ -699,7 +699,7 @@ function LoadDocuments(rows)
         var substring=rows[key].FinalFileName.substring(n+1,rows[key].FinalFileName.length);
         rows[key].DocumentType=substring;
         // var/www/Documents/opalAdmin/backend/clinical/documents
-        rows[key].Content=filesystem.readFileSync('/var/www/Documents/opalAdmin/backend/clinical/documents/' + rows[key].FinalFileName,'base64');
+        rows[key].Content=filesystem.readFileSync(config.DOCUMENTS_PATH + rows[key].FinalFileName,'base64');
         imageCounter++;
     }
     deferred.resolve(rows);
@@ -841,7 +841,7 @@ function getAriaPatientId(username)
 function checkIntoAria(patientId, serNum, username)
 {
     var r = Q.defer();
-    var url = 'http://172.26.66.41/devDocuments/screens/php/checkInPatientAriaMedi.php?CheckinVenue=OPAL%20PHONE%20APP&PatientId='+patientId;
+    var url = config.CHECKIN_PATH+patientId;
     //making request to checkin
     console.log(url, username, serNum);
     // getAppointmentAriaSer(username, serNum).then(function(res){
@@ -877,7 +877,7 @@ function checkIntoAria(patientId, serNum, username)
 function checkIfCheckedIntoAriaHelper(patientActivitySerNum)
 {
     var r = Q.defer();
-    var url = 'http://172.26.66.41/devDocuments/ackeem/getCheckins.php?AppointmentAriaSer='+patientActivitySerNum;
+    var url = config.VERIFYCHECKIN_PATH+patientActivitySerNum;
     request(url,function(error, response, body)
     {
         if(error){console.log('line811,sqlInterface',error);r.reject(error);}
@@ -895,7 +895,7 @@ function checkIfCheckedIntoAriaHelper(patientActivitySerNum)
 exports.getTimeEstimate = function(appointmentAriaSer)
 {
     var r = Q.defer();
-    var url = 'http://172.26.66.41/devDocuments/WTSim/api/getEstimate.php?appt_aria_ser='+appointmentAriaSer;
+    var url = config. WT_PATH+appointmentAriaSer;
     request(url,function(error, response, body)
     {
         if(error){console.log('getTimeEstimate,sqlInterface',error);r.reject(error);}

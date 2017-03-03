@@ -1,7 +1,20 @@
-/**
- * Created by rob on 03/11/16.
+/*
+ * Filename     :   permissionService.js
+ * Description  :   Service that manages permissions on Android.
+ * Created by   :   David Herrera, Robert Maglieri
+ * Date         :   03 Mar 2017
+ * Copyright    :   Copyright 2016, HIG, All rights reserved.
+ * Licence      :   This file is subject to the terms and conditions defined in
+ *                  file 'LICENSE.txt', which is part of this source code package.
  */
 
+/**
+ *@ngdoc service
+ *@name MUHCApp.service:Permissions
+ *@requires $q
+ *@requires Constants
+ *@description Service that requests and manages the lab results (blood tests) from the server.
+ **/
 (function () {
     'use strict';
 
@@ -20,9 +33,18 @@
 
         ////////////////
 
-        //Check if enable and , required for android 6+
+        /**
+         *@ngdoc method
+         *@name enablePermission
+         *@methodOf MUHCApp.service:Permissions
+         *@description Checks if the device has the required permissions enabled. If not, it asks the user permission.
+         *@param {String} permission_type Android permission that is requested.
+         *@param {String} msg Message to display.
+         *@returns {Promise} Returns a promise containing permission type, success and message.
+         **/
         function enablePermission(permission_type, msg) {
 
+            //Check if enabled required for android 6+
             var deferred = $q.defer();
             if (Constants.app) {
                 if (ons.platform.isAndroid()) {

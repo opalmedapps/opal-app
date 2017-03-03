@@ -1,6 +1,6 @@
 var Firebase    =require('firebase'),
     utility=require('./utility.js'),
-    credentials=require('./credentials.js'),
+    credentials=require('./config.json'),
     sqlInterface=require('./sqlInterface.js'),
     resetPasswordApi=require('./security.js'),
     CryptoJS=require('crypto-js'),

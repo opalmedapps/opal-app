@@ -1,3 +1,25 @@
+/*
+ * Filename     :   planningStepsService.js
+ * Description  :   Service that manages the current planning steps for the user
+ * Created by   :   David Herrera, Robert Maglieri
+ * Date         :   03 Mar 2017
+ * Copyright    :   Copyright 2016, HIG, All rights reserved.
+ * Licence      :   This file is subject to the terms and conditions defined in
+ *                  file 'LICENSE.txt', which is part of this source code package.
+ */
+
+/**
+ *@ngdoc service
+ *@name MUHCApp.service:PlanningSteps
+ *@requires MUHCApp.service:Tasks
+ *@requires MUHCApp.service:Appointments
+ *@description Sets and determines the current planning step for the user. The planning sequence is defined as follows:
+ * 1. Patient gets a CT Scan
+ * 2. Physician prepares the plan
+ * 3. The radiation dose is calculated
+ * 4. The plan is QAed by physics
+ * 5. The patient is ready for treatment
+ **/
 (function () {
     'use strict';
 
@@ -10,7 +32,20 @@
     /* @ngInject */
     function PlanningSteps(Tasks, Appointments) {
 
+        /**
+         *@ngdoc property
+         *@name  MUHCApp.service.#currentStep
+         *@propertyOf MUHCApp.service:PlanningSteps
+         *@description Current step of the planning sequence
+         **/
         var currentStep = '';
+
+        /**
+         *@ngdoc property
+         *@name  MUHCApp.service.#sequence
+         *@propertyOf MUHCApp.service:PlanningSteps
+         *@description Object containing five arrays: CTs, Physician Planning, Dose Calc, Physics QA, Scheduling Treatments
+         **/
         var sequence = {
             'CT for Radiotherapy Planning': [],
             'Physician Plan Preparation': [],
@@ -35,10 +70,24 @@
 
         ////////////////
 
+        /**
+         *@ngdoc method
+         *@name getPlanningSequence
+         *@methodOf MUHCApp.service:PlanningSteps
+         *@description Gets the planning sequence object.
+         *@returns {Object} Returns the planning sequence object.
+         **/
         function getPlanningSequence() {
             return sequence;
         }
 
+        /**
+         *@ngdoc method
+         *@name initializePlanningSequence
+         *@methodOf MUHCApp.service:PlanningSteps
+         *@description Initializes the sequence from Appointments and tasks.
+         *@returns {Object} Returns the planning sequence object.
+         **/
         function initializePlanningSequence(){
             destroy();
             var ctAppointment = getCTSimAppointment();
@@ -62,7 +111,13 @@
 
         }
 
-        // Gets the most recent CT Sim
+        /**
+         *@ngdoc method
+         *@name getCTSimAppointment
+         *@methodOf MUHCApp.service:PlanningSteps
+         *@description Scans the appointment list for the most recent CT scan and return it.
+         *@returns {Object} Returns the CT Appointment.
+         **/
         function getCTSimAppointment(){
 
             var appointments = Appointments.getUserAppointments();
@@ -86,15 +141,35 @@
             return ctAppointment;
         }
 
+        /**
+         *@ngdoc method
+         *@name isCompleted
+         *@methodOf MUHCApp.service:PlanningSteps
+         *@description Checks if the planning is completed
+         *@returns {Boolean} Returns plan completion.
+         **/
         function isCompleted(){
             return sequence['Scheduling Treatments'].length > 0 && sequence['CT for Radiotherapy Planning'].length > 0;
         }
 
+        /**
+         *@ngdoc method
+         *@name getCurrentStep
+         *@methodOf MUHCApp.service:PlanningSteps
+         *@description Gets the current planning step name
+         *@returns {String} Returns the name of the current step.
+         **/
         function getCurrentStep(){
             console.log("Current Step is: ", currentStep);
             return currentStep.TaskName_EN || currentStep.AppointmentType_EN;
         }
 
+        /**
+         *@ngdoc method
+         *@name destroy
+         *@methodOf MUHCApp.service:PlanningSteps
+         *@description Clears all planning steps.
+         **/
         function destroy(){
             currentStep = '';
             for (var step in sequence){
@@ -102,6 +177,13 @@
             }
         }
 
+        /**
+         *@ngdoc method
+         *@name hasCT
+         *@methodOf MUHCApp.service:PlanningSteps
+         *@description Returns the existence of a CT for the current plan.
+         *@returns {Boolean} Returns if a CT is present.
+         **/
         function hasCT() {
             return sequence['CT for Radiotherapy Planning'].length > 0;
         }

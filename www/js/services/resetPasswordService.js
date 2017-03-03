@@ -1,6 +1,15 @@
-//
-// Author David Herrera on Summer 2016, Email:davidfherrerar@gmail.com
-//
+/*
+ * Filename     :   resetPasswordService.js
+ * Description  :
+ * Created by   :   David Herrera, Robert Maglieri 
+ * Date         :   03 Mar 2017
+ * Copyright    :   Copyright 2016, HIG, All rights reserved.
+ * Licence      :   This file is subject to the terms and conditions defined in
+ *                  file 'LICENSE.txt', which is part of this source code package.
+ */
+ 
+ 
+ 
 
 /**
  *@ngdoc service
@@ -15,84 +24,6 @@ myApp.service('ResetPassword',function(){
     var auth = firebase.app().auth();
 
     return{
-        // setTemporaryPassword:function(temp)
-        // {
-        //     this.Password=temp;
-        // },
-        // getTemporaryPassword:function(temp)
-        // {
-        //     return this.Password;
-        // },
-        // setSSN:function(ssn)
-        // {
-        //     this.SSN=ssn;
-        // },
-        // getSSN:function()
-        // {
-        //     return this.SSN;
-        // },
-        // setEmail:function(email)
-        // {
-        //     this.Email=email;
-        // },
-        // getEmail:function()
-        // {
-        //     return this.Email;
-        // },
-        // setUsername:function(username)
-        // {
-        //     this.Username=username;
-        // },
-        // getUsername:function()
-        // {
-        //     return this.Username;
-        // },
-        // setQuestion:function(question)
-        // {
-        //     this.Question=question;
-        // },
-        // getQuestion:function()
-        // {
-        //     return this.Question;
-        // },
-        // setAnswer:function(answer)
-        // {
-        //     this.Answer=answer;
-        // },
-        // getAnswer:function()
-        // {
-        //     return this.Answer;
-        // },
-        // setToken:function(token)
-        // {
-        //     this.Token=token;
-        // },
-        // getToken:function()
-        // {
-        //     return this.Token;
-        // },
-        // sendRequest:function(type, parameter)
-        // {
-        //     if(type=='VerifySSN')
-        //     {
-        //
-        //         parameter=CryptoJS.AES.encrypt(parameter,parameter).toString();
-        //         console.log(parameter);
-        //         Ref.push({ 'Request' : 'VerifySSN', 'DeviceId':RequestToServer.getIdentifier(),'Token':this.Token, 'UserID':this.Username, 'Parameters':{'SSN' : parameter }});
-        //         Ref.off();
-        //     }else if(type=='SetNewPassword'){
-        //         console.log(this.Answer);
-        //         parameter=CryptoJS.AES.encrypt(parameter,this.Answer).toString();
-        //         Ref.push({ 'Request' : 'SetNewPassword', 'DeviceId':RequestToServer.getIdentifier(),'Token':this.Token, 'UserID':this.Username, 'Parameters':{'NewPassword' : parameter }});
-        //         Ref.off();
-        //     }else if(type=='VerifyAnswer')
-        //     {
-        //         parameter.Answer=CryptoJS.AES.encrypt(parameter.Answer,this.SSN).toString();
-        //         parameter.Question=CryptoJS.AES.encrypt(parameter.Question,this.SSN).toString();
-        //         Ref.push({ 'Request' : 'VerifySecurityAnswer', 'DeviceId':RequestToServer.getIdentifier(),'Token':this.Token, 'UserID':this.Username, 'Parameters':parameter});
-        //         Ref.off();
-        //     }
-        // },
         /**
          *@ngdoc method
          *@name verifyLinkCode
@@ -108,13 +39,32 @@ myApp.service('ResetPassword',function(){
 
         },
 
+        /**
+         *@ngdoc method
+         *@name completePasswordChange
+         *@param {String} oobCode  Code sent to user from the reset password email.
+         *@param {String} newPassword  New user password.
+         *@methodOf MUHCApp.service:ResetPassword
+         *@description confirms the password reset.
+         *@returns {Promise} Returns promise containing void.
+         **/
         completePasswordChange : function (oobCode, newPassword) {
             console.log(oobCode);
 
             return auth.confirmPasswordReset(oobCode[1], newPassword)
         },
 
+        /**
+         *@ngdoc method
+         *@name getParameter
+         *@param {String} param  Parameter to search for in query string.
+         *@param {String} url  URL to scan for parameter.
+         *@methodOf MUHCApp.service:ResetPassword
+         *@description Scans the URL using regular expressions for parameters.
+         *@returns {Object} The parameter and its value.
+         **/
         getParameter: function(param, url){
+            // Getting the query string param and value
             var regex = new RegExp('[?&]' + param +'=([^&#]*)', 'i');
             return regex.exec(url);
         }
