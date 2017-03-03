@@ -21,6 +21,7 @@ myApp.service('LabResults',['$filter','LocalStorage','RequestToServer','$q',
         var categoryThreeTests = ['LDH', 'T4', 'T4, Free', 'TSH', 'Albumin', 'Protein, Total', 'AST (SGOT)', 'ALT (SGPT)', 'Alkaline Phosphatase'];
         var categoryFourTests = ['CEA', 'CA 15-3', 'CA-125'];
 
+        // Function that saves tests results to the service
         function addTestResults(tests) {
 
             if (typeof tests == 'undefined') return;
@@ -90,7 +91,7 @@ myApp.service('LabResults',['$filter','LocalStorage','RequestToServer','$q',
             }
             testResultsByDateArray = $filter('orderBy')(testResultsByDateArray, 'testDateFormat', true);
             //console.log(testResultsByDateArray);
-            console.log(testResultsToLocalStorage);
+            //console.log(testResultsToLocalStorage);
             //LocalStorage.WriteToLocalStorage('LabResults', testResultsToLocalStorage);
         }
 
@@ -101,14 +102,6 @@ myApp.service('LabResults',['$filter','LocalStorage','RequestToServer','$q',
                 //
                 if (new Date - uptodate < 300000 && testResults.length>0){
                     deferred.resolve({Success: true, Location: 'Service'});
-                /*}
-                else if (LocalStorage.isUserSectionDefined('LabResults')){
-                    this.destroy();
-                    var results = LocalStorage.ReadLocalStorage('LabResults');
-                    console.log(results);
-                    var tests = makeArray(results);
-                    addTestResults(tests);
-                    deferred.resolve({Success: true, Location: 'LocalStorage'});*/
                 } else {
                     this.destroy();
                     RequestToServer.sendRequestWithResponse('LabResults')
@@ -127,12 +120,6 @@ myApp.service('LabResults',['$filter','LocalStorage','RequestToServer','$q',
                 return deferred.promise;
             },
             setTestResults:function(tests){
-
-                /**
-                 TODO: The only tests taken into account are Laurie's tests.
-                 Once we start accessing other patients' tests, the code below
-                 will have to be updated accordingly.
-                 **/
                 testResults = [];
                 testResultsByDate = {};
                 testResultsByType = {};
@@ -152,9 +139,11 @@ myApp.service('LabResults',['$filter','LocalStorage','RequestToServer','$q',
             },
             getTestResultsArrayByDate:function()
             {
+                console.log(testResultsByDateArray);
                 return testResultsByDateArray;
             },
             getTestResultsByDate:function(){
+                console.log(testResultsByDate);
                 return testResultsByDate;
             },
 
