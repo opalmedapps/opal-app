@@ -1,5 +1,5 @@
 var myApp = angular.module('MUHCApp');
-myApp.controller('LabResultsControllerCopy', ['RequestToServer','Notifications', 'UpdateUI', '$scope', '$timeout','$rootScope', 'UserPreferences', 'LabResults', function (RequestToServer, Notifications, UpdateUI, $scope,$timeout,$rootScope, UserPreferences, LabResults) {
+myApp.controller('LabResultsControllerCopy', ['RequestToServer','Notifications', 'UpdateUI', '$scope', '$timeout','$rootScope', 'UserPreferences', 'LabResults', '$q', function (RequestToServer, Notifications, UpdateUI, $scope,$timeout,$rootScope, UserPreferences, LabResults, $q) {
 
     $scope.load = function($done) {
         RequestToServer.sendRequest('Refresh','LabTests');
@@ -55,7 +55,31 @@ myApp.controller('LabResultsControllerCopy', ['RequestToServer','Notifications',
 
 
     function activate() {
-        return LabResults.updateTestResults();
+        if(LabResults.getTestResults().length > 0){
+            return $q.resolve();
+        }
+        return LabResults.setTestResults();
+    }
+
+    $scope.load = function($done) {
+        refresh($done);
+    }
+
+    function refresh(done) {
+        console.log(done);
+        done == undefined ? done = function () {
+            } : done;
+
+        LabResults.setTestResults().then(function () {
+            activate();
+            done();
+        }).catch(function (error) {
+            console.log(error);
+            done();
+        });
+        $timeout(function () {
+            done();
+        }, 5000);
     }
 
     $scope.init = function() {

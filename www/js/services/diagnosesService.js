@@ -1,6 +1,15 @@
-//
-// Author David Herrera on Summer 2016, Email:davidfherrerar@gmail.com
-//
+/*
+ * Filename     :   diagnosesService.js
+ * Description  :   Service that store and manages the patient diagnosis information.
+ * Created by   :   David Herrera, Robert Maglieri 
+ * Date         :   02 Mar 2017
+ * Copyright    :   Copyright 2016, HIG, All rights reserved.
+ * Licence      :   This file is subject to the terms and conditions defined in
+ *                  file 'LICENSE.txt', which is part of this source code package.
+ */
+ 
+ 
+ 
 var myApp=angular.module('MUHCApp');
 /**
 *@ngdoc service
