@@ -15,6 +15,7 @@ var myApp=angular.module('MUHCApp');
 myApp.service('Patient',['$q','$cordovaDevice','FileManagerService','LocalStorage',
     'UserPreferences', 'UserAuthorizationInfo',
     function($q, $cordovaDevice,FileManagerService,LocalStorage,UserPreferences, UserAuthorizationInfo){
+
     /**
      *@ngdoc property
      *@name  MUHCApp.service.#ProfileImage
@@ -22,6 +23,7 @@ myApp.service('Patient',['$q','$cordovaDevice','FileManagerService','LocalStorag
      *@description Property containing profile picture base64 content
      **/
     var ProfileImage='';
+
     /**
      *@ngdoc property
      *@name  MUHCApp.service.#FirstName
@@ -29,6 +31,7 @@ myApp.service('Patient',['$q','$cordovaDevice','FileManagerService','LocalStorag
      *@description Property containing the first name of the patient
      **/
     var FirstName='';
+
     /**
      *@ngdoc property
      *@name  MUHCApp.service.#LastName
@@ -36,6 +39,7 @@ myApp.service('Patient',['$q','$cordovaDevice','FileManagerService','LocalStorag
      *@description Property containing the last name of the patient
      **/
     var LastName='';
+
     /**
      *@ngdoc property
      *@name  MUHCApp.service.#Alias
@@ -43,6 +47,7 @@ myApp.service('Patient',['$q','$cordovaDevice','FileManagerService','LocalStorag
      *@description Property containing nickname of the patient
      **/
     var Alias='';
+
     /**
      *@ngdoc property
      *@name  MUHCApp.service.#TelNum
@@ -50,6 +55,7 @@ myApp.service('Patient',['$q','$cordovaDevice','FileManagerService','LocalStorag
      *@description Patient access level
      **/
     var accessLevel='';
+
     /**
      *@ngdoc property
      *@name  MUHCApp.service.#TelNum
@@ -57,6 +63,7 @@ myApp.service('Patient',['$q','$cordovaDevice','FileManagerService','LocalStorag
      *@description Property containing telephone number of the patient
      **/
     var TelNum='';
+
     /**
      *@ngdoc property
      *@name  MUHCApp.service.#Email
@@ -64,6 +71,7 @@ myApp.service('Patient',['$q','$cordovaDevice','FileManagerService','LocalStorag
      *@description  Property containing email of the patient
      **/
     var Email='';
+
     /**
      *@ngdoc property
      *@name  MUHCApp.service.#PatientId
@@ -71,6 +79,7 @@ myApp.service('Patient',['$q','$cordovaDevice','FileManagerService','LocalStorag
      *@description Property containing patientid of the patient
      **/
     var PatientId='';
+
     /**
      *@ngdoc property
      *@name  MUHCApp.service.#UserSerNum
@@ -78,6 +87,7 @@ myApp.service('Patient',['$q','$cordovaDevice','FileManagerService','LocalStorag
      *@description Property containing PatientSerNum of the patient
      **/
     var UserSerNum='';
+
     /**
      *@ngdoc property
      *@name  MUHCApp.service.#NameFileSystem
@@ -85,6 +95,7 @@ myApp.service('Patient',['$q','$cordovaDevice','FileManagerService','LocalStorag
      *@description Property containing name of profile image in device storage for the patient
      **/
     var NameFileSystem='';
+
     /**
      *@ngdoc property
      *@name  MUHCApp.service.#PathFileSystem
@@ -92,6 +103,7 @@ myApp.service('Patient',['$q','$cordovaDevice','FileManagerService','LocalStorag
      *@description Property containing full path for profile picture in device stroage
      **/
     var PathFileSystem='';
+
     /**
      *@ngdoc property
      *@name  MUHCApp.service.#CDVfilePath

@@ -1,5 +1,5 @@
 var CryptoJS    =require('crypto-js');
-var credentials=require('./credentials.js');
+var credentials=require('./config.json');
 var exports=module.exports={};
 
 //Returns empty response, function used by refresh, resume, login

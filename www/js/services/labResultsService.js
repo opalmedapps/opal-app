@@ -24,11 +24,10 @@ myApp.service('LabResults',['$filter','LocalStorage','RequestToServer','$q',
 
         /**
          *@ngdoc property
-         *@name  MUHCApp.service.#uptodate
+         *@name  MUHCApp.service.#testResults
          *@propertyOf MUHCApp.service:LabResults
-         *@description Content to be displayed in the Opal page.
+         *@description Raw data obtained by the server.
          **/
-        var uptodate = new Date();
         var testResults = [];
         var testResultsByDate = {};
         var testResultsByType = {};
@@ -120,18 +119,30 @@ myApp.service('LabResults',['$filter','LocalStorage','RequestToServer','$q',
         }
 
         return{
+
+            /**
+             *@ngdoc method
+             *@name updateTestResults
+             *@methodOf MUHCApp.service:LabResults
+             *@description Updates the lab results, grabbing the latest results from the server. Currently not implemented
+             *@returns {Promise} Returns a promise containing status.
+             **/
             updateTestResults:function()
             {
 
             },
-            setTestResults:function(tests){
-                testResults = [];
-                testResultsByDate = {};
-                testResultsByType = {};
-                testResultsByCategory = {};
-                testResultsByDateArray=[];
-                testResultsByTypeArray=[];
-                //testResultsToLocalStorage=[];
+
+            /**
+             *@ngdoc method
+             *@name setTestResults
+             *@methodOf MUHCApp.service:LabResults
+             *@description Clears and sets the lab results after getting the raw data from the server.
+             *@returns {Promise} Returns a promise containing status
+             **/
+            setTestResults:function(){
+
+                this.destroy();
+
                 var deferred = $q.defer();
                 this.destroy();
                 RequestToServer.sendRequestWithResponse('LabResults')
@@ -148,31 +159,83 @@ myApp.service('LabResults',['$filter','LocalStorage','RequestToServer','$q',
                 return deferred.promise;
             },
 
+            /**
+             *@ngdoc method
+             *@name getTestResults
+             *@methodOf MUHCApp.service:LabResults
+             *@description Getter for the raw lab results.
+             *@returns {Object} Returns raw lab results
+             **/
             getTestResults:function(){
                 return testResults;
             },
+
+            /**
+             *@ngdoc method
+             *@name getTestResultsArrayByType
+             *@methodOf MUHCApp.service:LabResults
+             *@description Gets the lab results by type
+             *@returns {Array} Returns array containing lab results by type
+             **/
             getTestResultsArrayByType:function()
             {
                 return testResultsByTypeArray;
             },
+
+            /**
+             *@ngdoc method
+             *@name getTestResultsArrayByDate
+             *@methodOf MUHCApp.service:LabResults
+             *@description Gets the lab results by date
+             *@returns {Array} Returns array containing lab results by date
+             **/
             getTestResultsArrayByDate:function()
             {
                 console.log(testResultsByDateArray);
                 return testResultsByDateArray;
             },
+
+            /**
+             *@ngdoc method
+             *@name getTestResultsByDate
+             *@methodOf MUHCApp.service:LabResults
+             *@description Gets lab results by date
+             *@returns {Object} Returns object containing lab results by date
+             **/
             getTestResultsByDate:function(){
                 console.log(testResultsByDate);
                 return testResultsByDate;
             },
 
+            /**
+             *@ngdoc method
+             *@name getTestResultsByType
+             *@methodOf MUHCApp.service:LabResults
+             *@description Gets the lab results by type.
+             *@returns {Object} Returns lab results object by type.
+             **/
             getTestResultsByType:function(){
                 return testResultsByType;
             },
+
+            /**
+             *@ngdoc method
+             *@name getTestResultsByCategory
+             *@methodOf MUHCApp.service:LabResults
+             *@description Gets lab results by category
+             *@returns {Object} Returns lab results by category
+             **/
             getTestResultsByCategory:function(){
                 return testResultsByCategory;
             },
+
+            /**
+             *@ngdoc method
+             *@name destroy
+             *@methodOf MUHCApp.service:LabResults
+             *@description Clears all lab results.
+             **/
             destroy:function () {
-                uptodate = new Date();
                 testResults = [];
                 testResultsByDate = {};
                 testResultsByType = {};

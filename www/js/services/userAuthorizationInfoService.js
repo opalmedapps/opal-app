@@ -51,6 +51,7 @@ myApp.service('UserAuthorizationInfo', function () {
      *@description Email property
      */
     var email = '';
+
     return {
         /**
         *@ngdoc method
@@ -81,17 +82,6 @@ myApp.service('UserAuthorizationInfo', function () {
             //Encode password
             pass=CryptoJS.SHA256(pass).toString();
             password=pass;
-            //Retrieve UserAuthorizationInfo
-            // var passString=window.localStorage.getItem('UserAuthorizationInfo');
-            // var passObject = {};
-            // if(passString)
-            // {
-            //      //Parse to convert to object
-            //     passObject=JSON.parse(passString);
-            //     passObject.Password=password;
-            //     //Save in storage
-            //     window.localStorage.setItem('UserAuthorizationInfo', JSON.stringify(passObject));
-            // }
            
         },
         /**

@@ -131,10 +131,24 @@ myApp.service('EncryptionService',function(UserAuthorizationInfo){
 			return encryptObject(object,secret);
 		},
 
+        /**
+         *@ngdoc method
+         *@name setSecurityAns
+         *@methodOf MUHCApp.service:EncryptionService
+         *@params {String} answer Security answer
+         *@description Sets the security answer to be used as the encryption key for all future communication.
+         **/
 		setSecurityAns: function (answer) {
 			securityAnswerHash = answer;
         },
 
+        /**
+         *@ngdoc method
+         *@name getSecurityAns
+         *@methodOf MUHCApp.service:EncryptionService
+         *@description Uses the secret parameter as key to encrypt object parameter
+         *@return {String} Returns hashed security answer
+         **/
 		getSecurityAns: function () {
 			return securityAnswerHash;
         }

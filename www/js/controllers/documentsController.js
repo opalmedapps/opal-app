@@ -79,7 +79,7 @@ myApp.controller('SingleDocumentController', ['NavigatorParameters','Documents',
         var image = Documents.setDocumentsLanguage(parameters.Post);
         var pdfdoc, scale = 3, uint8pf;
         var viewerSize = window.innerWidth;
-        var content = "";
+        var content = Document.Content;
         //console.log(document.getElementById('topholder'));
         var containerEl = document.getElementById('holder');
         console.log(containerEl);
@@ -259,12 +259,12 @@ myApp.controller('SingleDocumentController', ['NavigatorParameters','Documents',
                 var targetPath = FileManagerService.generatePath(image);
                 FileManagerService.downloadFileIntoStorage("data:application/pdf;base64," + content, targetPath).then(function()
                 {
-                    if (ons.platform.isAndroid()){
-                        NewsBanner.showCustomBanner($filter('translate')("DOCUMENT_DOWNLOADED"),'#0047f2', null, 3000);
+                    if (ons.platform.isAndroid()) {
+                        NewsBanner.showCustomBanner($filter('translate')("DOCUMENT_DOWNLOADED"), '#0047f2', null, 3000);
                     }
-                    if (ons.platform.isIOS()){
-                        FileManagerService.shareDocument(image.Title.replace(/ /g,"")+image.ApprovedTimeStamp.toDateString().replace(/ /g,"-"), targetPath);
-                    }
+
+                    FileManagerService.shareDocument(image.Title.replace(/ /g,"")+image.ApprovedTimeStamp.toDateString().replace(/ /g,"-"), targetPath);
+
                     console.log('success');
 
                 }).catch(function(error)
