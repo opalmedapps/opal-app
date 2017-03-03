@@ -698,7 +698,7 @@ function LoadDocuments(rows)
         var substring=rows[key].FinalFileName.substring(n+1,rows[key].FinalFileName.length);
         rows[key].DocumentType=substring;
         // var/www/Documents/opalAdmin/backend/clinical/documents
-        rows[key].Content=filesystem.readFileSync('var/www/Documents/opalAdmin/backend/clinical/documents' + rows[key].FinalFileName,'base64');
+        rows[key].Content=filesystem.readFileSync('var/www/Documents/opalAdmin/backend/clinical/documents/' + rows[key].FinalFileName,'base64');
         imageCounter++;
     }
     deferred.resolve(rows);
