@@ -33,6 +33,7 @@ var sqlConfig={
     database:credentials.MYSQL_DATABASE,
     dateStrings:true
 };
+console.log(sqlConfig);
 /*
  *Re-connecting the sql database, NodeJS has problems and disconnects if inactive,
  The handleDisconnect deals with that
@@ -698,7 +699,7 @@ function LoadDocuments(rows)
         var substring=rows[key].FinalFileName.substring(n+1,rows[key].FinalFileName.length);
         rows[key].DocumentType=substring;
         // var/www/Documents/opalAdmin/backend/clinical/documents
-        rows[key].Content=filesystem.readFileSync('/home/VarianFILEDATA/Documents/' + rows[key].FinalFileName,'base64');
+        rows[key].Content=filesystem.readFileSync('/var/www/Documents/opalAdmin/backend/clinical/documents/' + rows[key].FinalFileName,'base64');
         imageCounter++;
     }
     deferred.resolve(rows);

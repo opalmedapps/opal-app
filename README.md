@@ -109,6 +109,7 @@ cordova plugin add <nameOfPlugin>
 ####Credentials
  * email:muhc.app.mobile@gmail.com
  * password:12345
+ * securityAnswer: guitar
 
 ####Problems
 
