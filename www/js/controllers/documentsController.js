@@ -97,118 +97,71 @@ myApp.controller('SingleDocumentController', ['NavigatorParameters','Documents',
         function initializeDocument(document)
         {
             console.log(document);
-            // if(app)
-            // {
-            //     FileManagerService.findPatientDocumentInDevice(document.DocumentType, document.DocumentSerNum).then(function(url)
-            //     {
-            //         setDocumentForShowing(document, url);
-            //     }).catch(function(error)
-            //     {
-            //         console.log('File not found', error);
-            Documents.downloadDocumentFromServer(document.DocumentSerNum).then(function(doc)
-            {
-                $scope.loading = false;
-                content = doc.Content;
-                uint8pf = FileManagerService.convertToUint8Array(content);
-                //pdfjsframe.contentWindow.PDFViewerApplication.open(uint8pf);
 
-                PDFJS.getDocument(uint8pf)
-                    .then(function (_pdfDoc) {
+            if (Documents.getDocumentBySerNum(document.DocumentSerNum).Content){
+                console.log("on device");
+                setUpPDF(document);
+            }
 
-                        console.log(window.innerHeight, window.innerWidth);
+            else {
+                Documents.downloadDocumentFromServer(document.DocumentSerNum).then(function () {
+                    console.log("request to server");
+                    setUpPDF(document);
+                }).catch(function (error) {
+                    //Unable to get document from server
+                    $scope.loading = false;
+                    $scope.errorDownload = true;
+                    console.log('Unable to get document from server', error);
+                });
+            }
 
-                        var promises = [];
+        }
 
-                        for(var num = 1; num <= _pdfDoc.numPages; num++) {
-                            promises.push(renderPage(_pdfDoc, num, containerEl));
-                        }
-                        pdfdoc = _pdfDoc;
-                        //$scope.rendering=true;
-                        return $q.all(promises);
-                    })
-                    .then(function () {
-                        var canvasElements = containerEl.getElementsByTagName("canvas");
-                        //console.log(canvasElements);
-                        var viewerScale = viewerSize/canvasElements[0].width*0.95*100 + "%";
-                        // var translateY = canvasElements[0].height*(1-viewerSize/canvasElements[0].width);
-                        for (var i=0; i!=canvasElements.length; ++i){
-                            canvasElements[i].style.zoom = viewerScale;
-                            canvasElements[i].onclick = function (event) {
-                                console.log(event);
-                                if (Constants.app) {
-                                    if(ons.platform.isAndroid()){
-                                        var image = new Image();
-                                        image.src = event.srcElement.toDataURL("image/png");
-                                        cordova.InAppBrowser.open(image.src, '_blank', 'location=no,enableViewportScale=true');
-                                    }else{
-                                        cordova.InAppBrowser.open("data:application/pdf;base64,"+content, '_blank', 'EnableViewPortScale=yes');
-                                    }
-                                } else{
-                                    window.open("data:application/pdf;base64, "+content, '_blank', 'location=no,enableViewportScale=true');
+        function setUpPDF(document) {
+            $scope.loading = false;
+            uint8pf = FileManagerService.convertToUint8Array(document.Content);
+            //pdfjsframe.contentWindow.PDFViewerApplication.open(uint8pf);
+
+            PDFJS.getDocument(uint8pf)
+                .then(function (_pdfDoc) {
+
+                    console.log(window.innerHeight, window.innerWidth);
+
+                    var promises = [];
+
+                    for (var num = 1; num <= _pdfDoc.numPages; num++) {
+                        promises.push(renderPage(_pdfDoc, num, containerEl));
+                    }
+                    pdfdoc = _pdfDoc;
+                    //$scope.rendering=true;
+                    return $q.all(promises);
+                })
+                .then(function () {
+                    var canvasElements = containerEl.getElementsByTagName("canvas");
+                    console.log(canvasElements);
+                    var viewerScale = viewerSize / canvasElements[0].width * 0.95 * 100 + "%";
+                    // var translateY = canvasElements[0].height*(1-viewerSize/canvasElements[0].width);
+                    for (var i = 0; i != canvasElements.length; ++i) {
+                        canvasElements[i].style.zoom = viewerScale;
+                        canvasElements[i].onclick = function (event) {
+                            console.log(event);
+                            if (Constants.app) {
+                                if (ons.platform.isAndroid()) {
+                                    var image = new Image();
+                                    image.src = event.srcElement.toDataURL("image/png");
+                                    cordova.InAppBrowser.open(image.src, '_blank', 'location=no,enableViewportScale=true');
+                                } else {
+                                    cordova.InAppBrowser.open("data:application/pdf;base64," + document.Content, '_blank', 'EnableViewPortScale=yes');
                                 }
+                            } else {
+                                window.open("data:application/pdf;base64, " + document.Content, '_blank', 'location=no,enableViewportScale=true');
                             }
                         }
-
-                        // while(canvasElements.length>0){
-                        //     console.log(canvasElements);
-                        //     canvasElements[0].replaceWith(convertCanvasToImage(canvasElements[0]));
-                        // }
-
-                        // var pageContainer = $("#holder");
-                        // $(".panzoom-elements").panzoom({
-                        //     minScale: 1
-                        // });
-                        // pageContainer.on("panzoomstart", function (e, panzoom, event, touches) {
-                        //     console.log(e);
-                        //     console.log(panzoom);
-                        //     console.log(event);
-                        //     console.log(touches);
-                        // });
-
-                        // var mc = new Hammer(containerEl);
-                        // mc.on('pinchin', function (ev) {
-                        //     console.log(ev);
-                        // });
-                        //
-                        // mc.on('pinchout', function (ev) {
-                        //     console.log(ev);
-                        // });
-                        // mc.on('tap', function (ev) {
-                        //     containerEl.style.transform="scale(2)";
-                        //     containerEl.style.webkitTransform="scale(2)";
-                        //     containerEl.style.transformOrigin = "0 0";
-                        //     console.log(ev);
-                        // });
-                        // mc.on('pan', function (ev) {
-                        //     console.log(ev);
-                        // });
-
-                        $scope.rendering = false;
-                        $scope.loading=false;
-                        $scope.$apply();
-                    });
-
-                /*var targetPath = FileManagerService.getFilePathForDocument(document);
-                 console.log(targetPath);
-                 doc = FileManagerService.setBase64Document(doc);
-
-                 FileManagerService.downloadFileIntoStorage(doc.Content, targetPath).then(function()
-                 {
-                 setDocumentForShowing(document, FileManagerService.getDocumentUrls(document));
-                 console.log('success');
-
-                 }).catch(function(error)
-                 {
-                 console.log('Unable to save document on server',error);
-                 //Unable to save document on server
-                 });*/
-            }).catch(function(error){
-                //Unable to get document from server
-                $scope.loading = false;
-                $scope.errorDownload = true;
-                console.log('Unable to get document from server',error);
-            });
-
+                    }
+                    $scope.rendering = false;
+                    $scope.loading = false;
+                    $scope.$apply();
+                });
         }
 
         function convertCanvasToImage(canvas) {
@@ -260,62 +213,6 @@ myApp.controller('SingleDocumentController', ['NavigatorParameters','Documents',
 
             return renderContext;
         }
-
-        // function resizeAllCanvas(){
-        //
-        //
-        //
-        //     var canvasElements = containerEl.getElementsByTagName("canvas");
-        //
-        //     console.log(canvasElements);
-        //     var promises = [];
-        //
-        //     for (var i=0; i!=canvasElements.length; ++i){
-        //         promises.push(
-        //             // Need to wrap in an anonymous function to capture the iterator.
-        //             (function(e) {
-        //                 pdfdoc.getPage(e + 1).then(function (page) {
-        //
-        //                     var renderContext = draw(page, canvasElements[e], canvasElements[e].getContext('2d'));
-        //                     return page.render(renderContext);
-        //
-        //                 })
-        //             })(i)
-        //         );
-        //     }
-        //
-        //     $q.all(promises)
-        //         .then(function () {
-        //
-        //         });
-        // }
-        //
-        //
-        // $scope.zoomOut = function () {
-        //     scale += 0.1;
-        //     console.log(scale);
-        //     if (scale >= 2) scale = 2;
-        //     //resizeAllCanvas();
-        // };
-        //
-        // $scope.zoomIn = function () {
-        //     scale -= 0.1;
-        //     console.log(scale);
-        //     if (scale <= 0.25) scale = 0.25;
-        //     //resizeAllCanvas();
-        // };
-
-        $scope.openPDF = function () {
-            NavigatorParameters.setParameters({pdfdata:uint8pf});
-            personalNavigator.pushPage('./views/personal/my-chart/pdfview.html');
-            // $scope.viewerPath = "./lib/bower_components/pdfjs-pdfviewer/web/pdfviewer.html";
-            // var pdfjsframe = document.getElementById('pdfViewer');
-            // $timeout(function () {
-            //
-            //     console.log(pdfjsframe);
-            //     pdfjsframe.contentWindow.PDFViewerApplication.open(uint8pf);
-            // },5000);
-        };
 
         // function simply sets document for showing
         function setDocumentForShowing(document, url)
@@ -376,106 +273,11 @@ myApp.controller('SingleDocumentController', ['NavigatorParameters','Documents',
                     //Unable to save document on server
                 });
 
-
-                // var attachment='';
-                // var email = {
-                //     to: '',
-                //     cc: '',
-                //     bcc: [],
-                //     subject: 'MUHC Document',
-                //     body: '',
-                //     isHtml: true
-                // };
-                // var base64=image.Content.indexOf('cdvfile');
-                // var data='';
-                // if(base64==-1)
-                // {
-                //     console.log('Base64 file');
-                //     attachment='base64:'+'attachment.'+image.DocumentType+'//'+image.Content.substring(image.Content.indexOf(',')+1,image.Content.length);
-                //     console.log(attachment);
-                //     email.attachments=[attachment];
-                //     console.log(email);
-                //     cordova.plugins.email.isAvailable(function(isAvailable){
-                //         console.log('is available');
-                //         if(isAvailable)
-                //         {
-                //             cordova.plugins.email.open(email,function(sent){
-                //                 console.log('email ' + (sent ? 'sent' : 'cancelled'));
-                //             },this);
-                //         }else{
-                //             console.log('is not available');
-                //         }
-                //     });
-                // }else{
-                //     console.log('cdvfile',image.Content );
-                //     var attachmentFilePath = (ons.platform.isAndroid())?image.PathFileSystem:image.Content;
-                //     window.resolveLocalFileSystemURL(attachmentFilePath,function(file){
-                //         console.log(file);
-                //         attachment=file.toURL();
-                //         email.attachments=[attachment];
-                //         console.log(email);
-                //         cordova.plugins.email.isAvailable(function(isAvailable){
-                //             if(isAvailable)
-                //             {
-                //                 cordova.plugins.email.open(email,function(sent){
-                //                     console.log('email ' + (sent ? 'sent' : 'cancelled'));
-                //                 },this);
-                //
-                //             }else{
-                //                 console.log('is not available');
-                //             }
-                //         });
-                //     },function(error){
-                //         console.log(error);
-                //     });
-                // }
-                // //var attachment='base64:'+'attachment.'+image.DocumentType+'//'+image.Content.substring(image.Content.indexOf(',')+1,image.Content.length);
             } else {
                 window.open(image.Content);
             }
         };
 
-        //Print document function, if its an image it puts it into an html tag and prints that html, if its a pdf, it simple prints the pdf
-        // $scope.print=function()
-        // {
-        //     var options = {
-        //         // type of content, use either 'Data' or 'File'
-        //         title: 'Print Document', 	// title of document
-        //         dialogX: -1,				// if a dialog coord is not set, it defaults to -1.
-        //         dialogY: -1,
-        //         success: function(arg){
-        //             console.log(arg);
-        //         },
-        //         error: function(err){
-        //             console.log(err);
-        //         }
-        //     };
-        //     if(ons.platform.isAndroid())
-        //     {
-        //         if(image.DocumentType=='pdf')
-        //         {
-        //             options.type='File';
-        //             options.data = image.CDVfilePath;
-        //             console.log(options);
-        //             window.plugins.PrintPDF.print(options);
-        //         }else{
-        //             FileManagerService.getFileUrl(image.PathFileSystem).then(function(file){
-        //                     var page = "<img src='"+file+"' style='width:100%;height:auto'>";
-        //                     page.replace(/"/g, '\'');
-        //                     console.log(page);
-        //                     cordova.plugins.printer.print(page, 'Document.html', function () {
-        //                         //alert('Printing finished or canceled');
-        //                     });
-        //                 }
-        //             );
-        //         }
-        //     }else{
-        //         options.type='File';
-        //         options.data = image.CDVfilePath;
-        //         console.log(options);
-        //         window.plugins.PrintPDF.print(options);
-        //     }
-        // };
         console.log(FileManagerService);
 
 

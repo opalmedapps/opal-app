@@ -1,6 +1,15 @@
-//
-// Author David Herrera on Summer 2016, Email:davidfherrerar@gmail.com
-//
+/*
+ * Filename     :   documentsService.js
+ * Description  :   Service that store and manages the user documents. Connects with the server to grab data.
+ * Created by   :   David Herrera, Robert Maglieri
+ * Date         :   02 Mar 2017
+ * Copyright    :   Copyright 2016, HIG, All rights reserved.
+ * Licence      :   This file is subject to the terms and conditions defined in
+ *                  file 'LICENSE.txt', which is part of this source code package.
+ */
+
+
+
 var myApp=angular.module('MUHCApp');
 /**
 *@ngdoc service
@@ -204,12 +213,15 @@ myApp.service('Documents',['UserPreferences', 'UserAuthorizationInfo','$q', '$fi
 		**/
 		downloadDocumentFromServer:function(serNum)
 		{
+			var _this = this;
 			var r = $q.defer();
 			RequestToServer.sendRequestWithResponse('DocumentContent',[serNum]).then(function(response)
 			{
 				if(response.Code ==='3'&& response.Data!=='DocumentNotFound')
 				{
-					r.resolve(response.Data);
+					var doc = _this.getDocumentBySerNum(serNum);
+					doc.Content = response.Data.Content;
+					r.resolve("success");
 				}else{
 					r.reject(response);
 				}

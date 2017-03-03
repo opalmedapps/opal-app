@@ -1,9 +1,33 @@
-//
-// Author David Herrera on Summer 2016, Email:davidfherrerar@gmail.com
-//
+/*
+ * Filename     :   labResultsService.js
+ * Description  :   Service that requests test results from the hospital server and stores them in this service.
+ * Created by   :   David Herrera, Robert Maglieri 
+ * Date         :   02 Mar 2017
+ * Copyright    :   Copyright 2016, HIG, All rights reserved.
+ * Licence      :   This file is subject to the terms and conditions defined in
+ *                  file 'LICENSE.txt', which is part of this source code package.
+ */
+
+
+/**
+ *@ngdoc service
+ *@name MUHCApp.service:LabResults
+ *@requires $filter
+ *@requires MUHCApp.service:RequestToServer
+ *@requires $q
+ *@requires MUHCApp.service:LocalStorage
+ *@description Service that requests and manages the lab results (blood tests) from the server.
+ **/
 var myApp=angular.module('MUHCApp');
 myApp.service('LabResults',['$filter','LocalStorage','RequestToServer','$q',
     function($filter,LocalStorage,RequestToServer,$q){
+
+        /**
+         *@ngdoc property
+         *@name  MUHCApp.service.#uptodate
+         *@propertyOf MUHCApp.service:LabResults
+         *@description Content to be displayed in the Opal page.
+         **/
         var uptodate = new Date();
         var testResults = [];
         var testResultsByDate = {};
@@ -11,7 +35,7 @@ myApp.service('LabResults',['$filter','LocalStorage','RequestToServer','$q',
         var testResultsByCategory = {};
         var testResultsByDateArray=[];
         var testResultsByTypeArray=[];
-        var testResultsToLocalStorage=[];
+        //var testResultsToLocalStorage=[];
         var CATEGORY_ONE = 'Complete Blood Count'; // WBC, RBC, HGB, HCT, Platelet, Neutrophils, Eosinophils
         var CATEGORY_TWO = 'Electrolytes'; // Sodium, potassium, glucose, creatinine, calcium, corrected calcium, magnesium
         var CATEGORY_THREE = 'Other'; // LDH, T4, TSH, albumin, protein, AST, ALT, alkaline phosophatase
@@ -98,26 +122,7 @@ myApp.service('LabResults',['$filter','LocalStorage','RequestToServer','$q',
         return{
             updateTestResults:function()
             {
-                var deferred = $q.defer();
-                //
-                if (new Date - uptodate < 300000 && testResults.length>0){
-                    deferred.resolve({Success: true, Location: 'Service'});
-                } else {
-                    this.destroy();
-                    RequestToServer.sendRequestWithResponse('LabResults')
-                        .then(function (response) {
-                            if (response.Code == '3') {
-                                addTestResults(response.labResults);
-                                deferred.resolve({Success: true, Location: 'Server'});
-                                uptodate = new Date();
-                            }
-                        })
-                        .catch(function (error) {
-                            console.log('There was an error contacting hospital ' + error);
-                            deferred.reject({Success: false, Location: '', Error: error})
-                        });
-                }
-                return deferred.promise;
+
             },
             setTestResults:function(tests){
                 testResults = [];
@@ -126,8 +131,21 @@ myApp.service('LabResults',['$filter','LocalStorage','RequestToServer','$q',
                 testResultsByCategory = {};
                 testResultsByDateArray=[];
                 testResultsByTypeArray=[];
-                testResultsToLocalStorage=[];
-                addTestResults(tests);
+                //testResultsToLocalStorage=[];
+                var deferred = $q.defer();
+                this.destroy();
+                RequestToServer.sendRequestWithResponse('LabResults')
+                    .then(function (response) {
+                        if (response.Code == '3') {
+                            addTestResults(response.labResults);
+                            deferred.resolve({Success: true, Location: 'Server'});
+                        }
+                    })
+                    .catch(function (error) {
+                        console.log('There was an error contacting hospital ' + error);
+                        deferred.reject({Success: false, Location: '', Error: error})
+                    });
+                return deferred.promise;
             },
 
             getTestResults:function(){
@@ -161,7 +179,7 @@ myApp.service('LabResults',['$filter','LocalStorage','RequestToServer','$q',
                 testResultsByCategory = {};
                 testResultsByDateArray=[];
                 testResultsByTypeArray=[];
-                testResultsToLocalStorage=[];
+                //testResultsToLocalStorage=[];
             }
         }
     }]);
