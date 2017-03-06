@@ -69,7 +69,7 @@
                     -1e11          // -100000000000,
                 ).replace(     // replacing
                     /[018]/g,    // zeroes, ones, and eights with
-                    b            // random hex digits
+                    generate            // random hex digits
                 )
         }
 
