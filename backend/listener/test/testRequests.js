@@ -1,5 +1,5 @@
 var Firebase    =require('firebase');
-var utility =require('./../utility.js');
+var utility =require('./../utility/utility.js');
 var credentials=require('./../config.json');
 var ref=new Firebase(credentials.FIREBASE_REQUEST_URL);
 //Refresh request

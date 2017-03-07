@@ -1,10 +1,10 @@
 
 // Import necessary libraries
 
-var mainRequestApi      =   	require('./main.js');
-var securityApi    =   	require('./security.js');
+var mainRequestApi      =   	require('./api/main.js');
+var securityApi    =   	require('./security/security.js');
 var admin            	=   	require("firebase-admin");
-var utility            	=   	require('./utility.js');
+var utility            	=   	require('./utility/utility.js');
 var q 			        =      	require("q");
 
 // Initialize firebase connection
