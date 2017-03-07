@@ -310,6 +310,8 @@ myApp.controller('TimelineTestComponentController',['$scope','$timeout','LabResu
     $scope.title = $scope.selectedTest.FacComponentName;
     $scope.maxNorm = $scope.selectedTest.MaxNorm;
     $scope.minNorm = $scope.selectedTest.MinNorm;
+    var max = test.MaxNorm;
+    var min = test.MinNorm;
     $scope.unit = $scope.selectedTest.UnitDescription;
     var u = "Results ("+$scope.unit+")";
     $scope.testValue = page.options.param.TestValue;
@@ -324,12 +326,6 @@ myApp.controller('TimelineTestComponentController',['$scope','$timeout','LabResu
 
     $scope.testResultsByDateArray = LabResults.getTestResultsArrayByDate();
 
-    var dateArray = [];
-    for(var key in $scope.testResultsByDateArray)
-    {
-        dateArray.push($scope.testResultsByDateArray[key]);
-    }
-
     // Chart
     $scope.data = [{
         key: 'Data',
@@ -337,27 +333,16 @@ myApp.controller('TimelineTestComponentController',['$scope','$timeout','LabResu
     }];
 
     var reformedData = [];
-    var maxRange = [];
-    var minRange = [];
-    $scope.recentValue;
-
-    for(i=0; i<testResults.length; i++)
+    for(var i=0; i<testResults.length; i++)
     {
         var dv = [];  //array to store pairs of [date, testResult]
-        var ma = [];  //array to store pairs of [date, maxrange]
-        var mi = [];  //array to store pairs of [date, minrange]
-        dv[0] = Date.parse(dateArray[testResults.length-i-1].testDate);  //dateArray[0] = most recent date
-        dv[1] = parseFloat(testResults[testResults.length-i-1].TestValue);
-        ma[0] = Date.parse(dateArray[testResults.length-i-1].testDate);
-        ma[1] = parseFloat($scope.maxNorm);
-        mi[0] = Date.parse(dateArray[testResults.length-i-1].testDate);
-        mi[1] = parseFloat($scope.minNorm);
+        dv[0] = Date.parse(testResults[i].TestDateFormat);  //dateArray[0] = most recent date
+        dv[1] = parseFloat(testResults[i].TestValue);
         reformedData.push(dv);
-        maxRange.push(ma);
-        minRange.push(mi);
     }
+    console.log(reformedData);
 
-    $scope.recentValue = parseFloat(testResults[0].TestValue);
+    $scope.recentValue = parseFloat(testResults[testResults.length-1].TestValue);
     var windowWidth = $(window).width();
     var windowHeight = $(window).height();
 
@@ -403,7 +388,18 @@ myApp.controller('TimelineTestComponentController',['$scope','$timeout','LabResu
             title: {
                 text: u
             },
-            opposite: false
+            opposite: false,
+            plotLines: [{
+                color: 'rgba(246, 54, 92, 0.53)',
+                value: max,
+                dashStyle: 'Solid',
+                width: 2
+            },{
+                color: 'rgba(246, 54, 92, 0.53)',
+                value: min,
+                dashStyle: 'Solid',
+                width: 2
+            }]
         },
         plotOptions: {
             series: {
@@ -419,27 +415,10 @@ myApp.controller('TimelineTestComponentController',['$scope','$timeout','LabResu
             },
             type: 'area',
             color: 'rgba(21, 148, 187, 0.65)',
-            negativeColor: 'rgba(21, 148, 187, 0.4)',
             pointWidth: 100,
             tooltip: {
                 valueDecimals: 2
             }
-        },
-            {
-                name: 'Maximum Norm',
-                data: maxRange,
-                color: 'rgba(246, 54, 92, 0.53)',
-                tooltip: {
-                    valueDecimals: 2
-                }
-            },
-            {
-                name: 'Minimum Norm',
-                data: minRange,
-                color: 'rgba(246, 54, 92, 0.53)',
-                tooltip: {
-                    valueDecimals: 2
-                }
-            }]
+        }]
     };
 }]);
