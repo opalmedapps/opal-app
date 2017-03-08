@@ -1,7 +1,11 @@
 /*
- *Code by David Herrera May 20, 2015
- *Github: dherre3
- *Email:davidfherrerar@gmail.com
+ * Filename     :   cleanUpService.js
+ * Description  :   Clears all the app data on New Login so there are no inconsistencies.
+ * Created by   :   David Herrera, Robert Maglieri 
+ * Date         :   08 Mar 2017
+ * Copyright    :   Copyright 2016, HIG, All rights reserved.
+ * Licence      :   This file is subject to the terms and conditions defined in
+ *                  file 'LICENSE.txt', which is part of this source code package.
  */
 
 (function () {
@@ -9,32 +13,27 @@
 
     angular
         .module('MUHCApp')
-        .controller('logOutController', logOutController);
+        .factory('CleanUp', CleanUp);
 
-    logOutController.$inject = ['FirebaseService','UserAuthorizationInfo',
-        '$state','RequestToServer','LocalStorage', 'Documents','Diagnoses',
+    CleanUp.$inject = ['UserAuthorizationInfo','LocalStorage', 'Documents','Diagnoses',
         'Appointments','Patient','Doctors','TxTeamMessages','Questionnaires',
         'Announcements','EducationalMaterial','Notifications','UserPreferences',
         'UpdateUI', 'Tasks', 'PlanningSteps', 'LabResults'];
 
     /* @ngInject */
-    function logOutController(FirebaseService, UserAuthorizationInfo,
-                              $state,RequestToServer,LocalStorage,Documents,Diagnoses,
-                              Appointments,Patient,Doctors,TxTeamMessages,Questionnaires,
-                              Announcements,EducationalMaterial,Notifications,UserPreferences,
-                              UpdateUI, Tasks, PlanningSteps, LabResults) {
-        var vm = this;
-        vm.title = 'logOutController';
-
-        activate();
+    function CleanUp(UserAuthorizationInfo, LocalStorage,Documents,Diagnoses,
+                     Appointments,Patient,Doctors,TxTeamMessages,Questionnaires,
+                     Announcements,EducationalMaterial,Notifications,UserPreferences,
+                     UpdateUI, Tasks, PlanningSteps, LabResults) {
+        var service = {
+            clear: clear
+        };
+        return service;
 
         ////////////////
 
-        function activate() {
+        function clear() {
 
-            console.log('Resetting services...');
-
-            RequestToServer.sendRequest('Logout');
             LabResults.destroy();
             LocalStorage.resetUserLocalStorage();
             Tasks.destroy();
@@ -52,9 +51,8 @@
             UserPreferences.clearUserPreferences();
             UserAuthorizationInfo.clearUserAuthorizationInfo();
             UpdateUI.clearUpdateUI();
-            FirebaseService.getAuthentication().$signOut();
-            console.log($state.go('init'));
         }
     }
 
 })();
+

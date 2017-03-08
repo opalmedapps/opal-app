@@ -79,7 +79,6 @@ myApp.controller('SingleDocumentController', ['NavigatorParameters','Documents',
         var image = Documents.setDocumentsLanguage(parameters.Post);
         var pdfdoc, scale = 3, uint8pf;
         var viewerSize = window.innerWidth;
-        var content = Document.Content;
         //console.log(document.getElementById('topholder'));
         var containerEl = document.getElementById('holder');
         console.log(containerEl);
@@ -244,12 +243,6 @@ myApp.controller('SingleDocumentController', ['NavigatorParameters','Documents',
 
         }
 
-        // $timeout(function () {
-        //     ons.createPopover('./views/education/popover-material-options.html',{parentScope: $scope}).then(function (popover) {
-        //         $scope.popoverSharing = popover;
-        //     });
-        // }, 300);
-
         //Share via email function, detemines if its an app, sets the parameters for the email and formats depending on whether is a
         //base64 string or a simple attachment and depending on whether is an Android device or an iOS device
         $scope.share =function()
@@ -257,7 +250,8 @@ myApp.controller('SingleDocumentController', ['NavigatorParameters','Documents',
             if (Constants.app) {
 
                 var targetPath = FileManagerService.generatePath(image);
-                FileManagerService.downloadFileIntoStorage("data:application/pdf;base64," + content, targetPath).then(function()
+                console.log(image);
+                FileManagerService.downloadFileIntoStorage("data:application/pdf;base64," + image.Content, targetPath).then(function()
                 {
                     if (ons.platform.isAndroid()) {
                         NewsBanner.showCustomBanner($filter('translate')("DOCUMENT_DOWNLOADED"), '#0047f2', null, 3000);
@@ -274,7 +268,8 @@ myApp.controller('SingleDocumentController', ['NavigatorParameters','Documents',
                 });
 
             } else {
-                window.open(image.Content);
+                console.log(image);
+                window.open("data:application/pdf;base64," + image.Content);
             }
         };
 
