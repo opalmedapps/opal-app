@@ -1,7 +1,7 @@
 var chai = require('chai');
 var expect = require('chai').expect;
-var utility = require('../utility.js');
-var updatePatient = require('../apiPatientUpdate.js');
+var utility = require('../utility/utility.js');
+var updatePatient = require('../api/apiPatientUpdate.js');
 var sinon = require('sinon');
 var sinonChai = require('sinon-chai');
 chai.use(require('chai-datetime'));
