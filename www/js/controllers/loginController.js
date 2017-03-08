@@ -9,12 +9,12 @@ var myApp=angular.module('MUHCApp');
 myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$rootScope', '$state',
     'UserAuthorizationInfo', 'RequestToServer', 'FirebaseService','LocalStorage','$filter','DeviceIdentifiers',
     'UserPreferences','NavigatorParameters','Patient','NewsBanner', '$firebaseAuth', 'UUID', 'Constants',
-    'EncryptionService',
+    'EncryptionService', 'CleanUp',
     function LoginController(
         ResetPassword,$scope,$timeout, $rootScope, $state, UserAuthorizationInfo,
         RequestToServer,FirebaseService,LocalStorage,$filter,DeviceIdentifiers,
         UserPreferences,NavigatorParameters,Patient, NewsBanner,$firebaseAuth, UUID, Constants,
-        EncryptionService
+        EncryptionService, CleanUp
     ) {
 
         if(!localStorage.getItem('locked')){
@@ -101,51 +101,12 @@ myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$root
                     firebase.auth().signInWithEmailAndPassword(email,password).then(authHandler).catch(handleError);
                 }
 
-                //Getting authentication status
-                // var auth = FirebaseService.getAuthenticationCredentials();
-                // //Getting authentication info from local storage
-                // var authDetails = window.localStorage.getItem('UserAuthorizationInfo');
-                // //Auth details defined
-                // if(authDetails) authDetails = JSON.parse(authDetails);
-                // if(auth&&authDetails)
-                // {
-                //     //If the password is correct and the patient fields are defined, means they are in the locked out state, allow them
-                //     //access
-                //     console.log(authDetails.Email);
-                //     console.log($scope.email);
-                //     if(authDetails.Password == CryptoJS.SHA256($scope.password).toString()&&authDetails.Email==$scope.email)
-                //     {
-                //         console.log('Hello World');
-                //         if(typeof patientSerNum!=='undefined'&&patientSerNum)
-                //         {
-                //             $state.go('Home');
-                //         }else{
-                //             console.log(auth);
-                //             if(app&&authenticate(auth)&&LocalStorage.isUserDataDefined())
-                //             {
-                //                 console.log('In there');
-                //                 NavigatorParameters.setParameters('Resume');
-                //                 $state.go('loading');
-                //
-                //             }else{
-                //                 //Otherwise even if they are logged out, try to authenticate them.
-                //                 myAuth.$signInWithEmailAndPassword(email,password).then(authHandler).catch(handleError);
-                //             }
-                //
-                //         }
-                //     }else{
-                //         //Show appropiate error
-                //         myAuth.$signInWithEmailAndPassword(email,password).then(authHandler).catch(handleError);
-                //     }
-                //     //If not authenticated, simply try to authenticate
-                // }else{
-                //     myAuth.$signInWithEmailAndPassword(email,password).then(authHandler).catch(handleError);
-                // }
-
             }
         };
         //Handles authentication
-        function authHandler(/*error, */firebaseUser) {
+        function authHandler(firebaseUser) {
+
+            CleanUp.clear();
 
             firebaseUser.getToken(true).then(function(sessionToken){
                 console.log('In Auth Handler');
@@ -210,7 +171,6 @@ myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$root
 
 
             });
-            /*}*/
         }
 
         //Handles login error's;
