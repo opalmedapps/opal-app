@@ -1,8 +1,8 @@
 {
-    "MYSQL_USERNAME":"robert",
-    "MYSQL_PASSWORD":"service",
-    "MYSQL_DATABASE":"QPlusApp",
-    "HOST" : "172.26.66.41",
+    "MYSQL_USERNAME":"opal",
+    "MYSQL_PASSWORD":"Opal123!@#",
+    "MYSQL_DATABASE":"OpalDB",
+    "HOST" : "localhost",
     "DOCUMENTS_PATH" : "/var/www/Documents/opalAdmin/backend/clinical/documents/",
     "CHECKIN_PATH" : "http://172.26.66.41/devDocuments/screens/php/checkInPatientAriaMedi.php?CheckinVenue=OPAL%20PHONE%20APP&PatientId=",
     "VERIFYCHECKIN_PATH" : "http://172.26.66.41/devDocuments/ackeem/getCheckins.php?AppointmentAriaSer=",

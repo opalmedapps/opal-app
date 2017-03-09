@@ -17,11 +17,11 @@ var q 			        =      	require("q");
 
 // Initialize firebase connection
 
-var serviceAccount = require("/home/robert/firebase_account/opal-dev-firebase-adminsdk-73h8x-3b90af80af.json");
+var serviceAccount = require("./opal-mactest-firebase-adminsdk-euaoy-28ef25fd9b.json");
 
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
-    databaseURL: "https://opal-dev.firebaseio.com"
+    databaseURL: "https://opal-mactest.firebaseio.com"
 });
 
 // Get reference to correct data element
