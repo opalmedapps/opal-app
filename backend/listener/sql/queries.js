@@ -50,7 +50,7 @@ exports.patientDocumentTableFields=function()
         "INNER JOIN AliasExpression ON AliasExpression.AliasExpressionSerNum = Document.AliasExpressionSerNum " +
         "INNER JOIN Alias ON Alias.AliasSerNum = AliasExpression.AliasSerNum" +
         "INNER JOIN Users ON Users.UserTypeSerNum = Patient.PatientSerNum " +
-        "INNER JOIN Staff Staff.StaffSerNum = Document.ApprovedBySerNum " +
+        "INNER JOIN Staff ON Staff.StaffSerNum = Document.ApprovedBySerNum " +
         "LEFT JOIN EducationalMaterialControl emc ON emc.EducationalMaterialControlSerNum = Alias.EducationalMaterialControlSerNum " +
         "" +
         "WHERE " +
