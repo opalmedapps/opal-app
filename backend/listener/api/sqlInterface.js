@@ -703,7 +703,7 @@ function loadImageDoctor(rows){
             var n = rows[key].ProfileImage.lastIndexOf(".");
             var substring=rows[key].ProfileImage.substring(n+1,rows[key].ProfileImage.length);
             rows[key].DocumentType=substring;
-            rows[key].ProfileImage=filesystem.readFileSync(__dirname+'/Doctors/'+rows[key].ProfileImage,'base64' );
+            rows[key].ProfileImage=filesystem.readFileSync('./Doctors/'+rows[key].ProfileImage,'base64' );
 
         }
     }

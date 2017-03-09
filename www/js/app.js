@@ -185,11 +185,11 @@ myApp.config(function ($translateProvider) {
 myApp.config(function () {
     // Initialize Firebase
     var config = {
-            apiKey: "AIzaSyAMIDdcQR8EiY9gjj4cgxp6Vu3xwa78Ww8",
-            authDomain: "opal-dev.firebaseapp.com",
-            databaseURL: "https://opal-dev.firebaseio.com",
-            storageBucket: "opal-dev.appspot.com",
-            messagingSenderId: "652464215237"
+        apiKey: "AIzaSyCw4vvsyYYHbzKisZdJ3CdOOwClkG10J0A",
+        authDomain: "opal-mactest.firebaseapp.com",
+        databaseURL: "https://opal-mactest.firebaseio.com",
+        storageBucket: "opal-mactest.appspot.com",
+        messagingSenderId: "634611685707"
     };
     firebase.initializeApp(config);
 });
