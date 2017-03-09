@@ -27,7 +27,7 @@ exports.patientAppointmentsTableFields=function()
 
 exports.patientDocumentTableFields=function()
 {
-    return "SELECT DISTINCT" +
+    return "SELECT DISTINCT " +
         "Document.FinalFileName, " +
         "Alias.AliasName_EN, " +
         "Alias.AliasName_FR, " +
