@@ -1,6 +1,6 @@
 // var credentials=require('./../credentials.js');
 var sqlInterface=require('./../api/sqlInterface.js');
-var queries=require('./../queries.js');
+var queries=require('./../sql/queries.js');
 // var updatePatient = require('../apiPatientUpdate.js');
 // var Firebase    =require('firebase');
 // var CryptoJS = require('crypto-js');
@@ -28,7 +28,7 @@ var requestObject = {
     Parameters:{'AppointmentSerNum':'196'}
 };
 
-sqlInterface.runSqlQuery(queries.patientDocumentTableFields(),[requestObject.UserID]).then(function(rows) {
+sqlInterface.runSqlQuery(queries.patientDocumentTableFields(),[requestObject.UserID, new Date(), new Date()]).then(function(rows) {
     console.log(rows);
 }).catch(function (error) {
     console.log(error);
