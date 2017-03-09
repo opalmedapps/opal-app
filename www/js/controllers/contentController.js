@@ -21,34 +21,39 @@
         ////////////////
 
         function activate() {
-            var params = NavigatorParameters.getParameters();
-            console.log(params);
-            var contentType = params.nav.getCurrentPage().options.contentType;
-            //console.log(contentType)
+            var nav = NavigatorParameters.getNavigator();
+            var contentType = nav.getCurrentPage().options.contentType;
             loadPageContent(contentType);
         }
 
         function loadPageContent(contentType){
-            // push the new page on the satck
 
             var pageContent = DynamicContentService.getContentData(contentType);
-
-            vm.pageContent.title = pageContent.title;
 
             // get the content from depdocs
             DynamicContentService.getPageContent(contentType)
                 .then(function (response) {
                     console.log(response);
+                    vm.pageContent.title = pageContent.title;
                     vm.pageContent.content = response.data;
                     console.log(vm.pageContent);
                     vm.loading = false;
                 })
                 .catch(function (response) {
-                    console.log("Problems... ", response);
                     vm.loading = false;
-                    vm.alert = {
-                        type :'danger',
-                        content: 'INTERNETERROR'
+                    console.log(response.code == "NO_PAGE");
+                    switch (response.code) {
+                        case "NO_PAGE":
+                            vm.alert = {
+                                type :'info',
+                                content: "NO_CONTENT"
+                            };
+                            break;
+                        default:
+                            vm.alert = {
+                                type :'danger',
+                                content: "INTERNETERROR"
+                            };
                     }
                 });
         }

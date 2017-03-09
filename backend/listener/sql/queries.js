@@ -27,7 +27,7 @@ exports.patientAppointmentsTableFields=function()
 
 exports.patientDocumentTableFields=function()
 {
-    return "SELECT Document.FinalFileName, Alias.AliasName_EN, Alias.AliasName_FR, Document.ReadStatus, Alias.AliasDescription_EN, Alias.AliasDescription_FR, Document.DocumentSerNum, Document.DateAdded, Document.LastUpdated, Document.ApprovedTimeStamp, Staff.FirstName, Staff.LastName FROM Document, Patient, Alias, AliasExpression, Users, Staff WHERE Patient.AccessLevel = 3 AND Staff.StaffSerNum = Document.ApprovedBySerNum AND Document.AliasExpressionSerNum=AliasExpression.AliasExpressionSerNum AND AliasExpression.AliasSerNum=Alias.AliasSerNum AND Patient.PatientSerNum=Document.PatientSerNum AND Users.UserTypeSerNum=Patient.PatientSerNum AND Users.Username LIKE ? AND (Document.LastUpdated > ? OR Alias.LastUpdated > ?);";
+    return "SELECT Document.FinalFileName, Alias.AliasName_EN, Alias.AliasName_FR, Document.ReadStatus, Alias.AliasDescription_EN, Alias.AliasDescription_FR, Document.DocumentSerNum, Document.DateAdded, Document.LastUpdated, Document.ApprovedTimeStamp, Staff.FirstName, Staff.LastName, Alias.ColorTag, emc.URL_EN, emc.URL_FR FROM Document, Patient, Alias, AliasExpression, Users, Staff, EducationalMaterialControl emc WHERE Patient.AccessLevel = 3 AND Staff.StaffSerNum = Document.ApprovedBySerNum AND Document.AliasExpressionSerNum=AliasExpression.AliasExpressionSerNum AND AliasExpression.AliasSerNum=Alias.AliasSerNum AND Patient.PatientSerNum=Document.PatientSerNum AND Users.UserTypeSerNum=Patient.PatientSerNum AND Alias.EducationalMaterialControlSerNum = emc.EducationalMaterialControlSerNum AND Users.Username LIKE ? AND (Document.LastUpdated > ? OR Alias.LastUpdated > ?);";
 };
 exports.getDocumentsContentQuery = function()
 {
