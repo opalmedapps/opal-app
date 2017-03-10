@@ -17,7 +17,7 @@ var sqlConfig={
   host:credentials.HOST,
   user:credentials.MYSQL_USERNAME,
   password:credentials.MYSQL_PASSWORD,
-  database:'QuestionnaireDB',
+  database:'QuestionnairesDB',
   dateStrings:true
 };
 /*
@@ -56,7 +56,7 @@ exports.getPatientQuestionnaires = function (rows)
     var quer = connection.query(queryQuestions, [[questionnaireDBSerNumArray]], function(err,  questions, fields){
       if(err) r.reject(err);
 
-      
+      console.log(questions);
       getQuestionChoices(questions).then(function(questionsChoices){
         var questionnaires = prepareQuestionnaireObject(questionsChoices,rows);
         var patientQuestionnaires = {};
