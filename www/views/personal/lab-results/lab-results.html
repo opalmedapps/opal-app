@@ -8,31 +8,20 @@
     </ons-pull-hook>
     <ons-toolbar>
         <div class="left">
-            <ons-back-button>Back</ons-back-button>
+            <ons-back-button>{{"BACK"|translate}}</ons-back-button>
         </div>
-        <div class="center">Lab Results</div>
+        <div class="center">{{"LAB_RESULTS"|translate}}</div>
     </ons-toolbar>
     <div ng-show="loading" align="center" style="margin:10px">
         <svg class="progress-circular">
             <circle class="progress-circular__primary" cx="50%" cy="50%" r="40%" fill="none" stroke-width="10%" stroke-miterlimit="10"/>
         </svg>
         <br>
-        {{"LABS_LOADING"|translate}}
+        {{"LOADINGDATA"|translate}}
     </div>
-    <ons-list ng-hide="loading">
-        <ons-list-item ng-repeat="testResultByDate in testResultsByDate | orderBy:'-testDateFormat'" ng-click="personalNavigator.pushPage('./views/personal/lab-results/test-view.html',{param:testResultByDate})" modifier="tappable" class="list-item-container">
-            <ons-row align="center" >
-                <ons-col width="60px" align="center">
-                    <div style="margin-left:10px">
-                        <i class="fa fa-flask iconHomeView" style="color:blue"></i><span class="notification" ng-if="testResultByDate.ReadStatus==='0'">1</span>
-                    </div>
-                </ons-col>
-                <ons-col style="word-wrap: break-word;">
-                    <div style="line-height:1;padding:5px;" >
-                        <span ng-class="fontSizeTitle"> {{testResultByDate.testDateFormat|formatDateAppointmentTask}}</span> <br>
-                    </div>
-                </ons-col>
-            </ons-row>
-        </ons-list-item>
-    </ons-list>
+
+    <ons-tabbar position="top" ng-hide="loading" animation="fade" var="labbar">
+        <ons-tab page="./views/personal/lab-results/date-tests.html" label="{{'LAB_BYDATE'|translate}}" icon="fa-calendar" active="true"></ons-tab>
+        <ons-tab page="./views/personal/lab-results/category-view.html" label="{{'LAB_BYTYPE'|translate}}" icon="fa-tags"></ons-tab>
+    </ons-tabbar>
 </ons-page>

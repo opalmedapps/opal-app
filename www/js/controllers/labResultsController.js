@@ -45,16 +45,48 @@ myApp.controller('ByDateTestsController',['$scope','$timeout','LabResults','$fil
 
 }]);
 
+(function () {
+    'use strict';
+
+    angular
+        .module('MUHCApp')
+        .controller('CategoryLabTestController', CategoryLabTestController);
+
+    CategoryLabTestController.$inject = ['LabResults'];
+
+    /* @ngInject */
+    function CategoryLabTestController(LabResults) {
+        var vm = this;
+        vm.title = 'CategoryLabTestController';
+        vm.testResultsByCategory = null;
+
+        activate();
+
+        ////////////////
+
+        function activate() {
+            vm.testResultsByCategory = LabResults.getTestResultsByCategory();
+            console.log(vm.testResultsByCategory);
+            vm.testResultsByType = LabResults.getTestResultsArrayByType();
+            console.log(vm.testResultsByType);
+        }
+    }
+
+})();
+
+
+
 //for test-view.html
 myApp.controller('IndividualLabTestController',['$scope','$timeout','LabResults',function($scope,$timeout,LabResults){
     var page = personalNavigator.getCurrentPage();
     var test = page.options.param;
 
     if (test.testResults) {
+        $scope.test = test;
         $scope.selectedLabResults = test.testResults;
         $scope.testDate = test.testDate;
         $scope.testResultsByCategory = LabResults.getTestResultsByCategory();
-        $scope.testResultsByType = LabResults.getTestResultsArrayByType();
+
     }
 
     // Update title
@@ -65,20 +97,24 @@ myApp.controller('IndividualLabTestController',['$scope','$timeout','LabResults'
     }
 }]);
 
-myApp.controller('TimelineTestComponentController',['$scope','$timeout','LabResults',function($scope,$timeout,LabResults)
+myApp.controller('TimelineTestComponentController',['$scope','$timeout','LabResults','$filter','UserPreferences',
+    function($scope,$timeout,LabResults,$filter,UserPreferences)
 {
     var page = personalNavigator.getCurrentPage();
     var test = page.options.param;
 
+    console.log(test);
     $scope.selectedTest = test;
-    $scope.testName = test.ComponentName;
-    $scope.title = $scope.selectedTest.FacComponentName;
-    $scope.maxNorm = $scope.selectedTest.MaxNorm;
-    $scope.minNorm = $scope.selectedTest.MinNorm;
-    var max = test.MaxNorm;
-    var min = test.MinNorm;
-    $scope.unit = $scope.selectedTest.UnitDescription;
-    var u = "Results ("+$scope.unit+")";
+    $scope.testName = test.ComponentName || test.testResults[0].ComponentName;
+    $scope.title = $scope.selectedTest.FacComponentName || $scope.selectedTest.testName;
+
+    var max = $scope.selectedTest.MaxNorm || test.testResults[0].MaxNorm;
+    var min = $scope.selectedTest.MinNorm || test.testResults[0].MinNorm;
+    $scope.maxNorm = max;
+    $scope.minNorm = min;
+
+    $scope.unit = $scope.selectedTest.UnitDescription || test.testResults[0].UnitDescription;
+    var u = $filter('translate')('RESULTS') + '(' + $scope.unit + ')';
     $scope.testValue = page.options.param.TestValue;
     $scope.information = undefined;
 
@@ -130,6 +166,34 @@ myApp.controller('TimelineTestComponentController',['$scope','$timeout','LabResu
     });
 
     // Sample options for first chart
+
+    if (UserPreferences.getLanguage() == 'FR')
+    {
+        Highcharts.setOptions({
+            lang: {
+                months: ['janvier', 'février', 'mars', 'avril', 'mai', 'juin',
+                    'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'],
+                weekdays: ['Dimanche', 'Lundi', 'Mardi', 'Mercredi',
+                    'Jeudi', 'Vendredi', 'Samedi'],
+                shortMonths: ['Jan', 'Fev', 'Mar', 'Avr', 'Mai', 'Juin', 'Juil',
+                    'Aout', 'Sept', 'Oct', 'Nov', 'Déc'],
+                decimalPoint: ',',
+                downloadPNG: 'Télécharger en image PNG',
+                downloadJPEG: 'Télécharger en image JPEG',
+                downloadPDF: 'Télécharger en document PDF',
+                downloadSVG: 'Télécharger en document Vectoriel',
+                exportButtonTitle: 'Export du graphique',
+                loading: 'Chargement en cours...',
+                printButtonTitle: 'Imprimer le graphique',
+                resetZoom: 'Réinitialiser le zoom',
+                resetZoomTitle: 'Réinitialiser le zoom au niveau 1:1',
+                thousandsSep: ' ',
+                decimalPoint: ','
+            }
+        });
+    }
+
+
     $scope.chartOptions = {
         rangeSelector: {
             selected: 1
