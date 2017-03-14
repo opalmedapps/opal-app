@@ -53,6 +53,7 @@ myApp.service('LabResults',['$filter','LocalStorage','RequestToServer','$q',
 
                 var testResult = tests[key];
                 testResult.TestDateFormat = $filter('formatDate')(testResult.TestDate);
+                testResult.AbnormalFlag = testResult.AbnormalFlag.trim();
                 //console.log(key, testResult.TestDate);
                 var testResultDate = testResult.TestDate.replace(/ /g, '');
                 var testResultType = testResult.FacComponentName;

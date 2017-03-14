@@ -16,64 +16,13 @@
                     </p>
                 </div>
             </ons-list-item>
-            <ons-list-item modifier="chevron" ng-click="goToMap()">
-
-                <ons-row >
-
-                    <ons-col>
-                        <div align="left" style="margin-left:10px" >
-                            <i class="ion-location iconHomeView" style="color:grey;font-size:20px"  ></i>   {{"LOCATION"|translate}}
-                        </div>
-                    </ons-col>
-                    <ons-col align="center" >
-                        <div align="right" >
-                            <p class="item-desc" ng-class="fontSizeDesc">{{app["MapName_"+language]|ellipsis:15}}</p>
-                        </div>
-                    </ons-col>
-                </ons-row>
-                <!--<div class="text-center" style="color:grey" ng-class="fontSizeDesc">
-                    <i class="ion-location iconHomeView"></i>  {{"LOCATION"|translate}} &raquo;
-                </div>-->
+            <ons-list-item modifier="chevron" tappable ng-click="goToMap()">
+                <p class="item-desc" ng-class="fontSizeDesc">{{app["MapName_"+language]|ellipsis:30}}</p>
+            </ons-list-item>
+            <ons-list-item modifier="chevron" tappable ng-click="about()">
+                <p class="item-desc" ng-class="fontSizeDesc">{{"APPOINTMENT_ABOUT"|translate}}</p>
             </ons-list-item>
 
-        </ons-list>
-        <!--<ons-list class="settings-list" ng-show="showCheckin">
-            <ons-list-item class="item"">
-                <div ng-show="loading&&!errorMessage" align="center">
-                    <svg class="progress-circular">
-                        <circle class="progress-circular__primary" cx="50%" cy="50%" r="40%" fill="none" stroke-width="10%" stroke-miterlimit="10"/>
-                    </svg>
-                </div>
-                <div align="center" ng-show="!loading">
-                    <p class="item-desc" ng-class="fontSizeTitle">{{checkInMessage}}</p><br>
-                    <button class="button checkin-button" ng-click="goToCheckIn()" ng-disabled="!enableCheckinButton">
-                        <span style="font-size:20px"><i class="iconHomeView ion-android-checkbox" style="color:white"></i><br>{{"CHECKIN"|translate}}</span>
-                    </button>
-                </div>
-                <div ng-show="errorMessage" style="padding:20px"><p class="item-desc" ng-class="fontSizeTitle">{{errorMessage}}</p></div>
-
-
-                &lt;!&ndash;<div align="center" style="height:310px" ng-show="!loading&&showLiveUpdate">
-                    <p class="item-desc" ng-class="fontSizeDesc" style="font-size:20px"><img ng-src="./img/checkedbox.png" width="20px" height="20px"> {{checkInMessage}}</p>
-                    <div style="width:200px" >
-                        <div id = "statusBarCheckin"></div>
-                    </div>
-                    <div style="margin-top:-170px;height:150px;overflow-y:hidden;width:150px;padding:0;">
-                        <div ng-show="checkinEstimate"><p class="item-title" ng-class="fontSizeTitle"></p><br>
-                            <p class="item-title"   ng-class="fontSizeTitle">{{"ESTIMATEDWAIT"|translate}}</p>
-                            <p class="item-title" style="font-size:30px">{{checkinEstimate}}</p>
-                            <p class="item-title"   ng-class="fontSizeTitle">{{"MINUTES"|translate}}</p></div>
-                        <div ng-show="!checkinEstimate" style="margin-top:40px"><p><strong>{{"FETCHINGTIMEESTIMATE"|translate}}</strong></p><p><ons-icon icon="ion-load-d" spin="true"></ons-icon></p></div>
-                    </div>
-                    <div align="center" style="margin-top:20px">
-                        <div ng-show="checkinEstimate">
-                            <p class="item-title"  ng-class="fontSizeTitle">{{precedingPatientsLabel}}</p>
-                            <p class="item-title"   ng-class="fontSizeTitle"> {{scheduleAhead}}</p>
-                        </div>
-                    </div>
-                </div>&ndash;&gt;
-
-            </ons-list-item>-->
         </ons-list>
 
     </div>
