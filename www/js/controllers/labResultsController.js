@@ -114,7 +114,7 @@ myApp.controller('TimelineTestComponentController',['$scope','$timeout','LabResu
     $scope.minNorm = min;
 
     $scope.unit = $scope.selectedTest.UnitDescription || test.testResults[0].UnitDescription;
-    var u = $filter('translate')('RESULTS') + '(' + $scope.unit + ')';
+    var u = $filter('translate')('RESULTS') + ' (' + $scope.unit + ')';
     $scope.testValue = page.options.param.TestValue;
     $scope.information = undefined;
 
@@ -173,10 +173,10 @@ myApp.controller('TimelineTestComponentController',['$scope','$timeout','LabResu
             lang: {
                 months: ['janvier', 'février', 'mars', 'avril', 'mai', 'juin',
                     'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'],
-                weekdays: ['Dimanche', 'Lundi', 'Mardi', 'Mercredi',
-                    'Jeudi', 'Vendredi', 'Samedi'],
-                shortMonths: ['Jan', 'Fev', 'Mar', 'Avr', 'Mai', 'Juin', 'Juil',
-                    'Aout', 'Sept', 'Oct', 'Nov', 'Déc'],
+                weekdays: ['dimanche', 'lundi', 'lardi', 'mercredi',
+                    'jeudi', 'vendredi', 'samedi'],
+                shortMonths: ['janv.', 'févr.', 'mars', 'avr.', 'mai', 'juin', 'juill.',
+                    'août', 'sept.', 'oct.', 'nov.', 'déc'],
                 decimalPoint: ',',
                 downloadPNG: 'Télécharger en image PNG',
                 downloadJPEG: 'Télécharger en image JPEG',
@@ -184,13 +184,14 @@ myApp.controller('TimelineTestComponentController',['$scope','$timeout','LabResu
                 downloadSVG: 'Télécharger en document Vectoriel',
                 exportButtonTitle: 'Export du graphique',
                 loading: 'Chargement en cours...',
-                printButtonTitle: 'Imprimer le graphique',
+                printChart: 'Imprimer le graphique',
                 resetZoom: 'Réinitialiser le zoom',
                 resetZoomTitle: 'Réinitialiser le zoom au niveau 1:1',
-                thousandsSep: ' ',
-                decimalPoint: ','
+                thousandsSep: ' '
             }
         });
+
+        Highcharts.dateFormat('%e%a');
     }
 
 
