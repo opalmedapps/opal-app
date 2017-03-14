@@ -1,6 +1,9 @@
 {
   "ABOUT": "À propos",
   "DOC_ABOUT": "À propos de ce document",
+  "DOC_DATE_APPROVED": "Apprové le ",
+  "DOC_DATE_UPDATED":"Mis à jour le ",
+  "DOC_SIGNEDBY":"Signé par  ",
   "ACCOUNT": "Réglages",
   "ADDED": "Reçu à",
   "ALIAS": "Pseudonyme",
@@ -121,6 +124,7 @@
   "NEWPASSWORD": "Créer un mot de passe",
   "NEWS": "Actualité",
   "NEXTAPPOINTMENT": "Vos rendez-vous",
+  "NO_CONTENT": "Il n'y a présentment aucune information. SVP contactez l'hôpital pour plus d'informations.",
   "NOANNOUNCEMENTS": "Pas d'annonces",
   "NOAPPOINTMENTS": "Sans rendez-vous",
   "NOCONTACTSAVAILABLE": "Pas de contacts disponibles",

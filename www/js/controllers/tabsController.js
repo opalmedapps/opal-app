@@ -33,6 +33,7 @@ myApp.controller('personalTabController',
     //Its possible for a notification to have been read such as a document since this controller has already been instantiated
     // we will have to check to sync that number on the badges for the tabs on the personal page.
     NavigatorParameters.setParameters({'Navigator':'personalNavigator'});
+    NavigatorParameters.setNavigator(personalNavigator);
     personalNavigator.on('prepop',function(){
         setNewsNumbers();
     });
@@ -115,7 +116,8 @@ myApp.controller('personalTabController',
 
 myApp.controller('generalTabController',['$scope','$timeout','Announcements','RequestToServer','UpdateUI','Notifications','NavigatorParameters','$filter',function($scope,$timeout,Announcements,RequestToServer,UpdateUI,Notifications,NavigatorParameters,$filter){
 
-    NavigatorParameters.setParameters({'Navigator':'generalNavigator', nav: generalNavigator});
+    NavigatorParameters.setParameters({'Navigator':'generalNavigator'});
+    NavigatorParameters.setNavigator(generalNavigator);
 
     var app = document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'https://' ) === -1;
     setNewsNumbers();
@@ -155,30 +157,7 @@ myApp.controller('generalTabController',['$scope','$timeout','Announcements','Re
         NavigatorParameters.setParameters({'Navigator':'generalNavigator'});
         generalNavigator.pushPage('./views/init/init-settings.html')
     };
-    // $scope.reportIssuesMail = function()
-    // {
-    //
-    //     if(app){
-    //         var email = {
-    //             to: 'muhc.app.mobile@gmail.com',
-    //             cc: '',
-    //             bcc: [],
-    //             subject: $filter("translate")("OPALPROBLEMSUBJECT"),
-    //             body: '',
-    //             isHtml: true
-    //         };
-    //         cordova.plugins.email.isAvailable(function(isAvailable){
-    //             if(isAvailable)
-    //             {
-    //                 cordova.plugins.email.open(email,function(sent){
-    //                     console.log('email ' + (sent ? 'sent' : 'cancelled'));
-    //                 },this);
-    //             }else{
-    //                 console.log('is not available');
-    //             }
-    //         });
-    //     }
-    // };
+
     $scope.goToParking = function()
     {
         NavigatorParameters.setParameters('generalNavigator');

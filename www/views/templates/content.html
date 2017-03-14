@@ -12,7 +12,8 @@
         </svg>
     </div>
 
-    <div ng-bind-html="about.pageContent.content"></div>
-    <uib-alert ng-show="about.alert.type" type="{{about.alert.type}}">{{about.alert.content|translate}}</uib-alert>
-
+    <div ng-bind-html="about.pageContent.content"></div>{{about.alert}}
+    <div ng-show="about.alert.type" align="center" style="margin-top: 60px; width: 95%; margin: auto">
+        <uib-alert type="{{about.alert.type}}">{{about.alert.content|translate}}</uib-alert>
+    </div>
 </ons-page>

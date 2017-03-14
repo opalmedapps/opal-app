@@ -76,21 +76,31 @@ myApp.controller('SingleDocumentController', ['NavigatorParameters','Documents',
         var parameters = NavigatorParameters.getParameters();
 
         //PDF params
-        var image = Documents.setDocumentsLanguage(parameters.Post);
+        var docParams = Documents.setDocumentsLanguage(parameters.Post);
         var pdfdoc, scale = 3, uint8pf;
         var viewerSize = window.innerWidth;
         //console.log(document.getElementById('topholder'));
         var containerEl = document.getElementById('holder');
-        console.log(containerEl);
-        $scope.viewerPath = "./lib/js/pdfjs-viewer/web/viewer.html";
 
-        //var pdfjsframe = document.getElementById('pdfViewer');
-
-        $scope.documentObject = image;
+        $scope.documentObject = docParams;
         $scope.rendering = true;
         $scope.loading = true;
         $scope.errorDownload = false;
-        initializeDocument(image);
+
+        //Create popover
+
+        ons.createPopover('./views/personal/my-chart/popoverDocsInfo.html', {parentScope: $scope}).then(function (popover) {
+            $scope.popoverDocsInfo = popover;
+        });
+
+        $scope.$on('$destroy', function () {
+            console.log('on destroy');
+            $scope.popoverDocsInfo.off('posthide');
+            $scope.popoverDocsInfo.destroy();
+        });
+
+
+        initializeDocument(docParams);
         //Checks if document exists if it does not it downloads the document from the server
 
         function initializeDocument(document)
@@ -146,9 +156,9 @@ myApp.controller('SingleDocumentController', ['NavigatorParameters','Documents',
                             console.log(event);
                             if (Constants.app) {
                                 if (ons.platform.isAndroid()) {
-                                    var image = new Image();
-                                    image.src = event.srcElement.toDataURL("image/png");
-                                    cordova.InAppBrowser.open(image.src, '_blank', 'location=no,enableViewportScale=true');
+                                    var docParams = new docParams();
+                                    docParams.src = event.srcElement.toDataURL("docParams/png");
+                                    cordova.InAppBrowser.open(docParams.src, '_blank', 'location=no,enableViewportScale=true');
                                 } else {
                                     cordova.InAppBrowser.open("data:application/pdf;base64," + document.Content, '_blank', 'EnableViewPortScale=yes');
                                 }
@@ -163,20 +173,20 @@ myApp.controller('SingleDocumentController', ['NavigatorParameters','Documents',
                 });
         }
 
-        function convertCanvasToImage(canvas) {
-            var image = new Image();
-            image.src = canvas.toDataURL("image/png");
-            image.width = viewerSize;
-            image.height = 'auto';
-            image.style.border = "1px solid black";
-            // image.onclick = function () {
+        function convertCanvasTodocParams(canvas) {
+            var docParams = new docParams();
+            docParams.src = canvas.toDataURL("docParams/png");
+            docParams.width = viewerSize;
+            docParams.height = 'auto';
+            docParams.style.border = "1px solid black";
+            // docParams.onclick = function () {
             //     if (Constants.app) {
-            //         cordova.InAppBrowser.open(image.src, '_blank', 'location=no,enableViewportScale=true');
+            //         cordova.InAppBrowser.open(docParams.src, '_blank', 'location=no,enableViewportScale=true');
             //     } else{
-            //         window.open(image.src, '_blank', 'location=no,enableViewportScale=true');
+            //         window.open(docParams.src, '_blank', 'location=no,enableViewportScale=true');
             //     }
             // }
-            return image;
+            return docParams;
         }
 
         function renderPage(pdfDoc, num, containerEl) {
@@ -217,7 +227,7 @@ myApp.controller('SingleDocumentController', ['NavigatorParameters','Documents',
         function setDocumentForShowing(document, url)
         {
             console.log(url);
-            //Determine if its a pdf or an image for small window preview.
+            //Determine if its a pdf or an docParams for small window preview.
             if(document.DocumentType=='pdf')
             {
                 document.PreviewContent=(ons.platform.isIOS()&&app)?url.cdvUrl:'./img/pdf-icon.png';
@@ -249,15 +259,15 @@ myApp.controller('SingleDocumentController', ['NavigatorParameters','Documents',
         {
             if (Constants.app) {
 
-                var targetPath = FileManagerService.generatePath(image);
-                console.log(image);
-                FileManagerService.downloadFileIntoStorage("data:application/pdf;base64," + image.Content, targetPath).then(function()
+                var targetPath = FileManagerService.generatePath(docParams);
+                console.log(docParams);
+                FileManagerService.downloadFileIntoStorage("data:application/pdf;base64," + docParams.Content, targetPath).then(function()
                 {
                     if (ons.platform.isAndroid()) {
                         NewsBanner.showCustomBanner($filter('translate')("DOCUMENT_DOWNLOADED"), '#0047f2', null, 3000);
                     }
 
-                    FileManagerService.shareDocument(image.Title.replace(/ /g,"")+image.ApprovedTimeStamp.toDateString().replace(/ /g,"-"), targetPath);
+                    FileManagerService.shareDocument(docParams.Title.replace(/ /g,"")+docParams.ApprovedTimeStamp.toDateString().replace(/ /g,"-"), targetPath);
 
                     console.log('success');
 
@@ -268,8 +278,8 @@ myApp.controller('SingleDocumentController', ['NavigatorParameters','Documents',
                 });
 
             } else {
-                console.log(image);
-                window.open("data:application/pdf;base64," + image.Content);
+                console.log(docParams);
+                window.open("data:application/pdf;base64," + docParams.Content);
             }
         };
 
@@ -281,12 +291,12 @@ myApp.controller('SingleDocumentController', ['NavigatorParameters','Documents',
             var app = document.URL.indexOf('http://') === -1 && document.URL.indexOf('https://') === -1;
             if (app) {
                 if(ons.platform.isAndroid()){
-                    //window.open('https://docs.google.com/viewer?url='+image.Content+'&embedded=true', '_blank', 'location=yes');
-                    if(image.DocumentType=='pdf')
+                    //window.open('https://docs.google.com/viewer?url='+docParams.Content+'&embedded=true', '_blank', 'location=yes');
+                    if(docParams.DocumentType=='pdf')
                     {
-                        console.log(image.PathFileSystem);
+                        console.log(docParams.PathFileSystem);
                         $cordovaFileOpener2.open(
-                            image.PathFileSystem,
+                            docParams.PathFileSystem,
                             'application/pdf'
                         ).then(function() {
                             // file opened successfully
@@ -300,40 +310,20 @@ myApp.controller('SingleDocumentController', ['NavigatorParameters','Documents',
                             // An error occurred. Show a message to the user
                         });
                     }else{
-                        var ref = cordova.InAppBrowser.open(image.PathFileSystem, '_blank', 'EnableViewPortScale=yes');
+                        var ref = cordova.InAppBrowser.open(docParams.PathFileSystem, '_blank', 'EnableViewPortScale=yes');
                     }
 
-                    //var ref = cordova.InAppBrowser.open(image.Content, '_system', 'location=yes');
+                    //var ref = cordova.InAppBrowser.open(docParams.Content, '_system', 'location=yes');
                 }else{
-                    var ref = cordova.InAppBrowser.open("data:application/pdf;base64, " + image.Content, '_blank', 'EnableViewPortScale=yes');
+                    var ref = cordova.InAppBrowser.open("data:application/pdf;base64, " + docParams.Content, '_blank', 'EnableViewPortScale=yes');
                 }
             } else {
-                window.open("data:application/pdf;base64, " + image.Content);
+                window.open("data:application/pdf;base64, " + docParams.Content);
             }
         };
 
-
-
-
-        $scope.goToEducationalMaterial = function () {
-            // Need to provide
-            EducationalMaterial.openEducationalMaterialDetails($scope.edumaterial);
-        };
-        /*var gesturableImg = new ImgTouchCanvas({
-         canvas: document.getElementById('mycanvas2'),
-         path: "./img/D-RC_ODC_16June2015_en_FNL.png"
-         });*/
-    }]);
-
-myApp.controller('pdfViewController', ['NavigatorParameters','$scope', '$timeout',
-    function(NavigatorParameters,$scope, $timeout) {
-        var parameters = NavigatorParameters.getParameters();
-        console.log(parameters);
-        $scope.viewerPath = "./lib/js/pdfjs-viewer/web/viewer.html";
-        $timeout(function () {
-            var pdfjsframe = document.getElementById('pdfViewer');
-            console.log(pdfjsframe);
-            pdfjsframe.contentWindow.PDFViewerApplication.open(parameters.pdfdata);
-        },500);
-
+        $scope.about = function(){
+            personalNavigator.pushPage('./views/templates/content',{contentType: docParams.AliasName_EN});
+            $scope.popoverDocsInfo.hide();
+        }
     }]);

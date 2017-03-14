@@ -3,9 +3,8 @@
         <div class="left"><ons-back-button>{{"BACK"|translate}}</ons-back-button></div>
         <div class="center">{{documentObject.Title|limitTo:25}}{{documentObject.Title.length > 25 ? '...' : ''}}</div>
         <div class="right">
-            <ons-toolbar-button ng-click="share()">
-                <ons-icon icon="fa-share"
-                          fixed-width="false"></ons-icon>
+            <ons-toolbar-button ng-click="popoverDocsInfo.show('#buttonDocInfo')" id="buttonDocInfo">
+                <ons-icon icon="fa-ellipsis-v" fixed-width="true"></ons-icon>
             </ons-toolbar-button>
         </div>
     </ons-toolbar>
@@ -24,61 +23,6 @@
     <!--<div class="content-scrollable" ng-hide="loading||rendering" align="center" style="margin-top: 5px" style="width: 100%;">-->
         <!--<canvas id="the-canvas" style="border:1px solid black" style="width:inherit;"></canvas>-->
     <!--</div>-->
-    <div id="holder" class="panzoom-elements" ng-hide="loading||rendering" align="center">
+    <div id="holder" ng-hide="loading||rendering" align="center">
     </div>
-
-    <!--<ons-gesture-detector ng-hide="loading||rendering" id="holder"-->
-                          <!--style="margin-top: 5px; overflow: scroll"-->
-                          <!--align="center">-->
-    <!--</ons-gesture-detector>-->
-
-    <!--<div style="height: 100%">-->
-        <!--<iframe ng-hide="loading" id="pdfViewer" src="{{viewerPath}}" style="width: 100%; height: 97%"></iframe>-->
-
-        <!--<p class="item-desc text-center"  ng-class="fontSizeDesc">* Saved documents will be available offline</p>-->
-
-        <!-- </ons-list-item>
-       </ons-list>-->
-
-        <!--<ons-list>-->
-            <!--<ons-list-item class="item">-->
-                <!--<div style="line-height:1">-->
-                    <!--<p class="item-desc" ng-class="fontSizeDesc">-->
-                        <!--<strong>{{"DOC_TYPE"|translate}}:</strong>-->
-                        <!--{{documentObject.Title}}-->
-                    <!--</p>-->
-                    <!--<p class="item-desc" ng-class="fontSizeDesc">-->
-                        <!--<strong>{{"DOC_RECEIVED"|translate}}:</strong>-->
-                        <!--{{documentObject.ApprovedTimeStamp|date:'medium'}}-->
-                    <!--</p>-->
-                    <!--<p class="item-desc" ng-class="fontSizeDesc">-->
-                        <!--<strong>{{"DOC_UPDATED"|translate}}</strong>-->
-                        <!--{{documentObject.LastUpdated|date:'medium'}}-->
-                    <!--</p>-->
-                    <!--<p class="item-desc" ng-class="fontSizeDesc">-->
-                        <!--<strong>{{"DOC_SIGNED"|translate}}</strong>-->
-                        <!--{{documentObject.ApprovedBy}} {{documentObject.FirstName}} {{documentObject.LastName}}-->
-                    <!--</p>-->
-                <!--</div>-->
-            <!--</ons-list-item>-->
-            <!--<ons-list-item modifier="tappable chevron" ng-click="goToExternalSource(documentObject)">-->
-                <!--<strong>{{"DOC_ABOUT"|translate}}</strong>-->
-            <!--</ons-list-item>-->
-        <!--</ons-list>-->
-    <!--</div>-->
-
-    <!--<ons-list class="settings-list">
-       <ons-list-item >
-         <div class="text-center">
-           <a ng-click="share()" style="font-size:18px"><i class="ion-share"></i> {{"SHAREVIAEMAIL"|translate}}</a>
-         </div>
-        </ons-list-item>
-    </ons-list>
-    <ons-list class="settings-list">
-       <ons-list-item >
-         <div class="text-center">
-           <a ng-click="print()" style="font-size:18px"><i class="ion-printer"></i> {{"PRINTDOCUMENT"|translate}}</a>
-         </div>
-        </ons-list-item>
-    </ons-list>-->
 </ons-page>

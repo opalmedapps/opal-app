@@ -232,7 +232,6 @@ myApp.service('UserPreferences',[ 'UserAuthorizationInfo','$rootScope','tmhDynam
         {
             fontSize = '';
             calendarOption = '';
-            language = '';
             enableSMS = '';
         }
 

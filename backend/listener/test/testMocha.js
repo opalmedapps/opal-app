@@ -1,9 +1,9 @@
 var chai = require('chai');
 var expect = require('chai').expect;
-var utility = require('../utility.js');
+var utility = require('../utility/utility.js');
 var sinon = require('sinon');
 var sinonChai = require('sinon-chai');
-var sqlInterface = require('../sqlInterface.js');   
+var sqlInterface = require('../api/sqlInterface.js');   
 chai.use(sinonChai);
 
 describe('Sanitize',function(){

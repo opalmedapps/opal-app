@@ -1,5 +1,5 @@
 // var credentials=require('./../credentials.js');
-var sqlInterface=require('./../sqlInterface.js');
+var sqlInterface=require('./../api/sqlInterface.js');
 // var queries=require('./../queries.js');
 // var updatePatient = require('../apiPatientUpdate.js');
 // var Firebase    =require('firebase');
@@ -7,7 +7,6 @@ var sqlInterface=require('./../sqlInterface.js');
 // var utility = require('./../utility.js');
 // var http = require('http');
 // var q = require('q');
-// var timeEstimate = require('../timeEstimate.js');
 // var exec = require('child_process').exec;
 // exec('python3 /var/www/devDocuments/marc/ML_Algorithm_MUHC/predictor.py 43235', function(error, stdout, stderr){
 //   if (error) {
