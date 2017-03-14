@@ -11,18 +11,10 @@
         .module('MUHCApp')
         .controller('logOutController', logOutController);
 
-    logOutController.$inject = ['FirebaseService','UserAuthorizationInfo',
-        '$state','RequestToServer','LocalStorage', 'Documents','Diagnoses',
-        'Appointments','Patient','Doctors','TxTeamMessages','Questionnaires',
-        'Announcements','EducationalMaterial','Notifications','UserPreferences',
-        'UpdateUI', 'Tasks', 'PlanningSteps', 'LabResults'];
+    logOutController.$inject = ['FirebaseService', '$state','RequestToServer','CleanUp'];
 
     /* @ngInject */
-    function logOutController(FirebaseService, UserAuthorizationInfo,
-                              $state,RequestToServer,LocalStorage,Documents,Diagnoses,
-                              Appointments,Patient,Doctors,TxTeamMessages,Questionnaires,
-                              Announcements,EducationalMaterial,Notifications,UserPreferences,
-                              UpdateUI, Tasks, PlanningSteps, LabResults) {
+    function logOutController(FirebaseService, $state, RequestToServer, CleanUp) {
         var vm = this;
         vm.title = 'logOutController';
 
@@ -33,25 +25,10 @@
         function activate() {
 
             console.log('Resetting services...');
-
             RequestToServer.sendRequest('Logout');
-            LabResults.destroy();
-            LocalStorage.resetUserLocalStorage();
-            Tasks.destroy();
-            PlanningSteps.destroy();
-            Documents.clearDocuments();
-            Diagnoses.clearDiagnoses();
-            Appointments.clearAppointments();
-            Patient.clearPatient();
-            Doctors.clearDoctors();
-            TxTeamMessages.clearTxTeamMessages();
-            Questionnaires.clearQuestionnaires();
-            Announcements.clearAnnouncements();
-            EducationalMaterial.clearEducationalMaterial();
-            Notifications.clearNotifications();
-            UserPreferences.clearUserPreferences();
-            UserAuthorizationInfo.clearUserAuthorizationInfo();
-            UpdateUI.clearUpdateUI();
+
+            CleanUp.clear();
+
             FirebaseService.getAuthentication().$signOut();
             console.log($state.go('init'));
         }

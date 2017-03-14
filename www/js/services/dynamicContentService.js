@@ -94,6 +94,9 @@
          *@returns {Promise} contains the content to be loaded into the view.
          **/
         function getPageContent(contentType) {
+
+            if (!content[contentType]) return $q.reject({code: "NO_PAGE"});
+
             return $http({
                 method: 'GET',
                 url: content[contentType].url

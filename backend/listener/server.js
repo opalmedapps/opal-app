@@ -1,21 +1,27 @@
+/*
+ * Filename     :   server.js
+ * Description  :   This script listens for changes on dev2/ in firebase, reads those changes and writes a response back to firebase.
+ * Created by   :   David Herrera, Robert Maglieri
+ * Date         :   07 Mar 2017
+ * Copyright    :   Copyright 2016, HIG, All rights reserved.
+ * Licence      :   This file is subject to the terms and conditions defined in
+ *                  file 'LICENSE.txt', which is part of this source code package.
+ */
 
-// Import necessary libraries
 
-var mainRequestApi      =   	require('./main.js');
-var securityApi    =   	require('./security.js');
+var mainRequestApi      =   	require('./api/main.js');
+var securityApi         =   	require('./security/security.js');
 var admin            	=   	require("firebase-admin");
-var utility            	=   	require('./utility.js');
+var utility            	=   	require('./utility/utility.js');
 var q 			        =      	require("q");
 
 // Initialize firebase connection
 
-//admin.database.enableLogging(true);
-
-var serviceAccount = require("/home/robert/firebase_account/firebase-brilliant-inferno-767-firebase-adminsdk-dtkoi-829de7ac9e.json");
+var serviceAccount = require("/home/robert/firebase_account/opal-dev-firebase-adminsdk-73h8x-3b90af80af.json");
 
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
-    databaseURL: "https://brilliant-inferno-7679.firebaseio.com"
+    databaseURL: "https://opal-dev.firebaseio.com"
 });
 
 // Get reference to correct data element
@@ -32,23 +38,14 @@ setInterval(function(){
 
 // Listen for firebase changes and send responses for requests
 console.log('Initialize listeners: ');
-listenForRegularRequest();
-listenForResetPassword();
+listenForRequest('requests');
+listenForRequest('passwordResetRequests');
 
-function listenForRegularRequest(){
+//
+function listenForRequest(requestType){
     console.log('Starting regular request listener.');
-    var requestType = 'requests';
-    ref.child('requests').on('child_added', function(snapshot){
+    ref.child(requestType).on('child_added', function(snapshot){
         handleRequest(requestType,snapshot);
-
-    });
-}
-
-function listenForResetPassword(){
-    console.log('Starting password reset listener.')
-    var requestType = 'passwordResetRequests';
-    ref.child('passwordResetRequests').on('child_added', function(snapshot){
-        handleRequest(requestType, snapshot);
     });
 }
 
@@ -175,11 +172,6 @@ function uploadToFirebase(response, key)
     });
 }
 
-/**
- * @name EncryptObject
- * @description Deletes the request from Firebase and displays it on the screen
- *
- */
 function completeRequest(headers, success, key)
 {
     var requestKey = headers.RequestKey;

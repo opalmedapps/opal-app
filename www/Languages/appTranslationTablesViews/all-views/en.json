@@ -1,6 +1,9 @@
 {
   "ABOUT": "About",
   "DOC_ABOUT": "About this document",
+  "DOC_DATE_APPROVED": "Date Approved: ",
+  "DOC_DATE_UPDATED":"Date Updated: ",
+  "DOC_SIGNEDBY":"Signed By: ",
   "ACCOUNT": "Account",
   "ADDED": "Added at",
   "ALIAS": "Nickname",
@@ -104,6 +107,7 @@
   "NOCONTACTSAVAILABLE": "No contacts available",
   "NOEDUCATIONALMATERIAL": "No educational material",
   "NOGENERALANNOUNCEMENTS": "No general annoucements",
+  "NO_CONTENT": "There is currently no content available. Please contact the hospital for more information.",
   "NOINTERNETCONNECTION": "No internet connection",
   "NONOTIFICATIONS": "No notifications",
   "NOPATIENTDOCUMENTSAVAILABLE": "No patient documents available",
