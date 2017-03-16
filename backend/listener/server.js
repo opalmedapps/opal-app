@@ -14,14 +14,15 @@ var securityApi         =   	require('./security/security.js');
 var admin            	=   	require("firebase-admin");
 var utility            	=   	require('./utility/utility.js');
 var q 			        =      	require("q");
+var config              =       require('./config.json');
 
 // Initialize firebase connection
 
-var serviceAccount = require("./opal-mactest-firebase-adminsdk-euaoy-28ef25fd9b.json");
+var serviceAccount = require(config.FIREBASE_ADMIN_KEY);
 
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
-    databaseURL: "https://opal-mactest.firebaseio.com"
+    databaseURL: config.DATABASE_URL
 });
 
 // Get reference to correct data element
