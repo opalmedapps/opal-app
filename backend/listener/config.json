@@ -6,5 +6,8 @@
     "DOCUMENTS_PATH" : "/var/www/Documents/opalAdmin/backend/clinical/documents/",
     "CHECKIN_PATH" : "http://172.26.66.41/devDocuments/screens/php/checkInPatientAriaMedi.php?CheckinVenue=OPAL%20PHONE%20APP&PatientId=",
     "VERIFYCHECKIN_PATH" : "http://172.26.66.41/devDocuments/ackeem/getCheckins.php?AppointmentAriaSer=",
-    "WT_PATH" : "http://172.26.66.41/devDocuments/WTSim/api/getEstimate.php?appt_aria_ser="
+    "WT_PATH" : "http://172.26.66.41/devDocuments/WTSim/api/getEstimate.php?appt_aria_ser=",
+    "FIREBASE_ADMIN_KEY": "./opal-mactest-firebase-adminsdk-euaoy-28ef25fd9b.json",
+    "DATABASE_URL":"https://opal-mactest.firebaseio.com"
+
 }

@@ -665,7 +665,8 @@ function getUserFromEmail(email)
     var r=Q.defer();
     connection.query(queries.getUserFromEmail(),[email],function(error, rows, fields){
         if(error) r.reject(error);
-        r.resolve(rows[0]);
+        if(rows) r.resolve(rows[0])
+        r.reject({Response:'error',Reason:"No User match in DB"});
     });
     return r.promise;
 }
