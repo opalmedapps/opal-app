@@ -39,7 +39,8 @@
             getPageContent: getPageContent,
             initializeLinks: initializeLinks,
             getContentData: getContentData,
-            setContentData: setContentData
+            setContentData: setContentData,
+            loadFromURL: loadFromURL
         };
 
         return service;
@@ -100,6 +101,13 @@
             return $http({
                 method: 'GET',
                 url: content[contentType].url
+            })
+        }
+
+        function loadFromURL(url){
+            return $http({
+                method: 'GET',
+                url: url
             })
         }
     }
