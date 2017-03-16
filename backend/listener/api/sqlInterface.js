@@ -421,6 +421,8 @@ exports.getDocumentsContent = function(requestObject)
                         ]});
                     else r.resolve({Response:'success',Data:documents});
 
+                }).catch(function (error) {
+                    r.reject({Response:'error', Reason:err});
                 });
 
             }
@@ -663,7 +665,8 @@ function getUserFromEmail(email)
     var r=Q.defer();
     connection.query(queries.getUserFromEmail(),[email],function(error, rows, fields){
         if(error) r.reject(error);
-        r.resolve(rows[0]);
+        if(rows) r.resolve(rows[0])
+        r.reject({Response:'error',Reason:"No User match in DB"});
     });
     return r.promise;
 }
@@ -676,21 +679,33 @@ function LoadDocuments(rows)
      *@name LoadImages
      *@description  Uses the q module to make a promise to load images. The promise is resolved after all of them have been read from file system using the fs module. The code continues to run only if the promise is resolved.
      **/
-    var imageCounter=0 ;
-    var deferred = Q.defer();
-    if (rows.length === 0) { deferred.resolve([]); }
+
+    var defer = Q.defer();
+
+    if (rows.length === 0) { return defer.resolve([]); }
+
     for (var key = 0; key < rows.length; key++)
     {
-
+        // Get extension for filetype
         var n = rows[key].FinalFileName.lastIndexOf(".");
         var substring=rows[key].FinalFileName.substring(n+1,rows[key].FinalFileName.length);
         rows[key].DocumentType=substring;
-        // var/www/Documents/opalAdmin/backend/clinical/documents
-        rows[key].Content=filesystem.readFileSync(config.DOCUMENTS_PATH + rows[key].FinalFileName,'base64');
-        imageCounter++;
+
+        try{
+            rows[key].Content=filesystem.readFileSync(config.DOCUMENTS_PATH + rows[key].FinalFileName,'base64');
+            defer.resolve(rows)
+        } catch(err) {
+            if (err.code == "ENOENT"){
+                console.log("File not found!");
+                defer.reject("No file found");
+            }
+            else {
+                throw err;
+            }
+        }
+
     }
-    deferred.resolve(rows);
-    return deferred.promise;
+    return defer.promise;
 }
 
 
