@@ -14,7 +14,6 @@
         vm.pageContent = {};
         vm.loading = true;
         vm.alert = undefined;
-        vm.loadPageContent = loadPageContent;
 
         activate();
 
@@ -22,8 +21,10 @@
 
         function activate() {
             var nav = NavigatorParameters.getNavigator();
+            console.log(nav);
+            var link = nav.getCurrentPage().options.contentLink;
             var contentType = nav.getCurrentPage().options.contentType;
-            loadPageContent(contentType);
+            link ? loadFromURL(link, contentType) : loadPageContent(contentType);
         }
 
         function loadPageContent(contentType){
@@ -39,23 +40,37 @@
                     console.log(vm.pageContent);
                     vm.loading = false;
                 })
-                .catch(function (response) {
+                .catch(handleError);
+        }
+
+        function loadFromURL(url, contentType) {
+            DynamicContentService.loadFromURL(url)
+                .then(function (response) {
+                    vm.pageContent.title = contentType;
+                    vm.pageContent.content = response.data;
+                    console.log(vm.pageContent);
                     vm.loading = false;
-                    console.log(response.code == "NO_PAGE");
-                    switch (response.code) {
-                        case "NO_PAGE":
-                            vm.alert = {
-                                type :'info',
-                                content: "NO_CONTENT"
-                            };
-                            break;
-                        default:
-                            vm.alert = {
-                                type :'danger',
-                                content: "INTERNETERROR"
-                            };
-                    }
-                });
+                })
+                .catch(handleError);
+
+        }
+
+        function handleError(response) {
+            vm.loading = false;
+            console.log(response.code == "NO_PAGE");
+            switch (response.code) {
+                case "NO_PAGE":
+                    vm.alert = {
+                        type: 'info',
+                        content: "NO_CONTENT"
+                    };
+                    break;
+                default:
+                    vm.alert = {
+                        type: 'danger',
+                        content: "INTERNETERROR"
+                    };
+            }
         }
 
     }
