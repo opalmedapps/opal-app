@@ -10,7 +10,8 @@
     "firebase-admin": "^4.0.2",
     "mysql": "^2.10.2",
     "q": "^1.4.1",
-    "request": "^2.75.0"
+    "request": "^2.75.0",
+    "squel": "^5.8.0"
   },
   "devDependencies": {
     "chai": "^3.5.0",

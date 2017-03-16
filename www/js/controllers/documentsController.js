@@ -68,9 +68,9 @@ myApp.controller('DocumentsController', ['Patient', 'Documents', 'UpdateUI', '$s
  */
 myApp.controller('SingleDocumentController', ['NavigatorParameters','Documents', '$timeout', '$scope',
     '$cordovaEmailComposer','$cordovaFileOpener2','FileManagerService','Patient','NativeNotification',
-    '$filter', 'Constants', 'NewsBanner', '$q',
+    '$filter', 'Constants', 'NewsBanner', '$q', 'UserPreferences',
     function(NavigatorParameters, Documents, $timeout, $scope,$cordovaEmailComposer,$cordovaFileOpener2,
-             FileManagerService,Patient,NativeNotification,$filter, Constants, NewsBanner, $q) {
+             FileManagerService,Patient,NativeNotification,$filter, Constants, NewsBanner, $q, UserPreferences) {
 
         //Obtain navigator parameters.
         var parameters = NavigatorParameters.getParameters();
@@ -323,7 +323,19 @@ myApp.controller('SingleDocumentController', ['NavigatorParameters','Documents',
         };
 
         $scope.about = function(){
-            personalNavigator.pushPage('./views/templates/content',{contentType: docParams.AliasName_EN});
+
+            // Check if there is any about link
+            var link = null;
+            docParams.hasOwnProperty("URL_EN") ? link  = docParams["URL_"+UserPreferences.getLanguage()] : {} ;
+
+            // Set the options to send to the content controller
+            var contentOptions = {
+                contentType: docParams.AliasName_EN,
+                contentLink: link
+            };
+
+            console.log(contentOptions);
+            personalNavigator.pushPage('./views/templates/content',contentOptions);
             $scope.popoverDocsInfo.hide();
         }
     }]);
