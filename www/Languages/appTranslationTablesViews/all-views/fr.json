@@ -9,6 +9,7 @@
   "ALIAS": "Pseudonyme",
   "APPOINTMENT": "Rendez-vous",
   "APPOINTMENT_ROOM": "Localisation du rendez-vous",
+  "APPOINTMENT_ABOUT": "À propos de ce rendez-vous",
   "APPOINTMENTS": "Rendez-vous",
   "APPVERSION": "Version",
   "AUTHENTICATIONERROR": "Erreur d'authentification , s'il vous plaît vous connecter à nouveau",

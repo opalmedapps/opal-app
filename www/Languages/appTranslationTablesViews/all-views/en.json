@@ -9,6 +9,7 @@
   "ALIAS": "Nickname",
   "APPOINTMENT": "Appointment",
   "APPOINTMENT_ROOM": "Appointment Room",
+  "APPOINTMENT_ABOUT": "About this Appointment",
   "APPOINTMENTS": "Appointments",
   "APPVERSION": "App Version",
   "AUTHENTICATIONERROR": "Authentication error, please login again",

@@ -615,7 +615,7 @@ myApp.controller('IndividualAppointmentController', ['NavigatorParameters','Nati
         var parameters = NavigatorParameters.getParameters();
         console.log(parameters);
         var navigatorName = parameters.Navigator;
-        console.log(navigatorName);
+
         $scope.app = parameters.Post;
         $scope.language = UserPreferences.getLanguage();
         console.log($scope.app);
@@ -626,39 +626,11 @@ myApp.controller('IndividualAppointmentController', ['NavigatorParameters','Nati
             window[navigatorName].pushPage('./views/general/maps/individual-map.html');
         };
 
-        $scope.about = function () {
-
+        $scope.aboutApp = function () {
+            window[navigatorName].pushPage('./views/templates/content.html', {
+                contentLink: $scope.app["URL_"+UserPreferences.getLanguage()],
+                contentType: $scope.app["AppointmentType_"+UserPreferences.getLanguage()]
+            });
         }
 
     }]);
-
-myApp.controller('AppointmentOptionsController',['$scope','$timeout','$filter',function($scope,$timeout,$filter){
-    //Enter code here!!
-    /*var nativeCalendar=Number(window.localStorage.getItem('NativeCalendar'));
-     (nativeCalendar)?$scope.checkboxModelCalendar=nativeCalendar:$scope.checkboxModelCalendar=0;
-     $scope.saveSettings=function(){
-     if(ons.platform.isIOS()||ons.platform.isAndroid()){
-     var message=''
-     if($scope.checkboxModelCalendar===1){
-     message=$filter('translate')("ENABLECALENDARACCESSQUESTION");
-     }else{
-     message=$filter('translate')("DISABLECALENDARACCESSQUESTION");
-     }
-     navigator.notification.confirm(message, confirmCallbackCalendar, 'Calendar Setting', [$filter('translate')("CONTINUE"), $filter('translate')("CANCEL")] );
-     function confirmCallbackCalendar(index){
-     console.log(index);
-     if(index==1){
-     window.localStorage.setItem('NativeCalendar',$scope.checkboxModelCalendar);
-     }else{
-     $timeout(function(){
-     ($scope.checkboxModelCalendar==1)?$scope.checkboxModelCalendar=0:$scope.checkboxModelCalendar=1;
-     })
-     }
-     }
-
-     }
-
-     };*/
-
-
-}]);

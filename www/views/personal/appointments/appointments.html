@@ -8,7 +8,7 @@
   </ons-toolbar>
   <div align="center" class="calendar--appointments" style="margin-top:5px;position:relative;z-index:1" height-element>
     <div class="calendar-list">
-      <uib-datepicker id="scrollTo" ng-model="dt"  datepicker-mode="calendarMode" datepicker-options ="dateOptions" show-weeks="false" show-color="showColor(date)" style="width:100vw;" ></uib-datepicker></div>
+      <uib-datepicker id="scrollTo" ng-model="dt"  datepicker-mode="calendarMode" datepicker-options ="dateOptions" show-weeks="false" show-color="showColor(date)" style="width:100vw;" ng-class="fontSizeDesc"></uib-datepicker></div>
   </div>
 
   <!--<ons-list>
@@ -30,7 +30,7 @@
           </ons-col>
           <ons-col align="center" width="60px">
             <div align="center" style="line-height:1" >
-              <span style="color:grey;font-size:12px" ng-class="fontSizeDesc">{{app.ScheduledStartTime|date:'shortTime'}}</span>
+              <span style="color:grey;" ng-class="fontSizeDesc">{{app.ScheduledStartTime|date:'shortTime'}}</span>
             </div>
           </ons-col>
           <ons-col width="5px" style="opacity:0.8" ng-style="{ 'background-color': getStyle($index) }"></ons-col>
@@ -50,21 +50,3 @@
     </ons-list>
   </ons-scroller>
 </ons-page>
-<!--<ons-page ng-controller="ScheduleController">
-  <ons-toolbar>
-    <div class="left">
-      <ons-back-button>Back</ons-back-button>
-    </div>
-    <div class="center">Appointments</div>
-  </ons-toolbar>
-  <div class="container" ng-hide="noNotifications">
-<a style="text-decoration:none" href ng-click="menu.setMainPage('views/notifications.html',{closeMenu:true})">
-        <alert align="center" ng-show="showAlert&&(Notifications==1)" ng-model="alert" type="success" close="closeAlert()">You have {{Notifications}} unseen notifications. <span class="hidden-xs">Go to your Notifications page under the menu on the left.</span>
-        </alert>
-        <alert align="center" ng-show="showAlert&&(Notifications>1)" ng-model="alert" type="success" close="closeAlert()">You have {{Notifications}} unseen notification. <span class="hidden-xs">Go to your Notifications page under the menu on the left.</span>
-        </alert></a>
- </div>
- <ons-tabbar>
-    <ons-tab page="./views/personal/appointments/appointments-list.html" label="List" icon="ion-ios-list-outline" active="true"></ons-tab>
-    <ons-tab page="./views/personal/appointments/appointments-calendar.html" label="Calendar" icon="ion-calendar"></ons-tab>
-</ons-tabbar>-->

@@ -19,7 +19,6 @@
     function StatusController($anchorScroll,$location, Appointments,
                               NavigatorParameters,$filter, PlanningSteps, UserPreferences)
     {
-        /* jshint validthis: true */
         var statusVm = this;
 
         var params =NavigatorParameters.getParameters();
@@ -29,7 +28,6 @@
         statusVm.viewTitles = [$filter('translate')('TREATMENTPLANNING'), $filter('translate')('TREATMENTSESSION')];
         statusVm.noData = false;                // presence of planning or session data
         statusVm.planningCompleted = true;
-        //statusVm.treatmentCompleted = true;
         statusVm.events = {};                   // planning or treatment event list
         statusVm.eventType = '';                // determines event type plan or treatment
         statusVm.eventIndex = 0;                // tracker for the events
@@ -57,30 +55,15 @@
 
         function activate()
         {
-            //Check for PlanWorkflow completion and populate with that otherwise start with treatment sessions
+            //Check for plan completion and populate
             PlanningSteps.initializePlanningSequence();
             var events;
             statusVm.planningCompleted = true;
             statusVm.treatmentCompleted = true;
-            console.log(PlanningSteps.isCompleted());
-
-            // if (!PlanningSteps.isCompleted() || !boolStatus){
-                events = PlanningSteps.getPlanningSequence();
-                var currentStep = PlanningSteps.getCurrentStep();
-                console.log(currentStep);
-                initTreatmentPlanStatus(events,currentStep);
-
-            // } /*else{
-            //
-            //     events = Appointments.getTreatmentAppointments();
-            //     //If the treatment sessions are not empty adds them to
-            //     if(events.Total !== 0&&boolStatus)
-            //     {
-            //         events.AppointmentList = Appointments.setAppointmentsLanguage(
-            //             events.AppointmentList);
-            //         initTreatmentSessions(events);
-            //     }
-            // }*/
+            events = PlanningSteps.getPlanningSequence();
+            var currentStep = PlanningSteps.getCurrentStep();
+            console.log(currentStep);
+            initTreatmentPlanStatus(events,currentStep);
             setHeightElement();
         }
 
@@ -153,56 +136,6 @@
             },400);
 
         }
-
-
-        /*function initTreatmentSessions(sessions)
-        {
-            var startColor='#5CE68A';
-            var endColor='#3399ff';
-            statusVm.eventType = 'treatment';
-            statusVm.noData = false;
-            var appointments = sessions.AppointmentList;
-            statusVm.events = appointments;
-            statusVm.endingDate = appointments[appointments.length-1].ScheduledStartTime;
-            if(appointments.length > 0)
-            {
-                statusVm.showTreatments = true;
-                if(sessions.Completed)
-                {
-                    statusVm.eventIndex = sessions.CurrentAppointment.Index;
-                    statusVm.totalEvents = sessions.Total;
-                    statusVm.treatmentCompleted = true;
-                    /!*                statusVm.totalTreatments = sessions.Total;
-                     statusVm.stepStatusTreatment = sessions.Total +' of '+sessions.Total;*!/
-                    var circleCurrent = new ProgressBarStatus('#progressStatusPresentStage2',100, startColor, startColor, 2000);
-                    var anchor = 'treatmentSessions'+sessions.Total-1;
-                    setTimeout(function(){
-                        $location.hash(anchor);
-                        $anchorScroll();
-                    },400);
-                }else{
-                    statusVm.treatmentCompleted = false;
-                    statusVm.eventIndex = sessions.CurrentAppointment.Index;
-                    statusVm.totalEvents = sessions.Total;
-                    //statusVm.totalTreatments = sessions.Total;
-                    //statusVm.stepStatusTreatment = sessions.CurrentAppointment.Index +' of '+sessions.Total;
-                    statusVm.currentEvent = sessions.CurrentAppointment.Appointment;
-                    console.log(statusVm.currentEvent);
-                    var percentageCurrent = Math.floor(100*(sessions.CurrentAppointment.Index/sessions.Total));
-                    var percentageCompleted = Math.floor(100*((sessions.CurrentAppointment.Index-1)/sessions.Total));
-                    console.log(percentageCurrent);
-                    console.log(percentageCompleted);
-                    var circleCurrent = new ProgressBarStatus('#progressStatusPastStages2', percentageCompleted, startColor, startColor, 2000);
-                    var circleCurrent = new ProgressBarStatus('#progressStatusPresentStage2', percentageCurrent, startColor, endColor, 2000);
-                    var circleCurrent = new ProgressBarStatus('#progressStatusStage', 100, '#ccc', '#ccc', 2000);
-                    var anchor = 'treatmentSessions'+sessions.CurrentAppointment.Index-1;
-                    setTimeout(function(){
-                        $location.hash(anchor);
-                        $anchorScroll();
-                    },400);
-                }
-            }
-        }*/
 
         function ProgressBarStatus(id, percentage,startColor,endColor,duration)
         {
@@ -285,13 +218,25 @@
         .module('MUHCApp')
         .controller('IndividualStepController', IndividualStepController);
 
-    IndividualStepController.$inject = ['$scope','NavigatorParameters'];
+    IndividualStepController.$inject = ['NavigatorParameters'];
 
-    function IndividualStepController($scope,NavigatorParameters) {
+    function IndividualStepController(NavigatorParameters) {
 
         var stepVM = this;
+        var nav = NavigatorParameters.getNavigator();
+        console.log(nav);
+            
         stepVM.stage = NavigatorParameters.getParameters().Post;
+        console.log(stepVM.stage);
         stepVM.showTab = true;
+
+        function about() {
+            nav.pushPage('./views/templates/content.html', {
+                contentLink: $scope.app["URL_"+UserPreferences.getLanguage()],
+                contentType: $scope.app["AppointmentType_"+UserPreferences.getLanguage()]
+            });
+        }
+        
     }
 
 })();
