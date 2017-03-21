@@ -22,7 +22,7 @@ exports.patientMessageTableFields=function()
 
 exports.patientAppointmentsTableFields=function()
 {
-    return "SELECT Appointment.AppointmentSerNum, " +
+    return "SELECT DISTINCT Appointment.AppointmentSerNum, " +
         "Alias.AliasSerNum, " +
         "Alias.AliasName_EN AS AppointmentType_EN, " +
         "Alias.AliasName_FR AS AppointmentType_FR, " +
@@ -30,7 +30,8 @@ exports.patientAppointmentsTableFields=function()
         "Alias.AliasDescription_FR AS AppointmentDescription_FR, " +
         "Appointment.ScheduledStartTime, " +
         "Appointment.ScheduledEndTime, " +
-        "Appointment.Checkin,Appointment.ReadStatus, " +
+        "Appointment.Checkin, " +
+        "Appointment.ReadStatus, " +
         "Resource.ResourceName, " +
         "Resource.ResourceType, " +
         "HospitalMap.MapUrl, " +
@@ -41,24 +42,23 @@ exports.patientAppointmentsTableFields=function()
         "Appointment.Status, " +
         "Appointment.RoomLocation_EN, " +
         "Appointment.RoomLocation_FR, " +
-        "Appointment.LastUpdated " +
+        "Appointment.LastUpdated, " +
+        "emc.URL_EN, " +
+        "emc.URL_FR " +
         "" +
-        "FROM Appointment, " +
-        "AliasExpression, " +
-        "Alias,Resource, " +
-        "Patient, " +
-        "HospitalMap, " +
-        "ResourceAppointment, " +
-        "Users " +
+        "FROM Patient " +
         "" +
-        "WHERE HospitalMap.HospitalMapSerNum = Appointment.Location " +
-        "AND ResourceAppointment.AppointmentSerNum = Appointment.AppointmentSerNum " +
-        "AND ResourceAppointment.ResourceSerNum = Resource.ResourceSerNum " +
-        "AND Patient.PatientSerNum = Appointment.PatientSerNum " +
-        "AND AliasExpression.AliasExpressionSerNum=Appointment.AliasExpressionSerNum " +
-        "AND AliasExpression.AliasSerNum=Alias.AliasSerNum " +
-        "AND Users.UserTypeSerNum=Patient.PatientSerNum " +
-        "AND Users.Username = ? " +
+        "INNER JOIN Users ON Users.UserTypeSerNum = Patient.PatientSerNum " +
+        "INNER JOIN Appointment ON Appointment.PatientSerNum = Patient.PatientSerNum " +
+        "INNER JOIN HospitalMap ON HospitalMap.HospitalMapSerNum = Appointment.Location " +
+        "INNER JOIN ResourceAppointment ON ResourceAppointment.AppointmentSerNum = Appointment.AppointmentSerNum " +
+        "INNER JOIN Resource ON ResourceAppointment.ResourceSerNum = Resource.ResourceSerNum " +
+        "INNER JOIN AliasExpression ON AliasExpression.AliasExpressionSerNum=Appointment.AliasExpressionSerNum " +
+        "INNER JOIN Alias ON AliasExpression.AliasSerNum=Alias.AliasSerNum " +
+        "LEFT JOIN EducationalMaterialControl emc ON emc.EducationalMaterialControlSerNum = Alias.EducationalMaterialControlSerNum " +
+        "" +
+        "WHERE " +
+        "Users.Username = ? " +
         "AND Appointment.State = 'Active' " +
         "AND (Appointment.LastUpdated > ? OR Alias.LastUpdated > ? OR AliasExpression.LastUpdated > ? OR Resource.LastUpdated > ? OR HospitalMap.LastUpdated > ?) " +
         "" +
@@ -125,7 +125,27 @@ exports.patientEducationalMaterialContents=function()
 };
 exports.patientTasksTableFields=function()
 {
-    return "SELECT Patient.PatientAriaSer, Alias.AliasName_EN AS TaskName_EN,Alias.AliasName_FR AS TaskName_FR,Alias.AliasDescription_EN AS TaskDescription_EN,Alias.AliasDescription_FR AS TaskDescription_FR,Task.DueDateTime FROM Task,Alias,AliasExpression,Patient,Users WHERE Patient.PatientSerNum = Task.PatientSerNum AND AliasExpression.AliasExpressionSerNum =Task.AliasExpressionSerNum AND AliasExpression.AliasSerNum = Alias.AliasSerNum AND Users.UserTypeSerNum=Patient.PatientSerNum AND Users.Username LIKE ? AND (Task.LastUpdated > ? OR Alias.LastUpdated > ?);";
+    return "SELECT DISTINCT Patient.PatientAriaSer, " +
+        "Alias.AliasName_EN AS TaskName_EN, " +
+        "Alias.AliasName_FR AS TaskName_FR, " +
+        "Alias.AliasDescription_EN AS TaskDescription_EN, " +
+        "Alias.AliasDescription_FR AS TaskDescription_FR, " +
+        "Task.DueDateTime, " +
+        "emc.URL_EN, " +
+        "emc.URL_FR " +
+        "" +
+        "FROM Patient " +
+        "" +
+        "INNER JOIN Users ON Users.UserTypeSerNum = Patient.PatientSerNum " +
+        "INNER JOIN Task ON Task.PatientSerNum = Patient.PatientSerNum " +
+        "INNER JOIN AliasExpression ON AliasExpression.AliasExpressionSerNum = Task.AliasExpressionSerNum " +
+        "INNER JOIN Alias ON Alias.AliasSerNum = AliasExpression.AliasSerNum " +
+        "LEFT JOIN EducationalMaterialControl emc ON emc.EducationalMaterialControlSerNum = Alias.EducationalMaterialControlSerNum " +
+        "" +
+        "WHERE " +
+        "Users.Username LIKE ? " +
+        "AND (Task.LastUpdated > ? OR Alias.LastUpdated > ?) " +
+        "ORDER BY Task.DueDateTime DESC;";
 };
 exports.patientTestResultsTableFields=function()
 {
