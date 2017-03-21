@@ -6,11 +6,11 @@
             <span ng-switch-when="action"><ons-icon size="35px" spin="true" icon="ion-load-d"></ons-icon> {{"LOADINGDATA"|translate}}...</span>
     </span>
     </ons-pull-hook>
-    <ons-toolbar>
+    <ons-toolbar fixed-style>
         <div class="left">
             <ons-back-button>{{"BACK"|translate}}</ons-back-button>
         </div>
-        <div class="center">{{"LAB_RESULTS"|translate}}</div>
+        <div class="center" ng-class="fontSizeTitle">{{"LAB_RESULTS"|translate}}</div>
     </ons-toolbar>
     <div ng-show="loading" align="center" style="margin:10px">
         <svg class="progress-circular">
