@@ -1,7 +1,7 @@
 <ons-page ng-controller="IndividualLabTestController">
-    <ons-toolbar>
+    <ons-toolbar fixed-style>
         <div class="left"><ons-back-button>{{"BACK"|translate}}</ons-back-button></div>
-        <div class="center">{{"LAB_RESULTS"|translate}} {{test.testDateFormat|date:'shortDate'}}</div>
+        <div class="center" ng-class="fontSizeTitle">{{"LAB_RESULTS"|translate}} {{test.testDateFormat|date:'shortDate'}}</div>
     </ons-toolbar>
     <ons-col>
         <!-- SEARCH BAR -->
@@ -13,17 +13,17 @@
         <ons-list>
             <ons-row>
                 <ons-col class="col-xs-3 col-sm-3 col-lg-3">
-                    <div class="name1" align="left" style="margin-left: 8px">
+                    <div align="left" style="margin-left: 8px">
                         {{"LAB_NAME"|translate}}
                     </div>
                 </ons-col>
                 <ons-col class="col-xs-3 col-sm-3 col-lg-3">
-                    <div class="name1" align="center">
+                    <div align="center">
                         {{"LAB_YOUR_RESULT"|translate}}
                     </div>
                 </ons-col>
                 <ons-col class="col-xs-6 col-sm-6 col-lg-6">
-                    <div class="name1" align="right">
+                    <div align="right">
                         {{"LAB_NORM"|translate}}
                     </div>
                 </ons-col>
