@@ -21,9 +21,10 @@
 
         function activate() {
             var nav = NavigatorParameters.getNavigator();
-            console.log(nav);
+            console.log(nav.getCurrentPage());
             var link = nav.getCurrentPage().options.contentLink;
             var contentType = nav.getCurrentPage().options.contentType;
+            vm.pageContent.title = contentType;
             link ? loadFromURL(link, contentType) : loadPageContent(contentType);
         }
 
