@@ -145,7 +145,7 @@ exports.patientTasksTableFields=function()
         "WHERE " +
         "Users.Username LIKE ? " +
         "AND (Task.LastUpdated > ? OR Alias.LastUpdated > ?) " +
-        "ORDER BY Task.DueDateTime DESC;";
+        "ORDER BY Task.DueDateTime ASC;";
 };
 exports.patientTestResultsTableFields=function()
 {
