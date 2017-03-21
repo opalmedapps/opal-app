@@ -47,7 +47,7 @@
         }
 
         statusVm.getStyle = getStyle;           // function which determines style
-        statusVm.goTo = goTo;                   // function which provides details on the event
+        statusVm.goToStep = goToStep;           // function which provides details on the event
 
         activate();                             // initializes status page
 
@@ -176,33 +176,16 @@
 
         }
 
-        function goTo(whichEvent, event)
+        function goToStep(step, name)
         {
-            if (whichEvent === 'treatment') goToAppointment(event);
-            if (whichEvent === 'plan') goToStep(event);
-        }
-
-        //Goes to a particular appointment
-        function goToAppointment(appointment)
-        {
-            if(appointment.ReadStatus == '0')
-            {
-                Appointments.readAppointmentBySerNum(appointment.AppointmentSerNum);
-            }
-            NavigatorParameters.setParameters({'Navigator':'homeNavigator', 'Post':appointment});
-            homeNavigator.pushPage('./views/personal/appointments/individual-appointment.html');
-        }
-
-        function goToStep(step)
-        {
-            console.log(step);
+            console.log(step, name);
             if(boolStatus)
             {
-                NavigatorParameters.setParameters({'Navigator':'homeNavigator','Post':step});
+                NavigatorParameters.setParameters({'Navigator':'homeNavigator','Post':step, 'StepName': name});
                 homeNavigator.pushPage('./views/home/status/individual-step.html');
             }else{
                 console.log(step);
-                NavigatorParameters.setParameters({'Navigator':'personalNavigator','Post':step});
+                NavigatorParameters.setParameters({'Navigator':'personalNavigator','Post':step, 'StepName': name});
                 personalNavigator.pushPage('./views/home/status/individual-step.html');
             }
 
@@ -211,6 +194,10 @@
     }
 })();
 
+/**
+ * Controls the view for the treatment planning step information.
+ */
+
 (function() {
     'use strict';
 
@@ -218,22 +205,29 @@
         .module('MUHCApp')
         .controller('IndividualStepController', IndividualStepController);
 
-    IndividualStepController.$inject = ['NavigatorParameters'];
+    IndividualStepController.$inject = ['NavigatorParameters', 'UserPreferences','$filter'];
 
-    function IndividualStepController(NavigatorParameters) {
+    function IndividualStepController(NavigatorParameters, UserPreferences, $filter) {
 
         var stepVM = this;
         var nav = NavigatorParameters.getNavigator();
-        console.log(nav);
-            
-        stepVM.stage = NavigatorParameters.getParameters().Post;
-        console.log(stepVM.stage);
-        stepVM.showTab = true;
 
+        stepVM.showTab = true;
+        stepVM.about = about;
+        stepVM.stage = {};
+
+        activate();
+
+        function activate() {
+            stepVM.stage = NavigatorParameters.getParameters().Post;
+            stepVM.name = NavigatorParameters.getParameters().StepName;
+        }
+
+        //Links to the about page controlled by the contentController
         function about() {
             nav.pushPage('./views/templates/content.html', {
-                contentLink: $scope.app["URL_"+UserPreferences.getLanguage()],
-                contentType: $scope.app["AppointmentType_"+UserPreferences.getLanguage()]
+                contentLink: stepVM.stage ? stepVM.stage["URL_"+UserPreferences.getLanguage()] : '',
+                contentType: $filter('translate')(stepVM.name)
             });
         }
         
