@@ -5,12 +5,3 @@ credentials.js
 *.swp
 .DS_Store
 .idea/
-backend/listener/config.json
-www/js/config.js
-res/.DS_Store
-res/ios/.DS_Store
-res/screen/.DS_Store
-res/screen/ios/.DS_Store
-www/.DS_Store
-www/views/.DS_Store
-www/views/general/.DS_Store
