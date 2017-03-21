@@ -335,7 +335,7 @@ myApp.controller('SingleDocumentController', ['NavigatorParameters','Documents',
             };
 
             console.log(contentOptions);
-            personalNavigator.pushPage('./views/templates/content',contentOptions);
+            personalNavigator.pushPage('./views/templates/content.html',contentOptions);
             $scope.popoverDocsInfo.hide();
         }
     }]);

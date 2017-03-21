@@ -17,12 +17,14 @@
                 </div>
             </ons-list-item>
             <ons-list-item modifier="chevron" tappable ng-click="goToMap()">
-                <p class="item-desc" ng-class="fontSizeDesc">{{app["MapName_"+language]|ellipsis:30}}</p>
-            </ons-list-item>
-            <ons-list-item modifier="chevron" tappable ng-click="about()">
-                <p class="item-desc" ng-class="fontSizeDesc">{{"APPOINTMENT_ABOUT"|translate}}</p>
+                <p class="item-desc" ng-class="fontSizeDesc">{{app["MapName_"+language]|ellipsis:25}}</p>
             </ons-list-item>
 
+            <ons-list-item tappable ng-click="aboutApp()" ng-class="fontSizeDesc">
+                <button class="button button--large--quiet"  >
+                    {{"APPOINTMENT_ABOUT"|translate}}
+                </button >
+            </ons-list-item>
         </ons-list>
 
     </div>
