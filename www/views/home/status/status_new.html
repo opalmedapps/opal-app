@@ -49,18 +49,6 @@
                                                         <br><strong>{{status.completionDate|date:'fullDate'}}</strong></p>
                                                 </div>
                                             </div>
-                                            <!--<div ng-show="status.eventType === 'treatment'">
-                                                <div ng-show="!status.treatmentCompleted" align="middle" style="margin-left:5px; vertical-align: middle">
-                                                    <strong>{{"UPCOMING"|translate}}:</strong><br>
-                                                    {{status.currentEvent.Title}}<br>
-                                                    <strong>{{"TREATMENTENDS"|translate}}:</strong><br>
-                                                    {{status.endingDate|date:'EEE MMM dd yyyy'}}
-                                                </div>
-                                                <div ng-show="status.treatmentCompleted" align="middle" style="margin-left:5px">
-                                                    <p><i class="ion-checkmark-circled iconStatusBox"></i>{{"TREATMENTPLANCOMPLETEDON"|translate}}
-                                                        <br><strong>{{status.endingDate|date:'EEE MMM dd yyyy'}}</strong></p>
-                                                </div>
-                                            </div>-->
                                         </div>
                                     </div>
                                 </div>
@@ -75,7 +63,7 @@
                 <div id="divTreatmentPlan" style="overflow-y:scroll; height: 100%">
 
                     <ons-list class="plan-list" style="margin:0;padding:0">
-                        <ons-list-item class="plan" modifier="tappable" ng-click="status.goTo(status.eventType, events[events.length-1])" ng-repeat="(step, events) in status.events" id="treatmentSessions{{$index}}">
+                        <ons-list-item class="plan" modifier="tappable" ng-click="status.goToStep(events[events.length-1],step)" ng-repeat="(step, events) in status.events" id="treatmentSessions{{$index}}">
                             <ons-row id="statusStep{{$index}}">
                                 <ons-col width="50px" class="plan-left" align="center">
                                     <div class="plan-date" ng-show="status.eventIndex > status.stepMapping[step]"><img ng-src="./img/checkedbox.png" width="20px" height="20px"></div>

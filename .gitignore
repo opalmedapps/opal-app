@@ -5,5 +5,3 @@ credentials.js
 *.swp
 .DS_Store
 .idea/
-backend/listener/config.json
-www/js/config.js
