@@ -1,7 +1,7 @@
 <ons-page ng-controller="TimelineTestComponentController">
     <ons-toolbar>
         <div class="left"><ons-back-button>{{"BACK"|translate}}</ons-back-button></div>
-        <div class="center">{{title}}</div>
+        <div class="center" ng-class="fontSizeTitle">{{title}}</div>
     </ons-toolbar>
     <ons-col>
         <div id="chartArea"><hc-chart options="chartOptions">Placeholder for generic chart</hc-chart></div>
