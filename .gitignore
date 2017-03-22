@@ -5,3 +5,4 @@ credentials.js
 *.swp
 .DS_Store
 .idea/
+/backend/listener/logs/*.log
