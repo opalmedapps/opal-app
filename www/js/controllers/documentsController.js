@@ -253,7 +253,7 @@ myApp.controller('SingleDocumentController', ['NavigatorParameters','Documents',
 
         }
 
-        //Share via email function, detemines if its an app, sets the parameters for the email and formats depending on whether is a
+        //Share function, detemines if its an app, sets the parameters for the email and formats depending on whether is a
         //base64 string or a simple attachment and depending on whether is an Android device or an iOS device
         $scope.share =function()
         {
