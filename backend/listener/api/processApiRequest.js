@@ -2,7 +2,8 @@ var exports=module.exports={};
 var Q=require('q');
 var apiPatientUpdate=require('./apiPatientUpdate.js');
 var apiHospitalUpdate=require('./apiHospitalUpdate.js');
-var validate=require('./../utility/validate.js');
+var security = require('./../security/security');
+
 var API = {
     'Login':apiPatientUpdate.login,
     'Resume':apiPatientUpdate.resume,
@@ -21,15 +22,23 @@ var API = {
     'QuestionnaireRating':apiHospitalUpdate.inputEducationalMaterialRating,
     'QuestionnaireAnswers':apiHospitalUpdate.inputQuestionnaireAnswers,
     'LabResults': apiPatientUpdate.getLabResults,
+    'Log': apiPatientUpdate.logActivity
 };
+
+exports.securityAPI = {
+    'SecurityQuestion': security.securityQuestion,
+    'PasswordReset': security.resetPasswordRequest,
+    'SetNewPassword': security.resetPasswordRequest,
+    'VerifyAnswer': security.resetPasswordRequest
+}
 
 exports.processRequest=function(requestObject)
 {
-    console.log(requestObject);
 
     var r=Q.defer();
     var type = requestObject.Request;
-    if(API.hasOwnProperty(type))
+
+    if (API.hasOwnProperty(type))
     {
         return  API[type](requestObject);
     }else{

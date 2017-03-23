@@ -9,7 +9,7 @@
         'Appointments', 'CheckInService', 'Patient',
         'UpdateUI', '$timeout','$filter', '$location','Notifications','NavigatorParameters','NativeNotification',
         'NewsBanner','DeviceIdentifiers','$anchorScroll', 'PlanningSteps', 'Permissions',
-        'UserPreferences', 'Constants'
+        'UserPreferences', 'Constants', 'Logger'
     ];
 
     /* @ngInject */
@@ -17,7 +17,7 @@
         Appointments, CheckInService, Patient,
         UpdateUI, $timeout, $filter, $location, Notifications, NavigatorParameters, NativeNotification,
         NewsBanner, DeviceIdentifiers, $anchorScroll, PlanningSteps, Permissions,
-        UserPreferences, Constants)
+        UserPreferences, Constants, Logger)
     {
         var vm = this;
         vm.title = 'HomeController';

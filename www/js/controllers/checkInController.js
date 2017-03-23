@@ -8,12 +8,12 @@
     CheckInController.$inject =
         [
         'CheckInService', 'NavigatorParameters', 'UserPreferences',
-        'Appointments', 'NewsBanner','$filter'
+        'Appointments', 'NewsBanner','$filter', 'Logger'
         ];
 
     /* @ngInject */
     function CheckInController(CheckInService, NavigatorParameters, UserPreferences,
-                               Appointments, NewsBanner, $filter) {
+                               Appointments, NewsBanner, $filter, Logger) {
         var vm = this;
         vm.title = 'CheckInController';
         vm.apps = [];
@@ -30,6 +30,7 @@
         ////////////////
 
         function activate() {
+            Logger.sendLog('Checkin', 'all');
             vm.apps = CheckInService.getCheckInApps();
             console.log(vm.apps);
             vm.language = UserPreferences.getLanguage();
@@ -46,6 +47,8 @@
             CheckInService.isAllowedToCheckIn()
                 .then(function (response) {
                     console.log("Allowed to Check in", response);
+
+                    // Verify if the appointments are checked in
                     return CheckInService.verifyAllCheckIn();
                 })
                 .then(function (response){

@@ -14,26 +14,26 @@ exports.apiRequestFormatter=function(requestKey,requestObject)
     if(rows.length>1||rows.length === 0)
     {
       //Rejects requests if username returns more than one password
-      console.log('Rejecting request due to injection attack', rows);
+      //console.log('Rejecting request due to injection attack', rows);
       //Construction of request object
       responseObject = { Headers:{RequestKey:requestKey,RequestObject:requestObject},EncryptionKey:'', Code: 1, Data:{},Response:'error', Reason:'Injection attack, incorrect UserID'};       
       r.resolve(responseObject);
     }else{
       //Gets password and decrypts request
-      console.log(rows);
+      //console.log(rows);
       var key=rows[0].AnswerText;
       requestObject.Request=utility.decryptObject(requestObject.Request,key);
       encryptionKey=key;
       //If requests after decryption is empty, key was incorrect, reject the request
       if(requestObject.Request === '') {
-        console.log('Rejecting request due to incorrect password recorded');
+        //console.log('Rejecting request due to incorrect password recorded');
         responseObject = { Headers:{RequestKey:requestKey,RequestObject:requestObject},EncryptionKey:'', Code: 1, Data:{},Response:'error', Reason:'Incorrect Password for decryption'};
         r.resolve(responseObject);
       }else{
         //Otherwise decrypt the parameters and send to process api request
-        console.log("Decrypting");
+        //console.log("Decrypting");
         requestObject.Parameters=utility.decryptObject(requestObject.Parameters,key);
-        console.log('line38', requestObject.Parameters);
+        //console.log('line38', requestObject.Parameters);
         
         //Process request simple checks the request and pipes it to the appropiate API call, then it receives the response
         processApiRequest.processRequest(requestObject).then(function(data)
@@ -46,7 +46,7 @@ exports.apiRequestFormatter=function(requestKey,requestObject)
             r.resolve(responseObject);
         }).catch(function(errorResponse){
           //There was an error processing the request with the parameters, delete request
-            console.log("Error processing request", errorResponse);
+            //console.log("Error processing request", errorResponse);
             errorResponse.Code = 2;
             errorResponse.Reason = 'Server error, report the error to the hospital';
             errorResponse.Headers = {RequestKey:requestKey,RequestObject:requestObject};
@@ -56,7 +56,7 @@ exports.apiRequestFormatter=function(requestKey,requestObject)
       }
     }
   }).catch(function(error){
-    console.log("Get encryption error: ",error);
+    //console.log("Get encryption error: ",error);
     responseObject = { RequestKey:requestKey,EncryptionKey:encryptionKey, Code:2,Data:error, Headers:{RequestKey:requestKey,RequestObject:requestObject},Response:'error', Reason:'Server error, report the error to the hospital'};
     r.resolve(responseObject);
   });

@@ -4,6 +4,7 @@ var sqlInterface = require('./sqlInterface.js');
 var utility = require('./../utility/utility.js');
 var validate = require('./../utility/validate.js');
 var queries = require('./../sql/queries.js');
+var logger = require('./../logs/logger.js')
 
 /*
  *@name login
@@ -12,7 +13,7 @@ var queries = require('./../sql/queries.js');
  *@description Grabs all the tables for the user and updates them to firebase
  */
 exports.login = function (requestObject) {
-  console.log('Inside Login function', requestObject);
+  //console.log('Inside Login function', requestObject);
   
   sqlInterface.getPatientDeviceLastActivity(requestObject.UserID,requestObject.DeviceId).then(function(result){
       var date=new Date(result.DateTime);
@@ -22,9 +23,9 @@ exports.login = function (requestObject) {
       {
          result.Request='Logout';
          sqlInterface.updateLogout([result.Request,result.Username,result.DeviceId,result.SessionId,date]).then(function(response){
-            console.log('Updating logout', response);
+            //console.log('Updating logout', response);
          },function(error){
-            console.log('Error updating logout', error);
+            //console.log('Error updating logout', error);
          });
       }
     });
@@ -50,8 +51,7 @@ exports.refresh = function (requestObject) {
     var parameters=requestObject.Parameters;
     var fields =parameters.Fields;
     var timestamp=parameters.Timestamp;
-    var objectToFirebase = {};
-    console.log(parameters.Fields);
+
     if(!validate("Defined",fields))
     {
       r.reject({Response:'error',Reason:'Undefined Parameters'});
@@ -59,7 +59,7 @@ exports.refresh = function (requestObject) {
     if(fields=='All'){
       sqlInterface.getPatientTableFields(UserId,timestamp).then(function(objectToFirebase){
         objectToFirebase.Data = utility.resolveEmptyResponse(objectToFirebase.Data);
-        console.log('Hello World');
+        //console.log('Hello World');
         r.resolve(objectToFirebase);
       }).catch(function(error){
         r.reject(error);
@@ -89,7 +89,7 @@ exports.checkCheckin = function(requestObject)
 //Get checkin update API call
 exports.checkinUpdate = function(requestObject)
 {
-  console.log('Checkin update!');
+  //console.log('Checkin update!');
   return sqlInterface.checkinUpdate(requestObject);
 };
 
@@ -117,3 +117,14 @@ exports.getSecurityQuestion = function (requestObject) {
 exports.isTrustedDevice = function (requestObject) {
     return sqlInterface.isTrustedDevice(requestObject);
 };
+
+exports.logActivity = function (requestObject) {
+    logger.log('info', 'User Activity', {
+        deviceID:requestObject.DeviceId,
+        userID:requestObject.UserID,
+        request:requestObject.Request,
+        activity:requestObject.Parameters.Activity,
+        activitySerNum: requestObject.Parameters.ActivitySerNum
+    })
+    return Q.resolve({Response:'success'});
+}
