@@ -10,7 +10,7 @@ exports.securityQuestion=function(requestKey,requestObject) {
             return sqlInterface.getSecurityQuestion(requestObject)
         })
         .then(function (response) {
-            console.log(response);
+            //console.log(response);
             r.resolve({
                 Code:3,
                 Data:response.Data,

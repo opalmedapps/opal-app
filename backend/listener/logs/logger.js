@@ -9,26 +9,27 @@
  */
 
 var winston = require('winston');
-var exports = module.exports = {};
 
-var logger = new (winston.Logger)({
+winston.configure({
     transports: [
         // Output all debug events and higher to console
         new (winston.transports.Console)({
             level: 'debug',
-            json: true
+            json: false,
+            timestamp: true
         }),
         // Store all info events and higher to the opal.log file
         new (winston.transports.File)({
-            filename: './opal.log',
+            filename: './logs/opal-info.log',
             level: 'info',
-            json: false,
+            json: true,
             timestamp: true
         })
     ]
 });
 
 // Log all uncaught exceptions to a separate file
-logger.handleExceptions(new winston.transports.File({ filename: './opal-uncaughtExceptions.log' }));
+winston.handleExceptions(new winston.transports.File({ filename: './logs/opal-uncaughtExceptions.log' }));
 
-exports.logger = logger;
+
+module.exports = winston;

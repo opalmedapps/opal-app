@@ -28,7 +28,7 @@ var connection = mysql.createConnection(sqlConfig);
 
 function handleDisconnect(myconnection) {
   myconnection.on('error', function(err) {
-    console.log('Re-connecting lost connection');
+    //console.log('Re-connecting lost connection');
     connection.destroy();
     connection = mysql.createConnection(sqlConfig);
     handleDisconnect(connection);
@@ -48,7 +48,7 @@ var queryAnswersPatientQuestionnaire = "SELECT QuestionnaireQuestionSerNum, Answ
 exports.getPatientQuestionnaires = function (rows)
 {
   var r = q.defer();
-  console.log('QUESTIONNAIRE ROWS=====================================================',rows);
+  //console.log('QUESTIONNAIRE ROWS=====================================================',rows);
   if(rows.length!== 0)
   {
     var questionnaireDBSerNumArray = getQuestionnaireDBSerNums(rows);
@@ -56,7 +56,7 @@ exports.getPatientQuestionnaires = function (rows)
     var quer = connection.query(queryQuestions, [[questionnaireDBSerNumArray]], function(err,  questions, fields){
       if(err) r.reject(err);
 
-      console.log(questions);
+      //console.log(questions);
       getQuestionChoices(questions).then(function(questionsChoices){
         var questionnaires = prepareQuestionnaireObject(questionsChoices,rows);
         var patientQuestionnaires = {};
@@ -66,7 +66,7 @@ exports.getPatientQuestionnaires = function (rows)
           r.resolve({'Questionnaires':questionnaires, 'PatientQuestionnaires':patientQuestionnaires});
         }).catch(function(error)
         {
-          console.log(error);
+          //console.log(error);
           r.reject(error);
         });
       }).catch(function(err){
@@ -124,10 +124,10 @@ function getQuestionChoices(rows)
     array.push(rows[i].QuestionSerNum);
   };
   connection.query(queryQuestionChoices,[[array],[array],[array]],function(err,choices,fields){
-    console.log(err);
+    //console.log(err);
     if(err) r.reject(err);
     var questions = attachChoicesToQuestions(rows,choices);
-    //console.log(questions);
+    ////console.log(questions);
     r.resolve(questions);
   });
   return r.promise;
@@ -171,9 +171,9 @@ function attachingQuestionnaireAnswers(opalDB)
   {
     var quer = connection.query(queryAnswersPatientQuestionnaire, [[patientQuestionnaireSerNumArray]],function(err, rows, fields)
     {
-      console.log("QUESTIONNAIRE ANSWERS======================================================", rows);
-      console.log(quer.sql);
-      console.log('line 169', err);
+      //console.log("QUESTIONNAIRE ANSWERS======================================================", rows);
+      //console.log(quer.sql);
+      //console.log('line 169', err);
       if(err) r.reject(err);
       var answersQuestionnaires = {};
       for (var i = 0; i < rows.length; i++) {
@@ -183,14 +183,14 @@ function attachingQuestionnaireAnswers(opalDB)
       for (var i = 0; i < opalDB.length; i++) {
 
         if(opalDB[i].CompletedFlag == 1 || opalDB[i].CompletedFlag == '1') patientQuestionnaires[opalDB[i].QuestionnaireSerNum].Answers = answersQuestionnaires[opalDB[i].PatientQuestionnaireDBSerNum];
-        console.log(patientQuestionnaires[opalDB[i].QuestionnaireSerNum]);
+        //console.log(patientQuestionnaires[opalDB[i].QuestionnaireSerNum]);
       }
 
       r.resolve(patientQuestionnaires);
       
     }); 
   }else{
-    console.log('Hello World');
+    //console.log('Hello World');
     r.resolve(patientQuestionnaires);
   }
   return r.promise;
@@ -214,9 +214,9 @@ exports.inputQuestionnaireAnswers = function(parameters)
   getPatientSerNum(parameters.PatientId).then(function(serNum){
     var sa=connection.query(inputPatientQuestionnaireQuery,[serNum, parameters.DateCompleted, parameters.QuestionnaireDBSerNum],function(err,result)
     {
-      console.log(sa.sql);
+      //console.log(sa.sql);
       if(err)r.reject(err);
-      console.log(result);
+      //console.log(result);
       inputAnswersHelper(result.insertId,serNum, parameters.Answers).then(function(res){
         r.resolve(result.insertId);
       }).catch(function(err){
@@ -242,7 +242,7 @@ function inputAnswersHelper(id,patientSerNum, answers)
 {
   var r = q.defer();
   var arrayPromises = [];
-  console.log(answers);
+  //console.log(answers);
   for (var i in answers) {
     var objectAnswer = answers[i].Answer;
     if(answers[i].QuestionType == 'Checkbox')
@@ -260,10 +260,10 @@ function inputAnswersHelper(id,patientSerNum, answers)
   }
   q.all(arrayPromises).then(function(result)
   {
-    console.log(result);
+    //console.log(result);
     r.resolve(result);
   }).catch(function(err){
-    console.log(err);
+    //console.log(err);
     r.reject(err);
   });
   

@@ -17,7 +17,7 @@ var sqlConfig={
     database:config.MYSQL_DATABASE,
     dateStrings:true
 };
-console.log(sqlConfig);
+
 /*
  *Re-connecting the sql database, NodeJS has problems and disconnects if inactive,
  The handleDisconnect deals with that
@@ -26,7 +26,7 @@ var connection = mysql.createConnection(sqlConfig);
 
 function handleDisconnect(myconnection) {
     myconnection.on('error', function(err) {
-        console.log('Re-connecting lost connection');
+        //console.log('Re-connecting lost connection');
         connection.destroy();
         connection = mysql.createConnection(sqlConfig);
         handleDisconnect(connection);
@@ -150,7 +150,7 @@ exports.runSqlQuery = function(query, parameters, processRawFunction)
                     r.resolve(result);
                 });
             }else{
-                //console.log(rows);
+                ////console.log(rows);
                 r.resolve(rows);
             }
         }else{
@@ -199,7 +199,7 @@ function processSelectRequest(table, userId, timestamp)
 {
     var r=Q.defer();
     var requestMappingObject = requestMappings[table];
-    console.log(requestMappings[table]);
+    //console.log(requestMappings[table]);
     var date=new Date(0);
     if(typeof timestamp!=='undefined')
     {
@@ -217,7 +217,7 @@ function processSelectRequest(table, userId, timestamp)
             requestMappingObject.processFunction).then(function(rows)
         {
             if (table === 'Questionnaires'){
-                console.log(rows);
+                //console.log(rows);
             }
             r.resolve(rows);
         },function(err)
@@ -225,10 +225,10 @@ function processSelectRequest(table, userId, timestamp)
             r.reject(err);
         });
     }else{
-        console.log(requestMappingObject.processFunction);
+        //console.log(requestMappingObject.processFunction);
         requestMappingObject.processFunction(userId,timestamp).then(function(rows)
         {
-            console.log('adasdas');
+            //console.log('adasdas');
             r.resolve(rows);
         },function(err)
         {
@@ -293,10 +293,10 @@ exports.checkCheckinInAria = function(requestObject)
     //Get the appointment aria ser
     getAppointmentAriaSer(username, serNum).then(function(response){
         var ariaSerNum = response[0].AppointmentAriaSer;
-        console.log('Appointment aria ser', ariaSerNum);
+        //console.log('Appointment aria ser', ariaSerNum);
         //Check using Ackeem's script whether the patient has checked in at the kiosk
         checkIfCheckedIntoAriaHelper(ariaSerNum).then(function(success){
-            console.log('the user has checked in ', success);
+            //console.log('the user has checked in ', success);
             //Check in the user into mysql if they have indeed checkedin at kiosk
             if(success) exports.runSqlQuery(queries.checkin(),['Kiosk', serNum, username]);
             r.resolve({Response:'success', Data:{'CheckedIn':success, AppointmentSerNum:serNum}});
@@ -312,11 +312,11 @@ exports.checkCheckinInAria = function(requestObject)
 exports.checkinUpdate = function(requestObject)
 {
     var r = Q.defer();
-    console.log('hello world');
+    //console.log('hello world');
     connection.query(queries.getAppointmentAriaSer(),[requestObject.UserID,requestObject.Parameters.AppointmentSerNum],function(error,rows,fields)
     {
         if(error||rows.length==0) r.reject({'Response':'error'});
-        console.log('AppAriaSerNums',rows);
+        //console.log('AppAriaSerNums',rows);
         var appointmentAriaSer = rows[0].AppointmentAriaSer;
         exports.getTimeEstimate(appointmentAriaSer).then(function(data)
         {
@@ -329,7 +329,7 @@ exports.checkinUpdate = function(requestObject)
     // exports.runSqlQuery(queries.getAppointmentAriaSer(),[requestObject.UserID,requestObject.Parameters.AppointmentSerNum], exports.getTimeEstimate).then(
     // function(response)
     // {
-    //   console.log(response);
+    //   //console.log(response);
     //   r.resolve({Response:'success',Data:response});
     // }).catch(function(error)
     // {
@@ -354,17 +354,17 @@ exports.checkIn=function(requestObject)
     //Getting the appointment ariaSer to checkin to aria
     getAriaPatientId(username).then(function(response){
         var patientId = response[0].PatientId;
-        console.log(response, ' patientId', patientId, ' username ', username);
+        //console.log(response, ' patientId', patientId, ' username ', username);
         //Check in to aria using Johns script
         checkIntoAria(patientId,serNum, username).then(function(response){
             if(response)
             {
-                console.log('Checked in successfully done in aria', response);
+                //console.log('Checked in successfully done in aria', response);
                 //If successfully checked in change field in mysql
                 var promises = []
 
                 for (var i=0; i!=serNum.length; ++i){
-                    console.log(serNum[i]);
+                    //console.log(serNum[i]);
                     promises.push(
                         exports.runSqlQuery(queries.checkin(),[session, serNum[i], username])
                             .then(exports.runSqlQuery(queries.logCheckin(),[serNum[i], deviceId,latitude, longitude, accuracy, new Date()])));
@@ -372,11 +372,11 @@ exports.checkIn=function(requestObject)
 
                 Q.all(promises)
                     .then(function(response){
-                        console.log('Checkin done successfully', 'Finished writint to database');
+                        //console.log('Checkin done successfully', 'Finished writint to database');
                         r.resolve({Response:'success'});
                     })
                     .catch(function(error){
-                        console.log('error checkin dur to', error);
+                        //console.log('error checkin dur to', error);
                         r.reject({Response:'error',Reason:'CheckIn error due to '+error});
                     });
 
@@ -385,11 +385,11 @@ exports.checkIn=function(requestObject)
                 r.reject({Response:'error', Reason:'Unable to checkin Aria'});
             }
         }).catch(function(error){
-            console.log('Unable to checkin aria',error);
+            //console.log('Unable to checkin aria',error);
             r.reject({Response:'error', Reason:error});
         });
     }).catch(function(error){
-        console.log('Error while grabbing aria ser num', error);
+        //console.log('Error while grabbing aria ser num', error);
         r.reject({Response:'error', Reason:'Error grabbing aria ser num from aria'+error});
     });
     return r.promise;
@@ -404,11 +404,11 @@ exports.getDocumentsContent = function(requestObject)
     if(!(typeof documents.constructor !=='undefined'&&documents.constructor=== Array)){
         r.reject({Response:'error',Reason:'Not an array'});
     }else{
-        console.log('line 370', documents);
+        //console.log('line 370', documents);
         var quer = connection.query(queries.getDocumentsContentQuery(),[[documents],userID],function(err,rows,fields)
         {
 
-            console.log(rows);
+            //console.log(rows);
             if(err){
                 r.reject({Response:'error',Reason:err});
             }else if(rows.length==0)
@@ -494,7 +494,7 @@ exports.updateDeviceIdentifier = function(requestObject, parameters)
     var identifiers = parameters || requestObject.Parameters;
     var deviceType = null;
 
-    console.log(identifiers);
+    //console.log(identifiers);
 
     if (identifiers.deviceType == 'browser') {
         deviceType = 3;
@@ -503,12 +503,12 @@ exports.updateDeviceIdentifier = function(requestObject, parameters)
     }
 
     var UserEmail = requestObject.UserEmail;
-    console.log("Device Type is  ", deviceType);
+    //console.log("Device Type is  ", deviceType);
     getUserFromEmail(UserEmail).then(function(user){
         exports.runSqlQuery(queries.updateDeviceIdentifiers(),[user.PatientSerNum, requestObject.DeviceId, identifiers.registrationId, deviceType,requestObject.Token, identifiers.registrationId, requestObject.Token]).then(function(response){
             r.resolve({Response:'success'});
         }).catch(function(error){
-            console.log("UPDATE USER IDENTIFIER requestObject: " + requestObject);
+            //console.log("UPDATE USER IDENTIFIER requestObject: " + requestObject);
             r.reject({Response:'error', Reason:'Error updating device identifiers due to '+error});
         });
     }).catch(function(error){
@@ -534,13 +534,13 @@ exports.addToActivityLog=function(requestObject)
 exports.getEncryption=function(requestObject)
 {
     var r=Q.defer();
-    console.log("USERNAME IS " + requestObject.UserID);
-    console.log("ID IS " + requestObject.DeviceId);
+    //console.log("USERNAME IS " + requestObject.UserID);
+    //console.log("ID IS " + requestObject.DeviceId);
     connection.query(queries.userEncryption(),[requestObject.UserID, requestObject.DeviceId],function(error,rows,fields)
     {
-        console.log("PASSWORD IS " + rows);
+        //console.log("PASSWORD IS " + rows);
         if(error) {
-            console.log("sumtingwong" + error);
+            //console.log("sumtingwong" + error);
             r.reject(error);
         }
         r.resolve(rows);
@@ -580,19 +580,19 @@ exports.getMapLocation=function(requestObject)
 exports.getPatientFieldsForPasswordReset=function(requestObject)
 {
     var r=Q.defer();
-    //console.log(requestObject, requestObject.DeviceId);
+    ////console.log(requestObject, requestObject.DeviceId);
 
     var UserEmail = requestObject.UserEmail;
 
-    console.log("Inside get getPatientFields",UserEmail);
+    //console.log("Inside get getPatientFields",UserEmail);
 
     connection.query(queries.getPatientFieldsForPasswordReset(),[UserEmail, requestObject.DeviceId],function(error,rows,fields)
     {
         if(error) {
-            console.log("Error querying patient fields", error);
+            //console.log("Error querying patient fields", error);
             r.reject(error);
         }
-        //console.log(rows);
+        ////console.log(rows);
         r.resolve(rows);
     });
     return r.promise;
@@ -696,7 +696,7 @@ function LoadDocuments(rows)
             defer.resolve(rows)
         } catch(err) {
             if (err.code == "ENOENT"){
-                console.log("File not found!");
+                //console.log("File not found!");
                 defer.reject("No file found");
             }
             else {
@@ -845,14 +845,14 @@ function checkIntoAria(patientId, serNum, username)
     var r = Q.defer();
     var url = config.CHECKIN_PATH+patientId;
     //making request to checkin
-    console.log(url, username, serNum);
+    //console.log(url, username, serNum);
     // getAppointmentAriaSer(username, serNum).then(function(res){
-    //     console.log(res);
+    //     //console.log(res);
     //     var ariaSerNum = res[0].AppointmentAriaSer;
     request(url,function(error, response, body)
     {
-        console.log(response);
-        if(error){console.log('line770,sqlInterface',error);r.reject(error);}
+        //console.log(response);
+        if(error){}//console.log('line770,sqlInterface',error);r.reject(error);}
         if(!error&&response.statusCode=='200')
         {
             var promises = [];
@@ -862,14 +862,14 @@ function checkIntoAria(patientId, serNum, username)
             Q.all(promises).then(function(response){
                 r.resolve(response);
             }).catch(function(error){
-                console.log('line778',error);
+                //console.log('line778',error);
                 r.reject(error);
             });
             //r.resolve(true);
         }
     });
     // }).catch(function(error){
-    //     console.log('line778',error);
+    //     //console.log('line778',error);
     //     r.reject(error);
     // });
     return r.promise;
@@ -882,11 +882,11 @@ function checkIfCheckedIntoAriaHelper(patientActivitySerNum)
     var url = config.VERIFYCHECKIN_PATH+patientActivitySerNum;
     request(url,function(error, response, body)
     {
-        if(error){console.log('line811,sqlInterface',error);r.reject(error);}
+        if(error){}//console.log('line811,sqlInterface',error);r.reject(error);}
         if(!error&&response.statusCode=='200')
         {
             body = JSON.parse(body);
-            console.log("checkin checks bro", body);
+            //console.log("checkin checks bro", body);
             if(body.length>0 && body[0].CheckedInFlag == 1) r.resolve(true);
             else r.resolve(false);
         }
@@ -900,10 +900,10 @@ exports.getTimeEstimate = function(appointmentAriaSer)
     var url = config. WT_PATH+appointmentAriaSer;
     request(url,function(error, response, body)
     {
-        if(error){console.log('getTimeEstimate,sqlInterface',error);r.reject(error);}
+        if(error){}//console.log('getTimeEstimate,sqlInterface',error);r.reject(error);}
         if(!error&&response.statusCode=='200')
         {
-            console.log('Time Estimate ', body);
+            //console.log('Time Estimate ', body);
             body = JSON.parse(body);
 
             if(body.length>1){
@@ -999,7 +999,7 @@ exports.getLabResults = function(requestObject)
     //var labResults = requestObject.Parameters;
 
     var userID = requestObject.UserID;
-    console.log('Getting LabResults ');
+    //console.log('Getting LabResults ');
     exports.runSqlQuery(queries.patientTestResultsTableFields(),[userID, requestObject.Timestamp])
         .then(function (queryRows) {
             var labs={};
@@ -1019,10 +1019,10 @@ exports.getSecurityQuestion = function (requestObject){
     var obj={};
     var Data = {};
     var userEmail = requestObject.UserEmail;
-    console.log('Getting Security Question');
+    //console.log('Getting Security Question');
     exports.runSqlQuery(queries.getSecQuestion(),[userEmail])
         .then(function (queryRows) {
-            console.log(queryRows);
+            //console.log(queryRows);
             if (queryRows.length != 1 ) r.reject({Response:'error', Reason:'More or less than one question returned'});
             Data.securityQuestion = queryRows[0].QuestionText;
             obj.Data = Data;
@@ -1043,26 +1043,26 @@ exports.getSecurityQuestion = function (requestObject){
 //     var obj = {};
 //
 //     var userID = requestObject.UserID;
-//     console.log('Checking for trusted device');
+//     //console.log('Checking for trusted device');
 //     exports.runSqlQuery(queries.getTrustedDevice(),[userID, requestObject.DeviceId])
 //         .then(function (queryRows) {
 //             if (queryRows.length >1 ) r.reject({Response:'error', Reason:'More than one deviceID returned'});
 //
 //             else if (queryRows.length == 0 || (queryRows.length == 1 && queryRows[0].Trusted == 0)) {
 //                 Data.isTrusted = false;
-//                 console.log('Device is not trusted. Sending security question');
+//                 //console.log('Device is not trusted. Sending security question');
 //                 exports.getSecurityQuestion(requestObject)
 //                     .then(function (response) {
 //                         Data.securityQuestion = response.securityQuestion;
 //                         obj.Data = Data;
-//                         console.log(response.securityQuestion[0].SecurityAnswerSerNum);
-//                         console.log(requestObject.DeviceId);
+//                         //console.log(response.securityQuestion[0].SecurityAnswerSerNum);
+//                         //console.log(requestObject.DeviceId);
 //                     })
 //                     .catch(function (error) {
 //                         r.reject({Response:'error', Reason: error});
 //                     })
 //             } else {
-//                 console.log('Device is trusted');
+//                 //console.log('Device is trusted');
 //                 Data.isTrusted = true;
 //                 obj.Data = Data;
 //                 r.resolve(obj);
