@@ -124,7 +124,7 @@ exports.logActivity = function (requestObject) {
         userID:requestObject.UserID,
         request:requestObject.Request,
         activity:requestObject.Parameters.Activity,
-        activitySerNum: requestObject.Parameters.ActivitySerNum
+        activityDetails: requestObject.Parameters.ActivityDetails
     })
     return Q.resolve({Response:'success'});
 }

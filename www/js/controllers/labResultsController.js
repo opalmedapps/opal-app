@@ -1,5 +1,8 @@
 var myApp = angular.module('MUHCApp');
-myApp.controller('LabResultsControllerCopy', ['RequestToServer','Notifications', 'UpdateUI', '$scope', '$timeout','$rootScope', 'UserPreferences', 'LabResults', '$q', function (RequestToServer, Notifications, UpdateUI, $scope,$timeout,$rootScope, UserPreferences, LabResults, $q) {
+myApp.controller('LabResultsControllerCopy', ['RequestToServer','Notifications', 'UpdateUI', '$scope',
+    '$timeout','$rootScope', 'UserPreferences', 'LabResults', '$q', 'Logger',
+    function (RequestToServer, Notifications, UpdateUI, $scope,
+              $timeout,$rootScope, UserPreferences, LabResults, $q, Logger) {
 
 
     $scope.loading = true;
@@ -15,7 +18,6 @@ myApp.controller('LabResultsControllerCopy', ['RequestToServer','Notifications',
 
     activate()
         .then(function () {
-
             $scope.testResultsByDate = LabResults.getTestResultsArrayByDate();
             console.log($scope.testResultsByDate);
             $scope.loading = false;
@@ -35,13 +37,15 @@ myApp.controller('LabResultsControllerCopy', ['RequestToServer','Notifications',
 
 }]);
 
-myApp.controller('ByDateTestsController',['$scope','$timeout','LabResults','$filter',function($scope,$timeout,LabResults,$filter){
+myApp.controller('ByDateTestsController',['$scope','$timeout','LabResults','$filter','Logger',
+    function($scope,$timeout,LabResults,$filter,Logger){
     //Initializing option
 
     $scope.radioModel='All';
     $scope.selectedTests=LabResults.getTestResultsArrayByDate();
     console.log($scope.selectedTests[0]);
     $scope.testsReceived = 'Lab results';
+    Logger.sendLog('Lab Results', 'all - Date');
 
 }]);
 
@@ -52,10 +56,10 @@ myApp.controller('ByDateTestsController',['$scope','$timeout','LabResults','$fil
         .module('MUHCApp')
         .controller('CategoryLabTestController', CategoryLabTestController);
 
-    CategoryLabTestController.$inject = ['LabResults'];
+    CategoryLabTestController.$inject = ['LabResults', 'Logger'];
 
     /* @ngInject */
-    function CategoryLabTestController(LabResults) {
+    function CategoryLabTestController(LabResults, Logger) {
         var vm = this;
         vm.title = 'CategoryLabTestController';
         vm.testResultsByCategory = null;
@@ -69,6 +73,7 @@ myApp.controller('ByDateTestsController',['$scope','$timeout','LabResults','$fil
             console.log(vm.testResultsByCategory);
             vm.testResultsByType = LabResults.getTestResultsArrayByType();
             console.log(vm.testResultsByType);
+            Logger.sendLog('Lab Resulsts', 'all - Type')
         }
     }
 
@@ -97,8 +102,8 @@ myApp.controller('IndividualLabTestController',['$scope','$timeout','LabResults'
     }
 }]);
 
-myApp.controller('TimelineTestComponentController',['$scope','$timeout','LabResults','$filter','UserPreferences',
-    function($scope,$timeout,LabResults,$filter,UserPreferences)
+myApp.controller('TimelineTestComponentController',['$scope','$timeout','LabResults','$filter','UserPreferences', 'Logger',
+    function($scope,$timeout,LabResults,$filter,UserPreferences, Logger)
 {
     var page = personalNavigator.getCurrentPage();
     var test = page.options.param;
@@ -126,6 +131,8 @@ myApp.controller('TimelineTestComponentController',['$scope','$timeout','LabResu
     $scope.historicViewTestResult = $scope.testResultsByType[$scope.title].testResults;
 
     $scope.testResultsByDateArray = LabResults.getTestResultsArrayByDate();
+
+    Logger.sendLog('Lab Results', test.ComponentName || test.testResults[0].ComponentName);
 
     // Chart
     $scope.data = [{

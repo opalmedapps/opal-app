@@ -19,9 +19,12 @@ var myApp = angular.module('MUHCApp');
  */
 //Logic for the calendar controller view
 myApp.controller('CalendarController', ['Appointments', '$scope','$timeout', '$filter', '$location',
-    '$anchorScroll','NavigatorParameters', 'UserPreferences',
+    '$anchorScroll','NavigatorParameters', 'UserPreferences', 'Logger',
     function (Appointments, $scope,$timeout,$filter,$location,
-              $anchorScroll,NavigatorParameters,UserPreferences) {
+              $anchorScroll,NavigatorParameters,UserPreferences, Logger) {
+
+        Logger.sendLog('Appointment', 'all');
+
         var divTreatment=document.getElementById('scrollerAppointments');
         var heightTreatment=document.documentElement.clientHeight-document.documentElement.clientHeight*0.35-180;
         divTreatment.style.height=heightTreatment+'px';
@@ -33,6 +36,8 @@ myApp.controller('CalendarController', ['Appointments', '$scope','$timeout', '$f
         $scope.dt = new Date();
         $scope.todayDate=new Date();
         var flag=false;
+
+
 
         console.log(NavigatorParameters.getParameters());
 
@@ -606,12 +611,11 @@ myApp.controller('AppointmentListController', ['$scope','$timeout','Appointments
     }]);
 myApp.controller('IndividualAppointmentController', ['NavigatorParameters','NativeNotification','$scope',
     '$timeout', '$rootScope','Appointments', 'CheckInService','$q',
-    'NewsBanner','$filter', 'UserPreferences',
+    'NewsBanner','$filter', 'UserPreferences', 'Logger',
     function (NavigatorParameters,NativeNotification,$scope,
               $timeout, $rootScope, Appointments,CheckInService, $q,
-              NewsBanner,$filter, UserPreferences) {
+              NewsBanner,$filter, UserPreferences, Logger) {
         //Information of current appointment
-        NewsBanner.setAlertOffline();
         var parameters = NavigatorParameters.getParameters();
         console.log(parameters);
         var navigatorName = parameters.Navigator;
@@ -619,6 +623,8 @@ myApp.controller('IndividualAppointmentController', ['NavigatorParameters','Nati
         $scope.app = parameters.Post;
         $scope.language = UserPreferences.getLanguage();
         console.log($scope.app);
+
+        Logger.sendLog('Appointment', parameters.Post.AppointmentSerNum);
 
         $scope.goToMap=function()
         {

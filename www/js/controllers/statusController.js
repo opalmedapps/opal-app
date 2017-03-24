@@ -14,10 +14,10 @@
         .controller('StatusController', StatusController);
 
     StatusController.$inject = ['$anchorScroll','$location','Appointments',
-        'NavigatorParameters', '$filter', 'PlanningSteps', 'UserPreferences'];
+        'NavigatorParameters', '$filter', 'PlanningSteps', 'UserPreferences', 'Logger'];
 
     function StatusController($anchorScroll,$location, Appointments,
-                              NavigatorParameters,$filter, PlanningSteps, UserPreferences)
+                              NavigatorParameters,$filter, PlanningSteps, UserPreferences, Logger)
     {
         var statusVm = this;
 
@@ -56,12 +56,15 @@
         function activate()
         {
             //Check for plan completion and populate
-            PlanningSteps.initializePlanningSequence();
-            var events;
+
+            //PlanningSteps.initializePlanningSequence();
+            Logger.sendLog('Treatment Plan', 'all');
+
             statusVm.planningCompleted = true;
             statusVm.treatmentCompleted = true;
-            events = PlanningSteps.getPlanningSequence();
+            var events = PlanningSteps.getPlanningSequence();
             var currentStep = PlanningSteps.getCurrentStep();
+
             console.log(currentStep);
             initTreatmentPlanStatus(events,currentStep);
             setHeightElement();
@@ -205,9 +208,9 @@
         .module('MUHCApp')
         .controller('IndividualStepController', IndividualStepController);
 
-    IndividualStepController.$inject = ['NavigatorParameters', 'UserPreferences','$filter'];
+    IndividualStepController.$inject = ['NavigatorParameters', 'UserPreferences','$filter', 'Logger'];
 
-    function IndividualStepController(NavigatorParameters, UserPreferences, $filter) {
+    function IndividualStepController(NavigatorParameters, UserPreferences, $filter, Logger) {
 
         var stepVM = this;
         var nav = NavigatorParameters.getNavigator();
@@ -221,6 +224,7 @@
         function activate() {
             stepVM.stage = NavigatorParameters.getParameters().Post;
             stepVM.name = NavigatorParameters.getParameters().StepName;
+            Logger.sendLog('Treatment Plan', stepVM.stage);
         }
 
         //Links to the about page controlled by the contentController

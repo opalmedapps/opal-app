@@ -12,7 +12,7 @@
  *@ngdoc service
  *@name MUHCApp.service:Logger
  *@requires MUHCApp.service:RequestToServer
- *@description Service that logs user activity
+ *@description Service that logs user activity on the Opal server
  **/
 
 (function () {
@@ -26,8 +26,12 @@
 
     /* @ngInject */
     function Logger(RequestToServer) {
+
+        var loggingEnabled = true;
+
         var service = {
-            sendLog: sendLog
+            sendLog: sendLog,
+            enableLogging: enableLogging
         };
         return service;
 
@@ -38,17 +42,32 @@
          *@name sendLog
          *@methodOf MUHCApp.service:Logger
          *@param {String} activity the user activity type to be logged
-         *@param {String} activitySerNum the activity serial number to be logged
+         *@param {String} activityDetails the activity serial number to be logged
          *@description Sends a log of the current user activity to the server.
          **/
-        function sendLog(activity, activitySerNum) {
-            RequestToServer.sendRequestWithResponse('Log',{
-                Activity: activity,
-                ActivitySerNum: activitySerNum
-            })
-                .then(function (response) {
-                    console.log(response);
+        function sendLog(activity, activityDetails) {
+
+            if (loggingEnabled) {
+
+                RequestToServer.sendRequestWithResponse('Log', {
+                    Activity: activity,
+                    ActivityDetails: activityDetails
                 })
+                    .then(function (response) {
+                        console.log(response);
+                    });
+            }
+        }
+
+        /**
+         *@ngdoc method
+         *@name enableLogging
+         *@methodOf MUHCApp.service:Logger
+         *@param {Boolean} bool Boolean value that sets the logging
+         *@description Enables or disables logging of usage
+         **/
+        function enableLogging(bool){
+            loggingEnabled = bool;
         }
     }
 

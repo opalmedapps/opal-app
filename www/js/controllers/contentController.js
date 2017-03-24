@@ -5,10 +5,10 @@
         .module('MUHCApp')
         .controller('ContentController', ContentController);
 
-    ContentController.$inject = ['DynamicContentService', 'NavigatorParameters'];
+    ContentController.$inject = ['DynamicContentService', 'NavigatorParameters', 'Logger'];
 
     /* @ngInject */
-    function ContentController(DynamicContentService, NavigatorParameters) {
+    function ContentController(DynamicContentService, NavigatorParameters, Logger) {
         var vm = this;
         vm.title = 'ContentController';
         vm.pageContent = {};
@@ -47,6 +47,7 @@
         function loadFromURL(url, contentType) {
             DynamicContentService.loadFromURL(url)
                 .then(function (response) {
+                    Logger.sendLog('About', contentType);
                     vm.pageContent.title = contentType;
                     vm.pageContent.content = response.data;
                     console.log(vm.pageContent);
