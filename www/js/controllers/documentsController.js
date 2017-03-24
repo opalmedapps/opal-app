@@ -4,14 +4,16 @@
 var myApp = angular.module('MUHCApp');
 myApp.controller('DocumentsController', ['Patient', 'Documents', 'UpdateUI', '$scope', '$timeout',
     'UserPreferences', 'RequestToServer', '$cordovaFile','UserAuthorizationInfo',
-    '$q','$filter','NavigatorParameters', 'Permissions',
+    '$q','$filter','NavigatorParameters', 'Permissions', 'Logger',
     function(Patient, Documents, UpdateUI, $scope, $timeout, UserPreferences,
              RequestToServer,$cordovaFile,UserAuthorizationInfo,$q,$filter,
-             NavigatorParameters, Permissions){
+             NavigatorParameters, Permissions, Logger){
 
         Permissions.enablePermission('WRITE_EXTERNAL_STORAGE', 'Storage access disabled. Unable to write documents.');
 
         documentsInit();
+
+        Logger.sendLog('Documents', 'all');
 
         //Initialize documents, determine if there are documents, set language, determine if content has preview
         function documentsInit() {
@@ -68,9 +70,9 @@ myApp.controller('DocumentsController', ['Patient', 'Documents', 'UpdateUI', '$s
  */
 myApp.controller('SingleDocumentController', ['NavigatorParameters','Documents', '$timeout', '$scope',
     '$cordovaEmailComposer','$cordovaFileOpener2','FileManagerService','Patient','NativeNotification',
-    '$filter', 'Constants', 'NewsBanner', '$q', 'UserPreferences',
+    '$filter', 'Constants', 'NewsBanner', '$q', 'UserPreferences', 'Logger',
     function(NavigatorParameters, Documents, $timeout, $scope,$cordovaEmailComposer,$cordovaFileOpener2,
-             FileManagerService,Patient,NativeNotification,$filter, Constants, NewsBanner, $q, UserPreferences) {
+             FileManagerService,Patient,NativeNotification,$filter, Constants, NewsBanner, $q, UserPreferences, Logger) {
 
         //Obtain navigator parameters.
         var parameters = NavigatorParameters.getParameters();
@@ -87,8 +89,10 @@ myApp.controller('SingleDocumentController', ['NavigatorParameters','Documents',
         $scope.loading = true;
         $scope.errorDownload = false;
 
-        //Create popover
+        //Log usage
+        Logger.sendLog('Document', docParams.DocumentSerNum);
 
+        //Create popover
         ons.createPopover('./views/personal/my-chart/popoverDocsInfo.html', {parentScope: $scope}).then(function (popover) {
             $scope.popoverDocsInfo = popover;
         });

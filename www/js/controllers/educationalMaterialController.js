@@ -2,7 +2,10 @@
 // Author: David Herrera on Summer 2016, Email:davidfherrerar@gmail.com
 //
 var myApp = angular.module('MUHCApp');
-myApp.controller('EducationalMaterialController', function (NavigatorParameters, $scope, $timeout,UpdateUI, RequestToServer, $cordovaFileOpener2, $cordovaDevice, $cordovaDatePicker, FileManagerService, EducationalMaterial, UserPreferences,$rootScope) {
+myApp.controller('EducationalMaterialController',['NavigatorParameters', '$scope', '$timeout','UpdateUI', 'RequestToServer', '$cordovaFileOpener2',
+    '$cordovaDevice', '$cordovaDatePicker', 'FileManagerService', 'EducationalMaterial','Logger',
+	function (NavigatorParameters, $scope, $timeout,UpdateUI, RequestToServer, $cordovaFileOpener2,
+			  $cordovaDevice, $cordovaDatePicker, FileManagerService, EducationalMaterial, Logger) {
 
 	//Android device backbutton
 
@@ -50,6 +53,7 @@ myApp.controller('EducationalMaterialController', function (NavigatorParameters,
 		materials = EducationalMaterial.setLanguageEduationalMaterial(materials);
 		//Attaching to scope
 		$scope.edumaterials = materials;
+		Logger.sendLog('Educational Material', 'all');
 	}
 
 	//Function to decide whether or not to show the header
@@ -82,7 +86,7 @@ myApp.controller('EducationalMaterialController', function (NavigatorParameters,
 	});
 
 
-});
+}]);
 /**
  * @controller IndividualEducationalMaterialController
  * @description Controller receives each individual material and its in charge of the options to manipulate the material. i.e. This controller is in charge
@@ -91,7 +95,11 @@ myApp.controller('EducationalMaterialController', function (NavigatorParameters,
  * 
  * 
  */
-myApp.controller('IndividualEducationalMaterialController', ['$scope', '$timeout', 'NavigatorParameters', 'UserPreferences', 'EducationalMaterial', 'FileManagerService','$cordovaNetwork','$filter',function ($scope, $timeout, NavigatorParameters, UserPreferences, EducationalMaterial,FileManagerService,$cordovaNetwork,$filter) {
+myApp.controller('IndividualEducationalMaterialController', ['$scope', '$timeout', 'NavigatorParameters',
+	'UserPreferences', 'EducationalMaterial',
+	'FileManagerService','$cordovaNetwork','$filter', 'Logger',
+	function ($scope, $timeout, NavigatorParameters, UserPreferences, EducationalMaterial,
+			  FileManagerService,$cordovaNetwork,$filter, Logger) {
 	/**
 	 * Getting Parameters from navigation
 	 */
@@ -100,6 +108,7 @@ myApp.controller('IndividualEducationalMaterialController', ['$scope', '$timeout
 	
 	//Setting educational material
 	$scope.edumaterial =EducationalMaterial.setLanguageEduationalMaterial(param.Post);
+	Logger.sendLog('Educational Material', param.Post.EducationalMaterialSerNum);
 	
 	//Determine if material has a ShareURL and is printable
 	if($scope.edumaterial.hasOwnProperty('ShareURL')&&$scope.edumaterial.ShareURL !=="") {

@@ -28,12 +28,19 @@ admin.initializeApp({
     databaseURL: config.DATABASE_URL
 });
 
+//admin.database.enableLogging(true);
+
 // Get reference to correct data element
 var db = admin.database();
 var ref = db.ref("/dev2");
 
 // Ensure there is no leftover data on firebase
-ref.set(null);
+ref.set(null)
+    .catch(function (error) {
+        logger.log('error', 'Cannot reset firebase', {
+            error:error
+        })
+    });
 
 // Periodically clear requests that are still on Firebase
 setInterval(function(){
@@ -61,13 +68,16 @@ function handleRequest(requestType, snapshot){
     var headers = {key: snapshot.key, objectRequest: snapshot.val()};
     processRequest(headers).then(function(response){
 
-        // Log before uploading to Firebase
-        logger.log('info',"Completed response", {
-            deviceID:response.Headers.RequestObject.DeviceId,
-            userID:response.Headers.RequestObject.UserID,
-            request:response.Headers.RequestObject.Request,
-            requestKey: response.Headers.RequestKey
-        });
+        // Log before uploading to Firebase. Check that it was not a simple log
+        if (response.Headers.RequestObject.Request != 'Log') {
+
+            logger.log('info', "Completed response", {
+                deviceID: response.Headers.RequestObject.DeviceId,
+                userID: response.Headers.RequestObject.UserID,
+                request: response.Headers.RequestObject.Request,
+                requestKey: response.Headers.RequestKey
+            });
+        }
 
         uploadToFirebase(response, requestType);
 

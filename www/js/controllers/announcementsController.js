@@ -2,7 +2,9 @@
 // Author: David Herrera on Summer 2016, Email:davidfherrerar@gmail.com
 //
 var myApp=angular.module('MUHCApp');
-myApp.controller('AnnouncementsController',['$scope','$timeout','Announcements','UserPreferences','NavigatorParameters',function($scope,$timeout,Announcements,UserPreferences,NavigatorParameters){
+myApp.controller('AnnouncementsController',['$scope','$timeout','Announcements',
+    'UserPreferences','NavigatorParameters', 'Logger',
+    function($scope,$timeout,Announcements,UserPreferences,NavigatorParameters,Logger){
     init();
     //Initializing name and body of post
     function init()
@@ -13,6 +15,7 @@ myApp.controller('AnnouncementsController',['$scope','$timeout','Announcements',
         if (announcements.length>0) $scope.noAnnouncements = false;
         $scope.announcements=announcements;
         console.log($scope.announcements);
+        Logger.sendLog('Announcement', 'all');
     }
     //Function that goes to individual announcement
     $scope.goToAnnouncement=function(announcement)
@@ -36,9 +39,11 @@ myApp.controller('AnnouncementsController',['$scope','$timeout','Announcements',
     }
 
 }]);
-myApp.controller('IndividualAnnouncementController',['$scope','NavigatorParameters', 'Announcements',function($scope,NavigatorParameters,Announcements){
+myApp.controller('IndividualAnnouncementController',['$scope','NavigatorParameters', 'Announcements','Logger',
+    function($scope,NavigatorParameters,Announcements,Logger){
     var parameters=NavigatorParameters.getParameters();
     console.log(parameters);
     var message = Announcements.setLanguageAnnouncements(parameters.Post);
     $scope.announcement=message;
+    Logger.sendLog('Announcement', message.AnnouncementSerNum);
 }]);
