@@ -50,8 +50,8 @@
             if (loggingEnabled) {
 
                 RequestToServer.sendRequestWithResponse('Log', {
-                    Activity: activity,
-                    ActivityDetails: activityDetails
+                    Activity: angular.copy(activity),
+                    ActivityDetails: angular.copy(activityDetails)
                 })
                     .then(function (response) {
                         console.log(response);

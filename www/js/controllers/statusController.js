@@ -57,12 +57,13 @@
         {
             //Check for plan completion and populate
 
-            //PlanningSteps.initializePlanningSequence();
+            PlanningSteps.initializePlanningSequence();
             Logger.sendLog('Treatment Plan', 'all');
 
+            var events;
             statusVm.planningCompleted = true;
             statusVm.treatmentCompleted = true;
-            var events = PlanningSteps.getPlanningSequence();
+            events = PlanningSteps.getPlanningSequence();
             var currentStep = PlanningSteps.getCurrentStep();
 
             console.log(currentStep);
@@ -225,6 +226,7 @@
             stepVM.stage = NavigatorParameters.getParameters().Post;
             stepVM.name = NavigatorParameters.getParameters().StepName;
             Logger.sendLog('Treatment Plan', stepVM.stage);
+            console.log(stepVM.stage);
         }
 
         //Links to the about page controlled by the contentController

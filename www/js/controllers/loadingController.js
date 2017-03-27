@@ -56,5 +56,5 @@ angular.module('MUHCApp').controller('LoadingController',
                         }
                     });
                 }
-            },30000);
+            },40000);
         }]);
