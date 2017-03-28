@@ -1,7 +1,7 @@
-#MUHC Oncology Patient Application
+# MUHC Oncology Patient Application
 Opal - the MUHC Oncology Patient Application for mobile phones and the web - is a product that has arisen from the winning project of the 2014 MUHC Q+ initiative. The project proposal was submitted by the Health Informatics Group (HIG, see below) and was entitled “Realistic knowledge-based waiting time estimates for radiation oncology patients - addressing the pain of waiting”. It had as its goal the provision of waiting time estimates to radiation oncology patients. 
 
-###Installation
+### Installation
 [Install NodeJS](https://nodejs.org/en/download/)
 
 Intsall http-server
@@ -26,7 +26,7 @@ Navigate to qplus folder and install missing librairies
 ```
 bower install
 ```
-###Technologies
+### Technologies
 Opal utilizes the following technologies:
 * [Cordova](https://cordova.apache.org/)
 * [AngularJS](https://angularjs.org/)
@@ -35,7 +35,7 @@ Opal utilizes the following technologies:
 
 New developers working on the project should familairize themselves with AngularJS, OnsenUI and Cordova.
 
-###Browser View Only
+### Browser View Only
 Opal can be viewed and tested in the browser without having to deploy to any device. However, this is not a substitute for actual device testing. To view Opal in the browser do the following:
 
 1. Follow instructions in the [Installation](#installation) section
@@ -44,7 +44,7 @@ Opal can be viewed and tested in the browser without having to deploy to any dev
 
 Most broswers come with Javascript developer consoles built in. These can be used to debug the application.
 
-###Browser/Mobile View
+### Browser/Mobile View
 [Cordova](https://cordova.apache.org/) enables software programmers to build applications for mobile devices using JavaScript, HTML5, and CSS3, instead of relying on platform-specific APIs like those in Android, iOS, or Windows Phone. It enables wrapping up of CSS, HTML, and JavaScript code depending upon the platform of the device. It extends the features of HTML and JavaScript to work with the device. The resulting applications are a hybrid between web and native.
 
 Cordova has the ability to build applications for iOS, Android and browsers using one code base.
@@ -70,7 +70,7 @@ cordova build <platform>
 cordova run <platform>
 ```
 
-####Plugins:
+#### Plugins:
 
 You should not need to worry about plugins, but in case something goes wrong, you will need to add them manually using
  ```
@@ -106,24 +106,24 @@ cordova plugin add <nameOfPlugin>
 * phonegap-plugin-barcodescanner
 * cordova-plugin-android-permissions
 
-####Credentials
+#### Credentials
  * email:muhc.app.mobile@gmail.com
  * password:12345
  * securityAnswer: guitar
 
-####Problems
+#### Problems
 
-#####IOS
+##### IOS
 * If you are not running from an Apple computer a build and run for ios is not possible as it requires XCode to compile
 
-#####Android
+##### Android
 * You have to have installed the AndroidSDK with the most updated version, follow instructions given by [Android developer!](http://developer.android.com/sdk/installing/index.html)
 * Once the SDK is installed you have to tell cordova where to find the SDK, via the bash_profile folder, for instructions on this:
 [Cordova and Android!](https://cordova.apache.org/docs/en/2.5.0/guide/getting-started/android/). 
 
-###Quirks
+### Quirks
 The body tag on the index.html file contains the ng-app attribute to initialize the AngularJS code. It turns out that if you don't bootstrap AngularJS manually when the device is ready the AngularJS code will run and crash before the device is ready because is trying to use some of the plugins that are not yet made available by the device. Therefore, whenever you run the code in a browser, keep the ng-app="MUHCApp" attribute, but if you want to run it on your device, delete the attribute from the body element.  
 
-##Adding to the repo
+## Adding to the repo
 If you would like add your code to the repository, create a new branch and submit a pull request. One of our team will review your code before merging.
 
