@@ -8,6 +8,7 @@ var buffer          =   require('buffer');
 var http            =   require('http');
 var request         =   require('request');
 var questionnaires  =   require('./../questionnaires/patientQuestionnaires.js');
+var Mail            =   require('./../mailer/mailer.js');
 // var exec            =   require('child_process').exec;
 
 var sqlConfig={
@@ -471,10 +472,12 @@ exports.inputFeedback=function(requestObject)
     var UserEmail=requestObject.UserEmail;
     getUserFromEmail(UserEmail).then(function(user)
     {
-        var quer = connection.query(queries.inputFeedback(),[user.PatientSerNum,requestObject.Parameters.FeedbackContent,requestObject.Parameters.AppRating, requestObject.Token],
+        connection.query(queries.inputFeedback(),[user.PatientSerNum,requestObject.Parameters.FeedbackContent,requestObject.Parameters.AppRating, requestObject.Token],
             function(error, rows, fields)
             {
                 if(error) r.reject({Response:'error',Reason:error});
+                var mailman = new Mail();
+                mailman.sendMail("robert.maglieri@gmail.com", "New Suggestion - Opal", requestObject.Parameters.FeedbackContent);
                 r.resolve({Response:'success'});
             });
     });
@@ -1037,44 +1040,6 @@ exports.getSecurityQuestion = function (requestObject){
 
     return r.promise;
 };
-
-// exports.setTrustedDevice = function (requestObject){
-//     var r = Q.defer();
-//     var obj = {};
-//
-//     var userID = requestObject.UserID;
-//     //console.log('Checking for trusted device');
-//     exports.runSqlQuery(queries.getTrustedDevice(),[userID, requestObject.DeviceId])
-//         .then(function (queryRows) {
-//             if (queryRows.length >1 ) r.reject({Response:'error', Reason:'More than one deviceID returned'});
-//
-//             else if (queryRows.length == 0 || (queryRows.length == 1 && queryRows[0].Trusted == 0)) {
-//                 Data.isTrusted = false;
-//                 //console.log('Device is not trusted. Sending security question');
-//                 exports.getSecurityQuestion(requestObject)
-//                     .then(function (response) {
-//                         Data.securityQuestion = response.securityQuestion;
-//                         obj.Data = Data;
-//                         //console.log(response.securityQuestion[0].SecurityAnswerSerNum);
-//                         //console.log(requestObject.DeviceId);
-//                     })
-//                     .catch(function (error) {
-//                         r.reject({Response:'error', Reason: error});
-//                     })
-//             } else {
-//                 //console.log('Device is trusted');
-//                 Data.isTrusted = true;
-//                 obj.Data = Data;
-//                 r.resolve(obj);
-//             }
-//
-//         })
-//         .catch(function (error) {
-//             r.reject({Response:'error', Reason:'Error getting security question due to '+error});
-//         });
-//
-//     return r.promise;
-// };
 
 exports.setTrusted = function(requestObject)
 {
