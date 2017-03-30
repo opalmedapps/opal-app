@@ -75,9 +75,8 @@ exports.patientDocumentTableFields=function()
         "Alias.AliasDescription_EN, " +
         "Alias.AliasDescription_FR, " +
         "Document.DocumentSerNum, " +
-        "Document.DateAdded, " +
-        "Document.LastUpdated, " +
         "Document.ApprovedTimeStamp, " +
+        "Document.CreatedTimeStamp, " +
         "Staff.FirstName, " +
         "Staff.LastName, " +
         "Alias.ColorTag, " +

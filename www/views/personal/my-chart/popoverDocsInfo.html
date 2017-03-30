@@ -3,8 +3,8 @@
         <ons-list>
             <ons-list-header>{{DOC_INFO|translate}}</ons-list-header>
             <ons-list-item class="item">
-                <p><strong>{{"DOC_DATE_APPROVED"|translate}}</strong>{{documentObject.ApprovedTimeStamp| date:'fullDate'}}</p>
-                <p><strong>{{"DOC_DATE_UPDATED"|translate}}</strong>{{documentObject.LastUpdated| date:'fullDate'}}</p>
+                <p><strong>{{"DOC_DATE_CREATED"|translate}}</strong>{{documentObject.CreatedTimeStamp| date:'fullDate'}}</p>
+                <p><strong>{{"DOC_DATE_UPDATED"|translate}}</strong>{{documentObject.ApprovedTimeStamp| date:'fullDate'}}</p>
                 <p><strong>{{"DOC_SIGNEDBY"|translate}}</strong>{{documentObject.FirstName}} {{documentObject.LastName}}</p>
 
                 <div>

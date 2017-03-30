@@ -66,15 +66,14 @@ myApp.service('Documents',['UserPreferences', 'UserAuthorizationInfo','$q', '$fi
 		console.log(documents);
 		if(!documents) return;
 		for (var i = 0; i < documents.length; i++) {
-			documents[i].DateAdded = $filter('formatDate')(documents[i].DateAdded);
-			documents[i].LastUpdated = $filter('formatDate')(documents[i].LastUpdated);
+			documents[i].CreatedTimeStamp = $filter('formatDate')(documents[i].CreatedTimeStamp);
 			documents[i].ApprovedTimeStamp = $filter('formatDate')(documents[i].ApprovedTimeStamp);
 			documents[i].DocumentType = FileManagerService.getFileType(documents[i].FinalFileName);
 			documents[i].FirstName = documents[i].FirstName.trim();
 			documents[i].LastName = documents[i].LastName.trim();
 			documentsArray.push(documents[i]);
 		}
-		documentsArray = $filter('orderBy')(documentsArray,'-DateAdded');
+		documentsArray = $filter('orderBy')(documentsArray,'-CreatedTimeStamp');
 		console.log(documentsArray);
 		LocalStorage.WriteToLocalStorage('Documents',documentsArray);
 		return documents;

@@ -2,6 +2,7 @@ var utility             =   require('./../utility/utility.js'),
     sqlInterface        =   require('./sqlInterface.js'),
     q                   =   require('q'),
     processApiRequest   =   require('./processApiRequest.js');
+    logger              =   require('./../logs/logger')
 
 //This handles the api requests by formating the response obtain from the API
 exports.apiRequestFormatter=function(requestKey,requestObject)
@@ -47,6 +48,7 @@ exports.apiRequestFormatter=function(requestKey,requestObject)
         }).catch(function(errorResponse){
           //There was an error processing the request with the parameters, delete request
             //console.log("Error processing request", errorResponse);
+            logger.log('error', "Error processing request", {error:errorResponse});
             errorResponse.Code = 2;
             errorResponse.Reason = 'Server error, report the error to the hospital';
             errorResponse.Headers = {RequestKey:requestKey,RequestObject:requestObject};
