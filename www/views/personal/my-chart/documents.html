@@ -11,7 +11,7 @@
         </div>
         <ons-list ng-repeat="doc in documents" ng-click="goToDocument(doc)">
             <ons-list-header class="person-list-header" ng-class="fontSizeTitle" ng-show="showHeader($index, documents.length)">
-                {{doc.DateAdded|date:'fullDate'}}
+                {{doc.CreatedTimeStamp|date:'fullDate'}}
             </ons-list-header>
             <ons-list-item modifier="chevron">
 
@@ -24,7 +24,7 @@
                     <ons-col style="word-wrap: break-word;">
                         <div style="line-height:1;padding:5px;" >
                             <span ng-class="fontSizeTitle"> <strong>{{doc.Title}}</strong></span> <br>
-                            <span class="item-desc" ng-class="fontSizeDesc">{{"ADDED"|translate}} {{doc.DateAdded|date:'shortTime'}}</span>
+                            <span class="item-desc" ng-class="fontSizeDesc">{{"ADDED"|translate}} {{doc.CreatedTimeStamp|date:'shortTime'}}</span>
                         </div>
                         <!--<p class="item-desc" ng-class="fontSizeDesc" ng-bind-html = "message.Body| ellipsis: 40" ></p>-->
                     </ons-col>

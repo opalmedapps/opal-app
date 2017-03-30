@@ -9,6 +9,7 @@
     "firebase": "^2.4.2",
     "firebase-admin": "^4.0.2",
     "mysql": "^2.10.2",
+    "nodemailer": "^3.1.8",
     "q": "^1.4.1",
     "request": "^2.75.0",
     "squel": "^5.8.0",
