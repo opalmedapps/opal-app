@@ -476,8 +476,17 @@ exports.inputFeedback=function(requestObject)
             function(error, rows, fields)
             {
                 if(error) r.reject({Response:'error',Reason:error});
+
+                // Determine if the feedback is for the app or patients committee
+                if (requestObject.Parameters.Type == 'pfp'){
+                    var email = "patients4patients.contact@gmail.com";
+                    var title = "New Suggestion - Opal";
+                } else {
+                    var email = "muhc.app.mobile@gmail.com";
+                    var title = "New Feedback - Opal";
+                }
                 var mailman = new Mail();
-                mailman.sendMail("robert.maglieri@gmail.com", "New Suggestion - Opal", requestObject.Parameters.FeedbackContent);
+                mailman.sendMail(email, title, requestObject.Parameters.FeedbackContent);
                 r.resolve({Response:'success'});
             });
     });
