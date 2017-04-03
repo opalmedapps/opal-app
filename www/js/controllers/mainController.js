@@ -74,7 +74,6 @@ angular.module('MUHCApp').controller('MainController', ["$state",'$timeout', '$r
         setupInactivityChecks();
 
         function startTimer() {
-            console.log("starting timer");
             timeoutLockout = window.setTimeout(goInactive, 300000);
         }
 
