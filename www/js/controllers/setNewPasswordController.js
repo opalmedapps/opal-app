@@ -113,11 +113,9 @@ myApp.controller('SecurityQuestionController',['$scope','$timeout','ResetPasswor
             mySwitch.on( 'change', function () {
                 if (mySwitch.isChecked()) {
                     console.log("Trusted", deviceID);
-                    localStorage.setItem(UserAuthorizationInfo.getUsername()+"/deviceID",deviceID);
                     trusted = 1;
                 } else {
                     console.log("Not Trusted");
-                    localStorage.removeItem(UserAuthorizationInfo.getUsername()+"/deviceID");
                     trusted = 0;
                 }
             });
@@ -160,6 +158,7 @@ myApp.controller('SecurityQuestionController',['$scope','$timeout','ResetPasswor
                     if(data.Data.AnswerVerified=="true")
                     {
                         if (trusted){
+                            localStorage.setItem(UserAuthorizationInfo.getUsername()+"/deviceID",deviceID);
                             localStorage.setItem(UserAuthorizationInfo.getUsername()+"/securityAns",CryptoJS.AES.encrypt(key, UserAuthorizationInfo.getPassword()).toString());
                         }
                         EncryptionService.setSecurityAns(key);
@@ -252,77 +251,77 @@ myApp.controller('NewPasswordController',['$scope','$timeout','Patient','ResetPa
     function($scope,$timeout,Patient,ResetPassword,
              FirebaseService,NavigatorParameters,RequestToServer,
              $state,UserAuthorizationInfo,EncryptionService){
-    $scope.goToLogin=function()
-    {
-        UserAuthorizationInfo.clearUserAuthorizationInfo();
-        initNavigator.resetToPage('./views/init/init-screen.html');
-    };
-
-    var parameters = initNavigator.getCurrentPage().options;
-
-    $scope.alert={};
-    $scope.$watch('newValue',function()
-    {
-        if($scope.alert.hasOwnProperty('type'))
+        $scope.goToLogin=function()
         {
-            delete $scope.alert.type;
-            delete $scope.alert.content;
-        }
-    });
+            UserAuthorizationInfo.clearUserAuthorizationInfo();
+            initNavigator.resetToPage('./views/init/init-screen.html');
+        };
 
-    $scope.submitNewPassword=function(newValue)
-    {
-        if(!newValue)
+        var parameters = initNavigator.getCurrentPage().options;
+
+        $scope.alert={};
+        $scope.$watch('newValue',function()
         {
-            $scope.alert.type='danger';
-            $scope.alert.content = "ENTERVALIDPASSWORD";
-        }else{
+            if($scope.alert.hasOwnProperty('type'))
+            {
+                delete $scope.alert.type;
+                delete $scope.alert.content;
+            }
+        });
 
-            ResetPassword.completePasswordChange(parameters.oobCode, newValue)
-                .then(function () {
-                    console.log("Successfully changed password on firebase");
-                    return RequestToServer.sendRequestWithResponse(
-                        'SetNewPassword',
-                        {newPassword: newValue},
-                        EncryptionService.getSecurityAns() ,
-                        'passwordResetRequests',
-                        'passwordResetResponses'
-                    );
-                })
-                .then(function (response) {
-                    console.log(response);
-                    $timeout(function () {
-                        $scope.alert.type='success';
-                        $scope.alert.content="PASSWORDUPDATED";
+        $scope.submitNewPassword=function(newValue)
+        {
+            if(!newValue)
+            {
+                $scope.alert.type='danger';
+                $scope.alert.content = "ENTERVALIDPASSWORD";
+            }else{
+
+                ResetPassword.completePasswordChange(parameters.oobCode, newValue)
+                    .then(function () {
+                        console.log("Successfully changed password on firebase");
+                        return RequestToServer.sendRequestWithResponse(
+                            'SetNewPassword',
+                            {newPassword: newValue},
+                            EncryptionService.getSecurityAns() ,
+                            'passwordResetRequests',
+                            'passwordResetResponses'
+                        );
+                    })
+                    .then(function (response) {
+                        console.log(response);
+                        $timeout(function () {
+                            $scope.alert.type='success';
+                            $scope.alert.content="PASSWORDUPDATED";
+                        });
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                        $scope.alert.type='danger';
+                        switch (error.code) {
+                            case "auth/invalid-action-code":
+                                $timeout(function () {
+                                    $scope.alert.content = "CODE_INVALID"
+                                })
+                            case "auth/expired-action-code":
+                                $timeout(function () {
+                                    $scope.alert.content = "CODE_EXPIRED";
+                                });
+                                break;
+                            case "auth/weak-password":
+                                $timeout(function () {
+                                    $scope.alert.content = "WEAK_PASSWORD";
+                                });
+                                break;
+                            default:
+                                $timeout(function () {
+                                    $scope.alert.content = "SERVERPROBLEM";
+                                });
+                        }
                     });
-                })
-                .catch(function (error) {
-                    console.log(error);
-                    $scope.alert.type='danger';
-                    switch (error.code) {
-                        case "auth/invalid-action-code":
-                            $timeout(function () {
-                                $scope.alert.content = "CODE_INVALID"
-                            })
-                        case "auth/expired-action-code":
-                            $timeout(function () {
-                                $scope.alert.content = "CODE_EXPIRED";
-                            });
-                            break;
-                        case "auth/weak-password":
-                            $timeout(function () {
-                                $scope.alert.content = "WEAK_PASSWORD";
-                            });
-                            break;
-                        default:
-                            $timeout(function () {
-                                $scope.alert.content = "SERVERPROBLEM";
-                            });
-                    }
-                });
 
-        }
-    };
+            }
+        };
 
 
-}]);
+    }]);

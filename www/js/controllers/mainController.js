@@ -76,7 +76,6 @@ angular.module('MUHCApp').controller('MainController', ["$state",'$timeout', '$r
         function startTimer() {
             console.log("starting timer");
             timeoutLockout = window.setTimeout(goInactive, 300000);
-            scheduleDataDeletion();
         }
 
         function resetTimer(e) {
@@ -105,40 +104,6 @@ angular.module('MUHCApp').controller('MainController', ["$state",'$timeout', '$r
         function goActive() {
             // do something
             startTimer();
-        }
-
-        function scheduleDataDeletion() {
-            if (Constants.app) {
-                var now = (new Date()).getTime(),
-                    _30_min_from_now = new Date(now + 30 * 60 * 1000);
-
-                cordova.plugins.notification.local.isPresent(1, function (present) {
-
-                    if(present == "not found"){
-                        cordova.plugins.notification.local.schedule({
-                            id: 1,
-                            at: _30_min_from_now,
-                            sound: null
-                        });
-                    } else {
-                        cordova.plugins.notification.local.update({
-                            id: 1,
-                            at: _30_min_from_now,
-                            data: { updated:true }
-                        });
-                    }
-
-
-
-                });
-
-                cordova.plugins.notification.local.on("trigger", function (notification) {
-                    CleanUp.clear();
-                    cordova.plugins.notification.local.clearAll(function () {
-                    }, this);
-                });
-
-            }
         }
 
         $translatePartialLoader.addPart('top-view');
