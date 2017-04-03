@@ -154,7 +154,7 @@ myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$root
                         .then(function (response) {
                             console.log(response);
                             $scope.loading = false;
-                            initNavigator.pushPage('./views/login/security-question.html', {securityQuestion: response.Data.securityQuestion});
+                            initNavigator.pushPage('./views/login/security-question.html', {securityQuestion: response.Data.securityQuestion["securityQuestion_" + UserPreferences.getLanguage()]});
                         })
                         .catch(function (error) {
                             console.log(error);
