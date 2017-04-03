@@ -56,13 +56,6 @@
   ],
   "author": "David Herrera",
   "license": "ISC",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/dherre3/muhc.git"
-  },
-  "bugs": {
-    "url": "https://github.com/dherre3/muhc/issues"
-  },
   "homepage": "https://depdocs.com/opal",
   "description": "Repository for Opal, the oncology patient application"
 }
