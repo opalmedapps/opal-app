@@ -5,9 +5,11 @@
  */
 
 angular.module('MUHCApp').controller('MainController', ["$state",'$timeout', '$rootScope','FirebaseService',
-    'NativeNotification','DeviceIdentifiers','$translatePartialLoader','NewsBanner', "UpdateUI","Patient","LocalStorage",
+    'NativeNotification','DeviceIdentifiers','$translatePartialLoader','NewsBanner',
+    "UpdateUI","Patient","LocalStorage", 'Constants', 'CleanUp',
     function ($state,$timeout,$rootScope,FirebaseService,NativeNotification,
-              DeviceIdentifiers,$translatePartialLoader,NewsBanner,UpdateUI,Patient,LocalStorage) {
+              DeviceIdentifiers,$translatePartialLoader,NewsBanner,
+              UpdateUI,Patient,LocalStorage, Constants, CleanUp) {
 
 
         //var myDataRef = new Firebase(FirebaseService.getFirebaseUrl());
@@ -26,14 +28,20 @@ angular.module('MUHCApp').controller('MainController', ["$state",'$timeout', '$r
                 }
             }
         });
-//Ask for an update every 2 minutes
+
+        /*****************************************
+         * Refresh Data (Not working)
+         *****************************************/
+
+        //Ask for an update every 2 minutes
         setInterval(function()
         {
             //console.log("calling  refresh bg");
             backgroundRefresh();
         },120000);
 
-//On resume, make a background refresh check.
+
+        //On resume, make a background refresh check.
         document.addEventListener("resume", onResume, false);
         function onResume() {
             console.log("Called resume")
@@ -50,8 +58,13 @@ angular.module('MUHCApp').controller('MainController', ["$state",'$timeout', '$r
                 UpdateUI.update('All');
             }
         }
-//TimeoutID for locking user out
-        var timeoutID;
+
+        /*****************************************
+         * Lockout and Data Wipe
+         *****************************************/
+
+        //TimeoutID for locking user out
+        var timeoutLockout;
         function setupInactivityChecks() {
             this.addEventListener('touchstart',resetTimer,false);
             this.addEventListener("mousedown", resetTimer, false);
@@ -61,14 +74,14 @@ angular.module('MUHCApp').controller('MainController', ["$state",'$timeout', '$r
         setupInactivityChecks();
 
         function startTimer() {
-
-            // wait 2 seconds before calling goInactive
-            timeoutID = window.setTimeout(goInactive, 300000);
+            console.log("starting timer");
+            timeoutLockout = window.setTimeout(goInactive, 300000);
+            scheduleDataDeletion();
         }
 
         function resetTimer(e) {
             //console.log('resetting timer');
-            window.clearTimeout(timeoutID);
+            window.clearTimeout(timeoutLockout);
 
             goActive();
         }
@@ -94,10 +107,48 @@ angular.module('MUHCApp').controller('MainController', ["$state",'$timeout', '$r
             startTimer();
         }
 
+        function scheduleDataDeletion() {
+            if (Constants.app) {
+                var now = (new Date()).getTime(),
+                    _30_min_from_now = new Date(now + 30 * 60 * 1000);
+
+                cordova.plugins.notification.local.isPresent(1, function (present) {
+
+                    if(present == "not found"){
+                        cordova.plugins.notification.local.schedule({
+                            id: 1,
+                            at: _30_min_from_now,
+                            sound: null
+                        });
+                    } else {
+                        cordova.plugins.notification.local.update({
+                            id: 1,
+                            at: _30_min_from_now,
+                            data: { updated:true }
+                        });
+                    }
+
+
+
+                });
+
+                cordova.plugins.notification.local.on("trigger", function (notification) {
+                    CleanUp.clear();
+                    cordova.plugins.notification.local.clearAll(function () {
+                    }, this);
+                });
+
+            }
+        }
+
         $translatePartialLoader.addPart('top-view');
         //$state.transitionTo('logIn');
-        var app = document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'https://' ) === -1;
-        if(app)
+
+        /*****************************************
+         * Push Notifications
+         *****************************************/
+
+        if(Constants.app)
         {
 
             PushNotification.hasPermission(function(data) {
@@ -133,5 +184,9 @@ angular.module('MUHCApp').controller('MainController', ["$state",'$timeout', '$r
 
         }
         DeviceIdentifiers.setDeviceIdentifiers();
+
+        /*****************************************
+         * Scehduled data wipe
+         *****************************************/
 
     }]);

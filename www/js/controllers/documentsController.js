@@ -21,7 +21,7 @@ myApp.controller('DocumentsController', ['Patient', 'Documents', 'UpdateUI', '$s
             documents = Documents.setDocumentsLanguage(documents);
             if(documents.length === 0) $scope.noDocuments=true;
             //console.log(documents);
-            $scope.documents = $filter('orderBy')(documents,'documents.DateAdded');
+            $scope.documents = $filter('orderBy')(documents,'documents.CreatedTimeStamp');
             console.log($scope.documents);
 
         }
