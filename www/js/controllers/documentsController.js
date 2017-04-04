@@ -56,8 +56,8 @@ myApp.controller('DocumentsController', ['Patient', 'Documents', 'UpdateUI', '$s
                 return true;
             }
             else {
-                var previous = (new Date($scope.documents[index-1].DateAdded)).setHours(0,0,0,0);
-                var current = (new Date($scope.documents[index].DateAdded)).setHours(0,0,0,0);
+                var previous = (new Date($scope.documents[index-1].CreatedTimeStamp)).setHours(0,0,0,0);
+                var current = (new Date($scope.documents[index].CreatedTimeStamp)).setHours(0,0,0,0);
                 return (current !== previous);
             }
         };
