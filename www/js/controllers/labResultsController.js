@@ -170,6 +170,7 @@ myApp.controller('TimelineTestComponentController',['$scope','$timeout','LabResu
     },[]);
     var maxChart = Math.max.apply(Math, vals)*1.05;
     var minChart = Math.min.apply(Math, vals)*0.95;
+
     console.log("Chart range", minChart, maxChart);
 
     /**********************************************/
