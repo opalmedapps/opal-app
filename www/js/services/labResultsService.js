@@ -142,8 +142,6 @@ myApp.service('LabResults',['$filter','LocalStorage','RequestToServer','$q',
              **/
             setTestResults:function(){
 
-                this.destroy();
-
                 var deferred = $q.defer();
                 this.destroy();
                 RequestToServer.sendRequestWithResponse('LabResults')

@@ -7,14 +7,26 @@ myApp.controller('LabResultsControllerCopy', ['RequestToServer','Notifications',
 
     $scope.loading = true;
 
-    $scope.load = function($done) {
+    $scope.refresh = function () {
+        $scope.loading = true;
         LabResults.setTestResults().then(function () {
-            $done();
+            "use strict";
+            $scope.loading = false;
+            console.log("updated");
         }).catch(function (error) {
-            $done();
+            $scope.loading = false;
             console.log(error);
         });
     };
+
+    // $scope.load = function($done) {
+    //     LabResults.setTestResults().then(function () {
+    //         $done();
+    //     }).catch(function (error) {
+    //         $done();
+    //         console.log(error);
+    //     });
+    // };
 
     activate()
         .then(function () {
@@ -148,7 +160,20 @@ myApp.controller('TimelineTestComponentController',['$scope','$timeout','LabResu
         dv[1] = parseFloat(testResults[i].TestValue);
         reformedData.push(dv);
     }
-    console.log(reformedData);
+
+    /*********************************************
+     * FINDING THE MAX AND MIN VALUES FOR CHARTING
+     *********************************************/
+
+    var vals = reformedData.reduce(function(a, b) {
+        return a.concat(b[1]);
+    },[]);
+    var maxChart = Math.max.apply(Math, vals)*1.05;
+    var minChart = Math.min.apply(Math, vals)*0.95;
+
+    console.log("Chart range", minChart, maxChart);
+
+    /**********************************************/
 
     $scope.recentValue = parseFloat(testResults[testResults.length-1].TestValue);
     var windowWidth = $(window).width();
@@ -222,6 +247,8 @@ myApp.controller('TimelineTestComponentController',['$scope','$timeout','LabResu
             }
         },
         yAxis: {
+            max: maxChart,
+            min: minChart,
             title: {
                 text: u
             },
