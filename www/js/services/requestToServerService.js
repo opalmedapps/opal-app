@@ -112,9 +112,10 @@ myApp.service('RequestToServer',['$filter','$state','NewsBanner','UserAuthorizat
                 //Waits to obtain the request data.
                 //console.log('users/'+UserAuthorizationInfo.getUsername()+'/'+key);
                 refRequestResponse.on('value',function(snapshot){
+                    console.log(' I am inside response for ', key, snapshot.val());
                     if(snapshot.exists())
                     {
-                        console.log(' I am inside response');
+                        console.log(' There is a snapshot for ', key);
                         var data = snapshot.val();
                         var timestamp = data.Timestamp;
                         if(data.Code =='1')

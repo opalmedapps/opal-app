@@ -6,36 +6,36 @@
                 <span>{{"TOUR_WELCOME_DESC"|translate}}</span>
             </ons-carousel-item>
             <ons-carousel-item>
-                <ons-icon icon="fa fa-home tour-icon" aria-hidden="true"></ons-icon>
+                <ons-icon icon="fa-home" class="tour-icon" aria-hidden="true"></ons-icon>
                 <br>
                 {{"TOUR_HOME"|translate}}
             </ons-carousel-item>
             <ons-carousel-item>
-                <ons-icon icon="fa fa-user tour-icon" aria-hidden="true"></ons-icon>
+                <ons-icon icon="fa-user" class="tour-icon" aria-hidden="true"></ons-icon>
                 <br>
                 {{"TOUR_MYCHART"|translate}}
             </ons-carousel-item>
             <ons-carousel-item>
-                <ons-icon icon="fa fa-th tour-icon" aria-hidden="true"></ons-icon>
+                <ons-icon icon="fa-th" class="tour-icon" aria-hidden="true"></ons-icon>
                 <br>
                 {{"TOUR_GENERAL"|translate}}
             </ons-carousel-item>
             <ons-carousel-item>
-                <ons-icon icon="fa fa-mortar-board tour-icon" aria-hidden="true"></ons-icon>
+                <ons-icon icon="fa-mortar-board" class="tour-icon" aria-hidden="true"></ons-icon>
                 <br>
                 {{"TOUR_EDUCATION"|translate}}
             </ons-carousel-item>
             <ons-carousel-item>
-                <ons-icon icon="fa fa-info-circle tour-icon" aria-hidden="true"></ons-icon>
+                <ons-icon icon="fa-info-circle" class="tour-icon" aria-hidden="true"></ons-icon>
                 <br>
                 {{"TOUR_INFO"|translate}}
             </ons-carousel-item>
         </ons-carousel>
 
         <div id="tourButtons">
-            <span><i class="fa fa-arrow-left" aria-hidden="true" style="color:white" ng-click="tourCarousel.prev()"></i></span>
+            <span><ons-icon icon="fa-arrow-left" aria-hidden="true" style="color:white" ng-click="tourCarousel.prev()"></ons-icon></span>
             <ons-button modifier="cta" ng-click="tourModal.hide()" style="background-color: inherit; font-size: 125%">{{"CLOSE"|translate}}</ons-button>
-            <i class="fa fa-arrow-right" aria-hidden="true" style="color:white" ng-click="tourCarousel.next()"></i>
+            <ons-icon icon="fa-arrow-right" aria-hidden="true" style="color:white" ng-click="tourCarousel.next()"></ons-icon>
         </div>
     </div>
 </ons-modal>

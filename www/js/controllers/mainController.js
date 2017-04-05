@@ -60,7 +60,7 @@ angular.module('MUHCApp').controller('MainController', ["$state",'$timeout', '$r
         }
 
         /*****************************************
-         * Lockout and Data Wipe
+         * Lockout
          *****************************************/
 
         //TimeoutID for locking user out
@@ -150,7 +150,12 @@ angular.module('MUHCApp').controller('MainController', ["$state",'$timeout', '$r
         DeviceIdentifiers.setDeviceIdentifiers();
 
         /*****************************************
-         * Scehduled data wipe
+         * Data wipe
          *****************************************/
 
+        document.addEventListener("pause", onPause, false);
+
+        function onPause() {
+            CleanUp.clearSensitive();
+        }
     }]);

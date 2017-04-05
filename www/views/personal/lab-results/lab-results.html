@@ -4,14 +4,9 @@
             <ons-back-button>{{"BACK"|translate}}</ons-back-button>
         </div>
         <div class="center" ng-class="fontSizeTitle">{{"LAB_RESULTS"|translate}}</div>
+        <div class="right"><ons-toolbar-button ng-click="refresh()"><ons-icon icon="fa-refresh" style="color: #0a6ebd"></ons-icon></ons-toolbar-button></ons-icon></div>
     </ons-toolbar>
-    <ons-pull-hook ng-action="load($done)" var="loaderLabs">
-    <span ng-switch="loaderLabs.getCurrentState()">
-            <span ng-switch-when="initial"><ons-icon size="35px" spin="true" icon="ion-load-d"></ons-icon> {{"LOADINGDATA"|translate}}...</span>
-            <span ng-switch-when="preaction"><ons-icon size="35px" spin="true" icon="ion-load-d"></ons-icon> {{"LOADINGDATA"|translate}}...</span>
-            <span ng-switch-when="action"><ons-icon size="35px" spin="true" icon="ion-load-d"></ons-icon> {{"LOADINGDATA"|translate}}...</span>
-    </span>
-    </ons-pull-hook>
+
     <div ng-show="loading" align="center" style="margin:10px">
         <svg class="progress-circular">
             <circle class="progress-circular__primary" cx="50%" cy="50%" r="40%" fill="none" stroke-width="10%" stroke-miterlimit="10"/>
@@ -20,9 +15,17 @@
         {{"LOADINGDATA"|translate}}
     </div>
 
-    <ons-tabbar position="top" animation="fade" var="labbar">
+    <ons-tabbar position="top" animation="fade" var="labbar" ng-hide="loading">
         <ons-tab page="./views/personal/lab-results/date-tests.html" label="{{'LAB_BYDATE'|translate}}" icon="fa-calendar" active="true"></ons-tab>
         <ons-tab page="./views/personal/lab-results/category-view.html" label="{{'LAB_BYTYPE'|translate}}" icon="fa-tags"></ons-tab>
     </ons-tabbar>
+
+    <!--<ons-pull-hook ng-action="load($done)" var="loaderLabs">-->
+    <!--<span ng-switch="loaderLabs.getCurrentState()">-->
+            <!--<span ng-switch-when="initial"><ons-icon size="35px" spin="true" icon="ion-load-d"></ons-icon> {{"LOADINGDATA"|translate}}...</span>-->
+            <!--<span ng-switch-when="preaction"><ons-icon size="35px" spin="true" icon="ion-load-d"></ons-icon> {{"LOADINGDATA"|translate}}...</span>-->
+            <!--<span ng-switch-when="action"><ons-icon size="35px" spin="true" icon="ion-load-d"></ons-icon> {{"LOADINGDATA"|translate}}...</span>-->
+    <!--</span>-->
+    <!--</ons-pull-hook>-->
 
 </ons-page>
