@@ -50,22 +50,25 @@ myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$root
         //Locked out alert
         if(typeof patientSerNum !=='undefined'&&patientSerNum) NewsBanner.showCustomBanner($filter('translate')('LOCKEDOUT'),'black', null, 2000);
 
-        //demoSignIn();
-        //Demo automatic sign in
-        //demoSignIn();
-
-        function demoSignIn()
-        {
-            var password='12345';
-            var email='muhc.app.mobile@gmail.com';
-            $scope.password=password;
-            $scope.email=email;
-            $scope.submit(email, password);
-        }
 
         // Get the authentication state
         var myAuth = firebase.auth().currentUser;
         console.log(myAuth);
+
+        // Switch for trusting device
+        var trusted = 1;
+        $timeout(function () {
+            mySwitch.setChecked(trusted);
+            mySwitch.on( 'change', function () {
+                if (mySwitch.isChecked()) {
+                    console.log("Trusted");
+                    trusted = 1;
+                } else {
+                    console.log("Not Trusted");
+                    trusted = 0;
+                }
+            });
+        });
 
         $scope.submit = function (email,password) {
             $scope.email=email;
@@ -103,7 +106,8 @@ myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$root
 
             }
         };
-        //Handles authentication
+
+        //Handles authentication and next steps
         function authHandler(firebaseUser) {
 
             CleanUp.clear();
@@ -127,7 +131,14 @@ myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$root
                 // console.log("Authenticated successfully with payload:", firebaseUser);
                 NavigatorParameters.setParameters('Login');
                 var deviceID;
-                //$state.go('loading');
+
+                //
+
+                if (!trusted) {
+                    localStorage.removeItem(UserAuthorizationInfo.getUsername()+"/deviceID");
+                    localStorage.removeItem(UserAuthorizationInfo.getUsername()+"/securityAns");
+                }
+
                 if (deviceID = localStorage.getItem(UserAuthorizationInfo.getUsername()+"/deviceID")){
 
                     var decipherBytes = CryptoJS.AES.decrypt(localStorage.getItem(UserAuthorizationInfo.getUsername()+"/securityAns"),UserAuthorizationInfo.getPassword());
@@ -144,7 +155,6 @@ myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$root
                             console.log(error);
                             $timeout(function(){
                                 $scope.loading = false;
-                                initNavigator.pushPage('./views/login/security-question.html', {passwordReset: true});
                             });
                         });
 
@@ -154,7 +164,10 @@ myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$root
                         .then(function (response) {
                             console.log(response);
                             $scope.loading = false;
-                            initNavigator.pushPage('./views/login/security-question.html', {securityQuestion: response.Data.securityQuestion["securityQuestion_" + UserPreferences.getLanguage()]});
+                            initNavigator.pushPage('./views/login/security-question.html', {
+                                securityQuestion: response.Data.securityQuestion["securityQuestion_" + UserPreferences.getLanguage()],
+                                trusted: trusted
+                            });
                         })
                         .catch(function (error) {
                             console.log(error);
