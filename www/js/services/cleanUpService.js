@@ -56,7 +56,7 @@
 
         function clearSensitive(){
             LabResults.destroy();
-            Documents.clearDocuments();
+            Documents.clearDocumentContent();
         }
 
     }
