@@ -22,9 +22,9 @@
                     <input class="text-input" type="text" name="text" ng-model="answer" placeholder="{{'ENTERANSWERPLACEHOLDER'|translate}}" />
                     <br/><br/>
                 </div>
-                <div>{{"TRUST_DEVICE"|translate}}
-                    <span><ons-switch var="mySwitch" onchange=""></ons-switch></span>
-                </div>
+                <!--<div>{{"TRUST_DEVICE"|translate}}-->
+                    <!--<span><ons-switch var="mySwitch" onchange=""></ons-switch></span>-->
+                <!--</div>-->
                 <button class="button button--large" type="submit" value="Save" ng-disabled="waiting||threeTries" style="background-color:#387A36" ng-click="submitAnswer(answer)">{{"CONTINUE"|translate}}</button>
                 <uib-alert ng-show="alert.type" type="{{alert.type}}">{{alert.content|translate}}</uib-alert>
             </div>

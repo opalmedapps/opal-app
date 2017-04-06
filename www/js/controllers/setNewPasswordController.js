@@ -75,11 +75,11 @@ myApp.controller('SecurityQuestionController',['$scope','$timeout','ResetPasswor
              Constants, DeviceIdentifiers){
 
         var deviceID = (Constants.app) ? device.uuid : UUID.getUUID();
-        var trusted = 0;
         var passwordReset;
         $scope.tryReset=0;
         var parameters = initNavigator.getCurrentPage().options;
         $scope.Question = parameters.securityQuestion;
+        var trusted = parameters.trusted;
 
         if (parameters.passwordReset){
             passwordReset = parameters.passwordReset;
@@ -106,19 +106,6 @@ myApp.controller('SecurityQuestionController',['$scope','$timeout','ResetPasswor
             {
                 delete $scope.alert.type;
             }
-        });
-
-        $timeout(function () {
-
-            mySwitch.on( 'change', function () {
-                if (mySwitch.isChecked()) {
-                    console.log("Trusted", deviceID);
-                    trusted = 1;
-                } else {
-                    console.log("Not Trusted");
-                    trusted = 0;
-                }
-            });
         });
 
         // In case someone presses back button, need to remove the deviceID and security answer.
