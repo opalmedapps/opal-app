@@ -23,7 +23,7 @@ function Mail(){
 
     this.sendMail = function (recipient, subject, text) {
         let mailOptions = {
-            from: '"Opal" <john.kildea@mcgill.ca>', // sender address
+            from: '"Opal" <opal@muhc.mcgill.ca>', // sender address
             to: recipient, // list of receivers
             subject: subject, // Subject line
             text: text // plain text body

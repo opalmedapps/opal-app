@@ -81,7 +81,7 @@ myApp.controller('InitScreenController',
         {
             if(Constants.app){
                 var email = {
-                    to: 'muhc.app.mobile@gmail.com',
+                    to: 'opal@muhc.mcgill.ca',
                     cc: '',
                     bcc: [],
                     subject: $filter("translate")("OPALPROBLEMSUBJECT"),

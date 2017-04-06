@@ -68,7 +68,7 @@
 
             console.log(currentStep);
             initTreatmentPlanStatus(events,currentStep);
-            setHeightElement();
+            //setHeightElement();
         }
 
         function setHeightElement()
