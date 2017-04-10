@@ -1,5 +1,5 @@
 <ons-page ng-controller="ByDateTestsController" >
-  <ons-list style="padding-top: 45px; padding-bottom: 10%">
+  <ons-list style="padding-top: 45px; bottom: -17px">
     <ons-list-item ng-repeat="testResultByDate in selectedTests | orderBy:'-testDateFormat'" ng-click="personalNavigator.pushPage('./views/personal/lab-results/test-view.html',{param:testResultByDate})" modifier="tappable" class="list-item-container">
       <ons-row align="center" >
         <ons-col width="60px" align="center">

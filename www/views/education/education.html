@@ -19,7 +19,7 @@
       {{"NOEDUCATIONALMATERIAL"|translate}}
     </div>
    
-  <ons-list style="margin: 0px 0">
+  <ons-list>
     <ons-list-header ng-repeat-start = "edumaterial in edumaterials" class="person-list-header" ng-class="fontSizeTitle"  ng-if = "showHeader($index)">{{edumaterial.PhaseInTreatment}}</ons-list-header>
     <ons-list-item modifier="chevron" class="item" ng-repeat-end ng-click="goToEducationalMaterial(edumaterial)">
         <ons-row align="center">
