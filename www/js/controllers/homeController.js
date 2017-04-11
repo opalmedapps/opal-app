@@ -134,34 +134,34 @@
 
         function setNotifications()
         {
-            //Obtaining new documents and setting the number and value for last document, obtains unread notifications every time it reads
-            vm.notifications = Notifications.getUnreadNotifications();
+            ///Obtains unread notifications every time it reads
+            vm.notifications = Notifications.setNotificationsLanguage(Notifications.getUnreadNotifications());
             console.log(vm.notifications);
-            if(vm.notifications.length>0)
-            {
-                if(Constants.app)
-                {
-                    NewsBanner.showNotificationAlert(vm.notifications.length,function(result){
-                        if (result && result.event) {
-                            console.log("The toast was tapped or got hidden, see the value of result.event");
-                            console.log("Event: " + result.event); // "touch" when the toast was touched by the user or "hide" when the toast geot hidden
-                            console.log("Message: " + result.message); // will be equal to the message you passed in
-                            //console.log("data.foo: " + result.data.foo); // .. retrieve passed in data here
-
-                            if (result.event === 'hide') {
-                                console.log("The toast has been shown");
-                            }
-                            if(result.event == 'touch')
-                            {
-                                console.log('going to the bottom');
-                                $location.hash("bottomNotifications");
-                                $anchorScroll();
-                            }
-                        }
-                    });
-                }
-
-            }
+            // if(vm.notifications.length>0)
+            // {
+            //     if(Constants.app)
+            //     {
+            //         NewsBanner.showNotificationAlert(vm.notifications.length,function(result){
+            //             if (result && result.event) {
+            //                 console.log("The toast was tapped or got hidden, see the value of result.event");
+            //                 console.log("Event: " + result.event); // "touch" when the toast was touched by the user or "hide" when the toast geot hidden
+            //                 console.log("Message: " + result.message); // will be equal to the message you passed in
+            //                 //console.log("data.foo: " + result.data.foo); // .. retrieve passed in data here
+            //
+            //                 if (result.event === 'hide') {
+            //                     console.log("The toast has been shown");
+            //                 }
+            //                 if(result.event == 'touch')
+            //                 {
+            //                     console.log('going to the bottom');
+            //                     $location.hash("bottomNotifications");
+            //                     $anchorScroll();
+            //                 }
+            //             }
+            //         });
+            //     }
+            //
+            // }
         }
 
         function setUpCheckin()

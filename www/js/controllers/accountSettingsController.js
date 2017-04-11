@@ -118,6 +118,7 @@ myApp.controller('ChangingSettingController', function($filter, $rootScope, Fire
         $scope.disableButton = true;
         $scope.value = parameters;
         console.log(fieldsMappings);
+        $scope.title = $filter('translate')('UPDATE');
         $scope.valueLabel = $filter('translate')(fieldsMappings[parameters]);
         $scope.personal = true;
         $scope.type1 = 'text';
@@ -163,7 +164,7 @@ myApp.controller('ChangingSettingController', function($filter, $rootScope, Fire
             $scope.newValue = '';
             $scope.oldValue = '';
             var label = $filter('translate')('ENTEROLD');
-            $scope.placeHolder = label + $scope.valueLabel;
+            $scope.placeHolder = label + ' ' +$scope.valueLabel;
             $scope.instruction = "ENTERNEWPASSWORD";
             $scope.instructionOld = "ENTEROLDPASSWORD";
         } else if (parameters === 'Language') {
