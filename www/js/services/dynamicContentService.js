@@ -22,10 +22,10 @@
         .module('MUHCApp')
         .factory('DynamicContentService', DynamicContentService);
 
-    DynamicContentService.$inject = ['$http','$q'];
+    DynamicContentService.$inject = ['$http','$q','UserPreferences'];
 
     /* @ngInject */
-    function DynamicContentService($http, $q) {
+    function DynamicContentService($http, $q, UserPreferences) {
 
         /**
          *@ngdoc property
@@ -100,7 +100,7 @@
 
             return $http({
                 method: 'GET',
-                url: content[contentType].url
+                url: content[contentType]['url_'+UserPreferences.getLanguage()]
             })
         }
 

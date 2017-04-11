@@ -76,15 +76,6 @@ body {
     }
 }
 
-h1 {
-    font-size:24px;
-    font-weight:normal;
-    margin:0px;
-    overflow:visible;
-    padding:0px;
-    text-align:center;
-}
-
 .event {
     border-radius:4px;
     -webkit-border-radius:4px;
@@ -303,17 +294,6 @@ img
   background-color: #E6E6E6;
   /*text-shadow: rgba(0, 0, 0, 0.4) 0px 1px 0px;*/
 }
-
-/*.profile-image {
-  height: 150px;
-  width: 150px;
-  border-radius: 50%;
-  -webkit-border-radius: 50%;
-  background-color: black;
-  border 1px solid white;
-  box-shadow:rgba(0, 0, 0, 0.2) 0px 2px 0px 0px;
-  -webkit-box-shadow:rgba(0, 0, 0, 0.2) 0px 2px 0px 0px;
-}*/
 
 a.muhcapp-home-account:link, a.muhcapp-home-account:hover{
   text-decoration: none;
@@ -1065,14 +1045,6 @@ Tabbar treatment plan
   -webkit-box-shadow: none;
   box-shadow: none;
   outline: 0;
-}
-.tab-bar__content {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 49px;
-  z-index: 0;
 }
 
 p{
@@ -2280,11 +2252,11 @@ transform: translate(0px,-50px);
   pointer-events: none;
 }
 .progress.vertical {
-  float: left;
-  height: 100%;
-  margin-right: 20px;
-  margin-left: 30%;
-  width: 30px;
+float: left;
+height: 100%;
+margin-right: 20px;
+margin-left: 30%;
+width: 30px;
 }
 
 .lee-checkbox {

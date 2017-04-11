@@ -6,10 +6,10 @@
 
 angular.module('MUHCApp').controller('MainController', ["$state",'$timeout', '$rootScope','FirebaseService',
     'NativeNotification','DeviceIdentifiers','$translatePartialLoader','NewsBanner',
-    "UpdateUI","Patient","LocalStorage", 'Constants', 'CleanUp',
+    "UpdateUI","Patient","LocalStorage", 'Constants', 'CleanUp', 'NavigatorParameters',
     function ($state,$timeout,$rootScope,FirebaseService,NativeNotification,
               DeviceIdentifiers,$translatePartialLoader,NewsBanner,
-              UpdateUI,Patient,LocalStorage, Constants, CleanUp) {
+              UpdateUI,Patient,LocalStorage, Constants, CleanUp, NavigatorParameters) {
 
 
         //var myDataRef = new Firebase(FirebaseService.getFirebaseUrl());
@@ -63,7 +63,7 @@ angular.module('MUHCApp').controller('MainController', ["$state",'$timeout', '$r
          * Lockout
          *****************************************/
 
-        //TimeoutID for locking user out
+            //TimeoutID for locking user out
         var timeoutLockout;
         function setupInactivityChecks() {
             this.addEventListener('touchstart',resetTimer,false);
@@ -156,6 +156,16 @@ angular.module('MUHCApp').controller('MainController', ["$state",'$timeout', '$r
         document.addEventListener("pause", onPause, false);
 
         function onPause() {
+
+            var currentPage = NavigatorParameters.getNavigator().getCurrentPage().name;
+            // Check that the current location is either documents or lab
+            if (currentPage.indexOf('my-chart') !== -1 || currentPage.indexOf('lab') !== -1){
+
+                NavigatorParameters.getNavigator().resetToPage('./views/personal/personal.html');
+
+            }
+
+            // Wipe documents and lab-results
             CleanUp.clearSensitive();
         }
     }]);

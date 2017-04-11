@@ -6,8 +6,7 @@
         <div class="center" ng-class="fontSizeTitle">{{globalMessage}}</div>
     </ons-toolbar>
 
-    <div uib-alert style="text-align: center; width: 90%; margin: auto; margin-top: 10%" type="info" class="{{fontSizeTitle}}" >
-        {{globalMessageDescription}}
+    <div class="container" ng-bind-html="globalMessageDescription" >
     </div>
 
 </ons-page>
