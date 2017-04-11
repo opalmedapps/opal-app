@@ -5,7 +5,7 @@
 */
 var myApp = angular.module('MUHCApp');
 
-myApp.controller('ParkingController',function($scope, $timeout, NavigatorParameters)
+myApp.controller('ParkingController',function($scope, $timeout, NavigatorParameters, UserPreferences)
 {
     var navigatorName = NavigatorParameters.getParameters();
     $scope.navigatorName = navigatorName;
@@ -15,11 +15,17 @@ myApp.controller('ParkingController',function($scope, $timeout, NavigatorParamet
         
         if(type== 'general')
         {
-           NavigatorParameters.setParameters({type:type});
+            if (UserPreferences.getLanguage() == "EN"){
+                window.open('https://muhc.ca/glen/handbook/parking-hospital','_system');
+            } else {
+                window.open('https://cusm.ca/glen/handbook/stationnement','_system');
+            }
+
         }else if(type=='oncology'){
            NavigatorParameters.setParameters({type:type});
+           window[navigatorName].pushPage('./views/general/parking/parking-details.html');
         }
-        window[navigatorName].pushPage('./views/general/parking/parking-details.html');
+
     }
 });
 

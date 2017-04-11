@@ -104,7 +104,7 @@ myApp.service('Notifications',['$filter','RequestToServer','LocalStorage','Annou
                 PageUrl:TxTeamMessages.getTxTeamMessageUrl
             },
         'Announcement':{
-            icon:'ion-speakerphone',
+            icon:'fa fa-bullhorn',
             color:'navy',
             NameEN:'PostName_EN',
             NameFR: 'PostName_FR',
@@ -382,7 +382,7 @@ myApp.service('Notifications',['$filter','RequestToServer','LocalStorage','Annou
         {
             var language = UserPreferences.getLanguage();
             for (var i = notifications.length-1; i >=0; i--) {
-                console.log(notifications[i]);
+                //console.log(notifications[i]);
                 notifications[i].Title = (language=='EN') ?   notifications[i].Name_EN : notifications[i].Name_FR;
                 //console.log(notifications[i].RefTableRowSerNum);
                 try{
@@ -390,7 +390,7 @@ myApp.service('Notifications',['$filter','RequestToServer','LocalStorage','Annou
                     notifications[i].Desc = (language=='EN') ?  notifications[i].Content.NameEN : notifications[i].Content.NameFR;
                 }catch(e){
                     notifications.splice(i,1);
-                    console.log(e);
+                    //console.log(e);
                 }
 
 
@@ -405,8 +405,8 @@ myApp.service('Notifications',['$filter','RequestToServer','LocalStorage','Annou
          **/
         clearNotifications:function()
         {
-            var Notifications=[];
-            var notificationsLocalStorage=[];
+            Notifications=[];
+            notificationsLocalStorage=[];
         }
 
     };
