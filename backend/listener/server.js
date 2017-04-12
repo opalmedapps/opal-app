@@ -28,7 +28,7 @@ admin.initializeApp({
     databaseURL: config.DATABASE_URL
 });
 
-//admin.database.enableLogging(true);
+admin.database.enableLogging(true);
 
 // Get reference to correct data element
 var db = admin.database();
@@ -202,7 +202,7 @@ function uploadToFirebase(response, key)
     delete response.Headers.RequestObject;
 
     ref.child(path).set(response).then(function(){
-        //logger.log('I just finished writing to firebase');
+        logger.log('debug', 'Uploaded to firebase');
         completeRequest(headers,success, key);
     }).catch(function (error) {
         logger.error('Error writing to firebase', {error:error});
