@@ -3,23 +3,23 @@
         <div class="left">
             <ons-back-button>{{"BACK"|translate}}</ons-back-button>
         </div>
-        <div class="center">{{"PFP_EBOX"|translate}}</div>
+        <div class="center" ng-class="fontSizeTitle">{{"PFP_EBOX"|translate}}</div>
         <div class="right">
-            <ons-toolbar-button ng-click="submitFeedback('pfp')" ng-disabled="submitted||!feedbackText">{{"SEND"|translate}}</ons-toolbar-button>
+            <ons-toolbar-button ng-click="submitFeedback('pfp')" ng-disabled="submitted||!feedbackText" ng-class="fontSizeDesc">{{"SEND"|translate}}</ons-toolbar-button>
         </div>
     </ons-toolbar>
 
     <ons-list style="margin-top:10px">
         <ons-list-item style="line-height: 25px">
             <ons-row style="padding:0;margin:0">
-                <span>{{"PFP_SUGGESTION_MESSAGE"|translate}}</span>
+                <span ng-class="fontSizeDesc">{{"PFP_SUGGESTION_MESSAGE"|translate}}</span>
             </ons-row>
 
         </ons-list-item>
     </ons-list>
     <ons-list style="margin-top: 10px" ng-show="!submitted">
         <ons-list-item>
-            <textarea class="textarea textarea--transparent" placeholder="{{'LEAVEMESSAGE'|translate}}" ng-model="feedbackText" style="width: 100%; height: 50vh;"></textarea>
+            <textarea class="textarea textarea--transparent" placeholder="{{'LEAVEMESSAGE'|translate}}" ng-model="feedbackText" style="width: 100%; height: 50vh;" ng-class="fontSizeDesc"></textarea>
         </ons-list-item>
     </ons-list>
 

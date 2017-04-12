@@ -108,7 +108,7 @@ app.service('DeviceIdentifiers', [ 'RequestToServer', '$q','Constants','UserAuth
             if(haveBeenSet&&!haveBeenSend)
             {
                 console.log(deviceIdentifiers);
-                RequestToServer.sendRequest('DeviceIdentifier',deviceIdentifiers);
+                RequestToServer.sendRequestWithResponse('DeviceIdentifier',deviceIdentifiers);
                 haveBeenSend = true;
             }
 

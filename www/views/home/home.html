@@ -3,7 +3,7 @@
         <div class="center" ng-class="fontSizeTitle">{{"HEADER_MESSAGE_HOME"|translate}}</div>
         <div class="right">
             <ons-toolbar-button ng-click="homeNavigator.pushPage('views/tabs/info-page-tabs.html',{param:home})">
-                <ons-icon icon="fa fa-info-circle"></ons-icon>
+                <ons-icon icon="fa-info-circle"></ons-icon>
             </ons-toolbar-button>
         </div>
     </ons-toolbar>
@@ -58,7 +58,7 @@
                             <p class="text-center">
                                 <strong ng-class="fontSizeTitle" style="color:white">{{h.FirstName}} {{h.LastName}}</strong><br>
 
-                                <span style="color:white" ng-class="fontSizeDesc"> {{"PATIENTID"|translate}} {{h.PatientId}}</span><br>
+                                <!--<span style="color:white" ng-class="fontSizeDesc"> {{"PATIENTID"|translate}} {{h.PatientId}}</span><br>-->
                             </p>
                         </div>
                     </div>
@@ -152,7 +152,7 @@
                                 <span class="item-title" ng-class="fontSizeTitle">{{notification["Name_"+h.language]}}</span>
                             </header>
                             <p class="item-desc" ng-class="fontSizeDesc" ng-show="notification.Number<=1">
-                                {{notification["Description_"+h.language]}}
+                                {{notification["Desc"]}}
                             </p>
                         </ons-col>
                     </ons-row>

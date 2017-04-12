@@ -6,8 +6,6 @@ var myApp = angular.module('MUHCApp');
 myApp.controller('InitScreenController',
     function($scope, $timeout, NavigatorParameters, $translatePartialLoader, UserPreferences, $filter, Constants, Permissions, $http, DynamicContentService)
     {
-        //Firebase reference to check authentication
-        //var myDataRef = firebase.database().ref('dev2/');
 
         // Initializing the dynamic links for Opal.
         DynamicContentService.initializeLinks()
@@ -21,7 +19,6 @@ myApp.controller('InitScreenController',
             .then(function successCallback(response) {
                 console.log(response.data);
                 for (var key in response.data){
-                    console.log(response.data[key] != "");
                     if(response.data[key] !== ""){
                         $scope.globalMessage = key;
                         $scope.globalMessageDescription = response.data[key];
@@ -81,7 +78,7 @@ myApp.controller('InitScreenController',
         {
             if(Constants.app){
                 var email = {
-                    to: 'muhc.app.mobile@gmail.com',
+                    to: 'opal@muhc.mcgill.ca',
                     cc: '',
                     bcc: [],
                     subject: $filter("translate")("OPALPROBLEMSUBJECT"),

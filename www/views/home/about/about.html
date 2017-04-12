@@ -6,17 +6,64 @@
         <div class="center" ng-class="fontSizeTitle">{{"OPAL_ABOUT"|translate}}</div>
     </ons-toolbar>
     <ons-list>
-        <ons-list-item modifier="tappable chevron" ng-click="tourModal.show()" ng-class="fontSizeTitle">
-            {{"OPAL_TOUR"|translate}}
+        <ons-list-item modifier="tappable chevron" ng-click="tourModal.show()" >
+
+            <ons-row align="center">
+                <ons-col width="60px" style="text-align: center">
+                    <div>
+                        <ons-icon icon="fa-map-signs" style="color:grey" size="1.7em" fixed-width="true"></ons-icon>
+                    </div>
+                </ons-col>
+                <ons-col>
+                        <span ng-class="fontSizeTitle">{{"OPAL_TOUR"|translate}}</span>
+                </ons-col>
+            </ons-row>
+
         </ons-list-item>
-        <ons-list-item modifier="tappable chevron" ng-click="homeNavigator.pushPage('views/templates/content.html', {contentType: 'acknowledgements'});" ng-class="fontSizeTitle">
-            {{"OPAL_ACKNOWLEDGEMENTS"|translate}}
+        <ons-list-item modifier="tappable chevron" onclick="window.open('https://www.cedars.ca/cedars/en/donate/donate_online','_system');" >
+
+            <ons-row align="center">
+                <ons-col width="60px" style="text-align: center">
+                    <div>
+                        <ons-icon icon="fa-heart" style="color:red" size="1.7em" fixed-width="true"></ons-icon>
+                    </div>
+                </ons-col>
+                <ons-col>
+                    <span ng-class="fontSizeTitle">{{"OPAL_SUPPORT"|translate}}</span>
+                </ons-col>
+            </ons-row>
+
+
         </ons-list-item>
-        <ons-list-item modifier="tappable chevron" onclick="window.open('https://www.cedars.ca/cedars/en/donate/donate_online','_system');" ng-class="fontSizeTitle">
-            {{"OPAL_SUPPORT"|translate}}
+        <ons-list-item modifier="tappable chevron" ng-click="homeNavigator.pushPage('views/templates/content.html', {data: {contentType: 'hig'}});" >
+
+            <ons-row align="center">
+                <ons-col width="60px" style="text-align: center">
+                    <div>
+                        <ons-icon icon="fa-group" style="color:green" size="1.7em" fixed-width="true"></ons-icon>
+                    </div>
+                </ons-col>
+                <ons-col>
+                    <span ng-class="fontSizeTitle">{{"OPAL_HIG"|translate}}</span>
+                </ons-col>
+            </ons-row>
+
+
         </ons-list-item>
-        <ons-list-item modifier="tappable chevron" ng-click="homeNavigator.pushPage('views/templates/content.html', {contentType: 'hig'});" ng-class="fontSizeTitle">
-            {{"OPAL_HIG"|translate}}
+        <ons-list-item modifier="tappable chevron" ng-click="homeNavigator.pushPage('views/templates/content.html', {data: {contentType: 'acknowledgements'}});" >
+
+            <ons-row align="center">
+                <ons-col width="60px" style="text-align: center">
+                    <div>
+                        <ons-icon icon="fa-star" style="color:orangered" size="1.7em" fixed-width="true"></ons-icon>
+                    </div>
+                </ons-col>
+                <ons-col>
+                    <span ng-class="fontSizeTitle"> {{"OPAL_ACKNOWLEDGEMENTS"|translate}}</span>
+                </ons-col>
+            </ons-row>
+
+
         </ons-list-item>
     </ons-list>
 

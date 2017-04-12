@@ -2,19 +2,43 @@
     <ons-toolbar fixed-style>
         <div class="left">
             <span ng-show="navigatorName == 'generalNavigator'"><ons-back-button>{{"BACK"|translate}}</ons-back-button></span>
-            <span ng-show="navigatorName !=='generalNavigator'"><ons-toolbar-button ng-click="navigator.popPage()">{{"CLOSE"|translate}}</ons-toolbar-button></span>
+            <span ng-show="navigatorName !=='generalNavigator'"><ons-back-button ng-click="navigator.popPage()">{{"CLOSE"|translate}}</ons-back-button></span>
         </div>
         <div class="center" ng-class="fontSizeTitle">{{"PARKING"|translate}}</div>
     </ons-toolbar>
     <ons-list-header  ng-class="fontSizeTitle">{{"PARKINGINFORMATION"|translate}}</ons-list-header>
-      <ons-list modifier="chevron tappable" class="settings-list">
-        <ons-list-item modifier="chevron" ng-click="goToParkingLink('general')" ng-class="fontSizeTitle">
-          {{"HOSPITALPARKING"|translate}}
-        </ons-list-item>            
-        <ons-list-item modifier="chevron" ng-click="goToParkingLink('oncology')" ng-class="fontSizeTitle">
-          {{"ONCOLOGYPARKING"|translate}}
+    <ons-list modifier="chevron tappable" class="settings-list">
+        <ons-list-item modifier="chevron" ng-click="goToParkingLink('general')" ng-class="fontSizeDesc">
+
+            <ons-row align="center">
+                <ons-col width="60px" style="text-align: center">
+                    <div>
+                        <ons-icon icon="fa-h-square" class="iconHomeView" style="color:blue"></ons-icon>
+                    </div>
+                </ons-col>
+                <ons-col>
+
+                    <span class="item-title" ng-class="fontSizeTitle">{{"HOSPITALPARKING"|translate}}</span>
+
+                </ons-col>
+            </ons-row>
         </ons-list-item>
-      </ons-list>
+        <ons-list-item modifier="chevron" ng-click="goToParkingLink('oncology')" ng-class="fontSizeDesc">
+            <ons-row align="center">
+                <ons-col width="60px" style="text-align: center">
+                    <div>
+                        <ons-icon icon="fa-h-square" class="iconHomeView" style="color:green"></ons-icon>
+                    </div>
+                </ons-col>
+                <ons-col>
+
+                    <span class="item-title" ng-class="fontSizeTitle"> {{"ONCOLOGYPARKING"|translate}}</span>
+
+                </ons-col>
+            </ons-row>
+
+        </ons-list-item>
+    </ons-list>
 
 
- </ons-page>
+</ons-page>

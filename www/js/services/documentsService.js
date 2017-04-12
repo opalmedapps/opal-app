@@ -267,7 +267,19 @@ myApp.service('Documents',['UserPreferences', 'UserAuthorizationInfo','$q', '$fi
 		clearDocuments:function()
 		{
 			documentsArray=[];
-		}
+		},
+
+        /**
+         *@ngdoc method
+         *@name clearDocumentContent
+         *@methodOf MUHCApp.service:Documents
+         *@description Clears the document content leaving the meta data.
+         */
+		clearDocumentContent: function () {
+			for (var doc in documentsArray){
+				documentsArray[doc].Content = '';
+			}
+        }
 
 	};
 
