@@ -19,6 +19,7 @@ var API = {
     'Feedback':apiHospitalUpdate.inputFeedback,
     'Logout': apiHospitalUpdate.logout,
     'DeviceIdentifier':apiHospitalUpdate.updateDeviceIdentifier,
+    'Questionnaires': apiPatientUpdate.getQuestionnaires,
     'QuestionnaireRating':apiHospitalUpdate.inputEducationalMaterialRating,
     'QuestionnaireAnswers':apiHospitalUpdate.inputQuestionnaireAnswers,
     'LabResults': apiPatientUpdate.getLabResults,
