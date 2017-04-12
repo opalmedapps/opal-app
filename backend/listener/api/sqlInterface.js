@@ -1036,7 +1036,10 @@ exports.getSecurityQuestion = function (requestObject){
         .then(function (queryRows) {
             //console.log(queryRows);
             if (queryRows.length != 1 ) r.reject({Response:'error', Reason:'More or less than one question returned'});
-            Data.securityQuestion = queryRows[0].QuestionText;
+            Data.securityQuestion = {
+                securityQuestion_EN: queryRows[0].QuestionText_EN,
+                securityQuestion_FR: queryRows[0].QuestionText_FR
+            }
             obj.Data = Data;
             return exports.runSqlQuery(queries.setDeviceSecurityAnswer(), [queryRows[0].SecurityAnswerSerNum, requestObject.DeviceId, queryRows[0].PatientSerNum])
         })
