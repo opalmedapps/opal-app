@@ -19,7 +19,7 @@ angular.module('MUHCApp').controller('LoadingController',
                         var objectToSend = {};
                         objectToSend.NewValue = UserPreferences.getLanguage();
                         objectToSend.FieldToChange = 'Language';
-                        RequestToServer.sendRequest('AccountChange', objectToSend);
+                        RequestToServer.sendRequestWithResponse('AccountChange', objectToSend);
 
                         PlanningSteps.initializePlanningSequence();
 
@@ -56,5 +56,5 @@ angular.module('MUHCApp').controller('LoadingController',
                         }
                     });
                 }
-            },40000);
+            },30000);
         }]);

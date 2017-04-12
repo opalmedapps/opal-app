@@ -1,27 +1,27 @@
   <ons-page  ng-controller="questionnairesListController">
       <ons-toolbar fixed-style>
-        <div class="left" ><ons-back-button>Back</ons-back-button></div>
-        <div class="center" ng-class="fontSizeTitle">Questionnaires</div>
+        <div class="left" ><ons-back-button>{{"BACK"|translate}}</ons-back-button></div>
+        <div class="center" ng-class="fontSizeTitle">{{"QUESTIONNAIRES"|translate}}</div>
       </ons-toolbar>
 
       <div class="ons-row" align="center">
         <div class="ons-col" align="center">
           <div class="navigation-bar">
             <div class="navigation-bar__center">
-              <div class="button-bar" style="width:300px; margin-left: auto; margin-right: auto; margin-top: 7px;">
+              <div class="button-bar" style="margin-left: auto; margin-right: auto; margin-top: 7px;">
                 <div class="button-bar__item">
                   <input type="radio" name="navi-segment-a" checked ng-click="getDesiredQuestionnaires('new')">
-                  <div class="button-bar__button">New <div class="notification">{{numQuestionnairesNew}}</div></div>
+                  <div class="button-bar__button" ng-class="fontSizeTitle">{{"QUESTIONNAIRE_NEW"|translate}} <div class="notification">{{numQuestionnairesNew}}</div></div>
                 </div>
 
                 <div class="button-bar__item">
                   <input type="radio" name="navi-segment-a" ng-click="getDesiredQuestionnaires('progress')">
-                  <div class="button-bar__button">In Progress <div class="notification">{{numQuestionnairesInProgress}}</div></div>
+                  <div class="button-bar__button" ng-class="fontSizeTitle">{{"QUESTIONNAIRE_IN_PROGRESS"|translate}} <div class="notification">{{numQuestionnairesInProgress}}</div></div>
                 </div>
 
                  <div class="button-bar__item">
                   <input type="radio" name="navi-segment-a" ng-click="getDesiredQuestionnaires('completed')">
-                  <div class="button-bar__button">Completed</div>
+                  <div class="button-bar__button" ng-class="fontSizeTitle">{{"QUESTIONNAIRE_COMPLETED"|translate}}</div>
                 </div>
               </div>
             </div>
@@ -31,14 +31,14 @@
 
       <div class="ons-row" align="center" ng-init="refreshQuestionnairesList"> 
         <div class="ons-col" align="center">
-          <p ng-show="desiredQuestionnaires.length == 0" style="color: grey; margin-top: 10vh;">No {{isAnswered}}</p>
+          <p ng-show="desiredQuestionnaires.length == 0" style="color: grey; margin-top: 10vh;">{{"QUESTIONNAIRE_NONE"|translate}}</p>
 
           <ul class="list" ng-show="desiredQuestionnaires.length > 0">
             <li class="list__item list__item--chevron" ng-repeat="questionnaire in desiredQuestionnaires" 
             ng-click="goToQuestionnaire(questionnaire, questionnaire.QuestionnaireDBSerNum, questionnaire.QuestionnaireSerNum)"> 
-              <p style="margin-top: 7px">{{questionnaires[questionnaire.QuestionnaireDBSerNum].QuestionnaireName}}</p>
-              <p ng-show="clickedText == 'completed'" style="margin-top: -22px;font-size: 9pt;">Date Answered: {{patientQuestionnaires[questionnaire.QuestionnaireSerNum].CompletionDate}}</p>
-              <p ng-show="clickedText == 'new'" style="margin-top: -22px;font-size: 9pt;">Date Added: {{patientQuestionnaires[questionnaire.QuestionnaireSerNum].DateAdded}}</p>
+              <p style="margin-top: 7px" ng-class="fontSizeTitle">{{questionnaires[questionnaire.QuestionnaireDBSerNum].QuestionnaireName}}</p>
+              <p ng-show="clickedText == 'completed'" style="margin-top: -22px;" ng-class="fontSizeDesc">{{"QUESTIONNAIRE_DATE_ANSWERED"|translate}}: {{patientQuestionnaires[questionnaire.QuestionnaireSerNum].CompletionDate}}</p>
+              <p ng-show="clickedText == 'new'" style="margin-top: -22px;"ng-class="fontSizeDesc">{{"QUESTIONNAIRE_DATE_ADDED"|translate}} {{patientQuestionnaires[questionnaire.QuestionnaireSerNum].DateAdded}}</p>
             </li>
           </ul>
         </div>

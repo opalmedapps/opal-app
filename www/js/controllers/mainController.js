@@ -6,10 +6,10 @@
 
 angular.module('MUHCApp').controller('MainController', ["$state",'$timeout', '$rootScope','FirebaseService',
     'NativeNotification','DeviceIdentifiers','$translatePartialLoader','NewsBanner',
-    "UpdateUI","Patient","LocalStorage", 'Constants', 'CleanUp',
+    "UpdateUI","Patient","LocalStorage", 'Constants', 'CleanUp', 'NavigatorParameters',
     function ($state,$timeout,$rootScope,FirebaseService,NativeNotification,
               DeviceIdentifiers,$translatePartialLoader,NewsBanner,
-              UpdateUI,Patient,LocalStorage, Constants, CleanUp) {
+              UpdateUI,Patient,LocalStorage, Constants, CleanUp, NavigatorParameters) {
 
 
         //var myDataRef = new Firebase(FirebaseService.getFirebaseUrl());
@@ -60,10 +60,10 @@ angular.module('MUHCApp').controller('MainController', ["$state",'$timeout', '$r
         }
 
         /*****************************************
-         * Lockout and Data Wipe
+         * Lockout
          *****************************************/
 
-        //TimeoutID for locking user out
+            //TimeoutID for locking user out
         var timeoutLockout;
         function setupInactivityChecks() {
             this.addEventListener('touchstart',resetTimer,false);
@@ -74,9 +74,7 @@ angular.module('MUHCApp').controller('MainController', ["$state",'$timeout', '$r
         setupInactivityChecks();
 
         function startTimer() {
-            console.log("starting timer");
             timeoutLockout = window.setTimeout(goInactive, 300000);
-            scheduleDataDeletion();
         }
 
         function resetTimer(e) {
@@ -105,40 +103,6 @@ angular.module('MUHCApp').controller('MainController', ["$state",'$timeout', '$r
         function goActive() {
             // do something
             startTimer();
-        }
-
-        function scheduleDataDeletion() {
-            if (Constants.app) {
-                var now = (new Date()).getTime(),
-                    _30_min_from_now = new Date(now + 30 * 60 * 1000);
-
-                cordova.plugins.notification.local.isPresent(1, function (present) {
-
-                    if(present == "not found"){
-                        cordova.plugins.notification.local.schedule({
-                            id: 1,
-                            at: _30_min_from_now,
-                            sound: null
-                        });
-                    } else {
-                        cordova.plugins.notification.local.update({
-                            id: 1,
-                            at: _30_min_from_now,
-                            data: { updated:true }
-                        });
-                    }
-
-
-
-                });
-
-                cordova.plugins.notification.local.on("trigger", function (notification) {
-                    CleanUp.clear();
-                    cordova.plugins.notification.local.clearAll(function () {
-                    }, this);
-                });
-
-            }
         }
 
         $translatePartialLoader.addPart('top-view');
@@ -186,7 +150,22 @@ angular.module('MUHCApp').controller('MainController', ["$state",'$timeout', '$r
         DeviceIdentifiers.setDeviceIdentifiers();
 
         /*****************************************
-         * Scehduled data wipe
+         * Data wipe
          *****************************************/
 
+        document.addEventListener("pause", onPause, false);
+
+        function onPause() {
+
+            var currentPage = NavigatorParameters.getNavigator().getCurrentPage().name;
+            // Check that the current location is either documents or lab
+            if (currentPage.indexOf('my-chart') !== -1 || currentPage.indexOf('lab') !== -1){
+
+                NavigatorParameters.getNavigator().resetToPage('./views/personal/personal.html');
+
+            }
+
+            // Wipe documents and lab-results
+            CleanUp.clearSensitive();
+        }
     }]);

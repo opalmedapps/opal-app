@@ -3,7 +3,7 @@
         <div class="left">
             <ons-back-button ng-class="fontSizeDesc">{{"BACK"|translate}}</ons-back-button>
         </div>
-        <div class="center" ng-class="fontSizeDesc">{{about.pageContent.title|translate | ellipsis:25}}</div>
+        <div class="center" ng-class="fontSizeTitle">{{about.pageContent.title|translate}}</div>
     </ons-toolbar>
 
     <div ng-show="loading" align="center" style="margin:10px">
@@ -12,7 +12,7 @@
         </svg>
     </div>
 
-    <div ng-bind-html="about.pageContent.content"></div>{{about.alert}}
+    <div ng-bind-html="about.pageContent.content" ng-class="fontSizeDesc"></div>{{about.alert}}
     <div ng-show="about.alert.type" align="center" style="margin-top: 60px; width: 95%; margin: auto">
         <uib-alert type="{{about.alert.type}}">{{about.alert.content|translate}}</uib-alert>
     </div>

@@ -1,5 +1,5 @@
 <ons-page ng-controller="CategoryLabTestController as cat" >
-    <div style="padding-top: 50px">
+    <div>
         <ons-list ng-repeat="testCategory in cat.testResultsByCategory" >
             <ons-list-header ng-class="fontSizeTitle">{{testCategory.testCategory|translate}}</ons-list-header>
             <ons-list-item modifier="tappable" ng-repeat="test in cat.testResultsByType | orderBy:['testCategory']" ng-click="personalNavigator.pushPage('./views/personal/lab-results/timeline-test-component.html',{param:test});"  class="list-item-container" ng-if="test.testCategory == testCategory.testCategory">

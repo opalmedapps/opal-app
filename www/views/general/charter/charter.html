@@ -1,8 +1,7 @@
 <ons-page ng-controller="CharterController">
     <ons-toolbar fixed-style>
         <div class="left">
-            <span ng-show="navigatorName == 'generalNavigator'"><ons-back-button>{{"BACK"|translate}}</ons-back-button></span>
-            <span ng-show="navigatorName !=='generalNavigator'"><ons-toolbar-button ng-click="navigator.popPage()">{{"CLOSE"|translate}}</ons-toolbar-button></span>
+            <ons-back-button>{{"BACK"|translate}}</ons-back-button>
         </div>
         <div class="center">{{title}}</div>
     </ons-toolbar>
@@ -11,7 +10,7 @@
                 <circle class="progress-circular__primary" cx="50%" cy="50%" r="40%" fill="none" stroke-width="10%" stroke-miterlimit="10"/>
         </svg>
     </div>
-    <div ng-hide="loading" class="container" style="background-color:white;padding-top:10px;margin:1px solid black">
+    <div ng-hide="loading" class="container" style="background-color:white;padding-top:10px;margin:1px">
         <div ng-bind-html="htmlBind"></div>
     </div>
 </ons-page>

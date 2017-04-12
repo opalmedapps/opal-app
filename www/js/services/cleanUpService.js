@@ -26,7 +26,8 @@
                      Announcements,EducationalMaterial,Notifications,UserPreferences,
                      UpdateUI, Tasks, PlanningSteps, LabResults) {
         var service = {
-            clear: clear
+            clear: clear,
+            clearSensitive: clearSensitive
         };
         return service;
 
@@ -52,6 +53,12 @@
             UserAuthorizationInfo.clearUserAuthorizationInfo();
             UpdateUI.clearUpdateUI();
         }
+
+        function clearSensitive(){
+            LabResults.destroy();
+            Documents.clearDocumentContent();
+        }
+
     }
 
 })();
