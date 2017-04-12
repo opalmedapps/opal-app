@@ -114,9 +114,9 @@ exports.getSecurityQuestion = function (requestObject) {
     return sqlInterface.getSecurityQuestion(requestObject);
 };
 
-exports.isTrustedDevice = function (requestObject) {
-    return sqlInterface.isTrustedDevice(requestObject);
-};
+// exports.isTrustedDevice = function (requestObject) {
+//     return sqlInterface.isTrustedDevice(requestObject);
+// };
 
 exports.logActivity = function (requestObject) {
     logger.log('info', 'User Activity', {
@@ -125,6 +125,10 @@ exports.logActivity = function (requestObject) {
         request:requestObject.Request,
         activity:requestObject.Parameters.Activity,
         activityDetails: requestObject.Parameters.ActivityDetails
-    })
+    });
     return Q.resolve({Response:'success'});
-}
+};
+
+exports.getQuestionnaires = function (requestObject) {
+    return sqlInterface.getQuestionnaires(requestObject);
+};

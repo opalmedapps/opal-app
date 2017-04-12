@@ -66,12 +66,12 @@ var requestMappings=
             sql:queries.patientDiagnosisTableFields(),
             numberOfLastUpdated:1
         },
-        'Questionnaires':{
+        /*'Questionnaires':{
             sql:queries.patientQuestionnaireTableFields(),
             numberOfLastUpdated:2,
             processFunction:questionnaires.getPatientQuestionnaires
 
-        },
+        },*/
         /*,
          'Messages':{
          sql:queries.patientMessageTableFields(),
@@ -1064,4 +1064,27 @@ exports.setTrusted = function(requestObject)
 
     return r.promise;
 
+};
+
+/**
+ *
+ * @param requestObject the request
+ * @returns {Promise} Returns a promise that contains the questionnaire data
+ */
+
+exports.getQuestionnaires = function(requestObject){
+    "use strict";
+    var r = Q.defer();
+    exports.runSqlQuery(queries.patientQuestionnaireTableFields(), [requestObject.UserID,requestObject.Timestamp,requestObject.Timestamp])
+        .then(function (queryRows) {
+            return questionnaires.getPatientQuestionnaires(queryRows)
+        })
+        .then(function (result) {
+            r.resolve(result);
+        })
+        .catch(function (error) {
+            r.reject(error);
+        })
+
+    return r.promise
 };

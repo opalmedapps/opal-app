@@ -140,11 +140,11 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors',
                 init:TxTeamMessages.setTxTeamMessages,
                 update:TxTeamMessages.updateTxTeamMessages
             },
-            'Questionnaires':
-             {
-             init:Questionnaires.setPatientQuestionnaires,
-             update:Questionnaires.updatePatientQuestionnaires
-             },
+            // 'Questionnaires':
+            //  {
+            //  init:Questionnaires.setPatientQuestionnaires,
+            //  update:Questionnaires.updatePatientQuestionnaires
+            //  },
             'Announcements':
             {
                 init:Announcements.setAnnouncements,
