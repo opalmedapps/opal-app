@@ -66,12 +66,12 @@ var requestMappings=
             sql:queries.patientDiagnosisTableFields(),
             numberOfLastUpdated:1
         },
-        /*'Questionnaires':{
+        'Questionnaires':{
             sql:queries.patientQuestionnaireTableFields(),
             numberOfLastUpdated:2,
             processFunction:questionnaires.getPatientQuestionnaires
 
-        },*/
+        },
         /*,
          'Messages':{
          sql:queries.patientMessageTableFields(),
@@ -100,15 +100,15 @@ var requestMappings=
                 sql:queries.patientTasksTableFields(),
                 numberOfLastUpdated:2
             },
-        /*'TreatmentPlanning':
-         {
-         processFunction:planningStepsAndEstimates,
-         numberOfLastUpdated:0
-         },*/
-        /*'LabTests':{
+        // 'TreatmentPlanning':
+        //  {
+        //  processFunction:planningStepsAndEstimates,
+        //  numberOfLastUpdated:0
+        //  },
+        'LabTests':{
          sql:queries.patientTestResultsTableFields(),
          numberOfLastUpdated:1
-         },*/
+         },
         'TxTeamMessages':{
             sql:queries.patientTeamMessagesTableFields(),
             numberOfLastUpdated:2,
@@ -1032,10 +1032,10 @@ exports.getSecurityQuestion = function (requestObject){
     var obj={};
     var Data = {};
     var userEmail = requestObject.UserEmail;
-    //console.log('Getting Security Question');
+
     exports.runSqlQuery(queries.getSecQuestion(),[userEmail])
         .then(function (queryRows) {
-            //console.log(queryRows);
+
             if (queryRows.length != 1 ) r.reject({Response:'error', Reason:'More or less than one question returned'});
             Data.securityQuestion = {
                 securityQuestion_EN: queryRows[0].QuestionText_EN,
@@ -1071,8 +1071,8 @@ exports.setTrusted = function(requestObject)
 };
 
 /**
- *
- * @param requestObject the request
+ * Returns a promise containing the questionnaires and answers
+ * @param {object} requestObject the request
  * @returns {Promise} Returns a promise that contains the questionnaire data
  */
 

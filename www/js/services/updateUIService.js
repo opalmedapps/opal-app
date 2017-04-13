@@ -56,11 +56,11 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors',
         var lastUpdateTimestamp={
             'All':0,
             'Appointments':0,
-            //'Messages':0,
+            'Messages':0,
             'Documents':0,
             'Tasks':0,
             'Doctors':0,
-            //'LabTests':0,
+            'LabTests':0,
             'Patient':0,
             'Notifications':0,
             'EducationalMaterial':0,
@@ -140,11 +140,11 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors',
                 init:TxTeamMessages.setTxTeamMessages,
                 update:TxTeamMessages.updateTxTeamMessages
             },
-            // 'Questionnaires':
-            //  {
-            //  init:Questionnaires.setPatientQuestionnaires,
-            //  update:Questionnaires.updatePatientQuestionnaires
-            //  },
+            'Questionnaires':
+             {
+             init:Questionnaires.setPatientQuestionnaires,
+             update:Questionnaires.updatePatientQuestionnaires
+             },
             'Announcements':
             {
                 init:Announcements.setAnnouncements,
@@ -170,18 +170,18 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors',
             }
             return promises;
         }
-        function initLocalStorage()
-        {
-            var objectToLocalStorage={};
-            for (var key in sectionServiceMappings.length) {
-                objectToLocalStorage[key]=[{}];
-            }
-            LocalStorage.WriteToLocalStorage('All',objectToLocalStorage);
-        }
+        // function initLocalStorage()
+        // {
+        //     var objectToLocalStorage={};
+        //     for (var key in sectionServiceMappings.length) {
+        //         objectToLocalStorage[key]=[{}];
+        //     }
+        //     LocalStorage.WriteToLocalStorage('All',objectToLocalStorage);
+        // }
         function setServices(dataUserObject,mode)
         {
             var r = $q.defer();
-            if(mode=='setOnline') initLocalStorage();
+            //if(mode=='setOnline') initLocalStorage();
             var promises = setPromises(mode,dataUserObject);
             $q.all(promises).then(function(){
                 for(var key in dataUserObject)
@@ -252,56 +252,56 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors',
             return r.promise;
         }
 
-        function initServicesFromLocalStorage()
-        {
-            var r=$q.defer();
-            data=LocalStorage.ReadLocalStorage('All');
-
-            console.log(data);
-            sectionServiceMappings.All.init(data, 'setOffline').then(function()
-            {
-                var timestampLastUpdate = initTimestampsFromLocalStorage();
-                var app = document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'https://' ) === -1;
-                if(app){
-                    if($cordovaNetwork.isOnline()){
-                        console.log('I am right before sending the request for all the things');
-                        RequestToServer.sendRequestWithResponse('Refresh',{Fields:'All',Timestamp:timestampLastUpdate}).then(
-                            function(response)
-                            {
-                                updateServices(response.Data);
-                                updateTimestamps('All',response.Timestamp);
-                                clearTimeout(timeOut);
-                                r.resolve(true);
-                            }).catch(function(error)
-                        {
-                            if(error.Code =='2')  NativeNotification.showNotificationAlert($filter('translate')("ERRORCONTACTINGHOSPITAL"));
-                            clearTimeout(timeOut);
-                            console.log(error);
-                            r.resolve(true);
-                        });
-                    }else{
-                        clearTimeout(timeOut);
-                        console.log('Offline resolving');
-                        r.resolve(true);
-                    }
-                }else{
-                    r.resolve(true);
-                }
-            }).catch(function(error)
-            {
-                r.reject(error);
-            });
-            var timeOut = setTimeout(function(){
-                r.resolve(true);
-            },30000);
-
-            return r.promise;
-        }
-        function initTimestampsFromLocalStorage()
-        {
-            lastUpdateTimestamp=JSON.parse(window.localStorage.getItem(UserAuthorizationInfo.getUsername()+'/Timestamps'));
-            return findSmallestTimestamp('All');
-        }
+        // function initServicesFromLocalStorage()
+        // {
+        //     var r=$q.defer();
+        //     data=LocalStorage.ReadLocalStorage('All');
+        //
+        //     console.log(data);
+        //     sectionServiceMappings.All.init(data, 'setOffline').then(function()
+        //     {
+        //         var timestampLastUpdate = initTimestampsFromLocalStorage();
+        //         var app = document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'https://' ) === -1;
+        //         if(app){
+        //             if($cordovaNetwork.isOnline()){
+        //                 console.log('I am right before sending the request for all the things');
+        //                 RequestToServer.sendRequestWithResponse('Refresh',{Fields:'All',Timestamp:timestampLastUpdate}).then(
+        //                     function(response)
+        //                     {
+        //                         updateServices(response.Data);
+        //                         updateTimestamps('All',response.Timestamp);
+        //                         clearTimeout(timeOut);
+        //                         r.resolve(true);
+        //                     }).catch(function(error)
+        //                 {
+        //                     if(error.Code =='2')  NativeNotification.showNotificationAlert($filter('translate')("ERRORCONTACTINGHOSPITAL"));
+        //                     clearTimeout(timeOut);
+        //                     console.log(error);
+        //                     r.resolve(true);
+        //                 });
+        //             }else{
+        //                 clearTimeout(timeOut);
+        //                 console.log('Offline resolving');
+        //                 r.resolve(true);
+        //             }
+        //         }else{
+        //             r.resolve(true);
+        //         }
+        //     }).catch(function(error)
+        //     {
+        //         r.reject(error);
+        //     });
+        //     var timeOut = setTimeout(function(){
+        //         r.resolve(true);
+        //     },30000);
+        //
+        //     return r.promise;
+        // }
+        // function initTimestampsFromLocalStorage()
+        // {
+        //     lastUpdateTimestamp=JSON.parse(window.localStorage.getItem(UserAuthorizationInfo.getUsername()+'/Timestamps'));
+        //     return findSmallestTimestamp('All');
+        // }
 
         function initTimestamps(time)
         {
@@ -371,7 +371,7 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors',
         /**
          * Reset sections
          */
-        function resetSection()
+        function setSection(parameters)
         {
             var r = $q.defer();
             RequestToServer.sendRequestWithResponse('Refresh',{Fields:parameters}).then(
@@ -443,10 +443,10 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors',
              *@param {String,Array} parameters Could be a string or an array, parameter signifying the sections to update, i.e. 'All', or ['Appointments','Documents'].
              *@description Completely reinstantiates services specified by the parameter by obtaining all the data from the Hospital and re-setting them.
              **/
-            reset:function(parameters)
+            set:function(parameters)
             {
-                console.log("Called reset");
-                return resetSection(parameters);
+                console.log("Called set");
+                return setSection(parameters);
             },
             /**
              *@ngdoc method
@@ -457,21 +457,24 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors',
              **/
             init:function(type)
             {
-                //var r=$q.defer();
                 console.log("Called init");
-                var app = document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'https://' ) === -1;
-                if(app){
-                    console.log(LocalStorage.isUserDataDefined());
-                    if(LocalStorage.isUserDataDefined())
-                    {
-                        return initServicesFromLocalStorage();
-                    }else{
-                        return initServicesFromServer(type);
-                    }
-                }else{
-                    //Computer check if online
-                    return initServicesFromServer(type);
-                }
+                return initServicesFromServer(type);
+
+            },
+            /**
+             *@ngdoc method
+             *@name login
+             *@methodOf MUHCApp.service:UpdateUI
+             *@description Grabs the necessary data from the server for login.
+             **/
+            login: function () {
+                // The list of data to load on start
+                return this.set([
+                    'Patient',
+                    'Appointments',
+                    'Tasks',
+                    'Notifications'
+                ]);
             },
             /**
              *@ngdoc method
@@ -484,11 +487,11 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors',
                 lastUpdateTimestamp={
                     'All':0,
                     'Appointments':0,
-                    //'Messages':0,
+                    'Messages':0,
                     'Documents':0,
                     'Tasks':0,
                     'Doctors':0,
-                    //'LabTests':0,
+                    'LabTests':0,
                     'Patient':0,
                     'Notifications':0,
                     'EducationalMaterial':0,
