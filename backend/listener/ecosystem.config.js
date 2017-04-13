@@ -8,9 +8,7 @@ module.exports = {
         {
             name        : "opal",
             script      : "server.js",
-            watch       : true,
-            out_file    : null,
-            error_file  : null
+            out_file    : "dev/null"
         }
     ]
 };
