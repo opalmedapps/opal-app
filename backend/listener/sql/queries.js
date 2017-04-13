@@ -164,7 +164,7 @@ exports.getPatientFieldsForPasswordReset=function()
 };
 exports.setNewPassword=function()
 {
-    return "UPDATE Users SET Password=? WHERE UserTypeSerNum=?";
+    return "UPDATE Users SET Password = ? WHERE UserTypeSerNum = ?";
 };
 
 //For checkin

@@ -440,17 +440,18 @@ exports.updateAccountField=function(requestObject)
     var UserEmail=requestObject.UserEmail;
     getUserFromEmail(UserEmail).then(function(user)
     {
-
         var patientSerNum=user.PatientSerNum;
         var field=requestObject.Parameters.FieldToChange;
         var newValue=requestObject.Parameters.NewValue;
         if(field=='Password')
         {
-            newValue=CryptoJS.SHA256(newValue);
-            connection.query(queries.setNewPassword(newValue,patientSerNum,requestObject.Token),
+            newValue=CryptoJS.SHA256(newValue).toString();
+            connection.query(queries.setNewPassword(), [newValue,patientSerNum],
                 function(error, rows, fields)
                 {
-                    if(error) r.reject({Response:'error',Reason:error});
+                    if(error){
+                        r.reject({Response:'error',Reason:error});
+                    }
                     delete requestObject.Parameters.NewValue;
                     r.resolve({Response:'success'});
                 });
