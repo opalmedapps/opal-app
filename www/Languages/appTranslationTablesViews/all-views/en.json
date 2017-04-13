@@ -39,6 +39,8 @@
   "CONTINUE": "Continue",
   "CREATED": "Created",
   "DEAR": "Dear",
+  "DIAGNOSIS": "Diagnosis",
+  "DIAGNOSIS_DATE": "Date",
   "DISABLECALENDARACCESSQUESTION": "Would you like to disable saving your appointments to your phone calendar?",
   "DISABLESMSNOTIFICATIONQUESTION": "Would you like to disable your SMS messaging notifications?",
   "DOCTOR": "Doctor",

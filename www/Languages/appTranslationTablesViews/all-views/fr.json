@@ -42,6 +42,8 @@
   "CONTACTS": "Mon équipe soignante",
   "CONTINUE": "Continuer",
   "CREATED": "Creation",
+  "DIAGNOSIS": "Diagnostic",
+  "DIAGNOSIS_DATE": "Date",
   "DEAR": "Cher/Chère",
   "DISABLECALENDARACCESSQUESTION": "Souhaitez-vous sauvegarder vos rendez-vous dans le calendrier de votre téléphone?",
   "DISABLESMSNOTIFICATIONQUESTION": "Souhaitez-vous désactiver les notifications par sms?",
