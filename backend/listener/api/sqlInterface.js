@@ -1083,7 +1083,9 @@ exports.getQuestionnaires = function(requestObject){
             return questionnaires.getPatientQuestionnaires(queryRows)
         })
         .then(function (result) {
-            r.resolve(result);
+            var obj = {};
+            obj.Data = result;
+            r.resolve(obj);
         })
         .catch(function (error) {
             r.reject(error);

@@ -7,8 +7,6 @@ var app1 = angular.module('MUHCApp');
 app1.controller('questionnairesListController', function($scope, $rootScope, Questionnaires, $location, NavigatorParameters, $timeout) {
 
     console.log('started controller');
-    $scope.questionnaires = Questionnaires.getPatientQuestionnaires().Questionnaires;
-    $scope.patientQuestionnaires = Questionnaires.getPatientQuestionnaires().PatientQuestionnaires;
     $scope.loading = true;
 
     activate();
@@ -18,12 +16,16 @@ app1.controller('questionnairesListController', function($scope, $rootScope, Que
 
         if(!Questionnaires.isEmpty()){
             $scope.loading = false;
+            $scope.questionnaires = Questionnaires.getPatientQuestionnaires().Questionnaires;
+            $scope.patientQuestionnaires = Questionnaires.getPatientQuestionnaires().PatientQuestionnaires;
             return;
         }
 
         Questionnaires.requestQuestionnaires()
             .then(function () {
                 $scope.loading = false;
+                $scope.questionnaires = Questionnaires.getPatientQuestionnaires().Questionnaires;
+                $scope.patientQuestionnaires = Questionnaires.getPatientQuestionnaires().PatientQuestionnaires;
                 getBadgeNumbers();
             })
     }
