@@ -15,21 +15,21 @@
     </ons-pull-hook>
 
     <ons-list style="margin: 0px 0">
-        <!--<ons-list-item modifier="chevron" class="item" >
+        <ons-list-item modifier="chevron" class="item" ng-click="personalNavigator.pushPage('views/personal/diagnosis/diagnosis.html')">
           <ons-row align="center">
             <ons-col width="60px">
               <div>
-                <i class="ion-heart iconHomeView" style="color:darkred"></i>
+                <ons-icon icon="fa-heartbeat iconHomeView" style="color:darkred"></ons-icon>
               </div>
             </ons-col>
             <ons-col>
               <header>
-                <span class="item-title" ng-class="fontSizeTitle">Diagnosis </span>
+                <span class="item-title" ng-class="fontSizeTitle">{{"DIAGNOSIS"|translate}}</span>
               </header>
               <p class="item-desc" ng-class="fontSizeDesc"></p>
             </ons-col>
           </ons-row>
-        </ons-list-item>-->
+        </ons-list-item>
         <ons-list-item modifier="chevron" class="item" ng-click="personalNavigator.pushPage('views/general/notifications/notifications.html')">
             <ons-row align="center" >
                 <ons-col width="60px" align="center">

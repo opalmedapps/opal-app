@@ -4,15 +4,40 @@
 /**
  * @ngdoc controller
  * @name MUHCApp.controller:DiagnosesController
- * @requires $scope
- * @requires $timeout
  * @requires Diagnoses
+ * @requires UserPreferences
  * @description Controller for the diagnoses view.
  */
-var myApp=angular.module('MUHCApp');
-myApp.controller('DiagnosesController',['$scope','$timeout','Diagnoses',function($scope,$timeout, Diagnoses){
 
-  //load the diagnoses array into view
-  $scope.diagnoses=Diagnoses.getDiagnoses();
+(function () {
+    'use strict';
 
-}]);
+    angular
+        .module('MUHCApp')
+        .controller('DiagnosesController', DiagnosesController);
+
+    DiagnosesController.$inject = ['Diagnoses','UserPreferences'];
+
+    /* @ngInject */
+    function DiagnosesController(Diagnoses, UserPreferences) {
+        var vm = this;
+        vm.title = 'DiagnosesController';
+        vm.diagnoses = [];
+        vm.language = '';
+
+        activate();
+
+        ////////////////
+
+        function activate() {
+            //load the diagnoses array into view
+            vm.diagnoses=Diagnoses.getDiagnoses();
+
+            //grab the language
+            vm.language = UserPreferences.getLanguage();
+        }
+    }
+
+})();
+
+
