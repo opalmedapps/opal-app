@@ -17,7 +17,7 @@ var sqlConfig={
   host:credentials.HOST,
   user:credentials.MYSQL_USERNAME,
   password:credentials.MYSQL_PASSWORD,
-  database:'QuestionnairesDB',
+  database:'QuestionnaireDB',
   dateStrings:true
 };
 /*
