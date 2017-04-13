@@ -16,10 +16,10 @@
         .module('MUHCApp')
         .controller('DiagnosesController', DiagnosesController);
 
-    DiagnosesController.$inject = ['Diagnoses','UserPreferences'];
+    DiagnosesController.$inject = ['Diagnoses','UserPreferences', 'UpdateUI'];
 
     /* @ngInject */
-    function DiagnosesController(Diagnoses, UserPreferences) {
+    function DiagnosesController(Diagnoses, UserPreferences, UpdateUI) {
         var vm = this;
         vm.title = 'DiagnosesController';
         vm.diagnoses = [];

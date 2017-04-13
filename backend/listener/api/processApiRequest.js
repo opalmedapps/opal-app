@@ -5,30 +5,32 @@ var apiHospitalUpdate=require('./apiHospitalUpdate.js');
 var security = require('./../security/security');
 
 var API = {
+
+    'DeviceIdentifier':apiHospitalUpdate.updateDeviceIdentifier,
+    'Log': apiPatientUpdate.logActivity,
     'Login':apiPatientUpdate.login,
+    'Logout': apiHospitalUpdate.logout,
     'Resume':apiPatientUpdate.resume,
     'Refresh':apiPatientUpdate.refresh,
+
+    'AccountChange':apiHospitalUpdate.accountChange,
     'CheckCheckin':apiPatientUpdate.checkCheckin,
     'Checkin':apiHospitalUpdate.checkIn,
     'CheckinUpdate':apiPatientUpdate.checkinUpdate,
-    'MapLocation':apiPatientUpdate.getMapLocation,
     'DocumentContent':apiPatientUpdate.getDocumentsContent,
-    'Message':apiHospitalUpdate.sendMessage,
-    'Read':apiHospitalUpdate.updateReadStatus,
-    'AccountChange':apiHospitalUpdate.accountChange,
     'Feedback':apiHospitalUpdate.inputFeedback,
-    'Logout': apiHospitalUpdate.logout,
-    'DeviceIdentifier':apiHospitalUpdate.updateDeviceIdentifier,
+    'LabResults': apiPatientUpdate.getLabResults,
+    'MapLocation':apiPatientUpdate.getMapLocation,
+    'Message':apiHospitalUpdate.sendMessage,
     'Questionnaires': apiPatientUpdate.getQuestionnaires,
     'QuestionnaireRating':apiHospitalUpdate.inputEducationalMaterialRating,
     'QuestionnaireAnswers':apiHospitalUpdate.inputQuestionnaireAnswers,
-    'LabResults': apiPatientUpdate.getLabResults,
-    'Log': apiPatientUpdate.logActivity
+    'Read':apiHospitalUpdate.updateReadStatus,
 };
 
 exports.securityAPI = {
-    'SecurityQuestion': security.securityQuestion,
     'PasswordReset': security.resetPasswordRequest,
+    'SecurityQuestion': security.securityQuestion,
     'SetNewPassword': security.resetPasswordRequest,
     'VerifyAnswer': security.resetPasswordRequest
 }

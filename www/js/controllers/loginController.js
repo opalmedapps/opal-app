@@ -129,7 +129,7 @@ myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$root
                 window.localStorage.setItem('UserAuthorizationInfo', JSON.stringify(authenticationToLocalStorage));
                 // console.log(UserAuthorizationInfo.getUserAuthData());
                 // console.log("Authenticated successfully with payload:", firebaseUser);
-                NavigatorParameters.setParameters('Login');
+                // NavigatorParameters.setParameters('Login');
                 var deviceID;
 
                 //

@@ -6,9 +6,9 @@ var validate = require('./../utility/validate.js');
 var queries = require('./../sql/queries.js');
 var logger = require('./../logs/logger.js')
 
-/*
+/**
  *@name login
- *@requires slqInterface
+ *@requires sqlInterface
  *@parameter(string) UserID Patients user ID
  *@description Grabs all the tables for the user and updates them to firebase
  */
@@ -33,7 +33,7 @@ exports.login = function (requestObject) {
     return sqlInterface.getPatientTableFields(requestObject.UserID);
 };
 
-/*
+/**
 *@name refresh
 *@requires sqlInterface
 *@parameter(string) UserID Patients User Id
