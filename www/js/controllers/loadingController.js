@@ -14,7 +14,7 @@ angular.module('MUHCApp').controller('LoadingController',
             if(typeof userAuthorizationInfo === 'undefined'||!userAuthorizationInfo) $state.go('init');
             setTimeout(function()
             {
-                UpdateUI.login()
+                UpdateUI.init()
                     .then(function() {
                         var objectToSend = {};
                         objectToSend.NewValue = UserPreferences.getLanguage();

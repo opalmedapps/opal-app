@@ -22,6 +22,7 @@ var API = {
     'LabResults': apiPatientUpdate.getLabResults,
     'MapLocation':apiPatientUpdate.getMapLocation,
     'Message':apiHospitalUpdate.sendMessage,
+    'NotificationsAll':apiHospitalUpdate.getAllNotifications,
     'Questionnaires': apiPatientUpdate.getQuestionnaires,
     'QuestionnaireRating':apiHospitalUpdate.inputEducationalMaterialRating,
     'QuestionnaireAnswers':apiHospitalUpdate.inputQuestionnaireAnswers,

@@ -17,7 +17,8 @@ var myApp=angular.module('MUHCApp');
  *@requires MUHCApp.service:EducationalMaterial
  *@description API service used to patient notifications. This Service is deeply linked to other services to extract that information about the actual content of the notification.
  **/
-myApp.service('Notifications',['$filter','RequestToServer','LocalStorage','Announcements','TxTeamMessages','Appointments','Messages','Documents','EducationalMaterial', 'UserPreferences', function($filter,RequestToServer,LocalStorage,Announcements, TxTeamMessages,Appointments,Messages, Documents,EducationalMaterial, UserPreferences){
+myApp.service('Notifications',['$filter','RequestToServer','LocalStorage','Announcements','TxTeamMessages','Appointments','Messages','Documents','EducationalMaterial', 'UserPreferences', '$q',
+    function($filter,RequestToServer,LocalStorage,Announcements, TxTeamMessages,Appointments,Messages, Documents,EducationalMaterial, UserPreferences, $q){
     /**
      *@ngdoc property
      *@name  MUHCApp.service.#Notifications
@@ -249,6 +250,7 @@ myApp.service('Notifications',['$filter','RequestToServer','LocalStorage','Annou
          *@description Setter method for Notifications
          **/
         setUserNotifications:function(notifications){
+            console.log('setting notifications');
             Notifications=[];
             notificationsLocalStorage=[];
             addUserNotifications(notifications);
@@ -407,6 +409,28 @@ myApp.service('Notifications',['$filter','RequestToServer','LocalStorage','Annou
         {
             Notifications=[];
             notificationsLocalStorage=[];
+        },
+        /**
+         *@ngdoc method
+         *@name requestAllNotifications
+         *@methodOf MUHCApp.service:Notifications
+         *@description Grabs all the notifications form the server.
+         **/
+        requestAllNotifications: function () {
+
+            var r = $q.defer();
+
+            var _this = this;
+            RequestToServer.sendRequestWithResponse('NotificationsAll')
+                .then(function (response) {
+                    _this.updateUserNotifications(response.Data);
+                    r.resolve({});
+                })
+                .catch(function (error) {
+                    r.reject({})
+                });
+
+            return r.promise;
         }
 
     };

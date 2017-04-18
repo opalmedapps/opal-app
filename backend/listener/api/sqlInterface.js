@@ -1094,3 +1094,26 @@ exports.getQuestionnaires = function(requestObject){
 
     return r.promise
 };
+
+/**
+ * Returns a promise containing all the notifications
+ * @param {object} requestObject the request
+ * @returns {Promise} Returns a promise that contains the notification data
+ */
+
+exports.getAllNotifications = function(requestObject){
+    "use strict";
+    var r = Q.defer();
+    exports.runSqlQuery(queries.getAllNotifications(), [requestObject.UserID,requestObject.Timestamp,requestObject.Timestamp])
+        .then(function (queryRows) {
+            //console.log(queryRows);
+            var obj = {};
+            obj.Data = queryRows;
+            r.resolve(obj);
+        })
+        .catch(function (error) {
+            r.reject(error);
+        });
+
+    return r.promise
+};

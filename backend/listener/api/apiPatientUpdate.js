@@ -15,22 +15,22 @@ var logger = require('./../logs/logger.js')
 exports.login = function (requestObject) {
   //console.log('Inside Login function', requestObject);
   
-  sqlInterface.getPatientDeviceLastActivity(requestObject.UserID,requestObject.DeviceId).then(function(result){
-      var date=new Date(result.DateTime);
-      date.setDate(date.getDate()+1);
-      var today=new Date();
-      if(typeof result !=='undefined'&&result.Request=='Login')
-      {
-         result.Request='Logout';
-         sqlInterface.updateLogout([result.Request,result.Username,result.DeviceId,result.SessionId,date]).then(function(response){
-            //console.log('Updating logout', response);
-         },function(error){
-            //console.log('Error updating logout', error);
-         });
-      }
-    });
-    sqlInterface.addToActivityLog(requestObject);
-    return sqlInterface.getPatientTableFields(requestObject.UserID);
+  // sqlInterface.getPatientDeviceLastActivity(requestObject.UserID,requestObject.DeviceId).then(function(result){
+  //     var date=new Date(result.DateTime);
+  //     date.setDate(date.getDate()+1);
+  //     var today=new Date();
+  //     if(typeof result !=='undefined'&&result.Request=='Login')
+  //     {
+  //        result.Request='Logout';
+  //        sqlInterface.updateLogout([result.Request,result.Username,result.DeviceId,result.SessionId,date]).then(function(response){
+  //           //console.log('Updating logout', response);
+  //        },function(error){
+  //           //console.log('Error updating logout', error);
+  //        });
+  //     }
+  //   });
+    //sqlInterface.addToActivityLog(requestObject);
+    return sqlInterface.getPatientTableFields(requestObject.UserID, requestObject.Parameters.timestamp, requestObject.Parameters.Fields );
 };
 
 /**

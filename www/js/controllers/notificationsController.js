@@ -9,17 +9,27 @@ myApp.controller('NotificationsController', ['RequestToServer','Notifications', 
     'Documents','NavigatorParameters', 'Permissions', '$filter',
     function (RequestToServer, Notifications, UpdateUI, $scope,$timeout,$rootScope,
               UserPreferences, Appointments, Documents, NavigatorParameters, Permissions, $filter) {
+
         init();
 
         function init()
         {
-            $scope.noNotifications = true;
-            var notifications = Notifications.getUserNotifications();
-            if (notifications.length > 0)  $scope.noNotifications = false;
-            notifications = Notifications.setNotificationsLanguage(notifications);
-            $scope.notifications = $filter('orderBy')(notifications,'notifications.DateAdded', true);
-            console.log($scope.notifications);
-            Permissions.enablePermission('WRITE_EXTERNAL_STORAGE', 'Storage access disabled. Unable to write documents.');
+
+            Notifications.requestAllNotifications()
+                .then(function () {
+                    $scope.noNotifications = true;
+                    var notifications = Notifications.getUserNotifications();
+                    if (notifications.length > 0)  $scope.noNotifications = false;
+                    notifications = Notifications.setNotificationsLanguage(notifications);
+                    $scope.notifications = $filter('orderBy')(notifications,'notifications.DateAdded', true);
+                    console.log($scope.notifications);
+                    Permissions.enablePermission('WRITE_EXTERNAL_STORAGE', 'Storage access disabled. Unable to write documents.');
+                })
+                .catch(function (error) {
+                    console.log(error);
+                })
+
+
         }
 
 

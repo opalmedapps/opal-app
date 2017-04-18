@@ -227,12 +227,12 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors',
          */
         //Initiatiates all the services online at either login, or simple entering the app once
         //patient is already register
-        function initServicesFromServer(type)
+        function initServicesFromServer(parameters)
         {
             //Sets the path for data fetching
             var r=$q.defer();
             //Initializing all the services
-            RequestToServer.sendRequestWithResponse(type).then(function(response)
+            RequestToServer.sendRequestWithResponse('Login',{Fields:parameters}).then(function(response)
             {
                 setServices(response.Data, 'setOnline').then(function()
                 {
@@ -455,26 +455,17 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors',
              *@param {String} type Online or Offline init
              *@description Initializes app by querying the hospital for all the data and setting the services.
              **/
-            init:function(type)
+            init:function()
             {
                 console.log("Called init");
-                return initServicesFromServer(type);
-
-            },
-            /**
-             *@ngdoc method
-             *@name login
-             *@methodOf MUHCApp.service:UpdateUI
-             *@description Grabs the necessary data from the server for login.
-             **/
-            login: function () {
-                // The list of data to load on start
-                return this.set([
+                return initServicesFromServer([
                     'Patient',
                     'Appointments',
                     'Tasks',
-                    'Notifications'
+                    'Notifications',
+                    'Diagnosis'
                 ]);
+
             },
             /**
              *@ngdoc method
