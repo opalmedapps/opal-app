@@ -84,37 +84,34 @@ myApp.controller('personalTabController',
     };
     //Sets appointments and treatment plan stage tab
     initPersonalTab();
+
     //Init function for this controller
     function initPersonalTab()
     {
-        //Setting up Appointments status
-        backButtonPressed = 0;
-        if(Appointments.isThereAppointments())
-        {
-            if(Appointments.isThereNextAppointment())
-            {
-                $scope.appointmentTitle="UPCOMINGAPPOINTMENT";
-                $scope.appointment=Appointments.getUpcomingAppointment();
-            }else{
-                $scope.appointmentTitle= "LASTAPPOINTMENT";
-                $scope.appointment=Appointments.getLastAppointmentCompleted();
-            }
-        }
-        //Setting up status of treament plan
-        /*if(UserPlanWorkflow.isCompleted())
-        {
-            $scope.nameCurrentStage="COMPLETED";
-        }else{
-            var index=UserPlanWorkflow.getNextStageIndex();
-            $scope.outOf={index:index, total:6};
-        }*/
-        //Setting up badges
+
+        UpdateUI.set([
+            'Documents',
+            'TxTeamMessages',
+        ])
+            .catch(function(error){
+                "use strict";
+                console.log('error', error);
+            });
         setNewsNumbers();
     }
 }]);
 
 
 myApp.controller('generalTabController',['$scope','$timeout','Announcements','RequestToServer','UpdateUI','Notifications','NavigatorParameters','$filter',function($scope,$timeout,Announcements,RequestToServer,UpdateUI,Notifications,NavigatorParameters,$filter){
+
+    UpdateUI.set([
+        'Doctors',
+        'Announcements',
+    ])
+        .catch(function(error){
+            "use strict";
+            console.log('error', error);
+        });
 
     NavigatorParameters.setParameters({'Navigator':'generalNavigator'});
     NavigatorParameters.setNavigator(generalNavigator);
