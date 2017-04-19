@@ -71,10 +71,12 @@ function handleRequest(requestType, snapshot){
         // Log before uploading to Firebase. Check that it was not a simple log
         if (response.Headers.RequestObject.Request != 'Log') {
 
+            //console.log(response.Headers.RequestObject.Parameters.Fields.join(' '));
             logger.log('info', "Completed response", {
                 deviceID: response.Headers.RequestObject.DeviceId,
                 userID: response.Headers.RequestObject.UserID,
-                request: response.Headers.RequestObject.Request,
+                request: response.Headers.RequestObject.Request +
+                (response.Headers.RequestObject.Request === 'Refresh' ? ": " + response.Headers.RequestObject.Parameters.Fields.join(' ') : ""),
                 requestKey: response.Headers.RequestKey
             });
         }
