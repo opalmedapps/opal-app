@@ -134,9 +134,35 @@
 
         function setNotifications()
         {
-            ///Obtains unread notifications every time it reads
-            vm.notifications = Notifications.setNotificationsLanguage(Notifications.getUnreadNotifications());
-            console.log(vm.notifications);
+            // Get all new notifications
+            var notifications = Notifications.getNewNotifications();
+            if (notifications.length > 0)
+            {
+                // Get the refresh types from the notification data. These correspond to the API call to the server
+                var toLoad = notifications.reduce(
+                    function (accumulator, currentValue) {
+                        if (accumulator.includes(currentValue.refreshType)) {
+                            return accumulator
+                        } else {
+                            accumulator.push(currentValue.refreshType);
+                            return accumulator
+                        }
+                    }, []);
+                console.log(toLoad);
+
+                // Get the data needed from server and set it in Opal
+                UpdateUI.set(toLoad)
+                    .then(function () {
+                        vm.notifications = Notifications.setNotificationsLanguage(Notifications.getUnreadNotifications());
+                        console.log(vm.notifications);
+                    })
+                    .catch(function (error) {
+                        console.error(error);
+                    })
+            } else {
+                vm.notifications = [];
+            }
+
             // if(vm.notifications.length>0)
             // {
             //     if(Constants.app)
@@ -224,10 +250,12 @@
             }
         }
 
+        // Function used in the home view to refresh
         function load($done) {
             refresh($done);
         }
 
+        //Function used by load
         function refresh(done){
             console.log(done);
             done == undefined ? done = function () {} : done;
@@ -246,6 +274,7 @@
             },5000);
         }
 
+        // For Android only, allows pressing the back button
         function homeDeviceBackButton(){
             console.log('device button pressed do nothing');
             var message = $filter('translate')('EXIT_APP');
@@ -266,6 +295,7 @@
 
         }
 
+        // Function to go push a page to the correct notification.
         function goToNotification(index, notification){
             vm.notifications[index].Number = 0;
             Notifications.readNotification(index, notification);
