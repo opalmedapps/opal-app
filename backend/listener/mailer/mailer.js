@@ -21,12 +21,13 @@ function Mail(){
 
     // setup email data with unicode symbols
 
-    this.sendMail = function (recipient, subject, text) {
+    this.sendMail = function (recipient, subject, text, replyEmail) {
         let mailOptions = {
             from: '"Opal" <opal@muhc.mcgill.ca>', // sender address
             to: recipient, // list of receivers
             subject: subject, // Subject line
-            text: text // plain text body
+            text: text, // plain text body
+            replyTo: replyEmail
         }
 
         transporter.sendMail(mailOptions, (error, info) => {

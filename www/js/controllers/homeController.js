@@ -36,7 +36,7 @@
         vm.checkInMessage = '';
         vm.RoomLocation = '';
         vm.showHomeScreenUpdate = null;
-        vm.pageLoad = true;
+        vm.loading = true;
 
         vm.homeDeviceBackButton = homeDeviceBackButton;
         vm.load = load;
@@ -135,6 +135,7 @@
         function setNotifications()
         {
             // Get all new notifications
+
             var notifications = Notifications.getNewNotifications();
             if (notifications.length > 0)
             {
@@ -155,11 +156,15 @@
                     .then(function () {
                         vm.notifications = Notifications.setNotificationsLanguage(Notifications.getUnreadNotifications());
                         console.log(vm.notifications);
+                        vm.loading = false;
+
                     })
                     .catch(function (error) {
                         console.error(error);
+                        vm.loading = false;
                     })
             } else {
+                vm.loading = false;
                 vm.notifications = [];
             }
 
