@@ -44,7 +44,7 @@ myApp.controller('personalTabController',
             updated=true;
             $timeout(function()
             {
-                initPersonalTab();
+                setNewsNumbers();
                 clearTimeout(timeOut);
                 $done();
             });
@@ -88,30 +88,34 @@ myApp.controller('personalTabController',
     //Init function for this controller
     function initPersonalTab()
     {
-
-        UpdateUI.set([
-            'Documents',
-            'TxTeamMessages',
-        ])
-            .catch(function(error){
-                "use strict";
-                console.log('error', error);
-            });
+        if (Documents.getLastUpdated() < Date.now() - 300000 && TxTeamMessages.getLastUpdated() < Date.now() - 300000 ){
+            UpdateUI.set([
+                'Documents',
+                'TxTeamMessages',
+            ])
+                .catch(function(error){
+                    "use strict";
+                    console.log('error', error);
+                });
+        }
         setNewsNumbers();
     }
 }]);
 
 
-myApp.controller('generalTabController',['$scope','$timeout','Announcements','RequestToServer','UpdateUI','Notifications','NavigatorParameters','$filter',function($scope,$timeout,Announcements,RequestToServer,UpdateUI,Notifications,NavigatorParameters,$filter){
+myApp.controller('generalTabController',['$scope','$timeout','Announcements','RequestToServer','UpdateUI','Notifications','NavigatorParameters','$filter','Doctors',
+    function($scope,$timeout,Announcements,RequestToServer,UpdateUI,Notifications,NavigatorParameters,$filter, Doctors){
 
-    UpdateUI.set([
-        'Doctors',
-        'Announcements',
-    ])
-        .catch(function(error){
-            "use strict";
-            console.log('error', error);
-        });
+    if (Doctors.getLastUpdated() < Date.now() - 300000 && Announcements.getLastUpdated() < Date.now() - 300000 ) {
+        UpdateUI.set([
+            'Doctors',
+            'Announcements',
+        ])
+            .catch(function (error) {
+                "use strict";
+                console.log('error', error);
+            });
+    }
 
     NavigatorParameters.setParameters({'Navigator':'generalNavigator'});
     NavigatorParameters.setNavigator(generalNavigator);

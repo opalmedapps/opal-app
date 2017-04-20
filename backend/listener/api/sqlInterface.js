@@ -167,10 +167,7 @@ exports.getPatientTableFields = function(userId,timestamp,arrayTables)
 {
     var r=Q.defer();
     var timestp=0;
-    if(arguments.length>2)
-    {
-        timestp=timestamp;
-    }else if(arguments.length==2)
+    if(arguments.length>=2)
     {
         timestp=timestamp;
     }

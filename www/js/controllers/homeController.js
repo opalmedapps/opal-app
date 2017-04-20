@@ -136,37 +136,42 @@
         {
             // Get all new notifications
 
-            var notifications = Notifications.getNewNotifications();
-            if (notifications.length > 0)
-            {
-                // Get the refresh types from the notification data. These correspond to the API call to the server
-                var toLoad = notifications.reduce(
-                    function (accumulator, currentValue) {
-                        if (accumulator.includes(currentValue.refreshType)) {
-                            return accumulator
-                        } else {
-                            accumulator.push(currentValue.refreshType);
-                            return accumulator
-                        }
-                    }, []);
-                console.log(toLoad);
+            UpdateUI.set(['Notifications'])
+                .then(function () {
+                    var notifications = Notifications.getNewNotifications();
+                    if (notifications.length > 0)
+                    {
+                        // Get the refresh types from the notification data. These correspond to the API call to the server
+                        var toLoad = notifications.reduce(
+                            function (accumulator, currentValue) {
+                                if (accumulator.includes(currentValue.refreshType)) {
+                                    return accumulator
+                                } else {
+                                    accumulator.push(currentValue.refreshType);
+                                    return accumulator
+                                }
+                            }, []);
+                        console.log(toLoad);
 
-                // Get the data needed from server and set it in Opal
-                UpdateUI.set(toLoad)
-                    .then(function () {
-                        vm.notifications = Notifications.setNotificationsLanguage(Notifications.getUnreadNotifications());
-                        console.log(vm.notifications);
-                        vm.loading = false;
+                        // Get the data needed from server and set it in Opal
+                        UpdateUI.set(toLoad)
+                            .then(function () {
+                                vm.notifications = Notifications.setNotificationsLanguage(Notifications.getUnreadNotifications());
+                                console.log(vm.notifications);
+                                vm.loading = false;
 
-                    })
-                    .catch(function (error) {
-                        console.error(error);
+                            })
+                            .catch(function (error) {
+                                console.error(error);
+                                vm.loading = false;
+                            })
+                    } else {
                         vm.loading = false;
-                    })
-            } else {
-                vm.loading = false;
-                vm.notifications = [];
-            }
+                        vm.notifications = [];
+                    }
+                })
+
+
 
             // if(vm.notifications.length>0)
             // {
