@@ -52,32 +52,32 @@ myApp.controller('InitSettingsController',function($scope, FirebaseService,$time
     {
 
     };
-    function settingsSuccess() {
-        console.log('settings opened');
-    }
+    // function settingsSuccess() {
+    //     console.log('settings opened');
+    // }
+    //
+    // function settingsFail() {
+    //     console.log('open settings failed');
+    // }
 
-    function settingsFail() {
-        console.log('open settings failed');
-    }
-
-    function openSettingsNow() {
-        console.log('opening settings');
-        if(ons.platform.isAndroid())cordova.plugins.settings.openSetting("application_details",settingsSuccess,settingsFail);
-        else cordova.plugins.settings.open(settingsSuccess,settingsFail);
-
-    }
-    $scope.openDeviceSettings = function()
-    {
-        if(app && typeof cordova.plugins.settings.openSetting !== undefined){
-            if(ons.platform.isAndroid())
-            {
-                console.log('android');
-                openSettingsNow();
-            }else{
-                openSettingsNow();
-            }
-        }
-    };
+    // function openSettingsNow() {
+    //     console.log('opening settings');
+    //     if(ons.platform.isAndroid())cordova.plugins.settings.openSetting("application_details",settingsSuccess,settingsFail);
+    //     else cordova.plugins.settings.open(settingsSuccess,settingsFail);
+    //
+    // }
+    // $scope.openDeviceSettings = function()
+    // {
+    //     if(app && typeof cordova.plugins.settings.openSetting !== undefined){
+    //         if(ons.platform.isAndroid())
+    //         {
+    //             console.log('android');
+    //             openSettingsNow();
+    //         }else{
+    //             openSettingsNow();
+    //         }
+    //     }
+    // };
 
 
     $scope.openPageLegal = function(type)
