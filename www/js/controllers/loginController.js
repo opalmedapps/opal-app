@@ -132,8 +132,7 @@ myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$root
                 // NavigatorParameters.setParameters('Login');
                 var deviceID;
 
-                //
-
+                // If user sets not trusted remove the localstorage
                 if (!trusted) {
                     localStorage.removeItem(UserAuthorizationInfo.getUsername()+"/deviceID");
                     localStorage.removeItem(UserAuthorizationInfo.getUsername()+"/securityAns");
