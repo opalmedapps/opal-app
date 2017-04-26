@@ -26,6 +26,9 @@ myApp.service('Notifications',['$filter','RequestToServer','LocalStorage','Annou
          *@description Initializing array that represents all the information for Notifications, this array is passed to appropiate controllers.
          **/
         var Notifications=[];
+
+        var lastUpdated = 0;
+
         /**
          *@ngdoc property
          *@name  MUHCApp.service.#notificationsLocalStorage
@@ -262,6 +265,7 @@ myApp.service('Notifications',['$filter','RequestToServer','LocalStorage','Annou
                 Notifications=[];
                 notificationsLocalStorage=[];
                 addUserNotifications(notifications);
+                lastUpdated = Date.now();
             },
             /**
              *@ngdoc method
@@ -274,6 +278,7 @@ myApp.service('Notifications',['$filter','RequestToServer','LocalStorage','Annou
             {
                 searchAndDeleteNotifications(notifications);
                 addUserNotifications(notifications);
+                lastUpdated = Date.now();
             },
             /**
              *@ngdoc method
@@ -437,6 +442,7 @@ myApp.service('Notifications',['$filter','RequestToServer','LocalStorage','Annou
             {
                 Notifications=[];
                 notificationsLocalStorage=[];
+                lastUpdated = 0;
             },
             /**
              *@ngdoc method
@@ -447,6 +453,8 @@ myApp.service('Notifications',['$filter','RequestToServer','LocalStorage','Annou
             requestAllNotifications: function () {
 
                 var r = $q.defer();
+
+                if (lastUpdated > Date.now() - 60000) r.resolve({});
 
                 var _this = this;
                 RequestToServer.sendRequestWithResponse('NotificationsAll')

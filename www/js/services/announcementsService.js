@@ -38,6 +38,7 @@
          *the appropriate controllers.
          **/
         var announcementsArray=[];
+        var lastUpdated = 0;
 
         var service = {
             setAnnouncements: setAnnouncements,
@@ -51,7 +52,8 @@
             getAnnouncementName: getAnnouncementName,
             setLanguageAnnouncements: setLanguageAnnouncements,
             getAnnouncementUrl: getAnnouncementUrl,
-            clearAnnouncements: clearAnnouncements
+            clearAnnouncements: clearAnnouncements,
+            getLastUpdated: getLastUpdated
         };
         return service;
 
@@ -261,6 +263,7 @@
         function clearAnnouncements()
         {
             announcementsArray=[];
+            lastUpdated = 0;
         }
 
         //When there is an update, find the matching message and delete it, its added later by findAndDeleteAnnouncements function
@@ -289,6 +292,10 @@
             }
             //Update local storage section
             //LocalStorage.WriteToLocalStorage('Announcements',announcementsArray);
+        }
+
+        function getLastUpdated() {
+            return lastUpdated;
         }
 
     }

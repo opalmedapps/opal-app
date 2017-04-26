@@ -167,10 +167,7 @@ exports.getPatientTableFields = function(userId,timestamp,arrayTables)
 {
     var r=Q.defer();
     var timestp=0;
-    if(arguments.length>2)
-    {
-        timestp=timestamp;
-    }else if(arguments.length==2)
+    if(arguments.length>=2)
     {
         timestp=timestamp;
     }
@@ -478,16 +475,18 @@ exports.inputFeedback=function(requestObject)
             {
                 if(error) r.reject({Response:'error',Reason:error});
 
+                var replyTo = null;
                 // Determine if the feedback is for the app or patients committee
                 if (requestObject.Parameters.Type == 'pfp'){
                     var email = "patients4patients.contact@gmail.com";
                     var title = "New Suggestion - Opal";
+                    replyTo = email;
                 } else {
                     var email = "muhc.app.mobile@gmail.com";
                     var title = "New Feedback - Opal";
                 }
                 var mailman = new Mail();
-                mailman.sendMail(email, title, requestObject.Parameters.FeedbackContent);
+                mailman.sendMail(email, title, requestObject.Parameters.FeedbackContent, replyTo);
                 r.resolve({Response:'success'});
             });
     });
