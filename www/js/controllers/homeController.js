@@ -36,7 +36,7 @@
         vm.checkInMessage = '';
         vm.RoomLocation = '';
         vm.showHomeScreenUpdate = null;
-        vm.pageLoad = true;
+        vm.loading = true;
 
         vm.homeDeviceBackButton = homeDeviceBackButton;
         vm.load = load;
@@ -135,33 +135,43 @@
         function setNotifications()
         {
             // Get all new notifications
-            var notifications = Notifications.getNewNotifications();
-            if (notifications.length > 0)
-            {
-                // Get the refresh types from the notification data. These correspond to the API call to the server
-                var toLoad = notifications.reduce(
-                    function (accumulator, currentValue) {
-                        if (accumulator.includes(currentValue.refreshType)) {
-                            return accumulator
-                        } else {
-                            accumulator.push(currentValue.refreshType);
-                            return accumulator
-                        }
-                    }, []);
-                console.log(toLoad);
 
-                // Get the data needed from server and set it in Opal
-                UpdateUI.set(toLoad)
-                    .then(function () {
-                        vm.notifications = Notifications.setNotificationsLanguage(Notifications.getUnreadNotifications());
-                        console.log(vm.notifications);
-                    })
-                    .catch(function (error) {
-                        console.error(error);
-                    })
-            } else {
-                vm.notifications = [];
-            }
+            UpdateUI.set(['Notifications'])
+                .then(function () {
+                    var notifications = Notifications.getNewNotifications();
+                    if (notifications.length > 0)
+                    {
+                        // Get the refresh types from the notification data. These correspond to the API call to the server
+                        var toLoad = notifications.reduce(
+                            function (accumulator, currentValue) {
+                                if (accumulator.includes(currentValue.refreshType)) {
+                                    return accumulator
+                                } else {
+                                    accumulator.push(currentValue.refreshType);
+                                    return accumulator
+                                }
+                            }, []);
+                        console.log(toLoad);
+
+                        // Get the data needed from server and set it in Opal
+                        UpdateUI.set(toLoad)
+                            .then(function () {
+                                vm.notifications = Notifications.setNotificationsLanguage(Notifications.getUnreadNotifications());
+                                console.log(vm.notifications);
+                                vm.loading = false;
+
+                            })
+                            .catch(function (error) {
+                                console.error(error);
+                                vm.loading = false;
+                            })
+                    } else {
+                        vm.loading = false;
+                        vm.notifications = [];
+                    }
+                })
+
+
 
             // if(vm.notifications.length>0)
             // {
@@ -230,7 +240,7 @@
                             }
                         });
                     } else {
-                        //Case:2 Appointment already checked-in show the message for 'you are checked in...' and query for estimate
+                        //They have been called to the appointment.
 
                         var calledApp = Appointments.getRecentCalledAppointment();
                         vm.calledApp = calledApp;
@@ -277,16 +287,22 @@
         // For Android only, allows pressing the back button
         function homeDeviceBackButton(){
             console.log('device button pressed do nothing');
-            var message = $filter('translate')('EXIT_APP');
-            NativeNotification.showNotificationConfirm(message,function(){
-                if(ons.platform.isAndroid())
-                {
-                    navigator.app.exitApp();
+            var mod = 'android';
+            var msg = $filter('translate')('EXIT_APP');
+
+            ons.notification.confirm({
+                message: msg,
+                modifier: mod,
+                callback: function(idx) {
+                    switch (idx) {
+                        case 0:
+                            break;
+                        case 1:
+                            navigator.app.exitApp();
+                            break;
+                    }
                 }
-            },function(){
-                console.log('cancel exit');
             });
-            console.log(homeNavigator.getDeviceBackButtonHandler());
         }
 
         function goToStatus()

@@ -137,6 +137,15 @@
                     </ons-row>
                 </ons-list-item>
             </ons-list>
+
+            <div ng-show="loading" align="center" style="margin:10px">
+                <svg class="progress-circular">
+                    <circle class="progress-circular__primary" cx="50%" cy="50%" r="40%" fill="none" stroke-width="10%" stroke-miterlimit="10"/>
+                </svg>
+                <br>
+                {{"LOADINGDATA"|translate}}
+            </div>
+
             <div  style="padding-top:5px;" class="settings-header" ng-class="fontSizeTitle" ng-show = "h.notifications.length !== 0">{{"NEWS"|translate}}</div>
             <!--Making new set up for notifications-->
             <ons-list style="margin-top:5px;">
