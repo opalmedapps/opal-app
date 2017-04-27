@@ -88,7 +88,7 @@ myApp.controller('personalTabController',
     //Init function for this controller
     function initPersonalTab()
     {
-        if (Documents.getLastUpdated() < Date.now() - 300000 && TxTeamMessages.getLastUpdated() < Date.now() - 300000 ){
+        if (Documents.getLastUpdated() < Date.now() - 300000 || TxTeamMessages.getLastUpdated() < Date.now() - 300000 ){
             UpdateUI.set([
                 'Documents',
                 'TxTeamMessages',
@@ -106,7 +106,8 @@ myApp.controller('personalTabController',
 myApp.controller('generalTabController',['$scope','$timeout','Announcements','RequestToServer','UpdateUI','Notifications','NavigatorParameters','$filter','Doctors',
     function($scope,$timeout,Announcements,RequestToServer,UpdateUI,Notifications,NavigatorParameters,$filter, Doctors){
 
-    if (Doctors.getLastUpdated() < Date.now() - 300000 && Announcements.getLastUpdated() < Date.now() - 300000 ) {
+    if (Doctors.getLastUpdated() < Date.now() - 300000 || Announcements.getLastUpdated() < Date.now() - 300000 ) {
+        console.log('announcment : ',  Announcements.getLastUpdated(), 'doc: ', Doctors.getLastUpdated());
         UpdateUI.set([
             'Doctors',
             'Announcements',

@@ -71,6 +71,7 @@
             //Cleaning the announcements array
             announcementsArray=[];
             //Adding annoucements
+            lastUpdated = Date.now();
             addAnnouncements(announcements);
         }
 
