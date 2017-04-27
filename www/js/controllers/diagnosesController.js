@@ -1,6 +1,13 @@
-//
-// Author: David Herrera on Summer 2016, Email:davidfherrerar@gmail.com
-//
+/*
+ * Filename     :   diagnosesController.js
+ * Description  :   Manages the diagnosis view.
+ * Created by   :   David Herrera, Robert Maglieri 
+ * Date         :   27 Apr 2017
+ * Copyright    :   Copyright 2016, HIG, All rights reserved.
+ * Licence      :   This file is subject to the terms and conditions defined in
+ *                  file 'LICENSE.txt', which is part of this source code package.
+ */
+
 /**
  * @ngdoc controller
  * @name MUHCApp.controller:DiagnosesController
@@ -16,10 +23,10 @@
         .module('MUHCApp')
         .controller('DiagnosesController', DiagnosesController);
 
-    DiagnosesController.$inject = ['Diagnoses','UserPreferences', 'UpdateUI'];
+    DiagnosesController.$inject = ['Diagnoses','UserPreferences'];
 
     /* @ngInject */
-    function DiagnosesController(Diagnoses, UserPreferences, UpdateUI) {
+    function DiagnosesController(Diagnoses, UserPreferences) {
         var vm = this;
         vm.title = 'DiagnosesController';
         vm.diagnoses = [];

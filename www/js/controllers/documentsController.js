@@ -1,33 +1,46 @@
 //
 // Author: David Herrera on Summer 2016, Email:davidfherrerar@gmail.com
 //
-var myApp = angular.module('MUHCApp');
-myApp.controller('DocumentsController', ['Patient', 'Documents', 'UpdateUI', '$scope', '$timeout',
-    'UserPreferences', 'RequestToServer', '$cordovaFile','UserAuthorizationInfo',
-    '$q','$filter','NavigatorParameters', 'Permissions', 'Logger',
-    function(Patient, Documents, UpdateUI, $scope, $timeout, UserPreferences,
-             RequestToServer,$cordovaFile,UserAuthorizationInfo,$q,$filter,
-             NavigatorParameters, Permissions, Logger){
 
-        Permissions.enablePermission('WRITE_EXTERNAL_STORAGE', 'Storage access disabled. Unable to write documents.');
+(function () {
+    'use strict';
 
-        documentsInit();
+    angular
+        .module('MUHCApp')
+        .controller('DocumentsController', DocumentsController);
 
-        Logger.sendLog('Documents', 'all');
+    DocumentsController.$inject = ['Documents', '$filter', 'NavigatorParameters', 'Permissions', 'Logger'];
 
-        //Initialize documents, determine if there are documents, set language, determine if content has preview
-        function documentsInit() {
+    /* @ngInject */
+    function DocumentsController(Documents, $filter, NavigatorParameters, Permissions, Logger) {
+        var vm = this;
+        vm.title = 'DocumentsController';
+        vm.noDocuments = true;
+        vm.documents = [];
+
+        vm.goToDocument = goToDocument;
+        vm.showHeader = showHeader;
+
+        activate();
+
+        ////////////////
+
+        function activate() {
+
+            // Check for document permission
+            Permissions.enablePermission('WRITE_EXTERNAL_STORAGE', 'Storage access disabled. Unable to write documents.');
+            Logger.sendLog('Documents', 'all');
+
             var documents = Documents.getDocuments();
             documents = Documents.setDocumentsLanguage(documents);
-            if(documents.length === 0) $scope.noDocuments=true;
-            //console.log(documents);
-            $scope.documents = $filter('orderBy')(documents,'documents.CreatedTimeStamp');
-            console.log($scope.documents);
+            if(documents.length > 0) vm.noDocuments=false;
+            vm.documents = $filter('orderBy')(documents,'documents.CreatedTimeStamp');
 
         }
+
         //Go to document function, if not read, read it, then set parameters for navigation
-        $scope.goToDocument=function(doc)
-        {
+        function goToDocument(doc){
+
             if(doc.ReadStatus == '0')
             {
                 doc.ReadStatus ='1';
@@ -35,34 +48,24 @@ myApp.controller('DocumentsController', ['Patient', 'Documents', 'UpdateUI', '$s
             }
             NavigatorParameters.setParameters({'navigatorName':'personalNavigator', 'Post':doc});
             personalNavigator.pushPage('./views/personal/my-chart/individual-document.html');
-        };
-        //Function for document refresh, deprecated at the moment. Only refresh at home.
-        $scope.refreshDocuments = function($done) {
-            RequestToServer.sendRequest('Refresh', 'Documents');
-            var UserData = UpdateUI.update('Documents');
-            UserData.then(function(){
-                documentsInit();
-                $done();
-            });
-            $timeout(function() {
-                $done();
-            }, 5000);
-        };
+        }
 
-        //Show header function helper
-        $scope.showHeader=function(index, length)
+        // Determines whether or not to show the date header.
+        function showHeader(index)
         {
             if (index === 0){
                 return true;
             }
             else {
-                var previous = (new Date($scope.documents[index-1].CreatedTimeStamp)).setHours(0,0,0,0);
-                var current = (new Date($scope.documents[index].CreatedTimeStamp)).setHours(0,0,0,0);
+                var previous = (new Date(vm.documents[index-1].CreatedTimeStamp)).setHours(0,0,0,0);
+                var current = (new Date(vm.documents[index].CreatedTimeStamp)).setHours(0,0,0,0);
                 return (current !== previous);
             }
         };
 
-    }]);
+    }
+
+})();
 
 /**
  * @name SingleDocumentController

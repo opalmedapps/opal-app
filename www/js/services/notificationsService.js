@@ -278,7 +278,7 @@ myApp.service('Notifications',['$filter','RequestToServer','LocalStorage','Annou
             {
                 searchAndDeleteNotifications(notifications);
                 addUserNotifications(notifications);
-                lastUpdated = Date.now();
+                //lastUpdated = Date.now();
             },
             /**
              *@ngdoc method
@@ -459,7 +459,7 @@ myApp.service('Notifications',['$filter','RequestToServer','LocalStorage','Annou
                 var _this = this;
                 RequestToServer.sendRequestWithResponse('NotificationsAll')
                     .then(function (response) {
-                        _this.updateUserNotifications(response.Data);
+                        _this.setUserNotifications(response.Data);
                         r.resolve({});
                     })
                     .catch(function (error) {
@@ -467,8 +467,15 @@ myApp.service('Notifications',['$filter','RequestToServer','LocalStorage','Annou
                     });
 
                 return r.promise;
-            }
+            },
 
+            /**
+             *
+             */
+            getLastUpdated: function () {
+                "use strict";
+                return lastUpdated;
+            }
         };
 
     }]);
