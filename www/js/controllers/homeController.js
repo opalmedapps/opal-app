@@ -136,7 +136,7 @@
         {
             // Get all new notifications
 
-            UpdateUI.set(['Notifications'])
+            UpdateUI.update(['Notifications'])
                 .then(function () {
                     var notifications = Notifications.getNewNotifications();
                     if (notifications.length > 0)
@@ -151,7 +151,6 @@
                                     return accumulator
                                 }
                             }, []);
-                        console.log(toLoad);
 
                         // Get the data needed from server and set it in Opal
                         UpdateUI.set(toLoad)

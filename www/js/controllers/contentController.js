@@ -1,3 +1,13 @@
+/*
+ * Filename     :   contentController.js
+ * Description  :   Manages the dynamic content grabbed from depdocs. It can take a content link as input.
+ * Created by   :   David Herrera, Robert Maglieri 
+ * Date         :   27 Apr 2017
+ * Copyright    :   Copyright 2016, HIG, All rights reserved.
+ * Licence      :   This file is subject to the terms and conditions defined in
+ *                  file 'LICENSE.txt', which is part of this source code package.
+ */
+
 (function () {
     'use strict';
 
@@ -19,9 +29,9 @@
 
         ////////////////
 
+        // Uses the content pushed from a pushPage. See details in Opal wiki for use.
         function activate() {
             var nav = NavigatorParameters.getNavigator();
-            console.log(nav.getCurrentPage());
             var link = nav.getCurrentPage().options.contentLink;
             var contentType = nav.getCurrentPage().options.contentType;
             vm.pageContent.title = contentType;
@@ -35,10 +45,8 @@
             // get the content from depdocs
             DynamicContentService.getPageContent(contentType)
                 .then(function (response) {
-                    console.log(response);
                     vm.pageContent.title = pageContent.title;
                     vm.pageContent.content = response.data;
-                    console.log(vm.pageContent);
                     vm.loading = false;
                 })
                 .catch(handleError);
@@ -50,7 +58,6 @@
                     Logger.sendLog('About', contentType);
                     vm.pageContent.title = contentType;
                     vm.pageContent.content = response.data;
-                    console.log(vm.pageContent);
                     vm.loading = false;
                 })
                 .catch(handleError);
@@ -59,7 +66,6 @@
 
         function handleError(response) {
             vm.loading = false;
-            console.log(response.code == "NO_PAGE");
             switch (response.code) {
                 case "NO_PAGE":
                     vm.alert = {

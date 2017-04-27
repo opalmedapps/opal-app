@@ -41,6 +41,7 @@ myApp.controller('InitScreenController',
         //Do not show the list breaking, equivalent of ng-cloak for angularjs, LOOK IT UP!!! https://docs.angularjs.org/api/ng/directive/ngCloak
         setTimeout(function(){
             $("#listInitApp").css({display:'block'});
+            NavigatorParameters.setNavigator(initNavigator);
         },10);
 
         //Initialize language if not initialized
@@ -57,20 +58,18 @@ myApp.controller('InitScreenController',
         $scope.goToParking = function()
         {
             NavigatorParameters.setParameters('initNavigator');
-            initNavigator.pushPage('./views/general/parking/parking.html',{animation:'lift'});
+            initNavigator.pushPage('./views/general/parking/parking.html');
         };
         //Go to general settings
         $scope.goToGeneralSettings = function()
         {
             NavigatorParameters.setParameters({'Navigator':'initNavigator'});
-            initNavigator.pushPage('./views/init/init-settings.html',{animation:'lift'});
+            initNavigator.pushPage('./views/init/init-settings.html');
         };
         //Go to patient charter
         $scope.goToPatientCharter = function()
         {
-            console.log('heading to charter');
-            NavigatorParameters.setParameters('initNavigator');
-            initNavigator.pushPage('./views/general/charter/charter.html',{animation:'lift'});
+            initNavigator.pushPage('./views/templates/content.html', {contentType : 'patient_charter'});
         };
 
         //Report issues function
