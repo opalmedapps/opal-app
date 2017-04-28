@@ -1,4 +1,4 @@
-<ons-page ng-controller="InfoTabController">
+<ons-page ng-controller="InfoTabController as info">
     <ons-toolbar fixed-style>
       <div class="left">
           <ons-back-button>{{"BACK"|translate}}</ons-back-button>
@@ -7,9 +7,11 @@
     </ons-toolbar>
     <div style="margin-top:10vh;padding: 0 20px 0 20px" class="text-center">
       <div >
-        <i ng-class="view.icon" ng-style="{color:view.color}" style="font-size:80px"></i>
+        <ons-icon icon="{{info.view.icon}}" ng-style="{color:info.view.color}" style="font-size:80px"></ons-icon>
       </div>
-      <p class="item-title" style="font-size:30px" ng-style="{color:view.color}" translate= "{{view.name}}"></p>
-      <div style="text-align:center;:padding-left:20px;padding-right:20px" ng-bind-html="trustAsHtml(view.description)"></div>
+      <p class="item-title" style="font-size:30px" ng-style="{color:view.color}" translate= "{{info.view.name}}"></p>
+      <div class="container" style="text-align:center;">
+          {{info.view.description}}
+      </div>
     </div>
  </ons-page>

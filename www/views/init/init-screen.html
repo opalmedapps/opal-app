@@ -12,7 +12,7 @@
     </div>
     <div id = "listInitApp" style="display:none">
         <ons-list  class="person-list"  translate-cloak>
-            <ons-list-item class="person" modifier="tappable chevron" ng-click="goToParking()">
+            <ons-list-item class="person" modifier="tappable chevron" ng-click="init.goToParking()">
                 <ons-row align="middle" style="height:40px;">
                     <ons-col align="center" width="40px">
                         <div style="margin-left:10px;text-align:left;display:inline-block">
@@ -27,7 +27,7 @@
                     </ons-col>
                 </ons-row>
             </ons-list-item>
-            <ons-list-item class="person" modifier="tappable chevron" ng-click="goToPatientCharter()">
+            <ons-list-item class="person" modifier="tappable chevron" ng-click="init.goToPatientCharter()">
                 <ons-row align="middle" style="height:40px;">
                     <ons-col align="center" width="40px">
                         <div style="margin-left:10px;text-align:left;display:inline-block">
@@ -42,7 +42,7 @@
                     </ons-col>
                 </ons-row>
             </ons-list-item>
-            <ons-list-item class="person" modifier="tappable chevron" ng-click="reportIssuesMail()">
+            <ons-list-item class="person" modifier="tappable chevron" ng-click="init.reportIssuesMail()">
                 <ons-row align="middle" style="height:40px;">
                     <ons-col align="center" width="40px">
                         <div style="margin-left:10px;text-align:left;display:inline-block">
@@ -57,7 +57,7 @@
                     </ons-col>
                 </ons-row>
             </ons-list-item>
-            <ons-list-item class="person" modifier="tappable chevron" ng-click="goToGeneralSettings()" >
+            <ons-list-item class="person" modifier="tappable chevron" ng-click="init.goToGeneralSettings()" >
                 <ons-row align="middle" style="height:40px">
                     <ons-col align="center" width="40px">
                         <div style="margin-left:10px;text-align:left;display:inline-block">
@@ -71,7 +71,7 @@
                     </ons-col>
                 </ons-row>
             </ons-list-item>
-            <ons-list-item class="person" modifier="tappable chevron" ng-show="globalMessage" ng-click="goToMessage()" style="background-color: orange">
+            <ons-list-item class="person" modifier="tappable chevron" ng-show="init.globalMessage" ng-click="init.goToMessage()" style="background-color: orange">
                 <ons-row align="middle" style="height:40px;">
                     <ons-col align="center" width="40px">
                         <div style="margin-left:10px;text-align:left;display:inline-block">
@@ -81,7 +81,7 @@
                     <ons-col  align="center">
                         <div  align="center" >
                             <!--<ons-icon icon = "ion-android-car" style="font-size:25px;color:red" ></ons-icon>-->
-                            {{globalMessage}}
+                            {{init.globalMessage}}
                         </div>
                     </ons-col>
                 </ons-row>
@@ -92,7 +92,7 @@
         <br>
 
         <div style="text-align: center; width: 90%; margin: auto">
-            <ons-button class="animated pulse ng-cloak" modifier="large" style="font-size: x-large; font-weight: bolder; background-color: #387A36" ng-click="goToUserView()" var="initButton">{{"HEADER_MESSAGE_LOGIN"|translate}}</ons-button>
+            <ons-button class="animated pulse ng-cloak" modifier="large" style="font-size: x-large; font-weight: bolder; background-color: #387A36" ng-click="init.goToLogin()" var="initButton">{{"HEADER_MESSAGE_LOGIN"|translate}}</ons-button>
         </div>
     </div>
 
