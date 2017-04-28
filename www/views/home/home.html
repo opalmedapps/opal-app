@@ -118,7 +118,7 @@
 
             <div ng-hide="h.loading">
 
-                <div  style="padding-top:5px;" class="settings-header" ng-class="fontSizeTitle" ng-show = "h.notifications.length !== 0">{{"NEWS"|translate}}</div>
+                <div  style="padding-top:5px;" class="settings-header" ng-class="fontSizeTitle" ng-show = "h.notifications.length !== 0" >{{"NEWS"|translate}}</div>
                 <!--Making new set up for notifications-->
                 <ons-list style="margin-top:5px;">
                     <ons-list-item modifier="chevron" class="item" ng-repeat="(type, notification) in h.notifications" ng-click="h.goToNotification($index, notification)">
