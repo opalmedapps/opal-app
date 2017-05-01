@@ -444,13 +444,8 @@ myApp.controller('CalendarController', ['Appointments', '$scope','$timeout', '$f
                 Appointments.readAppointmentBySerNum(appointment.AppointmentSerNum);
             }
 
-            if (NavigatorParameters.getParameters().Navigator == 'homeNavigator'){
                 NavigatorParameters.setParameters({'Navigator':'homeNavigator', 'Post':appointment});
-                homeNavigator.pushPage('./views/personal/appointments/individual-appointment.html');
-            } else{
-                NavigatorParameters.setParameters({'Navigator':'personalNavigator', 'Post':appointment});
-                personalNavigator.pushPage('./views/personal/appointments/individual-appointment.html');
-            }
+                NavigatorParameters.getNavigator().pushPage('./views/personal/appointments/individual-appointment.html');
         };
     }]);
 myApp.controller('ScheduleController', ['$rootScope', 'UserPreferences', 'Appointments','$cordovaCalendar','$scope',
@@ -618,7 +613,6 @@ myApp.controller('IndividualAppointmentController', ['NavigatorParameters','Nati
         //Information of current appointment
         var parameters = NavigatorParameters.getParameters();
         console.log(parameters);
-        var navigatorName = parameters.Navigator;
 
         $scope.app = parameters.Post;
         $scope.language = UserPreferences.getLanguage();
@@ -629,11 +623,11 @@ myApp.controller('IndividualAppointmentController', ['NavigatorParameters','Nati
         $scope.goToMap=function()
         {
             NavigatorParameters.setParameters($scope.app);
-            window[navigatorName].pushPage('./views/general/maps/individual-map.html');
+            NavigatorParameters.getNavigator().pushPage('./views/general/maps/individual-map.html');
         };
 
         $scope.aboutApp = function () {
-            window[navigatorName].pushPage('./views/templates/content.html', {
+            NavigatorParameters.getNavigator().pushPage('./views/templates/content.html', {
                 contentLink: $scope.app["URL_"+UserPreferences.getLanguage()],
                 contentType: $scope.app["AppointmentType_"+UserPreferences.getLanguage()]
             });
