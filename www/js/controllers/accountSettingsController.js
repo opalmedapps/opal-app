@@ -157,7 +157,7 @@ myApp.controller('ChangingSettingController',
                 $scope.newValue = '';
                 $scope.oldValue = '';
                 var label = $filter('translate')('ENTEROLD');
-                $scope.placeHolder = label + ' ' +$scope.valueLabel;
+                $scope.placeHolder = label + ' ' +$filter('translate')($scope.valueLabel);
                 $scope.instruction = "ENTERNEWPASSWORD";
                 $scope.instructionOld = "ENTEROLDPASSWORD";
             } else if (parameters === 'LANGUAGE') {
@@ -208,7 +208,7 @@ myApp.controller('ChangingSettingController',
             $scope.actualValue = value;
             $scope.newUpdate = true;
             $scope.alertClass = "bg-success updateMessage-success";
-            $scope.updateMessage = $filter('translate')("FIELD_UPDATED");
+            $scope.updateMessage = "FIELD_UPDATED";
             console.log($scope.updateMessage, $scope.alertClass);
 
         }
@@ -252,7 +252,7 @@ myApp.controller('ChangingSettingController',
                         $timeout(function() {
 
                             $scope.alertClass = "bg-success updateMessage-success";
-                            $scope.updateMessage = $filter('translate')("PASSWORDUPDATED");
+                            $scope.updateMessage = "PASSWORDUPDATED";
                             $scope.newUpdate = true;
                         });
                     })
@@ -261,7 +261,7 @@ myApp.controller('ChangingSettingController',
                         $timeout(function () {
                             $scope.newUpdate = true;
                             $scope.alertClass = "bg-danger updateMessage-error";
-                            $scope.updateMessage = $filter('translate')("INTERNETERROR");
+                            $scope.updateMessage = "INTERNETERROR";
                         });
                     })
 
@@ -274,14 +274,14 @@ myApp.controller('ChangingSettingController',
                         $timeout(function () {
                             $scope.newUpdate = true;
                             $scope.alertClass = "bg-danger updateMessage-error";
-                            $scope.updateMessage = $filter('translate')("INVALID_PASSWORD");
+                            $scope.updateMessage = "INVALID_PASSWORD";
                         });
                         break;
                     default:
                         $timeout(function () {
                             $scope.newUpdate = true;
                             $scope.alertClass = "bg-danger updateMessage-error";
-                            $scope.updateMessage = $filter('translate')("INTERNETERROR");
+                            $scope.updateMessage = "INTERNETERROR";
                         });
                 }
             }
@@ -306,7 +306,7 @@ myApp.controller('ChangingSettingController',
                 RequestToServer.sendRequest('AccountChange', objectToSend);
                 $timeout(function() {
                     $scope.alertClass = "bg-success updateMessage-success";
-                    $scope.updateMessage = $filter('translate')("UPDATED_EMAIL");
+                    $scope.updateMessage = "UPDATED_EMAIL";
                     $scope.newUpdate = true;
                 });
             }
@@ -317,21 +317,21 @@ myApp.controller('ChangingSettingController',
                         $timeout(function() {
                             $scope.alertClass = "bg-danger updateMessage-error";
                             $scope.newUpdate = true;
-                            $scope.updateMessage = $filter('translate')("INVALID_EMAIL");
+                            $scope.updateMessage = "INVALID_EMAIL";
                         });
                         break;
                     case "auth/email-already-in-use":
                         $timeout(function() {
                             $scope.alertClass = "bg-danger updateMessage-error";
                             $scope.newUpdate = true;
-                            $scope.updateMessage = $filter('translate')("EMAIL_TAKEN");
+                            $scope.updateMessage = "EMAIL_TAKEN";
                         });
                         break;
                     default:
                         $timeout(function() {
                             $scope.alertClass = "bg-danger updateMessage-error";
                             $scope.newUpdate = true;
-                            $scope.updateMessage = $filter('translate')("INTERNETERROR");
+                            $scope.updateMessage = "INTERNETERROR";
                         });
                         break;
                 }
@@ -365,42 +365,42 @@ myApp.controller('ChangingSettingController',
                     $timeout(function () {
                         $scope.newUpdate = true;
                         $scope.alertClass = "bg-danger updateMessage-error";
-                        $scope.updateMessage = $filter('translate')("INVALID_ASSOCIATION");
+                        $scope.updateMessage = "INVALID_ASSOCIATION";
                     });
                     break;
                 case "auth/user-not-found":
                     $timeout(function () {
                         $scope.newUpdate = true;
                         $scope.alertClass = "bg-danger updateMessage-error";
-                        $scope.updateMessage = $filter('translate')("INVALID_USER");
+                        $scope.updateMessage = "INVALID_USER";
                     });
                     break;
                 case "auth/invalid-credential":
                     $timeout(function () {
                         $scope.newUpdate = true;
                         $scope.alertClass = "bg-danger updateMessage-error";
-                        $scope.updateMessage = $filter('translate')("INVALID_CREDENTIAL");
+                        $scope.updateMessage = "INVALID_CREDENTIAL";
                     });
                     break;
                 case "auth/invalid-email":
                     $timeout(function () {
                         $scope.newUpdate = true;
                         $scope.alertClass = "bg-danger updateMessage-error";
-                        $scope.updateMessage = $filter('translate')("INVALID_EMAIL");
+                        $scope.updateMessage = "INVALID_EMAIL";
                     });
                     break;
                 case "auth/wrong-password":
                     $timeout(function () {
                         $scope.newUpdate = true;
                         $scope.alertClass = "bg-danger updateMessage-error";
-                        $scope.updateMessage = $filter('translate')("INVALID_PASSWORD");
+                        $scope.updateMessage = "INVALID_PASSWORD";
                     });
                     break;
                 default:
                     $timeout(function () {
                         $scope.newUpdate = true;
                         $scope.alertClass = "bg-danger updateMessage-error";
-                        $scope.updateMessage = $filter('translate')("INTERNETERROR");
+                        $scope.updateMessage = "INTERNETERROR";
                     });
             }
         }
