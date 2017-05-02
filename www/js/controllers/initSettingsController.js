@@ -18,6 +18,8 @@ myApp.controller('InitSettingsController',function($scope, FirebaseService,$time
         var authData = FirebaseService.getAuthentication().$getAuth();
         $scope.authenticated = !!authData;
         $scope.languageSwitch  = (UserPreferences.getLanguage()=='EN')?false:true;
+        $scope.currentYear = new Date().getFullYear();
+
         if(app){
             cordova.getAppVersion.getVersionNumber(function (version) {
                 $timeout(function()
