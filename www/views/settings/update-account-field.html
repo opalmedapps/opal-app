@@ -1,12 +1,12 @@
 <ons-page style="background-color: white" ng-controller="ChangingSettingController" ng-cloak>
     <ons-toolbar fixed-style>
         <div class="left"><ons-back-button>{{"BACK"|translate}}</ons-back-button></div>
-        <div class="center" ng-class="fontSizeTitle">{{title}} {{valueLabel}}</div>
+        <div class="center" ng-class="fontSizeTitle">{{title|translate}} {{valueLabel|translate}}</div>
     </ons-toolbar>
 
     <div class="container" ng-show="personal">
 
-        <div ng-show="value=='Password'||value=='Email'">
+        <div ng-show="value=='PASSWORD'||value=='EMAIL'">
             <div>
                 <p ng-class="fontSizeTitle" translate ="{{instructionOld}}"></p>
             </div>
@@ -22,11 +22,11 @@
                 <p ng-class="fontSizeTitle" translate ="{{instruction}}"></p>
             </div>
 
-            <div class="style-4" style="width: 100%;" ng-show="value!=='Tel. Number'">
+            <div class="style-4" style="width: 100%;" ng-show="value!=='PHONENUMBER'">
                 <input ng-minlength="1" type="{{type1}}" ng-class="fontSizeDesc" class="style-4" placeholder="{{valueLabel}}" value="{{valueLabel}}" ng-model="newValue">
             </div>
 
-            <div class="style-4" style="width: 100%;" ng-show="value =='Tel. Number'" >
+            <div class="style-4" style="width: 100%;" ng-show="value =='PHONENUMBER'" >
                 <input phone-input type="{{type1}}" ng-class="fontSizeDesc" class="style-4" placeholder="{{valueLabel}}" value="{{valueLabel}}" ng-model="newValue">
             </div>
         </div>
@@ -36,7 +36,7 @@
         </div>
 
         <div class="container" style="margin-top:10px">
-            <button class="button button--large" ng-disabled="disableButton" ng-click="updateValue(value)"  style="margin: 0 auto;">{{"UPDATE"|translate}} {{valueLabel}}</button><br>
+            <button class="button button--large" ng-disabled="disableButton" ng-click="updateValue(value)"  style="margin: 0 auto;">{{"UPDATE"|translate}} {{valueLabel|translate}}</button><br>
         </div>
     </div>
 

@@ -102,14 +102,6 @@ myApp.controller('ChangingSettingController',
         //Sets all the account settings depeding on the field that needs to be changed
         function accountChangeSetUp() {
             //Mappings between parameters and translation
-            var fieldsMappings = {
-                "Font-size": "FONTSIZE",
-                "Language": "LANGUAGE",
-                "Tel. Number": "PHONENUMBER",
-                "Password": "PASSWORD",
-                "Email": "EMAIL",
-                "Nickname": "ALIAS"
-            };
             //Navigator parameter
             var page = settingsNavigator.getCurrentPage();
             var parameters = page.options.param;
@@ -118,22 +110,21 @@ myApp.controller('ChangingSettingController',
 
             //Instantiates values and parameters
             $scope.disableButton = true;
+            $scope.title = 'UPDATE';
             $scope.value = parameters;
-            console.log(fieldsMappings);
-            $scope.title = $filter('translate')('UPDATE');
-            $scope.valueLabel = $filter('translate')(fieldsMappings[parameters]);
+            $scope.valueLabel = parameters;
             $scope.personal = true;
             $scope.type1 = 'text';
             //Sets a watch on the values typed and runs the validation scripts for the respective values
             $scope.$watchGroup(['newValue', 'oldValue'], function() {
                 $scope.newUpdate = false;
-                if (parameters !== 'Language' && parameters !== 'Font-size') {
-                    if (parameters == 'Email') {
+                if (parameters !== 'LANGUAGE' && parameters !== 'FONTSIZE') {
+                    if (parameters == 'EMAIL') {
                         $scope.disableButton = !validateEmail();
-                    } else if (parameters == 'Password') {
+                    } else if (parameters == 'PASSWORD') {
                         console.log(validatePassword());
                         $scope.disableButton = !validatePassword();
-                    } else if (parameters == 'Tel. Number') {
+                    } else if (parameters == 'PHONENUMBER') {
                         $scope.disableButton = !validateTelNum();
                     } else {
                         console.log('alias, boom', $scope.actualValue, $scope.newValue);
@@ -144,15 +135,15 @@ myApp.controller('ChangingSettingController',
             });
 
             //Sets the instructions depending on the value to update
-            if (parameters === 'Nickname') {
+            if (parameters === 'ALIAS') {
                 $scope.actualValue = Patient.getAlias();
                 $scope.newValue = $scope.actualValue;
                 $scope.instruction = "ENTERYOURALIAS";
-            } else if (parameters === 'Tel. Number') {
+            } else if (parameters === 'PHONENUMBER') {
                 $scope.actualValue = Patient.getTelNum();
                 $scope.newValue = $scope.actualValue;
                 $scope.instruction = "ENTERNEWTELEPHONE";
-            } else if (parameters === 'Email') {
+            } else if (parameters === 'EMAIL') {
                 $scope.type1 = 'email';
                 $scope.type2 = 'password';
                 $scope.newValue = '';
@@ -160,7 +151,7 @@ myApp.controller('ChangingSettingController',
                 $scope.placeHolder = $filter('translate')("ENTERPASSWORD");
                 $scope.instruction = "ENTEREMAILADDRESS";
                 $scope.instructionOld = "ENTERPASSWORD";
-            } else if (parameters === 'Password') {
+            } else if (parameters === 'PASSWORD') {
                 $scope.type1 = 'password';
                 $scope.type2 = 'password';
                 $scope.newValue = '';
@@ -169,7 +160,7 @@ myApp.controller('ChangingSettingController',
                 $scope.placeHolder = label + ' ' +$scope.valueLabel;
                 $scope.instruction = "ENTERNEWPASSWORD";
                 $scope.instructionOld = "ENTEROLDPASSWORD";
-            } else if (parameters === 'Language') {
+            } else if (parameters === 'LANGUAGE') {
                 var value = UserPreferences.getLanguage();
                 $scope.instruction = 'SELECTLANGUAGE';
                 $scope.personal = false;
@@ -177,7 +168,9 @@ myApp.controller('ChangingSettingController',
                 $scope.pickLanguage = value;
                 $scope.firstOption = 'EN';
                 $scope.secondOption = 'FR';
-            } else if (parameters === 'Font-size') {
+                $scope.valueLabel = 'LANGUAGE';
+                $scope.title = 'UPDATE';
+            } else if (parameters === 'FONTSIZE') {
                 var value = UserPreferences.getFontSize();
                 $scope.firstOption = 'medium';
                 $scope.secondOption = 'large';
