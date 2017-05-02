@@ -91,7 +91,7 @@ NG_DOCS={
       "type": "service",
       "moduleName": "MUHCApp",
       "shortDescription": "Sets the documents and provides an API to interact with them and the server",
-      "keywords": "$filter $q aliasname_en aliasname_fr api appropiate array arrival backend cleardocuments clears contained controller controllers correct device document documents documentsarray documentsernum downloaddocumentfromserver downloads error function getdocumentbysernum getdocumentnames getdocuments getdocumenturl getnumberunreaddocuments getter individual initializing interact iterates language latest logoutcontroller looked matches matching method model muhcapp names notifications object parameter passed patient preferred promise property read readdocument readstatus rejected represents request returns saved sends sernum server service setdocuments setdocumentslanguage sets setter storage successful syncs timeout translated translates unread updatedocuments updates url userpreferences values"
+      "keywords": "$filter $q aliasname_en aliasname_fr api appropiate array arrival backend check cleardocumentcontent cleardocuments clears contained content controller controllers correct data device document documents documentsarray documentsernum downloaddocumentfromserver downloads error function getdocumentbysernum getdocumentnames getdocuments getdocumenturl getnumberunreaddocuments getter individual initializing interact iterates language lastupdated latest leaving logoutcontroller looked matches matching meta method model muhcapp names notifications object parameter passed patient preferred promise property read readdocument readstatus rejected represents request returns saved sends sernum server service setdocuments setdocumentslanguage sets setter storage successful syncs timeout timestamp translated translates unread updatedocuments updates url userpreferences values"
     },
     {
       "section": "api",
@@ -158,6 +158,15 @@ NG_DOCS={
     },
     {
       "section": "api",
+      "id": "MUHCApp.service:Logger",
+      "shortName": "Logger",
+      "type": "service",
+      "moduleName": "MUHCApp",
+      "shortDescription": "Service that logs user activity on the Opal server",
+      "keywords": "activity activitydetails api bool boolean current disables enablelogging enables log logged logging logs method muhcapp number opal sendlog sends serial server service sets type usage user"
+    },
+    {
+      "section": "api",
       "id": "MUHCApp.service:NativeNotification",
       "shortName": "NativeNotification",
       "type": "service",
@@ -172,7 +181,7 @@ NG_DOCS={
       "type": "service",
       "moduleName": "MUHCApp",
       "shortDescription": "Used to pass parameters between Navigators, the Onsen navigator options are not good enough because the controller you navigate to has to know the navigator that&#39;s currently in, this is possible but the code becomes",
-      "keywords": "api bunch clauses cleaner code controller current currently getparameters good html https info io messy method muhcapp navigate navigation navigator navigators object onsen options param parameter parameters pass property represents returns service setparameters sets simple simply specifies things"
+      "keywords": "api bunch clauses cleaner code controller current currently getparameters good html https info io messy method muhcapp nav navigate navigation navigator navigators object onsen options param parameter parameters pass property represents returns service setparameters sets simple simply specifies things"
     },
     {
       "section": "api",
@@ -190,7 +199,7 @@ NG_DOCS={
       "type": "service",
       "moduleName": "MUHCApp",
       "shortDescription": "API service used to patient notifications. This Service is deeply linked to other services to extract that information about the actual content of the notification.",
-      "keywords": "$filter actual adds aliasname_en aliasname_fr api appropiate array backend belongs clearnotifications clears color contained containts content controller controllers darkorange deeply defined device document documentsernum extract fa fa-folder field finds function getdocumentbysernum getdocumentnames getdocumenturl getnotificationpost getnumberunreadnotifications getter getunreadnotifications getusernotifications gotopost icon initializing iterates language linked localstorage logoutcontroller mappings method muhcapp nameen namefr namesfunction news notification notifications notificationsarray notificationslocalstorage notificationtypes number object opening opens pageurl parameter passed patient post preferred property read readdocument readfunction readnotification readstatus represents request return returns saved search searchfunction sends sernum service services setnotificationslanguage sets setter setusernotifications storage syncs translated translates type unread update updates updateusernotifications userpreferences values var"
+      "keywords": "$filter actual adds aliasname_en aliasname_fr api appropiate array backend belongs clearnotifications clears color contained containts content controller controllers darkorange deeply defined device document documentsernum extract fa fa-folder field finds form function getdocumentbysernum getdocumentnames getdocumenturl getnewnotifications getnotificationpost getnumberunreadnotifications getter getunreadnotifications getusernotifications gotopost grabs icon initializing iterates language linked localstorage logoutcontroller mappings method muhcapp nameen namefr namesfunction news notification notifications notificationsarray notificationslocalstorage notificationtypes number object opening opens pageurl parameter passed patient post preferred property read readdocument readfunction readnotification readstatus represents request requestallnotifications return returns saved search searchfunction sends sernum server service services setnotificationslanguage sets setter setusernotifications storage syncs translated translates type unread update updates updateusernotifications userpreferences values var"
     },
     {
       "section": "api",
@@ -244,7 +253,7 @@ NG_DOCS={
       "type": "service",
       "moduleName": "MUHCApp",
       "shortDescription": "Service used to store and manage treatment planning tasks",
-      "keywords": "$filter api array clears deleteplanningtasks destroy getallrecenttasks getplanningtasks local localstorage manage member method model muhcapp null objects physician planning planningtasks property returns service setplanningtasks sets sgetrecentphysiciantask storage store task tasks treatment users writes"
+      "keywords": "$filter api array clears deleteplanningtasks destroy getallrecenttasks getplanningtasks getrecentphysiciantask local localstorage manage member method model muhcapp null objects physician planning planningtasks property returns service setplanningtasks sets storage store task tasks treatment users writes"
     },
     {
       "section": "api",
@@ -253,7 +262,7 @@ NG_DOCS={
       "type": "service",
       "moduleName": "MUHCApp",
       "shortDescription": "Service that deals with the treatment team message information",
-      "keywords": "$filter adds announcements api appropiate array backend clears cleartxteammessages contained containts controller controllers deals device faster finds function getnumberunreadtxteammessages getter gettxteammessagebysernum gettxteammessagename gettxteammessages gettxteammessageurl getunreadtxteammessages individual initializing iterates iteration language logoutcontroller looked matching message messages method muhcapp names news notifications number object parameter passed postname_en postname_fr preferred property read readstatus readtxteammessage readtxteammessagebysernum represents request required returns saved sends sernum service setlanguagetxteammessages sets setter settxteammessages storage syncs team translated translates treatment tx txteammessage txteammessages txteammessagesarray txteammessagesernum unread update updates updatetxteammessages url userpreferences values"
+      "keywords": "$filter adds announcements api appropiate array backend check clears cleartxteammessages contained containts controller controllers deals device faster finds function getnumberunreadtxteammessages getter gettxteammessagebysernum gettxteammessagename gettxteammessages gettxteammessageurl getunreadtxteammessages individual initializing iterates iteration language lastupdated logoutcontroller looked matching message messages method muhcapp names news notifications number object parameter passed postname_en postname_fr preferred property read readstatus readtxteammessage readtxteammessagebysernum represents request required returns saved sends sernum service setlanguagetxteammessages sets setter settxteammessages storage syncs team timestamp translated translates treatment tx txteammessage txteammessages txteammessagesarray txteammessagesernum unread update updates updatetxteammessages url userpreferences values"
     },
     {
       "section": "api",
