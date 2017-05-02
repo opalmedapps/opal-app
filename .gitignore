@@ -1,6 +1,5 @@
 node_modules
 bower_components
-gulpfile.js
 credentials.js
 *.swp
 .DS_Store
