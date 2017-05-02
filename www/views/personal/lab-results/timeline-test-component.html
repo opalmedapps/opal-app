@@ -23,8 +23,8 @@
             {{"LAB_MAX_NORM"| translate}}
             <span class="list-item-note lucent">{{maxNorm}} {{unit}}</span>
         </ons-list-item>
-        <ons-list-item >
-            <a ng-href="{{url}}" target="_blank">{{"ABOUT" | translate}} {{title}}</a>
+        <ons-list-item ng-click="goToAbout()">
+            {{"ABOUT" | translate}} {{title}}
         </ons-list-item>
         </ons-list>
     </ons-col>

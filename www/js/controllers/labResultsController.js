@@ -115,8 +115,8 @@ myApp.controller('IndividualLabTestController',['$scope','$timeout','LabResults'
     }
 }]);
 
-myApp.controller('TimelineTestComponentController',['$scope','$timeout','LabResults','$filter','UserPreferences', 'Logger',
-    function($scope,$timeout,LabResults,$filter,UserPreferences, Logger)
+myApp.controller('TimelineTestComponentController',['$scope','$timeout','LabResults','$filter','UserPreferences', 'Logger', 'Constants',
+    function($scope,$timeout,LabResults,$filter,UserPreferences, Logger, Constants)
     {
         var page = personalNavigator.getCurrentPage();
         var test = page.options.param;
@@ -136,8 +136,6 @@ myApp.controller('TimelineTestComponentController',['$scope','$timeout','LabResu
         $scope.testValue = page.options.param.TestValue;
         $scope.information = undefined;
 
-        $scope.url = 'https://labtestsonline.org/map/aindex/SearchForm?Search='+$scope.title+'&action_ProcessSphinxSearchForm=Go';
-
         $scope.testResultsByType = LabResults.getTestResultsByType();
 
         var testResults = $scope.testResultsByType[$scope.title].testResults;
@@ -146,6 +144,16 @@ myApp.controller('TimelineTestComponentController',['$scope','$timeout','LabResu
         $scope.testResultsByDateArray = LabResults.getTestResultsArrayByDate();
 
         Logger.sendLog('Lab Results', test.ComponentName || test.testResults[0].ComponentName);
+
+        var url = 'https://labtestsonline.org/map/aindex/SearchForm?Search='+$scope.title+'&action_ProcessSphinxSearchForm=Go';
+
+        $scope.goToAbout = function () {
+            if (Constants.app) {
+                cordova.InAppBrowser.open(url, '_blank', 'location=yes');
+            } else {
+                window.open(url);
+            }
+        }
 
         // Chart
         $scope.data = [{
