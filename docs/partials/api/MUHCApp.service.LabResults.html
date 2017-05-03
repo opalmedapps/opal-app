@@ -1,0 +1,73 @@
+<h1><code ng:non-bindable="">LabResults</code>
+<div><span class="hint">service in module <code ng:non-bindable="">MUHCApp</code>
+</span>
+</div>
+</h1>
+<div><h2 id="description">Description</h2>
+<div class="description"><div class="muhcapp-service-page muhcapp-service-labresults-page"><p>Service that requests and manages the lab results (blood tests) from the server.</p>
+</div></div>
+<h2 id="dependencies">Dependencies</h2>
+<ul class="dependencies"><li><code ng:non-bindable=""><a href="api/ng.$filter">$filter</a></code>
+</li>
+<li><code ng:non-bindable=""><a href="api/MUHCApp.service:RequestToServer">RequestToServer</a></code>
+</li>
+<li><code ng:non-bindable=""><a href="api/ng.$q">$q</a></code>
+</li>
+<li><code ng:non-bindable=""><a href="api/MUHCApp.service:LocalStorage">LocalStorage</a></code>
+</li>
+</ul>
+<div class="member method"><h2 id="methods">Methods</h2>
+<ul class="methods"><li><h3 id="methods_destroy">destroy()</h3>
+<div class="destroy"><div class="destroy-page"><p>Clears all lab results.</p>
+</div></div>
+</li>
+<li><h3 id="methods_gettestresults">getTestResults()</h3>
+<div class="gettestresults"><div class="gettestresults-page"><p>Getter for the raw lab results.</p>
+</div><h5 id="methods_gettestresults_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-object">Object</a></td><td><div class="gettestresults-page"><p>Returns raw lab results</p>
+</div></td></tr></table></div>
+</li>
+<li><h3 id="methods_gettestresultsarraybydate">getTestResultsArrayByDate()</h3>
+<div class="gettestresultsarraybydate"><div class="gettestresultsarraybydate-page"><p>Gets the lab results by date</p>
+</div><h5 id="methods_gettestresultsarraybydate_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-array">Array</a></td><td><div class="gettestresultsarraybydate-page"><p>Returns array containing lab results by date</p>
+</div></td></tr></table></div>
+</li>
+<li><h3 id="methods_gettestresultsarraybytype">getTestResultsArrayByType()</h3>
+<div class="gettestresultsarraybytype"><div class="gettestresultsarraybytype-page"><p>Gets the lab results by type</p>
+</div><h5 id="methods_gettestresultsarraybytype_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-array">Array</a></td><td><div class="gettestresultsarraybytype-page"><p>Returns array containing lab results by type</p>
+</div></td></tr></table></div>
+</li>
+<li><h3 id="methods_gettestresultsbycategory">getTestResultsByCategory()</h3>
+<div class="gettestresultsbycategory"><div class="gettestresultsbycategory-page"><p>Gets lab results by category</p>
+</div><h5 id="methods_gettestresultsbycategory_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-object">Object</a></td><td><div class="gettestresultsbycategory-page"><p>Returns lab results by category</p>
+</div></td></tr></table></div>
+</li>
+<li><h3 id="methods_gettestresultsbydate">getTestResultsByDate()</h3>
+<div class="gettestresultsbydate"><div class="gettestresultsbydate-page"><p>Gets lab results by date</p>
+</div><h5 id="methods_gettestresultsbydate_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-object">Object</a></td><td><div class="gettestresultsbydate-page"><p>Returns object containing lab results by date</p>
+</div></td></tr></table></div>
+</li>
+<li><h3 id="methods_gettestresultsbytype">getTestResultsByType()</h3>
+<div class="gettestresultsbytype"><div class="gettestresultsbytype-page"><p>Gets the lab results by type.</p>
+</div><h5 id="methods_gettestresultsbytype_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-object">Object</a></td><td><div class="gettestresultsbytype-page"><p>Returns lab results object by type.</p>
+</div></td></tr></table></div>
+</li>
+<li><h3 id="methods_settestresults">setTestResults()</h3>
+<div class="settestresults"><div class="settestresults-page"><p>Clears and sets the lab results after getting the raw data from the server.</p>
+</div><h5 id="methods_settestresults_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-promise">Promise</a></td><td><div class="settestresults-page"><p>Returns a promise containing status</p>
+</div></td></tr></table></div>
+</li>
+<li><h3 id="methods_updatetestresults">updateTestResults()</h3>
+<div class="updatetestresults"><div class="updatetestresults-page"><p>Updates the lab results, grabbing the latest results from the server. Currently not implemented</p>
+</div><h5 id="methods_updatetestresults_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-promise">Promise</a></td><td><div class="updatetestresults-page"><p>Returns a promise containing status.</p>
+</div></td></tr></table></div>
+</li>
+</ul>
+</div>
+<div class="member property"><h2 id="properties">Properties</h2>
+<ul class="properties"><li><h3 id="properties_testresults">testResults</h3>
+<div class="testresults"><div class="muhcapp-service-testresults-page"><p>Raw data obtained by the server.</p>
+</div></div>
+</li>
+</ul>
+</div>
+</div>
