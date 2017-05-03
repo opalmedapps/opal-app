@@ -145,5 +145,19 @@
             </ons-col>
           </ons-row>
         </ons-list-item>
+        <ons-list-item modifier="chevron" class="item" ng-click="personalNavigator.pushPage('views/personal/medication-alerts/medication-list.html')">
+          <ons-row align="center">
+            <ons-col width="60px" align="center">
+                <ons-icon icon="fa fa-exclamation iconHomeView" style="color:black"></ons-icon>
+              </div>
+            </ons-col>
+            <ons-col>
+              <header>
+                <span class="item-title" ng-class="fontSizeTitle">{{"MEDICATIONALERTS"|translate}}</span>
+              </header>
+              <p class="item-desc" ng-class="fontSizeDesc"></p>
+            </ons-col>
+          </ons-row>
+        </ons-list-item>
     </ons-list>
 </ons-page>
