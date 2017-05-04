@@ -2535,3 +2535,14 @@ input:focus {
     
 
 }
+
+/*
+||||||||||||||||||||||||||||||
+designing new home menu items
+||||||||||||||||||||||||||||||
+ */
+.menuitem .col div.tabtext { padding: 20px 0 20px; min-height: 160px; text-align: center; }
+.menuitem .col div.tabtext i { font-size: 60px; color: #1773ba; }
+.menuitem .col div.tabtext h3 { font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; margin: 25px 0 0 0; padding: 0;color: #515151; font-size: 18px; }
+.menuitem .col div.tabtext.activated, .menuitem .col div.tabtext.active { background: #1773ba; -webkit-transition: all .3s ease-in-out; -moz-transition: all .3s ease-in-out; -o-transition: all .3s ease-in-out; transition: all .3s ease-in-out; }
+.menuitem .col div.tabtext.activated h3, .menuitem .col div.tabtext.activated i, .menuitem .col div.tabtext.active h3,  .menuitem .col div.tabtext.active i { color: #fff; -webkit-transition: all .3s ease-in-out; -moz-transition: all .3s ease-in-out; -o-transition: all .3s ease-in-out; transition: all .3s ease-in-out; }
