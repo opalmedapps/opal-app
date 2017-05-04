@@ -29,7 +29,7 @@
             }
             else {
                 check_button_color.style.color = "green";
-                desc.innerHTML = "Taken at " + moment().format("MMMM Do YYYY, h:mm:ss a");;
+                desc.innerHTML = "Taken at " + moment().format("MMMM Do YYYY, h:mm a");;
             }
 
 
