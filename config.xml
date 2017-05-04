@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.hig.opal" version="0.3.2" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <name>Opal</name>
+<widget id="com.hig.opaldev" version="0.3.2" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>Opal-dev</name>
     <description>
         Opal - the MUHC Oncology Patient Application for mobile phones and the web - is a product that has arisen from the winning project of the 2014 MUHC Q+ initiative. The project proposal was submitted by the Health Informatics Group (HIG) and was entitled “Realistic knowledge-based waiting time estimates for radiation oncology patients - addressing the pain of waiting”. It had as its goal the provision of waiting time estimates to radiation oncology patients.
     </description>
@@ -17,7 +17,7 @@
     <allow-intent href="mailto:*" />
     <allow-intent href="geo:*" />
     <allow-intent href="opal:" />
-    <preference name="Orientation" value="default" />
+    <preference name="Orientation" value="portrait" />
     <preference name="SplashScreenDelay" value="5000" />
     <preference name="DisallowOverscroll" value="true" />
     <preference name="FadeSplashScreen" value="true" />
@@ -67,7 +67,7 @@
         <icon height="58" src="res/ios/Icon-small@2x.png" width="58" />
     </platform>
     <plugin name="phonegap-plugin-push" spec="~1.9.2">
-        <variable name="SENDER_ID" value="810896751588" />
+        <variable name="SENDER_ID" value="652464215237" />
     </plugin>
     <plugin name="com-badrit-printplugin" spec="~0.2.0" />
     <plugin name="cordova-plugin-app-version" spec="~0.1.9" />
