@@ -25,7 +25,7 @@ myApp.controller('CalendarController', ['Appointments', '$scope','$timeout', '$f
     '$anchorScroll','NavigatorParameters', 'UserPreferences', 'Logger',
     function (Appointments, $scope,$timeout,$filter,$location,
               $anchorScroll,NavigatorParameters,UserPreferences, Logger) {
-       
+       console.log(Appointments.getUserAppointments());
         /*
         *   Controller constants
         **/ 
@@ -79,17 +79,20 @@ myApp.controller('CalendarController', ['Appointments', '$scope','$timeout', '$f
             $scope.dt.setHours(0,0,0,0);
             today = new Date($scope.dt);
             flag=false;
+            if( $scope.appointments.length>0)
+            {
+                //Setting time in milliseconds for last appointment
+                dateLast=(new Date($scope.appointments[$scope.appointments.length-1].ScheduledStartTime.getTime()));
+                dateLast.setHours(0,0,0,0);
+                dateLast = dateLast.getTime();
+                //Setting time in milliseconds for first appointment
+                dateFirst=(new Date($scope.appointments[0].ScheduledStartTime.getTime()));
+                dateFirst.setHours(0,0,0,0);
+                dateFirst = dateFirst.getTime();
+            }
             //Getting time in milliseconds for today's appointment
             todaysTimeMilliseconds =  today.getTime();
             choosenTimeMilliseconds = todaysTimeMilliseconds;
-            //Setting time in milliseconds for last appointment
-            dateLast=(new Date($scope.appointments[$scope.appointments.length-1].ScheduledStartTime.getTime()));
-            dateLast.setHours(0,0,0,0);
-            dateLast = dateLast.getTime();
-            //Setting time in milliseconds for first appointment
-            dateFirst=(new Date($scope.appointments[0].ScheduledStartTime.getTime()));
-            dateFirst.setHours(0,0,0,0);
-            dateFirst = dateFirst.getTime();
         }
         function goToCalendarOptions()
         {
