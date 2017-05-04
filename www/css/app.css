@@ -2484,3 +2484,10 @@ input:focus {
     touch-action: manipulation !important;
     -webkit-user-drag: element !important;
 }
+
+
+@media all and (orientation:landscape) {
+    .calendar--appointments{
+        display: none;
+    }
+}
