@@ -66,43 +66,43 @@
         <icon height="29" src="res/ios/Icon-small.png" width="29" />
         <icon height="58" src="res/ios/Icon-small@2x.png" width="58" />
     </platform>
-    <plugin name="phonegap-plugin-push" spec="~1.9.2">
+    <plugin name="phonegap-plugin-push" spec="^1.9.2">
         <variable name="SENDER_ID" value="810896751588" />
     </plugin>
-    <plugin name="com-badrit-printplugin" spec="~0.2.0" />
-    <plugin name="cordova-plugin-app-version" spec="~0.1.9" />
-    <plugin name="cordova-plugin-calendar" spec="~4.5.5" />
-    <plugin name="cordova-plugin-compat" spec="~1.1.0" />
-    <plugin name="cordova-plugin-device" spec="~1.1.5-dev" />
-    <plugin name="cordova-plugin-dialogs" spec="~1.3.1" />
-    <plugin name="cordova-plugin-file" spec="~4.2.0" />
-    <plugin name="cordova-plugin-file-opener2" spec="~2.0.3" />
-    <plugin name="cordova-plugin-file-transfer" spec="~1.6.1" />
-    <plugin name="cordova-plugin-fileopener" spec="~1.0.5" />
-    <plugin name="cordova-plugin-geolocation" spec="~2.4.1" />
-    <plugin name="cordova-plugin-globalization" spec="~1.0.5" />
-    <plugin name="cordova-plugin-media" spec="~2.4.1" />
-    <plugin name="cordova-plugin-network-information" spec="~1.3.1" />
-    <plugin name="cordova-plugin-print-pdf" spec="~4.0.0" />
-    <plugin name="cordova-plugin-splashscreen" spec="~4.0.1" />
-    <plugin name="cordova-plugin-x-toast" spec="~2.5.2" />
-    <plugin name="de.appplant.cordova.plugin.printer" spec="~0.7.1" />
-    <plugin name="phonegap-plugin-barcodescanner" spec="~6.0.4" />
-    <plugin name="cordova-plugin-android-permissions" spec="~0.10.0" />
-    <plugin name="cordova-fabric-plugin" spec="1.1.1">
+    <plugin name="com-badrit-printplugin" spec="^0.2.0" />
+    <plugin name="cordova-plugin-app-version" spec="^0.1.9" />
+    <plugin name="cordova-plugin-calendar" spec="^4.5.5" />
+    <plugin name="cordova-plugin-compat" spec="^1.1.0" />
+    <plugin name="cordova-plugin-device" spec="^1.1.5" />
+    <plugin name="cordova-plugin-dialogs" spec="^1.3.1" />
+    <plugin name="cordova-plugin-file" spec="^4.2.0" />
+    <plugin name="cordova-plugin-file-opener2" spec="^2.0.3" />
+    <plugin name="cordova-plugin-file-transfer" spec="^1.6.1" />
+    <plugin name="cordova-plugin-fileopener" spec="^1.0.5" />
+    <plugin name="cordova-plugin-geolocation" spec="^2.4.1" />
+    <plugin name="cordova-plugin-globalization" spec="^1.0.5" />
+    <plugin name="cordova-plugin-media" spec="^2.4.1" />
+    <plugin name="cordova-plugin-network-information" spec="^1.3.1" />
+    <plugin name="cordova-plugin-print-pdf" spec="^4.0.0" />
+    <plugin name="cordova-plugin-splashscreen" spec="^4.0.1" />
+    <plugin name="cordova-plugin-x-toast" spec="^2.5.2" />
+    <plugin name="de.appplant.cordova.plugin.printer" spec="^0.7.1" />
+    <plugin name="phonegap-plugin-barcodescanner" spec="^6.0.4" />
+    <plugin name="cordova-plugin-android-permissions" spec="^0.10.0" />
+    <plugin name="cordova-fabric-plugin" spec="^1.1.1">
         <variable name="FABRIC_API_KEY" value="710b104a1e625dfb3b338b72b0bce05b0b5d644c" />
         <variable name="FABRIC_API_SECRET" value="0a1e191ff6a6adda560608fb68cc56f9e16624f531bdc62f0e261c0e688fbdea" />
     </plugin>
-    <plugin name="cordova-plugin-inappbrowser" spec="~1.6.1" />
-    <plugin name="cordova-plugin-whitelist" spec="~1.3.1" />
-    <plugin name="cordova-plugin-email" spec="~1.2.6" />
-    <plugin name="cordova-plugin-x-socialsharing" spec="~5.1.5" />
-    <plugin name="cordova-plugin-customurlscheme" spec="~4.2.0">
+    <plugin name="cordova-plugin-inappbrowser" spec="^1.6.1" />
+    <plugin name="cordova-plugin-whitelist" spec="^1.3.1" />
+    <plugin name="cordova-plugin-email" spec="^1.2.6" />
+    <plugin name="cordova-plugin-x-socialsharing" spec="^5.1.5" />
+    <plugin name="cordova-plugin-customurlscheme" spec="^4.2.0">
         <variable name="URL_SCHEME" value="opal" />
         <variable name="ANDROID_SCHEME" value=" " />
         <variable name="ANDROID_HOST" value=" " />
         <variable name="ANDROID_PATHPREFIX" value="/" />
     </plugin>
-    <plugin name="org.pbernasconi.progressindicator" spec="~1.1.0" />
-    <plugin name="cordova.custom.plugins.exitapp" spec="~1.0.0" />
+    <!--<plugin name="org.pbernasconi.progressindicator" spec="^1.1.0" />-->
+    <!--<plugin name="cordova.custom.plugins.exitapp" spec="^1.0.0" />-->
 </widget>
