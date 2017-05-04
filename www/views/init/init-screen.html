@@ -11,84 +11,113 @@
         </div>
     </div>
     <div id = "listInitApp" style="display:none">
-        <ons-list  class="person-list"  translate-cloak>
-            <ons-list-item class="person" modifier="tappable chevron" ng-click="init.goToParking()">
-                <ons-row align="middle" style="height:40px;">
-                    <ons-col align="center" width="40px">
-                        <div style="margin-left:10px;text-align:left;display:inline-block">
-                            <ons-icon icon = "fa fa-car fa-lg" style="color:red" ></ons-icon>
-                        </div>
-                     </ons-col>
-                    <ons-col  align="center">
-                        <div  align="center" >
-                          <!--<ons-icon icon = "ion-android-car" style="font-size:25px;color:red" ></ons-icon>-->
-                            {{"PARKING"|translate}}
-                        </div>
-                    </ons-col>
-                </ons-row>
-            </ons-list-item>
-            <ons-list-item class="person" modifier="tappable chevron" ng-click="init.goToPatientCharter()">
-                <ons-row align="middle" style="height:40px;">
-                    <ons-col align="center" width="40px">
-                        <div style="margin-left:10px;text-align:left;display:inline-block">
-                            <ons-icon icon = "fa fa-list-alt fa-lg" style="color:brown"></ons-icon>
-                        </div>
-                     </ons-col>
-                    <ons-col  align="center">
-                        <div  style="line-height:1" align="center">
-                           <!--<ons-icon icon = "ion-bug" style="font-size:20px;color:purple"></ons-icon>-->
-                            {{"PATIENTCHARTER"|translate}}
-                        </div>
-                    </ons-col>
-                </ons-row>
-            </ons-list-item>
-            <ons-list-item class="person" modifier="tappable chevron" ng-click="init.reportIssuesMail()">
-                <ons-row align="middle" style="height:40px;">
-                    <ons-col align="center" width="40px">
-                        <div style="margin-left:10px;text-align:left;display:inline-block">
-                            <ons-icon icon = "fa fa-exclamation-triangle fa-lg" style="color:purple"></ons-icon>
-                        </div>
-                     </ons-col>
-                    <ons-col  align="center">
-                        <div  align="center">
-                           <!--<ons-icon icon = "ion-bug" style="font-size:20px;color:purple"></ons-icon>-->
-                            {{"REPORTISSUES"|translate}}
-                        </div>
-                    </ons-col>
-                </ons-row>
-            </ons-list-item>
-            <ons-list-item class="person" modifier="tappable chevron" ng-click="init.goToGeneralSettings()" >
-                <ons-row align="middle" style="height:40px">
-                    <ons-col align="center" width="40px">
-                        <div style="margin-left:10px;text-align:left;display:inline-block">
-                            <ons-icon icon = "fa fa-cog fa-lg" style="color:grey"></ons-icon>
-                        </div>
-                     </ons-col>
-                    <ons-col  align="center" >
-                        <div   align="center">
-                           {{"SETTINGS"|translate}}
-                        </div>
-                    </ons-col>
-                </ons-row>
-            </ons-list-item>
-            <ons-list-item class="person" modifier="tappable chevron" ng-show="init.globalMessage" ng-click="init.goToMessage()" style="background-color: orange">
-                <ons-row align="middle" style="height:40px;">
-                    <ons-col align="center" width="40px">
-                        <div style="margin-left:10px;text-align:left;display:inline-block">
-                            <ons-icon icon = "fa-exclamation" style="color:red" ></ons-icon>
-                        </div>
-                    </ons-col>
-                    <ons-col  align="center">
-                        <div  align="center" >
-                            <!--<ons-icon icon = "ion-android-car" style="font-size:25px;color:red" ></ons-icon>-->
-                            {{init.globalMessage}}
-                        </div>
-                    </ons-col>
-                </ons-row>
-            </ons-list-item>
+      <!--<ons-list  class="person-list"  translate-cloak>-->
+            <!--<ons-list-item class="person" modifier="tappable chevron" ng-click="init.goToParking()">-->
+                <!--<ons-row align="middle" style="height:40px;">-->
+                    <!--<ons-col align="center" width="40px">-->
+                        <!--<div style="margin-left:10px;text-align:left;display:inline-block">-->
+                            <!--<ons-icon icon = "fa fa-car fa-lg" style="color:red" ></ons-icon>-->
+                        <!--</div>-->
+                     <!--</ons-col>-->
+                    <!--<ons-col  align="center">-->
+                        <!--<div  align="center" >-->
+                          <!--&lt;!&ndash;<ons-icon icon = "ion-android-car" style="font-size:25px;color:red" ></ons-icon>&ndash;&gt;-->
+                            <!--{{"PARKING"|translate}}-->
+                        <!--</div>-->
+                    <!--</ons-col>-->
+                <!--</ons-row>-->
+            <!--</ons-list-item>-->
+            <!--<ons-list-item class="person" modifier="tappable chevron" ng-click="init.goToPatientCharter()">-->
+                <!--<ons-row align="middle" style="height:40px;">-->
+                    <!--<ons-col align="center" width="40px">-->
+                        <!--<div style="margin-left:10px;text-align:left;display:inline-block">-->
+                            <!--<ons-icon icon = "fa fa-list-alt fa-lg" style="color:brown"></ons-icon>-->
+                        <!--</div>-->
+                     <!--</ons-col>-->
+                    <!--<ons-col  align="center">-->
+                        <!--<div  style="line-height:1" align="center">-->
+                           <!--&lt;!&ndash;<ons-icon icon = "ion-bug" style="font-size:20px;color:purple"></ons-icon>&ndash;&gt;-->
+                            <!--{{"PATIENTCHARTER"|translate}}-->
+                        <!--</div>-->
+                    <!--</ons-col>-->
+                <!--</ons-row>-->
+            <!--</ons-list-item>-->
+            <!--<ons-list-item class="person" modifier="tappable chevron" ng-click="init.reportIssuesMail()">-->
+                <!--<ons-row align="middle" style="height:40px;">-->
+                    <!--<ons-col align="center" width="40px">-->
+                        <!--<div style="margin-left:10px;text-align:left;display:inline-block">-->
+                            <!--<ons-icon icon = "fa fa-exclamation-triangle fa-lg" style="color:purple"></ons-icon>-->
+                        <!--</div>-->
+                     <!--</ons-col>-->
+                    <!--<ons-col  align="center">-->
+                        <!--<div  align="center">-->
+                           <!--&lt;!&ndash;<ons-icon icon = "ion-bug" style="font-size:20px;color:purple"></ons-icon>&ndash;&gt;-->
+                            <!--{{"REPORTISSUES"|translate}}-->
+                        <!--</div>-->
+                    <!--</ons-col>-->
+                <!--</ons-row>-->
+            <!--</ons-list-item>-->
+            <!--<ons-list-item class="person" modifier="tappable chevron" ng-click="init.goToGeneralSettings()" >-->
+                <!--<ons-row align="middle" style="height:40px">-->
+                    <!--<ons-col align="center" width="40px">-->
+                        <!--<div style="margin-left:10px;text-align:left;display:inline-block">-->
+                            <!--<ons-icon icon = "fa fa-cog fa-lg" style="color:grey"></ons-icon>-->
+                        <!--</div>-->
+                     <!--</ons-col>-->
+                    <!--<ons-col  align="center" >-->
+                        <!--<div   align="center">-->
+                           <!--{{"SETTINGS"|translate}}-->
+                        <!--</div>-->
+                    <!--</ons-col>-->
+                <!--</ons-row>-->
+            <!--</ons-list-item>-->
+            <!--<ons-list-item class="person" modifier="tappable chevron" ng-show="init.globalMessage" ng-click="init.goToMessage()" style="background-color: orange">-->
+                <!--<ons-row align="middle" style="height:40px;">-->
+                    <!--<ons-col align="center" width="40px">-->
+                        <!--<div style="margin-left:10px;text-align:left;display:inline-block">-->
+                            <!--<ons-icon icon = "fa-exclamation" style="color:red" ></ons-icon>-->
+                        <!--</div>-->
+                    <!--</ons-col>-->
+                    <!--<ons-col  align="center">-->
+                        <!--<div  align="center" >-->
+                            <!--&lt;!&ndash;<ons-icon icon = "ion-android-car" style="font-size:25px;color:red" ></ons-icon>&ndash;&gt;-->
+                            <!--{{init.globalMessage}}-->
+                        <!--</div>-->
+                    <!--</ons-col>-->
+                <!--</ons-row>-->
+            <!--</ons-list-item>-->
 
 
-        </ons-list>
+        <!--</ons-list>-->
+        <div class="row eventTab">
+            <div class="col col-50">
+                <div class="tabtext"  ng-click="init.goToParking()" style="background: #3399CC;">
+                    <div class="icon" ><ons-icon icon = "fa fa-car fa-lg" style="color:white" ></ons-icon></div>
+                    <h3> {{"PARKING"|translate}} </h3>
+                </div>
+            </div>
+            <div class="col col-50">
+                <div class="tabtext" ng-click="init.goToPatientCharter()" style="background: #33CCCC;">
+                    <div class="icon"><i class="ion-bug" style="color:white;"></i></div>
+                    <h3>{{"PATIENTCHARTER"|translate}} </h3>
+                </div>
+            </div>
+        </div>
+        <div class="row eventTab">
+            <div class="col col-50">
+                <div class="tabtext"  ng-click="init.reportIssuesMail()" style="background: #99CC99;">
+                    <div class="icon"> <ons-icon icon = "fa fa-exclamation-triangle fa-lg" style="color:white"></ons-icon></div>
+                    <h3>  {{"REPORTISSUES"|translate}}  </h3>
+                </div>
+            </div>
+            <div class="col col-50">
+                <div class="tabtext"  ng-click="init.goToGeneralSettings()" style="background: #CC6699;">
+                    <div class="icon"><ons-icon icon = "fa fa-cog fa-lg" style="color:white;"></ons-icon></div>
+                    <h3> {{"SETTINGS"|translate}} </h3>
+                </div>
+            </div>
+        </div>
+        <div ng-show="init.globalMessage" ng-click="init.goToMessage()">message <div/>
         <br>
 
         <div style="text-align: center; width: 90%; margin: auto">
