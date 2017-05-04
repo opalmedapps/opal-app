@@ -2,7 +2,7 @@
     <ons-page id="popoverLanguage">
         <div>
             <div style="position:absolute;z-index:2;width:100vw" align="center">
-                <div style="margin-top:15vw" align="center">
+                <div align="center">
                     <ons-toolbar fixed-style>
                         <div class="left">
                             <div class="icon"><i class="ion-information" style="font-size:2em;"
@@ -22,7 +22,7 @@
             </div>
         </div>
 
-        <div id="listInitApp" style="display:none">
+        <div id="listInitApp">
             <!-- |||||||||||||||||||||||||||||||||||||||||||||||||||--
                                    HOME MENU
                  |||||||||||||||||||||||||||||||||||||||||||||||||||-->
@@ -40,7 +40,7 @@
                     </div>
                 </div>
             </div>
-            <div class="row menuitem">
+            <div class="row menuitem" style="margin:0 25px 0 0;">
                 <div class="col col-50">
                     <div class="tabtext" ng-click="init.reportIssuesMail()" style="background: #cddc39">
                         <div class="icon"><i class="ion-android-warning" style="color:white"></i></div>
@@ -53,6 +53,8 @@
                         <h3> {{"SETTINGS"|translate}} </h3>
                     </div>
                 </div>
+            </div>
+
             </div>
     </ons-page>
 </ons-navigator>
