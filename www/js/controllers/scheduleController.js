@@ -17,19 +17,49 @@ var myApp = angular.module('MUHCApp');
  *@description
  *Controller manages the logic in the schedule appointment main view, it as as "child" controllers,
  */
+
+
+
 //Logic for the calendar controller view
 myApp.controller('CalendarController', ['Appointments', '$scope','$timeout', '$filter', '$location',
     '$anchorScroll','NavigatorParameters', 'UserPreferences', 'Logger',
     function (Appointments, $scope,$timeout,$filter,$location,
               $anchorScroll,NavigatorParameters,UserPreferences, Logger) {
-        Logger.sendLog('Appointment', 'all');
+       
+        /*
+        *   Controller constants
+        **/ 
         var flag;//Boolean value to indicate initialization
         var todaysTimeMilliseconds;//Time in milliseconds
-        var today;//Day today
+        var choosenTimeMilliseconds;//Selected time in milliseconds
+        var today;//Date today
         var dateLast; //Date of last Appointment;
         var dateFirst;//Date of first Appointment;
         var navigatorName;//Navigator Name;
-
+        //Set the calendar options
+        $scope.dateOptions = {
+            formatYear: 'yyyy',
+            startingDay: 0,
+            formatDay:'d',
+            showWeeks:false
+        };
+        //Determines color for calendar dates based on appointments
+        $scope.showColor = showColor;
+        //Obtains color for a given appointment
+        $scope.getStyle=getStyle;
+        //Determines whether to show header at the end
+        $scope.showHeaderEnd = showHeaderEnd;
+        //Determines whether or not to show red highlighted date per index
+        $scope.showChoosenDateHeader=showChoosenDateHeader;
+        //Go to Appointment
+        $scope.goToAppointment=goToAppointment;
+        //Go to Calendar options
+        $scope.goToCalendarOptions = goToCalendarOptions;
+       
+       
+        /*
+        *   Implementation
+        **/
         //Initializing controller
         init();
         
@@ -41,7 +71,7 @@ myApp.controller('CalendarController', ['Appointments', '$scope','$timeout', '$f
             var heightTreatment=document.documentElement.clientHeight-document.documentElement.clientHeight*0.35-180;
             divTreatment.style.height=heightTreatment+'px';
            
-            //
+            //Obtaining and setting appointments from service
             $scope.appointments=Appointments.getUserAppointments();
             $scope.noAppointments = ($scope.appointments.length === 0);
             $scope.language = UserPreferences.getLanguage();
@@ -61,15 +91,16 @@ myApp.controller('CalendarController', ['Appointments', '$scope','$timeout', '$f
             dateFirst.setHours(0,0,0,0);
             dateFirst = dateFirst.getTime();
         }
-        $scope.goToCalendarOptions = function()
+        function goToCalendarOptions()
         {
             window[navigatorName].pushPage('./views/personal/appointments/calendar-options.html');
-        };
+        }
         //Watcher for the calendar date
         $scope.$watch('dt',function(){
                if(!flag)
                {
                     $timeout(function () {
+                        Logger.sendLog('Appointment', 'all');
                         var anchor=findClosestAnchor();
                         $location.hash(anchor);
                         $anchorScroll();
@@ -85,7 +116,7 @@ myApp.controller('CalendarController', ['Appointments', '$scope','$timeout', '$f
         });    
 
         //Determines color for calendar dates based on appointments
-        $scope.showColor = function(date)
+        function showColor(date)
         {
             var result = $scope.appointments.find(function(item){
                 return  item.ScheduledStartTime.toDateString() == date.toDateString();
@@ -104,21 +135,19 @@ myApp.controller('CalendarController', ['Appointments', '$scope','$timeout', '$f
             }else{
                 return 'rgba(255,255,255,0.0)';
             }
-        };
+        }
         
      
         //Returns string with closest anchor
         function findClosestAnchor()
         {
-            
             if($scope.appointments.length>0)
             {
                 if(dateLast<choosenTimeMilliseconds) return 'lastAnchor';
                 else if(dateFirst>choosenTimeMilliseconds) return 'firstAnchor';
                 else{
-                    var ind = findClosestAppointmentToTime(choosenTimeMilliseconds);                    
-                    if(ind<2) return 'firstAnchor';
-                    return 'anchorAppointments'+ (ind-1);
+                    var ind = findClosestAppointmentToTime(choosenTimeMilliseconds); 
+                    return 'anchorAppointments'+ ind;
                 }
             }
             return 'firstAnchor';
@@ -127,27 +156,28 @@ myApp.controller('CalendarController', ['Appointments', '$scope','$timeout', '$f
         //Could be done with binary search for an improvement
         function findClosestAppointmentToTime(tmili)
         {
-            //To be added once is supported by all browsers!
-            // $scope.appointments.findIndex(function(appointment)
-            // {
-            //     var date = appointment.ScheduledStartTime.getTime();
-            //     return date >= tmili;
-
-            // });
-            // return 0;
             for(var i =0;i<$scope.appointments.length;i++)
             {
                 var date = $scope.appointments[i].ScheduledStartTime.getTime();
-                if(date > tmili)
+                if(date >= tmili)
                 {
                     return i;
                 }   
             }
             return 0;
+             //To be added once is supported by all browsers!
+            // var ind = 0;
+            // ind = $scope.appointments.findIndex(function(appointment)
+            // {
+            //     var date = appointment.ScheduledStartTime.getTime();
+            //     return date >= tmili;
+
+            // });
+            // return ind;
         }
 
         //Obtains color for a given appointment
-        $scope.getStyle=function(index){
+        function getStyle(index){
             var dateAppointment=$scope.appointments[index].ScheduledStartTime;
             if(today.getDate()===dateAppointment.getDate()&&today.getMonth()===dateAppointment.getMonth()&&today.getFullYear()===dateAppointment.getFullYear()){
                 return '#3399ff';
@@ -156,16 +186,16 @@ myApp.controller('CalendarController', ['Appointments', '$scope','$timeout', '$f
             }else{
                 return '#5CE68A';
             }
-        };
+        }
 
         //Determines whether to show header at the end
-        $scope.showHeaderEnd=function()
+        function showHeaderEnd()
         {
             if($scope.appointments.length>0&&dateLast<choosenTimeMilliseconds)return true;
             return false;
-        };
-        //Determines whether or not to show red highlighted date per index
-        $scope.showChoosenDateHeader=function(index)
+        }
+        //Determines when to show header of appointment vs red highlighted header
+        function showChoosenDateHeader(index)
         {
             var date2=new Date($scope.appointments[index].ScheduledStartTime);
             date2.setHours(0,0,0,0);
@@ -200,229 +230,17 @@ myApp.controller('CalendarController', ['Appointments', '$scope','$timeout', '$f
                     }
                 }
             }
-        };
-        //Set the calendar options
-        $scope.dateOptions = {
-            formatYear: 'yyyy',
-            startingDay: 0,
-            formatDay:'d',
-            showWeeks:false
-        };
+        }
 
-        //Go to Appointment
-        $scope.goToAppointment=function(appointment)
+        //Leaves to appointment
+        function goToAppointment(appointment)
         {
             if(appointment.ReadStatus == '0') Appointments.readAppointmentBySerNum(appointment.AppointmentSerNum);
             NavigatorParameters.setParameters({'Navigator':navigatorName, 'Post':appointment});
             window[navigatorName].pushPage('./views/personal/appointments/individual-appointment.html');
-        };
-        /**
-         *@ngdoc method
-         *@name addEventsToCalendar
-         *@method MUHCApp.controller:ScheduleController
-         *@description  If its a device checks to see if the user authorized access to calendar device feature, if the user has not
-         defined it (first time), it prompts the user, otherwise it checks through the {@link Appointments.}whether it
-         they have been added.
-         **/
-
-
-        // function addEventsToNativeCalendar(){
-        //     //Check for device or website
-        //     var app = document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'https://' ) === -1;
-        //     if(app){
-        //         var nativeCalendarOption=window.localStorage.getItem('NativeCalendar')
-        //         if(!nativeCalendarOption){
-        //             var message='Would you like these appointments to be saved as events in your device calendar?';
-        //             navigator.notification.confirm(message, confirmCallback, 'Access Calendar', ["Don't allow",'Ok'] );
-        //         }else if( Number(nativeCalendarOption)===1){
-        //             console.log('option was one!')
-        //             Appointments.checkAndAddAppointmentsToCalendar().then(function(eventSuccession)
-        //             {
-        //                 console.log(eventSuccession);
-        //             });
-        //         }else{
-        //             console.log('Opted out of appointments in native calendar');
-        //         }
-        //     }else{
-        //         console.log('website');
-        //     }
-        // }
-        // function confirmCallback(index){
-        //     if(index==1){
-        //         console.log(index);
-        //         window.localStorage.setItem('NativeCalendar', 0);
-        //         console.log('Not Allowed!');
-        //     }else if(index==2){
-        //         console.log(index);
-        //         window.localStorage.setItem('NativeCalendar', 1);
-        //         console.log('Allowed!');
-        //         Appointments.checkAndAddAppointmentsToCalendar().then(function(eventSuccession)
-        //         {
-        //             console.log(eventSuccession);
-        //         });
-        //     }
-        // }
-
-        //Go to appointment
+        }
 
 }]);
-
-myApp.controller('ScheduleController', ['$rootScope', 'UserPreferences', 'Appointments','$cordovaCalendar','$scope',
-    function ($rootScope, UserPreferences, Appointments,$cordovaCalendar,$scope) {
-
-        $scope.closeAlert = function () {
-            $rootScope.showAlert = false;
-        };
-        //addEventsToNativeCalendar();
-
-        /**
-         *@ngdoc method
-         *@name addEventsToCalendar
-         *@methodOf MUHCApp.controller:ScheduleController
-         *@description  If its a device checks to see if the user authorized access to calendar device feature, if the user has not
-         defined it (first time), it prompts the user, otherwise it checks through the {@link Appointments.}whether it
-         they have been added.
-         **/
-
-
-        function addEventsToNativeCalendar(){
-            //Check for device or website
-            var app = document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'https://' ) === -1;
-            if(app){
-                var nativeCalendarOption=window.localStorage.getItem('NativeCalendar')
-                if(!nativeCalendarOption){
-                    var message='Would you like these appointments to be saved as events in your device calendar?';
-                    navigator.notification.confirm(message, confirmCallback, 'Access Calendar', ["Don't allow",'Ok'] );
-                }else if( Number(nativeCalendarOption)===1){
-                    console.log('option was one!')
-                    Appointments.checkAndAddAppointmentsToCalendar().then(function(eventSuccession)
-                    {
-                        console.log(eventSuccession);
-                    });
-                }else{
-                    console.log('Opted out of appointments in native calendar');
-                }
-            }else{
-                console.log('website');
-            }
-        }
-        function confirmCallback(index){
-            if(index==1){
-                console.log(index);
-                window.localStorage.setItem('NativeCalendar', 0);
-                console.log('Not Allowed!');
-            }else if(index==2){
-                console.log(index);
-                window.localStorage.setItem('NativeCalendar', 1);
-                console.log('Allowed!');
-                Appointments.checkAndAddAppointmentsToCalendar().then(function(eventSuccession)
-                {
-                    console.log(eventSuccession);
-                });
-            }
-        }
-
-    }]);
-
-/*myApp.controller('AppointmentListController', ['$scope','$timeout','Appointments','$location','$anchorScroll',
-
-    function ($scope,$timeout, Appointments,$location,$anchorScroll) {
-        //Initializing choice
-        if(Appointments.getTodaysAppointments().length!==0){
-            $scope.radioModel = 'Today';
-        }else {
-            $scope.radioModel = 'All';
-        }
-
-
-        //Today's date
-        $scope.today=new Date();
-
-        //Sets up appointments to display based on the user option selected
-        $scope.$watch('radioModel',function(){
-            $timeout(function(){
-                selectAppointmentsToDisplay();
-            });
-
-        });
-
-        //Function to select whether the today, past, or upming buttons are selected
-        function selectAppointmentsToDisplay(){
-            var selectionRadio=$scope.radioModel;
-            if(selectionRadio==='Today'){
-                $scope.appointments=Appointments.getTodaysAppointments();
-
-            }else if(selectionRadio==='Upcoming'){
-                $scope.appointments=Appointments.getFutureAppointments();
-            }else if(selectionRadio==='Past'){
-                $scope.appointments=Appointments.getPastAppointments();
-            }else{
-                $scope.appointments=Appointments.getUserAppointments();
-            }
-            if($scope.appointments.length==0){
-                $scope.noAppointments=true;
-            }
-        }
-
-        //Function to select the color of the appointment depending on whether the date has passed or not
-        $scope.getStyle=function(index){
-            var today=$scope.today;
-            var dateAppointment=$scope.appointments[index].ScheduledStartTime;
-
-            if(today.getDate()===dateAppointment.getDate()&&today.getMonth()===dateAppointment.getMonth()&&today.getFullYear()===dateAppointment.getFullYear()){
-                return '#3399ff';
-
-            }else if(dateAppointment>today){
-                return '#D3D3D3';
-
-
-            }else{
-                return '#5CE68A';
-            }
-        };
-
-        //Set header
-        $scope.scrollTo=function()
-        {
-            if($scope.pickAnchor&&typeof $scope.pickAnchor!=='undefined')
-            {
-                var anchor='anchorAppointments'+$scope.pickAnchor;
-                console.log(anchor);
-                $location.hash(anchor);
-                $anchorScroll();
-            }
-        }
-        $scope.showColor = function(date)
-        {
-
-            if(100*Math.random()>85)
-            {
-                return 'red';
-            }else{
-                return 'rgba(0,0,0,0.0)';
-            }
-        }
-        $scope.setHeader=function(index)
-        {
-            if(index>0)
-            {
-                var date1=new Date($scope.appointments[index-1].ScheduledStartTime.getTime());
-                date1.setHours(0,0,0,0);
-                date1=date1.getTime();
-                var date2=new Date($scope.appointments[index].ScheduledStartTime.getTime());
-                date2.setHours(0,0,0,0);
-                date2=date2.getTime();
-                if(date1==date2)
-                {
-                    return false;
-                }else{
-                    return true;
-                }
-            }else{
-                return true;
-            }
-        };
-    }]);*/
 
 myApp.controller('IndividualAppointmentController', ['NavigatorParameters','NativeNotification','$scope',
     '$timeout', '$rootScope','Appointments', 'CheckInService','$q',
