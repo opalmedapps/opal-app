@@ -1,131 +1,58 @@
-<ons-navigator var ="initNavigator" >
-<ons-page id="popoverLanguage">
-    <div>
-        <div style="position:absolute;z-index:2;width:100vw" align="center" >
-            <div style="margin-top:15vw" align="center" >
-            <img src="img/opal_banner_transparent.png" style="width:70vw;height:auto">
-            </div>
-        </div>
+<ons-navigator var="initNavigator">
+    <ons-page id="popoverLanguage">
         <div>
-            <img src="img/opal-init-photo.jpg" style="width:100vw;height:auto">
-        </div>
-    </div>
-    <div id = "listInitApp" style="display:none">
-      <!--<ons-list  class="person-list"  translate-cloak>-->
-            <!--<ons-list-item class="person" modifier="tappable chevron" ng-click="init.goToParking()">-->
-                <!--<ons-row align="middle" style="height:40px;">-->
-                    <!--<ons-col align="center" width="40px">-->
-                        <!--<div style="margin-left:10px;text-align:left;display:inline-block">-->
-                            <!--<ons-icon icon = "fa fa-car fa-lg" style="color:red" ></ons-icon>-->
-                        <!--</div>-->
-                     <!--</ons-col>-->
-                    <!--<ons-col  align="center">-->
-                        <!--<div  align="center" >-->
-                          <!--&lt;!&ndash;<ons-icon icon = "ion-android-car" style="font-size:25px;color:red" ></ons-icon>&ndash;&gt;-->
-                            <!--{{"PARKING"|translate}}-->
-                        <!--</div>-->
-                    <!--</ons-col>-->
-                <!--</ons-row>-->
-            <!--</ons-list-item>-->
-            <!--<ons-list-item class="person" modifier="tappable chevron" ng-click="init.goToPatientCharter()">-->
-                <!--<ons-row align="middle" style="height:40px;">-->
-                    <!--<ons-col align="center" width="40px">-->
-                        <!--<div style="margin-left:10px;text-align:left;display:inline-block">-->
-                            <!--<ons-icon icon = "fa fa-list-alt fa-lg" style="color:brown"></ons-icon>-->
-                        <!--</div>-->
-                     <!--</ons-col>-->
-                    <!--<ons-col  align="center">-->
-                        <!--<div  style="line-height:1" align="center">-->
-                           <!--&lt;!&ndash;<ons-icon icon = "ion-bug" style="font-size:20px;color:purple"></ons-icon>&ndash;&gt;-->
-                            <!--{{"PATIENTCHARTER"|translate}}-->
-                        <!--</div>-->
-                    <!--</ons-col>-->
-                <!--</ons-row>-->
-            <!--</ons-list-item>-->
-            <!--<ons-list-item class="person" modifier="tappable chevron" ng-click="init.reportIssuesMail()">-->
-                <!--<ons-row align="middle" style="height:40px;">-->
-                    <!--<ons-col align="center" width="40px">-->
-                        <!--<div style="margin-left:10px;text-align:left;display:inline-block">-->
-                            <!--<ons-icon icon = "fa fa-exclamation-triangle fa-lg" style="color:purple"></ons-icon>-->
-                        <!--</div>-->
-                     <!--</ons-col>-->
-                    <!--<ons-col  align="center">-->
-                        <!--<div  align="center">-->
-                           <!--&lt;!&ndash;<ons-icon icon = "ion-bug" style="font-size:20px;color:purple"></ons-icon>&ndash;&gt;-->
-                            <!--{{"REPORTISSUES"|translate}}-->
-                        <!--</div>-->
-                    <!--</ons-col>-->
-                <!--</ons-row>-->
-            <!--</ons-list-item>-->
-            <!--<ons-list-item class="person" modifier="tappable chevron" ng-click="init.goToGeneralSettings()" >-->
-                <!--<ons-row align="middle" style="height:40px">-->
-                    <!--<ons-col align="center" width="40px">-->
-                        <!--<div style="margin-left:10px;text-align:left;display:inline-block">-->
-                            <!--<ons-icon icon = "fa fa-cog fa-lg" style="color:grey"></ons-icon>-->
-                        <!--</div>-->
-                     <!--</ons-col>-->
-                    <!--<ons-col  align="center" >-->
-                        <!--<div   align="center">-->
-                           <!--{{"SETTINGS"|translate}}-->
-                        <!--</div>-->
-                    <!--</ons-col>-->
-                <!--</ons-row>-->
-            <!--</ons-list-item>-->
-            <!--<ons-list-item class="person" modifier="tappable chevron" ng-show="init.globalMessage" ng-click="init.goToMessage()" style="background-color: orange">-->
-                <!--<ons-row align="middle" style="height:40px;">-->
-                    <!--<ons-col align="center" width="40px">-->
-                        <!--<div style="margin-left:10px;text-align:left;display:inline-block">-->
-                            <!--<ons-icon icon = "fa-exclamation" style="color:red" ></ons-icon>-->
-                        <!--</div>-->
-                    <!--</ons-col>-->
-                    <!--<ons-col  align="center">-->
-                        <!--<div  align="center" >-->
-                            <!--&lt;!&ndash;<ons-icon icon = "ion-android-car" style="font-size:25px;color:red" ></ons-icon>&ndash;&gt;-->
-                            <!--{{init.globalMessage}}-->
-                        <!--</div>-->
-                    <!--</ons-col>-->
-                <!--</ons-row>-->
-            <!--</ons-list-item>-->
+            <div style="position:absolute;z-index:2;width:100vw" align="center">
+                <div style="margin-top:15vw" align="center">
+                    <ons-toolbar fixed-style>
+                        <div class="left">
+                            <div class="icon"><i class="ion-information" style="font-size:2em;"
+                                                 ng-show="init.globalMessage" ng-click="init.goToMessage()"></i></div>
+                        </div>
+                        <div class="right">
+                            <div class="icon"><i class="ion-log-in" style="font-size: 2em;" ng-click="init.goToLogin()"
+                                                 var="initButton"></i></div>
+                        </div>
+                    </ons-toolbar>
 
-
-        <!--</ons-list>-->
-        <div class="row menuitem">
-            <div class="col col-50">
-                <div class="tabtext"  ng-click="init.goToParking()" style="background: #ffeb3b;">
-                    <div class="icon" ><i class = "ion-model-s" style="color:white"></i> </div>
-                    <h3> {{"PARKING"|translate}} </h3>
+                    <img src="img/opal_banner_transparent.png" style="width:70vw;height:auto">
                 </div>
             </div>
-            <div class="col col-50">
-                <div class="tabtext" ng-click="init.goToPatientCharter()" style="background: #ffc107;">
-                    <div class="icon"><i class="ion-clipboard" style="color:white;"></i></div>
-                    <h3>{{"PATIENTCHARTER"|translate}} </h3>
-                </div>
+            <div>
+                <img src="img/opal-init-photo.jpg" style="width:100vw;height:auto">
             </div>
         </div>
-        <div class="row menuitem">
-            <div class="col col-50">
-                <div class="tabtext"  ng-click="init.reportIssuesMail()" style="background: #cddc39">
-                    <div class="icon"> <i class = "ion-android-warning" style="color:white"></i></div>
-                    <h3>  {{"REPORTISSUES"|translate}}  </h3>
+
+        <div id="listInitApp" style="display:none">
+            <!-- |||||||||||||||||||||||||||||||||||||||||||||||||||--
+                                   HOME MENU
+                 |||||||||||||||||||||||||||||||||||||||||||||||||||-->
+            <div class="row menuitem">
+                <div class="col col-50">
+                    <div class="tabtext" ng-click="init.goToParking()" style="background: #ffeb3b;">
+                        <div class="icon"><i class="ion-model-s" style="color:white"></i></div>
+                        <h3> {{"PARKING"|translate}} </h3>
+                    </div>
+                </div>
+                <div class="col col-50">
+                    <div class="tabtext" ng-click="init.goToPatientCharter()" style="background: #ffc107;">
+                        <div class="icon"><i class="ion-clipboard" style="color:white;"></i></div>
+                        <h3>{{"PATIENTCHARTER"|translate}} </h3>
+                    </div>
                 </div>
             </div>
-            <div class="col col-50">
-                <div class="tabtext"  ng-click="init.goToGeneralSettings()" style="background: #eeff41">
-                    <div class="icon"><i class="ion-settings"  style="color:white;"></i></div>
-                    <h3> {{"SETTINGS"|translate}} </h3>
+            <div class="row menuitem">
+                <div class="col col-50">
+                    <div class="tabtext" ng-click="init.reportIssuesMail()" style="background: #cddc39">
+                        <div class="icon"><i class="ion-android-warning" style="color:white"></i></div>
+                        <h3> {{"REPORTISSUES"|translate}} </h3>
+                    </div>
+                </div>
+                <div class="col col-50">
+                    <div class="tabtext" ng-click="init.goToGeneralSettings()" style="background: #eeff41">
+                        <div class="icon"><i class="ion-settings" style="color:white;"></i></div>
+                        <h3> {{"SETTINGS"|translate}} </h3>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div ng-show="init.globalMessage" ng-click="init.goToMessage()">message <div/>
-        <br>
-
-        <div style="text-align: center; width: 90%; margin: auto">
-            <ons-button class="animated pulse ng-cloak" modifier="large" style="font-size: x-large; font-weight: bolder; background-color: #387A36" ng-click="init.goToLogin()" var="initButton">{{"HEADER_MESSAGE_LOGIN"|translate}}</ons-button>
-        </div>
-    </div>
-
-
-
-</ons-page>
+    </ons-page>
 </ons-navigator>
