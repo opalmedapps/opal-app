@@ -90,7 +90,12 @@ myApp.controller('CalendarController', ['Appointments', '$q','$scope','$timeout'
                 dateFirst.setHours(0,0,0,0);
                 dateFirst = dateFirst.getTime();
             }
-            loadTemplate().then(function(){setTimeout(scrollToAnchor,100);});
+            loadTemplate().then(function(){
+                var divTreatment=document.getElementById('scrollerAppointments');
+                var heightTreatment=document.documentElement.clientHeight-document.documentElement.clientHeight*0.35-180;
+                if(divTreatment)divTreatment.style.height=heightTreatment+'px';
+                setTimeout(scrollToAnchor,100);
+            });
         }
         function scrollToAnchor()
         {
@@ -106,9 +111,6 @@ myApp.controller('CalendarController', ['Appointments', '$q','$scope','$timeout'
                     var template= $sce.getTrustedResourceUrl('./views/personal/appointments/appointment-list-template.html');
                     $templateRequest(template).then(function(template) {
                     $compile($("#appointment-list").html(template).contents())($scope);
-                    var divTreatment=document.getElementById('scrollerAppointments');
-                    var heightTreatment=document.documentElement.clientHeight-document.documentElement.clientHeight*0.35-180;
-                    if(divTreatment)divTreatment.style.height=heightTreatment+'px';
                     r.resolve(true);
                 }, function() {
                     r.resolve(true);
