@@ -22,20 +22,36 @@ _Under-the-hood_ there is a task called opal created in gulpfile.js this task ta
 ```
 Here _module_ stands for the name of the template to be use, in this case, _module_ creates an opal module, this module  in opal is created and added to the appropiate folders and pages in the application.
 (An example would be the appointments module where a service, controller, main view, and a tab are created to handle the appointments functionality)
-
+How to run:
+```
+$gulp opal --template module ...
+```
+Here the ... stands for the options for that templates.
 ## Templates
 Basic templates are added here, i.e. templates that are used commonly in the opal project.
 
 Templates so far:
-- module
+1. #### module:
+How to run:
+```
+$gulp opal --template module --name <module-name> --view personal 
+```
+What it does:
+1. Creates of moduleName Controller, moduleName Service, moduleName Html view by using template.
+2. Replaces template-names in the templates by the moduleName
+3. Saves files in appropiate directories, i.e. www/js/controllers, www/js/services, www/views/personal
+4. Injects into index.html controller and service paths
+5. Injects into personal.html a tab at the end of the personal list
+
 
 ## Future Work
-1. Creation of the following templates:
+1. Claritication and formalization of the CLI.
+2. Creation of the following templates:
     - [ ] Booklet
+    - [ ] List with dates in the right format
     - [ ] Setting style template
     - [ ] Document page/appointment detail/task details style template
 
-2. Creating of test script functionality for each module created.
-3. Addition of appropiate comments and building workflow for automatic documentation.
+3. Creating of test script functionality for each module created.
+4. Addition of appropiate comments and building workflow for automatic documentation.
 
- 
