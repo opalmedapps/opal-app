@@ -48,9 +48,10 @@ What it does:
 ## Future Work
 1. Claritication and formalization of the CLI.
 2. Creation of the following templates:
-    - [ ] Booklet
-    - [ ] List with dates in the right format
-    - [ ] Setting style template
+    - [ ] Booklet Page
+    - [ ] Page a list with dates in the right format
+    - [ ] _Settings-style_
+    - [ ] Graphing Plot template such as the one provided for lab results
     - [ ] Document-detail-page/appointment-detail/treatment-planing-details style template
 
 3. Creating of test script functionality for each module.
