@@ -35,7 +35,7 @@
 	"LANGUAGE": "Language",
 	"LIMITS_EXCEEDED": "Password tries exceeded, try resetting your password",
 	"LOADING": "Loading",
-	"LOADINGDATA": "Loading data",
+	"LOADINGDATA": "Retrieving your account",
 	"LOCKEDOUT": "Locked out due to inactivity",
 	"LOGIN": "Login",
 	"MUHC": "MUHC",
