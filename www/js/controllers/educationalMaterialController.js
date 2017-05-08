@@ -22,27 +22,27 @@ myApp.controller('EducationalMaterialController',['NavigatorParameters', '$scope
             init();
         });
 
-        // Pull to refresh function
-        $scope.load = function($done) {
-        	UpdateUI.update('All').then(function()
-        	{
-        		$timeout(function()
-        		{
-        			updated=true;
-        			backButtonPressed = 0;
-        			init();
-        			clearTimeout(timeOut);
-        			$done();
-        		});
-        	}).catch(function(error){
-        		console.log(error);
-        		clearTimeout(timeOut);
-        		$done();
-        	});
-        	var timeOut = setTimeout(function(){
-        		$done();
-        	},3000);
-        };
+        // // Pull to refresh function
+        // $scope.load = function($done) {
+        // 	UpdateUI.update('All').then(function()
+        // 	{
+        // 		$timeout(function()
+        // 		{
+        // 			updated=true;
+        // 			backButtonPressed = 0;
+        // 			init();
+        // 			clearTimeout(timeOut);
+        // 			$done();
+        // 		});
+        // 	}).catch(function(error){
+        // 		console.log(error);
+        // 		clearTimeout(timeOut);
+        // 		$done();
+        // 	});
+        // 	var timeOut = setTimeout(function(){
+        // 		$done();
+        // 	},3000);
+        // };
 
         init()
             .then(function () {

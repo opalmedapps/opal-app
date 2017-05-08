@@ -88,13 +88,18 @@ myApp.controller('personalTabController',
     //Init function for this controller
     function initPersonalTab()
     {
-        if (Documents.getLastUpdated() < Date.now() - 300000 && TxTeamMessages.getLastUpdated() < Date.now() - 300000 ){
+        if (Documents.getLastUpdated() < Date.now() - 300000 || TxTeamMessages.getLastUpdated() < Date.now() - 300000 ){
+            $scope.loading = true;
             UpdateUI.set([
                 'Documents',
                 'TxTeamMessages',
             ])
+                .then(function () {
+                    $scope.loading = false;
+                })
                 .catch(function(error){
                     "use strict";
+                    $scope.loading = false;
                     console.log('error', error);
                 });
         }
@@ -106,13 +111,21 @@ myApp.controller('personalTabController',
 myApp.controller('generalTabController',['$scope','$timeout','Announcements','RequestToServer','UpdateUI','Notifications','NavigatorParameters','$filter','Doctors',
     function($scope,$timeout,Announcements,RequestToServer,UpdateUI,Notifications,NavigatorParameters,$filter, Doctors){
 
-    if (Doctors.getLastUpdated() < Date.now() - 300000 && Announcements.getLastUpdated() < Date.now() - 300000 ) {
+
+
+    if (Doctors.getLastUpdated() < Date.now() - 300000 || Announcements.getLastUpdated() < Date.now() - 300000 ) {
+        $scope.loading = true;
+        console.log('announcment : ',  Announcements.getLastUpdated(), 'doc: ', Doctors.getLastUpdated());
         UpdateUI.set([
             'Doctors',
             'Announcements',
         ])
+            .then(function () {
+                $scope.loading = false;
+            })
             .catch(function (error) {
                 "use strict";
+                $scope.loading = false;
                 console.log('error', error);
             });
     }

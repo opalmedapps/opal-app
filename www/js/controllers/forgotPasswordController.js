@@ -1,55 +1,88 @@
-//
-// Author: David Herrera on Summer 2016, Email:davidfherrerar@gmail.com
-//
-var myApp=angular.module('MUHCApp');
-myApp.controller('ForgotPasswordController', ['$scope','$state','$timeout','$firebaseAuth',
-    function ($scope,$state,$timeout, $firebaseAuth) {
-        $scope.email="";
-        $scope.alert={};
-        $scope.$watch('email',function()
-        {
-            if($scope.alert.hasOwnProperty('type'))
-            {
-                delete $scope.alert.type;
-                delete $scope.alert.content;
-            }
-        });
-        $scope.submitPasswordReset = function (email) {
+/*
+ * Filename     :   forgotPasswordController.js
+ * Description  :   Controlls the forgot password view.
+ * Created by   :   David Herrera, Robert Maglieri
+ * Date         :   28 Apr 2017
+ * Copyright    :   Copyright 2016, HIG, All rights reserved.
+ * Licence      :   This file is subject to the terms and conditions defined in
+ *                  file 'LICENSE.txt', which is part of this source code package.
+ */
+
+(function () {
+    'use strict';
+
+    angular
+        .module('MUHCApp')
+        .controller('ForgotPasswordController', ForgotPasswordController);
+
+    ForgotPasswordController.$inject = ['$scope','$timeout','$firebaseAuth'];
+
+    /* @ngInject */
+    function ForgotPasswordController($scope,$timeout, $firebaseAuth) {
+        var vm = this;
+        vm.title = 'ForgotPasswordController';
+        vm.email = "";
+        vm.alert = {};
+
+        vm.submitPasswordReset = submitPasswordReset;
+
+        activate();
+
+        ////////////////
+
+        function activate() {
+
+            // Remove the alert on text input
+            $scope.$watch(function () {
+                return vm.email;
+            },function(){
+
+                if(vm.alert.hasOwnProperty('type'))
+                {
+                    delete vm.alert.type;
+                    delete vm.alert.content;
+                }
+
+            });
+        }
+
+        function submitPasswordReset() {
             var userAuth = $firebaseAuth();
-            console.log(email);
-            userAuth.$sendPasswordResetEmail(email).then(function(){
+            console.log(vm.email);
+            userAuth.$sendPasswordResetEmail(vm.email).then(function(){
                 console.log("Password reset email sent successfully!");
                 $timeout(function(){
-                    $scope.alert.type="success";
-                    $scope.alert.content="EMAILPASSWORDSENT";
+                    vm.alert.type="success";
+                    vm.alert.content="EMAILPASSWORDSENT";
                 });
             }).catch(function(error){
                 switch (error.code) {
                     case "auth/user-not-found":
                         console.log("The specified user account does not exist.");
                         $timeout(function(){
-                            $scope.alert.type="danger";
-                            $scope.alert.content="INVALID_USER";
+                            vm.alert.type="danger";
+                            vm.alert.content="INVALID_USER";
                         });
 
                         break;
                     case "auth/invalid-email":
                         console.log("The email is invalid.");
                         $timeout(function(){
-                            $scope.alert.type="danger";
-                            $scope.alert.content="INVALID_EMAIL";
+                            vm.alert.type="danger";
+                            vm.alert.content="INVALID_EMAIL";
                         });
 
                         break;
                     default:
                         console.log(error);
                         $timeout(function(){
-                            $scope.alert.type="danger";
-                            $scope.alert.content="INVALID_EMAIL";
+                            vm.alert.type="danger";
+                            vm.alert.content="INVALID_EMAIL";
                         });
                 }
             });
+        }
 
+    }
 
-        };
-    }]);
+})();

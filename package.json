@@ -29,8 +29,10 @@
     "gulp-concat": "^2.6.0",
     "gulp-connect": "^5.0.0",
     "gulp-htmlmin": "^2.0.0",
+    "gulp-if": "^2.0.2",
     "gulp-imagemin": "^3.0.3",
     "gulp-import-css": "^0.1.2",
+    "gulp-inject": "^4.2.0",
     "gulp-jasmine": "^2.4.0",
     "gulp-jshint": "^2.0.1",
     "gulp-karma": "0.0.5",
@@ -39,6 +41,8 @@
     "gulp-ngmin": "^0.3.0",
     "gulp-notify": "^2.2.0",
     "gulp-open": "^2.0.0",
+    "gulp-rename": "^1.2.2",
+    "gulp-replace": "^0.5.4",
     "gulp-size": "^2.1.0",
     "gulp-uglify": "^2.0.0",
     "jasmine": "^2.5.2",
@@ -50,7 +54,8 @@
     "karma-phantomjs-launcher": "^1.0.1",
     "karma-spec-reporter": "0.0.26",
     "marked": "^0.3.6",
-    "phantomjs-prebuilt": "^2.1.12"
+    "phantomjs-prebuilt": "^2.1.12",
+    "yargs": "^8.0.1"
   },
   "dependencies": {}
 }

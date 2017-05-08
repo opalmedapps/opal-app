@@ -228,6 +228,7 @@ myApp.service('Doctors',['$q','LocalStorage','$filter','FileManagerService', fun
             OtherDoctors=[];
             PrimaryPhysician=[];
             var promises=[];
+            lastUpdated = Date.now();
 
             /*
              *Add code for offline extraction of doctors photos

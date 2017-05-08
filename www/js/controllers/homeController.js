@@ -136,7 +136,7 @@
         {
             // Get all new notifications
 
-            UpdateUI.set(['Notifications'])
+            UpdateUI.update(['Notifications'])
                 .then(function () {
                     var notifications = Notifications.getNewNotifications();
                     if (notifications.length > 0)
@@ -151,7 +151,6 @@
                                     return accumulator
                                 }
                             }, []);
-                        console.log(toLoad);
 
                         // Get the data needed from server and set it in Opal
                         UpdateUI.set(toLoad)
@@ -240,7 +239,7 @@
                             }
                         });
                     } else {
-                        //Case:2 Appointment already checked-in show the message for 'you are checked in...' and query for estimate
+                        //They have been called to the appointment.
 
                         var calledApp = Appointments.getRecentCalledAppointment();
                         vm.calledApp = calledApp;
@@ -287,16 +286,22 @@
         // For Android only, allows pressing the back button
         function homeDeviceBackButton(){
             console.log('device button pressed do nothing');
-            var message = $filter('translate')('EXIT_APP');
-            NativeNotification.showNotificationConfirm(message,function(){
-                if(ons.platform.isAndroid())
-                {
-                    navigator.app.exitApp();
+            var mod = 'android';
+            var msg = $filter('translate')('EXIT_APP');
+
+            ons.notification.confirm({
+                message: msg,
+                modifier: mod,
+                callback: function(idx) {
+                    switch (idx) {
+                        case 0:
+                            break;
+                        case 1:
+                            navigator.app.exitApp();
+                            break;
+                    }
                 }
-            },function(){
-                console.log('cancel exit');
             });
-            console.log(homeNavigator.getDeviceBackButtonHandler());
         }
 
         function goToStatus()
