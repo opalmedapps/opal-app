@@ -267,8 +267,10 @@ myApp.controller('IndividualAppointmentController', ['NavigatorParameters','Nati
 
         $scope.aboutApp = function () {
             window[navigatorName].pushPage('./views/templates/content.html', {
-                contentLink: $scope.app["URL_"+UserPreferences.getLanguage()],
-                contentType: $scope.app["AppointmentType_"+UserPreferences.getLanguage()]
+                /*  Set default text to Eng. would let dynamicContentService to reach the right url
+                    because the "links.php" (JSON) that summarizes all content links, was written in Eng.
+                 */
+                contentType: $scope.app["AppointmentType_EN"]
             });
         }
 
