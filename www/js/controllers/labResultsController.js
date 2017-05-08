@@ -1,65 +1,66 @@
 var myApp = angular.module('MUHCApp');
 myApp.controller('LabResultsControllerCopy', ['RequestToServer','Notifications', 'UpdateUI', '$scope',
-    '$timeout','$rootScope', 'UserPreferences', 'LabResults', '$q', 'Logger',
+    '$timeout','$rootScope', 'UserPreferences', 'LabResults', '$q', 'NewsBanner', '$filter',
     function (RequestToServer, Notifications, UpdateUI, $scope,
-              $timeout,$rootScope, UserPreferences, LabResults, $q, Logger) {
+              $timeout,$rootScope, UserPreferences, LabResults, $q, NewsBanner,$filter) {
 
 
-    $scope.loading = true;
-
-    $scope.refresh = function () {
         $scope.loading = true;
-        LabResults.setTestResults().then(function () {
-            "use strict";
-            $scope.loading = false;
-            console.log("updated");
-        }).catch(function (error) {
-            $scope.loading = false;
-            console.log(error);
-        });
-    };
 
-    // $scope.load = function($done) {
-    //     LabResults.setTestResults().then(function () {
-    //         $done();
-    //     }).catch(function (error) {
-    //         $done();
-    //         console.log(error);
-    //     });
-    // };
+        // Refresh button
+        $scope.refresh = function () {
+            // Only allowed to refresh once every 60s.
+            if(LabResults.getLastUpdated() < Date.now() - 60000) {
+                $scope.loading = true;
+                LabResults.setTestResults().then(function () {
+                    "use strict";
+                    $scope.loading = false;
+                    console.log("updated");
+                }).catch(function (error) {
+                    $scope.loading = false;
+                    console.log(error);
+                });
+            } else {
+                console.log('wait 60 s');
+                NewsBanner.showCustomBanner($filter('translate')("REFRESH_WAIT"), '#333333', function(){}, 3000);
+            }
+        };
 
-    activate()
-        .then(function () {
-            $scope.testResultsByDate = LabResults.getTestResultsArrayByDate();
-            console.log($scope.testResultsByDate);
-            $scope.loading = false;
-        })
-        .catch(function (error) {
-            $scope.loading = true;
-        });
+        activate();
 
+        function activate() {
+            // Check if the data is 300s old if it is get again
+            if(LabResults.getLastUpdated() < Date.now() - 300000){
+                LabResults.setTestResults()
+                    .then(function () {
+                        $scope.testResultsByDate = LabResults.getTestResultsArrayByDate();
+                        console.log($scope.testResultsByDate);
+                        $scope.loading = false;
+                    }).catch(function (error) {
+                        $scope.loading = false;
+                        console.log(error);
+                    });
 
-
-    function activate() {
-        if(LabResults.getTestResults().length > 0){
-            return $q.resolve();
+            } else {
+                $scope.testResultsByDate = LabResults.getTestResultsArrayByDate();
+                console.log($scope.testResultsByDate);
+                $scope.loading = false;
+            }
         }
-        return LabResults.setTestResults();
-    }
 
-}]);
+    }]);
 
 myApp.controller('ByDateTestsController',['$scope','$timeout','LabResults','$filter','Logger',
     function($scope,$timeout,LabResults,$filter,Logger){
-    //Initializing option
+        //Initializing option
 
-    $scope.radioModel='All';
-    $scope.selectedTests=LabResults.getTestResultsArrayByDate();
-    console.log($scope.selectedTests[0]);
-    $scope.testsReceived = 'Lab results';
-    Logger.sendLog('Lab Results', 'all - Date');
+        $scope.radioModel='All';
+        $scope.selectedTests=LabResults.getTestResultsArrayByDate();
+        console.log($scope.selectedTests[0]);
+        $scope.testsReceived = 'Lab results';
+        Logger.sendLog('Lab Results', 'all - Date');
 
-}]);
+    }]);
 
 (function () {
     'use strict';
@@ -85,7 +86,7 @@ myApp.controller('ByDateTestsController',['$scope','$timeout','LabResults','$fil
             console.log(vm.testResultsByCategory);
             vm.testResultsByType = LabResults.getTestResultsArrayByType();
             console.log(vm.testResultsByType);
-            Logger.sendLog('Lab Resulsts', 'all - Type')
+            Logger.sendLog('Lab Results', 'all - Type')
         }
     }
 
@@ -114,175 +115,183 @@ myApp.controller('IndividualLabTestController',['$scope','$timeout','LabResults'
     }
 }]);
 
-myApp.controller('TimelineTestComponentController',['$scope','$timeout','LabResults','$filter','UserPreferences', 'Logger',
-    function($scope,$timeout,LabResults,$filter,UserPreferences, Logger)
-{
-    var page = personalNavigator.getCurrentPage();
-    var test = page.options.param;
-
-    console.log(test);
-    $scope.selectedTest = test;
-    $scope.testName = test.ComponentName || test.testResults[0].ComponentName;
-    $scope.title = $scope.selectedTest.FacComponentName || $scope.selectedTest.testName;
-
-    var max = $scope.selectedTest.MaxNorm || test.testResults[0].MaxNorm;
-    var min = $scope.selectedTest.MinNorm || test.testResults[0].MinNorm;
-    $scope.maxNorm = max;
-    $scope.minNorm = min;
-
-    $scope.unit = $scope.selectedTest.UnitDescription || test.testResults[0].UnitDescription;
-    var u = $filter('translate')('RESULTS') + ' (' + $scope.unit + ')';
-    $scope.testValue = page.options.param.TestValue;
-    $scope.information = undefined;
-
-    $scope.url = 'https://labtestsonline.org/map/aindex/SearchForm?Search='+$scope.title+'&action_ProcessSphinxSearchForm=Go';
-
-    $scope.testResultsByType = LabResults.getTestResultsByType();
-
-    var testResults = $scope.testResultsByType[$scope.title].testResults;
-    $scope.historicViewTestResult = $scope.testResultsByType[$scope.title].testResults;
-
-    $scope.testResultsByDateArray = LabResults.getTestResultsArrayByDate();
-
-    Logger.sendLog('Lab Results', test.ComponentName || test.testResults[0].ComponentName);
-
-    // Chart
-    $scope.data = [{
-        key: 'Data',
-        values: []
-    }];
-
-    var reformedData = [];
-    for(var i=0; i<testResults.length; i++)
+myApp.controller('TimelineTestComponentController',['$scope','$timeout','LabResults','$filter','UserPreferences', 'Logger', 'Constants',
+    function($scope,$timeout,LabResults,$filter,UserPreferences, Logger, Constants)
     {
-        var dv = [];  //array to store pairs of [date, testResult]
-        dv[0] = Date.parse(testResults[i].TestDateFormat);  //dateArray[0] = most recent date
-        dv[1] = parseFloat(testResults[i].TestValue);
-        reformedData.push(dv);
-    }
+        var page = personalNavigator.getCurrentPage();
+        var test = page.options.param;
 
-    /*********************************************
-     * FINDING THE MAX AND MIN VALUES FOR CHARTING
-     *********************************************/
+        console.log(test);
+        $scope.selectedTest = test;
+        $scope.testName = test.ComponentName || test.testResults[0].ComponentName;
+        $scope.title = $scope.selectedTest.FacComponentName || $scope.selectedTest.testName;
 
-    var vals = reformedData.reduce(function(a, b) {
-        return a.concat(b[1]);
-    },[]);
-    var maxChart = Math.max.apply(Math, vals)*1.05;
-    var minChart = Math.min.apply(Math, vals)*0.95;
+        var max = $scope.selectedTest.MaxNorm || test.testResults[0].MaxNorm;
+        var min = $scope.selectedTest.MinNorm || test.testResults[0].MinNorm;
+        $scope.maxNorm = max;
+        $scope.minNorm = min;
 
-    console.log("Chart range", minChart, maxChart);
+        $scope.unit = $scope.selectedTest.UnitDescription || test.testResults[0].UnitDescription;
+        var u = $filter('translate')('RESULTS') + ' (' + $scope.unit + ')';
+        $scope.testValue = page.options.param.TestValue;
+        $scope.information = undefined;
 
-    /**********************************************/
+        $scope.testResultsByType = LabResults.getTestResultsByType();
 
-    $scope.recentValue = parseFloat(testResults[testResults.length-1].TestValue);
-    var windowWidth = $(window).width();
-    var windowHeight = $(window).height();
+        var testResults = $scope.testResultsByType[$scope.title].testResults;
+        $scope.historicViewTestResult = $scope.testResultsByType[$scope.title].testResults;
 
-    $(window).on('resize.doResize', function () {
-        var newWidth = $(window).width(),
-            updateStuffTimer;
+        $scope.testResultsByDateArray = LabResults.getTestResultsArrayByDate();
 
-        if(newWidth !== windowWidth) {
-            $timeout.cancel(updateStuffTimer);
+        Logger.sendLog('Lab Results', test.ComponentName || test.testResults[0].ComponentName);
+
+        var url = 'https://labtestsonline.org/map/aindex/SearchForm?Search='+$scope.title+'&action_ProcessSphinxSearchForm=Go';
+
+        $scope.goToAbout = function () {
+            if (Constants.app) {
+                cordova.InAppBrowser.open(url, '_blank', 'location=yes');
+            } else {
+                window.open(url);
+            }
         }
 
-        updateStuffTimer = $timeout(function() {
-            console.log("resize detected!"); // Update the attribute based on window.innerWidth
-            //Need a function here to resize the graph size
-        }, 500);
-    });
+        // Chart
+        $scope.data = [{
+            key: 'Data',
+            values: []
+        }];
 
-    $scope.$on('$destroy',function (){
-        $(window).off('resize.doResize'); // remove the handler added earlier
-    });
+        var reformedData = [];
+        for(var i=0; i<testResults.length; i++)
+        {
+            var dv = [];  //array to store pairs of [date, testResult]
+            dv[0] = Date.parse(testResults[i].TestDateFormat);  //dateArray[0] = most recent date
+            dv[1] = parseFloat(testResults[i].TestValue);
+            reformedData.push(dv);
+        }
 
-    // Sample options for first chart
+        /*********************************************
+         * FINDING THE MAX AND MIN VALUES FOR CHARTING
+         *********************************************/
 
-    if (UserPreferences.getLanguage() == 'FR')
-    {
-        Highcharts.setOptions({
-            lang: {
-                months: ['janvier', 'février', 'mars', 'avril', 'mai', 'juin',
-                    'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'],
-                weekdays: ['dimanche', 'lundi', 'lardi', 'mercredi',
-                    'jeudi', 'vendredi', 'samedi'],
-                shortMonths: ['janv.', 'févr.', 'mars', 'avr.', 'mai', 'juin', 'juill.',
-                    'août', 'sept.', 'oct.', 'nov.', 'déc'],
-                decimalPoint: ',',
-                downloadPNG: 'Télécharger en image PNG',
-                downloadJPEG: 'Télécharger en image JPEG',
-                downloadPDF: 'Télécharger en document PDF',
-                downloadSVG: 'Télécharger en document Vectoriel',
-                exportButtonTitle: 'Export du graphique',
-                loading: 'Chargement en cours...',
-                printChart: 'Imprimer le graphique',
-                resetZoom: 'Réinitialiser le zoom',
-                resetZoomTitle: 'Réinitialiser le zoom au niveau 1:1',
-                thousandsSep: ' '
+        var vals = reformedData.reduce(function(a, b) {
+            return a.concat(b[1]);
+        },[]);
+        var maxChart = Math.max.apply(Math, vals)*1.05;
+        var minChart = Math.min.apply(Math, vals)*0.95;
+
+        console.log("Chart range", minChart, maxChart);
+
+        /**********************************************/
+
+        $scope.recentValue = parseFloat(testResults[testResults.length-1].TestValue);
+        var windowWidth = $(window).width();
+        var windowHeight = $(window).height();
+
+        $(window).on('resize.doResize', function () {
+            var newWidth = $(window).width(),
+                updateStuffTimer;
+
+            if(newWidth !== windowWidth) {
+                $timeout.cancel(updateStuffTimer);
             }
+
+            updateStuffTimer = $timeout(function() {
+                console.log("resize detected!"); // Update the attribute based on window.innerWidth
+                //Need a function here to resize the graph size
+            }, 500);
         });
 
-        Highcharts.dateFormat('%e%a');
-    }
+        $scope.$on('$destroy',function (){
+            $(window).off('resize.doResize'); // remove the handler added earlier
+        });
+
+        // Sample options for first chart
+
+        if (UserPreferences.getLanguage() == 'FR')
+        {
+            Highcharts.setOptions({
+                lang: {
+                    months: ['janvier', 'février', 'mars', 'avril', 'mai', 'juin',
+                        'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'],
+                    weekdays: ['dimanche', 'lundi', 'lardi', 'mercredi',
+                        'jeudi', 'vendredi', 'samedi'],
+                    shortMonths: ['janv.', 'févr.', 'mars', 'avr.', 'mai', 'juin', 'juill.',
+                        'août', 'sept.', 'oct.', 'nov.', 'déc'],
+                    decimalPoint: ',',
+                    downloadPNG: 'Télécharger en image PNG',
+                    downloadJPEG: 'Télécharger en image JPEG',
+                    downloadPDF: 'Télécharger en document PDF',
+                    downloadSVG: 'Télécharger en document Vectoriel',
+                    exportButtonTitle: 'Export du graphique',
+                    loading: 'Chargement en cours...',
+                    printChart: 'Imprimer le graphique',
+                    resetZoom: 'Réinitialiser le zoom',
+                    resetZoomTitle: 'Réinitialiser le zoom au niveau 1:1',
+                    thousandsSep: ' '
+                }
+            });
+
+            Highcharts.dateFormat('%e%a');
+        }
 
 
-    $scope.chartOptions = {
-        rangeSelector: {
-            selected: 1
-        },
-        chart: {
-            // Explicitly tell the width and height of a chart
-            width: windowWidth,
-            height: null
-        },
-        xAxis: {
-            type: 'datetime',
-            dateTimeLabelFormats: { // don't display the dummy year
-                month: '%e. %b',
-                year: '%b'
+        $scope.chartOptions = {
+            rangeSelector: {
+                selected: 1
             },
-            title: {
-                text: 'Date'
-            }
-        },
-        yAxis: {
-            max: maxChart,
-            min: minChart,
-            title: {
-                text: u
+            chart: {
+                // Explicitly tell the width and height of a chart
+                width: windowWidth,
+                height: null
             },
-            opposite: false,
-            plotLines: [{
-                color: 'rgba(246, 54, 92, 0.53)',
-                value: max,
-                dashStyle: 'Solid',
-                width: 2
-            },{
-                color: 'rgba(246, 54, 92, 0.53)',
-                value: min,
-                dashStyle: 'Solid',
-                width: 2
+            xAxis: {
+                type: 'datetime',
+                dateTimeLabelFormats: { // don't display the dummy year
+                    month: '%e. %b',
+                    year: '%b'
+                },
+                title: {
+                    text: 'Date'
+                }
+            },
+            yAxis: {
+                max: maxChart,
+                min: minChart,
+                title: {
+                    text: u
+                },
+                opposite: false,
+                plotLines: [{
+                    color: 'rgba(246, 54, 92, 0.53)',
+                    value: max,
+                    dashStyle: 'Solid',
+                    width: 2
+                },{
+                    color: 'rgba(246, 54, 92, 0.53)',
+                    value: min,
+                    dashStyle: 'Solid',
+                    width: 2
+                }]
+            },
+            plotOptions: {
+                series: {
+                    fillOpacity: 0.1
+                }
+            },
+            series: [{
+                name: 'Result',
+                data: reformedData,
+                marker: {
+                    enabled: true,
+                    radius: 3
+                },
+                type: 'area',
+                color: 'rgba(21, 148, 187, 0.65)',
+                pointWidth: 100,
+                tooltip: {
+                    valueDecimals: 2
+                }
             }]
-        },
-        plotOptions: {
-            series: {
-                fillOpacity: 0.1
-            }
-        },
-        series: [{
-            name: 'Result',
-            data: reformedData,
-            marker: {
-                enabled: true,
-                radius: 3
-            },
-            type: 'area',
-            color: 'rgba(21, 148, 187, 0.65)',
-            pointWidth: 100,
-            tooltip: {
-                valueDecimals: 2
-            }
-        }]
-    };
-}]);
+        };
+    }]);

@@ -90,7 +90,7 @@
 
 })();
 
-
+// Controller manages updating the user parameters
 myApp.controller('ChangingSettingController',
     function($filter, $rootScope, FirebaseService, $translate, UserPreferences,
              Patient, RequestToServer, $scope, $timeout, UpdateUI, UserAuthorizationInfo,EncryptionService) {

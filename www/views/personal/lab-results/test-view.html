@@ -1,7 +1,8 @@
 <ons-page ng-controller="IndividualLabTestController">
     <ons-toolbar fixed-style>
         <div class="left"><ons-back-button>{{"BACK"|translate}}</ons-back-button></div>
-        <div class="center" ng-class="fontSizeTitle">{{"LAB_RESULTS"|translate}} {{test.testDateFormat|date:'shortDate'}}</div>
+        <div class="center" ng-class="fontSizeTitle">{{test.testDateFormat|date:'longDate'}}</div>
+        <div class="right"><ons-toolbar-button ng-click="personalNavigator.pushPage('views/personal/lab-results/labs-info.html')"><ons-icon icon="fa fa-info-circle"></ons-icon></ons-toolbar-button></div>
     </ons-toolbar>
     <ons-col>
         <!-- SEARCH BAR -->

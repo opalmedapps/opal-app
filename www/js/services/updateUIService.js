@@ -320,9 +320,7 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors',
         function updateSection(parameters)
         {
             var r = $q.defer();
-            console.log(parameters);
-            console.log(findSmallestTimestamp(parameters));
-            RequestToServer.sendRequestWithResponse('Refresh',{Fields:parameters, Timestamp:findSmallestTimestamp(parameters)}).then(
+            RequestToServer.sendRequestWithResponse('Refresh',{Fields:parameters}).then(
                 function(data)
                 {
                     console.log(data);
