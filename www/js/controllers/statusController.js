@@ -214,7 +214,8 @@
     function IndividualStepController(NavigatorParameters, UserPreferences, $filter, Logger) {
 
         var stepVM = this;
-        var nav = NavigatorParameters.getNavigator();
+        var param = NavigatorParameters.getParameters();
+        var nav = param.Navigator;
 
         stepVM.showTab = true;
         stepVM.about = about;
@@ -231,8 +232,8 @@
 
         //Links to the about page controlled by the contentController
         function about() {
-            nav.pushPage('./views/templates/content.html', {
-                contentLink: stepVM.stage ? stepVM.stage["URL_"+UserPreferences.getLanguage()] : '',
+            window[nav].pushPage('./views/templates/content.html', {
+                //contentLink: stepVM.stage ? stepVM.stage["URL_"+UserPreferences.getLanguage()] : '',
                 contentType: $filter('translate')(stepVM.name)
             });
         }

@@ -352,8 +352,8 @@ myApp.controller('SingleDocumentController', ['NavigatorParameters','Documents',
         //     }
         // };
 
-        $scope.about = function(){
-
+        $scope.about = function() {
+            /*
             // Check if there is any about link
             var link = null;
             docParams.hasOwnProperty("URL_EN") ? link  = docParams["URL_"+UserPreferences.getLanguage()] : {} ;
@@ -364,8 +364,8 @@ myApp.controller('SingleDocumentController', ['NavigatorParameters','Documents',
                 contentLink: link
             };
 
-            console.log(contentOptions);
-            personalNavigator.pushPage('./views/templates/content.html',contentOptions);
+            console.log(contentOptions);*/
+            personalNavigator.pushPage('./views/templates/content.html', {contentType: docParams.AliasName_EN});
             $scope.popoverDocsInfo.hide();
         }
     }]);
