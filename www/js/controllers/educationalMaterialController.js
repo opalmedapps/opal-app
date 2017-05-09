@@ -22,27 +22,6 @@ myApp.controller('EducationalMaterialController',['NavigatorParameters', '$scope
             init();
         });
 
-        // // Pull to refresh function
-        // $scope.load = function($done) {
-        // 	UpdateUI.update('All').then(function()
-        // 	{
-        // 		$timeout(function()
-        // 		{
-        // 			updated=true;
-        // 			backButtonPressed = 0;
-        // 			init();
-        // 			clearTimeout(timeOut);
-        // 			$done();
-        // 		});
-        // 	}).catch(function(error){
-        // 		console.log(error);
-        // 		clearTimeout(timeOut);
-        // 		$done();
-        // 	});
-        // 	var timeOut = setTimeout(function(){
-        // 		$done();
-        // 	},3000);
-        // };
 
         init()
             .then(function () {
@@ -55,6 +34,7 @@ myApp.controller('EducationalMaterialController',['NavigatorParameters', '$scope
                 $scope.edumaterials = materials;
                 Logger.sendLog('Educational Material', 'all');
             });
+
         //Init function
         function init() {
             //Obtaining materials from service
@@ -67,7 +47,7 @@ myApp.controller('EducationalMaterialController',['NavigatorParameters', '$scope
 
         //Function to decide whether or not to show the header
         $scope.showHeader = function (index) {
-            if (index == 0) {
+            if (index === 0) {
                 return true;
             } else if ($scope.edumaterials[index - 1].PhaseInTreatment !== $scope.edumaterials[index].PhaseInTreatment) {
                 return true;
@@ -115,7 +95,7 @@ myApp.controller('IndividualEducationalMaterialController', ['$scope', '$timeout
         var param = NavigatorParameters.getParameters();
         var navigatorPage = param.Navigator;
 
-        //Setting educational material
+        //set educational material language
         $scope.edumaterial =EducationalMaterial.setLanguageEduationalMaterial(param.Post);
         Logger.sendLog('Educational Material', param.Post.EducationalMaterialSerNum);
 
@@ -137,14 +117,14 @@ myApp.controller('IndividualEducationalMaterialController', ['$scope', '$timeout
         }
 
         //Determining if its an individual php page to show immediately.
-        $scope.isIndividualHtmlPage = (FileManagerService.getFileType($scope.edumaterial.URL_EN) == 'php');
+        $scope.isIndividualHtmlPage = (FileManagerService.getFileType($scope.edumaterial.URL_EN) === 'php');
         if($scope.isIndividualHtmlPage) downloadIndividualPage();
 
         //Function to go to a specific educational material.
         $scope.goToEducationalMaterial = function (index) {
             var nextStatus = EducationalMaterial.openEducationalMaterialDetails($scope.edumaterial);
             if (nextStatus !== -1) {
-                console.log(nextStatus);
+                // console.log(nextStatus);
                 NavigatorParameters.setParameters({ 'Navigator': navigatorPage, 'Index': index, 'Booklet': $scope.edumaterial, 'TableOfContents': $scope.tableOfContents });
                 window[navigatorPage].pushPage(nextStatus.Url);
             }
@@ -159,7 +139,7 @@ myApp.controller('IndividualEducationalMaterialController', ['$scope', '$timeout
 
         //On destroy clean up
         $scope.$on('$destroy', function () {
-            console.log('on destroy');
+            // console.log('on destroy');
             $scope.popoverSharing.destroy();
         });
 
@@ -183,7 +163,7 @@ myApp.controller('IndividualEducationalMaterialController', ['$scope', '$timeout
                 xhr.responseType = 'blob';
                 //If successful, convert to base64 and print
                 xhr.onload = function() {
-                    if (this.status == 200) {
+                    if (this.status === 200) {
 
                         var blob = new Blob([this.response], { type: 'application/pdf' });
                         var fileReader = new FileReader();

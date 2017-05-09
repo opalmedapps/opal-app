@@ -31,30 +31,30 @@ myApp.service('EducationalMaterial',['$filter','LocalStorage','FileManagerServic
      **/
     var educationalMaterialType={
         'Video':{
-            icon:'fa fa-youtube-play',
-            color:'red'
+            icon:'fa fa-film',
+            color:'#ef5350'
         },
         'Factsheet':{
             icon:'fa fa-list',
-            color:'DarkSlateBlue'
+            color:'#1E88E5'
         },
         'Booklet':{
-            icon:'fa fa-map',
-            color:'SeaGreen'
+            icon:'fa fa-leanpub',
+            color:'#66BB6A'
         },
         'Treatment Guidelines':{
             icon:'fa fa-list-ol',
-            color:'SaddleBrown'
+            color:'#7E57C2'
         },
         'Other':{
             icon:'fa fa-book',
-            color:'DarkSlateGrey'
+            color:'#FF7043'
         }
     };
     function setLanguageEduMaterial(array)
     {
         var language = UserPreferences.getLanguage();
-        console.log(array);
+        // console.log(array);
         console.log(Object.prototype.toString.call( array ));
         //Check if array
         if (Object.prototype.toString.call( array ) === '[object Array]') {
@@ -67,7 +67,7 @@ myApp.service('EducationalMaterial',['$filter','LocalStorage','FileManagerServic
                 array[i].Type = (language=='EN')? array[i].EducationalMaterialType_EN : array[i].EducationalMaterialType_FR;
             }
         }else{
-            console.log(array);
+            // console.log(array);
             //set language if string
             array.PhaseInTreatment = (language=='EN')? array.PhaseName_EN:array.PhaseName_FR;
             array.Url = (language=='EN')?array.URL_EN:array.URL_FR;

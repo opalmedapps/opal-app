@@ -55,8 +55,27 @@ myApp.controller('CalendarController', ['Appointments', '$q','$scope','$timeout'
         $scope.goToAppointment=goToAppointment;
         //Go to Calendar options
         $scope.goToCalendarOptions = goToCalendarOptions;
-       
-       
+
+        //monitors whether or not the calendar is displayed
+        $scope.showCalendar = true;
+
+        $scope.scrollerHeight = '';
+
+        $scope.onHideCalendar= function() {
+
+            $scope.$apply(function() {
+                $scope.showCalendar = false;
+                $scope.scrollerHeight = '100%';
+            })
+        };
+
+        $scope.onShowCalendar= function() {
+            $scope.$apply(function() {
+                $scope.showCalendar = true;
+                $scope.scrollerHeight = '45%';
+            })
+        };
+
         /*
         *   Implementation
         **/
@@ -66,7 +85,8 @@ myApp.controller('CalendarController', ['Appointments', '$q','$scope','$timeout'
         function init()
         {
             Logger.sendLog('Appointment', 'all');
-            navigatorName = NavigatorParameters.getParameters().Navigator;    
+            navigatorName = NavigatorParameters.getParameters().Navigator;
+
             //Obtaining and setting appointments from service
             $scope.appointments=Appointments.getUserAppointments();
             $scope.noAppointments = ($scope.appointments.length === 0);
@@ -103,6 +123,7 @@ myApp.controller('CalendarController', ['Appointments', '$q','$scope','$timeout'
             $location.hash(anchor);
             $anchorScroll();
         }
+
         function loadTemplate()
         {
             var r = $q.defer();
