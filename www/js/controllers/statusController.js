@@ -234,7 +234,7 @@
         function about() {
             window[nav].pushPage('./views/templates/content.html', {
                 //contentLink: stepVM.stage ? stepVM.stage["URL_"+UserPreferences.getLanguage()] : '',
-                contentType: $filter('translate')(stepVM.name)
+                contentType: stepVM.name
             });
         }
         
