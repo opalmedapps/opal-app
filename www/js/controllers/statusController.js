@@ -226,6 +226,7 @@
         function activate() {
             stepVM.stage = NavigatorParameters.getParameters().Post;
             stepVM.name = NavigatorParameters.getParameters().StepName;
+            stepVM.lang = UserPreferences.getLanguage();
             Logger.sendLog('Treatment Plan', stepVM.stage);
             console.log(stepVM.stage);
         }
