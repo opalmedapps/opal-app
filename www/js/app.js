@@ -134,7 +134,7 @@ myApp.config(['$urlRouterProvider', '$stateProvider', function ($urlRouterProvid
                 // Auth refers to our $firebaseAuth wrapper in the example above
                 "currentAuth": ["FirebaseService", function(FirebaseService) {
                     // $requireSignIn returns a promise so the resolve waits for it to complete
-                    console.log(FirebaseService.getAuthentication().$requireSignIn());
+                    // console.log(FirebaseService.getAuthentication().$requireSignIn());
                     return FirebaseService.getAuthentication().$requireSignIn();
                 }]
             }

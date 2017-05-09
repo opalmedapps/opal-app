@@ -1,20 +1,31 @@
 <ons-page ng-controller="CalendarController">
   <ons-toolbar fixed-style>
     <div class="left">
-      <ons-back-button ng-show="!showCalendarButton">{{"BACK"|translate}}</ons-back-button>
+      <ons-back-button>{{"BACK"|translate}}</ons-back-button>
     </div>
     <div class="center" ng-class="fontSizeTitle">{{"APPOINTMENTS"|translate}}</div>
     <div class="right">
       <ons-toolbar-button ng-click="goToCalendarOptions()">{{"OPTIONS"|translate}}</ons-toolbar-button>
     </div>
   </ons-toolbar>
-  <div align="center" class="calendar--appointments" style="margin-top:5px;position:relative;z-index:1" height-element>
-    <div class="calendar-list">
-      <uib-datepicker id="scrollTo" ng-model="dt" datepicker-mode="calendarMode" datepicker-options="dateOptions" show-weeks="false" show-color="showColor(date)" style="width:100vw;" ng-class="fontSizeDesc"></uib-datepicker>
+
+  <ons-gesture-detector ng-dragdown="onShowCalendar()">
+    <div ng-hide="showCalendar" align="center" style="height: 30px; width: 100%; text-align: center; background-color: #FAFAFA;position:fixed;z-index:1000">
+      <small>Drag down to show calendar</small>
     </div>
-  </div>
-  <div id="topListAnchor" style="height:5px;background-color:lightgrey;position:relative;z-index:1"></div>
-  <ons-scroller id="scrollerAppointments" style="position:relative;z-index:1">
+  </ons-gesture-detector>
+
+  <ons-gesture-detector ng-dragup="onHideCalendar()">
+    <div ng-show="showCalendar" align="center" class="calendar--appointments" style="position:relative;z-index:1" height-element>
+      <div class="calendar-list">
+        <uib-datepicker id="scrollTo" ng-model="dt" datepicker-mode="calendarMode" datepicker-options="dateOptions" show-weeks="false" show-color="showColor(date)" style="width:100vw;" ng-class="fontSizeDesc"></uib-datepicker>
+      </div>
+    </div>
+  </ons-gesture-detector>
+
+
+  <div ng-show="showCalendar" id="topListAnchor" style="height:5px;background-color:lightgrey;position:relative;z-index:1"></div>
+  <ons-scroller id="scrollerAppointments" ng-style="{'height': scrollerHeight}">
     <div id="firstAnchor"></div>
     <div style="color:grey;margin-top:10vh" ng-show="noAppointments" align="center" ng-class="fontSizeTitle">
       {{"NOAPPOINTMENTS"|translate}}
