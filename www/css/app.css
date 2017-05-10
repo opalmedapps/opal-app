@@ -1616,7 +1616,7 @@ Button appointments
  */
 
  /*Month Picker*/
- .calendar--appointments .uib-monthpicker thead button
+ .appointment-calendar .uib-monthpicker thead button
 {
   border:0;
   height:7.2vh;
@@ -1626,7 +1626,7 @@ Button appointments
   border-top:1px solid lightgrey;
   border-radius:1px;
 }
-.calendar--appointments .uib-monthpicker .uib-month button{
+.appointment-calendar .uib-monthpicker .uib-month button{
   border:0;
   height:10vh;
   width:33vw;
@@ -1637,7 +1637,7 @@ Button appointments
   border-radius:1px;
 }
  /*Year Picker*/
- .calendar--appointments .uib-yearpicker thead button
+ .appointment-calendar .uib-yearpicker thead button
 {
   border:0;
   height:7.2vh;
@@ -1646,7 +1646,7 @@ Button appointments
   border-top:1px solid lightgrey;
   border-radius:1px;
 }
-.calendar--appointments .uib-yearpicker .uib-year button{
+.appointment-calendar .uib-yearpicker .uib-year button{
   border:0;
   height:10vh;
   width:16.66vw;
@@ -1657,7 +1657,7 @@ Button appointments
   border-radius:1px;
 }
  /*Day Picker*/
-  .calendar--appointments  .uib-daypicker thead button
+  .appointment-calendar  .uib-daypicker thead button
 {
   border:0;
   height:7vh;
@@ -1666,7 +1666,7 @@ Button appointments
   border-top:1px solid lightgrey;
   border-radius:1px;
 }
-.calendar--appointments .uib-daypicker .btn-sm{
+.appointment-calendar .uib-daypicker .btn-sm{
   border:0;
   height:7vh;
   width:14.28vw;
@@ -1684,7 +1684,7 @@ Button appointments
   background-color: blue;
 }
 
-.calendar--appointments .uib-monthpicker .uib-months .uib-month .btn-sm{
+.appointment-calendar .uib-monthpicker .uib-months .uib-month .btn-sm{
   border:0;
   width:60vw;
   border-top:1px solid lightgrey;
@@ -2521,10 +2521,16 @@ input:focus {
 
 
 @media all and (orientation:landscape) {
-    .calendar--appointments{
+    .appointment-calendar, #drag-notify{
         display: none;
     }
+
+    #scrollerAppointments {
+        height: 100% !important;
+    }
 }
+
+
 .calendar-marker
 {
   font-size:20px;
