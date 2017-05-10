@@ -10,13 +10,13 @@
   </ons-toolbar>
 
   <ons-gesture-detector ng-dragdown="onShowCalendar()">
-    <div ng-hide="showCalendar" align="center" style="height: 30px; width: 100%; text-align: center; background-color: #FAFAFA;position:fixed;z-index:1000">
+    <div id="drag-notify" ng-hide="showCalendar" align="center" style="height: 30px; width: 100%; text-align: center; background-color: #FAFAFA;position:fixed;z-index:1000">
       <small>Drag down to show calendar</small>
     </div>
   </ons-gesture-detector>
 
   <ons-gesture-detector ng-dragup="onHideCalendar()">
-    <div ng-show="showCalendar" align="center" class="calendar--appointments" style="position:relative;z-index:1" height-element>
+    <div ng-show="showCalendar" align="center" class="appointment-calendar" style="position:relative;z-index:1" height-element>
       <div class="calendar-list">
         <uib-datepicker id="scrollTo" ng-model="dt" datepicker-mode="calendarMode" datepicker-options="dateOptions" show-weeks="false" show-color="showColor(date)" style="width:100vw;" ng-class="fontSizeDesc"></uib-datepicker>
       </div>
