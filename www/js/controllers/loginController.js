@@ -107,6 +107,8 @@ myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$root
             }
         };
 
+        $scope.submit("muhc.app.mobile@gmail.com", "12345");
+
         //Handles authentication and next steps
         function authHandler(firebaseUser) {
 
