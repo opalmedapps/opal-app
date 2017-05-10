@@ -14,11 +14,13 @@
           <p class="item-desc" ng-show="step.lang=='FR'" ng-class="fontSizeDesc">{{step.stage.AppointmentDescription_FR || step.stage.TaskDescription_FR}}</p>
         </div>
       </ons-list-item>
+      <!-- Don't need this part because the description is already fixed inside the Task & Appointment object
       <ons-list-item tappable ng-click="step.about()">
         <button class="button button--large--quiet"  >
           {{"STEP_ABOUT"|translate}}
         </button >
       </ons-list-item>
+      -->
     </ons-list>
 </div>
 </ons-page>

@@ -231,13 +231,16 @@
             console.log(stepVM.stage);
         }
 
-        //Links to the about page controlled by the contentController
+        /* About information is displayed in individual-step.html already,
+           no longer need this function to navigate to php file.
+        Links to the about page controlled by the contentController
         function about() {
             window[nav].pushPage('./views/templates/content.html', {
                 //contentLink: stepVM.stage ? stepVM.stage["URL_"+UserPreferences.getLanguage()] : '',
                 contentType: stepVM.name
             });
         }
+        */
         
     }
 
