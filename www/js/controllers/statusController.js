@@ -218,7 +218,7 @@
         var nav = param.Navigator;
 
         stepVM.showTab = true;
-        stepVM.about = about;
+        //stepVM.about = about;
         stepVM.stage = {};
 
         activate();
