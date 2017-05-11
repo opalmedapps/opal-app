@@ -25,9 +25,9 @@
         <ons-list style="margin: 0px 0">
             <ons-list-item modifier="chevron" class="item" ng-click="personalNavigator.pushPage('views/personal/diagnosis/diagnosis.html')">
                 <ons-row align="center">
-                    <ons-col width="60px">
+                    <ons-col width="60px" style="text-align: center">
                         <div>
-                            <ons-icon icon="fa-heartbeat iconHomeView" style="color:#f44336"></ons-icon>
+                            <ons-icon icon="fa-heartbeat" size="2x" style="color:#f44336"></ons-icon>
                         </div>
                     </ons-col>
                     <ons-col>
@@ -39,9 +39,9 @@
                 </ons-row>
             </ons-list-item>
             <ons-list-item modifier="chevron" class="item" ng-click="personalNavigator.pushPage('views/general/notifications/notifications.html')">
-                <ons-row align="center" >
-                    <ons-col width="60px" align="center">
-                        <i class="fa fa-bell iconHomeView" style="color:#FFC107"></i><span class="notification" ng-show="notificationsUnreadNumber>0">{{notificationsUnreadNumber}}</span>
+                <ons-row align="center">
+                    <ons-col width="60px" style="text-align: center">
+                        <ons-icon icon="ion-android-notifications" size="2x" style="color:#FFC107"></ons-icon><span class="notification" ng-show="notificationsUnreadNumber>0">{{notificationsUnreadNumber}}</span>
                     </ons-col>
                     <ons-col>
                         <header>
@@ -51,23 +51,10 @@
                     </ons-col>
                 </ons-row>
             </ons-list-item>
-            <ons-list-item modifier="chevron" class="item" ng-click="personalNavigator.pushPage('views/personal/appointments/appointments.html')">
-                <ons-row align="center">
-                    <ons-col width="60px" align="center">
-                        <i style="color: #FFC107" class="fa fa-calendar-o iconHomeView"></i>
-                    </ons-col>
-                    <ons-col>
-                        <header>
-                            <span class="item-title" ng-class="fontSizeTitle">{{"APPOINTMENTS"|translate}}</span>
-                        </header>
-                        <!--<p class="item-desc" ng-class="fontSizeDesc" ng-show="appointmentTitle!=='undefined'"><span translate= "{{appointmentTitle}}"></span> {{appointment.ScheduledStartTime|formatDateAppointmentTask}}</p>-->
-                    </ons-col>
-                </ons-row>
-            </ons-list-item>
             <ons-list-item modifier="chevron" class="item" ng-click="goToStatus()">
                 <ons-row align="center">
-                    <ons-col width="60px" align="center">
-                        <i style="color: #9575CD" class="fa fa-tasks iconHomeView" aria-hidden="true" ></i>
+                    <ons-col width="60px" style="text-align: center">
+                        <ons-icon style="color: #9575CD" size="2x" icon="fa-tasks" aria-hidden="true" ></ons-icon>
                     </ons-col>
                     <ons-col>
                         <header>
@@ -77,26 +64,24 @@
                     </ons-col>
                 </ons-row>
             </ons-list-item>
-            <ons-list-item modifier="chevron" class="item" ng-if="censor" ng-click="personalNavigator.pushPage('views/personal/my-chart/documents.html')">
-                <ons-row align="center" >
-                    <ons-col width="60px" align="center">
-                        <div>
-                            <i class="fa fa-folder iconHomeView" style="color:#ffdf80"></i><span class="notification" ng-show="documentsUnreadNumber>0">{{documentsUnreadNumber}}</span>
-                        </div>
+            <ons-list-item modifier="chevron" class="item" ng-click="personalNavigator.pushPage('views/personal/appointments/appointments.html')">
+                <ons-row align="center">
+                    <ons-col width="60px" style="text-align: center">
+                        <ons-icon style="color: #FFC107" size="2x" icon="fa-calendar"></ons-icon>
                     </ons-col>
                     <ons-col>
                         <header>
-                            <span class="item-title" ng-class="fontSizeTitle">{{"CLINICAL_NOTES"|translate}}</span>
+                            <span class="item-title" ng-class="fontSizeTitle">{{"APPOINTMENTS"|translate}}</span>
                         </header>
-                        <p class="item-desc" ng-class="fontSizeDesc"></p>
+                        <!--<p class="item-desc" ng-class="fontSizeDesc" ng-show="appointmentTitle!=='undefined'"><span translate= "{{appointmentTitle}}"></span> {{appointment.ScheduledStartTime|formatDateAppointmentTask}}</p>-->
                     </ons-col>
                 </ons-row>
             </ons-list-item>
             <ons-list-item modifier="chevron" class="item" ng-if="censor" ng-click="personalNavigator.pushPage('views/personal/lab-results/lab-results.html')" >
                 <ons-row align="center" >
-                    <ons-col width="60px" align="center">
+                    <ons-col width="60px" style="text-align: center">
                         <div>
-                            <i class="fa fa-flask iconHomeView" style="color:#8BC34A"></i>
+                            <ons-icon icon="ion-erlenmeyer-flask" size="2x" style="color:#8BC34A"></ons-icon>
                         </div>
                     </ons-col>
                     <ons-col>
@@ -107,11 +92,26 @@
                     </ons-col>
                 </ons-row>
             </ons-list-item>
+            <ons-list-item modifier="chevron" class="item" ng-if="censor" ng-click="personalNavigator.pushPage('views/personal/my-chart/documents.html')">
+                <ons-row align="center" >
+                    <ons-col width="60px" style="text-align: center">
+                        <div>
+                            <ons-icon icon="fa-folder" size="2x" style="color:#ffdf80"></ons-icon><span class="notification" ng-show="documentsUnreadNumber>0">{{documentsUnreadNumber}}</span>
+                        </div>
+                    </ons-col>
+                    <ons-col>
+                        <header>
+                            <span class="item-title" ng-class="fontSizeTitle">{{"CLINICAL_NOTES"|translate}}</span>
+                        </header>
+                        <p class="item-desc" ng-class="fontSizeDesc"></p>
+                    </ons-col>
+                </ons-row>
+            </ons-list-item>
             <ons-list-item modifier="chevron" class="item" ng-click="personalNavigator.pushPage('views/personal/treatment-team-messages/team-messages.html')">
                 <ons-row align="center" >
-                    <ons-col width="60px" align="center">
+                    <ons-col width="60px" style="text-align: center">
                         <div>
-                            <i class="fa fa-user-md  iconHomeView" style="color:#2196F3"></i><span class="notification" ng-show="txTeamMessagesUnreadNumber>0">{{txTeamMessagesUnreadNumber}}</span>
+                            <ons-icon icon="fa-user-md" size="2x" style="color:#2196F3"></ons-icon><span class="notification" ng-show="txTeamMessagesUnreadNumber>0">{{txTeamMessagesUnreadNumber}}</span>
                         </div>
                     </ons-col>
                     <ons-col>
@@ -140,9 +140,9 @@
            </ons-list-item>-->
             <ons-list-item modifier="chevron" class="item" ng-click="personalNavigator.pushPage('views/personal/questionnaires/questionnairesList.html')">
                 <ons-row align="center">
-                    <ons-col width="60px" align="center">
+                    <ons-col width="60px" style="text-align: center">
                         <div>
-                            <i class="fa fa-question-circle iconHomeView" style="color: #607d8b;"></i><span class="notification" ng-show="questionnairesUnreadNumber>0">{{questionnairesUnreadNumber}}</span>
+                            <ons-icon icon="fa-question-circle" size="2x" style="color: #607d8b;"></ons-icon><span class="notification" ng-show="questionnairesUnreadNumber>0">{{questionnairesUnreadNumber}}</span>
                         </div>
                     </ons-col>
                     <ons-col>

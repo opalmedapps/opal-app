@@ -25,7 +25,6 @@ myApp.service('RequestToServer',['$filter','$state','NewsBanner','UserAuthorizat
          *@description Firebase reference
          **/
         var Ref= firebase.database().ref('dev2/');
-        console.log("Ref is " + Ref);
         /**
          *@ngdoc property
          *@name  MUHCApp.service.#refRequests
@@ -46,7 +45,6 @@ myApp.service('RequestToServer',['$filter','$state','NewsBanner','UserAuthorizat
         function sendRequest(typeOfRequest,parameters, encryptionKey, referenceField) {
             var requestType = '';
             var requestParameters;
-            console.log(typeOfRequest);
             if (typeof encryptionKey !== 'undefined' && encryptionKey) {
                 console.log(encryptionKey);
                 requestType = typeOfRequest;
@@ -67,8 +65,6 @@ myApp.service('RequestToServer',['$filter','$state','NewsBanner','UserAuthorizat
                 'Timestamp':firebase.database.ServerValue.TIMESTAMP,
                 'UserEmail': UserAuthorizationInfo.getEmail()
             };
-
-            console.log(toSend);
 
             var reference = referenceField || 'requests';
 
@@ -94,8 +90,6 @@ myApp.service('RequestToServer',['$filter','$state','NewsBanner','UserAuthorizat
             sendRequestWithResponse:function(typeOfRequest, parameters, encryptionKey, referenceField, responseField)
             {
                 var r = $q.defer();
-                console.log(encryptionKey);
-                console.log(typeOfRequest);
 
                 //Sends request and gets random key for request
                 var key = sendRequest(typeOfRequest,parameters,encryptionKey, referenceField);
@@ -108,14 +102,11 @@ myApp.service('RequestToServer',['$filter','$state','NewsBanner','UserAuthorizat
                     refRequestResponse = Ref.child(responseField).child(key);
                 }
 
-                console.log(refRequestResponse.toString());
                 //Waits to obtain the request data.
                 //console.log('users/'+UserAuthorizationInfo.getUsername()+'/'+key);
                 refRequestResponse.on('value',function(snapshot){
-                    console.log(' I am inside response for ', key, snapshot.val());
                     if(snapshot.exists())
                     {
-                        console.log(' There is a snapshot for ', key);
                         var data = snapshot.val();
                         var timestamp = data.Timestamp;
                         if(data.Code =='1')
@@ -126,7 +117,6 @@ myApp.service('RequestToServer',['$filter','$state','NewsBanner','UserAuthorizat
                         }else{
                             if(!encryptionKey||typeof encryptionKey == 'undefined') data = EncryptionService.decryptData(data);
                             data.Timestamp = timestamp;
-                            console.log(data);
                             clearTimeout(timeOut);
                             refRequestResponse.set(null);
                             refRequestResponse.off();
@@ -166,7 +156,4 @@ myApp.service('RequestToServer',['$filter','$state','NewsBanner','UserAuthorizat
                 sendRequest(typeOfRequest,content,key);
             }
         };
-
-
-
     }]);
