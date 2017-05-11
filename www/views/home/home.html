@@ -46,7 +46,7 @@
                         <ons-col width="60px" align="center" style="text-align: center">
                             <img style="width: 60px;" src="/img/Opal_Logo_Transparent_Inverse.png">
                         </ons-col>
-                        <ons-col class="text-center">
+                        <ons-col>
 
                             <header>
                                 <span class="item-title" ng-class="fontSizeTitle">{{"OPAL_ABOUT"|translate}}</span>
@@ -67,9 +67,11 @@
                             </div>
                         </ons-col>
                         <ons-col>
-                            <h2 style="margin-top: 0" class="item-title text-center" ng-class="fontSizeTitle">{{"CHECKIN"|translate}}</h2>
-                            <p style="font-size: 18px" class="item-desc text-center" ng-class="fontSizeDesc">{{h.checkInMessage|translate}} {{RoomLocation}}</p>
-                            <p style="font-size: 18px" class="item-desc text-center" ng-class="fontSizeDesc">{{h.calledApp["AppointmentType_"+h.language]}}</p>
+                            <header>
+                                <span style="margin-top: 0" class="item-title" ng-class="fontSizeTitle">{{"CHECKIN"|translate}}</span>
+                            </header>
+                            <p class="item-desc" ng-class="fontSizeDesc">{{h.checkInMessage|translate}} {{RoomLocation}}</p>
+                            <p class="item-desc" ng-class="fontSizeDesc">{{h.calledApp["AppointmentType_"+h.language]}}</p>
                             <!--<p class="item-desc" ng-class="fontSizeDesc" style="color:orange" ng-show ="checkinEstimate&&showHomeScreenUpdate">{{"ESTIMATEDWAIT"|translate}}: {{checkinEstimate}} minutes</p>-->
                         </ons-col>
                     </ons-row>
@@ -82,11 +84,11 @@
                                 <i class="fa fa-calendar fa-2x" style="color: #ffc107"></i>
                             </div>
                         </ons-col>
-                        <ons-col class="text-center">
+                        <ons-col>
                             <header>
-                                <span class="item-title text-center" ng-class="fontSizeTitle">{{"NEXTAPPOINTMENT"|translate}}</span>
+                                <span class="item-title" ng-class="fontSizeTitle">{{"NEXTAPPOINTMENT"|translate}}</span>
                             </header>
-                            <p class="item-desc text-center" ng-class="fontSizeDesc" ng-show="h.appointmentShown.ScheduledStartTime">
+                            <p class="item-desc" ng-class="fontSizeDesc" ng-show="h.appointmentShown.ScheduledStartTime">
                                 {{"UPCOMING"|translate}}: {{h.appointmentShown.ScheduledStartTime|date:'medium'}}
                             </p>
                         </ons-col>
@@ -100,11 +102,11 @@
                                 <i class="fa fa-medkit fa-2x" style="color:#03a9f4"></i>
                             </div>
                         </ons-col>
-                        <ons-col class="text-center">
+                        <ons-col>
                             <header>
                                 <span class="item-title" ng-class="fontSizeTitle">{{"STATUS"|translate}}</span>
                             </header>
-                            <p style="font-size: 18px" class="item-desc text-center" ng-class="fontSizeDesc" translate="{{h.statusDescription}}"></p>
+                            <p class="item-desc" ng-class="fontSizeDesc" translate="{{h.statusDescription}}"></p>
                         </ons-col>
                     </ons-row>
                 </ons-list-item>
