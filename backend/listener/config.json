@@ -1,7 +1,7 @@
 {
     "MYSQL_USERNAME":"robert",
     "MYSQL_PASSWORD":"service",
-    "MYSQL_DATABASE":"QplusApp",
+    "MYSQL_DATABASE":"QPlusApp",
     "HOST" : "172.26.66.41",
     "DOCUMENTS_PATH" : "/var/www/Documents/opalAdmin/backend/clinical/documents/",
     "CHECKIN_PATH" : "http://172.26.66.41/devDocuments/screens/php/checkInPatientAriaMedi.php?CheckinVenue=OPAL%20PHONE%20APP&PatientId=",
