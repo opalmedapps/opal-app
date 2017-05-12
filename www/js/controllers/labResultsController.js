@@ -3,7 +3,7 @@ myApp.controller('LabResultsControllerCopy', ['RequestToServer','Notifications',
     '$timeout','$rootScope', 'UserPreferences', 'LabResults', '$q', 'NewsBanner', '$filter',
     function (RequestToServer, Notifications, UpdateUI, $scope,
               $timeout,$rootScope, UserPreferences, LabResults, $q, NewsBanner,$filter) {
-
+            "use strict";
 
         $scope.loading = true;
 
@@ -13,7 +13,6 @@ myApp.controller('LabResultsControllerCopy', ['RequestToServer','Notifications',
             if(LabResults.getLastUpdated() < Date.now() - 60000) {
                 $scope.loading = true;
                 LabResults.setTestResults().then(function () {
-                    "use strict";
                     $scope.loading = false;
                     console.log("updated");
                 }).catch(function (error) {

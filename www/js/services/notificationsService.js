@@ -234,7 +234,7 @@ myApp.service('Notifications',['$filter','RequestToServer','LocalStorage','Annou
                 //if (temp[i].NotificationType == 'RoomAssignment') continue;
                 console.log(temp[i].NotificationType,  notificationTypes[temp[i].NotificationType], i);
                 //TODO: ADD THE ACTUAL MAPPINGS FOR ALL THE NOTIFICATIONS
-                if(typeof  notificationTypes[temp[i].NotificationType] =='undefined')break;
+                if(typeof  notificationTypes[temp[i].NotificationType] =='undefined') continue;
                 temp[i].Custom =  notificationTypes[temp[i].NotificationType].Custom;
                 temp[i].Icon = notificationTypes[temp[i].NotificationType].icon;
                 temp[i].Color = notificationTypes[temp[i].NotificationType].color;
