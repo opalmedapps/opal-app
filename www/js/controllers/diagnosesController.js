@@ -23,15 +23,16 @@
         .module('MUHCApp')
         .controller('DiagnosesController', DiagnosesController);
 
+    /* @ngInject */
     DiagnosesController.$inject = ['Diagnoses','UserPreferences'];
 
-    /* @ngInject */
+
     function DiagnosesController(Diagnoses, UserPreferences) {
         var vm = this;
         vm.title = 'DiagnosesController';
         vm.diagnoses = [];
         vm.language = '';
-
+        vm.showHeader = showHeader;
         activate();
 
         ////////////////
@@ -42,6 +43,15 @@
 
             //grab the language
             vm.language = UserPreferences.getLanguage();
+        }
+
+        // Determines whether or not to show the date header in the view. Announcements are grouped by day.
+        function showHeader(index)
+        {
+            if (index === 0) return true;
+            var current = (new Date(vm.diagnoses[index].CreationDate)).setHours(0,0,0,0);
+            var previous = (new Date(vm.diagnoses[index-1].CreationDate)).setHours(0,0,0,0);
+            return current !== previous;
         }
     }
 
