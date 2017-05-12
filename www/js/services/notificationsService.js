@@ -232,6 +232,7 @@ myApp.service('Notifications',['$filter','RequestToServer','LocalStorage','Annou
             var temp=angular.copy(notifications);
             for (var i = 0; i < notifications.length; i++) {
                 //if (temp[i].NotificationType == 'RoomAssignment') continue;
+                if(typeof notificationTypes[temp[i].NotificationType] =='undefined') break;
                 temp[i].Custom =  notificationTypes[temp[i].NotificationType].Custom;
                 temp[i].Icon = notificationTypes[temp[i].NotificationType].icon;
                 temp[i].Color = notificationTypes[temp[i].NotificationType].color;
