@@ -181,6 +181,7 @@ myApp.service('LabResults',['$filter','LocalStorage','RequestToServer','$q',
              **/
             getTestResultsArrayByType:function()
             {
+                console.log(testResultsByTypeArray);
                 return testResultsByTypeArray;
             },
 
@@ -193,7 +194,7 @@ myApp.service('LabResults',['$filter','LocalStorage','RequestToServer','$q',
              **/
             getTestResultsArrayByDate:function()
             {
-                console.log(testResultsByDateArray);
+                // console.log(testResultsByDateArray);
                 return testResultsByDateArray;
             },
 

@@ -13,15 +13,15 @@ myApp.controller('ParkingController',function($scope, $timeout, NavigatorParamet
     $scope.goToParkingLink = function(type)
     {
         
-        if(type== 'general')
+        if(type === 'general')
         {
-            if (UserPreferences.getLanguage() == "EN"){
-                window.open('https://muhc.ca/glen/handbook/parking-hospital','_system');
+            if (UserPreferences.getLanguage() === "EN"){
+                window.open('https://muhc.ca/glen/handbook/parking-hospital','_blank');
             } else {
-                window.open('https://cusm.ca/glen/handbook/stationnement','_system');
+                window.open('https://cusm.ca/glen/handbook/stationnement','_blank');
             }
 
-        }else if(type=='oncology'){
+        }else if(type ==='oncology'){
            NavigatorParameters.setParameters({type:type});
            window[navigatorName].pushPage('./views/general/parking/parking-details.html');
         }

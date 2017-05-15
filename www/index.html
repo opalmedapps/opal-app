@@ -27,12 +27,14 @@
           https://*.firebaseapp.com
           wss://*.firebaseio.com
           https://www.youtube.com;
-          img-src 'self' data:
-          https://www.depdocs.com
-          blob:" />
+          img-src 'self' https://www.depdocs.com data:
+          https://www.depdocs.com;"/>
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
+
+    <!-- Material library for Material Design -->
+    <!--<link rel="stylesheet" type="text/css" href="lib/css/materialize.min.css">-->
 
     <script src="lib/bower_components/angular/angular.min.js"></script>
     <link href="lib/bower_components/angular/angular-csp.css">
@@ -78,6 +80,10 @@
 
     <!--UI bootstrap-->
     <script src="lib/js/angular-bootstrap/ui-bootstrap-tpls-1.1.2.js"></script>
+
+    <!-- Material JS -->
+    <script src="lib/js/materialize.min.js"></script>
+
 
     <!--Tekbar-->
     <script src="lib/bower_components/angular-tek-progress-bar/dist/tek.progress-bar.js"></script>
@@ -128,7 +134,7 @@
     <script src="js/controllers/treatmentPlanController.js"></script>
     <script src="js/controllers/notificationsController.js"></script>
     <script src="js/controllers/patientPortalController.js"></script>
-    <script src="js/controllers/scheduleController.js"></script>
+    <script src="js/controllers/appointmentsController.js"></script>
     <script src="js/controllers/feedbackController.js"></script>
     <script src="js/controllers/contactsController.js"></script>
     <script src="js/controllers/educationalMaterialController.js"></script>
@@ -151,6 +157,9 @@
     <script src="js/controllers/contentController.js"></script>
     <script src="js/controllers/aboutController.js"></script>
     <script src="js/controllers/pfpContactsController.js"></script>
+    <!-- inject:controller:js -->
+    <!-- endinject -->
+
     <!--App services-->
     <script src="js/services/firebaseAuthService.js" type="text/javascript"></script>
     <script src="js/services/messagesService.js"></script>
@@ -187,10 +196,12 @@
     <script src="js/services/uuidService.js"></script>
     <script src="js/services/cleanUpService.js"></script>
     <script src="js/services/loggerService.js"></script>
-
+    <!-- inject:service:js -->
+    <!-- endinject -->
     <!--App filters-->
     <script src="js/filters/filters.js"></script>
-
+    <!-- inject:filter:js -->
+    <!-- endinject -->
     <!--App directives-->
     <script src="js/directives/watchHeightOfElementDirective.js"></script>
     <script src="js/directives/changeHeightDiv.js"></script>
@@ -200,7 +211,9 @@
     <script src="js/directives/linePlusBarChartDirective_bak.js"></script>
     <script src ="js/directives/rateEducationalMaterialDirective.js"></script>
     <script src="js/directives/scrollCarouselDirective.js"></script>
-
+    <!-- inject:directive -->
+    <!-- endinject -->
+<script type="text/javascript" src="js/bootstrap.js"></script>
 
 
 </head>
@@ -209,11 +222,11 @@
 
 <!--Loading Modal for the initial loading screen-->
 <ons-modal var="modal">
-    <ons-icon icon="ion-load-c" spin="true"></ons-icon>
+    <ons-icon size="50px" icon="ion-load-c" spin="true"></ons-icon>
     <br><br>
     <div class="container text-center" align="center">
-        <img ng-src="./img/muhc-logo-text.png" ><br>
-        <p id="loadingData" style="display:none">{{"LOADINGDATA"|translate}}...</p>
+        <p id="loadingData">{{"LOADINGDATA"|translate}}...</p>
+        <img style="margin-top: 5%; margin-left: -5%; width: 80%; height: auto;" ng-src="./img/muhc-logo-text.png" >
     </div>
 </ons-modal>
 
@@ -223,6 +236,5 @@
 
 </body>
 
-<script type="text/javascript" src="js/bootstrap.js"></script>
 
 </html>

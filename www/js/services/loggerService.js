@@ -53,9 +53,7 @@
                     Activity: angular.copy(activity),
                     ActivityDetails: angular.copy(activityDetails)
                 })
-                    .then(function (response) {
-                        console.log(response);
-                    });
+
             }
         }
 

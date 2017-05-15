@@ -12,11 +12,11 @@
     <!--</span>-->
     <!--</ons-pull-hook>-->
 
-    <div ng-show="loading" align="center" style="margin:10px">
-        <svg class="progress-circular">
-            <circle class="progress-circular__primary" cx="50%" cy="50%" r="40%" fill="none" stroke-width="10%" stroke-miterlimit="10"/>
-        </svg>
-    </div>
+    <!--<div ng-show="loading" align="center" style="margin:10px">-->
+        <!--<svg class="progress-circular">-->
+            <!--<circle class="progress-circular__primary" cx="50%" cy="50%" r="40%" fill="none" stroke-width="10%" stroke-miterlimit="10"/>-->
+        <!--</svg>-->
+    <!--</div>-->
 
     <div ng-hide="loading">
 
@@ -25,7 +25,7 @@
                 <ons-row align="center"   >
                     <ons-col width="60px" align="center">
                         <div >
-                            <i class="fa fa-address-book iconHomeView" style="color:Amethyst"></i>
+                            <i class="fa fa-address-book iconHomeView" style="color:#03A9F4"></i>
                         </div>
                     </ons-col>
                     <ons-col>
@@ -40,7 +40,7 @@
                 <ons-row align="center" >
                     <ons-col width="60px" >
                         <div>
-                            <i class="fa fa-bullhorn iconHomeView" style="color:DarkSlateBlue"></i><span class="notification" ng-show="announcementsUnreadNumber>0">{{announcementsUnreadNumber}}</span>
+                            <i class="fa fa-bullhorn iconHomeView" style="color:#FFC107"></i><span class="notification" ng-show="announcementsUnreadNumber>0">{{announcementsUnreadNumber}}</span>
                         </div>
                     </ons-col>
                     <ons-col>
@@ -85,7 +85,7 @@
                 <ons-row align="center"   >
                     <ons-col width="60px" align="center">
                         <div >
-                            <i class="fa fa-car iconHomeView" style="color:red"></i>
+                            <i class="fa fa-car iconHomeView" style="color:#f44336"></i>
                         </div>
                     </ons-col>
                     <ons-col>
@@ -100,7 +100,7 @@
                 <ons-row align="center"   >
                     <ons-col width="60px" align="center">
                         <div >
-                            <i class="fa fa-users iconHomeView" style="color:orange"></i>
+                            <i class="fa fa-users iconHomeView" style="color:#2196F3"></i>
                         </div>
                     </ons-col>
                     <ons-col>
@@ -112,10 +112,10 @@
                 </ons-row>
             </ons-list-item>
             <ons-list-item modifier="chevron" class="item" ng-click="generalNavigator.pushPage('views/general/feedback.html')">
-                <ons-row align="center"   >
+                <ons-row align="center">
                     <ons-col width="60px" align="center">
                         <div >
-                            <i class="fa fa-thumbs-o-up iconHomeView" style="color:green"></i>
+                            <i class="fa fa-thumbs-up iconHomeView" style="color:#4CAF50"></i>
                         </div>
                     </ons-col>
                     <ons-col>
@@ -126,6 +126,8 @@
                     </ons-col>
                 </ons-row>
             </ons-list-item>
+            <!-- inject:tab-->
+            <!-- endinject -->
             <!--<ons-list-item modifier="chevron" class="item" ng-click="reportIssuesMail()">-->
             <!--<ons-row align="center"   >-->
             <!--<ons-col width="60px" align="center">-->

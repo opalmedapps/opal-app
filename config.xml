@@ -17,7 +17,8 @@
     <allow-intent href="mailto:*" />
     <allow-intent href="geo:*" />
     <allow-intent href="opal:" />
-    <preference name="Orientation" value="portrait" />
+    <preference name="Orientation" value="default" />
+    <!--<preference name="phonegap-version" value="cli-6.3.1" />-->
     <preference name="SplashScreenDelay" value="5000" />
     <preference name="DisallowOverscroll" value="true" />
     <preference name="FadeSplashScreen" value="true" />
@@ -67,7 +68,7 @@
         <icon height="58" src="res/ios/Icon-small@2x.png" width="58" />
     </platform>
     <plugin name="phonegap-plugin-push" spec="^1.9.2">
-        <variable name="SENDER_ID" value="652464215237" />
+        <variable name="SENDER_ID" value="810896751588" />
     </plugin>
     <plugin name="com-badrit-printplugin" spec="^0.2.0" />
     <plugin name="cordova-plugin-app-version" spec="^0.1.9" />

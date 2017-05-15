@@ -22,11 +22,11 @@
     angular
         .module('MUHCApp')
         .controller('DiagnosesController', DiagnosesController);
-    
+
     /* @ngInject */
     DiagnosesController.$inject = ['Diagnoses','UserPreferences'];
 
-    
+
     function DiagnosesController(Diagnoses, UserPreferences) {
         var vm = this;
         vm.title = 'DiagnosesController';

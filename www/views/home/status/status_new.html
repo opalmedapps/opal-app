@@ -5,62 +5,53 @@
         </div>
         <div class="center" ng-class="fontSizeTitle">{{"PLANNING_TITLE"|translate}}</div>
     </ons-toolbar>
-    <div style="overcroll-y:scroll" >
-        <div class="container" style="height: 30%">
-            <div style="margin-top:1px">
-                <div ng-show="status.noData" class="btn my-home-profile">
-                    <div class="plan-info" style="width:100%">
-                        <ons-row>
-                            <ons-col width="40px">
-                                <div class="">
-                                    <i class="ion-clipboard iconHomeView"></i>
-                                </div>
-                            </ons-col>
-                            <ons-col>
-                                <div class="">
-                                    {{"NOTREATMENTPLAN"|translate}}
+    <div class="container" style="background-color: white">
+        <div class="row" style="z-index: 1000; margin-top: -1px; position: fixed;">
+            <div ng-show="status.noData" class="btn my-home-profile">
+                <div class="plan-info" style="width:100%">
+                    <ons-row>
+                        <ons-col width="40px">
+                            <div class="">
+                                <i class="ion-clipboard iconHomeView"></i>
+                            </div>
+                        </ons-col>
+                        <ons-col>
+                            <div class="">
+                                {{"NOTREATMENTPLAN"|translate}}
 
-                                </div>
-                            </ons-col>
-                        </ons-row>
-                    </div>
-                </div>
-                <div ng-hide="status.noData">
-                    <div class="my-home-profile" style="height:220px;">
-                        <ons-row style="margin:0;padding:0">
-                            <ons-col align="center">
-                                <div ng-show="!completed" class="progressStatus" id="progressStatusStage" >
-                                </div>
-                                <div class="progressStatus" id="progressStatusPresentStage2" style="margin-top:-200px">
-                                </div>
-                                <div ng-show="!completed" class="progressStatus" id="progressStatusPastStages2" style="margin-top:-200px">
-                                </div>
-
-                                <div align="center">
-                                    <div class="progressStatusTextBox" style="font-size:15px">
-                                        <div style="vertical-align: middle">
-                                            <strong>{{"STEP"|translate}} {{status.eventIndex - 1}} {{"OF"|translate}} {{status.totalEvents}} </strong>
-                                            <div ng-show="status.eventType === 'plan'">
-                                                <div ng-show="!status.planningCompleted" align="middle" style="margin-left:5px; vertical-align: middle">
-                                                    {{status.currentEvent | translate}}
-                                                </div>
-                                                <div ng-show="status.planningCompleted" align="middle" style="margin-left:5px">
-                                                    <p><i class="ion-checkmark-circled iconStatusBox"></i>{{"TREATMENTPLANCOMPLETEDON"|translate}}
-                                                        <br><strong>{{status.completionDate|date:'fullDate'}}</strong></p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </ons-col>
-                        </ons-row>
-                    </div>
+                            </div>
+                        </ons-col>
+                    </ons-row>
                 </div>
             </div>
+            <div class="my-home-profile shadow-2" style="overflow:hidden; height: 225px" ng-hide="status.noData">
+                <!--<ons-row style="margin:0;padding:0">-->
+                    <!--<ons-col align="center">-->
+                        <div ng-show="!completed" class="progressStatus" id="progressStatusStage" ></div>
+                        <div class="progressStatus" id="progressStatusPresentStage2" style="margin-top:-200px"></div>
+                        <div ng-show="!completed" class="progressStatus" id="progressStatusPastStages2" style="margin-top:-200px"></div>
+                        <div align="center">
+                            <div class="progressStatusTextBox" style="font-size:15px">
+                                <!--<div style="vertical-align: middle">-->
+                                    <strong>{{"STEP"|translate}} {{status.eventIndex - 1}} {{"OF"|translate}} {{status.totalEvents}} </strong>
+                                    <div ng-show="status.eventType === 'plan'">
+                                        <div ng-show="!status.planningCompleted" align="middle" style="margin-left:5px; vertical-align: middle">
+                                            {{status.currentEvent | translate}}
+                                        </div>
+                                        <div ng-show="status.planningCompleted" align="middle" style="margin-left:5px">
+                                            <p><i class="ion-checkmark-circled iconStatusBox"></i>{{"TREATMENTPLANCOMPLETEDON"|translate}}
+                                                <br><strong>{{status.completionDate|date:'fullDate'}}</strong></p>
+                                        </div>
+                                    </div>
+                                <!--</div>-->
+                            </div>
+                        </div>
+                    <!--</ons-col>-->
+                <!--</ons-row>-->
+            </div>
         </div>
-        <div id="divTreatmentPlan" ng-hide="status.noData"  style="overflow-y:scroll; height: 58vh">
-
-            <ons-list class="plan-list" style="margin:0;padding:0">
+        <div class="row" id="divTreatmentPlan" ng-hide="status.noData" style="overflow-y: scroll; width: 150%; padding:0; margin: 65% 0 0;">
+            <ons-list class="plan-list">
                 <ons-list-item class="plan" modifier="tappable" ng-click="status.goToStep(events[events.length-1],step)" ng-repeat="(step, events) in status.events" id="treatmentSessions{{$index}}">
                     <ons-row id="statusStep{{$index}}">
                         <ons-col width="50px" class="plan-left" align="center">
@@ -88,7 +79,6 @@
                     </ons-row>
                 </ons-list-item>
             </ons-list>
-
         </div>
     </div>
 </ons-page>
