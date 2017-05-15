@@ -25,6 +25,8 @@ var changed = require('gulp-changed');
 var open = require('gulp-open');
 
 
+
+
 //Set the cordova folder path here
 var cordovaFolderPath = '/Users/rob/Web/Qplus/Prod/www';
 
@@ -275,3 +277,101 @@ gulp.task('size-postbuild', function() {
             message:function(){ console.log("Total size post-built: " + s.prettySize);}
         }));
 });
+
+/**
+ * OPAL TEMPLATES 
+ */
+
+
+//TASKS FOR TEMPLATES
+//TASKS FOR TEMPLATES
+
+var inject = require('gulp-inject');
+var replace = require('gulp-replace');
+var gulpif = require('gulp-if');
+var rename = require("gulp-rename");
+var mainTabsUrls = {
+    "personal":'./www/views/personal/personal.html',
+    "general":'./www/views/general/general.html'
+};
+var fs = require('fs');
+var templateJson = JSON.parse(fs.readFileSync('./templates/patterns.json'));
+//Templates for opal
+gulp.task('opal', function(){
+    var argv = require('yargs').usage('Usage: $0 -t [string] -n [string] -v [string]')
+    .option('v',{
+        alias:'view',
+        choices:['personal','general']
+    })
+    .option('n',{
+        alias:'name'
+    })
+    .option('t',{
+        alias:'template',
+        choices:['module']
+    })
+    .demandOption(['t','n','v'])
+    .argv;
+    var template =templateJson[argv.t];
+    var view =mainTabsUrls[argv.v];
+    var name = argv.n.toLowerCase();
+    var upName = name.charAt(0).toUpperCase() + name.slice(1);
+    gulpif(template.includeController,gulp.src('./templates/'+argv.t+'/'+argv.t+'Controller.js')
+    .pipe(replace("<controller-name>", upName+'Controller'))
+    .pipe(rename(name+'Controller.js'))
+    .pipe(gulp.dest("./www/js/controllers/",{overwrite:'false'})));
+
+     gulpif(template.includeService,gulp.src('./templates/'+argv.t+'/'+argv.t+'Service.js')
+    .pipe(replace("<service-name>", upName))
+    .pipe(rename(name+'Service.js'))
+    .pipe(gulp.dest("./www/js/services",{overwrite:'false'})));
+
+    gulpif(template.includeView,gulp.src('./templates/'+argv.t+'/'+argv.t+'.html')
+    .pipe(replace("<controller-name>",  upName+'Controller'))
+    .pipe(replace("<view-name>", upName))
+    .pipe(rename(name+'.html'))
+    .pipe(gulp.dest("./www/views/"+argv.v+"/"+name,{overwrite:'false'})));
+    
+    gulpif(template.includeController,
+    gulp.src('./www/index.html')
+    .pipe(inject(gulp.src('./www/js/controllers/'+name+'Controller.js',{read: false}), {
+    starttag: '<!-- inject:controller:{{ext}} -->'
+    , relative: true}))
+    .pipe(gulp.dest('./www')))
+
+    gulpif(template.includeService,
+    gulp.src('./www/index.html')
+    .pipe(inject(gulp.src('./www/js/services/'+name+'Service.js',{read: false}), {
+    starttag: '<!-- inject:service:{{ext}} -->'
+    , relative: true}))
+    .pipe(gulp.dest('./www/')))
+
+    gulpif(template.addTab,
+    gulp.src("./www/views/"+argv.v+"/"+argv.v+".html")
+    .pipe(inject(gulp.src(["./www/views/"+argv.v+"/"+name+"/"+name+".html"],{read: false}), {
+     starttag: '<!-- inject:tab-->',
+     transform:function()
+    {
+    var str = "<ons-list-item modifier=\"chevron\" class=\"item\" ng-click=\""+argv.v+ "Navigator.pushPage('./views/"+argv.v+"/"+name+"/"+name+".html')\">"+
+                  `<ons-row align=\"center\">
+                  <ons-col width=\"60px\" align=\"center\">
+                        <div>
+                            <i class=\"fa fa-question-circle iconHomeView\" style=\"color:DarkSlateGray\"></i><span class=\"notification\" ng-show=\"questionnairesUnreadNumber>0\">{{questionnairesUnreadNumber}}</span>
+                        </div>
+                    </ons-col>
+                    <ons-col>
+                        <header>
+                            <span class=\"item-title\" ng-class=\"fontSizeTitle\">`+name+`</span>
+                        </header>
+                        <p class=\"item-desc\" ng-class=\"fontSizeDesc\"></p>
+                    </ons-col>
+                </ons-row>
+                </ons-list-item>`;
+
+        return str;
+    }}))
+    .pipe(gulp.dest("./www/views/"+argv.v)));
+
+    
+});
+
