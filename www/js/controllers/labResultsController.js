@@ -14,13 +14,11 @@ myApp.controller('LabResultsControllerCopy', ['RequestToServer','Notifications',
                 $scope.loading = true;
                 LabResults.setTestResults().then(function () {
                     $scope.loading = false;
-                    console.log("updated");
                 }).catch(function (error) {
                     $scope.loading = false;
                     console.log(error);
                 });
             } else {
-                console.log('wait 60 s');
                 NewsBanner.showCustomBanner($filter('translate')("REFRESH_WAIT"), '#333333', function(){}, 3000);
             }
         };
@@ -33,7 +31,6 @@ myApp.controller('LabResultsControllerCopy', ['RequestToServer','Notifications',
                 LabResults.setTestResults()
                     .then(function () {
                         $scope.testResultsByDate = LabResults.getTestResultsArrayByDate();
-                        console.log($scope.testResultsByDate);
                         $scope.loading = false;
                     }).catch(function (error) {
                         $scope.loading = false;
@@ -55,7 +52,6 @@ myApp.controller('ByDateTestsController',['$scope','$timeout','LabResults','$fil
 
         $scope.radioModel='All';
         $scope.selectedTests=LabResults.getTestResultsArrayByDate();
-        console.log($scope.selectedTests[0]);
         $scope.testsReceived = 'Lab results';
         Logger.sendLog('Lab Results', 'all - Date');
 
@@ -82,9 +78,7 @@ myApp.controller('ByDateTestsController',['$scope','$timeout','LabResults','$fil
 
         function activate() {
             vm.testResultsByCategory = LabResults.getTestResultsByCategory();
-            console.log(vm.testResultsByCategory);
             vm.testResultsByType = LabResults.getTestResultsArrayByType();
-            console.log(vm.testResultsByType);
             Logger.sendLog('Lab Results', 'all - Type')
         }
     }
@@ -120,7 +114,7 @@ myApp.controller('TimelineTestComponentController',['$scope','$timeout','LabResu
         var page = personalNavigator.getCurrentPage();
         var test = page.options.param;
 
-        console.log(test);
+        // console.log("test: " + JSON.stringify(test));
         $scope.selectedTest = test;
         $scope.testName = test.ComponentName || test.testResults[0].ComponentName;
         $scope.title = $scope.selectedTest.FacComponentName || $scope.selectedTest.testName;
@@ -152,7 +146,7 @@ myApp.controller('TimelineTestComponentController',['$scope','$timeout','LabResu
             } else {
                 window.open(url);
             }
-        }
+        };
 
         // Chart
         $scope.data = [{
@@ -169,6 +163,25 @@ myApp.controller('TimelineTestComponentController',['$scope','$timeout','LabResu
             reformedData.push(dv);
         }
 
+
+        /**
+         * @return {number}
+         */
+        reformedData.sort(function(a, b) {
+            return a[0] > b[0] ? 1 : -1;
+        });
+
+        //filters out all falsey values (i.e. null and NAN) since this throws an error with highgraph
+        function remove(arr) {
+            return arr.filter(Boolean);
+        }
+
+        tempList = [];
+
+        for(var point in reformedData)
+
+        console.log(reformedData);
+
         /*********************************************
          * FINDING THE MAX AND MIN VALUES FOR CHARTING
          *********************************************/
@@ -178,8 +191,6 @@ myApp.controller('TimelineTestComponentController',['$scope','$timeout','LabResu
         },[]);
         var maxChart = Math.max.apply(Math, vals)*1.05;
         var minChart = Math.min.apply(Math, vals)*0.95;
-
-        console.log("Chart range", minChart, maxChart);
 
         /**********************************************/
 
@@ -207,7 +218,7 @@ myApp.controller('TimelineTestComponentController',['$scope','$timeout','LabResu
 
         // Sample options for first chart
 
-        if (UserPreferences.getLanguage() == 'FR')
+        if (UserPreferences.getLanguage() === 'FR')
         {
             Highcharts.setOptions({
                 lang: {

@@ -8,7 +8,6 @@
 	"INTERNETERROR":"Error de coneccion, revise coneccion a internet",
 	"EMAILPASSWORDSENT":"Contraseña temporal ha sido enviada a tu buzon!",
 	"ENTEREMAIL":"Inserte su e-mail:",
-	"CANCERCENTER":"Centro de Cancer Cedars",
 	"RESETPASSWORD":"Resetear Contraseña",
 	"LOADING":"Cargando",
 	"NEWPASSWORD":"Entre Contraseña",
@@ -18,6 +17,9 @@
 	"BACKTOLOGIN":"Iniciar sesion",
 	"ENTERSSNLABEL":"Enter your SSN Health Care ID:",
 	"ENTERSSNPLACEHOLDER":"Enter SSN...",
-	"CONTINUE":"Continue"
+	"CONTINUE":"Continue",
+	"CLOSE": "Entendido!",
+	"CANCERCENTER":"Centro de Cancer Cedars",
+
 
 }

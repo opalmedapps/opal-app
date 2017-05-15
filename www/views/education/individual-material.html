@@ -19,10 +19,11 @@
             </ons-list-item>
         </ons-list>
         <ons-list class="settings-list" ng-hide="tableOfContents||edumaterial.Type == 'Video'||isIndividualHtmlPage">
-            <ons-list-item class="item" ng-click="goToEducationalMaterial()">
+            <ons-list-item class="item" ng-click="goToEducationalMaterial()" style="background-color: #F9F9F9; border: none;">
                 <div align="center">
                     <div>
-                        <img class="animated pulse" height="200px" width="100%" style="max-width:180px" ng-src="./img/pdf-icon.png">
+                        <img class="animated pulse" style="height:175px; margin-top: 25%;" ng-src="/img/pdf-icon.svg">
+                        <h4 style="margin-top: 2%">Click to open</h4>
                     </div>
                     <h3 ons-if-platform="android" align="center" ng-class="fontSizeTitle">{{"TAP_DL"|translate}}</h3>
                 </div>
