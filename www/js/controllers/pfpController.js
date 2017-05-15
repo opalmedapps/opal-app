@@ -35,19 +35,20 @@
             console.log(vm.materials);
             //Setting the language for view
             vm.materials = EducationalMaterial.setLanguageEduationalMaterial(materials);
-        })
+        });
 
         function initEdu() {
             if (EducationalMaterial.getEducationalMaterial().length !== 0 ) return $q.resolve({});
             return UpdateUI.set(['EducationalMaterial']);
         }
 
+
         function goToResources() {
             var resources = EducationalMaterial.getPfpResources();
-            NavigatorParameters.setParameters({ 'Post': resources });
+            NavigatorParameters.setParameters({'Navigator':'generalNavigator', 'Post': resources });
             generalNavigator.pushPage('./views/education/individual-material.html');
         }
 
     }
 
-})()
+})();
