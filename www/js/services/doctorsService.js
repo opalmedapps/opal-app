@@ -31,27 +31,27 @@ myApp.service('Doctors',['$q','LocalStorage','$filter','FileManagerService', fun
      *@description Array of all doctors
      **/
     var Doctors=[];
-    /**
-     *@ngdoc property
-     *@name  MUHCApp.service.#Oncologists
-     *@propertyOf MUHCApp.service:Doctors
-     *@description Array of Oncologists
-     **/
-    var Oncologists=[];
-    /**
-     *@ngdoc property
-     *@name  MUHCApp.service.#OtherDoctors
-     *@propertyOf MUHCApp.service:Doctors
-     *@description Array of other doctors
-     **/
-    var OtherDoctors=[];
-    /**
-     *@ngdoc property
-     *@name  MUHCApp.service.#PrimaryPhysician
-     *@propertyOf MUHCApp.service:Doctors
-     *@description Array of primary doctors
-     **/
-    var PrimaryPhysician=[];
+    // /**
+    //  *@ngdoc property
+    //  *@name  MUHCApp.service.#Oncologists
+    //  *@propertyOf MUHCApp.service:Doctors
+    //  *@description Array of Oncologists
+    //  **/
+    // var Oncologists=[];
+    // /**
+    //  *@ngdoc property
+    //  *@name  MUHCApp.service.#OtherDoctors
+    //  *@propertyOf MUHCApp.service:Doctors
+    //  *@description Array of other doctors
+    //  **/
+    // var OtherDoctors=[];
+    // /**
+    //  *@ngdoc property
+    //  *@name  MUHCApp.service.#PrimaryPhysician
+    //  *@propertyOf MUHCApp.service:Doctors
+    //  *@description Array of primary doctors
+    //  **/
+    // var PrimaryPhysician=[];
 
     //Array without the actually doctor pictures that goes into the localStarge
     var doctorsStorage=[];
@@ -122,7 +122,6 @@ myApp.service('Doctors',['$q','LocalStorage','$filter','FileManagerService', fun
                     }else{
                         doctors[doctorKeyArray[i]].ProfileImage='data:image/'+doctors[doctorKeyArray[i]].DocumentType+';base64,'+doctors[doctorKeyArray[i]].ProfileImage;
                     }
-                    console.log(doctors[doctorKeyArray[i]]);
                 }
             }
             var app = document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'https://' ) === -1;
@@ -156,19 +155,17 @@ myApp.service('Doctors',['$q','LocalStorage','$filter','FileManagerService', fun
                 {
                     copyDoctor.ProfileImage='./img/doctor.png';
                 }
-                if(copyDoctor.PrimaryFlag=='1'&&copyDoctor.OncologistFlag=='1'){
-                    PrimaryPhysician.push(copyDoctor);
-                }else if(copyDoctor.OncologistFlag=='1')
-                {
-                    Oncologists.push(copyDoctor);
-                }else{
-                    OtherDoctors.push(copyDoctor);
-                }
+                // if(copyDoctor.PrimaryFlag=='1'&&copyDoctor.OncologistFlag=='1'){
+                //     PrimaryPhysician.push(copyDoctor);
+                // }else if(copyDoctor.OncologistFlag=='1')
+                // {
+                //     Oncologists.push(copyDoctor);
+                // }else{
+                //     OtherDoctors.push(copyDoctor);
+                // }
                 Doctors.push(copyDoctor);
             };
-            Doctors=$filter('orderBy')(Doctors,'LastName',false);
-            Oncologists=$filter('orderBy')(Oncologists,'LastName',false);
-            OtherDoctors=$filter('orderBy')(OtherDoctors,'LastName',false);
+         
             LocalStorage.WriteToLocalStorage('Doctors',doctorsStorage);
             $q.all(promises).then(function(){
                 r.resolve(true);
@@ -191,9 +188,6 @@ myApp.service('Doctors',['$q','LocalStorage','$filter','FileManagerService', fun
         {
             Doctors=[];
             doctorsStorage=[];
-            Oncologists=[];
-            OtherDoctors=[];
-            PrimaryPhysician=[];
             lastUpdated = Date.now();
             return addPatientContacts(doctors);
 
@@ -224,9 +218,6 @@ myApp.service('Doctors',['$q','LocalStorage','$filter','FileManagerService', fun
         {
             var r=$q.defer();
             Doctors=[];
-            Oncologists=[];
-            OtherDoctors=[];
-            PrimaryPhysician=[];
             var promises=[];
             lastUpdated = Date.now();
 
@@ -244,19 +235,21 @@ myApp.service('Doctors',['$q','LocalStorage','$filter','FileManagerService', fun
                     }else{
                         copyDoctor.ProfileImage='./img/doctor.png';
                     }
-                    if(copyDoctor.PrimaryFlag=='1'&&copyDoctor.OncologistFlag=='1'){
-                        PrimaryPhysician.push(copyDoctor);
-                    }else if(copyDoctor.OncologistFlag=='1')
-                    {
-                        Oncologists.push(copyDoctor);
-                    }else{
-                        OtherDoctors.push(copyDoctor);
-                    }
+
+                    //TODO delete comment out code
+                    // if(copyDoctor.PrimaryFlag=='1'&&copyDoctor.OncologistFlag=='1'){
+                    //     PrimaryPhysician.push(copyDoctor);
+                    // }else if(copyDoctor.OncologistFlag=='1')
+                    // {
+                    //     Oncologists.push(copyDoctor);
+                    // }else{
+                    //     OtherDoctors.push(copyDoctor);
+                    // }
                     Doctors.push(copyDoctor);
                 };
-                Oncologists=$filter('orderBy')(Oncologists,'LastName',false);
-                Doctors=$filter('orderBy')(Doctors,'LastName',false);
-                OtherDoctors=$filter('orderBy')(OtherDoctors,'LastName',false);
+                // Oncologists=$filter('orderBy')(Oncologists,'LastName',false);
+                // Doctors=$filter('orderBy')(Doctors,'LastName',false);
+                // OtherDoctors=$filter('orderBy')(OtherDoctors,'LastName',false);
                 r.resolve(true);
             }else{
                 r.resolve(true);
@@ -281,11 +274,11 @@ myApp.service('Doctors',['$q','LocalStorage','$filter','FileManagerService', fun
         },
         /**
          *@ngdoc method
-         *@name getContacts
+         *@name getDoctors
          *@methodOf MUHCApp.service:Doctors
          *@returns {Array} Returns array of Doctors
          **/
-        getContacts:function(){
+        getDoctors:function(){
             return Doctors;
         },
         /**
@@ -294,27 +287,27 @@ myApp.service('Doctors',['$q','LocalStorage','$filter','FileManagerService', fun
          *@methodOf MUHCApp.service:Doctors
          *@returns {Array} Returns array of primary physicians
          **/
-        getPrimaryPhysician:function(){
-            return PrimaryPhysician;
-        },
-        /**
-         *@ngdoc method
-         *@name getOncologists
-         *@methodOf MUHCApp.service:Doctors
-         *@returns {Array} Returns array of oncologists
-         **/
-        getOncologists:function(){
-            return Oncologists;
-        },
-        /**
-         *@ngdoc method
-         *@name getOtherDoctors
-         *@methodOf MUHCApp.service:Doctors
-         *@returns {Array} Returns array of other doctors
-         **/
-        getOtherDoctors:function(){
-            return OtherDoctors;
-        },
+        // getPrimaryPhysician:function(){
+        //     return PrimaryPhysician;
+        // },
+        // /**
+        //  *@ngdoc method
+        //  *@name getOncologists
+        //  *@methodOf MUHCApp.service:Doctors
+        //  *@returns {Array} Returns array of oncologists
+        //  **/
+        // getOncologists:function(){
+        //     return Oncologists;
+        // },
+        // /**
+        //  *@ngdoc method
+        //  *@name getOtherDoctors
+        //  *@methodOf MUHCApp.service:Doctors
+        //  *@returns {Array} Returns array of other doctors
+        //  **/
+        // getOtherDoctors:function(){
+        //     return OtherDoctors;
+        // },
         /**
          *@ngdoc method
          *@name getDoctorBySerNum
@@ -359,9 +352,9 @@ myApp.service('Doctors',['$q','LocalStorage','$filter','FileManagerService', fun
         clearDoctors:function()
         {
             Doctors=[];
-            Oncologists=[];
-            OtherDoctors=[];
-            PrimaryPhysician=[];
+            // Oncologists=[];
+            // OtherDoctors=[];
+            // PrimaryPhysician=[];
             doctorsStorage=[];
             lastUpdated = 0;
         },

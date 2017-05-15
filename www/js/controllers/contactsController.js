@@ -29,13 +29,15 @@
 
     ContactsController.$inject = [
         'Doctors',
-        'NavigatorParameters'
+        'NavigatorParameters',
+        '$filter'
     ];
 
     /* @ngInject */
     function ContactsController(
         Doctors,
-        NavigatorParameters
+        NavigatorParameters,
+        $filter
     ) {
         var vm = this;
         vm.title = 'ContactsController';
@@ -43,8 +45,7 @@
         vm.oncologists = null;
         vm.primaryPhysician = null;
         vm.otherDoctors = null;
-
-        vm.goDoctorContact = goDoctorContact;
+        vm.showHeader = showHeader;
 
         activate();
 
@@ -52,15 +53,37 @@
 
         function activate() {
             vm.noContacts = Doctors.isEmpty();
-            vm.oncologists=Doctors.getOncologists();
-            vm.primaryPhysician=Doctors.getPrimaryPhysician();
-            vm.otherDoctors=Doctors.getOtherDoctors();
+            vm.doctors = Doctors.getDoctors();
+            vm.doctors = setDoctorsView(vm.doctors);
         }
 
         function goDoctorContact(doctor){
 
             NavigatorParameters.setParameters({Navigator:'generalNavigator',Data:doctor});
             generalNavigator.pushPage('views/general/contacts/individual-contact.html', {param:doctor},{ animation : 'slide' } );
+        }
+
+
+        function setDoctorsView(doctors)
+        {
+            doctors.forEach(function(doctor)
+            {
+                if(doctor.PrimaryFlag==1&&doctor.OncologistFlag==1){
+                    doctor.Role = $filter('translate')("PRIMARYDOCTOR");
+                }else if(doctor.OncologistFlag==1){
+                    doctor.Role = $filter('translate')("ONCOLOGIST");
+                }else{
+                    doctor.Role = $filter('translate')("OTHER");;
+                }
+            });
+            doctors = $filter('orderBy')(doctors, 'Role',true);
+            console.log(doctors);
+            return doctors;
+        }
+        function showHeader(index)
+        {
+            if(index==0||vm.doctors[index].Role !== vm.doctors[index-1].Role) return true;
+            else return false;
         }
     }
 
@@ -81,14 +104,14 @@
 
     angular
         .module('MUHCApp')
-        .controller('ContactIndividualDoctorController', ContactIndividualDoctorController);
+        .controller('ContactIndividualController', ContactIndividualController);
 
-    ContactIndividualDoctorController.$inject = ['NavigatorParameters'];
+    ContactIndividualController.$inject = ['NavigatorParameters'];
 
     /* @ngInject */
-    function ContactIndividualDoctorController(NavigatorParameters) {
+    function ContactIndividualController(NavigatorParameters) {
         var vm = this;
-        vm.title = 'ContactIndividualDoctorController';
+        vm.title = 'ContactIndividualController';
         vm.doctor = null;
         vm.header = '';
 
@@ -97,15 +120,9 @@
         ////////////////
 
         function activate() {
-            var params = NavigatorParameters.getParameters();
-            vm.doctor = params.Data;
-            if(vm.doctor.PrimaryFlag===1){
-                vm.header='Primary Physician';
-            }else if(vm.doctor.OncologistFlag===1){
-                vm.header='Oncologist';
-            }else{
-                vm.header='Doctor';
-            }
+            var navi = NavigatorParameters.getNavigator();
+            var page = navi.getCurrentPage();
+            vm.doctor = page.options.doctor;
         }
     }
 
