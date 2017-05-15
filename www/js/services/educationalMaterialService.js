@@ -20,8 +20,11 @@ myApp.service('EducationalMaterial',['$filter','LocalStorage','FileManagerServic
      *@propertyOf MUHCApp.service:EducationalMaterial
      *@description Initializing array that represents all the information regarding educational material for the patient, this array is passed to appropiate controllers.
      **/
-        //Initializing array that represents all the informations for Announcements
+
+    //Initializing array that represents all the informations for Announcements
     var educationalMaterialArray=[];
+    //Initializing an object for pfpresources.
+    var pfpresources={};
     //Types of educational material
     /**
      *@ngdoc property
@@ -91,14 +94,25 @@ myApp.service('EducationalMaterial',['$filter','LocalStorage','FileManagerServic
     {
         for (var i = 0; i < edumaterial.length; i++) {
             for (var j = 0; j < educationalMaterialArray.length; j++) {
-                if(educationalMaterialArray[j].EducationalMaterialControlSerNum===edumaterial[i].EducationalMaterialControlSerNum)
-                {
-                    educationalMaterialArray.splice(j,1);
+                if (educationalMaterialArray[j].EducationalMaterialControlSerNum == edumaterial[i].EducationalMaterialControlSerNum) {
+                    educationalMaterialArray.splice(j, 1);
                 }
             }
         }
     }
-
+    // Returns educational material object matching that EducationalMaterialSerNum parameter
+    // is returned as a service function in return{} section: getEducationaMaterialBySerNum
+    function getEducationalMaterialBySerNum(serNum)
+    {
+        console.log(serNum);
+        console.log(educationalMaterialArray);
+        for (var i = 0; i < educationalMaterialArray.length; i++) {
+            if(educationalMaterialArray[i].EducationalMaterialSerNum==serNum)
+            {
+                return angular.copy(educationalMaterialArray[i]);
+            }
+        }
+    }
     //Formats the input dates and gets it ready for controllers, updates announcementsArray
     function addEducationalMaterial(edumaterial)
     {
@@ -115,8 +129,30 @@ myApp.service('EducationalMaterial',['$filter','LocalStorage','FileManagerServic
         educationalMaterialArray = $filter('orderBy')(educationalMaterialArray, 'DateAdded');
         var temp1 = $filter('filter')(educationalMaterialArray, {PhaseName_EN:'Prior To Treatment'});
         educationalMaterialArray = temp1.concat(($filter('filter')(educationalMaterialArray, {PhaseName_EN:'During Treatment'})).concat($filter('filter')(educationalMaterialArray, {PhaseName_EN:'After Treatment'})));
+
+        //Get pfpresources
+        pfpresources=getEducationalMaterialBySerNum(77);
+        //Exclude the pfp resources
+        findAndDeleteEducationalMaterialBySerNum(educationalMaterialArray, 77);
+        console.log("expected edu array without pfpresources:")
+        console.log(educationalMaterialArray);
+
         //Update local storage section
         LocalStorage.WriteToLocalStorage('EducationalMaterial',educationalMaterialArray);
+        LocalStorage.WriteToLocalStorage('PfpResources',pfpresources);
+    }
+
+    //call this function to delete the certain educational material by indicate its sernum
+    function findAndDeleteEducationalMaterialBySerNum(edumaterial, sernum)
+    {
+        for (var i = 0; i < edumaterial.length; i++) {
+            //console.log("inside searching loop");
+            //console.log(edumaterial);
+            if(edumaterial[i].EducationalMaterialSerNum == sernum) {
+                //console.log("found resources");
+                edumaterial.splice(i,1);
+            }
+        }
     }
     return {
         /**
@@ -196,14 +232,7 @@ myApp.service('EducationalMaterial',['$filter','LocalStorage','FileManagerServic
          **/
         getEducationaMaterialBySerNum:function(serNum)
         {
-            console.log(serNum);
-            console.log(educationalMaterialArray);
-            for (var i = 0; i < educationalMaterialArray.length; i++) {
-                if(educationalMaterialArray[i].EducationalMaterialSerNum === serNum)
-                {
-                    return angular.copy(educationalMaterialArray[i]);
-                }
-            }
+            return getEducationalMaterialBySerNum(serNum);
         },
         /**
          *@ngdoc method
@@ -264,6 +293,17 @@ myApp.service('EducationalMaterial',['$filter','LocalStorage','FileManagerServic
         getEducationalMaterialUrl:function()
         {
             return {Url:'./views/education/individual-material.html'};
+        },
+        /**
+         *@ngdoc method
+         *@name getPfpResources
+         *@methodOf MUHCApp.service:EducationalMaterial
+         *@description Returns the resources booklet for 'Patients for Patients'
+         *@returns {String} Returns Url for individual educational materials
+         **/
+        getPfpResources:function()
+        {
+            return pfpresources;
         },
         /**
          *@ngdoc method
