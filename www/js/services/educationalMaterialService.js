@@ -131,9 +131,9 @@ myApp.service('EducationalMaterial',['$filter','LocalStorage','FileManagerServic
         educationalMaterialArray = temp1.concat(($filter('filter')(educationalMaterialArray, {PhaseName_EN:'During Treatment'})).concat($filter('filter')(educationalMaterialArray, {PhaseName_EN:'After Treatment'})));
 
         //Get pfpresources
-        pfpresources=getEducationalMaterialByControlSerNum(313);
+        pfpresources=getEducationalMaterialByControlSerNum(310);
         //Exclude the pfp resources
-        findAndDeleteEducationalMaterialByControlSerNum(educationalMaterialArray, 313);
+        findAndDeleteEducationalMaterialByControlSerNum(educationalMaterialArray, 310);
         console.log("expected edu array without pfpresources:")
         console.log(educationalMaterialArray);
 
