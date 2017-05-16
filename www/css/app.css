@@ -43,11 +43,11 @@ body {
         color-stop(0.51, #E4E4E4)
     );
     background-attachment:fixed;
-    font-family:'HelveticaNeue-Light', 'HelveticaNeue', Helvetica, Arial, sans-serif;
+    font-family: 'Cabin', serif !important;
     font-size:12px;
     height:100%;
-    margin:0px;
-    padding:0px;
+    margin:0;
+    padding:0;
     /*text-transform:uppercase;*/
     width:100%;
 }
@@ -881,7 +881,7 @@ Tabbar treatment plan
 
 
 .tab-bar {
-  font-family: 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif;
+  /*font-family: 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif;*/
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-weight: 400;
@@ -914,7 +914,7 @@ Tabbar treatment plan
   }
 }
 .tab-bar__item {
-  font-family: 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif;
+  /*font-family: 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif;*/
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-weight: 400;
@@ -949,7 +949,7 @@ Tabbar treatment plan
   position: relative;
   display: inline-block;
   vertical-align: top;
-  font-family: 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif;
+  /*font-family: 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif;*/
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-weight: 400;
@@ -1003,7 +1003,7 @@ Tabbar treatment plan
   height: 32px;
 }
 .tab-bar__label {
-  font-family: 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif;
+  /*font-family: 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif;*/
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-weight: 400;
@@ -1225,7 +1225,7 @@ Button appointments
   background: transparent;
   border: none;
   line-height: normal;
-  font-family: 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif;
+  /*font-family: 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif;*/
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-weight: 400;
@@ -1300,7 +1300,7 @@ Button appointments
   background: transparent;
   border: none;
   line-height: normal;
-  font-family: 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif;
+  /*font-family: 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif;*/
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-weight: 400;
@@ -1974,7 +1974,7 @@ a .action-col{
   background: transparent;
   border: none;
   line-height: normal;
-  font-family: 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif;
+  /*font-family: 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif;*/
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-weight: 400;
@@ -1984,7 +1984,7 @@ a .action-col{
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
-  font-family: 'Roboto', 'Noto', sans-serif;
+  /*font-family: 'Roboto', 'Noto', sans-serif;*/
   -webkit-font-smoothing: antialiased;
   width: 56px;
   height: 56px;
@@ -2226,7 +2226,7 @@ transform: translate(0px,-50px);
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
-  font-family: 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif;
+  /*font-family: 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif;*/
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-weight: 400;
@@ -2300,7 +2300,7 @@ width: 30px;
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
-  font-family: 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif;
+  /*font-family: 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif;*/
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-weight: 400;
@@ -2322,7 +2322,7 @@ width: 30px;
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
-  font-family: 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif;
+  /*font-family: 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif;*/
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-weight: 400;
@@ -2393,7 +2393,7 @@ width: 30px;
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
-  font-family: 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif;
+  /*font-family: 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif;*/
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-weight: 400;
@@ -2488,7 +2488,7 @@ input {
     display: block;
     margin: 0;
     width: 100%;
-    font-family: sans-serif;
+    /*font-family: sans-serif;*/
     font-size: 18px;
     appearance: none;
     box-shadow: none;
@@ -2541,6 +2541,14 @@ input:focus {
 
 .active_btn_calendar{
     background-color: red;
+}
+
+.list__item, .navigation-bar{
+    border-bottom: 1px solid #ddd !important;
+}
+
+.tab-bar{
+    border-top: 1px solid #ddd !important;
 }
 
 
