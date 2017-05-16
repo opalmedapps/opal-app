@@ -56,14 +56,12 @@
             // Initialize the service message to all users.
             DynamicContentService.initializeLinks()
                 .then(function (response) {
-                    console.log(response);
                     if(!response.exists){
                         DynamicContentService.setContentData(response.data);
                     }
                     return DynamicContentService.getPageContent('service');
                 })
                 .then(function successCallback(response) {
-                    console.log(response.data);
                     for (var key in response.data){
                         if(response.data[key] !== ""){
                             vm.globalMessage = key;
@@ -91,7 +89,6 @@
             // Get location permission
             Permissions.enablePermission('ACCESS_FINE_LOCATION', 'LOCATION_PERMISSION_DENIED')
                 .catch(function (response) {
-                    console.log(response);
                     NewsBanner.showCustomBanner($filter('translate')(response.Message), '#333333', function(){}, 5000);
                 });
 

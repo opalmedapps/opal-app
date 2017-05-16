@@ -214,7 +214,6 @@
                     var allCheckedIn = true;
                     for (var app in todaysAppointmentsToCheckIn){
                         if (todaysAppointmentsToCheckIn[app].Checkin == '0'){
-                            console.log("Hes not checked in Jim");
                             allCheckedIn = false;
                         }
                     }

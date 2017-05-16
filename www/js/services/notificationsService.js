@@ -61,7 +61,7 @@ myApp.service('Notifications',['$filter','RequestToServer','LocalStorage','Annou
         var notificationTypes={
             'Document':
                 {
-                    icon:'fa fa-folder',
+                    icon:'ion-android-document',
                     color:'#90CAF9',
                     NameEN:'AliasName_EN',
                     NameFR:'AliasName_FR',
@@ -74,8 +74,8 @@ myApp.service('Notifications',['$filter','RequestToServer','LocalStorage','Annou
                 },
             'UpdDocument':
                 {
-                    icon:'fa fa-folder',
-                    color:'#ffdf80',
+                    icon:'ion-android-document',
+                    color:'#BA68C8',
                     NameEN:'AliasName_EN',
                     NameFR:'AliasName_FR',
                     SerNum:'DocumentSerNum',
@@ -88,7 +88,7 @@ myApp.service('Notifications',['$filter','RequestToServer','LocalStorage','Annou
             'RoomAssignment':
                 {
                     icon:'fa fa-calendar-o',
-                    color:'#FFEB3B',
+                    color:'#ffc107',
                     NameEN:'Description_EN',
                     NameFR: 'Description_FR',
                     SerNum:'AppointmentSerNum',
@@ -112,7 +112,7 @@ myApp.service('Notifications',['$filter','RequestToServer','LocalStorage','Annou
                 },
             'Announcement':{
                 icon:'fa fa-bullhorn',
-                color:'#FFEB3B',
+                color:'#FFC107',
                 NameEN:'PostName_EN',
                 NameFR: 'PostName_FR',
                 SerNum:'AnnouncementSerNum',
@@ -136,7 +136,7 @@ myApp.service('Notifications',['$filter','RequestToServer','LocalStorage','Annou
             },
             'NextAppointment':{
                 icon:'fa fa-calendar',
-                color:'#FFEB3B',
+                color:'#ffc107',
                 SerNum:'AppointmentSerNum',
                 searchFunction:Appointments.getAppointmentBySerNum,
                 PageUrl:Appointments.getAppointmentUrl,
@@ -144,7 +144,7 @@ myApp.service('Notifications',['$filter','RequestToServer','LocalStorage','Annou
             },
             'AppointmentModified':{
                 icon:'fa fa-calendar',
-                color:'#FFEB3B',
+                color:'#ffc107',
                 NameEN:'AppointmentType_EN',
                 NameFR: 'AppointmentType_FR',
                 SerNum:'AppointmentSerNum',
