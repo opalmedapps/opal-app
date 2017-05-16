@@ -102,12 +102,12 @@ myApp.service('EducationalMaterial',['$filter','LocalStorage','FileManagerServic
     }
     // Returns educational material object matching that EducationalMaterialSerNum parameter
     // is returned as a service function in return{} section: getEducationaMaterialBySerNum
-    function getEducationalMaterialBySerNum(serNum)
+    function getEducationalMaterialByControlSerNum(cserNum)
     {
-        console.log(serNum);
+        console.log(cserNum);
         console.log(educationalMaterialArray);
         for (var i = 0; i < educationalMaterialArray.length; i++) {
-            if(educationalMaterialArray[i].EducationalMaterialSerNum==serNum)
+            if(educationalMaterialArray[i].EducationalMaterialControlSerNum==cserNum)
             {
                 return angular.copy(educationalMaterialArray[i]);
             }
@@ -131,9 +131,9 @@ myApp.service('EducationalMaterial',['$filter','LocalStorage','FileManagerServic
         educationalMaterialArray = temp1.concat(($filter('filter')(educationalMaterialArray, {PhaseName_EN:'During Treatment'})).concat($filter('filter')(educationalMaterialArray, {PhaseName_EN:'After Treatment'})));
 
         //Get pfpresources
-        pfpresources=getEducationalMaterialBySerNum(77);
+        pfpresources=getEducationalMaterialByControlSerNum(310);
         //Exclude the pfp resources
-        findAndDeleteEducationalMaterialBySerNum(educationalMaterialArray, 77);
+        findAndDeleteEducationalMaterialByControlSerNum(educationalMaterialArray, 310);
         console.log("expected edu array without pfpresources:")
         console.log(educationalMaterialArray);
 
@@ -142,13 +142,13 @@ myApp.service('EducationalMaterial',['$filter','LocalStorage','FileManagerServic
         LocalStorage.WriteToLocalStorage('PfpResources',pfpresources);
     }
 
-    //call this function to delete the certain educational material by indicate its sernum
-    function findAndDeleteEducationalMaterialBySerNum(edumaterial, sernum)
+    //call this function to delete the certain educational material by indicate its control sernum
+    function findAndDeleteEducationalMaterialByControlSerNum(edumaterial, csernum)
     {
         for (var i = 0; i < edumaterial.length; i++) {
             //console.log("inside searching loop");
             //console.log(edumaterial);
-            if(edumaterial[i].EducationalMaterialSerNum == sernum) {
+            if(edumaterial[i].EducationalMaterialControlSerNum == csernum) {
                 //console.log("found resources");
                 edumaterial.splice(i,1);
             }
@@ -232,7 +232,14 @@ myApp.service('EducationalMaterial',['$filter','LocalStorage','FileManagerServic
          **/
         getEducationaMaterialBySerNum:function(serNum)
         {
-            return getEducationalMaterialBySerNum(serNum);
+            console.log(serNum);
+            console.log(educationalMaterialArray);
+            for (var i = 0; i < educationalMaterialArray.length; i++) {
+                if(educationalMaterialArray[i].EducationalMaterialSerNum==serNum)
+                {
+                    return angular.copy(educationalMaterialArray[i]);
+                }
+            }
         },
         /**
          *@ngdoc method
