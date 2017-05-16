@@ -50,7 +50,7 @@
                 <!--</ons-row>-->
             </div>
         </div>
-        <div class="row" id="divTreatmentPlan" ng-hide="status.noData" style="overflow-y: scroll; width: 150%; padding:0; margin: 65% 0 0;">
+        <div class="row" id="divTreatmentPlan" ng-hide="status.noData" style="overflow-y: scroll; padding:0; margin: 225px 0 0;">
             <ons-list class="plan-list">
                 <ons-list-item class="plan" modifier="tappable" ng-click="status.goToStep(events[events.length-1],step)" ng-repeat="(step, events) in status.events" id="treatmentSessions{{$index}}">
                     <ons-row id="statusStep{{$index}}">
