@@ -2,7 +2,6 @@ var myApp=angular.module('MUHCApp');
 myApp.service('Documents',['UserPreferences', 'UserAuthorizationInfo','$q','$rootScope', '$filter',function(UserPreferences,UserAuthorizationInfo,$q,$rootScope,$filter){
 	return{
 		setDocuments:function(documents, mode){
-			console.log(documents);
 			this.Photos=[];
 			if(!documents) return;
 			if(mode==='Online'){
