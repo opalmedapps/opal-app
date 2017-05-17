@@ -43,11 +43,11 @@ body {
         color-stop(0.51, #E4E4E4)
     );
     background-attachment:fixed;
-    font-family:'HelveticaNeue-Light', 'HelveticaNeue', Helvetica, Arial, sans-serif;
+    font-family: 'Cabin', serif !important;
     font-size:12px;
     height:100%;
-    margin:0px;
-    padding:0px;
+    margin:0;
+    padding:0;
     /*text-transform:uppercase;*/
     width:100%;
 }
@@ -881,7 +881,7 @@ Tabbar treatment plan
 
 
 .tab-bar {
-  font-family: 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif;
+  /*font-family: 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif;*/
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-weight: 400;
@@ -914,7 +914,7 @@ Tabbar treatment plan
   }
 }
 .tab-bar__item {
-  font-family: 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif;
+  /*font-family: 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif;*/
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-weight: 400;
@@ -949,7 +949,7 @@ Tabbar treatment plan
   position: relative;
   display: inline-block;
   vertical-align: top;
-  font-family: 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif;
+  /*font-family: 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif;*/
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-weight: 400;
@@ -1003,7 +1003,7 @@ Tabbar treatment plan
   height: 32px;
 }
 .tab-bar__label {
-  font-family: 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif;
+  /*font-family: 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif;*/
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-weight: 400;
@@ -1068,8 +1068,6 @@ p{
   border: inset 1px rgba(0, 0, 0, 0.3);
 }
 
-
-
 .profile-email {
   font-size: 15px;
   opacity: 0.4;
@@ -1077,7 +1075,7 @@ p{
 .my-home-profile{
   width:100%;
   padding:10px;
-  border:1px solid rgba(0, 0, 0, 0.1);
+  border-bottom:1px solid rgba(0, 0, 0, 0.1);
   border-radius:4px;
   background-color:white;
   color:black;
@@ -1227,7 +1225,7 @@ Button appointments
   background: transparent;
   border: none;
   line-height: normal;
-  font-family: 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif;
+  /*font-family: 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif;*/
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-weight: 400;
@@ -1302,7 +1300,7 @@ Button appointments
   background: transparent;
   border: none;
   line-height: normal;
-  font-family: 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif;
+  /*font-family: 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif;*/
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-weight: 400;
@@ -1616,7 +1614,7 @@ Button appointments
  */
 
  /*Month Picker*/
- .calendar--appointments .uib-monthpicker thead button
+ .appointment-calendar .uib-monthpicker thead button
 {
   border:0;
   height:7.2vh;
@@ -1626,7 +1624,7 @@ Button appointments
   border-top:1px solid lightgrey;
   border-radius:1px;
 }
-.calendar--appointments .uib-monthpicker .uib-month button{
+.appointment-calendar .uib-monthpicker .uib-month button{
   border:0;
   height:10vh;
   width:33vw;
@@ -1637,7 +1635,7 @@ Button appointments
   border-radius:1px;
 }
  /*Year Picker*/
- .calendar--appointments .uib-yearpicker thead button
+ .appointment-calendar .uib-yearpicker thead button
 {
   border:0;
   height:7.2vh;
@@ -1646,7 +1644,7 @@ Button appointments
   border-top:1px solid lightgrey;
   border-radius:1px;
 }
-.calendar--appointments .uib-yearpicker .uib-year button{
+.appointment-calendar .uib-yearpicker .uib-year button{
   border:0;
   height:10vh;
   width:16.66vw;
@@ -1657,7 +1655,7 @@ Button appointments
   border-radius:1px;
 }
  /*Day Picker*/
-  .calendar--appointments  .uib-daypicker thead button
+  .appointment-calendar  .uib-daypicker thead button
 {
   border:0;
   height:7vh;
@@ -1666,7 +1664,7 @@ Button appointments
   border-top:1px solid lightgrey;
   border-radius:1px;
 }
-.calendar--appointments .uib-daypicker .btn-sm{
+.appointment-calendar .uib-daypicker .btn-sm{
   border:0;
   height:7vh;
   width:14.28vw;
@@ -1684,7 +1682,7 @@ Button appointments
   background-color: blue;
 }
 
-.calendar--appointments .uib-monthpicker .uib-months .uib-month .btn-sm{
+.appointment-calendar .uib-monthpicker .uib-months .uib-month .btn-sm{
   border:0;
   width:60vw;
   border-top:1px solid lightgrey;
@@ -1753,7 +1751,7 @@ Button appointments
   font-size:16px;
 }
 .fontDescLarge{
-  font-size: 20px;
+  font-size: 18px;
 }
 .fontTitleLarge{
   font-size: 21px;
@@ -1844,7 +1842,7 @@ a .action-col{
   -moz-animation: progress__dash 1.5s ease-in-out infinite;
   -o-animation: progress__dash 1.5s ease-in-out infinite;
   animation: progress__dash 1.5s ease-in-out infinite;
-  stroke: #009688;
+  stroke: #2196F3;
   -webkit-transition: all 1s cubic-bezier(0.4, 0, 0.2, 1);
   -moz-transition: all 1s cubic-bezier(0.4, 0, 0.2, 1);
   -o-transition: all 1s cubic-bezier(0.4, 0, 0.2, 1);
@@ -1872,7 +1870,7 @@ a .action-col{
   -moz-animation: none;
   -o-animation: none;
   animation: none;
-  stroke: #80cbc4;
+  stroke: #2196F3;
 }
 @-moz-keyframes progress__rotate {
   100% {
@@ -1976,7 +1974,7 @@ a .action-col{
   background: transparent;
   border: none;
   line-height: normal;
-  font-family: 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif;
+  /*font-family: 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif;*/
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-weight: 400;
@@ -1986,7 +1984,7 @@ a .action-col{
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
-  font-family: 'Roboto', 'Noto', sans-serif;
+  /*font-family: 'Roboto', 'Noto', sans-serif;*/
   -webkit-font-smoothing: antialiased;
   width: 56px;
   height: 56px;
@@ -2228,7 +2226,7 @@ transform: translate(0px,-50px);
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
-  font-family: 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif;
+  /*font-family: 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif;*/
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-weight: 400;
@@ -2302,7 +2300,7 @@ width: 30px;
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
-  font-family: 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif;
+  /*font-family: 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif;*/
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-weight: 400;
@@ -2324,7 +2322,7 @@ width: 30px;
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
-  font-family: 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif;
+  /*font-family: 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif;*/
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-weight: 400;
@@ -2395,7 +2393,7 @@ width: 30px;
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
-  font-family: 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif;
+  /*font-family: 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif;*/
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-weight: 400;
@@ -2490,7 +2488,7 @@ input {
     display: block;
     margin: 0;
     width: 100%;
-    font-family: sans-serif;
+    /*font-family: sans-serif;*/
     font-size: 18px;
     appearance: none;
     box-shadow: none;
@@ -2518,6 +2516,17 @@ input:focus {
     touch-action: manipulation !important;
     -webkit-user-drag: element !important;
 }
+
+
+@media all and (orientation:landscape) {
+    .appointment-calendar, #drag-notify{
+        display: none;
+    }
+    #scrollerAppointments {
+        height: 100% !important;
+    }
+}
+
 .calendar-marker
 {
   font-size:20px;
@@ -2532,6 +2541,19 @@ input:focus {
 
 .active_btn_calendar{
     background-color: red;
-    
+}
 
+.list__item, .navigation-bar{
+    border-bottom: 1px solid #ddd !important;
+}
+
+.tab-bar{
+    border-top: 1px solid #ddd !important;
+}
+
+
+/* MATERIAL DESIGN */
+.shadow-2 {
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+    transition: all 0.3s cubic-bezier(.25,.8,.25,1);
 }

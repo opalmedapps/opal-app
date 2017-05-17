@@ -21,11 +21,11 @@ var myApp = angular.module('MUHCApp');
 
 
 //Logic for the calendar controller view
-myApp.controller('CalendarController', ['Appointments', '$scope','$timeout', '$filter', '$location',
-    '$anchorScroll','NavigatorParameters', 'UserPreferences', 'Logger',
-    function (Appointments, $scope,$timeout,$filter,$location,
+myApp.controller('CalendarController', ['Appointments', '$q','$scope','$timeout', '$filter', '$location',
+    '$templateRequest', '$sce', '$compile','$anchorScroll','NavigatorParameters', 'UserPreferences', 'Logger',
+    function (Appointments, $q, $scope,$timeout,$filter,$location,$templateRequest, $sce, $compile,
               $anchorScroll,NavigatorParameters,UserPreferences, Logger) {
-       console.log(Appointments.getUserAppointments());
+       
         /*
         *   Controller constants
         **/ 
@@ -55,8 +55,27 @@ myApp.controller('CalendarController', ['Appointments', '$scope','$timeout', '$f
         $scope.goToAppointment=goToAppointment;
         //Go to Calendar options
         $scope.goToCalendarOptions = goToCalendarOptions;
-       
-       
+
+        //monitors whether or not the calendar is displayed
+        $scope.showCalendar = true;
+
+        $scope.scrollerHeight = '';
+
+        $scope.onHideCalendar= function() {
+
+            $scope.$apply(function() {
+                $scope.showCalendar = false;
+                $scope.scrollerHeight = '100%';
+            })
+        };
+
+        $scope.onShowCalendar= function() {
+            $scope.$apply(function() {
+                $scope.showCalendar = true;
+                $scope.scrollerHeight = '45%';
+            })
+        };
+
         /*
         *   Implementation
         **/
@@ -65,21 +84,22 @@ myApp.controller('CalendarController', ['Appointments', '$scope','$timeout', '$f
         
         function init()
         {
+            Logger.sendLog('Appointment', 'all');
             navigatorName = NavigatorParameters.getParameters().Navigator;
-            //Setting height for Appointment sector dynamically. - Could be done with a directive
-            var divTreatment=document.getElementById('scrollerAppointments');
-            var heightTreatment=document.documentElement.clientHeight-document.documentElement.clientHeight*0.35-180;
-            divTreatment.style.height=heightTreatment+'px';
-           
+
             //Obtaining and setting appointments from service
             $scope.appointments=Appointments.getUserAppointments();
             $scope.noAppointments = ($scope.appointments.length === 0);
+            $scope.loading = !$scope.noAppointments;
             $scope.language = UserPreferences.getLanguage();
             $scope.dt = new Date();
             $scope.dt.setHours(0,0,0,0);
             today = new Date($scope.dt);
             flag=false;
-            if( $scope.appointments.length>0)
+            //Getting time in milliseconds for today's appointment
+            todaysTimeMilliseconds =  today.getTime();
+            choosenTimeMilliseconds = todaysTimeMilliseconds;
+            if($scope.appointments.length>0)
             {
                 //Setting time in milliseconds for last appointment
                 dateLast=(new Date($scope.appointments[$scope.appointments.length-1].ScheduledStartTime.getTime()));
@@ -90,9 +110,35 @@ myApp.controller('CalendarController', ['Appointments', '$scope','$timeout', '$f
                 dateFirst.setHours(0,0,0,0);
                 dateFirst = dateFirst.getTime();
             }
-            //Getting time in milliseconds for today's appointment
-            todaysTimeMilliseconds =  today.getTime();
-            choosenTimeMilliseconds = todaysTimeMilliseconds;
+            loadTemplate().then(function(){
+                var divTreatment=document.getElementById('scrollerAppointments');
+                var heightTreatment=document.documentElement.clientHeight-document.documentElement.clientHeight*0.35-180;
+                if(divTreatment)divTreatment.style.height=heightTreatment+'px';
+                setTimeout(scrollToAnchor,100);
+            });
+        }
+        function scrollToAnchor()
+        {
+            var anchor=findClosestAnchor();
+            $location.hash(anchor);
+            $anchorScroll();
+        }
+
+        function loadTemplate()
+        {
+            var r = $q.defer();
+             $timeout(function () { 
+                    $scope.loading = false;
+                    var template= $sce.getTrustedResourceUrl('./views/personal/appointments/appointment-list-template.html');
+                    $templateRequest(template).then(function(template) {
+                    $compile($("#appointment-list").html(template).contents())($scope);
+                    r.resolve(true);
+                }, function() {
+                    r.resolve(true);
+                    // An error has occurred
+                });
+            }, 1000);
+            return r.promise;
         }
         function goToCalendarOptions()
         {
@@ -100,22 +146,8 @@ myApp.controller('CalendarController', ['Appointments', '$scope','$timeout', '$f
         }
         //Watcher for the calendar date
         $scope.$watch('dt',function(){
-               if(!flag)
-               {
-                    $timeout(function () {
-                        Logger.sendLog('Appointment', 'all');
-                        var anchor=findClosestAnchor();
-                        $location.hash(anchor);
-                        $anchorScroll();
-                    }, 1500);
-                }else{
-                    choosenTimeMilliseconds = $scope.dt.getTime();
-                    var anchor=findClosestAnchor();
-                    $location.hash(anchor);
-                    $anchorScroll();
-                }
-                flag=true;
-
+            choosenTimeMilliseconds = $scope.dt.getTime();
+            scrollToAnchor();
         });    
 
         //Determines color for calendar dates based on appointments

@@ -54,14 +54,14 @@ myApp.service('UserPreferences',[ 'UserAuthorizationInfo','$rootScope','tmhDynam
             var username=UserAuthorizationInfo.getUsername();
             window.localStorage.setItem(username+'fontSize',size);
             fontSize=size;
-            if(size=='medium')
+            if(size==='medium')
             {
                 $rootScope.fontSizeDesc='fontDescMedium';
                 $rootScope.fontSizeTitle='fontTitleMedium';
-            }else if(size=='large'){
+            }else if(size==='large'){
                 $rootScope.fontSizeDesc='fontDescLarge';
                 $rootScope.fontSizeTitle='fontTitleLarge';
-            }else if(size=='xlarge'){
+            }else if(size==='xlarge'){
                 $rootScope.fontSizeDesc='fontDescXLarge';
                 $rootScope.fontSizeTitle='fontTitleXLarge';
             }

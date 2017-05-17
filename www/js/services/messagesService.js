@@ -56,7 +56,7 @@ var messagesLocalStorage=[];
             }else{
               this.emptyMessages=true;
             }
-            var doctors=Doctors.getContacts();
+            var doctors=Doctors.getDoctors();
             for (var i = 0; i < doctors.length; i++) {
                 var conversation={};
                 if(typeof doctors[i].ProfileImage!=='undefined'&&doctors[i].ProfileImage!=='')
