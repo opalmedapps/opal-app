@@ -19,12 +19,10 @@ myApp.service('Documents',['UserPreferences', 'UserAuthorizationInfo','$q','$roo
 					imageToPhotoObject.NameFileSystem=documents[keysDocuments[i]].NameFileSystem;
 					imageToPhotoObject.Content=documents[keysDocuments[i]].Content;
 					documents[keysDocuments[i]].Content=null;
-          documents[keysDocuments[i]].PathLocation=null;
+          			documents[keysDocuments[i]].PathLocation=null;
 					this.Photos.push(imageToPhotoObject);
-				};
+				}
 			}
-			console.log(this.Photos);
-
 		},
 		getDocuments:function(){
 			return this.Photos;

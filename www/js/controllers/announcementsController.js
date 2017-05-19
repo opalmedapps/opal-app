@@ -43,12 +43,19 @@
             var announcements = Announcements.getAnnouncements();
             announcements = Announcements.setLanguageAnnouncements(announcements);
             if (announcements.length>0) vm.noAnnouncements = false;
+            else{
+                announcements.sort(function(a, b) {
+                    return new Date(a.DateAdded) - new Date(b.DateAdded);
+                });
+            }
+
             vm.announcements=announcements;
+
             Logger.sendLog('Announcement', 'all');
         }
 
         function goToAnnouncement(announcement) {
-            if(announcement.ReadStatus == '0')
+            if(announcement.ReadStatus === '0')
             {
                 announcement.ReadStatus = '1';
                 Announcements.readAnnouncementBySerNum(announcement.AnnouncementSerNum);
@@ -62,7 +69,7 @@
             if (index === 0) return true;
 
             var current = (new Date(vm.announcements[index].DateAdded)).setHours(0,0,0,0);
-            var previous = (new Date(vm.announcements[index-1].DateAdded)).setHours(0,0,0,0);
+            var previous =(new Date(vm.announcements[index-1].DateAdded)).setHours(0,0,0,0);
 
             return current !== previous;
         }
