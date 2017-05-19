@@ -1,7 +1,8 @@
 
 <div ng-include="tour"></div>
 
-<ons-tabbar var="tabbar" animation="fade">
+<!-- TODO: FIGURE OUT THIS EVENT LISTENER BUG...-->
+<ons-tabbar var="tabbar" animation="fade"><!-- ng-click="tabbar.on('prechange', analyze(e))" -->
     <ons-tab active="true" page="views/navigators/homeNavigator.html"  >
         <div class="tab">
             <ons-icon icon="fa-home" class="tab-icon"></ons-icon>

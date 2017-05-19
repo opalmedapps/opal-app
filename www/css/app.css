@@ -2551,9 +2551,118 @@ input:focus {
     border-top: 1px solid #ddd !important;
 }
 
+/* Popup container */
+.popup {
+    cursor: pointer;
+    position: absolute;
+    z-index: 5;
+    left: 50%;
+    top: 3%;
+}
+
+/* The actual popup (appears on top) */
+.popuptext {
+    visibility: hidden;
+    width: 160px;
+    background-color: #555;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 8px 16px;
+    position: relative;
+    z-index: 1001;
+    left: -50%;
+    opacity: 0.85;
+
+}
+
+/* Toggle this class when clicking on the popup container (hide and show the popup) */
+.popup-show {
+    visibility: visible;
+    -webkit-animation: fadeIn 1.5s;
+    animation: fadeIn 1.5s
+}
+
+/* Add animation (fade in the popup) */
+@-webkit-keyframes fadeIn {
+    from {opacity: 0;}
+    to {opacity: 0.85;}
+}
+
+@keyframes fadeIn {
+    from {opacity: 0;}
+    to {opacity: 0.85 ;}
+}
+
+.popup-hide{
+    -webkit-animation: fadeOut 1.5s;
+    animation: fadeOut 1.5s
+}
+
+/* Add animation (fade in the popup) */
+@-webkit-keyframes fadeOut {
+    from {opacity: 0.85;}
+    to {opacity: 0; display: none }
+}
+
+@keyframes fadeOut {
+    from {opacity: 0.85;}
+    to {opacity: 0 ; display: none}
+}
+
+.checkmark__circle {
+    stroke-dasharray: 166;
+    stroke-dashoffset: 166;
+    stroke-width: 2;
+    stroke-miterlimit: 10;
+    stroke: #7ac142;
+    fill: none;
+    animation: stroke 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards;
+}
+
+.checkmark {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    display: block;
+    stroke-width: 2;
+    stroke: #fff;
+    stroke-miterlimit: 10;
+    margin: 10% auto;
+    box-shadow: inset 0px 0px 0px #7ac142;
+    animation: fill .4s ease-in-out .4s forwards, scale .3s ease-in-out .9s both;
+}
+
+.checkmark__check {
+    transform-origin: 50% 50%;
+    stroke-dasharray: 48;
+    stroke-dashoffset: 48;
+    animation: stroke 0.3s cubic-bezier(0.65, 0, 0.45, 1) 0.8s forwards;
+}
+
+@keyframes stroke {
+    100% {
+        stroke-dashoffset: 0;
+    }
+}
+@keyframes scale {
+    0%, 100% {
+        transform: none;
+    }
+    50% {
+        transform: scale3d(1.1, 1.1, 1);
+    }
+}
+@keyframes fill {
+    100% {
+        box-shadow: inset 0px 0px 0px 30px #7ac142;
+    }
+}
+
 
 /* MATERIAL DESIGN */
 .shadow-2 {
     box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
     transition: all 0.3s cubic-bezier(.25,.8,.25,1);
 }
+
