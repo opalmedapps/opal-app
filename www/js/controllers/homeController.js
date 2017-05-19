@@ -43,6 +43,7 @@
         vm.goToStatus = goToStatus;
         vm.goToNotification = goToNotification;
         vm.goToAppointments = goToAppointments;
+        vm.goToAppointmentsWait = goToAppointmentsWait;
         vm.goToCheckinAppointments = goToCheckinAppointments;
 
         activate();
@@ -332,6 +333,12 @@
         {
             NavigatorParameters.setParameters({'Navigator':'homeNavigator'});
             homeNavigator.pushPage('./views/personal/appointments/appointments.html');
+        }
+
+        function goToAppointmentsWait()
+        {
+            NavigatorParameters.setParameters({'Navigator':'homeNavigator'});
+            homeNavigator.pushPage('./views/home/appointmentswait/appointmentswait.html');
         }
 
         function goToCheckinAppointments(todaysAppointments) {

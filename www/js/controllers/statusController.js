@@ -207,7 +207,7 @@
     function IndividualStepController(NavigatorParameters, UserPreferences, $filter, Logger) {
 
         var stepVM = this;
-        var nav = NavigatorParameters.getNavigator();
+        var nav = NavigatorParafmeters.getNavigator();
 
         stepVM.showTab = true;
         stepVM.about = about;

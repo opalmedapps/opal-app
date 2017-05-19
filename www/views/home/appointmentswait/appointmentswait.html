@@ -1,0 +1,35 @@
+<ons-page ng-controller="CalendarController">
+    <ons-toolbar fixed-style>
+        <div class="left">
+            <ons-back-button>{{"BACK"|translate}}</ons-back-button>
+        </div>
+        <div class="center" ng-class="fontSizeTitle">{{"APPOINTMENTSWAIT"|translate}}</div>
+    </ons-toolbar>
+
+    <ons-gesture-detector ng-dragdown="onShowCalendar()">
+        <div ng-show="showCalendar" align="center" class="appointment-calendar" style="position:relative;z-index:1" height-element>
+            <div class="calendar-list">
+                <uib-datepicker id="scrollTo" ng-model="dt" datepicker-mode="calendarMode" datepicker-options="dateOptions" show-weeks="false" show-color="showColor(date)" style="width:100vw;" ng-class="fontSizeDesc"></uib-datepicker>
+            </div>
+        </div>
+    </ons-gesture-detector>
+    <br>
+
+    <ons-list>
+        <ons-list-item modifier="chevron" ng-click="settingsNavigator.pushPage('views/home/update-checker.html', {param:'HOUR'},{ animation : 'slide' } )" ng-class="fontSizeDesc">
+            {{"HOUR"|translate}}
+            
+        </ons-list-item>
+        <ons-list-item modifier="chevron" ng-click="settingsNavigator.pushPage('views/home/update-checker.html', {param:'MINUTE'},{ animation : 'slide' } )" ng-class="fontSizeDesc">
+            {{"MINUTES"|translate}}
+        </ons-list-item>
+        <ons-list-item modifier="chevron" ng-click="settingsNavigator.pushPage('views/home/update-checker.html', {param:'TYPE'},{ animation : 'slide' } )" ng-class="fontSizeDesc">
+            {{"APPOINTMENT"|translate}}
+        </ons-list-item>
+    </ons-list>
+    <br>
+    <ons-button modifier="large--cta" ng-class="fontSizeDesc">
+        <ons-ripple></ons-ripple>
+        {{"CONTINUE" | translate}}
+    </ons-button>
+</ons-page>
