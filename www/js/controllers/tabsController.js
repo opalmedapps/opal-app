@@ -5,7 +5,6 @@
  */
 var myApp=angular.module('MUHCApp');
 myApp.controller('TabsController',['$scope','$timeout','$translate','$translatePartialLoader','$rootScope',function($scope,$timeout,$translate,$translatePartialLoader,$rootScope){
-    //Enter code here!!
 
     $scope.tour = './views/home/tour/tour.html';
     if (!localStorage.getItem('firstInstall')){
@@ -17,6 +16,16 @@ myApp.controller('TabsController',['$scope','$timeout','$translate','$translateP
     }
 
     $translatePartialLoader.addPart('all-views');
+
+    $scope.analyze = function(e){
+        console.log("event: " + e);
+        if(event.index === tabbar.getActiveTabIndex()){
+            event.cancel()
+        }
+        else{
+            tabbar.setActiveTab(e.index);
+        }
+    }
 
 
 }]);
