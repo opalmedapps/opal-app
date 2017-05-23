@@ -1,4 +1,4 @@
-myApp.config(fireConfig)
+myApp.config(fireConfig);
 
 fireConfig.$inject = [];
 
@@ -11,5 +11,7 @@ function fireConfig () {
         storageBucket: "opal-dev.appspot.com",
         messagingSenderId: "652464215237"
     };
+
+
     firebase.initializeApp(config);
 }

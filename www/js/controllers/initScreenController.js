@@ -22,7 +22,8 @@
         '$filter',
         'Constants',
         'Permissions',
-        'DynamicContentService'
+        'DynamicContentService',
+        'NetworkStatus'
     ];
 
     /* @ngInject */
@@ -33,7 +34,8 @@
         $filter,
         Constants,
         Permissions,
-        DynamicContentService
+        DynamicContentService,
+        NetworkStatus
     ) {
         var vm = this;
         vm.title = 'InitScreenController';
@@ -47,6 +49,8 @@
         vm.reportIssuesMail = reportIssuesMail;
         vm.goToLogin = goToLogin;
 
+        vm.isOnline = true;
+
         activate();
 
         ////////////////
@@ -58,6 +62,9 @@
                 .then(function (response) {
                     if(!response.exists){
                         DynamicContentService.setContentData(response.data);
+                    }
+                    else{
+
                     }
                     return DynamicContentService.getPageContent('service');
                 })
@@ -71,14 +78,14 @@
                     }
                 })
                 .catch(function errorCallback(error) {
-                    console.log("There was a problem", error);
+
                 });
 
             //Add the login translation
             $translatePartialLoader.addPart('login');
 
             //Initialize language if not initialized
-            UserPreferences.initializeLanguage()
+            UserPreferences.initializeLanguage();
 
             //Do not show the list breaking, equivalent of ng-cloak for angularjs, LOOK IT UP!!! https://docs.angularjs.org/api/ng/directive/ngCloak
             setTimeout(function(){

@@ -23,7 +23,7 @@ myApp.controller('FeedbackController',['Patient', 'RequestToServer','$scope', fu
 			RequestToServer.sendRequest('Feedback',{FeedbackContent: $scope.feedbackText, AppRating:3, Type: type});
 			$scope.feedbackText='';
 			$scope.submitted=true;
-			$scope.enableSend = false;	
+			$scope.enableSend = false;
 		}
 	};
 
