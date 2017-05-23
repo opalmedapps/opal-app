@@ -226,43 +226,40 @@ myApp.controller('CalendarController', ['Appointments', '$q','$scope','$timeout'
         //Determines whether to show header at the end
         function showHeaderEnd()
         {
-            if($scope.appointments.length>0&&dateLast<choosenTimeMilliseconds)return true;
-            return false;
+            return $scope.appointments.length > 0 && dateLast < choosenTimeMilliseconds;
+
         }
+
         //Determines when to show header of appointment vs red highlighted header
         function showChoosenDateHeader(index)
         {
-            var date2=new Date($scope.appointments[index].ScheduledStartTime);
-            date2.setHours(0,0,0,0);
-            date2=date2.getTime();
-            $scope.showHeaderNormalDay = true;
-            if(choosenTimeMilliseconds==date2)
-            {
-                $scope.showHeaderNormalDay = false;
+            var same_date = false;
+            var cur_date=new Date($scope.appointments[index].ScheduledStartTime);
+            cur_date.setHours(0,0,0,0);
+            cur_date=cur_date.getTime();
+
+            if(index !== 0){
+                var date_prev = new Date($scope.appointments[index - 1].ScheduledStartTime);
+                date_prev.setHours(0,0,0,0);
+                date_prev=date_prev.getTime();
+                same_date = date_prev === cur_date;
             }
-            if(index==0)
+
+            $scope.showHeaderNormalDay = (choosenTimeMilliseconds !== cur_date) && !same_date;
+
+            if(index===0)
             {
-                if(choosenTimeMilliseconds==date2||choosenTimeMilliseconds<date2)
-                {
-                    return true
-                }else{
-                    return false;
-                }
+                return choosenTimeMilliseconds === cur_date || choosenTimeMilliseconds < cur_date;
             }else
             {
                 var date1=new Date($scope.appointments[index-1].ScheduledStartTime.getTime());
                 date1.setHours(0,0,0,0);
                 date1=date1.getTime();
-                if(date1==date2)
+                if(date1===cur_date)
                 {
                     return false;
                 }else{
-                    if((date2>choosenTimeMilliseconds&&date1<choosenTimeMilliseconds)||date2==choosenTimeMilliseconds)
-                    {
-                        return true;
-                    }else{
-                        return false;
-                    }
+                    return (cur_date > choosenTimeMilliseconds && date1 < choosenTimeMilliseconds) || cur_date == choosenTimeMilliseconds;
                 }
             }
         }
@@ -285,7 +282,6 @@ myApp.controller('IndividualAppointmentController', ['NavigatorParameters','Nati
               NewsBanner,$filter, UserPreferences, Logger) {
         //Information of current appointment
         var parameters = NavigatorParameters.getParameters();
-        console.log(parameters);
         var navigatorName = parameters.Navigator;
 
         $scope.app = parameters.Post;
