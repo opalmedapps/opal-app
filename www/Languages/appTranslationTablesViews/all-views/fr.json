@@ -2,7 +2,7 @@
   "ABOUT": "À propos",
   "DOC_ABOUT": "À propos de ce document",
   "DOC_DATE_CREATED": "Créé le ",
-  "DOC_DATE_UPDATED":"Mis à jour le ",
+  "DOC_DATE_UPDATED":"Mise à jour le ",
   "DOC_SIGNEDBY":"Signé par  ",
   "ACCOUNT": "Réglages",
   "ADDED": "Reçu à",
@@ -11,6 +11,7 @@
   "APPOINTMENT_ROOM": "Localisation du rendez-vous",
   "APPOINTMENT_ABOUT": "À propos de ce rendez-vous",
   "APPOINTMENTS": "Rendez-vous",
+  "APPOINTMENTSWAIT": "Prévision - Temps d'attente"
   "APPVERSION": "Version",
   "AUTHENTICATIONERROR": "Erreur d'authentification , s'il vous plaît vous connecter à nouveau",
   "AVAILABLEDEVICES": "Disponible Seulement Sur ​​Un Périphérique!",
@@ -103,6 +104,7 @@
   "HOME": "Accueil",
   "HOME_DESCRIPTION": "Dans l'onglet Accueil, vous pourrez accéder aux nouvelles concernant votre statut médical, vos documents, les annonces de l'hôpital et vos rendez-vous.",
   "HOSPITALPARKING": "Stationnement",
+  "HOUR": "Heures"
   "INFO": "Information",
   "INPROGRESS": "En progrès",
   "INTERNETERROR": "Erreur de serveur, vérifiez votre connexion Internet.",

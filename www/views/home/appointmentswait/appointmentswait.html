@@ -1,4 +1,4 @@
-<ons-page ng-controller="CalendarController">
+<ons-page ng-controller="waitController">
     <ons-toolbar fixed-style>
         <div class="left">
             <ons-back-button>{{"BACK"|translate}}</ons-back-button>
@@ -16,20 +16,20 @@
     <br>
 
     <ons-list>
-        <ons-list-item modifier="chevron" ng-click="settingsNavigator.pushPage('views/home/update-checker.html', {param:'HOUR'},{ animation : 'slide' } )" ng-class="fontSizeDesc">
+        <ons-list-item modifier="chevron" ng-click="homeNavigator.pushPage('views/home/appointmentswait/update-checker.html', {param:'HOUR'},{ animation : 'slide' } )" ng-class="fontSizeDesc">
             {{"HOUR"|translate}}
-            
         </ons-list-item>
-        <ons-list-item modifier="chevron" ng-click="settingsNavigator.pushPage('views/home/update-checker.html', {param:'MINUTE'},{ animation : 'slide' } )" ng-class="fontSizeDesc">
+        <ons-list-item modifier="chevron" ng-click="homeNavigator.pushPage('views/home/appointmentswait/update-checker.html', {param:'MINUTE'},{ animation : 'slide' } )" ng-class="fontSizeDesc">
             {{"MINUTES"|translate}}
         </ons-list-item>
-        <ons-list-item modifier="chevron" ng-click="settingsNavigator.pushPage('views/home/update-checker.html', {param:'TYPE'},{ animation : 'slide' } )" ng-class="fontSizeDesc">
+        <ons-list-item modifier="chevron" ng-click="homeNavigator.pushPage('views/home/appointmentswait/update-checker.html', {param:'TYPE'},{ animation : 'slide' } )" ng-class="fontSizeDesc">
             {{"APPOINTMENT"|translate}}
         </ons-list-item>
     </ons-list>
     <br>
-    <ons-button modifier="large--cta" ng-class="fontSizeDesc">
+    <!--ons-button modifier="large--cta" ng-class="fontSizeDesc" style="background-color: #4CAF50; font-size: x-large; font-weight: bolder;" ng-click="submit(date, HOUR, MINUTE, TYPE)"-->
+    <ons-button modifier="large--cta" ng-class="fontSizeDesc" style="background-color: #4CAF50; font-size: x-large; font-weight: bolder;" ng-click="homeNavigator.pushPage('views/home/appointmentswait/individual-waiting.html')">
         <ons-ripple></ons-ripple>
         {{"CONTINUE" | translate}}
-    </ons-button>
+    </--ons-button>
 </ons-page>
