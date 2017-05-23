@@ -71,6 +71,8 @@
          *@returns {Object} contains the URL and Title for the content.
          **/
         function getContentData(contentType){
+            if(!content) return $q.reject({code: "NO_CONTENT"});
+
             return content[contentType];
         }
 
@@ -95,7 +97,7 @@
          *@returns {Promise} contains the content to be loaded into the view.
          **/
         function getPageContent(contentType) {
-
+            if(!content) return $q.reject({code: "NO_CONTENT"});
             if (!content[contentType]) return $q.reject({code: "NO_PAGE"});
 
             return $http({

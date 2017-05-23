@@ -35,8 +35,6 @@ angular.module('MUHCApp')
             .call(chart);
         };
 
-        console.log(scope.data);
-        console.log(d3.max(scope.data));
 
         // Render the chart every time the data changes.
         // The data is serialized in order to easily check for changes.
