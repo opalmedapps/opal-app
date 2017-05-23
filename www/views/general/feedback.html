@@ -11,7 +11,7 @@
         <span ng-class="fontSizeDesc">{{"FEEDBACK_MESSAGE"|translate}}</span>
       <!--</ons-row>-->
   </ons-row>
-  <ons-row ng-cloak class="shadow-2" ng-show="!submitted" style="width: 90%; margin: 10px 5%">
+  <ons-row ng-cloak class="shadow-2" ng-hide="submitted" style="width: 90%; margin: 10px 5%">
       <textarea class="textarea textarea--transparent" placeholder="{{'LEAVEMESSAGE'|translate}}" ng-model="feedbackText" style="width: 100%; height: 50vh; background-color: white" ng-class="fontSizeDesc"></textarea>
   </ons-row>
   <ons-row ng-show="!submitted" style="width: 90%; margin: 10px 5% 30% 5%">
