@@ -71,7 +71,6 @@ myApp.service('Documents',['UserPreferences', 'UserAuthorizationInfo','$q', '$fi
     }
     function addDocumentsToService(documents)
     {
-        console.log(documents);
         if(!documents) return;
         for (var i = 0; i < documents.length; i++) {
             documents[i].CreatedTimeStamp = $filter('formatDate')(documents[i].CreatedTimeStamp);
@@ -82,7 +81,6 @@ myApp.service('Documents',['UserPreferences', 'UserAuthorizationInfo','$q', '$fi
             documentsArray.push(documents[i]);
         }
         documentsArray = $filter('orderBy')(documentsArray,'-CreatedTimeStamp');
-        console.log(documentsArray);
         LocalStorage.WriteToLocalStorage('Documents',documentsArray);
         return documents;
     }

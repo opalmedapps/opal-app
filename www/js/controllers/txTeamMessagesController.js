@@ -22,23 +22,22 @@ myApp.controller('TxTeamMessagesController',['$scope','$timeout','TxTeamMessages
     //Function that goes to individual team message
     $scope.goToTeamMessage=function(message)
     {
-        console.log(message);
-        if(message.ReadStatus == '0')
+        if(message.ReadStatus === '0')
         {
-            console.log(message);
             message.ReadStatus = '1';
             TxTeamMessages.readTxTeamMessageBySerNum(message.TxTeamMessageSerNum);
         }
         NavigatorParameters.setParameters({'Navigator':'personalNavigator','Post':message});
         personalNavigator.pushPage('./views/personal/treatment-team-messages/individual-team-message.html');
-    }
+    };
 
     $scope.showHeader = function (index) {
-        if (index === 0) return true;
+
+        if (index === $scope.txTeamMessages.length -1) return true;
 
         var current = (new Date($scope.txTeamMessages[index].DateAdded)).setHours(0,0,0,0);
-        var previous = (new Date($scope.txTeamMessages[index-1].DateAdded)).setHours(0,0,0,0);
-        return current != previous;
+        var previous = (new Date($scope.txTeamMessages[index+1].DateAdded)).setHours(0,0,0,0);
+        return current !== previous;
     }
 
 }]);
@@ -47,5 +46,4 @@ myApp.controller('IndividualTxTeamMessageController',['$scope','NavigatorParamet
     var message = TxTeamMessages.setLanguageTxTeamMessages(parameters.Post);
     $scope.FirstName = Patient.getFirstName();
     $scope.message=message;
-    console.log(message);
 }]);
