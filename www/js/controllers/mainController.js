@@ -4,12 +4,12 @@
  *Email:davidfherrerar@gmail.com
  */
 
-angular.module('MUHCApp').controller('MainController', ["$state",'$timeout', '$rootScope','FirebaseService',
+angular.module('MUHCApp').controller('MainController', ["$window", "$state",'$timeout', '$rootScope','FirebaseService',
     'NativeNotification','DeviceIdentifiers','$translatePartialLoader','NewsBanner',
-    "UpdateUI","Patient","LocalStorage", 'Constants', 'CleanUp', 'NavigatorParameters',
-    function ($state,$timeout,$rootScope,FirebaseService,NativeNotification,
+    "UpdateUI","Patient","LocalStorage", 'Constants', 'CleanUp', 'NavigatorParameters', 'NetworkStatus',
+    function ($window, $state,$timeout,$rootScope,FirebaseService,NativeNotification,
               DeviceIdentifiers,$translatePartialLoader,NewsBanner,
-              UpdateUI,Patient,LocalStorage, Constants, CleanUp, NavigatorParameters) {
+              UpdateUI,Patient,LocalStorage, Constants, CleanUp, NavigatorParameters, NetworkStatus) {
 
 
         //var myDataRef = new Firebase(FirebaseService.getFirebaseUrl());
@@ -18,9 +18,8 @@ angular.module('MUHCApp').controller('MainController', ["$state",'$timeout', '$r
             var  authInfoLocalStorage=window.localStorage.getItem('UserAuthorizationInfo');
             if(!authData)
             {
-                if($state.current.name=='Home')
+                if($state.current.name ==='Home')
                 {
-                    console.log('here state');
                     $state.go('logOut');
                 }else if(authInfoLocalStorage)
                 {
@@ -30,31 +29,62 @@ angular.module('MUHCApp').controller('MainController', ["$state",'$timeout', '$r
         });
 
         /*****************************************
+         * Check for online activity (Not working)
+         *****************************************/
+        // //Detect whether or not the app is online and handle elegantly
+        // document.addEventListener("offline", onOffline, false);
+        //
+        // function onOffline(){
+        //     console.log("App is offline");
+        // }
+
+        var app = document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'https://' ) === -1;
+
+
+
+        $rootScope.online = navigator.onLine;
+
+        $window.addEventListener("offline", function() {
+            $rootScope.$apply(function() {
+                $rootScope.online = false;
+                console.log("offline");
+                NetworkStatus.setStatus(false);
+            });
+        }, false);
+
+        $window.addEventListener("online", function() {
+            $rootScope.$apply(function() {
+                $rootScope.online = true;
+                console.log("online");
+                NetworkStatus.setStatus(true);
+            });
+        }, false);
+
+        /*****************************************
          * Refresh Data (Not working)
          *****************************************/
 
         //Ask for an update every 2 minutes
         setInterval(function()
         {
-            //console.log("calling  refresh bg");
             backgroundRefresh();
         },120000);
 
 
         //On resume, make a background refresh check.
         document.addEventListener("resume", onResume, false);
+
         function onResume() {
-            console.log("Called resume")
             setTimeout(function() {
                 backgroundRefresh();
             });
         }
+
         var serialNum = Patient.getUserSerNum();
         function backgroundRefresh()
         {
             if(FirebaseService.getAuthenticationCredentials()&&typeof serialNum !=='undefined'&&serialNum)
             {
-                console.log('refreshing');
                 UpdateUI.update('All');
             }
         }
@@ -87,21 +117,19 @@ angular.module('MUHCApp').controller('MainController', ["$state",'$timeout', '$r
         function goInactive() {
             //console.log('Currently going inactive');
             resetTimer();
-            if($state.current.name=='Home')
+            if($state.current.name ==='Home')
             {
 
                 $state.go('init');
                 localStorage.setItem('locked',1);
                 //window.localStorage.removeItem('OpalAdminPanelPatient');
                 //window.localStorage.removeItem('OpalAdminPanelUser');
-                console.log('Going inactive');
             }
 
             //location.reload();
         }
 
         function goActive() {
-            // do something
             startTimer();
         }
 

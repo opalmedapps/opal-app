@@ -33,10 +33,10 @@ myApp.controller('TabsController',['$scope','$timeout','$translate','$translateP
 myApp.controller('personalTabController',
     ['$scope','$timeout','Appointments','$translate','TxTeamMessages','Documents',
         '$location','RequestToServer','UpdateUI','NavigatorParameters',
-        'Notifications','Questionnaires', 'Patient',
+        'Notifications','Questionnaires', 'Patient', 'NetworkStatus',
         function($scope,$timeout,Appointments,$translate, TxTeamMessages,Documents,
                  $location,RequestToServer,UpdateUI,NavigatorParameters,
-                 Notifications,Questionnaires,Patient){
+                 Notifications,Questionnaires,Patient, NetworkStatus){
 
     //Its possible for a notification to have been read such as a document since this controller has already been instantiated
     // we will have to check to sync that number on the badges for the tabs on the personal page.
@@ -61,6 +61,7 @@ myApp.controller('personalTabController',
             clearTimeout(timeOut);
             $done();
         });
+
         var timeOut = setTimeout(function(){
             $done();
         },5000);
@@ -90,8 +91,15 @@ myApp.controller('personalTabController',
     {
         tabbar.setActiveTab(0);
     };
+
+
     //Sets appointments and treatment plan stage tab
-    initPersonalTab();
+    if(NetworkStatus.isOnline()){
+
+        console.log("setting tabs..");
+        initPersonalTab();
+    }
+
 
     //Init function for this controller
     function initPersonalTab()
@@ -100,7 +108,7 @@ myApp.controller('personalTabController',
             $scope.loading = true;
             UpdateUI.set([
                 'Documents',
-                'TxTeamMessages',
+                'TxTeamMessages'
             ])
                 .then(function () {
                     $scope.loading = false;
@@ -116,27 +124,32 @@ myApp.controller('personalTabController',
 }]);
 
 
-myApp.controller('generalTabController',['$scope','$timeout','Announcements','RequestToServer','UpdateUI','Notifications','NavigatorParameters','$filter','Doctors',
-    function($scope,$timeout,Announcements,RequestToServer,UpdateUI,Notifications,NavigatorParameters,$filter, Doctors){
+myApp.controller('generalTabController',['$scope','$timeout','Announcements','RequestToServer','UpdateUI','Notifications','NavigatorParameters','$filter','Doctors', 'NetworkStatus',
+    function($scope,$timeout,Announcements,RequestToServer,UpdateUI,Notifications,NavigatorParameters,$filter, Doctors, NetworkStatus){
 
-
-
-    if (Doctors.getLastUpdated() < Date.now() - 300000 || Announcements.getLastUpdated() < Date.now() - 300000 ) {
-        $scope.loading = true;
-        console.log('announcment : ',  Announcements.getLastUpdated(), 'doc: ', Doctors.getLastUpdated());
-        UpdateUI.set([
-            'Doctors',
-            'Announcements',
-        ])
-            .then(function () {
-                $scope.loading = false;
-            })
-            .catch(function (error) {
-                "use strict";
-                $scope.loading = false;
-                console.log('error', error);
-            });
+    //Sets appointments and treatment plan stage tab
+    if(NetworkStatus.isOnline()){
+        initGeneralTab();
     }
+
+    function initGeneralTab(){
+        if (Doctors.getLastUpdated() < Date.now() - 300000 || Announcements.getLastUpdated() < Date.now() - 300000 ) {
+            $scope.loading = true;
+            UpdateUI.set([
+                'Doctors',
+                'Announcements'
+            ])
+                .then(function () {
+                    $scope.loading = false;
+                })
+                .catch(function (error) {
+                    "use strict";
+                    $scope.loading = false;
+                    console.log('error', error);
+                });
+        }
+    }
+
 
     NavigatorParameters.setParameters({'Navigator':'generalNavigator'});
     NavigatorParameters.setNavigator(generalNavigator);

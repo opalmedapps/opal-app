@@ -52,6 +52,10 @@ myApp.service('EducationalMaterial',['$filter','LocalStorage','FileManagerServic
         'Other':{
             icon:'fa fa-book',
             color:'#FF7043'
+        },
+        'TestingType':{
+            icon:'fa fa-question',
+            color:'#FF7043'
         }
     };
     function setLanguageEduMaterial(array)
@@ -121,6 +125,9 @@ myApp.service('EducationalMaterial',['$filter','LocalStorage','FileManagerServic
         for (var i = 0; i < edumaterial.length; i++) {
             //Format the date to javascript
             edumaterial[i].DateAdded=$filter('formatDate')(edumaterial[i].DateAdded);
+
+            console.log(edumaterial[i]);
+
             edumaterial[i].Icon = educationalMaterialType[edumaterial[i].EducationalMaterialType_EN].icon;
             edumaterial[i].Color = educationalMaterialType[edumaterial[i].EducationalMaterialType_EN].color;
             //Add to my annoucements array

@@ -197,6 +197,7 @@
     <script src="js/services/uuidService.js"></script>
     <script src="js/services/cleanUpService.js"></script>
     <script src="js/services/loggerService.js"></script>
+    <script src="js/services/networkStatusService.js"></script>
     <!-- inject:service:js -->
     <!-- endinject -->
     <!--App filters-->
@@ -212,6 +213,8 @@
     <script src="js/directives/linePlusBarChartDirective_bak.js"></script>
     <script src ="js/directives/rateEducationalMaterialDirective.js"></script>
     <script src="js/directives/scrollCarouselDirective.js"></script>
+    <script src="js/directives/offlineBannerDirective.js"></script>
+
     <!-- inject:directive -->
     <!-- endinject -->
     <script type="text/javascript" src="js/bootstrap.js"></script>
@@ -224,11 +227,14 @@
 <body id="boots">
 
 <!--Loading Modal for the initial loading screen-->
-<ons-modal var="modal">
-    <ons-icon size="50px" icon="ion-load-c" spin="true"></ons-icon>
+<ons-modal var="modal" style="background-color: white !important;">
+
+    <!--<img style="width: 200px;" src="img/Opal_Logo_Transparent_Inverse.png">-->
+    <br>
+    <ons-icon style="color: #0D47A1" size="50px" icon="ion-load-c" spin="true"></ons-icon>
     <br><br>
-    <div class="container text-center" align="center">
-        <p id="loadingData">{{"LOADINGDATA"|translate}}...</p>
+    <div style="margin-top: 5%" class="container text-center" align="center">
+        <p style="color: #0D47A1" id="loadingData">{{"LOADINGDATA"|translate}}...</p>
         <img style="margin-top: 5%; margin-left: -5%; width: 80%; height: auto;" ng-src="./img/muhc-logo-text.png" >
     </div>
 </ons-modal>
