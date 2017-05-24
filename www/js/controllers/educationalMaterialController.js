@@ -3,9 +3,9 @@
 //
 var myApp = angular.module('MUHCApp');
 myApp.controller('EducationalMaterialController',['NavigatorParameters', '$scope', '$timeout','UpdateUI', 'RequestToServer', '$cordovaFileOpener2',
-    '$cordovaDevice', '$cordovaDatePicker', 'FileManagerService', 'EducationalMaterial','Logger', '$q',
+    '$cordovaDevice', '$cordovaDatePicker', 'FileManagerService', 'EducationalMaterial','Logger', '$q', 'NetworkStatus',
     function (NavigatorParameters, $scope, $timeout,UpdateUI, RequestToServer, $cordovaFileOpener2,
-              $cordovaDevice, $cordovaDatePicker, FileManagerService, EducationalMaterial, Logger,$q) {
+              $cordovaDevice, $cordovaDatePicker, FileManagerService, EducationalMaterial, Logger,$q, NetworkStatus) {
 
         //Android device backbutton
 
@@ -19,21 +19,27 @@ myApp.controller('EducationalMaterialController',['NavigatorParameters', '$scope
         educationNavigator.on('prepop',function()
         {
             backButtonPressed = 0;
-            init();
+
+            if(NetworkStatus.isOnline()){
+                console.log("calling init");
+                init();
+            }
         });
 
+        if(NetworkStatus.isOnline()) {
 
-        init()
-            .then(function () {
-                $scope.noMaterials = !EducationalMaterial.isThereEducationalMaterial();
-                var materials = EducationalMaterial.getEducationalMaterial();
-                console.log(materials);
-                //Setting the language for view
-                materials = EducationalMaterial.setLanguageEduationalMaterial(materials);
-                //Attaching to scope
-                $scope.edumaterials = materials;
-                Logger.sendLog('Educational Material', 'all');
-            });
+            init()
+                .then(function () {
+                    $scope.noMaterials = !EducationalMaterial.isThereEducationalMaterial();
+                    var materials = EducationalMaterial.getEducationalMaterial();
+                    console.log(materials);
+                    //Setting the language for view
+                    materials = EducationalMaterial.setLanguageEduationalMaterial(materials);
+                    //Attaching to scope
+                    $scope.edumaterials = materials;
+                    Logger.sendLog('Educational Material', 'all');
+                });
+        }
 
         //Init function
         function init() {
