@@ -43,7 +43,6 @@
         }
 
         function isOnline(){
-            console.log("is online: " + online);
             return online;
         }
 
@@ -56,6 +55,7 @@
         //call this when you know 'foo' has been changed
         function notifyObservers(){
             angular.forEach(observerCallbacks, function(callback){
+                console.log("callback: " + callback);
                 callback();
             });
         }
