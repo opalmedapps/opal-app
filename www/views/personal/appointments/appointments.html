@@ -15,13 +15,13 @@
     </div>
   </ons-gesture-detector>
 
-  <ons-gesture-detector ng-dragup="onHideCalendar()">
+  <!--<ons-gesture-detector ng-dragup="onHideCalendar()">-->
     <div ng-show="showCalendar" align="center" class="appointment-calendar" style="position:relative;z-index:1" height-element>
       <div class="calendar-list">
         <uib-datepicker id="scrollTo" ng-model="dt" datepicker-mode="calendarMode" datepicker-options="dateOptions" show-weeks="false" show-color="showColor(date)" style="width:100vw;" ng-class="fontSizeDesc"></uib-datepicker>
       </div>
     </div>
-  </ons-gesture-detector>
+  <!--</ons-gesture-detector>-->
 
 
   <div ng-show="showCalendar" id="topListAnchor" style="height:5px;background-color:lightgrey;position:relative;z-index:1"></div>
