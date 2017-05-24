@@ -51,7 +51,7 @@
             </div>
         </div>
         <div class="row" id="divTreatmentPlan" ng-hide="status.noData" style="overflow-y: scroll;padding: 0;top: 250px;position: fixed;bottom: 50px;background: white;margin-left: 0;">
-            <ons-list class="plan-list">
+            <ons-list class="plan-list" style="margin-top: 10%;">
                 <ons-list-item class="plan" modifier="tappable" ng-click="status.goToStep(events[events.length-1],step)" ng-repeat="(step, events) in status.events" id="treatmentSessions{{$index}}">
                     <ons-row id="statusStep{{$index}}">
                         <ons-col width="50px" class="plan-left" align="center">
