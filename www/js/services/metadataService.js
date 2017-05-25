@@ -23,9 +23,9 @@
         .module('MUHCApp')
         .factory('MetaData', MetaData);
 
-    MetaData.$inject = ['Appointments','Documents','TxTeamMessages','Notifications', 'Questionnaires', 'Announcements'];
+    MetaData.$inject = ['Appointments','Documents','TxTeamMessages','Notifications', 'Questionnaires', 'Announcements', 'EducationalMaterial'];
 
-    function MetaData(Appointments, Documents, TxTeamMessages, Notifications, Questionnaires, Announcements) {
+    function MetaData(Appointments, Documents, TxTeamMessages, Notifications, Questionnaires, Announcements, EducationalMaterial) {
 
         //you only need to use this service the first time entering a tab
         var firstTimePersonal = true;
@@ -44,15 +44,21 @@
             announcementsUnreadNumber: null
         };
 
+        var eduMaterials = null;
+        var noMaterials = null;
+
         var MetaData = {
             init: init,
             fetchPersonalMeta: fetchPersonalMeta,
             fetchGeneralMeta: fetchGeneralMeta,
+            fetchEducationalMeta: fetchEducationalMeta,
             isFirstTimePersonal: isFirstTimePersonal,
             isFirstTimeGeneral: isFirstTimeGeneral,
             isFirstTimeEducational: isFirstTimeEducational,
             setFetchedPersonal: setFetchedPersonal,
-            setFetchedGeneral: setFetchedGeneral
+            setFetchedGeneral: setFetchedGeneral,
+            setFetchedEducational: setFetchedEducational,
+            noEduMaterial: noEduMaterial,
         };
 
         return MetaData;
@@ -69,13 +75,15 @@
             personalTabData.notificationsUnreadNumber = Notifications.getNumberUnreadNotifications();
             personalTabData.questionnairesUnreadNumber = Questionnaires.getNumberOfUnreadQuestionnaires();
 
-            console.log("personal meta data initialized!");
-
-
             //load the general tab data
             generalTabData.announcementsUnreadNumber = Announcements.getNumberUnreadAnnouncements();
 
-            console.log("meta data initialized!");
+           //load the educational tab data
+            noMaterials = !EducationalMaterial.isThereEducationalMaterial();
+            var materials = EducationalMaterial.getEducationalMaterial();
+            //Setting the language for view
+            eduMaterials = EducationalMaterial.setLanguageEduationalMaterial(materials);
+
         }
 
         function fetchPersonalMeta(){
@@ -102,8 +110,20 @@
             return firstTimeGeneral;
         }
 
+        function fetchEducationalMeta(){
+            return eduMaterials;
+        }
+
         function isFirstTimeEducational() {
             return firstTimeEducational;
+        }
+
+        function setFetchedEducational() {
+            firstTimeEducational = false;
+        }
+
+        function noEduMaterial(){
+            return noMaterials;
         }
 
     }

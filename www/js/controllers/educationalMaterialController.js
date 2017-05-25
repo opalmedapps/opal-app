@@ -3,9 +3,9 @@
 //
 var myApp = angular.module('MUHCApp');
 myApp.controller('EducationalMaterialController',['NavigatorParameters', '$scope', '$timeout','UpdateUI', 'RequestToServer', '$cordovaFileOpener2',
-    '$cordovaDevice', '$cordovaDatePicker', 'FileManagerService', 'EducationalMaterial','Logger', '$q', 'NetworkStatus',
+    '$cordovaDevice', '$cordovaDatePicker', 'FileManagerService', 'EducationalMaterial','Logger', '$q', 'NetworkStatus', 'MetaData',
     function (NavigatorParameters, $scope, $timeout,UpdateUI, RequestToServer, $cordovaFileOpener2,
-              $cordovaDevice, $cordovaDatePicker, FileManagerService, EducationalMaterial, Logger,$q, NetworkStatus) {
+              $cordovaDevice, $cordovaDatePicker, FileManagerService, EducationalMaterial, Logger,$q, NetworkStatus, MetaData) {
 
         //Android device backbutton
 
@@ -30,13 +30,15 @@ myApp.controller('EducationalMaterialController',['NavigatorParameters', '$scope
 
             init()
                 .then(function () {
-                    $scope.noMaterials = !EducationalMaterial.isThereEducationalMaterial();
-                    var materials = EducationalMaterial.getEducationalMaterial();
-                    console.log(materials);
-                    //Setting the language for view
-                    materials = EducationalMaterial.setLanguageEduationalMaterial(materials);
-                    //Attaching to scope
-                    $scope.edumaterials = materials;
+                    $scope.noMaterials = MetaData.noEduMaterial();
+                    $scope.edumaterials = MetaData.fetchEducationalMeta();
+                    // $scope.noMaterials = !EducationalMaterial.isThereEducationalMaterial();
+                    // var materials = EducationalMaterial.getEducationalMaterial();
+                    // console.log(materials);
+                    // //Setting the language for view
+                    // materials = EducationalMaterial.setLanguageEduationalMaterial(materials);
+                    // //Attaching to scope
+                    // $scope.edumaterials = materials;
                     Logger.sendLog('Educational Material', 'all');
                 });
         }
@@ -47,7 +49,9 @@ myApp.controller('EducationalMaterialController',['NavigatorParameters', '$scope
 
             if (EducationalMaterial.getEducationalMaterial().length !== 0 ) return $q.resolve({});
 
-            return UpdateUI.set(['EducationalMaterial'])
+            return null;
+
+            // return UpdateUI.set(['EducationalMaterial'])
 
         }
 
