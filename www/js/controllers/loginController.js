@@ -107,15 +107,12 @@ myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$root
             }
         };
 
-        // $scope.submit("muhca.pp.mobile@gmail.com", "12345opal");
-
         //Handles authentication and next steps
         function authHandler(firebaseUser) {
 
             CleanUp.clear();
 
             firebaseUser.getToken(true).then(function(sessionToken){
-                console.log('In Auth Handler');
                 window.localStorage.setItem('Email',$scope.email);
 
                 UserAuthorizationInfo.setUserAuthData(firebaseUser.uid, CryptoJS.SHA256($scope.password).toString(), undefined, sessionToken, $scope.email);
@@ -129,9 +126,6 @@ myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$root
                 };
                 $rootScope.refresh=true;
                 window.localStorage.setItem('UserAuthorizationInfo', JSON.stringify(authenticationToLocalStorage));
-                // console.log(UserAuthorizationInfo.getUserAuthData());
-                // console.log("Authenticated successfully with payload:", firebaseUser);
-                // NavigatorParameters.setParameters('Login');
                 var deviceID;
 
                 // If user sets not trusted remove the localstorage
@@ -179,10 +173,6 @@ myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$root
                             });
                         });
                 }
-
-
-
-
 
             });
         }
