@@ -27,7 +27,8 @@ angular.module('MUHCApp').controller('LoadingController',
                         //fetch all the tab metadata TODO: add the fetching of all the other data
                         UpdateUI.set([
                             // 'Doctors',
-                            'Announcements'
+                            'Announcements',
+                            'EducationalMaterial'
                         ])
                             .then(function () {
                                 MetaData.init();
