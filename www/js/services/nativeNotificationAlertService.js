@@ -14,6 +14,7 @@ myApp.service('NativeNotification',function(){
   *@propertyOf MUHCApp.service:NativeNotification
   *@description string representing the style for the alert, 'material' for Android and undefined for IOS
   **/
+  var currentAlert = null;
   var mod= (ons.platform.isAndroid())?'material' : undefined;
   return {
     /**
@@ -25,10 +26,18 @@ myApp.service('NativeNotification',function(){
 		**/
     showNotificationAlert:function(message)
     {
-      ons.notification.alert({
+      if(currentAlert&&message === currentAlert) return;
+      currentAlert = message;
+      ons.notification.confirm({
         message: message,
-        modifier: mod
+        modifier: mod,
+        buttonLabel:['Ok'],
+        callback:function(idx)
+        {
+          currentAlert = null;
+        }
       });
+      
     },
     /**
 		*@ngdoc method
@@ -41,10 +50,13 @@ myApp.service('NativeNotification',function(){
 		**/
     showNotificationConfirm:function(message,confirmCallback, cancelCallback)
     {
+      if(currentAlert&&message === currentAlert) return;
+      currentAlert = message;
       ons.notification.confirm({
         message: message,
         modifier: mod,
         callback: function(idx) {
+          currentAlert = null;
           switch (idx) {
             case 0:
               cancelCallback();
