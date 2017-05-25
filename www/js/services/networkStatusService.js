@@ -47,7 +47,6 @@
         }
 
         function setStatus(state){
-            console.log("being set in service");
             online = state;
             notifyObservers();
         }
@@ -55,7 +54,6 @@
         //call this when you know 'foo' has been changed
         function notifyObservers(){
             angular.forEach(observerCallbacks, function(callback){
-                console.log("callback: " + callback);
                 callback();
             });
         }
