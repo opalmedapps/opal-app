@@ -107,7 +107,7 @@ myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$root
             }
         };
 
-        $scope.submit("muhca.pp.mobile@gmail.com", "12345opal");
+        $scope.submit("hendren@cs.mcgill.com", "12345");
 
         //Handles authentication and next steps
         function authHandler(firebaseUser) {
