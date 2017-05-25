@@ -4,10 +4,10 @@
 angular.module('MUHCApp').controller('LoadingController',
     ['$rootScope','$state', '$scope','UpdateUI',
         'UserAuthorizationInfo','UserPreferences', '$q','Patient', 'Messages', '$timeout','LocalStorage',
-        'NavigatorParameters','RequestToServer', 'PlanningSteps',
+        'NavigatorParameters','RequestToServer', 'PlanningSteps', 'MetaData',
         function ($rootScope,$state, $scope, UpdateUI,
                   UserAuthorizationInfo, UserPreferences, $q, Patient, Messages,$timeout,LocalStorage,
-                  NavigatorParameters,RequestToServer, PlanningSteps){
+                  NavigatorParameters,RequestToServer, PlanningSteps, MetaData){
             modal.show();
             //var loadingParameter = NavigatorParameters.getParameters();
             var userAuthorizationInfo = UserAuthorizationInfo.getUserAuthData();
@@ -21,13 +21,23 @@ angular.module('MUHCApp').controller('LoadingController',
                         objectToSend.FieldToChange = 'Language';
                         RequestToServer.sendRequestWithResponse('AccountChange', objectToSend);
 
+
+                        console.log("about to init meta data...");
+
+                        //fetch all the tab metadata TODO: add the fetching of all the other data
+                        UpdateUI.set([
+                            // 'Doctors',
+                            'Announcements'
+                        ])
+                            .then(function () {
+                                MetaData.init();
+                            });
+
                         PlanningSteps.initializePlanningSequence();
 
                         modal.hide();
                         clearTimeout(timeOut);
-                        console.log('Going home');
-                        console.log($state.go('Home'));
-                        console.log('Supposed to be home.')
+                        $state.go('Home');
                     });
             },200);
 
@@ -35,8 +45,6 @@ angular.module('MUHCApp').controller('LoadingController',
             var timeOut = setTimeout(function(){
                 console.log(typeof Patient.getFirstName());
                 if(typeof Patient.getFirstName()==='undefined'||Patient.getFirstName()===''){
-                    console.log('Inside alert');
-                    console.log('we meet again');
                     var mod;
                     if(ons.platform.isAndroid())
                     {
