@@ -45,7 +45,11 @@ myApp.controller('personalTabController',
     personalNavigator.on('prepop',function(){
         setNewsNumbers();
     });
-
+    
+    personalNavigator.on('prepush',function(event){
+        if(event.navigator._isPushing) event.cancel();       
+    });
+    
     $scope.load = function($done) {
         UpdateUI.update('All').then(function()
         {
@@ -121,6 +125,11 @@ myApp.controller('personalTabController',
         }
         setNewsNumbers();
     }
+    //Destroying personal navigator events
+    $scope.$on('$destroy', function(){ 
+            personalNavigator.off('prepush');
+            personalNavigator.off('prepop');
+    });
 }]);
 
 
@@ -158,6 +167,9 @@ myApp.controller('generalTabController',['$scope','$timeout','Announcements','Re
     setNewsNumbers();
     generalNavigator.on('prepop',function(){
         setNewsNumbers();
+    });
+     generalNavigator.on('prepush',function(event){
+        if(event.navigator._isPushing) event.cancel();       
     });
 
     $scope.load = function($done) {
@@ -207,6 +219,12 @@ myApp.controller('generalTabController',['$scope','$timeout','Announcements','Re
     {
         tabbar.setActiveTab(0);
     };
+    
+    //Destroying personal navigator events
+    $scope.$on('$destroy', function(){ 
+            generalNavigator.off('prepush');
+            generalNavigator.off('prepop');
+    });
 
 
 }]);
