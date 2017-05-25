@@ -7,7 +7,7 @@
 
     HomeController.$inject = [
         'Appointments', 'CheckInService', 'Patient',
-        'UpdateUI', '$timeout','$filter', '$location','Notifications','NavigatorParameters','NativeNotification',
+        'UpdateUI','$scope', '$timeout','$filter', '$location','Notifications','NavigatorParameters','NativeNotification',
         'NewsBanner','DeviceIdentifiers','$anchorScroll', 'PlanningSteps', 'Permissions',
         'UserPreferences', 'Constants', 'Logger', 'NetworkStatus'
     ];
@@ -15,7 +15,7 @@
     /* @ngInject */
     function HomeController(
         Appointments, CheckInService, Patient,
-        UpdateUI, $timeout, $filter, $location, Notifications, NavigatorParameters, NativeNotification,
+        UpdateUI,$scope, $timeout, $filter, $location, Notifications, NavigatorParameters, NativeNotification,
         NewsBanner, DeviceIdentifiers, $anchorScroll, PlanningSteps, Permissions,
         UserPreferences, Constants, Logger, NetworkStatus)
     {
@@ -76,6 +76,14 @@
                     }
                 }
 
+            });
+            homeNavigator.on('prepush',function(event){
+            if(event.navigator._isPushing) event.cancel();       
+            });
+            $scope.$on('$destroy',function()
+            {
+                homeNavigator.off('prepop');
+                homeNavigator.off('prepush');
             });
 
             Permissions.enablePermission('WRITE_EXTERNAL_STORAGE', 'PERMISSION_STORAGE_DENIED')
@@ -348,6 +356,7 @@
             }
             return "";
         }
+        
 
     }
 
