@@ -29,9 +29,11 @@ myApp.service('NativeNotification',function(){
       if(currentAlert&&message === currentAlert) return;
       currentAlert = message;
       ons.notification.confirm({
+        
         message: message,
         modifier: mod,
-        buttonLabel:['Ok'],
+        title:'Alert',
+        buttonLabels:['OK'],
         callback:function(idx)
         {
           currentAlert = null;
@@ -59,11 +61,11 @@ myApp.service('NativeNotification',function(){
           currentAlert = null;
           switch (idx) {
             case 0:
-              cancelCallback();
+              if(cancelCallback&&typeof cancelCallback == "function")cancelCallback();
               break;
             case 1:
-              confirmCallback();
-            break;
+              if(confirmCallback&&typeof confirmCallback == "function")confirmCallback();
+              break;
           }
         }
       });
