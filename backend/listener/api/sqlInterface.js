@@ -1089,7 +1089,7 @@ exports.getQuestionnaires = function(requestObject){
         })
         .catch(function (error) {
             r.reject(error);
-        })
+        });
 
     return r.promise
 };

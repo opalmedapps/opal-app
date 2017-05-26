@@ -169,7 +169,6 @@ myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$root
                             $timeout(function(){
                                 $scope.loading = false;
                                 initNavigator.popPage();
-                                $scope.alert.content="INTERNETERROR";
                             });
                         });
                 }
@@ -202,15 +201,6 @@ myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$root
                         $scope.alert.content="LIMITS_EXCEEDED";
                     });
                     break;
-                case "NETWORK_ERROR":
-                    $timeout(function(){
-                        $scope.alert.content="INTERNETERROR";
-                    });
-                    break;
-                default:
-                    $timeout(function(){
-                        $scope.alert.content="INTERNETERROR";
-                    });
             }
         }
         function authenticate(firebaseUser)
