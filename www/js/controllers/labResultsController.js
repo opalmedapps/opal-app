@@ -6,7 +6,7 @@ myApp.controller('LabResultsControllerCopy', ['RequestToServer','Notifications',
             "use strict";
 
         $scope.loading = true;
-
+        $scope.noLabResults = false;
         // Refresh button
         $scope.refresh = function () {
             // Only allowed to refresh once every 60s.
@@ -26,11 +26,23 @@ myApp.controller('LabResultsControllerCopy', ['RequestToServer','Notifications',
         activate();
 
         function activate() {
+
             // Check if the data is 300s old if it is get again
             if(LabResults.getLastUpdated() < Date.now() - 300000){
                 LabResults.setTestResults()
                     .then(function () {
                         $scope.testResultsByDate = LabResults.getTestResultsArrayByDate();
+
+
+                        console.log("array length " + $scope.testResultsByDate.length);
+
+
+                        if($scope.testResultsByDate.length === 0){
+
+                            console.log("made it ");
+                            $scope.noLabResults = true;
+                        }
+
                         $scope.loading = false;
                     }).catch(function (error) {
                         $scope.loading = false;
@@ -39,10 +51,16 @@ myApp.controller('LabResultsControllerCopy', ['RequestToServer','Notifications',
 
             } else {
                 $scope.testResultsByDate = LabResults.getTestResultsArrayByDate();
-                console.log($scope.testResultsByDate);
+
+                if($scope.testResultsByDate.length === 0){
+                    $scope.noLabResults = true;
+                }
+
                 $scope.loading = false;
             }
         }
+
+        console.log($scope.noLabResults)
 
     }]);
 
@@ -50,8 +68,15 @@ myApp.controller('ByDateTestsController',['$scope','$timeout','LabResults','$fil
     function($scope,$timeout,LabResults,$filter,Logger){
         //Initializing option
 
+        $scope.noLabResults = false;
+
         $scope.radioModel='All';
         $scope.selectedTests=LabResults.getTestResultsArrayByDate();
+
+        if($scope.testResultsByDate.length === 0){
+            $scope.noLabResults = true;
+        }
+
         $scope.testsReceived = 'Lab results';
         Logger.sendLog('Lab Results', 'all - Date');
 
@@ -72,6 +97,8 @@ myApp.controller('ByDateTestsController',['$scope','$timeout','LabResults','$fil
         vm.title = 'CategoryLabTestController';
         vm.testResultsByCategory = null;
 
+        vm.noLabResults = false;
+
         activate();
 
         ////////////////
@@ -79,6 +106,10 @@ myApp.controller('ByDateTestsController',['$scope','$timeout','LabResults','$fil
         function activate() {
             vm.testResultsByCategory = LabResults.getTestResultsByCategory();
             vm.testResultsByType = LabResults.getTestResultsArrayByType();
+
+            if(vm.testResultsByCategory.length === 0){
+                vm.noLabResults = true;
+            }
             Logger.sendLog('Lab Results', 'all - Type')
         }
     }
