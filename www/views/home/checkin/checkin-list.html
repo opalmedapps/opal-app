@@ -5,8 +5,9 @@
         </div>
         <div class="center" ng-class="fontSizeTitle">{{"CHECKIN"|translate}}</div>
     </ons-toolbar>
+    <network-banner></network-banner>
     <ons-list >
-        <ons-list-header class="person-list-header" ng-class="fontSizeTitle">
+        <ons-list-header ng-hide="checkIn.alert.type == 'info'" class="person-list-header" ng-class="fontSizeTitle">
             {{"APPOINTMENTS"|translate}}
         </ons-list-header>
         <ons-list-item modifier="tappable chevron" ng-repeat="app in checkIn.apps" ng-click="checkIn.goToAppointment(app)">
@@ -34,9 +35,12 @@
     <br>
 
 
-    <div uib-alert ng-show="checkIn.alert.type" style="text-align: center; width: 90%; margin: auto" type="{{checkIn.alert.type}}" class="{{fontSizeTitle}}" >
-        {{checkIn.checkInMessage|translate}}
-    </div>
+    <p ng-show="checkIn.alert.type" style="text-align: center; color: grey; margin-top: 25vh;" ng-class="fontSizeTitle">{{checkIn.checkInMessage|translate}}</p>
+
+
+    <!--<div uib-alert ng-show="checkIn.alert.type" style="text-align: center; width: 90%; margin: auto" type="{{checkIn.alert.type}}" class="{{fontSizeTitle}}" >-->
+        <!--{{checkIn.checkInMessage|translate}}-->
+    <!--</div>-->
 
     <div uib-alert ng-show="checkIn.alert.type && checkIn.additionalInfo" style="text-align: center; width: 90%; margin: auto" type="info" class="{{fontSizeTitle}}" >
         {{checkIn.additionalInfo|translate}}

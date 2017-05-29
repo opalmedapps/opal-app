@@ -6,6 +6,7 @@
     </ons-toolbar>
     <ons-carousel  var="carouselContacts" swipeable overscrollable auto-scroll fullscreen>
         <ons-carousel-item ng-repeat="contact in cont.contacts">
+        <ons-scroller>
     <div class="profile-cardContact">
 
         <!--<img ng-show="!contact.Image" src="img/logo.png" class="profile-image">-->
@@ -52,12 +53,13 @@
                 </ons-col>
                 <ons-col>
                    <div  style="padding:5px 5px 5px 0">
-                    <span >{{contact["Bio_"+cont.language]}}</span>
+                    <span ng-class="fontSizeDesc" >{{contact["Bio_"+cont.language]}}</span>
                 </div>
                 </ons-col>
             </ons-row>
                 
         </ons-list>
+        </ons-scroller>
         </ons-carousel-item>
         <ons-carousel>
 </ons-page>

@@ -215,7 +215,6 @@ myApp.filter('filterDateLabTests',function()
 myApp.filter('FormatPhoneNumber',function(){
     return function(phone)
     {
-        console.log(typeof(phone));
         if(typeof phone =='string'&&phone.length==10)
         {
             console.log('Inside string equal ten');
@@ -225,12 +224,9 @@ myApp.filter('FormatPhoneNumber',function(){
             console.log("("+firstDigits+")"+" "+secondDigits+"-"+thirdDigits);
             return "("+firstDigits+")"+" "+secondDigits+"-"+thirdDigits;
         }else{
-            console.log(phone)
             return phone;
         }
     };
-
-
 });
 
 myApp.filter('standardDate', function($filter){

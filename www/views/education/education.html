@@ -10,8 +10,9 @@
     <div style="color:grey;margin-top:25vh" ng-show="noMaterials" align="center" ng-class="fontSizeTitle">
       {{"NOEDUCATIONALMATERIAL"|translate}}
     </div>
+    <network-banner></network-banner>
 
-  <ons-list>
+    <ons-list>
     <ons-list-header ng-repeat-start = "edumaterial in edumaterials" class="person-list-header" ng-class="fontSizeTitle"  ng-if = "showHeader($index)">{{edumaterial.PhaseInTreatment}}</ons-list-header>
     <ons-list-item modifier="chevron" class="item" ng-repeat-end ng-click="goToEducationalMaterial(edumaterial)">
         <ons-row align="center">
@@ -28,6 +29,5 @@
             </ons-col>
         </ons-row>
     </ons-list-item >
-  </ons-list>
-  <div>&nbsp;</div>
+    </ons-list>
 </ons-page>

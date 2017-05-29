@@ -15,7 +15,7 @@ angular.module('MUHCApp')
     return {
         restrict: 'E',
         scope: {},
-        template: "<div ng-hide=\" online\" style=\"background-color:black;opacity:0.7;color:white;height:30px;width:100vw\"><ons-icon ng-hide=\"online_temp\" style=\"margin-right: 3px\" icon='ion-alert-circled'></ons-icon><small>{{ message }}</small></div>",
+        template: "<div ng-cloak ng-hide=\" online\" style=\"text-align: center; background-color:black;opacity:0.7;color:white;height:30px;width:100vw\"><ons-icon ng-hide=\"online_temp\" style=\"margin-right: 3px\" icon='ion-alert-circled'></ons-icon><small>{{ message }}</small></div>",
         link: function(scope) {
             //observer for the network state
             var updateStatus = function(){
