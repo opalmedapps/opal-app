@@ -1,85 +1,69 @@
 <!-- For the full desktop view I have found this http://fullcalendar.io/docs/, plus an angular plugin to manipulate it-->
 <!--https://github.com/angular-ui/ui-calendar-->
 <ons-page ng-controller="MessagesController">
-  <ons-toolbar>
-    <div class="left">
-      <ons-back-button>Back</ons-back-button>
+    <ons-toolbar>
+        <div class="left">
+            <ons-back-button>Back</ons-back-button>
+        </div>
+        <div class="center">Messages</div>
+        <div class="right" ng-show="searchingMask">
+        <ons-toolbar-button ng-click="closeSearchMask()">Cancel</ons-toolbar-button></div>
+    </ons-toolbar>
+
+    <network-banner></network-banner>
+
+    <ons-pull-hook ng-hide="searchingMask" ng-action="load($done)" var="loader">
+        <span ng-switch="loader.getCurrentState()">
+            <span ng-switch-when="initial">
+                <ons-icon size="35px" icon="ion-arrow-down-a"></ons-icon> Pull down to refresh</span>
+            <span ng-switch-when="preaction">
+                <ons-icon size="35px" icon="ion-arrow-up-a"></ons-icon> Release to refresh</span>
+            <span ng-switch-when="action">
+                <ons-icon size="35px" spin="true" icon="ion-load-d"></ons-icon> Loading data...</span>
+        </span>
+    </ons-pull-hook>
+    <!--List Of Conversations Mobile View-->
+    <div class="alert-dialog-mask" style="z-index:1231231" ng-show="searchingMask"></div>
+    <div class="visible-xs" ng-controller="ListOfConversationMobileController">
+        <ons-scroller>
+            <ons-list class="plan-list" >
+                <ons-list-item  ng-click="personClicked($index)" modifier="tappable" style="padding:0" ng-repeat="conversation in messages|filter:searchPerson">
+                    <ons-row style="margin-left:0">
+                        <ons-col width="50px">
+                            <div style="padding:5px">
+                              <img  ng-src="{{conversation.Image}}" class="image-conversation">
+                            </div>
+                        </ons-col>
+                        <ons-col>
+                            <div style="line-height:1;padding:3px">
+                                <div class="item-title"  ng-class="fontSizeTitle">{{conversation.MessageRecipient}}</div>
+                                <div class="item-desc" ng-class="fontSizeDesc">{{conversation.LastMessageContent}}</div>
+                            </div>
+                        </ons-col>
+                        <ons-col width="120px" align="right" >
+                            <div align="right" class="plan-duration item-desc" style = "margin-right:5px;line-height:1;margin-top:10px;"  ng-show="conversation.DateOfLastMessage">{{conversation.DateOfLastMessage| dateEmail}}</div>
+                            <img ng-src="./img/unread-email-icon.png" style="opacity:0.7;" width="10px" height="auto" ng-show="conversation.ReadStatus===0">
+                        </ons-col>
+                    </ons-row>
+                </ons-list-item>
+            </ons-list>
+        </ons-scroller>
     </div>
-    <div class="center">Messages</div>
-    <div class="right" ng-show="searchingMask">
-      <ons-toolbar-button ng-click="closeSearchMask()">Cancel</ons-toolbar-button></div>
-  </ons-toolbar>
-  <ons-pull-hook ng-hide="searchingMask" ng-action="load($done)" var="loader">
-    <span ng-switch="loader.getCurrentState()">
-      <span ng-switch-when="initial">
-        <ons-icon size="35px" icon="ion-arrow-down-a"></ons-icon> Pull down to refresh</span>
-      <span ng-switch-when="preaction">
-        <ons-icon size="35px" icon="ion-arrow-up-a"></ons-icon> Release to refresh</span>
-      <span ng-switch-when="action">
-        <ons-icon size="35px" spin="true" icon="ion-load-d"></ons-icon> Loading data...</span>
-    </span>
-  </ons-pull-hook>
-  <!--List Of Conversations Mobile View-->
-  <div class="alert-dialog-mask" style="z-index:1231231" ng-show="searchingMask"></div>
-  <div class="visible-xs" ng-controller="ListOfConversationMobileController">
-    <ons-scroller>
-        <ons-list class="plan-list" >
-          <ons-list-item  ng-click="personClicked($index)" modifier="tappable" style="padding:0" ng-repeat="conversation in messages|filter:searchPerson">
-            <ons-row style="margin-left:0">
-              <ons-col width="50px">
-                <div style="padding:5px">
-                  <img  ng-src="{{conversation.Image}}" class="image-conversation">
-                </div>
-              </ons-col>
-              <ons-col>
-                <div style="line-height:1;padding:3px">
-                <div class="item-title"  ng-class="fontSizeTitle">{{conversation.MessageRecipient}}</div>
-                  <div class="item-desc" ng-class="fontSizeDesc">
-                    {{conversation.LastMessageContent}}
-                  </div>
-              </div>
-              </ons-col>
-              <ons-col width="120px" align="right" >
-                <div align="right" class="plan-duration item-desc" style = "margin-right:5px;line-height:1;margin-top:10px;"  ng-show="conversation.DateOfLastMessage">{{conversation.DateOfLastMessage| dateEmail}}</div>
-                <img ng-src="./img/unread-email-icon.png" style="opacity:0.7;" width="10px" height="auto" ng-show="conversation.ReadStatus===0">
-              </ons-col>
-            </ons-row>
-          </ons-list-item>
-        </ons-list>
-
-    </ons-scroller>
-
-  </div>
-
-
 
   <!--DESKTOP, TABLET VIEWS ONLY-->
   <!--List of messages per Conversation for every other view -->
-  <div class="container hidden-xs" style="margin-top:1% ">
+    <div class="container hidden-xs" style="margin-top:1% ">
+        <div class="col-md-4 col-sm-4 col-lg-4 ">
+            <div class="center">
+                <strong>Conversations</strong>
+            </div>
+            <div class="panel panel-default" style="padding:0px;height:79vh">
+                <div class="panel-body " style="padding:0px;">
 
-    <div class="col-md-4 col-sm-4 col-lg-4 ">
-      <div class="center">
+                 <!--SEARCH BAR FOR MESSAGES-->
 
-        <strong>Conversations</strong>
-      </div>
-      <div class="panel panel-default" style="padding:0px;height:79vh">
-        <div class="panel-body " style="padding:0px;">
-
-          <!--SEARCH BAR FOR MESSAGES-->
-
-          <div class="navigation-bar" style="width:100%">
-            <div class="navigation-bar__left">
-              <!-- <input type="search" style="display:inline-block;width: 200px;margin-top:2%;margin-left:2%;" class="search-input"
-  placeholder="Search Mailbox...">-->
-              <!--<ui-select ng-model="person.selected" theme="select2" ng-disabled="disabled" style="min-width: 200px;">
-    <ui-select-match placeholder="Select name...">{{$select.selected.name}}</ui-select-match>
-    <ui-select-choices repeat="person in people | propsFilter: {name: $select.search}">
-      <div ng-bind-html="person.name | highlight: $select.search"></div>
-    </ui-select-choices>
-  </ui-select>-->
-              <!--<span><strong>Search:</strong></span>-->
-
-
+                <div class="navigation-bar" style="width:100%">
+                <div class="navigation-bar__left">
 
             </div>
           </div>

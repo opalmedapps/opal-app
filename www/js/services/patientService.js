@@ -125,7 +125,6 @@ myApp.service('Patient',['$q','$cordovaDevice','FileManagerService','LocalStorag
             UserPreferences.setEnableSMS(patientFields.EnableSMS);
             //UserPreferences.setLanguage(patientFields.Language);
             var font = window.localStorage.getItem(UserAuthorizationInfo.getUsername() + 'fontSize');
-            console.log(font);
             UserPreferences.setFontSize(font||'large');
             if(typeof patientFields=='undefined') return;
             FirstName=patientFields.FirstName;

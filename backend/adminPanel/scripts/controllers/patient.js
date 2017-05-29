@@ -121,10 +121,9 @@ $scope.sendMessage=function(index){
 
 }]);
 app.controller('DocumentsPatientController',['$scope', '$timeout','Patient',function($scope, $timeout, Patient){
-  Patient.getDocumentsFromServer().then(function(data){
+    Patient.getDocumentsFromServer().then(function(data){
     Patient.setDocuments(data.data);
     $scope.documents=Patient.getDocuments();
-    console.log($scope.documents);
   });
 
 

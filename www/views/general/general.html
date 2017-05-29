@@ -4,28 +4,14 @@
         <div class="center" ng-class="fontSizeTitle">{{"GENERAL"|translate}}</div>
         <div class="right"><ons-toolbar-button ng-click="generalNavigator.pushPage('./views/tabs/info-page-tabs.html')"><ons-icon icon="fa fa-info-circle"></ons-icon></ons-toolbar-button></div>
     </ons-toolbar>
-    <!--<ons-pull-hook ng-action="load($done)" var="loader">-->
-    <!--<span ng-switch="loader.getCurrentState()">-->
-    <!--<span ng-switch-when="initial"><ons-icon size="35px" spin="true" icon="ion-load-d"></ons-icon> {{"LOADINGDATA"|translate}}...</span>-->
-    <!--<span ng-switch-when="preaction"><ons-icon size="35px" spin="true" icon="ion-load-d"></ons-icon> {{"LOADINGDATA"|translate}}...</span>-->
-    <!--<span ng-switch-when="action"><ons-icon size="35px" spin="true" icon="ion-load-d"></ons-icon> {{"LOADINGDATA"|translate}}...</span>-->
-    <!--</span>-->
-    <!--</ons-pull-hook>-->
-
-    <div ng-show="loading" align="center" style="margin:10px">
-        <svg class="progress-circular">
-            <circle class="progress-circular__primary" cx="50%" cy="50%" r="40%" fill="none" stroke-width="10%" stroke-miterlimit="10"/>
-        </svg>
-    </div>
-
-    <div ng-hide="loading">
-
+    <div>
+        <network-banner></network-banner>
         <ons-list style="margin: 0px 0">
             <ons-list-item modifier="chevron" class="item" ng-click="generalNavigator.pushPage('views/general/contacts/contacts.html')">
                 <ons-row align="center"   >
-                    <ons-col width="60px" align="center">
-                        <div >
-                            <i class="fa fa-address-book iconHomeView" style="color:Amethyst"></i>
+                    <ons-col width="60px" style="text-align: center">
+                        <div>
+                            <ons-icon icon="fa fa-address-book" size="2x" style="color:#2196F3"></ons-icon>
                         </div>
                     </ons-col>
                     <ons-col>
@@ -38,9 +24,9 @@
             </ons-list-item>
             <ons-list-item modifier="chevron" class="item" ng-click="generalNavigator.pushPage('views/general/announcements/announcements.html')">
                 <ons-row align="center" >
-                    <ons-col width="60px" >
+                    <ons-col width="60px" style="text-align: center">
                         <div>
-                            <i class="fa fa-bullhorn iconHomeView" style="color:DarkSlateBlue"></i><span class="notification" ng-show="announcementsUnreadNumber>0">{{announcementsUnreadNumber}}</span>
+                            <ons-icon icon="fa fa-bullhorn" size="2x" style="color:#FFC107"></ons-icon>
                         </div>
                     </ons-col>
                     <ons-col>
@@ -51,41 +37,11 @@
                     </ons-col>
                 </ons-row>
             </ons-list-item>
-            <!--<ons-list-item modifier="chevron" class="item" ng-click="goToPatientCharter()">
-                <ons-row align="center"   >
-                    <ons-col width="60px" align="center">
-                        <div >
-                          <i class="ion-android-list iconHomeView" style="color:SaddleBrown"></i>
-                        </div>
-                    </ons-col>
-                    <ons-col>
-                        <header>
-                            <span class="item-title" ng-class="fontSizeTitle">{{"PATIENTCHARTER"|translate}}</span>
-                        </header>
-                        <p class="item-desc"></p>
-                    </ons-col>
-                </ons-row>
-            </ons-list-item>-->
-            <!-- <ons-list-item modifier="chevron" class="item" ng-click="goToPatientCharter()">
-                <ons-row align="center"   >
-                    <ons-col width="60px" align="center">
-                        <div >
-                          <i class="ion-ios-people iconHomeView" style="color:Teal"></i>
-                        </div>
-                    </ons-col>
-                    <ons-col>
-                        <header>
-                            <span class="item-title" ng-class="fontSizeTitle">Patient Commitee</span>
-                        </header>
-                        <p class="item-desc"></p>
-                    </ons-col>
-                </ons-row>
-            </ons-list-item>-->
             <ons-list-item modifier="chevron" class="item" ng-click="goToParking()">
                 <ons-row align="center"   >
-                    <ons-col width="60px" align="center">
-                        <div >
-                            <i class="fa fa-car iconHomeView" style="color:red"></i>
+                    <ons-col width="60px" style="text-align: center">
+                        <div>
+                            <ons-icon icon="fa fa-car" size="2x" style="color:#f44336"></ons-icon>
                         </div>
                     </ons-col>
                     <ons-col>
@@ -98,9 +54,9 @@
             </ons-list-item>
             <ons-list-item modifier="chevron" class="item" ng-click="generalNavigator.pushPage('views/general/patientsforpatients/patientsforpatients.html')">
                 <ons-row align="center"   >
-                    <ons-col width="60px" align="center">
-                        <div >
-                            <i class="fa fa-users iconHomeView" style="color:orange"></i>
+                    <ons-col width="60px" style="text-align: center">
+                        <div>
+                            <ons-icon icon="fa fa-users" size="2x" style="color:#9575CD"></ons-icon>
                         </div>
                     </ons-col>
                     <ons-col>
@@ -112,10 +68,10 @@
                 </ons-row>
             </ons-list-item>
             <ons-list-item modifier="chevron" class="item" ng-click="generalNavigator.pushPage('views/general/feedback.html')">
-                <ons-row align="center"   >
-                    <ons-col width="60px" align="center">
-                        <div >
-                            <i class="fa fa-thumbs-o-up iconHomeView" style="color:green"></i>
+                <ons-row align="center">
+                    <ons-col width="60px" style="text-align: center">
+                        <div>
+                            <ons-icon icon="fa fa-thumbs-up" size="2x" style="color:#4CAF50"></ons-icon>
                         </div>
                     </ons-col>
                     <ons-col>
@@ -126,23 +82,6 @@
                     </ons-col>
                 </ons-row>
             </ons-list-item>
-            <!-- inject:tab-->
-            <!-- endinject -->
-            <!--<ons-list-item modifier="chevron" class="item" ng-click="reportIssuesMail()">-->
-            <!--<ons-row align="center"   >-->
-            <!--<ons-col width="60px" align="center">-->
-            <!--<div >-->
-            <!--<i class="fa fa-exclamation-circle iconHomeView" style="color:purple"></i>-->
-            <!--</div>-->
-            <!--</ons-col>-->
-            <!--<ons-col>-->
-            <!--<header>-->
-            <!--<span class="item-title" ng-class="fontSizeTitle"> {{"REPORTISSUES"|translate}}</span>-->
-            <!--</header>-->
-            <!--<p class="item-desc"></p>-->
-            <!--</ons-col>-->
-            <!--</ons-row>-->
-            <!--</ons-list-item>-->
         </ons-list>
     </div>
 </ons-page>

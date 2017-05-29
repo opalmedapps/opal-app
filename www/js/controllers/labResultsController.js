@@ -37,9 +37,9 @@ myApp.controller('LabResultsControllerCopy', ['RequestToServer','Notifications',
                         console.log($scope.testResultsByDate);
                         $scope.loading = false;
                     }).catch(function (error) {
-                        $scope.loading = false;
-                        console.log(error);
-                    });
+                    $scope.loading = false;
+                    console.log(error);
+                });
 
             } else {
                 $scope.testResultsByDate = LabResults.getTestResultsArrayByDate();

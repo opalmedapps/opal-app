@@ -22,7 +22,8 @@
         '$filter',
         'Constants',
         'Permissions',
-        'DynamicContentService'
+        'DynamicContentService',
+        'NetworkStatus'
     ];
 
     /* @ngInject */
@@ -33,7 +34,8 @@
         $filter,
         Constants,
         Permissions,
-        DynamicContentService
+        DynamicContentService,
+        NetworkStatus
     ) {
         var vm = this;
         vm.title = 'InitScreenController';
@@ -47,6 +49,8 @@
         vm.reportIssuesMail = reportIssuesMail;
         vm.goToLogin = goToLogin;
 
+        vm.isOnline = true;
+
         activate();
 
         ////////////////
@@ -56,14 +60,15 @@
             // Initialize the service message to all users.
             DynamicContentService.initializeLinks()
                 .then(function (response) {
-                    console.log(response);
                     if(!response.exists){
                         DynamicContentService.setContentData(response.data);
+                    }
+                    else{
+
                     }
                     return DynamicContentService.getPageContent('service');
                 })
                 .then(function successCallback(response) {
-                    console.log(response.data);
                     for (var key in response.data){
                         if(response.data[key] !== ""){
                             vm.globalMessage = key;
@@ -73,14 +78,14 @@
                     }
                 })
                 .catch(function errorCallback(error) {
-                    console.log("There was a problem", error);
+
                 });
 
             //Add the login translation
             $translatePartialLoader.addPart('login');
 
             //Initialize language if not initialized
-            UserPreferences.initializeLanguage()
+            UserPreferences.initializeLanguage();
 
             //Do not show the list breaking, equivalent of ng-cloak for angularjs, LOOK IT UP!!! https://docs.angularjs.org/api/ng/directive/ngCloak
             setTimeout(function(){
@@ -91,7 +96,6 @@
             // Get location permission
             Permissions.enablePermission('ACCESS_FINE_LOCATION', 'LOCATION_PERMISSION_DENIED')
                 .catch(function (response) {
-                    console.log(response);
                     NewsBanner.showCustomBanner($filter('translate')(response.Message), '#333333', function(){}, 5000);
                 });
 

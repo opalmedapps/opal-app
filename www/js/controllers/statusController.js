@@ -22,7 +22,7 @@
         var statusVm = this;
 
         var params =NavigatorParameters.getParameters();
-        var boolStatus = params.Navigator == 'homeNavigator';
+        var boolStatus = params.Navigator === 'homeNavigator';
 
         statusVm.navigator = params.Navigator;  // getting the navigator from the service
         statusVm.viewTitles = [$filter('translate')('TREATMENTPLANNING'), $filter('translate')('TREATMENTSESSION')];
@@ -51,12 +51,9 @@
 
         activate();                             // initializes status page
 
-        console.log(statusVm.events);
-
         function activate()
         {
             //Check for plan completion and populate
-
             PlanningSteps.initializePlanningSequence();
             Logger.sendLog('Treatment Plan', 'all');
 
@@ -99,9 +96,7 @@
         }
 
         function initTreatmentPlanStatus(stages, currentStep){
-            console.log('Inside Status init');
             statusVm.events=stages;
-            console.log(stages);
             statusVm.eventType = 'plan';
             statusVm.totalEvents = 5;
 
@@ -110,20 +105,20 @@
             statusVm.eventIndex = nextStepIndex;
             //statusVm.estimatedTime='3 days';
             //statusVm.finishedTreatment=false;
-            var startColor='#5CE68A';
+            var startColor='#00E676';
             var endColor='#3399ff';
 
             if(stages['CT for Radiotherapy Planning'].length == 0){
                 statusVm.noData=true;
+                statusVm.bg_color = "#F9F9F9"
             }else{
                 if(PlanningSteps.isCompleted()){
                     statusVm.planningCompleted=true;
                     statusVm.percentage=100;
                     statusVm.completionDate=stages['Scheduling Treatments'][stages['Scheduling Treatments'].length-1].DueDateTime;
-                    endColor='#5CE68A';
+                    endColor='#00E676';
                 }else{
                     statusVm.currentEvent=currentStep;
-                    console.log(statusVm.currentEvent);
                     statusVm.planningCompleted=false;
                     statusVm.percentage=Math.floor((100*(nextStepIndex))/stages.length);
                     var lastStageFinishedPercentage=Math.floor((100*(nextStepIndex))/5);
@@ -132,7 +127,6 @@
                 var circleCurrent = new ProgressBarStatus('#progressStatusPresentStage2', statusVm.percentage, startColor, endColor, 2000);
                 var circleCurrent = new ProgressBarStatus('#progressStatusStage', 100, '#ccc', '#ccc', 2000);
             }
-            console.log('initiating');
             var anchor="statusStep"+nextStepIndex;
             setTimeout(function(){
                 $location.hash(anchor);

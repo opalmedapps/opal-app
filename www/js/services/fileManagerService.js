@@ -79,8 +79,7 @@ myApp.service('FileManagerService',function($q, $cordovaFileOpener2,$filter,News
         getFileType:function(url)
         {
             var index = url.lastIndexOf('.');
-            var substring = url.substring(index+1,url.length);
-            return substring;
+            return url.substring(index + 1, url.length);
         },
         //Public function to determine whether a link is a url
         /**
