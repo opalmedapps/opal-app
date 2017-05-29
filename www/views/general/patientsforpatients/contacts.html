@@ -6,7 +6,12 @@
     
     <div class="center">{{"PFP_MEMBERS"|translate}}</div>
   </ons-toolbar>
-  <ons-list>
+   <div ng-show="cont.loading" align="center" style="margin:10px">
+                <svg class="progress-circular">
+                    <circle class="progress-circular__primary" cx="50%" cy="50%" r="40%" fill="none" stroke-width="10%" stroke-miterlimit="10"/>
+                </svg>
+            </div>
+  <ons-list ng-hide="cont.loading">
     <ons-list-header ng-repeat-start="contact in cont.contacts" class="person-list-header" ng-class="fontSizeTitle" ng-show="showHeader($index)">{{contact.role}}</ons-list-header>
       <ons-list-item modifier="chevron" ng-click="generalNavigator.pushPage('./views/general/patientsforpatients/individual-contacts.html',{index:$index,contacts:cont.contacts})" ng-repeat-end>
         <ons-row>

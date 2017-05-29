@@ -11,36 +11,16 @@
         <br>
         {{"LOADINGDATA"|translate}}
     </div>
+    <ons-tabbar class="shadow-2" position="top" animation="fade" var="questionnaire-bar" ng-hide="loading">
+        <ons-tab class="shadow-2" style="background-color:#ECEFF1;" ng-click="getDesiredQuestionnaires('new')" label="{{'QUESTIONNAIRE_NEW'|translate}}" icon="ion-android-star" active="true"></ons-tab>
+        <ons-tab class="shadow-2" style="background-color:#ECEFF1;" ng-click="getDesiredQuestionnaires('progress')" label="{{'QUESTIONNAIRE_IN_PROGRESS'|translate}}" icon="ion-android-create"></ons-tab>
+        <ons-tab class="shadow-2" style="background-color:#ECEFF1;" ng-click="getDesiredQuestionnaires('completed')" label="{{'QUESTIONNAIRE_COMPLETED'|translate}}" icon="ion-android-done"></ons-tab>
+    </ons-tabbar>
 
     <div ng-hide="loading">
-        <div class="ons-row" align="center">
-            <div class="ons-col" align="center">
-                <div class="navigation-bar">
-                    <div class="navigation-bar__center">
-                        <div class="button-bar" style="margin-left: auto; margin-right: auto; margin-top: 7px;">
-                            <div class="button-bar__item">
-                                <input type="radio" name="navi-segment-a" checked ng-click="getDesiredQuestionnaires('new')">
-                                <div class="button-bar__button" ng-class="fontSizeTitle">{{"QUESTIONNAIRE_NEW"|translate}} <div class="notification">{{numQuestionnairesNew}}</div></div>
-                            </div>
-
-                            <div class="button-bar__item">
-                                <input type="radio" name="navi-segment-a" ng-click="getDesiredQuestionnaires('progress')">
-                                <div class="button-bar__button" ng-class="fontSizeTitle">{{"QUESTIONNAIRE_IN_PROGRESS"|translate}} <div class="notification">{{numQuestionnairesInProgress}}</div></div>
-                            </div>
-
-                            <div class="button-bar__item">
-                                <input type="radio" name="navi-segment-a" ng-click="getDesiredQuestionnaires('completed')">
-                                <div class="button-bar__button" ng-class="fontSizeTitle">{{"QUESTIONNAIRE_COMPLETED"|translate}}</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
         <div class="ons-row" align="center" ng-init="refreshQuestionnairesList">
             <div class="ons-col" align="center">
-                <p ng-show="desiredQuestionnaires.length == 0" style="color: grey; margin-top: 10vh;">{{"QUESTIONNAIRE_NONE"|translate}}</p>
+                <p ng-show="desiredQuestionnaires.length == 0" style="color: grey; margin-top: 25vh;" ng-class="fontSizeTitle">{{"QUESTIONNAIRE_NONE"|translate}}</p>
 
                 <ul class="list" ng-show="desiredQuestionnaires.length > 0">
                     <li class="list__item list__item--chevron" ng-repeat="questionnaire in desiredQuestionnaires"

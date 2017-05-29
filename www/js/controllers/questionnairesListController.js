@@ -23,10 +23,15 @@ app1.controller('questionnairesListController', function($scope, $rootScope, Que
 
         Questionnaires.requestQuestionnaires()
             .then(function () {
+
                 $scope.loading = false;
                 $scope.questionnaires = Questionnaires.getPatientQuestionnaires().Questionnaires;
                 $scope.patientQuestionnaires = Questionnaires.getPatientQuestionnaires().PatientQuestionnaires;
                 getBadgeNumbers();
+            },
+            function(error){
+                console.log(JSON.stringify(error));
+                $scope.loading = false;
             })
     }
 

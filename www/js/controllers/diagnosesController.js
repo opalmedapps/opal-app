@@ -32,6 +32,7 @@
         vm.title = 'DiagnosesController';
         vm.diagnoses = [];
         vm.language = '';
+        vm.noDiagnosis = false;
         vm.showHeader = showHeader;
         activate();
 
@@ -40,6 +41,12 @@
         function activate() {
             //load the diagnoses array into view
             vm.diagnoses=Diagnoses.getDiagnoses();
+
+            console.log(vm.diagnoses);
+
+            if(vm.diagnoses.length === 0){
+                vm.noDiagnosis = true;
+            }
             
             //grab the language
             vm.language = UserPreferences.getLanguage();

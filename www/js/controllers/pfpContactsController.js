@@ -6,26 +6,40 @@
         .module('MUHCApp')
         .controller('PfpContactsController', PfpContactsController);
 
-    PfpContactsController.$inject = ['DynamicContentService','NavigatorParameters','RequestToServer'];
-    function PfpContactsController(DynamicContentService,NavigatorParameters,RequestToServer) {
+    PfpContactsController.$inject = ['DynamicContentService','NavigatorParameters','RequestToServer','NativeNotification','$filter','Pfp'];
+    function PfpContactsController(DynamicContentService,NavigatorParameters,RequestToServer,NativeNotification,$filter,Pfp) {
         var vm = this;
        vm.title = 'PfpContactsController';
        vm.navigator = NavigatorParameters.getNavigator();
+       vm.loading = true;
         activate();
 
         ////////////////
 
-        function activate() { 
-            RequestToServer.sendRequestWithResponse('PatientCommitteMembers')
-            .then(function (response) {
-                if (response.Code == '3') {
-                    vm.contacts = response.Data;
-                }
-            })
-            .catch(function (error) 
+        function activate() {
+            if(Pfp.areContactsEmpty())
             {
-                console.log(error);
-            });
+                RequestToServer.sendRequestWithResponse('PatientCommitteMembers')
+                .then(function (response) {
+
+                    if (response.Code == '3') {
+                        vm.loading  = false;
+                        Pfp.setContacts(response.Data);
+                        vm.contacts = response.Data;
+                    }
+                })
+                .catch(function (error) 
+                {
+                    if(error.Code=='2')
+                    {
+                        NativeNotification.showNotificationAlert($filter('translate')("ERRORCONTACTINGHOSPITAL"));
+                    }
+                });
+            }else{
+                vm.loading = false;
+                vm.contacts = Pfp.getContacts();
+            }
+            
                 
         }
 
