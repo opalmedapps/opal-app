@@ -8,13 +8,7 @@
         </div>
     </ons-toolbar>
 
-    <ons-pull-hook ng-action="h.load($done)" var="loader" >
-            <span ng-switch="loader.getCurrentState()">
-            <span ng-switch-when="initial"><ons-icon size="35px" spin="true" icon="ion-load-d"></ons-icon> {{"LOADINGDATA"|translate}}...</span>
-            <span ng-switch-when="preaction"><ons-icon size="35px" spin="true" icon="ion-load-d"></ons-icon> {{"LOADINGDATA"|translate}}...</span>
-            <span ng-switch-when="action"><ons-icon size="35px" spin="true" icon="ion-load-d"></ons-icon> {{"LOADINGDATA"|translate}}...</span>
-            </span>
-    </ons-pull-hook>
+    <network-banner></network-banner>
 
     <div>
         <div style="position:relative;z-index:1">
@@ -29,7 +23,6 @@
                         <div>
                             <p class="text-center">
                                 <strong ng-class="fontSizeTitle" style="color:white">{{h.FirstName}} {{h.LastName}}</strong><br>
-
                                 <!--<span style="color:white" ng-class="fontSizeDesc"> {{"PATIENTID"|translate}} {{h.PatientId}}</span><br>-->
                             </p>
                         </div>
@@ -38,35 +31,38 @@
             </div>
         </div>
 
-        <div style="margin-top:0px;position:relative;z-index:3;padding-top:0px;" >
-
+        <div style="margin-top:0;position:relative;z-index:3;padding-top:0;" >
+            <!-- LEARN MORE ABOUT OPAL -->
             <ons-list style="margin-top:5px;position:relative;z-index:2">
+                <ons-list-header class="person-list-header" ng-class="fontSizeTitle">Opal</ons-list-header>
                 <ons-list-item modifier="chevron tappable" class="item" ng-click="homeNavigator.pushPage('views/home/about/about.html')">
                     <ons-row align="center">
                         <ons-col width="60px" align="center" style="text-align: center">
-                            <i class="fa fa-info fa-2x" style="color: darkblue"></i>
+                            <img style="width: 60px;" src="img/Opal_Logo_Transparent_Inverse.png">
                         </ons-col>
                         <ons-col>
+
                             <header>
                                 <span class="item-title" ng-class="fontSizeTitle">{{"OPAL_ABOUT"|translate}}</span>
                             </header>
+
                             <!--<p class="item-desc" ng-class="fontSizeDesc">{{appointment.ScheduledStartTime|formatDateAppointmentTask}} </p>-->
                             <!--<p class="item-desc" ng-class="fontSizeDesc" style="color:orange" ng-show ="checkinEstimate&&showHomeScreenUpdate">{{"ESTIMATEDWAIT"|translate}}: {{checkinEstimate}} minutes</p>-->
                         </ons-col>
                     </ons-row>
                 </ons-list-item>
-                <!--CHECKIN TO APPOINTMENTS-->
+                <!--CHECK-IN TO APPOINTMENTS-->
                 <ons-list-header class="person-list-header" ng-class="fontSizeTitle">{{"OVERVIEW"|translate}}</ons-list-header>
                 <ons-list-item modifier="tappable chevron" class="item" ng-click="h.goToCheckinAppointments(h.todaysAppointments)">
                     <ons-row align="center">
                         <ons-col width="60px" style="text-align: center">
                             <div>
-                                <i class="fa fa-check-square-o fa-2x" style="color:orange"></i><span class="notification" ng-hide="h.allCheckedIn">1</span>
+                                <i class="fa fa-check-square-o fa-2x" style="color:#4CAF50"></i><span class="notification" ng-hide="h.allCheckedIn">1</span>
                             </div>
                         </ons-col>
                         <ons-col>
                             <header>
-                                <span class="item-title" ng-class="fontSizeTitle">{{"CHECKIN"|translate}}</span>
+                                <span style="margin-top: 0" class="item-title" ng-class="fontSizeTitle">{{"CHECKIN"|translate}}</span>
                             </header>
                             <p class="item-desc" ng-class="fontSizeDesc">{{h.checkInMessage|translate}} {{RoomLocation}}</p>
                             <p class="item-desc" ng-class="fontSizeDesc">{{h.calledApp["AppointmentType_"+h.language]}}</p>
@@ -74,12 +70,12 @@
                         </ons-col>
                     </ons-row>
                 </ons-list-item>
-                <!-- APPOINTMENT INFORMATION-->
+                <!-- APPOINTMENT STATUS-->
                 <ons-list-item modifier="chevron" class="item" ng-click="h.goToAppointments()">
                     <ons-row align="center">
                         <ons-col width="60px" style="text-align: center">
                             <div>
-                                <i class="fa fa-calendar-o fa-2x" style="color: #0a6ebd"></i>
+                                <i class="fa fa-calendar fa-2x" style="color: #ffc107"></i>
                             </div>
                         </ons-col>
                         <ons-col>
@@ -92,19 +88,19 @@
                         </ons-col>
                     </ons-row>
                 </ons-list-item>
-                <!--STATUS-->
+                <!--TREATMENT PLANNING STATUS-->
                 <ons-list-item modifier="chevron" class="item" ng-show="h.statusDescription" ng-click="h.goToStatus()">
                     <ons-row align="center">
                         <ons-col width="60px" align="center" style="text-align: center">
                             <div>
-                                <i class="fa fa-medkit fa-2x" style="color:darkgreen"></i>
+                                <i class="fa fa-medkit fa-2x" style="color:#03a9f4"></i>
                             </div>
                         </ons-col>
                         <ons-col>
                             <header>
                                 <span class="item-title" ng-class="fontSizeTitle">{{"STATUS"|translate}}</span>
                             </header>
-                            <p class="item-desc" ng-class="fontSizeDesc" translate ="{{h.statusDescription}}"></p>
+                            <p class="item-desc" ng-class="fontSizeDesc" translate="{{h.statusDescription}}"></p>
                         </ons-col>
                     </ons-row>
                 </ons-list-item>

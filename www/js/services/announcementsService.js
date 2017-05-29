@@ -68,6 +68,7 @@
          **/
         function setAnnouncements(announcements)
         {
+            console.log("setting last updated");
             //Cleaning the announcements array
             announcementsArray=[];
             //Adding annoucements
@@ -112,6 +113,8 @@
          **/
         function getUnreadAnnouncements()
         {
+
+            console.log("at unread announcements..");
             //Initializing array to return
             var array=[];
             //Iterating and finding annoucements that have not been read

@@ -3,7 +3,7 @@
         <div class="left"><ons-back-button>{{"BACK"|translate}}</ons-back-button></div>
         <div class="center">{{"APPOINTMENT"|translate}}</div>
     </ons-toolbar>
-    <div style="margin-top:5px">
+    <div style="border-top: 1px solid lightsteelblue">
         <ons-list >
             <ons-list-item class="item" >
                 <div style="line-height:1" align="left">
@@ -16,14 +16,11 @@
                     </p>
                 </div>
             </ons-list-item>
-            <ons-list-item modifier="chevron" tappable ng-click="goToMap()">
-                <p class="item-desc" ng-class="fontSizeDesc">{{app["MapName_"+language]|ellipsis:25}}</p>
+            <ons-list-item tappable ng-click="goToMap()" ng-class="fontSizeDesc">
+                <strong class="item-desc" ng-class="fontSizeDesc">{{app["MapName_"+language]|ellipsis:25}}</strong><ons-icon style="margin-top: 3%" class="pull-right" icon="ion-ios-arrow-forward"></ons-icon>
             </ons-list-item>
-
-            <ons-list-item tappable ng-click="aboutApp()" ng-class="fontSizeDesc">
-                <button class="button button--large--quiet"  >
-                    {{"APPOINTMENT_ABOUT"|translate}}
-                </button >
+            <ons-list-item style="background-color:  #E3F2FD" tappable ng-click="aboutApp()" ng-class="fontSizeDesc">
+                <strong class="item-desc">{{"APPOINTMENT_ABOUT" | translate}} {{title}} </strong> <ons-icon style="margin-top: 3%" class="pull-right" icon="ion-ios-arrow-forward"></ons-icon>
             </ons-list-item>
         </ons-list>
 

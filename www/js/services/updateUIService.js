@@ -375,7 +375,7 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors',
             RequestToServer.sendRequestWithResponse('Refresh',{Fields:parameters}).then(
                 function(data)
                 {
-                    if(data.Data =="Empty")
+                    if(data.Data === "Empty")
                     {
                         updateTimestamps(parameters, data.Timestamp);
                         r.resolve(true);
@@ -389,7 +389,7 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors',
                 }).catch(function(error)
             {
                 console.log(error);
-                if(error.Code =='2'||error.Response == 'timeout') NativeNotification.showNotificationAlert($filter('translate')("ERRORCONTACTINGHOSPITAL"));
+                if(error.Code ==='2'||error.Response === 'timeout') NativeNotification.showNotificationAlert($filter('translate')("ERRORCONTACTINGHOSPITAL"));
                 r.reject(error);
             });
             return r.promise;

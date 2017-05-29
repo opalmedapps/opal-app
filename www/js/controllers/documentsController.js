@@ -33,6 +33,9 @@
 
             var documents = Documents.getDocuments();
             documents = Documents.setDocumentsLanguage(documents);
+
+            console.log(documents);
+
             if(documents.length > 0) vm.noDocuments=false;
             vm.documents = $filter('orderBy')(documents,'documents.CreatedTimeStamp');
 
@@ -61,7 +64,7 @@
                 var current = (new Date(vm.documents[index].CreatedTimeStamp)).setHours(0,0,0,0);
                 return (current !== previous);
             }
-        };
+        }
 
     }
 
@@ -91,6 +94,8 @@ myApp.controller('SingleDocumentController', ['NavigatorParameters','Documents',
         $scope.rendering = true;
         $scope.loading = true;
         $scope.errorDownload = false;
+        $scope.show = false;
+        $scope.hide = false;
 
         //Log usage
         Logger.sendLog('Document', docParams.DocumentSerNum);
@@ -112,16 +117,13 @@ myApp.controller('SingleDocumentController', ['NavigatorParameters','Documents',
 
         function initializeDocument(document)
         {
-            console.log(document);
 
             if (Documents.getDocumentBySerNum(document.DocumentSerNum).Content){
-                console.log("on device");
                 setUpPDF(document);
             }
 
             else {
                 Documents.downloadDocumentFromServer(document.DocumentSerNum).then(function () {
-                    console.log("request to server");
                     setUpPDF(document);
                 }).catch(function (error) {
                     //Unable to get document from server
@@ -141,29 +143,26 @@ myApp.controller('SingleDocumentController', ['NavigatorParameters','Documents',
             PDFJS.getDocument(uint8pf)
                 .then(function (_pdfDoc) {
 
-                    console.log(window.innerHeight, window.innerWidth);
-
                     var promises = [];
 
                     for (var num = 1; num <= _pdfDoc.numPages; num++) {
                         promises.push(renderPage(_pdfDoc, num, containerEl));
                     }
                     pdfdoc = _pdfDoc;
+
                     //$scope.rendering=true;
                     return $q.all(promises);
                 })
                 .then(function () {
+
                     var canvasElements = containerEl.getElementsByTagName("canvas");
-                    console.log(canvasElements);
                     var viewerScale = viewerSize / canvasElements[0].width * 0.95 * 100 + "%";
                     // var translateY = canvasElements[0].height*(1-viewerSize/canvasElements[0].width);
                     for (var i = 0; i != canvasElements.length; ++i) {
                         canvasElements[i].style.zoom = viewerScale;
                         canvasElements[i].onclick = function (event) {
-                            console.log(event);
                             if (Constants.app) {
                                 if (ons.platform.isAndroid()) {
-                                    console.log('got android');
                                     convertCanvasToImage(event.srcElement);
                                     // docParams.src = event.srcElement.toDataURL("image/png");
                                     // cordova.InAppBrowser.open(docParams.src, '_system', 'location=no')
@@ -176,8 +175,12 @@ myApp.controller('SingleDocumentController', ['NavigatorParameters','Documents',
                             }
                         }
                     }
+
                     $scope.rendering = false;
                     $scope.loading = false;
+                    $scope.show = true;
+                    $timeout(function(){$scope.hide = true}, 5000);
+                    $timeout(function(){$scope.show = false}, 6500);
                     $scope.$apply();
                 });
         }
@@ -185,7 +188,6 @@ myApp.controller('SingleDocumentController', ['NavigatorParameters','Documents',
         function convertCanvasToImage(canvas) {
             var image = new Image();
             image.onload = function(){
-                console.log('inside onload');
                 cordova.InAppBrowser.open(image.src, '_blank', 'location=no,enableViewportScale=true');
             };
             image.src = canvas.toDataURL("image/jpeg", 0.5);
@@ -234,12 +236,10 @@ myApp.controller('SingleDocumentController', ['NavigatorParameters','Documents',
             canvas.width = scaledViewport.width;
             //console.log(canvas);
             // Render PDF page into canvas context
-            var renderContext = {
+            return {
                 canvasContext: ctx,
                 viewport: scaledViewport
             };
-
-            return renderContext;
         }
 
         // function simply sets document for showing
@@ -247,7 +247,7 @@ myApp.controller('SingleDocumentController', ['NavigatorParameters','Documents',
         {
             console.log(url);
             //Determine if its a pdf or an docParams for small window preview.
-            if(document.DocumentType=='pdf')
+            if(document.DocumentType ==='pdf')
             {
                 document.PreviewContent=(ons.platform.isIOS()&&app)?url.cdvUrl:'./img/pdf-icon.png';
             }else{
@@ -303,8 +303,8 @@ myApp.controller('SingleDocumentController', ['NavigatorParameters','Documents',
 
                 }).catch(function(error)
                 {
-                    console.log('Unable to save document on device',error);
                     //Unable to save document on server
+                    console.log('Unable to save document on device',error);
                 });
 
             } else {
@@ -313,7 +313,6 @@ myApp.controller('SingleDocumentController', ['NavigatorParameters','Documents',
             }
         };
 
-        console.log(FileManagerService);
 
 
         //Open document function: Opens document depending on the format

@@ -136,7 +136,7 @@ myApp.service('Questionnaires', ['RequestToServer','$filter', 'Patient','LocalSt
                 if(typeof questionnaireAnswers[questionnaireSerNum] !== 'undefined') {
                     return questionnaireAnswers[questionnaireSerNum].CompletedFlag;
                 } else {
-                    return questionnairesObject[questionnaireSerNum].CompletedFlag;;
+                    return questionnairesObject[questionnaireSerNum].CompletedFlag;
                 }
             },
             isQuestionnaireInProgress:function(questionnaireSerNum) {
@@ -166,12 +166,16 @@ myApp.service('Questionnaires', ['RequestToServer','$filter', 'Patient','LocalSt
                             _this.setPatientQuestionnaires(response.Data);
                             deferred.resolve({Success: true, Location: 'Server'});
                         }
-                    })
-                    .catch(function (error) {
-                        console.log('There was an error contacting hospital ' + error);
-                        deferred.reject({Success: false, Location: '', Error: error})
+                    },
+                    function (error) {
+                        console.log('There was an error contacting hospital ' + JSON.stringify(error));
+                        deferred.reject({Success: false, Location: '', Error: error});
+                        console.log("returning");
+
                     });
+
                 return deferred.promise;
+
             }
         };
     }]);

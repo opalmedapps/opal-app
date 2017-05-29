@@ -134,7 +134,7 @@ myApp.config(['$urlRouterProvider', '$stateProvider', function ($urlRouterProvid
                 // Auth refers to our $firebaseAuth wrapper in the example above
                 "currentAuth": ["FirebaseService", function(FirebaseService) {
                     // $requireSignIn returns a promise so the resolve waits for it to complete
-                    console.log(FirebaseService.getAuthentication().$requireSignIn());
+                    // console.log(FirebaseService.getAuthentication().$requireSignIn());
                     return FirebaseService.getAuthentication().$requireSignIn();
                 }]
             }
@@ -193,13 +193,23 @@ myApp.config(['$qProvider', function ($qProvider) {
  *@description Service is in charge of checking that the user is authorized at every state change by checking the parameters stored
  in the Firebase localstorage,  Check run service on angular {{link}}
  **/
-myApp.run(function ($state, $stateParams,$q, $rootScope,$translate, Patient,$location) {
+myApp.run(function ($state, $stateParams,$q, $rootScope,$translate, Patient,$location, NetworkStatus) {
+
+    var isOffline = 'onLine' in navigator && !navigator.onLine;
+
+    if ( isOffline ) {
+        console.log("is offline on load!");
+       NetworkStatus.setStatus(false);
+    }
+    else {
+        NetworkStatus.setStatus(true);
+    }
 
 
     $rootScope.$on('$stateChangeStart',function(event,toState,toParams)
     {
         var serialNum = Patient.getUserSerNum();
-        if((typeof serialNum =='undefined'|| serialNum === '')&&toState.name == 'Home')
+        if((typeof serialNum =='undefined'|| serialNum === '')&&toState.name === 'Home')
         {
             $location.path('/init');
         }
@@ -210,7 +220,6 @@ myApp.run(function ($state, $stateParams,$q, $rootScope,$translate, Patient,$loc
     $rootScope.$state = $state;
     $rootScope.$stateParams = $stateParams;
     $rootScope.$on("$stateChangeError", function(event, toState, toParams, fromState, fromParams, error) {
-        console.log(error);
         // We can catch the error thrown when the $requireSignIn() promise is rejected
         // and redirect the user back to the home page
         $state.go('init');

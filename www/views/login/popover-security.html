@@ -1,8 +1,9 @@
 <ons-modal var="securityModal">
     <div id="rcorners">
-        <i class="ion-locked" style="font-size:80px"></i>
-        <p>{{"SECURE_PHONE"|translate}}</p>
+        <h3 style="margin-top: -3%">Attention!</h3>
+        <i class="ion-locked" style="font-size:60px"></i>
+        <p style="margin-top: 5%"><small>{{"SECURE_PHONE"|translate}}</small></p>
         <p><small>{{"UNATTENDED"|translate}}</small></p>
-        <ons-button ng-click="securityModal.hide()">{{"CLOSE"|translate}}</ons-button>
+        <ons-button style="margin-top: 5%" ng-click="securityModal.hide()">{{"CLOSE"|translate}}</ons-button>
     </div>
 </ons-modal>

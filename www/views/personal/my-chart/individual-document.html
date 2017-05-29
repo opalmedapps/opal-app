@@ -1,6 +1,6 @@
 <ons-page ng-controller="SingleDocumentController">
     <ons-toolbar fixed-style>
-        <div class="left"><ons-back-button>{{"BACK"|translate}}</ons-back-button></div>
+        <div class="left"><ons-back-button ng-hide="loading">{{"BACK"|translate}}</ons-back-button></div>
         <div class="center">{{documentObject.Title|limitTo:25}}{{documentObject.Title.length > 25 ? '...' : ''}}</div>
         <div class="right">
             <ons-toolbar-button ng-click="popoverDocsInfo.show('#buttonDocInfo')" id="buttonDocInfo">
@@ -17,12 +17,16 @@
     </div>
 
     <div ng-show="errorDownload">
-        <p clas="lucent">{{"ERROROBTAININGDOCUMENT"|translate}}</p>
+        <p class="lucent">{{"ERROROBTAININGDOCUMENT"|translate}}</p>
     </div>
+
+    <div class="popup">
+        <span class="popuptext" ng-class="{'popup-show' : show, 'popup-hide': hide}">{{"TAPTOZOOM"| translate}}</span>
+    </div>
+
 
     <!--<div class="content-scrollable" ng-hide="loading||rendering" align="center" style="margin-top: 5px" style="width: 100%;">-->
         <!--<canvas id="the-canvas" style="border:1px solid black" style="width:inherit;"></canvas>-->
     <!--</div>-->
-    <div id="holder" ng-hide="loading||rendering" align="center">
-    </div>
+    <div id="holder" ng-hide="loading||rendering" align="center"></div>
 </ons-page>

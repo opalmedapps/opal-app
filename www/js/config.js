@@ -1,4 +1,4 @@
-myApp.config(fireConfig)
+myApp.config(fireConfig);
 
 fireConfig.$inject = [];
 

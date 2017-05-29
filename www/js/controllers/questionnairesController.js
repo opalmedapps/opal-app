@@ -14,12 +14,14 @@ myApp.controller('QuestionsController', ['Questionnaire','$scope', '$sce', funct
 		{
 			$scope.popover.show(id);
 		}
-	}
+	};
+
 	ons.createPopover('./views/personal/questionnaires/popover.html').then(function(popover){
 		console.log(popover);
 		$scope.popover = popover;
 		
 	});
+
 	$scope.Questions = Questionnaire.getQuestions();
 	$scope.maxNumberOfQuestions = Questionnaire.getMaxQuestions();
 	$scope.toSafeHTML = function(question){
