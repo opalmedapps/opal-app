@@ -33,6 +33,9 @@
 
             var documents = Documents.getDocuments();
             documents = Documents.setDocumentsLanguage(documents);
+
+            console.log(documents);
+
             if(documents.length > 0) vm.noDocuments=false;
             vm.documents = $filter('orderBy')(documents,'documents.CreatedTimeStamp');
 
