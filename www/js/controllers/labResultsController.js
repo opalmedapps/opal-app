@@ -3,22 +3,25 @@ myApp.controller('LabResultsControllerCopy', ['RequestToServer','Notifications',
     '$timeout','$rootScope', 'UserPreferences', 'LabResults', '$q', 'NewsBanner', '$filter',
     function (RequestToServer, Notifications, UpdateUI, $scope,
               $timeout,$rootScope, UserPreferences, LabResults, $q, NewsBanner,$filter) {
-            "use strict";
+
 
         $scope.loading = true;
-        $scope.noLabResults = false;
+
         // Refresh button
         $scope.refresh = function () {
             // Only allowed to refresh once every 60s.
             if(LabResults.getLastUpdated() < Date.now() - 60000) {
                 $scope.loading = true;
                 LabResults.setTestResults().then(function () {
+                    "use strict";
                     $scope.loading = false;
+                    console.log("updated");
                 }).catch(function (error) {
                     $scope.loading = false;
                     console.log(error);
                 });
             } else {
+                console.log('wait 60 s');
                 NewsBanner.showCustomBanner($filter('translate')("REFRESH_WAIT"), '#333333', function(){}, 3000);
             }
         };
@@ -26,41 +29,24 @@ myApp.controller('LabResultsControllerCopy', ['RequestToServer','Notifications',
         activate();
 
         function activate() {
-
             // Check if the data is 300s old if it is get again
             if(LabResults.getLastUpdated() < Date.now() - 300000){
                 LabResults.setTestResults()
                     .then(function () {
                         $scope.testResultsByDate = LabResults.getTestResultsArrayByDate();
-
-
-                        console.log("array length " + $scope.testResultsByDate.length);
-
-
-                        if($scope.testResultsByDate.length === 0){
-
-                            console.log("made it ");
-                            $scope.noLabResults = true;
-                        }
-
+                        console.log($scope.testResultsByDate);
                         $scope.loading = false;
                     }).catch(function (error) {
-                        $scope.loading = false;
-                        console.log(error);
-                    });
+                    $scope.loading = false;
+                    console.log(error);
+                });
 
             } else {
                 $scope.testResultsByDate = LabResults.getTestResultsArrayByDate();
-
-                if($scope.testResultsByDate.length === 0){
-                    $scope.noLabResults = true;
-                }
-
+                console.log($scope.testResultsByDate);
                 $scope.loading = false;
             }
         }
-
-        console.log($scope.noLabResults)
 
     }]);
 
@@ -68,15 +54,9 @@ myApp.controller('ByDateTestsController',['$scope','$timeout','LabResults','$fil
     function($scope,$timeout,LabResults,$filter,Logger){
         //Initializing option
 
-        $scope.noLabResults = false;
-
         $scope.radioModel='All';
         $scope.selectedTests=LabResults.getTestResultsArrayByDate();
-
-        if($scope.testResultsByDate.length === 0){
-            $scope.noLabResults = true;
-        }
-
+        console.log($scope.selectedTests[0]);
         $scope.testsReceived = 'Lab results';
         Logger.sendLog('Lab Results', 'all - Date');
 
@@ -97,19 +77,15 @@ myApp.controller('ByDateTestsController',['$scope','$timeout','LabResults','$fil
         vm.title = 'CategoryLabTestController';
         vm.testResultsByCategory = null;
 
-        vm.noLabResults = false;
-
         activate();
 
         ////////////////
 
         function activate() {
             vm.testResultsByCategory = LabResults.getTestResultsByCategory();
+            console.log(vm.testResultsByCategory);
             vm.testResultsByType = LabResults.getTestResultsArrayByType();
-
-            if(vm.testResultsByCategory.length === 0){
-                vm.noLabResults = true;
-            }
+            console.log(vm.testResultsByType);
             Logger.sendLog('Lab Results', 'all - Type')
         }
     }
@@ -145,7 +121,7 @@ myApp.controller('TimelineTestComponentController',['$scope','$timeout','LabResu
         var page = personalNavigator.getCurrentPage();
         var test = page.options.param;
 
-        // console.log("test: " + JSON.stringify(test));
+        console.log(test);
         $scope.selectedTest = test;
         $scope.testName = test.ComponentName || test.testResults[0].ComponentName;
         $scope.title = $scope.selectedTest.FacComponentName || $scope.selectedTest.testName;
@@ -177,7 +153,7 @@ myApp.controller('TimelineTestComponentController',['$scope','$timeout','LabResu
             } else {
                 window.open(url);
             }
-        };
+        }
 
         // Chart
         $scope.data = [{
@@ -194,25 +170,6 @@ myApp.controller('TimelineTestComponentController',['$scope','$timeout','LabResu
             reformedData.push(dv);
         }
 
-
-        /**
-         * @return {number}
-         */
-        reformedData.sort(function(a, b) {
-            return a[0] > b[0] ? 1 : -1;
-        });
-
-        //filters out all falsey values (i.e. null and NAN) since this throws an error with highgraph
-        function remove(arr) {
-            return arr.filter(Boolean);
-        }
-
-        tempList = [];
-
-        for(var point in reformedData)
-
-        console.log(reformedData);
-
         /*********************************************
          * FINDING THE MAX AND MIN VALUES FOR CHARTING
          *********************************************/
@@ -222,6 +179,8 @@ myApp.controller('TimelineTestComponentController',['$scope','$timeout','LabResu
         },[]);
         var maxChart = Math.max.apply(Math, vals)*1.05;
         var minChart = Math.min.apply(Math, vals)*0.95;
+
+        console.log("Chart range", minChart, maxChart);
 
         /**********************************************/
 
@@ -249,7 +208,7 @@ myApp.controller('TimelineTestComponentController',['$scope','$timeout','LabResu
 
         // Sample options for first chart
 
-        if (UserPreferences.getLanguage() === 'FR')
+        if (UserPreferences.getLanguage() == 'FR')
         {
             Highcharts.setOptions({
                 lang: {
