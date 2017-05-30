@@ -12,9 +12,24 @@
         {{"LOADINGDATA"|translate}}
     </div>
     <ons-tabbar class="shadow-2" position="top" animation="fade" var="questionnaire-bar" ng-hide="loading">
-        <ons-tab class="shadow-2" style="background-color:#ECEFF1;" ng-click="getDesiredQuestionnaires('new')" label="{{'QUESTIONNAIRE_NEW'|translate}}" icon="ion-android-star" active="true"></ons-tab>
-        <ons-tab class="shadow-2" style="background-color:#ECEFF1;" ng-click="getDesiredQuestionnaires('progress')" label="{{'QUESTIONNAIRE_IN_PROGRESS'|translate}}" icon="ion-android-create"></ons-tab>
-        <ons-tab class="shadow-2" style="background-color:#ECEFF1;" ng-click="getDesiredQuestionnaires('completed')" label="{{'QUESTIONNAIRE_COMPLETED'|translate}}" icon="ion-android-done"></ons-tab>
+        <ons-tab active="true" ng-click="getDesiredQuestionnaires('new')" class="shadow-2" style="background-color:#ECEFF1;">
+            <div class="tab" ng-class="fontSizeDesc">
+                <ons-icon icon="ion-android-star" class="tab-icon"></ons-icon>
+                <div class="tab-label" style="font-size: 13px !important;">{{'QUESTIONNAIRE_NEW'|translate}}</div>
+            </div>
+        </ons-tab>
+        <ons-tab active="true" ng-click="getDesiredQuestionnaires('progress')" class="shadow-2" style="background-color:#ECEFF1;">
+            <div class="tab" ng-class="fontSizeDesc">
+                <ons-icon icon="ion-android-create" class="tab-icon"></ons-icon>
+                <div class="tab-label" style="font-size: 13px !important;">{{'QUESTIONNAIRE_IN_PROGRESS'|translate}}</div>
+            </div>
+        </ons-tab>
+        <ons-tab active="true" ng-click="getDesiredQuestionnaires('completed')" class="shadow-2" style="background-color:#ECEFF1;">
+            <div class="tab" ng-class="fontSizeDesc">
+                <ons-icon icon="ion-android-done" class="tab-icon"></ons-icon>
+                <div class="tab-label" style="font-size: 13px !important;">{{'QUESTIONNAIRE_COMPLETED'|translate}}</div>
+            </div>
+        </ons-tab>
     </ons-tabbar>
 
     <div ng-hide="loading">
