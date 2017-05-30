@@ -188,12 +188,16 @@ myApp.controller('ChangingSettingController',
         $scope.updateValue = function(val) {
             var objectToSend = {};
             objectToSend.NewValue = $scope.newValue;
-
             console.log(val);
 
-            if (val == 'Password') {
+
+            if (val.toUpperCase() === 'PASSWORD') {
+
+                console.log("should be changing password");
+
+
                 changePassword();
-            } else if (val == 'Email') {
+            } else if (val.toUpperCase() === 'EMAIL') {
                 changeEmail();
             }else{
                 changeField(val, $scope.newValue);
@@ -203,12 +207,12 @@ myApp.controller('ChangingSettingController',
         //Function to change Nickname and phone number
         function changeField(type, value)
         {
-            var typeVal = (type == 'Nickname')?'Alias':'TelNum';
+            var typeVal = (type.toUpperCase() === 'NICKNAME')?'Alias':'TelNum';
             var objectToSend = {};
             objectToSend.NewValue = value;
             objectToSend.FieldToChange = typeVal;
             RequestToServer.sendRequest('AccountChange', objectToSend);
-            if (type == 'Nickname') Patient.setAlias(value);
+            if (type.toUpperCase() === 'NICKNAME') Patient.setAlias(value);
             else Patient.setTelNum(value);
             $scope.actualValue = value;
             $scope.newUpdate = true;

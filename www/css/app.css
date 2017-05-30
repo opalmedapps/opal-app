@@ -2660,6 +2660,20 @@ input:focus {
 }
 
 
+@media only screen and (min-device-width : 320px)  and (max-device-width : 56px) {
+
+ }
+
+@media only screen
+and (min-device-width : 320px)
+and (max-device-width : 568px)
+{
+    .secure-message, .unattended-message{
+        font-size: 14px;
+    }
+}
+
+
 
 /* MATERIAL DESIGN */
 .shadow-2 {
