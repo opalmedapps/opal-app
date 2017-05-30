@@ -189,6 +189,8 @@ myApp.controller('ChangingSettingController',
             var objectToSend = {};
             objectToSend.NewValue = $scope.newValue;
 
+            console.log(val);
+
             if (val == 'Password') {
                 changePassword();
             } else if (val == 'Email') {
@@ -243,7 +245,6 @@ myApp.controller('ChangingSettingController',
             }).catch(handleAuthenticationError);
 
             function updateOnServer(){
-                console.log('sending on server.');
                 var objectToSend = {};
                 objectToSend.FieldToChange = 'Password';
                 objectToSend.NewValue = $scope.newValue;
