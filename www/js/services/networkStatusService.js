@@ -43,12 +43,10 @@
         }
 
         function isOnline(){
-            console.log("is online: " + online);
             return online;
         }
 
         function setStatus(state){
-            console.log("being set in service");
             online = state;
             notifyObservers();
         }

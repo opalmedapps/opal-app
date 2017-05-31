@@ -110,6 +110,7 @@
 
             if(stages['CT for Radiotherapy Planning'].length == 0){
                 statusVm.noData=true;
+                statusVm.bg_color = "#F9F9F9"
             }else{
                 if(PlanningSteps.isCompleted()){
                     statusVm.planningCompleted=true;

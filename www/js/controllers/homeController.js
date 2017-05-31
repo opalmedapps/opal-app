@@ -7,17 +7,17 @@
 
     HomeController.$inject = [
         'Appointments', 'CheckInService', 'Patient',
-        'UpdateUI', '$timeout','$filter', '$location','Notifications','NavigatorParameters','NativeNotification',
+        'UpdateUI','$scope', '$timeout','$filter', '$location','Notifications','NavigatorParameters','NativeNotification',
         'NewsBanner','DeviceIdentifiers','$anchorScroll', 'PlanningSteps', 'Permissions',
-        'UserPreferences', 'Constants', 'Logger'
+        'UserPreferences', 'Constants', 'Logger', 'NetworkStatus'
     ];
 
     /* @ngInject */
     function HomeController(
         Appointments, CheckInService, Patient,
-        UpdateUI, $timeout, $filter, $location, Notifications, NavigatorParameters, NativeNotification,
+        UpdateUI,$scope, $timeout, $filter, $location, Notifications, NavigatorParameters, NativeNotification,
         NewsBanner, DeviceIdentifiers, $anchorScroll, PlanningSteps, Permissions,
-        UserPreferences, Constants, Logger)
+        UserPreferences, Constants, Logger, NetworkStatus)
     {
         var vm = this;
         vm.title = 'HomeController';
@@ -72,10 +72,19 @@
             // Refresh the page on coming back from checkin
             homeNavigator.on('prepop', function(event) {
                 if (event.currentPage.name == "./views/home/checkin/checkin-list.html") {
-                    console.log('prepop');
-                    setUpCheckin();
-                    //refresh();
+                    if(NetworkStatus.isOnline()) {
+                        setUpCheckin();
+                    }
                 }
+
+            });
+            homeNavigator.on('prepush',function(event){
+            if(event.navigator._isPushing) event.cancel();       
+            });
+            $scope.$on('$destroy',function()
+            {
+                homeNavigator.off('prepop');
+                homeNavigator.off('prepush');
             });
 
             Permissions.enablePermission('WRITE_EXTERNAL_STORAGE', 'PERMISSION_STORAGE_DENIED')
@@ -85,7 +94,9 @@
                 });
 
             // Initialize the page data
-            homePageInit();
+            if(NetworkStatus.isOnline()){
+                homePageInit();
+            }
         }
 
         function homePageInit()
@@ -352,6 +363,7 @@
             }
             return "";
         }
+        
 
     }
 

@@ -9,33 +9,43 @@
  *                  file 'LICENSE.txt', which is part of this source code package.
  */
 
-angular.module('MUHCApp').directive('networkBanner', ['NetworkStatus', function() {
-    return function($timeout, $scope, NetworkStatus) {
+angular.module('MUHCApp')
+    .directive('networkBanner', function($timeout, NetworkStatus, $filter) {
 
-        $scope.message = "You are currently offline. Please check your internet connection.";
+    return {
+        restrict: 'E',
+        scope: {},
+        template: "<div ng-cloak ng-hide=\" online\" style=\"text-align: center; background-color:black;opacity:0.7;color:white;height:30px;width:100vw\"><ons-icon ng-hide=\"online_temp\" style=\"margin-right: 3px\" icon='ion-alert-circled'></ons-icon><small>{{ message | translate }}</small></div>",
+        link: function(scope) {
+            //observer for the network state
+            var updateStatus = function(){
 
-        $scope.goingBackOnline = false;
-        $scope.wasOffline = false;
-        $scope.online = true;
+                scope.wasOffline = !scope.online;
+                scope.online_temp = NetworkStatus.isOnline();
 
-        //observer for the network state
-        var isOnline = function(){
-            $scope.wasOffline = !$scope.online;
-            $scope.online = NetworkStatus.isOnline;
+                if(scope.online_temp === false){
+                    scope.online = NetworkStatus.isOnline();
+                }
 
-            //this renders the "Reconnecting message" if switching from an offline state to an online state.
-            $scope.goingBackOnline = $scope.wasOffline && $scope.online;
+                //this renders the "Reconnecting message" if switching from an offline  `state to an online state.
+                scope.goingBackOnline = scope.wasOffline && scope.online_temp;
 
-            if($scope.goingBackOnline){
-                $scope.message = "Reconnecting...";
-                $timeout(function(){$scope.goingBackOnline = false}, 3000);
-            }
-        };
+                if(scope.goingBackOnline){
+                    scope.message = "RECONNECTING";
+                    $timeout(function(){
+                        scope.goingBackOnline = false;
+                        scope.online = true;
+                        scope.message = "NOINTERNETCONNECTION";
+                    }, 3000);
+                }
+            };
 
-        NetworkStatus.registerObserverCallback(isOnline);
+            NetworkStatus.registerObserverCallback(updateStatus);
 
-        return {
-            template: "<div ng-show='!$scope.online || $scope.goingBackOnline' style='background-color:black;opacity:0.8;color:white;height:30px;width:100vw'> {{ $scope.message }} </div>"
-        };
+            scope.message = "NOINTERNETCONNECTION";
+            scope.online = NetworkStatus.isOnline();
+
+        }
     };
-}]);
+
+});

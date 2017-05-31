@@ -38,7 +38,12 @@ angular.module('MUHCApp').controller('MainController', ["$window", "$state",'$ti
         //     console.log("App is offline");
         // }
 
+        var app = document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'https://' ) === -1;
+
+
+
         $rootScope.online = navigator.onLine;
+
         $window.addEventListener("offline", function() {
             $rootScope.$apply(function() {
                 $rootScope.online = false;
