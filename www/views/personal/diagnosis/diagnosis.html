@@ -3,6 +3,7 @@
         <div class="left"><ons-back-button>{{"BACK"|translate}}</ons-back-button></div>
         <div class="center" ng-class="fontSizeTitle">{{"DIAGNOSIS"|translate}}</div>
     </ons-toolbar>
+    <network-banner></network-banner>
     <div>
         <ons-list class="settings-list" ng-repeat="diagnosis in diag.diagnoses | orderBy: '-CreationDate' ">
             <ons-list-header   class="person-list-header" ng-class="fontSizeTitle" ng-show="diag.showHeader($index)">{{diagnosis.CreationDate|date:'fullDate'}}</ons-list-header>
@@ -21,5 +22,9 @@
             </ons-list-item>
         </ons-list>
 
+    </div>
+
+    <div style="color:grey;margin-top:25vh" ng-show="diag.noDiagnosis" align="center" ng-class="fontSizeTitle">
+        {{"NODIAGNOSIS"|translate}}
     </div>
 </ons-page>

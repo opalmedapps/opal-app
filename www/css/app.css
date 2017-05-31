@@ -2568,7 +2568,7 @@ input:focus {
     color: #fff;
     text-align: center;
     border-radius: 6px;
-    padding: 8px 16px;
+    padding: 8px 5px;
     position: relative;
     z-index: 1001;
     left: -50%;
@@ -2658,6 +2658,21 @@ input:focus {
         box-shadow: inset 0px 0px 0px 30px #7ac142;
     }
 }
+
+
+@media only screen and (min-device-width : 320px)  and (max-device-width : 56px) {
+
+ }
+
+@media only screen
+and (min-device-width : 320px)
+and (max-device-width : 568px)
+{
+    .secure-message, .unattended-message{
+        font-size: 14px;
+    }
+}
+
 
 
 /* MATERIAL DESIGN */

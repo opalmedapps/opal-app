@@ -2,7 +2,7 @@
 // Author: David Herrera on Summer 2016, Email:davidfherrerar@gmail.com
 //
 var myApp=angular.module('MUHCApp');
-myApp.controller('FeedbackController',['Patient', 'RequestToServer','$scope', function(Patient, RequestToServer, $scope){
+myApp.controller('FeedbackController',['Patient', 'RequestToServer', 'NetworkStatus','$scope', function(Patient, RequestToServer, NetworkStatus, $scope){
 	$scope.suggestionText='';
 	$scope.FirstName=Patient.getFirstName();
 	$scope.LastName=Patient.getLastName();
@@ -13,7 +13,7 @@ myApp.controller('FeedbackController',['Patient', 'RequestToServer','$scope', fu
 		{
 			$scope.enableSend = !$scope.emptyRating;
 		}else{
-			$scope.enableSend=true;
+			$scope.enableSend = !!NetworkStatus.isOnline();
 		}
 
 	});
