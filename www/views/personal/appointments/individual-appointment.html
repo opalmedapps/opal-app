@@ -1,33 +1,91 @@
 <ons-page ng-controller="IndividualAppointmentController">
     <ons-toolbar fixed-style>
-        <div class="left"><ons-back-button>{{"BACK"|translate}}</ons-back-button></div>
+        <div class="left">
+            <ons-back-button>{{"BACK"|translate}}</ons-back-button>
+        </div>
         <div class="center">{{"APPOINTMENT"|translate}}</div>
     </ons-toolbar>
-    <div style="border-top: 1px solid lightsteelblue">
-        <ons-list >
-            <ons-list-item class="item" >
+    <div style="border-top: 0px solid lightsteelblue">
+        <ons-list>
+            <ons-list-item class="item">
                 <div style="line-height:1" align="left">
                     <header>
                         <span class="item-title" ng-class="fontSizeTitle">{{app["AppointmentType_"+language]}}</span>
                     </header>
                     <p class="item-desc" ng-class="fontSizeDesc">{{app.ScheduledStartTime|date:'medium'}}</p>
-                    <p class="item-desc" ng-class="fontSizeDesc" ng-show="app.RoomLocation">
-                        {{"GOTO_ROOM"|translate}}{{app.RoomLocation}}
+                    <p class="item-desc" ng-class="fontSizeDesc">
+                        {{app["MapName_"+language]|ellipsis:20}}
                     </p>
                 </div>
             </ons-list-item>
             <ons-list-item tappable ng-click="goToMap()" ng-class="fontSizeDesc">
-                <strong class="item-desc" ng-class="fontSizeDesc">{{app["MapName_"+language]|ellipsis:25}}</strong><ons-icon style="margin-top: 3%" class="pull-right" icon="ion-ios-arrow-forward"></ons-icon>
+                <strong class="item-desc">{{"MAPS"|translate}} {{title}}</strong>
+                <ons-icon style="margin-top: 3%" class="pull-right" icon="ion-ios-arrow-forward"></ons-icon>
             </ons-list-item>
-            <ons-list-item style="background-color:  #E3F2FD" tappable ng-click="aboutApp()" ng-class="fontSizeDesc">
-                <strong class="item-desc">{{"APPOINTMENT_ABOUT" | translate}} {{title}} </strong> <ons-icon style="margin-top: 3%" class="pull-right" icon="ion-ios-arrow-forward"></ons-icon>
-            </ons-list-item>
-            <ons-list-item>
-                <stron class="item-desc" ng-class="fontSizeDesc">
-                    <ons-button modifier="material"><ons-ripple></ons-ripple>{{"APPOINTMENTSWAIT" | translate}}</ons-button>
-                </stron>
+            <ons-list-item tappable ng-click="aboutApp()" ng-class="fontSizeDesc">
+                <strong class="item-desc">{{"APPOINTMENT_ABOUT" | translate}} {{title}} </strong>
+                <ons-icon style="margin-top: 3%" class="pull-right" icon="ion-ios-arrow-forward"></ons-icon>
             </ons-list-item>
         </ons-list>
-
     </div>
+
+<!--waiting time trend by Wen Quan Li-->
+    <ons-list>
+        <div style="background-color: white">
+            <ons-list-item modifier="nodivider">
+                <!--Title of waiting time section-->
+                <strong class="item-desc" ng-class="fontSizeTitle" style="color: black"><div align="center">{{"APPOINTMENTSWAIT" | translate}}</div></strong>
+                <strong class="item-desc" ng-class="fontSizeTitle" style="color: black"><div align="center">{{app["AppointmentType_"+language]}}</div></strong>
+                <!--Bar Chart using simple background coloring-->
+                <div class="item-desc" ng-class="fontSizeDesc" style="color: #474747">
+                <ons-row align="center">
+                        <ons-col width="3%"></ons-col>
+                        <ons-col width="35%" align="left">0-15 min</ons-col>
+                        <ons-col width="3%"></ons-col>
+                        <ons-col width="50%">
+                            <div style="background-color: #59D45D; width: 46%;line-height: 90%">&nbsp</div>
+                        </ons-col>
+                        <ons-col width="9%" align="right"><strong  style="color: #59D45D"> 46%</strong></ons-col>
+                    </ons-row>
+                    <ons-row align="center">
+                        <ons-col width="3%"></ons-col>
+                        <ons-col width="35%" align="left">15-30 min</ons-col>
+                        <ons-col width="3%"></ons-col>
+                        <ons-col width="50%">
+                            <div style="background-color: #F1C40F; width: 28%; line-height: 90%">&nbsp</div>
+                        </ons-col>
+                        <ons-col width="9%" align="right"><strong style="color: #F1C40F"> 28%</strong></ons-col>
+                    </ons-row>
+                    <ons-row align="center">
+                        <ons-col width="3%"></ons-col>
+                        <ons-col width="35%" align="left">30-45 min</ons-col>
+                        <ons-col width="3%"></ons-col>
+                        <ons-col width="50%">
+                            <div style="background-color: darkorange; width: 11%; line-height: 90%">&nbsp</div>
+                        </ons-col>
+                        <ons-col width="9%" align="right"><strong  style="color: darkorange"> 11%</strong></ons-col>
+                    </ons-row>
+                    <ons-row align="center">
+                        <ons-col width="3%"></ons-col>
+                        <ons-col width="35%" align="left">45+ min</ons-col>
+                        <ons-col width="3%"></ons-col>
+                        <ons-col width="50%">
+                            <div style="background-color: red; width: 15%; line-height: 90%">&nbsp</div>
+                        </ons-col>
+                        <ons-col width="9%" align="right"><strong style="color: red"> 15%</strong></ons-col>
+                    </ons-row>
+                    <!--Button for more info-->
+                    <div style="text-align: center; width: 90%; margin: 5% auto">
+                        <ons-button class="animated pulse ng-cloak shadow-2" modifier="large" style="height: 50px; font-size: xx-large; font-weight: bolder; background-color: #59d45d;">
+                            <ons-icon icon="fa-clock-o" size="1x" style="color: white"><strong> {{ "MORE_INFO" | translate}} </strong></ons-icon>
+                        </ons-button>
+                    </div>
+                    <!--Disclaimer-->
+                    Delay: minutes after the scheduled time.<br>
+                    <i>People arriving on time (not late not too early) tend to wait less!</i></div>
+            </ons-list-item>
+        </div>
+    </ons-list>
+
+
 </ons-page>
