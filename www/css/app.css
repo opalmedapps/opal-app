@@ -17,6 +17,17 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+@font-face {
+    font-family: font;
+    src: url("../fonts/Montserrat-Light.ttf");
+    /*src: url(https://fonts.googleapis.com/css?family=Dosis);*/
+
+}
+
+html, .page {
+    font-family: font, cursive, sans-serif;
+}
+
 * {
     -webkit-tap-highlight-color: rgba(0,0,0,0); /* make transparent link selection, adjust last value opacity 0 to 1.0 */
 }
