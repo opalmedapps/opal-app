@@ -289,6 +289,7 @@ myApp.controller('IndividualAppointmentController', ['NavigatorParameters','Nati
         console.log($scope.app);
 
         Logger.sendLog('Appointment', parameters.Post.AppointmentSerNum);
+        var d = new Date($scope.app.ScheduledStartTime);
 
         $scope.goToMap=function()
         {
@@ -299,8 +300,13 @@ myApp.controller('IndividualAppointmentController', ['NavigatorParameters','Nati
         $scope.aboutApp = function () {
             window[navigatorName].pushPage('./views/templates/content.html', {
                 contentLink: $scope.app["URL_"+UserPreferences.getLanguage()],
-                contentType: $scope.app["AppointmentType_"+UserPreferences.getLanguage()]
+                contentType: $scope.app["AppointmentType_"+UserPreferences.getLanguage()],
+
             });
+            console.log($scope.app.AppointmentType_EN); //type of treatment TBD with dictionary
+            console.log(d.getHours()); //0 to 23 standard hour Difference vs UTCHour?
+            console.log(d.getMonth()); //0 being January, 11 being December (1 and 12 for mysql)
+            console.log(d.getDay()); //0 being Sunday, 6 being Saturday (0 to 4 for mysql)
         }
 
     }]);

@@ -103,7 +103,7 @@ myApp.controller('waitController', ['$scope','$timeout', '$filter','$anchorScrol
 
     }]);
 
-myApp.controller('IndividualAppointmentController', ['NavigatorParameters','NativeNotification','$scope',
+/*myApp.controller('IndividualAppointmentController', ['NavigatorParameters','NativeNotification','$scope',
     '$timeout', '$rootScope','Appointments', 'CheckInService','$q',
     'NewsBanner','$filter', 'UserPreferences', 'Logger',
     function (NavigatorParameters,NativeNotification,$scope,
@@ -133,7 +133,7 @@ myApp.controller('IndividualAppointmentController', ['NavigatorParameters','Nati
             });
         }
 
-    }]);
+    }]); */
 
 myApp.controller('waitChangeController',
     function($filter, $rootScope, $translate, UserPreferences, $scope) {
@@ -207,17 +207,18 @@ myApp.controller('waitChangeController',
             $scope.disableButton = true;
         };
 
-        //Function to change font size
+        //Function to change type of appointment
         $scope.changeType = function(newVal) {
 
         };
 
 
-        //FUnction to change the language
+        //FUnction to change the hour of appointment
         $scope.changeHour = function(val) {
 
         };
 
+        //Function to change the minute of appointment
         $scope.changeMinute = function(val) {
 
         }
