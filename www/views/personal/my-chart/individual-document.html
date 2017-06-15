@@ -29,4 +29,18 @@
         <!--<canvas id="the-canvas" style="border:1px solid black" style="width:inherit;"></canvas>-->
     <!--</div>-->
     <div id="holder" ng-hide="loading||rendering" align="center"></div>
+
+
+    <ons-modal var="modal">
+        <h3>Warning!</h3>
+        <ons-icon icon="ion-alert-circled" size="60px"></ons-icon>
+        <p style="margin-top: 5%" class="secure-message">{{"SECURE_PHONE"|translate}}</p>
+        <p class="unattended-message">{{"UNATTENDED"|translate}}</p>
+        <ons-button style="margin-top: 5%; font-size: 22px;" ng-click="modal.hide()">{{"CANCEL"|translate}}</ons-button>
+        <ons-button style="margin-top: 5%; margin-left: 50px; font-size: 22px; background-color: #F44336" ng-click="share()">{{"CONTINUE"|translate}}</ons-button>
+
+    </ons-modal>
+
 </ons-page>
+
+
