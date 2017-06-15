@@ -255,7 +255,6 @@ myApp.controller('SingleDocumentController', ['NavigatorParameters','Documents',
                 var targetPath = FileManagerService.generatePath(docParams);
 
 
-
                 FileManagerService.downloadFileIntoStorage("data:application/pdf;base64," + docParams.Content, targetPath).then(function()
                 {
                     if (ons.platform.isAndroid()) {
@@ -291,6 +290,10 @@ myApp.controller('SingleDocumentController', ['NavigatorParameters','Documents',
             }
         };
 
+        $scope.warn = function(){
+            modal.show();
+            $scope.popoverDocsInfo.hide();
+        };
 
 
         //Open document function: Opens document depending on the format
