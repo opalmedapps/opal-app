@@ -53,7 +53,6 @@ myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$root
 
         // Get the authentication state
         var myAuth = firebase.auth().currentUser;
-        console.log(myAuth);
 
         // Switch for trusting device
         var trusted = 1;
@@ -119,10 +118,6 @@ myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$root
                 var refCurrentUser = Ref.child('logged_in_users/' + firebaseUser.uid);
 
                 $rootScope.uid = firebaseUser.uid;
-
-
-                console.log("session token: " + sessionToken);
-
 
                 var toSend = {
                     'Token' : sessionToken

@@ -53,12 +53,10 @@ myApp.service('Diagnoses',function($filter,LocalStorage){
       diagnosesToLocalStorage.concat(temp);
       LocalStorage.WriteToLocalStorage('Diagnosis', temp);
       for (var i = 0; i < diag.length; i++) {
-        console.log(diag[i].CreationDate);
         diag[i].CreationDate=$filter('formatDate')(diag[i].CreationDate);
         diagnoses.push(diag[i]);
       }
       diagnoses=$filter('orderBy')(diagnoses, 'CreationDate');
-      console.log(diagnoses);
     }
     return{
        /**
