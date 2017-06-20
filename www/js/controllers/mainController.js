@@ -195,7 +195,6 @@ angular.module('MUHCApp').controller('MainController', ["$window", "$state",'$ti
          * Manage concurrent users
          *****************************************/
         $rootScope.$on("MonitorLoggedInUsers", function(event, uid){
-            console.log("uid: " + uid);
             addUserListener(uid);
         });
 
