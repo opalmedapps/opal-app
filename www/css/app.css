@@ -17,6 +17,17 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+@font-face {
+    font-family: font;
+    src: url("../fonts/Montserrat-Light.ttf");
+    /*src: url(https://fonts.googleapis.com/css?family=Dosis);*/
+
+}
+
+html, .page {
+    font-family: font, cursive, sans-serif;
+}
+
 * {
     -webkit-tap-highlight-color: rgba(0,0,0,0); /* make transparent link selection, adjust last value opacity 0 to 1.0 */
 }
@@ -2656,6 +2667,20 @@ input:focus {
 @keyframes fill {
     100% {
         box-shadow: inset 0px 0px 0px 30px #7ac142;
+    }
+}
+
+
+@media only screen and (min-device-width : 320px)  and (max-device-width : 56px) {
+
+ }
+
+@media only screen
+and (min-device-width : 320px)
+and (max-device-width : 568px)
+{
+    .secure-message, .unattended-message{
+        font-size: 14px;
     }
 }
 
