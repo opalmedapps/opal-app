@@ -5,11 +5,14 @@
  */
 
 angular.module('MUHCApp').controller('MainController', ["$window", "$state",'$timeout', '$rootScope','FirebaseService',
-    'NativeNotification','DeviceIdentifiers','$translatePartialLoader','NewsBanner',
-    "UpdateUI","Patient","LocalStorage", 'Constants', 'CleanUp', 'NavigatorParameters', 'NetworkStatus',
+    'NativeNotification','DeviceIdentifiers','$translatePartialLoader',
+    "UpdateUI","Patient","LocalStorage", 'Constants', 'CleanUp', 'NavigatorParameters', 'NetworkStatus', 'RequestToServer',
     function ($window, $state,$timeout,$rootScope,FirebaseService,NativeNotification,
-              DeviceIdentifiers,$translatePartialLoader,NewsBanner,
-              UpdateUI,Patient,LocalStorage, Constants, CleanUp, NavigatorParameters, NetworkStatus) {
+              DeviceIdentifiers,$translatePartialLoader,
+              UpdateUI,Patient,LocalStorage, Constants, CleanUp, NavigatorParameters, NetworkStatus, RequestToServer) {
+
+
+       $rootScope.firstTime = true;
 
 
         //var myDataRef = new Firebase(FirebaseService.getFirebaseUrl());
@@ -29,18 +32,9 @@ angular.module('MUHCApp').controller('MainController', ["$window", "$state",'$ti
         });
 
         /*****************************************
-         * Check for online activity (Not working)
+         * Check for online activity when the app starts
          *****************************************/
-        // //Detect whether or not the app is online and handle elegantly
-        // document.addEventListener("offline", onOffline, false);
-        //
-        // function onOffline(){
-        //     console.log("App is offline");
-        // }
-
         var app = document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'https://' ) === -1;
-
-
 
         $rootScope.online = navigator.onLine;
 
@@ -195,5 +189,40 @@ angular.module('MUHCApp').controller('MainController', ["$window", "$state",'$ti
 
             // Wipe documents and lab-results
             CleanUp.clearSensitive();
+        }
+
+        /*****************************************
+         * Manage concurrent users
+         *****************************************/
+        $rootScope.$on("MonitorLoggedInUsers", function(event, uid){
+            console.log("uid: " + uid);
+            addUserListener(uid);
+        });
+
+
+        function addUserListener(uid){
+            //add a listener to the firebase database that watches for the changing of the token value (this means that the same user has logged in somewhere else)
+            var Ref= firebase.database().ref('dev2/');
+
+            var refCurrentUser = Ref.child('logged_in_users/' + uid);
+
+            refCurrentUser.on('value', function() {
+
+                if(!$rootScope.firstTime){
+
+                    //If it is detected that a user has concurrently logged on with a different device. Then force the "first" user to log out and clear the observer
+
+                    RequestToServer.sendRequest('Logout');
+
+                    CleanUp.clear();
+
+                    // FirebaseService.getAuthentication().$signOut();
+                    console.log($state.go('init'));
+                }
+                else{
+                    $rootScope.firstTime = false;
+                }
+
+            });
         }
     }]);
