@@ -113,6 +113,26 @@ myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$root
             CleanUp.clear();
 
             firebaseUser.getToken(true).then(function(sessionToken){
+
+                //Save the current session token to the users "logged in users" node. This is used to make sure that the user is only logged in for one session at a time.
+                var Ref= firebase.database().ref('dev2/');
+                var refCurrentUser = Ref.child('logged_in_users/' + firebaseUser.uid);
+
+                $rootScope.uid = firebaseUser.uid;
+
+
+                console.log("session token: " + sessionToken);
+
+
+                var toSend = {
+                    'Token' : sessionToken
+                };
+
+                refCurrentUser.set(toSend);
+
+                //Evoke an observer function in mainController
+                $rootScope.$emit("MonitorLoggedInUsers", firebaseUser.uid);
+
                 window.localStorage.setItem('Email',$scope.email);
 
                 UserAuthorizationInfo.setUserAuthData(firebaseUser.uid, CryptoJS.SHA256($scope.password).toString(), undefined, sessionToken, $scope.email);
