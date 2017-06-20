@@ -34,11 +34,8 @@
             var documents = Documents.getDocuments();
             documents = Documents.setDocumentsLanguage(documents);
 
-            console.log(documents);
-
             if(documents.length > 0) vm.noDocuments=false;
             vm.documents = $filter('orderBy')(documents,'documents.CreatedTimeStamp');
-
         }
 
         //Go to document function, if not read, read it, then set parameters for navigation
@@ -164,9 +161,6 @@ myApp.controller('SingleDocumentController', ['NavigatorParameters','Documents',
                             if (Constants.app) {
                                 if (ons.platform.isAndroid()) {
                                     convertCanvasToImage(event.srcElement);
-                                    // docParams.src = event.srcElement.toDataURL("image/png");
-                                    // cordova.InAppBrowser.open(docParams.src, '_system', 'location=no')
-                                    // cordova.InAppBrowser.open(docParams.src, '_blank');
                                 } else {
                                     cordova.InAppBrowser.open("data:application/pdf;base64," + document.Content, '_blank', 'EnableViewPortScale=yes');
                                 }
@@ -193,22 +187,6 @@ myApp.controller('SingleDocumentController', ['NavigatorParameters','Documents',
             image.src = canvas.toDataURL("image/jpeg", 0.5);
         }
 
-        // function convertCanvasToImage(canvas) {
-        //
-        //     var docParams = new Image();
-        //     docParams.src = canvas.toDataURL("image/png");
-        //     docParams.width = viewerSize;
-        //     docParams.height = 'auto';
-        //     docParams.style.border = "1px solid black";
-        //     // docParams.onclick = function () {
-        //     //     if (Constants.app) {
-        //     //         cordova.InAppBrowser.open(docParams.src, '_blank', 'location=no,enableViewportScale=true');
-        //     //     } else{
-        //     //         window.open(docParams.src, '_blank', 'location=no,enableViewportScale=true');
-        //     //     }
-        //     // }
-        //     return docParams;
-        // }
 
         function renderPage(pdfDoc, num, containerEl) {
 
@@ -227,14 +205,11 @@ myApp.controller('SingleDocumentController', ['NavigatorParameters','Documents',
         }
 
         function draw(page, canvas, ctx) {
-            //var viewport = page.getViewport(scale);
-
-            //var rescale = viewerSize*0.95/(viewport.width);
 
             var scaledViewport = page.getViewport(scale);
             canvas.height = scaledViewport.height;
             canvas.width = scaledViewport.width;
-            //console.log(canvas);
+
             // Render PDF page into canvas context
             return {
                 canvasContext: ctx,
@@ -278,28 +253,12 @@ myApp.controller('SingleDocumentController', ['NavigatorParameters','Documents',
             if (Constants.app) {
 
                 var targetPath = FileManagerService.generatePath(docParams);
-                console.log(docParams);
+
+
                 FileManagerService.downloadFileIntoStorage("data:application/pdf;base64," + docParams.Content, targetPath).then(function()
                 {
-                    if (ons.platform.isAndroid()) {
-                        var mod = 'android';
-                        var msg = $filter('translate')('CONFIRM_SHARE');
-                        ons.notification.confirm({
-                            message: msg,
-                            modifier: mod,
-                            callback: function(idx) {
-                                switch (idx) {
-                                    case 0:
-                                        break;
-                                    case 1:
-                                        FileManagerService.shareDocument(docParams.Title.replace(/ /g,"")+docParams.ApprovedTimeStamp.toDateString().replace(/ /g,"-"), targetPath);
-                                        break;
-                                }
-                            }
-                        });
-                    } else{
-                        FileManagerService.shareDocument(docParams.Title.replace(/ /g,"")+docParams.ApprovedTimeStamp.toDateString().replace(/ /g,"-"), targetPath);
-                    }
+
+                    FileManagerService.shareDocument(docParams.Title.replace(/ /g,"")+docParams.ApprovedTimeStamp.toDateString().replace(/ /g,"-"), targetPath);
 
                 }).catch(function(error)
                 {
@@ -308,11 +267,14 @@ myApp.controller('SingleDocumentController', ['NavigatorParameters','Documents',
                 });
 
             } else {
-                console.log(docParams);
                 window.open("data:application/pdf;base64," + docParams.Content);
             }
         };
 
+        $scope.warn = function(){
+            modal.show();
+            $scope.popoverDocsInfo.hide();
+        };
 
 
         //Open document function: Opens document depending on the format
