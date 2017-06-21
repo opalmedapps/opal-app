@@ -286,7 +286,6 @@ myApp.controller('IndividualAppointmentController', ['NavigatorParameters','Nati
 
         $scope.app = parameters.Post;
         $scope.language = UserPreferences.getLanguage();
-        console.log($scope.app);
 
         Logger.sendLog('Appointment', parameters.Post.AppointmentSerNum);
         var day = new Date($scope.app.ScheduledStartTime);

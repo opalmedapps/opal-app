@@ -107,7 +107,6 @@
             vm.LastName = Patient.getLastName();
             vm.ProfileImage=Patient.getProfileImage();
             vm.language = UserPreferences.getLanguage();
-            console.log(vm.language);
             vm.noUpcomingAppointments=false;
 
             //Setting up status
@@ -122,7 +121,6 @@
 
         function settingStatus()
         {
-            console.log('Completed planning? ', PlanningSteps.isCompleted());
             if(!PlanningSteps.isCompleted() && PlanningSteps.hasCT()) {
                 vm.statusDescription = "PLANNING";
             }else if (PlanningSteps.isCompleted()){

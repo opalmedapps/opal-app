@@ -255,30 +255,11 @@ myApp.controller('SingleDocumentController', ['NavigatorParameters','Documents',
                 var targetPath = FileManagerService.generatePath(docParams);
 
 
-
                 FileManagerService.downloadFileIntoStorage("data:application/pdf;base64," + docParams.Content, targetPath).then(function()
                 {
-                    if (ons.platform.isAndroid()) {
-                        var mod = 'android';
-                    }
-                    else {
-                        var mod = 'ios';
-                    }
 
-                    var msg = $filter('translate')('CONFIRM_SHARE');
-                    ons.notification.confirm({
-                        message: msg,
-                        modifier: mod,
-                        callback: function(idx) {
-                            switch (idx) {
-                                case 0:
-                                    break;
-                                case 1:
-                                    FileManagerService.shareDocument(docParams.Title.replace(/ /g,"")+docParams.ApprovedTimeStamp.toDateString().replace(/ /g,"-"), targetPath);
-                                    break;
-                            }
-                        }
-                    });
+                    FileManagerService.shareDocument(docParams.Title.replace(/ /g,"")+docParams.ApprovedTimeStamp.toDateString().replace(/ /g,"-"), targetPath);
+
                 }).catch(function(error)
                 {
                     //Unable to save document on server
@@ -286,11 +267,14 @@ myApp.controller('SingleDocumentController', ['NavigatorParameters','Documents',
                 });
 
             } else {
-                console.log(docParams);
                 window.open("data:application/pdf;base64," + docParams.Content);
             }
         };
 
+        $scope.warn = function(){
+            modal.show();
+            $scope.popoverDocsInfo.hide();
+        };
 
 
         //Open document function: Opens document depending on the format
