@@ -21,9 +21,6 @@ angular.module('MUHCApp').controller('LoadingController',
                         objectToSend.FieldToChange = 'Language';
                         RequestToServer.sendRequestWithResponse('AccountChange', objectToSend);
 
-
-                        console.log("about to init meta data...");
-
                         //fetch all the tab metadata TODO: add the fetching of all the other data
                         UpdateUI.set([
                             // 'Doctors',

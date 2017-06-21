@@ -125,7 +125,6 @@ myApp.service('UserPreferences',[ 'UserAuthorizationInfo','$rootScope','tmhDynam
             //var lan =  window.localStorage.getItem('Language');
             var lan = navigator.language || navigator.userLanguage;
             lan = lan.substring(0,2).toLowerCase();
-            console.log(lan);
             //If language is not defined and its a device
             if(!lan&&app)
             {
