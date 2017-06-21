@@ -289,7 +289,11 @@ myApp.controller('IndividualAppointmentController', ['NavigatorParameters','Nati
         console.log($scope.app);
 
         Logger.sendLog('Appointment', parameters.Post.AppointmentSerNum);
-        var d = new Date($scope.app.ScheduledStartTime);
+        var day = new Date($scope.app.ScheduledStartTime);
+        var type = $scope.app.AppointmentType_EN; //type of treatment TBD with dictionary
+        var hour = day.getHours(); //0 to 23 standard hour Difference vs UTCHour?
+        var month = day.getMonth(); //0 being January, 11 being December (1 and 12 for mysql)
+        var weekday = day.getDay(); //0 being Sunday, 6 being Saturday (0 to 4 for mysql)
 
         $scope.goToMap=function()
         {
@@ -303,10 +307,268 @@ myApp.controller('IndividualAppointmentController', ['NavigatorParameters','Nati
                 contentType: $scope.app["AppointmentType_"+UserPreferences.getLanguage()],
 
             });
-            console.log($scope.app.AppointmentType_EN); //type of treatment TBD with dictionary
-            console.log(d.getHours()); //0 to 23 standard hour Difference vs UTCHour?
-            console.log(d.getMonth()); //0 being January, 11 being December (1 and 12 for mysql)
-            console.log(d.getDay()); //0 being Sunday, 6 being Saturday (0 to 4 for mysql)
+
         }
 
+        $scope.goToWait=function()
+        {
+            window[navigatorName].pushPage('./views/personal/appointments/waitinginfo.html', {
+                contentLink: $scope.app["URL_"+UserPreferences.getLanguage()],
+                contentType: $scope.app["AppointmentType_"+UserPreferences.getLanguage()]
+
+            });
+        };
+        var count0 = 46;
+        var count15 = 28;
+        var count30 = 11;
+        var count45 = 15;
+        var countTotal = count0+count15+count30+count45;
+        $scope.percent15 = Math.round((count15/countTotal)*100);
+        $scope.percent30 = Math.round((count30/countTotal)*100);
+        $scope.percent45 = Math.round((count45/countTotal)*100);
+        $scope.percent0 = 100-$scope.percent45-$scope.percent15-$scope.percent30;
     }]);
+
+myApp.controller('waitingInfoController', ['$scope', '$timeout', 'NavigatorParameters', '$rootScope', '$filter', function ($scope, $timeout, NavigatorParameters, $rootScope, $filter) {
+
+    //Obtaining appointment information parameters
+    var parameters = NavigatorParameters.getParameters();
+    var navigatorName = parameters.Navigator;
+
+    console.log("Navigator paranms",parameters);
+
+    initBooklet();
+
+    //Initialization variables for material
+    function initBooklet() {
+        $rootScope.contentsEduBooklet = parameters;
+        $scope.booklet = parameters.Booklet;
+        $scope.activeIndex = parameters.Index;
+        $scope.tableOfContents = parameters.TableOfContents;
+    }
+    $scope.isFullscreen = false;
+
+    /**
+     * Function handlers for advancing with the carousel
+     */
+    $scope.goNext = function () {
+        if ($scope.activeIndex < $scope.tableOfContents.length - 1) {
+            $scope.activeIndex++;
+            $scope.carousel.setActiveCarouselItemIndex($scope.activeIndex);
+            console.log('go next');
+        }
+    };
+    $scope.goBack = function () {
+        if ($scope.activeIndex > 0) {
+            $scope.activeIndex--;
+            $scope.carousel.setActiveCarouselItemIndex($scope.activeIndex);
+            console.log('go back');
+        }
+
+    };
+    /*
+     * Method in charge of fullscreen functionality. **deprecated!!
+     */
+    // $scope.fullScreenToggle = function () {
+    // 	$scope.isFullscreen = !$scope.isFullscreen;
+    // 	setHeightElement();
+    // }
+
+    /**
+     * Instantiation the popover for table of contents, delayed is to prevent the transition animation from lagging.
+     */
+    $timeout(function () {
+        ons.createPopover('./views/education/table-contents-popover.html').then(function (popover) {
+            $scope.popover = popover;
+            $rootScope.popoverEducation = popover;
+            $scope.popover.on('posthide', function () {
+                if (typeof $rootScope.indexEduMaterial !== 'undefined') $scope.carousel.setActiveCarouselItemIndex($rootScope.indexEduMaterial);
+            });
+        });
+    }, 300);
+
+    //Popover method to jump between educational material sections from a table of contents
+    $rootScope.goToSectionBooklet = function (index) {
+        $rootScope.indexEduMaterial = index;
+        $rootScope.popoverEducation.hide();
+    };
+    //Cleaning up controller after its uninstantiated. Destroys all the listeners and extra variables
+    $scope.$on('$destroy', function () {
+        console.log('on destroy');
+        ons.orientation.off("change");
+        delete $rootScope.contentsEduBooklet;
+        document.removeEventListener('ons-carousel:postchange', handlePostChangeEventCarousel);
+        document.removeEventListener('ons-carousel:init', handleInitEventCarousel);
+        $scope.carousel.off('init');
+        $scope.carousel.off('postchange');
+        $scope.popover.off('posthide');
+        $scope.popover.destroy();
+        delete $rootScope.indexEduMaterial;
+        delete $rootScope.popoverEducation;
+        delete $rootScope.goToSectionBooklet;
+    });
+    /**
+     * Set height of container carousel element
+     *
+     */
+    function setHeightElement() {
+        $timeout(function () {
+            var constantHeight = (ons.platform.isIOS()) ? 120 : 100;
+            var divTitleHeight = $('#divTitleBookletSection').height();
+            if ($scope.isFullscreen) {
+                divTitleHeight = 0;
+                constantHeight -= 48;
+            }
+            var heightChange = document.documentElement.clientHeight - constantHeight - divTitleHeight;
+            $scope.heightSection = heightChange + 'px';
+            $('#contentMaterial').height(heightChange);
+        }, 10);
+    }
+    //Handles the post change even carousel, basically updates activeIndex, sets height of view and lazily loads slides
+    function handlePostChangeEventCarousel(ev) {
+        setHeightSection(ev.activeIndex);
+        $scope.carousel = ev.component;
+        $scope.activeIndex = ev.activeIndex;
+        setHeightElement();
+        lazilyLoadSlides(ev.activeIndex);
+    }
+
+    //Sets the height dynamically for educational material contents. Fixing the bug from Onsen.
+    function setHeightSection(index) {
+        $scope.heightSection = $('#sectionContent' + index).height();
+    }
+
+    //This method is in charge of "lazy loading". It only loads the material if it has not been loaded yet and only for the current, previous and next slides.
+    function lazilyLoadSlides(index) {
+        if (index - 1 >= 0 && !$scope.tableOfContents[index - 1].hasOwnProperty("Content")) {
+            $.get($scope.tableOfContents[index - 1].Url, function (res) {
+                $timeout(function () {
+                    $scope.tableOfContents[index - 1].Content = $filter('removeTitleEducationalMaterial')(res);
+                });
+            });
+        }
+        if (!$scope.tableOfContents[index].hasOwnProperty("Content")) {
+            $.get($scope.tableOfContents[index].Url, function (res) {
+                $timeout(function () {
+                    $scope.tableOfContents[index].Content = $filter('removeTitleEducationalMaterial')(res);
+                });
+            });
+        };
+        if (index + 1 < $scope.tableOfContents.length && !$scope.tableOfContents[index + 1].hasOwnProperty("Content")) {
+            $.get($scope.tableOfContents[index + 1].Url, function (res) {
+                $timeout(function () {
+                    $scope.tableOfContents[index + 1].Content = $filter('removeTitleEducationalMaterial')(res);
+                });
+            });
+        }
+    }
+    //Function that handles the initialization of the carousel. Basically deals with instantiation of carousel, loading the first slides, settings initial height, and then instaitiating a listener to watch the
+    //change from portrait to landscape.
+    function handleInitEventCarousel(ev) {
+        console.log('initializing carouse');
+        $scope.carousel = ev.component;
+        $timeout(function () {
+            $scope.carousel.setActiveCarouselItemIndex(parameters.Index);
+            $scope.carousel.refresh();
+            lazilyLoadSlides(parameters.Index);
+            setHeightElement();
+
+        }, 10);
+        if (app) {
+            ons.orientation.on("change", function (event) {
+                console.log(event.isPortrait); // e.g. portrait
+                //$scope.carousel.refresh();
+                console.log('orientation changed');
+                setHeightElement();
+                var i = $scope.carousel._scroll / $scope.carousel._currentElementSize;
+                delete $scope.carousel._currentElementSize;
+                $scope.carousel.setActiveCarouselItemIndex(i);
+            });
+        }
+    }
+
+/*
+    $scope.gaugeOptions = {
+
+        chart: {
+            type: 'solidgauge'
+        },
+
+        title: null,
+
+        pane: {
+            center: ['50%', '85%'],
+            size: '140%',
+            startAngle: -90,
+            endAngle: 90,
+            background: {
+                backgroundColor: (Highcharts.theme && Highcharts.theme.background2) || '#EEE',
+                innerRadius: '60%',
+                outerRadius: '100%',
+                shape: 'arc'
+            }
+        },
+
+        tooltip: {
+            enabled: false
+        },
+
+        // the value axis
+        yAxis: {
+            stops: [
+                [0.1, '#55BF3B'], // green
+                [0.5, '#DDDF0D'], // yellow
+                [0.9, '#DF5353'] // red
+            ],
+            lineWidth: 0,
+            minorTickInterval: null,
+            tickAmount: 2,
+            title: {
+                y: -70
+            },
+            labels: {
+                y: 16
+            }
+        },
+
+        plotOptions: {
+            solidgauge: {
+                dataLabels: {
+                    y: 5,
+                    borderWidth: 0,
+                    useHTML: true
+                }
+            }
+        }
+    };
+
+// The speed gauge
+    $scope.chartSpeed = Highcharts.chart('container-speed', Highcharts.merge($scope.gaugeOptions, {
+        yAxis: {
+            min: 0,
+            max: 30,
+            title: {
+                text: ''
+            }
+        },
+
+        credits: {
+            enabled: false
+        },
+
+        series: [{
+            name: 'Speed',
+            data: [23],
+            dataLabels: {
+                format: '<div style="text-align:center"><span style="font-size:25px;color:' +
+                ((Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black') + '">{y}</span><br/>' +
+                '<span style="font-size:18px;color:black">%</span></div>'
+            },
+            tooltip: {
+                valueSuffix: '%'
+            }
+        }]
+
+    }));
+*/
+}]);

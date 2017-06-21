@@ -1369,6 +1369,96 @@ Button appointments
   pointer-events: none;
 }
 /*
+*Wait information carousel
+*/
+ons-carousel-item {
+    display: table;
+    text-align: left;
+}
+
+.item-label {
+    display: table-cell;
+    vertical-align: middle;
+    color: white;
+    line-height: 1;
+    font-size: 48px;
+    font-weight: bold;
+}
+
+.cover-label {
+    text-align: center;
+    position: absolute;
+    left: 0px;
+    width: 100%;
+    bottom: 10px;
+    color: white;
+}
+/*
+* Waiting time bar animation
+*/
+.wait-animation {
+    -webkit-animation: wait-animation 1.5s;
+    -moz-animation: wait-animation 1.5s ;
+    -o-animation: wait-animation 1.5s;
+    animation: wait-animation 1.5s;
+    position: relative;
+}
+@-moz-keyframes wait-animation {
+    0%   {
+        width: 0%;
+    }
+}
+@-webkit-keyframes wait-animation {
+    0%   {
+        width: 0%;
+    }
+
+}
+@-o-keyframes wait-animation {
+    0%   {
+        width: 0%;
+    }
+
+}
+
+.wait-animation-1 {
+    -webkit-animation: wait-animation-1 2s;
+    -moz-animation: wait-animation-1 2s ;
+    -o-animation: wait-animation-1 2s;
+    animation: wait-animation-1 2s;
+    position: relative;
+    background: #fec200;
+}
+@-moz-keyframes wait-animation-1 {
+    0%   {
+        width: 0%;
+    }
+
+}
+@-webkit-keyframes wait-animation-1 {
+    0%   {
+        width: 0%;
+        background: #fec200;
+    }
+    100%  {
+        background: #F06B6C;
+    }
+
+}
+@-o-keyframes wait-animation-1 {
+    0%   {
+        width: 0%;
+        background: #fec200;
+    }
+    100%  {
+        background: #F06B6C;
+    }
+}
+
+.highcharts-yaxis-grid .highcharts-grid-line {
+    display: none;
+}
+/*
 *Checkin button home
 */
 .button--large-danger {

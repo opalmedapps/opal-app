@@ -19,142 +19,100 @@ var myApp = angular.module('MUHCApp');
  */
 
 
+myApp.controller('waitController',
+    function($filter, $rootScope, $translate, UserPreferences, $scope) {
+        //Function sets account
+        var page = homeNavigator.getCurrentPage();
+        var parameters = page.options.param;
 
-//Logic for the calendar controller view
-myApp.controller('waitController', ['$scope','$timeout', '$filter','$anchorScroll','NavigatorParameters', 'UserPreferences',
-    function ($scope,$timeout,$filter,
-              $anchorScroll,NavigatorParameters,UserPreferences) {
-
-        /*
-         *   Controller constants
-         **/
-        var flag;//Boolean value to indicate initialization
-        var today;//Date today
-        //Set the calendar options
-        $scope.dateOptions = {
-            formatYear: 'yyyy',
-            startingDay: 0,
-            formatDay:'d',
-            showWeeks:false
-        };
-        //monitors whether or not the calendar is displayed, here the calendar should always be displayed
-        $scope.showCalendar = true;
-        $scope.onShowCalendar= function() {
-            $scope.$apply(function() {
-                $scope.showCalendar = true;
-            })
-        };
-        var vm = this;
-        vm.Language = UserPreferences.getLanguage();
-
-        /*
-         *   Implementation
-         **/
-        //Initializing controller
-        init();
-        //changeSetUp();
-
-        function init() {
-            //navigatorName = NavigatorParameters.getParameters().Navigator;
-
-            //Obtaining and setting appointments from service
-            $scope.language = UserPreferences.getLanguage();
-            $scope.dt = new Date();
-            $scope.dt.setHours(0, 0, 0, 0);
-            today = new Date($scope.dt);
-            flag = false;
-        }
-
-
-        //activate();
-
-                function activate() {
-
-                loadSettings();
-
-                // Setting our parameters for pushing and popping pages
-                NavigatorParameters.setParameters({
-                    'Navigator':'homeNavigator'
-                });
-
-                // After a page is popped reintialize the settings.
-                homeNavigator.on('postpop', function() {
-                    $timeout(function() {
-                        loadSettings();
-                    });
-
-                });
-
-                //On destroy, dettach listener
-                $scope.$on('destroy', function() {
-                    homeNavigator.off('postpop');
-                });
-
-            }
-
-            function accountDeviceBackButton() {
-                tabbar.setActiveTab(0);
-            }
-
-            function loadSettings() {
-                vm.Language = UserPreferences.getLanguage();
-            }
-
-
-    }]);
-
-/*myApp.controller('IndividualAppointmentController', ['NavigatorParameters','NativeNotification','$scope',
-    '$timeout', '$rootScope','Appointments', 'CheckInService','$q',
-    'NewsBanner','$filter', 'UserPreferences', 'Logger',
-    function (NavigatorParameters,NativeNotification,$scope,
-              $timeout, $rootScope, Appointments,CheckInService, $q,
-              NewsBanner,$filter, UserPreferences, Logger) {
-        //Information of current appointment
-        var parameters = NavigatorParameters.getParameters();
-        console.log(parameters);
-        var navigatorName = parameters.Navigator;
-
-        $scope.app = parameters.Post;
         $scope.language = UserPreferences.getLanguage();
         console.log($scope.app);
 
-        Logger.sendLog('Appointment', parameters.Post.AppointmentSerNum);
-
-        $scope.goToMap=function()
-        {
-            NavigatorParameters.setParameters($scope.app);
-            window[navigatorName].pushPage('./views/general/maps/individual-map.html');
-        };
-
-        $scope.aboutApp = function () {
-            window[navigatorName].pushPage('./views/templates/content.html', {
-                contentLink: $scope.app["URL_"+UserPreferences.getLanguage()],
-                contentType: $scope.app["AppointmentType_"+UserPreferences.getLanguage()]
-            });
+        var x = false;
+        if( x ){
+            $scope.percent15 = 0;
+            $scope.percent30 = 0;
+            $scope.percent45 = 0;
+            $scope.percent0 = 0;
+        }
+        else{
+            var count0 = 46;
+            var count15 = 28;
+            var count30 = 11;
+            var count45 = 15;
+            var countTotal = count0+count15+count30+count45;
+            $scope.percent15 = Math.round((count15/countTotal)*100);
+            $scope.percent30 = Math.round((count30/countTotal)*100);
+            $scope.percent45 = Math.round((count45/countTotal)*100);
+            $scope.percent0 = 100-$scope.percent45-$scope.percent15-$scope.percent30;
         }
 
-    }]); */
+        //Instantiates values and parameters
+        $scope.disableButton = true;
+        $scope.title = 'UPDATE';
+        $scope.value = parameters;
+        $scope.valueLabel = parameters;
+        $scope.timeUpdated = true;
+        $scope.type1 = 'text';
 
-myApp.controller('waitChangeController',
-    function($filter, $rootScope, $translate, UserPreferences, $scope) {
-        //Function sets account
-        changeSetUp();
+        Highcharts.setOptions({
+            setOptions: {
+                colors: ['#50BEC1', '#FEC200', '#F06B6C']
+            }
+        });
+
+        Highcharts.chart('container', {
+            chart: {
+                plotBackgroundColor: null,
+                plotBorderWidth: 0,
+                plotShadow: false,
+                margin: [0, 0, 0, 0],
+                spacingTop: 0,
+                spacingBottom: 0,
+                spacingLeft: 0,
+                spacingRight: 0
+            },
+            credits: {
+                enabled: false
+            },
+            title: {
+                text: ''
+            },
+            colors:
+                ['#59D45D', '#FEC200', '#FF0000'],
+            colorByPoint: true,
+            plotOptions: {
+                pie: {
+                    size: '100%',
+                    dataLabels: {
+                        enabled: false,
+                        distance: 0,
+                        style: {
+                            fontWeight: 'bold',
+                            color: 'white'
+                        }
+                    },
+                    startAngle: -0,
+                    endAngle: 360,
+                    center: ['50%', '50%']
+                }
+            },
+            series: [{
+                type: 'pie',
+                name: '',
+                innerSize: '30%',
+                data: [
+                    ['',   40],
+                    ['',       40],
+                    ['', 20],
+                ]
+            }]
+        });
 
         //Sets all the account settings depeding on the field that needs to be changed
         function changeSetUp() {
             //Mappings between parameters and translation
             //Navigator parameter
-            var page = homeNavigator.getCurrentPage();
-            var parameters = page.options.param;
-
-            //Instantiates values and parameters
-            $scope.disableButton = true;
-            $scope.title = 'UPDATE';
-            $scope.value = parameters;
-            $scope.valueLabel = parameters;
-            $scope.timeUpdated = true;
-            $scope.type1 = 'text';
-
 
             //Sets the instructions depending on the value to update
             if (parameters === 'HOUR') {
