@@ -31,11 +31,25 @@
         <div style="background-color: white">
             <ons-list-item modifier="nodivider">
                 <!--Title of waiting time section-->
-                <strong class="item-desc" ng-class="fontSizeTitle" style="color: black"><div align="center">{{"APPOINTMENTSWAIT" | translate}}</div></strong>
-                <strong class="item-desc" ng-class="fontSizeTitle" style="color: black"><div align="center">similar appointments</div></strong>
+                <strong class="item-desc" ng-class="fontSizeTitle" style="color: black">
+                    <div align="center">{{"APPOINTMENTSWAIT" | translate}} {{"FOR"|translate}}</div>
+                    <ons-row align="center">
+                        <ons-col width="7%"></ons-col>
+                        <ons-col>
+                            <strong class="item-desc" ng-class="fontSizeTitle" style="color: black"><div align="center">similar appointments</div></strong>
+                        </ons-col>
+                        <ons-col width="7%">
+                            <div align="right">
+                                <ons-toolbar-button ng-click="aboutWait()">
+                                    <ons-icon icon="fa-info-circle"></ons-icon>
+                                </ons-toolbar-button>
+                            </div>
+                        </ons-col>
+                    </ons-row>
+                </strong>
                 <!--Bar Chart using simple background coloring-->
                 <div class="item-desc" ng-class="fontSizeDesc" style="color: #474747">
-                <ons-row align="center">
+                    <ons-row align="center">
                         <ons-col width="10px"></ons-col>
                         <ons-col width="110px" align="left">0-15 min</ons-col>
                         <ons-col width="5px"></ons-col>
@@ -86,8 +100,7 @@
                         </ons-button>
                     </div>
                     <!--Disclaimer-->
-                    Delay: minutes after the scheduled time.<br>
-                    <i>Percentage is based on the total number of appointments of similar type, date and time from last 3 months. More information about the methodology are found on the last section of "More information".</i></div>
+                    Delay: minutes after the <u>scheduled</u> time.<br>
             </ons-list-item>
         </div>
     </ons-list>

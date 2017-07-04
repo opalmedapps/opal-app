@@ -283,16 +283,19 @@ myApp.controller('IndividualAppointmentController', ['NavigatorParameters','Nati
         //Information of current appointment
         var parameters = NavigatorParameters.getParameters();
         var navigatorName = parameters.Navigator;
-
         $scope.app = parameters.Post;
         $scope.language = UserPreferences.getLanguage();
-
         Logger.sendLog('Appointment', parameters.Post.AppointmentSerNum);
-        var day = new Date($scope.app.ScheduledStartTime);
-        var type = $scope.app.AppointmentType_EN; //type of treatment TBD with dictionary
-        var hour = day.getHours(); //0 to 23 standard hour Difference vs UTCHour?
-        var month = day.getMonth(); //0 being January, 11 being December (1 and 12 for mysql)
-        var weekday = day.getDay(); //0 being Sunday, 6 being Saturday (0 to 4 for mysql)
+        //Historical Delay Chart
+        //get SQL date format
+        var day = $scope.app.ScheduledStartTime.toISOString().slice(0, 19).replace('T', ' ');
+        console.log(day);
+
+        var percent = Appointments.getPercent($scope.app.AppointmentSerNum);
+        $scope.percent0 = percent[0];
+        $scope.percent15 = percent[1];
+        $scope.percent30 = percent[2];
+        $scope.percent45 = percent[3];
 
         $scope.goToMap=function()
         {
@@ -303,29 +306,26 @@ myApp.controller('IndividualAppointmentController', ['NavigatorParameters','Nati
         $scope.aboutApp = function () {
             window[navigatorName].pushPage('./views/templates/content.html', {
                 contentLink: $scope.app["URL_"+UserPreferences.getLanguage()],
-                contentType: $scope.app["AppointmentType_"+UserPreferences.getLanguage()],
-
+                contentType: $scope.app["AppointmentType_"+UserPreferences.getLanguage()]
             });
 
-        }
+        };
+
+        $scope.aboutWait = function () {
+            window[navigatorName].pushPage('./views/personal/appointmentswait/aboutwait.html', {
+                contentLink: $scope.app["URL_"+UserPreferences.getLanguage()],
+                contentType: $scope.app["AppointmentType_"+UserPreferences.getLanguage()]
+        });
+
+        };
 
         $scope.goToWait=function()
         {
-            window[navigatorName].pushPage('./views/personal/appointments/waitinginfo.html', {
+            window[navigatorName].pushPage('./views/personal/appointmentswait/waitinginfo.html', {
                 contentLink: $scope.app["URL_"+UserPreferences.getLanguage()],
                 contentType: $scope.app["AppointmentType_"+UserPreferences.getLanguage()]
-
             });
         };
-        var count0 = 46;
-        var count15 = 28;
-        var count30 = 11;
-        var count45 = 15;
-        var countTotal = count0+count15+count30+count45;
-        $scope.percent15 = Math.round((count15/countTotal)*100);
-        $scope.percent30 = Math.round((count30/countTotal)*100);
-        $scope.percent45 = Math.round((count45/countTotal)*100);
-        $scope.percent0 = 100-$scope.percent45-$scope.percent15-$scope.percent30;
     }]);
 
 myApp.controller('waitingInfoController', ['$scope', '$timeout', 'NavigatorParameters', '$rootScope', '$filter', function ($scope, $timeout, NavigatorParameters, $rootScope, $filter) {
