@@ -8,14 +8,12 @@ var myApp=angular.module('MUHCApp');
 //Login controller
 myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$rootScope', '$state',
     'UserAuthorizationInfo', 'RequestToServer', 'FirebaseService','LocalStorage','$filter','DeviceIdentifiers',
-    'UserPreferences','NavigatorParameters','Patient','NewsBanner', '$firebaseAuth', 'UUID', 'Constants',
+    'UserPreferences','NavigatorParameters','Patient','NewsBanner', 'UUID', 'Constants',
     'EncryptionService', 'CleanUp',
     function LoginController(
         ResetPassword,$scope,$timeout, $rootScope, $state, UserAuthorizationInfo,
         RequestToServer,FirebaseService,LocalStorage,$filter,DeviceIdentifiers,
-        UserPreferences,NavigatorParameters,Patient, NewsBanner, UUID, Constants,
-        EncryptionService, CleanUp
-    ) {
+        UserPreferences,NavigatorParameters,Patient, NewsBanner, UUID, Constants, EncryptionService, CleanUp) {
 
         if(!localStorage.getItem('locked')){
             $timeout(function () {
