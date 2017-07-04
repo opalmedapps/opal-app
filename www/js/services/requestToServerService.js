@@ -24,21 +24,15 @@ myApp.service('RequestToServer',['$filter','$state','NewsBanner','UserAuthorizat
          *@propertyOf MUHCApp.service:RequestToServer
          *@description Firebase reference
          **/
-        var Ref= firebase.database().ref('dev3/');
-        /**
-         *@ngdoc property
-         *@name  MUHCApp.service.#refRequests
-         *@propertyOf MUHCApp.service:RequestToServer
-         *@description Firebase reference requests
-         **/
-        var refRequests = Ref.child('requests');
+        var Ref= firebase.database().ref(FirebaseService.getFirebaseUrl(null));
+
         /**
          *@ngdoc property
          *@name  MUHCApp.service.#refUsers
          *@propertyOf MUHCApp.service:RequestToServer
          *@description Firebase reference user response
          **/
-        var refUsers = Ref.child('users');
+        var refUsers = Ref.child(FirebaseService.getFirebaseChild('users'));
 
         var app = Constants.app;
 
@@ -46,7 +40,6 @@ myApp.service('RequestToServer',['$filter','$state','NewsBanner','UserAuthorizat
             var requestType = '';
             var requestParameters;
             if (typeof encryptionKey !== 'undefined' && encryptionKey) {
-                console.log(encryptionKey);
                 requestType = typeOfRequest;
                 requestParameters = EncryptionService.encryptWithKey(parameters, encryptionKey);
             }
