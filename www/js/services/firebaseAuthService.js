@@ -13,7 +13,8 @@ var myApp=angular.module('MUHCApp');
 **/
 myApp.factory("FirebaseService", ['$firebaseAuth','$firebaseObject','UserAuthorizationInfo',
   function ($firebaseAuth) {
-    var firebaseUrl="https://brilliant-inferno-7679.firebaseio.com/dev3/";
+
+    var firebaseUrl="dev3/";
 
     return {
        /**
@@ -43,9 +44,34 @@ myApp.factory("FirebaseService", ['$firebaseAuth','$firebaseObject','UserAuthori
 		*@methodOf MUHCApp.service:FirebaseService
     *@returns {String} Returns firebase url string
 		**/
-      getFirebaseUrl:function()
+      getFirebaseUrl:function(extension)
       {
-        return firebaseUrl;
+          switch(extension){
+              case null:
+                  return firebaseUrl;
+              case 'users':
+                  return firebaseUrl + 'users/';
+              case 'requests':
+                  return firebaseUrl + 'requests/';
+              case 'logged_in_users':
+                  return firebaseUrl + 'logged_in_users/';
+              default:
+                  return firebaseUrl;
+          }
+
+      },
+
+      getFirebaseChild:function(child){
+          switch(child){
+              case 'users':
+                  return 'users/';
+              case 'requests':
+                  return 'requests/';
+              case 'logged_in_users':
+                  return 'logged_in_users/';
+              default:
+                  return '';
+          }
       }
     };
 }]);
