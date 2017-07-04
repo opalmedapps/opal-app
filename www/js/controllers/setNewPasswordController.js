@@ -33,7 +33,7 @@ myApp.controller('SetNewPasswordController',['$scope','$timeout','ResetPassword'
         return true;
 
     }
-    var ref=firebase.database().ref('dev2/');
+    var ref=firebase.database().ref('dev3/');
     $scope.submitSSN=function(ssn){
         console.log(ssn);
         if(validateSSN(ssn))
@@ -125,8 +125,10 @@ myApp.controller('SecurityQuestionController',['$scope','$timeout','ResetPasswor
 
                 $scope.waiting = true;
 
-                answer=answer.toUpperCase();
-                var hash=CryptoJS.SHA256(answer).toString();
+                answer = answer.toUpperCase();
+                var hash= EncryptionService.hash(answer);
+
+                console.log("hash: " + hash);
 
                 var key = hash;
                 var firebaseRequestField = passwordReset ? 'passwordResetRequests' : undefined;
@@ -135,20 +137,24 @@ myApp.controller('SecurityQuestionController',['$scope','$timeout','ResetPasswor
                     Question:$scope.Question,
                     Answer:hash,
                     SSN: $scope.ssn,
-                    Trusted: trusted,
+                    Trusted: trusted
                 };
+
+                // console.log("parameter object: " + )
 
                 RequestToServer.sendRequestWithResponse('VerifyAnswer',parameterObject,key, firebaseRequestField, firebaseResponseField).then(function(data)
                 {
-                    console.log(data);
+                    console.log("verify answer data: " + data);
                     $scope.waiting = false;
                     if(data.Data.AnswerVerified=="true")
                     {
                         if (trusted){
                             localStorage.setItem(UserAuthorizationInfo.getUsername()+"/deviceID",deviceID);
-                            localStorage.setItem(UserAuthorizationInfo.getUsername()+"/securityAns",CryptoJS.AES.encrypt(key, UserAuthorizationInfo.getPassword()).toString());
+                            localStorage.setItem(UserAuthorizationInfo.getUsername()+"/securityAns", EncryptionService.encryptWithKey(key, UserAuthorizationInfo.getPassword()).toString());
                         }
                         EncryptionService.setSecurityAns(key);
+
+                        EncryptionService.generateEncryptionHash();
 
                         if(passwordReset){
                             initNavigator.pushPage('./views/login/new-password.html', {oobCode: ResetPassword.getParameter("oobCode", parameters.url)});
@@ -289,7 +295,8 @@ myApp.controller('NewPasswordController',['$scope','$timeout','Patient','ResetPa
                             case "auth/invalid-action-code":
                                 $timeout(function () {
                                     $scope.alert.content = "CODE_INVALID"
-                                })
+                                });
+                                break;
                             case "auth/expired-action-code":
                                 $timeout(function () {
                                     $scope.alert.content = "CODE_EXPIRED";

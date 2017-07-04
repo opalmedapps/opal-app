@@ -11,14 +11,15 @@ var myApp=angular.module('MUHCApp');
 myApp.service('EncryptionService',function(UserAuthorizationInfo){
 
 	var securityAnswerHash = '';
+    var encryptionHash = '';
 
 
 	function decryptObject(object,secret)
 	{
-		if(typeof object =='string')
+		if(typeof object ==='string')
 		{
-			var decipherbytes = CryptoJS.AES.decrypt(object, secret);
-			object=decipherbytes.toString(CryptoJS.enc.Utf8);
+			var decipher_bytes = CryptoJS.AES.decrypt(object, secret);
+			object=decipher_bytes.toString(CryptoJS.enc.Utf8);
 		}else{
 			for (var key in object)
 			{
@@ -50,7 +51,7 @@ myApp.service('EncryptionService',function(UserAuthorizationInfo){
     function encryptObject(object,secret)
 	{
 		
-	 	if (typeof object=='string'){
+	 	if (typeof object ==='string'){
 	 		return CryptoJS.AES.encrypt(object, secret).toString();
 	 		//var encryptedString=ciphertext.toString();
 
@@ -70,7 +71,7 @@ myApp.service('EncryptionService',function(UserAuthorizationInfo){
 			    }else
 			    {
 			      if (typeof object[key] !=='string') object[key]=String(object[key]);
-			      object[key] = CryptoJS.AES.encrypt(object[key],secret ).toString();
+			      object[key] = CryptoJS.AES.encrypt(object[key], secret).toString();
 			      //object[key]=ciphertext.toString();
 			    }
 			}
@@ -90,8 +91,22 @@ myApp.service('EncryptionService',function(UserAuthorizationInfo){
 		decryptData:function(object)
 		{
 			//Decrypt
-			return decryptObject(object,securityAnswerHash);
+			return decryptObject(object, encryptionHash);
 		},
+
+        /**
+         *@ngdoc method
+         *@name decryptDataWithKey
+         *@methodOf MUHCApp.service:EncryptionService
+         *@params {Object} object Object to be decrypted, {String} key fo
+         *@description Uses the given key as the decryption hash
+         *@return {Object} Returns decrypted object
+         **/
+        decryptDataWithKey:function(object, key)
+        {
+            //Decrypt
+            return decryptObject(object, key);
+        },
 		/**
 		*@ngdoc method
 		*@name encryptData
@@ -102,21 +117,9 @@ myApp.service('EncryptionService',function(UserAuthorizationInfo){
 		**/
 		encryptData:function(object)
 		{
-			return encryptObject(object,securityAnswerHash);
+			return encryptObject(object, encryptionHash);
 		},
-		/**
-		*@ngdoc method
-		*@name decryptWithKey
-		*@methodOf MUHCApp.service:EncryptionService
-		*@params {Object} object Object to be decrypted
-		*@params {String} secret Key for decrypting
-		*@description Uses the secret parameter as key to decrypt object parameter
-    	*@return {Object} Returns decrypted object
-		**/
-		decryptWithKey:function(object,secret)
-		{
-			return decryptObject(object,secret);
-		},
+
 		/**
 		*@ngdoc method
 		*@name encryptWithKey
@@ -128,6 +131,7 @@ myApp.service('EncryptionService',function(UserAuthorizationInfo){
 		**/
 		encryptWithKey:function(object, secret)
 		{
+			console.log('OBJECT: ' +  JSON.stringify(object), 'SECRET: ' + secret);
 			return encryptObject(object,secret);
 		},
 
@@ -151,6 +155,35 @@ myApp.service('EncryptionService',function(UserAuthorizationInfo){
          **/
 		getSecurityAns: function () {
 			return securityAnswerHash;
+        },
+
+        /**
+         *@ngdoc method
+         *@name encryptPassword
+         *@methodOf MUHCApp.service:EncryptionService
+         *@description Encrypts a given password using SHA256
+         *@return {String} Returns hashed password
+         **/
+        hash: function (incoming) {
+
+        	console.log("before: " + incoming);
+
+         	var temp =  CryptoJS.SHA256(incoming).toString();
+
+            console.log("after: " + temp);
+
+            return temp;
+        },
+
+        /**
+         *@ngdoc method
+         *@name setEncryptionHash
+         *@methodOf MUHCApp.service:EncryptionService
+         *@description Encrypts a given password using SHA512
+         *@return {String} Returns hashed password
+         **/
+        generateEncryptionHash: function () {
+            encryptionHash = CryptoJS.PBKDF2(UserAuthorizationInfo.getPassword(), securityAnswerHash, {keySize: 512/32, iterations: 1000}).toString(CryptoJS.enc.Hex);
         }
 
 	};
