@@ -166,13 +166,8 @@ myApp.service('EncryptionService',function(UserAuthorizationInfo){
          **/
         hash: function (incoming) {
 
-        	console.log("before: " + incoming);
+         	return  CryptoJS.SHA256(incoming).toString();
 
-         	var temp =  CryptoJS.SHA256(incoming).toString();
-
-            console.log("after: " + temp);
-
-            return temp;
         },
 
         /**
