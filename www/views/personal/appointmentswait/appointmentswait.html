@@ -3,7 +3,7 @@
         <div class="left">
             <ons-back-button>{{"BACK"|translate}}</ons-back-button>
         </div>
-        <div class="center" ng-class="fontSizeTitle">{{"APPOINTMENTSWAIT"|translate}}</div>
+        <div class="center" ng-class="fontSizeTitle">{{"MY"|translate}} {{"APPOINTMENTSWAIT"|translate}}</div>
     </ons-toolbar>
 
     <div style="background-color: white">
@@ -67,7 +67,7 @@
                         <ons-col>
                             <div align="left"> On time</div>
                         </ons-col>
-                        <ons-col width="50px" align="left"><strong  style="color: #59D45D"> {{percent0}}%</strong></ons-col>
+                        <ons-col width="50px" align="left"><strong  style="color: #59D45D"> {{percentOnTime}}%</strong></ons-col>
                     </ons-row>
                     <ons-row>
                         <ons-col width="30px"></ons-col>
@@ -75,7 +75,7 @@
                         <ons-col>
                             <div align="left" style="display: inline-block"> Too Early</div>
                         </ons-col>
-                        <ons-col width="50px" align="left"><strong style="color: #F1C40F"> {{percent15}}% </strong></ons-col>
+                        <ons-col width="50px" align="left"><strong style="color: #F1C40F"> {{percentEarly}}% </strong></ons-col>
                     </ons-row>
                     <ons-row>
                         <ons-col width="30px"></ons-col>
@@ -83,7 +83,7 @@
                         <ons-col>
                             <div align="left"> Late</div>
                         </ons-col>
-                        <ons-col width="50px" align="left"><strong style="color: red"> {{percent45}}%</strong></ons-col>
+                        <ons-col width="50px" align="left"><strong style="color: red"> {{percentLate}}%</strong></ons-col>
                     </ons-row>
                 </ons-col>
                 <ons-col width="110px">

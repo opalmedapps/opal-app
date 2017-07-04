@@ -19,166 +19,182 @@ var myApp = angular.module('MUHCApp');
  */
 
 
-myApp.controller('waitController',
-    function($filter, $rootScope, $translate, UserPreferences, $scope) {
-        //Function sets account
-        var page = homeNavigator.getCurrentPage();
-        var parameters = page.options.param;
+myApp.controller('waitController',['$scope','$timeout','LabResults','$filter','UserPreferences', 'Logger', 'Constants',
+    function($scope,$timeout,LabResults,$filter,UserPreferences, Logger, Constants)
+    {
+        var page = personalNavigator.getCurrentPage();
+        var test = page.options.param;
 
-        $scope.language = UserPreferences.getLanguage();
-        console.log($scope.app);
+        console.log(test);
+        $scope.selectedTest = test;
+        $scope.testName = test.ComponentName || test.testResults[0].ComponentName;
+        $scope.title = $scope.selectedTest.FacComponentName || $scope.selectedTest.testName;
 
-        var x = false;
-        if( x ){
-            $scope.percent15 = 0;
-            $scope.percent30 = 0;
-            $scope.percent45 = 0;
-            $scope.percent0 = 0;
+        var max = $scope.selectedTest.MaxNorm || test.testResults[0].MaxNorm;
+        var min = $scope.selectedTest.MinNorm || test.testResults[0].MinNorm;
+        $scope.maxNorm = max;
+        $scope.minNorm = min;
+
+        $scope.unit = $scope.selectedTest.UnitDescription || test.testResults[0].UnitDescription;
+        var u = $filter('translate')('RESULTS') + ' (' + $scope.unit + ')';
+        $scope.testValue = page.options.param.TestValue;
+        $scope.information = undefined;
+
+        $scope.testResultsByType = LabResults.getTestResultsByType();
+
+        var testResults = $scope.testResultsByType[$scope.title].testResults;
+        $scope.historicViewTestResult = $scope.testResultsByType[$scope.title].testResults;
+
+        $scope.testResultsByDateArray = LabResults.getTestResultsArrayByDate();
+
+        Logger.sendLog('Lab Results', test.ComponentName || test.testResults[0].ComponentName);
+
+        var url = 'https://labtestsonline.org/map/aindex/SearchForm?Search='+$scope.title+'&action_ProcessSphinxSearchForm=Go';
+
+        $scope.goToAbout = function () {
+
+        };
+
+        // Chart
+        $scope.data = [{
+            key: 'Data',
+            values: []
+        }];
+
+        var reformedData = [];
+        for(var i=0; i<testResults.length; i++)
+        {
+            var dv = [];  //array to store pairs of [date, testResult]
+            dv[0] = Date.parse(testResults[i].TestDateFormat);  //dateArray[0] = most recent date
+            dv[1] = parseFloat(testResults[i].TestValue);
+            reformedData.push(dv);
         }
-        else{
-            var count0 = 46;
-            var count15 = 28;
-            var count30 = 11;
-            var count45 = 15;
-            var countTotal = count0+count15+count30+count45;
-            $scope.percent15 = Math.round((count15/countTotal)*100);
-            $scope.percent30 = Math.round((count30/countTotal)*100);
-            $scope.percent45 = Math.round((count45/countTotal)*100);
-            $scope.percent0 = 100-$scope.percent45-$scope.percent15-$scope.percent30;
-        }
 
-        //Instantiates values and parameters
-        $scope.disableButton = true;
-        $scope.title = 'UPDATE';
-        $scope.value = parameters;
-        $scope.valueLabel = parameters;
-        $scope.timeUpdated = true;
-        $scope.type1 = 'text';
+        /*********************************************
+         * FINDING THE MAX AND MIN VALUES FOR CHARTING
+         *********************************************/
 
-        Highcharts.setOptions({
-            setOptions: {
-                colors: ['#50BEC1', '#FEC200', '#F06B6C']
+        var vals = reformedData.reduce(function(a, b) {
+            return a.concat(b[1]);
+        },[]);
+        var maxChart = Math.max.apply(Math, vals)*1.05;
+        var minChart = Math.min.apply(Math, vals)*0.95;
+
+        console.log("Chart range", minChart, maxChart);
+
+        /**********************************************/
+
+        $scope.recentValue = parseFloat(testResults[testResults.length-1].TestValue);
+        var windowWidth = $(window).width();
+        var windowHeight = $(window).height();
+
+        $(window).on('resize.doResize', function () {
+            var newWidth = $(window).width(),
+                updateStuffTimer;
+
+            if(newWidth !== windowWidth) {
+                $timeout.cancel(updateStuffTimer);
             }
+
+            updateStuffTimer = $timeout(function() {
+                console.log("resize detected!"); // Update the attribute based on window.innerWidth
+                //Need a function here to resize the graph size
+            }, 500);
         });
 
-        Highcharts.chart('container', {
+        $scope.$on('$destroy',function (){
+            $(window).off('resize.doResize'); // remove the handler added earlier
+        });
+
+        // Sample options for first chart
+
+        if (UserPreferences.getLanguage() == 'FR')
+        {
+            Highcharts.setOptions({
+                lang: {
+                    months: ['janvier', 'février', 'mars', 'avril', 'mai', 'juin',
+                        'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'],
+                    weekdays: ['dimanche', 'lundi', 'lardi', 'mercredi',
+                        'jeudi', 'vendredi', 'samedi'],
+                    shortMonths: ['janv.', 'févr.', 'mars', 'avr.', 'mai', 'juin', 'juill.',
+                        'août', 'sept.', 'oct.', 'nov.', 'déc'],
+                    decimalPoint: ',',
+                    downloadPNG: 'Télécharger en image PNG',
+                    downloadJPEG: 'Télécharger en image JPEG',
+                    downloadPDF: 'Télécharger en document PDF',
+                    downloadSVG: 'Télécharger en document Vectoriel',
+                    exportButtonTitle: 'Export du graphique',
+                    loading: 'Chargement en cours...',
+                    printChart: 'Imprimer le graphique',
+                    resetZoom: 'Réinitialiser le zoom',
+                    resetZoomTitle: 'Réinitialiser le zoom au niveau 1:1',
+                    thousandsSep: ' '
+                }
+            });
+
+            Highcharts.dateFormat('%e%a');
+        }
+
+
+        $scope.chartOptions = {
+            rangeSelector: {
+                selected: 1
+            },
             chart: {
-                plotBackgroundColor: null,
-                plotBorderWidth: 0,
-                plotShadow: false,
-                margin: [0, 0, 0, 0],
-                spacingTop: 0,
-                spacingBottom: 0,
-                spacingLeft: 0,
-                spacingRight: 0
+                // Explicitly tell the width and height of a chart
+                width: windowWidth,
+                height: null
+            },
+            xAxis: {
+                type: 'datetime',
+                dateTimeLabelFormats: { // don't display the dummy year
+                    month: '%e. %b',
+                    year: '%b'
+                },
+                title: {
+                    text: 'Date'
+                }
+            },
+            yAxis: {
+                max: maxChart,
+                min: minChart,
+                title: {
+                    text: u
+                },
+                opposite: false,
+                plotLines: [{
+                    color: 'rgba(246, 54, 92, 0.53)',
+                    value: max,
+                    dashStyle: 'Solid',
+                    width: 2
+                },{
+                    color: 'rgba(246, 54, 92, 0.53)',
+                    value: min,
+                    dashStyle: 'Solid',
+                    width: 2
+                }]
             },
             credits: {
                 enabled: false
             },
-            title: {
-                text: ''
-            },
-            colors:
-                ['#59D45D', '#FEC200', '#FF0000'],
-            colorByPoint: true,
             plotOptions: {
-                pie: {
-                    size: '100%',
-                    dataLabels: {
-                        enabled: false,
-                        distance: 0,
-                        style: {
-                            fontWeight: 'bold',
-                            color: 'white'
-                        }
-                    },
-                    startAngle: -0,
-                    endAngle: 360,
-                    center: ['50%', '50%']
+                series: {
+                    fillOpacity: 0.1
                 }
             },
             series: [{
-                type: 'pie',
-                name: '',
-                innerSize: '30%',
-                data: [
-                    ['',   40],
-                    ['',       40],
-                    ['', 20],
-                ]
+                name: 'Result',
+                data: reformedData,
+                marker: {
+                    enabled: true,
+                    radius: 3
+                },
+                type: 'area',
+                color: 'rgba(21, 148, 187, 0.65)',
+                pointWidth: 100,
+                tooltip: {
+                    valueDecimals: 2
+                }
             }]
-        });
-
-        //Sets all the account settings depeding on the field that needs to be changed
-        function changeSetUp() {
-            //Mappings between parameters and translation
-            //Navigator parameter
-
-            //Sets the instructions depending on the value to update
-            if (parameters === 'HOUR') {
-                $scope.timeUpdated = false;
-                $scope.typeUpdated = false;
-                $scope.firstOption = '8';
-                $scope.secondOption = '9';
-                $scope.thirdOption = '10';
-                $scope.forthOption = '11';
-                $scope.fifthOption = '12';
-                $scope.sixthOption = '13';
-                $scope.seventhOption = '14';
-                $scope.eigthOption = '15';
-                $scope.ninthOption = '16';
-                $scope.valueLabel = 'HOUR';
-                $scope.title = 'UPDATE';
-                $scope.instruction = 'SELECTHOUR';
-            } else if (parameters === 'MINUTE') {
-                $scope.instruction = 'SELECTMINUTES';
-                $scope.timeUpdated = false;
-                $scope.typeUpdated = true;
-                $scope.firstOption = '00';
-                $scope.secondOption = '15';
-                $scope.thirdOption = '30';
-                $scope.forthOption = '45';
-                $scope.valueLabel = 'MINUTES';
-                $scope.title = 'UPDATE';
-                //$scope.pickMinute = value;
-            } else if (parameters === 'TYPE') {
-                $scope.firstOption = 'chemoapt';
-                $scope.secondOption = 'chemotx';
-                $scope.thirdOption = 'xlarge';
-                $scope.instruction = 'SELECTTYPE';
-                $scope.timeUpdated = true;
-                $scope.typeUpdated = true;
-            }
-
-        //Function to update new value
-        $scope.updateValue = function(val) {
-            var objectToSend = {};
-            objectToSend.NewValue = $scope.newValue;
-
-            if (val == 'Password') {
-                changePassword();
-            } else if (val == 'Email') {
-                changeEmail();
-            }else{
-                changeField(val, $scope.newValue);
-            }
-            $scope.disableButton = true;
         };
-
-        //Function to change type of appointment
-        $scope.changeType = function(newVal) {
-
-        };
-
-
-        //FUnction to change the hour of appointment
-        $scope.changeHour = function(val) {
-
-        };
-
-        //Function to change the minute of appointment
-        $scope.changeMinute = function(val) {
-
-        }
-    }});
-
+    }]);

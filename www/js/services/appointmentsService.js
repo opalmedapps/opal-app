@@ -224,6 +224,7 @@ myApp.service('Appointments', ['$q', 'RequestToServer','$cordovaCalendar','UserA
         return -1;
 
     }
+
     function setTreatmentSessions(appointments)
     {
         var array = [];
@@ -716,7 +717,7 @@ myApp.service('Appointments', ['$q', 'RequestToServer','$cordovaCalendar','UserA
         },
         /**
          *@ngdoc method
-         *@name setAppointmentsLanguage
+         *@name clearAppointments
          *@methodOf MUHCApp.service:Appointments
          *@description Cleans all the Appointments service state and reinstantiates.
          **/
@@ -727,6 +728,84 @@ myApp.service('Appointments', ['$q', 'RequestToServer','$cordovaCalendar','UserA
             appointmentsLocalStorage=[];
             calendar={};
             numberOfSessions=0;
+        },
+        /**
+         *@ngdoc method
+         *@name getPercent
+         *@methodOf MUHCApp.service:Appointments
+         *@description Extract the waiting time counts from OpalDB according to appointments, compute the percentages
+         *@returns an array of 4 integers representing Percentage for each time interval. If not available, return 0%.
+         **/
+        getPercent: function(serNum)
+        {
+            var percent = [0,0,0,0];
+            var index = findAppointmentIndexInArray(userAppointmentsArray,serNum);
+            //Check if this appointment if found, else return 0% placeholder
+            if(index == -1)
+            {
+                return percent;
+            }
+            //Set the properties of this appointment
+            var type = userAppointmentsArray[index].AppointmentType_EN;//type of treatment TBD with dictionary
+            var typeID; var hour1; var hour2;
+            var day = userAppointmentsArray[index].ScheduledStartTime;
+            var hour = day.getHours(); //0 to 23 standard hour
+            var weekday = day.getDay(); //0 being Sunday, 6 being Saturday (0 to 4 for mysql)
+            day = day.toISOString().slice(0, 19).replace('T', ' ');
+            //0 being January, 11 being December (1 and 12 for mysql)
+            //Map the variables to the corresponding category
+            switch (hour) {
+                case 8:
+                case 9:
+                    hour1 = 8;
+                    hour2 = 9;
+                    break;
+                case 10:
+                case 11:
+                    hour1 = 10;
+                    hour2 = 11;
+                    break;
+                case 12:
+                case 13:
+                    hour1 = 12;
+                    hour2 = 13;
+                    break;
+                case 14:
+                    hour1 = 13;
+                    hour2 = 14;
+                    break;
+                case 15:
+                case 16:
+                    hour1 = 15;
+                    hour2 = 16;
+            }
+            switch (type) {
+                case "Chemotherapy":
+                    typeID = 0;
+                    break;
+                case "Bladder transplant":
+                    typeID = 1;
+                    break;
+            }
+
+            //Request to get the corresponding data request(typeID 0, hour1 0, hour2 1, weekday 0, day);
+            var count = [];
+            //RequestToServer.sendRequest('getDelayCount',{"Id":serNum, "Field": "Appointments"});
+            //LocalStorage.WriteToLocalStorage('Appointments', userAppointmentsArray);
+            //getCount(type, hour, weekday, month);
+            count[0]=46;
+            count[1]=28;
+            count[2]=11;
+            count[3]=15;
+
+            //Compute the percentage of each category
+            var countTotal = count[0]+count[1]+count[2]+count[3];
+            for (var i = 1; i < 4; i++) {
+                percent[i] = Math.round((count[i]/countTotal)*100);
+            }
+            percent[0] = 100-percent[1]-percent[2]-percent[3]
+            console.log(percent);
+            return percent;
         },
 
         getRecentCalledAppointment: function () {
