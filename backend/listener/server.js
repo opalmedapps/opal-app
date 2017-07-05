@@ -32,7 +32,7 @@ admin.initializeApp({
 
 // Get reference to correct data element
 var db = admin.database();
-var ref = db.ref("/dev2");
+var ref = db.ref("/dev3");
 
 // Ensure there is no leftover data on firebase
 ref.set(null)

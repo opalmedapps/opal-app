@@ -132,3 +132,7 @@ exports.logActivity = function (requestObject) {
 exports.getQuestionnaires = function (requestObject) {
     return sqlInterface.getQuestionnaires(requestObject);
 };
+
+exports.getTimeEstimate = function (requestObject) {
+    return sqlInterface.getTimeEstimate(requestObject);
+};
