@@ -70,6 +70,7 @@
   "ERROROBTAININGDOCUMENT": "Error obtaining document from server",
   "ESTIMATED": "Estimated",
   "ESTIMATEDWAIT": "Estimated Wait",
+  "ESTIMATEDWAITMOREINFO": "Estimated Wait - More Info",
   "EXIT_APP": "Are you sure you wish to exit Opal?",
   "FEEDBACK": "Feedback",
   "FEEDBACK_MESSAGE": "Your feedback is invaluable to us. Please take a moment to let us know what you think about Opal!",

@@ -37,6 +37,8 @@
         vm.RoomLocation = '';
         vm.showHomeScreenUpdate = null;
         vm.loading = true;
+        vm.checkedInAppointments = ['hi'];
+        vm.waitingTimeEstimate = 5;
 
         vm.homeDeviceBackButton = homeDeviceBackButton;
         vm.load = load;
@@ -44,6 +46,7 @@
         vm.goToNotification = goToNotification;
         vm.goToAppointments = goToAppointments;
         vm.goToCheckinAppointments = goToCheckinAppointments;
+        vm.goToWaitingTimeEstimates = goToWaitingTimeEstimates;
 
         activate();
 
@@ -347,6 +350,13 @@
         function goToCheckinAppointments(todaysAppointments) {
             NavigatorParameters.setParameters({'Navigator':'homeNavigator'});
             homeNavigator.pushPage('./views/home/checkin/checkin-list.html');
+        }
+
+        function goToWaitingTimeEstimates()
+        {
+            homeNavigator.pushPage('views/home/waiting-time/waiting-time.html', {
+                checkedInAppointments: vm.checkedInAppointments
+            })
         }
 
         function setPlural(apps) {

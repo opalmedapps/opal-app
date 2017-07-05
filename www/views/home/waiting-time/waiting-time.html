@@ -1,0 +1,44 @@
+<ons-page ng-controller="WaitingTimeController as c">
+  <ons-toolbar fixed-style>
+    <div class="left">
+      <ons-back-button>{{"BACK"|translate}}</ons-back-button>
+    </div>
+    <div class="center" ng-class="fontSizeTitle">{{"ESTIMATEDWAIT"|translate}}</div>
+  </ons-toolbar>
+  <div id="last-updated">Last Updated: {{c.lastUpdated}}</div>
+  <div class="horizontal-center-outer">
+    <div class="horizontal-center-inner" style="width: 90%">
+      <div id="wait-time-timeline">
+        <div id="starting-dot"></div>
+        <div id="past-line"></div>
+        <div id="current-time-indicator"><i class="fa fa-user" aria-hidden="true"></i></div>
+        <div class="sthethoscope"><i class="fa fa-stethoscope" aria-hidden="true"></i></div>
+      </div>
+    </div>
+    <div class="dividing-horizontal-line"></div>
+
+    <div style="text-align: center; margin: 10px">
+      <div style="float: left">
+        <b>Ahead of You</b>:
+        <br> {{c.numPrevPatients}} {{c.numPrevPatients > 1 ? "Patients" : "Patient"}}
+      </div>
+      <div class="dividing-vertical-line"></div>
+      <div>
+        <b>Ahead of You Not Checked In</b>:
+        <br> {{c.numPrevPatientsNotCheckedIn}} {{c.numPrevPatientsNotCheckedIn > 1 ? "Patients" : "Patient"}}
+      </div>
+    </div>
+    <div style="text-align: center; margin-top: 60px">
+      <b>Estimated Wait</b>:
+      <br>
+      <div style="font-size: x-large">{{c.estimatedWait}}</div>
+    </div>
+
+    <div id="more-info-button-outer">
+      <button modifier="large" id="more-info-button" ng-click="c.goToWaitingTimeEstimates()">
+      <div style="color: #757575; position: relative; top: 50%;" align="center">
+        More Info
+      </div>
+    </button>
+  </div>
+</ons-page>
