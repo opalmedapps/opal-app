@@ -16,6 +16,8 @@ myApp.service('EncryptionService',function(UserAuthorizationInfo){
 
 	function decryptObject(object,secret)
 	{
+
+
 		if(typeof object ==='string')
 		{
 			var decipher_bytes = CryptoJS.AES.decrypt(object, secret);
@@ -50,15 +52,18 @@ myApp.service('EncryptionService',function(UserAuthorizationInfo){
 	    }
     function encryptObject(object,secret)
 	{
+
+        var nonce = this.generateNonce();
 		
 	 	if (typeof object ==='string'){
-	 		return CryptoJS.AES.encrypt(object, secret).toString();
+	 		return nonce + nacl.util.encodeUTF8(nacl.secretbox(object, nonce, secret));
+	 		// return CryptoJS.AES.encrypt(object, secret).toString();
 	 		//var encryptedString=ciphertext.toString();
 
 	 		//return encryptedString;
 	 	}else if(typeof object!=='string'&& typeof object!=='object'){
 	 		object=String(object);
-	 		var encryptedString = CryptoJS.AES.encrypt(object, secret).toString();
+	 		var encryptedString = nonce + nacl.util.encodeUTF8(nacl.secretbox(object, nonce, secret));
 	 		//var encryptedString=ciphertext.toString();
 	 		console.log(encryptedString);
 	 		return encryptedString;
@@ -71,7 +76,7 @@ myApp.service('EncryptionService',function(UserAuthorizationInfo){
 			    }else
 			    {
 			      if (typeof object[key] !=='string') object[key]=String(object[key]);
-			      object[key] = CryptoJS.AES.encrypt(object[key], secret).toString();
+			      object[key] = nonce + nacl.util.encodeUTF8(nacl.secretbox(object, nonce, secret));
 			      //object[key]=ciphertext.toString();
 			    }
 			}
@@ -182,7 +187,7 @@ myApp.service('EncryptionService',function(UserAuthorizationInfo){
         generateNonce: function() {
 			var nonce = "";
 			var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-			for(var i = 0; i < length; i++) {
+			for(var i = 0; i < 24; i++) {
 				nonce += possible.charAt(Math.floor(Math.random() * possible.length));
 			}
 			return nonce;
