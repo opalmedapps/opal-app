@@ -70,6 +70,22 @@
                         </ons-col>
                     </ons-row>
                 </ons-list-item>
+                <!-- WAITING TIME ESTIMATE -->
+                <ons-list-item modifier="tappable chevron" class="item" ng-hide="!h.checkedInAppointments.length" ng-click="h.goToWaitingTimeEstimates()">
+                    <ons-row align="center">
+                        <ons-col width="60px" style="text-align: center">
+                            <div>
+                                <i class="fa fa-clock-o fa-2x" style="color:red"></i>
+                            </div>
+                        </ons-col>
+                        <ons-col>
+                            <header>
+                                <span class="item-title" ng-class="fontSizeTitle">{{"ESTIMATEDWAIT"|translate}}</span>
+                            <p class="item-desc" ng-class="fontSizeDesc">{{h.waitingTimeEstimate}} {{"MINUTES"|translate}}</p>
+                            </header>
+                        </ons-col>
+                    </ons-row>
+                </ons-list-item>
                 <!-- APPOINTMENT STATUS-->
                 <ons-list-item modifier="chevron" class="item" ng-click="h.goToAppointments()">
                     <ons-row align="center">
