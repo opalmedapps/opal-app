@@ -165,9 +165,7 @@ myApp.service('EncryptionService',function(UserAuthorizationInfo){
          *@return {String} Returns hashed password
          **/
         hash: function (incoming) {
-
          	return  CryptoJS.SHA256(incoming).toString();
-
         },
 
         /**
@@ -179,7 +177,16 @@ myApp.service('EncryptionService',function(UserAuthorizationInfo){
          **/
         generateEncryptionHash: function () {
             encryptionHash = CryptoJS.PBKDF2(UserAuthorizationInfo.getPassword(), securityAnswerHash, {keySize: 512/32, iterations: 1000}).toString(CryptoJS.enc.Hex);
-        }
+        },
+
+        generateNonce: function() {
+			var nonce = "";
+			var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+			for(var i = 0; i < length; i++) {
+				nonce += possible.charAt(Math.floor(Math.random() * possible.length));
+			}
+			return nonce;
+		}
 
 	};
 
