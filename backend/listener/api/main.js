@@ -22,9 +22,9 @@ exports.apiRequestFormatter=function(requestKey,requestObject)
         }else{
             //Gets password and decrypts request
             //console.log(rows);
-            var key=rows[0].AnswerText;
-            requestObject.Request=utility.decryptObject(requestObject.Request,key);
-            encryptionKey=key;
+            var salt=rows[0].AnswerText;
+            var pass = rows[0].Password;
+            requestObject.Request=utility.decrypt(requestObject.Request,pass,salt);
             //If requests after decryption is empty, key was incorrect, reject the request
             if(requestObject.Request === '') {
                 //console.log('Rejecting request due to incorrect password recorded');
@@ -33,7 +33,7 @@ exports.apiRequestFormatter=function(requestKey,requestObject)
             }else{
                 //Otherwise decrypt the parameters and send to process api request
                 //console.log("Decrypting");
-                requestObject.Parameters=utility.decryptObject(requestObject.Parameters,key);
+                requestObject.Parameters=utility.decrypt(requestObject.Parameters,pass,salt);
                 //console.log('line38', requestObject.Parameters);
 
                 //Process request simple checks the request and pipes it to the appropiate API call, then it receives the response
@@ -42,7 +42,8 @@ exports.apiRequestFormatter=function(requestKey,requestObject)
                     //Once its process if the response is a hospital request processed, simply delete request
                     responseObject = data;
                     responseObject.Code = 3;
-                    responseObject.EncryptionKey = encryptionKey;
+                    responseObject.EncryptionKey = pass;
+                    responseObject.Salt = salt;
                     responseObject.Headers = {RequestKey:requestKey,RequestObject:requestObject};
                     r.resolve(responseObject);
                 }).catch(function(errorResponse){
@@ -52,7 +53,8 @@ exports.apiRequestFormatter=function(requestKey,requestObject)
                     errorResponse.Code = 2;
                     errorResponse.Reason = 'Server error, report the error to the hospital';
                     errorResponse.Headers = {RequestKey:requestKey,RequestObject:requestObject};
-                    errorResponse.EncryptionKey = encryptionKey;
+                    responseObject.EncryptionKey = pass;
+                    responseObject.Salt = salt;
                     r.resolve(errorResponse);
                 });
             }

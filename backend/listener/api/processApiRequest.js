@@ -12,7 +12,6 @@ var API = {
     'Logout': apiHospitalUpdate.logout,
     'Resume':apiPatientUpdate.resume,
     'Refresh':apiPatientUpdate.refresh,
-
     'AccountChange':apiHospitalUpdate.accountChange,
     'CheckCheckin':apiPatientUpdate.checkCheckin,
     'Checkin':apiHospitalUpdate.checkIn,
