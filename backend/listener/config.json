@@ -3,10 +3,12 @@
     "MYSQL_PASSWORD":"service",
     "MYSQL_DATABASE":"OpalDB_AJ_Sandbox",
     "HOST" : "172.26.66.41",
-    "DOCUMENTS_PATH" : "/var/www/Documents/opalAdmin/backend/clinical/documents/",
+    "DOCUMENTS_PATH" : "/var/www/devDocuments/opalAdmin/backend/clinical/documents/",
     "CHECKIN_PATH" : "http://172.26.66.41/devDocuments/screens/php/checkInPatientAriaMedi.php?CheckinVenue=OPAL%20PHONE%20APP&PatientId=",
     "VERIFYCHECKIN_PATH" : "http://172.26.66.41/devDocuments/ackeem/getCheckins.php?AppointmentAriaSer=",
     "WT_PATH" : "http://172.26.66.41/devDocuments/WTSim/api/getEstimate.php?appt_aria_ser=",
     "FIREBASE_ADMIN_KEY": "/home/robert/firebase_account/opal-sandbox.json",
     "DATABASE_URL":"https://opal-dev.firebaseio.com/"
+
+
 }

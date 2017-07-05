@@ -43,7 +43,14 @@ exports.unixToMYSQLTimestamp=function(time)
   var date=new Date(time);
   return exports.toMYSQLString(date);
 };
-
+exports.encrypt = function(object,secret,  salt)
+{
+  return exports.encryptObject(object,CryptoJS.PBKDF2(secret,salt,{keySize:512/32,iterations:1000}).toString(CryptoJS.enc.Hex));
+};
+exports.decrypt= function(object,secret, salt)
+{
+  return exports.decryptObject(object,CryptoJS.PBKDF2(secret,salt,{keySize:512/32,iterations:1000}).toString(CryptoJS.enc.Hex));
+};
 //Encrypts an object, array, number, date or string
 exports.encryptObject=function(object,secret)
 {
