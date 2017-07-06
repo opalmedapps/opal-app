@@ -1,6 +1,7 @@
 var sqlInterface=require('./../api/sqlInterface.js');
 var q=require('q');
 var utility=require('./../utility/utility.js');
+var CryptoJS = require('crypto-js');
 var exports=module.exports={};
 
 
@@ -44,7 +45,7 @@ exports.verifySecurityAnswer=function(requestKey,requestObject,patient)
     console.log("key",key);
     
     console.log("before decryption", requestObject.Parameters);
-    var unencrypted=utility.decryptObject(requestObject.Parameters,key);
+    var unencrypted=utility.decrypt(requestObject.Parameters,key);
     console.log("after decryption");
     console.log("Other key",unencrypted);
     var response = {};
@@ -82,9 +83,8 @@ exports.verifySecurityAnswer=function(requestKey,requestObject,patient)
 exports.setNewPassword=function(requestKey, requestObject,patient)
 {
     var r=q.defer();
-
     var key = patient.AnswerText;
-    var unencrypted=utility.decryptObject(requestObject.Parameters,key);
+    var unencrypted=utility.decrypt(requestObject.Parameters,key);
 
     sqlInterface.setNewPassword(unencrypted.newPassword,patient.PatientSerNum, requestObject.Token).then(function(){
         var response = { RequestKey:requestKey, Code:3,Data:{PasswordReset:"true"}, Headers:{RequestKey:requestKey,RequestObject:requestObject},Response:'success'};
@@ -101,36 +101,53 @@ exports.setNewPassword=function(requestKey, requestObject,patient)
 
 exports.securityQuestion=function(requestKey,requestObject) {
     var r = q.defer();
+    //sqlInterface.getEncryption(requestObject).then(function(){
+    //  console.log()
+    //});
+    sqlInterface.getEncryption(requestObject).then(function(rows){
+        if(rows.length>1||rows.length === 0)
+        {
+            //Rejects requests if username returns more than one password
+            //console.log('Rejecting request due to injection attack', rows);
+            //Construction of request object
+            responseObject = { Headers:{RequestKey:requestKey,RequestObject:requestObject},EncryptionKey:'', Code: 1, Data:{},Response:'error', Reason:'Injection attack, incorrect UserID'};
+            r.resolve(responseObject);
+        }else{
+            //Gets password and decrypts request
+            //console.log(rows);
+            var salt=rows[0].AnswerText;
+            var pass = rows[0].Password;
+            var unencrypted = utility.decrypt(requestObject.Parameters,pass,salt);
+            //console.log(requestObject);
 
-    var unencrypted=utility.decryptObject(requestObject.Parameters,'none');
+            sqlInterface.updateDeviceIdentifier(requestObject, unencrypted)
+                .then(function () {
+                    return sqlInterface.getSecurityQuestion(requestObject)
+                })
+                .then(function (response) {
+                    //console.log(response);
+                    r.resolve({
+                        Code:3,
+                        Data:response.Data,
+                        Headers:{RequestKey:requestKey,RequestObject:requestObject},
+                        Response:'success'
+                    });
 
-    //console.log(requestObject);
+                })
+                .catch(function (response){
 
-    sqlInterface.updateDeviceIdentifier(requestObject, unencrypted)
-        .then(function () {
-            return sqlInterface.getSecurityQuestion(requestObject)
-        })
-        .then(function (response) {
-            //console.log(response);
-            r.resolve({
-                Code:3,
-                Data:response.Data,
-                Headers:{RequestKey:requestKey,RequestObject:requestObject},
-                Response:'success'
-            });
+                    r.resolve({
+                        Headers:{RequestKey:requestKey,RequestObject:requestObject},
+                        Code: 2,
+                        Data:{},
+                        Response:'error',
+                        Reason:response
+                    });
 
-        })
-        .catch(function (response){
-
-            r.resolve({
-                Headers:{RequestKey:requestKey,RequestObject:requestObject},
-                Code: 2,
-                Data:{},
-                Response:'error',
-                Reason:response
-            });
-
-        });
+                });
+        }
+    });
+    
     return r.promise;
 
 };

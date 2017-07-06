@@ -187,14 +187,12 @@ function uploadToFirebase(response, key)
     var requestKey = headers.RequestKey;
     var encryptionKey = response.EncryptionKey;
     var salt = response.Salt;
-    //
     delete response.EncryptionKey;
     delete response.Salt;
     
 
     if(typeof encryptionKey!=='undefined' && encryptionKey!=='') response = utility.encrypt(response, encryptionKey, salt);
     response.Timestamp = admin.database.ServerValue.TIMESTAMP;
-
     var path = '';
     if (key === "requests") {
         var userId = headers.RequestObject.UserID;
