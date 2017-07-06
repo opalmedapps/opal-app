@@ -21,13 +21,13 @@ myApp.service('EncryptionService',function(UserAuthorizationInfo){
 			//grab the nonce
 			var pair = splitValue(object);
 
-			return nacl.util.encodeBase64(nacl.secretbox.open(nacl.util.decodeBase64(pair[1]), nacl.util.decodeBase64(pair[0]), secret));
+			return nacl.util.encodeUTF8(nacl.secretbox.open(pair[1], pair[0], secret));
 
 		}else{
 			for (var key in object)
 			{
 				//console.log(key);
-				if (typeof object[key]=='object')
+				if (typeof object[key] ==='object')
 				{
 					decryptObject(object[key],secret);
 				} else
@@ -37,54 +37,76 @@ myApp.service('EncryptionService',function(UserAuthorizationInfo){
                     }
 					else
 					{
-
                         //grab the nonce
-                        pair = splitValue(object);
+                        pair = splitValue(object[key]);
 
-                        var value = nacl.secretbox.open(nacl.util.decodeBase64(pair[1]), nacl.util.decodeBase64(pair[0]), secret);
-						//console.log(decipherbytes);
-						object[key]= nacl.util.encodeBase64(value);
-						//console.log(object[key]);
+                        var value = nacl.secretbox.open(pair[1], pair[0], secret);
+
+						if(value === null){
+
+                            object[key]= '';
+
+						}
+						else{
+                            object[key]= nacl.util.encodeUTF8(value);
+						}
 					}
 				}
 			}
 		}
-				return object;
-	    }
+		return object;
+	}
+
     function encryptObject(object,secret, nonce)
 	{
 	 	if (typeof object ==='string'){
-	 		return nacl.util.encodeBase64(nonce.concat(nacl.secretbox(nacl.util.decodeBase64(object), nonce, secret)));
+	 		return nacl.util.encodeBase64( appendUint8Array(nonce, nacl.secretbox(nacl.util.decodeUTF8(object), nonce, secret)));
 	 	}else if(typeof object!=='string'&& typeof object!=='object'){
 	 		object=String(object);
-	 		return nacl.util.encodeBase64(nonce.concat(nacl.secretbox(nacl.util.decodeBase64(object), nonce, secret)));
+	 		return nacl.util.encodeBase64(appendUint8Array(nonce, nacl.secretbox(nacl.util.decodeUTF8(object), nonce, secret)));
 	 	}else{
 			for (var key in object)
 			{
-				if (typeof object[key]=='object')
+				if (typeof object[key]==='object')
 			    {
 			      encryptObject(object[key], secret, nonce);
-			    }else
+			    }
+			    else
 			    {
-			      if (typeof object[key] !=='string') object[key]=String(object[key]);
-
-			      	console.log("encrypted array: " + nacl.secretbox(nacl.util.decodeBase64(object[key]), nonce, secret));
-					console.log("encrypted array concat: " + nonce.concat(nacl.secretbox(nacl.util.decodeBase64(object[key]), nonce, secret)));
-					console.log("output: " + nacl.util.encodeBase64(nonce.concat(nacl.secretbox(nacl.util.decodeBase64(object[key]), nonce, secret))));
-
-                    object[key] = nacl.util.encodeBase64(nonce.concat(nacl.secretbox(nacl.util.decodeBase64(object[key]), nonce, secret)));
+			        object[key]=String(object[key]);
+                    object[key] = nacl.util.encodeBase64(appendUint8Array(nonce, nacl.secretbox(nacl.util.decodeUTF8(object[key]), nonce, secret)));
 			    }
 			}
+
+			console.log("returned object: " + JSON.stringify(object));
+
+			var temp = decryptObject(object, nacl.util.decodeUTF8(UserAuthorizationInfo.getPassword().substring(0, nacl.secretbox.keyLength)));
+			console.log(JSON.stringify(temp));
 			return object;
 		}
 	}
 
-    function splitValue(value) {
-		var pair = [];
-		pair.push(value.substring(0, nacl.secretbox.nonceLength - 1));
-		pair.push(value.substring(nacl.secretbox.nonceLength - 1));
-        return pair;
+    function splitValue(str) {
+		var value = nacl.util.decodeBase64(str);
+		return [value.slice(0, nacl.secretbox.nonceLength), value.slice(nacl.secretbox.nonceLength)]
     }
+
+    /**
+     * Creates a new Uint8Array based on two different ArrayBuffers
+     *
+     * @private
+     * @param {Uint8Array} buffer1 The first buffer.
+     * @param {Uint8Array} buffer2 The second buffer.
+     * @return {Uint8Array} The new ArrayBuffer created out of the two.
+     */
+    var appendUint8Array = function(buffer1, buffer2) {
+        var tmp = new Uint8Array(buffer1.length + buffer2.length);
+        tmp.set(buffer1, 0);
+
+        tmp.set(buffer2, buffer1.length);
+
+        return tmp;
+    };
 
     return{
 		/**
@@ -98,7 +120,7 @@ myApp.service('EncryptionService',function(UserAuthorizationInfo){
 		decryptData:function(object)
 		{
 			//Decrypt
-			return decryptObject(object, nacl.util.decodeUTF8(encryptionHash.substring(0, nacl.secretbox.keyLength - 1)));
+			return decryptObject(object, nacl.util.decodeUTF8(encryptionHash.substring(0, nacl.secretbox.keyLength)));
 		},
 
         /**
@@ -112,7 +134,7 @@ myApp.service('EncryptionService',function(UserAuthorizationInfo){
         decryptDataWithKey:function(object, key)
         {
             //Decrypt
-            return decryptObject(object, nacl.util.decodeUTF8(key.substring(0, nacl.secretbox.keyLength - 1)));
+            return decryptObject(object, nacl.util.decodeUTF8(key.substring(0, nacl.secretbox.keyLength)));
         },
 		/**
 		*@ngdoc method
@@ -125,7 +147,7 @@ myApp.service('EncryptionService',function(UserAuthorizationInfo){
 		encryptData:function(object)
 		{
             var nonce = this.generateNonce();
-			return encryptObject(object, nacl.util.decodeUTF8(encryptionHash.substring(0, nacl.secretbox.keyLength - 1)), nonce);
+			return encryptObject(object, nacl.util.decodeUTF8(encryptionHash.substring(0, nacl.secretbox.keyLength)), nonce);
 		},
 
 		/**
@@ -139,12 +161,8 @@ myApp.service('EncryptionService',function(UserAuthorizationInfo){
 		**/
 		encryptWithKey:function(object, secret)
 		{
-			console.log("secret length: " + secret.length);
-            console.log("required secret length: " + nacl.secretbox.keyLength );
-
-
             var nonce = this.generateNonce();
-			return encryptObject(object, nacl.util.decodeUTF8(secret.substring(0, nacl.secretbox.keyLength - 1)), nonce);
+            return encryptObject(object, nacl.util.decodeUTF8(secret.substring(0, nacl.secretbox.keyLength)), nonce);
 		},
 
         /**
@@ -192,7 +210,7 @@ myApp.service('EncryptionService',function(UserAuthorizationInfo){
         },
 
         generateNonce: function() {
-            return nacl.randomBytes(nacl.secretbox.nonceLength)
+			return nacl.randomBytes(nacl.secretbox.nonceLength)
 		}
 
 	};
