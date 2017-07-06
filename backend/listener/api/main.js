@@ -1,8 +1,8 @@
-var utility             =   require('./../utility/utility.js'),
-    sqlInterface        =   require('./sqlInterface.js'),
-    q                   =   require('q'),
-    processApiRequest   =   require('./processApiRequest.js');
-logger              =   require('./../logs/logger')
+var utility             =   require('./../utility/utility.js');
+ var    sqlInterface        =   require('./sqlInterface.js');
+var    q                   =   require('q');
+var    processApiRequest   =   require('./processApiRequest.js');
+var logger              =   require('./../logs/logger');
 
 //This handles the api requests by formating the response obtain from the API
 exports.apiRequestFormatter=function(requestKey,requestObject)

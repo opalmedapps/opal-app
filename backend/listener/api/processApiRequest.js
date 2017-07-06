@@ -1,5 +1,5 @@
 var exports=module.exports={};
-var Q=require('q');
+var Q= require('q');
 var apiPatientUpdate=require('./apiPatientUpdate.js');
 var apiHospitalUpdate=require('./apiHospitalUpdate.js');
 var security = require('./../security/security');

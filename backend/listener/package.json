@@ -42,7 +42,8 @@
     "sinon-chai": "^2.8.0"
   },
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "test": "./node_modules/.bin/mocha --reporter spec"
   },
   "main": "main.js",
   "directories": {
