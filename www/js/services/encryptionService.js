@@ -16,12 +16,13 @@ myApp.service('EncryptionService',function(UserAuthorizationInfo){
 
 	function decryptObject(object,secret)
 	{
-
-
 		if(typeof object ==='string')
 		{
-			var decipher_bytes = CryptoJS.AES.decrypt(object, secret);
-			object=decipher_bytes.toString(CryptoJS.enc.Utf8);
+			//grab the nonce
+			var pair = splitValue(object);
+
+			return nacl.util.encodeBase64(nacl.secretbox.open(nacl.util.decodeBase64(pair[1]), nacl.util.decodeBase64(pair[0]), secret));
+
 		}else{
 			for (var key in object)
 			{
@@ -31,18 +32,18 @@ myApp.service('EncryptionService',function(UserAuthorizationInfo){
 					decryptObject(object[key],secret);
 				} else
 				{
-					if (key=='UserID')
-					{
-						object[key]=object[key];
-					}else if(key=='DeviceId')
-					{
-						object[key]=object[key];
-					}
+					if (key==='UserID' || key==='DeviceId') {
+                        object[key] = object[key];
+                    }
 					else
 					{
-						var decipherbytes = CryptoJS.AES.decrypt(object[key], secret);
+
+                        //grab the nonce
+                        pair = splitValue(object);
+
+                        var value = nacl.secretbox.open(nacl.util.decodeBase64(pair[1]), nacl.util.decodeBase64(pair[0]), secret);
 						//console.log(decipherbytes);
-						object[key]=decipherbytes.toString(CryptoJS.enc.Utf8);
+						object[key]= nacl.util.encodeBase64(value);
 						//console.log(object[key]);
 					}
 				}
@@ -50,41 +51,42 @@ myApp.service('EncryptionService',function(UserAuthorizationInfo){
 		}
 				return object;
 	    }
-    function encryptObject(object,secret)
+    function encryptObject(object,secret, nonce)
 	{
-
-        var nonce = this.generateNonce();
-		
 	 	if (typeof object ==='string'){
-	 		return nonce + nacl.util.encodeUTF8(nacl.secretbox(object, nonce, secret));
-	 		// return CryptoJS.AES.encrypt(object, secret).toString();
-	 		//var encryptedString=ciphertext.toString();
-
-	 		//return encryptedString;
+	 		return nacl.util.encodeBase64(nonce.concat(nacl.secretbox(nacl.util.decodeBase64(object), nonce, secret)));
 	 	}else if(typeof object!=='string'&& typeof object!=='object'){
 	 		object=String(object);
-	 		var encryptedString = nonce + nacl.util.encodeUTF8(nacl.secretbox(object, nonce, secret));
-	 		//var encryptedString=ciphertext.toString();
-	 		console.log(encryptedString);
-	 		return encryptedString;
+	 		return nacl.util.encodeBase64(nonce.concat(nacl.secretbox(nacl.util.decodeBase64(object), nonce, secret)));
 	 	}else{
 			for (var key in object)
 			{
 				if (typeof object[key]=='object')
 			    {
-			      encryptObject(object[key],secret);
+			      encryptObject(object[key], secret, nonce);
 			    }else
 			    {
 			      if (typeof object[key] !=='string') object[key]=String(object[key]);
-			      object[key] = nonce + nacl.util.encodeUTF8(nacl.secretbox(object, nonce, secret));
-			      //object[key]=ciphertext.toString();
+
+			      	console.log("encrypted array: " + nacl.secretbox(nacl.util.decodeBase64(object[key]), nonce, secret));
+					console.log("encrypted array concat: " + nonce.concat(nacl.secretbox(nacl.util.decodeBase64(object[key]), nonce, secret)));
+					console.log("output: " + nacl.util.encodeBase64(nonce.concat(nacl.secretbox(nacl.util.decodeBase64(object[key]), nonce, secret))));
+
+                    object[key] = nacl.util.encodeBase64(nonce.concat(nacl.secretbox(nacl.util.decodeBase64(object[key]), nonce, secret)));
 			    }
 			}
-
 			return object;
 		}
 	}
-	return{
+
+    function splitValue(value) {
+		var pair = [];
+		pair.push(value.substring(0, nacl.secretbox.nonceLength - 1));
+		pair.push(value.substring(nacl.secretbox.nonceLength - 1));
+        return pair;
+    }
+
+    return{
 		/**
 		*@ngdoc method
 		*@name decryptData
@@ -96,7 +98,7 @@ myApp.service('EncryptionService',function(UserAuthorizationInfo){
 		decryptData:function(object)
 		{
 			//Decrypt
-			return decryptObject(object, encryptionHash);
+			return decryptObject(object, nacl.util.decodeUTF8(encryptionHash.substring(0, nacl.secretbox.keyLength - 1)));
 		},
 
         /**
@@ -110,7 +112,7 @@ myApp.service('EncryptionService',function(UserAuthorizationInfo){
         decryptDataWithKey:function(object, key)
         {
             //Decrypt
-            return decryptObject(object, key);
+            return decryptObject(object, nacl.util.decodeUTF8(key.substring(0, nacl.secretbox.keyLength - 1)));
         },
 		/**
 		*@ngdoc method
@@ -122,7 +124,8 @@ myApp.service('EncryptionService',function(UserAuthorizationInfo){
 		**/
 		encryptData:function(object)
 		{
-			return encryptObject(object, encryptionHash);
+            var nonce = this.generateNonce();
+			return encryptObject(object, nacl.util.decodeUTF8(encryptionHash.substring(0, nacl.secretbox.keyLength - 1)), nonce);
 		},
 
 		/**
@@ -136,8 +139,12 @@ myApp.service('EncryptionService',function(UserAuthorizationInfo){
 		**/
 		encryptWithKey:function(object, secret)
 		{
-			console.log('OBJECT: ' +  JSON.stringify(object), 'SECRET: ' + secret);
-			return encryptObject(object,secret);
+			console.log("secret length: " + secret.length);
+            console.log("required secret length: " + nacl.secretbox.keyLength );
+
+
+            var nonce = this.generateNonce();
+			return encryptObject(object, nacl.util.decodeUTF8(secret.substring(0, nacl.secretbox.keyLength - 1)), nonce);
 		},
 
         /**
@@ -185,12 +192,7 @@ myApp.service('EncryptionService',function(UserAuthorizationInfo){
         },
 
         generateNonce: function() {
-			var nonce = "";
-			var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-			for(var i = 0; i < 24; i++) {
-				nonce += possible.charAt(Math.floor(Math.random() * possible.length));
-			}
-			return nonce;
+            return nacl.randomBytes(nacl.secretbox.nonceLength)
 		}
 
 	};
