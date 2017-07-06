@@ -17,8 +17,8 @@ var app = angular.module('MUHCApp');
  *@requires MUHCApp.service:RequestToServer
  *@description Service that deals with the device identifiers, sends the identifiers to backend to be used by the push notifications system.
  **/
-app.service('DeviceIdentifiers', [ 'RequestToServer', '$q','Constants','UserAuthorizationInfo',
-    function(RequestToServer,$q, Constants, UserAuthorizationInfo)
+app.service('DeviceIdentifiers', [ 'RequestToServer', '$q','Constants','UserAuthorizationInfo', 'EncryptionService',
+    function(RequestToServer,$q, Constants, UserAuthorizationInfo, EncryptionService)
 {
     /**
      *@ngdoc property
@@ -123,7 +123,7 @@ app.service('DeviceIdentifiers', [ 'RequestToServer', '$q','Constants','UserAuth
          **/
         sendFirstTimeIdentifierToServer:function()
         {
-            return RequestToServer.sendRequestWithResponse('SecurityQuestion',deviceIdentifiers, 'none');
+            return RequestToServer.sendRequestWithResponse('SecurityQuestion',deviceIdentifiers, EncryptionService.hash('none'), null, null);
         },
         /**
          *@ngdoc method
@@ -137,7 +137,7 @@ app.service('DeviceIdentifiers', [ 'RequestToServer', '$q','Constants','UserAuth
             var objectToSend = deviceIdentifiers;
             objectToSend.email = email;
 
-            return RequestToServer.sendRequestWithResponse('SecurityQuestion', objectToSend, 'none', 'passwordResetRequests', 'passwordResetResponses');
+            return RequestToServer.sendRequestWithResponse('SecurityQuestion', objectToSend, EncryptionService.hash('none'), 'passwordResetRequests', 'passwordResetResponses');
         },
         /**
          *@ngdoc method
