@@ -49,24 +49,23 @@ exports.unixToMYSQLTimestamp=function(time)
   return exports.toMYSQLString(date);
 };
 
-exports.encrypt = function(object,secret)
+exports.encrypt = function(object,secret,salt)
 {
   var nonce = nacl.randomBytes(nacl.secretbox.nonceLength);
-  var secret = stablelibutf8.encode(secret.substring(0,nacl.secretbox.keyLength));
+  secret = CryptoJS.PBKDF2(secret, salt, {keySize: 512/32, iterations: 1000}).toString(CryptoJS.enc.Hex);
+  secret = stablelibutf8.encode(secret.substring(0,nacl.secretbox.keyLength));
   return exports.encryptObject(object,secret,nonce);
 };
-exports.decrypt= function(object,secret)
+exports.decrypt= function(object,secret,salt)
 {
+  secret = CryptoJS.PBKDF2(secret, salt, {keySize: 512/32, iterations: 1000}).toString(CryptoJS.enc.Hex);
   return exports.decryptObject(object, stablelibutf8.encode(secret.substring(0,nacl.secretbox.keyLength)));
 };
 
 //Encrypts an object, array, number, date or string
 exports.encryptObject=function(object,secret,nonce)
 {
-  /*console.log(object.Appointments[0].ScheduledStartTime);
-  var dateString=object.Appointments[0].ScheduledStartTime.toISOString();
-  console.log(dateString);*/
-  //var object=JSON.parse(JSON.stringify(object));
+
   if(typeof object=='string')
   {
     object=stablelibbase64.encode(exports.concatUTF8Array(nonce, nacl.secretbox(stablelibutf8.encode(object),nonce,secret)));
@@ -101,16 +100,19 @@ exports.encryptObject=function(object,secret,nonce)
 //Decryption function, returns an object whose values are all strings
 exports.decryptObject=function(object,secret)
 {
+  console.log("WHAT THE HELL");
   if(typeof object =='string')
   {
     var enc = splitNonce(object);
+    console.log("Message Length",enc[1].length, "Message:", enc[1], "Nonce:",enc[0].length,enc[0],"SECRET:", secret, secret.length);
     object = stablelibutf8.decode(nacl.secretbox.open(enc[1],enc[0],secret));
+    console.log(object);
   }else{
     for (var key in object)
     {
       if (typeof object[key]=='object')
       {
-        exports.decryptObject(object[key],secret,nonce);
+        exports.decryptObject(object[key],secret);
       } else
       {
         if (key=='UserID')
