@@ -1,5 +1,10 @@
 var CryptoJS    =require('crypto-js');
 var credentials=require('./../config.json');
+var stablelibutf8=require('@stablelib/utf8');
+var nacl = require('tweetnacl');
+var stablelibbase64=require('@stablelib/base64');
+nacl.util = require('tweetnacl-util');
+
 var exports=module.exports={};
 
 //Returns empty response, function used by refresh, resume, login
@@ -43,9 +48,19 @@ exports.unixToMYSQLTimestamp=function(time)
   var date=new Date(time);
   return exports.toMYSQLString(date);
 };
+exports.encrypt = function(object,secret)
+{
+  var nonce = nacl.randomBytes(nacl.secretbox.nonceLength);
+  var secret = stablelibutf8.encode(secret.substring(0,nacl.secretbox.keyLength));
+  return exports.encryptObject(object,secret,nonce);
+};
+exports.decrypt= function(object,secret)
+{
+  return exports.decryptObject(object, stablelibutf8.encode(secret.substring(0,nacl.secretbox.keyLength)));
+};
 
 //Encrypts an object, array, number, date or string
-exports.encryptObject=function(object,secret)
+exports.encryptObject=function(object,secret,nonce)
 {
   /*console.log(object.Appointments[0].ScheduledStartTime);
   var dateString=object.Appointments[0].ScheduledStartTime.toISOString();
@@ -53,8 +68,7 @@ exports.encryptObject=function(object,secret)
   //var object=JSON.parse(JSON.stringify(object));
   if(typeof object=='string')
   {
-    var ciphertextString = CryptoJS.AES.encrypt(object, secret);
-    object=ciphertextString.toString();
+    object=stablelibbase64.encode(exports.concatUTF8Array(nonce, nacl.secretbox(stablelibutf8.encode(object),nonce,secret)));
     return object;
   }else{
     for (var key in object)
@@ -66,22 +80,17 @@ exports.encryptObject=function(object,secret)
         if(object[key] instanceof Date )
         {
           object[key]=object[key].toISOString();
-          var ciphertextDate = CryptoJS.AES.encrypt(object[key], secret);
-          object[key]=ciphertextDate.toString();
+          object[key] = stablelibbase64.encode(exports.concatUTF8Array(nonce, nacl.secretbox(stablelibutf8.encode(object[key]),nonce,secret)));
         }else{
-            exports.encryptObject(object[key],secret);
+            exports.encryptObject(object[key],secret,nonce);
         }
 
       } else
       {
-        //console.log('I am encrypting right now!');
         if (typeof object[key] !=='string') {
-          //console.log(object[key]);
           object[key]=String(object[key]);
         }
-        //console.log(object[key]);
-        var ciphertext = CryptoJS.AES.encrypt(object[key], secret);
-        object[key]=ciphertext.toString();
+        object[key]=stablelibbase64.encode(exports.concatUTF8Array(nonce,nacl.secretbox(stablelibutf8.encode(object[key]),nonce,secret)));
       }
     }
     return object;
@@ -93,14 +102,14 @@ exports.decryptObject=function(object,secret)
 {
   if(typeof object =='string')
   {
-    var decipherbytesString = CryptoJS.AES.decrypt(object, secret);
-    object=decipherbytesString.toString(CryptoJS.enc.Utf8);
+    var enc = splitNonce(object);
+    object = stablelibutf8.decode(nacl.secretbox.open(enc[1],enc[0],secret));
   }else{
     for (var key in object)
     {
       if (typeof object[key]=='object')
       {
-        exports.decryptObject(object[key],secret);
+        exports.decryptObject(object[key],secret,nonce);
       } else
       {
         if (key=='UserID')
@@ -113,14 +122,27 @@ exports.decryptObject=function(object,secret)
         else
         {
           //console.log("Decrypting", object[key]);
-          var decipherbytes = CryptoJS.AES.decrypt(object[key], secret);
-          object[key]= decipherbytes.toString(CryptoJS.enc.Utf8);
+          var enc = splitNonce(object[key]);
+          object[key] = stablelibutf8.decode(nacl.secretbox.open(enc[1],enc[0], secret));
         }
       }
     }
   }
   return object;
 };
+exports.concatUTF8Array = function(a1,a2)
+{
+  var c = new Uint8Array(a1.length + a2.length);
+  c.set(new Uint8Array(a1),0);
+  c.set(new Uint8Array(a2), a1.length);
+  return c;
+};
+
+function splitNonce(str)
+{
+  var ar = stablelibbase64.decode(str);
+  return [ar.slice(0,nacl.secretbox.nonceLength),ar.slice(nacl.secretbox.nonceLength)];
+}
 
 //Create copy of object if no nested object
 exports.copyObject = function(object)
