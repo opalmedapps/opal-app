@@ -27,7 +27,7 @@ app.service('DeviceIdentifiers', [ 'RequestToServer', '$q','Constants','UserAuth
      *@description Object contains three properties registrationId, deviceUUID, and deviceType, the object is sent to the server to update the devices for a particular user.
      **/
     var deviceIdentifiers = {
-        registrationId: '',
+        registrationId:'',
         deviceUUID:'',
         deviceType:''
     };
@@ -123,6 +123,7 @@ app.service('DeviceIdentifiers', [ 'RequestToServer', '$q','Constants','UserAuth
          **/
         sendFirstTimeIdentifierToServer:function()
         {
+            console.log("device id: " + JSON.stringify(deviceIdentifiers));
             return RequestToServer.sendRequestWithResponse('SecurityQuestion',deviceIdentifiers, EncryptionService.hash('none'), null, null);
         },
         /**
@@ -137,7 +138,7 @@ app.service('DeviceIdentifiers', [ 'RequestToServer', '$q','Constants','UserAuth
             var objectToSend = deviceIdentifiers;
             objectToSend.email = email;
 
-            return RequestToServer.sendRequestWithResponse('SecurityQuestion', objectToSend, EncryptionService.hash('none'), 'passwordResetRequests', 'passwordResetResponses');
+            return RequestToServer.sendRequestWithResponse('SecurityQuestion', objectToSend, EncryptionService.hash(email), 'passwordResetRequests', 'passwordResetResponses');
         },
         /**
          *@ngdoc method
