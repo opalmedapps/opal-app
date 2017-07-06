@@ -40,10 +40,13 @@ exports.verifySecurityAnswer=function(requestKey,requestObject,patient)
     var r=q.defer();
 
     var key = patient.AnswerText;
-    //console.log("before decryption", requestObject.Parameters);
+    
+    console.log("key",key);
+    
+    console.log("before decryption", requestObject.Parameters);
     var unencrypted=utility.decryptObject(requestObject.Parameters,key);
-    //console.log("after decryption");
-
+    console.log("after decryption");
+    console.log("Other key",unencrypted);
     var response = {};
 
     var isSSNValid = unencrypted.SSN == patient.SSN;

@@ -48,6 +48,7 @@ exports.unixToMYSQLTimestamp=function(time)
   var date=new Date(time);
   return exports.toMYSQLString(date);
 };
+
 exports.encrypt = function(object,secret)
 {
   var nonce = nacl.randomBytes(nacl.secretbox.nonceLength);
