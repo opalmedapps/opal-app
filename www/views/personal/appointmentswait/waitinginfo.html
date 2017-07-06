@@ -1,0 +1,100 @@
+<ons-page ng-controller="waitingInfoController">
+    <ons-toolbar fixed-style>
+        <div class="left">
+            <ons-back-button>{{"BACK"|translate}}</ons-back-button>
+        </div>
+        <div class="center">1/5</div>
+    </ons-toolbar>
+    <!--waiting time trend by Wen Quan Li-->
+    <ons-carousel swipeable overscrollable auto-scroll fullscreen>
+        <!--Page 1-->
+        <ons-carousel-item style="background-color: white;">
+            <div style="background-color: #59d45d; color: white"><strong>Page 1: Lateness</strong><br>
+                <div align="left">For your appointment time, if a greater percentage of patients are late in the past, you should consider leaving home early!</div>
+            </div>
+            <div class="item-desc" ng-class="fontSizeDesc" style="color: #474747">
+                <div style="display: inline-block" align="center">% of patients who arrived late for this appointment in the past</div>
+                <br><br>
+                <ons-row align="center">
+                    <ons-col width="20px"></ons-col>
+                    <ons-col width="30px" align="left"><div style="color: #50BEC1; font-size: 150%"><ons-icon icon="fa-male"></ons-icon></div></ons-col>
+                    <ons-col width="10px"></ons-col>
+                    <ons-col>
+                        <div style="background-color: #f06b6c; width: 90%;line-height: 90%" class="animated pulse ng-cloak wait-animation-1">&nbsp</div>
+                    </ons-col>
+                    <ons-col width="40px" align="center"><strong  style="color: #50BEC1"> 90%</strong></ons-col>
+                </ons-row>
+
+                <br>
+                <div align="center" style="color: #F06B6C"><b>Hign risk of being late</b></div>
+                <div align="center"><i>Leave early!</i></div><br><br>
+            </div>
+        </ons-carousel-item>
+
+        <!--Page 2-->
+        <ons-carousel-item style="background-color: white;">
+            <div style="background-color: #59d45d; color: white"><strong>Page 2 : Choosing a good arrival time</strong><br>
+                <div align="left">Patients who arrive on time (no more than 30 minutes prior to the scheduled time) tend to spend less time in waiting rooms.</div>
+            </div>
+            <div class="item-desc" ng-class="fontSizeDesc" style="color: #474747">
+                <div style="display: inline-block" align="center">% of patients who waited less than 30 min</div>
+                <ons-row align="center">
+                    <ons-col width="20px"></ons-col>
+                    <ons-col width="30px" align="left"><div style="color: #50BEC1; font-size: 85%"><ons-icon icon="fa-clock-o"></ons-icon></div></ons-col>
+                    <ons-col width="10px"></ons-col>
+                    <ons-col>
+                        <div style="display: inline-block">Arrived <30 min</div>
+                    </ons-col>
+                </ons-row>
+                <ons-row align="center">
+                    <ons-col width="20px"></ons-col>
+                    <ons-col width="30px" align="left"><div style="color: #50BEC1; font-size: 125%"><ons-icon icon="fa-male"></ons-icon></div></ons-col>
+                    <ons-col width="10px"></ons-col>
+                    <ons-col>
+                        <div style="background-color: #50BEC1; width: 56%;line-height: 90%" class="animated pulse ng-cloak wait-animation">&nbsp</div>
+                    </ons-col>
+                    <ons-col width="40px" align="center"><strong style="color: #50BEC1"> 56%</strong></ons-col>
+                </ons-row>
+                <ons-row align="center">
+                    <ons-col width="20px"></ons-col>
+                    <ons-col width="30px" align="left"><div style="color: #fec200; font-size: 85%"><ons-icon icon="fa-clock-o"></ons-icon></div></ons-col>
+                    <ons-col width="10px"></ons-col>
+                    <ons-col>
+                        <div style="display: inline-block"> Arrived 30-60 min</div>
+                    </ons-col>
+                </ons-row>
+                <ons-row align="center">
+                    <ons-col width="20px"></ons-col>
+                    <ons-col width="30px" align="left"><div style="color: #fec200; font-size: 125%"><ons-icon icon="fa-male"></ons-icon></div></ons-col>
+                    <ons-col width="10px"></ons-col>
+                    <ons-col>
+                        <div style="background-color: #fec200; width: 25%;line-height: 90%" class="animated pulse ng-cloak wait-animation">&nbsp</div>
+                    </ons-col>
+                    <ons-col width="40px" align="center"><strong  style="color: #fec200"> 25%</strong></ons-col>
+                </ons-row>
+                <ons-row align="center">
+                    <ons-col width="20px"></ons-col>
+                    <ons-col width="30px" align="left"><div style="color: #f06b6c; font-size: 85%"><ons-icon icon="fa-clock-o"></ons-icon></div></ons-col>
+                    <ons-col width="10px"></ons-col>
+                    <ons-col>
+                        <div style="display: inline-block">Arrived >1h</div>
+                    </ons-col>
+                </ons-row>
+                <ons-row align="center">
+                    <ons-col width="20px"></ons-col>
+                    <ons-col width="30px" align="left"><div style="color: #f06b6c; font-size: 125%"><ons-icon icon="fa-male"></ons-icon></div></ons-col>
+                    <ons-col width="10px"></ons-col>
+                    <ons-col>
+                        <div style="background-color: #f06b6c; width: 16%;line-height: 90%" class="animated pulse ng-cloak wait-animation">&nbsp</div>
+                    </ons-col>
+                    <ons-col width="40px" align="center"><strong  style="color: #f06b6c"> 16%</strong></ons-col>
+                </ons-row>
+                <div style="display: inline-block">Before the scheduled time.</div>
+            </div>
+        </ons-carousel-item>
+        <ons-carousel-cover>
+            <div class="cover-label" style="color: #555555"><h2>Swipe left or right</h2></div>
+        </ons-carousel-cover>
+    </ons-carousel>
+
+</ons-page>
