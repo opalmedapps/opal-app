@@ -68,6 +68,8 @@ myApp.service('RequestToServer',['$filter','$state','NewsBanner','UserAuthorizat
 
             var reference = referenceField || 'requests';
 
+
+
             var pushID =  Ref.child(reference).push(toSend);
             return pushID.key;
 
