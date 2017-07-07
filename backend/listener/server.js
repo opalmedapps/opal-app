@@ -1,6 +1,6 @@
 /*
  * Filename     :   server.js
- * Description  :   This script listens for changes on dev2/ in firebase, reads those changes and writes a response back to firebase.
+ * Description  :   This script listens for changes on dev4/ in firebase, reads those changes and writes a response back to firebase.
  * Created by   :   David Herrera, Robert Maglieri
  * Date         :   07 Mar 2017
  * Copyright    :   Copyright 2016, HIG, All rights reserved.
@@ -32,7 +32,7 @@ admin.initializeApp({
 
 // Get reference to correct data element
 var db = admin.database();
-var ref = db.ref("/dev3");
+var ref = db.ref("/dev4");
 
 // Ensure there is no leftover data on firebase
 ref.set(null)
@@ -202,6 +202,7 @@ function uploadToFirebase(response, key)
     }
 
     delete response.Headers.RequestObject;
+    logger.log('debug', path);
 
     ref.child(path).set(response).then(function(){
         logger.log('debug', 'Uploaded to firebase');
