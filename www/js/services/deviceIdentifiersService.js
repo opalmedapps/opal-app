@@ -105,9 +105,9 @@ app.service('DeviceIdentifiers', [ 'RequestToServer', '$q','Constants','UserAuth
         sendIdentifiersToServer:function()
         {
             var defer = $q.defer();
-            if(haveBeenSet&&!haveBeenSend)
+            if(haveBeenSet && !haveBeenSend)
             {
-                RequestToServer.sendRequestWithResponse('DeviceIdentifier',deviceIdentifiers);
+                RequestToServer.sendRequestWithResponse('DeviceIdentifier', deviceIdentifiers);
                 haveBeenSend = true;
             }
 
