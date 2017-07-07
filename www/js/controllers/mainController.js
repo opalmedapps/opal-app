@@ -201,7 +201,7 @@ angular.module('MUHCApp').controller('MainController', ["$window", "$state",'$ti
 
         function addUserListener(uid){
             //add a listener to the firebase database that watches for the changing of the token value (this means that the same user has logged in somewhere else)
-            var Ref= firebase.database().ref('dev2/');
+            var Ref= firebase.database().ref('dev4/');
 
             var refCurrentUser = Ref.child('logged_in_users/' + uid);
 
