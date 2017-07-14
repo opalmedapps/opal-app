@@ -2,7 +2,6 @@ var chai = require('chai');
 var CryptoJS = require('crypto-js');
 var expect = require('chai').expect;
 var utility = require('../utility/utility.js');
-var updatePatient = require('../api/apiPatientUpdate.js');
 var sinon = require('sinon');
 var sinonChai = require('sinon-chai');
 chai.use(require('chai-datetime'));
@@ -10,45 +9,39 @@ describe('Testing encryption/decryption',function(){
  
   it('Encryption/Decryption object with date, string, number',function()
   {
-    var enc = utility.encrypt({"da":"david","herre":1231233,"date": new Date()},CryptoJS.SHA512("david").toString());
+    var enc = utility.encrypt({"da":"david","herre":1231233,"date": new Date()},CryptoJS.SHA512("david").toString(),CryptoJS.SHA512("david").toString());
     var en2c = JSON.parse(JSON.stringify(enc));
-    var dec = utility.decrypt(enc,CryptoJS.SHA512("david").toString());
-    console.log(en2c,dec);
+    var dec = utility.decrypt(enc,CryptoJS.SHA512("david").toString(),CryptoJS.SHA512("david").toString());
     expect(dec).to.deep.equal(enc);
   });
 
   it('Encryption/Decryption string',function()
   {
-
-    var enc = utility.encrypt("String",CryptoJS.SHA512("david").toString());
-    var dec = utility.decrypt(enc,CryptoJS.SHA512("david").toString());
+    var enc = utility.encrypt("String",CryptoJS.SHA512("david").toString(),CryptoJS.SHA512("david").toString());
+    var dec = utility.decrypt(enc,CryptoJS.SHA512("david").toString(),CryptoJS.SHA512("david").toString());
     expect("String").to.equal(dec);
   });
   it('Encryption/Decryption number',function()
   {
-
-    var enc = utility.encrypt({"da":"david","herre":"er"},CryptoJS.SHA512("david").toString());
-    var en2c = JSON.parse(JSON.stringify(enc));
-    var dec = utility.decrypt(enc,CryptoJS.SHA512("david").toString());
-    console.log(en2c,dec);
-    expect(dec).to.deep.equal(enc);
+    var enc = utility.encrypt(12312,CryptoJS.SHA512("david").toString(),CryptoJS.SHA512("david").toString());
+    var dec = utility.decrypt(enc,CryptoJS.SHA512("david").toString(),CryptoJS.SHA512("david").toString());
+    expect(12312).to.equal(enc);
   });
   it('Encryption/Decryption date',function()
   {
 
     var testDate = new Date();
     var testDate2 = new Date(testDate);
-    var enc = utility.encrypt(testDate,CryptoJS.SHA512("david").toString());
-    var dec = utility.decrypt(enc,CryptoJS.SHA512("david").toString());
+    var enc = utility.encrypt(testDate,CryptoJS.SHA512("david").toString(),CryptoJS.SHA512("david").toString());
+    var dec = utility.decrypt(enc,CryptoJS.SHA512("david").toString(),CryptoJS.SHA512("david").toString());
     expect(testDate2).to.deep.equal(dec);
   });
   it('Encryption/Decryption array',function()
   {
 
-    var enc = utility.encrypt(["david","herrera"],CryptoJS.SHA512("david").toString());
+    var enc = utility.encrypt(["david","herrera"],CryptoJS.SHA512("david").toString(),CryptoJS.SHA512("david").toString());
     var en2c = JSON.parse(JSON.stringify(enc));
-    var dec = utility.decrypt(enc,CryptoJS.SHA512("david").toString());
-    console.log(en2c,dec);
+    var dec = utility.decrypt(enc,CryptoJS.SHA512("david").toString(),CryptoJS.SHA512("david").toString());
     expect(dec).to.deep.equal(enc);
   });
 

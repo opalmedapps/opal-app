@@ -3,7 +3,6 @@ var credentials=require('./../config.json');
 var stablelibutf8=require('@stablelib/utf8');
 var nacl = require('tweetnacl');
 var stablelibbase64=require('@stablelib/base64');
-nacl.util = require('tweetnacl-util');
 
 var exports=module.exports={};
 
@@ -100,13 +99,10 @@ exports.encryptObject=function(object,secret,nonce)
 //Decryption function, returns an object whose values are all strings
 exports.decryptObject=function(object,secret)
 {
-  console.log("WHAT THE HELL");
   if(typeof object =='string')
   {
     var enc = splitNonce(object);
-    console.log("Message Length",enc[1].length, "Message:", enc[1], "Nonce:",enc[0].length,enc[0],"SECRET:", secret, secret.length);
     object = stablelibutf8.decode(nacl.secretbox.open(enc[1],enc[0],secret));
-    console.log(object);
   }else{
     for (var key in object)
     {
@@ -124,7 +120,6 @@ exports.decryptObject=function(object,secret)
         }
         else
         {
-          //console.log("Decrypting", object[key]);
           var enc = splitNonce(object[key]);
           object[key] = stablelibutf8.decode(nacl.secretbox.open(enc[1],enc[0], secret));
         }
