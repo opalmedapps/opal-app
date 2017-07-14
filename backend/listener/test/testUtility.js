@@ -9,10 +9,11 @@ describe('Testing encryption/decryption',function(){
  
   it('Encryption/Decryption object with date, string, number',function()
   {
-    var enc = utility.encrypt({"da":"david","herre":1231233,"date": new Date()},CryptoJS.SHA512("david").toString(),CryptoJS.SHA512("david").toString());
-    var en2c = JSON.parse(JSON.stringify(enc));
+    var obj = {"da":"david","herre":"1231233","date": new Date()};
+    var obj2 = JSON.parse(JSON.stringify(obj));
+    var enc = utility.encrypt(obj,CryptoJS.SHA512("david").toString(),CryptoJS.SHA512("david").toString());
     var dec = utility.decrypt(enc,CryptoJS.SHA512("david").toString(),CryptoJS.SHA512("david").toString());
-    expect(dec).to.deep.equal(enc);
+    expect(obj2).to.deep.equal(dec);
   });
 
   it('Encryption/Decryption string',function()
@@ -21,7 +22,7 @@ describe('Testing encryption/decryption',function(){
     var dec = utility.decrypt(enc,CryptoJS.SHA512("david").toString(),CryptoJS.SHA512("david").toString());
     expect("String").to.equal(dec);
   });
-  it('Encryption/Decryption number',function()
+  it('Encryption/Decryption number, this gets converted to string',function()
   {
     var enc = utility.encrypt(12312,CryptoJS.SHA512("david").toString(),CryptoJS.SHA512("david").toString());
     var dec = utility.decrypt(enc,CryptoJS.SHA512("david").toString(),CryptoJS.SHA512("david").toString());
@@ -38,11 +39,11 @@ describe('Testing encryption/decryption',function(){
   });
   it('Encryption/Decryption array',function()
   {
-
-    var enc = utility.encrypt(["david","herrera"],CryptoJS.SHA512("david").toString(),CryptoJS.SHA512("david").toString());
-    var en2c = JSON.parse(JSON.stringify(enc));
+    var test1 = ["david","herrera"];
+    var testCopy = JSON.parse(JSON.stringify(["david","herrera"]));
+    var enc = utility.encrypt(test1,CryptoJS.SHA512("david").toString(),CryptoJS.SHA512("david").toString());
     var dec = utility.decrypt(enc,CryptoJS.SHA512("david").toString(),CryptoJS.SHA512("david").toString());
-    expect(dec).to.deep.equal(enc);
+    expect(testCopy).to.deep.equal(dec);
   });
 
 

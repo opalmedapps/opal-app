@@ -1,7 +1,6 @@
 var sqlInterface=require('./../api/sqlInterface.js');
-var q=require('q');
+var q = require('q');
 var utility=require('./../utility/utility.js');
-var CryptoJS = require('crypto-js');
 var exports=module.exports={};
 
 
@@ -41,13 +40,7 @@ exports.verifySecurityAnswer=function(requestKey,requestObject,patient)
     var r=q.defer();
 
     var key = patient.AnswerText;
-    
-    console.log("key",key);
-    
-    console.log("before decryption", requestObject.Parameters);
     var unencrypted=utility.decrypt(requestObject.Parameters,key);
-    console.log("after decryption");
-    console.log("Other key",unencrypted);
     var response = {};
 
     var isSSNValid = unencrypted.SSN == patient.SSN;

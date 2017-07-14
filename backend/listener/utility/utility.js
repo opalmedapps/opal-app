@@ -1,5 +1,4 @@
 var CryptoJS    =require('crypto-js');
-var credentials=require('./../config.json');
 var stablelibutf8=require('@stablelib/utf8');
 var nacl = require('tweetnacl');
 var stablelibbase64=require('@stablelib/base64');
