@@ -38,16 +38,14 @@ exports.resetPasswordRequest=function(requestKey, requestObject)
 exports.verifySecurityAnswer=function(requestKey,requestObject,patient)
 {
     var r=q.defer();
-
     var key = patient.AnswerText;
-    var unencrypted=utility.decrypt(requestObject.Parameters,key);
-    var response = {};
+    //var key = patient.Password;
 
+    var unencrypted = utility.decrypt(requestObject.Parameters,key);
+    var response = {};
     var isSSNValid = unencrypted.SSN == patient.SSN;
-    //console.log("SSNVALID "+unencrypted.SSN, isSSNValid);
     var isAnswerValid = unencrypted.Answer == patient.AnswerText;
-    //console.log("Answer valid ", isAnswerValid);
-    
+
     var isVerified;
     if (unencrypted.SSN == 'undefined' || unencrypted.SSN == '') isVerified = isAnswerValid;
     else isVerified = isSSNValid && isAnswerValid;
@@ -108,11 +106,9 @@ exports.securityQuestion=function(requestKey,requestObject) {
         }else{
             //Gets password and decrypts request
             //console.log(rows);
-            var salt=rows[0].AnswerText;
             var pass = rows[0].Password;
-            var unencrypted = utility.decrypt(requestObject.Parameters,pass,salt);
+            var unencrypted = utility.decrypt(requestObject.Parameters,pass);
             //console.log(requestObject);
-
             sqlInterface.updateDeviceIdentifier(requestObject, unencrypted)
                 .then(function () {
                     return sqlInterface.getSecurityQuestion(requestObject)
