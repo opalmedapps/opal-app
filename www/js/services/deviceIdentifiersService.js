@@ -123,8 +123,7 @@ app.service('DeviceIdentifiers', [ 'RequestToServer', '$q','Constants','UserAuth
          **/
         sendFirstTimeIdentifierToServer:function()
         {
-            console.log("device id: " + JSON.stringify(deviceIdentifiers));
-            return RequestToServer.sendRequestWithResponse('SecurityQuestion',deviceIdentifiers, EncryptionService.hash('none'), null, null);
+            return RequestToServer.sendRequestWithResponse('SecurityQuestion',deviceIdentifiers, UserAuthorizationInfo.getPassword(), null, null);
         },
         /**
          *@ngdoc method
