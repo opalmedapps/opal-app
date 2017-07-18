@@ -1,7 +1,7 @@
-var CryptoJS    =require('crypto-js');
-var stablelibutf8=require('@stablelib/utf8');
-var nacl = require('tweetnacl');
-var stablelibbase64=require('@stablelib/base64');
+const CryptoJS    =require('crypto-js');
+const stablelibutf8=require('@stablelib/utf8');
+const nacl = require('tweetnacl');
+const stablelibbase64=require('@stablelib/base64');
 
 var exports=module.exports={};
 
@@ -25,7 +25,7 @@ exports.resolveEmptyResponse=function(data)
 //Converts date object to mysql date
 exports.toMYSQLString=function(date)
 {
-  var month=date.getMonth();
+  var month = date.getMonth();
   var day=date.getDate();
   var hours=date.getHours();
   var minutes=date.getMinutes();
@@ -50,13 +50,13 @@ exports.unixToMYSQLTimestamp=function(time)
 exports.encrypt = function(object,secret,salt)
 {
   var nonce = nacl.randomBytes(nacl.secretbox.nonceLength);
-  secret = CryptoJS.PBKDF2(secret, salt, {keySize: 512/32, iterations: 1000}).toString(CryptoJS.enc.Hex);
+  secret = (salt)?CryptoJS.PBKDF2(secret, salt, {keySize: 512/32, iterations: 1000}).toString(CryptoJS.enc.Hex):secret;
   secret = stablelibutf8.encode(secret.substring(0,nacl.secretbox.keyLength));
   return exports.encryptObject(object,secret,nonce);
 };
 exports.decrypt= function(object,secret,salt)
 {
-  secret = CryptoJS.PBKDF2(secret, salt, {keySize: 512/32, iterations: 1000}).toString(CryptoJS.enc.Hex);
+  secret = (salt)?CryptoJS.PBKDF2(secret, salt, {keySize: 512/32, iterations: 1000}).toString(CryptoJS.enc.Hex):secret;
   return exports.decryptObject(object, stablelibutf8.encode(secret.substring(0,nacl.secretbox.keyLength)));
 };
 
@@ -66,7 +66,9 @@ exports.encryptObject=function(object,secret,nonce)
 
   if(typeof object=='string')
   {
+
     object=stablelibbase64.encode(exports.concatUTF8Array(nonce, nacl.secretbox(stablelibutf8.encode(object),nonce,secret)));
+
     return object;
   }else{
     for (var key in object)
@@ -79,6 +81,7 @@ exports.encryptObject=function(object,secret,nonce)
         {
           object[key]=object[key].toISOString();
           object[key] = stablelibbase64.encode(exports.concatUTF8Array(nonce, nacl.secretbox(stablelibutf8.encode(object[key]),nonce,secret)));
+
         }else{
             exports.encryptObject(object[key],secret,nonce);
         }
@@ -98,30 +101,21 @@ exports.encryptObject=function(object,secret,nonce)
 //Decryption function, returns an object whose values are all strings
 exports.decryptObject=function(object,secret)
 {
-  if(typeof object =='string')
+  if(typeof object ==='string')
   {
     var enc = splitNonce(object);
-    object = stablelibutf8.decode(nacl.secretbox.open(enc[1],enc[0],secret));
+    let dec = stablelibutf8.decode(nacl.secretbox.open(enc[1],enc[0],secret));
+    object = (typeof dec === 'boolean')?"":dec;
   }else{
     for (var key in object)
     {
-      if (typeof object[key]=='object')
+      if (typeof object[key]==='object')
       {
         exports.decryptObject(object[key],secret);
-      } else
-      {
-        if (key=='UserID')
-        {
-          object[key]=object[key];
-        }else if(key=='DeviceId')
-        {
-          object[key]=object[key];
-        }
-        else
-        {
+      } else if (key!=='UserID'&&key!=='DeviceId') {
           var enc = splitNonce(object[key]);
-          object[key] = stablelibutf8.decode(nacl.secretbox.open(enc[1],enc[0], secret));
-        }
+          let dec = stablelibutf8.decode(nacl.secretbox.open(enc[1], enc[0], secret));
+          object[key] = (typeof dec === 'boolean') ? "" : dec;
       }
     }
   }
