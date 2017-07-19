@@ -1,4 +1,10 @@
-(function () {
+/*
+ *  Code by Nami DoYeon Kim July 10, 2017
+ *  Github: ehdusjenny
+ *  Email: ehdusjenny@gmail.com
+ */
+
+ (function () {
     'use strict';
 
     angular
@@ -15,28 +21,32 @@
     {
         var vm = this;
         vm.title = 'WaitingTimeController';
-
-        var appointmentAriaSer = 1;
-        TimeEstimate.requestTimeEstimate(appointmentAriaSer);
-        console.log(TimeEstimate.getTimeEstimate());
-
-        //Hardcoded time set for testing UI
-        vm.estimatedStartTime = new Date().setMinutes(new Date().getMinutes() + 70);
-        vm.checkedInTime = new Date();
-
-         //vm.prevPatientStart contains the start time of all the previous patients
-        vm.prevPatientStart = [ new Date(),
-                                new Date().setMinutes(new Date().getMinutes() + 5),
-                                new Date().setMinutes(new Date().getMinutes() + 15),
-                                new Date().setMinutes(new Date().getMinutes() + 20),
-                                new Date().setMinutes(new Date().getMinutes() + 45),
-                                new Date().setMinutes(new Date().getMinutes() + 55)];
-        //vm.prevPatientDur contains the estimated durations for all the previous patients
-        vm.prevPatientDur = [5, 10, 5, 25, 10, 15];
-        vm.prevPatientCheckedIn = [true, false, true, true, true, true];
-        vm.initialNumPrevPatients = vm.prevPatientDur.length;
-        vm.lastId = vm.prevPatientDur.length;
+        vm.prevPatientDur = [];
+        vm.prevPatientCheckedIn = [];
         vm.numPrevPatientsNotCheckedIn = 0;
+        vm.initialNumPrevPatients = 0;
+
+        var appointmentAriaSer = 1871324;
+        function requestEstimate() {
+            TimeEstimate.requestTimeEstimate(appointmentAriaSer)
+                .then(function () {
+                    var tmpDur = [];
+                    var tmpCheckedIn = [];
+                    vm.timeEstimate = TimeEstimate.getTimeEstimate();
+                    for (var i = 0; i < Object.keys(vm.timeEstimate).length - 3; i++) {
+                        tmpDur.push(Number(vm.timeEstimate[i]["details"]["estimated_duration"]));
+                        tmpCheckedIn.push(vm.timeEstimate[i]["details"]["checked_in"] === 'true');
+                    }
+                    vm.prevPatientDur = tmpDur;
+                    vm.prevPatientCheckedIn = tmpCheckedIn;
+                    vm.initialNumPrevPatients = vm.prevPatientDur.length;
+                    vm.estimatedWait = estimateWait();    
+                    vm.lastUpdated = timeToString(new Date());
+                },
+                function(error){
+                    console.log(JSON.stringify(error));
+                });
+        }
 
         function setPatients() {
             var tmp = 0;
@@ -67,28 +77,27 @@
             for (var i = 0; i < vm.prevPatientDur.length; i++) {
                 totalMins = totalMins + vm.prevPatientDur[i];
             }
-            return Math.floor(totalMins/60) + "Hrs " + totalMins%60 + "Mins";
+            //vm.estimatedStartTime = new Date(vm.timeEstimate[0].actual_start);
+            //vm.estimatedStartTime.setMinutes(vm.estimatedStartTime.getMinutes + totalMins);
+            return Math.floor(totalMins/60) + "Hrs " + Math.round(totalMins%60) + "Mins";
         }
-        vm.estimatedWait = estimateWait();
 
-        function goToWaitingTimeEstimates()
-        {
+        function goToWaitingTimeEstimates() {
+            $timeout.cancel(vm.myTimeOut);
+            console.log("Tick destroyed");
             homeNavigator.pushPage('views/home/waiting-time/waiting-time-more-info.html', {
                 checkedInAppointments: vm.checkedInAppointments
             })
         }
         vm.goToWaitingTimeEstimates = goToWaitingTimeEstimates;
 
-        var w = window,
-            d = document,
-            e = d.documentElement,
-            g = d.getElementsByTagName('body')[0],
-            x = ((w.innerWidth || e.clientWidth || g.clientWidth) - 15) * 0.7;
+        // var w = window,
+        //     d = document,
+        //     e = d.documentElement,
+        //     g = d.getElementsByTagName('body')[0],
+        //     x = ((w.innerWidth || e.clientWidth || g.clientWidth) - 15) * 0.7;
 
         var updateCurrentTime = function() {
-            vm.prevPatientStart.pop();
-            vm.prevPatientDur.pop();
-            vm.prevPatientCheckedIn.pop();
             setPatients();
             vm.estimatedWait = estimateWait();
 
@@ -102,24 +111,17 @@
             }
         }
 
-        var tickInterval = 2000 
         var tick = function() {
+            requestEstimate();
             updateCurrentTime();
-            vm.myTimeOut = $timeout(tick, tickInterval);
+            vm.myTimeOut = $timeout(tick, 10000);
         }
-
-        angular.element(function() {
-            init();
-        });
-
-        var init = function() {
-            vm.lastUpdated = timeToString(new Date());
-            $timeout(tick, tickInterval);
-        }
-
+        requestEstimate();
+        updateCurrentTime();
+        $timeout(tick, 2000)
         $scope.$on('$destroy', function(){
             $timeout.cancel(vm.myTimeOut);
-            console.log("Tick destroyed")
+            console.log("Tick destroyed");
         });
     }
 })();

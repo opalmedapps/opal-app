@@ -17,11 +17,11 @@ myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$root
         EncryptionService, CleanUp
     ) {
 
-        if(!localStorage.getItem('locked')){
-            $timeout(function () {
-                securityModal.show();
-            },200);
-        }
+        // if(!localStorage.getItem('locked')){
+        //     $timeout(function () {
+        //         securityModal.show();
+        //     },200);
+        // }
 
         $scope.loading = false;
 
