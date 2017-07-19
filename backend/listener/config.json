@@ -1,12 +1,12 @@
 {
-    "MYSQL_USERNAME":"robert",
-    "MYSQL_PASSWORD":"service",
-    "MYSQL_DATABASE":"OpalDB_AJ_Sandbox",
-    "HOST" : "172.26.66.41",
-    "DOCUMENTS_PATH" : "/var/www/Documents/opalAdmin/backend/clinical/documents/",
+    "MYSQL_USERNAME":"integrator",
+    "MYSQL_PASSWORD":"erRE34$%nji9",
+    "MYSQL_DATABASE":"opalAdmin",
+    "HOST" : "172.26.120.179",
+    "DOCUMENTS_PATH" : "http://172.26.120.179/Documents/opalAdmin/publisher/clinical/documents/",
     "CHECKIN_PATH" : "http://172.26.66.41/devDocuments/screens/php/checkInPatientAriaMedi.php?CheckinVenue=OPAL%20PHONE%20APP&PatientId=",
     "VERIFYCHECKIN_PATH" : "http://172.26.66.41/devDocuments/ackeem/getCheckins.php?AppointmentAriaSer=",
     "WT_PATH" : "http://172.26.66.41/devDocuments/WTSim/api/getEstimate.php?appt_aria_ser=",
-    "FIREBASE_ADMIN_KEY": "/home/robert/firebase_account/opal-sandbox.json",
-    "DATABASE_URL":"https://opal-dev.firebaseio.com/"
+    "FIREBASE_ADMIN_KEY": "/listener/admin-key.json",
+    "DATABASE_URL":"https://opal-prod.firebaseio.com"
 }
