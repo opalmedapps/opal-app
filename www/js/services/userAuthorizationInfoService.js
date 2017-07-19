@@ -65,11 +65,10 @@ myApp.service('UserAuthorizationInfo', function () {
         */
         setUserAuthData: function (user, pass, exp, tok, Email) {
             username= user;
-            expires = exp;
             password=pass;
+            expires = exp;
             token=tok;
             email = Email;
-            //console.log(username, expires, password, token);
         },
         /**
         *@ngdoc method

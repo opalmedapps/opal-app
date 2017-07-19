@@ -1,5 +1,8 @@
-var CryptoJS    =require('crypto-js');
-var credentials=require('./../config.json');
+const CryptoJS    =require('crypto-js');
+const stablelibutf8=require('@stablelib/utf8');
+const nacl = require('tweetnacl');
+const stablelibbase64=require('@stablelib/base64');
+
 var exports=module.exports={};
 
 //Returns empty response, function used by refresh, resume, login
@@ -22,7 +25,7 @@ exports.resolveEmptyResponse=function(data)
 //Converts date object to mysql date
 exports.toMYSQLString=function(date)
 {
-  var month=date.getMonth();
+  var month = date.getMonth();
   var day=date.getDate();
   var hours=date.getHours();
   var minutes=date.getMinutes();
@@ -44,17 +47,28 @@ exports.unixToMYSQLTimestamp=function(time)
   return exports.toMYSQLString(date);
 };
 
-//Encrypts an object, array, number, date or string
-exports.encryptObject=function(object,secret)
+exports.encrypt = function(object,secret,salt)
 {
-  /*console.log(object.Appointments[0].ScheduledStartTime);
-  var dateString=object.Appointments[0].ScheduledStartTime.toISOString();
-  console.log(dateString);*/
-  //var object=JSON.parse(JSON.stringify(object));
+  var nonce = nacl.randomBytes(nacl.secretbox.nonceLength);
+  secret = (salt)?CryptoJS.PBKDF2(secret, salt, {keySize: 512/32, iterations: 1000}).toString(CryptoJS.enc.Hex):secret;
+  secret = stablelibutf8.encode(secret.substring(0,nacl.secretbox.keyLength));
+  return exports.encryptObject(object,secret,nonce);
+};
+exports.decrypt= function(object,secret,salt)
+{
+  secret = (salt)?CryptoJS.PBKDF2(secret, salt, {keySize: 512/32, iterations: 1000}).toString(CryptoJS.enc.Hex):secret;
+  return exports.decryptObject(object, stablelibutf8.encode(secret.substring(0,nacl.secretbox.keyLength)));
+};
+
+//Encrypts an object, array, number, date or string
+exports.encryptObject=function(object,secret,nonce)
+{
+
   if(typeof object=='string')
   {
-    var ciphertextString = CryptoJS.AES.encrypt(object, secret);
-    object=ciphertextString.toString();
+
+    object=stablelibbase64.encode(exports.concatUTF8Array(nonce, nacl.secretbox(stablelibutf8.encode(object),nonce,secret)));
+
     return object;
   }else{
     for (var key in object)
@@ -66,22 +80,18 @@ exports.encryptObject=function(object,secret)
         if(object[key] instanceof Date )
         {
           object[key]=object[key].toISOString();
-          var ciphertextDate = CryptoJS.AES.encrypt(object[key], secret);
-          object[key]=ciphertextDate.toString();
+          object[key] = stablelibbase64.encode(exports.concatUTF8Array(nonce, nacl.secretbox(stablelibutf8.encode(object[key]),nonce,secret)));
+
         }else{
-            exports.encryptObject(object[key],secret);
+            exports.encryptObject(object[key],secret,nonce);
         }
 
       } else
       {
-        //console.log('I am encrypting right now!');
         if (typeof object[key] !=='string') {
-          //console.log(object[key]);
           object[key]=String(object[key]);
         }
-        //console.log(object[key]);
-        var ciphertext = CryptoJS.AES.encrypt(object[key], secret);
-        object[key]=ciphertext.toString();
+        object[key]=stablelibbase64.encode(exports.concatUTF8Array(nonce,nacl.secretbox(stablelibutf8.encode(object[key]),nonce,secret)));
       }
     }
     return object;
@@ -91,36 +101,39 @@ exports.encryptObject=function(object,secret)
 //Decryption function, returns an object whose values are all strings
 exports.decryptObject=function(object,secret)
 {
-  if(typeof object =='string')
+  if(typeof object ==='string')
   {
-    var decipherbytesString = CryptoJS.AES.decrypt(object, secret);
-    object=decipherbytesString.toString(CryptoJS.enc.Utf8);
+    var enc = splitNonce(object);
+    let dec = stablelibutf8.decode(nacl.secretbox.open(enc[1],enc[0],secret));
+    object = (typeof dec === 'boolean')?"":dec;
   }else{
     for (var key in object)
     {
-      if (typeof object[key]=='object')
+      if (typeof object[key]==='object')
       {
         exports.decryptObject(object[key],secret);
-      } else
-      {
-        if (key=='UserID')
-        {
-          object[key]=object[key];
-        }else if(key=='DeviceId')
-        {
-          object[key]=object[key];
-        }
-        else
-        {
-          //console.log("Decrypting", object[key]);
-          var decipherbytes = CryptoJS.AES.decrypt(object[key], secret);
-          object[key]= decipherbytes.toString(CryptoJS.enc.Utf8);
-        }
+      } else if (key!=='UserID'&&key!=='DeviceId') {
+          var enc = splitNonce(object[key]);
+          let dec = stablelibutf8.decode(nacl.secretbox.open(enc[1], enc[0], secret));
+          object[key] = (typeof dec === 'boolean') ? "" : dec;
       }
     }
   }
   return object;
 };
+exports.concatUTF8Array = function(a1,a2)
+{
+  var c = new Uint8Array(a1.length + a2.length);
+  c.set(new Uint8Array(a1),0);
+  c.set(new Uint8Array(a2), a1.length);
+  return c;
+};
+
+function splitNonce(str)
+{
+  var ar = stablelibbase64.decode(str);
+  return [ar.slice(0,nacl.secretbox.nonceLength),ar.slice(nacl.secretbox.nonceLength)];
+}
 
 //Create copy of object if no nested object
 exports.copyObject = function(object)

@@ -1,0 +1,107 @@
+<ons-page ng-controller="waitController">
+    <ons-toolbar fixed-style>
+        <div class="left">
+            <ons-back-button>{{"BACK"|translate}}</ons-back-button>
+        </div>
+        <div class="center" ng-class="fontSizeTitle">{{"MY"|translate}} {{"APPOINTMENTSWAIT"|translate}}</div>
+    </ons-toolbar>
+
+    <div style="background-color: white">
+        <!--Title of waiting time section-->
+        <strong class="item-desc" ng-class="fontSizeTitle" style="color: black"><div align="center">My appointment delays</div></strong>
+        <div class="item-desc" ng-class="fontSizeDesc">How long is my usual delay?</div>
+        <!--Bar Chart using simple background coloring-->
+        <div class="item-desc" ng-class="fontSizeDesc" style="color: #474747">
+            <ons-row align="center">
+                <ons-col width="20px"></ons-col>
+                <ons-col width="130px" align="left">0-15 min</ons-col>
+                <ons-col width="5px"></ons-col>
+                <ons-col>
+                    <ons-col width="{{percent0}}%">
+                        <div style="background-color: #59d45d; width: 100%;line-height: 90%" class="animated pulse ng-cloak wait-animation">&nbsp</div>
+                    </ons-col>
+                </ons-col>
+                <ons-col width="40px" align="right"><strong  style="color: #59D45D"> {{percent0}}%</strong></ons-col>
+            </ons-row>
+            <ons-row align="center">
+                <ons-col width="20px"></ons-col>
+                <ons-col width="130px" align="left">15-30 min</ons-col>
+                <ons-col width="5px"></ons-col>
+                <ons-col>
+                    <ons-col width="{{percent15}}%">
+                        <div style="background-color: #F1C40F; width: 100%; line-height: 90%" class="animated pulse ng-cloak wait-animation">&nbsp</div>
+                    </ons-col>
+                </ons-col>
+                <ons-col width="40px" align="right"><strong style="color: #F1C40F"> {{percent15}}%</strong></ons-col>
+            </ons-row>
+            <ons-row align="center">
+                <ons-col width="20px"></ons-col>
+                <ons-col width="130px" align="left">30-45 min</ons-col>
+                <ons-col width="5px"></ons-col>
+                <ons-col>
+                    <ons-col width="{{percent30}}%">
+                        <div style="background-color: darkorange; width: 100%; line-height: 90%" class="animated pulse ng-cloak wait-animation">&nbsp</div>
+                    </ons-col>
+                </ons-col>
+                <ons-col width="40px" align="right"><strong style="color: darkorange"> {{percent30}}%</strong></ons-col>
+            </ons-row>
+            <ons-row align="center">
+                <ons-col width="20px"></ons-col>
+                <ons-col width="130px" align="left">45+ min</ons-col>
+                <ons-col width="5px"></ons-col>
+                <ons-col >
+                    <ons-col width="{{percent45}}%">
+                        <div style="background-color: red; width: 100%; line-height: 90%" class="animated pulse ng-cloak wait-animation">&nbsp</div>
+                    </ons-col>
+                </ons-col>
+                <ons-col width="40px" align="right"><strong style="color: red"> {{percent45}}%</strong></ons-col>
+            </ons-row>
+            <br>
+            <strong class="item-desc" ng-class="fontSizeTitle" style="color: black"><div align="center">My arrival time</div></strong>
+            <div class="item-desc" ng-class="fontSizeDesc">How often am I on time?</div>
+            <ons-row align="center">
+                <ons-col>
+                    <ons-row>
+                        <ons-col width="30px"></ons-col>
+                        <ons-col width="25px" align="left"><div style="color: #59d45d; font-size: 85%"><ons-icon icon="fa-clock-o"></ons-icon></div></ons-col>
+                        <ons-col>
+                            <div align="left"> On time</div>
+                        </ons-col>
+                        <ons-col width="50px" align="left"><strong  style="color: #59D45D"> {{percentOnTime}}%</strong></ons-col>
+                    </ons-row>
+                    <ons-row>
+                        <ons-col width="30px"></ons-col>
+                        <ons-col width="25px" align="left"><div style="color: #fec200; font-size: 85%"><ons-icon icon="fa-clock-o"></ons-icon></div></ons-col>
+                        <ons-col>
+                            <div align="left" style="display: inline-block"> Too Early</div>
+                        </ons-col>
+                        <ons-col width="50px" align="left"><strong style="color: #F1C40F"> {{percentEarly}}% </strong></ons-col>
+                    </ons-row>
+                    <ons-row>
+                        <ons-col width="30px"></ons-col>
+                        <ons-col width="25px" align="left"><div style="color: #ff0000; font-size: 85%"><ons-icon icon="fa-clock-o"></ons-icon></div></ons-col>
+                        <ons-col>
+                            <div align="left"> Late</div>
+                        </ons-col>
+                        <ons-col width="50px" align="left"><strong style="color: red"> {{percentLate}}%</strong></ons-col>
+                    </ons-row>
+                </ons-col>
+                <ons-col width="110px">
+                    <div align="right">
+                        <div id="container" style="width: 110px; height: 110px; margin: 0; overflow: hidden"></div>
+                    </div>
+                </ons-col>
+            </ons-row>
+
+            <!--Button for more info-->
+            <div style="text-align: center; width: 90%; margin: 5% auto">
+                <ons-button class="animated pulse ng-cloak shadow-2" modifier="large" style="height: 50px; font-size: xx-large; font-weight: bolder; background-color: #59d45d" ng-click="goToWait()">
+                    <ons-icon icon="fa-clock-o" size="1x" style="color: white"><strong> {{ "MORE_INFO" | translate}} </strong></ons-icon>
+                </ons-button>
+            </div>
+            <div class="item-desc" ng-class="fontSizeDesc"><u>On time</u>: arrive 0 to 30 min prior to the scheduled time.</div>
+            <div class="item-desc" ng-class="fontSizeDesc"><u>Delay</u>: min after the scheduled time.</div>
+        </div>
+
+    </div>
+</ons-page>

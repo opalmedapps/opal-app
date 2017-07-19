@@ -8,14 +8,12 @@ var myApp=angular.module('MUHCApp');
 //Login controller
 myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$rootScope', '$state',
     'UserAuthorizationInfo', 'RequestToServer', 'FirebaseService','LocalStorage','$filter','DeviceIdentifiers',
-    'UserPreferences','NavigatorParameters','Patient','NewsBanner', '$firebaseAuth', 'UUID', 'Constants',
+    'UserPreferences','NavigatorParameters','Patient','NewsBanner', 'UUID', 'Constants',
     'EncryptionService', 'CleanUp',
     function LoginController(
         ResetPassword,$scope,$timeout, $rootScope, $state, UserAuthorizationInfo,
         RequestToServer,FirebaseService,LocalStorage,$filter,DeviceIdentifiers,
-        UserPreferences,NavigatorParameters,Patient, NewsBanner,$firebaseAuth, UUID, Constants,
-        EncryptionService, CleanUp
-    ) {
+        UserPreferences,NavigatorParameters,Patient, NewsBanner, UUID, Constants, EncryptionService, CleanUp) {
 
         if(!localStorage.getItem('locked')){
             $timeout(function () {
@@ -114,8 +112,8 @@ myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$root
             firebaseUser.getToken(true).then(function(sessionToken){
 
                 //Save the current session token to the users "logged in users" node. This is used to make sure that the user is only logged in for one session at a time.
-                var Ref= firebase.database().ref('dev2/');
-                var refCurrentUser = Ref.child('logged_in_users/' + firebaseUser.uid);
+                var Ref= firebase.database().ref(FirebaseService.getFirebaseUrl(null));
+                var refCurrentUser = Ref.child(FirebaseService.getFirebaseChild('logged_in_users') + firebaseUser.uid);
 
                 $rootScope.uid = firebaseUser.uid;
 
@@ -130,7 +128,7 @@ myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$root
 
                 window.localStorage.setItem('Email',$scope.email);
 
-                UserAuthorizationInfo.setUserAuthData(firebaseUser.uid, CryptoJS.SHA256($scope.password).toString(), undefined, sessionToken, $scope.email);
+                UserAuthorizationInfo.setUserAuthData(firebaseUser.uid, EncryptionService.hash($scope.password), undefined, sessionToken, $scope.email);
                 //Setting The User Object for global Application Use
                 // console.log("Users email is" + $scope.email);
                 var authenticationToLocalStorage={
@@ -139,6 +137,7 @@ myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$root
                     Email:$scope.email,
                     Token:sessionToken
                 };
+
                 $rootScope.refresh=true;
                 window.localStorage.setItem('UserAuthorizationInfo', JSON.stringify(authenticationToLocalStorage));
                 var deviceID;
@@ -151,10 +150,12 @@ myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$root
 
                 if (deviceID = localStorage.getItem(UserAuthorizationInfo.getUsername()+"/deviceID")){
 
-                    var decipherBytes = CryptoJS.AES.decrypt(localStorage.getItem(UserAuthorizationInfo.getUsername()+"/securityAns"),UserAuthorizationInfo.getPassword());
-                    var ans = decipherBytes.toString(CryptoJS.enc.Utf8);
-
+                    var ans = EncryptionService.decryptDataWithKey(localStorage.getItem(UserAuthorizationInfo.getUsername()+"/securityAns"), UserAuthorizationInfo.getPassword());
                     EncryptionService.setSecurityAns(ans);
+
+                    //Now that we know that both the password and security answer are hashed, we can create our encryption hash
+                    EncryptionService.generateEncryptionHash();
+
                     UUID.setUUID(deviceID);
                     DeviceIdentifiers.sendIdentifiersToServer()
                         .then(function () {

@@ -16,14 +16,19 @@
 </div><h5 id="methods_decryptdata_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-object">Object</a></td><td><div class="decryptdata-page"><p>Returns decrypted object</p>
 </div></td></tr></table></div>
 </li>
-<li><h3 id="methods_decryptwithkey">decryptWithKey()</h3>
-<div class="decryptwithkey"><div class="decryptwithkey-page"><p>Uses the secret parameter as key to decrypt object parameter</p>
-</div><h5 id="methods_decryptwithkey_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-object">Object</a></td><td><div class="decryptwithkey-page"><p>Returns decrypted object</p>
+<li><h3 id="methods_decryptdatawithkey">decryptDataWithKey()</h3>
+<div class="decryptdatawithkey"><div class="decryptdatawithkey-page"><p>Uses the given key as the decryption hash</p>
+</div><h5 id="methods_decryptdatawithkey_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-object">Object</a></td><td><div class="decryptdatawithkey-page"><p>Returns decrypted object</p>
 </div></td></tr></table></div>
 </li>
 <li><h3 id="methods_encryptdata">encryptData()</h3>
 <div class="encryptdata"><div class="encryptdata-page"><p>Uses the hashed of the password from the <a href="api/MUHCApp.service:UserAuthorizationInfo">UserAuthorizationInfo</a> service as key to encrypt object parameter</p>
 </div><h5 id="methods_encryptdata_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-object">Object</a></td><td><div class="encryptdata-page"><p>Returns encrypted object</p>
+</div></td></tr></table></div>
+</li>
+<li><h3 id="methods_encryptpassword">encryptPassword()</h3>
+<div class="encryptpassword"><div class="encryptpassword-page"><p>Encrypts a given password using SHA256</p>
+</div><h5 id="methods_encryptpassword_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-string">String</a></td><td><div class="encryptpassword-page"><p>Returns hashed password</p>
 </div></td></tr></table></div>
 </li>
 <li><h3 id="methods_encryptwithkey">encryptWithKey()</h3>
@@ -34,6 +39,11 @@
 <li><h3 id="methods_getsecurityans">getSecurityAns()</h3>
 <div class="getsecurityans"><div class="getsecurityans-page"><p>Uses the secret parameter as key to encrypt object parameter</p>
 </div><h5 id="methods_getsecurityans_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-string">String</a></td><td><div class="getsecurityans-page"><p>Returns hashed security answer</p>
+</div></td></tr></table></div>
+</li>
+<li><h3 id="methods_setencryptionhash">setEncryptionHash()</h3>
+<div class="setencryptionhash"><div class="setencryptionhash-page"><p>Encrypts a given password using SHA512</p>
+</div><h5 id="methods_setencryptionhash_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-string">String</a></td><td><div class="setencryptionhash-page"><p>Returns hashed password</p>
 </div></td></tr></table></div>
 </li>
 <li><h3 id="methods_setsecurityans">setSecurityAns()</h3>
