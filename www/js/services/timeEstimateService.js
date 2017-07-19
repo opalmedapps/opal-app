@@ -12,7 +12,7 @@ var myApp = angular.module('MUHCApp');
 
 myApp.service('TimeEstimate', ['RequestToServer','LocalStorage', '$q',
     function(RequestToServer, LocalStorage, $q){
-        var timeEstimateObject = {};
+        var timeEstimateObject = [];
 
         return {
             getTimeEstimate:function()
@@ -25,7 +25,7 @@ myApp.service('TimeEstimate', ['RequestToServer','LocalStorage', '$q',
                     .then(
                         function (response) {
                             if (response.Code == '3') {
-                                console.log(response);
+                                timeEstimateObject = response;
                                 LocalStorage.WriteToLocalStorage('TimeEstimate', timeEstimateObject);
                                 deferred.resolve({Success: true, Location: 'Server'});
                             }
