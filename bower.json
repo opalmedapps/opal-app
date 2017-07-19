@@ -48,7 +48,9 @@
     "pdfjs-dist": "^1.6.446",
     "progressbar.js": "^1.0.1",
     "jquery.panzoom": "^3.2.2",
-    "highcharts": "^5.0.7"
+    "highcharts": "^5.0.7",
+    "tweetnacl-util": "^0.15.0",
+    "tweetnacl": "^1.0.0"
   },
   "resolutions": {
     "angular": "^1.6.0"

@@ -375,3 +375,44 @@ gulp.task('opal', function(){
     
 });
 
+gulp.task('create',function()
+{
+    var argv = require('yargs').usage('Usage: $0  -n [string] -v [path-relative-www] -c -s -f -d')
+    .option('v',{
+        alias: 'view',
+        default: null,
+        describe: 'Provide path for view',
+        type: 'string'
+    })
+    .option('n',{
+        alias:'name',
+        default: null,
+        describe: 'Provide a name to give all the created elements',
+        type: 'string'
+    })
+    .option('c',{
+        alias:'controller',
+        default: null,
+        describe: 'Flag use to create a controller with name given by -n flag',
+        type: 'Boolean'
+    })
+    .option('s',{
+        alias:'service',
+        default: null,
+        describe: 'Flag use to create a service with name given by -n flag',
+        type: 'Boolean'
+    })
+    .option('f',{
+        alias:'filter',
+        default: null,
+        describe: 'Flag use to create a filter with name given by -n flag',
+        type: 'Boolean'
+    })
+    .option('d',{
+        alias:'directive',
+        default: null,
+        describe: 'Flag use to create a directive with name given by -n flag',
+        type: 'Boolean'
+    })
+    .demandOption(['n']).argv;
+});

@@ -9,7 +9,7 @@
  */
 
 /**
- *@ngdoc Service
+ *@ngdoc service
  *@name MUHCApp.service:MetaData
  *@description Service that handles the tab metadata. Right now it fetches the necessary data on first load
  *
