@@ -32,7 +32,7 @@ admin.initializeApp({
 
 // Get reference to correct data element
 var db = admin.database();
-var ref = db.ref("/dev2");
+var ref = db.ref("/dev3");
 
 // Ensure there is no leftover data on firebase
 ref.set(null)
@@ -186,13 +186,13 @@ function uploadToFirebase(response, key)
     var success = response.Response;
     var requestKey = headers.RequestKey;
     var encryptionKey = response.EncryptionKey;
-
-    //
+    var salt = response.Salt;
     delete response.EncryptionKey;
+    delete response.Salt;
+    
 
-    if(typeof encryptionKey!=='undefined' && encryptionKey!=='') response = utility.encryptObject(response, encryptionKey);
+    if(typeof encryptionKey!=='undefined' && encryptionKey!=='') response = utility.encrypt(response, encryptionKey, salt);
     response.Timestamp = admin.database.ServerValue.TIMESTAMP;
-
     var path = '';
     if (key === "requests") {
         var userId = headers.RequestObject.UserID;
@@ -230,5 +230,3 @@ function completeRequest(headers, success, key)
             logger.error('Error writing to firebase', {error:error});
         });
 }
-
-

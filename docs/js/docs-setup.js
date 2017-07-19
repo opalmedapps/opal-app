@@ -82,7 +82,7 @@ NG_DOCS={
       "type": "service",
       "moduleName": "MUHCApp",
       "shortDescription": "Sets the doctors and contacts and provides an API to interact with them and the server",
-      "keywords": "$filter $q adds api array cleardoctors contacts controller doctor doctors doctorsernum doctorssernum empties filters finds getcontacts getdoctorbysernum getdoctorindexbysernum getoncologists getotherdoctors getprimaryphysician images instatiates interact isempty iterates localstorage logout match matches matching method muhcapp object obtaining offline oncologists online otherdoctors parameter physicians primary primaryphysician promise properties property reinstantiates replaces returns saving server service sets setusercontactsoffline setusercontactsonline updates updateusercontacts usersernum"
+      "keywords": "$filter $q adds api array cleardoctors contacts controller doctor doctors doctorsernum doctorssernum empties filters finds getdoctorbysernum getdoctorindexbysernum getdoctors getprimaryphysician images instatiates interact isempty iterates localstorage logout match matches matching method muhcapp object obtaining offline online parameter physicians primary promise properties property reinstantiates replaces returns saving server service sets setusercontactsoffline setusercontactsonline updates updateusercontacts usersernum"
     },
     {
       "section": "api",
@@ -109,7 +109,7 @@ NG_DOCS={
       "type": "service",
       "moduleName": "MUHCApp",
       "shortDescription": "Sets the educational material and provides an API to interact with it and the server",
-      "keywords": "$filter add api app appropiate array backend betweem chronogically cleareducationalmaterial clears color controller controllers converts cordova dates descending device displayed educational educationalmaterialarray educationalmaterialsernum educationalmaterialtype edumaterial existing filters firebase function geteducationalmaterial geteducationalmaterialname geteducationalmaterialurl geteducationamaterialbysernum getter getunreadeducationalmaterials icon individual initializing interact isthereeducationalmaterial javascript language latest link logoutcontroller mapping matching material materials method muhcapp name_en name_fr names notifications object objects obtains open opened openeducationalmaterialdetails opening opens orders parameter passed patient plugin preferred property read readeducationalmaterial readstatus represents request return returns saved sends sernum server service set seteducationalmaterial setlanguageeduationalmaterial sets setter storage string syncs translated translates type unread update updateeducationalmaterial url userpreferences values"
+      "keywords": "$filter add api app appropiate array backend betweem booklet chronogically cleareducationalmaterial clears color controller controllers converts cordova dates descending device displayed educational educationalmaterialarray educationalmaterialsernum educationalmaterialtype edumaterial existing filters firebase function geteducationalmaterial geteducationalmaterialname geteducationalmaterialurl geteducationamaterialbysernum getpfpresources getter getunreadeducationalmaterials icon individual initializing interact isthereeducationalmaterial javascript language latest link logoutcontroller mapping matching material materials method muhcapp name_en name_fr names notifications object objects obtains open opened openeducationalmaterialdetails opening opens orders parameter passed patient patients plugin preferred property read readeducationalmaterial readstatus represents request resources return returns saved sends sernum server service set seteducationalmaterial setlanguageeduationalmaterial sets setter storage string syncs translated translates type unread update updateeducationalmaterial url userpreferences values"
     },
     {
       "section": "api",
@@ -118,7 +118,7 @@ NG_DOCS={
       "type": "service",
       "moduleName": "MUHCApp",
       "shortDescription": "Provides an API to encrypt and decrypt objects, arrays, or strings.",
-      "keywords": "answer api arrays communication decrypt decryptdata decrypted decrypting decryptwithkey encrypt encryptdata encrypted encrypting encryption encryptwithkey future getsecurityans hashed key method muhcapp object objects parameter password returns secret security service sets setsecurityans strings userauthorizationinfo"
+      "keywords": "answer api arrays communication decrypt decryptdata decryptdatawithkey decrypted decryption encrypt encryptdata encrypted encrypting encryption encryptpassword encrypts encryptwithkey fo future getsecurityans hash hashed key method muhcapp object objects parameter password returns secret security service setencryptionhash sets setsecurityans sha256 sha512 strings userauthorizationinfo"
     },
     {
       "section": "api",
@@ -167,6 +167,15 @@ NG_DOCS={
     },
     {
       "section": "api",
+      "id": "MUHCApp.service:MetaData",
+      "shortName": "MetaData",
+      "type": "service",
+      "moduleName": "MUHCApp",
+      "shortDescription": "Service that handles the tab metadata. Right now it fetches the necessary data on first load",
+      "keywords": "api background data feature fetches handles implement load metadata muhcapp refresh service tab todo"
+    },
+    {
+      "section": "api",
       "id": "MUHCApp.service:NativeNotification",
       "shortName": "NativeNotification",
       "type": "service",
@@ -182,6 +191,15 @@ NG_DOCS={
       "moduleName": "MUHCApp",
       "shortDescription": "Used to pass parameters between Navigators, the Onsen navigator options are not good enough because the controller you navigate to has to know the navigator that&#39;s currently in, this is possible but the code becomes",
       "keywords": "api bunch clauses cleaner code controller current currently getparameters good html https info io messy method muhcapp nav navigate navigation navigator navigators object onsen options param parameter parameters pass property represents returns service setparameters sets simple simply specifies things"
+    },
+    {
+      "section": "api",
+      "id": "MUHCApp.service:NetworkStatus",
+      "shortName": "NetworkStatus",
+      "type": "service",
+      "moduleName": "MUHCApp",
+      "shortDescription": "Service that holds a property that states whether or not the app is online",
+      "keywords": "api app holds muhcapp online property service"
     },
     {
       "section": "api",

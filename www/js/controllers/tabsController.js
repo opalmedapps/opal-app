@@ -47,7 +47,6 @@ myApp.controller('personalTabController',
     });
     
     personalNavigator.on('prepush',function(event){
-        console.log("event "  + event);
         if(event.navigator._isPushing) event.cancel();       
     });
 

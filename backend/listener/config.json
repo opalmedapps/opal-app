@@ -3,7 +3,7 @@
     "MYSQL_PASSWORD":"service",
     "MYSQL_DATABASE":"QPlusApp",
     "HOST" : "172.26.66.41",
-    "DOCUMENTS_PATH" : "/var/www/Documents/opalAdmin/backend/clinical/documents/",
+    "DOCUMENTS_PATH" : "/var/www/devDocuments/opalAdmin/backend/clinical/documents/",
     "CHECKIN_PATH" : "http://172.26.66.41/devDocuments/screens/php/checkInPatientAriaMedi.php?CheckinVenue=OPAL%20PHONE%20APP&PatientId=",
     "VERIFYCHECKIN_PATH" : "http://172.26.66.41/devDocuments/ackeem/getCheckins.php?AppointmentAriaSer=",
     "WT_PATH" : "http://172.26.66.41/devDocuments/WTSim/api/getEstimate.php?appt_aria_ser=",

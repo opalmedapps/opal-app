@@ -26,7 +26,7 @@
         vm.alert = undefined;
 
         activate();
-
+ 
         ////////////////
 
         // Uses the content pushed from a pushPage. See details in Opal wiki for use.
@@ -48,8 +48,7 @@
                     vm.pageContent.title = pageContent.title;
                     vm.pageContent.content = response.data;
                     vm.loading = false;
-                })
-                .catch(handleError);
+                }).catch(handleError);
         }
 
         function loadFromURL(url, contentType) {
