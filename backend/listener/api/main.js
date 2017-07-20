@@ -60,7 +60,10 @@ exports.apiRequestFormatter=function(requestKey,requestObject)
             }
         }
     }).catch(function(error){
-        logger.log('error', "Error processing request", {error:errorResponse});
+
+        console.log("error: " + JSON.stringify(error));
+
+        logger.log('error', "Error processing request", {error: error});
         responseObject = { RequestKey:requestKey,EncryptionKey:encryptionKey, Code:2,Data:error, Headers:{RequestKey:requestKey,RequestObject:requestObject},Response:'error', Reason:'Server error, report the error to the hospital'};
         r.resolve(responseObject);
     });
