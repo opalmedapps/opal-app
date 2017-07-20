@@ -21,7 +21,6 @@ myApp.controller('EducationalMaterialController',['NavigatorParameters', '$scope
             backButtonPressed = 0;
 
             if(NetworkStatus.isOnline()){
-                console.log("calling init");
                 init();
             }
         });
@@ -49,7 +48,7 @@ myApp.controller('EducationalMaterialController',['NavigatorParameters', '$scope
 
             if (EducationalMaterial.getEducationalMaterial().length !== 0 ) return $q.resolve({});
 
-            return null;
+            return $q.resolve({})
 
             // return UpdateUI.set(['EducationalMaterial'])
 
