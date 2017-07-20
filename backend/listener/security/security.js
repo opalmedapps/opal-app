@@ -95,7 +95,7 @@ exports.securityQuestion=function(requestKey,requestObject) {
     //sqlInterface.getEncryption(requestObject).then(function(){
     //  console.log()
     //});
-    sqlInterface.getEncryption(requestObject).then(function(rows){
+    sqlInterface.getFirstEncryption(requestObject).then(function(rows){
         if(rows.length>1||rows.length === 0)
         {
             //Rejects requests if username returns more than one password
