@@ -33,7 +33,7 @@
 
             CleanUp.clear();
 
-            FirebaseService.getAuthentication().$signOut();
+            // FirebaseService.getAuthentication().$signOut();
             console.log($state.go('init'));
         }
     }
