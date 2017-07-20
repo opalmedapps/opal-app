@@ -114,7 +114,6 @@ myApp.service('RequestToServer',['$filter','$state','NewsBanner','UserAuthorizat
                         if(data.Code =='1')
                         {
                             NewsBanner.showCustomBanner($filter('translate')("AUTHENTICATIONERROR"),'#333333',null,20000);
-                            $state.go('logOut');
                             r.reject({Response:'AUTH_ERROR'});
                         }else{
                             if(!encryptionKey||typeof encryptionKey == 'undefined') data = EncryptionService.decryptData(data);

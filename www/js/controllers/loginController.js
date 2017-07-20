@@ -182,6 +182,7 @@ myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$root
                         })
                         .catch(function (error) {
                             console.log(error);
+
                             $timeout(function(){
                                 $scope.loading = false;
                                 initNavigator.popPage();
