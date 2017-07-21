@@ -123,7 +123,7 @@ app.service('DeviceIdentifiers', [ 'RequestToServer', '$q','Constants','UserAuth
          **/
         sendFirstTimeIdentifierToServer:function()
         {
-            return RequestToServer.sendRequestWithResponse('SecurityQuestion',deviceIdentifiers, UserAuthorizationInfo.getPassword(), null, null);
+            return RequestToServer.sendRequestWithResponse('SecurityQuestion',deviceIdentifiers, EncryptionService.hash('none'), null, null);
         },
         /**
          *@ngdoc method
@@ -136,8 +136,7 @@ app.service('DeviceIdentifiers', [ 'RequestToServer', '$q','Constants','UserAuth
 
             var objectToSend = deviceIdentifiers;
             objectToSend.email = email;
-
-            return RequestToServer.sendRequestWithResponse('SecurityQuestion', objectToSend, EncryptionService.hash(email), 'passwordResetRequests', 'passwordResetResponses');
+            return RequestToServer.sendRequestWithResponse('SecurityQuestion', objectToSend, EncryptionService.hash('none'), 'passwordResetRequests', 'passwordResetResponses');
         },
         /**
          *@ngdoc method
