@@ -5,31 +5,23 @@
     </div>
     <div class="center" ng-class="fontSizeTitle">{{"ESTIMATEDWAITMOREINFO"|translate}}</div>
   </ons-toolbar>
-  <div style="text-align: center; width: 100%; margin-top: 10px;">Total Estimated Wait:<br>{{c.estimatedWait}}</div>
-  <!-- <div>
-    <div>
-      <div style="font-size: x-small; margin-top: -48px">60 min</div>
-      <div style="font-size: x-small; margin-left: 50px; margin-top: 6px;">15<br>min</div>
-      <div style="font-size: x-small; margin-top: 8px;">30 min</div>
-      <div style="font-size: x-small; margin-left: -50px; margin-top: -49px;">45<br>min</div>
-    </div> -->
+  <div style="text-align: center; width: 100%; margin-top: 10px;">{{"ESTIMATEDWAIT"|translate}}:<br>{{c.estimatedWait}}</div>
     <div id="waiting-time-container" class="waiting-time-clock"></div>
-<!--   </div> -->
 
-  <div id="no-prev-patient"><b>There are no more patients before you!</b></div>
+  <div id="no-prev-patient"><b>{{"NOMOREPATIENTSBEFOREYOU"|translate}}</b></div>
   <div class="horizontal-center-outer">
   	<div id="waiting-time-container-info" class="horizontal-center-inner" style="font-size: small">
-      <div style="text-align: center">Number label corresponds to Patient #.</div>
-  		<div style="float: left"><span class="checked-in"></span> : Checked In</div>
-  		<div style="float: left; margin-left: 20px;"><span class="not-checked-in"></span> : Not Checked In</div>
+      <div style="text-align: center">{{"NUMBERCORRESPONDPATIENT"|translate}}</div>
+  		<div style="float: left"><span class="checked-in"></span> : {{"CHECKEDIN"|translate}}</div>
+  		<div style="float: left; margin-left: 20px;"><span class="not-checked-in"></span> : {{"NOTCHECKEDIN"|translate}}</div>
   	</div>
   	<div style="height: 5px; background-color: lightgrey; position: relative; z-index: 1"></div>
 	<div style="margin: 4px">
-		You are Patient <b>#{{c.numPrevPatients + 1}}</b>.
+		{{"YOUAREPATIENT"|translate}} <b>#{{c.numPrevPatients + 1}}</b>.
 		<br>
-		Ahead of You: <b>{{c.numPrevPatients}} {{c.numPrevPatients > 1 ? "Patients" : "Patient"}}</b>.
+		{{"AHEADOFYOU"|translate}}: <b>{{c.numPrevPatients}} {{c.numPrevPatients > 1 ? "Patients" : "Patient"}}</b>.
 		<br>
-		Ahead of You Not Checked In: <b>{{c.numPrevPatientsNotCheckedIn}} {{c.numPrevPatientsNotCheckedIn > 1 ? "Patients" : "Patient"}}</b>.
+		{{"AHEADOFYOUNOTCHECKEDIN"|translate}}: <b>{{c.numPrevPatientsNotCheckedIn}} {{c.numPrevPatientsNotCheckedIn > 1 ? "Patients" : "Patient"}}</b>.
 	</div>
 
   </div>
