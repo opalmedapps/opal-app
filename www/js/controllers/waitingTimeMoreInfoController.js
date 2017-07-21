@@ -11,18 +11,19 @@
         .controller('WaitingTimeMoreInfoController', WaitingTimeMoreInfoController);
 
     WaitingTimeMoreInfoController.$inject = [
-        '$scope', '$timeout', 'TimeEstimate'
+        '$scope', '$timeout', '$filter', 'TimeEstimate'
     ];
 
     /* @ngInject */
     function WaitingTimeMoreInfoController(
-        $scope, $timeout, TimeEstimate)
+        $scope, $timeout, $filter, TimeEstimate)
     {
         var vm = this;
 
         var myTimeOut = null;
         var prevPatientDur = [];
         var prevPatientCheckedIn = [];
+        var firstLoad = true;
 
         vm.estimatedWait = null;
         vm.numPrevPatients = null;
@@ -32,12 +33,24 @@
         function requestEstimate() {
             TimeEstimate.requestTimeEstimate(appointmentAriaSer)
                 .then(function () {
+                    if (document.getElementById('waiting-time-container').style.display == "none") {
+                        document.getElementById('waiting-time-container').style.display = block;
+                        document.getElementById('no-prev-patient').style.display = "none";
+                    }
                     var tmpDur = [];
                     var tmpCheckedIn = [];
                     var timeEstimate = TimeEstimate.getTimeEstimate();
                     //-3 because we don't need the last 3 attributes (Code, Timestamp, Header)
                     for (var i = Object.keys(timeEstimate).length - 3 - 1; i >= 0; i--) {
-                        tmpDur.push(Number(timeEstimate[i]["details"]["estimated_duration"]));
+                        if (timeEstimate[i]["details"]["status"] == "In Progress") {
+                            var tmpSlicedTime = Number(timeEstimate[i]["details"]["estimated_duration"]) - ((new Date() - new Date(timeEstimate[i]["details"]["actual_start"]))/60000);
+                            if (tmpSlicedTime > 0) {
+                                tmpDur.push(tmpSlicedTime);
+                            }
+                        }
+                        else {
+                            tmpDur.push(Number(timeEstimate[i]["details"]["estimated_duration"]));
+                        }
                         tmpCheckedIn.push(timeEstimate[i]["details"]["checked_in"] === 'true');
                     }
                     prevPatientDur = tmpDur;
@@ -184,6 +197,9 @@
                             pie: {
                                 shadow: false,
                                 center: ['50%', '50%']
+                            },
+                            series: {
+                                animation: firstLoad
                             }
                         },
                         tooltip: {
@@ -192,7 +208,7 @@
                                     return false; // Suppress the tooltips if it has no color
                                 } else {                    
                                     return 'Patient #' + this.point.name + '<br>' + 
-                                    this.series.name + ':<b> ' + this.point.minutes +' minutes</b>';
+                                    this.series.name + ':<b> ' + Math.round(this.point.minutes) + ' minutes</b>';
                                 }
                             }
                         },
@@ -202,10 +218,14 @@
 
             function(error){
                 console.log(JSON.stringify(error));
+                vm.message = $filter('translate')("NO_ESTIMATION");
+                document.getElementById('waiting-time-container').style.display = "none";
+                var container = document.getElementById('no-prev-patient');
+                container.style.display = "block";
             });
         }
 
-        var tickInterval = 60000
+        var tickInterval = 10000
         var tick = function() {
             // var prevPatientExists = false;
             // var prevColor;
@@ -233,13 +253,16 @@
             //     vm.estimatedWait = estimateWait();
             // }
             if (!vm.numPrevPatients) {
+                vm.message = $filter('translate')("NOMOREPATIENTSBEFOREYOU");
                 document.getElementById('waiting-time-container').style.display = "none";
                 var container = document.getElementById('no-prev-patient');
                 container.style.display = "block";
             }
+            myTimeOut = $timeout(tick, 10000);
         }
 
         requestEstimate();
+        firstLoad = false;
         $timeout(tick, tickInterval);
 
 

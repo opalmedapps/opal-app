@@ -277,9 +277,17 @@
             TimeEstimate.requestTimeEstimate(vm.checkedInAppointment)
                 .then(function () {
                     var prevPatientDur = [];
-                    vm.timeEstimate = TimeEstimate.getTimeEstimate();
-                    for (var i = 0; i < Object.keys(vm.timeEstimate).length - 3; i++) {
-                        prevPatientDur.push(Number(vm.timeEstimate[i]["details"]["estimated_duration"]));
+                    var timeEstimate = TimeEstimate.getTimeEstimate();
+                    for (var i = 0; i < Object.keys(timeEstimate).length - 3; i++) {
+                        if (timeEstimate[i]["details"]["status"] == "In Progress") {
+                            var tmpSlicedTime = Number(timeEstimate[i]["details"]["estimated_duration"]) - ((new Date() - new Date(timeEstimate[i]["details"]["actual_start"]))/60000);
+                            if (tmpSlicedTime > 0) {
+                                tmpDur.push(tmpSlicedTime);
+                            }
+                        }
+                        else {
+                            prevPatientDur.push(Number(timeEstimate[i]["details"]["estimated_duration"]));
+                        }
                     }
                     vm.waitingTimeEstimate = estimateWait(prevPatientDur);
                     console.log(vm.waitingTimeEstimate);
