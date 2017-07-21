@@ -33,7 +33,7 @@ myApp.controller('SetNewPasswordController',['$scope','$timeout','ResetPassword'
         return true;
 
     }
-    var ref=firebase.database().ref('dev3/');
+    var ref=firebase.database().ref('dev2/');
     $scope.submitSSN=function(ssn){
         console.log(ssn);
         if(validateSSN(ssn))
@@ -80,7 +80,6 @@ myApp.controller('SecurityQuestionController',['$scope','$timeout','ResetPasswor
         var parameters = initNavigator.getCurrentPage().options;
         $scope.Question = parameters.securityQuestion;
         var trusted = parameters.trusted;
-
         if (parameters.passwordReset){
             passwordReset = parameters.passwordReset;
             $scope.passwordReset = passwordReset;
@@ -93,7 +92,7 @@ myApp.controller('SecurityQuestionController',['$scope','$timeout','ResetPasswor
                 .then(function (response) {
                     console.log(response);
                     $timeout(function () {
-                        $scope.Question = response.Data.securityQuestion;
+                        $scope.Question = response.Data.securityQuestion.securityQuestion_EN +"/"+response.Data.securityQuestion.securityQuestion_FR ;
                     });
                 })
                 .catch(handleError);
@@ -183,7 +182,6 @@ myApp.controller('SecurityQuestionController',['$scope','$timeout','ResetPasswor
                     }
                 }).catch(function(error)
                 {
-                    console.log("Verify Answer error", error);
                     $scope.waiting = false;
                     localStorage.removeItem(UserAuthorizationInfo.getUsername()+"/deviceID");
                     localStorage.removeItem(UserAuthorizationInfo.getUsername()+"/securityAns");
@@ -231,22 +229,21 @@ myApp.controller('SecurityQuestionController',['$scope','$timeout','ResetPasswor
                     });
             }
 
-            $timeout(function(){
-                initNavigator.popPage();
-            },5000);
+            // $timeout(function(){
+            //     initNavigator.popPage();
+            // },5000);
 
         }
 
     }]);
 myApp.controller('NewPasswordController',['$scope','$timeout','Patient','ResetPassword',
     'FirebaseService','NavigatorParameters','RequestToServer',
-    '$state','UserAuthorizationInfo', 'EncryptionService',
-    function($scope,$timeout,Patient,ResetPassword,
+    '$state','UserAuthorizationInfo', 'EncryptionService', function(
              FirebaseService,NavigatorParameters,RequestToServer,
              $state,UserAuthorizationInfo,EncryptionService){
         $scope.goToLogin=function()
         {
-            UserAuthorizationInfo.clearUserAuthorizationInfo();
+
             initNavigator.resetToPage('./views/init/init-screen.html');
         };
 
@@ -283,6 +280,7 @@ myApp.controller('NewPasswordController',['$scope','$timeout','Patient','ResetPa
                     })
                     .then(function (response) {
                         console.log(response);
+                        UserAuthorizationInfo.clearUserAuthorizationInfo();
                         $timeout(function () {
                             $scope.alert.type='success';
                             $scope.alert.content="PASSWORDUPDATED";
