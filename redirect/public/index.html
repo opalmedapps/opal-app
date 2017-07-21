@@ -66,8 +66,14 @@
   <script>
 
       setTimeout(function(){
-          console.log('About to redirect', window.location.search);
-          window.location.replace("opal://"+ window.location.search);
+
+        var url =  window.location.href;
+        var params = url.split('#');
+        var new_url = params[0].concat(params[1]);
+
+          console.log('About to redirect', new_url);
+          alert('About to redirect to: ' + new_url);
+          window.location.replace("opal://"+ params[1]);
       }, 1000);
 
 
