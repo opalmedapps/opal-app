@@ -6,3 +6,4 @@ credentials.js
 .idea/
 /backend/listener/logs/*.log
 /www/js/config.js
+/backend/listener/config.json
