@@ -102,6 +102,9 @@ exports.securityQuestion=function(requestKey,requestObject) {
             //console.log('Rejecting request due to injection attack', rows);
             //Construction of request object
             responseObject = { Headers:{RequestKey:requestKey,RequestObject:requestObject},EncryptionKey:'', Code: 1, Data:{},Response:'error', Reason:'Injection attack, incorrect UserID'};
+
+            console.log(JSON.stringify("response: " + responseObject));
+
             r.resolve(responseObject);
         }else{
             //Gets password and decrypts request
@@ -111,10 +114,14 @@ exports.securityQuestion=function(requestKey,requestObject) {
             //console.log(requestObject);
             sqlInterface.updateDeviceIdentifier(requestObject, unencrypted)
                 .then(function () {
+
+                    console.log(JSON.stringify(requestObject));
+
+
                     return sqlInterface.getSecurityQuestion(requestObject)
                 })
                 .then(function (response) {
-                    //console.log(response);
+                    console.log(JSON.stringify(response));
                     r.resolve({
                         Code:3,
                         Data:response.Data,
@@ -124,6 +131,7 @@ exports.securityQuestion=function(requestKey,requestObject) {
 
                 })
                 .catch(function (response){
+                    console.log(JSON.stringify(response));
 
                     r.resolve({
                         Headers:{RequestKey:requestKey,RequestObject:requestObject},
