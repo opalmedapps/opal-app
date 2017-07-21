@@ -21,9 +21,9 @@
     {
         var vm = this;
 
-        var prevPatientDur = [];
+        var prevPatientDur = null;
         var initialNumPrevPatients = null;
-        var timeout = null;
+        var myTimeOut = null;
         
         vm.numPrevPatientsNotCheckedIn = null;
         vm.estimatedWait = null;
@@ -35,12 +35,20 @@
             TimeEstimate.requestTimeEstimate(appointmentAriaSer)
                 .then(function () {
                     var tmpDur = [];
-                    var tmpNumCheckedIn = 0;
+                    var tmpNumNotCheckedIn = 0;
                     var timeEstimate = TimeEstimate.getTimeEstimate();
                     for (var i = 0; i < Object.keys(timeEstimate).length - 3; i++) {
-                        tmpDur.push(Number(timeEstimate[i]["details"]["estimated_duration"]));
-                        if (timeEstimate[i]["details"]["checked_in"]) {
-                            tmpNumNotCheckedIn = tmpNumCheckedIn + 1;
+                        if (timeEstimate[i]["details"]["status"] == "In Progress") {
+                            var tmpSlicedTime = Number(timeEstimate[i]["details"]["estimated_duration"]) - ((new Date() - new Date(timeEstimate[i]["details"]["actual_start"]))/60000);
+                            if (tmpSlicedTime > 0) {
+                                tmpDur.push(tmpSlicedTime);
+                            }
+                        }
+                        else {
+                            tmpDur.push(Number(timeEstimate[i]["details"]["estimated_duration"]));
+                        }
+                        if (!(timeEstimate[i]["details"]["checked_in"] == 'true')) {
+                            tmpNumNotCheckedIn = tmpNumNotCheckedIn + 1;
                         }
                     }
                     prevPatientDur = tmpDur;
@@ -54,6 +62,7 @@
                 },
                 function(error){
                     console.log(JSON.stringify(error));
+                    vm.estimatedWait = "No estimation available!";
                 });
         }
 
@@ -77,14 +86,8 @@
         vm.goToWaitingTimeEstimates = goToWaitingTimeEstimates;
 
         var updateCurrentTime = function() {
-            vm.estimatedWait = estimateWait();
-            console.log("Inside updateCurrentTime");
-            console.log("vm.initial " + initialNumPrevPatients);
-            console.log("vm.prevPatients " + vm.numPrevPatients);
             var percent = (initialNumPrevPatients - vm.numPrevPatients)/initialNumPrevPatients * 90;
             if (percent <= 100) {
-                console.log("Inside if");
-                console.log("percent " + percent);
                 var element = document.getElementById('current-time-indicator');
                 element.style.left = percent + "%";
 
