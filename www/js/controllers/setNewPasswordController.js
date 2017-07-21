@@ -86,7 +86,6 @@ myApp.controller('SecurityQuestionController',['$scope','$timeout','ResetPasswor
 
             ResetPassword.verifyLinkCode(parameters.url)
                 .then(function (email) {
-                    alert(email);
                     UserAuthorizationInfo.setEmail(email);
                     return DeviceIdentifiers.sendDevicePasswordRequest(email);
                 })
@@ -183,7 +182,6 @@ myApp.controller('SecurityQuestionController',['$scope','$timeout','ResetPasswor
                     }
                 }).catch(function(error)
                 {
-                    console.log("Verify Answer error", error);
                     $scope.waiting = false;
                     localStorage.removeItem(UserAuthorizationInfo.getUsername()+"/deviceID");
                     localStorage.removeItem(UserAuthorizationInfo.getUsername()+"/securityAns");
@@ -202,7 +200,6 @@ myApp.controller('SecurityQuestionController',['$scope','$timeout','ResetPasswor
 
 
         function handleError(error) {
-            alert(JSON.stringify(error));
             $scope.alert.type='danger';
 
             switch (error.code){
