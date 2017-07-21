@@ -8,7 +8,7 @@
     HomeController.$inject = [
         'Appointments', 'CheckInService', 'Patient',
         'UpdateUI','$scope', '$timeout','$filter', '$location','Notifications','NavigatorParameters','NativeNotification',
-        'NewsBanner','DeviceIdentifiers','$anchorScroll', 'PlanningSteps', 'Permissions',
+        'NewsBanner','DeviceIdentifiers','$anchorScroll', 'PlanningSteps', 'Permissions', 'TimeEstimate',
         'UserPreferences', 'Constants', 'Logger', 'NetworkStatus'
     ];
 
@@ -16,7 +16,7 @@
     function HomeController(
         Appointments, CheckInService, Patient,
         UpdateUI,$scope, $timeout, $filter, $location, Notifications, NavigatorParameters, NativeNotification,
-        NewsBanner, DeviceIdentifiers, $anchorScroll, PlanningSteps, Permissions,
+        NewsBanner, DeviceIdentifiers, $anchorScroll, PlanningSteps, Permissions, TimeEstimate,
         UserPreferences, Constants, Logger, NetworkStatus)
     {
         var vm = this;
@@ -37,8 +37,9 @@
         vm.RoomLocation = '';
         vm.showHomeScreenUpdate = null;
         vm.loading = true;
-        vm.checkedInAppointments = ['hi'];
-        vm.waitingTimeEstimate = 5;
+        //vm.checkedInAppointment = null;
+        vm.checkedInAppointment = 1859684;
+        vm.waitingTimeEstimate = null;
 
         vm.homeDeviceBackButton = homeDeviceBackButton;
         vm.load = load;
@@ -51,7 +52,6 @@
         activate();
 
         ////////////////
-
         function activate() {
 
 
@@ -119,6 +119,8 @@
             setNotifications();
             //setUpCheckin();
             setUpCheckin();
+
+            requestEstimate();
         }
 
         function settingStatus()
@@ -218,7 +220,6 @@
             vm.allCheckedIn = true;
             var todaysAppointmentsToCheckIn = Appointments.getCheckinAppointment();
             CheckInService.setCheckInApps(todaysAppointmentsToCheckIn);
-            console.log(todaysAppointmentsToCheckIn);
             vm.todaysAppointments = todaysAppointmentsToCheckIn;
             if(todaysAppointmentsToCheckIn)
             {
@@ -246,6 +247,7 @@
                                 $timeout(function () {
                                     vm.checkInMessage = "CHECKIN_MESSAGE_AFTER" + setPlural(todaysAppointmentsToCheckIn);
                                     vm.showHomeScreenUpdate = true;
+                                    vm.checkedInAppointment = todaysAppointmentsToCheckIn[0];
                                 });
                             }
                         });
@@ -268,6 +270,33 @@
                 //Case where there are no appointments that day
                 vm.checkInMessage = "CHECKIN_NONE";
             }
+        }
+
+
+        function requestEstimate() {
+            TimeEstimate.requestTimeEstimate(vm.checkedInAppointment)
+                .then(function () {
+                    var prevPatientDur = [];
+                    vm.timeEstimate = TimeEstimate.getTimeEstimate();
+                    for (var i = 0; i < Object.keys(vm.timeEstimate).length - 3; i++) {
+                        prevPatientDur.push(Number(vm.timeEstimate[i]["details"]["estimated_duration"]));
+                    }
+                    vm.waitingTimeEstimate = estimateWait(prevPatientDur);
+                    console.log(vm.waitingTimeEstimate);
+                },
+                function(error){
+                    console.log(JSON.stringify(error));
+                });
+        }
+
+        var estimateWait = function(prevPatientDur) {
+            var totalMins = 0;
+            for (var i = 0; i < prevPatientDur.length; i++) {
+                totalMins = totalMins + prevPatientDur[i];
+            }
+            var hr = Math.floor(totalMins/60) > 1 ? "Hrs " : "Hr ";
+            var min = Math.round(totalMins%60) > 1 ? "Mins" : "Min";
+            return Math.floor(totalMins/60) + hr + Math.round(totalMins%60) + min;
         }
 
         // Function used in the home view to refresh
@@ -355,7 +384,7 @@
         function goToWaitingTimeEstimates()
         {
             homeNavigator.pushPage('views/home/waiting-time/waiting-time.html', {
-                checkedInAppointments: vm.checkedInAppointments
+                checkedInAppointment: vm.checkedInAppointment
             })
         }
 

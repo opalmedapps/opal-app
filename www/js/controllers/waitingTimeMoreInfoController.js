@@ -24,8 +24,9 @@
         vm.prevPatientCheckedIn = [];
         vm.numPrevPatientsNotCheckedIn = 0;
         vm.initialNumPrevPatients = 0;
+        var myTimeOut = null;
 
-        var appointmentAriaSer = 1871324;
+        var appointmentAriaSer = 1859684;
         function requestEstimate() {
             TimeEstimate.requestTimeEstimate(appointmentAriaSer)
                 .then(function () {
@@ -167,7 +168,9 @@
                         for (var i = 0; i < vm.prevPatientDur.length; i++) {
                             totalMins = totalMins + vm.prevPatientDur[i];
                         }
-                        return Math.floor(totalMins/60) + "Hrs " + Math.round(totalMins%60) + "Mins";
+                        var hr = Math.floor(totalMins/60) > 1 ? "Hrs " : "Hr ";
+                        var min = Math.round(totalMins%60) > 1 ? "Mins" : "Min";
+                        return Math.floor(totalMins/60) + hr + Math.round(totalMins%60) + min;
                     }
                     vm.estimatedWait = estimateWait();
 
@@ -224,7 +227,7 @@
                 }
             }
             if (exists) {
-                vm.myTimeOut = $timeout(tick, tickInterval);
+                myTimeOut = $timeout(tick, tickInterval);
                 vm.lastId = vm.lastId - 1;
                 vm.numPrevPatients = vm.numPrevPatients - 1;
                 if (prevColor == notCheckedInColor) {
@@ -246,7 +249,7 @@
 
 
         $scope.$on('$destroy',function(){
-            $timeout.cancel(vm.myTimeOut);
+            $timeout.cancel(myTimeOut);
             console.log("Tick destroyed")
         });
     }
