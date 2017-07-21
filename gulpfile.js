@@ -23,8 +23,13 @@ var size = require('gulp-size');
 var notify = require('gulp-notify');
 var changed = require('gulp-changed');
 var open = require('gulp-open');
-
-
+gulp.task('CopyToCordova',function(){
+    gulp.src('./www').pipe(gulp.dist('/Users/rob/Web/Qplus/Cordova/dev-opal'));
+});
+gulp.task('CopyWatch',function()
+{
+    gulp.watch('www/**/*',['CopyToCordova']);
+})
 
 
 //Set the cordova folder path here
