@@ -45,6 +45,12 @@ else {
 
 function handleOpenURL(url) {
     setTimeout(function() {
-        initNavigator.pushPage("./views/login/security-question.html", {url: url, passwordReset: true});
+        try{
+            initNavigator.pushPage("./views/login/security-question.html", {url: url, passwordReset: true});
+
+        }
+        catch (error){
+            console.log(JSON.stringify(error));
+        }
     }, 0);
 }
