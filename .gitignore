@@ -7,3 +7,4 @@ credentials.js
 /backend/listener/logs/*.log
 /www/js/config.js
 /backend/listener/config.json
+!/www/lib/bower_components/onsenui/css/onsen-css-components-blue-basic-theme.css
