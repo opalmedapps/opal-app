@@ -1,5 +1,6 @@
 var sqlInterface=require('./../api/sqlInterface.js');
 var q = require('q');
+var CryptoJS = require('crypto-js');
 var utility=require('./../utility/utility.js');
 var exports=module.exports={};
 
@@ -10,7 +11,8 @@ exports.resetPasswordRequest=function(requestKey, requestObject)
     ////console.log(requestObject.UserEmail);
     var responseObject = {};
     //Get the patient fields to verify the credentials
-    //console.log(requestObject);
+    console.log(requestObject);
+
     sqlInterface.getPatientFieldsForPasswordReset(requestObject).then(function(patient){
         //Check for injection attacks by the number of rows the result is returning
         if(patient.length>1||patient.length === 0)
@@ -21,7 +23,7 @@ exports.resetPasswordRequest=function(requestKey, requestObject)
             //If the request is not erroneus simply direct the request to appropiate function based on the request mapping object
             //var request = requestObject.Request;
             //console.log(requestObject.Request, requestObject.Parameters);
-            //console.log(patient);
+            console.log(requestObject.Request);
             requestMappings[requestObject.Request](requestKey, requestObject,patient[0]).then(function(response){
                 r.resolve(response);
             });
@@ -40,8 +42,9 @@ exports.verifySecurityAnswer=function(requestKey,requestObject,patient)
     var r=q.defer();
     var key = patient.AnswerText;
     //var key = patient.Password;
-
+    console.log(key);
     var unencrypted = utility.decrypt(requestObject.Parameters,key);
+    console.log(unencrypted);
     var response = {};
     var isSSNValid = unencrypted.SSN == patient.SSN;
     var isAnswerValid = unencrypted.Answer == patient.AnswerText;
@@ -95,22 +98,22 @@ exports.securityQuestion=function(requestKey,requestObject) {
     //sqlInterface.getEncryption(requestObject).then(function(){
     //  console.log()
     //});
-    sqlInterface.getFirstEncryption(requestObject).then(function(rows){
-        if(rows.length>1||rows.length === 0)
-        {
-            //Rejects requests if username returns more than one password
-            //console.log('Rejecting request due to injection attack', rows);
-            //Construction of request object
-            responseObject = { Headers:{RequestKey:requestKey,RequestObject:requestObject},EncryptionKey:'', Code: 1, Data:{},Response:'error', Reason:'Injection attack, incorrect UserID'};
+    // sqlInterface.getFirstEncryption(requestObject).then(function(rows){
+    //     if(rows.length>1||rows.length === 0)
+    //     {
+    //         //Rejects requests if username returns more than one password
+    //         //console.log('Rejecting request due to injection attack', rows);
+    //         //Construction of request object
+    //         responseObject = { Headers:{RequestKey:requestKey,RequestObject:requestObject},EncryptionKey:'', Code: 1, Data:{},Response:'error', Reason:'Injection attack, incorrect UserID'};
 
-            console.log(JSON.stringify("response: " + responseObject));
+    //         console.log(JSON.stringify("response: " + responseObject));
 
-            r.resolve(responseObject);
-        }else{
-            //Gets password and decrypts request
-            //console.log(rows);
-            var pass = rows[0].Password;
-            var unencrypted = utility.decrypt(requestObject.Parameters,pass);
+    //         r.resolve(responseObject);
+    //     }else{
+    //         //Gets password and decrypts request
+    //         //console.log(rows);
+    //        var pass = rows[0].Password;
+            var unencrypted = utility.decrypt(requestObject.Parameters,CryptoJS.SHA256("none").toString());
             //console.log(requestObject);
             sqlInterface.updateDeviceIdentifier(requestObject, unencrypted)
                 .then(function () {
@@ -142,8 +145,8 @@ exports.securityQuestion=function(requestKey,requestObject) {
                     });
 
                 });
-        }
-    });
+   //     }
+   // });
     
     return r.promise;
 
