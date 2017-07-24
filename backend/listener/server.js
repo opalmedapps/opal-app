@@ -87,11 +87,7 @@ function handleRequest(requestType, snapshot){
 
         //Log the error
         logger.error("Error processing request!", {
-            error: error,
-            deviceID:response.Headers.RequestObject.DeviceId,
-            userID:response.Headers.RequestObject.UserID,
-            request:response.Headers.RequestObject.Request,
-            requestKey: response.Headers.RequestKey
+            error: error
         });
     });
 }
