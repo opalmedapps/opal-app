@@ -6,6 +6,7 @@
     <div class="center" ng-class="fontSizeTitle">{{"ESTIMATEDWAIT"|translate}}</div>
   </ons-toolbar>
   <div id="last-updated">{{"LASTUPDATED"|translate}}: {{c.lastUpdated}}</div>
+
   <div class="horizontal-center-outer">
     <div class="horizontal-center-inner" style="width: 90%">
       <div id="wait-time-timeline">
@@ -36,9 +37,10 @@
 
     <div id="more-info-button-outer">
       <button modifier="large" id="more-info-button" ng-click="c.goToWaitingTimeEstimates()">
-      <div style="color: #757575; position: relative; top: 50%;" align="center">
-        {{"MORE_INFO"|translate}}
-      </div>
-    </button>
+        <div style="color: #757575; position: relative; top: 50%;" align="center">
+          {{"MORE_INFO"|translate}}
+        </div>
+      </button>
+    </div>
   </div>
 </ons-page>
