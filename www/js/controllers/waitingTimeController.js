@@ -30,7 +30,7 @@
         vm.lastUpdated = null;
         vm.numPrevPatients = null;
 
-        var appointmentAriaSer = 1859684;
+        var appointmentAriaSer = 1871328;
         function requestEstimate() {
             TimeEstimate.requestTimeEstimate(appointmentAriaSer)
                 .then(function () {
