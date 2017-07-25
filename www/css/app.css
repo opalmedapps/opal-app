@@ -54,7 +54,6 @@ body {
         color-stop(0.51, #E4E4E4)
     );
     background-attachment:fixed;
-    font-family: 'Cabin', serif !important;
     font-size:12px;
     height:100%;
     margin:0;
@@ -2671,13 +2670,10 @@ input:focus {
 }
 
 
-@media only screen and (min-device-width : 320px)  and (max-device-width : 56px) {
-
- }
 
 @media only screen
 and (min-device-width : 320px)
-and (max-device-width : 568px)
+and (max-device-width : 321px)
 {
     .secure-message, .unattended-message{
         font-size: 14px;
