@@ -25,7 +25,7 @@ myApp.controller('CalendarController', ['Appointments', '$scope','$timeout', '$f
     '$anchorScroll','NavigatorParameters', 'UserPreferences', 'Logger',
     function (Appointments, $scope,$timeout,$filter,$location,
               $anchorScroll,NavigatorParameters,UserPreferences, Logger) {
-       console.log(Appointments.getUserAppointments());
+       Appointments.getUserAppointments();
         /*
         *   Controller constants
         **/ 
@@ -253,12 +253,12 @@ myApp.controller('IndividualAppointmentController', ['NavigatorParameters','Nati
               NewsBanner,$filter, UserPreferences, Logger) {
         //Information of current appointment
         var parameters = NavigatorParameters.getParameters();
-        console.log(parameters);
+
         var navigatorName = parameters.Navigator;
 
         $scope.app = parameters.Post;
         $scope.language = UserPreferences.getLanguage();
-        console.log($scope.app);
+
 
         Logger.sendLog('Appointment', parameters.Post.AppointmentSerNum);
 

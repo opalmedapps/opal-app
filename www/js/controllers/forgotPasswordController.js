@@ -48,9 +48,9 @@
 
         function submitPasswordReset() {
             var userAuth = $firebaseAuth();
-            console.log(vm.email);
+
             userAuth.$sendPasswordResetEmail(vm.email).then(function(){
-                console.log("Password reset email sent successfully!");
+
                 $timeout(function(){
                     vm.alert.type="success";
                     vm.alert.content="EMAILPASSWORDSENT";
@@ -58,7 +58,7 @@
             }).catch(function(error){
                 switch (error.code) {
                     case "auth/user-not-found":
-                        console.log("The specified user account does not exist.");
+
                         $timeout(function(){
                             vm.alert.type="danger";
                             vm.alert.content="INVALID_USER";
@@ -66,7 +66,7 @@
 
                         break;
                     case "auth/invalid-email":
-                        console.log("The email is invalid.");
+
                         $timeout(function(){
                             vm.alert.type="danger";
                             vm.alert.content="INVALID_EMAIL";
@@ -74,7 +74,7 @@
 
                         break;
                     default:
-                        console.log(error);
+
                         $timeout(function(){
                             vm.alert.type="danger";
                             vm.alert.content="INVALID_EMAIL";

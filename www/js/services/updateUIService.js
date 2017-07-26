@@ -195,7 +195,7 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors',
                 r.resolve(true);
             }).catch(function(error)
             {
-                console.log(error);
+
                 r.reject(error);
             });
             return r.promise;
@@ -214,7 +214,7 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors',
                 r.resolve(true);
             }).catch(function(error)
             {
-                console.log(error);
+
                 r.reject(error);
             });
             return r.promise;
@@ -240,7 +240,7 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors',
                     r.resolve(true);
                 });
             }).catch(function(error) {
-                console.log(error);
+
                 if(error.Code=='2')
                 {
                     NativeNotification.showNotificationAlert($filter('translate')("ERRORCONTACTINGHOSPITAL"));
@@ -255,14 +255,14 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors',
         //     var r=$q.defer();
         //     data=LocalStorage.ReadLocalStorage('All');
         //
-        //     console.log(data);
+        //
         //     sectionServiceMappings.All.init(data, 'setOffline').then(function()
         //     {
         //         var timestampLastUpdate = initTimestampsFromLocalStorage();
         //         var app = document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'https://' ) === -1;
         //         if(app){
         //             if($cordovaNetwork.isOnline()){
-        //                 console.log('I am right before sending the request for all the things');
+        //
         //                 RequestToServer.sendRequestWithResponse('Refresh',{Fields:'All',Timestamp:timestampLastUpdate}).then(
         //                     function(response)
         //                     {
@@ -274,12 +274,12 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors',
         //                 {
         //                     if(error.Code =='2')  NativeNotification.showNotificationAlert($filter('translate')("ERRORCONTACTINGHOSPITAL"));
         //                     clearTimeout(timeOut);
-        //                     console.log(error);
+        //
         //                     r.resolve(true);
         //                 });
         //             }else{
         //                 clearTimeout(timeOut);
-        //                 console.log('Offline resolving');
+        //
         //                 r.resolve(true);
         //             }
         //         }else{

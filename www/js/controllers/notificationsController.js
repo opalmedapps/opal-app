@@ -22,11 +22,11 @@ myApp.controller('NotificationsController', ['RequestToServer','Notifications', 
                     if (notifications.length > 0)  $scope.noNotifications = false;
                     notifications = Notifications.setNotificationsLanguage(notifications);
                     $scope.notifications = $filter('orderBy')(notifications,'notifications.DateAdded', true);
-                    console.log($scope.notifications);
+
                     Permissions.enablePermission('WRITE_EXTERNAL_STORAGE', 'Storage access disabled. Unable to write documents.');
                 })
                 .catch(function (error) {
-                    console.log(error);
+
                 })
 
 
@@ -42,13 +42,13 @@ myApp.controller('NotificationsController', ['RequestToServer','Notifications', 
             else {
                 var previous = (new Date($scope.notifications[index-1].DateAdded)).setHours(0,0,0,0);
                 var current = (new Date($scope.notifications[index].DateAdded)).setHours(0,0,0,0);
-                //console.log(index, current !== previous);
+                //
                 return (current !== previous);
             }
         };
         $scope.goToNotification=function(index,notification){
-            console.log(notification);
-            console.log(index);
+
+
             if(notification.ReadStatus==='0'){
                 RequestToServer.sendRequest('Read',{"Id":notification.NotificationSerNum, "Field":"Notifications"});
                 Notifications.readNotification(index,notification);
@@ -71,6 +71,6 @@ myApp.controller('NotificationsController', ['RequestToServer','Notifications', 
     }]);
 
 myApp.controller('IndividualNotificationController',['$scope','Notifications','NavigatorParameters',function($scope,Notifications,NavigatorParameters){
-    console.log(NavigatorParameters.getParameters());
+
 
 }]);

@@ -97,8 +97,6 @@
 myApp.controller('ChangingSettingController',
     function($filter, $rootScope, FirebaseService, $translate, UserPreferences,
              Patient, RequestToServer, $scope, $timeout, UpdateUI, UserAuthorizationInfo,EncryptionService) {
-        console.log(UserAuthorizationInfo);
-
         //Function sets account
         accountChangeSetUp();
 
@@ -125,12 +123,10 @@ myApp.controller('ChangingSettingController',
                     if (parameters == 'EMAIL') {
                         $scope.disableButton = !validateEmail();
                     } else if (parameters == 'PASSWORD') {
-                        console.log(validatePassword());
                         $scope.disableButton = !validatePassword();
                     } else if (parameters == 'PHONENUMBER') {
                         $scope.disableButton = !validateTelNum();
                     } else {
-                        console.log('alias, boom', $scope.actualValue, $scope.newValue);
                         $scope.disableButton = !validateAlias();
                     }
                 }
@@ -188,13 +184,8 @@ myApp.controller('ChangingSettingController',
         $scope.updateValue = function(val) {
             var objectToSend = {};
             objectToSend.NewValue = $scope.newValue;
-            console.log(val);
-
 
             if (val.toUpperCase() === 'PASSWORD') {
-
-                console.log("should be changing password");
-
 
                 changePassword();
             } else if (val.toUpperCase() === 'EMAIL') {
@@ -218,8 +209,6 @@ myApp.controller('ChangingSettingController',
             $scope.newUpdate = true;
             $scope.alertClass = "bg-success updateMessage-success";
             $scope.updateMessage = "FIELD_UPDATED";
-            console.log($scope.updateMessage, $scope.alertClass);
-
         }
 
         //Function to change font size
@@ -230,7 +219,6 @@ myApp.controller('ChangingSettingController',
 
         //FUnction to change the language
         $scope.changeLanguage = function(val) {
-            console.log(val);
             var objectToSend = {};
             objectToSend.NewValue = val;
             objectToSend.FieldToChange = 'Language';
@@ -255,8 +243,6 @@ myApp.controller('ChangingSettingController',
                 localStorage.setItem(UserAuthorizationInfo.getUsername()+"/deviceID", EncryptionService.getSecurityAns());
                 RequestToServer.sendRequestWithResponse('AccountChange', objectToSend)
                     .then(function (response) {
-                        console.log('updated on server.');
-                        console.log(response);
                         $timeout(function() {
 
                             $scope.alertClass = "bg-success updateMessage-success";
@@ -265,7 +251,6 @@ myApp.controller('ChangingSettingController',
                         });
                     })
                     .catch(function (error) {
-                        console.log(error);
                         $timeout(function () {
                             $scope.newUpdate = true;
                             $scope.alertClass = "bg-danger updateMessage-error";
@@ -276,7 +261,6 @@ myApp.controller('ChangingSettingController',
             }
 
             function handleError(error){
-                console.log(error);
                 switch (error.code) {
                     case "auth/weak-password":
                         $timeout(function () {

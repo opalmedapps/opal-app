@@ -57,7 +57,7 @@ myApp.controller('IndividualParkingController',function($scope, $timeout, Naviga
     };
     
     var parameters = NavigatorParameters.getParameters();
-    console.log(parameters);
+
     
     $scope.title = parkingInformation[language][parameters.type].title;
     var link = parkingInformation[language][parameters.type].link;

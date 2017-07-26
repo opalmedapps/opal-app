@@ -23,10 +23,6 @@ myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$root
 
         $scope.loading = false;
 
-
-        //Check if device or browser
-        var app = document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'https://' ) === -1;
-
         //Watch email and password for error cleaning
         $scope.$watchGroup(['email','password'],function()
         {
@@ -36,6 +32,7 @@ myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$root
                 delete $scope.alert.content;
             }
         });
+
         //Obtain email from localStorage and show that email
         var savedEmail = window.localStorage.getItem('Email');
         if(savedEmail)
@@ -45,6 +42,7 @@ myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$root
 
 
         var patientSerNum = Patient.getUserSerNum();
+
         //Locked out alert
         if(typeof patientSerNum !=='undefined'&&patientSerNum) NewsBanner.showCustomBanner($filter('translate')('LOCKEDOUT'),'black', null, 2000);
 
@@ -58,10 +56,10 @@ myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$root
             mySwitch.setChecked(trusted);
             mySwitch.on( 'change', function () {
                 if (mySwitch.isChecked()) {
-                    console.log("Trusted");
+
                     trusted = 1;
                 } else {
-                    console.log("Not Trusted");
+
                     trusted = 0;
                 }
             });
@@ -112,16 +110,14 @@ myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$root
             firebaseUser.getToken(true).then(function(sessionToken){
 
                 //Save the current session token to the users "logged in users" node. This is used to make sure that the user is only logged in for one session at a time.
-                var Ref= firebase.database().ref(FirebaseService.getFirebaseUrl(null));
+                var Ref= firebase.database().ref(FirebaseService.getFirebaseUrl());
                 var refCurrentUser = Ref.child(FirebaseService.getFirebaseChild('logged_in_users') + firebaseUser.uid);
 
                 $rootScope.uid = firebaseUser.uid;
 
-                var toSend = {
+                refCurrentUser.set({
                     'Token' : sessionToken
-                };
-
-                refCurrentUser.set(toSend);
+                });
 
                 //Evoke an observer function in mainController
                 $rootScope.$emit("MonitorLoggedInUsers", firebaseUser.uid);
@@ -130,7 +126,7 @@ myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$root
 
                 UserAuthorizationInfo.setUserAuthData(firebaseUser.uid, EncryptionService.hash($scope.password), undefined, sessionToken, $scope.email);
                 //Setting The User Object for global Application Use
-                // console.log("Users email is" + $scope.email);
+                //
                 var authenticationToLocalStorage={
                     UserName:firebaseUser.uid,
                     Password: undefined,
@@ -163,7 +159,7 @@ myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$root
                             $state.go('loading');
                         })
                         .catch(function (error) {
-                            console.log(error);
+
                             $timeout(function(){
                                 $scope.loading = false;
                             });
@@ -173,15 +169,14 @@ myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$root
                     if (!Constants.app) UUID.setUUID(UUID.generate());
                     DeviceIdentifiers.sendFirstTimeIdentifierToServer()
                         .then(function (response) {
-                            console.log(response);
+
                             $scope.loading = false;
                             initNavigator.pushPage('./views/login/security-question.html', {
                                 securityQuestion: response.Data.securityQuestion["securityQuestion_" + UserPreferences.getLanguage()],
                                 trusted: trusted
                             });
                         })
-                        .catch(function (error) {
-                            console.log(error);
+                        .catch(function () {
                             $timeout(function(){
                                 $scope.loading = false;
                                 initNavigator.popPage();
@@ -192,13 +187,11 @@ myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$root
             });
         }
 
-        //Handles login error's;
-
         function handleError(error)
         {
             $scope.loading = false;
             $scope.alert.type='danger';
-            console.log(error);
+
             switch (error.code) {
                 case "auth/invalid-email":
                 case "auth/wrong-password":
@@ -219,33 +212,4 @@ myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$root
                     break;
             }
         }
-        function authenticate(firebaseUser)
-        {
-
-            //Get Firebase authentication state
-            var authenticated = !!firebaseUser;
-            //console.log($scope.authenticated );
-            //If authenticated update the user authentication state
-            if( authenticated)
-            {
-                firebaseUser.getToken().then(function(sessionToken){
-                    var  authInfoLocalStorage=window.localStorage.getItem('UserAuthorizationInfo');
-                    if(authInfoLocalStorage){
-                        var authInfoObject=JSON.parse(authInfoLocalStorage);
-                        UserAuthorizationInfo.setUserAuthData(firebaseUser.uid, authInfoObject.Password , undefined,sessionToken);
-                        var authenticationToLocalStorage={
-                            UserName:firebaseUser.uid,
-                            Password: authInfoObject.Password ,
-                            Email:firebaseUser.email,
-                            Token:sessionToken
-                        };
-                        window.localStorage.setItem('UserAuthorizationInfo', JSON.stringify(authenticationToLocalStorage));
-                    }else{
-                        return false;
-                    }
-                });
-            }
-            return authenticated;
-        }
-
     }]);

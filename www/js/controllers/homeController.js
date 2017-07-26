@@ -88,7 +88,7 @@
 
             Permissions.enablePermission('WRITE_EXTERNAL_STORAGE', 'PERMISSION_STORAGE_DENIED')
                 .catch(function (response) {
-                    console.log(response);
+
                     NewsBanner.showCustomBanner($filter('translate')(response.Message), '#333333', function(){}, 5000);
                 });
 
@@ -165,7 +165,7 @@
                         UpdateUI.set(toLoad)
                             .then(function () {
                                 vm.notifications = Notifications.setNotificationsLanguage(Notifications.getUnreadNotifications());
-                                console.log(vm.notifications);
+
                                 vm.loading = false;
 
                             })
@@ -187,17 +187,17 @@
             //     {
             //         NewsBanner.showNotificationAlert(vm.notifications.length,function(result){
             //             if (result && result.event) {
-            //                 console.log("The toast was tapped or got hidden, see the value of result.event");
-            //                 console.log("Event: " + result.event); // "touch" when the toast was touched by the user or "hide" when the toast geot hidden
-            //                 console.log("Message: " + result.message); // will be equal to the message you passed in
-            //                 //console.log("data.foo: " + result.data.foo); // .. retrieve passed in data here
+            //
+            //
+            //
+            //                 //
             //
             //                 if (result.event === 'hide') {
-            //                     console.log("The toast has been shown");
+            //
             //                 }
             //                 if(result.event == 'touch')
             //                 {
-            //                     console.log('going to the bottom');
+            //
             //                     $location.hash("bottomNotifications");
             //                     $anchorScroll();
             //                 }
@@ -215,7 +215,7 @@
             vm.allCheckedIn = true;
             var todaysAppointmentsToCheckIn = Appointments.getCheckinAppointment();
             CheckInService.setCheckInApps(todaysAppointmentsToCheckIn);
-            console.log(todaysAppointmentsToCheckIn);
+
             vm.todaysAppointments = todaysAppointmentsToCheckIn;
             if(todaysAppointmentsToCheckIn)
             {
@@ -256,12 +256,12 @@
                         vm.showHomeScreenUpdate = true;
                     }
                 }).catch(function(error){
-                    console.log(error);
+
                     //NewsBanner.showCustomBanner($filter('translate')(error), '#333333', function(){}, 3000);
                 });
 
             }else{
-                console.log("MEssage none");
+
                 //Case where there are no appointments that day
                 vm.checkInMessage = "CHECKIN_NONE";
             }
@@ -274,7 +274,7 @@
 
         //Function used by load
         function refresh(done){
-            console.log(done);
+
             done == undefined ? done = function () {} : done;
 
             UpdateUI.update('All').then(function()
@@ -283,7 +283,7 @@
                 homePageInit();
                 done();
             }).catch(function(error){
-                console.log(error);
+
                 done();
             });
             $timeout(function(){
@@ -293,7 +293,7 @@
 
         // For Android only, allows pressing the back button
         function homeDeviceBackButton(){
-            console.log('device button pressed do nothing');
+
             var mod = 'android';
             var msg = $filter('translate')('EXIT_APP');
 

@@ -153,10 +153,10 @@
                     if(isAvailable)
                     {
                         cordova.plugins.email.open(email,function(sent){
-                            console.log('email ' + (sent ? 'sent' : 'cancelled'));
+
                         },this);
                     }else{
-                        console.log('is not available');
+
                     }
                 });
             }

@@ -111,7 +111,7 @@ var messagesLocalStorage=[];
             }
 
             LocalStorage.WriteToLocalStorage('Messages',messagesLocalStorage);
-            console.log(UserConversationsArray);
+
         },
          /**
         *@ngdoc method

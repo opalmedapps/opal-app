@@ -41,7 +41,6 @@ angular.module('MUHCApp').controller('MainController', ["$window", "$state",'$ti
         $window.addEventListener("offline", function() {
             $rootScope.$apply(function() {
                 $rootScope.online = false;
-                console.log("offline");
                 NetworkStatus.setStatus(false);
             });
         }, false);
@@ -49,7 +48,6 @@ angular.module('MUHCApp').controller('MainController', ["$window", "$state",'$ti
         $window.addEventListener("online", function() {
             $rootScope.$apply(function() {
                 $rootScope.online = true;
-                console.log("online");
                 NetworkStatus.setStatus(true);
             });
         }, false);
@@ -102,14 +100,14 @@ angular.module('MUHCApp').controller('MainController', ["$window", "$state",'$ti
         }
 
         function resetTimer(e) {
-            //console.log('resetting timer');
+
             window.clearTimeout(timeoutLockout);
 
             goActive();
         }
 
         function goInactive() {
-            //console.log('Currently going inactive');
+
             resetTimer();
             if($state.current.name ==='Home')
             {
@@ -139,7 +137,6 @@ angular.module('MUHCApp').controller('MainController', ["$window", "$state",'$ti
 
             PushNotification.hasPermission(function(data) {
                 if (data.isEnabled) {
-                    console.log('isEnabled');
                 }
             });
 
@@ -157,14 +154,11 @@ angular.module('MUHCApp').controller('MainController', ["$window", "$state",'$ti
             });
 
             push.on('notification', function(data) {
-                console.log(data);
             });
             push.on('error', function(e) {
-                console.log(e);
             });
 
             push.on('registration', function(data) {
-                console.log(data.registrationId);
                 DeviceIdentifiers.updateRegistrationId(data.registrationId);
             });
 
@@ -216,7 +210,6 @@ angular.module('MUHCApp').controller('MainController', ["$window", "$state",'$ti
                     CleanUp.clear();
 
                     // FirebaseService.getAuthentication().$signOut();
-                    console.log($state.go('init'));
                 }
                 else{
                     $rootScope.firstTime = false;

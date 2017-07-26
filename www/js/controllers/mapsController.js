@@ -11,7 +11,7 @@ myApp.controller('MapsController',['$timeout', '$scope','FirebaseService','Reque
   }
   function goToScanMyLocation(result)
   {
-    console.log('Im in there!');
+
     
     generalNavigator.pushPage('./views/general/maps/hospital-location-scan.html',{param:result});
 
@@ -22,7 +22,7 @@ myApp.controller('MapsController',['$timeout', '$scope','FirebaseService','Reque
       var value=snapshot.val();
       if(typeof value!=='undefined')
       {
-        console.log(value);
+
         ref.set(null);
         ref.off();
       }
@@ -34,20 +34,20 @@ myApp.controller('MapsController',['$timeout', '$scope','FirebaseService','Reque
     {
       cordova.plugins.barcodeScanner.scan(
         function (result) {
-          console.log(result);
+
             if(!result.cancelled)
             {
-              console.log('boom');
+
                 if(result.format == "QR_CODE")
                 {
-                  console.log(result.format);
+
 
                     goToScanMyLocation(result.text);
                     /*navigator.notification.prompt("Please enter name of data",  function(input){
                         var name = input.input1;
                         var value = result.text;
                         var data = localStorage.getItem("LocalData");
-                        console.log(data);
+
                         data = JSON.parse(data);
                         data[data.length] = [name, value];
                         localStorage.setItem("LocalData", JSON.stringify(data));
@@ -57,7 +57,7 @@ myApp.controller('MapsController',['$timeout', '$scope','FirebaseService','Reque
             }
         },
         function (error) {
-          console.log(error)
+
         }
       );
     }
@@ -68,7 +68,7 @@ myApp.controller('MapsController',['$timeout', '$scope','FirebaseService','Reque
 myApp.controller('IndividualMapController',['$timeout', '$scope','NavigatorParameters','UserPreferences',function($timeout,$scope,NavigatorParameters,UserPreferences ){
   $scope.map=NavigatorParameters.getParameters();
   var language=UserPreferences.getLanguage();
-  console.log($scope.map);
+
   if(language=='EN')
   {
     $scope.name=$scope.map.MapName_EN;

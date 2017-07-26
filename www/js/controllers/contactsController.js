@@ -77,7 +77,6 @@
                 }
             });
             doctors = $filter('orderBy')(doctors, 'Role',true);
-            console.log(doctors);
             return doctors;
         }
         function showHeader(index)
