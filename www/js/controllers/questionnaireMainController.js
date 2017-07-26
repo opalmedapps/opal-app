@@ -20,15 +20,15 @@ app1.controller('QuestionnaireMainController', function ($scope, $location, $anc
     $scope.subAnswers = false;
 
     $scope.questionnaireSerNum = params.SerNum;
-    console.log($scope.questionnaireDBSerNum);
-    console.log($scope.questionnaireSerNum);
+
+
     $scope.clickedScrollArrow = new Array()
 
     // $scope.subData = Questionnaires.isQuestionnaireComplete($scope.questionnaireDBSerNum);
 
     setQuestionnaireAnswersObject(Questionnaires.getQuestionnaireAnswers($scope.questionnaireSerNum));
     $scope.questionaires = Questionnaires.getPatientQuestionnaires().Questionnaires;
-    console.log($scope.questionaires);
+
     $scope.questionaire = $scope.questionaires[$scope.questionnaireDBSerNum];
     questionsObject = $scope.questionaire.Questions;
     $scope.questions = [];
@@ -38,14 +38,14 @@ app1.controller('QuestionnaireMainController', function ($scope, $location, $anc
     }
     $scope.questions = $filter('orderBy')($scope.questions, 'OrderNum', false);
     $scope.clickedScrollArrow = new Array($scope.questions.length);
-    console.log($scope.questions.length);
+
 
     for (i = 0; i < $scope.questions.length; i++) {
       $scope.clickedScrollArrow[i] = false;
     }
 
-    console.log($scope.clickedScrollArrow);
-    console.log($scope.questions);
+
+
     $scope.question;
     $scope.options;
     $scope.shown = new Array($scope.questions.length);
@@ -56,7 +56,7 @@ app1.controller('QuestionnaireMainController', function ($scope, $location, $anc
     $scope.sumpage;
 
     ons.orientation.on("change", function (event) {
-      console.log('changed orientation');
+
       var i = $scope.carousel._scroll / $scope.carousel._currentElementSize;
       delete $scope.carousel._currentElementSize;
       $scope.carousel.setActiveCarouselItemIndex(i);
@@ -66,7 +66,7 @@ app1.controller('QuestionnaireMainController', function ($scope, $location, $anc
 
   }
   function carouselPostChange(event) {
-    console.log($scope.subAnswers);
+
     if (event != undefined) {
       $scope.carousel = event.carousel;
       $scope.index = event.activeIndex;
@@ -83,15 +83,15 @@ app1.controller('QuestionnaireMainController', function ($scope, $location, $anc
       $scope.sumpage = false;
     }
 
-    console.log($scope.index);
+
     returnIndex();
 
     if ($scope.answers != undefined) {
-      console.log($scope.answers);
+
     }
 
     if ($scope.index >= $scope.questions.length) {
-      console.log('summ');
+
       $scope.checkboxString = '';
       // At first there should be no answer shown
       for ($i = 0; $i < $scope.questions.length; $i++) {
@@ -110,7 +110,7 @@ app1.controller('QuestionnaireMainController', function ($scope, $location, $anc
     //   $scope.carousel.setSwipeable(true);
     // }
 
-    console.log($scope.index);
+
     for ($i = 1; $i <= $scope.shown.length; $i++) {
       if ($i == $scope.index) {
         $scope.shown[$i - 1] = true;
@@ -118,7 +118,7 @@ app1.controller('QuestionnaireMainController', function ($scope, $location, $anc
         $scope.shown[$i - 1] = false;
       }
     }
-    console.log($scope.shown);
+
 
     if (($scope.index <= $scope.questions.length) && ($scope.index > 0)) {
       $scope.question = $scope.questions[$scope.index - 1];
@@ -127,7 +127,7 @@ app1.controller('QuestionnaireMainController', function ($scope, $location, $anc
       if ($scope.question.QuestionType == 'MC') {
         if (($scope.question != undefined) && ($scope.question.Choices != undefined)) {
           $scope.options = $scope.question.Choices;
-          console.log($scope.options);
+
         }
         $scope.checked1 = [];
         $scope.answer;
@@ -156,7 +156,7 @@ app1.controller('QuestionnaireMainController', function ($scope, $location, $anc
         $scope.colors = ['white'];
         var length = $scope.heights.length;
         setColors(length, $scope.question.isPositiveQuestion);
-        console.log($scope.colors);
+
 
         if (($scope.answers != undefined) && ($scope.answers[$scope.index - 1] != undefined)) {
           num = $scope.answers[$scope.index - 1];
@@ -168,7 +168,7 @@ app1.controller('QuestionnaireMainController', function ($scope, $location, $anc
             }
           }
         }
-        console.log($scope.buttons);
+
       } else if ($scope.question.QuestionType == 'yes') {
         if ($scope.answers[$scope.index - 1] == 'Yes') {
           $scope.checkedYes = true;
@@ -195,7 +195,7 @@ app1.controller('QuestionnaireMainController', function ($scope, $location, $anc
           for (x in $scope.answers[$scope.index - 1]) {
             $scope.barTrack[x] = $scope.answers[$scope.index - 1][x] * 10;
           }
-          console.log($scope.barTrack);
+
           $scope.i = undefined
           $scope.prog = undefined;
         } else {
@@ -242,13 +242,13 @@ app1.controller('QuestionnaireMainController', function ($scope, $location, $anc
         }
       } else if ($scope.question.QuestionType == 'Checkbox') {
         $scope.options = $scope.question.Choices;
-        console.log($scope.options);
+
         $scope.checked = new Array($scope.options.length);
         $scope.choices = new Array($scope.options.length);
 
         if ($scope.options != undefined) {
           if ($scope.answers != undefined) {
-            console.log($scope.answers[$scope.index - 1]);
+
             for ($i = 0; $i < $scope.checked.length; $i++) {
               if ($scope.answers[$scope.index - 1] != undefined) {
                 if ($scope.answers[$scope.index - 1][$i] == undefined) {
@@ -260,7 +260,7 @@ app1.controller('QuestionnaireMainController', function ($scope, $location, $anc
               }
             }
             if ($scope.answers[$scope.index - 1] != undefined) {
-              console.log($scope.answers[$scope.index - 1][$scope.checked.length - 1]);
+
             }
             if (($scope.answers[$scope.index - 1] != undefined) && ($scope.answers[$scope.index - 1][$scope.checked.length - 1] == 'None of the Above')) {
               $scope.noneChecked = true;
@@ -269,9 +269,9 @@ app1.controller('QuestionnaireMainController', function ($scope, $location, $anc
             }
           }
         }
-        console.log($scope.checked);
-        console.log($scope.noneChecked);
-        console.log($scope.choices);
+
+
+
       } else if ($scope.question.QuestionType == 'SA') {
         $scope.longAns = $scope.answers[$scope.index - 1];
       }
@@ -324,18 +324,18 @@ app1.controller('QuestionnaireMainController', function ($scope, $location, $anc
   }
 
   function setQuestionnaireAnswersObject(object) {
-    console.log(object);
+
     if (object == undefined) {
       return;
     }
     answers = object.Answers;
-    console.log(answers);
+
     $scope.answers = {};
     for (key in answers) {
       orderNum = questionsObject[key].OrderNum;
       $scope.answers[orderNum - 1] = answers[key].Answer;
     }
-    console.log($scope.answers);
+
   }
 
   $scope.questionnaireInProgress = function () {
@@ -345,7 +345,7 @@ app1.controller('QuestionnaireMainController', function ($scope, $location, $anc
   function returnIndex() {
     $timeout(function () {
       $scope.toolbarIndex = $scope.index;
-      console.log($scope.toolbarIndex);
+
     });
   }
 
@@ -353,7 +353,7 @@ app1.controller('QuestionnaireMainController', function ($scope, $location, $anc
     if ($scope.index == undefined) {
       return true;
     } else {
-      console.log($scope.shown);
+
       if ($scope.shown[$scope.index] == true) {
         return true;
       } else {
@@ -363,23 +363,23 @@ app1.controller('QuestionnaireMainController', function ($scope, $location, $anc
   }
 
   $scope.goToBottom = function (position, index) {
-    console.log(position);
-    console.log(index);
+
+
     $scope.clickedScrollArrow[index] = true;
-    console.log($scope.clickedScrollArrow);
+
     $location.hash(position);
     $anchorScroll();
   };
 
   // function getScrollButtonTop () {
   //   $timeout(function () {
-  //     console.log($('#topScrollButton'));
-  //     console.log($('#topScrollButton')[0].offsetTop);
+  //
+  //
   //   });
   // }
 
   $scope.$on('$destroy', function () {
-    console.log('destroy');
+
     document.removeEventListener('ons-carousel:postchange', carouselPostChange);
     ons.orientation.off("change");
   });
@@ -394,7 +394,7 @@ app1.controller('QuestionnaireMainController', function ($scope, $location, $anc
   // Encountered a really weird problem here where if the checked value was anything but undefined it was unchecked. So the values
   // start off as false and later on when they are clicked are changed to undefined. Weird but works!
   function setChecked() {
-    console.log($scope.options);
+
     if (($scope.options != undefined) && ($scope.answers != undefined) && ($scope.answers[$scope.index - 1] != undefined)) {
       ans = $scope.answers[$scope.index - 1];
       for ($i = 0; $i < $scope.options.length; $i++) {
@@ -410,7 +410,7 @@ app1.controller('QuestionnaireMainController', function ($scope, $location, $anc
         $scope.checked1[$scope.options.length] = false;
       }
     }
-    console.log($scope.checked1);
+
   }
 
   // Run when one of the options is clicked
@@ -463,8 +463,8 @@ app1.controller('QuestionnaireMainController', function ($scope, $location, $anc
 
   // Sets the different possible colors the progress bars can have.
   function setColors(len, isPositiveQuestion) {
-    console.log('positive ' + isPositiveQuestion);
-    console.log('len = ' + len);
+
+
     if (isPositiveQuestion) {
       for ($i = 1; $i < len; $i++) {
         if ($i <= (len / 5 * 1)) {
@@ -490,7 +490,7 @@ app1.controller('QuestionnaireMainController', function ($scope, $location, $anc
         }
       }
     }
-    console.log($scope.colors);
+
   }
 
   $scope.getChecked = function (num) {
@@ -514,7 +514,7 @@ app1.controller('QuestionnaireMainController', function ($scope, $location, $anc
 
     $scope.answers[$scope.index - 1] = ans;
     Questionnaires.setQuestionnaireAnswers(ans, $scope.questions[$scope.index - 1].QuestionnaireQuestionSerNum, $scope.questionnaireDBSerNum, $scope.questionnaireSerNum);
-    console.log('ans = ' + ans);
+
 
     // Setting which buttons was clicked
     for ($i = 0; $i < $scope.heights.length; $i++) {
@@ -524,7 +524,7 @@ app1.controller('QuestionnaireMainController', function ($scope, $location, $anc
         $scope.buttons[$i] = false;
       }
     }
-    console.log($scope.buttons);
+
   };
 
   // Question 3 Controller
@@ -586,10 +586,10 @@ app1.controller('QuestionnaireMainController', function ($scope, $location, $anc
   $scope.areaClicked;
 
   $scope.clickedImage = function (area) {
-    console.log($scope.answers[$scope.index - 1]);
+
     if (($scope.answers[$scope.index - 1] == undefined) || (Object.keys($scope.answers[$scope.index - 1]).length === 0)) {
       $scope.numAnswered = $scope.numAnswered + 1;
-      console.log('incremented');
+
     }
     if ($scope.answers[$scope.index - 1] == undefined) {
       $scope.answers[$scope.index - 1] = {};
@@ -600,7 +600,7 @@ app1.controller('QuestionnaireMainController', function ($scope, $location, $anc
       $scope.barTrack[area] = 10;
       $scope.prog = 10;
     }
-    console.log('You clicked the ' + area.toLowerCase() + '!');
+
   }
 
   $scope.startCounter = function (part) {
@@ -620,7 +620,7 @@ app1.controller('QuestionnaireMainController', function ($scope, $location, $anc
       }
     }
     touch = $interval(function () {
-      console.log($scope.prog);
+
       if ($scope.i >= 10) {
         $scope.i = 10;
         $scope.prog = $scope.i * 10;
@@ -631,7 +631,7 @@ app1.controller('QuestionnaireMainController', function ($scope, $location, $anc
         $scope.answers[$scope.index - 1][part] = $scope.i;
         $scope.prog = $scope.i * 10;
         $scope.barTrack[part] = $scope.prog;
-        console.log($scope.barTrack);
+
       }
     }, 500);
   }
@@ -643,7 +643,7 @@ app1.controller('QuestionnaireMainController', function ($scope, $location, $anc
 
   $scope.reset = function (index) {
     key = Object.keys($scope.barTrack)[index];
-    console.log(key);
+
     $scope.prog = 0;
     $scope.i = 0;
     delete $scope.answers[$scope.index - 1][key]
@@ -682,8 +682,8 @@ app1.controller('QuestionnaireMainController', function ($scope, $location, $anc
     if ($scope.answers[$scope.index - 1] == undefined) {
       $scope.numAnswered = $scope.numAnswered + 1;
     }
-    console.log($scope.checked);
-    console.log($scope.noneChecked);
+
+
     var i = $scope.choices.indexOf(choice);
     if (i < 0) {
       $scope.choices[index] = choice;
@@ -691,14 +691,14 @@ app1.controller('QuestionnaireMainController', function ($scope, $location, $anc
       $scope.choices[index] = undefined;
     }
     $scope.answers[$scope.index - 1] = {};
-    console.log($scope.answers[$scope.index - 1]);
+
     for (val in $scope.choices) {
       if ($scope.choices[val] != undefined) {
         $scope.answers[$scope.index - 1][val] = $scope.choices[val];
       }
     }
     Questionnaires.setQuestionnaireAnswers($scope.answers[$scope.index - 1], $scope.questions[$scope.index - 1].QuestionnaireQuestionSerNum, $scope.questionnaireDBSerNum, $scope.questionnaireSerNum);
-    console.log($scope.answers);
+
 
     for ($i = 0; $i < $scope.choices.length; $i++) {
       if ($scope.answers[$scope.index - 1][$i] != undefined) {
@@ -757,7 +757,7 @@ app1.controller('QuestionnaireMainController', function ($scope, $location, $anc
   $scope.submitAns = function () {
     // $scope.carousel.setSwipeable(false);
     $scope.subAnswers = true;
-    console.log($scope.subAnswers);
+
     $timeout(function () {
       $scope.carousel.setActiveCarouselItemIndex($scope.questions.length + 2);
       Questionnaires.submitQuestionnaire($scope.questionnaireDBSerNum, $scope.questionnaireSerNum);
@@ -771,8 +771,8 @@ app1.controller('QuestionnaireMainController', function ($scope, $location, $anc
     $scope.answerShown[index] = !$scope.answerShown[index];
     $scope.animateShowAnswer = ($scope.answerShown[index]) ? 'animated fadeInDown' : 'animated fadeOutUp';
     if ($scope.questions[index].QuestionType == 'Checkbox') {
-      console.log($scope.answers[index]);
-      console.log(Object.keys($scope.answers[index]).length);
+
+
       $scope.checkboxString = '';
       for (val in $scope.answers[index]) {
         if ($scope.answers[index][val] != undefined) {

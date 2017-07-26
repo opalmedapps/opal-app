@@ -7,9 +7,9 @@ var myApp=angular.module('MUHCApp');
 myApp.controller('SetNewPasswordController',['$scope','$timeout','ResetPassword','RequestToServer','EncryptionService','FirebaseService','NavigatorParameters',function($scope,$timeout,ResetPassword,RequestToServer,EncryptionService,FirebaseService,NavigatorParameters){
     //Enter code here!!
     $scope.alert={};
-    console.log('Inside set new password');
+
     var parameters = NavigatorParameters.getParameters();
-    console.log(parameters);
+
     $scope.$watch('ssn',function()
     {
         if($scope.alert.hasOwnProperty('type'))
@@ -35,18 +35,18 @@ myApp.controller('SetNewPasswordController',['$scope','$timeout','ResetPassword'
     }
     var ref=firebase.database().ref('dev2/');
     $scope.submitSSN=function(ssn){
-        console.log(ssn);
+
         if(validateSSN(ssn))
         {
             $scope.loading=true;
             RequestToServer.sendRequestWithResponse('VerifySSN',{'SSN':ssn},ssn).then(function(data)
             {
-                console.log(data);
+
                 if(data.Data.ValidSSN=="true")
                 {
                     parameters.SSN = ssn;
                     parameters.Question = data.Data.Question;
-                    console.log(parameters);
+
                     NavigatorParameters.setParameters(parameters);
                     initNavigator.pushPage('./views/login/security-question.html');
                 }else{
@@ -91,7 +91,7 @@ myApp.controller('SecurityQuestionController',['$scope','$timeout','ResetPasswor
                     return DeviceIdentifiers.sendDevicePasswordRequest(email);
                 })
                 .then(function (response) {
-                    console.log(response);
+
                     $timeout(function () {
                         $scope.Question = response.Data.securityQuestion.securityQuestion_EN +"/"+response.Data.securityQuestion.securityQuestion_FR ;
                     });
@@ -128,7 +128,7 @@ myApp.controller('SecurityQuestionController',['$scope','$timeout','ResetPasswor
                 answer = answer.toUpperCase();
                 var hash= EncryptionService.hash(answer);
 
-                console.log("hash: " + hash);
+
 
                 var key = hash;
                 var firebaseRequestField = passwordReset ? 'passwordResetRequests' : undefined;
@@ -140,11 +140,11 @@ myApp.controller('SecurityQuestionController',['$scope','$timeout','ResetPasswor
                     Trusted: trusted
                 };
 
-                // console.log("parameter object: " + )
+                //
 
                 RequestToServer.sendRequestWithResponse('VerifyAnswer',parameterObject,key, firebaseRequestField, firebaseResponseField).then(function(data)
                 {
-                    console.log("verify answer data: " + data);
+
                     $scope.waiting = false;
                     if(data.Data.AnswerVerified=="true")
                     {
@@ -183,7 +183,7 @@ myApp.controller('SecurityQuestionController',['$scope','$timeout','ResetPasswor
                     }
                 }).catch(function(error)
                 {
-                    console.log("Verify Answer error", error);
+
                     $scope.waiting = false;
                     localStorage.removeItem(UserAuthorizationInfo.getUsername()+"/deviceID");
                     localStorage.removeItem(UserAuthorizationInfo.getUsername()+"/securityAns");
@@ -272,7 +272,7 @@ myApp.controller('NewPasswordController',['$scope','$timeout','Patient','ResetPa
 
                 ResetPassword.completePasswordChange(parameters.oobCode, newValue)
                     .then(function () {
-                        console.log("Successfully changed password on firebase");
+
                         return RequestToServer.sendRequestWithResponse(
                             'SetNewPassword',
                             {newPassword: newValue},
@@ -282,7 +282,7 @@ myApp.controller('NewPasswordController',['$scope','$timeout','Patient','ResetPa
                         );
                     })
                     .then(function (response) {
-                        console.log(response);
+
                         UserAuthorizationInfo.clearUserAuthorizationInfo();
                         $timeout(function () {
                             $scope.alert.type='success';
@@ -290,7 +290,7 @@ myApp.controller('NewPasswordController',['$scope','$timeout','Patient','ResetPa
                         });
                     })
                     .catch(function (error) {
-                        console.log(error);
+
                         $scope.alert.type='danger';
                         switch (error.code) {
                             case "auth/invalid-action-code":

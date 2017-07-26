@@ -18,7 +18,7 @@ myApp.controller('TabsController',['$scope','$timeout','$translate','$translateP
     $translatePartialLoader.addPart('all-views');
 
     $scope.analyze = function(e){
-        console.log("event: " + e);
+
         if(event.index === tabbar.getActiveTabIndex()){
             event.cancel()
         }
@@ -52,7 +52,7 @@ myApp.controller('personalTabController',
 
     if(MetaData.isFirstTimePersonal()){
 
-        console.log("choosing to load from metadata");
+
 
         var meta = MetaData.fetchPersonalMeta();
 
@@ -78,7 +78,7 @@ myApp.controller('personalTabController',
     //                 $done();
     //             });
     //         }).catch(function(error){
-    //             console.log(error);
+    //
     //             clearTimeout(timeOut);
     //             $done();
     //         });
@@ -127,11 +127,11 @@ myApp.controller('personalTabController',
     {
         if(MetaData.isFirstTimePersonal()){
 
-            console.log("choosing to load from metadata");
+
 
             var meta = MetaData.fetchPersonalMeta();
 
-            console.log(meta);
+
 
             $scope.appointmentsUnreadNumber = meta.appointmentsUnreadNumber;
             $scope.documentsUnreadNumber = meta.documentsUnreadNumber;
@@ -156,7 +156,7 @@ myApp.controller('personalTabController',
             .catch(function(error){
                 "use strict";
                 $scope.loading = false;
-                console.log('error', error);
+
             });
         }
 
@@ -182,11 +182,11 @@ myApp.controller('generalTabController',['$scope','$timeout','Announcements','Re
     function initGeneralTab(){
         if(MetaData.isFirstTimeGeneral()){
 
-            console.log("choosing to load from metadata");
+
 
             var meta = MetaData.fetchGeneralMeta();
 
-            console.log(meta);
+
 
             $scope.announcementsUnreadNumber = Announcements.getNumberUnreadAnnouncements();
 
@@ -207,7 +207,7 @@ myApp.controller('generalTabController',['$scope','$timeout','Announcements','Re
                 .catch(function (error) {
                     "use strict";
                     $scope.loading = false;
-                    console.log('error', error);
+
                 });
         }
         setNewsNumbers();
@@ -238,7 +238,7 @@ myApp.controller('generalTabController',['$scope','$timeout','Announcements','Re
     //             $done();
     //         });
     //     }).catch(function(error){
-    //         console.log(error);
+    //
     //         clearTimeout(timeOut);
     //         $done();
     //     });
@@ -249,7 +249,7 @@ myApp.controller('generalTabController',['$scope','$timeout','Announcements','Re
 
     $scope.goToPatientCharter = function()
     {
-        console.log('heading to charter');
+
         NavigatorParameters.setParameters('generalNavigator');
         generalNavigator.pushPage('./views/general/charter/charter.html');
     };

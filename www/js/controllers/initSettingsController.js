@@ -9,7 +9,7 @@ myApp.controller('InitSettingsController',function($scope, FirebaseService,$time
 
     var params = NavigatorParameters.getParameters();
     $scope.navigatorName = params.Navigator;
-    console.log(params);
+
     $scope.navigator = window[$scope.navigatorName];
     initSettings();
 
@@ -33,7 +33,7 @@ myApp.controller('InitSettingsController',function($scope, FirebaseService,$time
     }
     $scope.changeLanguage = function(value)
     {
-        console.log(value);
+
         if(value)
         {
             UserPreferences.setLanguage('FR');
@@ -55,15 +55,15 @@ myApp.controller('InitSettingsController',function($scope, FirebaseService,$time
 
     };
     // function settingsSuccess() {
-    //     console.log('settings opened');
+    //
     // }
     //
     // function settingsFail() {
-    //     console.log('open settings failed');
+    //
     // }
 
     // function openSettingsNow() {
-    //     console.log('opening settings');
+    //
     //     if(ons.platform.isAndroid())cordova.plugins.settings.openSetting("application_details",settingsSuccess,settingsFail);
     //     else cordova.plugins.settings.open(settingsSuccess,settingsFail);
     //
@@ -73,7 +73,7 @@ myApp.controller('InitSettingsController',function($scope, FirebaseService,$time
     //     if(app && typeof cordova.plugins.settings.openSetting !== undefined){
     //         if(ons.platform.isAndroid())
     //         {
-    //             console.log('android');
+    //
     //             openSettingsNow();
     //         }else{
     //             openSettingsNow();

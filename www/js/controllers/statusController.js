@@ -63,7 +63,7 @@
             events = PlanningSteps.getPlanningSequence();
             var currentStep = PlanningSteps.getCurrentStep();
 
-            console.log(currentStep);
+
             initTreatmentPlanStatus(events,currentStep);
             //setHeightElement();
         }
@@ -101,7 +101,7 @@
             statusVm.totalEvents = 5;
 
             var nextStepIndex = statusVm.stepMapping[currentStep] + 1;
-            console.log(nextStepIndex);
+
             statusVm.eventIndex = nextStepIndex;
             //statusVm.estimatedTime='3 days';
             //statusVm.finishedTreatment=false;
@@ -176,13 +176,13 @@
 
         function goToStep(step, name)
         {
-            console.log(step, name);
+
             if(boolStatus)
             {
                 NavigatorParameters.setParameters({'Navigator':'homeNavigator','Post':step, 'StepName': name});
                 homeNavigator.pushPage('./views/home/status/individual-step.html');
             }else{
-                console.log(step);
+
                 NavigatorParameters.setParameters({'Navigator':'personalNavigator','Post':step, 'StepName': name});
                 personalNavigator.pushPage('./views/home/status/individual-step.html');
             }
@@ -220,7 +220,7 @@
             stepVM.stage = NavigatorParameters.getParameters().Post;
             stepVM.name = NavigatorParameters.getParameters().StepName;
             Logger.sendLog('Treatment Plan', stepVM.stage);
-            console.log(stepVM.stage);
+
         }
 
         //Links to the about page controlled by the contentController

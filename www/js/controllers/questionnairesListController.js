@@ -6,7 +6,7 @@
 var app1 = angular.module('MUHCApp');
 app1.controller('questionnairesListController', function($scope, $rootScope, Questionnaires, $location, NavigatorParameters, $timeout) {
 
-    console.log('started controller');
+
     $scope.loading = true;
 
     activate();
@@ -30,7 +30,7 @@ app1.controller('questionnairesListController', function($scope, $rootScope, Que
                 getBadgeNumbers();
             },
             function(error){
-                console.log(JSON.stringify(error));
+
                 $scope.loading = false;
             })
     }
@@ -62,7 +62,7 @@ app1.controller('questionnairesListController', function($scope, $rootScope, Que
 
     $scope.getDesiredQuestionnaires = function(isAnsweredQuestionnaires) {
         $scope.desiredQuestionnaires = [];
-        console.log(isAnsweredQuestionnaires);
+
         if (isAnsweredQuestionnaires == 'completed') {
             for (var key in $scope.patientQuestionnaires) {
                 if (isQuestionnaireComplete($scope.patientQuestionnaires[key])) {
@@ -90,7 +90,7 @@ app1.controller('questionnairesListController', function($scope, $rootScope, Que
             $scope.isAnswered = "Questionnaires In Progress";
             $scope.clickedText = 'progress';
         }
-        console.log($scope.desiredQuestionnaires);
+
     }
 
     function isQuestionnaireComplete (patientQuestionnaire) {
@@ -103,33 +103,33 @@ app1.controller('questionnairesListController', function($scope, $rootScope, Que
 
     $scope.goToQuestionnaire = function(patientQuestionnaire, questionnaireDBSerNum, questionnaireSerNum) {
         if(!(isQuestionnaireComplete(patientQuestionnaire))) {
-            console.log('in questionnaires');
+
             NavigatorParameters.setParameters({Navigator:'personalNavigator', DBSerNum: questionnaireDBSerNum, SerNum: questionnaireSerNum});
             personalNavigator.pushPage('views/personal/questionnaires/questionnaires.html', {param:questionnaireDBSerNum, QuestionnaireSerNum:questionnaireSerNum},{ animation : 'slide' });
         } else {
-            console.log('in answered questionnaires');
+
             NavigatorParameters.setParameters({Navigator:'personalNavigator', DBSerNum: questionnaireDBSerNum, SerNum: questionnaireSerNum});
             personalNavigator.pushPage('views/personal/questionnaires/answeredQuestionnaire.html', {param:questionnaireDBSerNum, QuestionnaireSerNum:questionnaireSerNum},{ animation : 'slide' });
         }
-    }
+    };
 
     $scope.refreshQuestionnairesList = function () {
-        console.log($scope.isAnswered);
+
         if ($scope.isAnswered == undefined) {
             $scope.getDesiredQuestionnaires('new');
         } else {
             $scope.getDesiredQuestionnaires($scope.clickedText);
         }
-    }
+    };
 
     function setQuestionnaireAnswersObject(object) {
-        console.log(object);
+
         oneQuestionnaireAnswer = {};
         if (object == undefined) {
             return;
         }
         answers = object.Answers;
-        console.log(answers);
+
         $scope.answers = {};
         for(key in answers) {
             oneQuestionnaireAnswer[key] = answers[key];
@@ -143,8 +143,8 @@ app1.controller('questionnairesListController', function($scope, $rootScope, Que
         $timeout(function() {
             $scope.refreshQuestionnairesList();
             getBadgeNumbers();
-            console.log('popPost');
-            console.log($scope.desiredQuestionnaires);
+
+
         });
     }
 
@@ -153,6 +153,6 @@ app1.controller('questionnairesListController', function($scope, $rootScope, Que
     });
 
 
-    console.log($location.path());
+
 
 });

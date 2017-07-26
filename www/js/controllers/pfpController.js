@@ -32,7 +32,7 @@
         // edumaterials is requested
         initEdu().then(function () {
             vm.materials = EducationalMaterial.getEducationalMaterial();
-            console.log(vm.materials);
+
             //Setting the language for view
             vm.materials = EducationalMaterial.setLanguageEduationalMaterial(materials);
         });

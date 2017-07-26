@@ -4,14 +4,14 @@ myApp.service('MapLocation',function(){
 	return{
 		updateMapLocation:function(maplocation)
 		{
-			console.log(maplocation);
-			console.log(new Date());
+
+
 			map=maplocation;
 		},
 		getMapLocation:function()
 		{
-			console.log(map);
-			console.log(new Date());
+
+
 			return map;
 		}
 

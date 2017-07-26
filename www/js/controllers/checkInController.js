@@ -53,7 +53,6 @@
         function activate() {
             Logger.sendLog('Checkin', 'all');
             vm.apps = CheckInService.getCheckInApps();
-            console.log(vm.apps);
             vm.language = UserPreferences.getLanguage();
 
             // Check if there are appointments
@@ -64,16 +63,13 @@
             }
 
             // Ensure that user is within range of the hospital
-            console.log(CheckInService);
             CheckInService.isAllowedToCheckIn()
                 .then(function (response) {
-                    console.log("Allowed to Check in", response);
 
                     // Verify if the appointments are checked in
                     return CheckInService.verifyAllCheckIn();
                 })
                 .then(function (response){
-                    console.log(response);
                     if (response == null){
                         vm.alert.type = "info";
                         vm.checkInMessage = "CHECKIN_NONE";
@@ -82,19 +78,15 @@
                         vm.checkInMessage = "CHECKED_IN";
                         vm.additionalInfo = "CHECKIN_ADDITIONAL";
                     } else {
-                        console.log("Will call checkin");
 
                         // Checkin to all todays appointments
                         CheckInService.checkinToAllAppointments()
                             .then(function () {
-                                console.log("success");
                                 vm.alert.type = "success";
                                 vm.checkInMessage = "CHECKED_IN";
                                 vm.additionalInfo = "CHECKIN_ADDITIONAL";
-                                console.log(vm.apps);
                             })
                             .catch(function (error) {
-                                console.log(error);
                                 vm.alert.type = "danger";
                                 vm.checkInMessage = "CHECKIN_ERROR";
                             });

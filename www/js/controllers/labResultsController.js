@@ -15,13 +15,13 @@ myApp.controller('LabResultsControllerCopy', ['RequestToServer','Notifications',
                 LabResults.setTestResults().then(function () {
                     "use strict";
                     $scope.loading = false;
-                    console.log("updated");
+
                 }).catch(function (error) {
                     $scope.loading = false;
-                    console.log(error);
+
                 });
             } else {
-                console.log('wait 60 s');
+
                 NewsBanner.showCustomBanner($filter('translate')("REFRESH_WAIT"), '#333333', function(){}, 3000);
             }
         };
@@ -34,16 +34,16 @@ myApp.controller('LabResultsControllerCopy', ['RequestToServer','Notifications',
                 LabResults.setTestResults()
                     .then(function () {
                         $scope.testResultsByDate = LabResults.getTestResultsArrayByDate();
-                        console.log($scope.testResultsByDate);
+
                         $scope.loading = false;
                     }).catch(function (error) {
                     $scope.loading = false;
-                    console.log(error);
+
                 });
 
             } else {
                 $scope.testResultsByDate = LabResults.getTestResultsArrayByDate();
-                console.log($scope.testResultsByDate);
+
                 $scope.loading = false;
             }
         }
@@ -56,7 +56,7 @@ myApp.controller('ByDateTestsController',['$scope','$timeout','LabResults','$fil
 
         $scope.radioModel='All';
         $scope.selectedTests=LabResults.getTestResultsArrayByDate();
-        console.log($scope.selectedTests[0]);
+
         $scope.testsReceived = 'Lab results';
         Logger.sendLog('Lab Results', 'all - Date');
 
@@ -83,9 +83,9 @@ myApp.controller('ByDateTestsController',['$scope','$timeout','LabResults','$fil
 
         function activate() {
             vm.testResultsByCategory = LabResults.getTestResultsByCategory();
-            console.log(vm.testResultsByCategory);
+
             vm.testResultsByType = LabResults.getTestResultsArrayByType();
-            console.log(vm.testResultsByType);
+
             Logger.sendLog('Lab Results', 'all - Type')
         }
     }
@@ -121,7 +121,7 @@ myApp.controller('TimelineTestComponentController',['$scope','$timeout','LabResu
         var page = personalNavigator.getCurrentPage();
         var test = page.options.param;
 
-        console.log("This is your current test: " + JSON.stringify(test));
+
         $scope.selectedTest = test;
         $scope.testName = test.ComponentName || test.testResults[0].ComponentName;
         $scope.title = $scope.selectedTest.FacComponentName || $scope.selectedTest.testName;
@@ -191,7 +191,7 @@ myApp.controller('TimelineTestComponentController',['$scope','$timeout','LabResu
         var maxChart = Math.max.apply(Math, vals)*1.05;
         var minChart = Math.min.apply(Math, vals)*0.95;
 
-        console.log("Chart range", minChart, maxChart);
+
 
         /**********************************************/
 
@@ -208,7 +208,7 @@ myApp.controller('TimelineTestComponentController',['$scope','$timeout','LabResu
             }
 
             updateStuffTimer = $timeout(function() {
-                console.log("resize detected!"); // Update the attribute based on window.innerWidth
+                 // Update the attribute based on window.innerWidth
                 //Need a function here to resize the graph size
             }, 500);
         });

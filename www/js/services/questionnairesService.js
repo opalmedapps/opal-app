@@ -63,25 +63,25 @@ myApp.service('Questionnaires', ['RequestToServer','$filter', 'Patient','LocalSt
             },
             setPatientQuestionnaires:function(questionnaires)
             {
-                console.log(questionnaires);
+
                 questionnairesObject = {};
                 questionnairesObject.PatientQuestionnaires = {};
                 questionnairesObject.Questionnaires = {};
                 if(questionnaires&&typeof questionnaires !=='undefined') addToQuestionnaireObject(questionnaires);
-                console.log(questionnairesObject);
+
             },
             getPatientQuestionnaires:function()
             {
-                console.log(questionnairesObject);
+
                 return questionnairesObject;
             },
             setQuestionnaireAnswers:function(Answer, questionnaireQuestionSerNum, questionnaireDBSerNum, questionnaireSerNum)
             {
                 if((Object.keys(questionnaireAnswers).length == 0 ) || (Object.keys(questionnaireAnswers[questionnaireSerNum]).length == 0)) {
                     questionnaireAnswers[questionnaireSerNum] = {};
-                    console.log(questionnairesObject[questionnaireDBSerNum]);
-                    console.log(questionnaireDBSerNum);
-                    console.log(questionnairesObject.Questionnaires[questionnaireDBSerNum]);
+
+
+
                     questionnaireAnswers[questionnaireSerNum].QuestionnaireDBSerNum = questionnairesObject.Questionnaires[questionnaireDBSerNum].QuestionnaireDBSerNum;
                     questionnaireAnswers[questionnaireSerNum].CompletedFlag = questionnairesObject.PatientQuestionnaires[questionnaireSerNum].CompletedFlag;;
                     questionnaireAnswers[questionnaireSerNum].Answers = {};
@@ -92,7 +92,7 @@ myApp.service('Questionnaires', ['RequestToServer','$filter', 'Patient','LocalSt
                     QuestionType: questionnairesObject.Questionnaires[questionnaireDBSerNum].Questions[questionnaireQuestionSerNum].QuestionType,
                     QuestionnaireQuestionSerNum: questionnairesObject.Questionnaires[questionnaireDBSerNum].Questions[questionnaireQuestionSerNum].QuestionnaireQuestionSerNum
                 };
-                console.log(questionnaireAnswers);
+
             },
             getQuestionnaireAnswers:function(questionnaireSerNum)
             {
@@ -103,10 +103,10 @@ myApp.service('Questionnaires', ['RequestToServer','$filter', 'Patient','LocalSt
                     return undefined;
                 }
                 if((Object.keys(questionnaireAnswers).length == 0 ) || (Object.keys(questionnaireAnswers[questionnaireSerNum]).length == 0)) {
-                    console.log('undefined');
+
                     return undefined;
                 } else {
-                    console.log(questionnaireAnswers[questionnaireSerNum]);
+
                     return questionnaireAnswers[questionnaireSerNum];
                 }
             },
@@ -117,8 +117,8 @@ myApp.service('Questionnaires', ['RequestToServer','$filter', 'Patient','LocalSt
                 questionnairesObject.PatientQuestionnaires[questionnaireSerNum].CompletionDate = dateCompleted;
                 questionnaireAnswers[questionnaireSerNum].CompletedFlag = 1;
                 questionnairesObject.PatientQuestionnaires[questionnaireSerNum].CompletedFlag = 1;
-                console.log(questionnairesObject);
-                console.log(questionnaireAnswers[questionnaireSerNum]);
+
+
                 submittableQuestionnaire = angular.copy(questionnaireAnswers[questionnaireSerNum]);
                 RequestToServer.sendRequest('QuestionnaireAnswers', submittableQuestionnaire);
             },
@@ -162,15 +162,15 @@ myApp.service('Questionnaires', ['RequestToServer','$filter', 'Patient','LocalSt
                 RequestToServer.sendRequestWithResponse('Questionnaires')
                     .then(function (response) {
                         if (response.Code == '3') {
-                            console.log(response);
+
                             _this.setPatientQuestionnaires(response.Data);
                             deferred.resolve({Success: true, Location: 'Server'});
                         }
                     },
                     function (error) {
-                        console.log('There was an error contacting hospital ' + JSON.stringify(error));
+
                         deferred.reject({Success: false, Location: '', Error: error});
-                        console.log("returning");
+
 
                     });
 

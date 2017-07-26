@@ -42,7 +42,6 @@
             //load the diagnoses array into view
             vm.diagnoses=Diagnoses.getDiagnoses();
 
-            console.log(vm.diagnoses);
 
             if(vm.diagnoses.length === 0){
                 vm.noDiagnosis = true;

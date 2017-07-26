@@ -44,7 +44,7 @@ myApp.service('TxTeamMessages', ['$filter','RequestToServer','LocalStorage', 'Us
     //Formats the input dates and gets it ready for controllers, updates txTeamMessagesArray
     function addTreatmentTeamMessages(messages)
     {
-        console.log(messages);
+
         //If messages are undefined simply return
         if(typeof messages=='undefined') return;
         for (var i = 0; i < messages.length; i++) {
@@ -148,8 +148,8 @@ myApp.service('TxTeamMessages', ['$filter','RequestToServer','LocalStorage', 'Us
          **/
         getTxTeamMessageBySerNum:function(serNum)
         {
-            console.log(serNum);
-            console.log(txTeamMessagesArray);
+
+
             for (var i = 0; i < txTeamMessagesArray.length; i++) {
                 if(txTeamMessagesArray[i].TxTeamMessageSerNum==serNum)
                 {
@@ -205,12 +205,12 @@ myApp.service('TxTeamMessages', ['$filter','RequestToServer','LocalStorage', 'Us
          **/
         getTxTeamMessageName:function(serNum)
         {
-            console.log(txTeamMessagesArray);
-            console.log(serNum);
+
+
             for (var i = 0; i < txTeamMessagesArray.length; i++) {
                 if(txTeamMessagesArray[i].TxTeamMessageSerNum === serNum)
                 {
-                    console.log({ NameEN: txTeamMessagesArray[i].PostName_EN, NameFR:txTeamMessagesArray[i].PostName_FR});
+
                     return { NameEN: txTeamMessagesArray[i].PostName_EN, NameFR:txTeamMessagesArray[i].PostName_FR};
                 }
             }

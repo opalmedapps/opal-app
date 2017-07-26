@@ -46,7 +46,7 @@ myApp.service('RequestToServer',['$filter','$state','NewsBanner','UserAuthorizat
             var requestType = '';
             var requestParameters;
             if (typeof encryptionKey !== 'undefined' && encryptionKey) {
-                console.log(encryptionKey);
+
                 requestType = typeOfRequest;
                 requestParameters = EncryptionService.encryptWithKey(parameters, encryptionKey);
             }
@@ -105,7 +105,7 @@ myApp.service('RequestToServer',['$filter','$state','NewsBanner','UserAuthorizat
                 }
 
                 //Waits to obtain the request data.
-                //console.log('users/'+UserAuthorizationInfo.getUsername()+'/'+key);
+                //
                 refRequestResponse.on('value',function(snapshot){
                     if(snapshot.exists())
                     {
@@ -132,13 +132,13 @@ myApp.service('RequestToServer',['$filter','$state','NewsBanner','UserAuthorizat
                     }
                 },function(error)
                 {
-                    console.log('Firebase reading error', error);
+
                     r.reject(error);
                 });
                 //If request takes longer than 30000 to come back with timedout request, delete reference
                 var timeOut = setTimeout(function()
                 {
-                    console.log('Inside timeout function');
+
                     refRequestResponse.set(null);
                     refRequestResponse.off();
                     r.reject({Response:'timeout'});
