@@ -121,7 +121,7 @@ myApp.controller('TimelineTestComponentController',['$scope','$timeout','LabResu
         var page = personalNavigator.getCurrentPage();
         var test = page.options.param;
 
-        console.log(test);
+        console.log("This is your current test: " + JSON.stringify(test));
         $scope.selectedTest = test;
         $scope.testName = test.ComponentName || test.testResults[0].ComponentName;
         $scope.title = $scope.selectedTest.FacComponentName || $scope.selectedTest.testName;
@@ -145,7 +145,18 @@ myApp.controller('TimelineTestComponentController',['$scope','$timeout','LabResu
 
         Logger.sendLog('Lab Results', test.ComponentName || test.testResults[0].ComponentName);
 
-        var url = 'https://labtestsonline.org/map/aindex/SearchForm?Search='+$scope.title+'&action_ProcessSphinxSearchForm=Go';
+
+        var url = "";
+
+        if($scope.testName = "WBC"){
+            url = "http://www.labtestsonline.fr/tests/num-ration-des-globules-blancs.html";
+        }
+        else if ($scope.testName = "RBC"){
+            url = "http://www.labtestsonline.fr/tests/num-ration-des-globules-rouges.html?tab=3";
+        }
+        else{
+            url = 'https://labtestsonline.org/map/aindex/SearchForm?Search='+$scope.title+'&action_ProcessSphinxSearchForm=Go';
+        }
 
         $scope.goToAbout = function () {
             if (Constants.app) {
@@ -153,7 +164,7 @@ myApp.controller('TimelineTestComponentController',['$scope','$timeout','LabResu
             } else {
                 window.open(url);
             }
-        }
+        };
 
         // Chart
         $scope.data = [{
