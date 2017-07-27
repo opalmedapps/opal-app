@@ -6,18 +6,13 @@
         .controller('HomeController', HomeController);
 
     HomeController.$inject = [
-        'Appointments', 'CheckInService', 'Patient',
-        'UpdateUI','$scope', '$timeout','$filter', '$location','Notifications','NavigatorParameters','NativeNotification',
-        'NewsBanner','DeviceIdentifiers','$anchorScroll', 'PlanningSteps', 'Permissions',
-        'UserPreferences', 'Constants', 'Logger', 'NetworkStatus'
+        'Appointments', 'CheckInService', 'Patient', 'UpdateUI','$scope', '$timeout','$filter', 'Notifications',
+        'NavigatorParameters', 'NewsBanner', 'PlanningSteps', 'Permissions', 'UserPreferences', 'NetworkStatus'
     ];
 
     /* @ngInject */
-    function HomeController(
-        Appointments, CheckInService, Patient,
-        UpdateUI,$scope, $timeout, $filter, $location, Notifications, NavigatorParameters, NativeNotification,
-        NewsBanner, DeviceIdentifiers, $anchorScroll, PlanningSteps, Permissions,
-        UserPreferences, Constants, Logger, NetworkStatus)
+    function HomeController(Appointments, CheckInService, Patient, UpdateUI, $scope, $timeout, $filter, Notifications,
+                            NavigatorParameters, NewsBanner, PlanningSteps, Permissions, UserPreferences, NetworkStatus)
     {
         var vm = this;
         vm.title = 'HomeController';
@@ -51,35 +46,30 @@
 
         function activate() {
 
-
-
             // Initialize the navigator for push and pop of pages.
             NavigatorParameters.setParameters({'Navigator':'homeNavigator'});
             NavigatorParameters.setNavigator(homeNavigator);
-
-            // Banner alert for
-            NewsBanner.setAlertOffline();
 
             // Store the login time
             if(localStorage.getItem('locked')){
                 localStorage.removeItem('locked');
             }
 
-            // Sending registration id to server for push notifications.
-            //DeviceIdentifiers.sendIdentifiersToServer();
-
             // Refresh the page on coming back from checkin
             homeNavigator.on('prepop', function(event) {
                 if (event.currentPage.name == "./views/home/checkin/checkin-list.html") {
                     if(NetworkStatus.isOnline()) {
-                        setUpCheckin();
+                        //TODO: Optimize this
+                        setCheckin();
                     }
                 }
+            });
 
-            });
+            //This avoids constant repushing which causes bugs
             homeNavigator.on('prepush',function(event){
-            if(event.navigator._isPushing) event.cancel();       
+                if(event.navigator._isPushing) event.cancel();
             });
+
             $scope.$on('$destroy',function()
             {
                 homeNavigator.off('prepop');
@@ -109,22 +99,19 @@
             vm.noUpcomingAppointments=false;
 
             //Setting up status
-            settingStatus();
+            setTreatmentStatus();
             //Setting up next appointment
-            setUpNextAppointment();
+            setNextAppointment();
             //start by initilizing variables
             // setNotifications();
             vm.notifications = Notifications.setNotificationsLanguage(Notifications.getUnreadNotifications());
 
             vm.loading =false;
 
-            console.log(vm.notifications);
-
-            //setUpCheckin();
-            setUpCheckin();
+            setCheckin();
         }
 
-        function settingStatus()
+        function setTreatmentStatus()
         {
             if(!PlanningSteps.isCompleted() && PlanningSteps.hasCT()) {
                 vm.statusDescription = "PLANNING";
@@ -135,14 +122,13 @@
             }
         }
 
-        function setUpNextAppointment()
+        function setNextAppointment()
         {
             //Next appointment information
             if(Appointments.isThereAppointments())
             {
                 if(Appointments.isThereNextAppointment()){
-                    var nextAppointment=Appointments.getUpcomingAppointment();
-                    vm.appointmentShown=nextAppointment;
+                    vm.appointmentShown=Appointments.getUpcomingAppointment();
                 }
             }
         }
@@ -184,37 +170,9 @@
                         vm.notifications = [];
                     }
                 })
-
-
-
-            // if(vm.notifications.length>0)
-            // {
-            //     if(Constants.app)
-            //     {
-            //         NewsBanner.showNotificationAlert(vm.notifications.length,function(result){
-            //             if (result && result.event) {
-            //
-            //
-            //
-            //                 //
-            //
-            //                 if (result.event === 'hide') {
-            //
-            //                 }
-            //                 if(result.event == 'touch')
-            //                 {
-            //
-            //                     $location.hash("bottomNotifications");
-            //                     $anchorScroll();
-            //                 }
-            //             }
-            //         });
-            //     }
-            //
-            // }
         }
 
-        function setUpCheckin()
+        function setCheckin()
         {
             //Get checkin appointment for the day, gets the closest appointment to right now
             vm.checkInMessage = '';

@@ -15,12 +15,7 @@ angular.module('MUHCApp').controller('LoadingController',
             setTimeout(function()
             {
                 UpdateUI.init()
-                    .then(function(response) {
-
-                        console.log(JSON.stringify("response: " + response));
-                        // var objectToSend = {};
-                        // objectToSend.NewValue =
-                        // objectToSend.FieldToChange = 'Language';
+                    .then(function() {
                         RequestToServer.sendRequestWithResponse('AccountChange', {NewValue: UserPreferences.getLanguage(), FieldToChange: 'Language'});
 
                         //fetch all the tab metadata TODO: add the fetching of all the other data
@@ -55,14 +50,27 @@ angular.module('MUHCApp').controller('LoadingController',
                         message: 'Problems with server, could not fetch data, try again later',
                         modifier: mod,
                         callback: function(idx) {
-                            if(typeof Patient.getFirstName()==='undefined'||Patient.getFirstName()==='')
-                            {
-                                $state.go('logOut');
-                            }else{
-                                $scope.go('home');
-                            }
+                            $state.go('logOut');
                         }
                     });
                 }
-            },30000);
+                //This means server is working, but being slow
+                else{
+                    var mod;
+                    if(ons.platform.isAndroid())
+                    {
+                        mod='material';
+                    }
+                    ons.notification.alert({
+
+                        message: 'Request is taking longer than usual...',
+                        modifier: mod,
+                        callback: function(idx) {
+                            setTimeout(function(){
+                                $state.go('logOut');
+                            }, 5000);
+                        }
+                    });
+                }
+            },10000);
         }]);
