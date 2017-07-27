@@ -911,7 +911,7 @@ exports.getTimeEstimate = function(appointmentAriaSer)
     var r = Q.defer();
     var url = config.WT_PATH+appointmentAriaSer.Parameters;
     console.log(url);
-    request(url,function(error, response, body)
+    request(url, function(error, response, body)
     {
         if(!error&&response.statusCode=='200')
         {
