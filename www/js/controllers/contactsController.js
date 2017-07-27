@@ -55,6 +55,8 @@
             vm.noContacts = Doctors.isEmpty();
             vm.doctors = Doctors.getDoctors();
             vm.doctors = setDoctorsView(vm.doctors);
+
+            console.log(vm.doctors);
         }
 
         function goDoctorContact(doctor){
@@ -73,7 +75,7 @@
                 }else if(doctor.OncologistFlag==1){
                     doctor.Role = $filter('translate')("ONCOLOGIST");
                 }else{
-                    doctor.Role = $filter('translate')("OTHER");;
+                    doctor.Role = $filter('translate')("OTHER");
                 }
             });
             doctors = $filter('orderBy')(doctors, 'Role',true);
