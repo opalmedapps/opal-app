@@ -20,17 +20,22 @@ myApp.service('TimeEstimate', ['RequestToServer','LocalStorage', '$q',
                 return timeEstimateObject;
             },
             requestTimeEstimate: function (appointmentAriaSer) {
+                console.log("Inside timeEstimateService");
                 var deferred = $q.defer();
+                console.log(appointmentAriaSer);
                 RequestToServer.sendRequestWithResponse('TimeEstimate', appointmentAriaSer)
                     .then(
                         function (response) {
                             if (response.Code == '3') {
+                                console.log(response);
                                 timeEstimateObject = response;
                                 LocalStorage.WriteToLocalStorage('TimeEstimate', timeEstimateObject);
                                 deferred.resolve({Success: true, Location: 'Server'});
+                                console.log("Finished request");
                             }
                         },
                         function (error) {
+                            console.log(appointmentAriaSer);
                             console.log('There was an error contacting hospital ' + JSON.stringify(error));
                             deferred.reject({Success: false, Location: '', Error: error});
                             console.log("returning");

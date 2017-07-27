@@ -12,12 +12,12 @@
         .controller('WaitingTimeController', WaitingTimeController);
 
     WaitingTimeController.$inject = [
-        '$scope', '$timeout', 'TimeEstimate'
+        '$scope', '$timeout', 'TimeEstimate', 'NavigatorParameters'
     ];
 
     /* @ngInject */
     function WaitingTimeController(
-        $scope, $timeout, TimeEstimate)
+        $scope, $timeout, TimeEstimate, NavigatorParameters)
     {
         var vm = this;
 
@@ -29,8 +29,11 @@
         vm.estimatedWait = null;
         vm.lastUpdated = null;
         vm.numPrevPatients = null;
+        vm.appointments = null;
+        vm.checkedInAppointments = NavigatorParameters.getParameters().checkedInAppointments;
 
         var appointmentAriaSer = 1871328;
+        
         function requestEstimate() {
             TimeEstimate.requestTimeEstimate(appointmentAriaSer)
                 .then(function () {
@@ -79,6 +82,7 @@
         function goToWaitingTimeEstimates() {
             $timeout.cancel(myTimeOut);
             console.log("Tick destroyed");
+            NavigatorParameters.setParameters({'Navigator':'homeNavigator', 'checkedInAppointments':vm.checkedInAppointments});
             homeNavigator.pushPage('views/home/waiting-time/waiting-time-more-info.html', {
                 checkedInAppointments: vm.checkedInAppointments
             })
@@ -89,10 +93,14 @@
             var percent = (initialNumPrevPatients - vm.numPrevPatients)/initialNumPrevPatients * 90;
             if (percent <= 100) {
                 var element = document.getElementById('current-time-indicator');
-                element.style.left = percent + "%";
+                if (element) {
+                    element.style.left = percent + "%";  
+                }
 
                 var element = document.getElementById('past-line');
-                element.style.width = percent + "%";
+                if (element) {
+                    element.style.width = percent + "%";
+                }
             }
         }
 

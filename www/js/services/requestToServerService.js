@@ -140,7 +140,7 @@ myApp.service('RequestToServer',['$filter','$state','NewsBanner','UserAuthorizat
                     refRequestResponse.set(null);
                     refRequestResponse.off();
                     r.reject({Response:'timeout'});
-                },30000);
+                },300000);
                 return r.promise;
             },
             /**
