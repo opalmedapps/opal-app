@@ -32,6 +32,7 @@ angular.module('MUHCApp').controller('LoadingController',
 
                         modal.hide();
                         clearTimeout(timeOut);
+
                         $state.go('Home');
                     });
             },200);
@@ -47,7 +48,7 @@ angular.module('MUHCApp').controller('LoadingController',
                     }
                     modal.hide();
                     ons.notification.alert({
-                        message: 'Problems with server, could not fetch data, try again later',
+                        message: 'Server problem: could not fetch data, try again later',
                         modifier: mod,
                         callback: function(idx) {
                             $state.go('logOut');
@@ -63,14 +64,13 @@ angular.module('MUHCApp').controller('LoadingController',
                     }
                     ons.notification.alert({
 
-                        message: 'Request is taking longer than usual...',
+                        message: 'Request is taking longer than usual...please try again later.',
                         modifier: mod,
                         callback: function(idx) {
-                            setTimeout(function(){
-                                $state.go('logOut');
-                            }, 5000);
+                            $state.go('logOut');
                         }
                     });
                 }
             },10000);
+
         }]);
