@@ -38,8 +38,10 @@
         vm.showHomeScreenUpdate = null;
         vm.loading = true;
         //vm.checkedInAppointment = null;
-        vm.checkedInAppointment = 1859684;
-        vm.waitingTimeEstimate = null;
+        //vm.checkedInAppointment = 1871328;
+        vm.checkedInAppointments = null;
+        //vm.waitingTimeEstimate = null;
+        vm.waitingTimeEstimates = [];
 
         vm.homeDeviceBackButton = homeDeviceBackButton;
         vm.load = load;
@@ -91,7 +93,6 @@
 
             Permissions.enablePermission('WRITE_EXTERNAL_STORAGE', 'PERMISSION_STORAGE_DENIED')
                 .catch(function (response) {
-                    console.log(response);
                     NewsBanner.showCustomBanner($filter('translate')(response.Message), '#333333', function(){}, 5000);
                 });
 
@@ -119,8 +120,6 @@
             setNotifications();
             //setUpCheckin();
             setUpCheckin();
-
-            requestEstimate();
         }
 
         function settingStatus()
@@ -225,11 +224,16 @@
             {
                 CheckInService.isAllowedToCheckIn().then(function (response) {
                     var allCheckedIn = true;
+                    vm.checkedInAppointments = [];
                     for (var app in todaysAppointmentsToCheckIn){
                         if (todaysAppointmentsToCheckIn[app].Checkin == '0'){
                             allCheckedIn = false;
                         }
+                        else {
+                            vm.checkedInAppointments.push(todaysAppointmentsToCheckIn[app]);
+                        }
                     }
+                    requestEstimate();
 
                     vm.allCheckedIn = allCheckedIn;
 
@@ -247,7 +251,6 @@
                                 $timeout(function () {
                                     vm.checkInMessage = "CHECKIN_MESSAGE_AFTER" + setPlural(todaysAppointmentsToCheckIn);
                                     vm.showHomeScreenUpdate = true;
-                                    vm.checkedInAppointment = todaysAppointmentsToCheckIn[0];
                                 });
                             }
                         });
@@ -274,27 +277,31 @@
 
 
         function requestEstimate() {
-            TimeEstimate.requestTimeEstimate(vm.checkedInAppointment)
-                .then(function () {
-                    var prevPatientDur = [];
-                    var timeEstimate = TimeEstimate.getTimeEstimate();
-                    for (var i = 0; i < Object.keys(timeEstimate).length - 3; i++) {
-                        if (timeEstimate[i]["details"]["status"] == "In Progress") {
-                            var tmpSlicedTime = Number(timeEstimate[i]["details"]["estimated_duration"]) - ((new Date() - new Date(timeEstimate[i]["details"]["actual_start"]))/60000);
-                            if (tmpSlicedTime > 0) {
-                                tmpDur.push(tmpSlicedTime);
+            for (var i = 0; i < vm.checkedInAppointments.length; i++) {
+                console.log("Inside for loop");
+                console.log(vm.checkedInAppointments);
+                var proc = TimeEstimate.requestTimeEstimate(vm.checkedInAppointments[i].AppointmentSerNum);
+                console.log(proc);
+                proc.then(function () {
+                        var prevPatientDur = [];
+                        var timeEstimate = TimeEstimate.getTimeEstimate();
+                        for (var i = 0; i < Object.keys(timeEstimate).length - 3; i++) {
+                            if (timeEstimate[i]["details"]["status"] == "In Progress") {
+                                var tmpSlicedTime = Number(timeEstimate[i]["details"]["estimated_duration"]) - ((new Date() - new Date(timeEstimate[i]["details"]["actual_start"]))/60000);
+                                if (tmpSlicedTime > 0) {
+                                    prevPatientDur.push(tmpSlicedTime);
+                                }
+                            }
+                            else {
+                                prevPatientDur.push(Number(timeEstimate[i]["details"]["estimated_duration"]));
                             }
                         }
-                        else {
-                            prevPatientDur.push(Number(timeEstimate[i]["details"]["estimated_duration"]));
-                        }
-                    }
-                    vm.waitingTimeEstimate = estimateWait(prevPatientDur);
-                    console.log(vm.waitingTimeEstimate);
-                },
-                function(error){
-                    console.log(JSON.stringify(error));
-                });
+                        vm.waitingTimeEstimates.push(estimateWait(prevPatientDur));
+                    },
+                    function(error){
+                        console.log(JSON.stringify(error));
+                    });
+            }
         }
 
         var estimateWait = function(prevPatientDur) {
@@ -391,9 +398,8 @@
 
         function goToWaitingTimeEstimates()
         {
-            homeNavigator.pushPage('views/home/waiting-time/waiting-time.html', {
-                checkedInAppointment: vm.checkedInAppointment
-            })
+            NavigatorParameters.setParameters({'Navigator':'homeNavigator', 'checkedInAppointments':vm.checkedInAppointments});
+            homeNavigator.pushPage('views/home/waiting-time/waiting-time.html');
         }
 
         function setPlural(apps) {

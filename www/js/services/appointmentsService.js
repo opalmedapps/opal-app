@@ -139,7 +139,6 @@ myApp.service('Appointments', ['$q', 'RequestToServer','$cordovaCalendar','UserA
     function getCheckinAppointment()
     {
         var todayAppointments = getAppointmentsInPeriod('Today');
-        console.log(todayAppointments);
         todayAppointments = todayAppointments.filter(function(appointment){
             return !appointment.hasOwnProperty('StatusClose');
         });
@@ -811,7 +810,7 @@ myApp.service('Appointments', ['$q', 'RequestToServer','$cordovaCalendar','UserA
         getRecentCalledAppointment: function () {
             var todaysAppointments = [];
             todaysAppointments = getAppointmentsInPeriod('Today');
-            console.log(todaysAppointments);
+            //console.log(todaysAppointments);
             var now=new Date();
 
 

@@ -62,7 +62,7 @@ myApp.service('EducationalMaterial',['$filter','LocalStorage','FileManagerServic
     {
         var language = UserPreferences.getLanguage();
 
-        console.log(Object.prototype.toString.call( array ));
+        ////console.log(Object.prototype.toString.call( array ));
         //Check if array
         if (Object.prototype.toString.call( array ) === '[object Array]') {
             for (var i = 0; i < array.length; i++) {
@@ -108,8 +108,8 @@ myApp.service('EducationalMaterial',['$filter','LocalStorage','FileManagerServic
     // is returned as a service function in return{} section: getEducationaMaterialBySerNum
     function getEducationalMaterialByControlSerNum(cserNum)
     {
-        console.log(cserNum);
-        console.log(educationalMaterialArray);
+        ////console.log(cserNum);
+        ////console.log(educationalMaterialArray);
         for (var i = 0; i < educationalMaterialArray.length; i++) {
             if(educationalMaterialArray[i].EducationalMaterialControlSerNum==cserNum)
             {
@@ -126,7 +126,7 @@ myApp.service('EducationalMaterial',['$filter','LocalStorage','FileManagerServic
             //Format the date to javascript
             edumaterial[i].DateAdded=$filter('formatDate')(edumaterial[i].DateAdded);
 
-            console.log(edumaterial[i]);
+            ////console.log(edumaterial[i]);
 
             edumaterial[i].Icon = educationalMaterialType[edumaterial[i].EducationalMaterialType_EN].icon;
             edumaterial[i].Color = educationalMaterialType[edumaterial[i].EducationalMaterialType_EN].color;
@@ -141,8 +141,8 @@ myApp.service('EducationalMaterial',['$filter','LocalStorage','FileManagerServic
         pfpresources=getEducationalMaterialByControlSerNum(310);
         //Exclude the pfp resources
         findAndDeleteEducationalMaterialByControlSerNum(educationalMaterialArray, 310);
-        console.log("expected edu array without pfpresources:")
-        console.log(educationalMaterialArray);
+        //console.log("expected edu array without pfpresources:")
+        //console.log(educationalMaterialArray);
 
         //Update local storage section
         LocalStorage.WriteToLocalStorage('EducationalMaterial',educationalMaterialArray);
@@ -153,10 +153,10 @@ myApp.service('EducationalMaterial',['$filter','LocalStorage','FileManagerServic
     function findAndDeleteEducationalMaterialByControlSerNum(edumaterial, csernum)
     {
         for (var i = 0; i < edumaterial.length; i++) {
-            //console.log("inside searching loop");
-            //console.log(edumaterial);
+            ////console.log("inside searching loop");
+            ////console.log(edumaterial);
             if(edumaterial[i].EducationalMaterialControlSerNum == csernum) {
-                //console.log("found resources");
+                ////console.log("found resources");
                 edumaterial.splice(i,1);
             }
         }
@@ -239,8 +239,8 @@ myApp.service('EducationalMaterial',['$filter','LocalStorage','FileManagerServic
          **/
         getEducationaMaterialBySerNum:function(serNum)
         {
-            console.log(serNum);
-            console.log(educationalMaterialArray);
+            //console.log(serNum);
+            //console.log(educationalMaterialArray);
             for (var i = 0; i < educationalMaterialArray.length; i++) {
                 if(educationalMaterialArray[i].EducationalMaterialSerNum==serNum)
                 {
@@ -364,7 +364,7 @@ myApp.service('EducationalMaterial',['$filter','LocalStorage','FileManagerServic
          **/
         setLanguageEduationalMaterial:function(array)
         {
-            console.log('Inside language edumat');
+            //console.log('Inside language edumat');
             return setLanguageEduMaterial(array);
         },
         /**

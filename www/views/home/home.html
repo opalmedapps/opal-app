@@ -66,7 +66,7 @@
                             </header>
                             <p class="item-desc" ng-class="fontSizeDesc">{{h.checkInMessage|translate}} {{RoomLocation}}</p>
                             <p class="item-desc" ng-class="fontSizeDesc">{{h.calledApp["AppointmentType_"+h.language]}}</p>
-                            <p class="item-desc" ng-class="fontSizeDesc">{{h.waitingTimeEstimate}}</p>
+                            <p class="item-desc" ng-class="fontSizeDesc">{{h.waitingTimeEstimates[0]}}</p>
                             <!--<p class="item-desc" ng-class="fontSizeDesc" style="color:orange" ng-show ="checkinEstimate&&showHomeScreenUpdate">{{"ESTIMATEDWAIT"|translate}}: {{checkinEstimate}} minutes</p>-->
                         </ons-col>
                     </ons-row>

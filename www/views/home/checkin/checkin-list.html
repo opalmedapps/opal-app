@@ -51,40 +51,42 @@
         </svg>
     </div>
 
-    <div ng-controller="WaitingTimeController as c" class="horizontal-center-outer" ng-hide="checkIn.alert.type == 'info'">
-        <div class="horizontal-center-inner" style="width: 90%">
-            <div id="wait-time-timeline">
-                <div id="starting-dot"></div>
-                <div id="past-line"></div>
-                <div id="current-time-indicator"><i class="fa fa-user" aria-hidden="true"></i></div>
-                <div class="sthethoscope"><i class="fa fa-stethoscope" aria-hidden="true"></i></div>
-            </div>
-        </div>
-        <div class="dividing-horizontal-line"></div>
-
-        <div style="text-align: center; margin: 10px">
-          <div style="float: left">
-            <b>{{"AHEADOFYOU"|translate}}</b>:
-            <br> {{c.numPrevPatients}} {{c.numPrevPatients > 1 ? "Patients" : "Patient"}}
-            </div>
-            <div class="dividing-vertical-line"></div>
-            <div>
-                <b>{{"AHEADOFYOUNOTCHECKEDIN"|translate}}</b>:
-                <br> {{c.numPrevPatientsNotCheckedIn}} {{c.numPrevPatientsNotCheckedIn > 1 ? "Patients" : "Patient"}}
-            </div>
-        </div>
-        <div style="text-align: center; margin-top: 60px">
-            <b>{{"ESTIMATEDWAIT"|translate}}</b>:
-            <br>
-            <div style="font-size: x-large">{{c.estimatedWait}}</div>
-        </div>
-
-        <div id="more-info-button-outer">
-            <button modifier="large" id="more-info-button" ng-click="c.goToWaitingTimeEstimates()">
-                <div style="color: #757575; position: relative; top: 50%;" align="center">
-                  {{"MORE_INFO"|translate}}
+    <div ng-controller="WaitingTimeController as c" class="horizontal-center-outer"><!--  ng-hide="checkIn.alert.type == 'info'"> -->
+        <div ng-repeat="app in c.appointments">
+            <div class="horizontal-center-inner" style="width: 90%">
+                <div id="wait-time-timeline">
+                    <div id="starting-dot"></div>
+                    <div id="past-line"></div>
+                    <div id="current-time-indicator"><i class="fa fa-user" aria-hidden="true"></i></div>
+                    <div class="sthethoscope"><i class="fa fa-stethoscope" aria-hidden="true"></i></div>
                 </div>
-            </button>
+            </div>
+            <div class="dividing-horizontal-line"></div>
+
+            <div style="text-align: center; margin: 10px">
+              <div style="float: left">
+                <b>{{"AHEADOFYOU"|translate}}</b>:
+                <br> {{c.numPrevPatients}} {{c.numPrevPatients > 1 ? "Patients" : "Patient"}}
+                </div>
+                <div class="dividing-vertical-line"></div>
+                <div>
+                    <b>{{"AHEADOFYOUNOTCHECKEDIN"|translate}}</b>:
+                    <br> {{c.numPrevPatientsNotCheckedIn}} {{c.numPrevPatientsNotCheckedIn > 1 ? "Patients" : "Patient"}}
+                </div>
+            </div>
+            <div style="text-align: center; margin-top: 60px">
+                <b>{{"ESTIMATEDWAIT"|translate}}</b>:
+                <br>
+                <div style="font-size: x-large">{{c.estimatedWait}}</div>
+            </div>
+
+            <div id="more-info-button-outer">
+                <button modifier="large" id="more-info-button" ng-click="c.goToWaitingTimeEstimates()">
+                    <div style="color: #757575; position: relative; top: 50%;" align="center">
+                      {{"MORE_INFO"|translate}}
+                    </div>
+                </button>
+            </div>
         </div>
     </div>
 
