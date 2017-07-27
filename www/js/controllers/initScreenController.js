@@ -22,8 +22,7 @@
         '$filter',
         'Constants',
         'Permissions',
-        'DynamicContentService',
-        'NetworkStatus'
+        'DynamicContentService'
     ];
 
     /* @ngInject */
@@ -34,8 +33,7 @@
         $filter,
         Constants,
         Permissions,
-        DynamicContentService,
-        NetworkStatus
+        DynamicContentService
     ) {
         var vm = this;
         vm.title = 'InitScreenController';
@@ -49,7 +47,6 @@
         vm.reportIssuesMail = reportIssuesMail;
         vm.goToLogin = goToLogin;
 
-        vm.isOnline = true;
 
         activate();
 

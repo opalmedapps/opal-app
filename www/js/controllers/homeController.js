@@ -113,7 +113,13 @@
             //Setting up next appointment
             setUpNextAppointment();
             //start by initilizing variables
-            setNotifications();
+            // setNotifications();
+            vm.notifications = Notifications.setNotificationsLanguage(Notifications.getUnreadNotifications());
+
+            vm.loading =false;
+
+            console.log(vm.notifications);
+
             //setUpCheckin();
             setUpCheckin();
         }

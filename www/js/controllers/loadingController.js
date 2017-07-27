@@ -8,24 +8,26 @@ angular.module('MUHCApp').controller('LoadingController',
         function ($rootScope,$state, $scope, UpdateUI,
                   UserAuthorizationInfo, UserPreferences, $q, Patient, Messages,$timeout,LocalStorage,
                   NavigatorParameters,RequestToServer, PlanningSteps, MetaData){
+
             modal.show();
-            //var loadingParameter = NavigatorParameters.getParameters();
             var userAuthorizationInfo = UserAuthorizationInfo.getUserAuthData();
             if(typeof userAuthorizationInfo === 'undefined'||!userAuthorizationInfo) $state.go('init');
             setTimeout(function()
             {
                 UpdateUI.init()
-                    .then(function() {
-                        var objectToSend = {};
-                        objectToSend.NewValue = UserPreferences.getLanguage();
-                        objectToSend.FieldToChange = 'Language';
-                        RequestToServer.sendRequestWithResponse('AccountChange', objectToSend);
+                    .then(function(response) {
+
+                        console.log(JSON.stringify("response: " + response));
+                        // var objectToSend = {};
+                        // objectToSend.NewValue =
+                        // objectToSend.FieldToChange = 'Language';
+                        RequestToServer.sendRequestWithResponse('AccountChange', {NewValue: UserPreferences.getLanguage(), FieldToChange: 'Language'});
 
                         //fetch all the tab metadata TODO: add the fetching of all the other data
                         UpdateUI.set([
-                            // 'Doctors',
                             'Announcements',
-                            'EducationalMaterial'
+                            'Doctors',
+                            'Diagnosis'
                         ])
                             .then(function () {
                                 MetaData.init();

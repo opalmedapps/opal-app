@@ -337,11 +337,11 @@ myApp.service('Notifications',['$filter','RequestToServer','LocalStorage','Annou
                     //If ReadStatus is 0, then find actual post for notification
                     if(Notifications[i].ReadStatus == '0')
                     {
-                        // Attach room number
-
 
                         //Finding post
                         var post = notificationTypes[Notifications[i].NotificationType].searchFunction(Notifications[i].RefTableRowSerNum);
+
+                        if(post)
                         Notifications[i].Description_EN = Notifications[i].Description_EN.replace(/\$\w+/, post.RoomLocation_EN||"");
                         Notifications[i].Description_FR = Notifications[i].Description_FR.replace(/\$\w+/, post.RoomLocation_FR||"");
 

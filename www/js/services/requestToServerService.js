@@ -107,9 +107,11 @@ myApp.service('RequestToServer',['$filter','$state','NewsBanner','UserAuthorizat
                 //Waits to obtain the request data.
                 //
                 refRequestResponse.on('value',function(snapshot){
+
                     if(snapshot.exists())
                     {
                         var data = snapshot.val();
+
                         var timestamp = data.Timestamp;
                         if(data.Code =='1')
                         {
