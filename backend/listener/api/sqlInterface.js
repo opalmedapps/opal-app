@@ -917,6 +917,7 @@ exports.getTimeEstimate = function(appointmentAriaSer)
         {
             console.log('Time Estimate ', body);
             body = JSON.parse(body);
+            body['appointmentAriaSer'] = appointmentAriaSer;
             if(body.length>=1){
                 r.resolve(body);
             } else{
