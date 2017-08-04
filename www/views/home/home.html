@@ -57,7 +57,8 @@
                     <ons-row align="center">
                         <ons-col width="60px" style="text-align: center">
                             <div>
-                                <i class="fa fa-check-square-o fa-2x" style="color:#4CAF50"></i><span class="notification" ng-hide="h.allCheckedIn">1</span>
+                                <i ng-hide="!h.allCheckedIn" class="fa fa-check-square-o fa-2x" style="color:#4CAF50;"></i>
+                                <i ng-hide="h.allCheckedIn" class="fa fa-square-o fa-2x" style="color:#4CAF50; margin-left: 12px"></i><span ng-hide="h.allCheckedIn" class="notification" style="left: -10px !important;"> {{ h.todaysAppointments.length }}</span>
                             </div>
                         </ons-col>
                         <ons-col>
@@ -121,7 +122,7 @@
                         <ons-row align="center">
                             <ons-col width="60px" align="center">
                                 <div>
-                                    <ons-icon class="iconHomeView" icon="{{notification.Icon}}" ng-style="{color: notification.Color}"></ons-icon><span class="notification" ng-show="notification.Number>=1">{{notification.Number}}</span>
+                                    <ons-icon class="iconHomeView" icon="{{notification.Icon}}" ng-style="{color: notification.Color}" style="margin-left: 18px"></ons-icon><span class="notification" style="left: -7px !important" ng-show="notification.Number>=1">{{notification.Number}}</span>
                                 </div>
                             </ons-col>
                             <ons-col>

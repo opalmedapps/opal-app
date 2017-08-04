@@ -45,13 +45,18 @@
          **/
         var checkinApps = [];
 
+        var allCheckedIn = false;
+
         var service = {
             getCheckInApps: getCheckInApps,
             setCheckInApps: setCheckInApps,
             isAllowedToCheckIn: isAllowedToCheckIn,
             checkCheckinServer: checkCheckinServer,
             checkinToAllAppointments: checkinToAllAppointments,
-            verifyAllCheckIn: verifyAllCheckIn
+            verifyAllCheckIn: verifyAllCheckIn,
+            areAllCheckedIn: areAllCheckedIn,
+            setAllCheckedIn: setAllCheckedIn,
+            clear: clear
         };
 
         return service;
@@ -77,6 +82,26 @@
          **/
         function setCheckInApps(apps){
             checkinApps = apps;
+        }
+
+        /**
+         *@ngdoc method
+         *@name areAllCheckedIn
+         *@methodOf MUHCApp.service:CheckinService
+         *@description Function that returns whether or not todays appointments are all checked in
+         **/
+        function areAllCheckedIn(){
+            return allCheckedIn;
+        }
+
+        /**
+         *@ngdoc method
+         *@name areAllCheckedIn
+         *@methodOf MUHCApp.service:CheckinService
+         *@description Function that returns whether or not todays appointments are all checked in
+         **/
+        function setAllCheckedIn(bool){
+            allCheckedIn = bool;
         }
 
         /**
@@ -200,9 +225,6 @@
             var promises = [];
             var allCheckedIn;
 
-
-
-
             if (!checkinApps){
                 allCheckedIn = null;
                 defer.resolve(allCheckedIn);
@@ -242,6 +264,11 @@
                 checkinApps[appointment].Checkin='1';
             }
 
+        }
+
+        function clear() {
+            checkinApps = [];
+            allCheckedIn= false;
         }
 
         function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {

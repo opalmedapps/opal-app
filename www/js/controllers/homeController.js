@@ -22,16 +22,17 @@
         vm.LastName = '';
         vm.ProfileImage = null;
         vm.language = 'EN';
-        vm.notifications = null;
+        vm.notifications = [];
         vm.statusDescription = null;
         vm.appointmentShown = null;
-        vm.allCheckedIn = true;
-        vm.todaysAppointments = null;
+        vm.allCheckedIn = false;
+        vm.todaysAppointments = [];
         vm.calledApp = null;
         vm.checkInMessage = '';
         vm.RoomLocation = '';
         vm.showHomeScreenUpdate = null;
         vm.loading = true;
+        vm.no_appointments = false;
 
         vm.homeDeviceBackButton = homeDeviceBackButton;
         vm.load = load;
@@ -55,11 +56,10 @@
                 localStorage.removeItem('locked');
             }
 
-            // Refresh the page on coming back from checkin
+            // // Refresh the page on coming back from checkin
             homeNavigator.on('prepop', function(event) {
                 if (event.currentPage.name == "./views/home/checkin/checkin-list.html") {
                     if(NetworkStatus.isOnline()) {
-                        //TODO: Optimize this
                         setCheckin();
                     }
                 }
@@ -70,6 +70,7 @@
                 if(event.navigator._isPushing) event.cancel();
             });
 
+            //release the watchers
             $scope.$on('$destroy',function()
             {
                 homeNavigator.off('prepop');
@@ -78,13 +79,20 @@
 
             Permissions.enablePermission('WRITE_EXTERNAL_STORAGE', 'PERMISSION_STORAGE_DENIED')
                 .catch(function (response) {
-
                     NewsBanner.showCustomBanner($filter('translate')(response.Message), '#333333', function(){}, 5000);
                 });
 
-            // Initialize the page data
+            // Initialize the page data if online
             if(NetworkStatus.isOnline()){
                 homePageInit();
+            }else if(Patient.getPatientId()){
+                //Basic patient information
+                vm.PatientId=Patient.getPatientId();
+                vm.FirstName = Patient.getFirstName();
+                vm.LastName = Patient.getLastName();
+                vm.ProfileImage=Patient.getProfileImage();
+                vm.language = UserPreferences.getLanguage();
+                vm.noUpcomingAppointments=false;
             }
         }
 
@@ -98,13 +106,16 @@
             vm.language = UserPreferences.getLanguage();
             vm.noUpcomingAppointments=false;
 
-            //Setting up status
+            //Set treatment metadata state
             setTreatmentStatus();
-            //Setting up next appointment
+
+            //display next appointment
             setNextAppointment();
-            //start by initilizing variables
-            // setNotifications();
-            vm.notifications = Notifications.setNotificationsLanguage(Notifications.getUnreadNotifications());
+
+            //display new notifications, if any
+            if(Notifications.getNumberUnreadNotifications() > 0){
+                vm.notifications = Notifications.setNotificationsLanguage(Notifications.getUnreadNotifications());
+            }
 
             vm.loading =false;
 
@@ -133,101 +144,124 @@
             }
         }
 
-        function setNotifications()
-        {
-            // Get all new notifications
-
-            UpdateUI.update(['Notifications'])
-                .then(function () {
-                    var notifications = Notifications.getNewNotifications();
-                    if (notifications.length > 0)
-                    {
-                        // Get the refresh types from the notification data. These correspond to the API call to the server
-                        var toLoad = notifications.reduce(
-                            function (accumulator, currentValue) {
-                                if (accumulator.includes(currentValue.refreshType)) {
-                                    return accumulator
-                                } else {
-                                    accumulator.push(currentValue.refreshType);
-                                    return accumulator
-                                }
-                            }, []);
-
-                        // Get the data needed from server and set it in Opal
-                        UpdateUI.set(toLoad)
-                            .then(function () {
-                                vm.notifications = Notifications.setNotificationsLanguage(Notifications.getUnreadNotifications());
-
-                                vm.loading = false;
-
-                            })
-                            .catch(function (error) {
-                                console.error(error);
-                                vm.loading = false;
-                            })
-                    } else {
-                        vm.loading = false;
-                        vm.notifications = [];
-                    }
-                })
-        }
+        // function setNotifications()
+        // {
+        //     // Get all new notifications
+        //
+        //     UpdateUI.update(['Notifications'])
+        //         .then(function () {
+        //             var notifications = Notifications.getNewNotifications();
+        //             if (notifications.length > 0)
+        //             {
+        //                 // Get the refresh types from the notification data. These correspond to the API call to the server
+        //                 var toLoad = notifications.reduce(
+        //                     function (accumulator, currentValue) {
+        //                         if (accumulator.includes(currentValue.refreshType)) {
+        //                             return accumulator
+        //                         } else {
+        //                             accumulator.push(currentValue.refreshType);
+        //                             return accumulator
+        //                         }
+        //                     }, []);
+        //
+        //                 // Get the data needed from server and set it in Opal
+        //                 UpdateUI.set(toLoad)
+        //                     .then(function () {
+        //                         vm.notifications = Notifications.setNotificationsLanguage(Notifications.getUnreadNotifications());
+        //
+        //                         vm.loading = false;
+        //
+        //                     })
+        //                     .catch(function (error) {
+        //                         console.error(error);
+        //                         vm.loading = false;
+        //                     })
+        //             } else {
+        //                 vm.loading = false;
+        //                 vm.notifications = [];
+        //             }
+        //         })
+        // }
 
         function setCheckin()
         {
-            //Get checkin appointment for the day, gets the closest appointment to right now
-            vm.checkInMessage = '';
-            vm.allCheckedIn = true;
-            var todaysAppointmentsToCheckIn = Appointments.getCheckinAppointment();
-            CheckInService.setCheckInApps(todaysAppointmentsToCheckIn);
 
-            vm.todaysAppointments = todaysAppointmentsToCheckIn;
-            if(todaysAppointmentsToCheckIn)
-            {
-                CheckInService.isAllowedToCheckIn().then(function (response) {
-                    var allCheckedIn = true;
-                    for (var app in todaysAppointmentsToCheckIn){
-                        if (todaysAppointmentsToCheckIn[app].Checkin == '0'){
-                            allCheckedIn = false;
-                        }
-                    }
+            //skip the following if the check in state has already been set..
+            if(CheckInService.getCheckInApps() !== null &&  CheckInService.getCheckInApps().length > 0){
+                //Case 1: An Appointment has checkin 0, not checked-in
 
-                    vm.allCheckedIn = allCheckedIn;
+                vm.todaysAppointments = CheckInService.getCheckInApps();
+                vm.allCheckedIn = CheckInService.areAllCheckedIn();
 
-                    //Case 1: An Appointment has checkin 0, not checked-in
-                    if (!allCheckedIn) {
+                evaluateCheckIn();
 
-                        //Checkin message before appointment gets set and is changed only if appointment was checked into already from Aria
-                        vm.checkInMessage = "CHECKIN_MESSAGE_BEFORE" + setPlural(todaysAppointmentsToCheckIn);
-                        vm.showHomeScreenUpdate = false;
+            }
+            else{
+                //Get checkin appointment for the day, gets the closest appointment to right now
+                vm.checkInMessage = 'CHECKING_SERVER';
 
-                        //Queries the server to find out whether or not an appointment was checked into
-                        CheckInService.checkCheckinServer(todaysAppointmentsToCheckIn[0]).then(function (data) {
-                            //If it has, then it simply changes the message to checkedin and queries to get an update
-                            if (data) {
-                                $timeout(function () {
-                                    vm.checkInMessage = "CHECKIN_MESSAGE_AFTER" + setPlural(todaysAppointmentsToCheckIn);
-                                    vm.showHomeScreenUpdate = true;
-                                });
+                //at this point we have all the appointments that are available for checking in to
+                var todaysAppointmentsToCheckIn = Appointments.getCheckinAppointment();
+                CheckInService.setCheckInApps(todaysAppointmentsToCheckIn);
+
+                vm.todaysAppointments = todaysAppointmentsToCheckIn;
+                if(vm.todaysAppointments)
+                {
+                    CheckInService.isAllowedToCheckIn().then(function (response) {
+                        var allCheckedIn = true;
+                        for (var app in vm.todaysAppointments){
+                            if (vm.todaysAppointments[app].Checkin == '0'){
+
+                                allCheckedIn = false;
                             }
+                        }
+
+                        vm.allCheckedIn = allCheckedIn;
+                        CheckInService.setAllCheckedIn(allCheckedIn);
+
+                        evaluateCheckIn();
+
+                    }).catch(function(error){
+
+                        //NewsBanner.showCustomBanner($filter('translate')(error), '#333333', function(){}, 3000);
+                    });
+
+                }else{
+
+                    //Case where there are no appointments that day
+                    vm.checkInMessage = "CHECKIN_NONE";
+                    vm.no_appointments = true;
+                }
+            }
+
+        }
+
+        function evaluateCheckIn(){
+            //Case 1: An Appointment has checkin 0, not checked-in
+            if (!vm.allCheckedIn) {
+
+                //Checkin message before appointment gets set and is changed only if appointment was checked into already from Aria
+                vm.checkInMessage = "CHECKIN_MESSAGE_BEFORE" + setPlural(vm.todaysAppointments);
+                vm.showHomeScreenUpdate = false;
+
+                //Queries the server to find out whether or not an appointment was checked into
+                CheckInService.checkCheckinServer(vm.todaysAppointments[0]).then(function (data) {
+                    //If it has, then it simply changes the message to checkedin and queries to get an update
+                    if (data) {
+                        $timeout(function () {
+                            vm.checkInMessage = "CHECKIN_MESSAGE_AFTER" + setPlural(todaysAppointmentsToCheckIn);
+                            vm.showHomeScreenUpdate = true;
                         });
-                    } else {
-                        //They have been called to the appointment.
-
-                        var calledApp = Appointments.getRecentCalledAppointment();
-                        vm.calledApp = calledApp;
-                        vm.checkInMessage = calledApp.RoomLocation ? "CHECKIN_CALLED":"CHECKIN_MESSAGE_AFTER" + setPlural(todaysAppointmentsToCheckIn);
-                        vm.RoomLocation = calledApp.RoomLocation;
-                        vm.showHomeScreenUpdate = true;
                     }
-                }).catch(function(error){
-
-                    //NewsBanner.showCustomBanner($filter('translate')(error), '#333333', function(){}, 3000);
                 });
+            } else {
+                //They have been called to the appointment.
 
-            }else{
-
-                //Case where there are no appointments that day
-                vm.checkInMessage = "CHECKIN_NONE";
+                var calledApp = Appointments.getRecentCalledAppointment();
+                vm.calledApp = calledApp;
+                vm.checkInMessage = calledApp.RoomLocation ? "CHECKIN_CALLED":"CHECKIN_MESSAGE_AFTER" + setPlural(vm.todaysAppointments);
+                vm.RoomLocation = calledApp.RoomLocation;
+                vm.showHomeScreenUpdate = true;
             }
         }
 

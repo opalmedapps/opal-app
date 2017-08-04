@@ -16,6 +16,9 @@ angular.module('MUHCApp').controller('LoadingController',
             {
                 UpdateUI.init()
                     .then(function() {
+                        $state.go('Home');
+
+
                         RequestToServer.sendRequestWithResponse('AccountChange', {NewValue: UserPreferences.getLanguage(), FieldToChange: 'Language'});
 
                         //fetch all the tab metadata TODO: add the fetching of all the other data
@@ -33,7 +36,6 @@ angular.module('MUHCApp').controller('LoadingController',
                         modal.hide();
                         clearTimeout(timeOut);
 
-                        $state.go('Home');
                     });
             },200);
 
