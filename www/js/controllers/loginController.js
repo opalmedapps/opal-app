@@ -119,7 +119,7 @@ myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$root
                     'Token' : sessionToken
                 });
 
-                //Evoke an observer function in mainController
+                // Evoke an observer function in mainController
                 $rootScope.$emit("MonitorLoggedInUsers", firebaseUser.uid);
 
                 window.localStorage.setItem('Email',$scope.email);
