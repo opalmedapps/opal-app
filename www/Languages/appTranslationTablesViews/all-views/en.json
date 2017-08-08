@@ -45,6 +45,7 @@
   "DIAGNOSIS_DATE": "Date",
   "DISABLECALENDARACCESSQUESTION": "Would you like to disable saving your appointments to your phone calendar?",
   "DISABLESMSNOTIFICATIONQUESTION": "Would you like to disable your SMS messaging notifications?",
+  "DOC_INFO" : "Document Information",
   "DOCTOR": "Doctor",
   "DOCUMENT": "Document",
   "DOCUMENT_DOWNLOADED": "The document has been downloaded successfully to the /Documents folder.",

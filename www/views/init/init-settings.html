@@ -1,9 +1,9 @@
 <ons-page ng-controller="InitSettingsController">
       <ons-toolbar fixed-style>
         <div class="left">
-            <span ng-show="navigatorName == 'settingsNavigator'"><ons-back-button>{{"BACK"|translate}}</ons-back-button></span>
-            <span ng-show="navigatorName !=='settingsNavigator'"><ons-toolbar-button ng-click="navigator.popPage()">{{"BACK"|translate}}</ons-toolbar-button></span>
-        </div>        <div class="center">{{"SETTINGS"|translate}}</div>
+            <span><ons-back-button>{{"BACK"|translate}}</ons-back-button></span>
+        </div>
+        <div class="center">{{"SETTINGS"|translate}}</div>
       </ons-toolbar>
        <ons-list class="settings-list" ng-show="navigatorName !== 'settingsNavigator'">
         <!--<ons-list-item >-->
