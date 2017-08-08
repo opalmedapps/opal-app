@@ -88,8 +88,6 @@
             vm.Language = UserPreferences.getLanguage();
             vm.ProfilePicture = Patient.getProfileImage();
         }
-
     }
-
 })();
 
