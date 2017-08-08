@@ -49,6 +49,7 @@
   "DISABLECALENDARACCESSQUESTION": "Souhaitez-vous sauvegarder vos rendez-vous dans le calendrier de votre téléphone?",
   "DISABLESMSNOTIFICATIONQUESTION": "Souhaitez-vous désactiver les notifications par sms?",
   "DOCTOR": "Médecin",
+  "DOC_INFO" : "Information documentaire",
   "DOCUMENT": "Document",
   "DOCUMENT_DOWNLOADED": "Téléchargement réussi. Le document est enregistré dans /Documents",
   "EDUCATION": "Éducation",
