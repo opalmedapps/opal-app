@@ -56,9 +56,11 @@
                 });
 
             });
+
             settingsNavigator.on('prepush',function(event){
                 if(event.navigator._isPushing) event.cancel();       
             });
+
             //On destroy, dettach listener
             $scope.$on('$destroy', function() {
                 settingsNavigator.off('postpop');
