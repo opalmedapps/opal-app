@@ -207,6 +207,7 @@
   "REFRESH_WAIT": "Les données sont à jour. SVP attendre 60 secondes avant d'actualiser.",
   "DOC_RECEIVED": "Reçu",
   "RECONNECTNG": "Se reconnecter...",
+  "REENTER_PASSWORD": "Retaper le mot de passe",
   "REPORTISSUES": "Questions",
   "RESETPASSWORD": "Réinitialiser le mot de passe",
   "RESULTS": "Résultats",
