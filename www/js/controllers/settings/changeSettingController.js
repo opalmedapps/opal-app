@@ -20,6 +20,13 @@
                                      UserAuthorizationInfo, EncryptionService, $scope) {
 
         var vm = this;
+        var page;
+        var parameters;
+        vm.updateValue = updateValue;
+        vm.changeFont = changeFont;
+        vm.changeLangauge = changeLanguage;
+        vm.evaluate = evaluate;
+
         activate();
 
         ////////////////////////
@@ -28,8 +35,8 @@
         function activate() {
             //Mappings between parameters and translation
             //Navigator parameter
-            var page = settingsNavigator.getCurrentPage();
-            var parameters = page.options.param;
+            page = settingsNavigator.getCurrentPage();
+            parameters = page.options.param;
             //Actual Value
             vm.actualValue = '';
 
@@ -40,23 +47,6 @@
             vm.valueLabel = parameters;
             vm.personal = true;
             vm.type1 = 'text';
-
-            //Sets a watch on the values typed and runs the validation scripts for the respective values
-           $scope.$watchGroup(['newValue', 'oldValue'], function() {
-                vm.newUpdate = false;
-                if (parameters !== 'LANGUAGE' && parameters !== 'FONTSIZE') {
-                    if (parameters == 'EMAIL') {
-                        vm.disableButton = !validateEmail();
-                    } else if (parameters == 'PASSWORD') {
-                        vm.disableButton = !validatePassword();
-                    } else if (parameters == 'PHONENUMBER') {
-                        vm.disableButton = !validateTelNum();
-                    } else {
-                        vm.disableButton = !validateAlias();
-                    }
-                }
-
-            });
 
             //Sets the instructions depending on the value to update
             if (parameters === 'ALIAS') {
@@ -105,8 +95,25 @@
                 vm.pickFont = value;
             }
         }
+
+        //Sets a watch on the values typed and runs the validation scripts for the respective values
+        function evaluate () {
+            vm.newUpdate = false;
+            if (parameters !== 'LANGUAGE' && parameters !== 'FONTSIZE') {
+                if (parameters == 'EMAIL') {
+                    vm.disableButton = !validateEmail();
+                } else if (parameters == 'PASSWORD') {
+                    vm.disableButton = !validatePassword();
+                } else if (parameters == 'PHONENUMBER') {
+                    vm.disableButton = !validateTelNum();
+                } else {
+                    vm.disableButton = !validateAlias();
+                }
+            }
+        }
+
         //Function to update new value
-        vm.updateValue = function(val) {
+        function updateValue (val) {
             var objectToSend = {};
             objectToSend.NewValue = vm.newValue;
 
@@ -119,7 +126,8 @@
                 changeField(val, vm.newValue);
             }
             vm.disableButton = true;
-        };
+        }
+
         //Function to change Nickname and phone number
         function changeField(type, value)
         {
@@ -137,19 +145,18 @@
         }
 
         //Function to change font size
-        vm.changeFont = function(newVal) {
+        function changeFont (newVal) {
             UserPreferences.setFontSize(newVal);
-        };
-
+        }
 
         //FUnction to change the language
-        vm.changeLanguage = function(val) {
+        function changeLanguage (val) {
             var objectToSend = {};
             objectToSend.NewValue = val;
             objectToSend.FieldToChange = 'Language';
             RequestToServer.sendRequest('AccountChange', objectToSend);
             UserPreferences.setLanguage(val);
-        };
+        }
 
         //Change password function
         function changePassword() {
@@ -265,7 +272,7 @@
         }
 
         function validatePassword() {
-            return (vm.newValue.length > 5 && vm.oldValue.length > 4);
+            return (vm.newValue.length > 5 && vm.oldValue.length > 4 && vm.newValue === vm.newValueValidate);
         }
 
         function validateAlias() {
@@ -317,6 +324,5 @@
                     });
             }
         }
-
     }
 })();
