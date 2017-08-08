@@ -117,7 +117,7 @@ myApp.controller('ChangingSettingController',
             $scope.personal = true;
             $scope.type1 = 'text';
             //Sets a watch on the values typed and runs the validation scripts for the respective values
-            $scope.$watchGroup(['newValue', 'oldValue'], function() {
+            $scope.$watchGroup(['newValue', 'newValueValidate', 'oldValue'], function() {
                 $scope.newUpdate = false;
                 if (parameters !== 'LANGUAGE' && parameters !== 'FONTSIZE') {
                     if (parameters == 'EMAIL') {
@@ -155,10 +155,12 @@ myApp.controller('ChangingSettingController',
                 $scope.type2 = 'password';
                 $scope.newValue = '';
                 $scope.oldValue = '';
+                $scope.newValueValidate = '';
                 var label = $filter('translate')('ENTEROLD');
                 $scope.placeHolder = label + ' ' +$filter('translate')($scope.valueLabel);
                 $scope.instruction = "ENTERNEWPASSWORD";
                 $scope.instructionOld = "ENTEROLDPASSWORD";
+                $scope.reenter_placeholder = "REENTER_PASSWORD"
             } else if (parameters === 'LANGUAGE') {
                 var value = UserPreferences.getLanguage();
                 $scope.instruction = 'SELECTLANGUAGE';
@@ -240,7 +242,10 @@ myApp.controller('ChangingSettingController',
                 var objectToSend = {};
                 objectToSend.FieldToChange = 'Password';
                 objectToSend.NewValue = $scope.newValue;
-                localStorage.setItem(UserAuthorizationInfo.getUsername()+"/deviceID", EncryptionService.getSecurityAns());
+
+                localStorage.removeItem(UserAuthorizationInfo.getUsername()+"/deviceID");
+                localStorage.removeItem(UserAuthorizationInfo.getUsername()+"/securityAns");
+
                 RequestToServer.sendRequestWithResponse('AccountChange', objectToSend)
                     .then(function (response) {
                         $timeout(function() {
@@ -344,7 +349,7 @@ myApp.controller('ChangingSettingController',
         }
 
         function validatePassword() {
-            return ($scope.newValue.length > 5 && $scope.oldValue.length > 4);
+            return ($scope.newValue.length > 5 && $scope.oldValue.length > 4 && $scope.newValue === $scope.newValueValidate);
         }
 
         function validateAlias() {

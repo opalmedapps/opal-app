@@ -287,6 +287,9 @@ myApp.controller('NewPasswordController',['$scope','$timeout','Patient','ResetPa
                         $timeout(function () {
                             $scope.alert.type='success';
                             $scope.alert.content="PASSWORDUPDATED";
+
+                            localStorage.removeItem(UserAuthorizationInfo.getUsername()+"/deviceID");
+                            localStorage.removeItem(UserAuthorizationInfo.getUsername()+"/securityAns");
                         });
                     })
                     .catch(function (error) {
