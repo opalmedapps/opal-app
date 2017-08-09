@@ -13,11 +13,11 @@
         .controller('ChangeSettingController', ChangeSettingController);
 
     ChangeSettingController.$inject = ['$filter', 'FirebaseService', 'UserPreferences', 'Patient', 'RequestToServer',
-        '$timeout', 'UserAuthorizationInfo', 'EncryptionService', '$scope'];
+        '$timeout', 'UserAuthorizationInfo', 'EncryptionService'];
 
     /* @ngInject */
     function ChangeSettingController($filter, FirebaseService, UserPreferences, Patient, RequestToServer, $timeout,
-                                     UserAuthorizationInfo, EncryptionService, $scope) {
+                                     UserAuthorizationInfo, EncryptionService) {
 
         var vm = this;
         var page;
@@ -69,6 +69,7 @@
                 vm.type1 = 'password';
                 vm.type2 = 'password';
                 vm.newValue = '';
+                vm.newValueValidate = '';
                 vm.oldValue = '';
                 var label = $filter('translate')('ENTEROLD');
                 vm.placeHolder = label + ' ' +$filter('translate')(vm.valueLabel);
