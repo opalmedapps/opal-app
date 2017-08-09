@@ -3,82 +3,83 @@
  *Github: dherre3
  *Email:davidfherrerar@gmail.com
  */
-var myApp=angular.module('MUHCApp');
+(function () {
+    'use strict';
 
-//Login controller
-myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$rootScope', '$state',
-    'UserAuthorizationInfo', 'RequestToServer', 'FirebaseService','LocalStorage','$filter','DeviceIdentifiers',
-    'UserPreferences','NavigatorParameters','Patient','NewsBanner', 'UUID', 'Constants',
-    'EncryptionService', 'CleanUp',
-    function LoginController(
-        ResetPassword,$scope,$timeout, $rootScope, $state, UserAuthorizationInfo,
-        RequestToServer,FirebaseService,LocalStorage,$filter,DeviceIdentifiers,
-        UserPreferences,NavigatorParameters,Patient, NewsBanner, UUID, Constants, EncryptionService, CleanUp) {
+    angular
+        .module('MUHCApp')
+        .controller('LoginController', LoginController);
 
-        if(!localStorage.getItem('locked')){
-            $timeout(function () {
-                securityModal.show();
-            },200);
-        }
+    LoginController.$inject = ['$scope','$timeout', '$rootScope', '$state',
+        'UserAuthorizationInfo', 'FirebaseService', '$filter','DeviceIdentifiers', 'UserPreferences', 'Patient',
+        'NewsBanner', 'UUID', 'Constants', 'EncryptionService', 'CleanUp'];
 
-        $scope.loading = false;
+    /* @ngInject */
+    function LoginController($scope, $timeout, $rootScope, $state, UserAuthorizationInfo, FirebaseService,
+                             $filter,DeviceIdentifiers, UserPreferences, Patient, NewsBanner, UUID, Constants, EncryptionService, CleanUp) {
 
-        //Watch email and password for error cleaning
-        $scope.$watchGroup(['email','password'],function()
-        {
-            if($scope.alert.hasOwnProperty('type'))
-            {
-                delete $scope.alert.type;
-                delete $scope.alert.content;
+        var vm = this;
+        vm.loading = false;
+        vm.email = "";
+        vm.password = "";
+        vm.alert = {
+            type: "",
+            message: ""
+        };
+
+
+        var patientSerNum = "";
+
+        vm.clearErrors = clearErrors;
+        vm.submit = submit;
+
+
+        activate();
+        //////////////////////////////////
+
+        function activate(){
+
+            if(!localStorage.getItem('locked')){
+                $timeout(function () {
+                    securityModal.show();
+                },200);
             }
-        });
 
-        //Obtain email from localStorage and show that email
-        var savedEmail = window.localStorage.getItem('Email');
-        if(savedEmail)
-        {
-            $scope.email = savedEmail;
+            //Obtain email from localStorage and show that email
+            var savedEmail = window.localStorage.getItem('Email');
+            if(savedEmail) vm.email = savedEmail;
+
+            patientSerNum = Patient.getUserSerNum();
+            //Locked out alert
+            if(typeof patientSerNum !=='undefined' && patientSerNum) NewsBanner.showCustomBanner($filter('translate')('LOCKEDOUT'),'black', null, 2000);
+
+            // Switch for trusting device
+            var trusted = (localStorage.getItem(UserAuthorizationInfo.getUsername()+"/deviceID")) ? 1 : 0;
+
+            trustSwitch.setChecked(trusted);
+            trustSwitch.on('change', function () { trusted = (trustSwitch.isChecked()) ? 1 : 0; });
+        }
+
+        function clearErrors(){
+            if(vm.alert.hasOwnProperty('type'))
+            {
+                delete vm.alert.type;
+                delete vm.alert.message;
+            }
         }
 
 
-        var patientSerNum = Patient.getUserSerNum();
-
-        //Locked out alert
-        if(typeof patientSerNum !=='undefined'&&patientSerNum) NewsBanner.showCustomBanner($filter('translate')('LOCKEDOUT'),'black', null, 2000);
-
-
-        // Get the authentication state
-        var myAuth = firebase.auth().currentUser;
-
-        // Switch for trusting device
-        var trusted = 1;
-        $timeout(function () {
-            mySwitch.setChecked(trusted);
-            mySwitch.on( 'change', function () {
-                if (mySwitch.isChecked()) {
-
-                    trusted = 1;
-                } else {
-
-                    trusted = 0;
-                }
-            });
-        });
-
-        $scope.submit = function (email,password) {
-            $scope.email=email;
-            $scope.password=password;
-
-            if(typeof email=='undefined'||email ==='')
+        function submit() {
+            if(typeof vm.email==='undefined'||vm.email ==='')
             {
-                $scope.alert.type='danger';
-                $scope.alert.content="INVALID_EMAIL_OR_PWD";
-            }else if(typeof password=='undefined'||password ==='')
+                vm.alert.type='danger';
+                vm.alert.content="INVALID_EMAIL_OR_PWD";
+            }else if(typeof vm.password==='undefined'|| vm.password ==='')
             {
-                $scope.alert.type='danger';
-                $scope.alert.content="INVALID_EMAIL_OR_PWD";
+                vm.alert.type='danger';
+                vm.alert.content="INVALID_EMAIL_OR_PWD";
             }else{
-                $scope.loading = true;
+                vm.loading = true;
                 var authDetails = window.localStorage.getItem('UserAuthorizationInfo');
                 if (authDetails) authDetails = JSON.parse(authDetails);
 
@@ -87,20 +88,18 @@ myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$root
                  *  check if there is any stored data (authDetails)
                  *  check if user trying to login is the same as locked out user
                  */
-                if(myAuth && patientSerNum && authDetails && authDetails.Email==$scope.email){
-                    firebase.auth().signInWithEmailAndPassword(email,password)
+                if(myAuth && patientSerNum && authDetails && authDetails.Email===vm.email){
+                    firebase.auth().signInWithEmailAndPassword(vm.email, vm.password)
                         .then(function () {
-                            $scope.loading = false;
+                            vm.loading = false;
                             $state.go('Home');
-                        })
-                        .catch(handleError);
+                        }).catch(handleError);
 
                 } else{
-                    firebase.auth().signInWithEmailAndPassword(email,password).then(authHandler).catch(handleError);
+                    firebase.auth().signInWithEmailAndPassword(vm.email, vm.password).then(authHandler).catch(handleError);
                 }
-
             }
-        };
+        }
 
         //Handles authentication and next steps
         function authHandler(firebaseUser) {
@@ -113,37 +112,29 @@ myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$root
                 var Ref= firebase.database().ref(FirebaseService.getFirebaseUrl());
                 var refCurrentUser = Ref.child(FirebaseService.getFirebaseChild('logged_in_users') + firebaseUser.uid);
 
-                $rootScope.uid = firebaseUser.uid;
-
-                refCurrentUser.set({
-                    'Token' : sessionToken
-                });
+                refCurrentUser.set({ 'Token' : sessionToken });
 
                 // Evoke an observer function in mainController
                 $rootScope.$emit("MonitorLoggedInUsers", firebaseUser.uid);
 
-                window.localStorage.setItem('Email',$scope.email);
+                UserAuthorizationInfo.setUserAuthData(firebaseUser.uid, EncryptionService.hash(vm.password), undefined, sessionToken, vm.email);
 
-                UserAuthorizationInfo.setUserAuthData(firebaseUser.uid, EncryptionService.hash($scope.password), undefined, sessionToken, $scope.email);
-                //Setting The User Object for global Application Use
-                //
                 var authenticationToLocalStorage={
                     UserName:firebaseUser.uid,
                     Password: undefined,
-                    Email:$scope.email,
+                    Email: vm.email,
                     Token:sessionToken
                 };
 
-                $rootScope.refresh=true;
                 window.localStorage.setItem('UserAuthorizationInfo', JSON.stringify(authenticationToLocalStorage));
-                var deviceID;
 
                 // If user sets not trusted remove the localstorage
-                if (!trusted) {
+                if (!vm.trusted) {
                     localStorage.removeItem(UserAuthorizationInfo.getUsername()+"/deviceID");
                     localStorage.removeItem(UserAuthorizationInfo.getUsername()+"/securityAns");
                 }
 
+                var deviceID;
                 if (deviceID = localStorage.getItem(UserAuthorizationInfo.getUsername()+"/deviceID")){
 
                     var ans = EncryptionService.decryptDataWithKey(localStorage.getItem(UserAuthorizationInfo.getUsername()+"/securityAns"), UserAuthorizationInfo.getPassword());
@@ -155,32 +146,29 @@ myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$root
                     UUID.setUUID(deviceID);
                     DeviceIdentifiers.sendIdentifiersToServer()
                         .then(function () {
-                            $scope.loading = false;
+                            vm.loading = false;
                             $state.go('loading');
                         })
                         .catch(function (error) {
+                            vm.loading = false;
 
-                            $timeout(function(){
-                                $scope.loading = false;
-                            });
+                            //TODO: handle this error better... need to know the error object that is returned
+                            console.log(error);
                         });
 
                 } else {
                     if (!Constants.app) UUID.setUUID(UUID.generate());
                     DeviceIdentifiers.sendFirstTimeIdentifierToServer()
                         .then(function (response) {
-
-                            $scope.loading = false;
+                            vm.loading = false;
                             initNavigator.pushPage('./views/login/security-question.html', {
                                 securityQuestion: response.Data.securityQuestion["securityQuestion_" + UserPreferences.getLanguage()],
-                                trusted: trusted
+                                trusted: vm.trusted
                             });
                         })
                         .catch(function () {
-                            $timeout(function(){
-                                $scope.loading = false;
-                                initNavigator.popPage();
-                            });
+                            $scope.loading = false;
+                            initNavigator.popPage();
                         });
                 }
 
@@ -212,4 +200,6 @@ myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$root
                     break;
             }
         }
-    }]);
+
+    }
+})();
