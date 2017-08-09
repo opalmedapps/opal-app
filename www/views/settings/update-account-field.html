@@ -16,7 +16,7 @@
             </div>
 
             <div class="style-4" style="width: 100%;">
-                <input ng-minlength="1" type="{{csc.type2}}" ng-class="fontSizeDesc" placeholder="{{csc.placeHolder}}" value="{{csc.valueLabel|translate}}" ng-model="csc.oldValue">
+                <input ng-minlength="1" type="{{csc.type2}}" ng-class="fontSizeDesc" placeholder="{{csc.placeHolder}}" value="{{csc.valueLabel|translate}}" ng-model="csc.oldValue" ng-change="csc.evaluate()">
             </div>
 
         </div>
@@ -27,16 +27,22 @@
             </div>
 
             <div class="style-4" style="width: 100%;" ng-show="csc.value!=='PHONENUMBER'">
-                <input ng-minlength="1" type="{{csc.type1}}" ng-class="fontSizeDesc" class="style-4" placeholder="{{csc.valueLabel|translate}}" value="{{csc.valueLabel|translate}}" ng-model="csc.newValue">
+                <input ng-minlength="1" type="{{csc.type1}}" ng-class="fontSizeDesc" class="style-4" placeholder="{{csc.valueLabel|translate}}" value="{{csc.valueLabel|translate}}" ng-model="csc.newValue" ng-change="csc.evaluate()">
+            </div>
+
+            <br>
+
+            <div class="style-4" style="width: 100%;" ng-show="csc.value!=='PHONENUMBER'">
+                <input ng-minlength="1" type="{{csc.type1}}" ng-class="fontSizeDesc" class="style-4" placeholder="{{ 'REENTER_PASSWORD' |translate}}" value="{{csc.valueLabel|translate}}" ng-model="csc.newValueValidate" ng-change="csc.evaluate()">
             </div>
 
             <div class="style-4" style="width: 100%;" ng-show="csc.value =='PHONENUMBER'" >
-                <input phone-input type="{{csc.type1}}" ng-class="fontSizeDesc" class="style-4" placeholder="{{csc.valueLabel|translate}}" value="{{csc.valueLabel|translate}}" ng-model="csc.newValue">
+                <input phone-input type="{{csc.type1}}" ng-class="fontSizeDesc" class="style-4" placeholder="{{csc.valueLabel|translate}}" value="{{csc.valueLabel|translate}}" ng-model="csc.newValue" ng-change="csc.evaluate()">
             </div>
         </div>
 
         <div class="container" style="margin-top:10px">
-            <button class="button button--large" ng-disabled="csc.disableButton" ng-click="csc.updateValue(value)"  style="margin: 0 auto;">{{"UPDATE"|translate}} {{csc.valueLabel|translate}}</button><br>
+            <button class="button button--large" ng-disabled="csc.disableButton" ng-click="csc.updateValue(csc.value)"  style="margin: 0 auto;">{{"UPDATE"|translate}} {{csc.valueLabel|translate}}</button><br>
         </div>
     </div>
 
