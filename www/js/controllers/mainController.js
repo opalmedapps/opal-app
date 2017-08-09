@@ -14,7 +14,6 @@ angular.module('MUHCApp').controller('MainController', ["$window", "$state",'$ti
 
        $rootScope.firstTime = true;
 
-
         //var myDataRef = new Firebase(FirebaseService.getFirebaseUrl());
         //Listen to authentication state, if user get's unauthenticated log user out
         firebase.auth().onAuthStateChanged(function(authData){
@@ -34,8 +33,6 @@ angular.module('MUHCApp').controller('MainController', ["$window", "$state",'$ti
         /*****************************************
          * Check for online activity when the app starts
          *****************************************/
-        var app = document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'https://' ) === -1;
-
         $rootScope.online = navigator.onLine;
 
         $window.addEventListener("offline", function() {
@@ -208,8 +205,6 @@ angular.module('MUHCApp').controller('MainController', ["$window", "$state",'$ti
                     RequestToServer.sendRequest('Logout');
 
                     CleanUp.clear();
-
-                    // FirebaseService.getAuthentication().$signOut();
                 }
                 else{
                     $rootScope.firstTime = false;
