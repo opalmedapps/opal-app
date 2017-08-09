@@ -176,19 +176,14 @@
                 localStorage.setItem(UserAuthorizationInfo.getUsername()+"/deviceID", EncryptionService.getSecurityAns());
                 RequestToServer.sendRequestWithResponse('AccountChange', objectToSend)
                     .then(function () {
-                        $timeout(function() {
-
-                            vm.alertClass = "bg-success updateMessage-success";
-                            vm.updateMessage = "PASSWORDUPDATED";
-                            vm.newUpdate = true;
-                        });
+                        vm.alertClass = "bg-success updateMessage-success";
+                        vm.updateMessage = "PASSWORDUPDATED";
+                        vm.newUpdate = true;
                     })
                     .catch(function (error) {
-                        $timeout(function () {
-                            vm.newUpdate = true;
-                            vm.alertClass = "bg-danger updateMessage-error";
-                            vm.updateMessage = "INTERNETERROR";
-                        });
+                        vm.newUpdate = true;
+                        vm.alertClass = "bg-danger updateMessage-error";
+                        vm.updateMessage = "INTERNETERROR";
                     })
 
             }
@@ -196,18 +191,15 @@
             function handleError(error){
                 switch (error.code) {
                     case "auth/weak-password":
-                        $timeout(function () {
-                            vm.newUpdate = true;
-                            vm.alertClass = "bg-danger updateMessage-error";
-                            vm.updateMessage = "INVALID_PASSWORD";
-                        });
+                        vm.newUpdate = true;
+                        vm.alertClass = "bg-danger updateMessage-error";
+                        vm.updateMessage = "INVALID_PASSWORD";
                         break;
                     default:
-                        $timeout(function () {
-                            vm.newUpdate = true;
-                            vm.alertClass = "bg-danger updateMessage-error";
-                            vm.updateMessage = "INTERNETERROR";
-                        });
+                        vm.newUpdate = true;
+                        vm.alertClass = "bg-danger updateMessage-error";
+                        vm.updateMessage = "INTERNETERROR";
+                        break;
                 }
             }
         }
@@ -227,36 +219,30 @@
                 objectToSend.NewValue = vm.newValue;
                 Patient.setEmail(vm.newValue);
                 window.localStorage.setItem('Email',vm.newValue);
-                RequestToServer.sendRequest('AccountChange', objectToSend);
-                $timeout(function() {
-                    vm.alertClass = "bg-success updateMessage-success";
-                    vm.updateMessage = "UPDATED_EMAIL";
-                    vm.newUpdate = true;
-                });
+                RequestToServer.sendRequest('AccountChange', objectToSend)
+                    .then(function(){
+                        vm.alertClass = "bg-success updateMessage-success";
+                        vm.updateMessage = "UPDATED_EMAIL";
+                        vm.newUpdate = true;
+                    }).catch(handleError);
             }
 
             function handleError(){
                 switch (error.code) {
                     case "auth/invalid-email":
-                        $timeout(function() {
-                            vm.alertClass = "bg-danger updateMessage-error";
-                            vm.newUpdate = true;
-                            vm.updateMessage = "INVALID_EMAIL";
-                        });
+                        vm.alertClass = "bg-danger updateMessage-error";
+                        vm.newUpdate = true;
+                        vm.updateMessage = "INVALID_EMAIL";
                         break;
                     case "auth/email-already-in-use":
-                        $timeout(function() {
-                            vm.alertClass = "bg-danger updateMessage-error";
-                            vm.newUpdate = true;
-                            vm.updateMessage = "EMAIL_TAKEN";
-                        });
+                        vm.alertClass = "bg-danger updateMessage-error";
+                        vm.newUpdate = true;
+                        vm.updateMessage = "EMAIL_TAKEN";
                         break;
                     default:
-                        $timeout(function() {
-                            vm.alertClass = "bg-danger updateMessage-error";
-                            vm.newUpdate = true;
-                            vm.updateMessage = "INTERNETERROR";
-                        });
+                        vm.alertClass = "bg-danger updateMessage-error";
+                        vm.newUpdate = true;
+                        vm.updateMessage = "INTERNETERROR";
                         break;
                 }
             }
@@ -283,46 +269,35 @@
         function handleAuthenticationError(error) {
             switch(error.code){
                 case "auth/user-mismatch":
-                    $timeout(function () {
-                        vm.newUpdate = true;
-                        vm.alertClass = "bg-danger updateMessage-error";
-                        vm.updateMessage = "INVALID_ASSOCIATION";
-                    });
+                    vm.newUpdate = true;
+                    vm.alertClass = "bg-danger updateMessage-error";
+                    vm.updateMessage = "INVALID_ASSOCIATION";
                     break;
                 case "auth/user-not-found":
-                    $timeout(function () {
-                        vm.newUpdate = true;
-                        vm.alertClass = "bg-danger updateMessage-error";
-                        vm.updateMessage = "INVALID_USER";
-                    });
+                    vm.newUpdate = true;
+                    vm.alertClass = "bg-danger updateMessage-error";
+                    vm.updateMessage = "INVALID_USER";
                     break;
                 case "auth/invalid-credential":
-                    $timeout(function () {
-                        vm.newUpdate = true;
-                        vm.alertClass = "bg-danger updateMessage-error";
-                        vm.updateMessage = "INVALID_CREDENTIAL";
-                    });
+                    vm.newUpdate = true;
+                    vm.alertClass = "bg-danger updateMessage-error";
+                    vm.updateMessage = "INVALID_CREDENTIAL";
                     break;
                 case "auth/invalid-email":
-                    $timeout(function () {
-                        vm.newUpdate = true;
-                        vm.alertClass = "bg-danger updateMessage-error";
-                        vm.updateMessage = "INVALID_EMAIL";
-                    });
+                    vm.newUpdate = true;
+                    vm.alertClass = "bg-danger updateMessage-error";
+                    vm.updateMessage = "INVALID_EMAIL";
                     break;
                 case "auth/wrong-password":
-                    $timeout(function () {
-                        vm.newUpdate = true;
-                        vm.alertClass = "bg-danger updateMessage-error";
-                        vm.updateMessage = "INVALID_PASSWORD";
-                    });
+                    vm.newUpdate = true;
+                    vm.alertClass = "bg-danger updateMessage-error";
+                    vm.updateMessage = "INVALID_PASSWORD";
                     break;
                 default:
-                    $timeout(function () {
-                        vm.newUpdate = true;
-                        vm.alertClass = "bg-danger updateMessage-error";
-                        vm.updateMessage = "INTERNETERROR";
-                    });
+                    vm.newUpdate = true;
+                    vm.alertClass = "bg-danger updateMessage-error";
+                    vm.updateMessage = "INTERNETERROR";
+                    break;
             }
         }
     }
