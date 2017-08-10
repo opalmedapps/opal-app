@@ -29,85 +29,118 @@
         vm.estimatedWait = null;
         vm.lastUpdated = null;
         vm.numPrevPatients = null;
-        vm.appointments = null;
+        vm.appointments = [];
         vm.checkedInAppointments = NavigatorParameters.getParameters().checkedInAppointments;
-
-        var appointmentAriaSer = 1871328;
+        console.log(vm.checkedInAppointments);
         
+        function timeToString(time) {
+            var hour = time.getHours() + "";
+            var minute = time.getMinutes() + "";
+            if (hour.length == 1) {
+                hour = "0" + hour;
+            }
+            if (minute.length == 1) {
+                minute = "0" + minute;
+            }
+            return hour + ":" + minute;
+        }
+
         function requestEstimate() {
-            TimeEstimate.requestTimeEstimate(appointmentAriaSer)
-                .then(function () {
+            vm.lastUpdated = timeToString(new Date());
+            var index = 1;
+            if (!vm.checkedInAppointments) {
+                return;
+            }
+            TimeEstimate.requestTimeEstimate(vm.checkedInAppointments).then(function () {
+                var timeEstimate = TimeEstimate.getTimeEstimate();
+                //var appointmentAriaSers = TimeEstimate.getAppointmentAriaSers();
+                for (var i = 0; i < timeEstimate.length; i++) {
+                    var tmpDict = {};
                     var tmpDur = [];
                     var tmpNumNotCheckedIn = 0;
-                    var timeEstimate = TimeEstimate.getTimeEstimate();
-                    for (var i = 0; i < Object.keys(timeEstimate).length - 3; i++) {
-                        if (timeEstimate[i]["details"]["status"] == "In Progress") {
-                            var tmpSlicedTime = Number(timeEstimate[i]["details"]["estimated_duration"]) - ((new Date() - new Date(timeEstimate[i]["details"]["actual_start"]))/60000);
+                    for (var j = 0; j < Object.keys(timeEstimate[i]).length - 4; j++) {
+                        if (timeEstimate[i][j]["details"]["status"] == "In Progress") {
+                            var tmpSlicedTime = Number(timeEstimate[i][j]["details"]["estimated_duration"]) - ((new Date() - new Date(timeEstimate[i][j]["details"]["actual_start"]))/60000);
                             if (tmpSlicedTime > 0) {
                                 tmpDur.push(tmpSlicedTime);
                             }
                         }
                         else {
-                            tmpDur.push(Number(timeEstimate[i]["details"]["estimated_duration"]));
+                            tmpDur.push(Number(timeEstimate[i][j]["details"]["estimated_duration"]));
                         }
-                        if (!(timeEstimate[i]["details"]["checked_in"] == 'true')) {
+                        if (!(timeEstimate[i][j]["details"]["checked_in"] == 'true')) {
                             tmpNumNotCheckedIn = tmpNumNotCheckedIn + 1;
                         }
                     }
-                    prevPatientDur = tmpDur;
-                    vm.numPrevPatients = prevPatientDur.length;
-                    vm.numPrevPatientsNotCheckedIn = tmpNumNotCheckedIn;
-                    if (!initialNumPrevPatients) {
-                        initialNumPrevPatients = prevPatientDur.length;
+                    tmpDict["prevPatientDur"] = tmpDur;
+                    tmpDict["numPrevPatients"] = tmpDur.length;
+                    tmpDict["numPrevPatientsNotCheckedIn"] = tmpNumNotCheckedIn;
+                    if (!vm.appointments[i] || !vm.appointments[i].initialNumPrevPatients) {
+                        tmpDict["initialNumPrevPatients"] = tmpDur.length;
                     }
-                    vm.estimatedWait = estimateWait();    
-                    vm.lastUpdated = timeToString(new Date());
-                },
-                function(error){
-                    console.log(JSON.stringify(error));
-                    vm.estimatedWait = "No estimation available!";
-                });
+                    else {
+                        tmpDict["initialNumPrevPatients"] = vm.appointments[i].initialNumPrevPatients;
+                    }
+                    tmpDict["estimatedWait"] = estimateWait(tmpDict);
+                    tmpDict["title"] = "Radiotherapy Treatment #" + index;
+                    tmpDict["appointmentAriaSer"] = timeEstimate[i].appointmentAriaSer;
+                    index = index + 1;
+                    var percent = (tmpDict["initialNumPrevPatients"] - tmpDict["numPrevPatients"])/tmpDict["initialNumPrevPatients"] * 90;
+                    if (percent <= 100) {
+                        if (tmpDict["initialNumPrevPatients"] < tmpDict["numPrevPatients"]) {
+                            tmpDict["percent"] = 0 + "%";
+                        }
+                        else tmpDict["percent"] = percent + "%";
+                    }
+                    vm.appointments[i] = tmpDict;
+                    var element = document.getElementById('wait-time-timeline');
+                    element.style.animation = "";
+                }
+                console.log(vm.appointments);
+            },
+            function(error){
+                console.log(JSON.stringify(error));
+                vm.estimatedWait = "No estimation available!";
+            });
         }
 
-        var estimateWait = function() {
+        var estimateWait = function(tmpDict) {
             var totalMins = 0;
-            for (var i = 0; i < prevPatientDur.length; i++) {
-                totalMins = totalMins + prevPatientDur[i];
+            for (var i = 0; i < tmpDict.prevPatientDur.length; i++) {
+                totalMins = totalMins + tmpDict.prevPatientDur[i];
             }
             var hr = Math.floor(totalMins/60) > 1 ? "Hrs " : "Hr ";
             var min = Math.round(totalMins%60) > 1 ? "Mins" : "Min";
             return Math.floor(totalMins/60) + hr + Math.round(totalMins%60) + min;
         }
 
-        function goToWaitingTimeEstimates() {
+        function goToWaitingTimeEstimates(appointmentAriaSer) {
             $timeout.cancel(myTimeOut);
             console.log("Tick destroyed");
-            NavigatorParameters.setParameters({'Navigator':'homeNavigator', 'checkedInAppointments':vm.checkedInAppointments});
-            homeNavigator.pushPage('views/home/waiting-time/waiting-time-more-info.html', {
-                checkedInAppointments: vm.checkedInAppointments
-            })
+            NavigatorParameters.setParameters({'Navigator':'homeNavigator', 'appointmentAriaSer':appointmentAriaSer});
+            homeNavigator.pushPage('views/home/waiting-time/waiting-time-more-info.html');
         }
         vm.goToWaitingTimeEstimates = goToWaitingTimeEstimates;
 
-        var updateCurrentTime = function() {
-            var percent = (initialNumPrevPatients - vm.numPrevPatients)/initialNumPrevPatients * 90;
-            if (percent <= 100) {
-                var element = document.getElementById('current-time-indicator');
-                if (element) {
-                    element.style.left = percent + "%";  
-                }
+        // var updateCurrentTime = function() {
+        //     var percent = (initialNumPrevPatients - vm.numPrevPatients)/initialNumPrevPatients * 90;
+        //     if (percent <= 100) {
+        //         var element = document.getElementById('current-time-indicator');
+        //         if (element) {
+        //             element.style.left = percent + "%";
+        //         }
 
-                var element = document.getElementById('past-line');
-                if (element) {
-                    element.style.width = percent + "%";
-                }
-            }
-        }
+        //         var element = document.getElementById('past-line');
+        //         if (element) {
+        //             element.style.width = percent + "%";
+        //         }
+        //     }
+        // }
 
         var tick = function() {
             requestEstimate();
-            updateCurrentTime();
-            myTimeOut = $timeout(tick, 10000);
+            myTimeOut = $timeout(tick, 5000);
+            console.log("Inside tick");
         }
         tick();
 
@@ -117,5 +150,3 @@
         });
     }
 })();
-
-

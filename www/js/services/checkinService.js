@@ -199,9 +199,6 @@
             var promises = [];
             var allCheckedIn;
 
-            console.log(checkinApps);
-
-
             if (!checkinApps){
                 allCheckedIn = null;
                 defer.resolve(allCheckedIn);
