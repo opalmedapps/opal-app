@@ -37,10 +37,8 @@
         vm.RoomLocation = '';
         vm.showHomeScreenUpdate = null;
         vm.loading = true;
-        //vm.checkedInAppointment = null;
-        //vm.checkedInAppointment = 1871328;
-        vm.checkedInAppointments = null;
-        //vm.waitingTimeEstimate = null;
+        //vm.checkedInAppointments = null;
+        vm.checkedInAppointments = [{AppointmentAriaSer: 1862766}];
         vm.waitingTimeEstimates = [];
 
         vm.homeDeviceBackButton = homeDeviceBackButton;
@@ -49,7 +47,7 @@
         vm.goToNotification = goToNotification;
         vm.goToAppointments = goToAppointments;
         vm.goToCheckinAppointments = goToCheckinAppointments;
-        vm.goToWaitingTimeEstimates = goToWaitingTimeEstimates;
+        //vm.goToWaitingTimeEstimates = goToWaitingTimeEstimates;
 
         activate();
 
@@ -120,6 +118,7 @@
             setNotifications();
             //setUpCheckin();
             setUpCheckin();
+            requestEstimate();
         }
 
         function settingStatus()
@@ -233,7 +232,7 @@
                             vm.checkedInAppointments.push(todaysAppointmentsToCheckIn[app]);
                         }
                     }
-                    requestEstimate();
+                    //requestEstimate();
 
                     vm.allCheckedIn = allCheckedIn;
 
@@ -271,37 +270,37 @@
             }else{
                 console.log("MEssage none");
                 //Case where there are no appointments that day
-                vm.checkInMessage = "CHECKIN_NONE";
+                //vm.checkInMessage = "CHECKIN_NONE";
             }
         }
 
 
         function requestEstimate() {
-            for (var i = 0; i < vm.checkedInAppointments.length; i++) {
-                console.log("Inside for loop");
-                console.log(vm.checkedInAppointments);
-                var proc = TimeEstimate.requestTimeEstimate(vm.checkedInAppointments[i].AppointmentSerNum);
-                console.log(proc);
-                proc.then(function () {
-                        var prevPatientDur = [];
-                        var timeEstimate = TimeEstimate.getTimeEstimate();
-                        for (var i = 0; i < Object.keys(timeEstimate).length - 3; i++) {
-                            if (timeEstimate[i]["details"]["status"] == "In Progress") {
-                                var tmpSlicedTime = Number(timeEstimate[i]["details"]["estimated_duration"]) - ((new Date() - new Date(timeEstimate[i]["details"]["actual_start"]))/60000);
-                                if (tmpSlicedTime > 0) {
-                                    prevPatientDur.push(tmpSlicedTime);
-                                }
-                            }
-                            else {
-                                prevPatientDur.push(Number(timeEstimate[i]["details"]["estimated_duration"]));
+            TimeEstimate.requestTimeEstimate(vm.checkedInAppointments).then(function () {
+                var timeEstimate = TimeEstimate.getTimeEstimate();
+                console.log(timeEstimate);
+                for (var j = 0; j < timeEstimate.length; j++) {
+                    console.log(j);
+                    var prevPatientDur = [];
+                    for (var i = 0; i < Object.keys(timeEstimate[j]).length - 4; i++) {
+                        console.log(i);
+                        if (timeEstimate[j][i]["details"]["status"] == "In Progress") {
+                            var tmpSlicedTime = Number(timeEstimate[j][i]["details"]["estimated_duration"]) - ((new Date() - new Date(timeEstimate[j][i]["details"]["actual_start"]))/60000);
+                            if (tmpSlicedTime > 0) {
+                                prevPatientDur.push(tmpSlicedTime);
                             }
                         }
-                        vm.waitingTimeEstimates.push(estimateWait(prevPatientDur));
-                    },
-                    function(error){
-                        console.log(JSON.stringify(error));
-                    });
-            }
+                        else {
+                            prevPatientDur.push(Number(timeEstimate[j][i]["details"]["estimated_duration"]));
+                        }
+                    }
+                    console.log(prevPatientDur);
+                    vm.waitingTimeEstimates.push(estimateWait(prevPatientDur));
+                }
+            },
+            function(error){
+                console.log(JSON.stringify(error));
+            });
         }
 
         var estimateWait = function(prevPatientDur) {
@@ -392,15 +391,16 @@
 
 
         function goToCheckinAppointments(todaysAppointments) {
-            NavigatorParameters.setParameters({'Navigator':'homeNavigator'});
+            NavigatorParameters.setParameters({'Navigator':'homeNavigator', 'checkedInAppointments':vm.checkedInAppointments});
             homeNavigator.pushPage('./views/home/checkin/checkin-list.html');
         }
 
-        function goToWaitingTimeEstimates()
-        {
-            NavigatorParameters.setParameters({'Navigator':'homeNavigator', 'checkedInAppointments':vm.checkedInAppointments});
-            homeNavigator.pushPage('views/home/waiting-time/waiting-time.html');
-        }
+        // function goToWaitingTimeEstimates()
+        // {
+        //     NavigatorParameters.setParameters({'Navigator':'homeNavigator', 'checkedInAppointments':vm.checkedInAppointments});
+        //     console.log(vm.checkedInAppointments)
+        //     homeNavigator.pushPage('views/home/waiting-time/waiting-time.html');
+        // }
 
         function setPlural(apps) {
             if (apps.length > 1) {

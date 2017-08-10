@@ -12,35 +12,39 @@ var myApp = angular.module('MUHCApp');
 
 myApp.service('TimeEstimate', ['RequestToServer','LocalStorage', '$q',
     function(RequestToServer, LocalStorage, $q){
-        var timeEstimateObject = [];
+        var timeEstimateObject = null;
+        //var appointmentAriaSers = null;
 
         return {
             getTimeEstimate:function()
             {
                 return timeEstimateObject;
             },
-            requestTimeEstimate: function (appointmentAriaSer) {
-                console.log("Inside timeEstimateService");
+            // getAppointmentAriaSers:function()
+            // {
+            //     return appointmentAriaSers;
+            // },
+            requestTimeEstimate: function (appointments) {
                 var deferred = $q.defer();
-                console.log(appointmentAriaSer);
-                RequestToServer.sendRequestWithResponse('TimeEstimate', appointmentAriaSer)
-                    .then(
-                        function (response) {
-                            if (response.Code == '3') {
-                                console.log(response);
-                                timeEstimateObject = response;
-                                LocalStorage.WriteToLocalStorage('TimeEstimate', timeEstimateObject);
-                                deferred.resolve({Success: true, Location: 'Server'});
-                                console.log("Finished request");
+                timeEstimateObject = [];
+                appointmentAriaSers = [];
+                for (var i = 0; i < appointments.length; i++) {
+                    RequestToServer.sendRequestWithResponse('TimeEstimate', appointments[i].AppointmentAriaSer)
+                        .then(
+                            function (response) {
+                                if (response.Code == '3') {
+                                    timeEstimateObject.push(response);
+                                    //appointmentAriaSers = appointments[i].appointmentAriaSer;
+                                    deferred.resolve({Success: true, Location: 'Server'});
+                                }
+                            },
+                            function (error) {
+                                console.log('There was an error contacting hospital ' + JSON.stringify(error));
+                                deferred.reject({Success: false, Location: '', Error: error});
                             }
-                        },
-                        function (error) {
-                            console.log(appointmentAriaSer);
-                            console.log('There was an error contacting hospital ' + JSON.stringify(error));
-                            deferred.reject({Success: false, Location: '', Error: error});
-                            console.log("returning");
-                        }
-                    );
+                        );
+                }
+                LocalStorage.WriteToLocalStorage('TimeEstimate', timeEstimateObject);
 
                 return deferred.promise;
 

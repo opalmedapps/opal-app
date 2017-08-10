@@ -2790,13 +2790,13 @@ and (max-device-width : 568px)
 }
 
 #wait-time-timeline {
-  margin-top: 20%;
+  margin-top: 20px;
   position: relative;
   height: 5px;
-  animation: expand_line 1.5s ease-out forwards;
-  animation-delay: 0.3s;
+  /*animation: expand_line 1.5s ease-out forwards;
+  animation-delay: 0.3s;*/
   background-color: lightgrey;
-  width: 0%;
+  width: 100%;
 }
 
 @keyframes expand_line {
@@ -2939,8 +2939,6 @@ and (max-device-width : 568px)
   text-align: center; 
   width: 90%; 
   margin-left: 5%; 
-  bottom: 2%; 
-  position: absolute;
 }
 
 #more-info-button {

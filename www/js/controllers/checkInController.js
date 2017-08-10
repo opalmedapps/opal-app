@@ -53,7 +53,6 @@
         function activate() {
             Logger.sendLog('Checkin', 'all');
             vm.apps = CheckInService.getCheckInApps();
-            console.log(vm.apps);
             vm.language = UserPreferences.getLanguage();
 
             // Check if there are appointments
@@ -64,7 +63,6 @@
             }
 
             // Ensure that user is within range of the hospital
-            console.log(CheckInService);
             CheckInService.isAllowedToCheckIn()
                 .then(function (response) {
                     console.log("Allowed to Check in", response);

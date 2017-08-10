@@ -11,12 +11,12 @@
         .controller('WaitingTimeMoreInfoController', WaitingTimeMoreInfoController);
 
     WaitingTimeMoreInfoController.$inject = [
-        '$scope', '$timeout', '$filter', 'TimeEstimate'
+        '$scope', '$timeout', '$filter', 'TimeEstimate', 'NavigatorParameters'
     ];
 
     /* @ngInject */
     function WaitingTimeMoreInfoController(
-        $scope, $timeout, $filter, TimeEstimate)
+        $scope, $timeout, $filter, TimeEstimate, NavigatorParameters)
     {
         var vm = this;
 
@@ -29,7 +29,7 @@
         vm.numPrevPatients = null;
         vm.numPrevPatientsNotCheckedIn = 0;
 
-        var appointmentAriaSer = 1871328;
+        var appointmentAriaSer = [{'AppointmentAriaSer': NavigatorParameters.getParameters().appointmentAriaSer}];
         function requestEstimate() {
             TimeEstimate.requestTimeEstimate(appointmentAriaSer)
                 .then(function () {
@@ -39,9 +39,10 @@
                     }
                     var tmpDur = [];
                     var tmpCheckedIn = [];
-                    var timeEstimate = TimeEstimate.getTimeEstimate();
+                    var timeEstimate = TimeEstimate.getTimeEstimate()[0];
                     //-3 because we don't need the last 3 attributes (Code, Timestamp, Header)
-                    for (var i = Object.keys(timeEstimate).length - 3 - 1; i >= 0; i--) {
+                    for (var i = Object.keys(timeEstimate).length - 5; i >= 0; i--) {
+                        //console.log(i);
                         if (timeEstimate[i]["details"]["status"] == "In Progress") {
                             var tmpSlicedTime = Number(timeEstimate[i]["details"]["estimated_duration"]) - ((new Date() - new Date(timeEstimate[i]["details"]["actual_start"]))/60000);
                             if (tmpSlicedTime > 0) {
@@ -225,7 +226,7 @@
             });
         }
 
-        var tickInterval = 10000
+        var tickInterval = 60000
         var tick = function() {
             // var prevPatientExists = false;
             // var prevColor;
