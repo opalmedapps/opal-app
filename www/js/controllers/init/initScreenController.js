@@ -36,7 +36,6 @@
         DynamicContentService
     ) {
         var vm = this;
-        vm.title = 'InitScreenController';
         vm.globalMessage = '';
         vm.globalMessageDescription = '';
 
@@ -59,9 +58,6 @@
                 .then(function (response) {
                     if(!response.exists){
                         DynamicContentService.setContentData(response.data);
-                    }
-                    else{
-
                     }
                     return DynamicContentService.getPageContent('service');
                 })
@@ -129,7 +125,7 @@
          */
         function goToPatientCharter()
         {
-            initNavigator.pushPage('./views/templates/content.html', {contentType : 'patient_charter'});
+            initNavigator.pushPage('./views/templates/content.html', {data : {contentType : 'patient_charter'}});
         }
 
         /**
