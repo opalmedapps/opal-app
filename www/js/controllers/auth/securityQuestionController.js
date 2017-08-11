@@ -13,11 +13,11 @@
         .controller('SecurityQuestionController', SecurityQuestionController);
 
     SecurityQuestionController.$inject = ['$scope', '$timeout', 'ResetPassword', 'RequestToServer', 'EncryptionService',
-        'UUID', 'UserAuthorizationInfo', '$state', 'Constants', 'DeviceIdentifiers'];
+        'UUID', 'UserAuthorizationInfo', '$state', 'Constants', 'DeviceIdentifiers', 'NavigatorParameters'];
 
     /* @ngInject */
     function SecurityQuestionController($scope, $timeout, ResetPassword, RequestToServer, EncryptionService, UUID,
-                                        UserAuthorizationInfo, $state, Constants, DeviceIdentifiers) {
+                                        UserAuthorizationInfo, $state, Constants, DeviceIdentifiers, NavigatorParameters) {
 
         var vm = this;
         var deviceID;
@@ -40,10 +40,10 @@
 
         function activate(){
             deviceID = (Constants.app) ? device.uuid : UUID.getUUID();
-            parameters = initNavigator.topPage.data;
-            trusted = parameters.trusted;
+            var nav = NavigatorParameters.getNavigator();
+            var parameters = nav.getCurrentPage().options;
 
-            console.log("parameters: " + JSON.stringify(parameters));
+            trusted = parameters.trusted;
 
             if (parameters.passwordReset){
                 passwordReset = parameters.passwordReset;
@@ -104,11 +104,13 @@
                 RequestToServer.sendRequestWithResponse('VerifyAnswer',parameterObject,key, firebaseRequestField, firebaseResponseField).then(function(data)
                 {
 
+                    console.log("is trusted: " + trusted);
+
                     vm.waiting = false;
                     if(data.Data.AnswerVerified === "true")
                     {
                         if (trusted){
-                            localStorage.setItem(UserAuthorizationInfo.getUsername()+"/deviceID",deviceID);
+                            localStorage.setItem("deviceID",deviceID);
                             localStorage.setItem(UserAuthorizationInfo.getUsername()+"/securityAns", EncryptionService.encryptWithKey(key, UserAuthorizationInfo.getPassword()).toString());
                         }
                         EncryptionService.setSecurityAns(key);
