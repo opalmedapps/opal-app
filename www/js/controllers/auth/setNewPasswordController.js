@@ -5,10 +5,10 @@
  */
 var myApp=angular.module('MUHCApp');
 
-myApp.controller('NewPasswordController',['$scope','$timeout','Patient','ResetPassword',
+myApp.controller('SetNewPasswordController',['$scope', 'Patient',
     'FirebaseService','NavigatorParameters','RequestToServer',
     '$state','UserAuthorizationInfo', 'EncryptionService', function(
-             FirebaseService,NavigatorParameters,RequestToServer,
+             $scope, FirebaseService,NavigatorParameters,RequestToServer,
              $state,UserAuthorizationInfo,EncryptionService){
         $scope.goToLogin=function()
         {
@@ -47,13 +47,14 @@ myApp.controller('NewPasswordController',['$scope','$timeout','Patient','ResetPa
                             'passwordResetResponses'
                         );
                     })
-                    .then(function (response) {
+                    .then(function() {
 
                         UserAuthorizationInfo.clearUserAuthorizationInfo();
-                        $timeout(function () {
-                            $scope.alert.type='success';
-                            $scope.alert.content="PASSWORDUPDATED";
-                        });
+                        $scope.alert.type='success';
+                        $scope.alert.content="PASSWORDUPDATED";
+                        localStorage.removeItem("deviceID");
+                        localStorage.removeItem(UserAuthorizationInfo.getUsername()+"/securityAns");
+
                     })
                     .catch(function (error) {
 
