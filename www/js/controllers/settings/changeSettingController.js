@@ -173,12 +173,13 @@
                 var objectToSend = {};
                 objectToSend.FieldToChange = 'Password';
                 objectToSend.NewValue = vm.newValue;
-                localStorage.setItem(UserAuthorizationInfo.getUsername()+"/deviceID", EncryptionService.getSecurityAns());
                 RequestToServer.sendRequestWithResponse('AccountChange', objectToSend)
                     .then(function () {
                         vm.alertClass = "bg-success updateMessage-success";
                         vm.updateMessage = "PASSWORDUPDATED";
                         vm.newUpdate = true;
+                        localStorage.removeItem("deviceID");
+                        localStorage.removeItem(UserAuthorizationInfo.getUsername()+"/securityAns");
                     })
                     .catch(function (error) {
                         vm.newUpdate = true;
