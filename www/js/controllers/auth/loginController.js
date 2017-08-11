@@ -27,12 +27,12 @@
             message: ""
         };
 
+        vm.trusted = false;
 
         var patientSerNum = "";
 
         vm.clearErrors = clearErrors;
         vm.submit = submit;
-
 
         activate();
         //////////////////////////////////
@@ -54,10 +54,7 @@
             if(typeof patientSerNum !=='undefined' && patientSerNum) NewsBanner.showCustomBanner($filter('translate')('LOCKEDOUT'),'black', null, 2000);
 
             // Switch for trusting device
-            var trusted = (localStorage.getItem(UserAuthorizationInfo.getUsername()+"/deviceID")) ? 1 : 0;
-
-            trustSwitch.setChecked(trusted);
-            trustSwitch.on('change', function () { trusted = (trustSwitch.isChecked()) ? 1 : 0; });
+            vm.trusted = !!(localStorage.getItem(UserAuthorizationInfo.getUsername() + "/deviceID"));
         }
 
         function clearErrors(){
@@ -67,7 +64,6 @@
                 delete vm.alert.message;
             }
         }
-
 
         function submit() {
             if(typeof vm.email==='undefined'||vm.email ==='')
@@ -88,6 +84,10 @@
                  *  check if there is any stored data (authDetails)
                  *  check if user trying to login is the same as locked out user
                  */
+
+                // Get the authentication state
+                var myAuth = firebase.auth().currentUser;
+
                 if(myAuth && patientSerNum && authDetails && authDetails.Email===vm.email){
                     firebase.auth().signInWithEmailAndPassword(vm.email, vm.password)
                         .then(function () {
@@ -127,6 +127,7 @@
                 };
 
                 window.localStorage.setItem('UserAuthorizationInfo', JSON.stringify(authenticationToLocalStorage));
+                window.localStorage.setItem('Email', vm.email);
 
                 // If user sets not trusted remove the localstorage
                 if (!vm.trusted) {
@@ -161,17 +162,16 @@
                     DeviceIdentifiers.sendFirstTimeIdentifierToServer()
                         .then(function (response) {
                             vm.loading = false;
-                            initNavigator.pushPage('./views/login/security-question.html', {
+                            initNavigator.pushPage('./views/login/security-question.html', {data: {
                                 securityQuestion: response.Data.securityQuestion["securityQuestion_" + UserPreferences.getLanguage()],
                                 trusted: vm.trusted
-                            });
+                            }});
                         })
                         .catch(function () {
                             $scope.loading = false;
                             initNavigator.popPage();
                         });
                 }
-
             });
         }
 

@@ -20,30 +20,20 @@
     /* @ngInject */
     function ForgotPasswordController($scope,$timeout, $firebaseAuth) {
         var vm = this;
-        vm.title = 'ForgotPasswordController';
         vm.email = "";
         vm.alert = {};
 
         vm.submitPasswordReset = submitPasswordReset;
-
-        activate();
+        vm.clearErrors = clearErrors;
 
         ////////////////
 
-        function activate() {
-
-            // Remove the alert on text input
-            $scope.$watch(function () {
-                return vm.email;
-            },function(){
-
-                if(vm.alert.hasOwnProperty('type'))
-                {
-                    delete vm.alert.type;
-                    delete vm.alert.content;
-                }
-
-            });
+        function clearErrors(){
+            if(vm.alert.hasOwnProperty('type'))
+            {
+                delete vm.alert.type;
+                delete vm.alert.content;
+            }
         }
 
         function submitPasswordReset() {
@@ -82,7 +72,5 @@
                 }
             });
         }
-
     }
-
 })();

@@ -4,7 +4,7 @@
  *Email:davidfherrerar@gmail.com
  */
 var myApp=angular.module('MUHCApp');
-myApp.controller('TabsController',['$scope','$timeout','$translate','$translatePartialLoader','$rootScope',function($scope,$timeout,$translate,$translatePartialLoader,$rootScope){
+myApp.controller('TabsController',['$scope','$timeout','$translate','$translatePartialLoader','$rootScope',function($scope,$timeout,$translate,$translatePartialLoader){
 
     $scope.tour = './views/home/tour/tour.html';
     if (!localStorage.getItem('firstInstall')){

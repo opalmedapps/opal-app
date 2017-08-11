@@ -18,7 +18,7 @@
     ContentController.$inject = ['DynamicContentService', 'NavigatorParameters', 'Logger'];
 
     /* @ngInject */
-    function ContentController(DynamicContentService, NavigatorParameters, Logger) {
+    function ContentController(DynamicContentService, Logger) {
         var vm = this;
         vm.title = 'ContentController';
         vm.pageContent = {};
@@ -31,9 +31,9 @@
 
         // Uses the content pushed from a pushPage. See details in Opal wiki for use.
         function activate() {
-            var nav = NavigatorParameters.getNavigator();
-            var link = nav.getCurrentPage().options.contentLink;
-            var contentType = nav.getCurrentPage().options.contentType;
+            var page_params = initNavigator.topPage.data;
+            var link = page_params.contentLink;
+            var contentType = page_params.contentType;
             vm.pageContent.title = contentType;
             link ? loadFromURL(link, contentType) : loadPageContent(contentType);
         }
