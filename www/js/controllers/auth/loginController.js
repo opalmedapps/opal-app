@@ -54,7 +54,12 @@
             if(typeof patientSerNum !=='undefined' && patientSerNum) NewsBanner.showCustomBanner($filter('translate')('LOCKEDOUT'),'black', null, 2000);
 
             // Switch for trusting device
-            vm.trusted = !!(localStorage.getItem(UserAuthorizationInfo.getUsername() + "/deviceID"));
+            vm.trusted = !!(localStorage.getItem("deviceID"));
+
+            console.log(localStorage.getItem("deviceID"));
+
+
+            console.log(vm.trusted);
         }
 
         function clearErrors(){
@@ -131,12 +136,12 @@
 
                 // If user sets not trusted remove the localstorage
                 if (!vm.trusted) {
-                    localStorage.removeItem(UserAuthorizationInfo.getUsername()+"/deviceID");
+                    localStorage.removeItem("deviceID");
                     localStorage.removeItem(UserAuthorizationInfo.getUsername()+"/securityAns");
                 }
 
                 var deviceID;
-                if (deviceID = localStorage.getItem(UserAuthorizationInfo.getUsername()+"/deviceID")){
+                if (deviceID = localStorage.getItem("deviceID")){
 
                     var ans = EncryptionService.decryptDataWithKey(localStorage.getItem(UserAuthorizationInfo.getUsername()+"/securityAns"), UserAuthorizationInfo.getPassword());
                     EncryptionService.setSecurityAns(ans);
@@ -162,10 +167,10 @@
                     DeviceIdentifiers.sendFirstTimeIdentifierToServer()
                         .then(function (response) {
                             vm.loading = false;
-                            initNavigator.pushPage('./views/login/security-question.html', {data: {
+                            initNavigator.pushPage('./views/login/security-question.html', {
                                 securityQuestion: response.Data.securityQuestion["securityQuestion_" + UserPreferences.getLanguage()],
                                 trusted: vm.trusted
-                            }});
+                            });
                         })
                         .catch(function () {
                             $scope.loading = false;

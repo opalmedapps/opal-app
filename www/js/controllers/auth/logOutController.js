@@ -11,7 +11,7 @@
         .module('MUHCApp')
         .controller('logOutController', logOutController);
 
-    logOutController.$inject = ['FirebaseService', '$state','RequestToServer','CleanUp', '$rootScope', 'UserAuthorizationInfo'];
+    logOutController.$inject = ['FirebaseService', '$state','RequestToServer','CleanUp', 'UserAuthorizationInfo'];
 
     /* @ngInject */
     function logOutController(FirebaseService, $state, RequestToServer, CleanUp, UserAuthorizationInfo) {

@@ -27,7 +27,7 @@
                     </div>
 
                     <div>{{"TRUST_DEVICE"|translate}}
-                        <span><ons-switch var="login.trustSwitch"></ons-switch></span>
+                        <span><ons-switch var="login.trustSwitch" ng-model="login.trusted"></ons-switch></span>
                     </div>
                     <div style="max-width:400px; margin-top: 5%">
                         <ons-button class="shadow-2" modifier="large" style="background-color: #4CAF50; font-size: x-large; font-weight: bolder;" ng-click="login.submit()" ng-disabled="loading">
