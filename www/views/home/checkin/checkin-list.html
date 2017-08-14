@@ -50,7 +50,7 @@
         </svg>
     </div>
 
-    <div ng-controller="WaitingTimeController as c" class="horizontal-center-outer">  <!-- ng-hide="checkIn.alert.type == 'info'"> -->
+    <div ng-controller="WaitingTimeController as c" class="horizontal-center-outer" ng-hide="checkIn.alert.type == 'info'">
         <div ng-repeat="app in c.appointments">
             <div style="text-align: center; margin-top: 20px; font-size: 20px; font-weight: bold">{{app.title}}</div>
             <div class="horizontal-center-inner" style="width: 90%">
@@ -64,9 +64,9 @@
             <div class="dividing-horizontal-line"></div>
 
             <div style="text-align: center; margin: 10px">
-              <div style="float: left">
-                <b>{{"AHEADOFYOU"|translate}}</b>:
-                <br> {{app.numPrevPatients}} {{app.numPrevPatients > 1 ? "Patients" : "Patient"}}
+                <div style="float: left">
+                    <b>{{"AHEADOFYOU"|translate}}</b>:
+                    <br> {{app.numPrevPatients}} {{app.numPrevPatients > 1 ? "Patients" : "Patient"}}
                 </div>
                 <div class="dividing-vertical-line"></div>
                 <div>
@@ -84,8 +84,8 @@
                 <button modifier="large" id="more-info-button" ng-click="c.goToWaitingTimeEstimates(app.appointmentAriaSer)">
                     <div style="color: #757575; position: relative; top: 50%;" align="center">
                       {{"MORE_INFO"|translate}}
-                    </div>
-                </button>
+                  </div>
+              </button>
             </div>
         </div>
     </div>
