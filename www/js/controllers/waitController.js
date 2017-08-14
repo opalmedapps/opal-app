@@ -25,7 +25,7 @@ myApp.controller('waitController',['$scope','$timeout','LabResults','$filter','U
         var page = personalNavigator.getCurrentPage();
         var test = page.options.param;
 
-        console.log(test);
+        
         $scope.selectedTest = test;
         $scope.testName = test.ComponentName || test.testResults[0].ComponentName;
         $scope.title = $scope.selectedTest.FacComponentName || $scope.selectedTest.testName;
@@ -80,7 +80,7 @@ myApp.controller('waitController',['$scope','$timeout','LabResults','$filter','U
         var maxChart = Math.max.apply(Math, vals)*1.05;
         var minChart = Math.min.apply(Math, vals)*0.95;
 
-        console.log("Chart range", minChart, maxChart);
+        
 
         /**********************************************/
 
@@ -97,7 +97,7 @@ myApp.controller('waitController',['$scope','$timeout','LabResults','$filter','U
             }
 
             updateStuffTimer = $timeout(function() {
-                console.log("resize detected!"); // Update the attribute based on window.innerWidth
+                
                 //Need a function here to resize the graph size
             }, 500);
         });

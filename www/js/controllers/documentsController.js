@@ -84,7 +84,7 @@ myApp.controller('SingleDocumentController', ['NavigatorParameters','Documents',
         var docParams = Documents.setDocumentsLanguage(parameters.Post);
         var pdfdoc, scale = 3, uint8pf;
         var viewerSize = window.innerWidth;
-        //console.log(document.getElementById('topholder'));
+        //
         var containerEl = document.getElementById('holder');
 
         $scope.documentObject = docParams;
@@ -103,7 +103,7 @@ myApp.controller('SingleDocumentController', ['NavigatorParameters','Documents',
         });
 
         $scope.$on('$destroy', function () {
-            console.log('on destroy');
+
             $scope.popoverDocsInfo.off('posthide');
             $scope.popoverDocsInfo.destroy();
         });
@@ -126,7 +126,7 @@ myApp.controller('SingleDocumentController', ['NavigatorParameters','Documents',
                     //Unable to get document from server
                     $scope.loading = false;
                     $scope.errorDownload = true;
-                    console.log('Unable to get document from server', error);
+
                 });
             }
 
@@ -220,7 +220,7 @@ myApp.controller('SingleDocumentController', ['NavigatorParameters','Documents',
         // function simply sets document for showing
         function setDocumentForShowing(document, url)
         {
-            console.log(url);
+
             //Determine if its a pdf or an docParams for small window preview.
             if(document.DocumentType ==='pdf')
             {
@@ -236,7 +236,7 @@ myApp.controller('SingleDocumentController', ['NavigatorParameters','Documents',
                 document.Content =  url.cdvUrl;
             }
 
-            console.log(document);
+
 
             //Set the documentObject
             $timeout(function()
@@ -263,7 +263,7 @@ myApp.controller('SingleDocumentController', ['NavigatorParameters','Documents',
                 }).catch(function(error)
                 {
                     //Unable to save document on server
-                    console.log('Unable to save document on device',error);
+
                 });
 
             } else {
@@ -285,19 +285,19 @@ myApp.controller('SingleDocumentController', ['NavigatorParameters','Documents',
         //             //window.open('https://docs.google.com/viewer?url='+docParams.Content+'&embedded=true', '_blank', 'location=yes');
         //             if(docParams.DocumentType=='pdf')
         //             {
-        //                 console.log(docParams.PathFileSystem);
+        //
         //                 $cordovaFileOpener2.open(
         //                     docParams.PathFileSystem,
         //                     'application/pdf'
         //                 ).then(function() {
         //                     // file opened successfully
         //                 }, function(err) {
-        //                     console.log(err);
+        //
         //                     if(err.status == 9)
         //                     {
         //                         NativeNotification.showNotificationAlert($filter('translate')("NOPDFPROBLEM"));
         //                     }
-        //                     console.log('boom');
+        //
         //                     // An error occurred. Show a message to the user
         //                 });
         //             }else{
@@ -325,7 +325,7 @@ myApp.controller('SingleDocumentController', ['NavigatorParameters','Documents',
                 contentLink: link
             };
 
-            console.log(contentOptions);
+
             personalNavigator.pushPage('./views/templates/content.html',contentOptions);
             $scope.popoverDocsInfo.hide();
         }

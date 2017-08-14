@@ -320,7 +320,7 @@ myApp.service('Doctors',['$q','LocalStorage','$filter','FileManagerService', fun
             for (var i = 0; i < Doctors.length; i++) {
                 if(Doctors[i].DoctorSerNum===userSerNum)
                 {
-                    console.log(Doctors[i]);
+
                     return Doctors[i];
                 }
             }
@@ -337,7 +337,7 @@ myApp.service('Doctors',['$q','LocalStorage','$filter','FileManagerService', fun
             for (var i = 0; i < Doctors.length; i++) {
                 if(Doctors[i].DoctorSerNum===userSerNum)
                 {
-                    console.log(i);
+
                     return i;
                 }
             }

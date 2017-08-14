@@ -166,7 +166,7 @@ myApp.service('Patient',['$q','$cordovaDevice','FileManagerService','LocalStorag
                     {
                         r.resolve(patientFields);
                     },function(error){
-                        console.log(error);
+
                         r.resolve(patientFields);
                     });
                 }else{
@@ -199,7 +199,7 @@ myApp.service('Patient',['$q','$cordovaDevice','FileManagerService','LocalStorag
             UserPreferences.setEnableSMS(patientFields.EnableSMS);
             //UserPreferences.setLanguage(patientFields.Language);
             var font = window.localStorage.getItem(UserAuthorizationInfo.getUsername() + 'fontSize');
-            console.log(font);
+
             UserPreferences.setFontSize(font||'large');
             FirstName=patientFields.FirstName;
             LastName=patientFields.LastName;

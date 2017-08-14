@@ -6,18 +6,13 @@
         .controller('HomeController', HomeController);
 
     HomeController.$inject = [
-        'Appointments', 'CheckInService', 'Patient',
-        'UpdateUI','$scope', '$timeout','$filter', '$location','Notifications','NavigatorParameters','NativeNotification',
-        'NewsBanner','DeviceIdentifiers','$anchorScroll', 'PlanningSteps', 'Permissions',
-        'UserPreferences', 'Constants', 'Logger', 'NetworkStatus'
+        'Appointments', 'CheckInService', 'Patient', 'UpdateUI','$scope', '$timeout','$filter', 'Notifications',
+        'NavigatorParameters', 'NewsBanner', 'PlanningSteps', 'Permissions', 'UserPreferences', 'NetworkStatus'
     ];
 
     /* @ngInject */
-    function HomeController(
-        Appointments, CheckInService, Patient,
-        UpdateUI,$scope, $timeout, $filter, $location, Notifications, NavigatorParameters, NativeNotification,
-        NewsBanner, DeviceIdentifiers, $anchorScroll, PlanningSteps, Permissions,
-        UserPreferences, Constants, Logger, NetworkStatus)
+    function HomeController(Appointments, CheckInService, Patient, UpdateUI, $scope, $timeout, $filter, Notifications,
+                            NavigatorParameters, NewsBanner, PlanningSteps, Permissions, UserPreferences, NetworkStatus)
     {
         var vm = this;
         vm.title = 'HomeController';
@@ -27,16 +22,17 @@
         vm.LastName = '';
         vm.ProfileImage = null;
         vm.language = 'EN';
-        vm.notifications = null;
+        vm.notifications = [];
         vm.statusDescription = null;
         vm.appointmentShown = null;
-        vm.allCheckedIn = true;
-        vm.todaysAppointments = null;
+        vm.allCheckedIn = false;
+        vm.todaysAppointments = [];
         vm.calledApp = null;
         vm.checkInMessage = '';
         vm.RoomLocation = '';
         vm.showHomeScreenUpdate = null;
         vm.loading = true;
+        vm.no_appointments = false;
 
         vm.homeDeviceBackButton = homeDeviceBackButton;
         vm.load = load;
@@ -51,35 +47,30 @@
 
         function activate() {
 
-
-
             // Initialize the navigator for push and pop of pages.
             NavigatorParameters.setParameters({'Navigator':'homeNavigator'});
             NavigatorParameters.setNavigator(homeNavigator);
-
-            // Banner alert for
-            NewsBanner.setAlertOffline();
 
             // Store the login time
             if(localStorage.getItem('locked')){
                 localStorage.removeItem('locked');
             }
 
-            // Sending registration id to server for push notifications.
-            //DeviceIdentifiers.sendIdentifiersToServer();
-
-            // Refresh the page on coming back from checkin
+            // // Refresh the page on coming back from checkin
             homeNavigator.on('prepop', function(event) {
                 if (event.currentPage.name == "./views/home/checkin/checkin-list.html") {
                     if(NetworkStatus.isOnline()) {
-                        setUpCheckin();
+                        setCheckin();
                     }
                 }
+            });
 
-            });
+            //This avoids constant repushing which causes bugs
             homeNavigator.on('prepush',function(event){
-            if(event.navigator._isPushing) event.cancel();       
+                if(event.navigator._isPushing) event.cancel();
             });
+
+            //release the watchers
             $scope.$on('$destroy',function()
             {
                 homeNavigator.off('prepop');
@@ -88,13 +79,20 @@
 
             Permissions.enablePermission('WRITE_EXTERNAL_STORAGE', 'PERMISSION_STORAGE_DENIED')
                 .catch(function (response) {
-                    console.log(response);
                     NewsBanner.showCustomBanner($filter('translate')(response.Message), '#333333', function(){}, 5000);
                 });
 
-            // Initialize the page data
+            // Initialize the page data if online
             if(NetworkStatus.isOnline()){
                 homePageInit();
+            }else if(Patient.getPatientId()){
+                //Basic patient information
+                vm.PatientId=Patient.getPatientId();
+                vm.FirstName = Patient.getFirstName();
+                vm.LastName = Patient.getLastName();
+                vm.ProfileImage=Patient.getProfileImage();
+                vm.language = UserPreferences.getLanguage();
+                vm.noUpcomingAppointments=false;
             }
         }
 
@@ -108,17 +106,23 @@
             vm.language = UserPreferences.getLanguage();
             vm.noUpcomingAppointments=false;
 
-            //Setting up status
-            settingStatus();
-            //Setting up next appointment
-            setUpNextAppointment();
-            //start by initilizing variables
-            setNotifications();
-            //setUpCheckin();
-            setUpCheckin();
+            //Set treatment metadata state
+            setTreatmentStatus();
+
+            //display next appointment
+            setNextAppointment();
+
+            //display new notifications, if any
+            if(Notifications.getNumberUnreadNotifications() > 0){
+                vm.notifications = Notifications.setNotificationsLanguage(Notifications.getUnreadNotifications());
+            }
+
+            vm.loading =false;
+
+            setCheckin();
         }
 
-        function settingStatus()
+        function setTreatmentStatus()
         {
             if(!PlanningSteps.isCompleted() && PlanningSteps.hasCT()) {
                 vm.statusDescription = "PLANNING";
@@ -129,141 +133,135 @@
             }
         }
 
-        function setUpNextAppointment()
+        function setNextAppointment()
         {
             //Next appointment information
             if(Appointments.isThereAppointments())
             {
                 if(Appointments.isThereNextAppointment()){
-                    var nextAppointment=Appointments.getUpcomingAppointment();
-                    vm.appointmentShown=nextAppointment;
+                    vm.appointmentShown=Appointments.getUpcomingAppointment();
                 }
             }
         }
 
-        function setNotifications()
+        // function setNotifications()
+        // {
+        //     // Get all new notifications
+        //
+        //     UpdateUI.update(['Notifications'])
+        //         .then(function () {
+        //             var notifications = Notifications.getNewNotifications();
+        //             if (notifications.length > 0)
+        //             {
+        //                 // Get the refresh types from the notification data. These correspond to the API call to the server
+        //                 var toLoad = notifications.reduce(
+        //                     function (accumulator, currentValue) {
+        //                         if (accumulator.includes(currentValue.refreshType)) {
+        //                             return accumulator
+        //                         } else {
+        //                             accumulator.push(currentValue.refreshType);
+        //                             return accumulator
+        //                         }
+        //                     }, []);
+        //
+        //                 // Get the data needed from server and set it in Opal
+        //                 UpdateUI.set(toLoad)
+        //                     .then(function () {
+        //                         vm.notifications = Notifications.setNotificationsLanguage(Notifications.getUnreadNotifications());
+        //
+        //                         vm.loading = false;
+        //
+        //                     })
+        //                     .catch(function (error) {
+        //                         console.error(error);
+        //                         vm.loading = false;
+        //                     })
+        //             } else {
+        //                 vm.loading = false;
+        //                 vm.notifications = [];
+        //             }
+        //         })
+        // }
+
+        function setCheckin()
         {
-            // Get all new notifications
 
-            UpdateUI.update(['Notifications'])
-                .then(function () {
-                    var notifications = Notifications.getNewNotifications();
-                    if (notifications.length > 0)
-                    {
-                        // Get the refresh types from the notification data. These correspond to the API call to the server
-                        var toLoad = notifications.reduce(
-                            function (accumulator, currentValue) {
-                                if (accumulator.includes(currentValue.refreshType)) {
-                                    return accumulator
-                                } else {
-                                    accumulator.push(currentValue.refreshType);
-                                    return accumulator
-                                }
-                            }, []);
+            //skip the following if the check in state has already been set..
+            if(CheckInService.getCheckInApps() !== null &&  CheckInService.getCheckInApps().length > 0){
+                //Case 1: An Appointment has checkin 0, not checked-in
 
-                        // Get the data needed from server and set it in Opal
-                        UpdateUI.set(toLoad)
-                            .then(function () {
-                                vm.notifications = Notifications.setNotificationsLanguage(Notifications.getUnreadNotifications());
-                                console.log(vm.notifications);
-                                vm.loading = false;
+                vm.todaysAppointments = CheckInService.getCheckInApps();
+                vm.allCheckedIn = CheckInService.areAllCheckedIn();
 
-                            })
-                            .catch(function (error) {
-                                console.error(error);
-                                vm.loading = false;
-                            })
-                    } else {
-                        vm.loading = false;
-                        vm.notifications = [];
-                    }
-                })
+                evaluateCheckIn();
 
+            }
+            else{
+                //Get checkin appointment for the day, gets the closest appointment to right now
+                vm.checkInMessage = 'CHECKING_SERVER';
 
+                //at this point we have all the appointments that are available for checking in to
+                var todaysAppointmentsToCheckIn = Appointments.getCheckinAppointment();
+                CheckInService.setCheckInApps(todaysAppointmentsToCheckIn);
 
-            // if(vm.notifications.length>0)
-            // {
-            //     if(Constants.app)
-            //     {
-            //         NewsBanner.showNotificationAlert(vm.notifications.length,function(result){
-            //             if (result && result.event) {
-            //                 console.log("The toast was tapped or got hidden, see the value of result.event");
-            //                 console.log("Event: " + result.event); // "touch" when the toast was touched by the user or "hide" when the toast geot hidden
-            //                 console.log("Message: " + result.message); // will be equal to the message you passed in
-            //                 //console.log("data.foo: " + result.data.foo); // .. retrieve passed in data here
-            //
-            //                 if (result.event === 'hide') {
-            //                     console.log("The toast has been shown");
-            //                 }
-            //                 if(result.event == 'touch')
-            //                 {
-            //                     console.log('going to the bottom');
-            //                     $location.hash("bottomNotifications");
-            //                     $anchorScroll();
-            //                 }
-            //             }
-            //         });
-            //     }
-            //
-            // }
+                vm.todaysAppointments = todaysAppointmentsToCheckIn;
+                if(vm.todaysAppointments)
+                {
+                    CheckInService.isAllowedToCheckIn().then(function (response) {
+                        var allCheckedIn = true;
+                        for (var app in vm.todaysAppointments){
+                            if (vm.todaysAppointments[app].Checkin == '0'){
+
+                                allCheckedIn = false;
+                            }
+                        }
+
+                        vm.allCheckedIn = allCheckedIn;
+                        CheckInService.setAllCheckedIn(allCheckedIn);
+
+                        evaluateCheckIn();
+
+                    }).catch(function(error){
+
+                        //NewsBanner.showCustomBanner($filter('translate')(error), '#333333', function(){}, 3000);
+                    });
+
+                }else{
+
+                    //Case where there are no appointments that day
+                    vm.checkInMessage = "CHECKIN_NONE";
+                    vm.no_appointments = true;
+                }
+            }
+
         }
 
-        function setUpCheckin()
-        {
-            //Get checkin appointment for the day, gets the closest appointment to right now
-            vm.checkInMessage = '';
-            vm.allCheckedIn = true;
-            var todaysAppointmentsToCheckIn = Appointments.getCheckinAppointment();
-            CheckInService.setCheckInApps(todaysAppointmentsToCheckIn);
-            console.log(todaysAppointmentsToCheckIn);
-            vm.todaysAppointments = todaysAppointmentsToCheckIn;
-            if(todaysAppointmentsToCheckIn)
-            {
-                CheckInService.isAllowedToCheckIn().then(function (response) {
-                    var allCheckedIn = true;
-                    for (var app in todaysAppointmentsToCheckIn){
-                        if (todaysAppointmentsToCheckIn[app].Checkin == '0'){
-                            allCheckedIn = false;
-                        }
-                    }
+        function evaluateCheckIn(){
+            //Case 1: An Appointment has checkin 0, not checked-in
+            if (!vm.allCheckedIn) {
 
-                    vm.allCheckedIn = allCheckedIn;
+                //Checkin message before appointment gets set and is changed only if appointment was checked into already from Aria
+                vm.checkInMessage = "CHECKIN_MESSAGE_BEFORE" + setPlural(vm.todaysAppointments);
+                vm.showHomeScreenUpdate = false;
 
-                    //Case 1: An Appointment has checkin 0, not checked-in
-                    if (!allCheckedIn) {
-
-                        //Checkin message before appointment gets set and is changed only if appointment was checked into already from Aria
-                        vm.checkInMessage = "CHECKIN_MESSAGE_BEFORE" + setPlural(todaysAppointmentsToCheckIn);
-                        vm.showHomeScreenUpdate = false;
-
-                        //Queries the server to find out whether or not an appointment was checked into
-                        CheckInService.checkCheckinServer(todaysAppointmentsToCheckIn[0]).then(function (data) {
-                            //If it has, then it simply changes the message to checkedin and queries to get an update
-                            if (data) {
-                                $timeout(function () {
-                                    vm.checkInMessage = "CHECKIN_MESSAGE_AFTER" + setPlural(todaysAppointmentsToCheckIn);
-                                    vm.showHomeScreenUpdate = true;
-                                });
-                            }
+                //Queries the server to find out whether or not an appointment was checked into
+                CheckInService.checkCheckinServer(vm.todaysAppointments[0]).then(function (data) {
+                    //If it has, then it simply changes the message to checkedin and queries to get an update
+                    if (data) {
+                        $timeout(function () {
+                            vm.checkInMessage = "CHECKIN_MESSAGE_AFTER" + setPlural(todaysAppointmentsToCheckIn);
+                            vm.showHomeScreenUpdate = true;
                         });
-                    } else {
-                        //They have been called to the appointment.
-
-                        var calledApp = Appointments.getRecentCalledAppointment();
-                        vm.calledApp = calledApp;
-                        vm.checkInMessage = calledApp.RoomLocation ? "CHECKIN_CALLED":"CHECKIN_MESSAGE_AFTER" + setPlural(todaysAppointmentsToCheckIn);
-                        vm.RoomLocation = calledApp.RoomLocation;
-                        vm.showHomeScreenUpdate = true;
                     }
-                }).catch(function(error){
-                    console.log(error);
-                    //NewsBanner.showCustomBanner($filter('translate')(error), '#333333', function(){}, 3000);
                 });
+            } else {
+                //They have been called to the appointment.
 
-            }else{
-                console.log("MEssage none");
-                //Case where there are no appointments that day
-                vm.checkInMessage = "CHECKIN_NONE";
+                var calledApp = Appointments.getRecentCalledAppointment();
+                vm.calledApp = calledApp;
+                vm.checkInMessage = calledApp.RoomLocation ? "CHECKIN_CALLED":"CHECKIN_MESSAGE_AFTER" + setPlural(vm.todaysAppointments);
+                vm.RoomLocation = calledApp.RoomLocation;
+                vm.showHomeScreenUpdate = true;
             }
         }
 
@@ -274,7 +272,7 @@
 
         //Function used by load
         function refresh(done){
-            console.log(done);
+
             done == undefined ? done = function () {} : done;
 
             UpdateUI.update('All').then(function()
@@ -283,7 +281,7 @@
                 homePageInit();
                 done();
             }).catch(function(error){
-                console.log(error);
+
                 done();
             });
             $timeout(function(){
@@ -293,7 +291,7 @@
 
         // For Android only, allows pressing the back button
         function homeDeviceBackButton(){
-            console.log('device button pressed do nothing');
+
             var mod = 'android';
             var msg = $filter('translate')('EXIT_APP');
 

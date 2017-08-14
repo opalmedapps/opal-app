@@ -12,7 +12,7 @@ angular.module('MUHCApp')
 					this.Notes.push(notes[notesKeys[i]]);
 				};
 				this.Notes=$filter('orderBy')(this.Notes,'DateAdded',true);
-				console.log(this.Notes);
+
 
 			},
 			getNotes:function(){
@@ -35,12 +35,12 @@ angular.module('MUHCApp')
 				objectToBackEnd.DateAdded=$filter('formatDateToFirebaseString')(note.DateAdded);
 				RequestToServer.sendRequest('NewNote',objectToBackEnd);
 				RequestToServer.sendRequest('Refresh');
-				console.log(this.Notes);
+
 
 
 			},
 			editNote:function(newNote){
-				console.log(newNote);
+
 				for (var i = 0; i < this.Notes.length; i++) {
 					if(this.Notes[i].NoteSerNum==newNote.NoteSerNum){
 						this.Notes[i]=newNote;

@@ -136,6 +136,7 @@ app.service('DeviceIdentifiers', [ 'RequestToServer', '$q','Constants','UserAuth
 
             var objectToSend = deviceIdentifiers;
             objectToSend.email = email;
+
             return RequestToServer.sendRequestWithResponse('SecurityQuestion', objectToSend, EncryptionService.hash('none'), 'passwordResetRequests', 'passwordResetResponses');
         },
         /**
