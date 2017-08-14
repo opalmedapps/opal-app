@@ -31,6 +31,7 @@ exports.patientAppointmentsTableFields=function()
         "Appointment.ScheduledStartTime, " +
         "Appointment.ScheduledEndTime, " +
         "Appointment.Checkin, " +
+        "Appointment.AppointmentAriaSer, " + 
         "Appointment.ReadStatus, " +
         "Resource.ResourceName, " +
         "Resource.ResourceType, " +

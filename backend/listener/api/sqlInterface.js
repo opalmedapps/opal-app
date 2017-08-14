@@ -908,18 +908,19 @@ function checkIfCheckedIntoAriaHelper(patientActivitySerNum)
 //Get time estimate from Ackeem's scripts
 exports.getTimeEstimate = function(appointmentAriaSer)
 {
+    console.log(appointmentAriaSer);
     var r = Q.defer();
-    var url = config. WT_PATH+appointmentAriaSer;
-    request(url,function(error, response, body)
+    var url = config.WT_PATH+appointmentAriaSer.Parameters;
+    console.log(url);
+    request(url, function(error, response, body)
     {
-        if(error){}//console.log('getTimeEstimate,sqlInterface',error);r.reject(error);}
         if(!error&&response.statusCode=='200')
         {
-            //console.log('Time Estimate ', body);
+            console.log('Time Estimate ', body);
             body = JSON.parse(body);
-
-            if(body.length>1){
-                r.resolve(body[0]);
+            body['appointmentAriaSer'] = appointmentAriaSer;
+            if(body.length>=1){
+                r.resolve(body);
             } else{
                 r.reject({Response:'No data from getEstimate script'});
             }
@@ -927,13 +928,6 @@ exports.getTimeEstimate = function(appointmentAriaSer)
             r.resolve(error);
         }
     });
-    // timeEstimate.getEstimate(result.AppointmentAriaSer).then(
-    //     function(estimate){
-    //         r.resolve( estimate);
-    //     },function(error)
-    //     {
-    //       r.resolve(error);
-    //   });
     return r.promise;
 };
 /**
@@ -1089,7 +1083,7 @@ exports.getQuestionnaires = function(requestObject){
         })
         .catch(function (error) {
             r.reject(error);
-        })
+        });
 
     return r.promise
 };

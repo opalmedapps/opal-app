@@ -64,7 +64,6 @@
             }
             planningTasks = tasks;
             LocalStorage.WriteToLocalStorage('Tasks', planningTasks);
-            console.log(planningTasks);
         }
 
         /**
@@ -124,8 +123,6 @@
         function getAllRecentTasks(){
 
             var physicianTask = getRecentPhysicianTask();
-            console.log(planningTasks);
-            console.log(physicianTask);
             return planningTasks.slice(physicianTask.index, planningTasks.length);
         }
 

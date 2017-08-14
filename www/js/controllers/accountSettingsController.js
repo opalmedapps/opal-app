@@ -56,10 +56,13 @@
                 });
 
             });
-
+            settingsNavigator.on('prepush',function(event){
+                if(event.navigator._isPushing) event.cancel();       
+            });
             //On destroy, dettach listener
-            $scope.$on('destroy', function() {
+            $scope.$on('$destroy', function() {
                 settingsNavigator.off('postpop');
+                settingsNavigator.off('prepush');
             });
 
         }
@@ -90,7 +93,7 @@
 
 })();
 
-
+// Controller manages updating the user parameters
 myApp.controller('ChangingSettingController',
     function($filter, $rootScope, FirebaseService, $translate, UserPreferences,
              Patient, RequestToServer, $scope, $timeout, UpdateUI, UserAuthorizationInfo,EncryptionService) {
@@ -102,14 +105,6 @@ myApp.controller('ChangingSettingController',
         //Sets all the account settings depeding on the field that needs to be changed
         function accountChangeSetUp() {
             //Mappings between parameters and translation
-            var fieldsMappings = {
-                "Font-size": "FONTSIZE",
-                "Language": "LANGUAGE",
-                "Tel. Number": "PHONENUMBER",
-                "Password": "PASSWORD",
-                "Email": "EMAIL",
-                "Nickname": "ALIAS"
-            };
             //Navigator parameter
             var page = settingsNavigator.getCurrentPage();
             var parameters = page.options.param;
@@ -118,22 +113,21 @@ myApp.controller('ChangingSettingController',
 
             //Instantiates values and parameters
             $scope.disableButton = true;
+            $scope.title = 'UPDATE';
             $scope.value = parameters;
-            console.log(fieldsMappings);
-            $scope.title = $filter('translate')('UPDATE');
-            $scope.valueLabel = $filter('translate')(fieldsMappings[parameters]);
+            $scope.valueLabel = parameters;
             $scope.personal = true;
             $scope.type1 = 'text';
             //Sets a watch on the values typed and runs the validation scripts for the respective values
             $scope.$watchGroup(['newValue', 'oldValue'], function() {
                 $scope.newUpdate = false;
-                if (parameters !== 'Language' && parameters !== 'Font-size') {
-                    if (parameters == 'Email') {
+                if (parameters !== 'LANGUAGE' && parameters !== 'FONTSIZE') {
+                    if (parameters == 'EMAIL') {
                         $scope.disableButton = !validateEmail();
-                    } else if (parameters == 'Password') {
+                    } else if (parameters == 'PASSWORD') {
                         console.log(validatePassword());
                         $scope.disableButton = !validatePassword();
-                    } else if (parameters == 'Tel. Number') {
+                    } else if (parameters == 'PHONENUMBER') {
                         $scope.disableButton = !validateTelNum();
                     } else {
                         console.log('alias, boom', $scope.actualValue, $scope.newValue);
@@ -144,15 +138,15 @@ myApp.controller('ChangingSettingController',
             });
 
             //Sets the instructions depending on the value to update
-            if (parameters === 'Nickname') {
+            if (parameters === 'ALIAS') {
                 $scope.actualValue = Patient.getAlias();
                 $scope.newValue = $scope.actualValue;
                 $scope.instruction = "ENTERYOURALIAS";
-            } else if (parameters === 'Tel. Number') {
+            } else if (parameters === 'PHONENUMBER') {
                 $scope.actualValue = Patient.getTelNum();
                 $scope.newValue = $scope.actualValue;
                 $scope.instruction = "ENTERNEWTELEPHONE";
-            } else if (parameters === 'Email') {
+            } else if (parameters === 'EMAIL') {
                 $scope.type1 = 'email';
                 $scope.type2 = 'password';
                 $scope.newValue = '';
@@ -160,16 +154,16 @@ myApp.controller('ChangingSettingController',
                 $scope.placeHolder = $filter('translate')("ENTERPASSWORD");
                 $scope.instruction = "ENTEREMAILADDRESS";
                 $scope.instructionOld = "ENTERPASSWORD";
-            } else if (parameters === 'Password') {
+            } else if (parameters === 'PASSWORD') {
                 $scope.type1 = 'password';
                 $scope.type2 = 'password';
                 $scope.newValue = '';
                 $scope.oldValue = '';
                 var label = $filter('translate')('ENTEROLD');
-                $scope.placeHolder = label + ' ' +$scope.valueLabel;
+                $scope.placeHolder = label + ' ' +$filter('translate')($scope.valueLabel);
                 $scope.instruction = "ENTERNEWPASSWORD";
                 $scope.instructionOld = "ENTEROLDPASSWORD";
-            } else if (parameters === 'Language') {
+            } else if (parameters === 'LANGUAGE') {
                 var value = UserPreferences.getLanguage();
                 $scope.instruction = 'SELECTLANGUAGE';
                 $scope.personal = false;
@@ -177,7 +171,9 @@ myApp.controller('ChangingSettingController',
                 $scope.pickLanguage = value;
                 $scope.firstOption = 'EN';
                 $scope.secondOption = 'FR';
-            } else if (parameters === 'Font-size') {
+                $scope.valueLabel = 'LANGUAGE';
+                $scope.title = 'UPDATE';
+            } else if (parameters === 'FONTSIZE') {
                 var value = UserPreferences.getFontSize();
                 $scope.firstOption = 'medium';
                 $scope.secondOption = 'large';
@@ -192,10 +188,16 @@ myApp.controller('ChangingSettingController',
         $scope.updateValue = function(val) {
             var objectToSend = {};
             objectToSend.NewValue = $scope.newValue;
+            console.log(val);
 
-            if (val == 'Password') {
+
+            if (val.toUpperCase() === 'PASSWORD') {
+
+                console.log("should be changing password");
+
+
                 changePassword();
-            } else if (val == 'Email') {
+            } else if (val.toUpperCase() === 'EMAIL') {
                 changeEmail();
             }else{
                 changeField(val, $scope.newValue);
@@ -205,17 +207,17 @@ myApp.controller('ChangingSettingController',
         //Function to change Nickname and phone number
         function changeField(type, value)
         {
-            var typeVal = (type == 'Nickname')?'Alias':'TelNum';
+            var typeVal = (type.toUpperCase() === 'NICKNAME')?'Alias':'TelNum';
             var objectToSend = {};
             objectToSend.NewValue = value;
             objectToSend.FieldToChange = typeVal;
             RequestToServer.sendRequest('AccountChange', objectToSend);
-            if (type == 'Nickname') Patient.setAlias(value);
+            if (type.toUpperCase() === 'NICKNAME') Patient.setAlias(value);
             else Patient.setTelNum(value);
             $scope.actualValue = value;
             $scope.newUpdate = true;
             $scope.alertClass = "bg-success updateMessage-success";
-            $scope.updateMessage = $filter('translate')("FIELD_UPDATED");
+            $scope.updateMessage = "FIELD_UPDATED";
             console.log($scope.updateMessage, $scope.alertClass);
 
         }
@@ -247,7 +249,6 @@ myApp.controller('ChangingSettingController',
             }).catch(handleAuthenticationError);
 
             function updateOnServer(){
-                console.log('sending on server.');
                 var objectToSend = {};
                 objectToSend.FieldToChange = 'Password';
                 objectToSend.NewValue = $scope.newValue;
@@ -259,7 +260,7 @@ myApp.controller('ChangingSettingController',
                         $timeout(function() {
 
                             $scope.alertClass = "bg-success updateMessage-success";
-                            $scope.updateMessage = $filter('translate')("PASSWORDUPDATED");
+                            $scope.updateMessage = "PASSWORDUPDATED";
                             $scope.newUpdate = true;
                         });
                     })
@@ -268,7 +269,7 @@ myApp.controller('ChangingSettingController',
                         $timeout(function () {
                             $scope.newUpdate = true;
                             $scope.alertClass = "bg-danger updateMessage-error";
-                            $scope.updateMessage = $filter('translate')("INTERNETERROR");
+                            $scope.updateMessage = "INTERNETERROR";
                         });
                     })
 
@@ -281,14 +282,14 @@ myApp.controller('ChangingSettingController',
                         $timeout(function () {
                             $scope.newUpdate = true;
                             $scope.alertClass = "bg-danger updateMessage-error";
-                            $scope.updateMessage = $filter('translate')("INVALID_PASSWORD");
+                            $scope.updateMessage = "INVALID_PASSWORD";
                         });
                         break;
                     default:
                         $timeout(function () {
                             $scope.newUpdate = true;
                             $scope.alertClass = "bg-danger updateMessage-error";
-                            $scope.updateMessage = $filter('translate')("INTERNETERROR");
+                            $scope.updateMessage = "INTERNETERROR";
                         });
                 }
             }
@@ -313,7 +314,7 @@ myApp.controller('ChangingSettingController',
                 RequestToServer.sendRequest('AccountChange', objectToSend);
                 $timeout(function() {
                     $scope.alertClass = "bg-success updateMessage-success";
-                    $scope.updateMessage = $filter('translate')("UPDATED_EMAIL");
+                    $scope.updateMessage = "UPDATED_EMAIL";
                     $scope.newUpdate = true;
                 });
             }
@@ -324,21 +325,21 @@ myApp.controller('ChangingSettingController',
                         $timeout(function() {
                             $scope.alertClass = "bg-danger updateMessage-error";
                             $scope.newUpdate = true;
-                            $scope.updateMessage = $filter('translate')("INVALID_EMAIL");
+                            $scope.updateMessage = "INVALID_EMAIL";
                         });
                         break;
                     case "auth/email-already-in-use":
                         $timeout(function() {
                             $scope.alertClass = "bg-danger updateMessage-error";
                             $scope.newUpdate = true;
-                            $scope.updateMessage = $filter('translate')("EMAIL_TAKEN");
+                            $scope.updateMessage = "EMAIL_TAKEN";
                         });
                         break;
                     default:
                         $timeout(function() {
                             $scope.alertClass = "bg-danger updateMessage-error";
                             $scope.newUpdate = true;
-                            $scope.updateMessage = $filter('translate')("INTERNETERROR");
+                            $scope.updateMessage = "INTERNETERROR";
                         });
                         break;
                 }
@@ -372,44 +373,46 @@ myApp.controller('ChangingSettingController',
                     $timeout(function () {
                         $scope.newUpdate = true;
                         $scope.alertClass = "bg-danger updateMessage-error";
-                        $scope.updateMessage = $filter('translate')("INVALID_ASSOCIATION");
+                        $scope.updateMessage = "INVALID_ASSOCIATION";
                     });
                     break;
                 case "auth/user-not-found":
                     $timeout(function () {
                         $scope.newUpdate = true;
                         $scope.alertClass = "bg-danger updateMessage-error";
-                        $scope.updateMessage = $filter('translate')("INVALID_USER");
+                        $scope.updateMessage = "INVALID_USER";
                     });
                     break;
                 case "auth/invalid-credential":
                     $timeout(function () {
                         $scope.newUpdate = true;
                         $scope.alertClass = "bg-danger updateMessage-error";
-                        $scope.updateMessage = $filter('translate')("INVALID_CREDENTIAL");
+                        $scope.updateMessage = "INVALID_CREDENTIAL";
                     });
                     break;
                 case "auth/invalid-email":
                     $timeout(function () {
                         $scope.newUpdate = true;
                         $scope.alertClass = "bg-danger updateMessage-error";
-                        $scope.updateMessage = $filter('translate')("INVALID_EMAIL");
+                        $scope.updateMessage = "INVALID_EMAIL";
                     });
                     break;
                 case "auth/wrong-password":
                     $timeout(function () {
                         $scope.newUpdate = true;
                         $scope.alertClass = "bg-danger updateMessage-error";
-                        $scope.updateMessage = $filter('translate')("INVALID_PASSWORD");
+                        $scope.updateMessage = "INVALID_PASSWORD";
                     });
                     break;
                 default:
                     $timeout(function () {
                         $scope.newUpdate = true;
                         $scope.alertClass = "bg-danger updateMessage-error";
-                        $scope.updateMessage = $filter('translate')("INTERNETERROR");
+                        $scope.updateMessage = "INTERNETERROR";
                     });
             }
         }
+
+        
 
     });

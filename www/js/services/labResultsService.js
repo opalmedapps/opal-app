@@ -34,6 +34,8 @@ myApp.service('LabResults',['$filter','LocalStorage','RequestToServer','$q',
         var testResultsByCategory = {};
         var testResultsByDateArray=[];
         var testResultsByTypeArray=[];
+        var lastUpdated = 0;
+
         //var testResultsToLocalStorage=[];
         var CATEGORY_ONE = 'Complete Blood Count'; // WBC, RBC, HGB, HCT, Platelet, Neutrophils, Eosinophils
         var CATEGORY_TWO = 'Electrolytes'; // Sodium, potassium, glucose, creatinine, calcium, corrected calcium, magnesium
@@ -144,6 +146,7 @@ myApp.service('LabResults',['$filter','LocalStorage','RequestToServer','$q',
 
                 var deferred = $q.defer();
                 this.destroy();
+                lastUpdated = Date.now();
                 RequestToServer.sendRequestWithResponse('LabResults')
                     .then(function (response) {
                         if (response.Code == '3') {
@@ -178,6 +181,7 @@ myApp.service('LabResults',['$filter','LocalStorage','RequestToServer','$q',
              **/
             getTestResultsArrayByType:function()
             {
+                console.log(testResultsByTypeArray);
                 return testResultsByTypeArray;
             },
 
@@ -190,7 +194,7 @@ myApp.service('LabResults',['$filter','LocalStorage','RequestToServer','$q',
              **/
             getTestResultsArrayByDate:function()
             {
-                console.log(testResultsByDateArray);
+                // console.log(testResultsByDateArray);
                 return testResultsByDateArray;
             },
 
@@ -241,7 +245,15 @@ myApp.service('LabResults',['$filter','LocalStorage','RequestToServer','$q',
                 testResultsByCategory = {};
                 testResultsByDateArray=[];
                 testResultsByTypeArray=[];
+                lastUpdated = 0;
                 //testResultsToLocalStorage=[];
+            },
+
+            /**
+             *
+             */
+            getLastUpdated : function () {
+                return lastUpdated;
             }
         }
     }]);

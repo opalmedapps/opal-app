@@ -61,8 +61,8 @@ myApp.service('Notifications',['$filter','RequestToServer','LocalStorage','Annou
         var notificationTypes={
             'Document':
                 {
-                    icon:'fa fa-folder',
-                    color:'darkorange',
+                    icon:'ion-android-document',
+                    color:'#90CAF9',
                     NameEN:'AliasName_EN',
                     NameFR:'AliasName_FR',
                     SerNum:'DocumentSerNum',
@@ -74,8 +74,8 @@ myApp.service('Notifications',['$filter','RequestToServer','LocalStorage','Annou
                 },
             'UpdDocument':
                 {
-                    icon:'fa fa-folder',
-                    color:'orange',
+                    icon:'ion-android-document',
+                    color:'#BA68C8',
                     NameEN:'AliasName_EN',
                     NameFR:'AliasName_FR',
                     SerNum:'DocumentSerNum',
@@ -88,7 +88,7 @@ myApp.service('Notifications',['$filter','RequestToServer','LocalStorage','Annou
             'RoomAssignment':
                 {
                     icon:'fa fa-calendar-o',
-                    color:'red',
+                    color:'#ffc107',
                     NameEN:'Description_EN',
                     NameFR: 'Description_FR',
                     SerNum:'AppointmentSerNum',
@@ -100,7 +100,7 @@ myApp.service('Notifications',['$filter','RequestToServer','LocalStorage','Annou
             'TxTeamMessage':
                 {
                     icon:'fa fa-user-md ',
-                    color:'Olive',
+                    color:'#2196F3',
                     NameEN:'PostName_EN',
                     NameFR: 'PostName_FR',
                     SerNum:'TxTeamMessageSerNum',
@@ -112,7 +112,7 @@ myApp.service('Notifications',['$filter','RequestToServer','LocalStorage','Annou
                 },
             'Announcement':{
                 icon:'fa fa-bullhorn',
-                color:'navy',
+                color:'#FFC107',
                 NameEN:'PostName_EN',
                 NameFR: 'PostName_FR',
                 SerNum:'AnnouncementSerNum',
@@ -124,7 +124,7 @@ myApp.service('Notifications',['$filter','RequestToServer','LocalStorage','Annou
             },
             'EducationalMaterial':{
                 icon:'fa fa-book',
-                color:'purple',
+                color:'#66BB6A',
                 SerNum:'EducationalMaterialSerNum',
                 NameEN:'Name_EN',
                 NameFR:'Name_FR',
@@ -136,15 +136,15 @@ myApp.service('Notifications',['$filter','RequestToServer','LocalStorage','Annou
             },
             'NextAppointment':{
                 icon:'fa fa-calendar',
-                color:'DarkSlateGrey',
+                color:'#ffc107',
                 SerNum:'AppointmentSerNum',
                 searchFunction:Appointments.getAppointmentBySerNum,
                 PageUrl:Appointments.getAppointmentUrl,
                 refreshType: 'Appointments'
             },
             'AppointmentModified':{
-                icon:'fa fa-hospital-o',
-                color:'DarkSlateBlue',
+                icon:'fa fa-calendar',
+                color:'#ffc107',
                 NameEN:'AppointmentType_EN',
                 NameFR: 'AppointmentType_FR',
                 SerNum:'AppointmentSerNum',
@@ -157,16 +157,16 @@ myApp.service('Notifications',['$filter','RequestToServer','LocalStorage','Annou
             'NewMessage':{
                 SerNum:'DocumentSerNum',
                 icon:'ion-chatbubbles',
-                color:'DeepSkyBlue'
+                color:'#0091EA'
             },
             'NewLabResult':{
                 SerNum:'DocumentSerNum',
                 icon:'ion-erlenmeyer-flask',
-                color:'purple'
+                color:'#8BC34A'
             },
             'Other':{
                 icon:'fa fa-bell',
-                color:'darkred'
+                color:'#FFC107'
             }
         };
 
@@ -232,6 +232,7 @@ myApp.service('Notifications',['$filter','RequestToServer','LocalStorage','Annou
             var temp=angular.copy(notifications);
             for (var i = 0; i < notifications.length; i++) {
                 //if (temp[i].NotificationType == 'RoomAssignment') continue;
+                if(typeof notificationTypes[temp[i].NotificationType] =='undefined') break;
                 temp[i].Custom =  notificationTypes[temp[i].NotificationType].Custom;
                 temp[i].Icon = notificationTypes[temp[i].NotificationType].icon;
                 temp[i].Color = notificationTypes[temp[i].NotificationType].color;
@@ -278,7 +279,7 @@ myApp.service('Notifications',['$filter','RequestToServer','LocalStorage','Annou
             {
                 searchAndDeleteNotifications(notifications);
                 addUserNotifications(notifications);
-                lastUpdated = Date.now();
+                //lastUpdated = Date.now();
             },
             /**
              *@ngdoc method
@@ -459,7 +460,7 @@ myApp.service('Notifications',['$filter','RequestToServer','LocalStorage','Annou
                 var _this = this;
                 RequestToServer.sendRequestWithResponse('NotificationsAll')
                     .then(function (response) {
-                        _this.updateUserNotifications(response.Data);
+                        _this.setUserNotifications(response.Data);
                         r.resolve({});
                     })
                     .catch(function (error) {
@@ -467,8 +468,15 @@ myApp.service('Notifications',['$filter','RequestToServer','LocalStorage','Annou
                     });
 
                 return r.promise;
-            }
+            },
 
+            /**
+             *
+             */
+            getLastUpdated: function () {
+                "use strict";
+                return lastUpdated;
+            }
         };
 
     }]);

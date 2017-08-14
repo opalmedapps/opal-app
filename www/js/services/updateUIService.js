@@ -236,9 +236,7 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors',
             {
                 setServices(response.Data, 'setOnline').then(function()
                 {
-                    console.log(response.Timestamp);
                     initTimestamps(response.Timestamp);
-                    console.log(lastUpdateTimestamp);
                     r.resolve(true);
                 });
             }).catch(function(error) {
@@ -305,7 +303,6 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors',
 
         function initTimestamps(time)
         {
-            console.log(time);
             for(var field in lastUpdateTimestamp)
             {
                 lastUpdateTimestamp[field] = time;
@@ -320,18 +317,14 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors',
         function updateSection(parameters)
         {
             var r = $q.defer();
-            console.log(parameters);
-            console.log(findSmallestTimestamp(parameters));
-            RequestToServer.sendRequestWithResponse('Refresh',{Fields:parameters, Timestamp:findSmallestTimestamp(parameters)}).then(
+            RequestToServer.sendRequestWithResponse('Refresh',{Fields:parameters}).then(
                 function(data)
                 {
-                    console.log(data);
                     if(data.Data =="Empty")
                     {
                         updateTimestamps(parameters, data.Timestamp);
                         r.resolve(true);
                     }else{
-                        console.log("calling service updates")
                         updateServices(data.Data).then(function()
                         {
                             updateTimestamps(parameters, data.Timestamp);
@@ -346,7 +339,6 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors',
                 }else{
                     if(error.Code =='2') NativeNotification.showNotificationAlert($filter('translate')("ERRORCONTACTINGHOSPITAL"));
                 }
-                console.log(error);
                 r.reject(error);
             });
             return r.promise;
@@ -377,7 +369,7 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors',
             RequestToServer.sendRequestWithResponse('Refresh',{Fields:parameters}).then(
                 function(data)
                 {
-                    if(data.Data =="Empty")
+                    if(data.Data === "Empty")
                     {
                         updateTimestamps(parameters, data.Timestamp);
                         r.resolve(true);
@@ -390,8 +382,7 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors',
                     }
                 }).catch(function(error)
             {
-                console.log(error);
-                if(error.Code =='2'||error.Response == 'timeout') NativeNotification.showNotificationAlert($filter('translate')("ERRORCONTACTINGHOSPITAL"));
+                if(error.Code ==='2'||error.Response === 'timeout') NativeNotification.showNotificationAlert($filter('translate')("ERRORCONTACTINGHOSPITAL"));
                 r.reject(error);
             });
             return r.promise;
@@ -401,7 +392,6 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors',
          */
         function findSmallestTimestamp(content)
         {
-            console.log(content);
             if(content=='All')
             {
                 return lastUpdateTimestamp.All;
@@ -433,7 +423,6 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors',
              **/
             update:function(parameters)
             {
-                console.log("Called update");
                 return updateSection(parameters);
             },
             /**
@@ -445,7 +434,6 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors',
              **/
             set:function(parameters)
             {
-                console.log("Called set");
                 return setSection(parameters);
             },
             /**
@@ -457,7 +445,6 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors',
              **/
             init:function()
             {
-                console.log("Called init");
                 return initServicesFromServer([
                     'Patient',
                     'Appointments',

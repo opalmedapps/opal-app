@@ -2,7 +2,7 @@
 // Author: David Herrera on Summer 2016, Email:davidfherrerar@gmail.com
 //
 var myApp=angular.module('MUHCApp');
-myApp.controller('FeedbackController',['Patient', 'RequestToServer','$scope', function(Patient, RequestToServer, $scope){
+myApp.controller('FeedbackController',['Patient', 'RequestToServer', 'NetworkStatus','$scope', function(Patient, RequestToServer, NetworkStatus, $scope){
 	$scope.suggestionText='';
 	$scope.FirstName=Patient.getFirstName();
 	$scope.LastName=Patient.getLastName();
@@ -11,10 +11,9 @@ myApp.controller('FeedbackController',['Patient', 'RequestToServer','$scope', fu
 	$scope.$watch('feedbackText',function(){
 		if(($scope.feedbackText===''||!$scope.feedbackText))
 		{
-			$scope.enableSend=false;
-			if(!$scope.emptyRating) $scope.enableSend=true;
+			$scope.enableSend = !$scope.emptyRating;
 		}else{
-			$scope.enableSend=true;
+			$scope.enableSend = !!NetworkStatus.isOnline();
 		}
 
 	});
@@ -24,13 +23,12 @@ myApp.controller('FeedbackController',['Patient', 'RequestToServer','$scope', fu
 			RequestToServer.sendRequest('Feedback',{FeedbackContent: $scope.feedbackText, AppRating:3, Type: type});
 			$scope.feedbackText='';
 			$scope.submitted=true;
-			console.log('submmited');
-			$scope.enableSend = false;	
+			$scope.enableSend = false;
 		}
-		
-
 	};
+
 	initRater();
+
 	function initRater()
 	{
         $scope.rate = [];
@@ -43,6 +41,7 @@ myApp.controller('FeedbackController',['Patient', 'RequestToServer','$scope', fu
 			});
 		}
 	}
+
 	$scope.rateMaterial = function(index)
 	{
 		$scope.enableSend=true;
@@ -57,7 +56,4 @@ myApp.controller('FeedbackController',['Patient', 'RequestToServer','$scope', fu
 			$scope.rate[j].Icon = 'ion-ios-star-outline';
 		}
 	};
-
-
-
 }]);

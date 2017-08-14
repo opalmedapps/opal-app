@@ -3,6 +3,9 @@
     <ons-toolbar fixed-style>
         <div class="center" ng-class="fontSizeTitle">{{"ACCOUNT"|translate}}</div>
     </ons-toolbar>
+
+    <network-banner></network-banner>
+
     <div class="container">
         <a ng-click="tabbar.setActiveTab(4)">
             <ons-row style="padding:5px">
@@ -30,19 +33,19 @@
     <div class="settings-header" ng-class="fontSizeTitle">{{"PERSONAL"|translate}}</div>
 
     <ons-list class="settings-list">
-        <!--<ons-list-item modifier="chevron" ng-click="settingsNavigator.pushPage('views/settings/update-account-field.html', {param:'Nickname'},{ animation : 'slide' } )" ng-class="fontSizeDesc">
+        <!--<ons-list-item modifier="chevron" ng-click="settingsNavigator.pushPage('views/settings/update-account-field.html', {param:'ALIAS'},{ animation : 'slide' } )" ng-class="fontSizeDesc">
            {{"ALIAS"|translate}}
            <span class="list-item-note lucent">{{Alias|limitLetters:7}}</span>
          </ons-list-item>-->
-        <ons-list-item modifier="chevron" ng-click="settingsNavigator.pushPage('views/settings/update-account-field.html', {param:'Email'},{ animation : 'slide' } )" ng-class="fontSizeDesc">
+        <ons-list-item modifier="chevron" ng-click="settingsNavigator.pushPage('views/settings/update-account-field.html', {param:'EMAIL'},{ animation : 'slide' } )" ng-class="fontSizeDesc">
             {{"EMAIL"|translate}}
             <span class="list-item-note lucent">{{asc.Email|limitLetters:12}}</span>
         </ons-list-item>
-        <ons-list-item modifier="chevron" ng-click="settingsNavigator.pushPage('views/settings/update-account-field.html', {param:'Password'},{ animation : 'slide' } )" ng-class="fontSizeDesc">
+        <ons-list-item modifier="chevron" ng-click="settingsNavigator.pushPage('views/settings/update-account-field.html', {param:'PASSWORD'},{ animation : 'slide' } )" ng-class="fontSizeDesc">
             {{"PASSWORD"|translate}}
             <span type="password" class="list-item-note lucent">{{asc.passFill|limitTo:6}}</span>
         </ons-list-item>
-        <ons-list-item modifier="chevron" ng-click="settingsNavigator.pushPage('views/settings/update-account-field.html', {param:'Tel. Number'},{ animation : 'slide' } )" ng-class="fontSizeDesc">
+        <ons-list-item modifier="chevron" ng-click="settingsNavigator.pushPage('views/settings/update-account-field.html', {param:'PHONENUMBER'},{ animation : 'slide' } )" ng-class="fontSizeDesc">
             {{"PHONENUMBER"|translate}}
             <span class="list-item-note lucent" >{{asc.TelNum|FormatPhoneNumber}}</span>
         </ons-list-item>
@@ -50,11 +53,11 @@
 
     <div class="settings-header" ng-class="fontSizeTitle">{{"PREFERENCES"|translate}}</div>
     <ons-list>
-        <ons-list-item modifier="chevron" ng-click="settingsNavigator.pushPage('views/settings/update-account-field.html', {param:'Language'},{ animation : 'slide' } )" ng-class="fontSizeDesc">
+        <ons-list-item modifier="chevron" ng-click="settingsNavigator.pushPage('views/settings/update-account-field.html', {param:'LANGUAGE'},{ animation : 'slide' } )" ng-class="fontSizeDesc">
             {{"LANGUAGE"|translate}}
             <span class="list-item-note lucent">{{Language}}</span>
         </ons-list-item>
-        <ons-list-item modifier="chevron" ng-click="settingsNavigator.pushPage('views/settings/update-account-field.html', {param:'Font-size'},{ animation : 'slide' } )" ng-class="fontSizeDesc">
+        <ons-list-item modifier="chevron" ng-click="settingsNavigator.pushPage('views/settings/update-account-field.html', {param:'FONTSIZE'},{ animation : 'slide' } )" ng-class="fontSizeDesc">
             {{"FONTSIZE"|translate}}
         </ons-list-item>
         <!--<ons-list-item>
@@ -75,8 +78,8 @@
     </ons-list>
     <ons-list class="settings-list" ng-class="fontSizeDesc">
         <ons-list-item ng-click="$state.go('logOut')" modifier="tappable">
-            <ons-icon icon="fa fa-sign-out" style="opacity: 0.8"></ons-icon>
             {{"SIGNOUT"|translate}}
+            <ons-icon icon="fa fa-sign-out"  style="margin-top: 10px; color:#1284FF" class="pull-right"></ons-icon>
         </ons-list-item>
     </ons-list>
 

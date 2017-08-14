@@ -1,32 +1,30 @@
-<ons-page ng-controller="DiagnosesController as diag" ng-device-backbutton="educationDeviceBackButton()">
-  <ons-toolbar>
-      <div class="left">
-        <ons-back-button>{{"BACK"|translate}}</ons-back-button>
-      </div>
-    <div class="center">{{"DIAGNOSIS"|translate}}</div>
-  </ons-toolbar>
-  <div>
-    <ons-list class="settings-list" >
-      <ons-list-item class="item" ng-repeat="diagnosis in diag.diagnoses | orderBy: '-CreationDate' ">
-        <ons-row style="padding:5px;">
-          <ons-col width="50px" align="center">
-            <i class="ion-ios-medical iconHomeView" style="color:darkblue"></i>
-          </ons-col>
-            <ons-col align="center">
-               <span class="item-title" ng-class="fontSizeTitle"> {{"DIAGNOSIS"|translate}}</span>
-                <span class="item-desc" ng-class="fontSizeDesc">
-                  {{diagnosis["Description_"+diag.language]}}
-                </span><br>
-               <span class="item-title" ng-class="fontSizeTitle"> {{"DIAGNOSIS_DATE"|translate}}:</span>
-                  <span class="item-desc" ng-class="fontSizeDesc">
-                      {{diagnosis.CreationDate|date:'fullDate'}}
-                  </span>
-            </ons-col>
-        </ons-row>
-      </ons-list-item>
-    </ons-list>
+<ons-page ng-controller="DiagnosesController as diag">
+    <ons-toolbar fixed-style>
+        <div class="left"><ons-back-button>{{"BACK"|translate}}</ons-back-button></div>
+        <div class="center" ng-class="fontSizeTitle">{{"DIAGNOSIS"|translate}}</div>
+    </ons-toolbar>
+    <network-banner></network-banner>
+    <div>
+        <ons-list class="settings-list" ng-repeat="diagnosis in diag.diagnoses | orderBy: '-CreationDate' ">
+            <ons-list-header   class="person-list-header" ng-class="fontSizeTitle" ng-show="diag.showHeader($index)">{{diagnosis.CreationDate|date:'fullDate'}}</ons-list-header>
+            <ons-list-item class="item">
+                <ons-row style="padding:5px;">
+                    <ons-col width="50px" align="center">
+                        <ons-icon icon="fa-heartbeat iconHomeView" style="color:#f44336"></ons-icon>
+                    </ons-col>
+                    <ons-col align="center">
+                        <span class="item-title" ng-class="fontSizeTitle"> {{"DIAGNOSIS"|translate}}</span>
+                        <span class="item-desc" ng-class="fontSizeDesc">{{diagnosis["Description_"+ 'EN']}}</span><br>
+                        <!--<span class="item-title" ng-class="fontSizeTitle"> {{"DIAGNOSIS_DATE"|translate}}:</span>
+                        <span class="item-desc" ng-class="fontSizeDesc">{{diagnosis.CreationDate|date:'fullDate'}}</span>-->
+                    </ons-col>
+                </ons-row>
+            </ons-list-item>
+        </ons-list>
 
-</div>
+    </div>
 
-
+    <div style="color:grey;margin-top:25vh" ng-show="diag.noDiagnosis" align="center" ng-class="fontSizeTitle">
+        {{"NODIAGNOSIS"|translate}}
+    </div>
 </ons-page>
