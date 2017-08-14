@@ -7,17 +7,17 @@
 
     HomeController.$inject = [
         'Appointments', 'CheckInService', 'Patient',
-        'UpdateUI', '$timeout','$filter', '$location','Notifications','NavigatorParameters','NativeNotification',
-        'NewsBanner','DeviceIdentifiers','$anchorScroll', 'PlanningSteps', 'Permissions',
-        'UserPreferences', 'Constants', 'Logger'
+        'UpdateUI','$scope', '$timeout','$filter', '$location','Notifications','NavigatorParameters','NativeNotification',
+        'NewsBanner','DeviceIdentifiers','$anchorScroll', 'PlanningSteps', 'Permissions', 'TimeEstimate',
+        'UserPreferences', 'Constants', 'Logger', 'NetworkStatus'
     ];
 
     /* @ngInject */
     function HomeController(
         Appointments, CheckInService, Patient,
-        UpdateUI, $timeout, $filter, $location, Notifications, NavigatorParameters, NativeNotification,
-        NewsBanner, DeviceIdentifiers, $anchorScroll, PlanningSteps, Permissions,
-        UserPreferences, Constants, Logger)
+        UpdateUI,$scope, $timeout, $filter, $location, Notifications, NavigatorParameters, NativeNotification,
+        NewsBanner, DeviceIdentifiers, $anchorScroll, PlanningSteps, Permissions, TimeEstimate,
+        UserPreferences, Constants, Logger, NetworkStatus)
     {
         var vm = this;
         vm.title = 'HomeController';
@@ -37,6 +37,8 @@
         vm.RoomLocation = '';
         vm.showHomeScreenUpdate = null;
         vm.loading = true;
+        vm.checkedInAppointments = null;
+        vm.waitingTimeEstimates = [];
 
         vm.homeDeviceBackButton = homeDeviceBackButton;
         vm.load = load;
@@ -44,11 +46,11 @@
         vm.goToNotification = goToNotification;
         vm.goToAppointments = goToAppointments;
         vm.goToCheckinAppointments = goToCheckinAppointments;
+        //vm.goToWaitingTimeEstimates = goToWaitingTimeEstimates;
 
         activate();
 
         ////////////////
-
         function activate() {
 
 
@@ -71,20 +73,30 @@
             // Refresh the page on coming back from checkin
             homeNavigator.on('prepop', function(event) {
                 if (event.currentPage.name == "./views/home/checkin/checkin-list.html") {
-                    console.log('prepop');
-                    setUpCheckin();
-                    //refresh();
+                    if(NetworkStatus.isOnline()) {
+                        setUpCheckin();
+                    }
                 }
+
+            });
+            homeNavigator.on('prepush',function(event){
+            if(event.navigator._isPushing) event.cancel();       
+            });
+            $scope.$on('$destroy',function()
+            {
+                homeNavigator.off('prepop');
+                homeNavigator.off('prepush');
             });
 
             Permissions.enablePermission('WRITE_EXTERNAL_STORAGE', 'PERMISSION_STORAGE_DENIED')
                 .catch(function (response) {
-                    console.log(response);
                     NewsBanner.showCustomBanner($filter('translate')(response.Message), '#333333', function(){}, 5000);
                 });
 
             // Initialize the page data
-            homePageInit();
+            if(NetworkStatus.isOnline()){
+                homePageInit();
+            }
         }
 
         function homePageInit()
@@ -95,7 +107,6 @@
             vm.LastName = Patient.getLastName();
             vm.ProfileImage=Patient.getProfileImage();
             vm.language = UserPreferences.getLanguage();
-            console.log(vm.language);
             vm.noUpcomingAppointments=false;
 
             //Setting up status
@@ -110,7 +121,6 @@
 
         function settingStatus()
         {
-            console.log('Completed planning? ', PlanningSteps.isCompleted());
             if(!PlanningSteps.isCompleted() && PlanningSteps.hasCT()) {
                 vm.statusDescription = "PLANNING";
             }else if (PlanningSteps.isCompleted()){
@@ -136,7 +146,7 @@
         {
             // Get all new notifications
 
-            UpdateUI.set(['Notifications'])
+            UpdateUI.update(['Notifications'])
                 .then(function () {
                     var notifications = Notifications.getNewNotifications();
                     if (notifications.length > 0)
@@ -151,7 +161,6 @@
                                     return accumulator
                                 }
                             }, []);
-                        console.log(toLoad);
 
                         // Get the data needed from server and set it in Opal
                         UpdateUI.set(toLoad)
@@ -207,18 +216,21 @@
             vm.allCheckedIn = true;
             var todaysAppointmentsToCheckIn = Appointments.getCheckinAppointment();
             CheckInService.setCheckInApps(todaysAppointmentsToCheckIn);
-            console.log(todaysAppointmentsToCheckIn);
             vm.todaysAppointments = todaysAppointmentsToCheckIn;
             if(todaysAppointmentsToCheckIn)
             {
                 CheckInService.isAllowedToCheckIn().then(function (response) {
                     var allCheckedIn = true;
+                    vm.checkedInAppointments = [];
                     for (var app in todaysAppointmentsToCheckIn){
                         if (todaysAppointmentsToCheckIn[app].Checkin == '0'){
-                            console.log("Hes not checked in Jim");
                             allCheckedIn = false;
                         }
+                        else {
+                            vm.checkedInAppointments.push(todaysAppointmentsToCheckIn[app]);
+                        }
                     }
+                    requestEstimate();
 
                     vm.allCheckedIn = allCheckedIn;
 
@@ -240,7 +252,7 @@
                             }
                         });
                     } else {
-                        //Case:2 Appointment already checked-in show the message for 'you are checked in...' and query for estimate
+                        //They have been called to the appointment.
 
                         var calledApp = Appointments.getRecentCalledAppointment();
                         vm.calledApp = calledApp;
@@ -256,8 +268,43 @@
             }else{
                 console.log("MEssage none");
                 //Case where there are no appointments that day
-                vm.checkInMessage = "CHECKIN_NONE";
+                //vm.checkInMessage = "CHECKIN_NONE";
             }
+        }
+
+
+        function requestEstimate() {
+            TimeEstimate.requestTimeEstimate(vm.checkedInAppointments).then(function () {
+                var timeEstimate = TimeEstimate.getTimeEstimate();
+                for (var j = 0; j < timeEstimate.length; j++) {
+                    var prevPatientDur = [];
+                    for (var i = 0; i < Object.keys(timeEstimate[j]).length - 4; i++) {
+                        if (timeEstimate[j][i]["details"]["status"] == "In Progress") {
+                            var tmpSlicedTime = Number(timeEstimate[j][i]["details"]["estimated_duration"]) - ((new Date() - new Date(timeEstimate[j][i]["details"]["actual_start"]))/60000);
+                            if (tmpSlicedTime > 0) {
+                                prevPatientDur.push(tmpSlicedTime);
+                            }
+                        }
+                        else {
+                            prevPatientDur.push(Number(timeEstimate[j][i]["details"]["estimated_duration"]));
+                        }
+                    }
+                    vm.waitingTimeEstimates.push(estimateWait(prevPatientDur));
+                }
+            },
+            function(error){
+                console.log(JSON.stringify(error));
+            });
+        }
+
+        var estimateWait = function(prevPatientDur) {
+            var totalMins = 0;
+            for (var i = 0; i < prevPatientDur.length; i++) {
+                totalMins = totalMins + prevPatientDur[i];
+            }
+            var hr = Math.floor(totalMins/60) > 1 ? "Hrs " : "Hr ";
+            var min = Math.round(totalMins%60) > 1 ? "Mins" : "Min";
+            return Math.floor(totalMins/60) + hr + Math.round(totalMins%60) + min;
         }
 
         // Function used in the home view to refresh
@@ -287,16 +334,22 @@
         // For Android only, allows pressing the back button
         function homeDeviceBackButton(){
             console.log('device button pressed do nothing');
-            var message = $filter('translate')('EXIT_APP');
-            NativeNotification.showNotificationConfirm(message,function(){
-                if(ons.platform.isAndroid())
-                {
-                    navigator.app.exitApp();
+            var mod = 'android';
+            var msg = $filter('translate')('EXIT_APP');
+
+            ons.notification.confirm({
+                message: msg,
+                modifier: mod,
+                callback: function(idx) {
+                    switch (idx) {
+                        case 0:
+                            break;
+                        case 1:
+                            navigator.app.exitApp();
+                            break;
+                    }
                 }
-            },function(){
-                console.log('cancel exit');
             });
-            console.log(homeNavigator.getDeviceBackButtonHandler());
         }
 
         function goToStatus()
@@ -330,10 +383,18 @@
             homeNavigator.pushPage('./views/personal/appointments/appointments.html');
         }
 
+
         function goToCheckinAppointments(todaysAppointments) {
-            NavigatorParameters.setParameters({'Navigator':'homeNavigator'});
+            NavigatorParameters.setParameters({'Navigator':'homeNavigator', 'checkedInAppointments':vm.checkedInAppointments});
             homeNavigator.pushPage('./views/home/checkin/checkin-list.html');
         }
+
+        // function goToWaitingTimeEstimates()
+        // {
+        //     NavigatorParameters.setParameters({'Navigator':'homeNavigator', 'checkedInAppointments':vm.checkedInAppointments});
+        //     console.log(vm.checkedInAppointments)
+        //     homeNavigator.pushPage('views/home/waiting-time/waiting-time.html');
+        // }
 
         function setPlural(apps) {
             if (apps.length > 1) {
@@ -341,6 +402,7 @@
             }
             return "";
         }
+        
 
     }
 

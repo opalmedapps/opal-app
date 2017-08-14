@@ -29,7 +29,7 @@ app.service('DeviceIdentifiers', [ 'RequestToServer', '$q','Constants','UserAuth
     var deviceIdentifiers = {
         registrationId: '',
         deviceUUID:'',
-        deviceType:'',
+        deviceType:''
     };
     /**
      *@ngdoc property
@@ -107,7 +107,6 @@ app.service('DeviceIdentifiers', [ 'RequestToServer', '$q','Constants','UserAuth
             var defer = $q.defer();
             if(haveBeenSet&&!haveBeenSend)
             {
-                console.log(deviceIdentifiers);
                 RequestToServer.sendRequestWithResponse('DeviceIdentifier',deviceIdentifiers);
                 haveBeenSend = true;
             }

@@ -1,33 +1,46 @@
 //
 // Author: David Herrera on Summer 2016, Email:davidfherrerar@gmail.com
 //
-var myApp = angular.module('MUHCApp');
-myApp.controller('DocumentsController', ['Patient', 'Documents', 'UpdateUI', '$scope', '$timeout',
-    'UserPreferences', 'RequestToServer', '$cordovaFile','UserAuthorizationInfo',
-    '$q','$filter','NavigatorParameters', 'Permissions', 'Logger',
-    function(Patient, Documents, UpdateUI, $scope, $timeout, UserPreferences,
-             RequestToServer,$cordovaFile,UserAuthorizationInfo,$q,$filter,
-             NavigatorParameters, Permissions, Logger){
 
-        Permissions.enablePermission('WRITE_EXTERNAL_STORAGE', 'Storage access disabled. Unable to write documents.');
+(function () {
+    'use strict';
 
-        documentsInit();
+    angular
+        .module('MUHCApp')
+        .controller('DocumentsController', DocumentsController);
 
-        Logger.sendLog('Documents', 'all');
+    DocumentsController.$inject = ['Documents', '$filter', 'NavigatorParameters', 'Permissions', 'Logger'];
 
-        //Initialize documents, determine if there are documents, set language, determine if content has preview
-        function documentsInit() {
+    /* @ngInject */
+    function DocumentsController(Documents, $filter, NavigatorParameters, Permissions, Logger) {
+        var vm = this;
+        vm.title = 'DocumentsController';
+        vm.noDocuments = true;
+        vm.documents = [];
+
+        vm.goToDocument = goToDocument;
+        vm.showHeader = showHeader;
+
+        activate();
+
+        ////////////////
+
+        function activate() {
+
+            // Check for document permission
+            Permissions.enablePermission('WRITE_EXTERNAL_STORAGE', 'Storage access disabled. Unable to write documents.');
+            Logger.sendLog('Documents', 'all');
+
             var documents = Documents.getDocuments();
             documents = Documents.setDocumentsLanguage(documents);
-            if(documents.length === 0) $scope.noDocuments=true;
-            //console.log(documents);
-            $scope.documents = $filter('orderBy')(documents,'documents.CreatedTimeStamp');
-            console.log($scope.documents);
 
+            if(documents.length > 0) vm.noDocuments=false;
+            vm.documents = $filter('orderBy')(documents,'documents.CreatedTimeStamp');
         }
+
         //Go to document function, if not read, read it, then set parameters for navigation
-        $scope.goToDocument=function(doc)
-        {
+        function goToDocument(doc){
+
             if(doc.ReadStatus == '0')
             {
                 doc.ReadStatus ='1';
@@ -35,34 +48,24 @@ myApp.controller('DocumentsController', ['Patient', 'Documents', 'UpdateUI', '$s
             }
             NavigatorParameters.setParameters({'navigatorName':'personalNavigator', 'Post':doc});
             personalNavigator.pushPage('./views/personal/my-chart/individual-document.html');
-        };
-        //Function for document refresh, deprecated at the moment. Only refresh at home.
-        $scope.refreshDocuments = function($done) {
-            RequestToServer.sendRequest('Refresh', 'Documents');
-            var UserData = UpdateUI.update('Documents');
-            UserData.then(function(){
-                documentsInit();
-                $done();
-            });
-            $timeout(function() {
-                $done();
-            }, 5000);
-        };
+        }
 
-        //Show header function helper
-        $scope.showHeader=function(index, length)
+        // Determines whether or not to show the date header.
+        function showHeader(index)
         {
             if (index === 0){
                 return true;
             }
             else {
-                var previous = (new Date($scope.documents[index-1].CreatedTimeStamp)).setHours(0,0,0,0);
-                var current = (new Date($scope.documents[index].CreatedTimeStamp)).setHours(0,0,0,0);
+                var previous = (new Date(vm.documents[index-1].CreatedTimeStamp)).setHours(0,0,0,0);
+                var current = (new Date(vm.documents[index].CreatedTimeStamp)).setHours(0,0,0,0);
                 return (current !== previous);
             }
-        };
+        }
 
-    }]);
+    }
+
+})();
 
 /**
  * @name SingleDocumentController
@@ -88,6 +91,8 @@ myApp.controller('SingleDocumentController', ['NavigatorParameters','Documents',
         $scope.rendering = true;
         $scope.loading = true;
         $scope.errorDownload = false;
+        $scope.show = false;
+        $scope.hide = false;
 
         //Log usage
         Logger.sendLog('Document', docParams.DocumentSerNum);
@@ -109,16 +114,13 @@ myApp.controller('SingleDocumentController', ['NavigatorParameters','Documents',
 
         function initializeDocument(document)
         {
-            console.log(document);
 
             if (Documents.getDocumentBySerNum(document.DocumentSerNum).Content){
-                console.log("on device");
                 setUpPDF(document);
             }
 
             else {
                 Documents.downloadDocumentFromServer(document.DocumentSerNum).then(function () {
-                    console.log("request to server");
                     setUpPDF(document);
                 }).catch(function (error) {
                     //Unable to get document from server
@@ -138,31 +140,27 @@ myApp.controller('SingleDocumentController', ['NavigatorParameters','Documents',
             PDFJS.getDocument(uint8pf)
                 .then(function (_pdfDoc) {
 
-                    console.log(window.innerHeight, window.innerWidth);
-
                     var promises = [];
 
                     for (var num = 1; num <= _pdfDoc.numPages; num++) {
                         promises.push(renderPage(_pdfDoc, num, containerEl));
                     }
                     pdfdoc = _pdfDoc;
+
                     //$scope.rendering=true;
                     return $q.all(promises);
                 })
                 .then(function () {
+
                     var canvasElements = containerEl.getElementsByTagName("canvas");
-                    console.log(canvasElements);
                     var viewerScale = viewerSize / canvasElements[0].width * 0.95 * 100 + "%";
                     // var translateY = canvasElements[0].height*(1-viewerSize/canvasElements[0].width);
                     for (var i = 0; i != canvasElements.length; ++i) {
                         canvasElements[i].style.zoom = viewerScale;
                         canvasElements[i].onclick = function (event) {
-                            console.log(event);
                             if (Constants.app) {
                                 if (ons.platform.isAndroid()) {
-                                    var docParams = new docParams();
-                                    docParams.src = event.srcElement.toDataURL("docParams/png");
-                                    cordova.InAppBrowser.open(docParams.src, '_blank', 'location=no,enableViewportScale=true');
+                                    convertCanvasToImage(event.srcElement);
                                 } else {
                                     cordova.InAppBrowser.open("data:application/pdf;base64," + document.Content, '_blank', 'EnableViewPortScale=yes');
                                 }
@@ -171,27 +169,24 @@ myApp.controller('SingleDocumentController', ['NavigatorParameters','Documents',
                             }
                         }
                     }
+
                     $scope.rendering = false;
                     $scope.loading = false;
+                    $scope.show = true;
+                    $timeout(function(){$scope.hide = true}, 5000);
+                    $timeout(function(){$scope.show = false}, 6500);
                     $scope.$apply();
                 });
         }
 
-        function convertCanvasTodocParams(canvas) {
-            var docParams = new docParams();
-            docParams.src = canvas.toDataURL("docParams/png");
-            docParams.width = viewerSize;
-            docParams.height = 'auto';
-            docParams.style.border = "1px solid black";
-            // docParams.onclick = function () {
-            //     if (Constants.app) {
-            //         cordova.InAppBrowser.open(docParams.src, '_blank', 'location=no,enableViewportScale=true');
-            //     } else{
-            //         window.open(docParams.src, '_blank', 'location=no,enableViewportScale=true');
-            //     }
-            // }
-            return docParams;
+        function convertCanvasToImage(canvas) {
+            var image = new Image();
+            image.onload = function(){
+                cordova.InAppBrowser.open(image.src, '_blank', 'location=no,enableViewportScale=true');
+            };
+            image.src = canvas.toDataURL("image/jpeg", 0.5);
         }
+
 
         function renderPage(pdfDoc, num, containerEl) {
 
@@ -210,21 +205,16 @@ myApp.controller('SingleDocumentController', ['NavigatorParameters','Documents',
         }
 
         function draw(page, canvas, ctx) {
-            //var viewport = page.getViewport(scale);
-
-            //var rescale = viewerSize*0.95/(viewport.width);
 
             var scaledViewport = page.getViewport(scale);
             canvas.height = scaledViewport.height;
             canvas.width = scaledViewport.width;
-            //console.log(canvas);
+
             // Render PDF page into canvas context
-            var renderContext = {
+            return {
                 canvasContext: ctx,
                 viewport: scaledViewport
             };
-
-            return renderContext;
         }
 
         // function simply sets document for showing
@@ -232,7 +222,7 @@ myApp.controller('SingleDocumentController', ['NavigatorParameters','Documents',
         {
             console.log(url);
             //Determine if its a pdf or an docParams for small window preview.
-            if(document.DocumentType=='pdf')
+            if(document.DocumentType ==='pdf')
             {
                 document.PreviewContent=(ons.platform.isIOS()&&app)?url.cdvUrl:'./img/pdf-icon.png';
             }else{
@@ -257,74 +247,71 @@ myApp.controller('SingleDocumentController', ['NavigatorParameters','Documents',
 
         }
 
-        //Share function, detemines if its an app, sets the parameters for the email and formats depending on whether is a
-        //base64 string or a simple attachment and depending on whether is an Android device or an iOS device
+        //Share function
         $scope.share =function()
         {
             if (Constants.app) {
 
                 var targetPath = FileManagerService.generatePath(docParams);
-                console.log(docParams);
+
+
                 FileManagerService.downloadFileIntoStorage("data:application/pdf;base64," + docParams.Content, targetPath).then(function()
                 {
-                    if (ons.platform.isAndroid()) {
-                        NewsBanner.showCustomBanner($filter('translate')("DOCUMENT_DOWNLOADED"), '#0047f2', null, 3000);
-                    }
 
                     FileManagerService.shareDocument(docParams.Title.replace(/ /g,"")+docParams.ApprovedTimeStamp.toDateString().replace(/ /g,"-"), targetPath);
 
-                    console.log('success');
-
                 }).catch(function(error)
                 {
-                    console.log('Unable to save document on device',error);
                     //Unable to save document on server
+                    console.log('Unable to save document on device',error);
                 });
 
             } else {
-                console.log(docParams);
                 window.open("data:application/pdf;base64," + docParams.Content);
             }
         };
 
-        console.log(FileManagerService);
+        $scope.warn = function(){
+            modal.show();
+            $scope.popoverDocsInfo.hide();
+        };
 
 
         //Open document function: Opens document depending on the format
-        $scope.openDocument = function() {
-            var app = document.URL.indexOf('http://') === -1 && document.URL.indexOf('https://') === -1;
-            if (app) {
-                if(ons.platform.isAndroid()){
-                    //window.open('https://docs.google.com/viewer?url='+docParams.Content+'&embedded=true', '_blank', 'location=yes');
-                    if(docParams.DocumentType=='pdf')
-                    {
-                        console.log(docParams.PathFileSystem);
-                        $cordovaFileOpener2.open(
-                            docParams.PathFileSystem,
-                            'application/pdf'
-                        ).then(function() {
-                            // file opened successfully
-                        }, function(err) {
-                            console.log(err);
-                            if(err.status == 9)
-                            {
-                                NativeNotification.showNotificationAlert($filter('translate')("NOPDFPROBLEM"));
-                            }
-                            console.log('boom');
-                            // An error occurred. Show a message to the user
-                        });
-                    }else{
-                        var ref = cordova.InAppBrowser.open(docParams.PathFileSystem, '_blank', 'EnableViewPortScale=yes');
-                    }
-
-                    //var ref = cordova.InAppBrowser.open(docParams.Content, '_system', 'location=yes');
-                }else{
-                    var ref = cordova.InAppBrowser.open("data:application/pdf;base64, " + docParams.Content, '_blank', 'EnableViewPortScale=yes');
-                }
-            } else {
-                window.open("data:application/pdf;base64, " + docParams.Content);
-            }
-        };
+        // $scope.openDocument = function() {
+        //     var app = document.URL.indexOf('http://') === -1 && document.URL.indexOf('https://') === -1;
+        //     if (app) {
+        //         if(ons.platform.isAndroid()){
+        //             //window.open('https://docs.google.com/viewer?url='+docParams.Content+'&embedded=true', '_blank', 'location=yes');
+        //             if(docParams.DocumentType=='pdf')
+        //             {
+        //                 console.log(docParams.PathFileSystem);
+        //                 $cordovaFileOpener2.open(
+        //                     docParams.PathFileSystem,
+        //                     'application/pdf'
+        //                 ).then(function() {
+        //                     // file opened successfully
+        //                 }, function(err) {
+        //                     console.log(err);
+        //                     if(err.status == 9)
+        //                     {
+        //                         NativeNotification.showNotificationAlert($filter('translate')("NOPDFPROBLEM"));
+        //                     }
+        //                     console.log('boom');
+        //                     // An error occurred. Show a message to the user
+        //                 });
+        //             }else{
+        //                 var ref = cordova.InAppBrowser.open(docParams.PathFileSystem, '_blank', 'EnableViewPortScale=yes');
+        //             }
+        //
+        //             //var ref = cordova.InAppBrowser.open(docParams.Content, '_system', 'location=yes');
+        //         }else{
+        //             var ref = cordova.InAppBrowser.open("data:application/pdf;base64, " + docParams.Content, '_blank', 'EnableViewPortScale=yes');
+        //         }
+        //     } else {
+        //         window.open("data:application/pdf;base64, " + docParams.Content);
+        //     }
+        // };
 
         $scope.about = function(){
 

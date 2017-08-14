@@ -71,6 +71,7 @@
             //Cleaning the announcements array
             announcementsArray=[];
             //Adding annoucements
+            lastUpdated = Date.now();
             addAnnouncements(announcements);
         }
 
@@ -111,6 +112,8 @@
          **/
         function getUnreadAnnouncements()
         {
+
+            console.log("at unread announcements..");
             //Initializing array to return
             var array=[];
             //Iterating and finding annoucements that have not been read
@@ -281,7 +284,6 @@
         //Formats the input dates and gets it ready for controllers, updates announcementsArray
         function addAnnouncements(announcements)
         {
-            console.log(announcements);
             //If announcements are undefined simply return
             if(typeof announcements=='undefined') return;
             for (var i = 0; i < announcements.length; i++) {

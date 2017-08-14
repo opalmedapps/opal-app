@@ -1,11 +1,13 @@
 <ons-page ng-controller="ParkingController">
     <ons-toolbar fixed-style>
         <div class="left">
-            <span ng-show="navigatorName == 'generalNavigator'"><ons-back-button>{{"BACK"|translate}}</ons-back-button></span>
-            <span ng-show="navigatorName !=='generalNavigator'"><ons-back-button ng-click="navigator.popPage()">{{"CLOSE"|translate}}</ons-back-button></span>
+            <span><ons-back-button>{{"BACK"|translate}}</ons-back-button></span>
         </div>
         <div class="center" ng-class="fontSizeTitle">{{"PARKING"|translate}}</div>
     </ons-toolbar>
+
+    <network-banner></network-banner>
+
     <ons-list-header  ng-class="fontSizeTitle">{{"PARKINGINFORMATION"|translate}}</ons-list-header>
     <ons-list modifier="chevron tappable" class="settings-list">
         <ons-list-item modifier="chevron" ng-click="goToParkingLink('general')" ng-class="fontSizeDesc">
@@ -13,7 +15,7 @@
             <ons-row align="center">
                 <ons-col width="60px" style="text-align: center">
                     <div>
-                        <ons-icon icon="fa-h-square" class="iconHomeView" style="color:blue"></ons-icon>
+                        <ons-icon icon="fa-h-square" class="iconHomeView" style="color:#0D47A1"></ons-icon>
                     </div>
                 </ons-col>
                 <ons-col>
@@ -27,7 +29,7 @@
             <ons-row align="center">
                 <ons-col width="60px" style="text-align: center">
                     <div>
-                        <ons-icon icon="fa-h-square" class="iconHomeView" style="color:green"></ons-icon>
+                        <ons-icon icon="fa-h-square" class="iconHomeView" style="color:#1B5E20"></ons-icon>
                     </div>
                 </ons-col>
                 <ons-col>

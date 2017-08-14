@@ -2,7 +2,7 @@
       <ons-toolbar fixed-style>
         <div class="left">
             <span ng-show="navigatorName == 'settingsNavigator'"><ons-back-button>{{"BACK"|translate}}</ons-back-button></span>
-            <span ng-show="navigatorName !=='settingsNavigator'"><ons-toolbar-button ng-click="navigator.popPage()">{{"CLOSE"|translate}}</ons-toolbar-button></span>
+            <span ng-show="navigatorName !=='settingsNavigator'"><ons-toolbar-button ng-click="navigator.popPage()">{{"BACK"|translate}}</ons-toolbar-button></span>
         </div>        <div class="center">{{"SETTINGS"|translate}}</div>
       </ons-toolbar>
        <ons-list class="settings-list" ng-show="navigatorName !== 'settingsNavigator'">
@@ -53,7 +53,7 @@
           <span style=" position: absolute;right: 20px;top: 0px;opacity:0.6">{{version}}</span>
         </ons-list-item>
       </ons-list>
-      <p class="text-center" style="color:grey;margin-top:10px;font-size:15px">{{MUHC|translate}} 2016</p>
+      <p class="text-center" style="color:grey;margin-top:10px;font-size:15px">{{MUHC|translate}} {{currentYear}}</p>
 
 
     </ons-page>

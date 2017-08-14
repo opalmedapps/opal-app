@@ -1,31 +1,109 @@
 <ons-page ng-controller="IndividualAppointmentController">
     <ons-toolbar fixed-style>
-        <div class="left"><ons-back-button>{{"BACK"|translate}}</ons-back-button></div>
-        <div class="center">{{"APPOINTMENT"|translate}}</div>
+        <div class="left">
+            <ons-back-button>{{"BACK"|translate}}</ons-back-button>
+        </div>
+        <div class="center">{{app["AppointmentType_"+language]|ellipsis:24}}</div>
     </ons-toolbar>
-    <div style="margin-top:5px">
-        <ons-list >
-            <ons-list-item class="item" >
-                <div style="line-height:1" align="left">
-                    <header>
-                        <span class="item-title" ng-class="fontSizeTitle">{{app["AppointmentType_"+language]}}</span>
-                    </header>
-                    <p class="item-desc" ng-class="fontSizeDesc">{{app.ScheduledStartTime|date:'medium'}}</p>
-                    <p class="item-desc" ng-class="fontSizeDesc" ng-show="app.RoomLocation">
-                        {{"GOTO_ROOM"|translate}}{{app.RoomLocation}}
-                    </p>
-                </div>
+    <div style="border-top: 0px solid lightsteelblue">
+        <ons-list>
+            <ons-list-item class="item" ng-class="fontSizeDesc">
+                <strong class="item-desc">
+                    <!--<header>-->
+                        <!--<span class="item-title" ng-class="fontSizeTitle">{{app["AppointmentType_"+language]}}</span>-->
+                    <!--</header>-->
+                    {{app.ScheduledStartTime|date:'medium'}}
+                </strong>
             </ons-list-item>
-            <ons-list-item modifier="chevron" tappable ng-click="goToMap()">
-                <p class="item-desc" ng-class="fontSizeDesc">{{app["MapName_"+language]|ellipsis:25}}</p>
+            <ons-list-item tappable ng-click="goToMap()" ng-class="fontSizeDesc">
+                <strong class="item-desc">{{app["MapName_"+language]|ellipsis:26}}</strong>
+                <ons-icon style="margin-top: 3%" class="pull-right" icon="ion-ios-arrow-forward"></ons-icon>
             </ons-list-item>
-
             <ons-list-item tappable ng-click="aboutApp()" ng-class="fontSizeDesc">
-                <button class="button button--large--quiet"  >
-                    {{"APPOINTMENT_ABOUT"|translate}}
-                </button >
+                <strong class="item-desc">{{"APPOINTMENT_ABOUT" | translate}} {{title}} </strong>
+                <ons-icon style="margin-top: 3%" class="pull-right" icon="ion-ios-arrow-forward"></ons-icon>
             </ons-list-item>
         </ons-list>
-
     </div>
+
+<!--waiting time trend by Wen Quan Li-->
+    <ons-list>
+        <div style="background-color: white">
+            <ons-list-item modifier="nodivider">
+                <!--Title of waiting time section-->
+                <strong class="item-desc" ng-class="fontSizeTitle" style="color: black">
+                    <div align="center">{{"APPOINTMENTSWAIT" | translate}} {{"FOR"|translate}}</div>
+                    <ons-row align="center">
+                        <ons-col width="7%"></ons-col>
+                        <ons-col>
+                            <strong class="item-desc" ng-class="fontSizeTitle" style="color: black"><div align="center">similar appointments</div></strong>
+                        </ons-col>
+                        <ons-col width="7%">
+                            <div align="right">
+                                <ons-toolbar-button ng-click="aboutWait()">
+                                    <ons-icon icon="fa-info-circle"></ons-icon>
+                                </ons-toolbar-button>
+                            </div>
+                        </ons-col>
+                    </ons-row>
+                </strong>
+                <!--Bar Chart using simple background coloring-->
+                <div class="item-desc" ng-class="fontSizeDesc" style="color: #474747">
+                    <ons-row align="center">
+                        <ons-col width="10px"></ons-col>
+                        <ons-col width="110px" align="left">0-15 min</ons-col>
+                        <ons-col width="5px"></ons-col>
+                        <ons-col>
+                            <ons-col width="{{percent0}}%">
+                                <div style="background-color: #59D45D; width: 100%;line-height: 90%" class="animated pulse ng-cloak wait-animation">&nbsp</div>
+                            </ons-col>
+                        </ons-col>
+                        <ons-col width="30px" align="right"><strong  style="color: #59D45D"> {{percent0}}%</strong></ons-col>
+                    </ons-row>
+                    <ons-row align="center">
+                        <ons-col width="10px"></ons-col>
+                        <ons-col width="110px" align="left">15-30 min</ons-col>
+                        <ons-col width="5px"></ons-col>
+                        <ons-col>
+                            <ons-col width="{{percent15}}%">
+                                <div style="background-color: #F1C40F; width: 100%; line-height: 90%" class="animated pulse ng-cloak wait-animation">&nbsp</div>
+                            </ons-col>
+                        </ons-col>
+                        <ons-col width="30px" align="right"><strong style="color: #F1C40F"> {{percent15}}%</strong></ons-col>
+                    </ons-row>
+                    <ons-row align="center">
+                        <ons-col width="10px"></ons-col>
+                        <ons-col width="110px" align="left">30-45 min</ons-col>
+                        <ons-col width="5px"></ons-col>
+                        <ons-col>
+                            <ons-col width="{{percent30}}%">
+                                <div style="background-color: darkorange; width: 100%; line-height: 90%" class="animated pulse ng-cloak wait-animation">&nbsp</div>
+                            </ons-col>
+                        </ons-col>
+                        <ons-col width="30px" align="right"><strong style="color: darkorange"> {{percent30}}%</strong></ons-col>
+                    </ons-row>
+                    <ons-row align="center">
+                        <ons-col width="10px"></ons-col>
+                        <ons-col width="110px" align="left">45+ min</ons-col>
+                        <ons-col width="5px"></ons-col>
+                        <ons-col >
+                            <ons-col width="{{percent45}}%">
+                                <div style="background-color: red; width: 100%; line-height: 90%" class="animated pulse ng-cloak wait-animation">&nbsp</div>
+                            </ons-col>
+                        </ons-col>
+                        <ons-col width="30px" align="right"><strong style="color: red"> {{percent45}}%</strong></ons-col>
+                    </ons-row>
+                    <!--Button for more info-->
+                    <div style="text-align: center; width: 90%; margin: 5% auto">
+                        <ons-button class="animated pulse ng-cloak shadow-2" modifier="large" style="height: 50px; font-size: xx-large; font-weight: bolder; background-color: #59d45d" ng-click="goToWait()">
+                            <ons-icon icon="fa-clock-o" size="1x" style="color: white"><strong> {{ "MORE_INFO" | translate}} </strong></ons-icon>
+                        </ons-button>
+                    </div>
+                    <!--Disclaimer-->
+                    Delay: minutes after the <u>scheduled</u> time.<br>
+            </ons-list-item>
+        </div>
+    </ons-list>
+
+
 </ons-page>

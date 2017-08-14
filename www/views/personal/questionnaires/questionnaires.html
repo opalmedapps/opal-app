@@ -1,38 +1,25 @@
- <ons-page ng-controller="QuestionnaireMainController">
-      <ons-toolbar fixed-style>
-        <!--<div class="left"><p style="font-size: 10pt">Answered {{numAnswered}}/{{questions.length}}</div>-->
+<ons-page ng-controller="QuestionnaireMainController">
+    <ons-toolbar fixed-style>
         <div class="left">
-          <ons-back-button>Back</ons-back-button>
+            <ons-back-button>Back</ons-back-button>
         </div>
         <div class="center">
-          <span ng-hide="index>0">Questionnaire Home</span>
-          <span ng-show="(index > 0) && index <= (questions.length)"><ons-toolbar-button><i style="color: rgba(38,100,171,0.81);" class="ion-chevron-left" ng-click="back()"></i></ons-toolbar-button>{{index}}/{{questions.length}}<ons-toolbar-button><i style="color: rgba(38,100,171,0.81);" class="ion-chevron-right" ng-click="forward()"></i></ons-toolbar-button></span>
-          <span ng-show="(index == (questions.length + 1))"><ons-toolbar-button><i style="color: rgba(38,100,171,0.81);" class="ion-chevron-left" ng-click="back()"></i></ons-toolbar-button>Summary Page<ons-toolbar-button ng-disabled="true"><i style="color: rgba(38,100,171,0.81);" class="ion-chevron-right" ng-disabled="true"></i></ons-toolbar-button></span>
+            <span ng-hide="index>0">Questionnaire Home</span>
+            <span ng-show="(index > 0) && index <= (questions.length)"><ons-toolbar-button><i style="color: rgba(38,100,171,0.81);" class="ion-chevron-left" ng-click="back()"></i></ons-toolbar-button>{{index}}/{{questions.length}}<ons-toolbar-button><i style="color: rgba(38,100,171,0.81);" class="ion-chevron-right" ng-click="forward()"></i></ons-toolbar-button></span>
+            <span ng-show="(index == (questions.length + 1))"><ons-toolbar-button><i style="color: rgba(38,100,171,0.81);" class="ion-chevron-left" ng-click="back()"></i></ons-toolbar-button>Summary Page<ons-toolbar-button ng-disabled="true"><i style="color: rgba(38,100,171,0.81);" class="ion-chevron-right" ng-disabled="true"></i></ons-toolbar-button></span>
         </div>
         <div class="right">
-          <span span ng-hide="index>0" class="toolbar-button--quiet navigation-bar__line-height" ng-click="start()"><span ng-show="!questionnaireInProgress()">Begin</span>
-          <span ng-show="questionnaireInProgress()">Resume</span> <i class="ion-chevron-right"></i></span>
+            <span ng-hide="index>0" class="toolbar-button--quiet navigation-bar__line-height" ng-click="start()"><span ng-show="!questionnaireInProgress()">Begin</span>
+            <span ng-show="questionnaireInProgress()">Resume</span> <i class="ion-chevron-right"></i></span>
         </div>
-      </ons-toolbar>
+    </ons-toolbar>
 
-      <ons-carousel fullscreen swipeable overscrollable auto-scroll var="carousel">
+    <network-banner></network-banner>
+
+    <ons-carousel fullscreen swipeable overscrollable auto-scroll var="carousel">
         <ons-carousel-item style="overflow-y: scroll;" ng-if="!progress">
-
-          <!-- Home Page -->
-
-          <!--   <div ng-show="(homepage == false)">
-    <div class="row text-center" style="margin: 0 auto">
-      <div class="col-xs-12" style="margin: 0 auto">
-        <img src="http://i.stack.imgur.com/h6viz.gif"></img>
-      </div>
-    </div>
-  </div> -->
-
           <div class="container">
             <div>
-  
-
-
               <div class="row text-center" style="margin: 0 auto;" align="center">
                 <div class="col-xs-12 text-center" style="margin-top: 2.5vh">
                   <h1>

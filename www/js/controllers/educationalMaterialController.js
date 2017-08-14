@@ -3,9 +3,9 @@
 //
 var myApp = angular.module('MUHCApp');
 myApp.controller('EducationalMaterialController',['NavigatorParameters', '$scope', '$timeout','UpdateUI', 'RequestToServer', '$cordovaFileOpener2',
-    '$cordovaDevice', '$cordovaDatePicker', 'FileManagerService', 'EducationalMaterial','Logger', '$q',
+    '$cordovaDevice', '$cordovaDatePicker', 'FileManagerService', 'EducationalMaterial','Logger', '$q', 'NetworkStatus', 'MetaData',
     function (NavigatorParameters, $scope, $timeout,UpdateUI, RequestToServer, $cordovaFileOpener2,
-              $cordovaDevice, $cordovaDatePicker, FileManagerService, EducationalMaterial, Logger,$q) {
+              $cordovaDevice, $cordovaDatePicker, FileManagerService, EducationalMaterial, Logger,$q, NetworkStatus, MetaData) {
 
         //Android device backbutton
 
@@ -19,53 +19,45 @@ myApp.controller('EducationalMaterialController',['NavigatorParameters', '$scope
         educationNavigator.on('prepop',function()
         {
             backButtonPressed = 0;
-            init();
+
+            if(NetworkStatus.isOnline()){
+                console.log("calling init");
+                init();
+            }
         });
-        //Pull to refresh function
-        // $scope.load = function($done) {
-        // 	UpdateUI.update('All').then(function()
-        // 	{
-        // 		$timeout(function()
-        // 		{
-        // 			updated=true;
-        // 			backButtonPressed = 0;
-        // 			init();
-        // 			clearTimeout(timeOut);
-        // 			$done();
-        // 		});
-        // 	}).catch(function(error){
-        // 		console.log(error);
-        // 		clearTimeout(timeOut);
-        // 		$done();
-        // 	});
-        // 	var timeOut = setTimeout(function(){
-        // 		$done();
-        // 	},5000);
-        // };
-        init()
-            .then(function () {
-                $scope.noMaterials = !EducationalMaterial.isThereEducationalMaterial();
-                var materials = EducationalMaterial.getEducationalMaterial();
-                console.log(materials);
-                //Setting the language for view
-                materials = EducationalMaterial.setLanguageEduationalMaterial(materials);
-                //Attaching to scope
-                $scope.edumaterials = materials;
-                Logger.sendLog('Educational Material', 'all');
-            });
+
+        if(NetworkStatus.isOnline()) {
+
+            init()
+                .then(function () {
+                    $scope.noMaterials = MetaData.noEduMaterial();
+                    $scope.edumaterials = MetaData.fetchEducationalMeta();
+                    // $scope.noMaterials = !EducationalMaterial.isThereEducationalMaterial();
+                    // var materials = EducationalMaterial.getEducationalMaterial();
+                    // console.log(materials);
+                    // //Setting the language for view
+                    // materials = EducationalMaterial.setLanguageEduationalMaterial(materials);
+                    // //Attaching to scope
+                    // $scope.edumaterials = materials;
+                    Logger.sendLog('Educational Material', 'all');
+                });
+        }
+
         //Init function
         function init() {
             //Obtaining materials from service
 
             if (EducationalMaterial.getEducationalMaterial().length !== 0 ) return $q.resolve({});
 
-            return UpdateUI.set(['EducationalMaterial'])
+            return null;
+
+            // return UpdateUI.set(['EducationalMaterial'])
 
         }
 
         //Function to decide whether or not to show the header
         $scope.showHeader = function (index) {
-            if (index == 0) {
+            if (index === 0) {
                 return true;
             } else if ($scope.edumaterials[index - 1].PhaseInTreatment !== $scope.edumaterials[index].PhaseInTreatment) {
                 return true;
@@ -113,7 +105,7 @@ myApp.controller('IndividualEducationalMaterialController', ['$scope', '$timeout
         var param = NavigatorParameters.getParameters();
         var navigatorPage = param.Navigator;
 
-        //Setting educational material
+        //set educational material language
         $scope.edumaterial =EducationalMaterial.setLanguageEduationalMaterial(param.Post);
         Logger.sendLog('Educational Material', param.Post.EducationalMaterialSerNum);
 
@@ -135,14 +127,14 @@ myApp.controller('IndividualEducationalMaterialController', ['$scope', '$timeout
         }
 
         //Determining if its an individual php page to show immediately.
-        $scope.isIndividualHtmlPage = (FileManagerService.getFileType($scope.edumaterial.URL_EN) == 'php');
+        $scope.isIndividualHtmlPage = (FileManagerService.getFileType($scope.edumaterial.URL_EN) === 'php');
         if($scope.isIndividualHtmlPage) downloadIndividualPage();
 
         //Function to go to a specific educational material.
         $scope.goToEducationalMaterial = function (index) {
             var nextStatus = EducationalMaterial.openEducationalMaterialDetails($scope.edumaterial);
             if (nextStatus !== -1) {
-                console.log(nextStatus);
+                // console.log(nextStatus);
                 NavigatorParameters.setParameters({ 'Navigator': navigatorPage, 'Index': index, 'Booklet': $scope.edumaterial, 'TableOfContents': $scope.tableOfContents });
                 window[navigatorPage].pushPage(nextStatus.Url);
             }
@@ -157,7 +149,7 @@ myApp.controller('IndividualEducationalMaterialController', ['$scope', '$timeout
 
         //On destroy clean up
         $scope.$on('$destroy', function () {
-            console.log('on destroy');
+            // console.log('on destroy');
             $scope.popoverSharing.destroy();
         });
 
@@ -181,7 +173,7 @@ myApp.controller('IndividualEducationalMaterialController', ['$scope', '$timeout
                 xhr.responseType = 'blob';
                 //If successful, convert to base64 and print
                 xhr.onload = function() {
-                    if (this.status == 200) {
+                    if (this.status === 200) {
 
                         var blob = new Blob([this.response], { type: 'application/pdf' });
                         var fileReader = new FileReader();

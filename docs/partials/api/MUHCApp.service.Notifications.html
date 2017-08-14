@@ -33,6 +33,11 @@
 <div class="clearnotifications"><div class="clearnotifications-page"><p>Clears the service of any saved state, function used by the <a href="api/MUHCApp.controller:LogoutController">LogoutController</a></p>
 </div></div>
 </li>
+<li><h3 id="methods_getnewnotifications">getNewNotifications()</h3>
+<div class="getnewnotifications"><div class="getnewnotifications-page"><p>Gets unread notifications</p>
+</div><h5 id="methods_getnewnotifications_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-array">Array</a></td><td><div class="getnewnotifications-page"><p>Returns all the unread notifications</p>
+</div></td></tr></table></div>
+</li>
 <li><h3 id="methods_getnotificationpost">getNotificationPost(notification)</h3>
 <div class="getnotificationpost"><div class="getnotificationpost-page"><p>Finds the post that belongs to a given notification by using the search service function for that post</p>
 </div><h5 id="methods_getnotificationpost_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>notification</td><td><a href="" class="label type-hint type-hint-string">String</a></td><td><div class="getnotificationpost-page"><p>Notification that belongs to the post</p>
@@ -67,6 +72,10 @@
 </div></td></tr><tr><td>notification</td><td><a href="" class="label type-hint type-hint-string">String</a></td><td><div class="readnotification-page"><p>Notification to be read</p>
 </div></td></tr></tbody></table></div>
 </li>
+<li><h3 id="methods_requestallnotifications">requestAllNotifications()</h3>
+<div class="requestallnotifications"><div class="requestallnotifications-page"><p>Grabs all the notifications form the server.</p>
+</div></div>
+</li>
 <li><h3 id="methods_setnotificationslanguage">setNotificationsLanguage(array)</h3>
 <div class="setnotificationslanguage"><div class="setnotificationslanguage-page"><p>Translates the array parameter containing notifications to appropiate preferred language specified in <a href="api/MUHCApp.service:UserPreferences">UserPreferences</a>.</p>
 </div><h5 id="methods_setnotificationslanguage_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>array</td><td><a href="" class="label type-hint type-hint-array">Array</a></td><td><div class="setnotificationslanguage-page"><p>Array with notifications</p>
@@ -93,8 +102,8 @@
 <li><h3 id="properties_notificationtypes">notificationTypes</h3>
 <div class="notificationtypes"><div class="muhcapp-service-notificationtypes-page"><p>Array contains all the mappings to search the actual post for the notification, the icon, the color and the Name of the field.
 <pre class="prettyprint linenums">
-     //Example of the Document notification type.
-     var notificationTypes={
+         //Example of the Document notification type.
+         var notificationTypes={
       'Document':
       {
         icon:'fa fa-folder',

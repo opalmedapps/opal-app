@@ -1,3 +1,13 @@
+/*
+ * Filename     :   checkInController.js
+ * Description  :   Manages user checkin to their appointments
+ * Created by   :   David Herrera, Robert Maglieri
+ * Date         :   27 Apr 2017
+ * Copyright    :   Copyright 2016, HIG, All rights reserved.
+ * Licence      :   This file is subject to the terms and conditions defined in
+ *                  file 'LICENSE.txt', which is part of this source code package.
+ */
+
 (function () {
     'use strict';
 
@@ -5,15 +15,26 @@
         .module('MUHCApp')
         .controller('CheckInController', CheckInController);
 
-    CheckInController.$inject =
-        [
-        'CheckInService', 'NavigatorParameters', 'UserPreferences',
-        'Appointments', 'NewsBanner','$filter', 'Logger'
-        ];
+    CheckInController.$inject = [
+        'CheckInService',
+        'NavigatorParameters',
+        'UserPreferences',
+        'Appointments',
+        'NewsBanner',
+        '$filter',
+        'Logger'
+    ];
 
     /* @ngInject */
-    function CheckInController(CheckInService, NavigatorParameters, UserPreferences,
-                               Appointments, NewsBanner, $filter, Logger) {
+    function CheckInController(
+        CheckInService,
+        NavigatorParameters,
+        UserPreferences,
+        Appointments,
+        NewsBanner,
+        $filter,
+        Logger
+    ) {
         var vm = this;
         vm.title = 'CheckInController';
         vm.apps = [];
@@ -32,7 +53,6 @@
         function activate() {
             Logger.sendLog('Checkin', 'all');
             vm.apps = CheckInService.getCheckInApps();
-            console.log(vm.apps);
             vm.language = UserPreferences.getLanguage();
 
             // Check if there are appointments
@@ -43,16 +63,15 @@
             }
 
             // Ensure that user is within range of the hospital
-            console.log(CheckInService);
             CheckInService.isAllowedToCheckIn()
                 .then(function (response) {
-                    console.log("Allowed to Check in", response);
+                    //console.log("Allowed to Check in", response);
 
                     // Verify if the appointments are checked in
                     return CheckInService.verifyAllCheckIn();
                 })
                 .then(function (response){
-                    console.log(response);
+                    //console.log(response);
                     if (response == null){
                         vm.alert.type = "info";
                         vm.checkInMessage = "CHECKIN_NONE";
@@ -62,6 +81,8 @@
                         vm.additionalInfo = "CHECKIN_ADDITIONAL";
                     } else {
                         console.log("Will call checkin");
+
+                        // Checkin to all todays appointments
                         CheckInService.checkinToAllAppointments()
                             .then(function () {
                                 console.log("success");
@@ -91,6 +112,7 @@
 
         }
 
+        // View appointment details
         function goToAppointment(appointment){
             NavigatorParameters.setParameters({'Navigator':'homeNavigator', 'Post':appointment});
             homeNavigator.pushPage('./views/personal/appointments/individual-appointment.html');

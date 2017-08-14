@@ -3,13 +3,9 @@
         <div class="left"><ons-back-button>{{"BACK"|translate}}</ons-back-button></div>
         <div class="center" ng-class="fontSizeTitle">{{"NOTIFICATIONS"|translate}}</div>
     </ons-toolbar>
-    <!--<ons-pull-hook ng-action="load($done)" var="loader">
-          <span ng-switch="loader.getCurrentState()">
-            <span ng-switch-when="initial"><ons-icon size="35px" icon="ion-arrow-down-a"></ons-icon> Pull down to refresh</span>
-            <span ng-switch-when="preaction"><ons-icon size="35px" icon="ion-arrow-up-a"></ons-icon> Release to refresh</span>
-            <span ng-switch-when="action"><ons-icon size="35px" spin="true" icon="ion-load-d"></ons-icon> Loading data...</span>
-          </span>
-  </ons-pull-hook>-->
+
+    <network-banner></network-banner>
+
     <div ng-hide="noNotifications">
         <ons-list ng-repeat="notification in notifications" ng-click="goToNotification($index,notification)">
             <ons-list-header class="person-list-header" ng-show="showHeader($index, notifications.length)" ng-class="fontSizeTitle">
@@ -24,9 +20,9 @@
                     </ons-col>
                     <ons-col>
                         <header>
-                            <span class="item-title" ng-class="fontSizeTitle">{{notification.Title}}</span>
+                            <span class="item-title" ng-class="fontSizeTitle">{{notification.Desc}}</span>
                         </header>
-                        <p class="item-desc" ng-class="fontSizeDesc">{{notification.Desc}}</p>
+                        <p class="item-desc" ng-class="fontSizeDesc">{{notification.Title}}</p>
                     </ons-col>
                 </ons-row>
             </ons-list-item>

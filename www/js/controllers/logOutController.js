@@ -11,10 +11,10 @@
         .module('MUHCApp')
         .controller('logOutController', logOutController);
 
-    logOutController.$inject = ['FirebaseService', '$state','RequestToServer','CleanUp'];
+    logOutController.$inject = ['FirebaseService', '$state','RequestToServer','CleanUp', '$rootScope'];
 
     /* @ngInject */
-    function logOutController(FirebaseService, $state, RequestToServer, CleanUp) {
+    function logOutController(FirebaseService, $state, RequestToServer, CleanUp, $rootScope) {
         var vm = this;
         vm.title = 'logOutController';
 
@@ -23,8 +23,12 @@
         ////////////////
 
         function activate() {
+            var Ref= firebase.database().ref('dev4/');
 
-            console.log('Resetting services...');
+            var refCurrentUser = Ref.child('logged_in_users/' + $rootScope.uid);
+
+            refCurrentUser.remove();
+
             RequestToServer.sendRequest('Logout');
 
             CleanUp.clear();

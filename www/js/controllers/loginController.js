@@ -17,11 +17,11 @@ myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$root
         EncryptionService, CleanUp
     ) {
 
-        if(!localStorage.getItem('locked')){
-            $timeout(function () {
-                securityModal.show();
-            },200);
-        }
+        // if(!localStorage.getItem('locked')){
+        //     $timeout(function () {
+        //         securityModal.show();
+        //     },200);
+        // }
 
         $scope.loading = false;
 
@@ -53,7 +53,6 @@ myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$root
 
         // Get the authentication state
         var myAuth = firebase.auth().currentUser;
-        console.log(myAuth);
 
         // Switch for trusting device
         var trusted = 1;
@@ -113,7 +112,22 @@ myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$root
             CleanUp.clear();
 
             firebaseUser.getToken(true).then(function(sessionToken){
-                console.log('In Auth Handler');
+
+                //Save the current session token to the users "logged in users" node. This is used to make sure that the user is only logged in for one session at a time.
+                var Ref= firebase.database().ref('dev4/');
+                var refCurrentUser = Ref.child('logged_in_users/' + firebaseUser.uid);
+
+                $rootScope.uid = firebaseUser.uid;
+
+                var toSend = {
+                    'Token' : sessionToken
+                };
+
+                refCurrentUser.set(toSend);
+
+                //Evoke an observer function in mainController
+                $rootScope.$emit("MonitorLoggedInUsers", firebaseUser.uid);
+
                 window.localStorage.setItem('Email',$scope.email);
 
                 UserAuthorizationInfo.setUserAuthData(firebaseUser.uid, CryptoJS.SHA256($scope.password).toString(), undefined, sessionToken, $scope.email);
@@ -127,9 +141,6 @@ myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$root
                 };
                 $rootScope.refresh=true;
                 window.localStorage.setItem('UserAuthorizationInfo', JSON.stringify(authenticationToLocalStorage));
-                // console.log(UserAuthorizationInfo.getUserAuthData());
-                // console.log("Authenticated successfully with payload:", firebaseUser);
-                // NavigatorParameters.setParameters('Login');
                 var deviceID;
 
                 // If user sets not trusted remove the localstorage
@@ -173,14 +184,9 @@ myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$root
                             $timeout(function(){
                                 $scope.loading = false;
                                 initNavigator.popPage();
-                                $scope.alert.content="INTERNETERROR";
                             });
                         });
                 }
-
-
-
-
 
             });
         }
@@ -210,15 +216,6 @@ myApp.controller('LoginController', ['ResetPassword','$scope','$timeout', '$root
                         $scope.alert.content="LIMITS_EXCEEDED";
                     });
                     break;
-                case "NETWORK_ERROR":
-                    $timeout(function(){
-                        $scope.alert.content="INTERNETERROR";
-                    });
-                    break;
-                default:
-                    $timeout(function(){
-                        $scope.alert.content="INTERNETERROR";
-                    });
             }
         }
         function authenticate(firebaseUser)

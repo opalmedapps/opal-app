@@ -11,12 +11,9 @@ myWeb.controller('MainController', function ($scope,$q,$state, UserAuthorization
 			r.resolve(true);
 			return r.promise;
 		}
-		$scope.checkActive=function(){
 
-		}
 		$scope.goToNotification=function(index,notification)
 		{
-		        console.log(notification.Type);
 		        if(notification.ReadStatus==='0'){
 		            RequestToServer.sendRequest('NotificationRead',notification.NotificationSerNum);
 		            Notifications.setNotificationReadStatus(index);
@@ -31,7 +28,7 @@ myWeb.controller('MainController', function ($scope,$q,$state, UserAuthorization
 		           // menu.setMainPage('views/scansNDocuments.html', {closeMenu: true});
 		        }
 
-		}
+		};
 
 		deleteFields().then(function(){
 			setTimeout(function () {
@@ -58,7 +55,7 @@ myWeb.filter('dateToFirebase',function(){
       var minutes=date.getMinutes();
       var seconds=date.getSeconds();
       var hours=date.getHours();
-      var string= year+'-'+month+'-'+day+'T'+hours+':'+ minutes +':'+seconds+'.000'+'Z';      return string;
+        return year + '-' + month + '-' + day + 'T' + hours + ':' + minutes + ':' + seconds + '.000' + 'Z';
     }
 
   });
