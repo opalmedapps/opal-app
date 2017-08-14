@@ -205,6 +205,8 @@ angular.module('MUHCApp').controller('MainController', ["$window", "$state",'$ti
                     RequestToServer.sendRequest('Logout');
 
                     CleanUp.clear();
+
+                    $state.go('init');
                 }
                 else{
                     $rootScope.firstTime = false;
