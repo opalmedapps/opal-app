@@ -1,70 +1,84 @@
 //
 // Author: David Herrera on Summer 2016, Email:davidfherrerar@gmail.com
 //
-var myApp = angular.module('MUHCApp');
 
-myApp.controller('InitSettingsController',function($scope, FirebaseService,$timeout, NavigatorParameters, UserPreferences,RequestToServer)
-{
-    var params = NavigatorParameters.getParameters();
-    $scope.navigatorName = params.Navigator;
+(function () {
+    'use strict';
 
-    $scope.navigator = window[$scope.navigatorName];
-    initSettings();
+    angular
+        .module('MUHCApp')
+        .controller('InitSettingsController', InitSettingsController);
 
-    function initSettings()
-    {
-        var authData = FirebaseService.getAuthentication().$getAuth();
-        $scope.authenticated = !!authData;
-        $scope.languageSwitch  = (UserPreferences.getLanguage().toUpperCase() !== 'EN');
-        $scope.currentYear = new Date().getFullYear();
+    InitSettingsController.$inject = [
+        'FirebaseService', 'NavigatorParameters', 'UserPreferences'
+    ];
 
-        if(document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'https://' ) === -1){
-            cordova.getAppVersion.getVersionNumber(function (version) {
-                $timeout(function()
-                {
-                    $scope.version = version;
+    /* @ngInject */
+    function InitSettingsController(FirebaseService, NavigatorParameters, UserPreferences) {
+
+        var vm = this;
+        var params;
+        vm.changeLanguage = changeLanguage;
+        vm.openPageLegal = openPageLegal;
+        vm.goToRateThisApp = goToRateThisApp;
+
+        activate();
+
+        /////////////////////////
+
+        function activate(){
+            params = NavigatorParameters.getParameters();
+            vm.navigatorName = params.Navigator;
+            vm.navigator = window[vm.navigatorName];
+
+            initSettings();
+        }
+
+        function initSettings()
+        {
+            var authData = FirebaseService.getAuthentication().$getAuth();
+            vm.authenticated = !!authData;
+            vm.languageSwitch  = (UserPreferences.getLanguage().toUpperCase() !== 'EN');
+            vm.currentYear = new Date().getFullYear();
+
+            if(Constants.app){
+                cordova.getAppVersion.getVersionNumber(function (version) {
+                    vm.version = version;
                 });
-            });
-        }else{
-            $scope.version = '0.4.0';
+            }else{
+                vm.version = '0.4.0';
+            }
+        }
+
+        function changeLanguage (value)
+        {
+
+            if(value)
+            {
+                UserPreferences.setLanguage('FR');
+            }else{
+                UserPreferences.setLanguage('EN');
+            }
+        }
+
+        function goToRateThisApp()
+        {
+
+        }
+
+
+        function openPageLegal(type)
+        {
+            if(type === 0)
+            {
+                NavigatorParameters.setParameters({type:type, title:'Terms of Use',Navigator:vm.navigatorName});
+                vm.navigator.pushPage('./views/init/init-legal.html');
+            }else{
+                NavigatorParameters.setParameters({type:type, title:'Privacy Policy',Navigator:vm.navigatorName});
+                vm.navigator.pushPage('./views/init/init-legal.html');
+
+            }
+
         }
     }
-    $scope.changeLanguage = function(value)
-    {
-
-        if(value)
-        {
-            UserPreferences.setLanguage('FR');
-        }else{
-            UserPreferences.setLanguage('EN');
-        }
-    };
-
-    $scope.goToRateThisApp = function()
-    {
-
-    };
-
-
-    $scope.openPageLegal = function(type)
-    {
-        if(type === 0)
-        {
-            NavigatorParameters.setParameters({type:type, title:'Terms of Use',Navigator:$scope.navigatorName});
-            $scope.navigator.pushPage('./views/init/init-legal.html');
-        }else{
-            NavigatorParameters.setParameters({type:type, title:'Privacy Policy',Navigator:$scope.navigatorName});
-            $scope.navigator.pushPage('./views/init/init-legal.html');
-
-        }
-
-    };
-
-
-
-
-});
-
-myApp.controller('LegalController',function(){
-
-});
+})();
