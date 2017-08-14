@@ -37,8 +37,7 @@
         vm.RoomLocation = '';
         vm.showHomeScreenUpdate = null;
         vm.loading = true;
-        //vm.checkedInAppointments = null;
-        vm.checkedInAppointments = [{AppointmentAriaSer: 1862766}];
+        vm.checkedInAppointments = null;
         vm.waitingTimeEstimates = [];
 
         vm.homeDeviceBackButton = homeDeviceBackButton;
@@ -118,7 +117,6 @@
             setNotifications();
             //setUpCheckin();
             setUpCheckin();
-            requestEstimate();
         }
 
         function settingStatus()
@@ -232,7 +230,7 @@
                             vm.checkedInAppointments.push(todaysAppointmentsToCheckIn[app]);
                         }
                     }
-                    //requestEstimate();
+                    requestEstimate();
 
                     vm.allCheckedIn = allCheckedIn;
 
@@ -278,12 +276,9 @@
         function requestEstimate() {
             TimeEstimate.requestTimeEstimate(vm.checkedInAppointments).then(function () {
                 var timeEstimate = TimeEstimate.getTimeEstimate();
-                console.log(timeEstimate);
                 for (var j = 0; j < timeEstimate.length; j++) {
-                    console.log(j);
                     var prevPatientDur = [];
                     for (var i = 0; i < Object.keys(timeEstimate[j]).length - 4; i++) {
-                        console.log(i);
                         if (timeEstimate[j][i]["details"]["status"] == "In Progress") {
                             var tmpSlicedTime = Number(timeEstimate[j][i]["details"]["estimated_duration"]) - ((new Date() - new Date(timeEstimate[j][i]["details"]["actual_start"]))/60000);
                             if (tmpSlicedTime > 0) {
@@ -294,7 +289,6 @@
                             prevPatientDur.push(Number(timeEstimate[j][i]["details"]["estimated_duration"]));
                         }
                     }
-                    console.log(prevPatientDur);
                     vm.waitingTimeEstimates.push(estimateWait(prevPatientDur));
                 }
             },

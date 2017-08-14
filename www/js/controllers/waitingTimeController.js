@@ -31,7 +31,6 @@
         vm.numPrevPatients = null;
         vm.appointments = [];
         vm.checkedInAppointments = NavigatorParameters.getParameters().checkedInAppointments;
-        console.log(vm.checkedInAppointments);
         
         function timeToString(time) {
             var hour = time.getHours() + "";
@@ -51,9 +50,10 @@
             if (!vm.checkedInAppointments) {
                 return;
             }
+            console.log("vm.checkedInAppointments length: " + vm.checkedInAppointments.length);
             TimeEstimate.requestTimeEstimate(vm.checkedInAppointments).then(function () {
                 var timeEstimate = TimeEstimate.getTimeEstimate();
-                //var appointmentAriaSers = TimeEstimate.getAppointmentAriaSers();
+                console.log("timeEstimate length: " + timeEstimate.length);
                 for (var i = 0; i < timeEstimate.length; i++) {
                     var tmpDict = {};
                     var tmpDur = [];
@@ -80,9 +80,11 @@
                     }
                     else {
                         tmpDict["initialNumPrevPatients"] = vm.appointments[i].initialNumPrevPatients;
+                        var element = document.getElementById('wait-time-timeline');
+                        element.style.animation = "";
                     }
                     tmpDict["estimatedWait"] = estimateWait(tmpDict);
-                    tmpDict["title"] = "Radiotherapy Treatment #" + index;
+                    tmpDict["title"] = "Daily Radiotherapy Treatment";
                     tmpDict["appointmentAriaSer"] = timeEstimate[i].appointmentAriaSer;
                     index = index + 1;
                     var percent = (tmpDict["initialNumPrevPatients"] - tmpDict["numPrevPatients"])/tmpDict["initialNumPrevPatients"] * 90;
@@ -93,10 +95,15 @@
                         else tmpDict["percent"] = percent + "%";
                     }
                     vm.appointments[i] = tmpDict;
-                    var element = document.getElementById('wait-time-timeline');
-                    element.style.animation = "";
+                    console.log("vm.appointments length: " + vm.appointments.length);
                 }
-                console.log(vm.appointments);
+                vm.appointments = vm.appointments.sort(function(a, b){
+                    if (a.numPrevPatients < b.numPrevPatients) {
+                        return -1;
+                    }
+                    else return 1;
+                });
+                myTimeOut = $timeout(tick, 5000);
             },
             function(error){
                 console.log(JSON.stringify(error));
@@ -118,29 +125,13 @@
             $timeout.cancel(myTimeOut);
             console.log("Tick destroyed");
             NavigatorParameters.setParameters({'Navigator':'homeNavigator', 'appointmentAriaSer':appointmentAriaSer});
-            homeNavigator.pushPage('views/home/waiting-time/waiting-time-more-info.html');
+            homeNavigator.pushPage('views/home/checkin/waiting-time-more-info.html');
         }
         vm.goToWaitingTimeEstimates = goToWaitingTimeEstimates;
 
-        // var updateCurrentTime = function() {
-        //     var percent = (initialNumPrevPatients - vm.numPrevPatients)/initialNumPrevPatients * 90;
-        //     if (percent <= 100) {
-        //         var element = document.getElementById('current-time-indicator');
-        //         if (element) {
-        //             element.style.left = percent + "%";
-        //         }
-
-        //         var element = document.getElementById('past-line');
-        //         if (element) {
-        //             element.style.width = percent + "%";
-        //         }
-        //     }
-        // }
-
         var tick = function() {
-            requestEstimate();
-            myTimeOut = $timeout(tick, 5000);
             console.log("Inside tick");
+            requestEstimate();
         }
         tick();
 

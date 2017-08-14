@@ -65,13 +65,13 @@
             // Ensure that user is within range of the hospital
             CheckInService.isAllowedToCheckIn()
                 .then(function (response) {
-                    console.log("Allowed to Check in", response);
+                    //console.log("Allowed to Check in", response);
 
                     // Verify if the appointments are checked in
                     return CheckInService.verifyAllCheckIn();
                 })
                 .then(function (response){
-                    console.log(response);
+                    //console.log(response);
                     if (response == null){
                         vm.alert.type = "info";
                         vm.checkInMessage = "CHECKIN_NONE";

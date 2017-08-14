@@ -34,7 +34,6 @@ myApp.service('TimeEstimate', ['RequestToServer','LocalStorage', '$q',
                             function (response) {
                                 if (response.Code == '3') {
                                     timeEstimateObject.push(response);
-                                    //appointmentAriaSers = appointments[i].appointmentAriaSer;
                                     deferred.resolve({Success: true, Location: 'Server'});
                                 }
                             },
