@@ -115,10 +115,8 @@ myApp.service('Appointments', ['$q', 'RequestToServer','$cordovaCalendar','UserA
     function getCheckinAppointment()
     {
       var todayAppointments = getAppointmentsInPeriod('Today');
-      console.log(todayAppointments);
       todayAppointments = todayAppointments.filter(function(appointment){
-        if(appointment.hasOwnProperty('StatusClose')) return false;
-        else return true;
+        return !appointment.hasOwnProperty('StatusClose');
       });
       if(todayAppointments.length >0)
       {
