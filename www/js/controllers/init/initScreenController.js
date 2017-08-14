@@ -149,7 +149,7 @@
 
                         },this);
                     }else{
-
+                        alert("Not able to send emails currently.")
                     }
                 });
             }

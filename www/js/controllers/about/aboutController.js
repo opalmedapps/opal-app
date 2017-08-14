@@ -21,7 +21,6 @@
     /* @ngInject */
     function AboutController($window, UserPreferences) {
         var vm = this;
-        vm.title = 'AboutController';
         vm.language = '';
         vm.openDonation = openDonation;
 
