@@ -50,17 +50,17 @@ $scope.pickPagePagination=function(index)
 
     }
     var divTreatment=document.getElementById('divTreatmentPlan');
-    console.log(divTreatment);
+
     var heightTreatment=document.documentElement.clientHeight-335;
     divTreatment.style.height=heightTreatment+'px';
-    console.log(divTreatment.style.height);
+
 
     /*$scope.$watch('treatment.choice',function(){
         if($scope.treatment.choice=='Past'){
             $scope.stages=UserPlanWorkflow.getPastStages();
         }else if($scope.treatment.choice=='Next'){
             $scope.stages=[UserPlanWorkflow.getNextStage()];
-            console.log($scope.stages);
+
         }else if($scope.treatment.choice=='Future'){
             $scope.stages=UserPlanWorkflow.getFutureStages();
         }else{
@@ -100,9 +100,9 @@ $scope.pickPagePagination=function(index)
               $scope.currentStage=stages[nextStageIndex-1].Name;
               $scope.treatmentPlanCompleted=false;
               $scope.percentage=Math.floor((100*(nextStageIndex))/stages.length);
-              console.log($scope.percentage);
-              console.log(stages.lenght);
-              console.log(nextStageIndex);
+
+
+
               $scope.outOf=nextStageIndex +' of '+ stages.length;
               var lastStageFinishedPercentage=Math.floor((100*(nextStageIndex-1))/stages.length);
               var circle2 = new ProgressBar.Circle('#progressStatusPastStages', {
@@ -133,7 +133,7 @@ $scope.pickPagePagination=function(index)
               to: {color: endColor}
           });
       }
-      console.log('initiating');
+
       var anchor="treatmentPlanStage"+nextStageIndex;
       setTimeout(function(){
         $location.hash(anchor);
@@ -150,7 +150,7 @@ myApp.controller('IndividualStageController',['$scope','$timeout','UserPlanWorkf
     {
       delete page.options.flag;
       var stage = page.options.param;
-      console.log(stage);
+
       $scope.stage=stage;
       $scope.showTab=false;
     }else{

@@ -68,7 +68,7 @@
          **/
         function setAnnouncements(announcements)
         {
-            console.log("setting last updated");
+
             //Cleaning the announcements array
             announcementsArray=[];
             //Adding annoucements
@@ -114,7 +114,7 @@
         function getUnreadAnnouncements()
         {
 
-            console.log("at unread announcements..");
+
             //Initializing array to return
             var array=[];
             //Iterating and finding annoucements that have not been read
@@ -209,11 +209,11 @@
          **/
         function getAnnouncementName(serNum)
         {
-            console.log(announcementsArray);
+
             for (var i = 0; i < announcementsArray.length; i++) {
                 if(announcementsArray[i].AnnouncementSerNum==serNum)
                 {
-                    console.log({ NameEN: announcementsArray[i].PostName_EN, NameFR:announcementsArray[i].PostName_FR});
+
                     return { NameEN: announcementsArray[i].PostName_EN, NameFR:announcementsArray[i].PostName_FR};
                 }
             }
@@ -242,7 +242,7 @@
                 array.Title = (language=='EN')? array.PostName_EN : array.PostName_FR;
                 array.Body = (language == 'EN')? array.Body_EN: array.Body_FR;
             }
-            console.log(array);
+
             return array;
         }
 
@@ -285,7 +285,7 @@
         //Formats the input dates and gets it ready for controllers, updates announcementsArray
         function addAnnouncements(announcements)
         {
-            console.log(announcements);
+
             //If announcements are undefined simply return
             if(typeof announcements=='undefined') return;
             for (var i = 0; i < announcements.length; i++) {

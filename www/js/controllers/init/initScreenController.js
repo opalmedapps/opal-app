@@ -22,8 +22,7 @@
         '$filter',
         'Constants',
         'Permissions',
-        'DynamicContentService',
-        'NetworkStatus'
+        'DynamicContentService'
     ];
 
     /* @ngInject */
@@ -34,11 +33,9 @@
         $filter,
         Constants,
         Permissions,
-        DynamicContentService,
-        NetworkStatus
+        DynamicContentService
     ) {
         var vm = this;
-        vm.title = 'InitScreenController';
         vm.globalMessage = '';
         vm.globalMessageDescription = '';
 
@@ -49,7 +46,6 @@
         vm.reportIssuesMail = reportIssuesMail;
         vm.goToLogin = goToLogin;
 
-        vm.isOnline = true;
 
         activate();
 
@@ -62,9 +58,6 @@
                 .then(function (response) {
                     if(!response.exists){
                         DynamicContentService.setContentData(response.data);
-                    }
-                    else{
-
                     }
                     return DynamicContentService.getPageContent('service');
                 })
@@ -153,10 +146,10 @@
                     if(isAvailable)
                     {
                         cordova.plugins.email.open(email,function(sent){
-                            console.log('email ' + (sent ? 'sent' : 'cancelled'));
+
                         },this);
                     }else{
-                        console.log('is not available');
+
                     }
                 });
             }

@@ -11,13 +11,10 @@
         .module('MUHCApp')
         .controller('logOutController', logOutController);
 
-    logOutController.$inject = ['FirebaseService', '$state','RequestToServer','CleanUp', '$rootScope'];
+    logOutController.$inject = ['FirebaseService', '$state','RequestToServer','CleanUp', 'UserAuthorizationInfo'];
 
     /* @ngInject */
-    function logOutController(FirebaseService, $state, RequestToServer, CleanUp, $rootScope) {
-        var vm = this;
-        vm.title = 'logOutController';
-
+    function logOutController(FirebaseService, $state, RequestToServer, CleanUp, UserAuthorizationInfo) {
         activate();
 
         ////////////////
@@ -25,7 +22,7 @@
         function activate() {
             var Ref= firebase.database().ref('dev2/');
 
-            var refCurrentUser = Ref.child('logged_in_users/' + $rootScope.uid);
+            var refCurrentUser = Ref.child('logged_in_users/' + UserAuthorizationInfo.getUsername());
 
             refCurrentUser.remove();
 
@@ -33,8 +30,8 @@
 
             CleanUp.clear();
 
-            // FirebaseService.getAuthentication().$signOut();
-            console.log($state.go('init'));
+            FirebaseService.getAuthentication().$signOut();
+            $state.go('init');
         }
     }
 

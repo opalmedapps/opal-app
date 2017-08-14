@@ -33,7 +33,7 @@ myApp.controller('EducationalMaterialController',['NavigatorParameters', '$scope
                     $scope.edumaterials = MetaData.fetchEducationalMeta();
                     // $scope.noMaterials = !EducationalMaterial.isThereEducationalMaterial();
                     // var materials = EducationalMaterial.getEducationalMaterial();
-                    // console.log(materials);
+                    //
                     // //Setting the language for view
                     // materials = EducationalMaterial.setLanguageEduationalMaterial(materials);
                     // //Attaching to scope
@@ -133,7 +133,7 @@ myApp.controller('IndividualEducationalMaterialController', ['$scope', '$timeout
         $scope.goToEducationalMaterial = function (index) {
             var nextStatus = EducationalMaterial.openEducationalMaterialDetails($scope.edumaterial);
             if (nextStatus !== -1) {
-                // console.log(nextStatus);
+                //
                 NavigatorParameters.setParameters({ 'Navigator': navigatorPage, 'Index': index, 'Booklet': $scope.edumaterial, 'TableOfContents': $scope.tableOfContents });
                 window[navigatorPage].pushPage(nextStatus.Url);
             }
@@ -148,7 +148,7 @@ myApp.controller('IndividualEducationalMaterialController', ['$scope', '$timeout
 
         //On destroy clean up
         $scope.$on('$destroy', function () {
-            // console.log('on destroy');
+            //
             $scope.popoverSharing.destroy();
         });
 
@@ -185,11 +185,11 @@ myApp.controller('IndividualEducationalMaterialController', ['$scope', '$timeout
                                 type: 'Data',
                                 title: $filter('translate')("PRINTDOCUMENT"),
                                 success: function(){
-                                    console.log('success');
+
                                 },
                                 error: function(data){
                                     data = JSON.parse(data);
-                                    console.log('failed: ' + data.error);
+
                                 }
                             });
 
@@ -240,7 +240,7 @@ myApp.controller('EducationalMaterialSinglePageController', ['$scope', '$timeout
 
     //Ajax call to obtain material
     $.get(material.Url, function (res) {
-        console.log("res", res.replace(/(\r\n|\n|\r)/gm, " "));
+
         $timeout(function () {
             //Sets content variable for material and hides loading
             $scope.edumaterial.Content = res;
@@ -261,7 +261,7 @@ myApp.controller('BookletEduMaterialController', ['$scope', '$timeout', 'Navigat
     var parameters = NavigatorParameters.getParameters();
     var navigatorName = parameters.Navigator;
 
-    console.log("Navigator paranms",parameters);
+
     // var text = (new Array(100)).join('Lorem ipsum dolor sit amet. ');
     // var each = function(selector, f) {
     // [].forEach.call(document.querySelectorAll(selector), f);
@@ -273,7 +273,7 @@ myApp.controller('BookletEduMaterialController', ['$scope', '$timeout', 'Navigat
     // });
     // each('.page__content', function(element, i) {
     // 	element.addEventListener('scroll', function(){
-    // 	console.log(i);
+    //
     // 	})
     // });
     // });
@@ -302,14 +302,14 @@ myApp.controller('BookletEduMaterialController', ['$scope', '$timeout', 'Navigat
         if ($scope.activeIndex < $scope.tableOfContents.length - 1) {
             $scope.activeIndex++;
             $scope.carousel.setActiveCarouselItemIndex($scope.activeIndex);
-            console.log('go next');
+
         }
     };
     $scope.goBack = function () {
         if ($scope.activeIndex > 0) {
             $scope.activeIndex--;
             $scope.carousel.setActiveCarouselItemIndex($scope.activeIndex);
-            console.log('go back');
+
         }
 
     };
@@ -341,7 +341,7 @@ myApp.controller('BookletEduMaterialController', ['$scope', '$timeout', 'Navigat
     };
     //Cleaning up controller after its uninstantiated. Destroys all the listeners and extra variables
     $scope.$on('$destroy', function () {
-        console.log('on destroy');
+
         ons.orientation.off("change");
         delete $rootScope.contentsEduBooklet;
         document.removeEventListener('ons-carousel:postchange', handlePostChangeEventCarousel);
@@ -412,7 +412,7 @@ myApp.controller('BookletEduMaterialController', ['$scope', '$timeout', 'Navigat
     //Function that handles the initialization of the carousel. Basically deals with instantiation of carousel, loading the first slides, settings initial height, and then instaitiating a listener to watch the
     //change from portrait to landscape.
     function handleInitEventCarousel(ev) {
-        console.log('initializing carouse');
+
         $scope.carousel = ev.component;
         $timeout(function () {
             $scope.carousel.setActiveCarouselItemIndex(parameters.Index);
@@ -423,9 +423,9 @@ myApp.controller('BookletEduMaterialController', ['$scope', '$timeout', 'Navigat
         }, 10);
         if (app) {
             ons.orientation.on("change", function (event) {
-                console.log(event.isPortrait); // e.g. portrait
+
                 //$scope.carousel.refresh();
-                console.log('orientation changed');
+
                 setHeightElement();
                 var i = $scope.carousel._scroll / $scope.carousel._currentElementSize;
                 delete $scope.carousel._currentElementSize;

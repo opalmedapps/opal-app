@@ -45,13 +45,18 @@
          **/
         var checkinApps = [];
 
+        var allCheckedIn = false;
+
         var service = {
             getCheckInApps: getCheckInApps,
             setCheckInApps: setCheckInApps,
             isAllowedToCheckIn: isAllowedToCheckIn,
             checkCheckinServer: checkCheckinServer,
             checkinToAllAppointments: checkinToAllAppointments,
-            verifyAllCheckIn: verifyAllCheckIn
+            verifyAllCheckIn: verifyAllCheckIn,
+            areAllCheckedIn: areAllCheckedIn,
+            setAllCheckedIn: setAllCheckedIn,
+            clear: clear
         };
 
         return service;
@@ -81,6 +86,26 @@
 
         /**
          *@ngdoc method
+         *@name areAllCheckedIn
+         *@methodOf MUHCApp.service:CheckinService
+         *@description Function that returns whether or not todays appointments are all checked in
+         **/
+        function areAllCheckedIn(){
+            return allCheckedIn;
+        }
+
+        /**
+         *@ngdoc method
+         *@name areAllCheckedIn
+         *@methodOf MUHCApp.service:CheckinService
+         *@description Function that returns whether or not todays appointments are all checked in
+         **/
+        function setAllCheckedIn(bool){
+            allCheckedIn = bool;
+        }
+
+        /**
+         *@ngdoc method
          *@name isAllowedToCheckin
          *@methodOf MUHCApp.service:CheckinService
          *@description Function determines geographically whether user is allow to check-in. Works under the
@@ -92,7 +117,7 @@
             var r=$q.defer();
             navigator.geolocation.getCurrentPosition(function(position){
                 var distanceMeters = 1000 * getDistanceFromLatLonInKm(position.coords.latitude, position.coords.longitude, 45.474127399999996, -73.6011402);
-                console.log(position);
+
                 if (distanceMeters <= 500) {
                     positionCheckinAppointment = {
                         'Latitude':position.coords.latitude,
@@ -105,7 +130,7 @@
                 }
 
             }, function(error){
-                console.log(error.code);
+
                 r.reject('LOCATION_ERROR');
             }, {
                 maximumAge: 10000,
@@ -129,11 +154,11 @@
                 AppointmentSerNum: appoint.AppointmentSerNum
             })
                 .then(function(response) {
-                    console.log(response);
+
                     //Response is either success or failure with the appointmentSerNum again in the data object
-                    console.log('CheckCheckin coming back from backend', response);
+
                     if (response.hasOwnProperty('Data') && response.Data.hasOwnProperty('CheckedIn')) {
-                        console.log(typeof response.Data.CheckedIn, response.Data.CheckedIn);
+
 
                         if (response.Data.CheckedIn == 'true') {
                             //If success, then set checkin for services, i.e. synchronize app
@@ -149,7 +174,7 @@
                     }
                 })
                 .catch(function(error) {
-                    console.log(error);
+
                     r.reject(false);
                 });
             return r.promise;
@@ -176,12 +201,12 @@
 
             RequestToServer.sendRequestWithResponse('Checkin', objectToSend)
                 .then( function (response) {
-                    console.log('Successfully checked in to all appointments', response);
+
                     setCheckIn();
                     defer.resolve(response);
                 })
                 .catch(function (error) {
-                    console.log(error);
+
                     defer.reject(error);
                 });
 
@@ -200,9 +225,6 @@
             var promises = [];
             var allCheckedIn;
 
-            console.log(checkinApps);
-
-
             if (!checkinApps){
                 allCheckedIn = null;
                 defer.resolve(allCheckedIn);
@@ -216,7 +238,7 @@
                 }
 
                 $q.all(promises).then(function (dataArray) {
-                    console.log("Response from checkin check", dataArray);
+
                     allCheckedIn = true;
                     for (var checkedIn in dataArray) {
                         if (dataArray[checkedIn] === false) {
@@ -228,7 +250,7 @@
                     defer.resolve(allCheckedIn);
 
                 }).catch(function (error) {
-                    console.log("Cannot verify checkin", error);
+
                     defer.reject("Cannot verify checkin")
                 });
             }
@@ -237,11 +259,16 @@
         }
         //
         function setCheckIn() {
-            console.log("called set checkin");
+
             for (var appointment in checkinApps){
                 checkinApps[appointment].Checkin='1';
             }
 
+        }
+
+        function clear() {
+            checkinApps = [];
+            allCheckedIn= false;
         }
 
         function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
@@ -313,7 +340,7 @@
 //             //Set up the language for this life updates!
 //             function setLanguageCheckin(value)
 //             {
-//                 console.log(value);
+//
 //                 var language = UserPreferences.getLanguage();
 //                 $timeout(function(){
 //                     if(language =='EN')
@@ -327,7 +354,7 @@
 //                         $rootScope.scheduleAhead = value.schedule_detail.text.FR;
 //                     }
 //
-//                     console.log($rootScope);
+//
 //                 });
 //             }
 //             //To get the live estimates, send a CheckinUpdate request and listen to its response, send request every two minutes.
@@ -374,7 +401,7 @@
 //                      'Heading: '           + position.coords.heading           + '\n' +
 //                      'Speed: '             + position.coords.speed             + '\n' +
 //                      'Timestamp: '         + position.timestamp                + '\n');*/
-//                     console.log(position);
+//
 //                     if (distanceMeters <= 500) {
 //                         positionCheckinAppointment = {
 //                             'Latitude':position.coords.latitude,
@@ -387,7 +414,7 @@
 //                     }
 //
 //                 }, function(error){
-//                     console.log(error.code);
+//
 //                     r.reject('LOCATION_ERROR');
 //                 }, {
 //                     maximumAge: 10000,
@@ -445,11 +472,11 @@
 //                     RequestToServer.sendRequestWithResponse('CheckCheckin', {AppointmentSerNum:appointment.AppointmentSerNum}).then(
 //                         function(response)
 //                         {
-//                             console.log(response);
+//
 //                             //Response is either success or failure with the appointmentSerNum again in the data object
-//                             console.log('CheckCheckin coming back from backend', response);
+//
 //                             if(response.hasOwnProperty('Data')&&response.Data.hasOwnProperty('CheckedIn')){
-//                                 console.log(typeof response.Data.CheckedIn, response.Data.CheckedIn);
+//
 //
 //                                 if(response.Data.CheckedIn =='true')
 //                                 {
@@ -465,7 +492,7 @@
 //                             }
 //                         }).catch(function(error)
 //                     {
-//                         console.log(error);
+//
 //                         r.reject(false);
 //                     });
 //                     return r.promise;
@@ -485,7 +512,7 @@
 //                     var objectToSend = positionCheckinAppointment;
 //                     //Adds the appointment ser num for the request
 //                     objectToSend.AppointmentSerNum = nextAppointment.AppointmentSerNum;
-//                     console.log(objectToSend);
+//
 //                     //Request to Checkin sent
 //
 //                     RequestToServer.sendRequestWithResponse('Checkin', objectToSend).then(
@@ -494,7 +521,7 @@
 //                             //Listen for callback of this request, if success, successfuly checked in
 //                             //and ask for live update of time estimates, if not the simply tell patient to
 //                             //Checkin at the cancer center.
-//                             console.log('Checkin service, return from checkin request', data);
+//
 //                             data = data.Response;
 //                             if(data == 'success')
 //                             {
@@ -539,11 +566,11 @@
 //
 //                     RequestToServer.sendRequestWithResponse('Checkin', objectToSend)
 //                         .then( function (response) {
-//                             console.log('Successfully checked in to all appointments');
+//
 //                             defer.resolve(response);
 //                         })
 //                         .catch(function (error) {
-//                             console.log(error);
+//
 //                             defer.reject(error);
 //                         });
 //
@@ -556,11 +583,11 @@
 //                     var promises = [];
 //                     var allCheckedIn;
 //
-//                     console.log(appointments);
+//
 //
 //                     if (!appointments){
 //                         allCheckedIn = null;
-//                         console.log(!appointments);
+//
 //                         defer.resolve(allCheckedIn);
 //                     } else {
 //
@@ -569,7 +596,7 @@
 //                         }
 //
 //                         $q.all(promises).then(function (dataArray) {
-//                             console.log("Response from checkin check", dataArray);
+//
 //                             allCheckedIn = true;
 //                             for (var checkedIn in dataArray) {
 //                                 if (dataArray[checkedIn] === false) {
@@ -581,7 +608,7 @@
 //                             defer.resolve(allCheckedIn);
 //
 //                         }).catch(function (error) {
-//                             console.log("Cannot verify checkin", error);
+//
 //                             defer.reject("Cannot verify checkin")
 //                         });
 //                     }

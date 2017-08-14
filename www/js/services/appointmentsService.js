@@ -47,8 +47,8 @@ myApp.service('Appointments', ['$q', 'RequestToServer','$cordovaCalendar','UserA
     var numberOfSessions=0;
     function searchAppointmentsAndDelete(appointments)
     {
-        //console.log(appointments);
-        //console.log(userAppointmentsArray);
+        //
+        //
         for (var i = 0; i < appointments.length; i++) {
             for (var j = 0; j < userAppointmentsArray.length; j++) {
                 if(userAppointmentsArray[j].AppointmentSerNum==appointments[i].AppointmentSerNum)
@@ -139,7 +139,7 @@ myApp.service('Appointments', ['$q', 'RequestToServer','$cordovaCalendar','UserA
     function getCheckinAppointment()
     {
         var todayAppointments = getAppointmentsInPeriod('Today');
-        console.log(todayAppointments);
+
         todayAppointments = todayAppointments.filter(function(appointment){
             return !appointment.hasOwnProperty('StatusClose');
         });
@@ -153,8 +153,8 @@ myApp.service('Appointments', ['$q', 'RequestToServer','$cordovaCalendar','UserA
     function getAppointmentsInPeriod(period)
     {
         //Variables for comparing dates
-        //console.log(userAppointmentsArray);
-        //console.log(appointmentsLocalStorage);
+        //
+        //
         var today=new Date();
         var day=today.getDate();
         var month=today.getMonth();
@@ -265,7 +265,7 @@ myApp.service('Appointments', ['$q', 'RequestToServer','$cordovaCalendar','UserA
             r.resolve('Done adding all appointments');
         }else{
             var startDate=appointments[indexValue].ScheduledStartTime;
-            console.log(appointments[indexValue]);
+
             if(today<startDate)
             {
                 var eventToCalendar={};
@@ -278,7 +278,7 @@ myApp.service('Appointments', ['$q', 'RequestToServer','$cordovaCalendar','UserA
                 eventToCalendar.notes='Source: ' +appointments[indexValue].ResourceName;
                 if(isAppointmentInNativeCalendar(appointments[indexValue].AppointmentSerNum))
                 {
-                    console.log('Found event in Calendar');
+
                     var newIndex=indexValue+1;
                     r.resolve(manageAppointmentsInNativeCalendar(appointments,newIndex));
                 }else{
@@ -287,11 +287,11 @@ myApp.service('Appointments', ['$q', 'RequestToServer','$cordovaCalendar','UserA
                         var newIndex=indexValue+1;
                         r.resolve(manageAppointmentsInNativeCalendar(appointments,newIndex));
                     }, function (err) {
-                        console.log(err);
+
                         navigator.notification.alert(
                             'An error occured while adding your appointments',  // message
                             function(error){
-                                console.log(error);
+
                             },         // callback
                             'Error',            // title
                             'OK'                  // buttonName
@@ -314,7 +314,7 @@ myApp.service('Appointments', ['$q', 'RequestToServer','$cordovaCalendar','UserA
         if(!appointmentsString){
             return false;
         }else{
-            console.log(appointmentsString);
+
             appointmentsObject=JSON.parse(appointmentsString);
             var appointmentList=appointmentsObject.AppointmentList;
             for(var i=0;i<appointmentList.length;i++){
@@ -365,7 +365,7 @@ myApp.service('Appointments', ['$q', 'RequestToServer','$cordovaCalendar','UserA
          **/
         updateUserAppointments:function(appointments)
         {
-            console.log("called update user appointments");
+
             searchAppointmentsAndDelete(appointments);
             //this.clearAppointments();
             addAppointmentsToService(appointments);
@@ -568,12 +568,12 @@ myApp.service('Appointments', ['$q', 'RequestToServer','$cordovaCalendar','UserA
          **/
         getAppointmentName:function(serNum)
         {
-            //console.log(serNum);
-            //console.log(userAppointmentsArray);
+            //
+            //
             for (var i = 0; i < userAppointmentsArray.length; i++) {
                 if(userAppointmentsArray[i].AppointmentSerNum == serNum)
                 {
-                    console.log({NameEN:userAppointmentsArray[i].AppointmentType_EN, NameFR: userAppointmentsArray[i].AppointmentType_FR });
+
                     return {NameEN:userAppointmentsArray[i].AppointmentType_EN, NameFR: userAppointmentsArray[i].AppointmentType_FR };
                 }
             }
@@ -608,7 +608,7 @@ myApp.service('Appointments', ['$q', 'RequestToServer','$cordovaCalendar','UserA
             var r=$q.defer();
             if(userAppointmentsArray.length>0)
             {
-                console.log(userAppointmentsArray.length);
+
                 manageAppointmentsInNativeCalendar(userAppointmentsArray,0).then(
                     function(app){
                         r.resolve(app);
@@ -684,10 +684,10 @@ myApp.service('Appointments', ['$q', 'RequestToServer','$cordovaCalendar','UserA
         setAppointmentsLanguage:function(array)
         {
             var language = UserPreferences.getLanguage();
-            console.log(language);
+
             //Check if array
             if (Array.isArray(array)) {
-                console.log("Is array now setting language")
+
                 for (var i = 0; i < array.length; i++) {
                     //set language
                     if(!array[i].hasOwnProperty('Title')||!array[i].hasOwnProperty('Description')||!array[i].hasOwnProperty('ResourceName'))
@@ -732,7 +732,7 @@ myApp.service('Appointments', ['$q', 'RequestToServer','$cordovaCalendar','UserA
         getRecentCalledAppointment: function () {
             var todaysAppointments = [];
             todaysAppointments = getAppointmentsInPeriod('Today');
-            console.log(todaysAppointments);
+
             var now=new Date();
 
 
@@ -756,7 +756,7 @@ myApp.service('Appointments', ['$q', 'RequestToServer','$cordovaCalendar','UserA
                 return {RoomLocation_EN: ""};
             }
 
-            console.log(lowest);
+
 
             return todaysAppointments[lowest];
         }

@@ -14,7 +14,6 @@ angular.module('MUHCApp').controller('MainController', ["$window", "$state",'$ti
 
        $rootScope.firstTime = true;
 
-
         //var myDataRef = new Firebase(FirebaseService.getFirebaseUrl());
         //Listen to authentication state, if user get's unauthenticated log user out
         firebase.auth().onAuthStateChanged(function(authData){
@@ -34,14 +33,11 @@ angular.module('MUHCApp').controller('MainController', ["$window", "$state",'$ti
         /*****************************************
          * Check for online activity when the app starts
          *****************************************/
-        var app = document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'https://' ) === -1;
-
         $rootScope.online = navigator.onLine;
 
         $window.addEventListener("offline", function() {
             $rootScope.$apply(function() {
                 $rootScope.online = false;
-                console.log("offline");
                 NetworkStatus.setStatus(false);
             });
         }, false);
@@ -49,7 +45,6 @@ angular.module('MUHCApp').controller('MainController', ["$window", "$state",'$ti
         $window.addEventListener("online", function() {
             $rootScope.$apply(function() {
                 $rootScope.online = true;
-                console.log("online");
                 NetworkStatus.setStatus(true);
             });
         }, false);
@@ -102,14 +97,14 @@ angular.module('MUHCApp').controller('MainController', ["$window", "$state",'$ti
         }
 
         function resetTimer(e) {
-            //console.log('resetting timer');
+
             window.clearTimeout(timeoutLockout);
 
             goActive();
         }
 
         function goInactive() {
-            //console.log('Currently going inactive');
+
             resetTimer();
             if($state.current.name ==='Home')
             {
@@ -139,7 +134,6 @@ angular.module('MUHCApp').controller('MainController', ["$window", "$state",'$ti
 
             PushNotification.hasPermission(function(data) {
                 if (data.isEnabled) {
-                    console.log('isEnabled');
                 }
             });
 
@@ -157,14 +151,11 @@ angular.module('MUHCApp').controller('MainController', ["$window", "$state",'$ti
             });
 
             push.on('notification', function(data) {
-                console.log(data);
             });
             push.on('error', function(e) {
-                console.log(e);
             });
 
             push.on('registration', function(data) {
-                console.log(data.registrationId);
                 DeviceIdentifiers.updateRegistrationId(data.registrationId);
             });
 
@@ -214,9 +205,6 @@ angular.module('MUHCApp').controller('MainController', ["$window", "$state",'$ti
                     RequestToServer.sendRequest('Logout');
 
                     CleanUp.clear();
-
-                    // FirebaseService.getAuthentication().$signOut();
-                    console.log($state.go('init'));
                 }
                 else{
                     $rootScope.firstTime = false;
