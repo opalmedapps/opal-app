@@ -87,48 +87,48 @@ angular.module('MUHCApp').controller('MainController', ["$window", "$state",'$ti
          * Lockout
          *****************************************/
 
-        //     //TimeoutID for locking user out
-        // var timeoutLockout;
-        // function setupInactivityChecks() {
-        //     this.addEventListener('touchstart',resetTimer,false);
-        //     this.addEventListener("mousedown", resetTimer, false);
-        //     startTimer();
-        // }
+            //TimeoutID for locking user out
+        var timeoutLockout;
+        function setupInactivityChecks() {
+            this.addEventListener('touchstart',resetTimer,false);
+            this.addEventListener("mousedown", resetTimer, false);
+            startTimer();
+        }
 
-        // setupInactivityChecks();
+        setupInactivityChecks();
 
-        // function startTimer() {
-        //     timeoutLockout = window.setTimeout(goInactive, 300000);
-        // }
+        function startTimer() {
+            timeoutLockout = window.setTimeout(goInactive, 300000);
+        }
 
-        // function resetTimer(e) {
-        //     //console.log('resetting timer');
-        //     window.clearTimeout(timeoutLockout);
+        function resetTimer(e) {
+            //console.log('resetting timer');
+            window.clearTimeout(timeoutLockout);
 
-        //     goActive();
-        // }
+            goActive();
+        }
 
-        // function goInactive() {
-        //     //console.log('Currently going inactive');
-        //     resetTimer();
-        //     if($state.current.name ==='Home')
-        //     {
+        function goInactive() {
+            //console.log('Currently going inactive');
+            resetTimer();
+            if($state.current.name ==='Home')
+            {
 
-        //         $state.go('init');
-        //         localStorage.setItem('locked',1);
-        //         //window.localStorage.removeItem('OpalAdminPanelPatient');
-        //         //window.localStorage.removeItem('OpalAdminPanelUser');
-        //     }
+                $state.go('init');
+                localStorage.setItem('locked',1);
+                //window.localStorage.removeItem('OpalAdminPanelPatient');
+                //window.localStorage.removeItem('OpalAdminPanelUser');
+            }
 
-        //     //location.reload();
-        // }
+            //location.reload();
+        }
 
-        // function goActive() {
-        //     startTimer();
-        // }
+        function goActive() {
+            startTimer();
+        }
 
-        // $translatePartialLoader.addPart('top-view');
-        //$state.transitionTo('logIn');
+        $translatePartialLoader.addPart('top-view');
+        $state.transitionTo('logIn');
 
         /*****************************************
          * Push Notifications
