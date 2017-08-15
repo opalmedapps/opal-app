@@ -24,7 +24,7 @@ myApp.service('RequestToServer',['$filter','$state','NewsBanner','UserAuthorizat
          *@propertyOf MUHCApp.service:RequestToServer
          *@description Firebase reference
          **/
-        var Ref= firebase.database().ref('dev4/');
+        var Ref= firebase.database().ref('dev2/');
         /**
          *@ngdoc property
          *@name  MUHCApp.service.#refRequests

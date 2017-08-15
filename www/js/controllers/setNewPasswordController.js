@@ -33,7 +33,7 @@ myApp.controller('SetNewPasswordController',['$scope','$timeout','ResetPassword'
         return true;
 
     }
-    var ref=firebase.database().ref('dev4/');
+    var ref=firebase.database().ref('dev2/');
     $scope.submitSSN=function(ssn){
         console.log(ssn);
         if(validateSSN(ssn))

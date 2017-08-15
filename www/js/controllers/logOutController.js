@@ -23,7 +23,7 @@
         ////////////////
 
         function activate() {
-            var Ref= firebase.database().ref('dev4/');
+            var Ref= firebase.database().ref('dev2/');
 
             var refCurrentUser = Ref.child('logged_in_users/' + $rootScope.uid);
 
