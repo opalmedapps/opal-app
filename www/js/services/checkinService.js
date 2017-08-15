@@ -92,16 +92,16 @@
             var r=$q.defer();
             navigator.geolocation.getCurrentPosition(function(position){
                 var distanceMeters = 1000 * getDistanceFromLatLonInKm(position.coords.latitude, position.coords.longitude, 45.474127399999996, -73.6011402);
-                //if (distanceMeters <= 500) {
+                if (distanceMeters <= 500) {
                     positionCheckinAppointment = {
                         'Latitude':position.coords.latitude,
                         'Longitude':position.coords.longitude,
                         'Accuracy':position.coords.accuracy
                     };
                     r.resolve('CHECK_IN_PERMITTED');
-                // } else {
-                //     r.reject('NOT_ALLOWED');
-                // }
+                } else {
+                    r.reject('NOT_ALLOWED');
+                }
 
             }, function(error){
                 console.log(error.code);
