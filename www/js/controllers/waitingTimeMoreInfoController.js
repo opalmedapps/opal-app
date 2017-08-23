@@ -259,7 +259,7 @@
                 var container = document.getElementById('no-prev-patient');
                 container.style.display = "block";
             }
-            myTimeOut = $timeout(tick, 10000);
+            myTimeOut = $timeout(tick, 60000);
         }
 
         requestEstimate();
