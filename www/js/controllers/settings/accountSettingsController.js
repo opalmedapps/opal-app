@@ -69,6 +69,7 @@
 
         }
 
+
         function accountDeviceBackButton() {
             tabbar.setActiveTab(0);
         }
