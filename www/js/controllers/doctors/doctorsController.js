@@ -55,8 +55,6 @@
             vm.noContacts = Doctors.isEmpty();
             vm.doctors = Doctors.getDoctors();
             vm.doctors = setDoctorsView(vm.doctors);
-
-            console.log(vm.doctors);
         }
 
         function goDoctorContact(doctor){
@@ -70,9 +68,9 @@
         {
             doctors.forEach(function(doctor)
             {
-                if(doctor.PrimaryFlag==1&&doctor.OncologistFlag==1){
+                if(doctor.PrimaryFlag === 1 && doctor.OncologistFlag === 1){
                     doctor.Role = $filter('translate')("PRIMARYDOCTOR");
-                }else if(doctor.OncologistFlag==1){
+                }else if(doctor.OncologistFlag === 1){
                     doctor.Role = $filter('translate')("ONCOLOGIST");
                 }else{
                     doctor.Role = $filter('translate')("OTHER");
@@ -83,49 +81,11 @@
         }
         function showHeader(index)
         {
-            if(index==0||vm.doctors[index].Role !== vm.doctors[index-1].Role) return true;
-            else return false;
+            return index === 0 || vm.doctors[index].Role !== vm.doctors[index - 1].Role;
         }
     }
 
 })();
 
-/**
-* @ngdoc controller
-* @scope
-* @name MUHCApp.controller:ContactDoctorController
-* @requires vm
-* @description Controller manages the logic for the contact page of the doctor, the user is directed here through
-* the {@link MUHCApp.controller:HomeController HomeController} view.
-*
-**/
 
-(function () {
-    'use strict';
-
-    angular
-        .module('MUHCApp')
-        .controller('ContactIndividualController', ContactIndividualController);
-
-    ContactIndividualController.$inject = ['NavigatorParameters'];
-
-    /* @ngInject */
-    function ContactIndividualController(NavigatorParameters) {
-        var vm = this;
-        vm.title = 'ContactIndividualController';
-        vm.doctor = null;
-        vm.header = '';
-
-        activate();
-
-        ////////////////
-
-        function activate() {
-            var navi = NavigatorParameters.getNavigator();
-            var page = navi.getCurrentPage();
-            vm.doctor = page.options.doctor;
-        }
-    }
-
-})();
 

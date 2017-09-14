@@ -11,13 +11,10 @@
         .module('MUHCApp')
         .controller('CalendarController', CalendarController);
 
-    CalendarController.$inject = ['Appointments', '$q', '$timeout', '$location', '$templateRequest', '$sce', '$compile',
-        '$anchorScroll','NavigatorParameters', 'UserPreferences', 'Logger'];
+    CalendarController.$inject = ['Appointments', '$timeout', '$location', '$anchorScroll','NavigatorParameters', 'UserPreferences', 'Logger'];
 
     /* @ngInject */
-    function CalendarController(Appointments, $q, $timeout, $location, $templateRequest, $sce, $compile,
-                                $anchorScroll,NavigatorParameters,UserPreferences, Logger) {
-
+    function CalendarController(Appointments, $timeout, $location, $anchorScroll, NavigatorParameters, UserPreferences, Logger) {
         var vm = this;
         var flag;
         var todaysTimeMilliseconds;
@@ -90,12 +87,15 @@
                 dateFirst = dateFirst.getTime();
             }
 
-            // loadTemplate().then(function(){
-            var divTreatment=document.getElementById('scrollerAppointments');
-            var heightTreatment=document.documentElement.clientHeight-document.documentElement.clientHeight*0.35-180;
-            if(divTreatment)divTreatment.style.height=heightTreatment+'px';
-            setTimeout(scrollToAnchor,100);
-            // });
+
+            waitForCalendar()
+                .then(function(){
+                    var divTreatment=document.getElementById('scrollerAppointments');
+                    var heightTreatment=document.documentElement.clientHeight-document.documentElement.clientHeight*0.35-180;
+                    if(divTreatment)divTreatment.style.height=heightTreatment+'px';
+                    setTimeout(scrollToAnchor,100);
+                    Appointments.setAsLoaded();
+                })
         }
 
         function scrollToAnchor()
@@ -105,20 +105,9 @@
             $anchorScroll();
         }
 
-        function loadTemplate()
+        function waitForCalendar()
         {
-            var r = $q.defer();
-            $timeout(function () {
-                vm.loading = false;
-                var template= $sce.getTrustedResourceUrl('./views/personal/appointments/appointment-list-template.html');
-                $templateRequest(template).then(function(template) {
-                    $compile($("#appointment-list").html(template).contents())(vm);
-                    r.resolve(true);
-                }, function() {
-                    r.resolve(true);
-                });
-            }, 1000);
-            return r.promise;
+            return $timeout(function () {}, 500);
         }
 
         function goToCalendarOptions()
@@ -169,6 +158,7 @@
             }
             return 'firstAnchor';
         }
+
         //Finds the closest appointment that happens after the choosen appointment, this is use for scrolling
         //Could be done with binary search for an improvement
         function findClosestAppointmentToTime(tmili)
@@ -182,15 +172,6 @@
                 }
             }
             return 0;
-            //To be added once is supported by all browsers!
-            // var ind = 0;
-            // ind = vm.appointments.findIndex(function(appointment)
-            // {
-            //     var date = appointment.ScheduledStartTime.getTime();
-            //     return date >= tmili;
-
-            // });
-            // return ind;
         }
 
         //Obtains color for a given appointment
@@ -241,7 +222,7 @@
                 {
                     return false;
                 }else{
-                    return (cur_date > choosenTimeMilliseconds && date1 < choosenTimeMilliseconds) || cur_date == choosenTimeMilliseconds;
+                    return (cur_date > choosenTimeMilliseconds && date1 < choosenTimeMilliseconds) || cur_date === choosenTimeMilliseconds;
                 }
             }
         }
@@ -249,14 +230,11 @@
         //Leaves to appointment
         function goToAppointment(appointment)
         {
-            if(appointment.ReadStatus == '0') Appointments.readAppointmentBySerNum(appointment.AppointmentSerNum);
+            if(appointment.ReadStatus === '0') Appointments.readAppointmentBySerNum(appointment.AppointmentSerNum);
             NavigatorParameters.setParameters({'Navigator':navigatorName, 'Post':appointment});
             window[navigatorName].pushPage('./views/personal/appointments/individual-appointment.html');
         }
-
-
     }
-
 })();
 
 

@@ -151,6 +151,9 @@ myApp.service('LabResults',['$filter','LocalStorage','RequestToServer','$q',
                     .then(function (response) {
                         if (response.Code == '3') {
                             addTestResults(response.labResults);
+
+                            console.log(JSON.stringify(response.labResults));
+
                             deferred.resolve({Success: true, Location: 'Server'});
                         }
                     })
