@@ -12,7 +12,7 @@ var myApp=angular.module('MUHCApp');
  *@requires $filter
  *@description Sets the educational material and provides an API to interact with it and the server
  **/
-myApp.service('EducationalMaterial',['$filter','LocalStorage','FileManagerService', 'UserPreferences', 'RequestToServer',function ($filter, LocalStorage, FileManagerService,UserPreferences,RequestToServer) {
+myApp.service('EducationalMaterial',['$filter','LocalStorage','FileManagerService', 'UserPreferences', 'RequestToServer', '$http' ,function ($filter, LocalStorage, FileManagerService, UserPreferences,RequestToServer, $http) {
 
     /**
      *@ngdoc property
@@ -318,6 +318,17 @@ myApp.service('EducationalMaterial',['$filter','LocalStorage','FileManagerServic
         getPfpResources:function()
         {
             return pfpresources;
+        },
+
+        getMaterialBinary:function(url){
+            var config = { responseType: 'blob' };
+            return $http.get(url, config)
+
+        },
+
+
+        getMaterialPage:function(url){
+            return $http.get(url);
         },
         /**
          *@ngdoc method
