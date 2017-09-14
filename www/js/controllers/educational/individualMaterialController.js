@@ -39,64 +39,64 @@
             bindEvents();
 
             //set educational material language
-            $scope.edumaterial =EducationalMaterial.setLanguage(param.Post);
+            vm.edumaterial =EducationalMaterial.setLanguage(param.Post);
             Logger.sendLog('Educational Material', param.Post.EducationalMaterialSerNum);
 
             //Determine if material has a ShareURL and is printable
-            if($scope.edumaterial.hasOwnProperty('ShareURL')&& $scope.edumaterial.ShareURL !=="") {
-                $scope.isPrintable = FileManagerService.isPDFDocument($scope.edumaterial.ShareURL);
+            if(vm.edumaterial.hasOwnProperty('ShareURL')&& vm.edumaterial.ShareURL !=="") {
+                vm.isPrintable = FileManagerService.isPDFDocument(vm.edumaterial.ShareURL);
             }
 
             //Determine if material is a booklet
-            var isBooklet = $scope.edumaterial.hasOwnProperty('TableContents');
+            var isBooklet = vm.edumaterial.hasOwnProperty('TableContents');
 
             //Determine if material is an app
             app = document.URL.indexOf('http://') === -1 && document.URL.indexOf('https://') === -1;
 
             //If its a booklet, translate table of contents
             if (isBooklet) {
-                $scope.tableOfContents = $scope.edumaterial.TableContents;
-                $scope.tableOfContents = EducationalMaterial.setLanguage($scope.tableOfContents);
+                vm.tableOfContents = vm.edumaterial.TableContents;
+                vm.tableOfContents = EducationalMaterial.setLanguage(vm.tableOfContents);
             }
 
             //Determining if its an individual php page to show immediately.
-            $scope.isIndividualHtmlPage = (FileManagerService.getFileType($scope.edumaterial.URL_EN) === 'php');
-            if($scope.isIndividualHtmlPage) downloadIndividualPage();
+            vm.isIndividualHtmlPage = (FileManagerService.getFileType(vm.edumaterial.URL_EN) === 'php');
+            if(vm.isIndividualHtmlPage) downloadIndividualPage();
         }
 
         function bindEvents(){
             //Instantiating popover controller
             $timeout(function () {
-                ons.createPopover('./views/education/popover-material-options.html',{parentScope: $scope}).then(function (popover) {
-                    $scope.popoverSharing = popover;
+                ons.createPopover('./views/education/popover-material-options.html',{parentScope: vm}).then(function (popover) {
+                    vm.popoverSharing = popover;
                 });
             }, 300);
 
             //On destroy clean up
             $scope.$on('$destroy', function () {
-                $scope.popoverSharing.destroy();
+                vm.popoverSharing.destroy();
             });
         }
 
         function goToEducationalMaterial(){
-            var nextStatus = EducationalMaterial.openEducationalMaterialDetails($scope.edumaterial);
+            var nextStatus = EducationalMaterial.openEducationalMaterialDetails(vm.edumaterial);
             if (nextStatus !== -1) {
-                NavigatorParameters.setParameters({ 'Navigator': navigatorPage, 'Index': index, 'Booklet': $scope.edumaterial, 'TableOfContents': $scope.tableOfContents });
+                NavigatorParameters.setParameters({ 'Navigator': navigatorPage, 'Index': index, 'Booklet': vm.edumaterial, 'TableOfContents': vm.tableOfContents });
                 window[navigatorPage].pushPage(nextStatus.Url);
             }
         }
 
         function share(){
-            FileManagerService.shareDocument($scope.edumaterial.Name, $scope.edumaterial.ShareURL);
-            $scope.popoverSharing.hide();
+            FileManagerService.shareDocument(vm.edumaterial.Name, vm.edumaterial.ShareURL);
+            vm.popoverSharing.hide();
         }
 
         function print(){
             //If no connection then simply alert the user to connect to the internet
-            $scope.popoverSharing.hide();
+            vm.popoverSharing.hide();
             if(app && NetworkStatus.isOnline())
             {
-                EducationalMaterial.getMaterialBinary($scope.edumaterial.ShareURL)
+                EducationalMaterial.getMaterialBinary(vm.edumaterial.ShareURL)
                     .then(function(){
                         var blob = new Blob([this.response], { type: 'application/pdf' });
                         var fileReader = new FileReader();
@@ -119,18 +119,18 @@
                         ons.notification.alert({'message':$filter('translate')('UNABLETOOBTAINEDUCATIONALMATERIAL')});
                     });
             }else{
-                $scope.popoverSharing.hide();
+                vm.popoverSharing.hide();
                 ons.notification.alert({'message':$filter('translate')("PRINTINGUNAVAILABLE")});
             }
         }
 
         function downloadIndividualPage()
         {
-            if(!$scope.edumaterial.hasOwnProperty('Content'))
+            if(!vm.edumaterial.hasOwnProperty('Content'))
             {
-                EducationalMaterial.getMaterialPage($scope.edumaterial.Url)
+                EducationalMaterial.getMaterialPage(vm.edumaterial.Url)
                     .then(function(response){
-                        $scope.edumaterial.Content = response;
+                        vm.edumaterial.Content = response;
                     })
                     .catch(function(){
                         ons.notification.alert({'message':$filter('translate')('UNABLETOOBTAINEDUCATIONALMATERIAL')});
