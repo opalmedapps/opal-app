@@ -40,9 +40,6 @@
         }
 
         function loadPageContent(contentType){
-
-            console.log(contentType);
-
             var pageContent = DynamicContentService.getContentData(contentType);
 
             // get the content from depdocs
@@ -63,7 +60,6 @@
                     vm.loading = false;
                 })
                 .catch(handleError);
-
         }
 
         function handleError(response) {

@@ -5,32 +5,55 @@
  * Time: 1:37 PM
  */
 
-myApp.controller('AppointmentController', ['NavigatorParameters','NativeNotification','$scope',
-    '$timeout', '$rootScope','Appointments', 'CheckInService','$q',
-    'NewsBanner','$filter', 'UserPreferences', 'Logger',
-    function (NavigatorParameters,NativeNotification,$scope,
-              $timeout, $rootScope, Appointments,CheckInService, $q,
-              NewsBanner,$filter, UserPreferences, Logger) {
-        //Information of current appointment
-        var parameters = NavigatorParameters.getParameters();
-        var navigatorName = parameters.Navigator;
+(function () {
+    'use strict';
 
-        $scope.app = parameters.Post;
-        $scope.language = UserPreferences.getLanguage();
+    angular
+        .module('MUHCApp')
+        .controller('AppointmentController', AppointmentController);
 
-        Logger.sendLog('Appointment', parameters.Post.AppointmentSerNum);
+    AppointmentController.$inject = ['NavigatorParameters', 'UserPreferences', 'Logger'];
 
-        $scope.goToMap=function()
+    /* @ngInject */
+    function AppointmentController(NavigatorParameters, UserPreferences, Logger) {
+
+        var vm = this;
+
+        var navigatorName;
+
+        vm.goToMap = goToMap;
+        vm.aboutAppointment = aboutAppointment;
+
+        activate();
+
+        //////////////////////////////////////
+        function activate() {
+            var parameters = NavigatorParameters.getParameters();
+            navigatorName = parameters.Navigator;
+
+            vm.app = parameters.Post;
+            vm.language = UserPreferences.getLanguage();
+
+            console.log("language: " + vm.language);
+
+            console.log(JSON.stringify(vm.app));
+
+
+            Logger.sendLog('Appointment', parameters.Post.AppointmentSerNum);
+        }
+
+        function goToMap()
         {
-            NavigatorParameters.setParameters($scope.app);
+            NavigatorParameters.setParameters(vm.app);
             window[navigatorName].pushPage('./views/general/maps/individual-map.html');
-        };
+        }
 
-        $scope.aboutApp = function () {
+        function aboutAppointment () {
             window[navigatorName].pushPage('./views/templates/content.html', {
-                contentLink: $scope.app["URL_"+UserPreferences.getLanguage()],
-                contentType: $scope.app["AppointmentType_"+UserPreferences.getLanguage()]
+                contentLink: vm.app["URL_"+UserPreferences.getLanguage()],
+                contentType: vm.app["AppointmentType_"+UserPreferences.getLanguage()]
             });
         }
 
-    }]);
+    }
+})();

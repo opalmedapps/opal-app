@@ -19,10 +19,8 @@
         'CheckInService',
         'NavigatorParameters',
         'UserPreferences',
-        'Appointments',
         'NewsBanner',
-        '$filter',
-        'Logger'
+        '$filter'
     ];
 
     /* @ngInject */
@@ -34,7 +32,6 @@
         $filter
     ) {
         var vm = this;
-        vm.title = 'CheckInController';
         vm.apps = [];
         vm.language = '';
         vm.response = '';
@@ -53,7 +50,7 @@
             vm.language = UserPreferences.getLanguage();
 
             // Check if there are appointments
-            if (!vm.apps || vm.apps.length == 0){
+            if (!vm.apps || vm.apps.length === 0){
                 vm.alert.type = "info";
                 vm.checkInMessage = "CHECKIN_NONE";
                 return;
@@ -67,13 +64,12 @@
             else{
                 // Ensure that user is within range of the hospital
                 CheckInService.isAllowedToCheckIn()
-                    .then(function (response) {
-
+                    .then(function () {
                         // Verify if the appointments are checked in
                         return CheckInService.verifyAllCheckIn();
                     })
                     .then(function (response){
-                        if (response == null){
+                        if (!response){
                             vm.alert.type = "info";
                             vm.checkInMessage = "CHECKIN_NONE";
                         } else if (response){
@@ -98,7 +94,7 @@
                         }
                     })
                     .catch(function (error) {
-                        if (error == "NOT_ALLOWED"){
+                        if (error === "NOT_ALLOWED"){
                             NewsBanner.showCustomBanner($filter('translate')("NOT_ALLOWED"), '#333333', function(){}, 3000);
                             vm.alert.type = "warning";
                             vm.checkInMessage = "CHECKIN_IN_HOSPITAL_ONLY";
@@ -108,11 +104,7 @@
                             NewsBanner.showCustomBanner($filter('translate')(error), '#333333', function(){}, 3000);
                         }
                     });
-
             }
-
-
-
         }
 
         // View appointment details

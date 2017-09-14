@@ -43,6 +43,8 @@ myApp.service('Appointments', ['$q', 'RequestToServer','$cordovaCalendar','UserA
      **/
     var appointmentsLocalStorage=[];
 
+    var firstLoad = true;
+
     var calendar={};
     var numberOfSessions=0;
     function searchAppointmentsAndDelete(appointments)
@@ -759,6 +761,15 @@ myApp.service('Appointments', ['$q', 'RequestToServer','$cordovaCalendar','UserA
 
 
             return todaysAppointments[lowest];
+        },
+
+        setAsLoaded: function() {
+            firstLoad = false;
+        },
+
+        isFirstLoad: function() {
+            return firstLoad
+
         }
 
     };
