@@ -34,11 +34,6 @@
             vm.app = parameters.Post;
             vm.language = UserPreferences.getLanguage();
 
-            console.log("language: " + vm.language);
-
-            console.log(JSON.stringify(vm.app));
-
-
             Logger.sendLog('Appointment', parameters.Post.AppointmentSerNum);
         }
 
