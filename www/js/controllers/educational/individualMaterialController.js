@@ -5,7 +5,7 @@
  * Time: 2:08 PM
  */
 
-myApp.controller('IndividualEducationalMaterialController', ['$scope', '$timeout', 'NavigatorParameters',
+myApp.controller('IndividualMaterialController', ['$scope', '$timeout', 'NavigatorParameters',
     'UserPreferences', 'EducationalMaterial',
     'FileManagerService','$cordovaNetwork','$filter', 'Logger',
     function ($scope, $timeout, NavigatorParameters, UserPreferences, EducationalMaterial,
@@ -17,7 +17,7 @@ myApp.controller('IndividualEducationalMaterialController', ['$scope', '$timeout
         var navigatorPage = param.Navigator;
 
         //set educational material language
-        $scope.edumaterial =EducationalMaterial.setLanguageEduationalMaterial(param.Post);
+        $scope.edumaterial =EducationalMaterial.setLanguage(param.Post);
         Logger.sendLog('Educational Material', param.Post.EducationalMaterialSerNum);
 
         //Determine if material has a ShareURL and is printable
@@ -34,7 +34,7 @@ myApp.controller('IndividualEducationalMaterialController', ['$scope', '$timeout
         //If its a booklet, translate table of contents
         if (isBooklet) {
             $scope.tableOfContents = $scope.edumaterial.TableContents;
-            $scope.tableOfContents = EducationalMaterial.setLanguageEduationalMaterial($scope.tableOfContents);
+            $scope.tableOfContents = EducationalMaterial.setLanguage($scope.tableOfContents);
         }
 
         //Determining if its an individual php page to show immediately.

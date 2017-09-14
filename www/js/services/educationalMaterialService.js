@@ -181,7 +181,7 @@ myApp.service('EducationalMaterial',['$filter','LocalStorage','FileManagerServic
          *@description Setter method for educational material
          *@return {Boolean} Returns whether the patient has any educational material available.
          **/
-        isThereEducationalMaterial:function()
+        materialExists:function()
         {
             //Check if the educationa material array has any elements
             return educationalMaterialArray.length>0;
@@ -356,13 +356,13 @@ myApp.service('EducationalMaterial',['$filter','LocalStorage','FileManagerServic
         },
         /**
          *@ngdoc method
-         *@name setLanguageEduationalMaterial
+         *@name setLanguage
          *@methodOf MUHCApp.service:EducationalMaterial
          *@param {Array} array Array with educational material
          *@description Translates the array parameter containing educational material to appropiate preferred language specified in {@link MUHCApp.service:UserPreferences UserPreferences}.
          *@returns {Array} Returns array with translated values
          **/
-        setLanguageEduationalMaterial:function(array)
+        setLanguage:function(array)
         {
 
             return setLanguageEduMaterial(array);

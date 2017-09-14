@@ -34,7 +34,7 @@
             vm.materials = EducationalMaterial.getEducationalMaterial();
 
             //Setting the language for view
-            vm.materials = EducationalMaterial.setLanguageEduationalMaterial(materials);
+            vm.materials = EducationalMaterial.setLanguage(materials);
         });
 
         function initEdu() {
