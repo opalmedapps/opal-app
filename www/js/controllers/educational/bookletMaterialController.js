@@ -178,9 +178,6 @@
             }, 10);
             if (app) {
                 ons.orientation.on("change", function (event) {
-
-                    //vm.carousel.refresh();
-
                     setHeightElement();
                     var i = vm.carousel._scroll / vm.carousel._currentElementSize;
                     delete vm.carousel._currentElementSize;
