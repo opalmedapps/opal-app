@@ -7,27 +7,46 @@
 
 
 /**
- * @name EducationalMaterialSinglePageController
+ * @name HTMLMaterialController
  * @description Once the material has gone through the first show page, this controller is in charge of opening the material that is simple a individual html page, such as the charter and such and its not a table of
  * contents. Or in backend language is a parent element without a table of contents and simple material content.
  *
  */
-myApp.controller('EducationalMaterialSinglePageController', ['$scope', '$timeout', 'NavigatorParameters', 'EducationalMaterial', function ($scope, $timeout, NavigatorParameters, EducationalMaterial) {
-    //Obtaining educational material and other parameters such as the navigatorName
-    var parameters = NavigatorParameters.getParameters();
-    var material = parameters.Booklet;
-    var navigatorName = parameters.Navigator;
+(function () {
+    'use strict';
 
-    //Setting the educational material
-    $scope.edumaterial = material;
+    angular
+        .module('MUHCApp')
+        .controller('HTMLMaterialController', HTMLMaterialController);
 
-    //Ajax call to obtain material
-    $.get(material.Url, function (res) {
+    HTMLMaterialController.$inject = ['NavigatorParameters', 'EducationalMaterial'];
 
-        $timeout(function () {
-            //Sets content variable for material and hides loading
-            $scope.edumaterial.Content = res;
-        });
+    /* @ngInject */
+    function HTMLMaterialController(NavigatorParameters, EducationalMaterial) {
+        var vm = this;
 
-    });
-}]);
+        var parameters;
+        var material;
+        var navigatorName;
+
+        activate();
+        ///////////////////////////
+
+        function activate() {
+            parameters = NavigatorParameters.getParameters();
+            material = parameters.Booklet;
+            navigatorName = parameters.Navigator;
+
+            vm.edumaterial = material;
+
+           EducationalMaterial.getContent()
+               .then(function(response){
+                   vm.edumaterial.Content = response;
+               })
+               .catch(function(error){
+                   console.log(error);
+                   // TODO: HANDLE THIS ERROR BETTER!!!
+               })
+        }
+    }
+})();
