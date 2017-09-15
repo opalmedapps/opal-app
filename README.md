@@ -1,10 +1,13 @@
 # MUHC Oncology Patient Application
 Opal - the MUHC Oncology Patient Application for mobile phones and the web - is a product that has arisen from the winning project of the 2014 MUHC Q+ initiative. The project proposal was submitted by the Health Informatics Group (HIG, see below) and was entitled “Realistic knowledge-based waiting time estimates for radiation oncology patients - addressing the pain of waiting”. It had as its goal the provision of waiting time estimates to radiation oncology patients. 
 
-### Installation
-[Install NodeJS](https://nodejs.org/en/download/)
+To download the codebase and get the Opal Mobile App running in your browser or on a device, follow the instructions below.
 
-Intsall http-server
+### Installation
+[Install NodeJS](https://nodejs.org/en/download/) 
+**NOTE: For proper access to the backend you must have version 6+**
+
+Install http-server
 ```
 npm install -g http-server
 ```
@@ -14,18 +17,52 @@ npm install -g bower
 ```
 Clone from github 
 ```
-git clone git@github.com:Sable/qplus.git
-```
-If you are running ubuntu and you try to clone to your encrypted home directory, some filenames will be too long and git will throw an error. You should then only clone the master or opal_dev branches. 
-
-To clone a single branch from the git repository.
-```
-git clone -b <remote_branch_name> --single-branch git@github.com:Sable/qplus.git
+git clone https://github.com/Sable/qplus.git
 ```
 Navigate to qplus folder and install missing librairies
 ```
-bower install
+bower install -force
 ```
+
+### Browser View Only
+Opal can be viewed and tested in the browser without having to deploy to any device. However, this is not a substitute for actual device testing. To view Opal in the browser do the following:
+
+1. Follow instructions in the [Installation](#installation) section
+2. Navigate to /{path_to_qplus}/www and type the command `http-server`;
+3. Navigate to the localhost path that the terminal tells you it's hosting on in your browser, a webview version of the app should be shown.
+4. In order to view the app in a mobile view, right click the page and the select "inspect" in the menu options. Your developer console will open and you will see a tablet/mobile icon in top left corner of console. Clicking this will change the view to the corresponding mobile device aspect-ratio.
+
+Most browsers come with Javascript developer consoles built in. I personally enjoy using Google Chrome, but I know Firefox has a powerful debugging console as well. These can be used to debug the application.
+
+### Mobile Device View
+[Cordova](https://cordova.apache.org/) enables software programmers to build applications for mobile devices using JavaScript, HTML5, and CSS3, instead of relying on platform-specific APIs like those in Android, iOS, or Windows Phone. It enables wrapping up of CSS, HTML, and JavaScript code depending upon the platform of the device. It extends the features of HTML and JavaScript to work with the device. The resulting applications are a hybrid between web and native.
+
+Cordova has the ability to build applications for iOS, Android and browsers using one code base.
+
+Instructions are based on [Cordova get started page!](https://cordova.apache.org/#getstarted)
+
+1. Follow instructions in the [Installation](#installation) section
+2. Install Cordova via `npm install -g cordova`.
+3. Create a Cordova Project `cordova create <NameOfProject>`.
+4. Change directory to your newly created cordova project `cd <NameOfProject>`.
+5. Copy the res folder to the cordova folder project, and replace the config.xml file in the cordova project with the config.xml file in this repository.
+6. Add the contents of the www folder to the www folder in your cordova project.
+7. Add platforms to your project:
+  * `cordova platform add ios`
+  * `cordova platform add android`
+8. Build your app via: `cordova build`. For an specific platform build use:
+ ``` 
+cordova build <platform>
+```
+9. Connect your phone via USB to your computer and run your project:
+ ```
+cordova run <platform>
+```
+
+### When you're ready to start coding
+
+## AngularJS
+Please refer to the following guideline if you aren't familiar Papa John's style guide for angularJS: https://github.com/johnpapa/angular-styleguide/blob/master/a1/README.md
 ### Technologies
 Opal utilizes the following technologies:
 * [Cordova](https://cordova.apache.org/)
