@@ -384,12 +384,12 @@ myApp.service('Appointments', ['$q', 'RequestToServer','$cordovaCalendar','UserA
         },
         /**
          *@ngdoc method
-         *@name isThereNextAppointment
+         *@name nextAppointmentExists
          *@methodOf MUHCApp.service:Appointments
          *@param {Object} appointments Appointments array that containts the new appointments
          *@returns {Boolean} Returns whether there is a next appointment for the user
          **/
-        isThereNextAppointment:function(){
+        nextAppointmentExists:function(){
             var FutureAppointments=getAppointmentsInPeriod('Future');
             if(FutureAppointments.length===0)
             {
@@ -400,12 +400,12 @@ myApp.service('Appointments', ['$q', 'RequestToServer','$cordovaCalendar','UserA
         },
         /**
          *@ngdoc method
-         *@name isThereAppointments
+         *@name appointmentsExist
          *@methodOf MUHCApp.service:Appointments
          *@param {Object} appointments Appointments array that containts the new appointments
          *@returns {Boolean} Returns whether the user has any appointments
          **/
-        isThereAppointments:function()
+        appointmentsExist:function()
         {
             if(userAppointmentsArray.length===0)
             {

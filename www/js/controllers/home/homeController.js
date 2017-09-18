@@ -51,6 +51,8 @@
             NavigatorParameters.setParameters({'Navigator':'homeNavigator'});
             NavigatorParameters.setNavigator(homeNavigator);
 
+
+            //TODO: WHAT IS THIS USED FOR?!?!?!
             // Store the login time
             if(localStorage.getItem('locked')){
                 localStorage.removeItem('locked');
@@ -86,25 +88,15 @@
             if(NetworkStatus.isOnline()){
                 homePageInit();
             }else if(Patient.getPatientId()){
-                //Basic patient information
-                vm.PatientId=Patient.getPatientId();
-                vm.FirstName = Patient.getFirstName();
-                vm.LastName = Patient.getLastName();
-                vm.ProfileImage=Patient.getProfileImage();
-                vm.language = UserPreferences.getLanguage();
-                vm.noUpcomingAppointments=false;
+                //Basic patient information that may or many not be available... but won't break app if not there and it makes the app look less broken if not internet connection
+                setPatientInfo();
             }
         }
 
         function homePageInit()
         {
-            //Basic patient information
-            vm.PatientId=Patient.getPatientId();
-            vm.FirstName = Patient.getFirstName();
-            vm.LastName = Patient.getLastName();
-            vm.ProfileImage=Patient.getProfileImage();
-            vm.language = UserPreferences.getLanguage();
-            vm.noUpcomingAppointments=false;
+            //Set patient info
+            setPatientInfo();
 
             //Set treatment metadata state
             setTreatmentStatus();
@@ -136,9 +128,9 @@
         function setNextAppointment()
         {
             //Next appointment information
-            if(Appointments.isThereAppointments())
+            if(Appointments.appointmentsExist())
             {
-                if(Appointments.isThereNextAppointment()){
+                if(Appointments.nextAppointmentExists()){
                     vm.appointmentShown=Appointments.getUpcomingAppointment();
                 }
             }
@@ -183,18 +175,27 @@
         //         })
         // }
 
+        function setPatientInfo(){
+            //Basic patient information
+            vm.PatientId = Patient.getPatientId();
+            vm.FirstName = Patient.getFirstName();
+            vm.LastName = Patient.getLastName();
+            vm.ProfileImage=Patient.getProfileImage();
+            vm.language = UserPreferences.getLanguage();
+            vm.noUpcomingAppointments=false;
+        }
+
         function setCheckin()
         {
 
             //skip the following if the check in state has already been set..
-            if(CheckInService.getCheckInApps() !== null &&  CheckInService.getCheckInApps().length > 0){
+            if(!!CheckInService.getCheckInApps() &&  CheckInService.getCheckInApps().length > 0){
                 //Case 1: An Appointment has checkin 0, not checked-in
 
                 vm.todaysAppointments = CheckInService.getCheckInApps();
                 vm.allCheckedIn = CheckInService.areAllCheckedIn();
 
                 evaluateCheckIn();
-
             }
             else{
                 //Get checkin appointment for the day, gets the closest appointment to right now
@@ -210,24 +211,19 @@
                     CheckInService.isAllowedToCheckIn().then(function (response) {
                         var allCheckedIn = true;
                         for (var app in vm.todaysAppointments){
-                            if (vm.todaysAppointments[app].Checkin == '0'){
-
+                            if (vm.todaysAppointments[app].Checkin === '0'){
                                 allCheckedIn = false;
                             }
                         }
-
                         vm.allCheckedIn = allCheckedIn;
                         CheckInService.setAllCheckedIn(allCheckedIn);
-
                         evaluateCheckIn();
-
                     }).catch(function(error){
 
                         //NewsBanner.showCustomBanner($filter('translate')(error), '#333333', function(){}, 3000);
                     });
 
                 }else{
-
                     //Case where there are no appointments that day
                     vm.checkInMessage = "CHECKIN_NONE";
                     vm.no_appointments = true;
@@ -255,8 +251,7 @@
                     }
                 });
             } else {
-                //They have been called to the appointment.
-
+                //They have been called to the appointment. // TODO: why is this the case?
                 var calledApp = Appointments.getRecentCalledAppointment();
                 vm.calledApp = calledApp;
                 vm.checkInMessage = calledApp.RoomLocation ? "CHECKIN_CALLED":"CHECKIN_MESSAGE_AFTER" + setPlural(vm.todaysAppointments);
@@ -313,7 +308,6 @@
         function goToStatus()
         {
             homeNavigator.pushPage('views/home/status/status_new.html');
-
         }
 
         // Function to go push a page to the correct notification.
@@ -352,8 +346,5 @@
             }
             return "";
         }
-        
-
     }
-
 })();
