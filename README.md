@@ -72,41 +72,6 @@ Opal utilizes the following technologies:
 
 New developers working on the project should familairize themselves with AngularJS, OnsenUI and Cordova.
 
-### Browser View Only
-Opal can be viewed and tested in the browser without having to deploy to any device. However, this is not a substitute for actual device testing. To view Opal in the browser do the following:
-
-1. Follow instructions in the [Installation](#installation) section
-2. Navigate to /{path_to_qplus}/www and type the command `http-server`;
-3. Navigate to localhost:8080 in your browser, a webview version of the app should be shown.
-
-Most broswers come with Javascript developer consoles built in. These can be used to debug the application.
-
-### Browser/Mobile View
-[Cordova](https://cordova.apache.org/) enables software programmers to build applications for mobile devices using JavaScript, HTML5, and CSS3, instead of relying on platform-specific APIs like those in Android, iOS, or Windows Phone. It enables wrapping up of CSS, HTML, and JavaScript code depending upon the platform of the device. It extends the features of HTML and JavaScript to work with the device. The resulting applications are a hybrid between web and native.
-
-Cordova has the ability to build applications for iOS, Android and browsers using one code base.
-
-Instructions are based on [Cordova get started page!](https://cordova.apache.org/#getstarted)
-
-1. Follow instructions in the [Installation](#installation) section
-2. Install Cordova via `npm install -g cordova`.
-3. Create a Cordova Project `cordova create <NameOfProject>`.
-4. Change directory to your newly created cordova project `cd <NameOfProject>`.
-5. Copy the res folder to the cordova folder project, and replace the config.xml file in the cordova project with the config.xml file in this repository.
-6. Add the contents of the www folder to the www folder in your cordova project.
-7. Add platforms to your project:
-  * `cordova platform add ios`
-  * `cordova platform add android`
-  * `cordova platform add browser`
-8. Build your app via: `cordova build`. For an specific platform build use:
- ``` 
-cordova build <platform>
-```
-9. Connect your phone via USB to your computer and run your project:
- ```
-cordova run <platform>
-```
-
 #### Plugins:
 
 You should not need to worry about plugins, but in case something goes wrong, you will need to add them manually using
