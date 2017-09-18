@@ -30,5 +30,4 @@
             Logger.sendLog('Lab Results', 'all - Type')
         }
     }
-
 })();
