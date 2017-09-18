@@ -11,7 +11,7 @@ angular.module('MUHCApp').controller('LoadingController',
 
             modal.show();
             var userAuthorizationInfo = UserAuthorizationInfo.getUserAuthData();
-            if(typeof userAuthorizationInfo === 'undefined'||!userAuthorizationInfo) $state.go('init');
+            if(!userAuthorizationInfo) $state.go('init');
             setTimeout(function()
             {
                 UpdateUI.init()
