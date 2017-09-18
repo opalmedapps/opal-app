@@ -19,7 +19,6 @@
 
         function activate() {
             vm.loading = true;
-
             // Check if the data is 300s old if it is get again
             if(LabResults.getLastUpdated() < Date.now() - 300000){
                 LabResults.setTestResults()
@@ -27,7 +26,6 @@
                         vm.testResultsByDate = LabResults.getTestResultsArrayByDate();
                         vm.loading = false;
                     }).catch(function (error) {
-
                         // TODO: CATCH ERROR PROPERLY
                         vm.loading = false;
                 });
