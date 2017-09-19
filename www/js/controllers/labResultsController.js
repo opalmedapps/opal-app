@@ -148,10 +148,10 @@ myApp.controller('TimelineTestComponentController',['$scope','$timeout','LabResu
 
         var url = "";
 
-        if($scope.testName = "WBC"){
+        if($scope.title === "WBC"){
             url = "http://www.labtestsonline.fr/tests/num-ration-des-globules-blancs.html";
         }
-        else if ($scope.testName = "RBC"){
+        else if ($scope.title === "RBC"){
             url = "http://www.labtestsonline.fr/tests/num-ration-des-globules-rouges.html?tab=3";
         }
         else{

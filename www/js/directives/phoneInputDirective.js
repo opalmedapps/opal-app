@@ -9,10 +9,8 @@ myApp.directive('phoneInput', function($filter, $browser) {
     return {
         require: 'ngModel',
         link: function($scope, $element, $attrs, ngModelCtrl) {
-            console.log('phoneInput');
             var listener = function() {
                 var value = $element.val().replace(/[^0-9]/g, '');
-                console.log(value);
                 $element.val($filter('tel')(value, false));
             };
 

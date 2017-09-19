@@ -30,10 +30,12 @@
                 <input ng-minlength="1" type="{{csc.type1}}" ng-class="fontSizeDesc" class="style-4" placeholder="{{csc.valueLabel|translate}}" value="{{csc.valueLabel|translate}}" ng-model="csc.newValue" ng-change="csc.evaluate()">
             </div>
 
-            <br>
+            <div class="style-4" style="width: 100%;" ng-show="value!=='PHONENUMBER'">
+                <input ng-minlength="1" type="{{type1}}" ng-class="fontSizeDesc" class="style-4" placeholder="{{reenter_placeholder|translate}}" value="{{valueLabel|translate}}" ng-model="newValueValidate">
+            </div>
 
-            <div class="style-4" style="width: 100%;" ng-show="csc.value!=='PHONENUMBER'">
-                <input ng-minlength="1" type="{{csc.type1}}" ng-class="fontSizeDesc" class="style-4" placeholder="{{ 'REENTER_PASSWORD' |translate}}" value="{{csc.valueLabel|translate}}" ng-model="csc.newValueValidate" ng-change="csc.evaluate()">
+            <div class="style-4" style="width: 100%;" ng-show="value =='PHONENUMBER'" >
+                <input phone-input type="{{type1}}" ng-class="fontSizeDesc" class="style-4" placeholder="{{valueLabel|translate}}" value="{{valueLabel|translate}}" ng-model="newValue">
             </div>
 
             <div class="style-4" style="width: 100%;" ng-show="csc.value =='PHONENUMBER'" >

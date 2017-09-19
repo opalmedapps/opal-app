@@ -15,9 +15,6 @@ myApp.filter('notifications',function(){
         }
 
     };
-
-
-
 });
 
 myApp.filter('removeTitleEducationalMaterial',function()
@@ -131,14 +128,9 @@ myApp.filter('dateEmail',function($filter){
         }else{
             return date;
         }
-
-
-
-
-
     };
-
 });
+
 myApp.filter('limitLetters',function($filter){
     return function(string,num)
     {
@@ -150,6 +142,7 @@ myApp.filter('limitLetters',function($filter){
         return string;
     };
 });
+
 myApp.filter('propsFilter', function() {
     return function(items, props) {
         var out = [];
@@ -180,6 +173,7 @@ myApp.filter('propsFilter', function() {
         return out;
     };
 });
+
 myApp.filter('filterDateLabTests',function()
 {
     return function(items,option)
@@ -217,11 +211,9 @@ myApp.filter('FormatPhoneNumber',function(){
     {
         if(typeof phone =='string'&&phone.length==10)
         {
-            console.log('Inside string equal ten');
             var firstDigits=phone.substring(0,3);
             var secondDigits=phone.substring(3,6);
             var thirdDigits=phone.substring(6,phone.length);
-            console.log("("+firstDigits+")"+" "+secondDigits+"-"+thirdDigits);
             return "("+firstDigits+")"+" "+secondDigits+"-"+thirdDigits;
         }else{
             return phone;
@@ -239,7 +231,7 @@ myApp.filter('capitalizeFirstLetter', function () {
     return function (name) {
         return name.charAt(0) + name.slice(1).toLowerCase();
     }
-})
+});
 
 myApp.filter('FormatEditPhoneNumber',function(){
     return function(phone)
