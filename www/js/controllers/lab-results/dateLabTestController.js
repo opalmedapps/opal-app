@@ -27,6 +27,8 @@
             vm.radioModel='All';
             vm.selectedTests=LabResults.getTestResultsArrayByDate();
 
+            console.log(vm.selectedTests);
+
             vm.testsReceived = 'Lab results';
             Logger.sendLog('Lab Results', 'all - Date');
         }

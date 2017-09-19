@@ -10,11 +10,11 @@
         .controller('InitSettingsController', InitSettingsController);
 
     InitSettingsController.$inject = [
-        'FirebaseService', 'NavigatorParameters', 'UserPreferences'
+        'FirebaseService', 'NavigatorParameters', 'UserPreferences', 'Constants'
     ];
 
     /* @ngInject */
-    function InitSettingsController(FirebaseService, NavigatorParameters, UserPreferences) {
+    function InitSettingsController(FirebaseService, NavigatorParameters, UserPreferences, Constants) {
 
         var vm = this;
         var params;

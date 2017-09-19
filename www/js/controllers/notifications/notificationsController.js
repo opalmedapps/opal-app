@@ -20,25 +20,37 @@
         vm.showHeader = showHeader;
         vm.goToNotification = goToNotification;
 
+
         activate();
 
         ///////////////////////////
 
         function activate(){
+            vm.isLoading = true;
             // TODO: OPTIMIZE THIS... THIS SHOULD BE A BACKGROUND UPDATE THAT SILENTLY UPDATES THE LIST INSTEAD OF DOING A COMPLETE REFRESH
             Notifications.requestAllNotifications()
                 .then(function () {
                     vm.noNotifications = true;
                     var notifications = Notifications.getUserNotifications();
-                    if (notifications.length > 0)  vm.noNotifications = false;
+                    if (notifications.length === 0)  {
+                        $timeout(function() {
+                            vm.isLoading = false;
+                        });
+                        return
+                    }
                     notifications = Notifications.setNotificationsLanguage(notifications);
                     $timeout(function() {
+                        vm.noNotifications = false;
+                        vm.isLoading = false;
                         vm.notifications = $filter('orderBy')(notifications,'notifications.DateAdded', true);
                     });
                     Permissions.enablePermission('WRITE_EXTERNAL_STORAGE', 'Storage access disabled. Unable to write documents.');
                 })
                 .catch(function () {
-                    vm.noNotifications = true;
+                    $timeout(function() {
+                        vm.isLoading = false;
+                        vm.noNotifications = true;
+                    });
                 })
         }
 

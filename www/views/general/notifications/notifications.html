@@ -5,6 +5,11 @@
     </ons-toolbar>
 
     <network-banner></network-banner>
+    <div ng-show="notif.isLoading" align="center" style="margin-top:25vh">
+        <svg class="progress-circular">
+            <circle class="progress-circular__primary" cx="50%" cy="50%" r="40%" fill="none" stroke-width="10%" stroke-miterlimit="10"/>
+        </svg>
+    </div>
 
     <div ng-hide="notif.noNotifications">
         <ons-list ng-repeat="notification in notif.notifications" ng-click="notif.goToNotification($index,notification)">

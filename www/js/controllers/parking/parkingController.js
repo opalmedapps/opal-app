@@ -26,8 +26,7 @@
         /////////////////////////
 
         function activate(){
-            vm.navigatorName = navigatorName;
-            vm.navigator = window[navigatorName];
+            navigatorName = NavigatorParameters.getParameters();
         }
 
         function goToParkingLink(type){

@@ -41,6 +41,8 @@
             vm.edumaterial =EducationalMaterial.setLanguage(param.Post);
             Logger.sendLog('Educational Material', param.Post.EducationalMaterialSerNum);
 
+            console.log(vm.edumaterial);
+
             //Determine if material has a ShareURL and is printable
             if(vm.edumaterial.hasOwnProperty('ShareURL')&& vm.edumaterial.ShareURL !=="") {
                 vm.isPrintable = FileManagerService.isPDFDocument(vm.edumaterial.ShareURL);
@@ -66,14 +68,14 @@
         function bindEvents(){
             //Instantiating popover controller
             $timeout(function () {
-                ons.createPopover('./views/education/share-print-popover.html',{parentScope: vm}).then(function (popover) {
-                    popoverSharing = popover;
+                ons.createPopover('./views/education/share-print-popover.html',{parentScope: $scope}).then(function (popover) {
+                    $scope.popoverSharing = popover;
                 });
             }, 300);
 
             //On destroy clean up
             $scope.$on('$destroy', function () {
-                popoverSharing.destroy();
+                $scope.popoverSharing.destroy();
             });
         }
 
@@ -87,12 +89,12 @@
 
         function share(){
             FileManagerService.shareDocument(vm.edumaterial.Name, vm.edumaterial.ShareURL);
-            popoverSharing.hide();
+            $scope.popoverSharing.hide();
         }
 
         function print(){
             //If no connection then simply alert the user to connect to the internet
-            popoverSharing.hide();
+            $scope.popoverSharing.hide();
             if(app && NetworkStatus.isOnline())
             {
                 EducationalMaterial.getMaterialBinary(vm.edumaterial.ShareURL)
@@ -118,7 +120,7 @@
                         ons.notification.alert({'message':$filter('translate')('UNABLETOOBTAINEDUCATIONALMATERIAL')});
                     });
             }else{
-                popoverSharing.hide();
+                $scope.popoverSharing.hide();
                 ons.notification.alert({'message':$filter('translate')("PRINTINGUNAVAILABLE")});
             }
         }

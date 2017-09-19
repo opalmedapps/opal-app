@@ -1,6 +1,6 @@
-<ons-page ng-controller="DateLabTestController" >
+<ons-page ng-controller="DateLabTestController as labs" >
   <ons-list>
-    <ons-list-item ng-repeat="testResultByDate in selectedTests | orderBy:'-testDateFormat'" ng-click="personalNavigator.pushPage('./views/personal/lab-results/test-view.html',{param:testResultByDate})" modifier="tappable" class="list-item-container">
+    <ons-list-item ng-repeat="testResultByDate in labs.selectedTests | orderBy:'-testDateFormat'" ng-click="personalNavigator.pushPage('./views/personal/lab-results/test-view.html',{param:testResultByDate})" modifier="tappable" class="list-item-container">
       <ons-row align="center" >
         <ons-col width="60px" align="center">
           <div style="margin-left:10px">
