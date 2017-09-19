@@ -1,30 +1,30 @@
-<ons-page ng-controller="TimelineTestComponentController">
+<ons-page ng-controller="TestTimelineController as test">
     <ons-toolbar>
         <div class="left"><ons-back-button>{{"BACK"|translate}}</ons-back-button></div>
         <div class="center" ng-class="fontSizeTitle">{{title}}</div>
     </ons-toolbar>
     <ons-col>
-        <div id="chartArea"><hc-chart options="chartOptions">Placeholder for generic chart</hc-chart></div>
+        <div id="chartArea"><hc-chart options="test.chartOptions">Placeholder for generic chart</hc-chart></div>
         <ons-list>
             <ons-list-header>{{"LAB_TEST_INFO"|translate}}</ons-list>
         <ons-list-item>
             {{"LAB_NAME"|translate}}
-            <span class="list-item-note lucent">{{testName}}</span>
+            <span class="list-item-note lucent">{{test.testName}}</span>
         </ons-list-item>
         <ons-list-item>
             {{"LAB_RECENT_RESULT" | translate}}
-            <span class="list-item-note lucent">{{recentValue}} {{unit}}</span>
+            <span class="list-item-note lucent">{{test.recentValue}} {{test.unit}}</span>
         </ons-list-item>
         <ons-list-item >
             {{"LAB_MIN_NORM"| translate}}
-            <span class="list-item-note lucent">{{minNorm}} {{unit}}</span>
+            <span class="list-item-note lucent">{{test.minNorm}} {{test.unit}}</span>
         </ons-list-item>
         <ons-list-item >
             {{"LAB_MAX_NORM"| translate}}
-            <span class="list-item-note lucent">{{maxNorm}} {{unit}}</span>
+            <span class="list-item-note lucent">{{test.maxNorm}} {{test.unit}}</span>
         </ons-list-item>
-        <ons-list-item ng-click="goToAbout()" style="background-color:  #E3F2FD">
-            <strong>{{"ABOUT" | translate}} {{title}} </strong> <ons-icon style="margin-top: 3%" class="pull-right" icon="ion-ios-arrow-forward"></ons-icon>
+        <ons-list-item ng-click="test.about()" style="background-color:  #E3F2FD">
+            <strong>{{"ABOUT" | translate}} {{test.title}} </strong> <ons-icon style="margin-top: 3%" class="pull-right" icon="ion-ios-arrow-forward"></ons-icon>
         </ons-list-item>
         </ons-list>
     </ons-col>

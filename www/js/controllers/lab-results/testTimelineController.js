@@ -24,6 +24,8 @@
         var windowWidth;
         var unit;
         var testResults;
+        var max;
+        var min;
 
         vm.about = about;
 
@@ -76,8 +78,8 @@
             vm.testName = test.ComponentName || test.testResults[0].ComponentName;
             vm.title = vm.selectedTest.FacComponentName || vm.selectedTest.testName;
 
-            var max = vm.selectedTest.MaxNorm || test.testResults[0].MaxNorm;
-            var min = vm.selectedTest.MinNorm || test.testResults[0].MinNorm;
+            max = vm.selectedTest.MaxNorm || test.testResults[0].MaxNorm;
+            min = vm.selectedTest.MinNorm || test.testResults[0].MinNorm;
             vm.maxNorm = max;
             vm.minNorm = min;
 
