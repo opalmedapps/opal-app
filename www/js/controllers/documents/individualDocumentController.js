@@ -16,15 +16,17 @@
         .module('MUHCApp')
         .controller('IndividualDocumentController', IndividualDocumentController);
 
-    IndividualDocumentController.$inject = ['NavigatorParameters','Documents', '$timeout', 'FileManagerService', 'Constants', '$q', 'UserPreferences', 'Logger'];
+    IndividualDocumentController.$inject = ['$scope', 'NavigatorParameters','Documents', '$timeout', 'FileManagerService', 'Constants', '$q', 'UserPreferences', 'Logger'];
 
     /* @ngInject */
-    function IndividualDocumentController(NavigatorParameters, Documents, $timeout, FileManagerService, Constants, $q, UserPreferences, Logger) {
+    function IndividualDocumentController($scope, NavigatorParameters, Documents, $timeout, FileManagerService, Constants, $q, UserPreferences, Logger) {
         var vm = this;
 
         var parameters;
         var docParams;
-        var pdfdoc, scale;
+        var pdfdoc;
+        var uint8pf;
+        var scale;
         var viewerSize;
         var containerEl;
 
@@ -46,7 +48,8 @@
 
             //PDF params
             docParams = Documents.setDocumentsLanguage(parameters.Post);
-            pdfdoc, scale = 3, uint8pf;
+            pdfdoc = 3;
+            scale = uint8pf;
             viewerSize = window.innerWidth;
             containerEl = document.getElementById('holder');
 
@@ -56,14 +59,14 @@
             Logger.sendLog('Document', docParams.DocumentSerNum);
 
             //Create popover
-            ons.createPopover('./views/personal/my-chart/popoverDocsInfo.html', {parentScope: vm}).then(function (popover) {
-                vm.popoverDocsInfo = popover;
+            ons.createPopover('./views/personal/documents/info-popover.html', {parentScope: $scope}).then(function (popover) {
+                $scope.popoverDocsInfo = popover;
             });
 
-            vm.$on('$destroy', function () {
+            $scope.$on('$destroy', function () {
 
-                vm.popoverDocsInfo.off('posthide');
-                vm.popoverDocsInfo.destroy();
+                $scope.popoverDocsInfo.off('posthide');
+                $scope.popoverDocsInfo.destroy();
             });
 
 
@@ -93,7 +96,6 @@
         function setUpPDF(document) {
             vm.loading = false;
             uint8pf = FileManagerService.convertToUint8Array(document.Content);
-            //pdfjsframe.contentWindow.PDFViewerApplication.open(uint8pf);
 
             PDFJS.getDocument(uint8pf)
                 .then(function (_pdfDoc) {
@@ -133,7 +135,7 @@
                     vm.show = true;
                     $timeout(function(){vm.hide = true}, 5000);
                     $timeout(function(){vm.show = false}, 6500);
-                    vm.$apply();
+                    $scope.$apply();
                 });
         }
 
