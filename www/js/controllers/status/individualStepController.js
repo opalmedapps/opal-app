@@ -21,27 +21,27 @@
 
     function IndividualStepController(NavigatorParameters, UserPreferences, $filter, Logger) {
 
-        var stepVM = this;
+        var vm = this;
         var nav = NavigatorParameters.getNavigator();
 
-        stepVM.showTab = true;
-        stepVM.about = about;
-        stepVM.stage = {};
+        vm.showTab = true;
+        vm.about = about;
+        vm.stage = {};
 
         activate();
 
         function activate() {
-            stepVM.stage = NavigatorParameters.getParameters().Post;
-            stepVM.name = NavigatorParameters.getParameters().StepName;
-            Logger.sendLog('Treatment Plan', stepVM.stage);
+            vm.stage = NavigatorParameters.getParameters().Post;
+            vm.name = NavigatorParameters.getParameters().StepName;
+            Logger.sendLog('Treatment Plan', vm.stage);
 
         }
 
         //Links to the about page controlled by the contentController
         function about() {
             nav.pushPage('./views/templates/content.html', {
-                contentLink: stepVM.stage ? stepVM.stage["URL_"+UserPreferences.getLanguage()] : '',
-                contentType: $filter('translate')(stepVM.name)
+                contentLink: vm.stage ? vm.stage["URL_"+UserPreferences.getLanguage()] : '',
+                contentType: $filter('translate')(vm.name)
             });
         }
 

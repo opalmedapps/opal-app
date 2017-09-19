@@ -10,10 +10,10 @@
         .module('MUHCApp')
         .controller('NotificationsController', NotificationsController);
 
-    NotificationsController.$inject = ['RequestToServer','Notifications', 'NavigatorParameters', 'Permissions', '$filter'];
+    NotificationsController.$inject = ['RequestToServer','Notifications', 'NavigatorParameters', 'Permissions', '$filter', '$timeout'];
 
     /* @ngInject */
-    function NotificationsController(RequestToServer, Notifications, NavigatorParameters, Permissions, $filter) {
+    function NotificationsController(RequestToServer, Notifications, NavigatorParameters, Permissions, $filter, $timeout) {
 
         var vm = this;
 
@@ -25,13 +25,16 @@
         ///////////////////////////
 
         function activate(){
+            // TODO: OPTIMIZE THIS... THIS SHOULD BE A BACKGROUND UPDATE THAT SILENTLY UPDATES THE LIST INSTEAD OF DOING A COMPLETE REFRESH
             Notifications.requestAllNotifications()
                 .then(function () {
                     vm.noNotifications = true;
                     var notifications = Notifications.getUserNotifications();
                     if (notifications.length > 0)  vm.noNotifications = false;
                     notifications = Notifications.setNotificationsLanguage(notifications);
-                    vm.notifications = $filter('orderBy')(notifications,'notifications.DateAdded', true);
+                    $timeout(function() {
+                        vm.notifications = $filter('orderBy')(notifications,'notifications.DateAdded', true);
+                    });
                     Permissions.enablePermission('WRITE_EXTERNAL_STORAGE', 'Storage access disabled. Unable to write documents.');
                 })
                 .catch(function () {
