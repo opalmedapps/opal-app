@@ -1,0 +1,68 @@
+<div style="height:85vh;overflow-y:scroll;margin-left:10px;margin-right:10px">
+<div class="row">
+  <div class="col-xs-12 col-sm-4">
+    <h4>Education Material</h4>
+    <div class="div-container-section" style="height:70vh;overflow-y:scroll">
+
+      <div style="margin-top:10px">
+               <ul class="list list--inset div-container-section" ng-repeat="material in materials" style="margin-top:5px" ng-click="selectMaterial(material)">
+       <li class="list__item list--inset__item list__item--tappable">
+         <div style="padding:8px;">
+           <div class="row" >
+             <div class="col-xs-1">
+               <div align="right" >
+                 <i class=" iconThemeViews" ng-class="material.icon"></i>
+               </div>
+             </div>
+             <div class="col-xs-11">
+             <div  align="middle" style="margin-left:5px">
+                <div class="profile-name" >
+                     {{material.name}}
+                   </div>
+               <div class="desc">
+                     <div style=" color:grey;">{{material.description}}</div>
+                   </div>
+                   </div>
+             </div>
+           </div>
+             </div>
+       </li>
+     </ul>
+     </div>
+    </div>
+  </div>
+  <div class="col-xs-12 col-sm-8" >
+    <div class="div-container-section">
+      <div class="row" >
+  <div class="col-xs-1">
+        <div align="right" >
+          <i class="fa fa-hospital-o iconThemeViews"></i>
+        </div>
+      </div>
+
+          <div class="col-xs-11">
+          <div  align="middle" style="margin-left:5px">
+            <h4>{{selectedMaterial.name}}</h4>
+            <div style="margin-top:30px" align="center">
+            <div >
+              <div class="embed-responsive embed-responsive-16by9">
+                <iframe class="embed-responsive-item" ng-src="{{generateURL(selectedMaterial)}}"></iframe>
+              </div>
+            </div>
+            <img height="auto" width="60%" ng-src="{{selectedDocument.Content}}">
+            </div>
+              <div align="center">
+        <!--{{documentObject.date|date:"EEEE MMMM d, yyyy"}}--><br>
+        {{selectedMaterial.description}}<br>
+
+       </div>
+
+        </div>
+    </div>
+</div>
+    </div>
+  </div>
+</div>
+
+
+</div>

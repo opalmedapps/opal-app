@@ -1,0 +1,65 @@
+{
+  "name": "opal-backend",
+  "version": "0.0.1",
+  "dependencies": {
+    "@stablelib/base64": "^0.7.2",
+    "@stablelib/utf8": "^0.8.1",
+    "bluebird": "^3.3.5",
+    "body-parser": "^1.8.1",
+    "crypto-js": "^3.1.6",
+    "express": "^4.9.0",
+    "firebase": "^2.4.2",
+    "firebase-admin": "^4.0.2",
+    "mysql": "^2.10.2",
+    "nodemailer": "^3.1.8",
+    "q": "^1.4.1",
+    "request": "^2.75.0",
+    "squel": "^5.8.0",
+    "tweetnacl": "^1.0.0",
+    "winston": "^2.3.1"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "chai-datetime": "^1.4.1",
+    "del": "^2.2.0",
+    "firebase-server": "^0.5.0",
+    "gulp": "^3.9.1",
+    "gulp-autoprefixer": "^3.1.0",
+    "gulp-cache": "^0.4.4",
+    "gulp-concat": "^2.6.0",
+    "gulp-cssnano": "^2.1.2",
+    "gulp-imagemin": "^2.4.0",
+    "gulp-jshint": "^2.0.0",
+    "gulp-livereload": "^3.8.1",
+    "gulp-mocha": "^2.2.0",
+    "gulp-notify": "^2.2.0",
+    "gulp-rename": "^1.2.2",
+    "gulp-ruby-sass": "^2.0.6",
+    "gulp-uglify": "^1.5.3",
+    "gulp-util": "^3.0.7",
+    "jshint": "^2.9.2",
+    "jshint-stylish": "^2.1.0",
+    "mocha": "^2.4.5",
+    "q": "^1.4.1",
+    "sinon": "^1.17.3",
+    "sinon-chai": "^2.8.0"
+  },
+  "scripts": {
+    "start": "node server.js",
+    "test": "./node_modules/.bin/mocha --reporter spec"
+  },
+  "main": "main.js",
+  "directories": {
+    "test": "test"
+  },
+  "keywords": [
+    "muhc",
+    "opal",
+    "health",
+    "oncology"
+  ],
+  "author": "David Herrera",
+  "license": "ISC",
+  "homepage": "https://depdocs.com/opal",
+  "description": "Repository for Opal, the oncology patient application"
+}

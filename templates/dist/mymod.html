@@ -1,0 +1,33 @@
+<ons-page ng-controller="<controller-name> as contr">
+  <ons-toolbar fixed-style>
+    <div class="left">
+      <ons-back-button >{{"BACK"|translate}}</ons-back-button>
+    </div>
+    <div class="center" ng-class="fontSizeTitle"> Mymod {{"TITLE"|translate}}</div>
+    <div class="right">
+      <ons-toolbar-button ng-click="null">Options{{"OPTIONS"|translate}}</ons-toolbar-button>
+    </div>
+  </ons-toolbar>
+  <div ng-hide="contr.noList">
+  <ons-list  ng-repeat="controuncement in contr.list | orderBy:'-DateAdded'" ng-click="null">
+  <ons-list-item modifier="chevron" class="item">
+    <ons-row align="center" >
+      <ons-col width="70px" align="center">
+        <div style="margin-left:10px">
+          <i class="ion-ionic iconHomeView" style="color:#BADA55"></i>
+        </div>
+      </ons-col>
+      <ons-col>
+        <header>
+          <span class="item-title" ng-class="fontSizeTitle">{{item.Title}}</span>
+        </header>
+      </ons-col>
+    </ons-row>
+  </ons-list-item>
+</ons-list>
+</div>
+<div class="container" align="center">
+  <p style="margin-top:25vh;color:grey" ng-show="contr.noList">No items in list{{"NOITEMS"|translate}}</p>
+</div>
+
+</ons-page>

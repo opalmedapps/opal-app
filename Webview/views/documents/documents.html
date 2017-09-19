@@ -1,0 +1,64 @@
+<div style="height:85vh;overflow-y:scroll">
+<div class="row">
+  <div class="col-xs-12 col-sm-4">
+    <h4>Documents</h4>
+    <div class="div-container-section" style="height:70vh;overflow-y:scroll">
+
+      <div style="margin-top:10px">
+               <ul class="list list--inset div-container-section" ng-repeat="document in documents" style="margin-top:5px" ng-click="goToDocument(document)">
+       <li class="list__item list--inset__item list__item--tappable">
+         <div style="padding:8px;">
+           <div class="row" >
+             <div class="col-xs-1">
+               <div align="right" >
+                 <i class="ion-document-text iconThemeViews"></i>
+               </div>
+             </div>
+             <div class="col-xs-11">
+             <div  align="middle" style="margin-left:5px">
+                <div class="profile-name" >
+                     {{document.Name}}
+                   </div>
+               <div class="desc">
+                     Oct, 3 2015
+                     <div style=" color:grey;">{{document.Description}}</div>
+                   </div>
+                   </div>
+             </div>
+           </div>
+             </div>
+       </li>
+     </ul>
+     </div>
+    </div>
+  </div>
+  <div class="col-xs-12 col-sm-8" >
+    <div class="div-container-section">
+      <div class="row" >
+  <div class="col-xs-1">
+        <div align="right" >
+          <i class="fa fa-hospital-o iconThemeViews"></i>
+        </div>
+      </div>
+          <div class="col-xs-11">
+          <div  align="middle" style="margin-left:5px">
+            <h4>{{selectedDocument.Name}}</h4>
+            <div style="margin-top:30px" align="center">
+            <img height="auto" width="60%" ng-src="{{selectedDocument.Content}}">
+            </div>
+              <div align="center">
+        <!--{{documentObject.date|date:"EEEE MMMM d, yyyy"}}--><br>
+        {{selectedDocument.Description}}<br>
+        Oct 3, 2015
+
+       </div>
+
+        </div>
+    </div>
+</div>
+    </div>
+  </div>
+</div>
+
+
+</div>

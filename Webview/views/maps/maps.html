@@ -1,0 +1,54 @@
+<div style="height:85vh;overflow-y:scroll;margin-left:20px">
+<div class="row">
+  <div class="col-xs-12 col-sm-4">
+    <h4>Maps</h4>
+    <div class="div-container-section">
+    <ul class="list list--inset div-container-section" ng-repeat="map in maps" style="margin-top:5px" ng-click="showMap(map)">
+<li class="list__item list--inset__item list__item--tappable">
+<div style="padding:8px;">
+<div class="row" >
+  <div class="col-xs-1">
+    <div align="right" >
+      <i class="fa fa-globe iconThemeViews"></i>
+    </div>
+  </div>
+  <div class="col-xs-11">
+  <div  align="middle" style="margin-left:5px">
+     <div class="profile-name" >
+          <h4>{{map.Name}}</h4>
+        </div>
+    <div class="desc">
+          <img width="100px" height="80px" ng-src="{{map.Url}}">
+        </div>
+        </div>
+  </div>
+</div>
+  </div>
+</li>
+</ul>
+</div>
+
+  </div>
+  <div class="col-xs-12 col-sm-8" >
+    <div class="div-container-section">
+      <div class="row" >
+  <div class="col-xs-1">
+        <div align="right" >
+          <i class="fa fa-hospital-o iconThemeViews"></i>
+        </div>
+      </div>
+          <div class="col-xs-11">
+          <div  align="middle" style="margin-left:5px">
+            <h4>{{selectedMap.Name}}</h4>
+            <div style="margin-top:30px" align="center">
+            <img height="auto" width="90%" ng-src="{{selectedMap.Url}}">
+            </div>
+        </div>
+    </div>
+</div>
+    </div>
+  </div>
+</div>
+
+
+</div>
