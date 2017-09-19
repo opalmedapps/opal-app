@@ -68,14 +68,11 @@
                 $scope.popoverDocsInfo.off('posthide');
                 $scope.popoverDocsInfo.destroy();
             });
-
-
             initializeDocument(docParams);
         }
 
         function initializeDocument(document)
         {
-
             if (Documents.getDocumentBySerNum(document.DocumentSerNum).Content){
                 setUpPDF(document);
             }
@@ -87,10 +84,8 @@
                     //Unable to get document from server
                     vm.loading = false;
                     vm.errorDownload = true;
-
                 });
             }
-
         }
 
         function setUpPDF(document) {
@@ -107,7 +102,6 @@
                     }
                     pdfdoc = _pdfDoc;
 
-                    //vm.rendering=true;
                     return $q.all(promises);
                 })
                 .then(function () {
@@ -231,7 +225,7 @@
 
         function warn(){
             modal.show();
-            vm.popoverDocsInfo.hide();
+            $scope.popoverDocsInfo.hide();
         }
 
         function about(){
@@ -247,7 +241,7 @@
             };
 
             personalNavigator.pushPage('./views/templates/content.html',contentOptions);
-            vm.popoverDocsInfo.hide();
+            $scope.popoverDocsInfo.hide();
         }
     }
 })();

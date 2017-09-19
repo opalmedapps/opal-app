@@ -12,10 +12,10 @@
         .module('MUHCApp')
         .controller('IndividualParkingController', IndividualParkingController);
 
-    IndividualParkingController.$inject = ['NavigatorParameters', 'UserPreferences', '$http'];
+    IndividualParkingController.$inject = ['NavigatorParameters', 'UserPreferences', '$scope'];
 
     /* @ngInject */
-    function IndividualParkingController(NavigatorParameters, UserPreferences, $http) {
+    function IndividualParkingController(NavigatorParameters, UserPreferences, $scope) {
 
         var vm = this;
 
@@ -52,11 +52,13 @@
 
             var parameters = NavigatorParameters.getParameters();
             vm.title = parkingInformation[language][parameters.type].title;
-            $http.get(link)
+            var link = parkingInformation[language][parameters.type].link;
+            $.get(link)
                 .then(function(res){
                     res.replace(/(\r\n|\n|\r)/gm, " ");
                     vm.loading=false;
                     vm.htmlBind=res;
+                    $scope.$apply();
                 });
         }
     }
