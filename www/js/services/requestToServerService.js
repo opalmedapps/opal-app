@@ -25,13 +25,7 @@ myApp.service('RequestToServer',['$filter','$state','NewsBanner','UserAuthorizat
          *@description Firebase reference
          **/
         var Ref= firebase.database().ref(FirebaseService.getFirebaseUrl(null));
-        /**
-         *@ngdoc property
-         *@name  MUHCApp.service.#refRequests
-         *@propertyOf MUHCApp.service:RequestToServer
-         *@description Firebase reference requests
-         **/
-        var refRequests = Ref.child(FirebaseService.getFirebaseChild('requests'));
+
         /**
          *@ngdoc property
          *@name  MUHCApp.service.#refUsers
