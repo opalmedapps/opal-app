@@ -1,0 +1,26 @@
+<ons-popover direction="up down" cancelable animation="none" ng-style="{'height':(edumaterial.Type !=='Video')?'30px':''}" style="min-height:30px" >
+    <div style="text-align: center" >
+        <ons-list>
+            <ons-list-item class="item "   modifier="tappable" ng-click="share()" >
+                <ons-row style="padding:0;margin:0;height:30px" align="center">
+                    <ons-col width="40px">
+                        <ons-icon icon="fa fa-share"></ons-icon>
+                    </ons-col>
+                    <ons-col>
+                        {{"SHARE"|translate}}
+                    </ons-col>
+                </ons-row>
+            </ons-list-item >
+            <ons-list-item class="item"  modifier="tappable" ng-click="print()" ng-if="edumaterial.Type !=='Video'">
+                <ons-row style="padding:0;margin:0;height:30px" align="center">
+                    <ons-col width="40px">
+                        <ons-icon icon="fa fa-print"></ons-icon>
+                    </ons-col>
+                    <ons-col>
+                        {{"PRINTDOCUMENT"|translate}}
+                    </ons-col>
+                </ons-row>
+            </ons-list-item >
+        </ons-list>
+    </div>
+</ons-popover>

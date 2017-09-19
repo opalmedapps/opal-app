@@ -262,7 +262,6 @@ myApp.service('Notifications',['$filter','RequestToServer','LocalStorage','Annou
              *@description Setter method for Notifications
              **/
             setUserNotifications:function(notifications){
-
                 Notifications=[];
                 notificationsLocalStorage=[];
                 addUserNotifications(notifications);

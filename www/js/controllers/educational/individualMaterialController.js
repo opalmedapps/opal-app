@@ -12,12 +12,10 @@
         .module('MUHCApp')
         .controller('IndividualMaterialController', IndividualMaterialController);
 
-    IndividualMaterialController.$inject = ['$scope', '$timeout', 'NavigatorParameters', 'UserPreferences', 'EducationalMaterial',
-        'FileManagerService','$cordovaNetwork','$filter', 'Logger', 'NetworkStatus'];
+    IndividualMaterialController.$inject = ['$scope', '$timeout', 'NavigatorParameters', 'EducationalMaterial', 'FileManagerService', '$filter', 'Logger', 'NetworkStatus'];
 
     /* @ngInject */
-    function IndividualMaterialController($scope, $timeout, NavigatorParameters, EducationalMaterial,
-                                          FileManagerService, $filter, Logger, NetworkStatus) {
+    function IndividualMaterialController($scope, $timeout, NavigatorParameters, EducationalMaterial, FileManagerService, $filter, Logger, NetworkStatus) {
         var vm = this;
 
         var param;
@@ -67,7 +65,7 @@
         function bindEvents(){
             //Instantiating popover controller
             $timeout(function () {
-                ons.createPopover('./views/education/popover-material-options.html',{parentScope: vm}).then(function (popover) {
+                ons.createPopover('./views/education/share-print-popover.html',{parentScope: vm}).then(function (popover) {
                     vm.popoverSharing = popover;
                 });
             }, 300);

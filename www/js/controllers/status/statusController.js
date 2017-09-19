@@ -13,15 +13,13 @@
         .module('MUHCApp')
         .controller('StatusController', StatusController);
 
-    StatusController.$inject = ['$anchorScroll','$location','Appointments',
-        'NavigatorParameters', '$filter', 'PlanningSteps', 'UserPreferences', 'Logger'];
+    StatusController.$inject = ['$anchorScroll','$location', 'NavigatorParameters', '$filter', 'PlanningSteps', 'UserPreferences', 'Logger'];
 
-    function StatusController($anchorScroll,$location, Appointments,
-                              NavigatorParameters,$filter, PlanningSteps, UserPreferences, Logger)
+    function StatusController($anchorScroll, $location, NavigatorParameters, $filter, PlanningSteps, UserPreferences, Logger)
     {
         var statusVm = this;
 
-        var params =NavigatorParameters.getParameters();
+        var params = NavigatorParameters.getParameters();
         var boolStatus = params.Navigator === 'homeNavigator';
 
         statusVm.navigator = params.Navigator;  // getting the navigator from the service
@@ -44,7 +42,7 @@
             'Calculation of Dose': 3,
             'Physics Quality Control': 4,
             'Scheduling Treatments': 5
-        }
+        };
 
         statusVm.getStyle = getStyle;           // function which determines style
         statusVm.goToStep = goToStep;           // function which provides details on the event
