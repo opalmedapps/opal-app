@@ -58,6 +58,11 @@ myApp.service('EncryptionService',function(UserAuthorizationInfo){
 
     function encryptObject(object,secret, nonce)
 	{
+		console.log("object: " + object);
+		console.log("secret: " + secret);
+		console.log("nonce: " + nonce);
+
+
 	 	if (typeof object ==='string'){
             return nacl.util.encodeBase64( appendUint8Array(nonce, nacl.secretbox(nacl.util.decodeUTF8(object), nonce, secret)));
 	 	}else if(typeof object!=='string'&& typeof object!=='object'){
@@ -96,9 +101,7 @@ myApp.service('EncryptionService',function(UserAuthorizationInfo){
     var appendUint8Array = function(buffer1, buffer2) {
         var tmp = new Uint8Array(buffer1.length + buffer2.length);
         tmp.set(buffer1, 0);
-
         tmp.set(buffer2, buffer1.length);
-
         return tmp;
     };
 
@@ -189,7 +192,7 @@ myApp.service('EncryptionService',function(UserAuthorizationInfo){
          *@return {String} Returns hashed password
          **/
         hash: function (incoming) {
-         	return CryptoJS.SHA256(incoming).toString();
+         	return CryptoJS.SHA512(incoming).toString();
         },
 
         /**
