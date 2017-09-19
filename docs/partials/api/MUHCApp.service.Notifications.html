@@ -1,0 +1,128 @@
+<h1><code ng:non-bindable="">Notifications</code>
+<div><span class="hint">service in module <code ng:non-bindable="">MUHCApp</code>
+</span>
+</div>
+</h1>
+<div><h2 id="description">Description</h2>
+<div class="description"><div class="muhcapp-service-page muhcapp-service-notifications-page"><p>API service used to patient notifications. This Service is deeply linked to other services to extract that information about the actual content of the notification.</p>
+</div></div>
+<h2 id="dependencies">Dependencies</h2>
+<ul class="dependencies"><li><code ng:non-bindable=""><a href="api/ng.$filter">$filter</a></code>
+</li>
+<li><code ng:non-bindable=""><a href="api/MUHCApp.service:UserPreferences">UserPreferences</a></code>
+</li>
+<li><code ng:non-bindable=""><a href="api/MUHCApp.service:RequestToServer">RequestToServer</a></code>
+</li>
+<li><code ng:non-bindable=""><a href="api/MUHCApp.service:LocalStorage">LocalStorage</a></code>
+</li>
+<li><code ng:non-bindable=""><a href="api/MUHCApp.service:Announcements">Announcements</a></code>
+</li>
+<li><code ng:non-bindable=""><a href="api/MUHCApp.service:TxTeamMessages">TxTeamMessages</a></code>
+</li>
+<li><code ng:non-bindable=""><a href="api/MUHCApp.service:Appointments">Appointments</a></code>
+</li>
+<li><code ng:non-bindable=""><a href="api/MUHCApp.service:Messages">Messages</a></code>
+</li>
+<li><code ng:non-bindable=""><a href="api/MUHCApp.service:Documents">Documents</a></code>
+</li>
+<li><code ng:non-bindable=""><a href="api/MUHCApp.service:EducationalMaterial">EducationalMaterial</a></code>
+</li>
+</ul>
+<div class="member method"><h2 id="methods">Methods</h2>
+<ul class="methods"><li><h3 id="methods_clearnotifications">clearNotifications()</h3>
+<div class="clearnotifications"><div class="clearnotifications-page"><p>Clears the service of any saved state, function used by the <a href="api/MUHCApp.controller:LogoutController">LogoutController</a></p>
+</div></div>
+</li>
+<li><h3 id="methods_getnewnotifications">getNewNotifications()</h3>
+<div class="getnewnotifications"><div class="getnewnotifications-page"><p>Gets unread notifications</p>
+</div><h5 id="methods_getnewnotifications_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-array">Array</a></td><td><div class="getnewnotifications-page"><p>Returns all the unread notifications</p>
+</div></td></tr></table></div>
+</li>
+<li><h3 id="methods_getnotificationpost">getNotificationPost(notification)</h3>
+<div class="getnotificationpost"><div class="getnotificationpost-page"><p>Finds the post that belongs to a given notification by using the search service function for that post</p>
+</div><h5 id="methods_getnotificationpost_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>notification</td><td><a href="" class="label type-hint type-hint-string">String</a></td><td><div class="getnotificationpost-page"><p>Notification that belongs to the post</p>
+</div></td></tr></tbody></table><h5 id="methods_getnotificationpost_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-object">Object</a></td><td><div class="getnotificationpost-page"><p>Returns object containing the post</p>
+</div></td></tr></table></div>
+</li>
+<li><h3 id="methods_getnumberunreadnotifications">getNumberUnreadNotifications()</h3>
+<div class="getnumberunreadnotifications"><div class="getnumberunreadnotifications-page"><p>Iterates through array object and returns the number of unread notifications</p>
+</div><h5 id="methods_getnumberunreadnotifications_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-number">Number</a></td><td><div class="getnumberunreadnotifications-page"><p>Returns number of unread news</p>
+</div></td></tr></table></div>
+</li>
+<li><h3 id="methods_getunreadnotifications">getUnreadNotifications()</h3>
+<div class="getunreadnotifications"><div class="getunreadnotifications-page"><p>Gets unread notifications</p>
+</div><h5 id="methods_getunreadnotifications_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-array">Array</a></td><td><div class="getunreadnotifications-page"><p>Returns all the unread notifications</p>
+</div></td></tr></table></div>
+</li>
+<li><h3 id="methods_getusernotifications">getUserNotifications()</h3>
+<div class="getusernotifications"><div class="getusernotifications-page"><p>Getter for the Notifications array</p>
+</div><h5 id="methods_getusernotifications_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-array">Array</a></td><td><div class="getusernotifications-page"><p>Notifications array</p>
+</div></td></tr></table></div>
+</li>
+<li><h3 id="methods_gotopost">goToPost(type, post)</h3>
+<div class="gotopost"><div class="gotopost-page"><p>Opens a post by using the opening function in each post found by <a href="api/MUHCApp.service:Notifications#notificationtypes">notificationTypes</a> array.</p>
+</div><h5 id="methods_gotopost_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>type</td><td><a href="" class="label type-hint type-hint-string">String</a></td><td><div class="gotopost-page"><p>Notification type</p>
+</div></td></tr><tr><td>post</td><td><a href="" class="label type-hint type-hint-string">String</a></td><td><div class="gotopost-page"><p>Post object</p>
+</div></td></tr></tbody></table><h5 id="methods_gotopost_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-object">Object</a></td><td><div class="gotopost-page"><p>Returns the return value of the post opening function, this function is defined in each post.</p>
+</div></td></tr></table></div>
+</li>
+<li><h3 id="methods_readnotification">readNotification(index, notification)</h3>
+<div class="readnotification"><div class="readnotification-page"><p>Sets ReadStatus in the notification to 1, sends request to backend, and syncs with device storage</p>
+</div><h5 id="methods_readnotification_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>index</td><td><a href="" class="label type-hint type-hint-string">String</a></td><td><div class="readnotification-page"><p>index in the Notification array which belongs to the notification to be read.</p>
+</div></td></tr><tr><td>notification</td><td><a href="" class="label type-hint type-hint-string">String</a></td><td><div class="readnotification-page"><p>Notification to be read</p>
+</div></td></tr></tbody></table></div>
+</li>
+<li><h3 id="methods_requestallnotifications">requestAllNotifications()</h3>
+<div class="requestallnotifications"><div class="requestallnotifications-page"><p>Grabs all the notifications form the server.</p>
+</div></div>
+</li>
+<li><h3 id="methods_setnotificationslanguage">setNotificationsLanguage(array)</h3>
+<div class="setnotificationslanguage"><div class="setnotificationslanguage-page"><p>Translates the array parameter containing notifications to appropiate preferred language specified in <a href="api/MUHCApp.service:UserPreferences">UserPreferences</a>.</p>
+</div><h5 id="methods_setnotificationslanguage_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>array</td><td><a href="" class="label type-hint type-hint-array">Array</a></td><td><div class="setnotificationslanguage-page"><p>Array with notifications</p>
+</div></td></tr></tbody></table><h5 id="methods_setnotificationslanguage_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-array">Array</a></td><td><div class="setnotificationslanguage-page"><p>Returns array with translated values</p>
+</div></td></tr></table></div>
+</li>
+<li><h3 id="methods_setusernotifications">setUserNotifications(notifications)</h3>
+<div class="setusernotifications"><div class="setusernotifications-page"><p>Setter method for Notifications</p>
+</div><h5 id="methods_setusernotifications_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>notifications</td><td><a href="" class="label type-hint type-hint-object">Object</a></td><td><div class="setusernotifications-page"><p>Notifications array that containts the new notifications</p>
+</div></td></tr></tbody></table></div>
+</li>
+<li><h3 id="methods_updateusernotifications">updateUserNotifications(notifications)</h3>
+<div class="updateusernotifications"><div class="updateusernotifications-page"><p>Updates the notificationsArray with the new information contained in the notifications parameter</p>
+</div><h5 id="methods_updateusernotifications_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>notifications</td><td><a href="" class="label type-hint type-hint-object">Object</a></td><td><div class="updateusernotifications-page"><p>Finds notifications to update or adds new notifications if not found</p>
+</div></td></tr></tbody></table></div>
+</li>
+</ul>
+</div>
+<div class="member property"><h2 id="properties">Properties</h2>
+<ul class="properties"><li><h3 id="properties_notifications">Notifications</h3>
+<div class="notifications"><div class="muhcapp-service-notifications-page"><p>Initializing array that represents all the information for Notifications, this array is passed to appropiate controllers.</p>
+</div></div>
+</li>
+<li><h3 id="properties_notificationtypes">notificationTypes</h3>
+<div class="notificationtypes"><div class="muhcapp-service-notificationtypes-page"><p>Array contains all the mappings to search the actual post for the notification, the icon, the color and the Name of the field.
+<pre class="prettyprint linenums">
+         //Example of the Document notification type.
+         var notificationTypes={
+      'Document':
+      {
+        icon:'fa fa-folder',
+        color:'darkorange',
+        NameEN:'AliasName_EN',
+        NameFR:'AliasName_FR',
+        SerNum:'DocumentSerNum',
+        readFunction:Documents.readDocument,
+        searchFunction:Documents.getDocumentBySerNum,
+        namesFunction:Documents.getDocumentNames,
+        PageUrl:Documents.getDocumentUrl
+      }...
+    </pre>
+</div></div>
+</li>
+<li><h3 id="properties_notificationslocalstorage">notificationsLocalStorage</h3>
+<div class="notificationslocalstorage"><div class="muhcapp-service-notificationslocalstorage-page"><p>Initializing array that represents all the notifications as saved in localStorage.</p>
+</div></div>
+</li>
+</ul>
+</div>
+</div>
