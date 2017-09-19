@@ -3,53 +3,56 @@
  *Github: dherre3
  *Email:davidfherrerar@gmail.com
  */
-var myApp = angular.module('MUHCApp');
-myApp.controller('NotificationsController', ['RequestToServer','Notifications', 'UpdateUI',
-    '$scope', '$timeout','$rootScope', 'UserPreferences', 'Appointments',
-    'Documents','NavigatorParameters', 'Permissions', '$filter',
-    function (RequestToServer, Notifications, UpdateUI, $scope,$timeout,$rootScope,
-              UserPreferences, Appointments, Documents, NavigatorParameters, Permissions, $filter) {
+(function () {
+    'use strict';
 
-        init();
+    angular
+        .module('MUHCApp')
+        .controller('NotificationsController', LoadingController);
 
-        function init()
-        {
+    NotificationsController.$inject = ['RequestToServer','Notifications', 'NavigatorParameters', 'Permissions', '$filter'];
 
+    /* @ngInject */
+    function NotificationsController(RequestToServer, Notifications, NavigatorParameters, Permissions, $filter) {
+
+        var vm = this;
+
+        vm.showHeader = showHeader;
+        vm.goToNotification = goToNotification;
+
+        activate();
+
+        ///////////////////////////
+
+        function activate(){
             Notifications.requestAllNotifications()
                 .then(function () {
-                    $scope.noNotifications = true;
+                    vm.noNotifications = true;
                     var notifications = Notifications.getUserNotifications();
-                    if (notifications.length > 0)  $scope.noNotifications = false;
+                    if (notifications.length > 0)  vm.noNotifications = false;
                     notifications = Notifications.setNotificationsLanguage(notifications);
-                    $scope.notifications = $filter('orderBy')(notifications,'notifications.DateAdded', true);
-
+                    vm.notifications = $filter('orderBy')(notifications,'notifications.DateAdded', true);
                     Permissions.enablePermission('WRITE_EXTERNAL_STORAGE', 'Storage access disabled. Unable to write documents.');
                 })
-                .catch(function (error) {
-
+                .catch(function () {
+                    vm.noNotifications = true;
                 })
-
-
         }
 
-
-        //Show header function helper
-        $scope.showHeader=function(index, length)
-        {
+        function showHeader(index){
             if (index === 0){
                 return true;
             }
             else {
-                var previous = (new Date($scope.notifications[index-1].DateAdded)).setHours(0,0,0,0);
-                var current = (new Date($scope.notifications[index].DateAdded)).setHours(0,0,0,0);
-                //
+                var previous = (new Date(vm.notifications[index-1].DateAdded)).setHours(0,0,0,0);
+                var current = (new Date(vm.notifications[index].DateAdded)).setHours(0,0,0,0);
                 return (current !== previous);
             }
-        };
-        $scope.goToNotification=function(index,notification){
+        }
 
-
+        function goToNotification(index,notification){
             if(notification.ReadStatus==='0'){
+                //TODO: Move this read function in notifications service
                 RequestToServer.sendRequest('Read',{"Id":notification.NotificationSerNum, "Field":"Notifications"});
                 Notifications.readNotification(index,notification);
             }
@@ -67,10 +70,5 @@ myApp.controller('NotificationsController', ['RequestToServer','Notifications', 
                 }
             }
         }
-
-    }]);
-
-myApp.controller('IndividualNotificationController',['$scope','Notifications','NavigatorParameters',function($scope,Notifications,NavigatorParameters){
-
-
-}]);
+    }
+})();
