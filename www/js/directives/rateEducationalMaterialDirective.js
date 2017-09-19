@@ -11,7 +11,7 @@ angular.module('MUHCApp')
     scope: {
         eduMaterialControlSerNum: '=serNum'
     },
-    templateUrl: './views/education/rating-education-template-directive.html',
+    templateUrl: './views/education/material-rating-template.html',
     link: function (scope, element) {
 
    	initRater();
