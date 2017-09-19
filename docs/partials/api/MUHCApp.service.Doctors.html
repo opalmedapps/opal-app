@@ -1,0 +1,77 @@
+<h1><code ng:non-bindable="">Doctors</code>
+<div><span class="hint">service in module <code ng:non-bindable="">MUHCApp</code>
+</span>
+</div>
+</h1>
+<div><h2 id="description">Description</h2>
+<div class="description"><div class="muhcapp-service-page muhcapp-service-doctors-page"><p>Sets the doctors and contacts and provides an API to interact with them and the server</p>
+</div></div>
+<h2 id="dependencies">Dependencies</h2>
+<ul class="dependencies"><li><code ng:non-bindable=""><a href="api/MUHCApp.service:LocalStorage">LocalStorage</a></code>
+</li>
+<li><code ng:non-bindable=""><a href="api/MUHCApp.service:RequestToServer">RequestToServer</a></code>
+</li>
+<li><code ng:non-bindable=""><a href="api/MUHCApp.service:FileManagerService">FileManagerService</a></code>
+</li>
+<li><code ng:non-bindable=""><a href="api/ng.$q">$q</a></code>
+</li>
+<li><code ng:non-bindable=""><a href="api/ng.$filter">$filter</a></code>
+</li>
+</ul>
+<div class="member method"><h2 id="methods">Methods</h2>
+<ul class="methods"><li><h3 id="methods_cleardoctors">clearDoctors()</h3>
+<div class="cleardoctors"><div class="cleardoctors-page"><p>Reinstantiates or empties the doctors service. Used by the Logout Controller</p>
+</div></div>
+</li>
+<li><h3 id="methods_getdoctorbysernum">getDoctorBySerNum(userSerNum)</h3>
+<div class="getdoctorbysernum"><div class="getdoctorbysernum-page"><p>Iterates through doctor array until a doctor matches the DoctorSerNum</p>
+</div><h5 id="methods_getdoctorbysernum_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>userSerNum</td><td><a href="" class="label type-hint type-hint-string">String</a></td><td><div class="getdoctorbysernum-page"><p>DoctorSerNum to match</p>
+</div></td></tr></tbody></table><h5 id="methods_getdoctorbysernum_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-object">Object</a></td><td><div class="getdoctorbysernum-page"><p>Returns doctor whose DoctorSerNum matches the doctorSerNum parameter</p>
+</div></td></tr></table></div>
+</li>
+<li><h3 id="methods_getdoctorindexbysernum">getDoctorIndexBySerNum(userSerNum)</h3>
+<div class="getdoctorindexbysernum"><div class="getdoctorindexbysernum-page"><p>Filters doctors array by DoctorsSerNum and returns the index</p>
+</div><h5 id="methods_getdoctorindexbysernum_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>userSerNum</td><td><a href="" class="label type-hint type-hint-string">String</a></td><td><div class="getdoctorindexbysernum-page"><p>DoctorSerNum to match</p>
+</div></td></tr></tbody></table><h5 id="methods_getdoctorindexbysernum_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-number">Number</a></td><td><div class="getdoctorindexbysernum-page"><p>Returns index of matching doctor</p>
+</div></td></tr></table></div>
+</li>
+<li><h3 id="methods_getdoctors">getDoctors()</h3>
+<div class="getdoctors"><h5 id="methods_getdoctors_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-array">Array</a></td><td><div class="getdoctors-page"><p>Returns array of Doctors</p>
+</div></td></tr></table></div>
+</li>
+<li><h3 id="methods_getprimaryphysician">getPrimaryPhysician()</h3>
+<div class="getprimaryphysician"><h5 id="methods_getprimaryphysician_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-array">Array</a></td><td><div class="getprimaryphysician-page"><p>Returns array of primary physicians</p>
+</div></td></tr></table></div>
+</li>
+<li><h3 id="methods_isempty">isEmpty()</h3>
+<div class="isempty"><h5 id="methods_isempty_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-boolean">Boolean</a></td><td><div class="isempty-page"><p>Returns whether there are no contacts</p>
+</div></td></tr></table></div>
+</li>
+<li><h3 id="methods_setusercontactsoffline">setUserContactsOffline(doctors)</h3>
+<div class="setusercontactsoffline"><div class="setusercontactsoffline-page"><p>Gets the doctors from localStorage and sets the object, thus &#39;offline&#39;</p>
+</div><h5 id="methods_setusercontactsoffline_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>doctors</td><td><a href="" class="label type-hint type-hint-array">Array</a></td><td><div class="setusercontactsoffline-page"><p>Array of doctors</p>
+</div></td></tr></tbody></table><h5 id="methods_setusercontactsoffline_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-promise">Promise</a></td><td><div class="setusercontactsoffline-page"><p>Returns a promise after obtaining the images</p>
+</div></td></tr></table></div>
+</li>
+<li><h3 id="methods_setusercontactsonline">setUserContactsOnline(doctors)</h3>
+<div class="setusercontactsonline"><div class="setusercontactsonline-page"><p>Instatiates properties with the doctors Online</p>
+</div><h5 id="methods_setusercontactsonline_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>doctors</td><td><a href="" class="label type-hint type-hint-array">Array</a></td><td><div class="setusercontactsonline-page"><p>Array of doctors</p>
+</div></td></tr></tbody></table><h5 id="methods_setusercontactsonline_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-promise">Promise</a></td><td><div class="setusercontactsonline-page"><p>Returns a promise after saving the doctors images.</p>
+</div></td></tr></table></div>
+</li>
+<li><h3 id="methods_updateusercontacts">updateUserContacts(doctors)</h3>
+<div class="updateusercontacts"><div class="updateusercontacts-page"><p>Updates all the array properties, finds and replaces the old ones and adds the new doctors</p>
+</div><h5 id="methods_updateusercontacts_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>doctors</td><td><a href="" class="label type-hint type-hint-array">Array</a></td><td><div class="updateusercontacts-page"><p>Array of doctors</p>
+</div></td></tr></tbody></table><h5 id="methods_updateusercontacts_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-promise">Promise</a></td><td><div class="updateusercontacts-page"><p>Returns a promise after saving the doctors images.</p>
+</div></td></tr></table></div>
+</li>
+</ul>
+</div>
+<div class="member property"><h2 id="properties">Properties</h2>
+<ul class="properties"><li><h3 id="properties_doctors">Doctors</h3>
+<div class="doctors"><div class="muhcapp-service-doctors-page"><p>Array of all doctors</p>
+</div></div>
+</li>
+</ul>
+</div>
+</div>

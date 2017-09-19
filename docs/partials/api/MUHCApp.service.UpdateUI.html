@@ -1,0 +1,111 @@
+<h1><code ng:non-bindable="">UpdateUI</code>
+<div><span class="hint">service in module <code ng:non-bindable="">MUHCApp</code>
+</span>
+</div>
+</h1>
+<div><h2 id="description">Description</h2>
+<div class="description"><div class="muhcapp-service-page muhcapp-service-updateui-page"><p>API service used to update the whole application. The UpdateUI service is in charge of timestamps for updates of sections, set up or any update to the user fields.</p>
+</div></div>
+<h2 id="dependencies">Dependencies</h2>
+<ul class="dependencies"><li><code ng:non-bindable=""><a href="api/MUHCApp.service:Announcements">Announcements</a></code>
+</li>
+<li><code ng:non-bindable=""><a href="api/MUHCApp.service:TxTeamMessages">TxTeamMessages</a></code>
+</li>
+<li><code ng:non-bindable=""><a href="api/MUHCApp.service:Patient">Patient</a></code>
+</li>
+<li><code ng:non-bindable=""><a href="api/MUHCApp.service:Doctors">Doctors</a></code>
+</li>
+<li><code ng:non-bindable=""><a href="api/MUHCApp.service:Appointments">Appointments</a></code>
+</li>
+<li><code ng:non-bindable=""><a href="api/MUHCApp.service:Messages">Messages</a></code>
+</li>
+<li><code ng:non-bindable=""><a href="api/MUHCApp.service:Documents">Documents</a></code>
+</li>
+<li><code ng:non-bindable=""><a href="api/MUHCApp.service:EducationalMaterial">EducationalMaterial</a></code>
+</li>
+<li><code ng:non-bindable=""><a href="api/MUHCApp.service:Notifications">Notifications</a></code>
+</li>
+<li><code ng:non-bindable=""><a href="api/MUHCApp.service:UserPlanWorkflow">UserPlanWorkflow</a></code>
+</li>
+<li><code ng:non-bindable=""><a href="api/MUHCApp.service:LocalStorage">LocalStorage</a></code>
+</li>
+<li><code ng:non-bindable=""><a href="api/MUHCApp.service:RequestToServer">RequestToServer</a></code>
+</li>
+<li><code ng:non-bindable=""><a href="api/MUHCApp.service:Diagnoses">Diagnoses</a></code>
+</li>
+<li><code ng:non-bindable=""><a href="api/MUHCApp.service:Questionnaires">Questionnaires</a></code>
+</li>
+<li><code ng:non-bindable=""><a href="api/MUHCApp.service:NativeNotification">NativeNotification</a></code>
+</li>
+<li><code ng:non-bindable=""><a href="api/ng.$q">$q</a></code>
+</li>
+<li><code ng:non-bindable=""><a href="api/ng.$cordovaNetwork">$cordovaNetwork</a></code>
+</li>
+<li><code ng:non-bindable=""><a href="api/ng.$filter">$filter</a></code>
+</li>
+</ul>
+<div class="member method"><h2 id="methods">Methods</h2>
+<ul class="methods"><li><h3 id="methods_clearupdateui">clearUpdateUI()</h3>
+<div class="clearupdateui"><div class="clearupdateui-page"><p>Clears all the timestamps.</p>
+</div></div>
+</li>
+<li><h3 id="methods_init">init(type)</h3>
+<div class="init"><div class="init-page"><p>Initializes app by querying the hospital for all the data and setting the services.</p>
+</div><h5 id="methods_init_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>type</td><td><a href="" class="label type-hint type-hint-string">String</a></td><td><div class="init-page"><p>Online or Offline init</p>
+</div></td></tr></tbody></table></div>
+</li>
+<li><h3 id="methods_reset">reset(parameters)</h3>
+<div class="reset"><div class="reset-page"><p>Completely reinstantiates services specified by the parameter by obtaining all the data from the Hospital and re-setting them.</p>
+</div><h5 id="methods_reset_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>parameters</td><td><a href="" class="label type-hint type-hint-string">String,Array</a></td><td><div class="reset-page"><p>Could be a string or an array, parameter signifying the sections to update, i.e. &#39;All&#39;, or [&#39;Appointments&#39;,&#39;Documents&#39;].</p>
+</div></td></tr></tbody></table></div>
+</li>
+<li><h3 id="methods_update">update(parameters)</h3>
+<div class="update"><div class="update-page"><p>asks the backend for the most recent data in the parameters
+object, gets the data and updates the corresponding services with this new data.</p>
+</div><h5 id="methods_update_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>parameters</td><td><a href="" class="label type-hint type-hint-string">String</a><a href="" class="label type-hint type-hint-object"></a><a href="" class="label type-hint type-hint-array">Array</a></td><td><div class="update-page"><p>Could be a string or an array, parameter signifying the sections to update, i.e. &#39;All&#39;, or [&#39;Appointments&#39;,&#39;Documents&#39;].</p>
+</div></td></tr></tbody></table></div>
+</li>
+</ul>
+</div>
+<div class="member property"><h2 id="properties">Properties</h2>
+<ul class="properties"><li><h3 id="properties_lastupdatetimestamp">lastUpdateTimestamp</h3>
+<div class="lastupdatetimestamp"><div class="muhcapp-service-lastupdatetimestamp-page"><p>Initiatiates object with all the timestamps
+ <pre class="prettyprint linenums"> var lastUpdateTimestamp={
+'All':0,
+'Appointments':0,
+//'Messages':0,
+'Documents':0,
+'Tasks':0,
+'Doctors':0,
+//'LabTests':0,
+'Patient':0,
+'Notifications':0,
+'EducationalMaterial':0,
+'Questionnaires':0
+};</pre>
+</div></div>
+</li>
+<li><h3 id="properties_promisefields">promiseFields</h3>
+<div class="promisefields"><div class="muhcapp-service-promisefields-page"><p>Array contains the fields for the patient that perform asynchronous operations.
+This is done so that we have a generic way to make sure we wait for them whenever we are setting or updating patient information.
+In the current case we have to wait for the fields to download the images into the device storage
+         <pre>
+         //Contents so far:
+         var promiseFields =  [&#39;Doctors&#39;, &#39;Patient&#39;];</p>
+</div></div>
+</li>
+<li><h3 id="properties_sectionservicemappings">sectionServiceMappings</h3>
+<div class="sectionservicemappings"><div class="muhcapp-service-sectionservicemappings-page"><p>Array contains all the details concerning setting or update for patient fields, or patient modules
+     <pre>
+     //Example:
+     var sectionServiceMappings={
+&#39;Patient&#39;:{
+  setOnline:Patient.setUserFieldsOnline,
+  update:Patient.setUserFieldsOnline,
+  setOffline:Patient.setUserFieldsOffline
+},...</p>
+</div></div>
+</li>
+</ul>
+</div>
+</div>

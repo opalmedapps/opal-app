@@ -1,0 +1,82 @@
+<h1><code ng:non-bindable="">UserPreferences</code>
+<div><span class="hint">service in module <code ng:non-bindable="">MUHCApp</code>
+</span>
+</div>
+</h1>
+<div><h2 id="description">Description</h2>
+<div class="description"><div class="muhcapp-service-page muhcapp-service-userpreferences-page"><p>Service stores and manages user preferences</p>
+</div></div>
+<h2 id="dependencies">Dependencies</h2>
+<ul class="dependencies"><li><code ng:non-bindable=""><a href="api/ng.$rootScope">$rootScope</a></code>
+</li>
+<li><code ng:non-bindable=""><a href="api/tmhDynamicLocale">tmhDynamicLocale</a></code>
+</li>
+<li><code ng:non-bindable=""><a href="api/ng.$translate">$translate</a></code>
+</li>
+<li><code ng:non-bindable=""><a href="api/ng.$q">$q</a></code>
+</li>
+<li><code ng:non-bindable=""><a href="api/MUHCApp.service:UserAuthorizationInfo">UserAuthorizationInfo</a></code>
+</li>
+</ul>
+<div class="member method"><h2 id="methods">Methods</h2>
+<ul class="methods"><li><h3 id="methods_clearuserpreferences">clearUserPreferences()</h3>
+<div class="clearuserpreferences"><div class="clearuserpreferences-page"><p>Clears user preferences for logout functionality</p>
+</div></div>
+</li>
+<li><h3 id="methods_getfontsize">getFontSize()</h3>
+<div class="getfontsize"><h5 id="methods_getfontsize_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-string">String</a></td><td><div class="getfontsize-page"><p>Returns font-size</p>
+</div></td></tr></table></div>
+</li>
+<li><h3 id="methods_getfontsize">getFontSize()</h3>
+<div class="getfontsize"><h5 id="methods_getfontsize_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-string">String</a></td><td><div class="getfontsize-page"><p>Returns calendarOption</p>
+</div></td></tr></table></div>
+</li>
+<li><h3 id="methods_getfontsize">getFontSize()</h3>
+<div class="getfontsize"><div class="getfontsize-page"><p>The method accesses the globalization plugin of the device to find the actual language of device and sets default to that language. Otherwise it sets
+English as default</p>
+</div><h5 id="methods_getfontsize_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-promise">Promise</a></td><td><div class="getfontsize-page"><p>Returns a promise that fulfills if the language is been found and correctly set or rejects if there was a problem using the plugin.</p>
+</div></td></tr></table></div>
+</li>
+<li><h3 id="methods_setenablesms">setEnableSMS(option)</h3>
+<div class="setenablesms"><div class="setenablesms-page"><p>Setter method for enable sms notifications option</p>
+</div><h5 id="methods_setenablesms_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>option</td><td><a href="" class="label type-hint type-hint-string">String</a></td><td><div class="setenablesms-page"><p>Boolean value for option</p>
+</div></td></tr></tbody></table></div>
+</li>
+<li><h3 id="methods_setlanguage">setLanguage(lan)</h3>
+<div class="setlanguage"><div class="setlanguage-page"><p>Setter method for patient language of preference</p>
+</div><h5 id="methods_setlanguage_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>lan</td><td><a href="" class="label type-hint type-hint-string">String</a></td><td><div class="setlanguage-page"><p>Either &#39;EN&#39; or &#39;FR&#39;</p>
+</div></td></tr></tbody></table></div>
+</li>
+<li><h3 id="methods_setnativecalendaroption">setNativeCalendarOption(option)</h3>
+<div class="setnativecalendaroption"><div class="setnativecalendaroption-page"><p>Setter method for patient calendar option</p>
+</div><h5 id="methods_setnativecalendaroption_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>option</td><td><a href="" class="label type-hint type-hint-string">String</a></td><td><div class="setnativecalendaroption-page"><p>Boolean value for option</p>
+</div></td></tr></tbody></table></div>
+</li>
+<li><h3 id="methods_setuserpreferences">setUserPreferences(preferences)</h3>
+<div class="setuserpreferences"><div class="setuserpreferences-page"><p>Setter method for patient preferences, format
+<pre class="prettyprint linenums">preferences = {Language:'EN',EnableSMS:'1'}</pre>
+</div><h5 id="methods_setuserpreferences_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>preferences</td><td><a href="" class="label type-hint type-hint-object">Object</a></td><td><div class="setuserpreferences-page"><p>Object containing the user preferences</p>
+</div></td></tr></tbody></table></div>
+</li>
+</ul>
+</div>
+<div class="member property"><h2 id="properties">Properties</h2>
+<ul class="properties"><li><h3 id="properties_calendaroption">calendarOption</h3>
+<div class="calendaroption"><div class="muhcapp-service-calendaroption-page"><p>Calendar option preperty</p>
+</div></div>
+</li>
+<li><h3 id="properties_enablesms">enableSMS</h3>
+<div class="enablesms"><div class="muhcapp-service-enablesms-page"><p>Enable SMS property</p>
+</div></div>
+</li>
+<li><h3 id="properties_fontsize">fontSize</h3>
+<div class="fontsize"><div class="muhcapp-service-fontsize-page"><p>Font size property</p>
+</div></div>
+</li>
+<li><h3 id="properties_language">language</h3>
+<div class="language"><div class="muhcapp-service-language-page"><p>Language property</p>
+</div></div>
+</li>
+</ul>
+</div>
+</div>

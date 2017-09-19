@@ -1,0 +1,87 @@
+#verticallyAlignTreatment{
+	display: flex;
+	align-items: center;
+}
+.transDiv{
+	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";       /* IE 8 */
+  filter: alpha(opacity=50);  /* IE 5-7 */
+  -moz-opacity: 0.5;          /* Netscape */
+  -khtml-opacity: 0.5;        /* Safari 1.x */
+  opacity: 0.5;
+}
+.numberCircle {
+    border-radius: 50%;
+    behavior: url(PIE.htc);
+    /* remove if you don't care about IE8 */
+    width: 100%;
+    height: 80%;
+    padding: 0px;
+    border: 2px solid black;
+    color: black;
+    text-align: center;
+    font:20px Arial, sans-serif;
+
+}
+.greenCircle{
+	background: #5CE68A;
+
+}
+
+.blueCircle{
+	background: #3399ff;
+
+}
+.btn:focus {
+  outline: none;
+}
+.btn:focus, .btn:active {
+   outline: none !important;
+}
+
+
+.plan-treatment-list {
+  border-top: none;
+  background-image: none !important;
+}
+
+.plan-treatment {
+  line-height: 1;
+  padding: 0;
+}
+
+.plan-treatment-left {
+  text-align: right;
+  padding: 10px 10px 10px 0;
+}
+
+.plan-treatment-center {
+  background-color: #3399ff;
+  opacity: 0.5;
+}
+
+.plan-treatment-right {
+  padding: 10px 40px 10px 10px;
+}
+
+.plan-treatment-date {
+  font-size: 14px;
+  opacity: 0.8;
+  margin-bottom: 4px;
+  font-weight: 500;
+}
+
+.plan-treatment-duration {
+  font-size: 11px;
+  opacity: 0.4;
+}
+
+.plan-treatment-name {
+  font-size: 17px;
+  margin-bottom: 8px;
+}
+
+.plan-treatment-info {
+  opacity: 0.4;
+  font-size: 12px;
+  line-height: 1.4;
+}

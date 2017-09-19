@@ -1,0 +1,103 @@
+<div style="height:88vh;overflow-y:scroll">
+<div class="col-md-4 col-sm-4 col-lg-4 ">
+  <div class="center">
+<strong>Conversations</strong>
+</div>
+  <div class="panel panel-default" style="padding:0px;height:70vh;box-shadow:0 0 20px lightgrey" >
+<div class="panel-body " style="padding:0px;">
+
+<!--SEARCH BAR FOR MESSAGES-->
+
+ <div class="navigation-bar">
+  <input type="search" value="" placeholder="Search" class="search-input" ng-model="searchText" style="width:95%;margin:10px 10px 10px 10px">
+</div>
+
+<!--DESKTOP LIST OF MESSAGES-->
+<div style="overflow-y:scroll;height:62vh;margin-top:10px">
+
+       <div style="border-top:0.5px solid lightgrey" class="plan list__item " ng-click="personClicked($index)"  ng-class="($index==selectedIndex) ? 'my-class' : ''"   ng-repeat="conversation in messages|filter:searchText">
+         <div class="row">
+         <div class="col-xs-1"  style="padding:20px margin-left:5px">
+         </div>
+           <div class="col-xs-8">
+             <div class="plan-name">{{conversation.MessageRecipient}}</div>
+             <div class="plan-info" style="margin-left:10px">
+               <div>
+                 <i class="icon ion-ios-person" style="color:lightgrey"></i>&nbsp;&nbsp;{{conversation.Role}}
+             </div>
+             </div>
+           </div>
+           <div class="col-xs-3">
+             <div class="plan-duration" style="color:grey">{{conversation.DateOfLastMessage| dateEmail}}</div>
+            <img ng-src="./img/unread-email-icon.png"  style="opacity:0.7;" width="10px" height="auto" ng-show="conversation.ReadStatus===0">
+
+          </div>
+        </div>
+      </div>
+
+       </div>
+       </div>
+       </div>
+</div>
+<div class="container col-md-8 col-sm-8 col-lg-8" >
+<div class="panel panel-default" style="box-shadow:0 0 20px lightgrey">
+<div class="panel-body" >
+<div style="overflow-y:scroll;height:60vh" scroll-glue-bottom="glue">
+
+  <div  ng-repeat="mes in conversation" ng-init="(mes.Role=='1' ? messageName='User' : messageName=messages[selectedIndex].MessageRecipient)">
+       <br>
+    <div style="height: 1px; background-color: #C1C1C1; text-align: center">
+      <span style="font-size:12px;background-color: white; position: relative; top: -1.5em;color:#C1C1C1">
+        {{mes.Date|date:'dd/MM/yyyy'}}
+      </span>
+    </div>
+<br>
+    <div class="row" >
+      <div class="col-xs-2 col-md-2 col-sm-2 col-lg-2" style="padding-right:1vw">
+          <img  style="border-radius:4px" width="40px" height="auto" class="img-responsive"  ng-hide="mes.Role=='1'" ng-src="./img/doctor.png">
+          <img  width="40px" height="auto" ng-hide="mes.Role=='0'" class="img-responsive" ng-src="./img/patient.png">
+
+      </div>
+
+      <div class="col-xs-9 col-md-9 col-sm-9 col-lg-9" style="margin-left:-7%">
+         <div  class="timline-from" >
+            <span class="timeline-name">{{messageName}}</span>
+            <span class="timeline-id">{{mes.Date|date:'h:mm a'}}</span>
+          </div>
+          <div  class="timeline-message ">
+            <p>{{mes.MessageContent}}</p>
+          </div>
+          <div>
+            <a ng-click="messageAttachmentOpener(mes)">
+              <img ng-src="{{mes.Attachment}}"  class="img-responsive" style="max-width:250px">
+            </a>
+          </div>
+      </div>
+    </div>
+  </div>
+
+  </div>
+<div>
+<br>
+<form class="form-group">
+<div class="col-xs-1">
+<span class=" btn btn-default btn-file">
+<ons-icon icon="ion-paperclip"></ons-icon><input type="file" id="browseBtn" accept="image/*"/ fileread="upload.Document"><br>
+</span>
+<div ng-show="showAttachment">
+<p style="text-align:left">Attachment</p>
+</div>
+</div> <textarea ng-model="newMessage" style="margin-left:5%" class="textarea col-xs-8" rows="5"placeholder="Message"></textarea>
+  <div class="right">
+    <div class="col-xs-1">
+      <button style="margin-left=1%" class="btn btn-primary" ng-disabled="sendButtonDisabled" ng-click="submitMessage()">Send</button>
+    </div>
+  </div>
+  </form>
+
+</div>
+
+</div>
+</div>
+</div>
+</div>

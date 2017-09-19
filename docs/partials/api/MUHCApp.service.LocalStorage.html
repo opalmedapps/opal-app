@@ -1,0 +1,44 @@
+<h1><code ng:non-bindable="">LocalStorage</code>
+<div><span class="hint">service in module <code ng:non-bindable="">MUHCApp</code>
+</span>
+</div>
+</h1>
+<div><h2 id="description">Description</h2>
+<div class="description"><div class="muhcapp-service-page muhcapp-service-localstorage-page"><p>API to interact with the saved data storage for the patient.</p>
+</div></div>
+<h2 id="dependencies">Dependencies</h2>
+<ul class="dependencies"><li><code ng:non-bindable=""><a href="api/ng.$firebaseAuth">$firebaseAuth</a></code>
+</li>
+<li><code ng:non-bindable=""><a href="api/MUHCApp.service:UserAuthorizationInfo">UserAuthorizationInfo</a></code>
+</li>
+<li><code ng:non-bindable=""><a href="api/MUHCApp.service:EncryptionService">EncryptionService</a></code>
+</li>
+</ul>
+<div class="member method"><h2 id="methods">Methods</h2>
+<ul class="methods"><li><h3 id="methods_readlocalstorage">ReadLocalStorage(section)</h3>
+<div class="readlocalstorage"><div class="readlocalstorage-page"><p>Reads section from localStorage, decrypts and returns decrypted object by using the hashed of password.</p>
+</div><h5 id="methods_readlocalstorage_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>section</td><td><a href="" class="label type-hint type-hint-string">String</a></td><td><div class="readlocalstorage-page"><p>Section for patient data in localStorage</p>
+</div></td></tr></tbody></table><h5 id="methods_readlocalstorage_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-object">Object</a></td><td><div class="readlocalstorage-page"><p>Returns decrypted object representing that section in localStorage</p>
+</div></td></tr></table></div>
+</li>
+<li><h3 id="methods_writetolocalstorage">WriteToLocalStorage(section, data)</h3>
+<div class="writetolocalstorage"><div class="writetolocalstorage-page"><p>Writes the data parameter to that section in the patient storage encrypting all the data saved in the process.</p>
+</div><h5 id="methods_writetolocalstorage_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>section</td><td><a href="" class="label type-hint type-hint-string">String</a></td><td><div class="writetolocalstorage-page"><p>Patient section to write to</p>
+</div></td></tr><tr><td>data</td><td><a href="" class="label type-hint type-hint-object">Object</a></td><td><div class="writetolocalstorage-page"><p>Object to write to that particular patient section. i.e. &#39;Documents&#39;, &#39;Announcements&#39;</p>
+</div></td></tr></tbody></table></div>
+</li>
+<li><h3 id="methods_isuserdatadefined">isUserDataDefined()</h3>
+<div class="isuserdatadefined"><h5 id="methods_isuserdatadefined_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-boolean">Boolean</a></td><td><div class="isuserdatadefined-page"><p>Returns value depending on whether the storage for the user exists.</p>
+</div></td></tr></table></div>
+</li>
+<li><h3 id="methods_resetuserlocalstorage">resetUserLocalStorage()</h3>
+<div class="resetuserlocalstorage"><div class="resetuserlocalstorage-page"><p>Deletes all the user fields in local storage</p>
+</div></div>
+</li>
+<li><h3 id="methods_updatelocalstorageafterpasswordchange">updateLocalStorageAfterPasswordChange()</h3>
+<div class="updatelocalstorageafterpasswordchange"><div class="updatelocalstorageafterpasswordchange-page"><p>Updates the whole storage by encrypting all information with the new password.</p>
+</div></div>
+</li>
+</ul>
+</div>
+</div>

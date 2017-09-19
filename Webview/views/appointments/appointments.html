@@ -1,0 +1,157 @@
+<div style="height:90vh;overflow-y:scroll;padding-left:20px;padding-right:20px" >
+                <div class="row">
+                    <div class="col-xs-4">
+
+                      <div class="row">
+
+                        <div class="col-xs-12">
+                          <div class="div-container-section" style="padding:10px">
+                            <div class="row">
+                              <div class="col-xs-1">
+                                <i class="icon fa fa-calendar iconThemeViews"></i>
+                              </div>
+                              <div class="col-xs-11">
+                                <div align="center">
+                                <h4 style="margin-top:0">{{titleAppointmentsHome}}</h4>
+                              </div>
+                              </div>
+                              <div class="row">
+                                <div class="col-xs-12">
+                                  <div align="center">
+                                  <strong>{{appointmentShown.AppointmentType_EN}} </strong><a href ng-click="menu.setMainPage('views/educational-material.html',{closedMenu:true})"><i class="ion-help-circled iconHomeView"></i></a><br>
+                                  {{appointmentShown.ScheduledStartTime|formatDateAppointmentTask}}<br>
+                                  {{appointmentShown.ResourceName}}<br>
+                                  <i class="icon ion-ios-location iconHomeView"></i> {{appointmentShown.Location}}
+                                </div>
+                                </div>
+                              </div>
+
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                        <div class="row">
+                          <div class="col-xs-12">
+                            <div class="div-container-section" >
+
+                              <div class="row">
+                                <div class="col-xs-1">
+                                  <i class="fa fa-list icon iconThemeViews"></i>
+                                </div>
+                                <div class="col-xs-11">
+                                  <div align="center">
+                                  <h4 style="padding-top:0;margin-top:0">Appointment List</h4>
+                                </div>
+                                </div>
+                              </div>
+                              <div class="navigation-bar">
+    <div class="navigation-bar__center">
+      <div class="button-bar" style="width:280px;margin:0 auto;margin-top:7px">
+        <div class="button-bar__item">
+          <input type="radio" ng-model="radioModel" value="All" name="navi-segment-a" checked>
+          <div class="button-bar__button" align="center">All</div>
+        </div>
+
+        <div class="button-bar__item">
+          <input type="radio" ng-model="radioModel" value="Past" name="navi-segment-a">
+          <div class="button-bar__button" align="center">Past</div>
+        </div>
+        <div class="button-bar__item">
+          <input type="radio" ng-model="radioModel" value="Today" name="navi-segment-a">
+          <div class="button-bar__button" align="center">Today</div>
+        </div>
+        <div class="button-bar__item">
+          <input type="radio" ng-model="radioModel" value="Upcoming" name="navi-segment-a">
+          <div class="button-bar__button" align="center">Future</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div ng-show="radioModel=='All'">
+        <input type="search" value="" placeholder="Search" class="search-input" ng-model="searchText" style="margin:10px 0 10px 0">
+  </div>
+  <div style="height:45vh;overflow-y:scroll;margin-top:10px">
+
+    <ul class="list">
+         <li class="row list__itemo-appointments list__item-appointments--tight list__item__appointments--tappable" ng-repeat="app in appointments|filter:searchText" style="border-bottom:1px solid lightgrey;" ng-click="clickEventOnList(app.AppointmentSerNum)">
+           <div class="col-xs-1" style="opacity: 0.6;filter: alpha(opacity=60);width:10px;height:10px" ng-style="{ 'background-color': getStyle($index) }">
+           </div>
+           <div class="col-xs-11 plan-right">
+             <div >
+             <strong>{{app.AppointmentType_EN}}</strong>
+           </div>
+              <div >
+                <div ng-show="app.sessionNumber!==undefined"><strong>{{app.sessionNumber}}</strong></div>
+              <i class="fa fa-calendar" style="color:#2B6197"></i>&nbsp;{{app.ScheduledStartTime|formatDateAppointmentTask}}
+
+               </div>
+               <div>
+                 <i class="ion-person iconHomeView"></i>&nbsp;{{app.ResourceName}}
+               </div>
+           </div>
+         </li>
+       </ul>
+</div>
+
+                            </div>
+                          </div>
+                        </div>
+
+                        <!--<div class="btn-group calTools">
+                          <button class="btn" ng-click="changeLang()">
+                            {{changeTo}}
+                          </button>
+                          <button class="btn" ng-click="addRemoveEventSource(eventSources,eventSource)">
+                            Toggle Source
+                          </button>
+                          <button type="button" class="btn btn-primary" ng-click="addEvent()">
+                            Add Event
+                          </button>
+                        </div>
+
+                        <ul class="unstyled">
+                            <li ng-repeat="e in events">
+                                <div class="alert alert-info">
+                                    <a class="close" ng-click="remove($index)"><i class="icon-remove"></i></a>
+                                    <b> <input ng-model="e.title"></b>
+                                    {{e.start | date:"MMM dd"}} - {{e.end | date:"MMM dd"}}
+                                </div>
+                            </li>
+                        </ul>-->
+
+                    </div>
+
+
+
+
+                    <div class="col-xs-8">
+
+                              <div class="row">
+                                <div class="div-container-section" style="padding:5px">
+                                  <div class="row">
+                                    <div class="col-xs-1">
+                                      <i class="fa fa-calendar icon iconThemeViews"></i>
+                                    </div>
+                                    <div class="col-xs-11">
+                                      <div align="center" style="margin-left:-25px">
+                                          <h4>Calendar</h4>
+                                      </div>
+
+                                    </div>
+                                  </div>
+                                <div align="center" style="margin-top:10px">
+                                <div class="btn-group">
+                                    <button class="btn btn-primary" ng-click="changeView('agendaDay', 'myCalendar1')">AgendaDay</button>
+                                    <button class="btn btn-primary" ng-click="changeView('agendaWeek', 'myCalendar1')">AgendaWeek</button>
+                                    <button class="btn btn-primary" ng-click="changeView('month', 'myCalendar1')">Month</button>
+                                </div>
+                              </div>
+
+                            <div class="calendar" ng-model="eventSources" calendar="myCalendar1" ui-calendar="uiConfig.calendar"></div>
+                            </div>
+                            </div>
+                    </div>
+
+                </div>
+
+</div>
