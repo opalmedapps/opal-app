@@ -21,6 +21,7 @@
         var param;
         var navigatorPage;
         var app;
+        
 
         vm.goToEducationalMaterial = goToEducationalMaterial;
         vm.share = share;
@@ -66,13 +67,13 @@
             //Instantiating popover controller
             $timeout(function () {
                 ons.createPopover('./views/education/share-print-popover.html',{parentScope: vm}).then(function (popover) {
-                    vm.popoverSharing = popover;
+                    popoverSharing = popover;
                 });
             }, 300);
 
             //On destroy clean up
             $scope.$on('$destroy', function () {
-                vm.popoverSharing.destroy();
+                popoverSharing.destroy();
             });
         }
 
@@ -86,12 +87,12 @@
 
         function share(){
             FileManagerService.shareDocument(vm.edumaterial.Name, vm.edumaterial.ShareURL);
-            vm.popoverSharing.hide();
+            popoverSharing.hide();
         }
 
         function print(){
             //If no connection then simply alert the user to connect to the internet
-            vm.popoverSharing.hide();
+            popoverSharing.hide();
             if(app && NetworkStatus.isOnline())
             {
                 EducationalMaterial.getMaterialBinary(vm.edumaterial.ShareURL)
@@ -117,7 +118,7 @@
                         ons.notification.alert({'message':$filter('translate')('UNABLETOOBTAINEDUCATIONALMATERIAL')});
                     });
             }else{
-                vm.popoverSharing.hide();
+                popoverSharing.hide();
                 ons.notification.alert({'message':$filter('translate')("PRINTINGUNAVAILABLE")});
             }
         }
