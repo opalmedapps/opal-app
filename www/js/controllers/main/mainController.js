@@ -82,8 +82,8 @@
          *****************************************/
         //TimeoutID for locking user out
         function setupInactivityChecks() {
-            this.addEventListener('touchstart',resetTimer,false);
-            this.addEventListener("mousedown", resetTimer, false);
+            addEventListener('touchstart',resetTimer,false);
+            addEventListener("mousedown", resetTimer, false);
             startTimer();
         }
 

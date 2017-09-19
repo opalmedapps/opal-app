@@ -8,7 +8,7 @@
 
     angular
         .module('MUHCApp')
-        .controller('NotificationsController', LoadingController);
+        .controller('NotificationsController', NotificationsController);
 
     NotificationsController.$inject = ['RequestToServer','Notifications', 'NavigatorParameters', 'Permissions', '$filter'];
 
