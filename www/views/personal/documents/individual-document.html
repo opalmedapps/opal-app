@@ -1,4 +1,4 @@
-<ons-page ng-controller="SingleDocumentController">
+<ons-page ng-controller="IndividualDocumentController">
     <ons-toolbar fixed-style>
         <div class="left"><ons-back-button ng-hide="loading">{{"BACK"|translate}}</ons-back-button></div>
         <div class="center">{{documentObject.Title|limitTo:25}}{{documentObject.Title.length > 25 ? '...' : ''}}</div>
@@ -23,14 +23,7 @@
     <div class="popup">
         <span class="popuptext" ng-class="{'popup-show' : show, 'popup-hide': hide}">{{"TAPTOZOOM"| translate}}</span>
     </div>
-
-
-    <!--<div class="content-scrollable" ng-hide="loading||rendering" align="center" style="margin-top: 5px" style="width: 100%;">-->
-        <!--<canvas id="the-canvas" style="border:1px solid black" style="width:inherit;"></canvas>-->
-    <!--</div>-->
     <div id="holder" ng-hide="loading||rendering" align="center"></div>
-
-
     <ons-modal var="modal">
         <h3>Warning!</h3>
         <ons-icon icon="ion-alert-circled" size="60px"></ons-icon>
@@ -38,9 +31,7 @@
         <p class="unattended-message">{{"CONFIRM_SHARE"|translate}}</p>
         <ons-button style="margin-top: 5%; font-size: 22px;" ng-click="modal.hide()">{{"CANCEL"|translate}}</ons-button>
         <ons-button style="margin-top: 5%; margin-left: 50px; font-size: 22px; background-color: #F44336" ng-click="share()">{{"CONTINUE"|translate}}</ons-button>
-
     </ons-modal>
-
 </ons-page>
 
 

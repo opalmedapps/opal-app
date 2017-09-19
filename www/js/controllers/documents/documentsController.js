@@ -46,7 +46,7 @@
                 Documents.readDocument(doc.DocumentSerNum);
             }
             NavigatorParameters.setParameters({'navigatorName':'personalNavigator', 'Post':doc});
-            personalNavigator.pushPage('./views/personal/my-chart/individual-document.html');
+            personalNavigator.pushPage('./views/personal/documents/individual-document.html');
         }
 
         // Determines whether or not to show the date header.
