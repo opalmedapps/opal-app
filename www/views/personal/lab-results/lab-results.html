@@ -1,4 +1,4 @@
-<ons-page ng-controller="LabResultsControllerCopy">
+<ons-page ng-controller="LabResultsController">
     <ons-toolbar fixed-style>
         <div class="left">
             <ons-back-button>{{"BACK"|translate}}</ons-back-button>
@@ -16,7 +16,7 @@
     </div>
 
     <ons-tabbar class="shadow-2" position="top" animation="fade" var="labbar" ng-hide="loading">
-        <ons-tab class="shadow-2" style="background-color:#ECEFF1;" page="./views/personal/lab-results/date-tests.html" label="{{'LAB_BYDATE'|translate}}" icon="fa-calendar" active="true"></ons-tab>
+        <ons-tab class="shadow-2" style="background-color:#ECEFF1;" page="./views/personal/lab-results/date-view.html" label="{{'LAB_BYDATE'|translate}}" icon="fa-calendar" active="true"></ons-tab>
         <ons-tab class="shadow-2" style="background-color:#ECEFF1;" page="./views/personal/lab-results/category-view.html" label="{{'LAB_BYTYPE'|translate}}" icon="fa-tags"></ons-tab>
     </ons-tabbar>
 

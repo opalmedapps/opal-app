@@ -21,7 +21,7 @@
         var param;
         var navigatorPage;
         var app;
-        
+
 
         vm.goToEducationalMaterial = goToEducationalMaterial;
         vm.share = share;

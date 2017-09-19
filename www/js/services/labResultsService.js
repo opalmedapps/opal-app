@@ -143,7 +143,6 @@ myApp.service('LabResults',['$filter','LocalStorage','RequestToServer','$q',
              *@returns {Promise} Returns a promise containing status
              **/
             setTestResults:function(){
-
                 var deferred = $q.defer();
                 this.destroy();
                 lastUpdated = Date.now();
@@ -151,14 +150,10 @@ myApp.service('LabResults',['$filter','LocalStorage','RequestToServer','$q',
                     .then(function (response) {
                         if (response.Code == '3') {
                             addTestResults(response.labResults);
-
-                            console.log(JSON.stringify(response.labResults));
-
                             deferred.resolve({Success: true, Location: 'Server'});
                         }
                     })
                     .catch(function (error) {
-
                         deferred.reject({Success: false, Location: '', Error: error})
                     });
                 return deferred.promise;
