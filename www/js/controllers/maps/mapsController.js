@@ -19,6 +19,9 @@
         ///////////////////////
 
         function activate(){
+            console.log('here');
+
+
             vm.map=NavigatorParameters.getParameters();
             language = UserPreferences.getLanguage().toUpperCase();
 
@@ -36,7 +39,7 @@
             var app = document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'https://' ) === -1;
             if(app)
             {
-                cordova.InAppBrowser.open(vm.map.MapUrl, '_blank', 'EnableViewPortScale=yes');
+                var ref = cordova.InAppBrowser.open(vm.map.MapUrl, '_blank', 'EnableViewPortScale=yes');
             } else {
                 window.open(vm.map.MapUrl);
             }
