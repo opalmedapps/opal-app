@@ -1,4 +1,4 @@
-<ons-page ng-controller="personalTabController" ng-device-backbutton="personalDeviceBackButton()">
+<ons-page ng-controller="PersonalTabController as tab" ng-device-backbutton="personalDeviceBackButton()">
     <ons-toolbar fixed-style>
         <div class="left">
             <ons-back-button>{{"BACK"|translate}}</ons-back-button>
@@ -9,7 +9,7 @@
     <network-banner></network-banner>
     <div>
         <ons-list style="margin: 0px 0">
-            <ons-list-item modifier="chevron" ng-if="censor" class="item" ng-click="personalNavigator.pushPage('views/personal/diagnosis/diagnosis.html')">
+            <ons-list-item modifier="chevron" ng-if="tab.censor" class="item" ng-click="personalNavigator.pushPage('views/personal/diagnosis/diagnosis.html')">
                 <ons-row align="center">
                     <ons-col width="60px" style="text-align: center">
                         <div>
@@ -27,7 +27,7 @@
             <ons-list-item modifier="chevron" class="item" ng-click="personalNavigator.pushPage('views/general/notifications/notifications.html')">
                 <ons-row align="center">
                     <ons-col width="60px" style="text-align: center">
-                        <ons-icon icon="ion-android-notifications" size="2x" style="color:#FFC107"></ons-icon><span class="notification" ng-show="notificationsUnreadNumber>0">{{notificationsUnreadNumber}}</span>
+                        <ons-icon icon="ion-android-notifications" size="2x" style="color:#FFC107"></ons-icon><span class="notification" ng-show="tab.notificationsUnreadNumber>0">{{tab.notificationsUnreadNumber}}</span>
                     </ons-col>
                     <ons-col>
                         <header>
@@ -37,7 +37,7 @@
                     </ons-col>
                 </ons-row>
             </ons-list-item>
-            <ons-list-item modifier="chevron" class="item" ng-click="goToStatus()">
+            <ons-list-item modifier="chevron" class="item" ng-click="tab.goToStatus()">
                 <ons-row align="center">
                     <ons-col width="60px" style="text-align: center">
                         <ons-icon style="color: #9575CD" size="2x" icon="fa-tasks" aria-hidden="true" ></ons-icon>
@@ -63,7 +63,7 @@
                     </ons-col>
                 </ons-row>
             </ons-list-item>
-            <ons-list-item modifier="chevron" class="item" ng-if="censor" ng-click="personalNavigator.pushPage('views/personal/lab-results/lab-results.html')" >
+            <ons-list-item modifier="chevron" class="item" ng-if="tab.censor" ng-click="personalNavigator.pushPage('views/personal/lab-results/lab-results.html')" >
                 <ons-row align="center" >
                     <ons-col width="60px" style="text-align: center">
                         <div>
@@ -78,11 +78,11 @@
                     </ons-col>
                 </ons-row>
             </ons-list-item>
-            <ons-list-item modifier="chevron" class="item" ng-if="censor" ng-click="personalNavigator.pushPage('views/personal/my-chart/documents.html')">
+            <ons-list-item modifier="chevron" class="item" ng-if="tab.censor" ng-click="personalNavigator.pushPage('views/personal/documents/documents.html')">
                 <ons-row align="center" >
                     <ons-col width="60px" style="text-align: center">
                         <div>
-                            <ons-icon icon="fa-folder" size="2x" style="color:#ffdf80"></ons-icon><span class="notification" ng-show="documentsUnreadNumber>0">{{documentsUnreadNumber}}</span>
+                            <ons-icon icon="fa-folder" size="2x" style="color:#ffdf80"></ons-icon><span class="notification" ng-show="tab.documentsUnreadNumber>0">{{tab.documentsUnreadNumber}}</span>
                         </div>
                     </ons-col>
                     <ons-col>
@@ -97,7 +97,7 @@
                 <ons-row align="center" >
                     <ons-col width="60px" style="text-align: center">
                         <div>
-                            <ons-icon icon="fa-user-md" size="2x" style="color:#2196F3"></ons-icon><span class="notification" ng-show="txTeamMessagesUnreadNumber>0">{{txTeamMessagesUnreadNumber}}</span>
+                            <ons-icon icon="fa-user-md" size="2x" style="color:#2196F3"></ons-icon><span class="notification" ng-show="tab.txTeamMessagesUnreadNumber>0">{{tab.txTeamMessagesUnreadNumber}}</span>
                         </div>
                     </ons-col>
                     <ons-col>
@@ -112,7 +112,7 @@
                 <ons-row align="center">
                     <ons-col width="60px" style="text-align: center">
                         <div>
-                            <ons-icon icon="fa-question-circle" size="2x" style="color: #607d8b;"></ons-icon><span class="notification" ng-show="questionnairesUnreadNumber>0">{{questionnairesUnreadNumber}}</span>
+                            <ons-icon icon="fa-question-circle" size="2x" style="color: #607d8b;"></ons-icon><span class="notification" ng-show="tab.questionnairesUnreadNumber>0">{{tab.questionnairesUnreadNumber}}</span>
                         </div>
                     </ons-col>
                     <ons-col>

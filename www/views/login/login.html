@@ -1,4 +1,4 @@
-<ons-page style="background-color:white;width:100vw;height:100vh" ng-controller="LoginController">
+<ons-page style="background-color:white;width:100vw;height:100vh" ng-controller="LoginController as login">
     <ons-toolbar fixed-style>
         <div class="left">
             <ons-back-button>{{"BACK"|translate}}</ons-back-button>
@@ -16,10 +16,10 @@
                 <div align="center">
                     <div>
                         <div style="width: 100%" class="style-4">
-                            <input placeholder='{{"EMAIL"|translate}}' name="email" ng-model="email" type="email" required></div>
+                            <input placeholder='{{"EMAIL"|translate}}' name="email" ng-model="login.email" type="email" required ng-change=login.clearErrors()></div>
                         <br/>
                         <div style="width: 100%" class="style-4">
-                            <input name="password" ng-model="password" placeholder='{{"PASSWORD"|translate}}' type="password" required></div>
+                            <input name="password" ng-model="login.password" placeholder='{{"PASSWORD"|translate}}' type="password" required ng-change="login.clearErrors()"></div>
                         <br/>
                         <div ng-show="alert.type">
                             <uib-alert type="{{alert.type}}">{{alert.content|translate}}</uib-alert>
@@ -27,12 +27,10 @@
                     </div>
 
                     <div>{{"TRUST_DEVICE"|translate}}
-                        <span><ons-switch var="mySwitch" onchange=""></ons-switch></span>
+                        <span><ons-switch var="login.trustSwitch" ng-model="login.trusted"></ons-switch></span>
                     </div>
                     <div style="max-width:400px; margin-top: 5%">
-                        <ons-button class="shadow-2" modifier="large" style="background-color: #4CAF50; font-size: x-large; font-weight: bolder;"
-                                    ng-click="submit(email, password)"
-                                    ng-disabled="loading">
+                        <ons-button class="shadow-2" modifier="large" style="background-color: #4CAF50; font-size: x-large; font-weight: bolder;" ng-click="login.submit()" ng-disabled="loading">
                             {{"LOGIN"|translate}}
                         </ons-button>
                     </div>

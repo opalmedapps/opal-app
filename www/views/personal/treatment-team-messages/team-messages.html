@@ -1,12 +1,12 @@
-<ons-page ng-controller="TxTeamMessagesController">
+<ons-page ng-controller="TxTeamMessagesController as txTeam">
     <ons-toolbar fixed-style>
         <div class="left"><ons-back-button>{{"BACK"|translate}}</ons-back-button></div>
         <div class="center" ng-class="fontSizeTitle">{{"TEAMMESSAGES"|translate}}</div>
     </ons-toolbar>
     <network-banner></network-banner>
-    <div ng-hide="noMessages">
-        <ons-list  ng-repeat="message in txTeamMessages | orderBy:'-DateAdded'" ng-click="goToTeamMessage(message)">
-            <ons-list-header class="person-list-header" ng-class="fontSizeTitle" ng-show="showHeader($index)">{{message.DateAdded|date:'fullDate'}}</ons-list-header>
+    <div ng-hide="txTeam.noMessages">
+        <ons-list  ng-repeat="message in txTeam.txTeamMessages | orderBy:'-DateAdded'" ng-click="txTeam.goToTeamMessage(message)">
+            <ons-list-header class="person-list-header" ng-class="fontSizeTitle" ng-show="txTeam.showHeader($index)">{{message.DateAdded|date:'fullDate'}}</ons-list-header>
             <ons-list-item modifier="chevron" class="item">
                 <ons-row align="center" >
                     <ons-col width="60px" align="center">
@@ -24,6 +24,6 @@
         </ons-list>
     </div>
     <div class="container" align="center">
-      <p style="margin-top:25vh;color:grey" ng-show="noMessages">{{"NOTEAMMESSAGES"|translate}}</p>
+      <p style="margin-top:25vh;color:grey" ng-show="txTeam.noMessages">{{"NOTEAMMESSAGES"|translate}}</p>
     </div>
 </ons-page>
