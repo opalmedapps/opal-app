@@ -11,10 +11,10 @@
         .module('MUHCApp')
         .controller('TxTeamMessagesController', TxTeamMessagesController);
 
-    TxTeamMessagesController.$inject = ['TxTeamMessages','NavigatorParameters'];
+    TxTeamMessagesController.$inject = ['TxTeamMessages','NavigatorParameters', '$timeout'];
 
     /* @ngInject */
-    function TxTeamMessagesController(TxTeamMessages, NavigatorParameters) {
+    function TxTeamMessagesController(TxTeamMessages, NavigatorParameters, $timeout) {
         var vm = this;
 
         vm.goToTeamMessage = goToTeamMessage;
@@ -28,7 +28,11 @@
             vm.noMessages = true;
             var messages = TxTeamMessages.setLanguageTxTeamMessages(TxTeamMessages.getTxTeamMessages());
             if (messages.length > 0) vm.noMessages = false;
-            vm.txTeamMessages=messages
+
+            $timeout(function(){
+                vm.txTeamMessages = messages
+            });
+
         }
 
         function goToTeamMessage(message){
