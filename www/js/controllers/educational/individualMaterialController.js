@@ -41,8 +41,6 @@
             vm.edumaterial =EducationalMaterial.setLanguage(param.Post);
             Logger.sendLog('Educational Material', param.Post.EducationalMaterialSerNum);
 
-            console.log(vm.edumaterial);
-
             //Determine if material has a ShareURL and is printable
             if(vm.edumaterial.hasOwnProperty('ShareURL')&& vm.edumaterial.ShareURL !=="") {
                 vm.isPrintable = FileManagerService.isPDFDocument(vm.edumaterial.ShareURL);
@@ -79,7 +77,7 @@
             });
         }
 
-        function goToEducationalMaterial(){
+        function goToEducationalMaterial(index){
             var nextStatus = EducationalMaterial.openEducationalMaterialDetails(vm.edumaterial);
             if (nextStatus !== -1) {
                 NavigatorParameters.setParameters({ 'Navigator': navigatorPage, 'Index': index, 'Booklet': vm.edumaterial, 'TableOfContents': vm.tableOfContents });
@@ -131,7 +129,7 @@
             {
                 EducationalMaterial.getMaterialPage(vm.edumaterial.Url)
                     .then(function(response){
-                        vm.edumaterial.Content = response;
+                        vm.edumaterial.Content = response.data;
                     })
                     .catch(function(){
                         ons.notification.alert({'message':$filter('translate')('UNABLETOOBTAINEDUCATIONALMATERIAL')});

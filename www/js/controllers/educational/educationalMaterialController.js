@@ -46,7 +46,6 @@
 
         function configureState() {
             if(EducationalMaterial.materialExists()) {
-                console.log("initializing data..");
                 initData();
             } else {
                 vm.noMaterials = true;

@@ -48,12 +48,12 @@
 
             //PDF params
             docParams = Documents.setDocumentsLanguage(parameters.Post);
-            pdfdoc = 3;
-            scale = uint8pf;
             viewerSize = window.innerWidth;
             containerEl = document.getElementById('holder');
+            pdfdoc, scale = 3, uint8pf;
 
             vm.documentObject = docParams;
+            $scope.documentObject = docParams;
 
             //Log usage
             Logger.sendLog('Document', docParams.DocumentSerNum);
@@ -108,7 +108,6 @@
 
                     var canvasElements = containerEl.getElementsByTagName("canvas");
                     var viewerScale = viewerSize / canvasElements[0].width * 0.95 * 100 + "%";
-                    // var translateY = canvasElements[0].height*(1-viewerSize/canvasElements[0].width);
                     for (var i = 0; i !== canvasElements.length; ++i) {
                         canvasElements[i].style.zoom = viewerScale;
                         canvasElements[i].onclick = function (event) {
@@ -171,33 +170,6 @@
             };
         }
 
-        // function simply sets document for showing
-        function setDocumentForShowing(document, url)
-        {
-
-            //Determine if its a pdf or an docParams for small window preview.
-            if(document.DocumentType ==='pdf')
-            {
-                document.PreviewContent=(ons.platform.isIOS()&&app)?url.cdvUrl:'./img/pdf-icon.png';
-            }else{
-                if(app) document.PreviewContent=url.cdvUrl;
-                else document.PreviewContent = document.Content;
-            }
-            if(app)
-            {
-                document.CDVfilePath = url.cdvUrl;
-                document.PathFileSystem = url.urlPathFile;
-                document.Content =  url.cdvUrl;
-            }
-
-            //Set the documentObject
-            $timeout(function()
-            {
-                vm.loading = false;
-                vm.documentObject = document;
-            });
-
-        }
 
         //Share function
         function share()

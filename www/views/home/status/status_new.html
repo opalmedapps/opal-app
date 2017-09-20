@@ -9,14 +9,11 @@
     <div class="container" style="background-color: white; height: 100%" ng-style="{'background-color': status.bg_color}">
         <div class="row" style="z-index: 1000; margin-top: -1px; position: fixed;">
             <div class="my-home-profile shadow-2" style="overflow:hidden; height: 225px" ng-hide="status.noData">
-                <!--<ons-row style="margin:0;padding:0">-->
-                    <!--<ons-col align="center">-->
                         <div ng-show="!completed" class="progressStatus" id="progressStatusStage" ></div>
                         <div class="progressStatus" id="progressStatusPresentStage2" style="margin-top:-200px"></div>
                         <div ng-show="!completed" class="progressStatus" id="progressStatusPastStages2" style="margin-top:-200px"></div>
                         <div align="center">
                             <div class="progressStatusTextBox" style="font-size:15px">
-                                <!--<div style="vertical-align: middle">-->
                                     <strong>{{"STEP"|translate}} {{status.eventIndex - 1}} {{"OF"|translate}} {{status.totalEvents}} </strong>
                                     <div ng-show="status.eventType === 'plan'">
                                         <div ng-show="!status.planningCompleted" align="middle" style="margin-left:5px; vertical-align: middle">
@@ -27,11 +24,8 @@
                                                 <br><strong>{{status.completionDate|date:'fullDate'}}</strong></p>
                                         </div>
                                     </div>
-                                <!--</div>-->
                             </div>
                         </div>
-                    <!--</ons-col>-->
-                <!--</ons-row>-->
             </div>
         </div>
         <div class="row" id="divTreatmentPlan" ng-hide="status.noData" style="overflow-y: scroll;padding: 0;top: 250px;position: fixed;bottom: 50px;background: white;margin-left: 0;">

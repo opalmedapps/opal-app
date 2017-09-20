@@ -136,45 +136,6 @@
             }
         }
 
-        // function setNotifications()
-        // {
-        //     // Get all new notifications
-        //
-        //     UpdateUI.update(['Notifications'])
-        //         .then(function () {
-        //             var notifications = Notifications.getNewNotifications();
-        //             if (notifications.length > 0)
-        //             {
-        //                 // Get the refresh types from the notification data. These correspond to the API call to the server
-        //                 var toLoad = notifications.reduce(
-        //                     function (accumulator, currentValue) {
-        //                         if (accumulator.includes(currentValue.refreshType)) {
-        //                             return accumulator
-        //                         } else {
-        //                             accumulator.push(currentValue.refreshType);
-        //                             return accumulator
-        //                         }
-        //                     }, []);
-        //
-        //                 // Get the data needed from server and set it in Opal
-        //                 UpdateUI.set(toLoad)
-        //                     .then(function () {
-        //                         vm.notifications = Notifications.setNotificationsLanguage(Notifications.getUnreadNotifications());
-        //
-        //                         vm.loading = false;
-        //
-        //                     })
-        //                     .catch(function (error) {
-        //                         console.error(error);
-        //                         vm.loading = false;
-        //                     })
-        //             } else {
-        //                 vm.loading = false;
-        //                 vm.notifications = [];
-        //             }
-        //         })
-        // }
-
         function setPatientInfo(){
             //Basic patient information
             vm.PatientId = Patient.getPatientId();
@@ -225,11 +186,11 @@
 
                 }else{
                     //Case where there are no appointments that day
+                    vm.todaysAppointments = [];
                     vm.checkInMessage = "CHECKIN_NONE";
                     vm.no_appointments = true;
                 }
             }
-
         }
 
         function evaluateCheckIn(){
