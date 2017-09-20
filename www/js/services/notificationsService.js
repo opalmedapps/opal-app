@@ -17,8 +17,8 @@ var myApp=angular.module('MUHCApp');
  *@requires MUHCApp.service:EducationalMaterial
  *@description API service used to patient notifications. This Service is deeply linked to other services to extract that information about the actual content of the notification.
  **/
-myApp.service('Notifications',['$filter','RequestToServer','LocalStorage','Announcements','TxTeamMessages','Appointments','Messages','Documents','EducationalMaterial', 'UserPreferences', '$q',
-    function($filter,RequestToServer,LocalStorage,Announcements, TxTeamMessages,Appointments,Messages, Documents,EducationalMaterial, UserPreferences, $q){
+myApp.service('Notifications',['$filter','RequestToServer','LocalStorage','Announcements','TxTeamMessages','Appointments','Documents','EducationalMaterial', 'UserPreferences', '$q',
+    function($filter,RequestToServer,LocalStorage,Announcements, TxTeamMessages,Appointments, Documents,EducationalMaterial, UserPreferences, $q){
         /**
          *@ngdoc property
          *@name  MUHCApp.service.#Notifications
@@ -262,7 +262,6 @@ myApp.service('Notifications',['$filter','RequestToServer','LocalStorage','Annou
              *@description Setter method for Notifications
              **/
             setUserNotifications:function(notifications){
-
                 Notifications=[];
                 notificationsLocalStorage=[];
                 addUserNotifications(notifications);

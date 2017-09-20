@@ -208,6 +208,4 @@ myApp.service('EncryptionService',function(UserAuthorizationInfo){
 		}
 
 	};
-
-
 });
