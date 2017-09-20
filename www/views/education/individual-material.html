@@ -46,10 +46,10 @@
                 </ons-row>
             </ons-list-item >
         </ons-list>
-        <ons-list class="settings-list" ng-if="edumaterial.Type == 'Video'">
+        <ons-list class="settings-list" ng-if="edu.edumaterial.Type == 'Video'">
             <ons-list-item class="item">
                 <div align="center" class="embed-responsive embed-responsive-16by9">
-                    <iframe class="embed-responsive-item" ng-src="{{edumaterial.Url|trustThisUrl}}" allowfullscreen="allowfullscreen" mozallowfullscreen="mozallowfullscreen" msallowfullscreen="msallowfullscreen" oallowfullscreen="oallowfullscreen" webkitallowfullscreen="webkitallowfullscreen">
+                    <iframe class="embed-responsive-item" ng-src="{{edu.edumaterial.Url|trustThisUrl}}" allowfullscreen="allowfullscreen" mozallowfullscreen="mozallowfullscreen" msallowfullscreen="msallowfullscreen" oallowfullscreen="oallowfullscreen" webkitallowfullscreen="webkitallowfullscreen">
                     </iframe>
                 </div>
             </ons-list-item>

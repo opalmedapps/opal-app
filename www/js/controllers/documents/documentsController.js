@@ -9,10 +9,10 @@
         .module('MUHCApp')
         .controller('DocumentsController', DocumentsController);
 
-    DocumentsController.$inject = ['Documents', '$filter', 'NavigatorParameters', 'Permissions', 'Logger'];
+    DocumentsController.$inject = ['Documents', '$filter', 'NavigatorParameters', 'Permissions', 'Logger', '$timeout'];
 
     /* @ngInject */
-    function DocumentsController(Documents, $filter, NavigatorParameters, Permissions, Logger) {
+    function DocumentsController(Documents, $filter, NavigatorParameters, Permissions, Logger, $timeout) {
         var vm = this;
         vm.noDocuments = true;
         vm.documents = [];
@@ -34,7 +34,11 @@
             documents = Documents.setDocumentsLanguage(documents);
 
             if(documents.length > 0) vm.noDocuments=false;
-            vm.documents = $filter('orderBy')(documents,'documents.CreatedTimeStamp');
+
+            $timeout(function(){
+                vm.documents = $filter('orderBy')(documents,'documents.CreatedTimeStamp');
+            })
+
         }
 
         //Go to document function, if not read, read it, then set parameters for navigation

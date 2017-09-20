@@ -41,9 +41,6 @@
 
            EducationalMaterial.getContent()
                .then(function(response){
-
-                   console.log(response);
-
                    vm.edumaterial.Content = response;
                })
                .catch(function(error){

@@ -2,7 +2,7 @@
     <div>
         <ons-list ng-repeat="testCategory in cat.testResultsByCategory" >
             <ons-list-header ng-class="fontSizeTitle">{{testCategory.testCategory|translate}}</ons-list-header>
-            <ons-list-item modifier="tappable" ng-repeat="test in cat.testResultsByType | orderBy:['testCategory']" ng-click="personalNavigator.pushPage('./views/personal/lab-results/timeline-test-component.html',{param:test});"  class="list-item-container" ng-if="test.testCategory == testCategory.testCategory">
+            <ons-list-item modifier="tappable chevron" ng-repeat="test in cat.testResultsByType | orderBy:['testCategory']" ng-click="personalNavigator.pushPage('./views/personal/lab-results/timeline-test-component.html',{param:test});"  class="list-item-container" ng-if="test.testCategory == testCategory.testCategory">
                 <div class="name" ng-class="fontSizeTitle">
                     {{test.testName}}
                 </div>

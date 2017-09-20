@@ -10,9 +10,9 @@
         .module('MUHCApp')
         .controller('TabsController', TabsController);
 
-    TabsController.$inject = ['$timeout', '$translatePartialLoader'];
+    TabsController.$inject = ['$timeout', '$translatePartialLoader', '$scope'];
 
-    function TabsController($timeout, $translatePartialLoader) {
+    function TabsController($timeout, $translatePartialLoader, $scope) {
 
         var vm = this;
 
@@ -23,8 +23,9 @@
         /////////////////////////
 
         function activate(){
+            $scope.tour = './views/home/tour/tour.html';
+
             if (!localStorage.getItem('firstInstall')){
-                vm.tour = './views/home/tour/tour.html';
                 localStorage.setItem('firstInstall', '1');
                 $timeout(function () {
                     tourModal.show();

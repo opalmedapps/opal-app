@@ -7,12 +7,11 @@
         <div class="right"><ons-toolbar-button ng-click="labs.refresh()"><ons-icon icon="ion-ios-refresh-empty" size="2x" style="color: #4F81BB"></ons-icon></ons-toolbar-button></ons-icon></div>
     </ons-toolbar>
 
-    <div ng-show="labs.loading" align="center" style="margin:10px">
+    <div ng-show="labs.loading" align="center" style="margin-top:25vh">
         <svg class="progress-circular">
             <circle class="progress-circular__primary" cx="50%" cy="50%" r="40%" fill="none" stroke-width="10%" stroke-miterlimit="10"/>
         </svg>
-        <br>
-        {{"LOADINGDATA"|translate}}
+        <p style="margin-top: 30px">{{ "LOADINGLABRESULTS" | translate }}</p>
     </div>
 
     <ons-tabbar class="shadow-2" position="top" animation="fade" var="labbar" ng-hide="labs.loading">

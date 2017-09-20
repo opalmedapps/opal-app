@@ -189,7 +189,7 @@ myApp.service('EncryptionService',function(UserAuthorizationInfo){
          *@return {String} Returns hashed password
          **/
         hash: function (incoming) {
-         	return CryptoJS.SHA512(incoming).toString();
+         	return CryptoJS.SHA256(incoming).toString();
         },
 
         /**
