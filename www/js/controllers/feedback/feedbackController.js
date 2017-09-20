@@ -15,31 +15,24 @@
 
     /* @ngInject */
     function FeedbackController(Patient, RequestToServer, NetworkStatus, $scope) {
-
     	var vm = this;
 
     	vm.submitFeedback = submitFeedback;
-    	vm.rateMaterial = rateMaterial;
 
     	activate();
 
 		//////////////////////
 
 		function activate(){
-            vm.suggestionText='';
-            vm.FirstName=Patient.getFirstName();
-            vm.LastName=Patient.getLastName();
-            vm.profilePicture=Patient.getProfileImage();
             vm.enableSend=false;
     		bindEvents();
-            initRater();
 		}
 
 		function bindEvents(){
             $scope.$watch('feedbackText',function(){
-                if((vm.feedbackText===''||!vm.feedbackText))
+                if(($scope.feedbackText===''||!$scope.feedbackText))
                 {
-                    vm.enableSend = !vm.emptyRating;
+                    vm.enableSend = false;
                 }else{
                     vm.enableSend = !!NetworkStatus.isOnline();
                 }
@@ -53,35 +46,6 @@
                 vm.feedbackText='';
                 vm.submitted=true;
                 vm.enableSend = false;
-            }
-        }
-
-
-        function initRater()
-        {
-            vm.rate = [];
-            vm.submitted = false;
-            vm.emptyRating = true;
-            for(var i = 0; i < 5;i++)
-            {
-                vm.rate.push({
-                    'Icon':'ion-ios-star-outline'
-                });
-            }
-        }
-
-        function rateMaterial (index)
-        {
-            vm.enableSend=true;
-            vm.emptyRating = false;
-            vm.ratingValue = index+1;
-            for(var i = 0; i < index+1;i++)
-            {
-                vm.rate[i].Icon = 'ion-star';
-            }
-            for(var j = index+1; j < 5;j++)
-            {
-                vm.rate[j].Icon = 'ion-ios-star-outline';
             }
         }
     }
