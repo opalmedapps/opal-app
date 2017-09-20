@@ -208,7 +208,7 @@ myApp.service('Documents',['UserPreferences', 'UserAuthorizationInfo','$q', '$fi
          **/
         getDocumentUrl:function(serNum)
         {
-            return './views/personal/my-chart/individual-document.html';
+            return './views/personal/documents/individual-document.html';
         },
         /**
          *@ngdoc method

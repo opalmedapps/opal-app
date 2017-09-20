@@ -55,11 +55,6 @@
 
             // Switch for trusting device
             vm.trusted = !!(localStorage.getItem("deviceID"));
-
-            console.log(localStorage.getItem("deviceID"));
-
-
-            console.log(vm.trusted);
         }
 
         function clearErrors(){
