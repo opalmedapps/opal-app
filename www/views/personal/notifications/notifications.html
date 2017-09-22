@@ -14,7 +14,7 @@
 
     <div ng-hide="notif.noNotifications">
         <ons-list ng-repeat="notification in notif.notifications" ng-click="notif.goToNotification($index,notification)">
-            <ons-list-header class="person-list-header" ng-show="showHeader($index, notif.notifications.length)" ng-class="fontSizeTitle">
+            <ons-list-header class="person-list-header" ng-show="notif.showHeader($index, notif.notifications.length)" ng-class="fontSizeTitle">
                 {{notification.DateAdded|date:'fullDate'}}
             </ons-list-header>
             <ons-list-item modifier="chevron" class="item" >

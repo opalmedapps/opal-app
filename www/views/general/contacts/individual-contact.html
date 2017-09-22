@@ -15,32 +15,58 @@
     <ons-list style="margin-top: 12px;"  >
         <div ng-show="cont.doctor.Address">
             <ons-list-item   modifier="chevron">
-                <div class="prop-desc">
-                    <i class="fa fa-map-marker iconHomeView" style="margin:0"></i>
-                    <span style="color:black" ng-class="fontSizeDesc">{{cont.doctor.Address}}</span>
-                </div>
+                <ons-row lass="prop-desc" align="center"   >
+                    <ons-col width="60px" style="text-align: center">
+                        <div>
+                            <i class="fa fa-map-marker iconHomeView" style="margin:0"></i>
+                        </div>
+                    </ons-col>
+                    <ons-col>
+                        <header>
+                            <span style="color:black" ng-class="fontSizeDesc">{{cont.doctor.Address}}</span>
+                        </header>
+                        <p class="item-desc"></p>
+                    </ons-col>
+                </ons-row>
             </ons-list-item>
         </div>
         <div ng-show="cont.doctor.Phone" >
-            <ons-list-item modifier="chevron">
-                <a href="tel:{{cont.doctor.Phone}}" style="text-decoration:none"><div class="prop-desc">
-                    <i class="fa fa-mobile iconHomeView" style="margin:0"></i>
-
-                    <span style="color:black" ng-class="fontSizeDesc">{{cont.doctor.Phone|FormatPhoneNumber}}</span>
-                </div></a>
-            </ons-list-item>
+           <ons-list-item modifier="chevron">
+               <a href="tel:{{cont.doctor.Phone}}" style="text-decoration:none">
+                   <ons-row lass="prop-desc" align="center"   >
+                        <ons-col width="60px" style="text-align: center">
+                            <div>
+                                <i class="fa fa-mobile iconHomeView" style="margin:0"></i>
+                            </div>
+                        </ons-col>
+                        <ons-col>
+                            <header>
+                                <span style="color:black" ng-class="fontSizeDesc">{{cont.doctor.Phone|FormatPhoneNumber}}</span>
+                            </header>
+                            <p class="item-desc"></p>
+                        </ons-col>
+                    </ons-row>
+               </a>
+           </ons-list-item>
         </div>
-        <div ng-show="cont.doctor.Email">
-            <ons-list-item  modifier="chevron">
-                <a href="mailto:{{cont.doctor.Email}}">
-                    <div class="prop-desc">
-                        <i class="fa fa-envelope-o iconHomeView" style="margin:0"></i>
-                        <span style="color:black" ng-class="fontSizeDesc">{{cont.doctor.Email}}</span>
-                    </div>
+        <div ng-show="cont.doctor.Email" >
+            <ons-list-item modifier="chevron">
+                <a href="mailto:{{cont.doctor.Email}}" style="text-decoration:none">
+                    <ons-row lass="prop-desc" align="center">
+                        <ons-col width="60px" style="text-align: center">
+                            <div>
+                                <i  class="fa fa-envelope-o iconHomeView"style="margin:0"></i>
+                            </div>
+                        </ons-col>
+                        <ons-col>
+                            <header>
+                                <span style="color:black" ng-class="fontSizeDesc">{{cont.doctor.Email}}</span>
+                            </header>
+                            <p class="item-desc"></p>
+                        </ons-col>
+                    </ons-row>
                 </a>
             </ons-list-item>
         </div>
-
     </ons-list>
-
 </ons-page>

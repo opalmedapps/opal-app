@@ -39,6 +39,8 @@
 
         function activate(){
 
+            clearErrors();
+
             if(!localStorage.getItem('locked')){
                 $timeout(function () {
                     securityModal.show();
@@ -66,14 +68,13 @@
         }
 
         function submit() {
-            if(typeof vm.email==='undefined'||vm.email ==='')
+            clearErrors();
+            if(typeof vm.email==='undefined'||vm.email ==='' || typeof vm.password==='undefined'|| vm.password ==='')
             {
-                vm.alert.type='danger';
-                vm.alert.content="INVALID_EMAIL_OR_PWD";
-            }else if(typeof vm.password==='undefined'|| vm.password ==='')
-            {
-                vm.alert.type='danger';
-                vm.alert.content="INVALID_EMAIL_OR_PWD";
+                $timeout(function(){
+                    vm.alert.type='danger';
+                    vm.alert.content="INVALID_EMAIL_OR_PWD";
+                });
             }else{
                 vm.loading = true;
                 var authDetails = window.localStorage.getItem('UserAuthorizationInfo');
@@ -88,7 +89,7 @@
                 // Get the authentication state
                 var myAuth = firebase.auth().currentUser;
 
-                if(myAuth && patientSerNum && authDetails && authDetails.Email===vm.email){
+                if(myAuth && patientSerNum && authDetails && authDetails.Email===vm.email && vm.trusted){
                     firebase.auth().signInWithEmailAndPassword(vm.email, vm.password)
                         .then(function () {
                             vm.loading = false;
@@ -168,7 +169,7 @@
                             });
                         })
                         .catch(function () {
-                            $scope.loading = false;
+                            vm.loading = false;
                             initNavigator.popPage();
                         });
                 }
@@ -186,16 +187,19 @@
                 case "auth/user-not-found":
                     $timeout(function(){
                         $scope.alert.content="INVALID_EMAIL_OR_PWD";
+                        vm.loading = false;
                     });
                     break;
                 case "auth/too-many-requests":
                     $timeout(function () {
                         $scope.alert.content="TOO_MANY_REQUESTS";
+                        vm.loading = false;
                     });
                     break;
                 case "LIMITS_EXCEEDED":
                     $timeout(function(){
                         $scope.alert.content="LIMITS_EXCEEDED";
+                        vm.loading = false;
                     });
                     break;
             }

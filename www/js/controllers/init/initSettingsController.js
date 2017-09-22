@@ -10,11 +10,11 @@
         .controller('InitSettingsController', InitSettingsController);
 
     InitSettingsController.$inject = [
-        'FirebaseService', 'NavigatorParameters', 'UserPreferences', 'Constants'
+        'FirebaseService', 'NavigatorParameters', 'UserPreferences', 'Constants', '$timeout'
     ];
 
     /* @ngInject */
-    function InitSettingsController(FirebaseService, NavigatorParameters, UserPreferences, Constants) {
+    function InitSettingsController(FirebaseService, NavigatorParameters, UserPreferences, Constants, $timeout) {
 
         var vm = this;
         var params;
@@ -39,14 +39,18 @@
             var authData = FirebaseService.getAuthentication().$getAuth();
             vm.authenticated = !!authData;
             vm.languageSwitch  = (UserPreferences.getLanguage().toUpperCase() !== 'EN');
-            vm.currentYear = new Date().getFullYear();
+            $timeout(function() {
+                vm.currentYear = new Date().getFullYear();
+            });
 
             if(Constants.app){
                 cordova.getAppVersion.getVersionNumber(function (version) {
                     vm.version = version;
                 });
             }else{
-                vm.version = '0.4.0';
+                $timeout(function(){
+                    vm.version = '0.5.0';
+                })
             }
         }
 

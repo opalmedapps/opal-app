@@ -11,24 +11,26 @@
 
     <network-banner></network-banner>
 
-    <div align="center" class="appointment-calendar" style="position:relative;z-index:1" height-element>
+    <div ng-show="calendar.loading" align="center" style="margin-top:25vh">
+        <svg class="progress-circular">
+            <circle class="progress-circular__primary" cx="50%" cy="50%" r="40%" fill="none" stroke-width="10%" stroke-miterlimit="10"/>
+        </svg>
+        <p style="margin-top: 30px">{{ "LOADINGAPPOINTMENTS" | translate }}</p>
+    </div>
+
+    <div ng-hide="calendar.loading" align="center" class="appointment-calendar" style="position:relative;z-index:1" height-element>
         <div class="calendar-list">
             <uib-datepicker id="scrollTo" ng-change="calendar.onDateChange()" ng-model="calendar.dt" datepicker-mode="calendar.calendarMode" datepicker-options="calendar.dateOptions" show-weeks="false" show-color="calendar.showColor(date)" style="width:100vw;" ng-class="fontSizeDesc"></uib-datepicker>
         </div>
     </div>
 
-    <div id="topListAnchor" style="height:5px;background-color:lightgrey;position:relative;z-index:1"></div>
+    <div ng-hide="calendar.loading" id="topListAnchor" style="height:5px;background-color:lightgrey;position:relative;z-index:1"></div>
     <ons-scroller id="scrollerAppointments" ng-style="{'height': calendar.scrollerHeight}">
         <div id="firstAnchor"></div>
         <div style="color:grey;margin-top:10vh" ng-show="calendar.noAppointments" align="center" ng-class="fontSizeTitle">{{"NOAPPOINTMENTS"|translate}}</div>
-        <div ng-show="calendar.loading" align="center" style="margin-top:20px">
-            <svg class="progress-circular">
-                <circle class="progress-circular__primary" cx="50%" cy="50%" r="40%" fill="none" stroke-width="10%" stroke-miterlimit="10"/>
-            </svg>
-        </div>
 
         <!--LOADING LIST OF APPOINTMENTS USING ID TAG-->
-        <div ng-hide="loading">
+        <div ng-hide="calendar.loading">
             <ons-list ng-repeat="app in calendar.appointments" ng-click="calendar.goToAppointment(app)" class="gpu_efficiency" ng-hide="calendar.noAppointments">
                 <div id="anchorAppointments{{$index}}"></div>
                 <ons-list-header ng-if="calendar.showChoosenDateHeader($index)" style="color:#2196F3" ng-class="fontSizeTitle">{{calendar.dt|date:'fullDate'}}</ons-list-header>
