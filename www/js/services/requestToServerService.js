@@ -62,11 +62,8 @@ myApp.service('RequestToServer',['$filter','$state','NewsBanner','UserAuthorizat
 
             var reference = referenceField || 'requests';
 
-
-
             var pushID =  Ref.child(reference).push(toSend);
             return pushID.key;
-
         }
 
         return{
@@ -138,7 +135,7 @@ myApp.service('RequestToServer',['$filter','$state','NewsBanner','UserAuthorizat
                     refRequestResponse.set(null);
                     refRequestResponse.off();
                     r.reject({Response:'timeout'});
-                },30000);
+                },15000);
                 return r.promise;
             },
             /**
