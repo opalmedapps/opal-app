@@ -38,7 +38,6 @@
         function openDonation() {
             $window.open('https://www.cedars.ca/cedars/'+ vm.language +'/donate/donate_online?designation=radiation-oncology-opal-fund','_system');
         }
-
     }
 })();
 
