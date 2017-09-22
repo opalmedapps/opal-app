@@ -6,43 +6,31 @@
         .module('MUHCApp')
         .controller('PfpContactsController', PfpContactsController);
 
-    PfpContactsController.$inject = ['DynamicContentService','NavigatorParameters','RequestToServer','NativeNotification','$filter','Pfp'];
-    function PfpContactsController(DynamicContentService,NavigatorParameters,RequestToServer,NativeNotification,$filter,Pfp) {
+    PfpContactsController.$inject = ['NavigatorParameters', '$timeout','Pfp'];
+    function PfpContactsController(NavigatorParameters, $timeout, Pfp) {
         var vm = this;
-       vm.title = 'PfpContactsController';
-       vm.navigator = NavigatorParameters.getNavigator();
-       vm.loading = true;
+        var navigator;
         activate();
 
         ////////////////
 
         function activate() {
-            if(Pfp.areContactsEmpty())
-            {
-                RequestToServer.sendRequestWithResponse('PatientCommitteMembers')
-                .then(function (response) {
-
-                    if (response.Code == '3') {
+            vm.loading = true;
+            navigator = NavigatorParameters.getNavigator();
+            Pfp.getContacts()
+                .then(function(contacts){
+                    $timeout(function(){
                         vm.loading  = false;
-                        Pfp.setContacts(response.Data);
-                        vm.contacts = response.Data;
-                    }
+                        vm.contacts = contacts;
+                        vm.no_contacts = vm.contacts.length === 0
+                    });
                 })
-                .catch(function (error) 
-                {
-                    if(error.Code=='2')
-                    {
-                        NativeNotification.showNotificationAlert($filter('translate')("ERRORCONTACTINGHOSPITAL"));
-                    }
+                .catch(function(){
+                    vm.loading = false;
+                    vm.contacts = [];
+                    vm.no_contacts = true;
                 });
-            }else{
-                vm.loading = false;
-                vm.contacts = Pfp.getContacts();
-            }
-            
-                
         }
-
     }
 })();
 

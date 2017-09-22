@@ -12,10 +12,10 @@
         .module('MUHCApp')
         .controller('AppointmentController', AppointmentController);
 
-    AppointmentController.$inject = ['NavigatorParameters', 'UserPreferences', 'Logger'];
+    AppointmentController.$inject = ['NavigatorParameters', 'UserPreferences', 'Logger', '$timeout'];
 
     /* @ngInject */
-    function AppointmentController(NavigatorParameters, UserPreferences, Logger) {
+    function AppointmentController(NavigatorParameters, UserPreferences, Logger, $timeout) {
 
         var vm = this;
 
@@ -31,8 +31,10 @@
             var parameters = NavigatorParameters.getParameters();
             navigatorName = parameters.Navigator;
 
-            vm.app = parameters.Post;
-            vm.language = UserPreferences.getLanguage();
+            $timeout(function(){
+                vm.language = UserPreferences.getLanguage().toUpperCase();
+                vm.app = parameters.Post;
+            });
 
             Logger.sendLog('Appointment', parameters.Post.AppointmentSerNum);
         }

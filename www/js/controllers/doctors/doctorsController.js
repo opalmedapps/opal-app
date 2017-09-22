@@ -68,9 +68,9 @@
         {
             doctors.forEach(function(doctor)
             {
-                if(doctor.PrimaryFlag === 1 && doctor.OncologistFlag === 1){
+                if(doctor.PrimaryFlag === '1' && doctor.OncologistFlag === '1'){
                     doctor.Role = $filter('translate')("PRIMARYDOCTOR");
-                }else if(doctor.OncologistFlag === 1){
+                }else if(doctor.OncologistFlag === '1'){
                     doctor.Role = $filter('translate')("ONCOLOGIST");
                 }else{
                     doctor.Role = $filter('translate')("OTHER");

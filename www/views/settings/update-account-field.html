@@ -24,6 +24,7 @@
         <div style="margin-top: 5vh">
             <div>
                 <p ng-class="fontSizeTitle" translate ="{{csc.instruction}}"></p>
+                <small style = "color: red; margin-bottom: 30px" ng-show="csc.value=='PASSWORD'"> Must be atleast 5 characters with one uppercase and one number </small>
             </div>
 
             <div class="style-4" style="width: 100%;" ng-show="csc.value!=='PHONENUMBER'">

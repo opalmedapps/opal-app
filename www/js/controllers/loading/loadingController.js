@@ -8,10 +8,10 @@
         .module('MUHCApp')
         .controller('LoadingController', LoadingController);
 
-    LoadingController.$inject = ['$state', 'UpdateUI', 'UserAuthorizationInfo','UserPreferences', 'Patient', 'RequestToServer', 'PlanningSteps'];
+    LoadingController.$inject = ['$state', 'UpdateUI', 'UserAuthorizationInfo','UserPreferences', 'Patient', 'RequestToServer', 'PlanningSteps', 'MetaData'];
 
     /* @ngInject */
-    function LoadingController($state, UpdateUI, UserAuthorizationInfo, UserPreferences, Patient, RequestToServer, PlanningSteps) {
+    function LoadingController($state, UpdateUI, UserAuthorizationInfo, UserPreferences, Patient, RequestToServer, PlanningSteps, MetaData) {
 
         var vm = this;
 
@@ -33,7 +33,9 @@
                         'Announcements',
                         'Doctors',
                         'Diagnosis'
-                    ]);
+                    ]).then(function(){
+                        MetaData.init();
+                    });
 
                     PlanningSteps.initializePlanningSequence();
 

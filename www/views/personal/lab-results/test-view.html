@@ -1,7 +1,7 @@
-<ons-page ng-controller="IndividualLabTestController">
+<ons-page ng-controller="IndividualLabTestController as vm">
     <ons-toolbar fixed-style>
         <div class="left"><ons-back-button>{{"BACK"|translate}}</ons-back-button></div>
-        <div class="center" ng-class="fontSizeTitle">{{test.testDateFormat|date:'longDate'}}</div>
+        <div class="center" ng-class="fontSizeTitle">{{vm.test.testDateFormat|date:'longDate'}}</div>
         <div class="right"><ons-toolbar-button ng-click="personalNavigator.pushPage('views/personal/lab-results/labs-info.html')"><ons-icon icon="fa fa-info-circle"></ons-icon></ons-toolbar-button></div>
     </ons-toolbar>
     <ons-col>
@@ -29,9 +29,9 @@
                     </div>
                 </ons-col>
             </ons-row>
-            <ons-list ng-repeat="testCategory in testResultsByCategory">
+            <ons-list ng-repeat="testCategory in vm.testResultsByCategory">
                 <ons-list-header>{{testCategory.testCategory|translate}}</ons-list-header>
-                <ons-list-item modifier="tappable" ng-repeat="test in selectedLabResults | filter: searchText | orderBy:['testCategory']" ng-click="personalNavigator.pushPage('./views/personal/lab-results/timeline-test-component.html',{param:test});"  class="list-item-container" ng-if="test.testCategory == testCategory.testCategory">
+                <ons-list-item modifier="tappable" ng-repeat="test in vm.selectedLabResults | filter: searchText | orderBy:['testCategory']" ng-click="personalNavigator.pushPage('./views/personal/lab-results/timeline-test-component.html',{param:test});"  class="list-item-container" ng-if="test.testCategory == testCategory.testCategory">
 
                     <ons-row>
                         <ons-col class="col-xs-3 col-sm-3 col-lg-3">

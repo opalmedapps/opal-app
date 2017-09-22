@@ -10,14 +10,15 @@
         .controller('FeedbackController', FeedbackController);
 
     FeedbackController.$inject = [
-        'Patient', 'RequestToServer', 'NetworkStatus','$scope'
+        'RequestToServer', 'NetworkStatus','$scope'
     ];
 
     /* @ngInject */
-    function FeedbackController(Patient, RequestToServer, NetworkStatus, $scope) {
+    function FeedbackController(RequestToServer, NetworkStatus, $scope) {
     	var vm = this;
 
     	vm.submitFeedback = submitFeedback;
+    	vm.reset = reset;
 
     	activate();
 
@@ -42,11 +43,16 @@
         function submitFeedback(type){
             if(vm.enableSend)
             {
-                RequestToServer.sendRequest('Feedback',{FeedbackContent: vm.feedbackText, AppRating:3, Type: type});
+                RequestToServer.sendRequest('Feedback',{FeedbackContent: $scope.feedbackText, AppRating:3, Type: type});
                 vm.feedbackText='';
                 vm.submitted=true;
                 vm.enableSend = false;
             }
+        }
+
+        function reset() {
+            vm.submitted=false;
+            $scope.feedbackText = '';
         }
     }
 })();

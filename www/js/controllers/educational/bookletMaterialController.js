@@ -61,9 +61,9 @@
             //Instantiation the popover for table of contents, delayed is to prevent the transition animation from lagging.
             $timeout(function () {
                 ons.createPopover('./views/education/table-contents-popover.html').then(function (popover) {
-                    vm.popover = popover;
+                    $scope.popover = popover;
                     $rootScope.popoverEducation = popover;
-                    vm.popover.on('posthide', function () {
+                    $scope.popover.on('posthide', function () {
                         if (typeof $rootScope.indexEduMaterial !== 'undefined') vm.carousel.setActiveCarouselItemIndex($rootScope.indexEduMaterial);
                     });
                 });
@@ -78,8 +78,8 @@
                 document.removeEventListener('ons-carousel:init', handleInitEventCarousel);
                 vm.carousel.off('init');
                 vm.carousel.off('postchange');
-                vm.popover.off('posthide');
-                vm.popover.destroy();
+                $scope.popover.off('posthide');
+                $scope.popover.destroy();
                 delete $rootScope.indexEduMaterial;
                 delete $rootScope.popoverEducation;
                 delete $rootScope.goToSectionBooklet;

@@ -24,6 +24,7 @@
         var dateFirst;
         var navigatorName;
 
+
         //Set the calendar options
         vm.dateOptions = {
             formatYear: 'yyyy',
@@ -60,41 +61,46 @@
             Logger.sendLog('Appointment', 'all');
             navigatorName = NavigatorParameters.getParameters().Navigator;
 
-            //Obtaining and setting appointments from service
-            vm.appointments=Appointments.getUserAppointments();
-            vm.noAppointments = (vm.appointments.length === 0);
-            vm.loading = !vm.noAppointments;
-            vm.language = UserPreferences.getLanguage();
-            vm.dt = new Date();
-            vm.dt.setHours(0,0,0,0);
-            today = vm.dt;
-            flag=false;
-
-            //Getting time in milliseconds for today's appointment
-            todaysTimeMilliseconds =  today.getTime();
-            choosenTimeMilliseconds = todaysTimeMilliseconds;
-
-            if(vm.appointments.length>0)
-            {
-                //Setting time in milliseconds for last appointment
-                dateLast=(new Date(vm.appointments[vm.appointments.length-1].ScheduledStartTime.getTime()));
-                dateLast.setHours(0,0,0,0);
-                dateLast = dateLast.getTime();
-
-                //Setting time in milliseconds for first appointment
-                dateFirst=(new Date(vm.appointments[0].ScheduledStartTime.getTime()));
-                dateFirst.setHours(0,0,0,0);
-                dateFirst = dateFirst.getTime();
-            }
+            vm.loading = true;
 
 
-            waitForCalendar()
+            $timeout(function(){
+                //Obtaining and setting appointments from service
+                vm.appointments=Appointments.getUserAppointments();
+                vm.noAppointments = (vm.appointments.length === 0);
+            }, 450)
                 .then(function(){
-                    var divTreatment=document.getElementById('scrollerAppointments');
-                    var heightTreatment=document.documentElement.clientHeight-document.documentElement.clientHeight*0.35-180;
-                    if(divTreatment)divTreatment.style.height=heightTreatment+'px';
-                    setTimeout(scrollToAnchor,100);
-                    Appointments.setAsLoaded();
+                    vm.language = UserPreferences.getLanguage();
+                    vm.dt = new Date();
+                    vm.dt.setHours(0,0,0,0);
+                    today = vm.dt;
+                    flag=false;
+
+                    //Getting time in milliseconds for today's appointment
+                    todaysTimeMilliseconds =  today.getTime();
+                    choosenTimeMilliseconds = todaysTimeMilliseconds;
+
+                    if(vm.appointments.length>0)
+                    {
+                        //Setting time in milliseconds for last appointment
+                        dateLast=(new Date(vm.appointments[vm.appointments.length-1].ScheduledStartTime.getTime()));
+                        dateLast.setHours(0,0,0,0);
+                        dateLast = dateLast.getTime();
+
+                        //Setting time in milliseconds for first appointment
+                        dateFirst=(new Date(vm.appointments[0].ScheduledStartTime.getTime()));
+                        dateFirst.setHours(0,0,0,0);
+                        dateFirst = dateFirst.getTime();
+                    }
+
+                    $timeout(function(){
+                        vm.loading = false;
+                        var divTreatment=document.getElementById('scrollerAppointments');
+                        var heightTreatment=document.documentElement.clientHeight-document.documentElement.clientHeight*0.35-180;
+                        if(divTreatment)divTreatment.style.height=heightTreatment+'px';
+                        setTimeout(scrollToAnchor, 50);
+                        Appointments.setAsLoaded();
+                    })
                 })
         }
 
@@ -105,10 +111,6 @@
             $anchorScroll();
         }
 
-        function waitForCalendar()
-        {
-            return $timeout(function () {}, 500);
-        }
 
         function goToCalendarOptions()
         {
@@ -125,7 +127,7 @@
         function showColor(date)
         {
             var result = vm.appointments.find(function(item){
-                return  item.ScheduledStartTime.toDateString() == date.toDateString();
+                return item.ScheduledStartTime.toDateString() == date.toDateString();
             });
             if(result)
             {
@@ -177,6 +179,7 @@
         //Obtains color for a given appointment
         function getStyle(index){
             var dateAppointment=vm.appointments[index].ScheduledStartTime;
+            if(!dateAppointment || !today) return  '#5CE68A';
             if(today.getDate()===dateAppointment.getDate()&&today.getMonth()===dateAppointment.getMonth()&&today.getFullYear()===dateAppointment.getFullYear()){
                 return '#3399ff';
             }else if(dateAppointment>today){
@@ -189,6 +192,7 @@
         //Determines whether to show header at the end
         function showHeaderEnd()
         {
+            if(!vm.appointments) return;
             return vm.appointments.length > 0 && dateLast < choosenTimeMilliseconds;
 
         }

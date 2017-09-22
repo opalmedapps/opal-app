@@ -8,7 +8,7 @@
             <ons-list-item class="item" >
                 <div style="line-height:1" align="left">
                     <header>
-                        <span class="item-title" ng-class="fontSizeTitle">{{vm.app["AppointmentType_"+language]}}</span>
+                        <span class="item-title" ng-class="fontSizeTitle">{{vm.app["AppointmentType_"+vm.language]}}</span>
                     </header>
                     <p class="item-desc" ng-class="fontSizeDesc">{{vm.app.ScheduledStartTime|date:'medium'}}</p>
                     <p class="item-desc" ng-class="fontSizeDesc" ng-show="vm.app.RoomLocation">

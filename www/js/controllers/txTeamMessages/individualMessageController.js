@@ -29,7 +29,8 @@
                 vm.message = TxTeamMessages.setLanguageTxTeamMessages(parameters.Post);
                 vm.FirstName = Patient.getFirstName();
 
-                console.log('message: ' + vm.message, 'FirstName: ' + vm.FirstName);
+
+                console.log(parameters.Post);
             });
         }
     }
