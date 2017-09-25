@@ -13,10 +13,8 @@
  *@name MUHCApp.service:Announcements
  *@requires $filter
  *@requires MUHCApp.service:RequestToServer
- *@requires $q
  *@requires MUHCApp.service:UserPreferences
- *@requires MUHCApp.service:LocalStorage
- *@description Service that deals with the announcement information for the patient
+ *@description Service that handles the adding and updating of a User's announcements and provides API for controllers to grab the necessary information
  **/
 (function () {
     'use strict';
@@ -25,22 +23,29 @@
         .module('MUHCApp')
         .factory('Announcements', Announcements);
 
-    Announcements.$inject = ['RequestToServer','$filter','LocalStorage','UserPreferences'];
+    Announcements.$inject = ['RequestToServer','$filter', 'UserPreferences'];
 
     /* @ngInject */
-    function Announcements(RequestToServer,$filter, LocalStorage,UserPreferences) {
+    function Announcements(RequestToServer,$filter, UserPreferences) {
 
         /**
          *@ngdoc property
-         *@name  MUHCApp.service.#announcementsArray
+         *@name  MUHCApp.service.#announcements
          *@propertyOf MUHCApp.service:Announcements
          *@description Initializing array that represents all the information for Announcements, this array is passed to
          *the appropriate controllers.
          **/
-        var announcementsArray=[];
+        var announcements=[];
+
+        /**
+         *@ngdoc property
+         *@name  MUHCApp.service.#lastUpdated
+         *@propertyOf MUHCApp.service:Announcements
+         *@description Represents the last time the announcements array was updated
+         **/
         var lastUpdated = 0;
 
-        var service = {
+        return {
             setAnnouncements: setAnnouncements,
             updateAnnouncements: updateAnnouncements,
             getAnnouncements: getAnnouncements,
@@ -50,14 +55,54 @@
             readAnnouncementBySerNum: readAnnouncementBySerNum,
             readAnnouncement: readAnnouncement,
             getAnnouncementName: getAnnouncementName,
-            setLanguageAnnouncements: setLanguageAnnouncements,
+            setLanguage: setLanguage,
             getAnnouncementUrl: getAnnouncementUrl,
             clearAnnouncements: clearAnnouncements,
             getLastUpdated: getLastUpdated
         };
-        return service;
 
-        ////////////////
+        ////////////////////////////////////////////////////////////////////
+        /******************************
+         *  PRIVATE FUNCTIONS
+         ******************************/
+
+        /**
+         *@ngdoc function
+         *@name  MUHCApp.service.#findAndDeleteAnnouncements
+         *@methodOf MUHCApp.service:Announcements
+         *@description When there is an update, find the matching message and delete it to avoid and repeated announcements
+         **/
+        function findAndDeleteAnnouncements(announcements)
+        {
+            for (var i = 0; i < announcements.length; i++) {
+                for (var j = 0; j < announcements.length; j++) {
+                    if(announcements[j].AnnouncementSerNum === announcements[i].AnnouncementSerNum)
+                    {
+                        announcements.splice(j,1);
+                    }
+                }
+            }
+        }
+
+        /**
+         *@ngdoc function
+         *@name  MUHCApp.service.#addAnnouncements
+         *@methodOf MUHCApp.service:Announcements
+         *@description Push new announcements to currently existing announcements array
+         **/
+        function addAnnouncements(announcements)
+        {
+            if(!announcements) return;
+            for (var i = 0; i < announcements.length; i++) {
+                announcements[i].DateAdded=$filter('formatDate')(announcements[i].DateAdded);
+                announcements.push(announcements[i]);
+            }
+        }
+
+
+        /******************************
+         *  PUBLIC FUNCTIONS
+         ******************************/
 
         /**
          *@ngdoc method
@@ -68,10 +113,7 @@
          **/
         function setAnnouncements(announcements)
         {
-
-            //Cleaning the announcements array
-            announcementsArray=[];
-            //Adding annoucements
+            announcements=[];
             lastUpdated = Date.now();
             addAnnouncements(announcements);
         }
@@ -86,9 +128,7 @@
          **/
         function updateAnnouncements(announcements)
         {
-            //Find and delete to be added later
             findAndDeleteAnnouncements(announcements);
-            //Call formatting function
             addAnnouncements(announcements);
         }
 
@@ -101,7 +141,7 @@
          **/
         function getAnnouncements()
         {
-            return announcementsArray;
+            return announcements;
         }
 
         /**
@@ -113,15 +153,11 @@
          **/
         function getUnreadAnnouncements()
         {
-
-
-            //Initializing array to return
             var array=[];
-            //Iterating and finding annoucements that have not been read
-            for (var i = 0; i < announcementsArray.length; i++) {
-                if(announcementsArray[i].ReadStatus=='0')
+            for (var i = 0; i < announcements.length; i++) {
+                if(announcements[i].ReadStatus=='0')
                 {
-                    array.push(announcementsArray[i]);
+                    array.push(announcements[i]);
                 }
             }
             return array;
@@ -137,8 +173,8 @@
         function getNumberUnreadAnnouncements()
         {
             var number = 0;
-            for (var i = 0; i < announcementsArray.length; i++) {
-                if(announcementsArray[i].ReadStatus == '0')
+            for (var i = 0; i < announcements.length; i++) {
+                if(announcements[i].ReadStatus === '0')
                 {
                     number++;
                 }
@@ -156,10 +192,10 @@
          **/
         function getAnnouncementBySerNum(serNum)
         {
-            for (var i = 0; i < announcementsArray.length; i++) {
-                if(announcementsArray[i].AnnouncementSerNum==serNum)
+            for (var i = 0; i < announcements.length; i++) {
+                if(announcements[i].AnnouncementSerNum===serNum)
                 {
-                    return angular.copy(announcementsArray[i]);
+                    return angular.copy(announcements[i]);
                 }
             }
         }
@@ -173,11 +209,10 @@
          **/
         function readAnnouncementBySerNum(serNum)
         {
-            for (var i = 0; i < announcementsArray.length; i++) {
-                if(announcementsArray[i].AnnouncementSerNum==serNum)
+            for (var i = 0; i < announcements.length; i++) {
+                if(announcements[i].AnnouncementSerNum===serNum)
                 {
-                    announcementsArray[i].ReadStatus = '1';
-                    //LocalStorage.WriteToLocalStorage('Announcements',announcementsArray);
+                    announcements[i].ReadStatus = '1';
                     RequestToServer.sendRequest('Read',{'Id':serNum, 'Field':'Announcements'});
                     break;
                 }
@@ -194,8 +229,7 @@
          **/
         function readAnnouncement(index, serNum)
         {
-            announcementsArray[index].ReadStatus = '1';
-            LocalStorage.WriteToLocalStorage('Announcements',announcementsArray);
+            announcements[index].ReadStatus = '1';
             RequestToServer.sendRequest('Read',{'Id':serNum, 'Field':'Announcements'});
         }
 
@@ -209,38 +243,35 @@
          **/
         function getAnnouncementName(serNum)
         {
-
-            for (var i = 0; i < announcementsArray.length; i++) {
-                if(announcementsArray[i].AnnouncementSerNum==serNum)
+            for (var i = 0; i < announcements.length; i++) {
+                if(announcements[i].AnnouncementSerNum==serNum)
                 {
-
-                    return { NameEN: announcementsArray[i].PostName_EN, NameFR:announcementsArray[i].PostName_FR};
+                    return { NameEN: announcements[i].PostName_EN, NameFR:announcements[i].PostName_FR};
                 }
             }
         }
 
         /**
          *@ngdoc method
-         *@name setLanguageAnnouncements
+         *@name setLanguage
          *@methodOf MUHCApp.service:Announcements
          *@param {Array} array Array with annoucements
          *@description Translates the array parameter containing announcements to appropiate preferred language specified in {@link MUHCApp.service:UserPreferences UserPreferences}.
          *@returns {Array} Returns array with translated values
          **/
-        function setLanguageAnnouncements(array)
+        function setLanguage(array)
         {
             var language = UserPreferences.getLanguage();
-            //Check if array
-            if (Object.prototype.toString.call( array ) === '[object Array]') {
+            if (Array.isArray( array )) {
                 for (var i = 0; i < array.length; i++) {
                     //set language
-                    array[i].Title = (language=='EN')? array[i].PostName_EN : array[i].PostName_FR;
-                    array[i].Body = (language == 'EN')? array[i].Body_EN : array[i].Body_FR;
+                    array[i].Title = (language === 'EN')? array[i].PostName_EN : array[i].PostName_FR;
+                    array[i].Body = (language === 'EN')? array[i].Body_EN : array[i].Body_FR;
                 }
             }else{
                 //set language if string
-                array.Title = (language=='EN')? array.PostName_EN : array.PostName_FR;
-                array.Body = (language == 'EN')? array.Body_EN: array.Body_FR;
+                array.Title = (language ==='EN')? array.PostName_EN : array.PostName_FR;
+                array.Body = (language === 'EN')? array.Body_EN: array.Body_FR;
             }
 
             return array;
@@ -266,42 +297,18 @@
          **/
         function clearAnnouncements()
         {
-            announcementsArray=[];
+            announcements=[];
             lastUpdated = 0;
         }
 
-        //When there is an update, find the matching message and delete it, its added later by findAndDeleteAnnouncements function
-        function findAndDeleteAnnouncements(announcements)
-        {
-            for (var i = 0; i < announcements.length; i++) {
-                for (var j = 0; j < announcementsArray.length; j++) {
-                    if(announcementsArray[j].AnnouncementSerNum==announcements[i].AnnouncementSerNum)
-                    {
-                        announcementsArray.splice(j,1);
-                    }
-                }
-            }
-        }
-        //Formats the input dates and gets it ready for controllers, updates announcementsArray
-        function addAnnouncements(announcements)
-        {
-
-            //If announcements are undefined simply return
-            if(typeof announcements=='undefined') return;
-            for (var i = 0; i < announcements.length; i++) {
-                //Format the date to javascript
-                announcements[i].DateAdded=$filter('formatDate')(announcements[i].DateAdded);
-                //Add to my annoucements array
-                announcementsArray.push(announcements[i]);
-            }
-            //Update local storage section
-            //LocalStorage.WriteToLocalStorage('Announcements',announcementsArray);
-        }
-
+        /**
+         *@ngdoc method
+         *@name getLastUpdated
+         *@methodOf MUHCApp.service:Announcements
+         *@description Returns the date of when the announcements array was last updated
+         **/
         function getLastUpdated() {
             return lastUpdated;
         }
-
     }
-
 })();

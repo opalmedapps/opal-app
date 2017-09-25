@@ -8,6 +8,13 @@
  *                  file 'LICENSE.txt', which is part of this source code package.
  */
 
+/**
+ *  @ngdoc controller
+ *  @name MUHCApp.controllers: AnnouncementsController
+ *  @description
+ *
+ *  Manages the announcements list view. It simply guides the user to the correct individual announcement for a more detailed view of the announcement
+ */
 (function () {
     'use strict';
 
@@ -17,18 +24,15 @@
 
     AnnouncementsController.$inject = [
         'Announcements',
-        'NavigatorParameters',
-        'Logger'
+        'NavigatorParameters'
     ];
 
     /* @ngInject */
     function AnnouncementsController(
         Announcements,
-        NavigatorParameters,
-        Logger
+        NavigatorParameters
     ) {
         var vm = this;
-        vm.title = 'AnnouncementsController';
         vm.noAnnouncements = true;
         vm.announcements = [];
 
@@ -41,19 +45,28 @@
 
         function activate() {
             var announcements = Announcements.getAnnouncements();
-            announcements = Announcements.setLanguageAnnouncements(announcements);
+            announcements = Announcements.setLanguage(announcements);
             if (announcements.length>0) vm.noAnnouncements = false;
             else{
+
+                // TODO: SHOULD USE A FUNCTION DEFINED WITHIN A HELPER SERVICE
+
                 announcements.sort(function(a, b) {
                     return new Date(a.DateAdded) - new Date(b.DateAdded);
                 });
             }
 
             vm.announcements=announcements;
-
-            Logger.sendLog('Announcement', 'all');
         }
 
+        /**
+         * @ngdoc method
+         * @name goToAnnouncement
+         * @methodOf MUHCApp.controllers.AnnouncementsController
+         * @param announcement Announcement Object
+         * @description
+         * Takes the user to the specified announcement to be viewed in more detail
+         */
         function goToAnnouncement(announcement) {
             if(announcement.ReadStatus === '0')
             {
@@ -64,7 +77,15 @@
             generalNavigator.pushPage('./views/general/announcements/individual-announcement.html');
         }
 
-        // Determines whether or not to show the date header in the view. Announcements are grouped by day.
+        /**
+         * @ngdoc method
+         * @name openDonation
+         * @methodOf MUHCApp.controllers.AboutController
+         * @param index integer representing the index of the announcement in vm.announcements
+         * @return boolean
+         * @description
+         * Determines whether or not to show the date header in the view. Announcements are grouped by day.
+         */
         function showHeader(index) {
             if (index === 0) return true;
 

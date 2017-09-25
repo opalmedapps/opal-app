@@ -15,13 +15,33 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
+      'test/mock-data.js',
+      'lib/bower_components/angular/angular.js',
+      'lib/bower_components/jquery/dist/jquery.js',
+      'lib/bower_components/angular-animate/angular-animate.js',
+      'lib/bower_components/angular-sanitize/angular-sanitize.js',
+      'lib/bower_components/angular-translate/angular-translate.js',
+      'lib/bower_components/angular-translate-handler-log/angular-translate-handler-log.js',
+      'lib/bower_components/angular-translate-loader-partial/angular-translate-loader-partial.js',
+      'lib/bower_components/angular-dynamic-locale/src/tmhDynamicLocale.js',
+      'lib/bower_components/progressbar.js/dist/progressbar.js',
+      'lib/bower_components/angular-ui-router/release/angular-ui-router.js',
+      'lib/bower_components/angular-touch/angular-touch.js',
+      'lib/bower_components/firebase/firebase.js',
+      'lib/bower_components/angularfire/dist/angularfire.js',
+      'lib/bower_components/ngCordova/dist/ng-cordova.js',
+      'lib/bower_components/crypto-js/crypto-js.js',
+      'lib/bower_components/angular-elastic/elastic.js',
+      'lib/bower_components/angular-scroll-glue/src/scrollglue.js',
+      'lib/bower_components/angular-bootstrap/ui-bootstrap-tpls.js',
+      'lib/bower_components/angular-tek-progress-bar/dist/tek.progress-bar.js',
+      'lib/bower_components/onsenui/js/onsenui.js',
+      'lib/bower_components/angular-mocks/angular-mocks.js',
       'js/*.js',
       'js/**/*.js',
-      'js/**/**/*.js',
       'js/*spec.js',
       'js/**/*spec.js',
-      'js/**/**/*spec.js'
-
+      'views/**/*.html'
     ],
 
 
