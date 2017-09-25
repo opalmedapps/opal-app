@@ -80,10 +80,19 @@
             //Initialize language if not initialized
             UserPreferences.initializeLanguage();
 
+
+
             //Do not show the list breaking, equivalent of ng-cloak for angularjs, LOOK IT UP!!! https://docs.angularjs.org/api/ng/directive/ngCloak
             setTimeout(function(){
                 $("#listInitApp").css({display:'block'});
                 NavigatorParameters.setNavigator(initNavigator);
+                initNavigator.on('prepush', function(event) {
+
+                    if(event.navigator._isPushing) {
+                        console.log("initNavigator _isPushing");
+                        event.cancel();
+                    }
+                });
             },10);
 
             // Get location permission
