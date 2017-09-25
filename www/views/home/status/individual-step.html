@@ -8,9 +8,9 @@
       <ons-list-item class="item">
         <div style="line-height:1" align="left">
           <header>
-              <span class="item-title" ng-class="fontSizeTitle">{{step.name}}</span>
+              <span class="item-title" ng-class="fontSizeTitle">{{step.name | translate}}</span>
           </header>
-          <p class="item-desc" ng-class="fontSizeDesc">{{step.stage.AppointmentDescription_EN || step.stage.TaskDescription_EN}}</p>
+          <p class="item-desc" ng-class="fontSizeDesc">{{step.stage.appointmentDescription || step.stage.taskDescription}}</p>
         </div>
       </ons-list-item>
       <!--<ons-list-item tappable ng-click="step.about()">-->
