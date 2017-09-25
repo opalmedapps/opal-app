@@ -15,6 +15,6 @@ function fireConfig () {
     };
 
     if (!firebase.apps.length) {
-        firebase.initializeApp({});
+        firebase.initializeApp(config);
     }
 }

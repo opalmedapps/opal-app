@@ -72,11 +72,11 @@
          *@methodOf MUHCApp.service:Announcements
          *@description When there is an update, find the matching message and delete it to avoid and repeated announcements
          **/
-        function findAndDeleteAnnouncements(announcements)
+        function findAndDeleteAnnouncements(array)
         {
-            for (var i = 0; i < announcements.length; i++) {
+            for (var i = 0; i <array.length; i++) {
                 for (var j = 0; j < announcements.length; j++) {
-                    if(announcements[j].AnnouncementSerNum === announcements[i].AnnouncementSerNum)
+                    if(announcements[j].AnnouncementSerNum === array[i].AnnouncementSerNum)
                     {
                         announcements.splice(j,1);
                     }
@@ -90,12 +90,12 @@
          *@methodOf MUHCApp.service:Announcements
          *@description Push new announcements to currently existing announcements array
          **/
-        function addAnnouncements(announcements)
+        function addAnnouncements(array)
         {
-            if(!announcements) return;
-            for (var i = 0; i < announcements.length; i++) {
-                announcements[i].DateAdded=$filter('formatDate')(announcements[i].DateAdded);
-                announcements.push(announcements[i]);
+            if(!array) return;
+            for (var i = 0; i < array.length; i++) {
+                array[i].DateAdded=$filter('formatDate')(array[i].DateAdded);
+                announcements.push(array[i]);
             }
         }
 
@@ -108,28 +108,28 @@
          *@ngdoc method
          *@name setAnnouncements
          *@methodOf MUHCApp.service:Announcements
-         *@param {Array} announcements announcements array that containts the new announcements
+         *@param {Array} array announcements array that containts the new announcements
          *@description Setter method for announcements
          **/
-        function setAnnouncements(announcements)
+        function setAnnouncements(array)
         {
             announcements=[];
             lastUpdated = Date.now();
-            addAnnouncements(announcements);
+            addAnnouncements(array);
         }
 
         /**
          *@ngdoc method
          *@name updateAnnouncements
          *@methodOf MUHCApp.service:Announcements
-         *@param {Array} announcements new announcements array
+         *@param {Array} array new announcements array
          *@description Updates the announcementsArray with the new information contained in the announcement parameter.
          * Will replace out-of-date announcements.
          **/
-        function updateAnnouncements(announcements)
+        function updateAnnouncements(array)
         {
-            findAndDeleteAnnouncements(announcements);
-            addAnnouncements(announcements);
+            findAndDeleteAnnouncements(array);
+            addAnnouncements(array);
         }
 
         /**
@@ -155,7 +155,7 @@
         {
             var array=[];
             for (var i = 0; i < announcements.length; i++) {
-                if(announcements[i].ReadStatus=='0')
+                if(announcements[i].ReadStatus === '0')
                 {
                     array.push(announcements[i]);
                 }
@@ -244,7 +244,7 @@
         function getAnnouncementName(serNum)
         {
             for (var i = 0; i < announcements.length; i++) {
-                if(announcements[i].AnnouncementSerNum==serNum)
+                if(announcements[i].AnnouncementSerNum === serNum)
                 {
                     return { NameEN: announcements[i].PostName_EN, NameFR:announcements[i].PostName_FR};
                 }
@@ -255,26 +255,26 @@
          *@ngdoc method
          *@name setLanguage
          *@methodOf MUHCApp.service:Announcements
-         *@param {Array} array Array with annoucements
+         *@param {Array} item Array or object with announcements
          *@description Translates the array parameter containing announcements to appropiate preferred language specified in {@link MUHCApp.service:UserPreferences UserPreferences}.
          *@returns {Array} Returns array with translated values
          **/
-        function setLanguage(array)
+        function setLanguage(item)
         {
             var language = UserPreferences.getLanguage();
-            if (Array.isArray( array )) {
-                for (var i = 0; i < array.length; i++) {
+            if (Array.isArray( item )) {
+                for (var i = 0; i < item.length; i++) {
                     //set language
-                    array[i].Title = (language === 'EN')? array[i].PostName_EN : array[i].PostName_FR;
-                    array[i].Body = (language === 'EN')? array[i].Body_EN : array[i].Body_FR;
+                    item[i].Title = (language === 'EN')? item[i].PostName_EN : item[i].PostName_FR;
+                    item[i].Body = (language === 'EN')? item[i].Body_EN : item[i].Body_FR;
                 }
             }else{
                 //set language if string
-                array.Title = (language ==='EN')? array.PostName_EN : array.PostName_FR;
-                array.Body = (language === 'EN')? array.Body_EN: array.Body_FR;
+                item.Title = (language ==='EN')? item.PostName_EN : item.PostName_FR;
+                item.Body = (language === 'EN')? item.Body_EN: item.Body_FR;
             }
 
-            return array;
+            return item;
         }
 
         /**

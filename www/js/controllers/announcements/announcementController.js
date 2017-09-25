@@ -24,15 +24,13 @@
 
     IndividualAnnouncementController.$inject = [
         'NavigatorParameters',
-        'Announcements',
-        'Logger'
+        'Announcements'
     ];
 
     /* @ngInject */
     function IndividualAnnouncementController(
         NavigatorParameters,
-        Announcements,
-        Logger
+        Announcements
     ) {
         var vm = this;
         vm.announcement = '';
@@ -44,7 +42,6 @@
         function activate() {
             var parameters=NavigatorParameters.getParameters();
             vm.announcement = Announcements.setLanguage(parameters.Post);
-            Logger.sendLog('Announcement', message.AnnouncementSerNum);
         }
     }
 })();

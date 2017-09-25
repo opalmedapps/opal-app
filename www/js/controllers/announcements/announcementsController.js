@@ -24,13 +24,15 @@
 
     AnnouncementsController.$inject = [
         'Announcements',
-        'NavigatorParameters'
+        'NavigatorParameters',
+        '$scope'
     ];
 
     /* @ngInject */
     function AnnouncementsController(
         Announcements,
-        NavigatorParameters
+        NavigatorParameters,
+        $scope
     ) {
         var vm = this;
         vm.noAnnouncements = true;
@@ -46,17 +48,16 @@
         function activate() {
             var announcements = Announcements.getAnnouncements();
             announcements = Announcements.setLanguage(announcements);
-            if (announcements.length>0) vm.noAnnouncements = false;
-            else{
-
-                // TODO: SHOULD USE A FUNCTION DEFINED WITHIN A HELPER SERVICE
-
+            if (announcements.length>0) {
+                vm.noAnnouncements = false;
                 announcements.sort(function(a, b) {
+
+                    // TODO: USE EXTERNAL HELPER WHEN CALLING SORT FUNCTION
+
                     return new Date(a.DateAdded) - new Date(b.DateAdded);
                 });
+                vm.announcements=announcements;
             }
-
-            vm.announcements=announcements;
         }
 
         /**
@@ -74,7 +75,7 @@
                 Announcements.readAnnouncementBySerNum(announcement.AnnouncementSerNum);
             }
             NavigatorParameters.setParameters({Navigator:'generalNavigator', Post: announcement});
-            generalNavigator.pushPage('./views/general/announcements/individual-announcement.html');
+            $scope.generalNavigator.pushPage('./views/general/announcements/individual-announcement.html');
         }
 
         /**
