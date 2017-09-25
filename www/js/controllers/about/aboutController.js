@@ -35,6 +35,14 @@
         ////////////////
 
         function activate() {
+
+            /**
+             * @ngdoc property
+             * @name language
+             * @propertyOf AboutController
+             * @returns string
+             * @description used to determine which donation page to bring the user to
+             */
             vm.language = UserPreferences.getLanguage().toLowerCase();
         }
 

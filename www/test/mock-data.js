@@ -9,6 +9,11 @@
  */
 
 var MockData = {
+
+    /****************************
+     *  TEST ANNOUNCEMENTS
+     ***************************/
+
     test_announcements: [
         {
             AnnouncementSerNum: '1',
@@ -147,4 +152,8 @@ var MockData = {
             Body: 'No radiotherapy treatments on February 22. Consequently there will be no appointments schedule on that day.'
         }
     ]
+
+    /****************************
+     *  TEST APPOINTMENTS
+     ***************************/
 };
