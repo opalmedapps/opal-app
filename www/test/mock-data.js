@@ -94,7 +94,7 @@ var MockData = {
             PostName_EN: 'No radiotherapy treatments',
             PostName_FR: 'No radiotherapy treatments',
             PostType: 'Announcement',
-            ReadStatus: '1',
+            ReadStatus: '0',
             Title: 'No radiotherapy treatments',
             Body: 'No radiotherapy treatments on February 22. Consequently there will be no appointments schedule on that day.'
         },
