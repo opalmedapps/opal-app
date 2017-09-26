@@ -2476,6 +2476,7 @@ width: 30px;
     background: rgba(0,0,0,0.8);
     padding: 20px;
     width: 90%;
+    /*height: 60%;*/
     margin: auto;
     position: relative;
 }
