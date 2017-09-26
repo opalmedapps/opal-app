@@ -9,6 +9,13 @@
  */
 
 
+/**
+ *  @ngdoc controller
+ *  @name MUHCApp.controllers: AboutController
+ *  @description
+ *
+ *  Manages the about view. Only controls the link to the Cedar's donation page.
+ */
 (function () {
     'use strict';
 
@@ -21,7 +28,6 @@
     /* @ngInject */
     function AboutController($window, UserPreferences) {
         var vm = this;
-        vm.language = '';
         vm.openDonation = openDonation;
 
         activate();
@@ -29,11 +35,23 @@
         ////////////////
 
         function activate() {
+
+            /**
+             * @ngdoc property
+             * @name language
+             * @propertyOf AboutController
+             * @returns string
+             * @description used to determine which donation page to bring the user to
+             */
             vm.language = UserPreferences.getLanguage().toLowerCase();
         }
 
         /**
-         * Open the Cedar's donation page using the user preferred language.
+         * @ngdoc method
+         * @name openDonation
+         * @methodOf MUHCApp.controllers.AboutController
+         * @description
+         * Guides the user to the Cedar's donation page based on the user's language preference
          */
         function openDonation() {
             $window.open('https://www.cedars.ca/cedars/'+ vm.language +'/donate/donate_online?designation=radiation-oncology-opal-fund','_system');
