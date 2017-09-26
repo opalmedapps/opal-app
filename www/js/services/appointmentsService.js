@@ -43,12 +43,14 @@ myApp.service('Appointments', ['$q', 'RequestToServer','$cordovaCalendar','UserA
      **/
     var appointmentsLocalStorage=[];
 
+    var firstLoad = true;
+
     var calendar={};
     var numberOfSessions=0;
     function searchAppointmentsAndDelete(appointments)
     {
-        //console.log(appointments);
-        //console.log(userAppointmentsArray);
+        //
+        //
         for (var i = 0; i < appointments.length; i++) {
             for (var j = 0; j < userAppointmentsArray.length; j++) {
                 if(userAppointmentsArray[j].AppointmentSerNum==appointments[i].AppointmentSerNum)
@@ -139,6 +141,7 @@ myApp.service('Appointments', ['$q', 'RequestToServer','$cordovaCalendar','UserA
     function getCheckinAppointment()
     {
         var todayAppointments = getAppointmentsInPeriod('Today');
+
         todayAppointments = todayAppointments.filter(function(appointment){
             return !appointment.hasOwnProperty('StatusClose');
         });
@@ -152,8 +155,8 @@ myApp.service('Appointments', ['$q', 'RequestToServer','$cordovaCalendar','UserA
     function getAppointmentsInPeriod(period)
     {
         //Variables for comparing dates
-        //console.log(userAppointmentsArray);
-        //console.log(appointmentsLocalStorage);
+        //
+        //
         var today=new Date();
         var day=today.getDate();
         var month=today.getMonth();
@@ -223,7 +226,6 @@ myApp.service('Appointments', ['$q', 'RequestToServer','$cordovaCalendar','UserA
         return -1;
 
     }
-
     function setTreatmentSessions(appointments)
     {
         var array = [];
@@ -265,7 +267,7 @@ myApp.service('Appointments', ['$q', 'RequestToServer','$cordovaCalendar','UserA
             r.resolve('Done adding all appointments');
         }else{
             var startDate=appointments[indexValue].ScheduledStartTime;
-            console.log(appointments[indexValue]);
+
             if(today<startDate)
             {
                 var eventToCalendar={};
@@ -278,7 +280,7 @@ myApp.service('Appointments', ['$q', 'RequestToServer','$cordovaCalendar','UserA
                 eventToCalendar.notes='Source: ' +appointments[indexValue].ResourceName;
                 if(isAppointmentInNativeCalendar(appointments[indexValue].AppointmentSerNum))
                 {
-                    console.log('Found event in Calendar');
+
                     var newIndex=indexValue+1;
                     r.resolve(manageAppointmentsInNativeCalendar(appointments,newIndex));
                 }else{
@@ -287,11 +289,11 @@ myApp.service('Appointments', ['$q', 'RequestToServer','$cordovaCalendar','UserA
                         var newIndex=indexValue+1;
                         r.resolve(manageAppointmentsInNativeCalendar(appointments,newIndex));
                     }, function (err) {
-                        console.log(err);
+
                         navigator.notification.alert(
                             'An error occured while adding your appointments',  // message
                             function(error){
-                                console.log(error);
+
                             },         // callback
                             'Error',            // title
                             'OK'                  // buttonName
@@ -314,7 +316,7 @@ myApp.service('Appointments', ['$q', 'RequestToServer','$cordovaCalendar','UserA
         if(!appointmentsString){
             return false;
         }else{
-            console.log(appointmentsString);
+
             appointmentsObject=JSON.parse(appointmentsString);
             var appointmentList=appointmentsObject.AppointmentList;
             for(var i=0;i<appointmentList.length;i++){
@@ -365,7 +367,7 @@ myApp.service('Appointments', ['$q', 'RequestToServer','$cordovaCalendar','UserA
          **/
         updateUserAppointments:function(appointments)
         {
-            console.log("called update user appointments");
+
             searchAppointmentsAndDelete(appointments);
             //this.clearAppointments();
             addAppointmentsToService(appointments);
@@ -382,12 +384,12 @@ myApp.service('Appointments', ['$q', 'RequestToServer','$cordovaCalendar','UserA
         },
         /**
          *@ngdoc method
-         *@name isThereNextAppointment
+         *@name nextAppointmentExists
          *@methodOf MUHCApp.service:Appointments
          *@param {Object} appointments Appointments array that containts the new appointments
          *@returns {Boolean} Returns whether there is a next appointment for the user
          **/
-        isThereNextAppointment:function(){
+        nextAppointmentExists:function(){
             var FutureAppointments=getAppointmentsInPeriod('Future');
             if(FutureAppointments.length===0)
             {
@@ -398,12 +400,12 @@ myApp.service('Appointments', ['$q', 'RequestToServer','$cordovaCalendar','UserA
         },
         /**
          *@ngdoc method
-         *@name isThereAppointments
+         *@name appointmentsExist
          *@methodOf MUHCApp.service:Appointments
          *@param {Object} appointments Appointments array that containts the new appointments
          *@returns {Boolean} Returns whether the user has any appointments
          **/
-        isThereAppointments:function()
+        appointmentsExist:function()
         {
             if(userAppointmentsArray.length===0)
             {
@@ -568,12 +570,12 @@ myApp.service('Appointments', ['$q', 'RequestToServer','$cordovaCalendar','UserA
          **/
         getAppointmentName:function(serNum)
         {
-            //console.log(serNum);
-            //console.log(userAppointmentsArray);
+            //
+            //
             for (var i = 0; i < userAppointmentsArray.length; i++) {
                 if(userAppointmentsArray[i].AppointmentSerNum == serNum)
                 {
-                    console.log({NameEN:userAppointmentsArray[i].AppointmentType_EN, NameFR: userAppointmentsArray[i].AppointmentType_FR });
+
                     return {NameEN:userAppointmentsArray[i].AppointmentType_EN, NameFR: userAppointmentsArray[i].AppointmentType_FR };
                 }
             }
@@ -608,7 +610,7 @@ myApp.service('Appointments', ['$q', 'RequestToServer','$cordovaCalendar','UserA
             var r=$q.defer();
             if(userAppointmentsArray.length>0)
             {
-                console.log(userAppointmentsArray.length);
+
                 manageAppointmentsInNativeCalendar(userAppointmentsArray,0).then(
                     function(app){
                         r.resolve(app);
@@ -684,10 +686,10 @@ myApp.service('Appointments', ['$q', 'RequestToServer','$cordovaCalendar','UserA
         setAppointmentsLanguage:function(array)
         {
             var language = UserPreferences.getLanguage();
-            console.log(language);
+
             //Check if array
             if (Array.isArray(array)) {
-                console.log("Is array now setting language")
+
                 for (var i = 0; i < array.length; i++) {
                     //set language
                     if(!array[i].hasOwnProperty('Title')||!array[i].hasOwnProperty('Description')||!array[i].hasOwnProperty('ResourceName'))
@@ -716,7 +718,7 @@ myApp.service('Appointments', ['$q', 'RequestToServer','$cordovaCalendar','UserA
         },
         /**
          *@ngdoc method
-         *@name clearAppointments
+         *@name setAppointmentsLanguage
          *@methodOf MUHCApp.service:Appointments
          *@description Cleans all the Appointments service state and reinstantiates.
          **/
@@ -728,89 +730,11 @@ myApp.service('Appointments', ['$q', 'RequestToServer','$cordovaCalendar','UserA
             calendar={};
             numberOfSessions=0;
         },
-        /**
-         *@ngdoc method
-         *@name getPercent
-         *@methodOf MUHCApp.service:Appointments
-         *@description Extract the waiting time counts from OpalDB according to appointments, compute the percentages
-         *@returns an array of 4 integers representing Percentage for each time interval. If not available, return 0%.
-         **/
-        getPercent: function(serNum)
-        {
-            var percent = [0,0,0,0];
-            var index = findAppointmentIndexInArray(userAppointmentsArray,serNum);
-            //Check if this appointment if found, else return 0% placeholder
-            if(index == -1)
-            {
-                return percent;
-            }
-            //Set the properties of this appointment
-            var type = userAppointmentsArray[index].AppointmentType_EN;//type of treatment TBD with dictionary
-            var typeID; var hour1; var hour2;
-            var day = userAppointmentsArray[index].ScheduledStartTime;
-            var hour = day.getHours(); //0 to 23 standard hour
-            var weekday = day.getDay(); //0 being Sunday, 6 being Saturday (0 to 4 for mysql)
-            day = day.toISOString().slice(0, 19).replace('T', ' ');
-            //0 being January, 11 being December (1 and 12 for mysql)
-            //Map the variables to the corresponding category
-            switch (hour) {
-                case 8:
-                case 9:
-                    hour1 = 8;
-                    hour2 = 9;
-                    break;
-                case 10:
-                case 11:
-                    hour1 = 10;
-                    hour2 = 11;
-                    break;
-                case 12:
-                case 13:
-                    hour1 = 12;
-                    hour2 = 13;
-                    break;
-                case 14:
-                    hour1 = 13;
-                    hour2 = 14;
-                    break;
-                case 15:
-                case 16:
-                    hour1 = 15;
-                    hour2 = 16;
-            }
-            switch (type) {
-                case "Chemotherapy":
-                    typeID = 0;
-                    break;
-                case "Bladder transplant":
-                    typeID = 1;
-                    break;
-            }
-
-            //Request to get the corresponding data request(typeID 0, hour1 0, hour2 1, weekday 0, day);
-            var count = [];
-            //RequestToServer.sendRequest('getDelayCount',{"Id":serNum, "Field": "Appointments"});
-            //LocalStorage.WriteToLocalStorage('Appointments', userAppointmentsArray);
-            //getCount(type, hour, weekday, month);
-            count[0]=46;
-            count[1]=28;
-            count[2]=11;
-            count[3]=15;
-
-            //Compute the percentage of each category
-            var countTotal = count[0]+count[1]+count[2]+count[3];
-            for (var i = 1; i < 4; i++) {
-                percent[i] = Math.round((count[i]/countTotal)*100);
-            }
-            percent[0] = 100-percent[1]-percent[2]-percent[3]
-            console.log(percent);
-            return percent;
-        },
 
         getRecentCalledAppointment: function () {
             var todaysAppointments = [];
             todaysAppointments = getAppointmentsInPeriod('Today');
-            //console.log(todaysAppointments);
+
             var now=new Date();
 
 
@@ -834,9 +758,18 @@ myApp.service('Appointments', ['$q', 'RequestToServer','$cordovaCalendar','UserA
                 return {RoomLocation_EN: ""};
             }
 
-            console.log(lowest);
+
 
             return todaysAppointments[lowest];
+        },
+
+        setAsLoaded: function() {
+            firstLoad = false;
+        },
+
+        isFirstLoad: function() {
+            return firstLoad
+
         }
 
     };

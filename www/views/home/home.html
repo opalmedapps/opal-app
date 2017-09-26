@@ -23,7 +23,6 @@
                         <div>
                             <p class="text-center">
                                 <strong ng-class="fontSizeTitle" style="color:white">{{h.FirstName}} {{h.LastName}}</strong><br>
-                                <!--<span style="color:white" ng-class="fontSizeDesc"> {{"PATIENTID"|translate}} {{h.PatientId}}</span><br>-->
                             </p>
                         </div>
                     </div>
@@ -45,9 +44,6 @@
                             <header>
                                 <span class="item-title" ng-class="fontSizeTitle">{{"OPAL_ABOUT"|translate}}</span>
                             </header>
-
-                            <!--<p class="item-desc" ng-class="fontSizeDesc">{{appointment.ScheduledStartTime|formatDateAppointmentTask}} </p>-->
-                            <!--<p class="item-desc" ng-class="fontSizeDesc" style="color:orange" ng-show ="checkinEstimate&&showHomeScreenUpdate">{{"ESTIMATEDWAIT"|translate}}: {{checkinEstimate}} minutes</p>-->
                         </ons-col>
                     </ons-row>
                 </ons-list-item>
@@ -57,7 +53,9 @@
                     <ons-row align="center">
                         <ons-col width="60px" style="text-align: center">
                             <div>
-                                <i class="fa fa-check-square-o fa-2x" style="color:#4CAF50"></i><span class="notification" ng-hide="h.allCheckedIn">1</span>
+                                <i ng-hide="!h.allCheckedIn" class="fa fa-check-square-o fa-2x" style="color:#4CAF50;"></i>
+                                <i ng-hide="h.allCheckedIn || h.no_appointments" class="fa fa-square-o fa-2x animated pulse" style="display: none; color:#4CAF50;"></i><span ng-hide="h.allCheckedIn || h.no_appointments" class="notification" style="position: absolute; margin-left: -7px"> {{ h.todaysAppointments.length }}</span>
+                                <i ng-if="h.no_appointments" class="fa fa-square-o fa-2x" style="color:#9E9E9E;"></i>
                             </div>
                         </ons-col>
                         <ons-col>
@@ -122,7 +120,7 @@
                         <ons-row align="center">
                             <ons-col width="60px" align="center">
                                 <div>
-                                    <ons-icon class="iconHomeView" icon="{{notification.Icon}}" ng-style="{color: notification.Color}"></ons-icon><span class="notification" ng-show="notification.Number>=1">{{notification.Number}}</span>
+                                    <ons-icon class="iconHomeView" icon="{{notification.Icon}}" ng-style="{color: notification.Color}" style="margin-left: 18px"></ons-icon><span class="notification" style="left: -7px !important" ng-show="notification.Number>=1">{{notification.Number}}</span>
                                 </div>
                             </ons-col>
                             <ons-col>

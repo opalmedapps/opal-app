@@ -17,8 +17,8 @@ var myApp=angular.module('MUHCApp');
  *@requires MUHCApp.service:EducationalMaterial
  *@description API service used to patient notifications. This Service is deeply linked to other services to extract that information about the actual content of the notification.
  **/
-myApp.service('Notifications',['$filter','RequestToServer','LocalStorage','Announcements','TxTeamMessages','Appointments','Messages','Documents','EducationalMaterial', 'UserPreferences', '$q',
-    function($filter,RequestToServer,LocalStorage,Announcements, TxTeamMessages,Appointments,Messages, Documents,EducationalMaterial, UserPreferences, $q){
+myApp.service('Notifications',['$filter','RequestToServer','LocalStorage','Announcements','TxTeamMessages','Appointments','Documents','EducationalMaterial', 'UserPreferences', '$q',
+    function($filter,RequestToServer,LocalStorage,Announcements, TxTeamMessages,Appointments, Documents,EducationalMaterial, UserPreferences, $q){
         /**
          *@ngdoc property
          *@name  MUHCApp.service.#Notifications
@@ -177,16 +177,16 @@ myApp.service('Notifications',['$filter','RequestToServer','LocalStorage','Annou
             //an array iteration look up.
             //Notification SerNum
             var serNum = notification.NotificationSerNum;
-            console.log(notification);
+
 
             //ReferenceTableSerNum, as in DocumentSerNum and such.
             var refSerNum = notification.RefTableRowSerNum;
             var type = notification.NotificationType;
-            console.log(Notifications[index].NotificationSerNum, serNum);
+
             //If the index is not defined and the notificationSerNum matches then read that notification and sync the state of all services
             if(typeof Notifications[index]!== 'undefined' && Notifications[index].NotificationSerNum == serNum)
             {
-                console.log('Reading notification via index');
+
                 Notifications[index].ReadStatus = '1';
                 notificationsLocalStorage[index].ReadStatus = '1';
                 notificationTypes[type].readFunction(refSerNum);
@@ -194,16 +194,16 @@ myApp.service('Notifications',['$filter','RequestToServer','LocalStorage','Annou
                 RequestToServer.sendRequest('Read',{'Id':serNum, 'Field':'Notifications'});
             }else{
                 //If it doesnt match, iterate, find notification and update read status in all the states, i.e. localStorage, server, model.
-                console.log('Reading notification via serNum');
+
                 for (var i = 0; i < Notifications.length; i++) {
-                    console.log(serNum, Notifications[i].NotificationSerNum );
+
                     if(Notifications[i].NotificationSerNum == serNum )
                     {
-                        console.log('Reading not,', Notifications[i]);
+
                         Notifications[i].ReadStatus = '1';
                         notificationsLocalStorage[i].ReadStatus = '1';
                         notificationTypes[type].readFunction(refSerNum);
-                        console.log('Done reading', Notifications[i]);
+
                         LocalStorage.WriteToLocalStorage('Notifications', notificationsLocalStorage);
                         RequestToServer.sendRequest('Read',{'Id':serNum, 'Field':'Notifications'});
                         break;
@@ -236,21 +236,21 @@ myApp.service('Notifications',['$filter','RequestToServer','LocalStorage','Annou
                 temp[i].Custom =  notificationTypes[temp[i].NotificationType].Custom;
                 temp[i].Icon = notificationTypes[temp[i].NotificationType].icon;
                 temp[i].Color = notificationTypes[temp[i].NotificationType].color;
-                //console.log(temp[i].NotificationType, notificationTypes[temp[i].NotificationType].hasOwnProperty('openFunction'));
+                //
                 if(!notificationTypes[temp[i].NotificationType].hasOwnProperty('openFunction')){
                     temp[i].PageUrl = notificationTypes[temp[i].NotificationType].PageUrl(temp[i].RefTableRowSerNum);
                 }
                 temp[i].Content = notificationTypes[temp[i].NotificationType].namesFunction(temp[i].RefTableRowSerNum);
-                //console.log(temp[i].Content);
+                //
                 temp[i].DateAdded=$filter('formatDate')(temp[i].DateAdded);
                 temp[i].refreshType = notificationTypes[temp[i].NotificationType].refreshType;
-                //console.log(temp[i]);
+                //
                 Notifications.push(temp[i]);
                 notificationsLocalStorage.push(notifications[i]);
             }
-            //console.log(Notifications);
+            //
             Notifications=$filter('orderBy')(Notifications,'-DateAdded',true);
-            console.log(Notifications);
+
             LocalStorage.WriteToLocalStorage('Notifications',notificationsLocalStorage);
         }
         return{
@@ -262,7 +262,6 @@ myApp.service('Notifications',['$filter','RequestToServer','LocalStorage','Annou
              *@description Setter method for Notifications
              **/
             setUserNotifications:function(notifications){
-                console.log('setting notifications');
                 Notifications=[];
                 notificationsLocalStorage=[];
                 addUserNotifications(notifications);
@@ -337,18 +336,18 @@ myApp.service('Notifications',['$filter','RequestToServer','LocalStorage','Annou
                     //If ReadStatus is 0, then find actual post for notification
                     if(Notifications[i].ReadStatus == '0')
                     {
-                        // Attach room number
 
-                        console.log(Notifications[i]);
                         //Finding post
                         var post = notificationTypes[Notifications[i].NotificationType].searchFunction(Notifications[i].RefTableRowSerNum);
+
+                        if(post)
                         Notifications[i].Description_EN = Notifications[i].Description_EN.replace(/\$\w+/, post.RoomLocation_EN||"");
                         Notifications[i].Description_FR = Notifications[i].Description_FR.replace(/\$\w+/, post.RoomLocation_FR||"");
-                        console.log(Notifications[i].NotificationType);
+
                         //If ReadStatus in post is also 0, Set the notification for showing in the controller
                         if(post.ReadStatus == '0' || Notifications[i].NotificationType == "RoomAssignment")
                         {
-                            console.log(post);
+
                             Notifications[i].Post = post;
                             Notifications[i].Number = 1;
                             array.push(Notifications[i]);
@@ -403,7 +402,7 @@ myApp.service('Notifications',['$filter','RequestToServer','LocalStorage','Annou
              **/
             goToPost:function(type, post)
             {
-                console.log(post);
+
                 return notificationTypes[type].openFunction(post);
             },
             /**
@@ -418,15 +417,15 @@ myApp.service('Notifications',['$filter','RequestToServer','LocalStorage','Annou
             {
                 var language = UserPreferences.getLanguage();
                 for (var i = notifications.length-1; i >=0; i--) {
-                    //console.log(notifications[i]);
+                    //
                     notifications[i].Title = (language=='EN') ?   notifications[i].Name_EN : notifications[i].Name_FR;
-                    //console.log(notifications[i].RefTableRowSerNum);
+                    //
                     try{
                         if(typeof notifications[i].Content == 'undefined') notifications[i].Content = notificationTypes[notifications[i].NotificationType].namesFunction(notifications[i].RefTableRowSerNum);
                         notifications[i].Desc = (language=='EN') ?  notifications[i].Content.NameEN : notifications[i].Content.NameFR;
                     }catch(e){
                         notifications.splice(i,1);
-                        //console.log(e);
+                        //
                     }
 
 

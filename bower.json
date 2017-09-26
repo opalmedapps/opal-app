@@ -22,7 +22,7 @@
     "tests"
   ],
   "dependencies": {
-    "angular-animate": "^1.6.0",
+    "angular-animate": "1.6.4",
     "angular-dynamic-locale": "^0.1.27",
     "angular-scroll": "^1.0.0",
     "angular-mocks": "^1.6.0",
@@ -43,12 +43,14 @@
     "angular-bootstrap": "^2.3.1",
     "angular-scroll-glue": "^2.0.7",
     "crypto-js": "^3.1.6",
-    "firebase": "3.7.x",
+    "firebase": "^4.0.0",
     "moment": "^2.17.1",
     "pdfjs-dist": "^1.6.446",
     "progressbar.js": "^1.0.1",
     "jquery.panzoom": "^3.2.2",
-    "highcharts": "^5.0.7"
+    "highcharts": "^5.0.7",
+    "tweetnacl-util": "^0.15.0",
+    "tweetnacl": "^1.0.0"
   },
   "resolutions": {
     "angular": "^1.6.0"

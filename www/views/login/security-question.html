@@ -1,4 +1,4 @@
-<ons-page style="background-color:white;width:100vw;height:100vh" ng-controller="SecurityQuestionController">
+<ons-page style="background-color:white;width:100vw;height:100vh" ng-controller="SecurityQuestionController as security">
     <ons-toolbar fixed-style>
         <div class="left">
             <ons-back-button>{{"BACK"|translate}}</ons-back-button>
@@ -14,21 +14,18 @@
                 <form name="formPassword"  novalidate>
                     <div class="form-group" align="center"  style="margin-top: 20px">
 
-                        <div ng-show="passwordReset" style="width: 100%; margin-top: 15px; margin-bottom: 20px;" class="style-4">
+                        <div ng-show="security.passwordReset" style="width: 100%; margin-top: 15px; margin-bottom: 20px;" class="style-4">
                             <label name="text">{{"ENTERSSNLABEL"|translate}}</label><br/>
-                            <input class="text-input" type="text" name="text" ng-model="ssn" placeholder="{{'ENTERSSNPLACEHOLDER'|translate}}" />
+                            <input class="text-input" type="text" name="text" ng-model="security.ssn" placeholder="{{'ENTERSSNPLACEHOLDER'|translate}}" />
                         </div>
 
-                        <label name="text">{{Question}}</label><br/>
+                        <label name="text">{{ security.Question }} </label><br/>
                         <div style="width: 100%; margin-top: 15px" class="style-4">
-                            <input class="text-input" type="text" name="text" ng-model="answer" placeholder="{{'ENTERANSWERPLACEHOLDER'|translate}}" />
+                            <input class="text-input" name="text" ng-model="security.answer" placeholder="{{'ENTERANSWERPLACEHOLDER'|translate}}" />
                             <br/><br/>
                         </div>
-                        <!--<div>{{"TRUST_DEVICE"|translate}}-->
-                            <!--<span><ons-switch var="mySwitch" onchange=""></ons-switch></span>-->
-                        <!--</div>-->
-                        <button class="button button--large shadow-2" type="submit" value="Save" ng-disabled="waiting||threeTries" style="background-color: #4CAF50; font-weight: bolder;" ng-click="submitAnswer(answer)">{{"CONTINUE"|translate}}</button>
-                        <uib-alert ng-show="alert.type" type="{{alert.type}}">{{alert.content|translate}}</uib-alert>
+                        <button class="button button--large shadow-2" ng-disabled="security.waiting||security.threeTries" style="background-color: #4CAF50; font-weight: bolder;" ng-click="security.submitAnswer(security.answer)">{{"CONTINUE"|translate}}</button>
+                        <uib-alert ng-show="security.alert.type" type="{{security.alert.type}}">{{security.alert.content|translate}}</uib-alert>
                     </div>
                 </form>
             </div>

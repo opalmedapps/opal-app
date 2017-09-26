@@ -17,8 +17,8 @@ var app = angular.module('MUHCApp');
  *@requires MUHCApp.service:RequestToServer
  *@description Service that deals with the device identifiers, sends the identifiers to backend to be used by the push notifications system.
  **/
-app.service('DeviceIdentifiers', [ 'RequestToServer', '$q','Constants','UserAuthorizationInfo',
-    function(RequestToServer,$q, Constants, UserAuthorizationInfo)
+app.service('DeviceIdentifiers', [ 'RequestToServer', '$q','Constants','UserAuthorizationInfo', 'EncryptionService',
+    function(RequestToServer,$q, Constants, UserAuthorizationInfo, EncryptionService)
 {
     /**
      *@ngdoc property
@@ -27,7 +27,7 @@ app.service('DeviceIdentifiers', [ 'RequestToServer', '$q','Constants','UserAuth
      *@description Object contains three properties registrationId, deviceUUID, and deviceType, the object is sent to the server to update the devices for a particular user.
      **/
     var deviceIdentifiers = {
-        registrationId: '',
+        registrationId:'',
         deviceUUID:'',
         deviceType:''
     };
@@ -105,9 +105,9 @@ app.service('DeviceIdentifiers', [ 'RequestToServer', '$q','Constants','UserAuth
         sendIdentifiersToServer:function()
         {
             var defer = $q.defer();
-            if(haveBeenSet&&!haveBeenSend)
+            if(haveBeenSet && !haveBeenSend)
             {
-                RequestToServer.sendRequestWithResponse('DeviceIdentifier',deviceIdentifiers);
+                RequestToServer.sendRequestWithResponse('DeviceIdentifier', deviceIdentifiers);
                 haveBeenSend = true;
             }
 
@@ -123,7 +123,7 @@ app.service('DeviceIdentifiers', [ 'RequestToServer', '$q','Constants','UserAuth
          **/
         sendFirstTimeIdentifierToServer:function()
         {
-            return RequestToServer.sendRequestWithResponse('SecurityQuestion',deviceIdentifiers, 'none');
+            return RequestToServer.sendRequestWithResponse('SecurityQuestion',deviceIdentifiers, EncryptionService.hash('none'), null, null);
         },
         /**
          *@ngdoc method
@@ -137,7 +137,7 @@ app.service('DeviceIdentifiers', [ 'RequestToServer', '$q','Constants','UserAuth
             var objectToSend = deviceIdentifiers;
             objectToSend.email = email;
 
-            return RequestToServer.sendRequestWithResponse('SecurityQuestion', objectToSend, 'none', 'passwordResetRequests', 'passwordResetResponses');
+            return RequestToServer.sendRequestWithResponse('SecurityQuestion', objectToSend, EncryptionService.hash('none'), 'passwordResetRequests', 'passwordResetResponses');
         },
         /**
          *@ngdoc method
