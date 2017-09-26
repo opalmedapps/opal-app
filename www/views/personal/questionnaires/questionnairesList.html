@@ -1,55 +1,37 @@
-<ons-page  ng-controller="questionnairesListController">
+<ons-page  ng-controller="QuestionnairesListController as vm">
     <ons-toolbar fixed-style>
         <div class="left" ><ons-back-button>{{"BACK"|translate}}</ons-back-button></div>
         <div class="center" ng-class="fontSizeTitle">{{"QUESTIONNAIRES"|translate}}</div>
     </ons-toolbar>
 
-    <div ng-show="loading" align="center" style="margin-top:25vh">
+    <div ng-show="vm.loading" align="center" style="margin-top:25vh">
         <svg class="progress-circular">
             <circle class="progress-circular__primary" cx="50%" cy="50%" r="40%" fill="none" stroke-width="10%" stroke-miterlimit="10"/>
         </svg>
         <p style="margin-top: 30px">{{ "LOADINGQUESTIONNAIRES" | translate }}</p>
     </div>
 
-    <div ng-hide="loading">
-        <div class="ons-row" align="center">
-            <div class="ons-col" align="center">
-                <div class="navigation-bar">
-                    <div class="navigation-bar__center">
-                        <div class="button-bar" style="margin-left: auto; margin-right: auto; margin-top: 7px;">
-                            <div class="button-bar__item">
-                                <input type="radio" name="navi-segment-a" checked ng-click="getDesiredQuestionnaires('new')">
-                                <div class="button-bar__button" ng-class="fontSizeTitle">{{"QUESTIONNAIRE_NEW"|translate}} <div class="notification">{{numQuestionnairesNew}}</div></div>
-                            </div>
 
-                            <div class="button-bar__item">
-                                <input type="radio" name="navi-segment-a" ng-click="getDesiredQuestionnaires('progress')">
-                                <div class="button-bar__button" ng-class="fontSizeTitle">{{"QUESTIONNAIRE_IN_PROGRESS"|translate}} <div class="notification">{{numQuestionnairesInProgress}}</div></div>
-                            </div>
+    <ons-tabbar class="shadow-2" position="top" animation="fade"  style="position: fixed; margin-top: 43px" ng-hide="vm.loading" ng-cloak>
+        <ons-tab class="shadow-2" style="background-color:#ECEFF1;" label='{{"QUESTIONNAIRE_NEW"|translate}}' icon="ion-android-add" active="true" ng-click="vm.getDesiredQuestionnaires('new')"></ons-tab>
+        <ons-tab class="shadow-2" style="background-color:#ECEFF1;" label='{{"QUESTIONNAIRE_IN_PROGRESS"|translate}}' icon="ion-edit" ng-click="vm.getDesiredQuestionnaires('progress')"></ons-tab>
+        <ons-tab class="shadow-2" style="background-color:#ECEFF1;" label='{{"QUESTIONNAIRE_COMPLETED"|translate}}' icon="ion-android-done" ng-click="vm.getDesiredQuestionnaires('completed')"></ons-tab>
+    </ons-tabbar>
 
-                            <div class="button-bar__item">
-                                <input type="radio" name="navi-segment-a" ng-click="getDesiredQuestionnaires('completed')">
-                                <div class="button-bar__button" ng-class="fontSizeTitle">{{"QUESTIONNAIRE_COMPLETED"|translate}}</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <div class="ons-row" align="center" ng-init="vm.refreshQuestionnairesList()" ng-hide="vm.loading" style="margin-top: 50px">
+        <div class="ons-col" align="center">
+            <p ng-show="vm.desiredQuestionnaires.length === 0 && vm.current_type === 'new'" ng-class="fontSizeTitle" style="color: grey; margin-top: 25vh;">{{"QUESTIONNAIRE_NONE_NEW"|translate}}</p>
+            <p ng-show="vm.desiredQuestionnaires.length === 0 && vm.current_type === 'progress'" ng-class="fontSizeTitle" style="color: grey; margin-top: 25vh;">{{"QUESTIONNAIRE_NONE_PROGRESS"|translate}}</p>
+            <p ng-show="vm.desiredQuestionnaires.length === 0 && vm.current_type === 'completed'" ng-class="fontSizeTitle" style="color: grey; margin-top: 25vh;">{{"QUESTIONNAIRE_NONE_COMPLETED"|translate}}</p>
 
-        <div class="ons-row" align="center" ng-init="refreshQuestionnairesList">
-            <div class="ons-col" align="center">
-                <p ng-show="desiredQuestionnaires.length == 0" style="color: grey; margin-top: 10vh;">{{"QUESTIONNAIRE_NONE"|translate}}</p>
-
-                <ul class="list" ng-show="desiredQuestionnaires.length > 0">
-                    <li class="list__item list__item--chevron" ng-repeat="questionnaire in desiredQuestionnaires"
-                        ng-click="goToQuestionnaire(questionnaire, questionnaire.QuestionnaireDBSerNum, questionnaire.QuestionnaireSerNum)">
-                        <p style="margin-top: 7px" ng-class="fontSizeTitle">{{questionnaires[questionnaire.QuestionnaireDBSerNum].QuestionnaireName}}</p>
-                        <p ng-show="clickedText == 'completed'" style="margin-top: -22px;" ng-class="fontSizeDesc">{{"QUESTIONNAIRE_DATE_ANSWERED"|translate}}: {{patientQuestionnaires[questionnaire.QuestionnaireSerNum].CompletionDate}}</p>
-                        <p ng-show="clickedText == 'new'" style="margin-top: -22px;"ng-class="fontSizeDesc">{{"QUESTIONNAIRE_DATE_ADDED"|translate}} {{patientQuestionnaires[questionnaire.QuestionnaireSerNum].DateAdded}}</p>
-                    </li>
-                </ul>
-            </div>
+            <ul class="list" ng-show="vm.desiredQuestionnaires.length > 0">
+                <li class="list__item list__item--chevron" ng-repeat="questionnaire in vm.desiredQuestionnaires"
+                    ng-click="vm.goToQuestionnaire(questionnaire, questionnaire.QuestionnaireDBSerNum, questionnaire.QuestionnaireSerNum)">
+                    <p style="margin-top: 7px" ng-class="fontSizeTitle">{{vm.questionnaires[questionnaire.QuestionnaireDBSerNum].QuestionnaireName}}</p>
+                    <p ng-show="vm.clickedText == 'completed'" style="margin-top: -22px; color: #757575;" ng-class="fontSizeDesc">{{"QUESTIONNAIRE_DATE_ANSWERED"|translate}}: {{vm.patientQuestionnaires[questionnaire.QuestionnaireSerNum].CompletionDate}}</p>
+                    <p ng-show="vm.clickedText == 'new'" style="margin-top: -22px; color: #757575;"ng-class="fontSizeDesc">{{"QUESTIONNAIRE_DATE_ADDED"|translate}} {{vm.patientQuestionnaires[questionnaire.QuestionnaireSerNum].DateAdded}}</p>
+                </li>
+            </ul>
         </div>
     </div>
 </ons-page>
