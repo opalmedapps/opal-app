@@ -63,6 +63,13 @@
                 }
             });
 
+            educationNavigator.on('prepush', function(event) {
+                if (educationNavigator._doorLock.isLocked()) {
+                    console.log("education");
+                    event.cancel();
+                }
+            });
+
             //Cleaning up
             $scope.$on('$destroy',function()
             {
