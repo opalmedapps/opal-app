@@ -3,156 +3,174 @@
  *Github: dherre3
  *Email:davidfherrerar@gmail.com
  */
-var app1 = angular.module('MUHCApp');
-app1.controller('questionnairesListController', function($scope, $rootScope, Questionnaires, $location, NavigatorParameters, $timeout) {
+(function () {
+    'use strict';
 
+    angular
+        .module('MUHCApp')
+        .controller('QuestionnairesListController', QuestionnairesListController);
 
-    $scope.loading = true;
+    QuestionnairesListController.$inject = [
+        'Questionnaires', 'NavigatorParameters', '$timeout'
+    ];
 
-    activate();
+    /* @ngInject */
+    function QuestionnairesListController(Questionnaires, NavigatorParameters, $timeout) {
+        var vm = this;
+        var questionnaireSerNum;
 
-    function activate(){
-        "use strict";
+        vm.loading = true;
+        vm.current_type = 'new';
 
-        if(!Questionnaires.isEmpty()){
-            $scope.loading = false;
-            $scope.questionnaires = Questionnaires.getPatientQuestionnaires().Questionnaires;
-            $scope.patientQuestionnaires = Questionnaires.getPatientQuestionnaires().PatientQuestionnaires;
-            return;
-        }
+        vm.getDesiredQuestionnaires = getDesiredQuestionnaires;
+        vm.goToQuestionnaire = goToQuestionnaire;
+        vm.refreshQuestionnairesList = refreshQuestionnairesList;
 
-        Questionnaires.requestQuestionnaires()
-            .then(function () {
+        activate();
 
-                $scope.loading = false;
-                $scope.questionnaires = Questionnaires.getPatientQuestionnaires().Questionnaires;
-                $scope.patientQuestionnaires = Questionnaires.getPatientQuestionnaires().PatientQuestionnaires;
+        ////////////////////
+
+        /************************
+         * PRIVATE FUNCTIONS
+         ***********************/
+
+        function activate(){
+
+            console.log('activated');
+
+            if(!Questionnaires.isEmpty()){
+                vm.questionnaires = Questionnaires.getPatientQuestionnaires().Questionnaires;
+                vm.patientQuestionnaires = Questionnaires.getPatientQuestionnaires().PatientQuestionnaires;
+                getDesiredQuestionnaires('new');
                 getBadgeNumbers();
-            },
-            function(error){
+                vm.loading = false;
+                return;
+            }
 
-                $scope.loading = false;
-            })
-    }
+            Questionnaires.requestQuestionnaires()
+                .then(function () {
+                        vm.questionnaires = Questionnaires.getPatientQuestionnaires().Questionnaires;
+                        vm.patientQuestionnaires = Questionnaires.getPatientQuestionnaires().PatientQuestionnaires;
+                        getDesiredQuestionnaires('new');
+                        getBadgeNumbers();
+                        vm.loading = false;
+                    },
+                    function(error){
+                        vm.loading = false;
+                    });
 
-    function getBadgeNumbers () {
-        $scope.numQuestionnairesCompleted = undefined;
-        $scope.numQuestionnairesNew = undefined;
-        $scope.numQuestionnairesInProgress = undefined;
-        for (var key in $scope.patientQuestionnaires) {
-            questionnaireSerNum = $scope.patientQuestionnaires[key].QuestionnaireSerNum;
-            if ((!isQuestionnaireComplete($scope.patientQuestionnaires[key])) && (!Questionnaires.isQuestionnaireInProgress(questionnaireSerNum))) {
-                if (typeof($scope.numQuestionnairesNew) == 'undefined') {
-                    $scope.numQuestionnairesNew = 1;
-                } else {
-                    $scope.numQuestionnairesNew = $scope.numQuestionnairesNew + 1;
+
+            personalNavigator.on('postpop', popPost);
+        }
+
+        function getBadgeNumbers () {
+            for (var key in vm.patientQuestionnaires) {
+                var questionnaireSerNum = vm.patientQuestionnaires[key].QuestionnaireSerNum;
+                if ((!isQuestionnaireComplete(vm.patientQuestionnaires[key])) && (!Questionnaires.isQuestionnaireInProgress(questionnaireSerNum))) {
+                    if (!vm.numQuestionnairesNew) {
+                        vm.numQuestionnairesNew = 1;
+                    } else {
+                        vm.numQuestionnairesNew = vm.numQuestionnairesNew + 1;
+                    }
+                }
+                if ((!isQuestionnaireComplete(vm.patientQuestionnaires[key])) && (Questionnaires.isQuestionnaireInProgress(questionnaireSerNum))) {
+                    if (!vm.numQuestionnairesInProgress) {
+                        vm.numQuestionnairesInProgress = 1;
+                    } else {
+                        vm.numQuestionnairesInProgress = vm.numQuestionnairesInProgress + 1;
+                    }
                 }
             }
-            if ((!isQuestionnaireComplete($scope.patientQuestionnaires[key])) && (Questionnaires.isQuestionnaireInProgress(questionnaireSerNum))) {
-                if (typeof($scope.numQuestionnairesInProgress) == 'undefined') {
-                    $scope.numQuestionnairesInProgress = 1;
-                } else {
-                    $scope.numQuestionnairesInProgress = $scope.numQuestionnairesInProgress + 1;
+        }
+
+        function isQuestionnaireComplete (patientQuestionnaire) {
+            return patientQuestionnaire.CompletedFlag !== 0;
+        }
+
+        function setQuestionnaireAnswersObject(object) {
+
+            var oneQuestionnaireAnswer = {};
+            if (!object) {
+                return;
+            }
+            var answers = object.Answers;
+
+            vm.answers = {};
+            for(var key in answers) {
+                oneQuestionnaireAnswer[key] = answers[key];
+            }
+            return oneQuestionnaireAnswer;
+        }
+
+
+        function popPost() {
+            $timeout(function() {
+                vm.refreshQuestionnairesList();
+                getBadgeNumbers();
+            });
+        }
+
+
+        /************************
+         * PUBLIC FUNCTIONS
+         ***********************/
+
+        function getDesiredQuestionnaires (type) {
+            vm.current_type = type;
+            vm.desiredQuestionnaires = [];
+
+            if (type === 'completed') {
+                for (var key in vm.patientQuestionnaires) {
+                    if (isQuestionnaireComplete(vm.patientQuestionnaires[key])) {
+                        vm.desiredQuestionnaires.push(vm.patientQuestionnaires[key]);
+                    }
                 }
+                vm.isAnswered = "Questionnaires Completed";
+                vm.clickedText = "completed";
+            } else if (type === 'new') {
+                for (var key in vm.patientQuestionnaires) {
+                    questionnaireSerNum = vm.patientQuestionnaires[key].QuestionnaireSerNum;
+                    if ((!isQuestionnaireComplete(vm.patientQuestionnaires[key])) && (!Questionnaires.isQuestionnaireInProgress(questionnaireSerNum))) {
+                        vm.desiredQuestionnaires.push(vm.patientQuestionnaires[key]);
+                    }
+                }
+                vm.isAnswered = "New Questionnaires";
+                vm.clickedText = 'new';
+            } else if (type === 'progress') {
+                for (var key in vm.patientQuestionnaires) {
+                    questionnaireSerNum = vm.patientQuestionnaires[key].QuestionnaireSerNum;
+                    if ((!isQuestionnaireComplete(vm.patientQuestionnaires[key])) && (Questionnaires.isQuestionnaireInProgress(questionnaireSerNum))) {
+                        vm.desiredQuestionnaires.push(vm.patientQuestionnaires[key]);
+                    }
+                }
+                vm.isAnswered = "Questionnaires In Progress";
+                vm.clickedText = 'progress';
+            }
+        }
+
+        function goToQuestionnaire(patientQuestionnaire, questionnaireDBSerNum, questionnaireSerNum) {
+            console.log('triggered');
+
+            if(!(isQuestionnaireComplete(patientQuestionnaire))) {
+
+                NavigatorParameters.setParameters({Navigator:'personalNavigator', DBSerNum: questionnaireDBSerNum, SerNum: questionnaireSerNum});
+                personalNavigator.pushPage('views/personal/questionnaires/questionnaires.html', {param:questionnaireDBSerNum, QuestionnaireSerNum:questionnaireSerNum},{ animation : 'slide' });
+            } else {
+
+
+
+                NavigatorParameters.setParameters({Navigator:'personalNavigator', DBSerNum: questionnaireDBSerNum, SerNum: questionnaireSerNum});
+                personalNavigator.pushPage('views/personal/questionnaires/answeredQuestionnaire.html', {param:questionnaireDBSerNum, QuestionnaireSerNum:questionnaireSerNum},{ animation : 'slide' });
+            }
+        }
+
+        function refreshQuestionnairesList() {
+
+            if (!vm.isAnswered) {
+                getDesiredQuestionnaires('new');
+            } else {
+                getDesiredQuestionnaires(vm.clickedText);
             }
         }
     }
-
-
-
-    $scope.getDesiredQuestionnaires = function(isAnsweredQuestionnaires) {
-        $scope.desiredQuestionnaires = [];
-
-        if (isAnsweredQuestionnaires == 'completed') {
-            for (var key in $scope.patientQuestionnaires) {
-                if (isQuestionnaireComplete($scope.patientQuestionnaires[key])) {
-                    $scope.desiredQuestionnaires.push($scope.patientQuestionnaires[key]);
-                }
-            }
-            $scope.isAnswered = "Questionnaires Completed";
-            $scope.clickedText = "completed";
-        } else if (isAnsweredQuestionnaires == 'new') {
-            for (var key in $scope.patientQuestionnaires) {
-                questionnaireSerNum = $scope.patientQuestionnaires[key].QuestionnaireSerNum;
-                if ((!isQuestionnaireComplete($scope.patientQuestionnaires[key])) && (!Questionnaires.isQuestionnaireInProgress(questionnaireSerNum))) {
-                    $scope.desiredQuestionnaires.push($scope.patientQuestionnaires[key]);
-                }
-            }
-            $scope.isAnswered = "New Questionnaires";
-            $scope.clickedText = 'new';
-        } else if (isAnsweredQuestionnaires == 'progress') {
-            for (var key in $scope.patientQuestionnaires) {
-                questionnaireSerNum = $scope.patientQuestionnaires[key].QuestionnaireSerNum;
-                if ((!isQuestionnaireComplete($scope.patientQuestionnaires[key])) && (Questionnaires.isQuestionnaireInProgress(questionnaireSerNum))) {
-                    $scope.desiredQuestionnaires.push($scope.patientQuestionnaires[key]);
-                }
-            }
-            $scope.isAnswered = "Questionnaires In Progress";
-            $scope.clickedText = 'progress';
-        }
-
-    }
-
-    function isQuestionnaireComplete (patientQuestionnaire) {
-        if (patientQuestionnaire.CompletedFlag == 0) {
-            return false;
-        } else {
-            return true;
-        }
-    }
-
-    $scope.goToQuestionnaire = function(patientQuestionnaire, questionnaireDBSerNum, questionnaireSerNum) {
-        if(!(isQuestionnaireComplete(patientQuestionnaire))) {
-
-            NavigatorParameters.setParameters({Navigator:'personalNavigator', DBSerNum: questionnaireDBSerNum, SerNum: questionnaireSerNum});
-            personalNavigator.pushPage('views/personal/questionnaires/questionnaires.html', {param:questionnaireDBSerNum, QuestionnaireSerNum:questionnaireSerNum},{ animation : 'slide' });
-        } else {
-
-            NavigatorParameters.setParameters({Navigator:'personalNavigator', DBSerNum: questionnaireDBSerNum, SerNum: questionnaireSerNum});
-            personalNavigator.pushPage('views/personal/questionnaires/answeredQuestionnaire.html', {param:questionnaireDBSerNum, QuestionnaireSerNum:questionnaireSerNum},{ animation : 'slide' });
-        }
-    };
-
-    $scope.refreshQuestionnairesList = function () {
-
-        if ($scope.isAnswered == undefined) {
-            $scope.getDesiredQuestionnaires('new');
-        } else {
-            $scope.getDesiredQuestionnaires($scope.clickedText);
-        }
-    };
-
-    function setQuestionnaireAnswersObject(object) {
-
-        oneQuestionnaireAnswer = {};
-        if (object == undefined) {
-            return;
-        }
-        answers = object.Answers;
-
-        $scope.answers = {};
-        for(key in answers) {
-            oneQuestionnaireAnswer[key] = answers[key];
-        }
-        return oneQuestionnaireAnswer;
-    }
-
-    $scope.refreshQuestionnairesList();
-
-    function popPost() {
-        $timeout(function() {
-            $scope.refreshQuestionnairesList();
-            getBadgeNumbers();
-
-
-        });
-    }
-
-    $timeout(function() {
-        personalNavigator.on('postpop', popPost);
-    });
-
-
-
-
-});
+})();
