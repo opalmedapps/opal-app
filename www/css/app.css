@@ -19,8 +19,7 @@
  */
 @font-face {
     font-family: font;
-    src: url("../fonts/Montserrat-Light.ttf");
-    /*src: url(https://fonts.googleapis.com/css?family=Dosis);*/
+    src: url("../fonts/SanFranciscoFont-master/SanFranciscoText-Regular.otf");
 
 }
 
@@ -54,7 +53,6 @@ body {
         color-stop(0.51, #E4E4E4)
     );
     background-attachment:fixed;
-    font-family: 'Cabin', serif !important;
     font-size:12px;
     height:100%;
     margin:0;
@@ -1369,96 +1367,6 @@ Button appointments
   pointer-events: none;
 }
 /*
-*Wait information carousel
-*/
-ons-carousel-item {
-    display: table;
-    text-align: left;
-}
-
-.item-label {
-    display: table-cell;
-    vertical-align: middle;
-    color: white;
-    line-height: 1;
-    font-size: 48px;
-    font-weight: bold;
-}
-
-.cover-label {
-    text-align: center;
-    position: absolute;
-    left: 0px;
-    width: 100%;
-    bottom: 10px;
-    color: white;
-}
-/*
-* Waiting time bar animation
-*/
-.wait-animation {
-    -webkit-animation: wait-animation 1.5s;
-    -moz-animation: wait-animation 1.5s ;
-    -o-animation: wait-animation 1.5s;
-    animation: wait-animation 1.5s;
-    position: relative;
-}
-@-moz-keyframes wait-animation {
-    0%   {
-        width: 0%;
-    }
-}
-@-webkit-keyframes wait-animation {
-    0%   {
-        width: 0%;
-    }
-
-}
-@-o-keyframes wait-animation {
-    0%   {
-        width: 0%;
-    }
-
-}
-
-.wait-animation-1 {
-    -webkit-animation: wait-animation-1 2s;
-    -moz-animation: wait-animation-1 2s ;
-    -o-animation: wait-animation-1 2s;
-    animation: wait-animation-1 2s;
-    position: relative;
-    background: #fec200;
-}
-@-moz-keyframes wait-animation-1 {
-    0%   {
-        width: 0%;
-    }
-
-}
-@-webkit-keyframes wait-animation-1 {
-    0%   {
-        width: 0%;
-        background: #fec200;
-    }
-    100%  {
-        background: #F06B6C;
-    }
-
-}
-@-o-keyframes wait-animation-1 {
-    0%   {
-        width: 0%;
-        background: #fec200;
-    }
-    100%  {
-        background: #F06B6C;
-    }
-}
-
-.highcharts-yaxis-grid .highcharts-grid-line {
-    display: none;
-}
-/*
 *Checkin button home
 */
 .button--large-danger {
@@ -2568,7 +2476,7 @@ width: 30px;
     background: rgba(0,0,0,0.8);
     padding: 20px;
     width: 90%;
-    height: 60%;
+    /*height: 60%;*/
     margin: auto;
     position: relative;
 }
@@ -2756,23 +2664,29 @@ input:focus {
 }
 @keyframes fill {
     100% {
-        box-shadow: inset 0px 0px 0px 30px #7ac142;
+        box-shadow: inset 0 0 0 30px #7ac142;
     }
 }
 
 
-@media only screen and (min-device-width : 320px)  and (max-device-width : 56px) {
-
- }
-
 @media only screen
-and (min-device-width : 320px)
-and (max-device-width : 568px)
+and (max-device-width : 321px)
 {
     .secure-message, .unattended-message{
         font-size: 14px;
     }
+
+    #init-background{
+        height: 180px !important;
+    }
+
+    #lock-logo {
+        display: none;
+    }
+
 }
+
+
 
 
 

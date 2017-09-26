@@ -195,10 +195,13 @@ myApp.config(['$qProvider', function ($qProvider) {
  **/
 myApp.run(function ($state, $stateParams,$q, $rootScope,$translate, Patient,$location, NetworkStatus) {
 
+    if (!firebase.apps.length) {
+        firebase.initializeApp({});
+    }
+
     var isOffline = 'onLine' in navigator && !navigator.onLine;
 
     if ( isOffline ) {
-        console.log("is offline on load!");
        NetworkStatus.setStatus(false);
     }
     else {

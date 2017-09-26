@@ -1,5 +1,6 @@
 var sqlInterface=require('./../api/sqlInterface.js');
-var q=require('q');
+var q = require('q');
+var CryptoJS = require('crypto-js');
 var utility=require('./../utility/utility.js');
 var exports=module.exports={};
 
@@ -10,7 +11,8 @@ exports.resetPasswordRequest=function(requestKey, requestObject)
     ////console.log(requestObject.UserEmail);
     var responseObject = {};
     //Get the patient fields to verify the credentials
-    //console.log(requestObject);
+    console.log(requestObject);
+
     sqlInterface.getPatientFieldsForPasswordReset(requestObject).then(function(patient){
         //Check for injection attacks by the number of rows the result is returning
         if(patient.length>1||patient.length === 0)
@@ -21,7 +23,7 @@ exports.resetPasswordRequest=function(requestKey, requestObject)
             //If the request is not erroneus simply direct the request to appropiate function based on the request mapping object
             //var request = requestObject.Request;
             //console.log(requestObject.Request, requestObject.Parameters);
-            //console.log(patient);
+            console.log(requestObject.Request);
             requestMappings[requestObject.Request](requestKey, requestObject,patient[0]).then(function(response){
                 r.resolve(response);
             });
@@ -38,19 +40,15 @@ exports.resetPasswordRequest=function(requestKey, requestObject)
 exports.verifySecurityAnswer=function(requestKey,requestObject,patient)
 {
     var r=q.defer();
-
     var key = patient.AnswerText;
-    //console.log("before decryption", requestObject.Parameters);
-    var unencrypted=utility.decryptObject(requestObject.Parameters,key);
-    //console.log("after decryption");
-
+    //var key = patient.Password;
+    console.log(key);
+    var unencrypted = utility.decrypt(requestObject.Parameters,key);
+    console.log(unencrypted);
     var response = {};
-
     var isSSNValid = unencrypted.SSN == patient.SSN;
-    //console.log("SSNVALID "+unencrypted.SSN, isSSNValid);
     var isAnswerValid = unencrypted.Answer == patient.AnswerText;
-    //console.log("Answer valid ", isAnswerValid);
-    
+
     var isVerified;
     if (unencrypted.SSN == 'undefined' || unencrypted.SSN == '') isVerified = isAnswerValid;
     else isVerified = isSSNValid && isAnswerValid;
@@ -79,9 +77,8 @@ exports.verifySecurityAnswer=function(requestKey,requestObject,patient)
 exports.setNewPassword=function(requestKey, requestObject,patient)
 {
     var r=q.defer();
-
     var key = patient.AnswerText;
-    var unencrypted=utility.decryptObject(requestObject.Parameters,key);
+    var unencrypted=utility.decrypt(requestObject.Parameters,key);
 
     sqlInterface.setNewPassword(unencrypted.newPassword,patient.PatientSerNum, requestObject.Token).then(function(){
         var response = { RequestKey:requestKey, Code:3,Data:{PasswordReset:"true"}, Headers:{RequestKey:requestKey,RequestObject:requestObject},Response:'success'};
@@ -98,36 +95,59 @@ exports.setNewPassword=function(requestKey, requestObject,patient)
 
 exports.securityQuestion=function(requestKey,requestObject) {
     var r = q.defer();
+    //sqlInterface.getEncryption(requestObject).then(function(){
+    //  console.log()
+    //});
+    // sqlInterface.getFirstEncryption(requestObject).then(function(rows){
+    //     if(rows.length>1||rows.length === 0)
+    //     {
+    //         //Rejects requests if username returns more than one password
+    //         //console.log('Rejecting request due to injection attack', rows);
+    //         //Construction of request object
+    //         responseObject = { Headers:{RequestKey:requestKey,RequestObject:requestObject},EncryptionKey:'', Code: 1, Data:{},Response:'error', Reason:'Injection attack, incorrect UserID'};
 
-    var unencrypted=utility.decryptObject(requestObject.Parameters,'none');
+    //         console.log(JSON.stringify("response: " + responseObject));
 
-    //console.log(requestObject);
+    //         r.resolve(responseObject);
+    //     }else{
+    //         //Gets password and decrypts request
+    //         //console.log(rows);
+    //        var pass = rows[0].Password;
+            var unencrypted = utility.decrypt(requestObject.Parameters,CryptoJS.SHA256("none").toString());
+            //console.log(requestObject);
+            sqlInterface.updateDeviceIdentifier(requestObject, unencrypted)
+                .then(function () {
 
-    sqlInterface.updateDeviceIdentifier(requestObject, unencrypted)
-        .then(function () {
-            return sqlInterface.getSecurityQuestion(requestObject)
-        })
-        .then(function (response) {
-            //console.log(response);
-            r.resolve({
-                Code:3,
-                Data:response.Data,
-                Headers:{RequestKey:requestKey,RequestObject:requestObject},
-                Response:'success'
-            });
+                    console.log(JSON.stringify(requestObject));
 
-        })
-        .catch(function (response){
 
-            r.resolve({
-                Headers:{RequestKey:requestKey,RequestObject:requestObject},
-                Code: 2,
-                Data:{},
-                Response:'error',
-                Reason:response
-            });
+                    return sqlInterface.getSecurityQuestion(requestObject)
+                })
+                .then(function (response) {
+                    console.log(JSON.stringify(response));
+                    r.resolve({
+                        Code:3,
+                        Data:response.Data,
+                        Headers:{RequestKey:requestKey,RequestObject:requestObject},
+                        Response:'success'
+                    });
 
-        });
+                })
+                .catch(function (response){
+                    console.log(JSON.stringify(response));
+
+                    r.resolve({
+                        Headers:{RequestKey:requestKey,RequestObject:requestObject},
+                        Code: 2,
+                        Data:{},
+                        Response:'error',
+                        Reason:response
+                    });
+
+                });
+   //     }
+   // });
+    
     return r.promise;
 
 };

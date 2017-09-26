@@ -543,6 +543,22 @@ exports.addToActivityLog=function(requestObject)
     return r.promise;
 };
 //Gets user password for encrypting/decrypting
+exports.getFirstEncryption=function(requestObject)
+{
+    var r=Q.defer();
+    //console.log("USERNAME IS " + requestObject.UserID);
+    //console.log("ID IS " + requestObject.DeviceId);
+    connection.query(queries.securityQuestionEncryption(),[requestObject.UserID],function(error,rows,fields)
+    {
+        if(error) r.reject(error);
+        if(rows) r.resolve(rows);
+        r.reject({Response:'error',Reason:"No User match in DB"});
+    });
+    return r.promise;
+};
+
+
+//Gets user password for encrypting/decrypting to return security question
 exports.getEncryption=function(requestObject)
 {
     var r=Q.defer();

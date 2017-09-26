@@ -1,9 +1,0 @@
-{
-    "module":
-    {
-      "includeService":true,
-      "includeController":true,
-      "includeView":true,
-      "addTab":true
-    }
-}

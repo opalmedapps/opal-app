@@ -58,7 +58,7 @@
 
                             permissions.requestPermission(permissions[permission_type], function (status) {
                                 if (!status.hasPermission) {
-                                    console.log("called in request permission")
+
                                     errorCallback();
                                 }
                                 else deferred.resolve({Permission: permission_type, Success: true})

@@ -179,7 +179,7 @@ myApp.service('UserPreferences',[ 'UserAuthorizationInfo','$rootScope','tmhDynam
          *@description Setter method for patient language of preference
          **/
         setLanguage:function(lan){
-            console.log(lan);
+
             if(lan == 'EN')
             {
                 tmhDynamicLocale.set('en-ca');

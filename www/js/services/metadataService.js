@@ -9,7 +9,7 @@
  */
 
 /**
- *@ngdoc Service
+ *@ngdoc service
  *@name MUHCApp.service:MetaData
  *@description Service that handles the tab metadata. Right now it fetches the necessary data on first load
  *
@@ -82,7 +82,7 @@
             noMaterials = !EducationalMaterial.isThereEducationalMaterial();
             var materials = EducationalMaterial.getEducationalMaterial();
             //Setting the language for view
-            eduMaterials = EducationalMaterial.setLanguageEduationalMaterial(materials);
+            eduMaterials = EducationalMaterial.setLanguage(materials);
 
         }
 

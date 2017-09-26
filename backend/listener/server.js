@@ -87,11 +87,7 @@ function handleRequest(requestType, snapshot){
 
         //Log the error
         logger.error("Error processing request!", {
-            error: error,
-            deviceID:response.Headers.RequestObject.DeviceId,
-            userID:response.Headers.RequestObject.UserID,
-            request:response.Headers.RequestObject.Request,
-            requestKey: response.Headers.RequestKey
+            error: error
         });
     });
 }
@@ -186,13 +182,13 @@ function uploadToFirebase(response, key)
     var success = response.Response;
     var requestKey = headers.RequestKey;
     var encryptionKey = response.EncryptionKey;
-
-    //
+    var salt = response.Salt;
     delete response.EncryptionKey;
+    delete response.Salt;
+    
 
-    if(typeof encryptionKey!=='undefined' && encryptionKey!=='') response = utility.encryptObject(response, encryptionKey);
+    if(typeof encryptionKey!=='undefined' && encryptionKey!=='') response = utility.encrypt(response, encryptionKey, salt);
     response.Timestamp = admin.database.ServerValue.TIMESTAMP;
-
     var path = '';
     if (key === "requests") {
         var userId = headers.RequestObject.UserID;
@@ -231,5 +227,3 @@ function completeRequest(headers, success, key)
             logger.error('Error writing to firebase', {error:error});
         });
 }
-
-
