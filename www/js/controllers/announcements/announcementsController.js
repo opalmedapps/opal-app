@@ -8,6 +8,13 @@
  *                  file 'LICENSE.txt', which is part of this source code package.
  */
 
+/**
+ *  @ngdoc controller
+ *  @name MUHCApp.controllers: AnnouncementsController
+ *  @description
+ *
+ *  Manages the announcements list view. It simply guides the user to the correct individual announcement for a more detailed view of the announcement
+ */
 (function () {
     'use strict';
 
@@ -18,18 +25,33 @@
     AnnouncementsController.$inject = [
         'Announcements',
         'NavigatorParameters',
-        'Logger'
+        '$scope'
     ];
 
     /* @ngInject */
     function AnnouncementsController(
         Announcements,
         NavigatorParameters,
-        Logger
+        $scope
     ) {
         var vm = this;
-        vm.title = 'AnnouncementsController';
+
+        /**
+         * @ngdoc property
+         * @name noAnnouncements
+         * @propertyOf AnnouncementController
+         * @returns boolean
+         * @description used by the view to display no announcement message to user if no announcements exist
+         */
         vm.noAnnouncements = true;
+
+        /**
+         * @ngdoc property
+         * @name announcements
+         * @propertyOf AnnouncementController
+         * @returns array
+         * @description used by the view to display the list of existing announcements
+         */
         vm.announcements = [];
 
         vm.goToAnnouncement = goToAnnouncement;
@@ -41,19 +63,27 @@
 
         function activate() {
             var announcements = Announcements.getAnnouncements();
-            announcements = Announcements.setLanguageAnnouncements(announcements);
-            if (announcements.length>0) vm.noAnnouncements = false;
-            else{
+            announcements = Announcements.setLanguage(announcements);
+            if (announcements.length>0) {
+                vm.noAnnouncements = false;
                 announcements.sort(function(a, b) {
+
+                    // TODO: USE EXTERNAL HELPER WHEN CALLING SORT FUNCTION
+
                     return new Date(a.DateAdded) - new Date(b.DateAdded);
                 });
+                vm.announcements=announcements;
             }
-
-            vm.announcements=announcements;
-
-            Logger.sendLog('Announcement', 'all');
         }
 
+        /**
+         * @ngdoc method
+         * @name goToAnnouncement
+         * @methodOf MUHCApp.controllers.AnnouncementsController
+         * @param announcement Announcement Object
+         * @description
+         * Takes the user to the specified announcement to be viewed in more detail
+         */
         function goToAnnouncement(announcement) {
             if(announcement.ReadStatus === '0')
             {
@@ -61,10 +91,18 @@
                 Announcements.readAnnouncementBySerNum(announcement.AnnouncementSerNum);
             }
             NavigatorParameters.setParameters({Navigator:'generalNavigator', Post: announcement});
-            generalNavigator.pushPage('./views/general/announcements/individual-announcement.html');
+            $scope.generalNavigator.pushPage('./views/general/announcements/individual-announcement.html');
         }
 
-        // Determines whether or not to show the date header in the view. Announcements are grouped by day.
+        /**
+         * @ngdoc method
+         * @name openDonation
+         * @methodOf MUHCApp.controllers.AboutController
+         * @param index integer representing the index of the announcement in vm.announcements
+         * @return boolean
+         * @description
+         * Determines whether or not to show the date header in the view. Announcements are grouped by day.
+         */
         function showHeader(index) {
             if (index === 0) return true;
 
