@@ -256,10 +256,10 @@
             if(result)
             {
                 //if it is a future appointment...
-                if(date.getTime()> todaysTimeMilliseconds)
+                if(date_compare.getTime() > todaysTimeMilliseconds)
                 {
                     return '#cf5c4c';
-                } else if(date.getTime() === todaysTimeMilliseconds) {
+                } else if(date_compare.getTime() === todaysTimeMilliseconds) {
                     //it is an appointment today
                     return '#3399ff';
                 }else{

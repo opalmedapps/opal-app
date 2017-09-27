@@ -134,7 +134,7 @@ describe('CalendarController', function() {
         $timeout.flush();
         expect(controller.showColor(new Date('October 13, 2014 11:13:00'))).toBe('#5CE68A');
         expect(controller.showColor(new Date())).toBe('#3399ff');
-        expect(controller.showColor(new Date('October 13, 2018 11:13:00'))).toBe('#cf5c4c');
+        expect(controller.showColor(new Date('October 15, 2018 11:15:00'))).toBe('#cf5c4c');
         expect(controller.showColor(new Date('October 13, 2015 11:13:00'))).toBe('rgba(255,255,255,0.0)');
     })
 
