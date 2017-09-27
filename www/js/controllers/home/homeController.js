@@ -68,8 +68,10 @@
             });
 
             //This avoids constant repushing which causes bugs
-            homeNavigator.on('prepush',function(event){
-                if(event.navigator._isPushing) event.cancel();
+            homeNavigator.on('prepush', function(event) {
+                if (homeNavigator._doorLock.isLocked()) {
+                    event.cancel();
+                }
             });
 
             //release the watchers
