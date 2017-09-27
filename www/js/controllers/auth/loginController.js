@@ -10,12 +10,11 @@
         .module('MUHCApp')
         .controller('LoginController', LoginController);
 
-    LoginController.$inject = ['$scope','$timeout', '$rootScope', '$state',
-        'UserAuthorizationInfo', 'FirebaseService', '$filter','DeviceIdentifiers', 'UserPreferences', 'Patient',
-        'NewsBanner', 'UUID', 'Constants', 'EncryptionService', 'CleanUp'];
+    LoginController.$inject = ['$scope','$timeout', '$state', 'UserAuthorizationInfo', '$filter','DeviceIdentifiers',
+        'UserPreferences', 'Patient', 'NewsBanner', 'UUID', 'Constants', 'EncryptionService', 'CleanUp'];
 
     /* @ngInject */
-    function LoginController($scope, $timeout, $rootScope, $state, UserAuthorizationInfo, FirebaseService,
+    function LoginController($scope, $timeout, $state, UserAuthorizationInfo,
                              $filter,DeviceIdentifiers, UserPreferences, Patient, NewsBanner, UUID, Constants, EncryptionService, CleanUp) {
 
         var vm = this;
@@ -104,19 +103,17 @@
 
         //Handles authentication and next steps
         function authHandler(firebaseUser) {
-
             CleanUp.clear();
 
-            firebaseUser.getIdToken(true).then(function(sessionToken){
-
+            firebaseUser.getToken(true).then(function(sessionToken){
                 //Save the current session token to the users "logged in users" node. This is used to make sure that the user is only logged in for one session at a time.
-                var Ref= firebase.database().ref(FirebaseService.getFirebaseUrl());
-                var refCurrentUser = Ref.child(FirebaseService.getFirebaseChild('logged_in_users') + firebaseUser.uid);
-
-                refCurrentUser.set({ 'Token' : sessionToken });
-
-                // Evoke an observer function in mainController
-                $rootScope.$emit("MonitorLoggedInUsers", firebaseUser.uid);
+                // var Ref= firebase.database().ref(FirebaseService.getFirebaseUrl());
+                // var refCurrentUser = Ref.child(FirebaseService.getFirebaseChild('logged_in_users') + firebaseUser.uid);
+                //
+                // refCurrentUser.set({ 'Token' : sessionToken });
+                //
+                // // Evoke an observer function in mainController
+                // $rootScope.$emit("MonitorLoggedInUsers", firebaseUser.uid);
 
                 UserAuthorizationInfo.setUserAuthData(firebaseUser.uid, EncryptionService.hash(vm.password), undefined, sessionToken, vm.email);
 
@@ -132,12 +129,18 @@
 
                 // If user sets not trusted remove the localstorage
                 if (!vm.trusted) {
+
+                    console.log('not trusted');
+
                     localStorage.removeItem("deviceID");
                     localStorage.removeItem(UserAuthorizationInfo.getUsername()+"/securityAns");
                 }
 
-                var deviceID;
-                if (deviceID = localStorage.getItem("deviceID")){
+                var deviceID = localStorage.getItem("deviceID");
+
+                console.log("deviceID: " + deviceID);
+
+                if (deviceID){
 
                     var ans = EncryptionService.decryptDataWithKey(localStorage.getItem(UserAuthorizationInfo.getUsername()+"/securityAns"), UserAuthorizationInfo.getPassword());
                     EncryptionService.setSecurityAns(ans);
