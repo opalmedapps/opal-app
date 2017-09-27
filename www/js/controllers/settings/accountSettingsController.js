@@ -57,8 +57,10 @@
 
             });
 
-            settingsNavigator.on('prepush',function(event){
-                if(event.navigator._isPushing) event.cancel();       
+            settingsNavigator.on('prepush', function(event) {
+                if (settingsNavigator._doorLock.isLocked()) {
+                    event.cancel();
+                }
             });
 
             //On destroy, dettach listener
