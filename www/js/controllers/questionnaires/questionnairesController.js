@@ -17,7 +17,6 @@ myApp.controller('QuestionsController', ['Questionnaire','$scope', '$sce', funct
 	};
 
 	ons.createPopover('./views/personal/questionnaires/popover.html').then(function(popover){
-		console.log(popover);
 		$scope.popover = popover;
 		
 	});
