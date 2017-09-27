@@ -123,7 +123,7 @@
              * @ngdoc property
              * @name loading
              * @propertyOf CalendarController
-             * @returns string or int
+             * @returns boolean
              * @description used by the controller show loading view
              */
             vm.loading = true;
