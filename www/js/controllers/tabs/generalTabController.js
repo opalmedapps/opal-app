@@ -45,8 +45,10 @@
                 setBadges();
             });
 
-            generalNavigator.on('prepush',function(event){
-                if(event.navigator._isPushing) event.cancel();
+            generalNavigator.on('prepush', function(event) {
+                if (generalNavigator._doorLock.isLocked()) {
+                    event.cancel();
+                }
             });
 
             //Destroying personal navigator events
