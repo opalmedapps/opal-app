@@ -15,10 +15,10 @@
         .module('MUHCApp')
         .controller('ForgotPasswordController', ForgotPasswordController);
 
-    ForgotPasswordController.$inject = ['$scope','$timeout','$firebaseAuth'];
+    ForgotPasswordController.$inject = ['$timeout','$firebaseAuth'];
 
     /* @ngInject */
-    function ForgotPasswordController($scope,$timeout, $firebaseAuth) {
+    function ForgotPasswordController($timeout, $firebaseAuth) {
         var vm = this;
         vm.email = "";
         vm.alert = {};
