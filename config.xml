@@ -17,7 +17,6 @@
     <allow-intent href="mailto:*" />
     <allow-intent href="geo:*" />
     <allow-intent href="opal:" />
-    <!--<preference name="phonegap-version" value="cli-6.3.1" />-->
     <preference name="SplashScreenDelay" value="5000" />
     <preference name="DisallowOverscroll" value="true" />
     <preference name="FadeSplashScreen" value="true" />
@@ -102,6 +101,4 @@
         <variable name="ANDROID_HOST" value=" " />
         <variable name="ANDROID_PATHPREFIX" value="/" />
     </plugin>
-    <!--<plugin name="org.pbernasconi.progressindicator" spec="^1.1.0" />-->
-    <!--<plugin name="cordova.custom.plugins.exitapp" spec="^1.0.0" />-->
 </widget>

@@ -102,7 +102,7 @@
         vm.showColor = showColor;
         vm.getStyle=getStyle;
         vm.showHeaderEnd = showHeaderEnd;
-        vm.showChoosenDateHeader=showChosenDateHeader;
+        vm.showChosenDateHeader=showChosenDateHeader;
         vm.goToAppointment=goToAppointment;
         vm.goToCalendarOptions = goToCalendarOptions;
         vm.onDateChange = onDateChange;
@@ -282,13 +282,15 @@
          * Obtains color for a given appointment to be displayed in the appointment list
          */
         function getStyle(index){
+            // should never happen technically... but just in case
+            if(index > vm.appointments.length) return '#5CE68A';
             var appointment_date = vm.appointments[index].ScheduledStartTime;
 
             //assume it is a past appointment?
-            if(!appointment_date  || !today) return  '#5CE68A';
+            if(!appointment_date  || !today) return '#5CE68A';
 
             //it is an appointment today
-            if(today.getDate()===appointment_date .getDate()&&today.getMonth()===appointment_date .getMonth()&&today.getFullYear()===appointment_date .getFullYear()){
+            if(today.getDate() === appointment_date.getDate() && today.getMonth() === appointment_date.getMonth() && today.getFullYear() === appointment_date.getFullYear()){
                 return '#3399ff';
             }else if(appointment_date >today){
                 //it is a future appointment

@@ -180,6 +180,7 @@
                         });
 
                 } else {
+
                     //if using a web browers (via demo or testing)
                     if (!Constants.app) UUID.setUUID(UUID.generate());
 
