@@ -61,12 +61,18 @@ describe('CalendarController', function() {
                 Appointments = {
                     getUserAppointments: function(){
                         return MockData.test_appointments;
+                    },
+                    readAppointmentBySerNum: function(stuff){
+                        return true;
                     }
                 };
             } else {
                 Appointments = {
                     getUserAppointments: function(){
                         return MockData.test_appointments_varied_date;
+                    },
+                    readAppointmentBySerNum: function(stuff){
+                        return true;
                     }
                 };
             }
@@ -80,7 +86,7 @@ describe('CalendarController', function() {
 
 
         // Spies
-        spyOn( UserPreferences, 'getLanguage' ).and.callFake( function() {
+        spyOn( UserPreferences, 'getLanguage').and.callFake( function() {
             return 'EN';
         } );
 
@@ -97,7 +103,6 @@ describe('CalendarController', function() {
 
     describe('sanity test', function() {
         it('activates calendar and list properly', function() {
-            var spy = spyOn($location, 'hash');
             expect(controller.loading).toBeTruthy();
             $timeout.flush();
             expect(controller.appointments).toBe(MockData.test_appointments);
@@ -113,7 +118,6 @@ describe('CalendarController', function() {
         });
 
         it('activates calendar and list properly (no appointments', function() {
-            var spy = spyOn($location, 'hash');
             expect(controller.loading).toBeTruthy();
             $timeout.flush();
             expect(controller.appointments).toEqual([]);
@@ -130,12 +134,47 @@ describe('CalendarController', function() {
         });
     });
 
-    it('should return proper colors based on date', function(){
+    it('should return proper calendar colors based on date', function(){
         $timeout.flush();
         expect(controller.showColor(new Date('October 13, 2014 11:13:00'))).toBe('#5CE68A');
         expect(controller.showColor(new Date())).toBe('#3399ff');
         expect(controller.showColor(new Date('October 15, 2018 11:15:00'))).toBe('#cf5c4c');
         expect(controller.showColor(new Date('October 13, 2015 11:13:00'))).toBe('rgba(255,255,255,0.0)');
-    })
+    });
+
+    it('should return proper colors based on list item ', function(){
+        $timeout.flush();
+
+        expect(controller.getStyle(0)).toBe('#5CE68A');
+        expect(controller.getStyle(1)).toBe('#3399ff');
+        expect(controller.getStyle(2)).toBe('#cf5c4c');
+    });
+
+    //TODO: WRITE TEST FOR SHOWING HEADERS... HARD TO TEST SINCE IT RELIES ON THE INTERACTION WITH THE CALENDAR.
+
+    it('should go to appointment', function(){
+        var spy = spyOn(Appointments, 'readAppointmentBySerNum');
+        var spy2 = spyOn($window.navigator, 'pushPage');
+        $timeout.flush();
+
+        controller.goToAppointment(controller.appointments[0]);
+        expect(spy).toHaveBeenCalledTimes(0);
+        expect(NavigatorParameters.setParameters).toHaveBeenCalled();
+        expect(spy2).toHaveBeenCalled();
+
+        controller.goToAppointment(controller.appointments[1]);
+        expect(spy).toHaveBeenCalled();
+        expect(NavigatorParameters.setParameters).toHaveBeenCalled();
+        expect(spy2).toHaveBeenCalled();
+    });
+
+    it('should go to calendar options', function(){
+        var spy = spyOn($window.navigator, 'pushPage');
+        $timeout.flush();
+
+        controller.goToCalendarOptions();
+        expect(spy).toHaveBeenCalled();
+        expect(spy).toHaveBeenCalledWith('./views/personal/appointments/calendar-options.html')
+    });
 
 });
