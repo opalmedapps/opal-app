@@ -26,6 +26,8 @@
 
             refCurrentUser.remove();
 
+            window.sessionStorage.removeItem('UserAuthorizationInfo');
+
             RequestToServer.sendRequest('Logout');
 
             CleanUp.clear();
