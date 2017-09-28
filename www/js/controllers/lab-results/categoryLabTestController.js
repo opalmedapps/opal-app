@@ -15,7 +15,7 @@
     CategoryLabTestController.$inject = ['LabResults', 'Logger'];
 
     /* @ngInject */
-    function CategoryLabTestController(LabResults, Logger) {
+    function CategoryLabTestController(LabResults) {
         var vm = this;
         vm.title = 'CategoryLabTestController';
         vm.testResultsByCategory = null;
@@ -27,7 +27,6 @@
         function activate() {
             vm.testResultsByCategory = LabResults.getTestResultsByCategory();
             vm.testResultsByType = LabResults.getTestResultsArrayByType();
-            Logger.sendLog('Lab Results', 'all - Type')
         }
     }
 })();

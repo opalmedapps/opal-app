@@ -72,6 +72,11 @@ myApp.factory("FirebaseService", ['$firebaseAuth','$firebaseObject','UserAuthori
               default:
                   return '';
           }
-      }
+      },
+
+        signIn: function(email, password) {
+          return $firebaseAuth.signInWithEmailAndPassword(email, password);
+
+        }
     };
 }]);
