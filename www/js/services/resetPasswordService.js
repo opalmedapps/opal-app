@@ -49,7 +49,7 @@ myApp.service('ResetPassword',function(){
          *@returns {Promise} Returns promise containing void.
          **/
         completePasswordChange : function (oobCode, newPassword) {
-            console.log(oobCode);
+
 
             return auth.confirmPasswordReset(oobCode[1], newPassword)
         },

@@ -12,7 +12,10 @@
     angular
     .module('MUHCApp')
     .service('Pfp', PatientForPatientService);
-    function PatientForPatientService() {
+
+    PatientForPatientService.$inject = ['RequestToServer', 'NativeNotification', '$q'];
+
+    function PatientForPatientService(RequestToServer, NativeNotification, $q) {
         
         //Holds contacts
         this.contacts = [];
@@ -31,12 +34,36 @@
                 this.contacts = contacts;
                 _emptyContacts = false;
             }
-            
         };
+
         //Getter for the contacts array
         this.getContacts = function()
         {
-            return this.contacts;
+            var q = $q.defer();
+            if(this.areContactsEmpty()){
+                RequestToServer.sendRequestWithResponse('PatientCommitteMembers')
+                    .then(function (response) {
+                        this.contacts = response.Data;
+                        _emptyContacts = false;
+                        clearTimeout(timeout);
+                        q.resolve(this.contacts);
+                    }.bind(this))
+                    .catch(function (error)
+                    {
+                        if(error.Code==='2')
+                        {
+                            NativeNotification.showNotificationAlert($filter('translate')("ERRORCONTACTINGHOSPITAL"));
+                            clearTimeout(timeout);
+                            q.resolve([]);
+                        }
+                    });
+
+                var timeout = setTimeout(function(){ q.resolve([])}, 5000);
+            } else {
+                q.resolve(this.contacts);
+            }
+
+            return q.promise
         };
     }
 })();

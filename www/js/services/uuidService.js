@@ -90,7 +90,11 @@
          * @description Gets the previously generated UUID.
          **/
         function getUUID(){
-            return uuid;
+            if (Constants.app){
+                return device.uuid
+            } else {
+                return this.uuid
+            }
         }
 
     }
