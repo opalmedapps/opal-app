@@ -132,3 +132,12 @@ exports.logActivity = function (requestObject) {
 exports.getQuestionnaires = function (requestObject) {
     return sqlInterface.getQuestionnaires(requestObject);
 };
+
+exports.getPatientsForPatientsMembers = function ()
+{
+  return new Promise((resolve, reject)=>{
+      sqlInterface.runSqlQuery(queries.getPatientForPatientMembers(),[]).then((rows)=>{
+         resolve({Response:rows});
+      }).catch((err) => reject({Response:error, Reason:err}));
+  });
+};
