@@ -104,12 +104,6 @@ app1.controller('QuestionnaireMainController', function ($scope, $location, $anc
       $rootScope.reachEnd = true;
     }
 
-    // if($scope.index >= $scope.questions.length+1 || $scope.subData) {
-    //   $scope.carousel.setSwipeable(false);
-    // } else {
-    //   $scope.carousel.setSwipeable(true);
-    // }
-
 
     for ($i = 1; $i <= $scope.shown.length; $i++) {
       if ($i == $scope.index) {

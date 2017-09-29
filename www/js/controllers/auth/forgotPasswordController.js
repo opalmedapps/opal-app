@@ -8,6 +8,14 @@
  *                  file 'LICENSE.txt', which is part of this source code package.
  */
 
+/**
+ *  @ngdoc controller
+ *  @name MUHCApp.controllers: ForgotPasswordController
+ *  @description
+ *
+ * Takes user inputted email and uses FireBases's API to send password reset email
+ */
+
 (function () {
     'use strict';
 
@@ -15,59 +23,82 @@
         .module('MUHCApp')
         .controller('ForgotPasswordController', ForgotPasswordController);
 
-    ForgotPasswordController.$inject = ['$scope','$timeout','$firebaseAuth'];
+    ForgotPasswordController.$inject = ['$timeout','$firebaseAuth'];
 
     /* @ngInject */
-    function ForgotPasswordController($scope,$timeout, $firebaseAuth) {
+    function ForgotPasswordController($timeout, $firebaseAuth) {
         var vm = this;
+
+        /**
+         * @ngdoc property
+         * @name email
+         * @propertyOf ForgotPasswordController
+         * @returns string
+         * @description user-inputted email value
+         */
         vm.email = "";
-        vm.alert = {};
+
+        /**
+         * @ngdoc property
+         * @name alert
+         * @propertyOf ForgotPasswordController
+         * @returns object
+         * @description displays alert to user if an error occurs
+         */
+        vm.alert = {
+            type: null,
+            message: null
+        };
 
         vm.submitPasswordReset = submitPasswordReset;
         vm.clearErrors = clearErrors;
 
         ////////////////
 
+        /**
+         * @ngdoc method
+         * @name clearErrors
+         * @methodOf MUHCApp.controllers.ForgotPasswordController
+         * @description
+         * Clears errors
+         */
         function clearErrors(){
-            if(vm.alert.hasOwnProperty('type'))
-            {
-                delete vm.alert.type;
-                delete vm.alert.content;
-            }
+            vm.alert.type = null;
+            vm.alert.message = null;
         }
 
+        /**
+         * @ngdoc method
+         * @name submitPasswordReset
+         * @methodOf MUHCApp.controllers.ForgotPasswordController
+         * @description
+         * Submits the user-inputted email address to FireBase API. Either displays success or error message based on FireBase response.
+         */
         function submitPasswordReset() {
             var userAuth = $firebaseAuth();
-
             userAuth.$sendPasswordResetEmail(vm.email).then(function(){
-
                 $timeout(function(){
                     vm.alert.type="success";
-                    vm.alert.content="EMAILPASSWORDSENT";
+                    vm.alert.message="EMAILPASSWORDSENT";
                 });
             }).catch(function(error){
                 switch (error.code) {
                     case "auth/user-not-found":
-
                         $timeout(function(){
                             vm.alert.type="danger";
-                            vm.alert.content="INVALID_USER";
+                            vm.alert.message="INVALID_USER";
                         });
-
                         break;
                     case "auth/invalid-email":
-
                         $timeout(function(){
                             vm.alert.type="danger";
-                            vm.alert.content="INVALID_EMAIL";
+                            vm.alert.message="INVALID_EMAIL";
                         });
-
                         break;
                     default:
-
                         $timeout(function(){
                             vm.alert.type="danger";
-                            vm.alert.content="INVALID_EMAIL";
+                            vm.alert.message="INVALID_EMAIL";
                         });
                 }
             });
