@@ -36,7 +36,7 @@ myApp.service('NewsBanner',['$cordovaNetwork','$filter','$translatePartialLoader
         }
       },
       callback,
-      function(error){console.log(error);});
+      function(error){});
     }
   }
 
@@ -71,7 +71,7 @@ myApp.service('NewsBanner',['$cordovaNetwork','$filter','$translatePartialLoader
         }
       },
       callback,
-      function(error){console.log(error);});
+      function(error){});
     }else{
        window.plugins.toast.showWithOptions(
       {
@@ -85,8 +85,8 @@ myApp.service('NewsBanner',['$cordovaNetwork','$filter','$translatePartialLoader
           textColor: '#F0F3F4', // Ditto. Default #FFFFFF
         }
       },
-      function(result){console.log(result);},
-      function(error){console.log(error);});
+      function(result){},
+      function(error){});
       
     }
   

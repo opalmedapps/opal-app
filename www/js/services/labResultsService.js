@@ -56,7 +56,7 @@ myApp.service('LabResults',['$filter','LocalStorage','RequestToServer','$q',
                 var testResult = tests[key];
                 testResult.TestDateFormat = $filter('formatDate')(testResult.TestDate);
                 testResult.AbnormalFlag = testResult.AbnormalFlag.trim();
-                //console.log(key, testResult.TestDate);
+                //
                 var testResultDate = testResult.TestDate.replace(/ /g, '');
                 var testResultType = testResult.FacComponentName;
                 var testCategory = undefined;
@@ -111,13 +111,13 @@ myApp.service('LabResults',['$filter','LocalStorage','RequestToServer','$q',
             for (var keyType in testResultsByType) {
                 testResultsByTypeArray.push(testResultsByType[keyType]);
             }
-            //console.log(testResultsByTypeArray);
+            //
             for (var key1 in testResultsByDate) {
                 testResultsByDateArray.push(testResultsByDate[key1]);
             }
             testResultsByDateArray = $filter('orderBy')(testResultsByDateArray, 'testDateFormat', true);
-            //console.log(testResultsByDateArray);
-            //console.log(testResultsToLocalStorage);
+            //
+            //
             //LocalStorage.WriteToLocalStorage('LabResults', testResultsToLocalStorage);
         }
 
@@ -143,7 +143,6 @@ myApp.service('LabResults',['$filter','LocalStorage','RequestToServer','$q',
              *@returns {Promise} Returns a promise containing status
              **/
             setTestResults:function(){
-
                 var deferred = $q.defer();
                 this.destroy();
                 lastUpdated = Date.now();
@@ -155,7 +154,6 @@ myApp.service('LabResults',['$filter','LocalStorage','RequestToServer','$q',
                         }
                     })
                     .catch(function (error) {
-                        console.log('There was an error contacting hospital ' + error);
                         deferred.reject({Success: false, Location: '', Error: error})
                     });
                 return deferred.promise;
@@ -181,7 +179,7 @@ myApp.service('LabResults',['$filter','LocalStorage','RequestToServer','$q',
              **/
             getTestResultsArrayByType:function()
             {
-                console.log(testResultsByTypeArray);
+
                 return testResultsByTypeArray;
             },
 
@@ -194,7 +192,7 @@ myApp.service('LabResults',['$filter','LocalStorage','RequestToServer','$q',
              **/
             getTestResultsArrayByDate:function()
             {
-                // console.log(testResultsByDateArray);
+                //
                 return testResultsByDateArray;
             },
 
@@ -206,7 +204,7 @@ myApp.service('LabResults',['$filter','LocalStorage','RequestToServer','$q',
              *@returns {Object} Returns object containing lab results by date
              **/
             getTestResultsByDate:function(){
-                console.log(testResultsByDate);
+
                 return testResultsByDate;
             },
 

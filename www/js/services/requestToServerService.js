@@ -25,13 +25,7 @@ myApp.service('RequestToServer',['$filter','$state','NewsBanner','UserAuthorizat
          *@description Firebase reference
          **/
         var Ref= firebase.database().ref(FirebaseService.getFirebaseUrl(null));
-        /**
-         *@ngdoc property
-         *@name  MUHCApp.service.#refRequests
-         *@propertyOf MUHCApp.service:RequestToServer
-         *@description Firebase reference requests
-         **/
-        var refRequests = Ref.child(FirebaseService.getFirebaseChild('requests'));
+
         /**
          *@ngdoc property
          *@name  MUHCApp.service.#refUsers
@@ -46,7 +40,7 @@ myApp.service('RequestToServer',['$filter','$state','NewsBanner','UserAuthorizat
             var requestType = '';
             var requestParameters;
             if (typeof encryptionKey !== 'undefined' && encryptionKey) {
-                console.log(encryptionKey);
+
                 requestType = typeOfRequest;
                 requestParameters = EncryptionService.encryptWithKey(parameters, encryptionKey);
             }
@@ -68,11 +62,8 @@ myApp.service('RequestToServer',['$filter','$state','NewsBanner','UserAuthorizat
 
             var reference = referenceField || 'requests';
 
-
-
             var pushID =  Ref.child(reference).push(toSend);
             return pushID.key;
-
         }
 
         return{
@@ -105,11 +96,13 @@ myApp.service('RequestToServer',['$filter','$state','NewsBanner','UserAuthorizat
                 }
 
                 //Waits to obtain the request data.
-                //console.log('users/'+UserAuthorizationInfo.getUsername()+'/'+key);
+                //
                 refRequestResponse.on('value',function(snapshot){
+
                     if(snapshot.exists())
                     {
                         var data = snapshot.val();
+
                         var timestamp = data.Timestamp;
                         if(data.Code =='1')
                         {
@@ -132,17 +125,17 @@ myApp.service('RequestToServer',['$filter','$state','NewsBanner','UserAuthorizat
                     }
                 },function(error)
                 {
-                    console.log('Firebase reading error', error);
+
                     r.reject(error);
                 });
                 //If request takes longer than 30000 to come back with timedout request, delete reference
                 var timeOut = setTimeout(function()
                 {
-                    console.log('Inside timeout function');
+
                     refRequestResponse.set(null);
                     refRequestResponse.off();
                     r.reject({Response:'timeout'});
-                },30000);
+                },15000);
                 return r.promise;
             },
             /**
