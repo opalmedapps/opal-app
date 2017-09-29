@@ -61,7 +61,7 @@ myApp.service('EducationalMaterial',['$filter','LocalStorage','FileManagerServic
     function setLanguageEduMaterial(array)
     {
         var language = UserPreferences.getLanguage();
-
+        console.log(array);
 
         //Check if array
         if (Object.prototype.toString.call( array ) === '[object Array]') {
