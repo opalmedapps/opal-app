@@ -50,6 +50,15 @@
          */
         vm.app = null;
 
+        /**
+         * @ngdoc property
+         * @name app
+         * @propertyOf AppointmentController
+         * @returns boolean
+         * @description represents the case where the appointment passed to this controller is undefined. This should rarely be the case and should be logged immediately if this ever becomes true.
+         */
+        vm.corrupted_appointment = false;
+
         vm.goToMap = goToMap;
         vm.aboutAppointment = aboutAppointment;
 
@@ -64,6 +73,11 @@
             $timeout(function(){
                 vm.language = UserPreferences.getLanguage().toUpperCase();
                 vm.app = parameters.Post;
+
+                //if appointment is undefined/null/empty object
+                if(!vm.app || Object.keys(vm.app).length === 0) {
+                    vm.corrupted_appointment = true;
+                }
             });
         }
 

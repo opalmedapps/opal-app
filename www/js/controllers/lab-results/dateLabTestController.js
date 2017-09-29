@@ -14,7 +14,7 @@
     DateLabTestController.$inject = ['LabResults', 'Logger'];
 
     /* @ngInject */
-    function DateLabTestController(LabResults, Logger) {
+    function DateLabTestController(LabResults) {
         var vm = this;
 
         activate();
@@ -25,7 +25,6 @@
             vm.radioModel='All';
             vm.selectedTests=LabResults.getTestResultsArrayByDate();
             vm.testsReceived = 'Lab results';
-            Logger.sendLog('Lab Results', 'all - Date');
         }
     }
 })();

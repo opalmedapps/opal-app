@@ -36,8 +36,6 @@
 
         function activate(){
 
-            console.log('activated');
-
             if(!Questionnaires.isEmpty()){
                 vm.questionnaires = Questionnaires.getPatientQuestionnaires().Questionnaires;
                 vm.patientQuestionnaires = Questionnaires.getPatientQuestionnaires().PatientQuestionnaires;
@@ -149,7 +147,6 @@
         }
 
         function goToQuestionnaire(patientQuestionnaire, questionnaireDBSerNum, questionnaireSerNum) {
-            console.log('triggered');
 
             if(!(isQuestionnaireComplete(patientQuestionnaire))) {
 
