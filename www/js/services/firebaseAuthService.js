@@ -74,9 +74,23 @@ myApp.factory("FirebaseService", ['$firebaseAuth','$firebaseObject','UserAuthori
           }
       },
 
-        signIn: function(email, password) {
-          return $firebaseAuth.signInWithEmailAndPassword(email, password);
+        getDBRef: function(ref){
+            var global = firebase.database().ref(firebaseUrl);
 
+            if(ref){
+                return global.child(ref);
+            } else {
+                return global
+            }
+        },
+
+        signIn: function(email, password) {
+          return firebase.signInWithEmailAndPassword(email, password);
+
+        },
+
+        signOut: function() {
+            this.getAuthentication().$signOut();
         }
     };
 }]);
