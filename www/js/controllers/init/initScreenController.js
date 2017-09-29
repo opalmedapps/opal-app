@@ -86,7 +86,6 @@
                 NavigatorParameters.setNavigator(initNavigator);
                 initNavigator.on('prepush', function(event) {
                     if (initNavigator._doorLock.isLocked()) {
-                        console.log("initScreenController door locked");
                         event.cancel();
                     }
                 });
