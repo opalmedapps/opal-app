@@ -52,7 +52,7 @@ myApp.service('RequestToServer',['$filter','$state','NewsBanner','UserAuthorizat
 
             var toSend = {
                 'Request' : requestType,
-                'DeviceId':(app)?device.uuid:UUID.getUUID(),
+                'DeviceId': UUID.getUUID(),
                 'Token':UserAuthorizationInfo.getToken(),
                 'UserID': UserAuthorizationInfo.getUsername(),
                 'Parameters':requestParameters,
