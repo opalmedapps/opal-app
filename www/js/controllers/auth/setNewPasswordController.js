@@ -68,7 +68,6 @@
                         );
                     })
                     .then(function() {
-
                         UserAuthorizationInfo.clearUserAuthorizationInfo();
                         vm.alert.type='success';
                         vm.alert.content="PASSWORDUPDATED";

@@ -19,7 +19,7 @@
  */
 @font-face {
     font-family: font;
-    src: url("../fonts/SanFranciscoFont-master/SanFranciscoText-Regular.otf");
+    src: url("../fonts/SanFranciscoFont-master/SanFranciscoDisplay-Regular.otf");
 
 }
 
@@ -2476,7 +2476,6 @@ width: 30px;
     background: rgba(0,0,0,0.8);
     padding: 20px;
     width: 90%;
-    /*height: 60%;*/
     margin: auto;
     position: relative;
 }

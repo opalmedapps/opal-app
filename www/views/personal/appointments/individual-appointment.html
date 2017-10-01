@@ -4,7 +4,7 @@
         <div class="center">{{"APPOINTMENT"|translate}}</div>
     </ons-toolbar>
     <div style="border-top: 1px solid lightsteelblue">
-        <ons-list >
+        <ons-list ng-hide="vm.corrupted_appointment">
             <ons-list-item class="item" >
                 <div style="line-height:1" align="left">
                     <header>
@@ -23,5 +23,6 @@
                 <strong class="item-desc">{{"APPOINTMENT_ABOUT" | translate}} {{vm.title}} </strong> <ons-icon style="margin-top: 3%" class="pull-right" icon="ion-ios-arrow-forward"></ons-icon>
             </ons-list-item>
         </ons-list>
+        <div style="color:grey;margin-top:10vh" ng-show="vm.corrupted_appointment" align="center" ng-class="fontSizeTitle">{{"NOAPPOINTMENTINFO"|translate}}</div>
     </div>
 </ons-page>

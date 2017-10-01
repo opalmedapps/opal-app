@@ -2,97 +2,111 @@
 //  Created by David Herrera on 2016-06-15.
 //  Modified Lee Dennis Summer 2016
 //
-var app1 = angular.module('MUHCApp');
-app1.controller('answeredQuestionnaireController', function($scope, Questionnaires, NavigatorParameters, Questionnaires, $filter) {
-  var params = NavigatorParameters.getParameters();
-  $scope.questionnaireSerNum = params.SerNum;
-  $scope.questionnaireDBSerNum = params.DBSerNum;
-  console.log($scope.questionnaireSerNum);
-  console.log($scope.questionnaireDBSerNum);
-  $scope.answers = [];
-  var answersObject;
-  $scope.questionnaire = Questionnaires.getPatientQuestionnaires().Questionnaires[$scope.questionnaireDBSerNum];
-  $scope.patientQuestionnaire = Questionnaires.getPatientQuestionnaires().PatientQuestionnaires[$scope.questionnaireSerNum];
-  $scope.questionsObject = $scope.questionnaire.Questions;
-  console.log($scope.patientQuestionnaire);
-  console.log($scope.questionsObject);
-  //$scope.questionsObject = $filter('orderBy')($scope.questionsObject, 'OrderNum', false);
-  $scope.questions = [];
 
-  for (key in $scope.questionsObject) {
-    $scope.questions.push($scope.questionsObject[key]);
-  }
+(function () {
+    'use strict';
 
-  if(typeof($scope.patientQuestionnaire.Answers) == 'undefined') {
-    answersObject = Questionnaires.getQuestionnaireAnswers($scope.questionnaireSerNum).Answers;
-    console.log(answersObject);
-  } else {
-    answersObject = $scope.patientQuestionnaire.Answers;
-  }
+    angular
+        .module('MUHCApp')
+        .controller('AnsweredQuestionnaireController', AnsweredQuestionnaireController);
 
-  for (key in answersObject) {
-    $scope.answers.push(answersObject[key].Answer);
-  }
+    AnsweredQuestionnaireController.$inject = [
+        'Questionnaires', 'NavigatorParameters'
+    ];
 
-  console.log($scope.answers);
+    /* @ngInject */
+    function AnsweredQuestionnaireController(Questionnaires, NavigatorParameters) {
+        var vm = this;
 
-  if($scope.hasOwnProperty('questions')) $scope.answerToShow = new Array($scope.questions.length);
-  $scope.answerShown = [];
-  for ($i = 0; $i < $scope.questions.length; $i++) {
-    $scope.answerShown[$i] = false;
-  }
+        vm.chooseAction = chooseAction;
+        vm.showAnswer = showAnswer;
+        vm.showAnswerReview = showAnswerReview;
 
-  $scope.chooseAction = function(index, oneQuestion) {
-    if ($scope.answers[index] != undefined) {
-      if ((oneQuestion.QuestionType == 'SA') || (oneQuestion.QuestionType == 'Checkbox') || (oneQuestion.QuestionType == 'image')) {
-        $scope.showAnswer(index);
-      } else {
-        return;
-      }
-    } else {
-      return;
-    }
-  };
+        activate();
+        ///////////////////
 
-  // Decides what answer to show. This is purely only for the 'eye' icon where the answer can be previewed.
-  $scope.showAnswer = function (index) {
-    $scope.answerShown[index] = !$scope.answerShown[index];
-    $scope.animateShowAnswer = ($scope.answerShown[index])?'animated fadeInDown':'animated fadeOutUp';
-    if($scope.questions[index].QuestionType == 'Checkbox') {
-      if (typeof($scope.patientQuestionnaire.Answers) == 'undefined') {
-        console.log($scope.answers[index]);
-        console.log(Object.keys($scope.answers[index]).length);
-        $scope.checkboxString = '';
-        for (val in $scope.answers[index]) {
-          if ($scope.answers[index][val] != undefined) {
-            if ($scope.checkboxString == '') {
-              $scope.checkboxString = $scope.checkboxString + $scope.answers[index][val];
-            } else {
-              $scope.checkboxString = $scope.checkboxString + ', ' + $scope.answers[index][val];
+        function activate(){
+
+            var params = NavigatorParameters.getParameters();
+            vm.questionnaireSerNum = params.SerNum;
+            vm.questionnaireDBSerNum = params.DBSerNum;
+            vm.answers = [];
+
+            var answersObject;
+            vm.questionnaire = Questionnaires.getPatientQuestionnaires().Questionnaires[vm.questionnaireDBSerNum];
+            vm.patientQuestionnaire = Questionnaires.getPatientQuestionnaires().PatientQuestionnaires[vm.questionnaireSerNum];
+            vm.questionsObject = vm.questionnaire.Questions;
+            vm.questions = [];
+
+            for (var key in vm.questionsObject) {
+                vm.questions.push(vm.questionsObject[key]);
             }
-          }
-        }
-        $scope.answerToShow[index] = $scope.checkboxString;
-      } else {
-        $scope.answerToShow[index] = $scope.answers[index];
-      }
-    } else if (($scope.questions[index].QuestionType == 'image') && ($scope.answers[index] != undefined)) {
-      $scope.checkboxString = '';
-      for (x in $scope.answers[index]) {
-        if ( $scope.checkboxString == '') {
-          $scope.checkboxString = $scope.checkboxString + x + ': ' + $scope.answers[index][x] + '/10';
-        } else {
-          $scope.checkboxString = $scope.checkboxString + ', ' + x + ': ' + $scope.answers[index][x] + '/10';
-        }
-      }
-      $scope.answerToShow[index] = $scope.checkboxString;
-    } else {
-      $scope.answerToShow[index] = $scope.answers[index];
-    }
-  }
 
-  $scope.showAnswerReview = function(index) {
-    $scope.showAnswer(index);
-    return $scope.answerToShow[index];
-  }
-});
+
+            if(!vm.patientQuestionnaire.Answers) {
+                answersObject = Questionnaires.getQuestionnaireAnswers(vm.questionnaireSerNum).Answers;
+            } else {
+                answersObject = vm.patientQuestionnaire.Answers;
+            }
+
+            for (key in answersObject) {
+                vm.answers.push(answersObject[key].Answer);
+            }
+
+            vm.answerToShow = new Array(vm.questions.length);
+            vm.answerShown = [];
+
+            for (var $i = 0; $i < vm.questions.length; $i++) {
+                vm.answerShown[$i] = false;
+            }
+        }
+
+        function chooseAction(index, oneQuestion) {
+            if (!!vm.answers[index]) {
+                if ((oneQuestion.QuestionType === 'SA') || (oneQuestion.QuestionType === 'Checkbox') || (oneQuestion.QuestionType === 'image')) {
+                    showAnswer(index);
+                }
+            }
+        }
+
+        // Decides what answer to show. This is purely only for the 'eye' icon where the answer can be previewed.
+        function showAnswer(index) {
+            vm.answerShown[index] = !vm.answerShown[index];
+            vm.animateShowAnswer = (vm.answerShown[index])?'animated fadeInDown':'animated fadeOutUp';
+            if(vm.questions[index].QuestionType === 'Checkbox') {
+                if (!vm.patientQuestionnaire.Answers) {
+                    vm.checkboxString = '';
+                    for (var val in vm.answers[index]) {
+                        if (!!vm.answers[index][val]) {
+                            if (vm.checkboxString === '') {
+                                vm.checkboxString = vm.checkboxString + vm.answers[index][val];
+                            } else {
+                                vm.checkboxString = vm.checkboxString + ', ' + vm.answers[index][val];
+                            }
+                        }
+                    }
+                    vm.answerToShow[index] = vm.checkboxString;
+                } else {
+                    vm.answerToShow[index] = vm.answers[index];
+                }
+            } else if ((vm.questions[index].QuestionType === 'image') && (!!vm.answers[index] )) {
+                vm.checkboxString = '';
+                for (var x in vm.answers[index]) {
+                    if ( vm.checkboxString === '') {
+                        vm.checkboxString = vm.checkboxString + x + ': ' + vm.answers[index][x] + '/10';
+                    } else {
+                        vm.checkboxString = vm.checkboxString + ', ' + x + ': ' + vm.answers[index][x] + '/10';
+                    }
+                }
+                vm.answerToShow[index] = vm.checkboxString;
+            } else {
+                vm.answerToShow[index] = vm.answers[index];
+            }
+        }
+
+        function showAnswerReview(index) {
+            showAnswer(index);
+            return vm.answerToShow[index];
+        }
+    }
+})();

@@ -4,8 +4,9 @@ var sqlInterface = require('./sqlInterface.js');
 var utility = require('./../utility/utility.js');
 var validate = require('./../utility/validate.js');
 var queries = require('./../sql/queries.js');
-var logger = require('./../logs/logger.js')
-
+var logger = require('./../logs/logger.js');
+const fs = require('fs');
+const config = require('../config.json');
 /**
  *@name login
  *@requires sqlInterface
@@ -133,6 +134,32 @@ exports.getQuestionnaires = function (requestObject) {
     return sqlInterface.getQuestionnaires(requestObject);
 };
 
-exports.getTimeEstimate = function (requestObject) {
-    return sqlInterface.getTimeEstimate(requestObject);
+
+
+function getPatientForPatientMembersImage(members)
+{
+  return new Promise((resolve, reject) => {
+    members.forEach((member)=>{
+      if(member.ProfileImage)
+      {
+        try{
+          let profileImage = fs.readFileSync(config.PFP_PATH + member.ProfileImage, "base64");
+          member.ProfileImage = profileImage;
+          resolve(members);
+        }catch(err) {
+          reject(err);
+        } 
+      }
+    });
+  });
+}
+
+exports.getPatientsForPatientsMembers = function ()
+{
+  return new Promise((resolve, reject)=>{
+      sqlInterface.runSqlQuery(queries.getPatientForPatientMembers(),[],getPatientForPatientMembersImage).then((members)=>{
+          console.log(members);
+         resolve({Response:members});
+      }).catch((err) => reject({Response:error, Reason:err}));
+  });
 };
