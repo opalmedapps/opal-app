@@ -16,24 +16,25 @@ describe('AppointmentController', function() {
     var $controller;
     var controller;
     var NavigatorParameters;
-    var Announcements;
     var UserPreferences;
     var $scope;
+    var $timeout;
+    var $window;
 
-    var no_announcements = false;
+    var isCorrupted = false;
 
-    beforeEach(inject(function(_$controller_, _NavigatorParameters_, _UserPreferences_){
+    beforeEach(inject(function(_$controller_, _NavigatorParameters_, _UserPreferences_, _$timeout_){
 
         NavigatorParameters= _NavigatorParameters_;
         UserPreferences = _UserPreferences_;
-        var $window = {
+        $timeout = _$timeout_;
+        $window = {
             navigator: {
                 pushPage: function() {
                     return true;
                 }
             }
         };
-
 
         // Spies
         spyOn( UserPreferences, 'getLanguage' ).and.callFake( function() {
@@ -42,20 +43,53 @@ describe('AppointmentController', function() {
 
 
         spyOn( NavigatorParameters, 'setParameters').and.returnValue(true);
-        spyOn( NavigatorParameters, 'getParameters').and.returnValue(true);
+
+        if(!isCorrupted){
+            spyOn( NavigatorParameters, 'getParameters').and.returnValue({Navigator: 'navigator', Post: MockData.test_appointments[0]});
+
+        } else {
+            spyOn( NavigatorParameters, 'getParameters').and.returnValue({Navigator: 'navigator', Post: {}});
+        }
 
         $controller = _$controller_;
-        controller = $controller('AnnouncementsController', {Announcements: Announcements, NavigatorParameters: NavigatorParameters, $scope: $scope});
+        controller = $controller('AppointmentController', { NavigatorParameters: NavigatorParameters, $scope: $scope, UserPreferences: _UserPreferences_, $window: $window});
 
     }));
 
     describe('sanity test', function() {
-        it('activates announcements properly', function() {
-            expect(Announcements.getAnnouncements).toHaveBeenCalled();
-            expect(Announcements.setLanguage).toHaveBeenCalled();
-            expect(controller.noAnnouncements).toBe(false);
-            expect(controller.announcements).toEqual(MockData.english_test_annoucements);
+        it('activates appointment properly', function() {
+            $timeout.flush();
+            expect(controller.app).toBe(MockData.test_appointments[0]);
+            expect(controller.corrupted_appointment).toBeFalsy();
+            expect(controller.language).toBe('EN');
+
+            isCorrupted = true;
+
+        });
+        it('detects corrupted appointment', function() {
+            $timeout.flush();
+            expect(controller.app).toEqual({});
+            expect(controller.corrupted_appointment).toBeTruthy();
+            expect(controller.language).toBe('EN');
+
+            isCorrupted = false;
         });
     });
 
+    it('goes to map', function() {
+        var spy = spyOn($window.navigator, 'pushPage');
+        controller.goToMap();
+        expect(NavigatorParameters.setParameters).toHaveBeenCalled();
+        expect(NavigatorParameters.setParameters).toHaveBeenCalledWith(controller.app);
+        expect(spy).toHaveBeenCalled();
+        expect(spy).toHaveBeenCalledWith('./views/general/maps/individual-map.html')
+
+    });
+
+    it('goes to about appointment', function() {
+        var spy = spyOn($window.navigator, 'pushPage');
+        $timeout.flush();
+        controller.aboutAppointment();
+        expect(spy).toHaveBeenCalled();
+    });
 });

@@ -26,7 +26,7 @@ var API = {
     'QuestionnaireRating':apiHospitalUpdate.inputEducationalMaterialRating,
     'QuestionnaireAnswers':apiHospitalUpdate.inputQuestionnaireAnswers,
     'Read':apiHospitalUpdate.updateReadStatus,
-    'TimeEstimate':apiPatientUpdate.getTimeEstimate
+    'PFPMembers':apiPatientUpdate.getPatientsForPatientsMembers
 };
 
 exports.securityAPI = {

@@ -82,7 +82,7 @@
 	"ERRORINCORRECTSSN":"The SSN enter does not much our records, try again",
 	"ENTERANANSWER":"Enter an answer",
 	"ERRORANSWERNOTMATCH":"Answer does not match our records",
-	"CONTACTHOSPITAL":"Contact the hospital for assitance",
+	"CONTACTHOSPITAL":"Contact the hospital for assistance",
 	"ENTERVALIDPASSWORD":"Enter a valid password",
 	"SERVERPROBLEM":"Server problem, contact the hospital",
 	"PASSWORDSUCCESSRESET":"Password has been successfully changed, redirecting to login",

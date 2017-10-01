@@ -21,10 +21,10 @@
 
                         <label name="text">{{ security.Question }} </label><br/>
                         <div style="width: 100%; margin-top: 15px" class="style-4">
-                            <input class="text-input" name="text" ng-model="security.answer" placeholder="{{'ENTERANSWERPLACEHOLDER'|translate}}" />
+                            <input class="text-input" name="text" ng-model="security.answer" ng-change="security.clearErrors" placeholder="{{'ENTERANSWERPLACEHOLDER'|translate}}" />
                             <br/><br/>
                         </div>
-                        <button class="button button--large shadow-2" ng-disabled="security.waiting||security.threeTries" style="background-color: #4CAF50; font-weight: bolder;" ng-click="security.submitAnswer(security.answer)">{{"CONTINUE"|translate}}</button>
+                        <button class="button button--large shadow-2" ng-disabled="security.submitting||security.threeTries" style="background-color: #4CAF50; font-weight: bolder;" ng-click="security.submitAnswer(security.answer)">{{"CONTINUE"|translate}}</button>
                         <uib-alert ng-show="security.alert.type" type="{{security.alert.type}}">{{security.alert.content|translate}}</uib-alert>
                     </div>
                 </form>

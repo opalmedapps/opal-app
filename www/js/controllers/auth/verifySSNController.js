@@ -1,8 +1,21 @@
+/*
+ * Filename     :   loginController.js
+ * Description  :   Controller in charge of the login process using FireBase as the authentication API.
+ * Created by   :   David Herrera, Robert Maglieri
+ * Date         :   May 20, 2015
+ * Copyright    :   Copyright 2016, HIG, All rights reserved.
+ * Licence      :   This file is subject to the terms and conditions defined in
+ *                  file 'LICENSE.txt', which is part of this source code package.
+ */
+
+
 /**
- * Created by PhpStorm.
- * User: James Brace
- * Date: 2017-08-09
- * Time: 3:32 PM
+ *  @ngdoc controller
+ *  @name MUHCApp.controllers: LoginController
+ *  @requires $scope, $timeout, RequestToServer
+ *  @description
+ *
+ *  Controller in charge of the validating the user's SSN in order to allow them to change their password.
  */
 
 (function () {
@@ -10,12 +23,12 @@
 
     angular
         .module('MUHCApp')
-        .controller('RequestNewPasswordController', RequestNewPasswordController);
+        .controller('VerifySSNController', VerifySSNController);
 
-    RequestNewPasswordController.$inject = ['$scope', '$timeout', 'RequestToServer'];
+    VerifySSNController.$inject = ['$scope', '$timeout', 'RequestToServer'];
 
     /* @ngInject */
-    function RequestNewPasswordController($scope, RequestToServer) {
+    function VerifySSNController($scope, RequestToServer) {
 
         var vm = this;
         var parameters = { data: { SSN: "", Question: ""}};
