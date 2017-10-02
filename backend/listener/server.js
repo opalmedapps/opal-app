@@ -60,6 +60,7 @@ listenForRequest('passwordResetRequests');
 function listenForRequest(requestType){
     logger.log('debug','Starting '+ requestType+' listener.');
     ref.child(requestType).on('child_added', function(snapshot){
+        logger.info("received request:" + JSON.stringify(snapshot));
         handleRequest(requestType,snapshot);
     });
 }
@@ -69,7 +70,7 @@ function handleRequest(requestType, snapshot){
     processRequest(headers).then(function(response){
 
         // Log before uploading to Firebase. Check that it was not a simple log
-        if (response.Headers.RequestObject.Request != 'Log') {
+        if (response.Headers.RequestObject.Request !== 'Log') {
 
             //console.log(response.Headers.RequestObject.Parameters.Fields.join(' '));
             logger.log('info', "Completed response", {
@@ -201,6 +202,7 @@ function uploadToFirebase(response, key)
 
     ref.child(path).set(response).then(function(){
         logger.log('debug', 'Uploaded to firebase');
+        console.log(response);
         completeRequest(headers,success, key);
     }).catch(function (error) {
         logger.error('Error writing to firebase', {error:error});
