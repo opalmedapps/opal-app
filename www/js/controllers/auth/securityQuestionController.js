@@ -239,12 +239,12 @@
                 var firebaseResponseField = passwordReset ? 'passwordResetResponses' : undefined;
                 var parameterObject = {
                     Question:vm.Question,
-                    Answer:hash,
+                    Answer: hash,
                     SSN: vm.ssn,
                     Trusted: trusted
                 };
 
-                RequestToServer.sendRequestWithResponse('VerifyAnswer',parameterObject,key, firebaseRequestField, firebaseResponseField).then(function(data)
+                RequestToServer.sendRequestWithResponse('VerifyAnswer',parameterObject, key, firebaseRequestField, firebaseResponseField).then(function(data)
                 {
                     vm.submitting = false;
                     if(data.Data.AnswerVerified === "true")

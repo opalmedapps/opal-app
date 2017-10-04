@@ -112,7 +112,7 @@ exports.decryptObject=function(object,secret)
       if (typeof object[key]==='object')
       {
         exports.decryptObject(object[key],secret);
-      } else if (key!=='UserID'&&key!=='DeviceId') {
+      } else if (key!=='UserID' && key!=='DeviceId') {
           var enc = splitNonce(object[key]);
           var dec = stablelibutf8.decode(nacl.secretbox.open(enc[1], enc[0], secret));
           object[key] = (typeof dec === 'boolean') ? "" : dec;
