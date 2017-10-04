@@ -113,7 +113,7 @@ exports.securityQuestion=function(requestKey,requestObject) {
     //         //Gets password and decrypts request
     //         //console.log(rows);
     //        var pass = rows[0].Password;
-            var unencrypted = utility.decrypt(requestObject.Parameters,CryptoJS.SHA256("none").toString());
+            var unencrypted = utility.decrypt(requestObject.Parameters,CryptoJS.SHA512("none").toString());
             //console.log(requestObject);
             sqlInterface.updateDeviceIdentifier(requestObject, unencrypted)
                 .then(function () {

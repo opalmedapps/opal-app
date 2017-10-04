@@ -442,7 +442,7 @@ exports.updateAccountField=function(requestObject)
         var newValue=requestObject.Parameters.NewValue;
         if(field=='Password')
         {
-            newValue=CryptoJS.SHA256(newValue).toString();
+            newValue=CryptoJS.SHA512(newValue).toString();
             connection.query(queries.setNewPassword(), [newValue,patientSerNum],
                 function(error, rows, fields)
                 {

@@ -104,7 +104,7 @@ exports.decryptObject=function(object,secret)
   if(typeof object ==='string')
   {
     var enc = splitNonce(object);
-    let dec = stablelibutf8.decode(nacl.secretbox.open(enc[1],enc[0],secret));
+    var dec = stablelibutf8.decode(nacl.secretbox.open(enc[1],enc[0],secret));
     object = (typeof dec === 'boolean')?"":dec;
   }else{
     for (var key in object)
@@ -114,7 +114,7 @@ exports.decryptObject=function(object,secret)
         exports.decryptObject(object[key],secret);
       } else if (key!=='UserID'&&key!=='DeviceId') {
           var enc = splitNonce(object[key]);
-          let dec = stablelibutf8.decode(nacl.secretbox.open(enc[1], enc[0], secret));
+          var dec = stablelibutf8.decode(nacl.secretbox.open(enc[1], enc[0], secret));
           object[key] = (typeof dec === 'boolean') ? "" : dec;
       }
     }
