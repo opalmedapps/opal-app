@@ -115,11 +115,12 @@ exports.decryptObject=function(object,secret)
       } else if (key!=='UserID' && key!=='DeviceId') {
           var enc = splitNonce(object[key]);
 
-          console.log("data length: " + enc[1].length);
-          console.log("nonce length: " + enc[0].length);
-          console.log("key length: " + secret.length);
+          console.log("key: " + key);
+          console.log("data: " + object[key]);
 
-          console.log("decoded message: " + nacl.secretbox.open(enc[1], enc[0], secret));
+          console.log("nonce: " + stablelibbase64.encode(enc[0]));
+          console.log("data: " + stablelibbase64.encode(enc[1]));
+          console.log("secret: " + stablelibbase64.encode(secret));
 
           let dec = stablelibutf8.decode(nacl.secretbox.open(enc[1], enc[0], secret));
           console.log(dec);
