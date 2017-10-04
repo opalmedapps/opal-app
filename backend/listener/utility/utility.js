@@ -101,6 +101,7 @@ exports.encryptObject=function(object,secret,nonce)
 //Decryption function, returns an object whose values are all strings
 exports.decryptObject=function(object,secret)
 {
+  console.log("the received secret has this length: " + secret.length);
   if(typeof object ==='string')
   {
     var enc = splitNonce(object);
@@ -120,7 +121,6 @@ exports.decryptObject=function(object,secret)
 
           console.log("nonce: " + stablelibbase64.encode(enc[0]));
           console.log("data extracted: " + stablelibbase64.encode(enc[1]));
-          console.log("secret: " + secret);
 
           let dec = stablelibutf8.decode(nacl.secretbox.open(enc[1], enc[0], secret));
           console.log(dec);
