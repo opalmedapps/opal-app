@@ -120,6 +120,7 @@ exports.decryptObject=function(object,secret)
           console.log("key length: " + secret.length);
 
           var dec = stablelibutf8.decode(nacl.secretbox.open(enc[1], enc[0], secret));
+          console.log(dec);
           object[key] = (typeof dec === 'boolean') ? "" : dec;
       }
     }
