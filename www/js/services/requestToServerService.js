@@ -109,6 +109,7 @@ myApp.service('RequestToServer',['$filter','$state','NewsBanner','UserAuthorizat
                             $state.go('logOut');
                             r.reject({Response:'AUTH_ERROR'});
                         }else{
+
                             if(!encryptionKey||typeof encryptionKey == 'undefined') data = EncryptionService.decryptData(data);
                             data.Timestamp = timestamp;
                             clearTimeout(timeOut);
