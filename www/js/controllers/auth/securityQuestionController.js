@@ -135,6 +135,9 @@
             EncryptionService.setSecurityAns(key);
             EncryptionService.generateEncryptionHash();
 
+            console.log("hashed password: " + UserAuthorizationInfo.getPassword());
+            console.log("hashed answer: " + key);
+
             if(passwordReset){
                 $scope.initNavigator.pushPage('./views/login/new-password.html', {data: {oobCode: ResetPassword.getParameter("oobCode", parameters.url)}});
             }
@@ -231,7 +234,7 @@
                 vm.submitting = true;
 
                 answer = answer.toUpperCase();
-                var hash = EncryptionService.hash(answer);
+                var hash = EncryptionService.hash(answer).toUpperCase();
 
                 //Sets up the proper request object based on use case
                 var key = hash;
