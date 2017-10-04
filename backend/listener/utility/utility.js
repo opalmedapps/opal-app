@@ -104,7 +104,7 @@ exports.decryptObject=function(object,secret)
   if(typeof object ==='string')
   {
     var enc = splitNonce(object);
-    var dec = stablelibutf8.decode(nacl.secretbox.open(enc[1],enc[0],secret));
+    let dec = stablelibutf8.decode(nacl.secretbox.open(enc[1],enc[0],secret));
     object = (typeof dec === 'boolean')?"":dec;
   }else{
     for (var key in object)
@@ -119,7 +119,9 @@ exports.decryptObject=function(object,secret)
           console.log("nonce length: " + enc[0].length);
           console.log("key length: " + secret.length);
 
-          var dec = stablelibutf8.decode(nacl.secretbox.open(enc[1], enc[0], secret));
+          console.log("decoded message: " + nacl.secretbox.open(enc[1], enc[0], secret));
+
+          let dec = stablelibutf8.decode(nacl.secretbox.open(enc[1], enc[0], secret));
           console.log(dec);
           object[key] = (typeof dec === 'boolean') ? "" : dec;
       }
