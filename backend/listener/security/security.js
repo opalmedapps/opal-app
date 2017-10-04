@@ -44,9 +44,6 @@ exports.resetPasswordRequest=function(requestKey, requestObject)
 exports.verifySecurityAnswer=function(requestKey,requestObject,patient)
 {
 
-
-    console.log('reached verify security Answer');
-    console.log('the patient is: ' + JSON.stringify(patient));
     var r=q.defer();
     var key = patient.AnswerText;
     //var key = patient.Password;
