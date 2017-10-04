@@ -47,7 +47,8 @@ exports.verifySecurityAnswer=function(requestKey,requestObject,patient)
     var r=q.defer();
     var key = patient.AnswerText;
     //var key = patient.Password;
-    console.log("the patients key is: " + key);
+    console.log("the patient has the following info: " + JSON.stringify(patient));
+    console.log("the patients hashed answer is: " + key);
     console.log("the request object is: " + requestObject.Parameters);
     var unencrypted = utility.decrypt(requestObject.Parameters, key);
     var response = {};

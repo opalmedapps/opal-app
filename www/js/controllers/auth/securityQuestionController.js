@@ -238,7 +238,7 @@
                 var firebaseRequestField = passwordReset ? 'passwordResetRequests' : undefined;
                 var firebaseResponseField = passwordReset ? 'passwordResetResponses' : undefined;
                 var parameterObject = {
-                    Question:vm.Question,
+                    Question: vm.Question,
                     Answer: hash,
                     SSN: vm.ssn,
                     Trusted: trusted
