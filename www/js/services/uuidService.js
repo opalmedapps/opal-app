@@ -23,10 +23,10 @@
         .module('MUHCApp')
         .factory('UUID', UUID);
 
-    UUID.$inject = [];
+    UUID.$inject = ['Constants'];
 
     /* @ngInject */
-    function UUID() {
+    function UUID(Constants) {
 
         /**
          *@ngdoc property
@@ -53,6 +53,8 @@
          * @returns {String} The UUID.
          **/
         function generate(a){
+
+
             return a           // if the placeholder was passed, return
                 ? (              // a random number from 0 to 15
                     a ^            // unless b is 8,
@@ -93,7 +95,7 @@
             if (Constants.app){
                 return device.uuid
             } else {
-                return this.uuid
+                return uuid
             }
         }
 
