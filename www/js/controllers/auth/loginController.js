@@ -137,7 +137,7 @@
             firebaseUser.getToken(true).then(function(sessionToken){
 
                 /**************************************************************************************************************************************
-                 * SINCE PREPROD IS HEAVILY TESTED, I AM DISABLING TO LOCKING OUT OF CONCURRENT USERS, THIS SHOULDN'T BE THE CASE FOR PROD!!!!!!!!!!!
+                 * SINCE PREPROD/DEV IS HEAVILY TESTED, I AM DISABLING TO LOCKING OUT OF CONCURRENT USERS, THIS SHOULDN'T BE THE CASE FOR PROD!!!!!!!!!!!
                  **************************************************************************************************************************************/
 
                 //Save the current session token to the users "logged in users" node. This is used to make sure that the user is only logged in for one session at a time.

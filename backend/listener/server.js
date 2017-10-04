@@ -137,9 +137,13 @@ function clearClientRequests(){
 // Processes requests read from firebase
 function processRequest(headers){
 
+    console.log("reached process request");
+
     var r = q.defer();
     var requestKey = headers.key;
     var requestObject= headers.objectRequest;
+
+    console.log("type of request: " + requestObject.Request);
 
     // Separate security requests from main requests
     if(processApi.securityAPI.hasOwnProperty(requestObject.Request)) {
