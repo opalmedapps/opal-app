@@ -34,8 +34,6 @@ myApp.service('RequestToServer',['$filter','$state','NewsBanner','UserAuthorizat
          **/
         var refUsers = Ref.child(FirebaseService.getFirebaseChild('users'));
 
-        var app = Constants.app;
-
         function sendRequest(typeOfRequest,parameters, encryptionKey, referenceField) {
             var requestType = '';
             var requestParameters;
@@ -95,6 +93,7 @@ myApp.service('RequestToServer',['$filter','$state','NewsBanner','UserAuthorizat
                     refRequestResponse = Ref.child(responseField).child(key);
                 }
 
+
                 //Waits to obtain the request data.
                 //
                 refRequestResponse.on('value',function(snapshot){
@@ -104,7 +103,7 @@ myApp.service('RequestToServer',['$filter','$state','NewsBanner','UserAuthorizat
                         var data = snapshot.val();
 
                         var timestamp = data.Timestamp;
-                        if(data.Code =='1')
+                        if(data.Code === '1')
                         {
                             NewsBanner.showCustomBanner($filter('translate')("AUTHENTICATIONERROR"),'#333333',null,20000);
                             $state.go('logOut');
@@ -135,7 +134,7 @@ myApp.service('RequestToServer',['$filter','$state','NewsBanner','UserAuthorizat
                     refRequestResponse.set(null);
                     refRequestResponse.off();
                     r.reject({Response:'timeout'});
-                },15000);
+                },30000);
                 return r.promise;
             },
             /**
