@@ -7,6 +7,10 @@ var exports=module.exports={};
 
 exports.resetPasswordRequest=function(requestKey, requestObject)
 {
+
+    console.log("reached reset password request...");
+
+
     var r=q.defer();
     ////console.log(requestObject.UserEmail);
     var responseObject = {};
@@ -39,11 +43,15 @@ exports.resetPasswordRequest=function(requestKey, requestObject)
 };
 exports.verifySecurityAnswer=function(requestKey,requestObject,patient)
 {
+
+
+    console.log('reached verify security Answer');
+    console.log('the patient is: ' + JSON.stringify(patient));
     var r=q.defer();
     var key = patient.AnswerText;
     //var key = patient.Password;
-    console.log(key);
-    var unencrypted = utility.decrypt(requestObject.Parameters,key);
+    console.log("the patients key is: " + key);
+    var unencrypted = utility.decrypt(requestObject.Parameters, key);
     console.log(unencrypted);
     var response = {};
     var isSSNValid = unencrypted.SSN == patient.SSN;
