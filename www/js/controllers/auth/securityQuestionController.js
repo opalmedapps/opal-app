@@ -233,6 +233,8 @@
                 answer = answer.toUpperCase();
                 var hash = EncryptionService.hash(answer);
 
+                console.log(hash);
+
                 //Sets up the proper request object based on use case
                 var key = hash;
                 var firebaseRequestField = passwordReset ? 'passwordResetRequests' : undefined;

@@ -16,7 +16,7 @@ var myApp=angular.module('MUHCApp');
  **/
 myApp.service('RequestToServer',['$filter','$state','NewsBanner','UserAuthorizationInfo',
     'EncryptionService','FirebaseService','$q', 'Constants', 'UUID',
-    function($filter,$state,NewsBanner,UserAuthorizationInfo, EncryptionService, FirebaseService,$q, Constants, UUID){
+    function($filter,$state,NewsBanner,UserAuthorizationInfo, EncryptionService, FirebaseService, $q, Constants, UUID){
 
         /**
          *@ngdoc property
