@@ -209,6 +209,10 @@ myApp.service('EncryptionService',function(UserAuthorizationInfo){
 
         generateNonce: function() {
 			return nacl.randomBytes(nacl.secretbox.nonceLength)
+		},
+
+		getEncryptionHash: function() {
+
 		}
 
 	};
