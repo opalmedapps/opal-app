@@ -60,7 +60,7 @@ listenForRequest('passwordResetRequests');
 function listenForRequest(requestType){
     logger.log('debug','Starting '+ requestType+' listener.');
     ref.child(requestType).on('child_added', function(snapshot){
-        logger.info("received request:" + JSON.stringify(snapshot));
+        logger.info("received request:" + snapshot));
         handleRequest(requestType,snapshot);
     });
 }
