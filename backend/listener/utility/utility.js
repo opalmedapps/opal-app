@@ -57,6 +57,9 @@ exports.encrypt = function(object,secret,salt)
 exports.decrypt= function(object,secret,salt)
 {
   secret = (salt)?CryptoJS.PBKDF2(secret, salt, {keySize: 512/32, iterations: 1000}).toString(CryptoJS.enc.Hex):secret;
+
+  console.log("the secret before calling decrypt object is: " + secret);
+
   return exports.decryptObject(object, stablelibutf8.encode(secret.substring(0,nacl.secretbox.keyLength)));
 };
 
