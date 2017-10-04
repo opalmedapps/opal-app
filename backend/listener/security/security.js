@@ -53,7 +53,6 @@ exports.verifySecurityAnswer=function(requestKey,requestObject,patient)
     console.log("the patients key is: " + key);
     console.log("the request object is: " + requestObject.Parameters);
     var unencrypted = utility.decrypt(requestObject.Parameters, key);
-    console.log(unencrypted);
     var response = {};
     var isSSNValid = unencrypted.SSN == patient.SSN;
     var isAnswerValid = unencrypted.Answer == patient.AnswerText;
