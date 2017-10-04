@@ -135,9 +135,6 @@
             EncryptionService.setSecurityAns(key);
             EncryptionService.generateEncryptionHash();
 
-            console.log("hashed password: " + UserAuthorizationInfo.getPassword());
-            console.log("hashed answer: " + key);
-
             if(passwordReset){
                 $scope.initNavigator.pushPage('./views/login/new-password.html', {data: {oobCode: ResetPassword.getParameter("oobCode", parameters.url)}});
             }

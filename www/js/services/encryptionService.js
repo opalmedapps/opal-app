@@ -204,16 +204,17 @@ myApp.service('EncryptionService',function(UserAuthorizationInfo){
          *@return {String} Returns hashed password
          **/
         generateEncryptionHash: function () {
-            encryptionHash = CryptoJS.PBKDF2(UserAuthorizationInfo.getPassword(), securityAnswerHash, {keySize: 512/32, iterations: 1000}).toString(CryptoJS.enc.Hex);
+        	console.log("password: " + UserAuthorizationInfo.getPassword());
+        	console.log("security answer hash: " + securityAnswerHash);
+
+			encryptionHash = CryptoJS.PBKDF2(UserAuthorizationInfo.getPassword(), securityAnswerHash, {keySize: 512/32, iterations: 1000}).toString(CryptoJS.enc.Hex);
+
+            console.log("encryption hash: " + encryptionHash);
         },
 
         generateNonce: function() {
 			return nacl.randomBytes(nacl.secretbox.nonceLength)
 		},
-
-		getEncryptionHash: function() {
-
-		}
 
 	};
 });
