@@ -156,10 +156,6 @@ myApp.service('EncryptionService',function(UserAuthorizationInfo){
 		encryptWithKey:function(object, secret)
 		{
             var nonce = this.generateNonce();
-
-            console.log("nonce: " + nacl.util.encodeBase64(nonce));
-            console.log("secret (aka this is the hashed password: " + secret);
-
             return encryptObject(object, nacl.util.decodeUTF8(secret.substring(0, nacl.secretbox.keyLength)), nonce);
 		},
 
