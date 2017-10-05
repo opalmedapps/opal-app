@@ -442,7 +442,7 @@ exports.updateAccountField=function(requestObject)
         var newValue=requestObject.Parameters.NewValue;
         if(field=='Password')
         {
-            newValue=CryptoJS.SHA256(newValue).toString();
+            newValue=CryptoJS.SHA512(newValue).toString();
             connection.query(queries.setNewPassword(), [newValue,patientSerNum],
                 function(error, rows, fields)
                 {
@@ -924,18 +924,19 @@ function checkIfCheckedIntoAriaHelper(patientActivitySerNum)
 //Get time estimate from Ackeem's scripts
 exports.getTimeEstimate = function(appointmentAriaSer)
 {
+    console.log(appointmentAriaSer);
     var r = Q.defer();
-    var url = config. WT_PATH+appointmentAriaSer;
-    request(url,function(error, response, body)
+    var url = config.WT_PATH+appointmentAriaSer.Parameters;
+    console.log(url);
+    request(url, function(error, response, body)
     {
-        if(error){}//console.log('getTimeEstimate,sqlInterface',error);r.reject(error);}
         if(!error&&response.statusCode=='200')
         {
-            //console.log('Time Estimate ', body);
+            console.log('Time Estimate ', body);
             body = JSON.parse(body);
-
-            if(body.length>1){
-                r.resolve(body[0]);
+            body['appointmentAriaSer'] = appointmentAriaSer.Parameters;
+            if(body.length>=1){
+                r.resolve(body);
             } else{
                 r.reject({Response:'No data from getEstimate script'});
             }
@@ -943,13 +944,6 @@ exports.getTimeEstimate = function(appointmentAriaSer)
             r.resolve(error);
         }
     });
-    // timeEstimate.getEstimate(result.AppointmentAriaSer).then(
-    //     function(estimate){
-    //         r.resolve( estimate);
-    //     },function(error)
-    //     {
-    //       r.resolve(error);
-    //   });
     return r.promise;
 };
 /**

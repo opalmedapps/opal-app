@@ -4,8 +4,6 @@ angular.module('MUHCApp')
     return highstock;
   }])
 
-
-
   .directive('hcChart', ['$window', function($window) {
     return {
       restrict: 'E',

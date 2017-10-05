@@ -82,7 +82,7 @@
             noMaterials = !EducationalMaterial.isThereEducationalMaterial();
             var materials = EducationalMaterial.getEducationalMaterial();
             //Setting the language for view
-            eduMaterials = EducationalMaterial.setLanguageEduationalMaterial(materials);
+            eduMaterials = EducationalMaterial.setLanguage(materials);
 
         }
 

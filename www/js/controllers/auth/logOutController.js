@@ -1,8 +1,9 @@
-/*
- *Code by David Herrera May 20, 2015
- *Github: dherre3
- *Email:davidfherrerar@gmail.com
- */
+/**
+ *@ngdoc controller
+ *@name MUHCApp.service:logOutController
+ *@requires FirebaseService, $state, RequestToServer, CleanUp, UserAuthorizationInfo
+ *@description Logs users out on firebase and our servers, and then takes user to init page
+ **/
 
 (function () {
     'use strict';
@@ -11,28 +12,35 @@
         .module('MUHCApp')
         .controller('logOutController', logOutController);
 
-    logOutController.$inject = ['FirebaseService', '$state','RequestToServer','CleanUp', 'UserAuthorizationInfo'];
+    logOutController.$inject = ['FirebaseService', '$state','RequestToServer','CleanUp', 'UserAuthorizationInfo','$window'];
 
     /* @ngInject */
-    function logOutController(FirebaseService, $state, RequestToServer, CleanUp, UserAuthorizationInfo) {
+    function logOutController(FirebaseService, $state, RequestToServer, CleanUp, UserAuthorizationInfo, $window) {
         activate();
 
         ////////////////
 
         function activate() {
-            var Ref= firebase.database().ref('dev2/');
 
-            var refCurrentUser = Ref.child('logged_in_users/' + UserAuthorizationInfo.getUsername());
+            //remove the logged in user reference from DB
+            // var refCurrentUser = FirebaseService.getDBRef('logged_in_users/' + UserAuthorizationInfo.getUsername());
+            //
+            // refCurrentUser.remove();
 
-            refCurrentUser.remove();
+            //remove the saved authorized user info from session storage
+            $window.sessionStorage.removeItem('UserAuthorizationInfo');
 
+            //logout on server
             RequestToServer.sendRequest('Logout');
 
+            //wipe all data
             CleanUp.clear();
 
-            FirebaseService.getAuthentication().$signOut();
+            //signout on FireBase
+            FirebaseService.signOut();
+
+            //take user to init page
             $state.go('init');
         }
     }
-
 })();

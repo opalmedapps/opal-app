@@ -25,12 +25,12 @@ var myApp=angular.module('MUHCApp');
  *@requires $filter
  *@description API service used to update the whole application. The UpdateUI service is in charge of timestamps for updates of sections, set up or any update to the user fields.
  **/
-myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors','Appointments','Messages',
+myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors','Appointments',
     'Documents','EducationalMaterial', 'UserAuthorizationInfo', '$q', 'Notifications',
     '$cordovaNetwork', 'LocalStorage','RequestToServer','$filter','Diagnoses','Questionnaires',
     'NativeNotification','LabResults', 'Tasks',
 
-    function (Announcements, TxTeamMessages, Patient,Doctors, Appointments,Messages, Documents,
+    function (Announcements, TxTeamMessages, Patient,Doctors, Appointments, Documents,
               EducationalMaterial, UserAuthorizationInfo, $q, Notifications,
               $cordovaNetwork,LocalStorage,RequestToServer,$filter,Diagnoses,Questionnaires,
               NativeNotification,LabResults, Tasks ) {
@@ -121,14 +121,9 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors',
                 init: Tasks.setPlanningTasks,
                 update:Tasks.setPlanningTasks
             },
-            /*'Messages':
-             {
-             init:Messages.setUserMessages,
-             update:Messages.updateUserMessages
-             },*/
             'LabTests': {
-             init:LabResults.setTestResults,
-             update:LabResults.updateTestResults
+                 init:LabResults.setTestResults,
+                 update:LabResults.updateTestResults
              },
             'Diagnosis':
             {
@@ -142,8 +137,8 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors',
             },
             'Questionnaires':
              {
-             init:Questionnaires.setPatientQuestionnaires,
-             update:Questionnaires.updatePatientQuestionnaires
+                 init:Questionnaires.setPatientQuestionnaires,
+                 update:Questionnaires.updatePatientQuestionnaires
              },
             'Announcements':
             {
@@ -170,18 +165,10 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors',
             }
             return promises;
         }
-        // function initLocalStorage()
-        // {
-        //     var objectToLocalStorage={};
-        //     for (var key in sectionServiceMappings.length) {
-        //         objectToLocalStorage[key]=[{}];
-        //     }
-        //     LocalStorage.WriteToLocalStorage('All',objectToLocalStorage);
-        // }
+
         function setServices(dataUserObject,mode)
         {
             var r = $q.defer();
-            //if(mode=='setOnline') initLocalStorage();
             var promises = setPromises(mode,dataUserObject);
             $q.all(promises).then(function(){
                 for(var key in dataUserObject)
@@ -191,7 +178,6 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors',
                         sectionServiceMappings[key].init(dataUserObject[key]);
                     }
                 }
-                //UserPlanWorkflow.setUserPlanWorkflow(Appointments);
                 r.resolve(true);
             }).catch(function(error)
             {
@@ -219,8 +205,6 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors',
             });
             return r.promise;
         }
-
-
 
         /**
          * Initialize sections
@@ -250,56 +234,6 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors',
             return r.promise;
         }
 
-        // function initServicesFromLocalStorage()
-        // {
-        //     var r=$q.defer();
-        //     data=LocalStorage.ReadLocalStorage('All');
-        //
-        //     console.log(data);
-        //     sectionServiceMappings.All.init(data, 'setOffline').then(function()
-        //     {
-        //         var timestampLastUpdate = initTimestampsFromLocalStorage();
-        //         var app = document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'https://' ) === -1;
-        //         if(app){
-        //             if($cordovaNetwork.isOnline()){
-        //                 console.log('I am right before sending the request for all the things');
-        //                 RequestToServer.sendRequestWithResponse('Refresh',{Fields:'All',Timestamp:timestampLastUpdate}).then(
-        //                     function(response)
-        //                     {
-        //                         updateServices(response.Data);
-        //                         updateTimestamps('All',response.Timestamp);
-        //                         clearTimeout(timeOut);
-        //                         r.resolve(true);
-        //                     }).catch(function(error)
-        //                 {
-        //                     if(error.Code =='2')  NativeNotification.showNotificationAlert($filter('translate')("ERRORCONTACTINGHOSPITAL"));
-        //                     clearTimeout(timeOut);
-        //                     console.log(error);
-        //                     r.resolve(true);
-        //                 });
-        //             }else{
-        //                 clearTimeout(timeOut);
-        //                 console.log('Offline resolving');
-        //                 r.resolve(true);
-        //             }
-        //         }else{
-        //             r.resolve(true);
-        //         }
-        //     }).catch(function(error)
-        //     {
-        //         r.reject(error);
-        //     });
-        //     var timeOut = setTimeout(function(){
-        //         r.resolve(true);
-        //     },30000);
-        //
-        //     return r.promise;
-        // }
-        // function initTimestampsFromLocalStorage()
-        // {
-        //     lastUpdateTimestamp=JSON.parse(window.localStorage.getItem(UserAuthorizationInfo.getUsername()+'/Timestamps'));
-        //     return findSmallestTimestamp('All');
-        // }
 
         function initTimestamps(time)
         {
@@ -451,7 +385,8 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors',
                     'Tasks',
                     'TxTeamMessages',
                     'Notifications',
-                    'EducationalMaterial'
+                    'EducationalMaterial',
+                    'Documents'
                 ]);
 
             },

@@ -1,0 +1,19 @@
+<ons-page ng-controller="DateLabTestController as labs" >
+  <ons-list>
+    <ons-list-item ng-repeat="testResultByDate in labs.selectedTests | orderBy:'-testDateFormat'" ng-click="personalNavigator.pushPage('./views/personal/lab-results/test-view.html',{param:testResultByDate})" modifier="tappable" class="list-item-container">
+      <ons-row align="center" >
+        <ons-col width="60px" align="center">
+          <div style="margin-left:10px">
+            <ons-icon icon="ion-erlenmeyer-flask" style="color:#8BC34A" size="2x"></ons-icon><span class="notification" ng-if="testResultByDate.ReadStatus==='0'">1</span>
+          </div>
+        </ons-col>
+        <ons-col style="word-wrap: break-word;">
+          <div style="line-height:1;" >
+            <span ng-class="fontSizeTitle"> {{testResultByDate.testDateFormat|date:'longDate'}}</span>
+            <p class="item-desc" ng-class="fontSizeDesc">{{"ADDED"|translate}} {{testResultByDate.testDateFormat|date:'shortTime'}}</p>
+          </div>
+        </ons-col>
+      </ons-row>
+    </ons-list-item>
+  </ons-list>
+</ons-page>

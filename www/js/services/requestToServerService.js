@@ -16,7 +16,7 @@ var myApp=angular.module('MUHCApp');
  **/
 myApp.service('RequestToServer',['$filter','$state','NewsBanner','UserAuthorizationInfo',
     'EncryptionService','FirebaseService','$q', 'Constants', 'UUID',
-    function($filter,$state,NewsBanner,UserAuthorizationInfo, EncryptionService, FirebaseService,$q, Constants, UUID){
+    function($filter,$state,NewsBanner,UserAuthorizationInfo, EncryptionService, FirebaseService, $q, Constants, UUID){
 
         /**
          *@ngdoc property
@@ -34,8 +34,6 @@ myApp.service('RequestToServer',['$filter','$state','NewsBanner','UserAuthorizat
          **/
         var refUsers = Ref.child(FirebaseService.getFirebaseChild('users'));
 
-        var app = Constants.app;
-
         function sendRequest(typeOfRequest,parameters, encryptionKey, referenceField) {
             var requestType = '';
             var requestParameters;
@@ -52,7 +50,7 @@ myApp.service('RequestToServer',['$filter','$state','NewsBanner','UserAuthorizat
 
             var toSend = {
                 'Request' : requestType,
-                'DeviceId':(app)?device.uuid:UUID.getUUID(),
+                'DeviceId': UUID.getUUID(),
                 'Token':UserAuthorizationInfo.getToken(),
                 'UserID': UserAuthorizationInfo.getUsername(),
                 'Parameters':requestParameters,
@@ -62,11 +60,8 @@ myApp.service('RequestToServer',['$filter','$state','NewsBanner','UserAuthorizat
 
             var reference = referenceField || 'requests';
 
-
-
             var pushID =  Ref.child(reference).push(toSend);
             return pushID.key;
-
         }
 
         return{
@@ -98,6 +93,7 @@ myApp.service('RequestToServer',['$filter','$state','NewsBanner','UserAuthorizat
                     refRequestResponse = Ref.child(responseField).child(key);
                 }
 
+
                 //Waits to obtain the request data.
                 //
                 refRequestResponse.on('value',function(snapshot){
@@ -107,11 +103,12 @@ myApp.service('RequestToServer',['$filter','$state','NewsBanner','UserAuthorizat
                         var data = snapshot.val();
 
                         var timestamp = data.Timestamp;
-                        if(data.Code =='1')
+                        if(data.Code === '1')
                         {
                             NewsBanner.showCustomBanner($filter('translate')("AUTHENTICATIONERROR"),'#333333',null,20000);
                             r.reject({Response:'AUTH_ERROR'});
                         }else{
+
                             if(!encryptionKey||typeof encryptionKey == 'undefined') data = EncryptionService.decryptData(data);
                             data.Timestamp = timestamp;
                             clearTimeout(timeOut);

@@ -26,6 +26,7 @@ var API = {
     'QuestionnaireRating':apiHospitalUpdate.inputEducationalMaterialRating,
     'QuestionnaireAnswers':apiHospitalUpdate.inputQuestionnaireAnswers,
     'Read':apiHospitalUpdate.updateReadStatus,
+    'PFPMembers':apiPatientUpdate.getPatientsForPatientsMembers
 };
 
 exports.securityAPI = {
@@ -33,13 +34,18 @@ exports.securityAPI = {
     'SecurityQuestion': security.securityQuestion,
     'SetNewPassword': security.resetPasswordRequest,
     'VerifyAnswer': security.resetPasswordRequest
-}
+};
 
 exports.processRequest=function(requestObject)
 {
 
     var r=Q.defer();
+
+
+
     var type = requestObject.Request;
+
+
 
     if (API.hasOwnProperty(type))
     {

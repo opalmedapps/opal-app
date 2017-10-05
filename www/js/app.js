@@ -17,7 +17,7 @@
 /**
  * @ngdoc overview
  * @name MUHCApp
- *@description <img src="img/Opal_Logo_Full_2.png" alt="MUHCLogo" /><br>
+ *@description <img src="img/Opal_Name_Logo.png" alt="MUHCLogo" /><br>
  A multiplatform application built using {@link https://cordova.apache.org Apache Cordova}. The main frameworks for the project are {@link https://angularjs.org/ AngularJS} framework , {@link https://onsen.io/ OnsenUI} Framework, and {@link https://cordova.apache.org Apache Cordova} This project aims to aid patients in radiation oncology
  * at the Glen Hospital in Montreal, Quebec. This guide is the first version of the documentation for the Opal Hybrid Mobile app
  Main module for the project: {@link MUHCApp}.
@@ -195,10 +195,13 @@ myApp.config(['$qProvider', function ($qProvider) {
  **/
 myApp.run(function ($state, $stateParams,$q, $rootScope,$translate, Patient,$location, NetworkStatus) {
 
+    if (!firebase.apps.length) {
+        firebase.initializeApp({});
+    }
+
     var isOffline = 'onLine' in navigator && !navigator.onLine;
 
     if ( isOffline ) {
-        console.log("is offline on load!");
        NetworkStatus.setStatus(false);
     }
     else {

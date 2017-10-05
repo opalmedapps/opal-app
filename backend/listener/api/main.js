@@ -24,7 +24,13 @@ exports.apiRequestFormatter=function(requestKey,requestObject)
             //console.log(rows);
             var salt=rows[0].AnswerText;
             var pass = rows[0].Password;
+
+            console.log("salt: " + salt);
+            console.log("password: " + pass);
+
             requestObject.Request=utility.decrypt(requestObject.Request,pass,salt);
+
+            console.log(requestObject.Request);
             //If requests after decryption is empty, key was incorrect, reject the request
             if(requestObject.Request === '') {
                 //console.log('Rejecting request due to incorrect password recorded');

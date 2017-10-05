@@ -19,8 +19,7 @@
  */
 @font-face {
     font-family: font;
-    src: url("../fonts/Montserrat-Light.ttf");
-    /*src: url(https://fonts.googleapis.com/css?family=Dosis);*/
+    src: url("../fonts/SanFranciscoFont-master/SanFranciscoDisplay-Regular.otf");
 
 }
 
@@ -2477,7 +2476,6 @@ width: 30px;
     background: rgba(0,0,0,0.8);
     padding: 20px;
     width: 90%;
-    /*height: 60%;*/
     margin: auto;
     position: relative;
 }
@@ -2697,3 +2695,172 @@ and (max-device-width : 321px)
     transition: all 0.3s cubic-bezier(.25,.8,.25,1);
 }
 
+
+/* Waiting Time Estimates */
+#last-updated {
+  position: absolute;
+  right: 2%;
+}
+
+#wait-time-timeline {
+  margin-top: 20px;
+  position: relative;
+  height: 5px;
+  /*animation: expand_line 1.5s ease-out forwards;
+  animation-delay: 0.3s;*/
+  background-color: lightgrey;
+  width: 100%;
+}
+
+@keyframes expand_line {
+    0% {
+      width: 0%;
+    }
+    100% {
+      width: 100%;
+    }
+}
+
+#starting-dot {
+  margin-top: -8px;
+  background-color: #59D45D;
+  height: 20px;
+  width: 20px;
+  border-radius: 10px;
+  border: white 1px solid;
+  position: absolute;
+  z-index: 2;
+}
+
+#past-line {
+  position: absolute;
+  background-color: #59D45D;
+  width: 0%;
+  float: left;
+  height: 5px;
+}
+
+#current-time-indicator {
+  position: relative;
+  z-index: 3;
+  color: #59D45D;
+  animation: pulsate 1s 2s alternate infinite;
+  text-align: left;
+  float: left;
+  margin-top: -11px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-radius: 30px;
+  border: 2px solid;
+  background-color: white;
+}
+
+.sthethoscope {
+  margin-top: -13px;
+  color: black;
+  background-color: white;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  padding-left: 7px;
+  padding-right: 7px;
+  border-radius: 30px;
+  border: 2px solid;
+  position: absolute;
+  right: 0;
+}
+
+@keyframes pulsate {
+    0% {
+      transform: scale(1, 1);
+    }
+    100% {
+      transform: scale(1.2, 1.2);
+    }
+}
+
+.horizontal-center-outer {
+  text-align: center;
+}
+
+.horizontal-center-inner {
+  display: inline-block;
+}
+
+#waiting-time-container-info {
+  text-align: left;
+  margin: 4px;
+}
+
+#waiting-time-container {
+  margin-bottom: -10px;
+  margin-top: -10px;
+}
+
+#time-outline {
+  position: absolute;
+  width: 100%;
+  text-align: center;
+  top: 237px;
+  font-size: small;
+}
+
+.checked-in {
+  height: 22px;
+  width: 22px;
+  float: left;
+  background-color: #59D45D;
+}
+
+.not-checked-in {
+  height: 22px;
+  width: 22px;
+  float: left;
+  background-color: #1A651D;
+}
+
+#no-prev-patient {
+  display: none;
+  height: 50%;
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+  margin: 20px;
+  text-align: center;
+}
+
+.dividing-horizontal-line {
+  height: 2px;
+  background-color: lightgrey;
+  position: relative;
+  z-index: 1;
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+
+.dividing-vertical-line {
+  height: 70px;
+  width: 2px;
+  background-color: lightgrey;
+  position: relative;
+  z-index: 1;
+  float: left;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+#more-info-button-outer {
+  text-align: center; 
+  width: 90%; 
+  margin-left: 5%; 
+}
+
+#more-info-button {
+  width: 100%; 
+  height: 50px; 
+  font-size: x-large; 
+  background-color: #F5F5F5;
+}
+
+#more-info-button:hover {
+  background-color: #59D45D;
+}

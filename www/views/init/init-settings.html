@@ -1,9 +1,9 @@
-<ons-page ng-controller="InitSettingsController">
+<ons-page ng-controller="InitSettingsController as init">
       <ons-toolbar fixed-style>
         <div class="left">
-            <span><ons-back-button>{{"BACK"|translate}}</ons-back-button></span>
+            <ons-back-button>{{"BACK"|translate}}</ons-back-button>
         </div>
-        <div class="center">{{"SETTINGS"|translate}}</div>
+          <div class="center">{{"SETTINGS"|translate}}</div>
       </ons-toolbar>
 
       <ons-list class="settings-list">
@@ -13,16 +13,16 @@
       </ons-list>
 
      <ons-list class="settings-list">
-         <ons-list-item modifier="chevron" ng-click="secureYourDeviceNotice()">
+         <ons-list-item modifier="chevron" ng-click="init.secureYourDeviceNotice()">
           {{"SECUREYOURDEVICE"|translate}}
         </ons-list-item>
       </ons-list>
       
       <ons-list class="settings-list">
-        <ons-list-item modifier="chevron" ng-click="openPageLegal('TOU')">
+        <ons-list-item modifier="chevron" ng-click="init.openPageLegal('TOU')">
            {{"TERMSOFUSE"|translate}}
         </ons-list-item>
-        <ons-list-item modifier="chevron" ng-click="openPageLegal('PP')">
+        <ons-list-item modifier="chevron" ng-click="init.openPageLegal('PP')">
           {{"PRIVACYPOLICY"|translate}}
         </ons-list-item>
       </ons-list>
@@ -32,10 +32,10 @@
       <ons-list  class="settings-list">
         <ons-list-item >
          {{"APPVERSION"|translate}}
-          <span style=" position: absolute;right: 20px;top: 0px;opacity:0.6">{{version}}</span>
+          <span style=" position: absolute;right: 20px;top: 0px;opacity:0.6">{{ init.version}}</span>
         </ons-list-item>
       </ons-list>
-      <p class="text-center" style="color:grey;margin-top:10px;font-size:15px">{{MUHC|translate}} {{currentYear}}</p>
+      <p class="text-center" style="color:grey;margin-top:10px;font-size:15px">{{MUHC|translate}} {{ init.currentYear}}</p>
 
 
     </ons-page>
