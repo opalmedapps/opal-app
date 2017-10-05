@@ -58,11 +58,6 @@ myApp.service('EncryptionService',function(UserAuthorizationInfo){
 
     function encryptObject(object,secret, nonce)
 	{
-		console.log("object: " + object);
-		console.log("secret: " + secret);
-		console.log("nonce: " + nonce);
-
-
 	 	if (typeof object ==='string'){
             return nacl.util.encodeBase64( appendUint8Array(nonce, nacl.secretbox(nacl.util.decodeUTF8(object), nonce, secret)));
 	 	}else if(typeof object!=='string'&& typeof object!=='object'){
