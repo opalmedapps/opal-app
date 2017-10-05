@@ -12,7 +12,7 @@ var myApp=angular.module('MUHCApp');
  *@requires $filter
  *@description Sets the educational material and provides an API to interact with it and the server
  **/
-myApp.service('EducationalMaterial',['$filter','LocalStorage','FileManagerService', 'UserPreferences', 'RequestToServer',function ($filter, LocalStorage, FileManagerService,UserPreferences,RequestToServer) {
+myApp.service('EducationalMaterial',['$filter','LocalStorage','FileManagerService', 'UserPreferences', 'RequestToServer', '$http' ,function ($filter, LocalStorage, FileManagerService, UserPreferences,RequestToServer, $http) {
 
     /**
      *@ngdoc property
@@ -61,7 +61,6 @@ myApp.service('EducationalMaterial',['$filter','LocalStorage','FileManagerServic
     function setLanguageEduMaterial(array)
     {
         var language = UserPreferences.getLanguage();
-
 
         //Check if array
         if (Object.prototype.toString.call( array ) === '[object Array]') {
@@ -181,7 +180,7 @@ myApp.service('EducationalMaterial',['$filter','LocalStorage','FileManagerServic
          *@description Setter method for educational material
          *@return {Boolean} Returns whether the patient has any educational material available.
          **/
-        isThereEducationalMaterial:function()
+        materialExists:function()
         {
             //Check if the educationa material array has any elements
             return educationalMaterialArray.length>0;
@@ -319,6 +318,17 @@ myApp.service('EducationalMaterial',['$filter','LocalStorage','FileManagerServic
         {
             return pfpresources;
         },
+
+        getMaterialBinary:function(url){
+            var config = { responseType: 'blob' };
+            return $http.get(url, config)
+
+        },
+
+
+        getMaterialPage:function(url){
+            return $http.get(url);
+        },
         /**
          *@ngdoc method
          *@name openEducationalMaterialDetails
@@ -356,13 +366,13 @@ myApp.service('EducationalMaterial',['$filter','LocalStorage','FileManagerServic
         },
         /**
          *@ngdoc method
-         *@name setLanguageEduationalMaterial
+         *@name setLanguage
          *@methodOf MUHCApp.service:EducationalMaterial
          *@param {Array} array Array with educational material
          *@description Translates the array parameter containing educational material to appropiate preferred language specified in {@link MUHCApp.service:UserPreferences UserPreferences}.
          *@returns {Array} Returns array with translated values
          **/
-        setLanguageEduationalMaterial:function(array)
+        setLanguage:function(array)
         {
 
             return setLanguageEduMaterial(array);

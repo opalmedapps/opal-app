@@ -57,6 +57,9 @@ exports.encrypt = function(object,secret,salt)
 exports.decrypt= function(object,secret,salt)
 {
   secret = (salt)?CryptoJS.PBKDF2(secret, salt, {keySize: 512/32, iterations: 1000}).toString(CryptoJS.enc.Hex):secret;
+
+  console.log("the secret before calling decrypt object is: " + secret);
+
   return exports.decryptObject(object, stablelibutf8.encode(secret.substring(0,nacl.secretbox.keyLength)));
 };
 
@@ -101,6 +104,7 @@ exports.encryptObject=function(object,secret,nonce)
 //Decryption function, returns an object whose values are all strings
 exports.decryptObject=function(object,secret)
 {
+  console.log("the received secret has this length: " + secret.length);
   if(typeof object ==='string')
   {
     var enc = splitNonce(object);
@@ -112,9 +116,17 @@ exports.decryptObject=function(object,secret)
       if (typeof object[key]==='object')
       {
         exports.decryptObject(object[key],secret);
-      } else if (key!=='UserID'&&key!=='DeviceId') {
+      } else if (key!=='UserID' && key!=='DeviceId') {
           var enc = splitNonce(object[key]);
+
+          console.log("object key: " + key);
+          console.log("data at this key: " + object[key]);
+
+          console.log("nonce: " + stablelibbase64.encode(enc[0]));
+          console.log("data extracted: " + stablelibbase64.encode(enc[1]));
+
           let dec = stablelibutf8.decode(nacl.secretbox.open(enc[1], enc[0], secret));
+          console.log(dec);
           object[key] = (typeof dec === 'boolean') ? "" : dec;
       }
     }

@@ -14,6 +14,8 @@ function fireConfig () {
         messagingSenderId: "476395494069"
 
     };
-    
-    firebase.initializeApp(config);
+
+    if (!firebase.apps.length) {
+        firebase.initializeApp(config);
+    }
 }

@@ -24,7 +24,7 @@
         var parameters;
         vm.updateValue = updateValue;
         vm.changeFont = changeFont;
-        vm.changeLangauge = changeLanguage;
+        vm.changeLanguage = changeLanguage;
         vm.evaluate = evaluate;
 
         activate();
@@ -152,6 +152,7 @@
 
         //FUnction to change the language
         function changeLanguage (val) {
+            console.log('changed language to : ' + val);
             var objectToSend = {};
             objectToSend.NewValue = val;
             objectToSend.FieldToChange = 'Language';

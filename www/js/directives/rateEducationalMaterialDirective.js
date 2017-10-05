@@ -11,7 +11,7 @@ angular.module('MUHCApp')
     scope: {
         eduMaterialControlSerNum: '=serNum'
     },
-    templateUrl: './views/education/rating-education-template-directive.html',
+    templateUrl: './views/education/material-rating-template.html',
     link: function (scope, element) {
 
    	initRater();
@@ -42,12 +42,10 @@ angular.module('MUHCApp')
 	};
 	scope.submit = function()
 	{
-        console.log('submit');
         var patientSerNum = Patient.getUserSerNum();
         var edumaterialControlSerNum = scope.eduMaterialControlSerNum;
         RequestToServer.sendRequest('QuestionnaireRating',{'PatientSerNum':patientSerNum,'EducationalMaterialControlSerNum':edumaterialControlSerNum,'RatingValue':scope.ratingValue});
         scope.submitted = true;
-        console.log('rating submitted');
 	}
       
     }
