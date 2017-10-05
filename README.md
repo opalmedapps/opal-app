@@ -116,9 +116,9 @@ cordova plugin add <nameOfPlugin>
 Sometimes this account work due to backend changes or various other reasons due to development..
 No fret.. we have a backup account in case the first login doesn't work (it normally should though).
 
-email: muhca.pp.mobile@gmail.com
-password: 12345opal
-security answer (depending on question): red, guitar, superman
+ * email: muhca.pp.mobile@gmail.com
+ * password: 12345opal
+ * security answer (depending on question): red, guitar, superman
 #### Problems
 
 ##### IOS
