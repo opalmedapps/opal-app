@@ -62,9 +62,17 @@ myApp.service('EducationalMaterial',['$filter','LocalStorage','FileManagerServic
     {
         var language = UserPreferences.getLanguage();
 
-
+        if (!array.hasOwnProperty("Language")) {
+            array.Language = language;
+        }
         //Check if array
         if (Object.prototype.toString.call( array ) === '[object Array]') {
+            if (array.Language != language) {
+                array.forEach(function (element) {
+                    delete element.Content;
+                });
+                array.Language = language;
+            }
             for (var i = 0; i < array.length; i++) {
                 //set language
                 array[i].PhaseInTreatment = (language ==='EN')? array[i].PhaseName_EN:array[i].PhaseName_FR;
@@ -75,6 +83,10 @@ myApp.service('EducationalMaterial',['$filter','LocalStorage','FileManagerServic
             }
         }else{
             //set language if string
+            if (array.Language != language) {
+                delete array.Content;
+                array.Language = language;
+            }
             array.PhaseInTreatment = (language ==='EN')? array.PhaseName_EN:array.PhaseName_FR;
             array.Url = (language ==='EN')?array.URL_EN:array.URL_FR;
             array.Name =(language ==='EN')? array.Name_EN : array.Name_FR;
