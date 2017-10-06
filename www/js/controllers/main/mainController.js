@@ -36,7 +36,7 @@
             //var myDataRef = new Firebase(FirebaseService.getFirebaseUrl());
             //Listen to authentication state, if user get's unauthenticated log user out
             firebase.auth().onAuthStateChanged(function(authData){
-                var  authInfoLocalStorage=window.localStorage.getItem('UserAuthorizationInfo');
+                var  authInfoLocalStorage= window.sessionStorage.getItem('UserAuthorizationInfo');
                 if(!authData)
                 {
                     if($state.current.name ==='Home')
@@ -72,9 +72,9 @@
 
             document.addEventListener("pause", onPause, false);
 
-            $rootScope.$on("MonitorLoggedInUsers", function(event, uid){
-                addUserListener(uid);
-            });
+            // $rootScope.$on("MonitorLoggedInUsers", function(event, uid){
+            //     addUserListener(uid);
+            // });
         }
 
         /*****************************************
@@ -164,20 +164,20 @@
         /*****************************************
          * Manage concurrent users
          *****************************************/
-        function addUserListener(uid){
-            //add a listener to the firebase database that watches for the changing of the token value (this means that the same user has logged in somewhere else)
-            var refCurrentUser = firebase.database().ref(FirebaseService.getFirebaseUrl('logged_in_users/') + uid);
-
-            refCurrentUser.on('value', function() {
-                if(!$rootScope.firstTime){
-                    //If it is detected that a user has concurrently logged on with a different device. Then force the "first" user to log out and clear the observer
-                    RequestToServer.sendRequest('Logout');
-                    CleanUp.clear();
-                }
-                else{
-                    $rootScope.firstTime = false;
-                }
-            });
-        }
+        // function addUserListener(uid){
+        //     //add a listener to the firebase database that watches for the changing of the token value (this means that the same user has logged in somewhere else)
+        //     var refCurrentUser = firebase.database().ref(FirebaseService.getFirebaseUrl('logged_in_users/') + uid);
+        //
+        //     refCurrentUser.on('value', function() {
+        //         if(!$rootScope.firstTime){
+        //             //If it is detected that a user has concurrently logged on with a different device. Then force the "first" user to log out and clear the observer
+        //             RequestToServer.sendRequest('Logout');
+        //             CleanUp.clear();
+        //         }
+        //         else{
+        //             $rootScope.firstTime = false;
+        //         }
+        //     });
+        // }
     }
 })();
