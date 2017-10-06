@@ -148,7 +148,7 @@
                 // $rootScope.$emit("MonitorLoggedInUsers", firebaseUser.uid);
 
                 //Set the authorized user once we get confirmation from FireBase that the inputted credentials are valid
-                UserAuthorizationInfo.setUserAuthData(firebaseUser.uid, EncryptionService.hash(vm.password).toUpperCase(), undefined, sessionToken, vm.email);
+                UserAuthorizationInfo.setUserAuthData(firebaseUser.uid, EncryptionService.hash(vm.password), undefined, sessionToken, vm.email);
 
 
                 //This is for the user case where a user gets logged out automatically by the app after 5 minutes of inactivity.
