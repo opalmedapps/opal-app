@@ -134,32 +134,11 @@ exports.getQuestionnaires = function (requestObject) {
     return sqlInterface.getQuestionnaires(requestObject);
 };
 
-
-
-function getPatientForPatientMembersImage(members)
-{
-  return new Promise((resolve, reject) => {
-    members.forEach((member)=>{
-      if(member.ProfileImage)
-      {
-        try{
-          let profileImage = fs.readFileSync(config.PFP_PATH + member.ProfileImage, "base64");
-          member.ProfileImage = profileImage;
-          resolve(members);
-        }catch(err) {
-          reject(err);
-        } 
-      }
-    });
-  });
-}
-
 exports.getPatientsForPatientsMembers = function ()
 {
   return new Promise((resolve, reject)=>{
-      sqlInterface.runSqlQuery(queries.getPatientForPatientMembers(),[],getPatientForPatientMembersImage).then((members)=>{
-          console.log(members);
-         resolve({Response:members});
+      sqlInterface.runSqlQuery(queries.getPatientForPatientMembers(),[]).then((members)=>{
+         resolve({Data:members});
       }).catch((err) => reject({Response:error, Reason:err}));
   });
 };
