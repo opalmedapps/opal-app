@@ -62,7 +62,6 @@ myApp.service('EducationalMaterial',['$filter','LocalStorage','FileManagerServic
     {
         var language = UserPreferences.getLanguage();
 
-
         //Check if array
         if (Object.prototype.toString.call( array ) === '[object Array]') {
             for (var i = 0; i < array.length; i++) {
