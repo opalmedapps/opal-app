@@ -32,7 +32,7 @@ admin.initializeApp({
 
 // Get reference to correct data element
 var db = admin.database();
-var ref = db.ref("/dev2");
+var ref = db.ref("/dev3");
 
 // Ensure there is no leftover data on firebase
 ref.set(null)
@@ -60,7 +60,7 @@ listenForRequest('passwordResetRequests');
 function listenForRequest(requestType){
     logger.log('debug','Starting '+ requestType+' listener.');
     ref.child(requestType).on('child_added', function(snapshot){
-        logger.info("received request:" + JSON.stringify(snapshot));
+        logger.info("received request:\n Key" + snapshot.val()+"\nRequest: "+JSON.stringify(snapshot.val());
         handleRequest(requestType,snapshot);
     });
 }

@@ -1,0 +1,64 @@
+2017-10-06T18:14:00.520Z - info: received request:requests
+2017-10-06T18:14:01.150Z - info: received request:requests
+2017-10-06T18:14:01.707Z - info: Completed response deviceID=a61850960410970dd0f10320-eb14e0a0fc0-450a20c0-1987807f0c90-41d90c80bf07f06e02a0f70440d90d103c0, userID=a3c0068a-3503-4210-a88d-0ec47781fe2f, request=DeviceIdentifier, requestKey=-KvmvTEVp-LxzcyW1eHE
+{ Response: 'DTx8/5quFgrJ12NV3FDZbw6fPfP05LlodEd9gO7YUcQvhREEJrLZ42p74biWQ4Y=',
+  Code: 'DTx8/5quFgrJ12NV3FDZbw6fPfP05LlozCoCtxGlfij5mfhmCosueio=',
+  Headers: { RequestKey: 'DTx8/5quFgrJ12NV3FDZbw6fPfP05Llo0a+QIgWc9p6ZsdXy06RrfzRF9LaFZLAVzOWPd2YDxOgoRhLc' },
+  Timestamp: { '.sv': 'timestamp' } }
+2017-10-06T18:14:02.189Z - info: Completed response deviceID=a61850960410970dd0f10320-eb14e0a0fc0-450a20c0-1987807f0c90-41d90c80bf07f06e02a0f70440d90d103c0, userID=a3c0068a-3503-4210-a88d-0ec47781fe2f, request=Login, requestKey=-KvmvTFY6TyZt5Ksu1yC
+{ Data: 
+   { Patient: [ [Object] ],
+     Appointments: 
+      [ [Object],
+        [Object],
+        [Object],
+        [Object],
+        [Object],
+        [Object],
+        [Object],
+        [Object],
+        [Object],
+        [Object],
+        [Object],
+        [Object],
+        [Object],
+        [Object],
+        [Object],
+        [Object],
+        [Object],
+        [Object],
+        [Object],
+        [Object],
+        [Object],
+        [Object],
+        [Object],
+        [Object],
+        [Object],
+        [Object],
+        [Object] ],
+     Tasks: [],
+     TxTeamMessages: [ [Object] ],
+     Notifications: [],
+     EducationalMaterial: [ [Object], [Object], [Object], [Object] ],
+     Documents: [ [Object] ] },
+  Response: 'LX12WlY6g28Jj7SwZ2smnHfFPp+lGXfTvmMuMnBEwGPl+5YzzpHQCdvD2P+oRNw=',
+  Code: 'LX12WlY6g28Jj7SwZ2smnHfFPp+lGXfTz2kSMDf99JuqTCl356uQhJs=',
+  Headers: { RequestKey: 'LX12WlY6g28Jj7SwZ2smnHfFPp+lGXfTKTTHUxiGk0xqT1BKXdrKjIX9zfG7Y+lKcWiNoNYpImTgzSYP' },
+  Timestamp: { '.sv': 'timestamp' } }
+2017-10-06T18:14:04.212Z - info: received request:requests
+2017-10-06T18:14:04.216Z - info: received request:requests
+2017-10-06T18:14:05.125Z - info: Completed response deviceID=a61850960410970dd0f10320-eb14e0a0fc0-450a20c0-1987807f0c90-41d90c80bf07f06e02a0f70440d90d103c0, userID=a3c0068a-3503-4210-a88d-0ec47781fe2f, request=Refresh: Announcements Doctors Diagnosis, requestKey=-KvmvTsa2PE_X7kFX839
+2017-10-06T18:14:05.367Z - info: Completed response deviceID=a61850960410970dd0f10320-eb14e0a0fc0-450a20c0-1987807f0c90-41d90c80bf07f06e02a0f70440d90d103c0, userID=a3c0068a-3503-4210-a88d-0ec47781fe2f, request=AccountChange, requestKey=-KvmvTsUBUHuf3zjBKxs
+{ Data: 
+   { Announcements: [ [Object], [Object], [Object], [Object] ],
+     Doctors: [ [Object] ],
+     Diagnosis: [] },
+  Response: 'T8fHtEPy2WPFTVxWU8XMjXIXQrxrdRw9aX0ejnojQKqv3K/g1vvRAnk+LFP3FMs=',
+  Code: 'T8fHtEPy2WPFTVxWU8XMjXIXQrxrdRw9ZxLPXTee7VIW9ILbJSoySDk=',
+  Headers: { RequestKey: 'T8fHtEPy2WPFTVxWU8XMjXIXQrxrdRw9ToP1ehMB5/KNC6AGBNnk9ycAOV3kM8vLcryAYd3vxkwDi6T1' },
+  Timestamp: { '.sv': 'timestamp' } }
+{ Response: 'jopcifkKjcThijL4XV92ROpRT/As6/EKtzqrQXKz1+/28WRbk6SmiZDGAoiYtoA=',
+  Code: 'jopcifkKjcThijL4XV92ROpRT/As6/EKxo7diGiQ3uQNuQhMfkHzeNA=',
+  Headers: { RequestKey: 'jopcifkKjcThijL4XV92ROpRT/As6/EKRg7JqdfkLA2piOYBMkoA1874F4aLkYD6KMt66gM3DNDSrLen' },
+  Timestamp: { '.sv': 'timestamp' } }
+2017-10-06T18:14:07.617Z - info: received request:requests

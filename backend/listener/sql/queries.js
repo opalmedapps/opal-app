@@ -328,5 +328,5 @@ exports.setTrusted = function () {
 };
 
 exports.getPatientForPatientMembers = function() {
-    return "SELECT *  FROM PatientsForPatientsPersonnel;";
+    return "SELECT FirstName, LastName, Email, Website, ProfileImage, Bio_EN, Bio_FR  FROM PatientsForPatientsPersonnel;";
 };
