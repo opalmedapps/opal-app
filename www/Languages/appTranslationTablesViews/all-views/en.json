@@ -284,5 +284,6 @@
   "Complete Blood Count":"Complete Blood Count",
   "Other":"Other",
   "Electrolytes":"Electrolytes",
-  "Tumor markers":"TumorMarkers"
+  "Tumor markers":"TumorMarkers",
+  "GOTOWEBSITE":"Visit website"
 }
