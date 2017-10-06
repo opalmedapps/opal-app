@@ -65,6 +65,7 @@ myApp.service('EducationalMaterial',['$filter','LocalStorage','FileManagerServic
         if (!array.hasOwnProperty("Language")) {
             array.Language = language;
         }
+      
         //Check if array
         if (Object.prototype.toString.call( array ) === '[object Array]') {
             if (array.Language != language) {
