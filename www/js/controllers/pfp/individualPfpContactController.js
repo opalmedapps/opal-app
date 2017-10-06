@@ -12,16 +12,18 @@
         .module('MUHCApp')
         .controller('IndividualContactsController', IndividualContactsController);
 
-    IndividualContactsController.$inject = ['NavigatorParameters','UserPreferences','$timeout'];
-    function IndividualContactsController(NavigatorParameters,UserPreferences,$timeout) {
+    IndividualContactsController.$inject = ['NavigatorParameters','UserPreferences','$timeout', 'Constants'];
+    function IndividualContactsController(NavigatorParameters,UserPreferences,$timeout, Constants) {
         var vm = this;
         vm.contacts;
         vm.currentIndex;
         vm.contact;
         vm.language;
         vm.carousel;
+        vm.showBio = false;
         vm.goNext = goNext;
         vm.goBack = goBack;
+        vm.goToWebsite= goToWebsite;
         activate();
 
         ////////////////
@@ -66,6 +68,16 @@
             {
                 vm.currentIndex = event.activeIndex;
             });
+        }
+        function goToWebsite(url)
+        {
+            console.log("WHAT IS UP", url);
+            if(Constants.app)
+            {
+	            cordova.InAppBrowser.open(url, '_blank', 'EnableViewPortScale=yes');
+            }else{
+                window.open(url,"_blank");
+            }
         }
         vm.$onDestroy = function () {
             document.removeEventListener('ons-carousel:init',initCarouselEvent);
