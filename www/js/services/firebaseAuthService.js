@@ -90,7 +90,12 @@ myApp.factory("FirebaseService", ['$firebaseAuth','$firebaseObject','UserAuthori
         },
 
         signOut: function() {
-            this.getAuthentication().$signOut();
+
+            this.getAuthentication().$signOut()
+                .then(function(response) {
+                    "use strict";
+                    console.log(response)
+                })
         }
     };
 }]);

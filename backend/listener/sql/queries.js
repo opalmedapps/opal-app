@@ -1,4 +1,4 @@
-var exports=module.exports={};
+    var exports=module.exports={};
 //Get Patient table information for a particular patient
 exports.patientTableFields=function()
 {
@@ -325,4 +325,8 @@ exports.setDeviceSecurityAnswer = function () {
 
 exports.setTrusted = function () {
     return "UPDATE PatientDeviceIdentifier SET Trusted = 1 WHERE DeviceId = ?";
+};
+
+exports.getPatientForPatientMembers = function() {
+    return "SELECT *  FROM PatientsForPatientsPersonnel;";
 };

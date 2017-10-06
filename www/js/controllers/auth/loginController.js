@@ -32,6 +32,8 @@
         var vm = this;
 
         var patientSerNum = "";
+        var sameUser = false;
+        var savedEmail;
 
         /**
          * @ngdoc property
@@ -103,7 +105,7 @@
             }
 
             //Obtain email from localStorage and show that email
-            var savedEmail = $window.localStorage.getItem('Email');
+            savedEmail = $window.localStorage.getItem('Email');
             if(savedEmail) vm.email = savedEmail;
 
             patientSerNum = Patient.getUserSerNum();
@@ -165,6 +167,7 @@
                     LastActive: lastActive
                 };
 
+
                 $window.sessionStorage.setItem('UserAuthorizationInfo', JSON.stringify(authenticationToLocalStorage));
                 $window.localStorage.setItem('Email', vm.email);
 
@@ -178,7 +181,7 @@
                 var deviceID = localStorage.getItem("deviceID");
 
                 //if the device was a previously trusted device, and is still set to trusted...
-                if (deviceID){
+                if (deviceID && sameUser){
                     loginAsTrustedUser(deviceID)
 
                 } else {
@@ -327,6 +330,9 @@
 
                 //the user is still logged in if this is present
                 var authDetails = $window.sessionStorage.getItem('UserAuthorizationInfo');
+
+                if(savedEmail === vm.email) sameUser = true;
+
                 var stillActive = false;
 
                 //if the user is still logged in and was active in the last 10 minutes, then we can skip the loading process and take the user straight to their information
