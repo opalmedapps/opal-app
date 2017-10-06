@@ -231,7 +231,7 @@
                 vm.submitting = true;
 
                 answer = answer.toUpperCase();
-                var hash = EncryptionService.hash(answer).toUpperCase();
+                var hash = EncryptionService.hash(answer);
 
                 //Sets up the proper request object based on use case
                 var key = hash;
