@@ -41,14 +41,14 @@ myApp.service('FileManagerService',function($q, $cordovaFileOpener2,$filter,News
             urlDeviceDocuments = cordova.file.documentsDirectory+'/Documents/';
             urlCDVPathDocuments = "cdvfile://localhost/persistent/Documents/";
         }
-        console.log(urlDeviceDocuments, urlDeviceDocuments);
+
     }
     //Tell me whether a url is a pdf link
     function isPDFDocument(url)
     {
         var index = url.lastIndexOf('.');
         var substring = url.substring(index+1,url.length);
-        console.log(substring);
+
         return (substring=='pdf')?true:false;
     }
 
@@ -59,7 +59,7 @@ myApp.service('FileManagerService',function($q, $cordovaFileOpener2,$filter,News
         var reader = new FileReader();
         var img='';
         reader.onloadend = function(evt) {
-            console.log("Read as data URL");
+
             r.resolve(evt.target.result);
         };
         reader.readAsDataURL(file);
@@ -110,17 +110,17 @@ myApp.service('FileManagerService',function($q, $cordovaFileOpener2,$filter,News
             var fileTransfer = new FileTransfer();
             window.resolveLocalFileSystemURL(targetPath,function(fileEntry)
             {
-                console.log(fileEntry);
+
                 r.resolve(true);
             },function()
             {
                 fileTransfer.download(url, targetPath,
                     function(entry) {
-                        console.log(entry);
+
                         r.resolve(entry);
                     },
                     function(err) {
-                        console.log(err);
+
                         r.reject(err);
                     });
             });
@@ -146,14 +146,14 @@ myApp.service('FileManagerService',function($q, $cordovaFileOpener2,$filter,News
                 options.files = [url];
                 //Defines on success function
                 var onSuccess = function(result) {
-                    console.log("Share completed? " + result.completed); // On Android apps mostly return false even while it's true
-                    console.log("Shared to app: " + result.app); // On Android result.app is currently empty. On iOS it's empty when sharing is cancelled (result.completed=false)
+
+
                 };
                 //Defines on error function
                 var onError = function(msg) {
                     //Show alert banner with error
                     NewsBanner.showCustomBanner($filter('translate')("UNABLETOSHAREMATERIAL"),'#f2dede', null, 2000);
-                    console.log("Sharing failed with message: " + msg);
+
                 };
                 //Plugin usage
                 window.plugins.socialsharing.shareWithOptions(options, onSuccess, onError);
@@ -182,11 +182,11 @@ myApp.service('FileManagerService',function($q, $cordovaFileOpener2,$filter,News
                 {
                     //Error transforming file into base64
                     r.reject(error);
-                    console.log(error);
+
                 });
             }, function(error){
                 //Document not found
-                console.log(error);
+
                 r.reject(error.code);
             });
             return r.promise;
@@ -201,18 +201,18 @@ myApp.service('FileManagerService',function($q, $cordovaFileOpener2,$filter,News
          **/
         openPDF:function(url)
         {
-            console.log(url);
+
             var app = document.URL.indexOf('http://') === -1 && document.URL.indexOf('https://') === -1;
             if (app) {
                 if(ons.platform.isAndroid()){
                     window.cordova.plugins.FileOpener.canOpenFile(url, function(data){
-                        console.log('extension: ' + data.extension + '\n' +'canBeOpen: ' + data.canBeOpen);
+
                         if(data.canBeOpen)
                         {
                             window.cordova.plugins.FileOpener.openFile(url, function(data){
-                                console.log(data.message);
+
                             }, function(data){
-                                console.log(data);
+
                                 ons.notification.alert({ message:$filter('traslate')('UNABLETOOPEN') });
                             });
                         }else{
@@ -337,7 +337,7 @@ myApp.service('FileManagerService',function($q, $cordovaFileOpener2,$filter,News
         },
 
         convertToUint8Array: function(base64){
-            //console.log(dataURI);
+            //
             // var BASE64_MARKER = ';base64,';
             //
             // var base64Index = dataURI.indexOf(BASE64_MARKER) + BASE64_MARKER.length;

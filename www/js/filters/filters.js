@@ -4,6 +4,7 @@
  *Email:davidfherrerar@gmail.com
  */
 var myApp=angular.module('MUHCApp.filters',[]);
+
 myApp.filter('notifications',function(){
     return function(input){
         if(input==='DoctorNote'){
@@ -15,9 +16,6 @@ myApp.filter('notifications',function(){
         }
 
     };
-
-
-
 });
 
 myApp.filter('removeTitleEducationalMaterial',function()
@@ -38,15 +36,16 @@ myApp.filter('removeTitleEducationalMaterial',function()
         }else{
             return string;
         }
-
     };
 });
+
 myApp.filter('trustThisUrl',['$sce',function($sce){
     return function(url)
     {
         return $sce.trustAsResourceUrl(url);
     }
 }]);
+
 myApp.filter('formatDateAppointmentTask',function($filter){
     return function(dateApp)
     {
@@ -61,11 +60,9 @@ myApp.filter('formatDateAppointmentTask',function($filter){
         }else{
             return '';
         }
-
     };
-
-
 });
+
 myApp.filter('formatDateToFirebaseString',function(){
     return function(date){
         var month=date.getMonth()+1;
@@ -74,34 +71,25 @@ myApp.filter('formatDateToFirebaseString',function(){
         var minutes=date.getMinutes();
         var seconds=date.getSeconds();
         var hours=date.getHours();
-        var string= year+'-'+month+'-'+day+'T'+hours+':'+ minutes +':'+seconds+'.000'+'Z';
-        return string;
-
-
-
-
+        return year + '-' + month + '-' + day + 'T' + hours + ':' + minutes + ':' + seconds + '.000' + 'Z';
     }
-
 });
 
 
 myApp.filter('formatDate',function(){
     return function(str) {
         if(typeof str==='string'){
-            //console.log(str);
-            //var a = str.split(/[^0-9]/);
-            //for (i=0;i<a.length;i++) { alert(a[i]); }
-            //var d=new Date (a[0],a[1]-1,a[2],a[3],a[4],a[5] );
-            var d = new Date(moment(str).format());
-            //console.log(d);
-            return d;
+            return new Date(moment(str).format());
         }
     };
 });
+
 myApp.filter('ellipsis', function () {
     return function (text, length) {
         if (text.length > length) {
-            return text.substr(0, length) + "...";
+            var subtext = text.substr(0, length);
+            var index = subtext.lastIndexOf(" ");
+            return subtext.substr(0, index) + "...";
         }
         return text;
     };
@@ -131,14 +119,9 @@ myApp.filter('dateEmail',function($filter){
         }else{
             return date;
         }
-
-
-
-
-
     };
-
 });
+
 myApp.filter('limitLetters',function($filter){
     return function(string,num)
     {
@@ -150,14 +133,13 @@ myApp.filter('limitLetters',function($filter){
         return string;
     };
 });
+
 myApp.filter('propsFilter', function() {
     return function(items, props) {
         var out = [];
-
         if (angular.isArray(items)) {
             items.forEach(function(item) {
                 var itemMatches = false;
-
                 var keys = Object.keys(props);
                 for (var i = 0; i < keys.length; i++) {
                     var prop = keys[i];
@@ -167,7 +149,6 @@ myApp.filter('propsFilter', function() {
                         break;
                     }
                 }
-
                 if (itemMatches) {
                     out.push(item);
                 }
@@ -176,10 +157,10 @@ myApp.filter('propsFilter', function() {
             // Let the output be the input untouched
             out = items;
         }
-
         return out;
     };
 });
+
 myApp.filter('filterDateLabTests',function()
 {
     return function(items,option)
@@ -217,11 +198,9 @@ myApp.filter('FormatPhoneNumber',function(){
     {
         if(typeof phone =='string'&&phone.length==10)
         {
-            console.log('Inside string equal ten');
             var firstDigits=phone.substring(0,3);
             var secondDigits=phone.substring(3,6);
             var thirdDigits=phone.substring(6,phone.length);
-            console.log("("+firstDigits+")"+" "+secondDigits+"-"+thirdDigits);
             return "("+firstDigits+")"+" "+secondDigits+"-"+thirdDigits;
         }else{
             return phone;
@@ -239,7 +218,7 @@ myApp.filter('capitalizeFirstLetter', function () {
     return function (name) {
         return name.charAt(0) + name.slice(1).toLowerCase();
     }
-})
+});
 
 myApp.filter('FormatEditPhoneNumber',function(){
     return function(phone)

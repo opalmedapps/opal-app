@@ -96,9 +96,7 @@ myApp.service('EncryptionService',function(UserAuthorizationInfo){
     var appendUint8Array = function(buffer1, buffer2) {
         var tmp = new Uint8Array(buffer1.length + buffer2.length);
         tmp.set(buffer1, 0);
-
         tmp.set(buffer2, buffer1.length);
-
         return tmp;
     };
 
@@ -189,7 +187,7 @@ myApp.service('EncryptionService',function(UserAuthorizationInfo){
          *@return {String} Returns hashed password
          **/
         hash: function (incoming) {
-         	return CryptoJS.SHA256(incoming).toString();
+         	return CryptoJS.SHA512(incoming).toString();
         },
 
         /**
@@ -200,14 +198,13 @@ myApp.service('EncryptionService',function(UserAuthorizationInfo){
          *@return {String} Returns hashed password
          **/
         generateEncryptionHash: function () {
-            encryptionHash = CryptoJS.PBKDF2(UserAuthorizationInfo.getPassword(), securityAnswerHash, {keySize: 512/32, iterations: 1000}).toString(CryptoJS.enc.Hex);
+			encryptionHash = CryptoJS.PBKDF2(UserAuthorizationInfo.getPassword(), securityAnswerHash, {keySize: 512/32, iterations: 1000}).toString(CryptoJS.enc.Hex);
+
         },
 
         generateNonce: function() {
 			return nacl.randomBytes(nacl.secretbox.nonceLength)
-		}
+		},
 
 	};
-
-
 });

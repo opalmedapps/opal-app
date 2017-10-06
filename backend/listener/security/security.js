@@ -7,6 +7,10 @@ var exports=module.exports={};
 
 exports.resetPasswordRequest=function(requestKey, requestObject)
 {
+
+    console.log("reached reset password request...");
+
+
     var r=q.defer();
     ////console.log(requestObject.UserEmail);
     var responseObject = {};
@@ -39,12 +43,14 @@ exports.resetPasswordRequest=function(requestKey, requestObject)
 };
 exports.verifySecurityAnswer=function(requestKey,requestObject,patient)
 {
+
     var r=q.defer();
     var key = patient.AnswerText;
     //var key = patient.Password;
-    console.log(key);
-    var unencrypted = utility.decrypt(requestObject.Parameters,key);
-    console.log(unencrypted);
+    console.log("the patient has the following info: " + JSON.stringify(patient));
+    console.log("the patients hashed answer is: " + key);
+    console.log("the request object is: " + requestObject.Parameters);
+    var unencrypted = utility.decrypt(requestObject.Parameters, key);
     var response = {};
     var isSSNValid = unencrypted.SSN == patient.SSN;
     var isAnswerValid = unencrypted.Answer == patient.AnswerText;
@@ -113,7 +119,7 @@ exports.securityQuestion=function(requestKey,requestObject) {
     //         //Gets password and decrypts request
     //         //console.log(rows);
     //        var pass = rows[0].Password;
-            var unencrypted = utility.decrypt(requestObject.Parameters,CryptoJS.SHA256("none").toString());
+            var unencrypted = utility.decrypt(requestObject.Parameters,CryptoJS.SHA512("none").toString());
             //console.log(requestObject);
             sqlInterface.updateDeviceIdentifier(requestObject, unencrypted)
                 .then(function () {

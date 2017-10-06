@@ -1,4 +1,4 @@
-<ons-page ng-controller="generalTabController" ng-device-backbutton="generalDeviceBackButton()">
+<ons-page ng-controller="GeneralTabController as tab" ng-device-backbutton="generalDeviceBackButton()">
     <ons-toolbar fixed-style>
         <div class="left"><ons-back-button>{{"BACK"|translate}}</ons-back-button></div>
         <div class="center" ng-class="fontSizeTitle">{{"GENERAL"|translate}}</div>
@@ -37,7 +37,7 @@
                     </ons-col>
                 </ons-row>
             </ons-list-item>
-            <ons-list-item modifier="chevron" class="item" ng-click="goToParking()">
+            <ons-list-item modifier="chevron" class="item" ng-click="tab.goToParking()">
                 <ons-row align="center"   >
                     <ons-col width="60px" style="text-align: center">
                         <div>
@@ -67,7 +67,7 @@
                     </ons-col>
                 </ons-row>
             </ons-list-item>
-            <ons-list-item modifier="chevron" class="item" ng-click="generalNavigator.pushPage('views/general/feedback.html')">
+            <ons-list-item modifier="chevron" class="item" ng-click="generalNavigator.pushPage('views/general/feedback/feedback.html')">
                 <ons-row align="center">
                     <ons-col width="60px" style="text-align: center">
                         <div>

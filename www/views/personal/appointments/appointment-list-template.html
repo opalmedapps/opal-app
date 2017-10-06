@@ -1,8 +1,8 @@
 <ons-list ng-repeat="app in appointments" ng-click="goToAppointment(app)" class="gpu_efficiency" ng-hide="noAppointments">
-  <div id="anchorAppointments{{$index}}"></div>
-  <ons-list-header ng-if="showChoosenDateHeader($index)" style="color:#2196F3" ng-class="fontSizeTitle">{{dt|date:'fullDate'}}</ons-list-header>
-  <ons-list-header class="person-list-header" ng-if="showHeaderNormalDay" ng-class="fontSizeTitle">{{app.ScheduledStartTime|date:'fullDate'}}</ons-list-header>
-  <ons-list-item modifier="chevron">
+    <div id="anchorAppointments{{$index}}"></div>
+    <ons-list-header ng-if="showChoosenDateHeader($index)" style="color:#2196F3" ng-class="fontSizeTitle">{{dt|date:'fullDate'}}</ons-list-header>
+    <ons-list-header class="person-list-header" ng-if="showHeaderNormalDay" ng-class="fontSizeTitle">{{app.ScheduledStartTime|date:'fullDate'}}</ons-list-header>
+    <ons-list-item modifier="chevron">
     <ons-row>
       <ons-col align="center" width="60px">
         <div align="center" style="line-height:1">

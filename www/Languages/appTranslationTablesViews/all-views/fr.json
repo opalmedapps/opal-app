@@ -49,6 +49,7 @@
   "DISABLECALENDARACCESSQUESTION": "Souhaitez-vous sauvegarder vos rendez-vous dans le calendrier de votre téléphone?",
   "DISABLESMSNOTIFICATIONQUESTION": "Souhaitez-vous désactiver les notifications par sms?",
   "DOCTOR": "Médecin",
+  "DOC_INFO" : "Information documentaire",
   "DOCUMENT": "Document",
   "DOCUMENT_DOWNLOADED": "Téléchargement réussi. Le document est enregistré dans /Documents",
   "EDUCATION": "Éducation",
@@ -123,6 +124,7 @@
   "LOCATION_ERROR" : "Veuillez activer la localisation de votre téléphone.",
   "LOCKEDOUT": "Verrouillé en raison de l'inactivité",
   "MAPS": "Plan",
+  "MEDICATIONALERTS": "Alerte Médicaments",
   "MEDIUM":"Médium",
   "MINUTES": "Minutes",
   "MUHC": "CUSM",
@@ -203,10 +205,12 @@
   "QUESTIONNAIRE_NONE": "Aucun questionnaire.",
   "RATETHISAPP": "Évaluer l'application",
   "RATETHISMATERIAL": "Noter ce matériel pédagogique!",
+  "REENTER_PASSWORD": "Ré-entrez le nouveau mot de passe",
   "RELEASETOREFRESH": "Relâcher pour rafraichîr la page",
   "REFRESH_WAIT": "Les données sont à jour. SVP attendre 60 secondes avant d'actualiser.",
   "DOC_RECEIVED": "Reçu",
   "RECONNECTNG": "Se reconnecter...",
+  "REENTER_PASSWORD": "Retaper le mot de passe",
   "REPORTISSUES": "Questions",
   "RESETPASSWORD": "Réinitialiser le mot de passe",
   "RESULTS": "Résultats",
@@ -298,5 +302,7 @@
   "Complete Blood Count":"Formule sanguine complète",
   "Other":"Autres",
   "Electrolytes":"Électrolytes",
-  "Tumor markers":"Marqueurs tumoraux"
+  "Tumor markers":"Marqueurs tumoraux",
+  "GOTOWEBSITE":"Visitez le site"
+
 }
