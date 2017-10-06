@@ -165,7 +165,6 @@
                     LastActive: lastActive
                 };
 
-
                 $window.sessionStorage.setItem('UserAuthorizationInfo', JSON.stringify(authenticationToLocalStorage));
                 $window.localStorage.setItem('Email', vm.email);
 
