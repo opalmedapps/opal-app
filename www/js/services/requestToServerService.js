@@ -16,7 +16,7 @@ var myApp=angular.module('MUHCApp');
  **/
 myApp.service('RequestToServer',['$filter','$state','NewsBanner','UserAuthorizationInfo',
     'EncryptionService','FirebaseService','$q', 'Constants', 'UUID',
-    function($filter,$state,NewsBanner,UserAuthorizationInfo, EncryptionService, FirebaseService,$q, Constants, UUID){
+    function($filter,$state,NewsBanner,UserAuthorizationInfo, EncryptionService, FirebaseService, $q, Constants, UUID){
 
         /**
          *@ngdoc property
@@ -25,13 +25,7 @@ myApp.service('RequestToServer',['$filter','$state','NewsBanner','UserAuthorizat
          *@description Firebase reference
          **/
         var Ref= firebase.database().ref(FirebaseService.getFirebaseUrl(null));
-        /**
-         *@ngdoc property
-         *@name  MUHCApp.service.#refRequests
-         *@propertyOf MUHCApp.service:RequestToServer
-         *@description Firebase reference requests
-         **/
-        var refRequests = Ref.child(FirebaseService.getFirebaseChild('requests'));
+
         /**
          *@ngdoc property
          *@name  MUHCApp.service.#refUsers
@@ -40,13 +34,11 @@ myApp.service('RequestToServer',['$filter','$state','NewsBanner','UserAuthorizat
          **/
         var refUsers = Ref.child(FirebaseService.getFirebaseChild('users'));
 
-        var app = Constants.app;
-
         function sendRequest(typeOfRequest,parameters, encryptionKey, referenceField) {
             var requestType = '';
             var requestParameters;
             if (typeof encryptionKey !== 'undefined' && encryptionKey) {
-                console.log(encryptionKey);
+
                 requestType = typeOfRequest;
                 requestParameters = EncryptionService.encryptWithKey(parameters, encryptionKey);
             }
@@ -58,7 +50,7 @@ myApp.service('RequestToServer',['$filter','$state','NewsBanner','UserAuthorizat
 
             var toSend = {
                 'Request' : requestType,
-                'DeviceId':(app)?device.uuid:UUID.getUUID(),
+                'DeviceId': UUID.getUUID(),
                 'Token':UserAuthorizationInfo.getToken(),
                 'UserID': UserAuthorizationInfo.getUsername(),
                 'Parameters':requestParameters,
@@ -68,11 +60,8 @@ myApp.service('RequestToServer',['$filter','$state','NewsBanner','UserAuthorizat
 
             var reference = referenceField || 'requests';
 
-
-
             var pushID =  Ref.child(reference).push(toSend);
             return pushID.key;
-
         }
 
         return{
@@ -104,18 +93,22 @@ myApp.service('RequestToServer',['$filter','$state','NewsBanner','UserAuthorizat
                     refRequestResponse = Ref.child(responseField).child(key);
                 }
 
+
                 //Waits to obtain the request data.
-                //console.log('users/'+UserAuthorizationInfo.getUsername()+'/'+key);
+                //
                 refRequestResponse.on('value',function(snapshot){
+
                     if(snapshot.exists())
                     {
                         var data = snapshot.val();
+
                         var timestamp = data.Timestamp;
-                        if(data.Code =='1')
+                        if(data.Code === '1')
                         {
                             NewsBanner.showCustomBanner($filter('translate')("AUTHENTICATIONERROR"),'#333333',null,20000);
                             r.reject({Response:'AUTH_ERROR'});
                         }else{
+
                             if(!encryptionKey||typeof encryptionKey == 'undefined') data = EncryptionService.decryptData(data);
                             data.Timestamp = timestamp;
                             clearTimeout(timeOut);
@@ -131,13 +124,13 @@ myApp.service('RequestToServer',['$filter','$state','NewsBanner','UserAuthorizat
                     }
                 },function(error)
                 {
-                    console.log('Firebase reading error', error);
+
                     r.reject(error);
                 });
                 //If request takes longer than 30000 to come back with timedout request, delete reference
                 var timeOut = setTimeout(function()
                 {
-                    console.log('Inside timeout function');
+
                     refRequestResponse.set(null);
                     refRequestResponse.off();
                     r.reject({Response:'timeout'});
