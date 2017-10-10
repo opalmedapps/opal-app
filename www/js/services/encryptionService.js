@@ -12,6 +12,7 @@ myApp.service('EncryptionService',function(UserAuthorizationInfo){
 
 	var securityAnswerHash = '';
     var encryptionHash = '';
+    var tempEncryptionHash = '';
 
 
 	function decryptObject(object,secret)
@@ -192,18 +193,45 @@ myApp.service('EncryptionService',function(UserAuthorizationInfo){
 
         /**
          *@ngdoc method
+         *@name generateTempEncryptionHash
+         *@methodOf MUHCApp.service:EncryptionService
+         *@description returns a one-time encryption hash based on inputted parameters
+         *@return {String} Returns temporary encryption hash
+         **/
+        generateTempEncryptionHash: function (ssn, answer) {
+            tempEncryptionHash = CryptoJS.PBKDF2(ssn, answer, {keySize: 512/32, iterations: 1000}).toString(CryptoJS.enc.Hex);
+
+        },
+
+        /**
+         *@ngdoc method
+         *@name removeTempEncryptionHash
+         *@methodOf MUHCApp.service:EncryptionService
+         *@description deletes existing Temporary Encryption Hash
+         **/
+        removeTempEncryptionHash: function () {
+            tempEncryptionHash = "";
+
+        },
+
+        /**
+         *@ngdoc method
          *@name setEncryptionHash
          *@methodOf MUHCApp.service:EncryptionService
          *@description Encrypts a given password using SHA512
          *@return {String} Returns hashed password
          **/
         generateEncryptionHash: function () {
-			encryptionHash = CryptoJS.PBKDF2(UserAuthorizationInfo.getPassword(), securityAnswerHash, {keySize: 512/32, iterations: 1000}).toString(CryptoJS.enc.Hex);
+            encryptionHash = CryptoJS.PBKDF2(UserAuthorizationInfo.getPassword(), securityAnswerHash, {keySize: 512/32, iterations: 1000}).toString(CryptoJS.enc.Hex);
 
         },
 
         generateNonce: function() {
 			return nacl.randomBytes(nacl.secretbox.nonceLength)
+		},
+
+		getTempEncryptionHash: function() {
+        	return tempEncryptionHash;
 		}
 
 	};
