@@ -8,11 +8,7 @@ var exports=module.exports={};
 exports.resetPasswordRequest=function(requestKey, requestObject)
 {
 
-    console.log("reached reset password request...");
-
-
     var r=q.defer();
-    ////console.log(requestObject.UserEmail);
     var responseObject = {};
     //Get the patient fields to verify the credentials
     console.log(requestObject);
@@ -25,15 +21,12 @@ exports.resetPasswordRequest=function(requestKey, requestObject)
             r.resolve(responseObject);
         }else{
             //If the request is not erroneus simply direct the request to appropiate function based on the request mapping object
-            //var request = requestObject.Request;
-            //console.log(requestObject.Request, requestObject.Parameters);
             console.log(requestObject.Request);
             requestMappings[requestObject.Request](requestKey, requestObject,patient[0]).then(function(response){
                 r.resolve(response);
             });
         }
     }).catch(function(error){
-        //console.log("Reqeust error", error);
         //If there is an error with the queries reply with an error message
         responseObject = { Headers:{RequestKey:requestKey,RequestObject:requestObject}, Code: 2, Data:{},Response:'error', Reason: error+""};
         r.resolve(responseObject);
@@ -46,10 +39,6 @@ exports.verifySecurityAnswer=function(requestKey,requestObject,patient)
 
     var r=q.defer();
     var key = patient.AnswerText;
-    //var key = patient.Password;
-    console.log("the patient has the following info: " + JSON.stringify(patient));
-    console.log("the patients hashed answer is: " + key);
-    console.log("the request object is: " + requestObject.Parameters);
     var unencrypted = utility.decrypt(requestObject.Parameters, key);
     var response = {};
     var isSSNValid = unencrypted.SSN == patient.SSN;
@@ -58,7 +47,6 @@ exports.verifySecurityAnswer=function(requestKey,requestObject,patient)
     var isVerified;
     if (unencrypted.SSN == 'undefined' || unencrypted.SSN == '') isVerified = isAnswerValid;
     else isVerified = isSSNValid && isAnswerValid;
-    //console.log("Verified ", isVerified);
 
     if (isVerified)
     {
@@ -90,8 +78,6 @@ exports.setNewPassword=function(requestKey, requestObject,patient)
         var response = { RequestKey:requestKey, Code:3,Data:{PasswordReset:"true"}, Headers:{RequestKey:requestKey,RequestObject:requestObject},Response:'success'};
         r.resolve(response);
     }).catch(function(error){
-        //console.log('Invalid setting password', error);
-        //completeRequest(requestKey,{},'Invalid');
         var response = { Headers:{RequestKey:requestKey,RequestObject:requestObject}, Code: 2, Data:{},Response:'error', Reason:'Could not set password'};
         r.resolve(response);
     });
@@ -101,59 +87,31 @@ exports.setNewPassword=function(requestKey, requestObject,patient)
 
 exports.securityQuestion=function(requestKey,requestObject) {
     var r = q.defer();
-    //sqlInterface.getEncryption(requestObject).then(function(){
-    //  console.log()
-    //});
-    // sqlInterface.getFirstEncryption(requestObject).then(function(rows){
-    //     if(rows.length>1||rows.length === 0)
-    //     {
-    //         //Rejects requests if username returns more than one password
-    //         //console.log('Rejecting request due to injection attack', rows);
-    //         //Construction of request object
-    //         responseObject = { Headers:{RequestKey:requestKey,RequestObject:requestObject},EncryptionKey:'', Code: 1, Data:{},Response:'error', Reason:'Injection attack, incorrect UserID'};
+    var unencrypted = utility.decrypt(requestObject.Parameters,CryptoJS.SHA512("none").toString());
+    sqlInterface.updateDeviceIdentifier(requestObject, unencrypted)
+        .then(function () {
+            return sqlInterface.getSecurityQuestion(requestObject)
+        })
+        .then(function (response) {
+            r.resolve({
+                Code:3,
+                Data:response.Data,
+                Headers:{RequestKey:requestKey,RequestObject:requestObject},
+                Response:'success'
+            });
 
-    //         console.log(JSON.stringify("response: " + responseObject));
+        })
+        .catch(function (response){
+            r.resolve({
+                Headers:{RequestKey:requestKey,RequestObject:requestObject},
+                Code: 2,
+                Data:{},
+                Response:'error',
+                Reason:response
+            });
 
-    //         r.resolve(responseObject);
-    //     }else{
-    //         //Gets password and decrypts request
-    //         //console.log(rows);
-    //        var pass = rows[0].Password;
-            var unencrypted = utility.decrypt(requestObject.Parameters,CryptoJS.SHA512("none").toString());
-            //console.log(requestObject);
-            sqlInterface.updateDeviceIdentifier(requestObject, unencrypted)
-                .then(function () {
+        });
 
-                    console.log(JSON.stringify(requestObject));
-
-
-                    return sqlInterface.getSecurityQuestion(requestObject)
-                })
-                .then(function (response) {
-                    console.log(JSON.stringify(response));
-                    r.resolve({
-                        Code:3,
-                        Data:response.Data,
-                        Headers:{RequestKey:requestKey,RequestObject:requestObject},
-                        Response:'success'
-                    });
-
-                })
-                .catch(function (response){
-                    console.log(JSON.stringify(response));
-
-                    r.resolve({
-                        Headers:{RequestKey:requestKey,RequestObject:requestObject},
-                        Code: 2,
-                        Data:{},
-                        Response:'error',
-                        Reason:response
-                    });
-
-                });
-   //     }
-   // });
-    
     return r.promise;
 
 };
