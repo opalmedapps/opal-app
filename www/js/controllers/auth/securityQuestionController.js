@@ -105,7 +105,9 @@
                         return DeviceIdentifiers.sendDevicePasswordRequest(email);
                     })
                     .then(function (response) {
-                        vm.Question = response.Data.securityQuestion.securityQuestion_EN + " / " + response.Data.securityQuestion.securityQuestion_FR;
+                        $timeout(function() {
+                            vm.Question = response.Data.securityQuestion.securityQuestion_EN + " / " + response.Data.securityQuestion.securityQuestion_FR;
+                        });
                     })
                     .catch(handleError);
             } else {
@@ -136,6 +138,7 @@
             EncryptionService.generateEncryptionHash();
 
             if(passwordReset){
+                EncryptionService.generateTempEncryptionHash(EncryptionService.hash(vm.ssn), key);
                 $scope.initNavigator.pushPage('./views/login/new-password.html', {data: {oobCode: ResetPassword.getParameter("oobCode", parameters.url)}});
             }
             else {

@@ -62,17 +62,19 @@
                 ResetPassword.completePasswordChange(parameters.oobCode, newValue)
                     .then(function () {
 
-                        return RequestToServer.sendRequestWithResponse('SetNewPassword', {newPassword: newValue}, EncryptionService.getSecurityAns() ,
+                        return RequestToServer.sendRequestWithResponse('SetNewPassword', {newPassword: newValue}, EncryptionService.getTempEncryptionHash() ,
                             'passwordResetRequests',
                             'passwordResetResponses'
                         );
                     })
                     .then(function() {
                         UserAuthorizationInfo.clearUserAuthorizationInfo();
+                        EncryptionService.removeTempEncryptionHash();
                         vm.alert.type='success';
                         vm.alert.content="PASSWORDUPDATED";
                         localStorage.removeItem("deviceID");
                         localStorage.removeItem(UserAuthorizationInfo.getUsername()+"/securityAns");
+                        goToLogin();
                     })
                     .catch(function (error) {
 
