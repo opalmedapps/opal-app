@@ -71,8 +71,10 @@ exports.verifySecurityAnswer=function(requestKey,requestObject,patient)
 exports.setNewPassword=function(requestKey, requestObject,patient)
 {
     var r=q.defer();
-    var key = patient.AnswerText;
-    var unencrypted=utility.decrypt(requestObject.Parameters,key);
+    var answer = patient.AnswerText;
+    var ssn = patient.SSN;
+
+    var unencrypted=utility.decrypt(requestObject.Parameters, ssn, answer);
 
     sqlInterface.setNewPassword(unencrypted.newPassword,patient.PatientSerNum, requestObject.Token).then(function(){
         var response = { RequestKey:requestKey, Code:3,Data:{PasswordReset:"true"}, Headers:{RequestKey:requestKey,RequestObject:requestObject},Response:'success'};
