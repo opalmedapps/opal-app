@@ -74,6 +74,10 @@ exports.setNewPassword=function(requestKey, requestObject,patient)
     var answer = patient.AnswerText;
     var ssn = patient.SSN.toUpperCase();
 
+    console.log('answer: ' + answer);
+    console.log('ssn: ' + ssn);
+    console.log('hashed ssn: ' + utility.hash(ssn));
+
     var unencrypted=utility.decrypt(requestObject.Parameters, utility.hash(ssn), answer);
 
     sqlInterface.setNewPassword(unencrypted.newPassword,patient.PatientSerNum, requestObject.Token).then(function(){
