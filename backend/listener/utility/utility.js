@@ -98,6 +98,11 @@ exports.encryptObject=function(object,secret,nonce)
   }
 
 };
+
+exports.hash=function(input){
+  return CryptoJS.SHA512(input)
+
+};
 //Decryption function, returns an object whose values are all strings
 exports.decryptObject=function(object,secret)
 {

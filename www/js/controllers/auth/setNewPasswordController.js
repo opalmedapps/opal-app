@@ -16,11 +16,12 @@
         'RequestToServer',
         'UserAuthorizationInfo',
         'EncryptionService',
-        'ResetPassword'
+        'ResetPassword',
+        '$timeout'
     ];
 
     /* @ngInject */
-    function SetNewPasswordController($scope, RequestToServer, UserAuthorizationInfo, EncryptionService, ResetPassword) {
+    function SetNewPasswordController($scope, RequestToServer, UserAuthorizationInfo, EncryptionService, ResetPassword, $timeout) {
 
         var vm = this;
         var parameters;
@@ -34,6 +35,7 @@
 
         function activate() {
             parameters =  initNavigator.getCurrentPage().options;
+            parameters = parameters.data;
 
             $scope.$watch('newValue',function()
             {
@@ -90,8 +92,10 @@
                         vm.submitting = false;
                         UserAuthorizationInfo.clearUserAuthorizationInfo();
                         EncryptionService.removeTempEncryptionHash();
-                        vm.alert.type='success';
-                        vm.alert.content="PASSWORDUPDATED";
+                        $timeout(function() {
+                            vm.alert.type = 'success';
+                            vm.alert.content = "PASSWORDUPDATED";
+                        });
                         localStorage.removeItem("deviceID");
                         localStorage.removeItem(UserAuthorizationInfo.getUsername()+"/securityAns");
                     })
@@ -114,11 +118,8 @@
                                     break;
                             }
                         })
-
                     });
             }
         }
-
-
     }
 })();
