@@ -96,6 +96,7 @@
 
             // this checks whether or not the security question is being asked in order to log the user in or to trigger a password reset request
             if (parameters.passwordReset){
+
                 passwordReset = parameters.passwordReset;
                 vm.passwordReset = passwordReset;
 
@@ -139,6 +140,7 @@
 
             if(passwordReset){
                 EncryptionService.generateTempEncryptionHash(EncryptionService.hash(vm.ssn), key);
+                console.log("ooobcode: " + ResetPassword.getParameter("oobCode", parameters.url));
                 $scope.initNavigator.pushPage('./views/login/new-password.html', {data: {oobCode: ResetPassword.getParameter("oobCode", parameters.url)}});
             }
             else {

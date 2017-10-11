@@ -50,7 +50,7 @@ myApp.service('ResetPassword',function(){
          **/
         completePasswordChange : function (oobCode, newPassword) {
 
-
+            console.log('receieved: ' + JSON.stringify(oobCode) + ' and ' + newPassword);
             return auth.confirmPasswordReset(oobCode[1], newPassword)
         },
 
