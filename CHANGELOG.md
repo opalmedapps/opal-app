@@ -9,8 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 For new features
 
 #### Changed
-- Fix of Patient for Patients front-end
-For changes in existing functionality.
+
 #### Removed
 For deprecated features removed in this release.
 #### Fixed
