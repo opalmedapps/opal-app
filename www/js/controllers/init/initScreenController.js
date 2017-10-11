@@ -43,7 +43,7 @@
         vm.goToParking = goToParking;
         vm.goToGeneralSettings = goToGeneralSettings;
         vm.goToPatientCharter = goToPatientCharter;
-        vm.reportIssuesMail = reportIssuesMail;
+        vm.reportBugs = reportBugs;
         vm.goToLogin = goToLogin;
 
 
@@ -80,13 +80,13 @@
             //Initialize language if not initialized
             UserPreferences.initializeLanguage();
 
+            
             //Do not show the list breaking, equivalent of ng-cloak for angularjs, LOOK IT UP!!! https://docs.angularjs.org/api/ng/directive/ngCloak
             setTimeout(function(){
                 $("#listInitApp").css({display:'block'});
                 NavigatorParameters.setNavigator(initNavigator);
                 initNavigator.on('prepush', function(event) {
                     if (initNavigator._doorLock.isLocked()) {
-                        console.log("initScreenController door locked");
                         event.cancel();
                     }
                 });
@@ -159,6 +159,15 @@
                     }
                 });
             }
+        }
+
+        /**
+         * Report bugs function
+         */
+        function reportBugs()
+        {
+        //    TODO
+            initNavigator.pushPage('./views/general/bugreport/bugreport.html');
         }
 
         /**
