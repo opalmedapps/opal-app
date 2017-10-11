@@ -43,6 +43,7 @@
   "CONTACTHOSPITAL": "Contactez l'hôpital pour assistance",
   "CONTACTS": "Mon équipe soignante",
   "CONTINUE": "Continuer",
+  "COMINGSOON": "Disponible bientôt!",
   "CREATED": "Création",
   "DIAGNOSIS": "Diagnostic",
   "DIAGNOSIS_DATE": "Date",
@@ -178,6 +179,7 @@
   "PATIENTCHARTER": "Charte du patient",
   "PATIENTDOCUMENTS": "Documents du patient",
   "PATIENTID": "Identifiant Patient:",
+  "PP": "Politique de Confidentialité",
   "PFP": "Patients à votre aide",
   "PFP_EBOX": "Boîte à suggestions",
   "PFP_ANNOUNCEMENTS": "Annonces du comité",
@@ -201,6 +203,9 @@
   "PRIVACYPOLICY": "Politique de confidentialité",
   "PROBLEM_UPDATING_PASSWORD": "Problème de mise à jour du mot de passe",
   "PULLDOWNTOREFRESH": "Tirez pour rafraichîr la page",
+  "PP": "Politique de confidentialité",
+  "PROBLEM_UPDATING_PASSWORD": "Problème de mise à jour de mot de passe",
+  "PULLDOWNTOREFRESH": "Tirer pour rafraichîr la page",
   "QUESTIONNAIRES": "Questionnaires",
   "QUESTIONNAIRETOCOMPLETE": "Votre équipe de traitement vous a envoyé un questionnaire à remplir pendant que vous attendez votre prochain rendez-vous",
   "QUESTIONNAIRE_NEW": "Nouveau",
@@ -220,6 +225,7 @@
   "REENTER_PASSWORD": "Retaper le mot de passe",
   "REPORTISSUES": "Questions",
   "RESETPASSWORD": "Réinitialisez le mot de passe",
+  "REPORTBUGS": "Signaler Erreur",
   "RESULTS": "Résultats",
   "SEARCH": "Recherche",
   "SECUREYOURDEVICE": "Sécurisez votre appareil",
@@ -300,6 +306,7 @@
   "LAB_OUTSIDE_5":"Les valeurs en rouge se situent à l'extérieur du taux normal",
   "NUM_PATIENTS_AHEAD": "Nombre de patients devant vous: 2",
   "TIME_STATUS": "Rendez-vous devancé de 10 minutes",
+  "TOU": "Conditions d'Utilisation",
   "TOUR_WELCOME": "Bienvenue chez Opal!",
   "TOUR_WELCOME_DESC": "À travers cette application, vous trouverez toutes vous données. Sélectionez la flèche droite pour débuter.",
   "TOUR_HOME": "Dans l'onglet Accueil, vous trouverez des informations concernant l'actualité de votre statut médical, documents et rendez-vous.",
@@ -311,6 +318,8 @@
   "Complete Blood Count":"Formule sanguine complète",
   "Other":"Autres",
   "Electrolytes":"Électrolytes",
-  "Tumor markers":"Marqueurs tumoraux"
+  "Tumor markers":"Marqueurs tumoraux",
+  "GOTOWEBSITE":"Visitez le site"
+
 }
 

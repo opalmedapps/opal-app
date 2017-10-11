@@ -23,9 +23,9 @@
         function activate() {
 
             //remove the logged in user reference from DB
-            var refCurrentUser = FirebaseService.getDBRef('logged_in_users/' + UserAuthorizationInfo.getUsername());
-
-            refCurrentUser.remove();
+            // var refCurrentUser = FirebaseService.getDBRef('logged_in_users/' + UserAuthorizationInfo.getUsername());
+            //
+            // refCurrentUser.remove();
 
             //remove the saved authorized user info from session storage
             $window.sessionStorage.removeItem('UserAuthorizationInfo');
