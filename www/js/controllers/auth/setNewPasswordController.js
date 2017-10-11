@@ -15,11 +15,12 @@
         '$scope',
         'RequestToServer',
         'UserAuthorizationInfo',
-        'EncryptionService'
+        'EncryptionService',
+        'ResetPassword'
     ];
 
     /* @ngInject */
-    function SetNewPasswordController($scope, RequestToServer, UserAuthorizationInfo, EncryptionService) {
+    function SetNewPasswordController($scope, RequestToServer, UserAuthorizationInfo, EncryptionService, ResetPassword) {
 
         var vm = this;
         var parameters;
