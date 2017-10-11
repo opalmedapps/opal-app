@@ -27,7 +27,6 @@
         vm.goToLogin = goToLogin;
         vm.submitNewPassword = submitNewPassword;
 
-
         activate();
 
         ///////////////////////////////////
@@ -35,14 +34,33 @@
         function activate() {
             parameters =  initNavigator.getCurrentPage().options;
 
-            $scope.$watch('vm.newValue',function()
+            $scope.$watch('newValue',function()
             {
-                if($scope.alert.hasOwnProperty('type'))
+                vm.invalidPassword = !newPasswordIsValid();
+
+                if(vm.alert.hasOwnProperty('type') && vm.alert.type === 'danger')
                 {
-                    delete $scope.alert.type;
-                    delete $scope.alert.content;
+                    delete vm.alert.type;
+                    delete vm.alert.content;
                 }
             });
+        }
+
+        function newPasswordIsValid(){
+            var str = $scope.newValue;
+
+            if (str.length < 6) {
+                return false;
+            } else if (str.length > 50) {
+                return false
+            } else if (str.search(/\d/) === -1) {
+                return false
+            } else if (str.search(/[a-zA-Z]/) === -1) {
+                return false
+            } else if (str.search(/[^a-zA-Z0-9\!\@\#\$\%\^\&\*\(\)\_\+]/) !== -1) {
+                return false;
+            }
+            return true;
         }
 
         function goToLogin()
@@ -58,43 +76,48 @@
                 vm.alert.type='danger';
                 vm.alert.content = "ENTERVALIDPASSWORD";
             }else{
+                vm.submitting = true;
 
-                ResetPassword.completePasswordChange(parameters.oobCode, newValue)
+                ResetPassword.completePasswordChange(parameters.oobCode, $scope.newValue)
                     .then(function () {
-
-                        return RequestToServer.sendRequestWithResponse('SetNewPassword', {newPassword: newValue}, EncryptionService.getTempEncryptionHash() ,
+                        return RequestToServer.sendRequestWithResponse('SetNewPassword', {newPassword: $scope.newValue}, EncryptionService.getTempEncryptionHash() ,
                             'passwordResetRequests',
                             'passwordResetResponses'
                         );
                     })
                     .then(function() {
+                        vm.submitting = false;
                         UserAuthorizationInfo.clearUserAuthorizationInfo();
                         EncryptionService.removeTempEncryptionHash();
                         vm.alert.type='success';
                         vm.alert.content="PASSWORDUPDATED";
                         localStorage.removeItem("deviceID");
                         localStorage.removeItem(UserAuthorizationInfo.getUsername()+"/securityAns");
-                        goToLogin();
                     })
                     .catch(function (error) {
+                        $timeout(function(){
+                            vm.submitting = false;
+                            vm.alert.type='danger';
+                            switch (error.code) {
+                                case "auth/invalid-action-code":
+                                    vm.alert.content = "CODE_INVALID";
+                                    break;
+                                case "auth/expired-action-code":
+                                    vm.alert.content = "CODE_EXPIRED";
+                                    break;
+                                case "auth/weak-password":
+                                    vm.alert.content = "WEAK_PASSWORD";
+                                    break;
+                                default:
+                                    vm.alert.content = "SERVERPROBLEM";
+                                    break;
+                            }
+                        })
 
-                        vm.alert.type='danger';
-                        switch (error.code) {
-                            case "auth/invalid-action-code":
-                                vm.alert.content = "CODE_INVALID";
-                                break;
-                            case "auth/expired-action-code":
-                                vm.alert.content = "CODE_EXPIRED";
-                                break;
-                            case "auth/weak-password":
-                                vm.alert.content = "WEAK_PASSWORD";
-                                break;
-                            default:
-                                vm.alert.content = "SERVERPROBLEM";
-                                break;
-                        }
                     });
             }
         }
+
+
     }
 })();
