@@ -56,6 +56,9 @@ exports.encrypt = function(object,secret,salt)
 };
 exports.decrypt= function(object,secret,salt)
 {
+
+  console.log("secret (aka the hashed ssn) recieved by decrypy: " + secret);
+  console.log("salt (aka the secret answer: " + salt);
   secret = (salt)?CryptoJS.PBKDF2(secret, salt, {keySize: 512/32, iterations: 1000}).toString(CryptoJS.enc.Hex):secret;
 
   console.log("secret for decrypting: " + secret);
