@@ -140,7 +140,6 @@
 
             if(passwordReset){
                 EncryptionService.generateTempEncryptionHash(EncryptionService.hash(vm.ssn), key);
-                console.log("ooobcode: " + ResetPassword.getParameter("oobCode", parameters.url));
                 $scope.initNavigator.pushPage('./views/login/new-password.html', {data: {oobCode: ResetPassword.getParameter("oobCode", parameters.url)}});
             }
             else {
