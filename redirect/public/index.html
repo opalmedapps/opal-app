@@ -67,8 +67,7 @@
   <script>
       setTimeout(function(){
         var url =  window.location.href;
-        var params = url.split('#');
-        window.location.replace("opal://"+ params[1]);
+        window.location.replace("opal://"+ url);
       }, 1000);
   </script>
 </html>
