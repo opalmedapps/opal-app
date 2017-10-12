@@ -76,6 +76,8 @@ exports.setNewPassword=function(requestKey, requestObject,patient)
 
     var unencrypted=utility.decrypt(requestObject.Parameters, utility.hash(ssn), answer);
 
+    console.log("unencrypted: " + JSON.stringify(unencrypted));
+
     sqlInterface.setNewPassword(unencrypted.newPassword,patient.PatientSerNum, requestObject.Token).then(function(){
         var response = { RequestKey:requestKey, Code:3,Data:{PasswordReset:"true"}, Headers:{RequestKey:requestKey,RequestObject:requestObject},Response:'success'};
         r.resolve(response);
