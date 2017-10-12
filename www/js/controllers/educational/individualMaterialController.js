@@ -39,11 +39,14 @@
 
             //set educational material language
             vm.edumaterial =EducationalMaterial.setLanguage(param.Post);
+            console.log(vm.edumaterial);
             Logger.sendLog('Educational Material', param.Post.EducationalMaterialSerNum);
 
             //Determine if material has a ShareURL and is printable
             if(vm.edumaterial.hasOwnProperty('ShareURL')&& vm.edumaterial.ShareURL !=="") {
+                console.log("yes");
                 vm.isPrintable = FileManagerService.isPDFDocument(vm.edumaterial.ShareURL);
+                console.log(vm.isPrintable);
             }
 
             //Determine if material is a booklet
