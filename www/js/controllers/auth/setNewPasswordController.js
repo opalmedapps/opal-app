@@ -84,8 +84,6 @@
                 ResetPassword.completePasswordChange(parameters.oobCode, $scope.newValue)
                     .then(function () {
 
-                        console.log("tenp hash before sending request: " + EncryptionService.getTempEncryptionHash());
-
                         return RequestToServer.sendRequestWithResponse('SetNewPassword', {newPassword: $scope.newValue}, EncryptionService.getTempEncryptionHash() ,
                             'passwordResetRequests',
                             'passwordResetResponses'

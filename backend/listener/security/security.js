@@ -71,12 +71,8 @@ exports.verifySecurityAnswer=function(requestKey,requestObject,patient)
 exports.setNewPassword=function(requestKey, requestObject,patient)
 {
     var r=q.defer();
-    var answer = patient.AnswerText;
     var ssn = patient.SSN.toUpperCase();
-
-    console.log('answer: ' + answer);
-    console.log('ssn: ' + ssn);
-    console.log('hashed ssn: ' + utility.hash(ssn));
+    var answer = patient.AnswerText;
 
     var unencrypted=utility.decrypt(requestObject.Parameters, utility.hash(ssn), answer);
 
