@@ -199,14 +199,7 @@ myApp.service('EncryptionService',function(UserAuthorizationInfo){
          *@return {String} Returns temporary encryption hash
          **/
         generateTempEncryptionHash: function (ssn, answer) {
-
-        	console.log("generating temp encryption hash");
-        	console.log("ssn: " + ssn);
-        	console.log("answer: " + answer);
-
-
-        	console.log("switching params around");
-            tempEncryptionHash = CryptoJS.PBKDF2(answer, ssn, {keySize: 512/32, iterations: 1000}).toString(CryptoJS.enc.Hex);
+            tempEncryptionHash = CryptoJS.PBKDF2(ssn, answer, {keySize: 512/32, iterations: 1000}).toString(CryptoJS.enc.Hex);
 
             console.log("temp enc hash: " + tempEncryptionHash);
 

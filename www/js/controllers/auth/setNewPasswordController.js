@@ -74,7 +74,7 @@
 
         function submitNewPassword(newValue)
         {
-            if(!newValue)
+            if(!newValue || !newPasswordIsValid())
             {
                 vm.alert.type='danger';
                 vm.alert.content = "ENTERVALIDPASSWORD";
