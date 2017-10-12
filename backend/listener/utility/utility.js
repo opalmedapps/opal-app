@@ -57,12 +57,7 @@ exports.encrypt = function(object,secret,salt)
 exports.decrypt= function(object,secret,salt)
 {
 
-  console.log("secret (aka the hashed ssn) recieved by decrypyt: " + secret);
-  console.log("salt (aka the secret answer: " + salt);
   secret = (salt)?CryptoJS.PBKDF2(secret, salt, {keySize: 512/32, iterations: 1000}).toString(CryptoJS.enc.Hex):secret;
-
-  console.log("secret for decrypting: " + secret);
-
   return exports.decryptObject(object, stablelibutf8.encode(secret.substring(0,nacl.secretbox.keyLength)));
 };
 
@@ -112,7 +107,6 @@ exports.hash=function(input){
 //Decryption function, returns an object whose values are all strings
 exports.decryptObject=function(object,secret)
 {
-  console.log("the received secret has this length: " + secret.length);
   if(typeof object ==='string')
   {
     var enc = splitNonce(object);
@@ -127,14 +121,8 @@ exports.decryptObject=function(object,secret)
       } else if (key!=='UserID' && key!=='DeviceId') {
           var enc = splitNonce(object[key]);
 
-          console.log("object key: " + key);
-          console.log("data at this key: " + object[key]);
-
-          console.log("nonce: " + stablelibbase64.encode(enc[0]));
-          console.log("data extracted: " + stablelibbase64.encode(enc[1]));
 
           let dec = stablelibutf8.decode(nacl.secretbox.open(enc[1], enc[0], secret));
-          console.log(dec);
           object[key] = (typeof dec === 'boolean') ? "" : dec;
       }
     }
@@ -209,7 +197,6 @@ function Queue()
       array.splice(head,1);
       return poppedElement;
     }else{
-      console.log('Queue is empty');
     }
   };
 }
