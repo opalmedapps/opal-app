@@ -204,7 +204,9 @@ myApp.service('EncryptionService',function(UserAuthorizationInfo){
         	console.log("ssn: " + ssn);
         	console.log("answer: " + answer);
 
-            tempEncryptionHash = CryptoJS.PBKDF2(ssn, answer, {keySize: 512/32, iterations: 1000}).toString(CryptoJS.enc.Hex);
+
+        	console.log("switching params around");
+            tempEncryptionHash = CryptoJS.PBKDF2(answer, ssn, {keySize: 512/32, iterations: 1000}).toString(CryptoJS.enc.Hex);
 
             console.log("temp enc hash: " + tempEncryptionHash);
 
