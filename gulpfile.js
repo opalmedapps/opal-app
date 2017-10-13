@@ -96,7 +96,7 @@ gulp.task('serve', ['connect','open', 'watch-files']);
  *
  */
 //Main building task for production
-gulp.task('build',['minify-js','minify-css','minify-vendor-js','minify-html','minify-images','copy-non-minifiable-content','copy-vendor-css','size-prebuild','size-postbuild']);
+gulp.task('build',['minify-js','minify-css','minify-vendor-js','minify-html','minify-images','copy-non-minifiable-content', 'size-prebuild','size-postbuild']);
 
 //Minifying images task
 gulp.task('minify-images', function(){
@@ -160,17 +160,12 @@ gulp.task('minify-vendor-js',function()
     ]).pipe(concat('vendorjs.min.js')).pipe(uglify()).pipe(gulp.dest('dest/lib'));
 });
 
-//Copy css files
-gulp.task('copy-vendor-css',function()
-{
-    return gulp.src(['www/lib/bower_components/angular/*.css','www/lib/bower_components/font-awesome/css/**/*','www/lib/bower_components/bootstrap/dist/css/*', 'www/lib/js/onsenui/css/**/*'],{base:'www'}).pipe(gulp.dest(cordovaFolderPath));
-});
 
 //Minify html
 gulp.task('minify-html', function() {
     return gulp.src('www/views/**/*.html')
         .pipe(htmlmin({collapseWhitespace: true}))
-        .pipe(gulp.dest(cordovaFolderPath+'/views'));
+        .pipe(gulp.dest('dest/views'));
 });
 
 //Find out the size of the original folder
