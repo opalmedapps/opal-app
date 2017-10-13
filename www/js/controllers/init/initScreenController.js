@@ -43,7 +43,7 @@
         vm.goToParking = goToParking;
         vm.goToGeneralSettings = goToGeneralSettings;
         vm.goToPatientCharter = goToPatientCharter;
-        vm.reportIssuesMail = reportIssuesMail;
+        vm.reportBugs = reportBugs;
         vm.goToLogin = goToLogin;
 
 
@@ -159,6 +159,15 @@
                     }
                 });
             }
+        }
+
+        /**
+         * Report bugs function
+         */
+        function reportBugs()
+        {
+        //    TODO
+            initNavigator.pushPage('./views/general/bugreport/bugreport.html');
         }
 
         /**
