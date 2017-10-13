@@ -37,16 +37,16 @@
             parameters =  initNavigator.getCurrentPage().options;
             parameters = parameters.data;
 
-            // $scope.$watch('newValue',function()
-            // {
-            //     vm.invalidPassword = !newPasswordIsValid();
-            //
-            //     if(vm.alert.hasOwnProperty('type') && vm.alert.type === 'danger')
-            //     {
-            //         delete vm.alert.type;
-            //         delete vm.alert.content;
-            //     }
-            // });
+            $scope.$watch('newValue',function()
+            {
+                vm.invalidPassword = !newPasswordIsValid();
+
+                if(vm.alert.hasOwnProperty('type') && vm.alert.type === 'danger')
+                {
+                    delete vm.alert.type;
+                    delete vm.alert.content;
+                }
+            });
         }
 
         function newPasswordIsValid() {
