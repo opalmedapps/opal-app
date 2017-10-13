@@ -21,8 +21,6 @@
     {
         var vm = this;
 
-        var prevPatientDur = null;
-        var initialNumPrevPatients = null;
         var myTimeOut = null;
         
         vm.numPrevPatientsNotCheckedIn = null;
@@ -53,7 +51,6 @@
             console.log("vm.checkedInAppointments length: " + vm.checkedInAppointments.length);
             TimeEstimate.requestTimeEstimate(vm.checkedInAppointments).then(function () {
                 var timeEstimate = TimeEstimate.getTimeEstimate();
-                console.log("timeEstimate length: " + timeEstimate.length);
                 for (var i = 0; i < timeEstimate.length; i++) {
                     var tmpDict = {};
                     var tmpDur = [];
@@ -106,7 +103,6 @@
                 myTimeOut = $timeout(tick, 60000);
             },
             function(error){
-                console.log(JSON.stringify(error));
                 vm.estimatedWait = "No estimation available!";
             });
         }
@@ -119,25 +115,22 @@
             var hr = Math.floor(totalMins/60) > 1 ? "Hrs " : "Hr ";
             var min = Math.round(totalMins%60) > 1 ? "Mins" : "Min";
             return Math.floor(totalMins/60) + hr + Math.round(totalMins%60) + min;
-        }
+        };
 
         function goToWaitingTimeEstimates(appointmentAriaSer) {
             $timeout.cancel(myTimeOut);
-            console.log("Tick destroyed");
             NavigatorParameters.setParameters({'Navigator':'homeNavigator', 'appointmentAriaSer':appointmentAriaSer});
             homeNavigator.pushPage('views/home/checkin/waiting-time-more-info.html');
         }
         vm.goToWaitingTimeEstimates = goToWaitingTimeEstimates;
 
         var tick = function() {
-            console.log("Inside tick");
             requestEstimate();
-        }
+        };
         tick();
 
         $scope.$on('$destroy', function(){
             $timeout.cancel(myTimeOut);
-            console.log("Tick destroyed");
         });
     }
 })();
