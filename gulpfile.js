@@ -152,26 +152,24 @@ gulp.task('minify-vendor-js',function()
         'www/lib/bower_components/angular-translate-loader-url/angular-translate-loader-url.js',
         'www/lib/bower_components/angular-ui-router/release/angular-ui-router.js',
         'www/lib/bower_components/firebase/firebase.js',
-        'www/lib/js/cryptojs/aes.js',
-        'www/lib/js/cryptojs/mode-cfb-min.js',
-        'www/lib/js/cryptojs/sha256.js',
         'www/lib/bower_components/progressbar.js/dist/progressbar.js',
         'www/lib/bower_components/ngCordova/dist/ng-cordova.js',
         'www/lib/bower_components/bootstrap/dist/js/bootstrap.js',
         'www/lib/bower_components/onsenui/js/onsenui.js',
         'www/lib/js/angular-bootstrap/ui-bootstrap-tpls-1.1.2.js',
-        'www/lib/js/cryptojs/*.js',
         'www/lib/bower_components/angular-tek-progress-bar/dist/tek.progress-bar.js',
         'www/lib/bower_components/angular-scroll-glue/src/scrollglue.js',
         'www/lib/bower_components/angularfire/dist/angularfire.js',
         'www/lib/bower_components/angular-mocks/angular-mocks.js',
         'www/lib/bower_components/tweetnacl/nacl-fast.min.js',
+        'www/lib/bower_components/tweetnacl-util/nacl-util.min.js',
         'www/lib/bower_components/highcharts/highstock.js',
         'www/lib/bower_components/moment/moment.js',
         'www/lib/bower_components/pdfjs-dist/build/pdf.js',
         'www/lib/bower_components/pdfjs-dist/build/pdf.worker.min.js',
         'www/lib/bower_components/pdfjs-dist/web/pdf_viewer.js',
-        'www/lib/js/materialize.min.js'
+        'www/lib/js/materialize.min.js',
+        'www/lib/bower_components/crypto-js/crypto-js.js'
     ]).pipe(concat('vendor.min.js')).pipe(uglify()).pipe(gulp.dest('dest/vendor'));
 });
 
