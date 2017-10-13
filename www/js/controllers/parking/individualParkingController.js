@@ -55,7 +55,6 @@
             var link = parkingInformation[language][parameters.type].link;
             $.get(link)
                 .then(function(res){
-                    console.log(link);
                     res.replace(/(\r\n|\n|\r)/gm, " ");
                     vm.loading=false;
                     vm.htmlBind=res;
