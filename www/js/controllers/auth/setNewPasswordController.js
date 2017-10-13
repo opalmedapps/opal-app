@@ -25,7 +25,7 @@
 
         var vm = this;
         var parameters;
-        vm.alert={};
+        vm.alert = {};
         vm.goToLogin = goToLogin;
         vm.submitNewPassword = submitNewPassword;
 
@@ -37,45 +37,50 @@
             parameters =  initNavigator.getCurrentPage().options;
             parameters = parameters.data;
 
-            $scope.$watch('newValue',function()
-            {
-                vm.invalidPassword = !newPasswordIsValid();
-
-                if(vm.alert.hasOwnProperty('type') && vm.alert.type === 'danger')
-                {
-                    delete vm.alert.type;
-                    delete vm.alert.content;
-                }
-            });
+            // $scope.$watch('newValue',function()
+            // {
+            //     vm.invalidPassword = !newPasswordIsValid();
+            //
+            //     if(vm.alert.hasOwnProperty('type') && vm.alert.type === 'danger')
+            //     {
+            //         delete vm.alert.type;
+            //         delete vm.alert.content;
+            //     }
+            // });
         }
 
-        function newPasswordIsValid(){
+        function newPasswordIsValid() {
             var str = $scope.newValue;
-
-            if (str.length < 6) {
-                return false;
-            } else if (str.length > 50) {
-                return false
-            } else if (str.search(/\d/) === -1) {
-                return false
-            } else if (str.search(/[a-zA-Z]/) === -1) {
-                return false
-            } else if (str.search(/[^a-zA-Z0-9\!\@\#\$\%\^\&\*\(\)\_\+]/) !== -1) {
-                return false;
+            if (str && typeof str === 'string')
+            {
+                if ( str.length < 6) {
+                    return false;
+                } else if (str.length > 50) {
+                    return false;
+                } else if (str.search(/\d/) === -1) {
+                    return false;
+                } else if (str.search(/[a-zA-Z]/) === -1) {
+                    return false;
+                } else if (str.search(/[^a-zA-Z0-9\!\@\#\$\%\^\&\*\(\)\_\+]/) !== -1) {
+                    return false;
+                }
             }
+
             return true;
         }
-
+        console.log("WJAT");
         function goToLogin()
         {
-            initNavigator.resetToPage('./views/init/init-screen.html');
+            initNavigator.resetToPage('./views/init/init-screen.html',{animation:'none'});
         }
 
 
         function submitNewPassword(newValue)
         {
-            if(!newValue || !newPasswordIsValid())
+            var invalid = !newPasswordIsValid();
+            if(!newValue || invalid)
             {
+                vm.invalidPassword= invalid;
                 vm.alert.type='danger';
                 vm.alert.content = "ENTERVALIDPASSWORD";
             }else{
