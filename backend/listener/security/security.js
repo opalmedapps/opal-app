@@ -11,7 +11,6 @@ exports.resetPasswordRequest=function(requestKey, requestObject)
     var r=q.defer();
     var responseObject = {};
     //Get the patient fields to verify the credentials
-    console.log(requestObject);
 
     sqlInterface.getPatientFieldsForPasswordReset(requestObject).then(function(patient){
         //Check for injection attacks by the number of rows the result is returning
@@ -21,7 +20,6 @@ exports.resetPasswordRequest=function(requestKey, requestObject)
             r.resolve(responseObject);
         }else{
             //If the request is not erroneus simply direct the request to appropiate function based on the request mapping object
-            console.log(requestObject.Request);
             requestMappings[requestObject.Request](requestKey, requestObject,patient[0]).then(function(response){
                 r.resolve(response);
             });
@@ -76,7 +74,6 @@ exports.setNewPassword=function(requestKey, requestObject,patient)
 
     var unencrypted=utility.decrypt(requestObject.Parameters, utility.hash(ssn), answer);
 
-    console.log("unencrypted: " + JSON.stringify(unencrypted));
 
     sqlInterface.setNewPassword(unencrypted.newPassword,patient.PatientSerNum, requestObject.Token).then(function(){
         var response = { RequestKey:requestKey, Code:3,Data:{PasswordReset:"true"}, Headers:{RequestKey:requestKey,RequestObject:requestObject},Response:'success'};
