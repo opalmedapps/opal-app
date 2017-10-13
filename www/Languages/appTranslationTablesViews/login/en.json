@@ -70,5 +70,6 @@
 	"TERMSOFUSE": "Terms of Use",
 	"TRUST_DEVICE": "Set this device as a trusted device? ",
 	"TOO_MANY_REQUESTS": "Too many login attempts. Please try again later.",
-	"UNATTENDED": "Do not leave your phone unattended."
+	"UNATTENDED": "Do not leave your phone unattended.",
+	"NEWPASSWORDVALIDATION":"New password must be at least 6 characters and must contain at least one letter, and one number!"
 }
