@@ -62,8 +62,8 @@ myApp.service('UserPreferences',[ 'UserAuthorizationInfo','$rootScope','tmhDynam
                 $rootScope.fontSizeDesc='fontDescLarge';
                 $rootScope.fontSizeTitle='fontTitleLarge';
             }else if(size==='xlarge'){
-                $rootScope.fontSizeDesc='fontDescXLarge';
-                $rootScope.fontSizeTitle='fontTitleXLarge';
+                $rootScope.fontSizeDesc='fontDescXlarge';
+                $rootScope.fontSizeTitle='fontTitleXlarge';
             }
         },
         /**
@@ -104,7 +104,7 @@ myApp.service('UserPreferences',[ 'UserAuthorizationInfo','$rootScope','tmhDynam
         },
         /**
          *@ngdoc method
-         *@name getFontSize
+         *@name getNativeCalendarOption
          *@methodOf MUHCApp.service:UserPreferences
          *@returns {String} Returns calendarOption
          **/
@@ -113,7 +113,7 @@ myApp.service('UserPreferences',[ 'UserAuthorizationInfo','$rootScope','tmhDynam
         },
         /**
          *@ngdoc method
-         *@name getFontSize
+         *@name initializeLanguage
          *@methodOf MUHCApp.service:UserPreferences
          *@description The method accesses the globalization plugin of the device to find the actual language of device and sets default to that language. Otherwise it sets
          *English as default

@@ -158,6 +158,7 @@
         function handleError(error) {
             $timeout(function(){
                 vm.alert.type='danger';
+                console.log(error.code);
                 switch (error.code){
                     case "auth/expired-action-code":
                         vm.alert.content = "CODE_EXPIRED";
@@ -172,14 +173,13 @@
                         vm.alert.content = "INVALID_USER";
                         break;
                     case "three-tries":
-                        vm.alert.content = "CONTACTHOSPITAL";
+                        vm.alert.content = "OUTOFTRIES";
                         vm.threeTries=true;
                         break;
-                    case "corrupted-date":
+                    case "corrupted-data":
                         vm.alert.content = "CONTACTHOSPITAL";
                         break;
                     case "wrong-answer":
-                        vm.alert.type='danger';
                         vm.alert.content="ERRORANSWERNOTMATCH";
                         break;
                     default:
@@ -250,6 +250,7 @@
 
                 RequestToServer.sendRequestWithResponse('VerifyAnswer',parameterObject, key, firebaseRequestField, firebaseResponseField).then(function(data)
                 {
+                    console.log(data);
                     vm.submitting = false;
                     if(data.Data.AnswerVerified === "true")
                     {
@@ -264,7 +265,7 @@
 
                             if(vm.attempts >= 3)
                             {
-                                handleError({code: "threeTries"});
+                                handleError({code: "three-tries"});
                             }else{
                                 handleError({code: "wrong-answer"});
                             }
@@ -277,11 +278,16 @@
                 {
                     vm.submitting = false;
                     removeUserData();
-
-                    if(error.Reason.toLowerCase().indexOf('malformed utf-8') === -1) {
+                    if(error.Reason.toLowerCase().indexOf('malformed utf-8') !== -1) {
                         handleError({code: "corrupted-data"});
                     } else {
-                        handleError({code: "wrong-answer"});
+                        vm.attempts = vm.attempts + 1;
+                        if(vm.attempts >= 3)
+                        {
+                            handleError({code: "three-tries"});
+                        }else{
+                            handleError({code: "wrong-answer"});
+                        }
                     }
 
                 });
