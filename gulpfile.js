@@ -6,7 +6,6 @@
  */
 
 var gulp = require('gulp');
-var jshint = require('gulp-jshint');
 var gulpDocs = require('gulp-ngdocs');
 var connect = require('gulp-connect');
 var concat = require('gulp-concat');
@@ -98,7 +97,7 @@ gulp.task('serve', ['connect','open', 'watch-files']);
 //Main building task for production
 gulp.task('build',['minify-js','minify-css','minify-vendor-js','minify-html','minify-images','copy-non-minifiable-content', 'size-prebuild','size-postbuild']);
 
-//Minifying images task
+//Minify images
 gulp.task('minify-images', function(){
     return gulp.src('www/img/*.+(png|jpg|jpeg|gif|svg)')
         // Caching images that ran through imagemin
@@ -114,6 +113,12 @@ gulp.task('minify-css', function() {
         .pipe(concat('app.min.css'))
         .pipe(cleanCSS({compatibility: 'ie8'}))
         .pipe(gulp.dest('dest/css'));
+});
+
+//Copy css files
+gulp.task('copy-vendor-css',function()
+{
+    return gulp.src(['www/lib/bower_components/angular/*.css','www/lib/bower_components/font-awesome/css/**/*','www/lib/bower_components/bootstrap/dist/css/*', 'www/lib/js/onsenui/css/**/*'],{base:'www'}).pipe(gulp.dest(cordovaFolderPath));
 });
 
 //Minifies all the app code, concatanates and adds to dest folder
@@ -156,7 +161,9 @@ gulp.task('minify-vendor-js',function()
         'www/lib/bower_components/moment/moment.js',
         'www/lib/bower_components/pdfjs-dist/build/pdf.js',
         'www/lib/bower_components/pdfjs-dist/build/pdf.worker.min.js',
-        'www/lib/bower_components/pdfjs-dist/web/pdf_viewer.js'
+        'www/lib/bower_components/pdfjs-dist/web/pdf_viewer.js',
+        'www/lib/js/materialize.min.js'
+
     ]).pipe(concat('vendorjs.min.js')).pipe(uglify()).pipe(gulp.dest('dest/lib'));
 });
 
