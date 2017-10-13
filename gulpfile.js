@@ -13,31 +13,12 @@ var concat = require('gulp-concat');
 var uglify = require('gulp-uglify');
 var ngAnnotate = require('gulp-ng-annotate');
 var cleanCSS = require('gulp-clean-css');
-var karma = require('gulp-karma');
 var htmlmin = require('gulp-htmlmin');
-var importCss = require('gulp-import-css');
-//var bytediff = require('gulp-bytediff');
 var imagemin = require('gulp-imagemin');
 var cache = require('gulp-cache');
 var size = require('gulp-size');
 var notify = require('gulp-notify');
-var changed = require('gulp-changed');
 var open = require('gulp-open');
-
-/**
- *
- * Linting of js files for better formatting and conventions
- */
-gulp.task('lint', function() {
-    return gulp.src(['www/js/**/*.js', './test/**/*.js'])
-        .pipe(jshint())
-        .pipe(jshint.reporter('jshint-stylish'));
-});
-
-//Watch linting task
-gulp.task('watch-lint', function() {
-    gulp.watch(['www/**/*'], ['lint']);
-});
 
 /**
  *
@@ -58,6 +39,7 @@ gulp.task('ngdocs', [], function () {
         .pipe(gulpDocs.process(options))
         .pipe(gulp.dest('./docs'));
 });
+
 //Watch changes to files in order to write up documentation
 gulp.task('watch-docs',function(){
     gulp.watch(['www/js/**/*.js'],['ngdocs']);
@@ -116,25 +98,14 @@ gulp.task('serve', ['connect','open', 'watch-files']);
 //Main building task for production
 gulp.task('build',['minify-js','minify-css','minify-vendor-js','minify-html','minify-images','copy-non-minifiable-content','copy-vendor-css','size-prebuild','size-postbuild']);
 
-function bytediffFormatter(data) {
-    var formatPercent = function(num, precision) {
-        return (num * 100).toFixed(precision);
-    };
-    var difference = (data.savings > 0) ? ' smaller.' : ' larger.';
-
-    return data.fileName + ' went from ' +
-        (data.startSize / 1000).toFixed(2) + ' kB to ' + (data.endSize / 1000).toFixed(2) + ' kB' +
-        ' and is ' + formatPercent(1 - data.percent, 2) + '%' + difference;
-}
-
 //Minifying images task
 gulp.task('minify-images', function(){
     return gulp.src('www/img/*.+(png|jpg|jpeg|gif|svg)')
-    // Caching images that ran through imagemin
+        // Caching images that ran through imagemin
         .pipe(cache(imagemin({
             interlaced: true
         })))
-        .pipe(gulp.dest(cordovaFolderPath+'/img'));
+        .pipe(gulp.dest('dest/img'));
 });
 
 //Minifying app css task
@@ -142,13 +113,13 @@ gulp.task('minify-css', function() {
     return gulp.src('www/css/*.css')
         .pipe(concat('app.min.css'))
         .pipe(cleanCSS({compatibility: 'ie8'}))
-        .pipe(gulp.dest(cordovaFolderPath+'/css'));
+        .pipe(gulp.dest('dest/css'));
 });
 
-//Minifies all the app code, concatanates and adds to cordova folder
+//Minifies all the app code, concatanates and adds to dest folder
 gulp.task('minify-js',function()
 {
-    gulp.src('./www/js/**/*').pipe(concat('app.min.js')).pipe(ngAnnotate()).pipe(uglify()).pipe(gulp.dest(cordovaFolderPath+'/js'));
+    gulp.src('./www/js/**/*').pipe(concat('app.min.js')).pipe(ngAnnotate()).pipe(uglify()).pipe(gulp.dest('dest/js'));
 });
 
 //Minifies all vendor files, could be improved by writing a proper bower.json file for the project
@@ -179,7 +150,14 @@ gulp.task('minify-vendor-js',function()
         'www/lib/bower_components/angular-tek-progress-bar/dist/tek.progress-bar.js',
         'www/lib/js/scrollglue/scrollglue.js',
         'www/lib/bower_components/angularfire/dist/angularfire.js',
-        'www/lib/bower_components/angular-mocks/angular-mocks.js']).pipe(concat('vendorjs.min.js')).pipe(uglify()).pipe(gulp.dest(cordovaFolderPath+'/lib'));
+        'www/lib/bower_components/angular-mocks/angular-mocks.js',
+        'www/lib/bower_components/tweetnacl/nacl-fast.min.js',
+        'www/lib/bower_components/highcharts/highstock.js',
+        'www/lib/bower_components/moment/moment.js',
+        'www/lib/bower_components/pdfjs-dist/build/pdf.js',
+        'www/lib/bower_components/pdfjs-dist/build/pdf.worker.min.js',
+        'www/lib/bower_components/pdfjs-dist/web/pdf_viewer.js'
+    ]).pipe(concat('vendorjs.min.js')).pipe(uglify()).pipe(gulp.dest('dest/lib'));
 });
 
 //Copy css files
@@ -222,7 +200,6 @@ gulp.task('size-postbuild', function() {
  */
 
 
-//TASKS FOR TEMPLATES
 //TASKS FOR TEMPLATES
 
 var inject = require('gulp-inject');
@@ -291,23 +268,23 @@ gulp.task('opal', function(){
      starttag: '<!-- inject:tab-->',
      transform:function()
     {
-    var str = "<ons-list-item modifier=\"chevron\" class=\"item\" ng-click=\""+argv.v+ "Navigator.pushPage('./views/"+argv.v+"/"+name+"/"+name+".html')\">"+
-                  `<ons-row align=\"center\">
-                  <ons-col width=\"60px\" align=\"center\">
-                        <div>
-                            <i class=\"fa fa-question-circle iconHomeView\" style=\"color:DarkSlateGray\"></i><span class=\"notification\" ng-show=\"questionnairesUnreadNumber>0\">{{questionnairesUnreadNumber}}</span>
-                        </div>
-                    </ons-col>
-                    <ons-col>
-                        <header>
-                            <span class=\"item-title\" ng-class=\"fontSizeTitle\">`+name+`</span>
-                        </header>
-                        <p class=\"item-desc\" ng-class=\"fontSizeDesc\"></p>
-                    </ons-col>
-                </ons-row>
-                </ons-list-item>`;
+        var str = "<ons-list-item modifier=\"chevron\" class=\"item\" ng-click=\""+argv.v+ "Navigator.pushPage('./views/"+argv.v+"/"+name+"/"+name+".html')\">"+
+                      `<ons-row align=\"center\">
+                      <ons-col width=\"60px\" align=\"center\">
+                            <div>
+                                <i class=\"fa fa-question-circle iconHomeView\" style=\"color:DarkSlateGray\"></i><span class=\"notification\" ng-show=\"questionnairesUnreadNumber>0\">{{questionnairesUnreadNumber}}</span>
+                            </div>
+                        </ons-col>
+                        <ons-col>
+                            <header>
+                                <span class=\"item-title\" ng-class=\"fontSizeTitle\">`+name+`</span>
+                            </header>
+                            <p class=\"item-desc\" ng-class=\"fontSizeDesc\"></p>
+                        </ons-col>
+                    </ons-row>
+                    </ons-list-item>`;
 
-        return str;
+            return str;
     }}))
     .pipe(gulp.dest("./www/views/"+argv.v)));
 
