@@ -33,7 +33,7 @@
         <div ng-hide="calendar.loading">
             <ons-list ng-repeat="app in calendar.appointments" ng-click="calendar.goToAppointment(app)" class="gpu_efficiency" ng-hide="calendar.noAppointments">
                 <div id="anchorAppointments{{$index}}"></div>
-                <ons-list-header ng-if="calendar.showChoosenDateHeader($index)" style="color:#2196F3" ng-class="fontSizeTitle">{{calendar.dt|date:'fullDate'}}</ons-list-header>
+                <ons-list-header ng-if="calendar.showChosenDateHeader($index)" style="color:#2196F3" ng-class="fontSizeTitle">{{calendar.dt|date:'fullDate'}}</ons-list-header>
                 <ons-list-header class="person-list-header" ng-if="calendar.showHeaderNormalDay" ng-class="fontSizeTitle">{{app.ScheduledStartTime|date:'fullDate'}}</ons-list-header>
                 <ons-list-item modifier="chevron">
                     <ons-row>
