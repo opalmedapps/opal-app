@@ -255,6 +255,7 @@
          */
         function handleError(error)
         {
+
             switch (error.code) {
                 case "auth/invalid-email":
                 case "auth/wrong-password":
@@ -318,10 +319,9 @@
             clearErrors();
             if(!vm.email || vm.email === '' || !vm.password || vm.password ==='')
             {
-                $timeout(function(){
                     vm.alert.type='danger';
                     vm.alert.message="INVALID_EMAIL_OR_PWD";
-                });
+
             }else{
                 vm.loading = true;
 
