@@ -35,74 +35,23 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
 
-    <!-- Material library for Material Design -->
-    <!--<link rel="stylesheet" type="text/css" href="lib/css/materialize.min.css">-->
+    <!----------------------------------
+        CSS
+    ----------------------------------->
+    <link rel="stylesheet" type="text/css" href="vendor/vendor.min.css">
+    <link rel="stylesheet" type="text/css" href="css/app.min.css">
 
-    <script src="lib/bower_components/angular/angular.min.js"></script>
-    <link href="lib/bower_components/angular/angular-csp.css">
+    <!----------------------------------
+        VENDOR JAVASCRIPTS
+    ----------------------------------->
+    <script src="vendor/vendor.min.js"></script>
 
-    <script src="lib/bower_components/jquery/dist/jquery.min.js"></script>
-    <script src="lib/bower_components/angular-animate/angular-animate.min.js"></script>
-    <script src="lib/bower_components/angular-sanitize/angular-sanitize.min.js"></script>
 
-    <!--bootstrap-->
-    <link rel="stylesheet" href="lib/bower_components/font-awesome/css/font-awesome.min.css">
-    <link rel="stylesheet" type="text/css" href="lib/bower_components/bootstrap/dist/css/bootstrap.min.css">
 
-    <!--Animate library for animation-->
-    <link rel="stylesheet" type="text/css" href="lib/css/animate.css">
 
-    <!-- Language translation and what not-->
-    <script src="lib/bower_components/angular-translate/angular-translate.min.js"></script>
-    <script src="lib/bower_components/angular-translate-handler-log/angular-translate-handler-log.min.js"></script>
-    <script src="lib/bower_components/angular-translate-loader-partial/angular-translate-loader-partial.min.js"></script>
-    <script src="lib/bower_components/angular-dynamic-locale/tmhDynamicLocale.min.js"></script>
-
-    <!--Progress circle bar -->
-    <script src="./lib/bower_components/progressbar.js/dist/progressbar.js"></script>
-    <script src="lib/bower_components/angular-ui-router/release/angular-ui-router.min.js"></script>
-    <script src="lib/bower_components/angular-touch/angular-touch.min.js"></script>
-
-    <!-- Firebase -->
-    <script src="lib/bower_components/firebase/firebase.js"></script>
-    <!-- AngularFire -->
-    <script src="lib/bower_components/angularfire/dist/angularfire.min.js"></script>
-
-    <script src="lib/bower_components/ngCordova/dist/ng-cordova.min.js"></script>
-
-    <!--Encryption and Decryption libraries-->
-    <script src="lib/bower_components/crypto-js/crypto-js.js"></script>
-    <script src="lib/bower_components/tweetnacl/nacl-fast.min.js"></script>
-    <script src="lib/bower_components/tweetnacl-util/nacl-util.min.js"></script>
-
-    <!--Text area auto grow-->
-    <script src="lib/bower_components/angular-elastic/elastic.js"></script>
-
-    <!--Library used to scroll all the way to bottom of div anytime there is a change in a model of the div -->
-    <script src="lib/bower_components/angular-scroll-glue/src/scrollglue.js"></script>
-
-    <!--UI bootstrap-->
-    <script src="lib/js/angular-bootstrap/ui-bootstrap-tpls-1.1.2.js"></script>
-
-    <!-- Material JS -->
-    <script src="lib/js/materialize.min.js"></script>
-
-    <!--Tekbar-->
-    <script src="lib/bower_components/angular-tek-progress-bar/dist/tek.progress-bar.js"></script>
-    <script src="lib/bower_components/highcharts/highstock.js"></script>
-
-    <script src="lib/bower_components/moment/moment.js"></script>
-    <script src="lib/bower_components/pdfjs-dist/build/pdf.js"></script>
-    <script src="lib/bower_components/pdfjs-dist/build/pdf.worker.min.js"></script>
-    <script src="lib/bower_components/pdfjs-dist/web/pdf_viewer.js"></script>
 
     <title>OPAL</title>
 
-    <!--Libraries for OnsenUI-->
-
-    <link rel="stylesheet" href="lib/bower_components/onsenui/css/onsen-css-components-blue-basic-theme.css">
-    <link rel="stylesheet" href="lib/bower_components/onsenui/css/onsenui.css"/>
-    <script src="lib/bower_components/onsenui/js/onsenui.js"></script>
 
     <style>
         [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
@@ -110,9 +59,11 @@
         }
     </style>
     <!-- css stylesheets for the project-->
-    <link rel="stylesheet" href="css/app.css"/>
     <script src="cordova.js"></script>
 
+    <!----------------------------------
+       APP JAVASCRIPTS
+    ----------------------------------->
     <script src="js/app.js" type="text/javascript"></script>
     <script src="js/config.js" type="text/javascript"></script>
 
@@ -211,7 +162,6 @@
     <script src="js/services/loggerService.js"></script>
     <script src="js/services/networkStatusService.js"></script>
     <script src="js/services/metadataService.js"></script>
-
     <script src="js/services/pfpService.js"></script>
     <!-- inject:service:js -->
     <!-- endinject -->
@@ -233,6 +183,7 @@
     <!-- inject:directive -->
     <!-- endinject -->
     <script type="text/javascript" src="js/bootstrap.js"></script>
+
 </head>
 
 <body id="boots">
