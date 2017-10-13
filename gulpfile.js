@@ -95,7 +95,7 @@ gulp.task('serve', ['connect','open', 'watch-files']);
  *
  */
 //Main building task for production
-gulp.task('build',['minify-js','minify-css','minify-vendor-js','minify-html','minify-images','copy-non-minifiable-content', 'size-prebuild','size-postbuild']);
+gulp.task('build',['minify-css','minify-vendor-js', 'copy-vendor-css', 'minify-html','minify-images', 'size-prebuild','size-postbuild']);
 
 //Minify images
 gulp.task('minify-images', function(){
@@ -118,7 +118,16 @@ gulp.task('minify-css', function() {
 //Copy css files
 gulp.task('copy-vendor-css',function()
 {
-    return gulp.src(['www/lib/bower_components/angular/*.css','www/lib/bower_components/font-awesome/css/**/*','www/lib/bower_components/bootstrap/dist/css/*', 'www/lib/js/onsenui/css/**/*'],{base:'www'}).pipe(gulp.dest(cordovaFolderPath));
+    return gulp.src([
+        'www/lib/bower_components/angular/angular-csp.css',
+        'www/lib/bower_components/font-awesome/css/font-awesome.min.css',
+        'www/lib/bower_components/bootstrap/dist/css/bootstrap.min.css',
+        'www/lib/css/animate.css',
+        'www/lib/bower_components/onsenui/css/onsen-css-components-blue-basic-theme.css',
+        'www/lib/bower_components/onsenui/css/onsenui.css',
+        'www/lib/bower_components/angular/*.css'
+         ]).pipe(concat('vendor.min.css'))
+        .pipe(gulp.dest('dest/vendor'));
 });
 
 //Minifies all the app code, concatanates and adds to dest folder
@@ -149,11 +158,11 @@ gulp.task('minify-vendor-js',function()
         'www/lib/bower_components/progressbar.js/dist/progressbar.js',
         'www/lib/bower_components/ngCordova/dist/ng-cordova.js',
         'www/lib/bower_components/bootstrap/dist/js/bootstrap.js',
-        'www/lib/bower_components/onsenui/build/js/onsenui.js',
+        'www/lib/bower_components/onsenui/js/onsenui.js',
         'www/lib/js/angular-bootstrap/ui-bootstrap-tpls-1.1.2.js',
         'www/lib/js/cryptojs/*.js',
         'www/lib/bower_components/angular-tek-progress-bar/dist/tek.progress-bar.js',
-        'www/lib/js/scrollglue/scrollglue.js',
+        'www/lib/bower_components/angular-scroll-glue/src/scrollglue.js',
         'www/lib/bower_components/angularfire/dist/angularfire.js',
         'www/lib/bower_components/angular-mocks/angular-mocks.js',
         'www/lib/bower_components/tweetnacl/nacl-fast.min.js',
@@ -163,8 +172,7 @@ gulp.task('minify-vendor-js',function()
         'www/lib/bower_components/pdfjs-dist/build/pdf.worker.min.js',
         'www/lib/bower_components/pdfjs-dist/web/pdf_viewer.js',
         'www/lib/js/materialize.min.js'
-
-    ]).pipe(concat('vendorjs.min.js')).pipe(uglify()).pipe(gulp.dest('dest/lib'));
+    ]).pipe(concat('vendor.min.js')).pipe(uglify()).pipe(gulp.dest('dest/vendor'));
 });
 
 
@@ -189,7 +197,7 @@ gulp.task('size-prebuild', function() {
 //Find out the size of the post build
 gulp.task('size-postbuild', function() {
     var s = size();
-    return gulp.src(cordovaFolderPath+'/**/*')
+    return gulp.src('dest/**/*')
         .pipe(s)
         .pipe(notify({
             onLast: true,
@@ -197,140 +205,4 @@ gulp.task('size-postbuild', function() {
         }));
 });
 
-/**
- * OPAL TEMPLATES 
- */
 
-
-//TASKS FOR TEMPLATES
-
-var inject = require('gulp-inject');
-var replace = require('gulp-replace');
-var gulpif = require('gulp-if');
-var rename = require("gulp-rename");
-var mainTabsUrls = {
-    "personal":'./www/views/personal/personal.html',
-    "general":'./www/views/general/general.html'
-};
-var fs = require('fs');
-var templateJson = JSON.parse(fs.readFileSync('./templates/patterns.json'));
-//Templates for opal
-gulp.task('opal', function(){
-    var argv = require('yargs').usage('Usage: $0 -t [string] -n [string] -v [string]')
-    .option('v',{
-        alias:'view',
-        choices:['personal','general']
-    })
-    .option('n',{
-        alias:'name'
-    })
-    .option('t',{
-        alias:'template',
-        choices:['module']
-    })
-    .demandOption(['t','n','v'])
-    .argv;
-    var template =templateJson[argv.t];
-    var view =mainTabsUrls[argv.v];
-    var name = argv.n.toLowerCase();
-    var upName = name.charAt(0).toUpperCase() + name.slice(1);
-    gulpif(template.includeController,gulp.src('./templates/'+argv.t+'/'+argv.t+'Controller.js')
-    .pipe(replace("<controller-name>", upName+'Controller'))
-    .pipe(rename(name+'Controller.js'))
-    .pipe(gulp.dest("./www/js/controllers/",{overwrite:'false'})));
-
-     gulpif(template.includeService,gulp.src('./templates/'+argv.t+'/'+argv.t+'Service.js')
-    .pipe(replace("<service-name>", upName))
-    .pipe(rename(name+'Service.js'))
-    .pipe(gulp.dest("./www/js/services",{overwrite:'false'})));
-
-    gulpif(template.includeView,gulp.src('./templates/'+argv.t+'/'+argv.t+'.html')
-    .pipe(replace("<controller-name>",  upName+'Controller'))
-    .pipe(replace("<view-name>", upName))
-    .pipe(rename(name+'.html'))
-    .pipe(gulp.dest("./www/views/"+argv.v+"/"+name,{overwrite:'false'})));
-    
-    gulpif(template.includeController,
-    gulp.src('./www/index.html')
-    .pipe(inject(gulp.src('./www/js/controllers/'+name+'Controller.js',{read: false}), {
-    starttag: '<!-- inject:controller:{{ext}} -->'
-    , relative: true}))
-    .pipe(gulp.dest('./www')))
-
-    gulpif(template.includeService,
-    gulp.src('./www/index.html')
-    .pipe(inject(gulp.src('./www/js/services/'+name+'Service.js',{read: false}), {
-    starttag: '<!-- inject:service:{{ext}} -->'
-    , relative: true}))
-    .pipe(gulp.dest('./www/')))
-
-    gulpif(template.addTab,
-    gulp.src("./www/views/"+argv.v+"/"+argv.v+".html")
-    .pipe(inject(gulp.src(["./www/views/"+argv.v+"/"+name+"/"+name+".html"],{read: false}), {
-     starttag: '<!-- inject:tab-->',
-     transform:function()
-    {
-        var str = "<ons-list-item modifier=\"chevron\" class=\"item\" ng-click=\""+argv.v+ "Navigator.pushPage('./views/"+argv.v+"/"+name+"/"+name+".html')\">"+
-                      `<ons-row align=\"center\">
-                      <ons-col width=\"60px\" align=\"center\">
-                            <div>
-                                <i class=\"fa fa-question-circle iconHomeView\" style=\"color:DarkSlateGray\"></i><span class=\"notification\" ng-show=\"questionnairesUnreadNumber>0\">{{questionnairesUnreadNumber}}</span>
-                            </div>
-                        </ons-col>
-                        <ons-col>
-                            <header>
-                                <span class=\"item-title\" ng-class=\"fontSizeTitle\">`+name+`</span>
-                            </header>
-                            <p class=\"item-desc\" ng-class=\"fontSizeDesc\"></p>
-                        </ons-col>
-                    </ons-row>
-                    </ons-list-item>`;
-
-            return str;
-    }}))
-    .pipe(gulp.dest("./www/views/"+argv.v)));
-
-    
-});
-
-gulp.task('create',function()
-{
-    var argv = require('yargs').usage('Usage: $0  -n [string] -v [path-relative-www] -c -s -f -d')
-    .option('v',{
-        alias: 'view',
-        default: null,
-        describe: 'Provide path for view',
-        type: 'string'
-    })
-    .option('n',{
-        alias:'name',
-        default: null,
-        describe: 'Provide a name to give all the created elements',
-        type: 'string'
-    })
-    .option('c',{
-        alias:'controller',
-        default: null,
-        describe: 'Flag use to create a controller with name given by -n flag',
-        type: 'Boolean'
-    })
-    .option('s',{
-        alias:'service',
-        default: null,
-        describe: 'Flag use to create a service with name given by -n flag',
-        type: 'Boolean'
-    })
-    .option('f',{
-        alias:'filter',
-        default: null,
-        describe: 'Flag use to create a filter with name given by -n flag',
-        type: 'Boolean'
-    })
-    .option('d',{
-        alias:'directive',
-        default: null,
-        describe: 'Flag use to create a directive with name given by -n flag',
-        type: 'Boolean'
-    })
-    .demandOption(['n']).argv;
-});
