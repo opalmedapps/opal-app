@@ -295,7 +295,7 @@
   "TOUR_MYCHART":"In your My Chart tab, you can see your appointments, documents and any other chart information.",
   "TOUR_GENERAL": "In your General tab, you can see your treating team, announcements and parking. You can also provide us feedback on the app!",
   "TOUR_EDUCATION": "In your Education tab, you will receive educational material as you progress through your radiotherapy. We will show you videos, booklets and documents specific to you.",
-  "TOUR_INFO": "The Information button will give you any extra information if you need it! Press close if you want to exit the tour or you can press the left arrow to see the previous tips.",
+  "TOUR_INFO": "The Information button will give you any extra information if you need it! Press 'Close' if you want to exit the tour or you can press the left arrow to see the previous tips.",
   "GOTO_ROOM": "Appointment Room: ",
   "Complete Blood Count":"Complete Blood Count",
   "Other":"Other",
