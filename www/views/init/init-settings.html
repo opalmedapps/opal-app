@@ -7,23 +7,23 @@
       </ons-toolbar>
 
       <ons-list class="settings-list">
-        <ons-list-item modifier = "chevron">
+        <ons-list-item modifier = "chevron" ng-click="init.goToFeedback()">
           {{"RATETHISAPP"|translate}}
         </ons-list-item>
       </ons-list>
 
-     <ons-list class="settings-list">
-         <ons-list-item modifier="chevron" ng-click="init.secureYourDeviceNotice()">
-          {{"SECUREYOURDEVICE"|translate}}
-        </ons-list-item>
+      <ons-list class="settings-list">
+          <ons-list-item modifier="chevron" ng-click="init.secureYourDeviceNotice()">
+              {{"SECUREYOURDEVICE"|translate}}
+          </ons-list-item>
       </ons-list>
       
       <ons-list class="settings-list">
         <ons-list-item modifier="chevron" ng-click="init.openPageLegal('TOU')">
-           {{"TERMSOFUSE"|translate}}
+           {{"TOU"|translate}}
         </ons-list-item>
         <ons-list-item modifier="chevron" ng-click="init.openPageLegal('PP')">
-          {{"PRIVACYPOLICY"|translate}}
+          {{"PP"|translate}}
         </ons-list-item>
       </ons-list>
 
