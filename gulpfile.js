@@ -185,6 +185,7 @@ gulp.task('minify-html', function() {
 gulp.task('minify-index', function() {
     return gulp.src('www/index-build.html')
         .pipe(htmlmin({collapseWhitespace: true}))
+        .pipe(concat('index.html'))
         .pipe(gulp.dest('dest'));
 });
 
