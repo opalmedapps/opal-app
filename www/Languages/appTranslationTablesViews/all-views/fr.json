@@ -182,7 +182,6 @@
   "PATIENTCHARTER": "Charte du patient",
   "PATIENTDOCUMENTS": "Documents du patient",
   "PATIENTID": "Identifiant Patient:",
-  "PP": "Politique de Confidentialité",
   "PFP": "Patients à votre aide",
   "PFP_EBOX": "Boîte à suggestions",
   "PFP_ANNOUNCEMENTS": "Annonces du comité",
@@ -204,8 +203,6 @@
   "PRINTDOCUMENT": "Imprimer le document",
   "PRINTINTUNAVAILABLE": "Impression indisponible",
   "PRIVACYPOLICY": "Politique de confidentialité",
-  "PROBLEM_UPDATING_PASSWORD": "Problème de mise à jour du mot de passe",
-  "PULLDOWNTOREFRESH": "Tirez pour rafraichîr la page",
   "PP": "Politique de confidentialité",
   "PROBLEM_UPDATING_PASSWORD": "Problème de mise à jour de mot de passe",
   "PULLDOWNTOREFRESH": "Tirer pour rafraichîr la page",
@@ -221,7 +218,6 @@
   "RATETHISAPP": "Évaluez l'application",
   "RATETHISMATERIAL": "Notez ce matériel pédagogique!",
   "RELEASETOREFRESH": "Relâchez pour rafraichîr la page",
-  "REENTER_PASSWORD": "Ré-entrez le nouveau mot de passe",
   "REFRESH_WAIT": "Les données sont à jour. SVP attendre 60 secondes avant d'actualiser.",
   "DOC_RECEIVED": "Reçu",
   "RECONNECTNG": "Se reconnecter...",
@@ -323,6 +319,5 @@
   "Electrolytes":"Électrolytes",
   "Tumor markers":"Marqueurs tumoraux",
   "GOTOWEBSITE":"Visitez le site"
-
 }
 
