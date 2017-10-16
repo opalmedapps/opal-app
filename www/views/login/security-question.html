@@ -21,7 +21,7 @@
 
                         <label name="text">{{ security.Question }} </label><br/>
                         <div style="width: 100%; margin-top: 15px" class="style-4">
-                            <input class="text-input" name="text" ng-model="security.answer" ng-change="security.clearErrors" placeholder="{{'ENTERANSWERPLACEHOLDER'|translate}}" />
+                            <input autocapitalize="none" autocorrect="off" autocomplete="off" class="text-input" name="text" ng-model="security.answer" ng-change="security.clearErrors" placeholder="{{'ENTERANSWERPLACEHOLDER'|translate}}" />
                             <br/><br/>
                         </div>
                         <button class="button button--large shadow-2" ng-disabled="security.submitting||security.threeTries" style="background-color: #4CAF50; font-weight: bolder;" ng-click="security.submitAnswer(security.answer)">{{"CONTINUE"|translate}}</button>

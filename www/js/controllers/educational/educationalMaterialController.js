@@ -18,6 +18,7 @@
 
         vm.showHeader = showHeader;
         vm.goToEducationalMaterial = goToEducationalMaterial;
+        vm.educationDeviceBackButton = educationDeviceBackButton;
 
         activate();
         ///////////////////////////////////
@@ -25,9 +26,6 @@
         function activate(){
             NavigatorParameters.setParameters({'Navigator':'educationNavigator'});
 
-            vm.educationDeviceBackButton = function () {
-                tabbar.setActiveTab(0);
-            };
 
             bindEvents();
 
@@ -42,6 +40,10 @@
             vm.noMaterials = false;
             vm.edumaterials = EducationalMaterial.setLanguage(EducationalMaterial.getEducationalMaterial());
             Logger.sendLog('Educational Material', 'all');
+        }
+
+        function educationDeviceBackButton(){
+            tabbar.setActiveTab(0);
         }
 
         function configureState() {
