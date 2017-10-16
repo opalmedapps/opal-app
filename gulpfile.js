@@ -182,8 +182,8 @@ gulp.task('minify-html', function() {
 });
 
 //Minify index
-gulp.task('minify-html', function() {
-    return gulp.src('www/index.html')
+gulp.task('minify-index', function() {
+    return gulp.src('www/index-build.html')
         .pipe(htmlmin({collapseWhitespace: true}))
         .pipe(gulp.dest('dest'));
 });
