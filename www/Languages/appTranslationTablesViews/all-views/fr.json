@@ -113,7 +113,7 @@
   "INTREATMENT": "En traitement",
   "INVALID_EMAIL": "Courriel invalide",
   "INVALID_EMAIL_OR_PWD": "Addresse courriel ou mot de passe invalide",
-  "INVALID_PASSWORD": "Mot de passe invalide",
+  "INVALID_PASSWORD": "Mot de passe invalide.",
   "INVALID_USER": "L'utilisateur n'existe pas",
   "USER_DISABLED": "Compte a été désactivé",
   "LABELS": "Étiquettes",
