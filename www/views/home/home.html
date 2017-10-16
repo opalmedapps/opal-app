@@ -3,7 +3,7 @@
         <div class="center" ng-class="fontSizeTitle">{{"HEADER_MESSAGE_HOME"|translate}}</div>
         <div class="right">
             <ons-toolbar-button ng-click="homeNavigator.pushPage('views/tabs/info-page-tabs.html',{param:home})">
-                <ons-icon icon="fa-info-circle"></ons-icon>
+                <i icon="fa-info-circle"></i>
             </ons-toolbar-button>
         </div>
     </ons-toolbar>
@@ -40,7 +40,6 @@
                             <img style="width: 60px;" src="img/Opal_Logo_Transparent_Inverse.png">
                         </ons-col>
                         <ons-col>
-
                             <header>
                                 <span class="item-title" ng-class="fontSizeTitle">{{"OPAL_ABOUT"|translate}}</span>
                             </header>
@@ -120,7 +119,7 @@
                         <ons-row align="center">
                             <ons-col width="60px" align="center">
                                 <div>
-                                    <ons-icon class="iconHomeView" icon="{{notification.Icon}}" ng-style="{color: notification.Color}" style="margin-left: 18px"></ons-icon><span class="notification" style="left: -7px !important" ng-show="notification.Number>=1">{{notification.Number}}</span>
+                                    <i class="iconHomeView {{notification.Icon}}" ng-style="{color: notification.Color}" style="margin-left: 18px"></i><span class="notification" style="left: -7px !important" ng-show="notification.Number>=1">{{notification.Number}}</span>
                                 </div>
                             </ons-col>
                             <ons-col>

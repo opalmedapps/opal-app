@@ -68,15 +68,13 @@
 
             return true;
         }
-        console.log("WJAT");
-        function goToLogin()
-        {
+
+        function goToLogin() {
             initNavigator.resetToPage('./views/init/init-screen.html',{animation:'none'});
         }
 
 
-        function submitNewPassword(newValue)
-        {
+        function submitNewPassword(newValue) {
             var invalid = !newPasswordIsValid();
             if(!newValue || invalid)
             {
