@@ -79,7 +79,6 @@
 	"THANKYOUFORFEEDBACK": "Thank you for your feedback!",
 	"TRUST_DEVICE": "Set this device as a trusted device? ",
 	"TOO_MANY_REQUESTS": "Too many login attempts. Please try again later.",
-	"NEWPASSWORDVALIDATION":"New password must be at least 6 characters and must contain at least one letter, and one number!"
 	"OUTOFTRIES": "Too many failed attempts - Please try again or contact the hospital.",
 	"UNATTENDED": "Do not leave your phone unattended."
 }
