@@ -95,7 +95,7 @@ gulp.task('serve', ['connect','open', 'watch-files']);
  *
  */
 //Main building task for production
-gulp.task('build',['minify-css','minify-vendor-js', 'copy-vendor-css', 'minify-html','minify-images', 'size-prebuild','size-postbuild']);
+gulp.task('build',['minify-css','minify-vendor-js', 'copy-vendor-css', 'minify-html', 'minify-index', 'minify-images', 'size-prebuild','size-postbuild']);
 
 //Minify images
 gulp.task('minify-images', function(){
@@ -179,6 +179,13 @@ gulp.task('minify-html', function() {
     return gulp.src('www/views/**/*.html')
         .pipe(htmlmin({collapseWhitespace: true}))
         .pipe(gulp.dest('dest/views'));
+});
+
+//Minify index
+gulp.task('minify-html', function() {
+    return gulp.src('www/index.html')
+        .pipe(htmlmin({collapseWhitespace: true}))
+        .pipe(gulp.dest('dest'));
 });
 
 //Find out the size of the original folder
