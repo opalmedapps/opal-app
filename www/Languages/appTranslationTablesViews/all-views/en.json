@@ -100,7 +100,7 @@
   "INPROGRESS": "In progress",
   "INTERNETERROR": "Internet error occured try again later",
   "INTREATMENT": "In treatment. See all your appointments.",
-  "INVALID_PASSWORD": "Password is invalid",
+  "INVALID_PASSWORD": "Password is invalid.",
   "INVALID_USER": "User does not exist",
   "USER_DISABLED": "User account has been disabled",
   "LABELS": "Labels",

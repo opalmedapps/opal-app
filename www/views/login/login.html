@@ -20,8 +20,9 @@
                         <br/>
                         <div style="width: 100%" class="style-4">
                             <input name="password" ng-model="login.password" placeholder='{{"PASSWORD"|translate}}' type="password" required ng-change="login.clearErrors()"></div>
-                        <div  style="height:40px">
-                            <p ng-show="login.alert.type" style="color: red">{{login.alert.message|translate}}</p>
+                        <br/>
+                        <div ng-show="login.alert.type">
+                            <uib-alert type="{{login.alert.type}}">{{login.alert.message|translate}}</uib-alert>
                         </div>
                     </div>
 
