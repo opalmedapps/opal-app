@@ -189,6 +189,7 @@ gulp.task('minify-index', function() {
         .pipe(gulp.dest('dest'));
 });
 
+
 //Find out the size of the original folder
 gulp.task('size-prebuild', function() {
     var s = size();
