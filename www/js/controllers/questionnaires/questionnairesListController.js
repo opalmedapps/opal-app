@@ -82,7 +82,7 @@
         }
 
         function isQuestionnaireComplete (patientQuestionnaire) {
-            return patientQuestionnaire.CompletedFlag !== 0;
+            return patientQuestionnaire.CompletedFlag !== "0";
         }
 
         function setQuestionnaireAnswersObject(object) {

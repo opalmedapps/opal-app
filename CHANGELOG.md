@@ -22,4 +22,7 @@ To invite users to upgrade in case of vulnerabilities.
 
 ## [PRODUCTION]
 
-
+### v1.2.0
+* ##### Penetration test ready version of the app
+* Has all the latest security requirements
+* Follows exactly what is in the policies and procedures manual
