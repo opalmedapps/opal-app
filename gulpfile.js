@@ -18,6 +18,7 @@ var cache = require('gulp-cache');
 var size = require('gulp-size');
 var notify = require('gulp-notify');
 var open = require('gulp-open');
+var patch = require('cordova-auto-patch');
 
 /**
  *
@@ -88,6 +89,8 @@ gulp.task('watch-files', function () {
 
 //Make server connection and set to watch files for reload
 gulp.task('serve', ['connect','open', 'watch-files']);
+
+
 
 /**
  *
