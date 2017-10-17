@@ -259,12 +259,6 @@
             switch (error.code) {
                 case "auth/invalid-email":
                 case "auth/wrong-password":
-                    $timeout(function(){
-                        vm.alert.type='danger';
-                        vm.alert.message="INVALID_PASSWORD";
-                        vm.loading = false;
-                    });
-                    break;
                 case "auth/user-not-found":
                     $timeout(function(){
                         vm.alert.type='danger';
@@ -325,8 +319,10 @@
             clearErrors();
             if(!vm.email || vm.email === '' || !vm.password || vm.password ==='')
             {
-                    vm.alert.type='danger';
-                    vm.alert.message="INVALID_EMAIL_OR_PWD";
+                $timeout(function() {
+                    vm.alert.type = 'danger';
+                    vm.alert.message = "INVALID_EMAIL_OR_PWD";
+                });
 
             }else{
                 vm.loading = true;

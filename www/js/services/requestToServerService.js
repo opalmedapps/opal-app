@@ -98,6 +98,9 @@ myApp.service('RequestToServer',['$filter','$state','NewsBanner','UserAuthorizat
                 //
                 refRequestResponse.on('value',function(snapshot){
 
+
+
+
                     if(snapshot.exists())
                     {
                         var data = snapshot.val();
@@ -111,6 +114,9 @@ myApp.service('RequestToServer',['$filter','$state','NewsBanner','UserAuthorizat
 
                             if(!encryptionKey||typeof encryptionKey == 'undefined') data = EncryptionService.decryptData(data);
                             data.Timestamp = timestamp;
+
+                            console.log(JSON.stringify(data));
+
                             clearTimeout(timeOut);
                             refRequestResponse.set(null);
                             refRequestResponse.off();
