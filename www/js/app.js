@@ -92,7 +92,7 @@
 
 //Routes for angular views
 var myApp = angular
-    .module('MUHCApp', ['tmh.dynamicLocale','pascalprecht.translate','ngAnimate','luegg.directives',
+    .module('MUHCApp', ['tmh.dynamicLocale','pascalprecht.translate','luegg.directives',
         'ngSanitize','ui.router', 'onsen', 'ngTouch','firebase','ui.bootstrap','MUHCApp.filters',
         'ngCordova','monospaced.elastic','Tek.progressBar']);
 
@@ -119,7 +119,7 @@ myApp.config(['$urlRouterProvider', '$stateProvider', function ($urlRouterProvid
                 // Auth refers to our $firebaseAuth wrapper in the example above
                 "currentAuth": ["FirebaseService", function(FirebaseService) {
                     // $requireSignIn returns a promise so the resolve waits for it to complete
-                    return FirebaseService.getAuthentication().$requireSignIn();
+                    return !!firebase.auth().currentUser;
                 }]
             }
         })
@@ -133,7 +133,7 @@ myApp.config(['$urlRouterProvider', '$stateProvider', function ($urlRouterProvid
                 "currentAuth": ["FirebaseService", function(FirebaseService) {
                     // $requireSignIn returns a promise so the resolve waits for it to complete
                     // console.log(FirebaseService.getAuthentication().$requireSignIn());
-                    return FirebaseService.getAuthentication().$requireSignIn();
+                    return !!firebase.auth().currentUser;
                 }]
             }
 
@@ -147,7 +147,7 @@ myApp.config(['$urlRouterProvider', '$stateProvider', function ($urlRouterProvid
                 // Auth refers to our $firebaseAuth wrapper in the example above
                 "currentAuth": ["FirebaseService", function(FirebaseService) {
                     // $requireSignIn returns a promise so the resolve waits for it to complete
-                    return FirebaseService.getAuthentication().$requireSignIn();
+                    return !!firebase.auth().currentUser;
                 }]
             }
         });

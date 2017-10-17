@@ -109,9 +109,11 @@ myApp.service('TxTeamMessages', ['$filter','RequestToServer','LocalStorage', 'Us
          **/
         getUnreadTxTeamMessages:function()
         {
+            console.log(JSON.stringify(txTeamMessagesArray));
+
             var array=[];
             for (var i = 0; i < txTeamMessagesArray.length; i++) {
-                if(txTeamMessagesArray[i].ReadStatus=='0')
+                if(txTeamMessagesArray[i].ReadStatus =='0')
                 {
                     array.push(txTeamMessagesArray[i]);
                 }
@@ -135,6 +137,8 @@ myApp.service('TxTeamMessages', ['$filter','RequestToServer','LocalStorage', 'Us
                     number++;
                 }
             }
+
+            console.log
             return number;
         },
         //Obtain a team message by ser num
