@@ -158,7 +158,6 @@
         function handleError(error) {
             $timeout(function(){
                 vm.alert.type='danger';
-                console.log(error.code);
                 switch (error.code){
                     case "auth/expired-action-code":
                         vm.alert.content = "CODE_EXPIRED";
@@ -250,7 +249,6 @@
 
                 RequestToServer.sendRequestWithResponse('VerifyAnswer',parameterObject, key, firebaseRequestField, firebaseResponseField).then(function(data)
                 {
-                    console.log(data);
                     vm.submitting = false;
                     if(data.Data.AnswerVerified === "true")
                     {

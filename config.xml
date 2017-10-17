@@ -66,7 +66,7 @@
         <icon height="29" src="res/ios/Icon-small.png" width="29" />
         <icon height="58" src="res/ios/Icon-small@2x.png" width="58" />
     </platform>
-    <engine name="android" spec="~6.2.3" />
+    <engine name="android" spec="6.2.3" />
     <plugin name="com-badrit-printplugin" spec="^0.2.0" />
     <plugin name="cordova-fabric-plugin" spec="^1.1.1">
         <variable name="FABRIC_API_KEY" value="710b104a1e625dfb3b338b72b0bce05b0b5d644c" />
