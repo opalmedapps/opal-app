@@ -26,11 +26,11 @@
         .controller('SecurityQuestionController', SecurityQuestionController);
 
     SecurityQuestionController.$inject = ['$window', '$timeout', 'ResetPassword', 'RequestToServer', 'EncryptionService',
-        'UUID', 'UserAuthorizationInfo', '$state', 'Constants', 'DeviceIdentifiers', 'NavigatorParameters', '$scope'];
+        'UUID', 'UserAuthorizationInfo', '$state', 'DeviceIdentifiers', 'NavigatorParameters', '$scope'];
 
     /* @ngInject */
     function SecurityQuestionController($window, $timeout, ResetPassword, RequestToServer, EncryptionService, UUID,
-                                        UserAuthorizationInfo, $state, Constants, DeviceIdentifiers, NavigatorParameters, $scope) {
+                                        UserAuthorizationInfo, $state, DeviceIdentifiers, NavigatorParameters, $scope) {
 
         var vm = this;
         var deviceID;
