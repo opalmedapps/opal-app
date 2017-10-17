@@ -58,5 +58,7 @@
     "phantomjs-prebuilt": "^2.1.12",
     "yargs": "^8.0.1"
   },
-  "dependencies": {}
+  "dependencies": {
+    "cordova-auto-patch": "^1.2.2"
+  }
 }
