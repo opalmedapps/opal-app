@@ -48,7 +48,6 @@ myApp.service('Questionnaires', ['RequestToServer','$filter', 'Patient','LocalSt
             questionnairesObject.Questionnaires = questionnaires.Questionnaires;
 
 
-            LocalStorage.WriteToLocalStorage('Questionnaires',questionnairesObject);
         }
 
         return {

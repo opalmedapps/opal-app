@@ -141,6 +141,9 @@ exports.runSqlQuery = function(query, parameters, processRawFunction)
     var r = Q.defer();
 
     var que = connection.query(query, parameters, function(err,rows,fields){
+
+        console.log(que.sql);
+
         if (err) r.reject(err);
         if(typeof rows !=='undefined')
         {
@@ -1094,7 +1097,7 @@ exports.setTrusted = function(requestObject)
 exports.getQuestionnaires = function(requestObject){
     "use strict";
     var r = Q.defer();
-    exports.runSqlQuery(queries.patientQuestionnaireTableFields(), [requestObject.UserID,requestObject.Timestamp,requestObject.Timestamp])
+    exports.runSqlQuery(queries.patientQuestionnaireTableFields(), [requestObject.UserID, null, null])
         .then(function (queryRows) {
             return questionnaires.getPatientQuestionnaires(queryRows)
         })
