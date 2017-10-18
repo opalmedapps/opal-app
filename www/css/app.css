@@ -1139,6 +1139,10 @@ p{
 }
 
 /* Lab results specific classes */
+.labtest-col {
+    padding-right: 0px;
+    padding-left: 10px;
+}
 .name1 {
   color: blue;
 }
