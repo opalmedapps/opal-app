@@ -47,10 +47,14 @@
 
             Questionnaires.requestQuestionnaires()
                 .then(function () {
+
                         vm.questionnaires = Questionnaires.getPatientQuestionnaires().Questionnaires;
                         vm.patientQuestionnaires = Questionnaires.getPatientQuestionnaires().PatientQuestionnaires;
                         getDesiredQuestionnaires('new');
                         getBadgeNumbers();
+
+                        console.log("Questionnaires: " + JSON.stringify(vm.questionnaires));
+
                         vm.loading = false;
                     },
                     function(error){
