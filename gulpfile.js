@@ -19,6 +19,7 @@ var size = require('gulp-size');
 var notify = require('gulp-notify');
 var open = require('gulp-open');
 var patch = require('cordova-auto-patch');
+var stripDebug = require('gulp-strip-debug');
 
 /**
  *
@@ -98,7 +99,7 @@ gulp.task('serve', ['connect','open', 'watch-files']);
  *
  */
 //Main building task for production
-gulp.task('build',['minify-css','minify-vendor-js', 'copy-vendor-css', 'minify-html', 'minify-index', 'minify-images', 'size-prebuild','size-postbuild']);
+gulp.task('build',['minify-css','minify-vendor-js', 'copy-vendor-css', 'minify-html', 'minify-index', 'minify-images', 'strip-debug', 'size-prebuild','size-postbuild']);
 
 //Minify images
 gulp.task('minify-images', function(){
@@ -128,15 +129,18 @@ gulp.task('copy-vendor-css',function()
         'www/lib/css/animate.css',
         'www/lib/bower_components/onsenui/css/onsen-css-components-blue-basic-theme.css',
         'www/lib/bower_components/onsenui/css/onsenui.css',
-        'www/lib/bower_components/angular/*.css'
-         ]).pipe(concat('vendor.min.css'))
+        'www/lib/bower_components/angular/*.css'])
+        .pipe(concat('vendor.min.css'))
         .pipe(gulp.dest('dest/vendor'));
 });
 
 //Minifies all the app code, concatanates and adds to dest folder
 gulp.task('minify-js',function()
 {
-    gulp.src('./www/js/**/*').pipe(concat('app.min.js')).pipe(ngAnnotate()).pipe(uglify()).pipe(gulp.dest('dest/js'));
+    gulp.src('./www/js/**/*').pipe(concat('app.min.js'))
+        .pipe(ngAnnotate())
+        .pipe(uglify())
+        .pipe(gulp.dest('dest/js'));
 });
 
 //Minifies all vendor files, could be improved by writing a proper bower.json file for the project
@@ -172,8 +176,10 @@ gulp.task('minify-vendor-js',function()
         'www/lib/bower_components/pdfjs-dist/build/pdf.worker.min.js',
         'www/lib/bower_components/pdfjs-dist/web/pdf_viewer.js',
         'www/lib/js/materialize.min.js',
-        'www/lib/bower_components/crypto-js/crypto-js.js'
-    ]).pipe(concat('vendor.min.js')).pipe(uglify()).pipe(gulp.dest('dest/vendor'));
+        'www/lib/bower_components/crypto-js/crypto-js.js'])
+        .pipe(concat('vendor.min.js'))
+        .pipe(uglify())
+        .pipe(gulp.dest('dest/vendor'));
 });
 
 
@@ -190,6 +196,12 @@ gulp.task('minify-index', function() {
         .pipe(htmlmin({collapseWhitespace: true}))
         .pipe(concat('index.html'))
         .pipe(gulp.dest('dest'));
+});
+
+gulp.task('strip-debug', function () {
+    return gulp.src('www/js/**/*.js')
+        .pipe(stripDebug())
+        .pipe(gulp.dest('dest/js'));
 });
 
 
