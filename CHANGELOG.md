@@ -22,6 +22,11 @@ To invite users to upgrade in case of vulnerabilities.
 
 ## [PRODUCTION]
 
+### v1.2.1 (patch)
+* Fix notifications bug
+* Fix educational material bug
+* Fix questionnaires bug
+
 ### v1.2.0
 * ##### Penetration test ready version of the app
 * Has all the latest security requirements
