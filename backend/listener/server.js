@@ -60,7 +60,6 @@ listenForRequest('passwordResetRequests');
 function listenForRequest(requestType){
     logger.log('debug','Starting '+ requestType+' listener.');
     ref.child(requestType).on('child_added', function(snapshot){
-        logger.info("received request:\n Key" + snapshot.val()+"\nRequest: "+JSON.stringify(snapshot.val()));
         handleRequest(requestType,snapshot);
     });
 }
@@ -137,9 +136,13 @@ function clearClientRequests(){
 // Processes requests read from firebase
 function processRequest(headers){
 
+    console.log("reached process request");
+
     var r = q.defer();
     var requestKey = headers.key;
     var requestObject= headers.objectRequest;
+
+    console.log("type of request: " + requestObject.Request);
 
     // Separate security requests from main requests
     if(processApi.securityAPI.hasOwnProperty(requestObject.Request)) {
@@ -199,6 +202,7 @@ function uploadToFirebase(response, key)
     }
 
     delete response.Headers.RequestObject;
+    logger.log('debug', path);
 
     ref.child(path).set(response).then(function(){
         logger.log('debug', 'Uploaded to firebase');

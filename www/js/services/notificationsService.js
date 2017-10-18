@@ -337,23 +337,25 @@ myApp.service('Notifications',['$filter','RequestToServer','LocalStorage','Annou
                     if(Notifications[i].ReadStatus == '0')
                     {
 
+                        console.log(JSON.stringify(Notifications[i]));
                         //Finding post
                         var post = notificationTypes[Notifications[i].NotificationType].searchFunction(Notifications[i].RefTableRowSerNum);
 
-                        if(post)
-                        Notifications[i].Description_EN = Notifications[i].Description_EN.replace(/\$\w+/, post.RoomLocation_EN||"");
-                        Notifications[i].Description_FR = Notifications[i].Description_FR.replace(/\$\w+/, post.RoomLocation_FR||"");
+                        if(post){
+                            Notifications[i].Description_EN = Notifications[i].Description_EN.replace(/\$\w+/, post.RoomLocation_EN||"");
+                            Notifications[i].Description_FR = Notifications[i].Description_FR.replace(/\$\w+/, post.RoomLocation_FR||"");
 
-                        //If ReadStatus in post is also 0, Set the notification for showing in the controller
-                        if(post.ReadStatus == '0' || Notifications[i].NotificationType == "RoomAssignment")
-                        {
+                            //If ReadStatus in post is also 0, Set the notification for showing in the controller
+                            if((post.ReadStatus && post.ReadStatus === '0') || Notifications[i].NotificationType === "RoomAssignment")
+                            {
 
-                            Notifications[i].Post = post;
-                            Notifications[i].Number = 1;
-                            array.push(Notifications[i]);
-                        }else{
-                            //If the ReadStatus of the actual post is not 0, then read the notification
-                            readNotification(i, Notifications[i]);
+                                Notifications[i].Post = post;
+                                Notifications[i].Number = 1;
+                                array.push(Notifications[i]);
+                            }else{
+                                //If the ReadStatus of the actual post is not 0, then read the notification
+                                readNotification(i, Notifications[i]);
+                            }
                         }
                     }
                 }

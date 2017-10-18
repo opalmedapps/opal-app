@@ -26,11 +26,11 @@
         .controller('SecurityQuestionController', SecurityQuestionController);
 
     SecurityQuestionController.$inject = ['$window', '$timeout', 'ResetPassword', 'RequestToServer', 'EncryptionService',
-        'UUID', 'UserAuthorizationInfo', '$state', 'Constants', 'DeviceIdentifiers', 'NavigatorParameters', '$scope'];
+        'UUID', 'UserAuthorizationInfo', '$state', 'DeviceIdentifiers', 'NavigatorParameters', '$scope'];
 
     /* @ngInject */
     function SecurityQuestionController($window, $timeout, ResetPassword, RequestToServer, EncryptionService, UUID,
-                                        UserAuthorizationInfo, $state, Constants, DeviceIdentifiers, NavigatorParameters, $scope) {
+                                        UserAuthorizationInfo, $state, DeviceIdentifiers, NavigatorParameters, $scope) {
 
         var vm = this;
         var deviceID;
@@ -96,6 +96,7 @@
 
             // this checks whether or not the security question is being asked in order to log the user in or to trigger a password reset request
             if (parameters.passwordReset){
+
                 passwordReset = parameters.passwordReset;
                 vm.passwordReset = passwordReset;
 
@@ -105,7 +106,9 @@
                         return DeviceIdentifiers.sendDevicePasswordRequest(email);
                     })
                     .then(function (response) {
-                        vm.Question = response.Data.securityQuestion.securityQuestion_EN + " / " + response.Data.securityQuestion.securityQuestion_FR;
+                        $timeout(function() {
+                            vm.Question = response.Data.securityQuestion.securityQuestion_EN + " / " + response.Data.securityQuestion.securityQuestion_FR;
+                        });
                     })
                     .catch(handleError);
             } else {
@@ -136,6 +139,7 @@
             EncryptionService.generateEncryptionHash();
 
             if(passwordReset){
+                EncryptionService.generateTempEncryptionHash(EncryptionService.hash(vm.ssn.toUpperCase()), key);
                 $scope.initNavigator.pushPage('./views/login/new-password.html', {data: {oobCode: ResetPassword.getParameter("oobCode", parameters.url)}});
             }
             else {
@@ -154,7 +158,6 @@
         function handleError(error) {
             $timeout(function(){
                 vm.alert.type='danger';
-                console.log(error.code);
                 switch (error.code){
                     case "auth/expired-action-code":
                         vm.alert.content = "CODE_EXPIRED";
@@ -244,9 +247,8 @@
                     Trusted: trusted
                 };
 
-                RequestToServer.sendRequestWithResponse('VerifyAnswer',parameterObject,key, firebaseRequestField, firebaseResponseField).then(function(data)
+                RequestToServer.sendRequestWithResponse('VerifyAnswer',parameterObject, key, firebaseRequestField, firebaseResponseField).then(function(data)
                 {
-                    console.log(data);
                     vm.submitting = false;
                     if(data.Data.AnswerVerified === "true")
                     {

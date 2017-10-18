@@ -5,20 +5,18 @@
         </div>
         <div class="center" ng-class="fontSizeTitle">{{"EDUCATION"|translate}}</div>
         <div class="right"><ons-toolbar-button ng-click="educationNavigator.pushPage('./views/tabs/info-page-tabs.html')"><ons-icon icon="fa-info-circle"></ons-icon></ons-toolbar-button></div>
-        <!--<div class="right"><ons-toolbar-button ng-click="educationNavigator.pushPage('views/info-page-tabs.html',{param:home})"><ons-icon icon="ion-ios-information-outline"></ons-icon></ons-toolbar-button></div>-->
     </ons-toolbar>
     <div style="color:grey;margin-top:25vh" ng-show="edu.noMaterials" align="center" ng-class="fontSizeTitle">
       {{"NOEDUCATIONALMATERIAL"|translate}}
     </div>
     <network-banner></network-banner>
-
     <ons-list>
     <ons-list-header ng-repeat-start = "edumaterial in edu.edumaterials" class="person-list-header" ng-class="fontSizeTitle"  ng-if ="edu.showHeader($index)">{{edumaterial.PhaseInTreatment}}</ons-list-header>
     <ons-list-item modifier="chevron" class="item" ng-repeat-end ng-click="edu.goToEducationalMaterial(edumaterial)">
         <ons-row align="center">
             <ons-col width="60px" align="center">
                 <div>
-                    <i class="iconHomeView" ng-class="edumaterial.Icon" ng-style="{color: edumaterial.Color}"></i><span class="notification" ng-show="edumaterial.ReadStatus=='0'">1</span>
+                    <i ng-class="edumaterial.Icon" ng-style="{color: edumaterial.Color}" style="font-size: 26px; margin-left: 15px;"></i><span class="notification" ng-show="edumaterial.ReadStatus=='0'">1</span>
                 </div>
             </ons-col>
             <ons-col>

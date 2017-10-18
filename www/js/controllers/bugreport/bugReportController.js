@@ -10,16 +10,18 @@
         .controller('BugReportController', BugReportController);
 
     BugReportController.$inject = [
-        'FirebaseService', 'NavigatorParameters', 'UserPreferences', '$timeout'
+        'NavigatorParameters'
     ];
 
     /* @ngInject */
-    function BugReportController(FirebaseService, NavigatorParameters, UserPreferences, $timeout) {
+    function BugReportController( NavigatorParameters) {
 
         var vm = this;
         var params;
-        /////////////////////////
+
         activate();
+        /////////////////////////
+
 
         function activate() {
             params = NavigatorParameters.getParameters();
