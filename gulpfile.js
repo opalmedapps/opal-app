@@ -19,6 +19,7 @@ var size = require('gulp-size');
 var notify = require('gulp-notify');
 var open = require('gulp-open');
 var patch = require('cordova-auto-patch');
+var stripDebug = require('gulp-strip-debug');
 
 /**
  *
@@ -98,7 +99,7 @@ gulp.task('serve', ['connect','open', 'watch-files']);
  *
  */
 //Main building task for production
-gulp.task('build',['minify-css','minify-vendor-js', 'copy-vendor-css', 'minify-html', 'minify-index', 'minify-images', 'size-prebuild','size-postbuild']);
+gulp.task('build',['minify-css','minify-vendor-js', 'copy-vendor-css', 'minify-html', 'minify-index', 'minify-images', 'strip-debug', 'size-prebuild','size-postbuild']);
 
 //Minify images
 gulp.task('minify-images', function(){
@@ -190,6 +191,12 @@ gulp.task('minify-index', function() {
         .pipe(htmlmin({collapseWhitespace: true}))
         .pipe(concat('index.html'))
         .pipe(gulp.dest('dest'));
+});
+
+gulp.task('strip-debug', function () {
+    return gulp.src('www/js/**/*.js')
+        .pipe(stripDebug())
+        .pipe(gulp.dest('dest/js'));
 });
 
 
