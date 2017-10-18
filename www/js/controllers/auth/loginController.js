@@ -130,14 +130,12 @@
          */
         function authHandler(firebaseUser) {
 
-            console.log('here');
-
             CleanUp.clear();
 
             firebaseUser.getToken(true).then(function(sessionToken){
 
                 /**************************************************************************************************************************************
-                 * SINCE PREPROD IS HEAVILY TESTED, I AM DISABLING TO LOCKING OUT OF CONCURRENT USERS, THIS SHOULDN'T BE THE CASE FOR PROD!!!!!!!!!!!
+                 * SINCE PREPROD/DEV IS HEAVILY TESTED, I AM DISABLING TO LOCKING OUT OF CONCURRENT USERS, THIS SHOULDN'T BE THE CASE FOR PROD!!!!!!!!!!!
                  **************************************************************************************************************************************/
 
                 //Save the current session token to the users "logged in users" node. This is used to make sure that the user is only logged in for one session at a time.
@@ -166,7 +164,6 @@
                     Token:sessionToken,
                     LastActive: lastActive
                 };
-
 
                 $window.sessionStorage.setItem('UserAuthorizationInfo', JSON.stringify(authenticationToLocalStorage));
                 $window.localStorage.setItem('Email', vm.email);
@@ -258,15 +255,10 @@
          */
         function handleError(error)
         {
+
             switch (error.code) {
                 case "auth/invalid-email":
                 case "auth/wrong-password":
-                    $timeout(function(){
-                        vm.alert.type='danger';
-                        vm.alert.message="INVALID_PASSWORD";
-                        vm.loading = false;
-                    });
-                    break;
                 case "auth/user-not-found":
                     $timeout(function(){
                         vm.alert.type='danger';
@@ -327,10 +319,11 @@
             clearErrors();
             if(!vm.email || vm.email === '' || !vm.password || vm.password ==='')
             {
-                $timeout(function(){
-                    vm.alert.type='danger';
-                    vm.alert.message="INVALID_EMAIL_OR_PWD";
+                $timeout(function() {
+                    vm.alert.type = 'danger';
+                    vm.alert.message = "INVALID_EMAIL_OR_PWD";
                 });
+
             }else{
                 vm.loading = true;
 

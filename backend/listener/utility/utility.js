@@ -56,6 +56,7 @@ exports.encrypt = function(object,secret,salt)
 };
 exports.decrypt= function(object,secret,salt)
 {
+
   secret = (salt)?CryptoJS.PBKDF2(secret, salt, {keySize: 512/32, iterations: 1000}).toString(CryptoJS.enc.Hex):secret;
   return exports.decryptObject(object, stablelibutf8.encode(secret.substring(0,nacl.secretbox.keyLength)));
 };
@@ -98,6 +99,11 @@ exports.encryptObject=function(object,secret,nonce)
   }
 
 };
+
+exports.hash=function(input){
+  return CryptoJS.SHA512(input).toString();
+
+};
 //Decryption function, returns an object whose values are all strings
 exports.decryptObject=function(object,secret)
 {
@@ -112,8 +118,10 @@ exports.decryptObject=function(object,secret)
       if (typeof object[key]==='object')
       {
         exports.decryptObject(object[key],secret);
-      } else if (key!=='UserID'&&key!=='DeviceId') {
+      } else if (key!=='UserID' && key!=='DeviceId') {
           var enc = splitNonce(object[key]);
+
+
           let dec = stablelibutf8.decode(nacl.secretbox.open(enc[1], enc[0], secret));
           object[key] = (typeof dec === 'boolean') ? "" : dec;
       }
@@ -189,56 +197,7 @@ function Queue()
       array.splice(head,1);
       return poppedElement;
     }else{
-      console.log('Queue is empty');
     }
   };
 }
 
-
-/*
-* For test mocha
-var https = require('https');
-exports.sanitize= function(word)
-{
-  word = word.toLowerCase();
-   return word;
-};
-exports.tokenize = function(sentence)
-{
-  return sentence.split(" ");
-};
-var url = 'https://api.github.com/repos/sayenee/build-podcast';
-exports.info = function(callback)
-{
-  var options = {
-    host:'api.github.com',
-    path: '/users/dherre3/events',
-    method:'GET',
-    headers:{
-      'User-Agent':'dherre3'
-    }
-  };
-  var str = '';
-  https.request(options,function(response){
-     response.on('data',function(data)
-     {
-       str+= data;
-     });
-     response.on('end',function(data)
-     {
-       callback(JSON.parse(str));
-     });
-     response.on('error',function(error)
-     {
-       console.log(error);
-     });
-   
-  }).end();
-};
-exports.infoLang = function(infoFunc,callback)
-{
-  infoFunc(function(reply){
-     callback('Language is '+reply.Language);
-  });
-};
-*/

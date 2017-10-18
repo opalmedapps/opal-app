@@ -79,6 +79,8 @@
   "THANKYOUFORFEEDBACK": "Merci!",
   "TOO_MANY_REQUESTS": "Vous avez essayé trops de fois. Veuillez réessayer plus tard.",
   "TRUST_DEVICE": "Faire confiance à cet appareil?",
-  "UNATTENDED": "Ne laissez pas votre appareil sans surveillance."
+  "UNATTENDED": "Ne laissez pas votre appareil sans surveillance.",
+  "NEWPASSWORDVALIDATION":"Le nouveau mot de passe doit comporter au moins 6 caractères et doit contenir au moins une lettre et un chiffre!"
+
 }
 

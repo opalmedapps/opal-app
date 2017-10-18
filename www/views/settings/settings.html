@@ -33,10 +33,6 @@
     <div class="settings-header" ng-class="fontSizeTitle">{{"PERSONAL"|translate}}</div>
 
     <ons-list class="settings-list">
-        <!--<ons-list-item modifier="chevron" ng-click="settingsNavigator.pushPage('views/settings/update-account-field.html', {param:'ALIAS'},{ animation : 'slide' } )" ng-class="fontSizeDesc">
-           {{"ALIAS"|translate}}
-           <span class="list-item-note lucent">{{Alias|limitLetters:7}}</span>
-         </ons-list-item>-->
         <ons-list-item modifier="chevron" ng-click="settingsNavigator.pushPage('views/settings/update-account-field.html', {param:'EMAIL'},{ animation : 'slide' } )" ng-class="fontSizeDesc">
             {{"EMAIL"|translate}}
             <span class="list-item-note lucent">{{asc.Email|limitLetters:12}}</span>
@@ -45,10 +41,6 @@
             {{"PASSWORD"|translate}}
             <span type="password" class="list-item-note lucent">{{asc.passFill|limitTo:6}}</span>
         </ons-list-item>
-        <!--<ons-list-item modifier="chevron" ng-click="settingsNavigator.pushPage('views/settings/update-account-field.html', {param:'PHONENUMBER'},{ animation : 'slide' } )" ng-class="fontSizeDesc">-->
-            <!--{{"PHONENUMBER"|translate}}-->
-            <!--<span class="list-item-note lucent" >{{asc.TelNum|FormatPhoneNumber}}</span>-->
-        <!--</ons-list-item>-->
     </ons-list>
 
     <div class="settings-header" ng-class="fontSizeTitle">{{"PREFERENCES"|translate}}</div>
@@ -60,26 +52,11 @@
         <ons-list-item modifier="chevron" ng-click="settingsNavigator.pushPage('views/settings/update-account-field.html', {param:'FONTSIZE'},{ animation : 'slide' } )" ng-class="fontSizeDesc">
             {{"FONTSIZE"|translate}}
         </ons-list-item>
-        <!--<ons-list-item>
-          {{"ENABLESMS"|translate}}
-        <label class="switch switch&#45;&#45;list-item">
-          <input type="checkbox" ng-model="checkboxModel" ng-change="saveSettings('EnableSMS')" ng-true-value="1" ng-false-value="0" class="switch__input">
-          <div class="switch__toggle"></div>
-        </label>
-        </ons-list-item>
-        <ons-list-item >&lt;!&ndash;ng-show="mobilePlatform"&ndash;&gt;
-          {{"CALENDARACCESS"|translate}}
-        <label class="switch switch&#45;&#45;list-item">
-          <input type="checkbox" ng-model="checkboxModelCalendar" ng-change="saveSettings('Calendar')" ng-true-value="1" ng-false-value="0" class="switch__input">
-          <div class="switch__toggle"></div>
-        </label>
-          &lt;!&ndash;<span class="list-item-note lucent">{{smsPreference}}</span>&ndash;&gt;
-        </ons-list-item>-->
     </ons-list>
     <ons-list class="settings-list" ng-class="fontSizeDesc">
         <ons-list-item ng-click="$state.go('logOut')" modifier="tappable">
             {{"SIGNOUT"|translate}}
-            <ons-icon icon="fa fa-sign-out"  style="margin-top: 10px; color:#1284FF" class="pull-right"></ons-icon>
+            <ons-icon icon="fa-sign-out"  style="margin-top: 10px; color:#1284FF" class="pull-right"></ons-icon>
         </ons-list-item>
     </ons-list>
 

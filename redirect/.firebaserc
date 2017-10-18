@@ -1,5 +1,5 @@
 {
   "projects": {
-    "default": "opal-dev"
+    "default": "opal-prod"
   }
 }
