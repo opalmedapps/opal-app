@@ -129,7 +129,9 @@ gulp.task('copy-vendor-css',function()
         'www/lib/css/animate.css',
         'www/lib/bower_components/onsenui/css/onsen-css-components-blue-basic-theme.css',
         'www/lib/bower_components/onsenui/css/onsenui.css',
-        'www/lib/bower_components/angular/*.css'])
+        'www/lib/bower_components/angular/*.css',
+        'www/lib/bower_components/Ionicons/css/ionicons.min.css'
+    ])
         .pipe(concat('vendor.min.css'))
         .pipe(gulp.dest('dest/vendor'));
 });
