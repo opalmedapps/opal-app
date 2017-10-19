@@ -223,7 +223,7 @@
                 objectToSend.NewValue = vm.newValue;
                 Patient.setEmail(vm.newValue);
                 window.localStorage.setItem('Email',vm.newValue);
-                RequestToServer.sendRequest('AccountChange', objectToSend)
+                RequestToServer.sendRequestWithResponse('AccountChange', objectToSend)
                     .then(function(){
                         vm.alertClass = "bg-success updateMessage-success";
                         vm.updateMessage = "UPDATED_EMAIL";
