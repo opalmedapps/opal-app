@@ -384,9 +384,9 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors',
                     'Appointments',
                     'Tasks',
                     'TxTeamMessages',
-                    'Notifications',
                     'EducationalMaterial',
-                    'Documents'
+                    'Documents',
+                    'Notifications'
                 ]);
 
             },

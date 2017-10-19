@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html lang="en" >
 <head>
-    <title>MUHC App</title>
-    <!-- The above is equivalent to these three declarations -->
-    <!--<allow-navigation href="http://*/*" />-->
-    <!--<allow-navigation href="https://*/*" />-->
-    <!--<allow-navigation href="data:*" />-->
+    <title>OPAL</title>
+
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, minimum-scale=1, maximum-scale=1.5, user-scalable=1">
+
+    <!--
+    Caching Meta
+    =================================-->
     <meta http-equiv="cache-control" content="max-age=0" />
     <meta http-equiv="cache-control" content="no-cache" />
     <meta http-equiv="expires" content="0" />
@@ -31,28 +31,30 @@
           https://www.youtube.com;
           img-src 'self' https://www.depdocs.com data:
           https://www.depdocs.com;"/>
+
+    <!--
+    View Meta
+    =================================-->
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, minimum-scale=1, maximum-scale=1.5, user-scalable=1">
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
+    
 
-    <!-- Material library for Material Design -->
-    <!--<link rel="stylesheet" type="text/css" href="lib/css/materialize.min.css">-->
 
-    <script src="lib/bower_components/angular/angular.min.js"></script>
-    <link href="lib/bower_components/angular/angular-csp.css">
+    <!--
+    Vendor Javascript
+    =================================-->
 
+    <!-- Core Libraries-->
+    <script src="lib/bower_components/angular/angular.js"></script>
     <script src="lib/bower_components/jquery/dist/jquery.min.js"></script>
+
+    <!-- Angular Libraries-->
     <script src="lib/bower_components/angular-animate/angular-animate.min.js"></script>
     <script src="lib/bower_components/angular-sanitize/angular-sanitize.min.js"></script>
 
-    <!--bootstrap-->
-    <link rel="stylesheet" href="lib/bower_components/font-awesome/css/font-awesome.min.css">
-    <link rel="stylesheet" type="text/css" href="lib/bower_components/bootstrap/dist/css/bootstrap.min.css">
-
-    <!--Animate library for animation-->
-    <link rel="stylesheet" type="text/css" href="lib/css/animate.css">
-
-    <!-- Language translation and what not-->
+    <!-- Language translation-->
     <script src="lib/bower_components/angular-translate/angular-translate.min.js"></script>
     <script src="lib/bower_components/angular-translate-handler-log/angular-translate-handler-log.min.js"></script>
     <script src="lib/bower_components/angular-translate-loader-partial/angular-translate-loader-partial.min.js"></script>
@@ -60,14 +62,16 @@
 
     <!--Progress circle bar -->
     <script src="./lib/bower_components/progressbar.js/dist/progressbar.js"></script>
-    <script src="lib/bower_components/angular-ui-router/release/angular-ui-router.min.js"></script>
+    <script src="lib/bower_components/angular-ui-router/release/angular-ui-router.js"></script>
     <script src="lib/bower_components/angular-touch/angular-touch.min.js"></script>
 
     <!-- Firebase -->
     <script src="lib/bower_components/firebase/firebase.js"></script>
+
     <!-- AngularFire -->
     <script src="lib/bower_components/angularfire/dist/angularfire.min.js"></script>
 
+    <!-- Cordova -->
     <script src="lib/bower_components/ngCordova/dist/ng-cordova.min.js"></script>
 
     <!--Encryption and Decryption libraries-->
@@ -91,28 +95,54 @@
     <script src="lib/bower_components/angular-tek-progress-bar/dist/tek.progress-bar.js"></script>
     <script src="lib/bower_components/highcharts/highstock.js"></script>
 
+    <!--PDF Viewer-->
     <script src="lib/bower_components/moment/moment.js"></script>
     <script src="lib/bower_components/pdfjs-dist/build/pdf.js"></script>
     <script src="lib/bower_components/pdfjs-dist/build/pdf.worker.min.js"></script>
     <script src="lib/bower_components/pdfjs-dist/web/pdf_viewer.js"></script>
 
-    <title>OPAL</title>
+    <!-- Onsen UI -->
+    <script src="lib/bower_components/onsenui/js/onsenui.js"></script>
 
-    <!--Libraries for OnsenUI-->
+    <!-- Cordova -->
+    <script src="cordova.js"></script>
 
+
+
+    <!--
+    Vendor Stylesheets
+    =================================-->
+
+    <!-- Onsen UI -->
     <link rel="stylesheet" href="lib/bower_components/onsenui/css/onsen-css-components-blue-basic-theme.css">
     <link rel="stylesheet" href="lib/bower_components/onsenui/css/onsenui.css"/>
-    <script src="lib/bower_components/onsenui/js/onsenui.js"></script>
+
+    <!-- Angular CSP -->
+    <link href="lib/bower_components/angular/angular-csp.css">
+
+    <!--Bootstrap-->
+    <link rel="stylesheet" href="lib/bower_components/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="lib/bower_components/bootstrap/dist/css/bootstrap.min.css">
+
+    <!--Animate library for animation-->
+    <link rel="stylesheet" type="text/css" href="lib/css/animate.css">
 
     <style>
         [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
             display: none !important;
         }
     </style>
-    <!-- css stylesheets for the project-->
-    <link rel="stylesheet" href="css/app.css"/>
-    <script src="cordova.js"></script>
 
+
+    <!--
+    App Stylesheets
+    =================================-->
+    <link rel="stylesheet" href="css/app.css"/>
+
+
+    <!--
+    App Javascript
+    =================================-->
     <script src="js/app.js" type="text/javascript"></script>
     <script src="js/config.js" type="text/javascript"></script>
 
@@ -125,7 +155,6 @@
     <script src="js/controllers/auth/loginController.js"></script>
     <script src="js/controllers/auth/setNewPasswordController.js"></script>
     <script src="js/controllers/auth/securityQuestionController.js"></script>
-    <script src="js/controllers/auth/verifySSNController.js"></script>
     <script src="js/controllers/auth/forgotPasswordController.js"></script>
     <script src="js/controllers/auth/logOutController.js"></script>
     <script src="js/controllers/checkIn/checkInController.js"></script>
@@ -142,8 +171,10 @@
     <script src="js/controllers/educational/individualMaterialController.js"></script>
     <script src="js/controllers/educational/educationalMaterialController.js"></script>
     <script src="js/controllers/feedback/feedbackController.js"></script>
+    <script src="js/controllers/bugreport/bugReportController.js"></script>
     <script src="js/controllers/home/homeController.js"></script>
     <script src="js/controllers/info-tab/infoTabController.js"></script>
+    <script src="js/controllers/init/initLegalController.js"></script>
     <script src="js/controllers/init/initScreenController.js"></script>
     <script src="js/controllers/init/initSettingsController.js"></script>
     <script src="js/controllers/lab-results/labResultsController.js"></script>
@@ -159,12 +190,14 @@
     <script src="js/controllers/parking/individualParkingController.js"></script>
     <script src="js/controllers/pfp/pfpController.js"></script>
     <script src="js/controllers/pfp/pfpContactsController.js"></script>
+    <script src="js/controllers/pfp/individualPfpContactController.js"></script>
     <script src="js/controllers/questionnaires/questionnairesController.js"></script>
     <script src="js/controllers/questionnaires/questionnaireMainController.js"></script>
     <script src="js/controllers/questionnaires/answeredQuestionnaireController.js"></script>
     <script src="js/controllers/questionnaires/questionnairesListController.js"></script>
     <script src="js/controllers/settings/accountSettingsController.js"></script>
     <script src="js/controllers/settings/changeSettingController.js"></script>
+    <script src="js/controllers/settings/secureDeviceController.js"></script>
     <script src="js/controllers/status/statusController.js"></script>
     <script src="js/controllers/status/individualStepController.js"></script>
     <script src="js/controllers/tabs/tabsController.js"></script>
@@ -211,15 +244,17 @@
     <script src="js/services/loggerService.js"></script>
     <script src="js/services/networkStatusService.js"></script>
     <script src="js/services/metadataService.js"></script>
-
     <script src="js/services/pfpService.js"></script>
-    <script src="js/services/timeEstimateService.js"></script>    
     <!-- inject:service:js -->
     <!-- endinject -->
+
+
     <!--App filters-->
     <script src="js/filters/filters.js"></script>
     <!-- inject:filter:js -->
     <!-- endinject -->
+
+
     <!--App directives-->
     <script src="js/directives/watchHeightOfElementDirective.js"></script>
     <script src="js/directives/changeHeightDiv.js"></script>
@@ -230,34 +265,33 @@
     <script src ="js/directives/rateEducationalMaterialDirective.js"></script>
     <script src="js/directives/scrollCarouselDirective.js"></script>
     <script src="js/directives/offlineBannerDirective.js"></script>
-
     <!-- inject:directive -->
     <!-- endinject -->
+
     <script type="text/javascript" src="js/bootstrap.js"></script>
-    <link href="https://fonts.googleapis.com/css?family=Cabin" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Barrio" rel="stylesheet">
-
-
 </head>
 
 <body id="boots">
 
-<!--Loading Modal for the initial loading screen-->
-<ons-modal var="modal" style="background-color: white !important;">
-    <br>
-    <ons-icon style="color: #0D47A1" size="50px" icon="ion-load-c" spin="true"></ons-icon>
-    <br><br>
-    <div style="margin-top: 5%" class="container text-center" align="center">
-        <p style="color: #0D47A1" id="loadingData">{{"LOADINGDATA"|translate}}...</p>
-        <img style="margin-top: 5%; margin-left: -5%; width: 80%; height: auto;" ng-src="./img/muhc-logo-text.png" >
-    </div>
-</ons-modal>
+    <!--
+    Loading Modal
+    =================================-->
+    <ons-modal var="modal" style="background-color: white !important;">
+        <br>
+        <ons-icon style="color: #0D47A1" size="50px" icon="ion-load-c" spin="true"></ons-icon>
+        <br><br>
+        <div style="margin-top: 5%" class="container text-center" align="center">
+            <p style="color: #0D47A1" id="loadingData">{{"LOADINGDATA"|translate}}...</p>
+            <img style="margin-top: 5%; margin-left: -5%; width: 80%; height: auto;" ng-src="./img/muhc-logo-text.png" >
+        </div>
+    </ons-modal>
 
-<div ng-controller="MainController">
-    <div ui-view></div>
-</div>
+    <!--
+    App
+    =================================-->
+    <div ng-controller="MainController">
+        <div ui-view></div>
+    </div>
 
 </body>
-
-
 </html>

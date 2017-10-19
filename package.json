@@ -44,6 +44,7 @@
     "gulp-rename": "^1.2.2",
     "gulp-replace": "^0.5.4",
     "gulp-size": "^2.1.0",
+    "gulp-strip-debug": "^1.1.0",
     "gulp-uglify": "^2.0.0",
     "jasmine": "^2.5.2",
     "jasmine-core": "^2.4.1",
@@ -57,5 +58,7 @@
     "phantomjs-prebuilt": "^2.1.12",
     "yargs": "^8.0.1"
   },
-  "dependencies": {}
+  "dependencies": {
+    "cordova-auto-patch": "^1.2.2"
+  }
 }

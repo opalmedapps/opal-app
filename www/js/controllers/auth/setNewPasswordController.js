@@ -15,18 +15,19 @@
         '$scope',
         'RequestToServer',
         'UserAuthorizationInfo',
-        'EncryptionService'
+        'EncryptionService',
+        'ResetPassword',
+        '$timeout'
     ];
 
     /* @ngInject */
-    function SetNewPasswordController($scope, RequestToServer, UserAuthorizationInfo, EncryptionService) {
+    function SetNewPasswordController($scope, RequestToServer, UserAuthorizationInfo, EncryptionService, ResetPassword, $timeout) {
 
         var vm = this;
         var parameters;
-        vm.alert={};
+        vm.alert = {};
         vm.goToLogin = goToLogin;
         vm.submitNewPassword = submitNewPassword;
-
 
         activate();
 
@@ -34,63 +35,93 @@
 
         function activate() {
             parameters =  initNavigator.getCurrentPage().options;
+            parameters = parameters.data;
 
-            $scope.$watch('vm.newValue',function()
+            $scope.$watch('newValue',function()
             {
-                if($scope.alert.hasOwnProperty('type'))
+                vm.invalidPassword = !newPasswordIsValid();
+
+                if(vm.alert.hasOwnProperty('type') && vm.alert.type === 'danger')
                 {
-                    delete $scope.alert.type;
-                    delete $scope.alert.content;
+                    delete vm.alert.type;
+                    delete vm.alert.content;
                 }
             });
         }
 
-        function goToLogin()
-        {
-            initNavigator.resetToPage('./views/init/init-screen.html');
+        function newPasswordIsValid() {
+            var str = $scope.newValue;
+            if (str && typeof str === 'string')
+            {
+                if ( str.length < 6) {
+                    return false;
+                } else if (str.length > 50) {
+                    return false;
+                } else if (str.search(/\d/) === -1) {
+                    return false;
+                } else if (str.search(/[a-zA-Z]/) === -1) {
+                    return false;
+                } else if (str.search(/[^a-zA-Z0-9\!\@\#\$\%\^\&\*\(\)\_\+]/) !== -1) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        function goToLogin() {
+            initNavigator.resetToPage('./views/init/init-screen.html',{animation:'none'});
         }
 
 
-        function submitNewPassword(newValue)
-        {
-            if(!newValue)
+        function submitNewPassword(newValue) {
+            var invalid = !newPasswordIsValid();
+            if(!newValue || invalid)
             {
+                vm.invalidPassword= invalid;
                 vm.alert.type='danger';
                 vm.alert.content = "ENTERVALIDPASSWORD";
             }else{
+                vm.submitting = true;
 
-                ResetPassword.completePasswordChange(parameters.oobCode, newValue)
+                ResetPassword.completePasswordChange(parameters.oobCode, $scope.newValue)
                     .then(function () {
 
-                        return RequestToServer.sendRequestWithResponse('SetNewPassword', {newPassword: newValue}, EncryptionService.getSecurityAns() ,
+                        return RequestToServer.sendRequestWithResponse('SetNewPassword', {newPassword: $scope.newValue}, EncryptionService.getTempEncryptionHash() ,
                             'passwordResetRequests',
                             'passwordResetResponses'
                         );
                     })
                     .then(function() {
+                        vm.submitting = false;
                         UserAuthorizationInfo.clearUserAuthorizationInfo();
-                        vm.alert.type='success';
-                        vm.alert.content="PASSWORDUPDATED";
+                        EncryptionService.removeTempEncryptionHash();
+                        $timeout(function() {
+                            vm.alert.type = 'success';
+                            vm.alert.content = "PASSWORDUPDATED";
+                        });
                         localStorage.removeItem("deviceID");
                         localStorage.removeItem(UserAuthorizationInfo.getUsername()+"/securityAns");
                     })
                     .catch(function (error) {
-
-                        vm.alert.type='danger';
-                        switch (error.code) {
-                            case "auth/invalid-action-code":
-                                vm.alert.content = "CODE_INVALID";
-                                break;
-                            case "auth/expired-action-code":
-                                vm.alert.content = "CODE_EXPIRED";
-                                break;
-                            case "auth/weak-password":
-                                vm.alert.content = "WEAK_PASSWORD";
-                                break;
-                            default:
-                                vm.alert.content = "SERVERPROBLEM";
-                                break;
-                        }
+                        $timeout(function(){
+                            vm.submitting = false;
+                            vm.alert.type='danger';
+                            switch (error.code) {
+                                case "auth/invalid-action-code":
+                                    vm.alert.content = "CODE_INVALID";
+                                    break;
+                                case "auth/expired-action-code":
+                                    vm.alert.content = "CODE_EXPIRED";
+                                    break;
+                                case "auth/weak-password":
+                                    vm.alert.content = "WEAK_PASSWORD";
+                                    break;
+                                default:
+                                    vm.alert.content = "SERVERPROBLEM";
+                                    break;
+                            }
+                        })
                     });
             }
         }
