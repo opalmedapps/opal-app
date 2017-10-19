@@ -31,4 +31,11 @@
             </div>
         </ons-col>
     </ons-row>
+    <ons-modal var="modal">
+        <h5>{{"RESETERROR"|translate}}</h5>
+        <ons-icon icon="ion-alert-circled" size="60px"></ons-icon>
+        <p style="margin-top: 5%" class="unattended-message">{{"RETRYRESETMESSAGE"|translate}}</p>
+        <ons-button style="margin-top: 5%; font-size: 22px;" ng-click="security.goToInit()">{{"GOTOHOME"|translate}}</ons-button>
+        <ons-button style="margin-top: 5%; margin-left: 50px; font-size: 22px; background-color: #F44336" ng-click="security.goToReset()">{{"RETRYRESET"|translate}}</ons-button>
+    </ons-modal>
 </ons-page>
