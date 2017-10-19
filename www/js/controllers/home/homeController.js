@@ -107,9 +107,12 @@
             setNextAppointment();
 
             //display new notifications, if any
-            if(Notifications.getNumberUnreadNotifications() > 0){
-                vm.notifications = Notifications.setNotificationsLanguage(Notifications.getUnreadNotifications());
-            }
+            Notifications.requestAllNotifications()
+                .then(function(){
+                    if(Notifications.getNumberUnreadNotifications() > 0){
+                        vm.notifications = Notifications.setNotificationsLanguage(Notifications.getUnreadNotifications());
+                    }
+                });
 
             vm.loading =false;
 
@@ -299,6 +302,7 @@
         }
 
         function goToCheckinAppointments(todaysAppointments) {
+            if (vm.allCheckedIn || vm.no_appointments) return;
             NavigatorParameters.setParameters({'Navigator':'homeNavigator'});
             homeNavigator.pushPage('./views/home/checkin/checkin-list.html');
         }

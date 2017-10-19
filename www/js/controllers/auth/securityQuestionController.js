@@ -26,11 +26,11 @@
         .controller('SecurityQuestionController', SecurityQuestionController);
 
     SecurityQuestionController.$inject = ['$window', '$timeout', 'ResetPassword', 'RequestToServer', 'EncryptionService',
-        'UUID', 'UserAuthorizationInfo', '$state', 'Constants', 'DeviceIdentifiers', 'NavigatorParameters', '$scope'];
+        'UUID', 'UserAuthorizationInfo', '$state', 'DeviceIdentifiers', 'NavigatorParameters', '$scope'];
 
     /* @ngInject */
     function SecurityQuestionController($window, $timeout, ResetPassword, RequestToServer, EncryptionService, UUID,
-                                        UserAuthorizationInfo, $state, Constants, DeviceIdentifiers, NavigatorParameters, $scope) {
+                                        UserAuthorizationInfo, $state, DeviceIdentifiers, NavigatorParameters, $scope) {
 
         var vm = this;
         var deviceID;
@@ -96,6 +96,7 @@
 
             // this checks whether or not the security question is being asked in order to log the user in or to trigger a password reset request
             if (parameters.passwordReset){
+
                 passwordReset = parameters.passwordReset;
                 vm.passwordReset = passwordReset;
 
@@ -105,7 +106,9 @@
                         return DeviceIdentifiers.sendDevicePasswordRequest(email);
                     })
                     .then(function (response) {
-                        vm.Question = response.Data.securityQuestion.securityQuestion_EN + " / " + response.Data.securityQuestion.securityQuestion_FR;
+                        $timeout(function() {
+                            vm.Question = response.Data.securityQuestion.securityQuestion_EN + " / " + response.Data.securityQuestion.securityQuestion_FR;
+                        });
                     })
                     .catch(handleError);
             } else {
@@ -136,6 +139,7 @@
             EncryptionService.generateEncryptionHash();
 
             if(passwordReset){
+                EncryptionService.generateTempEncryptionHash(EncryptionService.hash(vm.ssn.toUpperCase()), key);
                 $scope.initNavigator.pushPage('./views/login/new-password.html', {data: {oobCode: ResetPassword.getParameter("oobCode", parameters.url)}});
             }
             else {
@@ -168,14 +172,13 @@
                         vm.alert.content = "INVALID_USER";
                         break;
                     case "three-tries":
-                        vm.alert.content = "CONTACTHOSPITAL";
+                        vm.alert.content = "OUTOFTRIES";
                         vm.threeTries=true;
                         break;
-                    case "corrupted-date":
+                    case "corrupted-data":
                         vm.alert.content = "CONTACTHOSPITAL";
                         break;
                     case "wrong-answer":
-                        vm.alert.type='danger';
                         vm.alert.content="ERRORANSWERNOTMATCH";
                         break;
                     default:
@@ -260,7 +263,7 @@
 
                             if(vm.attempts >= 3)
                             {
-                                handleError({code: "threeTries"});
+                                handleError({code: "three-tries"});
                             }else{
                                 handleError({code: "wrong-answer"});
                             }
@@ -273,11 +276,16 @@
                 {
                     vm.submitting = false;
                     removeUserData();
-
-                    if(error.Reason.toLowerCase().indexOf('malformed utf-8') === -1) {
+                    if(error.Reason.toLowerCase().indexOf('malformed utf-8') !== -1) {
                         handleError({code: "corrupted-data"});
                     } else {
-                        handleError({code: "wrong-answer"});
+                        vm.attempts = vm.attempts + 1;
+                        if(vm.attempts >= 3)
+                        {
+                            handleError({code: "three-tries"});
+                        }else{
+                            handleError({code: "wrong-answer"});
+                        }
                     }
 
                 });

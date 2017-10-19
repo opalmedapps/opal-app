@@ -75,7 +75,7 @@
         {
             vm.appointmentsUnreadNumber = Appointments.getNumberUnreadAppointments();
             vm.documentsUnreadNumber = Documents.getNumberUnreadDocuments();
-            vm.txTeamMessagesUnreadNumber = TxTeamMessages.getUnreadTxTeamMessages();
+            vm.txTeamMessagesUnreadNumber = TxTeamMessages.getNumberUnreadTxTeamMessages();
             vm.notificationsUnreadNumber = Notifications.getNumberUnreadNotifications();
             vm.questionnairesUnreadNumber = Questionnaires.getNumberOfUnreadQuestionnaires();
         }

@@ -40,12 +40,11 @@
         this.getContacts = function()
         {
             var q = $q.defer();
-            if(this.areContactsEmpty()){
-                RequestToServer.sendRequestWithResponse('PatientCommitteMembers')
+            if(_emptyContacts){
+                RequestToServer.sendRequestWithResponse('PFPMembers')
                     .then(function (response) {
                         this.contacts = response.Data;
                         _emptyContacts = false;
-                        clearTimeout(timeout);
                         q.resolve(this.contacts);
                     }.bind(this))
                     .catch(function (error)
@@ -53,12 +52,9 @@
                         if(error.Code==='2')
                         {
                             NativeNotification.showNotificationAlert($filter('translate')("ERRORCONTACTINGHOSPITAL"));
-                            clearTimeout(timeout);
-                            q.resolve([]);
                         }
+	                    q.resolve([]);
                     });
-
-                var timeout = setTimeout(function(){ q.resolve([])}, 5000);
             } else {
                 q.resolve(this.contacts);
             }

@@ -92,7 +92,7 @@
 
 //Routes for angular views
 var myApp = angular
-    .module('MUHCApp', ['tmh.dynamicLocale','pascalprecht.translate','ngAnimate','luegg.directives',
+    .module('MUHCApp', ['tmh.dynamicLocale','pascalprecht.translate','luegg.directives',
         'ngSanitize','ui.router', 'onsen', 'ngTouch','firebase','ui.bootstrap','MUHCApp.filters',
         'ngCordova','monospaced.elastic','Tek.progressBar']);
 
@@ -108,9 +108,7 @@ myApp.config(['$urlRouterProvider', '$stateProvider', function ($urlRouterProvid
         })
         .state('init', {
             url: '/',
-            templateUrl: 'views/init/init-screen.html',
-            controller: 'InitScreenController',
-            controllerAs: 'init'
+            templateUrl: 'views/navigators/initNavigator.html'
         })
         .state('loading', {
             url: '/loading',

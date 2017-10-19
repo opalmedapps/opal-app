@@ -19,8 +19,7 @@
  */
 @font-face {
     font-family: font;
-    src: url("../fonts/SanFranciscoFont-master/SanFranciscoDisplay-Regular.otf");
-
+    src: url("../fonts/roboto/Roboto-Regular.ttf");
 }
 
 html, .page {
@@ -1765,10 +1764,10 @@ Button appointments
 .fontTitleLarge{
   font-size: 21px;
 }
-.fontDescXLarge{
+.fontDescXlarge{
     font-size: 23px;
 }
-.fontTitleXLarge{
+.fontTitleXlarge{
     font-size: 24px;
 }
 /*
@@ -1993,7 +1992,7 @@ a .action-col{
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
-  /*font-family: 'Roboto', 'Noto', sans-serif;*/
+  /*font-family: font, 'Noto', sans-serif;*/
   -webkit-font-smoothing: antialiased;
   width: 56px;
   height: 56px;
