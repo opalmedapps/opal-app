@@ -79,14 +79,16 @@
 
         vm.submitAnswer = submitAnswer;
         vm.clearErrors = clearErrors;
+        vm.goToInit = goToInit;
+        vm.goToReset = goToReset;
 
         activate();
 
         //////////////////////////////////////////
 
-        /*************************
+        /************************************************
          *  PRIVATE FUNCTIONS
-         *************************/
+         ************************************************/
 
         function activate(){
             deviceID = UUID.getUUID();
@@ -160,11 +162,8 @@
                 vm.alert.type='danger';
                 switch (error.code){
                     case "auth/expired-action-code":
-                        vm.alert.content = "CODE_EXPIRED";
-                        break;
                     case "auth/invalid-action-code":
-                        vm.alert.content = "INVALID_CODE";
-                        break;
+                        modal.show();
                     case "auth/user-disabled":
                         vm.alert.content = "USER_DISABLED";
                         break;
@@ -200,9 +199,9 @@
             $window.localStorage.removeItem(UserAuthorizationInfo.getUsername()+"/securityAns");
         }
 
-        /*************************
+        /************************************************
          *  PUBLIC METHODS
-         *************************/
+         ************************************************/
 
         /**
          * @ngdoc method
@@ -290,6 +289,30 @@
 
                 });
             }
+        }
+
+        /**
+         * @ngdoc method
+         * @name goToInit
+         * @methodOf MUHCApp.controllers.SecurityQuestionController
+         * @description
+         * Brings user to init screen
+         */
+        function goToInit(){
+            modal.hide();
+            $state.go('init');
+        }
+
+        /**
+         * @ngdoc method
+         * @name goToInit
+         * @methodOf MUHCApp.controllers.SecurityQuestionController
+         * @description
+         * Brings user to init screen
+         */
+        function goToReset(){
+            modal.hide();
+            initNavigator.pushPage('./views/login/forgot-password.html',{})
         }
     }
 })();
