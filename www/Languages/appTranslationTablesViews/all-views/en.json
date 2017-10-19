@@ -213,6 +213,7 @@
   "RELEASETOREFRESH": "Release to refresh",
   "RESULTS": "Rssults",
   "REPORTBUGS": "Report Bugs",
+  "RESETINSTRUCTIONS": "Password must be at least 6 characters long and must include one letter and one number",
   "SECUREYOURDEVICE": "Secure Your Device",
   "SEARCH": "Search",
   "SELECTFONTSIZE": "Select font size",
