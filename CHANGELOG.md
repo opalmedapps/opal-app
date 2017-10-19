@@ -22,6 +22,9 @@ To invite users to upgrade in case of vulnerabilities.
 
 ## [PRODUCTION]
 
+### v1.2.2
+* Fix $state.go() bug
+
 ### v1.2.1 (patch)
 * Fix notifications bug
 * Fix educational material bug
