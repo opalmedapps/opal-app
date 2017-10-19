@@ -45,12 +45,14 @@
             });
 
             if(Constants.app){
-                cordova.getAppVersion.getVersionNumber(function (version) {
-                    vm.version = version;
+                cordova.getAppVersion.getVersionNumber().then(function (version) {
+                    $timeout(function(){
+                        vm.version = version;
+                    });
                 });
             }else{
                 $timeout(function(){
-                    vm.version = '0.5.0';
+                    vm.version = '1.2.0';
                 })
             }
         }
