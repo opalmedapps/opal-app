@@ -22,13 +22,19 @@ To invite users to upgrade in case of vulnerabilities.
 
 ## [PRODUCTION]
 
+### v1.2.4
+* Fixed password not being synced error handling
+* Fixed finger unlock lockout issue
+* Fixed invalid oob code error handling
+
+
 ### v1.2.2
 * Fix $state.go() bug
 
 ### v1.2.1 (patch)
-* Fix notifications bug
-* Fix educational material bug
-* Fix questionnaires bug
+* Fixed notifications bug
+* Fixed educational material bug
+* Fixed questionnaires bug
 
 ### v1.2.0
 * ##### Penetration test ready version of the app
