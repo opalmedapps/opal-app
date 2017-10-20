@@ -149,7 +149,7 @@ gulp.task('minify-js',function()
 gulp.task('minify-vendor-js',function()
 {
     return gulp.src([ 'www/lib/bower_components/angular/angular.js',
-        'www/lib/bower_components/jquery/dist/jquery.js',
+        'www/lib/bower_components/jquery/dist/jquery.min.js',
         'www/lib/bower_components/angular-animate/angular-animate.js',
         'www/lib/bower_components/angular-dynamic-locale/src/tmhDynamicLocale.js',
         'www/lib/bower_components/angular-elastic/elastic.js',
@@ -167,7 +167,6 @@ gulp.task('minify-vendor-js',function()
         'www/lib/bower_components/onsenui/js/onsenui.js',
         'www/lib/js/angular-bootstrap/ui-bootstrap-tpls-1.1.2.js',
         'www/lib/bower_components/angular-tek-progress-bar/dist/tek.progress-bar.js',
-        'www/lib/bower_components/angular-scroll-glue/src/scrollglue.js',
         'www/lib/bower_components/angularfire/dist/angularfire.js',
         'www/lib/bower_components/angular-mocks/angular-mocks.js',
         'www/lib/bower_components/tweetnacl/nacl-fast.min.js',
@@ -178,7 +177,8 @@ gulp.task('minify-vendor-js',function()
         'www/lib/bower_components/pdfjs-dist/build/pdf.worker.min.js',
         'www/lib/bower_components/pdfjs-dist/web/pdf_viewer.js',
         'www/lib/js/materialize.min.js',
-        'www/lib/bower_components/crypto-js/crypto-js.js'])
+        'www/lib/bower_components/crypto-js/crypto-js.js',
+        'www/lib/bower_components/angular-scroll-glue/src/scrollglue.js'])
         .pipe(concat('vendor.min.js'))
         .pipe(uglify())
         .pipe(gulp.dest('dest/vendor'));
