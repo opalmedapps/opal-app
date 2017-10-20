@@ -190,9 +190,8 @@
                     case "auth/user-not-found":
                         vm.alert.content = "INVALID_USER";
                         break;
-                    case "five-tries":
+                    case "3":
                         vm.alert.content = "OUTOFTRIES";
-                        vm.threeTries=true;
                         break;
                     case "corrupted-data":
                         vm.alert.content = "CONTACTHOSPITAL";
@@ -264,11 +263,16 @@
                     Answer: hash,
                     SSN: vm.ssn,
                     Trusted: trusted,
-                    PasswordReset: passwordReset
+                    PasswordReset: passwordReset || false
                 };
+
+                console.log(JSON.stringify(parameterObject));
 
                 RequestToServer.sendRequestWithResponse('VerifyAnswer',parameterObject, key, firebaseRequestField, firebaseResponseField).then(function(data)
                 {
+
+                    console.log(JSON.stringify(data));
+
                     vm.submitting = false;
                     if(data.Data.AnswerVerified === "true")
                     {
@@ -283,6 +287,7 @@
                 })
                 .catch(function(error)
                 {
+                    console.log(JSON.stringify(error));
                     vm.submitting = false;
                     removeUserData();
                     if(error.Reason.toLowerCase().indexOf('malformed utf-8') !== -1) {
