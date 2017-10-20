@@ -40,8 +40,13 @@ exports.verifySecurityAnswer=function(requestKey,requestObject,patient)
     var key = patient.AnswerText;
     //TO VERIFY, PASS SECURITY ANSWER THROUGH HASH THAT TAKES A WHILE TO COMPUTE, SIMILAR TO HOW THEY DO PASSWORD CHECKS
     utility.generatePBKDFHash(key,key);
-    console.log(requestObject.Parameters, key);
-    var unencrypted = utility.decrypt(requestObject.Parameters, key); 
+    console.log("WHATS UP",requestObject.Parameters, key);
+    try {
+        var unencrypted = utility.decrypt(requestObject.Parameters, key);
+    }catch(err){
+        console.log("HELLOW", err);
+    }
+     
     console.log("UNCRPT", unencrypted);
     //Incorrect answer   
     if(unencrypted.Answer === null)
