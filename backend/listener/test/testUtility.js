@@ -25,7 +25,7 @@ describe('Testing encryption/decryption',function(){
   it('Encryption/Decryption number, this gets converted to string',function()
   {
     var enc = utility.encrypt(12312,CryptoJS.SHA512("david").toString(),CryptoJS.SHA512("david").toString());
-    var dec = utility.decrypt(enc,CryptoJS.SHA512("david").toString(),CryptoJS.SHA512("david").toString());
+    var dec = utility.decrypt(enc,CryptoJS.SHA512("david").toString(),CryptoJS.SHA512("dasvid").toString());
     expect(12312).to.equal(enc);
   });
   it('Encryption/Decryption date',function()
