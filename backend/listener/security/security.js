@@ -40,21 +40,22 @@ exports.verifySecurityAnswer=function(requestKey,requestObject,patient)
     var key = patient.AnswerText;
     //TO VERIFY, PASS SECURITY ANSWER THROUGH HASH THAT TAKES A WHILE TO COMPUTE, SIMILAR TO HOW THEY DO PASSWORD CHECKS
     utility.generatePBKDFHash(key,key);
-    console.log("LINE 44",unencrypted,requestObject);
+    console.log(requestObject.Parameters, key);
     var unencrypted = utility.decrypt(requestObject.Parameters, key); 
+    console.log("UNCRPT", unencrypted);
     //Incorrect answer   
     if(unencrypted.Answer === null)
     {
-        // //Check if timestamp for lockout is old, if it is reset the security answer attempts
-        // if(patient.TimeoutTimestamp != null && requestObject.Timestamp - (new Date(patient.TimeoutTimestamp)).getTime() > FIVE_MINUTES)
-        // {
-        //     sqlInterface.resetSecurityAnswerAttempt(requestObject);
-        // }else if(patient.Attempt == 5)
-        // {
-        //     sqlInterface.setTimeoutSecurityAnswer(requestObject, requestObject.Timestamp);
-        //     r.resolve({ RequestKey:requestKey, Code:4, Data:{AnswerVerified:"false"}, Headers:{RequestKey:requestKey,RequestObject:requestObject},Response:'success'});
-        // }
-        // sqlInterface.increaseSecurityAnswerAttempt(requestObject);
+        //Check if timestamp for lockout is old, if it is reset the security answer attempts
+        if(patient.TimeoutTimestamp != null && requestObject.Timestamp - (new Date(patient.TimeoutTimestamp)).getTime() > FIVE_MINUTES)
+        {
+            sqlInterface.resetSecurityAnswerAttempt(requestObject);
+        }else if(patient.Attempt == 5)
+        {
+            sqlInterface.setTimeoutSecurityAnswer(requestObject, requestObject.Timestamp);
+            r.resolve({ RequestKey:requestKey, Code:4, Data:{AnswerVerified:"false"}, Headers:{RequestKey:requestKey,RequestObject:requestObject},Response:'success'});
+        }
+        sqlInterface.increaseSecurityAnswerAttempt(requestObject);
         r.resolve({ RequestKey:requestKey, Code:3,Data:{AnswerVerified:"false"}, Headers:{RequestKey:requestKey,RequestObject:requestObject},Response:'success'});
     }  
     //If its not a reset password request and the passwords are not equivalent
