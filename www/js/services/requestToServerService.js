@@ -116,7 +116,7 @@ myApp.service('RequestToServer',['$filter','$state','NewsBanner','UserAuthorizat
                             if(data.Code == '3')
                             {
                                 r.resolve(data);
-                            }else if(data.Code == '2'){
+                            }else if(data.Code == '2' || data.Code == '4'){
                                 r.reject(data);
                             }
                         }
