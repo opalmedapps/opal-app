@@ -86,6 +86,8 @@
 
         vm.clearErrors = clearErrors;
         vm.submit = submit;
+        vm.goToInit = goToInit;
+        vm.goToReset = goToReset;
 
         activate();
         //////////////////////////////////
@@ -135,7 +137,7 @@
             firebaseUser.getToken(true).then(function(sessionToken){
 
                 /**************************************************************************************************************************************
-                 * SINCE PREPROD/DEV IS HEAVILY TESTED, I AM DISABLING TO LOCKING OUT OF CONCURRENT USERS, THIS SHOULDN'T BE THE CASE FOR PROD!!!!!!!!!!!
+                 * SINCE PREPROD/DEV IS HEAVILY TESTED, I AM DISABLING TO LOCKING OUT OF CONCURRENT USERS, THIS SHOULDN'T BE THE CASE FOR PROD!!!!!!!!!
                  **************************************************************************************************************************************/
 
                 //Save the current session token to the users "logged in users" node. This is used to make sure that the user is only logged in for one session at a time.
@@ -209,7 +211,8 @@
                 })
                 .catch(function (error) {
                     //TODO: handle this error better... need to know the error object that is returned
-                    handleError('SERVERERROR')
+                    firebase.auth().signOut();
+                    handleError(error);
                 });
         }
 
@@ -237,10 +240,11 @@
                         trusted: vm.trusted
                     });
                 })
-                .catch(function () {
+                .catch(function (error) {
                     $timeout(function(){
                         vm.loading = false;
-                        initNavigator.popPage();
+                        firebase.auth().signOut();
+                        handleError(error);
                     });
                 });
         }
@@ -278,6 +282,12 @@
                         vm.alert.type='danger';
                         vm.alert.message="LIMITS_EXCEEDED";
                         vm.loading = false;
+                    });
+                    break;
+                case "ENCRYPTION_ERROR":
+                    $timeout(function(){
+                        vm.loading = false;
+                        modal.show();
                     });
                     break;
                 default:
@@ -357,6 +367,30 @@
                     firebase.auth().signInWithEmailAndPassword(vm.email, vm.password).then(authHandler).catch(handleError);
                 }
             }
+        }
+
+        /**
+         * @ngdoc method
+         * @name goToInit
+         * @methodOf MUHCApp.controllers.LoginController
+         * @description
+         * Brings user to init screen
+         */
+        function goToInit(){
+            modal.hide();
+            initNavigator.popPage();
+        }
+
+        /**
+         * @ngdoc method
+         * @name goToReset
+         * @methodOf MUHCApp.controllers.LoginController
+         * @description
+         * Brings user to password reset screen
+         */
+        function goToReset(){
+            modal.hide();
+            initNavigator.pushPage('./views/login/forgot-password.html',{})
         }
     }
 })();

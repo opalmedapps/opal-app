@@ -26,6 +26,7 @@
         var vm = this;
         var parameters;
         vm.alert = {};
+        vm.resetSuccess = false;
         vm.goToLogin = goToLogin;
         vm.submitNewPassword = submitNewPassword;
 
@@ -99,6 +100,7 @@
                         $timeout(function() {
                             vm.alert.type = 'success';
                             vm.alert.content = "PASSWORDUPDATED";
+                            vm.resetSuccess = true;
                         });
                         localStorage.removeItem("deviceID");
                         localStorage.removeItem(UserAuthorizationInfo.getUsername()+"/securityAns");
