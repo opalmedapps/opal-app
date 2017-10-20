@@ -5,7 +5,7 @@
  * Date         :   May 20, 2015
  * Copyright    :   Copyright 2016, HIG, All rights reserved.
  * Licence      :   This file is subject to the terms and conditions defined in
- *                  file 'LICENSE.txt', which is part of this source code package.
+ *                  file 'LICENSE.txt', which is part of this source Code package.
  */
 
 
@@ -178,9 +178,9 @@
         function handleError(error) {
             $timeout(function(){
                 vm.alert.type='danger';
-                switch (error.code){
-                    case "auth/expired-action-code":
-                    case "auth/invalid-action-code":
+                switch (error.Code){
+                    case "auth/expired-action-Code":
+                    case "auth/invalid-action-Code":
                         vm.invalidCode=true;
                         modal.show();
                         break;
@@ -190,7 +190,7 @@
                     case "auth/user-not-found":
                         vm.alert.content = "INVALID_USER";
                         break;
-                    case "three-tries":
+                    case "five-tries":
                         vm.alert.content = "OUTOFTRIES";
                         vm.threeTries=true;
                         break;
@@ -275,21 +275,10 @@
                         handleSuccess(key)
 
                     } else if(data.Data.AnswerVerified === "false"){
-                        vm.attempts = vm.attempts + 1;
-
-                        $timeout(function()
-                        {
-                            removeUserData();
-
-                            if(vm.attempts >= 3)
-                            {
-                                handleError({code: "three-tries"});
-                            }else{
-                                handleError({code: "wrong-answer"});
-                            }
-                        });
+                        removeUserData();
+                        handleError({Code: "wrong-answer"});
                     } else{
-                        handleError({code: ""});
+                        handleError({Code: ""});
                     }
                 })
                 .catch(function(error)
@@ -297,15 +286,9 @@
                     vm.submitting = false;
                     removeUserData();
                     if(error.Reason.toLowerCase().indexOf('malformed utf-8') !== -1) {
-                        handleError({code: "corrupted-data"});
+                        handleError({Code: "corrupted-data"});
                     } else {
-                        vm.attempts = vm.attempts + 1;
-                        if(vm.attempts >= 3)
-                        {
-                            handleError({code: "three-tries"});
-                        }else{
-                            handleError({code: "wrong-answer"});
-                        }
+                        handleError(error);
                     }
 
                 });
