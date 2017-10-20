@@ -44,13 +44,6 @@ exports.verifySecurityAnswer=function(requestKey,requestObject,patient)
     try {
         var unencrypted = utility.decrypt(requestObject.Parameters, key);
     }catch(err){
-        console.log("HELLOW", err);
-    }
-     
-    console.log("UNCRPT", unencrypted);
-    //Incorrect answer   
-    if(unencrypted.Answer === null)
-    {
         //Check if timestamp for lockout is old, if it is reset the security answer attempts
         if(patient.TimeoutTimestamp != null && requestObject.Timestamp - (new Date(patient.TimeoutTimestamp)).getTime() > FIVE_MINUTES)
         {
@@ -62,7 +55,8 @@ exports.verifySecurityAnswer=function(requestKey,requestObject,patient)
         }
         sqlInterface.increaseSecurityAnswerAttempt(requestObject);
         r.resolve({ RequestKey:requestKey, Code:3,Data:{AnswerVerified:"false"}, Headers:{RequestKey:requestKey,RequestObject:requestObject},Response:'success'});
-    }  
+    }
+     
     //If its not a reset password request and the passwords are not equivalent
      if(!requestObject.Parameters.PasswordReset && unencrypted.Pass !== patient.Password)
      {
