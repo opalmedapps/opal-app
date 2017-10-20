@@ -47,4 +47,13 @@
         </ons-col>
     </ons-row>
 
+    <ons-modal var="modal">
+        <h4>{{"SERVERERROR"|translate}}</h4>
+        <ons-icon icon="ion-alert-circled" size="60px"></ons-icon>
+        <p style="margin-top: 5%" class="unattended-message">{{"PASSWORDSERVERERROR"|translate}}</p>
+        <p style="margin-top: 5%" class="unattended-message">{{"RETRYRESETMESSAGE"|translate}}</p>
+        <ons-button style="margin-top: 5%; font-size: 22px; background-color: #4caf50" ng-click="login.goToReset()">{{"RETRYRESET"|translate}}</ons-button>
+        <br>
+        <ons-button style="margin-top: 5%; font-size: 22px;" ng-click="login.goToInit()">{{"GOTOHOME"|translate}}</ons-button>
+    </ons-modal>
 </ons-page>
