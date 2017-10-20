@@ -263,7 +263,8 @@
                     Question: vm.Question,
                     Answer: hash,
                     SSN: vm.ssn,
-                    Trusted: trusted
+                    Trusted: trusted,
+                    ResetPassword: passwordReset
                 };
 
                 RequestToServer.sendRequestWithResponse('VerifyAnswer',parameterObject, key, firebaseRequestField, firebaseResponseField).then(function(data)
@@ -324,10 +325,10 @@
 
         /**
          * @ngdoc method
-         * @name goToInit
+         * @name goToReset
          * @methodOf MUHCApp.controllers.SecurityQuestionController
          * @description
-         * Brings user to init screen
+         * Brings user to password reset screen
          */
         function goToReset(){
             initNavigator.pushPage('./views/login/forgot-password.html',{})

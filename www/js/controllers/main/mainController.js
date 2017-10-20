@@ -84,6 +84,7 @@
         function setupInactivityChecks() {
             addEventListener('touchstart',resetTimer,false);
             addEventListener("mousedown", resetTimer, false);
+
             startTimer();
         }
 
