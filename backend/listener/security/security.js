@@ -32,18 +32,26 @@ exports.resetPasswordRequest=function(requestKey, requestObject)
     return r.promise;
 
 };
+
 exports.verifySecurityAnswer=function(requestKey,requestObject,patient)
 {
 
     var r=q.defer();
     var key = patient.AnswerText;
-    var unencrypted = utility.decrypt(requestObject.Parameters, key);
+    //TO VERIFY, PASS SECURITY ANSWER THROUGH HASH THAT TAKES A WHILE TO COMPUTE, SIMILAR TO HOW THEY DO PASSWORD CHECKS
+    utility.generatePBKDFHash(key,key);
+    try{
+        var unencrypted = utility.decrypt(requestObject.Parameters, key);
+    }catch(err)
+    {
+        r.resolve({EncryptionKey:'', Code: 1,Response:'authentication error'});
+    }
     var response = {};
     var isSSNValid = unencrypted.SSN == patient.SSN;
     var isAnswerValid = unencrypted.Answer == patient.AnswerText;
 
     var isVerified;
-    if (unencrypted.SSN == 'undefined' || unencrypted.SSN == '') isVerified = isAnswerValid;
+    if (!unencrypted.ResetPassword) isVerified = isAnswerValid;
     else isVerified = isSSNValid && isAnswerValid;
 
     if (isVerified)

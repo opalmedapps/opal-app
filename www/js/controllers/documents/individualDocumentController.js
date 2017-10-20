@@ -175,15 +175,9 @@
         function share()
         {
             if (Constants.app) {
-
                 var targetPath = FileManagerService.generatePath(docParams);
-
-
-                FileManagerService.downloadFileIntoStorage("data:application/pdf;base64," + docParams.Content, targetPath).then(function()
-                {
-
+                FileManagerService.downloadFileIntoStorage("data:application/pdf;base64," + docParams.Content, targetPath).then(function() {
                     FileManagerService.shareDocument(docParams.Title.replace(/ /g,"")+docParams.ApprovedTimeStamp.toDateString().replace(/ /g,"-"), targetPath);
-
                 }).catch(function(error)
                 {
                     //Unable to save document on server

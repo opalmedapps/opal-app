@@ -65,6 +65,7 @@
                 vm.placeHolder = $filter('translate')("ENTERPASSWORD");
                 vm.instruction = "ENTEREMAILADDRESS";
                 vm.instructionOld = "ENTERPASSWORD";
+                vm.inputInstruction = "REENTER_EMAIL";
             } else if (parameters === 'PASSWORD') {
                 vm.type1 = 'password';
                 vm.type2 = 'password';
@@ -75,6 +76,7 @@
                 vm.placeHolder = label + ' ' +$filter('translate')(vm.valueLabel);
                 vm.instruction = "ENTERNEWPASSWORD";
                 vm.instructionOld = "ENTEROLDPASSWORD";
+                vm.inputInstruction = "REENTER_PASSWORD";
             } else if (parameters === 'LANGUAGE') {
                 var value = UserPreferences.getLanguage();
                 vm.instruction = 'SELECTLANGUAGE';
@@ -221,7 +223,7 @@
                 objectToSend.NewValue = vm.newValue;
                 Patient.setEmail(vm.newValue);
                 window.localStorage.setItem('Email',vm.newValue);
-                RequestToServer.sendRequest('AccountChange', objectToSend)
+                RequestToServer.sendRequestWithResponse('AccountChange', objectToSend)
                     .then(function(){
                         vm.alertClass = "bg-success updateMessage-success";
                         vm.updateMessage = "UPDATED_EMAIL";

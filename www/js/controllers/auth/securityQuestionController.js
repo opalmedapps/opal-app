@@ -77,16 +77,36 @@
          */
         vm.answer = "";
 
+        /**
+         * @ngdoc property
+         * @name invalidCode
+         * @propertyOf SecurityQuestionController
+         * @returns boolean
+         * @description hides input div if set to true
+         */
+        vm.invalidCode=false;
+
+        /**
+         * @ngdoc property
+         * @name passwordReset
+         * @propertyOf SecurityQuestionController
+         * @returns boolean
+         * @description determines which back button to show
+         */
+        vm.passwordReset = false;
+
         vm.submitAnswer = submitAnswer;
         vm.clearErrors = clearErrors;
+        vm.goToInit = goToInit;
+        vm.goToReset = goToReset;
 
         activate();
 
         //////////////////////////////////////////
 
-        /*************************
+        /************************************************
          *  PRIVATE FUNCTIONS
-         *************************/
+         ************************************************/
 
         function activate(){
             deviceID = UUID.getUUID();
@@ -160,10 +180,9 @@
                 vm.alert.type='danger';
                 switch (error.code){
                     case "auth/expired-action-code":
-                        vm.alert.content = "CODE_EXPIRED";
-                        break;
                     case "auth/invalid-action-code":
-                        vm.alert.content = "INVALID_CODE";
+                        vm.invalidCode=true;
+                        modal.show();
                         break;
                     case "auth/user-disabled":
                         vm.alert.content = "USER_DISABLED";
@@ -200,9 +219,9 @@
             $window.localStorage.removeItem(UserAuthorizationInfo.getUsername()+"/securityAns");
         }
 
-        /*************************
+        /************************************************
          *  PUBLIC METHODS
-         *************************/
+         ************************************************/
 
         /**
          * @ngdoc method
@@ -244,7 +263,8 @@
                     Question: vm.Question,
                     Answer: hash,
                     SSN: vm.ssn,
-                    Trusted: trusted
+                    Trusted: trusted,
+                    PasswordReset: passwordReset
                 };
 
                 RequestToServer.sendRequestWithResponse('VerifyAnswer',parameterObject, key, firebaseRequestField, firebaseResponseField).then(function(data)
@@ -290,6 +310,28 @@
 
                 });
             }
+        }
+
+        /**
+         * @ngdoc method
+         * @name goToInit
+         * @methodOf MUHCApp.controllers.SecurityQuestionController
+         * @description
+         * Brings user to init screen
+         */
+        function goToInit(){
+            initNavigator.resetToPage('./views/init/init-screen.html',{animation:'none'});
+        }
+
+        /**
+         * @ngdoc method
+         * @name goToReset
+         * @methodOf MUHCApp.controllers.SecurityQuestionController
+         * @description
+         * Brings user to password reset screen
+         */
+        function goToReset(){
+            initNavigator.pushPage('./views/login/forgot-password.html',{})
         }
     }
 })();

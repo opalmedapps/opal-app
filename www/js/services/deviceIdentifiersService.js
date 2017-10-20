@@ -123,7 +123,12 @@ app.service('DeviceIdentifiers', [ 'RequestToServer', '$q','Constants','UserAuth
          **/
         sendFirstTimeIdentifierToServer:function()
         {
-            return RequestToServer.sendRequestWithResponse('SecurityQuestion',deviceIdentifiers, EncryptionService.hash('none'), null, null);
+            var data = angular.copy(deviceIdentifiers);
+            data['Pass'] = UserAuthorizationInfo.getPassword();
+
+            console.log(JSON.stringify(data));
+
+            return RequestToServer.sendRequestWithResponse('SecurityQuestion', data, EncryptionService.hash('none'), null, null);
         },
         /**
          *@ngdoc method
@@ -136,7 +141,6 @@ app.service('DeviceIdentifiers', [ 'RequestToServer', '$q','Constants','UserAuth
 
             var objectToSend = deviceIdentifiers;
             objectToSend.email = email;
-
             return RequestToServer.sendRequestWithResponse('SecurityQuestion', objectToSend, EncryptionService.hash('none'), 'passwordResetRequests', 'passwordResetResponses');
         },
         /**
