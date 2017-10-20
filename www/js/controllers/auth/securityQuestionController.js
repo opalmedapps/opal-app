@@ -266,18 +266,11 @@
                     PasswordReset: passwordReset || false
                 };
 
-                console.log(JSON.stringify(parameterObject));
-
                 RequestToServer.sendRequestWithResponse('VerifyAnswer',parameterObject, key, firebaseRequestField, firebaseResponseField).then(function(data)
                 {
-
-                    console.log(JSON.stringify(data));
-
                     vm.submitting = false;
-                    if(data.Data.AnswerVerified === "true")
-                    {
+                    if(data.Data.AnswerVerified === "true") {
                         handleSuccess(key)
-
                     } else if(data.Data.AnswerVerified === "false"){
                         removeUserData();
                         handleError({Code: "wrong-answer"});
@@ -287,15 +280,13 @@
                 })
                 .catch(function(error)
                 {
-                    console.log(JSON.stringify(error));
                     vm.submitting = false;
                     removeUserData();
-                    if(error.Reason.toLowerCase().indexOf('malformed utf-8') !== -1) {
+                    if(error.Reason && error.Reason.toLowerCase().indexOf('malformed utf-8') !== -1) {
                         handleError({Code: "corrupted-data"});
                     } else {
                         handleError(error);
                     }
-
                 });
             }
         }
