@@ -101,8 +101,6 @@ myApp.service('RequestToServer',['$filter','$state','NewsBanner','UserAuthorizat
                     {
                         var data = snapshot.val();
 
-                        console.log(JSON.stringify(data));
-
                         var timestamp = data.Timestamp;
                         if(data.Code == '1')
                         {

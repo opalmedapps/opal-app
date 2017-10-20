@@ -264,7 +264,7 @@
                     Answer: hash,
                     SSN: vm.ssn,
                     Trusted: trusted,
-                    ResetPassword: passwordReset
+                    PasswordReset: passwordReset
                 };
 
                 RequestToServer.sendRequestWithResponse('VerifyAnswer',parameterObject, key, firebaseRequestField, firebaseResponseField).then(function(data)
