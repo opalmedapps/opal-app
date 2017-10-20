@@ -19,12 +19,16 @@
         var vm = this;
         var timeoutLockout;
 
+        var currentTime;
+
         activate();
         //////////////////////////////////////////
 
         function activate(){
             $rootScope.firstTime = true;
             $rootScope.online = navigator.onLine;
+
+            currentTime = Date.now();
 
             bindEvents();
             setPushPermissions();
@@ -95,6 +99,9 @@
         }
 
         function resetTimer(e) {
+            if(Date.now() - currentTime > 300000) {
+                return;
+            }
             window.clearTimeout(timeoutLockout);
             goActive();
         }
