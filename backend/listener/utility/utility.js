@@ -48,7 +48,7 @@ exports.unixToMYSQLTimestamp=function(time)
 };
 exports.generatePBKDFHash = function(secret,salt)
 {
-  return CryptoJS.PBKDF2(secret, salt, {keySize: 512/32, iterations: 10000}).toString(CryptoJS.enc.Hex);
+  return CryptoJS.PBKDF2(secret, salt, {keySize: 512/32, iterations: 1000}).toString(CryptoJS.enc.Hex);
 }
 exports.encrypt = function(object,secret,salt)
 {
