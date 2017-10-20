@@ -77,6 +77,24 @@
          */
         vm.answer = "";
 
+        /**
+         * @ngdoc property
+         * @name invalidCode
+         * @propertyOf SecurityQuestionController
+         * @returns boolean
+         * @description hides input div if set to true
+         */
+        vm.invalidCode=false;
+
+        /**
+         * @ngdoc property
+         * @name passwordReset
+         * @propertyOf SecurityQuestionController
+         * @returns boolean
+         * @description determines which back button to show
+         */
+        vm.passwordReset = false;
+
         vm.submitAnswer = submitAnswer;
         vm.clearErrors = clearErrors;
         vm.goToInit = goToInit;
@@ -163,7 +181,9 @@
                 switch (error.code){
                     case "auth/expired-action-code":
                     case "auth/invalid-action-code":
+                        vm.invalidCode=true;
                         modal.show();
+                        break;
                     case "auth/user-disabled":
                         vm.alert.content = "USER_DISABLED";
                         break;
@@ -299,8 +319,7 @@
          * Brings user to init screen
          */
         function goToInit(){
-            modal.hide();
-            $state.go('init');
+            initNavigator.resetToPage('./views/init/init-screen.html',{animation:'none'});
         }
 
         /**
@@ -311,7 +330,6 @@
          * Brings user to init screen
          */
         function goToReset(){
-            modal.hide();
             initNavigator.pushPage('./views/login/forgot-password.html',{})
         }
     }
