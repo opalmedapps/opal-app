@@ -94,7 +94,14 @@
          * @description determines which back button to show
          */
         vm.passwordReset = false;
-
+	    /**
+	     * @ngdoc property
+	     * @name alertShow
+	     * @propertyOf SecurityQuestionController
+	     * @returns boolean
+	     * @description momentarily hides the button while submitting
+	     */
+	    vm.alertShow = true;
         vm.submitAnswer = submitAnswer;
         vm.clearErrors = clearErrors;
         vm.goToInit = goToInit;
@@ -190,7 +197,7 @@
                     case "auth/user-not-found":
                         vm.alert.content = "INVALID_USER";
                         break;
-                    case "3":
+                    case "auth/tries_exceeded":
                         vm.alert.content = "OUTOFTRIES";
                         break;
                     case "corrupted-data":
@@ -249,6 +256,7 @@
                 vm.alert.content = 'ENTERANANSWER';
 
             } else {
+                vm.alertShow = false;
                 vm.submitting = true;
 
                 answer = answer.toUpperCase();
@@ -268,25 +276,33 @@
 
                 RequestToServer.sendRequestWithResponse('VerifyAnswer',parameterObject, key, firebaseRequestField, firebaseResponseField).then(function(data)
                 {
+	                vm.alertShow = true;
                     vm.submitting = false;
                     if(data.Data.AnswerVerified === "true") {
                         handleSuccess(key)
                     } else if(data.Data.AnswerVerified === "false"){
                         removeUserData();
                         handleError({Code: "wrong-answer"});
-                    } else{
+                    }else{
                         handleError({Code: ""});
                     }
                 })
                 .catch(function(error)
                 {
-                    vm.submitting = false;
-                    removeUserData();
-                    if(error.Reason && error.Reason.toLowerCase().indexOf('malformed utf-8') !== -1) {
-                        handleError({Code: "corrupted-data"});
-                    } else {
-                        handleError(error);
-                    }
+	                vm.alertShow = true;
+	                vm.submitting = false;
+	                if(error.Code === 4) {
+
+		                handleError({Code:"auth/tries_exceeded"});
+	                }else{
+
+		                removeUserData();
+                        if(error.Reason && error.Reason.toLowerCase().indexOf('malformed utf-8') !== -1) {
+			                handleError({Code: "corrupted-data"});
+		                } else {
+			                handleError(error);
+		                }
+	                }
                 });
             }
         }
