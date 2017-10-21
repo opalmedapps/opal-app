@@ -25,7 +25,7 @@
                             <br/><br/>
                         </div>
                         <button class="button button--large shadow-2" ng-disabled="security.submitting||security.threeTries" style="background-color: #4CAF50; font-weight: bolder;" ng-click="security.submitAnswer(security.answer)">{{"CONTINUE"|translate}}</button>
-                        <uib-alert ng-show="security.alert.type" type="{{security.alert.type}}">{{security.alert.content|translate}}</uib-alert>
+                        <uib-alert ng-show="security.alert.type && security.alertShow" type="{{security.alert.type}}">{{security.alert.content|translate}}</uib-alert>
                     </div>
                 </form>
             </div>
