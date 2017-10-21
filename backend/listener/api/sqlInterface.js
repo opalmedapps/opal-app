@@ -613,10 +613,8 @@ exports.increaseSecurityAnswerAttempt = function(requestObject)
     connection.query(queries.increaseSecurityAnswerAttempt(),[requestObject.DeviceId],function(error,rows,fields)
     {
         if(error) {
-            //console.log("Error querying patient fields", error);
             r.reject(error);
         }
-        ////console.log(rows);
         r.resolve(rows);
     });
     return r.promise;
@@ -626,12 +624,9 @@ exports.resetSecurityAnswerAttempt = function(requestObject)
     var r=Q.defer();
     var que = connection.query(queries.resetSecurityAnswerAttempt(),[requestObject.DeviceId],function(error,rows,fields)
     {
-        console.log(que.sql);
         if(error) {
-            //console.log("Error querying patient fields", error);
             r.reject(error);
         }
-        ////console.log(rows);
         r.resolve(rows);
     });
     return r.promise;
@@ -639,14 +634,11 @@ exports.resetSecurityAnswerAttempt = function(requestObject)
 exports.setTimeoutSecurityAnswer = function(requestObject, timestamp) 
 {
     var r=Q.defer();
-    var que = connection.query(queries.setTimeoutSecurityAnswer(),[timestamp, requestObject.DeviceId],function(error,rows,fields)
+    var que = connection.query(queries.setTimeoutSecurityAnswer(),[new Date(timestamp), requestObject.DeviceId],function(error,rows,fields)
     {
-        console.log(que.sql);
-        if(error) {
-            //console.log("Error querying patient fields", error);
+	if(error) {
             r.reject(error);
         }
-        ////console.log(rows);
         r.resolve(rows);
     });
     return r.promise;
@@ -663,7 +655,6 @@ exports.getPatientFieldsForPasswordReset=function(requestObject)
 
     var que = connection.query(queries.getPatientFieldsForPasswordReset(),[UserEmail, requestObject.DeviceId],function(error,rows,fields)
     {
-        console.log(que.sql);
         
         if(error) {
             //console.log("Error querying patient fields", error);

@@ -35,37 +35,35 @@ exports.resetPasswordRequest=function(requestKey, requestObject)
 
 exports.verifySecurityAnswer=function(requestKey,requestObject,patient)
 {
-    console.log("REACHING VERIFY");
-    var r=q.defer();
+    var r = q.defer();
     var key = patient.AnswerText;
     //TO VERIFY, PASS SECURITY ANSWER THROUGH HASH THAT TAKES A WHILE TO COMPUTE, SIMILAR TO HOW THEY DO PASSWORD CHECKS
     utility.generatePBKDFHash(key,key);
-    console.log("WHATS UP",requestObject.Parameters, key);
+     if(patient.TimeoutTimestamp != null && requestObject.Timestamp - (new Date(patient.TimeoutTimestamp)).getTime() > FIVE_MINUTES)
+     {
+	sqlInterface.resetSecurityAnswerAttempt(requestObject);
+    }else if(patient.Attempt == 5){
+	if(patient.TimeoutTimestamp == null) sqlInterface.setTimeoutSecurityAnswer(requestObject, requestObject.Timestamp);
+	r.resolve({Code: 4, RequestKey:requestKey,Data:"Attempted password more than 5 times, please try again in 5 minutes", Headers:{RequestKey:requestKey,RequestObject:requestObject}, Response:'error'});
+        return r.promise;
+    }
     try {
         var unencrypted = utility.decrypt(requestObject.Parameters, key);
     }catch(err){
         //Check if timestamp for lockout is old, if it is reset the security answer attempts
-        if(patient.TimeoutTimestamp != null && requestObject.Timestamp - (new Date(patient.TimeoutTimestamp)).getTime() > FIVE_MINUTES)
-        {
-            sqlInterface.resetSecurityAnswerAttempt(requestObject);
-        }else if(patient.Attempt == 5)
-        {
-            sqlInterface.setTimeoutSecurityAnswer(requestObject, requestObject.Timestamp);
-            r.resolve({ RequestKey:requestKey, Code:4, Data:{AnswerVerified:"false"}, Headers:{RequestKey:requestKey,RequestObject:requestObject},Response:'success'});
-        }
         sqlInterface.increaseSecurityAnswerAttempt(requestObject);
-        r.resolve({ RequestKey:requestKey, Code:3,Data:{AnswerVerified:"false"}, Headers:{RequestKey:requestKey,RequestObject:requestObject},Response:'success'});
+	r.resolve({ RequestKey:requestKey, Code:3,Data:{AnswerVerified:"false"}, Headers:{RequestKey:requestKey,RequestObject:requestObject},Response:'success'});
+    	return r.promise;
     }
-     
-    //If its not a reset password request and the passwords are not equivalent
+     //If its not a reset password request and the passwords are not equivalent
      if(!requestObject.Parameters.PasswordReset && unencrypted.Pass !== patient.Password)
      {
         r.resolve({Code:1});
+	return r.promise;
      }
     //If its the right security answer, also make sure is a valid SSN;
     var response = {};
-    console.log(patient, unencrypted);
-    var isSSNValid = unencrypted.SSN && unencrypted.SSN == patient.SSN;
+    var isSSNValid = unencrypted && unencrypted.SSN && unencrypted.SSN == patient.SSN;
     var isAnswerValid = unencrypted.Answer && unencrypted.Answer == patient.AnswerText;
 
     var isVerified = (typeof unencrypted.PasswordReset === 'undefined')? isSSNValid && isAnswerValid:isAnswerValid;
