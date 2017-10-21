@@ -197,7 +197,7 @@
                     case "auth/user-not-found":
                         vm.alert.content = "INVALID_USER";
                         break;
-                    case "auth/tries_exceeded":
+                    case 4:
                         vm.alert.content = "OUTOFTRIES";
                         break;
                     case "corrupted-data":
@@ -291,18 +291,13 @@
                 {
 	                vm.alertShow = true;
 	                vm.submitting = false;
-	                if(error.Code === 4) {
+	                removeUserData();
+                    if(error.Reason && error.Reason.toLowerCase().indexOf('malformed utf-8') !== -1) {
+                        handleError({Code: "corrupted-data"});
+                    } else {
+                        handleError(error);
+                    }
 
-		                handleError({Code:"auth/tries_exceeded"});
-	                }else{
-
-		                removeUserData();
-                        if(error.Reason && error.Reason.toLowerCase().indexOf('malformed utf-8') !== -1) {
-			                handleError({Code: "corrupted-data"});
-		                } else {
-			                handleError(error);
-		                }
-	                }
                 });
             }
         }
