@@ -115,15 +115,15 @@ myApp.service('UserPreferences',[ 'UserAuthorizationInfo','$rootScope','tmhDynam
          *@ngdoc method
          *@name initializeLanguage
          *@methodOf MUHCApp.service:UserPreferences
-         *@description The method accesses the globalization plugin of the device to find the actual language of device and sets default to that language. Otherwise it sets
-         *English as default
+         *@description The method accesses the globalization plugin of the device to find the actual language of device and sets default to that language.
+         * If language was already set previously within the app, set default to that language. Otherwise it sets English as default.
          *@returns {Promise} Returns a promise that fulfills if the language is been found and correctly set or rejects if there was a problem using the plugin.
          **/
         initializeLanguage:function()
         {
             var r = $q.defer();
             //var lan =  window.localStorage.getItem('Language');
-            var lan = navigator.language || navigator.userLanguage;
+            var lan = window.localStorage.getItem('Language') || navigator.language || navigator.userLanguage;
             lan = lan.substring(0,2).toLowerCase();
             //If language is not defined and its a device
             if(!lan&&app)
