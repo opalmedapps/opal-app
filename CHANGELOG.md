@@ -22,6 +22,9 @@ To invite users to upgrade in case of vulnerabilities.
 
 ## [PRODUCTION]
 
+### v1.3.0
+* Fixed proper security question handling
+
 ### v1.2.4
 * Fixed password not being synced error handling
 * Fixed finger unlock lockout issue
