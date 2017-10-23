@@ -93,7 +93,6 @@
         }
 
 
-
         function startTimer() {
             timeoutLockout = window.setTimeout(goInactive, 300000);
         }
