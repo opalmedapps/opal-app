@@ -66,7 +66,7 @@
 	"RESETPASSWORD": "Reset Password",
 	"RESETERROR": "Password Reset Error",
 	"RETRYRESET": "Retry Password Reset",
-	"RETRYRESETMESSAGE": "You password reset code was invalid. Please try resetting your password again.",
+	"RETRYRESETMESSAGE": "Your password reset code was invalid. Please try resetting your password again.",
 	"SECUREYOURDEVICE": "Secure Your Device",
 	"SECURE_PHONE": "Remember to secure your information by protecting your phone with a passphrase!",
 	"SECURITYQUESTION": "Security Question",
