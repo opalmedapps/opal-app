@@ -35,7 +35,11 @@ myApp.service('ResetPassword',function(){
 
             var oobCode = this.getParameter('oobCode', url);
 
-            return auth.verifyPasswordResetCode(oobCode[1]);
+            if(oobCode){
+                return auth.verifyPasswordResetCode(oobCode[1]);
+            } else {
+                return Promise.reject({code: "auth/invalid-action-code"})
+            }
 
         },
 

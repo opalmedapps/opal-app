@@ -1,7 +1,7 @@
 <ons-page style="background-color:white;width:100vw;height:100vh" ng-controller="SecurityQuestionController as security">
     <ons-toolbar fixed-style>
         <div class="left">
-            <ons-back-button>{{"BACK"|translate}}</ons-back-button>
+            <ons-back-button ng-if="!security.passwordReset">{{"BACK"|translate}}</ons-back-button>
         </div>
         <div class="center">{{"SECURITYQUESTION"|translate}}</div>
     </ons-toolbar>
@@ -10,7 +10,7 @@
             <div align="center">
                 <img src="./img/ceadarsLogo.png" style="max-width:300px;width:90vw;height:auto">
             </div>
-            <div class="container" align="center" style="margin-top:20px">
+            <div ng-if="!security.invalidCode" class="container" align="center" style="margin-top:20px">
                 <form name="formPassword"  novalidate>
                     <div class="form-group" align="center"  style="margin-top: 20px">
 
@@ -25,10 +25,18 @@
                             <br/><br/>
                         </div>
                         <button class="button button--large shadow-2" ng-disabled="security.submitting||security.threeTries" style="background-color: #4CAF50; font-weight: bolder;" ng-click="security.submitAnswer(security.answer)">{{"CONTINUE"|translate}}</button>
-                        <uib-alert ng-show="security.alert.type" type="{{security.alert.type}}">{{security.alert.content|translate}}</uib-alert>
+                        <uib-alert ng-show="security.alert.type && security.alertShow" type="{{security.alert.type}}">{{security.alert.content|translate}}</uib-alert>
                     </div>
                 </form>
             </div>
         </ons-col>
     </ons-row>
+    <ons-modal var="modal">
+        <h4>{{"RESETERROR"|translate}}</h4>
+        <ons-icon icon="ion-alert-circled" size="60px"></ons-icon>
+        <p style="margin-top: 5%" class="unattended-message">{{"RETRYRESETMESSAGE"|translate}}</p>
+        <ons-button style="margin-top: 5%; font-size: 22px; background-color: #4caf50" ng-click="security.goToReset()">{{"RETRYRESET"|translate}}</ons-button>
+        <br>
+        <ons-button style="margin-top: 5%; font-size: 22px;" ng-click="security.goToInit()">{{"GOTOHOME"|translate}}</ons-button>
+    </ons-modal>
 </ons-page>
