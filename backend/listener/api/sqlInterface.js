@@ -607,6 +607,42 @@ exports.getMapLocation=function(requestObject)
     });
     return r.promise;
 };
+exports.increaseSecurityAnswerAttempt = function(requestObject)
+{
+    var r=Q.defer();
+    connection.query(queries.increaseSecurityAnswerAttempt(),[requestObject.DeviceId],function(error,rows,fields)
+    {
+        if(error) {
+            r.reject(error);
+        }
+        r.resolve(rows);
+    });
+    return r.promise;
+}
+exports.resetSecurityAnswerAttempt = function(requestObject) 
+{
+    var r=Q.defer();
+    var que = connection.query(queries.resetSecurityAnswerAttempt(),[requestObject.DeviceId],function(error,rows,fields)
+    {
+        if(error) {
+            r.reject(error);
+        }
+        r.resolve(rows);
+    });
+    return r.promise;
+}
+exports.setTimeoutSecurityAnswer = function(requestObject, timestamp) 
+{
+    var r=Q.defer();
+    var que = connection.query(queries.setTimeoutSecurityAnswer(),[new Date(timestamp), requestObject.DeviceId],function(error,rows,fields)
+    {
+	if(error) {
+            r.reject(error);
+        }
+        r.resolve(rows);
+    });
+    return r.promise;
+}
 //Api call to get patient fields for password reset
 exports.getPatientFieldsForPasswordReset=function(requestObject)
 {
@@ -617,8 +653,9 @@ exports.getPatientFieldsForPasswordReset=function(requestObject)
 
     //console.log("Inside get getPatientFields",UserEmail);
 
-    connection.query(queries.getPatientFieldsForPasswordReset(),[UserEmail, requestObject.DeviceId],function(error,rows,fields)
+    var que = connection.query(queries.getPatientFieldsForPasswordReset(),[UserEmail, requestObject.DeviceId],function(error,rows,fields)
     {
+        
         if(error) {
             //console.log("Error querying patient fields", error);
             r.reject(error);

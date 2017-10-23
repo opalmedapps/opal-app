@@ -34,7 +34,7 @@
             <br>
 
             <div class="style-4" style="width: 100%;" ng-show="csc.value!=='PHONENUMBER'">
-                <input ng-minlength="1" type="{{csc.type1}}" ng-class="fontSizeDesc" class="style-4" placeholder="{{ 'REENTER_PASSWORD' |translate}}" value="{{csc.valueLabel|translate}}" ng-model="csc.newValueValidate" ng-change="csc.evaluate()">
+                <input ng-minlength="1" type="{{csc.type1}}" ng-class="fontSizeDesc" class="style-4" placeholder="{{ csc.inputInstruction |translate}}" value="{{csc.valueLabel|translate}}" ng-model="csc.newValueValidate" ng-change="csc.evaluate()">
             </div>
 
             <div class="style-4" style="width: 100%;" ng-show="csc.value =='PHONENUMBER'" >

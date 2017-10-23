@@ -67,7 +67,6 @@
 
             educationNavigator.on('prepush', function(event) {
                 if (educationNavigator._doorLock.isLocked()) {
-                    console.log("education");
                     event.cancel();
                 }
             });
