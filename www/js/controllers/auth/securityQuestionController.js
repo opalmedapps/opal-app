@@ -134,10 +134,14 @@
                     })
                     .then(function (response) {
                         $timeout(function() {
-                            vm.Question = response.Data.securityQuestion.securityQuestion_EN + " / " + response.Data.securityQuestion.securityQuestion_FR;
+                            if (!response.Data.securityQuestion.securityQuestion_EN) {
+                                handleError({Code: 'auth/invalid-action-Code'});
+                            } else {
+                                vm.Question = response.Data.securityQuestion.securityQuestion_EN + " / " + response.Data.securityQuestion.securityQuestion_FR;
+                            }
                         });
                     })
-                    .catch(handleError);
+                    .catch(handleError({Code: 'auth/invalid-action-Code'}));
             } else {
                 vm.Question = parameters.securityQuestion;
             }
@@ -189,7 +193,7 @@
                     case "auth/expired-action-Code":
                     case "auth/invalid-action-Code":
                         vm.invalidCode=true;
-                        modal.show();
+                        errormodal.show();
                         break;
                     case "auth/user-disabled":
                         vm.alert.content = "USER_DISABLED";
