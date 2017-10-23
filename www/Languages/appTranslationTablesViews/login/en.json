@@ -15,6 +15,7 @@
 	"ENTERANANSWER": "Enter an answer",
 	"ENTERANSWERPLACEHOLDER": "Enter your answer...",
 	"ENTEREMAIL": "Enter your Email Address:",
+	"ENTERSSN": "Pleae eenter your SSN",
 	"ENTERSSNLABEL": "Enter your SSN Health Care ID:",
 	"ENTERSSNPLACEHOLDER": "Enter SSN...",
 	"ENTERVALIDPASSWORD": "Enter a valid password",
@@ -32,6 +33,7 @@
 	"HEADER_MESSAGE_LOGIN": "Sign In!",
 	"HOME": "Home",
 	"HOSPITALPARKING": "Hospital Parking",
+	"HEAD_TO_LOGIN": "Head To Login",
 	"INTERNETERROR": "Sever error, please check your internet connection",
 	"INVALID_EMAIL": "Invalid e-mail",
 	"INVALID_EMAIL_OR_PWD": "Email or password is incorrect.",
@@ -59,11 +61,13 @@
 	"PASSWORDSERVERERROR": "There seems to be an issue on our end regarding your password. This could be due to a password reset that wasn't finalized correctly",
 	"PASSWORDSUCCESSRESET": "Password has been successfully changed, redirecting to login",
 	"PATIENTCHARTER": "Patient Charter",
+	"PASSWORDUPDATED": "Password Updated",
 	"PP": "Privacy Policy",
 	"RATETHISAPP": "Rate This App",
 	"RECONNECTING": "Reconnecting...",
 	"REPORTBUGS": "Report Bugs",
 	"RESETPASSWORD": "Reset Password",
+	"RESETINSTRUCTIONS": "Password must be at least 6 characters long and must include one letter and one number",
 	"RESETERROR": "Password Reset Error",
 	"RETRYRESET": "Retry Password Reset",
 	"RETRYRESETMESSAGE": "Your password reset code was invalid. Please try resetting your password again.",
@@ -85,6 +89,7 @@
 	"THANKYOUFORFEEDBACK": "Thank you for your feedback!",
 	"TRUST_DEVICE": "Set this device as a trusted device? ",
 	"TOO_MANY_REQUESTS": "Too many login attempts. Please try again later.",
+	"NEWPASSWORDVALIDATION":"Password must be at least 6 characters long and must include one letter and one number!"
 	"OUTOFTRIES": "Too many failed attempts - This account will be locked out for 5 minutes.",
 	"UNATTENDED": "Do not leave your phone unattended."
 }
