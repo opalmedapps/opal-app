@@ -22,6 +22,9 @@ To invite users to upgrade in case of vulnerabilities.
 
 ## [PRODUCTION]
 
+### v1.3.1
+* Added translations
+
 ### v1.3.0
 * Fixed proper security question handling
 
@@ -32,7 +35,7 @@ To invite users to upgrade in case of vulnerabilities.
 
 
 ### v1.2.2
-* Fix $state.go() bug
+* Fixed $state.go() bug
 
 ### v1.2.1 (patch)
 * Fixed notifications bug
