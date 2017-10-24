@@ -134,14 +134,10 @@
                     })
                     .then(function (response) {
                         $timeout(function() {
-                            if (!response.Data.securityQuestion.securityQuestion_EN) {
-                                handleError({Code: 'auth/invalid-action-Code'});
-                            } else {
-                                vm.Question = response.Data.securityQuestion.securityQuestion_EN + " / " + response.Data.securityQuestion.securityQuestion_FR;
-                            }
-                        });
+                            vm.Question = response.Data.securityQuestion.securityQuestion_EN + " / " + response.Data.securityQuestion.securityQuestion_FR;
+                        })
                     })
-                    .catch(handleError({Code: 'auth/invalid-action-Code'}));
+                    .catch(handleError);
             } else {
                 vm.Question = parameters.securityQuestion;
             }
@@ -187,6 +183,7 @@
          * Handles errors in order to display the proper message to the user.
          */
         function handleError(error) {
+            console.log(JSON.stringify(error));
             $timeout(function(){
                 vm.alert.type='danger';
                 switch (error.Code){

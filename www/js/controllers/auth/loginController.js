@@ -24,10 +24,10 @@
         .controller('LoginController', LoginController);
 
     LoginController.$inject = ['$timeout', '$state', 'UserAuthorizationInfo', '$filter','DeviceIdentifiers',
-        'UserPreferences', 'Patient', 'NewsBanner', 'UUID', 'Constants', 'EncryptionService', 'CleanUp', '$window', '$scope'];
+        'UserPreferences', 'Patient', 'NewsBanner', 'UUID', 'Constants', 'EncryptionService', 'CleanUp', '$window', '$scope', 'FirebaseService', '$rootScope'];
 
     /* @ngInject */
-    function LoginController($timeout, $state, UserAuthorizationInfo, $filter, DeviceIdentifiers, UserPreferences, Patient, NewsBanner, UUID, Constants, EncryptionService, CleanUp, $window, $scope) {
+    function LoginController($timeout, $state, UserAuthorizationInfo, $filter, DeviceIdentifiers, UserPreferences, Patient, NewsBanner, UUID, Constants, EncryptionService, CleanUp, $window, $scope, FirebaseService, $rootScope) {
 
         var vm = this;
 
@@ -141,13 +141,13 @@
                  **************************************************************************************************************************************/
 
                 //Save the current session token to the users "logged in users" node. This is used to make sure that the user is only logged in for one session at a time.
-                // var Ref= firebase.database().ref(FirebaseService.getFirebaseUrl());
-                // var refCurrentUser = Ref.child(FirebaseService.getFirebaseChild('logged_in_users') + firebaseUser.uid);
-                //
-                // refCurrentUser.set({ 'Token' : sessionToken });
-                //
-                // // Evoke an observer function in mainController
-                // $rootScope.$emit("MonitorLoggedInUsers", firebaseUser.uid);
+                var Ref= firebase.database().ref(FirebaseService.getFirebaseUrl(null));
+                var refCurrentUser = Ref.child(FirebaseService.getFirebaseChild('logged_in_users') + firebaseUser.uid);
+
+                refCurrentUser.set({ 'Token' : sessionToken });
+
+                // Evoke an observer function in mainController
+                $rootScope.$emit("MonitorLoggedInUsers", firebaseUser.uid);
 
                 //Set the authorized user once we get confirmation from FireBase that the inputted credentials are valid
                 UserAuthorizationInfo.setUserAuthData(firebaseUser.uid, EncryptionService.hash(vm.password), undefined, sessionToken, vm.email);
