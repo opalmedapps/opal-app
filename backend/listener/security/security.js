@@ -96,6 +96,11 @@ exports.setNewPassword=function(requestKey, requestObject,patient)
     var ssn = patient.SSN.toUpperCase();
     var answer = patient.AnswerText;
 
+
+    console.log("ssn: " + ssn);
+    console.log("hashed ssn: " + utility.hash(ssn));
+    console.log("answer: " + answer);
+
     var unencrypted=utility.decrypt(requestObject.Parameters, utility.hash(ssn), answer);
 
 

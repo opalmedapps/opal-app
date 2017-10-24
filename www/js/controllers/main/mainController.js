@@ -97,7 +97,8 @@
             timeoutLockout = window.setTimeout(goInactive, 300000);
         }
 
-        function resetTimer(e) {
+        function resetTimer() {
+
             if(Date.now() - currentTime > 300000) {
                 currentTime = Date.now();
                 goInactive();

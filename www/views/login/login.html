@@ -47,7 +47,7 @@
         </ons-col>
     </ons-row>
 
-    <ons-modal var="modal">
+    <ons-modal var="loginerrormodal">
         <h4>{{"SERVERERROR"|translate}}</h4>
         <ons-icon icon="ion-alert-circled" size="60px"></ons-icon>
         <p style="margin-top: 5%" class="unattended-message">{{"PASSWORDSERVERERROR"|translate}}</p>
@@ -55,5 +55,13 @@
         <ons-button style="margin-top: 5%; font-size: 22px; background-color: #4caf50" ng-click="login.goToReset()">{{"RETRYRESET"|translate}}</ons-button>
         <br>
         <ons-button style="margin-top: 5%; font-size: 22px;" ng-click="login.goToInit()">{{"GOTOHOME"|translate}}</ons-button>
+    </ons-modal>
+
+    <ons-modal var="wronghashmodal">
+        <h4>{{"ERROR"|translate}}</h4>
+        <ons-icon icon="ion-alert-circled" size="60px"></ons-icon>
+        <p style="margin-top: 5%" class="unattended-message">It seems like you resetted your password on a different device. Please set this phone to "Untrusted" to clear your saved user data before logging in again. You will be able to set as "Trusted" next time you try to login.</p>
+        <br>
+        <ons-button style="margin-top: 5%; font-size: 22px;" ng-click="wronghashmodal.hide()">{{"OK"|translate}}</ons-button>
     </ons-modal>
 </ons-page>

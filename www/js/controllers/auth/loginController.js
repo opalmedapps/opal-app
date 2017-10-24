@@ -102,7 +102,7 @@
 
             if(!localStorage.getItem('locked')){
                 $timeout(function () {
-                    $scope.securityModal.show();
+                    $scope.securityloginerrormodal.show();
                 },200);
             }
 
@@ -199,6 +199,11 @@
          */
         function loginAsTrustedUser(deviceID){
             var ans = EncryptionService.decryptDataWithKey($window.localStorage.getItem(UserAuthorizationInfo.getUsername()+"/securityAns"), UserAuthorizationInfo.getPassword());
+
+            if(!ans) {
+                handleError({code: "WRONG_SAVED_HASH"})
+            }
+
             EncryptionService.setSecurityAns(ans);
 
             //Now that we know that both the password and security answer are hashed, we can create our encryption hash
@@ -259,8 +264,9 @@
          */
         function handleError(error)
         {
+            var code = (error.code)? error.code : error.Code;
 
-            switch (error.code) {
+            switch (code) {
                 case "auth/invalid-email":
                 case "auth/wrong-password":
                 case "auth/user-not-found":
@@ -287,7 +293,13 @@
                 case "ENCRYPTION_ERROR":
                     $timeout(function(){
                         vm.loading = false;
-                        modal.show();
+                        loginerrormodal.show();
+                    });
+                    break;
+                case "WRONG_SAVED_HASH":
+                    $timeout(function(){
+                        vm.loading = false;
+                        loginerrormodal.show();
                     });
                     break;
                 default:
@@ -377,7 +389,7 @@
          * Brings user to init screen
          */
         function goToInit(){
-            modal.hide();
+            loginerrormodal.hide();
             initNavigator.popPage();
         }
 
@@ -389,7 +401,7 @@
          * Brings user to password reset screen
          */
         function goToReset(){
-            modal.hide();
+            loginerrormodal.hide();
             initNavigator.pushPage('./views/login/forgot-password.html',{})
         }
     }
