@@ -97,12 +97,11 @@ exports.setNewPassword=function(requestKey, requestObject,patient)
     var answer = patient.AnswerText;
 
 
-    console.log("ssn: " + ssn);
-    console.log("hashed ssn: " + utility.hash(ssn));
-    console.log("answer: " + answer);
-
     var unencrypted=utility.decrypt(requestObject.Parameters, utility.hash(ssn), answer);
 
+    console.log("unencrypted: " + unencrypted);
+    console.log("newPassword: " + unencrypted.newPassword);
+    console.log("patient serNum: " + patient.PatientSerNum);
 
     sqlInterface.setNewPassword(unencrypted.newPassword,patient.PatientSerNum, requestObject.Token).then(function(){
         var response = { RequestKey:requestKey, Code:3,Data:{PasswordReset:"true"}, Headers:{RequestKey:requestKey,RequestObject:requestObject},Response:'success'};
