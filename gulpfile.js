@@ -202,7 +202,7 @@ gulp.task('minify-index', function() {
 
 gulp.task('strip-debug', function () {
     return gulp.src('www/js/**/*.js')
-        // .pipe(stripDebug())
+        .pipe(stripDebug())
         .pipe(gulp.dest('dest/js'));
 });
 

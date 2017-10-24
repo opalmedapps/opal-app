@@ -22,6 +22,10 @@ To invite users to upgrade in case of vulnerabilities.
 
 ## [PRODUCTION]
 
+### v1.4.0
+* Fixed password reset functionality
+
+
 ### v1.3.1
 * Added translations
 

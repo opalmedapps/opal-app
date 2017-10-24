@@ -102,7 +102,7 @@
 
             if(!localStorage.getItem('locked')){
                 $timeout(function () {
-                    $scope.securityloginerrormodal.show();
+                    securityModal.show();
                 },200);
             }
 
@@ -198,9 +198,11 @@
          * If a user has been deemed as trusted, then this allows them to skip the security question process and go straight to loading screen
          */
         function loginAsTrustedUser(deviceID){
-            var ans = EncryptionService.decryptDataWithKey($window.localStorage.getItem(UserAuthorizationInfo.getUsername()+"/securityAns"), UserAuthorizationInfo.getPassword());
 
-            if(!ans) {
+            try {
+                var ans = EncryptionService.decryptDataWithKey($window.localStorage.getItem(UserAuthorizationInfo.getUsername()+"/securityAns"), UserAuthorizationInfo.getPassword());
+            }
+            catch(err) {
                 handleError({code: "WRONG_SAVED_HASH"})
             }
 
@@ -299,7 +301,7 @@
                 case "WRONG_SAVED_HASH":
                     $timeout(function(){
                         vm.loading = false;
-                        loginerrormodal.show();
+                        wronghashmodal.show();
                     });
                     break;
                 default:
