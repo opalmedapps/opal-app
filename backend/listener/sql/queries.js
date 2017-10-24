@@ -222,7 +222,7 @@ exports.setTimeoutSecurityAnswer = function()
 };
 exports.setNewPassword=function()
 {
-    return "UPDATE Patient SET Password=? WHERE PatientSerNum=?";
+    return "UPDATE Users SET Password = ? WHERE UserTypeSerNum = ?";
 };
 
 //For checkin
