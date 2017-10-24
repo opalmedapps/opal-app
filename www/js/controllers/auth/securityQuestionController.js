@@ -185,12 +185,16 @@
          * Handles errors in order to display the proper message to the user.
          */
         function handleError(error) {
-            console.log(JSON.stringify(error));
             $timeout(function(){
+                var code = (error.code)? error.code : error.Code;
+
+                console.log(JSON.stringify(error));
+
                 vm.alert.type='danger';
-                switch (error.Code){
+                switch (code){
                     case "auth/expired-action-Code":
                     case "auth/invalid-action-Code":
+                    case "auth/invalid-action-code":
                         vm.invalidCode=true;
                         errormodal.show();
                         break;
