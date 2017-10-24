@@ -120,7 +120,7 @@
                                     vm.alert.content = "WEAK_PASSWORD";
                                     break;
                                 default:
-                                    vm.alert.content = "SERVERPROBLEM";
+                                    vm.alert.content = "PASSWORDRESETSERVERERROR";
                                     break;
                             }
                         })
