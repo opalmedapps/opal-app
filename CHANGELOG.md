@@ -22,6 +22,12 @@ To invite users to upgrade in case of vulnerabilities.
 
 ## [PRODUCTION]
 
+### v1.4.1
+* Added DB and FB password validation
+* Fixed error message not displaying when original password is incorrect on change password
+* Added new password validation on password reset
+
+
 ### v1.4.0
 * Fixed password reset functionality
 * Fixed hashing mismatch
