@@ -24,7 +24,7 @@ To invite users to upgrade in case of vulnerabilities.
 
 ### v1.4.0
 * Fixed password reset functionality
-
+* Fixed hashing mismatch
 
 ### v1.3.1
 * Added translations
