@@ -45,8 +45,6 @@ exports.processRequest=function(requestObject)
 
     var type = requestObject.Request;
 
-
-
     if (API.hasOwnProperty(type))
     {
         return  API[type](requestObject);

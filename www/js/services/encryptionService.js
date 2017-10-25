@@ -200,6 +200,7 @@ myApp.service('EncryptionService',function(UserAuthorizationInfo){
          **/
         generateTempEncryptionHash: function (ssn, answer) {
             tempEncryptionHash = CryptoJS.PBKDF2(ssn, answer, {keySize: 512/32, iterations: 1000}).toString(CryptoJS.enc.Hex);
+            console.log("temp enc hash: " + tempEncryptionHash);
 
         },
 

@@ -135,7 +135,7 @@
                     .then(function (response) {
                         $timeout(function() {
                             vm.Question = response.Data.securityQuestion.securityQuestion_EN + " / " + response.Data.securityQuestion.securityQuestion_FR;
-                        });
+                        })
                     })
                     .catch(handleError);
             } else {
@@ -166,6 +166,10 @@
             EncryptionService.generateEncryptionHash();
 
             if(passwordReset){
+                console.log("ssn: " + vm.ssn);
+                console.log("ssn uppercase: " + vm.ssn.toUpperCase());
+                console.log("ssn hash: " +  EncryptionService.hash(vm.ssn.toUpperCase()));
+                console.log("key : " + key);
                 EncryptionService.generateTempEncryptionHash(EncryptionService.hash(vm.ssn.toUpperCase()), key);
                 $scope.initNavigator.pushPage('./views/login/new-password.html', {data: {oobCode: ResetPassword.getParameter("oobCode", parameters.url)}});
             }
@@ -184,12 +188,14 @@
          */
         function handleError(error) {
             $timeout(function(){
+                var code = (error.code)? error.code : error.Code;
                 vm.alert.type='danger';
-                switch (error.Code){
+                switch (code){
                     case "auth/expired-action-Code":
                     case "auth/invalid-action-Code":
+                    case "auth/invalid-action-code":
                         vm.invalidCode=true;
-                        modal.show();
+                        errormodal.show();
                         break;
                     case "auth/user-disabled":
                         vm.alert.content = "USER_DISABLED";
