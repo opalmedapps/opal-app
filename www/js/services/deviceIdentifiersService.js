@@ -104,11 +104,14 @@ app.service('DeviceIdentifiers', [ 'RequestToServer', '$q','Constants','UserAuth
          **/
         sendIdentifiersToServer:function()
         {
+
+            //TODO: THIS DOES NOT HANDLE ERRORS AT ALL
+
             var defer = $q.defer();
             if(haveBeenSet && !haveBeenSend)
             {
-                RequestToServer.sendRequestWithResponse('DeviceIdentifier', deviceIdentifiers);
                 haveBeenSend = true;
+                RequestToServer.sendRequestWithResponse('DeviceIdentifier', deviceIdentifiers);
             }
 
             defer.resolve();
@@ -124,10 +127,8 @@ app.service('DeviceIdentifiers', [ 'RequestToServer', '$q','Constants','UserAuth
         sendFirstTimeIdentifierToServer:function()
         {
             var data = angular.copy(deviceIdentifiers);
-            data['Pass'] = UserAuthorizationInfo.getPassword();
-
-            console.log(JSON.stringify(data));
-
+            data['Password'] = UserAuthorizationInfo.getPassword();
+            data['Email'] = UserAuthorizationInfo.getEmail();
             return RequestToServer.sendRequestWithResponse('SecurityQuestion', data, EncryptionService.hash('none'), null, null);
         },
         /**

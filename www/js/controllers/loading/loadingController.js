@@ -28,6 +28,8 @@
                     $state.go('Home');
                     RequestToServer.sendRequestWithResponse('AccountChange', {NewValue: UserPreferences.getLanguage(), FieldToChange: 'Language'});
 
+                    console.log("here");
+
                     //fetch all the tab metadata TODO: add the fetching of all the other data
                     UpdateUI.set([
                         'Announcements',
@@ -53,7 +55,7 @@
                 {
                     mod='material';
                 }
-                modal.hide();
+                loadingmodal.hide();
                 ons.notification.alert({
                     message: 'Server problem: could not fetch data, try again later',
                     modifier: mod,

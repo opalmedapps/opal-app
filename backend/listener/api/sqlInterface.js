@@ -669,11 +669,6 @@ exports.setNewPassword=function(password,patientSerNum)
 {
     var r=Q.defer();
 
-    // Create a salt
-
-    // Use pbkdf2 algorithm to hash and store passwords
-
-
     connection.query(queries.setNewPassword(),[password,patientSerNum],function(error,rows,fields)
     {
         if(error) r.reject(error);
@@ -733,10 +728,21 @@ function getUserFromEmail(email)
     var r=Q.defer();
     connection.query(queries.getUserFromEmail(),[email],function(error, rows, fields){
         if(error) r.reject(error);
-        if(rows) r.resolve(rows[0])
+        if(rows) r.resolve(rows[0]);
         r.reject({Response:'error',Reason:"No User match in DB"});
     });
     return r.promise;
+}
+
+exports.getPasswordForVerification= function(email) {
+    var r=Q.defer();
+    connection.query(queries.getPatientPasswordForVerification(),[email],function(error, rows, fields){
+        if(error) r.reject(error);
+        if(rows) r.resolve(rows[0]);
+        r.reject({Response:'error',Reason:"No User match in DB"});
+    });
+    return r.promise;
+
 }
 
 function LoadDocuments(rows)
