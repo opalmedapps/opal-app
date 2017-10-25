@@ -201,6 +201,15 @@ exports.patientQuestionnaireTableFields = function()
  {
  return 'SELECT Patient.SSN, Patient.PatientSerNum FROM Patient, Users WHERE Users.Username LIKE '+"\'"+ userID+"\'"+'AND Users.UserTypeSerNum = Patient.PatientSerNum';
  };*/
+
+exports.getPatientPasswordForVerification = function()
+{
+    return `SELECT DISTINCT u.Password
+            FROM Users u, Patient pat
+            WHERE pat.Email= ? AND pat.PatientSerNum = u.UserTypeSerNum`;
+};
+
+
  exports.getPatientFieldsForPasswordReset = function()
  {
     return `SELECT DISTINCT pat.SSN, pat.Email, u.Password, u.UserTypeSerNum, sa.AnswerText, pdi.Attempt, pdi.TimeoutTimestamp   

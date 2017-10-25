@@ -90,16 +90,16 @@ exports.verifySecurityAnswer=function(requestKey,requestObject,patient)
 
     return r.promise;
 };
-exports.setNewPassword=function(requestKey, requestObject,patient)
+exports.setNewPassword=function(requestKey, requestObject, user)
 {
     var r=q.defer();
-    var ssn = patient.SSN.toUpperCase();
-    var answer = patient.AnswerText;
+    var ssn = user.SSN.toUpperCase();
+    var answer = user.AnswerText;
 
 
     var unencrypted=utility.decrypt(requestObject.Parameters, utility.hash(ssn), answer);
 
-    sqlInterface.setNewPassword(utility.hash(unencrypted.newPassword), patient.UserTypeSerNum, requestObject.Token).then(function(){
+    sqlInterface.setNewPassword(utility.hash(unencrypted.newPassword), user.UserTypeSerNum, requestObject.Token).then(function(){
         var response = { RequestKey:requestKey, Code:3,Data:{PasswordReset:"true"}, Headers:{RequestKey:requestKey,RequestObject:requestObject},Response:'success'};
         r.resolve(response);
     }).catch(function(error){
@@ -113,28 +113,46 @@ exports.setNewPassword=function(requestKey, requestObject,patient)
 exports.securityQuestion=function(requestKey,requestObject) {
     var r = q.defer();
     var unencrypted = utility.decrypt(requestObject.Parameters,CryptoJS.SHA512("none").toString());
-    sqlInterface.updateDeviceIdentifier(requestObject, unencrypted)
-        .then(function () {
-            return sqlInterface.getSecurityQuestion(requestObject)
-        })
-        .then(function (response) {
-            r.resolve({
-                Code:3,
-                Data:response.Data,
-                Headers:{RequestKey:requestKey,RequestObject:requestObject},
-                Response:'success'
-            });
+    var email = unencrypted.Email;
+    var password = unencrypted.Password;
 
-        })
-        .catch(function (response){
-            r.resolve({
-                Headers:{RequestKey:requestKey,RequestObject:requestObject},
-                Code: 2,
-                Data:{},
-                Response:'error',
-                Reason:response
-            });
+    //first check to make sure user's password is correct in DB
+    sqlInterface.getPasswordForVerification(email)
+        .then(function(res) {
+            if (res.Password === password) {
+                sqlInterface.updateDeviceIdentifier(requestObject, unencrypted)
+                    .then(function () {
+                        return sqlInterface.getSecurityQuestion(requestObject)
+                    })
+                    .then(function (response) {
+                        r.resolve({
+                            Code:3,
+                            Data:response.Data,
+                            Headers:{RequestKey:requestKey,RequestObject:requestObject},
+                            Response:'success'
+                        });
 
+                    })
+                    .catch(function (response){
+                        r.resolve({
+                            Headers:{RequestKey:requestKey,RequestObject:requestObject},
+                            Code: 2,
+                            Data:{},
+                            Response:'error',
+                            Reason:response
+                        });
+
+                    });
+            } else {
+                r.resolve({
+                    Headers:{RequestKey:requestKey,RequestObject:requestObject},
+                    Code: 1,
+                    Data:{},
+                    Response:'error',
+                    Reason:'Received password does not match password stored in database.'
+                });
+
+            }
         });
 
     return r.promise;
