@@ -131,7 +131,6 @@ exports.securityQuestion=function(requestKey,requestObject) {
                             Headers:{RequestKey:requestKey,RequestObject:requestObject},
                             Response:'success'
                         });
-
                     })
                     .catch(function (response){
                         r.resolve({
@@ -141,7 +140,6 @@ exports.securityQuestion=function(requestKey,requestObject) {
                             Response:'error',
                             Reason:response
                         });
-
                     });
             } else {
                 r.resolve({

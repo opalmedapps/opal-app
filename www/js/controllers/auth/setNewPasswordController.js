@@ -64,6 +64,8 @@
                     return false;
                 } else if (str.search(/[^a-zA-Z0-9\!\@\#\$\%\^\&\*\(\)\_\+]/) !== -1) {
                     return false;
+                } else if (str !== vm.validateNewValue) {
+                    return false;
                 }
             }
 
@@ -77,11 +79,14 @@
 
         function submitNewPassword(newValue) {
             var invalid = !newPasswordIsValid();
-            if(!newValue || invalid)
-            {
-                vm.invalidPassword= invalid;
-                vm.alert.type='danger';
+            if(!newValue || invalid) {
+                vm.invalidPassword = invalid;
+                vm.alert.type = 'danger';
                 vm.alert.content = "ENTERVALIDPASSWORD";
+            } else if ($scope.newValue !== vm.validateNewValue){
+                vm.invalidPassword = true;
+                vm.alert.type = 'danger';
+                vm.alert.content = "Passwords do no match!";
             }else{
                 vm.submitting = true;
 
