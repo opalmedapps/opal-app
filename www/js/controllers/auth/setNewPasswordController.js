@@ -88,7 +88,7 @@
 
         function submitNewPassword(newValue) {
             var invalid = !newPasswordIsValid();
-            if(!newValue || invalid) {
+            if(!vm.newValue || invalid) {
                 vm.invalidPassword = invalid;
                 vm.alert.type = 'danger';
                 vm.alert.content = "ENTERVALIDPASSWORD";

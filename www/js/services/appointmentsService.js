@@ -188,16 +188,17 @@ myApp.service('Appointments', ['$q', 'RequestToServer','$cordovaCalendar','UserA
 
     function addAppointmentsToService(appointments)
     {
+
+
         if (appointments === undefined) return;
+
         //Setting min date for upcoming appointment
         var min=Infinity;
+
         //Format date to javascript date
         var index=-1;
         numberOfSessions=0;
-        // appointmentsLocalStorage=appointmentsLocalStorage.concat(appointments);
-        // LocalStorage.WriteToLocalStorage('Appointments',appointmentsLocalStorage);
-        // var today = new Date();
-        // today.setDate(today.getDate()-10);
+
         for (var i = 0; i < appointments.length; i++) {
             appointments[i].ResourceName = (appointments[i].Resource.hasOwnProperty('Machine')) ? '':appointments[i].Resource.Doctor;
             appointments[i].ScheduledStartTime = $filter('formatDate')(appointments[i].ScheduledStartTime);
@@ -352,6 +353,7 @@ myApp.service('Appointments', ['$q', 'RequestToServer','$cordovaCalendar','UserA
          the {@link MUHCApp.controller:ScheduleController ScheduleController}.
          **/
         setUserAppointments: function (appointments) {
+            console.log("appointments: " + appointments);
             //Initializing Variables
             userAppointmentsArray = [];
             appointmentsLocalStorage=[];
