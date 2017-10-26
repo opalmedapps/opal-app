@@ -23,10 +23,10 @@
         .module('MUHCApp')
         .controller('ForgotPasswordController', ForgotPasswordController);
 
-    ForgotPasswordController.$inject = ['$timeout','$firebaseAuth'];
+    ForgotPasswordController.$inject = ['$timeout','$firebaseAuth', '$state'];
 
     /* @ngInject */
-    function ForgotPasswordController($timeout, $firebaseAuth) {
+    function ForgotPasswordController($timeout, $firebaseAuth, $state) {
         var vm = this;
 
         /**
@@ -103,5 +103,6 @@
                 }
             });
         }
+
     }
 })();

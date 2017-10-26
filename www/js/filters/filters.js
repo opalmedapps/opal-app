@@ -216,7 +216,9 @@ myApp.filter('standardDate', function($filter){
 
 myApp.filter('capitalizeFirstLetter', function () {
     return function (name) {
-        return name.charAt(0) + name.slice(1).toLowerCase();
+        if(name){
+            return name.charAt(0) + name.slice(1).toLowerCase();
+        }
     }
 });
 

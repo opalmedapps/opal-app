@@ -12,7 +12,6 @@
         .controller('SetNewPasswordController', SetNewPasswordController);
 
     SetNewPasswordController.$inject = [
-        '$scope',
         'RequestToServer',
         'UserAuthorizationInfo',
         'EncryptionService',
@@ -21,36 +20,33 @@
     ];
 
     /* @ngInject */
-    function SetNewPasswordController($scope, RequestToServer, UserAuthorizationInfo, EncryptionService, ResetPassword, $timeout) {
+    function SetNewPasswordController(RequestToServer, UserAuthorizationInfo, EncryptionService, ResetPassword, $timeout) {
 
         var vm = this;
         var parameters;
         vm.alert = {};
+        vm.resetSuccess = false;
+        vm.invalidPassword = true;
         vm.goToLogin = goToLogin;
         vm.submitNewPassword = submitNewPassword;
+        vm.evaluatePassword = evaluatePassword;
 
         activate();
 
         ///////////////////////////////////
 
+        /*********************************
+         * PRIVATE FUNCTIONS
+         ********************************/
+
         function activate() {
             parameters =  initNavigator.getCurrentPage().options;
             parameters = parameters.data;
-
-            $scope.$watch('newValue',function()
-            {
-                vm.invalidPassword = !newPasswordIsValid();
-
-                if(vm.alert.hasOwnProperty('type') && vm.alert.type === 'danger')
-                {
-                    delete vm.alert.type;
-                    delete vm.alert.content;
-                }
-            });
         }
 
+
         function newPasswordIsValid() {
-            var str = $scope.newValue;
+            var str = vm.newValue;
             if (str && typeof str === 'string')
             {
                 if ( str.length < 6) {
@@ -63,31 +59,50 @@
                     return false;
                 } else if (str.search(/[^a-zA-Z0-9\!\@\#\$\%\^\&\*\(\)\_\+]/) !== -1) {
                     return false;
+                } else if (str !== vm.validateNewValue) {
+                    return false;
                 }
             }
 
             return true;
         }
 
+        /*********************************
+         * PUBLIC METHODS
+         ********************************/
+
         function goToLogin() {
             initNavigator.resetToPage('./views/init/init-screen.html',{animation:'none'});
+        }
+
+        function evaluatePassword(){
+            vm.invalidPassword = !newPasswordIsValid();
+
+            if(vm.alert.hasOwnProperty('type') && vm.alert.type === 'danger')
+            {
+                delete vm.alert.type;
+                delete vm.alert.content;
+            }
         }
 
 
         function submitNewPassword(newValue) {
             var invalid = !newPasswordIsValid();
-            if(!newValue || invalid)
-            {
-                vm.invalidPassword= invalid;
-                vm.alert.type='danger';
+            if(!vm.newValue || invalid) {
+                vm.invalidPassword = invalid;
+                vm.alert.type = 'danger';
                 vm.alert.content = "ENTERVALIDPASSWORD";
+            } else if (vm.newValue !== vm.validateNewValue){
+                vm.invalidPassword = true;
+                vm.alert.type = 'danger';
+                vm.alert.content = "Passwords do no match!";
             }else{
                 vm.submitting = true;
 
-                ResetPassword.completePasswordChange(parameters.oobCode, $scope.newValue)
+                ResetPassword.completePasswordChange(parameters.oobCode, vm.newValue)
                     .then(function () {
 
-                        return RequestToServer.sendRequestWithResponse('SetNewPassword', {newPassword: $scope.newValue}, EncryptionService.getTempEncryptionHash() ,
+                        return RequestToServer.sendRequestWithResponse('SetNewPassword', {newPassword: vm.newValue}, EncryptionService.getTempEncryptionHash() ,
                             'passwordResetRequests',
                             'passwordResetResponses'
                         );
@@ -99,6 +114,7 @@
                         $timeout(function() {
                             vm.alert.type = 'success';
                             vm.alert.content = "PASSWORDUPDATED";
+                            vm.resetSuccess = true;
                         });
                         localStorage.removeItem("deviceID");
                         localStorage.removeItem(UserAuthorizationInfo.getUsername()+"/securityAns");
@@ -118,7 +134,7 @@
                                     vm.alert.content = "WEAK_PASSWORD";
                                     break;
                                 default:
-                                    vm.alert.content = "SERVERPROBLEM";
+                                    vm.alert.content = "PASSWORDRESETSERVERERROR";
                                     break;
                             }
                         })

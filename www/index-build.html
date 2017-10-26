@@ -48,14 +48,15 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
 
+    <!-- Ionic Icons -- Used for production only because compressing breaks references -->
+    <link rel="stylesheet" type="text/css" href="fonts/ionicons.ttf">
+
     <!--
     Stylesheets
     =================================-->
     <link rel="stylesheet" type="text/css" href="vendor/vendor.min.css">
     <link rel="stylesheet" type="text/css" href="css/app.min.css">
 
-    <!-- Ionic Icons -- Used for production only because compressing breaks references -->
-    <link rel="stylesheet" type="text/css" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
 
     <style>
         [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
@@ -207,7 +208,7 @@
     <!--
     Loading Modal
     =================================-->
-    <ons-modal var="modal" style="background-color: white !important;">
+    <ons-modal var="loadingmodal" style="background-color: white !important;">
         <br>
         <ons-icon style="color: #0D47A1" size="50px" icon="ion-load-c" spin="true"></ons-icon>
         <br><br>

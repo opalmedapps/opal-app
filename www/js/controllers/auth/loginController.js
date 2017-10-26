@@ -24,10 +24,10 @@
         .controller('LoginController', LoginController);
 
     LoginController.$inject = ['$timeout', '$state', 'UserAuthorizationInfo', '$filter','DeviceIdentifiers',
-        'UserPreferences', 'Patient', 'NewsBanner', 'UUID', 'Constants', 'EncryptionService', 'CleanUp', '$window', '$scope'];
+        'UserPreferences', 'Patient', 'NewsBanner', 'UUID', 'Constants', 'EncryptionService', 'CleanUp', '$window', '$scope', 'FirebaseService', '$rootScope'];
 
     /* @ngInject */
-    function LoginController($timeout, $state, UserAuthorizationInfo, $filter, DeviceIdentifiers, UserPreferences, Patient, NewsBanner, UUID, Constants, EncryptionService, CleanUp, $window, $scope) {
+    function LoginController($timeout, $state, UserAuthorizationInfo, $filter, DeviceIdentifiers, UserPreferences, Patient, NewsBanner, UUID, Constants, EncryptionService, CleanUp, $window, $scope, FirebaseService, $rootScope) {
 
         var vm = this;
 
@@ -86,6 +86,8 @@
 
         vm.clearErrors = clearErrors;
         vm.submit = submit;
+        vm.goToInit = goToInit;
+        vm.goToReset = goToReset;
 
         activate();
         //////////////////////////////////
@@ -100,7 +102,7 @@
 
             if(!localStorage.getItem('locked')){
                 $timeout(function () {
-                    $scope.securityModal.show();
+                    securityModal.show();
                 },200);
             }
 
@@ -135,17 +137,17 @@
             firebaseUser.getToken(true).then(function(sessionToken){
 
                 /**************************************************************************************************************************************
-                 * SINCE PREPROD/DEV IS HEAVILY TESTED, I AM DISABLING TO LOCKING OUT OF CONCURRENT USERS, THIS SHOULDN'T BE THE CASE FOR PROD!!!!!!!!!!!
+                 * SINCE PREPROD/DEV IS HEAVILY TESTED, I AM DISABLING TO LOCKING OUT OF CONCURRENT USERS, THIS SHOULDN'T BE THE CASE FOR PROD!!!!!!!!!
                  **************************************************************************************************************************************/
 
                 //Save the current session token to the users "logged in users" node. This is used to make sure that the user is only logged in for one session at a time.
-                // var Ref= firebase.database().ref(FirebaseService.getFirebaseUrl());
-                // var refCurrentUser = Ref.child(FirebaseService.getFirebaseChild('logged_in_users') + firebaseUser.uid);
-                //
-                // refCurrentUser.set({ 'Token' : sessionToken });
-                //
-                // // Evoke an observer function in mainController
-                // $rootScope.$emit("MonitorLoggedInUsers", firebaseUser.uid);
+                var Ref= firebase.database().ref(FirebaseService.getFirebaseUrl(null));
+                var refCurrentUser = Ref.child(FirebaseService.getFirebaseChild('logged_in_users') + firebaseUser.uid);
+
+                refCurrentUser.set({ 'Token' : sessionToken });
+
+                // Evoke an observer function in mainController
+                $rootScope.$emit("MonitorLoggedInUsers", firebaseUser.uid);
 
                 //Set the authorized user once we get confirmation from FireBase that the inputted credentials are valid
                 UserAuthorizationInfo.setUserAuthData(firebaseUser.uid, EncryptionService.hash(vm.password), undefined, sessionToken, vm.email);
@@ -196,7 +198,14 @@
          * If a user has been deemed as trusted, then this allows them to skip the security question process and go straight to loading screen
          */
         function loginAsTrustedUser(deviceID){
-            var ans = EncryptionService.decryptDataWithKey($window.localStorage.getItem(UserAuthorizationInfo.getUsername()+"/securityAns"), UserAuthorizationInfo.getPassword());
+
+            try {
+                var ans = EncryptionService.decryptDataWithKey($window.localStorage.getItem(UserAuthorizationInfo.getUsername()+"/securityAns"), UserAuthorizationInfo.getPassword());
+            }
+            catch(err) {
+                handleError({code: "WRONG_SAVED_HASH"})
+            }
+
             EncryptionService.setSecurityAns(ans);
 
             //Now that we know that both the password and security answer are hashed, we can create our encryption hash
@@ -209,7 +218,8 @@
                 })
                 .catch(function (error) {
                     //TODO: handle this error better... need to know the error object that is returned
-                    handleError('SERVERERROR')
+                    firebase.auth().signOut();
+                    handleError(error);
                 });
         }
 
@@ -237,10 +247,11 @@
                         trusted: vm.trusted
                     });
                 })
-                .catch(function () {
+                .catch(function (error) {
                     $timeout(function(){
                         vm.loading = false;
-                        initNavigator.popPage();
+                        firebase.auth().signOut();
+                        handleError(error);
                     });
                 });
         }
@@ -255,8 +266,9 @@
          */
         function handleError(error)
         {
+            var code = (error.code)? error.code : error.Code;
 
-            switch (error.code) {
+            switch (code) {
                 case "auth/invalid-email":
                 case "auth/wrong-password":
                 case "auth/user-not-found":
@@ -278,6 +290,18 @@
                         vm.alert.type='danger';
                         vm.alert.message="LIMITS_EXCEEDED";
                         vm.loading = false;
+                    });
+                    break;
+                case "ENCRYPTION_ERROR":
+                    $timeout(function(){
+                        vm.loading = false;
+                        loginerrormodal.show();
+                    });
+                    break;
+                case "WRONG_SAVED_HASH":
+                    $timeout(function(){
+                        vm.loading = false;
+                        wronghashmodal.show();
                     });
                     break;
                 default:
@@ -357,6 +381,30 @@
                     firebase.auth().signInWithEmailAndPassword(vm.email, vm.password).then(authHandler).catch(handleError);
                 }
             }
+        }
+
+        /**
+         * @ngdoc method
+         * @name goToInit
+         * @methodOf MUHCApp.controllers.LoginController
+         * @description
+         * Brings user to init screen
+         */
+        function goToInit(){
+            loginerrormodal.hide();
+            initNavigator.popPage();
+        }
+
+        /**
+         * @ngdoc method
+         * @name goToReset
+         * @methodOf MUHCApp.controllers.LoginController
+         * @description
+         * Brings user to password reset screen
+         */
+        function goToReset(){
+            loginerrormodal.hide();
+            initNavigator.pushPage('./views/login/forgot-password.html',{})
         }
     }
 })();

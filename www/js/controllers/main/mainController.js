@@ -19,12 +19,16 @@
         var vm = this;
         var timeoutLockout;
 
+        var currentTime;
+
         activate();
         //////////////////////////////////////////
 
         function activate(){
             $rootScope.firstTime = true;
             $rootScope.online = navigator.onLine;
+
+            currentTime = Date.now();
 
             bindEvents();
             setPushPermissions();
@@ -72,9 +76,9 @@
 
             document.addEventListener("pause", onPause, false);
 
-            // $rootScope.$on("MonitorLoggedInUsers", function(event, uid){
-            //     addUserListener(uid);
-            // });
+            $rootScope.$on("MonitorLoggedInUsers", function(event, uid){
+                addUserListener(uid);
+            });
         }
 
         /*****************************************
@@ -84,16 +88,24 @@
         function setupInactivityChecks() {
             addEventListener('touchstart',resetTimer,false);
             addEventListener("mousedown", resetTimer, false);
+
             startTimer();
         }
-
 
 
         function startTimer() {
             timeoutLockout = window.setTimeout(goInactive, 300000);
         }
 
-        function resetTimer(e) {
+        function resetTimer() {
+
+            if(Date.now() - currentTime > 300000) {
+                currentTime = Date.now();
+                goInactive();
+                return;
+            }
+
+            currentTime = Date.now();
             window.clearTimeout(timeoutLockout);
             goActive();
         }
@@ -164,20 +176,22 @@
         /*****************************************
          * Manage concurrent users
          *****************************************/
-        // function addUserListener(uid){
-        //     //add a listener to the firebase database that watches for the changing of the token value (this means that the same user has logged in somewhere else)
-        //     var refCurrentUser = firebase.database().ref(FirebaseService.getFirebaseUrl('logged_in_users/') + uid);
-        //
-        //     refCurrentUser.on('value', function() {
-        //         if(!$rootScope.firstTime){
-        //             //If it is detected that a user has concurrently logged on with a different device. Then force the "first" user to log out and clear the observer
-        //             RequestToServer.sendRequest('Logout');
-        //             CleanUp.clear();
-        //         }
-        //         else{
-        //             $rootScope.firstTime = false;
-        //         }
-        //     });
-        // }
+        function addUserListener(uid){
+            //add a listener to the firebase database that watches for the changing of the token value (this means that the same user has logged in somewhere else)
+            var refCurrentUser = firebase.database().ref(FirebaseService.getFirebaseUrl('logged_in_users/') + uid);
+
+            refCurrentUser.on('value', function() {
+                if(!$rootScope.firstTime){
+                    //If it is detected that a user has concurrently logged on with a different device. Then force the "first" user to log out and clear the observer
+                    RequestToServer.sendRequest('Logout');
+                    CleanUp.clear();
+                    NewsBanner.showCustomBanner("You have logged in on another device.", '#333333', function(){}, 5000);
+                    $state.go('init');
+                }
+                else{
+                    $rootScope.firstTime = false;
+                }
+            });
+        }
     }
 })();

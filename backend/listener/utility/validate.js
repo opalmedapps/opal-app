@@ -53,7 +53,6 @@ var exports=module.exports=function(type, parameters)
   {
 
     var param=parameters.Parameters;
-    console.log(param);
     var Reg=new RegExp('^[0-9]+$');
     var testValue='0';
     if(param.MessageSerNum)
