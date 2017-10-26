@@ -41,16 +41,13 @@ exports.processRequest=function(requestObject)
 
     var r=Q.defer();
 
-
-
     var type = requestObject.Request;
-
-
 
     if (API.hasOwnProperty(type))
     {
         return  API[type](requestObject);
     }else{
+        // TODO: SPECIFY BETTER ERROR RETURN
         r.reject('error');
     }
     return r.promise;

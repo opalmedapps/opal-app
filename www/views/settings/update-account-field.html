@@ -24,7 +24,7 @@
         <div style="margin-top: 5vh">
             <div>
                 <p ng-class="fontSizeTitle" translate ="{{csc.instruction}}"></p>
-                <small style = "color: red; margin-bottom: 30px" ng-show="csc.value=='PASSWORD'"> {{"PASSWORDPOLICY" | translate}} </small>
+                <small style = "color: red; margin-bottom: 30px" ng-show="csc.value=='PASSWORD'" ng-class="fontSizeDesc"> {{"PASSWORDPOLICY" | translate}} </small>
             </div>
 
             <div class="style-4" style="width: 100%;" ng-show="csc.value!=='PHONENUMBER'">
@@ -34,7 +34,7 @@
             <br>
 
             <div class="style-4" style="width: 100%;" ng-show="csc.value!=='PHONENUMBER'">
-                <input ng-minlength="1" type="{{csc.type1}}" ng-class="fontSizeDesc" class="style-4" placeholder="{{ 'REENTER_PASSWORD' |translate}}" value="{{csc.valueLabel|translate}}" ng-model="csc.newValueValidate" ng-change="csc.evaluate()">
+                <input ng-minlength="1" type="{{csc.type1}}" ng-class="fontSizeDesc" class="style-4" placeholder="{{ csc.inputInstruction |translate}}" value="{{csc.valueLabel|translate}}" ng-model="csc.newValueValidate" ng-change="csc.evaluate()">
             </div>
 
             <div class="style-4" style="width: 100%;" ng-show="csc.value =='PHONENUMBER'" >
@@ -84,8 +84,8 @@
                 <li class="list__item list__item--tappable" >
                     <label  class="radio-button radio-button--list-item">
                         <input ng-change="csc.changeFont('xlarge')" ng-model="csc.pickFont" type="radio" value="{{csc.thirdOption}}" name="b">
-                        <div class="radio-button__checkmark radio-button--list-item__checkmark fontDescXLarge"></div>
-                        <span class="fontDescXLarge">{{"LARGE"|translate}}</span >
+                        <div class="radio-button__checkmark radio-button--list-item__checkmark fontDescXlarge"></div>
+                        <span class="fontDescXlarge">{{"LARGE"|translate}}</span >
                     </label>
                 </li>
             </div>

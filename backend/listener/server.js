@@ -70,8 +70,6 @@ function handleRequest(requestType, snapshot){
 
         // Log before uploading to Firebase. Check that it was not a simple log
         if (response.Headers.RequestObject.Request !== 'Log') {
-
-            //console.log(response.Headers.RequestObject.Parameters.Fields.join(' '));
             logger.log('info', "Completed response", {
                 deviceID: response.Headers.RequestObject.DeviceId,
                 userID: response.Headers.RequestObject.UserID,
@@ -136,13 +134,9 @@ function clearClientRequests(){
 // Processes requests read from firebase
 function processRequest(headers){
 
-    console.log("reached process request");
-
     var r = q.defer();
     var requestKey = headers.key;
     var requestObject= headers.objectRequest;
-
-    console.log("type of request: " + requestObject.Request);
 
     // Separate security requests from main requests
     if(processApi.securityAPI.hasOwnProperty(requestObject.Request)) {
@@ -206,7 +200,6 @@ function uploadToFirebase(response, key)
 
     ref.child(path).set(response).then(function(){
         logger.log('debug', 'Uploaded to firebase');
-        console.log(response);
         completeRequest(headers,success, key);
     }).catch(function (error) {
         logger.error('Error writing to firebase', {error:error});

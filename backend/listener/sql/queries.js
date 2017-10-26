@@ -191,7 +191,9 @@ exports.patientTasksTableFields=function()
 };
 exports.patientTestResultsTableFields=function()
 {
-    return 'SELECT ComponentName, FacComponentName, AbnormalFlag, MaxNorm, MinNorm, TestValue, TestValueString, UnitDescription, CAST(TestDate AS char(30)) as `TestDate` FROM TestResult, Users, Patient WHERE Patient.AccessLevel = 3 AND Users.UserTypeSerNum=Patient.PatientSerNum AND TestResult.PatientSerNum = Patient.PatientSerNum AND Users.Username LIKE ? AND TestResult.LastUpdated > ?;';
+    return 'SELECT ComponentName, FacComponentName, AbnormalFlag, MaxNorm, MinNorm, TestValue, TestValueString, UnitDescription, CAST(TestDate AS char(30)) as `TestDate` ' +
+        'FROM TestResult, Users, Patient ' +
+        'WHERE Patient.AccessLevel = 3 AND Users.UserTypeSerNum=Patient.PatientSerNum AND TestResult.PatientSerNum = Patient.PatientSerNum AND Users.Username LIKE ? AND TestResult.LastUpdated > ? AND TestResult.ValidEntry = "Y";';
 };
 exports.patientQuestionnaireTableFields = function()
 {
@@ -201,9 +203,33 @@ exports.patientQuestionnaireTableFields = function()
  {
  return 'SELECT Patient.SSN, Patient.PatientSerNum FROM Patient, Users WHERE Users.Username LIKE '+"\'"+ userID+"\'"+'AND Users.UserTypeSerNum = Patient.PatientSerNum';
  };*/
-exports.getPatientFieldsForPasswordReset=function()
+
+exports.getPatientPasswordForVerification = function()
 {
-    return 'SELECT DISTINCT pat.SSN, pat.Email, u.Password, u.UserTypeSerNum, sa.AnswerText FROM Users u, Patient pat, SecurityAnswer sa, PatientDeviceIdentifier pdi WHERE pat.Email= ? AND pat.PatientSerNum = u.UserTypeSerNum AND pdi.DeviceId = ? AND sa.SecurityAnswerSerNum = pdi.SecurityAnswerSerNum AND sa.PatientSerNum = pat.PatientSerNum';
+    return `SELECT DISTINCT u.Password
+            FROM Users u, Patient pat
+            WHERE pat.Email= ? AND pat.PatientSerNum = u.UserTypeSerNum`;
+};
+
+
+ exports.getPatientFieldsForPasswordReset = function()
+ {
+    return `SELECT DISTINCT pat.SSN, pat.Email, u.Password, u.UserTypeSerNum, sa.AnswerText, pdi.Attempt, pdi.TimeoutTimestamp   
+            FROM Users u, Patient pat, SecurityAnswer sa, PatientDeviceIdentifier pdi
+            WHERE pat.Email= ? AND pat.PatientSerNum = u.UserTypeSerNum AND pdi.DeviceId = ?
+            AND sa.SecurityAnswerSerNum = pdi.SecurityAnswerSerNum AND sa.PatientSerNum = pat.PatientSerNum`;
+ };
+exports.increaseSecurityAnswerAttempt = function()
+{
+    return `UPDATE PatientDeviceIdentifier SET Attempt = Attempt + 1 WHERE DeviceId = ?`;
+};
+exports.resetSecurityAnswerAttempt = function()
+{
+    return `UPDATE PatientDeviceIdentifier SET Attempt = 0, TimeoutTimestamp = NULL WHERE DeviceId = ?`;
+};
+exports.setTimeoutSecurityAnswer = function()
+{
+    return `UPDATE PatientDeviceIdentifier SET TimeoutTimestamp = ? WHERE DeviceId = ?`;
 };
 exports.setNewPassword=function()
 {
@@ -246,7 +272,7 @@ exports.sendMessage=function(objectRequest)
     var messageDate=objectRequest.MessageDate;
     return "INSERT INTO Messages (`MessageSerNum`, `SenderRole`,`ReceiverRole`, `SenderSerNum`, `ReceiverSerNum`,`MessageContent`,`ReadStatus`,`MessageDate`,`SessionId`,`LastUpdated`) VALUES (NULL,'"+senderRole+"','"+ receiverRole + "', '"+senderSerNum+"','"+ receiverSerNum +"','" +messageContent+"',0,'"+messageDate+"','"+token+"' ,CURRENT_TIMESTAMP )";
 };
-exports.getUserFromEmail=function()
+exports.getPatientFromEmail=function()
 {
     return "SELECT PatientSerNum FROM Patient WHERE Email = ?";
 };
@@ -284,7 +310,6 @@ exports.updateDeviceIdentifiers = function()
 };
 exports.getMapLocation=function(qrCode)
 {
-    console.log("SELECT * FROM HospitalMap WHERE QRMapAlias = '"+qrCode+"';");
     return "SELECT * FROM HospitalMap WHERE QRMapAlias = '"+qrCode+"';";
 };
 

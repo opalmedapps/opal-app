@@ -12,12 +12,10 @@ exports.resolveEmptyResponse=function(data)
   for (var key in data) {
     if(data[key].length>0)
     {
-      //console.log(data[key]);
       counter++;
       break;
     }
   }
-  //console.log('line 16',counter);
   if(counter === 0) data = 'empty';
   return data;
 };
@@ -46,7 +44,10 @@ exports.unixToMYSQLTimestamp=function(time)
   var date=new Date(time);
   return exports.toMYSQLString(date);
 };
-
+exports.generatePBKDFHash = function(secret,salt)
+{
+  return CryptoJS.PBKDF2(secret, salt, {keySize: 512/32, iterations: 1000}).toString(CryptoJS.enc.Hex);
+}
 exports.encrypt = function(object,secret,salt)
 {
   var nonce = nacl.randomBytes(nacl.secretbox.nonceLength);
