@@ -111,7 +111,7 @@ exports.setNewPassword=function(requestKey, requestObject, user)
 
 exports.securityQuestion=function(requestKey,requestObject) {
     var r = q.defer();
-    var unencrypted = utility.decrypt(requestObject.Parameters, CryptoJS.SHA512("none").toString());
+    var unencrypted = utility.decrypt(requestObject.Parameters, CryptoJS.SHA256("none").toString());
     var email = requestObject.UserEmail;
     var password = unencrypted.Password;
 
