@@ -313,5 +313,15 @@
             }
             return "";
         }
+
+        var fontSize = UserPreferences.getFontSize();
+        var rcorners = document.getElementById("rcorners");
+        if (fontSize == "xlarge") {
+            rcorners.setAttribute("style", "height: 80%");
+        }
+        else if (fontSize == "large") {
+            rcorners.setAttribute("style", "height: 60%");
+        }
+        else rcorners.setAttribute("style", "height: 50%");
     }
 })();
