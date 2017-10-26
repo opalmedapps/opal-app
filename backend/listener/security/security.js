@@ -115,8 +115,7 @@ exports.securityQuestion=function(requestKey,requestObject) {
     var email = unencrypted.Email;
     var password = unencrypted.Password;
 
-    console.log(JSON.stringify(unencrypted));
-
+    console.log("email: " + email);
     //first check to make sure user's password is correct in DB
     sqlInterface.getPasswordForVerification(email)
         .then(function(res) {
