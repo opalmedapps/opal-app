@@ -53,8 +53,6 @@ myApp.service('TxTeamMessages', ['$filter','RequestToServer','LocalStorage', 'Us
             //Add to my TxTeamMessages array
             txTeamMessagesArray.push(messages[i]);
         }
-        //Update local storage section
-        LocalStorage.WriteToLocalStorage('TxTeamMessages',txTeamMessagesArray);
     }
     return {
         //Setter the messages from 0
@@ -109,8 +107,6 @@ myApp.service('TxTeamMessages', ['$filter','RequestToServer','LocalStorage', 'Us
          **/
         getUnreadTxTeamMessages:function()
         {
-            console.log(JSON.stringify(txTeamMessagesArray));
-
             var array=[];
             for (var i = 0; i < txTeamMessagesArray.length; i++) {
                 if(txTeamMessagesArray[i].ReadStatus =='0')
@@ -137,8 +133,6 @@ myApp.service('TxTeamMessages', ['$filter','RequestToServer','LocalStorage', 'Us
                     number++;
                 }
             }
-
-            console.log
             return number;
         },
         //Obtain a team message by ser num

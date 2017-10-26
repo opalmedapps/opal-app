@@ -1,13 +1,13 @@
 <ons-page ng-controller="ContactIndividualController as cont" ng-cloak>
     <ons-toolbar fixed-style>
         <div class="left"><ons-back-button>{{"BACK"|translate}}</ons-back-button></div>
-        <div class="center">{{cont.doctor.Role}}</div>
+        <div class="center" ng-class="fontSizeTitle">{{cont.doctor.Role}}</div>
     </ons-toolbar>
     <div class="profile-cardContact">
 
         <!--<img ng-show="!contact.Image" src="img/logo.png" class="profile-image">-->
         <div ng-show="cont.doctor.ProfileImage"><img ng-src="{{cont.doctor.ProfileImage}}" class="profile-image"></div>
-        <div class="profile-name">{{cont.doctor.FirstName}} {{cont.doctor.LastName}}</div>
+        <div class="profile-name" ng-class="fontSizeTitle">{{cont.doctor.FirstName}} {{cont.doctor.LastName}}</div>
         <div class="profile-desc" ng-class="fontSizeDesc">{{cont.doctor.Role}}</div>
 
     </div>
