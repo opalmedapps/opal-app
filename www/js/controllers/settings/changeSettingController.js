@@ -13,11 +13,11 @@
         .controller('ChangeSettingController', ChangeSettingController);
 
     ChangeSettingController.$inject = ['$filter', 'FirebaseService', 'UserPreferences', 'Patient', 'RequestToServer',
-        '$timeout', 'UserAuthorizationInfo', 'EncryptionService'];
+        '$timeout', 'UserAuthorizationInfo'];
 
     /* @ngInject */
     function ChangeSettingController($filter, FirebaseService, UserPreferences, Patient, RequestToServer, $timeout,
-                                     UserAuthorizationInfo, EncryptionService) {
+                                     UserAuthorizationInfo) {
 
         var vm = this;
         var page;
@@ -40,61 +40,65 @@
             //Actual Value
             vm.actualValue = '';
 
-            //Instantiates values and parameters
-            vm.disableButton = true;
-            vm.title = 'UPDATE';
-            vm.value = parameters;
-            vm.valueLabel = parameters;
-            vm.personal = true;
-            vm.type1 = 'text';
-
-            //Sets the instructions depending on the value to update
-            if (parameters === 'ALIAS') {
-                vm.actualValue = Patient.getAlias();
-                vm.newValue = vm.actualValue;
-                vm.instruction = "ENTERYOURALIAS";
-            } else if (parameters === 'PHONENUMBER') {
-                vm.actualValue = Patient.getTelNum();
-                vm.newValue = vm.actualValue;
-                vm.instruction = "ENTERNEWTELEPHONE";
-            } else if (parameters === 'EMAIL') {
-                vm.type1 = 'email';
-                vm.type2 = 'password';
-                vm.newValue = '';
-                vm.oldValue = '';
-                vm.placeHolder = $filter('translate')("ENTERPASSWORD");
-                vm.instruction = "ENTEREMAILADDRESS";
-                vm.instructionOld = "ENTERPASSWORD";
-            } else if (parameters === 'PASSWORD') {
-                vm.type1 = 'password';
-                vm.type2 = 'password';
-                vm.newValue = '';
-                vm.newValueValidate = '';
-                vm.oldValue = '';
-                var label = $filter('translate')('ENTEROLD');
-                vm.placeHolder = label + ' ' +$filter('translate')(vm.valueLabel);
-                vm.instruction = "ENTERNEWPASSWORD";
-                vm.instructionOld = "ENTEROLDPASSWORD";
-            } else if (parameters === 'LANGUAGE') {
-                var value = UserPreferences.getLanguage();
-                vm.instruction = 'SELECTLANGUAGE';
-                vm.personal = false;
-                vm.fontUpdated = false;
-                vm.pickLanguage = value;
-                vm.firstOption = 'EN';
-                vm.secondOption = 'FR';
-                vm.valueLabel = 'LANGUAGE';
+            $timeout(function () {
+                //Instantiates values and parameters
+                vm.disableButton = true;
                 vm.title = 'UPDATE';
-            } else if (parameters === 'FONTSIZE') {
-                var value = UserPreferences.getFontSize();
-                vm.firstOption = 'medium';
-                vm.secondOption = 'large';
-                vm.thirdOption = 'xlarge';
-                vm.instruction = "SELECTFONTSIZE";
-                vm.personal = false;
-                vm.fontUpdated = true;
-                vm.pickFont = value;
-            }
+                vm.value = parameters;
+                vm.valueLabel = parameters;
+                vm.personal = true;
+                vm.type1 = 'text';
+
+                //Sets the instructions depending on the value to update
+                if (parameters === 'ALIAS') {
+                    vm.actualValue = Patient.getAlias();
+                    vm.newValue = vm.actualValue;
+                    vm.instruction = "ENTERYOURALIAS";
+                } else if (parameters === 'PHONENUMBER') {
+                    vm.actualValue = Patient.getTelNum();
+                    vm.newValue = vm.actualValue;
+                    vm.instruction = "ENTERNEWTELEPHONE";
+                } else if (parameters === 'EMAIL') {
+                    vm.type1 = 'email';
+                    vm.type2 = 'password';
+                    vm.newValue = '';
+                    vm.oldValue = '';
+                    vm.placeHolder = $filter('translate')("ENTERPASSWORD");
+                    vm.instruction = "ENTEREMAILADDRESS";
+                    vm.instructionOld = "ENTERPASSWORD";
+                    vm.inputInstruction = "REENTER_EMAIL";
+                } else if (parameters === 'PASSWORD') {
+                    vm.type1 = 'password';
+                    vm.type2 = 'password';
+                    vm.newValue = '';
+                    vm.newValueValidate = '';
+                    vm.oldValue = '';
+                    var label = $filter('translate')('ENTEROLD');
+                    vm.placeHolder = label + ' ' + $filter('translate')(vm.valueLabel);
+                    vm.instruction = "ENTERNEWPASSWORD";
+                    vm.instructionOld = "ENTEROLDPASSWORD";
+                    vm.inputInstruction = "REENTER_PASSWORD";
+                } else if (parameters === 'LANGUAGE') {
+                    var value = UserPreferences.getLanguage();
+                    vm.instruction = 'SELECTLANGUAGE';
+                    vm.personal = false;
+                    vm.fontUpdated = false;
+                    vm.pickLanguage = value;
+                    vm.firstOption = 'EN';
+                    vm.secondOption = 'FR';
+                    vm.valueLabel = 'LANGUAGE';
+                    vm.title = 'UPDATE';
+                } else if (parameters === 'FONTSIZE') {
+                    var value = UserPreferences.getFontSize();
+                    vm.firstOption = 'medium';
+                    vm.secondOption = 'large';
+                    vm.thirdOption = 'xlarge';
+                    vm.instruction = "SELECTFONTSIZE";
+                    vm.personal = false;
+                    vm.fontUpdated = true;
+                    vm.pickFont = value;
+                }
+            });
         }
 
         //Sets a watch on the values typed and runs the validation scripts for the respective values
@@ -119,7 +123,6 @@
             objectToSend.NewValue = vm.newValue;
 
             if (val.toUpperCase() === 'PASSWORD') {
-
                 changePassword();
             } else if (val.toUpperCase() === 'EMAIL') {
                 changeEmail();
@@ -152,7 +155,6 @@
 
         //FUnction to change the language
         function changeLanguage (val) {
-            console.log('changed language to : ' + val);
             var objectToSend = {};
             objectToSend.NewValue = val;
             objectToSend.FieldToChange = 'Language';
@@ -168,7 +170,7 @@
 
             user.reauthenticate(credential).then(function () {
                 user.updatePassword(vm.newValue).then(updateOnServer).catch(handleError);
-            }).catch(handleAuthenticationError);
+            }).catch(handleError);
 
             function updateOnServer(){
                 var objectToSend = {};
@@ -176,33 +178,22 @@
                 objectToSend.NewValue = vm.newValue;
                 RequestToServer.sendRequestWithResponse('AccountChange', objectToSend)
                     .then(function () {
-                        vm.alertClass = "bg-success updateMessage-success";
-                        vm.updateMessage = "PASSWORDUPDATED";
-                        vm.newUpdate = true;
+                        $timeout(function(){
+                            vm.alertClass = "bg-success updateMessage-success";
+                            vm.updateMessage = "PASSWORDUPDATED";
+                            vm.newUpdate = true;
+                        });
+
                         localStorage.removeItem("deviceID");
                         localStorage.removeItem(UserAuthorizationInfo.getUsername()+"/securityAns");
                     })
                     .catch(function (error) {
-                        vm.newUpdate = true;
-                        vm.alertClass = "bg-danger updateMessage-error";
-                        vm.updateMessage = "INTERNETERROR";
+                        $timeout(function() {
+                            vm.newUpdate = true;
+                            vm.alertClass = "bg-danger updateMessage-error";
+                            vm.updateMessage = "INTERNETERROR";
+                        });
                     })
-
-            }
-
-            function handleError(error){
-                switch (error.code) {
-                    case "auth/weak-password":
-                        vm.newUpdate = true;
-                        vm.alertClass = "bg-danger updateMessage-error";
-                        vm.updateMessage = "INVALID_PASSWORD";
-                        break;
-                    default:
-                        vm.newUpdate = true;
-                        vm.alertClass = "bg-danger updateMessage-error";
-                        vm.updateMessage = "INTERNETERROR";
-                        break;
-                }
             }
         }
         //Change email function
@@ -213,7 +204,7 @@
 
             user.reauthenticate(credential).then(function () {
                 user.updateEmail(vm.newValue).then(updateOnServer).catch(handleError);
-            }).catch(handleAuthenticationError);
+            }).catch(handleError);
 
             function updateOnServer(){
                 var objectToSend = {};
@@ -221,32 +212,14 @@
                 objectToSend.NewValue = vm.newValue;
                 Patient.setEmail(vm.newValue);
                 window.localStorage.setItem('Email',vm.newValue);
-                RequestToServer.sendRequest('AccountChange', objectToSend)
+                RequestToServer.sendRequestWithResponse('AccountChange', objectToSend)
                     .then(function(){
-                        vm.alertClass = "bg-success updateMessage-success";
-                        vm.updateMessage = "UPDATED_EMAIL";
-                        vm.newUpdate = true;
+                        $timeout(function(){
+                            vm.alertClass = "bg-success updateMessage-success";
+                            vm.updateMessage = "UPDATED_EMAIL";
+                            vm.newUpdate = true;
+                        });
                     }).catch(handleError);
-            }
-
-            function handleError(){
-                switch (error.code) {
-                    case "auth/invalid-email":
-                        vm.alertClass = "bg-danger updateMessage-error";
-                        vm.newUpdate = true;
-                        vm.updateMessage = "INVALID_EMAIL";
-                        break;
-                    case "auth/email-already-in-use":
-                        vm.alertClass = "bg-danger updateMessage-error";
-                        vm.newUpdate = true;
-                        vm.updateMessage = "EMAIL_TAKEN";
-                        break;
-                    default:
-                        vm.alertClass = "bg-danger updateMessage-error";
-                        vm.newUpdate = true;
-                        vm.updateMessage = "INTERNETERROR";
-                        break;
-                }
             }
         }
         //Validating fields functions
@@ -268,39 +241,51 @@
             return (vm.actualValue !== vm.newValue && vm.newValue.length > 3);
         }
 
-        function handleAuthenticationError(error) {
-            switch(error.code){
-                case "auth/user-mismatch":
-                    vm.newUpdate = true;
-                    vm.alertClass = "bg-danger updateMessage-error";
-                    vm.updateMessage = "INVALID_ASSOCIATION";
-                    break;
-                case "auth/user-not-found":
-                    vm.newUpdate = true;
-                    vm.alertClass = "bg-danger updateMessage-error";
-                    vm.updateMessage = "INVALID_USER";
-                    break;
-                case "auth/invalid-credential":
-                    vm.newUpdate = true;
-                    vm.alertClass = "bg-danger updateMessage-error";
-                    vm.updateMessage = "INVALID_CREDENTIAL";
-                    break;
-                case "auth/invalid-email":
-                    vm.newUpdate = true;
-                    vm.alertClass = "bg-danger updateMessage-error";
-                    vm.updateMessage = "INVALID_EMAIL";
-                    break;
-                case "auth/wrong-password":
-                    vm.newUpdate = true;
-                    vm.alertClass = "bg-danger updateMessage-error";
-                    vm.updateMessage = "INVALID_PASSWORD";
-                    break;
-                default:
-                    vm.newUpdate = true;
-                    vm.alertClass = "bg-danger updateMessage-error";
-                    vm.updateMessage = "INTERNETERROR";
-                    break;
-            }
+        function handleError(error) {
+            $timeout(function(){
+                switch(error.code){
+                    case "auth/user-mismatch":
+                        vm.newUpdate = true;
+                        vm.alertClass = "bg-danger updateMessage-error";
+                        vm.updateMessage = "INVALID_ASSOCIATION";
+                        break;
+                    case "auth/user-not-found":
+                        vm.newUpdate = true;
+                        vm.alertClass = "bg-danger updateMessage-error";
+                        vm.updateMessage = "INVALID_USER";
+                        break;
+                    case "auth/invalid-credential":
+                        vm.newUpdate = true;
+                        vm.alertClass = "bg-danger updateMessage-error";
+                        vm.updateMessage = "INVALID_CREDENTIAL";
+                        break;
+                    case "auth/invalid-email":
+                        vm.newUpdate = true;
+                        vm.alertClass = "bg-danger updateMessage-error";
+                        vm.updateMessage = "INVALID_EMAIL";
+                        break;
+                    case "auth/wrong-password":
+                        vm.newUpdate = true;
+                        vm.alertClass = "bg-danger updateMessage-error";
+                        vm.updateMessage = "INVALID_PASSWORD";
+                        break;
+                    case "auth/email-already-in-use":
+                        vm.alertClass = "bg-danger updateMessage-error";
+                        vm.newUpdate = true;
+                        vm.updateMessage = "EMAIL_TAKEN";
+                        break;
+                    case "auth/weak-password":
+                        vm.newUpdate = true;
+                        vm.alertClass = "bg-danger updateMessage-error";
+                        vm.updateMessage = "INVALID_PASSWORD";
+                        break;
+                    default:
+                        vm.newUpdate = true;
+                        vm.alertClass = "bg-danger updateMessage-error";
+                        vm.updateMessage = "INTERNETERROR";
+                        break;
+                }
+            })
         }
     }
 })();

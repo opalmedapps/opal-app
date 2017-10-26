@@ -10,7 +10,7 @@
 
         <!--<img ng-show="!contact.Image" src="img/logo.png" class="profile-image">-->
         <div ng-show="contact.ProfileImage"><img ng-src="{{contact.ProfileImage}}" class="profile-image"></div>
-        <div class="profile-name">{{contact.FirstName}} {{contact.LastName}}</div>
+        <div class="profile-name" ng-class="fontSizeTitle">{{contact.FirstName}} {{contact.LastName}}</div>
         <div class="profile-desc" ng-class="fontSizeDesc">{{contact.Role}}</div>
 
     </div>

@@ -33,9 +33,17 @@ myApp.service('ResetPassword',function(){
          **/
         verifyLinkCode: function (url) {
 
+            console.log("url: " + url);
+
             var oobCode = this.getParameter('oobCode', url);
 
-            return auth.verifyPasswordResetCode(oobCode[1]);
+            console.log("oobcode: " + oobCode);
+
+            if(oobCode){
+                return auth.verifyPasswordResetCode(oobCode[1]);
+            } else {
+                return Promise.reject({Code: "auth/invalid-action-code"})
+            }
 
         },
 
@@ -50,7 +58,6 @@ myApp.service('ResetPassword',function(){
          **/
         completePasswordChange : function (oobCode, newPassword) {
 
-            console.log('receieved: ' + JSON.stringify(oobCode) + ' and ' + newPassword);
             return auth.confirmPasswordReset(oobCode[1], newPassword)
         },
 

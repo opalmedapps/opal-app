@@ -19,7 +19,7 @@
         ///////////////////////////
 
         function activate() {
-            modal.show();
+            loadingmodal.show();
             var userAuthorizationInfo = UserAuthorizationInfo.getUserAuthData();
             if(!userAuthorizationInfo) $state.go('init');
 
@@ -39,7 +39,7 @@
 
                     PlanningSteps.initializePlanningSequence();
 
-                    modal.hide();
+                    loadingmodal.hide();
                     clearTimeout(timeOut);
                 });
         }
@@ -53,7 +53,7 @@
                 {
                     mod='material';
                 }
-                modal.hide();
+                loadingmodal.hide();
                 ons.notification.alert({
                     message: 'Server problem: could not fetch data, try again later',
                     modifier: mod,
