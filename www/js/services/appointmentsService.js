@@ -353,7 +353,6 @@ myApp.service('Appointments', ['$q', 'RequestToServer','$cordovaCalendar','UserA
          the {@link MUHCApp.controller:ScheduleController ScheduleController}.
          **/
         setUserAppointments: function (appointments) {
-            console.log("appointments: " + appointments);
             //Initializing Variables
             userAppointmentsArray = [];
             appointmentsLocalStorage=[];

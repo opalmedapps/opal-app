@@ -270,7 +270,7 @@ exports.sendMessage=function(objectRequest)
     var messageDate=objectRequest.MessageDate;
     return "INSERT INTO Messages (`MessageSerNum`, `SenderRole`,`ReceiverRole`, `SenderSerNum`, `ReceiverSerNum`,`MessageContent`,`ReadStatus`,`MessageDate`,`SessionId`,`LastUpdated`) VALUES (NULL,'"+senderRole+"','"+ receiverRole + "', '"+senderSerNum+"','"+ receiverSerNum +"','" +messageContent+"',0,'"+messageDate+"','"+token+"' ,CURRENT_TIMESTAMP )";
 };
-exports.getUserFromEmail=function()
+exports.getPatientFromEmail=function()
 {
     return "SELECT PatientSerNum FROM Patient WHERE Email = ?";
 };
@@ -308,7 +308,6 @@ exports.updateDeviceIdentifiers = function()
 };
 exports.getMapLocation=function(qrCode)
 {
-    console.log("SELECT * FROM HospitalMap WHERE QRMapAlias = '"+qrCode+"';");
     return "SELECT * FROM HospitalMap WHERE QRMapAlias = '"+qrCode+"';";
 };
 

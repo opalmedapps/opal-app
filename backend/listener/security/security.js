@@ -96,7 +96,6 @@ exports.setNewPassword=function(requestKey, requestObject, user)
     var ssn = user.SSN.toUpperCase();
     var answer = user.AnswerText;
 
-
     var unencrypted=utility.decrypt(requestObject.Parameters, utility.hash(ssn), answer);
 
     sqlInterface.setNewPassword(utility.hash(unencrypted.newPassword), user.UserTypeSerNum, requestObject.Token).then(function(){
@@ -115,6 +114,8 @@ exports.securityQuestion=function(requestKey,requestObject) {
     var unencrypted = utility.decrypt(requestObject.Parameters,CryptoJS.SHA512("none").toString());
     var email = unencrypted.Email;
     var password = unencrypted.Password;
+
+    console.log(JSON.stringify(unencrypted));
 
     //first check to make sure user's password is correct in DB
     sqlInterface.getPasswordForVerification(email)

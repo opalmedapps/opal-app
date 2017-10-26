@@ -9,6 +9,7 @@ var http            =   require('http');
 var request         =   require('request');
 var questionnaires  =   require('./../questionnaires/patientQuestionnaires.js');
 var Mail            =   require('./../mailer/mailer.js');
+var utility         =   require('./../utility/utility');
 // var exec            =   require('child_process').exec;
 
 var sqlConfig={
@@ -142,8 +143,6 @@ exports.runSqlQuery = function(query, parameters, processRawFunction)
 
     var que = connection.query(query, parameters, function(err,rows,fields){
 
-        console.log(que.sql);
-
         if (err) r.reject(err);
         if(typeof rows !=='undefined')
         {
@@ -218,7 +217,6 @@ function processSelectRequest(table, userId, timestamp)
             requestMappingObject.processFunction).then(function(rows)
         {
             if (table === 'Questionnaires'){
-                //console.log(rows);
             }
             r.resolve(rows);
         },function(err)
@@ -226,13 +224,9 @@ function processSelectRequest(table, userId, timestamp)
             r.reject(err);
         });
     }else{
-        //console.log(requestMappingObject.processFunction);
-        requestMappingObject.processFunction(userId,timestamp).then(function(rows)
-        {
-            //console.log('adasdas');
+        requestMappingObject.processFunction(userId,timestamp).then(function(rows) {
             r.resolve(rows);
-        },function(err)
-        {
+        },function(err) {
             r.reject(err);
         });
     }
@@ -276,9 +270,7 @@ exports.updateReadStatus=function(userId, parameters)
 exports.sendMessage=function(requestObject)
 {
     var r=Q.defer();
-    connection.query(queries.sendMessage(requestObject),function(error,rows, fields)
-    {
-
+    connection.query(queries.sendMessage(requestObject),function(error,rows, fields) {
         if(error) r.reject({Response:'error',Reason:error});
         r.resolve({Response:'success'});
     });
@@ -294,10 +286,8 @@ exports.checkCheckinInAria = function(requestObject)
     //Get the appointment aria ser
     getAppointmentAriaSer(username, serNum).then(function(response){
         var ariaSerNum = response[0].AppointmentAriaSer;
-        //console.log('Appointment aria ser', ariaSerNum);
         //Check using Ackeem's script whether the patient has checked in at the kiosk
         checkIfCheckedIntoAriaHelper(ariaSerNum).then(function(success){
-            //console.log('the user has checked in ', success);
             //Check in the user into mysql if they have indeed checkedin at kiosk
             if(success) exports.runSqlQuery(queries.checkin(),['Kiosk', serNum, username]);
             r.resolve({Response:'success', Data:{'CheckedIn':success, AppointmentSerNum:serNum}});
@@ -355,14 +345,13 @@ exports.checkIn=function(requestObject)
     //Getting the appointment ariaSer to checkin to aria
     getAriaPatientId(username).then(function(response){
         var patientId = response[0].PatientId;
-        //console.log(response, ' patientId', patientId, ' username ', username);
         //Check in to aria using Johns script
         checkIntoAria(patientId,serNum, username).then(function(response){
             if(response)
             {
                 //console.log('Checked in successfully done in aria', response);
                 //If successfully checked in change field in mysql
-                var promises = []
+                var promises = [];
 
                 for (var i=0; i!=serNum.length; ++i){
                     //console.log(serNum[i]);
@@ -380,8 +369,6 @@ exports.checkIn=function(requestObject)
                         //console.log('error checkin dur to', error);
                         r.reject({Response:'error',Reason:'CheckIn error due to '+error});
                     });
-
-
             }else{
                 r.reject({Response:'error', Reason:'Unable to checkin Aria'});
             }
@@ -405,11 +392,7 @@ exports.getDocumentsContent = function(requestObject)
     if(!(typeof documents.constructor !=='undefined'&&documents.constructor=== Array)){
         r.reject({Response:'error',Reason:'Not an array'});
     }else{
-        //console.log('line 370', documents);
-        var quer = connection.query(queries.getDocumentsContentQuery(),[[documents],userID],function(err,rows,fields)
-        {
-
-            //console.log(rows);
+        var quer = connection.query(queries.getDocumentsContentQuery(),[[documents],userID],function(err,rows,fields) {
             if(err){
                 r.reject({Response:'error',Reason:err});
             }else if(rows.length==0)
@@ -425,9 +408,7 @@ exports.getDocumentsContent = function(requestObject)
                 }).catch(function (error) {
                     r.reject({Response:'error', Reason:err});
                 });
-
             }
-
         });
     }
     return r.promise;
@@ -438,15 +419,15 @@ exports.updateAccountField=function(requestObject)
 {
     var r=Q.defer();
     var UserEmail=requestObject.UserEmail;
-    getUserFromEmail(UserEmail).then(function(user)
+    getPatientFromEmail(UserEmail).then(function(patient)
     {
-        var patientSerNum=user.PatientSerNum;
+        var patientSerNum=patient.PatientSerNum;
         var field=requestObject.Parameters.FieldToChange;
         var newValue=requestObject.Parameters.NewValue;
         if(field=='Password')
         {
-            newValue=CryptoJS.SHA512(newValue).toString();
-            connection.query(queries.setNewPassword(), [newValue,patientSerNum],
+            newValue=utility.hash(newValue);
+            connection.query(queries.setNewPassword(), [newValue, patientSerNum],
                 function(error, rows, fields)
                 {
                     if(error){
@@ -471,7 +452,7 @@ exports.inputFeedback=function(requestObject)
 {
     var r =Q.defer();
     var UserEmail=requestObject.UserEmail;
-    getUserFromEmail(UserEmail).then(function(user)
+    getPatientFromEmail(UserEmail).then(function(user)
     {
         connection.query(queries.inputFeedback(),[user.PatientSerNum,requestObject.Parameters.FeedbackContent,requestObject.Parameters.AppRating, requestObject.Token],
             function(error, rows, fields)
@@ -519,7 +500,7 @@ exports.updateDeviceIdentifier = function(requestObject, parameters)
 
     var UserEmail = requestObject.UserEmail;
     //console.log("Device Type is  ", deviceType);
-    getUserFromEmail(UserEmail).then(function(user){
+    getPatientFromEmail(UserEmail).then(function(user){
         exports.runSqlQuery(queries.updateDeviceIdentifiers(),[user.PatientSerNum, requestObject.DeviceId, identifiers.registrationId, deviceType,requestObject.Token, identifiers.registrationId, requestObject.Token]).then(function(response){
             r.resolve({Response:'success'});
         }).catch(function(error){
@@ -618,7 +599,7 @@ exports.increaseSecurityAnswerAttempt = function(requestObject)
         r.resolve(rows);
     });
     return r.promise;
-}
+};
 exports.resetSecurityAnswerAttempt = function(requestObject) 
 {
     var r=Q.defer();
@@ -642,16 +623,13 @@ exports.setTimeoutSecurityAnswer = function(requestObject, timestamp)
         r.resolve(rows);
     });
     return r.promise;
-}
+};
 //Api call to get patient fields for password reset
 exports.getPatientFieldsForPasswordReset=function(requestObject)
 {
     var r=Q.defer();
-    ////console.log(requestObject, requestObject.DeviceId);
 
     var UserEmail = requestObject.UserEmail;
-
-    //console.log("Inside get getPatientFields",UserEmail);
 
     var que = connection.query(queries.getPatientFieldsForPasswordReset(),[UserEmail, requestObject.DeviceId],function(error,rows,fields)
     {
@@ -723,10 +701,10 @@ exports.updateLogout=function(fields)
     return r.promise;
 };
 
-function getUserFromEmail(email)
+function getPatientFromEmail(email)
 {
     var r=Q.defer();
-    connection.query(queries.getUserFromEmail(),[email],function(error, rows, fields){
+    connection.query(queries.getPatientFromEmail(),[email],function(error, rows, fields){
         if(error) r.reject(error);
         if(rows) r.resolve(rows[0]);
         r.reject({Response:'error',Reason:"No User match in DB"});
