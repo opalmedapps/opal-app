@@ -715,11 +715,6 @@ function getPatientFromEmail(email)
 exports.getPasswordForVerification= function(email) {
     var r=Q.defer();
     connection.query(queries.getPatientPasswordForVerification(),[email],function(error, rows, fields){
-
-        console.log("error: " + error);
-        console.log("rows: " + JSON.stringify(rows));
-        console.log("rows[0]: " + rows[0]);
-
         if(error) r.reject(error);
         if(rows) r.resolve(rows[0]);
         r.reject({Response:'error',Reason:"No User match in DB"});

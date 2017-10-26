@@ -111,51 +111,67 @@ exports.setNewPassword=function(requestKey, requestObject, user)
 
 exports.securityQuestion=function(requestKey,requestObject) {
     var r = q.defer();
-    var unencrypted = utility.decrypt(requestObject.Parameters,CryptoJS.SHA512("none").toString());
+    var unencrypted = utility.decrypt(requestObject.Parameters, CryptoJS.SHA512("none").toString());
     var email = unencrypted.Email;
     var password = unencrypted.Password;
 
-    console.log("email: " + email);
-    //first check to make sure user's password is correct in DB
-    sqlInterface.getPasswordForVerification(email)
-        .then(function(res) {
-            if (res.Password === password) {
-                sqlInterface.updateDeviceIdentifier(requestObject, unencrypted)
-                    .then(function () {
-                        return sqlInterface.getSecurityQuestion(requestObject)
-                    })
-                    .then(function (response) {
-                        r.resolve({
-                            Code:3,
-                            Data:response.Data,
-                            Headers:{RequestKey:requestKey,RequestObject:requestObject},
-                            Response:'success'
-                        });
-                    })
-                    .catch(function (response){
-                        r.resolve({
-                            Headers:{RequestKey:requestKey,RequestObject:requestObject},
-                            Code: 2,
-                            Data:{},
-                            Response:'error',
-                            Reason:response
-                        });
-                    });
-            } else {
-                r.resolve({
-                    Headers:{RequestKey:requestKey,RequestObject:requestObject},
-                    Code: 1,
-                    Data:{},
-                    Response:'error',
-                    Reason:'Received password does not match password stored in database.'
-                });
+    console.log(JSON.stringify(requestObject));
 
-            }
-        });
+    if (requestObject.RequestType !== 'SetNewPassword') {
+
+        //first check to make sure user's password is correct in DB
+        sqlInterface.getPasswordForVerification(email)
+            .then(function (res) {
+                if (res.Password === password) {
+                    getSecurityQuestion(requestKey, requestObject, unencrypted)
+                        .then(function (response) {
+                            r.resolve(response)
+                        })
+                } else {
+                    r.resolve({
+                        Headers: {RequestKey: requestKey, RequestObject: requestObject},
+                        Code: 1,
+                        Data: {},
+                        Response: 'error',
+                        Reason: 'Received password does not match password stored in database.'
+                    });
+
+                }
+            });
+    } else {
+        getSecurityQuestion(requestKey, requestObject, unencrypted)
+            .then(function (response) {
+                r.resolve(response)
+            })
+    }
 
     return r.promise;
 
 };
+
+function getSecurityQuestion(requestKey, requestObject, unencrypted){
+    return sqlInterface.updateDeviceIdentifier(requestObject, unencrypted)
+        .then(function () {
+            return sqlInterface.getSecurityQuestion(requestObject)
+        })
+        .then(function (response) {
+            return Promise.resolve({
+                Code:3,
+                Data:response.Data,
+                Headers:{RequestKey:requestKey,RequestObject:requestObject},
+                Response:'success'
+            });
+        })
+        .catch(function (response){
+            return Promise.resolve({
+                Headers:{RequestKey:requestKey,RequestObject:requestObject},
+                Code: 2,
+                Data:{},
+                Response:'error',
+                Reason:response
+            });
+        });
+}
 
 var requestMappings = {
     'SetNewPassword':exports.setNewPassword,
