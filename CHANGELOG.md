@@ -22,6 +22,12 @@ To invite users to upgrade in case of vulnerabilities.
 
 ## [PRODUCTION]
 
+### v1.4.3
+* Finalized for pre pen-test testing
+
+### v1.4.2
+* Fixed lab result timelines not displaying properly
+
 ### v1.4.1
 * Added DB and FB password validation
 * Fixed error message not displaying when original password is incorrect on change password
