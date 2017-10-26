@@ -112,13 +112,11 @@ exports.setNewPassword=function(requestKey, requestObject, user)
 exports.securityQuestion=function(requestKey,requestObject) {
     var r = q.defer();
     var unencrypted = utility.decrypt(requestObject.Parameters, CryptoJS.SHA512("none").toString());
-    var email = unencrypted.Email;
+    var email = requestObject.UserEmail;
     var password = unencrypted.Password;
 
-    console.log(JSON.stringify(requestObject));
-
-    if (requestObject.RequestType !== 'SetNewPassword') {
-
+    //Then this means this is a login attempt
+    if (password) {
         //first check to make sure user's password is correct in DB
         sqlInterface.getPasswordForVerification(email)
             .then(function (res) {
@@ -139,6 +137,7 @@ exports.securityQuestion=function(requestKey,requestObject) {
                 }
             });
     } else {
+        //Otherwise we are dealing with a password reset
         getSecurityQuestion(requestKey, requestObject, unencrypted)
             .then(function (response) {
                 r.resolve(response)
