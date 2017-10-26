@@ -12,12 +12,10 @@ exports.resolveEmptyResponse=function(data)
   for (var key in data) {
     if(data[key].length>0)
     {
-      //console.log(data[key]);
       counter++;
       break;
     }
   }
-  //console.log('line 16',counter);
   if(counter === 0) data = 'empty';
   return data;
 };
@@ -61,9 +59,6 @@ exports.decrypt= function(object,secret,salt)
 {
 
   secret = (salt)?CryptoJS.PBKDF2(secret, salt, {keySize: 512/32, iterations: 1000}).toString(CryptoJS.enc.Hex):secret;
-
-  console.log("temp enc hash: " + secret);
-
   return exports.decryptObject(object, stablelibutf8.encode(secret.substring(0,nacl.secretbox.keyLength)));
 };
 

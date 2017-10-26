@@ -116,9 +116,6 @@ myApp.service('LabResults',['$filter','LocalStorage','RequestToServer','$q',
                 testResultsByDateArray.push(testResultsByDate[key1]);
             }
             testResultsByDateArray = $filter('orderBy')(testResultsByDateArray, 'testDateFormat', true);
-            //
-            //
-            //LocalStorage.WriteToLocalStorage('LabResults', testResultsToLocalStorage);
         }
 
         return{
