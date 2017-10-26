@@ -128,7 +128,6 @@ app.service('DeviceIdentifiers', [ 'RequestToServer', '$q','Constants','UserAuth
         {
             var data = angular.copy(deviceIdentifiers);
             data['Password'] = UserAuthorizationInfo.getPassword();
-            data['Email'] = UserAuthorizationInfo.getEmail();
             return RequestToServer.sendRequestWithResponse('SecurityQuestion', data, EncryptionService.hash('none'), null, null);
         },
         /**

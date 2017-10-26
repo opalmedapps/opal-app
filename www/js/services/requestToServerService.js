@@ -102,9 +102,9 @@ myApp.service('RequestToServer',['$filter','$state','NewsBanner','UserAuthorizat
                         var data = snapshot.val();
 
                         var timestamp = data.Timestamp;
-                        if(data.Code == '1')
+                        if(data.Code === 1)
                         {
-                            r.reject({Response:'ENCRYPTION_ERROR'});
+                            r.reject({Code:'ENCRYPTION_ERROR'});
                         }else{
 
                             if(!encryptionKey||typeof encryptionKey == 'undefined') data = EncryptionService.decryptData(data);

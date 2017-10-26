@@ -191,7 +191,9 @@ exports.patientTasksTableFields=function()
 };
 exports.patientTestResultsTableFields=function()
 {
-    return 'SELECT ComponentName, FacComponentName, AbnormalFlag, MaxNorm, MinNorm, TestValue, TestValueString, UnitDescription, CAST(TestDate AS char(30)) as `TestDate` FROM TestResult, Users, Patient WHERE Patient.AccessLevel = 3 AND Users.UserTypeSerNum=Patient.PatientSerNum AND TestResult.PatientSerNum = Patient.PatientSerNum AND Users.Username LIKE ? AND TestResult.LastUpdated > ?;';
+    return 'SELECT ComponentName, FacComponentName, AbnormalFlag, MaxNorm, MinNorm, TestValue, TestValueString, UnitDescription, CAST(TestDate AS char(30)) as `TestDate` ' +
+        'FROM TestResult, Users, Patient ' +
+        'WHERE Patient.AccessLevel = 3 AND Users.UserTypeSerNum=Patient.PatientSerNum AND TestResult.PatientSerNum = Patient.PatientSerNum AND Users.Username LIKE ? AND TestResult.LastUpdated > ? AND TestResult.ValidEntry = "Y";';
 };
 exports.patientQuestionnaireTableFields = function()
 {
@@ -270,7 +272,7 @@ exports.sendMessage=function(objectRequest)
     var messageDate=objectRequest.MessageDate;
     return "INSERT INTO Messages (`MessageSerNum`, `SenderRole`,`ReceiverRole`, `SenderSerNum`, `ReceiverSerNum`,`MessageContent`,`ReadStatus`,`MessageDate`,`SessionId`,`LastUpdated`) VALUES (NULL,'"+senderRole+"','"+ receiverRole + "', '"+senderSerNum+"','"+ receiverSerNum +"','" +messageContent+"',0,'"+messageDate+"','"+token+"' ,CURRENT_TIMESTAMP )";
 };
-exports.getUserFromEmail=function()
+exports.getPatientFromEmail=function()
 {
     return "SELECT PatientSerNum FROM Patient WHERE Email = ?";
 };
@@ -308,7 +310,6 @@ exports.updateDeviceIdentifiers = function()
 };
 exports.getMapLocation=function(qrCode)
 {
-    console.log("SELECT * FROM HospitalMap WHERE QRMapAlias = '"+qrCode+"';");
     return "SELECT * FROM HospitalMap WHERE QRMapAlias = '"+qrCode+"';";
 };
 

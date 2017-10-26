@@ -90,12 +90,10 @@
 
             vm.testResultsByType = LabResults.getTestResultsByType();
 
-             testResults = vm.testResultsByType[vm.title].testResults;
+            testResults = vm.testResultsByType[vm.title].testResults;
             vm.historicViewTestResult = vm.testResultsByType[vm.title].testResults;
 
             vm.testResultsByDateArray = LabResults.getTestResultsArrayByDate();
-
-            Logger.sendLog('Lab Results', test.ComponentName || test.testResults[0].ComponentName);
 
         }
 
@@ -132,6 +130,8 @@
                 dv[1] = parseFloat(testResults[i].TestValue);
                 reformedData.push(dv);
             }
+
+            reformedData.reverse();
 
             /*********************************************
              * FINDING THE MAX AND MIN VALUES FOR CHARTING

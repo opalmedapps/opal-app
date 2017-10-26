@@ -9,10 +9,10 @@
         .module('MUHCApp')
         .controller('EducationalMaterialController', EducationalMaterialController);
 
-    EducationalMaterialController.$inject = ['NavigatorParameters', '$scope', 'EducationalMaterial','Logger', 'NetworkStatus'];
+    EducationalMaterialController.$inject = ['NavigatorParameters', '$scope', 'EducationalMaterial','NetworkStatus'];
 
     /* @ngInject */
-    function EducationalMaterialController(NavigatorParameters, $scope, EducationalMaterial, Logger, NetworkStatus) {
+    function EducationalMaterialController(NavigatorParameters, $scope, EducationalMaterial, NetworkStatus) {
         var vm = this;
         var backButtonPressed = 0;
 
@@ -39,7 +39,6 @@
         function initData() {
             vm.noMaterials = false;
             vm.edumaterials = EducationalMaterial.setLanguage(EducationalMaterial.getEducationalMaterial());
-            Logger.sendLog('Educational Material', 'all');
         }
 
         function educationDeviceBackButton(){
