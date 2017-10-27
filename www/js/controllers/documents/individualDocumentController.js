@@ -88,7 +88,6 @@
         }
 
         function setUpPDF(document) {
-            vm.loading = false;
             uint8pf = FileManagerService.convertToUint8Array(document.Content);
 
             PDFJS.getDocument(uint8pf)
