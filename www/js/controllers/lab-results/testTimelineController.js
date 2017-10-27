@@ -132,6 +132,7 @@
             }
 
 
+            // reformedData.reverse();
             /*********************************************
              * FINDING THE MAX AND MIN VALUES FOR CHARTING
              *********************************************/
