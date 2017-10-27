@@ -30,7 +30,6 @@
         var viewerSize;
         var containerEl;
 
-        vm.rendering = true;
         vm.loading = true;
         vm.errorDownload = false;
         vm.show = false;
@@ -89,7 +88,6 @@
         }
 
         function setUpPDF(document) {
-            vm.loading = false;
             uint8pf = FileManagerService.convertToUint8Array(document.Content);
 
             PDFJS.getDocument(uint8pf)
@@ -123,7 +121,6 @@
                         }
                     }
 
-                    vm.rendering = false;
                     vm.loading = false;
                     vm.show = true;
                     $timeout(function(){vm.hide = true}, 5000);
