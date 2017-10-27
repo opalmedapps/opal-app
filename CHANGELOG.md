@@ -22,10 +22,41 @@ To invite users to upgrade in case of vulnerabilities.
 
 ## [PRODUCTION]
 
+### v1.4.3
+* Finalized for pre pen-test testing
+
+### v1.4.2
+* Fixed lab result timelines not displaying properly
+
+### v1.4.1
+* Added DB and FB password validation
+* Fixed error message not displaying when original password is incorrect on change password
+* Added new password validation on password reset
+
+
+### v1.4.0
+* Fixed password reset functionality
+* Fixed hashing mismatch
+
+### v1.3.1
+* Added translations
+
+### v1.3.0
+* Fixed proper security question handling
+
+### v1.2.4
+* Fixed password not being synced error handling
+* Fixed finger unlock lockout issue
+* Fixed invalid oob code error handling
+
+
+### v1.2.2
+* Fixed $state.go() bug
+
 ### v1.2.1 (patch)
-* Fix notifications bug
-* Fix educational material bug
-* Fix questionnaires bug
+* Fixed notifications bug
+* Fixed educational material bug
+* Fixed questionnaires bug
 
 ### v1.2.0
 * ##### Penetration test ready version of the app
