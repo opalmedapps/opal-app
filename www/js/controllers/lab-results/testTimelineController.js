@@ -131,8 +131,9 @@
                 reformedData.push(dv);
             }
 
-            reformedData.reverse();
+            console.log(JSON.stringify(reformedData));
 
+            // reformedData.reverse();
             /*********************************************
              * FINDING THE MAX AND MIN VALUES FOR CHARTING
              *********************************************/
