@@ -13,15 +13,16 @@
         .controller('ChangeSettingController', ChangeSettingController);
 
     ChangeSettingController.$inject = ['$filter', 'FirebaseService', 'UserPreferences', 'Patient', 'RequestToServer',
-        '$timeout', 'UserAuthorizationInfo'];
+        '$timeout', 'UserAuthorizationInfo', 'NavigatorParameters', '$window'];
 
     /* @ngInject */
     function ChangeSettingController($filter, FirebaseService, UserPreferences, Patient, RequestToServer, $timeout,
-                                     UserAuthorizationInfo) {
+                                     UserAuthorizationInfo, NavigatorParameters, $window) {
 
         var vm = this;
         var page;
         var parameters;
+        var navigatorName;
         vm.updateValue = updateValue;
         vm.changeFont = changeFont;
         vm.changeLanguage = changeLanguage;
@@ -35,7 +36,8 @@
         function activate() {
             //Mappings between parameters and translation
             //Navigator parameter
-            page = settingsNavigator.getCurrentPage();
+            navigatorName = NavigatorParameters.getParameters().Navigator;
+            page = $window[navigatorName].getCurrentPage();
             parameters = page.options.param;
             //Actual Value
             vm.actualValue = '';

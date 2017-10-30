@@ -15,10 +15,10 @@
         .module('MUHCApp')
         .controller('accountSettingController', accountSettingController);
 
-    accountSettingController.$inject = ['Patient', 'UserPreferences', '$scope', '$timeout', 'NavigatorParameters'];
+    accountSettingController.$inject = ['Patient', 'UserPreferences', '$scope', '$timeout', 'NavigatorParameters', '$window'];
 
     /* @ngInject */
-    function accountSettingController(Patient, UserPreferences, $scope, $timeout, NavigatorParameters) {
+    function accountSettingController(Patient, UserPreferences, $scope, $timeout, NavigatorParameters, $window) {
 
         var vm = this;
         vm.title = 'accountSettingController';
@@ -32,41 +32,42 @@
         vm.Language = UserPreferences.getLanguage();
         vm.ProfilePicture = Patient.getProfileImage();
         vm.passwordLength = 6;
+        var navigatorName;
 
         vm.accountDeviceBackButton = accountDeviceBackButton;
         vm.goToGeneralSettings = goToGeneralSettings;
+        vm.goToUpdateAccountField = goToUpdateAccountField;
 
         activate();
 
         ////////////////
 
         function activate() {
-
             loadSettings();
-
             // Setting our parameters for pushing and popping pages
             NavigatorParameters.setParameters({
                 'Navigator':'settingsNavigator'
             });
+            navigatorName = NavigatorParameters.getParameters().Navigator;
 
             // After a page is popped reintialize the settings.
-            settingsNavigator.on('postpop', function() {
+            $window[navigatorName].on('postpop', function() {
                 $timeout(function() {
                     loadSettings();
                 });
 
             });
 
-            settingsNavigator.on('prepush', function(event) {
-                if (settingsNavigator._doorLock.isLocked()) {
+            $window[navigatorName].on('prepush', function(event) {
+                if ($window[navigatorName]._doorLock.isLocked()) {
                     event.cancel();
                 }
             });
 
             //On destroy, dettach listener
             $scope.$on('$destroy', function() {
-                settingsNavigator.off('postpop');
-                settingsNavigator.off('prepush');
+                $window[navigatorName].off('postpop');
+                $window[navigatorName].off('prepush');
             });
 
         }
@@ -78,9 +79,13 @@
 
         function goToGeneralSettings() {
             NavigatorParameters.setParameters({
-                'Navigator': 'settingsNavigator'
+                'Navigator': navigatorName
             });
-            settingsNavigator.pushPage('./views/init/init-settings.html');
+            $window[navigatorName].pushPage('./views/init/init-settings.html');
+        }
+
+        function goToUpdateAccountField(param, animation) {
+            $window[navigatorName].pushPage('views/settings/update-account-field.html', {param:param},{ animation : animation } );
         }
 
         function loadSettings() {
