@@ -166,10 +166,6 @@
             EncryptionService.generateEncryptionHash();
 
             if(passwordReset){
-                console.log("ssn: " + vm.ssn);
-                console.log("ssn uppercase: " + vm.ssn.toUpperCase());
-                console.log("ssn hash: " +  EncryptionService.hash(vm.ssn.toUpperCase()));
-                console.log("key : " + key);
                 EncryptionService.generateTempEncryptionHash(EncryptionService.hash(vm.ssn.toUpperCase()), key);
                 $scope.initNavigator.pushPage('./views/login/new-password.html', {data: {oobCode: ResetPassword.getParameter("oobCode", parameters.url)}});
             }
