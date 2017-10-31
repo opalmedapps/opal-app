@@ -48,7 +48,27 @@
                 </ons-list-item>
                 <!--CHECK-IN TO APPOINTMENTS-->
                 <ons-list-header class="person-list-header" ng-class="fontSizeTitle">{{"OVERVIEW"|translate}}</ons-list-header>
-                <ons-list-item modifier="tappable chevron" class="item" ng-click="h.goToCheckinAppointments(h.todaysAppointments)">
+                <ons-list-item ng-hide="h.allCheckedIn || h.no_appointments" modifier="chevron tappable" class="item" ng-click="h.goToCheckinAppointments(h.todaysAppointments)">
+                    <ons-row align="center">
+                        <ons-col width="60px" style="text-align: center">
+                            <div>
+                                <i ng-hide="!h.allCheckedIn" class="fa fa-check-square-o fa-2x" style="color:#4CAF50;"></i>
+                                <i ng-hide="h.allCheckedIn || h.no_appointments" class="fa fa-square-o fa-2x animated pulse" style="display: none; color:#4CAF50;"></i><span ng-hide="h.allCheckedIn || h.no_appointments" class="notification" style="position: absolute; margin-left: -7px"> {{ h.todaysAppointments.length }}</span>
+                                <i ng-if="h.no_appointments" class="fa fa-square-o fa-2x" style="color:#9E9E9E;"></i>
+                            </div>
+                        </ons-col>
+                        <ons-col>
+                            <header>
+                                <span style="margin-top: 0" class="item-title" ng-class="fontSizeTitle">{{"CHECKIN"|translate}}</span>
+                            </header>
+                            <p class="item-desc" ng-class="fontSizeDesc">{{h.checkInMessage|translate}} {{RoomLocation}}</p>
+                            <p class="item-desc" ng-class="fontSizeDesc">{{h.calledApp["AppointmentType_"+h.language]}}</p>
+                            <p class="item-desc" ng-class="fontSizeDesc">{{h.waitingTimeEstimates[0]}}</p>
+                            <!--<p class="item-desc" ng-class="fontSizeDesc" style="color:orange" ng-show ="checkinEstimate&&showHomeScreenUpdate">{{"ESTIMATEDWAIT"|translate}}: {{checkinEstimate}} minutes</p>-->
+                        </ons-col>
+                    </ons-row>
+                </ons-list-item>
+                <ons-list-item ng-show="h.allCheckedIn || h.no_appointments" class="item" ng-click="h.goToCheckinAppointments(h.todaysAppointments)">
                     <ons-row align="center">
                         <ons-col width="60px" style="text-align: center">
                             <div>
