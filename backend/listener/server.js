@@ -44,8 +44,8 @@ ref.set(null)
 
 // Periodically clear requests that are still on Firebase
 setInterval(function(){
-    listenForRequest('requests');
-    listenForRequest('passwordResetRequests');
+    // listenForRequest('requests');
+    // listenForRequest('passwordResetRequests');
 
     clearTimeoutRequests();
     clearClientRequests();
