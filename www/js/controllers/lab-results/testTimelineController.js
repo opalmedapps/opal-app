@@ -131,7 +131,6 @@
                 reformedData.push(dv);
             }
 
-            console.log(JSON.stringify(reformedData));
 
             // reformedData.reverse();
             /*********************************************

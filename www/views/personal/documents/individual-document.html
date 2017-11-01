@@ -9,7 +9,7 @@
         </div>
     </ons-toolbar>
 
-    <div ng-show="doc.loading||doc.rendering" align="center" style="margin-top:25vh">
+    <div ng-show="doc.loading" align="center" style="margin-top:25vh">
         <svg class="progress-circular">
             <circle class="progress-circular__primary" cx="50%" cy="50%" r="40%" fill="none" stroke-width="10%" stroke-miterlimit="10"/>
         </svg>
@@ -23,7 +23,7 @@
     <div class="popup">
         <span class="popuptext" ng-class="{'popup-show' : doc.show, 'popup-hide': doc.hide}">{{"TAPTOZOOM"| translate}}</span>
     </div>
-    <div id="holder" ng-hide="doc.loading||doc.rendering" align="center"></div>
+    <div id="holder" ng-hide="doc.loading" align="center"></div>
     <ons-modal var="modal">
         <h3>Warning!</h3>
         <ons-icon icon="ion-alert-circled" size="60px"></ons-icon>
@@ -33,5 +33,4 @@
         <ons-button style="margin-top: 5%; margin-left: 50px; font-size: 22px; background-color: #F44336" ng-click="doc.share()">{{"CONTINUE"|translate}}</ons-button>
     </ons-modal>
 </ons-page>
-
 
