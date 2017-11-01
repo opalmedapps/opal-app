@@ -51,6 +51,7 @@ setInterval(function(){
 logger.log('debug','Initialize listeners: ');
 listenForRequest('requests');
 listenForRequest('passwordResetRequests');
+detectOffline();
 
 /*********************************************
  * FUNCTIONS
@@ -64,7 +65,7 @@ function listenForRequest(requestType){
             handleRequest(requestType,snapshot);
     },
         function(error){
-            console.log(JSON.stringify(error));
+            logger.log('info', JSON.stringify(error));
 
         });
 }
@@ -229,4 +230,18 @@ function completeRequest(headers, success, key)
         .catch(function (error) {
             logger.error('Error writing to firebase', {error:error});
         });
+}
+
+
+function detectOffline(){
+    const NODESERVERONLINE="NodeSeverStatus";
+    ref.child("NODESERVERONLINE").set("Online");
+    ref.child("NODESERVERONLINE").onDisconnect().set("Offline!");
+
+    ref.on("child_added",function(snapshot, prevChild){
+        if (snapshot.key()!== NODESERVERONLINE) console.log(snapshot.val());
+    }, function(errorObject){
+        console.log("Error reading Firebase: " + errorObject.code);
+    });
+
 }
