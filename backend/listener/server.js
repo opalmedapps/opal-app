@@ -63,6 +63,10 @@ detectOffline();
 // Listen for firebase changes and send responses for requests
 function listenForRequest(requestType){
     logger.log('debug','Starting '+ requestType+' listener.');
+
+    //disconnect any existing listeners..
+    ref.child(requestType).off();
+
     ref.child(requestType).on('child_added',
         function(snapshot){
             handleRequest(requestType,snapshot);
@@ -128,14 +132,12 @@ function clearClientRequests(){
         var now=(new Date()).getTime();
         var requestData=snapshot.val();
         for (var requestKey in requestData) {
-            if(requestData[requestKey].hasOwnProperty('Timestamp')&&now-requestData[requestKey].Timestamp>60000)
-            {
-                logger.log('info','Deleting leftover requests on firebase', {
+            if(requestData[requestKey].hasOwnProperty('Timestamp')&&now-requestData[requestKey].Timestamp>60000) {
+                logger.log('info', 'Deleting leftover requests on firebase', {
                     requestKey: requestKey
                 });
-                ref.child('requests/'+requestKey).set(null);
+                ref.child('requests/' + requestKey).set(null);
             }
-
         }
     });
 }
@@ -241,10 +243,17 @@ function detectOffline(){
     console.log('Detecting network status...');
 
     ref.child("NODESERVERONLINE").set("Online");
-    ref.child("NODESERVERONLINE").onDisconnect().set("Offline!");
+    ref.child("NODESERVERONLINE").onDisconnect().set("Offline");
 
     ref.child("NODESERVERONLINE").on("value",function(snapshot, prevChild){
-        console.log("network status: " + snapshot.val());
+       if(snapshot.val() === 'Offline'){
+
+           logger.error('Went offline, restarting listeners...');
+
+           listenForRequest('requests');
+           listenForRequest('passwordResetRequests');
+       }
+
     }, function(errorObject){
         console.log("Error reading Firebase: " + errorObject.code);
     });
