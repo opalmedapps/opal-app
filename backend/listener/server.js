@@ -46,9 +46,11 @@ ref.set(null)
 setInterval(function(){
     clearTimeoutRequests();
     clearClientRequests();
+
 },60000);
 
 logger.log('debug','Initialize listeners: ');
+detectOffline();
 listenForRequest('requests');
 listenForRequest('passwordResetRequests');
 
@@ -59,9 +61,18 @@ listenForRequest('passwordResetRequests');
 // Listen for firebase changes and send responses for requests
 function listenForRequest(requestType){
     logger.log('debug','Starting '+ requestType+' listener.');
-    ref.child(requestType).on('child_added', function(snapshot){
-        handleRequest(requestType,snapshot);
-    });
+
+    //disconnect any existing listeners..
+    ref.child(requestType).off();
+
+    ref.child(requestType).on('child_added',
+        function(snapshot){
+            handleRequest(requestType,snapshot);
+    },
+        function(error){
+            logger.log('info', JSON.stringify(error));
+
+        });
 }
 
 function handleRequest(requestType, snapshot){
@@ -119,14 +130,12 @@ function clearClientRequests(){
         var now=(new Date()).getTime();
         var requestData=snapshot.val();
         for (var requestKey in requestData) {
-            if(requestData[requestKey].hasOwnProperty('Timestamp')&&now-requestData[requestKey].Timestamp>60000)
-            {
-                logger.log('info','Deleting leftover requests on firebase', {
+            if(requestData[requestKey].hasOwnProperty('Timestamp')&&now-requestData[requestKey].Timestamp>60000) {
+                logger.log('info', 'Deleting leftover requests on firebase', {
                     requestKey: requestKey
                 });
-                ref.child('requests/'+requestKey).set(null);
+                ref.child('requests/' + requestKey).set(null);
             }
-
         }
     });
 }
@@ -224,4 +233,42 @@ function completeRequest(headers, success, key)
         .catch(function (error) {
             logger.error('Error writing to firebase', {error:error});
         });
+}
+
+
+function detectOffline(){
+
+    var connectedRef = db.ref(".info/connected");
+    connectedRef.on("value", function(snap) {
+        if (snap.val() === true) {
+            console.log("connected");
+        } else {
+            console.log("not connected");
+        }
+    });
+
+    ref.child("NODESERVERONLINE").onDisconnect().set("DefinitelySetToOffline", function(){
+
+            console.log('Went offline, restarting listeners');
+
+            listenForRequest('requests');
+            listenForRequest('passwordResetRequests');
+        });
+
+    ref.child("NODESERVERONLINE").on("value",function(snapshot, prevChild){
+
+        console.log("Network state change: " + snapshot.val());
+
+
+        if(snapshot.val() === 'Offline'){
+           logger.error('Went offline, restarting listeners...');
+
+           listenForRequest('requests');
+           listenForRequest('passwordResetRequests');
+        }
+
+    }, function(errorObject){
+        console.log("Error reading Firebase: " + errorObject.code);
+    });
+
 }
