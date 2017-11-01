@@ -46,6 +46,9 @@ ref.set(null)
 setInterval(function(){
     clearTimeoutRequests();
     clearClientRequests();
+
+
+    console.log('I am still here!');
 },60000);
 
 logger.log('debug','Initialize listeners: ');
