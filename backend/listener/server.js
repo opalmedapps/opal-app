@@ -234,14 +234,15 @@ function completeRequest(headers, success, key)
 
 
 function detectOffline(){
-    const NODESERVERONLINE="NodeSeverStatus";
-    ref.child("NODESERVERONLINE").set("Online");
+    console.log('detecting network status');
+    
     ref.child("NODESERVERONLINE").onDisconnect().set("Offline!");
+    ref.child(".info/connected").on("value", function(snapshot) {
 
-    ref.child("NODESERVERONLINE").on("value",function(snapshot, prevChild){
-        console.log(snapshot.val());
-    }, function(errorObject){
-        console.log("Error reading Firebase: " + errorObject.code);
+        console.log("network status: " + snapshot.val());
+
+        if (snapshot.val() === true) {
+            ref.child("NODESERVERONLINE").set("Online");
+        }
     });
-
 }
