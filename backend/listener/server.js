@@ -59,9 +59,14 @@ listenForRequest('passwordResetRequests');
 // Listen for firebase changes and send responses for requests
 function listenForRequest(requestType){
     logger.log('debug','Starting '+ requestType+' listener.');
-    ref.child(requestType).on('child_added', function(snapshot){
-        handleRequest(requestType,snapshot);
-    });
+    ref.child(requestType).on('child_added',
+        function(snapshot){
+            handleRequest(requestType,snapshot);
+    },
+        function(error){
+            console.log(JSON.stringify(error));
+
+        });
 }
 
 function handleRequest(requestType, snapshot){
