@@ -238,8 +238,8 @@ function detectOffline(){
     ref.child("NODESERVERONLINE").set("Online");
     ref.child("NODESERVERONLINE").onDisconnect().set("Offline!");
 
-    ref.on("child_added",function(snapshot, prevChild){
-        if (snapshot.key === NODESERVERONLINE) console.log(snapshot.val());
+    ref.child("NODESERVERONLINE").on("value",function(snapshot, prevChild){
+        console.log(snapshot.val());
     }, function(errorObject){
         console.log("Error reading Firebase: " + errorObject.code);
     });
