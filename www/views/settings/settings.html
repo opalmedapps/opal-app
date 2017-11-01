@@ -33,11 +33,11 @@
     <div class="settings-header" ng-class="fontSizeTitle">{{"PERSONAL"|translate}}</div>
 
     <ons-list class="settings-list">
-        <ons-list-item modifier="chevron" ng-click="settingsNavigator.pushPage('views/settings/update-account-field.html', {param:'EMAIL'},{ animation : 'slide' } )" ng-class="fontSizeDesc">
+        <ons-list-item modifier="chevron" ng-click="asc.goToUpdateAccountField('EMAIL', 'slide')" ng-class="fontSizeDesc">
             {{"EMAIL"|translate}}
             <span class="list-item-note lucent">{{asc.Email|limitLetters:12}}</span>
         </ons-list-item>
-        <ons-list-item modifier="chevron" ng-click="settingsNavigator.pushPage('views/settings/update-account-field.html', {param:'PASSWORD'},{ animation : 'slide' } )" ng-class="fontSizeDesc">
+        <ons-list-item modifier="chevron" ng-click="asc.goToUpdateAccountField('PASSWORD', 'slide')" ng-class="fontSizeDesc">
             {{"PASSWORD"|translate}}
             <span type="password" class="list-item-note lucent">{{asc.passFill|limitTo:6}}</span>
         </ons-list-item>
@@ -45,11 +45,11 @@
 
     <div class="settings-header" ng-class="fontSizeTitle">{{"PREFERENCES"|translate}}</div>
     <ons-list>
-        <ons-list-item modifier="chevron" ng-click="settingsNavigator.pushPage('views/settings/update-account-field.html', {param:'LANGUAGE'},{ animation : 'slide' } )" ng-class="fontSizeDesc">
+        <ons-list-item modifier="chevron" ng-click="asc.goToUpdateAccountField('LANGUAGE', 'slide')" ng-class="fontSizeDesc">
             {{"LANGUAGE"|translate}}
             <span class="list-item-note lucent">{{asc.Language}}</span>
         </ons-list-item>
-        <ons-list-item modifier="chevron" ng-click="settingsNavigator.pushPage('views/settings/update-account-field.html', {param:'FONTSIZE'},{ animation : 'slide' } )" ng-class="fontSizeDesc">
+        <ons-list-item modifier="chevron" ng-click="asc.goToUpdateAccountField('FONTSIZE', 'slide')" ng-class="fontSizeDesc">
             {{"FONTSIZE"|translate}}
         </ons-list-item>
     </ons-list>
