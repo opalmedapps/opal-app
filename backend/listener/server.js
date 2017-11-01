@@ -44,22 +44,15 @@ ref.set(null)
 
 // Periodically clear requests that are still on Firebase
 setInterval(function(){
-
-
-    console.log('resetting listener manually');
-
-    listenForRequest('requests');
-    listenForRequest('passwordResetRequests');
-
     clearTimeoutRequests();
     clearClientRequests();
 
 },60000);
 
 logger.log('debug','Initialize listeners: ');
+detectOffline();
 listenForRequest('requests');
 listenForRequest('passwordResetRequests');
-detectOffline();
 
 /*********************************************
  * FUNCTIONS
@@ -245,11 +238,16 @@ function completeRequest(headers, success, key)
 
 function detectOffline(){
 
-    console.log('Detecting network status...');
+    var connectedRef = db.ref(".info/connected");
+    connectedRef.on("value", function(snap) {
+        if (snap.val() === true) {
+            console.log("connected");
+        } else {
+            console.log("not connected");
+        }
+    });
 
-    ref.child("NODESERVERONLINE").set("Online");
-    ref.child("NODESERVERONLINE").onDisconnect().set("Offline")
-        .then(function(){
+    ref.child("NODESERVERONLINE").onDisconnect().set("DefinitelySetToOffline", function(){
 
             console.log('Went offline, restarting listeners');
 
@@ -259,11 +257,10 @@ function detectOffline(){
 
     ref.child("NODESERVERONLINE").on("value",function(snapshot, prevChild){
 
-        console.log(snapshot.val());
+        console.log("Network state change: " + snapshot.val());
 
 
         if(snapshot.val() === 'Offline'){
-
            logger.error('Went offline, restarting listeners...');
 
            listenForRequest('requests');
