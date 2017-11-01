@@ -241,7 +241,7 @@ function detectOffline(){
     var connectedRef = db.ref(".info/connected");
     connectedRef.on("value", function(snap) {
 
-        console.log("snapshot at .info/connected: " + JSON.stringify(snap));
+        console.log("snapshot at .info/connected: " + snap.val());
 
         if (snap.val() === true) {
             console.log("is connected based on .info/connected");
@@ -250,7 +250,7 @@ function detectOffline(){
         }
     });
 
-    ref.child("NODESERVERONLINE").set("Online");
+
     ref.child("NODESERVERONLINE").onDisconnect().set("DefinitelySetToOffline", function(){
 
             console.log('Disconnected, restarting listeners');
@@ -258,6 +258,7 @@ function detectOffline(){
             listenForRequest('requests');
             listenForRequest('passwordResetRequests');
         });
+    ref.child("NODESERVERONLINE").set("Online");
 
     ref.child("NODESERVERONLINE").on("value",function(snapshot, prevChild){
 
@@ -265,6 +266,9 @@ function detectOffline(){
 
 
         if(snapshot.val() === 'DefinitelySetToOffline'){
+
+            console.log("set to definitelyoffline...");
+
            logger.error('Went offline, restarting listeners...');
 
            listenForRequest('requests');
