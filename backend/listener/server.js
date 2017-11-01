@@ -44,11 +44,12 @@ ref.set(null)
 
 // Periodically clear requests that are still on Firebase
 setInterval(function(){
+    listenForRequest('requests');
+    listenForRequest('passwordResetRequests');
+
     clearTimeoutRequests();
     clearClientRequests();
 
-
-    console.log('I am still here!');
 },60000);
 
 logger.log('debug','Initialize listeners: ');
@@ -243,16 +244,27 @@ function detectOffline(){
     console.log('Detecting network status...');
 
     ref.child("NODESERVERONLINE").set("Online");
-    ref.child("NODESERVERONLINE").onDisconnect().set("Offline");
+    ref.child("NODESERVERONLINE").onDisconnect().set("Offline")
+        .then(function(){
+
+            console.log('Went offline, restarting listeners');
+
+            listenForRequest('requests');
+            listenForRequest('passwordResetRequests');
+        });
 
     ref.child("NODESERVERONLINE").on("value",function(snapshot, prevChild){
-       if(snapshot.val() === 'Offline'){
+
+        console.log(snapshot.val());
+
+
+        if(snapshot.val() === 'Offline'){
 
            logger.error('Went offline, restarting listeners...');
 
            listenForRequest('requests');
            listenForRequest('passwordResetRequests');
-       }
+        }
 
     }, function(errorObject){
         console.log("Error reading Firebase: " + errorObject.code);
