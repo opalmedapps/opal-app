@@ -240,16 +240,20 @@ function detectOffline(){
 
     var connectedRef = db.ref(".info/connected");
     connectedRef.on("value", function(snap) {
+
+        console.log("snapshot at .info/connected: " + JSON.stringify(snap));
+
         if (snap.val() === true) {
-            console.log("connected");
+            console.log("is connected based on .info/connected");
         } else {
-            console.log("not connected");
+            console.log("not connected based on .info/connected");
         }
     });
 
+    ref.child("NODESERVERONLINE").set("Online");
     ref.child("NODESERVERONLINE").onDisconnect().set("DefinitelySetToOffline", function(){
 
-            console.log('Went offline, restarting listeners');
+            console.log('Disconnected, restarting listeners');
 
             listenForRequest('requests');
             listenForRequest('passwordResetRequests');
@@ -260,7 +264,7 @@ function detectOffline(){
         console.log("Network state change: " + snapshot.val());
 
 
-        if(snapshot.val() === 'Offline'){
+        if(snapshot.val() === 'DefinitelySetToOffline'){
            logger.error('Went offline, restarting listeners...');
 
            listenForRequest('requests');
