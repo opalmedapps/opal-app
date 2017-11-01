@@ -69,6 +69,8 @@ exports.verifySecurityAnswer=function(requestKey,requestObject,patient)
     //If its the right security answer, also make sure is a valid SSN;
     var response = {};
 
+    console.log(unencrypted.PasswordReset, unencrypted.SSN, patient.SSN, unencrypted.Answer, patient.AnswerText);
+
     var isVerified = (unencrypted.PasswordReset)? unencrypted.SSN && unencrypted.SSN === patient.SSN && unencrypted.Answer && unencrypted.Answer === patient.AnswerText: unencrypted.Answer === patient.AnswerText;
 
     if (isVerified) {
