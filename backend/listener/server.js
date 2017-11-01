@@ -70,7 +70,7 @@ function listenForRequest(requestType){
             handleRequest(requestType,snapshot);
         },
         function(error){
-            logger.log('error', JSON.stringify(error));
+            console.log( JSON.stringify(error));
 
         });
 }
@@ -126,7 +126,6 @@ function clearTimeoutRequests()
 // Erase requests data on firebase in case the request has not been processed
 function clearClientRequests(){
     ref.child('requests').once('value').then(function(snapshot){
-        //logger.log('I am inside deleting requests');
         var now=(new Date()).getTime();
         var requestData=snapshot.val();
         for (var requestKey in requestData) {
@@ -162,7 +161,7 @@ function processRequest(headers){
                     requestKey: requestKey
                 });
             });
-    }else{
+    } else {
         mainRequestApi.apiRequestFormatter(requestKey, requestObject)
             .then(function(results){
                 r.resolve(results);

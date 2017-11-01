@@ -93,26 +93,23 @@ myApp.service('RequestToServer',['$filter','$state','NewsBanner','UserAuthorizat
                     refRequestResponse = Ref.child(responseField).child(key);
                 }
 
-
                 //Waits to obtain the request data.
-                //
                 refRequestResponse.on('value',function(snapshot){
-                    if(snapshot.exists())
-                    {
+                    if(snapshot.exists()) {
                         var data = snapshot.val();
+                        refRequestResponse.set(null);
+                        refRequestResponse.off();
 
                         var timestamp = data.Timestamp;
-                        if(data.Code === 1)
-                        {
-                            r.reject({Code:'ENCRYPTION_ERROR'});
-                        }else{
+                        if(data.Code === 1) {
 
+                            r.reject({Code:'ENCRYPTION_ERROR'});
+                        } else {
                             if(!encryptionKey||typeof encryptionKey == 'undefined') data = EncryptionService.decryptData(data);
                             data.Timestamp = timestamp;
 
                             clearTimeout(timeOut);
-                            refRequestResponse.set(null);
-                            refRequestResponse.off();
+
                             if(data.Code == '3')
                             {
                                 r.resolve(data);
@@ -121,15 +118,13 @@ myApp.service('RequestToServer',['$filter','$state','NewsBanner','UserAuthorizat
                             }
                         }
                     }
-                },function(error)
-                {
-
+                },function(error) {
+                    refRequestResponse.set(null);
+                    refRequestResponse.off();
                     r.reject(error);
                 });
                 //If request takes longer than 30000 to come back with timedout request, delete reference
-                var timeOut = setTimeout(function()
-                {
-
+                var timeOut = setTimeout(function() {
                     refRequestResponse.set(null);
                     refRequestResponse.off();
                     r.reject({Response:'timeout'});
