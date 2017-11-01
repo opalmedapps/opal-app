@@ -68,9 +68,9 @@ function listenForRequest(requestType){
     ref.child(requestType).on('child_added',
         function(snapshot){
             handleRequest(requestType,snapshot);
-    },
+        },
         function(error){
-            logger.log('info', JSON.stringify(error));
+            logger.log('error', JSON.stringify(error));
 
         });
 }
