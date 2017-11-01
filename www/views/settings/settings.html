@@ -33,10 +33,6 @@
     <div class="settings-header" ng-class="fontSizeTitle">{{"PERSONAL"|translate}}</div>
 
     <ons-list class="settings-list">
-        <ons-list-item modifier="chevron" ng-click="settingsNavigator.pushPage('views/settings/update-account-field.html', {param:'EMAIL'},{ animation : 'slide' } )" ng-class="fontSizeDesc">
-            {{"EMAIL"|translate}}
-            <span class="list-item-note lucent">{{asc.Email|limitLetters:12}}</span>
-        </ons-list-item>
         <ons-list-item modifier="chevron" ng-click="settingsNavigator.pushPage('views/settings/update-account-field.html', {param:'PASSWORD'},{ animation : 'slide' } )" ng-class="fontSizeDesc">
             {{"PASSWORD"|translate}}
             <span type="password" class="list-item-note lucent">{{asc.passFill|limitTo:6}}</span>
