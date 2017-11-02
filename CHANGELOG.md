@@ -22,6 +22,9 @@ To invite users to upgrade in case of vulnerabilities.
 
 ## [PRODUCTION]
 
+### v1.4.7
+* Fix password field not being set
+
 ### v1.4.6
 * Fix password reset field not being set
 
