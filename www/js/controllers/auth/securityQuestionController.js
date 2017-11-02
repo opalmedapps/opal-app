@@ -268,6 +268,7 @@
                 answer = answer.toUpperCase();
                 var hash = EncryptionService.hash(answer);
 
+
                 //Sets up the proper request object based on use case
                 var key = hash;
                 var firebaseRequestField = passwordReset ? 'passwordResetRequests' : undefined;
@@ -276,9 +277,12 @@
                     Question: vm.Question,
                     Answer: hash,
                     SSN: vm.ssn,
-                    Trusted: trusted,
-                    PasswordReset: passwordReset || false
+                    Trusted: trusted
                 };
+
+                if (passwordReset){
+                    parameterObject['PasswordReset'] = true;
+                }
 
                 RequestToServer.sendRequestWithResponse('VerifyAnswer',parameterObject, key, firebaseRequestField, firebaseResponseField).then(function(data)
                 {
