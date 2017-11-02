@@ -74,7 +74,7 @@ exports.verifySecurityAnswer=function(requestKey,requestObject,patient)
 
     var ssnValid = unencrypted.SSN && unencrypted.SSN.toUpperCase() === patient.SSN && unencrypted.Answer && unencrypted.Answer === patient.AnswerText;
 
-    var isVerified = (unencrypted.PasswordReset === true) ? ssnValid : unencrypted.Answer === patient.AnswerText;
+    var isVerified = (unencrypted.PasswordReset == true) ? ssnValid : unencrypted.Answer === patient.AnswerText;
 
 
     console.log("ssn validation: " + ssnValid);
