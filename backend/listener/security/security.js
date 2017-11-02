@@ -52,6 +52,8 @@ exports.verifySecurityAnswer=function(requestKey,requestObject,patient)
         return r.promise;
     }
 
+    console.log("reached here 1");
+
     //Wrap decrypt in try-catch because if error is caught that means decrypt was unsuccessful, hence incorrect security answer
     try {
         var unencrypted = utility.decrypt(requestObject.Parameters, key);
@@ -62,8 +64,10 @@ exports.verifySecurityAnswer=function(requestKey,requestObject,patient)
     	return r.promise;
     }
 
+    console.log("reached here 2");
+
     //If its not a reset password request and the passwords are not equivalent
-    if(!requestObject.Parameters.PasswordReset && unencrypted.Pass !== patient.Password) {
+    if(!requestObject.Parameters.PasswordReset && unencrypted.Password !== patient.Password) {
         r.resolve({Code:1});
         return r.promise;
     }
