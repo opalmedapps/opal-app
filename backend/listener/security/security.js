@@ -69,15 +69,17 @@ exports.verifySecurityAnswer=function(requestKey,requestObject,patient)
     //If its the right security answer, also make sure is a valid SSN;
     var response = {};
 
-    console.log(JSON.stringify(unencrypted));
-    console.log('Doing password reset: ' + (unencrypted.PasswordReset === true));
 
     var ssnValid = unencrypted.SSN && unencrypted.SSN.toUpperCase() === patient.SSN && unencrypted.Answer && unencrypted.Answer === patient.AnswerText;
+    var answerValid = unencrypted.Answer === patient.AnswerText;
+    var isVerified = false;
 
-    var isVerified = (unencrypted.PasswordReset == true) ? ssnValid : unencrypted.Answer === patient.AnswerText;
+    if(unencrypted.PasswordReset){
+        isVerified = ssnValid;
+    } else {
+        isVerified = answerValid;
+    }
 
-
-    console.log("ssn validation: " + ssnValid);
     console.log("is verified: " + isVerified);
 
     if (isVerified) {
