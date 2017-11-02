@@ -44,9 +44,12 @@
 
 
         function goToResources() {
-            var resources = EducationalMaterial.getPfpResources();
-            NavigatorParameters.setParameters({'Navigator':'generalNavigator', 'Post': resources });
-            generalNavigator.pushPage('./views/education/individual-material.html');
+            let nav = NavigatorParameters.getNavigator();
+            nav.pushPage("./views/templates/content.html",{"contentType":"pfp_resources"});
+	        //NavigatorParameters.setParameters({'Navigator':'generalNavigator'});
+            // var resources = EducationalMaterial.getPfpResources();
+            // NavigatorParameters.setParameters({'Navigator':'generalNavigator', 'Post': resources });
+            // generalNavigator.pushPage('./views/education/individual-material.html');
         }
 
     }
