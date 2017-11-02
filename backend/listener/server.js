@@ -50,7 +50,6 @@ setInterval(function(){
 },60000);
 
 logger.log('debug','Initialize listeners: ');
-detectOffline();
 listenForRequest('requests');
 listenForRequest('passwordResetRequests');
 
@@ -95,9 +94,7 @@ function handleRequest(requestType, snapshot){
     }).catch(function(error){
 
         //Log the error
-        logger.error("Error processing request!", {
-            error: error
-        });
+        logger.error("Error processing request!" + JSON.stringify(error))
     });
 }
 
@@ -153,6 +150,7 @@ function processRequest(headers){
                 r.resolve(response);
             })
             .catch(function (error) {
+                logger.error("Error processing request!" + JSON.stringify(error))
                 logger.error("Error processing request!", {
                     error: error,
                     deviceID:requestObject.DeviceId,
@@ -167,6 +165,7 @@ function processRequest(headers){
                 r.resolve(results);
             })
             .catch(function (error) {
+                logger.error("Error processing request!" + JSON.stringify(error))
                 logger.error("Error processing request!", {
                     error: error,
                     deviceID:requestObject.DeviceId,
@@ -234,48 +233,3 @@ function completeRequest(headers, success, key)
         });
 }
 
-
-function detectOffline(){
-
-    var connectedRef = db.ref(".info/connected");
-    connectedRef.on("value", function(snap) {
-
-        console.log("snapshot at .info/connected: " + snap.val());
-
-        if (snap.val() === true) {
-            console.log("is connected based on .info/connected");
-        } else {
-            console.log("not connected based on .info/connected");
-        }
-    });
-
-
-    ref.child("NODESERVERONLINE").onDisconnect().set("DefinitelySetToOffline", function(){
-
-            console.log('Disconnected, restarting listeners');
-
-            listenForRequest('requests');
-            listenForRequest('passwordResetRequests');
-        });
-    ref.child("NODESERVERONLINE").set("Online");
-
-    ref.child("NODESERVERONLINE").on("value",function(snapshot, prevChild){
-
-        console.log("Network state change: " + snapshot.val());
-
-
-        if(snapshot.val() === 'DefinitelySetToOffline'){
-
-            console.log("set to definitelyoffline...");
-
-           logger.error('Went offline, restarting listeners...');
-
-           listenForRequest('requests');
-           listenForRequest('passwordResetRequests');
-        }
-
-    }, function(errorObject){
-        console.log("Error reading Firebase: " + errorObject.code);
-    });
-
-}
