@@ -22,6 +22,12 @@ To invite users to upgrade in case of vulnerabilities.
 
 ## [PRODUCTION]
 
+### v1.4.5
+* Fix unnecessary 'You have logged in on another device' message
+
+### v1.4.4 (Nov 2nd, 2017)
+* Added blocking of concurrent users
+
 ### v1.4.3
 * Finalized for pre pen-test testing
 
