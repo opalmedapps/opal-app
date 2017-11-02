@@ -38,6 +38,8 @@ exports.verifySecurityAnswer=function(requestKey,requestObject,patient)
     var r = q.defer();
     var key = patient.AnswerText;
 
+    console.log("reached here");
+
     //TO VERIFY, PASS SECURITY ANSWER THROUGH HASH THAT TAKES A WHILE TO COMPUTE, SIMILAR TO HOW THEY DO PASSWORD CHECKS
     utility.generatePBKDFHash(key,key);
 
@@ -68,8 +70,6 @@ exports.verifySecurityAnswer=function(requestKey,requestObject,patient)
 
     //If its the right security answer, also make sure is a valid SSN;
     var response = {};
-
-    console.log(JSON.stringify(unencrypted));
 
     var ssnValid = unencrypted.SSN && unencrypted.SSN.toUpperCase() === patient.SSN && unencrypted.Answer && unencrypted.Answer === patient.AnswerText;
     var answerValid = unencrypted.Answer === patient.AnswerText;
