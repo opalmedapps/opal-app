@@ -22,6 +22,9 @@ To invite users to upgrade in case of vulnerabilities.
 
 ## [PRODUCTION]
 
+### v1.4.6
+* Fix password reset field not being set
+
 ### v1.4.5
 * Fix unnecessary 'You have logged in on another device' message
 
