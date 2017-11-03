@@ -28,7 +28,7 @@ admin.initializeApp({
     databaseURL: config.DATABASE_URL
 });
 
-admin.database.enableLogging(true);
+// admin.database.enableLogging(true);
 
 // Get reference to correct data element
 var db = admin.database();
