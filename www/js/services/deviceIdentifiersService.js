@@ -115,7 +115,6 @@ app.service('DeviceIdentifiers', [ 'RequestToServer', '$q','Constants','UserAuth
             }
 
             defer.resolve();
-
             return defer.promise;
         },
         /**

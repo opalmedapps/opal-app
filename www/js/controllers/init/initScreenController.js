@@ -166,7 +166,6 @@
          */
         function reportBugs()
         {
-        //    TODO
             initNavigator.pushPage('./views/general/bugreport/bugreport.html');
         }
 

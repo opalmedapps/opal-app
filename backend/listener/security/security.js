@@ -38,6 +38,8 @@ exports.verifySecurityAnswer=function(requestKey,requestObject,patient)
     var r = q.defer();
     var key = patient.AnswerText;
 
+    console.log("reached here");
+
     //TO VERIFY, PASS SECURITY ANSWER THROUGH HASH THAT TAKES A WHILE TO COMPUTE, SIMILAR TO HOW THEY DO PASSWORD CHECKS
     utility.generatePBKDFHash(key,key);
 
@@ -50,6 +52,8 @@ exports.verifySecurityAnswer=function(requestKey,requestObject,patient)
         return r.promise;
     }
 
+    console.log("reached here 1");
+
     //Wrap decrypt in try-catch because if error is caught that means decrypt was unsuccessful, hence incorrect security answer
     try {
         var unencrypted = utility.decrypt(requestObject.Parameters, key);
@@ -60,8 +64,10 @@ exports.verifySecurityAnswer=function(requestKey,requestObject,patient)
     	return r.promise;
     }
 
+    console.log("reached here 2");
+
     //If its not a reset password request and the passwords are not equivalent
-    if(!requestObject.Parameters.PasswordReset && unencrypted.Pass !== patient.Password) {
+    if(!requestObject.Parameters.PasswordReset && unencrypted.Password !== patient.Password) {
         r.resolve({Code:1});
         return r.promise;
     }
@@ -69,9 +75,17 @@ exports.verifySecurityAnswer=function(requestKey,requestObject,patient)
     //If its the right security answer, also make sure is a valid SSN;
     var response = {};
 
-    console.log(unencrypted.PasswordReset, unencrypted.SSN, patient.SSN, unencrypted.Answer, patient.AnswerText);
+    var ssnValid = unencrypted.SSN && unencrypted.SSN.toUpperCase() === patient.SSN && unencrypted.Answer && unencrypted.Answer === patient.AnswerText;
+    var answerValid = unencrypted.Answer === patient.AnswerText;
+    var isVerified = false;
 
-    var isVerified = (unencrypted.PasswordReset)? unencrypted.SSN && unencrypted.SSN === patient.SSN && unencrypted.Answer && unencrypted.Answer === patient.AnswerText: unencrypted.Answer === patient.AnswerText;
+    if(unencrypted.PasswordReset){
+        isVerified = ssnValid;
+    } else {
+        isVerified = answerValid;
+    }
+
+    console.log("is verified: " + isVerified);
 
     if (isVerified) {
         response = { RequestKey:requestKey, Code:3,Data:{AnswerVerified:"true"}, Headers:{RequestKey:requestKey,RequestObject:requestObject},Response:'success'};

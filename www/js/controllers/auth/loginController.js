@@ -374,6 +374,7 @@
                 if(myAuth && patientSerNum && stillActive && authDetails.Email === vm.email && vm.trusted){
                     firebase.auth().signInWithEmailAndPassword(vm.email, vm.password)
                         .then(function () {
+                            localStorage.removeItem('locked');
                             $state.go('Home');
                         }).catch(handleError);
                 } else{

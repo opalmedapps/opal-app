@@ -166,10 +166,6 @@
             EncryptionService.generateEncryptionHash();
 
             if(passwordReset){
-                console.log("ssn: " + vm.ssn);
-                console.log("ssn uppercase: " + vm.ssn.toUpperCase());
-                console.log("ssn hash: " +  EncryptionService.hash(vm.ssn.toUpperCase()));
-                console.log("key : " + key);
                 EncryptionService.generateTempEncryptionHash(EncryptionService.hash(vm.ssn.toUpperCase()), key);
                 $scope.initNavigator.pushPage('./views/login/new-password.html', {data: {oobCode: ResetPassword.getParameter("oobCode", parameters.url)}});
             }
@@ -276,9 +272,14 @@
                     Question: vm.Question,
                     Answer: hash,
                     SSN: vm.ssn,
-                    Trusted: trusted,
-                    PasswordReset: passwordReset || false
+                    Trusted: trusted
                 };
+
+                if (passwordReset){
+                    parameterObject['PasswordReset'] = true;
+                } else {
+                    parameterObject['Pass'] = UserAuthorizationInfo.getPassword();
+                }
 
                 RequestToServer.sendRequestWithResponse('VerifyAnswer',parameterObject, key, firebaseRequestField, firebaseResponseField).then(function(data)
                 {
