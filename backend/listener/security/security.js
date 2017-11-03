@@ -61,7 +61,7 @@ exports.verifySecurityAnswer=function(requestKey,requestObject,patient)
     }
 
     //If its not a reset password request and the passwords are not equivalent
-    if(!requestObject.Parameters.PasswordReset && unencrypted.Password !== patient.Password) {
+    if(!requestObject.Parameters.PasswordReset && unencrypted.Password && unencrypted.Password !== patient.Password) {
         r.resolve({Code:1});
         return r.promise;
     }
