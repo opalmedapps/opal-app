@@ -28,7 +28,7 @@ admin.initializeApp({
     databaseURL: config.DATABASE_URL
 });
 
-//admin.database.enableLogging(true);
+admin.database.enableLogging(true);
 
 // Get reference to correct data element
 var db = admin.database();
@@ -46,6 +46,7 @@ ref.set(null)
 setInterval(function(){
     clearTimeoutRequests();
     clearClientRequests();
+
 },60000);
 
 logger.log('debug','Initialize listeners: ');
@@ -59,9 +60,18 @@ listenForRequest('passwordResetRequests');
 // Listen for firebase changes and send responses for requests
 function listenForRequest(requestType){
     logger.log('debug','Starting '+ requestType+' listener.');
-    ref.child(requestType).on('child_added', function(snapshot){
-        handleRequest(requestType,snapshot);
-    });
+
+    //disconnect any existing listeners..
+    ref.child(requestType).off();
+
+    ref.child(requestType).on('child_added',
+        function(snapshot){
+            handleRequest(requestType,snapshot);
+        },
+        function(error){
+            console.log( JSON.stringify(error));
+
+        });
 }
 
 function handleRequest(requestType, snapshot){
@@ -84,9 +94,7 @@ function handleRequest(requestType, snapshot){
     }).catch(function(error){
 
         //Log the error
-        logger.error("Error processing request!", {
-            error: error
-        });
+        logger.error("Error processing request!" + JSON.stringify(error))
     });
 }
 
@@ -115,18 +123,15 @@ function clearTimeoutRequests()
 // Erase requests data on firebase in case the request has not been processed
 function clearClientRequests(){
     ref.child('requests').once('value').then(function(snapshot){
-        //logger.log('I am inside deleting requests');
         var now=(new Date()).getTime();
         var requestData=snapshot.val();
         for (var requestKey in requestData) {
-            if(requestData[requestKey].hasOwnProperty('Timestamp')&&now-requestData[requestKey].Timestamp>60000)
-            {
-                logger.log('info','Deleting leftover requests on firebase', {
+            if(requestData[requestKey].hasOwnProperty('Timestamp')&&now-requestData[requestKey].Timestamp>60000) {
+                logger.log('info', 'Deleting leftover requests on firebase', {
                     requestKey: requestKey
                 });
-                ref.child('requests/'+requestKey).set(null);
+                ref.child('requests/' + requestKey).set(null);
             }
-
         }
     });
 }
@@ -145,6 +150,7 @@ function processRequest(headers){
                 r.resolve(response);
             })
             .catch(function (error) {
+                logger.error("Error processing request!" + JSON.stringify(error))
                 logger.error("Error processing request!", {
                     error: error,
                     deviceID:requestObject.DeviceId,
@@ -153,12 +159,13 @@ function processRequest(headers){
                     requestKey: requestKey
                 });
             });
-    }else{
+    } else {
         mainRequestApi.apiRequestFormatter(requestKey, requestObject)
             .then(function(results){
                 r.resolve(results);
             })
             .catch(function (error) {
+                logger.error("Error processing request!" + JSON.stringify(error))
                 logger.error("Error processing request!", {
                     error: error,
                     deviceID:requestObject.DeviceId,
@@ -225,3 +232,4 @@ function completeRequest(headers, success, key)
             logger.error('Error writing to firebase', {error:error});
         });
 }
+
