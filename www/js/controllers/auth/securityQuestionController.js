@@ -272,9 +272,14 @@
                     Question: vm.Question,
                     Answer: hash,
                     SSN: vm.ssn,
-                    Trusted: trusted,
-                    PasswordReset: passwordReset || false
+                    Trusted: trusted
                 };
+
+                if (passwordReset){
+                    parameterObject['PasswordReset'] = true;
+                } else {
+                    parameterObject['Password'] = UserAuthorizationInfo.getPassword();
+                }
 
                 RequestToServer.sendRequestWithResponse('VerifyAnswer',parameterObject, key, firebaseRequestField, firebaseResponseField).then(function(data)
                 {

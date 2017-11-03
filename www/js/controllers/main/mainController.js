@@ -11,10 +11,10 @@
         .module('MUHCApp')
         .controller('MainController', MainController);
 
-    MainController.$inject = ["$window", "$state", '$rootScope','FirebaseService','DeviceIdentifiers','$translatePartialLoader', "LocalStorage", 'Constants', 'CleanUp', 'NavigatorParameters', 'NetworkStatus', 'RequestToServer'];
+    MainController.$inject = ["$window", "$state", '$rootScope','FirebaseService','DeviceIdentifiers','$translatePartialLoader', "LocalStorage", 'Constants', 'CleanUp', 'NavigatorParameters', 'NetworkStatus', 'RequestToServer', 'NewsBanner'];
 
     /* @ngInject */
-    function MainController($window, $state, $rootScope, FirebaseService, DeviceIdentifiers, $translatePartialLoader, LocalStorage, Constants, CleanUp, NavigatorParameters, NetworkStatus, RequestToServer) {
+    function MainController($window, $state, $rootScope, FirebaseService, DeviceIdentifiers, $translatePartialLoader, LocalStorage, Constants, CleanUp, NavigatorParameters, NetworkStatus, RequestToServer, NewsBanner) {
 
         var vm = this;
         var timeoutLockout;
@@ -77,6 +77,8 @@
             document.addEventListener("pause", onPause, false);
 
             $rootScope.$on("MonitorLoggedInUsers", function(event, uid){
+
+                $rootScope.firstTime = true;
                 addUserListener(uid);
             });
         }
@@ -178,14 +180,16 @@
          *****************************************/
         function addUserListener(uid){
             //add a listener to the firebase database that watches for the changing of the token value (this means that the same user has logged in somewhere else)
-            var refCurrentUser = firebase.database().ref(FirebaseService.getFirebaseUrl('logged_in_users/') + uid);
+            var Ref= firebase.database().ref(FirebaseService.getFirebaseUrl(null));
+            var refCurrentUser = Ref.child(FirebaseService.getFirebaseChild('logged_in_users') + uid);
 
             refCurrentUser.on('value', function() {
-                if(!$rootScope.firstTime){
+                if(!$rootScope.firstTime && !localStorage.getItem('locked')){
                     //If it is detected that a user has concurrently logged on with a different device. Then force the "first" user to log out and clear the observer
                     RequestToServer.sendRequest('Logout');
                     CleanUp.clear();
                     NewsBanner.showCustomBanner("You have logged in on another device.", '#333333', function(){}, 5000);
+                    refCurrentUser.off();
                     $state.go('init');
                 }
                 else{
