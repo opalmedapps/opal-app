@@ -12,7 +12,7 @@
     </div>
 
     <div ng-hide="vm.loading">
-        <ons-tabbar class="shadow-2" position="top" animation="fade"  style="position: fixed; margin-top: 43px; z-index: 1; height: 49px;">
+        <ons-tabbar id="questionnairesNavbar" class="shadow-2" position="top" animation="fade"  style="position: fixed; margin-top: 43px; z-index: 1; height: 49px;">
             <ons-tab class="shadow-2" style="background-color:#ECEFF1;" label='{{"QUESTIONNAIRE_NEW"|translate}}' icon="ion-android-add" active="true" ng-click="vm.getDesiredQuestionnaires('new')"></ons-tab>
             <ons-tab class="shadow-2" style="background-color:#ECEFF1;" label='{{"QUESTIONNAIRE_IN_PROGRESS"|translate}}' icon="ion-edit" ng-click="vm.getDesiredQuestionnaires('progress')"></ons-tab>
             <ons-tab class="shadow-2" style="background-color:#ECEFF1;" label='{{"QUESTIONNAIRE_COMPLETED"|translate}}' icon="ion-android-done" ng-click="vm.getDesiredQuestionnaires('completed')"></ons-tab>
