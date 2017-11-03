@@ -38,8 +38,6 @@ exports.verifySecurityAnswer=function(requestKey,requestObject,patient)
     var r = q.defer();
     var key = patient.AnswerText;
 
-    console.log("reached here");
-
     //TO VERIFY, PASS SECURITY ANSWER THROUGH HASH THAT TAKES A WHILE TO COMPUTE, SIMILAR TO HOW THEY DO PASSWORD CHECKS
     utility.generatePBKDFHash(key,key);
 
@@ -52,8 +50,6 @@ exports.verifySecurityAnswer=function(requestKey,requestObject,patient)
         return r.promise;
     }
 
-    console.log("reached here 1");
-
     //Wrap decrypt in try-catch because if error is caught that means decrypt was unsuccessful, hence incorrect security answer
     try {
         var unencrypted = utility.decrypt(requestObject.Parameters, key);
@@ -63,8 +59,6 @@ exports.verifySecurityAnswer=function(requestKey,requestObject,patient)
 	    r.resolve({ RequestKey:requestKey, Code:3,Data:{AnswerVerified:"false"}, Headers:{RequestKey:requestKey,RequestObject:requestObject},Response:'success'});
     	return r.promise;
     }
-
-    console.log("reached here 2");
 
     //If its not a reset password request and the passwords are not equivalent
     if(!requestObject.Parameters.PasswordReset && unencrypted.Password !== patient.Password) {
@@ -84,8 +78,6 @@ exports.verifySecurityAnswer=function(requestKey,requestObject,patient)
     } else {
         isVerified = answerValid;
     }
-
-    console.log("is verified: " + isVerified);
 
     if (isVerified) {
         response = { RequestKey:requestKey, Code:3,Data:{AnswerVerified:"true"}, Headers:{RequestKey:requestKey,RequestObject:requestObject},Response:'success'};
