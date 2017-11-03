@@ -2870,3 +2870,8 @@ and (max-device-width : 321px)
 #more-info-button:hover {
   background-color: #59D45D;
 }
+
+.notification {
+    position: absolute;
+    margin-left: -10px;
+}
