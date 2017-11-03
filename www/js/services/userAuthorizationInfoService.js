@@ -79,7 +79,7 @@ myApp.service('UserAuthorizationInfo', function () {
         */
         setPassword:function(pass){
             //Encode password
-            pass=CryptoJS.SHA256(pass).toString();
+            pass=CryptoJS.SHA512(pass).toString();
             password=pass;
            
         },

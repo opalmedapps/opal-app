@@ -50,7 +50,6 @@ setInterval(function(){
 },60000);
 
 logger.log('debug','Initialize listeners: ');
-detectOffline();
 listenForRequest('requests');
 listenForRequest('passwordResetRequests');
 
@@ -70,7 +69,7 @@ function listenForRequest(requestType){
             handleRequest(requestType,snapshot);
         },
         function(error){
-            logger.log('error', JSON.stringify(error));
+            console.log( JSON.stringify(error));
 
         });
 }
@@ -95,9 +94,7 @@ function handleRequest(requestType, snapshot){
     }).catch(function(error){
 
         //Log the error
-        logger.error("Error processing request!", {
-            error: error
-        });
+        logger.error("Error processing request!" + JSON.stringify(error))
     });
 }
 
@@ -126,7 +123,6 @@ function clearTimeoutRequests()
 // Erase requests data on firebase in case the request has not been processed
 function clearClientRequests(){
     ref.child('requests').once('value').then(function(snapshot){
-        //logger.log('I am inside deleting requests');
         var now=(new Date()).getTime();
         var requestData=snapshot.val();
         for (var requestKey in requestData) {
@@ -154,6 +150,7 @@ function processRequest(headers){
                 r.resolve(response);
             })
             .catch(function (error) {
+                logger.error("Error processing request!" + JSON.stringify(error))
                 logger.error("Error processing request!", {
                     error: error,
                     deviceID:requestObject.DeviceId,
@@ -162,12 +159,13 @@ function processRequest(headers){
                     requestKey: requestKey
                 });
             });
-    }else{
+    } else {
         mainRequestApi.apiRequestFormatter(requestKey, requestObject)
             .then(function(results){
                 r.resolve(results);
             })
             .catch(function (error) {
+                logger.error("Error processing request!" + JSON.stringify(error))
                 logger.error("Error processing request!", {
                     error: error,
                     deviceID:requestObject.DeviceId,
@@ -235,40 +233,3 @@ function completeRequest(headers, success, key)
         });
 }
 
-
-function detectOffline(){
-
-    var connectedRef = db.ref(".info/connected");
-    connectedRef.on("value", function(snap) {
-        if (snap.val() === true) {
-            console.log("connected");
-        } else {
-            console.log("not connected");
-        }
-    });
-
-    ref.child("NODESERVERONLINE").onDisconnect().set("DefinitelySetToOffline", function(){
-
-            console.log('Went offline, restarting listeners');
-
-            listenForRequest('requests');
-            listenForRequest('passwordResetRequests');
-        });
-
-    ref.child("NODESERVERONLINE").on("value",function(snapshot, prevChild){
-
-        console.log("Network state change: " + snapshot.val());
-
-
-        if(snapshot.val() === 'Offline'){
-           logger.error('Went offline, restarting listeners...');
-
-           listenForRequest('requests');
-           listenForRequest('passwordResetRequests');
-        }
-
-    }, function(errorObject){
-        console.log("Error reading Firebase: " + errorObject.code);
-    });
-
-}
