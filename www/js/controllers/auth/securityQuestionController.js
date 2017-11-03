@@ -278,7 +278,7 @@
                 if (passwordReset){
                     parameterObject['PasswordReset'] = true;
                 } else {
-                    parameterObject['Pass'] = UserAuthorizationInfo.getPassword();
+                    parameterObject['Password'] = UserAuthorizationInfo.getPassword();
                 }
 
                 RequestToServer.sendRequestWithResponse('VerifyAnswer',parameterObject, key, firebaseRequestField, firebaseResponseField).then(function(data)
