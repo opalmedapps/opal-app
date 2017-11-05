@@ -16,23 +16,26 @@ var q 			        =      	require("q");
 var config              =       require('./config.json');
 var logger              =       require('./logs/logger.js');
 
+const OpalQueue = require('./utility/queue').OpalQueue;
+
 /*********************************************
  * INTIALIZE
  *********************************************/
 
 // Initialize firebase connection
 var serviceAccount = require(config.FIREBASE_ADMIN_KEY);
-
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
     databaseURL: config.DATABASE_URL
 });
-
-admin.database.enableLogging(true);
+//admin.database.enableLogging(true);
 
 // Get reference to correct data element
 var db = admin.database();
-var ref = db.ref("/dev2");
+var ref = db.ref("/dev3");
+
+//Main queue to handle results sequentially
+let mainQueue = new OpalQueue();
 
 // Ensure there is no leftover data on firebase
 ref.set(null)
@@ -60,7 +63,6 @@ listenForRequest('passwordResetRequests');
 // Listen for firebase changes and send responses for requests
 function listenForRequest(requestType){
     logger.log('debug','Starting '+ requestType+' listener.');
-
     //disconnect any existing listeners..
     ref.child(requestType).off();
 
@@ -74,30 +76,66 @@ function listenForRequest(requestType){
         });
 }
 
+/**
+ * handleRequest
+ * @description Enqueues request for processing.
+ * @param requestType
+ * @param snapshot
+ */
 function handleRequest(requestType, snapshot){
-    var headers = {key: snapshot.key, objectRequest: snapshot.val()};
-    processRequest(headers).then(function(response){
-
-        // Log before uploading to Firebase. Check that it was not a simple log
-        if (response.Headers.RequestObject.Request !== 'Log') {
-            logger.log('info', "Completed response", {
-                deviceID: response.Headers.RequestObject.DeviceId,
-                userID: response.Headers.RequestObject.UserID,
-                request: response.Headers.RequestObject.Request +
-                (response.Headers.RequestObject.Request === 'Refresh' ? ": " + response.Headers.RequestObject.Parameters.Fields.join(' ') : ""),
-                requestKey: response.Headers.RequestKey
-            });
-        }
-
-        uploadToFirebase(response, requestType);
-
-    }).catch(function(error){
-
-        //Log the error
-        logger.error("Error processing request!" + JSON.stringify(error))
-    });
+    let headers = {key: snapshot.key, objectRequest: snapshot.val(), requestType: requestType};
+	mainQueue.enqueue(headers);
+    if(!mainQueue.inProgress){
+        console.log("INITIATING PROCESS OPAL QUEUE");
+        processOpalQueue();
+    }
 }
 
+function processOpalQueue(){
+	console.log("Processing request");
+	mainQueue.inProgress = true;
+	let headers =  mainQueue.dequeue();
+	console.log(`SIZE OF QUEUE: ${mainQueue.head}, DATE OF REQUEST: ${new Date(headers.objectRequest.Timestamp).toISOString()}`);
+	processRequest(headers).then((response)=>{
+        logResponse(response);
+		uploadToFirebase(response, headers.requestType).then(()=>{
+			processNext();
+        }).catch((error)=>{
+			logError(error);
+			processNext();
+        });
+
+	}).catch(function(error){
+        logError(error);
+		processNext();
+	});
+}
+function processNext() {
+    console.log("Process next");
+	if(!mainQueue.isEmpty())
+	{
+		processOpalQueue();
+	}else{
+	    console.log("QUEUE IS EMPTY");
+		mainQueue.inProgress = false;
+	}
+}
+function logResponse(response){
+	// Log before uploading to Firebase. Check that it was not a simple log
+	if (response.Headers.RequestObject.Request !== 'Log') {
+		logger.log('info', "Completed response", {
+			deviceID: response.Headers.RequestObject.DeviceId,
+			userID: response.Headers.RequestObject.UserID,
+			request: response.Headers.RequestObject.Request +
+			(response.Headers.RequestObject.Request === 'Refresh' ? ": " + response.Headers.RequestObject.Parameters.Fields.join(' ') : ""),
+			requestKey: response.Headers.RequestKey
+		});
+	}
+}
+function logError(err)
+{
+	logger.error("Error processing request!" + JSON.stringify(error));
+}
 // Erase response data on firebase in case the response has not been processed
 function clearTimeoutRequests()
 {
@@ -181,36 +219,40 @@ function processRequest(headers){
 // Uploading the response to firebase
 function uploadToFirebase(response, key)
 {
+    return new Promise((resolve, reject)=>{
+//Need to make a copy of the data, since the encryption key needs to be read
+	    var headers = JSON.parse(JSON.stringify(response.Headers));
+	    var success = response.Response;
+	    var requestKey = headers.RequestKey;
+	    var encryptionKey = response.EncryptionKey;
+	    var salt = response.Salt;
+	    delete response.EncryptionKey;
+	    delete response.Salt;
 
-    //Need to make a copy of the data, since the encryption key needs to be read
-    var headers = JSON.parse(JSON.stringify(response.Headers));
-    var success = response.Response;
-    var requestKey = headers.RequestKey;
-    var encryptionKey = response.EncryptionKey;
-    var salt = response.Salt;
-    delete response.EncryptionKey;
-    delete response.Salt;
-    
 
-    if(typeof encryptionKey!=='undefined' && encryptionKey!=='') response = utility.encrypt(response, encryptionKey, salt);
-    response.Timestamp = admin.database.ServerValue.TIMESTAMP;
-    var path = '';
-    if (key === "requests") {
-        var userId = headers.RequestObject.UserID;
-        path = 'users/'+userId+'/'+requestKey;
-    } else if (key === "passwordResetRequests") {
-        path = 'passwordResetResponses/'+requestKey;
-    }
+	    if(typeof encryptionKey!=='undefined' && encryptionKey!=='') response = utility.encrypt(response, encryptionKey, salt);
+	    response.Timestamp = admin.database.ServerValue.TIMESTAMP;
+	    var path = '';
+	    if (key === "requests") {
+		    var userId = headers.RequestObject.UserID;
+		    path = 'users/'+userId+'/'+requestKey;
+	    } else if (key === "passwordResetRequests") {
+		    path = 'passwordResetResponses/'+requestKey;
+	    }
 
-    delete response.Headers.RequestObject;
-    logger.log('debug', path);
+	    delete response.Headers.RequestObject;
+	    logger.log('debug', path);
 
-    ref.child(path).set(response).then(function(){
-        logger.log('debug', 'Uploaded to firebase');
-        completeRequest(headers,success, key);
-    }).catch(function (error) {
-        logger.error('Error writing to firebase', {error:error});
+	    ref.child(path).set(response).then(function(){
+		    logger.log('debug', 'Uploaded to firebase');
+		    completeRequest(headers,success, key);
+		    resolve('done');
+	    }).catch(function (error) {
+		    logger.error('Error writing to firebase', {error:error});
+		    reject(error);
+	    });
     });
+
 }
 
 // Clearing the request off firebase

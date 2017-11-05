@@ -2,7 +2,7 @@ const CryptoJS    =require('crypto-js');
 const stablelibutf8=require('@stablelib/utf8');
 const nacl = require('tweetnacl');
 const stablelibbase64=require('@stablelib/base64');
-
+const EventEmitter = require('events');
 var exports=module.exports={};
 
 //Returns empty response, function used by refresh, resume, login
@@ -153,52 +153,3 @@ exports.copyObject = function(object)
   }
   return copy;
 };
-
-exports.Queue=function(){
-  return new Queue();
-};
-
-//Creates Queue class for cascading purposes
-function Queue()
-{
-  var array=[];
-  var head=0;
-  this.isEmpty=function()
-  {
-    if(head === 0)
-    {
-      return true;
-    }else{
-      return false;
-    }
-  };
-  this.size = function()
-  {
-    return array.length;
-  };
-  this.enqueueArray=function(arr)
-  {
-
-    for (var i = 0; i < arr.length; i++) {
-      array.push(arr[i]);
-      head++;
-    }
-  };
-  this.enqueue=function(field)
-  {
-    array.push(field);
-    head++;
-  };
-  this.dequeue=function()
-  {
-    if(head !== 0)
-    {
-      head--;
-      var poppedElement = array[head];
-      array.splice(head,1);
-      return poppedElement;
-    }else{
-    }
-  };
-}
-
