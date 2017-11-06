@@ -1,4 +1,5 @@
 const admin            	=   	require("firebase-admin");
+const config            =       require('./config.json');
 // Initialize firebase connection
 const serviceAccount = require(config.FIREBASE_ADMIN_KEY);
 
