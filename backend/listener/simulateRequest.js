@@ -16,7 +16,7 @@ var request3 = {"Request":"q2swiEIHiaIoXVDMqjnoChqfLXhYschUoxVn0La6WpgIi8Gv7tely
 var requestArr = [request3];
 if(process.argv[2]!=='--delete')
 {
-    writeRequests(requestArr);
+    writeRequests(requestArr, process.argv[2]);
     setInterval(()=>{
         writeRequests(requestArr);
     },30000);
@@ -30,8 +30,8 @@ if(process.argv[2]=='--delete'){
     db.ref("/dev2/users").set(null);
 }
 
-function writeRequests(arr){
-    for(var i = 0;i< 100;i++)
+function writeRequests(arr, requestNumber){
+    for(var i = 0;i< requestNumber;i++)
     {
         arr.forEach((req)=>{
             var key = ref.push(req).then(function(){
