@@ -25,12 +25,11 @@ if(process.argv[2]!=='--delete') {
 
 } else {
 
-    console.log(ref);
-    console.log('clearing dev 3');
+    console.log('clearing firebase db');
 
-    db.ref("/dev2").set(null)
+    db.ref("/dev3").set(null)
         .then(()=>{
-            console.log("finished emptying dev3");
+            console.log("finished emptying firebase db");
         }).catch((err) => {
             console.log(err);
         });
@@ -44,8 +43,7 @@ function writeRequests(arr, requestNumber){
     {
         arr.forEach((req)=>{
             ref.push(req).then(function (key) {
-                console.log(key);
-
+                console.log(i);
             }).catch((err) => {
                 console.log(err);
             });
