@@ -17,15 +17,12 @@ var requestArr = [request3];
 
 if(process.argv[2]!=='--delete') {
 
-    console.log('wtf..');
-
     writeRequests(requestArr, process.argv[2]);
     setInterval(()=>{
-        writeRequests(requestArr);
+        writeRequests(requestArr, process.argv[2]);
     }, 30000)
 
 } else {
-    ref.set(null);
     db.ref("/dev3").set(null)
         .then(()=>{
             console.log("finished emptying dev3");
@@ -33,7 +30,7 @@ if(process.argv[2]!=='--delete') {
 }
 
 function writeRequests(arr, requestNumber){
-    
+
     console.log('going to write ' + requestNumber + ' requests to firebase');
 
     for(let i = 0; i< requestNumber; i++)
