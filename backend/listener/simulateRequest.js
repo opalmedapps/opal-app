@@ -7,6 +7,7 @@ admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
     databaseURL: "https://opal-prod.firebaseio.com"
 });
+
 var db = admin.database();
 var ref = db.ref("/dev3/requests");
 var request = {"Request":"SecurityQuestion","DeviceId":"9c1640db02001e0c40510320-2915e0870b80-42609d0310-507205805f0-721340bb00760c00ac0870c90d00b20a30","Token":"eyJhbGciOiJSUzI1NiIsImtpZCI6IjQ3N2I2ZWVjZmI3MGNjOWQwOWYyNGNkY2QzYWI3MzNiNDRhNmNjZGYifQ.eyJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vb3BhbC1wcm9kIiwiYXVkIjoib3BhbC1wcm9kIiwiYXV0aF90aW1lIjoxNTA5NzI0OTE5LCJ1c2VyX2lkIjoiQjJrWXNTZXBNTmNLbjVkUjRBeHNrYUhmeVMwMiIsInN1YiI6IkIya1lzU2VwTU5jS241ZFI0QXhza2FIZnlTMDIiLCJpYXQiOjE1MDk3MjQ5MTksImV4cCI6MTUwOTcyODUxOSwiZW1haWwiOiJtdWhjLmFwcC5tb2JpbGVAZ21haWwuY29tIiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlLCJmaXJlYmFzZSI6eyJpZGVudGl0aWVzIjp7ImVtYWlsIjpbIm11aGMuYXBwLm1vYmlsZUBnbWFpbC5jb20iXX0sInNpZ25faW5fcHJvdmlkZXIiOiJwYXNzd29yZCJ9fQ.K-yie_Y9N2BB4pLfKSVj-_DreyyD5JlbIB7oYJhFsLKX-EPsFfOOtYfUrvvIPFxmfhzE-OdqfuI0O4aAtmsjHU9-jASwJIJLfHMYZY9DLnbuBAtQRkvP1fTY4yJqngtdJgTT9cOlfWyX9G3HJZqTkDIq1mrigrn9fRR75xAu_GK_EworTsbODX7NEzowb4kC_2UZY3ZBbIjTNkV9wRAleBm7KA481CdQV7W4lE7cEvxCK3aKCkJBQkPPjpSYORYw7UuZ8D66-mSPb4Wr4JEdm1iA4vwKL7aD_7yw4Jlhd5dGFwCrewFETT6_LQNUcn7hj3IVvdZFR5nuZWyTat2Pqg","UserID":"B2kYsSepMNcKn5dR4AxskaHfyS02","Parameters":{"registrationId":"5/AeP2hxGN9SnPVhS0MuVsNESXAEowZWo20X+zBuHTN6zXCWhVaFuw==","deviceUUID":"5/AeP2hxGN9SnPVhS0MuVsNESXAEowZWX3kSI9t7AYO1PXwRvoMoN8VPzoZneFHKzg==","deviceType":"5/AeP2hxGN9SnPVhS0MuVsNESXAEowZW2lunw7QbUxznHQwMJIljoNJTxZRydE0=","Password":"5/AeP2hxGN9SnPVhS0MuVsNESXAEowZWlr3+JmrVYZZf5F3DtFGQtoITm9AwKFyby305FgmWPO836Gva2mFd+UEuDiw3zlSWMD2wrn+t/q2pT70Y/9RXt15vNqkydLDl95b+G0DxjV0vQN0TnkKWyYw1I2Ybj0RYEe6+eEA1+2gFl5YIxWwouqOiyCHdAwD4XT4WWBlCMe1eX8o/DMBme6+l0LJ293xd"},"Timestamp":{".sv":"timestamp"},"UserEmail":"muhc.app.mobile@gmail.com"};
@@ -23,10 +24,16 @@ if(process.argv[2]!=='--delete') {
     }, 30000)
 
 } else {
+
+    console.log(db);
+    console.log('clearing dev 3');
+
     db.ref("/dev3").set(null)
         .then(()=>{
             console.log("finished emptying dev3");
-        })
+        }).catch((err) => {
+            console.log(err);
+        });
 }
 
 function writeRequests(arr, requestNumber){
