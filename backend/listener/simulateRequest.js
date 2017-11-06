@@ -27,7 +27,7 @@ if(process.argv[2]!=='--delete')
 console.log(process.argv[2]);
 if(process.argv[2]=='--delete'){
     ref.set(null);
-    db.ref("/dev2/users").set(null);
+    db.ref("/dev3/users").set(null);
 }
 
 function writeRequests(arr, requestNumber){
