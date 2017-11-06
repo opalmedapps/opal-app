@@ -6,7 +6,7 @@ const config            =       require('./config.json');
 
 
 admin.initializeApp({
-    credential: admin.credential.cert("/Users/rob/Downloads/opal-prod-firebase-adminsdk-qx5pt-ab905b4009.json"),
+    credential: admin.credential.cert("/Users/rob/Downloads/opal-prod.json"),
     databaseURL: "https://opal-prod.firebaseio.com"
 });
 
