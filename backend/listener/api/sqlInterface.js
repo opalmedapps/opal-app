@@ -19,6 +19,14 @@ var sqlConfig={
     database:config.MYSQL_DATABASE,
     dateStrings:true
 };
+var sqlConfig={
+	host:'localhost',
+    port:'/Applications/MAMP/tmp/mysql/mysql.sock',
+	user:'root',
+	password:'v_y_d100',
+	database:'OpalProd',
+	dateStrings:true
+};
 
 /*
  *Re-connecting the sql database, NodeJS has problems and disconnects if inactive,
