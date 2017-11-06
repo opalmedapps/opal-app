@@ -1,10 +1,12 @@
 const admin            	=   	require("firebase-admin");
 const config            =       require('./config.json');
+
+
 // Initialize firebase connection
-const serviceAccount = require(config.FIREBASE_ADMIN_KEY);
+
 
 admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount),
+    credential: admin.credential.cert("/Users/rob/Downloads/opal-prod-firebase-adminsdk-qx5pt-ab905b4009.json"),
     databaseURL: "https://opal-prod.firebaseio.com"
 });
 
@@ -27,7 +29,7 @@ if(process.argv[2]!=='--delete') {
 
     console.log('clearing firebase db');
 
-    db.ref("/dev3").set(null)
+    db.ref("/dev2").set(null)
         .then(()=>{
             console.log("finished emptying firebase db");
         }).catch((err) => {
