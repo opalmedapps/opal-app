@@ -32,7 +32,7 @@ admin.initializeApp({
 
 // Get reference to correct data element
 var db = admin.database();
-var ref = db.ref("/dev2");
+var ref = db.ref("/dev3");
 
 //Main queue to handle results sequentially
 let mainQueue = new OpalQueue();
