@@ -25,7 +25,7 @@ if(process.argv[2]!=='--delete') {
 
 } else {
 
-    console.log(db);
+    console.log(ref);
     console.log('clearing dev 3');
 
     db.ref("/dev3").set(null)
