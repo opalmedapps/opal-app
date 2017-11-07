@@ -28,23 +28,33 @@ var sqlConfig={
 	dateStrings:true
 };
 
+var pool  = mysql.createPool({
+    connectionLimit : 10,
+    // port:'/Applications/MAMP/tmp/mysql/mysql.sock',
+    host:config.HOST,
+    user:config.MYSQL_USERNAME,
+    password:config.MYSQL_PASSWORD,
+    database:config.MYSQL_DATABASE,
+    dateStrings:true
+});
+
 /*
  *Re-connecting the sql database, NodeJS has problems and disconnects if inactive,
  The handleDisconnect deals with that
  */
-var connection = mysql.createConnection(sqlConfig);
+// var connection = mysql.createConnection(sqlConfig);
 
-function handleDisconnect(myconnection) {
-    myconnection.on('error', function(err) {
-        //console.log('Re-connecting lost connection');
-        connection.destroy();
-        connection = mysql.createConnection(sqlConfig);
-        handleDisconnect(connection);
-        connection.connect();
-    });
-}
-
-handleDisconnect(connection);
+// function handleDisconnect(connection) {
+//     connection.on('error', function(err) {
+//         //console.log('Re-connecting lost connection');
+//         connection.destroy();
+//         connection = mysql.createConnection(sqlConfig);
+//         handleDisconnect(connection);
+//         connection.connect();
+//     });
+// }
+//
+// handleDisconnect(connection);
 
 var exports=module.exports={};
 
@@ -149,27 +159,31 @@ exports.runSqlQuery = function(query, parameters, processRawFunction)
 {
     var r = Q.defer();
 
-    var que = connection.query(query, parameters, function(err,rows,fields){
+    pool.getConnection(function(err, connection) {
+        var que = connection.query(query, parameters, function(err,rows,fields){
+            connection.release();
 
-        if (err) r.reject(err);
-        if(typeof rows !=='undefined')
-        {
-            if(processRawFunction&&typeof processRawFunction !=='undefined')
+            if (err) r.reject(err);
+            if(typeof rows !=='undefined')
             {
-                processRawFunction(rows).then(function(result)
+                if(processRawFunction&&typeof processRawFunction !=='undefined')
                 {
-                    r.resolve(result);
-                });
+                    processRawFunction(rows).then(function(result)
+                    {
+                        r.resolve(result);
+                    });
+                }else{
+                    r.resolve(rows);
+                }
             }else{
-                ////console.log(rows);
-                r.resolve(rows);
+                r.resolve([]);
             }
-        }else{
-            r.resolve([]);
-        }
+        });
     });
+
     return r.promise;
 };
+
 
 //Gets Patient tables based on userID,  if timestamp defined sends requests
 //that are only updated after timestamp, third parameter is an array of table names, if not present all tables are gathered
@@ -266,11 +280,14 @@ exports.updateReadStatus=function(userId, parameters)
     table = requestMappings[parameters.Field].table;
     tableSerNum = requestMappings[parameters.Field].serNum;
     id=parameters.Id;
-    var query=connection.query(queries.updateReadStatus(),[table,table, tableSerNum, id, table, userId],
-        function(error,rows,fields){
-            if(error) r.reject({Response:'error',Reason:error});
-            r.resolve({Response:'success'});
-        });
+    pool.getConnection(function(err, connection) {
+        var query = connection.query(queries.updateReadStatus(), [table, table, tableSerNum, id, table, userId],
+            function (error, rows, fields) {
+                connection.release();
+                if (error) r.reject({Response: 'error', Reason: error});
+                r.resolve({Response: 'success'});
+            });
+    });
     return r.promise;
 };
 
@@ -278,9 +295,12 @@ exports.updateReadStatus=function(userId, parameters)
 exports.sendMessage=function(requestObject)
 {
     var r=Q.defer();
-    connection.query(queries.sendMessage(requestObject),function(error,rows, fields) {
-        if(error) r.reject({Response:'error',Reason:error});
-        r.resolve({Response:'success'});
+    pool.getConnection(function(err, connection) {
+        connection.query(queries.sendMessage(requestObject), function (error, rows, fields) {
+            connection.release();
+            if (error) r.reject({Response: 'error', Reason: error});
+            r.resolve({Response: 'success'});
+        });
     });
     return r.promise;
 };
@@ -390,37 +410,42 @@ exports.checkIn=function(requestObject)
     });
     return r.promise;
 };
-exports.getDocumentsContent = function(requestObject)
-{
+exports.getDocumentsContent = function(requestObject) {
 
     var r = Q.defer();
     var documents = requestObject.Parameters;
 
     var userID = requestObject.UserID;
-    if(!(typeof documents.constructor !=='undefined'&&documents.constructor=== Array)){
-        r.reject({Response:'error',Reason:'Not an array'});
-    }else{
-        var quer = connection.query(queries.getDocumentsContentQuery(),[[documents],userID],function(err,rows,fields) {
-            if(err){
-                r.reject({Response:'error',Reason:err});
-            }else if(rows.length==0)
-            {
-                r.resolve({Response:'success',Data:'DocumentNotFound'});
-            }else{
-                LoadDocuments(rows).then(function(documents)
-                {
-                    if(documents.length==1)r.resolve({Response:'success',Data:documents[0
-                        ]});
-                    else r.resolve({Response:'success',Data:documents});
+    if (!(typeof documents.constructor !== 'undefined' && documents.constructor === Array)) {
+        r.reject({Response: 'error', Reason: 'Not an array'});
+    } else {
+        pool.getConnection(function (err, connection) {
+            var quer = connection.query(queries.getDocumentsContentQuery(), [[documents], userID], function (err, rows, fields) {
+                if (err) {
+                    connection.release();
+                    r.reject({Response: 'error', Reason: err});
+                } else if (rows.length == 0) {
+                    connection.release();
+                    r.resolve({Response: 'success', Data: 'DocumentNotFound'});
+                } else {
+                    connection.release();
+                    LoadDocuments(rows).then(function (documents) {
+                        if (documents.length == 1) r.resolve({
+                            Response: 'success', Data: documents[0
+                                ]
+                        });
+                        else r.resolve({Response: 'success', Data: documents});
 
-                }).catch(function (error) {
-                    r.reject({Response:'error', Reason:err});
-                });
-            }
+                    }).catch(function (error) {
+                        connection.release();
+                        r.reject({Response: 'error', Reason: err});
+                    });
+                }
+            });
         });
+
     }
     return r.promise;
-
 };
 //Updating field in the database tables
 exports.updateAccountField=function(requestObject)
@@ -435,22 +460,27 @@ exports.updateAccountField=function(requestObject)
         if(field=='Password')
         {
             newValue=utility.hash(newValue);
-            connection.query(queries.setNewPassword(), [newValue, patientSerNum],
-                function(error, rows, fields)
-                {
-                    if(error){
-                        r.reject({Response:'error',Reason:error});
-                    }
-                    delete requestObject.Parameters.NewValue;
-                    r.resolve({Response:'success'});
-                });
+            pool.getConnection(function (err, connection) {
+                connection.query(queries.setNewPassword(), [newValue, patientSerNum],
+                    function (error, rows, fields) {
+                        if (error) {
+                            connection.release();
+                            r.reject({Response: 'error', Reason: error});
+                        }
+                        connection.release();
+                        delete requestObject.Parameters.NewValue;
+                        r.resolve({Response: 'success'});
+                    });
+            });
         }else{
-            connection.query(queries.accountChange(patientSerNum,field,newValue,requestObject.Token),
-                function(error, rows, fields)
-                {
-                    if(error) r.reject({Response:'error',Reason:error});
-                    r.resolve({Response:'success'});
-                });
+            pool.getConnection(function (err, connection) {
+                connection.query(queries.accountChange(patientSerNum, field, newValue, requestObject.Token),
+                    function (error, rows, fields) {
+                        connection.release();
+                        if (error) r.reject({Response: 'error', Reason: error});
+                        r.resolve({Response: 'success'});
+                    });
+            });
         }
     });
     return r.promise;
@@ -462,25 +492,27 @@ exports.inputFeedback=function(requestObject)
     var UserEmail=requestObject.UserEmail;
     getPatientFromEmail(UserEmail).then(function(user)
     {
-        connection.query(queries.inputFeedback(),[user.PatientSerNum,requestObject.Parameters.FeedbackContent,requestObject.Parameters.AppRating, requestObject.Token],
-            function(error, rows, fields)
-            {
-                if(error) r.reject({Response:'error',Reason:error});
+        pool.getConnection(function (err, connection) {
+            connection.query(queries.inputFeedback(), [user.PatientSerNum, requestObject.Parameters.FeedbackContent, requestObject.Parameters.AppRating, requestObject.Token],
+                function (error, rows, fields) {
+                    connection.release();
+                    if (error) r.reject({Response: 'error', Reason: error});
 
-                var replyTo = null;
-                // Determine if the feedback is for the app or patients committee
-                if (requestObject.Parameters.Type == 'pfp'){
-                    var email = "patients4patients.contact@gmail.com";
-                    var title = "New Suggestion - Opal";
-                    replyTo = email;
-                } else {
-                    var email = "muhc.app.mobile@gmail.com";
-                    var title = "New Feedback - Opal";
-                }
-                var mailman = new Mail();
-                mailman.sendMail(email, title, requestObject.Parameters.FeedbackContent, replyTo);
-                r.resolve({Response:'success'});
-            });
+                    var replyTo = null;
+                    // Determine if the feedback is for the app or patients committee
+                    if (requestObject.Parameters.Type == 'pfp') {
+                        var email = "patients4patients.contact@gmail.com";
+                        var title = "New Suggestion - Opal";
+                        replyTo = email;
+                    } else {
+                        var email = "muhc.app.mobile@gmail.com";
+                        var title = "New Feedback - Opal";
+                    }
+                    var mailman = new Mail();
+                    mailman.sendMail(email, title, requestObject.Parameters.FeedbackContent, replyTo);
+                    r.resolve({Response: 'success'});
+                });
+        });
     });
     return r.promise;
 };
@@ -525,26 +557,29 @@ exports.updateDeviceIdentifier = function(requestObject, parameters)
 exports.addToActivityLog=function(requestObject)
 {
     var r = Q.defer();
-    connection.query(queries.logActivity(requestObject),
-        function(error, rows, fields)
-        {
-            if(error) r.reject({Response:'error', Reason:error});
-            r.resolve({Response:'success'});
+    pool.getConnection(function (err, connection) {
+        connection.query(queries.logActivity(requestObject),
+            function (error, rows, fields) {
+                connection.release();
+                if (error) r.reject({Response: 'error', Reason: error});
+                r.resolve({Response: 'success'});
 
-        });
+            });
+    });
     return r.promise;
 };
 //Gets user password for encrypting/decrypting
 exports.getFirstEncryption=function(requestObject)
 {
     var r=Q.defer();
-    //console.log("USERNAME IS " + requestObject.UserID);
-    //console.log("ID IS " + requestObject.DeviceId);
-    connection.query(queries.securityQuestionEncryption(),[requestObject.UserID],function(error,rows,fields)
-    {
-        if(error) r.reject(error);
-        if(rows) r.resolve(rows);
-        r.reject({Response:'error',Reason:"No User match in DB"});
+
+    pool.getConnection(function (err, connection) {
+        connection.query(queries.securityQuestionEncryption(), [requestObject.UserID], function (error, rows, fields) {
+            connection.release();
+            if (error) r.reject(error);
+            if (rows) r.resolve(rows);
+            r.reject({Response: 'error', Reason: "No User match in DB"});
+        });
     });
     return r.promise;
 };
@@ -554,16 +589,15 @@ exports.getFirstEncryption=function(requestObject)
 exports.getEncryption=function(requestObject)
 {
     var r=Q.defer();
-    //console.log("USERNAME IS " + requestObject.UserID);
-    //console.log("ID IS " + requestObject.DeviceId);
-    connection.query(queries.userEncryption(),[requestObject.UserID, requestObject.DeviceId],function(error,rows,fields)
-    {
-        //console.log("PASSWORD IS " + rows);
-        if(error) {
-            //console.log("sumtingwong" + error);
-            r.reject(error);
-        }
-        r.resolve(rows);
+    pool.getConnection(function (err, connection) {
+        connection.query(queries.userEncryption(), [requestObject.UserID, requestObject.DeviceId], function (error, rows, fields) {
+            connection.release();
+            if (error) {
+                //console.log("sumtingwong" + error);
+                r.reject(error);
+            }
+            r.resolve(rows);
+        });
     });
     return r.promise;
 };
@@ -575,60 +609,72 @@ exports.inputQuestionnaireAnswers = function(requestObject)
     var parameters = requestObject.Parameters;
     questionnaires.inputQuestionnaireAnswers(parameters).then(function(patientQuestionnaireSerNum)
     {
-        connection.query(queries.setQuestionnaireCompletedQuery(),[patientQuestionnaireSerNum, parameters.DateCompleted, requestObject.Token,parameters.QuestionnaireSerNum],
-            function(error, rows, fields){
-                if(error) r.reject({Response:'error',Reason:error});
-                r.resolve({Response:'success'});
-            });
+        pool.getConnection(function (err, connection) {
+            connection.query(queries.setQuestionnaireCompletedQuery(), [patientQuestionnaireSerNum, parameters.DateCompleted, requestObject.Token, parameters.QuestionnaireSerNum],
+                function (error, rows, fields) {
+                    connection.release();
+                    if (error) r.reject({Response: 'error', Reason: error});
+                    r.resolve({Response: 'success'});
+                });
+        });
     }).catch(function(error){
         r.reject(error);
     });
     return r.promise;
 };
+
 exports.getMapLocation=function(requestObject)
 {
     var qrCode=requestObject.Parameters.QRCode;
     var r=Q.defer();
-    connection.query(queries.getMapLocation(qrCode),function(error,rows,fields)
-    {
-        if(error) r.reject({Response:'error', Reason:'Problem fetching maps'});
-        r.resolve({Response:'success', Data:{MapLocation:rows[0]}});
+    pool.getConnection(function (err, connection) {
+        connection.query(queries.getMapLocation(qrCode), function (error, rows, fields) {
+            connection.release();
+            if (error) r.reject({Response: 'error', Reason: 'Problem fetching maps'});
+            r.resolve({Response: 'success', Data: {MapLocation: rows[0]}});
+        });
     });
     return r.promise;
 };
 exports.increaseSecurityAnswerAttempt = function(requestObject)
 {
     var r=Q.defer();
-    connection.query(queries.increaseSecurityAnswerAttempt(),[requestObject.DeviceId],function(error,rows,fields)
-    {
-        if(error) {
-            r.reject(error);
-        }
-        r.resolve(rows);
+    pool.getConnection(function (err, connection) {
+        connection.query(queries.increaseSecurityAnswerAttempt(), [requestObject.DeviceId], function (error, rows, fields) {
+            connection.release();
+            if (error) {
+                r.reject(error);
+            }
+            r.resolve(rows);
+        });
     });
     return r.promise;
 };
 exports.resetSecurityAnswerAttempt = function(requestObject) 
 {
     var r=Q.defer();
-    var que = connection.query(queries.resetSecurityAnswerAttempt(),[requestObject.DeviceId],function(error,rows,fields)
-    {
-        if(error) {
-            r.reject(error);
-        }
-        r.resolve(rows);
+    pool.getConnection(function (err, connection) {
+        var que = connection.query(queries.resetSecurityAnswerAttempt(), [requestObject.DeviceId], function (error, rows, fields) {
+            connection.release();
+            if (error) {
+                r.reject(error);
+            }
+            r.resolve(rows);
+        });
     });
     return r.promise;
 }
 exports.setTimeoutSecurityAnswer = function(requestObject, timestamp) 
 {
     var r=Q.defer();
-    var que = connection.query(queries.setTimeoutSecurityAnswer(),[new Date(timestamp), requestObject.DeviceId],function(error,rows,fields)
-    {
-	if(error) {
-            r.reject(error);
-        }
-        r.resolve(rows);
+    pool.getConnection(function (err, connection) {
+        var que = connection.query(queries.setTimeoutSecurityAnswer(), [new Date(timestamp), requestObject.DeviceId], function (error, rows, fields) {
+            connection.release();
+            if (error) {
+                r.reject(error);
+            }
+            r.resolve(rows);
+        });
     });
     return r.promise;
 };
@@ -639,15 +685,16 @@ exports.getPatientFieldsForPasswordReset=function(requestObject)
 
     var UserEmail = requestObject.UserEmail;
 
-    var que = connection.query(queries.getPatientFieldsForPasswordReset(),[UserEmail, requestObject.DeviceId],function(error,rows,fields)
-    {
-        
-        if(error) {
-            //console.log("Error querying patient fields", error);
-            r.reject(error);
-        }
-        ////console.log(rows);
-        r.resolve(rows);
+    pool.getConnection(function (err, connection) {
+        var que = connection.query(queries.getPatientFieldsForPasswordReset(), [UserEmail, requestObject.DeviceId], function (error, rows, fields) {
+            connection.release();
+            if (error) {
+                //console.log("Error querying patient fields", error);
+                r.reject(error);
+            }
+            ////console.log(rows);
+            r.resolve(rows);
+        });
     });
     return r.promise;
 };
@@ -655,10 +702,12 @@ exports.setNewPassword=function(password,patientSerNum)
 {
     var r=Q.defer();
 
-    connection.query(queries.setNewPassword(),[password,patientSerNum],function(error,rows,fields)
-    {
-        if(error) r.reject(error);
-        r.resolve(rows);
+    pool.getConnection(function (err, connection) {
+        connection.query(queries.setNewPassword(), [password, patientSerNum], function (error, rows, fields) {
+            connection.release();
+            if (error) r.reject(error);
+            r.resolve(rows);
+        });
     });
     return r.promise;
 };
@@ -671,10 +720,13 @@ exports.planningStepsAndEstimates = function(userId, timestamp)
 exports.getPatientDeviceLastActivity=function(userid,device)
 {
     var r=Q.defer();
-    connection.query(queries.getPatientDeviceLastActivity(userid,device),function(error,rows,fields)
-    {
-        if(error) r.reject(error);
-        r.resolve(rows[0]);
+
+    pool.getConnection(function (err, connection) {
+        connection.query(queries.getPatientDeviceLastActivity(userid, device), function (error, rows, fields) {
+            connection.release();
+            if (error) r.reject(error);
+            r.resolve(rows[0]);
+        });
     });
     return r.promise;
 };
@@ -692,19 +744,26 @@ exports.inputEducationalMaterialRating = function(requestObject)
 {
     var r = Q.defer();
     var parameters = requestObject.Parameters;
-    var sql = connection.query(queries.insertEducationalMaterialRatingQuery(),[ parameters.EducationalMaterialControlSerNum,parameters.PatientSerNum, parameters.RatingValue, requestObject.Token],
-        function(err,rows,fields){
-            if(err) r.reject({Response:'error',Reason:err});
-            else r.resolve({Response:'success'});
-        });
+
+    pool.getConnection(function (err, connection) {
+        var sql = connection.query(queries.insertEducationalMaterialRatingQuery(), [parameters.EducationalMaterialControlSerNum, parameters.PatientSerNum, parameters.RatingValue, requestObject.Token],
+            function (err, rows, fields) {
+                connection.release();
+                if (err) r.reject({Response: 'error', Reason: err});
+                else r.resolve({Response: 'success'});
+            });
+    });
     return r.promise;
 };
 exports.updateLogout=function(fields)
 {
     var r=Q.defer();
-    connection.query(queries.updateLogout(),fields,function(err, rows, fields){
-        if(err) r.reject(err);
-        r.resolve(rows);
+    pool.getConnection(function (err, connection) {
+        connection.query(queries.updateLogout(), fields, function (err, rows, fields) {
+            connection.release();
+            if (err) r.reject(err);
+            r.resolve(rows);
+        });
     });
     return r.promise;
 };
@@ -712,20 +771,27 @@ exports.updateLogout=function(fields)
 function getPatientFromEmail(email)
 {
     var r=Q.defer();
-    connection.query(queries.getPatientFromEmail(),[email],function(error, rows, fields){
-        if(error) r.reject(error);
-        if(rows) r.resolve(rows[0]);
-        r.reject({Response:'error',Reason:"No User match in DB"});
+    pool.getConnection(function (err, connection) {
+        connection.query(queries.getPatientFromEmail(), [email], function (error, rows, fields) {
+            connection.release();
+            if (error) r.reject(error);
+            if (rows) r.resolve(rows[0]);
+            r.reject({Response: 'error', Reason: "No User match in DB"});
+        });
     });
     return r.promise;
 }
 
 exports.getPasswordForVerification= function(email) {
     var r=Q.defer();
-    connection.query(queries.getPatientPasswordForVerification(),[email],function(error, rows, fields){
-        if(error) r.reject(error);
-        if(rows) r.resolve(rows[0]);
-        r.reject({Response:'error',Reason:"No User match in DB"});
+
+    pool.getConnection(function (err, connection) {
+        connection.query(queries.getPatientPasswordForVerification(), [email], function (error, rows, fields) {
+            connection.release();
+            if (error) r.reject(error);
+            if (rows) r.resolve(rows[0]);
+            r.reject({Response: 'error', Reason: "No User match in DB"});
+        });
     });
     return r.promise;
 
