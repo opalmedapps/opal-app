@@ -8,22 +8,19 @@
  *                  file 'LICENSE.txt', which is part of this source code package.
  */
 
-var mainRequestApi      =   	require('./api/main.js');
-var processApi          =       require('./api/processApiRequest');
-var admin            	=   	require("firebase-admin");
-var utility            	=   	require('./utility/utility.js');
-var q 			        =      	require("q");
-var config              =       require('./config.json');
-var logger              =       require('./logs/logger.js');
-
-const OpalQueue = require('./utility/queue').OpalQueue;
+const mainRequestApi    = require('./api/main.js');
+const processApi        = require('./api/processApiRequest');
+const admin             = require("firebase-admin");
+const utility           = require('./utility/utility.js');
+const q                 = require("q");
+const config            = require('./config.json');
+const logger            = require('./logs/logger.js');
+const OpalQueue         = require('./utility/queue').OpalQueue;
 
 /*********************************************
- * INTIALIZE
+ * INITIALIZE
  *********************************************/
-
-// Initialize firebase connection
-var serviceAccount = require(config.FIREBASE_ADMIN_KEY);
+const serviceAccount = require(config.FIREBASE_ADMIN_KEY);
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
     databaseURL: config.DATABASE_URL
@@ -32,8 +29,9 @@ admin.initializeApp({
 if(process.env.DEBUG) admin.database.enableLogging(true);
 
 // Get reference to correct data element
-var db = admin.database();
-var ref = db.ref("/dev2");
+const db = admin.database();
+const ref = db.ref("/dev2");
+
 if(process.env.DEBUG) console.log("DEBUG MODE");
 
 //Main queue to handle results sequentially
@@ -78,7 +76,7 @@ function listenForRequest(requestType){
             handleRequest(requestType,snapshot);
         },
         function(error){
-	        logger.log('error','Firebase reading error',{error:error});
+	        logError(error);
             if(process.env.DEBUG) console.log( JSON.stringify(error));
         });
 }
@@ -172,10 +170,10 @@ function logError(err, requestObject, requestKey) {
  */
 function clearTimeoutRequests() {
     ref.child('users').once('value').then(function(snapshot){
-        var now=(new Date()).getTime();
-        var usersData=snapshot.val();
-        for (var user in usersData) {
-            for(var requestKey in usersData[user])
+        const now = (new Date()).getTime();
+        const usersData = snapshot.val();
+        for (const user in usersData) {
+            for(const requestKey in usersData[user])
             {
                 if(usersData[user][requestKey].hasOwnProperty('Timestamp')&&now-usersData[user][requestKey].Timestamp>60000)
                 {
@@ -197,9 +195,9 @@ function clearTimeoutRequests() {
  */
 function clearClientRequests(){
     ref.child('requests').once('value').then(function(snapshot){
-        var now = (new Date()).getTime();
-        var requestData=snapshot.val();
-        for (var requestKey in requestData) {
+        const now = (new Date()).getTime();
+        const requestData = snapshot.val();
+        for (const requestKey in requestData) {
             if(requestData[requestKey].hasOwnProperty('Timestamp')&&now-requestData[requestKey].Timestamp>60000) {
                 logger.log('info', 'Deleting leftover requests on firebase', {
                     requestKey: requestKey
@@ -217,9 +215,9 @@ function clearClientRequests(){
  */
 function processRequest(headers){
 
-    var r = q.defer();
-    var requestKey = headers.key;
-    var requestObject= headers.objectRequest;
+    const r = q.defer();
+    const requestKey = headers.key;
+    const requestObject = headers.objectRequest;
 
     // Separate security requests from main requests
     if(processApi.securityAPI.hasOwnProperty(requestObject.Request)) {
@@ -252,12 +250,14 @@ function uploadToFirebase(response, key) {
     return new Promise((resolve, reject)=>{
 
         //Need to make a copy of the data, since the encryption key needs to be read
-	    var headers = JSON.parse(JSON.stringify(response.Headers));
-	    var success = response.Response;
-	    var requestKey = headers.RequestKey;
-	    var encryptionKey = response.EncryptionKey;
-	    var salt = response.Salt;
-	    delete response.EncryptionKey;
+        const headers = JSON.parse(JSON.stringify(response.Headers));
+        const success = response.Response;
+        const requestKey = headers.RequestKey;
+        const salt = response.Salt;
+
+        let encryptionKey = response.EncryptionKey;
+
+        delete response.EncryptionKey;
 	    delete response.Salt;
 
         // Encrypt the response data
@@ -279,10 +279,10 @@ function uploadToFirebase(response, key) {
 
 	    response.Timestamp = admin.database.ServerValue.TIMESTAMP;
 
-	    var path = '';
-	    if (key === "requests") {
-		    var userId = headers.RequestObject.UserID;
-		    path = 'users/'+userId+'/'+requestKey;
+        let path = '';
+        if (key === "requests") {
+            const userId = headers.RequestObject.UserID;
+            path = 'users/'+userId+'/'+requestKey;
 	    } else if (key === "passwordResetRequests") {
 		    path = 'passwordResetResponses/'+requestKey;
 	    }
@@ -291,17 +291,23 @@ function uploadToFirebase(response, key) {
 
 	    ref.child(path).set(response).then(function(){
 		    logResponse(response);
-		    completeRequest(headers,success, key);
+		    completeRequest(headers, success, key);
 		    resolve('done');
 	    }).catch(function (error) {
 		    logger.error('Error writing to firebase', {error:error});
 		    reject(error);
 	    });
     });
-
 }
 
-// Clearing the request off firebase
+/**
+ * completeRequest
+ * @desc Clears the request off Firebase after returning response
+ * @param headers
+ * @param success
+ * @param key
+ * @return {Promise}
+ */
 function completeRequest(headers, success, key) {
     return ref.child(key).child(headers.RequestKey).set(null)
     .catch(function (error) {
