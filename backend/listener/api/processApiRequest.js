@@ -5,7 +5,10 @@ const apiHospitalUpdate     = require('./apiHospitalUpdate.js');
 const security              = require('./../security/security');
 const logger                = require('./../logs/logger');
 
-
+/**
+ * API HANDLERS FOR GENERAL REQUESTS
+ * @type {{DeviceIdentifier: *, Log: *, Login: *, Logout: *, Resume: *, Refresh: *, AccountChange: *, CheckCheckin: *, Checkin: *, CheckinUpdate: *, DocumentContent: *, Feedback: *, LabResults: *, MapLocation: *, Message: *, NotificationsAll: *, Questionnaires: *, QuestionnaireRating: *, QuestionnaireAnswers: *, Read: *, PFPMembers: *}}
+ */
 const API = {
     'DeviceIdentifier': apiHospitalUpdate.updateDeviceIdentifier,
     'Log': apiPatientUpdate.logActivity,
@@ -30,6 +33,10 @@ const API = {
     'PFPMembers': apiPatientUpdate.getPatientsForPatientsMembers
 };
 
+/**
+ * API HANDLERS FOR SECURITY SPECIFIC REQUESTS
+ * @type {{PasswordReset: *, SecurityQuestion: *, SetNewPassword: *, VerifyAnswer: *}}
+ */
 exports.securityAPI = {
     'PasswordReset': security.resetPasswordRequest,
     'SecurityQuestion': security.securityQuestion,
