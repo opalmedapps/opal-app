@@ -19,23 +19,33 @@ var sqlConfig={
     dateStrings:true
 };
 
+var pool  = mysql.createPool({
+    connectionLimit : 10,
+    // port:'/Applications/MAMP/tmp/mysql/mysql.sock',
+    host:config.HOST,
+    user:config.MYSQL_USERNAME,
+    password:config.MYSQL_PASSWORD,
+    database:config.MYSQL_DATABASE,
+    dateStrings:true
+});
+
 /*
  *Re-connecting the sql database, NodeJS has problems and disconnects if inactive,
  The handleDisconnect deals with that
  */
-var connection = mysql.createConnection(sqlConfig);
+// var connection = mysql.createConnection(sqlConfig);
 
-function handleDisconnect(myconnection) {
-    myconnection.on('error', function(err) {
-        //console.log('Re-connecting lost connection');
-        connection.destroy();
-        connection = mysql.createConnection(sqlConfig);
-        handleDisconnect(connection);
-        connection.connect();
-    });
-}
-
-handleDisconnect(connection);
+// function handleDisconnect(connection) {
+//     connection.on('error', function(err) {
+//         //console.log('Re-connecting lost connection');
+//         connection.destroy();
+//         connection = mysql.createConnection(sqlConfig);
+//         handleDisconnect(connection);
+//         connection.connect();
+//     });
+// }
+//
+// handleDisconnect(connection);
 
 var exports=module.exports={};
 
@@ -138,27 +148,36 @@ exports.getSqlApiMappings = function()
 //Query processing function 
 exports.runSqlQuery = function(query, parameters, processRawFunction)
 {
-    let r = Q.defer();
-    let que = connection.query(query, parameters, function(err,rows,fields){
-        if(process.env.DEBUG) console.log(que.sql);
-        if (err) r.reject(err);
-        if(typeof rows !== 'undefined')
-        {
-	        if(processRawFunction && typeof processRawFunction !=='undefined')
-	        {
-		        processRawFunction(rows).then(function(result)
-		        {
-			        r.resolve(result);
-		        });
-	        }else{
-		        r.resolve(rows);
-	        }
-        }else{
-            r.resolve([]);
-        }
+    var r = Q.defer();
+
+    pool.getConnection(function(err, connection) {
+        var que = connection.query(query, parameters, function(err,rows,fields){
+            connection.release();
+            
+            if(process.env.DEBUG) console.log(que.sql);
+
+            if (err) r.reject(err);
+            if(typeof rows !=='undefined')
+            {
+                if(processRawFunction&&typeof processRawFunction !=='undefined')
+                {
+                    processRawFunction(rows).then(function(result)
+                    {
+                        r.resolve(result);
+                    });
+                }else{
+                    r.resolve(rows);
+                }
+            }else{
+                r.resolve([]);
+            }
+        });
+        
     });
+
     return r.promise;
 };
+
 
 //Gets Patient tables based on userID,  if timestamp defined sends requests
 //that are only updated after timestamp, third parameter is an array of table names, if not present all tables are gathered
@@ -377,8 +396,7 @@ exports.checkIn=function(requestObject)
     });
     return r.promise;
 };
-exports.getDocumentsContent = function(requestObject)
-{
+exports.getDocumentsContent = function(requestObject) {
 
     let r = Q.defer();
     let documents = requestObject.Parameters;
@@ -402,6 +420,7 @@ exports.getDocumentsContent = function(requestObject)
         }).catch((err)=>{
 	        r.reject({Response:'error',Reason:err});
         });
+
     }
     return r.promise;
 };
