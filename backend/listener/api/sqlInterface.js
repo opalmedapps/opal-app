@@ -3,15 +3,17 @@ var filesystem      =   require('fs');
 var Q               =   require('q');
 var queries         =   require('./../sql/queries.js');
 var config          =   require('./../config.json');
-var CryptoJS        =   require('crypto-js');
-var buffer          =   require('buffer');
-var http            =   require('http');
 var request         =   require('request');
 var questionnaires  =   require('./../questionnaires/patientQuestionnaires.js');
 var Mail            =   require('./../mailer/mailer.js');
 var utility         =   require('./../utility/utility');
-// var exec            =   require('child_process').exec;
-var sqlConfig={
+
+
+/**
+ * SQL CONFIGURATION
+ * @type {{host, user, password, database, dateStrings: boolean}}
+ */
+const sqlConfig={
     host:config.HOST,
     user:config.MYSQL_USERNAME,
     password:config.MYSQL_PASSWORD,

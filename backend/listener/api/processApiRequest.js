@@ -1,11 +1,12 @@
 var exports=module.exports={};
 var Q= require('q');
-var apiPatientUpdate=require('./apiPatientUpdate.js');
-var apiHospitalUpdate=require('./apiHospitalUpdate.js');
-var security = require('./../security/security');
+var apiPatientUpdate    = require('./apiPatientUpdate.js');
+var apiHospitalUpdate   = require('./apiHospitalUpdate.js');
+var security            = require('./../security/security');
+var logger              = require('./../logs/logger');
+
 
 var API = {
-
     'DeviceIdentifier':apiHospitalUpdate.updateDeviceIdentifier,
     'Log': apiPatientUpdate.logActivity,
     'Login':apiPatientUpdate.login,
@@ -36,6 +37,12 @@ exports.securityAPI = {
     'VerifyAnswer': security.resetPasswordRequest
 };
 
+/**
+ * processRequest
+ * @desc Maps the incoming requestObject to the correct API function to handle it
+ * @param requestObject
+ * @return {Promise}
+ */
 exports.processRequest=function(requestObject)
 {
 
@@ -43,12 +50,11 @@ exports.processRequest=function(requestObject)
 
     var type = requestObject.Request;
 
-    if (API.hasOwnProperty(type))
-    {
+    if (API.hasOwnProperty(type)) {
         return  API[type](requestObject);
     }else{
-        // TODO: SPECIFY BETTER ERROR RETURN
-        r.reject('error');
+        logger.log('error', 'Invalid request type: ' + type);
+        r.reject('Invalid request type');
     }
     return r.promise;
 };

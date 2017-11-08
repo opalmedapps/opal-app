@@ -1,8 +1,12 @@
-const CryptoJS = require('crypto-js');
-const stablelibutf8 = require('@stablelib/utf8');
-const nacl = require('tweetnacl');
-const stablelibbase64=require('@stablelib/base64');
-const crypto = require('crypto');
+const CryptoJS          = require('crypto-js');
+const stablelibutf8     = require('@stablelib/utf8');
+const nacl              = require('tweetnacl');
+const stablelibbase64   = require('@stablelib/base64');
+const crypto            = require('crypto');
+const Q                   = require('q');
+
+crypto.DEFAULT_ENCODING = 'hex';
+
 
 var exports=module.exports={};
 
@@ -71,17 +75,61 @@ exports.generatePBKDFHash = function(secret,salt) {
   return CryptoJS.PBKDF2(secret, salt, {keySize: 512/32, iterations: 1000}).toString(CryptoJS.enc.Hex);
 };
 
-
+/**
+ * encrypt
+ * @desc Encrypts a response object using PBKDF2 hash as key and NACL as encryption tool
+ * @param object
+ * @param secret
+ * @param salt
+ * @returns {Promise}
+ * @notes link for NACL encryption documentation: https://tweetnacl.js.org/#/
+ */
 exports.encrypt = function(object,secret,salt) {
-  var nonce = nacl.randomBytes(nacl.secretbox.nonceLength);
-  secret = (salt)?CryptoJS.PBKDF2(secret, salt, {keySize: 512/32, iterations: 1000}).toString(CryptoJS.enc.Hex):secret;
-  secret = stablelibutf8.encode(secret.substring(0,nacl.secretbox.keyLength));
-  return exports.encryptObject(object,secret,nonce);
+    let r = Q.defer();
+
+    const nonce = nacl.randomBytes(nacl.secretbox.nonceLength);
+    // secret = (salt)?CryptoJS.PBKDF2(secret, salt, {keySize: 512/32, iterations: 1000}).toString(CryptoJS.enc.Hex):secret;
+
+    if(salt){
+        crypto.pbkdf2(secret, salt, 1000, 64, 'sha1', (err, derivedKey) => {
+            if (err) r.reject(err);
+            derivedKey = stablelibutf8.encode(derivedKey.substring(0,nacl.secretbox.keyLength));
+            r.resolve(exports.encryptObject(object,derivedKey,nonce));
+        });
+    } else {
+        secret = stablelibutf8.encode(secret.substring(0,nacl.secretbox.keyLength));
+        r.resolve(exports.encryptObject(object,secret,nonce));
+    }
+
+    return r.promise;
 };
 
+/**
+ * decrypt
+ * @desc Decrypts a request object so that it can be handled by the server
+ * @param object
+ * @param secret
+ * @param salt
+ * @returns {Promise}
+ * @notes link for NACL encryption documentation: https://tweetnacl.js.org/#/
+ */
 exports.decrypt= function(object,secret,salt) {
-  secret = (salt)?CryptoJS.PBKDF2(secret, salt, {keySize: 512/32, iterations: 1000}).toString(CryptoJS.enc.Hex):secret;
-  return exports.decryptObject(object, stablelibutf8.encode(secret.substring(0,nacl.secretbox.keyLength)));
+
+  let r = Q.defer();
+
+  // secret = (salt)?CryptoJS.PBKDF2(secret, salt, {keySize: 512/32, iterations: 1000}).toString(CryptoJS.enc.Hex):secret;
+
+  if(salt){
+      crypto.pbkdf2(secret, salt, 1000, 64, 'sha1', (err, derivedKey) => {
+          if (err) r.reject(err);
+          derivedKey = stablelibutf8.encode(derivedKey.substring(0,nacl.secretbox.keyLength));
+          r.resolve(exports.decryptObject(object, derivedKey));
+      });
+  } else {
+      r.resolve(exports.decryptObject(object, stablelibutf8.encode(secret.substring(0,nacl.secretbox.keyLength))));
+  }
+
+  return r.promise;
 };
 
 //Encrypts an object, array, number, date or string
