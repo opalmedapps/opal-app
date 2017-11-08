@@ -1,5 +1,4 @@
 var exports=module.exports={};
-var Q = require('q');
 var sqlInterface = require('./sqlInterface.js');
 
 //API call to log user out
@@ -54,4 +53,4 @@ exports.inputEducationalMaterialRating= function(requestObject)
 // Get all notifications
 exports.getAllNotifications = function (requestObject) {
     return sqlInterface.getAllNotifications(requestObject);
-}
+};

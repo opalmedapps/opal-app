@@ -39,7 +39,7 @@ exports.verifySecurityAnswer=function(requestKey,requestObject,patient)
     var key = patient.AnswerText;
 
     //TO VERIFY, PASS SECURITY ANSWER THROUGH HASH THAT TAKES A WHILE TO COMPUTE, SIMILAR TO HOW THEY DO PASSWORD CHECKS
-    utility.generatePBKDFHash(key,key);
+    // utility.generatePBKDFHash(key,key);
 
     if(patient.TimeoutTimestamp != null && requestObject.Timestamp - (new Date(patient.TimeoutTimestamp)).getTime() > FIVE_MINUTES) {
 	    sqlInterface.resetSecurityAnswerAttempt(requestObject);

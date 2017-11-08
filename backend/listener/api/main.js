@@ -1,10 +1,16 @@
 var utility             =   require('./../utility/utility.js');
- var    sqlInterface        =   require('./sqlInterface.js');
-var    q                   =   require('q');
-var    processApiRequest   =   require('./processApiRequest.js');
+var sqlInterface        =   require('./sqlInterface.js');
+var q                   =   require('q');
+var processApiRequest   =   require('./processApiRequest.js');
 var logger              =   require('./../logs/logger');
 
-//This handles the api requests by formating the response obtain from the API
+/**
+ * apiRequestFormatter
+ * @desc handles the api requests by formatting the response obtained from the API
+ * @param requestKey
+ * @param requestObject
+ * @returns {Promise}
+ */
 exports.apiRequestFormatter=function(requestKey,requestObject)
 {
     var r=q.defer();
@@ -12,49 +18,56 @@ exports.apiRequestFormatter=function(requestKey,requestObject)
     var encryptionKey = '';
     //Gets user password for decryptiong
     sqlInterface.getEncryption(requestObject).then(function(rows){
-        if(rows.length>1||rows.length === 0)
-        {
+        if(rows.length>1||rows.length === 0) {
             //Rejects requests if username returns more than one password
-            //console.log('Rejecting request due to injection attack', rows);
-            //Construction of request object
+            logger.log('error', 'Error at getting users encryption information. This is due to a username returning more than one password, or none at all.');
             responseObject = { Headers:{RequestKey:requestKey,RequestObject:requestObject},EncryptionKey:'', Code: 1, Data:{},Response:'error', Reason:'Injection attack, incorrect UserID'};
             r.resolve(responseObject);
         }else{
-            //Gets password and decrypts request
+            //Gets password and security answer (both hashed) in order to decrypt request
             var salt=rows[0].AnswerText;
             var pass = rows[0].Password;
 
-            requestObject.Request=utility.decrypt(requestObject.Request,pass,salt);
+            try{
+                utility.decrypt(requestObject.Request,pass,salt)
+                    .then((res) => {
 
-            console.log(requestObject.Request);
-            //If requests after decryption is empty, key was incorrect, reject the request
-            if(requestObject.Request === '') {
-                responseObject = { Headers:{RequestKey:requestKey,RequestObject:requestObject},EncryptionKey:'', Code: 1, Data:{},Response:'error', Reason:'Incorrect Password for decryption'};
-                r.resolve(responseObject);
-            }else{
-                //Otherwise decrypt the parameters and send to process api request
-                requestObject.Parameters=utility.decrypt(requestObject.Parameters,pass,salt);
+                        requestObject.Request = res;
 
-                //Process request simple checks the request and pipes it to the appropiate API call, then it receives the response
-                processApiRequest.processRequest(requestObject).then(function(data)
-                {
-                    //Once its process if the response is a hospital request processed, simply delete request
-                    responseObject = data;
-                    responseObject.Code = 3;
-                    responseObject.EncryptionKey = pass;
-                    responseObject.Salt = salt;
-                    responseObject.Headers = {RequestKey:requestKey,RequestObject:requestObject};
-                    r.resolve(responseObject);
-                }).catch(function(errorResponse){
-                    //There was an error processing the request with the parameters, delete request;
-                    logger.log('error', "Error processing request", {error:errorResponse});
-                    errorResponse.Code = 2;
-                    errorResponse.Reason = 'Server error, report the error to the hospital';
-                    errorResponse.Headers = {RequestKey:requestKey,RequestObject:requestObject};
-                    responseObject.EncryptionKey = pass;
-                    responseObject.Salt = salt;
-                    r.resolve(errorResponse);
-                });
+                        //If requests after decryption is empty, key was incorrect, reject the request
+                        if(requestObject.Request === '') {
+                            responseObject = { Headers:{RequestKey:requestKey,RequestObject:requestObject},EncryptionKey:'', Code: 1, Data:{},Response:'error', Reason:'Incorrect Password for decryption'};
+                            r.resolve(responseObject);
+                        }else{
+                            //Otherwise decrypt the parameters and send to process api request
+                            requestObject.Parameters=utility.decrypt(requestObject.Parameters,pass,salt);
+
+                            //Process request simple checks the request and pipes it to the appropiate API call, then it receives the response
+                            processApiRequest.processRequest(requestObject).then(function(data)
+                            {
+                                //Once its process if the response is a hospital request processed, simply delete request
+                                responseObject = data;
+                                responseObject.Code = 3;
+                                responseObject.EncryptionKey = pass;
+                                responseObject.Salt = salt;
+                                responseObject.Headers = {RequestKey:requestKey,RequestObject:requestObject};
+                                r.resolve(responseObject);
+                            }).catch(function(errorResponse){
+                                //There was an error processing the request with the parameters, delete request;
+                                logger.log('error', "Error processing request", {error:errorResponse});
+                                errorResponse.Code = 2;
+                                errorResponse.Reason = 'Server error, report the error to the hospital';
+                                errorResponse.Headers = {RequestKey:requestKey,RequestObject:requestObject};
+                                responseObject.EncryptionKey = pass;
+                                responseObject.Salt = salt;
+                                r.resolve(errorResponse);
+                            });
+                        }
+                    })
+            } catch(err) {
+                logger.log('error', JSON.stringify(err));
+                responseObject = { RequestKey:requestKey,EncryptionKey:encryptionKey, Code:2,Data:error, Headers:{RequestKey:requestKey,RequestObject:requestObject},Response:'error', Reason:'Server error, report the error to the hospital'};
+                r.resolve(requestObject);
             }
         }
     }).catch(function(error){

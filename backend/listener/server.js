@@ -262,9 +262,19 @@ function uploadToFirebase(response, key) {
 
         // Encrypt the response data
         try{
-            if(typeof encryptionKey!=='undefined' && encryptionKey!=='') response = utility.encrypt(response, encryptionKey, salt);
+            if(typeof encryptionKey!=='undefined' && encryptionKey!=='') {
+                utility.encrypt(response, encryptionKey, salt)
+                    .then((res) => {
+                        response = res;
+                    })
+                    .catch((err) => {
+                        logError(err);
+                        reject(err);
+                    })
+            }
         } catch(err) {
             logError(err);
+            reject(err);
         }
 
 	    response.Timestamp = admin.database.ServerValue.TIMESTAMP;
