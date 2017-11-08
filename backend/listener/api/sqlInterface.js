@@ -1,141 +1,144 @@
-var mysql           =   require('mysql');
-var filesystem      =   require('fs');
-var Q               =   require('q');
-var queries         =   require('./../sql/queries.js');
-var config          =   require('./../config.json');
-var request         =   require('request');
-var questionnaires  =   require('./../questionnaires/patientQuestionnaires.js');
-var Mail            =   require('./../mailer/mailer.js');
-var utility         =   require('./../utility/utility');
+const mysql             = require('mysql');
+const filesystem        = require('fs');
+const Q                 = require('q');
+const queries           = require('./../sql/queries.js');
+const config            = require('./../config.json');
+const request           = require('request');
+const questionnaires    = require('./../questionnaires/patientQuestionnaires.js');
+const Mail              = require('./../mailer/mailer.js');
+const utility           = require('./../utility/utility');
+
+let exports = module.exports = {};
+
+/******************************
+ * CONFIGURATIONS
+ ******************************/
 
 
 /**
- * SQL CONFIGURATION
- * @type {{host, user, password, database, dateStrings: boolean}}
+ * SQL POOL CONFIGURATION
+ * @type {Pool}
  */
-const sqlConfig={
-    host:config.HOST,
-    user:config.MYSQL_USERNAME,
-    password:config.MYSQL_PASSWORD,
-    database:config.MYSQL_DATABASE,
-    dateStrings:true
-};
-
-var pool  = mysql.createPool({
-    connectionLimit : 10,
+const pool = mysql.createPool({
+    connectionLimit: 1000,
     // port:'/Applications/MAMP/tmp/mysql/mysql.sock',
-    host:config.HOST,
-    user:config.MYSQL_USERNAME,
-    password:config.MYSQL_PASSWORD,
-    database:config.MYSQL_DATABASE,
-    dateStrings:true
+    host: config.HOST,
+    user: config.MYSQL_USERNAME,
+    password: config.MYSQL_PASSWORD,
+    database: config.MYSQL_DATABASE,
+    dateStrings: true
 });
 
+/////////////////////////////////////////////////////
 
-var exports=module.exports={};
+/******************************
+ * MAPPINGS
+ ******************************/
 
-
-//Table mappings and process data functions for results obtained from the database. Exporting function for testing purposes.
-var requestMappings=
+/**
+ * Table mappings and process data functions for results obtained from the database. Exporting function for testing purposes.
+ * @type {{Patient: {sql, processFunction: loadProfileImagePatient, numberOfLastUpdated: number}, Documents: {sql, numberOfLastUpdated: number, table: string, serNum: string}, Doctors: {sql, processFunction: loadImageDoctor, numberOfLastUpdated: number}, Diagnosis: {sql, numberOfLastUpdated: number}, Questionnaires: {sql, numberOfLastUpdated: number, processFunction: *}, Appointments: {sql, numberOfLastUpdated: number, processFunction: combineResources, table: string, serNum: string}, Notifications: {sql, numberOfLastUpdated: number, table: string, serNum: string}, Tasks: {sql, numberOfLastUpdated: number}, LabTests: {sql, numberOfLastUpdated: number}, TxTeamMessages: {sql, numberOfLastUpdated: number, table: string, serNum: string}, EducationalMaterial: {sql, processFunction: getEducationTableOfContents, numberOfLastUpdated: number, table: string, serNum: string}, Announcements: {sql, numberOfLastUpdated: number, table: string, serNum: string}}}
+ */
+const requestMappings =
     {
-        'Patient':{
-            sql:queries.patientTableFields(),
-            processFunction:loadProfileImagePatient,
-            numberOfLastUpdated:1
+        'Patient': {
+            sql: queries.patientTableFields(),
+            processFunction: loadProfileImagePatient,
+            numberOfLastUpdated: 1
         },
-        'Documents':
-            {
-                sql:queries.patientDocumentTableFields(),
-                numberOfLastUpdated:2,
-                //processFunction:LoadDocuments,
-                table:'Document',
-                serNum:'DocumentSerNum'
-            },
-        'Doctors':{
-            sql:queries.patientDoctorTableFields(),
-            processFunction:loadImageDoctor,
-            numberOfLastUpdated:2
+        'Documents': {
+            sql: queries.patientDocumentTableFields(),
+            numberOfLastUpdated: 2,
+            //processFunction:LoadDocuments,
+            table: 'Document',
+            serNum: 'DocumentSerNum'
         },
-        'Diagnosis':{
-            sql:queries.patientDiagnosisTableFields(),
-            numberOfLastUpdated:1
+        'Doctors': {
+            sql: queries.patientDoctorTableFields(),
+            processFunction: loadImageDoctor,
+            numberOfLastUpdated: 2
         },
-        'Questionnaires':{
-            sql:queries.patientQuestionnaireTableFields(),
-            numberOfLastUpdated:2,
-            processFunction:questionnaires.getPatientQuestionnaires
+        'Diagnosis': {
+            sql: queries.patientDiagnosisTableFields(),
+            numberOfLastUpdated: 1
+        },
+        'Questionnaires': {
+            sql: queries.patientQuestionnaireTableFields(),
+            numberOfLastUpdated: 2,
+            processFunction: questionnaires.getPatientQuestionnaires
 
         },
-        /*,
-         'Messages':{
-         sql:queries.patientMessageTableFields(),
-         processFunction:LoadAttachments,
-         numberOfLastUpdated:1,
-         table:'Messages',
-         serNum:'MessageSerNum'
-         }*/
-        'Appointments':
-            {
-                sql:queries.patientAppointmentsTableFields(),
-                numberOfLastUpdated:5,
-                processFunction:combineResources,
-                table:'Appointment',
-                serNum:'AppointmentSerNum'
-            },
-        'Notifications':
-            {
-                sql:queries.patientNotificationsTableFields(),
-                numberOfLastUpdated:2,
-                table:'Notification',
-                serNum:'NotificationSerNum'
-            },
-        'Tasks':
-            {
-                sql:queries.patientTasksTableFields(),
-                numberOfLastUpdated:2
-            },
-        // 'TreatmentPlanning':
-        //  {
-        //  processFunction:planningStepsAndEstimates,
-        //  numberOfLastUpdated:0
-        //  },
-        'LabTests':{
-         sql:queries.patientTestResultsTableFields(),
-         numberOfLastUpdated:1
-         },
-        'TxTeamMessages':{
-            sql:queries.patientTeamMessagesTableFields(),
-            numberOfLastUpdated:2,
-            table:'TxTeamMessage',
-            serNum:'TxTeamMessageSerNum'
+        'Appointments': {
+            sql: queries.patientAppointmentsTableFields(),
+            numberOfLastUpdated: 5,
+            processFunction: combineResources,
+            table: 'Appointment',
+            serNum: 'AppointmentSerNum'
         },
-        'EducationalMaterial':{
-            sql:queries.patientEducationalMaterialTableFields(),
-            processFunction:getEducationTableOfContents,
-            numberOfLastUpdated:5,
-            table:'EducationalMaterial',
-            serNum:'EducationalMaterialSerNum'
+        'Notifications': {
+            sql: queries.patientNotificationsTableFields(),
+            numberOfLastUpdated: 2,
+            table: 'Notification',
+            serNum: 'NotificationSerNum'
         },
-        'Announcements':{
-            sql:queries.patientAnnouncementsTableFields(),
-            numberOfLastUpdated:2,
-            table:'Announcement',
-            serNum:'AnnouncementSerNum'
+        'Tasks': {
+            sql: queries.patientTasksTableFields(),
+            numberOfLastUpdated: 2
+        },
+        'LabTests': {
+            sql: queries.patientTestResultsTableFields(),
+            numberOfLastUpdated: 1
+        },
+        'TxTeamMessages': {
+            sql: queries.patientTeamMessagesTableFields(),
+            numberOfLastUpdated: 2,
+            table: 'TxTeamMessage',
+            serNum: 'TxTeamMessageSerNum'
+        },
+        'EducationalMaterial': {
+            sql: queries.patientEducationalMaterialTableFields(),
+            processFunction: getEducationTableOfContents,
+            numberOfLastUpdated: 5,
+            table: 'EducationalMaterial',
+            serNum: 'EducationalMaterialSerNum'
+        },
+        'Announcements': {
+            sql: queries.patientAnnouncementsTableFields(),
+            numberOfLastUpdated: 2,
+            table: 'Announcement',
+            serNum: 'AnnouncementSerNum'
         }
     };
 
-exports.getSqlApiMappings = function()
-{
+
+//////////////////////////////////////////////////////////////////
+
+/******************************
+ * FUNCTIONS
+ ******************************/
+
+/**
+ * getSqlApiMapping
+ * @return {{Patient: {sql, processFunction: loadProfileImagePatient, numberOfLastUpdated: number}, Documents: {sql, numberOfLastUpdated: number, table: string, serNum: string}, Doctors: {sql, processFunction: loadImageDoctor, numberOfLastUpdated: number}, Diagnosis: {sql, numberOfLastUpdated: number}, Questionnaires: {sql, numberOfLastUpdated: number, processFunction: *}, Appointments: {sql, numberOfLastUpdated: number, processFunction: combineResources, table: string, serNum: string}, Notifications: {sql, numberOfLastUpdated: number, table: string, serNum: string}, Tasks: {sql, numberOfLastUpdated: number}, LabTests: {sql, numberOfLastUpdated: number}, TxTeamMessages: {sql, numberOfLastUpdated: number, table: string, serNum: string}, EducationalMaterial: {sql, processFunction: getEducationTableOfContents, numberOfLastUpdated: number, table: string, serNum: string}, Announcements: {sql, numberOfLastUpdated: number, table: string, serNum: string}}}
+ */
+exports.getSqlApiMappings = function() {
     return requestMappings;
 };
 
-//Query processing function 
-exports.runSqlQuery = function(query, parameters, processRawFunction)
-{
+
+//Query processing function
+/**
+ * runSqlQuery
+ * @desc runs inputted query against SQL mapping by grabbing an available connection from connection pool
+ * @param query
+ * @param parameters
+ * @param processRawFunction
+ */
+exports.runSqlQuery = function(query, parameters, processRawFunction) {
     var r = Q.defer();
 
     pool.getConnection(function(err, connection) {
-        var que = connection.query(query, parameters, function(err,rows,fields){
+        var que = connection.query(query, parameters, function(err,rows, fields){
             connection.release();
             
             if(process.env.DEBUG) console.log(que.sql);
