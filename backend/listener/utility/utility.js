@@ -1,17 +1,21 @@
-const CryptoJS    =require('crypto-js');
-const stablelibutf8=require('@stablelib/utf8');
+const CryptoJS = require('crypto-js');
+const stablelibutf8 = require('@stablelib/utf8');
 const nacl = require('tweetnacl');
 const stablelibbase64=require('@stablelib/base64');
-const EventEmitter = require('events');
+const crypto = require('crypto');
+
 var exports=module.exports={};
 
-//Returns empty response, function used by refresh, resume, login
-exports.resolveEmptyResponse=function(data)
-{
+/**
+ * resolveEmptyResponse
+ * @desc Returns empty response, function used by refresh, resume, login
+ * @param data
+ * @return {*}
+ */
+exports.resolveEmptyResponse=function(data) {
   var counter=0;
   for (var key in data) {
-    if(data[key].length>0)
-    {
+    if(data[key].length>0) {
       counter++;
       break;
     }
@@ -20,15 +24,21 @@ exports.resolveEmptyResponse=function(data)
   return data;
 };
 
-//Converts date object to mysql date
-exports.toMYSQLString=function(date)
-{
+/**
+ * toMYSQLString
+ * @desc Converts date object to mysql date
+ * @param date
+ * @return Date
+ */
+exports.toMYSQLString=function(date) {
   var month = date.getMonth();
   var day=date.getDate();
   var hours=date.getHours();
   var minutes=date.getMinutes();
   var seconds=date.getSeconds();
+
   month++;
+
   if(hours<10) hours='0'+hours;
   if(minutes<10) minutes='0'+minutes;
   if(seconds<10) seconds='0'+seconds;
@@ -36,28 +46,40 @@ exports.toMYSQLString=function(date)
   if (month<10) month='0'+month;
 
   return date.getFullYear()+'-'+month+'-'+day+' '+hours+':'+minutes+':'+seconds;
-
 };
-//Convers from milliseconds since 1970 to a mysql date
-exports.unixToMYSQLTimestamp=function(time)
-{
+
+
+/**
+ * unixToMYSQLTimestamp
+ * @desc Converts from milliseconds since 1970 to a mysql date
+ * @param time
+ * @return {Date}
+ */
+exports.unixToMYSQLTimestamp=function(time) {
   var date=new Date(time);
   return exports.toMYSQLString(date);
 };
-exports.generatePBKDFHash = function(secret,salt)
-{
+
+/**
+ * generatePBKDFHash
+ * @desc generates encryption hash using PBKDF2 Hashing Algorithm
+ * @param secret
+ * @param salt
+ * @return {string}
+ */
+exports.generatePBKDFHash = function(secret,salt) {
   return CryptoJS.PBKDF2(secret, salt, {keySize: 512/32, iterations: 1000}).toString(CryptoJS.enc.Hex);
-}
-exports.encrypt = function(object,secret,salt)
-{
+};
+
+
+exports.encrypt = function(object,secret,salt) {
   var nonce = nacl.randomBytes(nacl.secretbox.nonceLength);
   secret = (salt)?CryptoJS.PBKDF2(secret, salt, {keySize: 512/32, iterations: 1000}).toString(CryptoJS.enc.Hex):secret;
   secret = stablelibutf8.encode(secret.substring(0,nacl.secretbox.keyLength));
   return exports.encryptObject(object,secret,nonce);
 };
-exports.decrypt= function(object,secret,salt)
-{
 
+exports.decrypt= function(object,secret,salt) {
   secret = (salt)?CryptoJS.PBKDF2(secret, salt, {keySize: 512/32, iterations: 1000}).toString(CryptoJS.enc.Hex):secret;
   return exports.decryptObject(object, stablelibutf8.encode(secret.substring(0,nacl.secretbox.keyLength)));
 };
