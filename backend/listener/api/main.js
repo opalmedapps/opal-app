@@ -34,37 +34,44 @@ exports.apiRequestFormatter=function(requestKey,requestObject) {
             try{
                 utility.decrypt(requestObject.Request,pass,salt)
                     .then((res) => {
-
                         requestObject.Request = res;
 
                         //If requests after decryption is empty, key was incorrect, reject the request
+                        //TODO: Remove? I'm pretty sure this code will never be reached
                         if(requestObject.Request === '') {
                             responseObject = { Headers:{RequestKey:requestKey,RequestObject:requestObject},EncryptionKey:'', Code: 1, Data:{},Response:'error', Reason:'Incorrect Password for decryption'};
                             r.resolve(responseObject);
                         }else{
                             //Otherwise decrypt the parameters and send to process api request
-                            requestObject.Parameters=utility.decrypt(requestObject.Parameters,pass,salt);
+                            utility.decrypt(requestObject.Parameters,pass,salt)
+                                .then((res) =>{
+                                    requestObject.Parameters= res;
 
-                            //Process request simple checks the request and pipes it to the appropiate API call, then it receives the response
-                            processApiRequest.processRequest(requestObject).then(function(data)
-                            {
-                                //Once its process if the response is a hospital request processed, simply delete request
-                                responseObject = data;
-                                responseObject.Code = 3;
-                                responseObject.EncryptionKey = pass;
-                                responseObject.Salt = salt;
-                                responseObject.Headers = {RequestKey:requestKey,RequestObject:requestObject};
-                                r.resolve(responseObject);
-                            }).catch(function(errorResponse){
-                                //There was an error processing the request with the parameters, delete request;
-                                logger.log('error', "Error processing request", {error:errorResponse});
-                                errorResponse.Code = 2;
-                                errorResponse.Reason = 'Server error, report the error to the hospital';
-                                errorResponse.Headers = {RequestKey:requestKey,RequestObject:requestObject};
-                                responseObject.EncryptionKey = pass;
-                                responseObject.Salt = salt;
-                                r.resolve(errorResponse);
-                            });
+                                    //Process request simple checks the request and pipes it to the appropiate API call, then it receives the response
+                                    processApiRequest.processRequest(requestObject).then(function(data) {
+                                        //Once its process if the response is a hospital request processed, simply delete request
+                                        responseObject = data;
+                                        responseObject.Code = 3;
+                                        responseObject.EncryptionKey = pass;
+                                        responseObject.Salt = salt;
+                                        responseObject.Headers = {RequestKey:requestKey,RequestObject:requestObject};
+                                        r.resolve(responseObject);
+                                    }).catch(function(errorResponse){
+                                        //There was an error processing the request with the parameters, delete request;
+                                        logger.log('error', "Error processing request", {error:errorResponse});
+                                        errorResponse.Code = 2;
+                                        errorResponse.Reason = 'Server error, report the error to the hospital';
+                                        errorResponse.Headers = {RequestKey:requestKey,RequestObject:requestObject};
+                                        responseObject.EncryptionKey = pass;
+                                        responseObject.Salt = salt;
+                                        r.resolve(errorResponse);
+                                    });
+                                })
+                                .catch((err)=>{
+                                    logger.log('error', JSON.stringify(err));
+                                    responseObject = { RequestKey:requestKey,EncryptionKey:encryptionKey, Code:2,Data:error, Headers:{RequestKey:requestKey,RequestObject:requestObject},Response:'error', Reason:'Server error, report the error to the hospital'};
+                                    r.resolve(requestObject);
+                                })
                         }
                     })
             } catch(err) {
