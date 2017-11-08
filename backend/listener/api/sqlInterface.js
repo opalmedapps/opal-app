@@ -31,26 +31,8 @@ var pool  = mysql.createPool({
     dateStrings:true
 });
 
-/*
- *Re-connecting the sql database, NodeJS has problems and disconnects if inactive,
- The handleDisconnect deals with that
- */
-// var connection = mysql.createConnection(sqlConfig);
-
-// function handleDisconnect(connection) {
-//     connection.on('error', function(err) {
-//         //console.log('Re-connecting lost connection');
-//         connection.destroy();
-//         connection = mysql.createConnection(sqlConfig);
-//         handleDisconnect(connection);
-//         connection.connect();
-//     });
-// }
-//
-// handleDisconnect(connection);
 
 var exports=module.exports={};
-
 
 
 //Table mappings and process data functions for results obtained from the database. Exporting function for testing purposes.

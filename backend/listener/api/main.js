@@ -1,8 +1,8 @@
-var utility             =   require('./../utility/utility.js');
-var sqlInterface        =   require('./sqlInterface.js');
-var q                   =   require('q');
-var processApiRequest   =   require('./processApiRequest.js');
-var logger              =   require('./../logs/logger');
+const utility           = require('./../utility/utility.js');
+const sqlInterface      = require('./sqlInterface.js');
+const q                 = require('q');
+const processApiRequest = require('./processApiRequest.js');
+const logger            = require('./../logs/logger');
 
 /**
  * apiRequestFormatter
@@ -11,12 +11,14 @@ var logger              =   require('./../logs/logger');
  * @param requestObject
  * @returns {Promise}
  */
-exports.apiRequestFormatter=function(requestKey,requestObject)
-{
-    var r=q.defer();
-    var responseObject = {};
-    var encryptionKey = '';
-    //Gets user password for decryptiong
+exports.apiRequestFormatter=function(requestKey,requestObject) {
+
+    const r = q.defer();
+    const encryptionKey = '';
+
+    let responseObject = {};
+
+    //Gets user password for decrypting
     sqlInterface.getEncryption(requestObject).then(function(rows){
         if(rows.length>1||rows.length === 0) {
             //Rejects requests if username returns more than one password
@@ -24,9 +26,10 @@ exports.apiRequestFormatter=function(requestKey,requestObject)
             responseObject = { Headers:{RequestKey:requestKey,RequestObject:requestObject},EncryptionKey:'', Code: 1, Data:{},Response:'error', Reason:'Injection attack, incorrect UserID'};
             r.resolve(responseObject);
         }else{
+
             //Gets password and security answer (both hashed) in order to decrypt request
-            var salt=rows[0].AnswerText;
-            var pass = rows[0].Password;
+            const salt = rows[0].AnswerText;
+            const pass = rows[0].Password;
 
             try{
                 utility.decrypt(requestObject.Request,pass,salt)
@@ -78,6 +81,9 @@ exports.apiRequestFormatter=function(requestKey,requestObject)
 
     return r.promise;
 };
+
+//TODO: MOVE TO CONSTANTS FILE
+
 /**
  * Response codes facilitate the handling of the error for firebase, here is the breakdown.
  * CODE 1: Attack to our server incorrect password for encryption or unable to retrieve user's password, delete request and ignore user, since user
