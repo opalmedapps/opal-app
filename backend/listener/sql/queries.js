@@ -251,9 +251,9 @@ exports.logCheckin = function()
     return "INSERT INTO `CheckinLog`(`CheckinLogSerNum`, `AppointmentSerNum`, `DeviceId`, `Latitude`, `Longitude`, `Accuracy`, `DateAdded`, `LastUpdated`) VALUES (NULL,?,?,?,?,?,?,NULL)";
 };
 
-exports.accountChange=function( serNum, field, newValue, token)
+exports.accountChange=function()
 {
-    return "UPDATE Patient SET "+field+"='"+newValue+"', SessionId='"+token+"' WHERE PatientSerNum LIKE '"+serNum+"'";
+    return `UPDATE Patient SET ??=?, SessionId=? WHERE PatientSerNum=?`;
 };
 exports.inputFeedback=function(UserSerNum, content)
 {
@@ -278,6 +278,10 @@ exports.getPatientFromEmail=function()
 };
 exports.logActivity=function(requestObject)
 {
+	return `INSERT INTO PatientActivityLog 
+                (\`ActivitySerNum\`,\`Request\`,\`Username\`, \`DeviceId\`,\`SessionId\`,
+                \`DateTime\`, \`LastUpdated\`) 
+	        VALUES (NULL, ?, ?, ?, ?, CURRENT_TIMESTAMP ,CURRENT_TIMESTAMP )`;
 
     return "INSERT INTO PatientActivityLog (`ActivitySerNum`,`Request`,`Username`, `DeviceId`,`SessionId`,`DateTime`,`LastUpdated`) VALUES (NULL,'"+requestObject.Request+ "', '"+requestObject.UserID+ "', '"+requestObject.DeviceId+"','"+requestObject.Token+"', CURRENT_TIMESTAMP ,CURRENT_TIMESTAMP )";
 };
@@ -290,7 +294,12 @@ exports.userEncryption=function()
 {
     return "SELECT u.Password, sa.AnswerText FROM Users u, SecurityAnswer sa, PatientDeviceIdentifier pdi WHERE u.Username = ? AND pdi.PatientSerNum = u.UserTypeSerNum AND sa.SecurityAnswerSerNum = pdi.SecurityAnswerSerNum AND pdi.DeviceId = ?";
 };
-exports.getSecurityQuestions=function(serNum)
+    /**
+     * @deprecated;
+     * @param serNum
+     * @returns {string}
+     */
+    exports.getSecurityQuestions=function(serNum)
 {
     return "SELECT SecurityQuestion.QuestionText_EN, SecurityQuestion.QuestionText_FR, SecurityAnswer.AnswerText FROM SecurityQuestion, SecurityAnswer WHERE SecurityAnswer.PatientSerNum="+serNum +" AND SecurityQuestion.SecurityQuestionSerNum = SecurityAnswer.SecurityQuestionSerNum";
 };
@@ -308,9 +317,9 @@ exports.updateDeviceIdentifiers = function()
 {
     return "INSERT INTO `PatientDeviceIdentifier`(`PatientDeviceIdentifierSerNum`, `PatientSerNum`, `DeviceId`, `RegistrationId`, `DeviceType`,`SessionId`, `Trusted`,`LastUpdated`) VALUES (NULL, ?,?,?,?,?, 0, NULL) ON DUPLICATE KEY UPDATE RegistrationId = ?, SessionId = ?;"
 };
-exports.getMapLocation=function(qrCode)
+exports.getMapLocation=function()
 {
-    return "SELECT * FROM HospitalMap WHERE QRMapAlias = '"+qrCode+"';";
+    return "SELECT * FROM HospitalMap WHERE QRMapAlias = ?;";
 };
 
 exports.updateReadStatus=function()
@@ -318,9 +327,9 @@ exports.updateReadStatus=function()
     return "UPDATE ?? , Patient, Users SET ReadStatus = 1 WHERE ??.?? = ? AND Patient.PatientSerNum = ??.PatientSerNum AND Patient.PatientSerNum = Users.UserTypeSerNum AND Users.Username = ?;";
 };
 
-exports.getPatientDeviceLastActivity=function(userid,device)
+exports.getPatientDeviceLastActivity=function()
 {
-    return "SELECT * FROM PatientActivityLog WHERE Username='"+userid+"' AND DeviceId='"+device+"' ORDER BY ActivitySerNum DESC LIMIT 1;";
+    return "SELECT * FROM PatientActivityLog WHERE Username=? AND DeviceId=? ORDER BY ActivitySerNum DESC LIMIT 1;";
 };
 exports.insertEducationalMaterialRatingQuery=function()
 {
