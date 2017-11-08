@@ -7,6 +7,8 @@ const request           = require('request');
 const questionnaires    = require('./../questionnaires/patientQuestionnaires.js');
 const Mail              = require('./../mailer/mailer.js');
 const utility           = require('./../utility/utility');
+const logger            = require('./../logs/logger');
+
 
 let exports = module.exports = {};
 
@@ -126,104 +128,111 @@ exports.getSqlApiMappings = function() {
 };
 
 
-//Query processing function
 /**
  * runSqlQuery
  * @desc runs inputted query against SQL mapping by grabbing an available connection from connection pool
  * @param query
  * @param parameters
  * @param processRawFunction
+ * @return {Promise}
  */
 exports.runSqlQuery = function(query, parameters, processRawFunction) {
-    var r = Q.defer();
+    const r = Q.defer();
 
     pool.getConnection(function(err, connection) {
-        var que = connection.query(query, parameters, function(err,rows, fields){
+
+        logger('info', 'Successfully grabbed connection from pool and about to perform following query: ', {query: query});
+
+        const que = connection.query(query, parameters, function (err, rows, fields) {
             connection.release();
-            
-            if(process.env.DEBUG) console.log(que.sql);
+
+            logger('info', 'Successfully performed query', {query: que.sql, response: JSON.stringify(rows)});
+
+            if (process.env.DEBUG) console.log(que.sql);
 
             if (err) r.reject(err);
-            if(typeof rows !=='undefined')
-            {
-                if(processRawFunction&&typeof processRawFunction !=='undefined')
-                {
-                    processRawFunction(rows).then(function(result)
-                    {
+            if (typeof rows !== 'undefined') {
+                if (processRawFunction && typeof processRawFunction !== 'undefined') {
+                    processRawFunction(rows).then(function (result) {
                         r.resolve(result);
                     });
-                }else{
+                } else {
                     r.resolve(rows);
                 }
-            }else{
+            } else {
                 r.resolve([]);
             }
         });
-        
     });
-
     return r.promise;
 };
 
-
-//Gets Patient tables based on userID,  if timestamp defined sends requests
-//that are only updated after timestamp, third parameter is an array of table names, if not present all tables are gathered
-exports.getPatientTableFields = function(userId,timestamp,arrayTables)
-{
-    var r=Q.defer();
-    var timestp=0;
-    if(arguments.length>=2)
-    {
+/**
+ * getPatientTableFields
+ * @desc Gets Patient tables based on userID,  if timestamp defined sends requests that are only updated after timestamp, third parameter is an array of table names, if not present all tables are gathered
+ * @param userId
+ * @param timestamp
+ * @param arrayTables
+ * @return {Promise}
+ */
+exports.getPatientTableFields = function(userId,timestamp,arrayTables) {
+    const r = Q.defer();
+    let timestp = 0;
+    if(arguments.length>=2) {
         timestp=timestamp;
     }
-    var objectToFirebase={};
-    var index=0;
+
+    const objectToFirebase = {};
+    let index = 0;
+
     Q.all(preparePromiseArrayFields(userId,timestp,arrayTables)).then(function(response){
-        if(typeof arrayTables!=='undefined')
-        {
-            for (var i = 0; i < arrayTables.length; i++) {
+        if(arrayTables) {
+            for (let i = 0; i < arrayTables.length; i++) {
                 objectToFirebase[arrayTables[i]]=response[index];
                 index++;
             }
         }else{
-            for (var key in requestMappings) {
+            for (const key in requestMappings) {
                 objectToFirebase[key]=response[index];
                 index++;
             }
         }
         r.resolve({Data:objectToFirebase,Response:'success'});
     },function(error){
-        r.reject({Response:'error',Reason:'Problems querying the database due to '+error});
+        r.reject({Response:'error',Reason:'Problems querying the database due to ' + error});
     });
     return r.promise;
 };
-//Helper function to format the table, userId and timestamp
-function processSelectRequest(table, userId, timestamp)
-{
-    var r=Q.defer();
-    var requestMappingObject = requestMappings[table];
-    //console.log(requestMappings[table]);
-    var date=new Date(0);
-    if(typeof timestamp!=='undefined')
-    {
+
+/**
+ * processSelectRequest
+ * @desc Gets the correct request mapping object and runs the query against the sql function
+ * @param table
+ * @param userId
+ * @param timestamp
+ * @return {Promise}
+ */
+function processSelectRequest(table, userId, timestamp) {
+    const r = Q.defer();
+    const requestMappingObject = requestMappings[table];
+
+    let date = new Date(0);
+    if(timestamp) {
         date=new Date(Number(timestamp));
     }
-    var paramArray=[userId];
+
+    const paramArray = [userId];
     if(requestMappingObject.numberOfLastUpdated>0){
-        for (var i = 0; i < requestMappingObject.numberOfLastUpdated; i++) {
+        for (let i = 0; i < requestMappingObject.numberOfLastUpdated; i++) {
             paramArray.push(date);
         }
     }
-    if(requestMappingObject.hasOwnProperty('sql'))
-    {
-        exports.runSqlQuery(requestMappingObject.sql,paramArray,
-            requestMappingObject.processFunction).then(function(rows)
-        {
-            if (table === 'Questionnaires'){
-            }
+
+    if(requestMappingObject.hasOwnProperty('sql')) {
+        exports.runSqlQuery(requestMappingObject.sql,paramArray, requestMappingObject.processFunction).then(function(rows) {
+            if (table === 'Questionnaires'){  }
             r.resolve(rows);
-        },function(err)
-        {
+        },function(err) {
             r.reject(err);
         });
     }else{
@@ -237,24 +246,36 @@ function processSelectRequest(table, userId, timestamp)
     return r.promise;
 }
 
-//Preparing a promise array for later retrieval
-function preparePromiseArrayFields(userId,timestamp,arrayTables)
-{
-    var array=[];
+/**
+ * preparePromiseArrayFields
+ * @desc Preparing a promise array for later retrieval
+ * @param userId
+ * @param timestamp
+ * @param arrayTables
+ * @return {Array}
+ */
+function preparePromiseArrayFields(userId,timestamp,arrayTables) {
+    const array = [];
     if(typeof arrayTables!=='undefined')
     {
-        for (var i = 0; i < arrayTables.length; i++) {
+        for (let i = 0; i < arrayTables.length; i++) {
             array.push(processSelectRequest(arrayTables[i],userId,timestamp));
         }
     }else{
-        for (var key in requestMappings) {
+        for (const key in requestMappings) {
             array.push(processSelectRequest(key,userId,timestamp));
         }
     }
     return array;
 }
 
-//Update read status for a table
+/**
+ * updateReadStatus
+ * @desc Update read status for a table
+ * @param userId
+ * @param parameters
+ * @return {Promise}
+ */
 exports.updateReadStatus=function(userId, parameters)
 {
     let r = Q.defer();
@@ -273,26 +294,38 @@ exports.updateReadStatus=function(userId, parameters)
     return r.promise;
 };
 
-//Api call to insert a message into messages table
-exports.sendMessage=function(requestObject)
-{
+/**
+ * sendMessage
+ * @desc inserts a message into messages table
+ * @param requestObject
+ * @return {Promise}
+ */
+exports.sendMessage=function(requestObject) {
 	return exports.runSqlQuery(queries.sendMessage(requestObject));
 };
 
-//Check if user is already checkedin 
-exports.checkCheckinInAria = function(requestObject)
-{
-    var r = Q.defer();
-    var serNum = requestObject.Parameters.AppointmentSerNum;
-    var username = requestObject.UserID;
+/**
+ * checkCheckinInAria
+ * @desc Check if user is already checkedin
+ * @param requestObject
+ */
+exports.checkCheckinInAria = function(requestObject) {
+    const r = Q.defer();
+    const serNum = requestObject.Parameters.AppointmentSerNum;
+    const username = requestObject.UserID;
+
     //Get the appointment aria ser
     getAppointmentAriaSer(username, serNum).then(function(response){
-        var ariaSerNum = response[0].AppointmentAriaSer;
+        const ariaSerNum = response[0].AppointmentAriaSer;
+
         //Check using Ackeem's script whether the patient has checked in at the kiosk
         checkIfCheckedIntoAriaHelper(ariaSerNum).then(function(success){
+
+            //TODO: THIS SHOULD HANDLED IN THE CASE CHECKIN QUERY DOES NOT SUCCEED???
             //Check in the user into mysql if they have indeed checkedin at kiosk
             if(success) exports.runSqlQuery(queries.checkin(),['Kiosk', serNum, username]);
             r.resolve({Response:'success', Data:{'CheckedIn':success, AppointmentSerNum:serNum}});
+
         }).catch(function(error){
             //Error occur while checking patient status
             r.reject({Response:'error', Reason:error});
@@ -332,30 +365,33 @@ exports.checkinUpdate = function(requestObject)
 */
 
 
-//Api call to checkin to an Appointment (Implementation in Aria is yet to be done)
-exports.checkIn=function(requestObject)
-{
-    var r=Q.defer();
-    var serNum = requestObject.Parameters.AppointmentSerNum;
-    var latitude = requestObject.Parameters.Latitude;
-    var longitude = requestObject.Parameters.Longitude;
-    var accuracy = requestObject.Parameters.Accuracy;
-    var username = requestObject.UserID;
-    var session = requestObject.Token;
-    var deviceId = requestObject.DeviceId;
+/**
+ * checkIn
+ * @desc checks into aria and then logs the check in status to db
+ * @param requestObject
+ * @return {Promise}
+ */
+exports.checkIn=function(requestObject) {
+    const r = Q.defer();
+    const serNum = requestObject.Parameters.AppointmentSerNum;
+    const latitude = requestObject.Parameters.Latitude;
+    const longitude = requestObject.Parameters.Longitude;
+    const accuracy = requestObject.Parameters.Accuracy;
+    const username = requestObject.UserID;
+    const session = requestObject.Token;
+    const deviceId = requestObject.DeviceId;
+
     //Getting the appointment ariaSer to checkin to aria
     getAriaPatientId(username).then(function(response){
-        var patientId = response[0].PatientId;
+        const patientId = response[0].PatientId;
+
         //Check in to aria using Johns script
         checkIntoAria(patientId,serNum, username).then(function(response){
-            if(response)
-            {
-                //console.log('Checked in successfully done in aria', response);
+            if(response) {
                 //If successfully checked in change field in mysql
-                var promises = [];
+                let promises = [];
 
-                for (var i=0; i!=serNum.length; ++i){
-                    //console.log(serNum[i]);
+                for (let i=0; i!==serNum.length; ++i){
                     promises.push(
                         exports.runSqlQuery(queries.checkin(),[session, serNum[i], username])
                             .then(exports.runSqlQuery(queries.logCheckin(),[serNum[i], deviceId,latitude, longitude, accuracy, new Date()])));
@@ -363,26 +399,29 @@ exports.checkIn=function(requestObject)
 
                 Q.all(promises)
                     .then(function(response){
-                        //console.log('Checkin done successfully', 'Finished writint to database');
                         r.resolve({Response:'success'});
                     })
                     .catch(function(error){
-                        //console.log('error checkin dur to', error);
                         r.reject({Response:'error',Reason:'CheckIn error due to '+error});
                     });
             }else{
                 r.reject({Response:'error', Reason:'Unable to checkin Aria'});
             }
         }).catch(function(error){
-            //console.log('Unable to checkin aria',error);
             r.reject({Response:'error', Reason:error});
         });
     }).catch(function(error){
-        //console.log('Error while grabbing aria ser num', error);
-        r.reject({Response:'error', Reason:'Error grabbing aria ser num from aria'+error});
+        r.reject({Response:'error', Reason:'Error grabbing aria ser num from aria '+ error});
     });
     return r.promise;
 };
+
+/**
+ * getDocumentsContent
+ * @desc fetches a document's content from DB
+ * @param requestObject
+ * @return {Promise}
+ */
 exports.getDocumentsContent = function(requestObject) {
 
     let r = Q.defer();
@@ -392,12 +431,10 @@ exports.getDocumentsContent = function(requestObject) {
         r.reject({Response:'error',Reason:'Not an array'});
     }else{
         exports.runSqlQuery(queries.getDocumentsContentQuery(), [[documents],userID]).then((rows)=>{
-	        if(rows.length === 0)
-	        {
+	        if(rows.length === 0) {
 		        r.resolve({Response:'success',Data:'DocumentNotFound'});
-	        }else{
-		        LoadDocuments(rows).then(function(documents)
-		        {
+	        } else {
+		        LoadDocuments(rows).then(function(documents) {
 			        if(documents.length === 1) r.resolve({Response:'success',Data:documents[0]});
 			        else r.resolve({Response:'success',Data:documents});
 		        }).catch(function (err) {
@@ -407,23 +444,21 @@ exports.getDocumentsContent = function(requestObject) {
         }).catch((err)=>{
 	        r.reject({Response:'error',Reason:err});
         });
-
     }
     return r.promise;
 };
+
 /**
  * @name updateAccountField
  * @description Updates the fields in the patient table
  * @param requestObject
  */
-exports.updateAccountField=function(requestObject)
-{
+exports.updateAccountField=function(requestObject) {
     let r = Q.defer();
 
     let email = requestObject.UserEmail;
     if(!email) r.reject({Response:'error',Reason:`Invalid parameter email`}); //Check for valid email
-    getPatientFromEmail(email).then(function(patient)
-    {
+    getPatientFromEmail(email).then(function(patient) {
         //Valid fields
         let validFields = ['Email', 'TelNum', 'Language'];
         let { field, newValue } = requestObject.Parameters;
@@ -453,18 +488,17 @@ exports.updateAccountField=function(requestObject)
     });
     return r.promise;
 };
+
 /**
  * @name inputFeedback
  * @description Manages feedback content for the app, sends feedback to pfp committee if directed there.
  * @param requestObject
  */
-exports.inputFeedback = function(requestObject)
-{
+exports.inputFeedback = function(requestObject) {
     let r = Q.defer();
     let email = requestObject.UserEmail;
 	if(!email) r.reject({Response:'error',Reason:`Invalid parameter email`});
-	getPatientFromEmail(email).then((patient)=>
-    {
+	getPatientFromEmail(email).then((patient)=> {
         let {type, feedback, appRating} = requestObject.Parameters;
         if((!type||!feedback)) r.reject({Response:'error',Reason:`Invalid parameter type`});
         exports.runSqlQuery(queries.inputFeedback(),[ patient.PatientSerNum, feedback, appRating, requestObject.Token ])
@@ -497,18 +531,17 @@ exports.inputFeedback = function(requestObject)
  * @input {object} Object containing the device identifiers
  * @returns {promise} Promise with success or failure.
  */
-exports.updateDeviceIdentifier = function(requestObject, parameters)
-{
+exports.updateDeviceIdentifier = function(requestObject, parameters) {
     let r = Q.defer();
     //Validating parameters
     if(!requestObject.Parameters || !requestObject.Parameters.registrationId
-        || typeof requestObject.Parameters.registrationId !== 'string' )
-    {
+        || typeof requestObject.Parameters.registrationId !== 'string' ) {
         r.reject({Response:'error', Reason:'Invalid parameters'});
     }
 
     let registrationId = requestObject.Parameters.registrationId;
     let deviceType = null;
+
     //Validation deviceType
     if (identifiers.deviceType === 'browser') {
         deviceType = 3;
@@ -519,6 +552,7 @@ exports.updateDeviceIdentifier = function(requestObject, parameters)
     }else{
         r.reject({Response:'error', Reason:'Incorrect device type'});
     }
+
     let email = requestObject.UserEmail;
     getPatientFromEmail(email).then(function(user){
         exports.runSqlQuery(queries.updateDeviceIdentifiers(),[user.PatientSerNum, requestObject.DeviceId, registrationId, deviceType ,requestObject.Token, registrationId, requestObject.Token])
@@ -531,11 +565,11 @@ exports.updateDeviceIdentifier = function(requestObject, parameters)
         r.reject({Response:'error', Reason:'Error getting patient fields due to '+error});
     });
     return r.promise;
-
 };
-//Adding action to activity log
+
 /**
  * @name addToActivityLog
+ * @desc Adding action to activity log
  * @param requestObject
  */
 exports.addToActivityLog=function(requestObject)
@@ -550,12 +584,12 @@ exports.addToActivityLog=function(requestObject)
         });
     return r.promise;
 };
+
 /**
  * @name getFirstEncryption
  * @param requestObject
  */
-exports.getFirstEncryption=function(requestObject)
-{
+exports.getFirstEncryption=function(requestObject) {
     let r=Q.defer();
 	exports.runSqlQuery(queries.securityQuestionEncryption(),[requestObject.UserID])
 		.then((rows)=>{
@@ -567,18 +601,26 @@ exports.getFirstEncryption=function(requestObject)
 };
 
 
-//Gets user password for encrypting/decrypting to return security question
-exports.getEncryption=function(requestObject)
-{
+/**
+ * getEncryption
+ * @desc Gets user password for encrypting/decrypting to return security question
+ * @param requestObject
+ * @return {Promise}
+ */
+exports.getEncryption=function(requestObject) {
 	return exports.runSqlQuery(queries.securityQuestionEncryption(),[requestObject.UserID]);
 };
 
-exports.inputQuestionnaireAnswers = function(requestObject)
-{
+/**
+ * inputQuestionnaireAnswers
+ * @desc Input questionnaire answers into DB
+ * @param requestObject
+ * @return {Promise}
+ */
+exports.inputQuestionnaireAnswers = function(requestObject) {
     let r = Q.defer();
     let parameters = requestObject.Parameters;
-    questionnaires.inputQuestionnaireAnswers(parameters).then(function(patientQuestionnaireSerNum)
-    {
+    questionnaires.inputQuestionnaireAnswers(parameters).then(function(patientQuestionnaireSerNum) {
         exports.runSqlQuery(queries.setQuestionnaireCompletedQuery(),
             [patientQuestionnaireSerNum, parameters.DateCompleted, requestObject.Token,parameters.QuestionnaireSerNum])
             .then(()=>{
@@ -589,19 +631,20 @@ exports.inputQuestionnaireAnswers = function(requestObject)
     });
     return r.promise;
 };
-/***
+
+/**
  * @name getMapLocation
  * @description Obtains map location via QR code
  * @deprecated
  * @param requestObject
  */
-exports.getMapLocation=function(requestObject)
-{
+exports.getMapLocation=function(requestObject) {
     let r = Q.defer();
-    if(!requestObject.Parameters || !requestObject.Parameters.QRCode)
-    {
+
+    if(!requestObject.Parameters || !requestObject.Parameters.QRCode) {
         r.reject({Response:'error', Reason:'Incorrect parameter'});
     }
+
     exports.runSqlQuery(queries.getMapLocation(),[requestObject.Parameters.QRCode]).then((rows)=>{
        r.resolve({Response:'success', Data:{MapLocation:rows[0]}});
     }).catch((err)=>{
@@ -611,49 +654,72 @@ exports.getMapLocation=function(requestObject)
     return r.promise;
 };
 
-/***
+/**
  * @name increaseSecurityAnswerAttempt
  * @description Increase security answer attempt by one
  * @param requestObject
  */
-exports.increaseSecurityAnswerAttempt = function(requestObject)
-{
+exports.increaseSecurityAnswerAttempt = function(requestObject) {
     return exports.runSqlQuery(queries.increaseSecurityAnswerAttempt(),[requestObject.DeviceId]);
 };
-/***
+
+/**
  * @name resetSecurityAnswerAttempt
  * @description Sets the security answer attempt to zero
  * @param requestObject
  */
-exports.resetSecurityAnswerAttempt = function(requestObject) 
-{
+exports.resetSecurityAnswerAttempt = function(requestObject) {
 	return exports.runSqlQuery(queries.resetSecurityAnswerAttempt(),[requestObject.DeviceId]);
 };
+
 /**
  * @name setTimeoutSecurityAnswer
  * @description Sets up timeout for device with incorrect security answer
  * @param requestObject
  * @param timestamp
  */
-exports.setTimeoutSecurityAnswer = function(requestObject, timestamp) 
-{
+exports.setTimeoutSecurityAnswer = function(requestObject, timestamp) {
 	return exports.runSqlQuery(queries.setTimeoutSecurityAnswer(),[new Date(timestamp), requestObject.DeviceId]);
 };
-//Api call to get patient fields for password reset
-exports.getPatientFieldsForPasswordReset=function(requestObject)
-{
+
+/**
+ * getPatientFieldsForPasswordReset
+ * @desc gets patient fields for password reset
+ * @param requestObject
+ * @return {Promise}
+ */
+exports.getPatientFieldsForPasswordReset=function(requestObject) {
     return exports.runSqlQuery(queries.getPatientFieldsForPasswordReset(),[requestObject.UserEmail, requestObject.DeviceId]);
 };
-exports.setNewPassword=function(password,patientSerNum)
-{
+
+/**
+ * setNewPassword
+ * @desc updates user's password in DB
+ * @param password
+ * @param patientSerNum
+ * @return {Promise}
+ */
+exports.setNewPassword=function(password,patientSerNum) {
     return exports.runSqlQuery(queries.setNewPassword(),[password,patientSerNum]);
 };
-//Getting planning estimate from Marc's script
-exports.planningStepsAndEstimates = function(userId, timestamp)
-{
+
+/**
+ * planningStepsAndEstimates
+ * @desc Getting planning estimate from Marc's script
+ * @param userId
+ * @param timestamp
+ */
+exports.planningStepsAndEstimates = function(userId, timestamp) {
     return planningStepsAndEstimates(userId, timestamp);
 };
 
+/**
+ * getPatientDeviceLastActivity
+ * @desc gets the patient's last active timestamp
+ * @param userid
+ * @param device
+ * @return {Promise}
+ */
 exports.getPatientDeviceLastActivity = function(userid,device)
 {
     let r = Q.defer();
@@ -664,6 +730,7 @@ exports.getPatientDeviceLastActivity = function(userid,device)
     });
     return r.promise;
 };
+
 /**
  *@module sqlInterface
  *@name inputQuestionnaireRating
@@ -677,10 +744,10 @@ exports.inputEducationalMaterialRating = function(requestObject)
 {
     let r = Q.defer();
     let {EducationalMaterialControlSerNum, PatientSerNum, RatingValue} = requestObject.Parameters;
-    if(!EducationalMaterialControlSerNum||!PatientSerNum||!RatingValue)
-    {
+    if(!EducationalMaterialControlSerNum||!PatientSerNum||!RatingValue) {
         r.reject({Response:'error',Reason:'Invalid Parameters'});
     }
+
     exports.runSqlQuery(queries.insertEducationalMaterialRatingQuery(),
         [ EducationalMaterialControlSerNum, PatientSerNum, RatingValue, requestObject.Token])
         .then(()=>{
@@ -690,13 +757,23 @@ exports.inputEducationalMaterialRating = function(requestObject)
         });
     return r.promise;
 };
-exports.updateLogout = function(fields)
-{
+
+/**
+ * updateLogout
+ * @param fields
+ * @return {Promise}
+ */
+exports.updateLogout = function(fields) {
     return exports.runSqlQuery(queries.updateLogout(), fields);
 };
 
-function getPatientFromEmail(email)
-{
+/**
+ * getPatientFromEmail
+ * @desc gets patient information based on inputted email
+ * @param email
+ * @return {Promise}
+ */
+function getPatientFromEmail(email) {
     let r = Q.defer();
 	exports.runSqlQuery(queries.getPatientFromEmail(),[email])
         .then((rows)=>{
@@ -710,9 +787,11 @@ function getPatientFromEmail(email)
 
 /**
  * @name getPasswordForVerification
+ * @desc gets the user's password to crosscheck during login to verify that Firebase and DB passwords are synced
  * @param email
+ * @return {Promise}
  */
-exports.getPasswordForVerification= function(email) {
+exports.getPasswordForVerification = function(email) {
     let r=Q.defer();
     exports.runSqlQuery(queries.getPatientPasswordForVerification(), [email])
 	    .then((rows)=>{
@@ -724,83 +803,80 @@ exports.getPasswordForVerification= function(email) {
     return r.promise;
 };
 
-function LoadDocuments(rows)
-{
-    /**
-     * @ngdoc method
-     * @methodOf Qplus Firebase Listener
-     *@name LoadImages
-     *@description  Uses the q module to make a promise to load images. The promise is resolved after all of them have been read from file system using the fs module. The code continues to run only if the promise is resolved.
-     **/
+/**
+ * LoadDocuments
+ * @desc Grabs file object to be loaded
+ * @param rows
+ * @return {Promise}
+ */
+function LoadDocuments(rows) {
 
-    var defer = Q.defer();
+    const defer = Q.defer();
 
     if (rows.length === 0) { return defer.resolve([]); }
 
-    for (var key = 0; key < rows.length; key++)
-    {
+    for (let key = 0; key < rows.length; key++) {
+
         // Get extension for filetype
-        var n = rows[key].FinalFileName.lastIndexOf(".");
-        var substring=rows[key].FinalFileName.substring(n+1,rows[key].FinalFileName.length);
-        rows[key].DocumentType=substring;
+        const n = rows[key].FinalFileName.lastIndexOf(".");
+        rows[key].DocumentType= rows[key].FinalFileName.substring(n + 1, rows[key].FinalFileName.length);
 
         try{
             rows[key].Content=filesystem.readFileSync(config.DOCUMENTS_PATH + rows[key].FinalFileName,'base64');
             defer.resolve(rows)
         } catch(err) {
             if (err.code == "ENOENT"){
-                //console.log("File not found!");
                 defer.reject("No file found");
             }
             else {
                 throw err;
             }
         }
-
     }
     return defer.promise;
 }
 
-
-//Function toobtain Doctors images
+/**
+ * loadImageDoctor
+ * @desc loads a doctor's image fetched from DB
+ * @param rows
+ * @return {Promise}
+ */
 function loadImageDoctor(rows){
-    var deferred = Q.defer();
-    for (var key in rows){
+    const deferred = Q.defer();
+    for (const key in rows){
         if((typeof rows[key].ProfileImage !=="undefined" )&&rows[key].ProfileImage){
-
-            var n = rows[key].ProfileImage.lastIndexOf(".");
-            var substring=rows[key].ProfileImage.substring(n+1,rows[key].ProfileImage.length);
-            rows[key].DocumentType=substring;
+            const n = rows[key].ProfileImage.lastIndexOf(".");
+            rows[key].DocumentType=rows[key].ProfileImage.substring(n + 1, rows[key].ProfileImage.length);
             rows[key].ProfileImage=filesystem.readFileSync('./Doctors/'+rows[key].ProfileImage,'base64' );
-
         }
     }
     deferred.resolve(rows);
     return deferred.promise;
 }
 
-//function to format patient image to base 64
+/**
+ * loadProfileImagePatient
+ * @desc formats patient image to base64
+ * @param rows
+ * @return {Promise}
+ */
 function loadProfileImagePatient(rows){
-    var deferred = Q.defer();
+    const deferred = Q.defer();
 
-    if(rows[0]&&rows[0].ProfileImage && rows[0].ProfileImage!=='')
-    {
-        var buffer=new Buffer(rows[0].ProfileImage,'hex');
-        var base64Buffer=buffer.toString('base64');
+    if(rows[0]&&rows[0].ProfileImage && rows[0].ProfileImage!=='') {
+        const buffer = new Buffer(rows[0].ProfileImage, 'hex');
+        const base64Buffer = buffer.toString('base64');
         rows[0].DocumentType='jpg';
         rows[0].ProfileImage=base64Buffer;
         deferred.resolve(rows);
-        /*var n = rows[0].ProfileImage.lastIndexOf(".");
-         var substring=rows[0].ProfileImage.substring(n+1,rows[0].ProfileImage.length);
-         rows[0].DocumentType=substring;
-         rows[0].ProfileImage=filesystem.readFileSync(__dirname + '/Patients/'+ rows[0].ProfileImage,'base64' );
-         deferred.resolve(rows);*/
     }else{
         deferred.resolve(rows);
     }
 
     return deferred.promise;
 }
+
 //Obtains educational material table of contents
 function getEducationalMaterialTableOfContents(rows)
 {
@@ -870,10 +946,9 @@ function getEducationTableOfContents(rows)
     ).catch(function(error){r.reject(error);});
     return r.promise;
 }
-//Attachements for messages, not yet implemented to be added eventually
-var LoadAttachments = function (rows )
-{
 
+//Attachments for messages, not yet implemented to be added eventually
+var LoadAttachments = function (rows ) {
     var messageCounter=0 ;
     var r = Q.defer();
     r.resolve(rows);
@@ -882,19 +957,16 @@ var LoadAttachments = function (rows )
 };
 
 //Get the appointment aria ser num for a particular AppointmentSerNum, Username is passed as a security measure
-function getAppointmentAriaSer(username, appSerNum)
-{
+function getAppointmentAriaSer(username, appSerNum) {
     return exports.runSqlQuery(queries.getAppointmentAriaSer(),[username, appSerNum]);
 }
 
-function getAriaPatientId(username)
-{
+function getAriaPatientId(username) {
     return exports.runSqlQuery(queries.getPatientId(),[username]);
 }
 
 //Checks user into Aria
-function checkIntoAria(patientId, serNum, username)
-{
+function checkIntoAria(patientId, serNum, username) {
     var r = Q.defer();
     var url = config.CHECKIN_PATH+patientId;
     //making request to checkin
