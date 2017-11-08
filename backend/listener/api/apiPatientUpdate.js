@@ -5,8 +5,7 @@ var utility = require('./../utility/utility.js');
 var validate = require('./../utility/validate.js');
 var queries = require('./../sql/queries.js');
 var logger = require('./../logs/logger.js');
-const fs = require('fs');
-const config = require('../config.json');
+
 /**
  *@name login
  *@requires sqlInterface

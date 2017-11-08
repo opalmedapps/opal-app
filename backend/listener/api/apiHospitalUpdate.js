@@ -1,5 +1,5 @@
-var exports=module.exports={};
-var sqlInterface = require('./sqlInterface.js');
+const exports = module.exports = {};
+const sqlInterface = require('./sqlInterface.js');
 
 //API call to log user out
 exports.logout=function(requestObject)
@@ -12,10 +12,13 @@ exports.sendMessage=function(requestObject)
 {
   return sqlInterface.sendMessage(requestObject);
 };
+
+//Input questionnaire answers to DB
 exports.inputQuestionnaireAnswers = function(requestObject)
 {
   return sqlInterface.inputQuestionnaireAnswers(requestObject);
 };
+
 //Input feedback
 exports.inputFeedback=function(requestObject)
 {
