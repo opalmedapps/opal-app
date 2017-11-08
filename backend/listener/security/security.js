@@ -156,7 +156,8 @@ exports.securityQuestion=function(requestKey,requestObject) {
 };
 
 function getSecurityQuestion(requestKey, requestObject, unencrypted){
-    return sqlInterface.updateDeviceIdentifier(requestObject, unencrypted)
+    requestObject.Parameters = unencrypted;
+    return sqlInterface.updateDeviceIdentifier(requestObject)
         .then(function () {
             return sqlInterface.getSecurityQuestion(requestObject)
         })

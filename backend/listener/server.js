@@ -33,6 +33,7 @@ admin.database.enableLogging(true);
 // Get reference to correct data element
 var db = admin.database();
 var ref = db.ref("/dev2");
+if(process.env.DEBUG) console.log("DEBUG MODE");
 
 //Main queue to handle results sequentially
 let mainQueue = new OpalQueue();
@@ -49,7 +50,6 @@ ref.set(null)
 setInterval(function(){
     clearTimeoutRequests();
     clearClientRequests();
-
 },60000);
 
 logger.log('debug','Initialize listeners: ');
@@ -71,8 +71,8 @@ function listenForRequest(requestType){
             handleRequest(requestType,snapshot);
         },
         function(error){
-            console.log( JSON.stringify(error));
-
+	        logger.log('error','Firebase reading error',{error:error});
+            if(process.env.DEBUG) console.log( JSON.stringify(error));
         });
 }
 
@@ -86,16 +86,16 @@ function handleRequest(requestType, snapshot){
     let headers = {key: snapshot.key, objectRequest: snapshot.val(), requestType: requestType};
 	mainQueue.enqueue(headers);
     if(!mainQueue.inProgress){
-        console.log("INITIATING PROCESS OPAL QUEUE");
+	    if(process.env.DEBUG) console.log("INITIATING PROCESS OPAL QUEUE");
         processOpalQueue();
     }
 }
 
 function processOpalQueue(){
-	console.log("Processing request");
+	if(process.env.DEBUG) console.log("Processing request");
 	mainQueue.inProgress = true;
 	let headers =  mainQueue.dequeue();
-	console.log(`SIZE OF QUEUE: ${mainQueue.head}, DATE OF REQUEST: ${new Date(headers.objectRequest.Timestamp).toISOString()}`);
+	if(process.env.DEBUG) console.log(`SIZE OF QUEUE: ${mainQueue.head}, DATE OF REQUEST: ${new Date(headers.objectRequest.Timestamp).toISOString()}`);
 	processRequest(headers).then((response)=>{
         logResponse(response);
 		uploadToFirebase(response, headers.requestType).then(()=>{
@@ -111,12 +111,12 @@ function processOpalQueue(){
 	});
 }
 function processNext() {
-    console.log("Process next");
+	if(process.env.DEBUG) console.log("Process next");
 	if(!mainQueue.isEmpty())
 	{
 		processOpalQueue();
 	}else{
-	    console.log("QUEUE IS EMPTY");
+		if(process.env.DEBUG) console.log("QUEUE IS EMPTY");
 		mainQueue.inProgress = false;
 	}
 }
@@ -161,7 +161,7 @@ function clearTimeoutRequests()
 // Erase requests data on firebase in case the request has not been processed
 function clearClientRequests(){
     ref.child('requests').once('value').then(function(snapshot){
-        var now=(new Date()).getTime();
+        var now = (new Date()).getTime();
         var requestData=snapshot.val();
         for (var requestKey in requestData) {
             if(requestData[requestKey].hasOwnProperty('Timestamp')&&now-requestData[requestKey].Timestamp>60000) {
@@ -258,20 +258,9 @@ function uploadToFirebase(response, key)
 // Clearing the request off firebase
 function completeRequest(headers, success, key)
 {
-    var requestKey = headers.RequestKey;
-    var requestObject  = headers.RequestObject;
-    requestObject.Parameters=JSON.stringify(requestObject.Parameters);
-    requestObject.time=new Date();
-    if(success == 'error')
-    {
-        requestObject.response='Failure';
-    }else{
-        requestObject.response='Success';
-    }
-
-    ref.child(key).child(requestKey).set(null)
-        .catch(function (error) {
-            logger.error('Error writing to firebase', {error:error});
-        });
+    return ref.child(key).child(headers.RequestKey).set(null)
+    .catch(function (error) {
+        logger.error('Error writing to firebase', {error:error});
+    });
 }
 
