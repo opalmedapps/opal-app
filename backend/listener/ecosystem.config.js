@@ -1,14 +1,15 @@
 module.exports = {
-    /**
-     * Application configuration section
-     */
     apps : [
-
-        // Opal pm2 configs, out_file is for logs
         {
-            name        : "opal",
-            script      : "server.js",
-            out_file    : "dev/null"
+            name: "opal-listener",
+            script: "server.js",
+            watch: true,
+            env: {
+                "NODE_ENV": "development"
+            },
+            env_production: {
+                "NODE_ENV": "production",
+            }
         }
     ]
 };
