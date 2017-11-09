@@ -23,19 +23,11 @@ const dbCredentials = {
 	dateStrings: true
 };
 
-const sqlConfig={
-	host:'localhost',
-	port:'/Applications/MAMP/tmp/mysql/mysql.sock',
-	user:'root',
-	password:'v_y_d100',
-	database:'OpalProd',
-	dateStrings:true
-};
 /**
  * SQL POOL CONFIGURATION
  * @type {Pool}
  */
-const pool = mysql.createPool(sqlConfig);
+const pool = mysql.createPool(dbCredentials);
 
 /////////////////////////////////////////////////////
 
