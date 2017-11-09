@@ -15,7 +15,6 @@ const utility           = require('./utility/utility.js');
 const q                 = require("q");
 const config            = require('./config.json');
 const logger            = require('./logs/logger.js');
-const OpalQueue         = require('./utility/queue').OpalQueue;
 
 const DEBUG = process.env.NODE_ENV === 'development';
 const FIREBASE_DEBUG = !!process.env.FIREBASE_DEBUG;
@@ -35,12 +34,10 @@ if(FIREBASE_DEBUG) admin.database.enableLogging(true);
 
 // Get reference to correct data element
 const db = admin.database();
-const ref = db.ref("/dev4");
+const ref = db.ref("/dev2");
 
 logger.log('debug', 'CURRENTLY IN DEBUG MODE');
 
-//Main queue to handle results sequentially
-let mainQueue = new OpalQueue();
 
 // Ensure there is no leftover data on firebase
 ref.set(null)
@@ -95,46 +92,19 @@ function listenForRequest(requestType){
 function handleRequest(requestType, snapshot){
     logger.log('debug', 'Handling request');
 
-    let headers = {key: snapshot.key, objectRequest: snapshot.val(), requestType: requestType};
-	mainQueue.enqueue(headers);
-    if(!mainQueue.inProgress){
-        logger.log('debug', "INITIATING PROCESS OPAL QUEUE");
-        processOpalQueue();
-    }
-}
+    var headers = {key: snapshot.key, objectRequest: snapshot.val()};
+    processRequest(headers).then(function(response){
 
-function processOpalQueue(){
-    logger.log('debug', "Processing request");
-	mainQueue.inProgress = true;
-	let headers =  mainQueue.dequeue();
+        // Log before uploading to Firebase. Check that it was not a simple log
+        if (response.Headers.RequestObject.Request !== 'Log') logResponse(response);
 
-    logger.log('debug', `SIZE OF QUEUE: ${mainQueue.head}, DATE OF REQUEST: ${new Date(headers.objectRequest.Timestamp).toISOString()}`);
+        uploadToFirebase(response, requestType);
 
-    processRequest(headers).then((response)=>{
-        logResponse(response);
-		uploadToFirebase(response, headers.requestType).then(()=>{
-			processNext();
-		}).catch((error)=>{
-			logError(error);
-			processNext();
-		});
-
-	}).catch(function(error){
-		logError(error);
-		processNext();
-	});
-}
-
-function processNext() {
-    logger.log('debug', "Processing next");
-
-    if(!mainQueue.isEmpty())
-	{
-		processOpalQueue();
-	}else{
-        logger.log('debug', "Queue is empty");
-		mainQueue.inProgress = false;
-	}
+    }).catch(function(error){
+        //Log the error
+        logger.error("Error processing request!" + JSON.stringify(error));
+        uploadToFirebase(error, requestType);
+    });
 }
 
 /**
@@ -152,7 +122,6 @@ function logResponse(response){
 			(response.Headers.RequestObject.Request === 'Refresh' ? ": " + response.Headers.RequestObject.Parameters.Fields.join(' ') : ""),
 			requestKey: response.Headers.RequestKey
 		});
-
         logger.log('info', "Completed response", response.Headers.RequestObject.Request);
 	}
 }
@@ -311,6 +280,7 @@ function uploadToFirebase(response, key)
 			}
 
 			delete response.Headers.RequestObject;
+
 			logger.log('debug', path);
 
 			ref.child(path).set(response).then(function(){
@@ -338,6 +308,7 @@ function uploadToFirebase(response, key)
  */
 function completeRequest(headers, key)
 {
+    logger.log('debug', 'Removing request from Firebase after uploading response: ' + key);
 	return ref.child(key).child(headers.RequestKey).set(null)
 		.catch(function (error) {
 			logger.error('Error writing to firebase', {error:error});

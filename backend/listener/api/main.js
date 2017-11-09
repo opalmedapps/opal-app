@@ -15,7 +15,7 @@ module.exports = {
 };
 
 /**
- * equestFormatter
+ * requestFormatter
  * @description handles the api requests by formatting the response obtained from the API
  * @param {key, request}
  * @returns {Promise}
