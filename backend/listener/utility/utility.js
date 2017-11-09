@@ -5,7 +5,7 @@ const stablelibbase64   = require('@stablelib/base64');
 const crypto            = require('crypto');
 const Q                   = require('q');
 
-crypto.DEFAULT_ENCODING = 'hex';
+//crypto.DEFAULT_ENCODING = 'hex';
 
 
 var exports=module.exports={};
@@ -93,6 +93,7 @@ exports.encrypt = function(object,secret,salt) {
     if(salt){
         crypto.pbkdf2(secret, salt, 1000, 64, 'sha1', (err, derivedKey) => {
             if (err) r.reject(err);
+	        derivedKey = derivedKey.toString('hex');
             derivedKey = stablelibutf8.encode(derivedKey.substring(0,nacl.secretbox.keyLength));
             r.resolve(exports.encryptObject(object,derivedKey,nonce));
         });
@@ -122,8 +123,15 @@ exports.decrypt= function(object,secret,salt) {
   if(salt){
       crypto.pbkdf2(secret, salt, 1000, 64, 'sha1', (err, derivedKey) => {
           if (err) r.reject(err);
+	      derivedKey = derivedKey.toString('hex');
           derivedKey = stablelibutf8.encode(derivedKey.substring(0,nacl.secretbox.keyLength));
-          r.resolve(exports.decryptObject(object, derivedKey));
+          let decrypted;
+          try{
+	          decrypted = exports.decryptObject(object, derivedKey);
+	          r.resolve(decrypted);
+          }catch(err){
+              r.reject(err);
+          }
       });
   } else {
       r.resolve(exports.decryptObject(object, stablelibutf8.encode(secret.substring(0,nacl.secretbox.keyLength))));

@@ -8,11 +8,11 @@ class OpalResponseSuccess extends OpalResponse {
 		super(3,data,reqObj);
 	}
 	toLegacy() {
-		data.Code = this.code;
-		data.EncryptionKey = reqObj.auth.pass;
-		data.Salt =  reqObj.auth.salt;
-		data.Headers = {RequestKey:reqObj.requestKey,RequestObject:reqObj.toLegacy()};
-		return data;
+		this.data.Code = this.code;
+		this.data.EncryptionKey = this.reqObj.auth.pass;
+		this.data.Salt =  this.reqObj.auth.salt;
+		this.data.Headers = {RequestKey:this.reqObj.key,RequestObject:this.reqObj.toLegacy()};
+		return this.data;
 	}
 }
 module.exports = OpalResponseSuccess;
