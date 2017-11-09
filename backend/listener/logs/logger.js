@@ -8,7 +8,15 @@
  *                  file 'LICENSE.txt', which is part of this source code package.
  */
 
-var winston = require('winston');
+const winston = require('winston');
+
+const levels = {
+    error: 0,
+    warn: 1,
+    info: 2,
+    verbose: 3,
+    debug: 4,
+};
 
 winston.configure({
     transports: [
