@@ -40,7 +40,7 @@ class RequestValidator {
 							r.resolve(request);
 						})
 						.catch((err)=>{
-							r.reject(new OpalResponseError(2, 'Unable to process request', request, err))
+							r.reject(new OpalResponseError(2, 'Unable to process request', request, err));
 						});
 				}
 			}).catch((err)=>{
