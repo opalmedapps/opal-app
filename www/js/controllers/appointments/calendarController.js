@@ -97,7 +97,7 @@
          * @returns Date
          * @description used by the controller to determine today's date
          */
-        vm.dt = null;
+        vm.dt = new Date();
 
         vm.showColor = showColor;
         vm.getStyle=getStyle;
@@ -153,7 +153,6 @@
                 .then(function(){
                     vm.language = UserPreferences.getLanguage();
 
-                    vm.dt = new Date();
                     vm.dt.setHours(0,0,0,0);
                     today = vm.dt;
                     flag=false;
