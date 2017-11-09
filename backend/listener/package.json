@@ -47,7 +47,7 @@
     "sinon-chai": "^2.8.0"
   },
   "scripts": {
-    "start": "NODE_ENV='prod' node server.js",
+    "start": "NODE_ENV='production' node server.js",
     "start:dev": "node -r dotenv/config server.js",
     "test": "./node_modules/.bin/mocha --reporter spec"
   },
