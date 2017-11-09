@@ -13,6 +13,7 @@ var logger = require('./../logs/logger.js');
  *@description Grabs all the tables for the user and updates them to firebase
  */
 exports.login = function (requestObject) {
+    logger.log('debug', 'Getting patient fields');
     return sqlInterface.getPatientTableFields(requestObject.UserID, requestObject.Parameters.timestamp, requestObject.Parameters.Fields );
 };
 

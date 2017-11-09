@@ -185,7 +185,12 @@ exports.getPatientTableFields = function(userId,timestamp,arrayTables) {
     const objectToFirebase = {};
     let index = 0;
 
+    logger.log('debug', 'Preparing all promises for getting patient data: ' + JSON.stringify(arrayTables));
+
     Q.all(preparePromiseArrayFields(userId,timestp,arrayTables)).then(function(response){
+
+        logger.log('debug', 'Successfully finished all queries: ' + JSON.stringify(response));
+
         if(arrayTables) {
             for (let i = 0; i < arrayTables.length; i++) {
                 objectToFirebase[arrayTables[i]]=response[index];
@@ -199,6 +204,7 @@ exports.getPatientTableFields = function(userId,timestamp,arrayTables) {
         }
         r.resolve({Data:objectToFirebase,Response:'success'});
     },function(error){
+        logger.log('error', 'Problems querying the database due to ' + error);
         r.reject({Response:'error',Reason:'Problems querying the database due to ' + error});
     });
     return r.promise;
@@ -532,6 +538,8 @@ exports.inputFeedback = function(requestObject) {
  * @returns {promise} Promise with success or failure.
  */
 exports.updateDeviceIdentifier = function(requestObject, parameters) {
+    logger.log('debug', 'Inside updateDeviceIdentifier in sql interface');
+
     let r = Q.defer();
     //Validating parameters
     if(!requestObject.Parameters || !requestObject.Parameters.registrationId
@@ -557,11 +565,14 @@ exports.updateDeviceIdentifier = function(requestObject, parameters) {
     getPatientFromEmail(email).then(function(user){
         exports.runSqlQuery(queries.updateDeviceIdentifiers(),[user.PatientSerNum, requestObject.DeviceId, registrationId, deviceType ,requestObject.Token, registrationId, requestObject.Token])
             .then(()=>{
+            logger.log('debug', 'successfully updated device identifiers');
             r.resolve({Response:'success'});
         }).catch((error)=>{
+            logger.log('error', 'Error updating device identifiers due to '+ error);
             r.reject({Response:'error', Reason:'Error updating device identifiers due to '+error});
         });
     }).catch((error)=>{
+        logger.log('error', 'Error getting patient fields due to '+ error);
         r.reject({Response:'error', Reason:'Error getting patient fields due to '+error});
     });
     return r.promise;

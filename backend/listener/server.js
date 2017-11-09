@@ -17,6 +17,9 @@ const config            = require('./config.json');
 const logger            = require('./logs/logger.js');
 const OpalQueue         = require('./utility/queue').OpalQueue;
 
+const DEBUG = process.env.NODE_ENV === 'development';
+const FIREBASE_DEBUG = !!process.env.FIREBASE_DEBUG;
+
 /*********************************************
  * INITIALIZE
  *********************************************/
@@ -26,13 +29,13 @@ admin.initializeApp({
     databaseURL: config.DATABASE_URL
 });
 
-if(process.env.DEBUG) admin.database.enableLogging(true);
+if(FIREBASE_DEBUG) admin.database.enableLogging(true);
 
 // Get reference to correct data element
 const db = admin.database();
 const ref = db.ref("/dev2");
 
-if(process.env.DEBUG) console.log("DEBUG MODE");
+logger.log('debug', 'CURRENTLY IN DEBUG MODE');
 
 //Main queue to handle results sequentially
 let mainQueue = new OpalQueue();
@@ -66,18 +69,19 @@ listenForRequest('passwordResetRequests');
  * @desc Listen for firebase changes and send responses for requests
  */
 function listenForRequest(requestType){
-    logger.log('debug','Starting '+ requestType+' listener.');
+    logger.log('info','Starting '+ requestType+' listener.');
 
     //disconnect any existing listeners..
     ref.child(requestType).off();
 
     ref.child(requestType).on('child_added',
         function(snapshot){
+            logger.log('debug', 'Received request from Firebase: ', JSON.stringify(snapshot.val()));
+            logger.log('info', 'Received request from Firebase: ', snapshot.val().Request);
             handleRequest(requestType,snapshot);
         },
         function(error){
 	        logError(error);
-            if(process.env.DEBUG) console.log( JSON.stringify(error));
         });
 }
 
@@ -88,20 +92,24 @@ function listenForRequest(requestType){
  * @param snapshot
  */
 function handleRequest(requestType, snapshot){
+    logger.log('debug', 'Handling request');
+
     let headers = {key: snapshot.key, objectRequest: snapshot.val(), requestType: requestType};
 	mainQueue.enqueue(headers);
     if(!mainQueue.inProgress){
-	    if(process.env.DEBUG) console.log("INITIATING PROCESS OPAL QUEUE");
+        logger.log('debug', "INITIATING PROCESS OPAL QUEUE");
         processOpalQueue();
     }
 }
 
 function processOpalQueue(){
-	if(process.env.DEBUG) console.log("Processing request");
+    logger.log('debug', "Processing request");
 	mainQueue.inProgress = true;
 	let headers =  mainQueue.dequeue();
-	if(process.env.DEBUG) console.log(`SIZE OF QUEUE: ${mainQueue.head}, DATE OF REQUEST: ${new Date(headers.objectRequest.Timestamp).toISOString()}`);
-	processRequest(headers).then((response)=>{
+
+    logger.log('debug', `SIZE OF QUEUE: ${mainQueue.head}, DATE OF REQUEST: ${new Date(headers.objectRequest.Timestamp).toISOString()}`);
+
+    processRequest(headers).then((response)=>{
         logResponse(response);
 		uploadToFirebase(response, headers.requestType).then(()=>{
 			processNext();
@@ -117,12 +125,13 @@ function processOpalQueue(){
 }
 
 function processNext() {
-	if(process.env.DEBUG) console.log("Process next");
-	if(!mainQueue.isEmpty())
+    logger.log('debug', "Processing next");
+
+    if(!mainQueue.isEmpty())
 	{
 		processOpalQueue();
 	}else{
-		if(process.env.DEBUG) console.log("QUEUE IS EMPTY");
+        logger.log('debug', "Queue is empty");
 		mainQueue.inProgress = false;
 	}
 }
@@ -135,13 +144,15 @@ function processNext() {
 function logResponse(response){
 	// Log before uploading to Firebase. Check that it was not a simple log
 	if (response.Headers.RequestObject.Request !== 'Log') {
-		logger.log('info', "Completed response", {
+		logger.log('debug', "Completed response", {
 			deviceID: response.Headers.RequestObject.DeviceId,
 			userID: response.Headers.RequestObject.UserID,
 			request: response.Headers.RequestObject.Request +
 			(response.Headers.RequestObject.Request === 'Refresh' ? ": " + response.Headers.RequestObject.Parameters.Fields.join(' ') : ""),
 			requestKey: response.Headers.RequestKey
 		});
+
+        logger.log('info', "Completed response", response.Headers.RequestObject.Request);
 	}
 }
 
@@ -177,7 +188,7 @@ function clearTimeoutRequests() {
             {
                 if(usersData[user][requestKey].hasOwnProperty('Timestamp')&&now-usersData[user][requestKey].Timestamp>60000)
                 {
-                    logger.log('info','Deleting leftover responses on firebase', {
+                    logger.log('info','Deleting leftover response on firebase', {
                         request: requestKey
                     });
                     ref.child('users/'+user+'/'+requestKey).set(null);
@@ -194,12 +205,13 @@ function clearTimeoutRequests() {
  * TODO: THIS SHOULD BE IN SEPARATE PROCESS. WE'VE SEEN THAT THIS HOLDS UP THE EVENT LOOP
  */
 function clearClientRequests(){
+    logger.log('debug', 'clearClientRequest called');
     ref.child('requests').once('value').then(function(snapshot){
         const now = (new Date()).getTime();
         const requestData = snapshot.val();
         for (const requestKey in requestData) {
             if(requestData[requestKey].hasOwnProperty('Timestamp')&&now-requestData[requestKey].Timestamp>60000) {
-                logger.log('info', 'Deleting leftover requests on firebase', {
+                logger.log('info', 'Deleting leftover request on firebase', {
                     requestKey: requestKey
                 });
                 ref.child('requests/' + requestKey).set(null);
@@ -215,12 +227,18 @@ function clearClientRequests(){
  */
 function processRequest(headers){
 
+    logger.log('debug', 'Processing request: ' + JSON.stringify(headers));
+    logger.log('info', 'Processing request');
+
     const r = q.defer();
     const requestKey = headers.key;
     const requestObject = headers.objectRequest;
 
     // Separate security requests from main requests
     if(processApi.securityAPI.hasOwnProperty(requestObject.Request)) {
+
+        logger.log('debug', 'Processing security request');
+
         processApi.securityAPI[requestObject.Request](requestKey, requestObject)
             .then(function (response) {
                 r.resolve(response);
@@ -229,6 +247,9 @@ function processRequest(headers){
                 logError(error, requestObject, requestKey);
             });
     } else {
+
+        logger.log('debug', 'Processing general request');
+
         mainRequestApi.apiRequestFormatter(requestKey, requestObject)
             .then(function(results){
                 r.resolve(results);
@@ -247,6 +268,9 @@ function processRequest(headers){
  * @desc Encrypt and upload the response to Firebase
  */
 function uploadToFirebase(response, key) {
+
+    logger.log('debug', 'Uploading to Firebase');
+
     return new Promise((resolve, reject)=>{
 
         //Need to make a copy of the data, since the encryption key needs to be read
@@ -263,6 +287,8 @@ function uploadToFirebase(response, key) {
         // Encrypt the response data
         try{
             if(typeof encryptionKey!=='undefined' && encryptionKey!=='') {
+                logger.log('debug', 'Encrypting response');
+
                 utility.encrypt(response, encryptionKey, salt)
                     .then((res) => {
                         response = res;
@@ -289,7 +315,9 @@ function uploadToFirebase(response, key) {
 
 	    delete response.Headers.RequestObject;
 
-	    ref.child(path).set(response).then(function(){
+        logger.log('debug', 'Uploading response to Firebase');
+
+        ref.child(path).set(response).then(function(){
 		    logResponse(response);
 		    completeRequest(headers, success, key);
 		    resolve('done');

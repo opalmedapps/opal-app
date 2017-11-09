@@ -18,6 +18,8 @@ exports.apiRequestFormatter=function(requestKey,requestObject) {
 
     let responseObject = {};
 
+    logger.log('debug', 'Getting user encryption key');
+
     //Gets user password for decrypting
     sqlInterface.getEncryption(requestObject).then(function(rows){
         if(rows.length>1||rows.length === 0) {
@@ -26,6 +28,8 @@ exports.apiRequestFormatter=function(requestKey,requestObject) {
             responseObject = { Headers:{RequestKey:requestKey,RequestObject:requestObject},EncryptionKey:'', Code: 1, Data:{},Response:'error', Reason:'Injection attack, incorrect UserID'};
             r.resolve(responseObject);
         }else{
+
+            logger.log('debug', 'Successfully got user encryption key');
 
             //Gets password and security answer (both hashed) in order to decrypt request
             const salt = rows[0].AnswerText;
@@ -50,6 +54,8 @@ exports.apiRequestFormatter=function(requestKey,requestObject) {
                                     //Process request simple checks the request and pipes it to the appropiate API call, then it receives the response
                                     processApiRequest.processRequest(requestObject).then(function(data) {
                                         //Once its process if the response is a hospital request processed, simply delete request
+                                        logger.log('debug', 'Request was processed successfully: ' + JSON.stringify(data));
+
                                         responseObject = data;
                                         responseObject.Code = 3;
                                         responseObject.EncryptionKey = pass;
@@ -58,7 +64,7 @@ exports.apiRequestFormatter=function(requestKey,requestObject) {
                                         r.resolve(responseObject);
                                     }).catch(function(errorResponse){
                                         //There was an error processing the request with the parameters, delete request;
-                                        logger.log('error', "Error processing request", {error:errorResponse});
+                                        logger.log('error', "Error processing request after decrypting properly", {error:errorResponse});
                                         errorResponse.Code = 2;
                                         errorResponse.Reason = 'Server error, report the error to the hospital';
                                         errorResponse.Headers = {RequestKey:requestKey,RequestObject:requestObject};
@@ -81,7 +87,7 @@ exports.apiRequestFormatter=function(requestKey,requestObject) {
             }
         }
     }).catch(function(error){
-        logger.log('error', "Error processing request", {error: error});
+        logger.log('error', "Error getting user encryption", {error: error});
         responseObject = { RequestKey:requestKey,EncryptionKey:encryptionKey, Code:2,Data:error, Headers:{RequestKey:requestKey,RequestObject:requestObject},Response:'error', Reason:'Server error, report the error to the hospital'};
         r.resolve(responseObject);
     });

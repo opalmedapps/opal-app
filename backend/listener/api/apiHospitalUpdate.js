@@ -44,7 +44,8 @@ exports.checkIn = function (requestObject) {
 //Update device token for push notifications
 exports.updateDeviceIdentifier= function(requestObject)
 {
-  return sqlInterface.updateDeviceIdentifier(requestObject);
+    logger.log('debug', 'update device identifier called at apiHospitalUpdate');
+    return sqlInterface.updateDeviceIdentifier(requestObject);
 };
 
 //Input rating for 
