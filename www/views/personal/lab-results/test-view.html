@@ -36,40 +36,40 @@
                     <ons-row>
                         <ons-col class="col-xs-3 col-sm-3 col-lg-3 labtest-col">
 
-                            <div ng-if="(test.AbnormalFlag) && ((test.TestValue < 0.95*test.MinNorm) || (test.TestValue > 1.05*test.MaxNorm))" class="lab-results-test-out5" style="font-size: 17px">
+                            <div ng-if="(test.AbnormalFlag) && ((test.TestValue < 0.95*test.MinNorm) || (test.TestValue > 1.05*test.MaxNorm))" class="lab-results-test-out5" ng-class="fontSizeDesc">
                                 {{test.FacComponentName}} ({{test.AbnormalFlag}})
                             </div>
 
-                            <div ng-if="(test.AbnormalFlag) && ((test.TestValue >= 0.95*test.MinNorm) && (test.TestValue <= 1.05*test.MaxNorm))"  class="lab-results-test-in5" style="font-size: 17px">
+                            <div ng-if="(test.AbnormalFlag) && ((test.TestValue >= 0.95*test.MinNorm) && (test.TestValue <= 1.05*test.MaxNorm))"  class="lab-results-test-in5" ng-class="fontSizeDesc">
                                 {{test.FacComponentName}} ({{test.AbnormalFlag}})
                             </div>
 
-                            <div ng-if="(!test.AbnormalFlag)" class="name" style="font-size: 17px">
+                            <div ng-if="(!test.AbnormalFlag)" class="name" ng-class="fontSizeDesc">
                                 {{test.FacComponentName}} {{test.AbnormalFlag}}
                             </div>
-                            <div class="desc" style="font-size: 17px">
+                            <div class="desc" ng-class="fontSizeDesc">
                                 ({{test.UnitDescription}})
                             </div>
                         </ons-col>
 
                         <ons-col class="col-xs-3 col-sm-3 col-lg-3">
-                            <div ng-if="!test.AbnormalFlag" class="desc" align="center" style="font-size: 17px">
+                            <div ng-if="!test.AbnormalFlag" class="desc" align="center" ng-class="fontSizeDesc">
                                 {{test.TestValue}}
                                 <!--This displays your test value after clicking a specific test-->
                             </div>
 
-                            <div ng-if="test.AbnormalFlag && ((test.TestValue < 0.95*test.MinNorm) || (test.TestValue > 1.05*test.MaxNorm))" class="descOut5" align="center" style="font-size: 17px">
+                            <div ng-if="test.AbnormalFlag && ((test.TestValue < 0.95*test.MinNorm) || (test.TestValue > 1.05*test.MaxNorm))" class="descOut5" align="center" ng-class="fontSizeDesc">
                                 {{test.TestValue}}
                                 <!--This displays your test value after clicking a specific test-->
                             </div>
 
-                            <div ng-if="test.AbnormalFlag && ((test.TestValue >= 0.95*test.MinNorm) && (test.TestValue <= 1.05*test.MaxNorm))" class="descIn5" align="center" style="font-size: 17px">
+                            <div ng-if="test.AbnormalFlag && ((test.TestValue >= 0.95*test.MinNorm) && (test.TestValue <= 1.05*test.MaxNorm))" class="descIn5" align="center" ng-class="fontSizeDesc">
                                 {{test.TestValue}}
                                 <!--This displays your test value after clicking a specific test-->
                             </div>
                         </ons-col>
                         <ons-col class="col-xs-6 col-sm-6 col-lg-6 labtest-col">
-                            <div class="desc" align="right" style="font-size: 17px">
+                            <div class="desc" align="right" ng-class="fontSizeDesc">
                                 {{test.MinNorm}} - {{test.MaxNorm}}
                                 <!--This displays MinNorm and MaxNorm after clicking a specific test-->
                             </div>
