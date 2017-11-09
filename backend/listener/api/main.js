@@ -1,6 +1,5 @@
 const q                 = require('q');
 const processApiRequest = require('./processApiRequest.js');
-const logger            = require('./../logs/logger');
 const OpalResponseSuccess = require('./response/response-success');
 const OpalResponseError = require('./response/response-error');
 const RequestValidator = require('./request/request-validator');
@@ -32,6 +31,8 @@ function requestFormatter({key,request}) {
 				let response = new OpalResponseError( 2, 'Server error, report the error to the hospital', opalReq,err);
 				return response.toLegacy();
 			});
+		}).catch( err => {
+				return err.toLegacy();
 		});
 }
 
