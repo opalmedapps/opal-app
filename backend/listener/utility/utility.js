@@ -8,7 +8,7 @@ const Q                   = require('q');
 //crypto.DEFAULT_ENCODING = 'hex';
 
 
-var exports=module.exports={};
+let exports=module.exports={};
 
 /**
  * resolveEmptyResponse
@@ -204,6 +204,7 @@ exports.decryptObject=function(object,secret)
   }
   return object;
 };
+
 exports.concatUTF8Array = function(a1,a2)
 {
   let c = new Uint8Array(a1.length + a2.length);

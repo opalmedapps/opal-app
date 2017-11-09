@@ -1,12 +1,10 @@
-
-const utility           = require('./../utility/utility.js');
-const sqlInterface      = require('./sqlInterface.js');
 const q                 = require('q');
 const processApiRequest = require('./processApiRequest.js');
 const logger            = require('./../logs/logger');
 const OpalResponseSuccess = require('./response/response-success');
 const OpalResponseError = require('./response/response-error');
 const RequestValidator = require('./request/request-validator');
+
 /**
  * @namespace RequestFormatter
  * @description Module is in charge of taking a request, building response
@@ -16,11 +14,11 @@ module.exports = {
 	requestFormatter,
 	apiRequestFormatter
 };
+
 /**
  * apiRequestFormatter
  * @description handles the api requests by formatting the response obtained from the API
- * @param requestKey
- * @param requestObject
+ * @param {key, request}
  * @returns {Promise}
  */
 function requestFormatter({key,request}) {
@@ -31,8 +29,7 @@ function requestFormatter({key,request}) {
 				let response = new OpalResponseSuccess(data, opalReq);
 				return response.toLegacy();
 			}).catch((err)=>{
-				let response = new OpalResponseError( 2, 'Server error, report the error to the hospital',
-									opalReq,err);
+				let response = new OpalResponseError( 2, 'Server error, report the error to the hospital', opalReq,err);
 				return response.toLegacy();
 			});
 		});
@@ -50,6 +47,7 @@ function requestLegacyWrapper(requestKey, requestObject) {
 		.then((result)=>r.resolve(result)).catch((result)=>r.resolve(result));
 	return r.promise;
 }
+
 /**
  * apiRequestFormatter
  * @desc handles the api requests by formatting the response obtained from the API
@@ -59,6 +57,6 @@ function requestLegacyWrapper(requestKey, requestObject) {
  */
 function apiRequestFormatter(requestKey,requestObject) {
 	return  requestLegacyWrapper(requestKey, requestObject);
-};
+}
 
 

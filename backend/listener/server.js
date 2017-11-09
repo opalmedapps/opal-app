@@ -8,28 +8,28 @@
  *                  file 'LICENSE.txt', which is part of this source code package.
  */
 
-var mainRequestApi      =   	require('./api/main.js');
-var processApi          =       require('./api/processApiRequest');
-var admin            	=   	require("firebase-admin");
-var utility            	=   	require('./utility/utility.js');
-var q 			        =      	require("q");
-var config              =       require('./config.json');
-var logger              =       require('./logs/logger.js');
+const mainRequestApi    = require('./api/main.js');
+const processApi        = require('./api/processApiRequest');
+const admin             = require("firebase-admin");
+const utility           = require('./utility/utility.js');
+const q                 = require("q");
+const config            = require('./config.json');
+const logger            = require('./logs/logger.js');
+const OpalQueue         = require('./utility/queue').OpalQueue;
 
 const DEBUG = process.env.NODE_ENV === 'development';
 const FIREBASE_DEBUG = !!process.env.FIREBASE_DEBUG;
 
 /*********************************************
- * INTIALIZE
+ * INITIALIZE
  *********************************************/
 
 // Initialize firebase connection
-var serviceAccount = require(config.FIREBASE_ADMIN_KEY);
+const serviceAccount = require(config.FIREBASE_ADMIN_KEY);
 admin.initializeApp({
 	credential: admin.credential.cert(serviceAccount),
 	databaseURL: config.DATABASE_URL
 });
-//admin.database.enableLogging(true);
 
 if(FIREBASE_DEBUG) admin.database.enableLogging(true);
 
@@ -64,7 +64,11 @@ listenForRequest('passwordResetRequests');
  * FUNCTIONS
  *********************************************/
 
-// Listen for firebase changes and send responses for requests
+/**
+ * listenForRequest
+ * @param requestType
+ * @desc Listen for firebase changes and send responses for requests
+ */
 function listenForRequest(requestType){
     logger.log('info','Starting '+ requestType+' listener.');
 
@@ -120,6 +124,7 @@ function processOpalQueue(){
 		processNext();
 	});
 }
+
 function processNext() {
     logger.log('debug', "Processing next");
 
@@ -131,6 +136,12 @@ function processNext() {
 		mainQueue.inProgress = false;
 	}
 }
+
+/**
+ * logResponse
+ * @param response
+ * @desc logs every successful response the listener handles
+ */
 function logResponse(response){
 	// Log before uploading to Firebase. Check that it was not a simple log
 	if (response.Headers.RequestObject.Request !== 'Log') {
@@ -145,9 +156,24 @@ function logResponse(response){
         logger.log('info', "Completed response", response.Headers.RequestObject.Request);
 	}
 }
-function logError(err)
+
+/**
+ * logError
+ * @param err
+ * @param requestObject
+ * @param requestKey
+ * @desc logs every error the listener encounters
+ */
+function logError(err, requestObject, requestKey)
 {
-	logger.error("Error processing request!" + JSON.stringify(error));
+    err = JSON.stringify(err);
+    logger.error("Error processing request!", {
+        error: err,
+        deviceID:requestObject.DeviceId,
+        userID:requestObject.UserID,
+        request:requestObject.Request,
+        requestKey: requestKey
+    });
 }
 
 
@@ -176,7 +202,11 @@ function clearTimeoutRequests() {
     });
 }
 
-// Erase requests data on firebase in case the request has not been processed
+/**
+ * clearClientRequests
+ * @desc Erase requests data on firebase in case the request has not been processed
+ * TODO: THIS SHOULD BE IN SEPARATE PROCESS. WE'VE SEEN THAT THIS HOLDS UP THE EVENT LOOP
+ */
 function clearClientRequests(){
     logger.log('debug', 'clearClientRequest called');
     ref.child('requests').once('value').then(function(snapshot){
@@ -193,7 +223,11 @@ function clearClientRequests(){
     });
 }
 
-// Processes requests read from firebase
+/**
+ * processRequest
+ * @param headers
+ * @desc takes in the request read from Firebase and routes it to the correct API handler
+ */
 function processRequest(headers){
 
     logger.log('debug', 'Processing request: ' + JSON.stringify(headers));
@@ -229,11 +263,17 @@ function processRequest(headers){
     }
     return r.promise;
 }
+
+/**
+ * encryptResponse
+ * @desc Encrypts the response object before being uploaded to Firebase
+ * @param response
+ * @return {Promise}
+ */
 function encryptResponse(response)
 {
 	let encryptionKey = response.EncryptionKey;
 	let salt = response.Salt;
-	console.log(encryptionKey, salt);
 	delete response.EncryptionKey;
 	delete response.Salt;
 
@@ -244,22 +284,28 @@ function encryptResponse(response)
 		return Promise.resolve(response);
 	}
 }
-// Uploading the response to firebase
+
+/**
+ * uploadToFirebase
+ * @param response
+ * @param key
+ * @desc Encrypt and upload the response to Firebase
+ */
 function uploadToFirebase(response, key)
 {
   logger.log('debug', 'Uploading to Firebase');
 	return new Promise((resolve, reject)=>{
-//Need to make a copy of the data, since the encryption key needs to be read
-		var headers = JSON.parse(JSON.stringify(response.Headers));
-		var success = response.Response;
-		var requestKey = headers.RequestKey;
 
-		encryptResponse(response).then((response)=>{
+		//Need to make a copy of the data, since the encryption key needs to be read
+        const headers = JSON.parse(JSON.stringify(response.Headers));
+        const requestKey = headers.RequestKey;
+
+        encryptResponse(response).then((response)=>{
 			response.Timestamp = admin.database.ServerValue.TIMESTAMP;
-			var path = '';
-			if (key === "requests") {
-				var userId = headers.RequestObject.UserID;
-				path = 'users/'+userId+'/'+requestKey;
+            let path = '';
+            if (key === "requests") {
+                const userId = headers.RequestObject.UserID;
+                path = 'users/'+userId+'/'+requestKey;
 			} else if (key === "passwordResetRequests") {
 				path = 'passwordResetResponses/'+requestKey;
 			}
@@ -284,7 +330,12 @@ function uploadToFirebase(response, key)
 
 }
 
-// Clearing the request off firebase
+/**
+ * Sets the request reference to null after uploading response
+ * @param headers
+ * @param key
+ * @return {Promise}
+ */
 function completeRequest(headers, key)
 {
 	return ref.child(key).child(headers.RequestKey).set(null)
