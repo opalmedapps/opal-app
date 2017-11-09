@@ -1,4 +1,4 @@
-let exports                 = module.exports = {};
+var exports                 = module.exports = {};
 const Q                     = require('q');
 const apiPatientUpdate      = require('./apiPatientUpdate.js');
 const apiHospitalUpdate     = require('./apiHospitalUpdate.js');
@@ -53,7 +53,6 @@ exports.securityAPI = {
 exports.processRequest=function(requestObject) {
     const r = Q.defer();
     const type = requestObject.Request;
-
     if (API.hasOwnProperty(type)) {
         return  API[type](requestObject);
     }else{
