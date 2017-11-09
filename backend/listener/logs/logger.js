@@ -12,6 +12,8 @@ const winston = require('winston');
 
 winston.level = (process.env.NODE_ENV === 'production') ? 'info' : 'debug';
 
+console.log("Initialize Winston with level: " + winston.level);
+
 const levels = {
     error: 0,
     warn: 1,
