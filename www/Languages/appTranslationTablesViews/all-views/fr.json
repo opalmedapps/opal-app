@@ -121,6 +121,7 @@
   "LARGE": "Grand",
   "LASTAPPOINTMENT": "Dernier rendez-vous",
   "LEAVEMESSAGE": "Laissez-nous un message!",
+  "LEAVING_APP": "Notez que vous quittez l'application et que vous ne comptez plus sur l'application Opal pour protéger les données de votre document.",
   "LOADING": "Chargement",
   "LOADINGDATA": "Chargement des données",
   "LOADINGDOCUMENT": "Chargement de votre document...",
@@ -320,6 +321,7 @@
   "Other":"Autres",
   "Electrolytes":"Électrolytes",
   "Tumor markers":"Marqueurs tumoraux",
-  "GOTOWEBSITE":"Visitez le site"
+  "GOTOWEBSITE":"Visitez le site",
+  "WARNING": "Attention!"
 }
 
