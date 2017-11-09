@@ -2,6 +2,11 @@
     <ons-toolbar>
         <div class="left"><ons-back-button>{{"BACK"|translate}}</ons-back-button></div>
         <div class="center" ng-class="fontSizeTitle">{{test.title}}</div>
+        <div class="right">
+            <ons-toolbar-button ng-click="test.about()">
+                <ons-icon icon="fa-info-circle"></ons-icon>
+            </ons-toolbar-button>
+        </div>
     </ons-toolbar>
     <ons-col>
         <div id="chartArea"><hc-chart options="test.chartOptions">Placeholder for generic chart</hc-chart></div>
@@ -22,9 +27,6 @@
         <ons-list-item >
             {{"LAB_MAX_NORM"| translate}}
             <span class="list-item-note lucent">{{test.maxNorm}} {{test.unit}}</span>
-        </ons-list-item>
-        <ons-list-item ng-click="test.about()" style="background-color:  #E3F2FD">
-            <strong>{{"ABOUT" | translate}} {{test.title}} </strong> <ons-icon style="margin-top: 3%" class="pull-right" icon="ion-ios-arrow-forward"></ons-icon>
         </ons-list-item>
         </ons-list>
     </ons-col>
