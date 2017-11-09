@@ -8,26 +8,26 @@ const questionnaires    = require('./../questionnaires/patientQuestionnaires.js'
 const Mail              = require('./../mailer/mailer.js');
 const utility           = require('./../utility/utility');
 
-let exports = module.exports = {};
+var exports = module.exports = {};
 
 /******************************
  * CONFIGURATIONS
  ******************************/
 
-
+const dbCredentials = {
+	connectionLimit: 1000,
+	// port:'/Applications/MAMP/tmp/mysql/mysql.sock',
+	host: config.HOST,
+	user: config.MYSQL_USERNAME,
+	password: config.MYSQL_PASSWORD,
+	database: config.MYSQL_DATABASE,
+	dateStrings: true
+};
 /**
  * SQL POOL CONFIGURATION
  * @type {Pool}
  */
-const pool = mysql.createPool({
-    connectionLimit: 1000,
-    // port:'/Applications/MAMP/tmp/mysql/mysql.sock',
-    host: config.HOST,
-    user: config.MYSQL_USERNAME,
-    password: config.MYSQL_PASSWORD,
-    database: config.MYSQL_DATABASE,
-    dateStrings: true
-});
+const pool = mysql.createPool(dbCredentials);
 
 /////////////////////////////////////////////////////
 
@@ -135,10 +135,10 @@ exports.getSqlApiMappings = function() {
  * @param processRawFunction
  */
 exports.runSqlQuery = function(query, parameters, processRawFunction) {
-    var r = Q.defer();
+    let r = Q.defer();
 
     pool.getConnection(function(err, connection) {
-        var que = connection.query(query, parameters, function(err,rows, fields){
+        let que = connection.query(query, parameters, function(err,rows, fields){
             connection.release();
             
             if(process.env.DEBUG) console.log(que.sql);

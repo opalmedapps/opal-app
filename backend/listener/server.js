@@ -55,7 +55,6 @@ logger.log('debug','Initialize listeners: ');
 listenForRequest('requests');
 listenForRequest('passwordResetRequests');
 
-
 /*********************************************
  * FUNCTIONS
  *********************************************/
@@ -73,7 +72,9 @@ function listenForRequest(requestType){
 
     ref.child(requestType).on('child_added',
         function(snapshot){
-            handleRequest(requestType,snapshot);
+	        process.exit(0);
+
+	        handleRequest(requestType,snapshot);
         },
         function(error){
 	        logError(error);
