@@ -148,8 +148,6 @@ exports.runSqlQuery = function(query, parameters, processRawFunction) {
 
             logger('info', 'Successfully performed query', {query: que.sql, response: JSON.stringify(rows)});
 
-            if (process.env.DEBUG) console.log(que.sql);
-
             if (err) r.reject(err);
             if (typeof rows !== 'undefined') {
                 if (processRawFunction && typeof processRawFunction !== 'undefined') {
@@ -167,6 +165,15 @@ exports.runSqlQuery = function(query, parameters, processRawFunction) {
     return r.promise;
 };
 
+/**
+ * getPatientTableFields
+ * @desc Gets Patient tables based on userID,  if timestamp defined sends requests that are only updated after timestamp, third parameter is an array of table names, if not present all tables are gathered
+ * @param userId
+ * @param timestamp
+ * @param arrayTables
+ * @return {Promise}
+ */
+exports.getPatientTableFields = function(userId,timestamp,arrayTables) {
     const r = Q.defer();
     var timestp = (timestamp)?timestamp:0;
     const objectToFirebase = {};

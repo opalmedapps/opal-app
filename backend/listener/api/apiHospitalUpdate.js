@@ -1,4 +1,4 @@
-var exports = module.exports = {};
+let exports = module.exports = {};
 const sqlInterface = require('./sqlInterface.js');
 
 //API call to log user out
