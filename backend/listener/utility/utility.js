@@ -5,7 +5,7 @@ const stablelibbase64   = require('@stablelib/base64');
 const crypto            = require('crypto');
 const Q                   = require('q');
 
-crypto.DEFAULT_ENCODING = 'hex';
+//crypto.DEFAULT_ENCODING = 'hex';
 
 
 var exports=module.exports={};
@@ -93,6 +93,7 @@ exports.encrypt = function(object,secret,salt) {
     if(salt){
         crypto.pbkdf2(secret, salt, 1000, 64, 'sha1', (err, derivedKey) => {
             if (err) r.reject(err);
+	        derivedKey = derivedKey.toString('hex');
             derivedKey = stablelibutf8.encode(derivedKey.substring(0,nacl.secretbox.keyLength));
             r.resolve(exports.encryptObject(object,derivedKey,nonce));
         });
@@ -122,8 +123,15 @@ exports.decrypt= function(object,secret,salt) {
   if(salt){
       crypto.pbkdf2(secret, salt, 1000, 64, 'sha1', (err, derivedKey) => {
           if (err) r.reject(err);
+	      derivedKey = derivedKey.toString('hex');
           derivedKey = stablelibutf8.encode(derivedKey.substring(0,nacl.secretbox.keyLength));
-          r.resolve(exports.decryptObject(object, derivedKey));
+          let decrypted;
+          try{
+	          decrypted = exports.decryptObject(object, derivedKey);
+	          r.resolve(decrypted);
+          }catch(err){
+              r.reject(err);
+          }
       });
   } else {
       r.resolve(exports.decryptObject(object, stablelibutf8.encode(secret.substring(0,nacl.secretbox.keyLength))));
@@ -135,18 +143,15 @@ exports.decrypt= function(object,secret,salt) {
 //Encrypts an object, array, number, date or string
 exports.encryptObject=function(object,secret,nonce)
 {
-
-  if(typeof object=='string')
+  if(typeof object === 'string')
   {
-
-    object=stablelibbase64.encode(exports.concatUTF8Array(nonce, nacl.secretbox(stablelibutf8.encode(object),nonce,secret)));
-
+    object = stablelibbase64.encode(exports.concatUTF8Array(nonce, nacl.secretbox(stablelibutf8.encode(object),nonce,secret)));
     return object;
   }else{
-    for (var key in object)
+    for (let key in object)
     {
 
-      if (typeof object[key]=='object')
+      if (typeof object[key] === 'object')
       {
 
         if(object[key] instanceof Date )
@@ -163,7 +168,7 @@ exports.encryptObject=function(object,secret,nonce)
         if (typeof object[key] !=='string') {
           object[key]=String(object[key]);
         }
-        object[key]=stablelibbase64.encode(exports.concatUTF8Array(nonce,nacl.secretbox(stablelibutf8.encode(object[key]),nonce,secret)));
+        object[key] = stablelibbase64.encode(exports.concatUTF8Array(nonce,nacl.secretbox(stablelibutf8.encode(object[key]),nonce,secret)));
       }
     }
     return object;
@@ -180,21 +185,20 @@ exports.decryptObject=function(object,secret)
 {
   if(typeof object ==='string')
   {
-    var enc = splitNonce(object);
-    let dec = stablelibutf8.decode(nacl.secretbox.open(enc[1],enc[0],secret));
-    object = (typeof dec === 'boolean')?"":dec;
+    let enc = splitNonce(object);
+    let object = stablelibutf8.decode(nacl.secretbox.open(enc[1],enc[0],secret));
+    if(object === null) throw new Error('Encryption failed');
   }else{
-    for (var key in object)
+    for (let key in object)
     {
       if (typeof object[key]==='object')
       {
         exports.decryptObject(object[key],secret);
-      } else if (key!=='UserID' && key!=='DeviceId') {
-          var enc = splitNonce(object[key]);
-
-
+      }else {
+          let enc = splitNonce(object[key]);
           let dec = stablelibutf8.decode(nacl.secretbox.open(enc[1], enc[0], secret));
-          object[key] = (typeof dec === 'boolean') ? "" : dec;
+	      if(dec === null) throw new Error('Encryption failed');
+          object[key] = dec;
       }
     }
   }
@@ -202,7 +206,7 @@ exports.decryptObject=function(object,secret)
 };
 exports.concatUTF8Array = function(a1,a2)
 {
-  var c = new Uint8Array(a1.length + a2.length);
+  let c = new Uint8Array(a1.length + a2.length);
   c.set(new Uint8Array(a1),0);
   c.set(new Uint8Array(a2), a1.length);
   return c;

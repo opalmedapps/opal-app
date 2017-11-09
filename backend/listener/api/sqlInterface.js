@@ -15,21 +15,21 @@ let exports = module.exports = {};
 /******************************
  * CONFIGURATIONS
  ******************************/
-
+const dbCredentials = {
+	connectionLimit: 1000,
+	// port:'/Applications/MAMP/tmp/mysql/mysql.sock',
+	host: config.HOST,
+	user: config.MYSQL_USERNAME,
+	password: config.MYSQL_PASSWORD,
+	database: config.MYSQL_DATABASE,
+	dateStrings: true
+};
 
 /**
  * SQL POOL CONFIGURATION
  * @type {Pool}
  */
-const pool = mysql.createPool({
-    connectionLimit: 1000,
-    // port:'/Applications/MAMP/tmp/mysql/mysql.sock',
-    host: config.HOST,
-    user: config.MYSQL_USERNAME,
-    password: config.MYSQL_PASSWORD,
-    database: config.MYSQL_DATABASE,
-    dateStrings: true
-});
+const pool = mysql.createPool(dbCredentials);
 
 /////////////////////////////////////////////////////
 
@@ -137,7 +137,7 @@ exports.getSqlApiMappings = function() {
  * @return {Promise}
  */
 exports.runSqlQuery = function(query, parameters, processRawFunction) {
-    const r = Q.defer();
+    let r = Q.defer();
 
     pool.getConnection(function(err, connection) {
 
@@ -167,26 +167,11 @@ exports.runSqlQuery = function(query, parameters, processRawFunction) {
     return r.promise;
 };
 
-/**
- * getPatientTableFields
- * @desc Gets Patient tables based on userID,  if timestamp defined sends requests that are only updated after timestamp, third parameter is an array of table names, if not present all tables are gathered
- * @param userId
- * @param timestamp
- * @param arrayTables
- * @return {Promise}
- */
-exports.getPatientTableFields = function(userId,timestamp,arrayTables) {
     const r = Q.defer();
-    let timestp = 0;
-    if(arguments.length>=2) {
-        timestp=timestamp;
-    }
-
+    var timestp = (timestamp)?timestamp:0;
     const objectToFirebase = {};
     let index = 0;
-
     logger.log('debug', 'Preparing all promises for getting patient data: ' + JSON.stringify(arrayTables));
-
     Q.all(preparePromiseArrayFields(userId,timestp,arrayTables)).then(function(response){
 
         logger.log('debug', 'Successfully finished all queries: ' + JSON.stringify(response));
@@ -618,8 +603,9 @@ exports.getFirstEncryption=function(requestObject) {
  * @param requestObject
  * @return {Promise}
  */
-exports.getEncryption=function(requestObject) {
-	return exports.runSqlQuery(queries.securityQuestionEncryption(),[requestObject.UserID]);
+exports.getEncryption=function(requestObject)
+{
+	return exports.runSqlQuery(queries.userEncryption(),[requestObject.UserID, requestObject.DeviceId]);
 };
 
 /**
