@@ -53,7 +53,6 @@ exports.securityAPI = {
 exports.processRequest=function(requestObject) {
     const r = Q.defer();
     const type = requestObject.Request;
-
     if (API.hasOwnProperty(type)) {
         return  API[type](requestObject);
     }else{

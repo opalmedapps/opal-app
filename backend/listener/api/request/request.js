@@ -2,18 +2,12 @@
  *
  */
 class OpalRequest {
-	constructor(reqObj, key, fields = null, salt='', pass=''){
-		if(fields === null)
-		{
-			this.type = reqObj.Request;
-			this.parameters = reqObj.Parameters
-		}else{
-			this.type = fields.Request;
-			this.parameters = fields.Parameters;
-		}
+	constructor(reqObj, key, salt='', pass=''){
+		this.type = reqObj.Request;
+		this.parameters = reqObj.Parameters;
 		this.key = key;
 		this.auth = {salt: salt,pass: pass};
-		this.meta = reqObj; //contains deviceId, token etc..
+		this.meta = reqObj; //contains deviceId, token, UserEmail etc..
 		delete reqObj.Request;
 		delete reqObj.Parameters;
 	}
@@ -24,9 +18,6 @@ class OpalRequest {
 		this.auth.pass = pass;
 		this.type = type;
 		this.params = params;
-	}
-	toJSON() {
-		return {requestFields: {Request: this.type, Parameters:this.parameters}, auth:this.auth, meta: this.meta};
 	}
 	toLegacy(){
 		this.meta.Request = this.type;

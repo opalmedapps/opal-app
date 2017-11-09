@@ -24,17 +24,17 @@ class RequestValidator {
 	{
 		const r = q.defer();
 		let request = new OpalRequest(requestObject, requestKey);
-		if(this.validateRequestCredentials(requestObject))
+		if(this.validateRequestCredentials(request))
 		{
-
 			//Gets user password for decrypting
 			sqlInterface.getEncryption(requestObject).then(function(rows) {
 				if (rows.length > 1 || rows.length === 0) {
 					//Rejects requests if username returns more than one password
 					r.reject(new OpalResponseError(1, 'Potential Injection Attack, invalid password for encryption',request, 'Invalid credentials'));
 				} else {
+
 					let {Password, AnswerText} = rows[0];
-					utility.decrypt({req: requestObject.Request, params: requestObject.Parameters},Password,AnswerText)
+					utility.decrypt({req: request.type, params: request.parameters},Password,AnswerText)
 						.then((dec)=>{
 							request.setAuthenticatedInfo(AnswerText, Password, dec.req,dec.params);
 							r.resolve(request);
@@ -58,12 +58,13 @@ class RequestValidator {
 	 * @param requestObject
 	 * @returns {*}
 	 */
-	static validateRequestCredentials(requestObject){
+	static validateRequestCredentials(request){
+		if(!request.meta || !request.type) return false;
 		//Must have all the properties of a request
-		let prop = ['Request', 'DeviceId', 'Token', 'UserID'];
+		let prop = ['DeviceId', 'Token', 'UserID','Timestamp','UserEmail'];
 		return prop.reduce((valid, property)=>{
 			if(!valid) return false;
-			else return requestObject.hasOwnProperty(property);
+			else return request.meta.hasOwnProperty(property);
 		},true);
 	}
 }

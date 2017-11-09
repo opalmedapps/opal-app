@@ -18,13 +18,15 @@ module.exports.requestFormatter = requestFormatter;
  */
 function requestFormatter({key,request}) {
 	return RequestValidator.validate(key, request)
-		.then( opalReq =>{ //opalReq of type, OpalRequest
-			processApiRequest.processRequest(opalReq.toLegacy()).then((data)=>
+		.then( opalReq => { //opalReq of type, OpalRequest
+			return processApiRequest.processRequest(opalReq.toLegacy()).then((data)=>
 			{
-				return (new OpalResponseSuccess(data, opalReq)).toLegacy();
+				let response = new OpalResponseSuccess(data, opalReq);
+				return response.toLegacy();
 			}).catch((err)=>{
-				return (new OpalResponseError( 2,
-						'Server error, report the error to the hospital', opalReq,err)).toLegacy();
+				let response = new OpalResponseError( 2, 'Server error, report the error to the hospital',
+									opalReq,err);
+				return response.toLegacy();
 			});
 		});
 }
@@ -37,8 +39,9 @@ function requestFormatter({key,request}) {
  */
 function requestLegacyWrapper(requestKey, requestObject) {
 	let r = q.defer();
-	requestFormatter({key: requestObject,request:requestObject})
+	requestFormatter({key: requestKey,request:requestObject})
 		.then((result)=>r.resolve(result)).catch((result)=>r.resolve(result));
+	return r.promise;
 }
 /**
  * apiRequestFormatter

@@ -7,6 +7,6 @@
     "CHECKIN_PATH" : "http://172.26.66.41/devDocuments/screens/php/checkInPatientAriaMedi.php?CheckinVenue=OPAL%20PHONE%20APP&PatientId=",
     "VERIFYCHECKIN_PATH" : "http://172.26.66.41/devDocuments/ackeem/getCheckins.php?AppointmentAriaSer=",
     "WT_PATH" : "http://172.26.66.41/devDocuments/WTSim/api/getEstimate.php?appt_aria_ser=",
-    "FIREBASE_ADMIN_KEY": "/home/integrator/opal-prod.json",
+    "FIREBASE_ADMIN_KEY": "/users/davidherrera/Documents/Projects/hospitalProject/opal-prod.firebase.json",
     "DATABASE_URL": "https://opal-prod.firebaseio.com"
 }

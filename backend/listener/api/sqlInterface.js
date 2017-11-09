@@ -13,7 +13,6 @@ var exports = module.exports = {};
 /******************************
  * CONFIGURATIONS
  ******************************/
-
 const dbCredentials = {
 	connectionLimit: 1000,
 	// port:'/Applications/MAMP/tmp/mysql/mysql.sock',
@@ -23,11 +22,20 @@ const dbCredentials = {
 	database: config.MYSQL_DATABASE,
 	dateStrings: true
 };
+
+const sqlConfig={
+	host:'localhost',
+	port:'/Applications/MAMP/tmp/mysql/mysql.sock',
+	user:'root',
+	password:'v_y_d100',
+	database:'OpalProd',
+	dateStrings:true
+};
 /**
  * SQL POOL CONFIGURATION
  * @type {Pool}
  */
-const pool = mysql.createPool(dbCredentials);
+const pool = mysql.createPool(sqlConfig);
 
 /////////////////////////////////////////////////////
 
@@ -171,11 +179,8 @@ exports.runSqlQuery = function(query, parameters, processRawFunction) {
 exports.getPatientTableFields = function(userId,timestamp,arrayTables)
 {
     var r=Q.defer();
-    var timestp=0;
-    if(arguments.length>=2)
-    {
-        timestp=timestamp;
-    }
+
+    var timestp = (timestamp)?timestamp:0;
     var objectToFirebase={};
     var index=0;
     Q.all(preparePromiseArrayFields(userId,timestp,arrayTables)).then(function(response){
@@ -570,7 +575,7 @@ exports.getFirstEncryption=function(requestObject)
 //Gets user password for encrypting/decrypting to return security question
 exports.getEncryption=function(requestObject)
 {
-	return exports.runSqlQuery(queries.securityQuestionEncryption(),[requestObject.UserID]);
+	return exports.runSqlQuery(queries.userEncryption(),[requestObject.UserID, requestObject.DeviceId]);
 };
 
 exports.inputQuestionnaireAnswers = function(requestObject)
