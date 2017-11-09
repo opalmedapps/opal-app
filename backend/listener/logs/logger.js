@@ -10,6 +10,8 @@
 
 const winston = require('winston');
 
+winston.level = (process.env.NODE_ENV === 'production') ? 'info' : 'debug';
+
 const levels = {
     error: 0,
     warn: 1,
@@ -37,7 +39,7 @@ winston.configure({
 });
 
 // Log all uncaught exceptions to a separate file
-if(process.env.NODE_ENV === 'prod') winston.handleExceptions(new winston.transports.File({ filename: './logs/opal-uncaughtExceptions.log' }));
+if(process.env.NODE_ENV === 'production') winston.handleExceptions(new winston.transports.File({ filename: './logs/opal-uncaughtExceptions.log' }));
 
 
 module.exports = winston;
