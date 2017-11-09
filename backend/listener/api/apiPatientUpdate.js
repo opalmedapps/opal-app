@@ -5,8 +5,7 @@ var utility = require('./../utility/utility.js');
 var validate = require('./../utility/validate.js');
 var queries = require('./../sql/queries.js');
 var logger = require('./../logs/logger.js');
-const fs = require('fs');
-const config = require('../config.json');
+
 /**
  *@name login
  *@requires sqlInterface
@@ -14,6 +13,7 @@ const config = require('../config.json');
  *@description Grabs all the tables for the user and updates them to firebase
  */
 exports.login = function (requestObject) {
+    logger.log('debug', 'Getting patient fields');
     return sqlInterface.getPatientTableFields(requestObject.UserID, requestObject.Parameters.timestamp, requestObject.Parameters.Fields );
 };
 

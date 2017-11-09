@@ -8,7 +8,19 @@
  *                  file 'LICENSE.txt', which is part of this source code package.
  */
 
-var winston = require('winston');
+const winston = require('winston');
+
+winston.level = (process.env.NODE_ENV === 'production') ? 'info' : 'debug';
+
+console.log("Initialize Winston with level: " + winston.level);
+
+const levels = {
+    error: 0,
+    warn: 1,
+    info: 2,
+    verbose: 3,
+    debug: 4,
+};
 
 winston.configure({
     transports: [
@@ -29,7 +41,7 @@ winston.configure({
 });
 
 // Log all uncaught exceptions to a separate file
-winston.handleExceptions(new winston.transports.File({ filename: './logs/opal-uncaughtExceptions.log' }));
+if(process.env.NODE_ENV === 'production') winston.handleExceptions(new winston.transports.File({ filename: './logs/opal-uncaughtExceptions.log' }));
 
 
 module.exports = winston;
