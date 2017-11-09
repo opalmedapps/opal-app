@@ -35,11 +35,11 @@ exports.resolveEmptyResponse=function(data) {
  * @return Date
  */
 exports.toMYSQLString=function(date) {
-  var month = date.getMonth();
-  var day=date.getDate();
-  var hours=date.getHours();
-  var minutes=date.getMinutes();
-  var seconds=date.getSeconds();
+  let month = date.getMonth();
+  let day=date.getDate();
+  let hours=date.getHours();
+  let minutes=date.getMinutes();
+  let seconds=date.getSeconds();
 
   month++;
 
@@ -60,8 +60,8 @@ exports.toMYSQLString=function(date) {
  * @return {Date}
  */
 exports.unixToMYSQLTimestamp=function(time) {
-  var date=new Date(time);
-  return exports.toMYSQLString(date);
+    const date = new Date(time);
+    return exports.toMYSQLString(date);
 };
 
 /**
@@ -72,7 +72,7 @@ exports.unixToMYSQLTimestamp=function(time) {
  * @return {string}
  */
 exports.generatePBKDFHash = function(secret,salt) {
-  return CryptoJS.PBKDF2(secret, salt, {keySize: 512/32, iterations: 1000}).toString(CryptoJS.enc.Hex);
+    return CryptoJS.PBKDF2(secret, salt, {keySize: 512/32, iterations: 1000}).toString(CryptoJS.enc.Hex);
 };
 
 /**
@@ -177,54 +177,55 @@ exports.encryptObject=function(object,secret,nonce)
 };
 
 exports.hash=function(input){
-  return CryptoJS.SHA512(input).toString();
-
+    return CryptoJS.SHA512(input).toString();
 };
+
 //Decryption function, returns an object whose values are all strings
 exports.decryptObject=function(object,secret)
 {
-  if(typeof object ==='string')
-  {
-    let enc = splitNonce(object);
-    let object = stablelibutf8.decode(nacl.secretbox.open(enc[1],enc[0],secret));
-    if(object === null) throw new Error('Encryption failed');
-  }else{
-    for (let key in object)
+    if(typeof object ==='string')
     {
-      if (typeof object[key]==='object')
-      {
-        exports.decryptObject(object[key],secret);
-      }else {
-          let enc = splitNonce(object[key]);
-          let dec = stablelibutf8.decode(nacl.secretbox.open(enc[1], enc[0], secret));
-	      if(dec === null) throw new Error('Encryption failed');
-          object[key] = dec;
-      }
+        let enc = splitNonce(object);
+        let object = stablelibutf8.decode(nacl.secretbox.open(enc[1],enc[0],secret));
+        if(object === null) throw new Error('Encryption failed');
+
+    }else{
+        for (let key in object)
+        {
+            if (typeof object[key]==='object')
+            {
+                exports.decryptObject(object[key],secret);
+            }else {
+                let enc = splitNonce(object[key]);
+                let dec = stablelibutf8.decode(nacl.secretbox.open(enc[1], enc[0], secret));
+                if(dec === null) throw new Error('Encryption failed');
+                object[key] = dec;
+            }
+        }
     }
-  }
-  return object;
+    return object;
 };
 
 exports.concatUTF8Array = function(a1,a2)
 {
-  let c = new Uint8Array(a1.length + a2.length);
-  c.set(new Uint8Array(a1),0);
-  c.set(new Uint8Array(a2), a1.length);
-  return c;
+    let c = new Uint8Array(a1.length + a2.length);
+    c.set(new Uint8Array(a1),0);
+    c.set(new Uint8Array(a2), a1.length);
+    return c;
 };
 
 function splitNonce(str)
 {
-  var ar = stablelibbase64.decode(str);
-  return [ar.slice(0,nacl.secretbox.nonceLength),ar.slice(nacl.secretbox.nonceLength)];
+    const ar = stablelibbase64.decode(str);
+    return [ar.slice(0,nacl.secretbox.nonceLength),ar.slice(nacl.secretbox.nonceLength)];
 }
 
 //Create copy of object if no nested object
 exports.copyObject = function(object)
 {
-  var copy = {};
-  for (var key in object) {
-    copy[key] = object[key];
-  }
-  return copy;
+    const copy = {};
+    for (const key in object) {
+        copy[key] = object[key];
+    }
+    return copy;
 };
