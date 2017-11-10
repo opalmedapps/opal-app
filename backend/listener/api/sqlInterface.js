@@ -10,7 +10,7 @@ const utility           = require('./../utility/utility');
 const logger            = require('./../logs/logger');
 
 
-let exports = module.exports = {};
+var exports = module.exports = {};
 
 /******************************
  * CONFIGURATIONS
