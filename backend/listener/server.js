@@ -15,6 +15,7 @@ const utility           = require('./utility/utility.js');
 const q                 = require("q");
 const config            = require('./config.json');
 const logger            = require('./logs/logger.js');
+const cp                = require('child_process');
 
 const FIREBASE_DEBUG = !!process.env.FIREBASE_DEBUG;
 
@@ -45,15 +46,13 @@ ref.set(null)
 		})
 	});
 
-// Periodically clear requests that are still on Firebase
-setInterval(function(){
-	clearTimeoutRequests();
-	clearClientRequests();
-},60000);
+
 
 logger.log('info','Initialize listeners: ');
 listenForRequest('requests');
 listenForRequest('passwordResetRequests');
+spawnCronJobs();
+
 
 /*********************************************
  * FUNCTIONS
@@ -135,52 +134,6 @@ function logError(err, requestObject, requestKey)
         userID:requestObject.UserID,
         request:requestObject.Request,
         requestKey: requestKey
-    });
-}
-
-
-/**
- * clearTimeoutRequests
- * @desc Erase response data on firebase in case the response has not been processed
- * TODO: THIS SHOULD BE IN SEPARATE PROCESS. WE'VE SEEN THAT THIS HOLDS UP THE EVENT LOOP
- */
-function clearTimeoutRequests() {
-    ref.child('users').once('value').then(function(snapshot){
-        const now = (new Date()).getTime();
-        const usersData = snapshot.val();
-        for (const user in usersData) {
-            for(const requestKey in usersData[user])
-            {
-                if(usersData[user][requestKey].hasOwnProperty('Timestamp')&&now-usersData[user][requestKey].Timestamp>60000)
-                {
-                    logger.log('info','Deleting leftover response on firebase', {
-                        request: requestKey
-                    });
-                    ref.child('users/'+user+'/'+requestKey).set(null);
-                }
-            }
-        }
-    });
-}
-
-/**
- * clearClientRequests
- * @desc Erase requests data on firebase in case the request has not been processed
- * TODO: THIS SHOULD BE IN SEPARATE PROCESS. WE'VE SEEN THAT THIS HOLDS UP THE EVENT LOOP
- */
-function clearClientRequests(){
-    logger.log('debug', 'clearClientRequest called');
-    ref.child('requests').once('value').then(function(snapshot){
-        const now = (new Date()).getTime();
-        const requestData = snapshot.val();
-        for (const requestKey in requestData) {
-            if(requestData[requestKey].hasOwnProperty('Timestamp')&&now-requestData[requestKey].Timestamp>60000) {
-                logger.log('info', 'Deleting leftover request on firebase', {
-                    requestKey: requestKey
-                });
-                ref.child('requests/' + requestKey).set(null);
-            }
-        }
     });
 }
 
@@ -301,4 +254,32 @@ function completeRequest(headers, key)
 		.catch(function (error) {
 			logger.error('Error writing to firebase', {error:error});
 		});
+}
+
+/**
+ * Spawns two cron jobs:
+ *  1) clearRequest: clears request from firebase that have not been handled within 5 minute period
+ *  2) clearResponses: clears responses from firebase that have not been handled within 5 minute period
+ */
+function spawnCronJobs(){
+    const clearRequests = cp.fork(`${__dirname}/cron/clearRequests.js`);
+    const clearResponses = cp.fork(`${__dirname}/cron/clearResponses.js`);
+
+    // Handles clearRequest cron events
+    clearRequests.on('message', (m) => {
+        logger.log('info', 'PARENT got message:', m);
+    });
+
+    clearRequests.on('error', (m) => {
+        logger.log('error','clearRequest cron error:', m);
+    });
+
+    // Handles clearResponses cron events
+    clearResponses.on('message', (m) => {
+        logger.log('info','PARENT got message:', m);
+    });
+
+    clearResponses.on('error', (m) => {
+        logger.log('info','clearResponse cron error:', m);
+    });
 }

@@ -19,8 +19,17 @@ var requestArr = [request3];
 if(process.argv[2]!=='--delete') {
     writeRequests(requestArr, process.argv[2]);
     setInterval(()=>{
+
+        db.ref("/dev2").set(null)
+            .then(()=>{
+                console.log("finished emptying firebase db");
+            }).catch((err) => {
+            console.log(err);
+        });
+
+
         writeRequests(requestArr, process.argv[2]);
-    }, 30000)
+    }, 1800000)
 
 } else {
 
