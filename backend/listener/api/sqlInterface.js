@@ -141,12 +141,12 @@ exports.runSqlQuery = function(query, parameters, processRawFunction) {
 
     pool.getConnection(function(err, connection) {
 
-        logger('info', 'Successfully grabbed connection from pool and about to perform following query: ', {query: query});
+        logger.log('info', 'Successfully grabbed connection from pool and about to perform following query: ', {query: query});
 
         const que = connection.query(query, parameters, function (err, rows, fields) {
             connection.release();
 
-            logger('info', 'Successfully performed query', {query: que.sql, response: JSON.stringify(rows)});
+            logger.log('info', 'Successfully performed query', {query: que.sql, response: JSON.stringify(rows)});
 
             if (err) r.reject(err);
             if (typeof rows !== 'undefined') {
