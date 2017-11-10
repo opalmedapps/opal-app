@@ -16,7 +16,6 @@ const q                 = require("q");
 const config            = require('./config.json');
 const logger            = require('./logs/logger.js');
 
-const DEBUG = process.env.NODE_ENV === 'development';
 const FIREBASE_DEBUG = !!process.env.FIREBASE_DEBUG;
 
 /*********************************************
@@ -36,8 +35,7 @@ if(FIREBASE_DEBUG) admin.database.enableLogging(true);
 const db = admin.database();
 const ref = db.ref("/dev2");
 
-logger.log('debug', 'CURRENTLY IN DEBUG MODE');
-
+logger.log('debug', 'INITIALIZED APP IN DEBUG MODE');
 
 // Ensure there is no leftover data on firebase
 ref.set(null)
@@ -53,7 +51,7 @@ setInterval(function(){
 	clearClientRequests();
 },60000);
 
-logger.log('debug','Initialize listeners: ');
+logger.log('info','Initialize listeners: ');
 listenForRequest('requests');
 listenForRequest('passwordResetRequests');
 
@@ -92,18 +90,13 @@ function listenForRequest(requestType){
 function handleRequest(requestType, snapshot){
     logger.log('debug', 'Handling request');
 
-    var headers = {key: snapshot.key, objectRequest: snapshot.val()};
+    const headers = {key: snapshot.key, objectRequest: snapshot.val()};
     processRequest(headers).then(function(response){
 
         // Log before uploading to Firebase. Check that it was not a simple log
         if (response.Headers.RequestObject.Request !== 'Log') logResponse(response);
-
         uploadToFirebase(response, requestType);
 
-    }).catch(function(error){
-        //Log the error
-        logger.error("Error processing request!" + JSON.stringify(error));
-        uploadToFirebase(error, requestType);
     });
 }
 
@@ -217,6 +210,7 @@ function processRequest(headers){
             })
             .catch(function (error) {
                 logError(error, requestObject, requestKey);
+                r.reject(error);
             });
     } else {
 
@@ -228,6 +222,7 @@ function processRequest(headers){
             })
             .catch(function (error) {
                 logError(error, requestObject, requestKey);
+                r.reject(error);
             });
     }
     return r.promise;
@@ -295,9 +290,7 @@ function uploadToFirebase(response, key)
 			logger.error('Error writing to firebase', {error:err});
 			reject(err);
 		});
-
 	});
-
 }
 
 /**
