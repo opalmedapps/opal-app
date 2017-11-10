@@ -21,7 +21,9 @@
   "devDependencies": {
     "chai": "^3.5.0",
     "chai-datetime": "^1.4.1",
+    "debug": "^3.1.0",
     "del": "^2.2.0",
+    "dotenv": "^4.0.0",
     "firebase-server": "^0.5.0",
     "gulp": "^3.9.1",
     "gulp-autoprefixer": "^3.1.0",
@@ -45,7 +47,8 @@
     "sinon-chai": "^2.8.0"
   },
   "scripts": {
-    "start": "node server.js",
+    "start": "NODE_ENV='production' node server.js",
+    "start:dev": "node -r dotenv/config server.js",
     "test": "./node_modules/.bin/mocha --reporter spec"
   },
   "main": "main.js",

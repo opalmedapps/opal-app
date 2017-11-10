@@ -1,226 +1,237 @@
-var mysql           =   require('mysql');
-var filesystem      =   require('fs');
-var Q               =   require('q');
-var queries         =   require('./../sql/queries.js');
-var config          =   require('./../config.json');
-var CryptoJS        =   require('crypto-js');
-var buffer          =   require('buffer');
-var http            =   require('http');
-var request         =   require('request');
-var questionnaires  =   require('./../questionnaires/patientQuestionnaires.js');
-var Mail            =   require('./../mailer/mailer.js');
-var utility         =   require('./../utility/utility');
-// var exec            =   require('child_process').exec;
+const mysql             = require('mysql');
+const filesystem        = require('fs');
+const Q                 = require('q');
+const queries           = require('./../sql/queries.js');
+const config            = require('./../config.json');
+const request           = require('request');
+const questionnaires    = require('./../questionnaires/patientQuestionnaires.js');
+const Mail              = require('./../mailer/mailer.js');
+const utility           = require('./../utility/utility');
+const logger            = require('./../logs/logger');
 
-var sqlConfig={
-    host:config.HOST,
-    user:config.MYSQL_USERNAME,
-    password:config.MYSQL_PASSWORD,
-    database:config.MYSQL_DATABASE,
-    dateStrings:true
+
+var exports = module.exports = {};
+
+/******************************
+ * CONFIGURATIONS
+ ******************************/
+const dbCredentials = {
+	connectionLimit: 10,
+	host: config.HOST,
+	user: config.MYSQL_USERNAME,
+	password: config.MYSQL_PASSWORD,
+	database: config.MYSQL_DATABASE,
+	dateStrings: true
 };
 
-/*
- *Re-connecting the sql database, NodeJS has problems and disconnects if inactive,
- The handleDisconnect deals with that
+/**
+ * SQL POOL CONFIGURATION
+ * @type {Pool}
  */
-var connection = mysql.createConnection(sqlConfig);
+const pool = mysql.createPool(dbCredentials);
 
-function handleDisconnect(myconnection) {
-    myconnection.on('error', function(err) {
-        //console.log('Re-connecting lost connection');
-        connection.destroy();
-        connection = mysql.createConnection(sqlConfig);
-        handleDisconnect(connection);
-        connection.connect();
-    });
-}
+/////////////////////////////////////////////////////
 
-handleDisconnect(connection);
+/******************************
+ * MAPPINGS
+ ******************************/
 
-var exports=module.exports={};
-
-
-
-//Table mappings and process data functions for results obtained from the database. Exporting function for testing purposes.
-var requestMappings=
+/**
+ * Table mappings and process data functions for results obtained from the database. Exporting function for testing purposes.
+ * @type {{Patient: {sql, processFunction: loadProfileImagePatient, numberOfLastUpdated: number}, Documents: {sql, numberOfLastUpdated: number, table: string, serNum: string}, Doctors: {sql, processFunction: loadImageDoctor, numberOfLastUpdated: number}, Diagnosis: {sql, numberOfLastUpdated: number}, Questionnaires: {sql, numberOfLastUpdated: number, processFunction: *}, Appointments: {sql, numberOfLastUpdated: number, processFunction: combineResources, table: string, serNum: string}, Notifications: {sql, numberOfLastUpdated: number, table: string, serNum: string}, Tasks: {sql, numberOfLastUpdated: number}, LabTests: {sql, numberOfLastUpdated: number}, TxTeamMessages: {sql, numberOfLastUpdated: number, table: string, serNum: string}, EducationalMaterial: {sql, processFunction: getEducationTableOfContents, numberOfLastUpdated: number, table: string, serNum: string}, Announcements: {sql, numberOfLastUpdated: number, table: string, serNum: string}}}
+ */
+const requestMappings =
     {
-        'Patient':{
-            sql:queries.patientTableFields(),
-            processFunction:loadProfileImagePatient,
-            numberOfLastUpdated:1
+        'Patient': {
+            sql: queries.patientTableFields(),
+            processFunction: loadProfileImagePatient,
+            numberOfLastUpdated: 1
         },
-        'Documents':
-            {
-                sql:queries.patientDocumentTableFields(),
-                numberOfLastUpdated:2,
-                //processFunction:LoadDocuments,
-                table:'Document',
-                serNum:'DocumentSerNum'
-            },
-        'Doctors':{
-            sql:queries.patientDoctorTableFields(),
-            processFunction:loadImageDoctor,
-            numberOfLastUpdated:2
+        'Documents': {
+            sql: queries.patientDocumentTableFields(),
+            numberOfLastUpdated: 2,
+            //processFunction:LoadDocuments,
+            table: 'Document',
+            serNum: 'DocumentSerNum'
         },
-        'Diagnosis':{
-            sql:queries.patientDiagnosisTableFields(),
-            numberOfLastUpdated:1
+        'Doctors': {
+            sql: queries.patientDoctorTableFields(),
+            processFunction: loadImageDoctor,
+            numberOfLastUpdated: 2
         },
-        'Questionnaires':{
-            sql:queries.patientQuestionnaireTableFields(),
-            numberOfLastUpdated:2,
-            processFunction:questionnaires.getPatientQuestionnaires
+        'Diagnosis': {
+            sql: queries.patientDiagnosisTableFields(),
+            numberOfLastUpdated: 1
+        },
+        'Questionnaires': {
+            sql: queries.patientQuestionnaireTableFields(),
+            numberOfLastUpdated: 2,
+            processFunction: questionnaires.getPatientQuestionnaires
 
         },
-        /*,
-         'Messages':{
-         sql:queries.patientMessageTableFields(),
-         processFunction:LoadAttachments,
-         numberOfLastUpdated:1,
-         table:'Messages',
-         serNum:'MessageSerNum'
-         }*/
-        'Appointments':
-            {
-                sql:queries.patientAppointmentsTableFields(),
-                numberOfLastUpdated:5,
-                processFunction:combineResources,
-                table:'Appointment',
-                serNum:'AppointmentSerNum'
-            },
-        'Notifications':
-            {
-                sql:queries.patientNotificationsTableFields(),
-                numberOfLastUpdated:2,
-                table:'Notification',
-                serNum:'NotificationSerNum'
-            },
-        'Tasks':
-            {
-                sql:queries.patientTasksTableFields(),
-                numberOfLastUpdated:2
-            },
-        // 'TreatmentPlanning':
-        //  {
-        //  processFunction:planningStepsAndEstimates,
-        //  numberOfLastUpdated:0
-        //  },
-        'LabTests':{
-         sql:queries.patientTestResultsTableFields(),
-         numberOfLastUpdated:1
-         },
-        'TxTeamMessages':{
-            sql:queries.patientTeamMessagesTableFields(),
-            numberOfLastUpdated:2,
-            table:'TxTeamMessage',
-            serNum:'TxTeamMessageSerNum'
+        'Appointments': {
+            sql: queries.patientAppointmentsTableFields(),
+            numberOfLastUpdated: 5,
+            processFunction: combineResources,
+            table: 'Appointment',
+            serNum: 'AppointmentSerNum'
         },
-        'EducationalMaterial':{
-            sql:queries.patientEducationalMaterialTableFields(),
-            processFunction:getEducationTableOfContents,
-            numberOfLastUpdated:5,
-            table:'EducationalMaterial',
-            serNum:'EducationalMaterialSerNum'
+        'Notifications': {
+            sql: queries.patientNotificationsTableFields(),
+            numberOfLastUpdated: 2,
+            table: 'Notification',
+            serNum: 'NotificationSerNum'
         },
-        'Announcements':{
-            sql:queries.patientAnnouncementsTableFields(),
-            numberOfLastUpdated:2,
-            table:'Announcement',
-            serNum:'AnnouncementSerNum'
+        'Tasks': {
+            sql: queries.patientTasksTableFields(),
+            numberOfLastUpdated: 2
+        },
+        'LabTests': {
+            sql: queries.patientTestResultsTableFields(),
+            numberOfLastUpdated: 1
+        },
+        'TxTeamMessages': {
+            sql: queries.patientTeamMessagesTableFields(),
+            numberOfLastUpdated: 2,
+            table: 'TxTeamMessage',
+            serNum: 'TxTeamMessageSerNum'
+        },
+        'EducationalMaterial': {
+            sql: queries.patientEducationalMaterialTableFields(),
+            processFunction: getEducationTableOfContents,
+            numberOfLastUpdated: 5,
+            table: 'EducationalMaterial',
+            serNum: 'EducationalMaterialSerNum'
+        },
+        'Announcements': {
+            sql: queries.patientAnnouncementsTableFields(),
+            numberOfLastUpdated: 2,
+            table: 'Announcement',
+            serNum: 'AnnouncementSerNum'
         }
     };
 
-exports.getSqlApiMappings = function()
-{
+
+//////////////////////////////////////////////////////////////////
+
+/******************************
+ * FUNCTIONS
+ ******************************/
+
+/**
+ * getSqlApiMapping
+ * @return {{Patient: {sql, processFunction: loadProfileImagePatient, numberOfLastUpdated: number}, Documents: {sql, numberOfLastUpdated: number, table: string, serNum: string}, Doctors: {sql, processFunction: loadImageDoctor, numberOfLastUpdated: number}, Diagnosis: {sql, numberOfLastUpdated: number}, Questionnaires: {sql, numberOfLastUpdated: number, processFunction: *}, Appointments: {sql, numberOfLastUpdated: number, processFunction: combineResources, table: string, serNum: string}, Notifications: {sql, numberOfLastUpdated: number, table: string, serNum: string}, Tasks: {sql, numberOfLastUpdated: number}, LabTests: {sql, numberOfLastUpdated: number}, TxTeamMessages: {sql, numberOfLastUpdated: number, table: string, serNum: string}, EducationalMaterial: {sql, processFunction: getEducationTableOfContents, numberOfLastUpdated: number, table: string, serNum: string}, Announcements: {sql, numberOfLastUpdated: number, table: string, serNum: string}}}
+ */
+exports.getSqlApiMappings = function() {
     return requestMappings;
 };
 
-//Query processing function 
-exports.runSqlQuery = function(query, parameters, processRawFunction)
-{
-    var r = Q.defer();
 
-    var que = connection.query(query, parameters, function(err,rows,fields){
+/**
+ * runSqlQuery
+ * @desc runs inputted query against SQL mapping by grabbing an available connection from connection pool
+ * @param query
+ * @param parameters
+ * @param processRawFunction
+ * @return {Promise}
+ */
+exports.runSqlQuery = function(query, parameters, processRawFunction) {
+    let r = Q.defer();
 
-        if (err) r.reject(err);
-        if(typeof rows !=='undefined')
-        {
-            if(processRawFunction&&typeof processRawFunction !=='undefined')
-            {
-                processRawFunction(rows).then(function(result)
-                {
-                    r.resolve(result);
-                });
-            }else{
-                ////console.log(rows);
-                r.resolve(rows);
+    pool.getConnection(function(err, connection) {
+
+        if(err) logger.log('error', err);
+        logger.log('debug', 'grabbed connection: ' + connection);
+        logger.log('info', 'Successfully grabbed connection from pool and about to perform following query: ', {query: query});
+
+        const que = connection.query(query, parameters, function (err, rows, fields) {
+            connection.release();
+
+            logger.log('info', 'Successfully performed query', {query: que.sql, response: JSON.stringify(rows)});
+
+            if (err) r.reject(err);
+            if (typeof rows !== 'undefined') {
+                if (processRawFunction && typeof processRawFunction !== 'undefined') {
+                    processRawFunction(rows).then(function (result) {
+                        r.resolve(result);
+                    });
+                } else {
+                    r.resolve(rows);
+                }
+            } else {
+                r.resolve([]);
             }
-        }else{
-            r.resolve([]);
-        }
+        });
     });
     return r.promise;
 };
 
-//Gets Patient tables based on userID,  if timestamp defined sends requests
-//that are only updated after timestamp, third parameter is an array of table names, if not present all tables are gathered
-exports.getPatientTableFields = function(userId,timestamp,arrayTables)
-{
-    var r=Q.defer();
-    var timestp=0;
-    if(arguments.length>=2)
-    {
-        timestp=timestamp;
-    }
-    var objectToFirebase={};
-    var index=0;
+/**
+ * getPatientTableFields
+ * @desc Gets Patient tables based on userID,  if timestamp defined sends requests that are only updated after timestamp, third parameter is an array of table names, if not present all tables are gathered
+ * @param userId
+ * @param timestamp
+ * @param arrayTables
+ * @return {Promise}
+ */
+exports.getPatientTableFields = function(userId,timestamp,arrayTables) {
+    const r = Q.defer();
+    var timestp = (timestamp)?timestamp:0;
+    const objectToFirebase = {};
+    let index = 0;
+    logger.log('debug', 'Preparing all promises for getting patient data: ' + JSON.stringify(arrayTables));
     Q.all(preparePromiseArrayFields(userId,timestp,arrayTables)).then(function(response){
-        if(typeof arrayTables!=='undefined')
-        {
-            for (var i = 0; i < arrayTables.length; i++) {
+
+        logger.log('debug', 'Successfully finished all queries: ' + JSON.stringify(response));
+
+        if(arrayTables) {
+            for (let i = 0; i < arrayTables.length; i++) {
                 objectToFirebase[arrayTables[i]]=response[index];
                 index++;
             }
         }else{
-            for (var key in requestMappings) {
+            for (const key in requestMappings) {
                 objectToFirebase[key]=response[index];
                 index++;
             }
         }
         r.resolve({Data:objectToFirebase,Response:'success'});
     },function(error){
-        r.reject({Response:'error',Reason:'Problems querying the database due to '+error});
+        logger.log('error', 'Problems querying the database due to ' + error);
+        r.reject({Response:'error',Reason:'Problems querying the database due to ' + error});
     });
     return r.promise;
 };
-//Helper function to format the table, userId and timestamp
-function processSelectRequest(table, userId, timestamp)
-{
-    var r=Q.defer();
-    var requestMappingObject = requestMappings[table];
-    //console.log(requestMappings[table]);
-    var date=new Date(0);
-    if(typeof timestamp!=='undefined')
-    {
+
+/**
+ * processSelectRequest
+ * @desc Gets the correct request mapping object and runs the query against the sql function
+ * @param table
+ * @param userId
+ * @param timestamp
+ * @return {Promise}
+ */
+function processSelectRequest(table, userId, timestamp) {
+    const r = Q.defer();
+    const requestMappingObject = requestMappings[table];
+
+    let date = new Date(0);
+    if(timestamp) {
         date=new Date(Number(timestamp));
     }
-    var paramArray=[userId];
+
+    const paramArray = [userId];
     if(requestMappingObject.numberOfLastUpdated>0){
-        for (var i = 0; i < requestMappingObject.numberOfLastUpdated; i++) {
+        for (let i = 0; i < requestMappingObject.numberOfLastUpdated; i++) {
             paramArray.push(date);
         }
     }
-    if(requestMappingObject.hasOwnProperty('sql'))
-    {
-        exports.runSqlQuery(requestMappingObject.sql,paramArray,
-            requestMappingObject.processFunction).then(function(rows)
-        {
-            if (table === 'Questionnaires'){
-            }
+
+    if(requestMappingObject.hasOwnProperty('sql')) {
+        exports.runSqlQuery(requestMappingObject.sql,paramArray, requestMappingObject.processFunction).then(function(rows) {
+            if (table === 'Questionnaires'){  }
             r.resolve(rows);
-        },function(err)
-        {
+        },function(err) {
             r.reject(err);
         });
     }else{
@@ -234,63 +245,86 @@ function processSelectRequest(table, userId, timestamp)
     return r.promise;
 }
 
-//Preparing a promise array for later retrieval
-function preparePromiseArrayFields(userId,timestamp,arrayTables)
-{
-    var array=[];
+/**
+ * preparePromiseArrayFields
+ * @desc Preparing a promise array for later retrieval
+ * @param userId
+ * @param timestamp
+ * @param arrayTables
+ * @return {Array}
+ */
+function preparePromiseArrayFields(userId,timestamp,arrayTables) {
+    const array = [];
     if(typeof arrayTables!=='undefined')
     {
-        for (var i = 0; i < arrayTables.length; i++) {
+        for (let i = 0; i < arrayTables.length; i++) {
             array.push(processSelectRequest(arrayTables[i],userId,timestamp));
         }
     }else{
-        for (var key in requestMappings) {
+        for (const key in requestMappings) {
             array.push(processSelectRequest(key,userId,timestamp));
         }
     }
     return array;
 }
 
-//Update read status for a table
+/**
+ * updateReadStatus
+ * @desc Update read status for a table
+ * @param userId
+ * @param parameters
+ * @return {Promise}
+ */
 exports.updateReadStatus=function(userId, parameters)
 {
-    var r= Q.defer();
-    table = requestMappings[parameters.Field].table;
-    tableSerNum = requestMappings[parameters.Field].serNum;
-    id=parameters.Id;
-    var query=connection.query(queries.updateReadStatus(),[table,table, tableSerNum, id, table, userId],
-        function(error,rows,fields){
-            if(error) r.reject({Response:'error',Reason:error});
-            r.resolve({Response:'success'});
-        });
-    return r.promise;
-};
-
-//Api call to insert a message into messages table
-exports.sendMessage=function(requestObject)
-{
-    var r=Q.defer();
-    connection.query(queries.sendMessage(requestObject),function(error,rows, fields) {
-        if(error) r.reject({Response:'error',Reason:error});
-        r.resolve({Response:'success'});
+    let r = Q.defer();
+    let table, tableSerNum;
+    if(parameters && parameters.Field && parameters.Id && requestMappings.hasOwnProperty(parameters.Field) ) {
+        ({table, tableSerNum} = requestMappings[parameters.Field]);
+    }else{
+	    r.reject({Response:'error',Reason:'Invalid read status field'});
+    }
+	exports.runSqlQuery(queries.updateReadStatus(),[table,table, tableSerNum, id, table, userId])
+    .then(()=>{
+	    r.resolve({Response:'success'});
+    }).catch((err)=>{
+		r.reject({Response:'error',Reason:err});
     });
     return r.promise;
 };
 
-//Check if user is already checkedin 
-exports.checkCheckinInAria = function(requestObject)
-{
-    var r = Q.defer();
-    var serNum = requestObject.Parameters.AppointmentSerNum;
-    var username = requestObject.UserID;
+/**
+ * sendMessage
+ * @desc inserts a message into messages table
+ * @param requestObject
+ * @return {Promise}
+ */
+exports.sendMessage=function(requestObject) {
+	return exports.runSqlQuery(queries.sendMessage(requestObject));
+};
+
+/**
+ * checkCheckinInAria
+ * @desc Check if user is already checkedin
+ * @param requestObject
+ */
+exports.checkCheckinInAria = function(requestObject) {
+    const r = Q.defer();
+    const serNum = requestObject.Parameters.AppointmentSerNum;
+    const username = requestObject.UserID;
+
     //Get the appointment aria ser
     getAppointmentAriaSer(username, serNum).then(function(response){
-        var ariaSerNum = response[0].AppointmentAriaSer;
+        const ariaSerNum = response[0].AppointmentAriaSer;
+
         //Check using Ackeem's script whether the patient has checked in at the kiosk
         checkIfCheckedIntoAriaHelper(ariaSerNum).then(function(success){
+
+            //TODO: THIS SHOULD HANDLED IN THE CASE CHECKIN QUERY DOES NOT SUCCEED???
             //Check in the user into mysql if they have indeed checkedin at kiosk
             if(success) exports.runSqlQuery(queries.checkin(),['Kiosk', serNum, username]);
             r.resolve({Response:'success', Data:{'CheckedIn':success, AppointmentSerNum:serNum}});
+
         }).catch(function(error){
             //Error occur while checking patient status
             r.reject({Response:'error', Reason:error});
@@ -303,7 +337,6 @@ exports.checkCheckinInAria = function(requestObject)
 exports.checkinUpdate = function(requestObject)
 {
     var r = Q.defer();
-    //console.log('hello world');
     connection.query(queries.getAppointmentAriaSer(),[requestObject.UserID,requestObject.Parameters.AppointmentSerNum],function(error,rows,fields)
     {
         if(error||rows.length==0) r.reject({'Response':'error'});
@@ -331,30 +364,33 @@ exports.checkinUpdate = function(requestObject)
 */
 
 
-//Api call to checkin to an Appointment (Implementation in Aria is yet to be done)
-exports.checkIn=function(requestObject)
-{
-    var r=Q.defer();
-    var serNum = requestObject.Parameters.AppointmentSerNum;
-    var latitude = requestObject.Parameters.Latitude;
-    var longitude = requestObject.Parameters.Longitude;
-    var accuracy = requestObject.Parameters.Accuracy;
-    var username = requestObject.UserID;
-    var session = requestObject.Token;
-    var deviceId = requestObject.DeviceId;
+/**
+ * checkIn
+ * @desc checks into aria and then logs the check in status to db
+ * @param requestObject
+ * @return {Promise}
+ */
+exports.checkIn=function(requestObject) {
+    const r = Q.defer();
+    const serNum = requestObject.Parameters.AppointmentSerNum;
+    const latitude = requestObject.Parameters.Latitude;
+    const longitude = requestObject.Parameters.Longitude;
+    const accuracy = requestObject.Parameters.Accuracy;
+    const username = requestObject.UserID;
+    const session = requestObject.Token;
+    const deviceId = requestObject.DeviceId;
+
     //Getting the appointment ariaSer to checkin to aria
     getAriaPatientId(username).then(function(response){
-        var patientId = response[0].PatientId;
+        const patientId = response[0].PatientId;
+
         //Check in to aria using Johns script
         checkIntoAria(patientId,serNum, username).then(function(response){
-            if(response)
-            {
-                //console.log('Checked in successfully done in aria', response);
+            if(response) {
                 //If successfully checked in change field in mysql
-                var promises = [];
+                let promises = [];
 
-                for (var i=0; i!=serNum.length; ++i){
-                    //console.log(serNum[i]);
+                for (let i=0; i!==serNum.length; ++i){
                     promises.push(
                         exports.runSqlQuery(queries.checkin(),[session, serNum[i], username])
                             .then(exports.runSqlQuery(queries.logCheckin(),[serNum[i], deviceId,latitude, longitude, accuracy, new Date()])));
@@ -362,116 +398,126 @@ exports.checkIn=function(requestObject)
 
                 Q.all(promises)
                     .then(function(response){
-                        //console.log('Checkin done successfully', 'Finished writint to database');
                         r.resolve({Response:'success'});
                     })
                     .catch(function(error){
-                        //console.log('error checkin dur to', error);
                         r.reject({Response:'error',Reason:'CheckIn error due to '+error});
                     });
             }else{
                 r.reject({Response:'error', Reason:'Unable to checkin Aria'});
             }
         }).catch(function(error){
-            //console.log('Unable to checkin aria',error);
             r.reject({Response:'error', Reason:error});
         });
     }).catch(function(error){
-        //console.log('Error while grabbing aria ser num', error);
-        r.reject({Response:'error', Reason:'Error grabbing aria ser num from aria'+error});
+        r.reject({Response:'error', Reason:'Error grabbing aria ser num from aria '+ error});
     });
     return r.promise;
 };
-exports.getDocumentsContent = function(requestObject)
-{
 
-    var r = Q.defer();
-    var documents = requestObject.Parameters;
+/**
+ * getDocumentsContent
+ * @desc fetches a document's content from DB
+ * @param requestObject
+ * @return {Promise}
+ */
+exports.getDocumentsContent = function(requestObject) {
 
-    var userID = requestObject.UserID;
+    let r = Q.defer();
+    let documents = requestObject.Parameters;
+    let userID = requestObject.UserID;
     if(!(typeof documents.constructor !=='undefined'&&documents.constructor=== Array)){
         r.reject({Response:'error',Reason:'Not an array'});
     }else{
-        var quer = connection.query(queries.getDocumentsContentQuery(),[[documents],userID],function(err,rows,fields) {
-            if(err){
-                r.reject({Response:'error',Reason:err});
-            }else if(rows.length==0)
-            {
-                r.resolve({Response:'success',Data:'DocumentNotFound'});
-            }else{
-                LoadDocuments(rows).then(function(documents)
-                {
-                    if(documents.length==1)r.resolve({Response:'success',Data:documents[0
-                        ]});
-                    else r.resolve({Response:'success',Data:documents});
-
-                }).catch(function (error) {
-                    r.reject({Response:'error', Reason:err});
-                });
-            }
+        exports.runSqlQuery(queries.getDocumentsContentQuery(), [[documents],userID]).then((rows)=>{
+	        if(rows.length === 0) {
+		        r.resolve({Response:'success',Data:'DocumentNotFound'});
+	        } else {
+		        LoadDocuments(rows).then(function(documents) {
+			        if(documents.length === 1) r.resolve({Response:'success',Data:documents[0]});
+			        else r.resolve({Response:'success',Data:documents});
+		        }).catch(function (err) {
+			        r.reject({Response:'error', Reason:err});
+		        });
+	        }
+        }).catch((err)=>{
+	        r.reject({Response:'error',Reason:err});
         });
     }
     return r.promise;
-
 };
-//Updating field in the database tables
-exports.updateAccountField=function(requestObject)
-{
-    var r=Q.defer();
-    var UserEmail=requestObject.UserEmail;
-    getPatientFromEmail(UserEmail).then(function(patient)
-    {
-        var patientSerNum=patient.PatientSerNum;
-        var field=requestObject.Parameters.FieldToChange;
-        var newValue=requestObject.Parameters.NewValue;
-        if(field=='Password')
+
+/**
+ * @name updateAccountField
+ * @description Updates the fields in the patient table
+ * @param requestObject
+ */
+exports.updateAccountField=function(requestObject) {
+    let r = Q.defer();
+
+    let email = requestObject.UserEmail;
+    if(!email) r.reject({Response:'error',Reason:`Invalid parameter email`}); //Check for valid email
+    getPatientFromEmail(email).then(function(patient) {
+        //Valid fields
+        let validFields = ['Email', 'TelNum', 'Language'];
+        let { field, newValue } = requestObject.Parameters;
+        if ( !field || !newValue || typeof field !== 'string' || typeof newValue !== 'string')
+                r.resolve({Response:'error',Reason:'Invalid Parameters'});
+        if(field === 'Password')
         {
-            newValue=utility.hash(newValue);
-            connection.query(queries.setNewPassword(), [newValue, patientSerNum],
-                function(error, rows, fields)
-                {
-                    if(error){
-                        r.reject({Response:'error',Reason:error});
-                    }
-                    delete requestObject.Parameters.NewValue;
-                    r.resolve({Response:'success'});
+            //Hash the password before storing
+            let hashedPassword = utility.hash(newValue);
+            //Update database
+            exports.runSqlQuery(queries.setNewPassword(), [hashedPassword, patient.PatientSerNum])
+                .then(()=>{
+	                delete requestObject.Parameters.NewValue;
+	                r.resolve({Response:'success'});
+                }).catch((err)=>{
+	                r.reject({Response:'error',Reason:err});
                 });
-        }else{
-            connection.query(queries.accountChange(patientSerNum,field,newValue,requestObject.Token),
-                function(error, rows, fields)
-                {
-                    if(error) r.reject({Response:'error',Reason:error});
-                    r.resolve({Response:'success'});
-                });
+            //If not a password field update
+        }else if(validFields.includes(field)){
+            exports.runSqlQuery(queries.accountChange(), [field, newValue, requestObject.Token, patient.PatientSerNum])
+	            .then(()=>{
+		            r.resolve({Response:'success'});
+	            }).catch((err)=>{
+	            r.reject({Response:'error',Reason:err});
+            });
         }
     });
     return r.promise;
 };
-//Inputing feedback into feedback table
-exports.inputFeedback=function(requestObject)
-{
-    var r =Q.defer();
-    var UserEmail=requestObject.UserEmail;
-    getPatientFromEmail(UserEmail).then(function(user)
-    {
-        connection.query(queries.inputFeedback(),[user.PatientSerNum,requestObject.Parameters.FeedbackContent,requestObject.Parameters.AppRating, requestObject.Token],
-            function(error, rows, fields)
-            {
-                if(error) r.reject({Response:'error',Reason:error});
 
-                var replyTo = null;
-                // Determine if the feedback is for the app or patients committee
-                if (requestObject.Parameters.Type == 'pfp'){
-                    var email = "patients4patients.contact@gmail.com";
-                    var title = "New Suggestion - Opal";
-                    replyTo = email;
-                } else {
-                    var email = "muhc.app.mobile@gmail.com";
-                    var title = "New Feedback - Opal";
-                }
-                var mailman = new Mail();
-                mailman.sendMail(email, title, requestObject.Parameters.FeedbackContent, replyTo);
-                r.resolve({Response:'success'});
+/**
+ * @name inputFeedback
+ * @description Manages feedback content for the app, sends feedback to pfp committee if directed there.
+ * @param requestObject
+ */
+exports.inputFeedback = function(requestObject) {
+    let r = Q.defer();
+    let email = requestObject.UserEmail;
+	if(!email) r.reject({Response:'error',Reason:`Invalid parameter email`});
+	getPatientFromEmail(email).then((patient)=> {
+        let {type, feedback, appRating} = requestObject.Parameters;
+        if((!type||!feedback)) r.reject({Response:'error',Reason:`Invalid parameter type`});
+        exports.runSqlQuery(queries.inputFeedback(),[ patient.PatientSerNum, feedback, appRating, requestObject.Token ])
+            .then(()=>{
+	            let replyTo = null;
+	            let email;
+                let title;
+	            // Determine if the feedback is for the app or patients committee
+	            if (type === 'pfp'){
+		            email = "patients4patients.contact@gmail.com";
+		            title = "New Suggestion - Opal";
+		            replyTo = email;
+	            } else {
+		            email = "muhc.app.mobile@gmail.com";
+		            title = "New Feedback - Opal";
+	            }
+                (new Mail()).sendMail(email, title, feedback, replyTo);
+	            r.resolve({Response:'success'});
+            }).catch((err)=>{
+	            r.reject({Response:'error',Reason:err});
             });
     });
     return r.promise;
@@ -484,192 +530,212 @@ exports.inputFeedback=function(requestObject)
  * @input {object} Object containing the device identifiers
  * @returns {promise} Promise with success or failure.
  */
-exports.updateDeviceIdentifier = function(requestObject, parameters)
-{
-    var r = Q.defer();
-    var identifiers = parameters || requestObject.Parameters;
-    var deviceType = null;
+exports.updateDeviceIdentifier = function(requestObject, parameters) {
+    logger.log('debug', 'Inside updateDeviceIdentifier in sql interface');
 
-    //console.log(identifiers);
-
-    if (identifiers.deviceType == 'browser') {
-        deviceType = 3;
-    } else{
-        deviceType = (identifiers.deviceType == 'iOS')?0:1;
+    let r = Q.defer();
+    //Validating parameters
+    if(!requestObject.Parameters || !requestObject.Parameters.registrationId
+        || typeof requestObject.Parameters.registrationId !== 'string' ) {
+        r.reject({Response:'error', Reason:'Invalid parameters'});
     }
 
-    var UserEmail = requestObject.UserEmail;
-    //console.log("Device Type is  ", deviceType);
-    getPatientFromEmail(UserEmail).then(function(user){
-        exports.runSqlQuery(queries.updateDeviceIdentifiers(),[user.PatientSerNum, requestObject.DeviceId, identifiers.registrationId, deviceType,requestObject.Token, identifiers.registrationId, requestObject.Token]).then(function(response){
+    let registrationId = requestObject.Parameters.registrationId;
+    let deviceType = null;
+
+    //Validation deviceType
+    if (identifiers.deviceType === 'browser') {
+        deviceType = 3;
+    } else if ( deviceType === 'iOS'){
+        deviceType = 0;
+    }else if ( deviceType === 'Android'){
+        deviceType = 1;
+    }else{
+        r.reject({Response:'error', Reason:'Incorrect device type'});
+    }
+
+    let email = requestObject.UserEmail;
+    getPatientFromEmail(email).then(function(user){
+        exports.runSqlQuery(queries.updateDeviceIdentifiers(),[user.PatientSerNum, requestObject.DeviceId, registrationId, deviceType ,requestObject.Token, registrationId, requestObject.Token])
+            .then(()=>{
+            logger.log('debug', 'successfully updated device identifiers');
             r.resolve({Response:'success'});
-        }).catch(function(error){
-            //console.log("UPDATE USER IDENTIFIER requestObject: " + requestObject);
+        }).catch((error)=>{
+            logger.log('error', 'Error updating device identifiers due to '+ error);
             r.reject({Response:'error', Reason:'Error updating device identifiers due to '+error});
         });
-    }).catch(function(error){
+    }).catch((error)=>{
+        logger.log('error', 'Error getting patient fields due to '+ error);
         r.reject({Response:'error', Reason:'Error getting patient fields due to '+error});
     });
     return r.promise;
-
 };
-//Adding action to activity log
+
+/**
+ * @name addToActivityLog
+ * @desc Adding action to activity log
+ * @param requestObject
+ */
 exports.addToActivityLog=function(requestObject)
 {
-    var r = Q.defer();
-    connection.query(queries.logActivity(requestObject),
-        function(error, rows, fields)
-        {
-            if(error) r.reject({Response:'error', Reason:error});
-            r.resolve({Response:'success'});
-
+    let r = Q.defer();
+    let {Request, UserID, DeviceId, Token} = requestObject;
+    exports.runSqlQuery(queries.logActivity(),[Request, UserID, DeviceId, Token])
+        .then(()=>{
+	        r.resolve({Response:'success'});
+        }).catch((err)=>{
+	        r.reject({Response:'error', Reason:err});
         });
     return r.promise;
 };
-//Gets user password for encrypting/decrypting
-exports.getFirstEncryption=function(requestObject)
-{
-    var r=Q.defer();
-    //console.log("USERNAME IS " + requestObject.UserID);
-    //console.log("ID IS " + requestObject.DeviceId);
-    connection.query(queries.securityQuestionEncryption(),[requestObject.UserID],function(error,rows,fields)
-    {
-        if(error) r.reject(error);
-        if(rows) r.resolve(rows);
-        r.reject({Response:'error',Reason:"No User match in DB"});
-    });
+
+/**
+ * @name getFirstEncryption
+ * @param requestObject
+ */
+exports.getFirstEncryption=function(requestObject) {
+    let r=Q.defer();
+	exports.runSqlQuery(queries.securityQuestionEncryption(),[requestObject.UserID])
+		.then((rows)=>{
+			r.resolve(rows);
+		}).catch((err)=>{
+		r.reject({Response:'error', Reason:err});
+	});
     return r.promise;
 };
 
 
-//Gets user password for encrypting/decrypting to return security question
+/**
+ * getEncryption
+ * @desc Gets user password for encrypting/decrypting to return security question
+ * @param requestObject
+ * @return {Promise}
+ */
 exports.getEncryption=function(requestObject)
 {
-    var r=Q.defer();
-    //console.log("USERNAME IS " + requestObject.UserID);
-    //console.log("ID IS " + requestObject.DeviceId);
-    connection.query(queries.userEncryption(),[requestObject.UserID, requestObject.DeviceId],function(error,rows,fields)
-    {
-        //console.log("PASSWORD IS " + rows);
-        if(error) {
-            //console.log("sumtingwong" + error);
-            r.reject(error);
-        }
-        r.resolve(rows);
-    });
-    return r.promise;
+	return exports.runSqlQuery(queries.userEncryption(),[requestObject.UserID, requestObject.DeviceId]);
 };
 
-exports.inputQuestionnaireAnswers = function(requestObject)
-{
-    var r = Q.defer();
-
-    var parameters = requestObject.Parameters;
-    questionnaires.inputQuestionnaireAnswers(parameters).then(function(patientQuestionnaireSerNum)
-    {
-        connection.query(queries.setQuestionnaireCompletedQuery(),[patientQuestionnaireSerNum, parameters.DateCompleted, requestObject.Token,parameters.QuestionnaireSerNum],
-            function(error, rows, fields){
-                if(error) r.reject({Response:'error',Reason:error});
-                r.resolve({Response:'success'});
+/**
+ * inputQuestionnaireAnswers
+ * @desc Input questionnaire answers into DB
+ * @param requestObject
+ * @return {Promise}
+ */
+exports.inputQuestionnaireAnswers = function(requestObject) {
+    let r = Q.defer();
+    let parameters = requestObject.Parameters;
+    questionnaires.inputQuestionnaireAnswers(parameters).then(function(patientQuestionnaireSerNum) {
+        exports.runSqlQuery(queries.setQuestionnaireCompletedQuery(),
+            [patientQuestionnaireSerNum, parameters.DateCompleted, requestObject.Token,parameters.QuestionnaireSerNum])
+            .then(()=>{
+	            r.resolve({Response:'success'});
             });
-    }).catch(function(error){
-        r.reject(error);
+    }).catch(function(err){
+        r.reject({Response:'error',Reason:err});
     });
     return r.promise;
 };
-exports.getMapLocation=function(requestObject)
-{
-    var qrCode=requestObject.Parameters.QRCode;
-    var r=Q.defer();
-    connection.query(queries.getMapLocation(qrCode),function(error,rows,fields)
-    {
-        if(error) r.reject({Response:'error', Reason:'Problem fetching maps'});
-        r.resolve({Response:'success', Data:{MapLocation:rows[0]}});
-    });
-    return r.promise;
-};
-exports.increaseSecurityAnswerAttempt = function(requestObject)
-{
-    var r=Q.defer();
-    connection.query(queries.increaseSecurityAnswerAttempt(),[requestObject.DeviceId],function(error,rows,fields)
-    {
-        if(error) {
-            r.reject(error);
-        }
-        r.resolve(rows);
-    });
-    return r.promise;
-};
-exports.resetSecurityAnswerAttempt = function(requestObject) 
-{
-    var r=Q.defer();
-    var que = connection.query(queries.resetSecurityAnswerAttempt(),[requestObject.DeviceId],function(error,rows,fields)
-    {
-        if(error) {
-            r.reject(error);
-        }
-        r.resolve(rows);
-    });
-    return r.promise;
-}
-exports.setTimeoutSecurityAnswer = function(requestObject, timestamp) 
-{
-    var r=Q.defer();
-    var que = connection.query(queries.setTimeoutSecurityAnswer(),[new Date(timestamp), requestObject.DeviceId],function(error,rows,fields)
-    {
-	if(error) {
-            r.reject(error);
-        }
-        r.resolve(rows);
-    });
-    return r.promise;
-};
-//Api call to get patient fields for password reset
-exports.getPatientFieldsForPasswordReset=function(requestObject)
-{
-    var r=Q.defer();
 
-    var UserEmail = requestObject.UserEmail;
+/**
+ * @name getMapLocation
+ * @description Obtains map location via QR code
+ * @deprecated
+ * @param requestObject
+ */
+exports.getMapLocation=function(requestObject) {
+    let r = Q.defer();
 
-    var que = connection.query(queries.getPatientFieldsForPasswordReset(),[UserEmail, requestObject.DeviceId],function(error,rows,fields)
-    {
-        
-        if(error) {
-            //console.log("Error querying patient fields", error);
-            r.reject(error);
-        }
-        ////console.log(rows);
-        r.resolve(rows);
+    if(!requestObject.Parameters || !requestObject.Parameters.QRCode) {
+        r.reject({Response:'error', Reason:'Incorrect parameter'});
+    }
+
+    exports.runSqlQuery(queries.getMapLocation(),[requestObject.Parameters.QRCode]).then((rows)=>{
+       r.resolve({Response:'success', Data:{MapLocation:rows[0]}});
+    }).catch((err)=>{
+	    r.reject({Response:'error', Reason:err});
     });
+
     return r.promise;
 };
-exports.setNewPassword=function(password,patientSerNum)
-{
-    var r=Q.defer();
 
-    connection.query(queries.setNewPassword(),[password,patientSerNum],function(error,rows,fields)
-    {
-        if(error) r.reject(error);
-        r.resolve(rows);
-    });
-    return r.promise;
+/**
+ * @name increaseSecurityAnswerAttempt
+ * @description Increase security answer attempt by one
+ * @param requestObject
+ */
+exports.increaseSecurityAnswerAttempt = function(requestObject) {
+    return exports.runSqlQuery(queries.increaseSecurityAnswerAttempt(),[requestObject.DeviceId]);
 };
-//Getting planning estimate from Marc's script
-exports.planningStepsAndEstimates = function(userId, timestamp)
-{
+
+/**
+ * @name resetSecurityAnswerAttempt
+ * @description Sets the security answer attempt to zero
+ * @param requestObject
+ */
+exports.resetSecurityAnswerAttempt = function(requestObject) {
+	return exports.runSqlQuery(queries.resetSecurityAnswerAttempt(),[requestObject.DeviceId]);
+};
+
+/**
+ * @name setTimeoutSecurityAnswer
+ * @description Sets up timeout for device with incorrect security answer
+ * @param requestObject
+ * @param timestamp
+ */
+exports.setTimeoutSecurityAnswer = function(requestObject, timestamp) {
+	return exports.runSqlQuery(queries.setTimeoutSecurityAnswer(),[new Date(timestamp), requestObject.DeviceId]);
+};
+
+/**
+ * getPatientFieldsForPasswordReset
+ * @desc gets patient fields for password reset
+ * @param requestObject
+ * @return {Promise}
+ */
+exports.getPatientFieldsForPasswordReset=function(requestObject) {
+    return exports.runSqlQuery(queries.getPatientFieldsForPasswordReset(),[requestObject.UserEmail, requestObject.DeviceId]);
+};
+
+/**
+ * setNewPassword
+ * @desc updates user's password in DB
+ * @param password
+ * @param patientSerNum
+ * @return {Promise}
+ */
+exports.setNewPassword=function(password,patientSerNum) {
+    return exports.runSqlQuery(queries.setNewPassword(),[password,patientSerNum]);
+};
+
+/**
+ * planningStepsAndEstimates
+ * @desc Getting planning estimate from Marc's script
+ * @param userId
+ * @param timestamp
+ */
+exports.planningStepsAndEstimates = function(userId, timestamp) {
     return planningStepsAndEstimates(userId, timestamp);
 };
 
-exports.getPatientDeviceLastActivity=function(userid,device)
+/**
+ * getPatientDeviceLastActivity
+ * @desc gets the patient's last active timestamp
+ * @param userid
+ * @param device
+ * @return {Promise}
+ */
+exports.getPatientDeviceLastActivity = function(userid,device)
 {
-    var r=Q.defer();
-    connection.query(queries.getPatientDeviceLastActivity(userid,device),function(error,rows,fields)
-    {
-        if(error) r.reject(error);
+    let r = Q.defer();
+    exports.runSqlQuery(queries.getPatientDeviceLastActivity(), [userid,device]).then((rows)=>{
         r.resolve(rows[0]);
+    }).catch((err)=>{
+        r.reject(err);
     });
     return r.promise;
 };
+
 /**
  *@module sqlInterface
  *@name inputQuestionnaireRating
@@ -679,127 +745,143 @@ exports.getPatientDeviceLastActivity=function(userid,device)
  *@parameter {string} edumaterialSerNum serNum for educational material
  *@parameter {string} ratingValue value from 1 to 5 for educational material
  */
-
 exports.inputEducationalMaterialRating = function(requestObject)
 {
-    var r = Q.defer();
-    var parameters = requestObject.Parameters;
-    var sql = connection.query(queries.insertEducationalMaterialRatingQuery(),[ parameters.EducationalMaterialControlSerNum,parameters.PatientSerNum, parameters.RatingValue, requestObject.Token],
-        function(err,rows,fields){
-            if(err) r.reject({Response:'error',Reason:err});
-            else r.resolve({Response:'success'});
+    let r = Q.defer();
+    let {EducationalMaterialControlSerNum, PatientSerNum, RatingValue} = requestObject.Parameters;
+    if(!EducationalMaterialControlSerNum||!PatientSerNum||!RatingValue) {
+        r.reject({Response:'error',Reason:'Invalid Parameters'});
+    }
+
+    exports.runSqlQuery(queries.insertEducationalMaterialRatingQuery(),
+        [ EducationalMaterialControlSerNum, PatientSerNum, RatingValue, requestObject.Token])
+        .then(()=>{
+	        r.resolve({Response:'success'});
+        }).catch((err)=>{
+            r.reject({Response:'error',Reason:err});
         });
     return r.promise;
 };
-exports.updateLogout=function(fields)
-{
-    var r=Q.defer();
-    connection.query(queries.updateLogout(),fields,function(err, rows, fields){
-        if(err) r.reject(err);
-        r.resolve(rows);
-    });
+
+/**
+ * updateLogout
+ * @param fields
+ * @return {Promise}
+ */
+exports.updateLogout = function(fields) {
+    return exports.runSqlQuery(queries.updateLogout(), fields);
+};
+
+/**
+ * getPatientFromEmail
+ * @desc gets patient information based on inputted email
+ * @param email
+ * @return {Promise}
+ */
+function getPatientFromEmail(email) {
+    let r = Q.defer();
+	exports.runSqlQuery(queries.getPatientFromEmail(),[email])
+        .then((rows)=>{
+	        if(rows.length === 0) r.reject({Response:'error',Reason:"No User match in DB"});
+	        r.resolve(rows[0]);
+        }).catch((err)=>{
+		    r.reject(err);
+        });
+    return r.promise;
+}
+
+/**
+ * @name getPasswordForVerification
+ * @desc gets the user's password to crosscheck during login to verify that Firebase and DB passwords are synced
+ * @param email
+ * @return {Promise}
+ */
+exports.getPasswordForVerification = function(email) {
+    let r=Q.defer();
+    exports.runSqlQuery(queries.getPatientPasswordForVerification(), [email])
+	    .then((rows)=>{
+		    if(rows.length === 0) r.reject({Response:'error',Reason:"No User match in DB"});
+		    r.resolve(rows[0]);
+	    }).catch((err)=> {
+	        r.reject({Response: err, Reason:"Problem Fetching Password for verification"});
+        });
     return r.promise;
 };
 
-function getPatientFromEmail(email)
-{
-    var r=Q.defer();
-    connection.query(queries.getPatientFromEmail(),[email],function(error, rows, fields){
-        if(error) r.reject(error);
-        if(rows) r.resolve(rows[0]);
-        r.reject({Response:'error',Reason:"No User match in DB"});
-    });
-    return r.promise;
-}
+/**
+ * LoadDocuments
+ * @desc Grabs file object to be loaded
+ * @param rows
+ * @return {Promise}
+ */
+function LoadDocuments(rows) {
 
-exports.getPasswordForVerification= function(email) {
-    var r=Q.defer();
-    connection.query(queries.getPatientPasswordForVerification(),[email],function(error, rows, fields){
-        if(error) r.reject(error);
-        if(rows) r.resolve(rows[0]);
-        r.reject({Response:'error',Reason:"No User match in DB"});
-    });
-    return r.promise;
-
-}
-
-function LoadDocuments(rows)
-{
-    /**
-     * @ngdoc method
-     * @methodOf Qplus Firebase Listener
-     *@name LoadImages
-     *@description  Uses the q module to make a promise to load images. The promise is resolved after all of them have been read from file system using the fs module. The code continues to run only if the promise is resolved.
-     **/
-
-    var defer = Q.defer();
+    const defer = Q.defer();
 
     if (rows.length === 0) { return defer.resolve([]); }
 
-    for (var key = 0; key < rows.length; key++)
-    {
+    for (let key = 0; key < rows.length; key++) {
+
         // Get extension for filetype
-        var n = rows[key].FinalFileName.lastIndexOf(".");
-        var substring=rows[key].FinalFileName.substring(n+1,rows[key].FinalFileName.length);
-        rows[key].DocumentType=substring;
+        const n = rows[key].FinalFileName.lastIndexOf(".");
+        rows[key].DocumentType= rows[key].FinalFileName.substring(n + 1, rows[key].FinalFileName.length);
 
         try{
             rows[key].Content=filesystem.readFileSync(config.DOCUMENTS_PATH + rows[key].FinalFileName,'base64');
             defer.resolve(rows)
         } catch(err) {
             if (err.code == "ENOENT"){
-                //console.log("File not found!");
                 defer.reject("No file found");
             }
             else {
                 throw err;
             }
         }
-
     }
     return defer.promise;
 }
 
-
-//Function toobtain Doctors images
+/**
+ * loadImageDoctor
+ * @desc loads a doctor's image fetched from DB
+ * @param rows
+ * @return {Promise}
+ */
 function loadImageDoctor(rows){
-    var deferred = Q.defer();
-    for (var key in rows){
+    const deferred = Q.defer();
+    for (const key in rows){
         if((typeof rows[key].ProfileImage !=="undefined" )&&rows[key].ProfileImage){
-
-            var n = rows[key].ProfileImage.lastIndexOf(".");
-            var substring=rows[key].ProfileImage.substring(n+1,rows[key].ProfileImage.length);
-            rows[key].DocumentType=substring;
+            const n = rows[key].ProfileImage.lastIndexOf(".");
+            rows[key].DocumentType=rows[key].ProfileImage.substring(n + 1, rows[key].ProfileImage.length);
             rows[key].ProfileImage=filesystem.readFileSync('./Doctors/'+rows[key].ProfileImage,'base64' );
-
         }
     }
     deferred.resolve(rows);
     return deferred.promise;
 }
 
-//function to format patient image to base 64
+/**
+ * loadProfileImagePatient
+ * @desc formats patient image to base64
+ * @param rows
+ * @return {Promise}
+ */
 function loadProfileImagePatient(rows){
-    var deferred = Q.defer();
+    const deferred = Q.defer();
 
-    if(rows[0]&&rows[0].ProfileImage && rows[0].ProfileImage!=='')
-    {
-        var buffer=new Buffer(rows[0].ProfileImage,'hex');
-        var base64Buffer=buffer.toString('base64');
+    if(rows[0]&&rows[0].ProfileImage && rows[0].ProfileImage!=='') {
+        const buffer = new Buffer(rows[0].ProfileImage, 'hex');
+        const base64Buffer = buffer.toString('base64');
         rows[0].DocumentType='jpg';
         rows[0].ProfileImage=base64Buffer;
         deferred.resolve(rows);
-        /*var n = rows[0].ProfileImage.lastIndexOf(".");
-         var substring=rows[0].ProfileImage.substring(n+1,rows[0].ProfileImage.length);
-         rows[0].DocumentType=substring;
-         rows[0].ProfileImage=filesystem.readFileSync(__dirname + '/Patients/'+ rows[0].ProfileImage,'base64' );
-         deferred.resolve(rows);*/
     }else{
         deferred.resolve(rows);
     }
 
     return deferred.promise;
 }
+
 //Obtains educational material table of contents
 function getEducationalMaterialTableOfContents(rows)
 {
@@ -869,10 +951,9 @@ function getEducationTableOfContents(rows)
     ).catch(function(error){r.reject(error);});
     return r.promise;
 }
-//Attachements for messages, not yet implemented to be added eventually
-var LoadAttachments = function (rows )
-{
 
+//Attachments for messages, not yet implemented to be added eventually
+var LoadAttachments = function (rows ) {
     var messageCounter=0 ;
     var r = Q.defer();
     r.resolve(rows);
@@ -881,19 +962,16 @@ var LoadAttachments = function (rows )
 };
 
 //Get the appointment aria ser num for a particular AppointmentSerNum, Username is passed as a security measure
-function getAppointmentAriaSer(username, appSerNum)
-{
+function getAppointmentAriaSer(username, appSerNum) {
     return exports.runSqlQuery(queries.getAppointmentAriaSer(),[username, appSerNum]);
 }
 
-function getAriaPatientId(username)
-{
+function getAriaPatientId(username) {
     return exports.runSqlQuery(queries.getPatientId(),[username]);
 }
 
 //Checks user into Aria
-function checkIntoAria(patientId, serNum, username)
-{
+function checkIntoAria(patientId, serNum, username) {
     var r = Q.defer();
     var url = config.CHECKIN_PATH+patientId;
     //making request to checkin
