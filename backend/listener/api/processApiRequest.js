@@ -1,4 +1,4 @@
-let exports                 = module.exports = {};
+let exports = module.exports = {};
 const Q                     = require('q');
 const apiPatientUpdate      = require('./apiPatientUpdate.js');
 const apiHospitalUpdate     = require('./apiHospitalUpdate.js');
