@@ -54,6 +54,7 @@ exports.processRequest=function(requestObject) {
     const r = Q.defer();
     const type = requestObject.Request;
     if (API.hasOwnProperty(type)) {
+        logger.log('debug', 'Processing request of type: ' + type);
         return  API[type](requestObject);
     }else{
         logger.log('error', 'Invalid request type: ' + type);

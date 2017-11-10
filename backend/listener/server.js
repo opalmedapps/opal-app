@@ -159,7 +159,6 @@ function clearTimeoutRequests() {
                     ref.child('users/'+user+'/'+requestKey).set(null);
                 }
             }
-
         }
     });
 }
@@ -210,7 +209,7 @@ function processRequest(headers){
             })
             .catch(function (error) {
                 logError(error, requestObject, requestKey);
-                r.reject(error);
+                r.resolve(error);
             });
     } else {
 
@@ -220,10 +219,6 @@ function processRequest(headers){
             .then(function(results){
                 r.resolve(results);
             })
-            .catch(function (error) {
-                logError(error, requestObject, requestKey);
-                r.reject(error);
-            });
     }
     return r.promise;
 }
