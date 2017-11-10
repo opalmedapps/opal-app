@@ -17,7 +17,6 @@ var exports = module.exports = {};
  ******************************/
 const dbCredentials = {
 	connectionLimit: 1000,
-	// port:'/Applications/MAMP/tmp/mysql/mysql.sock',
 	host: config.HOST,
 	user: config.MYSQL_USERNAME,
 	password: config.MYSQL_PASSWORD,
@@ -141,6 +140,8 @@ exports.runSqlQuery = function(query, parameters, processRawFunction) {
 
     pool.getConnection(function(err, connection) {
 
+        if(err) logger.log('error', err);
+        logger.log('debug', 'grabbed connection: ' + connection);
         logger.log('info', 'Successfully grabbed connection from pool and about to perform following query: ', {query: query});
 
         const que = connection.query(query, parameters, function (err, rows, fields) {
