@@ -91,11 +91,9 @@ function handleRequest(requestType, snapshot){
 
     const headers = {key: snapshot.key, objectRequest: snapshot.val()};
     processRequest(headers).then(function(response){
-
         // Log before uploading to Firebase. Check that it was not a simple log
         if (response.Headers.RequestObject.Request !== 'Log') logResponse(response);
         uploadToFirebase(response, requestType);
-
     });
 }
 
@@ -262,8 +260,8 @@ function completeRequest(headers, key)
  *  2) clearResponses: clears responses from firebase that have not been handled within 5 minute period
  */
 function spawnCronJobs(){
-    const clearRequests = cp.fork(`${__dirname}/cron/clearRequests.js`);
-    const clearResponses = cp.fork(`${__dirname}/cron/clearResponses.js`);
+    let clearRequests = cp.fork(`${__dirname}/cron/clearRequests.js`);
+    let clearResponses = cp.fork(`${__dirname}/cron/clearResponses.js`);
 
     // Handles clearRequest cron events
     clearRequests.on('message', (m) => {
@@ -272,6 +270,10 @@ function spawnCronJobs(){
 
     clearRequests.on('error', (m) => {
         logger.log('error','clearRequest cron error:', m);
+        clearRequests.kill();
+        if(clearRequests.killed){
+            clearRequests = cp.fork(`${__dirname}/cron/clearRequests.js`);
+        }
     });
 
     // Handles clearResponses cron events
@@ -281,5 +283,10 @@ function spawnCronJobs(){
 
     clearResponses.on('error', (m) => {
         logger.log('info','clearResponse cron error:', m);
+
+        clearResponses.kill();
+        if(clearResponses.killed){
+            clearResponses = cp.fork(`${__dirname}/cron/clearResponses.js`);
+        }
     });
 }
