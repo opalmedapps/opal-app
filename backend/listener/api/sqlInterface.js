@@ -541,8 +541,9 @@ exports.updateDeviceIdentifier = function(requestObject, parameters) {
     }
 
     let registrationId = requestObject.Parameters.registrationId;
+    let identifiers = parameters || requestObject.Parameters;
     let deviceType = null;
-
+    
     //Validation deviceType
     if (identifiers.deviceType === 'browser') {
         deviceType = 3;
