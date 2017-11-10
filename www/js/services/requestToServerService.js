@@ -28,17 +28,16 @@ myApp.service('RequestToServer',['$filter','$state','NewsBanner','UserAuthorizat
 
         /**
          *@ngdoc property
-         *@name  MUHCApp.service.#refUsers
+         *@name  MUHCApp.service.#responseRef
          *@propertyOf MUHCApp.service:RequestToServer
          *@description Firebase reference user response
          **/
-        var refUsers = Ref.child(FirebaseService.getFirebaseChild('users'));
+        var responseRef = Ref.child(FirebaseService.getFirebaseChild('users'));
 
         function sendRequest(typeOfRequest,parameters, encryptionKey, referenceField) {
-            var requestType = '';
+            var requestType;
             var requestParameters;
             if (typeof encryptionKey !== 'undefined' && encryptionKey) {
-
                 requestType = typeOfRequest;
                 requestParameters = EncryptionService.encryptWithKey(parameters, encryptionKey);
             }
@@ -47,7 +46,6 @@ myApp.service('RequestToServer',['$filter','$state','NewsBanner','UserAuthorizat
                 requestParameters = EncryptionService.encryptData(parameters);
             }
             //Push the request to firebase
-
             var toSend = {
                 'Request' : requestType,
                 'DeviceId': UUID.getUUID(),
@@ -88,7 +86,7 @@ myApp.service('RequestToServer',['$filter','$state','NewsBanner','UserAuthorizat
                 //Sets the reference to fetch data for that request
                 var refRequestResponse;
                 if(!referenceField){
-                    refRequestResponse = refUsers.child(UserAuthorizationInfo.getUsername()+'/'+key);
+                    refRequestResponse = responseRef.child(UserAuthorizationInfo.getUsername()+'/'+key);
                 } else {
                     refRequestResponse = Ref.child(responseField).child(key);
                 }
