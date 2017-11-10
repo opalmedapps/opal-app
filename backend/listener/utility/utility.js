@@ -8,7 +8,7 @@ const Q                   = require('q');
 //crypto.DEFAULT_ENCODING = 'hex';
 
 
-let exports=module.exports={};
+var exports=module.exports={};
 
 /**
  * resolveEmptyResponse
