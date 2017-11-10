@@ -16,7 +16,7 @@ var exports = module.exports = {};
  * CONFIGURATIONS
  ******************************/
 const dbCredentials = {
-	connectionLimit: 1000,
+	connectionLimit: 10,
 	host: config.HOST,
 	user: config.MYSQL_USERNAME,
 	password: config.MYSQL_PASSWORD,
