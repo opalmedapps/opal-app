@@ -2,6 +2,8 @@ var sqlInterface=require('./../api/sqlInterface.js');
 var q = require('q');
 var CryptoJS = require('crypto-js');
 var utility=require('./../utility/utility.js');
+const logger            = require('./../logs/logger');
+
 var exports=module.exports={};
 const FIVE_MINUTES = 300000;
 
@@ -134,6 +136,9 @@ exports.securityQuestion=function(requestKey,requestObject) {
                         if (res.Password === password) {
                             getSecurityQuestion(requestKey, requestObject, unencrypted)
                                 .then(function (response) {
+
+                                    logger.log('debug', 'successfully got security question with response: ' + JSON.stringify(response));
+
                                     r.resolve(response)
                                 })
                         } else {
@@ -156,7 +161,7 @@ exports.securityQuestion=function(requestKey,requestObject) {
             }
 
         });
-    
+
     return r.promise;
 
 };

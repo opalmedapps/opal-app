@@ -531,7 +531,6 @@ exports.inputFeedback = function(requestObject) {
  * @returns {promise} Promise with success or failure.
  */
 exports.updateDeviceIdentifier = function(requestObject, parameters) {
-    logger.log('debug', 'Inside updateDeviceIdentifier in sql interface');
 
     let r = Q.defer();
     //Validating parameters
@@ -540,13 +539,8 @@ exports.updateDeviceIdentifier = function(requestObject, parameters) {
         r.reject({Response:'error', Reason:'Invalid parameters'});
     }
 
-    let registrationId = requestObject.Parameters.registrationId;
     let identifiers = parameters || requestObject.Parameters;
     let deviceType = null;
-
-    logger.log('debug', 'identifiers: ' + identifiers);
-    logger.log('debug', 'parameters: ' + parameters);
-    logger.log('debug', 'request object parameters: ' + JSON.stringify(requestObject.Parameters));
 
 
     //Validation deviceType
@@ -561,8 +555,6 @@ exports.updateDeviceIdentifier = function(requestObject, parameters) {
     }
 
     let email = requestObject.UserEmail;
-
-    logger.log('debug', 'Getting patient from email');
 
     getPatientFromEmail(email).then(function(user){
 
