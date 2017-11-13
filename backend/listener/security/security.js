@@ -160,6 +160,7 @@ exports.securityQuestion=function(requestKey,requestObject) {
                 //Otherwise we are dealing with a password reset
                 getSecurityQuestion(requestKey, requestObject, unencrypted)
                     .then(function (response) {
+                        logger.log('debug', 'successfully got security question with response: ' + JSON.stringify(response));
                         r.resolve(response)
                     }).catch(err => {
                     logger.log('error', 'Error getting security question', err);
