@@ -534,12 +534,12 @@ exports.updateDeviceIdentifier = function(requestObject, parameters) {
 
     let r = Q.defer();
 
-
     logger.log('debug', 'in update device id with : ' + JSON.stringify(requestObject));
     //Validating parameters
     if(!requestObject.Parameters || !requestObject.Parameters.registrationId
         || typeof requestObject.Parameters.registrationId !== 'string' ) {
         r.reject({Response:'error', Reason:'Invalid parameters'});
+        return r.promise;
     }
 
     let identifiers = parameters || requestObject.Parameters;
@@ -555,6 +555,7 @@ exports.updateDeviceIdentifier = function(requestObject, parameters) {
         deviceType = 1;
     }else{
         r.reject({Response:'error', Reason:'Incorrect device type'});
+        return r.promise;
     }
 
     let email = requestObject.UserEmail;
@@ -1145,6 +1146,9 @@ exports.getLabResults = function(requestObject)
 
 exports.getSecurityQuestion = function (requestObject){
     var r = Q.defer();
+
+    logger.log('debug', 'in get secyurity wquestuion in sql interface');
+
     var obj={};
     var Data = {};
     var userEmail = requestObject.UserEmail;

@@ -136,7 +136,12 @@ exports.securityQuestion=function(requestKey,requestObject) {
                 //first check to make sure user's password is correct in DB
                 sqlInterface.getPasswordForVerification(email)
                     .then((res) => {
+
+                        logger.log('debug', 'successfully got password for verification');
+
                         if (res.Password === password) {
+                            logger.log('debug', 'pasword was verified');
+
                             getSecurityQuestion(requestKey, requestObject, unencrypted)
                                 .then(function (response) {
                                     logger.log('debug', 'successfully got security question with response: ' + JSON.stringify(response));
@@ -171,16 +176,18 @@ function getSecurityQuestion(requestKey, requestObject, unencrypted){
 
     let r = q.defer();
 
-
     requestObject.Parameters = unencrypted;
 
     logger.log('debug', 'in get security question with: ' + requestObject);
 
     sqlInterface.updateDeviceIdentifier(requestObject)
         .then(function () {
+            logger.log('debug', 'finished updating device identifier');
             return sqlInterface.getSecurityQuestion(requestObject)
         })
         .then(function (response) {
+            logger.log('debug', 'updated devude id successfully');
+
             r.resolve({
                 Code:3,
                 Data:response.Data,
@@ -189,6 +196,7 @@ function getSecurityQuestion(requestKey, requestObject, unencrypted){
             });
         })
         .catch(function (response){
+            logger.log('debug', 'error updating device id');
             r.resolve({
                 Headers:{RequestKey:requestKey,RequestObject:requestObject},
                 Code: 2,
