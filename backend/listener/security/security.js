@@ -53,49 +53,55 @@ exports.verifySecurityAnswer=function(requestKey,requestObject,patient)
     }
 
     //Wrap decrypt in try-catch because if error is caught that means decrypt was unsuccessful, hence incorrect security answer
-    try {
-        var unencrypted = utility.decrypt(requestObject.Parameters, key);
-    }catch(err){
-        //Check if timestamp for lockout is old, if it is reset the security answer attempts
-        sqlInterface.increaseSecurityAnswerAttempt(requestObject);
-	    r.resolve({ RequestKey:requestKey, Code:3,Data:{AnswerVerified:"false"}, Headers:{RequestKey:requestKey,RequestObject:requestObject},Response:'success'});
-    	return r.promise;
-    }
 
-    //If its not a reset password request and the passwords are not equivalent
-    if(!requestObject.Parameters.PasswordReset && unencrypted.Password && unencrypted.Password !== patient.Password) {
-        r.resolve({Code:1});
-        return r.promise;
-    }
+    let unencrypted = null;
 
-    //If its the right security answer, also make sure is a valid SSN;
-    var response = {};
+    utility.decrypt(requestObject.Parameters, key)
+        .then(params => {
 
-    var ssnValid = unencrypted.SSN && unencrypted.SSN.toUpperCase() === patient.SSN && unencrypted.Answer && unencrypted.Answer === patient.AnswerText;
-    var answerValid = unencrypted.Answer === patient.AnswerText;
-    var isVerified = false;
+            unencrypted = params;
+            //If its not a reset password request and the passwords are not equivalent
+            if(!requestObject.Parameters.PasswordReset && unencrypted.Password && unencrypted.Password !== patient.Password) {
+                r.resolve({Code:1});
+                return r.promise;
+            }
 
-    if(unencrypted.PasswordReset){
-        isVerified = ssnValid;
-    } else {
-        isVerified = answerValid;
-    }
+            //If its the right security answer, also make sure is a valid SSN;
+            var response = {};
 
-    if (isVerified) {
-        response = { RequestKey:requestKey, Code:3,Data:{AnswerVerified:"true"}, Headers:{RequestKey:requestKey,RequestObject:requestObject},Response:'success'};
-        sqlInterface.setTrusted(requestObject)
-            .then(function(){
-                sqlInterface.resetSecurityAnswerAttempt(requestObject);
+            var ssnValid = unencrypted.SSN && unencrypted.SSN.toUpperCase() === patient.SSN && unencrypted.Answer && unencrypted.Answer === patient.AnswerText;
+            var answerValid = unencrypted.Answer === patient.AnswerText;
+            var isVerified = false;
+
+            if(unencrypted.PasswordReset){
+                isVerified = ssnValid;
+            } else {
+                isVerified = answerValid;
+            }
+
+            if (isVerified) {
+                response = { RequestKey:requestKey, Code:3,Data:{AnswerVerified:"true"}, Headers:{RequestKey:requestKey,RequestObject:requestObject},Response:'success'};
+                sqlInterface.setTrusted(requestObject)
+                    .then(function(){
+                        sqlInterface.resetSecurityAnswerAttempt(requestObject);
+                        r.resolve(response);
+                    })
+                    .catch(function(error){
+                        r.reject({ Headers:{RequestKey:requestKey,RequestObject:requestObject}, Code: 2, Data:{},Response:'error', Reason:'Could not set trusted device'});
+                    })
+
+            } else {
+                response = { RequestKey:requestKey, Code:3,Data:{AnswerVerified:"false"}, Headers:{RequestKey:requestKey,RequestObject:requestObject},Response:'success'};
                 r.resolve(response);
-            })
-            .catch(function(error){
-                response = { Headers:{RequestKey:requestKey,RequestObject:requestObject}, Code: 2, Data:{},Response:'error', Reason:'Could not set trusted device'};
-            })
+            }
 
-    } else {
-        response = { RequestKey:requestKey, Code:3,Data:{AnswerVerified:"false"}, Headers:{RequestKey:requestKey,RequestObject:requestObject},Response:'success'};
-        r.resolve(response);
-    }
+        })
+        .catch(err => {
+            //Check if timestamp for lockout is old, if it is reset the security answer attempts
+            sqlInterface.increaseSecurityAnswerAttempt(requestObject);
+            r.resolve({ RequestKey:requestKey, Code:3,Data:{AnswerVerified:"false"}, Headers:{RequestKey:requestKey,RequestObject:requestObject},Response:'success'});
+            return r.promise;
+    });
 
     return r.promise;
 };
