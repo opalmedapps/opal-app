@@ -125,7 +125,7 @@ exports.securityQuestion=function(requestKey,requestObject) {
         .then(params => {
             unencrypted = params;
 
-            logger.log('debug', 'unencrypted: ' + unencrypted);
+            logger.log('debug', 'unencrypted: ' + JSON.stringify(unencrypted));
 
             let email = requestObject.UserEmail;
             let password = unencrypted.Password;
