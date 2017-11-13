@@ -117,40 +117,46 @@ exports.setNewPassword=function(requestKey, requestObject, user)
 };
 
 exports.securityQuestion=function(requestKey,requestObject) {
-    var r = q.defer();
-    var unencrypted = utility.decrypt(requestObject.Parameters, utility.hash("none"));
-    var email = requestObject.UserEmail;
-    var password = unencrypted.Password;
+    let r = q.defer();
+    let unencrypted = null;
+    utility.decrypt(requestObject.Parameters, utility.hash("none"))
+        .then(params => {
+            unencrypted = params;
 
-    //Then this means this is a login attempt
-    if (password) {
-        //first check to make sure user's password is correct in DB
-        sqlInterface.getPasswordForVerification(email)
-            .then(function (res) {
-                if (res.Password === password) {
-                    getSecurityQuestion(requestKey, requestObject, unencrypted)
-                        .then(function (response) {
-                            r.resolve(response)
-                        })
-                } else {
-                    r.resolve({
-                        Headers: {RequestKey: requestKey, RequestObject: requestObject},
-                        Code: 1,
-                        Data: {},
-                        Response: 'error',
-                        Reason: 'Received password does not match password stored in database.'
+            let email = requestObject.UserEmail;
+            let password = unencrypted.Password;
+
+            //Then this means this is a login attempt
+            if (password) {
+                //first check to make sure user's password is correct in DB
+                sqlInterface.getPasswordForVerification(email)
+                    .then(function (res) {
+                        if (res.Password === password) {
+                            getSecurityQuestion(requestKey, requestObject, unencrypted)
+                                .then(function (response) {
+                                    r.resolve(response)
+                                })
+                        } else {
+                            r.resolve({
+                                Headers: {RequestKey: requestKey, RequestObject: requestObject},
+                                Code: 1,
+                                Data: {},
+                                Response: 'error',
+                                Reason: 'Received password does not match password stored in database.'
+                            });
+
+                        }
                     });
+            } else {
+                //Otherwise we are dealing with a password reset
+                getSecurityQuestion(requestKey, requestObject, unencrypted)
+                    .then(function (response) {
+                        r.resolve(response)
+                    })
+            }
 
-                }
-            });
-    } else {
-        //Otherwise we are dealing with a password reset
-        getSecurityQuestion(requestKey, requestObject, unencrypted)
-            .then(function (response) {
-                r.resolve(response)
-            })
-    }
-
+        });
+    
     return r.promise;
 
 };
