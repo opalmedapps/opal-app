@@ -125,6 +125,8 @@ exports.securityQuestion=function(requestKey,requestObject) {
         .then(params => {
             unencrypted = params;
 
+            logger.log('debug', 'unencrypted: ' + unencrypted);
+
             let email = requestObject.UserEmail;
             let password = unencrypted.Password;
 
@@ -136,11 +138,13 @@ exports.securityQuestion=function(requestKey,requestObject) {
                         if (res.Password === password) {
                             getSecurityQuestion(requestKey, requestObject, unencrypted)
                                 .then(function (response) {
-
                                     logger.log('debug', 'successfully got security question with response: ' + JSON.stringify(response));
-
                                     r.resolve(response)
                                 })
+                                .catch(err => {
+                                    logger.log('error', 'Error getting security question', err);
+                                    r.reject(err);
+                                });
                         } else {
                             r.resolve({
                                 Headers: {RequestKey: requestKey, RequestObject: requestObject},
@@ -157,7 +161,10 @@ exports.securityQuestion=function(requestKey,requestObject) {
                 getSecurityQuestion(requestKey, requestObject, unencrypted)
                     .then(function (response) {
                         r.resolve(response)
-                    })
+                    }).catch(err => {
+                    logger.log('error', 'Error getting security question', err);
+                    r.reject(err);
+                });
             }
 
         });
