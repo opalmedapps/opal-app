@@ -546,7 +546,7 @@ exports.updateDeviceIdentifier = function(requestObject, parameters) {
 
     logger.log('debug', 'identifiers: ' + identifiers);
     logger.log('debug', 'parameters: ' + parameters);
-    logger.log('debug', 'request object parameters: ' + requestObject.Parameters);
+    logger.log('debug', 'request object parameters: ' + JSON.stringify(requestObject.Parameters));
 
 
     //Validation deviceType
