@@ -120,6 +120,7 @@ exports.setNewPassword=function(requestKey, requestObject, user)
 
 exports.securityQuestion=function(requestKey,requestObject) {
     let r = q.defer();
+
     let unencrypted = null;
     utility.decrypt(requestObject.Parameters, utility.hash("none"))
         .then((params) => {
@@ -135,19 +136,12 @@ exports.securityQuestion=function(requestKey,requestObject) {
                 //first check to make sure user's password is correct in DB
                 sqlInterface.getPasswordForVerification(email)
                     .then((res) => {
-
-                        logger.log('debug', 'successfull got password for verification');
-
                         if (res.Password === password) {
                             getSecurityQuestion(requestKey, requestObject, unencrypted)
                                 .then(function (response) {
                                     logger.log('debug', 'successfully got security question with response: ' + JSON.stringify(response));
                                     r.resolve(response)
                                 })
-                                .catch(err => {
-                                    logger.log('error', 'Error getting security question', err);
-                                    r.reject(err);
-                                });
                         } else {
                             r.resolve({
                                 Headers: {RequestKey: requestKey, RequestObject: requestObject},
@@ -163,13 +157,8 @@ exports.securityQuestion=function(requestKey,requestObject) {
                 //Otherwise we are dealing with a password reset
                 getSecurityQuestion(requestKey, requestObject, unencrypted)
                     .then(function (response) {
-                        logger.log('debug', 'dealing with password reset');
-                        logger.log('debug', 'successfully got security question with response: ' + JSON.stringify(response));
                         r.resolve(response)
-                    }).catch(err => {
-                    logger.log('error', 'Error getting security question', err);
-                    r.reject(err);
-                });
+                    });
             }
 
         });
@@ -179,13 +168,15 @@ exports.securityQuestion=function(requestKey,requestObject) {
 };
 
 function getSecurityQuestion(requestKey, requestObject, unencrypted){
+
+    let r = q.defer();
     requestObject.Parameters = unencrypted;
-    return sqlInterface.updateDeviceIdentifier(requestObject)
+    sqlInterface.updateDeviceIdentifier(requestObject)
         .then(function () {
             return sqlInterface.getSecurityQuestion(requestObject)
         })
         .then(function (response) {
-            return Promise.resolve({
+            r.resolve({
                 Code:3,
                 Data:response.Data,
                 Headers:{RequestKey:requestKey,RequestObject:requestObject},
@@ -193,7 +184,7 @@ function getSecurityQuestion(requestKey, requestObject, unencrypted){
             });
         })
         .catch(function (response){
-            return Promise.resolve({
+            r.resolve({
                 Headers:{RequestKey:requestKey,RequestObject:requestObject},
                 Code: 2,
                 Data:{},
@@ -201,6 +192,8 @@ function getSecurityQuestion(requestKey, requestObject, unencrypted){
                 Reason:response
             });
         });
+
+    return r.promise;
 }
 
 var requestMappings = {
