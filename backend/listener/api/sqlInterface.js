@@ -536,8 +536,7 @@ exports.updateDeviceIdentifier = function(requestObject, parameters) {
 
     logger.log('debug', 'in update device id with : ' + JSON.stringify(requestObject));
     //Validating parameters
-    if(!requestObject.Parameters || !requestObject.Parameters.registrationId
-        || typeof requestObject.Parameters.registrationId !== 'string' ) {
+    if(!requestObject.Parameters || !requestObject.Parameters.registrationId) {
         r.reject({Response:'error', Reason:'Invalid parameters'});
         return r.promise;
     }
