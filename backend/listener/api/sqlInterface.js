@@ -556,7 +556,13 @@ exports.updateDeviceIdentifier = function(requestObject, parameters) {
     }
 
     let email = requestObject.UserEmail;
+
+    logger.log('debug', 'Getting patient from email');
+
     getPatientFromEmail(email).then(function(user){
+
+        logger.log('debug', 'updating device identifiers with the following: ' + user.PatientSerNum, requestObject.DeviceId, identifiers.registrationId, deviceType,requestObject.Token, identifiers.registrationId, requestObject.Token);
+
         exports.runSqlQuery(queries.updateDeviceIdentifiers(),[user.PatientSerNum, requestObject.DeviceId, identifiers.registrationId, deviceType,requestObject.Token, identifiers.registrationId, requestObject.Token])
             .then(()=>{
             logger.log('debug', 'successfully updated device identifiers');
