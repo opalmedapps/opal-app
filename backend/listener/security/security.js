@@ -170,7 +170,12 @@ exports.securityQuestion=function(requestKey,requestObject) {
 function getSecurityQuestion(requestKey, requestObject, unencrypted){
 
     let r = q.defer();
+
+
     requestObject.Parameters = unencrypted;
+
+    logger.log('debug', 'in get security question with: ' + requestObject);
+
     sqlInterface.updateDeviceIdentifier(requestObject)
         .then(function () {
             return sqlInterface.getSecurityQuestion(requestObject)

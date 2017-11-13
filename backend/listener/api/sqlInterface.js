@@ -533,6 +533,9 @@ exports.inputFeedback = function(requestObject) {
 exports.updateDeviceIdentifier = function(requestObject, parameters) {
 
     let r = Q.defer();
+
+
+    logger.log('debug', 'in update device id with : ' + JSON.stringify(requestObject));
     //Validating parameters
     if(!requestObject.Parameters || !requestObject.Parameters.registrationId
         || typeof requestObject.Parameters.registrationId !== 'string' ) {
