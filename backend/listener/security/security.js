@@ -122,7 +122,7 @@ exports.securityQuestion=function(requestKey,requestObject) {
     let r = q.defer();
     let unencrypted = null;
     utility.decrypt(requestObject.Parameters, utility.hash("none"))
-        .then(params => {
+        .then((params) => {
             unencrypted = params;
 
             logger.log('debug', 'unencrypted: ' + JSON.stringify(unencrypted));
@@ -134,7 +134,10 @@ exports.securityQuestion=function(requestKey,requestObject) {
             if (password) {
                 //first check to make sure user's password is correct in DB
                 sqlInterface.getPasswordForVerification(email)
-                    .then(function (res) {
+                    .then((res) => {
+
+                        logger.log('debug', 'successfull got password for verification');
+
                         if (res.Password === password) {
                             getSecurityQuestion(requestKey, requestObject, unencrypted)
                                 .then(function (response) {
@@ -160,6 +163,7 @@ exports.securityQuestion=function(requestKey,requestObject) {
                 //Otherwise we are dealing with a password reset
                 getSecurityQuestion(requestKey, requestObject, unencrypted)
                     .then(function (response) {
+                        logger.log('debug', 'dealing with password reset');
                         logger.log('debug', 'successfully got security question with response: ' + JSON.stringify(response));
                         r.resolve(response)
                     }).catch(err => {
