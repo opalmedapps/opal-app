@@ -1,6 +1,5 @@
-var exports=module.exports={};
-var Q = require('q');
-var sqlInterface = require('./sqlInterface.js');
+var exports = module.exports = {};
+const sqlInterface = require('./sqlInterface.js');
 
 //API call to log user out
 exports.logout=function(requestObject)
@@ -13,10 +12,13 @@ exports.sendMessage=function(requestObject)
 {
   return sqlInterface.sendMessage(requestObject);
 };
+
+//Input questionnaire answers to DB
 exports.inputQuestionnaireAnswers = function(requestObject)
 {
   return sqlInterface.inputQuestionnaireAnswers(requestObject);
 };
+
 //Input feedback
 exports.inputFeedback=function(requestObject)
 {
@@ -42,7 +44,8 @@ exports.checkIn = function (requestObject) {
 //Update device token for push notifications
 exports.updateDeviceIdentifier= function(requestObject)
 {
-  return sqlInterface.updateDeviceIdentifier(requestObject);
+    logger.log('debug', 'update device identifier called at apiHospitalUpdate');
+    return sqlInterface.updateDeviceIdentifier(requestObject);
 };
 
 //Input rating for 
@@ -54,4 +57,4 @@ exports.inputEducationalMaterialRating= function(requestObject)
 // Get all notifications
 exports.getAllNotifications = function (requestObject) {
     return sqlInterface.getAllNotifications(requestObject);
-}
+};

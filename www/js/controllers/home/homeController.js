@@ -39,6 +39,7 @@
         vm.goToStatus = goToStatus;
         vm.goToNotification = goToNotification;
         vm.goToAppointments = goToAppointments;
+        vm.goToSettings = goToSettings;
         vm.goToCheckinAppointments = goToCheckinAppointments;
 
         activate();
@@ -299,6 +300,11 @@
         {
             NavigatorParameters.setParameters({'Navigator':'homeNavigator'});
             homeNavigator.pushPage('./views/personal/appointments/appointments.html');
+        }
+
+        function goToSettings()
+        {
+            tabbar.setActiveTab(4);
         }
 
         function goToCheckinAppointments(todaysAppointments) {

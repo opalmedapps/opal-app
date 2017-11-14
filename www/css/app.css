@@ -60,6 +60,13 @@ body {
     width:100%;
 }
 
+#listInitApp div ons-button span {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%) translateX(-50%);
+    width: 100%;
+}
+
 /* Portrait layout (default) */
 .app {
     background:url(../img/logo.png) no-repeat center top; /* 170px x 200px */
@@ -192,6 +199,11 @@ img
   min-height: 20px;
   height: 100%;
 }
+
+.popover {
+    display: inline;
+}
+
 .menu-item {
   color:#2B6197;
   padding: 0 0 0 20px;
@@ -669,7 +681,7 @@ a.muhcapp-home-account:link, a.muhcapp-home-account:hover{
 }
 
 .desc {
-  line-height: 16px;
+  line-height: 20px;
 }
 
 .lucent {
@@ -1138,6 +1150,10 @@ p{
 }
 
 /* Lab results specific classes */
+.labtest-col {
+    padding-right: 0px;
+    padding-left: 10px;
+}
 .name1 {
   color: blue;
 }
@@ -2674,10 +2690,6 @@ and (max-device-width : 321px)
         font-size: 14px;
     }
 
-    #init-background{
-        height: 180px !important;
-    }
-
     #lock-logo {
         display: none;
     }
@@ -2862,4 +2874,9 @@ and (max-device-width : 321px)
 
 #more-info-button:hover {
   background-color: #59D45D;
+}
+
+.notification {
+    position: absolute;
+    margin-left: -10px;
 }

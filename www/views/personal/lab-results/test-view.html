@@ -8,68 +8,68 @@
         <!-- SEARCH BAR -->
         <div class="navigation-bar">
             <div class="navigation-bar__center">
-                <input ng-model="searchText" type="search" class="search-input" style="width: 96%; margin: 6px auto 6px auto;" placeholder="{{'SEARCH'|translate}}">
+                <input ng-model="searchText" type="search" class="search-input" style="width: 96%; margin: 6px auto 6px auto;" placeholder="{{'SEARCH'|translate}}" ng-class="fontSizeDesc">
             </div>
         </div>
-        <ons-list>
+        <ons-list ng-class="fontSizeDesc">
             <ons-row>
-                <ons-col class="col-xs-3 col-sm-3 col-lg-3">
+                <ons-col class="col-xs-3 col-sm-3 col-lg-3 labtest-col">
                     <div align="left" style="margin-left: 8px">
                         {{"LAB_NAME"|translate}}
                     </div>
                 </ons-col>
-                <ons-col class="col-xs-3 col-sm-3 col-lg-3">
+                <ons-col class="col-xs-3 col-sm-3 col-lg-3 labtest-col">
                     <div align="center">
                         {{"LAB_YOUR_RESULT"|translate}}
                     </div>
                 </ons-col>
-                <ons-col class="col-xs-6 col-sm-6 col-lg-6">
+                <ons-col class="col-xs-6 col-sm-6 col-lg-6 labtest-col">
                     <div align="right">
                         {{"LAB_NORM"|translate}}
                     </div>
                 </ons-col>
             </ons-row>
             <ons-list ng-repeat="testCategory in vm.testResultsByCategory">
-                <ons-list-header>{{testCategory.testCategory|translate}}</ons-list-header>
+                <ons-list-header ng-class="fontSizeDesc">{{testCategory.testCategory|translate}}</ons-list-header>
                 <ons-list-item modifier="tappable" ng-repeat="test in vm.selectedLabResults | filter: searchText | orderBy:['testCategory']" ng-click="personalNavigator.pushPage('./views/personal/lab-results/timeline-test-component.html',{param:test});"  class="list-item-container" ng-if="test.testCategory == testCategory.testCategory">
 
                     <ons-row>
-                        <ons-col class="col-xs-3 col-sm-3 col-lg-3">
+                        <ons-col class="col-xs-3 col-sm-3 col-lg-3 labtest-col">
 
-                            <div ng-if="(test.AbnormalFlag) && ((test.TestValue < 0.95*test.MinNorm) || (test.TestValue > 1.05*test.MaxNorm))" class="lab-results-test-out5">
+                            <div ng-if="(test.AbnormalFlag) && ((test.TestValue < 0.95*test.MinNorm) || (test.TestValue > 1.05*test.MaxNorm))" class="lab-results-test-out5" ng-class="fontSizeDesc">
                                 {{test.FacComponentName}} ({{test.AbnormalFlag}})
                             </div>
 
-                            <div ng-if="(test.AbnormalFlag) && ((test.TestValue >= 0.95*test.MinNorm) && (test.TestValue <= 1.05*test.MaxNorm))"  class="lab-results-test-in5">
+                            <div ng-if="(test.AbnormalFlag) && ((test.TestValue >= 0.95*test.MinNorm) && (test.TestValue <= 1.05*test.MaxNorm))"  class="lab-results-test-in5" ng-class="fontSizeDesc">
                                 {{test.FacComponentName}} ({{test.AbnormalFlag}})
                             </div>
 
-                            <div ng-if="(!test.AbnormalFlag)" class="name">
+                            <div ng-if="(!test.AbnormalFlag)" class="name" ng-class="fontSizeDesc">
                                 {{test.FacComponentName}} {{test.AbnormalFlag}}
                             </div>
-                            <div class="desc">
+                            <div class="desc" ng-class="fontSizeDesc">
                                 ({{test.UnitDescription}})
                             </div>
                         </ons-col>
 
                         <ons-col class="col-xs-3 col-sm-3 col-lg-3">
-                            <div ng-if="!test.AbnormalFlag" class="desc" align="center">
+                            <div ng-if="!test.AbnormalFlag" class="desc" align="center" ng-class="fontSizeDesc">
                                 {{test.TestValue}}
                                 <!--This displays your test value after clicking a specific test-->
                             </div>
 
-                            <div ng-if="test.AbnormalFlag && ((test.TestValue < 0.95*test.MinNorm) || (test.TestValue > 1.05*test.MaxNorm))" class="descOut5" align="center">
+                            <div ng-if="test.AbnormalFlag && ((test.TestValue < 0.95*test.MinNorm) || (test.TestValue > 1.05*test.MaxNorm))" class="descOut5" align="center" ng-class="fontSizeDesc">
                                 {{test.TestValue}}
                                 <!--This displays your test value after clicking a specific test-->
                             </div>
 
-                            <div ng-if="test.AbnormalFlag && ((test.TestValue >= 0.95*test.MinNorm) && (test.TestValue <= 1.05*test.MaxNorm))" class="descIn5" align="center">
+                            <div ng-if="test.AbnormalFlag && ((test.TestValue >= 0.95*test.MinNorm) && (test.TestValue <= 1.05*test.MaxNorm))" class="descIn5" align="center" ng-class="fontSizeDesc">
                                 {{test.TestValue}}
                                 <!--This displays your test value after clicking a specific test-->
                             </div>
                         </ons-col>
-                        <ons-col class="col-xs-6 col-sm-6 col-lg-6">
-                            <div class="desc" align="right">
+                        <ons-col class="col-xs-6 col-sm-6 col-lg-6 labtest-col">
+                            <div class="desc" align="right" ng-class="fontSizeDesc">
                                 {{test.MinNorm}} - {{test.MaxNorm}}
                                 <!--This displays MinNorm and MaxNorm after clicking a specific test-->
                             </div>
