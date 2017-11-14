@@ -131,7 +131,6 @@
                 reformedData.push(dv);
             }
 
-            console.log(JSON.stringify(reformedData));
 
             // reformedData.reverse();
             /*********************************************
@@ -150,8 +149,24 @@
             vm.recentValue = parseFloat(testResults[testResults.length-1].TestValue);
             windowWidth = $(window).width();
 
-            // Sample options for first chart
+            // Configuring the font size for the chart to be the same as the user defined font
+            var fontSize = UserPreferences.getFontSize();
+            var fontSizeText = fontSize.charAt(0).toUpperCase() + fontSize.slice(1);
+            var elem = document.querySelector('.fontDesc' + fontSizeText);
+            var style = getComputedStyle(elem);
+            fontSize = style.fontSize;
+            var zoomTextFont = fontSize;
 
+            // Computing the position of the range buttons depending on the client width
+            var buttonWidth;
+            if (fontSizeText == "Xlarge") {
+                buttonWidth = document.body.clientWidth - 320;
+                zoomTextFont = "16px";
+            }
+            else if (fontSizeText == "Large") buttonWidth = document.body.clientWidth - 280;
+            else buttonWidth = document.body.clientWidth - 240;
+
+            // Sample options for first chart
             if (UserPreferences.getLanguage().toUpperCase() === 'FR')
             {
                 Highcharts.setOptions({
@@ -172,16 +187,108 @@
                         printChart: 'Imprimer le graphique',
                         resetZoom: 'Réinitialiser le zoom',
                         resetZoomTitle: 'Réinitialiser le zoom au niveau 1:1',
-                        thousandsSep: ' '
+                        thousandsSep: ' ',
+                        rangeSelectorFrom: "Du",
+                        rangeSelectorTo: "au",
+                        rangeSelectorZoom: "Période"
+                    },
+                    rangeSelector: {
+                        buttons: [{
+                            type: 'month',
+                            count: 1,
+                            text: '1m'
+                        }, {
+                            type: 'month',
+                            count: 3,
+                            text: '3m'
+                        }, {
+                            type: 'month',
+                            count: 6,
+                            text: '6m'
+                        }, {
+                            type: 'ytd',
+                            text: 'YTD'
+                        }, {
+                            type: 'year',
+                            count: 1,
+                            text: '1a'
+                        }, {
+                            type: 'all',
+                            text: 'Tout'
+                        }]
+                    }
+                });
+                Highcharts.dateFormat('%e%a');
+            }
+            else {
+                Highcharts.setOptions({
+                    lang: {
+                        months: [ "January" , "February" , "March" , "April" , "May" ,
+                            "June" , "July" , "August" , "September" , "October" , "November" , "December"],
+                        weekdays: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+                        shortMonths: [ "Jan" , "Feb" , "Mar" , "Apr" , "May" , "Jun" ,
+                            "Jul" , "Aug" , "Sep" , "Oct" , "Nov" , "Dec"],
+                        decimalPoint: '.',
+                        downloadPNG: 'Download PNG image',
+                        downloadJPEG: 'Download JPEG image',
+                        downloadPDF: 'Download PDF document',
+                        downloadSVG: 'Download SVG vector image',
+                        exportButtonTitle: 'Graphics export',
+                        loading: 'Loading...',
+                        printChart: 'Print chart',
+                        resetZoom: 'Reset zoom',
+                        resetZoomTitle: 'Reset zoom level 1:1',
+                        thousandsSep: ' ',
+                        rangeSelectorFrom: 'From',
+                        rangeSelectorTo: 'To',
+                        rangeSelectorZoom: 'Zoom'
+                    },
+                    rangeSelector: {
+                        buttons: [{
+                            type: 'month',
+                            count: 1,
+                            text: '1m'
+                        }, {
+                            type: 'month',
+                            count: 3,
+                            text: '3m'
+                        }, {
+                            type: 'month',
+                            count: 6,
+                            text: '6m'
+                        }, {
+                            type: 'ytd',
+                            text: 'YTD'
+                        }, {
+                            type: 'year',
+                            count: 1,
+                            text: '1y'
+                        }, {
+                            type: 'all',
+                            text: 'All'
+                        }]
                     }
                 });
                 Highcharts.dateFormat('%e%a');
             }
 
-
             vm.chartOptions = {
                 rangeSelector: {
-                    selected: 1
+                    selected: 1,
+                    buttonTheme: {
+                        width: 'auto',
+                        style: {
+                            fontSize: fontSize
+                        }
+                    },
+                    labelStyle: {
+                        height: fontSize,
+                        fontSize: zoomTextFont
+                    },
+                    buttonPosition: {
+                        x: buttonWidth,
+                        y: 10
+                    }
                 },
                 chart: {
                     // Explicitly tell the width and height of a chart
@@ -191,18 +298,31 @@
                 xAxis: {
                     type: 'datetime',
                     dateTimeLabelFormats: { // don't display the dummy year
-                        month: '%e. %b',
+                        month: '%e %b',
                         year: '%b'
                     },
                     title: {
-                        text: 'Date'
+                        text: 'Date',
+                        style: {
+                            fontSize: fontSize
+                        }
+                    },
+                    labels: {
+                        rotation: 0,
+                        style: {
+                            fontSize: fontSize,
+                            textOverflow: false
+                        }
                     }
                 },
                 yAxis: {
                     max: maxChart,
                     min: minChart,
                     title: {
-                        text: unit
+                        text: unit,
+                        style: {
+                            fontSize: fontSize
+                        }
                     },
                     opposite: false,
                     plotLines: [{
@@ -215,7 +335,13 @@
                         value: min,
                         dashStyle: 'Solid',
                         width: 2
-                    }]
+                    }],
+                    labels: {
+                        style: {
+                            fontSize: fontSize,
+                            textOverflow: "ellipsis"
+                        }
+                    }
                 },
                 plotOptions: {
                     series: {

@@ -41,11 +41,11 @@
 
     <div class="settings-header" ng-class="fontSizeTitle">{{"PREFERENCES"|translate}}</div>
     <ons-list>
-        <ons-list-item modifier="chevron" ng-click="settingsNavigator.pushPage('views/settings/update-account-field.html', {param:'LANGUAGE'},{ animation : 'slide' } )" ng-class="fontSizeDesc">
+        <ons-list-item modifier="chevron" ng-click="asc.goToUpdateAccountField('LANGUAGE', 'slide')" ng-class="fontSizeDesc">
             {{"LANGUAGE"|translate}}
             <span class="list-item-note lucent">{{asc.Language}}</span>
         </ons-list-item>
-        <ons-list-item modifier="chevron" ng-click="settingsNavigator.pushPage('views/settings/update-account-field.html', {param:'FONTSIZE'},{ animation : 'slide' } )" ng-class="fontSizeDesc">
+        <ons-list-item modifier="chevron" ng-click="asc.goToUpdateAccountField('FONTSIZE', 'slide')" ng-class="fontSizeDesc">
             {{"FONTSIZE"|translate}}
         </ons-list-item>
     </ons-list>

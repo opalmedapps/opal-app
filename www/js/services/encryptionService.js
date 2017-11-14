@@ -188,7 +188,7 @@ myApp.service('EncryptionService',function(UserAuthorizationInfo){
          *@return {String} Returns hashed password
          **/
         hash: function (incoming) {
-         	return CryptoJS.SHA512(incoming).toString();
+         	return CryptoJS.SHA256(incoming).toString();
         },
 
         /**
@@ -200,7 +200,6 @@ myApp.service('EncryptionService',function(UserAuthorizationInfo){
          **/
         generateTempEncryptionHash: function (ssn, answer) {
             tempEncryptionHash = CryptoJS.PBKDF2(ssn, answer, {keySize: 512/32, iterations: 1000}).toString(CryptoJS.enc.Hex);
-            console.log("temp enc hash: " + tempEncryptionHash);
 
         },
 

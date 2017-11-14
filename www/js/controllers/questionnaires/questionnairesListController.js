@@ -36,6 +36,11 @@
 
         function activate(){
 
+            if (ons.platform.isIOS()) {
+                var tabbar = document.getElementById("questionnairesNavbar");
+                tabbar.style.marginTop = "63px";
+            }
+
             if(!Questionnaires.isEmpty()){
                 vm.questionnaires = Questionnaires.getPatientQuestionnaires().Questionnaires;
                 vm.patientQuestionnaires = Questionnaires.getPatientQuestionnaires().PatientQuestionnaires;

@@ -110,6 +110,7 @@
   "LASTUPDATED": "Last Updated",
   "LASTAPPOINTMENT": "Last Appointment",
   "LEAVEMESSAGE": "Leave us a message!",
+  "LEAVING_APP": "Note that you are leaving the app and are no longer relying on the Opal App to protect your document data.",
   "LOADINGDATA": "Retrieving your account",
   "LOADINGAPPOINTMENTS": "Loading your appointments...",
   "LOADINGLABRESULTS": "Loading your lab results...",
@@ -124,6 +125,7 @@
   "MAPS": "Map",
   "MINUTES": "Minutes",
   "MEDICATIONALERTS": "Medication Alerts",
+  "MEDICATIONINFO": "Medication Info",
   "MEDIUM":"Medium",
   "MYCHART": "My Chart",
   "MYCHART_DESCRIPTION": "The My Chart tab contains all the information regarding your electronic health data.",
@@ -303,5 +305,6 @@
   "Other":"Other",
   "Electrolytes":"Electrolytes",
   "Tumor markers":"TumorMarkers",
-  "GOTOWEBSITE":"Visit website"
+  "GOTOWEBSITE":"Visit website",
+  "WARNING": "Warning!"
 }

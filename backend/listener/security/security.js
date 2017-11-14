@@ -2,6 +2,8 @@ var sqlInterface=require('./../api/sqlInterface.js');
 var q = require('q');
 var CryptoJS = require('crypto-js');
 var utility=require('./../utility/utility.js');
+const logger            = require('./../logs/logger');
+
 var exports=module.exports={};
 const FIVE_MINUTES = 300000;
 
@@ -39,7 +41,7 @@ exports.verifySecurityAnswer=function(requestKey,requestObject,patient)
     var key = patient.AnswerText;
 
     //TO VERIFY, PASS SECURITY ANSWER THROUGH HASH THAT TAKES A WHILE TO COMPUTE, SIMILAR TO HOW THEY DO PASSWORD CHECKS
-    utility.generatePBKDFHash(key,key);
+    // utility.generatePBKDFHash(key,key);
 
     if(patient.TimeoutTimestamp != null && requestObject.Timestamp - (new Date(patient.TimeoutTimestamp)).getTime() > FIVE_MINUTES) {
 	    sqlInterface.resetSecurityAnswerAttempt(requestObject);
@@ -51,117 +53,155 @@ exports.verifySecurityAnswer=function(requestKey,requestObject,patient)
     }
 
     //Wrap decrypt in try-catch because if error is caught that means decrypt was unsuccessful, hence incorrect security answer
-    try {
-        var unencrypted = utility.decrypt(requestObject.Parameters, key);
-    }catch(err){
-        //Check if timestamp for lockout is old, if it is reset the security answer attempts
-        sqlInterface.increaseSecurityAnswerAttempt(requestObject);
-	    r.resolve({ RequestKey:requestKey, Code:3,Data:{AnswerVerified:"false"}, Headers:{RequestKey:requestKey,RequestObject:requestObject},Response:'success'});
-    	return r.promise;
-    }
 
-    //If its not a reset password request and the passwords are not equivalent
-    if(!requestObject.Parameters.PasswordReset && unencrypted.Password && unencrypted.Password !== patient.Password) {
-        r.resolve({Code:1});
-        return r.promise;
-    }
+    let unencrypted = null;
 
-    //If its the right security answer, also make sure is a valid SSN;
-    var response = {};
+    utility.decrypt(requestObject.Parameters, key)
+        .then(params => {
 
-    var ssnValid = unencrypted.SSN && unencrypted.SSN.toUpperCase() === patient.SSN && unencrypted.Answer && unencrypted.Answer === patient.AnswerText;
-    var answerValid = unencrypted.Answer === patient.AnswerText;
-    var isVerified = false;
+            unencrypted = params;
+            //If its not a reset password request and the passwords are not equivalent
+            if(!requestObject.Parameters.PasswordReset && unencrypted.Password && unencrypted.Password !== patient.Password) {
+                r.resolve({Code:1});
+                return r.promise;
+            }
 
-    if(unencrypted.PasswordReset){
-        isVerified = ssnValid;
-    } else {
-        isVerified = answerValid;
-    }
+            //If its the right security answer, also make sure is a valid SSN;
+            var response = {};
 
-    if (isVerified) {
-        response = { RequestKey:requestKey, Code:3,Data:{AnswerVerified:"true"}, Headers:{RequestKey:requestKey,RequestObject:requestObject},Response:'success'};
-        sqlInterface.setTrusted(requestObject)
-            .then(function(){
-                sqlInterface.resetSecurityAnswerAttempt(requestObject);
+            var ssnValid = unencrypted.SSN && unencrypted.SSN.toUpperCase() === patient.SSN && unencrypted.Answer && unencrypted.Answer === patient.AnswerText;
+            var answerValid = unencrypted.Answer === patient.AnswerText;
+            var isVerified = false;
+
+            if(unencrypted.PasswordReset){
+                isVerified = ssnValid;
+            } else {
+                isVerified = answerValid;
+            }
+
+            if (isVerified) {
+                response = { RequestKey:requestKey, Code:3,Data:{AnswerVerified:"true"}, Headers:{RequestKey:requestKey,RequestObject:requestObject},Response:'success'};
+                sqlInterface.setTrusted(requestObject)
+                    .then(function(){
+                        sqlInterface.resetSecurityAnswerAttempt(requestObject);
+                        r.resolve(response);
+                    })
+                    .catch(function(error){
+                        r.reject({ Headers:{RequestKey:requestKey,RequestObject:requestObject}, Code: 2, Data:{},Response:'error', Reason:'Could not set trusted device'});
+                    })
+
+            } else {
+                response = { RequestKey:requestKey, Code:3,Data:{AnswerVerified:"false"}, Headers:{RequestKey:requestKey,RequestObject:requestObject},Response:'success'};
                 r.resolve(response);
-            })
-            .catch(function(error){
-                response = { Headers:{RequestKey:requestKey,RequestObject:requestObject}, Code: 2, Data:{},Response:'error', Reason:'Could not set trusted device'};
-            })
+            }
 
-    } else {
-        response = { RequestKey:requestKey, Code:3,Data:{AnswerVerified:"false"}, Headers:{RequestKey:requestKey,RequestObject:requestObject},Response:'success'};
-        r.resolve(response);
-    }
+        })
+        .catch(() => {
+            //Check if timestamp for lockout is old, if it is reset the security answer attempts
+            sqlInterface.increaseSecurityAnswerAttempt(requestObject);
+            r.resolve({ RequestKey:requestKey, Code:3,Data:{AnswerVerified:"false"}, Headers:{RequestKey:requestKey,RequestObject:requestObject},Response:'success'});
+            return r.promise;
+        });
 
     return r.promise;
 };
+
 exports.setNewPassword=function(requestKey, requestObject, user)
 {
     var r=q.defer();
     var ssn = user.SSN.toUpperCase();
     var answer = user.AnswerText;
 
-    var unencrypted=utility.decrypt(requestObject.Parameters, utility.hash(ssn), answer);
+    var unencrypted = null;
 
-    sqlInterface.setNewPassword(utility.hash(unencrypted.newPassword), user.UserTypeSerNum, requestObject.Token).then(function(){
-        var response = { RequestKey:requestKey, Code:3,Data:{PasswordReset:"true"}, Headers:{RequestKey:requestKey,RequestObject:requestObject},Response:'success'};
-        r.resolve(response);
-    }).catch(function(error){
-        var response = { Headers:{RequestKey:requestKey,RequestObject:requestObject}, Code: 2, Data:{},Response:'error', Reason:'Could not set password'};
-        r.resolve(response);
-    });
+    utility.decrypt(requestObject.Parameters, utility.hash(ssn), answer)
+        .then((unencrypted)=> {
+            sqlInterface.setNewPassword(utility.hash(unencrypted.newPassword), user.UserTypeSerNum).then(function(){
+                logger.log('debug', 'successfully updated password');
+                var response = { RequestKey:requestKey, Code:3, Data:{PasswordReset:"true"}, Headers:{RequestKey:requestKey,RequestObject:requestObject},Response:'success'};
+                r.resolve(response);
+            }).catch(function(error){
+                logger.log('error', 'error updating password', error);
+
+                var response = { Headers:{RequestKey:requestKey,RequestObject:requestObject}, Code: 2, Data:{},Response:'error', Reason:'Could not set password'};
+                r.resolve(response);
+            });
+        }).catch(err => r.reject(err));
 
     return r.promise;
 };
 
 exports.securityQuestion=function(requestKey,requestObject) {
-    var r = q.defer();
-    var unencrypted = utility.decrypt(requestObject.Parameters, CryptoJS.SHA512("none").toString());
-    var email = requestObject.UserEmail;
-    var password = unencrypted.Password;
+    let r = q.defer();
 
-    //Then this means this is a login attempt
-    if (password) {
-        //first check to make sure user's password is correct in DB
-        sqlInterface.getPasswordForVerification(email)
-            .then(function (res) {
-                if (res.Password === password) {
-                    getSecurityQuestion(requestKey, requestObject, unencrypted)
-                        .then(function (response) {
-                            r.resolve(response)
-                        })
-                } else {
-                    r.resolve({
-                        Headers: {RequestKey: requestKey, RequestObject: requestObject},
-                        Code: 1,
-                        Data: {},
-                        Response: 'error',
-                        Reason: 'Received password does not match password stored in database.'
+    let unencrypted = null;
+    utility.decrypt(requestObject.Parameters, utility.hash("none"))
+        .then((params) => {
+            unencrypted = params;
+
+            logger.log('debug', 'unencrypted: ' + JSON.stringify(unencrypted));
+
+            let email = requestObject.UserEmail;
+            let password = unencrypted.Password;
+
+            //Then this means this is a login attempt
+            if (password) {
+                //first check to make sure user's password is correct in DB
+                sqlInterface.getPasswordForVerification(email)
+                    .then((res) => {
+
+                        logger.log('debug', 'successfully got password for verification');
+
+                        if (res.Password === password) {
+                            logger.log('debug', 'pasword was verified');
+
+                            getSecurityQuestion(requestKey, requestObject, unencrypted)
+                                .then(function (response) {
+                                    logger.log('debug', 'successfully got security question with response: ' + JSON.stringify(response));
+                                    r.resolve(response)
+                                })
+                        } else {
+                            r.resolve({
+                                Headers: {RequestKey: requestKey, RequestObject: requestObject},
+                                Code: 1,
+                                Data: {},
+                                Response: 'error',
+                                Reason: 'Received password does not match password stored in database.'
+                            });
+
+                        }
                     });
+            } else {
+                //Otherwise we are dealing with a password reset
+                getSecurityQuestion(requestKey, requestObject, unencrypted)
+                    .then(function (response) {
+                        r.resolve(response)
+                    });
+            }
 
-                }
-            });
-    } else {
-        //Otherwise we are dealing with a password reset
-        getSecurityQuestion(requestKey, requestObject, unencrypted)
-            .then(function (response) {
-                r.resolve(response)
-            })
-    }
+        });
 
     return r.promise;
 
 };
 
 function getSecurityQuestion(requestKey, requestObject, unencrypted){
-    return sqlInterface.updateDeviceIdentifier(requestObject, unencrypted)
+
+    let r = q.defer();
+
+    requestObject.Parameters = unencrypted;
+
+    logger.log('debug', 'in get security question with: ' + requestObject);
+
+    sqlInterface.updateDeviceIdentifier(requestObject)
         .then(function () {
+            logger.log('debug', 'finished updating device identifier');
             return sqlInterface.getSecurityQuestion(requestObject)
         })
         .then(function (response) {
-            return Promise.resolve({
+            logger.log('debug', 'updated devude id successfully');
+
+            r.resolve({
                 Code:3,
                 Data:response.Data,
                 Headers:{RequestKey:requestKey,RequestObject:requestObject},
@@ -169,7 +209,8 @@ function getSecurityQuestion(requestKey, requestObject, unencrypted){
             });
         })
         .catch(function (response){
-            return Promise.resolve({
+            logger.log('debug', 'error updating device id');
+            r.resolve({
                 Headers:{RequestKey:requestKey,RequestObject:requestObject},
                 Code: 2,
                 Data:{},
@@ -177,6 +218,8 @@ function getSecurityQuestion(requestKey, requestObject, unencrypted){
                 Reason:response
             });
         });
+
+    return r.promise;
 }
 
 var requestMappings = {

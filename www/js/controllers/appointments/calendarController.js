@@ -97,7 +97,7 @@
          * @returns Date
          * @description used by the controller to determine today's date
          */
-        vm.dt = null;
+        vm.dt = new Date();
 
         vm.showColor = showColor;
         vm.getStyle=getStyle;
@@ -117,6 +117,22 @@
 
         function activate()
         {
+            var fontSize = UserPreferences.getFontSize();
+            fontSize = fontSize.charAt(0).toUpperCase() + fontSize.slice(1);
+            var elem = document.querySelector('.fontDesc' + fontSize);
+            var style = getComputedStyle(elem);
+            fontSize = style.fontSize;
+            function createClass(name,rules){
+                var style = document.createElement('style');
+                style.type = 'text/css';
+                document.getElementsByTagName('head')[0].appendChild(style);
+                if(!(style.sheet||{}).insertRule)
+                    (style.styleSheet || style.sheet).addRule(name, rules);
+                else
+                    style.sheet.insertRule(name+"{"+rules+"}",0);
+            }
+            createClass('.uib-datepicker table thead tr th button div',"font-size: " +  fontSize + "!important;");
+
             navigatorName = NavigatorParameters.getParameters().Navigator;
 
             /**
@@ -137,7 +153,6 @@
                 .then(function(){
                     vm.language = UserPreferences.getLanguage();
 
-                    vm.dt = new Date();
                     vm.dt.setHours(0,0,0,0);
                     today = vm.dt;
                     flag=false;
@@ -165,6 +180,7 @@
                         var heightTreatment=document.documentElement.clientHeight-document.documentElement.clientHeight*0.35-180;
                         if(divTreatment)divTreatment.style.height=heightTreatment+'px';
                         setTimeout(scrollToAnchor, 50);
+
                     })
                 })
         }
