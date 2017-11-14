@@ -96,30 +96,34 @@ exports.verifySecurityAnswer=function(requestKey,requestObject,patient)
             }
 
         })
-        .catch(err => {
+        .catch(() => {
             //Check if timestamp for lockout is old, if it is reset the security answer attempts
             sqlInterface.increaseSecurityAnswerAttempt(requestObject);
             r.resolve({ RequestKey:requestKey, Code:3,Data:{AnswerVerified:"false"}, Headers:{RequestKey:requestKey,RequestObject:requestObject},Response:'success'});
             return r.promise;
-    });
+        });
 
     return r.promise;
 };
+
 exports.setNewPassword=function(requestKey, requestObject, user)
 {
     var r=q.defer();
     var ssn = user.SSN.toUpperCase();
     var answer = user.AnswerText;
 
-    var unencrypted=utility.decrypt(requestObject.Parameters, utility.hash(ssn), answer);
+    var unencrypted = null;
 
-    sqlInterface.setNewPassword(utility.hash(unencrypted.newPassword), user.UserTypeSerNum, requestObject.Token).then(function(){
-        var response = { RequestKey:requestKey, Code:3,Data:{PasswordReset:"true"}, Headers:{RequestKey:requestKey,RequestObject:requestObject},Response:'success'};
-        r.resolve(response);
-    }).catch(function(error){
-        var response = { Headers:{RequestKey:requestKey,RequestObject:requestObject}, Code: 2, Data:{},Response:'error', Reason:'Could not set password'};
-        r.resolve(response);
-    });
+    utility.decrypt(requestObject.Parameters, utility.hash(ssn), answer)
+        .then(()=> {
+            sqlInterface.setNewPassword(utility.hash(unencrypted.newPassword), user.UserTypeSerNum, requestObject.Token).then(function(){
+                var response = { RequestKey:requestKey, Code:3, Data:{PasswordReset:"true"}, Headers:{RequestKey:requestKey,RequestObject:requestObject},Response:'success'};
+                r.resolve(response);
+            }).catch(function(error){
+                var response = { Headers:{RequestKey:requestKey,RequestObject:requestObject}, Code: 2, Data:{},Response:'error', Reason:'Could not set password'};
+                r.resolve(response);
+            });
+        }).catch(err => r.reject(err));
 
     return r.promise;
 };
