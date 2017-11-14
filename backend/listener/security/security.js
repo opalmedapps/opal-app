@@ -115,8 +115,8 @@ exports.setNewPassword=function(requestKey, requestObject, user)
     var unencrypted = null;
 
     utility.decrypt(requestObject.Parameters, utility.hash(ssn), answer)
-        .then(()=> {
-            sqlInterface.setNewPassword(utility.hash(unencrypted.newPassword), user.UserTypeSerNum, requestObject.Token).then(function(){
+        .then((unencrypted)=> {
+            sqlInterface.setNewPassword(utility.hash(unencrypted.newPassword), user.UserTypeSerNum).then(function(){
                 var response = { RequestKey:requestKey, Code:3, Data:{PasswordReset:"true"}, Headers:{RequestKey:requestKey,RequestObject:requestObject},Response:'success'};
                 r.resolve(response);
             }).catch(function(error){
