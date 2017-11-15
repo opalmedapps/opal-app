@@ -134,7 +134,12 @@ exports.decrypt= function(object,secret,salt) {
           }
       });
   } else {
-      r.resolve(exports.decryptObject(object, stablelibutf8.encode(secret.substring(0,nacl.secretbox.keyLength))));
+      try{
+          var decrypted = exports.decryptObject(object, stablelibutf8.encode(secret.substring(0,nacl.secretbox.keyLength)))
+          r.resolve(decrypted);
+      }catch(err){
+          r.reject(err);
+      }
   }
 
   return r.promise;
