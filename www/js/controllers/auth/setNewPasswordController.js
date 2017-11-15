@@ -16,11 +16,12 @@
         'UserAuthorizationInfo',
         'EncryptionService',
         'ResetPassword',
-        '$timeout'
+        '$timeout',
+        'DeviceIdentifiers'
     ];
 
     /* @ngInject */
-    function SetNewPasswordController(RequestToServer, UserAuthorizationInfo, EncryptionService, ResetPassword, $timeout) {
+    function SetNewPasswordController(RequestToServer, UserAuthorizationInfo, EncryptionService, ResetPassword, $timeout, DeviceIdentifiers) {
 
         var vm = this;
         var parameters;
@@ -118,6 +119,7 @@
                         });
                         localStorage.removeItem("deviceID");
                         localStorage.removeItem(UserAuthorizationInfo.getUsername()+"/securityAns");
+                        DeviceIdentifiers.destroy();
                     })
                     .catch(function (error) {
                         $timeout(function(){
