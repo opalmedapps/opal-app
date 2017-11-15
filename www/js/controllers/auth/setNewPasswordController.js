@@ -112,7 +112,6 @@
                         vm.submitting = false;
                         UserAuthorizationInfo.clearUserAuthorizationInfo();
                         EncryptionService.removeTempEncryptionHash();
-                        setDeviceIdentifiers.setDeviceIdentifiers();
                         $timeout(function() {
                             vm.alert.type = 'success';
                             vm.alert.content = "PASSWORDUPDATED";
