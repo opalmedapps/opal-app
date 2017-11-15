@@ -156,6 +156,9 @@ function processRequest(headers){
 
         processApi.securityAPI[requestObject.Request](requestKey, requestObject)
             .then(function (response) {
+
+                logger.log('debug', 'processed request successfully with response: ' + JSON.stringify(response));
+
                 r.resolve(response);
             })
             .catch(function (error) {

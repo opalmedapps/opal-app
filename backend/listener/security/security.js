@@ -48,7 +48,7 @@ exports.verifySecurityAnswer=function(requestKey,requestObject,patient)
     } else if(patient.Attempt == 5) {
         //If 5 attempts have already been made, lock the user out for 5 minutes
 	    if(patient.TimeoutTimestamp == null) sqlInterface.setTimeoutSecurityAnswer(requestObject, requestObject.Timestamp);
-        r.resolve({Code: 4, RequestKey:requestKey,Data:"Attempted password more than 5 times, please try again in 5 minutes", Headers:{RequestKey:requestKey,RequestObject:requestObject}, Response:'error'});
+        r.resolve({Code: 4, RequestKey:requestKey, Data:"Attempted security answer more than 5 times, please try again in 5 minutes", Headers:{RequestKey:requestKey,RequestObject:requestObject}, Response:'error'});
         return r.promise;
     }
 
@@ -60,6 +60,7 @@ exports.verifySecurityAnswer=function(requestKey,requestObject,patient)
         .then(params => {
 
             unencrypted = params;
+
             //If its not a reset password request and the passwords are not equivalent
             if(!requestObject.Parameters.PasswordReset && unencrypted.Password && unencrypted.Password !== patient.Password) {
                 r.resolve({Code:1});
@@ -100,7 +101,6 @@ exports.verifySecurityAnswer=function(requestKey,requestObject,patient)
             //Check if timestamp for lockout is old, if it is reset the security answer attempts
             sqlInterface.increaseSecurityAnswerAttempt(requestObject);
             r.resolve({ RequestKey:requestKey, Code:3,Data:{AnswerVerified:"false"}, Headers:{RequestKey:requestKey,RequestObject:requestObject},Response:'success'});
-            return r.promise;
         });
 
     return r.promise;
