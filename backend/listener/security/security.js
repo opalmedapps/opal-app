@@ -107,7 +107,7 @@ exports.verifySecurityAnswer=function(requestKey,requestObject,patient)
         })
         .catch((err) => {
             //Check if timestamp for lockout is old, if it is reset the security answer attempts
-            logger('error', 'increase security answer attempt due to error decrypting', err);
+            logger.log('error', 'increase security answer attempt due to error decrypting', err);
             sqlInterface.increaseSecurityAnswerAttempt(requestObject);
             r.resolve({ RequestKey:requestKey, Code:3,Data:{AnswerVerified:"false"}, Headers:{RequestKey:requestKey,RequestObject:requestObject},Response:'success'});
         });
