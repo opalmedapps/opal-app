@@ -177,7 +177,7 @@ exports.encryptObject=function(object,secret,nonce)
 };
 
 exports.hash=function(input) {
-    return CryptoJS.SHA256(input).toString();
+    return CryptoJS.SHA512(input).toString();
 };
 
 //Decryption function, returns an object whose values are all strings
