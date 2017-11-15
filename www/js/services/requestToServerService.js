@@ -39,9 +39,6 @@ myApp.service('RequestToServer',['$filter','$state','NewsBanner','UserAuthorizat
             var requestParameters;
             if (encryptionKey) {
 
-                console.log("encryption key: " + encryptionKey);
-                console.log("parameters: " + parameters);
-
                 requestType = typeOfRequest;
                 requestParameters = EncryptionService.encryptWithKey(parameters, encryptionKey);
             }
