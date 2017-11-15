@@ -139,11 +139,9 @@ exports.decrypt= function(object,secret,salt) {
 
       logger.log('debug', 'reached here');
       try {
-          logger.log('debug', 'trying to decrypt');
           var decrypted = exports.decryptObject(object, stablelibutf8.encode(secret.substring(0, nacl.secretbox.keyLength)));
           r.resolve(decrypted);
       }catch(err){
-          logger.log('error', 'error thrown while decrypting' , err);
           r.reject(err);
       }
   }
