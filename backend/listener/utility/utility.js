@@ -3,7 +3,9 @@ const stablelibutf8     = require('@stablelib/utf8');
 const nacl              = require('tweetnacl');
 const stablelibbase64   = require('@stablelib/base64');
 const crypto            = require('crypto');
-const Q                   = require('q');
+const Q                 = require('q');
+const logger            = require('./../logs/logger');
+
 
 //crypto.DEFAULT_ENCODING = 'hex';
 
