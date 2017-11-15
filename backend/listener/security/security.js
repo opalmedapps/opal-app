@@ -40,10 +40,14 @@ exports.verifySecurityAnswer=function(requestKey,requestObject,patient)
     var r = q.defer();
     var key = patient.AnswerText;
 
+
+    logger.log('debug', 'in verify security answer');
+    logger.log('debug', 'patient: ' + JSON.stringify(patient));
     //TO VERIFY, PASS SECURITY ANSWER THROUGH HASH THAT TAKES A WHILE TO COMPUTE, SIMILAR TO HOW THEY DO PASSWORD CHECKS
     // utility.generatePBKDFHash(key,key);
 
     if(patient.TimeoutTimestamp != null && requestObject.Timestamp - (new Date(patient.TimeoutTimestamp)).getTime() > FIVE_MINUTES) {
+        logger.log('debug', 'resetting security answer attempt');
 	    sqlInterface.resetSecurityAnswerAttempt(requestObject);
     } else if(patient.Attempt == 5) {
         //If 5 attempts have already been made, lock the user out for 5 minutes
@@ -56,8 +60,12 @@ exports.verifySecurityAnswer=function(requestKey,requestObject,patient)
 
     let unencrypted = null;
 
+    logger.log('debug', 'decrypting');
+
     utility.decrypt(requestObject.Parameters, key)
         .then(params => {
+
+            logger.log('debug', 'params: ' + JSON.stringify(params));
 
             unencrypted = params;
 
