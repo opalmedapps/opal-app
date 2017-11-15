@@ -121,6 +121,8 @@ exports.decrypt= function(object,secret,salt) {
   // secret = (salt)?CryptoJS.PBKDF2(secret, salt, {keySize: 512/32, iterations: 1000}).toString(CryptoJS.enc.Hex):secret;
 
   if(salt){
+
+      logger.log('debug', 'reached here pbkdf2 ');
       crypto.pbkdf2(secret, salt, 1000, 64, 'sha1', (err, derivedKey) => {
           if (err) r.reject(err);
 	      derivedKey = derivedKey.toString('hex');
@@ -134,6 +136,10 @@ exports.decrypt= function(object,secret,salt) {
           }
       });
   } else {
+
+      logger.log('debug', 'reached here');
+      logger.log('debug', exports.decryptObject(object, stablelibutf8.encode(secret.substring(0,nacl.secretbox.keyLength))));
+
       r.resolve(exports.decryptObject(object, stablelibutf8.encode(secret.substring(0,nacl.secretbox.keyLength))));
   }
 
