@@ -86,7 +86,7 @@
         }
 
 
-        function submitNewPassword(newValue) {
+        function submitNewPassword() {
             var invalid = !newPasswordIsValid();
             if(!vm.newValue || invalid) {
                 vm.invalidPassword = invalid;

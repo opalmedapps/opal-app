@@ -127,6 +127,9 @@ app.service('DeviceIdentifiers', [ 'RequestToServer', '$q','Constants','UserAuth
         {
             var data = angular.copy(deviceIdentifiers);
             data['Password'] = UserAuthorizationInfo.getPassword();
+
+            console.log('sending data: ' + JSON.stringify(data));
+
             return RequestToServer.sendRequestWithResponse('SecurityQuestion', data, EncryptionService.hash('none'), null, null);
         },
         /**
