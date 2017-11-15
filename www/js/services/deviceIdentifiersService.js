@@ -110,8 +110,9 @@ app.service('DeviceIdentifiers', [ 'RequestToServer', '$q','Constants','UserAuth
             var defer = $q.defer();
             if(haveBeenSet && !haveBeenSend)
             {
+                var data = JSON.parse(JSON.stringify(deviceIdentifiers));
                 haveBeenSend = true;
-                RequestToServer.sendRequestWithResponse('DeviceIdentifier', deviceIdentifiers);
+                RequestToServer.sendRequestWithResponse('DeviceIdentifier', data);
             }
 
             defer.resolve();
@@ -125,10 +126,9 @@ app.service('DeviceIdentifiers', [ 'RequestToServer', '$q','Constants','UserAuth
          **/
         sendFirstTimeIdentifierToServer:function()
         {
-            var data = angular.copy(deviceIdentifiers);
-            data['Password'] = UserAuthorizationInfo.getPassword();
 
-            console.log('sending data: ' + JSON.stringify(data));
+            var data = JSON.parse(JSON.stringify(deviceIdentifiers));
+            data['Password'] = UserAuthorizationInfo.getPassword();
 
             return RequestToServer.sendRequestWithResponse('SecurityQuestion', data, EncryptionService.hash('none'), null, null);
         },
@@ -140,8 +140,7 @@ app.service('DeviceIdentifiers', [ 'RequestToServer', '$q','Constants','UserAuth
          **/
         sendDevicePasswordRequest:function(email)
         {
-
-            var objectToSend = deviceIdentifiers;
+            var objectToSend = JSON.parse(JSON.stringify(deviceIdentifiers));
             objectToSend.email = email;
             return RequestToServer.sendRequestWithResponse('SecurityQuestion', objectToSend, EncryptionService.hash('none'), 'passwordResetRequests', 'passwordResetResponses');
         },
@@ -153,11 +152,11 @@ app.service('DeviceIdentifiers', [ 'RequestToServer', '$q','Constants','UserAuth
          **/
         destroy: function () {
 
-            for (var key in deviceIdentifiers){
-                if (deviceIdentifiers.hasOwnProperty(key)){
-                    deviceIdentifiers[key] = '';
-                }
-            }
+            deviceIdentifiers ={
+                registrationId:'',
+                deviceUUID:'',
+                deviceType:''
+            };
 
             localStorage.removeItem(UserAuthorizationInfo.getUsername()+"/deviceID");
             localStorage.removeItem(UserAuthorizationInfo.getUsername()+"/securityAns");

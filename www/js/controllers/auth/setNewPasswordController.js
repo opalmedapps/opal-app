@@ -112,6 +112,7 @@
                         vm.submitting = false;
                         UserAuthorizationInfo.clearUserAuthorizationInfo();
                         EncryptionService.removeTempEncryptionHash();
+                        setDeviceIdentifiers.setDeviceIdentifiers();
                         $timeout(function() {
                             vm.alert.type = 'success';
                             vm.alert.content = "PASSWORDUPDATED";
@@ -119,7 +120,6 @@
                         });
                         localStorage.removeItem("deviceID");
                         localStorage.removeItem(UserAuthorizationInfo.getUsername()+"/securityAns");
-                        DeviceIdentifiers.destroy();
                     })
                     .catch(function (error) {
                         $timeout(function(){
