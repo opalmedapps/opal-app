@@ -36,7 +36,7 @@ npm install -g http-server
 
 This globally installs a simple, zero-configuration command line server that will be used to host the Opal app locally when developing in the browser.
 
-* Install Bower
+* Install [Bower](https://bower.io/)
 
 ```
 npm install -g bower
@@ -65,9 +65,7 @@ A step by step series of examples that tell you have to get a development env ru
 #### Front-End
 
 1) Follow the installation steps previously stated. At this point it is assumed that you have all the global and local dependencies needed installed. If you don't the following steps may not work, or you will get console errors in your browser.
-
 2) In your command-line, navigate to '/path/to/qplus/www/'. 
-
 3) Run the following command:
 
 ```
@@ -85,34 +83,84 @@ Hit CTRL-C to stop the server
 ```
 
 4) In Chrome or Firefox (they have the best debug console) navigate to one of the addresses provided from the previous step.
-
 5) Open the [developer console](https://developer.chrome.com/devtools) and switch to mobile view.
-
 6) If you followed all the steps correctly there should be errors in the debug console other than a missing cordova.js file. Otherwise please use Google or StackOverflow to solve any issues that arise, or try repeating all the steps again.
+7) If all is well you can login to the app with the following credentials:
 
+```
+email: muhc.app.mobile@gmail.com
+password: 12345opal
+```
 ## Running the tests
 
-Explain how to run the automated tests for this system
+Currently the Opal Development team has been making an effort to write tests for all new features. It's important to try
+to maintain this effort to avoid any code regression.
 
-### Break down into end to end tests
-
-Explain what these tests test and why
-
-```
-Give an example
-```
-
-### And coding style tests
-
-Explain what these tests test and why
-
-```
-Give an example
-```
+**MORE TO COME...**
 
 ## Deployment
 
-Add additional notes about how to deploy this on a live system
+Deployment is a rather rigorous process due to the nature of producing software that runs on various platforms. However, James
+has written a simple, yet practical build script that avoids a lot of the headaches in building the app. It is planned to extend the build script
+in order to make deployment automated as well...
+
+### Prerequisites
+
+Before being able to run build script there are a few steps one has to take that involves configuring the build script and cordova project.
+
+**NOTE: You will need to follow these steps for both PreProd and Prod since they both have unique app distributions, configurations, and build processes!**
+
+**IMPORTANT: In order to build iOS versions of the app you must have XCode installed which requires an Apple Computer. If you have
+Linux or Windows you can only build Android distribution**
+
+1) Follow the the instructions in the Installation section.
+2) Install [Cordova](https://cordova.apache.org/) globally with the following command:
+
+```
+npm install -g cordova
+```
+
+3) Create a Cordova project in any desired directory that's **NOT** the in qplus directory:
+
+```
+cordova create <NameOfProject>
+```
+
+4) Navigate to this newly created directory.
+
+5) Replace the current config.xml with the one in the qplus parent directory
+
+**NOTE: Both Prod and PreProd branches have their own config.xml. Carefully make sure you are copying over the correct one!**
+
+6) Add Android and iOS (if on macOS) platforms to cordova project:
+
+```
+cordova platform add ios
+cordova platform add android
+```
+
+Now you will a properly configured Cordova project that can be compiled into both Android and iOS native code. However there
+are still some dependencies needed for the build script to run properly...
+
+7) Install [Gulp](https://gulpjs.com/) globally
+
+```
+npm install -g gulp
+```
+
+Gulp is in charging of automating a lot of the build process such as minifying html/css/javascript, compressing images,
+and removing debug statements.
+
+8) (**WINDOWS AND LINUX ONLY**) Change build script to only build Android distribution
+
+9) Change working (qplus project parent) and target (Cordova project parents) directories in build script to match your computer's destinations
+
+Voila! You are now ready to run build script. If you didn't follow any of these properly the build script will catch and report it you.
+
+
+### Building
+
+
 
 ## Built With
 
