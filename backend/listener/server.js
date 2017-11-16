@@ -8,6 +8,8 @@
  *                  file 'LICENSE.txt', which is part of this source code package.
  */
 
+import * as os from "os";
+
 const mainRequestApi    = require('./api/main.js');
 const processApi        = require('./api/processApiRequest');
 const admin             = require("firebase-admin");
@@ -35,6 +37,7 @@ if(FIREBASE_DEBUG) admin.database.enableLogging(true);
 // Get reference to correct data element
 const db = admin.database();
 const ref = db.ref("/dev2");
+const heartbeatRef = db.ref("/dev2/users/heartbeat");
 
 logger.log('debug', 'INITIALIZED APP IN DEBUG MODE');
 
@@ -73,7 +76,12 @@ function listenForRequest(requestType){
         function(snapshot){
             logger.log('debug', 'Received request from Firebase: ', JSON.stringify(snapshot.val()));
             logger.log('info', 'Received request from Firebase: ', snapshot.val().Request);
-            handleRequest(requestType,snapshot);
+
+            if(snapshot.val().Request === 'HeartBeat'){
+                handleHeartBeat(snapshot.val())
+            } else {
+                handleRequest(requestType,snapshot);
+            }
         },
         function(error){
 	        logError(error);
@@ -255,6 +263,56 @@ function completeRequest(headers, key)
 		.catch(function (error) {
 			logger.error('Error writing to firebase', {error:error});
 		});
+}
+
+function handleHeartBeat(data){
+    "use strict";
+
+    let HeartBeat = {};
+
+    //Get CPU Usage
+    const cpus = os.cpus();
+    let CPUInfo = {};
+
+    let i = 0, len = cpus.length;
+    for(; i < len; i++) {
+        const cpu = cpus[i];
+
+        let type;
+        let currentCPU = {};
+        let total = 0;
+
+        for(type in cpu.times) {
+            total += cpu.times[type];
+        }
+
+        for(type in cpu.times) {
+            currentCPU.type = Math.round(100 * cpu.times[type] / total);
+        }
+
+        CPUInfo[i].Global = cpus;
+        CPUInfo[i].Averages = currentCPU;
+    }
+
+    CPUInfo.Process = process.cpuUsage();
+
+    //Get Memory Usage Of Process
+    let memoryUsage = process.memoryUsage();
+
+    //Get Other Process Info
+    let config = process.config;
+
+    //Push Heartbeat Back To Firebase
+    HeartBeat.CPU = CPUInfo;
+    HeartBeat.Memory = memoryUsage;
+    HeartBeat.Config = config;
+    HeartBeat.Timestamp = data.Timestamp;
+
+    heartbeatRef.set(HeartBeat)
+        .catch(err => {
+            logger.log('error', 'Error reporting heartbeat', err)
+        })
+
 }
 
 
