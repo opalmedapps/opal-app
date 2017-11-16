@@ -25,7 +25,7 @@ admin.initializeApp({
     databaseURL: config.DATABASE_URL
 });
 const db = admin.database();
-const ref = db.ref("/dev2/requests/heartbeat");
+const ref = db.ref("/dev2/requests");
 
 
 /**
@@ -66,15 +66,9 @@ function startHeartBeat(){
 
     logger.log('info', 'Requesting heartbeat from listener');
 
-    ref.set(null)
-        .catch(err => {
-            logger.log('error', 'Error sending heartbeat request', err);
-        });
-
     ref.push(request)
         .then(()=>{
             logger.log('info', 'Successfully pushed heartbeat');
-            ref.off();
         })
         .catch(err => {
             logger.log('error', 'Error sending heartbeat request', err);
