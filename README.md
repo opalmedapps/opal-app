@@ -1,28 +1,152 @@
 # MUHC Oncology Patient Application
-Opal - the MUHC Oncology Patient Application for mobile phones and the web - is a product that has arisen from the winning project of the 2014 MUHC Q+ initiative. The project proposal was submitted by the Health Informatics Group (HIG, see below) and was entitled “Realistic knowledge-based waiting time estimates for radiation oncology patients - addressing the pain of waiting”. It had as its goal the provision of waiting time estimates to radiation oncology patients. 
+Opal - the MUHC Oncology Patient Application for mobile phones and the web - is a product that has arisen from the winning project of the 2014 MUHC Q+ initiative. The project proposal was submitted by the Health Informatics Group (HIG, see below) and was entitled “Realistic knowledge-based waiting time estimates for radiation oncology patients - addressing the pain of waiting”. It had as its goal the provision of waiting time estimates to radiation oncology patients. The app has now extended its initiative to provide appointments, lab results, clinical documents, educational material and much more, making it a full-fledged, empowerment tool for those undergoing radiation treatment.
 
-To download the codebase and get the Opal Mobile App running in your browser or on a device, follow the instructions below.
+## Getting Started
 
-### Installation
-[Install NodeJS](https://nodejs.org/en/download/) 
-**NOTE: For proper access to the backend you must have version 6+**
+These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
 
-Install http-server
-```
-npm install -g http-server
-```
-Install bower
-```
-npm install -g bower
-```
-Clone from github 
+### Prerequisites
+
+#### Front-End
+
+In order to run the app in your browsing for development and basic testing purposes, there are a few steps you must take:
+
+* Clone the repository to the desired folder in your computer **(NOTE: You need to be added as a contributer to the project before being able to do this!)**
+
 ```
 git clone https://github.com/Sable/qplus.git
 ```
-Navigate to qplus folder and install missing librairies
+
+* [Install latest version of NodeJS](https://nodejs.org/en/download/) 
+**(NOTE: For proper access to the backend you must have version 6+)**
+
+Once this is done, verify that you installed Node globally but running the command.
+
+```
+node -v
+```
+
+If you see the current version of the Node runtime installed, then all is good! Otherwise please consult Node's troubleshooting manual or Google the error that occurs.
+
+* Install http-server
+
+```
+npm install -g http-server
+```
+
+This globally installs a simple, zero-configuration command line server that will be used to host the Opal app locally when developing in the browser.
+
+* Install Bower
+
+```
+npm install -g bower
+```
+
+Bower is our application's package manager. This allows all of our libraries to stay in sync and updated across all developing platforms.
+
+* Download App's dependencies via Bower
+
+In order to do this you need to navigate to the parent directory of the project (qplus/) and then run the following command:
+
 ```
 bower install -force
 ```
+
+The force flag is used because sometimes you might have global dependencies installed and bower install will skip over those dependencies even though they are needed locally.
+
+**NOTE: In the past there have been multiple students who have had trouble install dependencies due to strange permission issues that would block the ability to write to certain directories... so don't worry if this happens to you! If this occurs, the problem is easily fixable by some simple Google searching. There seemed to have been various solutions for different people so I can't really provide a troubleshooting manual for every case.**
+
+
+
+### Running Development Environment
+
+A step by step series of examples that tell you have to get a development env running
+
+#### Front-End
+
+1) Follow the installation steps previously stated. At this point it is assumed that you have all the global and local dependencies needed installed. If you don't the following steps may not work, or you will get console errors in your browser.
+
+2) In your command-line, navigate to '/path/to/qplus/www/'. 
+
+3) Run the following command:
+
+```
+http-server
+```
+
+and you should see something similar appear in your console:
+
+```
+Starting up http-server, serving ./
+Available on:
+  http://127.0.0.1:8080
+  http://10.37.89.13:8080
+Hit CTRL-C to stop the server
+```
+
+4) In Chrome or Firefox (they have the best debug console) navigate to one of the addresses provided from the previous step.
+
+5) Open the [developer console](https://developer.chrome.com/devtools) and switch to mobile view.
+
+6) If you followed all the steps correctly there should be errors in the debug console other than a missing cordova.js file. Otherwise please use Google or StackOverflow to solve any issues that arise, or try repeating all the steps again.
+
+## Running the tests
+
+Explain how to run the automated tests for this system
+
+### Break down into end to end tests
+
+Explain what these tests test and why
+
+```
+Give an example
+```
+
+### And coding style tests
+
+Explain what these tests test and why
+
+```
+Give an example
+```
+
+## Deployment
+
+Add additional notes about how to deploy this on a live system
+
+## Built With
+
+* [Dropwizard](http://www.dropwizard.io/1.0.2/docs/) - The web framework used
+* [Maven](https://maven.apache.org/) - Dependency Management
+* [ROME](https://rometools.github.io/rome/) - Used to generate RSS Feeds
+
+## Contributing
+
+Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to us.
+
+## Versioning
+
+We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags). 
+
+## Authors
+
+* **Billie Thompson** - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth)
+
+See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
+
+## Acknowledgments
+
+* Hat tip to anyone who's code was used
+* Inspiration
+* etc
+
+
+
+
 
 ### Browser View Only
 Opal can be viewed and tested in the browser without having to deploy to any device. However, this is not a substitute for actual device testing. To view Opal in the browser do the following:
