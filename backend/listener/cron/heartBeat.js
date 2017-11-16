@@ -66,7 +66,12 @@ function startHeartBeat(){
 
     logger.log('info', 'Requesting heartbeat from listener');
 
-    ref.set(request)
+    ref.set(null)
+        .catch(err => {
+            logger.log('error', 'error clearing previous heart beat request', err);
+        });
+
+    ref.push(request)
         .then(()=>{
             ref.off();
         })
