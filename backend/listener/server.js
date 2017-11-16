@@ -257,14 +257,29 @@ function completeRequest(headers, key)
 		});
 }
 
+
+/*********************************************
+ * CRON
+ *********************************************/
+
 /**
- * Spawns two cron jobs:
+ * Spawns three cron jobs:
  *  1) clearRequest: clears request from firebase that have not been handled within 5 minute period
  *  2) clearResponses: clears responses from firebase that have not been handled within 5 minute period
+ *  3) heartbeat: sends heartbeat request to firebase every 30 secs to get information about listener
  */
 function spawnCronJobs(){
+    spawnClearRequest();
+    spawnClearResponses();
+    spawnHeartBeat();
+}
+
+/**
+ * @name spawnClearRequest
+ * @desc creates clearRequest process that clears requests from firebase every 5 minutes
+ */
+function spawnClearRequest(){
     let clearRequests = cp.fork(`${__dirname}/cron/clearRequests.js`);
-    let clearResponses = cp.fork(`${__dirname}/cron/clearResponses.js`);
 
     // Handles clearRequest cron events
     clearRequests.on('message', (m) => {
@@ -278,6 +293,14 @@ function spawnCronJobs(){
             clearRequests = cp.fork(`${__dirname}/cron/clearRequests.js`);
         }
     });
+}
+
+/**
+ * @name spawnClearResponse
+ * @desc creates clearResponse process that clears responses from firebase every 5 minutes
+ */
+function spawnClearResponses(){
+    let clearResponses = cp.fork(`${__dirname}/cron/clearResponses.js`);
 
     // Handles clearResponses cron events
     clearResponses.on('message', (m) => {
@@ -285,11 +308,32 @@ function spawnCronJobs(){
     });
 
     clearResponses.on('error', (m) => {
-        logger.log('info','clearResponse cron error:', m);
+        logger.log('error','clearResponse cron error:', m);
 
         clearResponses.kill();
         if(clearResponses.killed){
             clearResponses = cp.fork(`${__dirname}/cron/clearResponses.js`);
         }
     });
+}
+
+
+function spawnHeartBeat(){
+    // create new Node child processs
+    let heartBeat = cp.fork(`${__dirname}/cron/heartBeat.js`);
+
+    // Handles heartBeat cron events
+    heartBeat.on('message', (m) => {
+        logger.log('info','PARENT got message:', m);
+    });
+
+    heartBeat.on('error', (m) => {
+        logger.log('error','heartBeat cron error:', m);
+
+        heartBeat.kill();
+        if(heartBeat.killed){
+            heartBeat = cp.fork(`${__dirname}/cron/heartBeat.js`);
+        }
+    });
+
 }
