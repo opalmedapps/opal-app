@@ -67,6 +67,9 @@ function startHeartBeat(){
     logger.log('info', 'Requesting heartbeat from listener');
 
     ref.set(request)
+        .then(()=>{
+            ref.off();
+        })
         .catch(err => {
             logger.log('error', 'Error sending heartbeat request', err);
         });

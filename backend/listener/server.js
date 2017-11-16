@@ -274,7 +274,7 @@ function handleHeartBeat(data){
     let CPUInfo = {
         0: {Global: null, Averages: null},
         1: {Global: null, Averages: null},
-        2: {Global: null, Averages: null}, 
+        2: {Global: null, Averages: null},
         3: {Global: null, Averages: null}
     };
 
