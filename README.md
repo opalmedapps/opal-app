@@ -90,6 +90,7 @@ Hit CTRL-C to stop the server
 ```
 email: muhc.app.mobile@gmail.com
 password: 12345opal
+security answer (depending on question): red, guitar, superman
 ```
 ## Running the tests
 
@@ -160,6 +161,17 @@ Voila! You are now ready to run build script. If you didn't follow any of these 
 
 ### Building
 
+The build script is very simple and detailed instructions can be found by running the script without any arguments.
+
+1) Make sure you are on the correct branch (either PreProd or Prod)
+2) Update the version number in the config.xml file found in your qplus project parent directory (**This will soon be a deprecated step as it will be handled by the script itself**)
+3) Run the script with the target as first argument and version as the second argument
+
+```
+./buildOpal.sh prod 1.10.1
+```
+
+4) The script will catch and display ALL errors and will stop the build process if any occur.
 
 
 ## Built With
