@@ -8,8 +8,6 @@
  *                  file 'LICENSE.txt', which is part of this source code package.
  */
 
-import * as os from "os";
-
 const mainRequestApi    = require('./api/main.js');
 const processApi        = require('./api/processApiRequest');
 const admin             = require("firebase-admin");
@@ -18,6 +16,7 @@ const q                 = require("q");
 const config            = require('./config.json');
 const logger            = require('./logs/logger.js');
 const cp                = require('child_process');
+const os                = require('os');
 
 const FIREBASE_DEBUG = !!process.env.FIREBASE_DEBUG;
 
