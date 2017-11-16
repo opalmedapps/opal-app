@@ -355,6 +355,10 @@ function spawnClearRequest(){
             clearRequests = cp.fork(`${__dirname}/cron/clearRequests.js`);
         }
     });
+
+    process.on('exit', function () {
+        clearRequests.kill();
+    });
 }
 
 /**
@@ -377,6 +381,10 @@ function spawnClearResponses(){
             clearResponses = cp.fork(`${__dirname}/cron/clearResponses.js`);
         }
     });
+
+    process.on('exit', function () {
+        clearResponses.kill();
+    });
 }
 
 
@@ -396,6 +404,10 @@ function spawnHeartBeat(){
         if(heartBeat.killed){
             heartBeat = cp.fork(`${__dirname}/cron/heartBeat.js`);
         }
+    });
+
+    process.on('exit', function () {
+        heartBeat.kill();
     });
 
 }
