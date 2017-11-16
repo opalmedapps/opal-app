@@ -271,7 +271,12 @@ function handleHeartBeat(data){
 
     //Get CPU Usage
     const cpus = os.cpus();
-    let CPUInfo = {0: null, 1: null, 2: null, 3: null};
+    let CPUInfo = {
+        0: {Global: null, Averages: null},
+        1: {Global: null, Averages: null},
+        2: {Global: null, Averages: null}, 
+        3: {Global: null, Averages: null}
+    };
 
     let i = 0, len = cpus.length;
     for(; i < len; i++) {
