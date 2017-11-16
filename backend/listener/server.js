@@ -77,6 +77,7 @@ function listenForRequest(requestType){
             logger.log('info', 'Received request from Firebase: ', snapshot.val().Request);
 
             if(snapshot.val().Request === 'HeartBeat'){
+                logger.log('debug', 'Handling heartbeat request');
                 handleHeartBeat(snapshot.val())
             } else {
                 handleRequest(requestType,snapshot);
