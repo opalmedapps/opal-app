@@ -121,7 +121,7 @@ in your Cordova project directory
 
 ## Deployment
 
-Deployment is a rather rigorous process due to the nature of producing software that runs on various platforms. However, James
+Deployment is a rather rigorous process due to the nature of producing software that runs on various platforms. However, James Brace
 has written a simple, yet practical build script that avoids a lot of the headaches in building the app. It is planned to extend the build script
 in order to make deployment automated as well...
 
@@ -160,7 +160,7 @@ cordova platform add ios
 cordova platform add android
 ```
 
-Now you will a properly configured Cordova project that can be compiled into both Android and iOS native code. However there
+Now you should have a properly configured Cordova project that can be compiled into both Android and iOS native code. However there
 are still some dependencies needed for the build script to run properly...
 
 7) Install [Gulp](https://gulpjs.com/) globally
