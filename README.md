@@ -83,7 +83,7 @@ Hit CTRL-C to stop the server
 ```
 
 4) In Chrome or Firefox (they have the best debug console) navigate to one of the addresses provided from the previous step.
-5) Open the [developer console](https://developer.chrome.com/devtools) and switch to mobile view.
+5) Open the [developer console](https://developer.chrome.com/devtools) and switch to mobile view and [disable caching](http://nicholasbering.ca/tools/2016/10/09/devtools-disable-caching/).
 6) If you followed all the steps correctly there should not be any errors in the debug console other than a missing cordova.js file. Otherwise please use Google or StackOverflow to solve any issues that arise, or try repeating all the steps again.
 7) If all is well you can login to the app with the following credentials:
 
@@ -169,7 +169,7 @@ are still some dependencies needed for the build script to run properly...
 npm install -g gulp
 ```
 
-Gulp is in charging of automating a lot of the build process such as minifying html/css/javascript, compressing images,
+Gulp is in charge of automating a lot of the build process such as minifying html/css/javascript, compressing images,
 and removing debug statements.
 
 8) (**WINDOWS AND LINUX ONLY**) Change build script to only build Android distribution
