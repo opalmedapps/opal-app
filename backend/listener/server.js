@@ -270,47 +270,9 @@ function handleHeartBeat(data){
 
     let HeartBeat = {};
 
-    //Get CPU Usage
-    const cpus = os.cpus();
-    let CPUInfo = {
-        0: {Global: null, Averages: null},
-        1: {Global: null, Averages: null},
-        2: {Global: null, Averages: null},
-        3: {Global: null, Averages: null}
-    };
-
-    let i = 0, len = cpus.length;
-    for(; i < len; i++) {
-        const cpu = cpus[i];
-
-        let type;
-        let currentCPU = {};
-        let total = 0;
-
-        for(type in cpu.times) {
-            total += cpu.times[type];
-        }
-
-        for(type in cpu.times) {
-            currentCPU.type = Math.round(100 * cpu.times[type] / total);
-        }
-
-        CPUInfo[i].Global = cpus;
-        CPUInfo[i].Averages = currentCPU;
-    }
-
-    CPUInfo.Process = process.cpuUsage();
-
-    //Get Memory Usage Of Process
-    let memoryUsage = process.memoryUsage();
-
-    //Get Other Process Info
-    let config = process.config;
-
     //Push Heartbeat Back To Firebase
-    HeartBeat.CPU = CPUInfo;
-    HeartBeat.Memory = memoryUsage;
-    HeartBeat.Config = config;
+    HeartBeat.CPU = process.cpuUsage();
+    HeartBeat.Memory = process.memoryUsage();
     HeartBeat.Timestamp = data.Timestamp;
 
     heartbeatRef.set(HeartBeat)
