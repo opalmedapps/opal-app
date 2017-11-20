@@ -15,7 +15,6 @@
                             NavigatorParameters, NewsBanner, PlanningSteps, Permissions, UserPreferences, NetworkStatus)
     {
         var vm = this;
-        vm.title = 'HomeController';
 
         vm.PatientId ='';
         vm.FirstName = '';
@@ -98,6 +97,9 @@
 
         function homePageInit()
         {
+            //Initialize modal size based on font size
+            initModalSize();
+
             //Set patient info
             setPatientInfo();
 
@@ -134,8 +136,7 @@
         function setNextAppointment()
         {
             //Next appointment information
-            if(Appointments.appointmentsExist())
-            {
+            if(Appointments.appointmentsExist()) {
                 if(Appointments.nextAppointmentExists()){
                     vm.appointmentShown=Appointments.getUpcomingAppointment();
                 }
@@ -320,14 +321,17 @@
             return "";
         }
 
-        var fontSize = UserPreferences.getFontSize();
-        var rcorners = document.getElementById("rcorners");
-        if (fontSize == "xlarge") {
-            rcorners.setAttribute("style", "height: 80%");
+        function initModalSize(){
+            var fontSize = UserPreferences.getFontSize();
+            var rcorners = document.getElementById("rcorners");
+            if (fontSize == "xlarge") {
+                rcorners.setAttribute("style", "height: 80%");
+            }
+            else if (fontSize == "large") {
+                rcorners.setAttribute("style", "height: 60%");
+            }
+            else rcorners.setAttribute("style", "height: 50%");
         }
-        else if (fontSize == "large") {
-            rcorners.setAttribute("style", "height: 60%");
-        }
-        else rcorners.setAttribute("style", "height: 50%");
+
     }
 })();
