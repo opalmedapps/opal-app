@@ -86,7 +86,7 @@ myApp.filter('formatDate',function(){
 
 myApp.filter('ellipsis', function () {
     return function (text, length) {
-        if (text.length > length) {
+        if (text && text.length > length) {
             var subtext = text.substr(0, length);
             var index = subtext.lastIndexOf(" ");
             return subtext.substr(0, index) + "...";
