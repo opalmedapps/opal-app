@@ -43,5 +43,4 @@ winston.configure({
 // Log all uncaught exceptions to a separate file
 if(process.env.NODE_ENV === 'production') winston.handleExceptions(new winston.transports.File({ filename: './logs/opal-uncaughtExceptions.log' }));
 
-
 module.exports = winston;

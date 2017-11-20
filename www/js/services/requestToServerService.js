@@ -37,7 +37,8 @@ myApp.service('RequestToServer',['$filter','$state','NewsBanner','UserAuthorizat
         function sendRequest(typeOfRequest,parameters, encryptionKey, referenceField) {
             var requestType;
             var requestParameters;
-            if (typeof encryptionKey !== 'undefined' && encryptionKey) {
+            if (encryptionKey) {
+
                 requestType = typeOfRequest;
                 requestParameters = EncryptionService.encryptWithKey(parameters, encryptionKey);
             }
@@ -45,6 +46,7 @@ myApp.service('RequestToServer',['$filter','$state','NewsBanner','UserAuthorizat
                 requestType = EncryptionService.encryptData(typeOfRequest);
                 requestParameters = EncryptionService.encryptData(parameters);
             }
+
             //Push the request to firebase
             var toSend = {
                 'Request' : requestType,

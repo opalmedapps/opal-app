@@ -33,7 +33,7 @@
   "CHECKIN_MESSAGE_AFTER_PLURAL": "You are checked in for your appointments!",
   "CHECKIN_MESSAGE_BEFORE": "Check-in to your appointment!",
   "CHECKIN_MESSAGE_BEFORE_PLURAL": "Check-in to your appointments!",
-  "CHECKIN_NONE": "There are no appointments today",
+  "CHECKIN_NONE": "You have no appointments today",
   "CHECKIN_TO_ALL": "Check me In!",
   "CHECKING_SERVER": "Checking server...",
   "CLINICAL_NOTES": "Clinical Notes",

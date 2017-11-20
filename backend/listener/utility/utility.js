@@ -3,7 +3,9 @@ const stablelibutf8     = require('@stablelib/utf8');
 const nacl              = require('tweetnacl');
 const stablelibbase64   = require('@stablelib/base64');
 const crypto            = require('crypto');
-const Q                   = require('q');
+const Q                 = require('q');
+const logger            = require('./../logs/logger');
+
 
 //crypto.DEFAULT_ENCODING = 'hex';
 
@@ -134,7 +136,14 @@ exports.decrypt= function(object,secret,salt) {
           }
       });
   } else {
-      r.resolve(exports.decryptObject(object, stablelibutf8.encode(secret.substring(0,nacl.secretbox.keyLength))));
+
+      logger.log('debug', 'reached here');
+      try {
+          var decrypted = exports.decryptObject(object, stablelibutf8.encode(secret.substring(0, nacl.secretbox.keyLength)));
+          r.resolve(decrypted);
+      }catch(err){
+          r.reject(err);
+      }
   }
 
   return r.promise;

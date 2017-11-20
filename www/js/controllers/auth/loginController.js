@@ -238,6 +238,7 @@
             //send new device ID which maps to a security question in the backend
             DeviceIdentifiers.sendFirstTimeIdentifierToServer()
                 .then(function (response) {
+
                     vm.loading = false;
                     //if all goes well, take the user to be asked security question
                     var language = UserPreferences.getLanguage();
