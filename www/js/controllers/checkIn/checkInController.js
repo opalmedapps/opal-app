@@ -62,10 +62,7 @@
                         return CheckInService.verifyAllCheckIn();
                     })
                     .then(function (response){
-                        if (!response){
-                            vm.alert.type = "info";
-                            vm.checkInMessage = "CHECKIN_NONE";
-                        } else if (response){
+                        if (response){
                             vm.alert.type = "success";
                             vm.checkInMessage = "CHECKED_IN";
                             vm.additionalInfo = "CHECKIN_ADDITIONAL";
@@ -78,7 +75,7 @@
                                     vm.checkInMessage = "CHECKED_IN";
                                     vm.additionalInfo = "CHECKIN_ADDITIONAL";
 
-                                    CheckInService.areAllCheckedIn(true)
+                                    CheckInService.setAllCheckedIn(true)
                                 })
                                 .catch(function (error) {
                                     vm.alert.type = "danger";

@@ -16,6 +16,7 @@ const q                 = require("q");
 const config            = require('./config.json');
 const logger            = require('./logs/logger.js');
 const cp                = require('child_process');
+const os                = require('os');
 
 const FIREBASE_DEBUG = !!process.env.FIREBASE_DEBUG;
 
@@ -35,6 +36,7 @@ if(FIREBASE_DEBUG) admin.database.enableLogging(true);
 // Get reference to correct data element
 const db = admin.database();
 const ref = db.ref("/dev2");
+const heartbeatRef = db.ref("/dev2/users/heartbeat");
 
 logger.log('debug', 'INITIALIZED APP IN DEBUG MODE');
 
@@ -73,7 +75,13 @@ function listenForRequest(requestType){
         function(snapshot){
             logger.log('debug', 'Received request from Firebase: ', JSON.stringify(snapshot.val()));
             logger.log('info', 'Received request from Firebase: ', snapshot.val().Request);
-            handleRequest(requestType,snapshot);
+
+            if(snapshot.val().Request === 'HeartBeat'){
+                logger.log('debug', 'Handling heartbeat request');
+                handleHeartBeat(snapshot.val())
+            } else {
+                handleRequest(requestType,snapshot);
+            }
         },
         function(error){
 	        logError(error);
@@ -156,6 +164,9 @@ function processRequest(headers){
 
         processApi.securityAPI[requestObject.Request](requestKey, requestObject)
             .then(function (response) {
+
+                logger.log('debug', 'processed request successfully with response: ' + JSON.stringify(response));
+
                 r.resolve(response);
             })
             .catch(function (error) {
@@ -254,14 +265,84 @@ function completeRequest(headers, key)
 		});
 }
 
+function handleHeartBeat(data){
+    "use strict";
+
+    let HeartBeat = {};
+
+    //Get CPU Usage
+    const cpus = os.cpus();
+    let CPUInfo = {
+        0: {Global: null, Averages: null},
+        1: {Global: null, Averages: null},
+        2: {Global: null, Averages: null},
+        3: {Global: null, Averages: null}
+    };
+
+    let i = 0, len = cpus.length;
+    for(; i < len; i++) {
+        const cpu = cpus[i];
+
+        let type;
+        let currentCPU = {};
+        let total = 0;
+
+        for(type in cpu.times) {
+            total += cpu.times[type];
+        }
+
+        for(type in cpu.times) {
+            currentCPU.type = Math.round(100 * cpu.times[type] / total);
+        }
+
+        CPUInfo[i].Global = cpus;
+        CPUInfo[i].Averages = currentCPU;
+    }
+
+    CPUInfo.Process = process.cpuUsage();
+
+    //Get Memory Usage Of Process
+    let memoryUsage = process.memoryUsage();
+
+    //Get Other Process Info
+    let config = process.config;
+
+    //Push Heartbeat Back To Firebase
+    HeartBeat.CPU = CPUInfo;
+    HeartBeat.Memory = memoryUsage;
+    HeartBeat.Config = config;
+    HeartBeat.Timestamp = data.Timestamp;
+
+    heartbeatRef.set(HeartBeat)
+        .catch(err => {
+            logger.log('error', 'Error reporting heartbeat', err)
+        })
+
+}
+
+
+/*********************************************
+ * CRON
+ *********************************************/
+
 /**
- * Spawns two cron jobs:
+ * Spawns three cron jobs:
  *  1) clearRequest: clears request from firebase that have not been handled within 5 minute period
  *  2) clearResponses: clears responses from firebase that have not been handled within 5 minute period
+ *  3) heartbeat: sends heartbeat request to firebase every 30 secs to get information about listener
  */
 function spawnCronJobs(){
+    spawnClearRequest();
+    spawnClearResponses();
+    spawnHeartBeat();
+}
+
+/**
+ * @name spawnClearRequest
+ * @desc creates clearRequest process that clears requests from firebase every 5 minutes
+ */
+function spawnClearRequest(){
     let clearRequests = cp.fork(`${__dirname}/cron/clearRequests.js`);
-    let clearResponses = cp.fork(`${__dirname}/cron/clearResponses.js`);
 
     // Handles clearRequest cron events
     clearRequests.on('message', (m) => {
@@ -276,17 +357,58 @@ function spawnCronJobs(){
         }
     });
 
+    process.on('exit', function () {
+        clearRequests.kill();
+    });
+}
+
+/**
+ * @name spawnClearResponse
+ * @desc creates clearResponse process that clears responses from firebase every 5 minutes
+ */
+function spawnClearResponses(){
+    let clearResponses = cp.fork(`${__dirname}/cron/clearResponses.js`);
+
     // Handles clearResponses cron events
     clearResponses.on('message', (m) => {
         logger.log('info','PARENT got message:', m);
     });
 
     clearResponses.on('error', (m) => {
-        logger.log('info','clearResponse cron error:', m);
+        logger.log('error','clearResponse cron error:', m);
 
         clearResponses.kill();
         if(clearResponses.killed){
             clearResponses = cp.fork(`${__dirname}/cron/clearResponses.js`);
         }
     });
+
+    process.on('exit', function () {
+        clearResponses.kill();
+    });
+}
+
+
+function spawnHeartBeat(){
+    // create new Node child processs
+    let heartBeat = cp.fork(`${__dirname}/cron/heartBeat.js`);
+
+    // Handles heartBeat cron events
+    heartBeat.on('message', (m) => {
+        logger.log('info','PARENT got message:', m);
+    });
+
+    heartBeat.on('error', (m) => {
+        logger.log('error','heartBeat cron error:', m);
+
+        heartBeat.kill();
+        if(heartBeat.killed){
+            heartBeat = cp.fork(`${__dirname}/cron/heartBeat.js`);
+        }
+    });
+
+    process.on('exit', function () {
+        heartBeat.kill();
+    });
+
 }

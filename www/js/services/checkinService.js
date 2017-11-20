@@ -257,13 +257,11 @@
 
             return defer.promise;
         }
-        //
-        function setCheckIn() {
 
+        function setCheckIn() {
             for (var appointment in checkinApps){
                 checkinApps[appointment].Checkin='1';
             }
-
         }
 
         function clear() {
