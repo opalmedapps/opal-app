@@ -239,8 +239,6 @@
             DeviceIdentifiers.sendFirstTimeIdentifierToServer()
                 .then(function (response) {
 
-                    console.log(JSON.stringify(DeviceIdentifiers.getDeviceIdentifiers()));
-
                     vm.loading = false;
                     //if all goes well, take the user to be asked security question
                     var language = UserPreferences.getLanguage();
