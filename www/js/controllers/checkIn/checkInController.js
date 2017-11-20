@@ -75,7 +75,7 @@
                                     vm.checkInMessage = "CHECKED_IN";
                                     vm.additionalInfo = "CHECKIN_ADDITIONAL";
 
-                                    CheckInService.areAllCheckedIn(true)
+                                    CheckInService.setAllCheckedIn(true)
                                 })
                                 .catch(function (error) {
                                     vm.alert.type = "danger";
