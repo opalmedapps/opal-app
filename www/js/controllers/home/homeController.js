@@ -160,8 +160,11 @@
             if(!!CheckInService.getCheckInApps() &&  CheckInService.getCheckInApps().length > 0){
                 //Case 1: An Appointment has checkin 0, not checked-in
 
+                console.log('here');
                 vm.todaysAppointments = CheckInService.getCheckInApps();
                 vm.allCheckedIn = CheckInService.areAllCheckedIn();
+
+                console.log(vm.allCheckedIn);
 
                 evaluateCheckIn();
             }
