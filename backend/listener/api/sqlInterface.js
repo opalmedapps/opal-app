@@ -986,7 +986,6 @@ function checkIntoAria(patientId, serNum, username) {
         logger.log('debug', 'checked into aria response: ' + JSON.stringify(response));
         logger.log('debug', 'checked into aria body: ' + JSON.stringify(body));
 
-
         if(error) r.reject(error);
 
         if(!error && response.statusCode =='200') {
@@ -995,8 +994,10 @@ function checkIntoAria(patientId, serNum, username) {
                 promises.push(checkIfCheckedIntoAriaHelper(serNum[i]));
             }
             Q.all(promises).then(function(response){
+                logger.log('debug', 'All appointments were successfully checked in');
                 r.resolve(response);
             }).catch(function(error){
+                logger.log('error', 'Error while verifying if checked in', error);
                 r.reject(error);
             });
         }
@@ -1019,7 +1020,7 @@ function checkIfCheckedIntoAriaHelper(patientActivitySerNum) {
         if(!error&& response.statusCode=='200') {
             body = JSON.parse(body);
             if(body.length>0 && body[0].CheckedInFlag == 1) r.resolve(true);
-            else r.resolve(false);
+            else r.reject(false);
         }
     });
     return r.promise;
