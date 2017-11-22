@@ -57,3 +57,6 @@ credentials.js
 /www/lib/bower_components/onsenui/css/onsen-css-components-purple-theme.css
 /www/lib/bower_components/onsenui/css/onsen-css-components-default.css
 
+/dest/
+/backend/Screen/
+/backend/OpalAdmin/
