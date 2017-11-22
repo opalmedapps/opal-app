@@ -392,16 +392,19 @@ exports.checkIn=function(requestObject) {
         //Check in to aria using Johns script
         checkIntoAria(ariaSerNum, patientId, apptSerNum, username).then(response => {
             if(response) {
+
+                logger.log('debug', 'response from checking into aria and before updating our database: ' + response);
+
                 //If successfully checked in change field in mysql
                 let promises = [];
-                for (let i=0; i!==serNum.length; ++i){
+                for (let i=0; i!== apptSerNum; ++i){
                     promises.push(
-                        exports.runSqlQuery(queries.checkin(),[session, serNum[i], username])
-                            .then(exports.runSqlQuery(queries.logCheckin(),[serNum[i], deviceId,latitude, longitude, accuracy, new Date()])));
+                        exports.runSqlQuery(queries.checkin(),[session, apptSerNum[i], username])
+                            .then(exports.runSqlQuery(queries.logCheckin(),[apptSerNum[i], deviceId,latitude, longitude, accuracy, new Date()])));
                 }
 
                 Q.all(promises)
-                    .then(function(response){
+                    .then(function(){
                         r.resolve({Response:'success'});
                     })
                     .catch(function(error){
@@ -1002,7 +1005,10 @@ function checkIntoAria(ariaSerNum, patientId, apptSerNum, username) {
                 promises.push(checkIfCheckedIntoAriaHelper(apptSerNum[i]));
             }
             Q.all(promises).then(function(response){
-                logger.log('debug', 'All appointments were successfully checked in');
+
+                logger.log('debug', 'response after checking if all appointments where checked into on aria: ' + response);
+
+                logger.log('debug', 'All appointments were successfully checked in on Aria');
                 r.resolve(response);
             }).catch(function(error){
                 logger.log('error', 'Error while verifying if checked in', error);
