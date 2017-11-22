@@ -391,9 +391,11 @@ exports.checkIn=function(requestObject) {
 
         //Check in to aria using Johns script
         checkIntoAria(ariaSerNum, patientId, apptSerNum, username).then(response => {
-            if(response) {
+            if(response == true) {
 
                 logger.log('debug', 'response from checking into aria and before updating our database: ' + response);
+
+                logger.log('debug', 'appt ser num: ' + apptSerNum);
 
                 //If successfully checked in change field in mysql
                 let promises = [];
