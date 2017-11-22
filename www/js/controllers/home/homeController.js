@@ -283,7 +283,9 @@
 
         // Function to go push a page to the correct notification.
         function goToNotification(index, notification){
-            vm.notifications[index].Number = 0;
+            $timeout(function(){
+                vm.notifications.splice(index, 1);
+            });
             Notifications.readNotification(index, notification);
             var post = (notification.hasOwnProperty('Post')) ? notification.Post : Notifications.getNotificationPost(notification);
             if(notification.hasOwnProperty('PageUrl'))
