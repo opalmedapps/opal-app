@@ -34,7 +34,7 @@ function requestFormatter({key,request}) {
 				return response.toLegacy();
 			}).catch((err)=>{
 				logger.log('error', 'Error processing request', err);
-				let response = new OpalResponseError( 2, 'Server error, report the error to the hospital', opalReq, err);
+				let response = new OpalResponseError( 2, 'Server error, report the error to the hospital', opalReq, JSON.stringify(err));
 				return response.toLegacy();
 			});
 		}).catch( err => {
