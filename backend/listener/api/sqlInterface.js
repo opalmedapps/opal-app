@@ -386,6 +386,8 @@ exports.checkIn=function(requestObject) {
         const ariaSerNum = response[0].PatientAriaSer;
         const patientId = response[0].PatientId;
 
+        logger.log('debug', 'ariaSerNum: ' + ariaSerNum + ' and patientID: ' + patientId);
+
         //Check in to aria using Johns script
         checkIntoAria(ariaSerNum, patientId, apptSerNum, username).then(response => {
             if(response) {
@@ -982,6 +984,9 @@ function checkIntoAria(ariaSerNum, patientId, apptSerNum, username) {
     let r = Q.defer();
     let url = config.CHECKIN_PATH.replace('{SERNUM}', ariaSerNum);
     url = url.replace('{ID}', patientId);
+
+    logger.log('debug', 'check in function received ariaSerNum: ' + ariaSerNum + ' and patientId: ' + patientId + 'and apptSerNum: ' + apptSerNum);
+    logger.log('debug', 'constructed url: ' + url);
 
     request(url,function(error, response, body) {
 
