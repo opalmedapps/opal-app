@@ -97,6 +97,9 @@ myApp.service('RequestToServer',['$filter','$state','NewsBanner','UserAuthorizat
                 refRequestResponse.on('value',function(snapshot){
                     if(snapshot.exists()) {
                         var data = snapshot.val();
+
+                        console.log(JSON.stringify(data));
+
                         refRequestResponse.set(null);
                         refRequestResponse.off();
 

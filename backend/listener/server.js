@@ -173,6 +173,8 @@ function processRequest(headers){
         logger.log('debug', 'Processing general request');
         mainRequestApi.apiRequestFormatter(requestKey, requestObject)
             .then(function(results){
+
+                logger.log('debug', 'results: ' + JSON.stringify(results));
                 r.resolve(results);
             })
     }
