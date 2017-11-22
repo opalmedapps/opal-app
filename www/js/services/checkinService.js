@@ -172,7 +172,6 @@
                     }
                 })
                 .catch(function(error) {
-
                     r.reject(false);
                 });
             return r.promise;

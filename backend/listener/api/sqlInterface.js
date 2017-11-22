@@ -317,14 +317,15 @@ exports.checkCheckinInAria = function(requestObject) {
     getAppointmentAriaSer(username, serNum).then(function(response){
         const ariaSerNum = response[0].AppointmentAriaSer;
 
+        logger.log('debug', 'checking check in of the following appointment: ' + ariaSerNum);
+
         //Check using Ackeem's script whether the patient has checked in at the kiosk
-        checkIfCheckedIntoAriaHelper(ariaSerNum).then(function(success){
+        checkIfCheckedIntoAriaHelper(ariaSerNum).then(res => {
 
-            //TODO: THIS SHOULD HANDLED IN THE CASE CHECKIN QUERY DOES NOT SUCCEED???
+            logger.log('debug', "user is checked in: " + res);
+
             //Check in the user into mysql if they have indeed checkedin at kiosk
-            if(success) exports.runSqlQuery(queries.checkin(),['Kiosk', serNum, username]);
-            r.resolve({Response:'success', Data:{'CheckedIn':success, AppointmentSerNum:serNum}});
-
+            r.resolve({Response:'success', Data:{'CheckedIn': res, AppointmentSerNum:serNum}})
         }).catch(function(error){
             //Error occur while checking patient status
             r.reject({Response:'error', Reason:error});
@@ -1027,7 +1028,7 @@ function checkIfCheckedIntoAriaHelper(patientActivitySerNum) {
         if(!error&& response.statusCode=='200') {
             body = JSON.parse(body);
             if(body.length>0 && body[0].CheckedInFlag == 1) r.resolve(true);
-            else r.reject(false);
+            else r.resolve(false);
         }
     });
     return r.promise;
