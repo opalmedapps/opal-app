@@ -984,7 +984,7 @@ function checkIntoAria(patientId, serNum, username) {
     request(url,function(error, response, body) {
 
         logger.log('debug', 'checked into aria response: ' + JSON.stringify(response));
-        logger.log('debug', 'checked into aria body: ' + JSON.stringify(body);
+        logger.log('debug', 'checked into aria body: ' + JSON.stringify(body));
 
 
         if(error) r.reject(error);
