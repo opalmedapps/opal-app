@@ -250,8 +250,7 @@
                     defer.resolve(allCheckedIn);
 
                 }).catch(function (error) {
-
-                    defer.reject("Cannot verify checkin")
+                    defer.reject("CHECKIN_ERROR")
                 });
             }
 
