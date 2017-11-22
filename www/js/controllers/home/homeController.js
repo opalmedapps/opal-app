@@ -152,9 +152,7 @@
             vm.noUpcomingAppointments=false;
         }
 
-        function setCheckin()
-        {
-
+        function setCheckin() {
             //skip the following if the check in state has already been set..
             if(!!CheckInService.getCheckInApps() &&  CheckInService.getCheckInApps().length > 0){
                 //Case 1: An Appointment has checkin 0, not checked-in
