@@ -371,6 +371,7 @@ exports.checkinUpdate = function(requestObject)
  * @return {Promise}
  */
 exports.checkIn=function(requestObject) {
+
     const r = Q.defer();
     const serNum = requestObject.Parameters.AppointmentSerNum;
     const latitude = requestObject.Parameters.Latitude;
@@ -977,57 +978,53 @@ function getAriaPatientId(username) {
 
 //Checks user into Aria
 function checkIntoAria(patientId, serNum, username) {
-    var r = Q.defer();
-    var url = config.CHECKIN_PATH+patientId;
-    //making request to checkin
-    //console.log(url, username, serNum);
-    // getAppointmentAriaSer(username, serNum).then(function(res){
-    //     //console.log(res);
-    //     var ariaSerNum = res[0].AppointmentAriaSer;
-    request(url,function(error, response, body)
-    {
-        //console.log(response);
-        if(error){}//console.log('line770,sqlInterface',error);r.reject(error);}
-        if(!error&&response.statusCode=='200')
-        {
-            var promises = [];
-            for (var i=0; i!=serNum.length; ++i){
+    let r = Q.defer();
+    let url = config.CHECKIN_PATH+patientId;
+
+    request(url,function(error, response, body) {
+
+        logger.log('debug', 'checked into aria response: ' + JSON.stringify(response));
+        logger.log('debug', 'checked into aria body: ' + JSON.stringify(body);
+
+
+        if(error) r.reject(error);
+
+        if(!error && response.statusCode =='200') {
+            let promises = [];
+            for (let i=0; i!==serNum.length; ++i){
                 promises.push(checkIfCheckedIntoAriaHelper(serNum[i]));
             }
             Q.all(promises).then(function(response){
                 r.resolve(response);
             }).catch(function(error){
-                //console.log('line778',error);
                 r.reject(error);
             });
-            //r.resolve(true);
         }
     });
-    // }).catch(function(error){
-    //     //console.log('line778',error);
-    //     r.reject(error);
-    // });
     return r.promise;
 }
 
 //Check if checked in for an appointment in aria
-function checkIfCheckedIntoAriaHelper(patientActivitySerNum)
-{
-    var r = Q.defer();
-    var url = config.VERIFYCHECKIN_PATH+patientActivitySerNum;
-    request(url,function(error, response, body)
-    {
-        if(error){}//console.log('line811,sqlInterface',error);r.reject(error);}
-        if(!error&&response.statusCode=='200')
-        {
+function checkIfCheckedIntoAriaHelper(patientActivitySerNum) {
+    let r = Q.defer();
+    let url = config.VERIFYCHECKIN_PATH + patientActivitySerNum;
+
+    request(url,function(error, response, body) {
+
+        logger.log('debug', 'verify aria checkin response: ' + JSON.stringify(response));
+        logger.log('debug', 'verify aria checkin body: ' + JSON.stringify(body));
+
+        if(error){r.reject(error)}
+
+        if(!error&& response.statusCode=='200') {
             body = JSON.parse(body);
-            //console.log("checkin checks bro", body);
             if(body.length>0 && body[0].CheckedInFlag == 1) r.resolve(true);
             else r.resolve(false);
         }
     });
     return r.promise;
 }
+
 //Get time estimate from Ackeem's scripts
 exports.getTimeEstimate = function(appointmentAriaSer)
 {
