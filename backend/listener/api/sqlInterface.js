@@ -139,7 +139,6 @@ exports.runSqlQuery = function(query, parameters, processRawFunction) {
     let r = Q.defer();
 
     pool.getConnection(function(err, connection) {
-
         if(err) logger.log('error', err);
         logger.log('debug', 'grabbed connection: ' + connection);
         logger.log('info', 'Successfully grabbed connection from pool and about to perform following query: ', {query: query});
@@ -181,9 +180,7 @@ exports.getPatientTableFields = function(userId,timestamp,arrayTables) {
     let index = 0;
     logger.log('debug', 'Preparing all promises for getting patient data: ' + JSON.stringify(arrayTables));
     Q.all(preparePromiseArrayFields(userId,timestp,arrayTables)).then(function(response){
-
         logger.log('debug', 'Successfully finished all queries: ' + JSON.stringify(response));
-
         if(arrayTables) {
             for (let i = 0; i < arrayTables.length; i++) {
                 objectToFirebase[arrayTables[i]]=response[index];
@@ -392,14 +389,10 @@ exports.checkIn=function(requestObject) {
         //Check in to aria using Johns script
         checkIntoAria(ariaSerNum, patientId, apptSerNum, username).then(response => {
             if(response == true) {
-
                 logger.log('debug', 'response from checking into aria and before updating our database: ' + response);
-
-                logger.log('debug', 'appt ser num: ' + apptSerNum);
-
                 //If successfully checked in change field in mysql
                 let promises = [];
-                for (let i=0; i!== apptSerNum; ++i){
+                for (let i=0; i!== apptSerNum.length; ++i){
                     promises.push(
                         exports.runSqlQuery(queries.checkin(),[session, apptSerNum[i], username])
                             .then(exports.runSqlQuery(queries.logCheckin(),[apptSerNum[i], deviceId,latitude, longitude, accuracy, new Date()])));
@@ -410,10 +403,10 @@ exports.checkIn=function(requestObject) {
                         r.resolve({Response:'success'});
                     })
                     .catch(function(error){
-                        r.reject({Response:'error',Reason:'CheckIn error due to '+error});
+                        r.reject({Response:'error', Reason:'CheckIn error due to '+error});
                     });
             }else{
-                r.reject({Response:'error', Reason:'Unable to checkin Aria'});
+                r.reject({Response:'error', Reason:'Unable to checkin on Aria'});
             }
         }).catch(function(error){
             r.reject({Response:'error', Reason:error});
@@ -1007,10 +1000,7 @@ function checkIntoAria(ariaSerNum, patientId, apptSerNum, username) {
                 promises.push(checkIfCheckedIntoAriaHelper(apptSerNum[i]));
             }
             Q.all(promises).then(function(response){
-
                 logger.log('debug', 'response after checking if all appointments where checked into on aria: ' + response);
-
-                logger.log('debug', 'All appointments were successfully checked in on Aria');
                 r.resolve(response);
             }).catch(function(error){
                 logger.log('error', 'Error while verifying if checked in', error);

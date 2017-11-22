@@ -154,9 +154,7 @@
                 AppointmentSerNum: appoint.AppointmentSerNum
             })
                 .then(function(response) {
-
                     //Response is either success or failure with the appointmentSerNum again in the data object
-
                     if (response.hasOwnProperty('Data') && response.Data.hasOwnProperty('CheckedIn')) {
                         if (response.Data.CheckedIn == 'true') {
                             //If success, then set checkin for services, i.e. synchronize app
