@@ -164,6 +164,15 @@ myApp.service('Notifications',['$filter','RequestToServer','LocalStorage','Annou
                 icon:'ion-erlenmeyer-flask',
                 color:'#8BC34A'
             },
+            'CheckInNotification':{
+                SerNum:'DocumentSerNum',
+                icon:'fa fa-check-square-o',
+                color:'#4CAF50',
+                readFunction:Appointments.readAppointmentBySerNum,
+                searchFunction:Appointments.getAppointmentBySerNum,
+                namesFunction:Appointments.getAppointmentName,
+                PageUrl:Appointments.getAppointmentUrl,
+            },
             'Other':{
                 icon:'fa fa-bell',
                 color:'#FFC107'
