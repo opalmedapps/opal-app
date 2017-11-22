@@ -998,7 +998,7 @@ function checkIntoAria(ariaSerNum, patientId, apptSerNum, username) {
 
         if(!error && response.statusCode =='200') {
             let promises = [];
-            for (let i=0; i!==serNum.length; ++i){
+            for (let i=0; i!==apptSerNum.length; ++i){
                 promises.push(checkIfCheckedIntoAriaHelper(apptSerNum[i]));
             }
             Q.all(promises).then(function(response){
