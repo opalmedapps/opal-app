@@ -55,7 +55,7 @@ exports.processRequest=function(requestObject) {
     const type = requestObject.Request;
     if (API.hasOwnProperty(type)) {
         logger.log('debug', 'Processing request of type: ' + type);
-        return  API[type](requestObject);
+        return API[type](requestObject);
     }else{
         logger.log('error', 'Invalid request type: ' + type);
         r.reject('Invalid request type');

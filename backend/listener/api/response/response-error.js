@@ -14,8 +14,8 @@ class OpalResponseError extends OpalResponse {
 		return {code: this.code, errorBackend:this.errorBackend, errorUser: this.data};
 	}
 	toLegacy() {
-		return {Code: this.code, Reason: this.data, Headers:{RequestKey:reqObj.key, RequestObject:reqObj.toLegacy()
-				}, EncryptionKey: reqObj.auth.key, Salt: reqObj.auth.salt};
+		return {Code: this.code, Reason: this.data, Headers:{RequestKey: this.reqObj.key, RequestObject: this.reqObj.toLegacy()
+				}, EncryptionKey: thia.reqObj.auth.key, Salt: this.reqObj.auth.salt};
 	}
 }
 module.exports = OpalResponseError;
