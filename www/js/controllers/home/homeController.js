@@ -75,8 +75,7 @@
             });
 
             //release the watchers
-            $scope.$on('$destroy',function()
-            {
+            $scope.$on('$destroy',function() {
                 homeNavigator.off('prepop');
                 homeNavigator.off('prepush');
             });
@@ -174,7 +173,7 @@
                 vm.todaysAppointments = todaysAppointmentsToCheckIn;
                 if(vm.todaysAppointments)
                 {
-                    CheckInService.isAllowedToCheckIn().then(function (response) {
+                    CheckInService.isAllowedToCheckIn().then(function () {
                         var allCheckedIn = true;
                         for (var app in vm.todaysAppointments){
                             if (vm.todaysAppointments[app].Checkin === '0'){
@@ -185,7 +184,7 @@
                         CheckInService.setAllCheckedIn(allCheckedIn);
                         evaluateCheckIn();
                     }).catch(function(error){
-
+                        //TODO: Display some sort of indicator to let user know that they cannot check in
                         //NewsBanner.showCustomBanner($filter('translate')(error), '#333333', function(){}, 3000);
                     });
 

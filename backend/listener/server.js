@@ -49,7 +49,6 @@ ref.set(null)
 	});
 
 
-
 logger.log('info','Initialize listeners: ');
 listenForRequest('requests');
 listenForRequest('passwordResetRequests');
@@ -100,7 +99,7 @@ function handleRequest(requestType, snapshot){
     const headers = {key: snapshot.key, objectRequest: snapshot.val()};
     processRequest(headers).then(function(response){
         // Log before uploading to Firebase. Check that it was not a simple log
-        if (response.Headers.RequestObject.Request !== 'Log') logResponse(response);
+        // if (response.Headers.RequestObject.Request !== 'Log') logResponse(response);
         uploadToFirebase(response, requestType);
     });
 }
@@ -150,7 +149,7 @@ function logError(err, requestObject, requestKey)
  */
 function processRequest(headers){
 
-    logger.log('debug', 'Processing request: ' + JSON.stringify(headers));
+    // logger.log('debug', 'Processing request: ' + JSON.stringify(headers));
     logger.log('info', 'Processing request');
 
     const r = q.defer();
@@ -159,14 +158,10 @@ function processRequest(headers){
 
     // Separate security requests from main requests
     if(processApi.securityAPI.hasOwnProperty(requestObject.Request)) {
-
         logger.log('debug', 'Processing security request');
-
         processApi.securityAPI[requestObject.Request](requestKey, requestObject)
             .then(function (response) {
-
                 logger.log('debug', 'processed request successfully with response: ' + JSON.stringify(response));
-
                 r.resolve(response);
             })
             .catch(function (error) {
@@ -176,7 +171,6 @@ function processRequest(headers){
     } else {
 
         logger.log('debug', 'Processing general request');
-
         mainRequestApi.apiRequestFormatter(requestKey, requestObject)
             .then(function(results){
                 r.resolve(results);
