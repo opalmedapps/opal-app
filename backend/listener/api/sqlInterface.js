@@ -373,7 +373,7 @@ exports.checkinUpdate = function(requestObject)
 exports.checkIn=function(requestObject) {
 
     const r = Q.defer();
-    const serNum = requestObject.Parameters.AppointmentSerNum;
+    const apptSerNum = requestObject.Parameters.AppointmentSerNum;
     const latitude = requestObject.Parameters.Latitude;
     const longitude = requestObject.Parameters.Longitude;
     const accuracy = requestObject.Parameters.Accuracy;
@@ -382,15 +382,15 @@ exports.checkIn=function(requestObject) {
     const deviceId = requestObject.DeviceId;
 
     //Getting the appointment ariaSer to checkin to aria
-    getAriaPatientId(username).then(function(response){
+    getAriaPatientId(username).then(response => {
+        const ariaSerNum = response[0].PatientAriaSer;
         const patientId = response[0].PatientId;
 
         //Check in to aria using Johns script
-        checkIntoAria(patientId,serNum, username).then(function(response){
+        checkIntoAria(ariaSerNum, patientId, apptSerNum, username).then(response => {
             if(response) {
                 //If successfully checked in change field in mysql
                 let promises = [];
-
                 for (let i=0; i!==serNum.length; ++i){
                     promises.push(
                         exports.runSqlQuery(queries.checkin(),[session, serNum[i], username])
@@ -536,11 +536,6 @@ exports.updateDeviceIdentifier = function(requestObject, parameters) {
     let r = Q.defer();
 
     logger.log('debug', 'in update device id with : ' + JSON.stringify(requestObject));
-    //Validating parameters
-    // if(!requestObject.Parameters || !requestObject.Parameters.registrationId) {
-    //     r.reject({Response:'error', Reason:'Invalid parameters'});
-    //     return r.promise;
-    // }
 
     let identifiers = parameters || requestObject.Parameters;
     let deviceType = null;
@@ -972,14 +967,21 @@ function getAppointmentAriaSer(username, appSerNum) {
     return exports.runSqlQuery(queries.getAppointmentAriaSer(),[username, appSerNum]);
 }
 
+/**
+ * @name getAriaPatientId
+ * @desc gets the patients Aria sernum from DB
+ * @param username
+ * @return {Promise}
+ */
 function getAriaPatientId(username) {
-    return exports.runSqlQuery(queries.getPatientId(),[username]);
+    return exports.runSqlQuery(queries.getPatientAriaSerQuery(),[username]);
 }
 
 //Checks user into Aria
-function checkIntoAria(patientId, serNum, username) {
+function checkIntoAria(ariaSerNum, patientId, apptSerNum, username) {
     let r = Q.defer();
-    let url = config.CHECKIN_PATH+patientId;
+    let url = config.CHECKIN_PATH.replace('{SERNUM}', ariaSerNum);
+    url = url.replace('{ID}', patientId);
 
     request(url,function(error, response, body) {
 
@@ -991,7 +993,7 @@ function checkIntoAria(patientId, serNum, username) {
         if(!error && response.statusCode =='200') {
             let promises = [];
             for (let i=0; i!==serNum.length; ++i){
-                promises.push(checkIfCheckedIntoAriaHelper(serNum[i]));
+                promises.push(checkIfCheckedIntoAriaHelper(apptSerNum[i]));
             }
             Q.all(promises).then(function(response){
                 logger.log('debug', 'All appointments were successfully checked in');

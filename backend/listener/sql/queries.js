@@ -342,7 +342,7 @@ exports.setQuestionnaireCompletedQuery = function()
 
 exports.getPatientAriaSerQuery = function()
 {
-    return "SELECT Patient.PatientAriaSer FROM Patient, Users WHERE Patient.PatientSerNum = Users.UserTypeSerNum && Users.Username = ?"
+    return "SELECT Patient.PatientAriaSer, Patient.PatientId FROM Patient, Users WHERE Patient.PatientSerNum = Users.UserTypeSerNum && Users.Username = ?"
 };
 
 exports.getPatientId= function()

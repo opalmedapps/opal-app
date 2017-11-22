@@ -159,13 +159,8 @@
             //skip the following if the check in state has already been set..
             if(!!CheckInService.getCheckInApps() &&  CheckInService.getCheckInApps().length > 0){
                 //Case 1: An Appointment has checkin 0, not checked-in
-
-                console.log('here');
                 vm.todaysAppointments = CheckInService.getCheckInApps();
                 vm.allCheckedIn = CheckInService.areAllCheckedIn();
-
-                console.log(vm.allCheckedIn);
-
                 evaluateCheckIn();
             }
             else{
@@ -216,7 +211,7 @@
                     //If it has, then it simply changes the message to checkedin and queries to get an update
                     if (data) {
                         $timeout(function () {
-                            vm.checkInMessage = "CHECKIN_MESSAGE_AFTER" + setPlural(todaysAppointmentsToCheckIn);
+                            vm.checkInMessage = "CHECKIN_MESSAGE_AFTER" + setPlural(vm.todaysAppointments);
                             vm.showHomeScreenUpdate = true;
                         });
                     }

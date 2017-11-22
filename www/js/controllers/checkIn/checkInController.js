@@ -91,7 +91,7 @@
                         } else {
                             vm.alert.type = "danger";
                             vm.checkInMessage = error;
-                            NewsBanner.showCustomBanner($filter('translate')(error), '#333333', function(){}, 3000);
+                            NewsBanner.showCustomBanner($filter('translate')("CHECKIN_ERROR"), '#333333', function(){}, 3000);
                         }
                     });
             }
