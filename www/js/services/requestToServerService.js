@@ -1,7 +1,9 @@
 //
 // Author David Herrera on Summer 2016, Email:davidfherrerar@gmail.com
 //
+
 var myApp=angular.module('MUHCApp');
+
 /**
  *@ngdoc service
  *@name MUHCApp.service:RequestToServer
@@ -12,11 +14,10 @@ var myApp=angular.module('MUHCApp');
  *@requires $filter
  *@requires $state
  *@requires $q
- *@description API service used to send requests to the server. Every request is encrypted and sent.
+ *@desc API service used to send requests to the server. Every request is encrypted and sent.
  **/
-myApp.service('RequestToServer',['$filter','$state','NewsBanner','UserAuthorizationInfo',
-    'EncryptionService','FirebaseService','$q', 'Constants', 'UUID',
-    function($filter,$state,NewsBanner,UserAuthorizationInfo, EncryptionService, FirebaseService, $q, Constants, UUID){
+myApp.service('RequestToServer',['$filter','$state','NewsBanner','UserAuthorizationInfo', 'EncryptionService','FirebaseService','$q', 'Constants', 'UUID',
+    function($filter, $state, NewsBanner, UserAuthorizationInfo, EncryptionService, FirebaseService, $q, Constants, UUID){
 
         /**
          *@ngdoc property
@@ -64,7 +65,7 @@ myApp.service('RequestToServer',['$filter','$state','NewsBanner','UserAuthorizat
             return pushID.key;
         }
 
-        return{
+        return {
             /**
              *@ngdoc method
              *@name sendRequestWithResponse
@@ -134,6 +135,7 @@ myApp.service('RequestToServer',['$filter','$state','NewsBanner','UserAuthorizat
                 },30000);
                 return r.promise;
             },
+
             /**
              *@ngdoc method
              *@name sendRequest
