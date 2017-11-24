@@ -380,14 +380,13 @@ exports.checkIn=function(requestObject) {
     const deviceId = requestObject.DeviceId;
 
     //Getting the appointment ariaSer to checkin to aria
-    getAriaPatientId(username).then(response => {
-        const ariaSerNum = response[0].PatientAriaSer;
+    getPatientId(username).then(response => {
         const patientId = response[0].PatientId;
 
-        logger.log('debug', 'ariaSerNum: ' + ariaSerNum + ' and patientID: ' + patientId);
+        logger.log('debug', 'patientID: ' + patientId);
 
         //Check in to aria using Johns script
-        checkIntoAria(ariaSerNum, patientId, apptSerNum, username).then(response => {
+        checkIntoAria(patientId, apptSerNum).then(response => {
             if(response == true) {
                 logger.log('debug', 'response from checking into aria and before updating our database: ' + response);
                 //If successfully checked in change field in mysql
@@ -969,22 +968,22 @@ function getAppointmentAriaSer(username, appSerNum) {
 }
 
 /**
- * @name getAriaPatientId
+ * @name getPatientId
  * @desc gets the patients Aria sernum from DB
  * @param username
  * @return {Promise}
  */
-function getAriaPatientId(username) {
-    return exports.runSqlQuery(queries.getPatientAriaSerQuery(),[username]);
+function getPatientId(username) {
+    return exports.runSqlQuery(queries.getPatientId(),[username]);
 }
 
 //Checks user into Aria
-function checkIntoAria(ariaSerNum, patientId, apptSerNum, username) {
+function checkIntoAria(patientId, apptSerNum) {
     let r = Q.defer();
-    let url = config.CHECKIN_PATH.replace('{SERNUM}', ariaSerNum);
-    url = url.replace('{ID}', patientId);
+    let url = config.CHECKIN_PATH.replace('{ID}', patientId);
 
-    logger.log('debug', 'check in function received ariaSerNum: ' + ariaSerNum + ' and patientId: ' + patientId + 'and apptSerNum: ' + apptSerNum);
+    logger.log('debug', 'appt ser num: ' + apptSerNum);
+
     logger.log('debug', 'constructed url: ' + url);
 
     request(url,function(error, response, body) {
@@ -1025,7 +1024,7 @@ function checkIfCheckedIntoAriaHelper(patientActivitySerNum) {
 
         if(!error&& response.statusCode=='200') {
             body = JSON.parse(body);
-            if(body.length>0 && body[0].CheckedInFlag == 1) r.resolve(true);
+            if(body.length > 0 && body[0].CheckedInFlag == 1) r.resolve(true);
             else r.resolve(false);
         }
     });
