@@ -165,9 +165,18 @@ myApp.service('Notifications',['$filter','RequestToServer','LocalStorage','Annou
                 color:'#8BC34A'
             },
             'CheckInNotification':{
-                SerNum:'DocumentSerNum',
+                SerNum:'AppointmentSerNum',
                 icon:'fa fa-check-square-o',
                 color:'#4CAF50',
+                readFunction:Appointments.readAppointmentBySerNum,
+                searchFunction:Appointments.getAppointmentBySerNum,
+                namesFunction:Appointments.getAppointmentName,
+                PageUrl:Appointments.getAppointmentUrl,
+            },
+            'CheckInError':{
+                SerNum:'AppointmentSerNum',
+                icon:'fa fa-check-square-o',
+                color:'#F44336',
                 readFunction:Appointments.readAppointmentBySerNum,
                 searchFunction:Appointments.getAppointmentBySerNum,
                 namesFunction:Appointments.getAppointmentName,
