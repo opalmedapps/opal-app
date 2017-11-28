@@ -94,8 +94,7 @@
             }
         }
 
-        function homePageInit()
-        {
+        function homePageInit() {
             //Initialize modal size based on font size
             initModalSize();
 
@@ -121,8 +120,11 @@
             setCheckin();
         }
 
-        function setTreatmentStatus()
-        {
+        /**
+         * @name setTreatmentStatus
+         * @desc displays the latest treatment statements
+         */
+        function setTreatmentStatus() {
             if(!PlanningSteps.isCompleted() && PlanningSteps.hasCT()) {
                 vm.statusDescription = "PLANNING";
             }else if (PlanningSteps.isCompleted()){
@@ -132,8 +134,11 @@
             }
         }
 
-        function setNextAppointment()
-        {
+        /**
+         * @name setNextAppointment
+         * @desc if appointments exist for the user, display the next upcoming appointment
+         */
+        function setNextAppointment() {
             //Next appointment information
             if(Appointments.appointmentsExist()) {
                 if(Appointments.nextAppointmentExists()){
@@ -142,6 +147,10 @@
             }
         }
 
+        /**
+         * @name setPatientInfo
+         * @desc sets the basic patient information in the view header
+         */
         function setPatientInfo(){
             //Basic patient information
             vm.PatientId = Patient.getPatientId();
@@ -152,6 +161,11 @@
             vm.noUpcomingAppointments=false;
         }
 
+        /**
+         * @name setCheckin
+         * @desc checks with Checkin service to see if there are appointments available for checking in, and if so verifies whether they are within distant
+         * of the hospital. If this also checks out and the check in state has not already been set, it updates the view accordingly
+         */
         function setCheckin() {
             //skip the following if the check in state has already been set..
             if(!!CheckInService.getCheckInApps() &&  CheckInService.getCheckInApps().length > 0){
@@ -169,8 +183,7 @@
                 CheckInService.setCheckInApps(todaysAppointmentsToCheckIn);
 
                 vm.todaysAppointments = todaysAppointmentsToCheckIn;
-                if(vm.todaysAppointments)
-                {
+                if(vm.todaysAppointments) {
                     CheckInService.isAllowedToCheckIn().then(function () {
                         var allCheckedIn = true;
                         for (var app in vm.todaysAppointments){
@@ -195,6 +208,10 @@
             }
         }
 
+        /**
+         * @name evaluateCheckIn
+         * @desc checks with listener to see if the current user has checked in or not
+         */
         function evaluateCheckIn(){
             //Case 1: An Appointment has checkin 0, not checked-in
             if (!vm.allCheckedIn) {
@@ -233,8 +250,7 @@
 
             done == undefined ? done = function () {} : done;
 
-            UpdateUI.update('All').then(function()
-            {
+            UpdateUI.update('All').then(function() {
                 //updated=true;
                 homePageInit();
                 done();
@@ -275,10 +291,14 @@
 
         // Function to go push a page to the correct notification.
         function goToNotification(index, notification){
+
             $timeout(function(){
                 vm.notifications.splice(index, 1);
             });
             Notifications.readNotification(index, notification);
+
+            if(notification.NotificationType === 'CheckInError') goToCheckinAppointments();
+
             var post = (notification.hasOwnProperty('Post')) ? notification.Post : Notifications.getNotificationPost(notification);
             if(notification.hasOwnProperty('PageUrl'))
             {
@@ -294,18 +314,16 @@
             }
         }
 
-        function goToAppointments()
-        {
+        function goToAppointments(){
             NavigatorParameters.setParameters({'Navigator':'homeNavigator'});
             homeNavigator.pushPage('./views/personal/appointments/appointments.html');
         }
 
-        function goToSettings()
-        {
+        function goToSettings() {
             tabbar.setActiveTab(4);
         }
 
-        function goToCheckinAppointments(todaysAppointments) {
+        function goToCheckinAppointments() {
             if (vm.allCheckedIn || vm.no_appointments) return;
             NavigatorParameters.setParameters({'Navigator':'homeNavigator'});
             homeNavigator.pushPage('./views/home/checkin/checkin-list.html');
