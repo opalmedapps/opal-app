@@ -99,10 +99,10 @@ myApp.service('RequestToServer',['$filter','$state','NewsBanner','UserAuthorizat
                     if(snapshot.exists()) {
                         var data = snapshot.val();
 
+                        console.log('response: ' + JSON.stringify(data));
+
                         refRequestResponse.set(null);
                         refRequestResponse.off();
-
-                        console.log(data);
 
                         var timestamp = data.Timestamp;
                         if(data.Code === 1) {

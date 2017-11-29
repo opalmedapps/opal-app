@@ -24,20 +24,14 @@ myApp.service('Notifications',['$filter','RequestToServer','LocalStorage','Annou
          *@name  MUHCApp.service.#Notifications
          *@propertyOf MUHCApp.service:Notifications
          *@description Initializing array that represents all the information for Notifications, this array is passed to appropiate controllers.
-         **/
+         */
         var Notifications=[];
 
         var lastUpdated = 0;
 
         var hasFetchedAll = false;
 
-        /**
-         *@ngdoc property
-         *@name  MUHCApp.service.#notificationsLocalStorage
-         *@propertyOf MUHCApp.service:Notifications
-         *@description Initializing array that represents all the notifications as saved in localStorage.
-         **/
-        var notificationsLocalStorage=[];
+
         /**
          *@ngdoc property
          *@name  MUHCApp.service.#notificationTypes
@@ -46,20 +40,20 @@ myApp.service('Notifications',['$filter','RequestToServer','LocalStorage','Annou
          *<pre>
          //Example of the Document notification type.
          var notificationTypes={
-      'Document':
-      {
-        icon:'fa fa-folder',
-        color:'darkorange',
-        NameEN:'AliasName_EN',
-        NameFR:'AliasName_FR',
-        SerNum:'DocumentSerNum',
-        readFunction:Documents.readDocument,
-        searchFunction:Documents.getDocumentBySerNum,
-        namesFunction:Documents.getDocumentNames,
-        PageUrl:Documents.getDocumentUrl
-      }...
-    </pre>
-    **/
+          'Document':
+          {
+            icon:'fa fa-folder',
+            color:'darkorange',
+            NameEN:'AliasName_EN',
+            NameFR:'AliasName_FR',
+            SerNum:'DocumentSerNum',
+            readFunction:Documents.readDocument,
+            searchFunction:Documents.getDocumentBySerNum,
+            namesFunction:Documents.getDocumentNames,
+            PageUrl:Documents.getDocumentUrl
+          }...
+        </pre>
+        */
         var notificationTypes={
             'Document':
                 {
@@ -191,8 +185,7 @@ myApp.service('Notifications',['$filter','RequestToServer','LocalStorage','Annou
         };
 
 
-        function readNotification(index, notification)
-        {
+        function readNotification(index, notification) {
             //If index is defined it the notification at that index matches the NotificationSerNum, then we can save
             //an array iteration look up.
             //Notification SerNum
@@ -291,6 +284,11 @@ myApp.service('Notifications',['$filter','RequestToServer','LocalStorage','Annou
         }
 
         return{
+
+            initNotifications:function(notifications){
+                lastUpdated = new Date();
+                setUserNotifications(notifications);
+            },
             /**
              *@ngdoc method
              *@name updateUserNotifications
@@ -472,12 +470,13 @@ myApp.service('Notifications',['$filter','RequestToServer','LocalStorage','Annou
                         })
                         .catch(function (err) {
 
+                            console.log(requestType);
+
                             console.log(JSON.stringify(err));
 
                             r.reject({})
                         });
                 }
-
                 return r.promise;
             },
 
