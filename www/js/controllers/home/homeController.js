@@ -95,10 +95,6 @@
         }
 
         function homePageInit() {
-
-            console.log('initializing home page');
-
-
             //Initialize modal size based on font size
             initModalSize();
 
@@ -112,7 +108,7 @@
             setNextAppointment();
 
             // //display new notifications, if any
-            Notifications.requestNotifications()
+            Notifications.requestNewNotifications()
                 .then(function(){
                     if(Notifications.getNumberUnreadNotifications() > 0){
                         vm.notifications = Notifications.setNotificationsLanguage(Notifications.getUnreadNotifications());
