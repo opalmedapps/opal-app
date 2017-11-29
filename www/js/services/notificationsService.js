@@ -438,8 +438,13 @@ myApp.service('Notifications',['$filter','RequestToServer','LocalStorage','Annou
 
                 if (lastUpdated > Date.now() - 10000) r.resolve({});
                 else{
+                    console.log('getting new notifications');
+
                     RequestToServer.sendRequestWithResponse('NotificationsNew', {LastUpdated: lastUpdated.getTime()})
                         .then(function (response) {
+
+                            console.log('response: ' + JSON.stringify(response));
+
                             lastUpdated = new Date();
                             if (response.Data) this.updateUserNotifications(response.Data);
                             r.resolve({});

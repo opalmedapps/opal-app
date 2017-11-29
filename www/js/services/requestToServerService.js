@@ -24,7 +24,7 @@ myApp.service('RequestToServer',['$filter','$state','NewsBanner','UserAuthorizat
          *@name  MUHCApp.service.#Ref
          *@propertyOf MUHCApp.service:RequestToServer
          *@description Firebase reference
-         **/
+         */
         var Ref= firebase.database().ref(FirebaseService.getFirebaseUrl(null));
 
         /**
@@ -32,7 +32,7 @@ myApp.service('RequestToServer',['$filter','$state','NewsBanner','UserAuthorizat
          *@name  MUHCApp.service.#responseRef
          *@propertyOf MUHCApp.service:RequestToServer
          *@description Firebase reference user response
-         **/
+         */
         var responseRef = Ref.child(FirebaseService.getFirebaseChild('users'));
 
         function sendRequest(typeOfRequest,parameters, encryptionKey, referenceField) {
@@ -78,7 +78,7 @@ myApp.service('RequestToServer',['$filter','$state','NewsBanner','UserAuthorizat
              *@returns {Promise} If data returns and the data was processed with a code 1 then it resolves to the data, otherwise it rejects with the
              *error given by the request response
              *@description Sends request to server, awaits for response, and returns with the results from server.
-             **/
+             */
             sendRequestWithResponse:function(typeOfRequest, parameters, encryptionKey, referenceField, responseField)
             {
                 var r = $q.defer();
@@ -108,6 +108,9 @@ myApp.service('RequestToServer',['$filter','$state','NewsBanner','UserAuthorizat
                             r.reject({Code:'ENCRYPTION_ERROR'});
                         } else {
                             if(!encryptionKey||typeof encryptionKey == 'undefined') data = EncryptionService.decryptData(data);
+
+                            if(typeOfRequest === 'NewNotifications') console.log(JSON.stringify(data));
+
                             data.Timestamp = timestamp;
                             clearTimeout(timeOut);
 
@@ -140,7 +143,7 @@ myApp.service('RequestToServer',['$filter','$state','NewsBanner','UserAuthorizat
              *@param {Object} content Object to be sent to backend as request parameter
              * @param {String} key Encryption key
              *@description Sends request to server
-             **/
+             */
             sendRequest:function(typeOfRequest,content,key){
                 sendRequest(typeOfRequest,content,key);
             }
