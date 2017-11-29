@@ -5,6 +5,7 @@ const OpalRequest = require('./request');
 const OpalResponseError = require('../response/response-error');
 const sqlInterface = require('../sqlInterface');
 const utility = require('../../utility/utility');
+const logger = require('../../logs/logger');
 /**
  * Library imports
  */
@@ -43,7 +44,6 @@ class RequestValidator {
 						})
 						.catch((err)=>{
 							logger.log('error', 'Unable to decrypt due to: ' + JSON.stringify(err));
-
 							r.reject(new OpalResponseError(2, 'Unable to decrypt request', request, err));
 						});
 				}
@@ -51,9 +51,7 @@ class RequestValidator {
 				r.reject(new OpalResponseError(2,  'Unable get user encryption', request, err));
 			});
 		}else{
-
 			logger.log('error', 'invalid request due to: ' + JSON.stringify(validation.errors));
-
 			r.reject(new OpalResponseError(2, 'Unable to process request', request, 'Missing request parameters: ' + validation.errors));
 		}
 		return r.promise;
