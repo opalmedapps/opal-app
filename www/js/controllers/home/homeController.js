@@ -95,6 +95,10 @@
         }
 
         function homePageInit() {
+
+            console.log('initializing home page');
+
+
             //Initialize modal size based on font size
             initModalSize();
 
@@ -107,16 +111,17 @@
             //display next appointment
             setNextAppointment();
 
-            //display new notifications, if any
-            Notifications.requestAllNotifications()
-                .then(function(){
-                    if(Notifications.getNumberUnreadNotifications() > 0){
-                        vm.notifications = Notifications.setNotificationsLanguage(Notifications.getUnreadNotifications());
-                    }
-                });
+            // //display new notifications, if any
+            // Notifications.requestNotifications()
+            //     .then(function(){
+            //         if(Notifications.getNumberUnreadNotifications() > 0){
+            //             vm.notifications = Notifications.setNotificationsLanguage(Notifications.getUnreadNotifications());
+            //         }
+            //     });
 
             vm.loading =false;
 
+            // Display current check in status
             setCheckin();
         }
 
@@ -221,7 +226,7 @@
                 vm.showHomeScreenUpdate = false;
 
                 //Queries the server to find out whether or not an appointment was checked into
-                CheckInService.checkCheckinServer(vm.todaysAppointments[0]).then(function (data) {
+                CheckInService.hasAttemptedCheckin(vm.todaysAppointments[0]).then(function (data) {
                     //If it has, then it simply changes the message to checkedin and queries to get an update
                     if (data) {
                         $timeout(function () {

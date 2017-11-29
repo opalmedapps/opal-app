@@ -28,7 +28,7 @@
         function activate(){
             vm.isLoading = true;
             // TODO: OPTIMIZE THIS... THIS SHOULD BE A BACKGROUND UPDATE THAT SILENTLY UPDATES THE LIST INSTEAD OF DOING A COMPLETE REFRESH
-            Notifications.requestAllNotifications()
+            Notifications.requestNotifications()
                 .then(function () {
                     vm.noNotifications = true;
                     var notifications = Notifications.getUserNotifications();

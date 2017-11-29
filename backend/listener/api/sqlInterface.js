@@ -178,9 +178,7 @@ exports.getPatientTableFields = function(userId,timestamp,arrayTables) {
     var timestp = (timestamp)?timestamp:0;
     const objectToFirebase = {};
     let index = 0;
-    logger.log('debug', 'Preparing all promises for getting patient data: ' + JSON.stringify(arrayTables));
     Q.all(preparePromiseArrayFields(userId,timestp,arrayTables)).then(function(response){
-        logger.log('debug', 'Successfully finished all queries: ' + JSON.stringify(response));
         if(arrayTables) {
             for (let i = 0; i < arrayTables.length; i++) {
                 objectToFirebase[arrayTables[i]]=response[index];
@@ -369,52 +367,87 @@ exports.checkinUpdate = function(requestObject)
  * @return {Promise}
  */
 exports.checkIn=function(requestObject) {
-
     const r = Q.defer();
-    const apptSerNum = requestObject.Parameters.AppointmentSerNum;
-    const latitude = requestObject.Parameters.Latitude;
-    const longitude = requestObject.Parameters.Longitude;
-    const accuracy = requestObject.Parameters.Accuracy;
-    const username = requestObject.UserID;
-    const session = requestObject.Token;
-    const deviceId = requestObject.DeviceId;
+    const patientId = requestObject.Parameters.PatientId;
+    const patientSerNum = requestObject.Parameters.PatientSerNum;
 
-    //Getting the appointment ariaSer to checkin to aria
-    getPatientId(username).then(response => {
-        const patientId = response[0].PatientId;
-
-        logger.log('debug', 'patientID: ' + patientId);
-
-        //Check in to aria using Johns script
-        checkIntoAria(patientId, apptSerNum).then(response => {
-            if(response == true) {
-                logger.log('debug', 'response from checking into aria and before updating our database: ' + response);
-                //If successfully checked in change field in mysql
-                let promises = [];
-                for (let i=0; i!== apptSerNum.length; ++i){
-                    promises.push(
-                        exports.runSqlQuery(queries.checkin(),[session, apptSerNum[i], username])
-                            .then(exports.runSqlQuery(queries.logCheckin(),[apptSerNum[i], deviceId,latitude, longitude, accuracy, new Date()])));
-                }
-
-                Q.all(promises)
-                    .then(function(){
-                        r.resolve({Response:'success'});
-                    })
-                    .catch(function(error){
-                        r.reject({Response:'error', Reason:'CheckIn error due to '+error});
-                    });
-            }else{
-                r.reject({Response:'error', Reason:'Unable to checkin on Aria'});
-            }
-        }).catch(function(error){
-            r.reject({Response:'error', Reason:error});
-        });
-    }).catch(function(error){
-        r.reject({Response:'error', Reason:'Error grabbing aria ser num from aria '+ error});
-    });
+    hasAlreadyAttemptedCheckin(patientSerNum)
+        .then(result => {
+            if(result === false){
+                //Check in to aria using Johns script
+                checkIntoAriaAndMedi(patientId).then(() => {
+                    //If successfully checked in, grab all the appointments that have been checked into in order to notify app
+                    getCheckedInAppointments(patientSerNum)
+                        .then(appts => r.resolve(appts))
+                        .catch(err => r.reject({Response:'error', Reason:'CheckIn error due to '+ err}));
+                }).catch(error => r.reject({Response:'error', Reason:error}));
+            } else r.resolve([]);
+        }).catch(err=> r.reject({Response:'error', Reason:'Error determining whether this patient has checked in or not due to : '+ error}));
     return r.promise;
 };
+
+/**
+ * Gets a patients id and sernum to use for checkin process
+ * @param username
+ * @returns {Object} that holds PatientID and PatientSerNUm
+ */
+function getPatientIdAndSerNum(username){
+    let id = exports.runSqlQuery(queries.getPatientId(),[username]);
+    let serNum = exports.runSqlQuery(queries.getPatientSerNum(),[id[0].PatientId]);
+    return {PatientId: id[0].PatientId, PatientSerNum: serNum[0].PatientSerNum}
+}
+
+/**
+ * Calls John's PHP script in order to check in patient on Aria and Medivisit
+ * @param patientId
+ * @param apptSerNum
+ * @returns {Promise}
+ */
+function checkIntoAriaAndMedi(patientId) {
+    let r = Q.defer();
+    let url = config.CHECKIN_PATH.replace('{ID}', patientId);
+
+    request(url,function(error, response, body) {
+        logger.log('debug', 'checked into aria and medi response: ' + JSON.stringify(response));
+        logger.log('debug', 'checked into aria and medi body: ' + JSON.stringify(body));
+
+        if(error) r.reject(error);
+        else r.resolve(response);
+    });
+    return r.promise;
+}
+
+/**
+ * Queries the database to see if any patient push notifications exist for the user today, hence whether or not they have attempted to check in already
+ * @param patientSerNum
+ * @returns {Promise}
+ */
+function hasAlreadyAttemptedCheckin(patientSerNum){
+    return new Promise((resolve, reject) => {
+        if(!patientSerNum) reject("No Patient SerNum Provided");
+        else {
+            exports.runSqlQuery(queries.getPatientCheckinPushNotifications(), [patientSerNum]).then((rows) => {
+                if (rows.length === 0) resolve(false);
+                else resolve(true);
+            }).catch((err) => {
+                reject({Response: 'error', Reason: err});
+            })
+        }
+    });
+}
+
+/**
+ * Gets and returns all of a patients appointments on today's date
+ * @param patientSerNum
+ * @return {Promise}
+ */
+function getCheckedInAppointments(patientSerNum){
+    return new Promise((resolve, reject) => {
+        exports.runSqlQuery(queries.getTodaysCheckedInAppointments(), [patientSerNum])
+            .then(rows => resolve(rows))
+            .catch(err => reject({Response: 'error', Reason: err}));
+    })
+}
 
 /**
  * getDocumentsContent
@@ -977,59 +1010,6 @@ function getPatientId(username) {
     return exports.runSqlQuery(queries.getPatientId(),[username]);
 }
 
-//Checks user into Aria
-function checkIntoAria(patientId, apptSerNum) {
-    let r = Q.defer();
-    let url = config.CHECKIN_PATH.replace('{ID}', patientId);
-
-    logger.log('debug', 'appt ser num: ' + apptSerNum);
-
-    logger.log('debug', 'constructed url: ' + url);
-
-    request(url,function(error, response, body) {
-
-        logger.log('debug', 'checked into aria response: ' + JSON.stringify(response));
-        logger.log('debug', 'checked into aria body: ' + JSON.stringify(body));
-
-        if(error) r.reject(error);
-
-        if(!error && response.statusCode =='200') {
-            let promises = [];
-            for (let i=0; i!==apptSerNum.length; ++i){
-                promises.push(checkIfCheckedIntoAriaHelper(apptSerNum[i]));
-            }
-            Q.all(promises).then(function(response){
-                logger.log('debug', 'response after checking if all appointments where checked into on aria: ' + response);
-                r.resolve(response);
-            }).catch(function(error){
-                logger.log('error', 'Error while verifying if checked in', error);
-                r.reject(error);
-            });
-        }
-    });
-    return r.promise;
-}
-
-//Check if checked in for an appointment in aria
-function checkIfCheckedIntoAriaHelper(patientActivitySerNum) {
-    let r = Q.defer();
-    let url = config.VERIFYCHECKIN_PATH + patientActivitySerNum;
-
-    request(url,function(error, response, body) {
-
-        logger.log('debug', 'verify aria checkin response: ' + JSON.stringify(response));
-        logger.log('debug', 'verify aria checkin body: ' + JSON.stringify(body));
-
-        if(error){r.reject(error)}
-
-        if(!error&& response.statusCode=='200') {
-            body = JSON.parse(body);
-            if(body.length > 0 && body[0].CheckedInFlag == 1) r.resolve(true);
-            else r.resolve(false);
-        }
-    });
-    return r.promise;
-}
 
 //Get time estimate from Ackeem's scripts
 exports.getTimeEstimate = function(appointmentAriaSer)
@@ -1226,9 +1206,29 @@ exports.getQuestionnaires = function(requestObject){
 exports.getAllNotifications = function(requestObject){
     "use strict";
     var r = Q.defer();
-    exports.runSqlQuery(queries.getAllNotifications(), [requestObject.UserID,requestObject.Timestamp,requestObject.Timestamp])
+    exports.runSqlQuery(queries.getAllNotifications(), [requestObject.UserID])
         .then(function (queryRows) {
-            //console.log(queryRows);
+            var obj = {};
+            obj.Data = queryRows;
+            r.resolve(obj);
+        })
+        .catch(function (error) {
+            r.reject(error);
+        });
+
+    return r.promise
+};
+
+/**
+ * Returns a promise containing all new notifications
+ * @param {object} requestObject the request
+ * @returns {Promise} Returns a promise that contains the notification data
+ */
+
+exports.getNewNotifications = function(requestObject){
+    var r = Q.defer();
+    exports.runSqlQuery(queries.getNewNotifications(), [requestObject.UserID, requestObject.Parameters.LastUpdated, requestObject.Parameters.LastUpdated])
+        .then(function (queryRows) {
             var obj = {};
             obj.Data = queryRows;
             r.resolve(obj);
