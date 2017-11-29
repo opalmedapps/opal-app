@@ -166,7 +166,7 @@ exports.getNewNotifications=function() {
         "AND Patient.PatientSerNum=Users.UserTypeSerNum " +
         "AND Users.Username= ? " +
         "AND Notification.ReadStatus = 0 " +
-        "AND (Notification.LastUpdated > ? OR NotificationControl.LastUpdated > ?);";
+        "AND (Notification.DateAdded > ? OR NotificationControl.DateAdded > ?);";
 };
 
 exports.patientTeamMessagesTableFields=function()
