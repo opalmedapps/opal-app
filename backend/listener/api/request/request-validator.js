@@ -36,12 +36,14 @@ class RequestValidator {
 				} else {
 
 					let {Password, AnswerText} = rows[0];
-					utility.decrypt({req: request.type, params: request.parameters},Password,AnswerText)
+					utility.decrypt({req: request.type, params: request.parameters}, Password, AnswerText)
 						.then((dec)=>{
 							request.setAuthenticatedInfo(AnswerText, Password, dec.req,dec.params);
 							r.resolve(request);
 						})
 						.catch((err)=>{
+							logger.log('error', 'Unable to decrypt due to: ' + JSON.stringify(err));
+
 							r.reject(new OpalResponseError(2, 'Unable to decrypt request', request, err));
 						});
 				}
