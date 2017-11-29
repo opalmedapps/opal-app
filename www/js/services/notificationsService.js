@@ -29,6 +29,8 @@ myApp.service('Notifications',['$filter','RequestToServer','LocalStorage','Annou
 
         var lastUpdated = 0;
 
+        var hasFetchedAll = false;
+
         /**
          *@ngdoc property
          *@name  MUHCApp.service.#notificationsLocalStorage
@@ -250,28 +252,28 @@ myApp.service('Notifications',['$filter','RequestToServer','LocalStorage','Annou
             var temp=angular.copy(notifications);
             for (var i = 0; i < notifications.length; i++) {
                 //if (temp[i].NotificationType == 'RoomAssignment') continue;
+
                 if(typeof notificationTypes[temp[i].NotificationType] =='undefined') break;
                 temp[i].Custom =  notificationTypes[temp[i].NotificationType].Custom;
                 temp[i].Icon = notificationTypes[temp[i].NotificationType].icon;
                 temp[i].Color = notificationTypes[temp[i].NotificationType].color;
-                //
+
                 if(!notificationTypes[temp[i].NotificationType].hasOwnProperty('openFunction')){
                     temp[i].PageUrl = notificationTypes[temp[i].NotificationType].PageUrl(temp[i].RefTableRowSerNum);
                 }
                 temp[i].Content = notificationTypes[temp[i].NotificationType].namesFunction(temp[i].RefTableRowSerNum);
-                //
                 temp[i].DateAdded=$filter('formatDate')(temp[i].DateAdded);
                 temp[i].refreshType = notificationTypes[temp[i].NotificationType].refreshType;
-                //
                 Notifications.push(temp[i]);
                 notificationsLocalStorage.push(notifications[i]);
             }
-            //
+
             Notifications=$filter('orderBy')(Notifications,'-DateAdded',true);
 
             LocalStorage.WriteToLocalStorage('Notifications',notificationsLocalStorage);
         }
         return{
+
             /**
              *@ngdoc method
              *@name setUserNotifications
@@ -280,11 +282,15 @@ myApp.service('Notifications',['$filter','RequestToServer','LocalStorage','Annou
              *@description Setter method for Notifications
              **/
             setUserNotifications:function(notifications){
+
+                console.log(JSON.stringify(notifications));
+
                 Notifications=[];
                 notificationsLocalStorage=[];
                 addUserNotifications(notifications);
-                lastUpdated = Date.now();
+                hasFetchedAll = true;
             },
+
             /**
              *@ngdoc method
              *@name updateUserNotifications
@@ -292,12 +298,11 @@ myApp.service('Notifications',['$filter','RequestToServer','LocalStorage','Annou
              *@param {Object} notifications Finds notifications to update or adds new notifications if not found
              *@description Updates the notificationsArray with the new information contained in the notifications parameter
              **/
-            updateUserNotifications:function(notifications)
-            {
+            updateUserNotifications:function(notifications) {
                 searchAndDeleteNotifications(notifications);
                 addUserNotifications(notifications);
-                //lastUpdated = Date.now();
             },
+
             /**
              *@ngdoc method
              *@name getUserNotifications
@@ -308,6 +313,7 @@ myApp.service('Notifications',['$filter','RequestToServer','LocalStorage','Annou
             getUserNotifications:function(){
                 return Notifications;
             },
+
             /**
              *@ngdoc method
              *@name readNotification
@@ -316,8 +322,7 @@ myApp.service('Notifications',['$filter','RequestToServer','LocalStorage','Annou
              *@param {String} notification Notification to be read
              *@description Sets ReadStatus in the notification to 1, sends request to backend, and syncs with device storage
              **/
-            readNotification:function(index, notification)
-            {
+            readNotification:function(index, notification) {
                 readNotification(index, notification);
             },
             //Get number of unread news
@@ -328,17 +333,14 @@ myApp.service('Notifications',['$filter','RequestToServer','LocalStorage','Annou
              *@description Iterates through array object and returns the number of unread notifications
              *@returns {Number} Returns number of unread news
              **/
-            getNumberUnreadNotifications:function()
-            {
+            getNumberUnreadNotifications:function() {
                 var number=0;
                 for (var i = 0; i < Notifications.length; i++) {
-                    if(Notifications[i].ReadStatus == '0')
-                    {
-                        number++;
-                    }
+                    if(Notifications[i].ReadStatus == '0') number++;
                 }
                 return number;
             },
+
             /**
              *@ngdoc method
              *@name getUnreadNotifications
@@ -352,21 +354,15 @@ myApp.service('Notifications',['$filter','RequestToServer','LocalStorage','Annou
                 var array=[];
                 for (var i = 0; i < Notifications.length; i++) {
                     //If ReadStatus is 0, then find actual post for notification
-                    if(Notifications[i].ReadStatus == '0')
-                    {
-
-                        console.log(JSON.stringify(Notifications[i]));
+                    if(Notifications[i].ReadStatus == '0') {
                         //Finding post
                         var post = notificationTypes[Notifications[i].NotificationType].searchFunction(Notifications[i].RefTableRowSerNum);
-
                         if(post){
                             Notifications[i].Description_EN = Notifications[i].Description_EN.replace(/\$\w+/, post.RoomLocation_EN||"");
                             Notifications[i].Description_FR = Notifications[i].Description_FR.replace(/\$\w+/, post.RoomLocation_FR||"");
 
                             //If ReadStatus in post is also 0, Set the notification for showing in the controller
-                            if((post.ReadStatus && post.ReadStatus === '0') || Notifications[i].NotificationType === "RoomAssignment")
-                            {
-
+                            if((post.ReadStatus && post.ReadStatus === '0') || Notifications[i].NotificationType === "RoomAssignment") {
                                 Notifications[i].Post = post;
                                 Notifications[i].Number = 1;
                                 array.push(Notifications[i]);
@@ -386,16 +382,12 @@ myApp.service('Notifications',['$filter','RequestToServer','LocalStorage','Annou
              *@description Gets unread notifications
              *@returns {Array} Returns all the unread notifications
              **/
-            getNewNotifications:function()
-            {
+            getNewNotifications:function() {
                 //Initialize array
                 var array=[];
                 for (var i = 0; i < Notifications.length; i++) {
                     //If ReadStatus is 0, then find actual post for notification
-                    if(Notifications[i].ReadStatus == '0')
-                    {
-                        array.push(Notifications[i]);
-                    }
+                    if(Notifications[i].ReadStatus == '0') array.push(Notifications[i]);
                 }
                 return array;
             },
@@ -407,8 +399,7 @@ myApp.service('Notifications',['$filter','RequestToServer','LocalStorage','Annou
              *@description Finds the post that belongs to a given notification by using the search service function for that post
              *@returns {Object} Returns object containing the post
              **/
-            getNotificationPost:function(notification)
-            {
+            getNotificationPost:function(notification) {
                 return notificationTypes[notification.NotificationType].searchFunction(notification.RefTableRowSerNum);
             },
             /**
@@ -420,9 +411,7 @@ myApp.service('Notifications',['$filter','RequestToServer','LocalStorage','Annou
              *@description Opens a post by using the opening function in each post found by {@link MUHCApp.service:Notifications#notificationTypes notificationTypes} array.
              *@returns {Object} Returns the return value of the post opening function, this function is defined in each post.
              **/
-            goToPost:function(type, post)
-            {
-
+            goToPost:function(type, post) {
                 return notificationTypes[type].openFunction(post);
             },
             /**
@@ -437,18 +426,13 @@ myApp.service('Notifications',['$filter','RequestToServer','LocalStorage','Annou
             {
                 var language = UserPreferences.getLanguage();
                 for (var i = notifications.length-1; i >=0; i--) {
-                    //
                     notifications[i].Title = (language=='EN') ?   notifications[i].Name_EN : notifications[i].Name_FR;
-                    //
                     try{
                         if(typeof notifications[i].Content == 'undefined') notifications[i].Content = notificationTypes[notifications[i].NotificationType].namesFunction(notifications[i].RefTableRowSerNum);
                         notifications[i].Desc = (language=='EN') ?  notifications[i].Content.NameEN : notifications[i].Content.NameFR;
                     }catch(e){
                         notifications.splice(i,1);
-                        //
                     }
-
-
                 }
                 return notifications;
             },
@@ -458,34 +442,35 @@ myApp.service('Notifications',['$filter','RequestToServer','LocalStorage','Annou
              *@methodOf MUHCApp.service:Notifications
              *@description Clears the service of any saved state, function used by the {@link MUHCApp.controller:LogoutController LogoutController}
              **/
-            clearNotifications:function()
-            {
+            clearNotifications:function() {
                 Notifications=[];
                 notificationsLocalStorage=[];
                 lastUpdated = 0;
             },
+
             /**
              *@ngdoc method
-             *@name requestAllNotifications
+             *@name requestNotifications
              *@methodOf MUHCApp.service:Notifications
              *@description Grabs all the notifications form the server.
              **/
-            requestAllNotifications: function () {
-
+            requestNotifications: function () {
                 var r = $q.defer();
-
-                if (lastUpdated > Date.now() - 60000) r.resolve({});
-
-                var _this = this;
-                RequestToServer.sendRequestWithResponse('NotificationsAll')
+                if (lastUpdated > Date.now() - 10000) r.resolve({});
+                var requestType = (!hasFetchedAll) ? 'NotificationsAll' : 'NotificationsNew';
+                RequestToServer.sendRequestWithResponse(requestType, {LastUpdated: lastUpdated})
                     .then(function (response) {
-                        _this.setUserNotifications(response.Data);
+                        lastUpdated = new Date();
+                        if(requestType === 'NotificationsAll') {
+                            hasFetchedAll = true;
+                            this.setUserNotifications(response.Data);
+                        }
+                        else this.updateUserNotifications(response.data);
                         r.resolve({});
                     })
-                    .catch(function (error) {
+                    .catch(function () {
                         r.reject({})
                     });
-
                 return r.promise;
             },
 

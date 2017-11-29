@@ -26,6 +26,7 @@ const API = {
     'MapLocation': apiPatientUpdate.getMapLocation,
     'Message': apiHospitalUpdate.sendMessage,
     'NotificationsAll': apiHospitalUpdate.getAllNotifications,
+    'NotificationsNew': apiHospitalUpdate.getNewNotifications,
     'Questionnaires': apiPatientUpdate.getQuestionnaires,
     'QuestionnaireRating': apiHospitalUpdate.inputEducationalMaterialRating,
     'QuestionnaireAnswers': apiHospitalUpdate.inputQuestionnaireAnswers,
