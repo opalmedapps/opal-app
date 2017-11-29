@@ -50,6 +50,9 @@
                     $timeout(function() {
                         vm.isLoading = false;
                         vm.noNotifications = true;
+
+                        // TODO: Add Error Message!!!
+
                     });
                 })
         }

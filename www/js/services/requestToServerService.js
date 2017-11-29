@@ -102,18 +102,17 @@ myApp.service('RequestToServer',['$filter','$state','NewsBanner','UserAuthorizat
                         refRequestResponse.set(null);
                         refRequestResponse.off();
 
+                        console.log(data);
+
                         var timestamp = data.Timestamp;
                         if(data.Code === 1) {
-
                             r.reject({Code:'ENCRYPTION_ERROR'});
                         } else {
                             if(!encryptionKey||typeof encryptionKey == 'undefined') data = EncryptionService.decryptData(data);
                             data.Timestamp = timestamp;
-
                             clearTimeout(timeOut);
 
-                            if(data.Code == '3')
-                            {
+                            if(data.Code == '3') {
                                 r.resolve(data);
                             }else if(data.Code == '2' || data.Code == '4'){
                                 r.reject(data);
