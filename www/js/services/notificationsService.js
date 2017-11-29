@@ -196,27 +196,18 @@ myApp.service('Notifications',['$filter','RequestToServer','LocalStorage','Annou
             var type = notification.NotificationType;
 
             //If the index is not defined and the notificationSerNum matches then read that notification and sync the state of all services
-            if(typeof Notifications[index]!== 'undefined' && Notifications[index].NotificationSerNum == serNum)
-            {
-
+            if(typeof Notifications[index]!== 'undefined' && Notifications[index].NotificationSerNum == serNum) {
                 Notifications[index].ReadStatus = '1';
-                notificationsLocalStorage[index].ReadStatus = '1';
                 notificationTypes[type].readFunction(refSerNum);
-                LocalStorage.WriteToLocalStorage('Notifications', notificationsLocalStorage);
                 RequestToServer.sendRequest('Read',{'Id':serNum, 'Field':'Notifications'});
             }else{
                 //If it doesnt match, iterate, find notification and update read status in all the states, i.e. localStorage, server, model.
 
                 for (var i = 0; i < Notifications.length; i++) {
 
-                    if(Notifications[i].NotificationSerNum == serNum )
-                    {
-
+                    if(Notifications[i].NotificationSerNum == serNum ) {
                         Notifications[i].ReadStatus = '1';
-                        notificationsLocalStorage[i].ReadStatus = '1';
                         notificationTypes[type].readFunction(refSerNum);
-
-                        LocalStorage.WriteToLocalStorage('Notifications', notificationsLocalStorage);
                         RequestToServer.sendRequest('Read',{'Id':serNum, 'Field':'Notifications'});
                         break;
                     }
@@ -228,10 +219,8 @@ myApp.service('Notifications',['$filter','RequestToServer','LocalStorage','Annou
         {
             for (var i = 0; i < notifications.length; i++) {
                 for (var j = 0; j < Notifications.length; j++) {
-                    if(Notifications[j].NotificationSerNum == notifications[i].NotificationSerNum)
-                    {
+                    if(Notifications[j].NotificationSerNum == notifications[i].NotificationSerNum) {
                         Notifications.splice(j,1);
-                        notificationsLocalStorage.splice(j,1);
                         break;
                     }
                 }
@@ -257,12 +246,9 @@ myApp.service('Notifications',['$filter','RequestToServer','LocalStorage','Annou
                 temp[i].DateAdded=$filter('formatDate')(temp[i].DateAdded);
                 temp[i].refreshType = notificationTypes[temp[i].NotificationType].refreshType;
                 Notifications.push(temp[i]);
-                notificationsLocalStorage.push(notifications[i]);
             }
 
             Notifications=$filter('orderBy')(Notifications,'-DateAdded',true);
-
-            LocalStorage.WriteToLocalStorage('Notifications',notificationsLocalStorage);
         }
 
 
@@ -274,11 +260,7 @@ myApp.service('Notifications',['$filter','RequestToServer','LocalStorage','Annou
          *@description Setter method for Notifications
          **/
         function setUserNotifications(notifications){
-
-            console.log('setting notifications');
-
             Notifications=[];
-            notificationsLocalStorage=[];
             addUserNotifications(notifications);
             hasFetchedAll = true;
         }
@@ -442,49 +424,34 @@ myApp.service('Notifications',['$filter','RequestToServer','LocalStorage','Annou
              **/
             clearNotifications:function() {
                 Notifications=[];
-                notificationsLocalStorage=[];
                 lastUpdated = 0;
             },
 
             /**
              *@ngdoc method
-             *@name requestNotifications
+             *@name requestNewNotifications
              *@methodOf MUHCApp.service:Notifications
              *@description Grabs all the notifications form the server.
              **/
-            requestNotifications: function () {
+            requestNewNotifications: function () {
                 var r = $q.defer();
 
                 if (lastUpdated > Date.now() - 10000) r.resolve({});
                 else{
-                    var requestType = (!hasFetchedAll) ? 'NotificationsAll' : 'NotificationsNew';
-                    RequestToServer.sendRequestWithResponse(requestType, {LastUpdated: lastUpdated})
+                    RequestToServer.sendRequestWithResponse('NotificationsNew', {LastUpdated: lastUpdated.getTime()})
                         .then(function (response) {
                             lastUpdated = new Date();
-                            if(requestType === 'NotificationsAll') {
-                                hasFetchedAll = true;
-                                setUserNotifications(response.Data);
-                            }
-                            else this.updateUserNotifications(response.data);
+                            if (response.Data) this.updateUserNotifications(response.Data);
                             r.resolve({});
                         })
-                        .catch(function (err) {
-
-                            console.log(requestType);
-
-                            console.log(JSON.stringify(err));
-
+                        .catch(function () {
                             r.reject({})
                         });
                 }
                 return r.promise;
             },
 
-            /**
-             *
-             */
             getLastUpdated: function () {
-                "use strict";
                 return lastUpdated;
             }
         };
