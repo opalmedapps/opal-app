@@ -26,8 +26,8 @@ class RequestValidator {
 		let request = new OpalRequest(requestObject, requestKey);
 
 		let validation = this.validateRequestCredentials(request);
-		if(validation.isValid)
-		{
+
+		if(validation.isValid) {
 			//Gets user password for decrypting
 			sqlInterface.getEncryption(requestObject).then(function(rows) {
 				if (rows.length > 1 || rows.length === 0) {
@@ -42,13 +42,16 @@ class RequestValidator {
 							r.resolve(request);
 						})
 						.catch((err)=>{
-							r.reject(new OpalResponseError(2, 'Unable to process request', request, err));
+							r.reject(new OpalResponseError(2, 'Unable to decrypt request', request, err));
 						});
 				}
 			}).catch((err)=>{
 				r.reject(new OpalResponseError(2,  'Unable get user encryption', request, err));
 			});
 		}else{
+
+			logger.log('error', 'invalid request due to: ' + JSON.stringify(validation.errors));
+
 			r.reject(new OpalResponseError(2, 'Unable to process request', request, 'Missing request parameters: ' + validation.errors));
 		}
 		return r.promise;

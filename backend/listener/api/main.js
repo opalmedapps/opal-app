@@ -23,6 +23,9 @@ module.exports = {
  * @returns {Promise}
  */
 function requestFormatter({key,request}) {
+
+	logger.log('debug', 'request object in request formatter: ' + JSON.stringify(request));
+
 	return RequestValidator.validate(key, request)
 		.then( opalReq => { //opalReq of type, OpalRequest
 			return processApiRequest.processRequest(opalReq.toLegacy()).then((data)=>
@@ -64,7 +67,6 @@ function requestLegacyWrapper(requestKey, requestObject) {
  * @returns {Promise}
  */
 function apiRequestFormatter(requestKey,requestObject) {
-    logger.log('debug', 'Reached API request formatter');
 	return  requestLegacyWrapper(requestKey, requestObject);
 }
 
