@@ -112,12 +112,12 @@
             setNextAppointment();
 
             // //display new notifications, if any
-            // Notifications.requestNotifications()
-            //     .then(function(){
-            //         if(Notifications.getNumberUnreadNotifications() > 0){
-            //             vm.notifications = Notifications.setNotificationsLanguage(Notifications.getUnreadNotifications());
-            //         }
-            //     });
+            Notifications.requestNotifications()
+                .then(function(){
+                    if(Notifications.getNumberUnreadNotifications() > 0){
+                        vm.notifications = Notifications.setNotificationsLanguage(Notifications.getUnreadNotifications());
+                    }
+                });
 
             vm.loading =false;
 

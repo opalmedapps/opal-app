@@ -198,7 +198,6 @@ myApp.service('Notifications',['$filter','RequestToServer','LocalStorage','Annou
             //Notification SerNum
             var serNum = notification.NotificationSerNum;
 
-
             //ReferenceTableSerNum, as in DocumentSerNum and such.
             var refSerNum = notification.RefTableRowSerNum;
             var type = notification.NotificationType;
@@ -272,25 +271,26 @@ myApp.service('Notifications',['$filter','RequestToServer','LocalStorage','Annou
 
             LocalStorage.WriteToLocalStorage('Notifications',notificationsLocalStorage);
         }
+
+
+        /**
+         *@ngdoc method
+         *@name setUserNotifications
+         *@methodOf MUHCApp.service:Notifications
+         *@param {Object} notifications Notifications array that containts the new notifications
+         *@description Setter method for Notifications
+         **/
+        function setUserNotifications(notifications){
+
+            console.log('setting notifications');
+
+            Notifications=[];
+            notificationsLocalStorage=[];
+            addUserNotifications(notifications);
+            hasFetchedAll = true;
+        }
+
         return{
-
-            /**
-             *@ngdoc method
-             *@name setUserNotifications
-             *@methodOf MUHCApp.service:Notifications
-             *@param {Object} notifications Notifications array that containts the new notifications
-             *@description Setter method for Notifications
-             **/
-            setUserNotifications:function(notifications){
-
-                console.log(JSON.stringify(notifications));
-
-                Notifications=[];
-                notificationsLocalStorage=[];
-                addUserNotifications(notifications);
-                hasFetchedAll = true;
-            },
-
             /**
              *@ngdoc method
              *@name updateUserNotifications
@@ -456,21 +456,28 @@ myApp.service('Notifications',['$filter','RequestToServer','LocalStorage','Annou
              **/
             requestNotifications: function () {
                 var r = $q.defer();
+
                 if (lastUpdated > Date.now() - 10000) r.resolve({});
-                var requestType = (!hasFetchedAll) ? 'NotificationsAll' : 'NotificationsNew';
-                RequestToServer.sendRequestWithResponse(requestType, {LastUpdated: lastUpdated})
-                    .then(function (response) {
-                        lastUpdated = new Date();
-                        if(requestType === 'NotificationsAll') {
-                            hasFetchedAll = true;
-                            this.setUserNotifications(response.Data);
-                        }
-                        else this.updateUserNotifications(response.data);
-                        r.resolve({});
-                    })
-                    .catch(function () {
-                        r.reject({})
-                    });
+                else{
+                    var requestType = (!hasFetchedAll) ? 'NotificationsAll' : 'NotificationsNew';
+                    RequestToServer.sendRequestWithResponse(requestType, {LastUpdated: lastUpdated})
+                        .then(function (response) {
+                            lastUpdated = new Date();
+                            if(requestType === 'NotificationsAll') {
+                                hasFetchedAll = true;
+                                setUserNotifications(response.Data);
+                            }
+                            else this.updateUserNotifications(response.data);
+                            r.resolve({});
+                        })
+                        .catch(function (err) {
+
+                            console.log(JSON.stringify(err));
+
+                            r.reject({})
+                        });
+                }
+
                 return r.promise;
             },
 
