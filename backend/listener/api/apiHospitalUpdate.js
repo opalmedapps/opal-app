@@ -58,3 +58,8 @@ exports.inputEducationalMaterialRating= function(requestObject)
 exports.getAllNotifications = function (requestObject) {
     return sqlInterface.getAllNotifications(requestObject);
 };
+
+// Get new notifications
+exports.getNewNotifications = function (requestObject) {
+    return sqlInterface.getNewNotifications(requestObject);
+};

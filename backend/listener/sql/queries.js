@@ -122,9 +122,7 @@ exports.patientNotificationsTableFields=function()
         "NotificationControl.NotificationControlSerNum = Notification.NotificationControlSerNum " +
         "AND Notification.PatientSerNum=Patient.PatientSerNum " +
         "AND Patient.PatientSerNum=Users.UserTypeSerNum " +
-        "AND Users.Username= ? " +
-        "AND Notification.ReadStatus = 0 " +
-        "AND (Notification.LastUpdated > ? OR NotificationControl.LastUpdated > ?);";
+        "AND Users.Username= ? ";
 };
 
 exports.getAllNotifications = function () {
@@ -145,7 +143,29 @@ exports.getAllNotifications = function () {
         "NotificationControl.NotificationControlSerNum = Notification.NotificationControlSerNum " +
         "AND Notification.PatientSerNum=Patient.PatientSerNum " +
         "AND Patient.PatientSerNum=Users.UserTypeSerNum " +
+        "AND Users.Username= ? ";
+};
+
+exports.getNewNotifications=function() {
+    return "SELECT Notification.NotificationSerNum, " +
+        "Notification.DateAdded, Notification.ReadStatus, " +
+        "Notification.RefTableRowSerNum, " +
+        "NotificationControl.NotificationType, " +
+        "NotificationControl.Name_EN, NotificationControl.Name_FR, " +
+        "NotificationControl.Description_EN, " +
+        "NotificationControl.Description_FR " +
+        "" +
+        "FROM Notification, " +
+        "NotificationControl, " +
+        "Patient, " +
+        "Users " +
+        "" +
+        "WHERE " +
+        "NotificationControl.NotificationControlSerNum = Notification.NotificationControlSerNum " +
+        "AND Notification.PatientSerNum=Patient.PatientSerNum " +
+        "AND Patient.PatientSerNum=Users.UserTypeSerNum " +
         "AND Users.Username= ? " +
+        "AND Notification.ReadStatus = 0 " +
         "AND (Notification.LastUpdated > ? OR NotificationControl.LastUpdated > ?);";
 };
 
@@ -350,6 +370,22 @@ exports.getPatientId= function()
     return "SELECT Patient.PatientId FROM Patient, Users WHERE Patient.PatientSerNum = Users.UserTypeSerNum && Users.Username = ?"
 };
 
+exports.getPatientId= function()
+{
+    return "SELECT Patient.PatientId FROM Patient, Users WHERE Patient.PatientSerNum = Users.UserTypeSerNum && Users.Username = ?"
+};
+
+/**
+ * Returns the query needed to get a patient's serNum
+ * @return {string}
+ */
+exports.getPatientSerNum = function()
+{
+    return `Select Patient.PatientSerNum
+            From Patient
+            Where Patient.PatientId = ?`
+};
+
 exports.getTrustedDevice = function () {
     return "SELECT pdi.Trusted FROM PatientDeviceIdentifier pdi, Users u WHERE pdi.PatientSerNum = u.UserTypeSerNum AND u.Username = ? AND DeviceId = ?"
 };
@@ -364,4 +400,32 @@ exports.setTrusted = function () {
 
 exports.getPatientForPatientMembers = function() {
     return "SELECT FirstName, LastName, Email, Website, ProfileImage, Bio_EN, Bio_FR  FROM PatientsForPatientsPersonnel;";
+};
+
+/**
+ * Queries PushNotifications to get notifications that correspond to a patient on today's date
+ * @return {string}
+ */
+exports.getPatientCheckinPushNotifications = function() {
+   return `
+        Select PushNotification.PushNotificationSerNum
+        From PushNotification
+        Where PushNotification.PatientSerNum = ?
+            And PushNotification.NotificationControlSerNum in (12, 14)
+            And DATE_FORMAT(PushNotification.DateAdded, '%Y-%m-%d') = DATE_FORMAT(NOW(), '%Y-%m-%d');
+   `
+};
+
+/**
+ * Get all of a user's checked in appointments on today's date
+ * @return {string}
+ */
+exports.getTodaysCheckedInAppointments = function() {
+   return `
+        SELECT Appointment.AppointmentSerNum 
+        FROM Appointment 
+        WHERE Appointment.PatientSerNum = ? 
+            AND Appointment.Checkin = 1
+            AND DATE_FORMAT(Appointment.ScheduledStartTime, '%Y-%m-%d') = DATE_FORMAT(NOW(), '%Y-%m-%d');     
+   `
 };
