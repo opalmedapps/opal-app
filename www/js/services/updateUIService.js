@@ -152,7 +152,7 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors',
             },
             'Notifications':
             {
-                init:Notifications.setUserNotifications,
+                init:Notifications.initNotifications,
                 update:Notifications.updateUserNotifications
             }
         };
@@ -216,7 +216,7 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors',
             //Sets the path for data fetching
             var r=$q.defer();
             //Initializing all the services
-            RequestToServer.sendRequestWithResponse('Login',{Fields:parameters}).then(function(response)
+            RequestToServer.sendRequestWithResponse('Login', {Fields:parameters}).then(function(response)
             {
                 setServices(response.Data, 'setOnline').then(function()
                 {
