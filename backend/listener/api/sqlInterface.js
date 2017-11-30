@@ -1184,10 +1184,10 @@ function assocNotificationsWithItems(notifications){
         let promises = [];
 
         notifications.map(notif => {
-            if(itemList.includes(notif.notificationType)){
+            if(itemList.includes(notif.NotificationType)){
                 let query = queries.getNewItem();
-                query.replace('{Table}', notif.notificationType);
-                query.replace('{SerNum}', notif.notificationType + 'SerNum');
+                query.replace('{Table}', notif.NotificationType);
+                query.replace('{SerNum}', notif.NotificationType + 'SerNum');
 
                 logger.log('debug', 'item query:' + query);
 
@@ -1205,7 +1205,7 @@ function assocNotificationsWithItems(notifications){
                         let tuple = [];
 
                         let item = results.find(result => {
-                            let serNumField = notif.notificationType + "SerNum";
+                            let serNumField = notif.NotificationType + "SerNum";
                             if(result.hasOwnProperty(serNumField)) return result[serNumField] === notif.RefTableRowSerNum;
                             return false;
                         });
