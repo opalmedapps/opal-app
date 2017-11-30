@@ -1190,7 +1190,7 @@ function assocNotificationsWithItems(notifications, requestObject){
             refresh(fields, requestObject)
                 .then(results => {
                     logger.log('debug', 'results: ' + JSON.stringify(results));
-                    if(results.length === notifications.length){
+                    if(results.length > 0){
                         let tuples = notifications.map(notif => {
                             let tuple = [];
 
@@ -1206,7 +1206,7 @@ function assocNotificationsWithItems(notifications, requestObject){
                         });
                         resolve(tuples);
                     }
-                    reject('Notifications and result lengths do not match');
+                    reject({Response:'error', Reason:'Could not associate any notifications to its content'});
                 })
                 .catch(err => resolve(err))
         } else resolve(notifications)
