@@ -1183,7 +1183,7 @@ function assocNotificationsWithItems(notifications, requestObject){
 
         let fields = [];
         fields = notifications.map(notif => {
-            if(itemList.includes(notif.NotificationType) && !fields.includes(notif.NotificationType)) return notif.NotificationType
+            if(itemList.includes(notif.NotificationType) && !fields.includes(notif.NotificationType)) return notif.NotificationType + 's'
         });
 
         if(fields.length > 0) {
