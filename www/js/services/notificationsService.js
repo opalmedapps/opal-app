@@ -451,16 +451,19 @@ myApp.service('Notifications',['$filter','RequestToServer','LocalStorage','Annou
                     RequestToServer.sendRequestWithResponse('NotificationsNew', {LastUpdated: lastUpdated.getTime()})
                         .then(function (response) {
 
-                            console.log(JSON.stringify(response));
-
+                            console.log(response);
                             lastUpdated = new Date();
-                            if (response.Data) updateUserNotifications(response.Data);
+                            if (response[0]) {
+                                response[0].forEach(function(notif){
+                                    console.log(notif);
+
+                                    if(!!notif[1]) notificationTypes[notif[0].NotificationType].updateFunction(notif[1]);
+                                    updateUserNotifications(notif[0]);
+                                })
+                            }
                             r.resolve({});
                         })
-                        .catch(function (err) {
-                            console.log(JSON.stringify(err));
-                            r.reject({})
-                        });
+                        .catch(function () {r.reject({})});
                 }
                 return r.promise;
             },
