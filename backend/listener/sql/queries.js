@@ -402,6 +402,12 @@ exports.getPatientForPatientMembers = function() {
     return "SELECT FirstName, LastName, Email, Website, ProfileImage, Bio_EN, Bio_FR  FROM PatientsForPatientsPersonnel;";
 };
 
+
+/**
+ * CHECKIN QUERIES
+ * ============================
+ */
+
 /**
  * Queries PushNotifications to get notifications that correspond to a patient on today's date
  * @return {string}
@@ -428,4 +434,17 @@ exports.getTodaysCheckedInAppointments = function() {
             AND Appointment.Checkin = 1
             AND DATE_FORMAT(Appointment.ScheduledStartTime, '%Y-%m-%d') = DATE_FORMAT(NOW(), '%Y-%m-%d');     
    `
+};
+
+/**
+ * NOTIFICATION QUERIES
+ * ================================
+ */
+
+exports.getNewItem = function(){
+    return `
+        Select *
+        From {Table}
+        Where {Table}.{SerNum} = ?
+    `
 };

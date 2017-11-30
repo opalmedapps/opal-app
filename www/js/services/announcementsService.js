@@ -174,10 +174,7 @@
         {
             var number = 0;
             for (var i = 0; i < announcements.length; i++) {
-                if(announcements[i].ReadStatus === '0')
-                {
-                    number++;
-                }
+                if(announcements[i].ReadStatus === '0') number++;
             }
             return number;
         }
@@ -190,11 +187,11 @@
          *@description Iterates through the annoucements array and returns annoucement object matching the serNum
          *@returns {Object} Returns object containing annoucement
          **/
-        function getAnnouncementBySerNum(serNum)
-        {
+        function getAnnouncementBySerNum(serNum) {
+            console.log(announcements);
+
             for (var i = 0; i < announcements.length; i++) {
-                if(announcements[i].AnnouncementSerNum===serNum)
-                {
+                if(announcements[i].AnnouncementSerNum===serNum) {
                     return angular.copy(announcements[i]);
                 }
             }

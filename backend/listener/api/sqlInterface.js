@@ -298,67 +298,11 @@ exports.sendMessage=function(requestObject) {
 	return exports.runSqlQuery(queries.sendMessage(requestObject));
 };
 
+
 /**
- * checkCheckinInAria
- * @desc Check if user is already checkedin
- * @param requestObject
+ * CHECKIN FUNCTIONALITY
+ * ============================================================
  */
-exports.checkCheckinInAria = function(requestObject) {
-    const r = Q.defer();
-    const serNum = requestObject.Parameters.AppointmentSerNum;
-    const username = requestObject.UserID;
-
-    //Get the appointment aria ser
-    getAppointmentAriaSer(username, serNum).then(function(response){
-        const ariaSerNum = response[0].AppointmentAriaSer;
-
-        logger.log('debug', 'checking check in of the following appointment: ' + ariaSerNum);
-
-        //Check using Ackeem's script whether the patient has checked in at the kiosk
-        checkIfCheckedIntoAriaHelper(ariaSerNum).then(res => {
-
-            logger.log('debug', "user is checked in: " + res);
-
-            //Check in the user into mysql if they have indeed checkedin at kiosk
-            r.resolve({Response:'success', Data:{'CheckedIn': res, AppointmentSerNum:serNum}})
-        }).catch(function(error){
-            //Error occur while checking patient status
-            r.reject({Response:'error', Reason:error});
-        });
-    });
-    return r.promise;
-};
-
-/*
-exports.checkinUpdate = function(requestObject)
-{
-    var r = Q.defer();
-    connection.query(queries.getAppointmentAriaSer(),[requestObject.UserID,requestObject.Parameters.AppointmentSerNum],function(error,rows,fields)
-    {
-        if(error||rows.length==0) r.reject({'Response':'error'});
-        //console.log('AppAriaSerNums',rows);
-        var appointmentAriaSer = rows[0].AppointmentAriaSer;
-        exports.getTimeEstimate(appointmentAriaSer).then(function(data)
-        {
-            r.resolve(data);
-        }).catch(function(error)
-        {
-            r.reject({'Response':'Problem resolving time estimate.'});
-        });
-    });
-    // exports.runSqlQuery(queries.getAppointmentAriaSer(),[requestObject.UserID,requestObject.Parameters.AppointmentSerNum], exports.getTimeEstimate).then(
-    // function(response)
-    // {
-    //   //console.log(response);
-    //   r.resolve({Response:'success',Data:response});
-    // }).catch(function(error)
-    // {
-    //   r.reject({Response:'error',Reason:'Checkin update error due to '+error});
-    //});
-    return r.promise;
-};
-*/
-
 
 /**
  * checkIn
@@ -386,16 +330,6 @@ exports.checkIn=function(requestObject) {
     return r.promise;
 };
 
-/**
- * Gets a patients id and sernum to use for checkin process
- * @param username
- * @returns {Object} that holds PatientID and PatientSerNUm
- */
-function getPatientIdAndSerNum(username){
-    let id = exports.runSqlQuery(queries.getPatientId(),[username]);
-    let serNum = exports.runSqlQuery(queries.getPatientSerNum(),[id[0].PatientId]);
-    return {PatientId: id[0].PatientId, PatientSerNum: serNum[0].PatientSerNum}
-}
 
 /**
  * Calls John's PHP script in order to check in patient on Aria and Medivisit
@@ -1198,24 +1132,21 @@ exports.getQuestionnaires = function(requestObject){
 };
 
 /**
+ * NOTIFICATIONS FUNCTIONALITY
+ * =====================================
+ */
+
+/**
  * Returns a promise containing all the notifications
  * @param {object} requestObject the request
  * @returns {Promise} Returns a promise that contains the notification data
  */
 
 exports.getAllNotifications = function(requestObject){
-    "use strict";
-    var r = Q.defer();
+    let r = Q.defer();
     exports.runSqlQuery(queries.getAllNotifications(), [requestObject.UserID])
-        .then(function (queryRows) {
-            var obj = {};
-            obj.Data = queryRows;
-            r.resolve(obj);
-        })
-        .catch(function (error) {
-            r.reject(error);
-        });
-
+        .then(rows => r.resolve({Data: rows})
+        .catch(err => r.reject(err)));
     return r.promise
 };
 
@@ -1226,16 +1157,57 @@ exports.getAllNotifications = function(requestObject){
  */
 
 exports.getNewNotifications = function(requestObject){
-    var r = Q.defer();
+    let r = Q.defer();
     exports.runSqlQuery(queries.getNewNotifications(), [requestObject.UserID, requestObject.Parameters.LastUpdated, requestObject.Parameters.LastUpdated])
-        .then(function (queryRows) {
-            var obj = {};
-            obj.Data = queryRows;
-            r.resolve(obj);
+        .then(rows => {
+            if(rows.length > 0){
+                assocNotificationsWithItems(rows)
+                    .then(tuples => r.resolve(tuples))
+                    .catch(err => r.reject(err))
+            } else r.resolve({Data: rows});
         })
-        .catch(function (error) {
+        .catch(error => {
             r.reject(error);
         });
 
     return r.promise
 };
+
+function assocNotificationsWithItems(notifications){
+
+    const itemList = ['Document', 'Announcement', 'TxTeamMessage', 'EducationalMaterial'];
+
+    return new Promise((resolve, reject) => {
+        let promises = [];
+
+        notifications.map(notif => {
+            if(itemList.includes(notif.notificationType)){
+                let query = queries.getNewItem();
+                query.replace('{Table}', notif.notificationType);
+                query.replace('{SerNum}', notif.notificationType + 'SerNum');
+                promises.push(exports.runSqlQuery(query, [notif.RefTableRowSerNum]))
+            }
+        });
+
+        Promise.all(promises)
+            .then(results => {
+                if(results.length === notifications.length){
+                    let tuples = notifications.map(notif => {
+                        let tuple = [];
+
+                        let item = results.find(result => {
+                            let serNumField = notif.notificationType + "SerNum";
+                            if(result.hasOwnProperty(serNumField)) return result[serNumField] === notif.RefTableRowSerNum;
+                            return false;
+                        });
+                        tuple.push(notif);
+                        tuple.push(item);
+                        return tuple;
+                    });
+                    resolve(tuples);
+                }
+                reject('Notifications and result lengths do not match');
+            })
+            .catch(err => resolve(err))
+    })
+}
