@@ -380,8 +380,9 @@ exports.getTodaysCheckedInAppointments = function() {
 exports.getNewItem = function(){
     return `
         Select *
-        From {Table}
+        From {Table}, PostControl
         Where {Table}.{SerNum} = ?
+            And PostControl.PostControlSerNum = {Table}.PostControlSerNum
     `
 };
 
