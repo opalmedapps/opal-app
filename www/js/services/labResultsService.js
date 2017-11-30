@@ -201,7 +201,6 @@ myApp.service('LabResults',['$filter','LocalStorage','RequestToServer','$q',
              *@returns {Object} Returns object containing lab results by date
              **/
             getTestResultsByDate:function(){
-
                 return testResultsByDate;
             },
 
@@ -241,7 +240,6 @@ myApp.service('LabResults',['$filter','LocalStorage','RequestToServer','$q',
                 testResultsByDateArray=[];
                 testResultsByTypeArray=[];
                 lastUpdated = 0;
-                //testResultsToLocalStorage=[];
             },
 
             /**

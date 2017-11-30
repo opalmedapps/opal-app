@@ -65,6 +65,7 @@ myApp.service('Notifications',['$filter','RequestToServer','LocalStorage','Annou
                     readFunction:Documents.readDocument,
                     searchFunction:Documents.getDocumentBySerNum,
                     namesFunction:Documents.getDocumentNames,
+                    updateFunction: Documents.updateDocuments,
                     PageUrl:Documents.getDocumentUrl,
                     refreshType: 'Documents'
                 },
@@ -79,6 +80,7 @@ myApp.service('Notifications',['$filter','RequestToServer','LocalStorage','Annou
                     searchFunction:Documents.getDocumentBySerNum,
                     namesFunction:Documents.getDocumentNames,
                     PageUrl:Documents.getDocumentUrl,
+                    updateFunction: Documents.updateDocuments,
                     refreshType: 'Documents'
                 },
             'RoomAssignment':
@@ -103,6 +105,7 @@ myApp.service('Notifications',['$filter','RequestToServer','LocalStorage','Annou
                     searchFunction:TxTeamMessages.getTxTeamMessageBySerNum,
                     namesFunction:TxTeamMessages.getTxTeamMessageName,
                     readFunction:TxTeamMessages.readTxTeamMessage,
+                    updateFunction: TxTeamMessages.updateTxTeamMessages,
                     PageUrl:TxTeamMessages.getTxTeamMessageUrl,
                     refreshType: 'TxTeamMessages'
                 },
@@ -115,6 +118,7 @@ myApp.service('Notifications',['$filter','RequestToServer','LocalStorage','Annou
                 readFunction:Announcements.readAnnouncementBySerNum,
                 searchFunction:Announcements.getAnnouncementBySerNum,
                 namesFunction:Announcements.getAnnouncementName,
+                updateFunction: Announcements.updateAnnouncements,
                 PageUrl:Announcements.getAnnouncementUrl,
                 refreshType :'Announcements'
             },
@@ -128,6 +132,7 @@ myApp.service('Notifications',['$filter','RequestToServer','LocalStorage','Annou
                 searchFunction:EducationalMaterial.getEducationaMaterialBySerNum,
                 namesFunction:EducationalMaterial.getEducationalMaterialName,
                 openFunction:EducationalMaterial.getEducationalMaterialUrl,
+                updateFunction: EducationalMaterial.updateEducationalMaterial,
                 refreshType: 'EducationalMaterial'
             },
             'NextAppointment':{
@@ -184,7 +189,6 @@ myApp.service('Notifications',['$filter','RequestToServer','LocalStorage','Annou
             }
         };
 
-
         function readNotification(index, notification) {
             //If index is defined it the notification at that index matches the NotificationSerNum, then we can save
             //an array iteration look up.
@@ -214,9 +218,9 @@ myApp.service('Notifications',['$filter','RequestToServer','LocalStorage','Annou
                 }
             }
         }
+
         //Used by the update function, it iterates through the notifications if it finds the notification then it deletes it.
-        function searchAndDeleteNotifications(notifications)
-        {
+        function searchAndDeleteNotifications(notifications) {
             for (var i = 0; i < notifications.length; i++) {
                 for (var j = 0; j < Notifications.length; j++) {
                     if(Notifications[j].NotificationSerNum == notifications[i].NotificationSerNum) {
@@ -226,14 +230,12 @@ myApp.service('Notifications',['$filter','RequestToServer','LocalStorage','Annou
                 }
             }
         }
+
         //Adds the notification to the notifications array and the localStorage array.
-        function addUserNotifications(notifications)
-        {
+        function addUserNotifications(notifications) {
             if(typeof notifications==='undefined') return;
             var temp=angular.copy(notifications);
             for (var i = 0; i < notifications.length; i++) {
-                //if (temp[i].NotificationType == 'RoomAssignment') continue;
-
                 if(typeof notificationTypes[temp[i].NotificationType] =='undefined') break;
                 temp[i].Custom =  notificationTypes[temp[i].NotificationType].Custom;
                 temp[i].Icon = notificationTypes[temp[i].NotificationType].icon;
@@ -265,23 +267,25 @@ myApp.service('Notifications',['$filter','RequestToServer','LocalStorage','Annou
             hasFetchedAll = true;
         }
 
+        /**
+         *@ngdoc method
+         *@name updateUserNotifications
+         *@methodOf MUHCApp.service:Notifications
+         *@param {Object} notifications Finds notifications to update or adds new notifications if not found
+         *@description Updates the notificationsArray with the new information contained in the notifications parameter
+         **/
+        function updateUserNotifications(notifications) {
+            searchAndDeleteNotifications(notifications);
+            addUserNotifications(notifications);
+        }
+
         return{
 
             initNotifications:function(notifications){
                 lastUpdated = new Date();
                 setUserNotifications(notifications);
             },
-            /**
-             *@ngdoc method
-             *@name updateUserNotifications
-             *@methodOf MUHCApp.service:Notifications
-             *@param {Object} notifications Finds notifications to update or adds new notifications if not found
-             *@description Updates the notificationsArray with the new information contained in the notifications parameter
-             **/
-            updateUserNotifications:function(notifications) {
-                searchAndDeleteNotifications(notifications);
-                addUserNotifications(notifications);
-            },
+
 
             /**
              *@ngdoc method
@@ -305,7 +309,8 @@ myApp.service('Notifications',['$filter','RequestToServer','LocalStorage','Annou
             readNotification:function(index, notification) {
                 readNotification(index, notification);
             },
-            //Get number of unread news
+
+
             /**
              *@ngdoc method
              *@name getNumberUnreadNotifications
@@ -316,7 +321,7 @@ myApp.service('Notifications',['$filter','RequestToServer','LocalStorage','Annou
             getNumberUnreadNotifications:function() {
                 var number=0;
                 for (var i = 0; i < Notifications.length; i++) {
-                    if(Notifications[i].ReadStatus == '0') number++;
+                    if(Notifications[i].ReadStatus === '0') number++;
                 }
                 return number;
             },
@@ -334,9 +339,13 @@ myApp.service('Notifications',['$filter','RequestToServer','LocalStorage','Annou
                 var array=[];
                 for (var i = 0; i < Notifications.length; i++) {
                     //If ReadStatus is 0, then find actual post for notification
-                    if(Notifications[i].ReadStatus == '0') {
+                    if(Notifications[i].ReadStatus === '0') {
+
+                        console.log(Notifications[i]);
+
                         //Finding post
                         var post = notificationTypes[Notifications[i].NotificationType].searchFunction(Notifications[i].RefTableRowSerNum);
+
                         if(post){
                             Notifications[i].Description_EN = Notifications[i].Description_EN.replace(/\$\w+/, post.RoomLocation_EN||"");
                             Notifications[i].Description_FR = Notifications[i].Description_FR.replace(/\$\w+/, post.RoomLocation_FR||"");
@@ -353,6 +362,7 @@ myApp.service('Notifications',['$filter','RequestToServer','LocalStorage','Annou
                         }
                     }
                 }
+
                 return array;
             },
             /**
@@ -438,15 +448,13 @@ myApp.service('Notifications',['$filter','RequestToServer','LocalStorage','Annou
 
                 if (lastUpdated > Date.now() - 10000) r.resolve({});
                 else{
-                    console.log('getting new notifications');
-
                     RequestToServer.sendRequestWithResponse('NotificationsNew', {LastUpdated: lastUpdated.getTime()})
                         .then(function (response) {
 
-                            console.log('response: ' + JSON.stringify(response));
+                            console.log(JSON.stringify(response));
 
                             lastUpdated = new Date();
-                            if (response.Data) this.updateUserNotifications(response.Data);
+                            if (response.Data) updateUserNotifications(response.Data);
                             r.resolve({});
                         })
                         .catch(function () {
