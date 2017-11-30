@@ -103,71 +103,7 @@ exports.getDocumentsContentQuery = function()
     return "SELECT Document.DocumentSerNum, Document.FinalFileName FROM Document, Patient, Users WHERE Document.DocumentSerNum IN ? AND Document.PatientSerNum = Patient.PatientSerNum AND Patient.PatientSerNum = Users.UserTypeSerNum AND Users.Username = ?";
 };
 
-exports.patientNotificationsTableFields=function()
-{
-    return "SELECT Notification.NotificationSerNum, " +
-        "Notification.DateAdded, Notification.ReadStatus, " +
-        "Notification.RefTableRowSerNum, " +
-        "NotificationControl.NotificationType, " +
-        "NotificationControl.Name_EN, NotificationControl.Name_FR, " +
-        "NotificationControl.Description_EN, " +
-        "NotificationControl.Description_FR " +
-        "" +
-        "FROM Notification, " +
-        "NotificationControl, " +
-        "Patient, " +
-        "Users " +
-        "" +
-        "WHERE " +
-        "NotificationControl.NotificationControlSerNum = Notification.NotificationControlSerNum " +
-        "AND Notification.PatientSerNum=Patient.PatientSerNum " +
-        "AND Patient.PatientSerNum=Users.UserTypeSerNum " +
-        "AND Users.Username= ? ";
-};
 
-exports.getAllNotifications = function () {
-    return "SELECT Notification.NotificationSerNum, " +
-        "Notification.DateAdded, Notification.ReadStatus, " +
-        "Notification.RefTableRowSerNum, " +
-        "NotificationControl.NotificationType, " +
-        "NotificationControl.Name_EN, NotificationControl.Name_FR, " +
-        "NotificationControl.Description_EN, " +
-        "NotificationControl.Description_FR " +
-        "" +
-        "FROM Notification, " +
-        "NotificationControl, " +
-        "Patient, " +
-        "Users " +
-        "" +
-        "WHERE " +
-        "NotificationControl.NotificationControlSerNum = Notification.NotificationControlSerNum " +
-        "AND Notification.PatientSerNum=Patient.PatientSerNum " +
-        "AND Patient.PatientSerNum=Users.UserTypeSerNum " +
-        "AND Users.Username= ? ";
-};
-
-exports.getNewNotifications=function() {
-    return "SELECT Notification.NotificationSerNum, " +
-        "Notification.DateAdded, Notification.ReadStatus, " +
-        "Notification.RefTableRowSerNum, " +
-        "NotificationControl.NotificationType, " +
-        "NotificationControl.Name_EN, NotificationControl.Name_FR, " +
-        "NotificationControl.Description_EN, " +
-        "NotificationControl.Description_FR " +
-        "" +
-        "FROM Notification, " +
-        "NotificationControl, " +
-        "Patient, " +
-        "Users " +
-        "" +
-        "WHERE " +
-        "NotificationControl.NotificationControlSerNum = Notification.NotificationControlSerNum " +
-        "AND Notification.PatientSerNum=Patient.PatientSerNum " +
-        "AND Patient.PatientSerNum=Users.UserTypeSerNum " +
-        "AND Users.Username= ? " +
-        "AND Notification.ReadStatus = 0 " +
-        "AND (Notification.DateAdded > ? OR NotificationControl.DateAdded > ?);";
-};
 
 exports.patientTeamMessagesTableFields=function()
 {
@@ -442,5 +378,75 @@ exports.getTodaysCheckedInAppointments = function() {
  */
 
 exports.getNewItem = function(){
-    return "Select * From {Table} Where {Table}.{SerNum} = ?"
+    return `
+        Select *
+        From {Table}
+        Where {Table}.{SerNum} = ?
+    `
+};
+
+exports.patientNotificationsTableFields=function()
+{
+    return "SELECT Notification.NotificationSerNum, " +
+        "Notification.DateAdded, Notification.ReadStatus, " +
+        "Notification.RefTableRowSerNum, " +
+        "NotificationControl.NotificationType, " +
+        "NotificationControl.Name_EN, NotificationControl.Name_FR, " +
+        "NotificationControl.Description_EN, " +
+        "NotificationControl.Description_FR " +
+        "" +
+        "FROM Notification, " +
+        "NotificationControl, " +
+        "Patient, " +
+        "Users " +
+        "" +
+        "WHERE " +
+        "NotificationControl.NotificationControlSerNum = Notification.NotificationControlSerNum " +
+        "AND Notification.PatientSerNum=Patient.PatientSerNum " +
+        "AND Patient.PatientSerNum=Users.UserTypeSerNum " +
+        "AND Users.Username= ? ";
+};
+
+exports.getAllNotifications = function () {
+    return "SELECT Notification.NotificationSerNum, " +
+        "Notification.DateAdded, Notification.ReadStatus, " +
+        "Notification.RefTableRowSerNum, " +
+        "NotificationControl.NotificationType, " +
+        "NotificationControl.Name_EN, NotificationControl.Name_FR, " +
+        "NotificationControl.Description_EN, " +
+        "NotificationControl.Description_FR " +
+        "" +
+        "FROM Notification, " +
+        "NotificationControl, " +
+        "Patient, " +
+        "Users " +
+        "" +
+        "WHERE " +
+        "NotificationControl.NotificationControlSerNum = Notification.NotificationControlSerNum " +
+        "AND Notification.PatientSerNum=Patient.PatientSerNum " +
+        "AND Patient.PatientSerNum=Users.UserTypeSerNum " +
+        "AND Users.Username= ? ";
+};
+
+exports.getNewNotifications=function() {
+    return "SELECT Notification.NotificationSerNum, " +
+        "Notification.DateAdded, Notification.ReadStatus, " +
+        "Notification.RefTableRowSerNum, " +
+        "NotificationControl.NotificationType, " +
+        "NotificationControl.Name_EN, NotificationControl.Name_FR, " +
+        "NotificationControl.Description_EN, " +
+        "NotificationControl.Description_FR " +
+        "" +
+        "FROM Notification, " +
+        "NotificationControl, " +
+        "Patient, " +
+        "Users " +
+        "" +
+        "WHERE " +
+        "NotificationControl.NotificationControlSerNum = Notification.NotificationControlSerNum " +
+        "AND Notification.PatientSerNum=Patient.PatientSerNum " +
+        "AND Patient.PatientSerNum=Users.UserTypeSerNum " +
+        "AND Users.Username= ? " +
+        "AND Notification.ReadStatus = 0 " +
+        "AND (Notification.DateAdded > ? OR NotificationControl.DateAdded > ?);";
 };
