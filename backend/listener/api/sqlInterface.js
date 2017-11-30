@@ -1190,7 +1190,7 @@ function assocNotificationsWithItems(notifications, requestObject){
             refresh(fields, requestObject)
                 .then(results => {
                     logger.log('debug', 'results: ' + JSON.stringify(results));
-                    if(results.Data.length > 0){
+                    if(!!results.Data){
                         results = results.Data;
                         let tuples = notifications.map(notif => {
                             let tuple = [];
