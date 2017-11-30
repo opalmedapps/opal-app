@@ -76,9 +76,8 @@
         {
             for (var i = 0; i <array.length; i++) {
                 for (var j = 0; j < announcements.length; j++) {
-                    if(announcements[j].AnnouncementSerNum === array[i].AnnouncementSerNum)
-                    {
-                        announcements.splice(j,1);
+                    if(announcements[j].AnnouncementSerNum === array[i].AnnouncementSerNum) {
+                        array.splice(i,1);
                     }
                 }
             }
@@ -128,6 +127,7 @@
          **/
         function updateAnnouncements(array)
         {
+            console.log('updating announcements');
             findAndDeleteAnnouncements(array);
             addAnnouncements(array);
         }

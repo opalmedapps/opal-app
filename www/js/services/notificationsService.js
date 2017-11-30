@@ -275,8 +275,13 @@ myApp.service('Notifications',['$filter','RequestToServer','LocalStorage','Annou
          *@description Updates the notificationsArray with the new information contained in the notifications parameter
          **/
         function updateUserNotifications(notifications) {
+
+            console.log('updating notifications...');
+
             searchAndDeleteNotifications(notifications);
             addUserNotifications(notifications);
+
+            console.log(Notifications);
         }
 
         return{
@@ -451,14 +456,13 @@ myApp.service('Notifications',['$filter','RequestToServer','LocalStorage','Annou
                     RequestToServer.sendRequestWithResponse('NotificationsNew', {LastUpdated: lastUpdated.getTime()})
                         .then(function (response) {
 
-                            console.log(response);
+                            console.log("response: " + JSON.stringify(response));
                             lastUpdated = new Date();
-                            if (response[0]) {
-                                response[0].forEach(function(notif){
+                            if (response.Data && response.Data.length > 0) {
+                                response.Data.forEach(function(notif){
                                     console.log(notif);
-
-                                    if(!!notif[1]) notificationTypes[notif[0].NotificationType].updateFunction(notif[1]);
-                                    updateUserNotifications(notif[0]);
+                                    if(notif[1]) notificationTypes[notif[0].NotificationType].updateFunction([notif[1]]);
+                                    updateUserNotifications([notif[0]]);
                                 })
                             }
                             r.resolve({});
