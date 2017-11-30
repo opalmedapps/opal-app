@@ -1185,7 +1185,7 @@ function assocNotificationsWithItems(notifications, requestObject){
             if(itemList.includes(notif.NotificationType) && !fields.includes(notif.NotificationType)) return notif.NotificationType
         });
 
-        if(promises.length > 0) {
+        if(fields.length > 0) {
             refresh(fields, requestObject)
                 .then(results => {
                     logger.log('debug', 'results: ' + JSON.stringify(results));
@@ -1209,7 +1209,6 @@ function assocNotificationsWithItems(notifications, requestObject){
                 })
                 .catch(err => resolve(err))
         } else resolve(notifications)
-
     })
 }
 
