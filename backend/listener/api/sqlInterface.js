@@ -1181,7 +1181,8 @@ function assocNotificationsWithItems(notifications, requestObject){
     return new Promise((resolve, reject) => {
         const itemList = ['Document', 'Announcement', 'TxTeamMessage', 'EducationalMaterial'];
 
-        let fields = notifications.map(notif => {
+        let fields = [];
+        fields = notifications.map(notif => {
             if(itemList.includes(notif.NotificationType) && !fields.includes(notif.NotificationType)) return notif.NotificationType
         });
 
