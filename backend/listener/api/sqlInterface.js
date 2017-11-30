@@ -1165,7 +1165,7 @@ exports.getNewNotifications = function(requestObject){
 
             if(rows.length > 0){
                 assocNotificationsWithItems(rows, requestObject)
-                    .then(tuples => r.resolve(tuples))
+                    .then(tuples => r.resolve({Data:tuples}))
                     .catch(err => r.reject(err))
             } else r.resolve({Data: rows});
         })
