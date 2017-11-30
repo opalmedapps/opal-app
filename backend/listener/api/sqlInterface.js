@@ -1188,8 +1188,8 @@ function assocNotificationsWithItems(notifications){
 
             if(itemList.includes(notif.NotificationType)){
                 let query = queries.getNewItem();
-                query.replace('{Table}', notif.NotificationType);
-                query.replace('{SerNum}', notif.NotificationType + 'SerNum');
+                query = query.replace("{Table}", notif.NotificationType);
+                query = query.replace("{SerNum}", notif.NotificationType + "SerNum");
 
                 logger.log('debug', 'item query:' + query);
 
