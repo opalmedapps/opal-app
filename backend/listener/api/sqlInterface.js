@@ -1190,10 +1190,10 @@ function assocNotificationsWithItems(notifications, requestObject){
             refresh(fields, requestObject)
                 .then(results => {
                     logger.log('debug', 'results: ' + JSON.stringify(results));
-                    if(results.length > 0){
+                    if(results.Data.length > 0){
+                        results = results.Data;
                         let tuples = notifications.map(notif => {
                             let tuple = [];
-
                             let item = results.find(result => {
                                 logger.log('debug', 'result: ' + JSON.stringify(result));
                                 let serNumField = notif.NotificationType + "SerNum";
