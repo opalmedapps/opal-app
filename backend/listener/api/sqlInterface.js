@@ -1194,7 +1194,7 @@ function assocNotificationsWithItems(notifications, requestObject){
                         results = results.Data;
 
                         let resultsArray = [];
-                        results.keys().map(key => resultsArray = resultsArray.concat(results[key]));
+                        Object.keys(results).map(key => resultsArray = resultsArray.concat(results[key]));
 
                         let tuples = notifications.map(notif => {
                             let tuple = [];
