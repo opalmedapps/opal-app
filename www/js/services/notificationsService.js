@@ -457,7 +457,8 @@ myApp.service('Notifications',['$filter','RequestToServer','LocalStorage','Annou
                             if (response.Data) updateUserNotifications(response.Data);
                             r.resolve({});
                         })
-                        .catch(function () {
+                        .catch(function (err) {
+                            console.log(JSON.stringify(err));
                             r.reject({})
                         });
                 }

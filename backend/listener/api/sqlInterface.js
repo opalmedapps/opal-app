@@ -1160,6 +1160,9 @@ exports.getNewNotifications = function(requestObject){
     let r = Q.defer();
     exports.runSqlQuery(queries.getNewNotifications(), [requestObject.UserID, requestObject.Parameters.LastUpdated, requestObject.Parameters.LastUpdated])
         .then(rows => {
+
+            logger.log('debug', 'new notifications: ' + JSON.stringify(rows));
+
             if(rows.length > 0){
                 assocNotificationsWithItems(rows)
                     .then(tuples => r.resolve(tuples))
@@ -1185,12 +1188,18 @@ function assocNotificationsWithItems(notifications){
                 let query = queries.getNewItem();
                 query.replace('{Table}', notif.notificationType);
                 query.replace('{SerNum}', notif.notificationType + 'SerNum');
+
+                logger.log('debug', 'item query:' + query);
+
                 promises.push(exports.runSqlQuery(query, [notif.RefTableRowSerNum]))
             }
         });
 
         Promise.all(promises)
             .then(results => {
+
+                logger.log('debug', 'results: ' + JSON.stringify(results));
+
                 if(results.length === notifications.length){
                     let tuples = notifications.map(notif => {
                         let tuple = [];

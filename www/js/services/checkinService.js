@@ -166,7 +166,7 @@
             var r = $q.defer();
 
             //Request is sent with the AppointmentSerNum
-            RequestToServer.sendRequestWithResponse('CheckCheckin', {PatientSerNum: Patient.getPatientSerNum()})
+            RequestToServer.sendRequestWithResponse('CheckCheckin', {PatientSerNum: Patient.getUserSerNum()})
                 .then(function(response) {
                     //Response is either success or failure with the appointmentSerNum again in the data object
                     if (response.Data.hasOwnProperty('AttemptedCheckin') && response.Data.AttemptedCheckin == 'true') {
