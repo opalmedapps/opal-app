@@ -442,9 +442,5 @@ exports.getTodaysCheckedInAppointments = function() {
  */
 
 exports.getNewItem = function(){
-    return `
-        Select *
-        From {Table}
-        Where {Table}.{SerNum} = ?
-    `
+    return "Select * From {Table} Where {Table}.{SerNum} = ?"
 };
