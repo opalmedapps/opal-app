@@ -42,7 +42,6 @@ exports.refresh = function (requestObject) {
     if(fields=='All'){
       sqlInterface.getPatientTableFields(UserId,timestamp).then(function(objectToFirebase){
         objectToFirebase.Data = utility.resolveEmptyResponse(objectToFirebase.Data);
-        //console.log('Hello World');
         r.resolve(objectToFirebase);
       }).catch(function(error){
         r.reject(error);

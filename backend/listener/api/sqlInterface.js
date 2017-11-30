@@ -1164,7 +1164,7 @@ exports.getNewNotifications = function(requestObject){
             logger.log('debug', 'new notifications: ' + JSON.stringify(rows));
 
             if(rows.length > 0){
-                assocNotificationsWithItems(rows)
+                assocNotificationsWithItems(rows, requestObject)
                     .then(tuples => r.resolve(tuples))
                     .catch(err => r.reject(err))
             } else r.resolve({Data: rows});
@@ -1176,41 +1176,25 @@ exports.getNewNotifications = function(requestObject){
     return r.promise
 };
 
-function assocNotificationsWithItems(notifications){
+function assocNotificationsWithItems(notifications, requestObject){
 
     return new Promise((resolve, reject) => {
         const itemList = ['Document', 'Announcement', 'TxTeamMessage', 'EducationalMaterial'];
-        let promises = [];
 
-        notifications.map(notif => {
-
-            logger.log('Notification type: ' + notif.NotificationType);
-
-            if(itemList.includes(notif.NotificationType)){
-                let query = queries.getNewItem();
-                query = query.replace("{Table}", notif.NotificationType);
-                query = query.replace("{Table}.", notif.NotificationType + '.');
-                query = query.replace("{SerNum}", notif.NotificationType + "SerNum");
-
-                logger.log('debug', 'item query:' + query);
-
-                promises.push(exports.runSqlQuery(query, [notif.RefTableRowSerNum]))
-            }
+        let fields = notifications.map(notif => {
+            if(itemList.includes(notif.NotificationType) && !fields.includes(notif.NotificationType)) return notif.NotificationType
         });
 
         if(promises.length > 0) {
-            Promise.all(promises)
+            refresh(fields, requestObject)
                 .then(results => {
-
                     logger.log('debug', 'results: ' + JSON.stringify(results));
-
                     if(results.length === notifications.length){
                         let tuples = notifications.map(notif => {
                             let tuple = [];
 
                             let item = results.find(result => {
                                 logger.log('debug', 'result: ' + JSON.stringify(result));
-
                                 let serNumField = notif.NotificationType + "SerNum";
                                 if(result.hasOwnProperty(serNumField)) return result[serNumField] === notif.RefTableRowSerNum;
                                 return false;
@@ -1227,4 +1211,19 @@ function assocNotificationsWithItems(notifications){
         } else resolve(notifications)
 
     })
+}
+
+function refresh (fields, requestObject) {
+    let r = Q.defer();
+    let UserId=requestObject.UserID;
+    let today = new Date();
+    let timestamp = today.setHours(0,0,0,0);
+
+    exports.getPatientTableFields(UserId, timestamp, fields).then(rows => {
+            rows.Data= utility.resolveEmptyResponse(rows.Data);
+            r.resolve(rows);
+        })
+        .catch(err => r.reject(err));
+
+    return r.promise;
 }

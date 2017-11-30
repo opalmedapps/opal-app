@@ -379,6 +379,10 @@ exports.getTodaysCheckedInAppointments = function() {
 
 exports.getNewItem = function(){
     return `
+    IF COL_LENGTH('.tableName', 'columnName') IS NOT NULL
+    BEGIN
+        -- Column Exists
+    END
         Select *
         From {Table}, PostControl
         Where {Table}.{SerNum} = ?
