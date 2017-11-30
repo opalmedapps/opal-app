@@ -1178,12 +1178,14 @@ exports.getNewNotifications = function(requestObject){
 
 function assocNotificationsWithItems(notifications){
 
-    const itemList = ['Document', 'Announcement', 'TxTeamMessage', 'EducationalMaterial'];
-
     return new Promise((resolve, reject) => {
+        const itemList = ['Document', 'Announcement', 'TxTeamMessage', 'EducationalMaterial'];
         let promises = [];
 
         notifications.map(notif => {
+
+            logger.log('Notification type: ' + notif.NotificationType);
+
             if(itemList.includes(notif.NotificationType)){
                 let query = queries.getNewItem();
                 query.replace('{Table}', notif.NotificationType);
@@ -1195,28 +1197,31 @@ function assocNotificationsWithItems(notifications){
             }
         });
 
-        Promise.all(promises)
-            .then(results => {
+        if(promises.length > 0) {
+            Promise.all(promises)
+                .then(results => {
 
-                logger.log('debug', 'results: ' + JSON.stringify(results));
+                    logger.log('debug', 'results: ' + JSON.stringify(results));
 
-                if(results.length === notifications.length){
-                    let tuples = notifications.map(notif => {
-                        let tuple = [];
+                    if(results.length === notifications.length){
+                        let tuples = notifications.map(notif => {
+                            let tuple = [];
 
-                        let item = results.find(result => {
-                            let serNumField = notif.NotificationType + "SerNum";
-                            if(result.hasOwnProperty(serNumField)) return result[serNumField] === notif.RefTableRowSerNum;
-                            return false;
+                            let item = results.find(result => {
+                                let serNumField = notif.NotificationType + "SerNum";
+                                if(result.hasOwnProperty(serNumField)) return result[serNumField] === notif.RefTableRowSerNum;
+                                return false;
+                            });
+                            tuple.push(notif);
+                            tuple.push(item);
+                            return tuple;
                         });
-                        tuple.push(notif);
-                        tuple.push(item);
-                        return tuple;
-                    });
-                    resolve(tuples);
-                }
-                reject('Notifications and result lengths do not match');
-            })
-            .catch(err => resolve(err))
+                        resolve(tuples);
+                    }
+                    reject('Notifications and result lengths do not match');
+                })
+                .catch(err => resolve(err))
+        } else resolve(notifications)
+
     })
 }
