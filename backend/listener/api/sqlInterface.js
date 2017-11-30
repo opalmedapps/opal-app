@@ -1209,7 +1209,7 @@ function assocNotificationsWithItems(notifications){
                             let tuple = [];
 
                             let item = results.find(result => {
-                                logger.log('debug', 'result: ' + result);
+                                logger.log('debug', 'result: ' + JSON.stringify(result));
 
                                 let serNumField = notif.NotificationType + "SerNum";
                                 if(result.hasOwnProperty(serNumField)) return result[serNumField] === notif.RefTableRowSerNum;
