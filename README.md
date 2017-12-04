@@ -31,7 +31,7 @@ If you see the current version of the Node runtime installed, then all is good! 
 * Install http-server
 
 ```
-npm install -g http-server
+sudo npm install -g http-server
 ```
 
 This globally installs a simple, zero-configuration command line server that will be used to host the Opal app locally when developing in the browser.
@@ -39,7 +39,7 @@ This globally installs a simple, zero-configuration command line server that wil
 * Install [Bower](https://bower.io/)
 
 ```
-npm install -g bower
+sudo npm install -g bower
 ```
 
 Bower is our application's package manager. This allows all of our libraries to stay in sync and updated across all developing platforms.
