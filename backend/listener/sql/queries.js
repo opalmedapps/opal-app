@@ -377,19 +377,6 @@ exports.getTodaysCheckedInAppointments = function() {
  * ================================
  */
 
-exports.getNewItem = function(){
-    return `
-    IF COL_LENGTH('.tableName', 'columnName') IS NOT NULL
-    BEGIN
-        -- Column Exists
-    END
-        Select *
-        From {Table}, PostControl
-        Where {Table}.{SerNum} = ?
-            And PostControl.PostControlSerNum = {Table}.PostControlSerNum
-    `
-};
-
 exports.patientNotificationsTableFields=function()
 {
     return "SELECT Notification.NotificationSerNum, " +
@@ -412,26 +399,6 @@ exports.patientNotificationsTableFields=function()
         "AND Users.Username= ? ";
 };
 
-exports.getAllNotifications = function () {
-    return "SELECT Notification.NotificationSerNum, " +
-        "Notification.DateAdded, Notification.ReadStatus, " +
-        "Notification.RefTableRowSerNum, " +
-        "NotificationControl.NotificationType, " +
-        "NotificationControl.Name_EN, NotificationControl.Name_FR, " +
-        "NotificationControl.Description_EN, " +
-        "NotificationControl.Description_FR " +
-        "" +
-        "FROM Notification, " +
-        "NotificationControl, " +
-        "Patient, " +
-        "Users " +
-        "" +
-        "WHERE " +
-        "NotificationControl.NotificationControlSerNum = Notification.NotificationControlSerNum " +
-        "AND Notification.PatientSerNum=Patient.PatientSerNum " +
-        "AND Patient.PatientSerNum=Users.UserTypeSerNum " +
-        "AND Users.Username= ? ";
-};
 
 exports.getNewNotifications=function() {
     return "SELECT Notification.NotificationSerNum, " +
