@@ -21,16 +21,19 @@ TARGET_DIR=''
 #Check if working directory exists
 if [ ! -d "$WORKING_DIR" ]; then
 	echo "ERROR: Specified working directory in configuration does not exist. Please fix before continuing."
+	exit -1
 fi
 
 #Check if pre-production directory exists
 if [ ! -d "$PREPROD_DIR" ]; then
 	echo "ERROR: Specified pre-production directory in configuration does not exist. Please fix before continuing."
+	exit -1
 fi
 
 #Check if production directory exists
 if [ ! -d "$PROD_DIR" ]; then
 	echo "ERROR: Specified production directory in configuration does not exist. Please fix before continuing."
+	exit -1
 fi
 
 #If there is no first parameter, then display the "help" view with instructions on how to use this script
