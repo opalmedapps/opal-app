@@ -138,7 +138,7 @@ Linux or Windows you can only build Android distribution**
 2) Install [Cordova](https://cordova.apache.org/) globally with the following command:
 
 ```
-npm install -g cordova
+sudo npm install -g cordova
 ```
 
 3) Create a Cordova project in any desired directory that's **NOT** the in qplus directory:
@@ -163,10 +163,10 @@ cordova platform add android
 Now you should have a properly configured Cordova project that can be compiled into both Android and iOS native code. However there
 are still some dependencies needed for the build script to run properly...
 
-7) Install [Gulp](https://gulpjs.com/) globally
+7)Install [Gulp](https://gulpjs.com/) globally
 
 ```
-npm install -g gulp
+npm install gulp-cli -g
 ```
 
 Gulp is in charge of automating a lot of the build process such as minifying html/css/javascript, compressing images,
