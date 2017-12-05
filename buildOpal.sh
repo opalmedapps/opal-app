@@ -213,7 +213,10 @@ then
 		cp -a $WORKING_DIR/www/. $TARGET_DIR/www
 		rm www/karma.conf.js
 		rm www/package.json
-		rm -r www/node_modules
+
+		if [ -d "$WORKING_DIR/www/node_modules" ]; then
+            rm -r www/node_modules
+        fi
 	fi
 
 	#TODO: UPDATE VERSION # IN CONFIG.XML + Gradle.Build file
