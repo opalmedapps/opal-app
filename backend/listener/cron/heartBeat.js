@@ -54,7 +54,7 @@ function init(){
 
     setInterval(() => {
         startHeartBeat()
-    }, 30000)
+    }, 60000)
 
 }
 
