@@ -22,6 +22,10 @@ To invite users to upgrade in case of vulnerabilities.
 
 ## [PRODUCTION]
 
+### v1.5.1
+* Fix security backend with current async decryption function
+* Fix various UI bugs
+
 ### v1.4.7
 * Fix password field not being set
 
