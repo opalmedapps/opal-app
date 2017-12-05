@@ -199,6 +199,7 @@ The build script is very simple and detailed instructions can be found by runnin
 2) Any new features should be unit tested
 3) Any new features should be documented using JSDoc format
 4) Any new features should be added to the Wiki
+5) Follow this [branching model](http://nvie.com/posts/a-successful-git-branching-model/)
 
 ## Built With
 
