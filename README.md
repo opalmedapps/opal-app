@@ -223,6 +223,8 @@ Just like building, deployment is rather tedious and has a bit of overheard when
 5) Upload the built application to Fabric
     * If on Android Studio, simply drag the APK from /build/outputs/apk
     * If on Xcode, Archive the project and if you are logged into Fabric, the app will automatically detect the Archive and ask you to distribute.
+    * For more information on how to distribute builds via Fabric and Beta [visit their documentation](https://docs.fabric.io/apple/beta/overview.html)
+
 
 ## Best Practices
 
