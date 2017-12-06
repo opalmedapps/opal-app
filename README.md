@@ -105,11 +105,11 @@ Before deploying and after you have ran your unit tests, developers should still
 
 It is quite simple to do either:
 
-1) Follow the build steps listed below.
+1) Follow the build steps listed below in the Deployment section (you will need to follow both the PreRequisites and Build subsections for the next steps to work). 
 
 Once you have built the app you have two options...
 
-1) Use Cordova to load APK onto phone using
+2) Use Cordova to load APK onto phone using
 
 ```
 cordova run
@@ -117,7 +117,7 @@ cordova run
 
 in your Cordova project directory
 
-2) Using [XCode](https://developer.apple.com/library/content/documentation/IDEs/Conceptual/iOS_Simulator_Guide/Introduction/Introduction.html) or [Android Studio](https://developer.android.com/studio/run/emulator.html) to run emulator or load APK onto phone. 
+3) Using [XCode](https://developer.apple.com/library/content/documentation/IDEs/Conceptual/iOS_Simulator_Guide/Introduction/Introduction.html) or [Android Studio](https://developer.android.com/studio/run/emulator.html) to run emulator or load APK onto phone. 
 
 ## Building
 
@@ -182,7 +182,10 @@ and removing debug statements.
 
 9) (**WINDOWS AND LINUX ONLY**) Change build script to only build Android distribution
 
-10) Change working (qplus project parent) and target (Cordova project parents) directories in build script to match your computer's destinations
+10) Change working (qplus project parent) and target (Cordova project parents) directories in build script to match your computer's destinations. The variables you need to change in the build script are titled: 
+    * WORKING_DIR - this is the complete path from root to your working directory , i.e. the cloned qplus repo. You need to point this to the root of the cloned repo i.e should end in '/qplus' 
+    * PREPROD_DIR - this is the complete path to your PreProd cordova project. It should point to the root of the project directory. 
+    * PROD_DIR - this is the complete path to your Prod cordova project. It should point to the root of the project directory. 
 
 Voila! You are now ready to run build script. If you didn't follow any of these properly the build script will catch and report it you.
 
