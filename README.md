@@ -119,9 +119,9 @@ in your Cordova project directory
 
 2) Using [XCode](https://developer.apple.com/library/content/documentation/IDEs/Conceptual/iOS_Simulator_Guide/Introduction/Introduction.html) or [Android Studio](https://developer.android.com/studio/run/emulator.html) to run emulator or load APK onto phone. 
 
-## Deployment
+## Building
 
-Deployment is a rather rigorous process due to the nature of producing software that runs on various platforms. However, James Brace
+Building is a rather rigorous process due to the nature of producing software that runs on various platforms. However, James Brace
 has written a simple, yet practical build script that avoids a lot of the headaches in building the app. It is planned to extend the build script
 in order to make deployment automated as well...
 
@@ -135,25 +135,33 @@ Before being able to run build script there are a few steps one has to take that
 Linux or Windows you can only build Android distribution**
 
 1) Follow the the instructions in the Installation section.
-2) Install [Cordova](https://cordova.apache.org/) globally with the following command:
+2) Install [JDK 8](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html) and update your OS's JAVA_HOME variable (you'll need to Google how to do this depending on your OS). **NOTE: Cordova has an issue with JDK 9 so you need to make sure you have JDK 8 installed and referenced as an environment variable or Cordova will not be able to build**
+3) Install [Android Studio](https://developer.android.com/studio/index.html) and [Xcode](https://developer.apple.com/xcode/) (if using macOS)
+4) **(macOS Only)** Install and setup [CocoaPods](https://stackoverflow.com/questions/20755044/how-to-install-cocoa-pods) 
+5) Install [Cordova](https://cordova.apache.org/) globally with the following command:
 
 ```
 sudo npm install -g cordova
 ```
 
-3) Create a Cordova project in any desired directory that's **NOT** the in qplus directory:
+6) Create a Cordova project in any desired directory that's **NOT** the in qplus directory:
 
 ```
 cordova create <NameOfProject>
 ```
 
-4) Navigate to this newly created directory.
+7) Navigate to this newly created directory.
 
-5) Replace the current config.xml with the one in the qplus parent directory
+8) Replace the current config.xml with the one in the qplus parent directory
 
 **NOTE: Both Prod and PreProd branches have their own config.xml. Carefully make sure you are copying over the correct one!**
 
-6) Add Android and iOS (if on macOS) platforms to cordova project:
+9) Add Android and iOS (if on macOS) platforms to cordova project:
+
+**If using Cordova version >= 7.0.0**
+```
+cordova plugin add cordova-plugin-ios-base64 --nofetch
+```
 
 ```
 cordova platform add ios
@@ -163,7 +171,7 @@ cordova platform add android
 Now you should have a properly configured Cordova project that can be compiled into both Android and iOS native code. However there
 are still some dependencies needed for the build script to run properly...
 
-7)Install [Gulp](https://gulpjs.com/) globally
+8) Install [Gulp](https://gulpjs.com/) globally
 
 ```
 npm install gulp-cli -g
@@ -172,9 +180,9 @@ npm install gulp-cli -g
 Gulp is in charge of automating a lot of the build process such as minifying html/css/javascript, compressing images,
 and removing debug statements.
 
-8) (**WINDOWS AND LINUX ONLY**) Change build script to only build Android distribution
+9) (**WINDOWS AND LINUX ONLY**) Change build script to only build Android distribution
 
-9) Change working (qplus project parent) and target (Cordova project parents) directories in build script to match your computer's destinations
+10) Change working (qplus project parent) and target (Cordova project parents) directories in build script to match your computer's destinations
 
 Voila! You are now ready to run build script. If you didn't follow any of these properly the build script will catch and report it you.
 
@@ -183,15 +191,38 @@ Voila! You are now ready to run build script. If you didn't follow any of these 
 
 The build script is very simple and detailed instructions can be found by running the script without any arguments.
 
-1) Make sure you are on the correct branch (either PreProd or Prod)
-2) Update the version number in the config.xml file found in your qplus project parent directory (**This will soon be a deprecated step as it will be handled by the script itself**)
-3) Run the script with the target as first argument and version as the second argument
+1) Follow the instructions in the prerequisites if you haven't already
+2) Make sure you are on the correct branch (either PreProd or Prod)
+3) Update the version number in the config.xml file found in your qplus project parent directory (**This will soon be a deprecated step as it will be handled by the script itself**)
+4) Run the script with the target as first argument and version as the second argument
 
 ```
 ./buildOpal.sh prod 1.10.1
 ```
 
-4) The script will catch and display ALL errors and will stop the build process if any occur.
+5) The script will catch and display ALL errors and will stop the build process if any occur.
+
+## Deployment
+
+Just like building, deployment is rather tedious and has a bit of overheard when performing for the first time. Currently there is no deployment script, however James Brace plans on developing one to expedite and automate the process.
+
+### Prerequisites
+1) Follow the Prerequisites for Building
+2) Install [Fabric](https://fabric.io/kits?show_signup=true) and create an account. Here's [how to install the plugin for Android Studio.](https://docs.fabric.io/android/fabric/overview.html)
+3) Have an existing team member add you to the Opal Health Fabric project
+4) Open up Android Studio and/or Xcode (if using macOS) and open the projects that exist underneath the Cordova project platform directories. For example for Android Studio point the existing project to /path/to/cordova/project/platforms/android
+5) (**macOS ONLY**) Create an Apple Developer Account. You will need an existing team member to help you with this. Once you have an Apple Developer Account to use, you will need to configure the Xcode project with that account in order to provision and build.
+6) Make sure the Fabric app for Xcode and Android studio is properly configured.
+7) Follow Crashlytics installation in the Fabric apps (will need to do this for both Android and iOS). You may need an existing team member's help to set this up.
+
+### Deploying
+1) Follow the instructions for Building
+2) Open and login to Fabric
+3) Open Android Studio and/or Xcode
+4) In Fabric application/plugin go to builds section of your desired app
+5) Upload the built application to Fabric
+    * If on Android Studio, simply drag the APK from /build/outputs/apk
+    * If on Xcode, Archive the project and if you are logged into Fabric, the app will automatically detect the Archive and ask you to distribute.
 
 ## Best Practices
 
