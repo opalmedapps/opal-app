@@ -143,12 +143,9 @@
 
             // Using promise to fetch the page
             return pdfDoc.getPage(num).then(function (page) {
-
                 var renderContext = draw(page, canvas, ctx);
-
                 containerEl.appendChild(canvas);
                 return page.render(renderContext);
-
             });
         }
 
@@ -167,8 +164,10 @@
 
 
         //Share function
-        function share()
-        {
+        function share() {
+
+            console.log('called share');
+
             if (Constants.app) {
                 var targetPath = FileManagerService.generatePath(docParams);
                 FileManagerService.downloadFileIntoStorage("data:application/pdf;base64," + docParams.Content, targetPath).then(function() {

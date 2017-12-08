@@ -131,8 +131,6 @@
                 reformedData.push(dv);
             }
 
-
-            // reformedData.reverse();
             /*********************************************
              * FINDING THE MAX AND MIN VALUES FOR CHARTING
              *********************************************/
@@ -292,6 +290,7 @@
                 },
                 chart: {
                     // Explicitly tell the width and height of a chart
+                    type: 'spline',
                     width: windowWidth,
                     height: null
                 },
@@ -301,16 +300,16 @@
                         month: '%e %b',
                         year: '%b'
                     },
-                    title: {
-                        text: 'Date',
-                        style: {
-                            fontSize: fontSize
-                        }
-                    },
+                    // title: {
+                    //     text: 'Date',
+                    //     style: {
+                    //         fontSize: fontSize
+                    //     }
+                    // },
                     labels: {
                         rotation: 0,
                         style: {
-                            fontSize: fontSize,
+                            fontSize: 12,
                             textOverflow: false
                         }
                     }
@@ -325,17 +324,17 @@
                         }
                     },
                     opposite: false,
-                    plotLines: [{
-                        color: 'rgba(246, 54, 92, 0.53)',
-                        value: max,
-                        dashStyle: 'Solid',
-                        width: 2
-                    },{
-                        color: 'rgba(246, 54, 92, 0.53)',
-                        value: min,
-                        dashStyle: 'Solid',
-                        width: 2
-                    }],
+                    // plotLines: [{
+                    //     color: 'rgba(246, 54, 92, 0.53)',
+                    //     value: max,
+                    //     dashStyle: 'Solid',
+                    //     width: 2
+                    // },{
+                    //     color: 'rgba(246, 54, 92, 0.53)',
+                    //     value: min,
+                    //     dashStyle: 'Solid',
+                    //     width: 2
+                    // }],
                     labels: {
                         style: {
                             fontSize: fontSize,
