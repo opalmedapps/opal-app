@@ -187,7 +187,8 @@
                         resetZoomTitle: 'Réinitialiser le zoom au niveau 1:1',
                         thousandsSep: ' ',
                         rangeSelectorFrom: "Du",
-                        rangeSelectorTo: "au"
+                        rangeSelectorTo: "au",
+                        rangeSelectorZoom: ''
                     },
                     rangeSelector: {
                         buttons: [{
@@ -202,9 +203,6 @@
                             type: 'month',
                             count: 6,
                             text: '6m'
-                        }, {
-                            type: 'ytd',
-                            text: 'YTD'
                         }, {
                             type: 'year',
                             count: 1,
@@ -237,7 +235,8 @@
                         resetZoomTitle: 'Reset zoom level 1:1',
                         thousandsSep: ' ',
                         rangeSelectorFrom: 'From',
-                        rangeSelectorTo: 'To'
+                        rangeSelectorTo: 'To',
+                        rangeSelectorZoom: ''
                     },
                     rangeSelector: {
                         buttons: [{
@@ -252,10 +251,7 @@
                             type: 'month',
                             count: 6,
                             text: '6m'
-                        }, {
-                            type: 'ytd',
-                            text: 'YTD'
-                        }, {
+                        },  {
                             type: 'year',
                             count: 1,
                             text: '1y'
@@ -288,7 +284,7 @@
                 },
                 chart: {
                     // Explicitly tell the width and height of a chart
-                    type: 'spline',
+                    // type: 'spline',
                     width: windowWidth,
                     height: null
                 },
@@ -300,20 +296,20 @@
                     },
                     minTickInterval: 3600*24*30*1000,//time in milliseconds
                     minRange: 3600*24*30*1000,
-                    ordinal: false //this sets the fixed time formats   
+                    ordinal: false, //this sets the fixed time formats
                     // title: {
                     //     text: 'Date',
                     //     style: {
                     //         fontSize: fontSize
                     //     }
                     // },
-                    // labels: {
-                    //     rotation: 0,
-                    //     style: {
-                    //         fontSize: 12,
-                    //         textOverflow: false
-                    //     }
-                    // }
+                    labels: {
+                        rotation: 0,
+                        style: {
+                            fontSize: fontSize,
+                            textOverflow: false
+                        }
+                    }
                 },
                 yAxis: {
                     max: maxChart,
