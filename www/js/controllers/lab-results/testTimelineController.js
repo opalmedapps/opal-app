@@ -187,8 +187,7 @@
                         resetZoomTitle: 'Réinitialiser le zoom au niveau 1:1',
                         thousandsSep: ' ',
                         rangeSelectorFrom: "Du",
-                        rangeSelectorTo: "au",
-                        rangeSelectorZoom: "Période"
+                        rangeSelectorTo: "au"
                     },
                     rangeSelector: {
                         buttons: [{
@@ -238,8 +237,7 @@
                         resetZoomTitle: 'Reset zoom level 1:1',
                         thousandsSep: ' ',
                         rangeSelectorFrom: 'From',
-                        rangeSelectorTo: 'To',
-                        rangeSelectorZoom: 'Zoom'
+                        rangeSelectorTo: 'To'
                     },
                     rangeSelector: {
                         buttons: [{
@@ -300,19 +298,22 @@
                         month: '%e %b',
                         year: '%b'
                     },
+                    minTickInterval: 3600*24*30*1000,//time in milliseconds
+                    minRange: 3600*24*30*1000,
+                    ordinal: false //this sets the fixed time formats   
                     // title: {
                     //     text: 'Date',
                     //     style: {
                     //         fontSize: fontSize
                     //     }
                     // },
-                    labels: {
-                        rotation: 0,
-                        style: {
-                            fontSize: 12,
-                            textOverflow: false
-                        }
-                    }
+                    // labels: {
+                    //     rotation: 0,
+                    //     style: {
+                    //         fontSize: 12,
+                    //         textOverflow: false
+                    //     }
+                    // }
                 },
                 yAxis: {
                     max: maxChart,
