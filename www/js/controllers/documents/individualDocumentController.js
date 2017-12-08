@@ -74,9 +74,7 @@
         {
             if (Documents.getDocumentBySerNum(document.DocumentSerNum).Content){
                 setUpPDF(document);
-            }
-
-            else {
+            } else {
                 Documents.downloadDocumentFromServer(document.DocumentSerNum).then(function () {
                     setUpPDF(document);
                 }).catch(function (error) {
