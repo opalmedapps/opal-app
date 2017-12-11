@@ -61,21 +61,197 @@
          */
         var attemptedCheckin = false;
 
+        var state = {
+            message: '',
+            canNavigate: false,
+            numberOfAppts: 0,
+            checkinError: false,
+            noAppointments: false,
+            allCheckedIn: false
+        };
+
+        var checkinStateSet = false;
+        var stateUpdated = false;
+        var errorsExist = false;
+
 
         ///////////////////////////////////////////
 
         return {
+            attemptCheckin: attemptCheckin,
+            evaluateCheckinState: evaluateCheckinState,
             getCheckInApps: getCheckInApps,
-            setCheckInApps: setCheckInApps,
-            isAllowedToCheckIn: isAllowedToCheckIn,
-            hasAttemptedCheckin: hasAttemptedCheckin,
-            checkinToAllAppointments: checkinToAllAppointments,
-            areAllCheckedIn: areAllCheckedIn,
-            setAllCheckedIn: setAllCheckedIn,
-            clear: clear
+            clear: clear,
         };
 
         ////////////////////////////////////////////
+
+        function attemptCheckin(){
+            var r = $q.defer();
+
+            if(attemptedCheckin && areAllCheckedIn()){
+                r.resolve('SUCCESS');
+            } else if (attemptedCheckin && areCheckinErrors()){
+                r.resolve('ERROR');
+            } else{
+                //This should only return true if all current appointments.checkin === 0 and there has been an attempted checkin. this implies an error has occurred
+                hasAttemptedCheckin()
+                    .then(function(attempted){
+                        if(!attempted){
+                            isAllowedToCheckIn()
+                                .then(function(isAllowed){
+                                    if(isAllowed){
+                                        checkinToAllAppointments()
+                                            .finally(function(res) {
+                                                attemptedCheckin = true;
+                                                updateCheckinState(res.appts);
+                                                r.resolve(res.status);
+                                            })
+                                    } else r.resolve('NOT_ALLOWED')
+                                })
+                        }
+                    })
+                    .catch(function(){
+                        r.resolve('ERROR')
+                    })
+            }
+
+            return r.promise;
+        }
+
+        function evaluateCheckinState(){
+            var r = $q.defer();
+
+            if(attemptedCheckin || checkinStateSet && !stateUpdated){
+                r.resolve(state);
+            } else {
+                initCheckinState()
+                    .then(function(){
+                        checkinStateSet = true;
+                        r.resolve(state);
+                    })
+                    .catch(function(err){
+                        r.resolve(err);
+                    })
+            }
+            return r.promise;
+        }
+
+        function initCheckinState(){
+            var r = $q.defer();
+
+            var appts = Appointments.getTodaysAppointments();
+
+            //First evaluate the current state of existing appointments, see if they were already checked in and if so what the state is (all success or some errors)
+            if(appts.length === 0){
+                setCheckinState('CHECKIN_NONE');
+                r.resolve()
+            } else if(alreadyCheckedIn(appts)){
+                setCheckIn("CHECKIN_MESSAGE_AFTER" + setPlural(appts));
+                r.resolve()
+            } else if (checkinErrorsExist(appts)) {
+                setCheckinState("CHECKIN_ERROR");
+                r.resolve()
+            } else {
+                //This means at this point there exists appointments today and none of them have been checked in
+                isAllowedToCheckIn()
+                    .then(function(canCheckin){
+                        if(!canCheckin) setCheckinState("NOT_ALLOWED", appts.length);
+                        else setCheckinState("CHECKIN_MESSAGE_BEFORE" + setPlural(appts), appts.length);
+                        r.resolve()
+                    })
+            }
+            return r.promise
+        }
+
+        function updateCheckinState(checkedInAppts){
+
+            if(checkedInAppts) Appointments.updateCheckedInAppointments(checkedInAppts);
+            var appts = Appointments.getTodaysAppointments();
+
+            //First evaluate the current state of existing appointments, see if they were already checked in and if so what the state is (all success or some errors)
+            if(alreadyCheckedIn(appts)){
+                setCheckIn("CHECKIN_MESSAGE_AFTER" + setPlural(appts));
+            } else if (checkinErrorsExist(appts)) {
+                setCheckinState("CHECKIN_ERROR");
+            } else {
+                 setCheckinState("NOT_ALLOWED", appts.length);
+            }
+        }
+
+        function alreadyCheckedIn(appts){
+            return appts.reduce(function(output, app){
+                if(app.CheckIn === '0') return false;
+            }, true);
+        }
+
+        function checkinErrorsExist(appts){
+            var checkinExists = appts.reduce(function(output, app){
+                if(app.CheckIn === '1') return true;
+            }, false);
+
+            if(!checkinExists) return false;
+
+            return appts.reduce(function(output, app){
+                if(app.CheckIn === '0') return true;
+            }, false);
+        }
+
+        function setPlural(apps) {
+            if (apps.length > 1) {
+                return "_PLURAL";
+            }
+            return "";
+        }
+
+        function setCheckinState(status, numAppts){
+
+            state.message = status;
+
+            switch(status){
+                case 'CHECKIN_ERROR':
+                    attemptedCheckin = true;
+                    errorsExist = true;
+                    state.canNavigate = true;
+                    state.numberOfAppts = 0;
+                    state.checkinError = true;
+                    state.noAppointments = false;
+                    state.allCheckedIn = false;
+                    break;
+                case 'CHECKIN_MESSAGE_AFTER':
+                case 'CHECKIN_MESSAGE_AFTER_PLURAL':
+                    attemptedCheckin = true;
+                    allCheckedIn = true;
+                    state.canNavigate = true;
+                    state.numberOfAppts = 0;
+                    state.checkinError = false;
+                    state.noAppointments = false;
+                    state.allCheckedIn = true;
+                    break;
+                case 'CHECKIN_NONE':
+                    state.canNavigate = false;
+                    state.numberOfAppts = 0;
+                    state.checkinError = false;
+                    state.noAppointments = true;
+                    state.allCheckedIn = false;
+                    break;
+                case 'CHECKIN_MESSAGE_BEFORE':
+                case 'CHECKIN_MESSAGE_BEFORE_PLURAL':
+                    state.canNavigate = true;
+                    state.numberOfAppts = numAppts;
+                    state.checkinError = false;
+                    state.noAppointments = false;
+                    state.allCheckedIn = false;
+                    break;
+                case 'NOT_ALLOWED':
+                    state.canNavigate = false;
+                    state.numberOfAppts = numAppts;
+                    state.checkinError = false;
+                    state.noAppointments = false;
+                    state.allCheckedIn = false;
+                    break;
+            }
+        }
 
         /**
          *@ngdoc method
@@ -85,7 +261,7 @@
          *@returns {Array} Todays checkinable appointments
          */
         function getCheckInApps() {
-            return checkinApps;
+            return Appointments.getTodaysAppointments();
         }
 
         /**
@@ -106,6 +282,10 @@
          **/
         function areAllCheckedIn(){
             return allCheckedIn;
+        }
+
+        function areCheckinErrors(){
+            return errorsExist;
         }
 
         /**
@@ -138,12 +318,12 @@
                         'Longitude':position.coords.longitude,
                         'Accuracy':position.coords.accuracy
                     };
-                    r.resolve('CHECK_IN_PERMITTED');
+                    r.resolve(true);
                 } else {
-                    r.reject('NOT_ALLOWED');
+                    r.reject(false);
                 }
             }, function(){
-                r.reject('LOCATION_ERROR');
+                r.reject(false);
             }, {
                 maximumAge: 10000,
                 timeout: 15000,
@@ -200,11 +380,11 @@
 
             RequestToServer.sendRequestWithResponse('Checkin', objectToSend)
                 .then(function (response) {
-                    console.log("response after checking in..." + JSON.stringify(response));
-                    r.resolve(response);
+                    //TODO: UPDATE LIST OF APPOINTMENTS THAT WERE SUCCESSFULLY CHECKED IN
+                    r.resolve({status: 'SUCCESS', appts: response.Data.appointments});
                 })
-                .catch(function (error) {
-                    r.reject(error);
+                .catch(function () {
+                    r.reject({status: 'ERROR', appts: null});
                 });
 
             return r.promise;
