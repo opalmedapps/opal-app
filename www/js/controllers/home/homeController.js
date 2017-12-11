@@ -24,17 +24,19 @@
         vm.notifications = [];
         vm.statusDescription = null;
         vm.appointmentShown = null;
-        vm.allCheckedIn = false;
         vm.todaysAppointments = [];
         vm.calledApp = null;
         vm.checkInMessage = '';
         vm.RoomLocation = '';
         vm.showHomeScreenUpdate = null;
         vm.loading = true;
-        vm.no_appointments = false;
+        vm.checkinState = {
+            noAppointments: true,
+            allCheckedIn: false,
+            message: 'CHECKING_SERVER'
+        };
 
         vm.homeDeviceBackButton = homeDeviceBackButton;
-        vm.load = load;
         vm.goToStatus = goToStatus;
         vm.goToNotification = goToNotification;
         vm.goToAppointments = goToAppointments;
@@ -43,7 +45,12 @@
 
         activate();
 
-        ////////////////
+        //////////////////////////////////////////////////
+
+        /*
+         * PRIVATE METHODS
+         * =================================
+         */
 
         function activate() {
 
@@ -60,18 +67,12 @@
 
             // // Refresh the page on coming back from checkin
             homeNavigator.on('prepop', function(event) {
-                if (event.currentPage.name == "./views/home/checkin/checkin-list.html") {
-                    if(NetworkStatus.isOnline()) {
-                        setCheckin();
-                    }
-                }
+                if (event.currentPage.name === "./views/home/checkin/checkin-list.html" && NetworkStatus.isOnline()) evaluateCheckIn();
             });
 
             //This avoids constant repushing which causes bugs
             homeNavigator.on('prepush', function(event) {
-                if (homeNavigator._doorLock.isLocked()) {
-                    event.cancel();
-                }
+                if (homeNavigator._doorLock.isLocked()) event.cancel();
             });
 
             //release the watchers
@@ -94,6 +95,9 @@
             }
         }
 
+        /**
+         * Initializes the home page view by calling a bunch of helper functiosn
+         */
         function homePageInit() {
             //Initialize modal size based on font size
             initModalSize();
@@ -118,7 +122,7 @@
             vm.loading =false;
 
             // Display current check in status
-            setCheckin();
+            evaluateCheckIn();
         }
 
         /**
@@ -141,10 +145,8 @@
          */
         function setNextAppointment() {
             //Next appointment information
-            if(Appointments.appointmentsExist()) {
-                if(Appointments.nextAppointmentExists()){
-                    vm.appointmentShown=Appointments.getUpcomingAppointment();
-                }
+            if(Appointments.appointmentsExist() && Appointments.nextAppointmentExists()) {
+                vm.appointmentShown=Appointments.getUpcomingAppointment();
             }
         }
 
@@ -163,116 +165,44 @@
         }
 
         /**
-         * @name setCheckin
-         * @desc checks with Checkin service to see if there are appointments available for checking in, and if so verifies whether they are within distant
-         * of the hospital. If this also checks out and the check in state has not already been set, it updates the view accordingly
-         */
-        function setCheckin() {
-            //skip the following if the check in state has already been set..
-            if(!!CheckInService.getCheckInApps() &&  CheckInService.getCheckInApps().length > 0){
-                //Case 1: An Appointment has checkin 0, not checked-in
-                vm.todaysAppointments = CheckInService.getCheckInApps();
-                vm.allCheckedIn = CheckInService.areAllCheckedIn();
-                evaluateCheckIn();
-            }
-            else{
-                //Get checkin appointment for the day, gets the closest appointment to right now
-                vm.checkInMessage = 'CHECKING_SERVER';
-
-                //at this point we have all the appointments that are available for checking in to
-                var todaysAppointmentsToCheckIn = Appointments.getCheckinAppointment();
-                CheckInService.setCheckInApps(todaysAppointmentsToCheckIn);
-
-                vm.todaysAppointments = todaysAppointmentsToCheckIn;
-                if(vm.todaysAppointments) {
-                    CheckInService.isAllowedToCheckIn().then(function () {
-                        var allCheckedIn = true;
-                        for (var app in vm.todaysAppointments){
-                            if (vm.todaysAppointments[app].Checkin === '0'){
-                                allCheckedIn = false;
-                            }
-                        }
-                        vm.allCheckedIn = allCheckedIn;
-                        CheckInService.setAllCheckedIn(allCheckedIn);
-                        evaluateCheckIn();
-                    }).catch(function(error){
-                        //TODO: Display some sort of indicator to let user know that they cannot check in
-                        //NewsBanner.showCustomBanner($filter('translate')(error), '#333333', function(){}, 3000);
-                    });
-
-                }else{
-                    //Case where there are no appointments that day
-                    vm.todaysAppointments = [];
-                    vm.checkInMessage = "CHECKIN_NONE";
-                    vm.no_appointments = true;
-                }
-            }
-        }
-
-        /**
          * @name evaluateCheckIn
          * @desc checks with listener to see if the current user has checked in or not
          */
         function evaluateCheckIn(){
-            //Case 1: An Appointment has checkin 0, not checked-in
-            if (!vm.allCheckedIn) {
-
-                //Checkin message before appointment gets set and is changed only if appointment was checked into already from Aria
-                vm.checkInMessage = "CHECKIN_MESSAGE_BEFORE" + setPlural(vm.todaysAppointments);
-                vm.showHomeScreenUpdate = false;
-
-                //Queries the server to find out whether or not an appointment was checked into
-                CheckInService.hasAttemptedCheckin(vm.todaysAppointments[0]).then(function (data) {
-                    //If it has, then it simply changes the message to checkedin and queries to get an update
-                    if (data) {
-                        $timeout(function () {
-                            vm.checkInMessage = "CHECKIN_MESSAGE_AFTER" + setPlural(vm.todaysAppointments);
-                            vm.showHomeScreenUpdate = true;
-                        });
-                    }
+            CheckInService.evaluateCheckinState()
+                .then(function(state){
+                    vm.checkinState = state;
                 });
-            } else {
-                //They have been called to the appointment. // TODO: why is this the case?
-                var calledApp = Appointments.getRecentCalledAppointment();
-                vm.calledApp = calledApp;
-                vm.checkInMessage = calledApp.RoomLocation ? "CHECKIN_CALLED":"CHECKIN_MESSAGE_AFTER" + setPlural(vm.todaysAppointments);
-                vm.RoomLocation = calledApp.RoomLocation;
-                vm.showHomeScreenUpdate = true;
+        }
+
+        /**
+         * Initialize the app's modal size based on the screen size
+         */
+        function initModalSize(){
+            var fontSize = UserPreferences.getFontSize();
+            var rcorners = document.getElementById("rcorners");
+            if (fontSize == "xlarge") {
+                rcorners.setAttribute("style", "height: 80%");
             }
+            else if (fontSize == "large") {
+                rcorners.setAttribute("style", "height: 60%");
+            }
+            else rcorners.setAttribute("style", "height: 50%");
         }
 
-        // Function used in the home view to refresh
-        function load($done) {
-            refresh($done);
-        }
+        /*
+         * PUBLIC METHODS
+         * =========================================
+         */
 
-        //Function used by load
-        function refresh(done){
-
-            done == undefined ? done = function () {} : done;
-
-            UpdateUI.update('All').then(function() {
-                //updated=true;
-                homePageInit();
-                done();
-            }).catch(function(error){
-
-                done();
-            });
-            $timeout(function(){
-                done();
-            },5000);
-        }
-
-        // For Android only, allows pressing the back button
+        /**
+         * Exits the app on pressing the back button
+         * Note: For Android devices only
+         */
         function homeDeviceBackButton(){
-
-            var mod = 'android';
-            var msg = $filter('translate')('EXIT_APP');
-
             ons.notification.confirm({
-                message: msg,
-                modifier: mod,
+                message: $filter('translate')('EXIT_APP'),
+                modifier: 'android',
                 callback: function(idx) {
                     switch (idx) {
                         case 0:
@@ -285,68 +215,63 @@
             });
         }
 
-        function goToStatus()
-        {
+        /**
+         * Takes the user the treatment status page
+         */
+        function goToStatus() {
             homeNavigator.pushPage('views/home/status/status_new.html');
         }
 
-        // Function to go push a page to the correct notification.
+        /**
+         * Takes the user to the selected notification in order to view it in detail
+         * @param index
+         * @param notification
+         */
         function goToNotification(index, notification){
 
             $timeout(function(){
                 vm.notifications.splice(index, 1);
             });
+
             Notifications.readNotification(index, notification);
 
             if(notification.NotificationType === 'CheckInError') goToCheckinAppointments();
 
             var post = (notification.hasOwnProperty('Post')) ? notification.Post : Notifications.getNotificationPost(notification);
-            if(notification.hasOwnProperty('PageUrl'))
-            {
+            if(notification.hasOwnProperty('PageUrl')) {
                 NavigatorParameters.setParameters({'Navigator':'homeNavigator', 'Post':post});
                 homeNavigator.pushPage(notification.PageUrl);
             }else{
                 var result = Notifications.goToPost(notification.NotificationType, post);
-                if(result !== -1  )
-                {
+                if(result !== -1 ) {
                     NavigatorParameters.setParameters({'Navigator':'homeNavigator', 'Post':post});
                     homeNavigator.pushPage(result.Url);
                 }
             }
         }
 
+        /**
+         * Takes the user to the selected appointment to view more details about it
+         */
         function goToAppointments(){
             NavigatorParameters.setParameters({'Navigator':'homeNavigator'});
             homeNavigator.pushPage('./views/personal/appointments/appointments.html');
         }
 
+        /**
+         * Takes the user to the setting pages
+         */
         function goToSettings() {
             tabbar.setActiveTab(4);
         }
 
+        /**
+         * Takes the user to the checkin view
+         */
         function goToCheckinAppointments() {
-            if (vm.allCheckedIn || vm.no_appointments) return;
+            if (vm.checkinState.allCheckedIn || vm.checkinState.noAppointments) return;
             NavigatorParameters.setParameters({'Navigator':'homeNavigator'});
             homeNavigator.pushPage('./views/home/checkin/checkin-list.html');
-        }
-
-        function setPlural(apps) {
-            if (apps.length > 1) {
-                return "_PLURAL";
-            }
-            return "";
-        }
-
-        function initModalSize(){
-            var fontSize = UserPreferences.getFontSize();
-            var rcorners = document.getElementById("rcorners");
-            if (fontSize == "xlarge") {
-                rcorners.setAttribute("style", "height: 80%");
-            }
-            else if (fontSize == "large") {
-                rcorners.setAttribute("style", "height: 60%");
-            }
-            else rcorners.setAttribute("style", "height: 50%");
         }
 
     }

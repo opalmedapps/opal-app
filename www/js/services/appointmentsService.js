@@ -149,9 +149,10 @@ myApp.service('Appointments', ['$q', 'RequestToServer','$cordovaCalendar','UserA
         {
             return todayAppointments;
         }else{
-            return null;
+            return [];
         }
     }
+
     function getAppointmentsInPeriod(period)
     {
         //Variables for comparing dates
@@ -519,6 +520,10 @@ myApp.service('Appointments', ['$q', 'RequestToServer','$cordovaCalendar','UserA
         getCheckinAppointment:function()
         {
             return getCheckinAppointment();
+        },
+
+        getCheckinAppointments:function(){
+
         },
         /**
          *@ngdoc method
