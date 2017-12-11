@@ -84,7 +84,7 @@
             vm.minNorm = min;
 
             vm.unit = vm.selectedTest.UnitDescription || test.testResults[0].UnitDescription;
-            unit = $filter('translate')('RESULTS') + ' (' + vm.unit + ')';
+            unit = '(' + vm.unit + ')';
             vm.testValue = page.options.param.TestValue;
             vm.information = undefined;
 
@@ -315,10 +315,14 @@
                     max: maxChart,
                     min: minChart,
                     title: {
+                        align: 'high',
                         text: unit,
                         style: {
-                            fontSize: fontSize
-                        }
+                            'text-anchor': 'start'
+                        },
+                        rotation: 0,
+                        y: -10,
+                        reserveSpace: false
                     },
                     opposite: false,
                     // plotLines: [{

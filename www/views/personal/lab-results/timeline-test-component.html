@@ -4,24 +4,24 @@
         <div class="center" ng-class="fontSizeTitle">{{test.title}}</div>
     </ons-toolbar>
     <ons-col>
-        <div id="chartArea"><hc-chart options="test.chartOptions">Placeholder for generic chart</hc-chart></div>
+        <div><hc-chart options="test.chartOptions">Placeholder for generic chart</hc-chart></div>
         <ons-list>
             <ons-list-header ng-class="fontSizeDesc">{{"LAB_TEST_INFO"|translate}}</ons-list>
+            <ons-list-item modifier="chevron" ng-class="fontSizeDesc" ng-click="test.about()" style="background-color: #E3F2FD" tappable>
+                Learn About {{test.testName}}
+            </ons-list-item>
             <ons-list-item ng-class="fontSizeDesc">
                 {{"LAB_RECENT_RESULT" | translate}}
                 <span class="list-item-note lucent" ng-class="fontSizeDesc" style="right: 10px">{{test.recentValue}} {{test.unit}}</span>
             </ons-list-item>
-            <ons-list-item modifier="chevron" ng-class="fontSizeDesc" ng-click="test.about()" style="background-color: #E3F2FD" tappable>
-                Learn About {{test.testName}}
+            <ons-list-item ng-class="fontSizeDesc">
+                {{"LAB_MIN_NORM"| translate}}
+                <span class="list-item-note lucent" ng-class="fontSizeDesc" style="right: 10px">{{test.minNorm}} {{test.unit}}</span>
             </ons-list-item>
-            <!--<ons-list-item ng-class="fontSizeDesc">-->
-                <!--{{"LAB_MIN_NORM"| translate}}-->
-                <!--<span class="list-item-note lucent" ng-class="fontSizeDesc" style="right: 10px">{{test.minNorm}} {{test.unit}}</span>-->
-            <!--</ons-list-item>-->
-            <!--<ons-list-item ng-class="fontSizeDesc">-->
-                <!--{{"LAB_MAX_NORM"| translate}}-->
-                <!--<span class="list-item-note lucent" ng-class="fontSizeDesc" style="right: 10px">{{test.maxNorm}} {{test.unit}}</span>-->
-            <!--</ons-list-item>-->
+            <ons-list-item ng-class="fontSizeDesc">
+                {{"LAB_MAX_NORM"| translate}}
+                <span class="list-item-note lucent" ng-class="fontSizeDesc" style="right: 10px">{{test.maxNorm}} {{test.unit}}</span>
+            </ons-list-item>
         </ons-list>
     </ons-col>
 </ons-page>
