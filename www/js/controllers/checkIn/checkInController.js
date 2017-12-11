@@ -31,6 +31,7 @@
         NewsBanner,
         $filter
     ) {
+
         var vm = this;
         vm.apps = [];
         vm.language = '';
@@ -39,6 +40,7 @@
         vm.checkInMessage = "";
         vm.additionalInfo = "";
         vm.alert = {};
+
         vm.goToAppointment = goToAppointment;
 
         activate();
@@ -49,52 +51,21 @@
             vm.apps = CheckInService.getCheckInApps();
             vm.language = UserPreferences.getLanguage();
 
-            if(CheckInService.areAllCheckedIn()){
-                vm.alert.type = "success";
-                vm.checkInMessage = "CHECKED_IN";
-                vm.additionalInfo = "CHECKIN_ADDITIONAL";
-            }
-            else{
-                // Ensure that user is within range of the hospital
-                CheckInService.isAllowedToCheckIn()
-                    .then(function () {
-                        // Verify if the appointments are checked in
-                        return CheckInService.verifyAllCheckIn();
-                    })
-                    .then(function (response){
-                        if (response){
-                            vm.alert.type = "success";
-                            vm.checkInMessage = "CHECKED_IN";
-                            vm.additionalInfo = "CHECKIN_ADDITIONAL";
-                        } else {
-
-                            // Checkin to all todays appointments
-                            CheckInService.checkinToAllAppointments()
-                                .then(function () {
-                                    vm.alert.type = "success";
-                                    vm.checkInMessage = "CHECKED_IN";
-                                    vm.additionalInfo = "CHECKIN_ADDITIONAL";
-
-                                    CheckInService.setAllCheckedIn(true)
-                                })
-                                .catch(function (error) {
-                                    vm.alert.type = "danger";
-                                    vm.checkInMessage = "CHECKIN_ERROR";
-                                });
-                        }
-                    })
-                    .catch(function (error) {
-                        if (error === "NOT_ALLOWED"){
-                            NewsBanner.showCustomBanner($filter('translate')("NOT_ALLOWED"), '#333333', function(){}, 3000);
-                            vm.alert.type = "warning";
-                            vm.checkInMessage = "CHECKIN_IN_HOSPITAL_ONLY";
-                        } else {
-                            vm.alert.type = "danger";
-                            vm.checkInMessage = error;
-                            NewsBanner.showCustomBanner($filter('translate')("CHECKIN_ERROR"), '#333333', function(){}, 3000);
-                        }
-                    });
-            }
+            CheckInService.attemptCheckin()
+                .then(function(response){
+                    if(response === 'NOT_ALLOWED'){
+                        NewsBanner.showCustomBanner($filter('translate')("NOT_ALLOWED"), '#333333', function(){}, 3000);
+                        vm.alert.type = "warning";
+                        vm.checkInMessage = "CHECKIN_IN_HOSPITAL_ONLY";
+                    } else if (response === 'SUCCESS') {
+                        vm.alert.type = "success";
+                        vm.checkInMessage = "CHECKED_IN";
+                        vm.additionalInfo = "CHECKIN_ADDITIONAL";
+                    } else {
+                        vm.alert.type = "danger";
+                        vm.checkInMessage = "CHECKIN_ERROR";
+                    }
+                });
         }
 
         // View appointment details
@@ -102,8 +73,6 @@
             NavigatorParameters.setParameters({'Navigator':'homeNavigator', 'Post':appointment});
             homeNavigator.pushPage('./views/personal/appointments/individual-appointment.html');
         }
-
     }
-
 })();
 
