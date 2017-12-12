@@ -70,7 +70,9 @@ exports.checkCheckin = function(requestObject)
 
     sqlInterface.checkCheckin(requestObject.Parameters.PatientSerNum)
         .then(function(hasAttempted){ r.resolve({Data: { AttemptedCheckin: hasAttempted}}) })
-        .catch(function(err){ r.reject(err) })
+        .catch(function(err){ r.reject(err) });
+
+    return r.promise;
 };
 
 //Get checkin update API call
