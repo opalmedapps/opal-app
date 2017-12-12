@@ -383,6 +383,12 @@ function getCheckedInAppointments(patientSerNum){
     })
 }
 
+
+/**
+ * ============================================================
+ */
+
+
 /**
  * getDocumentsContent
  * @desc fetches a document's content from DB
