@@ -39,7 +39,6 @@ myApp.service('RequestToServer',['$filter','$state','NewsBanner','UserAuthorizat
             var requestType;
             var requestParameters;
             if (encryptionKey) {
-
                 requestType = typeOfRequest;
                 requestParameters = EncryptionService.encryptWithKey(parameters, encryptionKey);
             }
@@ -79,8 +78,7 @@ myApp.service('RequestToServer',['$filter','$state','NewsBanner','UserAuthorizat
              *error given by the request response
              *@description Sends request to server, awaits for response, and returns with the results from server.
              */
-            sendRequestWithResponse:function(typeOfRequest, parameters, encryptionKey, referenceField, responseField)
-            {
+            sendRequestWithResponse:function(typeOfRequest, parameters, encryptionKey, referenceField, responseField) {
                 var r = $q.defer();
 
                 //Sends request and gets random key for request
@@ -98,7 +96,6 @@ myApp.service('RequestToServer',['$filter','$state','NewsBanner','UserAuthorizat
                 refRequestResponse.on('value',function(snapshot){
                     if(snapshot.exists()) {
                         var data = snapshot.val();
-
 
                         refRequestResponse.set(null);
                         refRequestResponse.off();
