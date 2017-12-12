@@ -377,13 +377,8 @@
             objectToSend.PatientSerNum = Patient.getPatientSerNum();
 
             RequestToServer.sendRequestWithResponse('Checkin', objectToSend)
-                .then(function (response) {
-                    //TODO: UPDATE LIST OF APPOINTMENTS THAT WERE SUCCESSFULLY CHECKED IN
-                    r.resolve({status: 'SUCCESS', appts: response.Data.appointments});
-                })
-                .catch(function () {
-                    r.reject({status: 'ERROR', appts: null});
-                });
+                .then(function (response) { r.resolve({status: 'SUCCESS', appts: response.Data});})
+                .catch(function () { r.reject({status: 'ERROR', appts: null}); });
 
             return r.promise;
         }
