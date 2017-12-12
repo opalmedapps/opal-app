@@ -33,7 +33,9 @@
         vm.checkinState = {
             noAppointments: true,
             allCheckedIn: false,
-            message: 'CHECKING_SERVER'
+            message: 'CHECKING_SERVER',
+            canNavigate: false,
+            checkinError: false
         };
 
         vm.homeDeviceBackButton = homeDeviceBackButton;
@@ -58,8 +60,6 @@
             NavigatorParameters.setParameters({'Navigator':'homeNavigator'});
             NavigatorParameters.setNavigator(homeNavigator);
 
-
-            //TODO: WHAT IS THIS USED FOR?!?!?!
             // Store the login time
             if(localStorage.getItem('locked')){
                 localStorage.removeItem('locked');
@@ -114,12 +114,11 @@
             // //display new notifications, if any
             Notifications.requestNewNotifications()
                 .then(function(){
+                    vm.loading = false;
                     if(Notifications.getNumberUnreadNotifications() > 0){
                         vm.notifications = Notifications.setNotificationsLanguage(Notifications.getUnreadNotifications());
                     }
                 });
-
-            vm.loading =false;
 
             // Display current check in status
             evaluateCheckIn();
