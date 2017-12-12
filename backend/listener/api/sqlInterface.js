@@ -322,11 +322,11 @@ exports.checkIn=function(requestObject) {
                 checkIntoAriaAndMedi(patientId).then(() => {
                     //If successfully checked in, grab all the appointments that have been checked into in order to notify app
                     getCheckedInAppointments(patientSerNum)
-                        .then(appts => r.resolve(appts))
+                        .then(appts => r.resolve({Data: appts}))
                         .catch(err => r.reject({Response:'error', Reason:'CheckIn error due to '+ err}));
                 }).catch(error => r.reject({Response:'error', Reason:error}));
             } else r.resolve([]);
-        }).catch(err=> r.reject({Response:'error', Reason:'Error determining whether this patient has checked in or not due to : '+ error}));
+        }).catch(err=> r.reject({Response:'error', Reason:'Error determining whether this patient has checked in or not due to : '+ err}));
     return r.promise;
 };
 
@@ -382,6 +382,12 @@ function getCheckedInAppointments(patientSerNum){
             .catch(err => reject({Response: 'error', Reason: err}));
     })
 }
+
+
+/**
+ * ============================================================
+ */
+
 
 /**
  * getDocumentsContent
