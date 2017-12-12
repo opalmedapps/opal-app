@@ -30,7 +30,7 @@
         vm.RoomLocation = '';
         vm.showHomeScreenUpdate = null;
         vm.loading = true;
-        
+
         vm.checkinState = {
             noAppointments: true,
             allCheckedIn: false,
