@@ -114,7 +114,6 @@
 
         function attemptCheckin(){
             var r = $q.defer();
-
             if(attemptedCheckin && allCheckedIn){
                 r.resolve('SUCCESS');
             } else if (attemptedCheckin && errorsExist){
@@ -348,7 +347,7 @@
             RequestToServer.sendRequestWithResponse('CheckCheckin', {PatientSerNum: Patient.getUserSerNum()})
                 .then(function(response) {
                     //Response is either success or failure with the appointmentSerNum again in the data object
-                    if (response.Data.hasOwnProperty('AttemptedCheckin') && response.Data.AttemptedCheckin == 'true') {
+                    if (response.Data.hasOwnProperty('AttemptedCheckin') && response.Data.AttemptedCheckin) {
                         r.resolve(true);
                     } else {
                         console.log('Error validating checkin status with response: ' + JSON.stringify(response));
