@@ -370,6 +370,8 @@ function hasAlreadyAttemptedCheckin(patientSerNum){
     });
 }
 
+exports.checkCheckin = hasAlreadyAttemptedCheckin;
+
 /**
  * Gets and returns all of a patients appointments on today's date
  * @param patientSerNum
