@@ -10,14 +10,16 @@
 
     <network-banner></network-banner>
 
-    <div>
+    <div id="home-container">
+        <!--
+        PATIENT INFO HEADER
+        ================================-->
         <div style="position:relative;z-index:1">
             <img src="img/cedarCancer.jpg" style="max-width:100vw">
             <div class="image-profile-wrapper-home text-center" align="center" style="margin-top:-160px;margin-left:auto;margin-right:auto;position:relative;z-index:4;">
                 <img ng-src="{{h.ProfileImage}}" style="margin-left:auto;margin-right:auto;" class="image-profile-home" ng-click="h.goToSettings()">
             </div>
             <div style="margin-top:0px">
-
                 <a ng-click="tabbar.setActiveTab(4)">
                     <div class="item item-text-wrap " style="margin-top:-10px;margin-bottom:0px;padding-bottom: 1px">
                         <div>
@@ -35,7 +37,6 @@
             <!--
             LEARN MORE ABOUT OPAL
             ================================-->
-
             <ons-list style="margin-top:5px;position:relative;z-index:2">
                 <ons-list-header class="person-list-header" ng-class="fontSizeTitle">Opal</ons-list-header>
                 <ons-list-item modifier="chevron tappable" class="item" ng-click="homeNavigator.pushPage('views/home/about/about.html')">
@@ -54,14 +55,19 @@
                 <!--
                 CHECK-IN TO APPOINTMENTS
                 =============================-->
-
                 <ons-list-header class="person-list-header" ng-class="fontSizeTitle">{{"OVERVIEW"|translate}}</ons-list-header>
-                <ons-list-item ng-hide="h.checkinState.allCheckedIn || h.checkinState.noAppointments" modifier="chevron tappable" class="item" ng-click="h.goToCheckinAppointments()">
+
+                <!--
+                NAVIGABLE CHECKIN STATE (ALL CHECKED IN OR APPOINTMENTS AVAILABLE FOR CHECKING INTO)
+                ======================================================================================-->
+                <ons-list-item ng-if="h.checkinState.canNavigate" modifier="chevron tappable" class="item" ng-click="h.goToCheckinAppointments()">
                     <ons-row align="center">
                         <ons-col width="60px" style="text-align: center">
                             <div>
-                                <i ng-if="!h.checkinState.allCheckedIn || !h.checkinState.noAppointments" class="fa fa-square-o fa-2x" style="color:#4CAF50;"></i><span ng-if="!h.checkinState.allCheckedIn || !h.checkinState.noAppointments" class="notification" style="position: absolute; margin-left: -7px"> {{ h.checkinState.numberOfAppts }}</span>
-                                <i ng-if="h.checkinState.noAppointments" class="fa fa-square-o fa-2x" style="color:#9E9E9E;"></i>
+                                <i ng-if="!h.checkinState.allCheckedIn && !h.checkinState.checkinError" class="fa fa-square-o fa-2x" style="color:#4CAF50;"></i>
+                                <i ng-if="h.checkinState.allCheckedIn || h.checkinState.checkinError" class="fa fa-check-square-o fa-2x" style="color:#4CAF50;"></i>
+                                <span ng-if="!h.checkinState.allCheckedIn && !h.checkinState.checkinError" class="notification" style="position: absolute; margin-left: -7px"> {{ h.checkinState.numberOfAppts }}</span>
+                                <span ng-if="h.checkinState.checkinError" class="notification" style="position: absolute; margin-left: -7px"> ! </span>
                             </div>
                         </ons-col>
                         <ons-col>
@@ -70,29 +76,25 @@
                             </header>
                             <p class="item-desc" ng-class="fontSizeDesc">{{h.checkinState.message|translate}} {{RoomLocation}}</p>
                             <p class="item-desc" ng-class="fontSizeDesc">{{h.calledApp["AppointmentType_"+h.language]}}</p>
-                            <!--<p class="item-desc" ng-class="fontSizeDesc">{{h.waitingTimeEstimates[0]}}</p>-->
-                            <!--<p class="item-desc" ng-class="fontSizeDesc" style="color:orange" ng-show ="checkinEstimate&&showHomeScreenUpdate">{{"ESTIMATEDWAIT"|translate}}: {{checkinEstimate}} minutes</p>-->
                         </ons-col>
                     </ons-row>
                 </ons-list-item>
-                <ons-list-item ng-show="h.checkinState.allCheckedIn || h.checkinState.noAppointments" class="item" ng-click="h.goToCheckinAppointments()">
+
+                <!--
+                NON-NAVIGABLE CHECKIN STATE (NO APPOINTMENTS)
+                ======================================================================================-->
+                <ons-list-item ng-if="!h.checkinState.canNavigate" class="item">
                     <ons-row align="center">
                         <ons-col width="60px" style="text-align: center">
                             <div>
-                                <i ng-hide="!h.checkinState.allCheckedIn" class="fa fa-check-square-o fa-2x" style="color:#4CAF50;"></i>
-                                <i ng-hide="h.checkinState.allCheckedIn || h.checkinState.noAppointments" class="fa fa-square-o fa-2x animated pulse" style="display: none; color:#4CAF50;"></i>
                                 <i ng-if="h.checkinState.noAppointments" class="fa fa-square-o fa-2x" style="color:#9E9E9E;"></i>
-                                <span ng-hide="h.checkinState.allCheckedIn || h.checkinState.noAppointments" class="notification"> {{ h.checkinState.numberOfAppts }}</span>
                             </div>
                         </ons-col>
                         <ons-col>
                             <header>
                                 <span style="margin-top: 0" class="item-title" ng-class="fontSizeTitle">{{"CHECKIN"|translate}}</span>
                             </header>
-                            <p class="item-desc" ng-class="fontSizeDesc">{{h.checkinState.message|translate}} {{RoomLocation}}</p>
-                            <p class="item-desc" ng-class="fontSizeDesc">{{h.calledApp["AppointmentType_"+h.language]}}</p>
-                            <p class="item-desc" ng-class="fontSizeDesc">{{h.waitingTimeEstimates[0]}}</p>
-                            <!--<p class="item-desc" ng-class="fontSizeDesc" style="color:orange" ng-show ="checkinEstimate&&showHomeScreenUpdate">{{"ESTIMATEDWAIT"|translate}}: {{checkinEstimate}} minutes</p>-->
+                            <p class="item-desc" ng-class="fontSizeDesc">{{h.checkinState.message|translate}}</p>
                         </ons-col>
                     </ons-row>
                 </ons-list-item>
@@ -100,7 +102,6 @@
                 <!--
                 APPOINTMENT STATUS
                 ===============================-->
-
                 <ons-list-item modifier="chevron" class="item" ng-click="h.goToAppointments()">
                     <ons-row align="center">
                         <ons-col width="60px" style="text-align: center">
@@ -122,7 +123,6 @@
                 <!--
                 TREATMENT PLANNING STATUS
                 ================================-->
-
                 <ons-list-item modifier="chevron" class="item" ng-show="h.statusDescription" ng-click="h.goToStatus()">
                     <ons-row align="center">
                         <ons-col width="60px" align="center" style="text-align: center">
@@ -149,17 +149,16 @@
             <!--
             NOTIFICATIONS
             ===================================-->
-
             <div ng-hide="h.loading">
 
                 <div  style="padding-top:5px;" class="settings-header" ng-class="fontSizeTitle" ng-show = "h.notifications.length !== 0" >{{"NEWS"|translate}}</div>
                 <!--Making new set up for notifications-->
                 <ons-list style="margin-top:5px;">
-                    <ons-list-item modifier="chevron" class="item" ng-repeat="(type, notification) in h.notifications" ng-click="h.goToNotification($index, notification)">
+                    <ons-list-item modifier="chevron" class="item" ng-repeat="notification in h.notifications" ng-click="h.goToNotification($index, notification)">
                         <ons-row align="center">
                             <ons-col width="60px" align="center">
                                 <div>
-                                    <i class="iconHomeView {{notification.Icon}}" ng-style="{color: notification.Color}" style="margin-left: 18px"></i><span class="notification"  ng-show="notification.Number>=1">{{notification.Number}}</span>
+                                    <i class="iconHomeView {{notification.Icon}}" ng-style="{color: notification.Color}" style="margin-left: 18px"></i><span class="notification" ng-show="notification.Number>=1">{{notification.Number}}</span>
                                 </div>
                             </ons-col>
                             <ons-col>
@@ -174,7 +173,6 @@
                     </ons-list-item>
                 </ons-list>
             </div>
-
         </div>
     </div>
     <div id="bottomNotifications"></div>
