@@ -66,7 +66,9 @@ exports.refresh = function (requestObject) {
 exports.checkCheckin = function(requestObject)
 {
     var r = Q.defer();
-    sqlInterface.checkCheckin(requestObject.parameters.PatientSerNum)
+    logger.log('debug', JSON.stringify(requestObject));
+
+    sqlInterface.checkCheckin(requestObject.Parameters.PatientSerNum)
         .then(function(hasAttempted){ r.resolve({Data: { AttemptedCheckin: hasAttempted}}) })
         .catch(function(err){ r.reject(err) })
 };
