@@ -84,7 +84,7 @@
             vm.minNorm = min;
 
             vm.unit = vm.selectedTest.UnitDescription || test.testResults[0].UnitDescription;
-            unit = $filter('translate')('RESULTS') + ' (' + vm.unit + ')';
+            unit = '(' + vm.unit + ')';
             vm.testValue = page.options.param.TestValue;
             vm.information = undefined;
 
@@ -131,8 +131,6 @@
                 reformedData.push(dv);
             }
 
-
-            // reformedData.reverse();
             /*********************************************
              * FINDING THE MAX AND MIN VALUES FOR CHARTING
              *********************************************/
@@ -190,7 +188,7 @@
                         thousandsSep: ' ',
                         rangeSelectorFrom: "Du",
                         rangeSelectorTo: "au",
-                        rangeSelectorZoom: "Période"
+                        rangeSelectorZoom: ''
                     },
                     rangeSelector: {
                         buttons: [{
@@ -205,9 +203,6 @@
                             type: 'month',
                             count: 6,
                             text: '6m'
-                        }, {
-                            type: 'ytd',
-                            text: 'YTD'
                         }, {
                             type: 'year',
                             count: 1,
@@ -241,7 +236,7 @@
                         thousandsSep: ' ',
                         rangeSelectorFrom: 'From',
                         rangeSelectorTo: 'To',
-                        rangeSelectorZoom: 'Zoom'
+                        rangeSelectorZoom: ''
                     },
                     rangeSelector: {
                         buttons: [{
@@ -256,10 +251,7 @@
                             type: 'month',
                             count: 6,
                             text: '6m'
-                        }, {
-                            type: 'ytd',
-                            text: 'YTD'
-                        }, {
+                        },  {
                             type: 'year',
                             count: 1,
                             text: '1y'
@@ -292,6 +284,7 @@
                 },
                 chart: {
                     // Explicitly tell the width and height of a chart
+                    // type: 'spline',
                     width: windowWidth,
                     height: null
                 },
@@ -301,12 +294,15 @@
                         month: '%e %b',
                         year: '%b'
                     },
-                    title: {
-                        text: 'Date',
-                        style: {
-                            fontSize: fontSize
-                        }
-                    },
+                    minTickInterval: 3600*24*30*1000,//time in milliseconds
+                    minRange: 3600*24*30*1000,
+                    ordinal: false, //this sets the fixed time formats
+                    // title: {
+                    //     text: 'Date',
+                    //     style: {
+                    //         fontSize: fontSize
+                    //     }
+                    // },
                     labels: {
                         rotation: 0,
                         style: {
@@ -319,23 +315,27 @@
                     max: maxChart,
                     min: minChart,
                     title: {
+                        align: 'high',
                         text: unit,
                         style: {
-                            fontSize: fontSize
-                        }
+                            'text-anchor': 'start'
+                        },
+                        rotation: 0,
+                        y: -10,
+                        reserveSpace: false
                     },
                     opposite: false,
-                    plotLines: [{
-                        color: 'rgba(246, 54, 92, 0.53)',
-                        value: max,
-                        dashStyle: 'Solid',
-                        width: 2
-                    },{
-                        color: 'rgba(246, 54, 92, 0.53)',
-                        value: min,
-                        dashStyle: 'Solid',
-                        width: 2
-                    }],
+                    // plotLines: [{
+                    //     color: 'rgba(246, 54, 92, 0.53)',
+                    //     value: max,
+                    //     dashStyle: 'Solid',
+                    //     width: 2
+                    // },{
+                    //     color: 'rgba(246, 54, 92, 0.53)',
+                    //     value: min,
+                    //     dashStyle: 'Solid',
+                    //     width: 2
+                    // }],
                     labels: {
                         style: {
                             fontSize: fontSize,
