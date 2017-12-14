@@ -26,7 +26,6 @@
         function activate(){
             NavigatorParameters.setParameters({'Navigator':'educationNavigator'});
 
-
             bindEvents();
 
             if(NetworkStatus.isOnline()) {
