@@ -275,13 +275,8 @@ myApp.service('Notifications',['$filter','RequestToServer','LocalStorage','Annou
          *@description Updates the notificationsArray with the new information contained in the notifications parameter
          **/
         function updateUserNotifications(notifications) {
-
-            console.log('updating notifications...');
-
             searchAndDeleteNotifications(notifications);
             addUserNotifications(notifications);
-
-            console.log(Notifications);
         }
 
         return{
