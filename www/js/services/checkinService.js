@@ -124,7 +124,7 @@
                     .then(function (isAllowed) {
                         if (isAllowed) {
                             checkinToAllAppointments()
-                                .finally(function (res) {
+                                .then(function (res) {
                                     attemptedCheckin = true;
                                     updateCheckinState(res.appts);
                                     r.resolve(res.status);
@@ -140,7 +140,7 @@
 
             hasAttemptedCheckin()
                 .then(function(attempted) {
-                    if (!attempted) {
+                    if (attempted === 'false') {
                         isWithinCheckinRange()
                             .then(function (isInRange) {
                                 r.resolve(isInRange)
@@ -212,21 +212,32 @@
         }
 
         function alreadyCheckedIn(appts){
-            return appts.reduce(function(output, app){
-                if(app.CheckIn === '0') return false;
-            }, true);
+
+            allCheckedIn = true;
+
+            appts.map(function(app){
+                if(app.CheckIn === '0') allCheckedIn = false;
+            });
+
+            return allCheckedIn;
         }
 
         function checkinErrorsExist(appts){
-            var checkinExists = appts.reduce(function(output, app){
-                if(app.CheckIn === '1') return true;
-            }, false);
+            var checkinExists = false;
+
+            appts.map(function(app){
+                if(app.CheckIn === '1') checkinExists = true;
+            });
 
             if(!checkinExists) return false;
 
-            return appts.reduce(function(output, app){
-                if(app.CheckIn === '0') return true;
-            }, false);
+            var errors = false;
+
+            appts.map(function(app){
+                if(app.CheckIn === '0') errors = true;
+            });
+
+            return errors;
         }
 
         function setPlural(apps) {
@@ -346,13 +357,7 @@
             //Request is sent with the AppointmentSerNum
             RequestToServer.sendRequestWithResponse('CheckCheckin', {PatientSerNum: Patient.getUserSerNum()})
                 .then(function(response) {
-                    //Response is either success or failure with the appointmentSerNum again in the data object
-                    if (response.Data.hasOwnProperty('AttemptedCheckin') && response.Data.AttemptedCheckin) {
-                        r.resolve(true);
-                    } else {
-                        console.log('Error validating checkin status with response: ' + JSON.stringify(response));
-                        r.resolve(false);
-                    }
+                    r.resolve(response.Data.AttemptedCheckin);
                 })
                 .catch(function() {
                     r.reject(false);
@@ -372,9 +377,9 @@
             //Create a promise so this can be run asynchronously
             var r = $q.defer();
 
-            var objectToSend = positionCheckinAppointment;
+            var objectToSend = {};
             objectToSend.PatientId = Patient.getPatientId();
-            objectToSend.PatientSerNum = Patient.getPatientSerNum();
+            objectToSend.PatientSerNum = Patient.getUserSerNum();
 
             RequestToServer.sendRequestWithResponse('Checkin', objectToSend)
                 .then(function (response) { r.resolve({status: 'SUCCESS', appts: response.Data});})
