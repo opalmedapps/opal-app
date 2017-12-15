@@ -292,7 +292,7 @@
                     type: 'datetime',
                     dateTimeLabelFormats: { // don't display the dummy year
                         month: '%e %b',
-                        year: '%b'
+                        year: '%b  %y'
                     },
                     minTickInterval: 3600*24*30*1000,//time in milliseconds
                     minRange: 3600*24*30*1000,
