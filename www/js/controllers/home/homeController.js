@@ -119,7 +119,12 @@
                     if(Notifications.getNumberUnreadNotifications() > 0){
                         vm.notifications = Notifications.setNotificationsLanguage(Notifications.getUnreadNotifications());
                     }
+                })
+                .catch(function(error){
+                    alert(JSON.stringify(error));
                 });
+
+            ;
 
             // Display current check in status
             evaluateCheckIn();
