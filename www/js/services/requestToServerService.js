@@ -106,7 +106,7 @@ myApp.service('RequestToServer',['$filter','$state','NewsBanner','UserAuthorizat
                         } else {
                             if(!encryptionKey||typeof encryptionKey == 'undefined') data = EncryptionService.decryptData(data);
 
-                            if(typeOfRequest === 'NewNotifications') console.log(JSON.stringify(data));
+                            if(typeOfRequest === 'NotificationsNew') console.log(JSON.stringify(data));
 
                             data.Timestamp = timestamp;
                             clearTimeout(timeOut);

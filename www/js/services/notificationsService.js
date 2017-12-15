@@ -450,6 +450,9 @@ myApp.service('Notifications',['$filter','RequestToServer','LocalStorage','Annou
                 else{
                     RequestToServer.sendRequestWithResponse('NotificationsNew', {LastUpdated: lastUpdated.getTime()})
                         .then(function (response) {
+
+                            console.log(JSON.stringify(response));
+
                             lastUpdated = new Date();
                             if (response.Data && response.Data.length > 0) {
                                 response.Data.forEach(function(notif){
@@ -459,7 +462,11 @@ myApp.service('Notifications',['$filter','RequestToServer','LocalStorage','Annou
                             }
                             r.resolve({});
                         })
-                        .catch(function () {r.reject({})});
+                        .catch(function (err) {
+                            console.log(JSON.stringify(err));
+
+                            r.reject({})
+                        });
                 }
                 return r.promise;
             },

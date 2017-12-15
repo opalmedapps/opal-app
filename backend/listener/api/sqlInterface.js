@@ -216,7 +216,7 @@ function processSelectRequest(table, userId, timestamp) {
     }
 
     const paramArray = [userId];
-    if(requestMappingObject.numberOfLastUpdated>0){
+    if(requestMappingObject.numberOfLastUpdated && requestMappingObject.numberOfLastUpdated>0){
         for (let i = 0; i < requestMappingObject.numberOfLastUpdated; i++) {
             paramArray.push(date);
         }
@@ -319,12 +319,9 @@ exports.checkIn=function(requestObject) {
         .then(result => {
             if(result === false){
                 //Check in to aria using Johns script
-                checkIntoAriaAndMedi(patientId).then(() => {
-                    //If successfully checked in, grab all the appointments that have been checked into in order to notify app
-                    getCheckedInAppointments(patientSerNum)
-                        .then(appts => r.resolve({Data: appts}))
-                        .catch(err => r.reject({Response:'error', Reason:'CheckIn error due to '+ err}));
-                }).catch(error => r.reject({Response:'error', Reason:error}));
+                checkIntoAriaAndMedi(patientId)
+                    .then(appts => r.resolve({Data: appts}))
+                    .catch(err => r.reject({Response:'error', Reason:'CheckIn error due to '+ err}));
             } else r.resolve([]);
         }).catch(err=> r.reject({Response:'error', Reason:'Error determining whether this patient has checked in or not due to : '+ err}));
     return r.promise;
@@ -345,8 +342,11 @@ function checkIntoAriaAndMedi(patientId) {
         logger.log('debug', 'checked into aria and medi response: ' + JSON.stringify(response));
         logger.log('debug', 'checked into aria and medi body: ' + JSON.stringify(body));
 
-        if(error) r.reject(error);
-        else r.resolve(response);
+        if(body.error) {
+            r.reject(body.error)
+        } else {
+            r.resolve(body.success);
+        }
     });
     return r.promise;
 }
@@ -364,7 +364,7 @@ function hasAlreadyAttemptedCheckin(patientSerNum){
                 if (rows.length === 0) resolve(false);
                 else resolve(true);
             }).catch((err) => {
-                reject({Response: 'error', Reason: err});
+                reject(err);
             })
         }
     });
