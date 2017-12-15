@@ -1141,22 +1141,8 @@ exports.getQuestionnaires = function(requestObject){
 
 /**
  * NOTIFICATIONS FUNCTIONALITY
- * =====================================
+ * ==============================================================================
  */
-
-/**
- * Returns a promise containing all the notifications
- * @param {object} requestObject the request
- * @returns {Promise} Returns a promise that contains the notification data
- */
-
-exports.getAllNotifications = function(requestObject){
-    let r = Q.defer();
-    exports.runSqlQuery(queries.getAllNotifications(), [requestObject.UserID])
-        .then(rows => r.resolve({Data: rows})
-        .catch(err => r.reject(err)));
-    return r.promise
-};
 
 /**
  * Returns a promise containing all new notifications
@@ -1166,7 +1152,7 @@ exports.getAllNotifications = function(requestObject){
 
 exports.getNewNotifications = function(requestObject){
     let r = Q.defer();
-    exports.runSqlQuery(queries.getNewNotifications(), [requestObject.UserID, requestObject.Parameters.LastUpdated, requestObject.Parameters.LastUpdated])
+    exports.runSqlQuery(queries.getNewNotifications(), [requestObject.UserID])
         .then(rows => {
 
             logger.log('debug', 'new notifications: ' + JSON.stringify(rows));
@@ -1175,7 +1161,7 @@ exports.getNewNotifications = function(requestObject){
                 assocNotificationsWithItems(rows, requestObject)
                     .then(tuples => r.resolve({Data:tuples}))
                     .catch(err => r.reject(err))
-            } else r.resolve({Data: rows});
+            } else r.resolve({Data: []});
         })
         .catch(error => {
             r.reject(error);
@@ -1197,7 +1183,6 @@ function assocNotificationsWithItems(notifications, requestObject){
         if(fields.length > 0) {
             refresh(fields, requestObject)
                 .then(results => {
-                    logger.log('debug', 'results: ' + JSON.stringify(results));
                     if(!!results.Data){
                         results = results.Data;
 
@@ -1207,7 +1192,6 @@ function assocNotificationsWithItems(notifications, requestObject){
                         let tuples = notifications.map(notif => {
                             let tuple = [];
                             let item = resultsArray.find(result => {
-                                logger.log('debug', 'result: ' + JSON.stringify(result));
                                 let serNumField = notif.NotificationType + "SerNum";
                                 if(result.hasOwnProperty(serNumField)) return result[serNumField] === notif.RefTableRowSerNum;
                                 return false;
@@ -1218,7 +1202,7 @@ function assocNotificationsWithItems(notifications, requestObject){
                         });
                         resolve(tuples);
                     }
-                    reject({Response:'error', Reason:'Could not associate any notifications to its content'});
+                    else reject({Response:'error', Reason:'Could not associate any notifications to its content'});
                 })
                 .catch(err => resolve(err))
         } else resolve(notifications)
@@ -1227,7 +1211,7 @@ function assocNotificationsWithItems(notifications, requestObject){
 
 function refresh (fields, requestObject) {
     let r = Q.defer();
-    let UserId=requestObject.UserID;
+    let UserId = requestObject.UserID;
     let today = new Date();
     let timestamp = today.setHours(0,0,0,0);
 

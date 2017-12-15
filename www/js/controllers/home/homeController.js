@@ -124,7 +124,6 @@
                     alert(JSON.stringify(error));
                 });
 
-            ;
 
             // Display current check in status
             evaluateCheckIn();
