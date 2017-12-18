@@ -119,7 +119,11 @@
                     if(Notifications.getNumberUnreadNotifications() > 0){
                         vm.notifications = Notifications.setNotificationsLanguage(Notifications.getUnreadNotifications());
                     }
+                })
+                .catch(function(error){
+                    alert(JSON.stringify(error));
                 });
+
 
             // Display current check in status
             evaluateCheckIn();
@@ -269,7 +273,7 @@
          * Takes the user to the checkin view
          */
         function goToCheckinAppointments() {
-            if (vm.checkinState.allCheckedIn || vm.checkinState.noAppointments) return;
+            if (vm.checkinState.noAppointments) return;
             NavigatorParameters.setParameters({'Navigator':'homeNavigator'});
             homeNavigator.pushPage('./views/home/checkin/checkin-list.html');
         }

@@ -60,7 +60,6 @@
                     } else if (response === 'SUCCESS') {
                         vm.alert.type = "success";
                         vm.checkInMessage = "CHECKED_IN";
-                        vm.additionalInfo = "CHECKIN_ADDITIONAL";
                     } else {
                         vm.alert.type = "danger";
                         vm.checkInMessage = "CHECKIN_ERROR";

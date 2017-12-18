@@ -32,6 +32,7 @@
                 .then(function () {
                     vm.noNotifications = true;
                     var notifications = Notifications.getUserNotifications();
+
                     if (notifications.length === 0)  {
                         $timeout(function() {
                             vm.isLoading = false;
@@ -39,14 +40,17 @@
                         return
                     }
                     notifications = Notifications.setNotificationsLanguage(notifications);
+
                     $timeout(function() {
                         vm.noNotifications = false;
                         vm.isLoading = false;
                         vm.notifications = $filter('orderBy')(notifications,'notifications.DateAdded', true);
                     });
-                    Permissions.enablePermission('WRITE_EXTERNAL_STORAGE', 'Storage access disabled. Unable to write documents.');
                 })
-                .catch(function () {
+                .catch(function (error) {
+
+                    console.log('notification error: ' + error);
+
                     $timeout(function() {
                         vm.isLoading = false;
                         vm.noNotifications = true;
