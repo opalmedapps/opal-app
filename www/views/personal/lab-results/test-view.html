@@ -36,11 +36,11 @@
                     <ons-row>
                         <ons-col class="col-xs-3 col-sm-3 col-lg-3 labtest-col">
 
-                            <div ng-if="(test.AbnormalFlag) && ((test.TestValue < 0.95*test.MinNorm) || (test.TestValue > 1.05*test.MaxNorm))" class="lab-results-test-out5" ng-class="fontSizeDesc">
+                            <div ng-if="test.AbnormalFlag && test.AbnormalFlag.toLowerCase() === 'c'" class="lab-results-test-out5" ng-class="fontSizeDesc">
                                 {{test.FacComponentName}} ({{test.AbnormalFlag}})
                             </div>
 
-                            <div ng-if="(test.AbnormalFlag) && ((test.TestValue >= 0.95*test.MinNorm) && (test.TestValue <= 1.05*test.MaxNorm))"  class="lab-results-test-in5" ng-class="fontSizeDesc">
+                            <div ng-if="test.AbnormalFlag && test.AbnormalFlag.toLowerCase() !== 'c'"  class="lab-results-test-in5" ng-class="fontSizeDesc">
                                 {{test.FacComponentName}} ({{test.AbnormalFlag}})
                             </div>
 
@@ -58,12 +58,12 @@
                                 <!--This displays your test value after clicking a specific test-->
                             </div>
 
-                            <div ng-if="test.AbnormalFlag && ((test.TestValue < 0.95*test.MinNorm) || (test.TestValue > 1.05*test.MaxNorm))" class="descOut5" align="center" ng-class="fontSizeDesc">
+                            <div ng-if="test.AbnormalFlag && test.AbnormalFlag.toLowerCase() === 'c'" class="descOut5" align="center" ng-class="fontSizeDesc">
                                 {{test.TestValue}}
                                 <!--This displays your test value after clicking a specific test-->
                             </div>
 
-                            <div ng-if="test.AbnormalFlag && ((test.TestValue >= 0.95*test.MinNorm) && (test.TestValue <= 1.05*test.MaxNorm))" class="descIn5" align="center" ng-class="fontSizeDesc">
+                            <div ng-if="test.AbnormalFlag && test.AbnormalFlag.toLowerCase() !== 'c'" class="descIn5" align="center" ng-class="fontSizeDesc">
                                 {{test.TestValue}}
                                 <!--This displays your test value after clicking a specific test-->
                             </div>

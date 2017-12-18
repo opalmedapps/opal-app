@@ -216,7 +216,7 @@ function processSelectRequest(table, userId, timestamp) {
     }
 
     const paramArray = [userId];
-    if(requestMappingObject.numberOfLastUpdated>0){
+    if(requestMappingObject.numberOfLastUpdated && requestMappingObject.numberOfLastUpdated>0){
         for (let i = 0; i < requestMappingObject.numberOfLastUpdated; i++) {
             paramArray.push(date);
         }
@@ -319,12 +319,9 @@ exports.checkIn=function(requestObject) {
         .then(result => {
             if(result === false){
                 //Check in to aria using Johns script
-                checkIntoAriaAndMedi(patientId).then(() => {
-                    //If successfully checked in, grab all the appointments that have been checked into in order to notify app
-                    getCheckedInAppointments(patientSerNum)
-                        .then(appts => r.resolve({Data: appts}))
-                        .catch(err => r.reject({Response:'error', Reason:'CheckIn error due to '+ err}));
-                }).catch(error => r.reject({Response:'error', Reason:error}));
+                checkIntoAriaAndMedi(patientId)
+                    .then(appts => r.resolve({Data: appts}))
+                    .catch(err => r.reject({Response:'error', Reason:'CheckIn error due to '+ err}));
             } else r.resolve([]);
         }).catch(err=> r.reject({Response:'error', Reason:'Error determining whether this patient has checked in or not due to : '+ err}));
     return r.promise;
@@ -345,8 +342,11 @@ function checkIntoAriaAndMedi(patientId) {
         logger.log('debug', 'checked into aria and medi response: ' + JSON.stringify(response));
         logger.log('debug', 'checked into aria and medi body: ' + JSON.stringify(body));
 
-        if(error) r.reject(error);
-        else r.resolve(response);
+        if(body.error) {
+            r.reject(body.error)
+        } else {
+            r.resolve(body.success);
+        }
     });
     return r.promise;
 }
@@ -364,7 +364,7 @@ function hasAlreadyAttemptedCheckin(patientSerNum){
                 if (rows.length === 0) resolve(false);
                 else resolve(true);
             }).catch((err) => {
-                reject({Response: 'error', Reason: err});
+                reject(err);
             })
         }
     });
@@ -1141,22 +1141,8 @@ exports.getQuestionnaires = function(requestObject){
 
 /**
  * NOTIFICATIONS FUNCTIONALITY
- * =====================================
+ * ==============================================================================
  */
-
-/**
- * Returns a promise containing all the notifications
- * @param {object} requestObject the request
- * @returns {Promise} Returns a promise that contains the notification data
- */
-
-exports.getAllNotifications = function(requestObject){
-    let r = Q.defer();
-    exports.runSqlQuery(queries.getAllNotifications(), [requestObject.UserID])
-        .then(rows => r.resolve({Data: rows})
-        .catch(err => r.reject(err)));
-    return r.promise
-};
 
 /**
  * Returns a promise containing all new notifications
@@ -1166,7 +1152,7 @@ exports.getAllNotifications = function(requestObject){
 
 exports.getNewNotifications = function(requestObject){
     let r = Q.defer();
-    exports.runSqlQuery(queries.getNewNotifications(), [requestObject.UserID, requestObject.Parameters.LastUpdated, requestObject.Parameters.LastUpdated])
+    exports.runSqlQuery(queries.getNewNotifications(), [requestObject.UserID])
         .then(rows => {
 
             logger.log('debug', 'new notifications: ' + JSON.stringify(rows));
@@ -1175,7 +1161,7 @@ exports.getNewNotifications = function(requestObject){
                 assocNotificationsWithItems(rows, requestObject)
                     .then(tuples => r.resolve({Data:tuples}))
                     .catch(err => r.reject(err))
-            } else r.resolve({Data: rows});
+            } else r.resolve({Data: []});
         })
         .catch(error => {
             r.reject(error);
@@ -1197,7 +1183,6 @@ function assocNotificationsWithItems(notifications, requestObject){
         if(fields.length > 0) {
             refresh(fields, requestObject)
                 .then(results => {
-                    logger.log('debug', 'results: ' + JSON.stringify(results));
                     if(!!results.Data){
                         results = results.Data;
 
@@ -1207,7 +1192,6 @@ function assocNotificationsWithItems(notifications, requestObject){
                         let tuples = notifications.map(notif => {
                             let tuple = [];
                             let item = resultsArray.find(result => {
-                                logger.log('debug', 'result: ' + JSON.stringify(result));
                                 let serNumField = notif.NotificationType + "SerNum";
                                 if(result.hasOwnProperty(serNumField)) return result[serNumField] === notif.RefTableRowSerNum;
                                 return false;
@@ -1218,7 +1202,7 @@ function assocNotificationsWithItems(notifications, requestObject){
                         });
                         resolve(tuples);
                     }
-                    reject({Response:'error', Reason:'Could not associate any notifications to its content'});
+                    else reject({Response:'error', Reason:'Could not associate any notifications to its content'});
                 })
                 .catch(err => resolve(err))
         } else resolve(notifications)
@@ -1227,7 +1211,7 @@ function assocNotificationsWithItems(notifications, requestObject){
 
 function refresh (fields, requestObject) {
     let r = Q.defer();
-    let UserId=requestObject.UserID;
+    let UserId = requestObject.UserID;
     let today = new Date();
     let timestamp = today.setHours(0,0,0,0);
 

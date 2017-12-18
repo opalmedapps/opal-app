@@ -1163,11 +1163,11 @@ p{
 }
 
 .lab-results-test-out5 {
-  color: red;
+  color: #F44336;
 }
 
 .lab-results-test-in5 {
-  color: orange;
+  color: #673AB7;
 }
 
 .list-item-note {
@@ -1182,11 +1182,11 @@ p{
 }
 
 .descOut5 {
-  color: red;
+  color: #F44336;
 }
 
 .descIn5{
-  color: orange;
+  color: #673AB7;
 }
 
 /*.chartArea{*/
