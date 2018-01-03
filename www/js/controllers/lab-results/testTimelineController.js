@@ -26,29 +26,29 @@
         var testResults;
         var max;
         var min;
+        var language;
 
         vm.about = about;
+        vm.noUrl = false;
 
         activate();
 
         /////////////////////////////
 
         function activate(){
-            console.log('inside testTimelineController ');
             configureViewModel();
             bindEvents();
-            configureURL();
+            //configureURL();
             configureChart(testResults);
         }
 
         function about(){
-            console.log('inside about() ');
-            if (Constants.app) {
-                console.log('cordova.InAppBrowser.open: ',url);
-                cordova.InAppBrowser.open(url, '_blank', 'location=yes');
-            } else {
-                console.log('window.open:',url);
-                window.open(url);
+            if (vm.url.length > 0) {
+                if (Constants.app) {
+                    cordova.InAppBrowser.open(vm.url, '_blank', 'location=yes');
+                } else {
+                    window.open(vm.url);
+                }
             }
         }
 
@@ -74,13 +74,16 @@
         }
 
         function configureViewModel(){
-
             page = personalNavigator.getCurrentPage();
             test = page.options.param;
 
             vm.selectedTest = test;
             vm.testName = test.ComponentName || test.testResults[0].ComponentName;
             vm.title = vm.selectedTest.FacComponentName || vm.selectedTest.testName;
+
+            language = UserPreferences.getLanguage().toUpperCase();
+            vm.url = (language === 'EN') ? test.URL_EN : test.URL_FR;
+            if (vm.url.length <= 0) vm.noUrl = true;
 
             max = vm.selectedTest.MaxNorm || test.testResults[0].MaxNorm;
             min = vm.selectedTest.MinNorm || test.testResults[0].MinNorm;
@@ -101,13 +104,13 @@
 
         }
 
+        /*
         function configureURL(){
             ///////////////////////////////////////////////////////////////////////////////////////////////
             // TODO: THIS IS ONLY TEMPORARY TO BE ABLE TO DISPLAY FRENCH PAGES FOR ONLY WBC AND RBC
 
-            if(vm.testName === "WBC"){
-               // url = "http://www.labtestsonline.fr/tests/num-ration-des-globules-blancs.html";
-                url = "http://www.cnn.com";
+            if(vm.testName == "WBC"){
+                url = "http://www.labtestsonline.fr/tests/num-ration-des-globules-blancs.html";
             }
             else if (vm.testName === "RBC"){
                 url = "http://www.labtestsonline.fr/tests/num-ration-des-globules-rouges.html?tab=3";
@@ -115,9 +118,11 @@
             else{
                 url = 'https://labtestsonline.org/map/aindex/SearchForm?Search='+vm.title+'&action_ProcessSphinxSearchForm=Go';
             }
+
             ///////////////////////////////////////////////////////////////////////////////////////////////
 
         }
+        */
 
         function configureChart(){
 
