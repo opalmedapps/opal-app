@@ -460,7 +460,8 @@ exports.updateAccountField=function(requestObject) {
     getPatientFromEmail(email).then(function(patient) {
         //Valid fields
         let validFields = ['Email', 'TelNum', 'Language'];
-        let { field, newValue } = requestObject.Parameters;
+        var field=requestObject.Parameters.FieldToChange;
+        var newValue=requestObject.Parameters.NewValue;
         if ( !field || !newValue || typeof field !== 'string' || typeof newValue !== 'string')
                 r.resolve({Response:'error',Reason:'Invalid Parameters'});
         if(field === 'Password')
