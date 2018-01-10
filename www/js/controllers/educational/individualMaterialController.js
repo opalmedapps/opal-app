@@ -38,7 +38,7 @@
             bindEvents();
 
             //set educational material language
-            vm.edumaterial =EducationalMaterial.setLanguage(param.Post);
+            vm.edumaterial = EducationalMaterial.setLanguage(param.Post);
             Logger.sendLog('Educational Material', param.Post.EducationalMaterialSerNum);
 
             //Determine if material has a ShareURL and is printable
