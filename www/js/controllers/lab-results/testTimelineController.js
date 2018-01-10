@@ -26,8 +26,10 @@
         var testResults;
         var max;
         var min;
+        var language;
 
         vm.about = about;
+        vm.noUrl = false;
 
         activate();
 
@@ -36,15 +38,17 @@
         function activate(){
             configureViewModel();
             bindEvents();
-            configureURL();
+            //configureURL();
             configureChart(testResults);
         }
 
         function about(){
-            if (Constants.app) {
-                cordova.InAppBrowser.open(url, '_blank', 'location=yes');
-            } else {
-                window.open(url);
+            if (vm.url.length > 0) {
+                if (Constants.app) {
+                    cordova.InAppBrowser.open(vm.url, '_blank', 'location=yes');
+                } else {
+                    window.open(vm.url);
+                }
             }
         }
 
@@ -70,13 +74,16 @@
         }
 
         function configureViewModel(){
-
             page = personalNavigator.getCurrentPage();
             test = page.options.param;
 
             vm.selectedTest = test;
             vm.testName = test.ComponentName || test.testResults[0].ComponentName;
             vm.title = vm.selectedTest.FacComponentName || vm.selectedTest.testName;
+
+            language = UserPreferences.getLanguage().toUpperCase();
+            vm.url = (language === 'EN') ? test.URL_EN : test.URL_FR;
+            if (vm.url.length <= 0) vm.noUrl = true;
 
             max = vm.selectedTest.MaxNorm || test.testResults[0].MaxNorm;
             min = vm.selectedTest.MinNorm || test.testResults[0].MinNorm;
@@ -97,11 +104,12 @@
 
         }
 
+        /*
         function configureURL(){
             ///////////////////////////////////////////////////////////////////////////////////////////////
             // TODO: THIS IS ONLY TEMPORARY TO BE ABLE TO DISPLAY FRENCH PAGES FOR ONLY WBC AND RBC
 
-            if(vm.testName === "WBC"){
+            if(vm.testName == "WBC"){
                 url = "http://www.labtestsonline.fr/tests/num-ration-des-globules-blancs.html";
             }
             else if (vm.testName === "RBC"){
@@ -110,9 +118,11 @@
             else{
                 url = 'https://labtestsonline.org/map/aindex/SearchForm?Search='+vm.title+'&action_ProcessSphinxSearchForm=Go';
             }
+
             ///////////////////////////////////////////////////////////////////////////////////////////////
 
         }
+        */
 
         function configureChart(){
 
