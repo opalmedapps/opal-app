@@ -39,6 +39,8 @@ exports.verifySecurityAnswer=function(requestKey,requestObject,patient)
 {
     var r = q.defer();
     var key = patient.AnswerText;
+	
+	logger.log('debug', 'key for decryption: ' + key);
 
 
     logger.log('debug', 'in verify security answer');
@@ -60,14 +62,13 @@ exports.verifySecurityAnswer=function(requestKey,requestObject,patient)
 
     let unencrypted = null;
 
-    logger.log('debug', 'decrypting');
+    logger.log('debug', 'decrypting params: ' +JSON.stringify(requestObject.Parameters));
 
     utility.decrypt(requestObject.Parameters, key)
         .then(params => {
 
-            logger.log('debug', 'params: ' + JSON.stringify(params));
-
             unencrypted = params;
+
 
             //If its not a reset password request and the passwords are not equivalent
             if(!requestObject.Parameters.PasswordReset && unencrypted.Password && unencrypted.Password !== patient.Password) {
