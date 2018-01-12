@@ -82,6 +82,16 @@ myApp.service('EncryptionService',function(UserAuthorizationInfo){
 	}
 
     function splitValue(str) {
+
+		// IOS9 Patch
+        if(!Uint8Array.prototype.slice)
+        {
+            Uint8Array.prototype.slice = function(a,b){
+                var Uint8ArraySlice = new Uint8Array(this.buffer.slice(a,b));
+                return Uint8ArraySlice;
+            }
+        }
+
 		var value = nacl.util.decodeBase64(str);
 		return [value.slice(0, nacl.secretbox.nonceLength), value.slice(nacl.secretbox.nonceLength)]
     }
