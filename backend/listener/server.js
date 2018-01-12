@@ -273,6 +273,10 @@ function completeRequest(headers, key)
 function handleHeartBeat(data){
     "use strict";
 
+	// Where to write the log file
+	const filename = 'logs/heartbeat.log';
+	var fs = require('fs');
+	
     let HeartBeat = {};
 
     //Push Heartbeat Back To Firebase
@@ -280,7 +284,16 @@ function handleHeartBeat(data){
     HeartBeat.Memory = process.memoryUsage();
     HeartBeat.Timestamp = data.Timestamp;
 
-    heartbeatRef.set(HeartBeat)
+	// Log the results to the heart beat DB logs
+	// NOTE: The logs are manage by using the  logrotate to control the settings of the log
+	fs.appendFile(filename, JSON.stringify(HeartBeat)  + "\n", function (err) {
+	  if (err) {
+			// Log any errors
+			logger.log('error', err);
+	  }
+	});
+		
+	heartbeatRef.set(HeartBeat)
         .catch(err => {
             logger.log('error', 'Error reporting heartbeat', err)
         })

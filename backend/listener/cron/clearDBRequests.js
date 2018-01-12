@@ -16,7 +16,7 @@
 const logger            = require('../logs/logger.js');
 const config             = require('../config.json');
 const admin             = require("firebase-admin");
-const gTimestamp	= 120000;
+const gTimestamp	= 300000;
 
 // Initialize firebase connection
 const serviceAccount = require(config.FIREBASE_ADMIN_KEY);
