@@ -60,3 +60,6 @@ credentials.js
 /dest/
 /backend/Screen/
 /backend/OpalAdmin/
+
+heartbeat.log*
+heartbeatdb.log*
