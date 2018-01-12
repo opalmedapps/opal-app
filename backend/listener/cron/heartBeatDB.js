@@ -108,7 +108,7 @@ function init(){
 
 	setInterval(() => {
         startHeartBeatDB()
-    }, 30000);
+    }, 600000);
 }
 
 /**
