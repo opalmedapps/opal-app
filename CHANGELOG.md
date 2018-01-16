@@ -22,6 +22,9 @@ To invite users to upgrade in case of vulnerabilities.
 
 ## [PRODUCTION]
 
+### v1.5.9
+* Fix Uint8Array functionality bug associated with iOS9
+
 ### v1.5.1
 * Fix security backend with current async decryption function
 * Fix various UI bugs

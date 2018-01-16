@@ -93,7 +93,7 @@ myApp.service('EncryptionService',function(UserAuthorizationInfo){
         }
 
 		var value = nacl.util.decodeBase64(str);
-		return [value.slice(0, nacl.secretbox.nonceLength), value.slice(nacl.secretbox.nonceLength)]
+		return [value.slice(0, nacl.secretbox.nonceLength), value.slice(nacl.secretbox.nonceLength, value.length)]
     }
 
     /**
