@@ -44,6 +44,7 @@
 
         function about(){
             if (vm.url.length > 0) {
+               // disclaimer.show();
                 if (Constants.app) {
                     cordova.InAppBrowser.open(vm.url, '_blank', 'location=yes');
                 } else {
