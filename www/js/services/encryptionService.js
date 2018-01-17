@@ -39,7 +39,6 @@ myApp.service('EncryptionService',function(UserAuthorizationInfo){
                         //grab the nonce
                         pair = splitValue(object[key]);
 
-
                         var value = nacl.secretbox.open(pair[1], pair[0], secret);
 
 						if(value === null){
@@ -82,8 +81,20 @@ myApp.service('EncryptionService',function(UserAuthorizationInfo){
 	}
 
     function splitValue(str) {
+
+
+		// Patch for iOS9
+        if(!Uint8Array.prototype.slice)
+        {
+            Uint8Array.prototype.slice = function(a,b){
+                var Uint8ArraySlice = new Uint8Array(this.buffer.slice(a,b));
+                return Uint8ArraySlice;
+            }
+        }
+
 		var value = nacl.util.decodeBase64(str);
-		return [value.slice(0, nacl.secretbox.nonceLength), value.slice(nacl.secretbox.nonceLength)]
+
+        return [value.slice(0, nacl.secretbox.nonceLength), value.slice(nacl.secretbox.nonceLength, value.length)]
     }
 
     /**
