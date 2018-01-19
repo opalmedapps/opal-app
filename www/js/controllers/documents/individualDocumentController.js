@@ -35,9 +35,11 @@
         vm.show = false;
         vm.hide = false;
 
-        $scope.share = share;
+        vm.share = share;
+        //$scope.share = share;
         $scope.about = about;
-        vm.warn = warn;
+        $scope.warn = warn;
+        //vm.warn = warn;
 
         activate();
         /////////////////////////////
