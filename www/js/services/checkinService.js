@@ -216,7 +216,7 @@
             allCheckedIn = true;
 
             appts.map(function(app){
-                if(app.CheckIn === '0') allCheckedIn = false;
+                if(app.Checkin === '0') allCheckedIn = false;
             });
 
             return allCheckedIn;
