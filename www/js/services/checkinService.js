@@ -226,7 +226,7 @@
             var checkinExists = false;
 
             appts.map(function(app){
-                if(app.CheckIn === '1') checkinExists = true;
+                if(app.Checkin === '1') checkinExists = true;
             });
 
             if(!checkinExists) return false;
@@ -234,7 +234,7 @@
             var errors = false;
 
             appts.map(function(app){
-                if(app.CheckIn === '0') errors = true;
+                if(app.Checkin === '0') errors = true;
             });
 
             return errors;
