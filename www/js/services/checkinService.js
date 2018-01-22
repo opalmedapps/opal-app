@@ -73,7 +73,8 @@
             numberOfAppts: 0,
             checkinError: false,
             noAppointments: false,
-            allCheckedIn: false
+            allCheckedIn: false,
+            inRange: true
         };
 
         /**
@@ -143,6 +144,9 @@
                     if (attempted === 'false') {
                         isWithinCheckinRange()
                             .then(function (isInRange) {
+
+                                console.log('is allowed to checkin ... is in range: ' + isInRange);
+
                                 r.resolve(isInRange)
                             })
                     } else r.resolve(false);
@@ -188,9 +192,16 @@
                 //This means at this point there exists appointments today and none of them have been checked in
                 isWithinCheckinRange()
                     .then(function(canCheckin){
+
+                        console.log("can checkin : " + canCheckin);
+
                         if(!canCheckin) setCheckinState("NOT_ALLOWED", appts.length);
                         else setCheckinState("CHECKIN_MESSAGE_BEFORE" + setPlural(appts), appts.length);
                         r.resolve()
+                    })
+                    .catch(function() {
+                        setCheckinState("NOT_ALLOWED", appts.length);
+                        r.reject()
                     })
             }
             return r.promise
@@ -292,6 +303,7 @@
                     state.checkinError = false;
                     state.noAppointments = false;
                     state.allCheckedIn = false;
+                    state.inRange = false;
                     break;
             }
         }
@@ -321,7 +333,10 @@
             var r=$q.defer();
             navigator.geolocation.getCurrentPosition(function(position){
                 var distanceMeters = 1000 * getDistanceFromLatLonInKm(position.coords.latitude, position.coords.longitude, 45.474127399999996, -73.6011402);
-                if (distanceMeters <= 500) {
+
+                console.log(distanceMeters);
+
+                if (distanceMeters <= 1) {
                     positionCheckinAppointment = {
                         'Latitude':position.coords.latitude,
                         'Longitude':position.coords.longitude,
@@ -329,7 +344,10 @@
                     };
                     r.resolve(true);
                 } else {
-                    r.reject(false);
+
+                    console.log('not within range!');
+
+                    r.resolve(false);
                 }
             }, function(){
                 r.reject(false);
