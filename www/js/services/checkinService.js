@@ -336,7 +336,7 @@
 
                 console.log(distanceMeters);
 
-                if (distanceMeters <= 1) {
+                if (distanceMeters <= 500) {
                     positionCheckinAppointment = {
                         'Latitude':position.coords.latitude,
                         'Longitude':position.coords.longitude,
