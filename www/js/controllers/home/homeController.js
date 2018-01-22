@@ -122,7 +122,7 @@
                     }
                 })
                 .catch(function(error){
-                    alert(JSON.stringify(error));
+                    console.log(error);
                 });
 
 
@@ -240,7 +240,7 @@
 
             Notifications.readNotification(index, notification);
 
-            if(notification.NotificationType === 'CheckInError' || notification.NotificationType === 'CheckIn') goToCheckinAppointments();
+            if(notification.NotificationType === 'CheckInError' || notification.NotificationType === 'CheckInNotification') goToCheckinAppointments();
 
             var post = (notification.hasOwnProperty('Post')) ? notification.Post : Notifications.getNotificationPost(notification);
             if(notification.hasOwnProperty('PageUrl')) {

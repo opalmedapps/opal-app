@@ -49,7 +49,7 @@
                 })
                 .catch(function (error) {
 
-                    console.log('notification error: ' + error);
+                    console.log(error);
 
                     $timeout(function() {
                         vm.isLoading = false;
