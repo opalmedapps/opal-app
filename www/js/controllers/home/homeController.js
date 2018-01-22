@@ -36,7 +36,8 @@
             allCheckedIn: false,
             message: 'CHECKING_SERVER',
             canNavigate: false,
-            checkinError: false
+            checkinError: false,
+            inRange: true
         };
 
         vm.homeDeviceBackButton = homeDeviceBackButton;
@@ -239,7 +240,7 @@
 
             Notifications.readNotification(index, notification);
 
-            if(notification.NotificationType === 'CheckInError') goToCheckinAppointments();
+            if(notification.NotificationType === 'CheckInError' || notification.NotificationType === 'CheckIn') goToCheckinAppointments();
 
             var post = (notification.hasOwnProperty('Post')) ? notification.Post : Notifications.getNotificationPost(notification);
             if(notification.hasOwnProperty('PageUrl')) {
