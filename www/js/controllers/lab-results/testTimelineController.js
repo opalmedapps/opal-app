@@ -83,7 +83,15 @@
             vm.title = vm.selectedTest.FacComponentName || vm.selectedTest.testName;
 
             language = UserPreferences.getLanguage().toUpperCase();
-            vm.url = (language === 'EN') ? test.URL_EN : test.URL_FR;
+
+            // if Sorted by Date, use vm.selectedTest.URL_EN to access URL_EN. If sorted by Type, use test.testResults[0].URL_EN
+            if (language === 'EN')
+                vm.url = vm.selectedTest.URL_EN || ((test.testResults === undefined) ? "" : test.testResults[0].URL_EN);
+            else
+                vm.url = vm.selectedTest.URL_FR || ((test.testResults === undefined) ? "" : test.testResults[0].URL_FR);
+
+            //vm.url = (language === 'EN') ? (vm.selectedTest.URL_EN || test.testResults[0].URL_EN) : (vm.selectedTest.URL_FR || test.testResults[0].URL_FR);
+
             if (vm.url.length <= 0) vm.noUrl = true;
 
             max = vm.selectedTest.MaxNorm || test.testResults[0].MaxNorm;
