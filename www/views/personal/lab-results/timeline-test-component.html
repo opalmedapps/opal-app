@@ -9,7 +9,7 @@
             <ons-list-header ng-class="fontSizeDesc">{{"LAB_TEST_INFO"|translate}}</ons-list>
         <div>
             <ons-list-item modifier="chevron" ng-class="fontSizeDesc"  ng-click="test.about()" style="background-color: #E3F2FD" tappable>
-                {{"LAB_LEARN_ABOUT" | translate}} {{test.testName}}
+                {{"LAB_LEARN_ABOUT" | translate}} {{test.title}}
             </ons-list-item>
         </div>
             <ons-list-item ng-class="fontSizeDesc">
@@ -28,12 +28,22 @@
     </ons-col>
 
     <ons-modal var="disclaimer">
+        <div id="rcorners">
+            <h3>Attention!</h3>
+            <ons-icon icon="ion-alert-circled" size="60px"></ons-icon>
+            <p style="margin-top: 5%" class="unattended-message">{{"LEAVING_APP2"|translate}}</p>
+            <ons-button style="margin-top: 5%" ng-click="disclaimer.hide()">{{"OK"|translate}}</ons-button>
+        </div>
+    </ons-modal>
+
+    <ons-modal var="disclaimer2">
         <h4>Attention!</h4>
         <ons-icon icon="ion-alert-circled" size="60px"></ons-icon>
         <p style="margin-top: 5%" class="unattended-message">Note that you are leaving the app to an external website.</p>
         <br>
         <ons-button style="margin-top: 5%; font-size: 22px;" ng-click="disclaimer.hide()">{{"OK"|translate}}</ons-button>
     </ons-modal>
+
 </ons-page>
 
 

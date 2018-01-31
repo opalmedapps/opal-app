@@ -38,13 +38,12 @@
         function activate(){
             configureViewModel();
             bindEvents();
-            //configureURL();
             configureChart(testResults);
         }
 
         function about(){
             if (vm.url.length > 0) {
-               // disclaimer.show();
+                disclaimer.show();
                 if (Constants.app) {
                     cordova.InAppBrowser.open(vm.url, '_blank', 'location=yes');
                 } else {
@@ -111,25 +110,6 @@
 
         }
 
-        /*
-        function configureURL(){
-            ///////////////////////////////////////////////////////////////////////////////////////////////
-            // TODO: THIS IS ONLY TEMPORARY TO BE ABLE TO DISPLAY FRENCH PAGES FOR ONLY WBC AND RBC
-
-            if(vm.testName == "WBC"){
-                url = "http://www.labtestsonline.fr/tests/num-ration-des-globules-blancs.html";
-            }
-            else if (vm.testName === "RBC"){
-                url = "http://www.labtestsonline.fr/tests/num-ration-des-globules-rouges.html?tab=3";
-            }
-            else{
-                url = 'https://labtestsonline.org/map/aindex/SearchForm?Search='+vm.title+'&action_ProcessSphinxSearchForm=Go';
-            }
-
-            ///////////////////////////////////////////////////////////////////////////////////////////////
-
-        }
-        */
 
         function configureChart(){
 
