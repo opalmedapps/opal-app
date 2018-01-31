@@ -195,11 +195,11 @@ myApp.service('EncryptionService',function(UserAuthorizationInfo){
          *@ngdoc method
          *@name encryptPassword
          *@methodOf MUHCApp.service:EncryptionService
-         *@description Encrypts a given password using SHA256
+         *@description Encrypts a given password using SHA512
          *@return {String} Returns hashed password
          **/
         hash: function (incoming) {
-         	return CryptoJS.SHA256(incoming).toString();
+         	return CryptoJS.SHA512(incoming).toString();
         },
 
         /**
