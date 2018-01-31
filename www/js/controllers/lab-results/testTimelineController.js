@@ -89,11 +89,6 @@
             else
                 vm.url = vm.selectedTest.URL_FR || ((test.testResults === undefined) ? "" : test.testResults[0].URL_FR);
 
-<<<<<<< HEAD
-            //vm.url = (language === 'EN') ? (vm.selectedTest.URL_EN || test.testResults[0].URL_EN) : (vm.selectedTest.URL_FR || test.testResults[0].URL_FR);
-
-=======
->>>>>>> bug-issues
             if (vm.url.length <= 0) vm.noUrl = true;
 
             max = vm.selectedTest.MaxNorm || test.testResults[0].MaxNorm;
