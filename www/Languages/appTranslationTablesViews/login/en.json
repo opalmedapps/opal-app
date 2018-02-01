@@ -74,6 +74,7 @@
 	"RESETPASSWORD": "Reset Password",
 	"RESETINSTRUCTIONS": "Password must be at least 6 characters long and must include one letter and one number",
 	"RESETERROR": "Password Reset Error",
+	"RESETTRUSTEDMESSAGE": "It seems like you reset your password on a different device. Please set this phone to 'Untrusted' to clear your saved user data before logging in again. You will be able to set as 'Trusted' next time you try to login.",
 	"RETRYRESET": "Retry Password Reset",
 	"RETRYRESETMESSAGE": "Your password reset code was invalid. Please try resetting your password again.",
 	"SECUREYOURDEVICE": "Secure Your Device",
