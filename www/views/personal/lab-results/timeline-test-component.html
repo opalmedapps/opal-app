@@ -27,12 +27,12 @@
         </ons-list>
     </ons-col>
 
-    <ons-modal var="disclaimer">
+    <ons-modal var="disclaimerModal">
         <div id="rcorners">
             <h3>Attention!</h3>
             <ons-icon icon="ion-alert-circled" size="60px"></ons-icon>
             <p style="margin-top: 5%" class="unattended-message">{{"LEAVING_APP2"|translate}}</p>
-            <ons-button style="margin-top: 5%" ng-click="disclaimer.hide()">{{"OK"|translate}}</ons-button>
+            <ons-button style="margin-top: 5%" ng-click="disclaimerModal.hide();test.gotoUrl()">{{"OK"|translate}}</ons-button>
         </div>
     </ons-modal>
 
