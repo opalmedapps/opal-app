@@ -1,6 +1,10 @@
 <?xml version='1.0' encoding='utf-8'?>
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 <widget id="com.hig.opal_dev" version="0.9.12" android-versionCode="9011" >
+=======
+<widget id="com.hig.opal_dev" version="0.9.17" android-versionCode="9017" >
+>>>>>>> Stashed changes
 =======
 <widget id="com.hig.opal_dev" version="0.9.17" android-versionCode="9017" >
 >>>>>>> Stashed changes
