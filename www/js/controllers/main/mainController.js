@@ -70,7 +70,7 @@
                 });
             }, false);
 
-//            setupInactivityChecks();
+            setupInactivityChecks();
 
             $translatePartialLoader.addPart('top-view');
 
