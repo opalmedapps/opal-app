@@ -147,6 +147,7 @@
             /**********************************************/
 
             vm.recentValue = parseFloat(testResults[testResults.length-1].TestValue);
+            vm.recentDate = Date.parse(testResults[testResults.length-1].TestDate);
             windowWidth = $(window).width();
 
             // Configuring the font size for the chart to be the same as the user defined font
