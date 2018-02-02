@@ -29,6 +29,7 @@
         var language;
 
         vm.about = about;
+        vm.gotoUrl = gotoUrl;
         vm.noUrl = false;
 
         activate();
@@ -43,13 +44,17 @@
 
         function about(){
             if (vm.url.length > 0) {
-                disclaimer.show();
-                if (Constants.app) {
-                    cordova.InAppBrowser.open(vm.url, '_blank', 'location=yes');
-                } else {
-                    window.open(vm.url);
-                }
+                disclaimerModal.show();
             }
+        }
+
+        function gotoUrl() {
+            if (Constants.app) {
+                cordova.InAppBrowser.open(vm.url, '_blank', 'location=yes');
+            } else {
+                window.open(vm.url);
+            }
+
         }
 
         function bindEvents(){
@@ -78,7 +83,7 @@
             test = page.options.param;
 
             vm.selectedTest = test;
-            vm.testName = test.ComponentName || test.testResults[0].ComponentName;
+            //vm.testName = test.ComponentName || test.testResults[0].ComponentName;
             vm.title = vm.selectedTest.FacComponentName || vm.selectedTest.testName;
 
             language = UserPreferences.getLanguage().toUpperCase();
@@ -88,7 +93,7 @@
                 vm.url = vm.selectedTest.URL_EN || ((test.testResults === undefined) ? "" : test.testResults[0].URL_EN);
             else
                 vm.url = vm.selectedTest.URL_FR || ((test.testResults === undefined) ? "" : test.testResults[0].URL_FR);
-
+            
             if (vm.url.length <= 0) vm.noUrl = true;
 
             max = vm.selectedTest.MaxNorm || test.testResults[0].MaxNorm;
@@ -142,6 +147,7 @@
             /**********************************************/
 
             vm.recentValue = parseFloat(testResults[testResults.length-1].TestValue);
+            vm.recentDate = Date.parse(testResults[testResults.length-1].TestDate);
             windowWidth = $(window).width();
 
             // Configuring the font size for the chart to be the same as the user defined font

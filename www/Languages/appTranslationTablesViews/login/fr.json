@@ -67,6 +67,7 @@
   "PATIENTCHARTER": "Charte du patient",
   "PP": "Politique de confidentialité",
   "RATETHISAPP": "Évaluer l'application",
+  "RESETTRUSTEDMESSAGE": "Il semble que vous réinitialisiez votre mot de passe sur un autre appareil. Veuillez paramétrer ce téléphone sur 'Non sécurisé' pour effacer vos données utilisateur enregistrées avant de vous reconnecter. Vous serez en mesure de définir comme 'sécurisé' la prochaine fois que vous essayez de vous connecter.",
   "RETRYRESET": "Réessayer la réinitialisation de mot de passe",
   "RECONNECTNG": "Se reconnecter...",
   "REPORTISSUES": "Signaler Erreur",
