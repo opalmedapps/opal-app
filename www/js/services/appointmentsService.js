@@ -354,6 +354,9 @@ myApp.service('Appointments', ['$q', 'RequestToServer','$cordovaCalendar','UserA
          the {@link MUHCApp.controller:ScheduleController ScheduleController}.
          **/
         setUserAppointments: function (appointments) {
+
+
+            console.log(appointments);
             //Initializing Variables
             userAppointmentsArray = [];
             appointmentsLocalStorage=[];
@@ -439,6 +442,22 @@ myApp.service('Appointments', ['$q', 'RequestToServer','$cordovaCalendar','UserA
          **/
         getTodaysAppointments: function () {
             return getAppointmentsInPeriod('Today');
+        },
+
+        updateCheckedInAppointments: function(appts){
+            appts = appts.map(function(apt){
+                return apt.AppointmentSerNum
+            });
+
+            userAppointmentsArray = userAppointmentsArray.map(function(apt) {
+                if(appts.includes(apt.AppointmentSerNum)) {
+
+                    console.log("updating appointment", apt);
+
+                    apt.Checkin = 1;
+                }
+                return apt
+            })
         },
         /**
          *@ngdoc method
