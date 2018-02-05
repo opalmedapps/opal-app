@@ -68,6 +68,8 @@
 
                 $scope.popoverDocsInfo.off('posthide');
                 $scope.popoverDocsInfo.destroy();
+
+
             });
             initializeDocument(docParams);
         }
@@ -92,6 +94,9 @@
 
             PDFJS.getDocument(uint8pf)
                 .then(function (_pdfDoc) {
+
+                    // Empty array
+                    uint8pf.length = 0;
 
                     var promises = [];
 
@@ -133,6 +138,10 @@
             var image = new Image();
             image.onload = function(){
                 cordova.InAppBrowser.open(image.src, '_blank', 'location=no,enableViewportScale=true');
+
+                //TODO: TEST !!!!
+                delete image.src;
+
             };
             image.src = canvas.toDataURL("image/jpeg", 0.5);
         }
@@ -167,8 +176,6 @@
 
         //Share function
         function share() {
-
-            console.log('called share');
 
             if (Constants.app) {
                 var targetPath = FileManagerService.generatePath(docParams);
