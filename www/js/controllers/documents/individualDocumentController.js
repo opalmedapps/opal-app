@@ -95,9 +95,6 @@
             PDFJS.getDocument(uint8pf)
                 .then(function (_pdfDoc) {
 
-                    // Empty array
-                    uint8pf.length = 0;
-
                     var promises = [];
 
                     for (var num = 1; num <= _pdfDoc.numPages; num++) {
@@ -131,16 +128,15 @@
                     $timeout(function(){vm.hide = true}, 5000);
                     $timeout(function(){vm.show = false}, 6500);
                     $scope.$apply();
+                    // Empty array
+                    uint8pf.length = 0;
                 });
         }
 
         function convertCanvasToImage(canvas) {
             var image = new Image();
             image.onload = function(){
-                cordova.InAppBrowser.open(image.src, '_blank', 'location=no,enableViewportScale=true');
-
-                //TODO: TEST !!!!
-                delete image.src;
+                cordova.InAppBrowser.open(image.src, '_blank', 'location=no,enableViewportScale=true', 'clearcache=yes');
 
             };
             image.src = canvas.toDataURL("image/jpeg", 0.5);
