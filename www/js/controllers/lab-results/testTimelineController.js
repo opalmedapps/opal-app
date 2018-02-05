@@ -27,6 +27,8 @@
         var max;
         var min;
         var language;
+        var chartSelectedDateRange = 4;
+
 
         vm.about = about;
         vm.gotoUrl = gotoUrl;
@@ -113,6 +115,9 @@
 
             vm.testResultsByDateArray = LabResults.getTestResultsArrayByDate();
 
+            vm.chartSelectedDateRange = 4;   // this to select All as the date range: 0,1,2,3,4   1m, 3m, 6m, 1yr, All
+            //vm.chartOptions.rangeSelector.selected = vm.chartSelectedDateRange;
+
         }
 
 
@@ -147,7 +152,7 @@
             /**********************************************/
 
             vm.recentValue = parseFloat(testResults[testResults.length-1].TestValue);
-            vm.recentDate = Date.parse(testResults[testResults.length-1].TestDate);
+            vm.recentDate = Date.parse(testResults[testResults.length-1].TestDateFormat);
             windowWidth = $(window).width();
 
             // Configuring the font size for the chart to be the same as the user defined font
@@ -269,7 +274,7 @@
 
             vm.chartOptions = {
                 rangeSelector: {
-                    selected: 1,
+                    selected: chartSelectedDateRange,
                     buttonTheme: {
                         width: 'auto',
                         style: {
@@ -294,8 +299,8 @@
                 xAxis: {
                     type: 'datetime',
                     dateTimeLabelFormats: { // don't display the dummy year
-                        month: '%e %b',
-                        year: '%b  %y'
+                        month: '%e %b %y',
+                        year: '%e %b %y'
                     },
                     minTickInterval: 3600*24*30*1000,//time in milliseconds
                     minRange: 3600*24*30*1000,

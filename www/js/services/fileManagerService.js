@@ -205,6 +205,38 @@ myApp.service('FileManagerService',function($q, $cordovaFileOpener2,$filter,News
             var app = document.URL.indexOf('http://') === -1 && document.URL.indexOf('https://') === -1;
             if (app) {
                 if(ons.platform.isAndroid()){
+
+                    $cordovaFileOpener2.open(url,'application/pdf').then(function() {
+                        // file opened successfully
+                    }, function(err) {
+                        // An error occurred.
+                        ons.notification.alert({ message:$filter('traslate')('UNABLETOOPEN') });
+                    });
+                    /*
+                    window.cordova.plugins.FileOpener.canOpenFile(url, function(data){
+
+                        if(data.canBeOpen)
+                        {
+                            window.cordova.plugins.FileOpener.openFile(url, function(data){
+
+                            }, function(data){
+
+                                ons.notification.alert({ message:$filter('traslate')('UNABLETOOPEN') });
+                            });
+                        }else{
+                            ons.notification.alert({ message:$filter('traslate')('UNABLETOOPEN') });
+                        }
+                    }, function(error){ons.notification.alert({ message:$filter('traslate')('UNABLETOOPEN') });}); */
+                }else{
+                    var ref = cordova.InAppBrowser.open(url, '_blank', 'EnableViewPortScale=yes');
+                }
+            } else {
+                window.open(url);
+            }
+            /**
+            var app = document.URL.indexOf('http://') === -1 && document.URL.indexOf('https://') === -1;
+            if (app) {
+                if(ons.platform.isAndroid()){
                     window.cordova.plugins.FileOpener.canOpenFile(url, function(data){
 
                         if(data.canBeOpen)
@@ -225,6 +257,7 @@ myApp.service('FileManagerService',function($q, $cordovaFileOpener2,$filter,News
             } else {
                 window.open(url);
             }
+            */
         },
         //Gets document file storage url
         /**
