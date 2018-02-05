@@ -68,6 +68,8 @@
 
                 $scope.popoverDocsInfo.off('posthide');
                 $scope.popoverDocsInfo.destroy();
+
+
             });
             initializeDocument(docParams);
         }
@@ -126,13 +128,16 @@
                     $timeout(function(){vm.hide = true}, 5000);
                     $timeout(function(){vm.show = false}, 6500);
                     $scope.$apply();
+                    // Empty array
+                    uint8pf.length = 0;
                 });
         }
 
         function convertCanvasToImage(canvas) {
             var image = new Image();
             image.onload = function(){
-                cordova.InAppBrowser.open(image.src, '_blank', 'location=no,enableViewportScale=true');
+                cordova.InAppBrowser.open(image.src, '_blank', 'location=no,enableViewportScale=true', 'clearcache=yes');
+
             };
             image.src = canvas.toDataURL("image/jpeg", 0.5);
         }
@@ -167,8 +172,6 @@
 
         //Share function
         function share() {
-
-            console.log('called share');
 
             if (Constants.app) {
                 var targetPath = FileManagerService.generatePath(docParams);
