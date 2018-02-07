@@ -136,7 +136,7 @@ myApp.service('FileManagerService',function($q, $cordovaFileOpener2,$filter,News
          *@param {String} url url to check
          *@description Opens the native shared functionality and allows the user to share the url through different mediums, giving it the name specified in the parameters. Reference {@link https://github.com/EddyVerbruggen/SocialSharing-PhoneGap-Plugin Cordova Sharing Plugin}
          **/
-        shareDocument:function(name, url)
+        shareDocument:function(name, url, fileType)
         {
             //Check if its an app
             if (app) {
@@ -145,18 +145,23 @@ myApp.service('FileManagerService',function($q, $cordovaFileOpener2,$filter,News
                 var options = {subject: name};
                 options.files = [url];
                 //Defines on success function
-                var onSuccess = function(result) {
+                var onSuccess = function (result) {
 
 
                 };
                 //Defines on error function
-                var onError = function(msg) {
+                var onError = function (msg) {
                     //Show alert banner with error
-                    NewsBanner.showCustomBanner($filter('translate')("UNABLETOSHAREMATERIAL"),'#f2dede', null, 2000);
+                    NewsBanner.showCustomBanner($filter('translate')("UNABLETOSHAREMATERIAL"), '#f2dede', null, 2000);
 
                 };
+
+                if (fileType === 'Video') {
+                    window.plugins.socialsharing.share('', name, '', url);
+                } else {
                 //Plugin usage
-                window.plugins.socialsharing.shareWithOptions(options, onSuccess, onError);
+                    window.plugins.socialsharing.shareWithOptions(options, onSuccess, onError);
+                }
             } else {
                 ons.notification.alert({ message: $filter('translate')('AVAILABLEDEVICES')});
             }
@@ -210,7 +215,7 @@ myApp.service('FileManagerService',function($q, $cordovaFileOpener2,$filter,News
                         // file opened successfully
                     }, function(err) {
                         // An error occurred.
-                        ons.notification.alert({ message:$filter('traslate')('UNABLETOOPEN') });
+                        ons.notification.alert({ message:$filter('translate')('UNABLETOOPEN') });
                     });
                     /*
                     window.cordova.plugins.FileOpener.canOpenFile(url, function(data){
@@ -221,12 +226,12 @@ myApp.service('FileManagerService',function($q, $cordovaFileOpener2,$filter,News
 
                             }, function(data){
 
-                                ons.notification.alert({ message:$filter('traslate')('UNABLETOOPEN') });
+                                ons.notification.alert({ message:$filter('translate')('UNABLETOOPEN') });
                             });
                         }else{
-                            ons.notification.alert({ message:$filter('traslate')('UNABLETOOPEN') });
+                            ons.notification.alert({ message:$filter('translate')('UNABLETOOPEN') });
                         }
-                    }, function(error){ons.notification.alert({ message:$filter('traslate')('UNABLETOOPEN') });}); */
+                    }, function(error){ons.notification.alert({ message:$filter('translate')('UNABLETOOPEN') });}); */
                 }else{
                     var ref = cordova.InAppBrowser.open(url, '_blank', 'EnableViewPortScale=yes');
                 }
@@ -245,12 +250,12 @@ myApp.service('FileManagerService',function($q, $cordovaFileOpener2,$filter,News
 
                             }, function(data){
 
-                                ons.notification.alert({ message:$filter('traslate')('UNABLETOOPEN') });
+                                ons.notification.alert({ message:$filter('translate')('UNABLETOOPEN') });
                             });
                         }else{
-                            ons.notification.alert({ message:$filter('traslate')('UNABLETOOPEN') });
+                            ons.notification.alert({ message:$filter('translate')('UNABLETOOPEN') });
                         }
-                    }, function(error){ons.notification.alert({ message:$filter('traslate')('UNABLETOOPEN') });});
+                    }, function(error){ons.notification.alert({ message:$filter('translate')('UNABLETOOPEN') });});
                 }else{
                     var ref = cordova.InAppBrowser.open(url, '_blank', 'EnableViewPortScale=yes');
                 }

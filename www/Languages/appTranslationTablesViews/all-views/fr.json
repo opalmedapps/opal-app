@@ -308,6 +308,7 @@
   "LAB_NORMAL":"Les valeurs en noires sont normales",
   "LAB_WITHIN_5":"Les valeurs en violet se situent dans un interval de 5%",
   "LAB_OUTSIDE_5":"Les valeurs en rouge se situent à l'extérieur du taux normal",
+  "LAB_RESULT_EMERGENCY": "TR_ Important: If you see any values in this category, please seek emergency medical attention.",
   "NUM_PATIENTS_AHEAD": "Nombre de patients devant vous: 2",
   "TIME_STATUS": "Rendez-vous devancé de 10 minutes",
   "TOU": "Conditions d'Utilisation",
