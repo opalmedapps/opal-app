@@ -12,10 +12,10 @@
         .module('MUHCApp')
         .controller('TestTimelineController', TestTimelineController);
 
-    TestTimelineController.$inject = ['$scope','$timeout','LabResults','$filter','UserPreferences', 'Logger', 'Constants'];
+    TestTimelineController.$inject = ['$rootScope','$scope','$timeout','LabResults','$filter','UserPreferences', 'Logger', 'Constants'];
 
     /* @ngInject */
-    function TestTimelineController($scope, $timeout, LabResults, $filter, UserPreferences, Logger, Constants) {
+    function TestTimelineController($rootScope, $scope, $timeout, LabResults, $filter, UserPreferences, Logger, Constants) {
 
         var vm = this;
         var page;
@@ -115,11 +115,33 @@
 
             vm.testResultsByDateArray = LabResults.getTestResultsArrayByDate();
 
-            vm.chartSelectedDateRange = 4;   // this to select All as the date range: 0,1,2,3,4   1m, 3m, 6m, 1yr, All
-            //vm.chartOptions.rangeSelector.selected = vm.chartSelectedDateRange;
+            if ($rootScope.chartSelectedDateRange === undefined) {
+                $rootScope.chartSelectedDateRange = 4;    // this to select All by Default as the date range: 0,1,2,3,4   1m, 3m, 6m, 1y, All
+            }
 
         }
 
+        /**
+         * This is to save the user's choice of Date Range on the chart (1m, 3m, 6m, 1y, All).
+         * This event is triggered (through HighCharts) when the user Clicks on a Date Range (1m, 3m, 6m, 1y, All) on the chart
+         * @param e (event)
+         */
+        function afterSetExtremes(e) {
+            //console.log(this);
+            //console.log(e);
+
+            if (e.rangeSelectorButton.text === '1m')
+                $rootScope.chartSelectedDateRange = 0;
+            else if (e.rangeSelectorButton.text === '3m')
+                $rootScope.chartSelectedDateRange = 1;
+            else if (e.rangeSelectorButton.text === '6m')
+                $rootScope.chartSelectedDateRange = 2;
+            else if (e.rangeSelectorButton.text === '1y')
+                $rootScope.chartSelectedDateRange = 3;
+            else if (e.rangeSelectorButton.text === 'All')
+                $rootScope.chartSelectedDateRange = 4;
+            else $rootScope.chartSelectedDateRange = 2;
+        }
 
         function configureChart(){
 
@@ -198,6 +220,11 @@
                         rangeSelectorTo: "au",
                         rangeSelectorZoom: ''
                     },
+                    xAxis: {
+                        events: {
+                            afterSetExtremes: afterSetExtremes
+                        }
+                    },
                     rangeSelector: {
                         buttons: [{
                             type: 'month',
@@ -246,6 +273,11 @@
                         rangeSelectorTo: 'To',
                         rangeSelectorZoom: ''
                     },
+                    xAxis: {
+                        events: {
+                            afterSetExtremes: afterSetExtremes
+                       }
+                    },
                     rangeSelector: {
                         buttons: [{
                             type: 'month',
@@ -267,6 +299,7 @@
                             type: 'all',
                             text: 'All'
                         }]
+
                     }
                 });
                 Highcharts.dateFormat('%e%a');
@@ -274,7 +307,7 @@
 
             vm.chartOptions = {
                 rangeSelector: {
-                    selected: chartSelectedDateRange,
+                    selected: $rootScope.chartSelectedDateRange,
                     buttonTheme: {
                         width: 'auto',
                         style: {
