@@ -157,7 +157,7 @@ myApp.service('FileManagerService',function($q, $cordovaFileOpener2,$filter,News
                 };
 
                 if (fileType === 'Video') {
-                    window.plugins.socialsharing.share('', name, '', url);
+                    window.plugins.socialsharing.share(name, name, '', url);
                 } else {
                 //Plugin usage
                     window.plugins.socialsharing.shareWithOptions(options, onSuccess, onError);
