@@ -86,7 +86,7 @@
         }
 
         function share(){
-            FileManagerService.shareDocument(vm.edumaterial.Name, vm.edumaterial.ShareURL);
+            FileManagerService.shareDocument(vm.edumaterial.Name, vm.edumaterial.ShareURL,vm.edumaterial.Type);
             $scope.popoverSharing.hide();
         }
 
