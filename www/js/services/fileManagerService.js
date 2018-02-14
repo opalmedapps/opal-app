@@ -210,15 +210,17 @@ myApp.service('FileManagerService',function($q, $cordovaFileOpener2,$filter,News
             var app = document.URL.indexOf('http://') === -1 && document.URL.indexOf('https://') === -1;
             if (app) {
                 if(ons.platform.isAndroid()){
-                    /*
+
                     $cordovaFileOpener2.open(url,'application/pdf').then(function() {
                         // file opened successfully
                     }, function(err) {
                         // An error occurred.
-                        ons.notification.alert({ message:$filter('translate')('UNABLETOOPEN') });
-                    });
-                    */
 
+                        ons.notification.alert('Error status: ' + err.status + ' - Error message: ' + err.message);
+                        //ons.notification.alert({ message:$filter('translate')('UNABLETOOPEN') });
+                    });
+
+                    /*
                     window.cordova.plugins.FileOpener.canOpenFile(url, function(data){
 
                         if(data.canBeOpen)
@@ -233,6 +235,7 @@ myApp.service('FileManagerService',function($q, $cordovaFileOpener2,$filter,News
                             ons.notification.alert({ message:$filter('translate')('UNABLETOOPEN') });
                         }
                     }, function(error){ons.notification.alert({ message:$filter('translate')('UNABLETOOPEN') });});
+                    */
                 }else{
                     var ref = cordova.InAppBrowser.open(url, '_blank', 'EnableViewPortScale=yes');
                 }
