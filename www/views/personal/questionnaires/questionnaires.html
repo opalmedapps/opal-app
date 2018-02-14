@@ -2,10 +2,10 @@
     <ons-toolbar fixed-style>
         <!--<div class="left"><p style="font-size: 10pt">Answered {{numAnswered}}/{{questions.length}}</div>-->
         <div class="left">
-            <ons-back-button>Back</ons-back-button>
+            <ons-back-button>{{"BACK"|translate}}</ons-back-button>
         </div>
         <div class="center">
-            <span ng-hide="index>0">Questionnaire Home</span>
+            <span ng-hide="index>0">{{"QUESTIONNAIRE_HOME"|translate}}</span>
             <span ng-show="(index > 0) && index <= (questions.length)"><ons-toolbar-button><i
                     style="color: rgba(38,100,171,0.81);" class="ion-chevron-left"
                     ng-click="back()"></i></ons-toolbar-button>{{index}}/{{questions.length}}<ons-toolbar-button><i
@@ -13,14 +13,14 @@
                     ng-click="forward()"></i></ons-toolbar-button></span>
             <span ng-show="(index == (questions.length + 1))"><ons-toolbar-button><i
                     style="color: rgba(38,100,171,0.81);" class="ion-chevron-left"
-                    ng-click="back()"></i></ons-toolbar-button>Summary Page<ons-toolbar-button ng-disabled="true"><i
+                    ng-click="back()"></i></ons-toolbar-button>{{"SUMMARY"|translate}}<ons-toolbar-button ng-disabled="true"><i
                     style="color: rgba(38,100,171,0.81);" class="ion-chevron-right"
                     ng-disabled="true"></i></ons-toolbar-button></span>
         </div>
         <div class="right">
           <span span ng-hide="index>0" class="toolbar-button--quiet navigation-bar__line-height"
-                ng-click="start()"><span ng-show="!questionnaireInProgress()">Begin</span>
-          <span ng-show="questionnaireInProgress()">Resume</span> <i class="ion-chevron-right"></i></span>
+                ng-click="start()"><span ng-show="!questionnaireInProgress()">{{"BEGIN"|translate}}</span>
+          <span ng-show="questionnaireInProgress()">{{"RESUME"|translate}}</span> <i class="ion-chevron-right"></i></span>
         </div>
     </ons-toolbar>
 
@@ -31,7 +31,7 @@
                     <div class="row text-center" style="margin: 0 auto;" align="center">
                         <div class="col-xs-12 text-center" style="margin-top: 2.5vh">
                             <h3>
-                                <center>Welcome to the <b><span style="color: darkmagenta"> {{questionaire.QuestionnaireName}}</span></b>!
+                                <center>{{"WELCOME"|translate}} <b><span style="color: darkmagenta"> {{questionaire.QuestionnaireName}}</span></b>!
                                 </center>
                             </h3>
                         </div>
@@ -48,8 +48,7 @@
                     <div class="row text-center" style="margin: 0 auto;" align="center">
                         <div class="col-xs-12">
                             <center>
-                                <p style="font-size: 14pt">Click begin/resume or swipe to switch to start the
-                                    questionnaire.</p>
+                                <p style="font-size: 14pt">{{"QUESTIONNAIRE_INSTRUCTIONS2"|translate}}</p>
                             </center>
                         </div>
                     </div>
@@ -83,12 +82,6 @@
                 <!-- Toolbar with forward and backward buttons to go back and forth between pages. -->
                 <!-- End of toolbar -->
 
-                <!--  Only shows if they have reached the last page -->
-                <div align="center" style="margin-top: 20px">
-                    <button class="button--large--cta" value="Submit Answer" ng-click="goToSummary()" ng-show="reachEnd"
-                            style="width:80%">Go To Summary Page
-                    </button>
-                </div>
                 <!-- Question text  -->
                 <div class="row" style="margin:0;padding:0" id="questionText" ng-show="shown[$index]">
                     <div class="col-xs-12">
@@ -484,6 +477,14 @@
                         <br><br>
                     </div>
                 </div>
+                <!--  Only shows if they have reached the last page -->
+                <div align="center" style="margin-top: 20px">
+                    <button class="button--large--cta" value="Submit Answer" ng-click="goToSummary()" ng-show="reachEnd"
+                            style="width:80%">{{"GOTOSUMMARY"|translate}}
+                    </button>
+                    <br>
+                </div>
+
             </ons-page>
         </ons-carousel-item>
 
@@ -517,15 +518,13 @@
                 <div>
                     <div class="ons-row">
                         <div class="ons-col" align="left">
-                            <p style="color: gray; padding-left: 10px; padding-right: 10px;">Answer the questions in
-                                red. Questions in green can be edited. Once all questions are answered, you can
-                                submit.
+                            <p style="color: gray; padding-left: 10px; padding-right: 10px;">{{"QUESTIONNAIRE_INSTRUCTIONS"|translate}}
                             </p>
                         </div>
                     </div>
                     <div align="center" style="margin-top:10px;margin-bottom:10px">
                         <button class="button--large--cta" value="Submit Answer" style="width:80%" ng-click="subPros()"
-                                ng-disabled="checkSubmit()">Submit Answers
+                                ng-disabled="checkSubmit()">{{"SUBMITANSWERS"|translate}}
                         </button>
                     </div>
                     <div>
