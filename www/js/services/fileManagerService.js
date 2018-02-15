@@ -211,7 +211,7 @@ myApp.service('FileManagerService', function ($q, $cordovaFileOpener2, $filter, 
                     });
                     */
 
-                    window.cordova.plugins.FileOpener.canOpenFile(url, function (data2) {
+                    window.cordova.plugins.FileOpener.canOpenFile(url, function (data) {
 
 
                         var onSuccess = function(data) {
