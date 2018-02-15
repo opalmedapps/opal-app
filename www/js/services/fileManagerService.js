@@ -211,10 +211,22 @@ myApp.service('FileManagerService', function ($q, $cordovaFileOpener2, $filter, 
                     });
                     */
 
-                    window.cordova.plugins.FileOpener.canOpenFile(url, function (data) {
+                    window.cordova.plugins.FileOpener.canOpenFile(url, function (data2) {
 
+
+                        var onSuccess = function(data) {
+                            ons.notification.alert({message:  'extension: ' + data.extension + ' - message: ' + data.message + ' - url: ' + url});
+                        };
+
+                        function onError(error) {
+                            ons.notification.alert({message: 'Error 1 status: ' + error.status + ' - Error message: ' + error.message + ' - url: ' + url});
+                        }
+
+                        window.cordova.plugins.FileOpener.openFile(url, onSuccess, onError);
+
+                        /*
                         if (data.canBeOpen) {
-                            ons.notification.alert({message:  'canBeOpen: ' + data.canBeOpen + ' - url: ' + url});
+                            ons.notification.alert({message:  'canBeOpen: ' + data.canBeOpen + ' - extension: ' + data.extension + ' - url: ' + url});
 
                             window.cordova.plugins.FileOpener.openFile(url, function (data) {
                                 // file opened successfully
@@ -230,6 +242,8 @@ myApp.service('FileManagerService', function ($q, $cordovaFileOpener2, $filter, 
 
                             //ons.notification.alert({ message:$filter('translate')('UNABLETOOPEN') });
                         }
+                        */
+
                     }, function (error) {
                         ons.notification.alert({message: 'canOpen 3 Error status: ' + error.status + ' - Error message: ' + error.message + ' - url: ' + url});
 
