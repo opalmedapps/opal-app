@@ -1,7 +1,7 @@
 //
 // Author David Herrera on Summer 2016, Email:davidfherrerar@gmail.com
 //
-var myApp=angular.module('MUHCApp');
+var myApp = angular.module('MUHCApp');
 /**
  *@ngdoc service
  *@name MUHCApp.service:FileManagerService
@@ -11,7 +11,7 @@ var myApp=angular.module('MUHCApp');
  *@requires $filter
  *@description Allows the app's controllers or services interact with the file storage of the device. For more information look at {@link https://github.com/apache/cordova-plugin-file Cordova File Plugin}, reference for social sharing plugin {@link https://github.com/EddyVerbruggen/SocialSharing-PhoneGap-Plugin Cordova Sharing Plugin}
  **/
-myApp.service('FileManagerService',function($q, $cordovaFileOpener2,$filter,NewsBanner ){
+myApp.service('FileManagerService', function ($q, $cordovaFileOpener2, $filter, NewsBanner) {
     //Determing whether is a device or the browser
     var app = document.URL.indexOf('http://') === -1 && document.URL.indexOf('https://') === -1;
 
@@ -31,34 +31,31 @@ myApp.service('FileManagerService',function($q, $cordovaFileOpener2,$filter,News
      *@description Same as above but the using th CDV protocol.
      **/
     var urlCDVPathDocuments = '';
-    if(app)
-    {
-        if(ons.platform.isAndroid())
-        {
-            urlDeviceDocuments = cordova.file.externalRootDirectory+'/Documents/';
+    if (app) {
+        if (ons.platform.isAndroid()) {
+            urlDeviceDocuments = cordova.file.externalRootDirectory + '/Documents/';
             urlCDVPathDocuments = "cdvfile://localhost/sdcard/Documents/";
-        }else{
-            urlDeviceDocuments = cordova.file.documentsDirectory+'/Documents/';
+        } else {
+            urlDeviceDocuments = cordova.file.documentsDirectory + '/Documents/';
             urlCDVPathDocuments = "cdvfile://localhost/persistent/Documents/";
         }
 
     }
-    //Tell me whether a url is a pdf link
-    function isPDFDocument(url)
-    {
-        var index = url.lastIndexOf('.');
-        var substring = url.substring(index+1,url.length);
 
-        return (substring=='pdf')?true:false;
+    //Tell me whether a url is a pdf link
+    function isPDFDocument(url) {
+        var index = url.lastIndexOf('.');
+        var substring = url.substring(index + 1, url.length);
+
+        return (substring == 'pdf') ? true : false;
     }
 
     //Reads data from file an return base64 representation
-    function readDataAsUrl(file)
-    {
-        var r=$q.defer();
+    function readDataAsUrl(file) {
+        var r = $q.defer();
         var reader = new FileReader();
-        var img='';
-        reader.onloadend = function(evt) {
+        var img = '';
+        reader.onloadend = function (evt) {
 
             r.resolve(evt.target.result);
         };
@@ -76,8 +73,7 @@ myApp.service('FileManagerService',function($q, $cordovaFileOpener2,$filter,News
          *@description Obtains file type
          *@returns {String} Returns type
          **/
-        getFileType:function(url)
-        {
+        getFileType: function (url) {
             var index = url.lastIndexOf('.');
             return url.substring(index + 1, url.length);
         },
@@ -90,8 +86,7 @@ myApp.service('FileManagerService',function($q, $cordovaFileOpener2,$filter,News
          *@description Public function to determine whether the url is a pdf
          *@returns {Boolean} Value representing whether a given url is a pdf or not
          **/
-        isPDFDocument:function(url)
-        {
+        isPDFDocument: function (url) {
             return isPDFDocument(url);
         },
         //Downloads a document into the device storage
@@ -104,22 +99,19 @@ myApp.service('FileManagerService',function($q, $cordovaFileOpener2,$filter,News
          *@description Downloads the url into the targetPath specified for the device, Checks if the document has been downloaded if it has not, it proceeds
          *@returns {Promise} If the document has been downloaded before, or if it downloads successfully, it function resolves to the file entry representing that document, otherwise rejects the promise with the appropiate error.
          **/
-        downloadFileIntoStorage:function(url,targetPath)
-        {
-            var r=$q.defer();
+        downloadFileIntoStorage: function (url, targetPath) {
+            var r = $q.defer();
             var fileTransfer = new FileTransfer();
-            window.resolveLocalFileSystemURL(targetPath,function(fileEntry)
-            {
+            window.resolveLocalFileSystemURL(targetPath, function (fileEntry) {
 
                 r.resolve(true);
-            },function()
-            {
+            }, function () {
                 fileTransfer.download(url, targetPath,
-                    function(entry) {
+                    function (entry) {
 
                         r.resolve(entry);
                     },
-                    function(err) {
+                    function (err) {
 
                         r.reject(err);
                     });
@@ -136,8 +128,7 @@ myApp.service('FileManagerService',function($q, $cordovaFileOpener2,$filter,News
          *@param {String} url url to check
          *@description Opens the native shared functionality and allows the user to share the url through different mediums, giving it the name specified in the parameters. Reference {@link https://github.com/EddyVerbruggen/SocialSharing-PhoneGap-Plugin Cordova Sharing Plugin}
          **/
-        shareDocument:function(name, url, fileType)
-        {
+        shareDocument: function (name, url, fileType) {
             //Check if its an app
             if (app) {
 
@@ -159,11 +150,11 @@ myApp.service('FileManagerService',function($q, $cordovaFileOpener2,$filter,News
                 if (fileType === 'Video') {
                     window.plugins.socialsharing.share(name, name, '', url);
                 } else {
-                //Plugin usage
+                    //Plugin usage
                     window.plugins.socialsharing.shareWithOptions(options, onSuccess, onError);
                 }
             } else {
-                ons.notification.alert({ message: $filter('translate')('AVAILABLEDEVICES')});
+                ons.notification.alert({message: $filter('translate')('AVAILABLEDEVICES')});
             }
         },
         //Gets the base64 representation of a file in the cordova file storage
@@ -175,21 +166,19 @@ myApp.service('FileManagerService',function($q, $cordovaFileOpener2,$filter,News
          *@description Opens file from device storage and converts into base64 format, it returns the base64 representation via promises
          *@return {Promise} If fulfilled document base64 representation returned correctly, otherwise, rejects promise with appropiate error.
          **/
-        getFileUrl:function(filePath)
-        {
-            var r=$q.defer();
+        getFileUrl: function (filePath) {
+            var r = $q.defer();
             //Find the file path in stroage
-            window.resolveLocalFileSystemURL(filePath, function(fileEntry){
+            window.resolveLocalFileSystemURL(filePath, function (fileEntry) {
                 //Get file entry and turn it into a base64 string
-                fileEntry.file(function(file){
+                fileEntry.file(function (file) {
                     r.resolve(readDataAsUrl(file));
-                },function(error)
-                {
+                }, function (error) {
                     //Error transforming file into base64
                     r.reject(error);
 
                 });
-            }, function(error){
+            }, function (error) {
                 //Document not found
 
                 r.reject(error.code);
@@ -204,47 +193,54 @@ myApp.service('FileManagerService',function($q, $cordovaFileOpener2,$filter,News
          *@param {String} url File url to open
          *@description If its an android phone, the function uses {@link https://github.com/pwlin/cordova-plugin-file-opener2 Cordova File Opener2}, and opens the pdf using a third party software. If its an iOS device or a browser, it simply opens it in a new browser window.
          **/
-        openPDF:function(url)
-        {
+        openPDF: function (url) {
 
             var app = document.URL.indexOf('http://') === -1 && document.URL.indexOf('https://') === -1;
             if (app) {
-                if(ons.platform.isAndroid()){
+                if (ons.platform.isAndroid()) {
 
+                    // $cordovaFileOpener2 does not open url. It has must be saved locally first
+                    /*
                     $cordovaFileOpener2.open(url,'application/pdf').then(function() {
                         // file opened successfully
                     }, function(err) {
                         // An error occurred.
 
-                        ons.notification.alert('Error status: ' + err.status + ' - Error message: ' + err.message);
+                        ons.notification.alert({ message: 'Error status: ' + err.status + ' - Error message: ' + err.message + ' - url: ' + url});
+                        //ons.notification.alert({ message:$filter('translate')('UNABLETOOPEN') });
+                    });
+                    */
+
+                    window.cordova.plugins.FileOpener.canOpenFile(url, function (data) {
+
+                        if (data.canBeOpen) {
+                            window.cordova.plugins.FileOpener.openFile(url, function (data) {
+                                // file opened successfully
+                            }, function (error) {
+                                ons.notification.alert({message: 'canOpen Error 1 status: ' + error.status + ' - Error message: ' + error.message + ' - url: ' + url});
+
+                                //ons.notification.alert({ message:$filter('translate')('UNABLETOOPEN') });
+                            });
+                        } else {
+                            ons.notification.alert({message: 'canOpen 2 Error ' + ' - url: ' + url});
+
+                            //ons.notification.alert({ message:$filter('translate')('UNABLETOOPEN') });
+                        }
+                    }, function (error) {
+                        ons.notification.alert({message: 'canOpen 3 Error status: ' + error.status + ' - Error message: ' + error.message + ' - url: ' + url});
+
                         //ons.notification.alert({ message:$filter('translate')('UNABLETOOPEN') });
                     });
 
-                    /*
-                    window.cordova.plugins.FileOpener.canOpenFile(url, function(data){
-
-                        if(data.canBeOpen)
-                        {
-                            window.cordova.plugins.FileOpener.openFile(url, function(data){
-
-                            }, function(data){
-
-                                ons.notification.alert({ message:$filter('translate')('UNABLETOOPEN') });
-                            });
-                        }else{
-                            ons.notification.alert({ message:$filter('translate')('UNABLETOOPEN') });
-                        }
-                    }, function(error){ons.notification.alert({ message:$filter('translate')('UNABLETOOPEN') });});
-                    */
-                }else{
+                } else {
                     var ref = cordova.InAppBrowser.open(url, '_blank', 'EnableViewPortScale=yes');
                 }
             } else {
                 window.open(url);
             }
             /**
-            var app = document.URL.indexOf('http://') === -1 && document.URL.indexOf('https://') === -1;
-            if (app) {
+             var app = document.URL.indexOf('http://') === -1 && document.URL.indexOf('https://') === -1;
+             if (app) {
                 if(ons.platform.isAndroid()){
                     window.cordova.plugins.FileOpener.canOpenFile(url, function(data){
 
@@ -266,7 +262,7 @@ myApp.service('FileManagerService',function($q, $cordovaFileOpener2,$filter,News
             } else {
                 window.open(url);
             }
-            */
+             */
         },
         //Gets document file storage url
         /**
@@ -277,12 +273,11 @@ myApp.service('FileManagerService',function($q, $cordovaFileOpener2,$filter,News
          *@description Gets the path representations of the document inside the device storage
          *@returns {Object} Object containing the two representations of file paths for the document in the device storage
          **/
-        getDocumentUrls:function(document)
-        {
-            var documentName = 'docMUHC'+document.DocumentSerNum+"."+document.DocumentType;
-            var urlCDV = urlCDVPathDocuments+documentName;
-            var urlPathFile = urlDeviceDocuments+documentName;
-            return {cdvUrl:urlCDV,urlPathFile:urlPathFile};
+        getDocumentUrls: function (document) {
+            var documentName = 'docMUHC' + document.DocumentSerNum + "." + document.DocumentType;
+            var urlCDV = urlCDVPathDocuments + documentName;
+            var urlPathFile = urlDeviceDocuments + documentName;
+            return {cdvUrl: urlCDV, urlPathFile: urlPathFile};
         },
         //Gets the absolute path for file storage
         /**
@@ -293,15 +288,13 @@ myApp.service('FileManagerService',function($q, $cordovaFileOpener2,$filter,News
          *@description Gets the file path representation of the document inside the device storage
          *@returns {String} Returns the device path representation of file in stroage
          **/
-        getFilePathForDocument:function(document)
-        {
-            var documentName = 'docMUHC'+document.DocumentSerNum+"."+document.DocumentType;
-            return urlDeviceDocuments+documentName;
+        getFilePathForDocument: function (document) {
+            var documentName = 'docMUHC' + document.DocumentSerNum + "." + document.DocumentType;
+            return urlDeviceDocuments + documentName;
         },
-        generatePath:function(document)
-        {
-            var documentName = document.Title.replace(/ /g, "_")+document.ApprovedTimeStamp.toDateString().replace(/ /g, "-")+"."+document.DocumentType;
-            return urlDeviceDocuments+documentName;
+        generatePath: function (document) {
+            var documentName = document.Title.replace(/ /g, "_") + document.ApprovedTimeStamp.toDateString().replace(/ /g, "-") + "." + document.DocumentType;
+            return urlDeviceDocuments + documentName;
         },
         //Gets the CDVFile representation for the document
         /**
@@ -312,10 +305,9 @@ myApp.service('FileManagerService',function($q, $cordovaFileOpener2,$filter,News
          *@description Gets the CDV file path representation of the document inside the device storage
          *@returns {String} Returns the CDV file representation of file in stroage
          **/
-        getCDVFilePathForDocument:function(document)
-        {
-            var documentName = 'docMUHC'+document.DocumentSerNum+"."+document.DocumentType;
-            return urlCDVPathDocuments+documentName;
+        getCDVFilePathForDocument: function (document) {
+            var documentName = 'docMUHC' + document.DocumentSerNum + "." + document.DocumentType;
+            return urlCDVPathDocuments + documentName;
         },
         //Gets an incomplete base64 string and adds the specific string to it
         /**
@@ -326,13 +318,11 @@ myApp.service('FileManagerService',function($q, $cordovaFileOpener2,$filter,News
          *@description Concatanates appropiate base64 prefix to content according to document type.
          *@returns {Object} Returns document object with the Content set to a correct base64 url
          **/
-        setBase64Document:function(document)
-        {
-            if(document.DocumentType=='pdf')
-            {
-                document.Content='data:application/pdf;base64,'+document.Content;
-            }else{
-                document.Content='data:image/'+document.DocumentType+';base64,'+document.Content;
+        setBase64Document: function (document) {
+            if (document.DocumentType == 'pdf') {
+                document.Content = 'data:application/pdf;base64,' + document.Content;
+            } else {
+                document.Content = 'data:image/' + document.DocumentType + ';base64,' + document.Content;
             }
             return document;
         },
@@ -346,16 +336,14 @@ myApp.service('FileManagerService',function($q, $cordovaFileOpener2,$filter,News
          *@description If it finds the document in storage, returns file path representations otherwise returns the error,
          *@returns {Promise} Promise resolves to document paths if document has been found, otherwise returns document not found error.
          **/
-        findPatientDocumentInDevice:function(type, documentSerNum)
-        {
+        findPatientDocumentInDevice: function (type, documentSerNum) {
             var r = $q.defer();
-            var documentName = 'docMUHC'+documentSerNum+"."+type;
-            var urlCDV = urlCDVPathDocuments+documentName;
-            var urlPathFile = urlDeviceDocuments+documentName;
-            window.resolveLocalFileSystemURL(urlCDV,function(fileEntry)
-            {
-                r.resolve({cdvUrl:urlCDV,urlPathFile:urlPathFile});
-            },function(error){
+            var documentName = 'docMUHC' + documentSerNum + "." + type;
+            var urlCDV = urlCDVPathDocuments + documentName;
+            var urlPathFile = urlDeviceDocuments + documentName;
+            window.resolveLocalFileSystemURL(urlCDV, function (fileEntry) {
+                r.resolve({cdvUrl: urlCDV, urlPathFile: urlPathFile});
+            }, function (error) {
                 r.reject(error);
             });
             return r.promise;
@@ -368,8 +356,7 @@ myApp.service('FileManagerService',function($q, $cordovaFileOpener2,$filter,News
          *@param {String} url Url to be opened
          *@description Opens url in another browser window.
          **/
-        openUrl:function(url)
-        {
+        openUrl: function (url) {
             var app = document.URL.indexOf('http://') === -1 && document.URL.indexOf('https://') === -1;
             if (app) {
                 var ref = cordova.InAppBrowser.open(url, '_blank', 'EnableViewPortScale=yes');
@@ -378,7 +365,7 @@ myApp.service('FileManagerService',function($q, $cordovaFileOpener2,$filter,News
             }
         },
 
-        convertToUint8Array: function(base64){
+        convertToUint8Array: function (base64) {
             //
             // var BASE64_MARKER = ';base64,';
             //
@@ -388,7 +375,7 @@ myApp.service('FileManagerService',function($q, $cordovaFileOpener2,$filter,News
             var rawLength = raw.length;
             var array = new Uint8Array(new ArrayBuffer(rawLength));
 
-            for(i = 0; i < rawLength; i++) {
+            for (i = 0; i < rawLength; i++) {
                 array[i] = raw.charCodeAt(i);
             }
             return array;
