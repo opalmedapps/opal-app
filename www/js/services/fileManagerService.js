@@ -215,7 +215,7 @@ myApp.service('FileManagerService', function ($q, $cordovaFileOpener2, $filter, 
                         };
 
                         function onError(error) {
-                            // Unexpected Error occurred. For some reason, file could not be opened and viewed, althoug canOpenFile function returned (data.canBeOpen = true)
+                            // Unexpected Error occurred. For some reason, file could not be opened and viewed, although canOpenFile function returned (data2.canBeOpen = true)
                             ons.notification.alert({ message:$filter('translate')('UNABLETOOPEN') });
                         }
 
