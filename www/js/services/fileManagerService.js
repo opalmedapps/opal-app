@@ -191,7 +191,14 @@ myApp.service('FileManagerService', function ($q, $cordovaFileOpener2, $filter, 
          *@name openPDF
          *@methodOf MUHCApp.service:FileManagerService
          *@param {String} url File url to open
-         *@description If its an android phone, the function uses {@link https://github.com/pwlin/cordova-plugin-file-opener2 Cordova File Opener2}, and opens the pdf using a third party software. If its an iOS device or a browser, it simply opens it in a new browser window.
+         *@description If its an android phone, it opens the pdf using a third party software.
+         *             If its an iOS device or a browser, it simply opens it in a new browser window.
+         *             In fact, this function should be named openFile() because it opens not only pdf, but many different file types with the following extensions:
+         *             .doc, .docx, .xls, .xlsx, .rtf, .wav, .gif, .jpg, .jpeg, .png, .txt, .mpg, .mpeg, .mpe, .mp4, .avi, .ods, .odt, .ppt, .pptx, .apk
+         *             It opens the file by passing as a parameter a URL of the location of the file (not .html, should be .pdf .doc etc...) OR a file path to the local storage
+         *             URL example: https://www.opal.com/myDocument.pdf
+         *             FileOpener.canOpenFile() will check if there is a default viewer for the requested file type
+         *             FileOpener.openFile() will show the file using the default viewer "if" canOpenFile returned true
          **/
         openPDF: function (url) {
 
@@ -199,55 +206,25 @@ myApp.service('FileManagerService', function ($q, $cordovaFileOpener2, $filter, 
             if (app) {
                 if (ons.platform.isAndroid()) {
 
-                    // $cordovaFileOpener2 does not open url. It has must be saved locally first
-                    /*
-                    $cordovaFileOpener2.open(url,'application/pdf').then(function() {
-                        // file opened successfully
-                    }, function(err) {
-                        // An error occurred.
-
-                        ons.notification.alert({ message: 'Error status: ' + err.status + ' - Error message: ' + err.message + ' - url: ' + url});
-                        //ons.notification.alert({ message:$filter('translate')('UNABLETOOPEN') });
-                    });
-                    */
-
-                    window.cordova.plugins.FileOpener.canOpenFile(url, function (data) {
+                    window.cordova.plugins.FileOpener.canOpenFile(url, function (data2) {
+                        // at this point it means data2.canBeOpen = true. A PDF Viewer "is" indeed available to show the document
 
 
                         var onSuccess = function(data) {
-                            ons.notification.alert({message:  'extension: ' + data.extension + ' - message: ' + data.message + ' - url: ' + url});
+                            // file opened successfully by Default PDF Viewer on Android. Nothing else to do at this point
                         };
 
                         function onError(error) {
-                            ons.notification.alert({message: 'Error 1 status: ' + error.status + ' - Error message: ' + error.message + ' - url: ' + url});
+                            // Unexpected Error occurred. For some reason, file could not be opened and viewed, althoug canOpenFile function returned (data.canBeOpen = true)
+                            ons.notification.alert({ message:$filter('translate')('UNABLETOOPEN') });
                         }
 
                         window.cordova.plugins.FileOpener.openFile(url, onSuccess, onError);
 
-                        /*
-                        if (data.canBeOpen) {
-                            ons.notification.alert({message:  'canBeOpen: ' + data.canBeOpen + ' - extension: ' + data.extension + ' - url: ' + url});
 
-                            window.cordova.plugins.FileOpener.openFile(url, function (data) {
-                                // file opened successfully
-                                ons.notification.alert({message: 'FileOpener.openFile message: ' + data.message + ' - url: ' + url});
-
-                            }, function (err) {
-                                ons.notification.alert({message: 'canOpen Error 1 status: ' + err.status + ' - Error message: ' + err.message + ' - url: ' + url});
-
-                                //ons.notification.alert({ message:$filter('translate')('UNABLETOOPEN') });
-                            });
-                        } else {
-                            ons.notification.alert({message: 'canOpen 2 Error ' + ' - url: ' + url});
-
-                            //ons.notification.alert({ message:$filter('translate')('UNABLETOOPEN') });
-                        }
-                        */
-
-                    }, function (error) {
-                        ons.notification.alert({message: 'canOpen 3 Error status: ' + error.status + ' - Error message: ' + error.message + ' - url: ' + url});
-
-                        //ons.notification.alert({ message:$filter('translate')('UNABLETOOPEN') });
+                    }, function (error) {   // at this point it means data2.canBeOpen = false. A PDF Viewer is NOT available to show the document
+                        ons.notification.alert({ message:$filter('translate')('UNABLETOOPEN') });
+                        //ons.notification.alert({message: 'canOpen 3 Error status: ' + error.status + ' - Error message: ' + error.message + ' - url: ' + url});
                     });
 
                 } else {
@@ -256,31 +233,34 @@ myApp.service('FileManagerService', function ($q, $cordovaFileOpener2, $filter, 
             } else {
                 window.open(url);
             }
+
             /**
-             var app = document.URL.indexOf('http://') === -1 && document.URL.indexOf('https://') === -1;
-             if (app) {
-                if(ons.platform.isAndroid()){
-                    window.cordova.plugins.FileOpener.canOpenFile(url, function(data){
+             openPDF: function (url) {
 
-                        if(data.canBeOpen)
-                        {
-                            window.cordova.plugins.FileOpener.openFile(url, function(data){
+                 var app = document.URL.indexOf('http://') === -1 && document.URL.indexOf('https://') === -1;
+                 if (app) {
+                    if(ons.platform.isAndroid()){
+                        window.cordova.plugins.FileOpener.canOpenFile(url, function(data){
 
-                            }, function(data){
+                            if(data.canBeOpen)
+                            {
+                                window.cordova.plugins.FileOpener.openFile(url, function(data){
 
+                                }, function(data){
+
+                                    ons.notification.alert({ message:$filter('translate')('UNABLETOOPEN') });
+                                });
+                            }else{
                                 ons.notification.alert({ message:$filter('translate')('UNABLETOOPEN') });
-                            });
-                        }else{
-                            ons.notification.alert({ message:$filter('translate')('UNABLETOOPEN') });
-                        }
-                    }, function(error){ons.notification.alert({ message:$filter('translate')('UNABLETOOPEN') });});
-                }else{
-                    var ref = cordova.InAppBrowser.open(url, '_blank', 'EnableViewPortScale=yes');
+                            }
+                        }, function(error){ons.notification.alert({ message:$filter('translate')('UNABLETOOPEN') });});
+                    }else{
+                        var ref = cordova.InAppBrowser.open(url, '_blank', 'EnableViewPortScale=yes');
+                    }
+                } else {
+                    window.open(url);
                 }
-            } else {
-                window.open(url);
-            }
-             */
+            }*/
         },
         //Gets document file storage url
         /**
