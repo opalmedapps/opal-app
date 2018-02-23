@@ -260,6 +260,10 @@
          */
         function showColor(date)
         {
+            if(vm.appointments.length === 0){
+                vm.appointments=Appointments.getUserAppointments();
+            }
+
             //check to see if an appointment exists at the selected date
             var result = vm.appointments.find(function(item){
                 return item.ScheduledStartTime.toDateString() === date.toDateString();
