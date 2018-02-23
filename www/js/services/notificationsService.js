@@ -221,15 +221,8 @@ myApp.service('Notifications',['$filter','RequestToServer','LocalStorage','Annou
 
         //Used by the update function, it iterates through the notifications if it finds the notification then it deletes it.
         function searchAndDeleteNotifications(notifications) {
-
-            console.log("new notifications: ", notifications);
-
             for (var i = 0; i < notifications.length; i++) {
                 for (var j = 0; j < Notifications.length; j++) {
-
-                    console.log("NOT: " , Notifications[j]);
-                    console.log("not: ", notifications[i]);
-
                     if(Notifications[j].NotificationSerNum === notifications[i].NotificationSerNum) {
                         Notifications.splice(j,1);
                         break;
@@ -248,18 +241,13 @@ myApp.service('Notifications',['$filter','RequestToServer','LocalStorage','Annou
                 temp[i].Icon = notificationTypes[temp[i].NotificationType].icon;
                 temp[i].Color = notificationTypes[temp[i].NotificationType].color;
 
-                console.log("here 1");
 
                 if(!notificationTypes[temp[i].NotificationType].hasOwnProperty('openFunction')){
                     temp[i].PageUrl = notificationTypes[temp[i].NotificationType].PageUrl(temp[i].RefTableRowSerNum);
                 }
 
-                console.log("here 2");
-
                 temp[i].Content = notificationTypes[temp[i].NotificationType].namesFunction(temp[i].RefTableRowSerNum);
                 temp[i].DateAdded=$filter('formatDate')(temp[i].DateAdded);
-
-                console.log("here 3");
 
                 temp[i].refreshType = notificationTypes[temp[i].NotificationType].refreshType;
                 Notifications.push(temp[i]);
@@ -290,13 +278,7 @@ myApp.service('Notifications',['$filter','RequestToServer','LocalStorage','Annou
          *@description Updates the notificationsArray with the new information contained in the notifications parameter
          **/
         function updateUserNotifications(notifications) {
-
-            console.log('are here');
-
             searchAndDeleteNotifications(notifications);
-
-            console.log("maide it");
-
             addUserNotifications(notifications);
         }
 
@@ -471,9 +453,6 @@ myApp.service('Notifications',['$filter','RequestToServer','LocalStorage','Annou
                 else{
                     RequestToServer.sendRequestWithResponse('NotificationsNew', {LastUpdated: lastUpdated.getTime()})
                         .then(function (response) {
-
-                            console.log(response);
-                            
                             lastUpdated = new Date();
                             if (response.Data && response.Data.length > 0) {
                                 response.Data.forEach(function(notif){
