@@ -24,7 +24,6 @@
 
         var parameters;
         var docParams;
-        var pdfdoc;
         var uint8pf;
         var scale;
         var viewerSize;
@@ -51,13 +50,9 @@
             docParams = Documents.setDocumentsLanguage(parameters.Post);
             viewerSize = window.innerWidth;
             containerEl = document.getElementById('holder');
-            pdfdoc, scale = 3, uint8pf;
+            scale = 3;
 
-            vm.documentObject = docParams;
-            $scope.documentObject = docParams;
-
-            //Log usage
-            Logger.sendLog('Document', docParams.DocumentSerNum);
+            vm.doc_title = docParams.Title;
 
             //Create popover
             ons.createPopover('./views/personal/documents/info-popover.html', {parentScope: $scope}).then(function (popover) {
@@ -65,12 +60,10 @@
             });
 
             $scope.$on('$destroy', function () {
-
                 $scope.popoverDocsInfo.off('posthide');
                 $scope.popoverDocsInfo.destroy();
-
-
             });
+
             initializeDocument(docParams);
         }
 
@@ -94,14 +87,12 @@
 
             PDFJS.getDocument(uint8pf)
                 .then(function (_pdfDoc) {
+                    uint8pf = null;
 
                     var promises = [];
-
                     for (var num = 1; num <= _pdfDoc.numPages; num++) {
                         promises.push(renderPage(_pdfDoc, num, containerEl));
                     }
-                    pdfdoc = _pdfDoc;
-
                     return $q.all(promises);
                 })
                 .then(function () {
@@ -128,18 +119,20 @@
                     $timeout(function(){vm.hide = true}, 5000);
                     $timeout(function(){vm.show = false}, 6500);
                     $scope.$apply();
-                    // Empty array
-                    uint8pf.length = 0;
                 });
         }
 
         function convertCanvasToImage(canvas) {
             var image = new Image();
-            image.onload = function(){
-                cordova.InAppBrowser.open(image.src, '_blank', 'location=no,enableViewportScale=true', 'clearcache=yes');
 
+            image.onload = function(){
+                var ref =cordova.InAppBrowser.open(image.src, '_blank', 'location=no,enableViewportScale=true', 'clearcache=yes');
+                ref.addEventListener('loadstop', function(){
+                    image = null;
+                });
             };
-            image.src = canvas.toDataURL("image/jpeg", 0.5);
+
+            image.src = canvas.toDataURL("image/jpeg", 0.1);
         }
 
 
