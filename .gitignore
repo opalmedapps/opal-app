@@ -64,3 +64,6 @@ credentials.js
 heartbeat.log*
 heartbeatdb.log*
 /config.xml
+
+
+buildOpal.sh
