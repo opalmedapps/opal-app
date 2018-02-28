@@ -4,7 +4,9 @@
 *Email:davidfherrerar@gmail.com
 */
 var app1 = angular.module('MUHCApp');
-app1.controller('QuestionnaireMainController', function ($scope, $location, $anchorScroll, $rootScope, $sce, $http, $window, $filter, progressBarManager, Questionnaires, $timeout, NavigatorParameters) {
+app1.controller('QuestionnaireMainController', function ($scope, $location, $anchorScroll, $rootScope, $sce, $http, $window, $filter, progressBarManager, Questionnaires, $timeout, NavigatorParameters, UserPreferences) {
+
+
     // Questionnaires.getQuestionnaireAnswers();
     if (Questionnaires.isEmpty()) {
         $scope.emptyQuestionnaires = true;
@@ -19,6 +21,7 @@ app1.controller('QuestionnaireMainController', function ($scope, $location, $anc
         var params = NavigatorParameters.getParameters();
         $scope.questionnaireDBSerNum = params.DBSerNum;
         $scope.subAnswers = false;
+        $scope.language = UserPreferences.getLanguage().toUpperCase();
 
         $scope.questionnaireSerNum = params.SerNum;
 
@@ -117,7 +120,7 @@ app1.controller('QuestionnaireMainController', function ($scope, $location, $anc
 
         if (($scope.index <= $scope.questions.length) && ($scope.index > 0)) {
             $scope.question = $scope.questions[$scope.index - 1];
-            $scope.questionText = $scope.question.QuestionText_EN;
+            $scope.questionText = ($scope.language === "EN") ? $scope.question.QuestionText_EN : $scope.question.QuestionText_FR;
 
             if ($scope.question.QuestionType == 'MC') {
                 if (($scope.question != undefined) && ($scope.question.Choices != undefined)) {
@@ -328,7 +331,7 @@ app1.controller('QuestionnaireMainController', function ($scope, $location, $anc
 
     $scope.trustAsHtml = function (questionText) {
         if ($scope.question != undefined) {
-            assesses = $scope.question.Asseses_EN;
+            assesses = ($scope.language === "EN") ? $scope.question.Asseses_EN : $scope.question.Asseses_FR;
         } else {
             return;
         }
@@ -414,11 +417,13 @@ app1.controller('QuestionnaireMainController', function ($scope, $location, $anc
     // Encountered a really weird problem here where if the checked value was anything but undefined it was unchecked. So the values
     // start off as false and later on when they are clicked are changed to undefined. Weird but works!
     function setChecked() {
+        var choiceDescription = "";
 
         if (($scope.options != undefined) && ($scope.answers != undefined) && ($scope.answers[$scope.index - 1] != undefined)) {
             ans = $scope.answers[$scope.index - 1];
             for ($i = 0; $i < $scope.options.length; $i++) {
-                if ((ans != undefined) && (ans.Answer == $scope.options[$i].ChoiceDescription_EN)) {
+                choiceDescription = ($scope.language === "EN") ? $scope.options[$i].ChoiceDescription_EN : $scope.options[$i].ChoiceDescription_FR
+                if ((ans != undefined) && (ans.Answer == choiceDescription)) {
                     $scope.checked1[$i] = true;
                 } else {
                     $scope.checked1[$i] = false;
