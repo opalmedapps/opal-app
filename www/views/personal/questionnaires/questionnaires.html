@@ -106,9 +106,9 @@
                                                     ng-repeat="option in options track by $index">
                                                     <label class="radio-button radio-button--list-item">
                                                         <input type="radio" ng-checked="checked1[$index]"
-                                                               ng-click="clicked1(options[$index].ChoiceDescription_EN, $index, undefined)">
+                                                               ng-click="clicked1(($scope.language === "EN") ? options[$index].ChoiceDescription_EN : options[$index].ChoiceDescription_FR, $index, undefined)">
                                                         <div class="radio-button__checkmark radio-button--list-item__checkmark"></div>
-                                                        {{option.ChoiceDescription_EN}}
+                                                        {{($scope.language === "EN") ? option.ChoiceDescription_EN : option.ChoiceDescription_FR}}
                                                     </label>
                                                 </li>
 
@@ -166,7 +166,7 @@
                             <div class="row text-center" style="margin:0 auto" align="center">
                                 <div class="col-xs-8" style="margin-left: auto; text-align: center;">
                                     <center>
-                                        <p>{{questions[$index].Choices[1].ChoiceDescription_EN}}</p>
+                                        <p>{{($scope.language === "EN") ? questions[$index].Choices[1].ChoiceDescription_EN : questions[$index].Choices[1].ChoiceDescription_FR}}</p>
                                     </center>
                                 </div>
                             </div>
@@ -212,7 +212,7 @@
                             <div id="bottom{{$index}}" class="row text-center" style="margin:0 auto" align="center">
                                 <div class="col-xs-8" style="margin-left: auto; text-align: center;">
                                     <center>
-                                        <p>{{questions[$index].Choices[0].ChoiceDescription_EN}}</p>
+                                        <p>{{($scope.language === "EN") ? questions[$index].Choices[0].ChoiceDescription_EN : questions[$index].Choices[0].ChoiceDescription_FR}}</p>
                                     </center>
                                 </div>
                             </div>
@@ -458,10 +458,10 @@
                             <li class="list__item list__item--tappable" ng-repeat="option in options"
                                 ng-show="$index < options.length-1">
                                 <label class="lee-checkbox lee-checkbox--list-item">
-                                    <input type="checkbox" ng-click="chosen(option.ChoiceDescription_EN, $index)"
+                                    <input type="checkbox" ng-click="chosen(($scope.language === "EN") ? option.ChoiceDescription_EN : option.ChoiceDescription_FR, $index)"
                                            ng-model="checked[$index]">
                                     <div class="lee-checkbox__checkmark lee-checkbox--list-item__checkmark"></div>
-                                    {{option.ChoiceDescription_EN}}
+                                    {{($scope.language === "EN") ? option.ChoiceDescription_EN : option.ChoiceDescription_FR}}
                                 </label>
                             </li>
                             <li class="list__item list__item--tappable">
@@ -540,7 +540,7 @@
                                             <ons-row style="margin:0;padding:0" align="center">
                                                 <ons-col align="left" style="border:1px solid white;color:white">
                                                     <div style="line-height: 1.4;">
-                                                        #{{$index+1}}: {{question.Asseses_EN}}
+                                                        #{{$index+1}}: {{($scope.language === "EN") ? question.Asseses_EN : question.Asseses_FR}}
                                                     </div>
                                                 </ons-col>
                                                 <ons-col align="center" width="30%">
@@ -553,16 +553,16 @@
                                 <span ng-show="(question.Choices[1].OrderNum == 10) && (question.QuestionType == 'MinMax')">/10</span>
                                     <!--            If its an input question and its answered all we say is "asnwered" and the user can preview it by clicking the eye -->
                                 <span ng-show="(question.QuestionType == 'SA' || question.QuestionType == 'Checkbox' || question.QuestionType == 'image') && (answers[$index] != undefined) && (!answerShown[$index])"><p
-                                        style="margin-top: 5px; line-height: 1; text-align: center">Show <br>Answer<i
+                                        style="margin-top: 5px; line-height: 1; text-align: center">Show <br>{{"ANSWER"|translate}}<i
                                         class="ion-chevron-down" style="padding-left: 2vw"></i></p></span>
                                 <span ng-show="(question.QuestionType == 'SA' || question.QuestionType == 'Checkbox' || question.QuestionType == 'image') && (answers[$index] != undefined) && (answerShown[$index])"><p
-                                        style="margin-top: 5px; margin-top:5px;line-height:1; text-align: center">Hide <br>Answer<i
+                                        style="margin-top: 5px; margin-top:5px;line-height:1; text-align: center">Hide <br>{{"ANSWER"|translate}}<i
                                         class="ion-chevron-up" style="padding-left: 2vw"></p></i></span>
                                 </span>
                                                         <span ng-click="goToPage($index)"
                                                               ng-show="(answers[$index] == undefined)"
                                                               style="float: right; margin-right: 0px; color: white"><i
-                                                                class="ion-chevron-left"></i> Answer</span>
+                                                                class="ion-chevron-left"></i> {{"ANSWER"|translate}}</span>
                                                     </div>
                                                 </ons-col>
                                             </ons-row>
@@ -572,7 +572,7 @@
                                         <li ng-show="answerShown[$index]"
                                             style="background:white;color:black;padding:5px 5px 0 5px;border:1px solid lightgrey"
                                             ng-class="animateShowAnswer">
-                                            <strong>Answer:</strong>
+                                            <strong>{{"ANSWER"|translate}}:</strong>
                                             <div class="card">
                                                 <div class="item">
                                                     {{answerToShow[$index]}}
@@ -580,7 +580,7 @@
                                             </div>
                                             <div align="center">
                                                 <button class="button--quiet" ng-click="goToPage($index)"><i
-                                                        class="ion-chevron-left"></i> Go to Question
+                                                        class="ion-chevron-left"></i> {{"QUESTIONNAIRE_INSTRUCTIONS4"|translate}}
                                                 </button>
                                             </div>
                                         </li>
@@ -597,16 +597,15 @@
                                     <div class="alert-dialog-mask" style="height: 100vh"></div>
                                     <div class="alert-dialog">
                                         <div class="alert-dialog-content">
-                                            Are you sure you want to submit the questionnaire? You cannot change your
-                                            answers after submitting.
+                                            {{"QUESTIONNAIRE_SUBMIT"|translate}}
                                         </div>
 
                                         <div class="alert-dialog-footer">
                                             <button class="alert-dialog-button"
-                                                    ng-click="subAnswers = true; submitAns()">Submit
+                                                    ng-click="subAnswers = true; submitAns()">{{"SUBMIT"|translate}}
                                             </button>
                                             <button class="alert-dialog-button alert-dialog-button--primal"
-                                                    ng-click="cancel()">Back
+                                                    ng-click="cancel()">{{"BACK"|translate}}
                                             </button>
                                         </div>
                                     </div>
@@ -630,9 +629,9 @@
                     <br>
                     <div class="row text-center" style="margin: 0 auto; align: center">
                         <div class="col-xs-12 text-center" style="margin: 0 auto; align: center">
-                            <h1>Thank you for completing the <b><span style="color: darkmagenta">  {{questionaire.QuestionnaireName}}</span></b>!
+                            <h1>{{"QUESTIONNAIRE_THANKS"|translate}} <b><span style="color: darkmagenta">  {{questionaire.QuestionnaireName}}</span></b>!
                             </h1><br>
-                            <p>More questions or concerns? Please let us know!</p>
+                            <p>{{"QUESTIONNAIRE_INSTRUCTIONS3"|translate}}</p>
                         </div>
                     </div>
                     <br>
@@ -640,7 +639,7 @@
                     <div class="row text-center" style="margin: 0 auto; align: center">
                         <div class="col-xs-12 col-md-6">
                             <button style="border-top: 4px solid white" class="button--large--cta" ng-click="contact()">
-                                Contact Us
+                                {{"CONTACTUS"|translate}}
                             </button>
                         </div>
                     </div>
