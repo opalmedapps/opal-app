@@ -152,7 +152,7 @@ cordova create <NameOfProject>
 
 7) Navigate to this newly created directory.
 
-8) Replace the current config.xml with the one in the qplus parent directory
+8) Replace the current config.xml, 'www' directory and 'res' directory with the ones in the qplus directory
 
 **NOTE: Both Prod and PreProd branches have their own config.xml. Carefully make sure you are copying over the correct one!**
 
