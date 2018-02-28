@@ -13,7 +13,7 @@
                     <ons-row style="margin:0;padding:0" align="center">
                         <ons-col align="left" style="border:1px solid white;color:white">
                             <div style="line-height: 1.4;">
-                               #{{$index+1}}: {{question.Asseses_EN}}
+                               #{{$index+1}}: {{($scope.language === "EN") ? question.Asseses_EN : question.Asseses_FR}}
                             </div>
                         </ons-col>
                         <ons-col align="center" width="30%">
@@ -36,13 +36,13 @@
                                     </p>
                                 </span>
                             </span>
-                            <span ng-click="vm.goToPage($index)" ng-show="(!vm.answers[$index])" style="float: right; color: #F44336">Answer <i class="ion-chevron-right" style="padding-left: 2vw"></i></span>
+                            <span ng-click="vm.goToPage($index)" ng-show="(!vm.answers[$index])" style="float: right; color: #F44336">{{"ANSWER"|translate}} <i class="ion-chevron-right" style="padding-left: 2vw"></i></span>
                         </ons-col>
                     </ons-row>
                 </li>
                 <!-- Eye preview -->
                 <li ng-show="vm.answerShown[$index]" style="background:white;color:black;padding:5px 5px 0 5px;border:1px solid lightgrey">
-                     <strong>Answer:</strong>
+                     <strong>{{"ANSWER"|translate}}:</strong>
                     <div class="card" >
                         <div class="item">
                          {{vm.answerToShow[$index]}}
