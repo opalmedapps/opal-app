@@ -166,6 +166,7 @@
          */
         function reportBugs()
         {
+            //initNavigator.pushPage('./views/general/feedback/feedback.html');
             initNavigator.pushPage('./views/general/bugreport/bugreport.html');
         }
 
