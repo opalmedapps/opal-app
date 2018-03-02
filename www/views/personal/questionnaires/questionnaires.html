@@ -31,7 +31,7 @@
                     <div class="row text-center" style="margin: 0 auto;" align="center">
                         <div class="col-xs-12 text-center" style="margin-top: 2.5vh">
                             <h3>
-                                <center>{{"WELCOME"|translate}} <b><span style="color: darkmagenta"> {{questionaire.QuestionnaireName}}</span></b>!
+                                <center>{{"WELCOME"|translate}} <b><span style="color: darkmagenta"> {{questionaire.QuestionnaireName}}</span></b>
                                 </center>
                             </h3>
                         </div>
@@ -106,9 +106,9 @@
                                                     ng-repeat="option in options track by $index">
                                                     <label class="radio-button radio-button--list-item">
                                                         <input type="radio" ng-checked="checked1[$index]"
-                                                               ng-click="clicked1(($scope.language === "EN") ? options[$index].ChoiceDescription_EN : options[$index].ChoiceDescription_FR, $index, undefined)">
+                                                               ng-click="clicked1((language === "EN") ? options[$index].ChoiceDescription_EN : options[$index].ChoiceDescription_FR, $index, undefined)">
                                                         <div class="radio-button__checkmark radio-button--list-item__checkmark"></div>
-                                                        {{($scope.language === "EN") ? option.ChoiceDescription_EN : option.ChoiceDescription_FR}}
+                                                        {{(language === "EN") ? option.ChoiceDescription_EN : option.ChoiceDescription_FR}} 
                                                     </label>
                                                 </li>
 
@@ -166,7 +166,8 @@
                             <div class="row text-center" style="margin:0 auto" align="center">
                                 <div class="col-xs-8" style="margin-left: auto; text-align: center;">
                                     <center>
-                                        <p>{{($scope.language === "EN") ? questions[$index].Choices[1].ChoiceDescription_EN : questions[$index].Choices[1].ChoiceDescription_FR}}</p>
+                                        <p>{{(language === "EN") ? questions[$index].Choices[1].ChoiceDescription_EN : questions[$index].Choices[1].ChoiceDescription_FR}}</p>
+                                        
                                     </center>
                                 </div>
                             </div>
@@ -212,7 +213,8 @@
                             <div id="bottom{{$index}}" class="row text-center" style="margin:0 auto" align="center">
                                 <div class="col-xs-8" style="margin-left: auto; text-align: center;">
                                     <center>
-                                        <p>{{($scope.language === "EN") ? questions[$index].Choices[0].ChoiceDescription_EN : questions[$index].Choices[0].ChoiceDescription_FR}}</p>
+                                        <p>{{(language === "EN") ? questions[$index].Choices[0].ChoiceDescription_EN : questions[$index].Choices[0].ChoiceDescription_FR}}</p>
+                                        
                                     </center>
                                 </div>
                             </div>
@@ -458,10 +460,10 @@
                             <li class="list__item list__item--tappable" ng-repeat="option in options"
                                 ng-show="$index < options.length-1">
                                 <label class="lee-checkbox lee-checkbox--list-item">
-                                    <input type="checkbox" ng-click="chosen(($scope.language === "EN") ? option.ChoiceDescription_EN : option.ChoiceDescription_FR, $index)"
+                                    <input type="checkbox" ng-click="chosen((language === "EN") ? option.ChoiceDescription_EN : option.ChoiceDescription_FR, $index)"
                                            ng-model="checked[$index]">
                                     <div class="lee-checkbox__checkmark lee-checkbox--list-item__checkmark"></div>
-                                    {{($scope.language === "EN") ? option.ChoiceDescription_EN : option.ChoiceDescription_FR}}
+                                        {{(language === "EN") ? option.ChoiceDescription_EN : option.ChoiceDescription_FR}}
                                 </label>
                             </li>
                             <li class="list__item list__item--tappable">
@@ -540,7 +542,7 @@
                                             <ons-row style="margin:0;padding:0" align="center">
                                                 <ons-col align="left" style="border:1px solid white;color:white">
                                                     <div style="line-height: 1.4;">
-                                                        #{{$index+1}}: {{($scope.language === "EN") ? question.Asseses_EN : question.Asseses_FR}}
+                                                        #{{$index+1}}: {{(language === "EN") ? question.Asseses_EN : question.Asseses_FR}} 
                                                     </div>
                                                 </ons-col>
                                                 <ons-col align="center" width="30%">
@@ -629,8 +631,8 @@
                     <br>
                     <div class="row text-center" style="margin: 0 auto; align: center">
                         <div class="col-xs-12 text-center" style="margin: 0 auto; align: center">
-                            <h1>{{"QUESTIONNAIRE_THANKS"|translate}} <b><span style="color: darkmagenta">  {{questionaire.QuestionnaireName}}</span></b>!
-                            </h1><br>
+                            <h3>{{"QUESTIONNAIRE_THANKS"|translate}} <b><span style="color: darkmagenta">  {{questionaire.QuestionnaireName}}</span></b>
+                            </h3><br>
                             <p>{{"QUESTIONNAIRE_INSTRUCTIONS3"|translate}}</p>
                         </div>
                     </div>

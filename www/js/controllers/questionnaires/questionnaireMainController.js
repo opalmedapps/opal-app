@@ -422,7 +422,7 @@ app1.controller('QuestionnaireMainController', function ($scope, $location, $anc
         if (($scope.options != undefined) && ($scope.answers != undefined) && ($scope.answers[$scope.index - 1] != undefined)) {
             ans = $scope.answers[$scope.index - 1];
             for ($i = 0; $i < $scope.options.length; $i++) {
-                choiceDescription = ($scope.language === "EN") ? $scope.options[$i].ChoiceDescription_EN : $scope.options[$i].ChoiceDescription_FR
+                choiceDescription = ($scope.language === "EN") ? $scope.options[$i].ChoiceDescription_EN : $scope.options[$i].ChoiceDescription_FR;
                 if ((ans != undefined) && (ans.Answer == choiceDescription)) {
                     $scope.checked1[$i] = true;
                 } else {
