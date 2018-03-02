@@ -11,13 +11,14 @@
         .controller('AnsweredQuestionnaireController', AnsweredQuestionnaireController);
 
     AnsweredQuestionnaireController.$inject = [
-        'Questionnaires', 'NavigatorParameters'
+        'Questionnaires', 'NavigatorParameters', 'UserPreferences'
     ];
 
     /* @ngInject */
-    function AnsweredQuestionnaireController(Questionnaires, NavigatorParameters) {
+    function AnsweredQuestionnaireController(Questionnaires, NavigatorParameters, UserPreferences) {
         var vm = this;
 
+        vm.language = UserPreferences.getLanguage().toUpperCase();
         vm.chooseAction = chooseAction;
         vm.showAnswer = showAnswer;
         vm.showAnswerReview = showAnswerReview;
