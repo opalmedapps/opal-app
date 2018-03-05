@@ -20,7 +20,7 @@ myApp.service('Questionnaires', ['RequestToServer','$filter', 'Patient','LocalSt
         {
             var questionnairesObjectRef =questionnaires.Questionnaires;
             var patientQuestionnaireObject =questionnaires.PatientQuestionnaires;
-            for(var serDBNum in questionnairesObjectRef)
+            for(var serNum in questionnairesObjectRef)
             {
                 var questionCopy = questionnairesObjectRef[serNum];
                 if(questionnairesObject.hasOwnProperty(serNum)&&questionCopy.QuestionnaireDBSerNum == questionnairesObject[serNum].QuestionnaireDBSerNum)
@@ -36,8 +36,6 @@ myApp.service('Questionnaires', ['RequestToServer','$filter', 'Patient','LocalSt
                     questionnairesObject[serNum] = questionAnswerCopy;
                 }
             }
-
-
         }
         function addToQuestionnaireObject(questionnaires)
         {
@@ -53,7 +51,7 @@ myApp.service('Questionnaires', ['RequestToServer','$filter', 'Patient','LocalSt
         return {
             updatePatientQuestionnaires:function(questionnaires)
             {
-                if(questionnaires&&typeof questionnaires !=='undefined')
+                if(questionnaires && typeof questionnaires !=='undefined')
                 {
 
                     findAndReplacePatientQuestionnaires(questionnaires);
@@ -175,6 +173,10 @@ myApp.service('Questionnaires', ['RequestToServer','$filter', 'Patient','LocalSt
 
                 return deferred.promise;
 
+            },
+            addQuestionnaireFromNotification: function() {
+                
             }
+
         };
     }]);
