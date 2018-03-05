@@ -17,8 +17,8 @@ var myApp=angular.module('MUHCApp');
  *@requires MUHCApp.service:EducationalMaterial
  *@description API service used to patient notifications. This Service is deeply linked to other services to extract that information about the actual content of the notification.
  **/
-myApp.service('Notifications',['$filter','RequestToServer','LocalStorage','Announcements','TxTeamMessages','Appointments','Documents','EducationalMaterial', 'UserPreferences', '$q',
-    function($filter,RequestToServer,LocalStorage,Announcements, TxTeamMessages,Appointments, Documents,EducationalMaterial, UserPreferences, $q){
+myApp.service('Notifications',['$filter','RequestToServer','LocalStorage','Announcements','TxTeamMessages','Appointments','Documents','EducationalMaterial', 'UserPreferences', '$q', 'Questionnaires',
+    function($filter,RequestToServer,LocalStorage,Announcements, TxTeamMessages,Appointments, Documents,EducationalMaterial, UserPreferences, $q, Questionnaires){
         /**
          *@ngdoc property
          *@name  MUHCApp.service.#Notifications
@@ -182,6 +182,12 @@ myApp.service('Notifications',['$filter','RequestToServer','LocalStorage','Annou
                 searchFunction:Appointments.getAppointmentBySerNum,
                 namesFunction:Appointments.getAppointmentName,
                 PageUrl:Appointments.getAppointmentUrl,
+            },
+            'Questionnaire':{
+                SerNum:'QuestionnaireSerNum',
+                icon:'fa fa-question-circle',
+                color:'#607d8b',
+                updateFunction: Questionnaires.updatePatientQuestionnaires,
             },
             'Other':{
                 icon:'fa fa-bell',
