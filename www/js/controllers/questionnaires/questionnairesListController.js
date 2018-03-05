@@ -41,7 +41,7 @@
                 tabbar.style.marginTop = "63px";
             }
 
-            if(!Questionnaires.isEmpty()){
+            if(!Questionnaires.isEmpty() && !Questionnaires.needsRefreshing()){
                 vm.questionnaires = Questionnaires.getPatientQuestionnaires().Questionnaires;
                 vm.patientQuestionnaires = Questionnaires.getPatientQuestionnaires().PatientQuestionnaires;
                 getDesiredQuestionnaires('new');
@@ -52,7 +52,6 @@
 
             Questionnaires.requestQuestionnaires()
                 .then(function () {
-
                         vm.questionnaires = Questionnaires.getPatientQuestionnaires().Questionnaires;
                         vm.patientQuestionnaires = Questionnaires.getPatientQuestionnaires().PatientQuestionnaires;
                         getDesiredQuestionnaires('new');
@@ -67,7 +66,9 @@
                     });
 
 
-            personalNavigator.on('postpop', popPost);
+            if(typeof personalNavigator !== 'undefined'){
+                personalNavigator.on('postpop', popPost);
+            }
         }
 
         function getBadgeNumbers () {
