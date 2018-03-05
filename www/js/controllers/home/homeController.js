@@ -113,18 +113,8 @@
             //display next appointment
             setNextAppointment();
 
-            // //display new notifications, if any
-            Notifications.requestNewNotifications()
-                .then(function(){
-                    vm.loading = false;
-                    if(Notifications.getNumberUnreadNotifications() > 0){
-                        vm.notifications = Notifications.setNotificationsLanguage(Notifications.getUnreadNotifications());
-                    }
-                })
-                .catch(function(error){
-                    console.log(error);
-                });
-
+            // display new notifications, if any
+            checkForNewNotifications();
 
             // Display current check in status
             evaluateCheckIn();
@@ -169,6 +159,23 @@
             vm.noUpcomingAppointments=false;
         }
 
+        function checkForNewNotifications(){
+            Notifications.requestNewNotifications()
+                .then(function(){
+                    vm.loading = false;
+                    if(Notifications.getNumberUnreadNotifications() > 0){
+                        vm.notifications = Notifications.setNotificationsLanguage(Notifications.getUnreadNotifications());
+                        console.log(vm.notifications)
+                    }
+                })
+                .catch(function(error){
+                    vm.loading = false;
+
+                    // TODO: Notify user about error
+                    console.log(error);
+                });
+        }
+
         /**
          * @name evaluateCheckIn
          * @desc checks with listener to see if the current user has checked in or not
@@ -186,10 +193,10 @@
         function initModalSize(){
             var fontSize = UserPreferences.getFontSize();
             var rcorners = document.getElementById("rcorners");
-            if (fontSize == "xlarge") {
+            if (fontSize === "xlarge") {
                 rcorners.setAttribute("style", "height: 80%");
             }
-            else if (fontSize == "large") {
+            else if (fontSize === "large") {
                 rcorners.setAttribute("style", "height: 60%");
             }
             else rcorners.setAttribute("style", "height: 50%");
