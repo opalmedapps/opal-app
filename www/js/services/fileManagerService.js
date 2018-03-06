@@ -241,7 +241,7 @@ myApp.service('FileManagerService', function ($q, $cordovaFileOpener2, $filter, 
                         }
 
 
-                        var targetPath = 'temp.pdf';
+                        var targetPath = urlDeviceDocuments + 'temp.pdf';
 
                         downloadFileIntoStorage2(url, targetPath).then(function() {
                             window.cordova.plugins.FileOpener.openFile(targetPath, onSuccess, onError);
