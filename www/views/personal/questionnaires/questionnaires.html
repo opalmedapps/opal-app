@@ -31,7 +31,12 @@
                     <div class="row text-center" style="margin: 0 auto;" align="center">
                         <div class="col-xs-12 text-center" style="margin-top: 2.5vh">
                             <h3>
-                                <center>{{"WELCOME"|translate}} <b><span style="color: darkmagenta"> {{questionaire.QuestionnaireName}}</span></b>
+                                <center>
+                                <!--
+                                {{"WELCOME"|translate}} <b><span style="color: darkmagenta"> {{questionaire.QuestionnaireName}}</span></b>
+                                -->
+                                    <b><span style="color: darkmagenta"> {{(language === "EN") ? questionaire.QuestionnaireName_EN : questionaire.QuestionnaireName_FR}}</span></b>
+
                                 </center>
                             </h3>
                         </div>
@@ -40,8 +45,13 @@
                     <!-- Home page image -->
                     <div class="row text-center" style="margin: 0 auto;" align="center">
                         <div class="col-xs-12 text-center">
-
+                            <!--
                             <img src="./img/MUHC.png" alt="MUHC Logo" style="margin-top: 1cm; margin-bottom: 1cm"></img>
+                            -->
+                            <br>
+                              {{(language === "EN") ? questionaire.Intro_EN : questionaire.Intro_FR}}
+                            <br>
+                            <br>
                         </div>
                     </div>
 
