@@ -63,27 +63,6 @@ myApp.service('FileManagerService', function ($q, $cordovaFileOpener2, $filter, 
         return r.promise;
     }
 
-    function downloadFileIntoStorage2 (url, targetPath) {
-        var r = $q.defer();
-        var fileTransfer = new FileTransfer();
-        window.resolveLocalFileSystemURL(targetPath, function (fileEntry) {
-
-            r.resolve(true);
-        }, function () {
-            fileTransfer.download(url, targetPath,
-                function (entry) {
-
-                    r.resolve(entry);
-                },
-                function (err) {
-
-                    r.reject(err);
-                });
-        });
-        return r.promise;
-
-    }
-
     return {
         //Obtains file type
         /**
@@ -231,32 +210,6 @@ myApp.service('FileManagerService', function ($q, $cordovaFileOpener2, $filter, 
                     window.cordova.plugins.FileOpener.canOpenFile(url, function (data2) {
                         // at this point it means data2.canBeOpen = true. A PDF Viewer "is" indeed available to show the document
 
-                        var onSuccess = function(data) {
-                            // file opened successfully using Default PDF Viewer on Android. Nothing else to do at this point
-                        };
-
-                        function onError(error) {
-                            // Unexpected Error occurred. For some reason, file could not be opened and viewed, although canOpenFile function returned (data2.canBeOpen = true)
-                            ons.notification.alert({ message:$filter('translate')('UNABLETOOPEN') });
-                        }
-
-/*
-                        var targetPath = urlDeviceDocuments + 'temp3.pdf';
-                        console.log('targetPath in OpenPDF(): ', targetPath);
-
-                        downloadFileIntoStorage2(url, targetPath).then(function() {
-                            console.log('Right after downloadFileIntoStorage2: ', targetPath);
-
-                            window.cordova.plugins.FileOpener.openFile(targetPath, onSuccess, onError);
-                            console.log('Right after FileOpener.openFile');
-
-                        }).catch(function(error)
-                        {
-                            //Unable to save document on server
-                            //ons.notification.alert({message: 'downloadFileIntoStorage Error: ' + error.status + ' - Error message: ' + error.message + ' - url: ' + url});
-                        });
-
- */
 
                         var onSuccess = function(data) {
                             // file opened successfully by Default PDF Viewer on Android. Nothing else to do at this point
