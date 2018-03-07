@@ -240,18 +240,24 @@ myApp.service('FileManagerService', function ($q, $cordovaFileOpener2, $filter, 
                             ons.notification.alert({ message:$filter('translate')('UNABLETOOPEN') });
                         }
 
-
-                        var targetPath = urlCDVPathDocuments + 'temp2.pdf';
+/*
+                        var targetPath = urlDeviceDocuments + 'temp3.pdf';
+                        console.log('targetPath in OpenPDF(): ', targetPath);
 
                         downloadFileIntoStorage2(url, targetPath).then(function() {
+                            console.log('Right after downloadFileIntoStorage2: ', targetPath);
+
                             window.cordova.plugins.FileOpener.openFile(targetPath, onSuccess, onError);
+                            console.log('Right after FileOpener.openFile');
+
                         }).catch(function(error)
                         {
                             //Unable to save document on server
-                            ons.notification.alert({message: 'downloadFileIntoStorage Error: ' + error.status + ' - Error message: ' + error.message + ' - url: ' + url});
+                            //ons.notification.alert({message: 'downloadFileIntoStorage Error: ' + error.status + ' - Error message: ' + error.message + ' - url: ' + url});
                         });
 
-/*
+ */
+
                         var onSuccess = function(data) {
                             // file opened successfully by Default PDF Viewer on Android. Nothing else to do at this point
                         };
@@ -262,7 +268,7 @@ myApp.service('FileManagerService', function ($q, $cordovaFileOpener2, $filter, 
                         }
 
                         window.cordova.plugins.FileOpener.openFile(url, onSuccess, onError);
-*/
+
 
                     }, function (error) {   // at this point it means data2.canBeOpen = false. A PDF Viewer is NOT available to show the document
                         ons.notification.alert({ message:$filter('translate')('UNABLETOOPEN') });
