@@ -11,17 +11,18 @@
         .controller('QuestionnairesListController', QuestionnairesListController);
 
     QuestionnairesListController.$inject = [
-        'Questionnaires', 'NavigatorParameters', '$timeout'
+        'Questionnaires', 'NavigatorParameters', '$timeout', 'UserPreferences'
     ];
 
     /* @ngInject */
-    function QuestionnairesListController(Questionnaires, NavigatorParameters, $timeout) {
+    function QuestionnairesListController(Questionnaires, NavigatorParameters, $timeout, UserPreferences) {
         var vm = this;
         var questionnaireSerNum;
 
         vm.loading = true;
         vm.current_type = 'new';
 
+        vm.language = UserPreferences.getLanguage().toUpperCase();
         vm.getDesiredQuestionnaires = getDesiredQuestionnaires;
         vm.goToQuestionnaire = goToQuestionnaire;
         vm.refreshQuestionnairesList = refreshQuestionnairesList;
