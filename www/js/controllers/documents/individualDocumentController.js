@@ -16,7 +16,7 @@
         .module('MUHCApp')
         .controller('IndividualDocumentController', IndividualDocumentController);
 
-    IndividualDocumentController.$inject = ['$scope', 'NavigatorParameters','Documents', '$timeout', 'FileManagerService', 'Constants', '$q', 'UserPreferences', 'Logger'];
+    IndividualDocumentController.$inject = ['$scope', 'NavigatorParameters', 'Documents', '$timeout', 'FileManagerService', 'Constants', '$q', 'UserPreferences', 'Logger'];
 
     /* @ngInject */
     function IndividualDocumentController($scope, NavigatorParameters, Documents, $timeout, FileManagerService, Constants, $q, UserPreferences, Logger) {
@@ -41,6 +41,7 @@
         //vm.warn = warn;
 
         activate();
+
         /////////////////////////////
 
         function activate() {
@@ -67,18 +68,54 @@
             initializeDocument(docParams);
         }
 
-        function initializeDocument(document)
-        {
-            if (Documents.getDocumentBySerNum(document.DocumentSerNum).Content){
-                setUpPDF(document);
+        function initializeDocument(document) {
+            if (Documents.getDocumentBySerNum(document.DocumentSerNum).Content) {
+                //setUpPDF(document);
+                openPDF(document);
             } else {
                 Documents.downloadDocumentFromServer(document.DocumentSerNum).then(function () {
-                    setUpPDF(document);
+                    //setUpPDF(document);
+                    openPDF(document);
                 }).catch(function (error) {
                     //Unable to get document from server
                     vm.loading = false;
                     vm.errorDownload = true;
                 });
+            }
+        }
+
+        function openPDF(document) {
+            if (Constants.app) {
+                if (ons.platform.isAndroid()) {
+                    var targetPath = FileManagerService.generatePath(docParams);
+                    FileManagerService.downloadFileIntoStorage("data:application/pdf;base64," + docParams.Content, targetPath).then(function () {
+
+                        //FileManagerService.shareDocument(docParams.Title.replace(/ /g, "") + docParams.ApprovedTimeStamp.toDateString().replace(/ /g, "-"), targetPath);
+
+                        cordova.plugins.fileOpener2.open(
+                            FileManagerService.urlDeviceDocuments + targetPath,
+                            'application/pdf',
+                            {
+                                error : function(e) {
+                                    console.log('Error status openPDF(): ' + e.status + ' - Error message: ' + e.message);
+                                },
+                                success : function () {
+                                    console.log('file opened successfully');
+                                }
+                            }
+                        );
+
+                    }).catch(function (error) {
+                        //Unable to save document on server
+                        console.log('Error saving/downloading document from Server downloadFileIntoStorage(): ' + error.status + ' - Error message: ' + error.message);
+
+                    });
+
+                } else {
+                    cordova.InAppBrowser.open("data:application/pdf;base64," + document.Content, '_blank', 'EnableViewPortScale=yes');
+                }
+            } else {
+                window.open("data:application/pdf;base64, " + document.Content, '_blank', 'location=no,enableViewportScale=true');
             }
         }
 
@@ -116,8 +153,12 @@
 
                     vm.loading = false;
                     vm.show = true;
-                    $timeout(function(){vm.hide = true}, 5000);
-                    $timeout(function(){vm.show = false}, 6500);
+                    $timeout(function () {
+                        vm.hide = true
+                    }, 5000);
+                    $timeout(function () {
+                        vm.show = false
+                    }, 6500);
                     $scope.$apply();
                 });
         }
@@ -125,9 +166,9 @@
         function convertCanvasToImage(canvas) {
             var image = new Image();
 
-            image.onload = function(){
-                var ref =cordova.InAppBrowser.open(image.src, '_blank', 'location=no,enableViewportScale=true', 'clearcache=yes');
-                ref.addEventListener('loadstop', function(){
+            image.onload = function () {
+                var ref = cordova.InAppBrowser.open(image.src, '_blank', 'location=no,enableViewportScale=true', 'clearcache=yes');
+                ref.addEventListener('loadstop', function () {
                     image = null;
                 });
             };
@@ -168,10 +209,9 @@
 
             if (Constants.app) {
                 var targetPath = FileManagerService.generatePath(docParams);
-                FileManagerService.downloadFileIntoStorage("data:application/pdf;base64," + docParams.Content, targetPath).then(function() {
-                    FileManagerService.shareDocument(docParams.Title.replace(/ /g,"")+docParams.ApprovedTimeStamp.toDateString().replace(/ /g,"-"), targetPath);
-                }).catch(function(error)
-                {
+                FileManagerService.downloadFileIntoStorage("data:application/pdf;base64," + docParams.Content, targetPath).then(function () {
+                    FileManagerService.shareDocument(docParams.Title.replace(/ /g, "") + docParams.ApprovedTimeStamp.toDateString().replace(/ /g, "-"), targetPath);
+                }).catch(function (error) {
                     //Unable to save document on server
 
                 });
@@ -181,16 +221,16 @@
             }
         }
 
-        function warn(){
+        function warn() {
             modal.show();
             $scope.popoverDocsInfo.hide();
         }
 
-        function about(){
+        function about() {
 
             // Check if there is any about link
             var link = null;
-            docParams.hasOwnProperty("URL_EN") ? link  = docParams["URL_"+UserPreferences.getLanguage()] : {} ;
+            docParams.hasOwnProperty("URL_EN") ? link = docParams["URL_" + UserPreferences.getLanguage()] : {};
 
             // Set the options to send to the content controller
             var contentOptions = {
@@ -198,7 +238,7 @@
                 contentLink: link
             };
 
-            personalNavigator.pushPage('./views/templates/content.html',contentOptions);
+            personalNavigator.pushPage('./views/templates/content.html', contentOptions);
             $scope.popoverDocsInfo.hide();
         }
     }
