@@ -93,7 +93,7 @@
                         //FileManagerService.shareDocument(docParams.Title.replace(/ /g, "") + docParams.ApprovedTimeStamp.toDateString().replace(/ /g, "-"), targetPath);
 
                         cordova.plugins.fileOpener2.open(
-                            FileManagerService.urlDeviceDocuments + targetPath,
+                            targetPath,
                             'application/pdf',
                             {
                                 error : function(e) {
