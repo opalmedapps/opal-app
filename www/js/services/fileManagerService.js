@@ -210,27 +210,7 @@ myApp.service('FileManagerService', function ($q, $cordovaFileOpener2, $filter, 
                     window.cordova.plugins.FileOpener.canOpenFile(url, function (data2) {
                         // at this point it means data2.canBeOpen = true. A PDF Viewer "is" indeed available to show the document
 
-                        var onSuccess = function(data) {
-                            // file opened successfully using Default PDF Viewer on Android. Nothing else to do at this point
-                        };
 
-                        function onError(error) {
-                            // Unexpected Error occurred. For some reason, file could not be opened and viewed, although canOpenFile function returned (data2.canBeOpen = true)
-                            ons.notification.alert({ message:$filter('translate')('UNABLETOOPEN') });
-                        }
-
-
-                        var targetPath = 'temp.pdf';
-
-                        FileManagerService.downloadFileIntoStorage(url, targetPath).then(function() {
-                            window.cordova.plugins.FileOpener.openFile(targetPath, onSuccess, onError);
-                        }).catch(function(error)
-                        {
-                            //Unable to save document on server
-                            ons.notification.alert({message: 'downloadFileIntoStorage Error: ' + error.status + ' - Error message: ' + error.message + ' - url: ' + url});
-                        });
-
-/*
                         var onSuccess = function(data) {
                             // file opened successfully by Default PDF Viewer on Android. Nothing else to do at this point
                         };
@@ -241,7 +221,7 @@ myApp.service('FileManagerService', function ($q, $cordovaFileOpener2, $filter, 
                         }
 
                         window.cordova.plugins.FileOpener.openFile(url, onSuccess, onError);
-*/
+
 
                     }, function (error) {   // at this point it means data2.canBeOpen = false. A PDF Viewer is NOT available to show the document
                         ons.notification.alert({ message:$filter('translate')('UNABLETOOPEN') });
