@@ -3,16 +3,20 @@
         <ons-list>
             <ons-list-header>{{"DOC_INFO"|translate}}</ons-list-header>
             <ons-list-item class="item">
+                <!--
                 <p><strong>{{"DOC_DATE_CREATED"|translate}}</strong>{{documentObject.CreatedTimeStamp| date:'fullDate'}}</p>
                 <p><strong>{{"DOC_DATE_UPDATED"|translate}}</strong>{{documentObject.ApprovedTimeStamp| date:'fullDate'}}</p>
                 <p><strong>{{"DOC_SIGNEDBY"|translate}}</strong>{{documentObject.FirstName}} {{documentObject.LastName}}</p>
-
+                -->
                 <div>
                     <button class="button button--large--quiet" ng-click="about()" >
                         {{"DOC_ABOUT"|translate}}
                     </button >
                     <button class="button button--large--quiet" ng-click="warn()" >
                         {{"SHARE"|translate}}
+                    </button >
+                    <button class="button button--large--quiet" ng-click="warn2()" >
+                        {{"OPENEXTERNALVIEWER"|translate}}
                     </button >
                 </div>
         </ons-list>
