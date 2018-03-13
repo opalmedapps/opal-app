@@ -165,7 +165,6 @@
                     vm.loading = false;
                     if(Notifications.getNumberUnreadNotifications() > 0){
                         vm.notifications = Notifications.setNotificationsLanguage(Notifications.getUnreadNotifications());
-                        console.log(vm.notifications)
                     }
                 })
                 .catch(function(error){
