@@ -33,7 +33,6 @@
         vm.errorDownload = false;
         vm.show = false;
         vm.hide = false;
-        vm.isAndroid = ons.platform.isAndroid();
 
         vm.share = share;
         vm.openPDF = openPDF;
@@ -43,6 +42,7 @@
         $scope.warn = warn;
         $scope.warn2 = warn2;
         $scope.docParams = docParams;
+        $scope.isAndroid = isAndroid;
 
 
         activate();
@@ -260,6 +260,10 @@
         function warn2() {
             modalOpenViewer.show();
             $scope.popoverDocsInfo.hide();
+        }
+
+        function isAndroid() {
+            return ons.platform.isAndroid();
         }
 
         function about() {
