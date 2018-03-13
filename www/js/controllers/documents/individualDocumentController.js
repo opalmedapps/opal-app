@@ -33,6 +33,7 @@
         vm.errorDownload = false;
         vm.show = false;
         vm.hide = false;
+        vm.isAndroid = ons.platform.isAndroid();
 
         vm.share = share;
         vm.openPDF = openPDF;
@@ -41,8 +42,8 @@
         $scope.about = about;
         $scope.warn = warn;
         $scope.warn2 = warn2;
+        $scope.docParams = docParams;
 
-        //vm.warn = warn;
 
         activate();
 
@@ -53,6 +54,8 @@
 
             //PDF params
             docParams = Documents.setDocumentsLanguage(parameters.Post);
+            $scope.docParams = docParams;
+
             viewerSize = window.innerWidth;
             containerEl = document.getElementById('holder');
             scale = 3;
@@ -95,7 +98,7 @@
                         window.cordova.plugins.FileOpener.canOpenFile(targetPath, function (data2) {
                             // at this point it means data2.canBeOpen = true. A PDF Viewer "is" indeed available to show the document
 
-                            var onSuccess = function(data) {
+                            var onSuccess = function (data) {
                                 // file opened successfully by Default PDF Viewer on Android. Nothing else to do at this point
                                 console.log('file opened successfully by Default PDF Viewer on Android. Nothing else to do at this point');
                             };
@@ -103,7 +106,7 @@
                             function onError(error) {
                                 // Unexpected Error occurred. For some reason, file could not be opened and viewed, although canOpenFile function returned (data2.canBeOpen = true)
                                 console.log('openPDF (FileOpener.openFile) Error: ' + error.status + ' - Error message: ' + error.message);
-                                ons.notification.alert({ message:$filter('translate')('UNABLETOOPEN') });
+                                ons.notification.alert({message: $filter('translate')('UNABLETOOPEN')});
                             }
 
                             window.cordova.plugins.FileOpener.openFile(targetPath, onSuccess, onError);
@@ -111,9 +114,8 @@
                             //targetPath.delete().addListener();
 
 
-
                         }, function (error) {   // at this point it means data2.canBeOpen = false. A PDF Viewer is NOT available to show the document
-                            ons.notification.alert({ message:$filter('translate')('UNABLETOOPEN') });
+                            ons.notification.alert({message: $filter('translate')('UNABLETOOPEN')});
                             console.log('canOpen 3 Error (A PDF Viewer is NOT available to show the document): ' + error.status + ' - Error message: ' + error.message);
                         });
 
