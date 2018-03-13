@@ -35,9 +35,13 @@
         vm.hide = false;
 
         vm.share = share;
+        vm.openPDF = openPDF;
+
         //$scope.share = share;
         $scope.about = about;
         $scope.warn = warn;
+        $scope.warn2 = warn2;
+
         //vm.warn = warn;
 
         activate();
@@ -70,12 +74,10 @@
 
         function initializeDocument(document) {
             if (Documents.getDocumentBySerNum(document.DocumentSerNum).Content) {
-                //setUpPDF(document);
-                openPDF(document);
+                setUpPDF(document);
             } else {
                 Documents.downloadDocumentFromServer(document.DocumentSerNum).then(function () {
-                    //setUpPDF(document);
-                    openPDF(document);
+                    setUpPDF(document);
                 }).catch(function (error) {
                     //Unable to get document from server
                     vm.loading = false;
@@ -84,11 +86,11 @@
             }
         }
 
-        function openPDF(document) {
+        function openPDF() {
             if (Constants.app) {
                 if (ons.platform.isAndroid()) {
-                    var targetPath = FileManagerService.generatePath(document);
-                    FileManagerService.downloadFileIntoStorage("data:application/pdf;base64," + document.Content, targetPath).then(function () {
+                    var targetPath = FileManagerService.generatePath(docParams);
+                    FileManagerService.downloadFileIntoStorage("data:application/pdf;base64," + docParams.Content, targetPath).then(function () {
 
                         window.cordova.plugins.FileOpener.canOpenFile(targetPath, function (data2) {
                             // at this point it means data2.canBeOpen = true. A PDF Viewer "is" indeed available to show the document
@@ -134,10 +136,10 @@
                     });
 
                 } else {
-                    cordova.InAppBrowser.open("data:application/pdf;base64," + document.Content, '_blank', 'EnableViewPortScale=yes');
+                    cordova.InAppBrowser.open("data:application/pdf;base64," + docParams.Content, '_blank', 'EnableViewPortScale=yes');
                 }
             } else {
-                window.open("data:application/pdf;base64, " + document.Content, '_blank', 'location=no,enableViewportScale=true');
+                window.open("data:application/pdf;base64, " + docParams.Content, '_blank', 'location=no,enableViewportScale=true');
             }
             vm.loading = false;
         }
@@ -246,6 +248,11 @@
 
         function warn() {
             modal.show();
+            $scope.popoverDocsInfo.hide();
+        }
+
+        function warn2() {
+            modalOpenViewer.show();
             $scope.popoverDocsInfo.hide();
         }
 
