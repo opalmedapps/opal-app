@@ -122,8 +122,13 @@ myApp.service('FileManagerService', function ($q, $cordovaFileOpener2, $filter, 
 
         // Delete file. Remove it from local storage
         deleteFileFromStorage: function (path, filename) {
+            console.log('Inside 1 deleteFileFromStorage');
             window.resolveLocalFileSystemURL(path, function (dir) {
+
+                console.log('Inside 2 deleteFileFromStorage');
+
                 dir.getFile(filename, {create: false}, function (fileEntry) {
+                    console.log('Inside 3 deleteFileFromStorage');
                     fileEntry.remove(function () {
                         // The file has been removed succesfully
                         console.log('The file has been removed succesfully.');
@@ -134,8 +139,13 @@ myApp.service('FileManagerService', function ($q, $cordovaFileOpener2, $filter, 
                         // The file doesn't exist
                         console.log('The file does not exist: ' + filename + '  path: ' + path);
                     });
+                    console.log('Inside 4 deleteFileFromStorage');
+
                 });
+                console.log('Inside 5 deleteFileFromStorage');
+
             });
+            console.log('Exiting deleteFileFromStorage');
         },
 
         //Shares a url using the social sharing options
