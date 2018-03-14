@@ -77,7 +77,7 @@ myApp.service('FileManagerService', function ($q, $cordovaFileOpener2, $filter, 
             var index = url.lastIndexOf('.');
             return url.substring(index + 1, url.length);
         },
-        //Public function to determine whether a link is a url
+        //Public function to determine whether a link is a PDF file
         /**
          *@ngdoc method
          *@name isPDFDocument
@@ -119,6 +119,25 @@ myApp.service('FileManagerService', function ($q, $cordovaFileOpener2, $filter, 
             return r.promise;
 
         },
+
+        // Delete file. Remove it from local storage
+        deleteFileFromStorage: function (path, filename) {
+            window.resolveLocalFileSystemURL(path, function (dir) {
+                dir.getFile(filename, {create: false}, function (fileEntry) {
+                    fileEntry.remove(function () {
+                        // The file has been removed succesfully
+                        console.log('The file has been removed succesfully.');
+                    }, function (error) {
+                        // Error deleting the file
+                        console.log('Error deleting the file: ' + filename + '  path: ' + path);
+                    }, function () {
+                        // The file doesn't exist
+                        console.log('The file does not exist: ' + filename + '  path: ' + path);
+                    });
+                });
+            });
+        },
+
         //Shares a url using the social sharing options
         /**
          *@ngdoc method
@@ -211,20 +230,20 @@ myApp.service('FileManagerService', function ($q, $cordovaFileOpener2, $filter, 
                         // at this point it means data2.canBeOpen = true. A PDF Viewer "is" indeed available to show the document
 
 
-                        var onSuccess = function(data) {
+                        var onSuccess = function (data) {
                             // file opened successfully by Default PDF Viewer on Android. Nothing else to do at this point
                         };
 
                         function onError(error) {
                             // Unexpected Error occurred. For some reason, file could not be opened and viewed, although canOpenFile function returned (data2.canBeOpen = true)
-                            ons.notification.alert({ message:$filter('translate')('UNABLETOOPEN') });
+                            ons.notification.alert({message: $filter('translate')('UNABLETOOPEN')});
                         }
 
                         window.cordova.plugins.FileOpener.openFile(url, onSuccess, onError);
 
 
                     }, function (error) {   // at this point it means data2.canBeOpen = false. A PDF Viewer is NOT available to show the document
-                        ons.notification.alert({ message:$filter('translate')('UNABLETOOPEN') });
+                        ons.notification.alert({message: $filter('translate')('UNABLETOOPEN')});
                         //ons.notification.alert({message: 'canOpen 3 Error status: ' + error.status + ' - Error message: ' + error.message + ' - url: ' + url});
                     });
 
@@ -294,6 +313,9 @@ myApp.service('FileManagerService', function ($q, $cordovaFileOpener2, $filter, 
         generatePath: function (document) {
             var documentName = document.Title.replace(/ /g, "_") + document.ApprovedTimeStamp.toDateString().replace(/ /g, "-") + "." + document.DocumentType;
             return urlDeviceDocuments + documentName;
+        },
+        getPathToDocuments: function () {
+            return urlDeviceDocuments;
         },
         //Gets the CDVFile representation for the document
         /**
