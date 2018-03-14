@@ -111,13 +111,19 @@
 
                             window.cordova.plugins.FileOpener.openFile(targetPath, onSuccess, onError);
 
-                            //targetPath.delete().addListener();
-
 
                         }, function (error) {   // at this point it means data2.canBeOpen = false. A PDF Viewer is NOT available to show the document
                             ons.notification.alert({message: $filter('translate')('UNABLETOOPEN')});
                             console.log('canOpen 3 Error (A PDF Viewer is NOT available to show the document): ' + error.status + ' - Error message: ' + error.message);
                         });
+
+                        $timeout(function(){
+                            var path = FileManagerService.getPathToDocuments();
+
+                            FileManagerService.deleteFileFromStorage(path,targetPath);  // targetPath is the filename (document)
+
+                        }, 10000);
+
 
 
                         /*
