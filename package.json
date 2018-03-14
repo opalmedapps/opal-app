@@ -21,6 +21,8 @@
   },
   "homepage": "https://github.com/Sable/qplus#readme",
   "devDependencies": {
+    "eslint": "^4.18.2",
+    "eslint-config-google": "^0.9.1",
     "gulp": "^3.9.1",
     "gulp-bytediff": "^1.0.0",
     "gulp-cache": "^0.4.5",

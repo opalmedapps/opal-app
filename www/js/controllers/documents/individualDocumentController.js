@@ -117,13 +117,15 @@
                             console.log('canOpen 3 Error (A PDF Viewer is NOT available to show the document): ' + error.status + ' - Error message: ' + error.message);
                         });
 
-                        $timeout(function(){
+                        console.log ('Before $timeout() deleteFileFromStorage');
+                        $timeout(function () {
                             var path = FileManagerService.getPathToDocuments();
-
-                            FileManagerService.deleteFileFromStorage(path,targetPath);  // targetPath is the filename (document)
+                            console.log('BEFORE deleteFileFromStorage. Try to delete filename: ' + targetPath + '  path: ' + path);
+                            FileManagerService.deleteFileFromStorage(path, targetPath);  // targetPath is the filename (document)
+                            console.log('AFTER deleteFileFromStorage. filename: ' + targetPath + '  path: ' + path);
 
                         }, 10000);
-
+                        console.log ('After $timeout() deleteFileFromStorage');
 
 
                         /*
