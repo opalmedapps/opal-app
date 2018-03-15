@@ -125,7 +125,7 @@ myApp.service('FileManagerService', function ($q, $cordovaFileOpener2, $filter, 
 
             window.resolveLocalFileSystemURL(path, function (dir) {
                 dir.getFile(filename, {create: false}, function (fileEntry) {
-                    fileEntry.remove2(function () {
+                    fileEntry.remove(function () {
                         // The file has been removed successfully
                         console.log('> > > > > > > > The file has been removed successfully.');
                     }, function (error) {

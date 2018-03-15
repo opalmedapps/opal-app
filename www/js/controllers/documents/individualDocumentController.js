@@ -117,16 +117,36 @@
                             console.log('canOpen 3 Error (A PDF Viewer is NOT available to show the document): ' + error.status + ' - Error message: ' + error.message);
                         });
 
-                        console.log ('Before $timeout() deleteFileFromStorage');
+                        console.log('= = = = = = = Before $timeout() deleteFileFromStorage');
                         $timeout(function () {
+
                             var path = FileManagerService.getPathToDocuments();
-                            console.log('BEFORE deleteFileFromStorage. Try to delete filename: ' + targetPath + '  path: ' + path);
-                            FileManagerService.deleteFileFromStorage(path, targetPath);  // targetPath is the filename (document)
-                            console.log('AFTER deleteFileFromStorage. filename: ' + targetPath + '  path: ' + path);
+                            var docName = FileManagerService.generateDocumentName(docParams);
+
+                            console.log('= = = = = = = BEFORE deleteFileFromStorage. Try to delete filename: ' + targetPath + '  path: ' + path);
+                            // FileManagerService.deleteFileFromStorage(path, targetPath);  // targetPath is the filename (document)
+
+                            window.resolveLocalFileSystemURL(path, function (dir) {
+                                dir.getFile(filename, {create: false}, function (fileEntry) {
+                                    fileEntry.remove(function () {
+                                        // The file has been removed successfully
+                                        console.log('> > > > > > > > The file has been removed successfully.');
+                                    }, function (error) {
+                                        // Error deleting the file
+                                        console.log('> > > > > > > > Error deleting the file. ');
+                                    }, function () {
+                                        // The file doesn't exist
+                                        console.log('> > > > > > > > The file does not exist. ');
+                                    });
+                                    console.log('> > > > > > > > Inside 2 fileEntry.remove.');
+                                });
+                                console.log('> > > > > > > > Inside 3 fileEntry.remove.');
+                            });
+
+                            console.log('= = = = = = = AFTER deleteFileFromStorage. filename: ' + targetPath + '  path: ' + path);
 
                         }, 10000);
-                        console.log ('After $timeout() deleteFileFromStorage');
-
+                        console.log('= = = = = = = After $timeout() fileEntry.remove');
 
                         /*
                         cordova.plugins.fileOpener2.open(
