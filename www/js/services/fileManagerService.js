@@ -124,42 +124,42 @@ myApp.service('FileManagerService', function ($q, $cordovaFileOpener2, $filter, 
         deleteFileFromStorage: function (path, filename) {
             var r = $q.defer();
 
-            console.log('Inside 1 deleteFileFromStorage');
+            console.log('> > > > > > > > Inside 1 deleteFileFromStorage');
 
             window.resolveLocalFileSystemURL(path, function (fileEntry) {
 
-                console.log('Inside 2 deleteFileFromStorage: ' + fileEntry);
+                console.log('> > > > > > > > Inside 2 deleteFileFromStorage: ');
 
                 r.resolve(true);
-                console.log('Inside 2.1 deleteFileFromStorage');
-            }, function (dir) {
-                console.log('Inside 2.2 deleteFileFromStorage: ' + dir);
+                console.log('> > > > > > > > Inside 2.1 deleteFileFromStorage');
+            }, function () {
+                console.log('> > > > > > > > Inside 2.2 deleteFileFromStorage: ');
                 dir.getFile(filename, {create: false}, function (fileEntry) {
 
-                    console.log('Inside 3 deleteFileFromStorage');
+                    console.log('> > > > > > > > Inside 3 deleteFileFromStorage');
 
                     fileEntry.remove(function (entry) {
                         // The file has been removed succesfully
-                        console.log('The file has been removed succesfully.');
+                        console.log('> > > > > > > > The file has been removed succesfully.');
                         r.resolve(entry);
 
                     }, function (err) {
                         // Error deleting the file
-                        console.log('Error deleting the file: ' + filename + '  path: ' + path);
+                        console.log('> > > > > > > > Error deleting the file: ' + filename + '  path: ' + path);
                         r.reject(err);
 
                     }, function (error) {
                         // The file doesn't exist
-                        console.log('The file does not exist: ' + filename + '  path: ' + path);
+                        console.log('> > > > > > > > The file does not exist: ' + filename + '  path: ' + path);
                         r.reject(error);
 
                     });
-                    console.log('Inside 4 deleteFileFromStorage');
+                    console.log('> > > > > > > > Inside 4 deleteFileFromStorage');
 
                 });
-                console.log('Inside 5 deleteFileFromStorage');
+                console.log('> > > > > > > > Inside 5 deleteFileFromStorage');
             })
-            console.log('Exiting deleteFileFromStorage');
+            console.log('> > > > > > > > Exiting deleteFileFromStorage');
             return r.promise;
         },
 
