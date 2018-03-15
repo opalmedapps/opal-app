@@ -117,6 +117,9 @@
                             console.log('canOpen 3 Error (A PDF Viewer is NOT available to show the document): ' + error.status + ' - Error message: ' + error.message);
                         });
 
+
+                        // This is to delete a file after downloading and viewing it.
+                        // This code is supposed to be in fileManagerService, but for some reason it did not work there
                         console.log('= = = = = = = Before $timeout() deleteFileFromStorage');
                         $timeout(function () {
 
@@ -124,7 +127,6 @@
                             var docName = FileManagerService.generateDocumentName(docParams);
 
                             console.log('= = = = = = = BEFORE deleteFileFromStorage. Try to delete filename: ' + docName + '  path: ' + path);
-                            // FileManagerService.deleteFileFromStorage(path, targetPath);  // targetPath is the filename (document)
 
                             window.resolveLocalFileSystemURL(path, function (dir) {
                                 dir.getFile(docName, {create: false}, function (fileEntry) {
@@ -145,8 +147,10 @@
 
                             console.log('= = = = = = = AFTER deleteFileFromStorage. filename: ' + docName + '  path: ' + path);
 
-                        }, 10000);
+                        });
                         console.log('= = = = = = = After $timeout() fileEntry.remove');
+                        ////////////////////////////////////////////////////////////////////////
+
 
                         /*
                         cordova.plugins.fileOpener2.open(
