@@ -126,12 +126,14 @@ myApp.service('FileManagerService', function ($q, $cordovaFileOpener2, $filter, 
 
             console.log('Inside 1 deleteFileFromStorage');
 
-            window.resolveLocalFileSystemURL(path, function (dir) {
+            window.resolveLocalFileSystemURL(path, function (fileEntry) {
 
-                console.log('Inside 2 deleteFileFromStorage');
+                console.log('Inside 2 deleteFileFromStorage: ' + fileEntry);
 
                 r.resolve(true);
-            }, function () {
+                console.log('Inside 2.1 deleteFileFromStorage');
+            }, function (dir) {
+                console.log('Inside 2.2 deleteFileFromStorage: ' + dir);
                 dir.getFile(filename, {create: false}, function (fileEntry) {
 
                     console.log('Inside 3 deleteFileFromStorage');
