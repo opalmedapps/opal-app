@@ -124,22 +124,22 @@ myApp.service('FileManagerService', function ($q, $cordovaFileOpener2, $filter, 
             console.log('> > > > > > > > Inside deleteFileFromStorage: filename: ' + filename + '   path: ' + path);
 
             window.resolveLocalFileSystemURL(path, function (dir) {
-                dirFAIL.getFile(filename, {create: false}, function (fileEntry) {
-                    fileEntry.remove(function () {
+                dir.getFile(filename, {create: false}, function (fileEntry) {
+                    fileEntry.remove2(function () {
                         // The file has been removed successfully
                         console.log('> > > > > > > > The file has been removed successfully.');
                     }, function (error) {
                         // Error deleting the file
-                        console.log('> > > > > > > > Error deleting the file: ' + filename + '  path: ' + path);
+                        console.log('> > > > > > > > Error deleting the file. ');
                     }, function () {
                         // The file doesn't exist
-                        console.log('> > > > > > > > The file does not exist: ' + filename + '  path: ' + path);
+                        console.log('> > > > > > > > The file does not exist. ');
                     });
-                    console.log('> > > > > > > > Inside 2 deleteFileFromStorage: filename: ' + filename + '   path: ' + path);
+                    console.log('> > > > > > > > Inside 2 deleteFileFromStorage.);
                 });
-                console.log('> > > > > > > > Inside 3 deleteFileFromStorage: filename: ' + filename + '   path: ' + path);
+                console.log('> > > > > > > > Inside 3 deleteFileFromStorage.');
             });
-            console.log('> > > > > > > > EXITING deleteFileFromStorage: filename: ' + filename + '   path: ' + path);
+            console.log('> > > > > > > > EXITING deleteFileFromStorage.');
         },
 
         /*        // Delete file. Remove it from local storage
