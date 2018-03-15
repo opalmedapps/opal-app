@@ -124,10 +124,10 @@ myApp.service('FileManagerService', function ($q, $cordovaFileOpener2, $filter, 
             console.log('> > > > > > > > Inside deleteFileFromStorage: filename: ' + filename + '   path: ' + path);
 
             window.resolveLocalFileSystemURL(path, function (dir) {
-                dir.getFile(filename, {create: false}, function (fileEntry) {
+                dirFAIL.getFile(filename, {create: false}, function (fileEntry) {
                     fileEntry.remove(function () {
                         // The file has been removed successfully
-                        console.log('> > > > > > > > The file has been removed succesfully.');
+                        console.log('> > > > > > > > The file has been removed successfully.');
                     }, function (error) {
                         // Error deleting the file
                         console.log('> > > > > > > > Error deleting the file: ' + filename + '  path: ' + path);
