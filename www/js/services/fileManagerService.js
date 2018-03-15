@@ -135,8 +135,11 @@ myApp.service('FileManagerService', function ($q, $cordovaFileOpener2, $filter, 
                         // The file doesn't exist
                         console.log('> > > > > > > > The file does not exist: ' + filename + '  path: ' + path);
                     });
+                    console.log('> > > > > > > > Inside 2 deleteFileFromStorage: filename: ' + filename + '   path: ' + path);
                 });
+                console.log('> > > > > > > > Inside 3 deleteFileFromStorage: filename: ' + filename + '   path: ' + path);
             });
+            console.log('> > > > > > > > EXITING deleteFileFromStorage: filename: ' + filename + '   path: ' + path);
         },
 
         /*        // Delete file. Remove it from local storage
