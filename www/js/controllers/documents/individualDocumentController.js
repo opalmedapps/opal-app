@@ -120,13 +120,11 @@
 
                         // This is to delete a file after downloading and viewing it.
                         // This code is supposed to be in fileManagerService, but for some reason it did not work there
-                        console.log('= = = = = = = Before $timeout() deleteFileFromStorage');
+                        /*
                         $timeout(function () {
 
                             var path = FileManagerService.getPathToDocuments();
                             var docName = FileManagerService.generateDocumentName(docParams);
-
-                            console.log('= = = = = = = BEFORE deleteFileFromStorage. Try to delete filename: ' + docName + '  path: ' + path);
 
                             window.resolveLocalFileSystemURL(path, function (dir) {
                                 dir.getFile(docName, {create: false}, function (fileEntry) {
@@ -140,32 +138,11 @@
                                         // The file doesn't exist
                                         console.log('> > > > > > > > The file does not exist. ');
                                     });
-                                    console.log('> > > > > > > > Inside 2 fileEntry.remove.');
                                 });
-                                console.log('> > > > > > > > Inside 3 fileEntry.remove.');
                             });
-
-                            console.log('= = = = = = = AFTER deleteFileFromStorage. filename: ' + docName + '  path: ' + path);
-
                         });
-                        console.log('= = = = = = = After $timeout() fileEntry.remove');
-                        ////////////////////////////////////////////////////////////////////////
-
-
-                        /*
-                        cordova.plugins.fileOpener2.open(
-                            targetPath,
-                            'application/pdf',
-                            {
-                                error: function (e) {
-                                    console.log('Error status openPDF(): ' + e.status + ' - Error message: ' + e.message);
-                                },
-                                success: function () {
-                                    console.log('file opened successfully');
-                                }
-                            }
-                        );
                         */
+                        ////////////////////////////////////////////////////////////////////////
 
                     }).catch(function (error) {
                         //Unable to save document on server
