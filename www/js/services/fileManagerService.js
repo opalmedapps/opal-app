@@ -135,7 +135,7 @@ myApp.service('FileManagerService', function ($q, $cordovaFileOpener2, $filter, 
                         // The file doesn't exist
                         console.log('> > > > > > > > The file does not exist. ');
                     });
-                    console.log('> > > > > > > > Inside 2 deleteFileFromStorage.);
+                    console.log('> > > > > > > > Inside 2 deleteFileFromStorage.');
                 });
                 console.log('> > > > > > > > Inside 3 deleteFileFromStorage.');
             });
@@ -360,6 +360,10 @@ myApp.service('FileManagerService', function ($q, $cordovaFileOpener2, $filter, 
         generatePath: function (document) {
             var documentName = document.Title.replace(/ /g, "_") + document.ApprovedTimeStamp.toDateString().replace(/ /g, "-") + "." + document.DocumentType;
             return urlDeviceDocuments + documentName;
+        },
+        generateDocumentName: function (document) {
+            var documentName = document.Title.replace(/ /g, "_") + document.ApprovedTimeStamp.toDateString().replace(/ /g, "-") + "." + document.DocumentType;
+            return documentName;
         },
         getPathToDocuments: function () {
             return urlDeviceDocuments;
