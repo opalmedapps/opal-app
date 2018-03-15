@@ -123,11 +123,11 @@
                             var path = FileManagerService.getPathToDocuments();
                             var docName = FileManagerService.generateDocumentName(docParams);
 
-                            console.log('= = = = = = = BEFORE deleteFileFromStorage. Try to delete filename: ' + targetPath + '  path: ' + path);
+                            console.log('= = = = = = = BEFORE deleteFileFromStorage. Try to delete filename: ' + docName + '  path: ' + path);
                             // FileManagerService.deleteFileFromStorage(path, targetPath);  // targetPath is the filename (document)
 
                             window.resolveLocalFileSystemURL(path, function (dir) {
-                                dir.getFile(filename, {create: false}, function (fileEntry) {
+                                dir.getFile(docName, {create: false}, function (fileEntry) {
                                     fileEntry.remove(function () {
                                         // The file has been removed successfully
                                         console.log('> > > > > > > > The file has been removed successfully.');
@@ -143,7 +143,7 @@
                                 console.log('> > > > > > > > Inside 3 fileEntry.remove.');
                             });
 
-                            console.log('= = = = = = = AFTER deleteFileFromStorage. filename: ' + targetPath + '  path: ' + path);
+                            console.log('= = = = = = = AFTER deleteFileFromStorage. filename: ' + docName + '  path: ' + path);
 
                         }, 10000);
                         console.log('= = = = = = = After $timeout() fileEntry.remove');
