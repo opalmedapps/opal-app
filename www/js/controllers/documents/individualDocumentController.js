@@ -35,10 +35,15 @@
         vm.hide = false;
 
         vm.share = share;
+        vm.openPDF = openPDF;
+
         //$scope.share = share;
         $scope.about = about;
         $scope.warn = warn;
-        //vm.warn = warn;
+        $scope.warn2 = warn2;
+        $scope.docParams = docParams;
+        $scope.isAndroid = isAndroid;
+
 
         activate();
 
@@ -49,6 +54,8 @@
 
             //PDF params
             docParams = Documents.setDocumentsLanguage(parameters.Post);
+            $scope.docParams = docParams;
+
             viewerSize = window.innerWidth;
             containerEl = document.getElementById('holder');
             scale = 3;
@@ -70,12 +77,10 @@
 
         function initializeDocument(document) {
             if (Documents.getDocumentBySerNum(document.DocumentSerNum).Content) {
-                //setUpPDF(document);
-                openPDF(document);
+                setUpPDF(document);
             } else {
                 Documents.downloadDocumentFromServer(document.DocumentSerNum).then(function () {
-                    //setUpPDF(document);
-                    openPDF(document);
+                    setUpPDF(document);
                 }).catch(function (error) {
                     //Unable to get document from server
                     vm.loading = false;
@@ -84,16 +89,16 @@
             }
         }
 
-        function openPDF(document) {
+        function openPDF() {
             if (Constants.app) {
                 if (ons.platform.isAndroid()) {
-                    var targetPath = FileManagerService.generatePath(document);
-                    FileManagerService.downloadFileIntoStorage("data:application/pdf;base64," + document.Content, targetPath).then(function () {
+                    var targetPath = FileManagerService.generatePath(docParams);
+                    FileManagerService.downloadFileIntoStorage("data:application/pdf;base64," + docParams.Content, targetPath).then(function () {
 
                         window.cordova.plugins.FileOpener.canOpenFile(targetPath, function (data2) {
                             // at this point it means data2.canBeOpen = true. A PDF Viewer "is" indeed available to show the document
 
-                            var onSuccess = function(data) {
+                            var onSuccess = function (data) {
                                 // file opened successfully by Default PDF Viewer on Android. Nothing else to do at this point
                                 console.log('file opened successfully by Default PDF Viewer on Android. Nothing else to do at this point');
                             };
@@ -101,31 +106,43 @@
                             function onError(error) {
                                 // Unexpected Error occurred. For some reason, file could not be opened and viewed, although canOpenFile function returned (data2.canBeOpen = true)
                                 console.log('openPDF (FileOpener.openFile) Error: ' + error.status + ' - Error message: ' + error.message);
-                                ons.notification.alert({ message:$filter('translate')('UNABLETOOPEN') });
+                                ons.notification.alert({message: $filter('translate')('UNABLETOOPEN')});
                             }
 
                             window.cordova.plugins.FileOpener.openFile(targetPath, onSuccess, onError);
 
+
                         }, function (error) {   // at this point it means data2.canBeOpen = false. A PDF Viewer is NOT available to show the document
-                            ons.notification.alert({ message:$filter('translate')('UNABLETOOPEN') });
+                            ons.notification.alert({message: $filter('translate')('UNABLETOOPEN')});
                             console.log('canOpen 3 Error (A PDF Viewer is NOT available to show the document): ' + error.status + ' - Error message: ' + error.message);
                         });
 
 
+                        // This is to delete a file after downloading and viewing it.
+                        // This code is supposed to be in fileManagerService, but for some reason it did not work there
                         /*
-                        cordova.plugins.fileOpener2.open(
-                            targetPath,
-                            'application/pdf',
-                            {
-                                error: function (e) {
-                                    console.log('Error status openPDF(): ' + e.status + ' - Error message: ' + e.message);
-                                },
-                                success: function () {
-                                    console.log('file opened successfully');
-                                }
-                            }
-                        );
+                        $timeout(function () {
+
+                            var path = FileManagerService.getPathToDocuments();
+                            var docName = FileManagerService.generateDocumentName(docParams);
+
+                            window.resolveLocalFileSystemURL(path, function (dir) {
+                                dir.getFile(docName, {create: false}, function (fileEntry) {
+                                    fileEntry.remove(function () {
+                                        // The file has been removed successfully
+                                        console.log('> > > > > > > > The file has been removed successfully.');
+                                    }, function (error) {
+                                        // Error deleting the file
+                                        console.log('> > > > > > > > Error deleting the file. ');
+                                    }, function () {
+                                        // The file doesn't exist
+                                        console.log('> > > > > > > > The file does not exist. ');
+                                    });
+                                });
+                            });
+                        });
                         */
+                        ////////////////////////////////////////////////////////////////////////
 
                     }).catch(function (error) {
                         //Unable to save document on server
@@ -134,10 +151,10 @@
                     });
 
                 } else {
-                    cordova.InAppBrowser.open("data:application/pdf;base64," + document.Content, '_blank', 'EnableViewPortScale=yes');
+                    cordova.InAppBrowser.open("data:application/pdf;base64," + docParams.Content, '_blank', 'EnableViewPortScale=yes');
                 }
             } else {
-                window.open("data:application/pdf;base64, " + document.Content, '_blank', 'location=no,enableViewportScale=true');
+                window.open("data:application/pdf;base64, " + docParams.Content, '_blank', 'location=no,enableViewportScale=true');
             }
             vm.loading = false;
         }
@@ -247,6 +264,15 @@
         function warn() {
             modal.show();
             $scope.popoverDocsInfo.hide();
+        }
+
+        function warn2() {
+            modalOpenViewer.show();
+            $scope.popoverDocsInfo.hide();
+        }
+
+        function isAndroid() {
+            return ons.platform.isAndroid();
         }
 
         function about() {
