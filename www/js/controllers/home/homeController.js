@@ -34,7 +34,7 @@
         vm.checkinState = {
             noAppointments: true,
             allCheckedIn: false,
-            message: 'CHECKING_SERVER',
+            message: 'DETECTING_LOCATION',
             canNavigate: false,
             checkinError: false,
             inRange: true
