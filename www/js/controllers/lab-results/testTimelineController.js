@@ -41,7 +41,7 @@
         function activate(){
             configureViewModel();
             bindEvents();
-            configureChart(testResults);
+            configureChart();
         }
 
         function about(){
@@ -115,10 +115,9 @@
 
             vm.testResultsByDateArray = LabResults.getTestResultsArrayByDate();
 
-            if ($rootScope.chartSelectedDateRange === undefined) {
+            if (!$rootScope.chartSelectedDateRange) {
                 $rootScope.chartSelectedDateRange = 4;    // this to select All by Default as the date range: 0,1,2,3,4   1m, 3m, 6m, 1y, All
             }
-
         }
 
         /**
@@ -130,15 +129,19 @@
             //console.log(this);
             //console.log(e);
 
-            if (e.rangeSelectorButton.text === '1m')
+            console.log(e);
+
+            var current_selection = e.rangeSelectorButton.text;
+
+            if (current_selection === '1m')
                 $rootScope.chartSelectedDateRange = 0;
-            else if (e.rangeSelectorButton.text === '3m')
+            else if (current_selection === '3m')
                 $rootScope.chartSelectedDateRange = 1;
-            else if (e.rangeSelectorButton.text === '6m')
+            else if (current_selection === '6m')
                 $rootScope.chartSelectedDateRange = 2;
-            else if (e.rangeSelectorButton.text === '1y')
+            else if (current_selection === '1y')
                 $rootScope.chartSelectedDateRange = 3;
-            else if (e.rangeSelectorButton.text === 'All')
+            else if (current_selection === 'All')
                 $rootScope.chartSelectedDateRange = 4;
             else $rootScope.chartSelectedDateRange = 2;
         }
@@ -160,6 +163,14 @@
                 reformedData.push(dv);
             }
 
+            /**
+             * Make sure it is sorted....
+             */
+
+            reformedData.sort(function(a,b){
+                return a[0] - b[0]
+            });
+            
             /*********************************************
              * FINDING THE MAX AND MIN VALUES FOR CHARTING
              *********************************************/
