@@ -36,7 +36,6 @@
                                 {{"WELCOME"|translate}} <b><span style="color: darkmagenta"> {{questionaire.QuestionnaireName}}</span></b>
                                 -->
                                     <b><span style="color: darkmagenta"> {{(language === "EN") ? questionaire.QuestionnaireName_EN : questionaire.QuestionnaireName_FR}}</span></b>
-
                                 </center>
                             </h3>
                         </div>
@@ -118,7 +117,7 @@
                                                         <input type="radio" ng-checked="checked1[$index]"
                                                                ng-click="clicked1((language === "EN") ? options[$index].ChoiceDescription_EN : options[$index].ChoiceDescription_FR, $index, undefined)">
                                                         <div class="radio-button__checkmark radio-button--list-item__checkmark"></div>
-                                                        {{(language === "EN") ? option.ChoiceDescription_EN : option.ChoiceDescription_FR}} 
+                                                        {{(language === "EN") ? option.ChoiceDescription_EN : option.ChoiceDescription_FR}}
                                                     </label>
                                                 </li>
 
@@ -174,10 +173,11 @@
                         <div class="container">
 
                             <div class="row text-center" style="margin:0 auto" align="center">
-                                <div class="col-xs-8" style="margin-left: auto; text-align: center;">
+                                <div class="col-xs-8" style="margin-left: auto; text-align: center;" ng-init="indexForTopBottomChoice = $index">   <!-- This is line is Important to get/save the $index value to be used later down -->
                                     <center>
+                                        <!--
                                         <p>{{(language === "EN") ? questions[$index].Choices[1].ChoiceDescription_EN : questions[$index].Choices[1].ChoiceDescription_FR}}</p>
-                                        
+                                        -->
                                     </center>
                                 </div>
                             </div>
@@ -186,14 +186,14 @@
                                 <div class="col-xs-12 text-center" style="text-align:center">
                                     <!-- Min height of list item is 44px so the height of this should be 44 * the number of elements its displaying -->
 
+                                    <!-- Only shown if buttons[index] is true -->
+                                    <!--
+
                                     <div class="col-xs-4" ng-repeat="number in numbers track by $index"
-                                         style="height: {{62*(heights.length-1)}}px;" ng-show="buttons[$index]">
-                                        <!-- Only shown if buttons[index] is true -->
-                                        <!--
-                                        <tek-progress-bar mode="vertical">
+                                     style="height: {{62*(heights.length-1)}}px;" ng-show="buttons[$index]">
+                                       <tek-progress-bar mode="vertical">
                                             <div class="progress vertical" ng-class="bar.containerClass">
-                                                <div class="vertprogress-bar" ng-class="bar.barClass" style="bottom: 0;
-            position: absolute;height: {{heights[$index]}}%;">
+                                                <div class="vertprogress-bar" ng-class="bar.barClass" style="bottom: 0; position: absolute;height: {{heights[$index]}}%;">
                                                     <div class="progress vertical full-bar ng-scope" ng-class="bar.containerClass" style="background: {{colors[$index]}};">
                                                         <div class="vertprogress-bar progress-bar-warning" ng-class="bar.barClass" style="height: 100%;">
                                                         </div>
@@ -201,10 +201,10 @@
                                                 </div>
                                             </div>
                                         </tek-progress-bar>
-                                        -->
                                     </div>
+                                        -->
 
-                                    <div class="col-xs-8" style="bottom: 5px;">
+                                    <div class="col-xs-14" style="bottom: 5px;">
                                         <ul class="list">
                                             <li class="list__item list__item--tappable"
                                                 ng-repeat="number in numbers track by $index" ng-show="$index>0">
@@ -212,23 +212,26 @@
                                                     <input type="radio" ng-checked="getChecked(heights.length-$index)"
                                                            ng-click="clicked2(numAnswers[heights.length-$index], $index)">
                                                     <div class="radio-button__checkmark radio-button--list-item__checkmark"></div>
-                                                    {{heights.length-$index}}
-                                                </label>
+                                                    {{heights.length-$index}} &nbsp;
+                                                    <label ng-show="$index === 1">{{(language === "EN") ? questions[indexForTopBottomChoice].Choices[1].ChoiceDescription_EN : questions[indexForTopBottomChoice].Choices[1].ChoiceDescription_FR}}</label>
+                                                    <label ng-show="$index === heights.length-1"> {{(language === "EN") ? questions[indexForTopBottomChoice].Choices[0].ChoiceDescription_EN : questions[indexForTopBottomChoice].Choices[0].ChoiceDescription_FR}}</label>
+                                                 </label>
                                             </li>
 
                                         </ul>
                                     </div>
                                 </div>
                             </div>
+                            <!--
                             <div id="bottom{{$index}}" class="row text-center" style="margin:0 auto" align="center">
                                 <div class="col-xs-8" style="margin-left: auto; text-align: center;">
                                     <center>
                                         <p>{{(language === "EN") ? questions[$index].Choices[0].ChoiceDescription_EN : questions[$index].Choices[0].ChoiceDescription_FR}}</p>
-                                        
                                     </center>
                                 </div>
                             </div>
                             <br>
+                            -->
 
                             <!--<ons-row id="button{{$index}}" style="position:fixed;bottom:0px;padding-bottom:5px" ng-click="goToBottom('bottom' + $index, $index)"
                               ng-hide="clickedScrollArrow[$index]">
@@ -552,7 +555,7 @@
                                             <ons-row style="margin:0;padding:0" align="center">
                                                 <ons-col align="left" style="border:1px solid white;color:white">
                                                     <div style="line-height: 1.4;">
-                                                        #{{$index+1}}: {{(language === "EN") ? question.Asseses_EN : question.Asseses_FR}} 
+                                                        #{{$index+1}}: {{(language === "EN") ? question.Asseses_EN : question.Asseses_FR}}
                                                     </div>
                                                 </ons-col>
                                                 <ons-col align="center" width="30%">
