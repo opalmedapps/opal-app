@@ -60,8 +60,6 @@
                     return false;
                 } else if (str.search(/[^a-zA-Z0-9\!\@\#\$\%\^\&\*\(\)\_\+]/) !== -1) {
                     return false;
-                } else if (str !== vm.validateNewValue) {
-                    return false;
                 }
             }
 
@@ -90,13 +88,17 @@
         function submitNewPassword() {
             var invalid = !newPasswordIsValid();
             if(!vm.newValue || invalid) {
-                vm.invalidPassword = invalid;
-                vm.alert.type = 'danger';
-                vm.alert.content = "ENTERVALIDPASSWORD";
+                $timeout(function() {
+                    vm.invalidPassword = invalid;
+                    vm.alert.type = 'danger';
+                    vm.alert.content = "ENTERVALIDPASSWORD";
+                })
             } else if (vm.newValue !== vm.validateNewValue){
-                vm.invalidPassword = true;
-                vm.alert.type = 'danger';
-                vm.alert.content = "Passwords do no match!";
+                $timeout(function() {
+                    vm.invalidPassword = true;
+                    vm.alert.type = 'danger';
+                    vm.alert.content = "Passwords do no match!";
+                });
             }else{
                 vm.submitting = true;
 
