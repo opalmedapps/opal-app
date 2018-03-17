@@ -51,6 +51,7 @@
   "DIAGNOSIS": "Diagnostic",
   "DIAGNOSIS_DATE": "Date",
   "DEAR": "Bonjour",
+  "DETECTING_LOCATION": "Détection de l'emplacement...",
   "DISABLECALENDARACCESSQUESTION": "Souhaitez-vous sauvegarder vos rendez-vous dans le calendrier de votre téléphone?",
   "DISABLESMSNOTIFICATIONQUESTION": "Souhaitez-vous désactiver les notifications par sms?",
   "DOCTOR": "Médecin",

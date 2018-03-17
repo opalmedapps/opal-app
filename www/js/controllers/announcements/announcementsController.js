@@ -70,7 +70,7 @@
 
                     // TODO: USE EXTERNAL HELPER WHEN CALLING SORT FUNCTION
 
-                    return new Date(a.DateAdded) - new Date(b.DateAdded);
+                    return new Date(b.DateAdded) - new Date(a.DateAdded);
                 });
                 vm.announcements=announcements;
             }

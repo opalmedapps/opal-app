@@ -17,8 +17,8 @@ var myApp=angular.module('MUHCApp');
  *@requires MUHCApp.service:EducationalMaterial
  *@description API service used to patient notifications. This Service is deeply linked to other services to extract that information about the actual content of the notification.
  **/
-myApp.service('Notifications',['$filter','RequestToServer','LocalStorage','Announcements','TxTeamMessages','Appointments','Documents','EducationalMaterial', 'UserPreferences', '$q', 'Questionnaires',
-    function($filter,RequestToServer,LocalStorage,Announcements, TxTeamMessages,Appointments, Documents,EducationalMaterial, UserPreferences, $q, Questionnaires){
+myApp.service('Notifications',['$filter','RequestToServer','LocalStorage','Announcements','TxTeamMessages','Appointments','Documents','EducationalMaterial', 'UserPreferences', '$q', 'Questionnaires', 'CheckInService',
+    function($filter,RequestToServer,LocalStorage,Announcements, TxTeamMessages,Appointments, Documents,EducationalMaterial, UserPreferences, $q, Questionnaires, CheckInService){
         /**
          *@ngdoc property
          *@name  MUHCApp.service.#Notifications
@@ -290,7 +290,6 @@ myApp.service('Notifications',['$filter','RequestToServer','LocalStorage','Annou
         function updateUserNotifications(notifications) {
             searchAndDeleteNotifications(notifications);
             addUserNotifications(notifications);
-            console.log(Notifications)
         }
 
         return{
@@ -458,7 +457,7 @@ myApp.service('Notifications',['$filter','RequestToServer','LocalStorage','Annou
             requestNewNotifications: function () {
                 var r = $q.defer();
 
-                if (lastUpdated > Date.now() - 10000) r.resolve({});
+                if (lastUpdated > Date.now() - 10000 && !CheckInService.checkinNotificationsExist()) r.resolve({});
                 else{
                     RequestToServer.sendRequestWithResponse('NotificationsNew', {LastUpdated: lastUpdated.getTime()})
                         .then(function (response) {
@@ -470,6 +469,11 @@ myApp.service('Notifications',['$filter','RequestToServer','LocalStorage','Annou
                                     updateUserNotifications([notification]);
                                 })
                             }
+
+                            if (CheckInService.checkinNotificationsExist()) {
+                                CheckInService.retrievedCheckinNotifications();
+                            }
+
                             r.resolve({});
                         })
                         .catch(function (err) {
