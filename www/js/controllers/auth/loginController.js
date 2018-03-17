@@ -286,6 +286,13 @@
                         vm.loading = false;
                     });
                     break;
+                case "auth/user-disabled":
+                    $timeout(function () {
+                        vm.alert.type='danger';
+                        vm.alert.message="USER_DISABLED";
+                        vm.loading = false;
+                    });
+                    break;
                 case "LIMITS_EXCEEDED":
                     $timeout(function(){
                         vm.alert.type='danger';

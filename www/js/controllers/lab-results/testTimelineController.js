@@ -170,7 +170,7 @@
             reformedData.sort(function(a,b){
                 return a[0] - b[0]
             });
-            
+
             /*********************************************
              * FINDING THE MAX AND MIN VALUES FOR CHARTING
              *********************************************/
