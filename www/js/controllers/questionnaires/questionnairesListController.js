@@ -42,7 +42,7 @@
                 tabbar.style.marginTop = "63px";
             }
 
-            if(!Questionnaires.isEmpty()){
+            if(!Questionnaires.isEmpty() && !Questionnaires.needsRefreshing()){
                 vm.questionnaires = Questionnaires.getPatientQuestionnaires().Questionnaires;
                 vm.patientQuestionnaires = Questionnaires.getPatientQuestionnaires().PatientQuestionnaires;
                 getDesiredQuestionnaires('new');
@@ -53,14 +53,10 @@
 
             Questionnaires.requestQuestionnaires()
                 .then(function () {
-
                         vm.questionnaires = Questionnaires.getPatientQuestionnaires().Questionnaires;
                         vm.patientQuestionnaires = Questionnaires.getPatientQuestionnaires().PatientQuestionnaires;
                         getDesiredQuestionnaires('new');
                         getBadgeNumbers();
-
-                        console.log("Questionnaires: " + JSON.stringify(vm.questionnaires));
-
                         vm.loading = false;
                     },
                     function(error){
@@ -68,7 +64,9 @@
                     });
 
 
-            personalNavigator.on('postpop', popPost);
+            if(typeof personalNavigator !== 'undefined'){
+                personalNavigator.on('postpop', popPost);
+            }
         }
 
         function getBadgeNumbers () {
@@ -135,6 +133,13 @@
                 }
                 vm.isAnswered = "Questionnaires Completed";
                 vm.clickedText = "completed";
+
+                vm.desiredQuestionnaires.sort(function(a, b) {
+
+                    // TODO: USE EXTERNAL HELPER WHEN CALLING SORT FUNCTION
+
+                    return new Date(b.CompletionDate) - new Date(a.CompletionDate);
+                });
             } else if (type === 'new') {
                 for (var key in vm.patientQuestionnaires) {
                     questionnaireSerNum = vm.patientQuestionnaires[key].QuestionnaireSerNum;
@@ -144,6 +149,13 @@
                 }
                 vm.isAnswered = "New Questionnaires";
                 vm.clickedText = 'new';
+
+                vm.desiredQuestionnaires.sort(function(a, b) {
+
+                    // TODO: USE EXTERNAL HELPER WHEN CALLING SORT FUNCTION
+
+                    return new Date(b.DateAdded) - new Date(a.DateAdded);
+                });
             } else if (type === 'progress') {
                 for (var key in vm.patientQuestionnaires) {
                     questionnaireSerNum = vm.patientQuestionnaires[key].QuestionnaireSerNum;
