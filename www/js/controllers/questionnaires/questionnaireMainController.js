@@ -758,11 +758,15 @@ app1.controller('QuestionnaireMainController', function ($scope, $location, $anc
         $scope.carousel.setActiveCarouselItemIndex(index + 1);
     }
 
-    // Chooses whether the user is able to submit answers or not. If not all of the asnwers are answered than they cannot
+    // Chooses whether the user is able to submit answers or not. If not all of the answers are answered then they cannot,
+    // EXCEPT if the answer is a free TEXT, then it is NOT mandatory. It could be empty. So it is ok not to answer this kind of question type 'SA'
     $scope.checkSubmit = function () {
         for ($i = 0; $i < $scope.questions.length; $i++) {
-            if (!$scope.hasOwnProperty('answers') || typeof $scope.answers[$i] == 'undefined') {
-                return true;
+            // if answer is in free TEXT format, it is NOT mandatory. It could be empty.
+            if ($scope.questions[$i].QuestionType !== 'SA') {
+                if (!$scope.hasOwnProperty('answers') || typeof $scope.answers[$i] == 'undefined') {
+                    return true;
+                }
             }
         }
         return false;
