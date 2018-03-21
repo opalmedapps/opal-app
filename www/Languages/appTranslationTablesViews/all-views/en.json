@@ -138,6 +138,7 @@
   "NEWNOTIFICATIONS": "New Notifications",
   "NEWS": "Notifications",
   "NEXTAPPOINTMENT": "Appointment Status",
+  "NO": "No",
   "NOANNOUNCEMENTS": "No announcements",
   "NOAPPOINTMENTS": "No appointments",
   "NOCONTACTSAVAILABLE": "No contacts available",
@@ -214,7 +215,7 @@
   "QUESTIONNAIRE_NONE_PROGRESS": "No questionnaires in progress.",
   "QUESTIONNAIRE_NONE_COMPLETED": "No completed questionnaires.",
   "QUESTIONNAIRE_INSTRUCTIONS": "Answer the questions in red. Questions in green can be edited. Once all questions are answered, you can submit.",
-  "QUESTIONNAIRE_INSTRUCTIONS2": "Tap begin/resume or swipe to switch to start the questionnaire.",
+  "QUESTIONNAIRE_INSTRUCTIONS2": "Tap Begin/Resume or swipe to start the questionnaire.",
   "QUESTIONNAIRE_INSTRUCTIONS3": "More questions or concerns? Please let us know!",
   "QUESTIONNAIRE_INSTRUCTIONS4": "Go to Question",
   "QUESTIONNAIRE_SUBMIT": "Are you sure you want to submit the questionnaire? You cannot change your answers after submitting.",
@@ -327,5 +328,6 @@
   "Tumor markers":"TumorMarkers",
   "GOTOWEBSITE":"Visit website",
   "WARNING": "Warning!",
-  "WELCOME": "Welcome to the"
+  "WELCOME": "Welcome to the",
+  "YES": "Yes"
 }
