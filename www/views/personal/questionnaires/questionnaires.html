@@ -50,7 +50,7 @@
                             <img src="./img/MUHC.png" alt="MUHC Logo" style="margin-top: 1cm; margin-bottom: 1cm"></img>
                             -->
                             <br>
-                            {{(language === "EN") ? questionaire.Intro_EN : questionaire.Intro_FR}}
+                            <div ng-bind-html="trustThisAsHtml()" ></div>
                             <br>
                             <br>
                         </div>
@@ -100,7 +100,7 @@
                     </div>
                 </div>
                 <div class="row" style="margin:0;padding:0">
-                    <div class="col-xs-12">
+                    <div class="col-xs-14">
 
                         <!-- Multiple choice question type page -->
                         <div ng-show="(question.QuestionType == 'MC' && (shown[$index]))">
@@ -108,18 +108,16 @@
                                 <div class="container">
 
                                     <div class="row" style="margin:0 auto">
-                                        <div class="col-xs-12">
+                                        <div class="col-xs-14">
                                             <br>
 
                                             <!-- Repeat all the list item for every option in options -->
                                             <ul class="list">
                                                 <li class="list__item list__item--tappable"
-                                                    ng-repeat="option in options track by $index">
-                                                    <label class="radio-button radio-button--list-item">
+                                                    ng-repeat="option in options track by $index" >
+                                                    <label class="radio-button radio-button--list-item" ng-init="choiceDescription = (language === 'EN') ? options[$index].ChoiceDescription_EN : options[$index].ChoiceDescription_FR">
                                                         <input type="radio" ng-checked="checked1[$index]"
-                                                               ng-click="clicked1((language === " EN") ?
-                                                        options[$index].ChoiceDescription_EN :
-                                                        options[$index].ChoiceDescription_FR, $index, undefined)">
+                                                               ng-click="clicked1(choiceDescription, $index, undefined)">
                                                         <div class="radio-button__checkmark radio-button--list-item__checkmark"></div>
                                                         {{(language === "EN") ? option.ChoiceDescription_EN :
                                                         option.ChoiceDescription_FR}}
@@ -133,7 +131,7 @@
                                                                ng-click="clicked1('other', options.length, undefined)"
                                                                ng-checked="checked1[options.length]">
                                                         <div class="radio-button__checkmark radio-button--list-item__checkmark"></div>
-                                                        Other
+                                                        {{"OTHER"|translate}}
                                                     </label>
                                                 </li>
                                             </ul>
@@ -260,12 +258,10 @@
 
                 </div>
 
-                <!-- End of scale question page
-    -->
+                <!-- End of scale question page -->
 
                 <!-- Yes/no question page -->
                 <div ng-show="(question.QuestionType == 'yes') && (shown[$index])">
-
 
                     <div>
                         <div class="container">
@@ -279,7 +275,7 @@
                                                 <input type="radio" value="Yes" ng-model="checkbox"
                                                        ng-click="answer3(checkbox, 1)" ng-checked="{{checkedYes}}">
                                                 <div class="radio-button__checkmark radio-button--list-item__checkmark"></div>
-                                                Yes
+                                               {{"YES"|translate}}
                                             </label>
                                         </li>
 
@@ -288,7 +284,7 @@
                                                 <input type="radio" value="No" ng-model="checkbox"
                                                        ng-click="answer3(checkbox, 0)" ng-checked="{{checkedNo}}">
                                                 <div class="radio-button__checkmark radio-button--list-item__checkmark"></div>
-                                                No
+                                                {{"NO"|translate}}
                                             </label>
                                         </li>
 
@@ -482,7 +478,7 @@
 
                     <div>
                         <br>
-                        <!-- ng-click="chosen((language === " EN") ? option.ChoiceDescription_EN : option.ChoiceDescription_FR, $index)" -->
+                        <!-- ng-click="chosen((language === "EN") ? option.ChoiceDescription_EN : option.ChoiceDescription_FR, $index)" -->
 
                         <ul class="list">
                             <li class="list__item list__item--tappable" ng-repeat="option in options" ng-init="choiceDescription = (language === 'EN') ? option.ChoiceDescription_EN : option.ChoiceDescription_FR"
