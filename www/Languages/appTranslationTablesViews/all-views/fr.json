@@ -152,6 +152,7 @@
   "NEWPASSWORD": "Créez un mot de passe",
   "NEWS": "Actualité",
   "NEXTAPPOINTMENT": "Mes rendez-vous",
+  "NO": "Non",
   "NO_CONTENT": "Il n'y a présentement aucune information. SVP contactez l'hôpital pour plus d'informations.",
   "NOANNOUNCEMENTS": "Pas d'annonces",
   "NOAPPOINTMENTS": "Sans rendez-vous",
@@ -228,7 +229,7 @@
   "QUESTIONNAIRE_NONE_PROGRESS": "Pas de questionnaires en cours.",
   "QUESTIONNAIRE_NONE_COMPLETED": "Pas de questionnaires remplis.",
   "QUESTIONNAIRE_INSTRUCTIONS": "TR_ Répondez aux questions en rouge. Les questions en vert peuvent être éditées. Une fois toutes les questions sont répondues, vous pouvez soumettre.",
-  "QUESTIONNAIRE_INSTRUCTIONS2": "TR_ Cliquez sur débuter/reprendre ou swipe pour passer au début du questionnaire.",
+  "QUESTIONNAIRE_INSTRUCTIONS2": "TR_ Cliquez sur Débuter/Reprendre ou swipe pour passer au début du questionnaire.",
   "QUESTIONNAIRE_INSTRUCTIONS3": "TR_ More questions or concerns? Please let us know!",
   "QUESTIONNAIRE_SUBMIT": "TR_ Are you sure you want to submit the questionnaire? You cannot change your answers after submitting.",
   "QUESTIONNAIRE_INSTRUCTIONS4": "TR_ Go to Question",
@@ -345,6 +346,7 @@
   "Tumor markers":"Marqueurs tumoraux",
   "GOTOWEBSITE":"Visitez le site",
   "WARNING": "Attention!",
-  "WELCOME": "TR_ Bienvenue au"
+  "WELCOME": "TR_ Bienvenue au",
+  "YES": "Oui"
 }
 

@@ -7,8 +7,15 @@
         <div><hc-chart options="test.chartOptions">Placeholder for generic chart</hc-chart></div>
             <ons-list-header ng-class="fontSizeDesc">{{"LAB_TEST_INFO"|translate}}</ons-list-header>
         <div>
-            <ons-list-item modifier="chevron" ng-class="fontSizeDesc"  ng-click="test.about()" style="background-color: #E3F2FD" tappable>
-                {{"LAB_LEARN_ABOUT" | translate}} {{test.title}}
+            <ons-list-item ng-class="fontSizeDesc"  ng-click="test.about()" style="background-color: #E3F2FD" tappable>
+                <ons-row style="padding:0;margin:0;">
+                     <ons-col>
+                        {{"LAB_LEARN_ABOUT" | translate}} {{test.title}}
+                    </ons-col>
+                    <ons-col width="40px">
+                        <i class="fa fa-share"></i>
+                    </ons-col>
+                </ons-row>
             </ons-list-item>
         </div>
         <div style="line-height:1">
