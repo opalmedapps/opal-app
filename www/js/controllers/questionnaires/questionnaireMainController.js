@@ -347,6 +347,10 @@ app1.controller('QuestionnaireMainController', function ($scope, $location, $anc
         return $sce.trustAsHtml(newHtml);
     }
 
+    $scope.trustThisAsHtml = function () {
+        return $sce.trustAsHtml(($scope.language === "EN") ? $scope.questionaire.Intro_EN : $scope.questionaire.Intro_FR);
+    }
+
     function setQuestionnaireAnswersObject(object) {
 
         if (object == undefined) {

@@ -1,3 +1,4 @@
+
 {
   "ABOUT": "À propos",
   "APPVERSION": "Version",
@@ -54,6 +55,7 @@
   "NEWNOTIFICATIONS": "Nouvelles Notifications",
   "NEWPASSWORD": "Créer mot de passe",
   "NOINTERNETCONNECTION": "Pas de connexion Internet",
+  "OPAL_ABOUT": "À propos de Opal",
   "ONCOLOGYPARKING": "Stationnement du centre de cancer",
   "OPALPROBLEMSUBJECT": "Trouvé un bug / problème en utilisant OPAL",
   "OPENDEVICESETTINGS": "Paramètres de l'appareil",
