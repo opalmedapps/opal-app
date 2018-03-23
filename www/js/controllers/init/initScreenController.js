@@ -40,6 +40,7 @@
         vm.globalMessageDescription = '';
 
         vm.goToMessage = goToMessage;
+        vm.gotoAboutOpal = gotoAboutOpal;
         vm.goToParking = goToParking;
         vm.goToGeneralSettings = goToGeneralSettings;
         vm.goToPatientCharter = goToPatientCharter;
@@ -109,6 +110,16 @@
         }
 
         /**
+         * Go to About Opal
+         */
+        function gotoAboutOpal()
+        {
+            NavigatorParameters.setParameters({'Navigator':'initNavigator'});
+            initNavigator.pushPage('./views/home/about/about.html');
+        }
+
+
+        /**
          * Go to parking function
          */
         function goToParking()
@@ -166,7 +177,6 @@
          */
         function reportBugs()
         {
-            //initNavigator.pushPage('./views/general/feedback/feedback.html');
             initNavigator.pushPage('./views/general/bugreport/bugreport.html');
         }
 
