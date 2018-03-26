@@ -3,9 +3,10 @@
 *Github: dherre3
 *Email:davidfherrerar@gmail.com
 */
+
+
 var app1 = angular.module('MUHCApp');
 app1.controller('QuestionnaireMainController', function ($scope, $location, $anchorScroll, $rootScope, $sce, $http, $window, $filter, progressBarManager, Questionnaires, $timeout, NavigatorParameters, UserPreferences) {
-
 
     // Questionnaires.getQuestionnaireAnswers();
     if (Questionnaires.isEmpty()) {

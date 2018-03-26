@@ -165,10 +165,10 @@ myApp.config(['tmhDynamicLocaleProvider','$translateProvider','Constants', funct
     tmhDynamicLocaleProvider.localeLocationPattern('./Languages/angular-locales/angular-locale_{{locale}}.js');
 }]);
 
+
 myApp.constant('Constants', {
     app: document.URL.indexOf('http://') === -1 && document.URL.indexOf('https://') === -1
 });
-
 myApp.config( [
     '$compileProvider',
     function($compileProvider)
