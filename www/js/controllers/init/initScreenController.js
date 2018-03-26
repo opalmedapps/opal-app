@@ -40,7 +40,7 @@
         vm.globalMessageDescription = '';
 
         vm.goToMessage = goToMessage;
-        vm.gotoAboutOpal = gotoAboutOpal;
+        vm.gotoLearnAboutOpal = gotoLearnAboutOpal;
         vm.goToParking = goToParking;
         vm.goToGeneralSettings = goToGeneralSettings;
         vm.goToPatientCharter = goToPatientCharter;
@@ -110,9 +110,9 @@
         }
 
         /**
-         * Go to About Opal
+         * Go to Learn About Opal
          */
-        function gotoAboutOpal()
+        function gotoLearnAboutOpal()
         {
             NavigatorParameters.setParameters({'Navigator':'initNavigator'});
             initNavigator.pushPage('./views/home/about/about.html');
@@ -129,7 +129,7 @@
         }
 
         /**
-         * Go to general settings
+         * Go to general settings (About)
          */
         function goToGeneralSettings()
         {
