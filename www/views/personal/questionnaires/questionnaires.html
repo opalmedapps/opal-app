@@ -140,7 +140,7 @@
                                                 <div ng-show="checkCollapse(answer)">
                                                     <input ng-change="clicked1('other', options.length, otherAns)"
                                                            type="text" class="text-input" placeholder="Please Specify"
-                                                           ng-model="otherAns" maxlength="15">
+                                                           ng-model="otherAns" maxlength="30">
                                                 </div>
                                             </center>
                                         </div>
@@ -177,8 +177,7 @@
 
                             <div class="row text-center" style="margin:0 auto" align="center">
                                 <div class="col-xs-8" style="margin-left: auto; text-align: center;"
-                                     ng-init="indexForTopBottomChoice = $index">
-                                    <!-- This is line is Important to get/save the $index value to be used later down -->
+                                     ng-init="indexForTopBottomChoice = $index">    <!-- This is line is Important to get/save the $index value to be used later down -->
                                     <center>
                                         <!--
                                         <p>{{(language === "EN") ? questions[$index].Choices[1].ChoiceDescription_EN : questions[$index].Choices[1].ChoiceDescription_FR}}</p>
@@ -577,7 +576,7 @@
                                 <span ng-show="answers[$index] != undefined" style="float: right; color: white;">
                   <!-- If its not an input question than the otherAns is shown or the answer is shown, both of those for the multiple choice questions.
                   If both of those are undefined than its a scale question and only the answer[$index] is needed to be shown.
-                  If the source is LEE the question is out of 5 and if its ESAS its out of 5 -->
+                  -->
                   <span ng-show="(question.QuestionType != 'SA') && (question.QuestionType != 'Checkbox') && (question.QuestionType != 'image')"><i
                           class="ion-chevron-left"></i> {{answers[$index].otherAns || answers[$index].answer || answers[$index]}}</span>
 
