@@ -34,7 +34,9 @@
             var nav = NavigatorParameters.getNavigator();
 
             var link = nav.getCurrentPage().options.contentLink;
-            var contentType = nav.getCurrentPage().options.data.contentType;
+            var contentType = nav.getCurrentPage().options.contentType;
+            if (!contentType) contentType = nav.getCurrentPage().options.data.contentType;
+
             vm.pageContent.title = contentType;
             link ? loadFromURL(link, contentType) : loadPageContent(contentType);
         }
