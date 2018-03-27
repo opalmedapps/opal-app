@@ -35,7 +35,7 @@
 
             var link = nav.getCurrentPage().options.contentLink;
             var contentType = nav.getCurrentPage().options.contentType;
-            if (!contentType) contentType = nav.getCurrentPage().options.data.contentType;
+            if (!contentType) contentType = nav.getCurrentPage().options.data.contentType;   // This is needed for "Opal Dev Team" and "Acknowledments". Should find a way to get rid of .data.
 
             vm.pageContent.title = contentType;
             link ? loadFromURL(link, contentType) : loadPageContent(contentType);
