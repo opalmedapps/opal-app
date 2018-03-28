@@ -460,10 +460,12 @@ app1.controller('QuestionnaireMainController', function ($scope, $location, $anc
         $scope.answer = option;
         // Stores the answer as an object where there is the clicked answer and a possibly defined variable called otherAns
         // this stores the possibly filled out other value
-        $scope.answers[$scope.index - 1] = {
-            Answer: option,
-            otherAns: otherAns
-        };
+        $scope.answers[$scope.index - 1] = option;
+
+            // $scope.answers[$scope.index - 1] = {
+        //     Answer: option,
+        //     // otherAns: otherAns    // DO NOT SEND BACK otherAns because management do not want this option + Column does not exist in the database.
+        // };
         Questionnaires.setQuestionnaireAnswers($scope.answers[$scope.index - 1], $scope.questions[$scope.index - 1].QuestionnaireQuestionSerNum, $scope.questionnaireDBSerNum, $scope.questionnaireSerNum);
         // If other is chosen but they havent filled it in than the answer is made undefined and the number of answered questions is
         // subtracted by 1
@@ -748,7 +750,7 @@ app1.controller('QuestionnaireMainController', function ($scope, $location, $anc
 
     $scope.chooseAction = function (index, oneQuestion) {
         if ($scope.answers[index] != undefined) {
-            if ((oneQuestion.QuestionType == 'SA') || (oneQuestion.QuestionType == 'Checkbox') || (oneQuestion.QuestionType == 'image')) {
+            if ((oneQuestion.QuestionType == 'SA') || (oneQuestion.QuestionType == 'Checkbox') || (oneQuestion.QuestionType == 'image') || (oneQuestion.QuestionType == 'MC')) {
                 $scope.showAnswer(index);
             } else {
                 $scope.goToPage(index);
