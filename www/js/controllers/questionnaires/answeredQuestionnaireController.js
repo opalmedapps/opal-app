@@ -63,8 +63,8 @@
         }
 
         function chooseAction(index, oneQuestion) {
-            if (!!vm.answers[index]) {
-                if ((oneQuestion.QuestionType === 'SA') || (oneQuestion.QuestionType === 'Checkbox') || (oneQuestion.QuestionType === 'image')) {
+            if (vm.answers[index]) {
+                if ((oneQuestion.QuestionType === 'SA') || (oneQuestion.QuestionType === 'Checkbox') || (oneQuestion.QuestionType === 'image') || (oneQuestion.QuestionType === 'MC')) {
                     showAnswer(index);
                 }
             }
