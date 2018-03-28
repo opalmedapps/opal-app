@@ -125,6 +125,7 @@
                                                 </li>
 
                                                 <!-- Also an "other" option for all types of multiple choice where the user can enter in what they want. -->
+                                                <!--
                                                 <li class="list__item list__item--tappable">
                                                     <label class="radio-button radio-button--list-item">
                                                         <input type="radio"
@@ -134,8 +135,10 @@
                                                         {{"OTHER"|translate}}
                                                     </label>
                                                 </li>
+                                                -->
                                             </ul>
                                             <!--  Where the user can enter their answer -->
+                                            <!--
                                             <center>
                                                 <div ng-show="checkCollapse(answer)">
                                                     <input ng-change="clicked1('other', options.length, otherAns)"
@@ -143,6 +146,7 @@
                                                            ng-model="otherAns" maxlength="30">
                                                 </div>
                                             </center>
+                                            -->
                                         </div>
                                     </div>
                                     <br>
@@ -577,8 +581,11 @@
                   <!-- If its not an input question than the otherAns is shown or the answer is shown, both of those for the multiple choice questions.
                   If both of those are undefined than its a scale question and only the answer[$index] is needed to be shown.
                   -->
-                  <span ng-show="(question.QuestionType != 'SA') && (question.QuestionType != 'Checkbox') && (question.QuestionType != 'image')"><i
-                          class="ion-chevron-left"></i> {{answers[$index].otherAns || answers[$index].answer || answers[$index]}}</span>
+                  <span ng-show="(question.QuestionType != 'SA') && (question.QuestionType != 'Checkbox') && (question.QuestionType != 'image')  && (question.QuestionType != 'MC') ">
+                          <!--
+                          <i class="ion-chevron-left"></i> {{answers[$index].otherAns || answers[$index].answer || answers[$index]}}</span>
+                          -->
+                          <i class="ion-chevron-left"></i> {{answers[$index].answer || answers[$index]}} </span>
 
                                 <span ng-show="(question.QuestionType === 'MinMax')"> / {{question.Choices[1].OrderNum}}</span>
 
@@ -586,11 +593,13 @@
                                 <!-- <span ng-show="(question.Choices[1].OrderNum == 10) && (question.QuestionType == 'MinMax')">/10</span> -->
 
                                     <!--            If its an input question and its answered all we say is "asnwered" and the user can preview it by clicking the eye -->
-                                <span ng-show="(question.QuestionType == 'SA' || question.QuestionType == 'Checkbox' || question.QuestionType == 'image') && (answers[$index] != undefined) && (!answerShown[$index])"><p
-                                        style="margin-top: 5px; line-height: 1; text-align: center">Show <br>{{"ANSWER"|translate}}<i
+                                <span ng-show="(question.QuestionType == 'SA' || question.QuestionType == 'Checkbox' || question.QuestionType == 'image' || question.QuestionType == 'MC')
+                                                && (answers[$index] != undefined) && (!answerShown[$index])"><p
+                                        style="margin-top: 5px; line-height: 1; text-align: center">{{"SHOW"|translate}} <br>{{"ANSWER2"|translate}}<i
                                         class="ion-chevron-down" style="padding-left: 2vw"></i></p></span>
-                                <span ng-show="(question.QuestionType == 'SA' || question.QuestionType == 'Checkbox' || question.QuestionType == 'image') && (answers[$index] != undefined) && (answerShown[$index])"><p
-                                        style="margin-top: 5px; margin-top:5px;line-height:1; text-align: center">Hide <br>{{"ANSWER"|translate}}<i
+                                <span ng-show="(question.QuestionType == 'SA' || question.QuestionType == 'Checkbox' || question.QuestionType == 'image' || question.QuestionType == 'MC')
+                                                && (answers[$index] != undefined) && (answerShown[$index])"><p
+                                        style="margin-top: 5px; margin-top:5px;line-height:1; text-align: center">{{"HIDE"|translate}} <br>{{"ANSWER2"|translate}}<i
                                         class="ion-chevron-up" style="padding-left: 2vw"></p></i></span>
                                 </span>
                                                         <span ng-click="goToPage($index)"
