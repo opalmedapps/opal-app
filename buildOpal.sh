@@ -245,16 +245,7 @@ then
 	echo ""
 
 	#All checks have been met... time to build...
-	if [ "$DEST" = "prod" ]; then
-		cordova build -verbose
-
-		#TODO: ARCHIVE APP WITH XCODE
-
-		#AUTOMATE FABRIC.IO DEPLOYMENT PROCESS
-
-	else
-		cordova build -verbose
-	fi
+    cordova build -verbose
 
 	
 	echo ""
@@ -264,7 +255,7 @@ then
 	if [ "$DEST" = "prod" ]; then
 		echo "Opening up changelog for you to update!"
 		cd $WORKING_DIR
-		vi CHANGELOG.md
+		vim CHANGELOG.md
 	fi
 
 else
