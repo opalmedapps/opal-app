@@ -73,6 +73,8 @@
 
             //addBackgroundDetection();
 
+            addiOSscreenshotDetection();
+
             $translatePartialLoader.addPart('top-view');
 
             document.addEventListener("pause", onPause, false);
@@ -197,6 +199,15 @@
             });
         }
 
+
+        function addiOSscreenshotDetection() {
+            window.addEventListener('screenshotDidTake', onScreenshotDidTake, false);
+
+            function onScreenshotDidTake() {
+                window.alert('Screenshot taken. Not allowed!');
+            }
+
+        }
         /*****************************************
          * Background Splash Screen
          *****************************************/
