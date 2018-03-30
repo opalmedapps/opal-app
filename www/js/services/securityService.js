@@ -10,6 +10,12 @@
     /* @ngInject */
     function SecurityService() {
 
+
+        /**
+         * Controls the security state of the app.
+         * Values set to true means 'secure' state, values set to false means 'insecure'
+         * @type {{validVersion: {value: boolean, callbacks: Array}}}
+         */
         let security_state = {
             validVersion: {
                 value: true,
@@ -37,7 +43,7 @@
             }
         }
 
-        //call this when you know 'foo' has been changed
+        //call this when you know state has been changed
         function notifyObservers(state){
             security_state[state].callbacks.forEach(callback => {
                 callback();
