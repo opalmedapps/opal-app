@@ -40,17 +40,18 @@
         function validate(response, encryptionKey, timeOut) {
             let timestamp = response.Timestamp;
 
+
             if (response.Code === ENCRYPTION_ERROR) {
                 return {error: {Code: 'ENCRYPTION_ERROR'}}
             } else {
                 if (!encryptionKey) response = EncryptionService.decryptData(response);
 
-                console.log(response);
+                // Needs to be done since decrypted code returns as a string
+                response.Code = parseInt(response.Code);
 
                 response.Timestamp = timestamp;
                 clearTimeout(timeOut);
 
-                response.Code = INVALID_VERSION_ERROR;
                 if (response.Code === SUCCESS) {
                     return {success: response};
                 } else {
