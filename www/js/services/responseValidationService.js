@@ -57,6 +57,7 @@
             } else {
                 if (!encryptionKey) response = EncryptionService.decryptData(response);
 
+                // TODO: Remove when latest listener update is in place that prevents 'Code' from being encrypted
                 // Needs to be done since decrypted code returns as a string
                 response.Code = parseInt(response.Code);
 
