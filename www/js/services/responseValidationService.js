@@ -1,3 +1,11 @@
+/**
+ * __author__ : James Brace
+ *
+ * The purpose of this service is to validate incoming responses from the Opal Listener. The first step of validation
+ * is to make sure that the response does not contain an encryption error (mainly used during authentication). Afterwards,
+ * it checks to see if the response is a SUCCESS or error. If SUCCESS it returns the response data, if ERROR then it handles
+ * the error accordingly
+ */
 (function () {
     'use strict';
 
@@ -24,6 +32,9 @@
         const SUCCESS = 3;
 
 
+        /**
+         * Expose API to consumers
+         */
         return {
             validate: validate
         };
@@ -40,7 +51,7 @@
         function validate(response, encryptionKey, timeOut) {
             let timestamp = response.Timestamp;
 
-
+            // TODO: it seems that encryption errors are no longer being handled properly by the app. This could be due to fact that response code is sometimes being returned encrypted
             if (response.Code === ENCRYPTION_ERROR) {
                 return {error: {Code: 'ENCRYPTION_ERROR'}}
             } else {
