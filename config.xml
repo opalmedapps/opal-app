@@ -13,7 +13,6 @@
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
     <allow-intent href="tel:*" />
-    <allow-intent href="sms:*" />
     <allow-intent href="mailto:*" />
     <allow-intent href="geo:*" />
     <allow-intent href="opal:" />
@@ -92,7 +91,6 @@
     </plugin>
     <plugin name="cordova-plugin-android-permissions" spec="^0.10.0" />
     <plugin name="cordova-plugin-app-version" spec="^0.1.9" />
-    <plugin name="cordova-plugin-calendar" spec="^4.5.5" />
     <plugin name="cordova-plugin-customurlscheme" spec="^4.2.0">
         <variable name="URL_SCHEME" value="opal" />
         <variable name="ANDROID_SCHEME" value=" " />
