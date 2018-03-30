@@ -4,6 +4,7 @@ fireConfig.$inject = [];
 
 /* @ngInject */
 function fireConfig () {
+
     var config = {
 
         apiKey: "AIzaSyCxV6VuVWtKg5wkeReqzQNfRULwkvVXkos",

@@ -11,16 +11,13 @@
         .module('MUHCApp')
         .controller('MainController', MainController);
 
-    MainController.$inject = ["$window", "$state", '$rootScope','FirebaseService','DeviceIdentifiers','$translatePartialLoader', "LocalStorage", 'Constants', 'CleanUp', 'NavigatorParameters', 'NetworkStatus', 'RequestToServer', 'NewsBanner'];
+    MainController.$inject = ["$window", "$state", '$rootScope','FirebaseService','DeviceIdentifiers','$translatePartialLoader', "LocalStorage", 'Constants', 'CleanUp', 'NavigatorParameters', 'NetworkStatus', 'RequestToServer', 'NewsBanner', 'Security'];
 
     /* @ngInject */
-    function MainController($window, $state, $rootScope, FirebaseService, DeviceIdentifiers, $translatePartialLoader, LocalStorage, Constants, CleanUp, NavigatorParameters, NetworkStatus, RequestToServer, NewsBanner) {
+    function MainController($window, $state, $rootScope, FirebaseService, DeviceIdentifiers, $translatePartialLoader, LocalStorage, Constants, CleanUp, NavigatorParameters, NetworkStatus, RequestToServer, NewsBanner, Security) {
 
-        var vm = this;
         var timeoutLockout;
-
         var currentTime;
-        var currentlyHidden = false;
 
         activate();
         //////////////////////////////////////////
@@ -74,6 +71,8 @@
             setupInactivityChecks();
 
             addBackgroundDetection();
+
+            addUpdateRequiredDetection();
 
             $translatePartialLoader.addPart('top-view');
 
@@ -235,18 +234,34 @@
             if( document[hidden] !== undefined )
                 onchange();
         }
+
+        function hideSplashScreen(){
+            setTimeout(function(){
+                backsplashmodal.hide();
+                console.log("hidden")
+            }, 1000)
+
+        }
+
+        function showSplashScreen(){
+            backsplashmodal.show();
+            console.log("visible")
+        }
+
+
+        /*****************************************
+        * Update-Required Modal
+        *****************************************/
+        function addUpdateRequiredDetection(){
+            Security.register('validVersion', showVersionUpdateScreen)
+        }
+
+        function showVersionUpdateScreen(){
+            updateRequiredModal.show();
+            $state.go('init')
+        }
+
     }
 
-    function hideSplashScreen(){
-        setTimeout(function(){
-            backsplashmodal.hide();
-            console.log("hidden")
-        }, 1000)
 
-    }
-
-    function showSplashScreen(){
-        backsplashmodal.show();
-        console.log("visible")
-    }
 })();
