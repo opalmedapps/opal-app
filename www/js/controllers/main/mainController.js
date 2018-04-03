@@ -199,12 +199,15 @@
             });
         }
 
-
+        /**************************************************
+         * Detect When Screenshot is taken on iOS device
+         *************************************************/
         function addiOSscreenshotDetection() {
             window.addEventListener('screenshotDidTake', onScreenshotDidTake, false);
 
             function onScreenshotDidTake() {
-                window.alert('Screenshot taken. Not allowed!');
+                //window.alert('Screenshot taken. Not allowed!');
+                screenshotTakenModal.show();
             }
 
         }
