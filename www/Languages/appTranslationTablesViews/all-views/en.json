@@ -279,6 +279,8 @@
   "TREATMENTSTAGE": "Treatment Step",
   "OUTOFTRIES": "Too many failed attempts - Please try again or contact the hospital.",
   "DOC_TYPE": "Title",
+  "UPDATEMESSAGE": "There is a security patch available for Opal App and for your safety it must be installed before continuing use.",
+  "UPDATEREQUIRED": "Update Required",
   "UNABLETOOBTAINEDUCATIONALMATERIAL": "Unable to obtain educational material from server",
   "UNABLETOOPEN": "Problem, unable to Open",
   "UNABLETOOPENINSTALL": "Unable to open, install a program that opens PDFs",

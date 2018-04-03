@@ -167,7 +167,16 @@ myApp.config(['tmhDynamicLocaleProvider','$translateProvider','Constants', funct
 
 
 myApp.constant('Constants', {
-    app: document.URL.indexOf('http://') === -1 && document.URL.indexOf('https://') === -1
+    app: document.URL.indexOf('http://') === -1 && document.URL.indexOf('https://') === -1,
+    version: function(){
+        if(this.app){
+            cordova.getAppVersion.getVersionNumber().then(function (version) {
+                return version
+            });
+        }else{
+            return "1.2.0"
+        }
+    }
 });
 myApp.config( [
     '$compileProvider',
