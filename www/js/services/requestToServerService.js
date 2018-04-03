@@ -2,6 +2,9 @@
 // Author David Herrera on Summer 2016, Email:davidfherrerar@gmail.com
 //
 
+
+// TODO: I REALLY THINK SOMEONE SHOULD REFACTOR THIS FILE! IT WORKS FINE BUT I FIND IT'S RATHER DIFFICULT TO UNDERSTAND
+
 var myApp=angular.module('MUHCApp');
 
 /**
@@ -16,8 +19,10 @@ var myApp=angular.module('MUHCApp');
  *@requires $q
  *@desc API service used to send requests to the server. Every request is encrypted and sent.
  **/
-myApp.service('RequestToServer',['$filter','$state','NewsBanner','UserAuthorizationInfo', 'EncryptionService','FirebaseService','$q', 'Constants', 'UUID',
-    function($filter, $state, NewsBanner, UserAuthorizationInfo, EncryptionService, FirebaseService, $q, Constants, UUID){
+myApp.service('RequestToServer',['$filter','$state','NewsBanner','UserAuthorizationInfo', 'EncryptionService',
+    'FirebaseService','$q', 'Constants', 'UUID', 'ResponseValidator',
+    function($filter, $state, NewsBanner, UserAuthorizationInfo, EncryptionService, FirebaseService,
+             $q, Constants, UUID, ResponseValidator){
 
         /**
          *@ngdoc property
@@ -38,6 +43,7 @@ myApp.service('RequestToServer',['$filter','$state','NewsBanner','UserAuthorizat
         function sendRequest(typeOfRequest,parameters, encryptionKey, referenceField) {
             var requestType;
             var requestParameters;
+
             if (encryptionKey) {
                 requestType = typeOfRequest;
                 requestParameters = EncryptionService.encryptWithKey(parameters, encryptionKey);
@@ -55,7 +61,8 @@ myApp.service('RequestToServer',['$filter','$state','NewsBanner','UserAuthorizat
                 'UserID': UserAuthorizationInfo.getUsername(),
                 'Parameters':requestParameters,
                 'Timestamp':firebase.database.ServerValue.TIMESTAMP,
-                'UserEmail': UserAuthorizationInfo.getEmail()
+                'UserEmail': UserAuthorizationInfo.getEmail(),
+                'AppVersion': Constants.version()
             };
 
             var reference = referenceField || 'requests';
@@ -100,22 +107,12 @@ myApp.service('RequestToServer',['$filter','$state','NewsBanner','UserAuthorizat
                         refRequestResponse.set(null);
                         refRequestResponse.off();
 
-                        var timestamp = data.Timestamp;
-                        if(data.Code === 1) {
-                            r.reject({Code:'ENCRYPTION_ERROR'});
+                        data = ResponseValidator.validate(data, encryptionKey, timeOut);
+
+                        if (data.success){
+                            r.resolve(data.success)
                         } else {
-                            if(!encryptionKey||typeof encryptionKey == 'undefined') data = EncryptionService.decryptData(data);
-
-                            // if(typeOfRequest === 'NotificationsNew') console.log(JSON.stringify(data));
-
-                            data.Timestamp = timestamp;
-                            clearTimeout(timeOut);
-
-                            if(data.Code == '3') {
-                                r.resolve(data);
-                            }else if(data.Code == '2' || data.Code == '4'){
-                                r.reject(data);
-                            }
+                            r.reject(data.error)
                         }
                     }
                 },function(error) {
@@ -123,6 +120,7 @@ myApp.service('RequestToServer',['$filter','$state','NewsBanner','UserAuthorizat
                     refRequestResponse.off();
                     r.reject(error);
                 });
+
                 //If request takes longer than 30000 to come back with timedout request, delete reference
                 var timeOut = setTimeout(function() {
                     refRequestResponse.set(null);
