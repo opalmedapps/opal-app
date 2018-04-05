@@ -177,6 +177,9 @@
     <script src="js/services/networkStatusService.js"></script>
     <script src="js/services/metadataService.js"></script>
     <script src="js/services/pfpService.js"></script>
+    <script src="js/services/responseValidationService.js"></script>
+    <script src="js/services/securityService.js"></script>
+
     <!-- inject:service:js -->
     <!-- endinject -->
 
@@ -239,6 +242,14 @@
         </div>
     </ons-modal>
 
+    <!--
+    Update Required Modal
+    =================================-->
+    <ons-modal var="updateRequiredModal">
+        <h4>{{"UPDATEREQUIRED"|translate}}</h4>
+        <ons-icon icon="ion-alert-circled" size="60px"></ons-icon>
+        <p style="margin-top: 5%" class="unattended-message">{{"UPDATEMESSAGE"|translate}}</p>
+    </ons-modal>
 
     <!--
     App
