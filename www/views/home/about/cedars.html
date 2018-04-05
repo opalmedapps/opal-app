@@ -1,0 +1,60 @@
+<ons-page ng-controller="AboutController as about">
+    <ons-toolbar fixed-style>
+        <div class="left">
+            <ons-back-button ng-class="fontSizeDesc">{{"BACK"|translate}}</ons-back-button>
+        </div>
+        <div class="center" ng-class="fontSizeTitle">{{"CEDARS"|translate}}</div>
+    </ons-toolbar>
+    <network-banner></network-banner>
+    <ons-list>
+        <ons-list-item modifier="tappable" ng-click="about.openCedarsCancerCanter()">
+
+            <ons-row align="center">
+                <ons-col width="60px" style="text-align: center">
+                    <div>
+                        <img style="width: 27px;" src="./img/letter_c.png">
+                    </div>
+                </ons-col>
+                <ons-col>
+                    <span ng-class="fontSizeTitle">{{"CANCERCENTER"|translate}}</span>
+                    <ons-icon  icon="ion-android-open" style="color:#000000; margin-top: 5%" class="pull-right" size="1.2em"  </ons-icon>
+                </ons-col>
+            </ons-row>
+
+
+        </ons-list-item>
+        <ons-list-item modifier="tappable" ng-click="about.openCedarsCancerFoundation()">
+
+            <ons-row align="center">
+                <ons-col width="60px" style="text-align: center">
+                    <div>
+                        <img style="width: 27px;" src="./img/letter_f.png">
+                    </div>
+                </ons-col>
+                <ons-col>
+                    <span ng-class="fontSizeTitle">{{"CEDARSFOUNDATION"|translate}}</span>
+                    <ons-icon  icon="ion-android-open" style="color:#000000; margin-top: 5%" class="pull-right" size="1.2em"  </ons-icon>
+                </ons-col>
+            </ons-row>
+
+
+        </ons-list-item>
+        <ons-list-item modifier="tappable" ng-click="about.openCedarsCanSupport()">
+
+            <ons-row align="center">
+                <ons-col width="60px" style="text-align: center">
+                    <div>
+                        <img style="width: 27px;" src="./img/letter_s.png">
+                    </div>
+                </ons-col>
+                <ons-col>
+                    <span ng-class="fontSizeTitle"> {{"CEDARSSUPPORT"|translate}}</span>
+                    <ons-icon  icon="ion-android-open" style="color:#000000; margin-top: 5%" class="pull-right" size="1.2em"  </ons-icon>
+                </ons-col>
+            </ons-row>
+
+
+        </ons-list-item>
+    </ons-list>
+
+</ons-page>
