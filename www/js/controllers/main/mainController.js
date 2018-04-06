@@ -220,6 +220,7 @@
         }
 
         function showVersionUpdateScreen(){
+            loadingmodal.hide();
             updateRequiredModal.show();
             $state.go('init')
         }
