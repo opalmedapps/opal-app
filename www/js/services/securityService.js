@@ -17,8 +17,7 @@
 
     /* @ngInject */
     function SecurityService() {
-
-
+        
         /**
          * Controls the security state of the app.
          * Values set to true means 'secure' state, values set to false means 'insecure'
