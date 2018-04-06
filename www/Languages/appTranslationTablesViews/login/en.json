@@ -107,6 +107,8 @@
 	"SIGNINDIFFERENTACCOUNT": "Sign in with a different account",
 	"SIGNOUT": "Sign out",
 	"TOU": "Terms of Use",
+	"UPDATEREQUIRED": "Update Required",
+	"UPDATEMESSAGE": "TR_ There is a security patch available for Opal App and for your safety it must be installed before continuing use.",
 	"LEGALINFO": "Technical/Legal Information",
 	"THANKYOUFORFEEDBACK": "Thank you for your feedback!",
 	"TRUST_DEVICE": "Set this device as a trusted device? ",
