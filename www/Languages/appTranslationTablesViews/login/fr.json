@@ -110,6 +110,7 @@
   "TRUST_DEVICE": "Faire confiance à cet appareil?",
   "UNATTENDED": "Ne laissez pas votre appareil sans surveillance.",
   "UPDATEREQUIRED": "TR_ Update Required",
+  "UPDATEMESSAGE": "TR_ There is a security patch available for Opal App and for your safety it must be installed before continuing use.",
   "NEWPASSWORDVALIDATION":"Le nouveau mot de passe doit comporter au moins 6 caractères et doit contenir au moins une lettre et un chiffre!"
 
 }
