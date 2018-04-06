@@ -171,13 +171,18 @@ myApp.constant('Constants', {
     version: function(){
         return new Promise((resolve) => {
             if(this.app){
-                cordova.getAppVersion.getVersionNumber().then(version => resolve(version));
+                if (this.savedVersion) resolve(this.savedVersion);
+                cordova.getAppVersion.getVersionNumber().then(version => {
+                    this.savedVersion = version;
+                    resolve(version)
+                });
             }else{
                 resolve("100.100.100")
             }
         })
 
-    }
+    },
+    savedVersion: null
 });
 myApp.config( [
     '$compileProvider',

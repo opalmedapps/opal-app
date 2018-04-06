@@ -19,9 +19,13 @@
         ///////////////////////////
 
         function activate() {
+
             loadingmodal.show();
             var userAuthorizationInfo = UserAuthorizationInfo.getUserAuthData();
-            if(!userAuthorizationInfo) $state.go('init');
+            if(!userAuthorizationInfo) {
+                loadingmodal.hide();
+                $state.go('init');
+            }
 
             UpdateUI.init()
                 .then(function() {
