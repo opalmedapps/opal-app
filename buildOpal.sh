@@ -12,9 +12,9 @@ set -e
 DEST=$1
 VERSION=$2
 
-WORKING_DIR=/Users/jamesbrace/Opal/qplus
-PREPROD_DIR=/Users/jamesbrace/Opal/opal-builds/preprod
-PROD_DIR=/Users/jamesbrace/Opal/opal-builds/preprod
+WORKING_DIR=/Users/rob/Opal/qplus
+PREPROD_DIR=/Users/rob/Web/QPlus/Cordova/dev-opal
+PROD_DIR=/Users/rob/Web/QPlus/Cordova/opal
 
 TARGET_DIR=''
 
