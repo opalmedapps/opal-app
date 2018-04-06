@@ -177,7 +177,7 @@ myApp.constant('Constants', {
                     resolve(version)
                 });
             }else{
-                resolve("100.100.100")
+                resolve("1.11.11")
             }
         })
 
