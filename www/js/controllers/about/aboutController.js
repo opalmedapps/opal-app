@@ -14,7 +14,7 @@
  *  @name MUHCApp.controllers: AboutController
  *  @description
  *
- *  Manages the about view.
+ *  Manages the about view. Only controls the link to the Cedar's donation page.
  */
 (function () {
     'use strict';
@@ -23,22 +23,12 @@
         .module('MUHCApp')
         .controller('AboutController', AboutController);
 
-    AboutController.$inject = ['$window', 'UserPreferences', 'NavigatorParameters'];
+    AboutController.$inject = ['$window', 'UserPreferences'];
 
     /* @ngInject */
-    function AboutController($window, UserPreferences, NavigatorParameters) {
+    function AboutController($window, UserPreferences) {
         var vm = this;
         vm.openDonation = openDonation;
-        vm.openAboutMUHC = openAboutMUHC;
-        vm.openCedarsCancerCanter = openCedarsCancerCanter;
-        vm.openCedarsCancerFoundation = openCedarsCancerFoundation;
-        vm.openCedarsCanSupport = openCedarsCanSupport;
-        vm.openCedars = openCedars;
-        vm.openTeam = openTeam;
-        vm.openAcknowledge = openAcknowledge;
-
-        var parameters;
-        var navigatorName;
 
         activate();
 
@@ -46,10 +36,14 @@
 
         function activate() {
 
-            parameters = NavigatorParameters.getParameters();
-            navigatorName = parameters.Navigator;
-
-            vm.language = UserPreferences.getLanguage();
+            /**
+             * @ngdoc property
+             * @name language
+             * @propertyOf AboutController
+             * @returns string
+             * @description used to determine which donation page to bring the user to
+             */
+            vm.language = UserPreferences.getLanguage().toLowerCase();
         }
 
         /**
@@ -60,61 +54,8 @@
          * Guides the user to the Cedar's donation page based on the user's language preference
          */
         function openDonation() {
-            $window.open('https://www.cedars.ca/cedars/' + vm.language.toLowerCase() + '/donate/donate_online?designation=radiation-oncology-opal-fund', '_system');
+            $window.open('https://www.cedars.ca/cedars/'+ vm.language +'/donate/donate_online?designation=radiation-oncology-opal-fund','_system');
         }
-
-        function openAboutMUHC() {
-            if (vm.language === "EN") {
-                window.open('https://muhc.ca/homepage/page/about-muhc', '_system');
-            } else {
-                window.open('https://cusm.ca/homepage/page/propos-du-cusm', '_system');
-            }
-        }
-
-        function openCedarsCancerCanter() {
-            if (vm.language === "EN") {
-                window.open('https://muhc.ca/glen/cedars-cancer-centre', '_system');
-            } else {
-                window.open('https://cusm.ca/glen/page/centre-du-cancer-c%C3%A8dres', '_system');
-            }
-        }
-
-        function openCedarsCancerFoundation() {
-            if (vm.language === "EN") {
-                window.open('https://www.cedars.ca/cedars/en/home', '_system');
-            } else {
-                window.open('https://www.cedars.ca/cedars/fr/home', '_system');
-            }
-        }
-
-        function openCedarsCanSupport() {
-            if (vm.language === "EN") {
-                window.open('http://www.cansupport.ca/', '_system');
-            } else {
-                window.open('http://www.cansupport.ca/fr', '_system');
-            }
-        }
-
-
-        /**
-         * navigatorName = 'initNavigator' or 'homeNavigator'
-         * navigatorName = 'initNavigator' when about.html is called from init-Screen.html (initScreenController)
-         * navigatorName = 'homeNavigator' when about.html is called from home.html (homeController)
-         *
-         * about.html (Learn About Opal) is called twice: once from init-Screen.html (very first screen) and once from home.html (after logging in)
-         */
-        function openTeam() {
-            window[navigatorName].pushPage('views/templates/content.html', {contentType: 'hig'});
-        }
-
-        function openAcknowledge() {
-            window[navigatorName].pushPage('./views/templates/content.html', {contentType: 'acknowledgements'});
-        }
-
-        function openCedars() {
-            window[navigatorName].pushPage('views/home/about/cedars.html');
-        }
-
     }
 })();
 
