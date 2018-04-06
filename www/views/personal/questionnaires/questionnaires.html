@@ -1,4 +1,4 @@
-<ons-page ng-controller="QuestionnaireMainController" >
+<ons-page ng-controller="QuestionnaireMainController">
     <ons-toolbar fixed-style>
         <!--<div class="left"><p style="font-size: 10pt">Answered {{numAnswered}}/{{questions.length}}</div>-->
         <div class="left">
@@ -26,8 +26,8 @@
         </div>
     </ons-toolbar>
 
-    <ons-carousel fullscreen swipeable overscrollable auto-scroll var="carousel" ng-class="fontSizeDesc">
-        <ons-carousel-item style="overflow-y: scroll;" ng-if="!progress" ng-class="fontSizeDesc">
+    <ons-carousel fullscreen swipeable overscrollable auto-scroll var="carousel">
+        <ons-carousel-item style="overflow-y: scroll;" ng-if="!progress">
             <div class="container">
                 <div>
                     <div class="row text-center" style="margin: 0 auto;" align="center">
@@ -57,9 +57,9 @@
                     </div>
 
                     <div class="row text-center" style="margin: 0 auto;" align="center">
-                        <div class="col-xs-12" ng-class="fontSizeDesc">
+                        <div class="col-xs-12">
                             <center>
-                                <p>{{"QUESTIONNAIRE_INSTRUCTIONS2"|translate}}</p>
+                                <p style="font-size: 14pt">{{"QUESTIONNAIRE_INSTRUCTIONS2"|translate}}</p>
                             </center>
                         </div>
                     </div>
@@ -95,8 +95,8 @@
 
                 <!-- Question text  -->
                 <div class="row" style="margin:0;padding:0" id="questionText" ng-show="shown[$index]">
-                    <div class="col-xs-12" ng-class="fontSizeDesc">
-                        <div style="color:black;" ng-bind-html="trustAsHtml(questionText)" id="qText" ng-class="fontSizeDesc"></div>
+                    <div class="col-xs-12">
+                        <div style="color:black;" ng-bind-html="trustAsHtml(questionText)" id="qText"></div>
                     </div>
                 </div>
                 <div class="row" style="margin:0;padding:0">
@@ -108,7 +108,7 @@
                                 <div class="container">
 
                                     <div class="row" style="margin:0 auto">
-                                        <div class="col-xs-14" ">
+                                        <div class="col-xs-14">
                                             <br>
 
                                             <!-- Repeat all the list item for every option in options -->
@@ -490,7 +490,7 @@
                                     <input type="checkbox"
                                            ng-click="chosen(choiceDescription, $index)"
                                            ng-model="checked[$index]">
-                                    <div class="lee-checkbox__checkmark lee-checkbox--list-item__checkmark" ></div>
+                                    <div class="lee-checkbox__checkmark lee-checkbox--list-item__checkmark"></div>
                                     {{(language === "EN") ? option.ChoiceDescription_EN : option.ChoiceDescription_FR}}
                                 </label>
                             </li>
