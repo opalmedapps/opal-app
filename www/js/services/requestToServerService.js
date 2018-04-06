@@ -54,21 +54,24 @@ myApp.service('RequestToServer',['$filter','$state','NewsBanner','UserAuthorizat
             }
 
             //Push the request to firebase
-            var toSend = {
-                'Request' : requestType,
-                'DeviceId': UUID.getUUID(),
-                'Token':UserAuthorizationInfo.getToken(),
-                'UserID': UserAuthorizationInfo.getUsername(),
-                'Parameters':requestParameters,
-                'Timestamp':firebase.database.ServerValue.TIMESTAMP,
-                'UserEmail': UserAuthorizationInfo.getEmail(),
-                'AppVersion': Constants.version()
-            };
+            Constants.version()
+                .then(version => {
+                    let request_object = {
+                        'Request' : requestType,
+                        'DeviceId': UUID.getUUID(),
+                        'Token':UserAuthorizationInfo.getToken(),
+                        'UserID': UserAuthorizationInfo.getUsername(),
+                        'Parameters':requestParameters,
+                        'Timestamp':firebase.database.ServerValue.TIMESTAMP,
+                        'UserEmail': UserAuthorizationInfo.getEmail(),
+                        'AppVersion': version
+                    };
 
-            var reference = referenceField || 'requests';
+                    let reference = referenceField || 'requests';
 
-            var pushID =  Ref.child(reference).push(toSend);
-            return pushID.key;
+                    let pushID =  Ref.child(reference).push(request_object);
+                    return pushID.key;
+                });
         }
 
         return {
