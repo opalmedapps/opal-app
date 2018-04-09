@@ -275,6 +275,9 @@ myApp.service('Notifications',['$filter','RequestToServer','LocalStorage','Annou
          *@description Setter method for Notifications
          **/
         function setUserNotifications(notifications){
+
+            console.log(notifications);
+
             Notifications=[];
             addUserNotifications(notifications);
             hasFetchedAll = true;
@@ -464,12 +467,15 @@ myApp.service('Notifications',['$filter','RequestToServer','LocalStorage','Annou
                             lastUpdated = new Date();
                             if (response.Data && response.Data.length > 0) {
                                 response.Data.forEach(function(notif){
+
+                                    // If notification content exists.. update the notification content
                                     if(notif[1]) notificationTypes[notif[0].NotificationType].updateFunction([notif[1]]);
                                     var notification = (!!notif[0]) ? notif[0] : notif;
                                     updateUserNotifications([notification]);
                                 })
                             }
 
+                            // If have just checked in.. then update boolean saying that we have received notification
                             if (CheckInService.checkinNotificationsExist()) {
                                 CheckInService.retrievedCheckinNotifications();
                             }
