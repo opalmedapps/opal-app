@@ -60,6 +60,7 @@
                 clearTimeout(timeOut);
 
                 if (response.Code === SUCCESS) {
+                    if (!encryptionKey) response = EncryptionService.decryptData(response);
                     return {success: response};
                 } else {
                     return handleResponseError(response)
