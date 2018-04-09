@@ -11,6 +11,7 @@ set -e
 
 DEST=$1
 VERSION=$2
+FLAG=$3
 
 WORKING_DIR=/Users/jamesbrace/Opal/qplus
 PREPROD_DIR=/Users/jamesbrace/Opal/opal-builds/preprod
@@ -55,6 +56,8 @@ then
 	echo ""
 	echo "Version: a string representing the version of the app your building. Needs to be in the format x.x.x (i.e semver)"
 	echo ""
+	echo "Flags: optional flags"
+	echo "      --test -- overrides checking if on proper branch"
 	echo ""
 	exit -1
 fi
@@ -78,28 +81,34 @@ fi
 
 if [ "$DEST" = "preprod" ] || [ "$DEST" = "prod" ]
 then
-	
-	#Make sure you are on the correct branch
-	if [ "$DEST" = "preprod" ]
+
+    # If
+	if [ "$FLAG" != "--test" ]
 	then
-		TARGET_DIR=$PREPROD_DIR
-		BRANCH=$(git --git-dir $WORKING_DIR/.git rev-parse --abbrev-ref HEAD)
-		if [[ "$BRANCH" != "opal_pre_prod" ]]; then
-			echo ""
-		  	echo "Error: You are not on the correct branch! You are currently on $BRANCH. Please switch to opal_pre_prod before trying to build to preprod app";
-		  	echo ""
-		  	exit 1;
-		fi
-	else
-		TARGET_DIR=$PROD_DIR
-		BRANCH=$(git --git-dir $WORKING_DIR/.git rev-parse --abbrev-ref HEAD)
-		if [[ "$BRANCH" != "master" ]]; then
-			echo ""
-			echo "Error: You are not on the correct branch! You are currently on $BRANCH. Please switch to opal_prod before trying to build the prod app";
-			echo ""
-			exit 1;
-		fi
-	fi
+        #Make sure you are on the correct branch
+        if [ "$DEST" = "preprod" ]
+        then
+            TARGET_DIR=${PREPROD_DIR}
+            BRANCH=$(git --git-dir $WORKING_DIR/.git rev-parse --abbrev-ref HEAD)
+            if [[ "$BRANCH" != "opal_pre_prod" ]]; then
+                echo ""
+                echo "Error: You are not on the correct branch! You are currently on $BRANCH. Please switch to opal_pre_prod before trying to build to preprod app";
+                echo ""
+                exit 1;
+            fi
+        else
+            TARGET_DIR=$PROD_DIR
+            BRANCH=$(git --git-dir $WORKING_DIR/.git rev-parse --abbrev-ref HEAD)
+            if [[ "$BRANCH" != "master" ]]; then
+                echo ""
+                echo "Error: You are not on the correct branch! You are currently on $BRANCH. Please switch to opal_prod before trying to build the prod app";
+                echo ""
+                exit 1;
+            fi
+        fi
+    else
+        TARGET_DIR=${PREPROD_DIR}
+    fi
 
 	#If files can be pushed... go ahead and do so.
 	LOCAL=$(git --git-dir $WORKING_DIR/.git rev-parse @)
@@ -150,7 +159,6 @@ then
 
 	#TODO: ANALYZE ERRORS?
 
-	
 	#Move to target environment
 	cd $TARGET_DIR
 	rm -r www
