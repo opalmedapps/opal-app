@@ -57,8 +57,6 @@
                 return {error: {Code: 'ENCRYPTION_ERROR'}}
             } else {
 
-                if (!encryptionKey) response = EncryptionService.decryptData(response);
-
                 // TODO: Remove when latest listener update is in place that prevents 'Code' from being encrypted
                 // Needs to be done since decrypted code returns as a string
                 response.Code = parseInt(response.Code);
@@ -67,6 +65,7 @@
                 clearTimeout(timeOut);
 
                 if (response.Code === SUCCESS) {
+                    if (!encryptionKey) response = EncryptionService.decryptData(response);
                     return {success: response};
                 } else {
                     return handleResponseError(response)
