@@ -11,6 +11,7 @@ set -e
 
 DEST=$1
 VERSION=$2
+FLAG=$3
 
 WORKING_DIR=/Users/rob/Opal/qplus
 PREPROD_DIR=/Users/rob/Web/QPlus/Cordova/dev-opal
@@ -80,7 +81,7 @@ if [ "$DEST" = "preprod" ] || [ "$DEST" = "prod" ]
 then
 	
 	#Make sure you are on the correct branch
-	if [ "$DEST" = "preprod" ]
+	if [ "$DEST" = "preprod" & "$FLAG" != "--test" ]
 	then
 		TARGET_DIR=$PREPROD_DIR
 		BRANCH=$(git --git-dir $WORKING_DIR/.git rev-parse --abbrev-ref HEAD)
@@ -90,8 +91,7 @@ then
 		  	echo ""
 		  	exit 1;
 		fi
-	elif [ "$DEST" = "prod" ]
-	then
+	else
 		TARGET_DIR=$PROD_DIR
 		BRANCH=$(git --git-dir $WORKING_DIR/.git rev-parse --abbrev-ref HEAD)
 		if [[ "$BRANCH" != "master" ]]; then
