@@ -65,10 +65,22 @@ myApp.service('RequestToServer',['$filter','$state','NewsBanner','UserAuthorizat
                 'AppVersion': Constants.version()
             };
 
-            var reference = referenceField || 'requests';
+                        let request_object = {
+                            'Request' : requestType,
+                            'DeviceId': UUID.getUUID(),
+                            'Token':UserAuthorizationInfo.getToken(),
+                            'UserID': UserAuthorizationInfo.getUsername(),
+                            'Parameters':requestParameters,
+                            'Timestamp':firebase.database.ServerValue.TIMESTAMP,
+                            'UserEmail': UserAuthorizationInfo.getEmail(),
+                            'AppVersion': version
+                        };
+                        let reference = referenceField || 'requests';
+                        let pushID =  firebase_url.child(reference).push(request_object);
+                        resolve(pushID.key);
+                    });
+            })
 
-            var pushID =  Ref.child(reference).push(toSend);
-            return pushID.key;
         }
 
         return {
@@ -88,37 +100,43 @@ myApp.service('RequestToServer',['$filter','$state','NewsBanner','UserAuthorizat
             sendRequestWithResponse:function(typeOfRequest, parameters, encryptionKey, referenceField, responseField) {
                 var r = $q.defer();
 
-                //Sends request and gets random key for request
-                var key = sendRequest(typeOfRequest,parameters,encryptionKey, referenceField);
+                            //Sets the reference to fetch data for that request
+                            let refRequestResponse = (!referenceField) ?
+                                response_url.child(UserAuthorizationInfo.getUsername()+'/'+key) :
+                                firebase_url.child(responseField).child(key);
 
-                //Sets the reference to fetch data for that request
-                var refRequestResponse;
-                if(!referenceField){
-                    refRequestResponse = responseRef.child(UserAuthorizationInfo.getUsername()+'/'+key);
-                } else {
-                    refRequestResponse = Ref.child(responseField).child(key);
-                }
+                            //Waits to obtain the request data.
+                            refRequestResponse.on('value', snapshot => {
+                                if(snapshot.exists()) {
 
-                //Waits to obtain the request data.
-                refRequestResponse.on('value',function(snapshot){
-                    if(snapshot.exists()) {
-                        var data = snapshot.val();
+                                    let data = snapshot.val();
 
-                        refRequestResponse.set(null);
-                        refRequestResponse.off();
+                                    refRequestResponse.set(null);
+                                    refRequestResponse.off();
 
-                        data = ResponseValidator.validate(data, encryptionKey, timeOut);
+                                    data = ResponseValidator.validate(data, encryptionKey, timeOut);
 
-                        if (data.success){
-                            r.resolve(data.success)
-                        } else {
-                            r.reject(data.error)
-                        }
-                    }
-                },function(error) {
-                    refRequestResponse.set(null);
-                    refRequestResponse.off();
-                    r.reject(error);
+                                    if (data.success){
+                                        resolve(data.success)
+                                    } else {
+                                        reject(data.error)
+                                    }
+                                }
+                            }, error => {
+                                console.log(error);
+                                refRequestResponse.set(null);
+                                refRequestResponse.off();
+                                reject(error);
+                            });
+
+                            //If request takes longer than 30000 to come back with timeout request, delete reference
+                            const timeOut = setTimeout(function() {
+                                refRequestResponse.set(null);
+                                refRequestResponse.off();
+                                reject({Response:'timeout'});
+                            }, 30000);
+
+                        }).catch(err=> console.log(err));
                 });
 
                 //If request takes longer than 30000 to come back with timedout request, delete reference

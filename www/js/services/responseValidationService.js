@@ -6,6 +6,7 @@
  * it checks to see if the response is a SUCCESS or error. If SUCCESS it returns the response data, if ERROR then it handles
  * the error accordingly
  */
+
 (function () {
     'use strict';
 
@@ -55,12 +56,6 @@
             if (response.Code === ENCRYPTION_ERROR) {
                 return {error: {Code: 'ENCRYPTION_ERROR'}}
             } else {
-                if (!encryptionKey) response = EncryptionService.decryptData(response);
-
-                // TODO: Remove when latest listener update is in place that prevents 'Code' from being encrypted
-                // Needs to be done since decrypted code returns as a string
-                response.Code = parseInt(response.Code);
-
                 response.Timestamp = timestamp;
                 clearTimeout(timeOut);
 
@@ -101,8 +96,7 @@
             FirebaseService.signOut();
 
             // Change state of security
-            Security.update('validVersion', false);
-
+            Security.update('validVersion', false)
         }
     }
 })();
