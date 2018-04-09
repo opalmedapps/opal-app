@@ -169,15 +169,22 @@ myApp.config(['tmhDynamicLocaleProvider','$translateProvider','Constants', funct
 myApp.constant('Constants', {
     app: document.URL.indexOf('http://') === -1 && document.URL.indexOf('https://') === -1,
     version: function(){
-        if(this.app){
-            cordova.getAppVersion.getVersionNumber().then(function (version) {
-                return version
-            });
-        }else{
-            return "1.2.0"
-        }
-    }
+        return new Promise((resolve) => {
+            if(this.app){
+                if (this.savedVersion) resolve(this.savedVersion);
+                cordova.getAppVersion.getVersionNumber().then(version => {
+                    this.savedVersion = version;
+                    resolve(version)
+                });
+            }else{
+                resolve("100.100.100")
+            }
+        })
+
+    },
+    savedVersion: null
 });
+
 myApp.config( [
     '$compileProvider',
     function($compileProvider)
