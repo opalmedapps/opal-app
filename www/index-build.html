@@ -179,7 +179,6 @@
     <script src="js/services/pfpService.js"></script>
     <script src="js/services/responseValidationService.js"></script>
     <script src="js/services/securityService.js"></script>
-
     <!-- inject:service:js -->
     <!-- endinject -->
 
@@ -224,11 +223,18 @@
     <!--
     Backsplash Modal
     =================================-->
-    <!--
     <ons-modal var="backsplashmodal">
         <img src="img/backsplash/backsplash.png">
     </ons-modal>
-    -->
+
+    <!--
+    Update Required Modal
+    =================================-->
+    <ons-modal var="updateRequiredModal">
+        <h4>{{"UPDATEREQUIRED"|translate}}</h4>
+        <ons-icon icon="ion-alert-circled" size="60px"></ons-icon>
+        <p style="margin-top: 5%" class="unattended-message">{{"UPDATEMESSAGE"|translate}}</p>
+    </ons-modal>
 
     <!--
      ScreenshotTaken Modal
@@ -240,15 +246,6 @@
             <p style="margin-top: 5%" class="unattended-message">{{"SCREENSHOTTAKEN"|translate}}</p>
             <ons-button style="margin-top: 5%" ng-click="screenshotTakenModal.hide()">{{"OK"|translate}}</ons-button>
         </div>
-    </ons-modal>
-
-    <!--
-    Update Required Modal
-    =================================-->
-    <ons-modal var="updateRequiredModal">
-        <h4>{{"UPDATEREQUIRED"|translate}}</h4>
-        <ons-icon icon="ion-alert-circled" size="60px"></ons-icon>
-        <p style="margin-top: 5%" class="unattended-message">{{"UPDATEMESSAGE"|translate}}</p>
     </ons-modal>
 
     <!--

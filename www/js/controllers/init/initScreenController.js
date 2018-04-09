@@ -114,8 +114,8 @@
          */
         function gotoLearnAboutOpal()
         {
-           NavigatorParameters.setParameters({'Navigator':'initNavigator'});
-           initNavigator.pushPage('./views/home/about/about.html');
+            NavigatorParameters.setParameters({'Navigator':'initNavigator'});
+            initNavigator.pushPage('./views/home/about/about.html');
         }
 
 
