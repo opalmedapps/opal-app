@@ -25,14 +25,14 @@
 
     /* @ngInject */
     function CalendarController(Appointments, $timeout, $location, $anchorScroll, NavigatorParameters, UserPreferences, $window) {
-        var vm = this;
+        const vm = this;
 
-        var todaysTimeMilliseconds;
-        var choosenTimeMilliseconds;
-        var today;
-        var dateLast;
-        var dateFirst;
-        var navigatorName;
+        let todaysTimeMilliseconds;
+        let choosenTimeMilliseconds;
+        let today;
+        let dateLast;
+        let dateFirst;
+        let navigatorName;
 
         /**
          * The date options that are fed into the appointment calendar
@@ -152,7 +152,7 @@
                 if(dateLast<choosenTimeMilliseconds) return 'lastAnchor';
                 else if(dateFirst>choosenTimeMilliseconds) return 'firstAnchor';
                 else{
-                    var ind = findClosestAppointmentToTime(choosenTimeMilliseconds);
+                    let ind = findClosestAppointmentToTime(choosenTimeMilliseconds);
                     return 'anchorAppointments'+ ind;
                 }
             }
@@ -165,7 +165,7 @@
          * @returns {number}
          */
         function findClosestAppointmentToTime(tmili) {
-            for(var i =0;i<vm.appointments.length;i++) {
+            for(let i =0;i<vm.appointments.length;i++) {
                 if(vm.appointments[i].ScheduledStartTime.getTime() >= tmili) return i;
             }
             return 0;
@@ -175,7 +175,7 @@
          * Scrolls to closest anchor
          */
         function scrollToAnchor() {
-            var anchor=findClosestAnchor();
+            let anchor=findClosestAnchor();
             $location.hash(anchor);
             $anchorScroll();
         }
@@ -184,10 +184,10 @@
          * Adjusts the calendar font size to the user's preferred font size
          */
         function initializeCalendarStyle(){
-            var fontSize = UserPreferences.getFontSize();
+            let fontSize = UserPreferences.getFontSize();
             fontSize = fontSize.charAt(0).toUpperCase() + fontSize.slice(1);
-            var elem = document.querySelector('.fontDesc' + fontSize);
-            var style = getComputedStyle(elem);
+            let elem = document.querySelector('.fontDesc' + fontSize);
+            let style = getComputedStyle(elem);
             fontSize = style.fontSize;
             createClass('.uib-datepicker table thead tr th button div', "font-size: " +  fontSize + "!important;");
         }
@@ -198,7 +198,7 @@
          * @param rules
          */
         function createClass(name,rules){
-            var style = document.createElement('style');
+            let style = document.createElement('style');
             style.type = 'text/css';
             document.getElementsByTagName('head')[0].appendChild(style);
             if(!(style.sheet||{}).insertRule)
@@ -211,8 +211,8 @@
          * Initializes the scroll height for when the appointments load
          */
         function setScrollHeight(){
-            var divTreatment = document.getElementById('scrollerAppointments');
-            var heightTreatment = document.documentElement.clientHeight-document.documentElement.clientHeight*0.35-180;
+            let divTreatment = document.getElementById('scrollerAppointments');
+            let heightTreatment = document.documentElement.clientHeight-document.documentElement.clientHeight*0.35-180;
             if(divTreatment) divTreatment.style.height=heightTreatment+'px';
         }
 
@@ -234,11 +234,11 @@
             // TODO: this is a huge bottleneck for the situation where a user has a bunch of appointments!!
             // TODO: can be optimized by creating a hashmap that maps date to a list of appointments
             //check to see if an appointment exists at the selected date
-            var result = vm.appointments.find(function(item){
+            let result = vm.appointments.find(function(item){
                 return item.ScheduledStartTime.toDateString() === date.toDateString();
             });
 
-            var appt_time = getMilliseconds(date);
+            let appt_time = getMilliseconds(date);
 
             //if an appointment exists
             if(result) {
@@ -254,8 +254,8 @@
          * @returns {string}
          */
         function getListColor(index){
-            var appointment_date = vm.appointments[index].ScheduledStartTime;
-            var appointment_milli = getMilliseconds(appointment_date);
+            let appointment_date = vm.appointments[index].ScheduledStartTime;
+            let appointment_milli = getMilliseconds(appointment_date);
             return getAppointmentColor(appointment_milli)
         }
 
@@ -276,15 +276,15 @@
         function showChosenDateHeader(index)
         {
             // whether or not the current appointment and previous appointment have the same date
-            var same_date_as_prev = false;
+            let same_date_as_prev = false;
 
             // Convert the appointment date at the given index to milliseconds
-            var selected_date = getMilliseconds(vm.appointments[index].ScheduledStartTime);
+            let selected_date = getMilliseconds(vm.appointments[index].ScheduledStartTime);
 
             //if it's not the first appointment in the list...
             if(index !== 0) {
                 //compare it to the appointment before and see if they share the same date
-                var date_prev = getMilliseconds(vm.appointments[index - 1].ScheduledStartTime);
+                let date_prev = getMilliseconds(vm.appointments[index - 1].ScheduledStartTime);
 
                 // if they share the same date, then you don't need to show the header, as it should be encompassed by a previous appointment on the same date
                 same_date_as_prev = date_prev === selected_date;
@@ -336,7 +336,7 @@
          * @returns {*|number}
          */
         function getMilliseconds(date){
-            var temp = new Date(date);
+            let temp = new Date(date);
             return temp.setHours(0,0,0,0);
         }
 
