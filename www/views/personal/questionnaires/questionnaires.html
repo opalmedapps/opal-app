@@ -1,4 +1,4 @@
-<ons-page ng-controller="QuestionnaireMainController" >
+<ons-page ng-controller="QuestionnaireMainController">
     <ons-toolbar fixed-style>
         <!--<div class="left"><p style="font-size: 10pt">Answered {{numAnswered}}/{{questions.length}}</div>-->
         <div class="left">
@@ -28,7 +28,7 @@
 
     <ons-carousel fullscreen swipeable overscrollable auto-scroll var="carousel" ng-class="fontSizeDesc">
         <ons-carousel-item style="overflow-y: scroll;" ng-if="!progress" ng-class="fontSizeDesc">
-            <div class="container">
+        <div class="container">
                 <div>
                     <div class="row text-center" style="margin: 0 auto;" align="center">
                         <div class="col-xs-12 text-center" style="margin-top: 2.5vh">
@@ -98,7 +98,6 @@
                     <div class="col-xs-12" ng-class="fontSizeDesc">
                         <div style="color:black;" ng-bind-html="trustAsHtml(questionText)" id="qText" ng-class="fontSizeDesc"></div>
                     </div>
-                </div>
                 <div class="row" style="margin:0;padding:0">
                     <div class="col-xs-14">
 
@@ -108,7 +107,7 @@
                                 <div class="container">
 
                                     <div class="row" style="margin:0 auto">
-                                        <div class="col-xs-14" ">
+                                        <div class="col-xs-14">
                                             <br>
 
                                             <!-- Repeat all the list item for every option in options -->
@@ -490,7 +489,7 @@
                                     <input type="checkbox"
                                            ng-click="chosen(choiceDescription, $index)"
                                            ng-model="checked[$index]">
-                                    <div class="lee-checkbox__checkmark lee-checkbox--list-item__checkmark" ></div>
+                                    <div class="lee-checkbox__checkmark lee-checkbox--list-item__checkmark"></div>
                                     {{(language === "EN") ? option.ChoiceDescription_EN : option.ChoiceDescription_FR}}
                                 </label>
                             </li>

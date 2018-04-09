@@ -27,7 +27,8 @@
 
     /* @ngInject */
     function AboutController($window, UserPreferences, NavigatorParameters) {
-        var vm = this;
+        const vm = this;
+
         vm.openDonation = openDonation;
         vm.openAboutMUHC = openAboutMUHC;
         vm.openCedarsCancerCanter = openCedarsCancerCanter;
@@ -37,8 +38,8 @@
         vm.openTeam = openTeam;
         vm.openAcknowledge = openAcknowledge;
 
-        var parameters;
-        var navigatorName;
+        let parameters;
+        let navigatorName;
 
         activate();
 
@@ -87,15 +88,6 @@
             }
         }
 
-        function openCedarsCanSupport() {
-            if (vm.language === "EN") {
-                window.open('http://www.cansupport.ca/', '_system');
-            } else {
-                window.open('http://www.cansupport.ca/fr', '_system');
-            }
-        }
-
-
         /**
          * navigatorName = 'initNavigator' or 'homeNavigator'
          * navigatorName = 'initNavigator' when about.html is called from init-Screen.html (initScreenController)
@@ -115,6 +107,14 @@
             window[navigatorName].pushPage('views/home/about/cedars.html');
         }
 
+
+        function openCedarsCanSupport() {
+            if (vm.language === "EN") {
+                window.open('http://www.cansupport.ca/', '_system');
+            } else {
+                window.open('http://www.cansupport.ca/fr', '_system');
+            }
+        }
     }
 })();
 

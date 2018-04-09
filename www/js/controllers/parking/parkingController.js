@@ -15,9 +15,9 @@
 
     /* @ngInject */
     function ParkingController(NavigatorParameters, UserPreferences) {
-        var vm = this;
+        const vm = this;
 
-        var navigatorName;
+        let navigatorName;
 
         vm.goToParkingLink = goToParkingLink;
 
@@ -25,27 +25,27 @@
 
         /////////////////////////
 
-        function activate() {
+        function activate(){
             navigatorName = NavigatorParameters.getParameters();
         }
 
-        function goToParkingLink(type) {
-            if (type === 'general') {
+        function goToParkingLink(type){
+            if(type === 'general') {
                 if (UserPreferences.getLanguage().toUpperCase() === "EN") {
                     window.open('https://muhc.ca/glen/handbook/parking-hospital', '_blank');
                 } else {
                     window.open('https://cusm.ca/glen/handbook/stationnement', '_blank');
                 }
-
-            } else if (type === 'gettingtohospital') {
+            }
+            else if (type === 'gettingtohospital') {
                 if (UserPreferences.getLanguage().toUpperCase() === "EN") {
                     window.open('https://muhc.ca/glen/handbook/getting-hospital-5', '_blank');
                 } else {
                     window.open('https://cusm.ca/glen/handbook/comment-vous-y-rendre', '_blank');
                 }
 
-            } else if (type === 'oncology') {
-                NavigatorParameters.setParameters({type: type});
+            } else if (type ==='oncology'){
+                NavigatorParameters.setParameters({type:type});
                 window[navigatorName].pushPage('./views/general/parking/parking-details.html');
             }
         }
