@@ -59,8 +59,6 @@ myApp.service('RequestToServer',['$filter','$state','NewsBanner','UserAuthorizat
                 Constants.version()
                     .then(version => {
 
-                        console.log("version" + version);
-
                         let request_object = {
                             'Request' : requestType,
                             'DeviceId': UUID.getUUID(),
@@ -99,40 +97,27 @@ myApp.service('RequestToServer',['$filter','$state','NewsBanner','UserAuthorizat
                     sendRequest(typeOfRequest,parameters,encryptionKey, referenceField)
                         .then(key=> {
 
-                            console.log("key: " + key);
-
                             //Sets the reference to fetch data for that request
                             let refRequestResponse = (!referenceField) ?
                                 response_url.child(UserAuthorizationInfo.getUsername()+'/'+key) :
                                 firebase_url.child(responseField).child(key);
 
-
-                            console.log("path: ", refRequestResponse);
-
                             //Waits to obtain the request data.
                             refRequestResponse.on('value', snapshot => {
                                 if(snapshot.exists()) {
-
-                                    console.log("data (snap): ", snapshot.val());
 
                                     let data = snapshot.val();
 
                                     refRequestResponse.set(null);
                                     refRequestResponse.off();
 
-                                    console.log(data);
-
                                     data = ResponseValidator.validate(data, encryptionKey, timeOut);
-
-                                    console.log(data);
 
                                     if (data.success){
                                         resolve(data.success)
                                     } else {
                                         reject(data.error)
                                     }
-                                } else {
-                                    console.log("data (non-snap): ", snapshot)
                                 }
                             }, error => {
                                 console.log(error);
