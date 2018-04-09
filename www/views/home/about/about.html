@@ -7,7 +7,7 @@
     </ons-toolbar>
     <network-banner></network-banner>
     <ons-list>
-        <ons-list-item modifier="tappable chevron" ng-click="tourModal.show()">
+        <ons-list-item modifier="tappable chevron" ng-click="tourModal.show()" >
 
             <ons-row align="center">
                 <ons-col width="60px" style="text-align: center">
@@ -16,12 +16,12 @@
                     </div>
                 </ons-col>
                 <ons-col>
-                    <span ng-class="fontSizeTitle">{{"OPAL_TOUR"|translate}}</span>
+                        <span ng-class="fontSizeTitle">{{"OPAL_TOUR"|translate}}</span>
                 </ons-col>
             </ons-row>
 
         </ons-list-item>
-        <ons-list-item modifier="tappable" ng-click="about.openDonation()">
+        <ons-list-item modifier="tappable chevron" ng-click="about.openDonation()" >
 
             <ons-row align="center">
                 <ons-col width="60px" style="text-align: center">
@@ -31,16 +31,12 @@
                 </ons-col>
                 <ons-col>
                     <span ng-class="fontSizeTitle">{{"OPAL_SUPPORT"|translate}}</span>
-                    <ons-icon icon="ion-android-open" style="color:#000000; margin-top: 5%" class="pull-right"
-                              size="1.2em"
-                    </ons-icon>
-
                 </ons-col>
             </ons-row>
 
 
         </ons-list-item>
-        <ons-list-item modifier="tappable chevron" ng-click="about.openTeam()">
+        <ons-list-item modifier="tappable chevron" ng-click="homeNavigator.pushPage('views/templates/content.html', {contentType: 'hig'});" >
 
             <ons-row align="center">
                 <ons-col width="60px" style="text-align: center">
@@ -55,7 +51,7 @@
 
 
         </ons-list-item>
-        <ons-list-item modifier="tappable chevron" ng-click="about.openAcknowledge()">
+        <ons-list-item modifier="tappable chevron" ng-click="homeNavigator.pushPage('views/templates/content.html',  {contentType: 'acknowledgements'});" >
 
             <ons-row align="center">
                 <ons-col width="60px" style="text-align: center">
@@ -66,41 +62,6 @@
                 <ons-col>
                     <span ng-class="fontSizeTitle"> {{"OPAL_ACKNOWLEDGEMENTS"|translate}}</span>
                 </ons-col>
-            </ons-row>
-
-
-        </ons-list-item>
-        <ons-list-item modifier="tappable chevron" ng-click="about.openCedars()">
-
-            <!--ng-click="homeNavigator.pushPage('views/home/about/cedars.html');">-->
-
-            <ons-row align="center">
-                <ons-col width="60px" style="text-align: center">
-                    <div>
-                        <img style="width: 27px;" src="./img/cedarsLogoSmall.png">
-                    </div>
-                </ons-col>
-                <ons-col>
-                    <span ng-class="fontSizeTitle"> {{"CEDARS"|translate}}</span>
-                </ons-col>
-            </ons-row>
-
-
-        </ons-list-item>
-        <ons-list-item modifier="tappable" ng-click="about.openAboutMUHC()">
-
-            <ons-row align="center">
-                <ons-col width="60px" style="text-align: center">
-                    <div>
-                        <img style="width: 27px;" src="./img/MUHC.png">
-                    </div>
-                </ons-col>
-                <ons-col>
-                    <span ng-class="fontSizeTitle"> {{"MUHC"|translate}}</span>
-                    <ons-icon icon="ion-android-open" style="color:#000000; margin-top: 5%" class="pull-right" size="1.2em" </ons-icon>
-                </ons-col>
-
-
             </ons-row>
 
 

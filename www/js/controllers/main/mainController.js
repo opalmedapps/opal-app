@@ -198,16 +198,15 @@
             });
         }
 
-        /**************************************************
-         * Detect When Screenshot is taken on iOS device
-         * (we cannot block screenshots on iOS. We can only detect if user has just taken a screenshot)
-         *************************************************/
+
+        /*****************************************
+         * Block screenshot on IOS
+         *****************************************/
         function addiOSscreenshotDetection() {
             window.addEventListener('screenshotDidTake', onScreenshotDidTake, false);
 
             function onScreenshotDidTake() {
-                //window.alert('Screenshot taken. Not allowed!');
-                screenshotTakenModal.show();
+                window.alert('Screenshot taken. Not allowed!');
             }
 
         }
