@@ -32,7 +32,6 @@
 
                     //fetch all the tab metadata TODO: add the fetching of all the other data
                     UpdateUI.set([
-                        'Announcements',
                         'Doctors',
                         'Diagnosis'
                     ]).then(function(){
