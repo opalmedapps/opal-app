@@ -120,7 +120,11 @@ myApp.service('RequestToServer',['$filter','$state','NewsBanner','UserAuthorizat
                                     refRequestResponse.set(null);
                                     refRequestResponse.off();
 
+                                    console.log(data);
+
                                     data = ResponseValidator.validate(data, encryptionKey, timeOut);
+
+                                    console.log(data);
 
                                     if (data.success){
                                         resolve(data.success)

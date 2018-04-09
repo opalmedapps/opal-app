@@ -90,7 +90,8 @@ then
 		  	echo ""
 		  	exit 1;
 		fi
-	else
+	elif [ "$DEST" = "prod" ]
+	then
 		TARGET_DIR=$PROD_DIR
 		BRANCH=$(git --git-dir $WORKING_DIR/.git rev-parse --abbrev-ref HEAD)
 		if [[ "$BRANCH" != "master" ]]; then
