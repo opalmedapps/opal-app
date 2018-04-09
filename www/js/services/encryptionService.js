@@ -14,6 +14,8 @@ myApp.service('EncryptionService',function(UserAuthorizationInfo){
     var encryptionHash = '';
     var tempEncryptionHash = '';
 
+    const main_fields = ['UserID', 'Timestamp', 'Code', 'DeviceId'];
+
 
 	function decryptObject(object,secret)
 	{
@@ -31,7 +33,7 @@ myApp.service('EncryptionService',function(UserAuthorizationInfo){
 					decryptObject(object[key],secret);
 				} else
 				{
-					if (key==='UserID' || key==='DeviceId' || key === 'Timestamp') {
+					if (main_fields.includes(key)) {
                         object[key] = object[key];
                     }
 					else

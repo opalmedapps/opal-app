@@ -36,7 +36,8 @@
         }
 
         function bindEvents() {
-            //var myDataRef = new Firebase(FirebaseService.getFirebaseUrl());
+            $translatePartialLoader.addPart('top-view');
+
             //Listen to authentication state, if user get's unauthenticated log user out
             firebase.auth().onAuthStateChanged(function (authData) {
                 var authInfoLocalStorage = window.sessionStorage.getItem('UserAuthorizationInfo');
@@ -68,13 +69,9 @@
 
             setupInactivityChecks();
 
-            //addBackgroundDetection();
-
             addiOSscreenshotDetection();
 
             addUpdateRequiredDetection();
-
-            $translatePartialLoader.addPart('top-view');
 
             document.addEventListener("pause", onPause, false);
 
@@ -199,14 +196,15 @@
         }
 
 
-        /*****************************************
-         * Block screenshot on IOS
-         *****************************************/
+        /**************************************************
+         * Detect When Screenshot is taken on iOS device
+         * (we cannot block screenshots on iOS. We can only detect if user has just taken a screenshot)
+         *************************************************/
         function addiOSscreenshotDetection() {
             window.addEventListener('screenshotDidTake', onScreenshotDidTake, false);
 
             function onScreenshotDidTake() {
-                window.alert('Screenshot taken. Not allowed!');
+                screenshotTakenModal.show();
             }
 
         }
@@ -219,6 +217,7 @@
         }
 
         function showVersionUpdateScreen(){
+            loadingmodal.hide();
             updateRequiredModal.show();
             $state.go('init')
         }

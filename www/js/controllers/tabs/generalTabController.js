@@ -15,11 +15,13 @@
     GeneralTabController.$inject = ['$scope', 'Announcements', 'UpdateUI', 'NavigatorParameters', 'NetworkStatus', 'MetaData'];
 
     function GeneralTabController($scope,  Announcements, UpdateUI, NavigatorParameters, NetworkStatus, MetaData) {
-        var vm = this;
+        const vm = this;
 
         vm.goToPatientCharter = goToPatientCharter;
-        vm.goToParking =goToParking;
+        vm.goToParking = goToParking;
         vm.generalDeviceBackButton = generalDeviceBackButton;
+        vm.goToMedicalScheduler = goToMedicalScheduler;
+        vm.goToFindDoctor = goToFindDoctor;
 
         activate();
 
@@ -94,6 +96,22 @@
 
         function generalDeviceBackButton(){
             tabbar.setActiveTab(0);
+        }
+
+        function goToFindDoctor() {
+            if (vm.language === "EN") {
+                window.open('http://www.gamf.gouv.qc.ca/index_en.html', '_system');
+            } else {
+                window.open('http://www.gamf.gouv.qc.ca/index.html', '_system');
+            }
+        }
+
+        function goToMedicalScheduler() {
+            if (vm.language === "EN") {
+                window.open('https://www.rvsq.gouv.qc.ca/en/public/Pages/home.aspx', '_system');
+            } else {
+                window.open('https://www.rvsq.gouv.qc.ca/fr/public/Pages/accueil.aspx', '_system');
+            }
         }
     }
 })();
