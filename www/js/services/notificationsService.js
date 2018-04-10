@@ -193,6 +193,16 @@ myApp.service('Notifications',['$filter','RequestToServer','LocalStorage','Annou
                 searchFunction: function() { return true },
                 readFunction: function() { return true },
             },
+            'LegacyQuestionnaire':{
+                SerNum:'QuestionnaireSerNum',
+                icon:'fa fa-question-circle',
+                color:'#607d8b',
+                updateFunction: Questionnaires.updateQuestionnairesFromNotification,
+                namesFunction: Questionnaires.getQuestionnaireName,
+                PageUrl:Questionnaires.getQuestionnaireUrl,
+                searchFunction: function() { return true },
+                readFunction: function() { return true },
+            },
             'Other':{
                 icon:'fa fa-bell',
                 color:'#FFC107'
@@ -357,16 +367,16 @@ myApp.service('Notifications',['$filter','RequestToServer','LocalStorage','Annou
                     //If ReadStatus is 0, then find actual post for notification
                     if(Notifications[i].ReadStatus === '0') {
 
-                        //Finding post
-                        var post = notificationTypes[Notifications[i].NotificationType].searchFunction(Notifications[i].RefTableRowSerNum);
+                        //Get content from the notification... should already exist on the app... except for questionnaires
+                        var content = notificationTypes[Notifications[i].NotificationType].searchFunction(Notifications[i].RefTableRowSerNum);
 
-                        if(post){
-                            Notifications[i].Description_EN = Notifications[i].Description_EN.replace(/\$\w+/, post.RoomLocation_EN||"");
-                            Notifications[i].Description_FR = Notifications[i].Description_FR.replace(/\$\w+/, post.RoomLocation_FR||"");
+                        if(content){
+                            Notifications[i].Description_EN = Notifications[i].Description_EN.replace(/\$\w+/, content.RoomLocation_EN||"");
+                            Notifications[i].Description_FR = Notifications[i].Description_FR.replace(/\$\w+/, content.RoomLocation_FR||"");
 
                             //If ReadStatus in post is also 0, Set the notification for showing in the controller
-                            if((post.ReadStatus && post.ReadStatus === '0') || Notifications[i].NotificationType === "RoomAssignment" || Notifications[i].NotificationType === "Questionnaire") {
-                                Notifications[i].Post = post;
+                            if((content.ReadStatus && content.ReadStatus === '0') || Notifications[i].NotificationType === "RoomAssignment" || Notifications[i].NotificationType === "Questionnaire" || Notifications[i].NotificationType === "LegacyQuestionnaire") {
+                                Notifications[i].Post = content;
                                 Notifications[i].Number = 1;
                                 array.push(Notifications[i]);
                             }else{
