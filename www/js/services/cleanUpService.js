@@ -15,15 +15,15 @@
         .module('MUHCApp')
         .factory('CleanUp', CleanUp);
 
-    CleanUp.$inject = ['UserAuthorizationInfo','LocalStorage', 'Documents','Diagnoses',
-        'Appointments','Patient','Doctors','TxTeamMessages','Questionnaires',
-        'Announcements','EducationalMaterial','Notifications','UserPreferences',
+    CleanUp.$inject = ['UserAuthorizationInfo', 'LocalStorage', 'Documents', 'Diagnoses',
+        'Appointments', 'Patient', 'Doctors', 'TxTeamMessages', 'Questionnaires',
+        'Announcements', 'EducationalMaterial', 'Notifications', 'UserPreferences',
         'UpdateUI', 'Tasks', 'PlanningSteps', 'LabResults', 'CheckInService'];
 
     /* @ngInject */
-    function CleanUp(UserAuthorizationInfo, LocalStorage,Documents,Diagnoses,
-                     Appointments,Patient,Doctors,TxTeamMessages,Questionnaires,
-                     Announcements,EducationalMaterial,Notifications,UserPreferences,
+    function CleanUp(UserAuthorizationInfo, LocalStorage, Documents, Diagnoses,
+                     Appointments, Patient, Doctors, TxTeamMessages, Questionnaires,
+                     Announcements, EducationalMaterial, Notifications, UserPreferences,
                      UpdateUI, Tasks, PlanningSteps, LabResults, CheckInService) {
         var service = {
             clear: clear,
@@ -53,12 +53,21 @@
             UserAuthorizationInfo.clearUserAuthorizationInfo();
             UpdateUI.clearUpdateUI();
             CheckInService.clear();
+
+            // cookieMaster.clearCookies(
+            //     function () {
+            //         console.log('Cookies have been cleared');
+            //     },
+            //     function () {
+            //         console.log('Cookies could not be cleared');
+            //     });
         }
 
-        function clearSensitive(){
+        function clearSensitive() {
             LabResults.destroy();
             Documents.clearDocumentContent();
         }
+
 
     }
 

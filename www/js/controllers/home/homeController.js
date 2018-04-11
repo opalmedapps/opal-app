@@ -165,6 +165,8 @@
                     vm.loading = false;
                     if(Notifications.getNumberUnreadNotifications() > 0){
                         vm.notifications = Notifications.setNotificationsLanguage(Notifications.getUnreadNotifications());
+
+                        vm.notifications=$filter('orderBy')(vm.notifications,'DateAdded',true);  // Sort Descending (chronological order)
                     }
                 })
                 .catch(function(error){

@@ -6,115 +6,128 @@
  */
 
 (function () {
-    'use strict';
+        'use strict';
 
-    angular
-        .module('MUHCApp')
-        .controller('GeneralTabController', GeneralTabController);
+        angular
+            .module('MUHCApp')
+            .controller('GeneralTabController', GeneralTabController);
 
-    GeneralTabController.$inject = ['$scope', 'Announcements', 'UpdateUI', 'NavigatorParameters', 'NetworkStatus', 'MetaData', 'UserPreferences'];
+        GeneralTabController.$inject = ['$scope', 'Announcements', 'UpdateUI', 'NavigatorParameters', 'NetworkStatus', 'MetaData', 'UserPreferences'];
 
-    function GeneralTabController($scope, Announcements, UpdateUI, NavigatorParameters, NetworkStatus, MetaData, UserPreferences) {
-        var vm = this;
+        function GeneralTabController($scope, Announcements, UpdateUI, NavigatorParameters, NetworkStatus, MetaData, UserPreferences) {
+            var vm = this;
 
-        vm.goToPatientCharter = goToPatientCharter;
-        vm.goToParking = goToParking;
-        vm.generalDeviceBackButton = generalDeviceBackButton;
-        vm.goToMedicalScheduler = goToMedicalScheduler;
-        vm.goToFindDoctor = goToFindDoctor;
+            vm.goToPatientCharter = goToPatientCharter;
+            vm.goToParking = goToParking;
+            vm.generalDeviceBackButton = generalDeviceBackButton;
+            vm.goToUrl = goToUrl;
 
-        activate();
+            activate();
 
-        ///////////////////////////
+            ///////////////////////////
 
-        /**
-         * PRIVATE FUNCTIONS
-         */
+            /**
+             * PRIVATE FUNCTIONS
+             */
 
-        function activate() {
-            if (NetworkStatus.isOnline()) {
-                initGeneralTab();
+            function activate() {
+                if (NetworkStatus.isOnline()) {
+                    initGeneralTab();
+                }
+
+                NavigatorParameters.setParameters({'Navigator': 'generalNavigator'});
+                NavigatorParameters.setNavigator(generalNavigator);
+
+                bindEvents();
+
+                vm.language = UserPreferences.getLanguage();
             }
 
-            NavigatorParameters.setParameters({'Navigator': 'generalNavigator'});
-            NavigatorParameters.setNavigator(generalNavigator);
+            function bindEvents() {
+                generalNavigator.on('prepop', function () {
+                    setBadges();
+                });
 
-            bindEvents();
+                generalNavigator.on('prepush', function (event) {
+                    if (generalNavigator._doorLock.isLocked()) {
+                        event.cancel();
+                    }
+                });
 
-            vm.language = UserPreferences.getLanguage();
-        }
+                //Destroying personal navigator events
+                $scope.$on('$destroy', function () {
+                    generalNavigator.off('prepush');
+                    generalNavigator.off('prepop');
+                });
+            }
 
-        function bindEvents() {
-            generalNavigator.on('prepop', function () {
-                setBadges();
-            });
-
-            generalNavigator.on('prepush', function (event) {
-                if (generalNavigator._doorLock.isLocked()) {
-                    event.cancel();
+            function initGeneralTab() {
+                if (MetaData.isFirstTimeGeneral()) {
+                    $scope.announcementsUnreadNumber = Announcements.getNumberUnreadAnnouncements();
                 }
-            });
+                else if (Announcements.getLastUpdated() < Date.now() - 300000) {
+                    // TODO: MAKE THIS INTO A BACKGROUND REFRESH
 
-            //Destroying personal navigator events
-            $scope.$on('$destroy', function () {
-                generalNavigator.off('prepush');
-                generalNavigator.off('prepop');
-            });
-        }
+                    UpdateUI.set([
+                        'Doctors',
+                        'Announcements'
+                    ])
+                }
+                setBadges();
+            }
 
-        function initGeneralTab() {
-            if (MetaData.isFirstTimeGeneral()) {
+            function setBadges() {
                 $scope.announcementsUnreadNumber = Announcements.getNumberUnreadAnnouncements();
             }
-            else if (Announcements.getLastUpdated() < Date.now() - 300000) {
-                // TODO: MAKE THIS INTO A BACKGROUND REFRESH
 
-                UpdateUI.set([
-                    'Doctors',
-                    'Announcements'
-                ])
+
+            /**
+             * PUBLIC FUNCTIONS
+             */
+
+            function goToPatientCharter() {
+                NavigatorParameters.setParameters('generalNavigator');
+                generalNavigator.pushPage('./views/general/charter/charter.html');
             }
-            setBadges();
-        }
 
-        function setBadges() {
-            $scope.announcementsUnreadNumber = Announcements.getNumberUnreadAnnouncements();
-        }
+            function goToParking() {
+                NavigatorParameters.setParameters('generalNavigator');
+                generalNavigator.pushPage('views/general/parking/parking.html')
+            }
 
+            function generalDeviceBackButton() {
+                tabbar.setActiveTab(0);
+            }
 
-        /**
-         * PUBLIC FUNCTIONS
-         */
+            function goToUrl(which) {
 
-        function goToPatientCharter() {
-            NavigatorParameters.setParameters('generalNavigator');
-            generalNavigator.pushPage('./views/general/charter/charter.html');
-        }
+                switch (which) {
+                    case "FindDoctor":
+                        if (vm.language === "EN") {
+                            window.open('http://www.gamf.gouv.qc.ca/index_en.html', '_system');
+                        } else {
+                            window.open('http://www.gamf.gouv.qc.ca/index.html', '_system');
+                        }
+                        break;
+                    case "MedicalScheduler":
+                        if (vm.language === "EN") {
+                            window.open('https://www.rvsq.gouv.qc.ca/en/public/Pages/home.aspx', '_system');
+                        } else {
+                            window.open('https://www.rvsq.gouv.qc.ca/fr/public/Pages/accueil.aspx', '_system');
+                        }
+                        break;
+                    case "CarnetSante":
+                        if (vm.language === "EN") {
+                            window.open('https://carnetsante.gouv.qc.ca/portail', '_system'); // English site available after opening the French one
+                        } else {
+                            window.open('https://carnetsante.gouv.qc.ca/portail', '_system');
+                        }
+                        break;
+                    default:
+                        break;
+                }
 
-        function goToParking() {
-            NavigatorParameters.setParameters('generalNavigator');
-            generalNavigator.pushPage('views/general/parking/parking.html')
-        }
-
-        function generalDeviceBackButton() {
-            tabbar.setActiveTab(0);
-        }
-
-        function goToFindDoctor() {
-            if (vm.language === "EN") {
-                window.open('http://www.gamf.gouv.qc.ca/index_en.html', '_system');
-            } else {
-                window.open('http://www.gamf.gouv.qc.ca/index.html', '_system');
             }
         }
-
-        function goToMedicalScheduler() {
-            if (vm.language === "EN") {
-                window.open('https://www.rvsq.gouv.qc.ca/en/public/Pages/home.aspx', '_system');
-            } else {
-                window.open('https://www.rvsq.gouv.qc.ca/fr/public/Pages/accueil.aspx', '_system');
-            }
-        }
-
     }
-})();
+)();
