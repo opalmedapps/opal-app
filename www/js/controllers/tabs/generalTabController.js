@@ -5,17 +5,17 @@
  * Time: 12:01 PM
  */
 
-(function() {
+(function () {
     'use strict';
 
     angular
         .module('MUHCApp')
         .controller('GeneralTabController', GeneralTabController);
 
-    GeneralTabController.$inject = ['$scope', 'Announcements', 'UpdateUI', 'NavigatorParameters', 'NetworkStatus', 'MetaData'];
+    GeneralTabController.$inject = ['$scope', 'Announcements', 'UpdateUI', 'NavigatorParameters', 'NetworkStatus', 'MetaData', 'UserPreferences'];
 
-    function GeneralTabController($scope,  Announcements, UpdateUI, NavigatorParameters, NetworkStatus, MetaData) {
-        const vm = this;
+    function GeneralTabController($scope, Announcements, UpdateUI, NavigatorParameters, NetworkStatus, MetaData, UserPreferences) {
+        var vm = this;
 
         vm.goToPatientCharter = goToPatientCharter;
         vm.goToParking = goToParking;
@@ -31,40 +31,42 @@
          * PRIVATE FUNCTIONS
          */
 
-        function activate(){
-            if(NetworkStatus.isOnline()){
+        function activate() {
+            if (NetworkStatus.isOnline()) {
                 initGeneralTab();
             }
 
-            NavigatorParameters.setParameters({'Navigator':'generalNavigator'});
+            NavigatorParameters.setParameters({'Navigator': 'generalNavigator'});
             NavigatorParameters.setNavigator(generalNavigator);
 
             bindEvents();
+
+            vm.language = UserPreferences.getLanguage();
         }
 
-        function bindEvents(){
-            generalNavigator.on('prepop',function(){
+        function bindEvents() {
+            generalNavigator.on('prepop', function () {
                 setBadges();
             });
 
-            generalNavigator.on('prepush', function(event) {
+            generalNavigator.on('prepush', function (event) {
                 if (generalNavigator._doorLock.isLocked()) {
                     event.cancel();
                 }
             });
 
             //Destroying personal navigator events
-            $scope.$on('$destroy', function(){
+            $scope.$on('$destroy', function () {
                 generalNavigator.off('prepush');
                 generalNavigator.off('prepop');
             });
         }
 
-        function initGeneralTab(){
-            if(MetaData.isFirstTimeGeneral()){
+        function initGeneralTab() {
+            if (MetaData.isFirstTimeGeneral()) {
                 $scope.announcementsUnreadNumber = Announcements.getNumberUnreadAnnouncements();
             }
-            else if (Announcements.getLastUpdated() < Date.now() - 300000 ) {
+            else if (Announcements.getLastUpdated() < Date.now() - 300000) {
                 // TODO: MAKE THIS INTO A BACKGROUND REFRESH
 
                 UpdateUI.set([
@@ -75,7 +77,7 @@
             setBadges();
         }
 
-        function setBadges(){
+        function setBadges() {
             $scope.announcementsUnreadNumber = Announcements.getNumberUnreadAnnouncements();
         }
 
@@ -84,7 +86,7 @@
          * PUBLIC FUNCTIONS
          */
 
-        function goToPatientCharter(){
+        function goToPatientCharter() {
             NavigatorParameters.setParameters('generalNavigator');
             generalNavigator.pushPage('./views/general/charter/charter.html');
         }
@@ -94,7 +96,7 @@
             generalNavigator.pushPage('views/general/parking/parking.html')
         }
 
-        function generalDeviceBackButton(){
+        function generalDeviceBackButton() {
             tabbar.setActiveTab(0);
         }
 
@@ -113,5 +115,6 @@
                 window.open('https://www.rvsq.gouv.qc.ca/fr/public/Pages/accueil.aspx', '_system');
             }
         }
+
     }
 })();
