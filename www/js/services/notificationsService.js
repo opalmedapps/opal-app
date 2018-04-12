@@ -27,7 +27,9 @@ myApp.service('Notifications',['$filter','RequestToServer','LocalStorage','Annou
          */
         var Notifications=[];
 
-        var lastUpdated = 0;
+        //var lastUpdated = 0;
+
+        var lastUpdated = new Date();
 
         var hasFetchedAll = false;
 
@@ -458,7 +460,8 @@ myApp.service('Notifications',['$filter','RequestToServer','LocalStorage','Annou
              **/
             clearNotifications:function() {
                 Notifications=[];
-                lastUpdated = 0;
+                //lastUpdated = 0;
+                lastUpdated = new Date();
             },
 
             /**
