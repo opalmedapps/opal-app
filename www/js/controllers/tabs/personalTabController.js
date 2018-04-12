@@ -13,14 +13,15 @@
         .controller('PersonalTabController', PersonalTabController);
 
     PersonalTabController.$inject = ['Appointments','TxTeamMessages','Documents','NavigatorParameters', 'Notifications',
-        'Questionnaires', 'Patient', 'NetworkStatus', 'MetaData', '$timeout'];
+        'Questionnaires', 'Patient', 'NetworkStatus', 'MetaData', '$timeout', 'UserPreferences'];
 
     function PersonalTabController( Appointments, TxTeamMessages, Documents, NavigatorParameters,
-                                   Notifications, Questionnaires, Patient, NetworkStatus, MetaData, $timeout) {
+                                   Notifications, Questionnaires, Patient, NetworkStatus, MetaData, $timeout, UserPreferences) {
         var vm = this;
 
         vm.goToStatus = goToStatus;
         vm.personalDeviceBackButton = personalDeviceBackButton;
+        vm.goToCarnetSante = goToCarnetSante;
 
         activate();
 
@@ -34,6 +35,8 @@
 
             bindEvents();
             setMetaData();
+
+            vm.language = UserPreferences.getLanguage();
 
             $timeout(function(){
                 vm.censor = Patient.getAccessLevel() == 3;
@@ -88,5 +91,14 @@
         function personalDeviceBackButton(){
             tabbar.setActiveTab(0);
         }
+
+        function goToCarnetSante() {
+            if (vm.language === "EN") {
+                window.open('https://carnetsante.gouv.qc.ca/portail', '_system'); // English site available after opening the French one
+            } else {
+                window.open('https://carnetsante.gouv.qc.ca/portail', '_system');
+            }
+        }
+
     }
 })();
