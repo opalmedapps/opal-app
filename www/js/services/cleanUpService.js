@@ -54,13 +54,20 @@
             UpdateUI.clearUpdateUI();
             CheckInService.clear();
 
-            // cookieMaster.clearCookies(
-            //     function () {
-            //         console.log('Cookies have been cleared');
-            //     },
-            //     function () {
-            //         console.log('Cookies could not be cleared');
-            //     });
+
+            /**
+             * Delete All Cookies
+             */
+            if (app) {
+                console.log('Before cookieMaster.clearCookies');
+                cookieMaster.clearCookies(
+                    function () {
+                        console.log('Cookies have been cleared');
+                    },
+                    function () {
+                        console.log('Cookies could not be cleared');
+                    });
+            }
         }
 
         function clearSensitive() {
