@@ -70,14 +70,16 @@
          *@ngdoc function
          *@name  MUHCApp.service.#findAndDeleteAnnouncements
          *@methodOf MUHCApp.service:Announcements
-         *@description When there is an update, find the matching message and delete it to avoid and repeated announcements
+         *@description When there is an update, find the matching message and delete it to avoid repeated announcements
          **/
         function findAndDeleteAnnouncements(array)
         {
             for (var i = 0; i <array.length; i++) {
                 for (var j = 0; j < announcements.length; j++) {
-                    if(announcements[j].AnnouncementSerNum === array[i].AnnouncementSerNum) {
-                        array.splice(i,1);
+                    if (array.length > 0) {    // array.length shrinks everytime it is "spliced" in the line below.
+                        if (announcements[j].AnnouncementSerNum === array[i].AnnouncementSerNum) {
+                            array.splice(i, 1);
+                        }
                     }
                 }
             }
@@ -92,6 +94,11 @@
         function addAnnouncements(array)
         {
             if(!array) return;
+            if (array[0] === "undefined") {
+                console.log ('array undefined');
+                return;
+            }
+
             for (var i = 0; i < array.length; i++) {
                 array[i].DateAdded=$filter('formatDate')(array[i].DateAdded);
                 announcements.push(array[i]);
