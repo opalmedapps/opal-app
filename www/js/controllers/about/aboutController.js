@@ -61,30 +61,30 @@
          * Guides the user to the Cedar's donation page based on the user's language preference
          */
         function openDonation() {
-            $window.open('https://www.cedars.ca/cedars/' + vm.language.toLowerCase() + '/donate/donate_online?designation=radiation-oncology-opal-fund', '_system');
+            $window.open('https://www.cedars.ca/cedars/' + vm.language.toLowerCase() + '/donate/donate_online?designation=radiation-oncology-opal-fund', '_self');
         }
 
         function openAboutMUHC() {
             if (vm.language === "EN") {
-                window.open('https://muhc.ca/homepage/page/about-muhc', '_system');
+                window.open('https://muhc.ca/homepage/page/about-muhc', '_self');
             } else {
-                window.open('https://cusm.ca/homepage/page/propos-du-cusm', '_system');
+                window.open('https://cusm.ca/homepage/page/propos-du-cusm', '_self');
             }
         }
 
         function openCedarsCancerCanter() {
             if (vm.language === "EN") {
-                window.open('https://muhc.ca/glen/cedars-cancer-centre', '_system');
+                window.open('https://muhc.ca/glen/cedars-cancer-centre', '_self');
             } else {
-                window.open('https://cusm.ca/glen/page/centre-du-cancer-c%C3%A8dres', '_system');
+                window.open('https://cusm.ca/glen/page/centre-du-cancer-c%C3%A8dres', '_self');
             }
         }
 
         function openCedarsCancerFoundation() {
             if (vm.language === "EN") {
-                window.open('https://www.cedars.ca/cedars/en/home', '_system');
+                window.open('https://www.cedars.ca/cedars/en/home', '_self');
             } else {
-                window.open('https://www.cedars.ca/cedars/fr/home', '_system');
+                window.open('https://www.cedars.ca/cedars/fr/home', '_self');
             }
         }
 
@@ -107,12 +107,11 @@
             window[navigatorName].pushPage('views/home/about/cedars.html');
         }
 
-
         function openCedarsCanSupport() {
             if (vm.language === "EN") {
-                window.open('http://www.cansupport.ca/', '_system');
+                window.open('http://www.cansupport.ca/', '_self');
             } else {
-                window.open('http://www.cansupport.ca/fr', '_system');
+                window.open('http://www.cansupport.ca/fr', '_self');
             }
         }
     }
