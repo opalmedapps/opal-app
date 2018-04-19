@@ -40,6 +40,7 @@
             Tasks.destroy();
             PlanningSteps.destroy();
             Documents.clearDocuments();
+            Documents.deleteDocumentsDownloaded();  // delete documents downloaded to be viewed on Android (view in external viewer option)
             Diagnoses.clearDiagnoses();
             Appointments.clearAppointments();
             Patient.clearPatient();
