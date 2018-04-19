@@ -11,13 +11,14 @@
         .controller('QuestionnairesListController', QuestionnairesListController);
 
     QuestionnairesListController.$inject = [
-        'Questionnaires', 'NavigatorParameters', '$timeout', 'UserPreferences'
+        'Questionnaires', 'NavigatorParameters', '$timeout', 'UserPreferences', '$window'
     ];
 
     /* @ngInject */
-    function QuestionnairesListController(Questionnaires, NavigatorParameters, $timeout, UserPreferences) {
+    function QuestionnairesListController(Questionnaires, NavigatorParameters, $timeout, UserPreferences, $window) {
         var vm = this;
         var questionnaireSerNum;
+        var navigatorName = NavigatorParameters.getParameters().Navigator;
 
         vm.loading = true;
         vm.current_type = 'new';
@@ -65,7 +66,7 @@
 
 
             if(typeof personalNavigator !== 'undefined'){
-                personalNavigator.on('postpop', popPost);
+                 personalNavigator.on('postpop', popPost);
             }
         }
 
@@ -171,15 +172,15 @@
         function goToQuestionnaire(patientQuestionnaire, questionnaireDBSerNum, questionnaireSerNum) {
 
             if(!(isQuestionnaireComplete(patientQuestionnaire))) {
-
-                NavigatorParameters.setParameters({Navigator:'personalNavigator', DBSerNum: questionnaireDBSerNum, SerNum: questionnaireSerNum});
-                personalNavigator.pushPage('views/personal/questionnaires/questionnaires.html', {param:questionnaireDBSerNum, QuestionnaireSerNum:questionnaireSerNum},{ animation : 'slide' });
+                NavigatorParameters.setParameters({DBSerNum: questionnaireDBSerNum, SerNum: questionnaireSerNum});
+                $window[navigatorName].pushPage('views/personal/questionnaires/questionnaires.html', {param:questionnaireDBSerNum, QuestionnaireSerNum:questionnaireSerNum},{ animation : 'slide' });
+              //   NavigatorParameters.setParameters({Navigator:'personalNavigator', DBSerNum: questionnaireDBSerNum, SerNum: questionnaireSerNum});
+              //   personalNavigator.pushPage('views/personal/questionnaires/questionnaires.html', {param:questionnaireDBSerNum, QuestionnaireSerNum:questionnaireSerNum},{ animation : 'slide' });
             } else {
-
-
-
-                NavigatorParameters.setParameters({Navigator:'personalNavigator', DBSerNum: questionnaireDBSerNum, SerNum: questionnaireSerNum});
-                personalNavigator.pushPage('views/personal/questionnaires/answeredQuestionnaire.html', {param:questionnaireDBSerNum, QuestionnaireSerNum:questionnaireSerNum},{ animation : 'slide' });
+                NavigatorParameters.setParameters({DBSerNum: questionnaireDBSerNum, SerNum: questionnaireSerNum});
+                $window[navigatorName].pushPage('views/personal/questionnaires/answeredQuestionnaire.html', {param:questionnaireDBSerNum, QuestionnaireSerNum:questionnaireSerNum},{ animation : 'slide' });
+                // NavigatorParameters.setParameters({Navigator:'personalNavigator', DBSerNum: questionnaireDBSerNum, SerNum: questionnaireSerNum});
+                // personalNavigator.pushPage('views/personal/questionnaires/answeredQuestionnaire.html', {param:questionnaireDBSerNum, QuestionnaireSerNum:questionnaireSerNum},{ animation : 'slide' });
             }
         }
 
