@@ -23,7 +23,8 @@ var myApp=angular.module('MUHCApp');
  *@requires $filter
  *@description Sets the documents and provides an API to interact with them and the server
  **/
-myApp.service('Documents',['UserPreferences', 'UserAuthorizationInfo','$q', '$filter','FileManagerService','RequestToServer','LocalStorage',function(UserPreferences,UserAuthorizationInfo,$q,$filter,FileManagerService,RequestToServer,LocalStorage){
+myApp.service('Documents',['UserPreferences', 'UserAuthorizationInfo','$q', '$filter','FileManagerService','RequestToServer','LocalStorage',
+                   function(UserPreferences,UserAuthorizationInfo,$q,$filter,FileManagerService,RequestToServer,LocalStorage){
     //Array documentsArray contains all the documents for the patient
     /**
      *@ngdoc property
@@ -40,6 +41,36 @@ myApp.service('Documents',['UserPreferences', 'UserAuthorizationInfo','$q', '$fi
      *@description Timestamp to check for updates
      **/
 	var lastUpdated=0;
+
+    /**
+     * This array will hold all document names downloaded to be viewed using FileOpener (filename and path on Android)
+     * It will be used to Delete all files on Exit/Logout
+     * @type {Array}
+     */
+	var documentsDownloaded = [];
+
+
+	/**
+	 * Delete file from local device storage, mainly Android
+	 */
+	function deleteFileFromLocalStorage (path, docName) {
+        window.resolveLocalFileSystemURL(path, function (dir) {
+            dir.getFile(docName, {create: false}, function (fileEntry) {
+                fileEntry.remove(function () {
+                    // The file has been removed successfully
+                    console.log('> > > > > > > > The file has been removed successfully.');
+                }, function (error) {
+                    // Error deleting the file
+                    console.log('> > > > > > > > Error deleting the file. ');
+                }, function () {
+                    // The file doesn't exist
+                    console.log('> > > > > > > > The file does not exist. ');
+                });
+            });
+        });
+    }
+
+
     //Check document, if its an update delete it from documentsArray
     function searchDocumentsAndDelete(documents)
     {
@@ -197,6 +228,21 @@ myApp.service('Documents',['UserPreferences', 'UserAuthorizationInfo','$q', '$fi
                 if(documentsArray[i].DocumentSerNum==serNum){
                     return documentsArray[i];
                 }
+            }
+        },
+
+        addToDocumentsDownloaded: function(filePath, documentName)
+        {
+            documentsDownloaded.push({path: filePath, docName: documentName});   // array of objects of 2 values each: {path, docName}
+        },
+
+        deleteDocumentsDownloaded: function()
+        {
+            for (var i = 0; i < documentsDownloaded.length; i++) {
+                console.log('+ + + + + + + + + + + + documentsDownloaded: ' + documentsDownloaded[i].path + ' ==> ' + documentsDownloaded[i].docName);
+
+                // Delete file from local device storage
+                deleteFileFromLocalStorage(documentsDownloaded[i].path, documentsDownloaded[i].docName);
             }
         },
         /**
