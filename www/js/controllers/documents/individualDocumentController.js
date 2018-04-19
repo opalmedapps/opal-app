@@ -93,6 +93,8 @@
             if (Constants.app) {
                 if (ons.platform.isAndroid()) {
                     var targetPath = FileManagerService.generatePath(docParams);
+
+
                     FileManagerService.downloadFileIntoStorage("data:application/pdf;base64," + docParams.Content, targetPath).then(function () {
 
                         window.cordova.plugins.FileOpener.canOpenFile(targetPath, function (data2) {
@@ -101,6 +103,23 @@
                             var onSuccess = function (data) {
                                 // file opened successfully by Default PDF Viewer on Android. Nothing else to do at this point
                                 console.log('file opened successfully by Default PDF Viewer on Android. Nothing else to do at this point');
+
+                                // Now add the filenames to an array to be deleted OnExit of the app (CleanUp.Clear())
+                                var path = FileManagerService.getPathToDocuments();
+                                var docName = FileManagerService.generateDocumentName(docParams);
+                                console.log('+ + + + + + + + + + + + path: ',path);
+                                console.log('+ + + + + + + + + + + + docName: ',docName);
+
+                                var filesToDelete = [];   // declare this Globally somewhere else
+
+                                filesToDelete.push({path: path, docName: docName});    // add file info to the array
+
+
+                                for (var i = 0; i < filesToDelete.length; i++) {
+                                    console.log('+ + + + + + + + + + + + fileToDelete: ',filesToDelete.path, ' ==> ',filesToDelete.docName);
+                                }
+                                //////////////////////////////////////////////////////
+                                
                             };
 
                             function onError(error) {
