@@ -18,6 +18,7 @@
 
         var timeoutLockout;
         var currentTime;
+        var maxIdleTimeAllowed = 300000;    // 1000 = 1 second;   300000 = 300 seconds = 5 minutes
 
         activate();
 
@@ -94,12 +95,12 @@
 
 
         function startTimer() {
-            timeoutLockout = window.setTimeout(goInactive, 300000);
+            timeoutLockout = window.setTimeout(goInactive, maxIdleTimeAllowed);
         }
 
         function resetTimer() {
 
-            if (Date.now() - currentTime > 300000) {
+            if (Date.now() - currentTime > maxIdleTimeAllowed) {
                 currentTime = Date.now();
                 goInactive();
                 return;
@@ -113,7 +114,8 @@
         function goInactive() {
             resetTimer();
             if ($state.current.name === 'Home') {
-                $state.go('init');
+                $state.go('logout');   // It should go to a Logout (not 'init'). Logout will trigger CleanUp.clear() function and other necessary clean ups
+//                $state.go('init');
                 localStorage.setItem('locked', 1);
             }
         }
@@ -159,7 +161,7 @@
 
 
         /*****************************************
-         * Data wipe
+         * Data wipe  - onPause event is triggered when you switch to another app on the phone
          *****************************************/
         function onPause() {
             var currentPage = NavigatorParameters.getNavigator().getCurrentPage().name;
