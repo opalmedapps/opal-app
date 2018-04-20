@@ -486,9 +486,6 @@ myApp.service('Notifications', ['$filter', 'RequestToServer', 'LocalStorage', 'A
             requestNewNotifications: function () {
                 var r = $q.defer();
 
-                console.log(' lastUpdated: ', lastUpdated, '     Date(): ', Date(), '\n lastUpdated.getTime(): ', lastUpdated.getTime(),
-                                                                                    '\n            Date.now(): ', Date.now());
-
                 if ((lastUpdated.getTime() > Date.now() - 10000) && (!CheckInService.checkinNotificationsExist()))
                     r.resolve({});
                 else {
