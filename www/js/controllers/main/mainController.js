@@ -114,7 +114,7 @@
         function goInactive() {
             resetTimer();
             if ($state.current.name === 'Home') {
-                $state.go('logout');   // It should go to a Logout (not 'init'). Logout will trigger CleanUp.clear() function and other necessary clean ups
+                $state.go('logOut');   // It should go to a Logout (not 'init'). Logout will trigger CleanUp.clear() function and other necessary clean ups
 //                $state.go('init');
                 localStorage.setItem('locked', 1);
             }
