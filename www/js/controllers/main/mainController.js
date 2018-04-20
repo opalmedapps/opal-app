@@ -168,8 +168,7 @@
                 NavigatorParameters.getNavigator().resetToPage('./views/personal/personal.html');
             }
             // Wipe documents and lab-results
-          //  CleanUp.clearSensitive();
-            CleanUp.clear();
+           CleanUp.clearSensitive();
         }
 
         /*****************************************
