@@ -127,31 +127,6 @@
                         });
 
 
-                        // This is to delete a file after downloading and viewing it.
-                        // This code is supposed to be in fileManagerService, but for some reason it did not work there
-                        /*
-                        $timeout(function () {
-
-                            var path = FileManagerService.getPathToDocuments();
-                            var docName = FileManagerService.generateDocumentName(docParams);
-
-                            window.resolveLocalFileSystemURL(path, function (dir) {
-                                dir.getFile(docName, {create: false}, function (fileEntry) {
-                                    fileEntry.remove(function () {
-                                        // The file has been removed successfully
-                                        console.log('> > > > > > > > The file has been removed successfully.');
-                                    }, function (error) {
-                                        // Error deleting the file
-                                        console.log('> > > > > > > > Error deleting the file. ');
-                                    }, function () {
-                                        // The file doesn't exist
-                                        console.log('> > > > > > > > The file does not exist. ');
-                                    });
-                                });
-                            });
-                        });
-                        */
-                        ////////////////////////////////////////////////////////////////////////
 
                     }).catch(function (error) {
                         //Unable to save document on server
@@ -258,8 +233,18 @@
 
             if (Constants.app) {
                 var targetPath = FileManagerService.generatePath(docParams);
+
+                var path = FileManagerService.getPathToDocuments();
+                var docName = FileManagerService.generateDocumentName(docParams);
+
                 FileManagerService.downloadFileIntoStorage("data:application/pdf;base64," + docParams.Content, targetPath).then(function () {
                     FileManagerService.shareDocument(docParams.Title.replace(/ /g, "") + docParams.ApprovedTimeStamp.toDateString().replace(/ /g, "-"), targetPath);
+
+                    // Now add the filename to an array to be deleted OnExit of the app (CleanUp.Clear())
+                    Documents.addToDocumentsDownloaded(path, docName);    // add file info to the array
+                    //////////////////////////////////////////////////////
+
+
                 }).catch(function (error) {
                     //Unable to save document on server
 

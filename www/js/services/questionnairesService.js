@@ -79,7 +79,9 @@ myApp.service('Questionnaires', ['RequestToServer','$filter', 'Patient','LocalSt
             },
             setQuestionnaireAnswers:function(Answer, questionnaireQuestionSerNum, questionnaireDBSerNum, questionnaireSerNum)
             {
-                if((Object.keys(questionnaireAnswers).length == 0 ) || (Object.keys(questionnaireAnswers[questionnaireSerNum]).length == 0)) {
+                // if((Object.keys(questionnaireAnswers).length == 0 ) || (Object.keys(questionnaireAnswers[questionnaireSerNum]).length == 0)) {
+                if((Object.keys(questionnaireAnswers).length == 0 ) || (!questionnaireAnswers[questionnaireSerNum])) {
+
                     questionnaireAnswers[questionnaireSerNum] = {};
 
 

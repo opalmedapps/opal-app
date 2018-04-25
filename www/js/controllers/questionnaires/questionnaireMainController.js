@@ -361,7 +361,8 @@ app1.controller('QuestionnaireMainController', function ($scope, $location, $anc
 
         $scope.answers = {};
         for (key in answers) {
-            orderNum = questionsObject[key].OrderNum;
+            // orderNum = questionsObject[key].OrderNum;
+            orderNum = questionsObject[key].Choices[1].OrderNum;
             $scope.answers[orderNum - 1] = answers[key].Answer;
         }
 
