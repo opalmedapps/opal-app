@@ -29,14 +29,16 @@
     function AboutController($window, UserPreferences, NavigatorParameters) {
         const vm = this;
 
-        vm.openDonation = openDonation;
-        vm.openAboutMUHC = openAboutMUHC;
-        vm.openCedarsCancerCanter = openCedarsCancerCanter;
-        vm.openCedarsCancerFoundation = openCedarsCancerFoundation;
-        vm.openCedarsCanSupport = openCedarsCanSupport;
-        vm.openCedars = openCedars;
+        vm.openUrl = openUrl;
         vm.openTeam = openTeam;
         vm.openAcknowledge = openAcknowledge;
+        vm.openCedars = openCedars;
+
+        // vm.openDonation = openDonation;
+        // vm.openAboutMUHC = openAboutMUHC;
+        // vm.openCedarsCancerCenter = openCedarsCancerCenter;
+        // vm.openCedarsCancerFoundation = openCedarsCancerFoundation;
+        // vm.openCedarsCanSupport = openCedarsCanSupport;
 
         let parameters;
         let navigatorName;
@@ -53,39 +55,37 @@
             vm.language = UserPreferences.getLanguage();
         }
 
-        /**
-         * @ngdoc method
-         * @name openDonation
-         * @methodOf MUHCApp.controllers.AboutController
-         * @description
-         * Guides the user to the Cedar's donation page based on the user's language preference
-         */
-        function openDonation() {
-            $window.open('https://www.cedars.ca/cedars/' + vm.language.toLowerCase() + '/donate/donate_online?designation=radiation-oncology-opal-fund', '_self');
-        }
+        function openUrl(openWhat) {
+            let url = '';
+            let app = document.URL.indexOf('http://') === -1 && document.URL.indexOf('https://') === -1;
 
-        function openAboutMUHC() {
-            if (vm.language === "EN") {
-                window.open('https://muhc.ca/homepage/page/about-muhc', '_self');
-            } else {
-                window.open('https://cusm.ca/homepage/page/propos-du-cusm', '_self');
+            switch (openWhat.toLowerCase()) {
+                case 'aboutmuhc':
+                    url = (vm.language === "EN") ? 'https://muhc.ca/homepage/page/about-muhc' : 'https://cusm.ca/homepage/page/propos-du-cusm';
+                    break;
+                case 'cedarscancercenter':
+                    url = (vm.language === "EN") ? 'https://muhc.ca/glen/cedars-cancer-centre' : 'https://cusm.ca/glen/page/centre-du-cancer-c%C3%A8dres';
+                    break;
+                case 'cedarscancerfoundation':
+                    url = (vm.language === "EN") ? 'https://www.cedars.ca/cedars/en/home' : 'https://www.cedars.ca/cedars/fr/home';
+                    break;
+                case 'cedarscansupport':
+                    url = (vm.language === "EN") ? 'http://www.cansupport.ca/' : 'http://www.cansupport.ca/fr';
+                    break;
+                case 'donation':
+                    url = (vm.language === "EN") ? 'https://www.cedars.ca/cedars/en/donate/donate_online?designation=radiation-oncology-opal-fund' :
+                                                   'https://www.cedars.ca/cedars/fr/donate/donate_online?designation=radiation-oncology-opal-fund';
+                    break;
+                default:
+                    break;
             }
-        }
 
-        function openCedarsCancerCanter() {
-            if (vm.language === "EN") {
-                window.open('https://muhc.ca/glen/cedars-cancer-centre', '_self');
+            if (app) {
+                cordova.InAppBrowser.open(url, '_blank', 'location=yes');
             } else {
-                window.open('https://cusm.ca/glen/page/centre-du-cancer-c%C3%A8dres', '_self');
+                window.open(url, '_blank');
             }
-        }
 
-        function openCedarsCancerFoundation() {
-            if (vm.language === "EN") {
-                window.open('https://www.cedars.ca/cedars/en/home', '_self');
-            } else {
-                window.open('https://www.cedars.ca/cedars/fr/home', '_self');
-            }
         }
 
         /**
@@ -107,13 +107,44 @@
             window[navigatorName].pushPage('views/home/about/cedars.html');
         }
 
-        function openCedarsCanSupport() {
-            if (vm.language === "EN") {
-                window.open('http://www.cansupport.ca/', '_self');
-            } else {
-                window.open('http://www.cansupport.ca/fr', '_self');
-            }
-        }
+
+        // function openDonation() {
+        //     $window.open('https://www.cedars.ca/cedars/' + vm.language.toLowerCase() + '/donate/donate_online?designation=radiation-oncology-opal-fund', '_self');
+        // }
+        //
+        // function openAboutMUHC() {
+        //     if (vm.language === "EN") {
+        //         window.open('https://muhc.ca/homepage/page/about-muhc', '_self');
+        //     } else {
+        //         window.open('https://cusm.ca/homepage/page/propos-du-cusm', '_self');
+        //     }
+        // }
+        //
+        // function openCedarsCancerCenter() {
+        //     if (vm.language === "EN") {
+        //         window.open('https://muhc.ca/glen/cedars-cancer-centre', '_self');
+        //     } else {
+        //         window.open('https://cusm.ca/glen/page/centre-du-cancer-c%C3%A8dres', '_self');
+        //     }
+        // }
+        //
+        // function openCedarsCancerFoundation() {
+        //     if (vm.language === "EN") {
+        //         window.open('https://www.cedars.ca/cedars/en/home', '_self');
+        //     } else {
+        //         window.open('https://www.cedars.ca/cedars/fr/home', '_self');
+        //     }
+        // }
+        //
+        // function openCedarsCanSupport() {
+        //     if (vm.language === "EN") {
+        //         window.open('http://www.cansupport.ca/', '_self');
+        //     } else {
+        //         window.open('http://www.cansupport.ca/fr', '_self');
+        //     }
+        // }
+
+
     }
 })();
 

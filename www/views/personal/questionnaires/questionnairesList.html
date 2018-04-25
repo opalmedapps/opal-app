@@ -11,14 +11,15 @@
         <p style="margin-top: 30px">{{ "LOADINGQUESTIONNAIRES" | translate }}</p>
     </div>
 
-    <div ng-hide="vm.loading">
-        <ons-tabbar id="questionnairesNavbar" class="shadow-2" position="top" animation="fade"  style="position: fixed; margin-top: 43px; z-index: 1; height: 49px;">
+    <!--<div ng-hide="vm.loading">-->
+        <ons-tabbar ng-hide="vm.loading" id="questionnairesNavbar" class="shadow-2" position="top" style="position: fixed; margin-top: 43px; z-index: 1; height: 49px;">
             <ons-tab class="shadow-2" style="background-color:#ECEFF1;" label='{{"QUESTIONNAIRE_NEW"|translate}}' icon="ion-android-add" active="true" ng-click="vm.getDesiredQuestionnaires('new')"></ons-tab>
             <ons-tab class="shadow-2" style="background-color:#ECEFF1;" label='{{"QUESTIONNAIRE_IN_PROGRESS"|translate}}' icon="ion-edit" ng-click="vm.getDesiredQuestionnaires('progress')"></ons-tab>
             <ons-tab class="shadow-2" style="background-color:#ECEFF1;" label='{{"QUESTIONNAIRE_COMPLETED"|translate}}' icon="ion-android-done" ng-click="vm.getDesiredQuestionnaires('completed')"></ons-tab>
         </ons-tabbar>
 
-        <div class="ons-row" align="center" ng-init="vm.refreshQuestionnairesList()"  style="margin-top: 50px">
+
+        <div class="ons-row" align="center" ng-hide="vm.loading" ng-init="vm.refreshQuestionnairesList()"  style="margin-top: 50px">
             <div class="ons-col" align="center">
                 <p ng-show="vm.desiredQuestionnaires.length === 0 && vm.current_type === 'new'" ng-class="fontSizeTitle" style="color: grey; margin-top: 25vh;">{{"QUESTIONNAIRE_NONE_NEW"|translate}}</p>
                 <p ng-show="vm.desiredQuestionnaires.length === 0 && vm.current_type === 'progress'" ng-class="fontSizeTitle" style="color: grey; margin-top: 25vh;">{{"QUESTIONNAIRE_NONE_PROGRESS"|translate}}</p>
@@ -37,6 +38,6 @@
                 </ul>
             </div>
         </div>
-    </div>
+    <!--</div>-->
 
 </ons-page>
