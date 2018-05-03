@@ -143,6 +143,7 @@
             vm.loading = false;
         }
 
+
         function setUpPDF(document) {
             uint8pf = FileManagerService.convertToUint8Array(document.Content);
 
@@ -161,7 +162,9 @@
                     var canvasElements = containerEl.getElementsByTagName("canvas");
                     var viewerScale = viewerSize / canvasElements[0].width * 0.95 * 100 + "%";
                     for (var i = 0; i !== canvasElements.length; ++i) {
+
                         canvasElements[i].style.zoom = viewerScale;
+
                         canvasElements[i].onclick = function (event) {
                             if (Constants.app) {
                                 if (ons.platform.isAndroid()) {
