@@ -99,35 +99,33 @@
                 tabbar.setActiveTab(0);
             }
 
-            function goToUrl(which) {
 
-                switch (which) {
-                    case "FindDoctor":
-                        if (vm.language === "EN") {
-                            window.open('http://www.gamf.gouv.qc.ca/index_en.html', '_system');
-                        } else {
-                            window.open('http://www.gamf.gouv.qc.ca/index.html', '_system');
-                        }
+            function goToUrl(openWhat) {
+                let url = '';
+                let app = document.URL.indexOf('http://') === -1 && document.URL.indexOf('https://') === -1;
+
+                switch (openWhat.toLowerCase()) {
+                    case 'finddoctor':
+                        url = (vm.language === "EN") ? 'http://www.gamf.gouv.qc.ca/index_en.html' : 'http://www.gamf.gouv.qc.ca/index.html';
                         break;
-                    case "MedicalScheduler":
-                        if (vm.language === "EN") {
-                            window.open('https://www.rvsq.gouv.qc.ca/en/public/Pages/home.aspx', '_system');
-                        } else {
-                            window.open('https://www.rvsq.gouv.qc.ca/fr/public/Pages/accueil.aspx', '_system');
-                        }
+                    case 'medicalscheduler':
+                        url = (vm.language === "EN") ? 'https://www.rvsq.gouv.qc.ca/en/public/Pages/home.aspx' : 'https://www.rvsq.gouv.qc.ca/fr/public/Pages/accueil.aspx';
                         break;
-                    case "CarnetSante":
-                        if (vm.language === "EN") {
-                            window.open('https://carnetsante.gouv.qc.ca/portail', '_system'); // English site available after opening the French one
-                        } else {
-                            window.open('https://carnetsante.gouv.qc.ca/portail', '_system');
-                        }
+                    case 'carnetsante':
+                        url = (vm.language === "EN") ? 'https://carnetsante.gouv.qc.ca/portail' : 'https://carnetsante.gouv.qc.ca/portail';  // English site available after opening the French one
                         break;
                     default:
                         break;
                 }
 
+                if (app) {
+                    cordova.InAppBrowser.open(url, '_blank', 'location=yes');
+                } else {
+                    window.open(url, '_blank');
+                }
+
             }
+
         }
     }
 )();
