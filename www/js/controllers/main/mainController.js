@@ -161,7 +161,7 @@
 
 
         /*****************************************
-         * Data wipe  - onPause event is triggered when you app goes in the background (switch apps on a device)
+         * Data wipe  - onPause event is triggered when the app goes in the background (switch apps on a device)
          *****************************************/
         function onPause() {
             var currentPage = NavigatorParameters.getNavigator().getCurrentPage().name;
