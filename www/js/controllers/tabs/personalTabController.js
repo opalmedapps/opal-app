@@ -93,10 +93,15 @@
         }
 
         function goToCarnetSante() {
-            if (vm.language === "EN") {
-                window.open('https://carnetsante.gouv.qc.ca/portail', '_system'); // English site available after opening the French one
+            let url = '';
+            let app = document.URL.indexOf('http://') === -1 && document.URL.indexOf('https://') === -1;
+
+            url = (vm.language === "EN") ? 'https://carnetsante.gouv.qc.ca/portail' : 'https://carnetsante.gouv.qc.ca/portail';  // English site available after opening the French one
+
+            if (app) {
+                cordova.InAppBrowser.open(url, '_blank', 'location=yes');
             } else {
-                window.open('https://carnetsante.gouv.qc.ca/portail', '_system');
+                window.open(url, '_blank');
             }
         }
 
