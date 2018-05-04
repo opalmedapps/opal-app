@@ -230,7 +230,9 @@ then
         fi
 	fi
 
-	#TODO: UPDATE VERSION # IN CONFIG.XML + Gradle.Build file
+	#TODO: UPDATE VERSION # IN CONFIG.XML + Build.Gradle file
+	# IMPORTANT IMPORTANT: Use always Gradle version 2.2.2   DO NOT UPGRADE TO A HIGHER VERSION. IT WON'T WORK
+	# ALWAYS MAKE SURE THAT THIS LINE IS IN Build.Gradle file: classpath 'com.android.tools.build:gradle:2.2.2'
 
 	echo ""
 	echo ""
