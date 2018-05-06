@@ -20,21 +20,18 @@ git clone https://github.com/Sable/qplus.git
 * [Install latest version of NodeJS](https://nodejs.org/en/download/) 
 **(NOTE: For proper access to the backend you must have version 6+)**
 
-Once this is done, verify that you installed Node globally but running the command.
-
-```
-node -v
-```
+Once this is done, verify that you installed Node globally by running
+running `$node -v`
 
 If you see the current version of the Node runtime installed, then all is good! Otherwise please consult Node's troubleshooting manual or Google the error that occurs.
 
-* Install http-server
 
-```
-sudo npm install -g http-server
-```
+This installation also installs the Node.js package manager ([npm](https://docs.npmjs.com/getting-started/what-is-npm)).
+This package manager is in charge of installing all the libraries and dependencies
+for development. The main file is the
+[package.json](./package.json) file. This file states all the depedencies
+and the versions for each of them.
 
-This globally installs a simple, zero-configuration command line server that will be used to host the Opal app locally when developing in the browser.
 
 * Install [Bower](https://bower.io/)
 
@@ -42,20 +39,58 @@ This globally installs a simple, zero-configuration command line server that wil
 sudo npm install -g bower
 ```
 
-Bower is our application's package manager. This allows all of our libraries to stay in sync and updated across all developing platforms.
+ Bower is our front-end libraries package manager. This allows all of our libraries to stay in sync and updated across all developing platforms.
+The main file for this dependencies is [bower.json](./bower.json), this file
+contains all the dependencies that are required to run the front-end.
 
-* Download App's dependencies via Bower
-
-In order to do this you need to navigate to the parent directory of the project (qplus/) and then run the following command:
+* Install [Gulp](https://gulpjs.com/) globally
 
 ```
-bower install -force
+npm install gulp-cli -g
 ```
 
-The force flag is used because sometimes you might have global dependencies installed and bower install will skip over those dependencies even though they are needed locally.
+Gulp is a task manager that allows to have readily available and useful tasks,
+some examples include, instantiating a server, running tests, generating
+ documentation or simply packaging the app
+for production.
+
+* Install all the front-end and back-end dependencies.
+
+```
+npm install
+```
+
+This will install the npm and bower dependencies.
+
+* Run the app
+
+```
+    gulp serve
+```
+
+
+After these steps if all the installation is correct, you should be able to see the app
+by navigating to `http://localhost:9000`
+
+### Optional
+* Install http-server
+
+```
+sudo npm install -g http-server
+```
+This globally installs a simple, zero-configuration command line server that may be used to host the Opal app locally when developing in the browser.
+Sometimes it is useful to quickly have a server in order to
+test a particular page or app. For this http-server is a great package.
+For instance, an alternative to `gulp serve` is to run from the root of the repository
+run:
+```
+http-server ./www -p 9000 -o
+```
+
+Similar to `gulp serve`, this opens automatically the app at address
+`http://localhost:9000`.
 
 **NOTE: In the past there have been multiple students who have had trouble install dependencies due to strange permission issues that would block the ability to write to certain directories... so don't worry if this happens to you! If this occurs, the problem is easily fixable by some simple Google searching. There seemed to have been various solutions for different people so I can't really provide a troubleshooting manual for every case.**
-
 
 
 ### Running Development Environment
@@ -64,28 +99,23 @@ A step by step series of examples that tell you have to get a development env ru
 
 #### Front-End
 
-1) Follow the installation steps previously stated. At this point it is assumed that you have all the global and local dependencies needed installed. If you don't the following steps may not work, or you will get console errors in your browser.
-2) In your command-line, navigate to '/path/to/qplus/www/'. 
-3) Run the following command:
+1) Run the following command:
 
 ```
-http-server
+gulp serve
 ```
 
 and you should see something similar appear in your console:
 
 ```
-Starting up http-server, serving ./
-Available on:
-  http://127.0.0.1:8080
-  http://10.37.89.13:8080
-Hit CTRL-C to stop the server
+[22:08:53] Server started http://localhost:9000
+[22:08:53] LiveReload started on port 35729
+[22:08:53] Running server
 ```
-
-4) In Chrome or Firefox (they have the best debug console) navigate to one of the addresses provided from the previous step.
-5) Open the [developer console](https://developer.chrome.com/devtools) and switch to mobile view and [disable caching](http://nicholasbering.ca/tools/2016/10/09/devtools-disable-caching/).
-6) If you followed all the steps correctly there should not be any errors in the debug console other than a missing cordova.js file. Otherwise please use Google or StackOverflow to solve any issues that arise, or try repeating all the steps again.
-7) If all is well you can login to the app with the following credentials:
+2) In Chrome or Firefox (they have the best debug console) navigate to one of the addresses provided from the previous step.
+3) Open the [developer console](https://developer.chrome.com/devtools) and switch to mobile view and [disable caching](http://nicholasbering.ca/tools/2016/10/09/devtools-disable-caching/).
+4) If you followed all the steps correctly there should not be any errors in the debug console other than a missing cordova.js file. Otherwise please use Google or StackOverflow to solve any issues that arise, or try repeating all the steps again.
+5) If all is well you can login to the app with the following credentials:
 
 ```
 email: muhc.app.mobile@gmail.com
@@ -171,11 +201,6 @@ cordova platform add android
 Now you should have a properly configured Cordova project that can be compiled into both Android and iOS native code. However there
 are still some dependencies needed for the build script to run properly...
 
-8) Install [Gulp](https://gulpjs.com/) globally
-
-```
-npm install gulp-cli -g
-```
 
 Gulp is in charge of automating a lot of the build process such as minifying html/css/javascript, compressing images,
 and removing debug statements.
@@ -251,11 +276,12 @@ We use [SemVer](http://semver.org/) for versioning. For the versions available, 
 
 ## Authors
 
-* **David Herrera** - *Initial work*
-* **James Brace** - *Initial work*
-* **Yick Mo** - *Initial work*
+* **David Herrera**
+* **Robert Maglieri**
+* **James Brace**
+* **Yick Mo**
 
-See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
+<!-- See also the list of [contributors](https://github.com/Sable/dh/contributors) who participated in this project. -->
 
 ## License
 
