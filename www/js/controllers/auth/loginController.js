@@ -119,6 +119,7 @@
             $timeout(function(){
                 vm.trusted = !!($window.localStorage.getItem("deviceID"));
             });
+
         }
 
         /**
@@ -349,6 +350,7 @@
          */
         function submit() {
             clearErrors();
+
             if(!vm.email || vm.email === '' || !vm.password || vm.password ==='')
             {
                 $timeout(function() {
