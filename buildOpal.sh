@@ -97,7 +97,7 @@ then
                 exit 1;
             fi
         else
-            TARGET_DIR=$PROD_DIR
+            TARGET_DIR=${PROD_DIR}
             BRANCH=$(git --git-dir $WORKING_DIR/.git rev-parse --abbrev-ref HEAD)
             if [[ "$BRANCH" != "master" ]]; then
                 echo ""
@@ -238,7 +238,8 @@ then
 	echo ""
 	echo ""
 	echo "Copying over config.xml to build destination..."
-
+	# $version_android = 
+    # sed -e "s/version=\"[0-9.]*\" android-versionCode=\"[0-9]*\"/version=\"${version}\" android-versionCode=\"${version_android}\"" $TARGET_DIR/config.xml
 	#Remove current config.xml and replace with current one
 	rm $TARGET_DIR/config.xml
 	cp $WORKING_DIR/config.xml $TARGET_DIR

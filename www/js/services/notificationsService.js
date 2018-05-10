@@ -145,7 +145,7 @@ myApp.service('Notifications', ['$filter', 'RequestToServer', 'LocalStorage', 'A
                 PageUrl: Appointments.getAppointmentUrl,
                 refreshType: 'Appointments'
             },
-            'AppointmentModified': {
+            'AppointmentTimeChange': {
                 icon: 'fa fa-calendar',
                 color: '#ffc107',
                 NameEN: 'AppointmentType_EN',
