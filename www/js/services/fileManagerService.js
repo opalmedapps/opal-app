@@ -235,33 +235,6 @@ myApp.service('FileManagerService', function ($q, $cordovaFileOpener2, $filter, 
                 window.open(url);
             }
 
-            /**
-             openPDF: function (url) {
-
-                 var app = document.URL.indexOf('http://') === -1 && document.URL.indexOf('https://') === -1;
-                 if (app) {
-                    if(ons.platform.isAndroid()){
-                        window.cordova.plugins.FileOpener.canOpenFile(url, function(data){
-
-                            if(data.canBeOpen)
-                            {
-                                window.cordova.plugins.FileOpener.openFile(url, function(data){
-
-                                }, function(data){
-
-                                    ons.notification.alert({ message:$filter('translate')('UNABLETOOPEN') });
-                                });
-                            }else{
-                                ons.notification.alert({ message:$filter('translate')('UNABLETOOPEN') });
-                            }
-                        }, function(error){ons.notification.alert({ message:$filter('translate')('UNABLETOOPEN') });});
-                    }else{
-                        var ref = cordova.InAppBrowser.open(url, '_blank', 'EnableViewPortScale=yes');
-                    }
-                } else {
-                    window.open(url);
-                }
-            }*/
         },
         //Gets document file storage url
         /**
