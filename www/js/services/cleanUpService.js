@@ -55,7 +55,7 @@
             UpdateUI.clearUpdateUI();
             CheckInService.clear();
 
-
+  
             /**
              * Delete All Cookies
              */
