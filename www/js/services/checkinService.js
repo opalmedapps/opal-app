@@ -452,6 +452,8 @@
         function clear() {
             checkinApps = [];
             allCheckedIn= false;
+            attemptedCheckin = false;
+            checkinStateSet = false;
         }
 
         function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
