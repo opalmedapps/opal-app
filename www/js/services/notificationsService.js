@@ -494,7 +494,9 @@ myApp.service('Notifications', ['$filter', 'RequestToServer', 'LocalStorage', 'A
                                 response.Data.forEach(function (notif) {
 
                                     // If notification content exists.. update the notification content
-                                    if (notif[1] !== "undefined") notificationTypes[notif[0].NotificationType].updateFunction([notif[1]]);
+                                    if (notif[1] !== "undefined" && notif[1] != undefined) {
+                                        notificationTypes[notif[0].NotificationType].updateFunction([notif[1]]);
+                                    }
 
                                     var notification = (!!notif[0]) ? notif[0] : notif;
                                     updateUserNotifications([notification]);
