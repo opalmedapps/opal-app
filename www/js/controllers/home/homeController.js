@@ -26,7 +26,7 @@
         vm.appointmentShown = null;
         vm.todaysAppointments = [];
         vm.calledApp = null;
-        vm.checkInMessage = '';
+        //vm.checkInMessage = '';
         vm.RoomLocation = '';
         vm.showHomeScreenUpdate = null;
         vm.loading = true;
