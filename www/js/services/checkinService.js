@@ -147,18 +147,34 @@
         function isAllowedToCheckin(){
             var r = $q.defer();
 
-            hasAttemptedCheckin()
-                .then(function(attempted) {
-                    if (attempted === 'false') {
+            // hasAttemptedCheckin()
+            //     .then(function(attempted) {
+            //         if (attempted === 'false') {
+
                         isWithinCheckinRange()
                             .then(function (isInRange) {
 
                                 console.log('is allowed to checkin ... is in range: ' + isInRange);
 
                                 r.resolve(isInRange)
-                            })
-                    } else r.resolve(false);
-                });
+                            });
+
+                //     } else r.resolve(false);
+                // });
+
+
+            // hasAttemptedCheckin()
+            //     .then(function(attempted) {
+            //         if (attempted === 'false') {
+            //             isWithinCheckinRange()
+            //                 .then(function (isInRange) {
+            //
+            //                     console.log('is allowed to checkin ... is in range: ' + isInRange);
+            //
+            //                     r.resolve(isInRange)
+            //                 })
+            //         } else r.resolve(false);
+            //     });
 
             return r.promise
         }
@@ -203,8 +219,12 @@
 
                         console.log("can checkin : " + canCheckin);
 
-                        if(!canCheckin) setCheckinState("NOT_ALLOWED", appts.length);
-                        else setCheckinState("CHECKIN_MESSAGE_BEFORE" + setPlural(appts), appts.length);
+                        if(!canCheckin) {
+                            setCheckinState("NOT_ALLOWED", appts.length);
+                        }
+                        else {
+                            setCheckinState("CHECKIN_MESSAGE_BEFORE" + setPlural(appts), appts.length);
+                        }
                         r.resolve()
                     })
                     .catch(function() {

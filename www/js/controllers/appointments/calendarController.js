@@ -269,10 +269,9 @@
             if(!vm.appointments) return false;
             return vm.appointments.length > 0 && dateLast < choosenTimeMilliseconds;
         }
-
         /**
          * Determines whether or not to show the date header in the appointment list
-         * @param index
+         * @param {Number} index
          * @returns {boolean}
          */
         function showChosenDateHeader(index)
