@@ -13,14 +13,15 @@
         .controller('PersonalTabController', PersonalTabController);
 
     PersonalTabController.$inject = ['Appointments','TxTeamMessages','Documents','NavigatorParameters', 'Notifications',
-        'Questionnaires', 'Patient', 'NetworkStatus', 'MetaData', '$timeout'];
+        'Questionnaires', 'Patient', 'NetworkStatus', 'MetaData', '$timeout', 'UserPreferences'];
 
     function PersonalTabController( Appointments, TxTeamMessages, Documents, NavigatorParameters,
-                                   Notifications, Questionnaires, Patient, NetworkStatus, MetaData, $timeout) {
+                                   Notifications, Questionnaires, Patient, NetworkStatus, MetaData, $timeout, UserPreferences) {
         var vm = this;
 
         vm.goToStatus = goToStatus;
         vm.personalDeviceBackButton = personalDeviceBackButton;
+        vm.goToCarnetSante = goToCarnetSante;
 
         activate();
 
@@ -34,6 +35,8 @@
 
             bindEvents();
             setMetaData();
+
+            vm.language = UserPreferences.getLanguage();
 
             $timeout(function(){
                 vm.censor = Patient.getAccessLevel() == 3;
@@ -88,5 +91,19 @@
         function personalDeviceBackButton(){
             tabbar.setActiveTab(0);
         }
+
+        function goToCarnetSante() {
+            let url = '';
+            let app = document.URL.indexOf('http://') === -1 && document.URL.indexOf('https://') === -1;
+
+            url = (vm.language === "EN") ? 'https://carnetsante.gouv.qc.ca/portail' : 'https://carnetsante.gouv.qc.ca/portail';  // English site available after opening the French one
+
+            if (app) {
+                cordova.InAppBrowser.open(url, '_blank', 'location=yes');
+            } else {
+                window.open(url, '_blank');
+            }
+        }
+
     }
 })();

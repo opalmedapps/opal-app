@@ -119,6 +119,7 @@
             $timeout(function(){
                 vm.trusted = !!($window.localStorage.getItem("deviceID"));
             });
+
         }
 
         /**
@@ -141,13 +142,13 @@
                  **************************************************************************************************************************************/
 
                 //Save the current session token to the users "logged in users" node. This is used to make sure that the user is only logged in for one session at a time.
-                var Ref= firebase.database().ref(FirebaseService.getFirebaseUrl(null));
-                var refCurrentUser = Ref.child(FirebaseService.getFirebaseChild('logged_in_users') + firebaseUser.uid);
-
-                refCurrentUser.set({ 'Token' : sessionToken });
-
-                // Evoke an observer function in mainController
-                $rootScope.$emit("MonitorLoggedInUsers", firebaseUser.uid);
+                // var Ref= firebase.database().ref(FirebaseService.getFirebaseUrl(null));
+                // var refCurrentUser = Ref.child(FirebaseService.getFirebaseChild('logged_in_users') + firebaseUser.uid);
+                //
+                // refCurrentUser.set({ 'Token' : sessionToken });
+                //
+                // // Evoke an observer function in mainController
+                // $rootScope.$emit("MonitorLoggedInUsers", firebaseUser.uid);
 
                 //Set the authorized user once we get confirmation from FireBase that the inputted credentials are valid
                 UserAuthorizationInfo.setUserAuthData(firebaseUser.uid, EncryptionService.hash(vm.password), undefined, sessionToken, vm.email);
@@ -286,6 +287,13 @@
                         vm.loading = false;
                     });
                     break;
+                case "auth/user-disabled":
+                    $timeout(function () {
+                        vm.alert.type='danger';
+                        vm.alert.message="USER_DISABLED";
+                        vm.loading = false;
+                    });
+                    break;
                 case "LIMITS_EXCEEDED":
                     $timeout(function(){
                         vm.alert.type='danger';
@@ -342,6 +350,7 @@
          */
         function submit() {
             clearErrors();
+
             if(!vm.email || vm.email === '' || !vm.password || vm.password ==='')
             {
                 $timeout(function() {

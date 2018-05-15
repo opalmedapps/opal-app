@@ -20,21 +20,18 @@ git clone https://github.com/Sable/qplus.git
 * [Install latest version of NodeJS](https://nodejs.org/en/download/) 
 **(NOTE: For proper access to the backend you must have version 6+)**
 
-Once this is done, verify that you installed Node globally but running the command.
-
-```
-node -v
-```
+Once this is done, verify that you installed Node globally by running
+running `$node -v`
 
 If you see the current version of the Node runtime installed, then all is good! Otherwise please consult Node's troubleshooting manual or Google the error that occurs.
 
-* Install http-server
 
-```
-sudo npm install -g http-server
-```
+This installation also installs the Node.js package manager ([npm](https://docs.npmjs.com/getting-started/what-is-npm)).
+This package manager is in charge of installing all the libraries and dependencies
+for development. The main file is the
+[package.json](./package.json) file. This file states all the depedencies
+and the versions for each of them.
 
-This globally installs a simple, zero-configuration command line server that will be used to host the Opal app locally when developing in the browser.
 
 * Install [Bower](https://bower.io/)
 
@@ -42,20 +39,58 @@ This globally installs a simple, zero-configuration command line server that wil
 sudo npm install -g bower
 ```
 
-Bower is our application's package manager. This allows all of our libraries to stay in sync and updated across all developing platforms.
+ Bower is our front-end libraries package manager. This allows all of our libraries to stay in sync and updated across all developing platforms.
+The main file for this dependencies is [bower.json](./bower.json), this file
+contains all the dependencies that are required to run the front-end.
 
-* Download App's dependencies via Bower
-
-In order to do this you need to navigate to the parent directory of the project (qplus/) and then run the following command:
+* Install [Gulp](https://gulpjs.com/) globally
 
 ```
-bower install -force
+npm install gulp-cli -g
 ```
 
-The force flag is used because sometimes you might have global dependencies installed and bower install will skip over those dependencies even though they are needed locally.
+Gulp is a task manager that allows to have readily available and useful tasks,
+some examples include, instantiating a server, running tests, generating
+ documentation or simply packaging the app
+for production.
+
+* Install all the front-end and back-end dependencies.
+
+```
+npm install
+```
+
+This will install the npm and bower dependencies.
+
+* Run the app
+
+```
+    gulp serve
+```
+
+
+After these steps if all the installation is correct, you should be able to see the app
+by navigating to `http://localhost:9000`
+
+### Optional
+* Install http-server
+
+```
+sudo npm install -g http-server
+```
+This globally installs a simple, zero-configuration command line server that may be used to host the Opal app locally when developing in the browser.
+Sometimes it is useful to quickly have a server in order to
+test a particular page or app. For this http-server is a great package.
+For instance, an alternative to `gulp serve` is to run from the root of the repository
+run:
+```
+http-server ./www -p 9000 -o
+```
+
+Similar to `gulp serve`, this opens automatically the app at address
+`http://localhost:9000`.
 
 **NOTE: In the past there have been multiple students who have had trouble install dependencies due to strange permission issues that would block the ability to write to certain directories... so don't worry if this happens to you! If this occurs, the problem is easily fixable by some simple Google searching. There seemed to have been various solutions for different people so I can't really provide a troubleshooting manual for every case.**
-
 
 
 ### Running Development Environment
@@ -64,28 +99,23 @@ A step by step series of examples that tell you have to get a development env ru
 
 #### Front-End
 
-1) Follow the installation steps previously stated. At this point it is assumed that you have all the global and local dependencies needed installed. If you don't the following steps may not work, or you will get console errors in your browser.
-2) In your command-line, navigate to '/path/to/qplus/www/'. 
-3) Run the following command:
+1) Run the following command:
 
 ```
-http-server
+gulp serve
 ```
 
 and you should see something similar appear in your console:
 
 ```
-Starting up http-server, serving ./
-Available on:
-  http://127.0.0.1:8080
-  http://10.37.89.13:8080
-Hit CTRL-C to stop the server
+[22:08:53] Server started http://localhost:9000
+[22:08:53] LiveReload started on port 35729
+[22:08:53] Running server
 ```
-
-4) In Chrome or Firefox (they have the best debug console) navigate to one of the addresses provided from the previous step.
-5) Open the [developer console](https://developer.chrome.com/devtools) and switch to mobile view and [disable caching](http://nicholasbering.ca/tools/2016/10/09/devtools-disable-caching/).
-6) If you followed all the steps correctly there should not be any errors in the debug console other than a missing cordova.js file. Otherwise please use Google or StackOverflow to solve any issues that arise, or try repeating all the steps again.
-7) If all is well you can login to the app with the following credentials:
+2) In Chrome or Firefox (they have the best debug console) navigate to one of the addresses provided from the previous step.
+3) Open the [developer console](https://developer.chrome.com/devtools) and switch to mobile view and [disable caching](http://nicholasbering.ca/tools/2016/10/09/devtools-disable-caching/).
+4) If you followed all the steps correctly there should not be any errors in the debug console other than a missing cordova.js file. Otherwise please use Google or StackOverflow to solve any issues that arise, or try repeating all the steps again.
+5) If all is well you can login to the app with the following credentials:
 
 ```
 email: muhc.app.mobile@gmail.com
@@ -105,11 +135,11 @@ Before deploying and after you have ran your unit tests, developers should still
 
 It is quite simple to do either:
 
-1) Follow the build steps listed below in the Deployment section (you will need to follow both the PreRequisites and Build subsections for the next steps to work).
+1) Follow the build steps listed below in the Deployment section (you will need to follow both the PreRequisites and Build subsections for the next steps to work). 
 
 Once you have built the app you have two options...
 
-1) Use Cordova to load APK onto phone using
+2) Use Cordova to load APK onto phone using
 
 ```
 cordova run
@@ -117,11 +147,11 @@ cordova run
 
 in your Cordova project directory
 
-2) Using [XCode](https://developer.apple.com/library/content/documentation/IDEs/Conceptual/iOS_Simulator_Guide/Introduction/Introduction.html) or [Android Studio](https://developer.android.com/studio/run/emulator.html) to run emulator or load APK onto phone. 
+3) Using [XCode](https://developer.apple.com/library/content/documentation/IDEs/Conceptual/iOS_Simulator_Guide/Introduction/Introduction.html) or [Android Studio](https://developer.android.com/studio/run/emulator.html) to run emulator or load APK onto phone. 
 
-## Deployment
+## Building
 
-Deployment is a rather rigorous process due to the nature of producing software that runs on various platforms. However, James Brace
+Building is a rather rigorous process due to the nature of producing software that runs on various platforms. However, James Brace
 has written a simple, yet practical build script that avoids a lot of the headaches in building the app. It is planned to extend the build script
 in order to make deployment automated as well...
 
@@ -135,25 +165,33 @@ Before being able to run build script there are a few steps one has to take that
 Linux or Windows you can only build Android distribution**
 
 1) Follow the the instructions in the Installation section.
-2) Install [Cordova](https://cordova.apache.org/) globally with the following command:
+2) Install [JDK 8](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html) and update your OS's JAVA_HOME variable (you'll need to Google how to do this depending on your OS). **NOTE: Cordova has an issue with JDK 9 so you need to make sure you have JDK 8 installed and referenced as an environment variable or Cordova will not be able to build**
+3) Install [Android Studio](https://developer.android.com/studio/index.html) and [Xcode](https://developer.apple.com/xcode/) (if using macOS)
+4) **(macOS Only)** Install and setup [CocoaPods](https://stackoverflow.com/questions/20755044/how-to-install-cocoa-pods) 
+5) Install [Cordova](https://cordova.apache.org/) globally with the following command:
 
 ```
 sudo npm install -g cordova
 ```
 
-3) Create a Cordova project in any desired directory that's **NOT** the in qplus directory:
+6) Create a Cordova project in any desired directory that's **NOT** the in qplus directory:
 
 ```
 cordova create <NameOfProject>
 ```
 
-4) Navigate to this newly created directory.
+7) Navigate to this newly created directory.
 
-5) Replace the current config.xml with the one in the qplus parent directory
+8) Replace the current config.xml, 'www' directory and 'res' directory with the ones in the qplus directory
 
 **NOTE: Both Prod and PreProd branches have their own config.xml. Carefully make sure you are copying over the correct one!**
 
-6) Add Android and iOS (if on macOS) platforms to cordova project:
+9) Add Android and iOS (if on macOS) platforms to cordova project:
+
+**If using Cordova version >= 7.0.0**
+```
+cordova plugin add cordova-plugin-ios-base64 --nofetch
+```
 
 ```
 cordova platform add ios
@@ -163,21 +201,16 @@ cordova platform add android
 Now you should have a properly configured Cordova project that can be compiled into both Android and iOS native code. However there
 are still some dependencies needed for the build script to run properly...
 
-7) Install [Gulp](https://gulpjs.com/) globally
-
-```
-npm install gulp-cli -g
-```
 
 Gulp is in charge of automating a lot of the build process such as minifying html/css/javascript, compressing images,
 and removing debug statements.
 
-8) (**WINDOWS AND LINUX ONLY**) Change build script to only build Android distribution
+9) (**WINDOWS AND LINUX ONLY**) Change build script to only build Android distribution
 
-9) Change working (qplus project parent) and target (Cordova project parents) directories in build script to match your computer's destinations. The variables you need to change in the build script are titled:
-* WORKING_DIR - this is the complete path from root to your working directory , i.e. the cloned qplus repo. You need to point this to the root of the cloned repo i.e should end in '/qplus'
-* PREPROD_DIR - this is the complete path to your PreProd cordova project. It should point to the root of the project directory.
-* PROD_DIR - this is the complete path to your Prod cordova project. It should point to the root of the project directory.
+10) Change working (qplus project parent) and target (Cordova project parents) directories in build script to match your computer's destinations. The variables you need to change in the build script are titled: 
+    * WORKING_DIR - this is the complete path from root to your working directory , i.e. the cloned qplus repo. You need to point this to the root of the cloned repo i.e should end in '/qplus' 
+    * PREPROD_DIR - this is the complete path to your PreProd cordova project. It should point to the root of the project directory. 
+    * PROD_DIR - this is the complete path to your Prod cordova project. It should point to the root of the project directory. 
 
 Voila! You are now ready to run build script. If you didn't follow any of these properly the build script will catch and report it you.
 
@@ -186,15 +219,40 @@ Voila! You are now ready to run build script. If you didn't follow any of these 
 
 The build script is very simple and detailed instructions can be found by running the script without any arguments.
 
-1) Make sure you are on the correct branch (either PreProd or Prod)
-2) Update the version number in the config.xml file found in your qplus project parent directory (**This will soon be a deprecated step as it will be handled by the script itself**)
-3) Run the script with the target as first argument and version as the second argument
+1) Follow the instructions in the prerequisites if you haven't already
+2) Make sure you are on the correct branch (either PreProd or Prod)
+3) Update the version number in the config.xml file found in your qplus project parent directory (**This will soon be a deprecated step as it will be handled by the script itself**)
+4) Run the script with the target as first argument and version as the second argument
 
 ```
 ./buildOpal.sh prod 1.10.1
 ```
 
-4) The script will catch and display ALL errors and will stop the build process if any occur.
+5) The script will catch and display ALL errors and will stop the build process if any occur.
+
+## Deployment
+
+Just like building, deployment is rather tedious and has a bit of overheard when performing for the first time. Currently there is no deployment script, however James Brace plans on developing one to expedite and automate the process.
+
+### Prerequisites
+1) Follow the Prerequisites for Building
+2) Install [Fabric](https://fabric.io/kits?show_signup=true) and create an account. Here's [how to install the plugin for Android Studio.](https://docs.fabric.io/android/fabric/overview.html)
+3) Have an existing team member add you to the Opal Health Fabric project
+4) Open up Android Studio and/or Xcode (if using macOS) and open the projects that exist underneath the Cordova project platform directories. For example for Android Studio point the existing project to /path/to/cordova/project/platforms/android
+5) (**macOS ONLY**) Create an Apple Developer Account. You will need an existing team member to help you with this. Once you have an Apple Developer Account to use, you will need to configure the Xcode project with that account in order to provision and build.
+6) Make sure the Fabric app for Xcode and Android studio is properly configured.
+7) Follow Crashlytics installation in the Fabric apps (will need to do this for both Android and iOS). You may need an existing team member's help to set this up.
+
+### Deploying
+1) Follow the instructions for Building
+2) Open and login to Fabric
+3) Open Android Studio and/or Xcode
+4) In Fabric application/plugin go to builds section of your desired app
+5) Upload the built application to Fabric
+    * If on Android Studio, simply drag the APK from /build/outputs/apk
+    * If on Xcode, Archive the project and if you are logged into Fabric, the app will automatically detect the Archive and ask you to distribute.
+    * For more information on how to distribute builds via Fabric and Beta [visit their documentation](https://docs.fabric.io/apple/beta/overview.html)
+
 
 ## Best Practices
 
@@ -218,11 +276,12 @@ We use [SemVer](http://semver.org/) for versioning. For the versions available, 
 
 ## Authors
 
-* **David Herrera** - *Initial work*
-* **James Brace** - *Initial work*
-* **Yick Mo** - *Initial work*
+* **David Herrera**
+* **Robert Maglieri**
+* **James Brace**
+* **Yick Mo**
 
-See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
+<!-- See also the list of [contributors](https://github.com/Sable/dh/contributors) who participated in this project. -->
 
 ## License
 

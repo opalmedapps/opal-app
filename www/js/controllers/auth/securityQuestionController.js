@@ -281,8 +281,7 @@
                     parameterObject['Password'] = UserAuthorizationInfo.getPassword();
                 }
 
-                RequestToServer.sendRequestWithResponse('VerifyAnswer',parameterObject, key, firebaseRequestField, firebaseResponseField).then(function(data)
-                {
+                RequestToServer.sendRequestWithResponse('VerifyAnswer',parameterObject, key, firebaseRequestField, firebaseResponseField).then(function(data) {
 	                vm.alertShow = true;
                     vm.submitting = false;
                     if(data.Data.AnswerVerified === "true") {
@@ -294,8 +293,7 @@
                         handleError({Code: ""});
                     }
                 })
-                .catch(function(error)
-                {
+                .catch(function(error) {
 	                vm.alertShow = true;
 	                vm.submitting = false;
 	                removeUserData();

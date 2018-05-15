@@ -149,9 +149,10 @@ myApp.service('Appointments', ['$q', 'RequestToServer','$cordovaCalendar','UserA
         {
             return todayAppointments;
         }else{
-            return null;
+            return [];
         }
     }
+
     function getAppointmentsInPeriod(period)
     {
         //Variables for comparing dates
@@ -439,6 +440,22 @@ myApp.service('Appointments', ['$q', 'RequestToServer','$cordovaCalendar','UserA
         getTodaysAppointments: function () {
             return getAppointmentsInPeriod('Today');
         },
+
+        updateCheckedInAppointments: function(appts){
+            appts = appts.map(function(apt){
+                return apt.AppointmentSerNum
+            });
+
+            userAppointmentsArray = userAppointmentsArray.map(function(apt) {
+                if(appts.includes(apt.AppointmentSerNum)) {
+
+                    console.log("updating appointment", apt);
+
+                    apt.Checkin = 1;
+                }
+                return apt
+            })
+        },
         /**
          *@ngdoc method
          *@name getFutureAppointments
@@ -519,6 +536,10 @@ myApp.service('Appointments', ['$q', 'RequestToServer','$cordovaCalendar','UserA
         getCheckinAppointment:function()
         {
             return getCheckinAppointment();
+        },
+
+        getCheckinAppointments:function(){
+
         },
         /**
          *@ngdoc method

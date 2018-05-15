@@ -28,30 +28,37 @@
         function activate(){
             vm.isLoading = true;
             // TODO: OPTIMIZE THIS... THIS SHOULD BE A BACKGROUND UPDATE THAT SILENTLY UPDATES THE LIST INSTEAD OF DOING A COMPLETE REFRESH
-            Notifications.requestAllNotifications()
+            Notifications.requestNewNotifications()
                 .then(function () {
-                    vm.noNotifications = true;
-                    var notifications = Notifications.getUserNotifications();
-                    if (notifications.length === 0)  {
-                        $timeout(function() {
-                            vm.isLoading = false;
-                        });
-                        return
+                   displayNotifications();
+                })
+                .catch(function (error) {
+                    console.log(error);
+                    if(Notifications.getUserNotifications().length === 0){
+                        // Display error message
+                    } else {
+                        displayNotifications()
                     }
-                    notifications = Notifications.setNotificationsLanguage(notifications);
-                    $timeout(function() {
-                        vm.noNotifications = false;
-                        vm.isLoading = false;
-                        vm.notifications = $filter('orderBy')(notifications,'notifications.DateAdded', true);
-                    });
-                    Permissions.enablePermission('WRITE_EXTERNAL_STORAGE', 'Storage access disabled. Unable to write documents.');
                 })
-                .catch(function () {
-                    $timeout(function() {
-                        vm.isLoading = false;
-                        vm.noNotifications = true;
-                    });
-                })
+        }
+
+        function displayNotifications(){
+            var notifications = Notifications.getUserNotifications();
+
+            if (notifications.length === 0)  {
+                $timeout(function() {
+                    vm.noNotifications = true;
+                    vm.isLoading = false;
+                });
+                return
+            }
+            notifications = Notifications.setNotificationsLanguage(notifications);
+
+            $timeout(function() {
+                vm.noNotifications = false;
+                vm.isLoading = false;
+                vm.notifications = $filter('orderBy')(notifications,'notifications.DateAdded', true);
+            });
         }
 
         function showHeader(index){

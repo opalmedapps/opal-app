@@ -108,6 +108,26 @@
                     </ons-col>
                 </ons-row>
             </ons-list-item>
+            <ons-list-item class="item" ng-click="tab.goToCarnetSante()">
+                <ons-row align="center">
+                    <ons-col width="60px" style="text-align: center">
+                        <div>
+                            <img style="width: 35px;" src="./img/quebec.png">
+                        </div>
+                    </ons-col>
+                    <ons-col>
+                        <header>
+                            <span class="item-title"
+                                  ng-class="fontSizeTitle">{{"CARNETSANTE"|translate}}</span>
+                            <ons-icon icon="ion-android-open" style="color:#ddd; margin-top: 1%; margin-right: -10px" class="pull-right"
+                                      size="1.2em"
+                            </ons-icon>
+                        </header>
+                        <p class="item-desc"></p>
+                    </ons-col>
+                </ons-row>
+            </ons-list-item>
+
             <ons-list-item modifier="chevron" class="item" ng-click="personalNavigator.pushPage('views/personal/questionnaires/questionnairesList.html')">
                 <ons-row align="center">
                     <ons-col width="60px" style="text-align: center">

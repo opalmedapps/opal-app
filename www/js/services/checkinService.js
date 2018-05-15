@@ -24,17 +24,17 @@
         .module('MUHCApp')
         .factory('CheckInService', CheckInService);
 
-    CheckInService.$inject = ['$q', 'RequestToServer', 'Appointments'];
+    CheckInService.$inject = ['$q', 'RequestToServer', 'Appointments', 'Patient'];
 
     /* @ngInject */
-    function CheckInService($q, RequestToServer, Appointments) {
+    function CheckInService($q, RequestToServer, Appointments, Patient) {
 
         /**
          *@ngdoc property
          *@name  MUHCApp.service.#positionCheckinAppointment
          *@propertyOf MUHCApp.service:CheckinService
          *@description Object contains the last GPS position used when the patient tried to checkin to an appointment
-         **/
+         */
         var positionCheckinAppointment = {};
 
         /**
@@ -42,81 +42,327 @@
          *@name  MUHCApp.service.#checkinApps
          *@propertyOf MUHCApp.service:CheckinService
          *@description Array contains the appointments to check in to.
-         **/
+         */
         var checkinApps = [];
 
+        /**
+         *@ngdoc property
+         *@name  MUHCApp.service.#allCheckedIn
+         *@propertyOf MUHCApp.service:CheckinService
+         *@description Determines whether all of appointments are checked in or not
+         */
         var allCheckedIn = false;
 
-        var service = {
-            getCheckInApps: getCheckInApps,
-            setCheckInApps: setCheckInApps,
-            isAllowedToCheckIn: isAllowedToCheckIn,
-            checkCheckinServer: checkCheckinServer,
-            checkinToAllAppointments: checkinToAllAppointments,
-            verifyAllCheckIn: verifyAllCheckIn,
-            areAllCheckedIn: areAllCheckedIn,
-            setAllCheckedIn: setAllCheckedIn,
-            clear: clear
+        /**
+         *@ngdoc property
+         *@name  MUHCApp.service.#attemptedCheckin
+         *@propertyOf MUHCApp.service:CheckinService
+         *@description Determines whether the patient has attempted checking in or not
+         */
+        var attemptedCheckin = false;
+
+        /**
+         *@ngdoc property
+         *@name  MUHCApp.service.#state
+         *@propertyOf MUHCApp.service:CheckinService
+         *@description Determines the current state of checkin for a given patient
+         */
+        var state = {
+            message: '',
+            canNavigate: false,
+            numberOfAppts: 0,
+            checkinError: false,
+            noAppointments: false,
+            allCheckedIn: false,
+            inRange: true
         };
 
-        return service;
+        /**
+         *@ngdoc property
+         *@name  MUHCApp.service.#checkinStateSet
+         *@propertyOf MUHCApp.service:CheckinService
+         *@description Determines whether the checkin state has been set, used for future reference
+         */
+        var checkinStateSet = false;
 
-        ////////////////
+        /**
+         *@ngdoc property
+         *@name  MUHCApp.service.#stateUpdated
+         *@propertyOf MUHCApp.service:CheckinService
+         *@description Determines whether or not the checkin state has been updated since initial setting
+         */
+        var stateUpdated = false;
+
+        /**
+         *@ngdoc property
+         *@name  MUHCApp.service.#errorsExist
+         *@propertyOf MUHCApp.service:CheckinService
+         *@description Determines whether checkin errors currently exist
+         */
+        var errorsExist = false;
+
+        /**
+         *
+         */
+        var notificationsExist = false;
+
+
+        ///////////////////////////////////////////
+
+        return {
+            attemptCheckin: attemptCheckin,
+            evaluateCheckinState: evaluateCheckinState,
+            getCheckInApps: getCheckInApps,
+            clear: clear,
+            checkinNotificationsExist: checkinNotificationsExist,
+            retrievedCheckinNotifications: retrievedCheckinNotifications
+        };
+
+        ////////////////////////////////////////////
+
+        function attemptCheckin(){
+            var r = $q.defer();
+            if(attemptedCheckin && allCheckedIn){
+                r.resolve('SUCCESS');
+            } else if (attemptedCheckin && errorsExist){
+                r.resolve('ERROR');
+            } else {
+                //This should only return true if all current appointments.checkin === 0 and there has been an attempted checkin. this implies an error has occurred
+                isAllowedToCheckin()
+                    .then(function (isAllowed) {
+                        if (isAllowed) {
+                            checkinToAllAppointments()
+                                .then(function (res) {
+                                    attemptedCheckin = true;
+                                    notificationsExist = true;
+                                    updateCheckinState(res.appts);
+                                    r.resolve(res.status);
+                                })
+                        } else r.resolve('NOT_ALLOWED');
+                    });
+            }
+            return r.promise;
+        }
+
+        function isAllowedToCheckin(){
+            var r = $q.defer();
+
+            // hasAttemptedCheckin()
+            //     .then(function(attempted) {
+            //         if (attempted === 'false') {
+
+                        isWithinCheckinRange()
+                            .then(function (isInRange) {
+
+                                console.log('is allowed to checkin ... is in range: ' + isInRange);
+
+                                r.resolve(isInRange)
+                            });
+
+                //     } else r.resolve(false);
+                // });
+
+
+            // hasAttemptedCheckin()
+            //     .then(function(attempted) {
+            //         if (attempted === 'false') {
+            //             isWithinCheckinRange()
+            //                 .then(function (isInRange) {
+            //
+            //                     console.log('is allowed to checkin ... is in range: ' + isInRange);
+            //
+            //                     r.resolve(isInRange)
+            //                 })
+            //         } else r.resolve(false);
+            //     });
+
+            return r.promise
+        }
+
+        function evaluateCheckinState(){
+            var r = $q.defer();
+
+            if(attemptedCheckin || checkinStateSet && !stateUpdated){
+                r.resolve(state);
+            } else {
+                initCheckinState()
+                    .then(function(){
+                        checkinStateSet = true;
+                        r.resolve(state);
+                    })
+                    .catch(function(err){
+                        r.resolve(err);
+                    })
+            }
+            return r.promise;
+        }
+
+        function initCheckinState(){
+            var r = $q.defer();
+
+            var appts = Appointments.getTodaysAppointments();
+
+            //First evaluate the current state of existing appointments, see if they were already checked in and if so what the state is (all success or some errors)
+            if(appts.length === 0){
+                setCheckinState('CHECKIN_NONE');
+                r.resolve()
+            } else if(alreadyCheckedIn(appts)){
+                setCheckinState("CHECKIN_MESSAGE_AFTER" + setPlural(appts));
+                r.resolve()
+            } else if (checkinErrorsExist(appts)) {
+                setCheckinState("CHECKIN_ERROR");
+                r.resolve()
+            } else {
+                //This means at this point there exists appointments today and none of them have been checked in
+                isWithinCheckinRange()
+                    .then(function(canCheckin){
+
+                        console.log("can checkin : " + canCheckin);
+
+                        if(!canCheckin) {
+                            setCheckinState("NOT_ALLOWED", appts.length);
+                        }
+                        else {
+                            setCheckinState("CHECKIN_MESSAGE_BEFORE" + setPlural(appts), appts.length);
+                        }
+                        r.resolve()
+                    })
+                    .catch(function() {
+                        setCheckinState("NOT_ALLOWED", appts.length);
+                        r.reject()
+                    })
+            }
+            return r.promise
+        }
+
+        function updateCheckinState(checkedInAppts){
+
+            if(checkedInAppts && checkedInAppts.length > 0) Appointments.updateCheckedInAppointments(checkedInAppts);
+            var appts = Appointments.getTodaysAppointments();
+
+            //First evaluate the current state of existing appointments, see if they were already checked in and if so what the state is (all success or some errors)
+            if(alreadyCheckedIn(appts)){
+                setCheckinState("CHECKIN_MESSAGE_AFTER" + setPlural(appts));
+            } else if (checkinErrorsExist(appts)) {
+                setCheckinState("CHECKIN_ERROR");
+            } else {
+                setCheckinState("NOT_ALLOWED", appts.length);
+            }
+        }
+
+        function alreadyCheckedIn(appts){
+
+            allCheckedIn = true;
+
+            appts.map(function(app){
+                if(app.Checkin === '0') allCheckedIn = false;
+            });
+
+            return allCheckedIn;
+        }
+
+        function checkinErrorsExist(appts){
+            var checkinExists = false;
+
+            appts.map(function(app){
+                if(app.Checkin === '1') checkinExists = true;
+            });
+
+            if(!checkinExists) return false;
+
+            var errors = false;
+
+            appts.map(function(app){
+                if(app.Checkin === '0') errors = true;
+            });
+
+            return errors;
+        }
+
+        function setPlural(apps) {
+            if (apps.length > 1) {
+                return "_PLURAL";
+            }
+            return "";
+        }
+
+        function setCheckinState(status, numAppts){
+
+            state.message = status;
+
+            switch(status){
+                case 'CHECKIN_ERROR':
+                    attemptedCheckin = true;
+                    errorsExist = true;
+                    state.canNavigate = true;
+                    state.numberOfAppts = 0;
+                    state.checkinError = true;
+                    state.noAppointments = false;
+                    state.allCheckedIn = false;
+                    break;
+                case 'CHECKIN_MESSAGE_AFTER':
+                case 'CHECKIN_MESSAGE_AFTER_PLURAL':
+                    attemptedCheckin = true;
+                    allCheckedIn = true;
+                    state.canNavigate = true;
+                    state.numberOfAppts = 0;
+                    state.checkinError = false;
+                    state.noAppointments = false;
+                    state.allCheckedIn = true;
+                    break;
+                case 'CHECKIN_NONE':
+                    state.canNavigate = false;
+                    state.numberOfAppts = 0;
+                    state.checkinError = false;
+                    state.noAppointments = true;
+                    state.allCheckedIn = false;
+                    break;
+                case 'CHECKIN_MESSAGE_BEFORE':
+                case 'CHECKIN_MESSAGE_BEFORE_PLURAL':
+                    state.canNavigate = true;
+                    state.numberOfAppts = numAppts;
+                    state.checkinError = false;
+                    state.noAppointments = false;
+                    state.allCheckedIn = false;
+                    break;
+                case 'NOT_ALLOWED':
+                    state.canNavigate = false;
+                    state.numberOfAppts = numAppts;
+                    state.checkinError = false;
+                    state.noAppointments = false;
+                    state.allCheckedIn = false;
+                    state.inRange = false;
+                    break;
+            }
+        }
 
         /**
          *@ngdoc method
          *@name getCheckInApps
          *@methodOf MUHCApp.service:CheckinService
-         *@description Function that gets the appointments
-         *@returns {Array}  Todays checkinable appointments
-         **/
+         *@description Gets today's appointments that are able to be checked into
+         *@returns {Array} Todays checkinable appointments
+         */
         function getCheckInApps() {
-            return checkinApps;
-        }
-
-        /**
-         *@ngdoc method
-         *@name setCheckInApps
-         *@methodOf MUHCApp.service:CheckinService
-         *@description Function that sets todays appointments
-         **/
-        function setCheckInApps(apps){
-            checkinApps = apps;
-        }
-
-        /**
-         *@ngdoc method
-         *@name areAllCheckedIn
-         *@methodOf MUHCApp.service:CheckinService
-         *@description Function that returns whether or not todays appointments are all checked in
-         **/
-        function areAllCheckedIn(){
-            return allCheckedIn;
-        }
-
-        /**
-         *@ngdoc method
-         *@name areAllCheckedIn
-         *@methodOf MUHCApp.service:CheckinService
-         *@description Function that returns whether or not todays appointments are all checked in
-         **/
-        function setAllCheckedIn(bool){
-            allCheckedIn = bool;
+            return Appointments.getTodaysAppointments();
         }
 
         /**
          *@ngdoc method
          *@name isAllowedToCheckin
          *@methodOf MUHCApp.service:CheckinService
-         *@description Function determines geographically whether user is allow to check-in. Works under the
-         * assumption that all the checks to see if an appointment is today and open have already been done! It also updates the positionCheckinAppointment property of the CheckinService.
-         *@returns {Promise} Returns a promise that resolves to success if the user is allowed to checkin based on whether the user is within a 300m radius of the hospital, or rejects the promise if the patient is not in the vecinity of the hospital or if there is an error while checkin location
-         **/
-        function isAllowedToCheckIn()
-        {
+         *@description Function determines geographically whether user is allow to check-in. Works under the assumption
+         * that all the checks to see if an appointment is today and open have already been done! It also updates
+         * the positionCheckinAppointment property of the CheckinService. Note: The patient must be within 500m of
+         * hospital to be able to checkin.
+         *@returns {Promise} Returns a promise that resolves to success if the user is allowed to checkin
+         */
+        function isWithinCheckinRange() {
             var r=$q.defer();
             navigator.geolocation.getCurrentPosition(function(position){
                 var distanceMeters = 1000 * getDistanceFromLatLonInKm(position.coords.latitude, position.coords.longitude, 45.474127399999996, -73.6011402);
+
+                console.log(distanceMeters);
 
                 if (distanceMeters <= 500) {
                     positionCheckinAppointment = {
@@ -124,57 +370,42 @@
                         'Longitude':position.coords.longitude,
                         'Accuracy':position.coords.accuracy
                     };
-                    r.resolve('CHECK_IN_PERMITTED');
+                    r.resolve(true);
                 } else {
-                    r.reject('NOT_ALLOWED');
+
+                    console.log('not within range!');
+
+                    r.resolve(false);
                 }
-
-            }, function(error){
-
-                r.reject('LOCATION_ERROR');
+            }, function(){
+                r.reject(false);
             }, {
                 maximumAge: 10000,
                 timeout: 15000,
                 enableHighAccuracy: true
             });
+
             return r.promise;
         }
 
         /**
          *@ngdoc method
-         *@name checkCheckinServer
+         *@name hasAttemptedCheckin
          *@methodOf MUHCApp.service:CheckinService
-         *@description Verifies if the user is already checked in for their appointment in the waiting room
+         *@description Verifies if the user is already checked in for their appointment in the waiting room. Note: This
+         * should only be called if none of today's appointment have their checkin flag set to 1.. because then
+         * intuitively they have attempted checking in.
          *@returns {Promise} Returns a promise containing the CheckedIn boolean and the AppointmentSerNum.
          **/
-        function checkCheckinServer(appoint) {
+        function hasAttemptedCheckin() {
             var r = $q.defer();
+
             //Request is sent with the AppointmentSerNum
-            RequestToServer.sendRequestWithResponse('CheckCheckin', {
-                AppointmentSerNum: appoint.AppointmentSerNum
-            })
+            RequestToServer.sendRequestWithResponse('CheckCheckin', {PatientSerNum: Patient.getUserSerNum()})
                 .then(function(response) {
-
-                    //Response is either success or failure with the appointmentSerNum again in the data object
-
-                    if (response.hasOwnProperty('Data') && response.Data.hasOwnProperty('CheckedIn')) {
-
-
-                        if (response.Data.CheckedIn == 'true') {
-                            //If success, then set checkin for services, i.e. synchronize app
-                            Appointments.setAppointmentCheckin(appoint.AppointmentSerNum);
-                            setCheckIn(appoint.AppointmentSerNum);
-                            //resolve with response
-                            r.resolve(true);
-                        } else {
-                            r.resolve(false);
-                        }
-                    } else {
-                        r.resolve(false);
-                    }
+                    r.resolve(response.Data.AttemptedCheckin);
                 })
-                .catch(function(error) {
-
+                .catch(function() {
                     r.reject(false);
                 });
             return r.promise;
@@ -190,83 +421,39 @@
         function checkinToAllAppointments(){
 
             //Create a promise so this can be run asynchronously
-            var defer = $q.defer();
+            var r = $q.defer();
 
-            var objectToSend = positionCheckinAppointment;
-            objectToSend.AppointmentSerNum = [];
-
-            for (var appointment in checkinApps){
-                objectToSend.AppointmentSerNum.push(checkinApps[appointment].AppointmentSerNum);
-            }
+            var objectToSend = {};
+            objectToSend.PatientId = Patient.getPatientId();
+            objectToSend.PatientSerNum = Patient.getUserSerNum();
 
             RequestToServer.sendRequestWithResponse('Checkin', objectToSend)
-                .then( function (response) {
+                .then(function (response) { r.resolve({status: 'SUCCESS', appts: response.Data});})
+                .catch(function () { r.reject({status: 'ERROR', appts: null}); });
 
-                    setCheckIn();
-                    defer.resolve(response);
-                })
-                .catch(function (error) {
-
-                    defer.reject(error);
-                });
-
-            return defer.promise;
+            return r.promise;
         }
 
-        /**
-         *@ngdoc method
-         *@name verifyAllCheckIn
-         *@methodOf MUHCApp.service:CheckinService
-         *@description verifies that the user is checked in to all his appintments today
-         *@returns {Promise} Returns a promise containing true or an error code.
-         **/
-        function verifyAllCheckIn() {
-            var defer = $q.defer();
-            var promises = [];
-            var allCheckedIn;
-
-            if (!checkinApps){
-                allCheckedIn = null;
-                defer.resolve(allCheckedIn);
-            } else if (allCheckedInOnApp()) {
-                allCheckedIn = true;
-                defer.resolve(allCheckedIn);
-            }
-            else{
-                for (var i = 0; i != checkinApps.length; i++) {
-                    promises.push(this.checkCheckinServer(checkinApps[i]));
-                }
-
-                $q.all(promises).then(function (dataArray) {
-
-                    allCheckedIn = true;
-                    for (var checkedIn in dataArray) {
-                        if (dataArray[checkedIn] === false) {
-                            allCheckedIn = false;
-                            break;
-                        }
-                    }
-
-                    defer.resolve(allCheckedIn);
-
-                }).catch(function (error) {
-
-                    defer.reject("Cannot verify checkin")
-                });
-            }
-
-            return defer.promise;
+        function checkinNotificationsExist(){
+            return notificationsExist;
         }
 
-        function setCheckIn() {
-            for (var appointment in checkinApps){
-                checkinApps[appointment].Checkin='1';
-            }
+        function retrievedCheckinNotifications(){
+            notificationsExist = false;
+        }
+
+        function updateCheckedInAppointments(checkedinApps) {
+            checkinApps = checkinApps.map(function(app){
+                if(checkedinApps.includes(app.AppointmentSerNum)) app.Checkin = '1';
+                return app;
+            });
         }
 
         function clear() {
             checkinApps = [];
             allCheckedIn= false;
+            attemptedCheckin = false;
+            checkinStateSet = false;
         }
 
         function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
@@ -282,339 +469,6 @@
         function deg2rad(deg) {
             return deg * (Math.PI / 180);
         }
-
-        function allCheckedInOnApp() {
-            for (var appointment in checkinApps){
-                if (checkinApps[appointment].Checkin !='1'){
-                    return false;
-                }
-            }
-            return true;
-        }
-
     }
-
 })();
 
-
-
-
-
-// var myApp=angular.module('MUHCApp');
-// /**
-//  *@ngdoc service
-//  *@name MUHCApp.service:CheckinService
-//  *@requires MUHCApp.service:RequestToServer
-//  *@requires MUHCApp.service:Appointments
-//  *@requires MUHCApp.service:FirebaseService
-//  *@requires MUHCApp.service:EncryptionService
-//  *@requires MUHCApp.service:UserPreferences
-//  *@requires $filter
-//  *@requires $q
-//  *@requires $rootScope
-//  *@requires $timeout
-//  *@description Service that deals with the checkin functionality for the app
-//  **/
-// myApp.factory('CheckinService',
-//     ['$q', 'RequestToServer', 'Appointments', '$timeout',
-//         'FirebaseService','EncryptionService', '$rootScope','UserPreferences', 'Permissions',
-//         function ($q, RequestToServer, Appointments,$timeout,
-//                   FirebaseService,EncryptionService,$rootScope,UserPreferences,Permissions) {
-//
-//             /**
-//              *@ngdoc property
-//              *@name  MUHCApp.service.#positionCheckinAppointment
-//              *@propertyOf MUHCApp.service:CheckinService
-//              *@description Object contains the last GPS position used when the patient tried to checkin to an appointment
-//              **/
-//                 //The last updated GPS coordinates are stored
-//             var positionCheckinAppointment = {};
-//
-//             var checkinUpdatesInterval = null;
-//
-//             var checkinApps = [];
-//
-//
-//             //Set up the language for this life updates!
-//             function setLanguageCheckin(value)
-//             {
-//
-//                 var language = UserPreferences.getLanguage();
-//                 $timeout(function(){
-//                     if(language =='EN')
-//                     {
-//                         $rootScope.precedingPatientsLabel =value.preceding.actual.text.EN +'. '+value.preceding.scheduled.text.EN;
-//                         $rootScope.checkinEstimate = value.estimate_display.range;
-//                         $rootScope.scheduleAhead = value.schedule_detail.text.EN;
-//                     }else{
-//                         $rootScope.precedingPatientsLabel = value.actual.text.EN +','+ value.preceding.text.EN;
-//                         $rootScope.checkinEstimate = value.estimate_display.range;
-//                         $rootScope.scheduleAhead = value.schedule_detail.text.FR;
-//                     }
-//
-//
-//                 });
-//             }
-//             //To get the live estimates, send a CheckinUpdate request and listen to its response, send request every two minutes.
-//             function liveCheckinUpdates(nextAppointment)
-//             {
-//                 if(checkinUpdatesInterval)
-//                 {
-//                     clearTimeout(checkinUpdatesInterval);
-//                 }
-//
-//                 RequestToServer.sendRequestWithResponse('CheckinUpdate', {AppointmentSerNum:nextAppointment.AppointmentSerNum}).then(
-//                     function(response)
-//                     {
-//                         var data = response.Data;
-//                         if(data.details.status == 'Close')
-//                         {
-//                             //Close request and do not send messages anymore.
-//                             Appointments.setCheckinAppointmentAsClosed(nextAppointment.AppointmentSerNum);
-//                             clearTimeout(checkinUpdatesInterval);
-//                         }else if(data.details.status == 'Open'){
-//                             setLanguageCheckin(data);
-//                         }
-//                     });
-//                 checkinUpdatesInterval = setTimeout(function(){
-//                     liveCheckinUpdates(nextAppointment);
-//                 },120000);
-//             }
-//
-//             //Helper methods
-//             //Obtaining the position from the GPS
-//             function isWithinAllowedRange()
-//             {
-//                 var r=$q.defer();
-//                 navigator.geolocation.getCurrentPosition(function(position){
-//                     var distanceMeters = 1000 * getDistanceFromLatLonInKm(position.coords.latitude, position.coords.longitude, 45.474127399999996, -73.6011402);
-//                     //var distanceMeters=1000*getDistanceFromLatLonInKm(position.coords.latitude, position.coords.longitude,45.5072138,-73.5784825);
-//                     //var distanceMeters = 100;
-//                     /*alert('Distance: '+ distanceMeters+
-//                      'Latitude: '          + position.coords.latitude          + '\n' +
-//                      'Longitude: '         + position.coords.longitude         + '\n' +
-//                      'Altitude: '          + position.coords.altitude          + '\n' +
-//                      'Accuracy: '          + position.coords.accuracy          + '\n' +
-//                      'Altitude Accuracy: ' + position.coords.altitudeAccuracy  + '\n' +
-//                      'Heading: '           + position.coords.heading           + '\n' +
-//                      'Speed: '             + position.coords.speed             + '\n' +
-//                      'Timestamp: '         + position.timestamp                + '\n');*/
-//
-//                     if (distanceMeters <= 500) {
-//                         positionCheckinAppointment = {
-//                             'Latitude':position.coords.latitude,
-//                             'Longitude':position.coords.longitude,
-//                             'Accuracy':position.coords.accuracy
-//                         };
-//                         r.resolve('CHECK_IN_PERMITTED');
-//                     } else {
-//                         r.reject('NOT_ALLOWED');
-//                     }
-//
-//                 }, function(error){
-//
-//                     r.reject('LOCATION_ERROR');
-//                 }, {
-//                     maximumAge: 10000,
-//                     timeout: 15000,
-//                     enableHighAccuracy: true
-//                 });
-//                 return r.promise;
-//             }
-//             //Helper functions for finding patient location
-//             function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
-//                 var R = 6371; // Radius of the earth in km
-//                 var dLat = deg2rad(lat2 - lat1); // deg2rad below
-//                 var dLon = deg2rad(lon2 - lon1);
-//                 var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
-//                 var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-//                 var d = R * c; // Distance in km
-//                 return d;
-//             }
-//             function deg2rad(deg) {
-//                 return deg * (Math.PI / 180);
-//             }
-//             return {
-//                 /**
-//                  *@ngdoc method
-//                  *@name isAllowedToCheckin
-//                  *@methodOf MUHCApp.service:CheckinService
-//                  *@description Function determines geographically whether user is allow to check-in. Works under the
-//                  * assumption that all the checks to see if an appointment is today and open have already been done! It also updates the positionCheckinAppointment property of the CheckinService.
-//                  *@returns {Promise} Returns a promise that resolves to success if the user is allowed to checkin based on whether the user is within a 300m radius of the hospital, or rejects the promise if the patient is not in the vecinity of the hospital or if there is an error while checkin location
-//                  **/
-//                 isAllowedToCheckin:function()
-//                 {
-//                     /* var r =$q.defer();
-//
-//                      isWithinAllowedRange().then(function(response)
-//                      {
-//                      r.resolve(response);
-//                      },function(response){
-//                      r.reject(response);
-//                      });*/
-//                     return isWithinAllowedRange();
-//                 },
-//                 /**
-//                  *@ngdoc method
-//                  *@name checkCheckinServer
-//                  *@methodOf MUHCApp.service:CheckinService
-//                  *@param {Object} appointment Appointment object
-//                  *@description Checks by querying the server if user has already checked in, perhaps from another device or simply the kiosk, or desk.
-//                  *@returns {Promise} Returns a promise that resolves to success if the user has indeed already checked in, or resolves to failure if the patient is not in the vecinity of the hospital
-//                  **/
-//                 checkCheckinServer:function(appointment)
-//                 {
-//                     var r = $q.defer();
-//                     //Request is sent with the AppointmentSerNum
-//                     RequestToServer.sendRequestWithResponse('CheckCheckin', {AppointmentSerNum:appointment.AppointmentSerNum}).then(
-//                         function(response)
-//                         {
-//
-//                             //Response is either success or failure with the appointmentSerNum again in the data object
-//
-//                             if(response.hasOwnProperty('Data')&&response.Data.hasOwnProperty('CheckedIn')){
-//
-//
-//                                 if(response.Data.CheckedIn =='true')
-//                                 {
-//                                     //If success, then set checkin for services, i.e. synchronize app
-//                                     Appointments.setAppointmentCheckin(appointment.AppointmentSerNum);
-//                                     //resolve with response
-//                                     r.resolve(true);
-//                                 }else{
-//                                     r.resolve(false);
-//                                 }
-//                             }else{
-//                                 r.resolve(false);
-//                             }
-//                         }).catch(function(error)
-//                     {
-//
-//                         r.reject(false);
-//                     });
-//                     return r.promise;
-//                 },
-//                 /**
-//                  *@ngdoc method
-//                  *@name checkinToAppointment
-//                  *@methodOf MUHCApp.service:CheckinService
-//                  *@description Function to check a user into an appointment.
-//                  *@returns {Promise} Returns a promise that resolves to success if the user has indeed checked in, and resolves to failure if the patient is not been able to checkin. It also opens the connection to get time estimates from the backend
-//                  **/
-//                 checkinToAppointment:function(nextAppointment)
-//                 {
-//
-//                     var r = $q.defer();
-//                     //Gets the position from GPS for logging in the backend.
-//                     var objectToSend = positionCheckinAppointment;
-//                     //Adds the appointment ser num for the request
-//                     objectToSend.AppointmentSerNum = nextAppointment.AppointmentSerNum;
-//
-//                     //Request to Checkin sent
-//
-//                     RequestToServer.sendRequestWithResponse('Checkin', objectToSend).then(
-//                         function(data)
-//                         {
-//                             //Listen for callback of this request, if success, successfuly checked in
-//                             //and ask for live update of time estimates, if not the simply tell patient to
-//                             //Checkin at the cancer center.
-//
-//                             data = data.Response;
-//                             if(data == 'success')
-//                             {
-//                                 var nextAppointment=Appointments.getCheckinAppointment();
-//                                 Appointments.setAppointmentCheckin(nextAppointment.AppointmentSerNum);
-//                                 var objectToSend = angular.copy(positionCheckinAppointment);
-//                                 objectToSend.AppointmentSerNum = nextAppointment.AppointmentSerNum;
-//                                 //liveCheckinUpdates(nextAppointment);
-//                                 r.resolve(data);
-//                             }else{
-//                                 r.reject(data);
-//                             }
-//                         }).catch(function(error)
-//                     {
-//                         r.reject(error);
-//                     });
-//                     return r.promise;
-//                 },
-//                 /**
-//                  *@ngdoc method
-//                  *@name getCheckinUpdates
-//                  *@methodOf MUHCApp.service:CheckinService
-//                  *@description Gets live waiting estimate from the backend, sends a request every two seconds and updates variables attached to rootScope to propagate this result.
-//                  **/
-//                 //
-//                 getCheckinUpdates:function(nextappointment)
-//                 {
-//                     liveCheckinUpdates(nextappointment);
-//                 },
-//
-//                 checkinToAllAppointments: function (appointments){
-//
-//                     //Create a promise so this can be run asynchronously
-//                     var defer = $q.defer();
-//
-//                     var objectToSend = positionCheckinAppointment;
-//                     objectToSend.AppointmentSerNum = [];
-//
-//                     for (appointment in appointments){
-//                         objectToSend.AppointmentSerNum.push(appointments[appointment].AppointmentSerNum);
-//                     }
-//
-//                     RequestToServer.sendRequestWithResponse('Checkin', objectToSend)
-//                         .then( function (response) {
-//
-//                             defer.resolve(response);
-//                         })
-//                         .catch(function (error) {
-//
-//                             defer.reject(error);
-//                         });
-//
-//                     return defer.promise;
-//                 },
-//
-//                 // Will return true if all appointments are checked in, false if one is not checked in or null if there are no appointments
-//                 verifyAllCheckIn:function (appointments) {
-//                     var defer = $q.defer();
-//                     var promises = [];
-//                     var allCheckedIn;
-//
-//
-//
-//                     if (!appointments){
-//                         allCheckedIn = null;
-//
-//                         defer.resolve(allCheckedIn);
-//                     } else {
-//
-//                         for (var i = 0; i != appointments.length; i++) {
-//                             promises.push(this.checkCheckinServer(appointments[i]));
-//                         }
-//
-//                         $q.all(promises).then(function (dataArray) {
-//
-//                             allCheckedIn = true;
-//                             for (var checkedIn in dataArray) {
-//                                 if (dataArray[checkedIn] === false) {
-//                                     allCheckedIn = false;
-//                                     break;
-//                                 }
-//                             }
-//
-//                             defer.resolve(allCheckedIn);
-//
-//                         }).catch(function (error) {
-//
-//                             defer.reject("Cannot verify checkin")
-//                         });
-//                     }
-//
-//                     return defer.promise;
-//                 }
-//
-//             };
-//
-//
-//         }]);

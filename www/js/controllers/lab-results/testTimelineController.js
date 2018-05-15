@@ -12,10 +12,10 @@
         .module('MUHCApp')
         .controller('TestTimelineController', TestTimelineController);
 
-    TestTimelineController.$inject = ['$scope','$timeout','LabResults','$filter','UserPreferences', 'Logger', 'Constants'];
+    TestTimelineController.$inject = ['$rootScope','$scope','$timeout','LabResults','$filter','UserPreferences', 'Logger', 'Constants'];
 
     /* @ngInject */
-    function TestTimelineController($scope, $timeout, LabResults, $filter, UserPreferences, Logger, Constants) {
+    function TestTimelineController($rootScope, $scope, $timeout, LabResults, $filter, UserPreferences, Logger, Constants) {
 
         var vm = this;
         var page;
@@ -26,8 +26,13 @@
         var testResults;
         var max;
         var min;
+        var language;
+        var chartSelectedDateRange = 4;
+
 
         vm.about = about;
+        vm.gotoUrl = gotoUrl;
+        vm.noUrl = false;
 
         activate();
 
@@ -36,16 +41,22 @@
         function activate(){
             configureViewModel();
             bindEvents();
-            configureURL();
-            configureChart(testResults);
+            configureChart();
         }
 
         function about(){
-            if (Constants.app) {
-                cordova.InAppBrowser.open(url, '_blank', 'location=yes');
-            } else {
-                window.open(url);
+            if (vm.url.length > 0) {
+                disclaimerModal.show();
             }
+        }
+
+        function gotoUrl() {
+            if (Constants.app) {
+                cordova.InAppBrowser.open(vm.url, '_blank', 'location=yes');
+            } else {
+                window.open(vm.url);
+            }
+
         }
 
         function bindEvents(){
@@ -70,13 +81,22 @@
         }
 
         function configureViewModel(){
-
             page = personalNavigator.getCurrentPage();
             test = page.options.param;
 
             vm.selectedTest = test;
-            vm.testName = test.ComponentName || test.testResults[0].ComponentName;
+            //vm.testName = test.ComponentName || test.testResults[0].ComponentName;
             vm.title = vm.selectedTest.FacComponentName || vm.selectedTest.testName;
+
+            language = UserPreferences.getLanguage().toUpperCase();
+
+            // if Sorted by Date, use vm.selectedTest.URL_EN to access URL_EN. If sorted by Type, use test.testResults[0].URL_EN
+            if (language === 'EN')
+                vm.url = vm.selectedTest.URL_EN || ((test.testResults === undefined) ? "" : test.testResults[0].URL_EN);
+            else
+                vm.url = vm.selectedTest.URL_FR || ((test.testResults === undefined) ? "" : test.testResults[0].URL_FR);
+            
+            if (vm.url.length <= 0) vm.noUrl = true;
 
             max = vm.selectedTest.MaxNorm || test.testResults[0].MaxNorm;
             min = vm.selectedTest.MinNorm || test.testResults[0].MinNorm;
@@ -84,7 +104,7 @@
             vm.minNorm = min;
 
             vm.unit = vm.selectedTest.UnitDescription || test.testResults[0].UnitDescription;
-            unit = $filter('translate')('RESULTS') + ' (' + vm.unit + ')';
+            unit = '(' + vm.unit + ')';
             vm.testValue = page.options.param.TestValue;
             vm.information = undefined;
 
@@ -95,23 +115,35 @@
 
             vm.testResultsByDateArray = LabResults.getTestResultsArrayByDate();
 
+            if (!$rootScope.chartSelectedDateRange) {
+                $rootScope.chartSelectedDateRange = 4;    // this to select All by Default as the date range: 0,1,2,3,4   1m, 3m, 6m, 1y, All
+            }
         }
 
-        function configureURL(){
-            ///////////////////////////////////////////////////////////////////////////////////////////////
-            // TODO: THIS IS ONLY TEMPORARY TO BE ABLE TO DISPLAY FRENCH PAGES FOR ONLY WBC AND RBC
+        /**
+         * This is to save the user's choice of Date Range on the chart (1m, 3m, 6m, 1y, All).
+         * This event is triggered (through HighCharts) when the user Clicks on a Date Range (1m, 3m, 6m, 1y, All) on the chart
+         * @param e (event)
+         */
+        function afterSetExtremes(e) {
+            //console.log(this);
+            //console.log(e);
 
-            if(vm.testName === "WBC"){
-                url = "http://www.labtestsonline.fr/tests/num-ration-des-globules-blancs.html";
-            }
-            else if (vm.testName === "RBC"){
-                url = "http://www.labtestsonline.fr/tests/num-ration-des-globules-rouges.html?tab=3";
-            }
-            else{
-                url = 'https://labtestsonline.org/map/aindex/SearchForm?Search='+vm.title+'&action_ProcessSphinxSearchForm=Go';
-            }
-            ///////////////////////////////////////////////////////////////////////////////////////////////
+            console.log(e);
 
+            var current_selection = e.rangeSelectorButton.text;
+
+            if (current_selection === '1m')
+                $rootScope.chartSelectedDateRange = 0;
+            else if (current_selection === '3m')
+                $rootScope.chartSelectedDateRange = 1;
+            else if (current_selection === '6m')
+                $rootScope.chartSelectedDateRange = 2;
+            else if (current_selection === '1y')
+                $rootScope.chartSelectedDateRange = 3;
+            else if (current_selection === 'All')
+                $rootScope.chartSelectedDateRange = 4;
+            else $rootScope.chartSelectedDateRange = 2;
         }
 
         function configureChart(){
@@ -131,8 +163,14 @@
                 reformedData.push(dv);
             }
 
+            /**
+             * Make sure it is sorted....
+             */
 
-            // reformedData.reverse();
+            reformedData.sort(function(a,b){
+                return a[0] - b[0]
+            });
+
             /*********************************************
              * FINDING THE MAX AND MIN VALUES FOR CHARTING
              *********************************************/
@@ -147,6 +185,7 @@
             /**********************************************/
 
             vm.recentValue = parseFloat(testResults[testResults.length-1].TestValue);
+            vm.recentDate = Date.parse(testResults[testResults.length-1].TestDateFormat);
             windowWidth = $(window).width();
 
             // Configuring the font size for the chart to be the same as the user defined font
@@ -190,7 +229,12 @@
                         thousandsSep: ' ',
                         rangeSelectorFrom: "Du",
                         rangeSelectorTo: "au",
-                        rangeSelectorZoom: "Période"
+                        rangeSelectorZoom: ''
+                    },
+                    xAxis: {
+                        events: {
+                            afterSetExtremes: afterSetExtremes
+                        }
                     },
                     rangeSelector: {
                         buttons: [{
@@ -205,9 +249,6 @@
                             type: 'month',
                             count: 6,
                             text: '6m'
-                        }, {
-                            type: 'ytd',
-                            text: 'YTD'
                         }, {
                             type: 'year',
                             count: 1,
@@ -241,7 +282,12 @@
                         thousandsSep: ' ',
                         rangeSelectorFrom: 'From',
                         rangeSelectorTo: 'To',
-                        rangeSelectorZoom: 'Zoom'
+                        rangeSelectorZoom: ''
+                    },
+                    xAxis: {
+                        events: {
+                            afterSetExtremes: afterSetExtremes
+                       }
                     },
                     rangeSelector: {
                         buttons: [{
@@ -256,10 +302,7 @@
                             type: 'month',
                             count: 6,
                             text: '6m'
-                        }, {
-                            type: 'ytd',
-                            text: 'YTD'
-                        }, {
+                        },  {
                             type: 'year',
                             count: 1,
                             text: '1y'
@@ -267,6 +310,7 @@
                             type: 'all',
                             text: 'All'
                         }]
+
                     }
                 });
                 Highcharts.dateFormat('%e%a');
@@ -274,7 +318,7 @@
 
             vm.chartOptions = {
                 rangeSelector: {
-                    selected: 1,
+                    selected: $rootScope.chartSelectedDateRange,
                     buttonTheme: {
                         width: 'auto',
                         style: {
@@ -292,21 +336,25 @@
                 },
                 chart: {
                     // Explicitly tell the width and height of a chart
+                    // type: 'spline',
                     width: windowWidth,
                     height: null
                 },
                 xAxis: {
                     type: 'datetime',
                     dateTimeLabelFormats: { // don't display the dummy year
-                        month: '%e %b',
-                        year: '%b'
+                        month: '%e %b %y',
+                        year: '%e %b %y'
                     },
-                    title: {
-                        text: 'Date',
-                        style: {
-                            fontSize: fontSize
-                        }
-                    },
+                    minTickInterval: 3600*24*30*1000,//time in milliseconds
+                    minRange: 3600*24*30*1000,
+                    ordinal: false, //this sets the fixed time formats
+                    // title: {
+                    //     text: 'Date',
+                    //     style: {
+                    //         fontSize: fontSize
+                    //     }
+                    // },
                     labels: {
                         rotation: 0,
                         style: {
@@ -319,23 +367,27 @@
                     max: maxChart,
                     min: minChart,
                     title: {
+                        align: 'high',
                         text: unit,
                         style: {
-                            fontSize: fontSize
-                        }
+                            'text-anchor': 'start'
+                        },
+                        rotation: 0,
+                        y: -10,
+                        reserveSpace: false
                     },
                     opposite: false,
-                    plotLines: [{
-                        color: 'rgba(246, 54, 92, 0.53)',
-                        value: max,
-                        dashStyle: 'Solid',
-                        width: 2
-                    },{
-                        color: 'rgba(246, 54, 92, 0.53)',
-                        value: min,
-                        dashStyle: 'Solid',
-                        width: 2
-                    }],
+                    // plotLines: [{
+                    //     color: 'rgba(246, 54, 92, 0.53)',
+                    //     value: max,
+                    //     dashStyle: 'Solid',
+                    //     width: 2
+                    // },{
+                    //     color: 'rgba(246, 54, 92, 0.53)',
+                    //     value: min,
+                    //     dashStyle: 'Solid',
+                    //     width: 2
+                    // }],
                     labels: {
                         style: {
                             fontSize: fontSize,

@@ -10,48 +10,50 @@
         .controller('FeedbackController', FeedbackController);
 
     FeedbackController.$inject = [
-        'RequestToServer', 'NetworkStatus','$scope'
+        'RequestToServer', 'NetworkStatus', '$scope'
     ];
 
     /* @ngInject */
     function FeedbackController(RequestToServer, NetworkStatus, $scope) {
-    	var vm = this;
+        var vm = this;
 
-    	vm.submitFeedback = submitFeedback;
-    	vm.reset = reset;
+        vm.submitFeedback = submitFeedback;
+        vm.reset = reset;
 
-    	activate();
+        activate();
 
-		//////////////////////
+        //////////////////////
 
-		function activate(){
-            vm.enableSend=false;
-    		bindEvents();
-		}
+        function activate() {
+            vm.enableSend = false;
+            bindEvents();
+        }
 
-		function bindEvents(){
-            $scope.$watch('feedbackText',function(){
-                if(($scope.feedbackText===''||!$scope.feedbackText))
-                {
+        function bindEvents() {
+            $scope.$watch('feedbackText', function () {
+                if (($scope.feedbackText === '' || !$scope.feedbackText)) {
                     vm.enableSend = false;
-                }else{
-                    vm.enableSend = !!NetworkStatus.isOnline();
+                } else {
+                    vm.enableSend = NetworkStatus.isOnline();
                 }
             });
-		}
+        }
 
-        function submitFeedback(type){
-            if(vm.enableSend)
-            {
-                RequestToServer.sendRequest('Feedback',{FeedbackContent: $scope.feedbackText, AppRating:3, Type: type});
-                vm.feedbackText='';
-                vm.submitted=true;
+        function submitFeedback(type) {
+            if (vm.enableSend) {
+                RequestToServer.sendRequest('Feedback', {
+                    FeedbackContent: $scope.feedbackText,
+                    AppRating: 3,
+                    Type: type
+                });
+                vm.feedbackText = '';
+                vm.submitted = true;
                 vm.enableSend = false;
             }
         }
 
         function reset() {
-            vm.submitted=false;
+            vm.submitted = false;
             $scope.feedbackText = '';
         }
     }

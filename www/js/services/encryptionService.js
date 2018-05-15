@@ -14,6 +14,8 @@ myApp.service('EncryptionService',function(UserAuthorizationInfo){
     var encryptionHash = '';
     var tempEncryptionHash = '';
 
+    const main_fields = ['UserID', 'Timestamp', 'Code', 'DeviceId'];
+
 
 	function decryptObject(object,secret)
 	{
@@ -31,14 +33,13 @@ myApp.service('EncryptionService',function(UserAuthorizationInfo){
 					decryptObject(object[key],secret);
 				} else
 				{
-					if (key==='UserID' || key==='DeviceId' || key === 'Timestamp') {
+					if (main_fields.includes(key)) {
                         object[key] = object[key];
                     }
 					else
 					{
                         //grab the nonce
                         pair = splitValue(object[key]);
-
 
                         var value = nacl.secretbox.open(pair[1], pair[0], secret);
 
@@ -83,7 +84,8 @@ myApp.service('EncryptionService',function(UserAuthorizationInfo){
 
     function splitValue(str) {
 
-		// IOS9 Patch
+
+		// Patch for iOS9
         if(!Uint8Array.prototype.slice)
         {
             Uint8Array.prototype.slice = function(a,b){
@@ -93,7 +95,8 @@ myApp.service('EncryptionService',function(UserAuthorizationInfo){
         }
 
 		var value = nacl.util.decodeBase64(str);
-		return [value.slice(0, nacl.secretbox.nonceLength), value.slice(nacl.secretbox.nonceLength, value.length)]
+
+        return [value.slice(0, nacl.secretbox.nonceLength), value.slice(nacl.secretbox.nonceLength, value.length)]
     }
 
     /**
@@ -194,7 +197,7 @@ myApp.service('EncryptionService',function(UserAuthorizationInfo){
          *@ngdoc method
          *@name encryptPassword
          *@methodOf MUHCApp.service:EncryptionService
-         *@description Encrypts a given password using SHA256
+         *@description Encrypts a given password using SHA512
          *@return {String} Returns hashed password
          **/
         hash: function (incoming) {

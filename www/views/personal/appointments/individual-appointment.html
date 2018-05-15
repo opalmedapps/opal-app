@@ -10,6 +10,7 @@
                     <header>
                         <span class="item-title" ng-class="fontSizeTitle">{{vm.app["AppointmentType_"+vm.language]}}</span>
                     </header>
+                    <p class="item-desc" ng-class="fontSizeDesc">{{vm.app.ResourceDescription}}</p>
                     <p class="item-desc" ng-class="fontSizeDesc">{{vm.app.ScheduledStartTime|date:'medium'}}</p>
                     <p class="item-desc" ng-class="fontSizeDesc" ng-show="vm.app.RoomLocation">
                         {{"GOTO_ROOM"|translate}}{{vm.app.RoomLocation}}
@@ -19,8 +20,8 @@
             <ons-list-item tappable ng-click="vm.goToMap()" ng-class="fontSizeDesc">
                 <strong class="item-desc" ng-class="fontSizeDesc">{{vm.app["MapName_"+vm.language]|ellipsis:25}}</strong><ons-icon style="margin-top: 3%" class="pull-right" icon="ion-ios-arrow-forward"></ons-icon>
             </ons-list-item>
-            <ons-list-item style="background-color:  #E3F2FD" tappable ng-click="vm.aboutAppointment()" ng-class="fontSizeDesc">
-                <strong class="item-desc">{{"APPOINTMENT_ABOUT" | translate}} {{vm.title}} </strong> <ons-icon style="margin-top: 3%" class="pull-right" icon="ion-ios-arrow-forward"></ons-icon>
+            <ons-list-item style="background-color:#E3F2FD" tappable ng-click="vm.aboutAppointment()" ng-class="fontSizeDesc">
+                <strong class="item-desc" ng-class="fontSizeDesc">{{"APPOINTMENT_ABOUT" | translate}} {{vm.title}} </strong> <ons-icon style="margin-top: 3%" class="pull-right" icon="ion-ios-arrow-forward"></ons-icon>
             </ons-list-item>
         </ons-list>
         <div style="color:grey;margin-top:10vh" ng-show="vm.corrupted_appointment" align="center" ng-class="fontSizeTitle">{{"NOAPPOINTMENTINFO"|translate}}</div>
