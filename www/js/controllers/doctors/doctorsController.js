@@ -66,6 +66,7 @@
 
         function setDoctorsView(doctors)
         {
+            /*
             doctors.forEach(function(doctor)
             {
                 if(doctor.PrimaryFlag === '1' && doctor.OncologistFlag === '1'){
@@ -77,6 +78,10 @@
                 }
             });
             doctors = $filter('orderBy')(doctors, 'Role',true);
+            */
+
+            doctors = $filter('orderBy')(doctors, 'LastName', false);    // Sort ascending by LastName
+
             return doctors;
         }
         function showHeader(index)

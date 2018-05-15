@@ -1,14 +1,18 @@
 <ons-page ng-controller="ContactIndividualController as cont" ng-cloak>
     <ons-toolbar fixed-style>
         <div class="left"><ons-back-button>{{"BACK"|translate}}</ons-back-button></div>
+        <!--
         <div class="center" ng-class="fontSizeTitle">{{cont.doctor.Role}}</div>
+        -->
     </ons-toolbar>
     <div class="profile-cardContact">
 
         <!--<img ng-show="!contact.Image" src="img/logo.png" class="profile-image">-->
         <div ng-show="cont.doctor.ProfileImage"><img ng-src="{{cont.doctor.ProfileImage}}" class="profile-image"></div>
         <div class="profile-name" ng-class="fontSizeTitle">{{cont.doctor.FirstName}} {{cont.doctor.LastName}}</div>
+        <!--
         <div class="profile-desc" ng-class="fontSizeDesc">{{cont.doctor.Role}}</div>
+        -->
 
     </div>
 
@@ -30,43 +34,39 @@
                 </ons-row>
             </ons-list-item>
         </div>
-        <div ng-show="cont.doctor.Phone" >
+        <a ng-show="cont.doctor.Phone" href="tel:{{cont.doctor.Phone}}" style="text-decoration:none">
            <ons-list-item modifier="chevron">
-               <a href="tel:{{cont.doctor.Phone}}" style="text-decoration:none">
-                   <ons-row lass="prop-desc" align="center"   >
-                        <ons-col width="60px" style="text-align: center">
-                            <div>
-                                <i class="fa fa-mobile iconHomeView" style="margin:0"></i>
-                            </div>
-                        </ons-col>
-                        <ons-col>
-                            <header>
-                                <span style="color:black" ng-class="fontSizeDesc">{{cont.doctor.Phone|FormatPhoneNumber}}</span>
-                            </header>
-                            <p class="item-desc"></p>
-                        </ons-col>
-                    </ons-row>
-               </a>
+               <ons-row lass="prop-desc" align="center"   >
+                    <ons-col width="60px" style="text-align: center">
+                        <div>
+                            <i class="fa fa-mobile iconHomeView" style="margin:0"></i>
+                        </div>
+                    </ons-col>
+                    <ons-col>
+                        <header>
+                            <span style="color:black" ng-class="fontSizeDesc">{{cont.doctor.Phone|FormatPhoneNumber}}</span>
+                        </header>
+                        <p class="item-desc"></p>
+                    </ons-col>
+                </ons-row>
            </ons-list-item>
-        </div>
-        <div ng-show="cont.doctor.Email" >
+        </a>
+        <a ng-show="cont.doctor.Email" style="text-decoration:none" href="mailto:{{cont.doctor.Email}}" >
             <ons-list-item modifier="chevron">
-                <a href="mailto:{{cont.doctor.Email}}" style="text-decoration:none">
-                    <ons-row lass="prop-desc" align="center">
-                        <ons-col width="60px" style="text-align: center">
-                            <div>
-                                <i  class="fa fa-envelope-o iconHomeView"style="margin:0"></i>
-                            </div>
-                        </ons-col>
-                        <ons-col>
-                            <header>
-                                <span style="color:black" ng-class="fontSizeDesc">{{cont.doctor.Email}}</span>
-                            </header>
-                            <p class="item-desc"></p>
-                        </ons-col>
-                    </ons-row>
-                </a>
+                <ons-row lass="prop-desc" align="center">
+                    <ons-col width="60px" style="text-align: center">
+                        <div>
+                            <i  class="fa fa-envelope-o iconHomeView"style="margin:0"></i>
+                        </div>
+                    </ons-col>
+                    <ons-col>
+                        <header>
+                            <span style="color:black" ng-class="fontSizeDesc">{{cont.doctor.Email}}</span>
+                        </header>
+                        <p class="item-desc"></p>
+                    </ons-col>
+                </ons-row>
             </ons-list-item>
-        </div>
+        </a>
     </ons-list>
 </ons-page>

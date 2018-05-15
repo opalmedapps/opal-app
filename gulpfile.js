@@ -127,7 +127,6 @@ gulp.task('copy-vendor-css',function()
         'www/lib/bower_components/font-awesome/css/font-awesome.min.css',
         'www/lib/bower_components/bootstrap/dist/css/bootstrap.min.css',
         'www/lib/css/animate.css',
-        'www/lib/bower_components/onsenui/css/onsen-css-components-blue-basic-theme.css',
         'www/lib/bower_components/onsenui/css/onsenui.css',
         'www/lib/bower_components/angular/*.css',
         'www/lib/bower_components/Ionicons/css/ionicons.min.css'

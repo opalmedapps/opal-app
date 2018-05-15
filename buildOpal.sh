@@ -11,6 +11,7 @@ set -e
 
 DEST=$1
 VERSION=$2
+FLAG=$3
 
 WORKING_DIR=/Users/rob/Opal/qplus
 PREPROD_DIR=/Users/rob/Web/QPlus/Cordova/dev-opal
@@ -21,16 +22,19 @@ TARGET_DIR=''
 #Check if working directory exists
 if [ ! -d "$WORKING_DIR" ]; then
 	echo "ERROR: Specified working directory in configuration does not exist. Please fix before continuing."
+	exit -1
 fi
 
 #Check if pre-production directory exists
 if [ ! -d "$PREPROD_DIR" ]; then
 	echo "ERROR: Specified pre-production directory in configuration does not exist. Please fix before continuing."
+	exit -1
 fi
 
 #Check if production directory exists
 if [ ! -d "$PROD_DIR" ]; then
 	echo "ERROR: Specified production directory in configuration does not exist. Please fix before continuing."
+	exit -1
 fi
 
 #If there is no first parameter, then display the "help" view with instructions on how to use this script
@@ -52,6 +56,8 @@ then
 	echo ""
 	echo "Version: a string representing the version of the app your building. Needs to be in the format x.x.x (i.e semver)"
 	echo ""
+	echo "Flags: optional flags"
+	echo "      --test -- overrides checking if on proper branch"
 	echo ""
 	exit -1
 fi
@@ -75,28 +81,34 @@ fi
 
 if [ "$DEST" = "preprod" ] || [ "$DEST" = "prod" ]
 then
-	
-	#Make sure you are on the correct branch
-	if [ "$DEST" = "preprod" ]
+
+    # If
+	if [ "$FLAG" != "--test" ]
 	then
-		TARGET_DIR=$PREPROD_DIR
-		BRANCH=$(git --git-dir $WORKING_DIR/.git rev-parse --abbrev-ref HEAD)
-		if [[ "$BRANCH" != "opal_pre_prod" ]]; then
-			echo ""
-		  	echo "Error: You are not on the correct branch! You are currently on $BRANCH. Please switch to opal_pre_prod before trying to build to preprod app";
-		  	echo ""
-		  	exit 1;
-		fi
-	else
-		TARGET_DIR=$PROD_DIR
-		BRANCH=$(git --git-dir $WORKING_DIR/.git rev-parse --abbrev-ref HEAD)
-		if [[ "$BRANCH" != "master" ]]; then
-			echo ""
-			echo "Error: You are not on the correct branch! You are currently on $BRANCH. Please switch to opal_prod before trying to build the prod app";
-			echo ""
-			exit 1;
-		fi
-	fi
+        #Make sure you are on the correct branch
+        if [ "$DEST" = "preprod" ]
+        then
+            TARGET_DIR=${PREPROD_DIR}
+            BRANCH=$(git --git-dir $WORKING_DIR/.git rev-parse --abbrev-ref HEAD)
+            if [[ "$BRANCH" != "opal_pre_prod" ]]; then
+                echo ""
+                echo "Error: You are not on the correct branch! You are currently on $BRANCH. Please switch to opal_pre_prod before trying to build to preprod app";
+                echo ""
+                exit 1;
+            fi
+        else
+            TARGET_DIR=${PROD_DIR}
+            BRANCH=$(git --git-dir $WORKING_DIR/.git rev-parse --abbrev-ref HEAD)
+            if [[ "$BRANCH" != "master" ]]; then
+                echo ""
+                echo "Error: You are not on the correct branch! You are currently on $BRANCH. Please switch to opal_prod before trying to build the prod app";
+                echo ""
+                exit 1;
+            fi
+        fi
+    else
+        TARGET_DIR=${PREPROD_DIR}
+    fi
 
 	#If files can be pushed... go ahead and do so.
 	LOCAL=$(git --git-dir $WORKING_DIR/.git rev-parse @)
@@ -147,7 +159,6 @@ then
 
 	#TODO: ANALYZE ERRORS?
 
-	
 	#Move to target environment
 	cd $TARGET_DIR
 	rm -r www
@@ -213,16 +224,22 @@ then
 		cp -a $WORKING_DIR/www/. $TARGET_DIR/www
 		rm www/karma.conf.js
 		rm www/package.json
-		rm -r www/node_modules
+
+		if [ -d "$WORKING_DIR/www/node_modules" ]; then
+            rm -r www/node_modules
+        fi
 	fi
 
-	#TODO: UPDATE VERSION # IN CONFIG.XML + Gradle.Build file
+	#TODO: UPDATE VERSION # IN CONFIG.XML + Build.Gradle file 
+	# IMPORTANT IMPORTANT: Use always Gradle version 2.2.2   DO NOT UPGRADE TO A HIGHER VERSION. IT WON'T WORK
+	# ALWAYS MAKE SURE THAT THIS LINE IS IN Build.Gradle file: classpath 'com.android.tools.build:gradle:2.2.2'
 
 	echo ""
 	echo ""
 	echo ""
 	echo "Copying over config.xml to build destination..."
-
+	# $version_android = 
+    # sed -e "s/version=\"[0-9.]*\" android-versionCode=\"[0-9]*\"/version=\"${version}\" android-versionCode=\"${version_android}\"" $TARGET_DIR/config.xml
 	#Remove current config.xml and replace with current one
 	rm $TARGET_DIR/config.xml
 	cp $WORKING_DIR/config.xml $TARGET_DIR
@@ -239,16 +256,7 @@ then
 	echo ""
 
 	#All checks have been met... time to build...
-	if [ "$DEST" = "prod" ]; then
-		cordova build -verbose
-
-		#TODO: ARCHIVE APP WITH XCODE
-
-		#AUTOMATE FABRIC.IO DEPLOYMENT PROCESS
-
-	else
-		cordova build
-	fi
+    cordova build -verbose
 
 	
 	echo ""
@@ -258,7 +266,7 @@ then
 	if [ "$DEST" = "prod" ]; then
 		echo "Opening up changelog for you to update!"
 		cd $WORKING_DIR
-		vi CHANGELOG.md
+		vim CHANGELOG.md
 	fi
 
 else

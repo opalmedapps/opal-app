@@ -58,3 +58,13 @@ credentials.js
 /www/lib/bower_components/onsenui/css/onsen-css-components-default.css
 
 /dest/
+/backend/Screen/
+/backend/OpalAdmin/
+
+heartbeat.log*
+heartbeatdb.log*
+/config.xml
+
+
+buildOpal.sh
+www/lib/bower_components/\.DS_Store

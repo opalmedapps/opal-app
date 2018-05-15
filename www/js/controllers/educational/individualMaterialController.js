@@ -38,7 +38,7 @@
             bindEvents();
 
             //set educational material language
-            vm.edumaterial =EducationalMaterial.setLanguage(param.Post);
+            vm.edumaterial = EducationalMaterial.setLanguage(param.Post);
             Logger.sendLog('Educational Material', param.Post.EducationalMaterialSerNum);
 
             //Determine if material has a ShareURL and is printable
@@ -86,42 +86,44 @@
         }
 
         function share(){
-            FileManagerService.shareDocument(vm.edumaterial.Name, vm.edumaterial.ShareURL);
+            FileManagerService.shareDocument(vm.edumaterial.Name, vm.edumaterial.ShareURL,vm.edumaterial.Type);
             $scope.popoverSharing.hide();
         }
 
-        function print(){
-            //If no connection then simply alert the user to connect to the internet
-            $scope.popoverSharing.hide();
-            if(app && NetworkStatus.isOnline())
-            {
-                EducationalMaterial.getMaterialBinary(vm.edumaterial.ShareURL)
-                    .then(function(){
-                        var blob = new Blob([this.response], { type: 'application/pdf' });
-                        var fileReader = new FileReader();
-                        fileReader.readAsDataURL(blob);
-                        fileReader.onloadend = function() {
-                            var base64data = fileReader.result;
-                            base64data = base64data.replace('data:application/pdf;base64,','');
-                            window.plugins.PrintPDF.print({
-                                data: base64data,
-                                type: 'Data',
-                                title: $filter('translate')("PRINTDOCUMENT"),
-                                success: function(){},
-                                error: function(data){
-                                    ons.notification.alert({'message':$filter('translate')('UNABLETOOBTAINEDUCATIONALMATERIAL')});
-                                }
-                            });
-                        }
-                    })
-                    .catch(function(){
-                        ons.notification.alert({'message':$filter('translate')('UNABLETOOBTAINEDUCATIONALMATERIAL')});
-                    });
-            }else{
-                $scope.popoverSharing.hide();
-                ons.notification.alert({'message':$filter('translate')("PRINTINGUNAVAILABLE")});
-            }
-        }
+        // PrintPDF.print uses the plugin cordova-plugin-print-pdf
+        // 
+        // function print(){
+        //     //If no connection then simply alert the user to connect to the internet
+        //     $scope.popoverSharing.hide();
+        //     if(app && NetworkStatus.isOnline())
+        //     {
+        //         EducationalMaterial.getMaterialBinary(vm.edumaterial.ShareURL)
+        //             .then(function(){
+        //                 var blob = new Blob([this.response], { type: 'application/pdf' });
+        //                 var fileReader = new FileReader();
+        //                 fileReader.readAsDataURL(blob);
+        //                 fileReader.onloadend = function() {
+        //                     var base64data = fileReader.result;
+        //                     base64data = base64data.replace('data:application/pdf;base64,','');
+        //                     window.plugins.PrintPDF.print({
+        //                         data: base64data,
+        //                         type: 'Data',
+        //                         title: $filter('translate')("PRINTDOCUMENT"),
+        //                         success: function(){},
+        //                         error: function(data){
+        //                             ons.notification.alert({'message':$filter('translate')('UNABLETOOBTAINEDUCATIONALMATERIAL')});
+        //                         }
+        //                     });
+        //                 }
+        //             })
+        //             .catch(function(){
+        //                 ons.notification.alert({'message':$filter('translate')('UNABLETOOBTAINEDUCATIONALMATERIAL')});
+        //             });
+        //     }else{
+        //         $scope.popoverSharing.hide();
+        //         ons.notification.alert({'message':$filter('translate')("PRINTINGUNAVAILABLE")});
+        //     }
+        // }
 
         function downloadIndividualPage()
         {

@@ -15,15 +15,15 @@
         .module('MUHCApp')
         .factory('CleanUp', CleanUp);
 
-    CleanUp.$inject = ['UserAuthorizationInfo','LocalStorage', 'Documents','Diagnoses',
-        'Appointments','Patient','Doctors','TxTeamMessages','Questionnaires',
-        'Announcements','EducationalMaterial','Notifications','UserPreferences',
+    CleanUp.$inject = ['UserAuthorizationInfo', 'LocalStorage', 'Documents', 'Diagnoses',
+        'Appointments', 'Patient', 'Doctors', 'TxTeamMessages', 'Questionnaires',
+        'Announcements', 'EducationalMaterial', 'Notifications', 'UserPreferences',
         'UpdateUI', 'Tasks', 'PlanningSteps', 'LabResults', 'CheckInService'];
 
     /* @ngInject */
-    function CleanUp(UserAuthorizationInfo, LocalStorage,Documents,Diagnoses,
-                     Appointments,Patient,Doctors,TxTeamMessages,Questionnaires,
-                     Announcements,EducationalMaterial,Notifications,UserPreferences,
+    function CleanUp(UserAuthorizationInfo, LocalStorage, Documents, Diagnoses,
+                     Appointments, Patient, Doctors, TxTeamMessages, Questionnaires,
+                     Announcements, EducationalMaterial, Notifications, UserPreferences,
                      UpdateUI, Tasks, PlanningSteps, LabResults, CheckInService) {
         var service = {
             clear: clear,
@@ -40,6 +40,7 @@
             Tasks.destroy();
             PlanningSteps.destroy();
             Documents.clearDocuments();
+            Documents.deleteDocumentsDownloaded();  // delete documents downloaded to be viewed on Android (view in external viewer option)
             Diagnoses.clearDiagnoses();
             Appointments.clearAppointments();
             Patient.clearPatient();
@@ -53,12 +54,28 @@
             UserAuthorizationInfo.clearUserAuthorizationInfo();
             UpdateUI.clearUpdateUI();
             CheckInService.clear();
+
+  
+            /**
+             * Delete All Cookies
+             */
+            if (app) {
+                console.log('Before cookieMaster.clearCookies');
+                cookieMaster.clearCookies(
+                    function () {
+                        console.log('Cookies have been cleared');
+                    },
+                    function () {
+                        console.log('Cookies could not be cleared');
+                    });
+            }
         }
 
-        function clearSensitive(){
+        function clearSensitive() {
             LabResults.destroy();
             Documents.clearDocumentContent();
         }
+
 
     }
 

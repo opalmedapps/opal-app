@@ -15,9 +15,9 @@
 
     /* @ngInject */
     function ParkingController(NavigatorParameters, UserPreferences) {
-        var vm = this;
+        const vm = this;
 
-        var navigatorName;
+        let navigatorName;
 
         vm.goToParkingLink = goToParkingLink;
 
@@ -30,15 +30,40 @@
         }
 
         function goToParkingLink(type){
-            if(type === 'general')
-            {
-                if (UserPreferences.getLanguage().toUpperCase() === "EN"){
-                    window.open('https://muhc.ca/glen/handbook/parking-hospital','_blank');
+            let url = '';
+            let app = document.URL.indexOf('http://') === -1 && document.URL.indexOf('https://') === -1;
+
+            if(type === 'general') {
+                if (UserPreferences.getLanguage().toUpperCase() === "EN") {
+                    url = 'https://muhc.ca/glen/handbook/parking-hospital';
+                    // window.open('https://muhc.ca/glen/handbook/parking-hospital', '_blank');
                 } else {
-                    window.open('https://cusm.ca/glen/handbook/stationnement','_blank');
+                    url = 'https://cusm.ca/glen/handbook/stationnement';
+                    // window.open('https://cusm.ca/glen/handbook/stationnement', '_blank');
+                }
+                
+                if (app) {
+                    cordova.InAppBrowser.open(url, '_blank', 'location=yes');
+                } else {
+                    window.open(url, '_blank');
+                }
+            }
+            else if (type === 'gettingtohospital') {
+                if (UserPreferences.getLanguage().toUpperCase() === "EN") {
+                    url = 'https://muhc.ca/glen/handbook/getting-hospital-5';
+                    // window.open('https://muhc.ca/glen/handbook/getting-hospital-5', '_blank');
+                } else {
+                    url = 'https://cusm.ca/glen/handbook/comment-vous-y-rendre';
+                    // window.open('https://cusm.ca/glen/handbook/comment-vous-y-rendre', '_blank');
                 }
 
-            }else if(type ==='oncology'){
+                if (app) {
+                    cordova.InAppBrowser.open(url, '_blank', 'location=yes');
+                } else {
+                    window.open(url, '_blank');
+                }
+
+            } else if (type ==='oncology'){
                 NavigatorParameters.setParameters({type:type});
                 window[navigatorName].pushPage('./views/general/parking/parking-details.html');
             }

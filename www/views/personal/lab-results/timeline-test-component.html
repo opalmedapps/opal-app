@@ -2,24 +2,27 @@
     <ons-toolbar>
         <div class="left"><ons-back-button>{{"BACK"|translate}}</ons-back-button></div>
         <div class="center" ng-class="fontSizeTitle">{{test.title}}</div>
-        <div class="right">
-            <ons-toolbar-button ng-click="test.about()">
-                <ons-icon icon="fa-info-circle"></ons-icon>
-            </ons-toolbar-button>
-        </div>
     </ons-toolbar>
     <ons-col>
-        <div id="chartArea"><hc-chart options="test.chartOptions">Placeholder for generic chart</hc-chart></div>
-        <ons-list>
-            <ons-list-header ng-class="fontSizeDesc">{{"LAB_TEST_INFO"|translate}}</ons-list>
-            <ons-list-item ng-class="fontSizeDesc">
-                {{"LAB_NAME"|translate}}
-                <span class="list-item-note lucent" ng-class="fontSizeDesc" style="right: 10px">{{test.testName}}</span>
+        <div><hc-chart options="test.chartOptions">Placeholder for generic chart</hc-chart></div>
+            <ons-list-header ng-class="fontSizeDesc">{{"LAB_TEST_INFO"|translate}}</ons-list-header>
+        <div>
+            <ons-list-item ng-class="fontSizeDesc"  ng-click="test.about()" style="background-color: #E3F2FD" tappable>
+                <ons-row style="padding:0;margin:0;">
+                     <ons-col>
+                        {{"LAB_LEARN_ABOUT" | translate}} {{test.title}}
+                    </ons-col>
+                    <ons-icon  icon="ion-android-open" style="color:#ddd; margin-top: 3.5%" class="pull-right" size="1.2em"></ons-icon>
+                </ons-row>
             </ons-list-item>
+        </div>
+        <div style="line-height:1">
             <ons-list-item ng-class="fontSizeDesc">
                 {{"LAB_RECENT_RESULT" | translate}}
-                <span class="list-item-note lucent" ng-class="fontSizeDesc" style="right: 10px">{{test.recentValue}} {{test.unit}}</span>
-            </ons-list-item>
+                <span class="list-item-note lucent" ng-class="fontSizeDesc" style="right: 10px">{{test.recentValue}} {{test.unit}}</span><br>
+                <p class="item-desc" ng-class="fontSizeDesc">{{test.recentDate|date:'longDate'}}</p>
+             </ons-list-item>
+        </div>
             <ons-list-item ng-class="fontSizeDesc">
                 {{"LAB_MIN_NORM"| translate}}
                 <span class="list-item-note lucent" ng-class="fontSizeDesc" style="right: 10px">{{test.minNorm}} {{test.unit}}</span>
@@ -30,6 +33,17 @@
             </ons-list-item>
         </ons-list>
     </ons-col>
+
+    <ons-modal var="disclaimerModal">
+        <div id="rcorners">
+            <h3>Attention!</h3>
+            <ons-icon icon="ion-alert-circled" size="60px"></ons-icon>
+            <p style="margin-top: 5%" class="unattended-message">{{"LEAVING_APP2"|translate}}</p>
+            <ons-button style="margin-top: 5%" ng-click="disclaimerModal.hide();test.gotoUrl()">{{"OK"|translate}}</ons-button>
+        </div>
+    </ons-modal>
+
+
 </ons-page>
 
 

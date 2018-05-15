@@ -13,15 +13,17 @@
     /* @ngInject */
     function LoadingController($state, UpdateUI, UserAuthorizationInfo, UserPreferences, Patient, RequestToServer, PlanningSteps, MetaData) {
 
-        var vm = this;
-
         activate();
         ///////////////////////////
 
         function activate() {
-            loadingmodal.show();
             var userAuthorizationInfo = UserAuthorizationInfo.getUserAuthData();
-            if(!userAuthorizationInfo) $state.go('init');
+
+            if(!userAuthorizationInfo) {
+                $state.go('init');
+            }
+
+            loadingmodal.show();
 
             UpdateUI.init()
                 .then(function() {
@@ -30,7 +32,6 @@
 
                     //fetch all the tab metadata TODO: add the fetching of all the other data
                     UpdateUI.set([
-                        'Announcements',
                         'Doctors',
                         'Diagnosis'
                     ]).then(function(){
@@ -77,6 +78,6 @@
                     }
                 });
             }
-        },30000);
+        }, 30000);
     }
 })();

@@ -14,16 +14,20 @@ var myApp = angular.module('MUHCApp');
 
 myApp.service('Questionnaires', ['RequestToServer','$filter', 'Patient','LocalStorage', '$q',
     function(RequestToServer, $filter, Patient,LocalStorage,$q){
+
         var questionnaireAnswers = {};
         var questionnairesObject = {};
+        var needsToRefresh = true;
+
         function findAndReplacePatientQuestionnaires(questionnaires)
         {
             var questionnairesObjectRef =questionnaires.Questionnaires;
             var patientQuestionnaireObject =questionnaires.PatientQuestionnaires;
-            for(var serDBNum in questionnairesObjectRef)
+
+            for(var serNum in questionnairesObjectRef)
             {
                 var questionCopy = questionnairesObjectRef[serNum];
-                if(questionnairesObject.hasOwnProperty(serNum)&&questionCopy.QuestionnaireDBSerNum == questionnairesObject[serNum].QuestionnaireDBSerNum)
+                if(questionnairesObject.hasOwnProperty(serNum)&& questionCopy.QuestionnaireDBSerNum == questionnairesObject[serNum].QuestionnaireDBSerNum)
                 {
                     questionnairesObject[serNum] = questionCopy;
                 }
@@ -31,38 +35,37 @@ myApp.service('Questionnaires', ['RequestToServer','$filter', 'Patient','LocalSt
             for(var serNum in patientQuestionnaireObject)
             {
                 var questionAnswerCopy = questionnairesObjectRef[serNum];
-                if(questionnairesObject.hasOwnProperty(serNum)&&questionAnswerCopy.QuestionnaireSerNum == questionnairesObject[serNum].QuestionnaireSerNum)
+                if(questionnairesObject.hasOwnProperty(serNum)&& questionAnswerCopy.QuestionnaireSerNum == questionnairesObject[serNum].QuestionnaireSerNum)
                 {
                     questionnairesObject[serNum] = questionAnswerCopy;
                 }
             }
-
-
         }
         function addToQuestionnaireObject(questionnaires)
         {
-            for(var key in questionnaires.PatientQuestionnaires)
-            {
+            // Make sure questionnaires object has been properly initialized before adding
+            if(!questionnairesObject.PatientQuestionnaires && !questionnairesObject.Questionnaires){
+                questionnairesObject.PatientQuestionnaires = {};
+                questionnairesObject.Questionnaires = {};
+            }
+
+            for(var key in questionnaires.PatientQuestionnaires) {
                 if(questionnaires.PatientQuestionnaires[key]) questionnairesObject.PatientQuestionnaires[key] = questionnaires.PatientQuestionnaires[key];
             }
             questionnairesObject.Questionnaires = questionnaires.Questionnaires;
-
-
         }
 
         return {
             updatePatientQuestionnaires:function(questionnaires)
             {
-                if(questionnaires&&typeof questionnaires !=='undefined')
+                if(questionnaires && typeof questionnaires !=='undefined')
                 {
-
                     findAndReplacePatientQuestionnaires(questionnaires);
                     addToQuestionnaireObject(questionnaires);
                 }
             },
             setPatientQuestionnaires:function(questionnaires)
             {
-
                 questionnairesObject = {};
                 questionnairesObject.PatientQuestionnaires = {};
                 questionnairesObject.Questionnaires = {};
@@ -76,7 +79,9 @@ myApp.service('Questionnaires', ['RequestToServer','$filter', 'Patient','LocalSt
             },
             setQuestionnaireAnswers:function(Answer, questionnaireQuestionSerNum, questionnaireDBSerNum, questionnaireSerNum)
             {
-                if((Object.keys(questionnaireAnswers).length == 0 ) || (Object.keys(questionnaireAnswers[questionnaireSerNum]).length == 0)) {
+                // if((Object.keys(questionnaireAnswers).length == 0 ) || (Object.keys(questionnaireAnswers[questionnaireSerNum]).length == 0)) {
+                if((Object.keys(questionnaireAnswers).length == 0 ) || (!questionnaireAnswers[questionnaireSerNum])) {
+
                     questionnaireAnswers[questionnaireSerNum] = {};
 
 
@@ -149,6 +154,9 @@ myApp.service('Questionnaires', ['RequestToServer','$filter', 'Patient','LocalSt
             {
                 return (Object.keys(questionnairesObject).length === 0);
             },
+            needsRefreshing: function(){
+                return needsToRefresh
+            },
             clearQuestionnaires:function()
             {
                 questionnaireAnswers = {};
@@ -164,17 +172,26 @@ myApp.service('Questionnaires', ['RequestToServer','$filter', 'Patient','LocalSt
 
                             _this.setPatientQuestionnaires(response.Data);
                             deferred.resolve({Success: true, Location: 'Server'});
+                            needsToRefresh = false;
                         }
                     },
                     function (error) {
-
                         deferred.reject({Success: false, Location: '', Error: error});
-
-
                     });
 
                 return deferred.promise;
 
+            },
+            updateQuestionnairesFromNotification: function(notif) {
+                needsToRefresh = true;
+            },
+            getQuestionnaireUrl: function(){
+                return './views/personal/questionnaires/questionnairesList.html';
+            },
+            getQuestionnaireName: function(){
+                return 'New Questionnaire'
             }
+
+
         };
     }]);

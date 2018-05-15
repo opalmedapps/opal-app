@@ -1,9 +1,9 @@
 <ons-page ng-controller="AnsweredQuestionnaireController as vm">
     <ons-toolbar fixed-style>
         <div class="left">
-            <ons-back-button>Back</ons-back-button>
+            <ons-back-button>{{"BACK"|translate}}</ons-back-button>
         </div>
-        <div class="center">Summary</div>
+        <div class="center">{{"SUMMARY"|translate}}</div>
     </ons-toolbar>
 
     <ons-row align="center" style="margin-left: 0.12vw;">
@@ -13,36 +13,43 @@
                     <ons-row style="margin:0;padding:0" align="center">
                         <ons-col align="left" style="border:1px solid white;color:white">
                             <div style="line-height: 1.4;">
-                               #{{$index+1}}: {{question.Asseses_EN}}
+                               #{{$index+1}}: {{(vm.language === "EN") ? question.Asseses_EN : question.Asseses_FR}}
                             </div>
                         </ons-col>
                         <ons-col align="center" width="30%">
                             <span ng-show="vm.answers[$index]" style="float: right; color: black;">
                                 <!-- If its not an input question than the otherAns is shown or the answer is shown, both of those for the multiple choice questions. If both of those are undefined than its a scale quesiton and only the answer[$index] is needed to be shown. If the source is LEE the question is out of 5 and if its ESAS its out of 5 -->
-                                <span ng-show="(question.QuestionType === 'MinMax') && (question.QuestionType !== 'Checkbox') && (question.QuestionType !== 'image')" style="color: #4CAF50">
+                                <span ng-show="(question.QuestionType !== 'SA') && (question.QuestionType !== 'Checkbox') && (question.QuestionType !== 'image') && (question.QuestionType !== 'MC')" style="color: #4CAF50">
+                                    {{vm.answers[$index].answer || vm.answers[$index]}}
+                                    <!--
                                     {{vm.answers[$index].otherAns || vm.answers[$index].answer || vm.answers[$index]}}
+                                    -->
+
                                 </span>
-                                <span ng-show="(question.Choices[1].OrderNum === '5') && (question.QuestionType === 'MinMax')"> / 5</span>
-                                <span ng-show="(question.Choices[1].OrderNum == '10') && (question.QuestionType == 'MinMax')"> / 10</span>
+                                <span ng-show="(question.QuestionType === 'MinMax')"> / {{question.Choices[1].OrderNum}}</span>
+
+                                <!-- <span ng-show="(question.Choices[1].OrderNum === '5') && (question.QuestionType === 'MinMax')"> / 5</span> -->
+                                <!-- <span ng-show="(question.Choices[1].OrderNum == '10') && (question.QuestionType == 'MinMax')"> / 10</span> -->
+
                                 <!-- If its an input question and its answered all we say is "asnwered" and the user can preview it by clicking the eye -->
-                                <span ng-show="(question.QuestionType === 'SA' || question.QuestionType === 'Checkbox' || question.QuestionType === 'image') && (vm.answers[$index]) && (!vm.answerShown[$index])">
+                                <span ng-show="(question.QuestionType === 'SA' || question.QuestionType === 'Checkbox' || question.QuestionType === 'image' || question.QuestionType === 'MC') && (vm.answers[$index]) && (!vm.answerShown[$index])">
                                     <p style="color: rgba(38,100,171,0.81); margin-left:3px;margin-top: 5px; line-height: 1; text-align: center">
-                                        <span>Show <i class="ion-chevron-right" style="padding-left: 2vw"></i></span>
+                                        <span>{{"SHOW"|translate}} <i class="ion-chevron-right" style="padding-left: 2vw"></i></span>
                                     </p>
                                 </span>
-                                <span ng-show="(question.QuestionType == 'SA' || question.QuestionType == 'Checkbox' || question.QuestionType == 'image') && (vm.answers[$index]) && (vm.answerShown[$index])">
+                                <span ng-show="(question.QuestionType === 'SA' || question.QuestionType === 'Checkbox' || question.QuestionType === 'image' || question.QuestionType === 'MC') && (vm.answers[$index]) && (vm.answerShown[$index])">
                                     <p style="color: rgba(38,100,171,0.81); margin-top:5px;line-height:1; text-align: center">
-                                        Hide<i class="ion-chevron-down" style="padding-left: 2vw"></i>
+                                        {{"HIDE"|translate}}<i class="ion-chevron-down" style="padding-left: 2vw"></i>
                                     </p>
                                 </span>
                             </span>
-                            <span ng-click="vm.goToPage($index)" ng-show="(!vm.answers[$index])" style="float: right; color: #F44336">Answer <i class="ion-chevron-right" style="padding-left: 2vw"></i></span>
+                            <span ng-click="vm.goToPage($index)" ng-show="(!vm.answers[$index])" style="float: right; color: #F44336">{{"ANSWER"|translate}} <i class="ion-chevron-right" style="padding-left: 2vw"></i></span>
                         </ons-col>
                     </ons-row>
                 </li>
                 <!-- Eye preview -->
                 <li ng-show="vm.answerShown[$index]" style="background:white;color:black;padding:5px 5px 0 5px;border:1px solid lightgrey">
-                     <strong>Answer:</strong>
+                     <strong>{{"ANSWER"|translate}}:</strong>
                     <div class="card" >
                         <div class="item">
                          {{vm.answerToShow[$index]}}

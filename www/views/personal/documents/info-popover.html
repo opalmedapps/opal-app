@@ -3,18 +3,46 @@
         <ons-list>
             <ons-list-header>{{"DOC_INFO"|translate}}</ons-list-header>
             <ons-list-item class="item">
-                <p><strong>{{"DOC_DATE_CREATED"|translate}}</strong>{{documentObject.CreatedTimeStamp| date:'fullDate'}}</p>
-                <p><strong>{{"DOC_DATE_UPDATED"|translate}}</strong>{{documentObject.ApprovedTimeStamp| date:'fullDate'}}</p>
-                <p><strong>{{"DOC_SIGNEDBY"|translate}}</strong>{{documentObject.FirstName}} {{documentObject.LastName}}</p>
+                <p><strong>{{"DOC_DATE_CREATED"|translate}}</strong>{{docParams.CreatedTimeStamp| date:'longDate'}}</p>
+                <p><strong>{{"DOC_DATE_UPDATED"|translate}}</strong>{{docParams.ApprovedTimeStamp| date:'longDate'}}</p>
+                <p><strong>{{"DOC_SIGNEDBY"|translate}}</strong>{{docParams.FirstName}} {{docParams.LastName}}</p>
+            </ons-list-item>
+
+            <div align="left">
+                <ons-list-item class="item" modifier="tappable" ng-click="about()">
+                        {{"DOC_ABOUT"|translate}}
+                </ons-list-item>
+
+                <ons-list-item class="item" modifier="tappable" ng-click="warn()">
+                        {{"SHARE"|translate}}
+                </ons-list-item>
+
+                <ons-list-item class="item" modifier="tappable" ng-show="isAndroid()" ng-click="warn2()">
+                        {{"OPENEXTERNALVIEWER"|translate}}
+                </ons-list-item>
+
+            </div>
+
+            <!--
+            <ons-list-item class="item" align="left">
+
+                <p><strong>{{"DOC_DATE_CREATED"|translate}}</strong>{{docParams.CreatedTimeStamp| date:'fullDate'}}</p>
+                <p><strong>{{"DOC_DATE_UPDATED"|translate}}</strong>{{docParams.ApprovedTimeStamp| date:'fullDate'}}</p>
+                <p><strong>{{"DOC_SIGNEDBY"|translate}}</strong>{{docParams.FirstName}} {{docParams.LastName}}</p>
 
                 <div>
-                    <button class="button button--large--quiet" ng-click="doc.about()" >
+                    <button class="button button--large--quiet" ng-click="about()">
                         {{"DOC_ABOUT"|translate}}
-                    </button >
-                    <button class="button button--large--quiet" ng-click="doc.warn()" >
+                    </button>
+                    <button class="button button--large--quiet" ng-click="warn()">
                         {{"SHARE"|translate}}
-                    </button >
+                    </button>
+                    <button class="button button--large--quiet" ng-show="isAndroid()" ng-click="warn2()">
+                        {{"OPENEXTERNALVIEWER"|translate}}
+                    </button>
                 </div>
+            </ons-list-item>
+            -->
         </ons-list>
     </div>
 </ons-popover>

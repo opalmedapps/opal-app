@@ -20,25 +20,25 @@
     <!--
     Content Security Policy
     =================================-->
-    <meta http-equiv="content-security-policy"
-          content="default-src 'self' 'unsafe-inline'
-          opal:
-          gap:
-          file:
-          data:
-          https://www.depdocs.com
-          https://apis.google.com
-          https://*.googleapis.com
-          https://*.firebaseio.com
-          https://*.firebaseapp.com
-          wss://*.firebaseio.com
-          https://code.highcharts.com
-          https://fonts.gstatic.com
-          https://fonts.googleapis.com
-          https://code.ionicframework.com
-          https://www.youtube.com;
-          img-src 'self' https://www.depdocs.com data:
-          https://www.depdocs.com;"/>
+    <!--<meta http-equiv="content-security-policy"-->
+          <!--content="default-src 'self' 'unsafe-inline'-->
+          <!--opal:-->
+          <!--gap:-->
+          <!--file:-->
+          <!--data:-->
+          <!--https://www.depdocs.com-->
+          <!--https://apis.google.com-->
+          <!--https://*.googleapis.com-->
+          <!--https://*.firebaseio.com-->
+          <!--https://*.firebaseapp.com-->
+          <!--wss://*.firebaseio.com-->
+          <!--https://code.highcharts.com-->
+          <!--https://fonts.gstatic.com-->
+          <!--https://fonts.googleapis.com-->
+          <!--https://code.ionicframework.com-->
+          <!--https://www.youtube.com;-->
+          <!--img-src 'self' https://www.depdocs.com data:-->
+          <!--https://www.depdocs.com;"/>-->
 
     <!--
     View Meta
@@ -47,6 +47,11 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
+
+    <!--
+     To disable/prevent Content Sniffing
+    =================================-->
+    <meta content="text/html; charset=UTF-8; X-Content-Type-Options=nosniff" http-equiv="Content-Type" />
 
     <!-- Ionic Icons -- Used for production only because compressing breaks references -->
     <link rel="stylesheet" type="text/css" href="fonts/ionicons.ttf">
@@ -177,6 +182,8 @@
     <script src="js/services/networkStatusService.js"></script>
     <script src="js/services/metadataService.js"></script>
     <script src="js/services/pfpService.js"></script>
+    <script src="js/services/responseValidationService.js"></script>
+    <script src="js/services/securityService.js"></script>
     <!-- inject:service:js -->
     <!-- endinject -->
 
@@ -215,6 +222,34 @@
         <div style="margin-top: 5%" class="container text-center" align="center">
             <p style="color: #0D47A1" id="loadingData">{{"LOADINGDATA"|translate}}...</p>
             <img style="margin-top: 5%; margin-left: -5%; width: 80%; height: auto;" ng-src="./img/muhc-logo-text.png" >
+        </div>
+    </ons-modal>
+
+    <!--
+    Backsplash Modal
+    =================================-->
+    <ons-modal var="backsplashmodal">
+        <img src="img/backsplash/backsplash.png">
+    </ons-modal>
+
+    <!--
+    Update Required Modal
+    =================================-->
+    <ons-modal var="updateRequiredModal">
+        <h4>{{"UPDATEREQUIRED"|translate}}</h4>
+        <ons-icon icon="ion-alert-circled" size="60px"></ons-icon>
+        <p style="margin-top: 5%" class="unattended-message">{{"UPDATEMESSAGE"|translate}}</p>
+    </ons-modal>
+
+    <!--
+     ScreenshotTaken Modal
+     =================================-->
+    <ons-modal var="screenshotTakenModal">
+        <div id="rcorners">
+            <h3>Attention!</h3>
+            <ons-icon icon="ion-alert-circled" size="60px"></ons-icon>
+            <p style="margin-top: 5%" class="unattended-message">{{"SCREENSHOTTAKEN"|translate}}</p>
+            <ons-button style="margin-top: 5%" ng-click="screenshotTakenModal.hide()">{{"OK"|translate}}</ons-button>
         </div>
     </ons-modal>
 

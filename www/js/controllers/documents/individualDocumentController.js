@@ -16,7 +16,7 @@
         .module('MUHCApp')
         .controller('IndividualDocumentController', IndividualDocumentController);
 
-    IndividualDocumentController.$inject = ['$scope', 'NavigatorParameters','Documents', '$timeout', 'FileManagerService', 'Constants', '$q', 'UserPreferences', 'Logger'];
+    IndividualDocumentController.$inject = ['$scope', 'NavigatorParameters', 'Documents', '$timeout', 'FileManagerService', 'Constants', '$q', 'UserPreferences', 'Logger'];
 
     /* @ngInject */
     function IndividualDocumentController($scope, NavigatorParameters, Documents, $timeout, FileManagerService, Constants, $q, UserPreferences, Logger) {
@@ -24,7 +24,6 @@
 
         var parameters;
         var docParams;
-        var pdfdoc;
         var uint8pf;
         var scale;
         var viewerSize;
@@ -36,10 +35,18 @@
         vm.hide = false;
 
         vm.share = share;
-        vm.about = about;
-        vm.warn = warn;
+        vm.openPDF = openPDF;
+
+        //$scope.share = share;
+        $scope.about = about;
+        $scope.warn = warn;
+        $scope.warn2 = warn2;
+        $scope.docParams = docParams;
+        $scope.isAndroid = isAndroid;
+
 
         activate();
+
         /////////////////////////////
 
         function activate() {
@@ -47,15 +54,13 @@
 
             //PDF params
             docParams = Documents.setDocumentsLanguage(parameters.Post);
+            $scope.docParams = docParams;
+
             viewerSize = window.innerWidth;
             containerEl = document.getElementById('holder');
-            pdfdoc, scale = 3, uint8pf;
+            scale = 3;
 
-            vm.documentObject = docParams;
-            $scope.documentObject = docParams;
-
-            //Log usage
-            Logger.sendLog('Document', docParams.DocumentSerNum);
+            vm.doc_title = docParams.Title;
 
             //Create popover
             ons.createPopover('./views/personal/documents/info-popover.html', {parentScope: $scope}).then(function (popover) {
@@ -63,20 +68,17 @@
             });
 
             $scope.$on('$destroy', function () {
-
                 $scope.popoverDocsInfo.off('posthide');
                 $scope.popoverDocsInfo.destroy();
             });
+
             initializeDocument(docParams);
         }
 
-        function initializeDocument(document)
-        {
-            if (Documents.getDocumentBySerNum(document.DocumentSerNum).Content){
+        function initializeDocument(document) {
+            if (Documents.getDocumentBySerNum(document.DocumentSerNum).Content) {
                 setUpPDF(document);
-            }
-
-            else {
+            } else {
                 Documents.downloadDocumentFromServer(document.DocumentSerNum).then(function () {
                     setUpPDF(document);
                 }).catch(function (error) {
@@ -87,19 +89,72 @@
             }
         }
 
+        function openPDF() {
+            if (Constants.app) {
+                if (ons.platform.isAndroid()) {
+                    var targetPath = FileManagerService.generatePath(docParams);
+
+                    var path = FileManagerService.getPathToDocuments();
+                    var docName = FileManagerService.generateDocumentName(docParams);
+
+                    FileManagerService.downloadFileIntoStorage("data:application/pdf;base64," + docParams.Content, targetPath).then(function () {
+
+                        window.cordova.plugins.FileOpener.canOpenFile(targetPath, function (data2) {
+                            // at this point it means data2.canBeOpen = true. A PDF Viewer "is" indeed available to show the document
+
+                            var onSuccess = function (data) {
+                                // file opened successfully by Default PDF Viewer on Android. Nothing else to do at this point
+                                console.log('file opened successfully by Default PDF Viewer on Android. Nothing else to do at this point');
+
+                                // Now add the filename to an array to be deleted OnExit of the app (CleanUp.Clear())
+                                Documents.addToDocumentsDownloaded(path, docName);    // add file info to the array
+                                //////////////////////////////////////////////////////
+                                
+                            };
+
+                            function onError(error) {
+                                // Unexpected Error occurred. For some reason, file could not be opened and viewed, although canOpenFile function returned (data2.canBeOpen = true)
+                                console.log('openPDF (FileOpener.openFile) Error: ' + error.status + ' - Error message: ' + error.message);
+                                ons.notification.alert({message: $filter('translate')('UNABLETOOPEN')});
+                            }
+
+                            window.cordova.plugins.FileOpener.openFile(targetPath, onSuccess, onError);
+
+
+                        }, function (error) {   // at this point it means data2.canBeOpen = false. A PDF Viewer is NOT available to show the document
+                            ons.notification.alert({message: $filter('translate')('UNABLETOOPEN')});
+                            console.log('canOpen 3 Error (A PDF Viewer is NOT available to show the document): ' + error.status + ' - Error message: ' + error.message);
+                        });
+
+
+
+                    }).catch(function (error) {
+                        //Unable to save document on server
+                        console.log('Error saving/downloading document from Server downloadFileIntoStorage(): ' + error.status + ' - Error message: ' + error.message);
+
+                    });
+
+                } else {
+                    cordova.InAppBrowser.open("data:application/pdf;base64," + docParams.Content, '_blank', 'EnableViewPortScale=yes');
+                }
+            } else {
+                window.open("data:application/pdf;base64, " + docParams.Content, '_blank', 'location=no,enableViewportScale=true');
+            }
+            vm.loading = false;
+        }
+
+
         function setUpPDF(document) {
             uint8pf = FileManagerService.convertToUint8Array(document.Content);
 
             PDFJS.getDocument(uint8pf)
                 .then(function (_pdfDoc) {
+                    uint8pf = null;
 
                     var promises = [];
-
                     for (var num = 1; num <= _pdfDoc.numPages; num++) {
                         promises.push(renderPage(_pdfDoc, num, containerEl));
                     }
-                    pdfdoc = _pdfDoc;
-
                     return $q.all(promises);
                 })
                 .then(function () {
@@ -107,7 +162,9 @@
                     var canvasElements = containerEl.getElementsByTagName("canvas");
                     var viewerScale = viewerSize / canvasElements[0].width * 0.95 * 100 + "%";
                     for (var i = 0; i !== canvasElements.length; ++i) {
+
                         canvasElements[i].style.zoom = viewerScale;
+
                         canvasElements[i].onclick = function (event) {
                             if (Constants.app) {
                                 if (ons.platform.isAndroid()) {
@@ -123,18 +180,27 @@
 
                     vm.loading = false;
                     vm.show = true;
-                    $timeout(function(){vm.hide = true}, 5000);
-                    $timeout(function(){vm.show = false}, 6500);
+                    $timeout(function () {
+                        vm.hide = true
+                    }, 5000);
+                    $timeout(function () {
+                        vm.show = false
+                    }, 6500);
                     $scope.$apply();
                 });
         }
 
         function convertCanvasToImage(canvas) {
             var image = new Image();
-            image.onload = function(){
-                cordova.InAppBrowser.open(image.src, '_blank', 'location=no,enableViewportScale=true');
+
+            image.onload = function () {
+                var ref = cordova.InAppBrowser.open(image.src, '_blank', 'location=no,enableViewportScale=true', 'clearcache=yes');
+                ref.addEventListener('loadstop', function () {
+                    image = null;
+                });
             };
-            image.src = canvas.toDataURL("image/jpeg", 0.5);
+
+            image.src = canvas.toDataURL("image/jpeg", 0.1);
         }
 
 
@@ -145,12 +211,9 @@
 
             // Using promise to fetch the page
             return pdfDoc.getPage(num).then(function (page) {
-
                 var renderContext = draw(page, canvas, ctx);
-
                 containerEl.appendChild(canvas);
                 return page.render(renderContext);
-
             });
         }
 
@@ -169,14 +232,23 @@
 
 
         //Share function
-        function share()
-        {
+        function share() {
+
             if (Constants.app) {
                 var targetPath = FileManagerService.generatePath(docParams);
-                FileManagerService.downloadFileIntoStorage("data:application/pdf;base64," + docParams.Content, targetPath).then(function() {
-                    FileManagerService.shareDocument(docParams.Title.replace(/ /g,"")+docParams.ApprovedTimeStamp.toDateString().replace(/ /g,"-"), targetPath);
-                }).catch(function(error)
-                {
+
+                var path = FileManagerService.getPathToDocuments();
+                var docName = FileManagerService.generateDocumentName(docParams);
+
+                FileManagerService.downloadFileIntoStorage("data:application/pdf;base64," + docParams.Content, targetPath).then(function () {
+                    FileManagerService.shareDocument(docParams.Title.replace(/ /g, "") + docParams.ApprovedTimeStamp.toDateString().replace(/ /g, "-"), targetPath);
+
+                    // Now add the filename to an array to be deleted OnExit of the app (CleanUp.Clear())
+                    Documents.addToDocumentsDownloaded(path, docName);    // add file info to the array
+                    //////////////////////////////////////////////////////
+
+
+                }).catch(function (error) {
                     //Unable to save document on server
 
                 });
@@ -186,16 +258,25 @@
             }
         }
 
-        function warn(){
+        function warn() {
             modal.show();
             $scope.popoverDocsInfo.hide();
         }
 
-        function about(){
+        function warn2() {
+            modalOpenViewer.show();
+            $scope.popoverDocsInfo.hide();
+        }
+
+        function isAndroid() {
+            return ons.platform.isAndroid();
+        }
+
+        function about() {
 
             // Check if there is any about link
             var link = null;
-            docParams.hasOwnProperty("URL_EN") ? link  = docParams["URL_"+UserPreferences.getLanguage()] : {} ;
+            docParams.hasOwnProperty("URL_EN") ? link = docParams["URL_" + UserPreferences.getLanguage()] : {};
 
             // Set the options to send to the content controller
             var contentOptions = {
@@ -203,7 +284,7 @@
                 contentLink: link
             };
 
-            personalNavigator.pushPage('./views/templates/content.html',contentOptions);
+            personalNavigator.pushPage('./views/templates/content.html', contentOptions);
             $scope.popoverDocsInfo.hide();
         }
     }

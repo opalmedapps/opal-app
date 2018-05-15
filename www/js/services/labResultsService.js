@@ -49,9 +49,8 @@ myApp.service('LabResults',['$filter','LocalStorage','RequestToServer','$q',
         // Function that saves tests results to the service
         function addTestResults(tests) {
 
-            if (typeof tests == 'undefined') return;
+            if (!tests) return;
             for (var key = 0; key < tests.length; key++) {
-                //testResultsToLocalStorage.push(angular.copy(tests[key]));
 
                 var testResult = tests[key];
                 testResult.TestDateFormat = $filter('formatDate')(testResult.TestDate);
@@ -74,7 +73,7 @@ myApp.service('LabResults',['$filter','LocalStorage','RequestToServer','$q',
                 testResult.testCategory = testCategory;
 
                 // Filter by test date
-                if (testResultsByDate[testResultDate] == undefined) {
+                if (!testResultsByDate[testResultDate]) {
                     testResultsByDate[testResultDate] = {};
                     testResultsByDate[testResultDate].testCategory = testCategory;
                     testResultsByDate[testResultDate].testDate = testResult.TestDate;
@@ -86,7 +85,7 @@ myApp.service('LabResults',['$filter','LocalStorage','RequestToServer','$q',
                 }
 
                 // Filter by test name
-                if (testResultsByType[testResultType] == undefined) {
+                if (!testResultsByType[testResultType]) {
                     testResultsByType[testResultType] = {};
                     testResultsByType[testResultType].testCategory = testCategory;
                     testResultsByType[testResultType].testName = testResultType;
@@ -97,7 +96,7 @@ myApp.service('LabResults',['$filter','LocalStorage','RequestToServer','$q',
                 }
 
                 // Filter by test category
-                if (testResultsByCategory[testCategory] === undefined) {
+                if (!testResultsByCategory[testCategory]) {
                     testResultsByCategory[testCategory] = {};
                     testResultsByCategory[testCategory].testCategory = testCategory;
                     testResultsByCategory[testCategory].testResults = [];
@@ -111,10 +110,11 @@ myApp.service('LabResults',['$filter','LocalStorage','RequestToServer','$q',
             for (var keyType in testResultsByType) {
                 testResultsByTypeArray.push(testResultsByType[keyType]);
             }
-            //
+
             for (var key1 in testResultsByDate) {
                 testResultsByDateArray.push(testResultsByDate[key1]);
             }
+
             testResultsByDateArray = $filter('orderBy')(testResultsByDateArray, 'testDateFormat', true);
         }
 
@@ -201,7 +201,6 @@ myApp.service('LabResults',['$filter','LocalStorage','RequestToServer','$q',
              *@returns {Object} Returns object containing lab results by date
              **/
             getTestResultsByDate:function(){
-
                 return testResultsByDate;
             },
 
@@ -241,7 +240,6 @@ myApp.service('LabResults',['$filter','LocalStorage','RequestToServer','$q',
                 testResultsByDateArray=[];
                 testResultsByTypeArray=[];
                 lastUpdated = 0;
-                //testResultsToLocalStorage=[];
             },
 
             /**

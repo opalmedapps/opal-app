@@ -7,7 +7,7 @@
     </ons-toolbar>
     <network-banner></network-banner>
     <ons-list >
-        <ons-list-header ng-hide="checkIn.alert.type == 'info'" class="person-list-header" ng-class="fontSizeTitle">
+        <ons-list-header class="person-list-header" ng-class="fontSizeTitle">
             {{"APPOINTMENTS"|translate}}
         </ons-list-header>
         <ons-list-item modifier="tappable chevron" ng-repeat="app in checkIn.apps" ng-click="checkIn.goToAppointment(app)">
@@ -23,7 +23,6 @@
                         <span ng-class="fontSizeTitle">
                             {{app["AppointmentType_"+checkIn.language]}} <br>
                             {{app.ScheduledStartTime | date:'shortTime'}}
-                            {{home.checkInMessage}}
                         </span> <br>
                         <span class="item-desc" ng-class="fontSizeDesc" ng-show="app.RoomLocation_EN">{{"APPOINTMENT_ROOM"|translate}} {{app["RoomLocation_"+checkIn.language]}}</span>
                     </div>
@@ -33,17 +32,9 @@
     </ons-list>
     <br>
 
-    <!-- <p ng-show="checkIn.alert.type" style="text-align: center; color: grey;" ng-class="fontSizeTitle">{{checkIn.checkInMessage|translate}}</p> -->
-
     <p ng-show="checkIn.alert.type" style="text-align: center; color: grey;" ng-class="fontSizeTitle">{{checkIn.checkInMessage|translate}}</p>
+    <p ng-show="checkIn.alert.type && checkIn.additionalInfo" style="text-align: center; color: grey;" ng-class="fontSizeTitle">{{checkIn.checkInMessage|translate}}</p>
 
-    <!--<div uib-alert ng-show="checkIn.alert.type" style="text-align: center; width: 90%; margin: auto" type="{{checkIn.alert.type}}" class="{{fontSizeTitle}}" >-->
-    <!--{{checkIn.checkInMessage|translate}}-->
-    <!--</div>-->
-
-    <!-- <div uib-alert ng-show="checkIn.alert.type && checkIn.additionalInfo" style="text-align: center; width: 90%; margin: auto" type="info" class="{{fontSizeTitle}}" >
-        {{checkIn.additionalInfo|translate}}
-    </div> -->
 
     <div ng-hide="checkIn.alert.type" align="center" style="margin:10px">
         <svg class="progress-circular">
