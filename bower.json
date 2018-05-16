@@ -38,7 +38,7 @@
     "ngCordova": "^0.1.24-alpha",
     "onsenui": "^1.3.11",
     "angular-tek-progress-bar": "^0.2.0",
-    "angular-sanitize": "^1.6.0",
+    "angular-sanitize": "^1.7.0",
     "angular-elastic": "^2.5.1",
     "angular-bootstrap": "^2.3.1",
     "angular-scroll-glue": "^2.0.7",
@@ -54,6 +54,6 @@
     "Ionicons": "ionicons#^2.0.1"
   },
   "resolutions": {
-    "angular": "^1.6.0"
+    "angular": ">= 1.2.23"
   }
 }

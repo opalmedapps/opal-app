@@ -3,11 +3,8 @@
 *Github: dherre3
 *Email:davidfherrerar@gmail.com
 */
-
-
 var app1 = angular.module('MUHCApp');
-app1.controller('QuestionnaireMainController', function ($scope, $location, $anchorScroll, $rootScope, $sce, $http, $window, $filter, progressBarManager, Questionnaires, $timeout, NavigatorParameters, UserPreferences) {
-
+app1.controller('QuestionnaireMainController', function ($scope, $location, $anchorScroll, $rootScope, $sce, $http, $window, $filter, progressBarManager, Questionnaires, $timeout, NavigatorParameters) {
     // Questionnaires.getQuestionnaireAnswers();
     if (Questionnaires.isEmpty()) {
         $scope.emptyQuestionnaires = true;
@@ -17,12 +14,10 @@ app1.controller('QuestionnaireMainController', function ($scope, $location, $anc
 
 
     }
-
     function initQuestionnaire() {
         var params = NavigatorParameters.getParameters();
         $scope.questionnaireDBSerNum = params.DBSerNum;
         $scope.subAnswers = false;
-        $scope.language = UserPreferences.getLanguage().toUpperCase();
 
         $scope.questionnaireSerNum = params.SerNum;
 
@@ -50,6 +45,7 @@ app1.controller('QuestionnaireMainController', function ($scope, $location, $anc
         }
 
 
+
         $scope.question;
         $scope.options;
         $scope.shown = new Array($scope.questions.length);
@@ -69,7 +65,6 @@ app1.controller('QuestionnaireMainController', function ($scope, $location, $anc
         var listener = document.addEventListener('ons-carousel:postchange', carouselPostChange);
 
     }
-
     function carouselPostChange(event) {
 
         if (event != undefined) {
@@ -121,7 +116,7 @@ app1.controller('QuestionnaireMainController', function ($scope, $location, $anc
 
         if (($scope.index <= $scope.questions.length) && ($scope.index > 0)) {
             $scope.question = $scope.questions[$scope.index - 1];
-            $scope.questionText = ($scope.language === "EN") ? $scope.question.QuestionText_EN : $scope.question.QuestionText_FR;
+            $scope.questionText = $scope.question.QuestionText_EN;
 
             if ($scope.question.QuestionType == 'MC') {
                 if (($scope.question != undefined) && ($scope.question.Choices != undefined)) {
@@ -143,41 +138,14 @@ app1.controller('QuestionnaireMainController', function ($scope, $location, $anc
                 // is shown if nothing is clicked
                 $scope.numbers = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
-                // Percentage heights of different vertical progress bars
+                // Percentage heights of different progress bars
                 $scope.heights = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
-                /*
-                        if ($scope.question.Choices[1].OrderNum == 5) {
-                          // Possible answers excluding 0. Just there to take place in the array.
-                          $scope.buttons = $scope.buttons.slice(0, 6);
-                          $scope.numbers = $scope.numbers.slice(0, 6);
-                          $scope.heights = [0, 20, 40, 60, 80, 100];
-                        }
-                */
-                var numberOfRatings = parseInt($scope.question.Choices[1].OrderNum);
-
-                $scope.buttons = $scope.buttons.slice(0, numberOfRatings + 1);
-                $scope.numbers = $scope.numbers.slice(0, numberOfRatings + 1);
-                $scope.heights = $scope.heights.slice(0, numberOfRatings + 1);
-
-                /*
-                        if ($scope.question.Choices[1].OrderNum == 4) {
-                            // Possible answers excluding 0. Just there to take place in the array.
-                            $scope.buttons = $scope.buttons.slice(0, 5);
-                            $scope.numbers = $scope.numbers.slice(0, 5);
-                            $scope.heights = [0, 25, 50, 75, 100];
-                        } else if ($scope.question.Choices[1].OrderNum == 5) {
-                            // Possible answers excluding 0. Just there to take place in the array.
-                            $scope.buttons = $scope.buttons.slice(0, 6);
-                            $scope.numbers = $scope.numbers.slice(0, 6);
-                            $scope.heights = [0, 20, 40, 60, 80, 100];
-                        } else if ($scope.question.Choices[1].OrderNum == 7) {
-                            // Possible answers excluding 0. Just there to take place in the array.
-                            $scope.buttons = $scope.buttons.slice(0, 8);
-                            $scope.numbers = $scope.numbers.slice(0, 8);
-                            $scope.heights = [0, 25, 37, 50, 62, 75, 87, 100];
-                          }
-                */
-
+                if ($scope.question.Choices[1].OrderNum == 5) {
+                    // Possible answers excluding 0. Just there to take place in the array.
+                    $scope.buttons = $scope.buttons.slice(0, 6);
+                    $scope.numbers = $scope.numbers.slice(0, 6);
+                    $scope.heights = [0, 20, 40, 60, 80, 100];
+                }
                 // Background color of empty progress bar is initially white
                 $scope.colors = ['white'];
                 var length = $scope.heights.length;
@@ -297,6 +265,7 @@ app1.controller('QuestionnaireMainController', function ($scope, $location, $anc
                 }
 
 
+
             } else if ($scope.question.QuestionType == 'SA') {
                 $scope.longAns = $scope.answers[$scope.index - 1];
             }
@@ -332,24 +301,20 @@ app1.controller('QuestionnaireMainController', function ($scope, $location, $anc
 
     $scope.trustAsHtml = function (questionText) {
         if ($scope.question != undefined) {
-            assesses = ($scope.language === "EN") ? $scope.question.Asseses_EN : $scope.question.Asseses_FR;
+            assesses = $scope.question.Asseses_EN;
         } else {
             return;
         }
         i = questionText.search(assesses);
         if (i == -1) {
-            newHtml = "<h4>" + questionText + "</h4>";
+            newHtml = "<h2>" + questionText + "</h2>";
         } else {
             questionPart1 = questionText.slice(0, i);
             questionPart2 = questionText.slice(i + assesses.length);
-            newHtml = "<h4>" + questionPart1 + "<span style='color:darkmagenta'><strong>" + assesses + "</strong></span>" +
-                questionPart2 + "</h4>";
+            newHtml = "<h2>" + questionPart1 + "<span style='color:darkmagenta'><strong>" + assesses + "</strong></span>" +
+                questionPart2 + "</h2>";
         }
         return $sce.trustAsHtml(newHtml);
-    }
-
-    $scope.trustThisAsHtml = function () {
-        return $sce.trustAsHtml(($scope.language === "EN") ? $scope.questionaire.Intro_EN : $scope.questionaire.Intro_FR);
     }
 
     function setQuestionnaireAnswersObject(object) {
@@ -361,8 +326,7 @@ app1.controller('QuestionnaireMainController', function ($scope, $location, $anc
 
         $scope.answers = {};
         for (key in answers) {
-            // orderNum = questionsObject[key].OrderNum;
-            orderNum = questionsObject[key].Choices[1].OrderNum;
+            orderNum = questionsObject[key].OrderNum;
             $scope.answers[orderNum - 1] = answers[key].Answer;
         }
 
@@ -419,17 +383,16 @@ app1.controller('QuestionnaireMainController', function ($scope, $location, $anc
     /////////////////////////
 
 
+
     // checked stores whether or not the option is clicked or not. objectClass stores what class a particular list item will take.
     // Encountered a really weird problem here where if the checked value was anything but undefined it was unchecked. So the values
     // start off as false and later on when they are clicked are changed to undefined. Weird but works!
     function setChecked() {
-        var choiceDescription = "";
 
         if (($scope.options != undefined) && ($scope.answers != undefined) && ($scope.answers[$scope.index - 1] != undefined)) {
             ans = $scope.answers[$scope.index - 1];
             for ($i = 0; $i < $scope.options.length; $i++) {
-                choiceDescription = ($scope.language === "EN") ? $scope.options[$i].ChoiceDescription_EN : $scope.options[$i].ChoiceDescription_FR;
-                if ((ans != undefined) && (ans.Answer == choiceDescription)) {
+                if ((ans != undefined) && (ans.Answer == $scope.options[$i].ChoiceDescription_EN)) {
                     $scope.checked1[$i] = true;
                 } else {
                     $scope.checked1[$i] = false;
@@ -461,12 +424,10 @@ app1.controller('QuestionnaireMainController', function ($scope, $location, $anc
         $scope.answer = option;
         // Stores the answer as an object where there is the clicked answer and a possibly defined variable called otherAns
         // this stores the possibly filled out other value
-        $scope.answers[$scope.index - 1] = option;
-
-            // $scope.answers[$scope.index - 1] = {
-        //     Answer: option,
-        //     // otherAns: otherAns    // DO NOT SEND BACK otherAns because management do not want this option + Column does not exist in the database.
-        // };
+        $scope.answers[$scope.index - 1] = {
+            Answer: option,
+            otherAns: otherAns
+        };
         Questionnaires.setQuestionnaireAnswers($scope.answers[$scope.index - 1], $scope.questions[$scope.index - 1].QuestionnaireQuestionSerNum, $scope.questionnaireDBSerNum, $scope.questionnaireSerNum);
         // If other is chosen but they havent filled it in than the answer is made undefined and the number of answered questions is
         // subtracted by 1
@@ -751,7 +712,7 @@ app1.controller('QuestionnaireMainController', function ($scope, $location, $anc
 
     $scope.chooseAction = function (index, oneQuestion) {
         if ($scope.answers[index] != undefined) {
-            if ((oneQuestion.QuestionType == 'SA') || (oneQuestion.QuestionType == 'Checkbox') || (oneQuestion.QuestionType == 'image') || (oneQuestion.QuestionType == 'MC')) {
+            if ((oneQuestion.QuestionType == 'SA') || (oneQuestion.QuestionType == 'Checkbox') || (oneQuestion.QuestionType == 'image')) {
                 $scope.showAnswer(index);
             } else {
                 $scope.goToPage(index);
@@ -766,15 +727,11 @@ app1.controller('QuestionnaireMainController', function ($scope, $location, $anc
         $scope.carousel.setActiveCarouselItemIndex(index + 1);
     }
 
-    // Chooses whether the user is able to submit answers or not. If not all of the answers are answered then they cannot,
-    // EXCEPT if the answer is a free TEXT, then it is NOT mandatory. It could be empty. So it is ok not to answer this kind of question type 'SA'
+    // Chooses whether the user is able to submit answers or not. If not all of the asnwers are answered than they cannot
     $scope.checkSubmit = function () {
         for ($i = 0; $i < $scope.questions.length; $i++) {
-            // if answer is in free TEXT format, it is NOT mandatory. It could be empty.
-            if ($scope.questions[$i].QuestionType !== 'SA') {
-                if (!$scope.hasOwnProperty('answers') || typeof $scope.answers[$i] == 'undefined') {
-                    return true;
-                }
+            if (!$scope.hasOwnProperty('answers') || typeof $scope.answers[$i] == 'undefined') {
+                return true;
             }
         }
         return false;
