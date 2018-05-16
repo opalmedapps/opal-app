@@ -1,55 +1,74 @@
 <ons-page ng-controller="AnsweredQuestionnaireController as vm">
     <ons-toolbar fixed-style>
         <div class="left">
-            <ons-back-button>Back</ons-back-button>
+            <ons-back-button>{{"BACK"|translate}}</ons-back-button>
         </div>
-        <div class="center">Summary</div>
+        <div class="center">{{"SUMMARY_PAGE"|translate}}</div>
+        <div class="right">
+          <span ng-if="vm.questionnaire.status == 'In progress'" class="toolbar-button--quiet navigation-bar__line-height" ng-click="vm.submitQuestionnaire();" ng-disabled="!vm.submitAllowed">
+            {{"SUBMIT"|translate}}
+          </span>
+        </div>
     </ons-toolbar>
 
     <ons-row align="center" style="margin-left: 0.12vw;">
         <ons-col align="center">
-            <ul class="list" style="width: 100vw;" ng-repeat="question in vm.questions track by $index">
-                <li class="list__item" ng-click="vm.chooseAction($index, question)">
-                    <ons-row style="margin:0;padding:0" align="center">
-                        <ons-col align="left" style="border:1px solid white;color:white">
-                            <div style="line-height: 1.4;">
-                                #{{$index+1}}: {{question.Asseses_EN}}
-                            </div>
-                        </ons-col>
-                        <ons-col align="center" width="30%">
-                            <span ng-show="vm.answers[$index]" style="float: right; color: black;">
-                                <!-- If its not an input question than the otherAns is shown or the answer is shown, both of those for the multiple choice questions. If both of those are undefined than its a scale quesiton and only the answer[$index] is needed to be shown. If the source is LEE the question is out of 5 and if its ESAS its out of 5 -->
-                                <span ng-show="(question.QuestionType === 'MinMax') && (question.QuestionType !== 'Checkbox') && (question.QuestionType !== 'image')" style="color: #4CAF50">
-                                    {{vm.answers[$index].otherAns || vm.answers[$index].answer || vm.answers[$index]}}
-                                </span>
-                                <span ng-show="(question.Choices[1].OrderNum === '5') && (question.QuestionType === 'MinMax')"> / 5</span>
-                                <span ng-show="(question.Choices[1].OrderNum == '10') && (question.QuestionType == 'MinMax')"> / 10</span>
-                                <!-- If its an input question and its answered all we say is "asnwered" and the user can preview it by clicking the eye -->
-                                <span ng-show="(question.QuestionType === 'SA' || question.QuestionType === 'Checkbox' || question.QuestionType === 'image') && (vm.answers[$index]) && (!vm.answerShown[$index])">
-                                    <p style="color: rgba(38,100,171,0.81); margin-left:3px;margin-top: 5px; line-height: 1; text-align: center">
-                                        <span>Show <i class="ion-chevron-right" style="padding-left: 2vw"></i></span>
-                                    </p>
-                                </span>
-                                <span ng-show="(question.QuestionType == 'SA' || question.QuestionType == 'Checkbox' || question.QuestionType == 'image') && (vm.answers[$index]) && (vm.answerShown[$index])">
-                                    <p style="color: rgba(38,100,171,0.81); margin-top:5px;line-height:1; text-align: center">
-                                        Hide<i class="ion-chevron-down" style="padding-left: 2vw"></i>
-                                    </p>
-                                </span>
-                            </span>
-                            <span ng-click="vm.goToPage($index)" ng-show="(!vm.answers[$index])" style="float: right; color: #F44336">Answer <i class="ion-chevron-right" style="padding-left: 2vw"></i></span>
-                        </ons-col>
-                    </ons-row>
-                </li>
-                <!-- Eye preview -->
-                <li ng-show="vm.answerShown[$index]" style="background:white;color:black;padding:5px 5px 0 5px;border:1px solid lightgrey">
-                    <strong>Answer:</strong>
-                    <div class="card" >
-                        <div class="item">
-                            {{vm.answerToShow[$index]}}
+            <div ng-repeat="section in vm.questionnaire.sections">
+                <ons-row style="margin:0;padding:0;" align="center">
+                    <ons-col align="center">
+                        <div class="text-center">
+                            {{section.title}}
                         </div>
-                    </div>
-                </li>
-            </ul>
+                    </ons-col>
+                </ons-row>
+                <ul class="list" style="width: 100vw;" ng-repeat="question in section.questions">
+                    <li class="list__item" ng-init="question.showAnswer = false;" ng-click="vm.editQuestion($parent.$index,$index)" ng-style="question.optional == 0 && question.patient_answer.length == 0 && {'background-color': 'red'}">
+                        <ons-row style="margin:0;padding:0" align="center">
+                            <ons-col align="left" style="border:1px solid white;color:white">
+                                <div style="line-height: 1.4;margin-top:10px;margin-bottom:10px">
+                                    <span style="color:rgba(38,100,171,0.81)">{{$index+1}}.</span> {{question.text}}
+                                </div>
+                            </ons-col>
+                            <ons-col align="center" width="30%">
+                    <span ng-if="question.patient_answer.length > 1" style="float: right; color: rgba(38,100,171,0.81);" ng-click="question.showAnswer = !question.showAnswer">
+                      <i ng-if="!question.showAnswer" class="ion-chevron-down" style="padding-left: 2vw"></i>
+                      <i ng-if="question.showAnswer" class="ion-chevron-up" style="padding-left: 2vw"></i>
+                    </span>
+                                <span ng-if="question.patient_answer.length == 1 && question.questiontype == 'Scale' && question.patient_answer.indexOf('SKIPPED') == -1" style="float: right; color: rgba(38,100,171,0.81);">
+                      {{question.patient_answer[0]}}/{{vm.getScaleMaxValue(question)}}
+                    </span>
+                                <span ng-if="question.patient_answer.length == 1 && question.questiontype == 'Scale' && question.patient_answer.indexOf('SKIPPED') > -1" style="float: right; color: rgba(38,100,171,0.81);">
+                      <i>{{"SKIPPED"|translate}}</i>
+                    </span>
+                                <span ng-if="question.patient_answer.length == 1 && question.questiontype != 'Scale' && question.patient_answer.indexOf('SKIPPED') > -1" style="float: right; color: rgba(38,100,171,0.81);">
+                      <i>{{"SKIPPED"|translate}}</i>
+                    </span>
+                                <span ng-if="question.patient_answer.length == 1 && question.questiontype != 'Scale' && question.patient_answer.indexOf('SKIPPED') == -1" style="float: right; color: rgba(38,100,171,0.81);">
+                      {{question.options[""+question.patient_answer[0]].text}}
+                    </span>
+                            </ons-col>
+                        </ons-row>
+                    </li>
+                    <!-- Eye preview -->
+                    <li ng-show="question.showAnswer" style="background:white;color:rgba(38,100,171,0.81);padding:5px 5px 0 5px;border:1px solid lightgrey">
+                        <div class="item" >
+                            <div ng-repeat="answer in question.patient_answer">
+                    <span ng-if="question.questiontype == 'Scale'">
+                      {{answer}}
+                    </span>
+                                <span ng-if="question.questiontype != 'Scale'">
+                      {{question.options[""+answer].text}}
+                    </span>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div ng-if="vm.questionnaire.status == 'In progress'" class="card">
+                <button type="button" class="btn" style="width: 100%; color:white; background-color:rgba(38,100,171,0.81)" ng-click="vm.submitQuestionnaire();" ng-disabled="!vm.submitAllowed">
+                    <h4>{{"SUBMIT_QUESTIONNAIRE"|translate}}
+                </button>
+            </div>
         </ons-col>
     </ons-row>
 </ons-page>

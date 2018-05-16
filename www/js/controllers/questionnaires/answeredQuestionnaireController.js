@@ -1,8 +1,3 @@
-//
-//  Created by David Herrera on 2016-06-15.
-//  Modified Lee Dennis Summer 2016
-//
-
 (function () {
     'use strict';
 
@@ -17,96 +12,54 @@
     /* @ngInject */
     function AnsweredQuestionnaireController(Questionnaires, NavigatorParameters) {
         var vm = this;
+        vm.editQuestion = editQuestion;
+        vm.submitQuestionnaire = submitQuestionnaire;
+        vm.getScaleMaxValue = getScaleMaxValue;
 
-        vm.chooseAction = chooseAction;
-        vm.showAnswer = showAnswer;
-        vm.showAnswerReview = showAnswerReview;
+        // vm.toggleAnswer = toggleAnswer;
 
         activate();
         ///////////////////
 
-        function activate(){
-
+        function activate() {
             var params = NavigatorParameters.getParameters();
-            vm.questionnaireSerNum = params.SerNum;
-            vm.questionnaireDBSerNum = params.DBSerNum;
-            vm.answers = [];
-
-            var answersObject;
-            vm.questionnaire = Questionnaires.getPatientQuestionnaires().Questionnaires[vm.questionnaireDBSerNum];
-            vm.patientQuestionnaire = Questionnaires.getPatientQuestionnaires().PatientQuestionnaires[vm.questionnaireSerNum];
-            vm.questionsObject = vm.questionnaire.Questions;
-            vm.questions = [];
-
-            for (var key in vm.questionsObject) {
-                vm.questions.push(vm.questionsObject[key]);
-            }
-
-
-            if(!vm.patientQuestionnaire.Answers) {
-                answersObject = Questionnaires.getQuestionnaireAnswers(vm.questionnaireSerNum).Answers;
-            } else {
-                answersObject = vm.patientQuestionnaire.Answers;
-            }
-
-            for (key in answersObject) {
-                vm.answers.push(answersObject[key].Answer);
-            }
-
-            vm.answerToShow = new Array(vm.questions.length);
-            vm.answerShown = [];
-
-            for (var $i = 0; $i < vm.questions.length; $i++) {
-                vm.answerShown[$i] = false;
-            }
-        }
-
-        function chooseAction(index, oneQuestion) {
-            if (!!vm.answers[index]) {
-                if ((oneQuestion.QuestionType === 'SA') || (oneQuestion.QuestionType === 'Checkbox') || (oneQuestion.QuestionType === 'image')) {
-                    showAnswer(index);
-                }
-            }
-        }
-
-        // Decides what answer to show. This is purely only for the 'eye' icon where the answer can be previewed.
-        function showAnswer(index) {
-            vm.answerShown[index] = !vm.answerShown[index];
-            vm.animateShowAnswer = (vm.answerShown[index])?'animated fadeInDown':'animated fadeOutUp';
-            if(vm.questions[index].QuestionType === 'Checkbox') {
-                if (!vm.patientQuestionnaire.Answers) {
-                    vm.checkboxString = '';
-                    for (var val in vm.answers[index]) {
-                        if (!!vm.answers[index][val]) {
-                            if (vm.checkboxString === '') {
-                                vm.checkboxString = vm.checkboxString + vm.answers[index][val];
-                            } else {
-                                vm.checkboxString = vm.checkboxString + ', ' + vm.answers[index][val];
-                            }
-                        }
-                    }
-                    vm.answerToShow[index] = vm.checkboxString;
-                } else {
-                    vm.answerToShow[index] = vm.answers[index];
-                }
-            } else if ((vm.questions[index].QuestionType === 'image') && (!!vm.answers[index] )) {
-                vm.checkboxString = '';
-                for (var x in vm.answers[index]) {
-                    if ( vm.checkboxString === '') {
-                        vm.checkboxString = vm.checkboxString + x + ': ' + vm.answers[index][x] + '/10';
-                    } else {
-                        vm.checkboxString = vm.checkboxString + ', ' + x + ': ' + vm.answers[index][x] + '/10';
+            vm.questionnaire = params.questionnaire;
+            vm.submitAllowed = true;
+            for (var i=0; i<vm.questionnaire.sections.length; i++) {
+                for (var j=0; j<vm.questionnaire.sections[i].questions.length; j++) {
+                    if (vm.questionnaire.sections[i].questions[j].optional == 0 && vm.questionnaire.sections[i].questions[j].patient_answer.length == 0) {
+                        console.log("Questionnaire can't be submitted because of question: ");
+                        console.log(vm.questionnaire.sections[i].questions[j]);
+                        vm.submitAllowed = false;
+                        i = vm.questionnaire.sections.length;
+                        break;
                     }
                 }
-                vm.answerToShow[index] = vm.checkboxString;
-            } else {
-                vm.answerToShow[index] = vm.answers[index];
             }
         }
 
-        function showAnswerReview(index) {
-            showAnswer(index);
-            return vm.answerToShow[index];
+        function submitQuestionnaire() {
+            // mark questionnaire as finished
+            console.log("submit request");
+            Questionnaires.updateQuestionnaireStatus(vm.questionnaire.qp_ser_num, "Completed");
+            vm.questionnaire.status = "Completed";
+            NavigatorParameters.setParameters({Navigator:'personalNavigator'});
+            personalNavigator.pushPage('views/personal/questionnaires/questionnairesList.html',{ animation : 'slide' });
         }
+
+        function showAnswer(question) {
+            question.showAnswer = true;
+        }
+
+        function editQuestion(sIndex, qIndex) {
+            NavigatorParameters.setParameters({Navigator:'personalNavigator', questionnaire: vm.questionnaire, sectionIndex: sIndex, questionIndex: qIndex});
+            personalNavigator.pushPage('views/personal/questionnaires/questionnaire.html',{ animation : 'slide' });
+        }
+
+        function getScaleMaxValue(question) {
+            var keys = Object.keys(question.options);
+            return question.options[keys[1]].text;
+        }
+
     }
 })();
