@@ -21,7 +21,7 @@ app1.controller('questionnairesListController', ['$scope', '$rootScope', 'Questi
 
     $scope.goToQuestionnaire = function(selectedQuestionnaire) {
         NavigatorParameters.setParameters({Navigator:'personalNavigator', questionnaire: selectedQuestionnaire});
-        personalNavigator.pushPage('views/personal/questionnaires/questionnaire.html',{ animation : 'slide' });
+        personalNavigator.pushPage('views/personal/questionnaires/questionnaires.html',{ animation : 'slide' });
     };
 
     $scope.goToQuestionnaireSummary = function(selectedQuestionnaire) {
