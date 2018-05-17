@@ -26,7 +26,7 @@
     "angular-dynamic-locale": "^0.1.27",
     "angular-scroll": "^1.0.0",
     "angular-mocks": "^1.6.0",
-    "angular-translate-handler-log": "^2.7.2",
+    "angular-translate-handler-log": "^2.17.1",
     "angular-touch": "^1.6.0",
     "angular-ui-router": "^0.2.13",
     "angular-translate-loader-partial": "^2.7.2",
@@ -54,6 +54,6 @@
     "Ionicons": "ionicons#^2.0.1"
   },
   "resolutions": {
-    "angular": ">= 1.2.23"
+    "angular": "^1.2.21"
   }
 }

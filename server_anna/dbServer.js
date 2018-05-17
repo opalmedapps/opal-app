@@ -9,7 +9,7 @@
 var http   = require('http'),
     q        = require('q'),
     express  = require('express'),
-    mysql    = require('mysql')
+    mysql    = require('mysql'),
 parser   = require('body-parser');
 
 // var connection = mysql.createConnection({
@@ -22,7 +22,8 @@ parser   = require('body-parser');
 var connection = mysql.createConnection({
     host     : 'localhost',
     user     : 'root',
-    password : '',
+    password : 'root',
+    port     :  8889,
     database : 'QuestionnaireDB_StringKeys'
 });
 

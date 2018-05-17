@@ -18,20 +18,20 @@ var myApp = angular.module('MUHCApp');
  *@description API service used to patient notifications. This Service is deeply linked to other services to extract that information about the actual content of the notification.
  **/
 myApp.service('Notifications', ['$filter', 'RequestToServer', 'LocalStorage', 'Announcements', 'TxTeamMessages', 'Appointments', 'Documents', 'EducationalMaterial', 'UserPreferences', '$q', 'Questionnaires', 'CheckInService',
-    function ($filter, RequestToServer, LocalStorage, Announcements, TxTeamMessages, Appointments, Documents, EducationalMaterial, UserPreferences, $q, Questionnaires, CheckInService) {
+    function($filter, RequestToServer, LocalStorage, Announcements, TxTeamMessages, Appointments, Documents, EducationalMaterial, UserPreferences, $q, Questionnaires, CheckInService) {
         /**
          *@ngdoc property
          *@name  MUHCApp.service.#Notifications
          *@propertyOf MUHCApp.service:Notifications
          *@description Initializing array that represents all the information for Notifications, this array is passed to appropiate controllers.
          */
-        var Notifications = [];
+        let Notifications = [];
 
-        //var lastUpdated = 0;
+        // var lastUpdated = 0;
 
-        var lastUpdated = new Date();
+        let lastUpdated = new Date();
 
-        var hasFetchedAll = false;
+        let hasFetchedAll = false;
 
 
         /**
@@ -56,7 +56,7 @@ myApp.service('Notifications', ['$filter', 'RequestToServer', 'LocalStorage', 'A
           }...
         </pre>
         */
-        var notificationTypes = {
+        let notificationTypes = {
             'Document':
                 {
                     icon: 'ion-android-document',
@@ -69,7 +69,7 @@ myApp.service('Notifications', ['$filter', 'RequestToServer', 'LocalStorage', 'A
                     namesFunction: Documents.getDocumentNames,
                     updateFunction: Documents.updateDocuments,
                     PageUrl: Documents.getDocumentUrl,
-                    refreshType: 'Documents'
+                    refreshType: 'Documents',
                 },
             'UpdDocument':
                 {
@@ -83,7 +83,7 @@ myApp.service('Notifications', ['$filter', 'RequestToServer', 'LocalStorage', 'A
                     namesFunction: Documents.getDocumentNames,
                     PageUrl: Documents.getDocumentUrl,
                     updateFunction: Documents.updateDocuments,
-                    refreshType: 'Documents'
+                    refreshType: 'Documents',
                 },
             'RoomAssignment':
                 {
@@ -95,7 +95,7 @@ myApp.service('Notifications', ['$filter', 'RequestToServer', 'LocalStorage', 'A
                     readFunction: Appointments.readAppointmentBySerNum,
                     searchFunction: Appointments.getAppointmentBySerNum,
                     namesFunction: Appointments.getAppointmentName,
-                    PageUrl: Appointments.getAppointmentUrl
+                    PageUrl: Appointments.getAppointmentUrl,
                 },
             'TxTeamMessage':
                 {
@@ -109,7 +109,7 @@ myApp.service('Notifications', ['$filter', 'RequestToServer', 'LocalStorage', 'A
                     readFunction: TxTeamMessages.readTxTeamMessage,
                     updateFunction: TxTeamMessages.updateTxTeamMessages,
                     PageUrl: TxTeamMessages.getTxTeamMessageUrl,
-                    refreshType: 'TxTeamMessages'
+                    refreshType: 'TxTeamMessages',
                 },
             'Announcement': {
                 icon: 'fa fa-bullhorn',
@@ -122,7 +122,7 @@ myApp.service('Notifications', ['$filter', 'RequestToServer', 'LocalStorage', 'A
                 namesFunction: Announcements.getAnnouncementName,
                 updateFunction: Announcements.updateAnnouncements,
                 PageUrl: Announcements.getAnnouncementUrl,
-                refreshType: 'Announcements'
+                refreshType: 'Announcements',
             },
             'EducationalMaterial': {
                 icon: 'fa fa-book',
@@ -135,7 +135,7 @@ myApp.service('Notifications', ['$filter', 'RequestToServer', 'LocalStorage', 'A
                 namesFunction: EducationalMaterial.getEducationalMaterialName,
                 openFunction: EducationalMaterial.getEducationalMaterialUrl,
                 updateFunction: EducationalMaterial.updateEducationalMaterial,
-                refreshType: 'EducationalMaterial'
+                refreshType: 'EducationalMaterial',
             },
             'NextAppointment': {
                 icon: 'fa fa-calendar',
@@ -143,7 +143,7 @@ myApp.service('Notifications', ['$filter', 'RequestToServer', 'LocalStorage', 'A
                 SerNum: 'AppointmentSerNum',
                 searchFunction: Appointments.getAppointmentBySerNum,
                 PageUrl: Appointments.getAppointmentUrl,
-                refreshType: 'Appointments'
+                refreshType: 'Appointments',
             },
             'AppointmentModified': {
                 icon: 'fa fa-calendar',
@@ -155,17 +155,17 @@ myApp.service('Notifications', ['$filter', 'RequestToServer', 'LocalStorage', 'A
                 searchFunction: Appointments.getAppointmentBySerNum,
                 namesFunction: Appointments.getAppointmentName,
                 PageUrl: Appointments.getAppointmentUrl,
-                refreshType: 'Appointments'
+                refreshType: 'Appointments',
             },
             'NewMessage': {
                 SerNum: 'DocumentSerNum',
                 icon: 'ion-chatbubbles',
-                color: '#0091EA'
+                color: '#0091EA',
             },
             'NewLabResult': {
                 SerNum: 'DocumentSerNum',
                 icon: 'ion-erlenmeyer-flask',
-                color: '#8BC34A'
+                color: '#8BC34A',
             },
             'CheckInNotification': {
                 SerNum: 'AppointmentSerNum',
@@ -193,11 +193,11 @@ myApp.service('Notifications', ['$filter', 'RequestToServer', 'LocalStorage', 'A
                 updateFunction: Questionnaires.updateQuestionnairesFromNotification,
                 namesFunction: Questionnaires.getQuestionnaireName,
                 PageUrl: Questionnaires.getQuestionnaireUrl,
-                searchFunction: function () {
-                    return true
+                searchFunction: function() {
+                    return true;
                 },
-                readFunction: function () {
-                    return true
+                readFunction: function() {
+                    return true;
                 },
             },
             'LegacyQuestionnaire': {
@@ -208,39 +208,38 @@ myApp.service('Notifications', ['$filter', 'RequestToServer', 'LocalStorage', 'A
                 updateFunction: Questionnaires.updateQuestionnairesFromNotification,
                 namesFunction: Questionnaires.getQuestionnaireName,
                 PageUrl: Questionnaires.getQuestionnaireUrl,
-                searchFunction: function () {
-                    return true
+                searchFunction: function() {
+                    return true;
                 },
-                readFunction: function () {
-                    return true
+                readFunction: function() {
+                    return true;
                 },
             },
             'Other': {
                 icon: 'fa fa-bell',
-                color: '#FFC107'
-            }
+                color: '#FFC107',
+            },
         };
 
         function readNotification(index, notification) {
-            //If index is defined it the notification at that index matches the NotificationSerNum, then we can save
-            //an array iteration look up.
-            //Notification SerNum
-            var serNum = notification.NotificationSerNum;
+            // If index is defined it the notification at that index matches the NotificationSerNum, then we can save
+            // an array iteration look up.
+            // Notification SerNum
+            let serNum = notification.NotificationSerNum;
 
-            //ReferenceTableSerNum, as in DocumentSerNum and such.
-            var refSerNum = notification.RefTableRowSerNum;
-            var type = notification.NotificationType;
+            // ReferenceTableSerNum, as in DocumentSerNum and such.
+            let refSerNum = notification.RefTableRowSerNum;
+            let type = notification.NotificationType;
 
-            //If the index is not defined and the notificationSerNum matches then read that notification and sync the state of all services
+            // If the index is not defined and the notificationSerNum matches then read that notification and sync the state of all services
             if (typeof Notifications[index] !== 'undefined' && Notifications[index].NotificationSerNum == serNum) {
                 Notifications[index].ReadStatus = '1';
                 notificationTypes[type].readFunction(refSerNum);
                 RequestToServer.sendRequest('Read', {'Id': serNum, 'Field': 'Notifications'});
             } else {
-                //If it doesnt match, iterate, find notification and update read status in all the states, i.e. localStorage, server, model.
+                // If it doesnt match, iterate, find notification and update read status in all the states, i.e. localStorage, server, model.
 
-                for (var i = 0; i < Notifications.length; i++) {
-
+                for (let i = 0; i < Notifications.length; i++) {
                     if (Notifications[i].NotificationSerNum == serNum) {
                         Notifications[i].ReadStatus = '1';
                         notificationTypes[type].readFunction(refSerNum);
@@ -251,10 +250,10 @@ myApp.service('Notifications', ['$filter', 'RequestToServer', 'LocalStorage', 'A
             }
         }
 
-        //Used by the update function, it iterates through the notifications if it finds the notification then it deletes it.
+        // Used by the update function, it iterates through the notifications if it finds the notification then it deletes it.
         function searchAndDeleteNotifications(notifications) {
-            for (var i = 0; i < notifications.length; i++) {
-                for (var j = 0; j < Notifications.length; j++) {
+            for (let i = 0; i < notifications.length; i++) {
+                for (let j = 0; j < Notifications.length; j++) {
                     if (Notifications[j].NotificationSerNum === notifications[i].NotificationSerNum) {
                         Notifications.splice(j, 1);
                         break;
@@ -263,26 +262,28 @@ myApp.service('Notifications', ['$filter', 'RequestToServer', 'LocalStorage', 'A
             }
         }
 
-        //Adds the notification to the notifications array and the localStorage array.
+        // Adds the notification to the notifications array and the localStorage array.
         function addUserNotifications(notifications) {
             if (typeof notifications === 'undefined') return;
-            var temp = angular.copy(notifications);
-            for (var i = 0; i < notifications.length; i++) {
+            let temp = angular.copy(notifications);
+            for (let i = 0; i < notifications.length; i++) {
                 if (typeof notificationTypes[temp[i].NotificationType] === 'undefined') break;
-                temp[i].Custom = notificationTypes[temp[i].NotificationType].Custom;
-                temp[i].Icon = notificationTypes[temp[i].NotificationType].icon;
-                temp[i].Color = notificationTypes[temp[i].NotificationType].color;
+                if(temp[i].NotificationType === "LegacyQuestionnaire") break;
+                    temp[i].Custom = notificationTypes[temp[i].NotificationType].Custom;
+                    temp[i].Icon = notificationTypes[temp[i].NotificationType].icon;
+                    temp[i].Color = notificationTypes[temp[i].NotificationType].color;
 
+                    console.log(temp[i].NotificationType);
+                    if (!notificationTypes[temp[i].NotificationType].hasOwnProperty('openFunction')) {
+                        temp[i].PageUrl = notificationTypes[temp[i].NotificationType].PageUrl(temp[i].RefTableRowSerNum);
+                    }
 
-                if (!notificationTypes[temp[i].NotificationType].hasOwnProperty('openFunction')) {
-                    temp[i].PageUrl = notificationTypes[temp[i].NotificationType].PageUrl(temp[i].RefTableRowSerNum);
-                }
+                    temp[i].Content = notificationTypes[temp[i].NotificationType].namesFunction(temp[i].RefTableRowSerNum);
+                    temp[i].DateAdded = $filter('formatDate')(temp[i].DateAdded);
 
-                temp[i].Content = notificationTypes[temp[i].NotificationType].namesFunction(temp[i].RefTableRowSerNum);
-                temp[i].DateAdded = $filter('formatDate')(temp[i].DateAdded);
+                    temp[i].refreshType = notificationTypes[temp[i].NotificationType].refreshType;
+                    Notifications.push(temp[i]);
 
-                temp[i].refreshType = notificationTypes[temp[i].NotificationType].refreshType;
-                Notifications.push(temp[i]);
             }
 
             Notifications = $filter('orderBy')(Notifications, '-DateAdded', true);
@@ -297,7 +298,6 @@ myApp.service('Notifications', ['$filter', 'RequestToServer', 'LocalStorage', 'A
          *@description Setter method for Notifications
          **/
         function setUserNotifications(notifications) {
-
             console.log(notifications);
 
             Notifications = [];
@@ -319,9 +319,9 @@ myApp.service('Notifications', ['$filter', 'RequestToServer', 'LocalStorage', 'A
 
         return {
 
-            initNotifications: function (notifications) {
+            initNotifications: function(notifications) {
                 lastUpdated = new Date();
-                lastUpdated.setSeconds(lastUpdated.getSeconds() - 10);    // Initialize time to 10 seconds "before" now
+                lastUpdated.setSeconds(lastUpdated.getSeconds() - 10); // Initialize time to 10 seconds "before" now
 
                 setUserNotifications(notifications);
             },
@@ -332,9 +332,9 @@ myApp.service('Notifications', ['$filter', 'RequestToServer', 'LocalStorage', 'A
              *@name getUserNotifications
              *@methodOf MUHCApp.service:Notifications
              *@description Getter for the Notifications array
-             *@returns {Array} Notifications array
+             *@return {Array} Notifications array
              **/
-            getUserNotifications: function () {
+            getUserNotifications: function() {
                 return Notifications;
             },
 
@@ -346,7 +346,7 @@ myApp.service('Notifications', ['$filter', 'RequestToServer', 'LocalStorage', 'A
              *@param {String} notification Notification to be read
              *@description Sets ReadStatus in the notification to 1, sends request to backend, and syncs with device storage
              **/
-            readNotification: function (index, notification) {
+            readNotification: function(index, notification) {
                 readNotification(index, notification);
             },
 
@@ -356,11 +356,11 @@ myApp.service('Notifications', ['$filter', 'RequestToServer', 'LocalStorage', 'A
              *@name getNumberUnreadNotifications
              *@methodOf MUHCApp.service:Notifications
              *@description Iterates through array object and returns the number of unread notifications
-             *@returns {Number} Returns number of unread news
+             *@return {Number} Returns number of unread news
              **/
-            getNumberUnreadNotifications: function () {
-                var number = 0;
-                for (var i = 0; i < Notifications.length; i++) {
+            getNumberUnreadNotifications: function() {
+                let number = 0;
+                for (let i = 0; i < Notifications.length; i++) {
                     if (Notifications[i].ReadStatus === '0') number++;
                 }
                 return number;
@@ -371,29 +371,28 @@ myApp.service('Notifications', ['$filter', 'RequestToServer', 'LocalStorage', 'A
              *@name getUnreadNotifications
              *@methodOf MUHCApp.service:Notifications
              *@description Gets unread notifications
-             *@returns {Array} Returns all the unread notifications
+             *@return {Array} Returns all the unread notifications
              **/
-            getUnreadNotifications: function () {
-                //Initialize array
-                var array = [];
-                for (var i = 0; i < Notifications.length; i++) {
-                    //If ReadStatus is 0, then find actual post for notification
+            getUnreadNotifications: function() {
+                // Initialize array
+                let array = [];
+                for (let i = 0; i < Notifications.length; i++) {
+                    // If ReadStatus is 0, then find actual post for notification
                     if (Notifications[i].ReadStatus === '0') {
-
-                        //Get content from the notification... should already exist on the app... except for questionnaires
-                        var content = notificationTypes[Notifications[i].NotificationType].searchFunction(Notifications[i].RefTableRowSerNum);
+                        // Get content from the notification... should already exist on the app... except for questionnaires
+                        let content = notificationTypes[Notifications[i].NotificationType].searchFunction(Notifications[i].RefTableRowSerNum);
 
                         if (content) {
-                            Notifications[i].Description_EN = Notifications[i].Description_EN.replace(/\$\w+/, content.RoomLocation_EN || "");
-                            Notifications[i].Description_FR = Notifications[i].Description_FR.replace(/\$\w+/, content.RoomLocation_FR || "");
+                            Notifications[i].Description_EN = Notifications[i].Description_EN.replace(/\$\w+/, content.RoomLocation_EN || '');
+                            Notifications[i].Description_FR = Notifications[i].Description_FR.replace(/\$\w+/, content.RoomLocation_FR || '');
 
-                            //If ReadStatus in post is also 0, Set the notification for showing in the controller
-                            if ((content.ReadStatus && content.ReadStatus === '0') || Notifications[i].NotificationType === "RoomAssignment" || Notifications[i].NotificationType === "Questionnaire" || Notifications[i].NotificationType === "LegacyQuestionnaire") {
+                            // If ReadStatus in post is also 0, Set the notification for showing in the controller
+                            if ((content.ReadStatus && content.ReadStatus === '0') || Notifications[i].NotificationType === 'RoomAssignment' || Notifications[i].NotificationType === 'Questionnaire' || Notifications[i].NotificationType === 'LegacyQuestionnaire') {
                                 Notifications[i].Post = content;
                                 Notifications[i].Number = 1;
                                 array.push(Notifications[i]);
                             } else {
-                                //If the ReadStatus of the actual post is not 0, then read the notification
+                                // If the ReadStatus of the actual post is not 0, then read the notification
                                 readNotification(i, Notifications[i]);
                             }
                         }
@@ -407,13 +406,13 @@ myApp.service('Notifications', ['$filter', 'RequestToServer', 'LocalStorage', 'A
              *@name getNewNotifications
              *@methodOf MUHCApp.service:Notifications
              *@description Gets unread notifications
-             *@returns {Array} Returns all the unread notifications
+             *@return {Array} Returns all the unread notifications
              **/
-            getNewNotifications: function () {
-                //Initialize array
-                var array = [];
-                for (var i = 0; i < Notifications.length; i++) {
-                    //If ReadStatus is 0, then find actual post for notification
+            getNewNotifications: function() {
+                // Initialize array
+                let array = [];
+                for (let i = 0; i < Notifications.length; i++) {
+                    // If ReadStatus is 0, then find actual post for notification
                     if (Notifications[i].ReadStatus == '0') array.push(Notifications[i]);
                 }
                 return array;
@@ -424,9 +423,9 @@ myApp.service('Notifications', ['$filter', 'RequestToServer', 'LocalStorage', 'A
              *@methodOf MUHCApp.service:Notifications
              *@param {String} notification Notification that belongs to the post
              *@description Finds the post that belongs to a given notification by using the search service function for that post
-             *@returns {Object} Returns object containing the post
+             *@return {Object} Returns object containing the post
              **/
-            getNotificationPost: function (notification) {
+            getNotificationPost: function(notification) {
                 return notificationTypes[notification.NotificationType].searchFunction(notification.RefTableRowSerNum);
             },
             /**
@@ -436,9 +435,9 @@ myApp.service('Notifications', ['$filter', 'RequestToServer', 'LocalStorage', 'A
              *@param {String} type Notification type
              *@param {String} post Post object
              *@description Opens a post by using the opening function in each post found by {@link MUHCApp.service:Notifications#notificationTypes notificationTypes} array.
-             *@returns {Object} Returns the return value of the post opening function, this function is defined in each post.
+             *@return {Object} Returns the return value of the post opening function, this function is defined in each post.
              **/
-            goToPost: function (type, post) {
+            goToPost: function(type, post) {
                 return notificationTypes[type].openFunction(post);
             },
             /**
@@ -447,11 +446,11 @@ myApp.service('Notifications', ['$filter', 'RequestToServer', 'LocalStorage', 'A
              *@methodOf MUHCApp.service:Notifications
              *@param {Array} array Array with notifications
              *@description Translates the array parameter containing notifications to appropiate preferred language specified in {@link MUHCApp.service:UserPreferences UserPreferences}.
-             *@returns {Array} Returns array with translated values
+             *@return {Array} Returns array with translated values
              **/
-            setNotificationsLanguage: function (notifications) {
-                var language = UserPreferences.getLanguage();
-                for (var i = notifications.length - 1; i >= 0; i--) {
+            setNotificationsLanguage: function(notifications) {
+                let language = UserPreferences.getLanguage();
+                for (let i = notifications.length - 1; i >= 0; i--) {
                     notifications[i].Title = (language == 'EN') ? notifications[i].Name_EN : notifications[i].Name_FR;
                     try {
                         if (typeof notifications[i].Content == 'undefined') notifications[i].Content = notificationTypes[notifications[i].NotificationType].namesFunction(notifications[i].RefTableRowSerNum);
@@ -468,11 +467,11 @@ myApp.service('Notifications', ['$filter', 'RequestToServer', 'LocalStorage', 'A
              *@methodOf MUHCApp.service:Notifications
              *@description Clears the service of any saved state, function used by the {@link MUHCApp.controller:LogoutController LogoutController}
              **/
-            clearNotifications: function () {
+            clearNotifications: function() {
                 Notifications = [];
-                //lastUpdated = 0;
+                // lastUpdated = 0;
                 lastUpdated = new Date();
-                lastUpdated.setSeconds(lastUpdated.getSeconds() - 10);    // Initialize time to 10 seconds "before" now to force requestNewNotifications to run the very first time
+                lastUpdated.setSeconds(lastUpdated.getSeconds() - 10); // Initialize time to 10 seconds "before" now to force requestNewNotifications to run the very first time
             },
 
             /**
@@ -481,24 +480,23 @@ myApp.service('Notifications', ['$filter', 'RequestToServer', 'LocalStorage', 'A
              *@methodOf MUHCApp.service:Notifications
              *@description Grabs all the notifications form the server.
              **/
-            requestNewNotifications: function () {
-                var r = $q.defer();
+            requestNewNotifications: function() {
+                let r = $q.defer();
 
                 if ((lastUpdated.getTime() > Date.now() - 10000) && (!CheckInService.checkinNotificationsExist()))
-                    r.resolve({});
+                    {r.resolve({});}
                 else {
                    RequestToServer.sendRequestWithResponse('NotificationsNew', {LastUpdated: lastUpdated.getTime()})
-                        .then(function (response) {
+                        .then(function(response) {
                             lastUpdated = new Date();
                             if (response.Data && response.Data.length > 0) {
-                                response.Data.forEach(function (notif) {
-
+                                response.Data.forEach(function(notif) {
                                     // If notification content exists.. update the notification content
-                                    if (notif[1] !== "undefined") notificationTypes[notif[0].NotificationType].updateFunction([notif[1]]);
+                                    if (notif[1] !== 'undefined') notificationTypes[notif[0].NotificationType].updateFunction([notif[1]]);
 
-                                    var notification = (!!notif[0]) ? notif[0] : notif;
+                                    let notification = (!!notif[0]) ? notif[0] : notif;
                                     updateUserNotifications([notification]);
-                                })
+                                });
                             }
 
                             // If have just checked in.. then update boolean saying that we have received notification
@@ -508,17 +506,16 @@ myApp.service('Notifications', ['$filter', 'RequestToServer', 'LocalStorage', 'A
 
                             r.resolve({});
                         })
-                        .catch(function (error) {
+                        .catch(function(error) {
                             console.log('Error in requestNewNotifications: ', error);
-                            r.reject(error)
+                            r.reject(error);
                         });
                 }
                 return r.promise;
             },
 
-            getLastUpdated: function () {
+            getLastUpdated: function() {
                 return lastUpdated;
-            }
+            },
         };
-
     }]);

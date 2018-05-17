@@ -218,6 +218,7 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors',
             //Initializing all the services
             RequestToServer.sendRequestWithResponse('Login', {Fields:parameters}).then(function(response)
             {
+                console.log(response.Data);
                 setServices(response.Data, 'setOnline').then(function()
                 {
                     initTimestamps(response.Timestamp);
