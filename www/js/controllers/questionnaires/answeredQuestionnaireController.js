@@ -53,7 +53,7 @@
 
         function editQuestion(sIndex, qIndex) {
             NavigatorParameters.setParameters({Navigator:'personalNavigator', questionnaire: vm.questionnaire, sectionIndex: sIndex, questionIndex: qIndex});
-            personalNavigator.pushPage('views/personal/questionnaires/questionnaire.html',{ animation : 'slide' });
+            personalNavigator.pushPage('views/personal/questionnaires/questionnaires.html',{ animation : 'slide' });
         }
 
         function getScaleMaxValue(question) {
