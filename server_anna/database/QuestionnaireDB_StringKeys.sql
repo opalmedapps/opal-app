@@ -22,6 +22,9 @@ SET time_zone = "+00:00";
 
 -- --------------------------------------------------------
 
+CREATE DATABASE IF NOT EXISTS `QuestionnaireDB_StringKeys` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
+USE `QuestionnaireDB_StringKeys`;
+
 DROP TABLE IF EXISTS `feedback_answer`;
 
 CREATE TABLE `feedback_answer` (
