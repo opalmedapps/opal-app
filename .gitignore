@@ -68,3 +68,5 @@ heartbeatdb.log*
 
 buildOpal.sh
 www/lib/bower_components/\.DS_Store
+
+CHANGELOG\.md
