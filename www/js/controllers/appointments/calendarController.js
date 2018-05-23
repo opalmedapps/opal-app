@@ -45,6 +45,7 @@
             showWeeks:false
         };
 
+        vm.HasMeaningfulAlias = HasMeaningfulAlias;
         /**
          * The list of user appointments
          * @type {Array}
@@ -361,6 +362,15 @@
                     return '#5CE68A';
             }
         }
+
+        /**
+         * Checks if AppointmentType has a Meaningful Alias; i.e. other than the word "Appointment" or "Rendez-vous"
+         * @returns {boolean}
+         */
+        function HasMeaningfulAlias(appointmentType) {
+            return (appointmentType.toLowerCase() !== "appointment" && appointmentType.toLowerCase() !== "rendez-vous");
+        }
+
     }
 })();
 

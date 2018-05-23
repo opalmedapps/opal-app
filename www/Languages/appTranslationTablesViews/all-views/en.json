@@ -34,7 +34,7 @@
   "CHECKIN_ADDITIONAL": "You will be called to your appointment(s) via the waiting room screens and via an alert on your phone. Please ensure that you are connected to wifi or that you have a cell phone signal in order to receive the alert to your phone.",
   "CHECKIN_CALLED": "Please go to: ",
   "CHECKIN_ERROR": "Error occurred, check in at the cancer center",
-  "CHECKIN_IN_HOSPITAL_ONLY": "You must be at the hospital to check in",
+  "CHECKIN_IN_HOSPITAL_ONLY": "Check-in will be available on arrival at the hospital.",
   "CHECKIN_MESSAGE_AFTER": "You are checked in for your appointment!",
   "CHECKIN_MESSAGE_AFTER_PLURAL": "You are checked in for your appointments!",
   "CHECKIN_MESSAGE_BEFORE": "Check-in to your appointment!",
