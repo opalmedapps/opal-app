@@ -73,7 +73,12 @@
                         <ons-col>
                             <div style="line-height:1;padding:2px">
                                 <header>
-                                    <span class="item-title" ng-class="fontSizeTitle">{{app["AppointmentType_" + calendar.language]}}</span>
+                                    <span ng-if="calendar.HasMeaningfulAlias(app['AppointmentType_' + calendar.language])" class="item-title" ng-class="fontSizeTitle">
+                                        {{app["AppointmentType_" + calendar.language]}}
+                                    </span>
+                                    <span ng-if="!calendar.HasMeaningfulAlias(app['AppointmentType_' + calendar.language])" class="item-title" ng-class="fontSizeTitle">
+                                        {{app["ResourceDescription"]}}
+                                    </span>
                                 </header>
                                 <p class="item-desc" ng-class="fontSizeDesc">{{app["MapName_"+ calendar.language]}}</p>
                             </div>

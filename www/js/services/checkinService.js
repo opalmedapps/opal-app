@@ -253,6 +253,9 @@
         function alreadyCheckedIn(appts){
 
             allCheckedIn = true;
+            // Appointment.Checkin === '1'  means Checked-in
+            // Appointment.Checkin === '0'  means NOT Checked-in
+            // Appointment.Checkin === '-1' means ERROR
 
             appts.map(function(app){
                 if(app.Checkin === '0') allCheckedIn = false;
@@ -261,6 +264,9 @@
             return allCheckedIn;
         }
 
+        // Appointment.Checkin === '1'  means Checked-in
+        // Appointment.Checkin === '0'  means NOT Checked-in
+        // Appointment.Checkin === '-1' means ERROR
         function checkinErrorsExist(appts){
             var checkinExists = false;
 
@@ -273,7 +279,7 @@
             var errors = false;
 
             appts.map(function(app){
-                if(app.Checkin === '0') errors = true;
+                if(app.Checkin === '-1') errors = true;
             });
 
             return errors;
