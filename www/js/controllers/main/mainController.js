@@ -70,7 +70,7 @@
 
             setupInactivityChecks();
 
-           // addiOSscreenshotDetection();
+            addiOSscreenshotDetection();
 
             addScreenshotDetection();
 
