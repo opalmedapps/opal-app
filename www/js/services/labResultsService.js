@@ -43,7 +43,7 @@ myApp.service('LabResults',['$filter','LocalStorage','RequestToServer','$q',
         var CATEGORY_FOUR = 'Tumor markers'; //CEA, CA 15-3, CA-125
         var categoryOneTests = ['WBC', 'RBC', 'HGB', 'HCT', 'Platelet Count', 'Neutrophils', 'Eosinophils'];
         var categoryTwoTests = ['Sodium', 'Potassium', 'Glucose, Random', 'Creatinine', 'Calcium', 'Corrected Calcium', 'Magnesium'];
-        var categoryThreeTests = ['LDH', 'T4', 'T4, Free', 'TSH', 'Albumin', 'Protein, Total', 'AST (SGOT)', 'ALT (SGPT)', 'Alkaline Phosphatase'];
+        var categoryThreeTests = ['LDH', 'T4', 'T4, Free', 'TSH', 'Albumin', 'Protein, Total', 'AST (SGOT)', 'ALT (SGPT)', 'Alkaline Phosphatase', 'Rapamune (Sirolimus)'];
         var categoryFourTests = ['CEA', 'CA 15-3', 'CA-125'];
 
         // Function that saves tests results to the service
