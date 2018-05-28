@@ -40,8 +40,10 @@
         vm.checkInMessage = "";
         vm.additionalInfo = "";
         vm.alert = {};
+        vm.HasNonCheckinableAppt = false;
 
         vm.goToAppointment = goToAppointment;
+        vm.HasMeaningfulAlias = HasMeaningfulAlias;
 
         activate();
 
@@ -50,6 +52,8 @@
         function activate() {
             vm.apps = CheckInService.getCheckInApps();
             vm.language = UserPreferences.getLanguage();
+
+            vm.HasNonCheckinableAppt = HasNonCheckinableAppointment(vm.apps);
 
             CheckInService.attemptCheckin()
                 .then(function(response){
@@ -70,6 +74,7 @@
                         vm.apps = CheckInService.getCheckInApps();
                     }
                 });
+
         }
 
         // View appointment details
@@ -77,6 +82,31 @@
             NavigatorParameters.setParameters({'Navigator':'homeNavigator', 'Post':appointment});
             homeNavigator.pushPage('./views/personal/appointments/individual-appointment.html');
         }
+
+        /**
+         * Checks if AppointmentType has a Meaningful Alias; i.e. other than the word "Appointment" or "Rendez-vous"
+         * @returns {boolean}
+         */
+        function HasMeaningfulAlias(appointmentType) {
+            return (appointmentType.toLowerCase() !== "appointment" && appointmentType.toLowerCase() !== "rendez-vous");
+        }
+
+        /**
+         *
+         * @param apps
+         * @return {boolean}
+         * @description Checks if in the list of Appointments, there is "at least" one Non-Checkinable appointment,
+         *              like a Blood Test
+         */
+        function HasNonCheckinableAppointment(apps) {
+            var HasNonCheckinable = false;
+            apps.map(function (app) {
+                if (app.CheckinPossible === '0')  HasNonCheckinable = true;
+            });
+
+            return HasNonCheckinable;
+        }
+
     }
 })();
 

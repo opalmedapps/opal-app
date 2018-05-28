@@ -13,18 +13,48 @@
         <ons-list-item modifier="tappable chevron" ng-repeat="app in checkIn.apps" ng-click="checkIn.goToAppointment(app)">
             <ons-row>
                 <ons-col width="50px" align="center" style="text-align: center;">
-                    <div class="plan-date" ng-show="app.Checkin == 1"><img ng-src="./img/checkedbox.png" width="25px" height="25px"></div>
-                    <div class="plan-duration" ng-show="app.Checkin == 0">
-                        <img ng-src="./img/uncheckedbox.png" width="25px" height="25px">
-                    </div>
+
+                    <i ng-if="app.CheckinPossible == 0" class="fa fa-exclamation-triangle fa-2x" style="color:#FF8F35;"></i>
+
+                    <i ng-if="app.Checkin == 1 && app.CheckinPossible == 1" class="fa fa-check-square-o fa-2x" style="color:#4CAF50;"></i>
+
+                    <i ng-if="app.Checkin == 0 && app.CheckinPossible == 1" class="fa fa-square-o fa-2x" style="color:#4CAF50;"></i>
+
+                    <!--<div class="plan-date" ng-show="app.Checkin == 1 && (!app.CheckinPossible)">-->
+                        <!--<img ng-src="./img/checkedbox.png" width="25px" height="25px">-->
+                    <!--</div>-->
+
+                    <!--<div class="plan-duration" ng-show="app.Checkin == 0 && !app.CheckinPossible">-->
+                        <!--<img ng-src="./img/uncheckedbox.png" width="25px" height="25px">-->
+                    <!--</div>-->
+
                 </ons-col>
                 <ons-col align="center">
                     <div style="line-height:1;padding:5px;">
                         <span ng-class="fontSizeTitle">
-                            {{app["AppointmentType_"+checkIn.language]}} <br>
+                            <span ng-if="checkIn.HasMeaningfulAlias(app['AppointmentType_' + checkIn.language])">
+                                {{app["AppointmentType_" + checkIn.language]}}
+                            </span>
+                            <span ng-if="!checkIn.HasMeaningfulAlias(app['AppointmentType_' + checkIn.language])">
+                                {{app["ResourceDescription"]}}
+                            </span>
+                            <br>
                             {{app.ScheduledStartTime | date:'shortTime'}}
-                        </span> <br>
-                        <span class="item-desc" ng-class="fontSizeDesc" ng-show="app.RoomLocation_EN">{{"APPOINTMENT_ROOM"|translate}} {{app["RoomLocation_"+checkIn.language]}}</span>
+                        </span>
+                        <br>
+                        <span class="item-desc" ng-class="fontSizeDesc" ng-show="app.RoomLocation_EN">
+                            {{"APPOINTMENT_ROOM"|translate}} {{app["RoomLocation_"+checkIn.language]}}
+                            <br>
+                        </span>
+
+                        <span class="item-desc" ng-class="fontSizeDesc" ng-if="app.CheckinPossible == 0" style="color:#FF803E;"
+                              ng-bind-html="app['CheckinInstruction_' + checkIn.language]">
+                        </span>
+                        <span class="item-desc" ng-class="fontSizeDesc" ng-if="app.CheckinPossible == 1"
+                              ng-bind-html="app['CheckinInstruction_' + checkIn.language]">
+                        </span>
+
+
                     </div>
                 </ons-col>
             </ons-row>

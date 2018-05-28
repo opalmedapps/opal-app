@@ -72,8 +72,6 @@
 
             addiOSscreenshotDetection();
 
-            addScreenshotDetection();
-
             addUpdateRequiredDetection();
 
             document.addEventListener("pause", onPause, false);
@@ -213,21 +211,6 @@
 
         }
 
-        function receiveScreenShotCallback(data){
-            screenshotTakenModal.show();
-            alert('inside receiveScreenShotCallback ONE');
-            alert(data); //data return the file full path
-        }
-
-        function addScreenshotDetection() {
-            window.addEventListener('receiveScreenShotCallback', receiveScreenShotCallback, false);
-
-            function receiveScreenShotCallback(data){
-                alert('inside receiveScreenShotCallback 2222222');
-                screenshotTakenModal.show();
-                alert(data); //data return the file full path
-            }
-        }
 
         /*****************************************
          * Update-Required Modal
