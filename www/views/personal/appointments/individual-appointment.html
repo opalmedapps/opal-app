@@ -5,6 +5,7 @@
     </ons-toolbar>
     <div style="border-top: 1px solid lightsteelblue">
         <ons-list ng-hide="vm.corrupted_appointment">
+
             <ons-list-item class="item" >
                 <div style="line-height:1" align="left">
                     <header>
@@ -17,12 +18,28 @@
                     </p>
                 </div>
             </ons-list-item>
-            <ons-list-item tappable ng-click="vm.goToMap()" ng-class="fontSizeDesc">
-                <strong class="item-desc" ng-class="fontSizeDesc">{{vm.app["MapName_"+vm.language]|ellipsis:25}}</strong><ons-icon style="margin-top: 3%" class="pull-right" icon="ion-ios-arrow-forward"></ons-icon>
+
+            <ons-list-item style="background-color:#E3F2FD" modifier="chevron tappable" ng-click="vm.aboutAppointment()" ng-class="fontSizeDesc">
+                <strong class="item-desc" ng-class="fontSizeDesc">{{"APPOINTMENT_ABOUT" | translate}} {{vm.title}} </strong>
             </ons-list-item>
-            <ons-list-item style="background-color:#E3F2FD" tappable ng-click="vm.aboutAppointment()" ng-class="fontSizeDesc">
-                <strong class="item-desc" ng-class="fontSizeDesc">{{"APPOINTMENT_ABOUT" | translate}} {{vm.title}} </strong> <ons-icon style="margin-top: 3%" class="pull-right" icon="ion-ios-arrow-forward"></ons-icon>
+
+            <!--<ons-list-item modifier="chevron tappable" ng-click="vm.goToMap()" ng-class="fontSizeDesc">-->
+                <!--<strong class="item-desc" ng-class="fontSizeDesc">{{vm.app["MapName_"+vm.language]|ellipsis:25}}</strong>-->
+                <!--<p class="item-desc" ng-class="fontSizeDesc">{{vm.app["MapDescription_" + vm.language]}}</p>-->
+            <!--</ons-list-item>-->
+
+            <ons-list-item ng-class="fontSizeDesc">
+                <p class="item-desc" ng-class="fontSizeDesc">{{vm.app["MapDescription_" + vm.language]}}</p>
             </ons-list-item>
+
+            <ons-list class="settings-list" align="center">
+                <ons-list-item ng-click="vm.openMap()" align="center">
+                    <div align="center" class="text-center" style="padding:5px">
+                        <img ng-src="{{vm.app['MapUrl']}}" style="max-width:100%;height:auto">
+                    </div>
+                </ons-list-item>
+            </ons-list>
+
         </ons-list>
         <div style="color:grey;margin-top:10vh" ng-show="vm.corrupted_appointment" align="center" ng-class="fontSizeTitle">{{"NOAPPOINTMENTINFO"|translate}}</div>
     </div>
