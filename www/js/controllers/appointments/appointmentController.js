@@ -61,6 +61,7 @@
 
         vm.goToMap = goToMap;
         vm.aboutAppointment = aboutAppointment;
+        vm.openMap = openMap;
 
         activate();
 
@@ -107,6 +108,17 @@
                 contentType: vm.app["AppointmentType_"+ vm.language]
             });
         }
+
+        function openMap(){
+            var app = document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'https://' ) === -1;
+            if(app)
+            {
+                var ref = cordova.InAppBrowser.open(vm.app["MapUrl"], '_blank', 'EnableViewPortScale=yes');
+            } else {
+                window.open(vm.app["MapUrl"]);
+            }
+        }
+
 
     }
 })();
