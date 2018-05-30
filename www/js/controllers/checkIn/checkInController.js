@@ -38,7 +38,6 @@
         vm.response = '';
         vm.error = '';
         vm.checkInMessage = "";
-        vm.additionalInfo = "";
         vm.alert = {};
         vm.HasNonCheckinableAppt = false;
 
@@ -64,14 +63,17 @@
                         NewsBanner.showCustomBanner($filter('translate')("NOT_ALLOWED"), '#333333', function(){}, 3000);
                         vm.alert.type = "warning";
                         vm.checkInMessage = "CHECKIN_IN_HOSPITAL_ONLY";
+                        vm.error = "";
                     } else if (response === 'SUCCESS') {
                         vm.alert.type = "success";
                         vm.checkInMessage = "CHECKED_IN";
                         vm.apps = CheckInService.getCheckInApps();
+                        vm.error = "";
                     } else {
                         vm.alert.type = "danger";
                         vm.checkInMessage = "CHECKIN_ERROR";
                         vm.apps = CheckInService.getCheckInApps();
+                        vm.error = "ERROR";
                     }
                 });
 
