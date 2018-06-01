@@ -201,6 +201,11 @@ cordova platform add android
 Now you should have a properly configured Cordova project that can be compiled into both Android and iOS native code. However there
 are still some dependencies needed for the build script to run properly...
 
+8) Install [Gulp](https://gulpjs.com/) globally
+
+```
+npm install gulp-cli -g
+```
 
 Gulp is in charge of automating a lot of the build process such as minifying html/css/javascript, compressing images,
 and removing debug statements.
