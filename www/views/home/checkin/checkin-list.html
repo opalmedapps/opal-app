@@ -13,18 +13,54 @@
         <ons-list-item modifier="tappable chevron" ng-repeat="app in checkIn.apps" ng-click="checkIn.goToAppointment(app)">
             <ons-row>
                 <ons-col width="50px" align="center" style="text-align: center;">
-                    <div class="plan-date" ng-show="app.Checkin == 1"><img ng-src="./img/checkedbox.png" width="25px" height="25px"></div>
-                    <div class="plan-duration" ng-show="app.Checkin == 0">
-                        <img ng-src="./img/uncheckedbox.png" width="25px" height="25px">
-                    </div>
+
+                    <i ng-if="app.CheckinPossible == 0" class="fa fa-exclamation-triangle fa-2x" style="color:#FF8F35;"></i>
+
+                    <i ng-if="app.Checkin == 1 && app.CheckinPossible == 1" class="fa fa-check-square-o fa-2x" style="color:#4CAF50;"></i>
+
+                    <i ng-if="app.Checkin == 0 && app.CheckinPossible == 1" class="fa fa-square-o fa-2x" style="color:#4CAF50;"></i>
+
+                    <!--<div class="plan-date" ng-show="app.Checkin == 1 && (!app.CheckinPossible)">-->
+                        <!--<img ng-src="./img/checkedbox.png" width="25px" height="25px">-->
+                    <!--</div>-->
+
+                    <!--<div class="plan-duration" ng-show="app.Checkin == 0 && !app.CheckinPossible">-->
+                        <!--<img ng-src="./img/uncheckedbox.png" width="25px" height="25px">-->
+                    <!--</div>-->
+
                 </ons-col>
                 <ons-col align="center">
                     <div style="line-height:1;padding:5px;">
                         <span ng-class="fontSizeTitle">
-                            {{app["AppointmentType_"+checkIn.language]}} <br>
+                            <p ng-if="checkIn.HasMeaningfulAlias(app['AppointmentType_' + checkIn.language])">
+                                {{app["AppointmentType_" + checkIn.language]}}
+                            </p>
+                            <p ng-if="!checkIn.HasMeaningfulAlias(app['AppointmentType_' + checkIn.language])">
+                                {{app["ResourceDescription"]}}
+                            </p>
                             {{app.ScheduledStartTime | date:'shortTime'}}
-                        </span> <br>
-                        <span class="item-desc" ng-class="fontSizeDesc" ng-show="app.RoomLocation_EN">{{"APPOINTMENT_ROOM"|translate}} {{app["RoomLocation_"+checkIn.language]}}</span>
+                        </span>
+                        <p class="item-desc" ng-class="fontSizeDesc" ng-show="app.RoomLocation_EN">
+                            {{"APPOINTMENT_ROOM"|translate}} {{app["RoomLocation_" + checkIn.language]}}
+                        </p>
+
+                        <p class="item-desc" ng-class="fontSizeDesc" ng-if="app.CheckinPossible == 0" style="color:#FF803E;"
+                              ng-bind-html="app['CheckinInstruction_' + checkIn.language]">
+                        </p>
+
+                        <!--<span class="item-desc" ng-class="fontSizeDesc" ng-if="app.CheckinPossible == 1"-->
+                              <!--ng-bind-html="app['CheckinInstruction_' + checkIn.language]">-->
+                        <!--</span>-->
+
+                        <p class="item-desc" ng-class="fontSizeDesc" ng-if="app.CheckinPossible == 1">
+                            {{"HAVESEAT"|translate}}
+                        </p>
+
+                        <p></p>
+                        <p class="item-desc" ng-class="fontSizeDesc" ng-show="app.MapName_EN">
+                            {{"WAITING_ROOM"|translate}} {{app["MapName_" + checkIn.language]}}
+                        </p>
+
                     </div>
                 </ons-col>
             </ons-row>
@@ -32,9 +68,25 @@
     </ons-list>
     <br>
 
-    <p ng-show="checkIn.alert.type" style="text-align: center; color: grey;" ng-class="fontSizeTitle">{{checkIn.checkInMessage|translate}}</p>
-    <p ng-show="checkIn.alert.type && checkIn.additionalInfo" style="text-align: center; color: grey;" ng-class="fontSizeTitle">{{checkIn.checkInMessage|translate}}</p>
 
+    <!-- If there is an ERROR, the following will show an error message. -->
+    <ons-list ng-if="checkIn.error">
+        <ons-list-item>
+            <ons-row>
+                <ons-col width="50px" align="center" style="text-align: center;">
+                    <i ng-if="checkIn.error" class="fa fa-times-circle fa-2x" style="color:red;"></i>
+                </ons-col>
+
+                <ons-col>
+                    <p ng-if="checkIn.error" style="color: red;" class="item-desc" ng-class="fontSizeDesc"> {{"CHECKIN_ERROR"|translate}}</p>
+                </ons-col>
+            </ons-row>
+        </ons-list-item>
+    </ons-list>
+
+
+
+    <!--<p ng-show="checkIn.alert.type" style="text-align: center; color: grey;" ng-class="fontSizeTitle">{{checkIn.checkInMessage|translate}}</p>-->
 
     <div ng-hide="checkIn.alert.type" align="center" style="margin:10px">
         <svg class="progress-circular">
