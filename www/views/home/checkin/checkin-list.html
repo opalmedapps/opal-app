@@ -48,13 +48,13 @@
                               ng-bind-html="app['CheckinInstruction_' + checkIn.language]">
                         </p>
 
-                        <!--<span class="item-desc" ng-class="fontSizeDesc" ng-if="app.CheckinPossible == 1"-->
-                              <!--ng-bind-html="app['CheckinInstruction_' + checkIn.language]">-->
-                        <!--</span>-->
-
-                        <p class="item-desc" ng-class="fontSizeDesc" ng-if="app.CheckinPossible == 1">
-                            {{"HAVESEAT"|translate}}
+                        <p class="item-desc" ng-class="fontSizeDesc" ng-if="app.CheckinPossible == 1"
+                              ng-bind-html="app['CheckinInstruction_' + checkIn.language]">
                         </p>
+
+                        <!--<p class="item-desc" ng-class="fontSizeDesc" ng-if="app.CheckinPossible == 1">-->
+                            <!--{{"HAVESEAT"|translate}}-->
+                        <!--</p>-->
 
                         <p></p>
                         <p class="item-desc" ng-class="fontSizeDesc" ng-show="app.MapName_EN">
