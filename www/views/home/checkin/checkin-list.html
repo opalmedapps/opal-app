@@ -48,9 +48,14 @@
                               ng-bind-html="app['CheckinInstruction_' + checkIn.language]">
                         </p>
 
-                        <p class="item-desc" ng-class="fontSizeDesc" ng-if="app.CheckinPossible == 1"
+                        <p></p>
+                        <span class="item-desc" ng-class="fontSizeDesc" ng-if="app.CheckinPossible == 1">
+                            {{"CHECKED_IN"|translate}}
+                        </span>
+
+                        <span class="item-desc" ng-class="fontSizeDesc" ng-if="app.CheckinPossible == 1"
                               ng-bind-html="app['CheckinInstruction_' + checkIn.language]">
-                        </p>
+                        </span>
 
                         <!--<p class="item-desc" ng-class="fontSizeDesc" ng-if="app.CheckinPossible == 1">-->
                             <!--{{"HAVESEAT"|translate}}-->
@@ -67,7 +72,6 @@
         </ons-list-item>
     </ons-list>
     <br>
-
 
     <!-- If there is an ERROR, the following will show an error message. -->
     <ons-list ng-if="checkIn.error">
