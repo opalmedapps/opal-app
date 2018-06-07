@@ -75,6 +75,7 @@
             addUpdateRequiredDetection();
 
             document.addEventListener("pause", onPause, false);
+            document.addEventListener("resume", onResume, false);
 
             $rootScope.$on("MonitorLoggedInUsers", function (event, uid) {
                 $rootScope.firstTime = true;
@@ -169,8 +170,20 @@
             if (currentPage.indexOf('my-chart') !== -1 || currentPage.indexOf('lab') !== -1) {
                 NavigatorParameters.getNavigator().resetToPage('./views/personal/personal.html');
             }
+
+            backsplashmodal.show();
+
             // Wipe documents and lab-results
-           CleanUp.clearSensitive();
+            CleanUp.clearSensitive();
+        }
+
+        /*****************************************
+         * onResume event is triggered when the app comes back from background (switch apps on a device)
+         *****************************************/
+        function onResume() {
+
+            backsplashmodal.hide();
+
         }
 
         /*****************************************
