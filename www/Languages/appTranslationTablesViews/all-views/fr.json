@@ -40,6 +40,7 @@
   "CHECKIN_MESSAGE_BEFORE": "TR_Check-In for your appointment",
   "CHECKIN_MESSAGE_BEFORE_PLURAL": "TR_Check-In for your appointments",
   "CHECKIN_TO_ALL": "Je m'enregistre!",
+  "CHECKIN_PROCESSING": "TR_ Please Wait. Processing your check-in.",
   "CHECKIN_NONE": "Aucun rendez-vous aujourd'hui",
   "CLINICAL_NOTES": "Notes médicales",
   "CLOSE": "Fermer",
