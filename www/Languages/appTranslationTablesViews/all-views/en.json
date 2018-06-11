@@ -42,6 +42,7 @@
   "CHECKIN_MESSAGE_BEFORE": "Check-in for your appointment.",
   "CHECKIN_MESSAGE_BEFORE_PLURAL": "Check-in for your appointments.",
   "CHECKIN_NONE": "You have no appointments today.",
+  "CHECKIN_PROCESSING": "Please Wait. Processing your check-in.",
   "CHECKIN_TO_ALL": "Check me In!",
   "CHECKING_SERVER": "Checking server...",
   "CLINICAL_NOTES": "Clinical Notes",
