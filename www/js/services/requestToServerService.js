@@ -13,7 +13,6 @@ myApp.service('RequestToServer',['$filter','$state','NewsBanner','UserAuthorizat
     function($filter, $state, NewsBanner, UserAuthorizationInfo, EncryptionService, FirebaseService,
              $q, Constants, UUID, ResponseValidator){
 
-
         const firebase_url= firebase.database().ref(FirebaseService.getFirebaseUrl(null));
         const response_url = firebase_url.child(FirebaseService.getFirebaseChild('users'));
 
@@ -54,7 +53,7 @@ myApp.service('RequestToServer',['$filter','$state','NewsBanner','UserAuthorizat
 
             sendRequestWithResponse:function(typeOfRequest, parameters, encryptionKey, referenceField, responseField, url, url_params) {
                 return new Promise((resolve, reject) => {
-                    // TODO: Delete these two if-statements and the last two parameters of the function when the firebase database for questions is ready
+                    // // TODO: Delete these two if-statements and the last two parameters of the function when the database for questions is ready
                     if (url != null) {
                         var settings = {
                             "async": true,

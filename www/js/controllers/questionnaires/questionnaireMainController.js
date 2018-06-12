@@ -32,7 +32,6 @@
         vm.choosenReaction = [{}];
         vm.skipQuestion = { 'reason': '', 'askSimilar': ''};
 
-
         vm.availableReactions = [
             {'type': 'emotion-good', 'reaction': 'reaction-happy', 'text': 'Happy'},
             {'type': 'emotion-good', 'reaction': 'reaction-hopeful', 'text': 'Hopeful'},
@@ -69,7 +68,25 @@
             carousel.next()
             skip_question.hide();
         };
+        $scope.initializeValue = function() {
 
+        }
+
+        $scope.slider = {
+            value: 6,
+            options: {
+                showSelectionBar: true,
+                getPointerColor: function(value) {
+                    if (value <= 3)
+                        return 'red';
+                    if (value <= 6)
+                        return 'orange';
+                    if (value <= 9)
+                        return 'yellow';
+                    return '#2AE02A';
+                }
+            }
+        };
 
         activate();
 

@@ -6,6 +6,7 @@
 var myApp = angular.module('MUHCApp');
 
 myApp.controller('QuestionsController', ['Questionnaire','$scope', '$sce', function(Questionnaire, $scope, $sce){
+
 	$scope.show = function(id)
 	{
 

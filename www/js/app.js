@@ -94,7 +94,7 @@
 var myApp = angular
     .module('MUHCApp', ['tmh.dynamicLocale','pascalprecht.translate','luegg.directives',
         'ngSanitize','ui.router', 'onsen', 'ngTouch','firebase','ui.bootstrap','MUHCApp.filters',
-        'ngCordova','monospaced.elastic','Tek.progressBar']);
+        'ngCordova','monospaced.elastic','Tek.progressBar', 'rzModule', 'ui.bootstrap']);
 
 myApp.config(['$urlRouterProvider', '$stateProvider', function ($urlRouterProvider, $stateProvider) {
 

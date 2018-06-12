@@ -51,9 +51,11 @@
     "highcharts": "^5.0.7",
     "tweetnacl-util": "^0.15.0",
     "tweetnacl": "^1.0.0",
-    "Ionicons": "ionicons#^2.0.1"
+    "Ionicons": "ionicons#^2.0.1",
+    "angularjs-slider": "^6.5.1"
   },
   "resolutions": {
-    "angular": "^1.2.21"
+    "angular": "^1.2.21",
+    "angular-translate": "~2.17.1"
   }
 }
