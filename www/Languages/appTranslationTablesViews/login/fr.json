@@ -44,7 +44,7 @@
   "INVALID_EMAIL": "Email invalide!",
   "INVALID_EMAIL_OR_PWD": "Addresse courriel ou mot de passe invalide",
   "INVALID_PASSWORD": "Mot de passe incorrect.",
-  "INVALID_USER": "L'utilisateur n'existe pas!",
+  "INVALID_USER": "TR_Invalid user.",
   "USER_DISABLED": "Compte a été désactivé",
   "LANGUAGE": "Langue",
   "LEAVEMESSAGE": "Laissez-nous un message!",
@@ -101,6 +101,7 @@
   "SETPASSWORDPLACEHOLDER": "Créez mot de passe...",
   "SETTINGS": "Réglages",
   "SIGNINDIFFERENTACCOUNT": "Se connecter avec un compte différent",
+  "SCREENSHOTTAKEN": "TR_Screenshot taken. If it was not you, then exit the app.",
   "SIGNOUT": "Se déconnecter",
   "GENERAL": "Général",
   "EDUCATION": "Éducation",
@@ -121,4 +122,3 @@
   "NEWPASSWORDVALIDATION":"Le nouveau mot de passe doit comporter au moins 6 caractères et doit contenir au moins une lettre et un chiffre!"
 
 }
-

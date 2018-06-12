@@ -169,9 +169,11 @@
             if (currentPage.indexOf('my-chart') !== -1 || currentPage.indexOf('lab') !== -1) {
                 NavigatorParameters.getNavigator().resetToPage('./views/personal/personal.html');
             }
+
             // Wipe documents and lab-results
-           CleanUp.clearSensitive();
+            CleanUp.clearSensitive();
         }
+
 
         /*****************************************
          * Manage concurrent users
