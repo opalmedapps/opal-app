@@ -69,6 +69,4 @@ heartbeatdb.log*
 buildOpal.sh
 www/lib/bower_components/\.DS_Store
 
-build-Opal-Preprod\.txt
 
-buildOpal-backup\.sh
