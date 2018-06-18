@@ -119,5 +119,6 @@
     <plugin name="cordova-plugin-compat" spec="^1.1.0" />
     <plugin name="cordova-plugin-ios-base64" spec="~1.0.0" />
     <plugin name="cordova-plugin-cookiemaster" spec="^1.0.5" />
+    <engine name="android" spec="~6.2.3" />
     <engine name="ios" spec="^4.5.2" />
 </widget>
