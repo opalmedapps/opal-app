@@ -31,6 +31,14 @@
         vm.average = average;
         vm.choosenReaction = [{}];
         vm.skipQuestion = { 'reason': '', 'askSimilar': ''};
+        vm.width = window.innerWidth
+            || document.documentElement.clientWidth
+            || document.body.clientWidth;
+        console.log("WIDTHnjdsdjdjlndjlenfjenfjenkfke " + vm.width);
+        vm.height = window.innerHeight
+            || document.documentElement.clientHeight
+            || document.body.clientHeight;
+        console.log("HEIGHTnjdsdjdjlndjlenfjenfjenkfke " + vm.height);
 
         vm.availableReactions = [
             {'type': 'emotion-good', 'reaction': 'reaction-happy', 'text': 'Happy'},
@@ -161,7 +169,42 @@
             document.addEventListener('ons-carousel:postchange', carouselPostChange);
             updateColorGradient(Object.keys(vm.questionnaire.sections[0].questions[0].options).length, vm.questionnaire.sections[0].questions[0].polarity);
             vm.currentPolarity = vm.questionnaire.sections[0].questions[0].polarity;
+
+            // Listen to orientation changes
+            //window.addEventListener("orientationchange", setLayoutByOrientation);
+
+            vm.portraitOrientationCheck = window.matchMedia("(orientation: portrait)");
+            vm.portraitOrientationCheck.addListener(setLayoutByOrientation);
         }
+
+        // reset all the scale styles once screen is rotated
+        function setLayoutByOrientation() {
+            console.log("width : " + vm.width);
+            console.log("height : " + vm.height);
+            setTimeout(function() {
+                var tabbars = $(".tab-bar");
+                var bottomtabbar = tabbars[tabbars.length-1];
+                if (!vm.portraitOrientationCheck.matches) {
+                    // landscape
+                    $(".tab-bar__content").css("height","100%");
+                    bottomtabbar.style.visibility = "hidden";
+                    document.getElementById("myRange").style.transform = 'rotate(0deg)';
+                    document.getElementById("myRange").style.marginTop = '-4vw';
+                    document.getElementById("myRange").style.marginLeft = '10vw';
+                    document.getElementById("maximumText").style.left = '92%';
+                    document.getElementById("minimumText").style.top = '0vw';
+                    document.getElementById("minimumText").style.left = '7%';
+                    document.getElementById("valueSelected").style.top = '30%';
+                    document.getElementById("valueSelected").style.right = '44%';
+                }
+                else {
+                    // portrait
+                    $(".tab-bar__content").css("height","auto");
+                    bottomtabbar.style.visibility = "visible";
+                }
+            },500);
+        }
+
 
         function carouselPostChange(event) {
             //console.log($scope.carousel.getActiveCarouselItemIndex());
@@ -271,12 +314,12 @@
             }
         }
 
-        function removeSpanChild(parent) {
+        function removeSpanChild() {
             // angular automatically creates an annoying span element with the current value
             // this removes it
             var parentElement = document.getElementsByClassName("thumb active");
-            if (parentElement.length > 0) {
-                var span = parentElement[0];
+            for(var i=0; i<parentElement.length;i++) {
+                var span = parentElement[i];
                 span.remove();
             }
         }

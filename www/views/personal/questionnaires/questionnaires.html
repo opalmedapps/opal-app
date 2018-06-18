@@ -106,44 +106,44 @@
             <p><ons-button modifier="light" ng-click="vm.chooseReaction(undefined); vm.closeReactions();">I don't know (close this window)</ons-button></p>
         </ons-modal>
 
-        <ons-bottom-toolbar style="height: 90px" ng-if="carousel.getActiveCarouselItemIndex() !== vm.carouselItems.length && !vm.questionnaireStart">
-            <ons-row align="center" style="height: 90px;">
-                <ons-col>
-                    <div style="padding-left: 25px; font-size: 16px;">
-                        How does this question makes you feel?
+        <!--<ons-bottom-toolbar style="height: 90px" ng-if="carousel.getActiveCarouselItemIndex() !== vm.carouselItems.length && !vm.questionnaireStart">-->
+            <!--<ons-row align="center" style="height: 90px;">-->
+                <!--<ons-col>-->
+                    <!--<div style="padding-left: 25px; font-size: 16px;">-->
+                        <!--How does this question makes you feel?-->
 
-                        <div ng-if="vm.choosenReaction[vm.questionIndex] && vm.choosenReaction[vm.questionIndex].type.startsWith('emotion')" style="display: inline-block;">
-                            <ons-button style="padding:3px" modifier="light" ng-click="vm.showReactions()">
-                                <span style="width: 50px; position: absolute; top: -15px; left: -10px; height: 50px;" class="reaction" ng-class="vm.choosenReaction[vm.questionIndex].reaction"></span>
-                                <span style="padding-left: 25px; color: #000;">{{vm.choosenReaction[vm.questionIndex].text}}</span>
-                            </ons-button>
-                        </div>
+                        <!--<div ng-if="vm.choosenReaction[vm.questionIndex] && vm.choosenReaction[vm.questionIndex].type.startsWith('emotion')" style="display: inline-block;">-->
+                            <!--<ons-button style="padding:3px" modifier="light" ng-click="vm.showReactions()">-->
+                                <!--<span style="width: 50px; position: absolute; top: -15px; left: -10px; height: 50px;" class="reaction" ng-class="vm.choosenReaction[vm.questionIndex].reaction"></span>-->
+                                <!--<span style="padding-left: 25px; color: #000;">{{vm.choosenReaction[vm.questionIndex].text}}</span>-->
+                            <!--</ons-button>-->
+                        <!--</div>-->
 
-                        <div ng-if="!(vm.choosenReaction[vm.questionIndex] && vm.choosenReaction[vm.questionIndex].type.startsWith('emotion'))" style="display: inline-block;">
-                            <ons-button style="padding:3px" modifier="light" ng-click="vm.chooseReaction({'type': 'like', 'reaction': 'thumbs-up'}); vm.showReactions('emotion-good');">
-                                <ons-icon
-                                        icon="fa-thumbs-up"
-                                        size="22px"
-                                        fixed-width="false"
-                                        style="color: rgba(0,0,0, 0.2)"
-                                        ng-class="{'like-selected': vm.choosenReaction[vm.questionIndex].type === 'like' && vm.choosenReaction[vm.questionIndex].reaction === 'thumbs-up'}">
-                                </ons-icon>
-                            </ons-button>
+                        <!--<div ng-if="!(vm.choosenReaction[vm.questionIndex] && vm.choosenReaction[vm.questionIndex].type.startsWith('emotion'))" style="display: inline-block;">-->
+                            <!--<ons-button style="padding:3px" modifier="light" ng-click="vm.chooseReaction({'type': 'like', 'reaction': 'thumbs-up'}); vm.showReactions('emotion-good');">-->
+                                <!--<ons-icon-->
+                                        <!--icon="fa-thumbs-up"-->
+                                        <!--size="22px"-->
+                                        <!--fixed-width="false"-->
+                                        <!--style="color: rgba(0,0,0, 0.2)"-->
+                                        <!--ng-class="{'like-selected': vm.choosenReaction[vm.questionIndex].type === 'like' && vm.choosenReaction[vm.questionIndex].reaction === 'thumbs-up'}">-->
+                                <!--</ons-icon>-->
+                            <!--</ons-button>-->
 
-                            <ons-button style="padding:3px" modifier="light" ng-click="vm.chooseReaction({'type': 'like', 'reaction': 'thumbs-down'}); vm.showReactions('emotion-bad');">
-                                <ons-icon
-                                        icon="fa-thumbs-down"
-                                        size="22px"
-                                        fixed-width="false"
-                                        style="color: rgba(0,0,0, 0.2)"
-                                        ng-class="{'like-selected': vm.choosenReaction[vm.questionIndex].type === 'like' && vm.choosenReaction[vm.questionIndex].reaction === 'thumbs-down'}">
-                                </ons-icon>
-                            </ons-button>
-                        </div>
-                    </div>
-                </ons-col>
-            </ons-row>
-        </ons-bottom-toolbar>
+                            <!--<ons-button style="padding:3px" modifier="light" ng-click="vm.chooseReaction({'type': 'like', 'reaction': 'thumbs-down'}); vm.showReactions('emotion-bad');">-->
+                                <!--<ons-icon-->
+                                        <!--icon="fa-thumbs-down"-->
+                                        <!--size="22px"-->
+                                        <!--fixed-width="false"-->
+                                        <!--style="color: rgba(0,0,0, 0.2)"-->
+                                        <!--ng-class="{'like-selected': vm.choosenReaction[vm.questionIndex].type === 'like' && vm.choosenReaction[vm.questionIndex].reaction === 'thumbs-down'}">-->
+                                <!--</ons-icon>-->
+                            <!--</ons-button>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                <!--</ons-col>-->
+            <!--</ons-row>-->
+        <!--</ons-bottom-toolbar>-->
 
         <ons-carousel fullscreen swipeable auto-scroll overscrollable var="carousel">
 
@@ -302,6 +302,9 @@
                     <div ng-if="item.data.questiontype == 'Scale'" class="center" style="padding-left:10%">
 
                         <style>
+
+                            /* Portrait mode slider*/
+
                             .slider {
                                 margin-top: 11vw;
                                 position: absolute;
@@ -388,20 +391,128 @@
                                 top: 27%;
                                 right: 17%;
                             }
+
+                            /* Landscape mode slider*/
+
+                            .slider2 {
+                                position: absolute;
+                                top: 14%;
+                                -webkit-appearance: none;
+                                background: #8A2BE2;
+                                outline: none;
+                                opacity: 1;
+                                transform: rotate(0deg);
+                                margin-top: -4vw;
+                                margin-left: 10vw;
+                            }
+
+                            .slider2::-webkit-slider-thumb {
+                                -webkit-appearance: none;
+                                appearance: none;
+                                width: 45px;
+                                height: 45px;
+                                background: white;
+                            }
+
+                            .slider2::-moz-range-thumb {
+                                width: 40px;
+                                height: 40px;
+                                background: #7B52FB;
+                            }
+
+                            /*Chrome*/
+                            @media screen and (-webkit-min-device-pixel-ratio:0) {
+                                input[type='range'] {
+                                    overflow: hidden;
+                                    width: 80px;
+                                    -webkit-appearance: none;
+                                    background-color: #E6D8FE;
+                                }
+
+                                input[type='range']::-webkit-slider-runnable-track {
+                                    height: 10px;
+                                    -webkit-appearance: none;
+                                    margin-top: -1px;
+                                }
+
+                                input[type='range']::-webkit-slider-thumb {
+                                    width: 10px;
+                                    -webkit-appearance: none;
+                                    height: 110px;
+                                    background: white;
+                                    box-shadow: -1000px 0 0 1000px #7B52FB;
+                                    margin-top: -50px;
+                                }
+
+                            }
+                            /** FF*/
+                            input[type="range"]::-moz-range-progress {
+                                background-color: #7B52FB;
+                            }
+                            input[type="range"]::-moz-range-track {
+                                background-color: #E6D8FE;
+                            }
+                            /* IE*/
+                            input[type="range"]::-ms-fill-lower {
+                                background-color: #7B52FB;
+                            }
+                            input[type="range"]::-ms-fill-upper {
+                                background-color: #E6D8FE;
+                            }
+                            .minimumText2{
+                                position: absolute;
+                                top: 0vw;
+                                left: 7%;
+                            }
+                            .maximumText2{
+                                position: absolute;
+                                left: 92%;
+                            }
+                            .value2 {
+                                position: absolute;
+                                top: 30%;
+                                right:44%
+                            }
+                             input[type="range"]::-ms-tooltip {
+                                 display: none;
+                             }
+                            .thumb .active {
+                                position: absolute;
+                                top: 30%;
+                                right:44%
+                            }
                         </style>
-                        <ons-row class="slidercontainer" style="margin-left:0px;margin-right:0px" ng-init="vm.bindScaleParameters(item.data);initializeValue();" class="center" style="margin-top:10px;padding-left:5vw;padding-right:5vw;">
+
+                        <!--landscape mode-->
+                        <ons-row ng-if="!vm.portraitOrientationCheck.matches" class="slidercontainer" style="margin-left:0px;margin-right:0px" ng-init="vm.bindScaleParameters(item.data);initializeValue();" class="center" style="margin-top:10px;padding-left:5vw;padding-right:5vw;">
+
+                            <ons-col ng-init="item.data.patient_answer.length > 0 || item.data.patient_answer.push(vm.average(minText,maxText)); item.data.answerChangedFlag = false;">
+                                <ons-row class="maximumText2" width="40px" style="text-align: right;">
+                                    {{maxText}} - {{maxCaption}}
+                                </ons-row>
+
+                                <input type="range" min={{minText}} max={{maxText}} value="0" class="slider2" id="myRange2" style="width: 80%; height: 90px;" ng-model="item.data.patient_answer[0]" ng-change="vm.removeSpanChild(); item.data.answerChangedFlag = true">
+                                <ons-row class="minimumText2" width="40px" style="text-align: right;">
+                                    {{minText}} - {{minCaption}}
+                                </ons-row>
+                            </ons-col>
+                            <div class="value2">Value: &nbsp; &nbsp;{{item.data.patient_answer[0]}}</div>
+                        </ons-row>
+
+                        <!-- portrait mode-->
+                        <ons-row ng-if="vm.portraitOrientationCheck.matches" class="slidercontainer" style="margin-left:0px;margin-right:0px" ng-init="vm.bindScaleParameters(item.data);initializeValue();" class="center" style="margin-top:10px;padding-left:5vw;padding-right:5vw;">
 
                                 <ons-col ng-init="item.data.patient_answer.length > 0 || item.data.patient_answer.push(vm.average(minText,maxText)); item.data.answerChangedFlag = false;">
-                                    <ons-row class="maximumText" width="40px" style="text-align: right; left: 67%;">
+                                    <ons-row class="maximumText" id="maximumText" width="40px" style="text-align: right; left: 67%;">
                                         {{maxText}} - {{maxCaption}}
                                     </ons-row>
-                                    <!-- ng-change ...patient_answer.push(this) -->
-                                <input type="range" min={{minText}} max={{maxText}} value="0" class="slider" id="myRange" style="width: 80%; height: 90px;" ng-model="item.data.patient_answer[0]" ng-change="item.data.answerChangedFlag = true">
+
+                                <input type="range" min={{minText}} max={{maxText}} value="0" class="slider" id="myRange" style="width: 80%; height: 90px;" ng-model="item.data.patient_answer[0]" ng-change="vm.removeSpanChild(); item.data.answerChangedFlag = true">
                                     <ons-row class="minimumText" width="40px" style="text-align: right; top: 57%; left: 67%;">
                                         {{minText}} - {{minCaption}}
                                     </ons-row>
                                 </ons-col>
-                            <div class="value" >Value: &nbsp; &nbsp;<span id="valueSelected2" ng-show="!item.data.answerChangedFlag" ng-bind="item.data.patient_answer[0]"></span><span id="valueSelected" ng-bind="document.getElementById('myRange').value"></span></div>
+                            <div class="value" >Value: &nbsp; &nbsp;{{item.data.patient_answer[0]}}</div>
                         </ons-row>
 
                         <!--<script>-->
@@ -413,7 +524,7 @@
                             <!--}-->
                         <!--</script>-->
 
-                    </ons-col>
+                    </div>
 
                     <!-- SCALE -->
 
