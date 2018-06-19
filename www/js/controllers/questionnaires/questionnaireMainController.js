@@ -31,14 +31,6 @@
         vm.average = average;
         vm.choosenReaction = [{}];
         vm.skipQuestion = { 'reason': '', 'askSimilar': ''};
-        vm.width = window.innerWidth
-            || document.documentElement.clientWidth
-            || document.body.clientWidth;
-        console.log("WIDTHnjdsdjdjlndjlenfjenfjenkfke " + vm.width);
-        vm.height = window.innerHeight
-            || document.documentElement.clientHeight
-            || document.body.clientHeight;
-        console.log("HEIGHTnjdsdjdjlndjlenfjenfjenkfke " + vm.height);
 
         vm.availableReactions = [
             {'type': 'emotion-good', 'reaction': 'reaction-happy', 'text': 'Happy'},
@@ -311,7 +303,27 @@
                 $scope.minCaption = question.options[keys[0]].caption;
                 $scope.maxText = question.options[keys[1]].text;
                 $scope.maxCaption = question.options[keys[1]].caption;
+
+                // set the style of the options
+                var min = parseInt($scope.minText);
+                var max = parseInt($scope.maxText);
+                console.log(min+" "+max);
+                $scope.options = [];
+                var options = $scope.options;
+                for (var i = min; i <= max; i++) {
+                    options.push({text: i+"", value:i});
+                }
+                console.log($scope.options);
+                var scalewidth = $(".scale").width();
+                $scope.scalebtn = {
+                    "height": "auto",
+                    "float": "left",
+                    "text-align": "center",
+                    "width": Math.floor(100/options.length) + "\%"
+                };
+                console.log($scope.scalebtn);
             }
+
         }
 
         function removeSpanChild() {

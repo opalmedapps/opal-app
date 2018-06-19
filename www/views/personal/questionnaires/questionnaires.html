@@ -298,8 +298,8 @@
                         </ul>
                     </div>
 
-                    <!--Test SLIDER-->
-                    <div ng-if="item.data.questiontype == 'Scale'" class="center" style="padding-left:10%">
+                    <!-- LARGE RANGE SCALE (SLIDER TYPE OF QUESTION)--> <!--TODO: Add visualization option check instead of hardcoding 'vm.questionTotalIndex + 1 <= 3'-->
+                    <div ng-if="item.data.questiontype == 'Scale' && vm.questionTotalIndex + 1 <= 3" class="center" style="padding-left:10%">
 
                         <style>
 
@@ -314,6 +314,7 @@
                                 background: #8A2BE2;
                                 outline: none;
                                 opacity: 1;
+                                margin-left: 13%;
                             }
 
                             .slider::-webkit-slider-thumb {
@@ -389,7 +390,7 @@
                             .value {
                                 position: absolute;
                                 top: 27%;
-                                right: 17%;
+                                margin-left: 8%;
                             }
 
                             /* Landscape mode slider*/
@@ -488,12 +489,12 @@
 
                             <ons-col ng-init="item.data.patient_answer.length > 0 || item.data.patient_answer.push(vm.average(minText,maxText)); item.data.answerChangedFlag = false;">
                                 <ons-row class="maximumText2" width="40px" style="text-align: right;">
-                                    {{maxText}} - {{maxCaption}}
+                                    <!--TODO: {{maxText}}--> 100 - {{maxCaption}}
                                 </ons-row>
-
-                                <input type="range" min={{minText}} max={{maxText}} value="0" class="slider2" id="myRange2" style="width: 80%; height: 90px;" ng-model="item.data.patient_answer[0]" ng-change="vm.removeSpanChild(); item.data.answerChangedFlag = true">
+                                <!--TODO: min={{minText}} max={{maxText}}-->
+                                <input type="range" min="1" max="100" value="0" class="slider2" id="myRange2" style="width: 80%; height: 90px;" ng-model="item.data.patient_answer[0]" ng-change="vm.removeSpanChild(); item.data.answerChangedFlag = true">
                                 <ons-row class="minimumText2" width="40px" style="text-align: right;">
-                                    {{minText}} - {{minCaption}}
+                                    <!--TODO: {{minText}}-->1 - {{minCaption}}
                                 </ons-row>
                             </ons-col>
                             <div class="value2">Value: &nbsp; &nbsp;{{item.data.patient_answer[0]}}</div>
@@ -503,56 +504,47 @@
                         <ons-row ng-if="vm.portraitOrientationCheck.matches" class="slidercontainer" style="margin-left:0px;margin-right:0px" ng-init="vm.bindScaleParameters(item.data);initializeValue();" class="center" style="margin-top:10px;padding-left:5vw;padding-right:5vw;">
 
                                 <ons-col ng-init="item.data.patient_answer.length > 0 || item.data.patient_answer.push(vm.average(minText,maxText)); item.data.answerChangedFlag = false;">
-                                    <ons-row class="maximumText" id="maximumText" width="40px" style="text-align: right; left: 67%;">
-                                        {{maxText}} - {{maxCaption}}
+                                    <ons-row class="maximumText" id="maximumText" width="40px" style="text-align: right; left: 77%;">
+                                        <!--TODO: {{maxText}}--> 100 - {{maxCaption}}
                                     </ons-row>
-
-                                <input type="range" min={{minText}} max={{maxText}} value="0" class="slider" id="myRange" style="width: 80%; height: 90px;" ng-model="item.data.patient_answer[0]" ng-change="vm.removeSpanChild(); item.data.answerChangedFlag = true">
-                                    <ons-row class="minimumText" width="40px" style="text-align: right; top: 57%; left: 67%;">
-                                        {{minText}} - {{minCaption}}
+                                <!--TODO: min={{minText}} max={{maxText}}-->
+                                <input type="range" min="1" max="100" value="0" class="slider" id="myRange" style="width: 80%; height: 90px;" ng-model="item.data.patient_answer[0]" ng-change="vm.removeSpanChild(); item.data.answerChangedFlag = true">
+                                    <ons-row class="minimumText" width="40px" style="text-align: right; top: 57%; left: 77%;">
+                                        <!--TODO: {{minText}}-->1 - {{minCaption}}
                                     </ons-row>
                                 </ons-col>
                             <div class="value" >Value: &nbsp; &nbsp;{{item.data.patient_answer[0]}}</div>
                         </ons-row>
 
-                        <!--<script>-->
-                            <!--var slider = document.getElementById("myRange");-->
-                            <!--var output = document.getElementById("valueSelected");-->
-                            <!--output.innerHTML = slider.value;-->
-                            <!--slider.oninput = function() {-->
-                                <!--output.innerHTML = this.value;-->
-                            <!--}-->
-                        <!--</script>-->
-
                     </div>
 
-                    <!-- SCALE -->
+                    <!-- SMALL RANGE SCALE (SLIDER TYPE OF QUESTION)--> <!--TODO: Add visualization option check instead of hardcoding 'vm.questionTotalIndex + 1 >= 4'-->
+                    <div ng-if="item.data.questiontype == 'Scale' && vm.questionTotalIndex + 1 >= 4" class="center scale" style="margin-top:10px;padding-left:5vw;padding-right:5vw;">
+                        <!--<ons-row style="margin-left:0px;margin-right:0px" ng-init="vm.bindScaleParameters(item.data)">
+                          <ons-col width="40px" style="text-align: center; line-height: 31px;">
+                            {{minText}}
+                          </ons-col>
+                          <ons-col ng-init="item.data.patient_answer.length > 0 || item.data.patient_answer.push(vm.average(minText,maxText)); item.data.answerChangedFlag = false;">
+                            <input type="range" class="range" ng-model="item.data.patient_answer[0]" min={{minText}} max={{maxText}} ng-change="vm.removeSpanChild(this); item.data.answerChangedFlag = true;">
+                          </ons-col>
+                          <ons-col width="40px" style="text-align: center; line-height: 31px;">
+                            {{maxText}}
+                          </ons-col>
+                        </ons-row>-->
 
 
+                        <div style="margin-left:0px;margin-right:0px;" ng-init="vm.bindScaleParameters(item.data)">
+                            <div class="scale_option" ng-repeat="op in options" ng-init="item.data.patient_answer.length > 0 || item.data.patient_answer.push(vm.average(minText,maxText)); item.data.answerChangedFlag = false;" ng-style="scalebtn">
+                                {{op.text}}
+                                <input type="radio" value="{{op.value}}" ng-model="item.data.patient_answer[0]" ng-change="vm.removeSpanChild(this); item.data.answerChangedFlag = true;" />
+                            </div>
+                        </div>
 
-                    <div ng-if="item.data.questiontype == ''" class="center" style="margin-top:10px;padding-left:5vw;padding-right:5vw;">
-                        <ons-row style="margin-left:0px;margin-right:0px" ng-init="vm.bindScaleParameters(item.data)">
-                            <ons-col width="40px" style="text-align: center; line-height: 31px;">
-                                {{minText}}
-                            </ons-col>
-                            <ons-col ng-init="item.data.patient_answer.length > 0 || item.data.patient_answer.push(vm.average(minText,maxText)); item.data.answerChangedFlag = false;">
-                                <div ng-if="item.data.questiontype == 'Scale'" class="center" style="margin-top:20px;padding-left:15vw;padding-right:15vw;z-index:0;">
-
-                                    <rzslider rz-slider-model="slider.value"
-                                              rz-slider-options="slider.options"></rzslider>
-
-                                </div>
-                                <!--<input type="range" class="range" ng-model="item.data.patient_answer[0]" min={{minText}} max={{maxText}} ng-change="vm.removeSpanChild(this); item.data.answerChangedFlag = true;">-->
-                            </ons-col>
-                            <ons-col width="40px" style="text-align: center; line-height: 31px;">
-                                {{maxText}}
-                            </ons-col>
-                        </ons-row>
-                        <ons-row style="margin-left:0px;margin-right:0px;margin-top:10px">
+                        <ons-row style="margin-left:0px;margin-right:0px;margin-top:30px;">
                             <ons-col width="40%" style="text-align: left; line-height: 31px;">
                                 {{minCaption}}
                             </ons-col>
-                            <ons-col width="20%" style="text-align: center;">
+                            <ons-col width="20%" style="text-align: center;padding-top:3vw;">
                                 <div ng-if="item.data.patient_answer[0] != null && item.data.patient_answer[0] != -9">
                                     {{item.data.patient_answer[0]}}
                                 </div>
@@ -576,6 +568,65 @@
                             </li>
                         </ul>
                     </div>
+
+                    <!-- FEEDBACK -->
+                    <!-- <ons-row align="center" style="margin-left:0.12vw;padding-top:3vh;padding-bottom:2vh;">
+                      <ons-col align="left">
+                        <i class="fa fa-thumbs-down fa-3x" style="margin-left:20vw" aria-hidden="true"></i>
+                      </ons-col>
+                      <ons-col align="right">
+                        <i class="fa fa-thumbs-up fa-3x" style="margin-right:20vw" aria-hidden="true"></i>
+                      </ons-col>
+                    </ons-row> -->
+
+                    <!-- SCALE -->
+
+                    <!--<div ng-if="item.data.questiontype == ''" class="center" style="margin-top:10px;padding-left:5vw;padding-right:5vw;">-->
+                        <!--<ons-row style="margin-left:0px;margin-right:0px" ng-init="vm.bindScaleParameters(item.data)">-->
+                            <!--<ons-col width="40px" style="text-align: center; line-height: 31px;">-->
+                                <!--{{minText}}-->
+                            <!--</ons-col>-->
+                            <!--<ons-col ng-init="item.data.patient_answer.length > 0 || item.data.patient_answer.push(vm.average(minText,maxText)); item.data.answerChangedFlag = false;">-->
+                                <!--<div ng-if="item.data.questiontype == 'Scale'" class="center" style="margin-top:20px;padding-left:15vw;padding-right:15vw;z-index:0;">-->
+
+                                    <!--<rzslider rz-slider-model="slider.value"-->
+                                              <!--rz-slider-options="slider.options"></rzslider>-->
+
+                                <!--</div>-->
+                                <!--&lt;!&ndash;<input type="range" class="range" ng-model="item.data.patient_answer[0]" min={{minText}} max={{maxText}} ng-change="vm.removeSpanChild(this); item.data.answerChangedFlag = true;">&ndash;&gt;-->
+                            <!--</ons-col>-->
+                            <!--<ons-col width="40px" style="text-align: center; line-height: 31px;">-->
+                                <!--{{maxText}}-->
+                            <!--</ons-col>-->
+                        <!--</ons-row>-->
+                        <!--<ons-row style="margin-left:0px;margin-right:0px;margin-top:10px">-->
+                            <!--<ons-col width="40%" style="text-align: left; line-height: 31px;">-->
+                                <!--{{minCaption}}-->
+                            <!--</ons-col>-->
+                            <!--<ons-col width="20%" style="text-align: center;">-->
+                                <!--<div ng-if="item.data.patient_answer[0] != null && item.data.patient_answer[0] != -9">-->
+                                    <!--{{item.data.patient_answer[0]}}-->
+                                <!--</div>-->
+                                <!--<div ng-if="item.data.patient_answer[0] != null && item.data.patient_answer[0] == -9">-->
+                                    <!--{{"SKIPPED"|translate}}-->
+                                <!--</div>-->
+                            <!--</ons-col>-->
+                            <!--<ons-col width="40%" style="text-align: right; line-height: 31px;">-->
+                                <!--{{maxCaption}}-->
+                            <!--</ons-col>-->
+                        <!--</ons-row>-->
+                        <!--<ul class="list" style="margin-top:1vh;">-->
+                            <!--<div ng-if="item.data.optional == 1" style="padding-top:3vh; background-color:#d9d9d9">-->
+                            <!--</div>-->
+                            <!--<li ng-if="item.data.optional == 1" class="list__item list__item&#45;&#45;tappable" ng-style="item.data.patient_answer[0] == -9 ? {'background-color':'#e9e9e9'} : {'background-color':'#f9f9f9'}" ng-init="item.data.skip = true">-->
+                                <!--<label class="radio-button radio-button&#45;&#45;list-item">-->
+                                    <!--<input type="radio" name="{{'scaleSkip'+item.data.ser_num}}" ng-checked="item.data.patient_answer[0] == -9" ng-click="vm.toggleScaleSkip(item.data.skip, item.data); console.log(item.data.patient_answer[0] == -9);">-->
+                                    <!--<div class="radio-button__checkmark radio-button&#45;&#45;list-item__checkmark"></div>-->
+                                    <!--{{"SKIP_THIS_QUESTION"|translate}}-->
+                                <!--</label>-->
+                            <!--</li>-->
+                        <!--</ul>-->
+                    <!--</div>-->
 
                     <!-- FEEDBACK -->
                     <!-- <ons-row align="center" style="margin-left:0.12vw;padding-top:3vh;padding-bottom:2vh;">
