@@ -82,7 +82,7 @@
         {
         //     vm.navigator.pushPage('views/settings/secure-device.html');
         //     vm.navigator.pushPage('./views/templates/content.html', {contentType: 'secureyourdevice'});
-            window[navigatorName].pushPage('/views/templates/content.html', {contentType: 'secureyourdevice'});
+            window[navigatorName].pushPage('./views/templates/content.html', {contentType: 'secureyourdevice'});
         }
 
         function openPageLegal(type)
