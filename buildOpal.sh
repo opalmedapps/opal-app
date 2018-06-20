@@ -164,14 +164,29 @@ then
 	rm -r www
 	mkdir www
 
+
+
 	#Prod specific build phase, this includes gulp taks + using proper index.html file
 	if [ "$DEST" = "prod" ]; then
+
+#		#Just transfer everything for now until we figure out how to make the script work differently for Prod
+#		#and copies over only the necessary files
+#		cp -a $WORKING_DIR/www/. $TARGET_DIR/www
+#		rm www/karma.conf.js
+#		rm www/package.json
+#
+#		if [ -d "$WORKING_DIR/www/node_modules" ]; then
+#            rm -r www/node_modules
+#        fi
+
 		#Run Gulp tasks in order to compress and bundle all needed files
 		cd $WORKING_DIR
 
 		echo ""
 		echo ""
+		echo "*********************************************"
 		echo "Making sure all build dependencies are installed..."
+		echo "*********************************************"
 		echo ""
 		echo ""
 
@@ -179,7 +194,9 @@ then
 
 		echo ""
 		echo ""
+		echo "*********************************************"
 		echo "Dependency installation was successful. Now starting gulp automated processes."
+		echo "*********************************************"
 		echo ""
 		echo ""
 
@@ -188,10 +205,12 @@ then
 
 		echo ""
 		echo ""
+		echo "*********************************************"
 		echo "Gulp build tasks were successful!"
 		echo ""
 		echo ""
 		echo "Copying over other dependencies to dest folder..."
+		echo "*********************************************"
 
 		#Copy over language directory
 		cp -a $WORKING_DIR/www/Languages/. $WORKING_DIR/dest/Languages
@@ -209,18 +228,20 @@ then
 
 		echo ""
 		echo ""
+		echo "*********************************************"
 		echo "Copying completed successfully..."
 
 		echo ""
 		echo ""
 		echo "Removing intermediate build folder..."
-	
-		#You can now remove the dest folder 
+		echo "*********************************************"
+
+		#You can now remove the dest folder
 		rm -r $WORKING_DIR/dest
 
 
 	else
-		#Just transfer everything over if not in production mode 
+		#Just transfer everything over if not in production mode
 		cp -a $WORKING_DIR/www/. $TARGET_DIR/www
 		rm www/karma.conf.js
 		rm www/package.json
@@ -230,15 +251,18 @@ then
         fi
 	fi
 
-	#TODO: UPDATE VERSION # IN CONFIG.XML + Build.Gradle file 
+	#TODO: UPDATE VERSION # IN CONFIG.XML + Build.Gradle file
 	# IMPORTANT IMPORTANT: Use always Gradle version 2.2.2   DO NOT UPGRADE TO A HIGHER VERSION. IT WON'T WORK
 	# ALWAYS MAKE SURE THAT THIS LINE IS IN Build.Gradle file: classpath 'com.android.tools.build:gradle:2.2.2'
 
 	echo ""
 	echo ""
-	echo ""
+	echo "*********************************************"
 	echo "Copying over config.xml to build destination..."
-	# $version_android = 
+	echo "*********************************************"
+	echo ""
+	echo ""
+	# $version_android =
     # sed -e "s/version=\"[0-9.]*\" android-versionCode=\"[0-9]*\"/version=\"${version}\" android-versionCode=\"${version_android}\"" $TARGET_DIR/config.xml
 	#Remove current config.xml and replace with current one
 	rm $TARGET_DIR/config.xml
@@ -249,18 +273,24 @@ then
 
 	echo ""
 	echo ""
+	echo "*********************************************"
+	echo "*********************************************"
 	echo ""
 	echo "All checks have been met... time to build...."
 	echo ""
+	echo "*********************************************"
+	echo "*********************************************"
 	echo ""
 	echo ""
 
 	#All checks have been met... time to build...
     cordova build -verbose
 
-	
+
 	echo ""
+	echo "*********************************************"
 	echo "Build was successful!"
+	echo "*********************************************"
 	echo ""
 
 	if [ "$DEST" = "prod" ]; then
