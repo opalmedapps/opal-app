@@ -1,6 +1,6 @@
 {
   "LOADINGDATA":"Chargement",
   "HOME":"Accueil",
-  "UPDATEMESSAGE": "TR_ There is a security patch available for Opal App and for your safety it must be installed before continuing use.",
-  "UPDATEREQUIRED": "TR_ Update Required"
+  "UPDATEMESSAGE":"Il y a un correctif de sécurité disponible pour l'application Opal et pour votre sécurité, il doit être installé pour pouvoir continuer à l'utiliser.",
+  "UPDATEREQUIRED":"Mise à jour requise"
 }
