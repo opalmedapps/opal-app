@@ -169,69 +169,76 @@ then
 	#Prod specific build phase, this includes gulp taks + using proper index.html file
 	if [ "$DEST" = "prod" ]; then
 
-		#Just transfer everything for now until we figure out how to make the script work differently for Prod
-		#and copies over only the necessary files
-		cp -a $WORKING_DIR/www/. $TARGET_DIR/www
-		rm www/karma.conf.js
-		rm www/package.json
+#		#Just transfer everything for now until we figure out how to make the script work differently for Prod
+#		#and copies over only the necessary files
+#		cp -a $WORKING_DIR/www/. $TARGET_DIR/www
+#		rm www/karma.conf.js
+#		rm www/package.json
+#
+#		if [ -d "$WORKING_DIR/www/node_modules" ]; then
+#            rm -r www/node_modules
+#        fi
 
-		if [ -d "$WORKING_DIR/www/node_modules" ]; then
-            rm -r www/node_modules
-        fi
+		#Run Gulp tasks in order to compress and bundle all needed files
+		cd $WORKING_DIR
 
+		echo ""
+		echo ""
+		echo "*********************************************"
+		echo "Making sure all build dependencies are installed..."
+		echo "*********************************************"
+		echo ""
+		echo ""
 
-#		#Run Gulp tasks in order to compress and bundle all needed files
-#		cd $WORKING_DIR
-#
-#		echo ""
-#		echo ""
-#		echo "Making sure all build dependencies are installed..."
-#		echo ""
-#		echo ""
-#
-#		npm install
-#
-#		echo ""
-#		echo ""
-#		echo "Dependency installation was successful. Now starting gulp automated processes."
-#		echo ""
-#		echo ""
-#
-#		#Do minification work here
-#		gulp build
-#
-#		echo ""
-#		echo ""
-#		echo "Gulp build tasks were successful!"
-#		echo ""
-#		echo ""
-#		echo "Copying over other dependencies to dest folder..."
-#
-#		#Copy over language directory
-#		cp -a $WORKING_DIR/www/Languages/. $WORKING_DIR/dest/Languages
-#
-#		#Copy over fonts directory to root
-#		cp -a $WORKING_DIR/www/fonts/. $WORKING_DIR/dest/fonts
-#
-#		#Copy over fonts directory to vendor for OnsenUI
-#		cp -a $WORKING_DIR/www/fonts/. $WORKING_DIR/dest/vendor/fonts
-#
-#		cp $WORKING_DIR/www/lib/bower_components/bootstrap/dist/css/bootstrap.min.css.map $WORKING_DIR/dest/vendor
-#
-#		#Grab from dest folder and move them the production environment
-#		cp -a $WORKING_DIR/dest/. $TARGET_DIR/www
-#
-#		echo ""
-#		echo ""
-#		echo "Copying completed successfully..."
-#
-#		echo ""
-#		echo ""
-#		echo "Removing intermediate build folder..."
-#
-#		#You can now remove the dest folder
-#		rm -r $WORKING_DIR/dest
-#
+		npm install
+
+		echo ""
+		echo ""
+		echo "*********************************************"
+		echo "Dependency installation was successful. Now starting gulp automated processes."
+		echo "*********************************************"
+		echo ""
+		echo ""
+
+		#Do minification work here
+		gulp build
+
+		echo ""
+		echo ""
+		echo "*********************************************"
+		echo "Gulp build tasks were successful!"
+		echo ""
+		echo ""
+		echo "Copying over other dependencies to dest folder..."
+		echo "*********************************************"
+
+		#Copy over language directory
+		cp -a $WORKING_DIR/www/Languages/. $WORKING_DIR/dest/Languages
+
+		#Copy over fonts directory to root
+		cp -a $WORKING_DIR/www/fonts/. $WORKING_DIR/dest/fonts
+
+		#Copy over fonts directory to vendor for OnsenUI
+		cp -a $WORKING_DIR/www/fonts/. $WORKING_DIR/dest/vendor/fonts
+
+		cp $WORKING_DIR/www/lib/bower_components/bootstrap/dist/css/bootstrap.min.css.map $WORKING_DIR/dest/vendor
+
+		#Grab from dest folder and move them the production environment
+		cp -a $WORKING_DIR/dest/. $TARGET_DIR/www
+
+		echo ""
+		echo ""
+		echo "*********************************************"
+		echo "Copying completed successfully..."
+
+		echo ""
+		echo ""
+		echo "Removing intermediate build folder..."
+		echo "*********************************************"
+
+		#You can now remove the dest folder
+		rm -r $WORKING_DIR/dest
+
 
 	else
 		#Just transfer everything over if not in production mode
