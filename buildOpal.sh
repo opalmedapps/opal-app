@@ -233,6 +233,39 @@ then
 #		rm -r $WORKING_DIR/dest
 #
 
+		echo ""
+		echo ""
+		echo "Gulp build tasks were successful!"
+		echo ""
+		echo ""
+		echo "Copying over other dependencies to dest folder..."
+
+		#Copy over language directory
+		cp -a $WORKING_DIR/www/Languages/. $WORKING_DIR/dest/Languages
+
+		#Copy over fonts directory to root
+		cp -a $WORKING_DIR/www/fonts/. $WORKING_DIR/dest/fonts
+
+		#Copy over fonts directory to vendor for OnsenUI
+		cp -a $WORKING_DIR/www/fonts/. $WORKING_DIR/dest/vendor/fonts
+
+		cp $WORKING_DIR/www/lib/bower_components/bootstrap/dist/css/bootstrap.min.css.map $WORKING_DIR/dest/vendor
+
+		#Grab from dest folder and move them the production environment
+		cp -a $WORKING_DIR/dest/. $TARGET_DIR/www
+
+		echo ""
+		echo ""
+		echo "Copying completed successfully..."
+
+		echo ""
+		echo ""
+		echo "Removing intermediate build folder..."
+
+		#You can now remove the dest folder
+		rm -r $WORKING_DIR/dest
+
+
 	else
 		#Just transfer everything over if not in production mode
 		cp -a $WORKING_DIR/www/. $TARGET_DIR/www
@@ -244,7 +277,7 @@ then
         fi
 	fi
 
-	#TODO: UPDATE VERSION # IN CONFIG.XML + Build.Gradle file 
+	#TODO: UPDATE VERSION # IN CONFIG.XML + Build.Gradle file
 	# IMPORTANT IMPORTANT: Use always Gradle version 2.2.2   DO NOT UPGRADE TO A HIGHER VERSION. IT WON'T WORK
 	# ALWAYS MAKE SURE THAT THIS LINE IS IN Build.Gradle file: classpath 'com.android.tools.build:gradle:2.2.2'
 
@@ -254,7 +287,7 @@ then
 	echo "Copying over config.xml to build destination..."
 	echo "*********************************************"
 	echo ""
-	echo ""
+	echo "Copying over config.xml to build destination..."
 	# $version_android =
     # sed -e "s/version=\"[0-9.]*\" android-versionCode=\"[0-9]*\"/version=\"${version}\" android-versionCode=\"${version_android}\"" $TARGET_DIR/config.xml
 	#Remove current config.xml and replace with current one
@@ -279,7 +312,7 @@ then
 	#All checks have been met... time to build...
     cordova build -verbose
 
-	
+
 	echo ""
 	echo "*********************************************"
 	echo "Build was successful!"

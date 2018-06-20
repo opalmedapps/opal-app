@@ -69,4 +69,8 @@ heartbeatdb.log*
 buildOpal.sh
 www/lib/bower_components/\.DS_Store
 
+<<<<<<< HEAD
 CHANGELOG\.md
+=======
+
+>>>>>>> opal_pre_prod
