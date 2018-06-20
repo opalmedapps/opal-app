@@ -29,7 +29,8 @@
             <!--</ons-list-item>-->
 
             <ons-list-item ng-class="fontSizeDesc">
-                <p class="item-desc" ng-class="fontSizeDesc">{{vm.app["MapDescription_" + vm.language]}}</p>
+                <!--<p class="item-desc" ng-class="fontSizeDesc">{{vm.app["MapDescription_" + vm.language]}}</p>-->
+                <p class="item-desc" ng-class="fontSizeDesc" ng-bind-html="vm.app['MapDescription_' + vm.language]"></p>
             </ons-list-item>
 
             <ons-list class="settings-list" align="center">
