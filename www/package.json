@@ -4,7 +4,7 @@
   "description": "used for Karma testing",
   "main": "karma.conf.js",
   "scripts": {
-    "test": "ng test"
+      "test": "ng test"
   },
   "repository": {
     "type": "git",
