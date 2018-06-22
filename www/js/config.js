@@ -6,7 +6,7 @@ fireConfig.$inject = [];
 function fireConfig () {
 
     var config = {
-
+        // PreProd (Dev)
         apiKey: "AIzaSyCxV6VuVWtKg5wkeReqzQNfRULwkvVXkos",
         authDomain: "brilliant-inferno-7679.firebaseapp.com",
         databaseURL: "https://brilliant-inferno-7679.firebaseio.com",
