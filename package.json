@@ -62,7 +62,10 @@
     "yargs": "^8.0.1"
   },
   "dependencies": {
-    "cordova-android": "^6.4.0",
+    "cordova-android": "^6.3.0",
     "cordova-auto-patch": "^1.2.2"
+  },
+  "cordova": {
+    "plugins": {}
   }
 }
