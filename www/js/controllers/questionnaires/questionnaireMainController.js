@@ -31,7 +31,8 @@
         vm.average = average;
         vm.choosenReaction = [{}];
         vm.skipQuestion = { 'reason': '', 'askSimilar': ''};
-
+        vm.ischeckedTest=true;
+        vm.isDisabled = isDisabled;
         vm.availableReactions = [
             {'type': 'emotion-good', 'reaction': 'reaction-happy', 'text': 'Happy'},
             {'type': 'emotion-good', 'reaction': 'reaction-hopeful', 'text': 'Hopeful'},
@@ -68,8 +69,10 @@
             carousel.next()
             skip_question.hide();
         };
-        $scope.initializeValue = function() {
+        vm.isCheckedFcn = isCheckedFcn;
 
+        vm.exists = function(item) {
+            return vm.selected.indexOf(item)>-1;
         }
 
         $scope.slider = {
@@ -436,21 +439,54 @@
         function toggleCheckboxSelection(optionKey) {
             var question = vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex];
 
+            console.log("Object is "+Object(question.patient_answer));
+
             // if previous choice was to skip question, toggle skip boolean
             if (question.patient_answer.indexOf('SKIPPED') > -1) {
                 toggleCheckboxSkip(false, question);
+                vm.checkedNumber++;
             }
 
+            console.log("Object is "+Object(question.patient_answer));
+
             var answerIndex = question.patient_answer.indexOf(optionKey);
+
             // is currently selected, remove it
             if (answerIndex > -1) {
                 question.answerChangedFlag = true;
                 question.patient_answer.splice(answerIndex, 1);
+                vm.checkedNumber--;
+                console.log("Object after splice in if is "+Object(question.patient_answer));
+            } else { // is newly selected
+                if ($('input[class=single-checkbox]:checked').length > 2 ) { // if too many selections, do not add it
+                    //question.answerChangedFlag = true;
+                    console.log("Object before splice in if else if is "+Object(question.patient_answer));
+                    console.log("Object before splice in if else if is "+Object(question.patient_answer));
+                    console.log('here');
+                    alert("allowed only 2");
+                } else { // otherwise add it
+                    question.answerChangedFlag = true;
+                    question.patient_answer.push(optionKey);
+                    vm.checkedNumber++;
+                    console.log("Object after push in if else else is "+Object(question.patient_answer));
+                }
             }
-            // is newly selected, add it
-            else {
-                question.answerChangedFlag = true;
-                question.patient_answer.push(optionKey);
+            console.log("Object at the end is "+Object(question.patient_answer));
+        }
+
+        function isCheckedFcn(optionKey) {
+            var question = vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex];
+            var answerIndex = question.patient_answer.indexOf(optionKey);
+            return (answerIndex > -1);
+        }
+
+        vm.checkedNumber = 0;
+        vm.limitNumber = 2;
+        vm.check = function(item) {
+            if (item.checked) {
+                vm.checkedNumber++;
+            } else {
+                vm.checkedNumber--;
             }
         }
 
@@ -481,10 +517,17 @@
         }
 
         function skipQuestion(question) {
+            vm.checkedNumber=0;
             question.patient_answer = ['SKIPPED'];
             if (!$scope.$$phase) {
                 $scope.$digest();
             }
+        }
+
+        function isDisabled(key) {
+            var question = vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex];
+            var answerIndex = question.patient_answer.indexOf(key);
+            return !(answerIndex>-1) && (vm.checkedNumber === vm.limitNumber);
         }
 
         function removeListener() {
