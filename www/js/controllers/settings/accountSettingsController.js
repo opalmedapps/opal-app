@@ -55,7 +55,6 @@
                 $timeout(function() {
                     loadSettings();
                 });
-
             });
 
             $window[navigatorName].on('prepush', function(event) {
@@ -78,9 +77,7 @@
         }
 
         function goToGeneralSettings() {
-            NavigatorParameters.setParameters({
-                'Navigator': navigatorName
-            });
+            NavigatorParameters.setParameters({'Navigator': navigatorName});
             $window[navigatorName].pushPage('./views/init/init-settings.html');
         }
 
