@@ -75,6 +75,7 @@
         vm.exists = function(item) {
             return vm.selected.indexOf(item)>-1;
         }
+        vm.tmpAnswer = [];
 
         $scope.slider = {
             value: 6,
@@ -476,21 +477,15 @@
             if (answerIndex > -1) {
                 question.answerChangedFlag = true;
                 question.patient_answer.splice(answerIndex, 1);
+                vm.tmpAnswer.splice(answerIndex, 1);
                 vm.checkedNumber--;
                 console.log("Object after splice in if is "+Object(question.patient_answer));
             } else { // is newly selected
-                if ($('input[class=single-checkbox]:checked').length > 2 ) { // if too many selections, do not add it
-                    //question.answerChangedFlag = true;
-                    console.log("Object before splice in if else if is "+Object(question.patient_answer));
-                    console.log("Object before splice in if else if is "+Object(question.patient_answer));
-                    console.log('here');
-                    alert("allowed only 2");
-                } else { // otherwise add it
-                    question.answerChangedFlag = true;
-                    question.patient_answer.push(optionKey);
-                    vm.checkedNumber++;
-                    console.log("Object after push in if else else is "+Object(question.patient_answer));
-                }
+                question.answerChangedFlag = true;
+                question.patient_answer.push(optionKey);
+                vm.checkedNumber++;
+                console.log("Object after push in if else else is "+Object(question.patient_answer));
+                vm.tmpAnswer.push(optionKey);
             }
             console.log("Object at the end is "+Object(question.patient_answer));
         }
@@ -532,13 +527,18 @@
                 skipQuestion(question);
             }
             else {
-                question.patient_answer = [];
+                vm.checkedNumber=vm.tmpAnswer.length;
+                question.patient_answer = vm.tmpAnswer;
+                console.log("UNCHECKING SKIP: " + Object(question.patient_answer));
+                for(var i = 0; i <question.patient_answer.length; i++) {
+                    document.getElementById(question.patient_answer[i]).ngDisabled = vm.isDisabled(question.patient_answer[i]);
+                }
+                //question.patient_answer = [];
             }
             question.skip = !skip;
         }
 
         function skipQuestion(question) {
-            vm.checkedNumber=0;
             question.patient_answer = ['SKIPPED'];
             if (!$scope.$$phase) {
                 $scope.$digest();
@@ -548,7 +548,7 @@
         function isDisabled(key) {
             var question = vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex];
             var answerIndex = question.patient_answer.indexOf(key);
-            return !(answerIndex>-1) && (vm.checkedNumber === vm.limitNumber);
+            return !(answerIndex>-1) && (vm.checkedNumber >= vm.limitNumber);
         }
 
         function removeListener() {
