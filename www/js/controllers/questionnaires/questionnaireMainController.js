@@ -14,6 +14,7 @@
         var vm = this;
         vm.beginQuestionnaire = beginQuestionnaire;
         vm.resumeQuestionnaire = resumeQuestionnaire;
+        vm.isQuestion=false;
         vm.currentColorGradient = [];
         vm.currentPolarity = "lowGood";
         vm.optionBackgroundColor = "#f3f3f3";
@@ -100,8 +101,16 @@
         ///////////////////
 
         function activate() {
+
+            // Initialize the navigator for push and pop of pages.
+            // NavigatorParameters.setParameters({'Navigator':'questionInfoNav'});
+            // NavigatorParameters.setNavigator(questionInfoNav);
+
             var params = NavigatorParameters.getParameters();
+
             vm.questionnaire = params.questionnaire;
+            console.log("jkdebfjkewfewbkfjbewlfjwelfewjf");
+            console.log(vm.questionnaire);
             vm.carouselItems = flattenQuestionnaire(); // questions + section headers
             vm.questionnaireStart = true;
             vm.sectionIndex = 0;
@@ -206,11 +215,14 @@
             // going from questionnaire header page to first section
             if (event.lastActiveIndex == 0) {
                 vm.questionnaireStart = false;
+                vm.isQuestion = false;
             }
             // going to questionnaire header page
             else if (event.activeIndex == 0) {
                 vm.questionnaireStart = true;
+                vm.isQuestion = false;
             }
+
             // if right swipe
             else if (event.activeIndex - event.lastActiveIndex > 0) {
                 // coming from question, going to question
@@ -218,15 +230,21 @@
                     saveAnswer(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex]);
                     vm.questionIndex++;
                     vm.questionTotalIndex++;
+                    vm.isQuestion = true;
                 }
                 // coming from question, going to section header
                 else if (event.lastActiveIndex > 0 && vm.carouselItems[event.lastActiveIndex-1].type == 'question' && vm.carouselItems[event.activeIndex-1].type == 'header') {
                     saveAnswer(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex]);
+                    vm.isQuestion = false;
                     vm.sectionIndex++;
                     vm.questionIndex = 0;
                     vm.maxQuestionIndex = vm.questionnaire.sections[vm.sectionIndex].questions.length-1;
                     vm.questionTotalIndex++;
+                    // coming from section header, going to question
+                } else if (event.lastActiveIndex > 0 && vm.carouselItems[event.lastActiveIndex-1].type == 'header' && vm.carouselItems[event.activeIndex-1].type == 'question') {
+                    vm.isQuestion = true;
                 }
+
             }
             // if left swipe
             else if (event.activeIndex - event.lastActiveIndex < 0) {
@@ -235,9 +253,11 @@
                     saveAnswer(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex]);
                     vm.questionIndex--;
                     vm.questionTotalIndex--;
+                    vm.isQuestion = true;
                 }
                 // coming from section header, going to question
                 else if (event.lastActiveIndex > 0 && vm.carouselItems[event.lastActiveIndex-1].type == 'header' && vm.carouselItems[event.activeIndex-1].type == 'question') {
+                    vm.isQuestion = true;
                     vm.sectionIndex--;
                     vm.maxQuestionIndex = vm.questionnaire.sections[vm.sectionIndex].questions.length-1;
                     vm.questionIndex = vm.maxQuestionIndex;
@@ -347,6 +367,8 @@
 
         function beginQuestionnaire() {
             vm.questionnaireStart = false;
+            console.log("questionnaire structure: ");
+            console.log(vm.questionnaire);
             $scope.carousel.next();
         }
 
@@ -444,7 +466,6 @@
             // if previous choice was to skip question, toggle skip boolean
             if (question.patient_answer.indexOf('SKIPPED') > -1) {
                 toggleCheckboxSkip(false, question);
-                vm.checkedNumber++;
             }
 
             console.log("Object is "+Object(question.patient_answer));
@@ -479,7 +500,7 @@
             var answerIndex = question.patient_answer.indexOf(optionKey);
             return (answerIndex > -1);
         }
-
+        //TODO: define checkedNumber and limitNumber dynamically for each question instead of hardcoding
         vm.checkedNumber = 0;
         vm.limitNumber = 2;
         vm.check = function(item) {

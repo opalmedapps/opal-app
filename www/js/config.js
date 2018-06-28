@@ -17,4 +17,18 @@ function fireConfig () {
     if (!firebase.apps.length) {
         firebase.initializeApp(config);
     }
+
+    // // Initialize Firebase
+    // var config = {
+    //     apiKey: "AIzaSyBqPY0KIXqPFlLztENbAauhn12tGHPeA6A",
+    //     authDomain: "opalpatient.firebaseapp.com",
+    //     databaseURL: "https://opalpatient.firebaseio.com",
+    //     projectId: "opalpatient",
+    //     storageBucket: "opalpatient.appspot.com",
+    //     messagingSenderId: "42757898093"
+    // };
+    // if (!firebase.apps.length) {
+    //         firebase.initializeApp(config);
+    //     }
+
 }

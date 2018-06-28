@@ -84,14 +84,14 @@ myApp.service('Questionnaires', ['RequestToServer', '$filter', 'Patient', 'Local
                 'new_status': new_status,
             };
             // TODO: change request when the database for questions is ready
-            RequestToServer.sendRequestWithResponse('Questionnaires')
-                .then(function (response) {
-                        this.setQuestionnaires(response.Data);
-                        deferred.resolve({Success: true, Location: 'Server'});
-                    },
-                    function (error) {
-                        deferred.reject({Success: false, Location: '', Error: error});
-                    });
+            // RequestToServer.sendRequestWithResponse('Questionnaires')
+            //     .then(function (response) {
+            //             this.setQuestionnaires(response.Data);
+            //             deferred.resolve({Success: true, Location: 'Server'});
+            //         },
+            //         function (error) {
+            //             deferred.reject({Success: false, Location: '', Error: error});
+            //         });
             RequestToServer.sendRequestWithResponse('Questionnaires', null, null, null, null, 'http://127.0.0.1:5000/update-questionnaire-status/', url_params)
                 .then(function(response) {
                     console.log(response);
@@ -104,14 +104,14 @@ myApp.service('Questionnaires', ['RequestToServer', '$filter', 'Patient', 'Local
                 'ao_ser_num': answeroption_ser_num,
             };
             // TODO: change request when the database for questions is ready
-            RequestToServer.sendRequestWithResponse('Questionnaires')
-                .then(function (response) {
-                        this.setQuestionnaires(response.Data);
-                        deferred.resolve({Success: true, Location: 'Server'});
-                    },
-                    function (error) {
-                        deferred.reject({Success: false, Location: '', Error: error});
-                    });
+            // RequestToServer.sendRequestWithResponse('Questionnaires')
+            //     .then(function (response) {
+            //             this.setQuestionnaires(response.Data);
+            //             deferred.resolve({Success: true, Location: 'Server'});
+            //         },
+            //         function (error) {
+            //             deferred.reject({Success: false, Location: '', Error: error});
+            //         });
             RequestToServer.sendRequestWithResponse('Questionnaires', null, null, null, null, 'http://127.0.0.1:5000/questionnaire-answer/', url_params)
                 .then(function(response) {
                     console.log(response);
