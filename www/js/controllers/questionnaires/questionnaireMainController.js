@@ -477,15 +477,17 @@
             if (answerIndex > -1) {
                 question.answerChangedFlag = true;
                 question.patient_answer.splice(answerIndex, 1);
-                vm.tmpAnswer.splice(answerIndex, 1);
+                vm.tmpAnswer = question.patient_answer;
                 vm.checkedNumber--;
                 console.log("Object after splice in if is "+Object(question.patient_answer));
+                console.log("tmpAnswer = " + Object(vm.tmpAnswer));
             } else { // is newly selected
                 question.answerChangedFlag = true;
                 question.patient_answer.push(optionKey);
                 vm.checkedNumber++;
                 console.log("Object after push in if else else is "+Object(question.patient_answer));
-                vm.tmpAnswer.push(optionKey);
+                vm.tmpAnswer = question.patient_answer;
+                console.log("tmpAnswer = " + Object(vm.tmpAnswer));
             }
             console.log("Object at the end is "+Object(question.patient_answer));
         }
@@ -527,12 +529,11 @@
                 skipQuestion(question);
             }
             else {
+                //question.patient_answer = [];
                 vm.checkedNumber=vm.tmpAnswer.length;
                 question.patient_answer = vm.tmpAnswer;
                 console.log("UNCHECKING SKIP: " + Object(question.patient_answer));
-                for(var i = 0; i <question.patient_answer.length; i++) {
-                    document.getElementById(question.patient_answer[i]).ngDisabled = vm.isDisabled(question.patient_answer[i]);
-                }
+
                 //question.patient_answer = [];
             }
             question.skip = !skip;
