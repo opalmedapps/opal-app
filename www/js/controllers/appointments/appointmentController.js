@@ -105,7 +105,12 @@
         function aboutAppointment () {
             $window[navigatorName].pushPage('./views/templates/content.html', {
                 contentLink: vm.app["URL_"+ vm.language],
-                contentType: vm.app["AppointmentType_"+ vm.language]
+                // contentType: vm.app["AppointmentType_"+ vm.language]
+
+                contentType: vm.app["AppointmentType_EN"]
+                // Important: even though it is _EN, it works for the French version too. The _EN is
+                // just the correct title in the https://www.depdocs.com/opal/links/links.php that will grab
+                // the right .php file. Ex: "Blood tests", "Chemotherapy", etc...
             });
         }
 
