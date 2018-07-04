@@ -20,8 +20,17 @@ app1.controller('questionnairesListController', ['$scope', '$rootScope', 'Questi
     }
 
     $scope.goToQuestionnaire = function(selectedQuestionnaire) {
-        NavigatorParameters.setParameters({Navigator:'personalNavigator', questionnaire: selectedQuestionnaire});
-        personalNavigator.pushPage('views/personal/questionnaires/questionnaires.html',{ animation : 'slide' });
+        var questionnaireToReturn = {};
+        console.log("selectedQuestionnaire: ");
+        console.log(selectedQuestionnaire);
+        Questionnaires.requestQuestionnaire(selectedQuestionnaire.qp_ser_num)
+            .then(function() {
+                questionnaireToReturn = Questionnaires.getQuestionnaire();
+                console.log("questionnaireToReturn: ");
+                console.log(questionnaireToReturn);
+                NavigatorParameters.setParameters({Navigator:'personalNavigator', questionnaire: questionnaireToReturn});
+                personalNavigator.pushPage('views/personal/questionnaires/questionnaires.html',{ animation : 'slide' });
+            });
     };
 
     $scope.goToQuestionnaireSummary = function(selectedQuestionnaire) {

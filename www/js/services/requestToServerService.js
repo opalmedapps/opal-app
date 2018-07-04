@@ -51,38 +51,38 @@ myApp.service('RequestToServer',['$filter','$state','NewsBanner','UserAuthorizat
 
         return {
 
-            sendRequestWithResponse:function(typeOfRequest, parameters, encryptionKey, referenceField, responseField, url, url_params) {
+            sendRequestWithResponse:function(typeOfRequest, parameters, encryptionKey, referenceField, responseField) { //, url, url_params) {
                 return new Promise((resolve, reject) => {
-                    // // TODO: Delete these two if-statements and the last two parameters of the function when the database for questions is ready
-                    if (url != null) {
-                        var settings = {
-                            "async": true,
-                            "crossDomain": true,
-                            "url": url,
-                            "method": "POST",
-                            "headers": {
-                                "content-type": "application/x-www-form-urlencoded",
-                                "cache-control": "no-cache",
-                                "postman-token": "1230e50a-37dc-5b3f-30a2-f60257a1d464"
-                            }
-                        }
-
-                        if (url_params != null) {
-                            settings["data"] = {};
-                            for (var key in url_params) {
-                                if(url_params.hasOwnProperty(key)) {
-                                    //console.log("Key: " + key + ", Value: " + url_params[key]);
-                                    settings.data[key] = url_params[key];
-                                }
-                            }
-                            console.log(settings.data);
-                        }
-
-                        $.ajax(settings).done(function(response) {
-                            resolve(response[0].data);
-                        });
-                    }
-                    else {
+                    // TODO: Delete these two if-statements and the last two parameters of the function when the database for questions is ready
+                    // if (url != null) {
+                    //     var settings = {
+                    //         "async": true,
+                    //         "crossDomain": true,
+                    //         "url": url,
+                    //         "method": "POST",
+                    //         "headers": {
+                    //             "content-type": "application/x-www-form-urlencoded",
+                    //             "cache-control": "no-cache",
+                    //             "postman-token": "1230e50a-37dc-5b3f-30a2-f60257a1d464"
+                    //         }
+                    //     }
+                    //
+                    //     if (url_params != null) {
+                    //         settings["data"] = {};
+                    //         for (var key in url_params) {
+                    //             if(url_params.hasOwnProperty(key)) {
+                    //                 //console.log("Key: " + key + ", Value: " + url_params[key]);
+                    //                 settings.data[key] = url_params[key];
+                    //             }
+                    //         }
+                    //         console.log(settings.data);
+                    //     }
+                    //
+                    //     $.ajax(settings).done(function(response) {
+                    //         resolve(response[0].data);
+                    //     });
+                    // }
+                    // else {
                     //Sends request and gets random key for request
                     sendRequest(typeOfRequest,parameters,encryptionKey, referenceField)
                         .then(key=> {
@@ -123,7 +123,7 @@ myApp.service('RequestToServer',['$filter','$state','NewsBanner','UserAuthorizat
                         response_url.off();
                         reject({Response:'timeout'});
                     }, 30000);
-                        }
+                        //}
                 }).catch(err=> console.log(err));
             },
 

@@ -23,10 +23,10 @@
 
                 <div ng-if="new" class="ons-row" align="center" style="margin-top: 50px">
                     <div class="ons-col" align="center">
-                        <p ng-show="getQuestionnaireCount('New') <= 0" ng-class="fontSizeTitle" style="color: grey; margin-top: 25vh;">
+                        <p ng-if="getQuestionnaireCount('New') <= 0" ng-class="fontSizeTitle" style="color: grey; margin-top: 25vh;">
                             {{"QUESTIONNAIRE_NONE_NEW"|translate}}</p>
                         <ul class="list">
-                            <li class="list__item list__item--chevron" ng-repeat="questionnaire in newQuestionnaireList" ng-click="goToQuestionnaire(questionnaire)">
+                            <li class="list__item list__item--chevron" ng-repeat="questionnaire in newQuestionnaireList" ng-click="goToQuestionnaire(questionnaire, questionnaire.qp_ser_num)">
                                 <p style="margin-top: 2.7vh; margin-bottom: 2.4vh; line-height: 3.6vh;" ng-class="fontSizeTitle">{{questionnaire.nickname}}</p>
                                 <p style="margin-top: -2.6vh; color: #757575;"ng-class="fontSizeDesc">{{"QUESTIONNAIRE_DATE_ADDED"|translate}}: {{questionnaire.created | date:'yyyy-MM-dd HH:mm'}}</p>
                             </li>
@@ -38,7 +38,7 @@
                     <div class="ons-col" align="center">
                         <p ng-show="getQuestionnaireCount('In progress') <= 0" ng-class="fontSizeTitle" style="color: grey; margin-top: 25vh;">{{"QUESTIONNAIRE_NONE_PROGRESS"|translate}}</p>
                         <ul class="list">
-                            <li class="list__item list__item--chevron" ng-repeat="questionnaire in inProgressQuestionnaireList" ng-click="goToQuestionnaire(questionnaire)">
+                            <li class="list__item list__item--chevron" ng-repeat="questionnaire in inProgressQuestionnaireList" ng-click="goToQuestionnaire(questionnaire, questionnaire.qp_ser_num)">
                                 <p style="margin-top: 2.7vh; margin-bottom: 2.4vh; line-height: 3.6vh;" ng-class="fontSizeTitle">{{questionnaire.nickname}}</p>
                                 <p style="margin-top: -2.6vh; color: #757575;"ng-class="fontSizeDesc">{{"QUESTIONNAIRE_DATE_LAST_UPDATED"|translate}}: {{questionnaire.last_updated | date:'yyyy-MM-dd HH:mm'}}</p>
                             </li>

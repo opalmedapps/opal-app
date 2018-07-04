@@ -14,7 +14,8 @@
         var vm = this;
         vm.beginQuestionnaire = beginQuestionnaire;
         vm.resumeQuestionnaire = resumeQuestionnaire;
-        vm.isQuestion=false;
+        vm.isResume = true;
+        vm.isQuestion = false;
         vm.currentColorGradient = [];
         vm.currentPolarity = "lowGood";
         vm.optionBackgroundColor = "#f3f3f3";
@@ -103,25 +104,22 @@
 
         function activate() {
 
-            // Initialize the navigator for push and pop of pages.
-            // NavigatorParameters.setParameters({'Navigator':'questionInfoNav'});
-            // NavigatorParameters.setNavigator(questionInfoNav);
-
             var params = NavigatorParameters.getParameters();
 
             vm.questionnaire = params.questionnaire;
-            console.log("jkdebfjkewfewbkfjbewlfjwelfewjf");
+            console.log("IN ACTIVATE() IN QUESTIONAIREMAINCONTROLLER: " + Object(params));
             console.log(vm.questionnaire);
             vm.carouselItems = flattenQuestionnaire(); // questions + section headers
             vm.questionnaireStart = true;
             vm.sectionIndex = 0;
-            vm.questionIndex = 0; //  index within the section
+            vm.questionIndex = 0; // index within the section
             vm.editQuestion = false;
-            if (params.sectionIndex != null && params.questionIndex != null) {
-                vm.editQuestion = true;
-                vm.sectionIndex = params.sectionIndex;
-                vm.questionIndex = params.questionIndex;
-            }
+            // if (params.sectionIndex != null && params.questionIndex != null) {
+            //     vm.editQuestion = true;
+            //     vm.sectionIndex = params.sectionIndex;
+            //     console.log("AAAAAAAAAAAAAAAAAAAAAAA params.questionIndex is: " + params.questionIndex);
+            //     vm.questionIndex = params.questionIndex;
+            // }
             vm.questionTotalIndex = 0; // index within array of all (and only) questions of questionnaire
             vm.maxQuestionIndex = vm.questionnaire.sections[vm.sectionIndex].questions.length-1; // maximum questionIndex for current section
 
@@ -134,25 +132,38 @@
                     vm.questionIndex = 0;
                     vm.startIndex++;
                     vm.sectionIndex++;
+                    vm.maxQuestionIndex = vm.questionnaire.sections[vm.sectionIndex].questions.length-1;
+                    console.log('HERE7 ' + vm.sectionIndex);
                     for (var j = 0; j<vm.questionnaire.sections[i].questions.length; j++) {
                         // as soon as find a question with no answer
-                        if (vm.questionnaire.sections[i].questions[j].patient_answer.length == 0) {
+                        console.log("BEFORE IF IN ACTIVATE");
+                        if ((vm.questionnaire.sections[i].questions[j].patient_answer.length === 0) || (vm.questionnaire.sections[i].questions[j].patient_answer[0]==-1)) {
+                            console.log("no answer to question: " + (j+1));
+                            // console.log("sectionIndex is: " + vm.sectionIndex);
+                            // console.log("questionIndex is: " + vm.questionIndex);
                             vm.maxQuestionIndex = vm.questionnaire.sections[vm.sectionIndex].questions.length-1;
                             i = vm.questionnaire.sections.length;
                             break;
                         }
+                        if(vm.questionIndex<vm.maxQuestionIndex){
+                            vm.questionIndex++;
+                            vm.questionTotalIndex++;
+                        }
                         vm.startIndex++;
-                        vm.questionIndex++;
-                        vm.questionTotalIndex++;
+                        console.log('HERE6 ' + vm.questionTotalIndex + " and questionIndex = " + vm.questionIndex);
                     }
                     // if all questions have been answered
                     if (i == vm.questionnaire.sections.length-1) {
                         vm.startIndex = -1;
                     }
+                    console.log("sectionIndex is: " + vm.sectionIndex);
+                    console.log("questionIndex is: " + vm.questionIndex);
                 }
+                console.log("AFTER THE FOR LOOP FOR SECTIONS, vm.questionIndex = " + vm.questionIndex);
             }
             // if in progress and came from summary page to edit question
             else if (vm.questionnaire.status == 'In progress' && vm.editQuestion) {
+                vm.questionTotalIndex=0;
                 vm.startIndex++;
                 for (var i = 0; i<vm.questionnaire.sections.length; i++) {
                     vm.startIndex++;
@@ -215,6 +226,11 @@
             //console.log($scope.carousel.getActiveCarouselItemIndex());
             // going from questionnaire header page to first section
             if (event.lastActiveIndex == 0) {
+                if(vm.questionnaire.status == 'In progress' && vm.isResume){
+                    vm.sectionIndex = 0;
+                    vm.questionIndex = 0;
+                    vm.questionTotalIndex = 0;
+                }
                 vm.questionnaireStart = false;
                 vm.isQuestion = false;
             }
@@ -223,24 +239,33 @@
                 vm.questionnaireStart = true;
                 vm.isQuestion = false;
             }
-
+            //vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex].answerChangedFlag = true;
             // if right swipe
-            else if (event.activeIndex - event.lastActiveIndex > 0) {
+            if (event.activeIndex - event.lastActiveIndex > 0) {
                 // coming from question, going to question
                 if (event.lastActiveIndex > 0 && vm.carouselItems[event.lastActiveIndex-1].type == 'question' && vm.carouselItems[event.activeIndex-1].type == 'question') {
                     saveAnswer(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex]);
                     vm.questionIndex++;
                     vm.questionTotalIndex++;
+                    console.log('HERE1 ' + vm.questionTotalIndex + "and questionIndex = " + vm.questionIndex);
                     vm.isQuestion = true;
+                    console.log('Merge question is: ' + Object(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex]));
                 }
                 // coming from question, going to section header
                 else if (event.lastActiveIndex > 0 && vm.carouselItems[event.lastActiveIndex-1].type == 'question' && vm.carouselItems[event.activeIndex-1].type == 'header') {
                     saveAnswer(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex]);
                     vm.isQuestion = false;
-                    vm.sectionIndex++;
+                    console.log("vm.sectionIndex="+vm.sectionIndex+ " and vm.questionIndex=" + vm.questionIndex);
+                    if(vm.sectionIndex < vm.questionnaire.sections.length-1){
+                        vm.sectionIndex++;
+                        console.log('HERE1 ' + vm.sectionIndex);
+                    } else {
+                        console.log("BUG BUG BUG: sectionIndex becomes too large!");
+                    }
                     vm.questionIndex = 0;
                     vm.maxQuestionIndex = vm.questionnaire.sections[vm.sectionIndex].questions.length-1;
                     vm.questionTotalIndex++;
+                    console.log('HERE2 ' + vm.questionTotalIndex + " and questionIndex = " + vm.questionIndex);
                     // coming from section header, going to question
                 } else if (event.lastActiveIndex > 0 && vm.carouselItems[event.lastActiveIndex-1].type == 'header' && vm.carouselItems[event.activeIndex-1].type == 'question') {
                     vm.isQuestion = true;
@@ -251,18 +276,30 @@
             else if (event.activeIndex - event.lastActiveIndex < 0) {
                 // coming from question, going to question
                 if (event.lastActiveIndex > 0 && vm.carouselItems[event.lastActiveIndex-1].type == 'question' && vm.carouselItems[event.activeIndex-1].type == 'question') {
+                    console.log("BEFORE BUG: sectionIndex=" + vm.sectionIndex + " and questionIndex=" + vm.questionIndex);
                     saveAnswer(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex]);
                     vm.questionIndex--;
                     vm.questionTotalIndex--;
                     vm.isQuestion = true;
+                    console.log('HERE3 ' + vm.questionTotalIndex + " and questionIndex = " + vm.questionIndex);
                 }
                 // coming from section header, going to question
                 else if (event.lastActiveIndex > 0 && vm.carouselItems[event.lastActiveIndex-1].type == 'header' && vm.carouselItems[event.activeIndex-1].type == 'question') {
                     vm.isQuestion = true;
-                    vm.sectionIndex--;
+                    if(vm.sectionIndex>0) {
+                        vm.sectionIndex--;
+                        console.log('HERE4 ' + vm.questionTotalIndex + " and questionIndex = " + vm.questionIndex);
+                    } else {
+                        console.log("BUG BUG BUG: sectionIndex becomes negative!");
+                    }
                     vm.maxQuestionIndex = vm.questionnaire.sections[vm.sectionIndex].questions.length-1;
                     vm.questionIndex = vm.maxQuestionIndex;
                     vm.questionTotalIndex--;
+                    console.log('HERE5 ' + vm.questionTotalIndex + " and questionIndex = " + vm.questionIndex);
+                }
+                // coming from question to section header
+                else if (event.lastActiveIndex > 0 && vm.carouselItems[event.lastActiveIndex-1].type == 'question' && vm.carouselItems[event.activeIndex-1].type == 'header') {
+                    vm.isQuestion = false;
                 }
             }
             var question = vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex];
@@ -380,10 +417,12 @@
         }
 
         function resumeQuestionnaire() {
+            vm.isResume = false;
+            vm.questionTotalIndex++;
             vm.questionnaireStart = false;
             if (vm.startIndex > -1) {
                 console.log($scope.carousel);
-                console.log(vm.startIndex);
+                console.log("startIndex = " + vm.startIndex);
                 console.log($scope.carousel.getActiveCarouselItemIndex());
                 $scope.carousel.setActiveCarouselItemIndex(vm.startIndex);
             }
@@ -394,6 +433,7 @@
 
         // save answer to a question whenever user swipes away from question and answer has changed
         function saveAnswer(question) {
+            console.log("typeoftypeoftypeoftypeoftypeoftypeof" + typeof question.patient_answer[0] + "and value is: " + question.patient_answer[0]);
             // check that answer has changed or that questiontype is scale
             // all scales should be saved everytime since scale begins in middle
             // and user may want that answer (which wouldn't trigger the flag)
@@ -402,8 +442,10 @@
             }
             if (question.answerChangedFlag || question.questiontype == 'Scale') {
                 console.log("saveanswer()");
-                for (var i=0; i<question.patient_answer.length; i++) {
-                    Questionnaires.saveQuestionnaireAnswer(vm.questionnaire.qp_ser_num, question.ser_num, question.patient_answer[i]);
+                console.log("patient answer is: " + Object(question.patient_answer));
+                for(var i=0; i<question.patient_answer.length; i++) {
+                    // TODO: add question.type; for slider answeroptionsernum;
+                    Questionnaires.saveQuestionnaireAnswer(vm.questionnaire.qp_ser_num, question.ser_num, question.patient_answer[i], question.type, vm.questionnaire.sections[vm.sectionIndex].SectionSerNum);
                 }
                 if (vm.questionnaire.status == 'New') {
                     Questionnaires.updateQuestionnaireStatus(vm.questionnaire.qp_ser_num, 'In progress');
@@ -460,9 +502,11 @@
         }
 
         function toggleCheckboxSelection(optionKey) {
+            console.log("Sectionindex is : " + vm.sectionIndex + " and question index is " + vm.questionIndex);
             var question = vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex];
 
-            console.log("Object is "+Object(question.patient_answer));
+            console.log("Question is "+Object(question));
+            console.log("Question.patient_answer is "+Object(question.patient_answer));
 
             // if previous choice was to skip question, toggle skip boolean
             if (question.patient_answer.indexOf('SKIPPED') > -1) {
