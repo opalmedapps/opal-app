@@ -52,9 +52,9 @@
                 icon:'fa-question',
                 color:'SteelBlue',
                 // change to question.questionTypeCategory... (question type) - question.visOpt... (visualization option)
-                name: personalNavigator.getCurrentPage().options.question.QuestionTypeCategoryKey, //"QUESTION TYPE - VISUALISATION OPTION",
+                name: personalNavigator.getCurrentPage().options.question.question_type_category_key, //"QUESTION TYPE - VISUALISATION OPTION",
                 // change to question.information
-                description: personalNavigator.getCurrentPage().options.question.Information,//"This paragraph explains how to answer this question type."
+                description: personalNavigator.getCurrentPage().options.question.information,//"This paragraph explains how to answer this question type."
             }
         ];
 

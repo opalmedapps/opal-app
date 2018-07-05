@@ -34,16 +34,16 @@
                       <i ng-if="!question.showAnswer" class="ion-chevron-down" style="padding-left: 2vw"></i>
                       <i ng-if="question.showAnswer" class="ion-chevron-up" style="padding-left: 2vw"></i>
                     </span>
-                                <span ng-if="question.patient_answer.length == 1 && question.questiontype == 'Scale' && question.patient_answer.indexOf('SKIPPED') == -1" style="float: right; color: rgba(38,100,171,0.81);">
+                                <span ng-if="question.patient_answer.length == 1 && question.question_type_category_key == 'slider' && question.patient_answer.indexOf('SKIPPED') == -1" style="float: right; color: rgba(38,100,171,0.81);">
                       {{question.patient_answer[0]}}/{{vm.getScaleMaxValue(question)}}
                     </span>
-                                <span ng-if="question.patient_answer.length == 1 && question.questiontype == 'Scale' && question.patient_answer.indexOf('SKIPPED') > -1" style="float: right; color: rgba(38,100,171,0.81);">
+                                <span ng-if="question.patient_answer.length == 1 && question.question_type_category_key == 'slider' && question.patient_answer.indexOf('SKIPPED') > -1" style="float: right; color: rgba(38,100,171,0.81);">
                       <i>{{"SKIPPED"|translate}}</i>
                     </span>
-                                <span ng-if="question.patient_answer.length == 1 && question.questiontype != 'Scale' && question.patient_answer.indexOf('SKIPPED') > -1" style="float: right; color: rgba(38,100,171,0.81);">
+                                <span ng-if="question.patient_answer.length == 1 && question.question_type_category_key != 'slider' && question.patient_answer.indexOf('SKIPPED') > -1" style="float: right; color: rgba(38,100,171,0.81);">
                       <i>{{"SKIPPED"|translate}}</i>
                     </span>
-                                <span ng-if="question.patient_answer.length == 1 && question.questiontype != 'Scale' && question.patient_answer.indexOf('SKIPPED') == -1" style="float: right; color: rgba(38,100,171,0.81);">
+                                <span ng-if="question.patient_answer.length == 1 && question.question_type_category_key != 'slider' && question.patient_answer.indexOf('SKIPPED') == -1" style="float: right; color: rgba(38,100,171,0.81);">
                       {{question.options[""+question.patient_answer[0]].text}}
                     </span>
                             </ons-col>
@@ -53,10 +53,10 @@
                     <li ng-show="question.showAnswer" style="background:white;color:rgba(38,100,171,0.81);padding:5px 5px 0 5px;border:1px solid lightgrey">
                         <div class="item" >
                             <div ng-repeat="answer in question.patient_answer">
-                    <span ng-if="question.questiontype == 'Scale'">
+                    <span ng-if="question.question_type_category_key == 'slider'">
                       {{answer}}
                     </span>
-                                <span ng-if="question.questiontype != 'Scale'">
+                                <span ng-if="question.question_type_category_key != 'slider'">
                       {{question.options[""+answer].text}}
                     </span>
                             </div>

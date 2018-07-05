@@ -28,9 +28,11 @@
         vm.numQuestions = 0;
         vm.summaryPage = summaryPage;
         vm.sectionEnds = [];
+        vm.tempAns;
+        vm.fixSlider = fixSlider;
         vm.bindScaleParameters = bindScaleParameters;
         vm.removeSpanChild = removeSpanChild;
-        vm.average = average;
+        //vm.average = average;
         vm.choosenReaction = [{}];
         vm.skipQuestion = { 'reason': '', 'askSimilar': ''};
         vm.ischeckedTest=true;
@@ -193,6 +195,12 @@
             vm.portraitOrientationCheck.addListener(setLayoutByOrientation);
         }
 
+        function fixSlider(question){
+            console.log("in fixSlider sliderAns=" + question.patient_answer[0].sliderAns + " and tempAns" + vm.tempAns);
+            console.log("in fixSlider");
+            question.patient_answer[0].sliderAns = vm.tempAns;
+        }
+
         // reset all the scale styles once screen is rotated
         function setLayoutByOrientation() {
             console.log("width : " + vm.width);
@@ -244,17 +252,18 @@
             if (event.activeIndex - event.lastActiveIndex > 0) {
                 // coming from question, going to question
                 if (event.lastActiveIndex > 0 && vm.carouselItems[event.lastActiveIndex-1].type == 'question' && vm.carouselItems[event.activeIndex-1].type == 'question') {
+                    vm.questionTotalIndex++;
                     saveAnswer(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex]);
                     vm.questionIndex++;
-                    vm.questionTotalIndex++;
                     console.log('HERE1 ' + vm.questionTotalIndex + "and questionIndex = " + vm.questionIndex);
                     vm.isQuestion = true;
                     console.log('Merge question is: ' + Object(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex]));
                 }
                 // coming from question, going to section header
                 else if (event.lastActiveIndex > 0 && vm.carouselItems[event.lastActiveIndex-1].type == 'question' && vm.carouselItems[event.activeIndex-1].type == 'header') {
-                    saveAnswer(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex]);
                     vm.isQuestion = false;
+                    vm.questionTotalIndex++;
+                    saveAnswer(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex]);
                     console.log("vm.sectionIndex="+vm.sectionIndex+ " and vm.questionIndex=" + vm.questionIndex);
                     if(vm.sectionIndex < vm.questionnaire.sections.length-1){
                         vm.sectionIndex++;
@@ -264,7 +273,6 @@
                     }
                     vm.questionIndex = 0;
                     vm.maxQuestionIndex = vm.questionnaire.sections[vm.sectionIndex].questions.length-1;
-                    vm.questionTotalIndex++;
                     console.log('HERE2 ' + vm.questionTotalIndex + " and questionIndex = " + vm.questionIndex);
                     // coming from section header, going to question
                 } else if (event.lastActiveIndex > 0 && vm.carouselItems[event.lastActiveIndex-1].type == 'header' && vm.carouselItems[event.activeIndex-1].type == 'question') {
@@ -277,9 +285,9 @@
                 // coming from question, going to question
                 if (event.lastActiveIndex > 0 && vm.carouselItems[event.lastActiveIndex-1].type == 'question' && vm.carouselItems[event.activeIndex-1].type == 'question') {
                     console.log("BEFORE BUG: sectionIndex=" + vm.sectionIndex + " and questionIndex=" + vm.questionIndex);
+                    vm.questionTotalIndex--;
                     saveAnswer(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex]);
                     vm.questionIndex--;
-                    vm.questionTotalIndex--;
                     vm.isQuestion = true;
                     console.log('HERE3 ' + vm.questionTotalIndex + " and questionIndex = " + vm.questionIndex);
                 }
@@ -355,15 +363,18 @@
         }
 
         function bindScaleParameters(question) {
+            console.log("1-------------- sliderAns = " + question.patient_answer[0].sliderAns);
             var keys = Object.keys(question.options);
-            if (keys.length != 2) {
-                console.log("Option size should be 2, is " + keys.length);
-            }
-            else {
-                $scope.minText = question.options[keys[0]].text;
-                $scope.minCaption = question.options[keys[0]].caption;
-                $scope.maxText = question.options[keys[1]].text;
-                $scope.maxCaption = question.options[keys[1]].caption;
+            console.log(question.options[0].min_value);
+            console.log(question.options[0].max_value);
+            // if (keys.length != 2) {
+            //     console.log("Option size should be 2, is " + keys.length);
+            // }
+            // else {
+                $scope.minText = question.options[0].min_value;
+                $scope.minCaption = question.options[0].min_caption;
+                $scope.maxText = question.options[0].max_value;
+                $scope.maxCaption = question.options[0].max_caption;
 
                 // set the style of the options
                 var min = parseInt($scope.minText);
@@ -383,7 +394,9 @@
                     "width": Math.floor(100/options.length) + "\%"
                 };
                 console.log($scope.scalebtn);
-            }
+                console.log("2-------------- sliderAns = " + question.patient_answer[0].sliderAns);
+                vm.tempAns=question.patient_answer[0].sliderAns
+            // }
 
         }
 
@@ -397,11 +410,11 @@
             }
         }
 
-        function average(low, high) {
-            low = parseInt(low);
-            high = parseInt(high);
-            return parseInt((low+high)/2);
-        }
+        // function average(low, high) {
+        //     low = parseInt(low);
+        //     high = parseInt(high);
+        //     return parseInt((low+high)/2);
+        // }
 
         function beginQuestionnaire() {
             vm.questionnaireStart = false;
@@ -433,6 +446,7 @@
 
         // save answer to a question whenever user swipes away from question and answer has changed
         function saveAnswer(question) {
+            console.log("sectionIndex= " + vm.sectionIndex + " and questitonIndex= " + vm.questionIndex);
             console.log("typeoftypeoftypeoftypeoftypeoftypeof" + typeof question.patient_answer[0] + "and value is: " + question.patient_answer[0]);
             // check that answer has changed or that questiontype is scale
             // all scales should be saved everytime since scale begins in middle
@@ -440,12 +454,16 @@
             if (typeof question.answerChangedFlag == 'undefined') {
                 question.answerChangedFlag = false;
             }
-            if (question.answerChangedFlag || question.questiontype == 'Scale') {
+            if (question.answerChangedFlag || question.question_type_category_key == 'slider') {
                 console.log("saveanswer()");
                 console.log("patient answer is: " + Object(question.patient_answer));
-                for(var i=0; i<question.patient_answer.length; i++) {
-                    // TODO: add question.type; for slider answeroptionsernum;
-                    Questionnaires.saveQuestionnaireAnswer(vm.questionnaire.qp_ser_num, question.ser_num, question.patient_answer[i], question.type, vm.questionnaire.sections[vm.sectionIndex].SectionSerNum);
+                if(question.question_type_category_key == 'slider'){
+                    Questionnaires.saveQuestionnaireAnswer(vm.questionnaire.qp_ser_num, question.ser_num, question.patient_answer[0].sliderAns, question.options[0].answer_option_ser_num, question.question_type_category_key, vm.questionnaire.sections[vm.sectionIndex].section_ser_num);
+                } else {
+                    for (var i = 0; i < question.patient_answer.length; i++) {
+                        // TODO: add question.type; for slider answeroptionsernum;
+                        Questionnaires.saveQuestionnaireAnswer(vm.questionnaire.qp_ser_num, question.ser_num, -1, question.options[question.patient_answer[i]].answer_option_ser_num, question.question_type_category_key, vm.questionnaire.sections[vm.sectionIndex].section_ser_num);
+                    }
                 }
                 if (vm.questionnaire.status == 'New') {
                     Questionnaires.updateQuestionnaireStatus(vm.questionnaire.qp_ser_num, 'In progress');
@@ -523,12 +541,14 @@
                 question.patient_answer.splice(answerIndex, 1);
                 vm.tmpAnswer = question.patient_answer;
                 vm.checkedNumber--;
+                console.log("In if, checkedNumber = "+vm.checkedNumber);
                 console.log("Object after splice in if is "+Object(question.patient_answer));
                 console.log("tmpAnswer = " + Object(vm.tmpAnswer));
             } else { // is newly selected
                 question.answerChangedFlag = true;
                 question.patient_answer.push(optionKey);
                 vm.checkedNumber++;
+                console.log("In else, checkedNumber = "+vm.checkedNumber);
                 console.log("Object after push in if else else is "+Object(question.patient_answer));
                 vm.tmpAnswer = question.patient_answer;
                 console.log("tmpAnswer = " + Object(vm.tmpAnswer));
@@ -553,6 +573,7 @@
         }
 
         function toggleScaleSkip(skip, question) {
+            console.log("CHECK answerChangedFlag= " + question.answerChangedFlag + " and skip=" + skip);
             question.answerChangedFlag = true;
             if (skip) {
                 question.patient_answer = [-9];
@@ -561,7 +582,7 @@
                 }
             }
             else {
-                question.patient_answer[0] = average($scope.minText, $scope.maxText);
+                //question.patient_answer[0].sliderAns = average($scope.minText, $scope.maxText);
             }
             question.skip = !skip;
             console.log(question.patient_answer);

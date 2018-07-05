@@ -7,7 +7,7 @@ myApp.service('Questionnaires', ['RequestToServer', '$filter', 'Patient', 'Local
     var inProgressQuestionnaires = {};
     var completeQuestionnaires = {};
     var newAnswers = {};
-    var currentQuestionnaire;
+    var currentQuestionnaire={};
 
     function addToQuestionnaireObject(questionnaires) {
         for (var key in questionnaires.PatientQuestionnaires) {
@@ -86,6 +86,8 @@ myApp.service('Questionnaires', ['RequestToServer', '$filter', 'Patient', 'Local
             currentQuestionnaire = questionnaire;
         },
         getQuestionnaire: function() {
+            console.log("questionnaireService getQuest");
+            console.log(currentQuestionnaire);
             return currentQuestionnaire;
         },
         updateQuestionnaireStatus: function(questionnaire_patient_rel_ser_num, new_status) {
@@ -110,7 +112,7 @@ myApp.service('Questionnaires', ['RequestToServer', '$filter', 'Patient', 'Local
         // to get 1 questionnaire:  language, questionnaire_patient_rel_ser_num
         // to get list
         // save answer: section, question type
-        saveQuestionnaireAnswer: function(questionnaire_patient_rel_ser_num, question_ser_num, answeroption_ser_num, question_type, section) {
+        saveQuestionnaireAnswer: function(questionnaire_patient_rel_ser_num, question_ser_num, answerValue, answeroption_ser_num, question_type, section) {
             let deferred = $q.defer();
             let _this = this;
 
@@ -118,6 +120,7 @@ myApp.service('Questionnaires', ['RequestToServer', '$filter', 'Patient', 'Local
                 'qp_ser_num': questionnaire_patient_rel_ser_num,
                 'q_ser_num' : question_ser_num,
                 'patientAnswers': answeroption_ser_num,
+                'answerValue': answerValue,
                 'questionType': question_type,
                 'sectionSerNum': section
                 // 'ao_ser_num': answeroption_ser_num
@@ -143,7 +146,7 @@ myApp.service('Questionnaires', ['RequestToServer', '$filter', 'Patient', 'Local
 
             // Parameters
             let params = {
-                'language': 'en'
+                'language': 'EN'
             };
             // TODO: change request when the database for questions is ready
             // RequestToServer.sendRequestWithResponse('Questionnaires', null, null, null, null, 'http://127.0.0.1:5000/questionnaires/', url_params)
@@ -176,7 +179,7 @@ myApp.service('Questionnaires', ['RequestToServer', '$filter', 'Patient', 'Local
             // Parameters
             let params = {
                 'qp_ser_num': questionnaire_patient_rel_ser_num,
-                'language': 'ENG'
+                'language': 'EN'
             };
             // TODO: change request when the database for questions is ready
             // RequestToServer.sendRequestWithResponse('Questionnaires', null, null, null, null, 'http://127.0.0.1:5000/questionnaires/', url_params)
@@ -192,6 +195,8 @@ myApp.service('Questionnaires', ['RequestToServer', '$filter', 'Patient', 'Local
             // CONNECTION TO FIREBASE
             RequestToServer.sendRequestWithResponse('Questionnaire',params)
                 .then(function (response) {
+                    console.log("response.Data");
+                    console.log(response.Data);
                         _this.setQuestionnaire(response.Data);
                         deferred.resolve({Success: true, Location: 'Server'});
                     },
