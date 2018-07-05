@@ -1,55 +1,83 @@
-var app1 = angular.module('MUHCApp');
-app1.controller('questionnairesListController', ['$scope', '$rootScope', 'Questionnaires', '$location', 'NavigatorParameters', '$timeout', function($scope, $rootScope, Questionnaires, $location, NavigatorParameters, $timeout) {
+var app = angular.module('MUHCApp');
+app.controller('questionnairesListController', [
+    '$scope',
+    '$rootScope',
+    'Questionnaires',
+    '$location',
+    'NavigatorParameters',
+    '$timeout',
+    function ($scope, $rootScope, Questionnaires, $location, NavigatorParameters, $timeout) {
 
-    $scope.loading = true;
+        $scope.loading = true;
 
-    activate();
+        activate();
 
-    function activate() {
-        NavigatorParameters.setParameters({'Navigator':'personalNavigator'});
-        NavigatorParameters.setNavigator(personalNavigator);
+        function activate() {
+            NavigatorParameters.setParameters({'Navigator': 'personalNavigator'});
+            NavigatorParameters.setNavigator(personalNavigator);
 
-        Questionnaires.requestQuestionnaires()
-            .then(function() {
-                $scope.newQuestionnaireList = Questionnaires.getQuestionnaires('New');
-                $scope.inProgressQuestionnaireList = Questionnaires.getQuestionnaires('In progress');
-                console.log($scope.inProgressQuestionnaireList);
-                $scope.completedQuestionnaireList = Questionnaires.getQuestionnaires('Completed');
-                $scope.loading = false;
-            });
-    }
+            Questionnaires.requestQuestionnaires()
+                .then(function () {
+                    $scope.newQuestionnaireList = Questionnaires.getQuestionnaires('New');
+                    $scope.inProgressQuestionnaireList = Questionnaires.getQuestionnaires('In progress');
+                    $scope.completedQuestionnaireList = Questionnaires.getQuestionnaires('Completed');
+                    $scope.summaryQuestionnaireList = [];
+                    var questionnairesByName = Questionnaires.getByQuestionnaireName();
+                    for(var quest in questionnairesByName) {
+                        $scope.summaryQuestionnaireList.push(questionnairesByName[quest]);
+                    }
+                    $scope.loading = false;
+                });
+        }
 
-    $scope.goToQuestionnaire = function(selectedQuestionnaire) {
-        NavigatorParameters.setParameters({Navigator:'personalNavigator', questionnaire: selectedQuestionnaire});
-        personalNavigator.pushPage('views/personal/questionnaires/questionnaires.html',{ animation : 'slide' });
-    };
+        $scope.goToQuestionnaire = function (selectedQuestionnaire) {
+            NavigatorParameters.setParameters({Navigator: 'personalNavigator', questionnaire: selectedQuestionnaire});
+            personalNavigator.pushPage('views/personal/questionnaires/questionnaires.html', {animation: 'slide'});
+        };
 
-    $scope.goToQuestionnaireSummary = function(selectedQuestionnaire) {
-        NavigatorParameters.setParameters({Navigator:'personalNavigator', questionnaire: selectedQuestionnaire});
-        personalNavigator.pushPage('views/personal/questionnaires/answeredQuestionnaire.html',{ animation : 'slide' });
-    };
+        // go to the answer page of the selected questionnaire
+        $scope.goToQuestionnaireSummary = function (selectedQuestionnaire) {
+            NavigatorParameters.setParameters({Navigator: 'personalNavigator', questionnaire: selectedQuestionnaire});
+            personalNavigator.pushPage('views/personal/questionnaires/answeredQuestionnaire.html', {animation: 'slide'});
+        };
 
-    $scope.setNew = function() {
-        $scope.new       = true;
-        $scope.progress  = false;
-        $scope.completed = false;
-    }
+        // go to historical summary page of the selected questionnaire entity
+        $scope.goToHistoricalSummary = function (selectedQuestionnaire) {
+            NavigatorParameters.setParameters({Navigator: 'personalNavigator', questionnaire: selectedQuestionnaire});
+            personalNavigator.pushPage('views/personal/questionnaires/detailedQuestionnaireSummary.html', {animation: 'slide'});
 
-    $scope.setProgress = function() {
-        $scope.new       = false;
-        $scope.progress  = true;
-        $scope.completed = false;
-    }
+        };
 
-    $scope.setCompleted = function() {
-        $scope.new       = false;
-        $scope.progress  = false;
-        $scope.completed = true;
-    }
+        $scope.setNew = function () {
+            $scope.new = true;
+            $scope.progress = false;
+            $scope.completed = false;
+            $scope.summary = false;
+        }
+
+        $scope.setProgress = function () {
+            $scope.new = false;
+            $scope.progress = true;
+            $scope.completed = false;
+            $scope.summary = false;
+        }
+
+        $scope.setCompleted = function () {
+            $scope.new = false;
+            $scope.progress = false;
+            $scope.completed = true;
+            $scope.summary = false;
+        }
+        $scope.setSummary = function () {
+            $scope.new = false;
+            $scope.progress = false;
+            $scope.completed = false;
+            $scope.summary = true;
+        }
 
 
-    $scope.getQuestionnaireCount = function(type){
-        return Questionnaires.getQuestionnaireCount(type);
-    };
+        $scope.getQuestionnaireCount = function (type) {
+            return Questionnaires.getQuestionnaireCount(type);
+        };
 
-}]);
+    }]);

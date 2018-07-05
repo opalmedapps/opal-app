@@ -6,12 +6,18 @@ fireConfig.$inject = [];
 function fireConfig () {
 
     var config = {
+        // apiKey: "AIzaSyCxV6VuVWtKg5wkeReqzQNfRULwkvVXkos",
+        // authDomain: "brilliant-inferno-7679.firebaseapp.com",
+        // databaseURL: "https://brilliant-inferno-7679.firebaseio.com",
+        // storageBucket: "firebase-brilliant-inferno-767.appspot.com",
+        // messagingSenderId: "810896751588"
 
-        apiKey: "AIzaSyCxV6VuVWtKg5wkeReqzQNfRULwkvVXkos",
-        authDomain: "brilliant-inferno-7679.firebaseapp.com",
-        databaseURL: "https://brilliant-inferno-7679.firebaseio.com",
-        storageBucket: "firebase-brilliant-inferno-767.appspot.com",
-        messagingSenderId: "810896751588"
+        apiKey: "AIzaSyBlgECY8lAhQglgjHgr57RPsYRSjREXyOw",
+        authDomain: "opal-database-test.firebaseapp.com",
+        databaseURL: "https://opal-database-test.firebaseio.com",
+        projectId: "opal-database-test",
+        storageBucket: "opal-database-test.appspot.com",
+        messagingSenderId: "885558569645"
     };
 
     if (!firebase.apps.length) {

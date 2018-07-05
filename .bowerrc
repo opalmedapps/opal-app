@@ -1,5 +1,5 @@
 {
   "directory": "www/lib/bower_components",
-  "registry": "http://bower.herokuapp.com",
+  "registry": "https://registry.bower.io",
   "strict-ssl": false
 }

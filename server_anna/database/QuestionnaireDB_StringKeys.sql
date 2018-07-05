@@ -1,6 +1,6 @@
 -- phpMyAdmin SQL Dump
--- version 4.5.2
--- http://www.phpmyadmin.net
+-- version 4.7.4
+-- https://www.phpmyadmin.net/
 --
 -- Host: localhost
 -- Generation Time: Feb 01, 2018 at 04:17 AM
@@ -8,6 +8,8 @@
 -- PHP Version: 7.0.9
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET AUTOCOMMIT = 0;
+START TRANSACTION;
 SET time_zone = "+00:00";
 
 
@@ -25,6 +27,174 @@ SET time_zone = "+00:00";
 CREATE DATABASE IF NOT EXISTS `QuestionnaireDB_StringKeys` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
 USE `QuestionnaireDB_StringKeys`;
 
+--
+-- Table structure for table `algorithm_entity`
+--
+
+CREATE TABLE `algorithm_entity` (
+  `ser_num` int(11) UNSIGNED NOT NULL,
+  `nickname_key` varchar(256) DEFAULT NULL,
+  `version` int(4) UNSIGNED DEFAULT NULL,
+  `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `last_updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `questionnaire_entity_ser_num` int(11) UNSIGNED DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Table structure for table `algorithm_entity`
+--
+
+INSERT INTO `algorithm_entity` (`ser_num`, `nickname_key`, `version`, `created`, `last_updated`, `questionnaire_entity_ser_num`) VALUES
+(1, 'Default', NULL, '2018-03-20 16:59:18', '2018-03-29 00:52:55', NULL),
+(2, 'Breast_Radiotherapy_ALG_STD', NULL, '2018-03-20 16:59:18', '2018-03-20 16:59:18', 2),
+(3, 'FACT-B_A', 1, '2018-03-29 00:55:40', '2018-03-29 01:02:53', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `algorithm_entity_section_scheme_rel`
+--
+
+CREATE TABLE `algorithm_entity_section_scheme_rel` (
+  `entity_ser_num` int(11) UNSIGNED NOT NULL,
+  `section_scheme_ser_num` int(11) UNSIGNED NOT NULL,
+  `portion` int(4) NOT NULL,
+  `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `last_updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Table structure for table `algorithm_entity_section_scheme_rel`
+--
+
+INSERT INTO `algorithm_entity_section_scheme_rel` (`entity_ser_num`, `section_scheme_ser_num`, `portion`, `created`, `last_updated`) VALUES
+(3, 1, 0, '2018-04-06 16:27:12', '2018-04-06 16:27:12');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `algorithm_option_scheme`
+--
+
+CREATE TABLE `algorithm_option_scheme` (
+  `ser_num` int(11) UNSIGNED NOT NULL,
+  `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `last_updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `answeroption_ser_num` int(11) UNSIGNED NOT NULL,
+  `portion` int(4) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Table structure for table `algorithm_option_scheme`
+--
+
+INSERT INTO `algorithm_option_scheme` (`ser_num`, `created`, `last_updated`, `answeroption_ser_num`, `portion`) VALUES
+(1, '2018-03-13 00:55:37', '2018-03-13 00:55:37', 48, 4),
+(2, '2018-03-13 00:55:37', '2018-03-13 00:55:37', 49, 3),
+(3, '2018-03-13 00:55:37', '2018-03-13 00:55:37', 50, 2),
+(4, '2018-03-13 00:55:37', '2018-03-13 00:55:37', 51, 1),
+(5, '2018-03-13 00:59:02', '2018-03-13 00:59:02', 46, 1),
+(6, '2018-03-13 00:59:02', '2018-03-13 00:59:02', 47, 7),
+(7, '2018-04-06 16:33:12', '2018-04-06 16:33:12', 19, 1),
+(8, '2018-04-06 16:33:12', '2018-04-06 16:33:12', 20, 2),
+(9, '2018-04-06 16:33:12', '2018-04-06 16:33:12', 21, 3),
+(10, '2018-04-06 16:33:12', '2018-04-06 16:33:12', 20, 4),
+(11, '2018-04-06 16:33:12', '2018-04-06 16:33:12', 23, 5);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `algorithm_question_scheme`
+--
+
+CREATE TABLE `algorithm_question_scheme` (
+  `ser_num` int(11) UNSIGNED NOT NULL,
+  `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `last_updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `question_ser_num` int(11) UNSIGNED NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Table structure for table `algorithm_question_scheme`
+--
+
+INSERT INTO `algorithm_question_scheme` (`ser_num`, `created`, `last_updated`, `question_ser_num`) VALUES
+(1, '2018-03-13 01:13:46', '2018-03-13 01:13:46', 38),
+(2, '2018-03-13 01:13:46', '2018-03-13 01:13:46', 39),
+(3, '2018-03-13 01:13:46', '2018-03-13 01:13:46', 40),
+(4, '2018-03-13 01:13:46', '2018-03-13 01:13:46', 41),
+(5, '2018-03-13 01:13:46', '2018-03-13 01:13:46', 42),
+(6, '2018-03-13 01:13:46', '2018-03-13 01:13:46', 43),
+(7, '2018-03-13 01:13:46', '2018-03-13 01:13:46', 44),
+(8, '2018-03-13 01:13:46', '2018-03-13 01:13:46', 45),
+(9, '2018-04-06 16:28:42', '2018-04-06 16:28:42', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `algorithm_question_scheme_option_scheme_rel`
+--
+
+CREATE TABLE `algorithm_question_scheme_option_scheme_rel` (
+  `question_scheme_ser_num` int(11) UNSIGNED NOT NULL,
+  `option_scheme_ser_num` int(11) UNSIGNED NOT NULL,
+  `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `last_updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Table structure for table `algorithm_question_scheme_option_scheme_rel`
+--
+
+INSERT INTO `algorithm_question_scheme_option_scheme_rel` (`question_scheme_ser_num`, `option_scheme_ser_num`, `created`, `last_updated`) VALUES
+(9, 7, '2018-04-06 16:34:49', '2018-04-06 16:34:49'),
+(9, 8, '2018-04-06 16:34:49', '2018-04-06 16:34:49'),
+(9, 9, '2018-04-06 16:34:49', '2018-04-06 16:34:49'),
+(9, 10, '2018-04-06 16:34:49', '2018-04-06 16:34:49'),
+(9, 11, '2018-04-06 16:34:49', '2018-04-06 16:34:49');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `algorithm_section_scheme`
+--
+
+CREATE TABLE `algorithm_section_scheme` (
+  `ser_num` int(11) UNSIGNED NOT NULL,
+  `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `last_updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `section_ser_num` int(11) UNSIGNED NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Table structure for table `algorithm_section_scheme`
+--
+
+INSERT INTO `algorithm_section_scheme` (`ser_num`, `created`, `last_updated`, `section_ser_num`) VALUES
+(1, '2018-04-06 16:26:00', '2018-04-06 16:26:00', 1);
+
+-- --------------------------------------------------------
+
+CREATE DATABASE IF NOT EXISTS `QuestionnaireDB_StringKeys` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
+USE `QuestionnaireDB_StringKeys`;
+
+CREATE TABLE `algorithm_section_scheme_question_scheme_rel` (
+  `question_scheme_ser_num` int(11) UNSIGNED NOT NULL,
+  `section_scheme_ser_num` int(11) UNSIGNED NOT NULL,
+  `portion` int(4) NOT NULL,
+  `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `last_updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- `algorithm_section_scheme_question_scheme_rel`
+--
+
+INSERT INTO `algorithm_section_scheme_question_scheme_rel` (`question_scheme_ser_num`, `section_scheme_ser_num`, `portion`, `created`, `last_updated`) VALUES
+(9, 1, 0, '2018-04-09 13:16:17', '2018-04-09 13:30:31');
+
+-- --------------------------------------------------------
+
 DROP TABLE IF EXISTS `feedback_answer`;
 
 CREATE TABLE `feedback_answer` (
@@ -35,7 +205,7 @@ CREATE TABLE `feedback_answer` (
   PRIMARY KEY (`ser_num`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-
+-- --------------------------------------------------------
 
 # Dump of table feedback_answeroption
 # ------------------------------------------------------------
@@ -75,8 +245,10 @@ VALUES
 CREATE TABLE `questionnaire_answer` (
   `ser_num` int(11) UNSIGNED NOT NULL,
   `questionnaire_patient_rel_ser_num` int(11) UNSIGNED NOT NULL,
+  `section_ser_num` int(11) NOT NULL,
   `question_ser_num` int(11) UNSIGNED NOT NULL,
   `answeroption_ser_num` int(11) UNSIGNED DEFAULT NULL,
+  `scale_answer` int(11) DEFAULT NULL,
   `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `last_updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `skipped` tinyint(1) DEFAULT '0'
@@ -86,23 +258,188 @@ CREATE TABLE `questionnaire_answer` (
 -- Dumping data for table `questionnaire_answer`
 --
 
-INSERT INTO `questionnaire_answer` (`ser_num`, `questionnaire_patient_rel_ser_num`, `question_ser_num`, `answeroption_ser_num`, `created`, `last_updated`, `skipped`) VALUES
-(25, 1, 1, 21, '2017-11-21 16:58:23', '2017-11-21 17:10:32', 0),
-(26, 1, 2, 22, '2017-11-21 16:58:28', '2017-11-21 17:16:23', 0),
-(27, 1, 4, 21, '2017-11-21 16:58:31', '2017-11-21 16:59:39', 0),
-(28, 1, 3, 20, '2017-11-21 17:17:42', '2017-11-21 17:17:42', 0),
-(29, 1, 5, 23, '2017-11-21 17:17:51', '2017-11-21 17:17:51', 0),
-(32, 2, 39, 50, '2017-11-30 20:58:07', '2017-11-30 20:58:07', 0),
-(33, 2, 40, 51, '2017-11-30 20:58:09', '2017-11-30 23:16:27', 0),
-(36, 2, 43, 48, '2017-11-30 20:58:16', '2017-11-30 20:58:16', 0),
-(37, 2, 44, 48, '2017-11-30 20:58:17', '2017-11-30 20:58:17', 0),
-(49, 2, 38, 48, '2017-11-30 23:16:14', '2017-11-30 23:16:14', 0),
-(66, 2, 41, 48, '2017-12-20 18:35:01', '2017-12-20 18:35:01', 0),
-(67, 2, 42, NULL, '2017-12-20 18:35:03', '2017-12-20 18:35:03', 1),
-(68, 2, 45, 49, '2017-12-20 18:35:21', '2017-12-20 18:35:21', 0),
-(69, 2, 46, 6, '2017-12-20 19:12:06', '2017-12-20 19:12:06', 0),
-(70, 2, 47, NULL, '2017-12-20 19:14:39', '2017-12-20 19:14:39', 1),
-(74, 3, 48, NULL, '2018-01-30 23:50:47', '2018-01-30 23:50:47', 1);
+INSERT INTO `questionnaire_answer` (`ser_num`, `questionnaire_patient_rel_ser_num`, `section_ser_num`, `question_ser_num`, `answeroption_ser_num`, `scale_answer`, `created`, `last_updated`, `skipped`) VALUES
+(25, 1, 1, 1, 21, NULL, '2017-11-21 16:58:23', '2018-03-20 14:24:44', 0),
+(26, 1, 1, 2, 22, NULL, '2017-11-21 16:58:28', '2018-03-20 14:26:23', 0),
+(27, 1, 1, 4, 21, NULL, '2017-11-21 16:58:31', '2018-03-20 14:26:23', 0),
+(28, 1, 1, 3, 20, NULL, '2017-11-21 17:17:42', '2018-03-20 14:26:23', 0),
+(29, 1, 1, 5, 23, NULL, '2017-11-21 17:17:51', '2018-03-20 14:26:23', 0),
+(32, 2, 6, 39, 50, NULL, '2017-11-30 20:58:07', '2018-03-20 14:29:11', 0),
+(33, 2, 6, 40, 51, NULL, '2017-11-30 20:58:09', '2018-03-20 14:29:11', 0),
+(36, 2, 6, 43, 48, NULL, '2017-11-30 20:58:16', '2018-03-20 14:29:11', 0),
+(37, 2, 6, 44, 48, NULL, '2017-11-30 20:58:17', '2018-03-20 14:29:11', 0),
+(49, 2, 6, 38, 48, NULL, '2017-11-30 23:16:14', '2018-03-20 14:29:11', 0),
+(66, 2, 6, 41, 48, NULL, '2017-12-20 18:35:01', '2018-03-20 14:29:11', 0),
+(67, 2, 6, 42, NULL, NULL, '2017-12-20 18:35:03', '2018-03-20 14:29:11', 1),
+(68, 2, 6, 45, 49, NULL, '2017-12-20 18:35:21', '2018-03-20 14:29:11', 0),
+(69, 2, 7, 46, 6, NULL, '2017-12-20 19:12:06', '2018-03-20 14:29:47', 0),
+(74, 3, 8, 48, NULL, NULL, '2018-01-30 23:50:47', '2018-03-20 14:29:48', 1),
+(75, 1, 1, 6, 21, NULL, '2018-02-23 05:11:06', '2018-03-20 14:26:23', 0),
+(76, 1, 1, 7, 21, NULL, '2018-02-23 05:11:09', '2018-03-20 14:26:23', 0),
+(77, 6, 1, 1, 22, NULL, '2018-03-20 17:44:56', '2018-03-20 17:44:56', 0),
+(78, 6, 1, 2, 22, NULL, '2018-03-20 17:44:56', '2018-03-20 17:44:56', 0),
+(79, 6, 1, 3, 21, NULL, '2018-03-20 17:44:56', '2018-03-20 17:44:56', 0),
+(80, 6, 1, 4, 23, NULL, '2018-03-20 17:44:56', '2018-03-20 17:44:56', 0),
+(81, 6, 1, 5, 21, NULL, '2018-03-20 17:44:56', '2018-03-20 17:44:56', 0),
+(82, 6, 1, 6, 22, NULL, '2018-03-20 17:44:56', '2018-03-20 17:44:56', 0),
+(83, 6, 1, 7, 22, NULL, '2018-03-20 17:44:56', '2018-03-20 17:44:56', 0),
+(84, 6, 2, 8, 21, NULL, '2018-03-20 17:44:56', '2018-03-20 17:44:56', 0),
+(85, 6, 2, 9, 22, NULL, '2018-03-20 17:44:56', '2018-03-20 17:44:56', 0),
+(86, 6, 2, 10, 23, NULL, '2018-03-20 17:44:56', '2018-03-20 17:44:56', 0),
+(87, 6, 2, 11, 23, NULL, '2018-03-20 17:44:56', '2018-03-20 17:44:56', 0),
+(88, 6, 2, 12, 22, NULL, '2018-03-20 17:44:56', '2018-03-20 17:44:56', 0),
+(89, 6, 2, 13, 22, NULL, '2018-03-20 17:44:56', '2018-03-20 17:44:56', 0),
+(90, 6, 2, 14, 20, NULL, '2018-03-20 17:44:56', '2018-03-20 17:44:56', 0),
+(91, 6, 3, 15, 22, NULL, '2018-03-20 17:44:56', '2018-03-20 17:44:56', 0),
+(92, 6, 3, 16, 22, NULL, '2018-03-20 17:44:56', '2018-03-20 17:44:56', 0),
+(93, 6, 3, 17, 19, NULL, '2018-03-20 17:44:56', '2018-03-20 17:44:56', 0),
+(94, 6, 3, 18, 22, NULL, '2018-03-20 17:44:56', '2018-03-20 17:44:56', 0),
+(95, 6, 3, 19, 21, NULL, '2018-03-20 17:44:56', '2018-03-20 17:44:56', 0),
+(96, 6, 3, 20, 21, NULL, '2018-03-20 17:44:56', '2018-03-20 17:44:56', 0),
+(97, 6, 4, 21, 21, NULL, '2018-03-20 17:44:56', '2018-03-20 17:44:56', 0),
+(98, 6, 4, 22, 21, NULL, '2018-03-20 17:44:56', '2018-03-20 17:44:56', 0),
+(99, 6, 4, 23, 21, NULL, '2018-03-20 17:44:56', '2018-03-20 17:44:56', 0),
+(100, 6, 4, 24, 22, NULL, '2018-03-20 17:44:56', '2018-03-20 17:44:56', 0),
+(101, 6, 4, 25, 22, NULL, '2018-03-20 17:44:56', '2018-03-20 17:44:56', 0),
+(102, 6, 4, 26, 22, NULL, '2018-03-20 17:44:56', '2018-03-20 17:44:56', 0),
+(103, 6, 4, 27, 22, NULL, '2018-03-20 17:44:56', '2018-03-20 17:44:56', 0),
+(104, 6, 5, 28, 20, NULL, '2018-03-20 17:44:56', '2018-03-20 17:44:56', 0),
+(105, 6, 5, 29, 22, NULL, '2018-03-20 17:44:56', '2018-03-20 17:44:56', 0),
+(106, 6, 5, 30, 19, NULL, '2018-03-20 17:44:56', '2018-03-20 17:44:56', 0),
+(107, 6, 5, 31, 20, NULL, '2018-03-20 17:44:56', '2018-03-20 17:44:56', 0),
+(108, 6, 5, 32, 21, NULL, '2018-03-20 17:44:56', '2018-03-20 17:44:56', 0),
+(109, 6, 5, 33, 19, NULL, '2018-03-20 17:44:56', '2018-03-20 17:44:56', 0),
+(110, 6, 5, 34, 20, NULL, '2018-03-20 17:44:56', '2018-03-20 17:44:56', 0),
+(111, 6, 5, 35, 20, NULL, '2018-03-20 17:44:56', '2018-03-20 17:44:56', 0),
+(112, 6, 5, 36, 22, NULL, '2018-03-20 17:44:56', '2018-03-20 17:44:56', 0),
+(113, 6, 5, 37, 21, NULL, '2018-03-20 17:44:56', '2018-03-20 17:44:56', 0),
+(114, 7, 1, 1, 19, NULL, '2018-03-20 17:49:57', '2018-03-20 17:49:57', 0),
+(115, 7, 1, 2, 21, NULL, '2018-03-20 17:49:57', '2018-03-20 17:49:57', 0),
+(116, 7, 1, 3, 21, NULL, '2018-03-20 17:49:57', '2018-03-20 17:49:57', 0),
+(117, 7, 1, 4, 22, NULL, '2018-03-20 17:49:57', '2018-03-20 17:49:57', 0),
+(118, 7, 1, 5, 20, NULL, '2018-03-20 17:49:57', '2018-03-20 17:49:57', 0),
+(119, 7, 1, 6, 21, NULL, '2018-03-20 17:49:57', '2018-03-20 17:49:57', 0),
+(120, 7, 1, 7, 23, NULL, '2018-03-20 17:49:57', '2018-03-20 17:49:57', 0),
+(121, 7, 2, 8, 22, NULL, '2018-03-20 17:49:57', '2018-03-20 17:49:57', 0),
+(122, 7, 2, 9, 21, NULL, '2018-03-20 17:49:57', '2018-03-20 17:49:57', 0),
+(123, 7, 2, 10, 20, NULL, '2018-03-20 17:49:57', '2018-03-20 17:49:57', 0),
+(124, 7, 2, 11, 22, NULL, '2018-03-20 17:49:57', '2018-03-20 17:49:57', 0),
+(125, 7, 2, 12, 20, NULL, '2018-03-20 17:49:57', '2018-03-20 17:49:57', 0),
+(126, 7, 2, 13, 23, NULL, '2018-03-20 17:49:57', '2018-03-20 17:49:57', 0),
+(127, 7, 2, 14, 19, NULL, '2018-03-20 17:49:57', '2018-03-20 17:49:57', 0),
+(128, 7, 3, 15, 20, NULL, '2018-03-20 17:49:57', '2018-03-20 17:49:57', 0),
+(129, 7, 3, 16, 21, NULL, '2018-03-20 17:49:57', '2018-03-20 17:49:57', 0),
+(130, 7, 3, 17, 23, NULL, '2018-03-20 17:49:57', '2018-03-20 17:49:57', 0),
+(131, 7, 3, 18, 21, NULL, '2018-03-20 17:49:57', '2018-03-20 17:49:57', 0),
+(132, 7, 3, 19, 19, NULL, '2018-03-20 17:49:57', '2018-03-20 17:49:57', 0),
+(133, 7, 3, 20, 22, NULL, '2018-03-20 17:49:57', '2018-03-20 17:49:57', 0),
+(134, 7, 4, 21, 22, NULL, '2018-03-20 17:49:57', '2018-03-20 17:49:57', 0),
+(135, 7, 4, 22, 21, NULL, '2018-03-20 17:49:57', '2018-03-20 17:49:57', 0),
+(136, 7, 4, 23, 23, NULL, '2018-03-20 17:49:57', '2018-03-20 17:49:57', 0),
+(137, 7, 4, 24, 19, NULL, '2018-03-20 17:49:57', '2018-03-20 17:49:57', 0),
+(138, 7, 4, 25, 20, NULL, '2018-03-20 17:49:57', '2018-03-20 17:49:57', 0),
+(139, 7, 4, 26, 22, NULL, '2018-03-20 17:49:57', '2018-03-20 17:49:57', 0),
+(140, 7, 4, 27, 21, NULL, '2018-03-20 17:49:57', '2018-03-20 17:49:57', 0),
+(141, 7, 5, 28, 20, NULL, '2018-03-20 17:49:57', '2018-03-20 17:49:57', 0),
+(142, 7, 5, 29, 21, NULL, '2018-03-20 17:49:57', '2018-03-20 17:49:57', 0),
+(143, 7, 5, 30, 19, NULL, '2018-03-20 17:49:57', '2018-03-20 17:49:57', 0),
+(144, 7, 5, 31, 22, NULL, '2018-03-20 17:49:57', '2018-03-20 17:49:57', 0),
+(145, 7, 5, 32, 23, NULL, '2018-03-20 17:49:57', '2018-03-20 17:49:57', 0),
+(146, 7, 5, 33, 19, NULL, '2018-03-20 17:49:57', '2018-03-20 17:49:57', 0),
+(147, 7, 5, 34, 20, NULL, '2018-03-20 17:49:57', '2018-03-20 17:49:57', 0),
+(148, 7, 5, 35, 21, NULL, '2018-03-20 17:49:57', '2018-03-20 17:49:57', 0),
+(149, 7, 5, 36, 19, NULL, '2018-03-20 17:49:57', '2018-03-20 17:49:57', 0),
+(150, 7, 5, 37, 22, NULL, '2018-03-20 17:49:57', '2018-03-20 17:49:57', 0),
+(151, 8, 1, 1, 22, NULL, '2018-03-20 18:00:39', '2018-03-20 18:00:39', 0),
+(152, 8, 1, 2, 21, NULL, '2018-03-20 18:00:39', '2018-03-20 18:00:39', 0),
+(153, 8, 1, 3, 23, NULL, '2018-03-20 18:00:39', '2018-03-20 18:00:39', 0),
+(154, 8, 1, 4, 19, NULL, '2018-03-20 18:00:39', '2018-03-20 18:00:39', 0),
+(155, 8, 1, 5, 20, NULL, '2018-03-20 18:00:39', '2018-03-20 18:00:39', 0),
+(156, 8, 1, 6, 21, NULL, '2018-03-20 18:00:39', '2018-03-20 18:00:39', 0),
+(157, 8, 1, 7, 22, NULL, '2018-03-20 18:00:39', '2018-03-20 18:00:39', 0),
+(158, 8, 2, 8, 21, NULL, '2018-03-20 18:00:39', '2018-03-20 18:00:39', 0),
+(159, 8, 2, 9, 19, NULL, '2018-03-20 18:00:39', '2018-03-20 18:00:39', 0),
+(160, 8, 2, 10, 22, NULL, '2018-03-20 18:00:39', '2018-03-20 18:00:39', 0),
+(161, 8, 2, 11, 21, NULL, '2018-03-20 18:00:39', '2018-03-20 18:00:39', 0),
+(162, 8, 2, 12, 20, NULL, '2018-03-20 18:00:39', '2018-03-20 18:00:39', 0),
+(163, 8, 2, 13, 20, NULL, '2018-03-20 18:00:39', '2018-03-20 18:00:39', 0),
+(164, 8, 2, 14, 22, NULL, '2018-03-20 18:00:39', '2018-03-20 18:00:39', 0),
+(165, 8, 3, 15, 19, NULL, '2018-03-20 18:00:39', '2018-03-20 18:00:39', 0),
+(166, 8, 3, 16, 23, NULL, '2018-03-20 18:00:39', '2018-03-20 18:00:39', 0),
+(167, 8, 3, 17, 20, NULL, '2018-03-20 18:00:39', '2018-03-20 18:00:39', 0),
+(168, 8, 3, 18, 22, NULL, '2018-03-20 18:00:39', '2018-03-20 18:00:39', 0),
+(169, 8, 3, 19, 23, NULL, '2018-03-20 18:00:39', '2018-03-20 18:00:39', 0),
+(170, 8, 3, 20, 21, NULL, '2018-03-20 18:00:39', '2018-03-20 18:00:39', 0),
+(171, 8, 4, 21, 21, NULL, '2018-03-20 18:00:39', '2018-03-20 18:00:39', 0),
+(172, 8, 4, 22, 21, NULL, '2018-03-20 18:00:39', '2018-03-20 18:00:39', 0),
+(173, 8, 4, 23, 21, NULL, '2018-03-20 18:00:39', '2018-03-20 18:00:39', 0),
+(174, 8, 4, 24, 22, NULL, '2018-03-20 18:00:39', '2018-03-20 18:00:39', 0),
+(175, 8, 4, 25, 20, NULL, '2018-03-20 18:00:39', '2018-03-20 18:00:39', 0),
+(176, 8, 4, 26, 19, NULL, '2018-03-20 18:00:39', '2018-03-20 18:00:39', 0),
+(177, 8, 4, 27, 22, NULL, '2018-03-20 18:00:39', '2018-03-20 18:00:39', 0),
+(178, 8, 5, 28, 20, NULL, '2018-03-20 18:00:39', '2018-03-20 18:00:39', 0),
+(179, 8, 5, 29, 21, NULL, '2018-03-20 18:00:39', '2018-03-20 18:00:39', 0),
+(180, 8, 5, 30, 19, NULL, '2018-03-20 18:00:39', '2018-03-20 18:00:39', 0),
+(181, 8, 5, 31, 23, NULL, '2018-03-20 18:00:39', '2018-03-20 18:00:39', 0),
+(182, 8, 5, 32, 21, NULL, '2018-03-20 18:00:39', '2018-03-20 18:00:39', 0),
+(183, 8, 5, 33, 19, NULL, '2018-03-20 18:00:39', '2018-03-20 18:00:39', 0),
+(184, 8, 5, 34, 21, NULL, '2018-03-20 18:00:39', '2018-03-20 18:00:39', 0),
+(185, 8, 5, 35, 22, NULL, '2018-03-20 18:00:39', '2018-03-20 18:00:39', 0),
+(186, 8, 5, 36, 23, NULL, '2018-03-20 18:00:39', '2018-03-20 18:00:39', 0),
+(187, 8, 5, 37, 21, NULL, '2018-03-20 18:00:39', '2018-03-20 18:00:39', 0),
+(188, 10, 1, 1, 22, NULL, '2018-03-20 18:06:45', '2018-03-20 18:06:45', 0),
+(189, 10, 1, 2, 21, NULL, '2018-03-20 18:06:45', '2018-03-20 18:06:45', 0),
+(190, 10, 1, 3, 23, NULL, '2018-03-20 18:06:45', '2018-03-20 18:06:45', 0),
+(191, 10, 1, 4, 19, NULL, '2018-03-20 18:06:45', '2018-03-20 18:06:45', 0),
+(192, 10, 1, 5, 20, NULL, '2018-03-20 18:06:45', '2018-03-20 18:06:45', 0),
+(193, 10, 1, 6, 21, NULL, '2018-03-20 18:06:45', '2018-03-20 18:06:45', 0),
+(194, 10, 1, 7, 22, NULL, '2018-03-20 18:06:45', '2018-03-20 18:06:45', 0),
+(195, 10, 2, 8, 21, NULL, '2018-03-20 18:06:45', '2018-03-20 18:06:45', 0),
+(196, 10, 2, 9, 19, NULL, '2018-03-20 18:06:45', '2018-03-20 18:06:45', 0),
+(197, 10, 2, 10, 22, NULL, '2018-03-20 18:06:45', '2018-03-20 18:06:45', 0),
+(198, 10, 2, 11, 21, NULL, '2018-03-20 18:06:45', '2018-03-20 18:06:45', 0),
+(199, 10, 2, 12, 20, NULL, '2018-03-20 18:06:45', '2018-03-20 18:06:45', 0),
+(200, 10, 2, 13, 20, NULL, '2018-03-20 18:06:45', '2018-03-20 18:06:45', 0),
+(201, 10, 2, 14, 22, NULL, '2018-03-20 18:06:45', '2018-03-20 18:06:45', 0),
+(202, 10, 3, 15, 19, NULL, '2018-03-20 18:06:45', '2018-03-20 18:06:45', 0),
+(203, 10, 3, 16, 23, NULL, '2018-03-20 18:06:45', '2018-03-20 18:06:45', 0),
+(204, 10, 3, 17, 20, NULL, '2018-03-20 18:06:45', '2018-03-20 18:06:45', 0),
+(205, 10, 3, 18, 22, NULL, '2018-03-20 18:06:45', '2018-03-20 18:06:45', 0),
+(206, 10, 3, 19, 23, NULL, '2018-03-20 18:06:45', '2018-03-20 18:06:45', 0),
+(207, 10, 3, 20, 21, NULL, '2018-03-20 18:06:45', '2018-03-20 18:06:45', 0),
+(208, 10, 4, 21, 21, NULL, '2018-03-20 18:06:45', '2018-03-20 18:06:45', 0),
+(209, 10, 4, 22, 21, NULL, '2018-03-20 18:06:45', '2018-03-20 18:06:45', 0),
+(210, 10, 4, 23, 21, NULL, '2018-03-20 18:06:45', '2018-03-20 18:06:45', 0),
+(211, 10, 4, 24, 22, NULL, '2018-03-20 18:06:45', '2018-03-20 18:06:45', 0),
+(212, 10, 4, 25, 20, NULL, '2018-03-20 18:06:45', '2018-03-20 18:06:45', 0),
+(213, 10, 4, 26, 19, NULL, '2018-03-20 18:06:45', '2018-03-20 18:06:45', 0),
+(214, 10, 4, 27, 22, NULL, '2018-03-20 18:06:45', '2018-03-20 18:06:45', 0),
+(215, 10, 5, 28, 20, NULL, '2018-03-20 18:06:45', '2018-03-20 18:06:45', 0),
+(216, 10, 5, 29, 21, NULL, '2018-03-20 18:06:45', '2018-03-20 18:06:45', 0),
+(217, 10, 5, 30, 19, NULL, '2018-03-20 18:06:45', '2018-03-20 18:06:45', 0),
+(218, 10, 5, 31, 23, NULL, '2018-03-20 18:06:45', '2018-03-20 18:06:45', 0),
+(219, 10, 5, 32, 21, NULL, '2018-03-20 18:06:45', '2018-03-20 18:06:45', 0),
+(220, 10, 5, 33, 19, NULL, '2018-03-20 18:06:45', '2018-03-20 18:06:45', 0),
+(221, 10, 5, 34, 21, NULL, '2018-03-20 18:06:45', '2018-03-20 18:06:45', 0),
+(222, 10, 5, 35, 22, NULL, '2018-03-20 18:06:45', '2018-03-20 18:06:45', 0),
+(223, 10, 5, 36, 23, NULL, '2018-03-20 18:06:45', '2018-03-20 18:06:45', 0),
+(224, 10, 5, 37, 21, NULL, '2018-03-20 18:06:45', '2018-03-20 18:06:45', 0),
+(225, 1, 0, 11, 19, NULL, '2018-03-23 00:59:33', '2018-03-23 00:59:33', 0),
+(226, 1, 0, 12, 23, NULL, '2018-03-23 00:59:36', '2018-03-23 00:59:36', 0),
+(229, 18, 0, 46, 4, NULL, '2018-03-23 02:18:38', '2018-03-23 02:18:38', 0),
+(231, 18, 0, 47, 4, NULL, '2018-03-23 04:36:15', '2018-03-23 04:36:15', 0),
+(232, 6, 1, 1, 19, NULL, '2018-04-06 16:41:37', '2018-04-06 16:41:37', 0),
+(233, 7, 1, 1, 20, NULL, '2018-04-06 16:41:37', '2018-04-06 16:41:37', 0),
+(234, 8, 1, 1, 19, NULL, '2018-04-06 16:41:37', '2018-04-06 16:41:37', 0),
+(235, 9, 1, 1, 22, NULL, '2018-04-06 16:41:37', '2018-04-06 16:41:37', 0),
+(236, 10, 1, 1, 21, NULL, '2018-04-06 16:41:37', '2018-04-09 18:40:25', 0),
+(237, 11, 1, 1, 20, NULL, '2018-04-06 16:41:37', '2018-04-06 16:41:37', 0),
+(239, 13, 1, 1, 23, NULL, '2018-04-06 16:41:37', '2018-04-06 16:41:37', 0),
+(240, 14, 1, 1, 22, NULL, '2018-04-06 16:41:37', '2018-04-06 16:41:37', 0),
+(241, 15, 1, 1, 19, NULL, '2018-04-06 16:41:37', '2018-04-06 16:41:37', 0),
+(242, 16, 1, 1, 23, NULL, '2018-04-06 16:41:37', '2018-04-06 16:41:37', 0),
+(243, 17, 1, 1, 19, NULL, '2018-04-06 16:41:37', '2018-04-06 16:41:37', 0),
+(259, 2, 0, 47, NULL, NULL, '2018-04-13 02:01:19', '2018-04-13 02:01:19', 1);
 
 -- --------------------------------------------------------
 
@@ -170,9 +507,103 @@ CREATE TABLE `questionnaire_entity_patient_rel` (
 INSERT INTO `questionnaire_entity_patient_rel` (`ser_num`, `questionnaire_ser_num`, `patient_ser_num`, `status`, `created`, `last_updated`) VALUES
 (1, 1, 1, 'In progress', '2017-11-09 22:34:21', '2017-12-20 14:54:06'),
 (2, 2, 1, 'In progress', '2017-11-09 23:19:53', '2017-12-20 14:48:48'),
-(3, 3, 1, 'In progress', '2017-11-21 17:28:01', '2018-01-30 23:50:46'),
+(3, 3, 1, 'Completed', '2017-11-21 17:28:01', '2018-02-23 05:10:41'),
 (4, 1, 1, 'Completed', '2017-12-20 14:57:52', '2018-01-10 12:37:21'),
-(5, 2, 1, 'Completed', '2017-12-20 15:40:36', '2018-01-10 12:37:24');
+(5, 2, 1, 'Completed', '2017-12-20 15:40:36', '2018-01-10 12:37:24'),
+(6, 1, 1, 'Completed', '2016-11-09 22:34:20', '2017-10-31 21:34:20'),
+(7, 1, 1, 'Completed', '2016-11-09 22:34:20', '2017-11-07 22:34:20'),
+(8, 1, 1, 'Completed', '2016-11-09 22:34:20', '2017-11-14 22:34:20'),
+(9, 1, 1, 'Completed', '2016-11-09 22:34:20', '2017-11-21 22:34:20'),
+(10, 1, 1, 'Completed', '2016-11-09 22:34:20', '2017-11-28 22:34:20'),
+(11, 1, 1, 'Completed', '2016-11-09 22:34:20', '2017-12-05 22:34:20'),
+(12, 1, 1, 'Completed', '2016-11-09 22:34:20', '2018-01-12 22:34:20'),
+(13, 1, 1, 'Completed', '2016-11-09 22:34:20', '2018-01-16 22:34:20'),
+(14, 1, 1, 'Completed', '2016-11-09 22:34:20', '2018-01-23 22:34:20'),
+(15, 1, 1, 'Completed', '2016-11-09 22:34:20', '2018-02-28 22:34:20'),
+(16, 1, 1, 'Completed', '2016-11-09 22:34:20', '2018-03-28 21:34:20'),
+(17, 1, 1, 'Completed', '2016-11-09 22:34:20', '2018-04-28 21:34:20'),
+(18, 2, 1, 'In progress', '2018-03-23 01:02:49', '2018-03-23 01:03:23');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `questionnaire_entscore`
+--
+
+CREATE TABLE `questionnaire_entscore` (
+  `entity_patient_rel_ser_num` int(11) NOT NULL,
+  `alg_ser_num` int(11) NOT NULL,
+  `score` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Table structure for table `questionnaire_entscore`
+--
+
+INSERT INTO `questionnaire_entscore` (`entity_patient_rel_ser_num`, `alg_ser_num`, `score`) VALUES
+(6, 1, 40),
+(6, 3, 10),
+(7, 1, 43),
+(7, 3, 20),
+(8, 1, 50),
+(8, 3, 30),
+(9, 1, 98),
+(9, 3, 50),
+(10, 1, 20),
+(10, 3, 45),
+(11, 1, 25),
+(11, 3, 30),
+(13, 1, 35),
+(13, 3, 60),
+(14, 1, 45),
+(14, 3, 80),
+(15, 1, 55),
+(15, 3, 70),
+(16, 1, 85),
+(16, 3, 55),
+(17, 1, 10),
+(17, 3, 50);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `questionnaire_qscore`
+--
+
+CREATE TABLE `questionnaire_qscore` (
+  `entity_patient_rel_ser_num` int(11) NOT NULL,
+  `alg_ser_num` int(11) NOT NULL,
+  `question_ser_num` int(11) NOT NULL,
+  `score` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Table structure for table `questionnaire_qscore`
+--
+
+INSERT INTO `questionnaire_qscore` (`entity_patient_rel_ser_num`, `alg_ser_num`, `question_ser_num`, `score`) VALUES
+(6, 1, 1, 10),
+(6, 3, 1, 1),
+(7, 1, 1, 20),
+(7, 3, 1, 2),
+(8, 1, 1, 30),
+(8, 3, 1, 3),
+(9, 1, 1, 40),
+(9, 3, 1, 4),
+(10, 1, 1, 50),
+(10, 3, 1, 5),
+(11, 1, 1, 60),
+(11, 3, 1, 1),
+(13, 1, 1, 70),
+(13, 3, 1, 2),
+(14, 1, 1, 60),
+(14, 3, 1, 2),
+(15, 1, 1, 30),
+(15, 3, 1, 3),
+(16, 1, 1, 90),
+(16, 3, 1, 4),
+(17, 1, 1, 10),
+(17, 3, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -188,6 +619,47 @@ CREATE TABLE `questionnaire_scoring_rubric` (
   `created_by` int(11) UNSIGNED DEFAULT NULL,
   `last_updated_by` int(11) UNSIGNED DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `questionnaire_secscore`
+--
+
+CREATE TABLE `questionnaire_secscore` (
+  `entity_patient_rel_ser_num` int(11) NOT NULL,
+  `alg_ser_num` int(11) NOT NULL,
+  `section_ser_num` int(11) NOT NULL,
+  `score` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- 转存表中的数据 `questionnaire_secscore`
+--
+
+INSERT INTO `questionnaire_secscore` (`entity_patient_rel_ser_num`, `alg_ser_num`, `section_ser_num`, `score`) VALUES
+(6, 1, 1, 20),
+(6, 3, 1, 10),
+(7, 1, 1, 30),
+(7, 3, 1, 40),
+(8, 1, 1, 40),
+(8, 3, 1, 30),
+(9, 1, 1, 30),
+(9, 3, 1, 20),
+(10, 1, 1, 60),
+(10, 3, 1, 60),
+(11, 1, 1, 60),
+(11, 3, 1, 90),
+(13, 1, 1, 90),
+(13, 3, 1, 20),
+(14, 1, 1, 92),
+(14, 3, 1, 32),
+(15, 1, 1, 65),
+(15, 3, 1, 45),
+(16, 1, 1, 80),
+(16, 3, 1, 30),
+(17, 1, 1, 20),
+(17, 3, 1, 60);
 
 -- --------------------------------------------------------
 
@@ -318,7 +790,7 @@ INSERT INTO `questionnaire_strings` (`string_key`, `string`, `language`, `create
 ('Additional_Concerns', 'Additional Concerns', 'en', '2017-11-09 22:38:09', '2017-11-09 22:38:09', NULL, NULL),
 ('Almost_constantly', 'Almost constantly', 'en', '2017-11-09 22:26:08', '2017-11-09 22:26:08', NULL, NULL),
 ('Amount', 'Amount', 'en', '2017-11-09 22:26:08', '2017-11-09 22:26:08', NULL, NULL),
-('Anna_Library', 'Anna''s Library', 'en', '2017-11-21 17:23:02', '2017-11-21 17:23:02', NULL, NULL),
+('Anna_Library', 'Anna\'s Library', 'en', '2017-11-21 17:23:02', '2017-11-21 17:23:02', NULL, NULL),
 ('Arm_Breast_Symptoms', 'Arm & Breast Symptoms', 'en', '2017-11-09 23:17:59', '2017-11-09 23:17:59', NULL, NULL),
 ('A_little', 'A little', 'en', '2017-11-09 23:07:10', '2017-11-09 23:07:10', NULL, NULL),
 ('A_little_bit', 'A little bit', 'en', '2017-11-09 22:26:08', '2017-11-09 22:26:08', NULL, NULL),
@@ -337,6 +809,7 @@ INSERT INTO `questionnaire_strings` (`string_key`, `string`, `language`, `create
 ('Breast_Radiotherapy_7', 'Have you had skin problems in the area that was radiated (e.g. itchy, dry, flaky)?', 'en', '2017-11-09 23:41:05', '2017-11-09 23:41:05', NULL, NULL),
 ('Breast_Radiotherapy_8', 'Were you tired?', 'en', '2017-11-09 23:41:05', '2017-11-09 23:41:05', NULL, NULL),
 ('Breast_Radiotherapy_9', 'How would you rate your overall health during the past week?', 'en', '2017-11-09 23:41:32', '2017-11-09 23:41:32', NULL, NULL),
+('Breast_Radiotherapy_ALG_STD', 'Breast radiotherapy standard scoring algorithm', 'en', '2018-03-20 16:58:04', '2018-03-20 16:58:04', NULL, NULL),
 ('Breast_Radiotherapy_Instructions', 'Patients sometimes report that they have the following symptoms or problems. Please indicate the extent to which you have experienced these symptoms or problems during the past week.', 'en', '2017-11-09 23:21:26', '2017-11-14 21:20:45', NULL, NULL),
 ('Breast_Radiotherapy_Symptom_Questionnaire', 'Breast Radiotherapy Symptom Questionnaire', 'en', '2017-11-09 23:18:49', '2017-11-09 23:18:49', NULL, NULL),
 ('Checkbox', 'Checkbox', 'en', '2017-11-21 17:20:38', '2017-11-21 17:20:38', NULL, NULL),
@@ -344,10 +817,14 @@ INSERT INTO `questionnaire_strings` (`string_key`, `string`, `language`, `create
 ('Colors', 'Couleurs', 'fr', '2017-11-21 17:19:25', '2017-11-21 17:19:25', NULL, NULL),
 ('Colors_Question', 'Which of the following colors do you like?', 'en', '2017-11-21 17:22:38', '2017-11-21 17:22:38', NULL, NULL),
 ('Colors_Question', 'Lesquelles des couleurs suivantes aimez-vous?', 'fr', '2017-11-21 17:22:38', '2017-11-21 17:22:38', NULL, NULL),
+('Default', 'Default', 'en', '2018-03-20 16:58:04', '2018-03-29 00:51:46', NULL, NULL),
+('Default', 'Défaut', 'fr', '2018-03-29 00:52:26', '2018-03-29 00:52:26', NULL, NULL),
 ('Emotional_Well_Being', 'Emotional Well-Being', 'en', '2017-11-09 22:37:27', '2017-11-09 22:37:27', NULL, NULL),
 ('EORTC_QLQ-30', 'EORTC QLQ-30', 'en', '2017-11-09 23:16:06', '2017-11-09 23:16:06', NULL, NULL),
 ('Excellent', 'Excellent', 'en', '2017-11-09 23:03:46', '2017-11-09 23:03:46', NULL, NULL),
 ('FACT-B', 'FACT-B', 'en', '2017-11-09 22:29:01', '2017-11-09 22:29:01', NULL, NULL),
+('FACT-B_A', 'FACT-B A', 'en', '2018-03-29 00:54:53', '2018-03-29 00:54:53', NULL, NULL),
+('FACT-B_A', 'FACT-B A', 'fr', '2018-03-29 00:54:53', '2018-03-29 00:54:53', NULL, NULL),
 ('FACT-B_Instructions', 'Please answer all sections of the questionnaire.', 'en', '2017-11-09 22:33:23', '2017-11-09 22:33:23', NULL, NULL),
 ('FACTB_0', 'I have a lack of energy', 'en', '2017-11-09 22:29:01', '2017-11-09 22:29:01', NULL, NULL),
 ('FACTB_1', 'I have nausea', 'en', '2017-11-09 22:29:01', '2017-11-09 22:29:01', NULL, NULL),
@@ -683,9 +1160,91 @@ CREATE TABLE `question_bank_tag` (
   `last_updated_by` int(11) UNSIGNED DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `temp`
+-- (See below for the actual view)
+--
+CREATE TABLE `temp` (
+`ser_num` int(11) unsigned
+,`q_ser_num` int(11) unsigned
+);
+
+-- --------------------------------------------------------
+
+--
+-- DROP `temp`
+--
+DROP TABLE IF EXISTS `temp`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `temp`  AS  select `a`.`ser_num` AS `ser_num`,`a`.`questiontype_ser_num` AS `q_ser_num` from (`question_bank_question` `a` join `questionnaire_section_question_rel` `b`) where ((`b`.`question_ser_num` = `a`.`ser_num`) and `b`.`question_ser_num` in (select `questionnaire_section_question_rel`.`question_ser_num` from `questionnaire_section_question_rel` where (`questionnaire_section_question_rel`.`section_ser_num` = 6))) ;
+
 --
 -- Indexes for dumped tables
 --
+
+--
+-- Indexes for table `algorithm_entity`
+--
+ALTER TABLE `algorithm_entity`
+  ADD PRIMARY KEY (`ser_num`),
+  ADD KEY `questionnaire_entity_ser_num` (`questionnaire_entity_ser_num`),
+  ADD KEY `nickname_key` (`nickname_key`);
+
+--
+-- Indexes for table `algorithm_entity_section_scheme_rel`
+--
+ALTER TABLE `algorithm_entity_section_scheme_rel`
+  ADD PRIMARY KEY (`entity_ser_num`,`section_scheme_ser_num`),
+  ADD KEY `section_scheme_ser_num` (`section_scheme_ser_num`);
+
+--
+-- Indexes for table `algorithm_option_scheme`
+--
+ALTER TABLE `algorithm_option_scheme`
+  ADD PRIMARY KEY (`ser_num`),
+  ADD KEY `answeroption_ser_num` (`answeroption_ser_num`);
+
+--
+-- Indexes for table `algorithm_question_scheme`
+--
+ALTER TABLE `algorithm_question_scheme`
+  ADD PRIMARY KEY (`ser_num`),
+  ADD KEY `question_ser_num` (`question_ser_num`);
+
+--
+-- Indexes for table `algorithm_question_scheme_option_scheme_rel`
+--
+ALTER TABLE `algorithm_question_scheme_option_scheme_rel`
+  ADD PRIMARY KEY (`question_scheme_ser_num`,`option_scheme_ser_num`),
+  ADD KEY `option_scheme_ser_num` (`option_scheme_ser_num`);
+
+--
+-- Indexes for table `algorithm_section_scheme`
+--
+ALTER TABLE `algorithm_section_scheme`
+  ADD PRIMARY KEY (`ser_num`),
+  ADD KEY `section_ser_num` (`section_ser_num`);
+
+--
+-- Indexes for table `algorithm_section_scheme_question_scheme_rel`
+--
+ALTER TABLE `algorithm_section_scheme_question_scheme_rel`
+  ADD PRIMARY KEY (`section_scheme_ser_num`,`question_scheme_ser_num`),
+  ADD KEY `question_scheme_ser_num` (`question_scheme_ser_num`);
+
+--
+-- Indexes for table `feedback_answer`
+--
+-- ALTER TABLE `feedback_answer`
+--  ADD PRIMARY KEY (`ser_num`);
+
+--
+-- Indexes for table `feedback_answeroption`
+--
+-- ALTER TABLE `feedback_answeroption`
+--  ADD PRIMARY KEY (`ser_num`);
 
 --
 -- Indexes for table `questionnaire_answer`
@@ -720,10 +1279,28 @@ ALTER TABLE `questionnaire_entity_patient_rel`
   ADD KEY `questionnaire_ser_num` (`questionnaire_ser_num`);
 
 --
+-- Indexes for table `questionnaire_entscore`
+--
+ALTER TABLE `questionnaire_entscore`
+  ADD PRIMARY KEY (`entity_patient_rel_ser_num`,`alg_ser_num`);
+
+--
+-- Indexes for table `questionnaire_qscore`
+--
+ALTER TABLE `questionnaire_qscore`
+  ADD PRIMARY KEY (`entity_patient_rel_ser_num`,`alg_ser_num`,`question_ser_num`);
+
+--
 -- Indexes for table `questionnaire_scoring_rubric`
 --
 ALTER TABLE `questionnaire_scoring_rubric`
   ADD PRIMARY KEY (`questionnaire_ser_num`,`algorithm_ser_num`);
+
+--
+-- Indexes for table `questionnaire_secscore`
+--
+ALTER TABLE `questionnaire_secscore`
+  ADD PRIMARY KEY (`entity_patient_rel_ser_num`,`alg_ser_num`,`section_ser_num`);
 
 --
 -- Indexes for table `questionnaire_section`
@@ -806,10 +1383,47 @@ ALTER TABLE `question_bank_tag`
 --
 
 --
+-- AUTO_INCREMENT for table `algorithm_entity`
+--
+ALTER TABLE `algorithm_entity`
+  MODIFY `ser_num` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `algorithm_option_scheme`
+--
+ALTER TABLE `algorithm_option_scheme`
+  MODIFY `ser_num` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+
+--
+-- AUTO_INCREMENT for table `algorithm_question_scheme`
+--
+ALTER TABLE `algorithm_question_scheme`
+  MODIFY `ser_num` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+
+--
+-- AUTO_INCREMENT for table `algorithm_section_scheme`
+--
+ALTER TABLE `algorithm_section_scheme`
+  MODIFY `ser_num` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `feedback_answer`
+--
+ALTER TABLE `feedback_answer`
+  MODIFY `ser_num` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `feedback_answeroption`
+--
+ALTER TABLE `feedback_answeroption`
+  MODIFY `ser_num` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+
+--
 -- AUTO_INCREMENT for table `questionnaire_answer`
 --
 ALTER TABLE `questionnaire_answer`
-  MODIFY `ser_num` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=75;
+  MODIFY `ser_num` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=260;
+
 --
 -- AUTO_INCREMENT for table `questionnaire_answertext`
 --
@@ -855,9 +1469,55 @@ ALTER TABLE `question_bank_questiontype`
 --
 ALTER TABLE `question_bank_tag`
   MODIFY `ser_num` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
+
 --
 -- Constraints for dumped tables
 --
+
+--
+-- Constraints for table `algorithm_entity`
+--
+ALTER TABLE `algorithm_entity`
+  ADD CONSTRAINT `algorithm_entity_ibfk_1` FOREIGN KEY (`questionnaire_entity_ser_num`) REFERENCES `questionnaire_entity` (`ser_num`);
+
+--
+-- Constraints for table `algorithm_entity_section_scheme_rel`
+--
+ALTER TABLE `algorithm_entity_section_scheme_rel`
+  ADD CONSTRAINT `algorithm_entity_section_scheme_rel_ibfk_1` FOREIGN KEY (`entity_ser_num`) REFERENCES `algorithm_entity` (`ser_num`),
+  ADD CONSTRAINT `algorithm_entity_section_scheme_rel_ibfk_2` FOREIGN KEY (`section_scheme_ser_num`) REFERENCES `algorithm_section_scheme` (`ser_num`);
+
+--
+-- Constraints for table `algorithm_option_scheme`
+--
+ALTER TABLE `algorithm_option_scheme`
+  ADD CONSTRAINT `algorithm_option_scheme_ibfk_1` FOREIGN KEY (`answeroption_ser_num`) REFERENCES `question_bank_answeroption` (`ser_num`);
+
+--
+-- Constraints for table `algorithm_question_scheme`
+--
+ALTER TABLE `algorithm_question_scheme`
+  ADD CONSTRAINT `algorithm_question_scheme_ibfk_1` FOREIGN KEY (`question_ser_num`) REFERENCES `question_bank_question` (`ser_num`);
+
+--
+-- Constraints for table `algorithm_question_scheme_option_scheme_rel`
+--
+ALTER TABLE `algorithm_question_scheme_option_scheme_rel`
+  ADD CONSTRAINT `algorithm_question_scheme_option_scheme_rel_ibfk_1` FOREIGN KEY (`question_scheme_ser_num`) REFERENCES `algorithm_question_scheme` (`ser_num`),
+  ADD CONSTRAINT `algorithm_question_scheme_option_scheme_rel_ibfk_2` FOREIGN KEY (`option_scheme_ser_num`) REFERENCES `algorithm_option_scheme` (`ser_num`);
+
+--
+-- Constraints for table `algorithm_section_scheme`
+--
+ALTER TABLE `algorithm_section_scheme`
+  ADD CONSTRAINT `algorithm_section_scheme_ibfk_1` FOREIGN KEY (`section_ser_num`) REFERENCES `questionnaire_section` (`ser_num`);
+
+--
+-- Constraints for table `algorithm_section_scheme_question_scheme_rel`
+--
+ALTER TABLE `algorithm_section_scheme_question_scheme_rel`
+  ADD CONSTRAINT `algorithm_section_scheme_question_scheme_rel_ibfk_1` FOREIGN KEY (`section_scheme_ser_num`) REFERENCES `algorithm_section_scheme` (`ser_num`),
+  ADD CONSTRAINT `algorithm_section_scheme_question_scheme_rel_ibfk_2` FOREIGN KEY (`question_scheme_ser_num`) REFERENCES `algorithm_question_scheme` (`ser_num`);
 
 --
 -- Constraints for table `questionnaire_answer`
@@ -888,10 +1548,22 @@ ALTER TABLE `questionnaire_entity_patient_rel`
   ADD CONSTRAINT `questionnaire_entity_patient_rel_ibfk_1` FOREIGN KEY (`questionnaire_ser_num`) REFERENCES `questionnaire_entity` (`ser_num`);
 
 --
+-- Constraints for table `questionnaire_qscore`
+--
+ALTER TABLE `questionnaire_qscore`
+  ADD CONSTRAINT `questionnaire_qscore_ibfk_1` FOREIGN KEY (`entity_patient_rel_ser_num`,`alg_ser_num`) REFERENCES `questionnaire_entscore` (`entity_patient_rel_ser_num`, `alg_ser_num`);
+
+--
 -- Constraints for table `questionnaire_scoring_rubric`
 --
 ALTER TABLE `questionnaire_scoring_rubric`
   ADD CONSTRAINT `questionnaire_scoring_rubric_ibfk_1` FOREIGN KEY (`questionnaire_ser_num`) REFERENCES `questionnaire_entity` (`ser_num`);
+
+--
+-- Constraints for table `questionnaire_secscore`
+--
+ALTER TABLE `questionnaire_secscore`
+  ADD CONSTRAINT `fk_qsecscore` FOREIGN KEY (`entity_patient_rel_ser_num`,`alg_ser_num`) REFERENCES `questionnaire_entscore` (`entity_patient_rel_ser_num`, `alg_ser_num`);
 
 --
 -- Constraints for table `questionnaire_section`

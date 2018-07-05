@@ -16,6 +16,7 @@
             <ons-tab class="shadow-2" style="background-color:#ECEFF1;" label='{{"QUESTIONNAIRE_NEW"|translate}}' ng-click="setNew()" icon="ion-android-star" active="true"></ons-tab>
             <ons-tab class="shadow-2" style="background-color:#ECEFF1;" label='{{"QUESTIONNAIRE_IN_PROGRESS"|translate}}' ng-click="setProgress()" icon="ion-edit"></ons-tab>
             <ons-tab class="shadow-2" style="background-color:#ECEFF1;" label='{{"QUESTIONNAIRE_COMPLETED"|translate}}' ng-click="setCompleted()" icon="ion-android-done"></ons-tab>
+            <ons-tab class="shadow-2" style="background-color:#ECEFF1;" label='Summary' ng-click="setSummary()" icon="ion-stats-bars"></ons-tab>
         </ons-tabbar>
 
         <div class="ons-row" align="center" ng-init="new = true;"  style="margin-top: 50px">
@@ -53,6 +54,18 @@
                             <li class="list__item list__item--chevron" ng-repeat="questionnaire in completedQuestionnaireList" ng-click="goToQuestionnaireSummary(questionnaire)">
                                 <p style="margin-top: 2.7vh; margin-bottom: 2.4vh; line-height: 3.6vh;" ng-class="fontSizeTitle">{{questionnaire.nickname}}</p>
                                 <p style="margin-top: -2.6vh; color: #757575;" ng-class="fontSizeDesc">{{"QUESTIONNAIRE_DATE_ANSWERED"|translate}}: {{questionnaire.last_updated | date:'yyyy-MM-dd HH:mm'}}</p>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div ng-if="summary" class="ons-row" align="center" style="margin-top: 50px">
+                    <div class="ons-col" align="center">
+                        <p ng-show="getQuestionnaireCount('Completed') <= 0" ng-class="fontSizeTitle" style="color: grey; margin-top: 25vh;">{{"QUESTIONNAIRE_NONE_COMPLETED"|translate}}</p>
+                        <ul class="list">
+                            <li class="list__item list__item--chevron" ng-repeat="questionnaire in summaryQuestionnaireList | orderBy: '-last_updated'" ng-click="goToHistoricalSummary(questionnaire)">
+                                <p style="margin-top: 2.7vh; margin-bottom: 2.4vh; line-height: 3.6vh;" ng-class="fontSizeTitle">{{questionnaire.nickname}}</p>
+                                <p style="margin-top: -2.6vh; color: #757575;" ng-class="fontSizeDesc">{{"QUESTIONNAIRE_LAST_COMPLETED"|translate}}: {{questionnaire.last_updated | date:'yyyy-MM-dd HH:mm'}}</p>
                             </li>
                         </ul>
                     </div>

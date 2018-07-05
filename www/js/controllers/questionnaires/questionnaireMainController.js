@@ -31,6 +31,8 @@
         vm.average = average;
         vm.choosenReaction = [{}];
         vm.skipQuestion = { 'reason': '', 'askSimilar': ''};
+        vm.currentQuestion = {};
+        vm.scaleQuestions = [];
 
 
         vm.availableReactions = [
@@ -69,7 +71,9 @@
             carousel.next()
             skip_question.hide();
         };
-
+        vm.updateCurrentQuestion = function(item) {
+            vm.currentQuestion = item.data;
+        };
 
         activate();
 
@@ -144,6 +148,30 @@
             document.addEventListener('ons-carousel:postchange', carouselPostChange);
             updateColorGradient(Object.keys(vm.questionnaire.sections[0].questions[0].options).length, vm.questionnaire.sections[0].questions[0].polarity);
             vm.currentPolarity = vm.questionnaire.sections[0].questions[0].polarity;
+
+            // add event listener: orientation changed
+            window.addEventListener("orientationchange", setLayoutByOrientation);
+
+        }
+
+        // reset all the scale styles once screen is rotated
+        function setLayoutByOrientation() {
+            setTimeout(function() {
+                var width = document.documentElement.clientWidth;
+                var height =  document.documentElement.clientHeight;
+                var tabbars = $(".tab-bar");
+                var bottomtabbar = tabbars[tabbars.length-1];
+                if (width > height) {
+                    // landscape
+                    $(".tab-bar__content").css("height","100%");
+                    bottomtabbar.style.visibility = "hidden";
+                }
+                else {
+                    // portrait
+                    $(".tab-bar__content").css("height","auto");
+                    bottomtabbar.style.visibility = "visible";
+                }
+            },500);
         }
 
         function carouselPostChange(event) {
@@ -242,6 +270,7 @@
         }
 
         function bindScaleParameters(question) {
+            vm.scaleQuestions.push(question);
             var keys = Object.keys(question.options);
             if (keys.length != 2) {
                 console.log("Option size should be 2, is " + keys.length);
@@ -251,6 +280,25 @@
                 $scope.minCaption = question.options[keys[0]].caption;
                 $scope.maxText = question.options[keys[1]].text;
                 $scope.maxCaption = question.options[keys[1]].caption;
+
+                // set the style of the options
+                var min = parseInt($scope.minText);
+                var max = parseInt($scope.maxText);
+                console.log(""+min+" "+max);
+                $scope.options = [];
+                var options = $scope.options;
+                for (var i = min; i <= max; i++) {
+                    options.push({text: i+"", value:i});
+                }
+                console.log($scope.options);
+                var scalewidth = $(".scale").width();
+                $scope.scalebtn = {
+                    "height": "auto",
+                    "float": "left",
+                    "text-align": "center",
+                    "width": Math.floor(100/options.length) + "\%"
+                };
+                console.log($scope.scalebtn);
             }
         }
 

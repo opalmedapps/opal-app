@@ -1,0 +1,119 @@
+<!--
+showing historical summary of selected questionnaire entity
+consists of 2 parts: global score summary, and section/question list
+ -->
+
+<ons-page ng-app="MUHCApp" ng-controller="detailedQuestionnaireSummaryController as vm">
+    <div>
+        <ons-toolbar fixed-style>
+            <div class="left">
+                <ons-back-button>{{"BACK" | translate}}</ons-back-button>
+            </div>
+            <!--<div class="center" ng-class="fontSizeTitle">Historical Summary</div>-->
+            <div class="center" ng-class="fontSizeTitle">{{ vm.questionnaire.nickname | limitTo: 20 }}
+                    {{vm.questionnaire.nickname.length > 20 ? '...' : ''}}
+            </div>
+        </ons-toolbar>
+
+        <div ng-show="loading" align="center" style="margin-top:25vh">
+            <svg class="progress-circular">
+                <circle class="progress-circular__primary" cx="50%" cy="50%" r="40%" fill="none" stroke-width="10%"
+                        stroke-miterlimit="10"/>
+            </svg>
+            <p style="margin-top: 30px">{{ "LOADING" | translate }}</p>
+        </div>
+
+        <div ng-hide="loading">
+
+            <!-- 这个就不在entitySummary出现了，去具体的scoreshistory去 -->
+            <!--<div style="margin: 10px">
+                <p>Select scoring algorothm:<p>
+                <ons-select ng-model="algorithm" id="sel_alg" ng-change="switchAlg(algorithm)">
+                  <option ng-repeat="alg in algList" value="{{alg.nickname}}">{{alg.nickname}}</option>
+                </ons-select>
+            </div>-->
+
+            <!-- global section question row -->
+
+            <!--style="margin-top: 20px"-->
+            <div class="ons-row" align="center" ng-init="global = true;">
+                <div class="ons-col" align="center">
+
+                    <!--<div style="margin:0;padding:0;" align="center">-->
+                        <!--<span style="font-size:1.1em;color:rgb(100,0,255);"><b>{{vm.entity.title}}</b></span>-->
+                        <!--</br></br>-->
+                        <!--<p>Please select a section or question to see the summary</p>-->
+                    <!--</div>-->
+
+                    <!-- 查看global history -->
+                    <!--<ons-row style="margin:0;padding:0;height:30;" align="center">
+                        <ons-col align="left" style="padding-left:10;">
+                            <div class="text-center" ng-click="vm.goToGlobalScoreHistory()">
+                              {{"GLOBAL_SUMMARY"|translate}}132
+                            </div>
+                        </ons-col>
+                    </ons-row>-->
+
+                    <!--ng-click="vm.goToGlobalScoreHistory(vm.entity)"-->
+                    <ul class="list">
+                        <ons-list-item class="list__item list__item--chevron expand">
+                            <ons-row style="margin:0;padding:0" align="center">
+                                <ons-col align="left" style="border:1px solid white;color:white" ng-click="vm.goToGlobalScoreHistory()">
+                                    <div style="line-height: 2.0;margin-top:10px;margin-bottom:10px;font-size:1.1em">
+                                        <b>Total score summary</b>
+                                    </div>
+                                </ons-col>
+                            </ons-row>
+                        </ons-list-item>
+                    </ul>
+
+                    <!-- 对每个section， -->
+                    <div ng-repeat="section in vm.historicalQuestionnaires.sections">
+
+                        <!-- 去section score summary -->
+                        <!--<div class="text-center" style="line-height: 1.4;margin-top:10px;margin-bottom:10px">
+                        <ons-row style="margin:0;padding:0;" align="center" ng-click="vm.goToSectionScoreHistory(section)">
+                            <ons-col align="left" style="border:1px solid white;color:white;style="padding-left:10;"">
+                                <div>
+                                  <span style="color:rgba(38,100,171,0.81)">Section {{$index+1}}.</span>{{section.title}}
+                                </div>
+                            </ons-col>
+                        </ons-row>
+                        </div>-->
+                        <ul class="list">
+                            <li class="list__item list__item--chevron" ng-click="vm.goToSectionScoreHistory(section)"
+                                style="background-color: #efeff4">
+                                <ons-row style="margin:0;padding:0" align="center">
+                                    <ons-col align="left" style="border:1px solid white;color:white">
+                                        <div style="line-height: 1.8;margin-top:10px;margin-bottom:10px">
+                                            <!--<span style="color:rgba(38,100,171,0.81);"><b>Section {{$index+1}}.</b></span>-->
+                                            <b>{{section.title}}</b>
+                                        </div>
+                                    </ons-col>
+                                </ons-row>
+                            </li>
+                        </ul>
+
+                        <!-- 列出每个问题，去quesiton score summary -->
+                        <ul class="list" style="width: 100vw;" ng-repeat="question in section.questions">
+
+                            <li class="list__item list__item--chevron" ng-click="vm.goToQuestionScoreHistory(section, question)">
+                                <ons-row style="margin:0;padding:0" align="center">
+                                    <ons-col align="left" style="border:1px solid white;color:white">
+                                        <div style="line-height: 1.4;margin-top:10px;margin-bottom:10px">
+                                            <!--<span style="color:rgba(38,100,171,0.81)">{{$index+1}}.</span>-->
+                                            {{question.text}}
+                                        </div>
+                                    </ons-col>
+                                </ons-row>
+                            </li>
+
+                        </ul>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</ons-page>
