@@ -1,0 +1,62 @@
+<!-- questionScoreHistory.html
+shows the historical summary of overall scores of a questionnaire entity
+ -->
+
+<ons-page ng-app="MUHCApp" ng-controller="questionScoreHistoryController as vm">
+    <ons-toolbar fixed-style>
+        <div class="left" ><ons-back-button>{{"BACK"|translate}}</ons-back-button></div>
+        <div class="center" ng-class="fontSizeTitle">Question Scores</div>
+    </ons-toolbar>
+
+    <div ng-app="MUHCApp" ng-controller="questionScoreHistoryController as vm">
+        <div ng-show="loading" align="center" style="margin-top:25vh">
+            <svg class="progress-circular">
+                <circle class="progress-circular__primary" cx="50%" cy="50%" r="40%" fill="none" stroke-width="10%" stroke-miterlimit="10"/>
+            </svg>
+            <p style="margin-top: 30px">{{ "LOADING" | translate }}</p>
+        </div>
+
+
+        <div ng-if="loading == false">
+
+            <!-- Offers two options: line graph, or histogram ng-if="loading == false"-->
+            <ons-tabbar class="shadow-2" position="top" animation="fade" style="position: fixed; margin-top: 43px; z-index: 1; height: 49px;">
+                <ons-tab class="shadow-2" style="background-color:#ECEFF1;" label='Line Chart' ng-click="vm.setLine()" icon="ion-arrow-graph-up-right" active="true"></ons-tab>
+                <ons-tab class="shadow-2" style="background-color:#ECEFF1;" label='Histogram' ng-click="vm.setHistogram()" icon="ion-stats-bars"></ons-tab>
+            </ons-tabbar>
+
+            <!-- The graph -->
+            <div class="ons-row" align="center" style="margin-top: 50px">
+                <div class="ons-col" align="center">
+                    <div id="chartArea" ng-init="vm.setLine()"></div>
+                </div>
+            </div>
+
+            <div style="height:40px">
+                <span style="margin-left:5vw;line-height=40px;">Algorithm:</span>
+                <select ng-model="algo" ng-change="vm.switchAlg(algo)" style="line-height=40px;">
+                    <option ng-repeat="alg in vm.algorithms" ng-value="alg.ser_num">{{alg.nickname}} {{alg.version}}</option>
+                </select>
+                <ons-button ng-click="vm.exportChart();" style="float:right;margin-right:5vw;height:40px;">Export Chart</ons-button>
+            </div>
+
+            <!-- Showing important information -->
+            <ons-list-header style="background-color:white;color:red;font-size:20px;line-height:25px;height:25px;">{{"Important Information"|translate}}</ons-list-header>
+            <ons-list-item ng-repeat="note in vm.importantInfo">
+                <ons-row style="margin:0;padding:0" align="center">
+                    <ons-col align="left" width="10%">
+					<span style="float: left; color: rgba(38,100,171,0.81);">
+						<i class="fa fa-flag fa-1" aria-hidden="true" style="margin-right: 5px;" ></i>
+					</span>
+                    </ons-col>
+                    <ons-col class="lucent">
+                        <div style="line-height: 1.4;margin-top:10px;margin-bottom:10px;">
+                            {{note}}
+                        </div>
+                    </ons-col>
+                </ons-row>
+            </ons-list-item>
+
+        </div>
+    </div>
+</ons-page>

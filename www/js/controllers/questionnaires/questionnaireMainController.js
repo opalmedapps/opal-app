@@ -35,6 +35,10 @@
         //vm.average = average;
         vm.choosenReaction = [{}];
         vm.skipQuestion = { 'reason': '', 'askSimilar': ''};
+        vm.currentQuestion = {};
+        vm.scaleQuestions = [];
+
+
         vm.ischeckedTest=true;
         vm.isDisabled = isDisabled;
         vm.availableReactions = [
@@ -72,6 +76,9 @@
         vm.skipQuestionClose = function() {
             carousel.next()
             skip_question.hide();
+        };
+        vm.updateCurrentQuestion = function(item) {
+            vm.currentQuestion = item.data;
         };
         vm.isCheckedFcn = isCheckedFcn;
 

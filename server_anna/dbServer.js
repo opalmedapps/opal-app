@@ -24,7 +24,7 @@ var connection = mysql.createConnection({
     user     : 'root',
     password : 'root',
     port     :  8889,
-    database : 'QuestionnaireDB_StringKeys'
+    database : 'Questionnaire_test'
 });
 
 try {

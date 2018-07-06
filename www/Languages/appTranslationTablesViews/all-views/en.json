@@ -216,6 +216,7 @@
   "QUESTIONNAIRE_IN_PROGRESS": "In Progress",
   "QUESTIONNAIRE_COMPLETED": "Completed",
   "QUESTIONNAIRE_DATE_ANSWERED": "Date Answered",
+  "QUESTIONNAIRE_LAST_COMPLETED": "Last Completed",
   "QUESTIONNAIRE_DATE_ADDED": "Date Added",
   "QUESTIONNAIRE_HOME": "Questionnaire Home",
   "QUESTIONNAIRE_NONE_NEW": "No new questionnaires.",

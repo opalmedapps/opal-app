@@ -232,6 +232,7 @@
   "QUESTIONNAIRE_IN_PROGRESS": "En cours",
   "QUESTIONNAIRE_COMPLETED": "Complété",
   "QUESTIONNAIRE_DATE_ANSWERED": "Complété",
+  "QUESTIONNAIRE_LAST_COMPLETED": "Le dernier complété",
   "QUESTIONNAIRE_DATE_ADDED": "Ajouté le ",
   "QUESTIONNAIRE_HOME": "TR_ Questionnaire Accueil",
   "QUESTIONNAIRE_NONE_NEW": "Pas de nouveaux questionnaires.",
