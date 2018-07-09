@@ -86,7 +86,7 @@ myApp.service('Questionnaires', [
                 if (type == "New") {
                     return Object.keys(newQuestionnaires).length;
                 }
-                else if (type == "In progress") {
+                else if (type == "In Progress") {
                     return Object.keys(inProgressQuestionnaires).length;
                 }
                 else if (type == "Completed") {
@@ -127,7 +127,7 @@ myApp.service('Questionnaires', [
                 if (type == 'New') {
                     return newQuestionnaires;
                 }
-                else if (type == "In progress") {
+                else if (type == "In Progress") {
                     return inProgressQuestionnaires;
                 }
                 else {

@@ -319,7 +319,7 @@
                     </div>
 
                     <!-- LARGE RANGE SCALE (SLIDER TYPE OF QUESTION)--> <!--TODO: Add visualization option check instead of hardcoding 'vm.questionTotalIndex + 1 <= 3'-->
-                    <div ng-if="item.data.question_type_category_key == 'slider' && item.data.visualization_name == 'large range'" ng-init="console.log('3------ sliderAns='+ item.data.patient_answer[0].sliderAns); vm.tempAns=item.data.patient_answer[0].sliderAns;" class="center" style="padding-left:10%">
+                    <div ng-if="item.data.question_type_category_key == 'slider' && item.data.visualization_name == 'large range'" ng-init="console.log('3------ sliderAns='+ item.data.patient_answer[0].sliderAns);console.log('1 tempAns = '+ vm.tempAns);vm.tempAns=item.data.patient_answer[0].sliderAns;" class="center" style="padding-left:10%">
 
                         <style>
 
@@ -511,8 +511,8 @@
                                 <ons-row class="maximumText2" width="40px" style="text-align: right;">
                                     <!--TODO: {{maxText}}--> 100 - {{item.data.options[0].max_caption}}
                                 </ons-row>
-                                <!--TODO: min={{minText}} max={{maxText}}-->
-                                <input type="range" min="{{min_value}}" max="{{max_value}}" ng-bind="item.data.patient_answer[0].sliderAns" string-to-number ng-model="item.data.patient_answer[0].sliderAns" class="slider2" id="myRange2" style="width: 80%; height: 90px;" ng-change="vm.removeSpanChild(); item.data.answerChangedFlag = true; vm.fixSlider(item.data);console.log("5---------");console.log(Object(item.data));">
+
+                                <input type="range" min="{{min_value}}" max="{{max_value}}" string-to-number ng-value="item.data.patient_answer[0].sliderAns" ng-model="item.data.patient_answer[0].sliderAns" ng-init="item.data.patient_answer[0].sliderAns = vm.tempAns" class="slider2" id="myRange2" style="width: 80%; height: 90px;" ng-change="vm.removeSpanChild(); item.data.answerChangedFlag = true; console.log('5---------');console.log(Object(item.data));">
                                 <ons-row class="minimumText2" width="40px" style="text-align: right;">
                                     <!--TODO: {{minText}}-->1 - {{item.data.options[0].min_caption}}
                                 </ons-row>
@@ -528,17 +528,18 @@
                                         <!--TODO: {{maxText}}--> 100 - {{item.data.options[0].max_caption}}
                                     </ons-row>
                                 <!--TODO: min={{minText}} max={{maxText}}-->
-                                <input type="range" min="{{min_value}}" max="{{max_value}}" ng-bind="item.data.patient_answer[0].sliderAns" ng-model="item.data.patient_answer[0].sliderAns" class="slider" id="myRange" style="width: 80%; height: 90px;" ng-change="vm.removeSpanChild(); item.data.answerChangedFlag = true">
+                                <input type="range" min="{{min_value}}" max="{{max_value}}" string-to-number ng-init="item.data.patient_answer[0].sliderAns = parseInt(vm.tempAns);" ng-value="vm.tempAns" ng-model="item.data.patient_answer[0].sliderAns" class="slider" id="myRange" style="width: 80%; height: 90px;" ng-change="vm.removeSpanChild(); item.data.answerChangedFlag = true;">
                                     <ons-row class="minimumText" width="40px" style="text-align: right; top: 57%; left: 77%;">
                                         <!--TODO: {{minText}}-->1 - {{item.data.options[0].min_caption}}
                                     </ons-row>
                                 </ons-col>
-                            <div class="value" >Value: &nbsp; &nbsp;{{item.data.patient_answer[0].sliderAns}}</div>
+                            <div ng-init="item.data.patient_answer[0].sliderAns=vm.tempAns" class="value" >Value: &nbsp; &nbsp;{{vm.isTemp}}{{item.data.patient_answer[0].sliderAns}}</div>
+                            <!--<div ng-show="vm.isTemp" class="value">Value:  &nbsp; {{vm.isTemp}}&nbsp;{{vm.tempAns}}</div>-->
                         </ons-row>
 
                     </div>
 
-                    <!-- SMALL RANGE SCALE (SLIDER TYPE OF QUESTION)--> <!--TODO: Add visualization option check instead of hardcoding 'vm.questionTotalIndex + 1 >= 4'-->
+                    <!-- SMALL RANGE SCALE (SLIDER TYPE OF QUESTION)-->
                     <div ng-if="item.data.question_type_category_key == 'slider' && item.data.visualization_name == 'small range'" class="center scale" style="margin-top:10px;padding-left:5vw;padding-right:5vw;">
                         <!--<ons-row style="margin-left:0px;margin-right:0px" ng-init="vm.bindScaleParameters(item.data)">
                           <ons-col width="40px" style="text-align: center; line-height: 31px;">
@@ -558,7 +559,7 @@
                                 {{op.text}}
                                 <input type="radio" value="{{op.value}}" ng-model="item.data.patient_answer[0].sliderAns" ng-change="vm.removeSpanChild(this); item.data.answerChangedFlag = true;" />
                             </div>
-                        </div>up
+                        </div>
 
                         <ons-row style="margin-left:0px;margin-right:0px;margin-top:30px;">
                             <ons-col width="40%" style="text-align: left; line-height: 31px;">
@@ -594,13 +595,13 @@
                     <div ng-if="item.data.question_type_category_key == 'textbox'" class="center" style="margin-top:10px;padding-left:5vw;padding-right:5vw;">
                         <ul class="list" ng-init="item.data.answerChangedFlag = false;">
                             <li>
-
+                                <input type="text" ng-model="item.data.patient_answer[0].text" ng-change="item.data.answerChangedFlag = true;">
                             </li>
                             <div ng-if="item.data.optional == 1" style="padding-top:3vh; background-color:#d9d9d9">
-                            </div> <!--TODO: fix skip button-->
+                            </div>
                             <li ng-if="item.data.optional == 1" class="list__item list__item--tappable" ng-style="item.data.patient_answer.indexOf('SKIPPED') > -1 ? {'background-color':'#e9e9e9'} : {'background-color':'#f9f9f9'}" ng-init="item.data.skip = true">
                                 <label class="checkbox checkbox--list-item" ng-style="item.data.patient_answer.indexOf('SKIPPED') > -1 ? {'background-color':'#e9e9e9', 'margin':'0px', 'padding':'10px'} : {'background-color':'#f9f9f9', 'margin':'0px', 'padding':'10px'}">
-                                    <input type="checkbox" name="{{'mcCheckbox'+item.data.ser_num}}" value='SKIPPED' ng-checked="" ng-click="">
+                                    <input type="checkbox" name="{{'mcCheckbox'+item.data.ser_num}}" value='SKIPPED' ng-checked="" ng-click="item.data.options[0].answer_option_ser_num='SKIPPED';item.data.patient_answer[0].text=''">
                                     <div class="checkbox__checkmark checkbox--list-item__checkmark"></div>
                                     {{"Prefer not to answer"|translate}}
                                 </label>

@@ -15,6 +15,7 @@
         vm.editQuestion = editQuestion;
         vm.submitQuestionnaire = submitQuestionnaire;
         vm.getScaleMaxValue = getScaleMaxValue;
+        vm.getMaxOfSlider = getMaxOfSlider;
 
         // vm.toggleAnswer = toggleAnswer;
 
@@ -54,6 +55,10 @@
         function editQuestion(sIndex, qIndex) {
             NavigatorParameters.setParameters({Navigator:'personalNavigator', questionnaire: vm.questionnaire, sectionIndex: sIndex, questionIndex: qIndex});
             personalNavigator.pushPage('views/personal/questionnaires/questionnaires.html',{ animation : 'slide' });
+        }
+
+        function getMaxOfSlider(question) {
+            return question.options[0].max_value;
         }
 
         function getScaleMaxValue(question) {

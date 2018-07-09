@@ -18,7 +18,7 @@
     InfoTabController.$inject = ['$timeout','$filter','$sce','NavigatorParameters'];
 
   /* @ngInject */
-    function InfoTabController($timeout,$filter,$sce) {
+    function InfoTabController($timeout,$filter,$sce,NavigatorParameters) {
         var vm = this;
         vm.title = 'InfoTabController';
         vm.view = {};
@@ -33,7 +33,7 @@
             {
                 icon:'fa-user',
                 color:'maroon',
-                name:"MYCHART" ,
+                name:"MYCHART",
                 description:"MYCHART_DESCRIPTION"
             },
             {
@@ -47,14 +47,6 @@
                 color:'Chocolate',
                 name:"EDUCATION",
                 description:"EDUCATION_DESCRIPTION"
-            },
-            {
-                icon:'fa-question',
-                color:'SteelBlue',
-                // change to question.questionTypeCategory... (question type) - question.visOpt... (visualization option)
-                name: personalNavigator.getCurrentPage().options.question.question_type_category_key, //"QUESTION TYPE - VISUALISATION OPTION",
-                // change to question.information
-                description: personalNavigator.getCurrentPage().options.question.information,//"This paragraph explains how to answer this question type."
             }
         ];
 
@@ -63,13 +55,28 @@
         ////////////////
 
         function activate() {
-            if((typeof personalNavigator.getCurrentPage() !== "undefined") && (personalNavigator.getCurrentPage().options.isQuest === true)) {
+            console.log("infoTabController activate()");
+            var personalNavigator = NavigatorParameters.getNavigator();
+            console.log(typeof personalNavigator);
+            if((typeof personalNavigator.getCurrentPage()) !== "undefined" && personalNavigator.getCurrentPage().options.isQuest === true) {
+                console.log("not undefined");
+                console.log(personalNavigator.getCurrentPage());
+                views = [
+                    {
+                        icon:'fa-question',
+                        color:'SteelBlue',
+                        // change to question.questionTypeCategory... (question type) - question.visOpt... (visualization option)
+                        name: personalNavigator.getCurrentPage().options.question.question_type_category_key, //"QUESTION TYPE - VISUALISATION OPTION",
+                        // change to question.information
+                        description: personalNavigator.getCurrentPage().options.question.information,//"This paragraph explains how to answer this question type."
+                    }
+                ];
                 vm.view = views[views.length-1];
-                vm.view.description = $filter('translate')(vm.view.description );
+                vm.view.description = $filter('translate')(vm.view.description);
             } else {
                 var tab=tabbar.getActiveTabIndex();
                 vm.view = views[tab];
-                vm.view.description = $filter('translate')(vm.view.description );
+                vm.view.description = $filter('translate')(vm.view.description);
             }
 
         }

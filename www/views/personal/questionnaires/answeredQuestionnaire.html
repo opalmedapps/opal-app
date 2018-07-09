@@ -35,7 +35,7 @@
                       <i ng-if="question.showAnswer" class="ion-chevron-up" style="padding-left: 2vw"></i>
                     </span>
                                 <span ng-if="question.patient_answer.length == 1 && question.question_type_category_key == 'slider' && question.patient_answer.indexOf('SKIPPED') == -1" style="float: right; color: rgba(38,100,171,0.81);">
-                      {{question.patient_answer[0]}}/{{vm.getScaleMaxValue(question)}}
+                      {{question.patient_answer[0].sliderAns}}/{{vm.getMaxOfSlider(question)}}
                     </span>
                                 <span ng-if="question.patient_answer.length == 1 && question.question_type_category_key == 'slider' && question.patient_answer.indexOf('SKIPPED') > -1" style="float: right; color: rgba(38,100,171,0.81);">
                       <i>{{"SKIPPED"|translate}}</i>
