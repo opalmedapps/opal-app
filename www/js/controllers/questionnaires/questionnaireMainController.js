@@ -115,7 +115,7 @@
         function activate() {
 
             var params = NavigatorParameters.getParameters();
-
+            vm.checkboxSavingIndex = 0;
             vm.questionnaire = params.questionnaire;
             console.log("IN ACTIVATE() IN QUESTIONAIREMAINCONTROLLER: " + Object(params));
             console.log(vm.questionnaire);
@@ -485,6 +485,12 @@
                     Questionnaires.saveQuestionnaireAnswer(vm.questionnaire.qp_ser_num, question.ser_num, question.patient_answer[0].sliderAns, question.options[0].answer_option_ser_num, question.question_type_category_key, vm.questionnaire.sections[vm.sectionIndex].section_ser_num);
                 } else if(question.question_type_category_key == 'textbox') {
                     Questionnaires.saveQuestionnaireAnswer(vm.questionnaire.qp_ser_num, question.ser_num, question.patient_answer[0].text, question.options[0].answer_option_ser_num, question.question_type_category_key, vm.questionnaire.sections[vm.sectionIndex].section_ser_num);
+                }  else if(question.question_type_category_key == 'checkbox') {
+                    var toReturn = [];
+                    for(var i = 0; i<question.patient_answer.length;i++) {
+                        toReturn.push(question.options[question.patient_answer[i].AnsSerNum].answer_option_ser_num);
+                    }
+                    Questionnaires.saveQuestionnaireAnswer(vm.questionnaire.qp_ser_num, question.ser_num, -1, toReturn, question.question_type_category_key, vm.questionnaire.sections[vm.sectionIndex].section_ser_num);
                 } else {
                     for (var i = 0; i < question.patient_answer.length; i++) {
                         Questionnaires.saveQuestionnaireAnswer(vm.questionnaire.qp_ser_num, question.ser_num, -1, question.options[question.patient_answer[i]].answer_option_ser_num, question.question_type_category_key, vm.questionnaire.sections[vm.sectionIndex].section_ser_num);
@@ -571,7 +577,17 @@
                 console.log("tmpAnswer = " + Object(vm.tmpAnswer));
             } else { // is newly selected
                 question.answerChangedFlag = true;
-                question.patient_answer.push(optionKey);
+                //question.patient_answer.push(optionKey);
+                // push answer to answer array
+                //question.patient_answer[vm.checkboxSavingIndex].AnsSerNum=optionKey;
+                if(vm.checkboxSavingIndex==0) {
+                    question.patient_answer[0].AnsSerNum=optionKey;
+                } else {
+                    question.patient_answer.push({'AnsSerNum':optionKey});
+                }
+                vm.checkboxSavingIndex++;
+                console.log("Answer array");
+                console.log(Object(question.patient_answer));
                 vm.checkedNumber++;
                 console.log("In else, checkedNumber = "+vm.checkedNumber);
                 console.log("Object after push in if else else is "+Object(question.patient_answer));
