@@ -412,8 +412,6 @@
                     "width": Math.floor(100/options.length) + "\%"
                 };
                 console.log($scope.scalebtn);
-                console.log("2-------------- sliderAns = " + question.patient_answer[0].sliderAns);
-                question.patient_answer[0].sliderAns = vm.tempAns;
             // }
 
         }
