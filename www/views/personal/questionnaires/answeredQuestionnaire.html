@@ -34,18 +34,37 @@
                       <i ng-if="!question.showAnswer" class="ion-chevron-down" style="padding-left: 2vw"></i>
                       <i ng-if="question.showAnswer" class="ion-chevron-up" style="padding-left: 2vw"></i>
                     </span>
+                                <!--Slider-->
                                 <span ng-if="question.patient_answer.length == 1 && question.question_type_category_key == 'slider' && question.patient_answer.indexOf('SKIPPED') == -1" style="float: right; color: rgba(38,100,171,0.81);">
                       {{question.patient_answer[0].sliderAns}}/{{vm.getMaxOfSlider(question)}}
                     </span>
                                 <span ng-if="question.patient_answer.length == 1 && question.question_type_category_key == 'slider' && question.patient_answer.indexOf('SKIPPED') > -1" style="float: right; color: rgba(38,100,171,0.81);">
                       <i>{{"SKIPPED"|translate}}</i>
                     </span>
-                                <span ng-if="question.patient_answer.length == 1 && question.question_type_category_key != 'slider' && question.patient_answer.indexOf('SKIPPED') > -1" style="float: right; color: rgba(38,100,171,0.81);">
+                    </span>
+                                <!--Textbox-->
+                                <span ng-if="question.patient_answer.length == 1 && question.question_type_category_key == 'textbox' && question.patient_answer.indexOf('SKIPPED') > -1" style="float: right; color: rgba(38,100,171,0.81);">
                       <i>{{"SKIPPED"|translate}}</i>
                     </span>
-                                <span ng-if="question.patient_answer.length == 1 && question.question_type_category_key != 'slider' && question.patient_answer.indexOf('SKIPPED') == -1" style="float: right; color: rgba(38,100,171,0.81);">
-                      {{question.options[""+question.patient_answer[0]].text}}
+                                <span ng-if="question.patient_answer.length == 1 && question.question_type_category_key == 'textbox' && question.patient_answer.indexOf('SKIPPED') == -1" style="float: right; color: rgba(38,100,171,0.81);">
+                      {{question.patient_answer[0].text}}
                     </span>
+                                <!--Multiple choice-->
+                                <span ng-if="question.patient_answer.length == 1 && question.question_type_category_key == 'multiple choice' && question.patient_answer.indexOf('SKIPPED') > -1" style="float: right; color: rgba(38,100,171,0.81);">
+                      <i>{{"SKIPPED"|translate}}</i>
+                    </span>
+                                <span ng-if="question.patient_answer.length == 1 && question.question_type_category_key == 'multiple choice' && question.patient_answer.indexOf('SKIPPED') == -1" style="float: right; color: rgba(38,100,171,0.81);">
+                      {{question.options[question.patient_answer[0].MCAnswerOptionSerNum].mc_text}}
+                    </span>
+                                <!--Checkbox-->
+                                <span ng-if="question.patient_answer.length == 1 && question.question_type_category_key == 'checkbox' && question.patient_answer.indexOf('SKIPPED') > -1" style="float: right; color: rgba(38,100,171,0.81);">
+                      <i>{{"SKIPPED"|translate}}</i>
+                    </span>
+                                <div ng-repeat="answer in question.patient_answer">
+                                    <span ng-if="question.patient_answer.length == 1 && question.question_type_category_key == 'checkbox' && question.patient_answer.indexOf('SKIPPED') == -1" style="float: right; color: rgba(38,100,171,0.81);">
+                          {{question.options[answer.AnsSerNum].checkbox_text}}
+                                        </span>
+                                </div>
                             </ons-col>
                         </ons-row>
                     </li>
