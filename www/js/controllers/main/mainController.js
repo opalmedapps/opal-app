@@ -136,6 +136,8 @@
                     }
                 });
 
+                // forceShow: "true" in Android will allow push notification to appear even when app is running
+
                 var push = PushNotification.init({
                     ios: {
                         alert: true,
@@ -151,9 +153,10 @@
                 });
 
                 push.on('notification', function (data) {
-                    // if (ons.platform.isIOS() && data.additionalData.foreground) {
-                    //     // show Banner
-                    // }
+                    if (ons.platform.isIOS() && data.additionalData.foreground) {
+                        // on iOS, it will allow push notification to appear when app is running
+                        NewsBanner.showCustomBanner("Notification: " + data.title + " \n" + data.message, '#333333', function(){}, 9000);
+                    }
                 });
                 push.on('error', function (e) {
                 });
@@ -162,7 +165,6 @@
                 });
             }
         }
-
 
         /*****************************************
          * Data wipe  - onPause event is triggered when the app goes in the background (switch apps on a device)
