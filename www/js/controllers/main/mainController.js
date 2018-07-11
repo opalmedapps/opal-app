@@ -161,9 +161,8 @@
                 push.on('notification', function (data) {
                     if (ons.platform.isIOS() && data.additionalData.foreground) {
                         // on iOS, it will allow push notification to appear when app is running
-                        $cordovaVibration.vibrate();
-                        NewsBanner.showCustomBanner(data.title + " \n" + data.message, '#333333', function(){}, 9000);
-                        navigator.vibrate(3000);
+                        NewsBanner.showCustomBanner(data.title + "\n" + data.message, '#333333', function(){}, 9000);
+                        $cordovaVibration.vibrate(3000);
                     }
                 });
                 push.on('error', function (e) {
