@@ -28,8 +28,6 @@
         vm.numQuestions = 0;
         vm.summaryPage = summaryPage;
         vm.sectionEnds = [];
-        vm.tempAns;
-        vm.fixSlider = fixSlider;
         vm.bindScaleParameters = bindScaleParameters;
         vm.removeSpanChild = removeSpanChild;
         //vm.average = average;
@@ -37,10 +35,11 @@
         vm.skipQuestion = { 'reason': '', 'askSimilar': ''};
         vm.currentQuestion = {};
         vm.scaleQuestions = [];
-
-
-        vm.ischeckedTest=true;
+        vm.tempAns= 1;
+        vm.totalNumberOfQuestions = 0;
+        vm.ischeckedTest=false;
         vm.isDisabled = isDisabled;
+        // vm.isTemp = true;
         vm.availableReactions = [
             {'type': 'emotion-good', 'reaction': 'reaction-happy', 'text': 'Happy'},
             {'type': 'emotion-good', 'reaction': 'reaction-hopeful', 'text': 'Hopeful'},
@@ -82,6 +81,8 @@
         };
         vm.isCheckedFcn = isCheckedFcn;
 
+        // vm.fixSliderValue = fixSliderValue();
+
         vm.exists = function(item) {
             return vm.selected.indexOf(item)>-1;
         }
@@ -114,11 +115,17 @@
         function activate() {
 
             var params = NavigatorParameters.getParameters();
-
+            vm.checkboxSavingIndex = 0;
             vm.questionnaire = params.questionnaire;
             console.log("IN ACTIVATE() IN QUESTIONAIREMAINCONTROLLER: " + Object(params));
             console.log(vm.questionnaire);
             vm.carouselItems = flattenQuestionnaire(); // questions + section headers
+
+            for(var i=0;i<vm.questionnaire.sections.length; i++) {
+                for(var j=0; j<vm.questionnaire.sections[i].questions.length;j++) {
+                    vm.totalNumberOfQuestions++;
+                }
+            }
             vm.questionnaireStart = true;
             vm.sectionIndex = 0;
             vm.questionIndex = 0; // index within the section
@@ -134,7 +141,8 @@
 
             // if in progress, find spot patient left off at
             vm.startIndex = 0;
-            if (vm.questionnaire.status == 'In progress' && !vm.editQuestion) {
+            if (vm.questionnaire.status == 'In Progress' && !vm.editQuestion) {
+                console.log("In if");
                 vm.sectionIndex = -1;
                 vm.startIndex++;
                 for (var i = 0; i<vm.questionnaire.sections.length; i++) {
@@ -146,6 +154,7 @@
                     for (var j = 0; j<vm.questionnaire.sections[i].questions.length; j++) {
                         // as soon as find a question with no answer
                         console.log("BEFORE IF IN ACTIVATE");
+
                         if ((vm.questionnaire.sections[i].questions[j].patient_answer.length === 0) || (vm.questionnaire.sections[i].questions[j].patient_answer[0]==-1)) {
                             console.log("no answer to question: " + (j+1));
                             // console.log("sectionIndex is: " + vm.sectionIndex);
@@ -153,6 +162,12 @@
                             vm.maxQuestionIndex = vm.questionnaire.sections[vm.sectionIndex].questions.length-1;
                             i = vm.questionnaire.sections.length;
                             break;
+                        } else {
+                            if((vm.questionnaire.sections[i].questions[j].question_type_category_key == "slider") && (vm.questionnaire.sections[i].questions[j].visualization_name == 'large range')) {
+                            vm.tempAns = vm.questionnaire.sections[i].questions[j].patient_answer[0].sliderAns;
+                            console.log("Changing vm.tempAns to " + vm.tempAns);
+                            console.log(vm.questionnaire);
+                            }
                         }
                         if(vm.questionIndex<vm.maxQuestionIndex){
                             vm.questionIndex++;
@@ -171,7 +186,7 @@
                 console.log("AFTER THE FOR LOOP FOR SECTIONS, vm.questionIndex = " + vm.questionIndex);
             }
             // if in progress and came from summary page to edit question
-            else if (vm.questionnaire.status == 'In progress' && vm.editQuestion) {
+            else if (vm.questionnaire.status == 'In Progress' && vm.editQuestion) {
                 vm.questionTotalIndex=0;
                 vm.startIndex++;
                 for (var i = 0; i<vm.questionnaire.sections.length; i++) {
@@ -200,12 +215,7 @@
 
             vm.portraitOrientationCheck = window.matchMedia("(orientation: portrait)");
             vm.portraitOrientationCheck.addListener(setLayoutByOrientation);
-        }
 
-        function fixSlider(question){
-            console.log("in fixSlider sliderAns=" + question.patient_answer[0].sliderAns + " and tempAns" + vm.tempAns);
-            console.log("in fixSlider");
-            question.patient_answer[0].sliderAns = vm.tempAns;
         }
 
         // reset all the scale styles once screen is rotated
@@ -241,7 +251,7 @@
             //console.log($scope.carousel.getActiveCarouselItemIndex());
             // going from questionnaire header page to first section
             if (event.lastActiveIndex == 0) {
-                if(vm.questionnaire.status == 'In progress' && vm.isResume){
+                if(vm.questionnaire.status == 'In Progress' && vm.isResume){
                     vm.sectionIndex = 0;
                     vm.questionIndex = 0;
                     vm.questionTotalIndex = 0;
@@ -260,9 +270,10 @@
                 // coming from question, going to question
                 if (event.lastActiveIndex > 0 && vm.carouselItems[event.lastActiveIndex-1].type == 'question' && vm.carouselItems[event.activeIndex-1].type == 'question') {
                     vm.questionTotalIndex++;
+                    console.log("testing for textbox");
                     saveAnswer(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex]);
                     vm.questionIndex++;
-                    console.log('HERE1 ' + vm.questionTotalIndex + "and questionIndex = " + vm.questionIndex);
+                    console.log('questTotalIndex = ' + vm.questionTotalIndex + " and questionIndex = " + vm.questionIndex);
                     vm.isQuestion = true;
                     console.log('Merge question is: ' + Object(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex]));
                 }
@@ -274,7 +285,7 @@
                     console.log("vm.sectionIndex="+vm.sectionIndex+ " and vm.questionIndex=" + vm.questionIndex);
                     if(vm.sectionIndex < vm.questionnaire.sections.length-1){
                         vm.sectionIndex++;
-                        console.log('HERE1 ' + vm.sectionIndex);
+                        console.log('HERE1 sectionIndex= ' + vm.sectionIndex);
                     } else {
                         console.log("BUG BUG BUG: sectionIndex becomes too large!");
                     }
@@ -285,7 +296,6 @@
                 } else if (event.lastActiveIndex > 0 && vm.carouselItems[event.lastActiveIndex-1].type == 'header' && vm.carouselItems[event.activeIndex-1].type == 'question') {
                     vm.isQuestion = true;
                 }
-
             }
             // if left swipe
             else if (event.activeIndex - event.lastActiveIndex < 0) {
@@ -334,9 +344,10 @@
 
         function summaryPage() {
             console.log(vm.startIndex);
-            if (vm.startIndex > -1) {
+            console.log("section: " + vm.sectionIndex + " and question: " + vm.questionIndex);
+                console.log("saving in summary page: " + vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex]);
                 saveAnswer(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex]);
-            }
+
             removeListener();
             // go to summary page
             NavigatorParameters.setParameters({Navigator:'personalNavigator', questionnaire: vm.questionnaire});
@@ -401,11 +412,14 @@
                     "width": Math.floor(100/options.length) + "\%"
                 };
                 console.log($scope.scalebtn);
-                console.log("2-------------- sliderAns = " + question.patient_answer[0].sliderAns);
-                vm.tempAns=question.patient_answer[0].sliderAns
             // }
 
         }
+
+        // function fixSliderValue(question){
+        //     console.log("2 tempAns = "+ vm.tempAns);
+        //     question.patient_answer[0].sliderAns = vm.tempAns;
+        // }
 
         function removeSpanChild() {
             // angular automatically creates an annoying span element with the current value
@@ -465,16 +479,36 @@
                 console.log("saveanswer()");
                 console.log("patient answer is: " + Object(question.patient_answer));
                 if(question.question_type_category_key == 'slider'){
-                    Questionnaires.saveQuestionnaireAnswer(vm.questionnaire.qp_ser_num, question.ser_num, question.patient_answer[0].sliderAns, question.options[0].answer_option_ser_num, question.question_type_category_key, vm.questionnaire.sections[vm.sectionIndex].section_ser_num);
-                } else {
-                    for (var i = 0; i < question.patient_answer.length; i++) {
-                        // TODO: add question.type; for slider answeroptionsernum;
-                        Questionnaires.saveQuestionnaireAnswer(vm.questionnaire.qp_ser_num, question.ser_num, -1, question.options[question.patient_answer[i]].answer_option_ser_num, question.question_type_category_key, vm.questionnaire.sections[vm.sectionIndex].section_ser_num);
+                    if(vm.tempAns !== 50 && question.patient_answer[0].sliderAns == 50) {
+                        question.patient_answer[0].sliderAns = vm.tempAns;
                     }
+                    Questionnaires.saveQuestionnaireAnswer(vm.questionnaire.qp_ser_num, question.ser_num, question.patient_answer[0].sliderAns, question.options[0].answer_option_ser_num, question.question_type_category_key, vm.questionnaire.sections[vm.sectionIndex].section_ser_num);
+                } else if(question.question_type_category_key == 'textbox') {
+                    Questionnaires.saveQuestionnaireAnswer(vm.questionnaire.qp_ser_num, question.ser_num, question.patient_answer[0].text, question.options[0].answer_option_ser_num, question.question_type_category_key, vm.questionnaire.sections[vm.sectionIndex].section_ser_num);
+                }  else if(question.question_type_category_key == 'checkbox') {
+                    var toReturn = {};
+                    for(var i = 0; i<question.patient_answer.length;i++) {
+                        var temp = jsObjects.filter(question.options = function() {
+                            return question.options.answer_option_ser_num == question.patient_answer[0].CheckboxAnswerOptionSerNum
+                        });
+                        toReturn.push(temp);
+                        console.log("toReturn = ");
+                        console.log(Object(toReturn));
+                    }
+                    Questionnaires.saveQuestionnaireAnswer(vm.questionnaire.qp_ser_num, question.ser_num, -1, toReturn, question.question_type_category_key, vm.questionnaire.sections[vm.sectionIndex].section_ser_num);
+                } else {
+                   // for (var i = 0; i < question.patient_answer.length; i++) {
+                        // var patientAnswers = jsObjects.filter(question.options = function() {
+                        //     return question.options.answer_option_ser_num == question.patient_answer[0].MCAnswerOptionSerNum
+                        // });z
+                        console.log("about to call save quest answer");
+                        console.log(question);
+                        Questionnaires.saveQuestionnaireAnswer(vm.questionnaire.qp_ser_num, question.ser_num, -1, vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex].options[question.patient_answer[0]].answer_option_ser_num, question.question_type_category_key, vm.questionnaire.sections[vm.sectionIndex].section_ser_num);
+                   // }
                 }
                 if (vm.questionnaire.status == 'New') {
-                    Questionnaires.updateQuestionnaireStatus(vm.questionnaire.qp_ser_num, 'In progress');
-                    vm.questionnaire.status = "In progress";
+                    Questionnaires.updateQuestionnaireStatus(vm.questionnaire.qp_ser_num, 'In Progress');
+                    vm.questionnaire.status = "In Progress";
                 }
             }
         }
@@ -553,7 +587,18 @@
                 console.log("tmpAnswer = " + Object(vm.tmpAnswer));
             } else { // is newly selected
                 question.answerChangedFlag = true;
-                question.patient_answer.push(optionKey);
+                //question.patient_answer.push(optionKey);
+                // push answer to answer array
+                //question.patient_answer[vm.checkboxSavingIndex].AnsSerNum=optionKey;
+                if(vm.checkboxSavingIndex==0) {
+                    question.patient_answer = {};
+                    question.patient_answer[0].CheckboxAnswerOptionSerNum=optionKey;
+                } else {
+                    question.patient_answer.push({'CheckboxAnswerOptionSerNum':optionKey});
+                }
+                vm.checkboxSavingIndex++;
+                console.log("Answer array");
+                console.log(Object(question.patient_answer));
                 vm.checkedNumber++;
                 console.log("In else, checkedNumber = "+vm.checkedNumber);
                 console.log("Object after push in if else else is "+Object(question.patient_answer));

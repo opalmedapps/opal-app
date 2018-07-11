@@ -15,6 +15,9 @@
         vm.editQuestion = editQuestion;
         vm.submitQuestionnaire = submitQuestionnaire;
         vm.getScaleMaxValue = getScaleMaxValue;
+        vm.getMaxOfSlider = getMaxOfSlider;
+        vm.temporaryAnswer={};
+        vm.setTempAnswer = setTempAnswer;
 
         // vm.toggleAnswer = toggleAnswer;
 
@@ -24,6 +27,8 @@
         function activate() {
             var params = NavigatorParameters.getParameters();
             vm.questionnaire = params.questionnaire;
+            console.log("activate() answeredQuestionnaire");
+            console.log(vm.questionnaire);
             vm.submitAllowed = true;
             for (var i=0; i<vm.questionnaire.sections.length; i++) {
                 for (var j=0; j<vm.questionnaire.sections[i].questions.length; j++) {
@@ -56,9 +61,32 @@
             personalNavigator.pushPage('views/personal/questionnaires/questionnaires.html',{ animation : 'slide' });
         }
 
+        function getMaxOfSlider(question) {
+            return question.options[0].max_value;
+        }
+
         function getScaleMaxValue(question) {
             var keys = Object.keys(question.options);
             return question.options[keys[1]].text;
+        }
+
+        function setTempAnswer(question) {
+            console.log("setTempAnswer ");
+            console.log(Object(question));
+            var elem = {};
+                if(question.question_type_category_key == 'checkbox') {
+                for (var i = 0; i < question.patient_answer.length; i++) {
+                    var temp = question.options.filter(elem => elem.answer_option_ser_num == question.patient_answer[0].CheckboxAnswerOptionSerNum);
+                    question.temporaryAnswer = Object.assign({},vm.temporaryAnswer,temp);
+                }
+            } else { // multiple choice
+                for (var i = 0; i < question.options.length; i++) {
+                    if(question.options[i].answer_option_ser_num == question.patient_answer[0].MCAnswerOptionSerNum){
+                        question.temporaryAnswer = question.options[i];
+                    }
+                }
+            }
+
         }
 
     }

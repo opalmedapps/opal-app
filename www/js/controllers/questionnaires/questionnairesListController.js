@@ -19,7 +19,7 @@ app.controller('questionnairesListController', [
             Questionnaires.requestQuestionnaires()
                 .then(function () {
                     $scope.newQuestionnaireList = Questionnaires.getQuestionnaires('New');
-                    $scope.inProgressQuestionnaireList = Questionnaires.getQuestionnaires('In progress');
+                    $scope.inProgressQuestionnaireList = Questionnaires.getQuestionnaires('In Progress');
                     $scope.completedQuestionnaireList = Questionnaires.getQuestionnaires('Completed');
                     $scope.summaryQuestionnaireList = [];
                     var questionnairesByName = Questionnaires.getByQuestionnaireName();

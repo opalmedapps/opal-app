@@ -5,7 +5,7 @@
         </div>
         <div class="center">{{"SUMMARY_PAGE"|translate}}</div>
         <div class="right">
-          <span ng-if="vm.questionnaire.status == 'In progress'" class="toolbar-button--quiet navigation-bar__line-height" ng-click="vm.submitQuestionnaire();" ng-disabled="!vm.submitAllowed">
+          <span ng-if="vm.questionnaire.status == 'In Progress'" class="toolbar-button--quiet navigation-bar__line-height" ng-click="vm.submitQuestionnaire();" ng-disabled="!vm.submitAllowed">
             {{"SUBMIT"|translate}}
           </span>
         </div>
@@ -22,7 +22,8 @@
                     </ons-col>
                 </ons-row>
                 <ul class="list" style="width: 100vw;" ng-repeat="question in section.questions">
-                    <li class="list__item" ng-init="question.showAnswer = false;" ng-click="vm.editQuestion($parent.$index,$index)" ng-style="question.optional == 0 && question.patient_answer.length == 0 && {'background-color': 'red'}">
+                    <li class="list__item" ng-init="question.showAnswer = false;" ng-style="question.optional == 0 && question.patient_answer.length == 0 && {'background-color': 'red'}">
+                        <!--ng-click="vm.editQuestion($parent.$index,$index)" in li just above-->
                         <ons-row style="margin:0;padding:0" align="center">
                             <ons-col align="left" style="border:1px solid white;color:white">
                                 <div style="line-height: 1.4;margin-top:10px;margin-bottom:10px">
@@ -30,41 +31,56 @@
                                 </div>
                             </ons-col>
                             <ons-col align="center" width="30%">
-                    <span ng-if="question.patient_answer.length > 1" style="float: right; color: rgba(38,100,171,0.81);" ng-click="question.showAnswer = !question.showAnswer">
+                    <span ng-if="question.question_type_category_key != 'slider'" style="float: right; color: rgba(38,100,171,0.81);" ng-click="question.showAnswer=question.showAnswer? false: true">
                       <i ng-if="!question.showAnswer" class="ion-chevron-down" style="padding-left: 2vw"></i>
-                      <i ng-if="question.showAnswer" class="ion-chevron-up" style="padding-left: 2vw"></i>
+                      <i ng-if="question.showAnswer" class="ion-chevron-up" style="padding-left: 2vw" ></i>
                     </span>
+                                <!--Slider-->
                                 <span ng-if="question.patient_answer.length == 1 && question.question_type_category_key == 'slider' && question.patient_answer.indexOf('SKIPPED') == -1" style="float: right; color: rgba(38,100,171,0.81);">
-                      {{question.patient_answer[0]}}/{{vm.getScaleMaxValue(question)}}
+                      {{question.patient_answer[0].sliderAns}}/{{vm.getMaxOfSlider(question)}}
                     </span>
                                 <span ng-if="question.patient_answer.length == 1 && question.question_type_category_key == 'slider' && question.patient_answer.indexOf('SKIPPED') > -1" style="float: right; color: rgba(38,100,171,0.81);">
                       <i>{{"SKIPPED"|translate}}</i>
                     </span>
-                                <span ng-if="question.patient_answer.length == 1 && question.question_type_category_key != 'slider' && question.patient_answer.indexOf('SKIPPED') > -1" style="float: right; color: rgba(38,100,171,0.81);">
-                      <i>{{"SKIPPED"|translate}}</i>
-                    </span>
-                                <span ng-if="question.patient_answer.length == 1 && question.question_type_category_key != 'slider' && question.patient_answer.indexOf('SKIPPED') == -1" style="float: right; color: rgba(38,100,171,0.81);">
-                      {{question.options[""+question.patient_answer[0]].text}}
                     </span>
                             </ons-col>
                         </ons-row>
                     </li>
                     <!-- Eye preview -->
-                    <li ng-show="question.showAnswer" style="background:white;color:rgba(38,100,171,0.81);padding:5px 5px 0 5px;border:1px solid lightgrey">
+                    <li ng-show="question.showAnswer" style="background:white;color:rgba(38,100,171,0.81);padding:5px 5px 0px 5px;">
                         <div class="item" >
                             <div ng-repeat="answer in question.patient_answer">
-                    <span ng-if="question.question_type_category_key == 'slider'">
-                      {{answer}}
+
+                                <!--Textbox-->
+                                <span ng-if="question.question_type_category_key == 'textbox' && (question.options[0].answer_option_ser_num == 'SKIPPED'||question.patient_answer[0].Skipped=='1') && question.patient_answer[0].text==''" style="float: right; color: rgba(38,100,171,0.81);">
+                      <i>{{"SKIPPED"|translate}}</i>
                     </span>
-                                <span ng-if="question.question_type_category_key != 'slider'">
-                      {{question.options[""+answer].text}}
+                                <span ng-if="question.question_type_category_key == 'textbox' && question.patient_answer.indexOf('SKIPPED') == -1" style="float: right; color: rgba(38,100,171,0.81);display:block;width:100%;word-wrap:break-word;">
+                        {{question.patient_answer[0].text}}
                     </span>
+                                <!--Multiple choice-->
+                                <span ng-if="question.question_type_category_key == 'multiple choice' && question.patient_answer.indexOf('SKIPPED') > -1" style="float: right; color: rgba(38,100,171,0.81);">
+                      <i>{{"SKIPPED"|translate}}</i>
+                    </span>
+                                <span ng-if="question.question_type_category_key == 'multiple choice' && question.patient_answer.indexOf('SKIPPED') == -1" style="float: right; color: rgba(38,100,171,0.81);" ng-init="vm.setTempAnswer(question);">
+                        {{question.temporaryAnswer.mc_text}}
+                    </span>
+                                <!--Checkbox-->
+                                <span ng-if="question.question_type_category_key == 'checkbox' && question.patient_answer.indexOf('SKIPPED') > -1" style="float: right; color: rgba(38,100,171,0.81);">
+                      <i>{{"SKIPPED"|translate}}</i>
+                    </span>
+                                <div ng-repeat="answer in question.patient_answer">
+                                    <span ng-if="question.question_type_category_key == 'checkbox' && question.patient_answer.indexOf('SKIPPED') == -1" style="float: right; color: rgba(38,100,171,0.81);" ng-init="vm.temporaryAnswer={};vm.setTempAnswer(question)">
+                        {{question.temporaryAnswer.checkbox_text}}
+                                        </span>
+                                </div>
+
                             </div>
                         </div>
                     </li>
                 </ul>
             </div>
-            <div ng-if="vm.questionnaire.status == 'In progress'" class="card">
+            <div ng-if="vm.questionnaire.status == 'In Progress'" class="card">
                 <button type="button" class="btn" style="width: 100%; color:white; background-color:rgba(38,100,171,0.81)" ng-click="vm.submitQuestionnaire();" ng-disabled="!vm.submitAllowed">
                     <h4> {{"SUBMIT_QUESTIONNAIRE"|translate}} </h4>
                 </button>
