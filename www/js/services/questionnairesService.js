@@ -302,14 +302,14 @@ myApp.service('Questionnaires', [
                 return historicalQuestionnaires;
             },
 
-            requestHistoricalQuestionnaires(questionnaireTitle) {
+            requestHistoricalQuestionnaires(questionnaireSerNum) {
                 var deferred = $q.defer();
                 historicalQuestionnaires = [];
                 var _this = this;
 
                 RequestToServer.sendRequestWithResponse('HistoricalQuestionnaires', {
-                    questionnaireTitle: questionnaireTitle,
-                    language: 'ENG' // UserPreferences.getLanguage()
+                    questionnaire_ser_num: questionnaireSerNum,
+                    language: UserPreferences.getLanguage()
                 })
                     .then(function (response) {
                             historicalQuestionnaires = response.Data;

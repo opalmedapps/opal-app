@@ -14,76 +14,91 @@ app.controller('detailedQuestionnaireSummaryController', [
         $scope.loading = true;
 
         var vm = this;
-        // vm.entity.sections.question
-        // vm.goToGlobalScoreHistory()
-        // vm.goToSectionScoreHistory(section)
-        // vm.goToQuestionScoreHistory(question)
-        vm.expandTotalScore = false;
-        vm.expandSectionScore = false;
-        vm.expandSectionScores = [];
-        vm.expandQuestionScore = false;
-        vm.historicalQuestionnaires = [];
+        $scope.historicalQuestionnaires = [];
         vm.questionnaireScores = [];
         vm.importantInfo = [];
+        vm.expandTotalScore = false;
+        vm.expandedQuestionLists = [];
         vm.algorithms = []; // {ser_num, nickname, version}
-        vm.chart = {};
+
 
         activate();
 
         function activate() {
-            $scope.line = false;
-            $scope.histogram = false;
-            var default_alg = {ser_num: "default", title: $filter('translate')("Default"), nickname: $filter('translate')("Default")};
+            var default_alg = {
+                ser_num: "default",
+                title: $filter('translate')("Default"),
+                nickname: $filter('translate')("Default")
+            };
             $scope.algo = "default";
             var params = NavigatorParameters.getParameters();
             vm.questionnaire = params.questionnaire;
-            Questionnaires.requestHistoricalQuestionnaires(vm.questionnaire.title)
+            Questionnaires.requestHistoricalQuestionnaires(vm.questionnaire.questionnaire_ser_num)
                 .then(function () {
-                    vm.historicalQuestionnaires = Questionnaires.getHistoricalQuestionnaires();
-                    // for (section in vm.historicalQuestionnaires.sections) {
-                    //     vm.historicalQuestionnaires.sections[section].isExpanded  = false;
-                    //     for (question in vm.historicalQuestionnaires.sections[section].questions) {
-                    //         vm.historicalQuestionnaires.sections[section].questions[question].isExpanded  = false;
-                    //     }
-                    // }
+                    $scope.historicalQuestionnaires = Questionnaires.getHistoricalQuestionnaires();
+                    vm.questionnaireScores = $scope.historicalQuestionnaires.scoresForQuestionnaire;
+                    var questionnaireScores = [];
+                    for (var questionnaire in $scope.historicalQuestionnaires.scoresForQuestionnaire) {
+                        var dateScore = [];  //array to store pairs of [date, score]
+                        dateScore[0] = Date.parse($scope.historicalQuestionnaires.scoresForQuestionnaire[questionnaire].last_updated);
+                        dateScore[1] = parseFloat($scope.historicalQuestionnaires.scoresForQuestionnaire[questionnaire].score);
+                        questionnaireScores.push(dateScore);
+                    }
+                    $scope.historicalQuestionnaires.scoresForQuestionnaire = questionnaireScores;
 
-                    for (section in vm.historicalQuestionnaires.sections) {
-                        vm.expandSectionScores.push(false);
+                    for (var section in $scope.historicalQuestionnaires.sections) {
+                        var reformedData = [];
+                        for (var i = 0; i < $scope.historicalQuestionnaires.sections[section].scoresForSection.length; i++) {
+                            var dateScore = [];  //array to store pairs of [date, score]
+                            dateScore[0] = Date.parse($scope.historicalQuestionnaires.sections[section].scoresForSection[i].last_updated);
+                            dateScore[1] = parseFloat($scope.historicalQuestionnaires.sections[section].scoresForSection[i].score);
+                            reformedData.push(dateScore);
+                        }
+                        $scope.historicalQuestionnaires.sections[section].scoresForSection = reformedData;
+                        $scope.historicalQuestionnaires.sections[section].expandSectionScores = false;
+                        vm.expandedQuestionLists.push(false);
+                        for (var question in $scope.historicalQuestionnaires.sections[section].questions) {
+                            reformedData = [];
+                            for (var j = 0; j < $scope.historicalQuestionnaires.sections[section].questions[question].scoresForQuestion.length; j++) {
+                                var dateScore = [];  //array to store pairs of [date, score]
+                                dateScore[0] = Date.parse($scope.historicalQuestionnaires.sections[section].questions[question].scoresForQuestion[j].last_updated);
+                                dateScore[1] = parseFloat($scope.historicalQuestionnaires.sections[section].questions[question].scoresForQuestion[j].score);
+                                reformedData.push(dateScore);
+                            }
+                            $scope.historicalQuestionnaires.sections[section].questions[question].scoresForQuestion = reformedData;
+                            $scope.historicalQuestionnaires.sections[section].questions[question].expandQuestionScores = false;
+                        }
                     }
 
-                    vm.questionnaireScores = vm.historicalQuestionnaires.scoresForQuestionnaire;
+                    console.log($scope.historicalQuestionnaires);
                     vm.algorithms = [default_alg].concat(params.algorithms);
-                    importantInfo();
+
+
+                    // importantInfo();
                     configureCharts();
                     vm.expandTotalScore = true;
                     $scope.loading = false;
-                    // Questionnaires.requestAlgorithms(vm.entity.ser_num)
-                    //     .then(function () {
-                    //             vm.algorithms = Questionnaires.getAlgorithms();
-                    //             $scope.loading = false;
-                    //         }
-                    //     );
                 });
         }
 
-        vm.setLine = function(scores, title, id) {
+        vm.setLine = function (scores, title, id) {
             drawLineChart(scores, title, id);
         };
 
 
-        vm.exportChart = function() {
+        vm.exportChart = function () {
             var d = new Date();
-            var timestr = d.getFullYear()+"_"+d.getMonth()+"_"+d.getDate()+"_"+d.getHours()+"_"+d.getMinutes()+"_"+d.getSeconds();
+            var timestr = d.getFullYear() + "_" + d.getMonth() + "_" + d.getDate() + "_" + d.getHours() + "_" + d.getMinutes() + "_" + d.getSeconds();
             var algstr = $("select option:selected").text();
-            var nicknamestr = (vm.entity.nickname+"_"+algstr).replace(new RegExp(' ',"g"), '_');
+            var nicknamestr = (vm.entity.nickname + "_" + algstr).replace(new RegExp(' ', "g"), '_');
             // PROBLEM: it goes through external server, offline export does not work here. Maybe try a local exporting server.
 
             vm.chart.exportChart({
                 type: 'application/pdf',
-                filename: nicknamestr+"_"+timestr,
+                filename: nicknamestr + "_" + timestr,
                 sourceHeight: 500,
-                sourceWidth:750
-            },{
+                sourceWidth: 750
+            }, {
                 xAxis: {
                     labels: {
                         fontSize: '30px'
@@ -97,36 +112,36 @@ app.controller('detailedQuestionnaireSummaryController', [
             });
         };
 
-        function importantInfo () {
+        function importantInfo() {
             //Same for either questionnaire section because it's out of 100!
             //flag results that are 70% or higher
             // Flag results whose values have changed by 50% or 75%
-            var i = vm.questionnaireScores.length-1;
+            var i = vm.questionnaireScores.length - 1;
             if (vm.questionnaireScores[i] >= 70) {
-                note = "Current section score is " + vm.questionnaireScores[i] + "." ;
+                note = "Current section score is " + vm.questionnaireScores[i] + ".";
                 vm.importantInfo.push(note);
             }
-            if(vm.questionnaireScores[i] - vm.questionnaireScores[i-1] >= 50){
+            if (vm.questionnaireScores[i] - vm.questionnaireScores[i - 1] >= 50) {
                 note = "Section score increased by 50% since last timepoint.";
                 vm.importantInfo.push(note);
             }
-            else if(vm.questionnaireScores[i] - vm.questionnaireScores[i-1] <= -50) {
+            else if (vm.questionnaireScores[i] - vm.questionnaireScores[i - 1] <= -50) {
                 note = "Section score improved by 50% since last timepoint.";
                 vm.importantInfo.push(note);
             }
-            if(vm.questionnaireScores[i] - vm.questionnaireScores[i-1] >= 75) {
+            if (vm.questionnaireScores[i] - vm.questionnaireScores[i - 1] >= 75) {
                 note = "Section score increased by 75% within two timepoints.";
                 vm.importantInfo.push(note);
             }
-            else if(vm.questionnaireScores[i] - vm.questionnaireScores[i-1] <= -75) {
+            else if (vm.questionnaireScores[i] - vm.questionnaireScores[i - 1] <= -75) {
                 note = "Section score improved by 75% within two timepoints.";
                 vm.importantInfo.push(note);
             }
-            if(vm.questionnaireScores[i] - vm.questionnaireScores[0] >= 50) {
+            if (vm.questionnaireScores[i] - vm.questionnaireScores[0] >= 50) {
                 note = "Section score increased by 50% since initial assessment.";
                 vm.importantInfo.push(note);
             }
-            else if(vm.questionnaireScores[i] - vm.questionnaireScores[0] <= -50) {
+            else if (vm.questionnaireScores[i] - vm.questionnaireScores[0] <= -50) {
                 note = "Section score increased by 50% since initial assessment.";
                 vm.importantInfo.push(note);
             }
@@ -140,8 +155,7 @@ app.controller('detailedQuestionnaireSummaryController', [
 
         function configureCharts() {
 
-            if (UserPreferences.getLanguage().toUpperCase() === 'FR')
-            {
+            if (UserPreferences.getLanguage().toUpperCase() === 'FR') {
                 Highcharts.setOptions({
                     lang: {
                         months: ['janvier', 'février', 'mars', 'avril', 'mai', 'juin',
@@ -169,15 +183,14 @@ app.controller('detailedQuestionnaireSummaryController', [
             Highcharts.setOptions({
                 lang: {
                     //Zoom replaced with Date Range
-                    rangeSelectorZoom:''
+                    rangeSelectorZoom: ''
                 }
             });
         }
 
         function drawLineChart(scores, title, id) {
             var reformedData = [];
-            for(var i = 0; i < scores.length; i++)
-            {
+            for (var i = 0; i < scores.length; i++) {
                 var dv = [];  //array to store pairs of [date, testResult]
                 dv[0] = Date.parse(scores[i].last_updated);  //dateArray[0] = most recent date
                 dv[1] = parseFloat(scores[i].score);
@@ -291,61 +304,134 @@ app.controller('detailedQuestionnaireSummaryController', [
                     }
                 }]
             });
-
         }
 
-
-
-
-
-        vm.toggleExpandTotalScore = function(){
+        vm.toggleExpandTotalScore = function () {
             vm.expandTotalScore = !vm.expandTotalScore; //toggle between true and false
         };
 
-        vm.toggleExpandSectionScore = function(id){
-            console.log(id);
-            console.log(vm.expandSectionScores[id]);
-            vm.expandSectionScores[id] = !vm.expandSectionScores[id];
-            // vm.expandSectionScore = !vm.expandSectionScore; //toggle between true and false
+        vm.toggleExpandSectionScore = function (section) {
+            $scope.historicalQuestionnaires.sections[section.section_ser_num].expandSectionScores = !section.expandSectionScores;
         };
 
-        vm.toggleExpandQuestionScore = function(question){
-            vm.expandQuestionScore = !vm.expandQuestionScore; //toggle between true and false
+        vm.toggleExpandQuestionScore = function (sectionId, question) {
+            $scope.historicalQuestionnaires.sections[sectionId].questions[question.question_ser_num].expandQuestionScores = !question.expandQuestionScores;
+            // vm.expandQuestionScore = !vm.expandQuestionScore; //toggle between true and false
         };
 
-
-        // vm.goToGlobalScoreHistory = function () {
-        //     NavigatorParameters.setParameters({
-        //         Navigator: 'personalNavigator',
-        //         questionnaireScores: vm.historicalQuestionnaires.scoresForQuestionnaire,
-        //         questionnaireNickname: vm.questionnaire.nickname
-        //         // algorithms: vm.algorithms
-        //     });
-        //     personalNavigator.pushPage('views/personal/questionnaires/globalScoreHistory.html', {animation: 'slide'});
-        // };
-        //
-        // vm.goToSectionScoreHistory = function (selectedSection) {
-        //     NavigatorParameters.setParameters({
-        //         Navigator: 'personalNavigator',
-        //         scoresForSection: selectedSection.scoresForSection,
-        //         sectionTitle: selectedSection.title
-        //         // entity: vm.entity,
-        //         // section: selectedSection,
-        //         // algorithms: vm.algorithms
-        //     });
-        //     personalNavigator.pushPage('views/personal/questionnaires/sectionScoreHistory.html', {animation: 'slide'});
-        // };
-        //
-        // vm.goToQuestionScoreHistory = function (selectedSection, selectedQuestion) {
-        //     NavigatorParameters.setParameters({
-        //         Navigator: 'personalNavigator',
-        //         scoresForQuestion: selectedQuestion.scoresForQuestion,
-        //         questionLabel: selectedQuestion.text,
-        //         question: selectedQuestion
-        //         // entity: vm.entity,
-        //         // section: selectedSection,
-        //         // algorithms: vm.algorithms
-        //     });
-        //     personalNavigator.pushPage('views/personal/questionnaires/questionScoreHistory.html', {animation: 'slide'});
-        // };
+        vm.showQuestionList = function(id) {
+            vm.expandedQuestionLists[id] = !vm.expandedQuestionLists[id];
+        }
     }]);
+
+
+app.directive('hcLineChart', function () {
+    var windowWidth = $(window).width();
+    return {
+        restrict: 'E',
+        template: '<div></div>',
+        scope: {
+            title: '@',
+            data: '='
+        },
+        link: function (scope, element) {
+            Highcharts.chart(element[0], {
+                rangeSelector: {
+                    enabled: true,
+                    //select all as default button
+                    selected: 4,
+                    buttonSpacing: 14,
+                    buttons: [{
+                        type: 'month',
+                        count: 1,
+                        text: '1month'
+                    }, {
+                        type: 'month',
+                        count: 3,
+                        text: '3month'
+                    }, {
+                        type: 'month',
+                        count: 6,
+                        text: '6month'
+                    }, {
+                        type: 'year',
+                        count: 1,
+                        text: '1year'
+                    }, {
+                        type: 'all',
+                        text: 'All'
+                    }],
+                    buttonTheme: {
+                        width: null
+                    }
+                },
+                chart: {
+                    width: windowWidth,
+                    height: null,
+                    zoomType: 'xy'
+                },
+                exporting: {
+                    enabled: true,
+                    buttons: {
+                        contextButton: {
+                            enabled: false,
+                            // menuItems: ['downloadJPEG','downloadPDF','downloadPNG','downloadSVG','separator','printChart']
+                        }
+                    }
+                },
+                xAxis: {
+                    type: 'datetime',
+                    dateTimeLabelFormats: { // don't display the dummy year
+                        month: '%e. %b',
+                        year: '%b'
+                    },
+                    title: {
+                        text: 'Date'
+                    },
+                    labels: {
+                        style: {
+                            fontSize: '15px'
+                        }
+                    }
+                },
+                yAxis: {
+                    max: 100,
+                    min: 0,
+                    title: {
+                        text: '\%'
+                    },
+                    opposite: false,
+                    tickInterval: 10,
+                    labels: {
+                        style: {
+                            fontSize: '15px'
+                        }
+                    }
+                },
+                title: {
+                    text: scope.title,
+                    align: 'center'
+                },
+                plotOptions: {
+                    series: {
+                        fillOpacity: 0.1
+                    }
+                },
+                series: [{
+                    name: 'Score',
+                    data: scope.data,
+                    marker: {
+                        enabled: true,
+                        radius: 3
+                    },
+                    type: 'area',
+                    color: 'rgba(21, 148, 187, 0.65)',
+                    pointWidth: 100,
+                    tooltip: {
+                        valueDecimals: 0
+                    }
+                }]
+            });
+        }
+    };
+});
