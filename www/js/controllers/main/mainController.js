@@ -145,11 +145,15 @@
                     android: {
                         icon: "opal_notification",
                         iconColor: "#74A333",
-                        senderID: "810896751588"
+                        senderID: "810896751588",
+                        forceShow: "true"
                     }
                 });
 
                 push.on('notification', function (data) {
+                    // if (ons.platform.isIOS() && data.additionalData.foreground) {
+                    //     // show Banner
+                    // }
                 });
                 push.on('error', function (e) {
                 });
