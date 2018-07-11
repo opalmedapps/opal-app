@@ -52,7 +52,7 @@
                             <div ng-repeat="answer in question.patient_answer">
 
                                 <!--Textbox-->
-                                <span ng-if="question.question_type_category_key == 'textbox' && (question.options[0].answer_option_ser_num == 'SKIPPED'||question.patient_answer[0].Skipped=='1')" style="float: right; color: rgba(38,100,171,0.81);">
+                                <span ng-if="question.question_type_category_key == 'textbox' && (question.options[0].answer_option_ser_num == 'SKIPPED'||question.patient_answer[0].Skipped=='1') && question.patient_answer[0].text==''" style="float: right; color: rgba(38,100,171,0.81);">
                       <i>{{"SKIPPED"|translate}}</i>
                     </span>
                                 <span ng-if="question.question_type_category_key == 'textbox' && question.patient_answer.indexOf('SKIPPED') == -1" style="float: right; color: rgba(38,100,171,0.81);display:block;width:100%;word-wrap:break-word;">
