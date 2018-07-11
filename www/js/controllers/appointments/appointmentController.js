@@ -112,6 +112,7 @@
                 // just the correct title in the https://www.depdocs.com/opal/links/links.php that will grab
                 // the right .php file. Ex: "Blood tests", "Chemotherapy", etc...
             });
+            
         }
 
         function openMap(){
