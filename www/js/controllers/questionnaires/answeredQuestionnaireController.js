@@ -73,20 +73,22 @@
         function setTempAnswer(question) {
             console.log("setTempAnswer ");
             console.log(Object(question));
-            vm.temporaryAnswer={};
+            var elem = {};
                 if(question.question_type_category_key == 'checkbox') {
                 for (var i = 0; i < question.patient_answer.length; i++) {
-                    var temp = jsObjects.filter(question.options = function () {
-                        return question.options.answer_option_ser_num == question.patient_answer[0].CheckboxAnswerOptionSerNum
-                    });
-                    vm.temporaryAnswer.push(temp);
+                    var temp = question.options.filter(elem => elem.answer_option_ser_num == question.patient_answer[0].CheckboxAnswerOptionSerNum);
+                    vm.temporaryAnswer = Object.assign({},vm.temporaryAnswer,temp);
+                    console.log("temporaryAnswer");
+                    console.log(Object(vm.temporaryAnswer));
                 }
             } else { // multiple choice
-                for (var i = 0; i < question.patient_answer.length; i++) {
-                    var temp = jsObjects.filter(question.options = function () {
-                        return question.options.answer_option_ser_num == question.patient_answer[0].MCAnswerOptionSerNum
-                    });
-                    vm.temporaryAnswer.push(temp);
+                for (var i = 0; i < question.options.length; i++) {
+                    if(question.options[i].answer_option_ser_num == question.patient_answer[0].MCAnswerOptionSerNum){
+                        question.temporaryAnswer = question.options[i];
+                        console.log("---------------------------------------------");
+                        console.log("temporaryAnswer " + i);
+                        console.log(Object(vm.temporaryAnswer));
+                    }
                 }
             }
 
