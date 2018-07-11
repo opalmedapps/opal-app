@@ -273,7 +273,7 @@
                     console.log("testing for textbox");
                     saveAnswer(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex]);
                     vm.questionIndex++;
-                    console.log('HERE1 ' + vm.questionTotalIndex + " and questionIndex = " + vm.questionIndex);
+                    console.log('questTotalIndex = ' + vm.questionTotalIndex + " and questionIndex = " + vm.questionIndex);
                     vm.isQuestion = true;
                     console.log('Merge question is: ' + Object(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex]));
                 }
@@ -285,7 +285,7 @@
                     console.log("vm.sectionIndex="+vm.sectionIndex+ " and vm.questionIndex=" + vm.questionIndex);
                     if(vm.sectionIndex < vm.questionnaire.sections.length-1){
                         vm.sectionIndex++;
-                        console.log('HERE1 ' + vm.sectionIndex);
+                        console.log('HERE1 sectionIndex= ' + vm.sectionIndex);
                     } else {
                         console.log("BUG BUG BUG: sectionIndex becomes too large!");
                     }
@@ -344,8 +344,8 @@
 
         function summaryPage() {
             console.log(vm.startIndex);
-
-                console.log("saving in summary page: " + vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex].patient_answer[0].text);
+            console.log("section: " + vm.sectionIndex + " and question: " + vm.questionIndex);
+                console.log("saving in summary page: " + vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex]);
                 saveAnswer(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex]);
 
             removeListener();
@@ -486,15 +486,25 @@
                 } else if(question.question_type_category_key == 'textbox') {
                     Questionnaires.saveQuestionnaireAnswer(vm.questionnaire.qp_ser_num, question.ser_num, question.patient_answer[0].text, question.options[0].answer_option_ser_num, question.question_type_category_key, vm.questionnaire.sections[vm.sectionIndex].section_ser_num);
                 }  else if(question.question_type_category_key == 'checkbox') {
-                    var toReturn = [];
+                    var toReturn = {};
                     for(var i = 0; i<question.patient_answer.length;i++) {
-                        toReturn.push(question.options[question.patient_answer[i].AnsSerNum].answer_option_ser_num);
+                        var temp = jsObjects.filter(question.options = function() {
+                            return question.options.answer_option_ser_num == question.patient_answer[0].CheckboxAnswerOptionSerNum
+                        });
+                        toReturn.push(temp);
+                        console.log("toReturn = ");
+                        console.log(Object(toReturn));
                     }
                     Questionnaires.saveQuestionnaireAnswer(vm.questionnaire.qp_ser_num, question.ser_num, -1, toReturn, question.question_type_category_key, vm.questionnaire.sections[vm.sectionIndex].section_ser_num);
                 } else {
-                    for (var i = 0; i < question.patient_answer.length; i++) {
-                        Questionnaires.saveQuestionnaireAnswer(vm.questionnaire.qp_ser_num, question.ser_num, -1, question.options[question.patient_answer[i]].answer_option_ser_num, question.question_type_category_key, vm.questionnaire.sections[vm.sectionIndex].section_ser_num);
-                    }
+                   // for (var i = 0; i < question.patient_answer.length; i++) {
+                        // var patientAnswers = jsObjects.filter(question.options = function() {
+                        //     return question.options.answer_option_ser_num == question.patient_answer[0].MCAnswerOptionSerNum
+                        // });z
+                        console.log("about to call save quest answer");
+                        console.log(question);
+                        Questionnaires.saveQuestionnaireAnswer(vm.questionnaire.qp_ser_num, question.ser_num, -1, vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex].options[question.patient_answer[0]].answer_option_ser_num, question.question_type_category_key, vm.questionnaire.sections[vm.sectionIndex].section_ser_num);
+                   // }
                 }
                 if (vm.questionnaire.status == 'New') {
                     Questionnaires.updateQuestionnaireStatus(vm.questionnaire.qp_ser_num, 'In Progress');
@@ -581,9 +591,10 @@
                 // push answer to answer array
                 //question.patient_answer[vm.checkboxSavingIndex].AnsSerNum=optionKey;
                 if(vm.checkboxSavingIndex==0) {
-                    question.patient_answer[0].AnsSerNum=optionKey;
+                    question.patient_answer = {};
+                    question.patient_answer[0].CheckboxAnswerOptionSerNum=optionKey;
                 } else {
-                    question.patient_answer.push({'AnsSerNum':optionKey});
+                    question.patient_answer.push({'CheckboxAnswerOptionSerNum':optionKey});
                 }
                 vm.checkboxSavingIndex++;
                 console.log("Answer array");
