@@ -48,8 +48,8 @@
             console.log("submit request");
             Questionnaires.updateQuestionnaireStatus(vm.questionnaire.qp_ser_num, "Completed");
             vm.questionnaire.status = "Completed";
-            NavigatorParameters.setParameters({Navigator:'personalNavigator'});
-            personalNavigator.pushPage('views/personal/questionnaires/questionnairesList.html',{ animation : 'slide' });
+            NavigatorParameters.setParameters({Navigator:'personalNavigator', questionnaire: vm.questionnaire});
+            personalNavigator.pushPage('views/personal/questionnaires/questionnaireStarRating.html',{ animation : 'slide' });
         }
 
         function showAnswer(question) {
@@ -91,3 +91,4 @@
 
     }
 })();
+

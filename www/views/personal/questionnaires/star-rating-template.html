@@ -1,0 +1,28 @@
+<div>
+    <div>
+        <p style="color:grey">{{"Rate this questionnaire and leave a comment!"|translate}}</p>
+    </div>
+    <div>
+        <textarea maxlength="512" style="height:200px" id="starText" wrap="hard" ng-change="emptyComment=false" ng-model="starComment"></textarea>
+        <style>
+            #starText{
+                width: 100%;
+                height: 80%;
+                padding: 12px 20px;
+                box-sizing: border-box;
+                border: 2px solid #ccc;
+                border-radius: 4px;
+                background-color: #f8f8f8;
+                font-size: 16px;
+                resize: none;
+            }
+        </style>
+    </div>
+    <span  style="display:inline-block;opacity:0.5;padding-top:5%" ng-repeat="star in rate" ng-click="rateQuestionnaire($index)">
+            <i ng-class="star.Icon" style="font-size:35px;color:#DAA520" ></i>
+        </span>
+    <span style="margin:10px"><ons-button ng-click="submitRating(starComment)" ng-disabled="emptyRating && emptyComment">{{"RATEIT" | translate}}</ons-button></span>
+</div>
+<div ng-show="submitted" style="margin-top:5px">
+    <p style="color:#5cb85c;opacity:0.8;">{{"THANKYOUFORFEEDBACK"|translate}}</p>
+</div>

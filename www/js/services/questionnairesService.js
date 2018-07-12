@@ -213,7 +213,7 @@ myApp.service('Questionnaires', [
                     'sectionSerNum': section
                     // 'ao_ser_num': answeroption_ser_num
                 };
-                // TODO: change request when the database for questions is ready
+
                 RequestToServer.sendRequestWithResponse('QuestionnaireAnswers', params)
                     .then(function (response) {
                             _this.setQuestionnaires(response.Data);
@@ -222,10 +222,7 @@ myApp.service('Questionnaires', [
                         function (error) {
                             deferred.reject({Success: false, Location: '', Error: error});
                         });
-                // RequestToServer.sendRequestWithResponse('Questionnaires', null, null, null, null, 'http://127.0.0.1:5000/questionnaire-answer/', url_params)
-                //     .then(function(response) {
-                //         console.log(response);
-                //     });
+
             },
             requestQuestionnaires: function (type) {
                 let deferred = $q.defer();

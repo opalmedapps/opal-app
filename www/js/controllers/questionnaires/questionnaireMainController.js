@@ -390,6 +390,7 @@
         }
 
         vm.setMaxLength = setMaxLength;
+
         function setMaxLength(question) {
             document.getElementById("textType").maxLength = question.options[0].char_limit;
         }
@@ -520,7 +521,7 @@
                         // });z
                         console.log("about to call save quest answer");
                         console.log(question);
-                        Questionnaires.saveQuestionnaireAnswer(vm.questionnaire.qp_ser_num, question.ser_num, -1, vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex].options[question.patient_answer[0]].answer_option_ser_num, question.question_type_category_key, vm.questionnaire.sections[vm.sectionIndex].section_ser_num);
+                        Questionnaires.saveQuestionnaireAnswer(vm.questionnaire.qp_ser_num, question.ser_num, -1, question.options[question.patient_answer[0]].answer_option_ser_num, question.question_type_category_key, vm.questionnaire.sections[vm.sectionIndex].section_ser_num);
                    // }
                 }
                 if (vm.questionnaire.status == 'New') {

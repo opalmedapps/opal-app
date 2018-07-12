@@ -320,7 +320,7 @@
                     </div>
 
                     <!-- LARGE RANGE SCALE (SLIDER TYPE OF QUESTION)--> <!--TODO: Add visualization option check instead of hardcoding 'vm.questionTotalIndex + 1 <= 3'-->
-                    <div ng-if="item.data.question_type_category_key == 'slider' && item.data.visualization_name == 'large range'" ng-init="console.log('3------ sliderAns='+ item.data.patient_answer[0].sliderAns);console.log('1 tempAns = '+ vm.tempAns);vm.tempAns=item.data.patient_answer[0].sliderAns;" class="center" style="padding-left:10%">
+                    <div ng-if="item.data.question_type_category_key == 'slider' && item.data.visualization_name == 'slider'" ng-init="console.log('3------ sliderAns='+ item.data.patient_answer[0].sliderAns);console.log('1 tempAns = '+ vm.tempAns);vm.tempAns=item.data.patient_answer[0].sliderAns;" class="center" style="padding-left:10%">
 
                         <style>
 
@@ -540,7 +540,7 @@
                     </div>
 
                     <!-- SMALL RANGE SCALE (SLIDER TYPE OF QUESTION)-->
-                    <div ng-if="item.data.question_type_category_key == 'slider' && item.data.visualization_name == 'small range'" class="center scale" style="margin-top:10px;padding-left:5vw;padding-right:5vw;">
+                    <div ng-if="item.data.question_type_category_key == 'slider' && item.data.visualization_name == 'dots'" class="center scale" style="margin-top:10px;padding-left:5vw;padding-right:5vw;">
                         <!--<ons-row style="margin-left:0px;margin-right:0px" ng-init="vm.bindScaleParameters(item.data)">
                           <ons-col width="40px" style="text-align: center; line-height: 31px;">
                             {{minText}}
@@ -590,7 +590,7 @@
                         </ul>
                     </div>
 
-                    <!-- TEXTBOX --> <!-- TODO: check length of answer-->
+                    <!-- TEXTBOX -->
 
                     <div ng-if="item.data.question_type_category_key == 'textbox'" class="center" style="margin-top:10px;padding-left:5vw;padding-right:5vw;">
                         <ul class="list" ng-init="item.data.answerChangedFlag = false;">
