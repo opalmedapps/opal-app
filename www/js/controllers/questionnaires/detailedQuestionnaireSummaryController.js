@@ -56,7 +56,7 @@ app.controller('detailedQuestionnaireSummaryController', [
                         }
                         $scope.historicalQuestionnaires.sections[section].scoresForSection = reformedData;
                         $scope.historicalQuestionnaires.sections[section].expandSectionScores = false;
-                        vm.expandedQuestionLists.push(false);
+                        vm.expandedQuestionLists[section] = false;
                         for (var question in $scope.historicalQuestionnaires.sections[section].questions) {
                             reformedData = [];
                             for (var j = 0; j < $scope.historicalQuestionnaires.sections[section].questions[question].scoresForQuestion.length; j++) {
@@ -312,6 +312,12 @@ app.controller('detailedQuestionnaireSummaryController', [
 
         vm.toggleExpandSectionScore = function (section) {
             $scope.historicalQuestionnaires.sections[section.section_ser_num].expandSectionScores = !section.expandSectionScores;
+            if ($scope.historicalQuestionnaires.sections[section.section_ser_num].expandSectionScores === false) {
+                vm.expandedQuestionLists[section.section_ser_num] = false;
+                for(var i = 0; i < $scope.historicalQuestionnaires.sections[section.section_ser_num].questions.length; i++) {
+                    $scope.historicalQuestionnaires.sections[section.section_ser_num].questions[i].expandQuestionScores = false;
+                }
+            }
         };
 
         vm.toggleExpandQuestionScore = function (sectionId, question) {
@@ -319,14 +325,16 @@ app.controller('detailedQuestionnaireSummaryController', [
             // vm.expandQuestionScore = !vm.expandQuestionScore; //toggle between true and false
         };
 
-        vm.showQuestionList = function(id) {
+        vm.toggleExpandQuestionList = function(id) {
             vm.expandedQuestionLists[id] = !vm.expandedQuestionLists[id];
+            for (var question in $scope.historicalQuestionnaires.sections[id].questions) {
+                $scope.historicalQuestionnaires.sections[id].questions[question].expandQuestionScores = false;
+            }
         }
     }]);
 
 
 app.directive('hcLineChart', function () {
-    var windowWidth = $(window).width();
     return {
         restrict: 'E',
         template: '<div></div>',
@@ -335,7 +343,8 @@ app.directive('hcLineChart', function () {
             data: '='
         },
         link: function (scope, element) {
-            Highcharts.chart(element[0], {
+            var windowWidth = $(window).width();
+            Highcharts.stockChart(element[0], {
                 rangeSelector: {
                     enabled: true,
                     //select all as default button
@@ -374,8 +383,9 @@ app.directive('hcLineChart', function () {
                     enabled: true,
                     buttons: {
                         contextButton: {
-                            enabled: false,
-                            // menuItems: ['downloadJPEG','downloadPDF','downloadPNG','downloadSVG','separator','printChart']
+                            fallbackToExportServer: false,
+                            enabled: true,
+                            menuItems: ['printChart', 'separator', 'downloadPNG', 'downloadJPEG','downloadPDF','downloadSVG']
                         }
                     }
                 },
@@ -418,6 +428,7 @@ app.directive('hcLineChart', function () {
                     }
                 },
                 series: [{
+                    showInNavigator: true,
                     name: 'Score',
                     data: scope.data,
                     marker: {
