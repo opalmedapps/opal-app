@@ -15,6 +15,7 @@
         vm.beginQuestionnaire = beginQuestionnaire;
         vm.resumeQuestionnaire = resumeQuestionnaire;
         vm.isResume = true;
+        vm.viewAns='--';
         vm.isQuestion = false;
         vm.currentColorGradient = [];
         vm.currentPolarity = "lowGood";
@@ -36,6 +37,7 @@
         vm.currentQuestion = {};
         vm.scaleQuestions = [];
         vm.tempAns= 1;
+        vm.toggleViewAns = toggleViewAns;
         vm.totalNumberOfQuestions = 0;
         vm.ischeckedTest=false;
         vm.isDisabled = isDisabled;
@@ -246,6 +248,13 @@
             },500);
         }
 
+        function toggleViewAns(question) {
+            if(vm.tempAns !== 50 && question.patient_answer[0].sliderAns == 50) {
+                vm.viewAns = '--';
+            } else {
+                vm.viewAns = question.patient_answer[0].sliderAns;
+            }
+        }
 
         function carouselPostChange(event) {
             //console.log($scope.carousel.getActiveCarouselItemIndex());
@@ -380,6 +389,12 @@
             return carouselItems;
         }
 
+        vm.setMaxLength = setMaxLength;
+        function setMaxLength(question) {
+            document.getElementById("textType").maxLength = question.options[0].char_limit;
+        }
+
+
         function bindScaleParameters(question) {
             console.log("1-------------- sliderAns = " + question.patient_answer[0].sliderAns);
             var keys = Object.keys(question.options);
@@ -389,14 +404,14 @@
             //     console.log("Option size should be 2, is " + keys.length);
             // }
             // else {
-                $scope.minText = question.options[0].min_value;
-                $scope.minCaption = question.options[0].min_caption;
-                $scope.maxText = question.options[0].max_value;
-                $scope.maxCaption = question.options[0].max_caption;
+                //$scope.minText = question.options[0].min_value;
+                //$scope.minCaption = question.options[0].min_caption;
+                //$scope.maxText = question.options[0].max_value;
+                //$scope.maxCaption = question.options[0].max_caption;
 
                 // set the style of the options
-                var min = parseInt($scope.minText);
-                var max = parseInt($scope.maxText);
+                var min = question.options[0].min_value;
+                var max = question.options[0].max_value;
                 console.log(min+" "+max);
                 $scope.options = [];
                 var options = $scope.options;
@@ -486,11 +501,13 @@
                 } else if(question.question_type_category_key == 'textbox') {
                     Questionnaires.saveQuestionnaireAnswer(vm.questionnaire.qp_ser_num, question.ser_num, question.patient_answer[0].text, question.options[0].answer_option_ser_num, question.question_type_category_key, vm.questionnaire.sections[vm.sectionIndex].section_ser_num);
                 }  else if(question.question_type_category_key == 'checkbox') {
-                    var toReturn = {};
+                    var toReturn = [];
+                    var elem={};
                     for(var i = 0; i<question.patient_answer.length;i++) {
-                        var temp = jsObjects.filter(question.options = function() {
-                            return question.options.answer_option_ser_num == question.patient_answer[0].CheckboxAnswerOptionSerNum
+                        var temp = question.options.find(elem = function() {
+                            return elem.answer_option_ser_num == question.patient_answer[i].CheckboxAnswerOptionSerNum
                         });
+                        console.log(Object(temp));
                         toReturn.push(temp);
                         console.log("toReturn = ");
                         console.log(Object(toReturn));
@@ -563,48 +580,48 @@
         function toggleCheckboxSelection(optionKey) {
             console.log("Sectionindex is : " + vm.sectionIndex + " and question index is " + vm.questionIndex);
             var question = vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex];
-
+            question.answerChangedFlag = true;
             console.log("Question is "+Object(question));
             console.log("Question.patient_answer is "+Object(question.patient_answer));
 
             // if previous choice was to skip question, toggle skip boolean
-            if (question.patient_answer.indexOf('SKIPPED') > -1) {
-                toggleCheckboxSkip(false, question);
-            }
-
-            console.log("Object is "+Object(question.patient_answer));
-
-            var answerIndex = question.patient_answer.indexOf(optionKey);
-
-            // is currently selected, remove it
-            if (answerIndex > -1) {
-                question.answerChangedFlag = true;
-                question.patient_answer.splice(answerIndex, 1);
-                vm.tmpAnswer = question.patient_answer;
-                vm.checkedNumber--;
-                console.log("In if, checkedNumber = "+vm.checkedNumber);
-                console.log("Object after splice in if is "+Object(question.patient_answer));
-                console.log("tmpAnswer = " + Object(vm.tmpAnswer));
-            } else { // is newly selected
-                question.answerChangedFlag = true;
-                //question.patient_answer.push(optionKey);
-                // push answer to answer array
-                //question.patient_answer[vm.checkboxSavingIndex].AnsSerNum=optionKey;
-                if(vm.checkboxSavingIndex==0) {
-                    question.patient_answer = {};
-                    question.patient_answer[0].CheckboxAnswerOptionSerNum=optionKey;
-                } else {
-                    question.patient_answer.push({'CheckboxAnswerOptionSerNum':optionKey});
-                }
-                vm.checkboxSavingIndex++;
-                console.log("Answer array");
-                console.log(Object(question.patient_answer));
-                vm.checkedNumber++;
-                console.log("In else, checkedNumber = "+vm.checkedNumber);
-                console.log("Object after push in if else else is "+Object(question.patient_answer));
-                vm.tmpAnswer = question.patient_answer;
-                console.log("tmpAnswer = " + Object(vm.tmpAnswer));
-            }
+            // if (question.patient_answer.indexOf("SKIPPED") > -1) {
+            //     toggleCheckboxSkip(false, question);
+            // }
+            //
+            // console.log("Object is "+Object(question.patient_answer));
+            //
+            // var answerIndex = question.patient_answer.indexOf(optionKey);
+            //
+            // // is currently selected, remove it
+            // if (answerIndex > -1) {
+            //     question.answerChangedFlag = true;
+            //     question.patient_answer.splice(answerIndex, 1);
+            //     vm.tmpAnswer = question.patient_answer;
+            //     vm.checkedNumber--;
+            //     console.log("In if, checkedNumber = "+vm.checkedNumber);
+            //     console.log("Object after splice in if is "+Object(question.patient_answer));
+            //     console.log("tmpAnswer = " + Object(vm.tmpAnswer));
+            // } else { // is newly selected
+            //     question.answerChangedFlag = true;
+            //     //question.patient_answer.push(optionKey);
+            //     // push answer to answer array
+            //     //question.patient_answer[vm.checkboxSavingIndex].AnsSerNum=optionKey;
+            //     if(vm.checkboxSavingIndex==0) {
+            //         question.patient_answer = {};
+            //         question.patient_answer[0].CheckboxAnswerOptionSerNum=optionKey;
+            //     } else {
+            //         question.patient_answer.push({'CheckboxAnswerOptionSerNum':optionKey});
+            //     }
+            //     vm.checkboxSavingIndex++;
+            //     console.log("Answer array");
+            //     console.log(Object(question.patient_answer));
+            //     vm.checkedNumber++;
+            //     console.log("In else, checkedNumber = "+vm.checkedNumber);
+            //     console.log("Object after push in if else else is "+Object(question.patient_answer));
+            //     vm.tmpAnswer = question.patient_answer;
+            //     console.log("tmpAnswer = " + Object(vm.tmpAnswer));
+            // }
             console.log("Object at the end is "+Object(question.patient_answer));
         }
 
