@@ -11,10 +11,16 @@
         .module('MUHCApp')
         .controller('MainController', MainController);
 
-    MainController.$inject = ["$window", "$state", '$rootScope','FirebaseService','DeviceIdentifiers','$translatePartialLoader', "LocalStorage", 'Constants', 'CleanUp', 'NavigatorParameters', 'NetworkStatus', 'RequestToServer', 'NewsBanner', 'Security'];
+    MainController.$inject = ["$window", "$state", '$rootScope','FirebaseService','DeviceIdentifiers',
+                                '$translatePartialLoader', "LocalStorage", 'Constants', 'CleanUp',
+                                'NavigatorParameters', 'NetworkStatus', 'RequestToServer', 'NewsBanner', 'Security',
+                                '$cordovaVibration'];
 
     /* @ngInject */
-    function MainController($window, $state, $rootScope, FirebaseService, DeviceIdentifiers, $translatePartialLoader, LocalStorage, Constants, CleanUp, NavigatorParameters, NetworkStatus, RequestToServer, NewsBanner, Security) {
+    function MainController($window, $state, $rootScope, FirebaseService, DeviceIdentifiers,
+                            $translatePartialLoader, LocalStorage, Constants, CleanUp,
+                            NavigatorParameters, NetworkStatus, RequestToServer, NewsBanner, Security,
+                            $cordovaVibration) {
 
         var timeoutLockout;
         var currentTime;
@@ -155,7 +161,8 @@
                 push.on('notification', function (data) {
                     if (ons.platform.isIOS() && data.additionalData.foreground) {
                         // on iOS, it will allow push notification to appear when app is running
-                        NewsBanner.showCustomBanner("Notification: " + data.title + " \n" + data.message, '#333333', function(){}, 9000);
+                        NewsBanner.showCustomBanner(data.title + "\n" + data.message, '#333333', function(){}, 9000);
+                        navigator.vibrate(3000);
                     }
                 });
                 push.on('error', function (e) {
