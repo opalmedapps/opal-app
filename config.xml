@@ -6,11 +6,7 @@
 
 
 <!-- Pre-Production -->
-<<<<<<< HEAD
-<widget id="com.hig.opal-dev" version="1.6.29" android-versionCode="16029" >
-=======
 <widget id="com.hig.opal-dev" version="1.6.37" android-versionCode="16037" >
->>>>>>> opal_pre_prod
     <name>Opal-dev</name>
 
     <description>
