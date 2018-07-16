@@ -6,7 +6,7 @@
 
 
 <!-- Pre-Production -->
-<widget id="com.hig.opal-dev" version="1.6.33" android-versionCode="16033" >
+<widget id="com.hig.opal-dev" version="1.6.36" android-versionCode="16036" >
     <name>Opal-dev</name>
 
     <description>
@@ -125,6 +125,7 @@
     </plugin>
     <plugin name="cordova-plugin-compat" spec="^1.1.0" />
     <plugin name="cordova-plugin-cookiemaster" spec="^1.0.5" />
+    <plugin name="cordova-plugin-vibration" spec="^3.1.0" />
     <plugin name="es6-promise-plugin" spec="^4.2.2" />
         <engine name="android" spec="~6.2.3" />
     <engine name="ios" spec="^4.5.2" />
