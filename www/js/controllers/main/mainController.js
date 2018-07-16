@@ -13,14 +13,12 @@
 
     MainController.$inject = ["$window", "$state", '$rootScope','FirebaseService','DeviceIdentifiers',
                                 '$translatePartialLoader', "LocalStorage", 'Constants', 'CleanUp',
-                                'NavigatorParameters', 'NetworkStatus', 'RequestToServer', 'NewsBanner', 'Security',
-                                '$cordovaVibration'];
+                                'NavigatorParameters', 'NetworkStatus', 'RequestToServer', 'NewsBanner', 'Security'];
 
     /* @ngInject */
     function MainController($window, $state, $rootScope, FirebaseService, DeviceIdentifiers,
                             $translatePartialLoader, LocalStorage, Constants, CleanUp,
-                            NavigatorParameters, NetworkStatus, RequestToServer, NewsBanner, Security,
-                            $cordovaVibration) {
+                            NavigatorParameters, NetworkStatus, RequestToServer, NewsBanner, Security) {
 
         var timeoutLockout;
         var currentTime;
