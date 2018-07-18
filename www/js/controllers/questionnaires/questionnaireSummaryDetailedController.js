@@ -1,7 +1,7 @@
 // entitySummaryController
 
 var app = angular.module('MUHCApp');
-app.controller('detailedQuestionnaireSummaryController', [
+app.controller('questionnaireSummaryDetailedController', [
     '$scope',
     '$rootScope',
     'Questionnaires',

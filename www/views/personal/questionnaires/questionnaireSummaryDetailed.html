@@ -1,7 +1,7 @@
 <!-- showing historical summary of selected questionnaire entity
 consists of 2 parts: global score summary, and section/question list
  -->
-<ons-page ng-app="MUHCApp" ng-controller="detailedQuestionnaireSummaryController as vm">
+<ons-page ng-app="MUHCApp" ng-controller="questionnaireSummaryDetailedController as vm">
     <div>
         <ons-toolbar fixed-style>
             <div class="left">
@@ -115,7 +115,7 @@ consists of 2 parts: global score summary, and section/question list
                                                 <div id="chart-{{$parent.$index}}{{$index}}" style="line-height: 1.4;margin-top:10px;margin-bottom:10px">
                                                     {{question.question_label}}
                                                     <span class="pull-right">
-                                                        <span ng-class="question.expandQuestionScores ? 'glyphicon glyphicon-minus' : 'glyphicon glyphicon-plus'">
+                                                        <span ng-class="question.expandQuestionScores ? 'fa fa-minus' : 'fa fa-plus'">
                                                         </span>
                                                     </span>
                                                 </div>
