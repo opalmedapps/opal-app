@@ -233,16 +233,6 @@ myApp.service('Questionnaires', [
                 let params = {
                     'language': 'EN'
                 };
-                // TODO: change request when the database for questions is ready
-                // RequestToServer.sendRequestWithResponse('Questionnaires', null, null, null, null, 'http://127.0.0.1:5000/questionnaires/', url_params)
-                //     .then(function(response) {
-                //             console.log(response);
-                //             _this.setQuestionnaires(response);
-                //             deferred.resolve({Success: true, Location: 'Server'});
-                //         },
-                //         function(error) {
-                //             deferred.reject({Success: false, Location: '', Error: error});
-                //         });
 
                 // CONNECTION TO FIREBASE
                 RequestToServer.sendRequestWithResponse('Questionnaires', params)
@@ -266,16 +256,6 @@ myApp.service('Questionnaires', [
                     'qp_ser_num': questionnaire_patient_rel_ser_num,
                     'language': 'EN'
                 };
-                // TODO: change request when the database for questions is ready
-                // RequestToServer.sendRequestWithResponse('Questionnaires', null, null, null, null, 'http://127.0.0.1:5000/questionnaires/', url_params)
-                //     .then(function(response) {
-                //             console.log(response);
-                //             _this.setQuestionnaires(response);
-                //             deferred.resolve({Success: true, Location: 'Server'});
-                //         },
-                //         function(error) {
-                //             deferred.reject({Success: false, Location: '', Error: error});
-                //         });
 
                 // CONNECTION TO FIREBASE
                 RequestToServer.sendRequestWithResponse('Questionnaire', params)
