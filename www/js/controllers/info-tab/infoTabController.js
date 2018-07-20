@@ -55,20 +55,15 @@
         ////////////////
 
         function activate() {
-            console.log("infoTabController activate()");
             var personalNavigator = NavigatorParameters.getNavigator();
-            console.log(typeof personalNavigator);
             if((typeof personalNavigator.getCurrentPage()) !== "undefined" && personalNavigator.getCurrentPage().options.isQuest === true) {
-                console.log("not undefined");
-                console.log(personalNavigator.getCurrentPage());
                 views = [
                     {
                         icon:'fa-question',
                         color:'SteelBlue',
-                        // change to question.questionTypeCategory... (question type) - question.visOpt... (visualization option)
-                        name: personalNavigator.getCurrentPage().options.question.question_type_category_key, //"QUESTION TYPE - VISUALISATION OPTION",
-                        // change to question.information
-                        description: personalNavigator.getCurrentPage().options.question.information,//"This paragraph explains how to answer this question type."
+                        name: personalNavigator.getCurrentPage().options.question.question_type_category_key,
+                        //This description explains how to answer this question type
+                        description: personalNavigator.getCurrentPage().options.question.information,
                     }
                 ];
                 vm.view = views[views.length-1];

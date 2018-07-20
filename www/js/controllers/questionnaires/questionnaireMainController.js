@@ -6,14 +6,15 @@
         .controller('QuestionnaireMainController', QuestionnaireMainController);
 
     QuestionnaireMainController.$inject = [
-        '$scope', '$rootScope', 'Questionnaires', '$location', 'NavigatorParameters', '$q', '$anchorScroll', '$sce', '$http', '$window', '$filter'
+        '$scope', '$timeout', '$rootScope', 'Questionnaires', '$location', 'NavigatorParameters', '$q', '$anchorScroll', '$sce', '$http', '$window', '$filter'
     ];
 
     /* @ngInject */
-    function QuestionnaireMainController($scope, $rootScope, Questionnaires, $location, NavigatorParameters, $q, $anchorScroll, $sce, $http, $window, $filter) {
+    function QuestionnaireMainController($scope, $timeout, $rootScope, Questionnaires, $location, NavigatorParameters, $q, $anchorScroll, $sce, $http, $window, $filter) {
         var vm = this;
         vm.beginQuestionnaire = beginQuestionnaire;
         vm.resumeQuestionnaire = resumeQuestionnaire;
+        vm.resetCheckednumber = resetCheckednumber;
         vm.isResume = true;
         vm.viewAns='--';
         vm.isQuestion = false;
@@ -74,6 +75,15 @@
 
             vm.skipQuestionClose();
         };
+
+        // vm.swipeRightHandleCheckmark = function(question) {
+        //     if(question.options[0].is_exact == '1' && vm.checkedNumber<vm.limitNumber) {
+        //         checkmarkModal.show().then(carousel.next());
+        //     } else {
+        //         carousel.next();
+        //     }
+        // };
+
         vm.skipQuestionClose = function() {
             carousel.next()
             skip_question.hide();
@@ -88,7 +98,6 @@
         vm.exists = function(item) {
             return vm.selected.indexOf(item)>-1;
         }
-        vm.tmpAnswer = [];
 
         $scope.slider = {
             value: 6,
@@ -122,7 +131,7 @@
             console.log("IN ACTIVATE() IN QUESTIONAIREMAINCONTROLLER: " + Object(params));
             console.log(vm.questionnaire);
             vm.carouselItems = flattenQuestionnaire(); // questions + section headers
-
+            vm.tmpAnswer = [];
             for(var i=0;i<vm.questionnaire.sections.length; i++) {
                 for(var j=0; j<vm.questionnaire.sections[i].questions.length;j++) {
                     vm.totalNumberOfQuestions++;
@@ -140,7 +149,9 @@
             // }
             vm.questionTotalIndex = 0; // index within array of all (and only) questions of questionnaire
             vm.maxQuestionIndex = vm.questionnaire.sections[vm.sectionIndex].questions.length-1; // maximum questionIndex for current section
-
+            if(!vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex].patient_answer.hasOwnProperty('answer')) {
+                vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex].patient_answer.answer = [];
+            }
             // if in progress, find spot patient left off at
             vm.startIndex = 0;
             if (vm.questionnaire.status == 'In Progress' && !vm.editQuestion) {
@@ -156,8 +167,7 @@
                     for (var j = 0; j<vm.questionnaire.sections[i].questions.length; j++) {
                         // as soon as find a question with no answer
                         console.log("BEFORE IF IN ACTIVATE");
-
-                        if ((vm.questionnaire.sections[i].questions[j].patient_answer.length === 0) || (vm.questionnaire.sections[i].questions[j].patient_answer[0]==-1)) {
+                        if ((vm.questionnaire.sections[i].questions[j].patient_answer.answer.length === 0) || (vm.questionnaire.sections[i].questions[j].patient_answer.is_defined=='0')) {
                             console.log("no answer to question: " + (j+1));
                             // console.log("sectionIndex is: " + vm.sectionIndex);
                             // console.log("questionIndex is: " + vm.questionIndex);
@@ -166,7 +176,7 @@
                             break;
                         } else {
                             if((vm.questionnaire.sections[i].questions[j].question_type_category_key == "slider") && (vm.questionnaire.sections[i].questions[j].visualization_name == 'large range')) {
-                            vm.tempAns = vm.questionnaire.sections[i].questions[j].patient_answer[0].sliderAns;
+                            vm.tempAns = vm.questionnaire.sections[i].questions[j].patient_answer.answer[0].sliderAns;
                             console.log("Changing vm.tempAns to " + vm.tempAns);
                             console.log(vm.questionnaire);
                             }
@@ -248,11 +258,40 @@
             },500);
         }
 
+        vm.checkmarkPopup = function(question) {
+            if (question.question_type_category_key == 'checkbox') {
+                if (question.options[0].is_exact == '1' && vm.checkedNumber < vm.limitNumber) {
+                    //pop up saying the answer has not been saved because it is incomplete
+                    checkmarkModal.show();
+                }
+            }
+        };
+
+        // vm.nextCarousel = function(question) {
+        //     if(question.question_type_category_key == 'checkbox') {
+        //         if(question.options[0].is_exact == '1' && vm.checkedNumber<vm.limitNumber) {
+        //             //pop up saying the answer has not been saved because it is incomplete
+        //             checkmarkModal.show();
+        //         } else {
+        //             carousel.next();
+        //         }
+        //     }
+        //     else {
+        //         carousel.next();
+        //     }
+        // };
+
         function toggleViewAns(question) {
-            if(vm.tempAns !== 50 && question.patient_answer[0].sliderAns == 50) {
+            if(vm.tempAns !== 50 && question.patient_answer.answer[0].sliderAns == 50) {
                 vm.viewAns = '--';
             } else {
-                vm.viewAns = question.patient_answer[0].sliderAns;
+                vm.viewAns = question.patient_answer.answer[0].sliderAns;
+            }
+        }
+
+        vm.setCheckboxAnswer = function(question) {
+            if(typeof question.patient_answer.answer == 'undefined') {
+                question.patient_answer.answer = [];
             }
         }
 
@@ -264,6 +303,7 @@
                     vm.sectionIndex = 0;
                     vm.questionIndex = 0;
                     vm.questionTotalIndex = 0;
+                    vm.checkedNumber = 0;
                 }
                 vm.questionnaireStart = false;
                 vm.isQuestion = false;
@@ -280,8 +320,10 @@
                 if (event.lastActiveIndex > 0 && vm.carouselItems[event.lastActiveIndex-1].type == 'question' && vm.carouselItems[event.activeIndex-1].type == 'question') {
                     vm.questionTotalIndex++;
                     console.log("testing for textbox");
+                    vm.checkmarkPopup(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex]);
                     saveAnswer(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex]);
                     vm.questionIndex++;
+                    resetCheckednumber(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex]);
                     console.log('questTotalIndex = ' + vm.questionTotalIndex + " and questionIndex = " + vm.questionIndex);
                     vm.isQuestion = true;
                     console.log('Merge question is: ' + Object(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex]));
@@ -290,6 +332,7 @@
                 else if (event.lastActiveIndex > 0 && vm.carouselItems[event.lastActiveIndex-1].type == 'question' && vm.carouselItems[event.activeIndex-1].type == 'header') {
                     vm.isQuestion = false;
                     vm.questionTotalIndex++;
+                    vm.checkmarkPopup(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex]);
                     saveAnswer(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex]);
                     console.log("vm.sectionIndex="+vm.sectionIndex+ " and vm.questionIndex=" + vm.questionIndex);
                     if(vm.sectionIndex < vm.questionnaire.sections.length-1){
@@ -299,11 +342,13 @@
                         console.log("BUG BUG BUG: sectionIndex becomes too large!");
                     }
                     vm.questionIndex = 0;
+                    resetCheckednumber(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex]);
                     vm.maxQuestionIndex = vm.questionnaire.sections[vm.sectionIndex].questions.length-1;
                     console.log('HERE2 ' + vm.questionTotalIndex + " and questionIndex = " + vm.questionIndex);
                     // coming from section header, going to question
                 } else if (event.lastActiveIndex > 0 && vm.carouselItems[event.lastActiveIndex-1].type == 'header' && vm.carouselItems[event.activeIndex-1].type == 'question') {
                     vm.isQuestion = true;
+                    resetCheckednumber(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex]);
                 }
             }
             // if left swipe
@@ -312,8 +357,10 @@
                 if (event.lastActiveIndex > 0 && vm.carouselItems[event.lastActiveIndex-1].type == 'question' && vm.carouselItems[event.activeIndex-1].type == 'question') {
                     console.log("BEFORE BUG: sectionIndex=" + vm.sectionIndex + " and questionIndex=" + vm.questionIndex);
                     vm.questionTotalIndex--;
+                    vm.checkmarkPopup(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex]);
                     saveAnswer(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex]);
                     vm.questionIndex--;
+                    resetCheckednumber(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex]);
                     vm.isQuestion = true;
                     console.log('HERE3 ' + vm.questionTotalIndex + " and questionIndex = " + vm.questionIndex);
                 }
@@ -328,12 +375,15 @@
                     }
                     vm.maxQuestionIndex = vm.questionnaire.sections[vm.sectionIndex].questions.length-1;
                     vm.questionIndex = vm.maxQuestionIndex;
+                    resetCheckednumber(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex]);
                     vm.questionTotalIndex--;
                     console.log('HERE5 ' + vm.questionTotalIndex + " and questionIndex = " + vm.questionIndex);
                 }
                 // coming from question to section header
                 else if (event.lastActiveIndex > 0 && vm.carouselItems[event.lastActiveIndex-1].type == 'question' && vm.carouselItems[event.activeIndex-1].type == 'header') {
                     vm.isQuestion = false;
+                    vm.checkmarkPopup(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex]);
+                    saveAnswer(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex]);
                 }
             }
             var question = vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex];
@@ -341,13 +391,23 @@
             updateColorGradient(Object.keys(question.options).length, question.polarity);
             vm.currentPolarity = question.polarity;
             // if answer was given in previous session, fill color in correctly
-            if ((question.questiontype == 'Multiple Choice') && (typeof question.answerColor == 'undefined') && question.patient_answer.length > 0 && question.patient_answer[0] != -1) {
+            if ((question.question_type_category_key == 'multiple choice') && (typeof question.answerColor == 'undefined') && question.patient_answer.answer.length > 0 && question.patient_answer.answer[0] != -1) {
                 var keys = Object.keys(question.options);
-                var answerIndex = keys.indexOf("" + question.patient_answer[0]);
+                var answerIndex = keys.indexOf("" + question.patient_answer.answer[0]);
                 updateOptionBackgroundColor(question, answerIndex)
             }
             if (!$scope.$$phase) {
                 $scope.$digest();
+            }
+        }
+
+        function resetCheckednumber(question) {
+            if(question.question_type_category_key == 'checkbox') {
+                if(question.patient_answer.hasOwnProperty('answer')) {
+                    vm.checkedNumber = question.patient_answer.answer.length;
+                } else {
+                    vm.checkedNumber=0;
+                }
             }
         }
 
@@ -397,7 +457,6 @@
 
 
         function bindScaleParameters(question) {
-            console.log("1-------------- sliderAns = " + question.patient_answer[0].sliderAns);
             var keys = Object.keys(question.options);
             console.log(question.options[0].min_value);
             console.log(question.options[0].max_value);
@@ -483,8 +542,6 @@
 
         // save answer to a question whenever user swipes away from question and answer has changed
         function saveAnswer(question) {
-            console.log("sectionIndex= " + vm.sectionIndex + " and questitonIndex= " + vm.questionIndex);
-            console.log("typeoftypeoftypeoftypeoftypeoftypeof" + typeof question.patient_answer[0] + "and value is: " + question.patient_answer[0]);
             // check that answer has changed or that questiontype is scale
             // all scales should be saved everytime since scale begins in middle
             // and user may want that answer (which wouldn't trigger the flag)
@@ -493,27 +550,38 @@
             }
             if (question.answerChangedFlag || question.question_type_category_key == 'slider') {
                 console.log("saveanswer()");
-                console.log("patient answer is: " + Object(question.patient_answer));
-                if(question.question_type_category_key == 'slider'){
-                    if(vm.tempAns !== 50 && question.patient_answer[0].sliderAns == 50) {
-                        question.patient_answer[0].sliderAns = vm.tempAns;
+                console.log(question.question_type_category_key);
+                console.log("patient answer is: ");
+                console.log(Object(question.patient_answer));
+                if(question.question_type_category_key == 'slider') {
+                    if(!question.patient_answer.hasOwnProperty('answer')) {
+                        console.log('Adding answer property');
+                        question.patient_answer.answer = [{'sliderAns':''}];
                     }
-                    Questionnaires.saveQuestionnaireAnswer(vm.questionnaire.qp_ser_num, question.ser_num, question.patient_answer[0].sliderAns, question.options[0].answer_option_ser_num, question.question_type_category_key, vm.questionnaire.sections[vm.sectionIndex].section_ser_num);
+                    if(!question.patient_answer.answer.hasOwnProperty('sliderAns')) {
+                        if (vm.tempAns !== 50 && question.patient_answer.answer[0].sliderAns == 50) {
+                            question.patient_answer.answer[0].sliderAns = vm.tempAns;
+                        }
+                    }
+                    Questionnaires.saveQuestionnaireAnswer(vm.questionnaire.qp_ser_num, question.ser_num, question.patient_answer.answer[0].sliderAns, question.options[0].answer_option_ser_num, question.question_type_category_key, vm.questionnaire.sections[vm.sectionIndex].section_ser_num);
                 } else if(question.question_type_category_key == 'textbox') {
-                    Questionnaires.saveQuestionnaireAnswer(vm.questionnaire.qp_ser_num, question.ser_num, question.patient_answer[0].text, question.options[0].answer_option_ser_num, question.question_type_category_key, vm.questionnaire.sections[vm.sectionIndex].section_ser_num);
-                }  else if(question.question_type_category_key == 'checkbox') {
-                    var toReturn = [];
-                    var elem={};
-                    for(var i = 0; i<question.patient_answer.length;i++) {
-                        var temp = question.options.find(elem = function() {
-                            return elem.answer_option_ser_num == question.patient_answer[i].CheckboxAnswerOptionSerNum
-                        });
-                        console.log(Object(temp));
-                        toReturn.push(temp);
-                        console.log("toReturn = ");
-                        console.log(Object(toReturn));
+                    Questionnaires.saveQuestionnaireAnswer(vm.questionnaire.qp_ser_num, question.ser_num, question.patient_answer.answer[0].text, question.options[0].answer_option_ser_num, question.question_type_category_key, vm.questionnaire.sections[vm.sectionIndex].section_ser_num);
+                } else if(question.question_type_category_key == 'checkbox') {
+                    if(!(question.options[0].is_exact == '1' && vm.checkedNumber<vm.limitNumber)) {
+                        var toReturn = [];
+                        //var elem={};
+                        for (var i = 0; i < question.patient_answer.answer.length; i++) {
+                            // var temp = question.options.find(elem = function() {
+                            //     return elem.answer_option_ser_num == question.patient_answer.answer[i].CheckboxAnswerOptionSerNum
+                            // });
+                            // console.log(Object(temp));
+                            toReturn.push(question.patient_answer.answer[i].CheckboxAnswerOptionSerNum);
+                            console.log("toReturn = ");
+                            console.log(Object(toReturn));
+                            console.log(i);
+                        }
+                        Questionnaires.saveQuestionnaireAnswer(vm.questionnaire.qp_ser_num, question.ser_num, -1, toReturn, question.question_type_category_key, vm.questionnaire.sections[vm.sectionIndex].section_ser_num);
                     }
-                    Questionnaires.saveQuestionnaireAnswer(vm.questionnaire.qp_ser_num, question.ser_num, -1, toReturn, question.question_type_category_key, vm.questionnaire.sections[vm.sectionIndex].section_ser_num);
                 } else {
                    // for (var i = 0; i < question.patient_answer.length; i++) {
                         // var patientAnswers = jsObjects.filter(question.options = function() {
@@ -521,7 +589,7 @@
                         // });z
                         console.log("about to call save quest answer");
                         console.log(question);
-                        Questionnaires.saveQuestionnaireAnswer(vm.questionnaire.qp_ser_num, question.ser_num, -1, question.options[question.patient_answer[0]].answer_option_ser_num, question.question_type_category_key, vm.questionnaire.sections[vm.sectionIndex].section_ser_num);
+                        Questionnaires.saveQuestionnaireAnswer(vm.questionnaire.qp_ser_num, question.ser_num, -1, question.options[question.patient_answer.answer[0]].answer_option_ser_num, question.question_type_category_key, vm.questionnaire.sections[vm.sectionIndex].section_ser_num);
                    // }
                 }
                 if (vm.questionnaire.status == 'New') {
@@ -582,48 +650,59 @@
             console.log("Sectionindex is : " + vm.sectionIndex + " and question index is " + vm.questionIndex);
             var question = vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex];
             question.answerChangedFlag = true;
-            console.log("Question is "+Object(question));
-            console.log("Question.patient_answer is "+Object(question.patient_answer));
+            console.log("Question.patient_answer is ");
+            console.log(Object(question.patient_answer));
+            console.log("checknumber = "+vm.checkedNumber);
+            if(!question.hasOwnProperty('patient_answer')) {
+                question.patient_answer= {};
+            }
 
-            // if previous choice was to skip question, toggle skip boolean
-            // if (question.patient_answer.indexOf("SKIPPED") > -1) {
-            //     toggleCheckboxSkip(false, question);
-            // }
-            //
-            // console.log("Object is "+Object(question.patient_answer));
-            //
-            // var answerIndex = question.patient_answer.indexOf(optionKey);
-            //
-            // // is currently selected, remove it
-            // if (answerIndex > -1) {
-            //     question.answerChangedFlag = true;
-            //     question.patient_answer.splice(answerIndex, 1);
-            //     vm.tmpAnswer = question.patient_answer;
-            //     vm.checkedNumber--;
-            //     console.log("In if, checkedNumber = "+vm.checkedNumber);
-            //     console.log("Object after splice in if is "+Object(question.patient_answer));
-            //     console.log("tmpAnswer = " + Object(vm.tmpAnswer));
-            // } else { // is newly selected
-            //     question.answerChangedFlag = true;
-            //     //question.patient_answer.push(optionKey);
-            //     // push answer to answer array
-            //     //question.patient_answer[vm.checkboxSavingIndex].AnsSerNum=optionKey;
-            //     if(vm.checkboxSavingIndex==0) {
-            //         question.patient_answer = {};
-            //         question.patient_answer[0].CheckboxAnswerOptionSerNum=optionKey;
-            //     } else {
-            //         question.patient_answer.push({'CheckboxAnswerOptionSerNum':optionKey});
-            //     }
-            //     vm.checkboxSavingIndex++;
-            //     console.log("Answer array");
-            //     console.log(Object(question.patient_answer));
-            //     vm.checkedNumber++;
-            //     console.log("In else, checkedNumber = "+vm.checkedNumber);
-            //     console.log("Object after push in if else else is "+Object(question.patient_answer));
-            //     vm.tmpAnswer = question.patient_answer;
-            //     console.log("tmpAnswer = " + Object(vm.tmpAnswer));
-            // }
-            console.log("Object at the end is "+Object(question.patient_answer));
+            //question.patient_answer.answer = (!question.patient_answer.hasOwnProperty('answer'))? []:question.patient_answer.answer;
+
+            //if previous choice was to skip question, toggle skip boolean
+            if (question.patient_answer.answer.indexOf("SKIPPED") > -1) {
+                toggleCheckboxSkip(false, question);
+            }
+
+            console.log("Object is "+Object(question.patient_answer));
+
+            //var answerIndex = question.patient_answer.answer.indexOf({CheckboxAnswerOptionSerNum:optionKey});
+            var answerIndex = question.patient_answer.answer.map(function(e) { return e.CheckboxAnswerOptionSerNum; }).indexOf(optionKey);
+            console.log("Selected option sernum = " + answerIndex);
+
+            // is currently selected, remove it
+            if (answerIndex > -1) {
+                question.answerChangedFlag = true;
+                question.patient_answer.answer.splice(answerIndex, 1);
+                vm.tmpAnswer = question.patient_answer.answer;
+                vm.checkedNumber--;
+                console.log("In if, checkedNumber = "+vm.checkedNumber);
+                console.log("Object after splice in if is "+Object(question.patient_answer));
+                console.log("tmpAnswer = " + Object(vm.tmpAnswer));
+                console.log(Object(question.patient_answer));
+            } else { // is newly selected
+                question.answerChangedFlag = true;
+                //question.patient_answer.push(optionKey);
+                // push answer to answer array
+                //question.patient_answer[vm.checkboxSavingIndex].AnsSerNum=optionKey;
+                // if(vm.checkboxSavingIndex==0) {
+                //     question.patient_answer.answer = [{'CheckboxAnswerOptionSerNum':''}];
+                //     question.patient_answer.answer[0].CheckboxAnswerOptionSerNum=optionKey;
+                //     //question.patient_answer.answer.push({'CheckboxAnswerOptionSerNum':optionKey});
+                // } else {
+                    question.patient_answer.answer.push({'CheckboxAnswerOptionSerNum':optionKey});
+                // }
+                // vm.checkboxSavingIndex++;
+                console.log("Answer array");
+                console.log(Object(question.patient_answer));
+                vm.checkedNumber++;
+                console.log("In else, checkedNumber = "+vm.checkedNumber);
+                console.log("Object after push in if else else is "+Object(question.patient_answer));
+                vm.tmpAnswer = question.patient_answer.answer;
+                console.log("tmpAnswer = " + Object(vm.tmpAnswer));
+            }
+            console.log("Object at the end is ");
+            console.log(Object(question.patient_answer));
         }
 
         function isCheckedFcn(optionKey) {
@@ -631,22 +710,16 @@
             var answerIndex = question.patient_answer.indexOf(optionKey);
             return (answerIndex > -1);
         }
-        //TODO: define checkedNumber and limitNumber dynamically for each question instead of hardcoding
-        vm.checkedNumber = 0;
-        vm.limitNumber = 2;
-        vm.check = function(item) {
-            if (item.checked) {
-                vm.checkedNumber++;
-            } else {
-                vm.checkedNumber--;
-            }
-        }
+
+        vm.setLimit = function(question) {
+            vm.limitNumber = parseInt(question.options[0].nb_answer);
+        };
 
         function toggleScaleSkip(skip, question) {
             console.log("CHECK answerChangedFlag= " + question.answerChangedFlag + " and skip=" + skip);
             question.answerChangedFlag = true;
             if (skip) {
-                question.patient_answer = [-9];
+                question.patient_answer.answer[0].sliderAns = 'SKIPPED';
                 if (!$scope.$$phase) {
                     $scope.$digest();
                 }
@@ -666,7 +739,7 @@
             else {
                 //question.patient_answer = [];
                 vm.checkedNumber=vm.tmpAnswer.length;
-                question.patient_answer = vm.tmpAnswer;
+                question.patient_answer.answer = vm.tmpAnswer;
                 console.log("UNCHECKING SKIP: " + Object(question.patient_answer));
 
                 //question.patient_answer = [];
@@ -674,17 +747,21 @@
             question.skip = !skip;
         }
 
+        vm.isCheckedCheckmark = function(question, optionKey) {
+            return (question.patient_answer.answer.map(function(e) { return e.CheckboxAnswerOptionSerNum; }).indexOf(optionKey) > -1);
+        };
+
         function skipQuestion(question) {
-            question.patient_answer = ['SKIPPED'];
+            question.patient_answer.answer = ['SKIPPED'];
             if (!$scope.$$phase) {
                 $scope.$digest();
             }
         }
 
-        function isDisabled(key) {
+        function isDisabled(optionKey) {
             var question = vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex];
-            var answerIndex = question.patient_answer.indexOf(key);
-            return !(answerIndex>-1) && (vm.checkedNumber >= vm.limitNumber);
+            var answerIndex = question.patient_answer.answer.map(function(e) { return e.CheckboxAnswerOptionSerNum; }).indexOf(optionKey);
+            return !(answerIndex>-1) && (vm.checkedNumber >= vm.limitNumber || question.patient_answer.answer[0]=='SKIPPED');
         }
 
         function removeListener() {

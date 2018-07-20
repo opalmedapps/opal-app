@@ -32,7 +32,10 @@
             vm.submitAllowed = true;
             for (var i=0; i<vm.questionnaire.sections.length; i++) {
                 for (var j=0; j<vm.questionnaire.sections[i].questions.length; j++) {
-                    if (vm.questionnaire.sections[i].questions[j].optional == 0 && vm.questionnaire.sections[i].questions[j].patient_answer.length == 0) {
+                    if(!vm.questionnaire.sections[i].questions[j].patient_answer.hasOwnProperty('answer')) {
+                        vm.questionnaire.sections[i].questions[j].patient_answer.answer = [];
+                    }
+                    if (vm.questionnaire.sections[i].questions[j].optional == 0 && vm.questionnaire.sections[i].questions[j].patient_answer.answer.length == 0) {
                         console.log("Questionnaire can't be submitted because of question: ");
                         console.log(vm.questionnaire.sections[i].questions[j]);
                         vm.submitAllowed = false;
@@ -74,14 +77,21 @@
             console.log("setTempAnswer ");
             console.log(Object(question));
             var elem = {};
+            var tempIndex = 0;
                 if(question.question_type_category_key == 'checkbox') {
-                for (var i = 0; i < question.patient_answer.length; i++) {
-                    var temp = question.options.filter(elem => elem.answer_option_ser_num == question.patient_answer[0].CheckboxAnswerOptionSerNum);
-                    question.temporaryAnswer = Object.assign({},vm.temporaryAnswer,temp);
+                for (var i = 0; i < question.patient_answer.answer.length; i++) {
+                    for(var j = 0; j < question.options.length; j++) {
+                        if(question.options[j].answer_option_ser_num == question.patient_answer.answer[i].CheckboxAnswerOptionSerNum) {
+                            question.temporaryAnswer[tempIndex].checkbox_text = question.options[j].checkbox_text;
+                            tempIndex++;
+                        }
+                    }
+                    // var temp = question.options.filter(elem => elem.answer_option_ser_num == question.patient_answer.answer[0].CheckboxAnswerOptionSerNum);
+                    // question.temporaryAnswer = Object.assign({},vm.temporaryAnswer,temp);
                 }
             } else { // multiple choice
                 for (var i = 0; i < question.options.length; i++) {
-                    if(question.options[i].answer_option_ser_num == question.patient_answer[0].MCAnswerOptionSerNum){
+                    if(question.options[i].answer_option_ser_num == question.patient_answer.answer[0].MCAnswerOptionSerNum){
                         question.temporaryAnswer = question.options[i];
                     }
                 }
