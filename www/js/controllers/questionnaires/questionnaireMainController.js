@@ -267,19 +267,19 @@
             }
         };
 
-        // vm.nextCarousel = function(question) {
-        //     if(question.question_type_category_key == 'checkbox') {
-        //         if(question.options[0].is_exact == '1' && vm.checkedNumber<vm.limitNumber) {
-        //             //pop up saying the answer has not been saved because it is incomplete
-        //             checkmarkModal.show();
-        //         } else {
-        //             carousel.next();
-        //         }
-        //     }
-        //     else {
-        //         carousel.next();
-        //     }
-        // };
+        vm.nextCarousel = function(question) {
+            if(question.question_type_category_key == 'checkbox') {
+                if(question.options[0].is_exact == '1' && vm.checkedNumber<vm.limitNumber) {
+                    //pop up saying the answer has not been saved because it is incomplete
+                    checkmarkModal.show();
+                } else {
+                    carousel.next();
+                }
+            }
+            else {
+                carousel.next();
+            }
+        };
 
         function toggleViewAns(question) {
             if(vm.tempAns !== 50 && question.patient_answer.answer[0].sliderAns == 50) {
