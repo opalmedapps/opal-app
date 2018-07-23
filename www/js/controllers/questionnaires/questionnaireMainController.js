@@ -267,19 +267,19 @@
             }
         };
 
-        vm.nextCarousel = function(question) {
-            if(question.question_type_category_key == 'checkbox') {
-                if(question.options[0].is_exact == '1' && vm.checkedNumber<vm.limitNumber) {
-                    //pop up saying the answer has not been saved because it is incomplete
-                    checkmarkModal.show();
-                } else {
-                    carousel.next();
-                }
-            }
-            else {
-                carousel.next();
-            }
-        };
+        // vm.nextCarousel = function(question) {
+        //     if(question.question_type_category_key == 'checkbox') {
+        //         if(question.options[0].is_exact == '1' && vm.checkedNumber<vm.limitNumber) {
+        //             //pop up saying the answer has not been saved because it is incomplete
+        //             checkmarkModal.show();
+        //         } else {
+        //             carousel.next();
+        //         }
+        //     }
+        //     else {
+        //         carousel.next();
+        //     }
+        // };
 
         function toggleViewAns(question) {
             if(vm.tempAns !== 50 && question.patient_answer.answer[0].sliderAns == 50) {
@@ -290,10 +290,15 @@
         }
 
         vm.setCheckboxAnswer = function(question) {
+            vm.limitNumber = parseInt(question.options[0].nb_answer);
+            console.log('limitNumber= '+vm.limitNumber);
             if(typeof question.patient_answer.answer == 'undefined') {
                 question.patient_answer.answer = [];
+            } else if(!question.patient_answer.answer[0].hasOwnProperty('CheckboxAnswerOptionSerNum')){
+                question.patient_answer.answer = [];
             }
-        }
+            resetCheckednumber(question);
+        };
 
         function carouselPostChange(event) {
             //console.log($scope.carousel.getActiveCarouselItemIndex());
@@ -404,7 +409,13 @@
         function resetCheckednumber(question) {
             if(question.question_type_category_key == 'checkbox') {
                 if(question.patient_answer.hasOwnProperty('answer')) {
-                    vm.checkedNumber = question.patient_answer.answer.length;
+                    if(question.patient_answer.answer[0].hasOwnProperty('CheckboxAnswerOptionSerNum')) {
+                        vm.checkedNumber = question.patient_answer.answer.length;
+                        console.log('vm.checkedNumber');
+                        console.log(vm.checkedNumber);
+                    } else {
+                        vm.checkedNumber=0;
+                    }
                 } else {
                     vm.checkedNumber=0;
                 }
@@ -685,14 +696,14 @@
                 //question.patient_answer.push(optionKey);
                 // push answer to answer array
                 //question.patient_answer[vm.checkboxSavingIndex].AnsSerNum=optionKey;
-                // if(vm.checkboxSavingIndex==0) {
-                //     question.patient_answer.answer = [{'CheckboxAnswerOptionSerNum':''}];
-                //     question.patient_answer.answer[0].CheckboxAnswerOptionSerNum=optionKey;
-                //     //question.patient_answer.answer.push({'CheckboxAnswerOptionSerNum':optionKey});
-                // } else {
+                if(!question.patient_answer.answer[0].hasOwnProperty('CheckboxAnswerOptionSerNum') || question.patient_answer.answer[0].Skipped=='1') {
+                    question.patient_answer.answer = [{'CheckboxAnswerOptionSerNum':''}];
+                    question.patient_answer.answer[0].CheckboxAnswerOptionSerNum=optionKey;
+                    //question.patient_answer.answer.push({'CheckboxAnswerOptionSerNum':optionKey});
+                } else {
                     question.patient_answer.answer.push({'CheckboxAnswerOptionSerNum':optionKey});
-                // }
-                // vm.checkboxSavingIndex++;
+                }
+                vm.checkboxSavingIndex++;
                 console.log("Answer array");
                 console.log(Object(question.patient_answer));
                 vm.checkedNumber++;
@@ -710,10 +721,6 @@
             var answerIndex = question.patient_answer.indexOf(optionKey);
             return (answerIndex > -1);
         }
-
-        vm.setLimit = function(question) {
-            vm.limitNumber = parseInt(question.options[0].nb_answer);
-        };
 
         function toggleScaleSkip(skip, question) {
             console.log("CHECK answerChangedFlag= " + question.answerChangedFlag + " and skip=" + skip);

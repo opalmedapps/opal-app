@@ -212,7 +212,7 @@
                                     <center><i style="color:rgba(38,100,171,0.81);font-size:25px" class="ion-chevron-left" ng-click="carousel.prev()"></i></center>
                                 </div>
                                 <div class="col-xs-6">
-                                    <center><h3 style="margin-top:10px">Section {{vm.sectionIndex+1}} of {{vm.questionnaire.sections.length}}</h3></center>
+                                    <center><h3 style="margin-top:10px" ng-class="fontSizeDesc">Section {{vm.sectionIndex+1}} of {{vm.questionnaire.sections.length}}</h3></center>
                                 </div>
                                 <div class="col-xs-3" ng-disabled="carousel.getActiveCarouselItemIndex() == vm.carouselItems.length" style="margin-top:5px;padding-right: 0vw;">
                                     <center><i style="color:rgba(38,100,171,0.81);font-size:25px" class="ion-chevron-right" ng-click="carousel.next()"></i></center>
@@ -268,14 +268,14 @@
 
                     <!-- QUESTION -->
                     <div class="center" style="margin-top:10px;padding-left:5vw;padding-right:5vw;">
-                        <h4>{{item.data.text}}</h4>
+                        <h4 ng-class="fontSizeDesc">{{item.data.text}}</h4>
                     </div>
 
                     <!-- MULTIPLE CHOICE -->
                     <div ng-if="item.data.question_type_category_key == 'multiple choice'" class="center" style="margin-top:10px;padding-left:5vw;padding-right:5vw;">
                         <ul class="list" ng-init="item.data.patient_answer.answer.length > 0 || item.data.patient_answer.push(-1); item.data.answerChangedFlag = false;">
                             <li class="list__item list__item--tappable" ng-style="item.data.patient_answer.answer.length > 0 && item.data.patient_answer[0] == key ? {'background-color':item.data.answerColor} : {'background-color':'#f9f9f9'};" ng-repeat="(key, value) in item.data.options">
-                                <label ng-click="vm.updateOptionBackgroundColor(item.data, $index)" class="radio-button radio-button--list-item">
+                                <label ng-class="fontSizeDesc" ng-click="vm.updateOptionBackgroundColor(item.data, $index)" class="radio-button radio-button--list-item">
                                     <input type="radio" name="{{'mcRadio'+item.data.ser_num}}" value={{key}} ng-model="item.data.patient_answer.answer[0]" ng-checked="item.data.patient_answer.answer[0].MCAnswerOptionSerNum == value.answer_option_ser_num" ng-change="item.data.answerChangedFlag = true;">
                                     <div class="radio-button__checkmark radio-button--list-item__checkmark"></div>
                                     {{value.mc_text}}
@@ -284,7 +284,7 @@
                             <div ng-if="item.data.optional == 1" style="padding-top:3vh; background-color:#d9d9d9">
                             </div>
                             <li ng-if="item.data.optional == 1" class="list__item list__item--tappable" ng-style="item.data.patient_answer.answer[0] == 'SKIPPED' ? {'background-color':'#e9e9e9'} : {'background-color':'#f9f9f9'}">
-                                <label class="radio-button radio-button--list-item">
+                                <label ng-class="fontSizeDesc" class="radio-button radio-button--list-item">
                                     <input type="radio" name="{{'mcRadio'+item.data.ser_num}}" value='SKIPPED' ng-model="item.data.patient_answer.answer[0]" ng-checked="item.data.patient_answer.answer[0] == 'SKIPPED'||item.data.patient_answer.answer[0].Skipped == '1'" ng-change="item.data.answerChangedFlag = true;">
                                     <div class="radio-button__checkmark radio-button--list-item__checkmark"></div>
                                     {{"Prefer not to answer"|translate}}
@@ -295,20 +295,20 @@
 
                     <!-- CHECKMARK -->
 
-                    <div ng-if="item.data.question_type_category_key == 'checkbox'" class="center" style="margin-top:10px;padding-left:5vw;padding-right:5vw;" ng-init="vm.setCheckboxAnswer(item.data);vm.setLimit(item.data);vm.checkedNumber=item.data.patient_answer.answer.length;">
+                    <div ng-if="item.data.question_type_category_key == 'checkbox'" class="center" style="margin-top:10px;padding-left:5vw;padding-right:5vw;" ng-init="vm.setCheckboxAnswer(item.data);">
                         <ul class="list" ng-init="item.data.answerChangedFlag = false;">
                             <!-- ng-style="item.data.patient_answer.indexOf($index) > -1 && {'background-color':'#e9e9e9'} || {'background-color':'#f9f9f9'};"  -->
                             <li class="list__item list__item--tappable" ng-style="vm.isCheckedCheckmark(item.data, value.answer_option_ser_num) ? {'background-color':'#e9e9e9'} : {'background-color':'#f9f9f9'}" ng-repeat="(key, value) in item.data.options">
-                                <label class="checkbox checkbox--list-item" ng-style="vm.isCheckedCheckmark(item.data, value.answer_option_ser_num) ? {'background-color':'#e9e9e9', 'margin':'0px', 'padding':'10px'} : {'background-color':'#f9f9f9', 'margin':'0px', 'padding':'10px'}">
+                                <label class="checkbox checkbox--list-item" ng-class="fontSizeDesc" ng-style="vm.isCheckedCheckmark(item.data, value.answer_option_ser_num) ? {'background-color':'#e9e9e9', 'margin':'0px', 'padding':'10px'} : {'background-color':'#f9f9f9', 'margin':'0px', 'padding':'10px'}">
                                     <input type="checkbox" name="{{'mcCheckbox'+item.data.ser_num}}" style="-webkit-appearance: checkbox !important" value={{value.answer_option_ser_num}} ng-checked="vm.isCheckedCheckmark(item.data, value.answer_option_ser_num) " ng-click="vm.toggleCheckboxSelection(value.answer_option_ser_num)" ng-disabled="vm.isDisabled(value.answer_option_ser_num)">
-                                    <div class="checkbox__checkmark checkbox--list-item__checkmark" ng-class="fontSizeDesc"></div>
+                                    <div class="checkbox__checkmark checkbox--list-item__checkmark" ></div>
                                     {{value.checkbox_text}}
                                 </label>
                             </li>
                             <div ng-if="item.data.optional == 1" style="padding-top:0px; background-color:#d9d9d9">
                             </div>
                             <li ng-if="item.data.optional == 1" class="list__item list__item--tappable" ng-style="vm.isCheckedCheckmark(item.data, 'SKIPPED') ? {'background-color':'#e9e9e9'} : {'background-color':'#f9f9f9'}" ng-init="item.data.skip = true">
-                                <label class="checkbox checkbox--list-item" ng-style="item.data.patient_answer.answer.indexOf('SKIPPED') > -1 ? {'background-color':'#e9e9e9', 'margin':'0px', 'padding':'10px'} : {'background-color':'#f9f9f9', 'margin':'0px', 'padding':'10px'}">
+                                <label ng-class="fontSizeDesc" class="checkbox checkbox--list-item" ng-style="item.data.patient_answer.answer.indexOf('SKIPPED') > -1 ? {'background-color':'#e9e9e9', 'margin':'0px', 'padding':'10px'} : {'background-color':'#f9f9f9', 'margin':'0px', 'padding':'10px'}">
                                     <input type="checkbox" name="{{'mcCheckbox'+item.data.ser_num}}" value='SKIPPED' ng-checked="item.data.patient_answer.is_defined!=='0' && vm.isCheckedCheckmark(item.data, 'SKIPPED')" ng-click="vm.toggleCheckboxSkip(item.data.skip, item.data)">
                                     <div class="checkbox__checkmark checkbox--list-item__checkmark"></div>
                                     {{"Prefer not to answer"|translate}}
@@ -317,60 +317,29 @@
                         </ul>
                         <ul class="list" style="background: #f9f9f9;padding-top: 10%;">
                             <li ng-if="vm.checkedNumber>0 && item.data.options[0].is_exact == '0' && !(item.data.patient_answer.answer.indexOf('SKIPPED') > -1)">
-                                <span>You have selected {{vm.checkedNumber}} options. You can select up to {{vm.limitNumber-vm.checkedNumber}} more options.</span>
+                                <span ng-class="fontSizeDesc">You have selected {{vm.checkedNumber}} options. You can select up to {{vm.limitNumber-vm.checkedNumber}} more options.</span>
                             </li>
                             <li ng-if="vm.checkedNumber>0 && item.data.options[0].is_exact == '1' && !(item.data.patient_answer.answer.indexOf('SKIPPED') > -1)">
-                                <span>You have selected {{vm.checkedNumber}} options. You have to select {{vm.limitNumber-vm.checkedNumber}} more.</span>
+                                <span ng-class="fontSizeDesc">You have selected {{vm.checkedNumber}} options. You have to select {{vm.limitNumber-vm.checkedNumber}} more.</span>
                             </li>
                         </ul>
                     </div>
 
                     <ons-modal var="checkmarkModal">
                         <div id="rcorners" style="height: 60%">
-                            <ul style="height: 100%">
-                                    <div style="margin-top:10vh;padding: 0 20px 0 20px" class="text-center">
-                                        <div>
-                                            <ons-icon icon="far fa-exclamation-triangle" style="font-size:80px; color: #2196F3"></ons-icon>
+                                    <div style="margin-top:10%;padding: 0px 20px 0px 20px;margin-right: 9%;" class="text-center">
+                                        <div style="padding-bottom: 10%">
+                                            <ons-icon icon="far fa-exclamation-triangle" style="font-size:80px; color: white"></ons-icon>
                                         </div>
-                                        <div ng-class="fontSizeTitle"></div>
                                         <div class="container" style="text-align:center;">
-                                            <span ng-class="fontSizeDesc">This question requires you to select exactly {{vm.limitNumber}} options. You have only selected {{vm.checkedNumber}}. Your answer has not been saved. You may come back to this question to submit an answer.</span>
+                                            <p ng-class="fontSizeDesc" style="text-align: justify;text-justify: inter-word;">This question requires you to select exactly {{vm.limitNumber}} options. You can come back to this question to submit a valid answer.</p>
+                                        </div>
+                                        <div id="tourButtons" style="padding: 0px 20px 0px 20px; padding-top: 5%;padding-bottom: 5%;padding-right: 10%;" class="text-center">
+                                            <ons-button class="ng-isolate-scope button effeckt-button slide-left" ng-click="checkmarkModal.hide();"ng-class="fontSizeDesc">{{"OK"|translate}}</ons-button>
                                         </div>
                                     </div>
-                                </li>
-                            </ul>
-
-                            <div id="tourButtons">
-                                <ons-button modifier="cta" ng-click="checkmarkModal.hide();" style="background-color: inherit; font-size: 125%">{{"OK"|translate}}</ons-button>
-                            </div>
                         </div>
                     </ons-modal>
-
-                    <!-- BROKEN CHECKMARK-->
-                    <!--<div ng-if="item.data.question_type_category_key == 'checkbox'" class="center" style="margin-top:10px;padding-left:5vw;padding-right:5vw;">-->
-                        <!--<ul class="list" ng-init="item.data.answerChangedFlag = false;">-->
-                            <!--&lt;!&ndash; ng-style="item.data.patient_answer.indexOf($index) > -1 && {'background-color':'#e9e9e9'} || {'background-color':'#f9f9f9'};"  &ndash;&gt;-->
-                            <!--<li class="list__item list__item&#45;&#45;tappable" ng-style="item.data.patient_answer.indexOf(key) > -1 ? {'background-color':'#e9e9e9'} : {'background-color':'#f9f9f9'}" ng-repeat="(key, value) in item.data.options">-->
-                                <!--<label class="checkbox checkbox&#45;&#45;list-item" ng-style="item.data.patient_answer.indexOf(key) > -1 ? {'background-color':'#e9e9e9', 'margin':'0px', 'padding':'10px'} : {'background-color':'#f9f9f9', 'margin':'0px', 'padding':'10px'}">-->
-                                    <!--&lt;!&ndash;<input class="single-checkbox" type="checkbox" name="{{'mcCheckbox'+item.data.ser_num}}" value={{key}} id={{key}} ng-checked="(item.data.options.patient_answer.indexOf(key)>-1)||(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex].patient_answer.indexOf(key) > -1)" >&ndash;&gt;-->
-                                    <!--<input  type="checkbox" name="{{'mcCheckbox'+item.data.ser_num}}" value={{key}} id={{key}} ng-checked="(item.data.patient_answer.indexOf(key)>-1) && !(item.data.patient_answer.indexOf('SKIPPED')>-1)" ng-disabled="vm.isDisabled(key) || (item.data.patient_answer.indexOf('SKIPPED')>-1)" ng-click="vm.toggleCheckboxSelection(key);">-->
-                                    <!--&lt;!&ndash;&lt;!&ndash;&& (vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex].patient_answer.indexOf(key) > -1) && (item.data.options.patient_answer.indexOf(key)>-1)&ndash;&gt;&ndash;&gt;-->
-                                    <!--&lt;!&ndash;TODO: exactly vs lessthan or equal with ng-if&ndash;&gt;-->
-                                    <!--<div class="checkbox__checkmark checkbox&#45;&#45;list-item__checkmark"></div>-->
-                                    <!--{{value.checkbox_text}}-->
-                                <!--</label>-->
-                            <!--</li>-->
-                            <!--<div ng-if="item.data.optional == 1" style="padding-top:3vh; background-color:#d9d9d9">-->
-                            <!--</div>-->
-                            <!--<li ng-if="item.data.optional == 1" class="list__item list__item&#45;&#45;tappable" ng-style="item.data.patient_answer.indexOf('SKIPPED') > -1 ? {'background-color':'#e9e9e9'} : {'background-color':'#f9f9f9'}" ng-init="item.data.skip = true">-->
-                                <!--<label class="checkbox checkbox&#45;&#45;list-item" ng-style="item.data.patient_answer.indexOf('SKIPPED') > -1 ? {'background-color':'#e9e9e9', 'margin':'0px', 'padding':'10px'} : {'background-color':'#f9f9f9', 'margin':'0px', 'padding':'10px'}">-->
-                                    <!--<input type="checkbox" name="{{'mcCheckbox'+item.data.ser_num}}" value='SKIPPED' ng-checked="item.data.patient_answer.indexOf('SKIPPED') > -1" ng-click="vm.toggleCheckboxSkip(item.data.skip, item.data)">-->
-                                    <!--<div class="checkbox__checkmark checkbox&#45;&#45;list-item__checkmark"></div>-->
-                                    <!--{{"Prefer not to answer"|translate}}-->
-                                <!--</label>-->
-                            <!--</li>-->
-                        <!--</ul>-->
-                    <!--</div>-->
 
                     <!-- LARGE RANGE SCALE (SLIDER TYPE OF QUESTION)--> <!--TODO: Add visualization option check instead of hardcoding 'vm.questionTotalIndex + 1 <= 3'-->
                     <div ng-if="item.data.question_type_category_key == 'slider' && item.data.visualization_name == 'slider'" ng-init="console.log('3------ sliderAns='+ item.data.patient_answer.answer[0].sliderAns);console.log('1 tempAns = '+ vm.tempAns);vm.tempAns=item.data.patient_answer.answer[0].sliderAns;" class="center" style="padding-left:10%">
@@ -562,31 +531,31 @@
                         <ons-row ng-if="!vm.portraitOrientationCheck.matches" class="slidercontainer" style="margin-left:0px;margin-right:0px" ng-init="vm.bindScaleParameters(item.data);" class="center" style="margin-top:10px;padding-left:5vw;padding-right:5vw;">
 
                             <ons-col ng-init="console.log('4---------- sliderAns = ' + item.data.patient_answer.answer[0].sliderAns); item.data.answerChangedFlag = false;">
-                                <ons-row class="maximumText2" width="40px" style="text-align: right;">
+                                <ons-row class="maximumText2" width="40px" style="text-align: right;" ng-class="fontSizeDesc">
                                      {{item.data.options[0].max_value}} - {{item.data.options[0].max_caption}}
                                 </ons-row>
 
                                 <input type="range" min="{{item.data.options[0].min_value}}" max="{{item.data.options[0].max_value}}" string-to-number ng-value="item.data.patient_answer.answer[0].sliderAns" ng-model="item.data.patient_answer.answer[0].sliderAns" ng-init="item.data.patient_answer.answer[0].sliderAns = vm.tempAns;" class="slider2" id="myRange2" style="width: 80%; height: 90px;" ng-change="vm.removeSpanChild(); item.data.answerChangedFlag = true; console.log('5---------');console.log(Object(item.data));vm.toggleViewAns(item.data);">
-                                <ons-row class="minimumText2" width="40px" style="text-align: right;">
+                                <ons-row class="minimumText2" width="40px" style="text-align: right;" ng-class="fontSizeDesc">
                                      {{item.data.options[0].min_value}} - {{item.data.options[0].min_caption}}
                                 </ons-row>
                             </ons-col>
-                            <div class="value2">Value: &nbsp; {{vm.viewAns}}<!--{{item.data.patient_answer[0].sliderAns}}--></div>
+                            <div class="value2" ng-class="fontSizeDesc">Value: &nbsp; {{vm.viewAns}}<!--{{item.data.patient_answer[0].sliderAns}}--></div>
                         </ons-row>
 
                         <!-- portrait mode-->
                         <ons-row ng-if="vm.portraitOrientationCheck.matches" class="slidercontainer" style="margin-left:0px;margin-right:0px" ng-init="vm.bindScaleParameters(item.data);" class="center" style="margin-top:10px;padding-left:5vw;padding-right:5vw;">
 
                                 <ons-col ng-init="item.data.patient_answer.length > 0; item.data.answerChangedFlag = false;">
-                                    <ons-row class="maximumText" id="maximumText" width="40px" style="text-align: right; left: 77%;">
+                                    <ons-row class="maximumText" id="maximumText" width="40px" style="text-align: right; left: 77%;" ng-class="fontSizeDesc">
                                         {{item.data.options[0].max_value}} - {{item.data.options[0].max_caption}}
                                     </ons-row>
                                 <input type="range" min="{{item.data.options[0].min_value}}" max="{{item.data.options[0].max_value}}" string-to-number ng-init="item.data.patient_answer.answer[0].sliderAns = parseInt(vm.tempAns);" ng-value="vm.tempAns" ng-model="item.data.patient_answer.answer[0].sliderAns" class="slider" id="myRange" style="width: 80%; height: 90px;" ng-change="vm.removeSpanChild(); item.data.answerChangedFlag = true;vm.toggleViewAns(item.data);">
-                                    <ons-row class="minimumText" width="40px" style="text-align: right; top: 57%; left: 77%;">
+                                    <ons-row class="minimumText" width="40px" style="text-align: right; top: 57%; left: 77%;" ng-class="fontSizeDesc">
                                         {{item.data.options[0].min_value}} - {{item.data.options[0].min_caption}}
                                     </ons-row>
                                 </ons-col>
-                            <div ng-init="item.data.patient_answer.answer[0].sliderAns=vm.tempAns" class="value" >Value: &nbsp;{{vm.viewAns}}<!--{{item.data.patient_answer[0].sliderAns}}--></div>
+                            <div ng-init="item.data.patient_answer.answer[0].sliderAns=vm.tempAns" class="value" ng-class="fontSizeDesc">Value: &nbsp;{{vm.viewAns}}<!--{{item.data.patient_answer[0].sliderAns}}--></div>
                             <!--<div ng-show="vm.isTemp" class="value">Value:  &nbsp; {{vm.isTemp}}&nbsp;{{vm.tempAns}}</div>-->
                         </ons-row>
 
@@ -615,10 +584,10 @@
                         </div>
 
                         <ons-row style="margin-left:0px;margin-right:0px;margin-top:30px;">
-                            <ons-col width="40%" style="text-align: left; line-height: 31px;">
+                            <ons-col width="40%" style="text-align: left; line-height: 31px;" ng-class="fontSizeDesc">
                                 {{item.data.options[0].min_caption}}
                             </ons-col>
-                            <ons-col width="20%" style="text-align: center;padding-top:6vw;">
+                            <ons-col width="20%" style="text-align: center;padding-top:6vw;" ng-class="fontSizeDesc">
                                 <div ng-if="item.data.patient_answer.answer[0].sliderAns != null && item.data.patient_answer.answer[0].sliderAns != 'SKIPPED'">
                                     Value:&nbsp;{{item.data.patient_answer.answer[0].sliderAns}}
                                 </div>
@@ -626,7 +595,7 @@
                                     {{"SKIPPED"|translate}}
                                 </div>
                             </ons-col>
-                            <ons-col width="40%" style="text-align: right; line-height: 31px;">
+                            <ons-col width="40%" style="text-align: right; line-height: 31px;" ng-class="fontSizeDesc">
                                 {{item.data.options[0].max_caption}}
                             </ons-col>
                         </ons-row>
@@ -634,7 +603,7 @@
                             <div ng-if="item.data.optional == 1" style="padding-top:3vh; background-color:#d9d9d9">
                             </div>
                             <li ng-if="item.data.optional == 1" class="list__item list__item--tappable" ng-style="item.data.patient_answer.answer[0].sliderAns == 'SKIPPED' ? {'background-color':'#e9e9e9'} : {'background-color':'#f9f9f9'}" ng-init="item.data.skip = true">
-                                <label class="radio-button radio-button--list-item">
+                                <label ng-class="fontSizeDesc" class="radio-button radio-button--list-item">
                                     <input type="radio" name="{{'scaleSkip'+item.data.ser_num}}" ng-checked="item.data.patient_answer.answer[0].sliderAns == 'SKIPPED'" ng-click="vm.toggleScaleSkip(item.data.skip, item.data); console.log(item.data.patient_answer.answer[0] == 'SKIPPED');">
                                     <div class="radio-button__checkmark radio-button--list-item__checkmark"></div>
                                     {{"Prefer not to answer"|translate}}
@@ -648,7 +617,7 @@
                     <div ng-if="item.data.question_type_category_key == 'textbox'" class="center" style="margin-top:10px;padding-left:5vw;padding-right:5vw;">
                         <ul class="list" ng-init="item.data.answerChangedFlag = false;">
                             <li>
-                                <textarea  style="height:200px" id="textType" wrap="hard" ng-model="item.data.patient_answer.answer[0].text" ng-value="item.data.patient_answer.answer[0].text"  ng-change="item.data.answerChangedFlag = true;" ng-init="vm.setMaxLength(item.data)"></textarea>
+                                <textarea ng-class="fontSizeDesc" style="height:200px" id="textType" wrap="hard" ng-model="item.data.patient_answer.answer[0].text" ng-value="item.data.patient_answer.answer[0].text"  ng-change="item.data.answerChangedFlag = true;" ng-init="vm.setMaxLength(item.data)"></textarea>
                             </li>
                             <style>
                             #textType {
@@ -667,7 +636,7 @@
                             <li ng-if="item.data.optional == 1" class="list__item list__item--tappable" ng-style="item.data.patient_answer.answer.indexOf('SKIPPED') > -1 ? {'background-color':'#e9e9e9'} : {'background-color':'#f9f9f9'}" ng-init="item.data.skip = true">
                                 <label class="checkbox checkbox--list-item" ng-style="item.data.patient_answer.answer.indexOf('SKIPPED') > -1 ? {'background-color':'#e9e9e9', 'margin':'0px', 'padding':'10px'} : {'background-color':'#f9f9f9', 'margin':'0px', 'padding':'10px'}">
                                     <input type="checkbox" name="{{'mcCheckbox'+item.data.ser_num}}" value='SKIPPED' ng-checked="(item.data.options[0].answer_option_ser_num=='SKIPPED'||item.data.patient_answer.answer[0].Skipped=='1') && (item.data.patient_answer.answer[0].text=='' || !item.data.patient_answer.answer[0].hasOwnProperty('text'))" ng-click="item.data.answerChangedFlag = true;item.data.options[0].answer_option_ser_num='SKIPPED';item.data.patient_answer.answer[0].text=''">
-                                    <div class="checkbox__checkmark checkbox--list-item__checkmark"></div>
+                                    <div ng-class="fontSizeDesc" class="checkbox__checkmark checkbox--list-item__checkmark"></div>
                                     {{"Prefer not to answer"|translate}}
                                 </label>
                             </li>
