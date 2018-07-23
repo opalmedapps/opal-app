@@ -457,7 +457,8 @@
 
 
         function bindScaleParameters(question) {
-            var keys = Object.keys(question.options);
+            console.log('this function bind scale parameters');
+            //var keys = Object.keys(question.options);
             console.log(question.options[0].min_value);
             console.log(question.options[0].max_value);
             // if (keys.length != 2) {
@@ -472,15 +473,16 @@
                 // set the style of the options
                 var min = question.options[0].min_value;
                 var max = question.options[0].max_value;
-                console.log(min+" "+max);
-                $scope.options = [];
+                console.log(min+" :min, max: "+max);
+                $scope.options = []; //{opt: []};
                 var options = $scope.options;
                 for (var i = min; i <= max; i++) {
                     options.push({text: i+"", value:i});
                 }
-                console.log($scope.options);
-                var scalewidth = $(".scale").width();
-                $scope.scalebtn = {
+                console.log("scope.options: ", $scope.options);
+                console.log("options: ", options);
+            var scalewidth = $(".scale").width();
+                var scalebtn = {
                     "height": "auto",
                     "float": "left",
                     "text-align": "center",
@@ -488,6 +490,14 @@
                 };
                 console.log($scope.scalebtn);
             // }
+
+            // this is to avoid the problem of html not updating when controller updates
+            var returning = {
+                options: options,
+                formatting: scalebtn
+            };
+
+            return returning;
 
         }
 
