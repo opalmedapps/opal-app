@@ -562,7 +562,7 @@
                     </div>
 
                     <!-- SMALL RANGE SCALE (SLIDER TYPE OF QUESTION)-->
-                    <div ng-if="item.data.question_type_category_key == 'slider' && item.data.visualization_name == 'dots'" class="center scale" style="margin-top:10px;padding-left:5vw;padding-right:5vw;">
+                    <div ng-if="item.data.question_type_category_key == 'slider' && item.data.visualization_name == 'dots'" class="center scale" style="margin-top:10px;padding-left:5vw;padding-right:5vw;" ng-init="options = vm.bindScaleParameters(item.data)">
                         <!--<ons-row style="margin-left:0px;margin-right:0px" ng-init="vm.bindScaleParameters(item.data)">
                           <ons-col width="40px" style="text-align: center; line-height: 31px;">
                             {{minText}}
@@ -576,8 +576,8 @@
                         </ons-row>-->
 
 
-                        <div style="margin-left:0px;margin-right:0px;" ng-init="vm.bindScaleParameters(item.data)">
-                            <div class="scale_option" ng-repeat="op in options" ng-init="item.data.patient_answer.length > 0; item.data.answerChangedFlag = false;" ng-style="scalebtn">
+                        <div style="margin-left:0px;margin-right:0px;">
+                            <div class="scale_option" ng-repeat="op in options.options" ng-init="item.data.patient_answer.length > 0; item.data.answerChangedFlag = false;" ng-style="options.formatting">
                                 {{op.text}}
                                 <input type="radio" value="{{op.value}}" ng-model="item.data.patient_answer.answer[0].sliderAns" ng-change="vm.removeSpanChild(this); item.data.answerChangedFlag = true;" />
                             </div>
@@ -585,7 +585,7 @@
 
                         <ons-row style="margin-left:0px;margin-right:0px;margin-top:30px;">
                             <ons-col width="40%" style="text-align: left; line-height: 31px;" ng-class="fontSizeDesc">
-                                {{item.data.options[0].min_caption}}
+                                {{item.data.options[0].min_value}} - {{item.data.options[0].min_caption}}
                             </ons-col>
                             <ons-col width="20%" style="text-align: center;padding-top:6vw;" ng-class="fontSizeDesc">
                                 <div ng-if="item.data.patient_answer.answer[0].sliderAns != null && item.data.patient_answer.answer[0].sliderAns != 'SKIPPED'">
@@ -596,7 +596,7 @@
                                 </div>
                             </ons-col>
                             <ons-col width="40%" style="text-align: right; line-height: 31px;" ng-class="fontSizeDesc">
-                                {{item.data.options[0].max_caption}}
+                                {{item.data.options[0].max_value}} - {{item.data.options[0].max_caption}}
                             </ons-col>
                         </ons-row>
                         <ul class="list" style="margin-top:1vh;">
