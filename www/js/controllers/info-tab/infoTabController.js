@@ -56,19 +56,30 @@
 
         function activate() {
             var personalNavigator = NavigatorParameters.getNavigator();
-            if((typeof personalNavigator.getCurrentPage()) !== "undefined" && personalNavigator.getCurrentPage().options.isQuest === true) {
+            if((typeof personalNavigator.getCurrentPage()) !== "undefined" && personalNavigator.getCurrentPage().options.hasOwnProperty('questionnaire')) {
+                console.log('IN IF INFOTABCONTROLLER');
+                views = [{
+                   icon: 'fa-list-alt',
+                   color: 'SteelBlue',
+                    name: 'Questionnaire Summary',
+                    description: 'This is a summary of your answers to the following questionnaire: ' + personalNavigator.getCurrentPage().options.questionnaire.nickname,
+                }];
+                vm.view = views[views.length-1];
+                vm.view.description = $filter('translate')(vm.view.description);
+            } else if((typeof personalNavigator.getCurrentPage()) !== "undefined" && !(personalNavigator.getCurrentPage().options.hasOwnProperty('questionnaire')) && personalNavigator.getCurrentPage().options.isQuest === true) {
+                console.log('IN ELSE-IF INFOTABCONTROLLER');
                 views = [
                     {
                         icon:'fa-question',
                         color:'SteelBlue',
                         name: personalNavigator.getCurrentPage().options.question.question_type_category_key,
-                        //This description explains how to answer this question type
-                        description: personalNavigator.getCurrentPage().options.question.information,
+                        description: personalNavigator.getCurrentPage().options.question.information, //This description explains how to answer this question type
                     }
                 ];
                 vm.view = views[views.length-1];
                 vm.view.description = $filter('translate')(vm.view.description);
             } else {
+                console.log('IN ELSE INFOTABCONTROLLER');
                 var tab=tabbar.getActiveTabIndex();
                 vm.view = views[tab];
                 vm.view.description = $filter('translate')(vm.view.description);

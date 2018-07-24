@@ -2,7 +2,7 @@
     <ons-toolbar fixed-style>
         <div class="center" ng-class="fontSizeTitle">{{"HEADER_MESSAGE_HOME"|translate}}</div>
         <div class="right">
-            <ons-toolbar-button ng-click="homeNavigator.pushPage('views/tabs/info-page-tabs.html',{param:home})">
+            <ons-toolbar-button ng-click="homeNavigator.pushPage('views/tabs/info-page-tabs.html',{param:'home', isQuest: false})">
                 <ons-icon icon="fa-info-circle"></ons-icon>
             </ons-toolbar-button>
         </div>
