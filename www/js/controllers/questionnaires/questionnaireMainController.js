@@ -468,10 +468,9 @@
 
 
         function bindScaleParameters(question) {
-            console.log('this function bind scale parameters');
             //var keys = Object.keys(question.options);
-            console.log(question.options[0].min_value);
-            console.log(question.options[0].max_value);
+            // console.log(question.options[0].min_value);
+            // console.log(question.options[0].max_value);
             // if (keys.length != 2) {
             //     console.log("Option size should be 2, is " + keys.length);
             // }
@@ -482,24 +481,24 @@
                 //$scope.maxCaption = question.options[0].max_caption;
 
                 // set the style of the options
-                var min = question.options[0].min_value;
-                var max = question.options[0].max_value;
-                console.log(min+" :min, max: "+max);
-                $scope.options = []; //{opt: []};
-                var options = $scope.options;
-                for (var i = min; i <= max; i++) {
-                    options.push({text: i+"", value:i});
-                }
-                console.log("scope.options: ", $scope.options);
-                console.log("options: ", options);
+            var min = question.options[0].min_value;
+            var max = question.options[0].max_value;
+            //console.log(min+" :min, max: "+max);
+            $scope.options = []; //{opt: []};
+            var options = $scope.options;
+            for (var i = min; i <= max; i++) {
+                options.push({text: i + "", value: i});
+            }
+            // console.log("scope.options: ", $scope.options);
+            // console.log("options: ", options);
             var scalewidth = $(".scale").width();
-                var scalebtn = {
-                    "height": "auto",
-                    "float": "left",
-                    "text-align": "center",
-                    "width": Math.floor(100/options.length) + "\%"
-                };
-                console.log($scope.scalebtn);
+            var scalebtn = {
+                "height": "auto",
+                "float": "left",
+                "text-align": "center",
+                "width": Math.floor(100 / options.length) + "\%"
+            };
+            //console.log($scope.scalebtn);
             // }
 
             // this is to avoid the problem of html not updating when controller updates
@@ -736,13 +735,15 @@
             console.log("CHECK answerChangedFlag= " + question.answerChangedFlag + " and skip=" + skip);
             question.answerChangedFlag = true;
             if (skip) {
+                question.patient_answer.answer[0].Skipped = '1';
                 question.patient_answer.answer[0].sliderAns = 'SKIPPED';
                 if (!$scope.$$phase) {
                     $scope.$digest();
                 }
             }
             else {
-                //question.patient_answer[0].sliderAns = average($scope.minText, $scope.maxText);
+                question.patient_answer.answer[0].Skipped = '0';
+                question.patient_answer.answer[0].sliderAns = '';
             }
             question.skip = !skip;
             console.log(question.patient_answer);
