@@ -297,6 +297,7 @@
 
                     <div ng-if="item.data.question_type_category_key == 'checkbox'" class="center" style="margin-top:10px;padding-left:5vw;padding-right:5vw;" ng-init="vm.setCheckboxAnswer(item.data);">
                         <ul class="list" ng-init="item.data.answerChangedFlag = false;">
+                            <!-- ng-style="item.data.patient_answer.indexOf($index) > -1 && {'background-color':'#e9e9e9'} || {'background-color':'#f9f9f9'};"  -->
                             <li class="list__item list__item--tappable" ng-style="vm.isCheckedCheckmark(item.data, value.answer_option_ser_num) ? {'background-color':'#e9e9e9'} : {'background-color':'#f9f9f9'}" ng-repeat="(key, value) in item.data.options">
                                 <label class="checkbox checkbox--list-item" ng-class="fontSizeDesc" ng-style="vm.isCheckedCheckmark(item.data, value.answer_option_ser_num) ? {'background-color':'#e9e9e9', 'margin':'0px', 'padding':'10px'} : {'background-color':'#f9f9f9', 'margin':'0px', 'padding':'10px'}">
                                     <input type="checkbox" name="{{'mcCheckbox'+item.data.ser_num}}" style="-webkit-appearance: checkbox !important" value={{value.answer_option_ser_num}} ng-checked="vm.isCheckedCheckmark(item.data, value.answer_option_ser_num) " ng-click="vm.toggleCheckboxSelection(value.answer_option_ser_num)" ng-disabled="vm.isDisabled(value.answer_option_ser_num)">
@@ -578,7 +579,7 @@
                         <div style="margin-left:0px;margin-right:0px;">
                             <div class="scale_option" ng-repeat="op in options.options" ng-init="item.data.patient_answer.length > 0; item.data.answerChangedFlag = false;" ng-style="options.formatting">
                                 {{op.text}}
-                                <input type="radio" value="{{op.value}}" ng-model="item.data.patient_answer.answer[0].sliderAns" ng-change="vm.removeSpanChild(this); item.data.answerChangedFlag = true;" />
+                                <input type="radio" value="{{op.value}}" ng-model="item.data.patient_answer.answer[0].sliderAns" ng-change="vm.removeSpanChild(this); item.data.answerChangedFlag = true;"/>
                             </div>
                         </div>
 
@@ -587,10 +588,10 @@
                                 {{item.data.options[0].min_value}} - {{item.data.options[0].min_caption}}
                             </ons-col>
                             <ons-col width="20%" style="text-align: center;padding-top:6vw;" ng-class="fontSizeDesc">
-                                <div ng-if="item.data.patient_answer.answer[0].sliderAns != null && item.data.patient_answer.answer[0].sliderAns != 'SKIPPED'">
+                                <div ng-if="item.data.patient_answer.answer[0].sliderAns != null && item.data.patient_answer.answer[0].Skipped != '1'">
                                     Value:&nbsp;{{item.data.patient_answer.answer[0].sliderAns}}
                                 </div>
-                                <div ng-if="item.data.patient_answer.answer[0].sliderAns != null && item.data.patient_answer.answer[0].sliderAns == 'SKIPPED'">
+                                <div ng-if="item.data.patient_answer.answer[0].sliderAns != null && item.data.patient_answer.answer[0].Skipped == '1'">
                                     {{"SKIPPED"|translate}}
                                 </div>
                             </ons-col>
@@ -599,11 +600,11 @@
                             </ons-col>
                         </ons-row>
                         <ul class="list" style="margin-top:1vh;">
-                            <div ng-if="item.data.optional == 1" style="padding-top:0px; background-color:#d9d9d9">
+                            <div ng-if="item.data.optional == '1'" style="padding-top:3vh; background-color:#d9d9d9">
                             </div>
-                            <li ng-if="item.data.optional == 1" class="list__item list__item--tappable" ng-style="item.data.patient_answer.answer[0].sliderAns == 'SKIPPED' ? {'background-color':'#e9e9e9'} : {'background-color':'#f9f9f9'}" ng-init="item.data.skip = true">
+                            <li ng-if="item.data.optional == '1'" class="list__item list__item--tappable" ng-style="item.data.patient_answer.answer[0].Skipped == '1' ? {'background-color':'#e9e9e9'} : {'background-color':'#f9f9f9'}" ng-init="item.data.skip = true">
                                 <label ng-class="fontSizeDesc" class="radio-button radio-button--list-item">
-                                    <input type="radio" name="{{'scaleSkip'+item.data.ser_num}}" ng-checked="item.data.patient_answer.answer[0].sliderAns == 'SKIPPED'" ng-click="vm.toggleScaleSkip(item.data.skip, item.data); console.log(item.data.patient_answer.answer[0] == 'SKIPPED');">
+                                    <input type="radio" name="{{'scaleSkip'+item.data.ser_num}}" ng-checked="item.data.patient_answer.answer[0].Skipped == '1'" ng-click="vm.toggleScaleSkip(item.data.skip, item.data); console.log(item.data.patient_answer.answer[0] == 'SKIPPED');">
                                     <div class="radio-button__checkmark radio-button--list-item__checkmark"></div>
                                     {{"Prefer not to answer"|translate}}
                                 </label>
