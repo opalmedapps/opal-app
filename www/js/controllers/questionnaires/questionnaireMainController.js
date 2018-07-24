@@ -167,7 +167,7 @@
                     for (var j = 0; j<vm.questionnaire.sections[i].questions.length; j++) {
                         // as soon as find a question with no answer
                         console.log("BEFORE IF IN ACTIVATE");
-                        if ((vm.questionnaire.sections[i].questions[j].patient_answer.answer.length === 0) || (vm.questionnaire.sections[i].questions[j].patient_answer.is_defined=='0')) {
+                        if (vm.questionnaire.sections[i].questions[j].patient_answer.is_defined=='0') {
                             console.log("no answer to question: " + (j+1));
                             // console.log("sectionIndex is: " + vm.sectionIndex);
                             // console.log("questionIndex is: " + vm.questionIndex);
@@ -294,8 +294,6 @@
             console.log('limitNumber= '+vm.limitNumber);
             if(typeof question.patient_answer.answer == 'undefined') {
                 question.patient_answer.answer = [];
-            } else if(!question.patient_answer.answer[0].hasOwnProperty('CheckboxAnswerOptionSerNum')){
-                question.patient_answer.answer = [];
             }
             resetCheckednumber(question);
         };
@@ -407,18 +405,10 @@
         }
 
         function resetCheckednumber(question) {
-            if(question.question_type_category_key == 'checkbox') {
-                if(question.patient_answer.hasOwnProperty('answer')) {
-                    if(question.patient_answer.answer[0].hasOwnProperty('CheckboxAnswerOptionSerNum')) {
-                        vm.checkedNumber = question.patient_answer.answer.length;
-                        console.log('vm.checkedNumber');
-                        console.log(vm.checkedNumber);
-                    } else {
-                        vm.checkedNumber=0;
-                    }
-                } else {
-                    vm.checkedNumber=0;
-                }
+            if(question.question_type_category_key == 'checkbox' && question.patient_answer.is_defined == '1') {
+                vm.checkedNumber = question.patient_answer.answer.length;
+            } else {
+                vm.checkedNumber = 0;
             }
         }
 
@@ -468,6 +458,7 @@
 
 
         function bindScaleParameters(question) {
+            console.log('this function bind scale parameters');
             //var keys = Object.keys(question.options);
             // console.log(question.options[0].min_value);
             // console.log(question.options[0].max_value);
@@ -676,7 +667,9 @@
             if(!question.hasOwnProperty('patient_answer')) {
                 question.patient_answer= {};
             }
-
+            if(!question.patient_answer.hasOwnProperty('answer')) {
+                question.patient_answer.answer=[];
+            }
             //question.patient_answer.answer = (!question.patient_answer.hasOwnProperty('answer'))? []:question.patient_answer.answer;
 
             //if previous choice was to skip question, toggle skip boolean
@@ -695,27 +688,29 @@
                 question.answerChangedFlag = true;
                 question.patient_answer.answer.splice(answerIndex, 1);
                 vm.tmpAnswer = question.patient_answer.answer;
-                vm.checkedNumber--;
+                vm.checkedNumber=question.patient_answer.answer.length;
                 console.log("In if, checkedNumber = "+vm.checkedNumber);
                 console.log("Object after splice in if is "+Object(question.patient_answer));
                 console.log("tmpAnswer = " + Object(vm.tmpAnswer));
                 console.log(Object(question.patient_answer));
             } else { // is newly selected
                 question.answerChangedFlag = true;
+                question.patient_answer.is_defined = '1';
                 //question.patient_answer.push(optionKey);
                 // push answer to answer array
                 //question.patient_answer[vm.checkboxSavingIndex].AnsSerNum=optionKey;
-                if(!question.patient_answer.answer[0].hasOwnProperty('CheckboxAnswerOptionSerNum') || question.patient_answer.answer[0].Skipped=='1') {
-                    question.patient_answer.answer = [{'CheckboxAnswerOptionSerNum':''}];
-                    question.patient_answer.answer[0].CheckboxAnswerOptionSerNum=optionKey;
-                    //question.patient_answer.answer.push({'CheckboxAnswerOptionSerNum':optionKey});
-                } else {
+                // if(vm.checkboxSavingIndex==0) {
+                //     question.patient_answer.answer = [{'CheckboxAnswerOptionSerNum':''}];
+                //     question.patient_answer.answer[0].CheckboxAnswerOptionSerNum=optionKey;
+                //
+                //     //question.patient_answer.answer.push({'CheckboxAnswerOptionSerNum':optionKey});
+                // } else {
                     question.patient_answer.answer.push({'CheckboxAnswerOptionSerNum':optionKey});
-                }
-                vm.checkboxSavingIndex++;
+                // }
+                // vm.checkboxSavingIndex++;
                 console.log("Answer array");
                 console.log(Object(question.patient_answer));
-                vm.checkedNumber++;
+                vm.checkedNumber=question.patient_answer.answer.length;
                 console.log("In else, checkedNumber = "+vm.checkedNumber);
                 console.log("Object after push in if else else is "+Object(question.patient_answer));
                 vm.tmpAnswer = question.patient_answer.answer;

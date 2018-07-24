@@ -281,7 +281,7 @@
                                     {{value.mc_text}}
                                 </label>
                             </li>
-                            <div ng-if="item.data.optional == 1" style="padding-top:3vh; background-color:#d9d9d9">
+                            <div ng-if="item.data.optional == 1" style="padding-top:0px; background-color:#d9d9d9">
                             </div>
                             <li ng-if="item.data.optional == 1" class="list__item list__item--tappable" ng-style="item.data.patient_answer.answer[0] == 'SKIPPED' ? {'background-color':'#e9e9e9'} : {'background-color':'#f9f9f9'}">
                                 <label ng-class="fontSizeDesc" class="radio-button radio-button--list-item">
@@ -293,7 +293,7 @@
                         </ul>
                     </div>
 
-                    <!-- CHECKMARK -->
+                    <!-- CHECKBOX -->
 
                     <div ng-if="item.data.question_type_category_key == 'checkbox'" class="center" style="margin-top:10px;padding-left:5vw;padding-right:5vw;" ng-init="vm.setCheckboxAnswer(item.data);">
                         <ul class="list" ng-init="item.data.answerChangedFlag = false;">
@@ -327,12 +327,12 @@
 
                     <ons-modal var="checkmarkModal">
                         <div id="rcorners" style="height: 60%">
-                                    <div style="margin-top:10%;padding: 0px 20px 0px 20px;margin-right: 9%;" class="text-center">
+                                    <div style="margin-top:10%;padding: 0px 20px 0px 20px;" class="text-center">
                                         <div style="padding-bottom: 10%">
                                             <ons-icon icon="far fa-exclamation-triangle" style="font-size:80px; color: white"></ons-icon>
                                         </div>
                                         <div class="container" style="text-align:center;">
-                                            <p ng-class="fontSizeDesc" style="text-align: justify;text-justify: inter-word;">This question requires you to select exactly {{vm.limitNumber}} options. You can come back to this question to submit a valid answer.</p>
+                                            <p ng-class="fontSizeDesc" style="text-align: justify;text-justify: inter-word;">This question requires you to select exactly {{vm.limitNumber}} options. Please come back to this question to submit a valid answer.</p>
                                         </div>
                                         <div id="tourButtons" style="padding: 0px 20px 0px 20px; padding-top: 5%;padding-bottom: 5%;padding-right: 10%;" class="text-center">
                                             <ons-button class="ng-isolate-scope button effeckt-button slide-left" ng-click="checkmarkModal.hide();"ng-class="fontSizeDesc">{{"OK"|translate}}</ons-button>
@@ -574,6 +574,7 @@
                             {{maxText}}
                           </ons-col>
                         </ons-row>-->
+
 
                         <div style="margin-left:0px;margin-right:0px;">
                             <div class="scale_option" ng-repeat="op in options.options" ng-init="item.data.patient_answer.length > 0; item.data.answerChangedFlag = false;" ng-style="options.formatting">
