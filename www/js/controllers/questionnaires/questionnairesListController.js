@@ -45,8 +45,16 @@ app.controller('questionnairesListController', [
     };
 
     $scope.goToQuestionnaireSummary = function(selectedQuestionnaire) {
-        NavigatorParameters.setParameters({Navigator:'personalNavigator', questionnaire: selectedQuestionnaire});
-        personalNavigator.pushPage('views/personal/questionnaires/answeredQuestionnaire.html',{ animation : 'slide' });
+        var questionnaireToReturn = {};
+        Questionnaires.requestQuestionnaire(selectedQuestionnaire.qp_ser_num)
+            .then(function() {
+                questionnaireToReturn = Questionnaires.getQuestionnaire();
+                NavigatorParameters.setParameters({
+                    Navigator: 'personalNavigator',
+                    questionnaire: questionnaireToReturn
+                });
+                personalNavigator.pushPage('views/personal/questionnaires/answeredQuestionnaire.html', {animation: 'slide'});
+            });
     };
 
         // go to historical summary page of the selected questionnaire entity
