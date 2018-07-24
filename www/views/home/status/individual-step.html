@@ -1,24 +1,26 @@
 <ons-page ng-controller="IndividualStepController as step">
-  <ons-toolbar fixed-style>
-    <div class="left"><ons-back-button>{{"BACK"|translate}}</ons-back-button></div>
-    <div class="center">{{"TREATMENTSTAGE"|translate}}</div>
-  </ons-toolbar>
-  <div>
-    <ons-list class="settings-list">
-      <ons-list-item class="item">
-        <div style="line-height:1" align="left">
-          <header>
-              <span class="item-title" ng-class="fontSizeTitle">{{step.name | translate}}</span>
-          </header>
-          <!--<p class="item-desc" ng-class="fontSizeDesc">{{step.stage.appointmentDescription || step.stage.taskDescription}}</p>-->
-          <p class="item-desc" ng-class="fontSizeDesc" ng-bind-html="step.stage.appointmentDescription || step.stage.taskDescription"></p>
+    <ons-toolbar fixed-style>
+        <div class="left">
+            <ons-back-button>{{"BACK"|translate}}</ons-back-button>
         </div>
-      </ons-list-item>
-      <!--<ons-list-item tappable ng-click="step.about()">-->
-        <!--<button class="button button&#45;&#45;large&#45;&#45;quiet"  >-->
-          <!--{{"STEP_ABOUT"|translate}}-->
-        <!--</button >-->
-      <!--</ons-list-item>-->
-    </ons-list>
-</div>
+        <div class="center">{{"TREATMENTSTAGE"|translate}}</div>
+    </ons-toolbar>
+    <div>
+        <ons-list class="settings-list">
+            <ons-list-item class="item">
+                <div style="line-height:1" align="left">
+                    <header>
+                        <span class="item-title" ng-class="fontSizeTitle">{{step.name | translate}}</span>
+                    </header>
+                    <p class="item-desc" ng-class="fontSizeDesc"
+                       ng-bind-html="step.stage.appointmentDescription || step.stage.taskDescription"></p>
+                </div>
+            </ons-list-item>
+            <!--<ons-list-item tappable ng-click="step.about()">-->
+            <!--<button class="button button&#45;&#45;large&#45;&#45;quiet"  >-->
+            <!--{{"STEP_ABOUT"|translate}}-->
+            <!--</button >-->
+            <!--</ons-list-item>-->
+        </ons-list>
+    </div>
 </ons-page>
