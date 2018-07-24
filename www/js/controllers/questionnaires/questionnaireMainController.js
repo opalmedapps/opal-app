@@ -688,13 +688,14 @@
                 question.answerChangedFlag = true;
                 question.patient_answer.answer.splice(answerIndex, 1);
                 vm.tmpAnswer = question.patient_answer.answer;
-                vm.checkedNumber--;
+                vm.checkedNumber=question.patient_answer.answer.length;
                 console.log("In if, checkedNumber = "+vm.checkedNumber);
                 console.log("Object after splice in if is "+Object(question.patient_answer));
                 console.log("tmpAnswer = " + Object(vm.tmpAnswer));
                 console.log(Object(question.patient_answer));
             } else { // is newly selected
                 question.answerChangedFlag = true;
+                question.patient_answer.is_defined = '1';
                 //question.patient_answer.push(optionKey);
                 // push answer to answer array
                 //question.patient_answer[vm.checkboxSavingIndex].AnsSerNum=optionKey;
@@ -709,7 +710,7 @@
                 // vm.checkboxSavingIndex++;
                 console.log("Answer array");
                 console.log(Object(question.patient_answer));
-                vm.checkedNumber++;
+                vm.checkedNumber=question.patient_answer.answer.length;
                 console.log("In else, checkedNumber = "+vm.checkedNumber);
                 console.log("Object after push in if else else is "+Object(question.patient_answer));
                 vm.tmpAnswer = question.patient_answer.answer;
