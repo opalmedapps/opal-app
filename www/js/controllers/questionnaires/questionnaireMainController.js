@@ -85,7 +85,7 @@
         // };
 
         vm.skipQuestionClose = function() {
-            carousel.next()
+            carousel.next();
             skip_question.hide();
         };
         vm.updateCurrentQuestion = function(item) {
@@ -97,7 +97,9 @@
 
         vm.exists = function(item) {
             return vm.selected.indexOf(item)>-1;
-        }
+        };
+
+        vm.initializeSliderAns = initializeSliderAns;
 
         $scope.slider = {
             value: 6,
@@ -500,6 +502,13 @@
 
             return returning;
 
+        }
+
+        function initializeSliderAns(question){
+            console.log('in initializeSliderAns');
+            if(question.optional == '1' && question.patient_answer.answer[0].Skipped == '1'){
+                question.patient_answer.answer[0].sliderAns = 'SKIPPED';
+            }
         }
 
         // function fixSliderValue(question){
