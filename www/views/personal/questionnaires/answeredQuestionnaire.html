@@ -5,7 +5,9 @@
         </div>
         <div class="center">{{"SUMMARY_PAGE"|translate}}</div>
         <div class="right">
-
+            <ons-toolbar-button ng-click="personalNavigator.pushPage('views/tabs/info-page-tabs.html',{questionnaire:vm.questionnaire, isQuest: false})">
+                <ons-icon icon="fa-info-circle"></ons-icon>
+            </ons-toolbar-button>
         </div>
     </ons-toolbar>
 
