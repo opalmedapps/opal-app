@@ -53,7 +53,6 @@ app.controller('questionnairesListController', [
         $scope.goToHistoricalSummary = function (selectedQuestionnaire) {
             NavigatorParameters.setParameters({Navigator: 'personalNavigator', questionnaire: selectedQuestionnaire});
             personalNavigator.pushPage('views/personal/questionnaires/questionnaireSummaryDetailed.html', {animation: 'slide'});
-
         };
 
         $scope.setNew = function () {

@@ -1,141 +1,26 @@
 <!-- showing historical summary of selected questionnaire entity
 consists of 2 parts: global score summary, and section/question list
  -->
-<ons-page ng-app="MUHCApp" ng-controller="questionnaireSummaryDetailedController as vm">
-    <div>
-        <ons-toolbar fixed-style>
-            <div class="left">
-                <ons-back-button>{{"BACK" | translate}}</ons-back-button>
-            </div>
-            <div class="center" ng-class="fontSizeTitle">Historical Summary</div>
-            <div class="right">
-                <ons-toolbar-button
-                        ng-click="personalNavigator.pushPage('views/personal/questionnaires/questionnairesSummaryInfo.html')">
-                    <ons-icon icon="fa-info-circle"></ons-icon>
-                </ons-toolbar-button>
-            </div>
-        </ons-toolbar>
-
-        <div ng-show="loading" align="center" style="margin-top:25vh">
-            <svg class="progress-circular">
-                <circle class="progress-circular__primary" cx="50%" cy="50%" r="40%" fill="none" stroke-width="10%"
-                        stroke-miterlimit="10"/>
-            </svg>
-            <p style="margin-top: 30px">{{ "LOADING" | translate }}</p>
-        </div>
-
-        <div ng-if="loading === false">
-
-            <!-- global section question row -->
-
-            <div class="ons-row" align="center" ng-init="global = true;">
-                <div class="ons-col" align="center">
-
-                    <ul class="list">
-                        <ons-list-item class="list__item" ng-click="vm.toggleExpandTotalScore()"
-                                       style="background-color: #efeff4">
-                            <ons-row style="margin:0;padding:0" align="center">
-                                <ons-col align="left" style="border:1px solid white;color:white">
-                                    <div style="line-height: 2.0;margin-top:10px;margin-bottom:10px;font-size:1.1em">
-                                        <b>Total score summary</b>
-                                        <span class="pull-right">
-                                            <span ng-class="vm.expandTotalScore ? 'glyphicon glyphicon-menu-up' : 'glyphicon glyphicon-menu-down'"></span>
-                                        </span>
-                                    </div>
-                                </ons-col>
-                            </ons-row>
-                        </ons-list-item>
-                        <div ng-show="vm.expandTotalScore" class="ons-col" align="center">
-                            <hc-line-chart title="{{vm.questionnaire.nickname}}"
-                                           data="vm.historicalQuestionnaires.scoresForQuestionnaire">Placeholder for line
-                                chart
-                            </hc-line-chart>
-                        </div>
-
-                        <ons-list-item class="list__item" style="background-color: #efeff4">
-                            <ons-row style="margin:0;padding:0" align="center">
-                                <ons-col align="left" style="border:1px solid white;color:white">
-                                    <div style="line-height: 2.0;margin-top:10px;margin-bottom:10px;font-size:1.1em">
-                                        <b>Scores for sections</b>
-                                    </div>
-                                </ons-col>
-                            </ons-row>
-                        </ons-list-item>
-                    </ul>
-
-                    <!-- section -->
-                    <div ng-repeat="section in vm.historicalQuestionnaires.sections">
-                        <ul class="list">
-                            <ons-list-item class="list__item"
-                                           ng-click="vm.toggleExpandSectionScore(section, 'section-' + $index)"
-                                           style="background-color: #E3F2FD">
-                                <ons-row style="margin:0;padding:0" align="center">
-                                    <ons-col align="left" style="border:1px solid white;color:white">
-                                        <div id="section-{{$index}}" style="line-height: 1.8;margin-top:10px;margin-bottom:10px">
-                                            <!--<span style="color:rgba(38,100,171,0.81);"><b>Section {{$index+1}}.</b></span>-->
-                                            <b>{{section.title}}</b>
-                                            <span class="pull-right">
-                                                <span ng-class="section.expandSectionScores ? 'glyphicon glyphicon-menu-up' : 'glyphicon glyphicon-menu-down'">
-                                                </span>
-                                            </span>
-                                        </div>
-                                    </ons-col>
-                                </ons-row>
-                            </ons-list-item>
-                            <div ng-show="section.expandSectionScores" class="ons-col" align="center">
-                                <hc-line-chart title="{{section.title}}" data="section.scoresForSection">Placeholder for
-                                    line chart
-                                </hc-line-chart>
-                            </div>
-                            <ons-list-item ng-show="section.expandSectionScores" class="list__item"
-                                           ng-click="vm.toggleExpandQuestionList(section.section_ser_num, 'questionList-' + $index)">
-                                <ons-row style="margin:0;padding:0" align="center">
-                                    <ons-col align="left" style="border:1px solid white;color:white">
-                                        <div id="questionList-{{$index}}" style="line-height: 2.0;margin-top:10px;margin-bottom:10px;font-size:1.0em">
-                                            <!--<span style="color:rgba(38,100,171,0.81);"><b>Section {{$index+1}}.</b></span>-->
-                                            <b>Scores for questions</b>
-                                            <span class="pull-right">
-                                                <span ng-class="vm.expandedQuestionLists[section.section_ser_num] ? 'glyphicon glyphicon-menu-up' : 'glyphicon glyphicon-menu-down'">
-                                                </span>
-                                            </span>
-                                        </div>
-                                    </ons-col>
-                                </ons-row>
-                            </ons-list-item>
-                        </ul>
-
-                        <!--quesiton score summary-->
-                        <div ng-if="vm.expandedQuestionLists[section.section_ser_num] === true">
-                            <div ng-repeat="question in section.questions">
-                                <ul class="list" style="width: 100vw;">
-                                    <li class="list__item"
-                                        ng-click="vm.toggleExpandQuestionScore(section.section_ser_num, question, 'chart-' + $parent.$index + $index)">
-                                        <ons-row style="margin:0;padding:0" align="center">
-                                            <ons-col align="left" style="border:1px solid white;color:white">
-                                                <div id="chart-{{$parent.$index}}{{$index}}" style="line-height: 1.4;margin-top:10px;margin-bottom:10px">
-                                                    {{question.question_label}}
-                                                    <span class="pull-right">
-                                                        <span ng-class="question.expandQuestionScores ? 'fa fa-minus' : 'fa fa-plus'">
-                                                        </span>
-                                                    </span>
-                                                </div>
-                                            </ons-col>
-                                        </ons-row>
-                                    </li>
-                                    <div ng-show="question.expandQuestionScores" class="ons-col" align="center">
-                                        <!--title="{{question.title | limitTo: 20; question.title > 20 ? '...' : '' }}"-->
-                                        <hc-line-chart
-                                                title="{{(question.title | limitTo: 75) + (question.title.length > 75 ? '...' : '')}}"
-                                                data="question.scoresForQuestion">
-                                            Placeholder for line chart
-                                        </hc-line-chart>
-                                    </div>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+<ons-page>
+<ons-toolbar fixed-style>
+    <div class="left">
+        <ons-back-button>{{"BACK" | translate}}</ons-back-button>
     </div>
+    <div class="center" ng-class="fontSizeTitle">Historical Summary</div>
+    <div class="right">
+        <ons-toolbar-button
+                ng-click="personalNavigator.pushPage('views/personal/questionnaires/questionnaireSummaryInfo.html')">
+            <ons-icon icon="fa-info-circle"></ons-icon>
+        </ons-toolbar-button>
+    </div>
+</ons-toolbar>
+
+<ons-tabbar class="shadow-2" position="top" animation="fade">
+    <ons-tab class="shadow-2" style="background-color:#ECEFF1;"
+             page="./views/personal/questionnaires/questionnaireSummaryByScores.html" label="By Scores"
+             icon="fa-line-chart" active="true"></ons-tab>
+    <ons-tab class="shadow-2" style="background-color:#ECEFF1;"
+             page="./views/personal/questionnaires/questionnaireSummaryByAnswers.html" label="By Answers"
+             icon="fa-sort-amount-desc"></ons-tab>
+</ons-tabbar>
 </ons-page>
