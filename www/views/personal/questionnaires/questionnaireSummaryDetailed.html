@@ -1,0 +1,26 @@
+<!-- showing historical summary of selected questionnaire entity
+consists of 2 parts: global score summary, and section/question list
+ -->
+<ons-page>
+<ons-toolbar fixed-style>
+    <div class="left">
+        <ons-back-button>{{"BACK" | translate}}</ons-back-button>
+    </div>
+    <div class="center" ng-class="fontSizeTitle">Historical Summary</div>
+    <div class="right">
+        <ons-toolbar-button
+                ng-click="personalNavigator.pushPage('views/personal/questionnaires/questionnaireSummaryInfo.html')">
+            <ons-icon icon="fa-info-circle"></ons-icon>
+        </ons-toolbar-button>
+    </div>
+</ons-toolbar>
+
+<ons-tabbar class="shadow-2" position="top" animation="fade">
+    <ons-tab class="shadow-2" style="background-color:#ECEFF1;"
+             page="./views/personal/questionnaires/questionnaireSummaryByScores.html" label="By Scores"
+             icon="fa-line-chart" active="true"></ons-tab>
+    <ons-tab class="shadow-2" style="background-color:#ECEFF1;"
+             page="./views/personal/questionnaires/questionnaireSummaryByAnswers.html" label="By Answers"
+             icon="fa-sort-amount-desc"></ons-tab>
+</ons-tabbar>
+</ons-page>

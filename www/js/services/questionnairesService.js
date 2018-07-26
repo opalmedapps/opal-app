@@ -321,6 +321,10 @@ myApp.service('Questionnaires', [
                 return deferred.promise;
             },
 
+            clearHistoricalQuestionnaires: function() {
+                historicalQuestionnaires = [];
+            },
+
 
             // =====================
             // Scores part
