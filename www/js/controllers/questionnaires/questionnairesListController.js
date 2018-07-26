@@ -59,6 +59,7 @@ app.controller('questionnairesListController', [
 
         // go to historical summary page of the selected questionnaire entity
         $scope.goToHistoricalSummary = function (selectedQuestionnaire) {
+            Questionnaires.clearHistoricalQuestionnaires();
             NavigatorParameters.setParameters({Navigator: 'personalNavigator', questionnaire: selectedQuestionnaire});
             personalNavigator.pushPage('views/personal/questionnaires/questionnaireSummaryDetailed.html', {animation: 'slide'});
         };
