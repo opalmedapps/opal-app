@@ -224,6 +224,27 @@ myApp.service('Questionnaires', [
                         });
 
             },
+            saveQuestionFeedback: function(questionnaire_patient_rel_ser_num, question_ser_num, answeroption_ser_num, section) {
+                let deferred = $q.defer();
+                let _this = this;
+                var temp = {'feedbackAnswerOptionSerNum': answeroption_ser_num, 'feedbackTest':''};
+                let params = {
+                    'qp_ser_num': questionnaire_patient_rel_ser_num,
+                    'q_ser_num': question_ser_num,
+                    'sectionSerNum': section,
+                    'patientAnswers': temp,
+                };
+
+                RequestToServer.sendRequestWithResponse('QuestionFeedback', params)
+                    .then(function (response) {
+                            //_this.setQuestionnaires(response.Data);
+                            console.log('success saving feedback');
+                            deferred.resolve({Success: true, Location: 'Server'});
+                        },
+                        function (error) {
+                            deferred.reject({Success: false, Location: '', Error: error});
+                        });
+            },
             requestQuestionnaires: function (type) {
                 let deferred = $q.defer();
                 this.clearQuestionnaires();

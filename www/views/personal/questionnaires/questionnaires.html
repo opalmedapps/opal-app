@@ -32,136 +32,9 @@
             </span>
         </div>
         <!--TODO: Put skip radio button at the bottom for every question type-->
-        <!--<div class="right" style="width:20%">-->
-      <!--<span ng-if="vm.questionnaireStart && vm.questionnaire.status == 'New'" class="toolbar-button&#45;&#45;quiet navigation-bar__line-height" ng-click="vm.beginQuestionnaire();">-->
-        <!--{{"BEGIN"|translate}}-->
-      <!--</span>-->
-            <!--<span ng-if="vm.questionnaireStart && vm.questionnaire.status == 'In Progress'" class="toolbar-button&#45;&#45;quiet navigation-bar__line-height" ng-click="vm.resumeQuestionnaire();">-->
-        <!--{{"RESUME"|translate}}-->
-      <!--</span>-->
-            <!--<span ng-if="!vm.questionnaireStart && vm.questionnaire.status == 'In Progress' && vm.editQuestion" class="toolbar-button&#45;&#45;quiet navigation-bar__line-height" ng-click="vm.summaryPage();">-->
-        <!--{{"DONE"|translate}}-->
-      <!--</span>-->
-            <!--<span ng-if="carousel.getActiveCarouselItemIndex() == vm.carouselItems.length && !vm.editQuestion" style="padding-left:0px" class="toolbar-button&#45;&#45;quiet navigation-bar__line-height" ng-click="vm.summaryPage();">-->
-        <!--{{"SUMMARY"|translate}}-->
-      <!--</span>-->
-            <!--<span ng-if="carousel.getActiveCarouselItemIndex() !== vm.carouselItems.length && !vm.questionnaireStart" class="toolbar-button&#45;&#45;quiet navigation-bar__line-height" ng-click="vm.skipQuestion();">-->
-        <!--Skip-->
-      <!--</span>-->
-        <!--</div>-->
     </ons-toolbar>
 
     <div class="page__content ons-page-inner">
-
-        <!-- FEEDBACK -->
-        <ons-modal var="skip_question" style="overflow-y:auto">
-            <h3>Help us improve this question</h3>
-            <p>You chose not to answer this question.
-                Please let us know what is wrong.</p>
-
-            <div style="width: 100%; margin: 0 auto; margin-top: 15px;">
-                <p>
-                    <strong>I chose not to answer this question because ...</strong><br>
-                </p>
-                <p>
-                    <select id="skipReason" ng-model="skipQuestion.reason" class="button" style="text-align: center;">
-                        <option value="">No answer selected - tap to select an answer</option>
-                        <option>I am not comfortable answering this question</option>
-                        <option>This question is ambiguous or unclear</option>
-                        <option>There are no valid answer choices</option>
-                    </select>
-                </p>
-
-                <br>
-
-                <p>
-                    <strong>How does this question makes you feel?</strong>
-                <ul class="reactions-box">
-                    <li ng-repeat="emotion in vm.availableReactions | filter: {'type': 'emotion-bad'}" class="reaction {{emotion.reaction}}" ng-class="{'reaction-selected': (vm.choosenReaction[vm.questionIndex] == emotion), 'reaction-enabled': (!vm.choosenReaction[vm.questionIndex] || (vm.choosenReaction[vm.questionIndex] == emotion)), 'reaction-disabled': (vm.choosenReaction[vm.questionIndex] && (vm.choosenReaction[vm.questionIndex] != emotion)) }" ng-click="vm.chooseReaction(emotion);">
-                        {{ emotion.text }}
-                    </li>
-                </ul>
-                </p>
-
-                <p>
-                    <strong>This question should be asked to a patient in a situation similar to mine:</strong>
-                <div>
-                    <select id="skipReason" ng-model="skipQuestion.askSimilar" class="button" style="text-align: center;">
-                        <option value="">No answer selected - tap to select an answer</option>
-                        <option value="yes">I agree</option>
-                        <option value="no">I disagree</option>
-                    </select>
-                </div>
-                </p>
-
-                <p>
-                    <textarea class="textarea" ng-model="text2" placeholder="You may enter any additional comments here." style="width: 350px; height: 50px;"></textarea>
-                </p>
-
-                <br>
-
-                <p class="right">
-                    <ons-button style="display: inline-block;" ng-click="vm.skipQuestionSubmit()">Submit - thank you!</ons-button>
-                    <ons-button modifier="light" style="display: inline-block;" ng-click="vm.skipQuestionClose()">Skip this question</ons-button>
-                </p>
-
-            </div>
-        </ons-modal>
-
-        <ons-modal var="reactions_modal">
-            <strong>How does this question make you feel ...</strong><br><br>
-            <ul class="reactions-box">
-                <li ng-repeat="emotion in vm.displayReactions" class="reaction {{emotion.reaction}}" ng-class="{'reaction-selected': (vm.choosenReaction[vm.questionIndex] == emotion), 'reaction-enabled': (!vm.choosenReaction[vm.questionIndex] || (vm.choosenReaction[vm.questionIndex] == emotion)), 'reaction-disabled': (vm.choosenReaction[vm.questionIndex] && (vm.choosenReaction[vm.questionIndex] != emotion)) }" ng-click="vm.chooseReaction(emotion);">
-                    {{ emotion.text }}
-                </li>
-            </ul>
-
-            <textarea class="textarea" ng-model="text2" placeholder="Why does that make you feel that way ?" style="width: 350px; height: 100px;"></textarea>
-
-            <br><br>
-
-            <p><ons-button modifier="" ng-click="vm.submitReaction()">Submit - thank you!</ons-button></p>
-            <p><ons-button modifier="light" ng-click="vm.chooseReaction(undefined); vm.closeReactions();">I don't know (close this window)</ons-button></p>
-        </ons-modal>
-
-        <!--<ons-bottom-toolbar style="height: 90px" ng-if="carousel.getActiveCarouselItemIndex() !== vm.carouselItems.length && !vm.questionnaireStart">-->
-            <!--<ons-row align="center" style="height: 90px;">-->
-                <!--<ons-col>-->
-                    <!--<div style="padding-left: 25px; font-size: 16px;">-->
-                        <!--How does this question makes you feel?-->
-
-                        <!--<div ng-if="vm.choosenReaction[vm.questionIndex] && vm.choosenReaction[vm.questionIndex].type.startsWith('emotion')" style="display: inline-block;">-->
-                            <!--<ons-button style="padding:3px" modifier="light" ng-click="vm.showReactions()">-->
-                                <!--<span style="width: 50px; position: absolute; top: -15px; left: -10px; height: 50px;" class="reaction" ng-class="vm.choosenReaction[vm.questionIndex].reaction"></span>-->
-                                <!--<span style="padding-left: 25px; color: #000;">{{vm.choosenReaction[vm.questionIndex].text}}</span>-->
-                            <!--</ons-button>-->
-                        <!--</div>-->
-
-                        <!--<div ng-if="!(vm.choosenReaction[vm.questionIndex] && vm.choosenReaction[vm.questionIndex].type.startsWith('emotion'))" style="display: inline-block;">-->
-                            <!--<ons-button style="padding:3px" modifier="light" ng-click="vm.chooseReaction({'type': 'like', 'reaction': 'thumbs-up'}); vm.showReactions('emotion-good');">-->
-                                <!--<ons-icon-->
-                                        <!--icon="fa-thumbs-up"-->
-                                        <!--size="22px"-->
-                                        <!--fixed-width="false"-->
-                                        <!--style="color: rgba(0,0,0, 0.2)"-->
-                                        <!--ng-class="{'like-selected': vm.choosenReaction[vm.questionIndex].type === 'like' && vm.choosenReaction[vm.questionIndex].reaction === 'thumbs-up'}">-->
-                                <!--</ons-icon>-->
-                            <!--</ons-button>-->
-
-                            <!--<ons-button style="padding:3px" modifier="light" ng-click="vm.chooseReaction({'type': 'like', 'reaction': 'thumbs-down'}); vm.showReactions('emotion-bad');">-->
-                                <!--<ons-icon-->
-                                        <!--icon="fa-thumbs-down"-->
-                                        <!--size="22px"-->
-                                        <!--fixed-width="false"-->
-                                        <!--style="color: rgba(0,0,0, 0.2)"-->
-                                        <!--ng-class="{'like-selected': vm.choosenReaction[vm.questionIndex].type === 'like' && vm.choosenReaction[vm.questionIndex].reaction === 'thumbs-down'}">-->
-                                <!--</ons-icon>-->
-                            <!--</ons-button>-->
-                        <!--</div>-->
-                    <!--</div>-->
-                <!--</ons-col>-->
-            <!--</ons-row>-->
-        <!--</ons-bottom-toolbar>-->
 
         <ons-carousel fullscreen swipeable auto-scroll overscrollable var="carousel">
 
@@ -226,7 +99,7 @@
                         <!-- Home page image -->
                         <div class="row text-center" style="margin: 0 auto;" align="center">
                             <div class="col-xs-12 text-center">
-                                <!--<img src="img/MUHC.png" alt="MUHC Logo" style="margin-top: 1cm; margin-bottom: 1cm"></img>-->
+                                <!--<img src="img/MUHC.png" alt="MUHC Logo" style="margin-top: 1cm; margin-bottom: 1cm"></img>--> <!-- TODO: implement in general for any logo-->
                             </div>
                         </div>
 
@@ -294,7 +167,6 @@
                     </div>
 
                     <!-- CHECKBOX -->
-
                     <div ng-if="item.data.question_type_category_key == 'checkbox'" class="center" style="margin-top:10px;padding-left:5vw;padding-right:5vw;" ng-init="vm.setCheckboxAnswer(item.data);">
                         <ul class="list" ng-init="item.data.answerChangedFlag = false;">
                             <!-- ng-style="item.data.patient_answer.indexOf($index) > -1 && {'background-color':'#e9e9e9'} || {'background-color':'#f9f9f9'};"  -->
@@ -309,14 +181,14 @@
                             </div>
                             <li ng-if="item.data.optional == 1" class="list__item list__item--tappable" ng-style="vm.isCheckedCheckmark(item.data, 'SKIPPED') ? {'background-color':'#e9e9e9'} : {'background-color':'#f9f9f9'}" ng-init="item.data.skip = true">
                                 <label ng-class="fontSizeDesc" class="checkbox checkbox--list-item" ng-style="item.data.patient_answer.answer.indexOf('SKIPPED') > -1 ? {'background-color':'#e9e9e9', 'margin':'0px', 'padding':'10px'} : {'background-color':'#f9f9f9', 'margin':'0px', 'padding':'10px'}">
-                                    <input type="checkbox" name="{{'mcCheckbox'+item.data.ser_num}}" value='SKIPPED' ng-checked="item.data.patient_answer.is_defined!=='0' && vm.isCheckedCheckmark(item.data, 'SKIPPED')" ng-click="vm.toggleCheckboxSkip(item.data.skip, item.data)">
+                                    <input type="checkbox" name="{{'mcCheckbox'+item.data.ser_num}}" value='SKIPPED' ng-checked="item.data.patient_answer.is_defined!=='0' && item.data.patient_answer.answer[0]=='SKIPPED'" ng-click="vm.toggleCheckboxSkip(item.data.skip, item.data)">
                                     <div class="checkbox__checkmark checkbox--list-item__checkmark"></div>
                                     {{"Prefer not to answer"|translate}}
                                 </label>
                             </li>
                         </ul>
                         <ul class="list" style="background: #f9f9f9;padding-top: 10%;">
-                            <li ng-if="vm.checkedNumber>0 && item.data.options[0].is_exact == '0' && !(item.data.patient_answer.answer.indexOf('SKIPPED') > -1)">
+                            <li ng-if="vm.checkedNumber>0 && item.data.options[0].is_exact == '0' && (!(item.data.patient_answer.answer.indexOf('SKIPPED') > -1))">
                                 <span ng-class="fontSizeDesc">You have selected {{vm.checkedNumber}} options. You can select up to {{vm.limitNumber-vm.checkedNumber}} more options.</span>
                             </li>
                             <li ng-if="vm.checkedNumber>0 && item.data.options[0].is_exact == '1' && !(item.data.patient_answer.answer.indexOf('SKIPPED') > -1)">
@@ -342,7 +214,7 @@
                     </ons-modal>
 
                     <!-- LARGE RANGE SCALE (SLIDER TYPE OF QUESTION)--> <!--TODO: Add visualization option check instead of hardcoding 'vm.questionTotalIndex + 1 <= 3'-->
-                    <div ng-if="item.data.question_type_category_key == 'slider' && item.data.visualization_name == 'slider'" ng-init="console.log('3------ sliderAns='+ item.data.patient_answer.answer[0].sliderAns);console.log('1 tempAns = '+ vm.tempAns);vm.tempAns=item.data.patient_answer.answer[0].sliderAns;" class="center" style="padding-left:10%">
+                    <div ng-if="item.data.question_type_category_key == 'slider' && item.data.visualization_name == 'slider'" ng-init="console.log('3------ sliderAns='+ item.data.patient_answer.answer[0].sliderAns);console.log('1 tempAns = '+ vm.tempAns);vm.tempAns=item.data.patient_answer.answer[0].sliderAns;" class="center" style="padding-left:10%;height: 60%;">
 
                         <style>
 
@@ -528,7 +400,7 @@
                         </style>
 
                         <!--landscape mode-->
-                        <ons-row ng-if="!vm.portraitOrientationCheck.matches" class="slidercontainer" style="margin-left:0px;margin-right:0px" ng-init="vm.bindScaleParameters(item.data);" class="center" style="margin-top:10px;padding-left:5vw;padding-right:5vw;">
+                        <ons-row ng-if="!vm.portraitOrientationCheck.matches" class="slidercontainer" style="margin-left:0px;margin-right:0px;top: 20px;" ng-init="vm.bindScaleParameters(item.data);" class="center"><!-- style="margin-top:10px;padding-left:5vw;padding-right:5vw;">-->
 
                             <ons-col ng-init="console.log('4---------- sliderAns = ' + item.data.patient_answer.answer[0].sliderAns); item.data.answerChangedFlag = false;">
                                 <ons-row class="maximumText2" width="40px" style="text-align: right;" ng-class="fontSizeDesc">
@@ -544,14 +416,14 @@
                         </ons-row>
 
                         <!-- portrait mode-->
-                        <ons-row ng-if="vm.portraitOrientationCheck.matches" class="slidercontainer" style="margin-left:0px;margin-right:0px" ng-init="vm.bindScaleParameters(item.data);" class="center" style="margin-top:10px;padding-left:5vw;padding-right:5vw;">
+                        <ons-row ng-if="vm.portraitOrientationCheck.matches" class="slidercontainer" style="margin-left:0px;margin-right:0px;top:20px;height: 340px;" ng-init="vm.bindScaleParameters(item.data);" class="center">
 
-                                <ons-col ng-init="item.data.patient_answer.length > 0; item.data.answerChangedFlag = false;">
-                                    <ons-row class="maximumText" id="maximumText" width="40px" style="text-align: right; left: 77%;" ng-class="fontSizeDesc">
+                                <ons-col ng-init="item.data.patient_answer.length > 0; item.data.answerChangedFlag = false;" style="height: 340px;">
+                                    <ons-row class="maximumText" id="maximumText" width="40px" style="text-align: right; left: 77%;top:-4%;" ng-class="fontSizeDesc">
                                         {{item.data.options[0].max_value}} - {{item.data.options[0].max_caption}}
                                     </ons-row>
                                 <input type="range" min="{{item.data.options[0].min_value}}" max="{{item.data.options[0].max_value}}" string-to-number ng-init="item.data.patient_answer.answer[0].sliderAns = parseInt(vm.tempAns);" ng-value="vm.tempAns" ng-model="item.data.patient_answer.answer[0].sliderAns" class="slider" id="myRange" style="width: 80%; height: 90px;" ng-change="vm.removeSpanChild(); item.data.answerChangedFlag = true;vm.toggleViewAns(item.data);">
-                                    <ons-row class="minimumText" width="40px" style="text-align: right; top: 57%; left: 77%;" ng-class="fontSizeDesc">
+                                    <ons-row class="minimumText" width="40px" style="text-align: right; top: 75%; left: 77%;height:30px;" ng-class="fontSizeDesc">
                                         {{item.data.options[0].min_value}} - {{item.data.options[0].min_caption}}
                                     </ons-row>
                                 </ons-col>
@@ -563,18 +435,6 @@
 
                     <!-- SMALL RANGE SCALE (SLIDER TYPE OF QUESTION)-->
                     <div ng-if="item.data.question_type_category_key == 'slider' && item.data.visualization_name == 'dots'" class="center scale" style="margin-top:10px;padding-left:5vw;padding-right:5vw;" ng-init="options = vm.bindScaleParameters(item.data)">
-                        <!--<ons-row style="margin-left:0px;margin-right:0px" ng-init="vm.bindScaleParameters(item.data)">
-                          <ons-col width="40px" style="text-align: center; line-height: 31px;">
-                            {{minText}}
-                          </ons-col>
-                          <ons-col ng-init="item.data.patient_answer.length > 0 || item.data.patient_answer.push(vm.average(minText,maxText)); item.data.answerChangedFlag = false;">
-                            <input type="range" class="range" ng-model="item.data.patient_answer[0]" min={{minText}} max={{maxText}} ng-change="vm.removeSpanChild(this); item.data.answerChangedFlag = true;">
-                          </ons-col>
-                          <ons-col width="40px" style="text-align: center; line-height: 31px;">
-                            {{maxText}}
-                          </ons-col>
-                        </ons-row>-->
-
 
                         <div style="margin-left:0px;margin-right:0px;">
                             <div class="scale_option" ng-repeat="op in options.options" ng-init="item.data.patient_answer.length > 0; item.data.answerChangedFlag = false;" ng-style="options.formatting">
@@ -600,7 +460,7 @@
                             </ons-col>
                         </ons-row>
                         <ul class="list" style="margin-top:1vh;">
-                            <div ng-if="item.data.optional == '1'" style="padding-top:3vh; background-color:#d9d9d9">
+                            <div ng-if="item.data.optional == '1'" style="padding-top:1vh; background-color:#d9d9d9">
                             </div>
                             <li ng-if="item.data.optional == '1'" class="list__item list__item--tappable" ng-style="item.data.patient_answer.answer[0].Skipped == '1' ? {'background-color':'#e9e9e9'} : {'background-color':'#f9f9f9'}" ng-init="item.data.skip = true">
                                 <label ng-class="fontSizeDesc" class="radio-button radio-button--list-item">
@@ -643,80 +503,24 @@
                         </ul>
                     </div>
 
-
-                    <!-- FEEDBACK -->
-                    <!-- <ons-row align="center" style="margin-left:0.12vw;padding-top:3vh;padding-bottom:2vh;">
-                      <ons-col align="left">
-                        <i class="fa fa-thumbs-down fa-3x" style="margin-left:20vw" aria-hidden="true"></i>
-                      </ons-col>
-                      <ons-col align="right">
-                        <i class="fa fa-thumbs-up fa-3x" style="margin-right:20vw" aria-hidden="true"></i>
-                      </ons-col>
-                    </ons-row> -->
-
-                    <!-- SCALE -->
-
-                    <!--<div ng-if="item.data.questiontype == ''" class="center" style="margin-top:10px;padding-left:5vw;padding-right:5vw;">-->
-                        <!--<ons-row style="margin-left:0px;margin-right:0px" ng-init="vm.bindScaleParameters(item.data)">-->
-                            <!--<ons-col width="40px" style="text-align: center; line-height: 31px;">-->
-                                <!--{{minText}}-->
-                            <!--</ons-col>-->
-                            <!--<ons-col ng-init="item.data.patient_answer.length > 0 || item.data.patient_answer.push(vm.average(minText,maxText)); item.data.answerChangedFlag = false;">-->
-                                <!--<div ng-if="item.data.questiontype == 'Scale'" class="center" style="margin-top:20px;padding-left:15vw;padding-right:15vw;z-index:0;">-->
-
-                                    <!--<rzslider rz-slider-model="slider.value"-->
-                                              <!--rz-slider-options="slider.options"></rzslider>-->
-
-                                <!--</div>-->
-                                <!--&lt;!&ndash;<input type="range" class="range" ng-model="item.data.patient_answer[0]" min={{minText}} max={{maxText}} ng-change="vm.removeSpanChild(this); item.data.answerChangedFlag = true;">&ndash;&gt;-->
-                            <!--</ons-col>-->
-                            <!--<ons-col width="40px" style="text-align: center; line-height: 31px;">-->
-                                <!--{{maxText}}-->
-                            <!--</ons-col>-->
-                        <!--</ons-row>-->
-                        <!--<ons-row style="margin-left:0px;margin-right:0px;margin-top:10px">-->
-                            <!--<ons-col width="40%" style="text-align: left; line-height: 31px;">-->
-                                <!--{{minCaption}}-->
-                            <!--</ons-col>-->
-                            <!--<ons-col width="20%" style="text-align: center;">-->
-                                <!--<div ng-if="item.data.patient_answer[0] != null && item.data.patient_answer[0] != -9">-->
-                                    <!--{{item.data.patient_answer[0]}}-->
-                                <!--</div>-->
-                                <!--<div ng-if="item.data.patient_answer[0] != null && item.data.patient_answer[0] == -9">-->
-                                    <!--{{"SKIPPED"|translate}}-->
-                                <!--</div>-->
-                            <!--</ons-col>-->
-                            <!--<ons-col width="40%" style="text-align: right; line-height: 31px;">-->
-                                <!--{{maxCaption}}-->
-                            <!--</ons-col>-->
-                        <!--</ons-row>-->
-                        <!--<ul class="list" style="margin-top:1vh;">-->
-                            <!--<div ng-if="item.data.optional == 1" style="padding-top:3vh; background-color:#d9d9d9">-->
-                            <!--</div>-->
-                            <!--<li ng-if="item.data.optional == 1" class="list__item list__item&#45;&#45;tappable" ng-style="item.data.patient_answer[0] == -9 ? {'background-color':'#e9e9e9'} : {'background-color':'#f9f9f9'}" ng-init="item.data.skip = true">-->
-                                <!--<label class="radio-button radio-button&#45;&#45;list-item">-->
-                                    <!--<input type="radio" name="{{'scaleSkip'+item.data.ser_num}}" ng-checked="item.data.patient_answer[0] == -9" ng-click="vm.toggleScaleSkip(item.data.skip, item.data); console.log(item.data.patient_answer[0] == -9);">-->
-                                    <!--<div class="radio-button__checkmark radio-button&#45;&#45;list-item__checkmark"></div>-->
-                                    <!--{{"SKIP_THIS_QUESTION"|translate}}-->
-                                <!--</label>-->
-                            <!--</li>-->
-                        <!--</ul>-->
-                    <!--</div>-->
-
-                    <!-- FEEDBACK -->
-                    <!-- <ons-row align="center" style="margin-left:0.12vw;padding-top:3vh;padding-bottom:2vh;">
-                      <ons-col align="left">
-                        <i class="fa fa-thumbs-down fa-3x" style="margin-left:20vw" aria-hidden="true"></i>
-                      </ons-col>
-                      <ons-col align="right">
-                        <i class="fa fa-thumbs-up fa-3x" style="margin-right:20vw" aria-hidden="true"></i>
-                      </ons-col>
-                    </ons-row> -->
-
+                </div>
+                <!-- FEEDBACK -->
+                    <div ng-if="vm.isQuestion && !vm.questionnaireStart && vm.portraitOrientationCheck.matches" style="text-align:center;">
+                        <div style="padding-top:1vh; background-color:#d9d9d9;position: relative;top:70%;margin-bottom:7px"></div>
+                        <div style="overflow-y: auto;right: 10%;position: relative;clear: left;bottom:0%;top:80%">
+                            <div style="display: inline-block;padding-left:20px;">
+                                <span ng-class="fontSizeTitle">Feedback</span>
+                            </div>
+                            <div style="display: inline-block;padding-left:20px;">
+                                <div style="font-size:50px;" id="thumbsUp" ng-style="(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex].patient_answer.feedback == vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex].feedback_options[0].feedback_ser_num)? {'color':'darkblue'}:{'color':'black'}" ng-click="vm.thumbsUp(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex])" class="fa fa-thumbs-up"></div>
+                            </div>
+                            <div style="display: inline-block;padding-left:20px;">
+                                <div style="font-size:50px;" id="thumbsDown" ng-style="(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex].patient_answer.feedback == vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex].feedback_options[1].feedback_ser_num)? {'color':'darkblue'}:{'color':'black'}" ng-click="vm.thumbsDown(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex])" class="fa fa-thumbs-down"></div>
+                            </div>
+                        </div>
                 </div>
 
             </ons-carousel-item>
         </ons-carousel>
-
     </div>
 </ons-page>
