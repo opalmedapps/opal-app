@@ -187,7 +187,7 @@
                                 </label>
                             </li>
                         </ul>
-                        <ul class="list" style="background: #f9f9f9;padding-top: 10%;">
+                        <ul class="list" style="background: #f9f9f9;padding-top: 10%;margin-bottom:10px;">
                             <li ng-if="vm.checkedNumber>0 && item.data.options[0].is_exact == '0' && (!(item.data.patient_answer.answer.indexOf('SKIPPED') > -1))">
                                 <span ng-class="fontSizeDesc">You have selected {{vm.checkedNumber}} options. You can select up to {{vm.limitNumber-vm.checkedNumber}} more options.</span>
                             </li>
