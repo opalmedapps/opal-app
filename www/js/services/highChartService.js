@@ -33,7 +33,7 @@
          *@name getJSONForLineChart
          *@methodOf MUHCApp.service:HighChartService
          *@param {String} title which displays in chart
-         *@param {Array} scores for displaying a graph
+         *@param {Array} scores for displaying a graph. An array of objects which is composed of dates and scores
          *@description Returns JSON for line chart
          */
         function getJSONForLineChart(title, scores) {
