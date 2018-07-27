@@ -17,7 +17,7 @@ consists of 2 parts: global score summary, and section/question list
             <div class="ons-col" align="center">
 
                 <ul class="list">
-                    <ons-list-item class="list__item" ng-click="vm.toggleExpandTotalScore()"
+                    <div class="list__item" ng-click="vm.toggleExpandTotalScore()"
                                    style="background-color: #efeff4">
                         <ons-row style="margin:0;padding:0" align="center">
                             <ons-col align="left" style="border:1px solid white;color:white">
@@ -29,7 +29,7 @@ consists of 2 parts: global score summary, and section/question list
                                 </div>
                             </ons-col>
                         </ons-row>
-                    </ons-list-item>
+                    </div>
 
                     <div ng-show="vm.expandTotalScore" class="ons-col" align="center">
                         <div ng-init="vm.initChartOptions(vm.questionnaire.nickname, vm.historicalQuestionnaires.scoresForQuestionnaire)">
@@ -39,7 +39,7 @@ consists of 2 parts: global score summary, and section/question list
                         </div>
                     </div>
 
-                    <ons-list-item class="list__item" style="background-color: #efeff4">
+                    <div class="list__item" style="background-color: #efeff4">
                         <ons-row style="margin:0;padding:0" align="center">
                             <ons-col align="left" style="border:1px solid white;color:white">
                                 <div style="line-height: 2.0;margin-top:10px;margin-bottom:10px;font-size:1.1em">
@@ -47,7 +47,7 @@ consists of 2 parts: global score summary, and section/question list
                                 </div>
                             </ons-col>
                         </ons-row>
-                    </ons-list-item>
+                    </div>
                 </ul>
 
                  <!--section -->
@@ -77,22 +77,22 @@ consists of 2 parts: global score summary, and section/question list
                                 </hc-chart>
                             </div>
                         </div>
-                        <ons-list-item ng-show="vm.expandSectinos[section.section_ser_num].expandSectionScores" class="list__item"
-                                       ng-click="vm.toggleExpandQuestionList(section.section_ser_num, 'questionList-' + $index)">
-                            <ons-row style="margin:0;padding:0" align="center">
-                                <ons-col align="left" style="border:1px solid white;color:white">
-                                    <div id="questionList-{{$index}}"
-                                         style="line-height: 2.0;margin-top:10px;margin-bottom:10px;font-size:1.0em">
-                                        <b>Scores for questions</b>
-                                        <span class="pull-right">
+                    </ul>
+                    <ons-list-item ng-show="vm.expandSectinos[section.section_ser_num].expandSectionScores" class="list__item"
+                                   ng-click="vm.toggleExpandQuestionList(section.section_ser_num, 'questionList-' + $index)">
+                        <ons-row style="margin:0;padding:0" align="center">
+                            <ons-col align="left" style="border:1px solid white;color:white">
+                                <div id="questionList-{{$index}}"
+                                     style="line-height: 2.0;margin-top:10px;margin-bottom:10px;font-size:1.0em">
+                                    <b>Scores for questions</b>
+                                    <span class="pull-right">
                                                 <span ng-class="vm.expandedQuestionLists[section.section_ser_num] ? 'glyphicon glyphicon-menu-up' : 'glyphicon glyphicon-menu-down'">
                                                 </span>
                                             </span>
-                                    </div>
-                                </ons-col>
-                            </ons-row>
-                        </ons-list-item>
-                    </ul>
+                                </div>
+                            </ons-col>
+                        </ons-row>
+                    </ons-list-item>
 
                     <!--quesiton score summary-->
                     <div ng-if="vm.expandedQuestionLists[section.section_ser_num] === true">
@@ -106,22 +106,22 @@ consists of 2 parts: global score summary, and section/question list
                                                  style="line-height: 1.4;margin-top:10px;margin-bottom:10px">
                                                 {{question.question_label}}
                                                 <span class="pull-right">
-                                                        <span ng-class="question.expandQuestionScores ? 'fa fa-minus' : 'fa fa-plus'">
+                                                        <span ng-class="vm.expandSectinos[section.section_ser_num].questions[question.question_ser_num].expandQuestionScores ? 'fa fa-minus' : 'fa fa-plus'">
                                                         </span>
                                                     </span>
                                             </div>
                                         </ons-col>
                                     </ons-row>
                                 </li>
-                                <div ng-show="vm.expandSectinos[section.section_ser_num].questions[question.question_ser_num].expandQuestionScores"
-                                     class="ons-col" align="center">
-                                    <div ng-init="vm.initChartOptions(question.title, question.scoresForQuestion)">
-                                        <hc-chart options="vm.chartOptions">
-                                            Placeholder for line chart
-                                        </hc-chart>
-                                    </div>
-                                </div>
                             </ul>
+                            <div ng-show="vm.expandSectinos[section.section_ser_num].questions[question.question_ser_num].expandQuestionScores"
+                                 class="ons-col" align="center">
+                                <div ng-init="vm.initChartOptions(question.title, question.scoresForQuestion)">
+                                    <hc-chart options="vm.chartOptions">
+                                        Placeholder for line chart
+                                    </hc-chart>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

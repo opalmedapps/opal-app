@@ -27,14 +27,16 @@ app.controller('questionnaireSummaryByAnswersController', [
             // fetch historical questionnaires data from service
             vm.historicalQuestionnaires = Questionnaires.getHistoricalQuestionnaires();
             prepareExpandableRows();
+            configureCharts();
             $scope.loading = false;
         }
 
         // Initializing charts properties
-        vm.initChartOptions = function (title, scores) {
-            vm.chartOptions = HighChartService.getJSONForLineChart(
-                title,
-                scores
+        vm.initChartOptions = function (question) {
+
+            vm.chartOptions = HighChartService.getJSONForColumnChart(
+                question.title,
+                question.answersForQuestion
             );
         };
 
@@ -70,6 +72,21 @@ app.controller('questionnaireSummaryByAnswersController', [
                     vm.expandSectinos[section].questions[question].expandQuestionScores = false;
                 }
             }
+        }
+
+        function configureCharts() {
+
+            if (UserPreferences.getLanguage().toUpperCase() === 'FR') {
+                Highcharts.setOptions(HighChartService.configureFrenchCharts());
+                Highcharts.dateFormat('%e%a');
+            }
+
+            Highcharts.setOptions({
+                lang: {
+                    //Zoom replaced with Date Range
+                    rangeSelectorZoom: ''
+                }
+            });
         }
 
         function importantInfo() {
