@@ -45,22 +45,23 @@
                                                      style="line-height: 1.4;margin-top:10px;margin-bottom:10px">
                                                     {{question.question_label}}
                                                     <span class="pull-right">
-                                                        <span ng-class="question.expandQuestionScores ? 'fa fa-minus' : 'fa fa-plus'">
+                                                        <span
+                                                                ng-class="vm.expandSectinos[section.section_ser_num].questions[question.question_ser_num].expandQuestionScores ? 'fa fa-minus' : 'fa fa-plus'">
                                                         </span>
                                                     </span>
                                                 </div>
                                             </ons-col>
                                         </ons-row>
                                     </li>
-                                    <div ng-show="vm.expandSectinos[section.section_ser_num].questions[question.question_ser_num].expandQuestionScores"
-                                         class="ons-col" align="center">
-                                        <div ng-init="vm.initChartOptions(question.title, question.scoresForQuestion)">
-                                            <hc-chart options="vm.chartOptions">
-                                                Placeholder for line chart
-                                            </hc-chart>
-                                        </div>
-                                    </div>
                                 </ul>
+                                <div ng-show="vm.expandSectinos[section.section_ser_num].questions[question.question_ser_num].expandQuestionScores"
+                                    class="ons-col" align="center">
+                                    <div ng-init="vm.initChartOptions(question)">
+                                        <hc-chart options="vm.chartOptions">
+                                            Placeholder for line chart
+                                        </hc-chart>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

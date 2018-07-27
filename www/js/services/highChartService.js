@@ -23,6 +23,7 @@
 
         var service = {
             getJSONForLineChart: getJSONForLineChart,
+            getJSONForColumnChart: getJSONForColumnChart,
             configureFrenchCharts: configureFrenchCharts
         };
         return service;
@@ -148,6 +149,129 @@
                 }]
             };
         }
+
+        /**
+         *@ngdoc method
+         *@name getJSONForColumnChart
+         *@methodOf MUHCApp.service:HighChartService
+         *@param {String} title which displays in chart
+         *@param {Array} answersForQuestion for displaying a graph
+         *@description Returns JSON for column chart
+         */
+        function getJSONForColumnChart(title, answersForQuestion) {
+            var windowWidth = $(window).width();
+            // Reformat dates for highcharts library
+            var questionnaireAnswers = [];
+            for (var item in answersForQuestion) {
+                var dateAnswer = [];  //array to store pairs of [date, answer]
+                dateAnswer[0] = Date.parse(answersForQuestion[item].last_updated);
+                dateAnswer[1] = 1;
+                // dateAnswer[1] = answersForQuestion[item].answer;
+                questionnaireAnswers.push(dateAnswer);
+            }
+            if (title.length > 75) {
+                title = title.substring(0, 75) + '...';
+            }
+            console.log(questionnaireAnswers[0]);
+            return {
+                rangeSelector: {
+                    enabled: true,
+                    //select all as default button
+                    selected: 4,
+                    buttonSpacing: 14,
+                    buttons: [{
+                        type: 'month',
+                        count: 1,
+                        text: '1month'
+                    }, {
+                        type: 'month',
+                        count: 3,
+                        text: '3month'
+                    }, {
+                        type: 'month',
+                        count: 6,
+                        text: '6month'
+                    }, {
+                        type: 'year',
+                        count: 1,
+                        text: '1year'
+                    }, {
+                        type: 'all',
+                        text: 'All'
+                    }],
+                    buttonTheme: {
+                        width: null
+                    }
+                },
+                chart: {
+                    type: 'column',
+                    width: windowWidth,
+                    height: null,
+                    zoomType: 'xy'
+                },
+                title: {
+                    text: title
+                },
+                xAxis: {
+                    type: 'datetime',
+                    dateTimeLabelFormats: { // don't display the dummy year
+                        month: '%e. %b',
+                        year: '%b'
+                    },
+                    title: {
+                        text: 'Date'
+                    },
+                    labels: {
+                        style: {
+                            fontSize: '15px'
+                        }
+                    }
+                },
+                yAxis: {
+                    labels: {
+                        enabled: false,
+                        style: {
+                            fontSize: '15px'
+                        }
+                    },
+                    opposite: false
+                },
+                tooltip: {
+                    pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y}</b> ({point.percentage:.0f}%)<br/>',
+                    shared: true
+                },
+                plotOptions: {
+                    column: {
+                        stacking: 'percent'
+                    }
+                },
+                series: [{
+                    name: 'John',
+                    data: [1, 1, 1, 1, 1]
+                }, {
+                    name: 'Jane',
+                    data: [1, 1, 1, 1, 1]
+                }, {
+                    name: 'Joe',
+                    data: [1, 1, 1, 1, 1]
+                }]
+            }
+        }
+
+        //     [{
+        //     name: 'Test1',
+        //     data: [questionnaireAnswers[0], questionnaireAnswers[1]]
+        // }, {
+        //     name: 'Test2',
+        //     data: [questionnaireAnswers[2], questionnaireAnswers[3]]
+        // }]
+
+        // [{
+        //     showInNavigator: true,
+        //     name: 'Answer',
+        //     data: questionnaireAnswers,
+        //     type: 'column'
+        // }]
 
 
         /**
