@@ -45,6 +45,7 @@ app.controller('questionnaireSummaryByScoresController', [
                     });
             } else { // otherwise use data from service without request to server
                 prepareExpandableRows();
+                configureCharts();
                 $scope.loading = false;
             }
         }
@@ -99,6 +100,19 @@ app.controller('questionnaireSummaryByScoresController', [
             $anchorScroll();
         };
 
+        function prepareExpandableRows() {
+            for (var section in vm.historicalQuestionnaires.sections) {
+                vm.expandSectinos[section] = [];
+                vm.expandSectinos[section].questions = [];
+                vm.expandedQuestionLists[section] = false;
+                for (var question in vm.historicalQuestionnaires.sections[section].questions) {
+                    vm.expandSectinos[section].questions[question] = [];
+                    vm.expandSectinos[section].questions[question].expandQuestionScores = false;
+                }
+            }
+            vm.expandTotalScore = true;
+        }
+
         function configureCharts() {
 
             if (UserPreferences.getLanguage().toUpperCase() === 'FR') {
@@ -112,19 +126,6 @@ app.controller('questionnaireSummaryByScoresController', [
                     rangeSelectorZoom: ''
                 }
             });
-        }
-
-        function prepareExpandableRows() {
-            for (var section in vm.historicalQuestionnaires.sections) {
-                vm.expandSectinos[section] = [];
-                vm.expandSectinos[section].questions = [];
-                vm.expandedQuestionLists[section] = false;
-                for (var question in vm.historicalQuestionnaires.sections[section].questions) {
-                    vm.expandSectinos[section].questions[question] = [];
-                    vm.expandSectinos[section].questions[question].expandQuestionScores = false;
-                }
-            }
-            vm.expandTotalScore = true;
         }
 
         function importantInfo() {
