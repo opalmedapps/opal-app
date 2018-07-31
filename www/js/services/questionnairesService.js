@@ -183,7 +183,6 @@ myApp.service('Questionnaires', [
                     'qp_ser_num': questionnaire_patient_rel_ser_num,
                     'new_status': new_status,
                 };
-                // TODO: change request when the database for questions is ready
                 RequestToServer.sendRequestWithResponse('UpdateQuestionnaireStatus', params) // 'UpdateQuestionnaireStatus'
                     .then(function (response) {
                             this.setQuestionnaires(response.Data);
@@ -227,7 +226,7 @@ myApp.service('Questionnaires', [
             saveQuestionFeedback: function(questionnaire_patient_rel_ser_num, question_ser_num, answeroption_ser_num, section) {
                 let deferred = $q.defer();
                 let _this = this;
-                var temp = {'feedbackAnswerOptionSerNum': answeroption_ser_num, 'feedbackTest':''};
+                var temp = {'feedbackAnswerOptionSerNum': answeroption_ser_num, 'feedbackText':null};
                 let params = {
                     'qp_ser_num': questionnaire_patient_rel_ser_num,
                     'q_ser_num': question_ser_num,

@@ -63,6 +63,7 @@
   },
   "dependencies": {
     "@angular/material": "^6.4.0",
+    "angular": "^1.7.0",
     "angular-material": "^1.1.10",
     "angular-route": "^1.7.2",
     "cordova-auto-patch": "^1.2.2"

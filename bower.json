@@ -30,7 +30,7 @@
     "angular-touch": "^1.6.0",
     "angular-ui-router": "^0.2.13",
     "angular-translate-loader-partial": "^2.7.2",
-    "angular": "^1.6.0",
+    "angular": "^1.7.0",
     "angular-translate-loader-url": "^2.7.2",
     "bootstrap": "^3.3.6",
     "angularfire": "^2.1.0",
