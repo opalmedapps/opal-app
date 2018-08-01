@@ -22,7 +22,8 @@
         '$filter',
         'Constants',
         'Permissions',
-        'DynamicContentService'
+        'DynamicContentService',
+        'NewsBanner'
     ];
 
     /* @ngInject */
@@ -33,7 +34,8 @@
         $filter,
         Constants,
         Permissions,
-        DynamicContentService
+        DynamicContentService,
+        NewsBanner
     ) {
         var vm = this;
         vm.globalMessage = '';
@@ -101,13 +103,11 @@
                     NewsBanner.showCustomBanner($filter('translate')(response.Message), '#333333', function(){}, 5000);
                 });
 
-            vm.counter = vm.counter + 1;
         }
 
         function showMessageOfTheDay() {
             if (vm.globalMessageDescription !== '') {
-                NewsBanner.showCustomBanner(vm.globalMessage + "\n" + vm.globalMessageDescription,
-                                            '#333333', function () {}, 9000);
+                NewsBanner.showCustomBanner(vm.globalMessage + "\n" + vm.globalMessageDescription, '#333333', function () {}, 9000);
             }
         }
 
