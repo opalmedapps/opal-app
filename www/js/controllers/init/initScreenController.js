@@ -40,7 +40,7 @@
         var vm = this;
         vm.globalMessage = '';
         vm.globalMessageDescription = '';
-        vm.counter = 0;
+        vm.firstTime = true;
 
         vm.goToMessage = goToMessage;
         vm.gotoLearnAboutOpal = gotoLearnAboutOpal;
@@ -107,7 +107,11 @@
 
         function showMessageOfTheDay() {
             if (vm.globalMessageDescription !== '') {
-                NewsBanner.showCustomBanner(vm.globalMessage + "\n" + vm.globalMessageDescription, '#333333', function () {}, 9000);
+                if (vm.firstTime) {
+                    vm.firstTime = false;
+                    NewsBanner.showCustomBanner(vm.globalMessage + "\n" + vm.globalMessageDescription, '#333333', function () {
+                    }, 9000);
+                }
             }
         }
 

@@ -84,6 +84,7 @@
             <!-- MOTD comes from serviceStatus_EN.php -->
             <!-- if there is a Message, then show it -->
             <div ng-show="init.globalMessageDescription !== ''">
+                 firstTime: {{init.firstTime}}
                  {{init.showMessageOfTheDay()}}
             </div>
 
