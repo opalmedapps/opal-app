@@ -1,22 +1,21 @@
-<ons-page ng-controller="IndividualStepController as step">
+<ons-page ng-controller="AppointmentController as vm">
     <ons-toolbar fixed-style>
-        <div class="left">
-            <ons-back-button>{{"BACK"|translate}}</ons-back-button>
-        </div>
-        <div class="center">{{"TREATMENTSTAGE"|translate}}</div>
+        <div class="left"><ons-back-button>{{"BACK"|translate}}</ons-back-button></div>
+        <div class="center">{{"INFO"|translate}}</div>
     </ons-toolbar>
     <div>
         <ons-list class="settings-list">
             <ons-list-item class="item">
                 <div style="line-height:1" align="left">
                     <header>
-                        <span class="item-title" ng-class="fontSizeTitle">{{step.name | translate}}</span>
+                        <span class="item-title" ng-class="fontSizeTitle">{{vm.app["AppointmentType_" + vm.language]}}</span>
                     </header>
                     <p class="item-desc" ng-class="fontSizeDesc"
-                       ng-bind-html="step.stage.appointmentDescription || step.stage.taskDescription"></p>
+                       ng-bind-html="vm.app['AppointmentDescription_' + vm.language]">
+                    </p>
                 </div>
             </ons-list-item>
-            <ons-list-item tappable ng-click="step.about()" ng-show="vm.stage != ''">
+            <ons-list-item tappable ng-click="vm.moreEducationalMaterial()" ng-show="vm.app['URL_' + vm.language] != ''">
                 <button class="button button--large--quiet">
                     {{"MORE_EDU_MATERIAL"|translate}}
                 </button>

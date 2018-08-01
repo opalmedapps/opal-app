@@ -31,7 +31,6 @@
         var vm = this;
 
         var navigatorName;
-
         /**
          * @ngdoc property
          * @name language
@@ -59,8 +58,10 @@
          */
         vm.corrupted_appointment = false;
 
+
         vm.goToMap = goToMap;
         vm.aboutAppointment = aboutAppointment;
+        vm.moreEducationalMaterial = moreEducationalMaterial;
         vm.openMap = openMap;
 
         activate();
@@ -95,6 +96,12 @@
             $window[navigatorName].pushPage('./views/general/maps/individual-map.html');
         }
 
+        function aboutAppointment()
+        {
+          //  NavigatorParameters.setParameters(vm.app);
+            $window[navigatorName].pushPage('./views/personal/appointments/about-appointment.html');
+        }
+
         /**
          * @ngdoc method
          * @name aboutAppointment
@@ -102,15 +109,11 @@
          * @description
          * Takes the user to the About-This-Appointment view of the specified appointment
          */
-        function aboutAppointment () {
+        function moreEducationalMaterial() {
             $window[navigatorName].pushPage('./views/templates/content.html', {
                 contentLink: vm.app["URL_"+ vm.language],
-                // contentType: vm.app["AppointmentType_"+ vm.language]
 
-                contentType: vm.app["AppointmentType_EN"]
-                // Important: even though it is _EN, it works for the French version too. The _EN is
-                // just the correct title in the https://www.depdocs.com/opal/links/links.php that will grab
-                // the right .php file. Ex: "Blood tests", "Chemotherapy", etc...
+                contentType: vm.app["AppointmentType_" + vm.language]
             });
             
         }
