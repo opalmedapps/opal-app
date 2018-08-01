@@ -467,7 +467,7 @@
                     </div>
 
                     <!-- SMALL RANGE SCALE (SLIDER TYPE OF QUESTION)-->
-                    <div ng-if="item.data.question_type_category_key == 'slider' && item.data.visualization_name == 'dots'" class="center scale" style="margin-top:10px;padding-left:5vw;padding-right:5vw;" ng-init="options = vm.bindScaleParameters(item.data)">
+                    <div ng-if="item.data.question_type_category_key == 'slider' && (item.data.visualization_name == 'dots' || item.data.visualization_name == 'default')" class="center scale" style="margin-top:10px;padding-left:5vw;padding-right:5vw;" ng-init="options = vm.bindScaleParameters(item.data)">
 
                         <div style="margin-left:0px;margin-right:0px;" ng-init="vm.initializeSliderAns(item.data);">
                             <div class="scale_option" ng-repeat="op in options.options" ng-init="item.data.patient_answer.length > 0; item.data.answerChangedFlag = false;" ng-style="options.formatting">
@@ -537,19 +537,32 @@
 
                 </div>
                 <!-- FEEDBACK -->
-                    <div ng-if="vm.isQuestion && !vm.questionnaireStart && vm.portraitOrientationCheck.matches" style="text-align:center;">
-                        <div style="padding-top:1vh; background-color:#d9d9d9;position: relative;top:70%;margin-bottom:7px"></div>
-                        <div style="margin-bottom:20px;padding-left:20px;overflow-y: auto;right: 10%;position: relative;clear: left;bottom:0%;top:80%">
-                            <div style="padding-left:20px;">
-                                <span ng-class="fontSizeDesc">Do you like this question? (Optional)</span>
-                            </div>
-                            <div style="display: inline-block;padding-left:20px;">
-                                <div style="font-size:50px;" id="thumbsUp" ng-style="(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex].patient_answer.feedback == vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex].feedback_options[0].feedback_ser_num)? {'color':'darkblue'}:{'color':'black'}" ng-click="vm.thumbsUp(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex])" class="fa fa-thumbs-up"></div>
-                            </div>
-                            <div style="display: inline-block;padding-left:20px;">
-                                <div style="font-size:50px;" id="thumbsDown" ng-style="(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex].patient_answer.feedback == vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex].feedback_options[1].feedback_ser_num)? {'color':'darkblue'}:{'color':'black'}" ng-click="vm.thumbsDown(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex])" class="fa fa-thumbs-down"></div>
-                            </div>
+
+                <div ng-if="vm.isQuestion && !vm.questionnaireStart && vm.portraitOrientationCheck.matches && vm.questionnaire.is_feedback == '1'"
+                     style="text-align:center;position:sticky;margin-bottom:7px;top:80%">
+                    <!--feedback before is: {{vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex].patient_answer.feedback}}-->
+                    <div style="padding-top:1vh; background-color:#d9d9d9;"></div>
+                    <div style="margin-bottom:20px; background-color:#ffffff">
+                        <div style="text-align: center">
+                            <span ng-class="fontSizeDesc">Do you like this question? (Optional)</span>
                         </div>
+                        <div style="display: inline-block;padding-left:20px;">
+                            <div style="font-size:50px;" id="thumbsUp"
+                                 ng-style="(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex].patient_answer.feedback == vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex].feedback_options[0].feedback_ser_num)? {'color':'darkblue'}:{'color':'black'}"
+                                 ng-click="vm.thumbsUp(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex])"
+                                 class="fa fa-thumbs-up"></div>
+                        </div>
+                        <div style="display: inline-block;padding-left:20px;">
+                            <div style="font-size:50px;" id="thumbsDown"
+                                 ng-style="(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex].patient_answer.feedback == vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex].feedback_options[1].feedback_ser_num)? {'color':'darkblue'}:{'color':'black'}"
+                                 ng-click="vm.thumbsDown(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex]);"
+                                 class="fa fa-thumbs-down"></div>
+                        </div>
+                        <!--feedback after is: {{vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex].patient_answer.feedback}}-->
+                    </div>
+                    <!--<div ng-if="(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex].patient_answer.feedback)">-->
+
+                    <!--</div>-->
                 </div>
 
             </ons-carousel-item>
