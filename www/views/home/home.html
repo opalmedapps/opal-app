@@ -38,7 +38,8 @@
             LEARN MORE ABOUT OPAL
             ================================-->
             <ons-list style="margin-top:5px;position:relative;z-index:2">
-                <ons-list-header class="person-list-header" ng-class="fontSizeTitle">Opal</ons-list-header>
+                <!--<ons-list-header class="person-list-header" ng-class="fontSizeTitle">Opal</ons-list-header>-->
+                <ons-list-header class="person-list-header" ng-class="fontSizeTitle"></ons-list-header>
                 <ons-list-item modifier="chevron tappable" class="item" ng-click="homeNavigator.pushPage('views/home/about/about.html')">
                     <ons-row align="center">
                         <ons-col width="60px" align="center" style="text-align: center">
@@ -52,10 +53,25 @@
                     </ons-row>
                 </ons-list-item>
 
+                <ons-list-item modifier="chevron" class="item" ng-click="homeNavigator.pushPage('views/personal/notifications/notifications.html')">
+                    <ons-row align="center">
+                        <ons-col width="60px" style="text-align: center">
+                            <ons-icon icon="ion-android-notifications" size="2x" style="color:#FFC107"></ons-icon><span class="notification"
+                                      ng-show="h.notificationsUnreadNumber>0">{{h.notificationsUnreadNumber}}</span>
+                        </ons-col>
+                        <ons-col>
+                            <header>
+                                <span class="item-title" ng-class="fontSizeTitle">{{"NOTIFICATIONS"|translate}}</span>
+                            </header>
+                            <p class="item-desc" ng-class="fontSizeDesc"></p>
+                        </ons-col>
+                    </ons-row>
+                </ons-list-item>
+
                 <!--
                 CHECK-IN TO APPOINTMENTS
                 =============================-->
-                <ons-list-header class="person-list-header" ng-class="fontSizeTitle">{{"OVERVIEW"|translate}}</ons-list-header>
+                <!--<ons-list-header class="person-list-header" ng-class="fontSizeTitle">{{"OVERVIEW"|translate}}</ons-list-header>-->
 
                 <!--
                 NAVIGABLE CHECKIN STATE (ALL CHECKED IN OR APPOINTMENTS AVAILABLE FOR CHECKING INTO)
@@ -140,39 +156,39 @@
                 </ons-list-item>
             </ons-list>
 
-            <div ng-show="h.loading" align="center" style="margin:10px">
-                <svg class="progress-circular">
-                    <circle class="progress-circular__primary" cx="50%" cy="50%" r="40%" fill="none" stroke-width="10%" stroke-miterlimit="10"/>
-                </svg>
-            </div>
+            <!--<div ng-show="h.loading" align="center" style="margin:10px">-->
+                <!--<svg class="progress-circular">-->
+                    <!--<circle class="progress-circular__primary" cx="50%" cy="50%" r="40%" fill="none" stroke-width="10%" stroke-miterlimit="10"/>-->
+                <!--</svg>-->
+            <!--</div>-->
 
             <!--
             NOTIFICATIONS
             ===================================-->
-            <div ng-hide="h.loading">
+            <!--<div ng-hide="h.loading">-->
 
-                <div  style="padding-top:5px;" class="settings-header" ng-class="fontSizeTitle" ng-show = "h.notifications.length !== 0" >{{"NEWS"|translate}}</div>
-                <!--Making new set up for notifications-->
-                <ons-list style="margin-top:5px;">
-                    <ons-list-item modifier="chevron" class="item" ng-repeat="notification in h.notifications" ng-click="h.goToNotification($index, notification)">
-                        <ons-row align="center">
-                            <ons-col width="60px" align="center">
-                                <div>
-                                    <i class="iconHomeView {{notification.Icon}}" ng-style="{color: notification.Color}" style="margin-left: 18px"></i><span class="notification" ng-show="notification.Number>=1">{{notification.Number}}</span>
-                                </div>
-                            </ons-col>
-                            <ons-col>
-                                <header>
-                                    <span class="item-title" ng-class="fontSizeTitle">{{notification["Name_"+h.language]}}</span>
-                                </header>
-                                <p class="item-desc" ng-class="fontSizeDesc" ng-show="notification.Number<=1">
-                                    {{notification["Desc"]}}
-                                </p>
-                            </ons-col>
-                        </ons-row>
-                    </ons-list-item>
-                </ons-list>
-            </div>
+                <!--<div  style="padding-top:5px;" class="settings-header" ng-class="fontSizeTitle" ng-show = "h.notifications.length !== 0" >{{"NEWS"|translate}}</div>-->
+                <!--&lt;!&ndash;Making new set up for notifications&ndash;&gt;-->
+                <!--<ons-list style="margin-top:5px;">-->
+                    <!--<ons-list-item modifier="chevron" class="item" ng-repeat="notification in h.notifications" ng-click="h.goToNotification($index, notification)">-->
+                        <!--<ons-row align="center">-->
+                            <!--<ons-col width="60px" align="center">-->
+                                <!--<div>-->
+                                    <!--<i class="iconHomeView {{notification.Icon}}" ng-style="{color: notification.Color}" style="margin-left: 18px"></i><span class="notification" ng-show="notification.Number>=1">{{notification.Number}}</span>-->
+                                <!--</div>-->
+                            <!--</ons-col>-->
+                            <!--<ons-col>-->
+                                <!--<header>-->
+                                    <!--<span class="item-title" ng-class="fontSizeTitle">{{notification["Name_"+h.language]}}</span>-->
+                                <!--</header>-->
+                                <!--<p class="item-desc" ng-class="fontSizeDesc" ng-show="notification.Number<=1">-->
+                                    <!--{{notification["Desc"]}}-->
+                                <!--</p>-->
+                            <!--</ons-col>-->
+                        <!--</ons-row>-->
+                    <!--</ons-list-item>-->
+                <!--</ons-list>-->
+            <!--</div>-->
         </div>
     </div>
     <div id="bottomNotifications"></div>
