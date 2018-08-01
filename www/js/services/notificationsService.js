@@ -187,7 +187,7 @@ myApp.service('Notifications', ['$filter', 'RequestToServer', 'LocalStorage', 'A
             },
             'Questionnaire': {
                 SerNum: 'QuestionnaireSerNum',
-                icon: 'fa fa-question-circle',
+                icon: 'ion-clipboard',
                 color: '#607d8b',
                 NameEN: 'QuestionnaireName_EN',
                 updateFunction: Questionnaires.updateQuestionnairesFromNotification,
@@ -202,7 +202,7 @@ myApp.service('Notifications', ['$filter', 'RequestToServer', 'LocalStorage', 'A
             },
             'LegacyQuestionnaire': {
                 SerNum: 'QuestionnaireSerNum',
-                icon: 'fa fa-question-circle',
+                icon: 'ion-clipboard',
                 color: '#607d8b',
                 NameEN: 'QuestionnaireName_EN',
                 updateFunction: Questionnaires.updateQuestionnairesFromNotification,
