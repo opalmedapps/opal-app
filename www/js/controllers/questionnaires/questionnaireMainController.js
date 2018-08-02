@@ -261,8 +261,9 @@
         }
 
         vm.checkmarkPopup = function(question) {
+            vm.limitNumber = parseInt(question.options[0].nb_answer);
             if (question.question_type_category_key == 'checkbox') {
-                if (question.options[0].is_exact == '1' && vm.checkedNumber < vm.limitNumber && question.patient_answer.answer[0]!=='SKIPPED') {
+                if (question.options[0].is_exact == '1' && vm.checkedNumber < question.options[0].nb_answer && question.patient_answer.answer[0]!=='SKIPPED') {
                     //pop up saying the answer has not been saved because it is incomplete
                     checkmarkModal.show();
                 }
@@ -292,8 +293,8 @@
         }
 
         vm.setCheckboxAnswer = function(question) {
-            vm.limitNumber = parseInt(question.options[0].nb_answer);
-            console.log('limitNumber= '+vm.limitNumber);
+            // vm.limitNumber = parseInt(question.options[0].nb_answer);
+            // console.log('limitNumber= '+vm.limitNumber);
             if(typeof question.patient_answer.answer == 'undefined') {
                 question.patient_answer.answer = [];
             }
@@ -596,7 +597,7 @@
                 } else if(question.question_type_category_key == 'textbox') {
                     Questionnaires.saveQuestionnaireAnswer(vm.questionnaire.qp_ser_num, question.ser_num, question.patient_answer.answer[0].text, question.options[0].answer_option_ser_num, question.question_type_category_key, vm.questionnaire.sections[vm.sectionIndex].section_ser_num);
                 } else if(question.question_type_category_key == 'checkbox') {
-                    if(!(question.options[0].is_exact == '1' && vm.checkedNumber<vm.limitNumber) || question.patient_answer.answer[0]=='SKIPPED') {
+                    if(!(question.options[0].is_exact == '1' && vm.checkedNumber < question.options[0].nb_answer) || question.patient_answer.answer[0]=='SKIPPED') {
                         if(question.patient_answer.answer[0]=='SKIPPED') {
                             Questionnaires.saveQuestionnaireAnswer(vm.questionnaire.qp_ser_num, question.ser_num, -1, 'SKIPPED', question.question_type_category_key, vm.questionnaire.sections[vm.sectionIndex].section_ser_num);
                         } else {
@@ -798,7 +799,7 @@
         function isCheckboxDisabled(question, optionKey) {
             // var question = vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex];
             var answerIndex = question.patient_answer.answer.map(function(e) { return e.CheckboxAnswerOptionSerNum; }).indexOf(optionKey);
-            return !(answerIndex>-1) && (vm.checkedNumber >= vm.limitNumber || question.patient_answer.answer[0]=='SKIPPED');
+            return !(answerIndex>-1) && (vm.checkedNumber >= question.options[0].nb_answer || question.patient_answer.answer[0]=='SKIPPED');
         }
 
         function removeListener() {

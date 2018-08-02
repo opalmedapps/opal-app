@@ -222,10 +222,10 @@
                         </ul>
                         <ul class="list" style="background: #f9f9f9;padding-top: 10%;margin-bottom:10px;">
                             <li ng-if="vm.checkedNumber>0 && item.data.options[0].is_exact == '0' && (!(item.data.patient_answer.answer.indexOf('SKIPPED') > -1))">
-                                <span ng-class="fontSizeDesc">You have selected {{vm.checkedNumber}} options. You can select up to {{vm.limitNumber-vm.checkedNumber}} more options.</span>
+                                <span ng-class="fontSizeDesc">You have selected {{vm.checkedNumber}} option(s). You can select up to {{item.data.options[0].nb_answer - vm.checkedNumber}} more options.</span>
                             </li>
                             <li ng-if="vm.checkedNumber>0 && item.data.options[0].is_exact == '1' && !(item.data.patient_answer.answer.indexOf('SKIPPED') > -1)">
-                                <span ng-class="fontSizeDesc">You have selected {{vm.checkedNumber}} options. You have to select {{vm.limitNumber-vm.checkedNumber}} more.</span>
+                                <span ng-class="fontSizeDesc">You have selected {{vm.checkedNumber}} option(s). You have to select {{item.data.options[0].nb_answer - vm.checkedNumber}} more.</span>
                             </li>
                         </ul>
                     </div>
@@ -237,10 +237,10 @@
                                             <ons-icon icon="far fa-exclamation-triangle" style="font-size:80px; color: white"></ons-icon>
                                         </div>
                                         <div class="container" style="text-align:center;">
-                                            <p ng-class="fontSizeDesc" style="text-align: justify;text-justify: inter-word;">This question requires you to select exactly {{vm.limitNumber}} options. Please come back to this question to submit a valid answer.</p>
+                                            <p ng-class="fontSizeDesc" style="text-align: justify;text-justify: inter-word;">This question requires you to select exactly {{vm.limitNumber}} option(s). Please come back to this question to submit a valid answer.</p>
                                         </div>
                                         <div id="tourButtons" style="padding: 0px 20px 0px 20px; padding-top: 5%;padding-bottom: 5%;padding-right: 10%;" class="text-center">
-                                            <ons-button class="ng-isolate-scope button effeckt-button slide-left" ng-click="checkmarkModal.hide();"ng-class="fontSizeDesc">{{"OK"|translate}}</ons-button>
+                                            <ons-button class="ng-isolate-scope button effeckt-button slide-left" ng-click="console.log(checkmarkModal.hide());" ng-class="fontSizeDesc">{{"OK"|translate}}</ons-button>
                                         </div>
                                     </div>
                         </div>
