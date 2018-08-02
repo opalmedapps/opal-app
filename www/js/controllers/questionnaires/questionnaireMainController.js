@@ -41,7 +41,7 @@
         vm.toggleViewAns = toggleViewAns;
         vm.totalNumberOfQuestions = 0;
         vm.ischeckedTest=false;
-        vm.isDisabled = isDisabled;
+        vm.isCheckboxDisabled = isCheckboxDisabled;
         // vm.isTemp = true;
         vm.availableReactions = [
             {'type': 'emotion-good', 'reaction': 'reaction-happy', 'text': 'Happy'},
@@ -579,12 +579,15 @@
                 console.log(question.question_type_category_key);
                 console.log("patient answer is: ");
                 console.log(Object(question.patient_answer));
-                if(question.question_type_category_key == 'slider') {
+                if(question.question_type_category_key === 'slider') {
                     if(!question.patient_answer.hasOwnProperty('answer')) {
                         console.log('Adding answer property');
-                        question.patient_answer.answer = [{'sliderAns':''}];
+                        question.patient_answer.answer = [{sliderAns:''}];
                     }
-                    if(!question.patient_answer.answer.hasOwnProperty('sliderAns')) {
+                    if(question.patient_answer.answer.length === 0){
+                        question.patient_answer.answer.push({})
+                    }
+                    if(!question.patient_answer.answer[0].hasOwnProperty('sliderAns')) {
                         if (vm.tempAns !== 50 && question.patient_answer.answer[0].sliderAns == 50) {
                             question.patient_answer.answer[0].sliderAns = vm.tempAns;
                         }
@@ -792,8 +795,8 @@
             }
         }
 
-        function isDisabled(optionKey) {
-            var question = vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex];
+        function isCheckboxDisabled(question, optionKey) {
+            // var question = vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex];
             var answerIndex = question.patient_answer.answer.map(function(e) { return e.CheckboxAnswerOptionSerNum; }).indexOf(optionKey);
             return !(answerIndex>-1) && (vm.checkedNumber >= vm.limitNumber || question.patient_answer.answer[0]=='SKIPPED');
         }

@@ -167,7 +167,7 @@
                     </div>
 
                     <!-- CHECKBOX -->
-                    <div ng-if="item.data.question_type_category_key == 'checkbox'" class="center" style="margin-top:10px;padding-left:5vw;padding-right:5vw;" ng-init="vm.setCheckboxAnswer(item.data);">
+                    <div ng-if="item.data.question_type_category_key === 'checkbox'" class="center" style="margin-top:10px;padding-left:5vw;padding-right:5vw;" ng-init="vm.setCheckboxAnswer(item.data);">
 
                         <!--using onsen ui, no checkmark once selected-->
                         <!--<ons-list ng-init="item.data.answerChangedFlag = false;">-->
@@ -205,7 +205,7 @@
                                            value={{value.answer_option_ser_num}}
                                            ng-checked="vm.isCheckedCheckmark(item.data, value.answer_option_ser_num) "
                                            ng-click="vm.toggleCheckboxSelection(value.answer_option_ser_num)"
-                                           ng-disabled="vm.isDisabled(value.answer_option_ser_num)">
+                                           ng-disabled="vm.isCheckboxDisabled(item.data, value.answer_option_ser_num);">
                                     <!--<div class="checkbox__checkmark checkbox&#45;&#45;list-item__checkmark"></div>-->
                                     <label for="{{'mcCheckbox'+item.data.ser_num+'_'+value.answer_option_ser_num}}">{{value.checkbox_text}}</label>
                                 </label>
