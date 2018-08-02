@@ -6,28 +6,34 @@
         </div>
         <div class="center" ng-class="fontSizeTitle" style="width:60%;overflow:hidden">
             <center>
-        <span ng-if="vm.questionnaireStart">
+        <span ng-if="vm.questionnaireStart" ng-class="fontSizeDesc">
           {{"QUESTIONNAIRE_HOME"|translate}}
         </span>
-                <span ng-if="!vm.questionnaireStart">
+                <span ng-if="!vm.questionnaireStart" ng-class="fontSizeDesc">
           {{vm.questionnaire.sections[vm.sectionIndex].title}}
         </span>
             </center>
         </div>
         <div class="right" style="width:20%">
-            <ons-toolbar-button ng-if="vm.isQuestion" ng-click="personalNavigator.pushPage('views/tabs/info-page-tabs.html',{question:vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex], isQuest: true})">
+            <ons-toolbar-button ng-if="vm.isQuestion"
+                                ng-click="personalNavigator.pushPage('views/tabs/info-page-tabs.html',{question:vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex], isQuest: true})">
                 <ons-icon icon="fa-info-circle"></ons-icon>
             </ons-toolbar-button>
-            <span ng-if="!vm.isQuestion && vm.questionnaireStart && vm.questionnaire.status == 'New'" class="toolbar-button--quiet navigation-bar__line-height" ng-click="vm.beginQuestionnaire();">
+            <span ng-if="!vm.isQuestion && vm.questionnaireStart && vm.questionnaire.status == 'New'"
+                  class="toolbar-button--quiet navigation-bar__line-height" ng-click="vm.beginQuestionnaire();">
             {{"BEGIN"|translate}}
             </span>
-            <span ng-if="!vm.isQuestion && vm.questionnaireStart && vm.questionnaire.status == 'In Progress'" class="toolbar-button--quiet navigation-bar__line-height" ng-click="vm.resumeQuestionnaire();">
+            <span ng-if="!vm.isQuestion && vm.questionnaireStart && vm.questionnaire.status == 'In Progress'"
+                  class="toolbar-button--quiet navigation-bar__line-height" ng-click="vm.resumeQuestionnaire();">
             {{"RESUME"|translate}}
             </span>
-            <span ng-if="!vm.isQuestion && !vm.questionnaireStart && vm.questionnaire.status == 'In Progress' && vm.editQuestion" class="toolbar-button--quiet navigation-bar__line-height" ng-click="vm.summaryPage();">
+            <span ng-if="!vm.isQuestion && !vm.questionnaireStart && vm.questionnaire.status == 'In Progress' && vm.editQuestion"
+                  class="toolbar-button--quiet navigation-bar__line-height" ng-click="vm.summaryPage();">
             {{"DONE"|translate}}
             </span>
-            <span ng-if="!vm.isQuestion && (carousel.getActiveCarouselItemIndex() == vm.carouselItems.length) && !vm.editQuestion" style="padding-left:0px" class="toolbar-button--quiet navigation-bar__line-height" ng-click="vm.summaryPage();">
+            <span ng-if="!vm.isQuestion && (carousel.getActiveCarouselItemIndex() == vm.carouselItems.length) && !vm.editQuestion"
+                  style="padding-left:0px" class="toolbar-button--quiet navigation-bar__line-height"
+                  ng-click="vm.summaryPage();">
             {{"SUMMARY"|translate}} <!-- TODO: is Last question-->
             </span>
         </div>
@@ -46,7 +52,8 @@
 
                             <div class="row text-center" style="margin: 0 auto;" align="center">
                                 <div class="col-xs-12">
-                                    <h3><b><span style="color: darkmagenta">{{vm.questionnaire.nickname}}</span></b></h3>
+                                    <h3><b><span style="color: darkmagenta" ng-class="fontSizeDesc">{{vm.questionnaire.nickname}}</span></b>
+                                    </h3>
                                 </div>
                             </div>
 
@@ -60,9 +67,18 @@
                             <div class="row text-center" style="margin: 0 auto;" align="center">
                                 <div class="col-xs-12">
                                     <center>
-                                        <h4 ng-if="vm.questionnaire.status == 'New'"> Tap "Begin" or swipe to start the questionnaire.</h4>
-                                        <h4 ng-if="vm.questionnaire.status == 'In Progress'"> Tap "Resume" or swipe to resume the questionnaire.</h4>
-                                        <p ng-if="vm.questionnaire.instructions != '' && vm.questionnaire.instructions != null" style="font-size: 14pt; margin-top:2vh; margin-bottom:2vh"><b><span style="color: darkmagenta">Instructions: </span></b>{{vm.questionnaire.instructions}}</p>
+                                        <h4 ng-if="vm.questionnaire.status == 'New'" ng-class="fontSizeDesc"> Tap "Begin" or swipe to start the
+                                            questionnaire.</h4>
+                                        <h4 ng-if="vm.questionnaire.status == 'In Progress'" ng-class="fontSizeDesc"> Tap "Resume" or swipe to
+                                            resume the questionnaire.</h4>
+                                        <p ng-if="vm.questionnaire.description != '' && vm.questionnaire.description !== null && vm.questionnaire.description !== undefined"
+                                           style="margin-top:2vh; margin-bottom:2vh" ng-class="fontSizeDesc"><b><span
+                                                style="color: darkmagenta">Description: </span></b>{{vm.questionnaire.description}}
+                                        </p>
+                                        <p ng-if="vm.questionnaire.instructions != '' && vm.questionnaire.instructions != null"
+                                           style="margin-top:2vh; margin-bottom:2vh" ng-class="fontSizeDesc"><b><span
+                                                style="color: darkmagenta">Instructions: </span></b>{{vm.questionnaire.instructions}}
+                                        </p>
                                     </center>
                                 </div>
                             </div>
@@ -82,31 +98,41 @@
                         <div class="row text-center" style="margin: 0 auto;" align="center">
                             <div class="col-xs-12" style="padding-left: 0vw; padding-right: 0vw;">
                                 <div class="col-xs-3" style="margin-top:5px;padding-left: 0vw;">
-                                    <center><i style="color:rgba(38,100,171,0.81);font-size:25px" class="ion-chevron-left" ng-click="carousel.prev()"></i></center>
+                                    <center><i style="color:rgba(38,100,171,0.81);font-size:25px"
+                                               class="ion-chevron-left" ng-click="carousel.prev()"></i></center>
                                 </div>
                                 <div class="col-xs-6">
-                                    <center><h3 style="margin-top:10px" ng-class="fontSizeDesc">Section {{vm.sectionIndex+1}} of {{vm.questionnaire.sections.length}}</h3></center>
+                                    <center><h3 style="margin-top:10px" ng-class="fontSizeDesc">Section
+                                        {{vm.sectionIndex+1}} of {{vm.questionnaire.sections.length}}</h3></center>
                                 </div>
-                                <div class="col-xs-3" ng-disabled="carousel.getActiveCarouselItemIndex() == vm.carouselItems.length" style="margin-top:5px;padding-right: 0vw;">
-                                    <center><i style="color:rgba(38,100,171,0.81);font-size:25px" class="ion-chevron-right" ng-click="carousel.next()"></i></center>
+                                <div class="col-xs-3"
+                                     ng-disabled="carousel.getActiveCarouselItemIndex() == vm.carouselItems.length"
+                                     style="margin-top:5px;padding-right: 0vw;">
+                                    <center><i style="color:rgba(38,100,171,0.81);font-size:25px"
+                                               class="ion-chevron-right" ng-click="carousel.next()"></i></center>
                                 </div>
                             </div>
                             <div class="col-xs-12">
-                                <center><h3><b><span style="color: darkmagenta">{{vm.questionnaire.sections[vm.sectionIndex].title}}</span></b></h3></center>
+                                <center><h3><b><span style="color: darkmagenta" ng-class="fontSizeDesc">{{vm.questionnaire.sections[vm.sectionIndex].title}}</span></b>
+                                </h3></center>
                             </div>
                         </div>
 
                         <!-- Home page image -->
                         <div class="row text-center" style="margin: 0 auto;" align="center">
                             <div class="col-xs-12 text-center">
-                                <!--<img src="img/MUHC.png" alt="MUHC Logo" style="margin-top: 1cm; margin-bottom: 1cm"></img>--> <!-- TODO: implement in general for any logo-->
+                                <!--<img src="img/MUHC.png" alt="MUHC Logo" style="margin-top: 1cm; margin-bottom: 1cm"></img>-->
+                                <!-- TODO: implement in general for any logo-->
                             </div>
                         </div>
 
-                        <div class="row text-center" style="margin: 0 auto;" align="center"> <!--ng-if="item.instructions != null && item.instructions != ''">-->
+                        <div class="row text-center" style="margin: 0 auto;" align="center"
+                            ng-if="item.instructions != null && item.instructions != '' && item.instructions !== undefined">
                             <div class="col-xs-12">
                                 <center>
-                                    <p style="font-size: 14pt; margin-top:2vh; margin-bottom:2vh"><b><span style="color: darkmagenta">Section instructions: </span></b>{{vm.questionnaire.sections[vm.sectionIndex].instructions}}</p>
+                                    <p style="margin-top:2vh; margin-bottom:2vh" ng-class="fontSizeDesc"><b><span
+                                            style="color: darkmagenta">Section instructions: </span></b>{{vm.questionnaire.sections[vm.sectionIndex].instructions}}
+                                    </p>
                                 </center>
                             </div>
                         </div>
@@ -118,23 +144,36 @@
                 <div ng-if="item.type == 'question'">
 
                     <!-- PROGRESS BAR -->
-                    <div class="center progress" style="height:4vh;margin:2vh;background-color:white;border-radius:20px;">
-                        <div ng-repeat="i in vm.carouselItems | filter:{type:'question'}" ng-show="$index <= vm.questionTotalIndex" class="progress-bar" role="progressbar" ng-style="vm.sectionEnds.includes($index) ? {'border-right':'solid 1px rgba(38,100,171,0.81)'} : {'border-right':'solid 1px #f9f9f9'}" style="width:{{vm.progressBarPercent+'%'}};background-color:rgb(176, 212, 241)"></div>
-                        <div ng-repeat="i in vm.carouselItems | filter:{type:'question'}" ng-show="$index > vm.questionTotalIndex" class="progress-bar" role="progressbar" ng-style="vm.sectionEnds.includes($index) ? {'border-right':'solid 1px rgba(38,100,171,0.81)'} : {'border-right':'solid 1px #f9f9f9'}" style="width:{{vm.progressBarPercent+'%'}};background-color:white"></div>
+                    <div class="center progress"
+                         style="height:4vh;margin:2vh;background-color:white;border-radius:20px;">
+                        <div ng-repeat="i in vm.carouselItems | filter:{type:'question'}"
+                             ng-show="$index <= vm.questionTotalIndex" class="progress-bar" role="progressbar"
+                             ng-style="vm.sectionEnds.includes($index) ? {'border-right':'solid 1px rgba(38,100,171,0.81)'} : {'border-right':'solid 1px #f9f9f9'}"
+                             style="width:{{vm.progressBarPercent+'%'}};background-color:rgb(176, 212, 241)"></div>
+                        <div ng-repeat="i in vm.carouselItems | filter:{type:'question'}"
+                             ng-show="$index > vm.questionTotalIndex" class="progress-bar" role="progressbar"
+                             ng-style="vm.sectionEnds.includes($index) ? {'border-right':'solid 1px rgba(38,100,171,0.81)'} : {'border-right':'solid 1px #f9f9f9'}"
+                             style="width:{{vm.progressBarPercent+'%'}};background-color:white"></div>
                     </div>
 
                     <!-- QUESTION NUMBER -->
                     <ons-row align="center" style="margin-left: 0.12vw; margin-top: 2vh">
                         <ons-col align="left">
-                            <center><i style="color:rgba(38,100,171,0.81);font-size:25px" class="ion-chevron-left" ng-click="carousel.prev()"></i></center>
+                            <center><i style="color:rgba(38,100,171,0.81);font-size:25px" class="ion-chevron-left"
+                                       ng-click="carousel.prev()"></i></center>
                         </ons-col>
                         <ons-col align="center">
-                            <h5 class="text-center" style="margin: 0px">Question {{vm.questionTotalIndex+1}} of {{vm.numQuestions}}</h5>
+                            <h5 class="text-center" style="margin: 0px">Question {{vm.questionTotalIndex+1}} of
+                                {{vm.numQuestions}}</h5>
                         </ons-col>
                         <ons-col align="right">
                             <center>
-                                <i ng-if="carousel.getActiveCarouselItemIndex() < vm.carouselItems.length" style="color:rgba(38,100,171,0.81);font-size:25px" class="ion-chevron-right" ng-click="carousel.next()"></i>
-                                <i ng-if="carousel.getActiveCarouselItemIndex() == vm.carouselItems.length" style="color:rgba(38,100,171,0.81);font-size:25px" class="ion-chevron-right" ng-click="vm.summaryPage()"></i>
+                                <i ng-if="carousel.getActiveCarouselItemIndex() < vm.carouselItems.length"
+                                   style="color:rgba(38,100,171,0.81);font-size:25px" class="ion-chevron-right"
+                                   ng-click="carousel.next()"></i>
+                                <i ng-if="carousel.getActiveCarouselItemIndex() == vm.carouselItems.length"
+                                   style="color:rgba(38,100,171,0.81);font-size:25px" class="ion-chevron-right"
+                                   ng-click="vm.summaryPage()"></i>
                             </center>
                         </ons-col>
                     </ons-row>
@@ -145,20 +184,33 @@
                     </div>
 
                     <!-- MULTIPLE CHOICE -->
-                    <div ng-if="item.data.question_type_category_key == 'multiple choice'" class="center" style="margin-top:10px;padding-left:5vw;padding-right:5vw;">
-                        <ul class="list" ng-init="item.data.patient_answer.answer.length > 0 || item.data.patient_answer.push(-1); item.data.answerChangedFlag = false;">
-                            <li class="list__item list__item--tappable" ng-style="item.data.patient_answer.answer.length > 0 && item.data.patient_answer[0] == key ? {'background-color':item.data.answerColor} : {'background-color':'#f9f9f9'};" ng-repeat="(key, value) in item.data.options">
-                                <label ng-class="fontSizeDesc" ng-click="vm.updateOptionBackgroundColor(item.data, $index)" class="radio-button radio-button--list-item">
-                                    <input type="radio" name="{{'mcRadio'+item.data.ser_num}}" value={{key}} ng-model="item.data.patient_answer.answer[0]" ng-checked="item.data.patient_answer.answer[0].MCAnswerOptionSerNum == value.answer_option_ser_num" ng-change="item.data.answerChangedFlag = true;">
+                    <div ng-if="item.data.question_type_category_key == 'multiple choice'" class="center"
+                         style="margin-top:10px;padding-left:5vw;padding-right:5vw;">
+                        <ul class="list"
+                            ng-init="item.data.patient_answer.answer.length > 0 || item.data.patient_answer.push(-1); item.data.answerChangedFlag = false;">
+                            <li class="list__item list__item--tappable"
+                                ng-style="item.data.patient_answer.answer.length > 0 && item.data.patient_answer[0] == key ? {'background-color':item.data.answerColor} : {'background-color':'#f9f9f9'};"
+                                ng-repeat="(key, value) in item.data.options">
+                                <label ng-class="fontSizeDesc"
+                                       ng-click="vm.updateOptionBackgroundColor(item.data, $index)"
+                                       class="radio-button radio-button--list-item">
+                                    <input type="radio" name="{{'mcRadio'+item.data.ser_num}}" value={{key}}
+                                           ng-model="item.data.patient_answer.answer[0]"
+                                           ng-checked="item.data.patient_answer.answer[0].MCAnswerOptionSerNum == value.answer_option_ser_num"
+                                           ng-change="item.data.answerChangedFlag = true;">
                                     <div class="radio-button__checkmark radio-button--list-item__checkmark"></div>
                                     {{value.mc_text}}
                                 </label>
                             </li>
                             <div ng-if="item.data.optional == 1" style="padding-top:0px; background-color:#d9d9d9">
                             </div>
-                            <li ng-if="item.data.optional == 1" class="list__item list__item--tappable" ng-style="item.data.patient_answer.answer[0] == 'SKIPPED' ? {'background-color':'#e9e9e9'} : {'background-color':'#f9f9f9'}">
+                            <li ng-if="item.data.optional == 1" class="list__item list__item--tappable"
+                                ng-style="item.data.patient_answer.answer[0] == 'SKIPPED' ? {'background-color':'#e9e9e9'} : {'background-color':'#f9f9f9'}">
                                 <label ng-class="fontSizeDesc" class="radio-button radio-button--list-item">
-                                    <input type="radio" name="{{'mcRadio'+item.data.ser_num}}" value='SKIPPED' ng-model="item.data.patient_answer.answer[0]" ng-checked="item.data.patient_answer.answer[0] == 'SKIPPED'||item.data.patient_answer.answer[0].Skipped == '1'" ng-change="item.data.answerChangedFlag = true;">
+                                    <input type="radio" name="{{'mcRadio'+item.data.ser_num}}" value='SKIPPED'
+                                           ng-model="item.data.patient_answer.answer[0]"
+                                           ng-checked="item.data.patient_answer.answer[0] == 'SKIPPED'||item.data.patient_answer.answer[0].Skipped == '1'"
+                                           ng-change="item.data.answerChangedFlag = true;">
                                     <div class="radio-button__checkmark radio-button--list-item__checkmark"></div>
                                     {{"Prefer not to answer"|translate}}
                                 </label>
@@ -167,32 +219,34 @@
                     </div>
 
                     <!-- CHECKBOX -->
-                    <div ng-if="item.data.question_type_category_key === 'checkbox'" class="center" style="margin-top:10px;padding-left:5vw;padding-right:5vw;" ng-init="vm.setCheckboxAnswer(item.data);">
+                    <div ng-if="item.data.question_type_category_key === 'checkbox'" class="center"
+                         style="margin-top:10px;padding-left:5vw;padding-right:5vw;"
+                         ng-init="vm.setCheckboxAnswer(item.data);">
 
                         <!--using onsen ui, no checkmark once selected-->
                         <!--<ons-list ng-init="item.data.answerChangedFlag = false;">-->
-                            <!--<ons-list-item tappable ng-style="vm.isCheckedCheckmark(item.data, value.answer_option_ser_num) ? {'background-color':'#e9e9e9'} : {'background-color':'#f9f9f9'}" ng-repeat="(key, value) in item.data.options">-->
-                                <!--<label class="left" ng-class="fontSizeDesc" ng-style="vm.isCheckedCheckmark(item.data, value.answer_option_ser_num) ? {'background-color':'#e9e9e9', 'margin':'0px', 'padding':'10px'} : {'background-color':'#f9f9f9', 'margin':'0px', 'padding':'10px'}">-->
-                                    <!--<ons-checkbox input-id="{{'mcCheckbox'+item.data.ser_num}}" style="-webkit-appearance: checkbox !important" value={{value.answer_option_ser_num}} ng-checked="vm.isCheckedCheckmark(item.data, value.answer_option_ser_num) " ng-click="vm.toggleCheckboxSelection(value.answer_option_ser_num)" ng-disabled="vm.isDisabled(value.answer_option_ser_num)"></ons-checkbox>-->
-                                <!--</label>-->
-                                <!--<label for="{{'mcCheckbox'+item.data.ser_num}}" class="center">-->
-                                    <!--{{value.checkbox_text}}-->
-                                <!--</label>-->
-                            <!--</ons-list-item>-->
+                        <!--<ons-list-item tappable ng-style="vm.isCheckedCheckmark(item.data, value.answer_option_ser_num) ? {'background-color':'#e9e9e9'} : {'background-color':'#f9f9f9'}" ng-repeat="(key, value) in item.data.options">-->
+                        <!--<label class="left" ng-class="fontSizeDesc" ng-style="vm.isCheckedCheckmark(item.data, value.answer_option_ser_num) ? {'background-color':'#e9e9e9', 'margin':'0px', 'padding':'10px'} : {'background-color':'#f9f9f9', 'margin':'0px', 'padding':'10px'}">-->
+                        <!--<ons-checkbox input-id="{{'mcCheckbox'+item.data.ser_num}}" style="-webkit-appearance: checkbox !important" value={{value.answer_option_ser_num}} ng-checked="vm.isCheckedCheckmark(item.data, value.answer_option_ser_num) " ng-click="vm.toggleCheckboxSelection(value.answer_option_ser_num)" ng-disabled="vm.isDisabled(value.answer_option_ser_num)"></ons-checkbox>-->
+                        <!--</label>-->
+                        <!--<label for="{{'mcCheckbox'+item.data.ser_num}}" class="center">-->
+                        <!--{{value.checkbox_text}}-->
+                        <!--</label>-->
+                        <!--</ons-list-item>-->
                         <!--</ons-list>-->
 
                         <!--radio button instead of boxes-->
                         <!--<ul class="list" ng-init="item.data.answerChangedFlag = false;">-->
-                             <!--ng-style="item.data.patient_answer.indexOf($index) > -1 && {'background-color':'#e9e9e9'} || {'background-color':'#f9f9f9'};"  -->
-                            <!--<li class="list__item list__item&#45;&#45;tappable" ng-style="vm.isCheckedCheckmark(item.data, value.answer_option_ser_num) ? {'background-color':'#e9e9e9'} : {'background-color':'#f9f9f9'}" ng-repeat="(key, value) in item.data.options">-->
-                                <!--<label class="checkbox checkbox&#45;&#45;list-item" ng-class="fontSizeDesc" ng-style="vm.isCheckedCheckmark(item.data, value.answer_option_ser_num) ? {'background-color':'#e9e9e9', 'margin':'0px', 'padding':'10px'} : {'background-color':'#f9f9f9', 'margin':'0px', 'padding':'10px'}">-->
-                                    <!--<input type="checkbox" name="{{'mcCheckbox'+item.data.ser_num}}" style="-webkit-appearance: checkbox !important" value={{value.answer_option_ser_num}} ng-checked="vm.isCheckedCheckmark(item.data, value.answer_option_ser_num) " ng-click="vm.toggleCheckboxSelection(value.answer_option_ser_num)" ng-disabled="vm.isDisabled(value.answer_option_ser_num)">-->
-                                    <!--<div class="checkbox__checkmark checkbox&#45;&#45;list-item__checkmark" ></div>-->
-                                    <!--{{value.checkbox_text}}-->
-                                <!--</label>-->
-                            <!--</li>-->
-                            <!--<div ng-if="item.data.optional == 1" style="padding-top:0px; background-color:#d9d9d9">-->
-                            <!--</div>-->
+                        <!--ng-style="item.data.patient_answer.indexOf($index) > -1 && {'background-color':'#e9e9e9'} || {'background-color':'#f9f9f9'};"  -->
+                        <!--<li class="list__item list__item&#45;&#45;tappable" ng-style="vm.isCheckedCheckmark(item.data, value.answer_option_ser_num) ? {'background-color':'#e9e9e9'} : {'background-color':'#f9f9f9'}" ng-repeat="(key, value) in item.data.options">-->
+                        <!--<label class="checkbox checkbox&#45;&#45;list-item" ng-class="fontSizeDesc" ng-style="vm.isCheckedCheckmark(item.data, value.answer_option_ser_num) ? {'background-color':'#e9e9e9', 'margin':'0px', 'padding':'10px'} : {'background-color':'#f9f9f9', 'margin':'0px', 'padding':'10px'}">-->
+                        <!--<input type="checkbox" name="{{'mcCheckbox'+item.data.ser_num}}" style="-webkit-appearance: checkbox !important" value={{value.answer_option_ser_num}} ng-checked="vm.isCheckedCheckmark(item.data, value.answer_option_ser_num) " ng-click="vm.toggleCheckboxSelection(value.answer_option_ser_num)" ng-disabled="vm.isDisabled(value.answer_option_ser_num)">-->
+                        <!--<div class="checkbox__checkmark checkbox&#45;&#45;list-item__checkmark" ></div>-->
+                        <!--{{value.checkbox_text}}-->
+                        <!--</label>-->
+                        <!--</li>-->
+                        <!--<div ng-if="item.data.optional == 1" style="padding-top:0px; background-color:#d9d9d9">-->
+                        <!--</div>-->
 
                         <ul class="list" ng-init="item.data.answerChangedFlag = false;">
                             <li class="list__item list__item--tappable"
@@ -200,7 +254,8 @@
                                 ng-repeat="(key, value) in item.data.options">
                                 <label ng-class="fontSizeDesc"
                                        ng-style="vm.isCheckedCheckmark(item.data, value.answer_option_ser_num) ? {'background-color':'#e9e9e9', 'margin':'0px', 'padding':'10px'} : {'background-color':'#f9f9f9', 'margin':'0px', 'padding':'10px'}">
-                                    <input type="checkbox" id="{{'mcCheckbox'+item.data.ser_num+'_'+value.answer_option_ser_num}}"
+                                    <input type="checkbox"
+                                           id="{{'mcCheckbox'+item.data.ser_num+'_'+value.answer_option_ser_num}}"
                                            style="-webkit-appearance: checkbox !important; width:20px; height:20px; display:inline"
                                            value={{value.answer_option_ser_num}}
                                            ng-checked="vm.isCheckedCheckmark(item.data, value.answer_option_ser_num) "
@@ -212,9 +267,15 @@
                             </li>
                             <div ng-if="item.data.optional == 1" style="padding-top:0px; background-color:#d9d9d9">
                             </div>
-                            <li ng-if="item.data.optional == 1" class="list__item list__item--tappable" ng-style="vm.isCheckedCheckmark(item.data, 'SKIPPED') ? {'background-color':'#e9e9e9'} : {'background-color':'#f9f9f9'}" ng-init="item.data.skip = true">
-                                <label ng-class="fontSizeDesc" class="checkbox checkbox--list-item" ng-style="item.data.patient_answer.answer.indexOf('SKIPPED') > -1 ? {'background-color':'#e9e9e9', 'margin':'0px', 'padding':'10px'} : {'background-color':'#f9f9f9', 'margin':'0px', 'padding':'10px'}" style="font-weight:700">
-                                    <input type="checkbox" name="{{'mcCheckbox'+item.data.ser_num}}" value='SKIPPED' ng-checked="item.data.patient_answer.is_defined!=='0' && item.data.patient_answer.answer[0]=='SKIPPED'" ng-click="vm.toggleCheckboxSkip(item.data.skip, item.data)">
+                            <li ng-if="item.data.optional == 1" class="list__item list__item--tappable"
+                                ng-style="vm.isCheckedCheckmark(item.data, 'SKIPPED') ? {'background-color':'#e9e9e9'} : {'background-color':'#f9f9f9'}"
+                                ng-init="item.data.skip = true">
+                                <label ng-class="fontSizeDesc" class="checkbox checkbox--list-item"
+                                       ng-style="item.data.patient_answer.answer.indexOf('SKIPPED') > -1 ? {'background-color':'#e9e9e9', 'margin':'0px', 'padding':'10px'} : {'background-color':'#f9f9f9', 'margin':'0px', 'padding':'10px'}"
+                                       style="font-weight:700">
+                                    <input type="checkbox" name="{{'mcCheckbox'+item.data.ser_num}}" value='SKIPPED'
+                                           ng-checked="item.data.patient_answer.is_defined!=='0' && item.data.patient_answer.answer[0]=='SKIPPED'"
+                                           ng-click="vm.toggleCheckboxSkip(item.data.skip, item.data)">
                                     <div class="checkbox__checkmark checkbox--list-item__checkmark"></div>
                                     {{"Prefer not to answer"|translate}}
                                 </label>
@@ -232,22 +293,33 @@
 
                     <ons-modal var="checkmarkModal">
                         <div id="rcorners" style="height: 60%">
-                                    <div style="margin-top:10%;padding: 0px 20px 0px 20px;" class="text-center">
-                                        <div style="padding-bottom: 10%">
-                                            <ons-icon icon="far fa-exclamation-triangle" style="font-size:80px; color: white"></ons-icon>
-                                        </div>
-                                        <div class="container" style="text-align:center;">
-                                            <p ng-class="fontSizeDesc" style="text-align: justify;text-justify: inter-word;">This question requires you to select exactly {{vm.limitNumber}} option(s). Please come back to this question to submit a valid answer.</p>
-                                        </div>
-                                        <div id="tourButtons" style="padding: 0px 20px 0px 20px; padding-top: 5%;padding-bottom: 5%;padding-right: 10%;" class="text-center">
-                                            <ons-button class="ng-isolate-scope button effeckt-button slide-left" ng-click="console.log(checkmarkModal.hide());" ng-class="fontSizeDesc">{{"OK"|translate}}</ons-button>
-                                        </div>
-                                    </div>
+                            <div style="margin-top:10%;padding: 0px 20px 0px 20px;" class="text-center">
+                                <div style="padding-bottom: 10%">
+                                    <ons-icon icon="far fa-exclamation-triangle"
+                                              style="font-size:80px; color: white"></ons-icon>
+                                </div>
+                                <div class="container" style="text-align:center;">
+                                    <p ng-class="fontSizeDesc" style="text-align: justify;text-justify: inter-word;">
+                                        This question requires you to select exactly {{vm.limitNumber}} option(s).
+                                        Please come back to this question to submit a valid answer.</p>
+                                </div>
+                                <div id="tourButtons"
+                                     style="padding: 0px 20px 0px 20px; padding-top: 5%;padding-bottom: 5%;padding-right: 10%;"
+                                     class="text-center">
+                                    <ons-button class="ng-isolate-scope button effeckt-button slide-left"
+                                                ng-click="console.log(checkmarkModal.hide());" ng-class="fontSizeDesc">
+                                        {{"OK"|translate}}
+                                    </ons-button>
+                                </div>
+                            </div>
                         </div>
                     </ons-modal>
 
-                    <!-- LARGE RANGE SCALE (SLIDER TYPE OF QUESTION)--> <!--TODO: Add visualization option check instead of hardcoding 'vm.questionTotalIndex + 1 <= 3'-->
-                    <div ng-if="item.data.question_type_category_key == 'slider' && item.data.visualization_name == 'slider'" ng-init="console.log('3------ sliderAns='+ item.data.patient_answer.answer[0].sliderAns);console.log('1 tempAns = '+ vm.tempAns);vm.tempAns=item.data.patient_answer.answer[0].sliderAns;" class="center" style="padding-left:10%;height: 60%;">
+                    <!-- LARGE RANGE SCALE (SLIDER TYPE OF QUESTION)-->
+                    <!--TODO: Add visualization option check instead of hardcoding 'vm.questionTotalIndex + 1 <= 3'-->
+                    <div ng-if="item.data.question_type_category_key == 'slider' && item.data.visualization_name == 'slider'"
+                         ng-init="console.log('3------ sliderAns='+ item.data.patient_answer.answer[0].sliderAns);console.log('1 tempAns = '+ vm.tempAns);vm.tempAns=item.data.patient_answer.answer[0].sliderAns;"
+                         class="center" style="padding-left:10%;height: 60%;">
 
                         <style>
 
@@ -280,7 +352,7 @@
                             }
 
                             /*Chrome*/
-                            @media screen and (-webkit-min-device-pixel-ratio:0) {
+                            @media screen and (-webkit-min-device-pixel-ratio: 0) {
                                 input[type='range'] {
                                     overflow: hidden;
                                     width: 80px;
@@ -304,37 +376,45 @@
                                 }
 
                             }
+
                             /** FF*/
                             input[type="range"]::-moz-range-progress {
                                 background-color: #7B52FB;
                             }
+
                             input[type="range"]::-moz-range-track {
                                 background-color: #E6D8FE;
                             }
+
                             /* IE*/
                             input[type="range"]::-ms-fill-lower {
                                 background-color: #7B52FB;
                             }
+
                             input[type="range"]::-ms-fill-upper {
                                 background-color: #E6D8FE;
                             }
+
                             .slidercontainer {
                                 top: 20%;
-                                right:10%;
+                                right: 10%;
                                 height: 500px;
                                 width: 100%;
-                                position:relative;
+                                position: relative;
                             }
-                            .minimumText{
+
+                            .minimumText {
                                 position: absolute;
-                                bottom:0;
-                                right:5%;
+                                bottom: 0;
+                                right: 5%;
                             }
-                            .maximumText{
+
+                            .maximumText {
                                 position: absolute;
-                                top:0;
-                                right:0;
+                                top: 0;
+                                right: 0;
                             }
+
                             .value {
                                 position: absolute;
                                 top: 27%;
@@ -370,7 +450,7 @@
                             }
 
                             /*Chrome*/
-                            @media screen and (-webkit-min-device-pixel-ratio:0) {
+                            @media screen and (-webkit-min-device-pixel-ratio: 0) {
                                 input[type='range'] {
                                     overflow: hidden;
                                     width: 80px;
@@ -394,85 +474,126 @@
                                 }
 
                             }
+
                             /** FF*/
                             input[type="range"]::-moz-range-progress {
                                 background-color: #7B52FB;
                             }
+
                             input[type="range"]::-moz-range-track {
                                 background-color: #E6D8FE;
                             }
+
                             /* IE*/
                             input[type="range"]::-ms-fill-lower {
                                 background-color: #7B52FB;
                             }
+
                             input[type="range"]::-ms-fill-upper {
                                 background-color: #E6D8FE;
                             }
-                            .minimumText2{
+
+                            .minimumText2 {
                                 position: absolute;
                                 top: 0vw;
                                 left: 7%;
                             }
-                            .maximumText2{
+
+                            .maximumText2 {
                                 position: absolute;
                                 left: 92%;
                             }
+
                             .value2 {
                                 position: absolute;
                                 top: 30%;
-                                right:44%
+                                right: 44%
                             }
-                             input[type="range"]::-ms-tooltip {
-                                 display: none;
-                             }
+
+                            input[type="range"]::-ms-tooltip {
+                                display: none;
+                            }
+
                             .thumb .active {
                                 position: absolute;
                                 top: 30%;
-                                right:44%
+                                right: 44%
                             }
                         </style>
 
                         <!--landscape mode-->
-                        <ons-row ng-if="!vm.portraitOrientationCheck.matches" class="slidercontainer" style="margin-left:0px;margin-right:0px;top: 20px;" ng-init="vm.bindScaleParameters(item.data);" class="center"><!-- style="margin-top:10px;padding-left:5vw;padding-right:5vw;">-->
+                        <ons-row ng-if="!vm.portraitOrientationCheck.matches" class="slidercontainer"
+                                 style="margin-left:0px;margin-right:0px;top: 20px;"
+                                 ng-init="vm.bindScaleParameters(item.data);" class="center">
+                            <!-- style="margin-top:10px;padding-left:5vw;padding-right:5vw;">-->
 
-                            <ons-col ng-init="console.log('4---------- sliderAns = ' + item.data.patient_answer.answer[0].sliderAns); item.data.answerChangedFlag = false;">
-                                <ons-row class="maximumText2" width="40px" style="text-align: right;" ng-class="fontSizeDesc">
-                                     {{item.data.options[0].max_value}} - {{item.data.options[0].max_caption}}
+                            <ons-col
+                                    ng-init="console.log('4---------- sliderAns = ' + item.data.patient_answer.answer[0].sliderAns); item.data.answerChangedFlag = false;">
+                                <ons-row class="maximumText2" width="40px" style="text-align: right;"
+                                         ng-class="fontSizeDesc">
+                                    {{item.data.options[0].max_value}} - {{item.data.options[0].max_caption}}
                                 </ons-row>
 
-                                <input type="range" min="{{item.data.options[0].min_value}}" max="{{item.data.options[0].max_value}}" string-to-number ng-value="item.data.patient_answer.answer[0].sliderAns" ng-model="item.data.patient_answer.answer[0].sliderAns" ng-init="item.data.patient_answer.answer[0].sliderAns = vm.tempAns;" class="slider2" id="myRange2" style="width: 80%; height: 90px;" ng-change="vm.removeSpanChild(); item.data.answerChangedFlag = true; console.log('5---------');console.log(Object(item.data));vm.toggleViewAns(item.data);">
-                                <ons-row class="minimumText2" width="40px" style="text-align: right;" ng-class="fontSizeDesc">
-                                     {{item.data.options[0].min_value}} - {{item.data.options[0].min_caption}}
+                                <input type="range" min="{{item.data.options[0].min_value}}"
+                                       max="{{item.data.options[0].max_value}}" string-to-number
+                                       ng-value="item.data.patient_answer.answer[0].sliderAns"
+                                       ng-model="item.data.patient_answer.answer[0].sliderAns"
+                                       ng-init="item.data.patient_answer.answer[0].sliderAns = vm.tempAns;"
+                                       class="slider2" id="myRange2" style="width: 80%; height: 90px;"
+                                       ng-change="vm.removeSpanChild(); item.data.answerChangedFlag = true; console.log('5---------');console.log(Object(item.data));vm.toggleViewAns(item.data);">
+                                <ons-row class="minimumText2" width="40px" style="text-align: right;"
+                                         ng-class="fontSizeDesc">
+                                    {{item.data.options[0].min_value}} - {{item.data.options[0].min_caption}}
                                 </ons-row>
                             </ons-col>
-                            <div class="value2" ng-class="fontSizeDesc">Value: &nbsp; {{vm.viewAns}}<!--{{item.data.patient_answer[0].sliderAns}}--></div>
+                            <div class="value2" ng-class="fontSizeDesc">Value: &nbsp; {{vm.viewAns}}
+                                <!--{{item.data.patient_answer[0].sliderAns}}--></div>
                         </ons-row>
 
                         <!-- portrait mode-->
-                        <ons-row ng-if="vm.portraitOrientationCheck.matches" class="slidercontainer" style="margin-left:0px;margin-right:0px;top:20px;height: 340px;" ng-init="vm.bindScaleParameters(item.data);" class="center">
+                        <ons-row ng-if="vm.portraitOrientationCheck.matches" class="slidercontainer"
+                                 style="margin-left:0px;margin-right:0px;top:20px;height: 340px;"
+                                 ng-init="vm.bindScaleParameters(item.data);" class="center">
 
-                                <ons-col ng-init="item.data.patient_answer.length > 0; item.data.answerChangedFlag = false;" style="height: 340px;">
-                                    <ons-row class="maximumText" id="maximumText" width="40px" style="text-align: right; left: 77%;top:-4%;" ng-class="fontSizeDesc">
-                                        {{item.data.options[0].max_value}} - {{item.data.options[0].max_caption}}
-                                    </ons-row>
-                                <input type="range" min="{{item.data.options[0].min_value}}" max="{{item.data.options[0].max_value}}" string-to-number ng-init="item.data.patient_answer.answer[0].sliderAns = parseInt(vm.tempAns);" ng-value="vm.tempAns" ng-model="item.data.patient_answer.answer[0].sliderAns" class="slider" id="myRange" style="width: 80%; height: 90px;" ng-change="vm.removeSpanChild(); item.data.answerChangedFlag = true;vm.toggleViewAns(item.data);">
-                                    <ons-row class="minimumText" width="40px" style="text-align: right; top: 75%; left: 77%;height:30px;" ng-class="fontSizeDesc">
-                                        {{item.data.options[0].min_value}} - {{item.data.options[0].min_caption}}
-                                    </ons-row>
-                                </ons-col>
-                            <div ng-init="item.data.patient_answer.answer[0].sliderAns=vm.tempAns" class="value" ng-class="fontSizeDesc">Value: &nbsp;{{vm.viewAns}}<!--{{item.data.patient_answer[0].sliderAns}}--></div>
+                            <ons-col ng-init="item.data.patient_answer.length > 0; item.data.answerChangedFlag = false;"
+                                     style="height: 340px;">
+                                <ons-row class="maximumText" id="maximumText" width="40px"
+                                         style="text-align: right; left: 77%;top:-4%;" ng-class="fontSizeDesc">
+                                    {{item.data.options[0].max_value}} - {{item.data.options[0].max_caption}}
+                                </ons-row>
+                                <input type="range" min="{{item.data.options[0].min_value}}"
+                                       max="{{item.data.options[0].max_value}}" string-to-number
+                                       ng-init="item.data.patient_answer.answer[0].sliderAns = parseInt(vm.tempAns);"
+                                       ng-value="vm.tempAns" ng-model="item.data.patient_answer.answer[0].sliderAns"
+                                       class="slider" id="myRange" style="width: 80%; height: 90px;"
+                                       ng-change="vm.removeSpanChild(); item.data.answerChangedFlag = true;vm.toggleViewAns(item.data);">
+                                <ons-row class="minimumText" width="40px"
+                                         style="text-align: right; top: 75%; left: 77%;height:30px;"
+                                         ng-class="fontSizeDesc">
+                                    {{item.data.options[0].min_value}} - {{item.data.options[0].min_caption}}
+                                </ons-row>
+                            </ons-col>
+                            <div ng-init="item.data.patient_answer.answer[0].sliderAns=vm.tempAns" class="value"
+                                 ng-class="fontSizeDesc">Value: &nbsp;{{vm.viewAns}}
+                                <!--{{item.data.patient_answer[0].sliderAns}}--></div>
                             <!--<div ng-show="vm.isTemp" class="value">Value:  &nbsp; {{vm.isTemp}}&nbsp;{{vm.tempAns}}</div>-->
                         </ons-row>
 
                     </div>
 
                     <!-- SMALL RANGE SCALE (SLIDER TYPE OF QUESTION)-->
-                    <div ng-if="item.data.question_type_category_key == 'slider' && (item.data.visualization_name == 'dots' || item.data.visualization_name == 'default')" class="center scale" style="margin-top:10px;padding-left:5vw;padding-right:5vw;" ng-init="options = vm.bindScaleParameters(item.data)">
+                    <div ng-if="item.data.question_type_category_key == 'slider' && (item.data.visualization_name == 'dots' || item.data.visualization_name == 'default')"
+                         class="center scale" style="margin-top:10px;padding-left:5vw;padding-right:5vw;"
+                         ng-init="options = vm.bindScaleParameters(item.data)">
 
                         <div style="margin-left:0px;margin-right:0px;" ng-init="vm.initializeSliderAns(item.data);">
-                            <div class="scale_option" ng-repeat="op in options.options" ng-init="item.data.patient_answer.length > 0; item.data.answerChangedFlag = false;" ng-style="options.formatting">
+                            <div class="scale_option" ng-repeat="op in options.options"
+                                 ng-init="item.data.patient_answer.length > 0; item.data.answerChangedFlag = false;"
+                                 ng-style="options.formatting">
                                 {{op.text}}
-                                <input type="radio" value="{{op.value}}" ng-model="item.data.patient_answer.answer[0].sliderAns" ng-change="vm.removeSpanChild(this); item.data.answerChangedFlag = true;"/>
+                                <input type="radio" value="{{op.value}}"
+                                       ng-model="item.data.patient_answer.answer[0].sliderAns"
+                                       ng-change="vm.removeSpanChild(this); item.data.answerChangedFlag = true;"/>
                             </div>
                         </div>
                         <ons-row style="margin-left:0px;margin-right:0px;margin-top:30px;">
@@ -494,9 +615,13 @@
                         <ul class="list" style="margin-top:1vh;">
                             <div ng-if="item.data.optional == '1'" style="padding-top:1px; background-color:#d9d9d9">
                             </div>
-                            <li ng-if="item.data.optional == '1'" class="list__item list__item--tappable" ng-style="item.data.patient_answer.answer[0].sliderAns == 'SKIPPED' ? {'background-color':'#e9e9e9'} : {'background-color':'#f9f9f9'}"> <!--ng-init="item.data.skip = true;"-->
+                            <li ng-if="item.data.optional == '1'" class="list__item list__item--tappable"
+                                ng-style="item.data.patient_answer.answer[0].sliderAns == 'SKIPPED' ? {'background-color':'#e9e9e9'} : {'background-color':'#f9f9f9'}">
+                                <!--ng-init="item.data.skip = true;"-->
                                 <label ng-class="fontSizeDesc" class="radio-button radio-button--list-item">
-                                    <input type="radio" name="{{'scaleSkip'+item.data.ser_num}}" value='SKIPPED' ng-model="item.data.patient_answer.answer[0].sliderAns"> <!--ng-click="vm.toggleScaleSkip(item.data.skip, item.data);"-->
+                                    <input type="radio" name="{{'scaleSkip'+item.data.ser_num}}" value='SKIPPED'
+                                           ng-model="item.data.patient_answer.answer[0].sliderAns">
+                                    <!--ng-click="vm.toggleScaleSkip(item.data.skip, item.data);"-->
                                     <div class="radio-button__checkmark radio-button--list-item__checkmark"></div>
                                     {{"Prefer not to answer"|translate}}
                                 </label>
@@ -506,29 +631,40 @@
 
                     <!-- TEXTBOX -->
 
-                    <div ng-if="item.data.question_type_category_key == 'textbox'" class="center" style="margin-top:10px;padding-left:5vw;padding-right:5vw;">
+                    <div ng-if="item.data.question_type_category_key == 'textbox'" class="center"
+                         style="margin-top:10px;padding-left:5vw;padding-right:5vw;">
                         <ul class="list" ng-init="item.data.answerChangedFlag = false;">
                             <li>
-                                <textarea ng-class="fontSizeDesc" style="height:200px" id="textType" wrap="hard" ng-model="item.data.patient_answer.answer[0].text" ng-value="item.data.patient_answer.answer[0].text"  ng-change="item.data.answerChangedFlag = true;" ng-init="vm.setMaxLength(item.data)"></textarea>
+                                <textarea ng-class="fontSizeDesc" style="height:200px" id="textType" wrap="hard"
+                                          ng-model="item.data.patient_answer.answer[0].text"
+                                          ng-value="item.data.patient_answer.answer[0].text"
+                                          ng-change="item.data.answerChangedFlag = true;"
+                                          ng-init="vm.setMaxLength(item.data)"></textarea>
                             </li>
                             <style>
-                            #textType {
-                                width: 100%;
-                                height: 80%;
-                                padding: 12px 20px;
-                                box-sizing: border-box;
-                                border: 2px solid #ccc;
-                                border-radius: 4px;
-                                background-color: #f8f8f8;
-                                font-size: 16px;
-                                resize: none;
-                            }
+                                #textType {
+                                    width: 100%;
+                                    height: 80%;
+                                    padding: 12px 20px;
+                                    box-sizing: border-box;
+                                    border: 2px solid #ccc;
+                                    border-radius: 4px;
+                                    background-color: #f8f8f8;
+                                    font-size: 16px;
+                                    resize: none;
+                                }
                             </style>
 
-                            <li ng-if="item.data.optional == 1" class="list__item list__item--tappable" ng-style="item.data.patient_answer.answer.indexOf('SKIPPED') > -1 ? {'background-color':'#e9e9e9'} : {'background-color':'#f9f9f9'}" ng-init="item.data.skip = true">
-                                <label class="checkbox checkbox--list-item" ng-style="item.data.patient_answer.answer.indexOf('SKIPPED') > -1 ? {'background-color':'#e9e9e9', 'margin':'0px', 'padding':'10px'} : {'background-color':'#f9f9f9', 'margin':'0px', 'padding':'10px'}">
-                                    <input type="checkbox" name="{{'mcCheckbox'+item.data.ser_num}}" value='SKIPPED' ng-checked="(item.data.options[0].answer_option_ser_num=='SKIPPED'||item.data.patient_answer.answer[0].Skipped=='1') && (item.data.patient_answer.answer[0].text=='' || !item.data.patient_answer.answer[0].hasOwnProperty('text'))" ng-click="item.data.answerChangedFlag = true;item.data.options[0].answer_option_ser_num='SKIPPED';item.data.patient_answer.answer[0].text=''">
-                                    <div ng-class="fontSizeDesc" class="checkbox__checkmark checkbox--list-item__checkmark"></div>
+                            <li ng-if="item.data.optional == 1" class="list__item list__item--tappable"
+                                ng-style="item.data.patient_answer.answer.indexOf('SKIPPED') > -1 ? {'background-color':'#e9e9e9'} : {'background-color':'#f9f9f9'}"
+                                ng-init="item.data.skip = true">
+                                <label class="checkbox checkbox--list-item"
+                                       ng-style="item.data.patient_answer.answer.indexOf('SKIPPED') > -1 ? {'background-color':'#e9e9e9', 'margin':'0px', 'padding':'10px'} : {'background-color':'#f9f9f9', 'margin':'0px', 'padding':'10px'}">
+                                    <input type="checkbox" name="{{'mcCheckbox'+item.data.ser_num}}" value='SKIPPED'
+                                           ng-checked="(item.data.options[0].answer_option_ser_num=='SKIPPED'||item.data.patient_answer.answer[0].Skipped=='1') && (item.data.patient_answer.answer[0].text=='' || !item.data.patient_answer.answer[0].hasOwnProperty('text'))"
+                                           ng-click="item.data.answerChangedFlag = true;item.data.options[0].answer_option_ser_num='SKIPPED';item.data.patient_answer.answer[0].text=''">
+                                    <div ng-class="fontSizeDesc"
+                                         class="checkbox__checkmark checkbox--list-item__checkmark"></div>
                                     {{"Prefer not to answer"|translate}}
                                 </label>
                             </li>
