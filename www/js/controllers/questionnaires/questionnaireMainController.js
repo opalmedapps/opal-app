@@ -621,7 +621,7 @@
             //saving question feedback
             if(question.patient_answer.hasOwnProperty('feedback')) {
                 console.log('about to save feedback');
-                Questionnaires.saveQuestionFeedback(vm.questionnaire.qp_ser_num,question.ser_num,question.patient_answer.feedback, vm.questionnaire.sections[vm.sectionIndex].section_ser_num);
+                Questionnaires.saveQuestionFeedback(vm.questionnaire.qp_ser_num,question.ser_num,question.patient_answer.feedback, vm.questionnaire.sections[vm.sectionIndex].section_ser_num, question.patient_answer.feedbackText);
             }
         }
 
@@ -778,11 +778,19 @@
         vm.thumbsUp = function(question) {
             question.patient_answer.feedback = question.feedback_options[0].feedback_ser_num;
             console.log(Object(question));
+
+            // auto scroll to feedback comment box
+            $location.hash('questionFeedbackText_' + question.ser_num);
+            $anchorScroll();
         };
 
         vm.thumbsDown = function(question) {
             question.patient_answer.feedback = question.feedback_options[1].feedback_ser_num;
             console.log(Object(question));
+
+            // auto scroll to feedback comment box
+            $location.hash('questionFeedbackText_' + question.ser_num);
+            $anchorScroll();
         };
 
         vm.isCheckedCheckmark = function(question, optionKey) {

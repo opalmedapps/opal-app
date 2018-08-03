@@ -649,7 +649,6 @@
                                     border: 2px solid #ccc;
                                     border-radius: 4px;
                                     background-color: #f8f8f8;
-                                    font-size: 16px;
                                     resize: none;
                                 }
                             </style>
@@ -690,10 +689,41 @@
                         <div style="display: inline-block;padding-left:20px;">
                             <div style="font-size:50px;" id="thumbsDown"
                                  ng-style="(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex].patient_answer.feedback == vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex].feedback_options[1].feedback_ser_num)? {'color':'darkblue'}:{'color':'black'}"
-                                 ng-click="vm.thumbsDown(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex]);"
+                                 ng-click="vm.thumbsDown(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex])"
                                  class="fa fa-thumbs-down"></div>
                         </div>
                         <!--feedback after is: {{vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex].patient_answer.feedback}}-->
+                        <!--item.data.patient_answer.feedback is: {{item.data.patient_answer.feedback}}-->
+                        <div ng-show="(item.data.patient_answer.feedback === item.data.feedback_options[1].feedback_ser_num) || (item.data.patient_answer.feedback === item.data.feedback_options[0].feedback_ser_num)"
+                             id="questionFeedbackText_{{item.data.ser_num}}">
+                            <div ng-show="(item.data.patient_answer.feedback === item.data.feedback_options[1].feedback_ser_num)"
+                                 style="margin-top: 10px">
+                                <span ng-class="fontSizeDesc">What should we improve?</span>
+                            </div>
+                            <div ng-show="(item.data.patient_answer.feedback === item.data.feedback_options[0].feedback_ser_num)"
+                                 style="margin-top: 10px">
+                                <span ng-class="fontSizeDesc">What do you like about this question?</span>
+                            </div>
+                            <div style="padding-left: 5vw; padding-right: 5vw">
+                                <textarea ng-class="fontSizeDesc" style="margin-top: 10px;
+                                        width: 100%;
+                                        height: 80%;
+                                        padding: 12px 20px;
+                                        box-sizing: border-box;
+                                        border: 2px solid #ccc;
+                                        border-radius: 4px;
+                                        background-color: #f8f8f8;
+                                        resize: none;" wrap="hard"
+                                          ng-model="item.data.patient_answer.feedbackText"
+                                          ng-value="item.data.patient_answer.feedbackText"
+                                ></textarea>
+                                <!--ng-value="item.data.patient_answer.answer[0].text"-->
+                                <!--ng-init="vm.setMaxLength(item.data)"-->
+                                <!--ng-change="item.data.answerChangedFlag = true;"-->
+
+                            </div>
+                        </div>
+
                     </div>
                     <!--<div ng-if="(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex].patient_answer.feedback)">-->
 

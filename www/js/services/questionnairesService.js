@@ -223,10 +223,10 @@ myApp.service('Questionnaires', [
                         });
 
             },
-            saveQuestionFeedback: function(questionnaire_patient_rel_ser_num, question_ser_num, answeroption_ser_num, section) {
+            saveQuestionFeedback: function(questionnaire_patient_rel_ser_num, question_ser_num, answeroption_ser_num, section, feedbackText) {
                 let deferred = $q.defer();
                 let _this = this;
-                var temp = {'feedbackAnswerOptionSerNum': answeroption_ser_num, 'feedbackText':null};
+                var temp = {'feedbackAnswerOptionSerNum': answeroption_ser_num, 'feedbackText': feedbackText};
                 let params = {
                     'qp_ser_num': questionnaire_patient_rel_ser_num,
                     'q_ser_num': question_ser_num,
