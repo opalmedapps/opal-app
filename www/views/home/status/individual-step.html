@@ -16,11 +16,22 @@
                        ng-bind-html="step.stage.appointmentDescription || step.stage.taskDescription"></p>
                 </div>
             </ons-list-item>
-            <ons-list-item tappable ng-click="step.about()" ng-show="vm.stage != ''">
-                <button class="button button--large--quiet">
-                    {{"MORE_EDU_MATERIAL"|translate}}
-                </button>
+            <ons-list-item ng-class="fontSizeDesc" ng-click="step.about()"
+                           ng-show="vm.stage != ''" style="background-color: #fde2ed" tappable>
+                <ons-row style="padding:0;margin:0;">
+                    <ons-col>
+                        {{"MORE_EDU_MATERIAL" | translate}}
+                    </ons-col>
+                    <ons-icon icon="ion-android-open" style="color:#ddd; margin-top: 3.5%" class="pull-right"
+                              size="1.2em"></ons-icon>
+                </ons-row>
             </ons-list-item>
+
+            <!--<ons-list-item tappable ng-click="step.about()" ng-show="vm.stage != ''">-->
+                <!--<button class="button button&#45;&#45;large&#45;&#45;quiet">-->
+                    <!--{{"MORE_EDU_MATERIAL"|translate}}-->
+                <!--</button>-->
+            <!--</ons-list-item>-->
         </ons-list>
     </div>
 </ons-page>
