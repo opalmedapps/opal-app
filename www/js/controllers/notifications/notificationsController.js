@@ -81,14 +81,14 @@
             var post = (notification.hasOwnProperty('Post')) ? notification.Post : Notifications.getNotificationPost(notification);
             if(notification.hasOwnProperty('PageUrl'))
             {
-                NavigatorParameters.setParameters({'Navigator':'personalNavigator', 'Post':post});
-                personalNavigator.pushPage(notification.PageUrl);
+                NavigatorParameters.setParameters({'Navigator':'homeNavigator', 'Post':post});
+                homeNavigator.pushPage(notification.PageUrl);
             }else{
                 var result = Notifications.goToPost(notification.NotificationType, post);
                 if(result !== -1  )
                 {
-                    NavigatorParameters.setParameters({'Navigator':'personalNavigator', 'Post':post});
-                    personalNavigator.pushPage(result.Url);
+                    NavigatorParameters.setParameters({'Navigator':'homeNavigator', 'Post':post});
+                    homeNavigator.pushPage(result.Url);
                 }
             }
         }

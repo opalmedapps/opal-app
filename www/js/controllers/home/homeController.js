@@ -7,12 +7,13 @@
 
     HomeController.$inject = [
         'Appointments', 'CheckInService', 'Patient', 'UpdateUI','$scope', '$timeout','$filter', 'Notifications',
-        'NavigatorParameters', 'NewsBanner', 'PlanningSteps', 'Permissions', 'UserPreferences', 'NetworkStatus'
-    ];
+        'NavigatorParameters', 'NewsBanner', 'PlanningSteps', 'Permissions', 'UserPreferences', 'NetworkStatus',
+        'MetaData'];
 
     /* @ngInject */
     function HomeController(Appointments, CheckInService, Patient, UpdateUI, $scope, $timeout, $filter, Notifications,
-                            NavigatorParameters, NewsBanner, PlanningSteps, Permissions, UserPreferences, NetworkStatus)
+                            NavigatorParameters, NewsBanner, PlanningSteps, Permissions, UserPreferences, NetworkStatus,
+                            MetaData)
     {
         var vm = this;
 
@@ -118,6 +119,27 @@
 
             // Display current check in status
             evaluateCheckIn();
+
+            setMetaData();
+
+            // Display Notifications badge (unread number)
+            setBadges();
+
+        }
+
+
+        function setMetaData(){
+            if(MetaData.isFirstTimeHome()){
+                var meta = MetaData.fetchHomeMeta();
+                vm.notificationsUnreadNumber = meta.notificationsUnreadNumber;
+                MetaData.setFetchedHome();
+            }
+        }
+
+        //Setting up numbers on the
+        function setBadges()
+        {
+            vm.notificationsUnreadNumber = Notifications.getNumberUnreadNotifications();
         }
 
         /**

@@ -22,7 +22,8 @@
         '$filter',
         'Constants',
         'Permissions',
-        'DynamicContentService'
+        'DynamicContentService',
+        'NewsBanner'
     ];
 
     /* @ngInject */
@@ -33,11 +34,13 @@
         $filter,
         Constants,
         Permissions,
-        DynamicContentService
+        DynamicContentService,
+        NewsBanner
     ) {
         var vm = this;
         vm.globalMessage = '';
         vm.globalMessageDescription = '';
+        vm.firstTime = true;
 
         vm.goToMessage = goToMessage;
         vm.gotoLearnAboutOpal = gotoLearnAboutOpal;
@@ -46,6 +49,7 @@
         vm.goToPatientCharter = goToPatientCharter;
         vm.reportBugs = reportBugs;
         vm.goToLogin = goToLogin;
+        vm.showMessageOfTheDay = showMessageOfTheDay;
 
 
         activate();
@@ -54,12 +58,14 @@
 
         function activate() {
 
-            // Initialize the service message to all users.
+            // Initialize the service message to all users (links.php)
             DynamicContentService.initializeLinks()
                 .then(function (response) {
                     if(!response.exists){
                         DynamicContentService.setContentData(response.data);
                     }
+                    // This line reads the Message Of The Day from serviceStatus_EN.php on depDocs
+                    // 'service' in links.php will grab the url (location) of serviceStatus_EN.php (or _FR.php)
                     return DynamicContentService.getPageContent('service');
                 })
                 .then(function successCallback(response) {
@@ -98,7 +104,16 @@
                 .catch(function (response) {
                     NewsBanner.showCustomBanner($filter('translate')(response.Message), '#333333', function(){}, 5000);
                 });
+        }
 
+        function showMessageOfTheDay() {
+            if (vm.globalMessageDescription !== '') {
+                if (vm.firstTime) {
+                    vm.firstTime = false;
+                    NewsBanner.showCustomBanner(vm.globalMessage + "\n" + vm.globalMessageDescription, '#333333', function () {
+                    }, 30000); // message stays visible for 30 seconds, or tap on it to disappear
+                }
+            }
         }
 
         /**

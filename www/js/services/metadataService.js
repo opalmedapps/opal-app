@@ -28,6 +28,7 @@
     function MetaData(Appointments, Documents, TxTeamMessages, Notifications, Questionnaires, Announcements, EducationalMaterial) {
 
         //you only need to use this service the first time entering a tab
+        var firstTimeHome = true;
         var firstTimePersonal = true;
         var firstTimeGeneral = true;
         var firstTimeEducational = true;
@@ -40,6 +41,10 @@
             questionnairesUnreadNumber: null
         };
 
+        var homeTabData = {
+            notificationsUnreadNumber: null
+        };
+
         var generalTabData = {
             announcementsUnreadNumber: null
         };
@@ -50,12 +55,15 @@
         var MetaData = {
             init: init,
             fetchPersonalMeta: fetchPersonalMeta,
+            fetchHomeMeta: fetchHomeMeta,
             fetchGeneralMeta: fetchGeneralMeta,
             fetchEducationalMeta: fetchEducationalMeta,
             isFirstTimePersonal: isFirstTimePersonal,
+            isFirstTimeHome: isFirstTimeHome,
             isFirstTimeGeneral: isFirstTimeGeneral,
             isFirstTimeEducational: isFirstTimeEducational,
             setFetchedPersonal: setFetchedPersonal,
+            setFetchedHome: setFetchedHome,
             setFetchedGeneral: setFetchedGeneral,
             setFetchedEducational: setFetchedEducational,
             noEduMaterial: noEduMaterial,
@@ -73,6 +81,7 @@
             personalTabData.documentsUnreadNumber = Documents.getNumberUnreadDocuments();
             personalTabData.txTeamMessagesUnreadNumber = TxTeamMessages.getUnreadTxTeamMessages();
             personalTabData.notificationsUnreadNumber = Notifications.getNumberUnreadNotifications();
+            homeTabData.notificationsUnreadNumber = Notifications.getNumberUnreadNotifications();
             personalTabData.questionnairesUnreadNumber = Questionnaires.getNumberOfUnreadQuestionnaires();
 
             //load the general tab data
@@ -84,6 +93,18 @@
             //Setting the language for view
             eduMaterials = EducationalMaterial.setLanguage(materials);
 
+        }
+
+        function fetchHomeMeta(){
+            return homeTabData;
+        }
+
+        function isFirstTimeHome() {
+            return firstTimeHome;
+        }
+
+        function setFetchedHome() {
+            firstTimeHome = false;
         }
 
         function fetchPersonalMeta(){
