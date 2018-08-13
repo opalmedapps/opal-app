@@ -11,10 +11,14 @@
         .module('MUHCApp')
         .controller('MainController', MainController);
 
-    MainController.$inject = ["$window", "$state", '$rootScope','FirebaseService','DeviceIdentifiers','$translatePartialLoader', "LocalStorage", 'Constants', 'CleanUp', 'NavigatorParameters', 'NetworkStatus', 'RequestToServer', 'NewsBanner', 'Security'];
+    MainController.$inject = ["$window", "$state", '$rootScope','FirebaseService','DeviceIdentifiers',
+                                '$translatePartialLoader', "LocalStorage", 'Constants', 'CleanUp',
+                                'NavigatorParameters', 'NetworkStatus', 'RequestToServer', 'NewsBanner', 'Security'];
 
     /* @ngInject */
-    function MainController($window, $state, $rootScope, FirebaseService, DeviceIdentifiers, $translatePartialLoader, LocalStorage, Constants, CleanUp, NavigatorParameters, NetworkStatus, RequestToServer, NewsBanner, Security) {
+    function MainController($window, $state, $rootScope, FirebaseService, DeviceIdentifiers,
+                            $translatePartialLoader, LocalStorage, Constants, CleanUp,
+                            NavigatorParameters, NetworkStatus, RequestToServer, NewsBanner, Security) {
 
         var timeoutLockout;
         var currentTime;
@@ -136,6 +140,8 @@
                     }
                 });
 
+                // forceShow: "true" in Android will allow push notification to appear even when app is running
+
                 var push = PushNotification.init({
                     ios: {
                         alert: true,
@@ -145,11 +151,21 @@
                     android: {
                         icon: "opal_notification",
                         iconColor: "#74A333",
+<<<<<<< HEAD
                         senderID: "476395494069"
+=======
+                        senderID: "810896751588",
+                        forceShow: "true"
+>>>>>>> opal_pre_prod
                     }
                 });
 
                 push.on('notification', function (data) {
+                    if (ons.platform.isIOS() && data.additionalData.foreground) {
+                        // on iOS, it will allow push notification to appear when app is running
+                        NewsBanner.showCustomBanner(data.title + "\n" + data.message, '#333333', function(){}, 9000);
+                        navigator.vibrate(3000);
+                    }
                 });
                 push.on('error', function (e) {
                 });
@@ -158,7 +174,6 @@
                 });
             }
         }
-
 
         /*****************************************
          * Data wipe  - onPause event is triggered when the app goes in the background (switch apps on a device)

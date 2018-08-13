@@ -79,5 +79,13 @@
                             ng-click="init.goToLogin()" var="initButton">{{"HEADER_MESSAGE_LOGIN"|translate}}
                 </ons-button>
             </div>
+
+            <!-- Show Message Of The Day (MOTD), if there is any. -->
+            <!-- MOTD comes from serviceStatus_EN.php -->
+            <!-- if there is a Message, then show it -->
+            <div ng-show="init.globalMessageDescription !== ''">
+                 {{init.showMessageOfTheDay()}}
+            </div>
+
         </div>
     </ons-page>

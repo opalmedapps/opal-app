@@ -1,34 +1,50 @@
 <ons-page ng-controller="NotificationsController as notif">
     <ons-toolbar fixed-style>
-        <div class="left"><ons-back-button>{{"BACK"|translate}}</ons-back-button></div>
+        <div class="left">
+            <ons-back-button>{{"BACK"|translate}}</ons-back-button>
+        </div>
         <div class="center" ng-class="fontSizeTitle">{{"NOTIFICATIONS"|translate}}</div>
     </ons-toolbar>
 
     <network-banner></network-banner>
     <div ng-show="notif.isLoading" align="center" style="margin-top:25vh">
         <svg class="progress-circular">
-            <circle class="progress-circular__primary" cx="50%" cy="50%" r="40%" fill="none" stroke-width="10%" stroke-miterlimit="10"/>
+            <circle class="progress-circular__primary" cx="50%" cy="50%" r="40%" fill="none" stroke-width="10%"
+                    stroke-miterlimit="10"/>
         </svg>
         <p style="margin-top: 30px">{{ "LOADINGNOTIFICATIONS" | translate }}</p>
     </div>
 
     <div ng-hide="notif.noNotifications">
-        <ons-list ng-repeat="notification in notif.notifications" ng-click="notif.goToNotification($index,notification)">
-            <ons-list-header class="person-list-header" ng-show="notif.showHeader($index, notif.notifications.length)" ng-class="fontSizeTitle">
+        <ons-list ng-repeat="notification in notif.notifications"
+                  ng-click="notif.goToNotification($index,notification)">
+            <ons-list-header class="person-list-header" ng-show="notif.showHeader($index, notif.notifications.length)"
+                             ng-class="fontSizeTitle">
                 {{notification.DateAdded|date:'fullDate'}}
             </ons-list-header>
-            <ons-list-item modifier="chevron" class="item" >
-                <ons-row align="center" >
+            <ons-list-item modifier="chevron" class="item">
+                <ons-row align="center">
                     <ons-col width="80px" align="center">
                         <div style="margin-left:10px">
-                            <i class="iconHomeView" ng-class="notification.Icon" ng-style="{color: notification.Color}"></i><span class="notification" ng-if="notification.ReadStatus==='0'">&nbsp;</span>
+                            <i class="iconHomeView" ng-class="notification.Icon"
+                               ng-style="{color: notification.Color}">
+                            </i>
+                            <!--<span class="notification" ng-if="notification.ReadStatus==='0'">&nbsp;-->
+                            <!--</span>-->
                         </div>
                     </ons-col>
                     <ons-col>
-                        <header>
+                        <!-- Bold if Unread, Normal font if already read -->
+                        <!-- Bold is when class="item-title" -->
+                        <!-- Non-Bold is when class="item-desc" -->
+                        <header ng-if="notification.ReadStatus==='0'">
                             <span class="item-title" ng-class="fontSizeTitle">{{notification.Title}}</span>
                         </header>
-                        <p class="item-desc" ng-class="fontSizeDesc">{{notification.Desc}}</p>
+                        <header ng-if="notification.ReadStatus==='1'">
+                            <span class="item-desc" ng-class="fontSizeTitle">{{notification.Title}}</span>
+                        </header>
+
+                        <p class="item-desc" ng-class="fontSizeDesc">{{notification.Desc|ellipsis:30}}</p>
                     </ons-col>
                 </ons-row>
             </ons-list-item>
