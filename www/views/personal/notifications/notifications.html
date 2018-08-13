@@ -44,7 +44,7 @@
                             <span class="item-desc" ng-class="fontSizeTitle">{{notification.Title}}</span>
                         </header>
 
-                        <p class="item-desc" ng-class="fontSizeDesc">{{notification.Desc}}</p>
+                        <p class="item-desc" ng-class="fontSizeDesc">{{notification.Desc|ellipsis:30}}</p>
                     </ons-col>
                 </ons-row>
             </ons-list-item>

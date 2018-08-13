@@ -454,8 +454,16 @@ myApp.service('Notifications', ['$filter', 'RequestToServer', 'LocalStorage', 'A
                 for (var i = notifications.length - 1; i >= 0; i--) {
                     notifications[i].Title = (language == 'EN') ? notifications[i].Name_EN : notifications[i].Name_FR;
                     try {
-                        if (typeof notifications[i].Content == 'undefined') notifications[i].Content = notificationTypes[notifications[i].NotificationType].namesFunction(notifications[i].RefTableRowSerNum);
-                        notifications[i].Desc = (language == 'EN') ? notifications[i].Content.NameEN : notifications[i].Content.NameFR;
+                        if (typeof notifications[i].Content == 'undefined') {
+                            notifications[i].Content = notificationTypes[notifications[i].NotificationType].namesFunction(notifications[i].RefTableRowSerNum);
+                        }
+
+                        if (notifications[i].NotificationType == 'Questionnaire' || notifications[i].NotificationType == 'LegacyQuestionnaire') {
+                            notifications[i].Desc = (language == 'EN') ? notifications[i].RefTableRowTitle_EN : notifications[i].RefTableRowTitle_FR;
+                        }
+                        else {
+                            notifications[i].Desc = (language == 'EN') ? notifications[i].Content.NameEN : notifications[i].Content.NameFR;
+                        }
                     } catch (e) {
                         notifications.splice(i, 1);
                     }

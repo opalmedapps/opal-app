@@ -104,8 +104,6 @@
                 .catch(function (response) {
                     NewsBanner.showCustomBanner($filter('translate')(response.Message), '#333333', function(){}, 5000);
                 });
-
-
         }
 
         function showMessageOfTheDay() {
