@@ -16,14 +16,14 @@
                        ng-bind-html="step.stage.appointmentDescription || step.stage.taskDescription"></p>
                 </div>
             </ons-list-item>
-            <ons-list-item ng-class="fontSizeDesc" ng-click="step.about()"
+            <ons-list-item modifier="chevron" ng-class="fontSizeDesc" ng-click="step.about()"
                            ng-show="vm.stage != ''" style="background-color: #fde2ed" tappable>
                 <ons-row style="padding:0;margin:0;">
                     <ons-col>
                         {{"MORE_EDU_MATERIAL" | translate}}
                     </ons-col>
-                    <ons-icon icon="ion-android-open" style="color:#ddd; margin-top: 3.5%" class="pull-right"
-                              size="1.2em"></ons-icon>
+                    <!--<ons-icon icon="ion-android-open" style="color:#ddd; margin-top: 3.5%" class="pull-right"-->
+                              <!--size="1.2em"></ons-icon>-->
                 </ons-row>
             </ons-list-item>
 
