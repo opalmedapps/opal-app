@@ -12,10 +12,10 @@
         .module('MUHCApp')
         .controller('IndividualMaterialController', IndividualMaterialController);
 
-    IndividualMaterialController.$inject = ['$scope', '$timeout', 'NavigatorParameters', 'EducationalMaterial', 'FileManagerService', '$filter', 'Logger', 'NetworkStatus'];
+    IndividualMaterialController.$inject = ['$scope', '$timeout', 'NavigatorParameters', 'EducationalMaterial', 'FileManagerService', '$filter', 'Logger', 'NetworkStatus', 'Patient'];
 
     /* @ngInject */
-    function IndividualMaterialController($scope, $timeout, NavigatorParameters, EducationalMaterial, FileManagerService, $filter, Logger, NetworkStatus) {
+    function IndividualMaterialController($scope, $timeout, NavigatorParameters, EducationalMaterial, FileManagerService, $filter, Logger, NetworkStatus, Patient) {
         var vm = this;
 
         var param;
@@ -26,6 +26,11 @@
         vm.goToEducationalMaterial = goToEducationalMaterial;
         vm.share = share;
         vm.print = print;
+
+        vm.scrollDown = scrollDown;
+        vm.clickBack = clickBack;
+
+        vm.goInPackage = goInPackage;
 
         activate();
         /////////////////////////////
@@ -41,8 +46,12 @@
             vm.edumaterial = EducationalMaterial.setLanguage(param.Post);
             Logger.sendLog('Educational Material', param.Post.EducationalMaterialSerNum);
 
+            vm.recursive_step = param.RStep;
+
+            MatchingDocuments();
+
             //Determine if material has a ShareURL and is printable
-            if(vm.edumaterial.hasOwnProperty('ShareURL')&& vm.edumaterial.ShareURL !=="") {
+            if(vm.edumaterial.hasOwnProperty('ShareURL')&& vm.edumaterial.ShareURL !=="" && vm.edumaterial.ShareURL !== undefined) {
                 vm.isPrintable = FileManagerService.isPDFDocument(vm.edumaterial.ShareURL);
             }
 
@@ -61,6 +70,11 @@
             //Determining if its an individual php page to show immediately.
             vm.isIndividualHtmlPage = (FileManagerService.getFileType(vm.edumaterial.URL_EN) === 'php');
             if(vm.isIndividualHtmlPage) downloadIndividualPage();
+
+            if(vm.edumaterial.Type === "Package"){
+                vm.PackageContents = vm.edumaterial.PackageContents;
+            }
+
         }
 
         function bindEvents(){
@@ -82,6 +96,16 @@
             if (nextStatus !== -1) {
                 NavigatorParameters.setParameters({ 'Navigator': navigatorPage, 'Index': index, 'Booklet': vm.edumaterial, 'TableOfContents': vm.tableOfContents });
                 window[navigatorPage].pushPage(nextStatus.Url);
+
+                console.log('what up');
+                console.log(vm.tableOfContents[index]);
+
+                EducationalMaterial.writeSubClickedRequest(Patient.getPatientId(),vm.tableOfContents[index].EducationalMaterialTOCSerNum)
+                    .then((res)=>{
+                        console.log(res);
+                        console.log("set sub clicked")
+                    });
+
             }
         }
 
@@ -137,6 +161,78 @@
                         ons.notification.alert({'message':$filter('translate')('UNABLETOOBTAINEDUCATIONALMATERIAL')});
                     })
             }
+        }
+
+        //newly added scroll function
+
+        function scrollDown(){
+
+            $timeout(function () {
+
+                console.log("in scroll down function");
+
+                var $ = document.getElementById(vm.recursive_step);
+
+                $.onscroll = function () {
+                    console.log($.clientHeight);
+                    console.log($.scrollHeight-$.scrollTop);
+
+                    if($.clientHeight===$.scrollHeight-$.scrollTop){
+
+                        EducationalMaterial.writeScrollToBottomRequest(vm.edumaterial.EducationalMaterialSerNum, Patient.getPatientId())
+                            .then((res) => {
+                                console.log(res);
+                            });
+                    }
+                };
+
+                $.onclick = function () {
+
+                    if($.scrollHeight<=$.clientHeight) {//don't need to scroll
+
+                        EducationalMaterial.writeScrollToBottomRequest(vm.edumaterial.EducationalMaterialSerNum, Patient.getPatientId())
+                            .then((res) => {
+                                console.log(res);
+                            });
+                    }
+
+                }
+
+            },0);
+
+        }
+
+        function clickBack() {
+            console.log("clicked back");
+
+            EducationalMaterial.writeClickedBackRequest(vm.edumaterial.EducationalMaterialSerNum, Patient.getPatientId())
+                .then((res)=>{
+                    console.log(res);
+                })
+
+        }
+
+        function MatchingDocuments(){
+            vm.existingMaterials = EducationalMaterial.setLanguage(EducationalMaterial.getEducationalMaterial());
+            vm.packageContent = {};//build a matching dictionary
+
+            vm.existingMaterials.forEach(function(mat){
+                vm.packageContent[mat.EducationalMaterialControlSerNum] = mat;
+            });
+        }
+
+        function goInPackage(material){
+
+            if(vm.packageContent[material.EducationalMaterialControlSerNum].ReadStatus==0){
+                vm.packageContent[material.EducationalMaterialControlSerNum].ReadStatus = 1;
+                EducationalMaterial.readMaterial(vm.packageContent[material.EducationalMaterialControlSerNum].EducationalMaterialSerNum);
+            }
+            EducationalMaterial.writeClickedRequest(vm.packageContent[material.EducationalMaterialControlSerNum].EducationalMaterialSerNum, Patient.getPatientId());
+
+            var rstep = vm.recursive_step + 1;
+            NavigatorParameters.setParameters({ 'Navigator': navigatorPage,'Post': vm.packageContent[material.EducationalMaterialControlSerNum], 'RStep':rstep });
+            window[navigatorPage].pushPage('./views/education/individual-material.html');
+
         }
     }
 })();
