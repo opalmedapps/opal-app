@@ -9,16 +9,20 @@
         .module('MUHCApp')
         .controller('EducationalMaterialController', EducationalMaterialController);
 
-    EducationalMaterialController.$inject = ['NavigatorParameters', '$scope', 'EducationalMaterial','NetworkStatus'];
+    EducationalMaterialController.$inject = ['NavigatorParameters', '$scope', 'EducationalMaterial','NetworkStatus', 'Patient'];
 
     /* @ngInject */
-    function EducationalMaterialController(NavigatorParameters, $scope, EducationalMaterial, NetworkStatus) {
+    function EducationalMaterialController(NavigatorParameters, $scope, EducationalMaterial, NetworkStatus, Patient) {
         var vm = this;
         var backButtonPressed = 0;
 
         vm.showHeader = showHeader;
         vm.goToEducationalMaterial = goToEducationalMaterial;
         vm.educationDeviceBackButton = educationDeviceBackButton;
+        vm.searchname = "";
+        //new added
+        vm.filterMaterial = filterMaterial;
+        vm.opend = opened;
 
         activate();
         ///////////////////////////////////
@@ -37,7 +41,8 @@
 
         function initData() {
             vm.noMaterials = false;
-            vm.edumaterials = EducationalMaterial.setLanguage(EducationalMaterial.getEducationalMaterial());
+            vm.edumaterials = EducationalMaterial.setLanguage(EducationalMaterial.getEducationalMaterial());//only for comparison
+            vm.new_edumaterials = vm.edumaterials;// this is what we use in html, will be changed in filtering
         }
 
         function educationDeviceBackButton(){
@@ -92,12 +97,51 @@
          *
          */
         function goToEducationalMaterial(edumaterial) {
-            if (edumaterial.ReadStatus === '0') {
-                edumaterial.ReadStatus = '1';
-                EducationalMaterial.readEducationalMaterial(edumaterial.EducationalMaterialSerNum);
+            console.log("pppp");
+            console.log(edumaterial.ReadStatus);
+
+            EducationalMaterial.writeClickedRequest(edumaterial.EducationalMaterialSerNum, Patient.getPatientId());
+            if(edumaterial.ReadStatus==0){
+                edumaterial.ReadStatus = 1;
+                EducationalMaterial.readMaterial(edumaterial.EducationalMaterialSerNum);
             }
-            NavigatorParameters.setParameters({ 'Navigator': 'educationNavigator', 'Post': edumaterial });
+
+
+            NavigatorParameters.setParameters({ 'Navigator': 'educationNavigator', 'Post': edumaterial, 'RStep':1 });
             educationNavigator.pushPage('./views/education/individual-material.html');
+
+        }
+
+        function filterMaterial() {
+
+            var searchname_parts = vm.searchname.toLowerCase().split(" ");//split into different parts
+
+            var filtered = [];//generate new show list for educational material
+            vm.edumaterials.forEach(function(edumaterial){
+
+                var name_no_space = edumaterial.Name.replace(/\s/g, '').toLowerCase();
+                var show = true;
+                searchname_parts.forEach(function(part){
+                    if(!name_no_space.includes(part)){
+                        show = false;
+                    }
+                });
+
+                if(show){
+                    filtered.push(edumaterial);
+                }
+
+            });
+
+            vm.new_edumaterials = filtered;//assign to new show list
+        }
+
+        function opened(e){
+            if(e.ReadStatus==0){
+                return "item-title";
+            }else{
+                return "item-desc";
+            }
         }
     }
 })();

@@ -56,6 +56,10 @@ myApp.service('EducationalMaterial',['$filter','LocalStorage','FileManagerServic
         'TestingType':{
             icon:'fa fa-question',
             color:'#FF7043'
+        },
+        'Package':{ // TODO: to be changed for package
+            icon:'fa fa-book',
+            color:'#FF7043'
         }
     };
     function setLanguageEduMaterial(array)
@@ -279,25 +283,117 @@ myApp.service('EducationalMaterial',['$filter','LocalStorage','FileManagerServic
             }
         },
         //Reads announcement and sends request to backend
+
+        readMaterial:function(serNum)
+        {
+            RequestToServer.sendRequestWithResponse('readMaterial',{'Id':serNum, 'Field':'EducationalMaterial'})
+                .then((res)=>{
+                    console.log(res);
+                    // ons.notification.alert({message:"set clicked in DB"});
+                }).catch(()=>{
+
+            });
+        },
+
         /**
          *@ngdoc method
-         *@name readEducationalMaterial
+         *@name writeClickedRequest
          *@methodOf MUHCApp.service:EducationalMaterial
          *@param {String} serNum EducationalMaterialSerNum to be read
          *@description Sets ReadStatus in educational material to 1, sends request to backend, and syncs with device storage
          **/
-        readEducationalMaterial:function(serNum)
-
+        writeClickedRequest:function(serNum, userId)
         {
-            for (var i = 0; i < educationalMaterialArray.length; i++) {
-                if(educationalMaterialArray[i].EducationalMaterialSerNum==serNum)
-                {
-                    educationalMaterialArray[i].ReadStatus='1';
-                    LocalStorage.WriteToLocalStorage('EducationalMaterial',educationalMaterialArray);
-                    RequestToServer.sendRequest('Read',{'Id':serNum, 'Field':'EducationalMaterial'});
-                }
-            }
+
+            RequestToServer.sendRequestWithResponse('Clicked',{'Id':serNum, 'Field':'EducationalMaterial', 'UserId':userId})
+                .then((res)=>{
+                    console.log(res);
+                    // ons.notification.alert({message:"set clicked in DB"});
+                }).catch(()=>{
+
+            });
+
         },
+
+        writeScrollToBottomRequest:function(serNum, userId){
+            console.log("in writeScrollToBottomRequest function");
+
+            return RequestToServer.sendRequestWithResponse('WriteScrollToBottom', {
+                'Id': serNum,
+                'UserId': userId,
+                'Field': 'EducationalMaterial'
+            }).then((res) => {
+                console.log(res);
+                // ons.notification.alert({message: "Successfully write in DB"});
+                return res;
+            }).catch(() => {
+
+            });
+
+        },
+        writeSubScrollToBottomRequest:function(patientId, TocSerNum){
+            console.log("in writeSubScrollToBottomRequest function");
+
+            return RequestToServer.sendRequestWithResponse('WriteSubScrollToBottom',{
+                'patientId' : patientId,
+                'TocSerNum' : TocSerNum,
+                'Field' : 'EducationalMaterialTOC'
+            }).then((res)=>{
+                console.log(res);
+                // ons.notification.alert({message: "Successfully write in Sub DB"});
+                return res;
+            }).catch(()=>{
+
+            });
+
+        },
+        writeSubClickedRequest:function(patientId, TocSerNum){
+
+            return RequestToServer.sendRequestWithResponse('WriteSubClicked', {
+                'patientId': patientId,
+                'TocSerNum': TocSerNum,
+                'Field': 'EducationalMaterialTOC'
+            }).then((res) => {
+                console.log(res);
+                // ons.notification.alert({message: "Successfully write in Sub DB"});
+                return res;
+            }).catch(() => {
+
+            });
+
+        },
+
+        writeClickedBackRequest:function(EducationalMaterialSerNum, userId){
+            console.log("in clicked back service");
+            return RequestToServer.sendRequestWithResponse('WriteClickedBack', {
+                'Id': EducationalMaterialSerNum,
+                'UserId': userId,
+                'Field': 'EducationalMaterial'
+            }).then((res) => {
+                console.log(res);
+                // ons.notification.alert({message: "Successfully write in DB"});
+                return res;
+            }).catch(() => {
+
+            });
+        },
+
+        writeSubClickedBackRequest:function(patientId, TocSerNum){
+            console.log("in writeSubClickedBackRequest function");
+
+            return RequestToServer.sendRequestWithResponse('writeSubClickedBackRequest',{
+                'patientId' : patientId,
+                'TocSerNum' : TocSerNum,
+                'Field' : 'EducationalMaterialTOC'
+            }).then((res)=>{
+                console.log(res);
+                // ons.notification.alert({message: "Successfully write in Sub DB"});
+                return res;
+            }).catch(()=>{
+
+            });
+        },
+
         /**
          *@ngdoc method
          *@name readEducationalMaterial
