@@ -1,13 +1,18 @@
 <?xml version='1.0' encoding='utf-8'?>
+<widget android-versionCode="16026" id="hig.opal.com" version="1.6.26" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>Opal</name>
 
+<<<<<<< HEAD
 <!-- Production -->
 <!--<widget android-versionCode="1620" id="hig.opal.com" version="1.6.20" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">-->
 <!--<name>Opal</name>-->
+=======
+>>>>>>> master
 
 
-<!-- Pre-Production -->
-<widget id="com.hig.opal-dev" version="1.6.46" android-versionCode="16046" >
-    <name>Opal-dev</name>
+    <!-- Pre-Production -->
+    <!--<widget id="com.hig.opal-dev" version="1.6.46" android-versionCode="16046" >-->
+    <!--<name>Opal-dev</name>-->
 
     <description>
         Opal - the MUHC Oncology Patient Application for mobile phones and the web - is a product that has arisen from the winning project of the 2014 MUHC Q+ initiative. The project proposal was submitted by the Health Informatics Group (HIG) and was entitled “Realistic knowledge-based waiting time estimates for radiation oncology patients - addressing the pain of waiting”. It had as its goal the provision of waiting time estimates to radiation oncology patients.
@@ -122,14 +127,20 @@
     <plugin name="de.appplant.cordova.plugin.printer" spec="^0.7.1" />
     <plugin name="phonegap-plugin-push" spec="^1.9.2">
         <!--PRODUCTION -->
+<<<<<<< HEAD
         <!--<variable name="SENDER_ID" value="476395494069" />-->
         <!--pre-prod-->
         <variable name="SENDER_ID" value="810896751588" />
+=======
+        <variable name="SENDER_ID" value="476395494069" />
+        <!--pre-prod-->
+        <!--<variable name="SENDER_ID" value="810896751588" />-->
+>>>>>>> master
     </plugin>
     <plugin name="cordova-plugin-compat" spec="^1.1.0" />
     <plugin name="cordova-plugin-cookiemaster" spec="^1.0.5" />
     <plugin name="cordova-plugin-vibration" spec="^3.1.0" />
     <plugin name="es6-promise-plugin" spec="^4.2.2" />
-        <engine name="android" spec="~6.2.3" />
+    <engine name="android" spec="~6.2.3" />
     <engine name="ios" spec="^4.5.2" />
 </widget>
