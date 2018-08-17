@@ -179,7 +179,7 @@ gulp.task('minify-vendor-js',function()
         'www/lib/bower_components/crypto-js/crypto-js.js',
         'www/lib/bower_components/angular-scroll-glue/src/scrollglue.js'])
         .pipe(concat('vendor.min.js'))
-        .pipe(uglify())
+        //.pipe(uglify())
         .pipe(gulp.dest('dest/vendor'));
 });
 
