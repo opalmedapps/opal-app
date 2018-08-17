@@ -208,7 +208,7 @@ then
 		cp $WORKING_DIR/www/lib/bower_components/bootstrap/dist/css/bootstrap.min.css.map $WORKING_DIR/dest/vendor
 
         #Copy over PDF Viewer directory
-		cp -a $WORKING_DIR/www/lib/bower_components/pdfjs-dist $WORKING_DIR/vendor/pdfjs-dist
+		cp -a $WORKING_DIR/www/lib/bower_components/pdfjs-dist $WORKING_DIR/dest/vendor/pdfjs-dist
 
 		#Grab from dest folder and move them the production environment
 		cp -a $WORKING_DIR/dest/. $TARGET_DIR/www
