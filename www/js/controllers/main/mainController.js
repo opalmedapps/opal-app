@@ -12,8 +12,8 @@
         .controller('MainController', MainController);
 
     MainController.$inject = ["$window", "$state", '$rootScope','FirebaseService','DeviceIdentifiers',
-                                '$translatePartialLoader', "LocalStorage", 'Constants', 'CleanUp',
-                                'NavigatorParameters', 'NetworkStatus', 'RequestToServer', 'NewsBanner', 'Security'];
+        '$translatePartialLoader', "LocalStorage", 'Constants', 'CleanUp',
+        'NavigatorParameters', 'NetworkStatus', 'RequestToServer', 'NewsBanner', 'Security'];
 
     /* @ngInject */
     function MainController($window, $state, $rootScope, FirebaseService, DeviceIdentifiers,
@@ -151,8 +151,13 @@
                     android: {
                         icon: "opal_notification",
                         iconColor: "#74A333",
+<<<<<<< HEAD
                         // senderID: "476395494069",   // PRODUCTION
                         senderID: "810896751588",   // pre-prod
+=======
+                        senderID: "476395494069",   // PRODUCTION
+                        // senderID: "810896751588",   // pre-prod
+>>>>>>> master
                         forceShow: "true"
                     }
                 });
