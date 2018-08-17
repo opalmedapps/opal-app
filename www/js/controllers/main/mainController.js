@@ -151,13 +151,8 @@
                     android: {
                         icon: "opal_notification",
                         iconColor: "#74A333",
-<<<<<<< HEAD
                         // senderID: "476395494069",   // PRODUCTION
                         senderID: "810896751588",   // pre-prod
-=======
-                        senderID: "476395494069",   // PRODUCTION
-                        // senderID: "810896751588",   // pre-prod
->>>>>>> master
                         forceShow: "true"
                     }
                 });
