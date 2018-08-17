@@ -172,9 +172,9 @@ gulp.task('minify-vendor-js',function()
         'www/lib/bower_components/tweetnacl-util/nacl-util.min.js',
         'www/lib/bower_components/highcharts/highstock.js',
         'www/lib/bower_components/moment/moment.js',
-        'www/lib/bower_components/pdfjs-dist/build/pdf.js',
-        'www/lib/bower_components/pdfjs-dist/build/pdf.worker.min.js',
-        'www/lib/bower_components/pdfjs-dist/web/pdf_viewer.js',
+        // 'www/lib/bower_components/pdfjs-dist/build/pdf.js',
+        // 'www/lib/bower_components/pdfjs-dist/build/pdf.worker.min.js',
+        // 'www/lib/bower_components/pdfjs-dist/web/pdf_viewer.js',
         'www/lib/js/materialize.min.js',
         'www/lib/bower_components/crypto-js/crypto-js.js',
         'www/lib/bower_components/angular-scroll-glue/src/scrollglue.js'])
