@@ -4,7 +4,7 @@
   "description": "used for Karma testing",
   "main": "karma.conf.js",
   "scripts": {
-      "test": "ng test"
+    "test": "ng test"
   },
   "repository": {
     "type": "git",
@@ -28,5 +28,9 @@
     "karma-chrome-launcher": "^2.2.0",
     "karma-jasmine": "^1.1.0",
     "puppeteer": "^0.11.0"
+  },
+  "dependencies": {
+    "angularjs-onsenui": "^1.0.0",
+    "onsenui": "^2.10.4"
   }
 }
