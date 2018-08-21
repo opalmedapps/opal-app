@@ -96,4 +96,8 @@ app.controller('questionnairesListController', [
             return Questionnaires.getQuestionnaireCount(type);
         };
 
+        $scope.scoringTest = function(){
+            Questionnaires.updateQuestionnaireStatus(2,'Completed');
+        };
+
     }]);
