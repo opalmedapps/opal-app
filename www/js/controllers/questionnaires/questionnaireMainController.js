@@ -611,7 +611,12 @@
                 } else {
                     console.log("about to call save quest answer");
                     console.log(question);
-                    Questionnaires.saveQuestionnaireAnswer(vm.questionnaire.qp_ser_num, question.ser_num, -1, question.options[question.patient_answer.answer[0]].answer_option_ser_num, question.question_type_category_key, vm.questionnaire.sections[vm.sectionIndex].section_ser_num);
+                    // TODO: skipped does not save for multiple choice, this is a quick fix, write it in a better way later
+                    if(question.patient_answer.answer[0] === 'SKIPPED'){
+                        Questionnaires.saveQuestionnaireAnswer(vm.questionnaire.qp_ser_num, question.ser_num, -1, 'SKIPPED', question.question_type_category_key, vm.questionnaire.sections[vm.sectionIndex].section_ser_num);
+                    }else{
+                        Questionnaires.saveQuestionnaireAnswer(vm.questionnaire.qp_ser_num, question.ser_num, -1, question.options[question.patient_answer.answer[0]].answer_option_ser_num, question.question_type_category_key, vm.questionnaire.sections[vm.sectionIndex].section_ser_num);
+                    }
                 }
                 if (vm.questionnaire.status == 'New') {
                     Questionnaires.updateQuestionnaireStatus(vm.questionnaire.qp_ser_num, 'In Progress');

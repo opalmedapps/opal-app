@@ -185,6 +185,8 @@ myApp.service('Questionnaires', [
                 };
                 RequestToServer.sendRequestWithResponse('UpdateQuestionnaireStatus', params) // 'UpdateQuestionnaireStatus'
                     .then(function (response) {
+                            console.log('in update questionnaire status, response is');
+                            console.log(response);
                             this.setQuestionnaires(response.Data);
                             deferred.resolve({Success: true, Location: 'Server'});
                         },
@@ -215,6 +217,8 @@ myApp.service('Questionnaires', [
 
                 RequestToServer.sendRequestWithResponse('QuestionnaireAnswers', params)
                     .then(function (response) {
+                            console.log('response from save Questionnaire answer: ');
+                            console.log(response);
                             _this.setQuestionnaires(response.Data);
                             deferred.resolve({Success: true, Location: 'Server'});
                         },
