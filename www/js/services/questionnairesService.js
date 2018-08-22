@@ -183,19 +183,11 @@ myApp.service('Questionnaires', [
                     'qp_ser_num': questionnaire_patient_rel_ser_num,
                     'new_status': new_status,
                 };
-                RequestToServer.sendRequest('UpdateQuestionnaireStatus', params); // 'UpdateQuestionnaireStatus'
-                // this is for sendRequestWithResponse, but now the response is only success or failure
-                //     .then(function (response) {
-                //             console.log('in update questionnaire status, response is');
-                //             console.log(response);
-                //             //this.setQuestionnaires(response.Data);
-                //             deferred.resolve({Success: true, Location: 'Server'});
-                //         },
-                //         function (error) {
-                //             deferred.reject({Success: false, Location: '', Error: error});
-                //         });
+
+                RequestToServer.sendRequest('UpdateQuestionnaireStatus', params);
 
             },
+
             // to get 1 questionnaire:  language, questionnaire_patient_rel_ser_num
             // to get list
             // save answer: section, question type
