@@ -183,20 +183,18 @@ myApp.service('Questionnaires', [
                     'qp_ser_num': questionnaire_patient_rel_ser_num,
                     'new_status': new_status,
                 };
-                RequestToServer.sendRequestWithResponse('UpdateQuestionnaireStatus', params) // 'UpdateQuestionnaireStatus'
-                    .then(function (response) {
-                            console.log('in update questionnaire status, response is');
-                            console.log(response);
-                            this.setQuestionnaires(response.Data);
-                            deferred.resolve({Success: true, Location: 'Server'});
-                        },
-                        function (error) {
-                            deferred.reject({Success: false, Location: '', Error: error});
-                        });
-                // RequestToServer.sendRequestWithResponse('Questionnaires', null, null, null, null, 'http://127.0.0.1:5000/update-questionnaire-status/', url_params)
-                //     .then(function(response) {
-                //         console.log(response);
-                //     });
+                RequestToServer.sendRequest('UpdateQuestionnaireStatus', params); // 'UpdateQuestionnaireStatus'
+                // this is for sendRequestWithResponse, but now the response is only success or failure
+                //     .then(function (response) {
+                //             console.log('in update questionnaire status, response is');
+                //             console.log(response);
+                //             //this.setQuestionnaires(response.Data);
+                //             deferred.resolve({Success: true, Location: 'Server'});
+                //         },
+                //         function (error) {
+                //             deferred.reject({Success: false, Location: '', Error: error});
+                //         });
+
             },
             // to get 1 questionnaire:  language, questionnaire_patient_rel_ser_num
             // to get list
@@ -215,16 +213,17 @@ myApp.service('Questionnaires', [
                     // 'ao_ser_num': answeroption_ser_num
                 };
 
-                RequestToServer.sendRequestWithResponse('QuestionnaireAnswers', params)
-                    .then(function (response) {
-                            console.log('response from save Questionnaire answer: ');
-                            console.log(response);
-                            _this.setQuestionnaires(response.Data);
-                            deferred.resolve({Success: true, Location: 'Server'});
-                        },
-                        function (error) {
-                            deferred.reject({Success: false, Location: '', Error: error});
-                        });
+                RequestToServer.sendRequest('QuestionnaireAnswers', params);
+                // this is for sendRequestWithResponse, but now the response is only success or failure
+                    // .then(function (response) {
+                    //         console.log('response from save Questionnaire answer: ');
+                    //         console.log(response);
+                    //         //_this.setQuestionnaires(response.Data);  this is for sendRequestWithResponse, but now the response is only success or failure
+                    //         deferred.resolve({Success: true, Location: 'Server'});
+                    //     },
+                    //     function (error) {
+                    //         deferred.reject({Success: false, Location: '', Error: error});
+                    //     });
 
             },
             saveQuestionFeedback: function(questionnaire_patient_rel_ser_num, question_ser_num, answeroption_ser_num, section, feedbackText) {
