@@ -1,10 +1,11 @@
 <?xml version='1.0' encoding='utf-8'?>
-    <!--<widget android-versionCode="16026" id="hig.opal.com" version="1.6.26" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">-->
+    <!--PRODUCTION-->
+    <!--<widget android-versionCode="16030" id="hig.opal.com" version="1.6.30" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">-->
     <!--<name>Opal</name>-->
 
 
-     Pre-Production
-    <widget id="com.hig.opal-dev" version="1.6.46" android-versionCode="16046" >
+    <!--Pre-Production-->
+    <widget id="com.hig.opal-dev" version="1.6.47" android-versionCode="16047" >
     <name>Opal-dev</name>
 
     <description>
