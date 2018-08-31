@@ -102,6 +102,11 @@
             $window[navigatorName].pushPage('./views/personal/appointments/about-appointment.html');
         }
 
+        function historicalDelays()
+        {
+            $window[navigatorName].pushPage('./views/personal/appointments/appointment-historical-delays.html');
+        }
+
         /**
          * @ngdoc method
          * @name aboutAppointment

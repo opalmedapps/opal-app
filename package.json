@@ -62,6 +62,7 @@
     "yargs": "^8.0.1"
   },
   "dependencies": {
+    "angular-sanitize": "^1.7.3",
     "cordova-android": "^6.3.0",
     "cordova-auto-patch": "^1.2.2"
   },

@@ -14,6 +14,8 @@
   "ANSWER2":"la réponse",
   "APPOINTMENT":"Rendez-vous",
   "APPOINTMENT_ABOUT":"À propos de ce rendez-vous",
+  "APPOINTMENT_CHECK_HISTORICAL_DELAYS":"Afficher l'historique des retards",
+  "APPOINTMENT_HISTORICAL_DELAYS_OF":"Historique des Retards de",
   "APPOINTMENT_ROOM":"Localisation du rendez-vous",
   "APPOINTMENTS":"Rendez-vous",
   "APPVERSION":"Version",
