@@ -3,9 +3,9 @@ myApp.config(fireConfig);
 fireConfig.$inject = [];
 
 /* @ngInject */
-function fireConfig () {
+function fireConfig() {
 
-    var config = {
+    let config = {
         //
         // PRODUCTION
         //
@@ -19,11 +19,12 @@ function fireConfig () {
         //
         // PreProd (Dev)
         //
-        apiKey: "AIzaSyCxV6VuVWtKg5wkeReqzQNfRULwkvVXkos",
-        authDomain: "brilliant-inferno-7679.firebaseapp.com",
-        databaseURL: "https://brilliant-inferno-7679.firebaseio.com",
-        storageBucket: "firebase-brilliant-inferno-767.appspot.com",
-        messagingSenderId: "810896751588"
+        apiKey: 'AIzaSyDUxheeBz18Qu2WhXgYGIJ2b0gWBmEYAjM',
+        authDomain: 'opal-dev-64f98.firebaseapp.com',
+        databaseURL: 'https://opal-dev-64f98.firebaseio.com',
+        projectId: 'opal-dev-64f98',
+        storageBucket: '',
+        messagingSenderId: '752651575903',
     };
 
     if (!firebase.apps.length) {
