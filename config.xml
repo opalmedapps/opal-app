@@ -6,7 +6,7 @@
 
 
     <!--Pre-Production-->
-    <widget id="com.hig.opaldev2" version="1.6.48" android-versionCode="16048" >
+    <widget id="com.hig.opaldev2" version="1.6.50" android-versionCode="16050" >
     <name>Opal-dev</name>
 
     <description>
