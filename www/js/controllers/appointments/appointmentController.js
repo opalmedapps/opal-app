@@ -23,10 +23,10 @@
         .module('MUHCApp')
         .controller('AppointmentController', AppointmentController);
 
-    AppointmentController.$inject = ['NavigatorParameters', 'UserPreferences', '$timeout', '$window'];
+    AppointmentController.$inject = ['NavigatorParameters', 'UserPreferences', 'RequestToServer', 'LocalStorage', '$timeout', '$window', '$q', '$scope'];
 
     /* @ngInject */
-    function AppointmentController(NavigatorParameters, UserPreferences,  $timeout, $window) {
+    function AppointmentController(NavigatorParameters, UserPreferences, RequestToServer, LocalStorage, $timeout, $window, $q, $scope) {
 
         var vm = this;
 
@@ -53,6 +53,16 @@
          * @ngdoc property
          * @name app
          * @propertyOf AppointmentController
+         * @returns object
+         * @description delays for the currently selected appointment
+         */
+        vm.delays = null;
+        vm.requestingDelays = false;
+
+        /**
+         * @ngdoc property
+         * @name app
+         * @propertyOf AppointmentController
          * @returns boolean
          * @description represents the case where the appointment passed to this controller is undefined. This should rarely be the case and should be logged immediately if this ever becomes true.
          */
@@ -60,6 +70,9 @@
 
 
         vm.goToMap = goToMap;
+        vm.historicalDelays = historicalDelays
+        vm.allowDelaysRendering = allowDelaysRendering;
+        vm.hasDelays = hasDelays;
         vm.aboutAppointment = aboutAppointment;
         vm.moreEducationalMaterial = moreEducationalMaterial;
         vm.openMap = openMap;
@@ -104,7 +117,25 @@
 
         function historicalDelays()
         {
+            console.log(vm)
             $window[navigatorName].pushPage('./views/personal/appointments/appointment-historical-delays.html');
+        }
+
+        function hasDelays()
+        {
+            console.log('vm.delays: ' + vm.delays)
+            if (!vm.delays) {
+                // check local storage
+                // if does not exists, retrieve from listener
+                if (!vm.requestingDelays) {
+                    vm.requestingDelays = true
+                    requestWaitingTimes(vm.app).then(function(response) {
+                        vm.delays = response
+                        $scope.$apply()
+                    })
+                }
+            }
+            return !!vm.delays
         }
 
         /**
@@ -131,6 +162,35 @@
             } else {
                 window.open(vm.app["MapUrl_"+ vm.language]);
             }
+        }
+
+        function allowDelaysRendering () {
+            if (vm.app) {
+                var current = new Date();
+                var scheduledTime = vm.app.ScheduledStartTime;
+                if (scheduledTime.getFullYear() > current.getFullYear()) {
+                    return true
+                } else if (scheduledTime.getFullYear() === current.getFullYear()) {
+                    if (scheduledTime.getMonth() > current.getMonth()) {
+                        return true
+                    } else if (scheduledTime.getMonth() === current.getMonth()) {
+                        return current.getDay() <= scheduledTime.getDay()
+                    }
+                }
+            }
+            return false;
+        }
+
+        function requestWaitingTimes (appointment) {
+            var promise = $q.defer();
+            RequestToServer.sendRequestWithResponse('WaitingTimeVisualization', {payload: 'this is the payload'})
+                .then(function (data) {
+                    promise.resolve(data);
+                })
+                .catch(function (err) {
+                    promise.reject(err)
+                });
+            return promise.promise;
         }
 
 

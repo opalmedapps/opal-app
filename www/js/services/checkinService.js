@@ -365,6 +365,8 @@
          */
         function isWithinCheckinRange() {
             var r=$q.defer();
+            r.resolve(true); // Only allow on dev
+            return r.promise; // Only allow on dev
             navigator.geolocation.getCurrentPosition(function(position){
                 var distanceMeters = 1000 * getDistanceFromLatLonInKm(position.coords.latitude, position.coords.longitude, 45.474127399999996, -73.6011402);
 
