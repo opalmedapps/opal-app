@@ -201,6 +201,7 @@ myApp.service('Appointments', ['$q', 'RequestToServer','$cordovaCalendar','UserA
         numberOfSessions=0;
 
         for (var i = 0; i < appointments.length; i++) {
+            console.log(appointments[i])
             appointments[i].ResourceName = (appointments[i].Resource.hasOwnProperty('Machine')) ? '':appointments[i].Resource.Doctor;
             appointments[i].ScheduledStartTime = $filter('formatDate')(appointments[i].ScheduledStartTime);
             appointments[i].ScheduledEndTime =  $filter('formatDate')(appointments[i].ScheduledEndTime);
