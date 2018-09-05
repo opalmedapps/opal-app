@@ -117,21 +117,19 @@
 
         function historicalDelays()
         {
-            console.log(vm)
+            NavigatorParameters.setParameters({'Navigator':navigatorName, 'Post':vm.app});
             $window[navigatorName].pushPage('./views/personal/appointments/appointment-historical-delays.html');
         }
 
         function hasDelays()
         {
-            console.log('vm.delays: ' + vm.delays)
-            if (!vm.delays) {
-                // check local storage
-                // if does not exists, retrieve from listener
+            if (!vm.delays && vm.app) {
                 if (!vm.requestingDelays) {
                     vm.requestingDelays = true
                     requestWaitingTimes(vm.app).then(function(response) {
-                        vm.delays = response
-                        $scope.$apply()
+                        $timeout(function () {
+                            vm.delays = response
+                        })
                     })
                 }
             }
@@ -165,16 +163,16 @@
         }
 
         function allowDelaysRendering () {
-            if (vm.app) {
+            if (vm.app && (vm.app.SourceDatabaseSerNum === '2' || vm.app.SourceDatabaseSerNum === 2)) {
                 var current = new Date();
                 var scheduledTime = vm.app.ScheduledStartTime;
                 if (scheduledTime.getFullYear() > current.getFullYear()) {
-                    return true
+                    return true;
                 } else if (scheduledTime.getFullYear() === current.getFullYear()) {
                     if (scheduledTime.getMonth() > current.getMonth()) {
-                        return true
+                        return true;
                     } else if (scheduledTime.getMonth() === current.getMonth()) {
-                        return current.getDay() <= scheduledTime.getDay()
+                        return current.getDay() <= scheduledTime.getDay();
                     }
                 }
             }
@@ -182,8 +180,13 @@
         }
 
         function requestWaitingTimes (appointment) {
+            console.log('appointment:', appointment)
+            var refSource = appointment.SourceDatabaseSerNum;
+            var refId = appointment.AppointmentAriaSer;
             var promise = $q.defer();
-            RequestToServer.sendRequestWithResponse('WaitingTimeVisualization', {payload: 'this is the payload'})
+            // check local storage
+            // if does not exists, retrieve from listener
+            RequestToServer.sendRequestWithResponse('WaitingTimeVisualization', {refSource: refSource, refId: refId})
                 .then(function (data) {
                     promise.resolve(data);
                 })
