@@ -56,7 +56,6 @@
          * @returns object
          * @description delays for the currently selected appointment
          */
-        vm.delays = null;
         vm.requestingDelays = false;
 
         /**
@@ -125,12 +124,18 @@
         {
             if (!vm.delays && vm.app) {
                 if (!vm.requestingDelays) {
-                    vm.requestingDelays = true
-                    requestWaitingTimes(vm.app).then(function(response) {
-                        $timeout(function () {
-                            vm.delays = response
+                    vm.requestingDelays = true;
+                    requestWaitingTimes(vm.app)
+                        .then(function(response) {
+                            $timeout(function () {
+                                vm.delays = response;
+                            })
                         })
-                    })
+                        .catch(function(err) {
+                            $timeout(function () {
+                                vm.delays = {err: err};
+                            })
+                        });
                 }
             }
             return !!vm.delays
@@ -180,19 +185,29 @@
         }
 
         function requestWaitingTimes (appointment) {
-            console.log('appointment:', appointment)
+            console.log('appointment:', appointment);
             var refSource = appointment.SourceDatabaseSerNum;
             var refId = appointment.AppointmentAriaSer;
             var promise = $q.defer();
-            // check local storage
-            // if does not exists, retrieve from listener
-            RequestToServer.sendRequestWithResponse('WaitingTimeVisualization', {refSource: refSource, refId: refId})
-                .then(function (data) {
-                    promise.resolve(data);
+            var appointmentCachedDelay = appointment.Delays;
+            if (appointmentCachedDelay) {
+                promise.resolve(appointmentCachedDelay);
+            } else {
+                RequestToServer.sendRequestWithResponse('WaitingTimeVisualization', {refSource: refSource, refId: refId})
+                .then(function (response) {
+                    var data = response.data
+                    var dataErr = data.err
+                    if (dataErr) {
+                        return promise.reject(dataErr)
+                    }
+                    var delays = JSON.parse(data.delays)
+                    appointment.Delays = delays;
+                    promise.resolve(delays);
                 })
                 .catch(function (err) {
                     promise.reject(err)
                 });
+            }
             return promise.promise;
         }
 
