@@ -1,11 +1,11 @@
 <?xml version='1.0' encoding='utf-8'?>
     <!--PRODUCTION-->
-    <!--<widget android-versionCode="16031" id="com.hig.opal2" version="1.6.31" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">-->
+    <!--<widget android-versionCode="16031" id="com.hig.opal2" android-packageName="com.hig.opal2" version="1.6.31" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">-->
     <!--<name>Opal</name>-->
 
 
     <!--Pre-Production-->
-    <widget id="com.hig.opaldev2" version="1.6.54" android-versionCode="16054" >
+    <widget id="com.hig.opaldev2" android-packageName="com.hig.opaldev2" version="1.6.58" android-versionCode="16058" >
     <name>Opal-dev</name>
 
     <description>
@@ -106,7 +106,7 @@
     <plugin name="cordova-plugin-dialogs" spec="^1.3.1" />
     <plugin name="cordova-plugin-email" spec="^1.2.6" />
     <plugin name="cordova-plugin-file" spec="^5.0.0" />
-    <plugin name="cordova-plugin-file-opener2" spec="^2.0.15" />
+    <plugin name="cordova-plugin-file-opener2" spec="^2.0.19" />
     <plugin name="cordova-plugin-file-transfer" spec="^1.6.1" />
     <plugin name="cordova-plugin-fileopener" spec="^1.0.5" />
     <plugin name="cordova-plugin-geolocation" spec="^2.4.1" />
