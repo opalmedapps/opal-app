@@ -56,6 +56,9 @@
          * @returns object
          * @description delays for the currently selected appointment
          */
+        vm.updateDelays = null
+        buildDelayChart()
+        vm.delays = {chartRender: '', presenter: {}, hasData: false}
         vm.requestingDelays = false;
 
         /**
@@ -83,7 +86,6 @@
         function activate() {
             var parameters = NavigatorParameters.getParameters();
             navigatorName = parameters.Navigator;
-
             $timeout(function(){
                 vm.language = UserPreferences.getLanguage().toUpperCase();
                 vm.app = parameters.Post;
@@ -120,25 +122,187 @@
             $window[navigatorName].pushPage('./views/personal/appointments/appointment-historical-delays.html');
         }
 
+        function formatHourEN (hour) {
+            return {
+                time: hour >= 13 ? hour - 12 : hour,
+                daySuffix: hour >= 18 ? 'night' : (hour >= 12 ? 'afternoon' : 'morning'),
+                timeSuffix: hour >= 12 ? 'PM' : 'AM'
+            }
+        }
+
+        function retrieveSetDescriptionEN(delayData) {
+            var sets = delayData.sets
+            var appointmentSet
+            var lastSetAmount = -1
+            for (var set in sets) {
+                var setAmount = sets[set]
+                if (setAmount > lastSetAmount) {
+                    appointmentSet = set
+                    lastSetAmount = setAmount
+                }
+            }
+            switch (appointmentSet) {
+                case 'set1':
+                    return 'from 0 to 15 minutes'
+                case 'set2':
+                    return 'from 15 to 30 minutes'
+                case 'set3':
+                    return 'from 30 to 45 minutes'
+                case 'set4':
+                    return 'more than 45 minutes'
+                default:
+                    return 'an unknown amount of time'
+            }
+        }
+
+        function dayOrdinal (day) {
+            var suffix = ['th', 'st', 'nd', 'rd']
+            var trim = day % 100
+            return suffix[(trim - 20) % 10] || suffix[trim] || suffix[0]
+        }
+
+        function retrieveDateEN(appointment) {
+            var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+            var scheduledDate = appointment.ScheduledStartTime
+            var day = scheduledDate.getDate()
+            return months[scheduledDate.getMonth()] + ' ' + day + dayOrdinal(day) + ', ' + scheduledDate.getFullYear()
+        }
+
+        function buildHistoricalDelayInfoEN(delayData)
+        {
+            var daysSingular = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+            var daysPlural = ['Mondays', 'Tuesdays', 'Wednesdays', 'Thursdays', 'Fridays', 'Saturdays', 'Sundays']
+            var hourFormat = formatHourEN(delayData.scheduledHour)
+            return {
+                date: retrieveDateEN(vm.app),
+                title: delayData.appointmentType + ' on ' + daysPlural[delayData.scheduledDay] + ' at ' + hourFormat.time + ':' + delayData.scheduledMinutes + ' ' + hourFormat.timeSuffix,
+                description: 'Your ' + vm.app.AppointmentType_EN + ' appointment is on a ' + daysSingular[delayData.scheduledDay] + ' ' + hourFormat.daySuffix + ', at ' + hourFormat.time + ':' + delayData.scheduledMinutes + ' ' + hourFormat.timeSuffix + '.',
+                delayInfo: 'Patients usually wait ' + retrieveSetDescriptionEN(delayData) + ' for this kind of appointment.'
+            }
+        }
+
+        function buildDelayChart(sets)
+        {
+            var windowWidth = $(window).width();
+            $scope.chartConfig = {
+                chart: {
+                    type: 'bar',
+                    width: windowWidth - 16,
+                    events: {
+                        load: function () {
+                            var chartSeries = this.series
+                            vm.updateDelays = function (newData) {
+                                console.log('updating delays...')
+                                for (var series = 0; series < 4; ++series) {
+                                    chartSeries[series].setData([newData[series]], true, true)
+                                }
+                            }
+                        }
+                    }
+                },
+                navigator: {
+                    enabled: false
+                },
+                rangeSelector: {
+                    enabled: false
+                },
+                scrollbar: {
+                    enabled: false
+                },
+                title: {
+                    text: ''
+                },
+                xAxis: {
+                    type: 'linear',
+                    categories: [''],
+                    title: {
+                        text: ''
+                    },
+                    labels: {
+                        enabled: false
+                    }
+                },
+                yAxis: {
+                    type: 'linear',
+                    min: 0,
+                    title: {
+                        text: 'Frequency (%)',
+                        align: 'high'
+                    }
+                },
+                tooltip: {
+                    enabled: true,
+                    pointFormat: '<span style="color:{point.color}">\u25CF</span> {series.name}: <b>{point.y}%</b> of the patients waited this amount of minutes.<br/>',
+                    shared: false
+                },
+                plotOptions: {
+                    bar: {
+                        dataLabels: {
+                            enabled: true
+                        }
+                    }
+                },
+                legend: {
+                    enabled: true,
+                    align: 'center',
+                    verticalAlign: 'top'
+                },
+                credits: {
+                    enabled: false
+                },
+                series: [
+                    {
+                        name: '0-15 minutes',
+                        data: [0],
+                        color: '#00d652'
+                    },
+                    {
+                        name: '15-30 minutes',
+                        data: [0],
+                        color: '#ffc400'
+                    },
+                    {
+                        name: '30-45 minutes',
+                        data: [0],
+                        color: '#ff8200'
+                    },
+                    {
+                        name: '45+ minutes',
+                        data: [0],
+                        color: '#ff0000'
+                    }
+                ]
+            }
+        }
+
         function hasDelays()
         {
-            if (!vm.delays && vm.app) {
+            if (!vm.delays.hasData && vm.app) {
                 if (!vm.requestingDelays) {
                     vm.requestingDelays = true;
                     requestWaitingTimes(vm.app)
                         .then(function(response) {
                             $timeout(function () {
                                 vm.delays = response;
+                                var sum = response.sets.set1 + response.sets.set2 + response.sets.set3 + response.sets.set4
+                                vm.updateDelays([
+                                    +((response.sets.set1 / sum) * 100).toFixed(2),
+                                    +((response.sets.set2 / sum) * 100).toFixed(2),
+                                    +((response.sets.set3 / sum) * 100).toFixed(2),
+                                    +((response.sets.set4 / sum) * 100).toFixed(2)
+                                ])
+                                vm.delays.presenter = vm.language === 'FR' ? buildHistoricalDelayInfoFR(response) : buildHistoricalDelayInfoEN(response)
+                                vm.delays.hasData = true
                             })
                         })
                         .catch(function(err) {
                             $timeout(function () {
-                                vm.delays = {err: err};
+                                vm.delays = {err: err, hasData: true};
                             })
                         });
                 }
             }
-            return !!vm.delays
+            return vm.delays.hasData
         }
 
         /**
@@ -168,15 +332,21 @@
         }
 
         function allowDelaysRendering () {
-            if (vm.app && (vm.app.SourceDatabaseSerNum === '2' || vm.app.SourceDatabaseSerNum === 2)) {
+            var appointment = vm.app;
+            var source;
+            if (appointment && ((source = appointment.SourceDatabaseSerNum) === '2' || source === 2)) {
                 var current = new Date();
-                var scheduledTime = vm.app.ScheduledStartTime;
-                if (scheduledTime.getFullYear() > current.getFullYear()) {
+                var scheduledTime = appointment.ScheduledStartTime;
+                var scheduledFullYear = scheduledTime.getFullYear();
+                var currentFullYear = current.getFullYear();
+                if (scheduledFullYear > currentFullYear) {
                     return true;
-                } else if (scheduledTime.getFullYear() === current.getFullYear()) {
-                    if (scheduledTime.getMonth() > current.getMonth()) {
+                } else if (scheduledFullYear === currentFullYear) {
+                    var scheduledMonth = scheduledTime.getMonth();
+                    var currentMonth = current.getMonth();
+                    if (scheduledMonth > currentMonth) {
                         return true;
-                    } else if (scheduledTime.getMonth() === current.getMonth()) {
+                    } else if (scheduledMonth === currentMonth) {
                         return current.getDay() <= scheduledTime.getDay();
                     }
                 }
