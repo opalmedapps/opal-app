@@ -8,14 +8,14 @@
     <div>
         <ons-list class="settings-list">
             <ons-list-item class="item">
-                <div style="line-height:1" align="left" ng-show="vm.delay && vm.delay.err">{{vm.delay.err}}</div>
-                <div style="line-height:1" align="left" style="text-align:center;" ng-show="!vm.hasDelays()">{{"APPOINTMENT_LOADING_HISTORICAL_DELAYS" | translate}}</div>
-                <div style="line-height:1" align="left" ng-show="vm.hasDelays()">
+                <div style="line-height:1" align="left" ng-show="!!vm.delays.err">{{vm.delays.err}}</div>
+                <div style="line-height:1" align="left" style="text-align:center;" ng-show="!vm.app.Delays && !vm.delays.err">{{"APPOINTMENT_LOADING_HISTORICAL_DELAYS" | translate}}</div>
+                <div style="line-height:1" align="left" ng-show="!!vm.app.Delays && !vm.delays.err">
                     <p class="item-desc" ng-class="fontSizeDesc">{{vm.delays.presenter.date}}</p>
                     <p class="item-desc" ng-class="fontSizeDesc">{{vm.delays.presenter.description}}</p>
                     <p class="item-title" style="font-weight:bold;text-align:center;" ng-class="fontSizeTitle">{{"APPOINTMENT_HISTORICAL_DELAYS" | translate}}</p>
                     <p class="item-title" style="text-align:center;" ng-class="fontSizeTitle">{{vm.delays.presenter.title}}</p>
-                    <hc-chart options="chartConfig">
+                    <hc-chart options="vm.delays.chart">
                         Placeholder for delays chart
                     </hc-chart>
                     <p class="item-desc" style="text-align:center;" ng-class="fontSizeDesc">{{vm.delays.presenter.delayInfo}}</p>
