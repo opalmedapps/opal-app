@@ -23,6 +23,7 @@
         vm.hasData = false
         vm.waitingTimesChart = null
         vm.onTimeChart = null
+        vm.patientFrequencyInformation = ''
 
         activate()
 
@@ -32,7 +33,24 @@
             vm.onTimeChart = MyWaitingTimeService.newOnTimeChart(language)
             MyWaitingTimeService.getWaitingTimes(Patient.getUserSerNum())
                 .then(function (response) {
+                    var waitingTimes = response.waitingTimes
+                    var onTime = response.onTime
                     $timeout(function () {
+                        var onTimeNames = ['MY_WAITING_TIME_USUALLY_ON_TIME', 'MY_WAITING_TIME_USUALLY_TOO_EARLY', 'MY_WAITING_TIME_USUALLY_LATE']
+                        var onTimeValues = [onTime.onTime, onTime.tooEarly, onTime.late]
+                        vm.waitingTimesChart.updater.deliver(waitingTimes)
+                        vm.onTimeChart.updater.deliver(onTimeValues)
+                        var highestCategoryValue = -1
+                        var highestCategoryName = null
+                        for (var categoryIndex = 0; categoryIndex < 3; ++categoryIndex) {
+                            var categoryValue = onTimeValues[categoryIndex]
+                            if (categoryValue > highestCategoryValue) {
+                                highestCategoryValue = categoryValue
+                                highestCategoryName = onTimeNames[categoryIndex]
+                            }
+                        }
+                        vm.patientFrequencyInformation = highestCategoryName || ''
+                        console.log('category:', vm.patientFrequencyInformation)
                         vm.hasData = true
                         console.log('response: ', response)
                     })
