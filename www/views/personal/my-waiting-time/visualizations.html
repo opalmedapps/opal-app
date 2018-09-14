@@ -20,6 +20,7 @@
                     <hc-chart options="vm.onTimeChart" ng-show="vm.hasData">
                         Placeholder for the "on time" chart
                     </hc-chart>
+                    <p class="item-desc" style="text-align:center;" ng-class="fontSizeDesc" ng-show="vm.hasData && vm.patientFrequencyInformation">{{ vm.patientFrequencyInformation | translate }}</p>
                 </div>
             </ons-list-item>
         </ons-list>

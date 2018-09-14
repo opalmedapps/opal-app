@@ -138,17 +138,15 @@ angular.module('MUHCApp').service('DelaysService', [
                         var translator = languages[language] || languages.EN
                         if(/Unknown appointment type/gm.test(err)) {
                             appointment.UnavailableDelays = true
-                            onError(new Error(translator.unknownAppointmentType))
+                            onError(translator.unknownAppointmentType)
                         } else {
-                            onError(new Error(err))
+                            onError(err)
                         }
                     } else {
                         onDone((appointment.Delays = JSON.parse(data.delays)))
                     }
                 })
-                .catch(function (err) {
-                    onError(err)
-                })
+                .catch(onError)
         }
         return {
             getPresenter: function (appointment, delayData, language) {

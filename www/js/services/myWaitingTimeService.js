@@ -18,15 +18,26 @@ angular.module('MUHCApp').service('MyWaitingTimeService', [
             EN: {},
             FR: {}
         }
+        function processResponse(onDone, onError) {
+            return function (response) {
+                var results
+                if (!response || !(results = JSON.parse(response.data.results))) {
+                    return onError('Invalid response.')
+                }
+                onDone(results)
+            }
+        }
         return {
             getWaitingTimes: function (patientId) {
                 var promise = $q.defer()
-                promise.resolve({patientId})
+                RequestToServer.sendRequestWithResponse('MyWaitingTime', {patientId})
+                    .then(processResponse(promise.resolve, promise.reject))
+                    .catch(promise.reject)
                 return promise.promise
             },
             newWaitingTimesChart: function (language) {
                 console.log('language requested: ', language)
-                var dateTest = new Date().getTime()
+                var todayTime = new Date().getTime()
                 var translator = languages[language] || languages.EN
                 var updater = {cached: null, deliver: function (newData) {
                     this.cached = newData
@@ -40,9 +51,19 @@ angular.module('MUHCApp').service('MyWaitingTimeService', [
                             load: function () {
                                 var chartSeries = this.series
                                 updater.deliver = function (newData) {
-                                    for (var series = 0; series < 2; ++series) {
-                                        chartSeries[series].setData([newData[series]], true, true)
+                                    console.log('building new data...', newData)
+                                    var hospitalDelays = []
+                                    var earlyArrival = []
+                                    var dataAmount = newData.length
+                                    for (var dataIndex = 0; dataIndex < dataAmount; ++dataIndex) {
+                                        var dataObj = newData[dataIndex]
+                                        var dataScheduledTime = dataObj.scheduledTime
+                                        hospitalDelays.push([dataScheduledTime, dataObj.hospitalDelay])
+                                        earlyArrival.push([dataScheduledTime, dataObj.personalWait])
                                     }
+                                    console.log('updating...', hospitalDelays, earlyArrival)
+                                    chartSeries[0].setData(hospitalDelays, true, true)
+                                    chartSeries[1].setData(earlyArrival, true, true)
                                 }
                                 if (updater.cached) {
                                     updater.deliver(updater.cached)
@@ -107,12 +128,12 @@ angular.module('MUHCApp').service('MyWaitingTimeService', [
                     series: [
                         {
                             name: 'Minutes waiting due to hospital\'s delay',
-                            data: [[dateTest, 3]],
+                            data: [[todayTime, 0]],
                             color: '#c3c3f3'
                         },
                         {
                             name: 'Minutes waiting due to early arrival',
-                            data: [[dateTest, 7]],
+                            data: [[todayTime, 0]],
                             color: '#0000ff'
                         }
                     ]
@@ -136,9 +157,37 @@ angular.module('MUHCApp').service('MyWaitingTimeService', [
                             load: function () {
                                 var chartSeries = this.series
                                 updater.deliver = function (newData) {
-                                    for (var series = 0; series < 2; ++series) {
-                                        chartSeries[series].setData([newData[series]], true, true)
+                                    console.log('updating...', newData)
+                                    var onTimeValue = newData[0]
+                                    var tooEarlyValue = newData[1]
+                                    var lateValue = newData[2]
+                                    var sum = onTimeValue + tooEarlyValue + lateValue
+                                    var updatedData = []
+                                    if (onTimeValue > 0) {
+                                        updatedData.push({
+                                            name: 'On time',
+                                            y: sum > 0 ? +((newData[0] / sum) * 100).toFixed(2) : 0,
+                                            sliced: false,
+                                            color: '#00d652'
+                                        })
                                     }
+                                    if (tooEarlyValue > 0) {
+                                        updatedData.push({
+                                            name: 'Too early',
+                                            y: sum > 0 ? +((newData[1] / sum) * 100).toFixed(2) : 0,
+                                            sliced: false,
+                                            color: '#ffc400'
+                                        })
+                                    }
+                                    if (lateValue > 0) {
+                                        updatedData.push({
+                                            name: 'Late',
+                                            y: sum > 0 ? +((newData[2] / sum) * 100).toFixed(2) : 0,
+                                            sliced: false,
+                                            color: '#ff0000'
+                                        })
+                                    }
+                                    chartSeries[0].setData(updatedData, true, true)
                                 }
                                 if (updater.cached) {
                                     updater.deliver(updater.cached)
@@ -180,19 +229,19 @@ angular.module('MUHCApp').service('MyWaitingTimeService', [
                             data: [
                                 {
                                     name: 'On time',
-                                    y: 60,
+                                    y: 0,
                                     sliced: false,
                                     color: '#00d652'
                                 },
                                 {
                                     name: 'Too early',
-                                    y: 30,
+                                    y: 0,
                                     sliced: false,
                                     color: '#ffc400'
                                 },
                                 {
                                     name: 'Late',
-                                    y: 10,
+                                    y: 0,
                                     sliced: false,
                                     color: '#ff0000'
                                 }
