@@ -23,10 +23,10 @@
         .module('MUHCApp')
         .controller('AppointmentController', AppointmentController);
 
-    AppointmentController.$inject = ['NavigatorParameters', 'UserPreferences', 'WaitingTimeService', '$timeout', '$window', '$q', '$scope'];
+    AppointmentController.$inject = ['NavigatorParameters', 'UserPreferences', 'DelaysService', '$timeout', '$window', '$q', '$scope'];
 
     /* @ngInject */
-    function AppointmentController(NavigatorParameters, UserPreferences, WaitingTimeService, $timeout, $window, $q, $scope) {
+    function AppointmentController(NavigatorParameters, UserPreferences, DelaysService, $timeout, $window, $q, $scope) {
 
         var vm = this;
 
@@ -82,16 +82,16 @@
             var parameters = NavigatorParameters.getParameters();
             var language = UserPreferences.getLanguage().toUpperCase();
             navigatorName = parameters.Navigator;
-            vm.delays.chart = WaitingTimeService.newDelaysChart(language);
+            vm.delays.chart = DelaysService.newDelaysChart(language);
             $timeout(function(){
                 vm.language = language;
                 vm.app = parameters.Post;
                 if (!(vm.corrupted_appointment = !vm.app || Object.keys(vm.app).length === 0)) {
-                    WaitingTimeService.getWaitingTimes(vm.app, language)
+                    DelaysService.getWaitingTimes(vm.app, language)
                         .then(function(response) {
                             var sets = response.sets;
                             var sum = sets.set1 + sets.set2 + sets.set3 + sets.set4;
-                            vm.delays.presenter = WaitingTimeService.getPresenter(vm.app, response, language);
+                            vm.delays.presenter = DelaysService.getPresenter(vm.app, response, language);
                             vm.delays.chart.updater.deliver([
                                 +((sets.set1 / sum) * 100).toFixed(2),
                                 +((sets.set2 / sum) * 100).toFixed(2),
@@ -173,7 +173,7 @@
                     if (scheduledMonth > currentMonth) {
                         return true;
                     } else if (scheduledMonth === currentMonth) {
-                        return current.getDay() <= scheduledTime.getDay();
+                        return current.getDate() <= scheduledTime.getDate();
                     }
                 }
             }
