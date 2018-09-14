@@ -1,5 +1,5 @@
 /*
- * Filename     :   waitingTimeServiceService.js
+ * Filename     :   delaysService.js
  * Description  :   
  * Created by   :   Arthur A. Bergamaschi <arthurbergmz@gmail.com>
  * Date         :   September 2018
@@ -11,7 +11,7 @@
 /**
  *@ngdoc service
  **/
-angular.module('MUHCApp').service('WaitingTimeService', [
+angular.module('MUHCApp').service('DelaysService', [
     '$q', 'RequestToServer', '$timeout',
     function ($q, RequestToServer, $timeout) {
         var languages_en = {
@@ -130,7 +130,7 @@ angular.module('MUHCApp').service('WaitingTimeService', [
                 refSource: appointment.SourceDatabaseSerNum,
                 refId: appointment.AppointmentAriaSer
             }
-            RequestToServer.sendRequestWithResponse('WaitingTimeVisualization', requestObject)
+            RequestToServer.sendRequestWithResponse('AppointmentDelays', requestObject)
                 .then(function (response) {
                     var data = response.data
                     var err = data.err
@@ -214,6 +214,7 @@ angular.module('MUHCApp').service('WaitingTimeService', [
                     },
                     tooltip: {
                         enabled: true,
+                        headerFormat: '',
                         pointFormat: translator.setsDescription.point,
                         shared: false
                     },

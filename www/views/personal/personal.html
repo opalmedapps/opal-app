@@ -94,6 +94,19 @@
                     </ons-col>
                 </ons-row>
             </ons-list-item>
+            <ons-list-item modifier="chevron" class="item" ng-if="tab.censor" ng-click="personalNavigator.pushPage('views/personal/my-waiting-time/visualizations.html')">
+                <ons-row align="center" >
+                    <ons-col width="60px" style="text-align: center">
+                        <ons-icon icon="fa-clock-o" size="2x" style="color:#444444"></ons-icon>
+                    </ons-col>
+                    <ons-col>
+                        <header>
+                            <span class="item-title" ng-class="fontSizeTitle">{{ "MY_WAITING_TIME" | translate }}</span>
+                        </header>
+                        <p class="item-desc" ng-class="fontSizeDesc"></p>
+                    </ons-col>
+                </ons-row>
+            </ons-list-item>
             <ons-list-item modifier="chevron" class="item"
                            ng-click="personalNavigator.pushPage('views/general/contacts/contacts.html')">
                 <ons-row align="center">
