@@ -50,9 +50,7 @@
                             }
                         }
                         vm.patientFrequencyInformation = highestCategoryName || ''
-                        console.log('category:', vm.patientFrequencyInformation)
                         vm.hasData = true
-                        console.log('response: ', response)
                     })
                 })
         }
