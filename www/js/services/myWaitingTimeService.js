@@ -14,9 +14,27 @@
 angular.module('MUHCApp').service('MyWaitingTimeService', [
     '$q', 'RequestToServer',
     function ($q, RequestToServer) {
+        var languages_EN = {
+            waitingTitle: 'Appointments',
+            waitingUnit: 'Waiting times (minutes)',
+            waitingDueHospitalDelay: 'Minutes waiting due to hospital\'s delay',
+            waitingDueEarlyArrival: 'Minutes waiting due to early arrival',
+            usuallyOnTime: 'On time',
+            usuallyTooEarly: 'Too early',
+            usuallyLate: 'Late'
+        }
+        var languages_FR = {
+            waitingTitle: 'Rendez-vous',
+            waitingUnit: 'Temps d\'attente (minutes)',
+            waitingDueHospitalDelay: 'Temps d\'attente causé par les délais de l\'hôpital',
+            waitingDueEarlyArrival: 'Temps d\'attente causé par l\'arrivée d\'avance',
+            usuallyOnTime: 'À l\'heure',
+            usuallyTooEarly: 'Trop tôt',
+            usuallyLate: 'En retard'
+        }
         var languages = {
-            EN: {},
-            FR: {}
+            EN: languages_EN,
+            FR: languages_FR
         }
         function processResponse(onDone, onError) {
             return function (response) {
@@ -36,7 +54,6 @@ angular.module('MUHCApp').service('MyWaitingTimeService', [
                 return promise.promise
             },
             newWaitingTimesChart: function (language) {
-                console.log('language requested: ', language)
                 var todayTime = new Date().getTime()
                 var translator = languages[language] || languages.EN
                 var updater = {cached: null, deliver: function (newData) {
@@ -51,7 +68,6 @@ angular.module('MUHCApp').service('MyWaitingTimeService', [
                             load: function () {
                                 var chartSeries = this.series
                                 updater.deliver = function (newData) {
-                                    console.log('building new data...', newData)
                                     var hospitalDelays = []
                                     var earlyArrival = []
                                     var dataAmount = newData.length
@@ -61,7 +77,6 @@ angular.module('MUHCApp').service('MyWaitingTimeService', [
                                         hospitalDelays.push([dataScheduledTime, dataObj.hospitalDelay])
                                         earlyArrival.push([dataScheduledTime, dataObj.personalWait])
                                     }
-                                    console.log('updating...', hospitalDelays, earlyArrival)
                                     chartSeries[0].setData(hospitalDelays, true, true)
                                     chartSeries[1].setData(earlyArrival, true, true)
                                 }
@@ -79,14 +94,14 @@ angular.module('MUHCApp').service('MyWaitingTimeService', [
                     xAxis: {
                         type: 'datetime',
                         categories: [''],
-                        title: { text: 'Appointments' },
+                        title: { text: translator.waitingTitle },
                         labels: { enabled: false }
                     },
                     yAxis: {
                         type: 'linear',
                         min: 0,
                         title: {
-                            text: 'Waiting time (minutes)',
+                            text: translator.waitingUnit,
                             align: 'middle'
                         },
                         stackLabels: {
@@ -127,12 +142,12 @@ angular.module('MUHCApp').service('MyWaitingTimeService', [
                     credits: { enabled: false },
                     series: [
                         {
-                            name: 'Minutes waiting due to hospital\'s delay',
+                            name: translator.waitingDueHospitalDelay,
                             data: [[todayTime, 0]],
                             color: '#c3c3f3'
                         },
                         {
-                            name: 'Minutes waiting due to early arrival',
+                            name: translator.waitingDueEarlyArrival,
                             data: [[todayTime, 0]],
                             color: '#0000ff'
                         }
@@ -140,7 +155,6 @@ angular.module('MUHCApp').service('MyWaitingTimeService', [
                 }
             },
             newOnTimeChart: function (language) {
-                console.log('language requested: ', language)
                 var translator = languages[language] || languages.EN
                 var updater = {cached: null, deliver: function (newData) {
                     this.cached = newData
@@ -157,7 +171,6 @@ angular.module('MUHCApp').service('MyWaitingTimeService', [
                             load: function () {
                                 var chartSeries = this.series
                                 updater.deliver = function (newData) {
-                                    console.log('updating...', newData)
                                     var onTimeValue = newData[0]
                                     var tooEarlyValue = newData[1]
                                     var lateValue = newData[2]
@@ -165,7 +178,7 @@ angular.module('MUHCApp').service('MyWaitingTimeService', [
                                     var updatedData = []
                                     if (onTimeValue > 0) {
                                         updatedData.push({
-                                            name: 'On time',
+                                            name: translator.usuallyOnTime,
                                             y: sum > 0 ? +((newData[0] / sum) * 100).toFixed(2) : 0,
                                             sliced: false,
                                             color: '#00d652'
@@ -173,7 +186,7 @@ angular.module('MUHCApp').service('MyWaitingTimeService', [
                                     }
                                     if (tooEarlyValue > 0) {
                                         updatedData.push({
-                                            name: 'Too early',
+                                            name: translator.usuallyTooEarly,
                                             y: sum > 0 ? +((newData[1] / sum) * 100).toFixed(2) : 0,
                                             sliced: false,
                                             color: '#ffc400'
@@ -181,7 +194,7 @@ angular.module('MUHCApp').service('MyWaitingTimeService', [
                                     }
                                     if (lateValue > 0) {
                                         updatedData.push({
-                                            name: 'Late',
+                                            name: translator.usuallyLate,
                                             y: sum > 0 ? +((newData[2] / sum) * 100).toFixed(2) : 0,
                                             sliced: false,
                                             color: '#ff0000'
@@ -228,19 +241,19 @@ angular.module('MUHCApp').service('MyWaitingTimeService', [
                             colorByPoint: true,
                             data: [
                                 {
-                                    name: 'On time',
+                                    name: translator.usuallyOnTime,
                                     y: 0,
                                     sliced: false,
                                     color: '#00d652'
                                 },
                                 {
-                                    name: 'Too early',
+                                    name: translator.usuallyTooEarly,
                                     y: 0,
                                     sliced: false,
                                     color: '#ffc400'
                                 },
                                 {
-                                    name: 'Late',
+                                    name: translator.usuallyLate,
                                     y: 0,
                                     sliced: false,
                                     color: '#ff0000'
