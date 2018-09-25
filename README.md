@@ -11,7 +11,7 @@ These instructions will get you a copy of the project up and running on your loc
 
 In order to run the app in your browsing for development and basic testing purposes, there are a few steps you must take:
 
-* Clone the repository to the desired folder in your computer **(NOTE: You need to be added as a contributer to the project before being able to do this!)**
+* Clone the repository to the desired folder in your computer (create an empty folder for this) **(NOTE: You need to be added as a contributer to the project before being able to do this!)**
 
 ```
 git clone https://github.com/Sable/qplus.git
@@ -32,6 +32,8 @@ for development. The main file is the
 [package.json](./package.json) file. This file states all the depedencies
 and the versions for each of them.
 
+
+* Open a command prompt and navigate to the folder in which you have cloned the repository.
 
 * Install [Bower](https://bower.io/)
 
