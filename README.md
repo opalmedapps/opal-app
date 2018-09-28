@@ -17,7 +17,7 @@ In order to run the app in your browsing for development and basic testing purpo
 git clone https://github.com/Sable/qplus.git
 ```
 
-* Checkout the branch you wish to install. In the example below, this is the `opal_student` branch (if you are a student, this is likely the branch you will use). To checkout a different branch, replace `opal_student` with the name of your desired branch.
+* Checkout the branch you wish to install. In the example below, this is the `opal_student` branch (if you are a student, this is likely the branch you will use). To checkout a different branch, replace `opal_student` with the name of your desired branch. Depending on the file structure that was created when cloning, you may need to enter `cd qplus` first to go into the folder containing the repository.
 
 ```
 git fetch
