@@ -163,7 +163,9 @@ gulp.task('minify-vendor-js',function()
         'www/lib/bower_components/progressbar.js/dist/progressbar.js',
         'www/lib/bower_components/ngCordova/dist/ng-cordova.js',
         'www/lib/bower_components/bootstrap/dist/js/bootstrap.js',
+        //
         // 'www/lib/bower_components/onsenui/js/onsenui.js',
+        //
         'www/lib/js/angular-bootstrap/ui-bootstrap-tpls-1.1.2.js',
         'www/lib/bower_components/angular-tek-progress-bar/dist/tek.progress-bar.js',
         'www/lib/bower_components/angularfire/dist/angularfire.js',
