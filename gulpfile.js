@@ -124,15 +124,25 @@ gulp.task('copy-vendor-css',function()
 {
     return gulp.src([
         'www/lib/bower_components/angular/angular-csp.css',
-        // 'www/lib/bower_components/onsenui/css/onsen-css-components-blue-theme.css',
         'www/lib/bower_components/font-awesome/css/font-awesome.min.css',
         'www/lib/bower_components/bootstrap/dist/css/bootstrap.min.css',
         'www/lib/css/animate.css',
-        // 'www/lib/bower_components/onsenui/css/onsenui.css',
         'www/lib/bower_components/Ionicons/css/ionicons.min.css'
     ])
         .pipe(concat('vendor.min.css'))
         .pipe(gulp.dest('dest/vendor'));
+
+    // return gulp.src([
+    //     'www/lib/bower_components/angular/angular-csp.css',
+    //     // 'www/lib/bower_components/onsenui/css/onsen-css-components-blue-theme.css',
+    //     'www/lib/bower_components/font-awesome/css/font-awesome.min.css',
+    //     'www/lib/bower_components/bootstrap/dist/css/bootstrap.min.css',
+    //     'www/lib/css/animate.css',
+    //     // 'www/lib/bower_components/onsenui/css/onsenui.css',
+    //     'www/lib/bower_components/Ionicons/css/ionicons.min.css'
+    // ])
+    //     .pipe(concat('vendor.min.css'))
+    //     .pipe(gulp.dest('dest/vendor'));
 });
 
 //Minifies all the app code, concatanates and adds to dest folder
@@ -163,9 +173,6 @@ gulp.task('minify-vendor-js',function()
         'www/lib/bower_components/progressbar.js/dist/progressbar.js',
         'www/lib/bower_components/ngCordova/dist/ng-cordova.js',
         'www/lib/bower_components/bootstrap/dist/js/bootstrap.js',
-        //
-        // 'www/lib/bower_components/onsenui/js/onsenui.js',
-        //
         'www/lib/js/angular-bootstrap/ui-bootstrap-tpls-1.1.2.js',
         'www/lib/bower_components/angular-tek-progress-bar/dist/tek.progress-bar.js',
         'www/lib/bower_components/angularfire/dist/angularfire.js',
@@ -174,15 +181,49 @@ gulp.task('minify-vendor-js',function()
         'www/lib/bower_components/tweetnacl-util/nacl-util.min.js',
         'www/lib/bower_components/highcharts/highstock.js',
         'www/lib/bower_components/moment/moment.js',
-        // 'www/lib/bower_components/pdfjs-dist/build/pdf.js',
-        // 'www/lib/bower_components/pdfjs-dist/build/pdf.worker.min.js',
-        // 'www/lib/bower_components/pdfjs-dist/web/pdf_viewer.js',
         'www/lib/js/materialize.min.js',
         'www/lib/bower_components/crypto-js/crypto-js.js',
         'www/lib/bower_components/angular-scroll-glue/src/scrollglue.js'])
         .pipe(concat('vendor.min.js'))
         .pipe(uglify())
         .pipe(gulp.dest('dest/vendor'));
+
+    // return gulp.src([ 'www/lib/bower_components/angular/angular.js',
+    //     'www/lib/bower_components/jquery/dist/jquery.min.js',
+    //     'www/lib/bower_components/angular-animate/angular-animate.js',
+    //     'www/lib/bower_components/angular-dynamic-locale/src/tmhDynamicLocale.js',
+    //     'www/lib/bower_components/angular-elastic/elastic.js',
+    //     'www/lib/bower_components/angular-sanitize/angular-sanitize.js',
+    //     'www/lib/bower_components/angular-touch/angular-touch.js',
+    //     'www/lib/bower_components/angular-translate/angular-translate.js',
+    //     'www/lib/bower_components/angular-translate-handler-log/angular-translate-handler-log.js',
+    //     'www/lib/bower_components/angular-translate-loader-partial/angular-translate-loader-partial.js',
+    //     'www/lib/bower_components/angular-translate-loader-url/angular-translate-loader-url.js',
+    //     'www/lib/bower_components/angular-ui-router/release/angular-ui-router.js',
+    //     'www/lib/bower_components/firebase/firebase.js',
+    //     'www/lib/bower_components/progressbar.js/dist/progressbar.js',
+    //     'www/lib/bower_components/ngCordova/dist/ng-cordova.js',
+    //     'www/lib/bower_components/bootstrap/dist/js/bootstrap.js',
+    //     //
+    //     // 'www/lib/bower_components/onsenui/js/onsenui.js',
+    //     //
+    //     'www/lib/js/angular-bootstrap/ui-bootstrap-tpls-1.1.2.js',
+    //     'www/lib/bower_components/angular-tek-progress-bar/dist/tek.progress-bar.js',
+    //     'www/lib/bower_components/angularfire/dist/angularfire.js',
+    //     'www/lib/bower_components/angular-mocks/angular-mocks.js',
+    //     'www/lib/bower_components/tweetnacl/nacl-fast.min.js',
+    //     'www/lib/bower_components/tweetnacl-util/nacl-util.min.js',
+    //     'www/lib/bower_components/highcharts/highstock.js',
+    //     'www/lib/bower_components/moment/moment.js',
+    //     // 'www/lib/bower_components/pdfjs-dist/build/pdf.js',
+    //     // 'www/lib/bower_components/pdfjs-dist/build/pdf.worker.min.js',
+    //     // 'www/lib/bower_components/pdfjs-dist/web/pdf_viewer.js',
+    //     'www/lib/js/materialize.min.js',
+    //     'www/lib/bower_components/crypto-js/crypto-js.js',
+    //     'www/lib/bower_components/angular-scroll-glue/src/scrollglue.js'])
+    //     .pipe(concat('vendor.min.js'))
+    //     .pipe(uglify())
+    //     .pipe(gulp.dest('dest/vendor'));
 });
 
 
