@@ -210,6 +210,9 @@ then
         #Copy over PDF Viewer directory
 		cp -a $WORKING_DIR/www/lib/bower_components/pdfjs-dist $WORKING_DIR/dest/vendor/pdfjs-dist
 
+        #Copy over PDF Viewer directory
+		cp -a $WORKING_DIR/www/lib/bower_components/onsenui $WORKING_DIR/dest/vendor/onsenui
+
 		#Grab from dest folder and move them the production environment
 		cp -a $WORKING_DIR/dest/. $TARGET_DIR/www
 
