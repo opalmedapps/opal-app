@@ -214,7 +214,9 @@ then
 #		cp -a $WORKING_DIR/www/lib/bower_components/onsenui $WORKING_DIR/dest/vendor/onsenui
 
 		#Grab from dest folder and move them to the production environment
-		cp -a $WORKING_DIR/dest/. $TARGET_DIR/www
+#		cp -a $WORKING_DIR/dest/. $TARGET_DIR/www
+
+		cp -a $WORKING_DIR/www/. $TARGET_DIR/www
 
 		rm www/karma.conf.js
 		rm www/package.json
@@ -233,7 +235,7 @@ then
 		echo "Removing intermediate build folder..."
 
 		#You can now remove the dest folder
-		rm -r $WORKING_DIR/dest
+		#rm -r $WORKING_DIR/dest
 
 
 	else
