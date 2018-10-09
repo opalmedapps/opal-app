@@ -11,14 +11,20 @@ These instructions will get you a copy of the project up and running on your loc
 
 In order to run the app in your browsing for development and basic testing purposes, there are a few steps you must take:
 
-* Clone the repository to the desired folder in your computer **(NOTE: You need to be added as a contributer to the project before being able to do this!)**
+* Clone the repository to the desired folder in your computer (create an empty folder for this). **(NOTE: You need to be added as a contributer to the project before being able to do this!)**
 
 ```
 git clone https://github.com/Sable/qplus.git
 ```
 
-* [Install latest version of NodeJS](https://nodejs.org/en/download/) 
-**(NOTE: For proper access to the backend you must have version 6+)**
+* Checkout the branch you wish to install. In the example below, this is the `opal_student` branch (if you are a student, this is likely the branch you will use). To checkout a different branch, replace `opal_student` with the name of your desired branch. Depending on the file structure that was created when cloning, you may need to enter `cd qplus` first to go into the folder containing the repository.
+
+```
+git fetch
+git checkout -b opal_student origin/opal_student
+```
+
+* Install the latest version of [NodeJS](https://nodejs.org/en/download/). If you have already done this, skip this step. **(NOTE: For proper access to the backend you must have version 6+)**
 
 Once this is done, verify that you installed Node globally by running
 running `$node -v`
@@ -33,17 +39,21 @@ for development. The main file is the
 and the versions for each of them.
 
 
-* Install [Bower](https://bower.io/)
+* Open a command prompt and navigate to the folder in which you have cloned the repository.
+
+* Install [Bower](https://bower.io/) globally. If you have already done this, skip this step.
+
+**Note:** you may need to replace `npm` with `sudo npm` if you are running a Mac or Linux system without root access.
 
 ```
-sudo npm install -g bower
+npm install -g bower
 ```
 
  Bower is our front-end libraries package manager. This allows all of our libraries to stay in sync and updated across all developing platforms.
 The main file for this dependencies is [bower.json](./bower.json), this file
 contains all the dependencies that are required to run the front-end.
 
-* Install [Gulp](https://gulpjs.com/) globally
+* Install [Gulp](https://gulpjs.com/) globally. If you have already done this, skip this step.
 
 ```
 npm install gulp-cli -g
@@ -65,7 +75,7 @@ This will install the npm and bower dependencies.
 * Run the app
 
 ```
-    gulp serve
+gulp serve
 ```
 
 
@@ -76,7 +86,7 @@ by navigating to `http://localhost:9000`
 * Install http-server
 
 ```
-sudo npm install -g http-server
+npm install -g http-server
 ```
 This globally installs a simple, zero-configuration command line server that may be used to host the Opal app locally when developing in the browser.
 Sometimes it is useful to quickly have a server in order to
@@ -120,7 +130,7 @@ and you should see something similar appear in your console:
 ```
 email: muhc.app.mobile@gmail.com
 password: 12345opal
-security answer (depending on question): red, guitar, superman
+security answer (depending on question): red, guitar, superman, dog, bob, cuba
 ```
 ## Running the tests
 
@@ -171,7 +181,7 @@ Linux or Windows you can only build Android distribution**
 5) Install [Cordova](https://cordova.apache.org/) globally with the following command:
 
 ```
-sudo npm install -g cordova
+npm install -g cordova
 ```
 
 6) Create a Cordova project in any desired directory that's **NOT** the in qplus directory:
