@@ -180,38 +180,51 @@ then
 
 		npm install
 
-		echo ""
-		echo ""
-		echo "Dependency installation was successful. Now starting gulp automated processes."
-		echo ""
-		echo ""
+#		echo ""
+#		echo ""
+#		echo "Dependency installation was successful. Now starting gulp automated processes."
+#		echo ""
+#		echo ""
 
 		#Do minification work here
-		gulp build
+#		gulp build
+#
+#		echo ""
+#		echo ""
+#		echo "Gulp build tasks were successful!"
+#		echo ""
+#		echo ""
+#		echo "Copying over other dependencies to dest folder..."
+#
+#		#Copy over language directory
+#		cp -a $WORKING_DIR/www/Languages/. $WORKING_DIR/dest/Languages
+#
+#		#Copy over fonts directory to root
+#		cp -a $WORKING_DIR/www/fonts/. $WORKING_DIR/dest/fonts
+#
+#		#Copy over fonts directory to vendor for OnsenUI
+#		cp -a $WORKING_DIR/www/fonts/. $WORKING_DIR/dest/vendor/fonts
+#
+#		cp $WORKING_DIR/www/lib/bower_components/bootstrap/dist/css/bootstrap.min.css.map $WORKING_DIR/dest/vendor
+#
+#        #Copy over PDF Viewer directory
+#		cp -a $WORKING_DIR/www/lib/bower_components/pdfjs-dist $WORKING_DIR/dest/vendor/pdfjs-dist
+#
+#        #Copy over onsenui directory
+#		cp -a $WORKING_DIR/www/lib/bower_components/onsenui $WORKING_DIR/dest/vendor/onsenui
 
-		echo ""
-		echo ""
-		echo "Gulp build tasks were successful!"
-		echo ""
-		echo ""
-		echo "Copying over other dependencies to dest folder..."
+		#Grab from dest folder and move them to the production environment
+#		cp -a $WORKING_DIR/dest/. $TARGET_DIR/www
 
-		#Copy over language directory
-		cp -a $WORKING_DIR/www/Languages/. $WORKING_DIR/dest/Languages
+		cp -a $WORKING_DIR/www/. $TARGET_DIR/www
 
-		#Copy over fonts directory to root
-		cp -a $WORKING_DIR/www/fonts/. $WORKING_DIR/dest/fonts
+		rm www/karma.conf.js
+		rm www/package.json
 
-		#Copy over fonts directory to vendor for OnsenUI
-		cp -a $WORKING_DIR/www/fonts/. $WORKING_DIR/dest/vendor/fonts
+		if [ -d "$WORKING_DIR/www/node_modules" ]; then
+            rm -r www/node_modules
+        fi
 
-		cp $WORKING_DIR/www/lib/bower_components/bootstrap/dist/css/bootstrap.min.css.map $WORKING_DIR/dest/vendor
-
-        #Copy over PDF Viewer directory
-		cp -a $WORKING_DIR/www/lib/bower_components/pdfjs-dist $WORKING_DIR/dest/vendor/pdfjs-dist
-
-		#Grab from dest folder and move them the production environment
-		cp -a $WORKING_DIR/dest/. $TARGET_DIR/www
 
 		echo ""
 		echo ""
@@ -222,7 +235,7 @@ then
 		echo "Removing intermediate build folder..."
 
 		#You can now remove the dest folder
-		rm -r $WORKING_DIR/dest
+		#rm -r $WORKING_DIR/dest
 
 
 	else
