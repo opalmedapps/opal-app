@@ -171,7 +171,16 @@
             var credential = firebase.auth.EmailAuthProvider.credential(user.email, vm.oldValue);
 
             user.reauthenticate(credential).then(function () {
-                user.updatePassword(vm.newValue).then(updateOnServer).catch(handleError);
+
+                // Before updating the password, check that the new password's contents are valid. -SB
+                if (validatePasswordContents()) {
+                    user.updatePassword(vm.newValue).then(updateOnServer).catch(handleError);
+                }
+                else{
+                    handleError({
+                       code:"password-disrespects-criteria"
+                    });
+                }
             }).catch(handleError);
 
             function updateOnServer(){
@@ -232,11 +241,28 @@
 
         function validateEmail() {
             var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-            return (vm.newValue !== vm.actualValue && re.test(vm.newValue) && vm.oldValue.length > 3);
+            return (vm.newValue !== vm.actualValue && re.test(vm.newValue));
         }
 
+        // Used to enable or disable the UPDATE button
         function validatePassword() {
-            return (vm.newValue.length > 5 && vm.oldValue.length > 4 && vm.newValue === vm.newValueValidate);
+            return (vm.newValue.length > 5 && vm.newValue === vm.newValueValidate);
+        }
+
+        /**
+         * validatePasswordContents
+         * @author Stacey Beard
+         * @date 2018-10-09
+         * @desc Checks the contents of a password to make sure it matches security criteria.
+         *       For example, checks that the password contains at least one letter and one number.
+         *       Used after the UPDATE button is pressed to refuse the password and produce an error message
+         *       if necessary.
+         * @returns {boolean} True if the password contents are valid; false otherwise
+         */
+        function validatePasswordContents() {
+            let containsALetter = vm.newValue.search(/[a-zA-Z]{1}/) > -1;
+            let containsANumber = vm.newValue.search(/\d{1}/) > -1;
+            return containsALetter && containsANumber;
         }
 
         function validateAlias() {
@@ -280,6 +306,11 @@
                         vm.newUpdate = true;
                         vm.alertClass = "bg-danger updateMessage-error";
                         vm.updateMessage = "INVALID_PASSWORD";
+                        break;
+                    case "password-disrespects-criteria":
+                        vm.newUpdate = true;
+                        vm.alertClass = "bg-danger updateMessage-error";
+                        vm.updateMessage = "PASSWORD_CRITERIA";
                         break;
                     default:
                         vm.newUpdate = true;
