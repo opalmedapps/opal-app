@@ -274,19 +274,20 @@
                 case "auth/invalid-email":
                 case "auth/wrong-password":
                 case "auth/user-not-found":
+                case "auth/too-many-requests":   // This is temporary (too many attempts), until we decide what to do in this case
                     $timeout(function(){
                         vm.alert.type='danger';
                         vm.alert.message="INVALID_EMAIL_OR_PWD";
                         vm.loading = false;
                     });
                     break;
-                case "auth/too-many-requests":
-                    $timeout(function () {
-                        vm.alert.type='danger';
-                        vm.alert.message="TOO_MANY_REQUESTS";
-                        vm.loading = false;
-                    });
-                    break;
+                // case "auth/too-many-requests":
+                //     $timeout(function () {
+                //         vm.alert.type='danger';
+                //         vm.alert.message="TOO_MANY_REQUESTS";
+                //         vm.loading = false;
+                //     });
+                //     break;
                 case "auth/user-disabled":
                     $timeout(function () {
                         vm.alert.type='danger';
