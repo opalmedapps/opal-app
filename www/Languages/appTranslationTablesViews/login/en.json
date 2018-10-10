@@ -43,7 +43,7 @@
 	"HEADER_MESSAGE_LOGIN":"Sign In",
 	"HOME":"Home",
 	"HOSPITALPARKING":"Hospital Parking",
-	"INTERNETERROR":"Sever error, please check your internet connection",
+	"INTERNETERROR":"Server error, please check your internet connection",
 	"INVALID_EMAIL":"Invalid e-mail",
 	"INVALID_EMAIL_OR_PWD":"Email or password is incorrect.",
 	"INVALID_PASSWORD":"Invalid password.",
