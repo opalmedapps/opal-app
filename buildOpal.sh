@@ -180,11 +180,11 @@ then
 
 		npm install
 
-		echo ""
-		echo ""
-		echo "Dependency installation was successful. Now starting gulp automated processes."
-		echo ""
-		echo ""
+#		echo ""
+#		echo ""
+#		echo "Dependency installation was successful. Now starting gulp automated processes."
+#		echo ""
+#		echo ""
 
 		#Do minification work here
 #		gulp build
