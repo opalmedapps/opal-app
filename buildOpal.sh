@@ -218,8 +218,13 @@ then
 
 		cp -a $WORKING_DIR/www/. $TARGET_DIR/www
 
-		rm www/karma.conf.js
-		rm www/package.json
+        if [ -f "$WORKING_DIR/www/karma.conf.js" ]; then
+            rm www/karma.conf.js
+        fi
+
+        if [ -f "$WORKING_DIR/www/package.json" ]; then
+            rm www/package.json
+        fi
 
 		if [ -d "$WORKING_DIR/www/node_modules" ]; then
             rm -r www/node_modules
