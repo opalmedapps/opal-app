@@ -146,6 +146,7 @@
   "INFO":"Information",
   "INPROGRESS":"In progress",
   "INTERNETERROR":"Internet error occured try again later",
+  "INTERNETERROR2":"Error connecting to the Opal network. If you are trying to enter your security answer and have made many mistakes, you will be locked out for a short time. Otherwise, the network may be temporarily not working. Please try again later.",
   "INTREATMENT":"In treatment. See all your appointments.",
   "INVALID_EMAIL":"Invalid e-mail",
   "INVALID_EMAIL_OR_PWD":"Email or password is incorrect.",
