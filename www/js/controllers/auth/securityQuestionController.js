@@ -209,7 +209,7 @@
                         vm.alert.content="ERRORANSWERNOTMATCH";
                         break;
                     default:
-                        vm.alert.content="INTERNETERROR";
+                        vm.alert.content="INTERNETERROR2";
                         break;
                 }
             })
