@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
     <!-- PRODUCTION -->
-    <widget id="com.hig.opal2" android-packageName="com.hig.opal2" android-versionCode="1700" version="1.7.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <widget id="com.hig.opal2" android-packageName="com.hig.opal2" android-versionCode="1701" version="1.7.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>Opal</name>
 
     <!--Pre-Production-->
