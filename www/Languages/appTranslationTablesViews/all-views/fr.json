@@ -244,6 +244,7 @@
   "PARKING":"Stationnement/Transport",
   "PARKINGINFORMATION":"Informations Sur Le Stationnement",
   "PASSWORD":"Mot de passe",
+  "PASSWORD_CRITERIA":"Ce nouveau mot de passe ne respecte pas les conditions requises",
   "PASSWORDPOLICY":"Doit être au moins 6 caractères avec une lettre et un numéro",
   "PASSWORDSUCCESSRESET":"Votre mot de passe a été changé avec succès, redirection vers la page de connexion.",
   "PASSWORDUPDATED":"Le mot de passe a été mis à jour",
