@@ -244,6 +244,7 @@
   "PARKING":"Parking & Transport",
   "PARKINGINFORMATION":"Parking Information",
   "PASSWORD":"Password",
+  "PASSWORD_CRITERIA":"This new password does not comply with the required criteria",
   "PASSWORDPOLICY":"Must be at least 6 characters with one letter and one number",
   "PASSWORDSUCCESSRESET":"Password has been successfully changed, redirecting to login",
   "PASSWORDUPDATED":"Password has been updated",
