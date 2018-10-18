@@ -27,6 +27,7 @@
         vm.showTab = true;
         vm.about = about;
         vm.stage = {};
+        vm.UrlExists = false;
 
         activate();
 
@@ -41,6 +42,10 @@
                 }
                 if ("TaskDescription_" + language in vm.stage) {
                     vm.stage.taskDescription = vm.stage["TaskDescription_" + language];
+                }
+
+                if ("URL_" + language in vm.stage) {
+                    vm.UrlExists = (vm.stage["URL_" + language] != '');
                 }
             }
 
