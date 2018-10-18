@@ -178,7 +178,7 @@ then
 		echo ""
 		echo ""
 
-		npm install
+#		npm install
 
 #		echo ""
 #		echo ""

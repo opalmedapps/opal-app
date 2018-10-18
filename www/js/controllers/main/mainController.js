@@ -191,16 +191,24 @@
          * Manage concurrent users
          *****************************************/
         function addUserListener(uid) {
-            //add a listener to the firebase database that watches for the changing of the token value (this means that the same user has logged in somewhere else)
+            //
+            // add a listener to the firebase database that watches for the changing of the token value
+            // (this means that the same user has logged in somewhere else)
+            //
             var Ref = firebase.database().ref(FirebaseService.getFirebaseUrl(null));
             var refCurrentUser = Ref.child(FirebaseService.getFirebaseChild('logged_in_users') + uid);
 
             refCurrentUser.on('value', function () {
                 if (!$rootScope.firstTime && !localStorage.getItem('locked')) {
-                    //If it is detected that a user has concurrently logged on with a different device. Then force the "first" user to log out and clear the observer
+                    //
+                    // If it is detected that a user has concurrently logged on with a different device.
+                    // Then force the "first" user to log out and clear the observer
+                    //
                     RequestToServer.sendRequest('Logout');
                     CleanUp.clear();
-                    NewsBanner.showCustomBanner("You have logged in on another device.", '#333333', function () {
+
+                    // Show message "You have logged in on another device."
+                    NewsBanner.showCustomBanner($filter('translate')("KICKEDOUT"), '#333333', function () {
                     }, 5000);
                     refCurrentUser.off();
                     $state.go('init');
