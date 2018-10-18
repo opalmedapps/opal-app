@@ -49,6 +49,7 @@
 	"INVALID_EMAIL_OR_PWD":"Email or password is incorrect.",
 	"INVALID_PASSWORD":"Invalid password.",
 	"INVALID_USER":"Invalid user.",
+	"KICKEDOUT": "You have logged in on another device.",
 	"LANGUAGE":"Language",
 	"LEAVEMESSAGE":"Leave us a message",
 	"LEAVING_APP2":"Note that you are leaving the app to an external website.",
