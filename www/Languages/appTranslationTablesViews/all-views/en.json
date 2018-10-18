@@ -152,6 +152,7 @@
   "INVALID_EMAIL_OR_PWD":"Email or password is incorrect.",
   "INVALID_PASSWORD":"Invalid password.",
   "INVALID_USER":"Invalid user.",
+  "KICKEDOUT": "You have logged in on another device.",
   "LAB_BYDATE":"By Date",
   "LAB_BYTYPE":"By Type",
   "LAB_LEARN_ABOUT":"Learn About",
