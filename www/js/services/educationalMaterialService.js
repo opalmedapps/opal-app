@@ -141,8 +141,8 @@ myApp.service('EducationalMaterial',['$filter','LocalStorage','FileManagerServic
 
 
 
-            edumaterial[i].Icon = educationalMaterialType[edumaterial[i].EducationalMaterialType_EN].icon;
-            edumaterial[i].Color = educationalMaterialType[edumaterial[i].EducationalMaterialType_EN].color;
+          //  edumaterial[i].Icon = educationalMaterialType[edumaterial[i].EducationalMaterialType_EN].icon;
+           // edumaterial[i].Color = educationalMaterialType[edumaterial[i].EducationalMaterialType_EN].color;
             //Add to my annoucements array
             educationalMaterialArray.push(edumaterial[i]);
         }
