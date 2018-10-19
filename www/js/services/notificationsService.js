@@ -275,7 +275,7 @@ myApp.service('Notifications', ['$filter', 'RequestToServer', 'LocalStorage', 'A
 
                     console.log(temp[i].NotificationType);
                     if (!notificationTypes[temp[i].NotificationType].hasOwnProperty('openFunction')) {
-                        temp[i].PageUrl = notificationTypes[temp[i].NotificationType].PageUrl(temp[i].RefTableRowSerNum);
+                        // temp[i].PageUrl = notificationTypes[temp[i].NotificationType].PageUrl(temp[i].RefTableRowSerNum);
                     }
 
                     temp[i].Content = notificationTypes[temp[i].NotificationType].namesFunction(temp[i].RefTableRowSerNum);
