@@ -141,18 +141,7 @@
             }
 
             // Jordan added
-            // Sort the array containing feedback in order of question index.
-            // This will allow for constant time when setting up the questionnaires
-            // feedback state as opposed to constantly searching the array while looping
-            // the array of questions
             var feedback = params.questionnaire.feedback.Result;
-            console.log("FEEDBACK:");
-            feedback = feedback.sort(function(a,b){
-                if(a.QuestionSerNum > b.QuestionSerNum) return 1;
-                if(a.QuestionSerNum < b.QuestionSerNum) return -1;
-                if(a.SectionSerNum > b.SectionSerNum) return 1;
-                if(a.SectionSerNum < b.SectionSerNum) return -1;
-            });
             console.log(feedback);
             var feedbackIndex = 0;
 
@@ -209,16 +198,16 @@
 
                         // Set feedback
                         // **** BUG HERE **** need to find replacement for vm.carousel
-                        console.log("i: "+(i+1)+", secNum:"+feedback[feedbackIndex].SectionSerNum);
-                        console.log("j: "+(j)+", quesNum:"+feedback[feedbackIndex].QuestionSerNum);
-                        if(i+1 == feedback[feedbackIndex].SectionSerNum && j == feedback[feedbackIndex].QuestionSerNum){
-                            vm.questionnaire.sections[i].questions[j].patient_answer.feedback = feedback[feedbackIndex].FeedbackAnswerOptionSerNum;
-                            //vm.carouselItems.data.patient_answer.feedbackText = feedback[feedbackIndex].FeedbackText;
-                            console.log("FEEDBACK MATCHES QUESTION");
-                            console.log("FEEDBACK TYPE: "+vm.questionnaire.sections[i].questions[j].patient_answer.feedback);
-                            console.log("FEEDBACK TEXT: "+vm.carouselItems.data.patient_answer.feedbackText);
-                            feedbackIndex++;
-                        }
+                        // console.log("i: "+(i+1)+", secNum:"+feedback[feedbackIndex].SectionSerNum);
+                        // console.log("j: "+(j)+", quesNum:"+feedback[feedbackIndex].QuestionSerNum);
+                        // if(i+1 == feedback[feedbackIndex].SectionSerNum && j == feedback[feedbackIndex].QuestionSerNum){
+                        //     vm.questionnaire.sections[i].questions[j].patient_answer.feedback = feedback[feedbackIndex].FeedbackAnswerOptionSerNum;
+                        //     //vm.carouselItems.data.patient_answer.feedbackText = feedback[feedbackIndex].FeedbackText;
+                        //     console.log("FEEDBACK MATCHES QUESTION");
+                        //     console.log("FEEDBACK TYPE: "+vm.questionnaire.sections[i].questions[j].patient_answer.feedback);
+                        //     console.log("FEEDBACK TEXT: "+vm.carouselItems.data.patient_answer.feedbackText);
+                        //     feedbackIndex++;
+                        // }
                     }
                     // if all questions have been answered
                     if (i == vm.questionnaire.sections.length-1) {
@@ -476,7 +465,8 @@
                     carouselItems.push(
                         {
                             type: "question",
-                            data: vm.questionnaire.sections[i].questions[j]
+                            data: vm.questionnaire.sections[i].questions[j],
+                            leaveComment: false
                         }
                     );
                     if (i < vm.questionnaire.sections.length-1 && j == vm.questionnaire.sections[i].questions.length-1) {
