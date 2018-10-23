@@ -47,11 +47,21 @@ function fireConfig () {
         //
         // PreProd (Dev)
         //
-        apiKey: "AIzaSyCxV6VuVWtKg5wkeReqzQNfRULwkvVXkos",
-        authDomain: "brilliant-inferno-7679.firebaseapp.com",
-        databaseURL: "https://brilliant-inferno-7679.firebaseio.com",
-        storageBucket: "firebase-brilliant-inferno-767.appspot.com",
-        messagingSenderId: "810896751588"
+        // apiKey: "AIzaSyCxV6VuVWtKg5wkeReqzQNfRULwkvVXkos",
+        // authDomain: "brilliant-inferno-7679.firebaseapp.com",
+        // databaseURL: "https://brilliant-inferno-7679.firebaseio.com",
+        // storageBucket: "firebase-brilliant-inferno-767.appspot.com",
+        // messagingSenderId: "810896751588"
+
+        //
+        // Local (Stacey)
+        //
+        apiKey: "AIzaSyB_I9XTYRGBcL54E-vwihapSe6cLjHebTY",
+        authDomain: "opal-test-35d3d.firebaseapp.com",
+        databaseURL: "https://opal-test-35d3d.firebaseio.com",
+        projectId: "opal-test-35d3d",
+        storageBucket: "",
+        messagingSenderId: "338019889649"
     };
 
     if (!firebase.apps.length) {
