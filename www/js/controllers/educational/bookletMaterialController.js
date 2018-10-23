@@ -19,10 +19,11 @@
         .module('MUHCApp')
         .controller('BookletMaterialController', BookletMaterialController);
 
-    BookletMaterialController.$inject = ['$scope', '$timeout', 'NavigatorParameters', '$rootScope', '$filter'];
+    BookletMaterialController.$inject = ['$scope', '$timeout', 'NavigatorParameters', '$rootScope', '$filter','EducationalMaterial','Patient'];
+
 
     /* @ngInject */
-    function BookletMaterialController($scope, $timeout, NavigatorParameters, $rootScope, $filter) {
+    function BookletMaterialController($scope, $timeout, NavigatorParameters, $rootScope, $filter, EducationalMaterial, Patient) {
 
         var vm = this;
 
@@ -31,6 +32,9 @@
 
         vm.goBack = goBack;
         vm.goNext = goNext;
+
+        vm.scrollDown = scrollDown;
+        vm.SubClickBack = SubClickBack;
 
         activate();
         /////////////////////////////
@@ -91,9 +95,16 @@
          */
         function goNext() {
             if (vm.activeIndex < vm.tableOfContents.length - 1) {
+                window.scrollTo(0,0);
                 vm.activeIndex++;
                 vm.carousel.setActiveCarouselItemIndex(vm.activeIndex);
 
+                EducationalMaterial.writeSubClickedRequest(Patient.getPatientId(),
+                    vm.tableOfContents[vm.activeIndex].EducationalMaterialTOCSerNum)
+                    .then((res)=>{
+                        console.log(res);
+                        console.log("sub clicked");
+                    });
             }
         }
 
@@ -101,6 +112,13 @@
             if (vm.activeIndex > 0) {
                 vm.activeIndex--;
                 vm.carousel.setActiveCarouselItemIndex(vm.activeIndex);
+
+                EducationalMaterial.writeSubClickedRequest(Patient.getPatientId(),
+                    vm.tableOfContents[vm.activeIndex].EducationalMaterialTOCSerNum)
+                    .then((res)=>{
+                        console.log(res);
+                        console.log("sub clicked");
+                    });
             }
         }
 
@@ -184,6 +202,58 @@
                     vm.carousel.setActiveCarouselItemIndex(i);
                 });
             }
+        }
+
+        function scrollDown(i,section){
+
+            $timeout(function () {
+                var $ = document.getElementById(i+'sub');
+
+                $.onclick = function(){ //if don't need to scroll, then if a user clicks, then set the field
+                    console.log("client height "+$.clientHeight);
+                    console.log("scroll height "+$.scrollHeight);
+                    if($.scrollHeight<=$.clientHeight){//don't need to scroll
+
+                        console.log(section);
+                        EducationalMaterial.writeSubScrollToBottomRequest(Patient.getPatientId(),
+                            section.EducationalMaterialTOCSerNum)
+                            .then((res)=>{
+                                console.log(res);
+                                console.log("default scrolled to bottom")
+                            });
+
+                    }
+                };
+
+                $.onscroll = function () {
+                    console.log("in on scroll function");
+
+                    if($.clientHeight===$.scrollHeight-$.scrollTop){
+                        console.log(section);
+
+                        EducationalMaterial.writeSubScrollToBottomRequest(Patient.getPatientId(),
+                            section.EducationalMaterialTOCSerNum)
+                            .then((res)=>{
+                                console.log(res);
+                                console.log("set scrolled to bottom")
+                            });
+
+                    }
+                }
+
+
+
+            },0);
+        }
+
+        function SubClickBack() {
+
+            EducationalMaterial.writeSubClickedBackRequest(Patient.getPatientId(),
+                vm.tableOfContents[vm.activeIndex].EducationalMaterialTOCSerNum)
+                .then((res)=>{
+                    console.log(res);
+                    console.log("sub clicked back");
+                });
         }
 
 
