@@ -53,6 +53,11 @@
             {'type': 'emotion-bad', 'reaction': 'reaction-anxious', 'text': 'Anxious'}
         ];
         vm.displayReactions = [];
+
+        // Noah Added
+        vm.thumbsUpClicked = false;
+        vm.thumbsDownClicked = false;
+
         vm.showReactions = function(filter) {
             vm.displayReactions = $filter('filter')(vm.availableReactions, function(x) { return x.type == filter; });
             console.log(vm.displayReactions);
@@ -801,11 +806,29 @@
         }
 
         vm.thumbsUp = function(question) {
-            question.patient_answer.feedback = question.feedback_options[0].feedback_ser_num;
+          
+            if (!vm.thumbsUpClicked) {
+                question.patient_answer.feedback = question.feedback_options[0].feedback_ser_num;
+                vm.thumbsUpClicked = true;
+            } else {
+                question.patient_answer.feedback = null;
+                vm.thumbsUpClicked = false;
+            }
+
+            vm.thumbsDownClicked = false;
         };
 
         vm.thumbsDown = function(question) {
-            question.patient_answer.feedback = question.feedback_options[1].feedback_ser_num;
+          
+            if (!vm.thumbsDownClicked) {
+                question.patient_answer.feedback = question.feedback_options[1].feedback_ser_num;
+                vm.thumbsDownClicked = true;
+            } else {
+                question.patient_answer.feedback = null;
+                vm.thumbsDownClicked = false;
+            }
+
+            vm.thumbsUpClicked = false;
         };
 
         // Jordan Added
