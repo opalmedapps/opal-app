@@ -684,34 +684,25 @@
                      style="position: absolute; text-align: center; width: 100%; overflow-y: hidden; border-top: solid lightgrey 1px; background-color: #F9F9F9;"
                 id="questionFeedbackText_{{item.data.ser_num}}" class="down-position">
                     <div style="position: relative; width:100%;">
-                        <div ng-show="(item.data.patient_answer.feedback !== item.data.feedback_options[1].feedback_ser_num) &&
-                        (item.data.patient_answer.feedback !== item.data.feedback_options[0].feedback_ser_num)" style="margin-top: 10px">
-                            <span ng-class="fontSizeDesc">Do you like this question? (Optional)</span>
+                        <div style="margin-top: 10px">
+                            <span ng-class="fontSizeDesc" id="feedbackTitle_{{item.data.ser_num}}">Do you like this question? (Optional)</span>
                         </div>
                         <div style="display: inline-block;margin:3px 5px 0px 5px;">
                             <div style="font-size:30px;" id="thumbsUp"
                                  ng-style="(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex].patient_answer.feedback == vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex].feedback_options[0].feedback_ser_num)? {'color':'darkblue'}:{'color':'black'}"
-                                 ng-click="vm.thumbsUp(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex])"
+                                 ng-click="vm.thumbsUp(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex],item)"
                                  class="fa fa-thumbs-up"></div>
                         </div>
                         <div style="display: inline-block;margin:3px 5px 0px 5px;">
                             <div style="font-size:30px;" id="thumbsDown"
                                  ng-style="(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex].patient_answer.feedback == vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex].feedback_options[1].feedback_ser_num)? {'color':'darkblue'}:{'color':'black'}"
-                                 ng-click="vm.thumbsDown(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex])"
+                                 ng-click="vm.thumbsDown(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex],item)"
                                  class="fa fa-thumbs-down"></div>
                         </div>
-                        <ons-button ng-if="item.feedbackSectionDown" style="display: inline-block;margin:3px 5px 0px 5px;" ng-click="vm.toggleFeedback('questionFeedbackText_'+item.data.ser_num,item)">Leave Comment
+                        <ons-button ng-if="item.feedbackSectionDown" style="display: inline-block;margin:3px 5px 0px 5px;" ng-click="vm.toggleFeedback(item)">Leave Comment
                         </ons-button>
-                        <ons-button ng-if="!item.feedbackSectionDown" style="display: inline-block;margin:3px 5px 0px 5px;" ng-click="vm.toggleFeedback('questionFeedbackText_'+item.data.ser_num,item)">Minimize Comment
+                        <ons-button ng-if="!item.feedbackSectionDown" style="display: inline-block;margin:3px 5px 0px 5px;" ng-click="vm.toggleFeedback(item)">Minimize Comment
                         </ons-button>
-                        <div ng-show="(item.data.patient_answer.feedback === item.data.feedback_options[1].feedback_ser_num)"
-                             style="margin-top: 7px">
-                            <span ng-class="fontSizeDesc">What do you dislike about this question? (Optional)</span>
-                        </div>
-                        <div ng-show="(item.data.patient_answer.feedback === item.data.feedback_options[0].feedback_ser_num)"
-                             style="margin-top: 7px">
-                            <span ng-class="fontSizeDesc">What do you like about this question? (Optional)</span>
-                        </div>
                         <div style="padding-left: 5vw; padding-right: 5vw">
                                 <textarea ng-class="fontSizeDesc" style="margin-top: 10px;
                                         width: 100%;
