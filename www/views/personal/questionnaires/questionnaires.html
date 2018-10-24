@@ -677,101 +677,45 @@
                             </div>
 
                         </div>
-                        <!-- FEEDBACK -->
-
-                        <!--<div ng-if="vm.isQuestion && !vm.questionnaireStart && vm.portraitOrientationCheck.matches && vm.questionnaire.is_feedback == '1'"-->
-                        <!--style="text-align:center;position:sticky;margin-bottom:7px;top:80%">-->
-                        <!--&lt;!&ndash;feedback before is: {{vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex].patient_answer.feedback}}&ndash;&gt;-->
-                        <!--<div style="padding-top:1vh; background-color:#d9d9d9;"></div>-->
-                        <!--<div style="margin-bottom:20px; background-color:#f9f9f9">-->
-                        <!--<div style="text-align: center">-->
-                        <!--<span ng-class="fontSizeDesc">Do you like this question? (Optional)</span>-->
-                        <!--</div>-->
-                        <!--<div style="display: inline-block;padding-left:20px;">-->
-                        <!--<div style="font-size:50px;" id="thumbsUp"-->
-                        <!--ng-style="(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex].patient_answer.feedback == vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex].feedback_options[0].feedback_ser_num)? {'color':'darkblue'}:{'color':'black'}"-->
-                        <!--ng-click="vm.thumbsUp(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex])"-->
-                        <!--class="fa fa-thumbs-up"></div>-->
-                        <!--</div>-->
-                        <!--<div style="display: inline-block;padding-left:20px;">-->
-                        <!--<div style="font-size:50px;" id="thumbsDown"-->
-                        <!--ng-style="(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex].patient_answer.feedback == vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex].feedback_options[1].feedback_ser_num)? {'color':'darkblue'}:{'color':'black'}"-->
-                        <!--ng-click="vm.thumbsDown(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex])"-->
-                        <!--class="fa fa-thumbs-down"></div>-->
-                        <!--</div>-->
-                        <!--&lt;!&ndash;feedback after is: {{vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex].patient_answer.feedback}}&ndash;&gt;-->
-                        <!--&lt;!&ndash;item.data.patient_answer.feedback is: {{item.data.patient_answer.feedback}}&ndash;&gt;-->
-                        <!--<div ng-show="(item.data.patient_answer.feedback === item.data.feedback_options[1].feedback_ser_num) || (item.data.patient_answer.feedback === item.data.feedback_options[0].feedback_ser_num)"-->
-                        <!--id="questionFeedbackText_{{item.data.ser_num}}">-->
-                        <!--<div ng-show="(item.data.patient_answer.feedback === item.data.feedback_options[1].feedback_ser_num)"-->
-                        <!--style="margin-top: 10px">-->
-                        <!--<span ng-class="fontSizeDesc">What do you dislike about this question? (Optional)</span>-->
-                        <!--</div>-->
-                        <!--<div ng-show="(item.data.patient_answer.feedback === item.data.feedback_options[0].feedback_ser_num)"-->
-                        <!--style="margin-top: 10px">-->
-                        <!--<span ng-class="fontSizeDesc">What do you like about this question? (Optional)</span>-->
-                        <!--</div>-->
-                        <!--<div style="padding-left: 5vw; padding-right: 5vw">-->
-                        <!--<textarea ng-class="fontSizeDesc" style="margin-top: 10px;-->
-                        <!--width: 100%;-->
-                        <!--height: 80%;-->
-                        <!--padding: 12px 20px;-->
-                        <!--box-sizing: border-box;-->
-                        <!--border: 2px solid #ccc;-->
-                        <!--border-radius: 4px;-->
-                        <!--background-color: #f8f8f8;-->
-                        <!--resize: none;" wrap="hard"-->
-                        <!--ng-model="item.data.patient_answer.feedbackText"-->
-                        <!--ng-value="item.data.patient_answer.feedbackText"-->
-                        <!--&gt;</textarea>-->
-                        <!--&lt;!&ndash;ng-value="item.data.patient_answer.answer[0].text"&ndash;&gt;-->
-                        <!--&lt;!&ndash;ng-init="vm.setMaxLength(item.data)"&ndash;&gt;-->
-                        <!--&lt;!&ndash;ng-change="item.data.answerChangedFlag = true;"&ndash;&gt;-->
-
-                        <!--</div>-->
-                        <!--</div>-->
-
-                        <!--</div>-->
-                        <!--&lt;!&ndash;<div ng-if="(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex].patient_answer.feedback)">&ndash;&gt;-->
-
-                        <!--&lt;!&ndash;</div>&ndash;&gt;-->
-                        <!--</div>-->
                         </div>
                 </div>
+                <!--FEEDBACK-->
                 <div ng-if="vm.isQuestion && !vm.questionnaireStart && vm.portraitOrientationCheck.matches && vm.questionnaire.is_feedback == '1'"
-                     style="position: absolute;height:20%; bottom: 0px; text-align: center; width: 100%; overflow-y: auto; border-top: solid lightgrey 1px; background-color: #F9F9F9;">
+                     style="position: absolute; text-align: center; width: 100%; overflow-y: hidden; border-top: solid lightgrey 1px; background-color: #F9F9F9;"
+                id="questionFeedbackText_{{item.data.ser_num}}" class="down-position">
                     <div style="position: relative; width:100%;">
                         <div ng-show="(item.data.patient_answer.feedback !== item.data.feedback_options[1].feedback_ser_num) &&
                         (item.data.patient_answer.feedback !== item.data.feedback_options[0].feedback_ser_num)" style="margin-top: 10px">
                             <span ng-class="fontSizeDesc">Do you like this question? (Optional)</span>
                         </div>
                         <div style="display: inline-block;margin:3px 5px 0px 5px;">
-                            <div style="font-size:40px;" id="thumbsUp"
+                            <div style="font-size:30px;" id="thumbsUp"
                                  ng-style="(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex].patient_answer.feedback == vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex].feedback_options[0].feedback_ser_num)? {'color':'darkblue'}:{'color':'black'}"
                                  ng-click="vm.thumbsUp(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex])"
                                  class="fa fa-thumbs-up"></div>
                         </div>
                         <div style="display: inline-block;margin:3px 5px 0px 5px;">
-                            <div style="font-size:40px;" id="thumbsDown"
+                            <div style="font-size:30px;" id="thumbsDown"
                                  ng-style="(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex].patient_answer.feedback == vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex].feedback_options[1].feedback_ser_num)? {'color':'darkblue'}:{'color':'black'}"
                                  ng-click="vm.thumbsDown(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex])"
                                  class="fa fa-thumbs-down"></div>
                         </div>
-                    </div>
-                        <div ng-show="(item.data.patient_answer.feedback === item.data.feedback_options[1].feedback_ser_num) || (item.data.patient_answer.feedback === item.data.feedback_options[0].feedback_ser_num)"
-                             id="questionFeedbackText_{{item.data.ser_num}}" style="position:relative; width:100%">
-                            <div ng-show="(item.data.patient_answer.feedback === item.data.feedback_options[1].feedback_ser_num)"
-                                 style="margin-top: 10px">
-                                <span ng-class="fontSizeDesc">What do you dislike about this question? (Optional)</span>
-                            </div>
-                            <div ng-show="(item.data.patient_answer.feedback === item.data.feedback_options[0].feedback_ser_num)"
-                                 style="margin-top: 10px">
-                                <span ng-class="fontSizeDesc">What do you like about this question? (Optional)</span>
-                            </div>
-                            <div style="padding-left: 5vw; padding-right: 5vw">
+                        <ons-button ng-if="item.feedbackSectionDown" style="display: inline-block;margin:3px 5px 0px 5px;" ng-click="vm.toggleFeedback('questionFeedbackText_'+item.data.ser_num,item)">Leave Comment
+                        </ons-button>
+                        <ons-button ng-if="!item.feedbackSectionDown" style="display: inline-block;margin:3px 5px 0px 5px;" ng-click="vm.toggleFeedback('questionFeedbackText_'+item.data.ser_num,item)">Minimize Comment
+                        </ons-button>
+                        <div ng-show="(item.data.patient_answer.feedback === item.data.feedback_options[1].feedback_ser_num)"
+                             style="margin-top: 7px">
+                            <span ng-class="fontSizeDesc">What do you dislike about this question? (Optional)</span>
+                        </div>
+                        <div ng-show="(item.data.patient_answer.feedback === item.data.feedback_options[0].feedback_ser_num)"
+                             style="margin-top: 7px">
+                            <span ng-class="fontSizeDesc">What do you like about this question? (Optional)</span>
+                        </div>
+                        <div style="padding-left: 5vw; padding-right: 5vw">
                                 <textarea ng-class="fontSizeDesc" style="margin-top: 10px;
                                         width: 100%;
-                                        height: 60px;
+                                        height: 100px;
                                         padding: 12px 20px;
                                         box-sizing: border-box;
                                         border: 2px solid #ccc;
@@ -781,13 +725,84 @@
                                           ng-model="item.data.patient_answer.feedbackText"
                                           ng-value="item.data.patient_answer.feedbackText"
                                 ></textarea>
-                                <!--ng-value="item.data.patient_answer.answer[0].text"-->
-                                <!--ng-init="vm.setMaxLength(item.data)"-->
-                                <!--ng-change="item.data.answerChangedFlag = true;"-->
+                            <!--ng-value="item.data.patient_answer.answer[0].text"-->
+                            <!--ng-init="vm.setMaxLength(item.data)"-->
+                            <!--ng-change="item.data.answerChangedFlag = true;"-->
 
-                            </div>
+                        </div>
                     </div>
+                        <!--<div ng-show="(item.data.patient_answer.feedback === item.data.feedback_options[1].feedback_ser_num) || (item.data.patient_answer.feedback === item.data.feedback_options[0].feedback_ser_num)"-->
+                             <!--id="questionFeedbackText_{{item.data.ser_num}}" style="position:relative; width:100%">-->
+                            <!--<div ng-show="(item.data.patient_answer.feedback === item.data.feedback_options[1].feedback_ser_num)"-->
+                                 <!--style="margin-top: 10px">-->
+                                <!--<span ng-class="fontSizeDesc">What do you dislike about this question? (Optional)</span>-->
+                            <!--</div>-->
+                            <!--<div ng-show="(item.data.patient_answer.feedback === item.data.feedback_options[0].feedback_ser_num)"-->
+                                 <!--style="margin-top: 10px">-->
+                                <!--<span ng-class="fontSizeDesc">What do you like about this question? (Optional)</span>-->
+                            <!--</div>-->
+                            <!--<div style="padding-left: 5vw; padding-right: 5vw">-->
+                                <!--<textarea ng-class="fontSizeDesc" style="margin-top: 10px;-->
+                                        <!--width: 100%;-->
+                                        <!--height: 60px;-->
+                                        <!--padding: 12px 20px;-->
+                                        <!--box-sizing: border-box;-->
+                                        <!--border: 2px solid #ccc;-->
+                                        <!--border-radius: 4px;-->
+                                        <!--background-color: #f8f8f8;-->
+                                        <!--resize: none;" wrap="hard"-->
+                                          <!--ng-model="item.data.patient_answer.feedbackText"-->
+                                          <!--ng-value="item.data.patient_answer.feedbackText"-->
+                                <!--&gt;</textarea>-->
+                                <!--&lt;!&ndash;ng-value="item.data.patient_answer.answer[0].text"&ndash;&gt;-->
+                                <!--&lt;!&ndash;ng-init="vm.setMaxLength(item.data)"&ndash;&gt;-->
+                                <!--&lt;!&ndash;ng-change="item.data.answerChangedFlag = true;"&ndash;&gt;-->
+
+                            <!--</div>-->
+                    <!--</div>-->
                 </div>
+
+                <!--PULL UP FEEDBACK COMMENT BOX ANIMATION-->
+                <style>
+                    .down-position{
+                        bottom: -110px
+                    }
+
+                    .up-position{
+                        bottom: 0px
+                    }
+
+                    .pull-up {
+                        animation: pull-up-animation 0.5s linear;
+                        -webkit-animation: pull-up-animation 0.5s linear;
+                    }
+
+                    @keyframes pull-up-animation {
+                        from {bottom:-110px}
+                        to {bottom:0px}
+                    }
+
+                    @-webkit-keyframes pull-up-animation {
+                        from {bottom:-110px}
+                        to {bottom:0px}
+                    }
+
+                    .push-down {
+                        animation: push-down-animation 0.5s linear;
+                        -webkit-animation: push-down-animation 0.5s linear;
+                    }
+
+                    @keyframes push-down-animation {
+                        from {bottom:0px}
+                        to {bottom:-110px}
+                    }
+
+                    @-webkit-keyframes push-down-animation {
+                        from {bottom:0px}
+                        to {bottom:-110px}
+                    }
+                </style>
+
             </ons-carousel-item>
         </ons-carousel>
     </div>

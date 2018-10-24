@@ -465,7 +465,8 @@
                     carouselItems.push(
                         {
                             type: "question",
-                            data: vm.questionnaire.sections[i].questions[j]
+                            data: vm.questionnaire.sections[i].questions[j],
+                            feedbackSectionDown: true
                         }
                     );
                     if (i < vm.questionnaire.sections.length-1 && j == vm.questionnaire.sections[i].questions.length-1) {
@@ -800,29 +801,30 @@
         }
 
         vm.thumbsUp = function(question) {
-                question.patient_answer.feedback = question.feedback_options[0].feedback_ser_num;
-                console.log(Object(question));
-
-            // auto scroll to feedback comment box
-            // scrollTo('questionFeedbackText_' + question.ser_num);
-            $location.hash('questionFeedbackText_' + question.ser_num);
-            $anchorScroll();
+            question.patient_answer.feedback = question.feedback_options[0].feedback_ser_num;
         };
 
         vm.thumbsDown = function(question) {
             question.patient_answer.feedback = question.feedback_options[1].feedback_ser_num;
-            console.log(Object(question));
-
-            // auto scroll to feedback comment box
-            // scrollTo('questionFeedbackText_' + question.ser_num);
-            $location.hash('questionFeedbackText_' + question.ser_num);
-            $anchorScroll();
         };
 
-        scrollTo = function(id){
-            var offset = 10; //pixels; adjust for floating menu, context etc
-            var element = angular.element(document.getElementById(id));
-            $document.scrollToElement(element, offset, 2000);
+        // Jordan Added
+        vm.toggleFeedback = function(id,item){
+            if(item.feedbackSectionDown)
+                vm.pullUpComment(id);
+            else
+                vm.pushDownComment(id);
+            item.feedbackSectionDown = !item.feedbackSectionDown;
+        };
+
+        vm.pullUpComment = function(id){
+            var feedback = document.getElementById(id);
+            feedback.className ='pull-up up-position';
+        };
+
+        vm.pushDownComment = function(id){
+            var feedback = document.getElementById(id);
+            feedback.className = 'push-down down-position';
         };
 
         vm.isCheckedCheckmark = function(question, optionKey) {
