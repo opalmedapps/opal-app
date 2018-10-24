@@ -232,6 +232,7 @@ myApp.service('Questionnaires', [
                 RequestToServer.sendRequestWithResponse('QuestionFeedback', params)
                     .then(function (response) {
                             //_this.setQuestionnaires(response.Data);
+                        console.log(response);
                             console.log('success saving feedback');
                             deferred.resolve({Success: true, Location: 'Server'});
                         },

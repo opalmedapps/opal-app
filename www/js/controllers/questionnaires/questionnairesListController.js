@@ -46,6 +46,7 @@ app.controller('questionnairesListController', [
 
     $scope.goToQuestionnaireSummary = function(selectedQuestionnaire) {
         var questionnaireToReturn = {};
+        var questionFeedbackToReturn = {};
         Questionnaires.requestQuestionnaire(selectedQuestionnaire.qp_ser_num)
             .then(function() {
                 questionnaireToReturn = Questionnaires.getQuestionnaire();
