@@ -86,7 +86,16 @@ myApp.service('RequestToServer',['$filter','$state','NewsBanner','UserAuthorizat
                     //Sends request and gets random key for request
                     sendRequest(typeOfRequest,parameters,encryptionKey, referenceField)
                         .then(key=> {
-
+                            console.log("TYPE");
+                            console.log(typeOfRequest);
+                            console.log("PARAM");
+                            console.log(parameters);
+                            console.log("EKEY");
+                            console.log(encryptionKey);
+                            console.log("REFFIELD");
+                            console.log(referenceField);
+                            console.log("KEY");
+                            console.log(key);
                             //Sets the reference to fetch data for that request
                             let refRequestResponse = (!referenceField) ?
                                 response_url.child(UserAuthorizationInfo.getUsername() + '/' + key) :
