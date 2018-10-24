@@ -465,8 +465,7 @@
                     carouselItems.push(
                         {
                             type: "question",
-                            data: vm.questionnaire.sections[i].questions[j],
-                            leaveComment: false
+                            data: vm.questionnaire.sections[i].questions[j]
                         }
                     );
                     if (i < vm.questionnaire.sections.length-1 && j == vm.questionnaire.sections[i].questions.length-1) {
@@ -805,6 +804,7 @@
                 console.log(Object(question));
 
             // auto scroll to feedback comment box
+            // scrollTo('questionFeedbackText_' + question.ser_num);
             $location.hash('questionFeedbackText_' + question.ser_num);
             $anchorScroll();
         };
@@ -814,8 +814,15 @@
             console.log(Object(question));
 
             // auto scroll to feedback comment box
+            // scrollTo('questionFeedbackText_' + question.ser_num);
             $location.hash('questionFeedbackText_' + question.ser_num);
             $anchorScroll();
+        };
+
+        scrollTo = function(id){
+            var offset = 10; //pixels; adjust for floating menu, context etc
+            var element = angular.element(document.getElementById(id));
+            $document.scrollToElement(element, offset, 2000);
         };
 
         vm.isCheckedCheckmark = function(question, optionKey) {
