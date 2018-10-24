@@ -576,15 +576,21 @@
             }
         }
 
+
+
         function resumeQuestionnaire() {
+
             vm.isResume = false;
             vm.questionTotalIndex++;
             vm.questionnaireStart = false;
             if (vm.startIndex > -1) {
+
                 console.log($scope.carousel);
                 console.log("startIndex = " + vm.startIndex);
                 console.log($scope.carousel.getActiveCarouselItemIndex());
-                $scope.carousel.setActiveCarouselItemIndex(vm.startIndex);
+
+                $scope.carousel.setActiveCarouselItemIndex(vm.startIndex-1);
+                $scope.carousel.next();
             }
             else {
                 summaryPage();
