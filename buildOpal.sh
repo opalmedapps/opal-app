@@ -250,7 +250,7 @@ then
         if [ -f "www/karma.conf.js" ]; then
             rm www/karma.conf.js
         fi
-        	
+
         if [ -f "www/package.json" ]; then
             rm www/package.json
         fi
