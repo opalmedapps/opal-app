@@ -247,11 +247,11 @@ then
 		#Just transfer everything over if not in production mode
 		cp -a $WORKING_DIR/www/. $TARGET_DIR/www
 
-        if [ -f "www/karma.conf.js" ]; then
+        if [ -f "$WORKING_DIR/www/karma.conf.js" ]; then
             rm www/karma.conf.js
         fi
 
-        if [ -f "www/package.json" ]; then
+        if [ -f "$WORKING_DIR/www/package.json" ]; then
             rm www/package.json
         fi
 
