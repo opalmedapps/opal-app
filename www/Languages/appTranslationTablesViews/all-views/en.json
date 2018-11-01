@@ -368,7 +368,7 @@
   "UPCOMINGAPPOINTMENT":"Upcoming Appointment",
   "UPDATE":"Update",
   "UPDATED_EMAIL":"Email successfully updated",
-  "UPDATEMESSAGE":"There is a security patch available for Opal App and for your safety it must be installed before continuing use.",
+  "UPDATEMESSAGE":"This version of Opal is no longer supported. Please update Opal to login.",
   "UPDATEREQUIRED":"Update Required",
   "USER_DISABLED":"Your account has been blocked, please contact the hospital for further assistance.",
   "WAITING_ROOM":"Waiting Room:",

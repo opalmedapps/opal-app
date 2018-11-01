@@ -1,6 +1,6 @@
 {
   "LOADINGDATA":"Chargement",
   "HOME":"Accueil",
-  "UPDATEMESSAGE":"Il y a un correctif de sécurité disponible pour l'application Opal et pour votre sécurité, il doit être installé pour pouvoir continuer à l'utiliser.",
+  "UPDATEMESSAGE":"Cette version d'Opal est discontinuée. Veuillez installer la nouvelle version pour accéder à votre compte.",
   "UPDATEREQUIRED":"Mise à jour requise"
 }
