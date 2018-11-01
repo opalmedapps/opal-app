@@ -1,6 +1,6 @@
 {
   "LOADINGDATA":"Loading data",
   "HOME":"Home",
-  "UPDATEMESSAGE":"There is a security patch available for Opal App and for your safety it must be installed before continuing use.",
+  "UPDATEMESSAGE":"This version of Opal is no longer supported. Please update Opal to login.",
   "UPDATEREQUIRED":"Update Required"
 }

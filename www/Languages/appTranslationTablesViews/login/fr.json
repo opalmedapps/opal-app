@@ -128,7 +128,7 @@
   "TOUR_WELCOME_DESC":"Vous pouvez trouver toutes vos données de radiothérapie grâce à cette application. Pour commencer, cliquez sur la flèche pour changer de diapositive.",
   "TRUST_DEVICE":"Faire confiance à cet appareil?",
   "UNATTENDED":"Ne laissez pas votre appareil sans surveillance.",
-  "UPDATEMESSAGE":"Il y a un correctif de sécurité disponible pour l'application Opal et pour votre sécurité, il doit être installé avant de continuer à l'utiliser.",
+  "UPDATEMESSAGE":"Cette version d'Opal est discontinuée. Veuillez installer la nouvelle version pour accéder à votre compte.",
   "UPDATEREQUIRED":"Mise à jour requise",
   "USER_DISABLED":"Le compte d'utilisateur a été désactivé"
 }
