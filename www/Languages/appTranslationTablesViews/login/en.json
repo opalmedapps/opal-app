@@ -128,7 +128,7 @@
 	"TOUR_WELCOME_DESC":"You can find all your radiotherapy data through this app. To get started, click on the arrow to change slide.",
 	"TRUST_DEVICE":"Set this device as a trusted device?",
 	"UNATTENDED":"Do not leave your phone unattended.",
-	"UPDATEMESSAGE":"There is a security patch available for Opal App and for your safety it must be installed before continuing use.",
+	"UPDATEMESSAGE":"This version of Opal is no longer supported. Please update Opal to login.",
 	"UPDATEREQUIRED":"Update Required",
 	"USER_DISABLED":"User account has been disabled"
 }
