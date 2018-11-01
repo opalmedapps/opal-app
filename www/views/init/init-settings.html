@@ -7,7 +7,7 @@
     </ons-toolbar>
 
     <ons-list class="settings-list">
-        <ons-list-item modifier = "chevron" ng-click="init.goToFeedback()" ng-class="fontSizeTitle">
+        <ons-list-item modifier = "chevron" ng-hide="init.navigatorName == 'initNavigator'" ng-click="init.goToFeedback()" ng-class="fontSizeTitle">
             {{"RATETHISAPP"|translate}}
         </ons-list-item>
     </ons-list>
@@ -39,5 +39,5 @@
         </ons-list-item>
     </ons-list>
 
-    <p class="text-center" style="color:grey;margin-top:10px;font-size:15px">{{MUHC|translate}} {{ init.currentYear}}</p>
+    <p class="text-center" style="color:grey;margin-top:10px;font-size:15px">{{"MUHC"|translate}} {{ init.currentYear}}</p>
 </ons-page>
