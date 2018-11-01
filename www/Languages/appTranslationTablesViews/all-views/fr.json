@@ -368,7 +368,7 @@
   "UPCOMINGAPPOINTMENT":"Prochain rendez-vous",
   "UPDATE":"Mettre à jour",
   "UPDATED_EMAIL":"Email mis à jour avec succès",
-  "UPDATEMESSAGE":"Il y a un correctif de sécurité disponible pour l'application Opal et pour votre sécurité, il doit être installé avant de continuer à utiliser.",
+  "UPDATEMESSAGE":"Cette version d'Opal est discontinuée. Veuillez installer la nouvelle version pour accéder à votre compte.",
   "UPDATEREQUIRED":"Mise à jour requise",
   "USER_DISABLED":"Votre compte a été bloqué. Veuillez contacter l'hôpital pour obtenir de l'aide.",
   "WAITING_ROOM":"Salle d'attente:",
