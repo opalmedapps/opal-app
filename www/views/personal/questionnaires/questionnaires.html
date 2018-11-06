@@ -681,7 +681,7 @@
                 </div>
                 <!--FEEDBACK-->
                 <div ng-if="vm.isQuestion && !vm.questionnaireStart && vm.portraitOrientationCheck.matches && vm.questionnaire.is_feedback == '1'"
-                     style="position: absolute; text-align: center; width: 100%; overflow-y: hidden; border-top: solid lightgrey 1px; background-color: #F9F9F9;"
+                     style="position: absolute; text-align: center; width: 100%; overflow-y: hidden; border-top: solid lightgrey 1px; background-color: lightblue;"
                 id="questionFeedbackText_{{item.data.ser_num}}" class="down-position">
                     <div style="position: relative; width:100%;">
                         <div style="margin-top: 10px">
@@ -699,7 +699,7 @@
                                  ng-click="vm.thumbsDown(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex],item)"
                                  class="fa fa-thumbs-down"></div>
                         </div>
-                        <ons-button ng-if="item.feedbackSectionDown" style="display: inline-block;margin:3px 5px 0px 5px;" ng-click="vm.toggleFeedback(item)">Leave Comment
+                        <ons-button ng-if="item.feedbackSectionDown && (vm.thumbsUpClicked || vm.thumbsDownClicked)" style="display: inline-block;margin:3px 5px 0px 5px;" ng-click="vm.toggleFeedback(item)">Edit Comment
                         </ons-button>
                         <ons-button ng-if="!item.feedbackSectionDown" style="display: inline-block;margin:3px 5px 0px 5px;" ng-click="vm.toggleFeedback(item)">Minimize Comment
                         </ons-button>
