@@ -1,4 +1,8 @@
 <script src="../../../js/controllers/questionnaires/answeredQuestionnaireController.js"></script>
+<head>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/v4-shims.css">
+</head>
 <ons-page ng-controller="QuestionnaireMainController as vm">
     <ons-toolbar fixed-style>
         <div class="left" style="width:20%">
@@ -704,33 +708,33 @@
                         <div ng-if="vm.emoticons">
                             <div style="display: inline-block;margin:3px 5px 0px 5px;">
                                 <div style="font-size:30px;" id="love"
-                                     ng-style="(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex].patient_answer.feedback == vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex].feedback_options[0].feedback_ser_num)? {'color':'darkblue'}:{'color':'black'}"
-                                     ng-click="vm.thumbsUp(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex],item)"
-                                     class="fas fa-smile-beam"></div>
+                                     ng-style="(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex].patient_answer.feedback == 3)? {'color':'darkblue'}:{'color':'black'}"
+                                     ng-click="vm.loveEmot(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex],item)"
+                                     class="far fa-grin-hearts"></div>
                             </div>
                             <div style="display: inline-block;margin:3px 5px 0px 5px;">
                                 <div style="font-size:30px;" id="like"
-                                     ng-style="(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex].patient_answer.feedback == vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex].feedback_options[1].feedback_ser_num)? {'color':'darkblue'}:{'color':'black'}"
-                                     ng-click="vm.thumbsDown(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex],item)"
-                                     class="fas fa-smile"></div>
+                                     ng-style="(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex].patient_answer.feedback == 4)? {'color':'darkblue'}:{'color':'black'}"
+                                     ng-click="vm.likeEmot(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex],item)"
+                                     class="far fa-smile"></div>
                             </div>
                             <div style="display: inline-block;margin:3px 5px 0px 5px;">
                                 <div style="font-size:30px;" id="neutral"
-                                     ng-style="(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex].patient_answer.feedback == vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex].feedback_options[0].feedback_ser_num)? {'color':'darkblue'}:{'color':'black'}"
-                                     ng-click="vm.thumbsUp(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex],item)"
-                                     class="fas fa-meh"></div>
+                                     ng-style="(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex].patient_answer.feedback == 5)? {'color':'darkblue'}:{'color':'black'}"
+                                     ng-click="vm.neutralEmot(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex],item)"
+                                     class="far fa-meh"></div>
                             </div>
                             <div style="display: inline-block;margin:3px 5px 0px 5px;">
                                 <div style="font-size:30px;" id="dislike"
-                                     ng-style="(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex].patient_answer.feedback == vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex].feedback_options[1].feedback_ser_num)? {'color':'darkblue'}:{'color':'black'}"
-                                     ng-click="vm.thumbsDown(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex],item)"
-                                     class="fas fa-frown"></div>
+                                     ng-style="(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex].patient_answer.feedback == 6)? {'color':'darkblue'}:{'color':'black'}"
+                                     ng-click="vm.dislikeEmot(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex],item)"
+                                     class="far fa-frown"></div>
                             </div>
                             <div style="display: inline-block;margin:3px 5px 0px 5px;">
                                 <div style="font-size:30px;" id="hate"
-                                     ng-style="(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex].patient_answer.feedback == vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex].feedback_options[1].feedback_ser_num)? {'color':'darkblue'}:{'color':'black'}"
-                                     ng-click="vm.thumbsDown(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex],item)"
-                                     class="fas fa-angry"></div>
+                                     ng-style="(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex].patient_answer.feedback == 7)? {'color':'darkblue'}:{'color':'black'}"
+                                     ng-click="vm.angryEmot(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex],item)"
+                                     class="far fa-angry"></div>
                             </div>
                         </div>
                         <ons-button ng-if="item.feedbackSectionDown && (vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex].patient_answer.feedback != null)" style="display: inline-block;margin:3px 5px 0px 5px;" ng-click="vm.toggleFeedback(item)">Edit Comment
