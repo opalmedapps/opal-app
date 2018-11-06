@@ -810,6 +810,8 @@
         vm.feedbackTitleDislike = 'Why do you dislike about this question? (Optional)';
         vm.feedbackTitleLike = 'What do you like about this question? (Optional)';
 
+        vm.thumbs = false;
+        vm.emoticons = true;
         vm.thumbsUp = function(question,item) {
             let feedbackTitle = document.getElementById('feedbackTitle_'+item.data.ser_num);
             if (question.patient_answer.feedback != question.feedback_options[0].feedback_ser_num) {
