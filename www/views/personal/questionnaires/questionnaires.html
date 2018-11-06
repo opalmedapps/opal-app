@@ -704,17 +704,19 @@
                         <ons-button ng-if="!item.feedbackSectionDown" style="display: inline-block;margin:3px 5px 0px 5px;" ng-click="vm.toggleFeedback(item)">Minimize Comment
                         </ons-button>
                         <div style="padding-left: 5vw; padding-right: 5vw">
-                                <textarea ng-class="fontSizeDesc" style="margin-top: 10px;
+                                <textarea id="feedbackTextbox_{{item.data.ser_num}}"
+                                          ng-class="fontSizeDesc" style="margin-top: 10px;
                                         width: 100%;
-                                        height: 100px;
+                                        height: 150px;
                                         padding: 12px 20px;
                                         box-sizing: border-box;
                                         border: 2px solid #ccc;
                                         border-radius: 4px;
                                         background-color: #f8f8f8;
                                         resize: none;" wrap="hard"
-                                          ng-model="item.data.patient_answer.feedbackText"
-                                          ng-value="item.data.patient_answer.feedbackText"
+                                          ng-model="vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex].patient_answer.feedbackText"
+                                          ng-value="vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex].patient_answer.feedbackText"
+                                          maxlength="140"
                                 ></textarea>
                             <!--ng-value="item.data.patient_answer.answer[0].text"-->
                             <!--ng-init="vm.setMaxLength(item.data)"-->
@@ -756,7 +758,7 @@
                 <!--PULL UP FEEDBACK COMMENT BOX ANIMATION-->
                 <style>
                     .down-position{
-                        bottom: -110px
+                        bottom: -160px
                     }
 
                     .up-position{
@@ -769,12 +771,12 @@
                     }
 
                     @keyframes pull-up-animation {
-                        from {bottom:-110px}
+                        from {bottom:-160px}
                         to {bottom:0px}
                     }
 
                     @-webkit-keyframes pull-up-animation {
-                        from {bottom:-110px}
+                        from {bottom:-160px}
                         to {bottom:0px}
                     }
 
@@ -785,12 +787,12 @@
 
                     @keyframes push-down-animation {
                         from {bottom:0px}
-                        to {bottom:-110px}
+                        to {bottom:-160px}
                     }
 
                     @-webkit-keyframes push-down-animation {
                         from {bottom:0px}
-                        to {bottom:-110px}
+                        to {bottom:-160px}
                     }
                 </style>
 

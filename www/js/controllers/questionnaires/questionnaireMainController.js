@@ -656,7 +656,7 @@
             }
             //saving question feedback
             if(question.patient_answer.hasOwnProperty('feedback')) {
-                console.log('about to save feedback');
+                console.log('SAVE FEEDBACK');
                 Questionnaires.saveQuestionFeedback(vm.questionnaire.qp_ser_num,question.ser_num,question.patient_answer.feedback, vm.questionnaire.sections[vm.sectionIndex].section_ser_num, question.patient_answer.feedbackText);
             }
         }
