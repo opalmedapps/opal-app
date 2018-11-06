@@ -54,10 +54,6 @@
         ];
         vm.displayReactions = [];
 
-        // Noah Added
-        vm.thumbsUpClicked = false;
-        vm.thumbsDownClicked = false;
-
         vm.showReactions = function(filter) {
             vm.displayReactions = $filter('filter')(vm.availableReactions, function(x) { return x.type == filter; });
             console.log(vm.displayReactions);
@@ -813,46 +809,41 @@
         vm.feedbackTitleNeutral = 'Do you like this question? (Optional)';
         vm.feedbackTitleDislike = 'Why do you dislike about this question? (Optional)';
         vm.feedbackTitleLike = 'What do you like about this question? (Optional)';
+
         vm.thumbsUp = function(question,item) {
             let feedbackTitle = document.getElementById('feedbackTitle_'+item.data.ser_num);
-            if (!vm.thumbsUpClicked) {
+            if (question.patient_answer.feedback != question.feedback_options[0].feedback_ser_num) {
                 feedbackTitle.innerHTML = vm.feedbackTitleLike;
                 question.patient_answer.feedback = question.feedback_options[0].feedback_ser_num;
-                vm.thumbsUpClicked = true;
                 vm.pullUpComment('questionFeedbackText_'+item.data.ser_num);
                 item.feedbackSectionDown = false;
             } else {
                 feedbackTitle.innerHTML = vm.feedbackTitleNeutral;
                 question.patient_answer.feedback = null;
-                vm.thumbsUpClicked = false;
                 vm.pushDownComment('questionFeedbackText_'+item.data.ser_num);
                 item.feedbackSectionDown = true;
             }
 
-            vm.thumbsDownClicked = false;
         };
 
         vm.thumbsDown = function(question, item) {
             let feedbackTitle = document.getElementById('feedbackTitle_'+item.data.ser_num);
-            if (!vm.thumbsDownClicked) {
+            if (question.patient_answer.feedback != question.feedback_options[1].feedback_ser_num) {
                 feedbackTitle.innerHTML = vm.feedbackTitleDislike;
                 question.patient_answer.feedback = question.feedback_options[1].feedback_ser_num;
-                vm.thumbsDownClicked = true;
                 vm.pullUpComment('questionFeedbackText_'+item.data.ser_num);
                 item.feedbackSectionDown = false;
             } else {
                 feedbackTitle.innerHTML = vm.feedbackTitleNeutral;
                 question.patient_answer.feedback = null;
-                vm.thumbsDownClicked = false;
                 vm.pushDownComment('questionFeedbackText_'+item.data.ser_num);
                 item.feedbackSectionDown = true;
             }
-
-            vm.thumbsUpClicked = false;
         };
 
         // Jordan Added
         vm.toggleFeedback = function(item){
+            console.log(item);
             let id = 'questionFeedbackText_'+item.data.ser_num;
             if(item.feedbackSectionDown)
                 vm.pullUpComment(id);
