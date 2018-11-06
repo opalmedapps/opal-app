@@ -1,11 +1,11 @@
 <?xml version='1.0' encoding='utf-8'?>
     <!-- PRODUCTION -->
-    <!--<widget id="com.hig.opal2" android-packageName="com.hig.opal2" android-versionCode="1704" version="1.7.4" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">-->
-    <!--<name>Opal</name>-->
+    <widget id="com.hig.opal2" android-packageName="com.hig.opal2" android-versionCode="1709" version="1.7.9" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>Opal</name>
 
     <!--Pre-Production-->
-    <widget id="com.hig.opaldev2" android-packageName="com.hig.opaldev2" version="1.7.2" android-versionCode="1702" >
-    <name>Opal-dev</name>
+    <!--<widget id="com.hig.opaldev2" android-packageName="com.hig.opaldev2" version="1.7.2" android-versionCode="1702" >-->
+    <!--<name>Opal-dev</name>-->
 
     <description>
         Opal - the MUHC Oncology Patient Application for mobile phones and the web - is a product that has arisen from the winning project of the 2014 MUHC Q+ initiative. The project proposal was submitted by the Health Informatics Group (HIG) and was entitled “Realistic knowledge-based waiting time estimates for radiation oncology patients - addressing the pain of waiting”. It had as its goal the provision of waiting time estimates to radiation oncology patients.
