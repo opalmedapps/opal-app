@@ -809,8 +809,8 @@
             question.skip = !skip;
         }
         vm.feedbackTitleNeutral = 'Do you like this question? (Optional)';
-        vm.thumbs = true;
-        vm.emoticons = false;
+        vm.thumbs = false;
+        vm.emoticons = true;
 
         // ***** THUMBS UP/THUMBS DOWN *****
         vm.feedbackTitleDislike = 'Why do you dislike about this question? (Optional)';
