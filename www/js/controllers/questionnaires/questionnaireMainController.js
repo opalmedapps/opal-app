@@ -53,6 +53,7 @@
             {'type': 'emotion-bad', 'reaction': 'reaction-anxious', 'text': 'Anxious'}
         ];
         vm.displayReactions = [];
+
         vm.showReactions = function(filter) {
             vm.displayReactions = $filter('filter')(vm.availableReactions, function(x) { return x.type == filter; });
             console.log(vm.displayReactions);
@@ -131,7 +132,7 @@
             vm.checkboxSavingIndex = 0;
             vm.questionnaire = params.questionnaire;
             console.log("IN ACTIVATE() IN QUESTIONAIREMAINCONTROLLER: " + Object(params));
-            console.log(vm.questionnaire);
+            console.log(params);
             vm.carouselItems = flattenQuestionnaire(); // questions + section headers
             vm.tmpAnswer = [];
             for(var i=0;i<vm.questionnaire.sections.length; i++) {
@@ -139,6 +140,12 @@
                     vm.totalNumberOfQuestions++;
                 }
             }
+
+            // Jordan added
+            var feedback = params.questionnaire.feedback.Result;
+            console.log(feedback);
+            var feedbackIndex = 0;
+
             vm.questionnaireStart = true;
             vm.sectionIndex = 0;
             vm.questionIndex = 0; // index within the section
@@ -178,9 +185,9 @@
                             break;
                         } else {
                             if((vm.questionnaire.sections[i].questions[j].question_type_category_key == "slider") && (vm.questionnaire.sections[i].questions[j].visualization_name == 'large range')) {
-                            vm.tempAns = vm.questionnaire.sections[i].questions[j].patient_answer.answer[0].sliderAns;
-                            console.log("Changing vm.tempAns to " + vm.tempAns);
-                            console.log(vm.questionnaire);
+                                vm.tempAns = vm.questionnaire.sections[i].questions[j].patient_answer.answer[0].sliderAns;
+                                console.log("Changing vm.tempAns to " + vm.tempAns);
+                                console.log(vm.questionnaire);
                             }
                         }
                         if(vm.questionIndex<vm.maxQuestionIndex){
@@ -189,6 +196,19 @@
                         }
                         vm.startIndex++;
                         console.log('HERE6 ' + vm.questionTotalIndex + " and questionIndex = " + vm.questionIndex);
+
+                        // Set feedback
+                        // **** BUG HERE **** need to find replacement for vm.carousel
+                        // console.log("i: "+(i+1)+", secNum:"+feedback[feedbackIndex].SectionSerNum);
+                        // console.log("j: "+(j)+", quesNum:"+feedback[feedbackIndex].QuestionSerNum);
+                        // if(i+1 == feedback[feedbackIndex].SectionSerNum && j == feedback[feedbackIndex].QuestionSerNum){
+                        //     vm.questionnaire.sections[i].questions[j].patient_answer.feedback = feedback[feedbackIndex].FeedbackAnswerOptionSerNum;
+                        //     //vm.carouselItems.data.patient_answer.feedbackText = feedback[feedbackIndex].FeedbackText;
+                        //     console.log("FEEDBACK MATCHES QUESTION");
+                        //     console.log("FEEDBACK TYPE: "+vm.questionnaire.sections[i].questions[j].patient_answer.feedback);
+                        //     console.log("FEEDBACK TEXT: "+vm.carouselItems.data.patient_answer.feedbackText);
+                        //     feedbackIndex++;
+                        // }
                     }
                     // if all questions have been answered
                     if (i == vm.questionnaire.sections.length-1) {
@@ -423,8 +443,8 @@
         function summaryPage() {
             console.log(vm.startIndex);
             console.log("section: " + vm.sectionIndex + " and question: " + vm.questionIndex);
-                console.log("saving in summary page: " + vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex]);
-                saveAnswer(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex]);
+            console.log("saving in summary page: " + vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex]);
+            saveAnswer(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex]);
 
             removeListener();
             // go to summary page
@@ -446,7 +466,8 @@
                     carouselItems.push(
                         {
                             type: "question",
-                            data: vm.questionnaire.sections[i].questions[j]
+                            data: vm.questionnaire.sections[i].questions[j],
+                            feedbackSectionDown: true
                         }
                     );
                     if (i < vm.questionnaire.sections.length-1 && j == vm.questionnaire.sections[i].questions.length-1) {
@@ -474,12 +495,12 @@
             //     console.log("Option size should be 2, is " + keys.length);
             // }
             // else {
-                //$scope.minText = question.options[0].min_value;
-                //$scope.minCaption = question.options[0].min_caption;
-                //$scope.maxText = question.options[0].max_value;
-                //$scope.maxCaption = question.options[0].max_caption;
+            //$scope.minText = question.options[0].min_value;
+            //$scope.minCaption = question.options[0].min_caption;
+            //$scope.maxText = question.options[0].max_value;
+            //$scope.maxCaption = question.options[0].max_caption;
 
-                // set the style of the options
+            // set the style of the options
             var min = question.options[0].min_value;
             var max = question.options[0].max_value;
             //console.log(min+" :min, max: "+max);
@@ -551,15 +572,21 @@
             }
         }
 
+
+
         function resumeQuestionnaire() {
+
             vm.isResume = false;
             vm.questionTotalIndex++;
             vm.questionnaireStart = false;
             if (vm.startIndex > -1) {
+
                 console.log($scope.carousel);
                 console.log("startIndex = " + vm.startIndex);
                 console.log($scope.carousel.getActiveCarouselItemIndex());
-                $scope.carousel.setActiveCarouselItemIndex(vm.startIndex);
+
+                $scope.carousel.setActiveCarouselItemIndex(vm.startIndex-1);
+                $scope.carousel.next();
             }
             else {
                 summaryPage();
@@ -625,7 +652,9 @@
             }
             //saving question feedback
             if(question.patient_answer.hasOwnProperty('feedback')) {
-                console.log('about to save feedback');
+                console.log('SAVE FEEDBACK');
+                console.log(question.patient_answer.feedbackText);
+                console.log(question.patient_answer.feedback);
                 Questionnaires.saveQuestionFeedback(vm.questionnaire.qp_ser_num,question.ser_num,question.patient_answer.feedback, vm.questionnaire.sections[vm.sectionIndex].section_ser_num, question.patient_answer.feedbackText);
             }
         }
@@ -725,7 +754,7 @@
                 //
                 //     //question.patient_answer.answer.push({'CheckboxAnswerOptionSerNum':optionKey});
                 // } else {
-                    question.patient_answer.answer.push({'CheckboxAnswerOptionSerNum':optionKey});
+                question.patient_answer.answer.push({'CheckboxAnswerOptionSerNum':optionKey});
                 // }
                 // vm.checkboxSavingIndex++;
                 console.log("Answer array");
@@ -779,23 +808,145 @@
             }
             question.skip = !skip;
         }
+        vm.feedbackTitleNeutral = 'Do you like this question? (Optional)';
+        vm.thumbs = false;
+        vm.emoticons = true;
 
-        vm.thumbsUp = function(question) {
-            question.patient_answer.feedback = question.feedback_options[0].feedback_ser_num;
-            console.log(Object(question));
+        // ***** THUMBS UP/THUMBS DOWN *****
+        vm.feedbackTitleDislike = 'Why do you dislike about this question? (Optional)';
+        vm.feedbackTitleLike = 'What do you like about this question? (Optional)';
 
-            // auto scroll to feedback comment box
-            $location.hash('questionFeedbackText_' + question.ser_num);
-            $anchorScroll();
+        vm.thumbsUp = function(question,item) {
+            let feedbackTitle = document.getElementById('feedbackTitle_'+item.data.ser_num);
+            if (question.patient_answer.feedback != question.feedback_options[0].feedback_ser_num) {
+                feedbackTitle.innerHTML = vm.feedbackTitleLike;
+                question.patient_answer.feedback = question.feedback_options[0].feedback_ser_num;
+                vm.pullUpComment('questionFeedbackText_'+item.data.ser_num);
+                item.feedbackSectionDown = false;
+            } else {
+                feedbackTitle.innerHTML = vm.feedbackTitleNeutral;
+                question.patient_answer.feedback = null;
+                vm.pushDownComment('questionFeedbackText_'+item.data.ser_num);
+                item.feedbackSectionDown = true;
+            }
+
         };
 
-        vm.thumbsDown = function(question) {
-            question.patient_answer.feedback = question.feedback_options[1].feedback_ser_num;
-            console.log(Object(question));
+        vm.thumbsDown = function(question, item) {
+            let feedbackTitle = document.getElementById('feedbackTitle_'+item.data.ser_num);
+            if (question.patient_answer.feedback != question.feedback_options[1].feedback_ser_num) {
+                feedbackTitle.innerHTML = vm.feedbackTitleDislike;
+                question.patient_answer.feedback = question.feedback_options[1].feedback_ser_num;
+                vm.pullUpComment('questionFeedbackText_'+item.data.ser_num);
+                item.feedbackSectionDown = false;
+            } else {
+                feedbackTitle.innerHTML = vm.feedbackTitleNeutral;
+                question.patient_answer.feedback = null;
+                vm.pushDownComment('questionFeedbackText_'+item.data.ser_num);
+                item.feedbackSectionDown = true;
+            }
+        };
 
-            // auto scroll to feedback comment box
-            $location.hash('questionFeedbackText_' + question.ser_num);
-            $anchorScroll();
+        // ***** EMOTICONS *****
+
+        vm.loveEmot = function(question,item) {
+            let feedbackTitle = document.getElementById('feedbackTitle_'+item.data.ser_num);
+            if (question.patient_answer.feedback != 3) {
+                feedbackTitle.innerHTML = 'What do you love about this question? (Optional)';
+                question.patient_answer.feedback = 3;
+                vm.pullUpComment('questionFeedbackText_'+item.data.ser_num);
+                item.feedbackSectionDown = false;
+            } else {
+                feedbackTitle.innerHTML = vm.feedbackTitleNeutral;
+                question.patient_answer.feedback = null;
+                vm.pushDownComment('questionFeedbackText_'+item.data.ser_num);
+                item.feedbackSectionDown = true;
+            }
+
+        };
+
+        vm.likeEmot = function(question,item) {
+            let feedbackTitle = document.getElementById('feedbackTitle_'+item.data.ser_num);
+            if (question.patient_answer.feedback != 4) {
+                feedbackTitle.innerHTML = 'What do you like about this question? (Optional)';
+                question.patient_answer.feedback = 4;
+                vm.pullUpComment('questionFeedbackText_'+item.data.ser_num);
+                item.feedbackSectionDown = false;
+            } else {
+                feedbackTitle.innerHTML = vm.feedbackTitleNeutral;
+                question.patient_answer.feedback = null;
+                vm.pushDownComment('questionFeedbackText_'+item.data.ser_num);
+                item.feedbackSectionDown = true;
+            }
+
+        };
+
+        vm.neutralEmot = function(question,item) {
+            let feedbackTitle = document.getElementById('feedbackTitle_'+item.data.ser_num);
+            if (question.patient_answer.feedback != 5) {
+                feedbackTitle.innerHTML = 'How do you feel about this question? (Optional)';
+                question.patient_answer.feedback = 5;
+                vm.pullUpComment('questionFeedbackText_'+item.data.ser_num);
+                item.feedbackSectionDown = false;
+            } else {
+                feedbackTitle.innerHTML = vm.feedbackTitleNeutral;
+                question.patient_answer.feedback = null;
+                vm.pushDownComment('questionFeedbackText_'+item.data.ser_num);
+                item.feedbackSectionDown = true;
+            }
+        };
+
+        vm.dislikeEmot = function(question,item) {
+            let feedbackTitle = document.getElementById('feedbackTitle_'+item.data.ser_num);
+            if (question.patient_answer.feedback != 6) {
+                feedbackTitle.innerHTML = 'What do you dislike about this question? (Optional)';
+                question.patient_answer.feedback = 6;
+                vm.pullUpComment('questionFeedbackText_'+item.data.ser_num);
+                item.feedbackSectionDown = false;
+            } else {
+                feedbackTitle.innerHTML = vm.feedbackTitleNeutral;
+                question.patient_answer.feedback = null;
+                vm.pushDownComment('questionFeedbackText_'+item.data.ser_num);
+                item.feedbackSectionDown = true;
+            }
+        };
+
+        vm.angryEmot = function(question,item) {
+            let feedbackTitle = document.getElementById('feedbackTitle_'+item.data.ser_num);
+            if (question.patient_answer.feedback != 7) {
+                feedbackTitle.innerHTML = 'What makes you angry about this question? (Optional)';
+                question.patient_answer.feedback = 7;
+                vm.pullUpComment('questionFeedbackText_'+item.data.ser_num);
+                item.feedbackSectionDown = false;
+            } else {
+                feedbackTitle.innerHTML = vm.feedbackTitleNeutral;
+                question.patient_answer.feedback = null;
+                vm.pushDownComment('questionFeedbackText_'+item.data.ser_num);
+                item.feedbackSectionDown = true;
+            }
+        };
+
+
+
+        // Jordan Added
+        vm.toggleFeedback = function(item){
+            console.log(item);
+            let id = 'questionFeedbackText_'+item.data.ser_num;
+            if(item.feedbackSectionDown)
+                vm.pullUpComment(id);
+            else
+                vm.pushDownComment(id);
+            item.feedbackSectionDown = !item.feedbackSectionDown;
+        };
+
+        vm.pullUpComment = function(id){
+            var feedback = document.getElementById(id);
+            feedback.className ='pull-up up-position';
+        };
+
+        vm.pushDownComment = function(id){
+            var feedback = document.getElementById(id);
+            feedback.className = 'push-down down-position';
         };
 
         vm.isCheckedCheckmark = function(question, optionKey) {

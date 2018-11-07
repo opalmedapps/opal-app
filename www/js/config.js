@@ -20,11 +20,11 @@ function fireConfig () {
 
     // Initialize Firebase
     var config = {
-        apiKey: "AIzaSyBqPY0KIXqPFlLztENbAauhn12tGHPeA6A",
-        authDomain: "opalpatient.firebaseapp.com",
-        databaseURL: "https://opalpatient.firebaseio.com",
-        projectId: "opalpatient",
-        storageBucket: "opalpatient.appspot.com",
+        apiKey: "AIzaSyAwrkvcBqCDIleuKKyJvTsdTYkXRbYMSVw",
+        authDomain: "opal-86e32.firebaseapp.com",
+        databaseURL: "https://opal-86e32.firebaseio.com",
+        projectId: "opal-86e32",
+        storageBucket: "opal-86e32.appspot.com",
         messagingSenderId: "42757898093"
     };
     if (!firebase.apps.length) {
