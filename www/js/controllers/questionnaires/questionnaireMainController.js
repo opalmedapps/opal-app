@@ -652,7 +652,9 @@
             }
             //saving question feedback
             if(question.patient_answer.hasOwnProperty('feedback')) {
-                console.log('about to save feedback');
+                console.log('SAVE FEEDBACK');
+                console.log(question.patient_answer.feedbackText);
+                console.log(question.patient_answer.feedback);
                 Questionnaires.saveQuestionFeedback(vm.questionnaire.qp_ser_num,question.ser_num,question.patient_answer.feedback, vm.questionnaire.sections[vm.sectionIndex].section_ser_num, question.patient_answer.feedbackText);
             }
         }
@@ -807,6 +809,10 @@
             question.skip = !skip;
         }
         vm.feedbackTitleNeutral = 'Do you like this question? (Optional)';
+        vm.thumbs = false;
+        vm.emoticons = true;
+
+        // ***** THUMBS UP/THUMBS DOWN *****
         vm.feedbackTitleDislike = 'Why do you dislike about this question? (Optional)';
         vm.feedbackTitleLike = 'What do you like about this question? (Optional)';
 
@@ -840,6 +846,87 @@
                 item.feedbackSectionDown = true;
             }
         };
+
+        // ***** EMOTICONS *****
+
+        vm.loveEmot = function(question,item) {
+            let feedbackTitle = document.getElementById('feedbackTitle_'+item.data.ser_num);
+            if (question.patient_answer.feedback != 3) {
+                feedbackTitle.innerHTML = 'What do you love about this question? (Optional)';
+                question.patient_answer.feedback = 3;
+                vm.pullUpComment('questionFeedbackText_'+item.data.ser_num);
+                item.feedbackSectionDown = false;
+            } else {
+                feedbackTitle.innerHTML = vm.feedbackTitleNeutral;
+                question.patient_answer.feedback = null;
+                vm.pushDownComment('questionFeedbackText_'+item.data.ser_num);
+                item.feedbackSectionDown = true;
+            }
+
+        };
+
+        vm.likeEmot = function(question,item) {
+            let feedbackTitle = document.getElementById('feedbackTitle_'+item.data.ser_num);
+            if (question.patient_answer.feedback != 4) {
+                feedbackTitle.innerHTML = 'What do you like about this question? (Optional)';
+                question.patient_answer.feedback = 4;
+                vm.pullUpComment('questionFeedbackText_'+item.data.ser_num);
+                item.feedbackSectionDown = false;
+            } else {
+                feedbackTitle.innerHTML = vm.feedbackTitleNeutral;
+                question.patient_answer.feedback = null;
+                vm.pushDownComment('questionFeedbackText_'+item.data.ser_num);
+                item.feedbackSectionDown = true;
+            }
+
+        };
+
+        vm.neutralEmot = function(question,item) {
+            let feedbackTitle = document.getElementById('feedbackTitle_'+item.data.ser_num);
+            if (question.patient_answer.feedback != 5) {
+                feedbackTitle.innerHTML = 'How do you feel about this question? (Optional)';
+                question.patient_answer.feedback = 5;
+                vm.pullUpComment('questionFeedbackText_'+item.data.ser_num);
+                item.feedbackSectionDown = false;
+            } else {
+                feedbackTitle.innerHTML = vm.feedbackTitleNeutral;
+                question.patient_answer.feedback = null;
+                vm.pushDownComment('questionFeedbackText_'+item.data.ser_num);
+                item.feedbackSectionDown = true;
+            }
+        };
+
+        vm.dislikeEmot = function(question,item) {
+            let feedbackTitle = document.getElementById('feedbackTitle_'+item.data.ser_num);
+            if (question.patient_answer.feedback != 6) {
+                feedbackTitle.innerHTML = 'What do you dislike about this question? (Optional)';
+                question.patient_answer.feedback = 6;
+                vm.pullUpComment('questionFeedbackText_'+item.data.ser_num);
+                item.feedbackSectionDown = false;
+            } else {
+                feedbackTitle.innerHTML = vm.feedbackTitleNeutral;
+                question.patient_answer.feedback = null;
+                vm.pushDownComment('questionFeedbackText_'+item.data.ser_num);
+                item.feedbackSectionDown = true;
+            }
+        };
+
+        vm.angryEmot = function(question,item) {
+            let feedbackTitle = document.getElementById('feedbackTitle_'+item.data.ser_num);
+            if (question.patient_answer.feedback != 7) {
+                feedbackTitle.innerHTML = 'What makes you angry about this question? (Optional)';
+                question.patient_answer.feedback = 7;
+                vm.pullUpComment('questionFeedbackText_'+item.data.ser_num);
+                item.feedbackSectionDown = false;
+            } else {
+                feedbackTitle.innerHTML = vm.feedbackTitleNeutral;
+                question.patient_answer.feedback = null;
+                vm.pushDownComment('questionFeedbackText_'+item.data.ser_num);
+                item.feedbackSectionDown = true;
+            }
+        };
+
+
 
         // Jordan Added
         vm.toggleFeedback = function(item){
