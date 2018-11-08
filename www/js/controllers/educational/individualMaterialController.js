@@ -5,6 +5,15 @@
  * Time: 2:08 PM
  */
 
+/**
+ * Modification History
+ *
+ * 2018 Nov: Project: Fertility Educate / Educational Material Packages / Education Material Interaction Logging
+ *           Developed by Tongyou (Eason) Yang in Summer 2018
+ *           Merged by Stacey Beard
+ *           Commit # 6706edfb776eabef4ef4a2c9b69d834960863435
+ */
+
 (function () {
     'use strict';
 
@@ -12,10 +21,12 @@
         .module('MUHCApp')
         .controller('IndividualMaterialController', IndividualMaterialController);
 
-    IndividualMaterialController.$inject = ['$scope', '$timeout', 'NavigatorParameters', 'EducationalMaterial', 'FileManagerService', '$filter', 'Logger', 'NetworkStatus', 'Patient'];
+    IndividualMaterialController.$inject = ['$scope', '$timeout', 'NavigatorParameters', 'EducationalMaterial',
+        'FileManagerService', '$filter', 'Logger', 'NetworkStatus', 'Patient'];
 
     /* @ngInject */
-    function IndividualMaterialController($scope, $timeout, NavigatorParameters, EducationalMaterial, FileManagerService, $filter, Logger, NetworkStatus, Patient) {
+    function IndividualMaterialController($scope, $timeout, NavigatorParameters, EducationalMaterial,
+                                          FileManagerService, $filter, Logger, NetworkStatus, Patient) {
         var vm = this;
 
         var param;
@@ -27,9 +38,11 @@
         vm.share = share;
         vm.print = print;
 
+        // Logging functions
         vm.scrollDown = scrollDown;
         vm.clickBack = clickBack;
 
+        // Function used to open a material contained in a package
         vm.goInPackage = goInPackage;
 
         activate();
@@ -46,12 +59,13 @@
             vm.edumaterial = EducationalMaterial.setLanguage(param.Post);
             Logger.sendLog('Educational Material', param.Post.EducationalMaterialSerNum);
 
+            // RStep refers to recursive depth in a package (since packages can contain other packages).
             vm.recursive_step = param.RStep;
 
-            MatchingDocuments();
+            matchingDocuments();
 
             //Determine if material has a ShareURL and is printable
-            if(vm.edumaterial.hasOwnProperty('ShareURL')&& vm.edumaterial.ShareURL !=="" && vm.edumaterial.ShareURL !== undefined) {
+            if(vm.edumaterial.ShareURL && vm.edumaterial.ShareURL !=="") {
                 vm.isPrintable = FileManagerService.isPDFDocument(vm.edumaterial.ShareURL);
             }
 
@@ -97,14 +111,15 @@
                 NavigatorParameters.setParameters({ 'Navigator': navigatorPage, 'Index': index, 'Booklet': vm.edumaterial, 'TableOfContents': vm.tableOfContents });
                 window[navigatorPage].pushPage(nextStatus.Url);
 
-                console.log('what up');
-                console.log(vm.tableOfContents[index]);
+                // console.log('vm.tableOfContents[index]:');
+                // console.log(vm.tableOfContents[index]);
 
                 EducationalMaterial.writeSubClickedRequest(Patient.getPatientId(),vm.tableOfContents[index].EducationalMaterialTOCSerNum)
-                    .then((res)=>{
-                        console.log(res);
-                        console.log("set sub clicked")
-                    });
+                    // // For testing
+                    // .then((res)=>{
+                    //     console.log(res);
+                    //     console.log("set sub clicked")
+                    // });
 
             }
         }
@@ -163,26 +178,23 @@
             }
         }
 
-        //newly added scroll function
-
+        // Author: Tongyou (Eason) Yang
         function scrollDown(){
 
             $timeout(function () {
 
-                console.log("in scroll down function");
-
                 var $ = document.getElementById(vm.recursive_step);
 
                 $.onscroll = function () {
-                    console.log($.clientHeight);
-                    console.log($.scrollHeight-$.scrollTop);
 
                     if($.clientHeight===$.scrollHeight-$.scrollTop){
 
                         EducationalMaterial.writeScrollToBottomRequest(vm.edumaterial.EducationalMaterialSerNum, Patient.getPatientId())
-                            .then((res) => {
-                                console.log(res);
-                            });
+                            // // For testing
+                            // .then((res) => {
+                            //     console.log(res);
+                            //     console.log("set scrolled to bottom");
+                            // });
                     }
                 };
 
@@ -191,28 +203,31 @@
                     if($.scrollHeight<=$.clientHeight) {//don't need to scroll
 
                         EducationalMaterial.writeScrollToBottomRequest(vm.edumaterial.EducationalMaterialSerNum, Patient.getPatientId())
-                            .then((res) => {
-                                console.log(res);
-                            });
+                            // // For testing
+                            // .then((res) => {
+                            //     console.log(res);
+                            //     console.log("default scrolled to bottom")
+                            // });
                     }
-
                 }
 
             },0);
 
         }
 
+        // Logs when a user clicks back from an educational material.
+        // Author: Tongyou (Eason) Yang
         function clickBack() {
-            console.log("clicked back");
-
             EducationalMaterial.writeClickedBackRequest(vm.edumaterial.EducationalMaterialSerNum, Patient.getPatientId())
-                .then((res)=>{
-                    console.log(res);
-                })
-
+                // // For testing
+                // .then((res)=>{
+                //     console.log(res);
+                //     console.log("clicked back");
+                // });
         }
 
-        function MatchingDocuments(){
+        // Author: Tongyou (Eason) Yang
+        function matchingDocuments(){
             vm.existingMaterials = EducationalMaterial.setLanguage(EducationalMaterial.getEducationalMaterial());
             vm.packageContent = {};//build a matching dictionary
 
@@ -221,6 +236,8 @@
             });
         }
 
+        // Opens a material contained in a package.
+        // Author: Tongyou (Eason) Yang
         function goInPackage(material){
 
             if(vm.packageContent[material.EducationalMaterialControlSerNum].ReadStatus==0){
@@ -229,6 +246,7 @@
             }
             EducationalMaterial.writeClickedRequest(vm.packageContent[material.EducationalMaterialControlSerNum].EducationalMaterialSerNum, Patient.getPatientId());
 
+            // RStep refers to recursive depth in a package (since packages can contain other packages).
             var rstep = vm.recursive_step + 1;
             NavigatorParameters.setParameters({ 'Navigator': navigatorPage,'Post': vm.packageContent[material.EducationalMaterialControlSerNum], 'RStep':rstep });
             window[navigatorPage].pushPage('./views/education/individual-material.html');

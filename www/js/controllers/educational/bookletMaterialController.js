@@ -6,6 +6,15 @@
  */
 
 /**
+ * Modification History
+ *
+ * 2018 Nov: Project: Fertility Educate / Educational Material Packages / Education Material Interaction Logging
+ *           Developed by Tongyou (Eason) Yang in Summer 2018
+ *           Merged by Stacey Beard
+ *           Commit # 6706edfb776eabef4ef4a2c9b69d834960863435
+ */
+
+/**
  * @method BookletEduMaterialController
  * @description This controller takes care of the displaying the educational material that has a table of contents in a carousel fashion. It also takes care of the popover that controls the table of contents and
  * rating.
@@ -19,11 +28,13 @@
         .module('MUHCApp')
         .controller('BookletMaterialController', BookletMaterialController);
 
-    BookletMaterialController.$inject = ['$scope', '$timeout', 'NavigatorParameters', '$rootScope', '$filter','EducationalMaterial','Patient'];
+    BookletMaterialController.$inject = ['$scope', '$timeout', 'NavigatorParameters', '$rootScope', '$filter',
+        'EducationalMaterial', 'Patient'];
 
 
     /* @ngInject */
-    function BookletMaterialController($scope, $timeout, NavigatorParameters, $rootScope, $filter, EducationalMaterial, Patient) {
+    function BookletMaterialController($scope, $timeout, NavigatorParameters, $rootScope, $filter,
+                                       EducationalMaterial, Patient) {
 
         var vm = this;
 
@@ -33,8 +44,9 @@
         vm.goBack = goBack;
         vm.goNext = goNext;
 
+        // Logging functions
         vm.scrollDown = scrollDown;
-        vm.SubClickBack = SubClickBack;
+        vm.subClickBack = subClickBack;
 
         activate();
         /////////////////////////////
@@ -95,16 +107,17 @@
          */
         function goNext() {
             if (vm.activeIndex < vm.tableOfContents.length - 1) {
-                window.scrollTo(0,0);
+                // window.scrollTo(0,0); // Not working
                 vm.activeIndex++;
                 vm.carousel.setActiveCarouselItemIndex(vm.activeIndex);
 
                 EducationalMaterial.writeSubClickedRequest(Patient.getPatientId(),
                     vm.tableOfContents[vm.activeIndex].EducationalMaterialTOCSerNum)
-                    .then((res)=>{
-                        console.log(res);
-                        console.log("sub clicked");
-                    });
+                    // // For testing
+                    // .then((res)=>{
+                    //     console.log(res);
+                    //     console.log("sub clicked");
+                    // });
             }
         }
 
@@ -115,10 +128,11 @@
 
                 EducationalMaterial.writeSubClickedRequest(Patient.getPatientId(),
                     vm.tableOfContents[vm.activeIndex].EducationalMaterialTOCSerNum)
-                    .then((res)=>{
-                        console.log(res);
-                        console.log("sub clicked");
-                    });
+                    // // For testing
+                    // .then((res)=>{
+                    //     console.log(res);
+                    //     console.log("sub clicked");
+                    // });
             }
         }
 
@@ -204,58 +218,55 @@
             }
         }
 
+        // Author: Tongyou (Eason) Yang
         function scrollDown(i,section){
 
             $timeout(function () {
                 var $ = document.getElementById(i+'sub');
 
                 $.onclick = function(){ //if don't need to scroll, then if a user clicks, then set the field
-                    console.log("client height "+$.clientHeight);
-                    console.log("scroll height "+$.scrollHeight);
+
                     if($.scrollHeight<=$.clientHeight){//don't need to scroll
 
-                        console.log(section);
+                        //console.log(section);
                         EducationalMaterial.writeSubScrollToBottomRequest(Patient.getPatientId(),
                             section.EducationalMaterialTOCSerNum)
-                            .then((res)=>{
-                                console.log(res);
-                                console.log("default scrolled to bottom")
-                            });
-
+                            // // For testing
+                            // .then((res)=>{
+                            //     console.log(res);
+                            //     console.log("default scrolled to bottom")
+                            // });
                     }
                 };
 
                 $.onscroll = function () {
-                    console.log("in on scroll function");
 
                     if($.clientHeight===$.scrollHeight-$.scrollTop){
-                        console.log(section);
-
+                        //console.log(section);
                         EducationalMaterial.writeSubScrollToBottomRequest(Patient.getPatientId(),
                             section.EducationalMaterialTOCSerNum)
-                            .then((res)=>{
-                                console.log(res);
-                                console.log("set scrolled to bottom")
-                            });
-
+                            // // For testing
+                            // .then((res)=>{
+                            //     console.log(res);
+                            //     console.log("set scrolled to bottom");
+                            // });
                     }
                 }
-
-
 
             },0);
         }
 
-        function SubClickBack() {
+        // Logs when a user clicks back from an educational sub-material (material contained in a booklet).
+        // Author: Tongyou (Eason) Yang
+        function subClickBack() {
 
             EducationalMaterial.writeSubClickedBackRequest(Patient.getPatientId(),
                 vm.tableOfContents[vm.activeIndex].EducationalMaterialTOCSerNum)
-                .then((res)=>{
-                    console.log(res);
-                    console.log("sub clicked back");
-                });
+                // // For testing
+                // .then((res)=>{
+                //     console.log(res);
+                //     console.log("sub clicked back");
+                // });
         }
-
-
     }
 })();

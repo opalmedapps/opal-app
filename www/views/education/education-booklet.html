@@ -1,15 +1,14 @@
 <ons-page ng-controller="BookletMaterialController as edu" style="background-color:white;">
 
-
     <ons-toolbar fixed-style modifier="transparent">
 
         <div class="left">
-            <ons-back-button ng-show="!edu.isFullscreen" ng-click="edu.SubClickBack()">
+            <ons-back-button ng-show="!edu.isFullscreen" ng-click="edu.subClickBack()">
                 {{"BACK"|translate}}
             </ons-back-button>
             <span class="item-title" ng-class="fontSizeTitle" style="font-size:19px;padding-left:40px;padding-top:10px" ng-show="edu.isFullscreen">
-            {{edu.tableOfContents[activeIndex].Name}}
-        </span>
+                {{edu.tableOfContents[activeIndex].Name}}
+            </span>
         </div>
 
         <div class="center" >
@@ -17,13 +16,12 @@
                 <i class="ion-chevron-left"></i>
             </ons-toolbar-button>
             <span ng-show="!edu.isFullscreen">
-            {{edu.activeIndex+1}} / {{edu.tableOfContents.length}}
-        </span>
-            <ons-toolbar-button  ng-disabled="activeIndex==(edu.tableOfContents.length-1)" ng-click="edu.goNext()" ng-show="!edu.isFullscreen">
+                {{edu.activeIndex+1}} / {{edu.tableOfContents.length}}
+            </span>
+            <ons-toolbar-button ng-disabled="activeIndex==(edu.tableOfContents.length-1)" ng-click="edu.goNext()" ng-show="!edu.isFullscreen">
                 <i class="ion-chevron-right"></i>
             </ons-toolbar-button>
         </div>
-
 
         <div class="right">
             <ons-toolbar-button ng-show="!edu.isFullscreen" ng-click="popover.show('#buttonListContent');" id="buttonListContent">
@@ -39,11 +37,13 @@
     </ons-toolbar>
 
 
-
     <div style="background:transparent;margin:0;width:100vw;" id="divTitleBookletSection" ng-show="!edu.isFullscreen">
         <div style="line-height:1;padding:5px" align="center" >
             <header>
-                <span class="item-title" ng-class="fontSizeTitle" style="font-size:19px">{{edu.tableOfContents[edu.activeIndex].Name}}</span><!--<span style="float:right;margin-top:-10px" class="navigation-bar__line-height"><button class="button--quiet" ng-click="fullScreenToggle()"  style="font-size:30px;padding:0 0 0 10px"><i class="ion-arrow-shrink" style="font-size:32px; vertical-align:-6px;" ng-show="isFullscreen"></i><i ng-show="!isFullscreen" style="font-size:32px" class="ion-arrow-expand"></i></button></span>-->
+                <span class="item-title" ng-class="fontSizeTitle" style="font-size:19px">
+                    {{edu.tableOfContents[edu.activeIndex].Name}}
+                </span>
+                <!--<span style="float:right;margin-top:-10px" class="navigation-bar__line-height"><button class="button--quiet" ng-click="fullScreenToggle()"  style="font-size:30px;padding:0 0 0 10px"><i class="ion-arrow-shrink" style="font-size:32px; vertical-align:-6px;" ng-show="isFullscreen"></i><i ng-show="!isFullscreen" style="font-size:32px" class="ion-arrow-expand"></i></button></span>-->
             </header>
         </div>
     </div>
@@ -69,10 +69,7 @@
 
         </ons-carousel-item>
 
-
     </ons-carousel>
-
-
 
 </ons-page>
 

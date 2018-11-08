@@ -1,10 +1,5 @@
 <ons-page ng-controller="EducationalMaterialController as edu" ng-device-backbutton="edu.educationDeviceBackButton()">
     <ons-toolbar fixed-style>
-        <!--<div class="left">-->
-        <!--<ons-toolbar-button ng-click="educationNavigator.pushPage('./views/education/education_charts.html')">-->
-        <!--<ons-icon icon="fa-pie-chart "></ons-icon>-->
-        <!--</ons-toolbar-button>-->
-        <!--</div>-->
         <div class="center" ng-class="fontSizeTitle">{{"EDUCATION"|translate}}</div>
         <div class="right"><ons-toolbar-button ng-click="educationNavigator.pushPage('./views/tabs/info-page-tabs.html')"><ons-icon icon="fa-info-circle"></ons-icon></ons-toolbar-button></div>
     </ons-toolbar>
@@ -13,11 +8,10 @@
     </div>
     <network-banner></network-banner>
 
-    <input type="text" placeholder="Search" class="search-input" ng-model="edu.searchname" ng-change="edu.filterMaterial()">
+    <input type="text" placeholder="Search" class="search-input" ng-model="edu.searchString" ng-change="edu.filterMaterial()">
 
     <ons-list>
-
-        <ons-list-header ng-repeat-start = "edumaterial in edu.new_edumaterials" class="person-list-header" ng-class="fontSizeTitle"  ng-if ="edu.showHeader($index)">
+        <ons-list-header ng-repeat-start = "edumaterial in edu.filteredEduMaterials" class="person-list-header" ng-class="fontSizeTitle"  ng-if ="edu.showHeader($index)">
             {{edumaterial.PhaseInTreatment}}
         </ons-list-header>
         <ons-list-item modifier="chevron" class="item" ng-repeat-end ng-click="edu.goToEducationalMaterial(edumaterial)">
