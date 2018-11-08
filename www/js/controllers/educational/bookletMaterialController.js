@@ -240,8 +240,15 @@
                 };
 
                 $.onscroll = function () {
+                    
+                    // Check whether the user has scrolled to the bottom.
+                    // Smaller than 1 is used instead of equals 0 to make sure the check doesn't fail due to
+                    // decimals (since $.scrollHeight and $.clientHeight are integers but $.scrollTop is not).
+                    // Note: $.scrollHeight is the height of the material
+                    //       $.scrollTop + $.clientHeight is the position of the bottom of our 'window' on the material
+                    var spaceToTheBottomOfTheScreen = $.scrollHeight - ($.scrollTop + $.clientHeight);
+                    if(spaceToTheBottomOfTheScreen < 1){
 
-                    if($.clientHeight===$.scrollHeight-$.scrollTop){
                         //console.log(section);
                         EducationalMaterial.writeSubScrollToBottomRequest(Patient.getPatientId(),
                             section.EducationalMaterialTOCSerNum)
