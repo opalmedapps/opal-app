@@ -1,6 +1,16 @@
 //
 // Author David Herrera on Summer 2016, Email:davidfherrerar@gmail.com
 //
+
+/**
+ * Modification History
+ *
+ * 2018 Nov: Project: Fertility Educate / Educational Material Packages / Education Material Interaction Logging
+ *           Developed by Tongyou (Eason) Yang in Summer 2018
+ *           Merged by Stacey Beard
+ *           Commit # 6706edfb776eabef4ef4a2c9b69d834960863435
+ */
+
 var myApp=angular.module('MUHCApp');
 /**
  *@ngdoc service
@@ -12,13 +22,16 @@ var myApp=angular.module('MUHCApp');
  *@requires $filter
  *@description Sets the educational material and provides an API to interact with it and the server
  **/
-myApp.service('EducationalMaterial',['$filter','LocalStorage','FileManagerService', 'UserPreferences', 'RequestToServer', '$http' ,function ($filter, LocalStorage, FileManagerService, UserPreferences,RequestToServer, $http) {
+myApp.service('EducationalMaterial',['$filter','LocalStorage','FileManagerService', 'UserPreferences',
+    'RequestToServer', '$http' ,function ($filter, LocalStorage, FileManagerService, UserPreferences,
+                                          RequestToServer, $http) {
 
     /**
      *@ngdoc property
      *@name  MUHCApp.service.#educationalMaterialArray
      *@propertyOf MUHCApp.service:EducationalMaterial
-     *@description Initializing array that represents all the information regarding educational material for the patient, this array is passed to appropiate controllers.
+     *@description Initializing array that represents all the information regarding educational material
+     *             for the patient, this array is passed to appropriate controllers.
      **/
 
     //Initializing array that represents all the informations for Announcements
@@ -55,11 +68,11 @@ myApp.service('EducationalMaterial',['$filter','LocalStorage','FileManagerServic
         },
         'TestingType':{
             icon:'fa fa-question',
-            color:'#FF7043'
+            color:'#818181'
         },
-        'Package':{ // TODO: to be changed for package
-            icon:'fa fa-book',
-            color:'#FF7043'
+        'Package':{
+            icon:'fa fa-cube',
+            color:'#8A5B45'
         }
     };
     function setLanguageEduMaterial(array)
@@ -97,6 +110,8 @@ myApp.service('EducationalMaterial',['$filter','LocalStorage','FileManagerServic
             array.Name =(language ==='EN')? array.Name_EN : array.Name_FR;
             array.Type = (language ==='EN')? array.EducationalMaterialType_EN : array.EducationalMaterialType_FR;
         }
+        //console.log('Set edu material language:');
+        //console.log(array);
         return array;
     }
     function getTypeMaterial(edumaterial)
@@ -282,118 +297,113 @@ myApp.service('EducationalMaterial',['$filter','LocalStorage','FileManagerServic
                 }
             }
         },
-        //Reads announcement and sends request to backend
 
+        // Sends a request to the backend to mark the row numbered 'serNum' of the table EducationalMaterial as read.
+        // Author: Tongyou (Eason) Yang
         readMaterial:function(serNum)
         {
             RequestToServer.sendRequestWithResponse('Read',{'Id':serNum, 'Field':'EducationalMaterial'})
                 // // For testing
                 // .then((res)=>{
                 //     console.log(res);
-                //     ons.notification.alert({message:"Set EducationalMaterial row "+serNum+" as read."});
+                //     // ons.notification.alert({message:"Set EducationalMaterial row "+serNum+" as read."});
                 // }).catch((err)=>{
                 //     console.log("Failed to set EducationalMaterial row "+serNum+" as read due to error:");
                 //     console.log(err);
                 // });
         },
 
-        /**
-         *@ngdoc method
-         *@name writeClickedRequest
-         *@methodOf MUHCApp.service:EducationalMaterial
-         *@param {String} serNum EducationalMaterialSerNum to be read
-         *@description Sets ReadStatus in educational material to 1, sends request to backend, and syncs with device storage
-         **/
+        // Logs when a user clicks on an educational material.
+        // Author: Tongyou (Eason) Yang
         writeClickedRequest:function(serNum, userId)
         {
-
             RequestToServer.sendRequestWithResponse('Clicked',{'Id':serNum, 'Field':'EducationalMaterial', 'UserId':userId})
-                .then((res)=>{
-                    console.log(res);
-                    // ons.notification.alert({message:"set clicked in DB"});
-                }).catch(()=>{
-
-            });
-
+                // // For testing
+                // .then((res)=>{
+                //     console.log(res);
+                //     // ons.notification.alert({message:"Successfully wrote Clicked in DB"});
+                // });
         },
 
+        // Logs when a user scrolls to the bottom of an educational material.
+        // Author: Tongyou (Eason) Yang
         writeScrollToBottomRequest:function(serNum, userId){
-            console.log("in writeScrollToBottomRequest function");
 
             return RequestToServer.sendRequestWithResponse('WriteScrollToBottom', {
                 'Id': serNum,
                 'UserId': userId,
                 'Field': 'EducationalMaterial'
-            }).then((res) => {
-                console.log(res);
-                // ons.notification.alert({message: "Successfully write in DB"});
-                return res;
-            }).catch(() => {
-
-            });
+            })
+            // // For testing
+            // .then((res) => {
+            //     console.log(res);
+            //     // ons.notification.alert({message: "Successfully wrote WriteScrollToBottom in DB"});
+            //     return res;
+            // });
 
         },
+
+        // Logs when a user scrolls to the bottom of an educational sub-material (material contained in a booklet).
+        // Author: Tongyou (Eason) Yang
         writeSubScrollToBottomRequest:function(patientId, TocSerNum){
-            console.log("in writeSubScrollToBottomRequest function");
 
             return RequestToServer.sendRequestWithResponse('WriteSubScrollToBottom',{
                 'patientId' : patientId,
                 'TocSerNum' : TocSerNum,
                 'Field' : 'EducationalMaterialTOC'
-            }).then((res)=>{
-                console.log(res);
-                // ons.notification.alert({message: "Successfully write in Sub DB"});
-                return res;
-            }).catch(()=>{
-
-            });
-
+            })
+            // // For testing
+            // .then((res)=>{
+            //     console.log(res);
+            //     // ons.notification.alert({message: "Successfully wrote WriteSubScrollToBottom in DB"});
+            //     return res;
         },
+
+        // Logs when a user clicks on an educational sub-material (material contained in a booklet).
+        // Author: Tongyou (Eason) Yang
         writeSubClickedRequest:function(patientId, TocSerNum){
 
             return RequestToServer.sendRequestWithResponse('WriteSubClicked', {
                 'patientId': patientId,
                 'TocSerNum': TocSerNum,
                 'Field': 'EducationalMaterialTOC'
-            }).then((res) => {
-                console.log(res);
-                // ons.notification.alert({message: "Successfully write in Sub DB"});
-                return res;
-            }).catch(() => {
-
-            });
-
+            })
+            // // For testing
+            // .then((res) => {
+            //     console.log(res);
+            //     //ons.notification.alert({message: "Successfully wrote WriteSubClicked in DB"});
+            //     return res;
         },
 
+        // Logs when a user clicks back from an educational material.
+        // Author: Tongyou (Eason) Yang
         writeClickedBackRequest:function(EducationalMaterialSerNum, userId){
-            console.log("in clicked back service");
             return RequestToServer.sendRequestWithResponse('WriteClickedBack', {
                 'Id': EducationalMaterialSerNum,
                 'UserId': userId,
                 'Field': 'EducationalMaterial'
-            }).then((res) => {
-                console.log(res);
-                // ons.notification.alert({message: "Successfully write in DB"});
-                return res;
-            }).catch(() => {
-
-            });
+            })
+            // // For testing
+            // .then((res) => {
+            //     console.log(res);
+            //     // ons.notification.alert({message: "Successfully wrote WriteClickedBack in DB"});
+            //     return res;
         },
 
+        // Logs when a user clicks back from an educational sub-material (material contained in a booklet).
+        // Author: Tongyou (Eason) Yang
         writeSubClickedBackRequest:function(patientId, TocSerNum){
-            console.log("in writeSubClickedBackRequest function");
 
             return RequestToServer.sendRequestWithResponse('writeSubClickedBackRequest',{
                 'patientId' : patientId,
                 'TocSerNum' : TocSerNum,
                 'Field' : 'EducationalMaterialTOC'
-            }).then((res)=>{
-                console.log(res);
-                // ons.notification.alert({message: "Successfully write in Sub DB"});
-                return res;
-            }).catch(()=>{
-
-            });
+            })
+            // // For testing
+            // .then((res)=>{
+            //     console.log(res);
+            //     ons.notification.alert({message: "Successfully wrote writeSubClickedBack in DB"});
+            //     return res;
         },
 
         /**
