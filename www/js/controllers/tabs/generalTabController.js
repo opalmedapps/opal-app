@@ -77,7 +77,7 @@
             }
 
             function setBadges() {
-                $scope.announcementsUnreadNumber = Announcements.getNumberUnreadAnnouncements();
+                vm.announcementsUnreadNumber = Announcements.getNumberUnreadAnnouncements();
             }
 
 
