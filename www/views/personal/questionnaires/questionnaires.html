@@ -691,7 +691,7 @@
                         <div style="margin-top: 10px">
                             <span ng-class="fontSizeDesc" id="feedbackTitle_{{item.data.ser_num}}">{{vm.thumbs ? vm.feedbackTitleThumbs : vm.feedbackTitleEmot}}</span>
                         </div>
-                        <div ng-if="vm.thumbs">
+                        <div ng-if="vm.thumbs" class="feedbackItems">
                             <div style="display: inline-block;margin:3px 5px 0px 5px;">
                                 <div style="font-size:30px;" id="thumbsUp"
                                      ng-style="(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex].patient_answer.feedback == vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex].feedback_options[0].feedback_ser_num)? {'color':'darkblue'}:{'color':'black'}"
@@ -705,48 +705,38 @@
                                      class="fa fa-thumbs-down"></div>
                             </div>
                         </div>
-                        <div ng-if="!vm.thumbs">
+                        <div ng-if="!vm.thumbs" class="feedbackItems">
                             <div style="display: inline-block;margin:3px 5px 0px 5px;">
-                                <div style="font-size:30px;" id="love"
+                                <div style="font-size:30px;" id="happy"
                                      ng-style="(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex].patient_answer.feedback == 3)? {'color':'darkblue'}:{'color':'black'}"
                                      ng-click="vm.happyEmot(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex],item)"
                                      class="far fa-smile"></div>
                             </div>
                             <div style="display: inline-block;margin:3px 5px 0px 5px;">
-                                <div style="font-size:30px;" id="like"
+                                <div style="font-size:30px;" id="sad"
                                      ng-style="(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex].patient_answer.feedback == 4)? {'color':'darkblue'}:{'color':'black'}"
                                      ng-click="vm.sadEmot(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex],item)"
                                      class="far fa-sad-tear"></div>
                             </div>
                             <div style="display: inline-block;margin:3px 5px 0px 5px;">
-                                <div style="font-size:30px;" id="neutral"
+                                <div style="font-size:30px;" id="upset"
                                      ng-style="(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex].patient_answer.feedback == 5)? {'color':'darkblue'}:{'color':'black'}"
-                                     ng-click="vm.worriedEmot(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex],item)"
-                                     class="far fa-grimace"></div>
-                            </div>
-                            <div style="display: inline-block;margin:3px 5px 0px 5px;">
-                                <div style="font-size:30px;" id="dislike"
-                                     ng-style="(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex].patient_answer.feedback == 6)? {'color':'darkblue'}:{'color':'black'}"
-                                     ng-click="vm.uncomfEmot(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex],item)"
-                                     class="far fa-flushed"></div>
-                            </div>
-                            <div style="display: inline-block;margin:3px 5px 0px 5px;">
-                                <div style="font-size:30px;" id="hate"
-                                     ng-style="(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex].patient_answer.feedback == 7)? {'color':'darkblue'}:{'color':'black'}"
                                      ng-click="vm.upsetEmot(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex],item)"
                                      class="far fa-angry"></div>
                             </div>
                             <div style="display: inline-block;margin:3px 5px 0px 5px;">
-                                <div style="font-size:30px;" id="hate"
-                                     ng-style="(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex].patient_answer.feedback == 8)? {'color':'darkblue'}:{'color':'black'}"
-                                     ng-click="vm.annoyedEmot(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex],item)"
-                                     class="far fa-meh-rolling-eyes"></div>
+                                <div style="font-size:30px;" id="confused"
+                                     ng-style="(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex].patient_answer.feedback == 6)? {'color':'darkblue'}:{'color':'black'}"
+                                     ng-click="vm.confusedEmot(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex],item)"
+                                     class="far fa-question-circle"></div>
                             </div>
                         </div>
-                        <ons-button ng-if="item.feedbackSectionDown && (vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex].patient_answer.feedback != null)" style="display: inline-block;margin:3px 5px 0px 5px;" ng-click="vm.toggleFeedback(item)">Edit Comment
-                        </ons-button>
-                        <ons-button ng-if="!item.feedbackSectionDown" style="display: inline-block;margin:3px 5px 0px 5px;" ng-click="vm.toggleFeedback(item)">Minimize Comment
-                        </ons-button>
+                        <div class="feedbackItems">
+                            <ons-button ng-if="item.feedbackSectionDown && (vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex].patient_answer.feedback != null)" style="display: inline-block;margin:3px 5px 0px 5px;" ng-click="vm.toggleFeedback(item)">Edit Comment
+                            </ons-button>
+                            <ons-button ng-if="!item.feedbackSectionDown" style="display: inline-block;margin:3px 5px 0px 5px;" ng-click="vm.toggleFeedback(item)">Minimize Comment
+                            </ons-button>
+                        </div>
                         <div style="padding-left: 5vw; padding-right: 5vw">
                                 <textarea id="feedbackTextbox_{{item.data.ser_num}}"
                                           ng-class="fontSizeDesc" style="margin-top: 10px;
@@ -801,6 +791,11 @@
 
                 <!--PULL UP FEEDBACK COMMENT BOX ANIMATION-->
                 <style>
+
+                    .feedbackItems{
+                        display: inline-block;
+                    }
+
                     .down-position{
                         bottom: -160px
                     }
