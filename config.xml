@@ -1,7 +1,12 @@
 <?xml version='1.0' encoding='utf-8'?>
     <!-- PRODUCTION -->
+<<<<<<< Updated upstream
     <!--<widget id="com.hig.opal2" android-packageName="com.hig.opal2" android-versionCode="1709" version="1.7.9" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">-->
     <!--<name>Opal</name>-->
+=======
+    <widget id="com.hig.opal2" android-packageName="com.hig.opal2" android-versionCode="1710" version="1.7.10" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>Opal</name>
+>>>>>>> Stashed changes
 
     <!--Pre-Production-->
     <widget id="com.hig.opaldev2" android-packageName="com.hig.opaldev2" version="1.7.10" android-versionCode="17010" >
