@@ -114,13 +114,8 @@
                 // console.log('vm.tableOfContents[index]:');
                 // console.log(vm.tableOfContents[index]);
 
-                EducationalMaterial.writeSubClickedRequest(Patient.getPatientId(),vm.tableOfContents[index].EducationalMaterialTOCSerNum)
-                    // // For testing
-                    // .then((res)=>{
-                    //     console.log(res);
-                    //     console.log("set sub clicked")
-                    // });
-
+                // Logs the sub material as clicked.
+                EducationalMaterial.logSubClickedEduMaterial(vm.tableOfContents[index].EducationalMaterialTOCSerNum);
             }
         }
 
@@ -194,26 +189,16 @@
                     //       $.scrollTop + $.clientHeight is the position of the bottom of our 'window' on the material
                     var spaceToTheBottomOfTheScreen = $.scrollHeight - ($.scrollTop + $.clientHeight);
                     if(spaceToTheBottomOfTheScreen < 1){
-
-                        EducationalMaterial.writeScrollToBottomRequest(vm.edumaterial.EducationalMaterialSerNum, Patient.getPatientId())
-                            // // For testing
-                            // .then((res) => {
-                            //     console.log(res);
-                            //     console.log("set scrolled to bottom");
-                            // });
+                        // Logs the material as scrolled to the bottom.
+                        EducationalMaterial.logScrolledToBottomEduMaterial(vm.edumaterial.EducationalMaterialControlSerNum)
                     }
                 };
 
                 $.onclick = function () {
 
                     if($.scrollHeight<=$.clientHeight) {//don't need to scroll
-
-                        EducationalMaterial.writeScrollToBottomRequest(vm.edumaterial.EducationalMaterialSerNum, Patient.getPatientId())
-                            // // For testing
-                            // .then((res) => {
-                            //     console.log(res);
-                            //     console.log("default scrolled to bottom")
-                            // });
+                        // Logs the material as scrolled to the bottom.
+                        EducationalMaterial.logScrolledToBottomEduMaterial(vm.edumaterial.EducationalMaterialControlSerNum);
                     }
                 }
 
@@ -224,12 +209,7 @@
         // Logs when a user clicks back from an educational material.
         // Author: Tongyou (Eason) Yang
         function clickBack() {
-            EducationalMaterial.writeClickedBackRequest(vm.edumaterial.EducationalMaterialSerNum, Patient.getPatientId())
-                // // For testing
-                // .then((res)=>{
-                //     console.log(res);
-                //     console.log("clicked back");
-                // });
+            EducationalMaterial.logClickedBackEduMaterial(vm.edumaterial.EducationalMaterialControlSerNum);
         }
 
         // Author: Tongyou (Eason) Yang
@@ -245,12 +225,8 @@
         // Opens a material contained in a package.
         // Author: Tongyou (Eason) Yang
         function goInPackage(material){
-
-            if(vm.packageContent[material.EducationalMaterialControlSerNum].ReadStatus==0){
-                vm.packageContent[material.EducationalMaterialControlSerNum].ReadStatus = 1;
-                EducationalMaterial.readMaterial(vm.packageContent[material.EducationalMaterialControlSerNum].EducationalMaterialSerNum);
-            }
-            EducationalMaterial.writeClickedRequest(vm.packageContent[material.EducationalMaterialControlSerNum].EducationalMaterialSerNum, Patient.getPatientId());
+            // Logs the material as clicked.
+            EducationalMaterial.logClickedEduMaterial(vm.packageContent[material.EducationalMaterialControlSerNum].EducationalMaterialControlSerNum);
 
             // RStep refers to recursive depth in a package (since packages can contain other packages).
             var rstep = vm.recursive_step + 1;
