@@ -111,13 +111,8 @@
                 vm.activeIndex++;
                 vm.carousel.setActiveCarouselItemIndex(vm.activeIndex);
 
-                EducationalMaterial.writeSubClickedRequest(Patient.getPatientId(),
-                    vm.tableOfContents[vm.activeIndex].EducationalMaterialTOCSerNum)
-                    // // For testing
-                    // .then((res)=>{
-                    //     console.log(res);
-                    //     console.log("sub clicked");
-                    // });
+                // Logs the sub material as clicked.
+                EducationalMaterial.logSubClickedEduMaterial(vm.tableOfContents[vm.activeIndex].EducationalMaterialTOCSerNum);
             }
         }
 
@@ -126,13 +121,8 @@
                 vm.activeIndex--;
                 vm.carousel.setActiveCarouselItemIndex(vm.activeIndex);
 
-                EducationalMaterial.writeSubClickedRequest(Patient.getPatientId(),
-                    vm.tableOfContents[vm.activeIndex].EducationalMaterialTOCSerNum)
-                    // // For testing
-                    // .then((res)=>{
-                    //     console.log(res);
-                    //     console.log("sub clicked");
-                    // });
+                // Logs the sub material as clicked.
+                EducationalMaterial.logSubClickedEduMaterial(vm.tableOfContents[vm.activeIndex].EducationalMaterialTOCSerNum);
             }
         }
 
@@ -229,13 +219,8 @@
                     if($.scrollHeight<=$.clientHeight){//don't need to scroll
 
                         //console.log(section);
-                        EducationalMaterial.writeSubScrollToBottomRequest(Patient.getPatientId(),
-                            section.EducationalMaterialTOCSerNum)
-                            // // For testing
-                            // .then((res)=>{
-                            //     console.log(res);
-                            //     console.log("default scrolled to bottom")
-                            // });
+                        // Logs the sub material as scrolled to the bottom.
+                        EducationalMaterial.logSubScrolledToBottomEduMaterial(section.EducationalMaterialTOCSerNum);
                     }
                 };
 
@@ -250,13 +235,8 @@
                     if(spaceToTheBottomOfTheScreen < 1){
 
                         //console.log(section);
-                        EducationalMaterial.writeSubScrollToBottomRequest(Patient.getPatientId(),
-                            section.EducationalMaterialTOCSerNum)
-                            // // For testing
-                            // .then((res)=>{
-                            //     console.log(res);
-                            //     console.log("set scrolled to bottom");
-                            // });
+                        // Logs the sub material as scrolled to the bottom
+                        EducationalMaterial.logSubScrolledToBottomEduMaterial(section.EducationalMaterialTOCSerNum);
                     }
                 }
 
@@ -266,14 +246,7 @@
         // Logs when a user clicks back from an educational sub-material (material contained in a booklet).
         // Author: Tongyou (Eason) Yang
         function subClickBack() {
-
-            EducationalMaterial.writeSubClickedBackRequest(Patient.getPatientId(),
-                vm.tableOfContents[vm.activeIndex].EducationalMaterialTOCSerNum)
-                // // For testing
-                // .then((res)=>{
-                //     console.log(res);
-                //     console.log("sub clicked back");
-                // });
+            EducationalMaterial.logSubClickedBackEduMaterial(vm.tableOfContents[vm.activeIndex].EducationalMaterialTOCSerNum);
         }
     }
 })();

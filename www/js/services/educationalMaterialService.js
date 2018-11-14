@@ -303,107 +303,146 @@ myApp.service('EducationalMaterial',['$filter','LocalStorage','FileManagerServic
         readMaterial:function(serNum)
         {
             RequestToServer.sendRequestWithResponse('Read',{'Id':serNum, 'Field':'EducationalMaterial'})
-                // // For testing
-                // .then((res)=>{
-                //     console.log(res);
-                //     // ons.notification.alert({message:"Set EducationalMaterial row "+serNum+" as read."});
-                // }).catch((err)=>{
-                //     console.log("Failed to set EducationalMaterial row "+serNum+" as read due to error:");
-                //     console.log(err);
-                // });
+            // // For testing
+            // .then((res)=>{
+            //     console.log(res);
+            //     ons.notification.alert({message:"Set EducationalMaterial row "+serNum+" as read."});
+            // }).catch((err)=>{
+            //     console.log("Failed to set EducationalMaterial row "+serNum+" as read due to error:");
+            //     console.log(err);
+            // });
         },
 
         // Logs when a user clicks on an educational material.
-        // Author: Tongyou (Eason) Yang
-        writeClickedRequest:function(serNum, userId)
+        // Author: Tongyou (Eason) Yang, modified by Stacey Beard
+        // Previously called writeClickedRequest()
+        logClickedEduMaterial:function(EducationalMaterialControlSerNum)
         {
-            RequestToServer.sendRequestWithResponse('Clicked',{'Id':serNum, 'Field':'EducationalMaterial', 'UserId':userId})
-                // // For testing
-                // .then((res)=>{
-                //     console.log(res);
-                //     // ons.notification.alert({message:"Successfully wrote Clicked in DB"});
-                // });
+            return RequestToServer.sendRequestWithResponse('LogPatientAction', {
+                'Action': 'CLICKED',
+                'RefTable': 'EducationalMaterialControl',
+                'RefTableSerNum': EducationalMaterialControlSerNum,
+                'ActionTime': $filter('date')(new Date(), 'yyyy-MM-dd HH:mm:ss'),
+            })
+            // // For testing
+            // .then((res)=>{
+            //     console.log(res);
+            //     ons.notification.alert({message:"Successfully wrote CLICKED in DB"});
+            // })
+            // .catch((err)=>{
+            //     console.log('Error in logClickedEduMaterial.');
+            //     console.log(err);
+            // });
         },
 
         // Logs when a user scrolls to the bottom of an educational material.
-        // Author: Tongyou (Eason) Yang
-        writeScrollToBottomRequest:function(serNum, userId){
+        // Author: Tongyou (Eason) Yang, modified by Stacey Beard
+        // Previously called writeScrollToBottomRequest()
+        logScrolledToBottomEduMaterial:function(EducationalMaterialControlSerNum){
 
-            return RequestToServer.sendRequestWithResponse('WriteScrollToBottom', {
-                'Id': serNum,
-                'UserId': userId,
-                'Field': 'EducationalMaterial'
+            return RequestToServer.sendRequestWithResponse('LogPatientAction', {
+                'Action': 'SCROLLED_TO_BOTTOM',
+                'RefTable': 'EducationalMaterialControl',
+                'RefTableSerNum': EducationalMaterialControlSerNum,
+                'ActionTime': $filter('date')(new Date(), 'yyyy-MM-dd HH:mm:ss'),
             })
             // // For testing
-            // .then((res) => {
+            // .then((res)=>{
             //     console.log(res);
-            //     // ons.notification.alert({message: "Successfully wrote WriteScrollToBottom in DB"});
-            //     return res;
+            //     ons.notification.alert({message:"Successfully wrote SCROLLED_TO_BOTTOM in DB"});
+            // })
+            // .catch((err)=>{
+            //     console.log('Error in logScrolledToBottomEduMaterial.');
+            //     console.log(err);
             // });
-
         },
 
         // Logs when a user scrolls to the bottom of an educational sub-material (material contained in a booklet).
-        // Author: Tongyou (Eason) Yang
-        writeSubScrollToBottomRequest:function(patientId, TocSerNum){
+        // Author: Tongyou (Eason) Yang, modified by Stacey Beard
+        // Previously called writeSubScrollToBottomRequest()
+        logSubScrolledToBottomEduMaterial:function(EducationalMaterialTOCSerNum){
 
-            return RequestToServer.sendRequestWithResponse('WriteSubScrollToBottom',{
-                'patientId' : patientId,
-                'TocSerNum' : TocSerNum,
-                'Field' : 'EducationalMaterialTOC'
+            return RequestToServer.sendRequestWithResponse('LogPatientAction', {
+                'Action': 'SCROLLED_TO_BOTTOM',
+                'RefTable': 'EducationalMaterialTOC',
+                'RefTableSerNum': EducationalMaterialTOCSerNum,
+                'ActionTime': $filter('date')(new Date(), 'yyyy-MM-dd HH:mm:ss'),
             })
             // // For testing
             // .then((res)=>{
             //     console.log(res);
-            //     // ons.notification.alert({message: "Successfully wrote WriteSubScrollToBottom in DB"});
-            //     return res;
+            //     ons.notification.alert({message:"Successfully wrote SCROLLED_TO_BOTTOM in DB"});
+            // })
+            // .catch((err)=>{
+            //     console.log('Error in logSubScrolledToBottomEduMaterial.');
+            //     console.log(err);
+            // });
         },
 
         // Logs when a user clicks on an educational sub-material (material contained in a booklet).
-        // Author: Tongyou (Eason) Yang
-        writeSubClickedRequest:function(patientId, TocSerNum){
+        // Author: Tongyou (Eason) Yang, modified by Stacey Beard
+        // Previously called writeSubClickedRequest()
+        logSubClickedEduMaterial:function(EducationalMaterialTOCSerNum){
 
-            return RequestToServer.sendRequestWithResponse('WriteSubClicked', {
-                'patientId': patientId,
-                'TocSerNum': TocSerNum,
-                'Field': 'EducationalMaterialTOC'
-            })
-            // // For testing
-            // .then((res) => {
-            //     console.log(res);
-            //     //ons.notification.alert({message: "Successfully wrote WriteSubClicked in DB"});
-            //     return res;
-        },
-
-        // Logs when a user clicks back from an educational material.
-        // Author: Tongyou (Eason) Yang
-        writeClickedBackRequest:function(EducationalMaterialSerNum, userId){
-            return RequestToServer.sendRequestWithResponse('WriteClickedBack', {
-                'Id': EducationalMaterialSerNum,
-                'UserId': userId,
-                'Field': 'EducationalMaterial'
-            })
-            // // For testing
-            // .then((res) => {
-            //     console.log(res);
-            //     // ons.notification.alert({message: "Successfully wrote WriteClickedBack in DB"});
-            //     return res;
-        },
-
-        // Logs when a user clicks back from an educational sub-material (material contained in a booklet).
-        // Author: Tongyou (Eason) Yang
-        writeSubClickedBackRequest:function(patientId, TocSerNum){
-
-            return RequestToServer.sendRequestWithResponse('writeSubClickedBackRequest',{
-                'patientId' : patientId,
-                'TocSerNum' : TocSerNum,
-                'Field' : 'EducationalMaterialTOC'
+            return RequestToServer.sendRequestWithResponse('LogPatientAction', {
+                'Action': 'CLICKED',
+                'RefTable': 'EducationalMaterialTOC',
+                'RefTableSerNum': EducationalMaterialTOCSerNum,
+                'ActionTime': $filter('date')(new Date(), 'yyyy-MM-dd HH:mm:ss'),
             })
             // // For testing
             // .then((res)=>{
             //     console.log(res);
-            //     ons.notification.alert({message: "Successfully wrote writeSubClickedBack in DB"});
-            //     return res;
+            //     ons.notification.alert({message:"Successfully wrote CLICKED in DB"});
+            // })
+            // .catch((err)=>{
+            //     console.log('Error in logSubClickedEduMaterial.');
+            //     console.log(err);
+            // });
+        },
+
+        // Logs when a user clicks back from an educational material.
+        // Author: Tongyou (Eason) Yang, modified by Stacey Beard
+        // Previously called writeClickedBackRequest()
+        logClickedBackEduMaterial:function(EducationalMaterialControlSerNum){
+
+            return RequestToServer.sendRequestWithResponse('LogPatientAction', {
+                'Action': 'CLICKED_BACK',
+                'RefTable': 'EducationalMaterialControl',
+                'RefTableSerNum': EducationalMaterialControlSerNum,
+                'ActionTime': $filter('date')(new Date(), 'yyyy-MM-dd HH:mm:ss'),
+            })
+            // // For testing
+            // .then((res)=>{
+            //     console.log(res);
+            //     ons.notification.alert({message:"Successfully wrote CLICKED_BACK in DB"});
+            // })
+            // .catch((err)=>{
+            //     console.log('Error in logClickedBackEduMaterial.');
+            //     console.log(err);
+            // });
+        },
+
+        // Logs when a user clicks back from an educational sub-material (material contained in a booklet).
+        // Author: Tongyou (Eason) Yang, modified by Stacey Beard
+        // Previously called writeSubClickedBackRequest()
+        logSubClickedBackEduMaterial:function(EducationalMaterialTOCSerNum){
+
+            return RequestToServer.sendRequestWithResponse('LogPatientAction', {
+                'Action': 'CLICKED_BACK',
+                'RefTable': 'EducationalMaterialTOC',
+                'RefTableSerNum': EducationalMaterialTOCSerNum,
+                'ActionTime': $filter('date')(new Date(), 'yyyy-MM-dd HH:mm:ss'),
+            })
+            // // For testing
+            // .then((res)=>{
+            //     console.log(res);
+            //     ons.notification.alert({message:"Successfully wrote CLICKED_BACK in DB"});
+            // })
+            // .catch((err)=>{
+            //     console.log('Error in logSubClickedBackEduMaterial.');
+            //     console.log(err);
+            // });
         },
 
         /**

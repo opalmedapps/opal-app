@@ -113,7 +113,8 @@
          */
         function goToEducationalMaterial(edumaterial) {
 
-            EducationalMaterial.writeClickedRequest(edumaterial.EducationalMaterialSerNum, Patient.getPatientId());
+            // Logs the material as clicked.
+            EducationalMaterial.logClickedEduMaterial(edumaterial.EducationalMaterialControlSerNum);
 
             // If the material was unread, set it to read.
             if(edumaterial.ReadStatus == 0){
