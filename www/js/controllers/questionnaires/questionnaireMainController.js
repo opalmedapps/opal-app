@@ -141,11 +141,6 @@
                 }
             }
 
-            // Jordan added
-            var feedback = params.questionnaire.feedback.Result;
-            console.log(feedback);
-            var feedbackIndex = 0;
-
             vm.questionnaireStart = true;
             vm.sectionIndex = 0;
             vm.questionIndex = 0; // index within the section
@@ -196,19 +191,6 @@
                         }
                         vm.startIndex++;
                         console.log('HERE6 ' + vm.questionTotalIndex + " and questionIndex = " + vm.questionIndex);
-
-                        // Set feedback
-                        // **** BUG HERE **** need to find replacement for vm.carousel
-                        // console.log("i: "+(i+1)+", secNum:"+feedback[feedbackIndex].SectionSerNum);
-                        // console.log("j: "+(j)+", quesNum:"+feedback[feedbackIndex].QuestionSerNum);
-                        // if(i+1 == feedback[feedbackIndex].SectionSerNum && j == feedback[feedbackIndex].QuestionSerNum){
-                        //     vm.questionnaire.sections[i].questions[j].patient_answer.feedback = feedback[feedbackIndex].FeedbackAnswerOptionSerNum;
-                        //     //vm.carouselItems.data.patient_answer.feedbackText = feedback[feedbackIndex].FeedbackText;
-                        //     console.log("FEEDBACK MATCHES QUESTION");
-                        //     console.log("FEEDBACK TYPE: "+vm.questionnaire.sections[i].questions[j].patient_answer.feedback);
-                        //     console.log("FEEDBACK TEXT: "+vm.carouselItems.data.patient_answer.feedbackText);
-                        //     feedbackIndex++;
-                        // }
                     }
                     // if all questions have been answered
                     if (i == vm.questionnaire.sections.length-1) {
@@ -533,6 +515,7 @@
 
         function initializeSliderAns(question){
             console.log('in initializeSliderAns');
+            console.log(question);
             if(question.optional == '1' && question.patient_answer.answer[0].Skipped == '1'){
                 question.patient_answer.answer[0].sliderAns = 'SKIPPED';
             }
@@ -808,7 +791,7 @@
             }
             question.skip = !skip;
         }
-        vm.thumbs = false;
+        vm.thumbs = true;
 
         // ***** THUMBS UP/THUMBS DOWN *****
         vm.feedbackTitleThumbs= 'Do you like this question? (Optional)';
