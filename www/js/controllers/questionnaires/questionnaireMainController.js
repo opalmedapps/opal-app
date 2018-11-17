@@ -840,9 +840,9 @@
         vm.happyEmot = function(question,item) {
             let feedbackTitle = document.getElementById('feedbackTitle_'+item.data.ser_num);
 
-            if (question.patient_answer.feedback != 3) {
+            if (question.patient_answer.feedback != question.feedback_options[0].feedback_ser_num) {
                 feedbackTitle.innerHTML = getEmotTitle("happy");
-                question.patient_answer.feedback = 3;
+                question.patient_answer.feedback = question.feedback_options[0].feedback_ser_num;
                 vm.pullUpComment('questionFeedbackText_'+item.data.ser_num);
                 item.feedbackSectionDown = false;
             } else {
@@ -856,9 +856,9 @@
 
         vm.sadEmot = function(question,item) {
             let feedbackTitle = document.getElementById('feedbackTitle_'+item.data.ser_num);
-            if (question.patient_answer.feedback != 4) {
+            if (question.patient_answer.feedback != question.feedback_options[1].feedback_ser_num) {
                 feedbackTitle.innerHTML = getEmotTitle("sad");
-                question.patient_answer.feedback = 4;
+                question.patient_answer.feedback = question.feedback_options[1].feedback_ser_num;
                 vm.pullUpComment('questionFeedbackText_'+item.data.ser_num);
                 item.feedbackSectionDown = false;
             } else {
@@ -872,9 +872,9 @@
 
         vm.upsetEmot = function(question,item) {
             let feedbackTitle = document.getElementById('feedbackTitle_'+item.data.ser_num);
-            if (question.patient_answer.feedback != 5) {
+            if (question.patient_answer.feedback != question.feedback_options[2].feedback_ser_num) {
                 feedbackTitle.innerHTML = getEmotTitle("upset");
-                question.patient_answer.feedback = 5;
+                question.patient_answer.feedback = question.feedback_options[2].feedback_ser_num;
                 vm.pullUpComment('questionFeedbackText_'+item.data.ser_num);
                 item.feedbackSectionDown = false;
             } else {
@@ -888,9 +888,9 @@
         vm.confusedEmot = function(question, item) {
             let feedbackTitle = document.getElementById('feedbackTitle_'+item.data.ser_num);
 
-            if (question.patient_answer.feedback != 6) {
+            if (question.patient_answer.feedback != question.feedback_options[3].feedback_ser_num) {
                 feedbackTitle.innerHTML = getEmotTitle("confused");
-                question.patient_answer.feedback = 6;
+                question.patient_answer.feedback = question.feedback_options[3].feedback_ser_num;
                 vm.pullUpComment('questionFeedbackText_'+item.data.ser_num);
                 item.feedbackSectionDown = false;
             } else {
@@ -899,7 +899,7 @@
                 vm.pushDownComment('questionFeedbackText_'+item.data.ser_num);
                 item.feedbackSectionDown = true;
             }
-        }
+        };
 
 
         // Jordan Added
