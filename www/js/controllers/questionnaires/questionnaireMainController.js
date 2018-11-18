@@ -232,6 +232,9 @@
             vm.portraitOrientationCheck = window.matchMedia("(orientation: portrait)");
             vm.portraitOrientationCheck.addListener(setLayoutByOrientation);
 
+            console.log("HELLO CJ");
+            console.log(vm);
+
         }
 
         // reset all the scale styles once screen is rotated
