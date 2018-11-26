@@ -34,7 +34,7 @@
         </ons-list>
 
         <!-- booklet, click to open one pdf -->
-        <ons-list class="settings-list" ng-hide="edu.tableOfContents||edu.edumaterial.Type === 'Video'||edu.edumaterial.Type === 'Vidéo'||edu.isIndividualHtmlPage || edu.edumaterial.Type === 'Package'">
+        <ons-list class="settings-list" ng-hide="edu.tableOfContents||edu.edumaterial.Type === 'Video'||edu.edumaterial.Type === 'Vidéo'||edu.isIndividualHtmlPage || edu.edumaterial.EducationalMaterialType_EN === 'Package'">
             <ons-list-item class="item" ng-click="edu.goToEducationalMaterial()" style="background-color: #F9F9F9; border: none !important;">
                 <div align="center">
                     <div>
@@ -47,29 +47,21 @@
         </ons-list>
 
         <!--package -- Added by Tongyou (Eason) Yang-->
-        <ons-list ng-if="edu.edumaterial.Type === 'Package'">
+        <ons-list ng-if="edu.edumaterial.EducationalMaterialType_EN === 'Package'">
 
-            <ons-list-item modifier="chevron" class="item" ng-repeat = "e in edu.PackageContents" ng-click="edu.goInPackage(e)">
+            <ons-list-item modifier="chevron" class="item" ng-repeat = "e in edu.edumaterial.PackageContents" ng-click="edu.goInPackage(e)">
                 <ons-row align="center">
                     <ons-col width="60px" align="center">
                         <div>
-                            <i ng-class="edu.packageContent[e.EducationalMaterialControlSerNum].Icon" ng-style="{color: edu.packageContent[e.EducationalMaterialControlSerNum].Color}" style="font-size: 26px; margin-left: 15px;"></i>
-                            <!--<span class="notification" ng-show="edu.packageContent[e.EducationalMaterialControlSerNum].ReadStatus=='0'">&nbsp;</span>-->
+                            <i ng-class="e.Icon" ng-style="{color: e.Color}" style="font-size: 26px; margin-left: 15px;"></i>
                         </div>
                     </ons-col>
 
-                    <ons-col ng-if="edu.packageContent[e.EducationalMaterialControlSerNum].ReadStatus=='0'">
+                    <ons-col>
                         <header>
-                            <span class="item-title" ng-class="fontSizeTitle">{{edu.packageContent[e.EducationalMaterialControlSerNum].Name}}</span>
+                            <span class="item-desc" ng-class="fontSizeTitle">{{e.Name}}</span>
                         </header>
-                        <p class="item-title" ng-class="fontSizeDesc" >{{edu.packageContent[e.EducationalMaterialControlSerNum].Type}}</p>
-                    </ons-col>
-
-                    <ons-col ng-if="edu.packageContent[e.EducationalMaterialControlSerNum].ReadStatus=='1'">
-                        <header>
-                            <span class="item-desc" ng-class="fontSizeTitle">{{edu.packageContent[e.EducationalMaterialControlSerNum].Name}}</span>
-                        </header>
-                        <p class="item-desc" ng-class="fontSizeDesc" >{{edu.packageContent[e.EducationalMaterialControlSerNum].Type}}</p>
+                        <p class="item-desc" ng-class="fontSizeDesc" >{{e.Type}}</p>
                     </ons-col>
 
                 </ons-row>
