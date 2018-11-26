@@ -15,6 +15,7 @@ var myApp=angular.module('MUHCApp');
 /**
  *@ngdoc service
  *@name MUHCApp.service:EducationalMaterial
+ *@requires $q
  *@requires MUHCApp.service:UserPreferences
  *@requires MUHCApp.service:RequestToServer
  *@requires MUHCApp.service:LocalStorage
@@ -22,8 +23,8 @@ var myApp=angular.module('MUHCApp');
  *@requires $filter
  *@description Sets the educational material and provides an API to interact with it and the server
  **/
-myApp.service('EducationalMaterial',['$filter','LocalStorage','FileManagerService', 'UserPreferences',
-    'RequestToServer', '$http' ,function ($filter, LocalStorage, FileManagerService, UserPreferences,
+myApp.service('EducationalMaterial',['$q','$filter','LocalStorage','FileManagerService', 'UserPreferences',
+    'RequestToServer', '$http' ,function ($q,$filter, LocalStorage, FileManagerService, UserPreferences,
                                           RequestToServer, $http) {
 
     /**
@@ -93,7 +94,9 @@ myApp.service('EducationalMaterial',['$filter','LocalStorage','FileManagerServic
             }
             for (var i = 0; i < array.length; i++) {
                 //set language
-                array[i].PhaseInTreatment = (language ==='EN')? array[i].PhaseName_EN:array[i].PhaseName_FR;
+                if (array[i].PhaseName_EN || array[i].PhaseName_FR) {
+                    array[i].PhaseInTreatment = (language === 'EN') ? array[i].PhaseName_EN : array[i].PhaseName_FR;
+                }
                 array[i].Url = (language ==='EN')?array[i].URL_EN:array[i].URL_FR;
                 array[i].Name =(language==='EN')? array[i].Name_EN : array[i].Name_FR;
                 array[i].ShareURL =(language ==='EN')? array[i].ShareURL_EN : array[i].ShareURL_FR;
@@ -105,7 +108,9 @@ myApp.service('EducationalMaterial',['$filter','LocalStorage','FileManagerServic
                 delete array.Content;
                 array.Language = language;
             }
-            array.PhaseInTreatment = (language ==='EN')? array.PhaseName_EN:array.PhaseName_FR;
+            if (array.PhaseName_EN || array.PhaseName_FR) {
+                array.PhaseInTreatment = (language === 'EN') ? array.PhaseName_EN : array.PhaseName_FR;
+            }
             array.Url = (language ==='EN')?array.URL_EN:array.URL_FR;
             array.Name =(language ==='EN')? array.Name_EN : array.Name_FR;
             array.Type = (language ==='EN')? array.EducationalMaterialType_EN : array.EducationalMaterialType_FR;
@@ -524,6 +529,40 @@ myApp.service('EducationalMaterial',['$filter','LocalStorage','FileManagerServic
                     return {Url:'./views/education/education-individual-page.html'};
                 }
             }
+        },
+        /**
+         * getPackageContents
+         * @author Stacey Beard
+         * @date 2018-11-19
+         * @desc Gets an educational material package's contents in 2 steps:
+         *       1. Sends a request to the server to get the contents of an educational material package.
+         *       2. Adds the icon and color to each package material based on its type.
+         * @param educationalMaterialControlSerNum The SerNum of the package for which to get the contents.
+         * @returns {*}
+         */
+        getPackageContents:function(educationalMaterialControlSerNum)
+        {
+            let deferred = $q.defer();
+            RequestToServer.sendRequestWithResponse('EducationalPackageContents', {
+                'EducationalMaterialControlSerNum': educationalMaterialControlSerNum
+            }).then((response)=>{
+                let packageContents = response.Data;
+                // Attach the icons and colours to the package contents.
+                for (var i = 0; i < packageContents.length; i++) {
+                    if(educationalMaterialType[packageContents[i].EducationalMaterialType_EN]) {
+                        packageContents[i].Icon = educationalMaterialType[packageContents[i].EducationalMaterialType_EN].icon;
+                        packageContents[i].Color = educationalMaterialType[packageContents[i].EducationalMaterialType_EN].color;
+                    }
+                    else{
+                        packageContents[i].Icon = educationalMaterialType['Other'].icon;
+                        packageContents[i].Color = educationalMaterialType['Other'].color;
+                    }
+                }
+                deferred.resolve(packageContents);
+            }).catch((err)=>{
+                deferred.reject(err);
+            });
+            return deferred.promise;
         },
         /**
          *@ngdoc method
