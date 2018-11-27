@@ -110,9 +110,6 @@
                 // window.scrollTo(0,0); // Not working
                 vm.activeIndex++;
                 vm.carousel.setActiveCarouselItemIndex(vm.activeIndex);
-
-                // Logs the sub material as clicked.
-                EducationalMaterial.logSubClickedEduMaterial(vm.tableOfContents[vm.activeIndex].EducationalMaterialTOCSerNum);
             }
         }
 
@@ -120,9 +117,6 @@
             if (vm.activeIndex > 0) {
                 vm.activeIndex--;
                 vm.carousel.setActiveCarouselItemIndex(vm.activeIndex);
-
-                // Logs the sub material as clicked.
-                EducationalMaterial.logSubClickedEduMaterial(vm.tableOfContents[vm.activeIndex].EducationalMaterialTOCSerNum);
             }
         }
 
@@ -154,6 +148,17 @@
             vm.activeIndex = ev.activeIndex;
             setHeightElement();
             lazilyLoadSlides(ev.activeIndex);
+
+            /* This function is called exactly once every time the user navigates to a new page in the booklet carousel,
+             * no matter how they do it (clicking in the TOC, clicking the carousel arrows, swiping, using the
+             * pop-out TOC). Thus, this is the perfect place to log "clicking" on a booklet sub-material.
+             * NOTE: There is one exception. This function does not get called when the user clicks on the first
+             *   sub-material in the table of contents. That special case is addressed separately in the function
+             *   goToEducationalMaterial() in individualMaterialController.js.
+             * -SB */
+
+            // Logs the sub material as clicked.
+            EducationalMaterial.logSubClickedEduMaterial(vm.tableOfContents[vm.activeIndex].EducationalMaterialTOCSerNum);
         }
 
         //Sets the height dynamically for educational material contents. Fixing the bug from Onsen.
