@@ -398,10 +398,11 @@ myApp.service('EducationalMaterial',['$q','$filter','LocalStorage','FileManagerS
             // // For testing
             // .then((res)=>{
             //     console.log(res);
-            //     ons.notification.alert({message:"Successfully wrote CLICKED in DB"});
+            //     console.log('Clicked on sub material '+EducationalMaterialTOCSerNum);
+            //     // ons.notification.alert({message:"Successfully wrote CLICKED in DB"});
             // })
             // .catch((err)=>{
-            //     console.log('Error in logSubClickedEduMaterial.');
+            //     console.log('Error in logSubClickedEduMaterial for material'+EducationalMaterialTOCSerNum);
             //     console.log(err);
             // });
         },
