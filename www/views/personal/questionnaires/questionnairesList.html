@@ -32,7 +32,7 @@
                             {{(vm.language === "EN") ? vm.questionnaires[questionnaire.QuestionnaireDBSerNum].QuestionnaireName_EN :
                                                        vm.questionnaires[questionnaire.QuestionnaireDBSerNum].QuestionnaireName_FR}}
                         </p>
-                        <p ng-show="vm.clickedText == 'completed'" style="margin-top: -22px; color: #757575;" ng-class="fontSizeDesc">{{"QUESTIONNAIRE_DATE_ANSWERED"|translate}}: {{vm.patientQuestionnaires[questionnaire.QuestionnaireSerNum].CompletionDate|date:'longDate'}}</p>
+                        <p ng-show="vm.clickedText == 'completed'" style="margin-top: -22px; color: #757575;" ng-class="fontSizeDesc">{{"QUESTIONNAIRE_DATE_ANSWERED"|translate}} {{vm.patientQuestionnaires[questionnaire.QuestionnaireSerNum].CompletionDate|date:'longDate'}}</p>
                         <p ng-show="vm.clickedText == 'new'" style="margin-top: -22px; color: #757575;"ng-class="fontSizeDesc">{{"QUESTIONNAIRE_DATE_ADDED"|translate}} {{vm.patientQuestionnaires[questionnaire.QuestionnaireSerNum].DateAdded|date:'longDate'}}</p>
                     </li>
                 </ul>
