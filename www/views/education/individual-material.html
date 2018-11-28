@@ -49,6 +49,20 @@
         <!--package -- Added by Tongyou (Eason) Yang-->
         <ons-list ng-if="edu.edumaterial.EducationalMaterialType_EN === 'Package'">
 
+            <!-- Loading wheel while the package contents is being fetched. -->
+            <div  align="center" style="margin-top:10vh" ng-show="edu.loadingPackageContents">
+                <svg class="progress-circular">
+                    <circle class="progress-circular__primary" cx="50%" cy="50%" r="40%" fill="none" stroke-width="10%" stroke-miterlimit="10"/>
+                </svg>
+            </div>
+
+            <!-- Message if there are no package contents. -->
+            <div class="ons-row" align="center" ng-show="edu.noPackageContents" style="margin-top: 50px">
+                <div class="ons-col" align="center">
+                    <p ng-class="fontSizeTitle" style="color: grey; margin-top: 25vh;">{{"PACKAGE_CONTENTS_ERROR"|translate}}</p>
+                </div>
+            </div>
+
             <ons-list-item modifier="chevron" class="item" ng-repeat = "e in edu.edumaterial.PackageContents" ng-click="edu.goInPackage(e)">
                 <ons-row align="center">
                     <ons-col width="60px" align="center">

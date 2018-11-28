@@ -242,6 +242,7 @@
   "Other":"Other",
   "OUTOFTRIES":"Too many failed attempts - Please try again or contact the hospital.",
   "OVERVIEW":"Overview",
+  "PACKAGE_CONTENTS_ERROR":"Error getting package contents from server.",
   "PARKING":"Parking & Transport",
   "PARKINGINFORMATION":"Parking Information",
   "PASSWORD":"Password",
