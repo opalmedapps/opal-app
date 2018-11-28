@@ -33,6 +33,8 @@
         var navigatorPage;
         var app;
 
+        vm.loadingPackageContents = false;
+        vm.noPackageContents = false;
 
         vm.goToEducationalMaterial = goToEducationalMaterial;
         vm.share = share;
@@ -93,22 +95,32 @@
             // Determine if it's a package.
             if(vm.edumaterial.EducationalMaterialType_EN === "Package"){
 
+                vm.loadingPackageContents = true;
+
                 // Get the package contents from the database if it hasn't been downloaded already.
                 if(!vm.edumaterial.PackageContents){
+
                     EducationalMaterial.getPackageContents(vm.edumaterial.EducationalMaterialControlSerNum).then((packageContents)=>{
                         vm.edumaterial.PackageContents = packageContents;
 
                         // Translate the package materials to the correct language.
                         EducationalMaterial.setLanguage(vm.edumaterial.PackageContents);
+
+                        vm.loadingPackageContents = false;
+
                     }).catch((err) => {
                         console.log("Failed to get package contents from the server.");
                         console.log(err);
-                        // TODO When this fails, change a variable to display a message to the user.
+
+                        vm.loadingPackageContents = false;
+                        vm.noPackageContents = true;
                     });
                 }
                 else{
                     // If the package materials were already downloaded, translate them anyways (in case the user switched language).
                     EducationalMaterial.setLanguage(vm.edumaterial.PackageContents);
+
+                    vm.loadingPackageContents = false;
                 }
             }
         }

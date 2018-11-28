@@ -242,6 +242,7 @@
   "Other":"Autres",
   "OUTOFTRIES":"Trop de tentatives ratées - Veuillez réessayer ou contacter l'hôpital.",
   "OVERVIEW":"Aperçu",
+  "PACKAGE_CONTENTS_ERROR":"Erreur. Le contenu du paquet n'a pas pu être téléchargé du serveur.",
   "PARKING":"Stationnement/Transport",
   "PARKINGINFORMATION":"Informations Sur Le Stationnement",
   "PASSWORD":"Mot de passe",
