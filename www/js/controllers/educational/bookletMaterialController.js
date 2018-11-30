@@ -29,12 +29,12 @@
         .controller('BookletMaterialController', BookletMaterialController);
 
     BookletMaterialController.$inject = ['$scope', '$timeout', 'NavigatorParameters', '$rootScope', '$filter',
-        'EducationalMaterial', 'Patient'];
+        'EducationalMaterial', 'Patient', 'Logger'];
 
 
     /* @ngInject */
     function BookletMaterialController($scope, $timeout, NavigatorParameters, $rootScope, $filter,
-                                       EducationalMaterial, Patient) {
+                                       EducationalMaterial, Patient, Logger) {
 
         var vm = this;
 
@@ -158,7 +158,7 @@
              * -SB */
 
             // Logs the sub material as clicked.
-            EducationalMaterial.logSubClickedEduMaterial(vm.tableOfContents[vm.activeIndex].EducationalMaterialTOCSerNum);
+            Logger.logSubClickedEduMaterial(vm.tableOfContents[vm.activeIndex].EducationalMaterialTOCSerNum);
         }
 
         //Sets the height dynamically for educational material contents. Fixing the bug from Onsen.
@@ -237,7 +237,7 @@
         // Logs when a user clicks back from an educational sub-material (material contained in a booklet).
         // Author: Tongyou (Eason) Yang
         function subClickBack() {
-            EducationalMaterial.logSubClickedBackEduMaterial(vm.tableOfContents[vm.activeIndex].EducationalMaterialTOCSerNum);
+            Logger.logSubClickedBackEduMaterial(vm.tableOfContents[vm.activeIndex].EducationalMaterialTOCSerNum);
         }
     }
 })();

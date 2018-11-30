@@ -19,11 +19,11 @@
         .controller('EducationalMaterialController', EducationalMaterialController);
 
     EducationalMaterialController.$inject = ['NavigatorParameters', '$scope', 'EducationalMaterial','NetworkStatus',
-        'Patient'];
+        'Patient', 'Logger'];
 
     /* @ngInject */
     function EducationalMaterialController(NavigatorParameters, $scope, EducationalMaterial, NetworkStatus,
-                                           Patient) {
+                                           Patient, Logger) {
         var vm = this;
         var backButtonPressed = 0;
 
@@ -114,7 +114,7 @@
         function goToEducationalMaterial(edumaterial) {
 
             // Logs the material as clicked.
-            EducationalMaterial.logClickedEduMaterial(edumaterial.EducationalMaterialControlSerNum);
+            Logger.logClickedEduMaterial(edumaterial.EducationalMaterialControlSerNum);
 
             // If the material was unread, set it to read.
             if(edumaterial.ReadStatus == 0){

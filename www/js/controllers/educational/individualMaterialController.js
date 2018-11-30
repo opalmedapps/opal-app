@@ -154,7 +154,7 @@
 
                 // Logs the sub material as clicked, if it is the first sub-material in the table of contents.
                 if (index == 0) {
-                    EducationalMaterial.logSubClickedEduMaterial(vm.tableOfContents[index].EducationalMaterialTOCSerNum);
+                    Logger.logSubClickedEduMaterial(vm.tableOfContents[index].EducationalMaterialTOCSerNum);
                 }
             }
         }
@@ -239,14 +239,14 @@
         // Logs when a user clicks back from an educational material.
         // Author: Tongyou (Eason) Yang
         function clickBack() {
-            EducationalMaterial.logClickedBackEduMaterial(vm.edumaterial.EducationalMaterialControlSerNum);
+            Logger.logClickedBackEduMaterial(vm.edumaterial.EducationalMaterialControlSerNum);
         }
 
         // Opens a material contained in a package.
         // Author: Tongyou (Eason) Yang
         function goInPackage(material){
             // Logs the material as clicked.
-            EducationalMaterial.logClickedEduMaterial(material.EducationalMaterialControlSerNum);
+            Logger.logClickedEduMaterial(material.EducationalMaterialControlSerNum);
 
             // RStep refers to recursive depth in a package (since packages can contain other packages).
             var rstep = vm.recursive_step + 1;
