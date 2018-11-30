@@ -24,8 +24,8 @@ var myApp=angular.module('MUHCApp');
  *@description Sets the educational material and provides an API to interact with it and the server
  **/
 myApp.service('EducationalMaterial',['$q','$filter','LocalStorage','FileManagerService', 'UserPreferences',
-    'RequestToServer', '$http' ,function ($q,$filter, LocalStorage, FileManagerService, UserPreferences,
-                                          RequestToServer, $http) {
+    'RequestToServer', '$http', 'Logger',
+    function ($q, $filter, LocalStorage, FileManagerService, UserPreferences, RequestToServer, $http, Logger) {
 
     /**
      *@ngdoc property
@@ -226,50 +226,6 @@ myApp.service('EducationalMaterial',['$q','$filter','LocalStorage','FileManagerS
         else return false;
     }
 
-    // Logs when a user scrolls to the bottom of an educational material.
-    // Author: Tongyou (Eason) Yang, modified by Stacey Beard
-    // Previously called writeScrollToBottomRequest()
-    function logScrolledToBottomEduMaterial(EducationalMaterialControlSerNum){
-
-        return RequestToServer.sendRequestWithResponse('LogPatientAction', {
-            'Action': 'SCROLLED_TO_BOTTOM',
-            'RefTable': 'EducationalMaterialControl',
-            'RefTableSerNum': EducationalMaterialControlSerNum,
-            'ActionTime': $filter('date')(new Date(), 'yyyy-MM-dd HH:mm:ss'),
-        })
-        // For testing
-        .then((res)=>{
-            console.log(res);
-            ons.notification.alert({message:"Successfully wrote SCROLLED_TO_BOTTOM in DB for EducationalMaterialControlSerNum="+EducationalMaterialControlSerNum});
-        })
-        .catch((err)=>{
-            console.log('Error in logScrolledToBottomEduMaterial.');
-            console.log(err);
-        });
-    }
-
-    // Logs when a user scrolls to the bottom of an educational sub-material (material contained in a booklet).
-    // Author: Tongyou (Eason) Yang, modified by Stacey Beard
-    // Previously called writeSubScrollToBottomRequest()
-    function logSubScrolledToBottomEduMaterial(EducationalMaterialTOCSerNum){
-
-        return RequestToServer.sendRequestWithResponse('LogPatientAction', {
-            'Action': 'SCROLLED_TO_BOTTOM',
-            'RefTable': 'EducationalMaterialTOC',
-            'RefTableSerNum': EducationalMaterialTOCSerNum,
-            'ActionTime': $filter('date')(new Date(), 'yyyy-MM-dd HH:mm:ss'),
-        })
-        // For testing
-        .then((res)=>{
-            console.log(res);
-            ons.notification.alert({message:"Successfully wrote SCROLLED_TO_BOTTOM in DB for EducationalMaterialTOCSerNum="+EducationalMaterialTOCSerNum});
-        })
-        .catch((err)=>{
-            console.log('Error in logSubScrolledToBottomEduMaterial.');
-            console.log(err);
-        });
-    }
-
     return {
         /**
          *@ngdoc method
@@ -390,95 +346,6 @@ myApp.service('EducationalMaterial',['$q','$filter','LocalStorage','FileManagerS
             // });
         },
 
-        // Logs when a user clicks on an educational material.
-        // Author: Tongyou (Eason) Yang, modified by Stacey Beard
-        // Previously called writeClickedRequest()
-        logClickedEduMaterial:function(EducationalMaterialControlSerNum)
-        {
-            return RequestToServer.sendRequestWithResponse('LogPatientAction', {
-                'Action': 'CLICKED',
-                'RefTable': 'EducationalMaterialControl',
-                'RefTableSerNum': EducationalMaterialControlSerNum,
-                'ActionTime': $filter('date')(new Date(), 'yyyy-MM-dd HH:mm:ss'),
-            })
-            // // For testing
-            // .then((res)=>{
-            //     console.log(res);
-            //     ons.notification.alert({message:"Successfully wrote CLICKED in DB"});
-            // })
-            // .catch((err)=>{
-            //     console.log('Error in logClickedEduMaterial.');
-            //     console.log(err);
-            // });
-        },
-
-        // Logs when a user clicks on an educational sub-material (material contained in a booklet).
-        // Author: Tongyou (Eason) Yang, modified by Stacey Beard
-        // Previously called writeSubClickedRequest()
-        logSubClickedEduMaterial:function(EducationalMaterialTOCSerNum){
-
-            return RequestToServer.sendRequestWithResponse('LogPatientAction', {
-                'Action': 'CLICKED',
-                'RefTable': 'EducationalMaterialTOC',
-                'RefTableSerNum': EducationalMaterialTOCSerNum,
-                'ActionTime': $filter('date')(new Date(), 'yyyy-MM-dd HH:mm:ss'),
-            })
-            // // For testing
-            // .then((res)=>{
-            //     console.log(res);
-            //     console.log('Clicked on sub material '+EducationalMaterialTOCSerNum);
-            //     // ons.notification.alert({message:"Successfully wrote CLICKED in DB"});
-            // })
-            // .catch((err)=>{
-            //     console.log('Error in logSubClickedEduMaterial for material'+EducationalMaterialTOCSerNum);
-            //     console.log(err);
-            // });
-        },
-
-        // Logs when a user clicks back from an educational material.
-        // Author: Tongyou (Eason) Yang, modified by Stacey Beard
-        // Previously called writeClickedBackRequest()
-        logClickedBackEduMaterial:function(EducationalMaterialControlSerNum){
-
-            return RequestToServer.sendRequestWithResponse('LogPatientAction', {
-                'Action': 'CLICKED_BACK',
-                'RefTable': 'EducationalMaterialControl',
-                'RefTableSerNum': EducationalMaterialControlSerNum,
-                'ActionTime': $filter('date')(new Date(), 'yyyy-MM-dd HH:mm:ss'),
-            })
-            // // For testing
-            // .then((res)=>{
-            //     console.log(res);
-            //     ons.notification.alert({message:"Successfully wrote CLICKED_BACK in DB"});
-            // })
-            // .catch((err)=>{
-            //     console.log('Error in logClickedBackEduMaterial.');
-            //     console.log(err);
-            // });
-        },
-
-        // Logs when a user clicks back from an educational sub-material (material contained in a booklet).
-        // Author: Tongyou (Eason) Yang, modified by Stacey Beard
-        // Previously called writeSubClickedBackRequest()
-        logSubClickedBackEduMaterial:function(EducationalMaterialTOCSerNum){
-
-            return RequestToServer.sendRequestWithResponse('LogPatientAction', {
-                'Action': 'CLICKED_BACK',
-                'RefTable': 'EducationalMaterialTOC',
-                'RefTableSerNum': EducationalMaterialTOCSerNum,
-                'ActionTime': $filter('date')(new Date(), 'yyyy-MM-dd HH:mm:ss'),
-            })
-            // // For testing
-            // .then((res)=>{
-            //     console.log(res);
-            //     ons.notification.alert({message:"Successfully wrote CLICKED_BACK in DB"});
-            // })
-            // .catch((err)=>{
-            //     console.log('Error in logSubClickedBackEduMaterial.');
-            //     console.log(err);
-            // });
-        },
-
         /**
          * @ngdoc method
          * @name logScrolledToBottomIfApplicable
@@ -507,11 +374,11 @@ myApp.service('EducationalMaterial',['$q','$filter','LocalStorage','FileManagerS
 
                 // Logs the material as scrolled to the bottom, checking first if it is a material or a TOC sub-material.
                 if (serNum.EducationalMaterialTOCSerNum){
-                    logSubScrolledToBottomEduMaterial(serNum.EducationalMaterialTOCSerNum);
+                    Logger.logSubScrolledToBottomEduMaterial(serNum.EducationalMaterialTOCSerNum);
                     return true;
                 }
                 if (serNum.EducationalMaterialControlSerNum){
-                    logScrolledToBottomEduMaterial(serNum.EducationalMaterialControlSerNum);
+                    Logger.logScrolledToBottomEduMaterial(serNum.EducationalMaterialControlSerNum);
                     return true;
                 }
             }
