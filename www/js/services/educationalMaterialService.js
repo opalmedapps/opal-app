@@ -455,7 +455,12 @@ myApp.service('EducationalMaterial',['$q','$filter','LocalStorage','FileManagerS
                     return -1;
                 }else if (type == 'pdf')
                 {
-                    //If its a pdf, the use the file manager service to open the material and return -1
+                    // If it's a pdf:
+
+                    // Log the fact that the user clicked on the pdf download button
+                    Logger.logClickedPdfEduMaterial(edumaterial.EducationalMaterialControlSerNum);
+
+                    // Use the file manager service to open the material and return -1
                     FileManagerService.openPDF(edumaterial.Url);
                     return -1;
                 }

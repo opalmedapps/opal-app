@@ -38,6 +38,7 @@
             // --- BEGINNING OF EDUCATIONAL MATERIAL LOGGING --- //
             logClickedEduMaterial: logClickedEduMaterial,
             logSubClickedEduMaterial: logSubClickedEduMaterial,
+            logClickedPdfEduMaterial: logClickedPdfEduMaterial,
             logClickedBackEduMaterial: logClickedBackEduMaterial,
             logSubClickedBackEduMaterial: logSubClickedBackEduMaterial,
             logScrolledToBottomEduMaterial: logScrolledToBottomEduMaterial,
@@ -140,6 +141,24 @@
                 // })
                 // .catch((err)=>{
                 //     console.log('Error in logSubClickedEduMaterial for EducationalMaterialTOCSerNum='+EducationalMaterialTOCSerNum);
+                //     console.log(err);
+                // });
+            }
+        }
+
+        // Logs when a user clicks on an educational material's pdf button to view or download the pdf.
+        // Author: Stacey Beard
+        function logClickedPdfEduMaterial(EducationalMaterialControlSerNum){
+
+            if (loggingEnabled) {
+                return sendLogPatientActionRequest('CLICKED_PDF', 'EducationalMaterialControl', EducationalMaterialControlSerNum)
+                // // For testing
+                // .then((res)=>{
+                //     console.log(res);
+                //     ons.notification.alert({message:"Successfully wrote CLICKED_PDF in DB for EducationalMaterialControlSerNum="+EducationalMaterialControlSerNum});
+                // })
+                // .catch((err)=>{
+                //     console.log("Error in logClickedPdfEduMaterial for EducationalMaterialControlSerNum="+EducationalMaterialControlSerNum);
                 //     console.log(err);
                 // });
             }
