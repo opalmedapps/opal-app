@@ -219,31 +219,17 @@
             $timeout(function () {
                 var $ = document.getElementById(i+'sub');
 
-                $.onclick = function(){ //if don't need to scroll, then if a user clicks, then set the field
-
-                    if($.scrollHeight<=$.clientHeight){//don't need to scroll
-
-                        //console.log(section);
-                        // Logs the sub material as scrolled to the bottom.
-                        EducationalMaterial.logSubScrolledToBottomEduMaterial(section.EducationalMaterialTOCSerNum);
-                    }
+                $.onscroll = function () {
+                    EducationalMaterial.logScrolledToBottomIfApplicable($, {
+                        "EducationalMaterialTOCSerNum":section.EducationalMaterialTOCSerNum
+                    });
                 };
 
-                $.onscroll = function () {
-                    
-                    // Check whether the user has scrolled to the bottom.
-                    // Smaller than 1 is used instead of equals 0 to make sure the check doesn't fail due to
-                    // decimals (since $.scrollHeight and $.clientHeight are integers but $.scrollTop is not).
-                    // Note: $.scrollHeight is the height of the material
-                    //       $.scrollTop + $.clientHeight is the position of the bottom of our 'window' on the material
-                    var spaceToTheBottomOfTheScreen = $.scrollHeight - ($.scrollTop + $.clientHeight);
-                    if(spaceToTheBottomOfTheScreen < 1){
-
-                        //console.log(section);
-                        // Logs the sub material as scrolled to the bottom
-                        EducationalMaterial.logSubScrolledToBottomEduMaterial(section.EducationalMaterialTOCSerNum);
-                    }
-                }
+                $.onclick = function(){
+                    EducationalMaterial.logScrolledToBottomIfApplicable($, {
+                        "EducationalMaterialTOCSerNum":section.EducationalMaterialTOCSerNum
+                    });
+                };
 
             },0);
         }
