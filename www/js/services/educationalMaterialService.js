@@ -198,6 +198,78 @@ myApp.service('EducationalMaterial',['$q','$filter','LocalStorage','FileManagerS
             }
         }
     }
+
+    /**
+     * @ngdoc method
+     * @name hasReachedBottomOfScreen
+     * @methodOf MUHCApp.service:EducationalMaterial
+     * @author Stacey Beard, based on work by Tongyou (Eason) Yang
+     * @date 2018-11-29
+     * @description Tests whether the user has reached the bottom of the page, either by scrolling down or by
+     *              default if the page is too short to scroll.
+
+     * @param {Object} documentElement object returned by a function call such as "document.getElementById(index)"
+     * @param {*} documentElement.scrollHeight height of the material
+     * @param {*} documentElement.scrollTop position of the top of our 'window' on the material
+     * @param {*} documentElement.clientHeight height of our 'window' on the material
+
+     * @returns {boolean} True if the user has reached the bottom of the screen; false if not.
+     **/
+    function hasReachedBottomOfScreen(documentElement){
+        // Check whether the user has reached the bottom of the screen.
+        // Smaller than 1 is used instead of equals 0 to make sure the check doesn't fail due to
+        // decimals (since $.scrollHeight and $.clientHeight are integers but $.scrollTop is not).
+
+        var spaceToTheBottomOfTheScreen = documentElement.scrollHeight - (documentElement.scrollTop + documentElement.clientHeight);
+
+        if(spaceToTheBottomOfTheScreen < 1) return true;
+        else return false;
+    }
+
+    // Logs when a user scrolls to the bottom of an educational material.
+    // Author: Tongyou (Eason) Yang, modified by Stacey Beard
+    // Previously called writeScrollToBottomRequest()
+    function logScrolledToBottomEduMaterial(EducationalMaterialControlSerNum){
+
+        return RequestToServer.sendRequestWithResponse('LogPatientAction', {
+            'Action': 'SCROLLED_TO_BOTTOM',
+            'RefTable': 'EducationalMaterialControl',
+            'RefTableSerNum': EducationalMaterialControlSerNum,
+            'ActionTime': $filter('date')(new Date(), 'yyyy-MM-dd HH:mm:ss'),
+        })
+        // For testing
+        .then((res)=>{
+            console.log(res);
+            ons.notification.alert({message:"Successfully wrote SCROLLED_TO_BOTTOM in DB for EducationalMaterialControlSerNum="+EducationalMaterialControlSerNum});
+        })
+        .catch((err)=>{
+            console.log('Error in logScrolledToBottomEduMaterial.');
+            console.log(err);
+        });
+    }
+
+    // Logs when a user scrolls to the bottom of an educational sub-material (material contained in a booklet).
+    // Author: Tongyou (Eason) Yang, modified by Stacey Beard
+    // Previously called writeSubScrollToBottomRequest()
+    function logSubScrolledToBottomEduMaterial(EducationalMaterialTOCSerNum){
+
+        return RequestToServer.sendRequestWithResponse('LogPatientAction', {
+            'Action': 'SCROLLED_TO_BOTTOM',
+            'RefTable': 'EducationalMaterialTOC',
+            'RefTableSerNum': EducationalMaterialTOCSerNum,
+            'ActionTime': $filter('date')(new Date(), 'yyyy-MM-dd HH:mm:ss'),
+        })
+        // For testing
+        .then((res)=>{
+            console.log(res);
+            ons.notification.alert({message:"Successfully wrote SCROLLED_TO_BOTTOM in DB for EducationalMaterialTOCSerNum="+EducationalMaterialTOCSerNum});
+        })
+        .catch((err)=>{
+            console.log('Error in logSubScrolledToBottomEduMaterial.');
+            console.log(err);
+        });
+    }
+
     return {
         /**
          *@ngdoc method
@@ -340,50 +412,6 @@ myApp.service('EducationalMaterial',['$q','$filter','LocalStorage','FileManagerS
             // });
         },
 
-        // Logs when a user scrolls to the bottom of an educational material.
-        // Author: Tongyou (Eason) Yang, modified by Stacey Beard
-        // Previously called writeScrollToBottomRequest()
-        logScrolledToBottomEduMaterial:function(EducationalMaterialControlSerNum){
-
-            return RequestToServer.sendRequestWithResponse('LogPatientAction', {
-                'Action': 'SCROLLED_TO_BOTTOM',
-                'RefTable': 'EducationalMaterialControl',
-                'RefTableSerNum': EducationalMaterialControlSerNum,
-                'ActionTime': $filter('date')(new Date(), 'yyyy-MM-dd HH:mm:ss'),
-            })
-            // // For testing
-            // .then((res)=>{
-            //     console.log(res);
-            //     ons.notification.alert({message:"Successfully wrote SCROLLED_TO_BOTTOM in DB"});
-            // })
-            // .catch((err)=>{
-            //     console.log('Error in logScrolledToBottomEduMaterial.');
-            //     console.log(err);
-            // });
-        },
-
-        // Logs when a user scrolls to the bottom of an educational sub-material (material contained in a booklet).
-        // Author: Tongyou (Eason) Yang, modified by Stacey Beard
-        // Previously called writeSubScrollToBottomRequest()
-        logSubScrolledToBottomEduMaterial:function(EducationalMaterialTOCSerNum){
-
-            return RequestToServer.sendRequestWithResponse('LogPatientAction', {
-                'Action': 'SCROLLED_TO_BOTTOM',
-                'RefTable': 'EducationalMaterialTOC',
-                'RefTableSerNum': EducationalMaterialTOCSerNum,
-                'ActionTime': $filter('date')(new Date(), 'yyyy-MM-dd HH:mm:ss'),
-            })
-            // // For testing
-            // .then((res)=>{
-            //     console.log(res);
-            //     ons.notification.alert({message:"Successfully wrote SCROLLED_TO_BOTTOM in DB"});
-            // })
-            // .catch((err)=>{
-            //     console.log('Error in logSubScrolledToBottomEduMaterial.');
-            //     console.log(err);
-            // });
-        },
-
         // Logs when a user clicks on an educational sub-material (material contained in a booklet).
         // Author: Tongyou (Eason) Yang, modified by Stacey Beard
         // Previously called writeSubClickedRequest()
@@ -449,6 +477,45 @@ myApp.service('EducationalMaterial',['$q','$filter','LocalStorage','FileManagerS
             //     console.log('Error in logSubClickedBackEduMaterial.');
             //     console.log(err);
             // });
+        },
+
+        /**
+         * @ngdoc method
+         * @name logScrolledToBottomIfApplicable
+         * @methodOf MUHCApp.service:EducationalMaterial
+         * @author Stacey Beard, based on work by Tongyou (Eason) Yang
+         * @date 2018-11-29
+         * @description Tests whether the user has reached the bottom of the page, either by scrolling down or by
+         *              default if the page is too short to scroll. If they have reached the bottom, calls a function
+         *              to log the scroll in the database.
+
+         * @param {Object} documentElement object returned by a function call such as "document.getElementById(index)"
+         * @param {*} documentElement.scrollHeight height of the material
+         * @param {*} documentElement.scrollTop position of the top of our 'window' on the material
+         * @param {*} documentElement.clientHeight height of our 'window' on the material
+         * @param {Object} serNum object containing the serNum to use in the logging
+         * @param {*} serNum.EducationalMaterialTOCSerNum optional: if used, logSubScrolledToBottomEduMaterial
+         *                                                          will be called
+         * @param {*} serNum.EducationalMaterialControlSerNum optional: if used, logScrolledToBottomEduMaterial
+         *                                                              will be called
+
+         * @returns {boolean} True if a log request was sent; false if it was not.
+         **/
+        logScrolledToBottomIfApplicable:function(documentElement, serNum){
+
+            if(hasReachedBottomOfScreen(documentElement)){
+
+                // Logs the material as scrolled to the bottom, checking first if it is a material or a TOC sub-material.
+                if (serNum.EducationalMaterialTOCSerNum){
+                    logSubScrolledToBottomEduMaterial(serNum.EducationalMaterialTOCSerNum);
+                    return true;
+                }
+                if (serNum.EducationalMaterialControlSerNum){
+                    logScrolledToBottomEduMaterial(serNum.EducationalMaterialControlSerNum);
+                    return true;
+                }
+            }
+            return false;
         },
 
         /**
