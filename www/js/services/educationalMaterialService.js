@@ -201,6 +201,39 @@ myApp.service('EducationalMaterial',['$q','$filter','LocalStorage','FileManagerS
 
     /**
      * @ngdoc method
+     * @name isScrollableType
+     * @methodOf MUHCApp.service:EducationalMaterial
+     * @author Stacey Beard
+     * @date 2018-12-03
+     * @description Checks whether we consider the given material type to be scrollable in a meaningful way,
+     *              for logging purposes. For example, BookletSubMaterial is considered scrollable, because it contains
+     *              scrollable information. However, Booklet is not considered scrollable because the type Booklet is
+     *              used for a table of contents, and even if it is physically scrollable, scrolling down a table of
+     *              contents is not considered especially meaningful.
+     *
+     *              Examples of non scrollable types: Booklet (represents a table of contents), Video, Package.
+
+     * @param {*} materialType The type of the material which is being checked.
+     *                         Special case: Booklet is used for a table of contents; BookletSubMaterial is used for
+     *                         a material in a booklet.
+
+     * @returns {boolean} True if the material is scrollable in a meaningful way; false if it is not.
+     **/
+    function isScrollableType(materialType){
+        let nonScrollableTypes = [
+            "Booklet",
+            "Brochure",
+            "Video",
+            "Vidéo",
+            "Package",
+            "Paquet",
+        ];
+        if (nonScrollableTypes.indexOf(materialType) === -1) return true;
+        else return false;
+    }
+
+    /**
+     * @ngdoc method
      * @name hasReachedBottomOfScreen
      * @methodOf MUHCApp.service:EducationalMaterial
      * @author Stacey Beard, based on work by Tongyou (Eason) Yang
@@ -352,25 +385,29 @@ myApp.service('EducationalMaterial',['$q','$filter','LocalStorage','FileManagerS
          * @methodOf MUHCApp.service:EducationalMaterial
          * @author Stacey Beard, based on work by Tongyou (Eason) Yang
          * @date 2018-11-29
-         * @description Tests whether the user has reached the bottom of the page, either by scrolling down or by
-         *              default if the page is too short to scroll. If they have reached the bottom, calls a function
-         *              to log the scroll in the database.
+         * @description Checks that the material is of a type for which we want to log scrolling. If it is,
+         *              tests whether the user has reached the bottom of the page, either by scrolling down or by
+         *              default if the page is too short to scroll. If they have, calls a function to log the scroll
+         *              in the database.
 
-         * @param {Object} documentElement object returned by a function call such as "document.getElementById(index)"
-         * @param {*} documentElement.scrollHeight height of the material
-         * @param {*} documentElement.scrollTop position of the top of our 'window' on the material
-         * @param {*} documentElement.clientHeight height of our 'window' on the material
-         * @param {Object} serNum object containing the serNum to use in the logging
-         * @param {*} serNum.EducationalMaterialTOCSerNum optional: if used, logSubScrolledToBottomEduMaterial
-         *                                                          will be called
-         * @param {*} serNum.EducationalMaterialControlSerNum optional: if used, logScrolledToBottomEduMaterial
-         *                                                              will be called
+         * @param {Object} documentElement Object returned by a function call such as "document.getElementById(index)".
+         * @param {*} documentElement.scrollHeight Height of the material.
+         * @param {*} documentElement.scrollTop Position of the top of our 'window' on the material.
+         * @param {*} documentElement.clientHeight Height of our 'window' on the material.
+         * @param {String} materialType The type of the material that is being viewed (Video, Package, etc.).
+         *                              Special case: Booklet is used for a table of contents; BookletSubMaterial is used for
+         *                              a material in a booklet.
+         * @param {Object} serNum Object containing the serNum to use in the logging.
+         * @param {*} serNum.EducationalMaterialTOCSerNum Optional: if used, logSubScrolledToBottomEduMaterial
+         *                                                          will be called.
+         * @param {*} serNum.EducationalMaterialControlSerNum Optional: if used, logScrolledToBottomEduMaterial
+         *                                                              will be called.
 
          * @returns {boolean} True if a log request was sent; false if it was not.
          **/
-        logScrolledToBottomIfApplicable:function(documentElement, serNum){
+        logScrolledToBottomIfApplicable:function(documentElement, materialType, serNum){
 
-            if(hasReachedBottomOfScreen(documentElement)){
+            if(isScrollableType(materialType) && hasReachedBottomOfScreen(documentElement)){
 
                 // Logs the material as scrolled to the bottom, checking first if it is a material or a TOC sub-material.
                 if (serNum.EducationalMaterialTOCSerNum){
