@@ -220,13 +220,13 @@
                 var $ = document.getElementById(i+'sub');
 
                 $.onscroll = function () {
-                    EducationalMaterial.logScrolledToBottomIfApplicable($, 'BookletSubMaterial', {
+                    EducationalMaterial.logScrolledToBottomIfApplicable($, {
                         "EducationalMaterialTOCSerNum":section.EducationalMaterialTOCSerNum
                     });
                 };
 
                 $.onclick = function(){
-                    EducationalMaterial.logScrolledToBottomIfApplicable($, 'BookletSubMaterial', {
+                    EducationalMaterial.logScrolledToBottomIfApplicable($, {
                         "EducationalMaterialTOCSerNum":section.EducationalMaterialTOCSerNum
                     });
                 };
