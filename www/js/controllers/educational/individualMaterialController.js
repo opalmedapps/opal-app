@@ -221,13 +221,13 @@
                 var $ = document.getElementById(vm.recursive_step);
 
                 $.onscroll = function () {
-                    EducationalMaterial.logScrolledToBottomIfApplicable($, {
+                    EducationalMaterial.logScrolledToBottomIfApplicable($, vm.edumaterial.EducationalMaterialType_EN, {
                         "EducationalMaterialControlSerNum":vm.edumaterial.EducationalMaterialControlSerNum
                     });
                 };
 
                 $.onclick = function () {
-                    EducationalMaterial.logScrolledToBottomIfApplicable($, {
+                    EducationalMaterial.logScrolledToBottomIfApplicable($, vm.edumaterial.EducationalMaterialType_EN, {
                         "EducationalMaterialControlSerNum":vm.edumaterial.EducationalMaterialControlSerNum
                     });
                 }
