@@ -220,18 +220,22 @@
 
                 var $ = document.getElementById(vm.recursive_step);
 
-                $.onscroll = function () {
-                    EducationalMaterial.logScrolledToBottomIfApplicable($, {
-                        "EducationalMaterialControlSerNum":vm.edumaterial.EducationalMaterialControlSerNum
-                    });
-                };
+                // This makes sure that scrolling is only checked here for HTML pages (not on Videos, Packages, etc.)
+                // [Scrolling is also checked for booklet sub-materials, handled in bookletMaterialController.]
+                if (vm.isIndividualHtmlPage) {
 
-                $.onclick = function () {
-                    EducationalMaterial.logScrolledToBottomIfApplicable($, {
-                        "EducationalMaterialControlSerNum":vm.edumaterial.EducationalMaterialControlSerNum
-                    });
+                    $.onscroll = function () {
+                        EducationalMaterial.logScrolledToBottomIfApplicable($, {
+                            "EducationalMaterialControlSerNum": vm.edumaterial.EducationalMaterialControlSerNum
+                        });
+                    };
+
+                    $.onclick = function () {
+                        EducationalMaterial.logScrolledToBottomIfApplicable($, {
+                            "EducationalMaterialControlSerNum": vm.edumaterial.EducationalMaterialControlSerNum
+                        });
+                    }
                 }
-
             },0);
 
         }
