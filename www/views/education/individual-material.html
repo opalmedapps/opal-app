@@ -18,7 +18,7 @@
 
     <div id="{{edu.recursive_step}}" ng-init="edu.scrollDown()" style="height: 100%; width: auto; overflow: auto;">
 
-        <!-- rating bar-->
+        <!-- Rating bar-->
         <ons-list >
             <ons-list-item class="item">
                 <div style="line-height:1" align="center">
@@ -33,7 +33,7 @@
             </ons-list-item>
         </ons-list>
 
-        <!-- booklet, click to open one pdf -->
+        <!-- Booklet: click to open pdf -->
         <ons-list class="settings-list" ng-hide="edu.tableOfContents||edu.edumaterial.Type === 'Video'||edu.edumaterial.Type === 'Vidéo'||edu.isIndividualHtmlPage || edu.edumaterial.EducationalMaterialType_EN === 'Package'">
             <ons-list-item class="item" ng-click="edu.goToEducationalMaterial()" style="background-color: #F9F9F9; border: none !important;">
                 <div align="center">
@@ -46,23 +46,24 @@
             </ons-list-item>
         </ons-list>
 
-        <!--package -- Added by Tongyou (Eason) Yang-->
+        <!-- Package [Added by Tongyou (Eason) Yang] -->
         <ons-list ng-if="edu.edumaterial.EducationalMaterialType_EN === 'Package'">
 
             <!-- Loading wheel while the package contents is being fetched. -->
-            <div  align="center" style="margin-top:10vh" ng-show="edu.loadingPackageContents">
+            <div  align="center" style="margin-top:10vh" ng-show="edu.loadingContents">
                 <svg class="progress-circular">
                     <circle class="progress-circular__primary" cx="50%" cy="50%" r="40%" fill="none" stroke-width="10%" stroke-miterlimit="10"/>
                 </svg>
             </div>
 
-            <!-- Message if there are no package contents. -->
-            <div class="ons-row" align="center" ng-show="edu.noPackageContents" style="margin-top: 50px">
+            <!-- Message if the package contents could not be fetched from the server. -->
+            <div class="ons-row" align="center" ng-show="edu.errorLoadingContents" style="margin-top: 50px">
                 <div class="ons-col" align="center">
-                    <p ng-class="fontSizeTitle" style="color: grey; margin-top: 25vh;">{{"PACKAGE_CONTENTS_ERROR"|translate}}</p>
+                    <p ng-class="fontSizeTitle" style="color: grey; margin-top: 5vh;">{{"ERROR_GETTING_EDU_MATERIAL"|translate}}</p>
                 </div>
             </div>
 
+            <!-- Contents -->
             <ons-list-item modifier="chevron" class="item" ng-repeat = "e in edu.edumaterial.PackageContents" ng-click="edu.goInPackage(e)">
                 <ons-row align="center">
                     <ons-col width="60px" align="center">
@@ -83,7 +84,7 @@
 
         </ons-list>
 
-        <!-- booklet, list of contents-->
+        <!-- Booklet: table of contents -->
         <ons-list style="margin: 10px 0 0 0" ng-hide="!edu.tableOfContents">
             <ons-list-header class="person-list-header" ng-class="fontSizeTitle"  >{{"TABLEOFCONTENTS"|translate}}</ons-list-header>
 
@@ -104,7 +105,7 @@
 
         </ons-list>
 
-        <!-- video-->
+        <!-- Video -->
         <ons-list class="settings-list" ng-if="edu.edumaterial.Type === 'Video' || edu.edumaterial.Type === 'Vidéo'">
             <ons-list-item class="item">
                 <div align="center" class="embed-responsive embed-responsive-16by9">
@@ -115,14 +116,25 @@
         </ons-list>
 
 
-        <!-- factsheet -->
+        <!-- HTML page (Booklet, Factsheet, etc.) -->
         <ons-list class="settings-list" ng-if="edu.isIndividualHtmlPage" >
-            <ons-list-item class="item">
-                <div  align="center" style="margin-top:10vh" ng-show="!edu.edumaterial.Content">
-                    <svg class="progress-circular">
-                        <circle class="progress-circular__primary" cx="50%" cy="50%" r="40%" fill="none" stroke-width="10%" stroke-miterlimit="10"/>
-                    </svg>
+
+            <!-- Loading wheel while the material contents is being fetched. -->
+            <div  align="center" style="margin-top:10vh" ng-show="edu.loadingContents">
+                <svg class="progress-circular">
+                    <circle class="progress-circular__primary" cx="50%" cy="50%" r="40%" fill="none" stroke-width="10%" stroke-miterlimit="10"/>
+                </svg>
+            </div>
+
+            <!-- Message if the material contents could not be loaded. -->
+            <div class="ons-row" align="center" ng-show="edu.errorLoadingContents" style="margin-top: 50px">
+                <div class="ons-col" align="center">
+                    <p ng-class="fontSizeTitle" style="color: grey; margin-top: 5vh;">{{"ERROR_GETTING_EDU_MATERIAL"|translate}}</p>
                 </div>
+            </div>
+
+            <!-- Contents -->
+            <ons-list-item class="item">
                 <div class="container" style="background-color:white;overflow-y:scroll" ng-style="{height:edu.heightSection}"   ng-show="edu.edumaterial.Content">
                     <div ng-bind-html="edu.edumaterial.Content" ng-class="fontSizeDesc"></div>
                 </div>

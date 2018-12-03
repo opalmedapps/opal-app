@@ -33,8 +33,8 @@
         var navigatorPage;
         var app;
 
-        vm.loadingPackageContents = false;
-        vm.noPackageContents = false;
+        vm.loadingContents = false;
+        vm.errorLoadingContents = false;
 
         vm.goToEducationalMaterial = goToEducationalMaterial;
         vm.share = share;
@@ -95,7 +95,7 @@
             // Determine if it's a package.
             if(vm.edumaterial.EducationalMaterialType_EN === "Package"){
 
-                vm.loadingPackageContents = true;
+                vm.loadingContents = true;
 
                 // Get the package contents from the database if it hasn't been downloaded already.
                 if(!vm.edumaterial.PackageContents){
@@ -106,21 +106,21 @@
                         // Translate the package materials to the correct language.
                         EducationalMaterial.setLanguage(vm.edumaterial.PackageContents);
 
-                        vm.loadingPackageContents = false;
+                        vm.loadingContents = false;
 
                     }).catch((err) => {
                         console.log("Failed to get package contents from the server.");
                         console.log(err);
 
-                        vm.loadingPackageContents = false;
-                        vm.noPackageContents = true;
+                        vm.loadingContents = false;
+                        vm.errorLoadingContents = true;
                     });
                 }
                 else{
                     // If the package materials were already downloaded, translate them anyways (in case the user switched language).
                     EducationalMaterial.setLanguage(vm.edumaterial.PackageContents);
 
-                    vm.loadingPackageContents = false;
+                    vm.loadingContents = false;
                 }
             }
         }
@@ -185,13 +185,13 @@
         //                         title: $filter('translate')("PRINTDOCUMENT"),
         //                         success: function(){},
         //                         error: function(data){
-        //                             ons.notification.alert({'message':$filter('translate')('UNABLETOOBTAINEDUCATIONALMATERIAL')});
+        //                             ons.notification.alert({'message':$filter('translate')('ERROR_GETTING_EDU_MATERIAL')});
         //                         }
         //                     });
         //                 }
         //             })
         //             .catch(function(){
-        //                 ons.notification.alert({'message':$filter('translate')('UNABLETOOBTAINEDUCATIONALMATERIAL')});
+        //                 ons.notification.alert({'message':$filter('translate')('ERROR_GETTING_EDU_MATERIAL')});
         //             });
         //     }else{
         //         $scope.popoverSharing.hide();
@@ -203,12 +203,16 @@
         {
             if(!vm.edumaterial.hasOwnProperty('Content'))
             {
+                vm.loadingContents = true;
+
                 EducationalMaterial.getMaterialPage(vm.edumaterial.Url)
                     .then(function(response){
                         vm.edumaterial.Content = response.data;
+                        vm.loadingContents = false;
                     })
                     .catch(function(){
-                        ons.notification.alert({'message':$filter('translate')('UNABLETOOBTAINEDUCATIONALMATERIAL')});
+                        vm.loadingContents = false;
+                        vm.errorLoadingContents = true;
                     })
             }
         }
