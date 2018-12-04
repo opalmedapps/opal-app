@@ -23,15 +23,19 @@ app1.controller('QuestionnaireMainController', function ($scope, $location, $anc
         $scope.questionnaireDBSerNum = params.DBSerNum;
         $scope.subAnswers = false;
         $scope.language = UserPreferences.getLanguage().toUpperCase();
+        $scope.sourceTab = params.Tab; // Source tab from which this questionnaire was clicked (new, progress or completed).
+
+        $scope.reachEnd = false; // Reset this variable to hide the "Go to summary" button.
 
         $scope.questionnaireSerNum = params.SerNum;
 
 
-        $scope.clickedScrollArrow = new Array()
+        $scope.clickedScrollArrow = new Array();
 
         // $scope.subData = Questionnaires.isQuestionnaireComplete($scope.questionnaireDBSerNum);
 
-        setQuestionnaireAnswersObject(Questionnaires.getQuestionnaireAnswers($scope.questionnaireSerNum));
+        // TEMPORARY: commenting out this function call because it fails on text field questions, and because the In progress tab was removed.
+        // setQuestionnaireAnswersObject(Questionnaires.getQuestionnaireAnswers($scope.questionnaireSerNum));
         $scope.questionaires = Questionnaires.getPatientQuestionnaires().Questionnaires;
 
         $scope.questionaire = $scope.questionaires[$scope.questionnaireDBSerNum];
@@ -106,7 +110,7 @@ app1.controller('QuestionnaireMainController', function ($scope, $location, $anc
 
         if ($scope.index > $scope.questions.length) {
             // They have reached the end and now the "Go To Summary Page" button should be shown on all the pages
-            $rootScope.reachEnd = true;
+            $scope.reachEnd = true;
         }
 
 
@@ -338,12 +342,15 @@ app1.controller('QuestionnaireMainController', function ($scope, $location, $anc
         }
         i = questionText.search(assesses);
         if (i == -1) {
-            newHtml = "<h4>" + questionText + "</h4>";
+            // Removing the <h4> tag so that questionText is dynamic based on the user's chosen font size.
+            // newHtml = "<h4>" + questionText + "</h4>";
+            newHtml = questionText;
         } else {
             questionPart1 = questionText.slice(0, i);
             questionPart2 = questionText.slice(i + assesses.length);
-            newHtml = "<h4>" + questionPart1 + "<span style='color:darkmagenta'><strong>" + assesses + "</strong></span>" +
-                questionPart2 + "</h4>";
+            // Removing the <h4> tag so that questionText is dynamic based on the user's chosen font size.
+            // newHtml = "<h4>" + questionPart1 + "<span style='color:darkmagenta'><strong>" + assesses + "</strong></span>" + questionPart2 + "</h4>";
+            newHtml = questionPart1 + "<span style='color:darkmagenta'><strong>" + assesses + "</strong></span>" + questionPart2;
         }
         return $sce.trustAsHtml(newHtml);
     }
@@ -362,7 +369,7 @@ app1.controller('QuestionnaireMainController', function ($scope, $location, $anc
         $scope.answers = {};
         for (key in answers) {
             // orderNum = questionsObject[key].OrderNum;
-            orderNum = questionsObject[key].Choices[1].OrderNum;
+            orderNum = questionsObject[key].Choices[1].OrderNum; // This line has a bug because text field questions have no Choices.
             $scope.answers[orderNum - 1] = answers[key].Answer;
         }
 
@@ -569,6 +576,14 @@ app1.controller('QuestionnaireMainController', function ($scope, $location, $anc
             $scope.numAnswered = $scope.numAnswered + 1;
         }
         $scope.answers[$scope.index - 1] = checkbox;
+        if(checkbox === "Yes"){
+            $scope.checkedYes = true;
+            $scope.checkedNo = false;
+        }
+        else if (checkbox === "No"){
+            $scope.checkedNo = true;
+            $scope.checkedYes = false;
+        }
         Questionnaires.setQuestionnaireAnswers(checkbox, $scope.questions[$scope.index - 1].QuestionnaireQuestionSerNum, $scope.questionnaireDBSerNum, $scope.questionnaireSerNum);
     }
 
@@ -801,7 +816,6 @@ app1.controller('QuestionnaireMainController', function ($scope, $location, $anc
             $scope.carousel.refresh();
         }, 100);
     }
-
 
     // Decides what answer to show. This is purely only for the 'eye' icon where the answer can be previewed.
     $scope.showAnswer = function (index) {
