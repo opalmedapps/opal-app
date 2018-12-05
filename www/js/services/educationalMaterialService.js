@@ -63,18 +63,14 @@ myApp.service('EducationalMaterial',['$q','$filter','LocalStorage','FileManagerS
             icon:'fa fa-list-ol',
             color:'#7E57C2'
         },
+        'Package':{
+            icon:'fa fa-cube',
+            color:'#8A5B45'
+        },
         'Other':{
             icon:'fa fa-book',
             color:'#FF7043'
         },
-        'TestingType':{
-            icon:'fa fa-question',
-            color:'#818181'
-        },
-        'Package':{
-            icon:'fa fa-cube',
-            color:'#8A5B45'
-        }
     };
     function setLanguageEduMaterial(array)
     {
@@ -163,10 +159,16 @@ myApp.service('EducationalMaterial',['$q','$filter','LocalStorage','FileManagerS
             //Format the date to javascript
             edumaterial[i].DateAdded=$filter('formatDate')(edumaterial[i].DateAdded);
 
+            // Attach the icons and colours to the educational material contents.
+            if(educationalMaterialType[edumaterial[i].EducationalMaterialType_EN]) {
+                edumaterial[i].Icon = educationalMaterialType[edumaterial[i].EducationalMaterialType_EN].icon;
+                edumaterial[i].Color = educationalMaterialType[edumaterial[i].EducationalMaterialType_EN].color;
+            }
+            else{
+                edumaterial[i].Icon = educationalMaterialType['Other'].icon;
+                edumaterial[i].Color = educationalMaterialType['Other'].color;
+            }
 
-
-            edumaterial[i].Icon = educationalMaterialType[edumaterial[i].EducationalMaterialType_EN].icon;
-            edumaterial[i].Color = educationalMaterialType[edumaterial[i].EducationalMaterialType_EN].color;
             //Add to my annoucements array
             educationalMaterialArray.push(edumaterial[i]);
         }
