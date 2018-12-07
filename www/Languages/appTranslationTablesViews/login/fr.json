@@ -49,6 +49,7 @@
   "INVALID_EMAIL_OR_PWD":"Adresse courriel ou mot de passe invalide",
   "INVALID_PASSWORD":"Mot de passe incorrect.",
   "INVALID_USER":"Utilisateur invalide.",
+  "INVALID_USER2":"Si votre adresse courriel est dans notre système, un lien de réinitialisation de mot de passe vous a été envoyé. Veuillez suivre les instructions pour réinitialiser votre mot de passe.",
   "KICKEDOUT": "Votre compte a été ouvert sur un autre appareil.",
   "LANGUAGE":"Langue",
   "LEAVEMESSAGE":"Laissez-nous un message",

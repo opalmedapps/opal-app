@@ -49,6 +49,7 @@
 	"INVALID_EMAIL_OR_PWD":"Email or password is incorrect.",
 	"INVALID_PASSWORD":"Invalid password.",
 	"INVALID_USER":"Invalid user.",
+	"INVALID_USER2":"If your email address was found in our system, a reset password link was sent to your email. Please follow the instructions to reset your password.",
 	"KICKEDOUT": "You have logged in on another device.",
 	"LANGUAGE":"Language",
 	"LEAVEMESSAGE":"Leave us a message",

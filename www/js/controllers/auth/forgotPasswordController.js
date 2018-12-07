@@ -92,7 +92,7 @@
                     case "auth/user-not-found":
                         $timeout(function(){
                             vm.alert.type="danger";
-                            vm.alert.message="INVALID_USER";
+                            vm.alert.message="INVALID_USER2";
                         });
                         break;
                     case "auth/invalid-email":
