@@ -1,10 +1,21 @@
 //
 // Author David Herrera on Summer 2016, Email:davidfherrerar@gmail.com
 //
+
+/**
+ * Modification History
+ *
+ * 2018 Nov: Project: Fertility Educate / Educational Material Packages / Education Material Interaction Logging
+ *           Developed by Tongyou (Eason) Yang in Summer 2018
+ *           Merged by Stacey Beard
+ *           Commit # 6706edfb776eabef4ef4a2c9b69d834960863435
+ */
+
 var myApp=angular.module('MUHCApp');
 /**
  *@ngdoc service
  *@name MUHCApp.service:EducationalMaterial
+ *@requires $q
  *@requires MUHCApp.service:UserPreferences
  *@requires MUHCApp.service:RequestToServer
  *@requires MUHCApp.service:LocalStorage
@@ -12,13 +23,16 @@ var myApp=angular.module('MUHCApp');
  *@requires $filter
  *@description Sets the educational material and provides an API to interact with it and the server
  **/
-myApp.service('EducationalMaterial',['$filter','LocalStorage','FileManagerService', 'UserPreferences', 'RequestToServer', '$http' ,function ($filter, LocalStorage, FileManagerService, UserPreferences,RequestToServer, $http) {
+myApp.service('EducationalMaterial',['$q','$filter','LocalStorage','FileManagerService', 'UserPreferences',
+    'RequestToServer', '$http', 'Logger',
+    function ($q, $filter, LocalStorage, FileManagerService, UserPreferences, RequestToServer, $http, Logger) {
 
     /**
      *@ngdoc property
      *@name  MUHCApp.service.#educationalMaterialArray
      *@propertyOf MUHCApp.service:EducationalMaterial
-     *@description Initializing array that represents all the information regarding educational material for the patient, this array is passed to appropiate controllers.
+     *@description Initializing array that represents all the information regarding educational material
+     *             for the patient, this array is passed to appropriate controllers.
      **/
 
     //Initializing array that represents all the informations for Announcements
@@ -49,14 +63,14 @@ myApp.service('EducationalMaterial',['$filter','LocalStorage','FileManagerServic
             icon:'fa fa-list-ol',
             color:'#7E57C2'
         },
+        'Package':{
+            icon:'fa fa-cube',
+            color:'#8A5B45'
+        },
         'Other':{
             icon:'fa fa-book',
             color:'#FF7043'
         },
-        'TestingType':{
-            icon:'fa fa-question',
-            color:'#FF7043'
-        }
     };
     function setLanguageEduMaterial(array)
     {
@@ -76,7 +90,9 @@ myApp.service('EducationalMaterial',['$filter','LocalStorage','FileManagerServic
             }
             for (var i = 0; i < array.length; i++) {
                 //set language
-                array[i].PhaseInTreatment = (language ==='EN')? array[i].PhaseName_EN:array[i].PhaseName_FR;
+                if (array[i].PhaseName_EN || array[i].PhaseName_FR) {
+                    array[i].PhaseInTreatment = (language === 'EN') ? array[i].PhaseName_EN : array[i].PhaseName_FR;
+                }
                 array[i].Url = (language ==='EN')?array[i].URL_EN:array[i].URL_FR;
                 array[i].Name =(language==='EN')? array[i].Name_EN : array[i].Name_FR;
                 array[i].ShareURL =(language ==='EN')? array[i].ShareURL_EN : array[i].ShareURL_FR;
@@ -88,11 +104,15 @@ myApp.service('EducationalMaterial',['$filter','LocalStorage','FileManagerServic
                 delete array.Content;
                 array.Language = language;
             }
-            array.PhaseInTreatment = (language ==='EN')? array.PhaseName_EN:array.PhaseName_FR;
+            if (array.PhaseName_EN || array.PhaseName_FR) {
+                array.PhaseInTreatment = (language === 'EN') ? array.PhaseName_EN : array.PhaseName_FR;
+            }
             array.Url = (language ==='EN')?array.URL_EN:array.URL_FR;
             array.Name =(language ==='EN')? array.Name_EN : array.Name_FR;
             array.Type = (language ==='EN')? array.EducationalMaterialType_EN : array.EducationalMaterialType_FR;
         }
+        //console.log('Set edu material language:');
+        //console.log(array);
         return array;
     }
     function getTypeMaterial(edumaterial)
@@ -139,10 +159,16 @@ myApp.service('EducationalMaterial',['$filter','LocalStorage','FileManagerServic
             //Format the date to javascript
             edumaterial[i].DateAdded=$filter('formatDate')(edumaterial[i].DateAdded);
 
+            // Attach the icons and colours to the educational material contents.
+            if(educationalMaterialType[edumaterial[i].EducationalMaterialType_EN]) {
+                edumaterial[i].Icon = educationalMaterialType[edumaterial[i].EducationalMaterialType_EN].icon;
+                edumaterial[i].Color = educationalMaterialType[edumaterial[i].EducationalMaterialType_EN].color;
+            }
+            else{
+                edumaterial[i].Icon = educationalMaterialType['Other'].icon;
+                edumaterial[i].Color = educationalMaterialType['Other'].color;
+            }
 
-
-            edumaterial[i].Icon = educationalMaterialType[edumaterial[i].EducationalMaterialType_EN].icon;
-            edumaterial[i].Color = educationalMaterialType[edumaterial[i].EducationalMaterialType_EN].color;
             //Add to my annoucements array
             educationalMaterialArray.push(edumaterial[i]);
         }
@@ -174,6 +200,34 @@ myApp.service('EducationalMaterial',['$filter','LocalStorage','FileManagerServic
             }
         }
     }
+
+    /**
+     * @ngdoc method
+     * @name hasReachedBottomOfScreen
+     * @methodOf MUHCApp.service:EducationalMaterial
+     * @author Stacey Beard, based on work by Tongyou (Eason) Yang
+     * @date 2018-11-29
+     * @description Tests whether the user has reached the bottom of the page, either by scrolling down or by
+     *              default if the page is too short to scroll.
+
+     * @param {Object} documentElement object returned by a function call such as "document.getElementById(index)"
+     * @param {*} documentElement.scrollHeight height of the material
+     * @param {*} documentElement.scrollTop position of the top of our 'window' on the material
+     * @param {*} documentElement.clientHeight height of our 'window' on the material
+
+     * @returns {boolean} True if the user has reached the bottom of the screen; false if not.
+     **/
+    function hasReachedBottomOfScreen(documentElement){
+        // Check whether the user has reached the bottom of the screen.
+        // Smaller than 1 is used instead of equals 0 to make sure the check doesn't fail due to
+        // decimals (since $.scrollHeight and $.clientHeight are integers but $.scrollTop is not).
+
+        var spaceToTheBottomOfTheScreen = documentElement.scrollHeight - (documentElement.scrollTop + documentElement.clientHeight);
+
+        if(spaceToTheBottomOfTheScreen < 1) return true;
+        else return false;
+    }
+
     return {
         /**
          *@ngdoc method
@@ -278,26 +332,61 @@ myApp.service('EducationalMaterial',['$filter','LocalStorage','FileManagerServic
                 }
             }
         },
-        //Reads announcement and sends request to backend
-        /**
-         *@ngdoc method
-         *@name readEducationalMaterial
-         *@methodOf MUHCApp.service:EducationalMaterial
-         *@param {String} serNum EducationalMaterialSerNum to be read
-         *@description Sets ReadStatus in educational material to 1, sends request to backend, and syncs with device storage
-         **/
-        readEducationalMaterial:function(serNum)
 
+        // Sends a request to the backend to mark the row numbered 'serNum' of the table EducationalMaterial as read.
+        // Author: Tongyou (Eason) Yang
+        readMaterial:function(serNum)
         {
-            for (var i = 0; i < educationalMaterialArray.length; i++) {
-                if(educationalMaterialArray[i].EducationalMaterialSerNum==serNum)
-                {
-                    educationalMaterialArray[i].ReadStatus='1';
-                    LocalStorage.WriteToLocalStorage('EducationalMaterial',educationalMaterialArray);
-                    RequestToServer.sendRequest('Read',{'Id':serNum, 'Field':'EducationalMaterial'});
+            RequestToServer.sendRequestWithResponse('Read',{'Id':serNum, 'Field':'EducationalMaterial'})
+            // // For testing
+            // .then((res)=>{
+            //     console.log(res);
+            //     ons.notification.alert({message:"Set EducationalMaterial row "+serNum+" as read."});
+            // }).catch((err)=>{
+            //     console.log("Failed to set EducationalMaterial row "+serNum+" as read due to error:");
+            //     console.log(err);
+            // });
+        },
+
+        /**
+         * @ngdoc method
+         * @name logScrolledToBottomIfApplicable
+         * @methodOf MUHCApp.service:EducationalMaterial
+         * @author Stacey Beard, based on work by Tongyou (Eason) Yang
+         * @date 2018-11-29
+         * @description Tests whether the user has reached the bottom of the page, either by scrolling down or by
+         *              default if the page is too short to scroll. If they have reached the bottom, calls a function
+         *              to log the scroll in the database.
+
+         * @param {Object} documentElement object returned by a function call such as "document.getElementById(index)"
+         * @param {*} documentElement.scrollHeight height of the material
+         * @param {*} documentElement.scrollTop position of the top of our 'window' on the material
+         * @param {*} documentElement.clientHeight height of our 'window' on the material
+         * @param {Object} serNum object containing the serNum to use in the logging
+         * @param {*} serNum.EducationalMaterialTOCSerNum optional: if used, logSubScrolledToBottomEduMaterial
+         *                                                          will be called
+         * @param {*} serNum.EducationalMaterialControlSerNum optional: if used, logScrolledToBottomEduMaterial
+         *                                                              will be called
+
+         * @returns {boolean} True if a log request was sent; false if it was not.
+         **/
+        logScrolledToBottomIfApplicable:function(documentElement, serNum){
+
+            if(hasReachedBottomOfScreen(documentElement)){
+
+                // Logs the material as scrolled to the bottom, checking first if it is a material or a TOC sub-material.
+                if (serNum.EducationalMaterialTOCSerNum){
+                    Logger.logSubScrolledToBottomEduMaterial(serNum.EducationalMaterialTOCSerNum);
+                    return true;
+                }
+                if (serNum.EducationalMaterialControlSerNum){
+                    Logger.logScrolledToBottomEduMaterial(serNum.EducationalMaterialControlSerNum);
+                    return true;
                 }
             }
+            return false;
         },
+
         /**
          *@ngdoc method
          *@name readEducationalMaterial
@@ -368,7 +457,12 @@ myApp.service('EducationalMaterial',['$filter','LocalStorage','FileManagerServic
                     return -1;
                 }else if (type == 'pdf')
                 {
-                    //If its a pdf, the use the file manager service to open the material and return -1
+                    // If it's a pdf:
+
+                    // Log the fact that the user clicked on the pdf download button
+                    Logger.logClickedPdfEduMaterial(edumaterial.EducationalMaterialControlSerNum);
+
+                    // Use the file manager service to open the material and return -1
                     FileManagerService.openPDF(edumaterial.Url);
                     return -1;
                 }
@@ -377,6 +471,40 @@ myApp.service('EducationalMaterial',['$filter','LocalStorage','FileManagerServic
                     return {Url:'./views/education/education-individual-page.html'};
                 }
             }
+        },
+        /**
+         * getPackageContents
+         * @author Stacey Beard
+         * @date 2018-11-19
+         * @desc Gets an educational material package's contents in 2 steps:
+         *       1. Sends a request to the server to get the contents of an educational material package.
+         *       2. Adds the icon and color to each package material based on its type.
+         * @param educationalMaterialControlSerNum The SerNum of the package for which to get the contents.
+         * @returns {*}
+         */
+        getPackageContents:function(educationalMaterialControlSerNum)
+        {
+            let deferred = $q.defer();
+            RequestToServer.sendRequestWithResponse('EducationalPackageContents', {
+                'EducationalMaterialControlSerNum': educationalMaterialControlSerNum
+            }).then((response)=>{
+                let packageContents = response.Data;
+                // Attach the icons and colours to the package contents.
+                for (var i = 0; i < packageContents.length; i++) {
+                    if(educationalMaterialType[packageContents[i].EducationalMaterialType_EN]) {
+                        packageContents[i].Icon = educationalMaterialType[packageContents[i].EducationalMaterialType_EN].icon;
+                        packageContents[i].Color = educationalMaterialType[packageContents[i].EducationalMaterialType_EN].color;
+                    }
+                    else{
+                        packageContents[i].Icon = educationalMaterialType['Other'].icon;
+                        packageContents[i].Color = educationalMaterialType['Other'].color;
+                    }
+                }
+                deferred.resolve(packageContents);
+            }).catch((err)=>{
+                deferred.reject(err);
+            });
+            return deferred.promise;
         },
         /**
          *@ngdoc method

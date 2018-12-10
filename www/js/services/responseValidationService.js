@@ -59,8 +59,9 @@
                 response.Timestamp = timestamp;
                 clearTimeout(timeOut);
 
+                if (!encryptionKey) response = EncryptionService.decryptData(response);
+
                 if (response.Code === SUCCESS) {
-                    if (!encryptionKey) response = EncryptionService.decryptData(response);
                     return {success: response};
                 } else {
                     return handleResponseError(response)
@@ -76,6 +77,7 @@
         function handleResponseError(response){
             switch (response.Code) {
                 case SERVER_RESPONSE_ERROR:
+                    return {error: response};
                 case TOO_MANY_ATTEMPTS_ERROR:
                     return {error: response};
                 case INVALID_VERSION_ERROR:
