@@ -7,7 +7,7 @@ function fireConfig () {
 
     var config = {
         //
-        // PRODUCTION
+        // PreProd (Dev) - ALTHOUGH BELOW IT HAS THE WORD "PROD"
         //
         // apiKey: "AIzaSyAGBV2Zwr0SYKy_J92jceof-OFeeFmm0Gw",
         // authDomain: "opal-prod.firebaseapp.com",
@@ -17,7 +17,7 @@ function fireConfig () {
         // messagingSenderId: "476395494069"
 
         //
-        // PreProd (Dev)
+        // PRODUCTION
         //
         apiKey: "AIzaSyCxV6VuVWtKg5wkeReqzQNfRULwkvVXkos",
         authDomain: "brilliant-inferno-7679.firebaseapp.com",
