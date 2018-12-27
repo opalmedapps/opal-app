@@ -6,6 +6,15 @@
  */
 
 /**
+ * Modification History
+ *
+ * 2018 Nov: Project: Fertility Educate / Educational Material Packages / Education Material Interaction Logging
+ *           Developed by Tongyou (Eason) Yang in Summer 2018
+ *           Merged by Stacey Beard
+ *           Commit # 6706edfb776eabef4ef4a2c9b69d834960863435
+ */
+
+/**
  * @method BookletEduMaterialController
  * @description This controller takes care of the displaying the educational material that has a table of contents in a carousel fashion. It also takes care of the popover that controls the table of contents and
  * rating.
@@ -19,10 +28,13 @@
         .module('MUHCApp')
         .controller('BookletMaterialController', BookletMaterialController);
 
-    BookletMaterialController.$inject = ['$scope', '$timeout', 'NavigatorParameters', '$rootScope', '$filter'];
+    BookletMaterialController.$inject = ['$scope', '$timeout', 'NavigatorParameters', '$rootScope', '$filter',
+        'EducationalMaterial', 'Patient', 'Logger'];
+
 
     /* @ngInject */
-    function BookletMaterialController($scope, $timeout, NavigatorParameters, $rootScope, $filter) {
+    function BookletMaterialController($scope, $timeout, NavigatorParameters, $rootScope, $filter,
+                                       EducationalMaterial, Patient, Logger) {
 
         var vm = this;
 
@@ -31,6 +43,10 @@
 
         vm.goBack = goBack;
         vm.goNext = goNext;
+
+        // Logging functions
+        vm.scrollDown = scrollDown;
+        vm.subClickBack = subClickBack;
 
         activate();
         /////////////////////////////
@@ -91,9 +107,9 @@
          */
         function goNext() {
             if (vm.activeIndex < vm.tableOfContents.length - 1) {
+                // window.scrollTo(0,0); // Not working
                 vm.activeIndex++;
                 vm.carousel.setActiveCarouselItemIndex(vm.activeIndex);
-
             }
         }
 
@@ -132,6 +148,17 @@
             vm.activeIndex = ev.activeIndex;
             setHeightElement();
             lazilyLoadSlides(ev.activeIndex);
+
+            /* This function is called exactly once every time the user navigates to a new page in the booklet carousel,
+             * no matter how they do it (clicking in the TOC, clicking the carousel arrows, swiping, using the
+             * pop-out TOC). Thus, this is the perfect place to log "clicking" on a booklet sub-material.
+             * NOTE: There is one exception. This function does not get called when the user clicks on the first
+             *   sub-material in the table of contents. That special case is addressed separately in the function
+             *   goToEducationalMaterial() in individualMaterialController.js.
+             * -SB */
+
+            // Logs the sub material as clicked.
+            Logger.logSubClickedEduMaterial(vm.tableOfContents[vm.activeIndex].EducationalMaterialTOCSerNum);
         }
 
         //Sets the height dynamically for educational material contents. Fixing the bug from Onsen.
@@ -186,6 +213,31 @@
             }
         }
 
+        // Author: Tongyou (Eason) Yang
+        function scrollDown(i,section){
 
+            $timeout(function () {
+                var $ = document.getElementById(i+'sub');
+
+                $.onscroll = function () {
+                    EducationalMaterial.logScrolledToBottomIfApplicable($, {
+                        "EducationalMaterialTOCSerNum":section.EducationalMaterialTOCSerNum
+                    });
+                };
+
+                $.onclick = function(){
+                    EducationalMaterial.logScrolledToBottomIfApplicable($, {
+                        "EducationalMaterialTOCSerNum":section.EducationalMaterialTOCSerNum
+                    });
+                };
+
+            },0);
+        }
+
+        // Logs when a user clicks back from an educational sub-material (material contained in a booklet).
+        // Author: Tongyou (Eason) Yang
+        function subClickBack() {
+            Logger.logSubClickedBackEduMaterial(vm.tableOfContents[vm.activeIndex].EducationalMaterialTOCSerNum);
+        }
     }
 })();
