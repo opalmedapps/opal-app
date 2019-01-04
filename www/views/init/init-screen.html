@@ -1,7 +1,8 @@
     <ons-page id="popoverLanguage" ng-controller="InitScreenController as init">
          <div style="position: relative; height: 40%">
             <div style="z-index:2;width:100%" align="center">
-                <network-banner></network-banner>
+                <!-- Style on network banner used to make it overlap the picture-logo instead of push it down. -->
+                <network-banner style="position:absolute; top:0; left:0; z-index:9999"></network-banner>
                 <div style="position: absolute; top: 50%;transform: translateY(-50%);" align="center">
                     <img src="img/Opal_Name_Logo_Transparent.png" style="width:75%;height:auto">
                 </div>
