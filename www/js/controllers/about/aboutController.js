@@ -74,7 +74,10 @@
                     break;
                 case 'donation':
                     url = (vm.language === "EN") ? 'https://www.cedars.ca/cedars/en/donate/donate_online?designation=radiation-oncology-opal-fund' :
-                                                   'https://www.cedars.ca/cedars/fr/donate/donate_online?designation=radiation-oncology-opal-fund';
+                        'https://www.cedars.ca/cedars/fr/donate/donate_online?designation=radiation-oncology-opal-fund';
+                    break;
+                case 'opalwebsite':
+                    url = (vm.language === "EN") ? 'https://www.opalmedapps.com' : 'https://www.opalmedapps.com/fr-selected';
                     break;
                 default:
                     break;
