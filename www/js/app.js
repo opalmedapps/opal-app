@@ -120,7 +120,11 @@ myApp.config(['$urlRouterProvider', '$stateProvider', function ($urlRouterProvid
                 "currentAuth": ["FirebaseService", function(FirebaseService) {
                     // $requireSignIn returns a promise so the resolve waits for it to complete
                     return FirebaseService.getAuthentication().$requireSignIn();
-                }]
+                }],
+                // Controller will not be loaded until the translations are ready.
+                "translationsReady": ["$translate", function($translate) {
+                    return $translate.onReady();
+                }],
             }
         })
         .state('Home', {
