@@ -23,15 +23,32 @@
         </ons-list-item>
 
         <!--<ons-list-item modifier="tappable" ng-click="about.openDonation()">-->
-        <ons-list-item modifier="tappable" ng-click="about.openUrl('donation')">
+        <!--<ons-list-item modifier="tappable" ng-click="about.openUrl('donation')">-->
+            <!--<ons-row align="center">-->
+                <!--<ons-col width="60px" style="text-align: center">-->
+                    <!--<div>-->
+                        <!--<ons-icon icon="fa-heart" style="color:#f44336" size="1.7em" fixed-width="true"></ons-icon>-->
+                    <!--</div>-->
+                <!--</ons-col>-->
+                <!--<ons-col>-->
+                    <!--<span ng-class="fontSizeTitle">{{"OPAL_SUPPORT"|translate}}</span>-->
+                    <!--<ons-icon icon="ion-android-open" style="color:#ddd; margin-top: 5%; margin-right: -10px" class="pull-right"-->
+                              <!--size="1.2em">-->
+                    <!--</ons-icon>-->
+                <!--</ons-col>-->
+            <!--</ons-row>-->
+        <!--</ons-list-item>-->
+
+        <ons-list-item modifier="tappable" ng-click="about.openUrl('opalwebsite')">
             <ons-row align="center">
                 <ons-col width="60px" style="text-align: center">
                     <div>
-                        <ons-icon icon="fa-heart" style="color:#f44336" size="1.7em" fixed-width="true"></ons-icon>
+                        <!--<ons-icon icon="fa-heart" style="color:#f44336" size="1.7em" fixed-width="true"></ons-icon>-->
+                        <img style="width: 50px;" src="./img/Opal_Logo_Transparent_Inverse.png">
                     </div>
                 </ons-col>
                 <ons-col>
-                    <span ng-class="fontSizeTitle">{{"OPAL_SUPPORT"|translate}}</span>
+                    <span ng-class="fontSizeTitle">{{"OPAL_WEBSITE"|translate}}</span>
                     <ons-icon icon="ion-android-open" style="color:#ddd; margin-top: 5%; margin-right: -10px" class="pull-right"
                               size="1.2em">
                     </ons-icon>
