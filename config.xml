@@ -4,7 +4,7 @@
     <!--<name>Opal</name>-->
 
     <!--Pre-Production-->
-    <widget id="com.hig.opaldev2" android-packageName="com.hig.opaldev2" version="1.7.19" android-versionCode="17019" >
+    <widget id="com.hig.opaldev2" android-packageName="com.hig.opaldev2" version="1.7.20" android-versionCode="17020" >
     <name>Opal-dev</name>
 
     <description>
