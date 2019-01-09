@@ -55,7 +55,7 @@
             vm.language = UserPreferences.getLanguage();
         }
 
-        function openUrl(openWhat) {
+        function openUrl(openWhat, openInExternalBrowser = false) {
             let url = '';
             let app = document.URL.indexOf('http://') === -1 && document.URL.indexOf('https://') === -1;
 
@@ -83,13 +83,12 @@
                     break;
             }
 
-            if (app) {
-                cordova.InAppBrowser.open(url, '_blank', 'location=yes');
-            } else {
+            if (!app || openInExternalBrowser) {
                 window.open(url, '_blank');
+            } else {
+                cordova.InAppBrowser.open(url, '_blank', 'location=yes');
             }
-
-        }
+         }
 
         /**
          * navigatorName = 'initNavigator' or 'homeNavigator'
