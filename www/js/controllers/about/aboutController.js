@@ -83,7 +83,13 @@
                     break;
             }
 
-            window.open(url, '_blank');
+            if (!app) {
+                window.open(url, '_blank');
+            } else if (openInExternalBrowser) {
+                cordova.InAppBrowser.open(url, '_system');
+            } else {
+                cordova.InAppBrowser.open(url, '_blank', 'location=yes');
+            }
 
             // if (!app || openInExternalBrowser) {
             //     window.open(url, '_blank');
