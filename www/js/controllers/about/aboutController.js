@@ -86,16 +86,10 @@
             if (!app) {
                 window.open(url, '_blank');
             } else if (openInExternalBrowser) {
-                cordova.InAppBrowser.open(url, '_system');
+                cordova.InAppBrowser.open(url, '_system');   // _system: opens in External Browser (Safari, etc...) on the device
             } else {
-                cordova.InAppBrowser.open(url, '_blank', 'location=yes');
+                cordova.InAppBrowser.open(url, '_blank', 'location=yes');  // Opens inside the app
             }
-
-            // if (!app || openInExternalBrowser) {
-            //     window.open(url, '_blank');
-            // } else {
-            //     cordova.InAppBrowser.open(url, '_blank', 'location=yes');
-            // }
 
          }
 
