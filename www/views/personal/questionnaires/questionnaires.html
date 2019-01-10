@@ -689,7 +689,9 @@
                      id="questionFeedbackText_{{item.data.ser_num}}" class="down-position">
                     <div style="position: relative; width:100%;">
                         <div style="margin-top: 10px">
-                            <span ng-class="fontSizeDesc" id="feedbackTitle_{{item.data.ser_num}}"></span>
+                            <span ng-class="fontSizeDesc" id="feedbackTitle_{{item.data.ser_num}}">
+                                {{vm.setFeedbackTitleText(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex])}}
+                            </span>
                         </div>
                         <div ng-if="vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex].question_feedback_category_ser_num == 1" class="feedbackItems">
                             <div style="display: inline-block;margin:3px 5px 0px 5px;">

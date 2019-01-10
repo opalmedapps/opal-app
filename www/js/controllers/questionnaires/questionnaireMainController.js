@@ -794,22 +794,22 @@
             }
             question.skip = !skip;
         }
-        vm.thumbs = true;
+
+        vm.setFeedbackTitleText = function(question){
+            return question.patient_answer.feedback ? question.feedback_options[question.patient_answer.feedback-question.feedback_options[0].feedback_ser_num].feedback_title_text : question.feedback_title_text;
+        };
 
         // ***** THUMBS UP/THUMBS DOWN *****
-        vm.feedbackTitleThumbs= 'Do you like this question? (Optional)';
-        vm.feedbackTitleLike = 'What do you <b>like</b> about this question? (Optional)';
-        vm.feedbackTitleDislike = 'What do you <b>dislike</b> about this question? (Optional)';
 
         vm.thumbsUp = function(question,item) {
             let feedbackTitle = document.getElementById('feedbackTitle_'+item.data.ser_num);
             if (question.patient_answer.feedback != question.feedback_options[0].feedback_ser_num) {
-                feedbackTitle.innerHTML = vm.feedbackTitleLike;
+                feedbackTitle.innerHTML = question.feedback_options[0].feedback_title_text;
                 question.patient_answer.feedback = question.feedback_options[0].feedback_ser_num;
                 vm.pullUpComment('questionFeedbackText_'+item.data.ser_num);
                 item.feedbackSectionDown = false;
             } else {
-                feedbackTitle.innerHTML = vm.feedbackTitleThumbs;
+                feedbackTitle.innerHTML = question.feedback_title_text;
                 question.patient_answer.feedback = null;
                 vm.pushDownComment('questionFeedbackText_'+item.data.ser_num);
                 item.feedbackSectionDown = true;
@@ -820,12 +820,13 @@
         vm.thumbsDown = function(question, item) {
             let feedbackTitle = document.getElementById('feedbackTitle_'+item.data.ser_num);
             if (question.patient_answer.feedback != question.feedback_options[1].feedback_ser_num) {
-                feedbackTitle.innerHTML = vm.feedbackTitleDislike;
+                feedbackTitle.innerHTML = question.feedback_options[1].feedback_title_text;
                 question.patient_answer.feedback = question.feedback_options[1].feedback_ser_num;
+                console.log(question.patient_answer.feedback);
                 vm.pullUpComment('questionFeedbackText_'+item.data.ser_num);
                 item.feedbackSectionDown = false;
             } else {
-                feedbackTitle.innerHTML = vm.feedbackTitleThumbs;
+                feedbackTitle.innerHTML = question.feedback_title_text;
                 question.patient_answer.feedback = null;
                 vm.pushDownComment('questionFeedbackText_'+item.data.ser_num);
                 item.feedbackSectionDown = true;
@@ -833,23 +834,17 @@
         };
 
         // ***** EMOTICONS *****
-        vm.feedbackTitleEmot = 'How do you feel about this question? (Optional)';
-        vm.feedbackTitleEmotSelected = 'Why does this question make you feel <b>REACTION</b>? (Optional)';
-
-        function getEmotTitle(reaction) {
-            return vm.feedbackTitleEmotSelected.replace("REACTION", reaction);
-        }
 
         vm.happyEmot = function(question,item) {
             let feedbackTitle = document.getElementById('feedbackTitle_'+item.data.ser_num);
 
             if (question.patient_answer.feedback != question.feedback_options[0].feedback_ser_num) {
-                feedbackTitle.innerHTML = getEmotTitle("happy");
+                feedbackTitle.innerHTML = question.feedback_options[0].feedback_title_text;
                 question.patient_answer.feedback = question.feedback_options[0].feedback_ser_num;
                 vm.pullUpComment('questionFeedbackText_'+item.data.ser_num);
                 item.feedbackSectionDown = false;
             } else {
-                feedbackTitle.innerHTML = vm.feedbackTitleEmot;
+                feedbackTitle.innerHTML = question.feedback_title_text;
                 question.patient_answer.feedback = null;
                 vm.pushDownComment('questionFeedbackText_'+item.data.ser_num);
                 item.feedbackSectionDown = true;
@@ -860,12 +855,12 @@
         vm.sadEmot = function(question,item) {
             let feedbackTitle = document.getElementById('feedbackTitle_'+item.data.ser_num);
             if (question.patient_answer.feedback != question.feedback_options[1].feedback_ser_num) {
-                feedbackTitle.innerHTML = getEmotTitle("sad");
+                feedbackTitle.innerHTML = question.feedback_options[1].feedback_title_text;
                 question.patient_answer.feedback = question.feedback_options[1].feedback_ser_num;
                 vm.pullUpComment('questionFeedbackText_'+item.data.ser_num);
                 item.feedbackSectionDown = false;
             } else {
-                feedbackTitle.innerHTML = vm.feedbackTitleEmot;
+                feedbackTitle.innerHTML = question.feedback_title_text;
                 question.patient_answer.feedback = null;
                 vm.pushDownComment('questionFeedbackText_'+item.data.ser_num);
                 item.feedbackSectionDown = true;
@@ -876,12 +871,12 @@
         vm.upsetEmot = function(question,item) {
             let feedbackTitle = document.getElementById('feedbackTitle_'+item.data.ser_num);
             if (question.patient_answer.feedback != question.feedback_options[2].feedback_ser_num) {
-                feedbackTitle.innerHTML = getEmotTitle("upset");
+                feedbackTitle.innerHTML = question.feedback_options[2].feedback_title_text;
                 question.patient_answer.feedback = question.feedback_options[2].feedback_ser_num;
                 vm.pullUpComment('questionFeedbackText_'+item.data.ser_num);
                 item.feedbackSectionDown = false;
             } else {
-                feedbackTitle.innerHTML = vm.feedbackTitleEmot;
+                feedbackTitle.innerHTML = question.feedback_title_text;
                 question.patient_answer.feedback = null;
                 vm.pushDownComment('questionFeedbackText_'+item.data.ser_num);
                 item.feedbackSectionDown = true;
@@ -892,12 +887,12 @@
             let feedbackTitle = document.getElementById('feedbackTitle_'+item.data.ser_num);
 
             if (question.patient_answer.feedback != question.feedback_options[3].feedback_ser_num) {
-                feedbackTitle.innerHTML = getEmotTitle("confused");
+                feedbackTitle.innerHTML = question.feedback_options[3].feedback_title_text;
                 question.patient_answer.feedback = question.feedback_options[3].feedback_ser_num;
                 vm.pullUpComment('questionFeedbackText_'+item.data.ser_num);
                 item.feedbackSectionDown = false;
             } else {
-                feedbackTitle.innerHTML = vm.feedbackTitleEmot;
+                feedbackTitle.innerHTML = question.feedback_title_text;
                 question.patient_answer.feedback = null;
                 vm.pushDownComment('questionFeedbackText_'+item.data.ser_num);
                 item.feedbackSectionDown = true;
