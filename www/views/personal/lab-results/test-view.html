@@ -62,7 +62,7 @@
                         <!-- LAB RESULT - LEFT (NAME AND UNIT) -->
                         <ons-col class="col-xs-3 col-sm-3 col-lg-3 labtest-col">
                             <div align="left" style="margin-left: 4px">
-                                {{test.FacComponentName}}{{vm.getAbnormalFlagString(test)}}
+                                {{test.FacComponentName}}
                                 <br>
                                 ({{test.UnitDescription}})
                             </div>
@@ -71,7 +71,7 @@
                         <!-- LAB RESULT - CENTRE (VALUE) -->
                         <ons-col class="col-xs-6 col-sm-6 col-lg-6 labtest-col">
                             <div align="center">
-                                {{test.TestValue}}
+                                {{test.TestValue}}{{vm.getAbnormalFlagString(test)}}
                             </div>
                         </ons-col>
 
