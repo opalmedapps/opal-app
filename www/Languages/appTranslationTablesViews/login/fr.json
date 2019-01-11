@@ -54,6 +54,7 @@
   "LANGUAGE":"Langue",
   "LEAVEMESSAGE":"Laissez-nous un message",
   "LEAVING_APP2":"Notez que vous quittez l'application pour aller sur un site web externe.",
+  "LEAVING_APP4":"Notez que vous quittez l'application pour ouvrir un navigateur externe.",
   "LEGALINFO":"Technique/légal",
   "LIMITS_EXCEEDED":"Limite de tentatives de mot de passe dépassé, essayez de réinitialiser votre mot de passe",
   "LOADING":"Chargement",
@@ -75,6 +76,7 @@
   "OPAL_HIG":"Équipe de développement d'Opal",
   "OPAL_SUPPORT":"Soutenir Opal",
   "OPAL_TOUR":"Revoir le guide d'Opal",
+  "OPAL_WEBSITE":"Site web d'Opal",
   "OPALPROBLEMSUBJECT":"Trouvé un défaut / problème en utilisant OPAL",
   "OPENDEVICESETTINGS":"Ouvrir les paramètres de l'appareil",
   "OUTOFTRIES":"Trop de tentatives sans succès - Ce compte sera verrouillé pendant 5 minutes.",
@@ -131,5 +133,6 @@
   "UNATTENDED":"Ne laissez pas votre appareil sans surveillance.",
   "UPDATEMESSAGE":"Cette version d'Opal est discontinuée. Veuillez installer la nouvelle version pour accéder à votre compte.",
   "UPDATEREQUIRED":"Mise à jour requise",
-  "USER_DISABLED":"Le compte d'utilisateur a été désactivé"
+  "USER_DISABLED":"Le compte d'utilisateur a été désactivé",
+  "WARNING":"Attention"
 }

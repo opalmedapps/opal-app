@@ -299,7 +299,8 @@ then
 
 	#All checks have been met... time to build...
 #    cordova build android --release
-    cordova build -verbose
+    cordova build ios --release --device
+#    cordova build -verbose
 
 
 	echo ""
