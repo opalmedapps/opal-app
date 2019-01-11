@@ -132,5 +132,6 @@
 	"UNATTENDED":"Do not leave your phone unattended.",
 	"UPDATEMESSAGE":"This version of Opal is no longer supported. Please update Opal to login.",
 	"UPDATEREQUIRED":"Update Required",
-	"USER_DISABLED":"User account has been disabled"
+	"USER_DISABLED":"User account has been disabled",
+	"WARNING":"Warning"
 }

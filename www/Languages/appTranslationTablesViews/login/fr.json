@@ -132,5 +132,6 @@
   "UNATTENDED":"Ne laissez pas votre appareil sans surveillance.",
   "UPDATEMESSAGE":"Cette version d'Opal est discontinuée. Veuillez installer la nouvelle version pour accéder à votre compte.",
   "UPDATEREQUIRED":"Mise à jour requise",
-  "USER_DISABLED":"Le compte d'utilisateur a été désactivé"
+  "USER_DISABLED":"Le compte d'utilisateur a été désactivé",
+  "WARNING":"Attention"
 }
