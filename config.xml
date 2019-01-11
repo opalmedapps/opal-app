@@ -37,6 +37,7 @@
     <preference name="DisallowOverscroll" value="true" />
     <preference name="FadeSplashScreen" value="true" />
     <preference name="FadeSplashScreenDuration" value="500" />
+    <preference name="ErrorUrl" value="www/views/error/error-page.html"/>
     <icon src="./www/img/OpalHealth_App_Apple_Icon_2.png" />
     <platform name="android">
         <splash density="land-hdpi" src="res/screen/android/splash-land-hdpi.png" />
