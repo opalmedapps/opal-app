@@ -673,13 +673,6 @@ a.muhcapp-home-account:link, a.muhcapp-home-account:hover{
   -webkit-border-radius: 3px;
 }
 
-.name {
-  font-weight: 500;
-  line-height: 16px;
-  font-size: 15px;
-  margin-bottom: 6px;
-}
-
 .desc {
   line-height: 20px;
 }
@@ -1179,14 +1172,6 @@ p{
 
 .lucent {
   opacity: 0.4;
-}
-
-.descOut5 {
-  color: #F44336;
-}
-
-.descIn5{
-  color: #673AB7;
 }
 
 /*.chartArea{*/
