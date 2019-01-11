@@ -44,13 +44,12 @@ else {
  */
 
 function handleOpenURL(url) {
-    setTimeout(function() {
-        try{
-            initNavigator.pushPage("./views/login/security-question.html", {url: url, passwordReset: true});
+    if(url.indexOf("opal://")!==-1){
+        setTimeout(function() {
+            if(typeof initNavigator!== "undefined"){
+                initNavigator.pushPage("./views/login/security-question.html", {url: url, passwordReset: true});
+            }
+        }, 0);
+    }
 
-        }
-        catch (error){
-            console.log(JSON.stringify(error));
-        }
-    }, 0);
 }
