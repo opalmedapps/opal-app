@@ -55,7 +55,7 @@
             vm.language = UserPreferences.getLanguage();
         }
 
-        function openUrl(openWhat) {
+        function openUrl(openWhat, openInExternalBrowser = false) {
             let url = '';
             let app = document.URL.indexOf('http://') === -1 && document.URL.indexOf('https://') === -1;
 
@@ -74,19 +74,24 @@
                     break;
                 case 'donation':
                     url = (vm.language === "EN") ? 'https://www.cedars.ca/cedars/en/donate/donate_online?designation=radiation-oncology-opal-fund' :
-                                                   'https://www.cedars.ca/cedars/fr/donate/donate_online?designation=radiation-oncology-opal-fund';
+                        'https://www.cedars.ca/cedars/fr/donate/donate_online?designation=radiation-oncology-opal-fund';
+                    break;
+                case 'opalwebsite':
+                    url = (vm.language === "EN") ? 'https://www.opalmedapps.com' : 'https://www.opalmedapps.com/fr-selected';
                     break;
                 default:
                     break;
             }
 
-            if (app) {
-                cordova.InAppBrowser.open(url, '_blank', 'location=yes');
-            } else {
+            if (!app) {
                 window.open(url, '_blank');
+            } else if (openInExternalBrowser) {
+                cordova.InAppBrowser.open(url, '_system');   // _system: opens in External Browser (Safari, etc...) on the device
+            } else {
+                cordova.InAppBrowser.open(url, '_blank', 'location=yes');  // Opens inside the app
             }
 
-        }
+         }
 
         /**
          * navigatorName = 'initNavigator' or 'homeNavigator'
