@@ -32,6 +32,7 @@
   "ERRORENTERVALIDSSN":"Entrer un numéro de sécurité sociale valide",
   "ERRORINCORRECTSSN":"Le numéro de sécurité sociale saisi ne correspond pas à celui de nos fichiers, merci de réessayer",
   "ERROROBTAININGDOCUMENT":"Erreur lors de l'obtention du document à partir serveur",
+  "ERROR_PAGE":"Erreur lors du chargement de cette page",
   "FEEDBACK":"Commentaires",
   "FEEDBACK_MESSAGE":"Votre commentaire est inestimable pour nous. S'il vous plaît prenez le temps pour nous faire savoir ce que vous pensez d'Opal. Chaque commentaire est apprécié",
   "FEEDBACK_RECEIVED":"Vos commentaires ont été reçus.",
