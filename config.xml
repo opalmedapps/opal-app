@@ -135,6 +135,7 @@
 
     <plugin name="phonegap-plugin-push" spec="^2.1.2">
         <variable name="FCM_VERSION" value="11.0.1" />
+        <variable name="SENDER_ID" value="476395494069" />
     </plugin>
 
     <plugin name="cordova-plugin-compat" spec="^1.1.0" />
