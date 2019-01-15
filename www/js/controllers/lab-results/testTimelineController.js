@@ -27,8 +27,7 @@
         var max;
         var min;
         var language;
-        var chartSelectedDateRange = 4;
-
+        var chartSelectedDateRangeDefault = 4; // Default to use for the date range (0,1,2,3,4 = 1m,3m,6m,1y,All)
 
         vm.about = about;
         vm.gotoUrl = gotoUrl;
@@ -60,24 +59,8 @@
         }
 
         function bindEvents(){
-            $(window).on('resize.doResize', function () {
-                var newWidth = $(window).width(),
-                    updateStuffTimer;
-
-                if(newWidth !== windowWidth) {
-                    $timeout.cancel(updateStuffTimer);
-                }
-
-                updateStuffTimer = $timeout(function() {
-                    // Update the attribute based on window.innerWidth
-                    //Need a function here to resize the graph size
-                }, 500);
-            });
-
-            $scope.$on('$destroy',function (){
-                $(window).off('resize.doResize'); // remove the handler added earlier
-            });
-
+            // Event binding that doesn't require controller variables should be done in lineChartDirective.js.
+            // Event binding that does require controller variables should be done here.
         }
 
         function configureViewModel(){
@@ -115,8 +98,10 @@
 
             vm.testResultsByDateArray = LabResults.getTestResultsArrayByDate();
 
-            if (!$rootScope.chartSelectedDateRange) {
-                $rootScope.chartSelectedDateRange = 4;    // this to select All by Default as the date range: 0,1,2,3,4   1m, 3m, 6m, 1y, All
+            // If there is no Date Range stored in $rootScope memory, set it to the default.
+            // Note: special check for 0, because a Date Range of 0 is a valid range. -SB
+            if (!$rootScope.chartSelectedDateRange && $rootScope.chartSelectedDateRange != 0) {
+                $rootScope.chartSelectedDateRange = chartSelectedDateRangeDefault;
             }
         }
 
@@ -126,24 +111,31 @@
          * @param e (event)
          */
         function afterSetExtremes(e) {
-            //console.log(this);
-            //console.log(e);
+            // Only process the event e if it contains a rangeSelectorButton.
+            // Otherwise, it is not relevant to this function.
+            if(e && e.rangeSelectorButton && e.rangeSelectorButton.text) {
 
-            console.log(e);
+                var current_selection = e.rangeSelectorButton.text;
 
-            var current_selection = e.rangeSelectorButton.text;
-
-            if (current_selection === '1m')
-                $rootScope.chartSelectedDateRange = 0;
-            else if (current_selection === '3m')
-                $rootScope.chartSelectedDateRange = 1;
-            else if (current_selection === '6m')
-                $rootScope.chartSelectedDateRange = 2;
-            else if (current_selection === '1y')
-                $rootScope.chartSelectedDateRange = 3;
-            else if (current_selection === 'All')
-                $rootScope.chartSelectedDateRange = 4;
-            else $rootScope.chartSelectedDateRange = 2;
+                if (current_selection === '1m') {
+                    $rootScope.chartSelectedDateRange = 0;
+                }
+                else if (current_selection === '3m') {
+                    $rootScope.chartSelectedDateRange = 1;
+                }
+                else if (current_selection === '6m') {
+                    $rootScope.chartSelectedDateRange = 2;
+                }
+                else if (current_selection === '1y') {
+                    $rootScope.chartSelectedDateRange = 3;
+                }
+                else if (current_selection === 'All') {
+                    $rootScope.chartSelectedDateRange = 4;
+                }
+                else {
+                    console.log('Error: invalid range selector button with text '+current_selection);
+                }
+            }
         }
 
         function configureChart(){
@@ -196,14 +188,24 @@
             fontSize = style.fontSize;
             var zoomTextFont = fontSize;
 
-            // Computing the position of the range buttons depending on the client width
-            var buttonWidth;
+            /* Computing the position of the range buttons depending on the text size.
+             * The best result was produced by 70 px for all font sizes. The if statements were left for
+             * future customization.
+             */
+            var buttonPositionX;
             if (fontSizeText == "Xlarge") {
-                buttonWidth = document.body.clientWidth - 320;
+                buttonPositionX = 70;
                 zoomTextFont = "16px";
             }
-            else if (fontSizeText == "Large") buttonWidth = document.body.clientWidth - 280;
-            else buttonWidth = document.body.clientWidth - 240;
+            else if (fontSizeText == "Large") {
+                buttonPositionX = 70;
+            }
+            else if (fontSizeText == "Medium") {
+                buttonPositionX = 70;
+            }
+            else{
+                buttonPositionX = 70; // Default
+            }
 
             // Sample options for first chart
             if (UserPreferences.getLanguage().toUpperCase() === 'FR')
@@ -215,7 +217,7 @@
                         weekdays: ['dimanche', 'lundi', 'lardi', 'mercredi',
                             'jeudi', 'vendredi', 'samedi'],
                         shortMonths: ['janv.', 'févr.', 'mars', 'avr.', 'mai', 'juin', 'juill.',
-                            'août', 'sept.', 'oct.', 'nov.', 'déc'],
+                            'août', 'sept.', 'oct.', 'nov.', 'déc.'],
                         decimalPoint: ',',
                         downloadPNG: 'Télécharger en image PNG',
                         downloadJPEG: 'Télécharger en image JPEG',
@@ -330,9 +332,12 @@
                         fontSize: zoomTextFont
                     },
                     buttonPosition: {
-                        x: buttonWidth,
+                        // align: "right", // This feature will be available after updating Highcharts.
+                        x: buttonPositionX,
                         y: 10
-                    }
+                    },
+                    // Disable the date box input (from <date> to <date>) which causes display problems.
+                    inputEnabled: false
                 },
                 chart: {
                     // Explicitly tell the width and height of a chart
