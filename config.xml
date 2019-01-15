@@ -35,7 +35,7 @@
     <preference name="ErrorUrl" value="www/views/error/error-page.html"/>
     <icon src="./www/img/OpalHealth_App_Apple_Icon_2.png" />
     <platform name="android">
-        <resource-file src="google-services.json" target="./platforms/android/app/google-services.json" />
+        <resource-file src="google-services.json" target="app/google-services.json" />
         <splash density="land-hdpi" src="res/screen/android/splash-land-hdpi.png" />
         <splash density="land-ldpi" src="res/screen/android/splash-land-ldpi.png" />
         <splash density="land-mdpi" src="res/screen/android/splash-land-mdpi.png" />
@@ -135,7 +135,7 @@
 
     <plugin name="phonegap-plugin-push" spec="^2.1.2">
         <variable name="FCM_VERSION" value="11.0.1" />
-        <variable name="SENDER_ID" value="476395494069" />
+        <!--<variable name="SENDER_ID" value="476395494069" />-->
     </plugin>
 
     <plugin name="cordova-plugin-compat" spec="^1.1.0" />
