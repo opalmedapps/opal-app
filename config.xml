@@ -52,6 +52,7 @@
         <allow-intent href="market:*" />
     </platform>
     <platform name="ios">
+        <resource-file src="GoogleService-Info.plist" />
         <splash height="768" src="/res/screen/ios/iPad-Landscape.png" width="1024" />
         <splash height="1536" src="/res/screen/ios/iPad-Landscape@2x.png" width="2048" />
         <splash height="2304" src="/res/screen/ios/iPad-Landscape@3x.png" width="3072" />
