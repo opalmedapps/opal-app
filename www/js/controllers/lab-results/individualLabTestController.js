@@ -48,26 +48,8 @@
             }
         }
 
-        /**
-         * getTestClass
-         * @author Stacey Beard
-         * @date 2019-01-11
-         * @desc Returns the class for a given test based on its criticality (within normal range, outside normal range,
-         *       critically outside normal range). The resulting class will be used to change the colour of test results
-         *       outside the normal range.
-         * @param test Test for which to get the class.
-         * @returns {string} Name of the class to use with this test.
-         */
         function getTestClass(test){
-            if (test.AbnormalFlag && test.AbnormalFlag.toLowerCase() === 'c'){
-                return "lab-results-test-out5";
-            }
-            else if (test.AbnormalFlag && test.AbnormalFlag.toLowerCase() !== 'c'){
-                return "lab-results-test-in5";
-            }
-            else{
-                return "";
-            }
+            return LabResults.getTestClass(test);
         }
 
         /**
