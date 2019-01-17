@@ -339,6 +339,9 @@
                     // Disable the date box input (from <date> to <date>) which causes display problems.
                     inputEnabled: false
                 },
+                navigator: {
+                    margin: 5,
+                },
                 chart: {
                     // Explicitly tell the width and height of a chart
                     // type: 'spline',
@@ -361,7 +364,9 @@
                     //     }
                     // },
                     labels: {
-                        rotation: 0,
+                        y : 20,
+                        rotation: -35,
+                        align: 'right',
                         style: {
                             fontSize: fontSize,
                             textOverflow: false
