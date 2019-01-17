@@ -4,7 +4,7 @@
     <!--<name>Opal</name>-->
 
     <!--Pre-Production-->
-    <widget id="com.hig.opaldev2" android-packageName="com.hig.opaldev2" version="1.7.25" android-versionCode="17025" >
+    <widget id="com.hig.opaldev2" android-packageName="com.hig.opaldev2" version="1.7.26" android-versionCode="17026" >
     <name>Opal-dev</name>
 
     <description>
@@ -135,7 +135,7 @@
 
     <plugin name="phonegap-plugin-push" spec="^2.1.2">
         <variable name="FCM_VERSION" value="11.0.1" />
-        <variable name="SENDER_ID" value="476395494069" />
+        <!--<variable name="SENDER_ID" value="476395494069" />-->
     </plugin>
 
     <plugin name="cordova-plugin-compat" spec="^1.1.0" />
