@@ -99,41 +99,39 @@
             vm.testResultsByDateArray = LabResults.getTestResultsArrayByDate();
 
             // If there is no Date Range stored in $rootScope memory, set it to the default.
-            // Note: special check for 0, because a Date Range of 0 is a valid range. -SB
-            if (!$rootScope.chartSelectedDateRange && $rootScope.chartSelectedDateRange != 0) {
+            if ($rootScope.chartSelectedDateRange === undefined) {
                 $rootScope.chartSelectedDateRange = chartSelectedDateRangeDefault;
             }
         }
 
         /**
-         * This is to save the user's choice of Date Range on the chart (1m, 3m, 6m, 1y, All).
-         * This event is triggered (through HighCharts) when the user Clicks on a Date Range (1m, 3m, 6m, 1y, All) on the chart
+         * afterSetExtremes
+         * @author re-written by Stacey Beard
+         * @date 2019-01-17
+         * @desc Saves the user's choice of Date Range when selecting a button on the chart (1m, 3m, 6m, 1y, All).
+         *       This is done by giving each button an id number that matches its index in the buttons array, and
+         *       saving this id number in $rootScope memory (as chartSelectedDateRange). The variable
+         *       chartSelectedDateRange is associated back to the chart in the chart option "rangeSelector: selected:"
+         *       to select the right button when returning to a chart.
+         *       This event is triggered (through HighCharts) when the chart extremes change, including when a Date
+         *       Range button is pressed.
          * @param e (event)
          */
         function afterSetExtremes(e) {
             // Only process the event e if it contains a rangeSelectorButton.
             // Otherwise, it is not relevant to this function.
-            if(e && e.rangeSelectorButton && e.rangeSelectorButton.text) {
+            if(e && e.rangeSelectorButton) {
 
-                var current_selection = e.rangeSelectorButton.text;
+                var button = e.rangeSelectorButton;
 
-                if (current_selection === '1m') {
-                    $rootScope.chartSelectedDateRange = 0;
-                }
-                else if (current_selection === '3m') {
-                    $rootScope.chartSelectedDateRange = 1;
-                }
-                else if (current_selection === '6m') {
-                    $rootScope.chartSelectedDateRange = 2;
-                }
-                else if (current_selection === '1y') {
-                    $rootScope.chartSelectedDateRange = 3;
-                }
-                else if (current_selection === 'All') {
-                    $rootScope.chartSelectedDateRange = 4;
+                if (button.id === undefined) {
+                    console.log("Error: range selector button with text '"+button.text
+                        +"' was not given an id attribute and will not be saved in memory.");
+                    console.log("Setting range selector to default.");
+                    $rootScope.chartSelectedDateRange = chartSelectedDateRangeDefault;
                 }
                 else {
-                    console.log('Error: invalid range selector button with text '+current_selection);
+                    $rootScope.chartSelectedDateRange = button.id;
                 }
             }
         }
@@ -239,23 +237,31 @@
                         }
                     },
                     rangeSelector: {
+                        /* Button id attribute is used to remember which button was pressed. It must match the index of
+                         * the button in the buttons array to work properly.
+                         * -SB */
                         buttons: [{
+                            id: 0,
                             type: 'month',
                             count: 1,
                             text: '1m'
                         }, {
+                            id: 1,
                             type: 'month',
                             count: 3,
                             text: '3m'
                         }, {
+                            id: 2,
                             type: 'month',
                             count: 6,
                             text: '6m'
                         }, {
+                            id: 3,
                             type: 'year',
                             count: 1,
                             text: '1a'
                         }, {
+                            id: 4,
                             type: 'all',
                             text: 'Tout'
                         }]
@@ -292,23 +298,31 @@
                        }
                     },
                     rangeSelector: {
+                        /* Button id attribute is used to remember which button was pressed. It must match the index of
+                         * the button in the buttons array to work properly.
+                         * -SB */
                         buttons: [{
+                            id: 0,
                             type: 'month',
                             count: 1,
                             text: '1m'
                         }, {
+                            id: 1,
                             type: 'month',
                             count: 3,
                             text: '3m'
                         }, {
+                            id: 2,
                             type: 'month',
                             count: 6,
                             text: '6m'
                         },  {
+                            id: 3,
                             type: 'year',
                             count: 1,
                             text: '1y'
                         }, {
+                            id: 4,
                             type: 'all',
                             text: 'All'
                         }]
