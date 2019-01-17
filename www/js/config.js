@@ -14,7 +14,7 @@ function fireConfig () {
         databaseURL: "https://opal-prod.firebaseio.com",
         projectId: "opal-prod",
         storageBucket: "opal-prod.appspot.com",
-     //   messagingSenderId: "476395494069"
+        messagingSenderId: "476395494069"
 
         //
         // PRODUCTION
