@@ -571,8 +571,9 @@
                 console.log("startIndex = " + vm.startIndex);
                 console.log($scope.carousel.getActiveCarouselItemIndex());
 
-                $scope.carousel.setActiveCarouselItemIndex(vm.startIndex-1);
+                $scope.carousel.setActiveCarouselItemIndex(vm.startIndex);
                 $scope.carousel.next();
+                $scope.carousel.prev();
             }
             else {
                 summaryPage();
@@ -796,14 +797,14 @@
         }
 
         vm.setFeedbackTitleText = function(question){
-            return question.patient_answer.feedback ? question.feedback_options[question.patient_answer.feedback-question.feedback_options[0].feedback_ser_num].feedback_title_text : question.feedback_title_text;
+          return question.patient_answer.feedback ? question.feedback_options[question.patient_answer.feedback-question.feedback_options[0].feedback_ser_num].feedback_title_text : question.feedback_title_text;
         };
 
         vm.feedbackIcon = function(question, item, feedbackOptionNum) {
             let feedbackTitle = document.getElementById('feedbackTitle_'+item.data.ser_num);
 
             if (question.patient_answer.feedback != question.feedback_options[feedbackOptionNum].feedback_ser_num) {
-                feedbackTitle.innerHTML = question.feedback_options[feedbackOptionNum].feedback_title_text;
+               feedbackTitle.innerHTML = question.feedback_options[feedbackOptionNum].feedback_title_text;
                 question.patient_answer.feedback = question.feedback_options[feedbackOptionNum].feedback_ser_num;
                 vm.pullUpComment('questionFeedbackText_'+item.data.ser_num);
                 item.feedbackSectionDown = false;
