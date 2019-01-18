@@ -899,6 +899,90 @@
             }
         };
 
+        vm.oneStar = function(question, item) {
+            let feedbackTitle = document.getElementById('feedbackTitle_'+item.data.ser_num);
+
+
+            if (question.patient_answer.feedback != question.feedback_options[0].feedback_ser_num) {
+                feedbackTitle.innerHTML = question.feedback_options[0].feedback_title_text;
+                question.patient_answer.feedback = question.feedback_options[0].feedback_ser_num;
+                vm.pullUpComment('questionFeedbackText_'+item.data.ser_num);
+                item.feedbackSectionDown = false;
+            } else {
+                feedbackTitle.innerHTML = question.feedback_title_text;
+                question.patient_answer.feedback = null;
+                vm.pushDownComment('questionFeedbackText_'+item.data.ser_num);
+                item.feedbackSectionDown = true;
+            }
+        };
+
+        vm.twoStars = function(question, item) {
+            let feedbackTitle = document.getElementById('feedbackTitle_'+item.data.ser_num);
+
+
+            if (question.patient_answer.feedback != question.feedback_options[1].feedback_ser_num) {
+                feedbackTitle.innerHTML = question.feedback_options[1].feedback_title_text;
+                question.patient_answer.feedback = question.feedback_options[1].feedback_ser_num;
+                vm.pullUpComment('questionFeedbackText_'+item.data.ser_num);
+                item.feedbackSectionDown = false;
+            } else {
+                feedbackTitle.innerHTML = question.feedback_title_text;
+                question.patient_answer.feedback = null;
+                vm.pushDownComment('questionFeedbackText_'+item.data.ser_num);
+                item.feedbackSectionDown = true;
+            }
+        };
+
+        vm.threeStars = function(question, item) {
+            let feedbackTitle = document.getElementById('feedbackTitle_'+item.data.ser_num);
+
+
+            if (question.patient_answer.feedback != question.feedback_options[2].feedback_ser_num) {
+                feedbackTitle.innerHTML = question.feedback_options[2].feedback_title_text;
+                question.patient_answer.feedback = question.feedback_options[2].feedback_ser_num;
+                vm.pullUpComment('questionFeedbackText_'+item.data.ser_num);
+                item.feedbackSectionDown = false;
+            } else {
+                feedbackTitle.innerHTML = question.feedback_title_text;
+                question.patient_answer.feedback = null;
+                vm.pushDownComment('questionFeedbackText_'+item.data.ser_num);
+                item.feedbackSectionDown = true;
+            }
+        };
+
+        vm.fourStars = function(question, item) {
+            let feedbackTitle = document.getElementById('feedbackTitle_'+item.data.ser_num);
+
+
+            if (question.patient_answer.feedback != question.feedback_options[3].feedback_ser_num) {
+                feedbackTitle.innerHTML = question.feedback_options[3].feedback_title_text;
+                question.patient_answer.feedback = question.feedback_options[3].feedback_ser_num;
+                vm.pullUpComment('questionFeedbackText_'+item.data.ser_num);
+                item.feedbackSectionDown = false;
+            } else {
+                feedbackTitle.innerHTML = question.feedback_title_text;
+                question.patient_answer.feedback = null;
+                vm.pushDownComment('questionFeedbackText_'+item.data.ser_num);
+                item.feedbackSectionDown = true;
+            }
+        };
+
+        vm.fiveStars = function(question, item) {
+            let feedbackTitle = document.getElementById('feedbackTitle_'+item.data.ser_num);
+
+            if (question.patient_answer.feedback != question.feedback_options[4].feedback_ser_num) {
+                feedbackTitle.innerHTML = question.feedback_options[4].feedback_title_text;
+                question.patient_answer.feedback = question.feedback_options[4].feedback_ser_num;
+                vm.pullUpComment('questionFeedbackText_'+item.data.ser_num);
+                item.feedbackSectionDown = false;
+            } else {
+                feedbackTitle.innerHTML = question.feedback_title_text;
+                question.patient_answer.feedback = null;
+                vm.pushDownComment('questionFeedbackText_'+item.data.ser_num);
+                item.feedbackSectionDown = true;
+            }
+        };
+
 
         // Jordan Added
         vm.toggleFeedback = function(item){

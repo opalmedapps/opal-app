@@ -733,6 +733,38 @@
                                      class="far fa-question-circle"></div>
                             </div>
                         </div>
+                        <div ng-if="vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex].question_feedback_category_ser_num == 3" class="feedbackItems">
+                            <div style="display: inline-block;margin:3px 5px 0px 5px;">
+                                <div style="font-size:30px;" id="oneStar"
+                                     ng-style="(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex].patient_answer.feedback > 6)? {'color':'darkblue'}:{'color':'black'}"
+                                     ng-click="vm.oneStar(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex],item)"
+                                     class="fas fa-star"></div>
+                            </div>
+                            <div style="display: inline-block;margin:3px 5px 0px 5px;">
+                                <div style="font-size:30px;" id="twoStars"
+                                     ng-style="(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex].patient_answer.feedback > 7)? {'color':'darkblue'}:{'color':'black'}"
+                                     ng-click="vm.twoStars(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex],item)"
+                                     class="fas fa-star"></div>
+                            </div>
+                            <div style="display: inline-block;margin:3px 5px 0px 5px;">
+                                <div style="font-size:30px;" id="threeStars"
+                                     ng-style="(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex].patient_answer.feedback > 8)? {'color':'darkblue'}:{'color':'black'}"
+                                     ng-click="vm.threeStars(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex],item)"
+                                     class="fas fa-star"></div>
+                            </div>
+                            <div style="display: inline-block;margin:3px 5px 0px 5px;">
+                                <div style="font-size:30px;" id="fourStars"
+                                     ng-style="(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex].patient_answer.feedback > 9)? {'color':'darkblue'}:{'color':'black'}"
+                                     ng-click="vm.fourStars(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex],item)"
+                                     class="fas fa-star"></div>
+                            </div>
+                            <div style="display: inline-block;margin:3px 5px 0px 5px;">
+                                <div style="font-size:30px;" id="fiveStars"
+                                     ng-style="(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex].patient_answer.feedback > 10)? {'color':'darkblue'}:{'color':'black'}"
+                                     ng-click="vm.fiveStars(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex],item)"
+                                     class="fas fa-star"></div>
+                            </div>
+                        </div>
                         <div class="feedbackItems">
                             <ons-button ng-if="item.feedbackSectionDown && (vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex].patient_answer.feedback != null)" style="display: inline-block;margin:3px 5px 0px 5px;" ng-click="vm.toggleFeedback(item)">Edit Comment
                             </ons-button>
