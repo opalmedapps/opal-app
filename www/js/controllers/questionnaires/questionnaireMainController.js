@@ -797,11 +797,7 @@
         }
 
        vm.setFeedbackTitleText = function(question){
-          var feedbackTitle = question.patient_answer.feedback ? question.feedback_options[question.patient_answer.feedback-question.feedback_options[0].feedback_ser_num].feedback_title_text : question.feedback_title_text;
-
-          //Ignore bold for this case
-          feedbackTitle = feedbackTitle.replace("<b>","").replace("</b>","");
-          return feedbackTitle;
+          return question.patient_answer.feedback ? question.feedback_options[question.patient_answer.feedback-question.feedback_options[0].feedback_ser_num].feedback_title_text : question.feedback_title_text;
         };
 
 
@@ -810,12 +806,10 @@
             let feedbackTitle = document.getElementById('feedbackTitle_'+item.data.ser_num);
 
             if (question.patient_answer.feedback != question.feedback_options[feedbackOptionNum].feedback_ser_num) {
-                feedbackTitle.innerHTML = question.feedback_options[feedbackOptionNum].feedback_title_text;
                 question.patient_answer.feedback = question.feedback_options[feedbackOptionNum].feedback_ser_num;
                 vm.pullUpComment('questionFeedbackText_'+item.data.ser_num);
                 item.feedbackSectionDown = false;
             } else {
-                feedbackTitle.innerHTML = question.feedback_title_text;
                 question.patient_answer.feedback = null;
                 vm.pushDownComment('questionFeedbackText_'+item.data.ser_num);
                 item.feedbackSectionDown = true;
