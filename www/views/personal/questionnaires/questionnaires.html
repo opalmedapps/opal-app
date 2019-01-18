@@ -697,13 +697,13 @@
                             <div style="display: inline-block;margin:3px 5px 0px 5px;">
                                 <div style="font-size:30px;" id="thumbsUp"
                                      ng-style="(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex].patient_answer.feedback == vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex].feedback_options[0].feedback_ser_num)? {'color':'darkblue'}:{'color':'black'}"
-                                     ng-click="vm.thumbsUp(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex],item)"
+                                     ng-click="vm.feedbackIcon(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex],item, 0)"
                                      class="fa fa-thumbs-up"></div>
                             </div>
                             <div style="display: inline-block;margin:3px 5px 0px 5px;">
                                 <div style="font-size:30px;" id="thumbsDown"
                                      ng-style="(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex].patient_answer.feedback == vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex].feedback_options[1].feedback_ser_num)? {'color':'darkblue'}:{'color':'black'}"
-                                     ng-click="vm.thumbsDown(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex],item)"
+                                     ng-click="vm.feedbackIcon(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex],item, 1)"
                                      class="fa fa-thumbs-down"></div>
                             </div>
                         </div>
@@ -711,25 +711,25 @@
                             <div style="display: inline-block;margin:3px 5px 0px 5px;">
                                 <div style="font-size:30px;" id="happy"
                                      ng-style="(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex].patient_answer.feedback == 3)? {'color':'darkblue'}:{'color':'black'}"
-                                     ng-click="vm.happyEmot(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex],item)"
+                                     ng-click="vm.feedbackIcon(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex],item, 0)"
                                      class="far fa-smile"></div>
                             </div>
                             <div style="display: inline-block;margin:3px 5px 0px 5px;">
                                 <div style="font-size:30px;" id="sad"
                                      ng-style="(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex].patient_answer.feedback == 4)? {'color':'darkblue'}:{'color':'black'}"
-                                     ng-click="vm.sadEmot(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex],item)"
+                                     ng-click="vm.feedbackIcon(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex],item, 1)"
                                      class="far fa-sad-tear"></div>
                             </div>
                             <div style="display: inline-block;margin:3px 5px 0px 5px;">
                                 <div style="font-size:30px;" id="upset"
                                      ng-style="(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex].patient_answer.feedback == 5)? {'color':'darkblue'}:{'color':'black'}"
-                                     ng-click="vm.upsetEmot(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex],item)"
+                                     ng-click="vm.feedbackIcon(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex],item, 2)"
                                      class="far fa-angry"></div>
                             </div>
                             <div style="display: inline-block;margin:3px 5px 0px 5px;">
                                 <div style="font-size:30px;" id="confused"
                                      ng-style="(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex].patient_answer.feedback == 6)? {'color':'darkblue'}:{'color':'black'}"
-                                     ng-click="vm.confusedEmot(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex],item)"
+                                     ng-click="vm.feedbackIcon(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex],item, 3)"
                                      class="far fa-question-circle"></div>
                             </div>
                         </div>
@@ -737,31 +737,31 @@
                             <div style="display: inline-block;margin:3px 5px 0px 5px;">
                                 <div style="font-size:30px;" id="oneStar"
                                      ng-style="(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex].patient_answer.feedback > 6)? {'color':'darkblue'}:{'color':'black'}"
-                                     ng-click="vm.oneStar(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex],item)"
+                                     ng-click="vm.feedbackIcon(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex],item, 0)"
                                      class="fas fa-star"></div>
                             </div>
                             <div style="display: inline-block;margin:3px 5px 0px 5px;">
                                 <div style="font-size:30px;" id="twoStars"
                                      ng-style="(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex].patient_answer.feedback > 7)? {'color':'darkblue'}:{'color':'black'}"
-                                     ng-click="vm.twoStars(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex],item)"
+                                     ng-click="vm.feedbackIcon(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex],item, 1)"
                                      class="fas fa-star"></div>
                             </div>
                             <div style="display: inline-block;margin:3px 5px 0px 5px;">
                                 <div style="font-size:30px;" id="threeStars"
                                      ng-style="(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex].patient_answer.feedback > 8)? {'color':'darkblue'}:{'color':'black'}"
-                                     ng-click="vm.threeStars(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex],item)"
+                                     ng-click="vm.feedbackIcon(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex],item, 2)"
                                      class="fas fa-star"></div>
                             </div>
                             <div style="display: inline-block;margin:3px 5px 0px 5px;">
                                 <div style="font-size:30px;" id="fourStars"
                                      ng-style="(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex].patient_answer.feedback > 9)? {'color':'darkblue'}:{'color':'black'}"
-                                     ng-click="vm.fourStars(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex],item)"
+                                     ng-click="vm.feedbackIcon(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex],item, 3)"
                                      class="fas fa-star"></div>
                             </div>
                             <div style="display: inline-block;margin:3px 5px 0px 5px;">
                                 <div style="font-size:30px;" id="fiveStars"
                                      ng-style="(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex].patient_answer.feedback > 10)? {'color':'darkblue'}:{'color':'black'}"
-                                     ng-click="vm.fiveStars(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex],item)"
+                                     ng-click="vm.feedbackIcon(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex],item, 4)"
                                      class="fas fa-star"></div>
                             </div>
                         </div>
