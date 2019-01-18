@@ -796,20 +796,38 @@
             question.skip = !skip;
         }
 
-        vm.setFeedbackTitleText = function(question){
+  /*      vm.setFeedbackTitleText = function(question){
           return question.patient_answer.feedback ? question.feedback_options[question.patient_answer.feedback-question.feedback_options[0].feedback_ser_num].feedback_title_text : question.feedback_title_text;
+        };
+*/
+        vm.setNoFeedbackGivenTitleText = function(question) {
+            return question.feedback_title_text;
+        };
+
+        vm.feedbackTitleArray = [];
+
+        vm.setFeedbackGivenTitleText = function(question) {
+            var htmlTitleText = question.feedback_options[question.patient_answer.feedback-question.feedback_options[0].feedback_ser_num].feedback_title_text;
+
+            var titleText = htmlTitleText.replace("<b>", ":");
+            titleText = titleText.replace("</b>", ":");
+
+            var titleArray = titleText.split(":");
+            vm.feedbackTitleArray = titleArray;
+
+            return vm.feedbackTitleArray.length == 3;
         };
 
         vm.feedbackIcon = function(question, item, feedbackOptionNum) {
             let feedbackTitle = document.getElementById('feedbackTitle_'+item.data.ser_num);
 
             if (question.patient_answer.feedback != question.feedback_options[feedbackOptionNum].feedback_ser_num) {
-               feedbackTitle.innerHTML = question.feedback_options[feedbackOptionNum].feedback_title_text;
+   //             feedbackTitle.innerHTML = question.feedback_options[feedbackOptionNum].feedback_title_text;
                 question.patient_answer.feedback = question.feedback_options[feedbackOptionNum].feedback_ser_num;
                 vm.pullUpComment('questionFeedbackText_'+item.data.ser_num);
                 item.feedbackSectionDown = false;
             } else {
-                feedbackTitle.innerHTML = question.feedback_title_text;
+   //             feedbackTitle.innerHTML = question.feedback_title_text;
                 question.patient_answer.feedback = null;
                 vm.pushDownComment('questionFeedbackText_'+item.data.ser_num);
                 item.feedbackSectionDown = true;

@@ -685,12 +685,17 @@
                 </div>
                 <!--FEEDBACK-->
                 <div ng-if="vm.isQuestion && !vm.questionnaireStart && vm.portraitOrientationCheck.matches && vm.questionnaire.is_feedback == '1' && vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex].question_feedback_category_ser_num != 0"
-                     style="position: absolute; text-align: center; width: 100%; overflow-y: hidden; border-top: solid lightgrey 1px; background-color: lightblue;"
+                     style="position: absolute; text-align: center; width: 100%; overflow-y: hidden; border-top: solid lightgrey 1px; background-color: palegoldenrod;"
                      id="questionFeedbackText_{{item.data.ser_num}}" class="down-position">
                     <div style="position: relative; width:100%;">
                         <div style="margin-top: 10px">
                             <span ng-class="fontSizeDesc" id="feedbackTitle_{{item.data.ser_num}}">
-                                {{vm.setFeedbackTitleText(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex])}}
+                                <div ng-if="!vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex].patient_answer.feedback">
+                                    {{vm.setNoFeedbackGivenTitleText(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex])}}
+                                </div>
+                                <div ng-if="vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex].patient_answer.feedback && vm.setFeedbackGivenTitleText(vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex])">
+                                    {{vm.feedbackTitleArray[0]}}<b>{{vm.feedbackTitleArray[1]}}</b>{{feedbackTitleArray[2]}}
+                                </div>
                             </span>
                         </div>
                         <div ng-if="vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex].question_feedback_category_ser_num == 1" class="feedbackItems">
