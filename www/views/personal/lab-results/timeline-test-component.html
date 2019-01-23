@@ -4,7 +4,10 @@
         <div class="center" ng-class="fontSizeTitle">{{test.title}}</div>
     </ons-toolbar>
     <ons-col>
-        <div><hc-chart options="test.chartOptions">Placeholder for generic chart</hc-chart></div>
+        <!-- CHART -->
+        <div>
+            <hc-chart options="test.chartOptions">[Lab results chart]</hc-chart>
+        </div>
             <ons-list-header ng-class="fontSizeDesc">{{"LAB_TEST_INFO"|translate}}</ons-list-header>
         <div>
             <ons-list-item ng-class="fontSizeDesc"  ng-click="test.about()" style="background-color: #E3F2FD" tappable>
