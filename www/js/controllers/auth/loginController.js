@@ -299,6 +299,13 @@
                         vm.loading = false;
                     });
                     break;
+                case "auth/network-request-failed":
+                    $timeout(function(){
+                        vm.alert.type='danger';
+                        vm.alert.message="ERROR_NETWORK";
+                        vm.loading = false;
+                    });
+                    break;
                 case "LIMITS_EXCEEDED":
                     $timeout(function(){
                         vm.alert.type='danger';
@@ -321,7 +328,7 @@
                 default:
                     $timeout(function(){
                         vm.alert.type='danger';
-                        vm.alert.message="SERVER_ERROR";
+                        vm.alert.message="ERROR_GENERIC";
                         vm.loading = false;
                     });
             }

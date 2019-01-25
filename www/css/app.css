@@ -67,6 +67,38 @@ body {
     width: 100%;
 }
 
+.listInitApp {
+    display: none;
+    height: 56%;
+}
+
+.initScreenButtonDiv {
+    height: 15%;
+    margin: 3% auto;
+    text-align: center;
+    width: 90%;
+}
+
+.initScreenWhiteButton {
+    background-color: #F5F5F5;
+    font-size: x-large;
+    height: 100%;
+    position: relative;
+}
+
+.initScreenGreenButton {
+    background-color: #4CAF50;
+    font-size: xx-large;
+    font-weight: bolder;
+    height: 100%;
+}
+
+.initScreenButtonText {
+    color: #757575;
+    display: inline-block;
+    margin-left: -10%;
+}
+
 /* Portrait layout (default) */
 .app {
     background:url(../img/logo.png) no-repeat center top; /* 170px x 200px */
@@ -673,13 +705,6 @@ a.muhcapp-home-account:link, a.muhcapp-home-account:hover{
   -webkit-border-radius: 3px;
 }
 
-.name {
-  font-weight: 500;
-  line-height: 16px;
-  font-size: 15px;
-  margin-bottom: 6px;
-}
-
 .desc {
   line-height: 20px;
 }
@@ -1179,14 +1204,6 @@ p{
 
 .lucent {
   opacity: 0.4;
-}
-
-.descOut5 {
-  color: #F44336;
-}
-
-.descIn5{
-  color: #673AB7;
 }
 
 /*.chartArea{*/
