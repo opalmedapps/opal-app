@@ -82,31 +82,20 @@
          */
         function submitPasswordReset() {
             var userAuth = $firebaseAuth();
+
+            /* Note: for security reasons, the success and failure cases must show the exact same message,
+             * in the same colour (success = green).
+             * -SB */
             userAuth.$sendPasswordResetEmail(vm.email).then(function(){
                 $timeout(function(){
                     vm.alert.type="success";
-                    vm.alert.message="EMAILPASSWORDSENT";
+                    vm.alert.message="RESET_PASSWORD_SENT";
                 });
             }).catch(function(error){
-                switch (error.code) {
-                    case "auth/user-not-found":
-                        $timeout(function(){
-                            vm.alert.type="danger";
-                            vm.alert.message="INVALID_USER2";
-                        });
-                        break;
-                    case "auth/invalid-email":
-                        $timeout(function(){
-                            vm.alert.type="danger";
-                            vm.alert.message="INVALID_EMAIL";
-                        });
-                        break;
-                    default:
-                        $timeout(function(){
-                            vm.alert.type="danger";
-                            vm.alert.message="INVALID_EMAIL";
-                        });
-                }
+                $timeout(function(){
+                    vm.alert.type="success";
+                    vm.alert.message="RESET_PASSWORD_SENT";
+                });
             });
         }
 
