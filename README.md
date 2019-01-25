@@ -3,13 +3,15 @@ Opal - the MUHC Oncology Patient Application for mobile phones and the web - is 
 
 ## Getting Started
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
+The first section of these instructions will get you a copy of the frontend Opal app up and running on your local machine for development and testing purposes. This frontend copy will communicate with the backend infrastructure (listener, database, etc.) already in place at the MUHC. Please note that you must have git installed to follow this guide. The second section (from "Running the tests" on) addresses testing, building and deployment on a live system. This section should be skipped for students or new developers who just want to get started with a frontend copy of Opal for development.
+
+If you have a newer Mac (MacOS High Sierra or later), or are using a firewall or security plugins, you may want to skip directly to [Troubleshooting](#troubleshooting). This may save you some time dealing with installation errors later.
 
 ### Prerequisites
 
 #### Front-End
 
-In order to run the app in your browsing for development and basic testing purposes, there are a few steps you must take:
+In order to run the app in your browser for development and basic testing purposes, there are a few steps you must take:
 
 * Clone the repository to the desired folder in your computer (create an empty folder for this). **(NOTE: You need to be added as a contributer to the project before being able to do this!)**
 
@@ -17,20 +19,29 @@ In order to run the app in your browsing for development and basic testing purpo
 git clone https://github.com/Sable/qplus.git
 ```
 
-* Checkout the branch you wish to install. In the example below, this is the `opal_student` branch (if you are a student, this is likely the branch you will use). To checkout a different branch, replace `opal_student` with the name of your desired branch. Depending on the file structure that was created when cloning, you may need to enter `cd qplus` first to go into the folder containing the repository.
+**Note:** to follow best practices, especially if you intend to also install the listener and database (a "full local copy" of Opal), your folder structure should look like this:
+```
+<root folder> (wherever you want to keep your documents; this can be an existing folder or a new "Opal" folder)
+|_
+  Opal Installation (you can change the name if you want; this folder will contain all your installation files)
+  |_
+    qplus (this is the frontend repository)
+```
+Never put any new documents in qplus (except for new code files).
+You can keep documents in Opal Installation, or in the root folder, whichever you prefer. Just keep everything organized.
+
+* Checkout the `opal_student` branch for installation. You will be able to switch to a different branch when your installation is complete, but you must install using the `opal_student` branch to ensure that your installation will run correctly. Depending on the file structure that was created when cloning, you may need to enter `cd qplus` first to go into the folder containing the repository.
 
 ```
-git fetch
+git fetch    [Optional: only do this step if you cloned the repository several hours or days ago.]
 git checkout -b opal_student origin/opal_student
 ```
 
-* Install the latest version of [NodeJS](https://nodejs.org/en/download/). If you have already done this, skip this step. **(NOTE: For proper access to the backend you must have version 6+)**
+* Install the latest version of [NodeJS](https://nodejs.org/en/download/) globally. If you have already done this, skip this step, but follow the instruction for verifying that Node is installed globally. **(NOTE: For proper access to the backend you must have version 6+)**
 
-Once this is done, verify that you installed Node globally by running
-running `$node -v`
+Verify that Node is installed globally by running `node -v`.
 
-If you see the current version of the Node runtime installed, then all is good! Otherwise please consult Node's troubleshooting manual or Google the error that occurs.
-
+If you see the current version of the Node runtime installed after running `node -v`, then all is good! Otherwise please consult Node's troubleshooting manual or Google the error that occurs.
 
 This installation also installs the Node.js package manager ([npm](https://docs.npmjs.com/getting-started/what-is-npm)).
 This package manager is in charge of installing all the libraries and dependencies
@@ -41,23 +52,27 @@ and the versions for each of them.
 
 * Open a command prompt and navigate to the folder in which you have cloned the repository.
 
-* Install [Bower](https://bower.io/) globally. If you have already done this, skip this step.
+* Install [Bower](https://bower.io/) globally. If you have already done this, skip this step, but follow the instruction for verifying that Bower is installed globally.
 
-**Note:** you may need to replace `npm` with `sudo npm` if you are running a Mac or Linux system without root access.
+**Note:** you may need to replace `npm` with `sudo npm` if you are running a Mac or Linux system without root access. If this is the case, use `sudo npm` for all the `npm` steps that follow.
 
 ```
 npm install -g bower
 ```
 
- Bower is our front-end libraries package manager. This allows all of our libraries to stay in sync and updated across all developing platforms.
+Verify that Bower is installed globally by running `bower -v`.
+
+Bower is our front-end libraries package manager. This allows all of our libraries to stay in sync and updated across all developing platforms.
 The main file for this dependencies is [bower.json](./bower.json), this file
 contains all the dependencies that are required to run the front-end.
 
-* Install [Gulp](https://gulpjs.com/) globally. If you have already done this, skip this step.
+* Install [Gulp](https://gulpjs.com/) globally. If you have already done this, skip this step, but follow the instruction for verifying that Gulp is installed globally.
 
 ```
 npm install gulp-cli -g
 ```
+
+Verify that Gulp is installed globally by running `gulp -v`.
 
 Gulp is a task manager that allows to have readily available and useful tasks,
 some examples include, instantiating a server, running tests, generating
@@ -70,7 +85,7 @@ for production.
 npm install
 ```
 
-This will install the npm and bower dependencies.
+This will install the npm and bower dependencies (using the packages specified in `bower.json` and `package.json`).
 
 * Run the app
 
@@ -78,11 +93,12 @@ This will install the npm and bower dependencies.
 gulp serve
 ```
 
+After these steps, the app should automatically launch in a Chrome browser window. If you get an error message because gulp can't launch Chrome, open a browser window yourself and navigate to `http://localhost:9000`.
 
-After these steps if all the installation is correct, you should be able to see the app
-by navigating to `http://localhost:9000`
+If the app looks normal (though stretched out), with the Opal logo and buttons, your installation was successful.
+If the app looks jumbled (a green screen, strange labels, no buttons), the app code is fine, but the packages installation failed --> skip ahead to [Troubleshooting](#troubleshooting).
 
-### Optional
+### Optional Alternative to Gulp Serve (skip this if gulp serve works well for you)
 * Install http-server
 
 ```
@@ -100,12 +116,9 @@ http-server ./www -p 9000 -o
 Similar to `gulp serve`, this opens automatically the app at address
 `http://localhost:9000`.
 
-**NOTE: In the past there have been multiple students who have had trouble install dependencies due to strange permission issues that would block the ability to write to certain directories... so don't worry if this happens to you! If this occurs, the problem is easily fixable by some simple Google searching. There seemed to have been various solutions for different people so I can't really provide a troubleshooting manual for every case.**
-
-
 ### Running Development Environment
 
-A step by step series of examples that tell you have to get a development env running
+A step by step series of examples that tell you how to get a development environment running.
 
 #### Front-End
 
@@ -124,14 +137,30 @@ and you should see something similar appear in your console:
 ```
 2) In Chrome or Firefox (they have the best debug console) navigate to one of the addresses provided from the previous step.
 3) Open the [developer console](https://developer.chrome.com/devtools) and switch to mobile view and [disable caching](http://nicholasbering.ca/tools/2016/10/09/devtools-disable-caching/).
-4) If you followed all the steps correctly there should not be any errors in the debug console other than a missing cordova.js file. Otherwise please use Google or StackOverflow to solve any issues that arise, or try repeating all the steps again.
-5) If all is well you can login to the app with the following credentials:
+4) If you followed all the steps correctly, the only errors you should see in the debug console are a 404 error for cordova.js, a 404 error for favicon.ico, and many warnings for translations that don't exist. Otherwise, skip ahead to [Troubleshooting](#troubleshooting).
+5) If all is well you can log in to the app with the following credentials:
 
 ```
 email: muhc.app.mobile@gmail.com
 password: 12345opal
-security answer (depending on question): red, guitar, superman, dog, bob, cuba
+security answer (depending on the question): red, guitar, superman, dog, bob, cuba
 ```
+
+**NOTE: In the past, several students have had trouble installing dependencies due to strange permission issues that block the ability to write to certain directories. Don't worry if this happens to you! Please consult the [Troubleshooting](#troubleshooting) section below.**
+
+## Troubleshooting
+If you are getting errors during your installation, here are some things you can try:
+* If you got unexpected errors in the developer console, and the app looks jumbled, it is likely that one of the packages used by Opal was not properly installed.
+* If one or many packages didn't install correctly, one of the reasons below may be preventing `npm install` from installing the packages correctly. [Note: if you want to try installing the packages again, you can navigate to your local qplus repository and delete the folder `www/lib/bower_components`. Then, in the root of the repository, run `npm install`. Npm will detect that you deleted the folder and install the packages again.] You may be having one of the following problems:
+  - You don't have the required permissions to perform the installation. Make sure you are logged in as an administrator on your computer, and try re-installing the packages. If you have a Mac, preceed your npm commands with `sudo` to run the command with administrator permissions.
+  - You have an extra firewall or security plugin installed, which is preventing the packages from installing. For example, the browser extension Ghostery is known to interfere with installation. Try disabling firewalls and security plugins and re-installing the packages.
+  - Your computer security is too strong. For example, newer Mac devices running MacOS High Sierra or newer have been known to prevent some packages from installing. For newer Macs, follow the instructions on [this website](https://www.imore.com/how-turn-system-integrity-protection-macos) to turn off System Integrity Protection. Then, try re-installing the packages using the instructions above. Don't forget to re-enable System Integrity Protection once you're done.
+  - You have a too-recent version of npm installed. Try installing an older version of npm such as version 6 instead of 8 or 10, and re-install the packages.
+  
+If at this point you have been unable to install everything properly, reach out to an Opal team member for help.
+
+This is the end of the section on installing the frontend Opal app. If you are a student or if you weren't explicitly asked to test, build or deploy the app, skip ahead to [Best Practices](#best-practices).
+
 ## Running the tests
 
 Currently the Opal Development team has been making an effort to write tests for all new features. It's important to try
@@ -295,6 +324,7 @@ We use [SemVer](http://semver.org/) for versioning. For the versions available, 
 * **Robert Maglieri**
 * **James Brace**
 * **Yick Mo**
+* **Stacey Beard**
 
 <!-- See also the list of [contributors](https://github.com/Sable/dh/contributors) who participated in this project. -->
 
@@ -307,5 +337,4 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 * Medical Physics department at the MUHC for providing a space to work in
 * Cedar's Cancer Centre
 * Laurie Hendren, John Kildea, and Tarek Hijal for founding the initiative
-* All the McGill students who have graciously contributed to the development
-
+* All the McGill students who have graciously contributed to the project development
