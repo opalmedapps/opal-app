@@ -642,7 +642,19 @@
                 console.log('SAVE FEEDBACK');
                 console.log(question.patient_answer.feedbackText);
                 console.log(question.patient_answer.feedback);
-                Questionnaires.saveQuestionFeedback(vm.questionnaire.qp_ser_num,question.ser_num,question.patient_answer.feedback, vm.questionnaire.sections[vm.sectionIndex].section_ser_num, question.patient_answer.feedbackText);
+
+
+                var nlpEnable = question.patient_answer.nlpFeedbackEnable;
+
+                if (!nlpEnable || nlpEnable === "false") {
+                    nlpEnable = false;
+                } else {
+                    nlpEnable = true;
+                }
+
+                console.log(nlpEnable);
+
+                Questionnaires.saveQuestionFeedback(vm.questionnaire.qp_ser_num,question.ser_num,question.patient_answer.feedback, vm.questionnaire.sections[vm.sectionIndex].section_ser_num, question.patient_answer.feedbackText, nlpEnable);
             }
         }
 
@@ -803,6 +815,7 @@
 
 
         vm.feedbackIcon = function(question, item, feedbackOptionNum) {
+            console.log(question)
             let feedbackTitle = document.getElementById('feedbackTitle_'+item.data.ser_num);
 
             if (question.patient_answer.feedback != question.feedback_options[feedbackOptionNum].feedback_ser_num) {

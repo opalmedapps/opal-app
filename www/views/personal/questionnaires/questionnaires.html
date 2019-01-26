@@ -786,6 +786,9 @@
                                           ng-value="vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex].patient_answer.feedbackText"
                                           maxlength="140"
                                 ></textarea>
+                                <!-- Added NLP Checkbox. JORDAN FIX THIS! -->
+                                 NLP
+                                <input type="checkbox" ng-model="vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex].patient_answer.nlpFeedbackEnable">
                             <!--ng-value="item.data.patient_answer.answer[0].text"-->
                             <!--ng-init="vm.setMaxLength(item.data)"-->
                             <!--ng-change="item.data.answerChangedFlag = true;"-->
