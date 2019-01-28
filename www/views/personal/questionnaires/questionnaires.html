@@ -684,6 +684,34 @@
                     </div>
                 </div>
                 <!--FEEDBACK-->
+                <ons-modal var="nlpModal">
+                    <div id="rcorners" style="height: 60%">
+                        <div style="margin-top:10%;padding: 0px 20px 0px 20px;" class="text-center">
+                            <div style="padding-bottom: 10%">
+                                <ons-icon icon="far fa-exclamation-triangle"
+                                          style="font-size:80px; color: white"></ons-icon>
+                            </div>
+                            <div class="container" style="text-align:center;">
+                                <p class="nlpEnableText" style="text-align: justify;text-justify: inter-word;">
+                                    We would like to send your comments to the IBM Watson Tone Analyzer that detects the tone of the given text. This gives us
+                                the ability to better understand your feedback and overall improve the questionnaire process. If you do not feel comfortable
+                                having this text sent to a third party application select the Disable button, otherwise select the Enable button.</p>
+                            </div>
+                            <div id="tourButtons"
+                                 style="padding: 0px 20px 0px 20px; padding-top: 5%;padding-bottom: 5%;padding-right: 10%;"
+                                 class="text-center">
+                                <ons-button class="ng-isolate-scope button effeckt-button slide-left"
+                                            ng-click="vm.setNLP(true)" ng-class="fontSizeDesc">
+                                    {{"Enable"|translate}}
+                                </ons-button>
+                                <ons-button class="ng-isolate-scope button effeckt-button slide-left"
+                                            ng-click="vm.setNLP(false)" ng-class="fontSizeDesc">
+                                    {{"Disable"|translate}}
+                                </ons-button>
+                            </div>
+                        </div>
+                    </div>
+                </ons-modal>
                 <div ng-if="vm.isQuestion && !vm.questionnaireStart && vm.portraitOrientationCheck.matches && vm.questionnaire.is_feedback == '1' && vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex].question_feedback_category_ser_num != 0"
                      style="position: absolute; text-align: center; width: 100%; overflow-y: hidden; border-top: solid lightgrey 1px; background-color: palegoldenrod;"
                      id="questionFeedbackText_{{item.data.ser_num}}" class="down-position">
@@ -786,9 +814,6 @@
                                           ng-value="vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex].patient_answer.feedbackText"
                                           maxlength="140"
                                 ></textarea>
-                                <!-- Added NLP Checkbox. JORDAN FIX THIS! -->
-                                 NLP
-                                <input type="checkbox" ng-model="vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex].patient_answer.nlpFeedbackEnable">
                             <!--ng-value="item.data.patient_answer.answer[0].text"-->
                             <!--ng-init="vm.setMaxLength(item.data)"-->
                             <!--ng-change="item.data.answerChangedFlag = true;"-->
@@ -826,9 +851,8 @@
                     <!--</div>-->
                 </div>
 
-                <!--PULL UP FEEDBACK COMMENT BOX ANIMATION-->
                 <style>
-
+                    /*PULL UP/PULL DOWN FEEDBACK*/
                     .feedbackItems{
                         display: inline-block;
                     }
@@ -870,6 +894,12 @@
                         from {bottom:0px}
                         to {bottom:-160px}
                     }
+
+                    /*NLP ENABLE FEEDBACK*/
+                    .nlpEnableText{
+                        font-size: 14px;
+                    }
+
                 </style>
 
             </ons-carousel-item>

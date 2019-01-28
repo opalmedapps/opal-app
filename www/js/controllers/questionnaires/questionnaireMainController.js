@@ -644,17 +644,17 @@
                 console.log(question.patient_answer.feedback);
 
 
-                var nlpEnable = question.patient_answer.nlpFeedbackEnable;
+                // var nlpEnable = question.patient_answer.nlpFeedbackEnable;
+                //
+                // if (!nlpEnable || nlpEnable === "false") {
+                //     nlpEnable = false;
+                // } else {
+                //     nlpEnable = true;
+                // }
 
-                if (!nlpEnable || nlpEnable === "false") {
-                    nlpEnable = false;
-                } else {
-                    nlpEnable = true;
-                }
+                console.log(vm.enableNlp);
 
-                console.log(nlpEnable);
-
-                Questionnaires.saveQuestionFeedback(vm.questionnaire.qp_ser_num,question.ser_num,question.patient_answer.feedback, vm.questionnaire.sections[vm.sectionIndex].section_ser_num, question.patient_answer.feedbackText, nlpEnable);
+                Questionnaires.saveQuestionFeedback(vm.questionnaire.qp_ser_num,question.ser_num,question.patient_answer.feedback, vm.questionnaire.sections[vm.sectionIndex].section_ser_num, question.patient_answer.feedbackText, vm.enableNlp);
             }
         }
 
@@ -812,10 +812,24 @@
           return question.patient_answer.feedback ? question.feedback_options[question.patient_answer.feedback-question.feedback_options[0].feedback_ser_num].feedback_title_text : question.feedback_title_text;
         };
 
+        vm.firstFeedback = true;
+        vm.isFirstFeedback = function(){
+            console.log("FIRSY FEEDBACK");
+            if(vm.firstFeedback){
+                console.log("YES IT IS");
+                nlpModal.show();
+                vm.firstFeedback = false;
+            }
+        };
 
+        vm.enableNlp = true;
+        vm.setNLP = function(enable){
+            vm.enableNlp = enable;
+            nlpModal.hide();
+        };
 
         vm.feedbackIcon = function(question, item, feedbackOptionNum) {
-            console.log(question)
+            console.log(question);
             let feedbackTitle = document.getElementById('feedbackTitle_'+item.data.ser_num);
 
             if (question.patient_answer.feedback != question.feedback_options[feedbackOptionNum].feedback_ser_num) {
@@ -827,18 +841,20 @@
                 vm.pushDownComment('questionFeedbackText_'+item.data.ser_num);
                 item.feedbackSectionDown = true;
             }
+            vm.isFirstFeedback();
         };
 
 
         // Jordan Added
         vm.toggleFeedback = function(item){
-            console.log(item);
             let id = 'questionFeedbackText_'+item.data.ser_num;
             if(item.feedbackSectionDown)
                 vm.pullUpComment(id);
             else
                 vm.pushDownComment(id);
             item.feedbackSectionDown = !item.feedbackSectionDown;
+
+            vm.isFirstFeedback();
         };
 
         vm.pullUpComment = function(id){
