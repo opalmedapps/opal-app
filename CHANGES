@@ -1,4 +1,5 @@
 Staging 1.8.0.2:
+ - corrected the bumping of staging
  - Merge branch '412' into staging_1.8.0.1
  - 412: Make response messages identical in Forgot Password
 
