@@ -1,3 +1,24 @@
+Staging 1.8.0.1:
+ - Merge branch '517' into staging_1.8.0
+ - Merge branch '514' into staging_1.8.0
+ - Merge branch '512' into staging_1.8.0
+ - Merge branch '508' into staging_1.8.0
+ - Merge branch '507' into staging_1.8.0
+ - Merge branch '504' into staging_1.8.0
+ - 504: Fix spacing of buttons on the init screen
+ - Fix bug with remembering lab graph timeframe
+ - Rotate date labels on lab results graph
+ - 517: Update the lab results info page
+ - Move the getTestClass function to the lab results service
+ - 517: Add chevrons to lab results test-view
+ - 517: Resize lab results graph after phone rotation
+ - Issue 517: move the abnormal flag next to the lab result value
+ - Issue 517: make lab results header sticky and remove duplicate html
+ - Issue 514: fix RECONNECTING string translation (FR)
+ - Issue 512: make the button labels consistent on init page
+ - Issue 507: replace SERVER_ERROR with an informative error message
+ - Issue 508: fix network banner displacing init page layout
+
 Staging 1.8.0.0:
 
 
