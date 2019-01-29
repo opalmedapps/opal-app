@@ -6,7 +6,6 @@
 	"INVALID_PASSWORD":"Contraseña invalida",
 	"INVALID_EMAIL":"E-mail invalido",
 	"INTERNETERROR":"Error de coneccion, revise coneccion a internet",
-	"EMAILPASSWORDSENT":"Contraseña temporal ha sido enviada a tu buzon!",
 	"ENTEREMAIL":"Inserte su e-mail:",
 	"RESETPASSWORD":"Resetear Contraseña",
 	"LOADING":"Cargando",
