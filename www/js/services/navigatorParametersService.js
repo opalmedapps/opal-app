@@ -54,14 +54,24 @@ myApp.service('NavigatorParameters',function(){
         },
         /**
          *@ngdoc method
-         *@name getParameters
+         *@name getNavigator
          *@methodOf MUHCApp.service:NavigatorParameters
          *@return {Object} Returns navigator object.
          **/
         getNavigator:function()
         {
             return navigator;
-        }
+        },
+        /**
+         *@ngdoc method
+         *@name getNavigatorName
+         *@methodOf MUHCApp.service:NavigatorParameters
+         *@return {Object} Returns the name of the navigator.
+         **/
+        getNavigatorName:function()
+        {
+            return navigator._attrs.var;
+        },
     };
 
 

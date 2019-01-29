@@ -18,7 +18,7 @@
     function QuestionnairesListController(Questionnaires, NavigatorParameters, $timeout, UserPreferences, $window) {
         var vm = this;
         var questionnaireSerNum;
-        var navigatorName = NavigatorParameters.getParameters().Navigator;
+        var navigatorName = NavigatorParameters.getNavigatorName();
 
         vm.loading = true;
         vm.current_type = 'new';
@@ -144,7 +144,12 @@
             } else if (type === 'new') {
                 for (var key in vm.patientQuestionnaires) {
                     questionnaireSerNum = vm.patientQuestionnaires[key].QuestionnaireSerNum;
-                    if ((!isQuestionnaireComplete(vm.patientQuestionnaires[key])) && (!Questionnaires.isQuestionnaireInProgress(questionnaireSerNum))) {
+                    // if ((!isQuestionnaireComplete(vm.patientQuestionnaires[key])) && (!Questionnaires.isQuestionnaireInProgress(questionnaireSerNum))) {
+                    //     vm.desiredQuestionnaires.push(vm.patientQuestionnaires[key]);
+                    // }
+                    // TEMPORARY CHANGE: While the 'In progress' tab is not working and has been removed,
+                    //   we don't want in progress questionnaires to vanish from the new questionnaires list. -SB
+                    if (!isQuestionnaireComplete(vm.patientQuestionnaires[key])) {
                         vm.desiredQuestionnaires.push(vm.patientQuestionnaires[key]);
                     }
                 }
@@ -172,12 +177,12 @@
         function goToQuestionnaire(patientQuestionnaire, questionnaireDBSerNum, questionnaireSerNum) {
 
             if(!(isQuestionnaireComplete(patientQuestionnaire))) {
-                NavigatorParameters.setParameters({DBSerNum: questionnaireDBSerNum, SerNum: questionnaireSerNum});
+                NavigatorParameters.setParameters({DBSerNum: questionnaireDBSerNum, SerNum: questionnaireSerNum, Tab: vm.current_type});
                 $window[navigatorName].pushPage('views/personal/questionnaires/questionnaires.html', {param:questionnaireDBSerNum, QuestionnaireSerNum:questionnaireSerNum},{ animation : 'slide' });
-              //   NavigatorParameters.setParameters({Navigator:'personalNavigator', DBSerNum: questionnaireDBSerNum, SerNum: questionnaireSerNum});
-              //   personalNavigator.pushPage('views/personal/questionnaires/questionnaires.html', {param:questionnaireDBSerNum, QuestionnaireSerNum:questionnaireSerNum},{ animation : 'slide' });
+                // NavigatorParameters.setParameters({Navigator:'personalNavigator', DBSerNum: questionnaireDBSerNum, SerNum: questionnaireSerNum});
+                // personalNavigator.pushPage('views/personal/questionnaires/questionnaires.html', {param:questionnaireDBSerNum, QuestionnaireSerNum:questionnaireSerNum},{ animation : 'slide' });
             } else {
-                NavigatorParameters.setParameters({DBSerNum: questionnaireDBSerNum, SerNum: questionnaireSerNum});
+                NavigatorParameters.setParameters({DBSerNum: questionnaireDBSerNum, SerNum: questionnaireSerNum, Tab: vm.current_type});
                 $window[navigatorName].pushPage('views/personal/questionnaires/answeredQuestionnaire.html', {param:questionnaireDBSerNum, QuestionnaireSerNum:questionnaireSerNum},{ animation : 'slide' });
                 // NavigatorParameters.setParameters({Navigator:'personalNavigator', DBSerNum: questionnaireDBSerNum, SerNum: questionnaireSerNum});
                 // personalNavigator.pushPage('views/personal/questionnaires/answeredQuestionnaire.html', {param:questionnaireDBSerNum, QuestionnaireSerNum:questionnaireSerNum},{ animation : 'slide' });

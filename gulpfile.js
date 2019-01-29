@@ -20,6 +20,7 @@ var notify = require('gulp-notify');
 var open = require('gulp-open');
 var patch = require('cordova-auto-patch');
 var stripDebug = require('gulp-strip-debug');
+var os = require('os');
 
 /**
  *
@@ -71,10 +72,15 @@ gulp.task('connect', function() {
     });
 });
 
+//Get the browser in which to open server --SB
+var browser = os.platform() === 'linux' ? 'google-chrome' : (
+              os.platform() === 'darwin' ? 'google chrome' : (
+              os.platform() === 'win32' ? 'chrome' : 'firefox'));
+
 //Open server
 gulp.task('open',function()
 {
-    gulp.src('./www/index.html').pipe(open({uri: 'http://localhost:9000', app: 'Google Chrome'}));
+    gulp.src('./www/index.html').pipe(open({uri: 'http://localhost:9000', app: browser}));
 });
 
 //Reload all the files in www

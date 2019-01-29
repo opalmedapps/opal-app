@@ -1,24 +1,28 @@
 <ons-page>
     <ons-toolbar fixed-style>
         <div class="left"><ons-back-button>{{"BACK"|translate}}</ons-back-button></div>
-        <div class="center">{{"LAB_RESULTS"|translate}}</div>
+        <div class="center" ng-class="fontSizeTitle">{{"LAB_RESULTS"|translate}}</div>
     </ons-toolbar>
-    <div class="container">
-        <div class="text-left"  ng-class="fontSizeDesc">
-            <p style="color:black">{{"LAB_NORMAL"|translate}}</p>
-        </div>
 
+    <div class="container text-left" ng-class="fontSizeDesc">
+
+        <p>{{"LAB_INFO_FLAGS"|translate}}</p>
         <br>
-
-        <div class="text-left" ng-class="fontSizeDesc">
-            <p style="color:#673AB7">{{"LAB_WITHIN_5"|translate}}</p>
-        </div>
-
+        <p>
+            <span style="font-weight:bold">{{"LAB_INFO_NORMAL_HEADER"|translate}}: </span>
+            {{"LAB_INFO_NORMAL_TEXT"|translate}}
+        </p>
         <br>
-
-        <div class="text-left"  ng-class="fontSizeDesc">
-            <p style="color:#F44336">{{"LAB_OUTSIDE_5"|translate}}</p>
-            <p> {{ "LAB_RESULT_EMERGENCY" | translate }}</p>
-        </div>
+        <p>
+            <span class="lab-results-test-in5" style="font-weight:bold">{{"LAB_INFO_WITHIN_5_HEADER"|translate}}: </span>
+            {{"LAB_INFO_WITHIN_5_TEXT"|translate}}
+        </p>
+        <br>
+        <p>
+            <span class="lab-results-test-out5" style="font-weight:bold">{{"LAB_INFO_OUTSIDE_5_HEADER"|translate}}: </span>
+            {{"LAB_INFO_OUTSIDE_5_TEXT"|translate}}
+            <br>
+            {{"LAB_INFO_EMERGENCY"|translate}}
+        </p>
     </div>
 </ons-page>
