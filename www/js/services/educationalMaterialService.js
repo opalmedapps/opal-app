@@ -250,7 +250,7 @@ myApp.service('EducationalMaterial',['$q','$filter','LocalStorage','FileManagerS
          **/
         materialExists:function()
         {
-            //Check if the educationa material array has any elements
+            //Check if the educational material array has any elements
             return educationalMaterialArray.length>0;
         },
         /**
