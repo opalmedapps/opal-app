@@ -3,7 +3,7 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/v4-shims.css">
 </head>
-<ons-page ng-controller="QuestionnaireMainController as vm">
+<ons-page ng-controller="QuestionnaireMainController as vm" id="questionnaireMainController">
     <ons-toolbar fixed-style>
         <div class="left" style="width:20%">
             <ons-back-button>{{"BACK"|translate}}</ons-back-button>
@@ -187,7 +187,11 @@
                         <div style="height:80%; overflow-y: auto; position: relative">
                             <!-- QUESTION -->
                             <div class="center" style="margin-top:10px;padding-left:5vw;padding-right:5vw;">
-                                <h4 ng-class="fontSizeDesc">{{item.data.text}}</h4>
+                                <h4 ng-class="fontSizeDesc">{{item.data.text}}
+                                    <div ng-if="vm.questionnaire.allow_removable_questions === '1' && item.data.is_removable === '1'">
+                                        (<a ng-click="vm.popRemoveQuestionModal(item.data.ser_num)">Remove Question?</a>)
+                                    </div>
+                                </h4>
                             </div>
 
                             <!-- MULTIPLE CHOICE -->
@@ -310,7 +314,7 @@
                                                 This question requires you to select exactly {{vm.limitNumber}} option(s).
                                                 Please come back to this question to submit a valid answer.</p>
                                         </div>
-                                        <div id="tourButtons"
+                                        <div id=""
                                              style="padding: 0px 20px 0px 20px; padding-top: 5%;padding-bottom: 5%;padding-right: 10%;"
                                              class="text-center">
                                             <ons-button class="ng-isolate-scope button effeckt-button slide-left"
@@ -683,6 +687,35 @@
                         </div>
                     </div>
                 </div>
+
+                <!--REMOVE QUESTION MODAL-->
+                <ons-modal var="removeQuestionModalTemp">
+                    <div class="removeQuestionModalStyle" style="height: 60%">
+                        <div style="margin-top:10%;padding: 0px 20px 0px 20px;" class="text-center">
+                            <div style="padding-bottom: 10%">
+                                <ons-icon icon="far fa-exclamation-triangle"
+                                          style="font-size:80px; color: white"></ons-icon>
+                            </div>
+                            <div class="container" style="text-align:center;">
+                                <p class="removeQuestionModalText" style="text-align: justify;text-justify: inter-word;">
+                                    Would you like to remove this question from the questionnaire? If so, this question will no longer appear when you take this questionnaire.</p>
+                            </div>
+                            <div
+                                    style="padding: 0px 20px 0px 20px; padding-top: 5%;padding-bottom: 5%;padding-right: 10%;"
+                                    class="text-center">
+                                <ons-button class="ng-isolate-scope button effeckt-button slide-left"
+                                            ng-click="vm.removeQuestion()" ng-class="fontSizeDesc">
+                                    {{"Remove"|translate}}
+                                </ons-button>
+                                <ons-button class="ng-isolate-scope button effeckt-button slide-left"
+                                            ng-click="vm.popRemoveQuestionModal()" ng-class="fontSizeDesc">
+                                    {{"Cancel"|translate}}
+                                </ons-button>
+                            </div>
+                        </div>
+                    </div>
+                </ons-modal>
+
                 <!--FEEDBACK-->
                 <ons-modal var="nlpModal">
                     <div id="nlpModal" style="height: 60%">
@@ -900,6 +933,19 @@
                         font-size: 14px;
                     }
                     #nlpModal{
+                        border-radius: 25px;
+                        background: rgba(0,0,0,0.8);
+                        padding: 20px;
+                        width: 90%;
+                        margin: auto;
+                        position: relative;
+                    }
+
+                    /*REMOVE QUESTION MODAL*/
+                    .removeQuestionModalText{
+                        font-size: 14px;
+                    }
+                    .removeQuestionModalStyle{
                         border-radius: 25px;
                         background: rgba(0,0,0,0.8);
                         padding: 20px;

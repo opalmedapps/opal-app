@@ -242,6 +242,24 @@ myApp.service('Questionnaires', [
                             deferred.reject({Success: false, Location: '', Error: error});
                         });
             },
+            removeQuestionFromPatientQuestionnaire: function(questionnaire_patient_rel_ser_num, question_ser_num) {
+                let deferred = $q.defer();
+                let params = {
+                    'qprs': questionnaire_patient_rel_ser_num,
+                    'qs': question_ser_num
+                };
+                RequestToServer.sendRequestWithResponse('RemovePatientRelativeQuestion', params)
+                    .then(function () {
+                            deferred.resolve({Success: true, Location: 'Server'});
+                        },
+                        function (error) {
+                            deferred.reject({Success: false, Location: '', Error: error});
+                        })
+                    .catch(function (error) {
+                        deferred.reject(error);
+                    });
+                return deferred.promise;
+            },
             requestQuestionnaires: function (type) {
                 let deferred = $q.defer();
                 this.clearQuestionnaires();

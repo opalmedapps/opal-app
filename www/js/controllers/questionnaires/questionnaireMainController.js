@@ -53,6 +53,7 @@
             {'type': 'emotion-bad', 'reaction': 'reaction-anxious', 'text': 'Anxious'}
         ];
         vm.displayReactions = [];
+        vm.removeQuestionModal = null;
 
         vm.showReactions = function(filter) {
             vm.displayReactions = $filter('filter')(vm.availableReactions, function(x) { return x.type == filter; });
@@ -89,8 +90,8 @@
             carousel.next();
             skip_question.hide();
         };
-        vm.updateCurrentQuestion = function(item) {
-            vm.currentQuestion = item.data;
+        vm.updateCurrentQuestion = function(itemIndex) {
+            vm.currentQuestion = vm.carouselItems[itemIndex-1].data;
         };
         vm.isCheckedFcn = isCheckedFcn;
 
@@ -133,6 +134,7 @@
             vm.questionnaire = params.questionnaire;
             console.log("IN ACTIVATE() IN QUESTIONAIREMAINCONTROLLER: " + Object(params));
             console.log(params);
+            manageRemovedQuestions();
             vm.carouselItems = flattenQuestionnaire(); // questions + section headers
             vm.tmpAnswer = [];
             for(var i=0;i<vm.questionnaire.sections.length; i++) {
@@ -307,6 +309,7 @@
         };
 
         function carouselPostChange(event) {
+            vm.updateCurrentQuestion(event.activeIndex);
             //console.log($scope.carousel.getActiveCarouselItemIndex());
             // going from questionnaire header page to first section
             if (event.lastActiveIndex == 0) {
@@ -462,6 +465,12 @@
                 }
             }
             return carouselItems;
+        }
+
+        function manageRemovedQuestions(){
+            for(var i = 0; i < vm.questionnaire.sections.length; i++)
+                if(!vm.questionnaire.sections[i].questions)
+                    vm.questionnaire.sections[i].questions = [];
         }
 
         vm.setMaxLength = setMaxLength;
@@ -828,6 +837,12 @@
             nlpModal.hide();
         };
 
+        vm.popRemoveQuestionModal = function(){
+            if(vm.removeQuestionModal == null)
+                vm.removeQuestionModal = removeQuestionModalTemp;
+            vm.removeQuestionModal.toggle();
+        };
+
         vm.feedbackIcon = function(question, item, feedbackOptionNum) {
             console.log(question);
             let feedbackTitle = document.getElementById('feedbackTitle_'+item.data.ser_num);
@@ -865,6 +880,12 @@
         vm.pushDownComment = function(id){
             var feedback = document.getElementById(id);
             feedback.className = 'push-down down-position';
+        };
+
+        vm.removeQuestion = function(){
+            Questionnaires.removeQuestionFromPatientQuestionnaire(vm.questionnaire.qp_ser_num,vm.currentQuestion.ser_num);
+            vm.popRemoveQuestionModal();
+            carousel.next();
         };
 
         vm.isCheckedCheckmark = function(question, optionKey) {
