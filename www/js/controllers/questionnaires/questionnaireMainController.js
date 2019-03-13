@@ -443,6 +443,7 @@
 
         function flattenQuestionnaire() {
             var carouselItems = [];
+
             for(var i=0; i<vm.questionnaire.sections.length; i++) {
                 carouselItems.push(
                     {
@@ -455,7 +456,9 @@
                         {
                             type: "question",
                             data: vm.questionnaire.sections[i].questions[j],
-                            feedbackSectionDown: true
+                            addable: vm.questionnaire.sections[i].questions[j].is_addable === '1',
+                            add: false,
+                            feedbackSectionDown: true,
                         }
                     );
                     if (i < vm.questionnaire.sections.length-1 && j == vm.questionnaire.sections[i].questions.length-1) {
@@ -464,8 +467,13 @@
                     vm.numQuestions++;
                 }
             }
+
             return carouselItems;
         }
+
+        vm.getNumFills = function(text) {
+            return text.split(" ");
+        };
 
         function manageRemovedQuestions(){
             for(var i = 0; i < vm.questionnaire.sections.length; i++)
@@ -816,9 +824,11 @@
             }
             question.skip = !skip;
         }
-
+        // Bug Here
        vm.setFeedbackTitleText = function(question){
-          return question.patient_answer.feedback ? question.feedback_options[question.patient_answer.feedback-question.feedback_options[0].feedback_ser_num].feedback_title_text : question.feedback_title_text;
+            if(question) {
+                return question.patient_answer.feedback ? question.feedback_options[question.patient_answer.feedback-question.feedback_options[0].feedback_ser_num].feedback_title_text : question.feedback_title_text;
+            }
         };
 
         vm.firstFeedback = true;
