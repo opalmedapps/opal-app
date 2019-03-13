@@ -54,6 +54,7 @@
         ];
         vm.displayReactions = [];
         vm.removeQuestionModal = null;
+        vm.addQuestionModal = null;
 
         vm.showReactions = function(filter) {
             vm.displayReactions = $filter('filter')(vm.availableReactions, function(x) { return x.type == filter; });
@@ -471,8 +472,48 @@
             return carouselItems;
         }
 
-        vm.getNumFills = function(text) {
+        vm.removeQuestion = function(){
+            Questionnaires.removeQuestionFromPatientQuestionnaire(vm.questionnaire.qp_ser_num,vm.currentQuestion.ser_num);
+            vm.popRemoveQuestionModal();
+            carousel.next();
+        };
+
+        vm.popRemoveQuestionModal = function(){
+            if(vm.removeQuestionModal == null)
+                vm.removeQuestionModal = removeQuestionModalTemp;
+            vm.removeQuestionModal.toggle();
+        };
+
+        vm.addQuestion = function(item) {
+            var fills = '';
+            var words = vm.getNumWords(item.data.text);
+            for(var j = 0; j < words.length; j++){
+                if(words[j].localeCompare('***') === 0){
+                    var input = document.getElementById('addQuestionFill'+j);
+                    fills+=input.value+'~';
+                    input.value = '';
+                }
+            }
+            Questionnaires.addQuestionToPatientQuestionnaire(vm.questionnaire.qp_ser_num,vm.currentQuestion.ser_num,fills);
+            vm.popAddQuestionModal();
+        };
+
+        vm.popAddQuestionModal = function(){
+            if(vm.addQuestionModal == null)
+                vm.addQuestionModal = addQuestionModalTemp;
+            vm.addQuestionModal.toggle();
+        };
+
+        vm.getNumWords = function(text) {
             return text.split(" ");
+        };
+
+        vm.adjustQuestionSection = function(item) {
+            return vm.showFeedback(item) ? "height: 80%" : "height: 100%";
+        };
+
+        vm.showFeedback = function(item) {
+            return vm.isQuestion && !vm.questionnaireStart && vm.portraitOrientationCheck.matches && vm.questionnaire.is_feedback == '1' && vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex].question_feedback_category_ser_num != 0 && !item.addable
         };
 
         function manageRemovedQuestions(){
@@ -847,12 +888,6 @@
             nlpModal.hide();
         };
 
-        vm.popRemoveQuestionModal = function(){
-            if(vm.removeQuestionModal == null)
-                vm.removeQuestionModal = removeQuestionModalTemp;
-            vm.removeQuestionModal.toggle();
-        };
-
         vm.feedbackIcon = function(question, item, feedbackOptionNum) {
             console.log(question);
             let feedbackTitle = document.getElementById('feedbackTitle_'+item.data.ser_num);
@@ -890,12 +925,6 @@
         vm.pushDownComment = function(id){
             var feedback = document.getElementById(id);
             feedback.className = 'push-down down-position';
-        };
-
-        vm.removeQuestion = function(){
-            Questionnaires.removeQuestionFromPatientQuestionnaire(vm.questionnaire.qp_ser_num,vm.currentQuestion.ser_num);
-            vm.popRemoveQuestionModal();
-            carousel.next();
         };
 
         vm.isCheckedCheckmark = function(question, optionKey) {

@@ -94,7 +94,7 @@
 
             <!-- <ons-carousel-item style="overflow-y:auto;" ng-repeat="item in vm.carouselItems" ng-if="item.type == 'question' || item.instructions != '' || item.instructions != null"> -->
             <ons-carousel-item style="" ng-repeat="item in vm.carouselItems">
-                <div style="height: 80%">
+                <div style={{vm.adjustQuestionSection(item)}}>
                     <!-- SECTION START -->
                     <div ng-if="item.type == 'header'" style="height:100%">
                         <div class="container" style="margin-top: 3.5vh">
@@ -189,9 +189,9 @@
                             <div class="center" style="margin-top:10px;padding-left:5vw;padding-right:5vw;">
                                 <h4 ng-class="fontSizeDesc">
                                     <div ng-if="item.addable && item.add">
-                                        <div ng-repeat="sub in vm.getNumFills(item.data.text)" style="float:left; margin-right: 5px;">
+                                        <div ng-repeat="sub in vm.getNumWords(item.data.text)" style="float:left; margin-right: 5px;">
                                             <div ng-if="sub.localeCompare('***') === 0">
-                                                <input type="text" name="fill{{i}}" style="width:100px;" />
+                                                <input type="text" id="addQuestionFill{{$index}}" style="width:100px;" />
                                             </div>
                                             <div ng-if="sub.localeCompare('***') !== 0" style="">
                                                 {{sub}}
@@ -702,20 +702,53 @@
                                     </ul>
                                 </div>
                             </div>
+
+                            <div ng-if="item.addable && item.add" class="center" style="width: 100%; margin: 0 auto; padding-left:5vw;padding-right:5vw; text-align: center">
+                                <ons-button ng-click="vm.popAddQuestionModal()">Submit</ons-button>
+                                <ons-button ng-click="item.add = false">Cancel</ons-button>
+                            </div>
+
+                            <!--SUBMIT ADDABLE QUESTION MODAL-->
+                            <ons-modal var="addQuestionModalTemp">
+                                <div class="modalStyle" style="height: 60%">
+                                    <div style="margin-top:10%;padding: 0px 20px 0px 20px;" class="text-center">
+                                        <div style="padding-bottom: 10%">
+                                            <ons-icon icon="far fa-exclamation-triangle"
+                                                      style="font-size:80px; color: white"></ons-icon>
+                                        </div>
+                                        <div class="container" style="text-align:center;">
+                                            <p class="modalText" style="text-align: justify;text-justify: inter-word;">
+                                                Would you like to add this question to the questionnaire? If so, this question will appear in this questionnaire whenever you take it.</p>
+                                        </div>
+                                        <div
+                                                style="padding: 0px 20px 0px 20px; padding-top: 5%;padding-bottom: 5%;padding-right: 10%;"
+                                                class="text-center">
+                                            <ons-button class="ng-isolate-scope button effeckt-button slide-left"
+                                                        ng-click="vm.addQuestion(item)" ng-class="fontSizeDesc">
+                                                {{"Add"|translate}}
+                                            </ons-button>
+                                            <ons-button class="ng-isolate-scope button effeckt-button slide-left"
+                                                        ng-click="vm.popAddQuestionModal()" ng-class="fontSizeDesc">
+                                                {{"Cancel"|translate}}
+                                            </ons-button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </ons-modal>
                         </div>
                     </div>
                 </div>
 
                 <!--REMOVE QUESTION MODAL-->
                 <ons-modal var="removeQuestionModalTemp">
-                    <div class="removeQuestionModalStyle" style="height: 60%">
+                    <div class="modalStyle" style="height: 60%">
                         <div style="margin-top:10%;padding: 0px 20px 0px 20px;" class="text-center">
                             <div style="padding-bottom: 10%">
                                 <ons-icon icon="far fa-exclamation-triangle"
                                           style="font-size:80px; color: white"></ons-icon>
                             </div>
                             <div class="container" style="text-align:center;">
-                                <p class="removeQuestionModalText" style="text-align: justify;text-justify: inter-word;">
+                                <p class="modalText" style="text-align: justify;text-justify: inter-word;">
                                     Would you like to remove this question from the questionnaire? If so, this question will no longer appear when you take this questionnaire.</p>
                             </div>
                             <div
@@ -763,7 +796,7 @@
                         </div>
                     </div>
                 </ons-modal>
-                <div ng-if="vm.isQuestion && !vm.questionnaireStart && vm.portraitOrientationCheck.matches && vm.questionnaire.is_feedback == '1' && vm.questionnaire.sections[vm.sectionIndex].questions[vm.questionIndex].question_feedback_category_ser_num != 0 && !item.addable"
+                <div ng-if="vm.showFeedback(item)"
                      style="position: absolute; text-align: center; width: 100%; overflow-y: hidden; border-top: solid lightgrey 1px; background-color: palegoldenrod;"
                      id="questionFeedbackText_{{item.data.ser_num}}" class="down-position">
                     <div style="position: relative; width:100%;">
@@ -960,10 +993,10 @@
                     }
 
                     /*REMOVE QUESTION MODAL*/
-                    .removeQuestionModalText{
+                    .modalText{
                         font-size: 14px;
                     }
-                    .removeQuestionModalStyle{
+                    .modalStyle{
                         border-radius: 25px;
                         background: rgba(0,0,0,0.8);
                         padding: 20px;
