@@ -130,7 +130,7 @@ myApp.service('Notifications', ['$filter', 'RequestToServer', 'LocalStorage', 'A
                 SerNum: 'EducationalMaterialSerNum',
                 NameEN: 'Name_EN',
                 NameFR: 'Name_FR',
-                readFunction: EducationalMaterial.readEducationalMaterial,
+                readFunction: EducationalMaterial.readMaterial,
                 searchFunction: EducationalMaterial.getEducationaMaterialBySerNum,
                 namesFunction: EducationalMaterial.getEducationalMaterialName,
                 openFunction: EducationalMaterial.getEducationalMaterialUrl,

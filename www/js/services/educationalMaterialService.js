@@ -389,7 +389,7 @@ myApp.service('EducationalMaterial',['$q','$filter','LocalStorage','FileManagerS
 
         /**
          *@ngdoc method
-         *@name readEducationalMaterial
+         *@name getTypeEducationaMaterial
          *@methodOf MUHCApp.service:EducationalMaterial
          *@param {Object} edumaterial EducationalMaterialSerNum
          *@description Obtains the type for that particular educational material
