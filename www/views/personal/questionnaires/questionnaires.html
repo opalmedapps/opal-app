@@ -112,18 +112,8 @@
                                             <ul class="list">
                                                 <li class="list__item list__item--tappable"
                                                     ng-repeat="option in options track by $index">
-                                                    <!-- No background colour when unselected-->
-                                                    <div ng-show="!checked1[$index]">
-                                                        <label class="radio-button radio-button--list-item">
-                                                            <input type="radio" ng-checked="checked1[$index]"
-                                                                   ng-click="clicked1(option, $index, undefined)">
-                                                            <div class="radio-button__checkmark radio-button--list-item__checkmark"></div>
-                                                            {{(language === "EN") ? option.ChoiceDescription_EN :
-                                                            option.ChoiceDescription_FR}}
-                                                        </label>
-                                                    </div>
-                                                    <!-- Background colour when selected -->
-                                                    <div style="background-color:#d6f2ff;" ng-show="checked1[$index]">
+                                                    
+                                                    <div ng-style="styleIfSelected(checked1[$index])">
                                                         <label class="radio-button radio-button--list-item">
                                                             <input type="radio" ng-checked="checked1[$index]"
                                                                    ng-click="clicked1(option, $index, undefined)">
@@ -226,28 +216,8 @@
                                         <ul class="list">
                                             <li class="list__item list__item--tappable"
                                                 ng-repeat="number in numbers track by $index" ng-show="$index>0">
-                                                <!-- No background colour when unselected-->
-                                                <div ng-show="!getChecked(heights.length-$index)">
-                                                    <label class="radio-button radio-button--list-item">
-                                                        <input type="radio" ng-checked="getChecked(heights.length-$index)"
-                                                               ng-click="clicked2(numAnswers[heights.length-$index], $index)">
-                                                        <div class="radio-button__checkmark radio-button--list-item__checkmark"></div>
-                                                        {{heights.length-$index}} &nbsp
-                                                        <label ng-show="$index === 1" ng-click="clicked2(numAnswers[heights.length-$index], $index)">
-                                                            {{(language === "EN")
-                                                            ?
-                                                            questions[indexForTopBottomChoice].Choices[1].ChoiceDescription_EN
-                                                            :
-                                                            questions[indexForTopBottomChoice].Choices[1].ChoiceDescription_FR}}</label>
-                                                        <label ng-show="$index === heights.length-1" ng-click="clicked2(numAnswers[heights.length-$index], $index)">{{(language === "EN")
-                                                            ?
-                                                            questions[indexForTopBottomChoice].Choices[0].ChoiceDescription_EN
-                                                            :
-                                                            questions[indexForTopBottomChoice].Choices[0].ChoiceDescription_FR}}</label>
-                                                    </label>
-                                                </div>
-                                                <!-- Background colour when selected -->
-                                                <div style="background-color:#d6f2ff;" ng-show="getChecked(heights.length-$index)">
+
+                                                <div ng-style="styleIfSelected(getChecked(heights.length-$index))">
                                                     <label class="radio-button radio-button--list-item">
                                                         <input type="radio" ng-checked="getChecked(heights.length-$index)"
                                                                ng-click="clicked2(numAnswers[heights.length-$index], $index)">
@@ -307,19 +277,8 @@
                             <div class="row text-center" style="margin:0 auto" align="center">
                                 <div class="col-xs-12 text-center" style="margin-top:15%" align="center">
                                     <ul class="list">
-                                        <!-- No background colour when unselected-->
-                                        <div ng-show="!checkedYes">
-                                            <li class="list__item list__item--tappable">
-                                                <label class="radio-button radio-button--list-item">
-                                                    <input type="radio" value="Yes" ng-model="checkbox"
-                                                           ng-click="answer3(checkbox, 1)" ng-checked="checkedYes">
-                                                    <div class="radio-button__checkmark radio-button--list-item__checkmark"></div>
-                                                   {{"YES"|translate}}
-                                                </label>
-                                            </li>
-                                        </div>
-                                        <!-- Background colour when selected -->
-                                        <div style="background-color:#d6f2ff;" ng-show="checkedYes">
+
+                                        <div ng-style="styleIfSelected(checkedYes)">
                                             <li class="list__item list__item--tappable">
                                                 <label class="radio-button radio-button--list-item">
                                                     <input type="radio" value="Yes" ng-model="checkbox"
@@ -330,19 +289,7 @@
                                             </li>
                                         </div>
 
-                                        <!-- No background colour when unselected-->
-                                        <div ng-show="!checkedNo">
-                                            <li class="list__item list__item--tappable">
-                                                <label class="radio-button radio-button--list-item">
-                                                    <input type="radio" value="No" ng-model="checkbox"
-                                                           ng-click="answer3(checkbox, 0)" ng-checked="checkedNo">
-                                                    <div class="radio-button__checkmark radio-button--list-item__checkmark"></div>
-                                                    {{"NO"|translate}}
-                                                </label>
-                                            </li>
-                                        </div>
-                                        <!-- Background colour when selected -->
-                                        <div style="background-color:#d6f2ff;" ng-show="checkedNo">
+                                        <div ng-style="styleIfSelected(checkedNo)">
                                             <li class="list__item list__item--tappable">
                                                 <label class="radio-button radio-button--list-item">
                                                     <input type="radio" value="No" ng-model="checkbox"
@@ -542,18 +489,8 @@
                         <ul class="list">
                             <li class="list__item list__item--tappable" ng-repeat="option in options"
                                 ng-show="$index < options.length-1">
-                                <!-- No background colour when unselected-->
-                                <div ng-show="!checked[$index]">
-                                    <label class="lee-checkbox lee-checkbox--list-item">
-                                        <input type="checkbox"
-                                               ng-click="chosen(option, $index)"
-                                               ng-model="checked[$index]">
-                                        <div class="lee-checkbox__checkmark lee-checkbox--list-item__checkmark"></div>
-                                        {{(language === "EN") ? option.ChoiceDescription_EN : option.ChoiceDescription_FR}}
-                                    </label>
-                                </div>
-                                <!-- Background colour when selected -->
-                                <div style="background-color:#d6f2ff;" ng-show="checked[$index]">
+
+                                <div ng-style="styleIfSelected(checked[$index])">
                                     <label class="lee-checkbox lee-checkbox--list-item">
                                         <input type="checkbox"
                                                ng-click="chosen(option, $index)"
@@ -564,17 +501,8 @@
                                 </div>
                             </li>
                             <li class="list__item list__item--tappable">
-                                <!-- No background colour when unselected-->
-                                <div ng-show="!checked[options.length-1]">
-                                    <label class="checkbox checkbox--list-item">
-                                        <input type="checkbox" ng-click="chosen('QUESTIONNAIRE_NONE_OF_THE_ABOVE', options.length-1)"
-                                               ng-model="checked[options.length-1]">
-                                        <div class="checkbox__checkmark checkbox--list-item__checkmark"></div>
-                                        {{"QUESTIONNAIRE_NONE_OF_THE_ABOVE"|translate}}
-                                    </label>
-                                </div>
-                                <!-- Background colour when selected -->
-                                <div style="background-color:#d6f2ff;" ng-show="checked[options.length-1]">
+
+                                <div ng-style="styleIfSelected(checked[options.length-1])">
                                     <label class="checkbox checkbox--list-item">
                                         <input type="checkbox" ng-click="chosen('QUESTIONNAIRE_NONE_OF_THE_ABOVE', options.length-1)"
                                                ng-model="checked[options.length-1]">
