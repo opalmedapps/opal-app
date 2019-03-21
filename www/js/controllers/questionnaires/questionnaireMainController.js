@@ -436,17 +436,17 @@ app1.controller('QuestionnaireMainController', function ($scope, $location, $anc
             ans = $scope.answers[$scope.index - 1];
             for ($i = 0; $i < $scope.options.length; $i++) {
                 choiceDescription = ($scope.language === "EN") ? $scope.options[$i].ChoiceDescription_EN : $scope.options[$i].ChoiceDescription_FR;
-                if ((ans != undefined) && (ans.Answer == choiceDescription)) {
+                if ((ans != undefined) && (ans == choiceDescription)) {
                     $scope.checked1[$i] = true;
                 } else {
                     $scope.checked1[$i] = false;
                 }
             }
-            if (((ans != undefined) && (ans.Answer == 'other')) || ($scope.checkbox == 'other')) {
-                $scope.checked1[$scope.options.length] = true;
-            } else {
-                $scope.checked1[$scope.options.length] = false;
-            }
+            // if (((ans != undefined) && (ans.Answer == 'other')) || ($scope.checkbox == 'other')) {
+            //     $scope.checked1[$scope.options.length] = true;
+            // } else {
+            //     $scope.checked1[$scope.options.length] = false;
+            // }
         }
     }
 
