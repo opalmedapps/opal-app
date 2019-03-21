@@ -895,4 +895,22 @@ app1.controller('QuestionnaireMainController', function ($scope, $location, $anc
     $scope.contact = function () {
         $window.location.href = "mailto:muhc.app.mobile@gmail.com";
     }
+
+    /**
+     * styleIfSelected
+     * @author Stacey Beard
+     * @date 2019-03-21
+     * @desc Returns the style to apply to a button based on whether it's selected or not.
+     *       This is what makes selected buttons a different colour than unselected ones.
+     * @param isSelected Condition that should evaluate to true if the button is selected or to false if it isn't.
+     * @returns {*} The style to apply to the button.
+     */
+    $scope.styleIfSelected = function(isSelected) {
+        if (isSelected) {
+            return {"background-color":"#d6f2ff"} // Light blue
+        }
+        else {
+            return {}
+        }
+    }
 });
