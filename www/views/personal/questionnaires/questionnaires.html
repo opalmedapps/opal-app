@@ -114,9 +114,9 @@
                                                     ng-repeat="option in options track by $index">
                                                     <!-- No background colour when unselected-->
                                                     <div ng-show="!checked1[$index]">
-                                                        <label class="radio-button radio-button--list-item" ng-init="choiceDescription = (language === 'EN') ? options[$index].ChoiceDescription_EN : options[$index].ChoiceDescription_FR">
+                                                        <label class="radio-button radio-button--list-item">
                                                             <input type="radio" ng-checked="checked1[$index]"
-                                                                   ng-click="clicked1(choiceDescription, $index, undefined)">
+                                                                   ng-click="clicked1(option, $index, undefined)">
                                                             <div class="radio-button__checkmark radio-button--list-item__checkmark"></div>
                                                             {{(language === "EN") ? option.ChoiceDescription_EN :
                                                             option.ChoiceDescription_FR}}
@@ -124,9 +124,9 @@
                                                     </div>
                                                     <!-- Background colour when selected -->
                                                     <div style="background-color:#d6f2ff;" ng-show="checked1[$index]">
-                                                        <label class="radio-button radio-button--list-item" ng-init="choiceDescription = (language === 'EN') ? options[$index].ChoiceDescription_EN : options[$index].ChoiceDescription_FR">
+                                                        <label class="radio-button radio-button--list-item">
                                                             <input type="radio" ng-checked="checked1[$index]"
-                                                                   ng-click="clicked1(choiceDescription, $index, undefined)">
+                                                                   ng-click="clicked1(option, $index, undefined)">
                                                             <div class="radio-button__checkmark radio-button--list-item__checkmark"></div>
                                                             {{(language === "EN") ? option.ChoiceDescription_EN :
                                                             option.ChoiceDescription_FR}}
@@ -533,23 +533,20 @@
 
     </div>
     </div> -->
+                <!-- Checkbox question page -->
 
                 <div ng-show="(question.QuestionType == 'Checkbox') && (shown[$index])">
 
-                    <!-- Image page in progress. Just skip this for now -->
-
                     <div>
                         <br>
-                        <!-- ng-click="chosen((language === "EN") ? option.ChoiceDescription_EN : option.ChoiceDescription_FR, $index)" -->
-
                         <ul class="list">
-                            <li class="list__item list__item--tappable" ng-repeat="option in options" ng-init="choiceDescription = (language === 'EN') ? option.ChoiceDescription_EN : option.ChoiceDescription_FR"
+                            <li class="list__item list__item--tappable" ng-repeat="option in options"
                                 ng-show="$index < options.length-1">
                                 <!-- No background colour when unselected-->
                                 <div ng-show="!checked[$index]">
                                     <label class="lee-checkbox lee-checkbox--list-item">
                                         <input type="checkbox"
-                                               ng-click="chosen(choiceDescription, $index)"
+                                               ng-click="chosen(option, $index)"
                                                ng-model="checked[$index]">
                                         <div class="lee-checkbox__checkmark lee-checkbox--list-item__checkmark"></div>
                                         {{(language === "EN") ? option.ChoiceDescription_EN : option.ChoiceDescription_FR}}
@@ -559,7 +556,7 @@
                                 <div style="background-color:#d6f2ff;" ng-show="checked[$index]">
                                     <label class="lee-checkbox lee-checkbox--list-item">
                                         <input type="checkbox"
-                                               ng-click="chosen(choiceDescription, $index)"
+                                               ng-click="chosen(option, $index)"
                                                ng-model="checked[$index]">
                                         <div class="lee-checkbox__checkmark lee-checkbox--list-item__checkmark"></div>
                                         {{(language === "EN") ? option.ChoiceDescription_EN : option.ChoiceDescription_FR}}
@@ -570,7 +567,7 @@
                                 <!-- No background colour when unselected-->
                                 <div ng-show="!checked[options.length-1]">
                                     <label class="checkbox checkbox--list-item">
-                                        <input type="checkbox" ng-click="chosen('None of the Above', options.length-1)"
+                                        <input type="checkbox" ng-click="chosen('QUESTIONNAIRE_NONE_OF_THE_ABOVE', options.length-1)"
                                                ng-model="checked[options.length-1]">
                                         <div class="checkbox__checkmark checkbox--list-item__checkmark"></div>
                                         {{"QUESTIONNAIRE_NONE_OF_THE_ABOVE"|translate}}
@@ -579,7 +576,7 @@
                                 <!-- Background colour when selected -->
                                 <div style="background-color:#d6f2ff;" ng-show="checked[options.length-1]">
                                     <label class="checkbox checkbox--list-item">
-                                        <input type="checkbox" ng-click="chosen('None of the Above', options.length-1)"
+                                        <input type="checkbox" ng-click="chosen('QUESTIONNAIRE_NONE_OF_THE_ABOVE', options.length-1)"
                                                ng-model="checked[options.length-1]">
                                         <div class="checkbox__checkmark checkbox--list-item__checkmark"></div>
                                         {{"QUESTIONNAIRE_NONE_OF_THE_ABOVE"|translate}}
@@ -591,6 +588,9 @@
                         <br>
                     </div>
                 </div>
+
+                <!-- End of checkbox question page -->
+
                 <!--  Only shows if they have reached the last page -->
                 <div align="center" style="margin-top: 20px">
                     <button class="button--large--cta" value="Submit Answer" ng-click="goToSummary()" ng-show="reachEnd"
