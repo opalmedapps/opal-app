@@ -200,17 +200,17 @@ app1.controller('QuestionnaireMainController', function ($scope, $location, $anc
                 }
 
             } else if ($scope.question.QuestionType == 'yes') {
-                if ($scope.answers[$scope.index - 1] == 'Yes') {
+                if (typeof $scope.answers !== "undefined" && $scope.answers[$scope.index - 1] == 'Yes') {
                     $scope.checkedYes = true;
                     $scope.checkedNo = false;
-                } else if ($scope.answers[$scope.index - 1] == 'No') {
+                } else if (typeof $scope.answers !== "undefined" && $scope.answers[$scope.index - 1] == 'No') {
                     $scope.checkedYes = false;
                     $scope.checkedNo = true;
                 } else {
                     $scope.checkedYes = false;
                     $scope.checkedNo = false;
                 }
-                // checkbo stores the value of the clicked button
+                // checkbox stores the value of the clicked button
                 $scope.checkbox = undefined;
             } else if ($scope.question.QuestionType == 'image') {
                 $scope.colors = ['lime', 'lime', 'orange', 'orange', 'orange', 'red', 'red', 'red', 'darkred', 'darkred'];
