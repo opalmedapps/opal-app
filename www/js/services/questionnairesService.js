@@ -218,16 +218,19 @@ myApp.service('Questionnaires', [
                     //     });
 
             },
-            saveQuestionFeedback: function(questionnaire_patient_rel_ser_num, question_ser_num, answeroption_ser_num, section, feedbackText) {
+            saveQuestionFeedback: function(questionnaire_patient_rel_ser_num, question_ser_num, answeroption_ser_num, section, feedbackText, nlpEnabled) {
                 let deferred = $q.defer();
                 let _this = this;
-                var temp = {'feedbackAnswerOptionSerNum': answeroption_ser_num, 'feedbackText': feedbackText};
+                var temp = {'feedbackAnswerOptionSerNum': answeroption_ser_num, 'feedbackText': feedbackText, 'nlpEnabled': nlpEnabled};
                 let params = {
                     'qp_ser_num': questionnaire_patient_rel_ser_num,
                     'q_ser_num': question_ser_num,
                     'sectionSerNum': section,
                     'patientAnswers': temp,
                 };
+
+                console.log("PATIENT ANSWERS");
+                console.log(params.patientAnswers);
 
                 RequestToServer.sendRequestWithResponse('QuestionFeedback', params)
                     .then(function (response) {
@@ -238,6 +241,43 @@ myApp.service('Questionnaires', [
                         function (error) {
                             deferred.reject({Success: false, Location: '', Error: error});
                         });
+            },
+            removeQuestionFromPatientQuestionnaire: function(questionnaire_patient_rel_ser_num, question_ser_num) {
+                let deferred = $q.defer();
+                let params = {
+                    'qprs': questionnaire_patient_rel_ser_num,
+                    'qs': question_ser_num
+                };
+                RequestToServer.sendRequestWithResponse('RemovePatientRelativeQuestion', params)
+                    .then(function () {
+                            deferred.resolve({Success: true, Location: 'Server'});
+                        },
+                        function (error) {
+                            deferred.reject({Success: false, Location: '', Error: error});
+                        })
+                    .catch(function (error) {
+                        deferred.reject(error);
+                    });
+                return deferred.promise;
+            },
+            addQuestionToPatientQuestionnaire: function(questionnaire_patient_rel_ser_num, question_ser_num, fill) {
+                let deferred = $q.defer();
+                let params = {
+                    'qprs': questionnaire_patient_rel_ser_num,
+                    'qs': question_ser_num,
+                    'fill': fill
+                };
+                RequestToServer.sendRequestWithResponse('AddPatientRelativeQuestion', params)
+                    .then(function () {
+                            deferred.resolve({Success: true, Location: 'Server'});
+                        },
+                        function (error) {
+                            deferred.reject({Success: false, Location: '', Error: error});
+                        })
+                    .catch(function (error) {
+                        deferred.reject(error);
+                    });
+                return deferred.promise;
             },
             requestQuestionnaires: function (type) {
                 let deferred = $q.defer();
