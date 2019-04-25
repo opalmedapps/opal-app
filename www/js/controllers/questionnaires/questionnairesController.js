@@ -9,7 +9,6 @@ myApp.controller('QuestionsController', ['Questionnaire','$scope', '$sce', funct
 	$scope.show = function(id)
 	{
 
-		console.log(id);
 		if($scope.hasOwnProperty('popover'))
 		{
 			$scope.popover.show(id);
@@ -32,7 +31,7 @@ myApp.controller('BeginButtonController', ['$scope', function($scope){
 
 	if(typeof personalNavigator!=='undefined'&&typeof personalNavigator.getCurrentPage()!=='undefined'&&typeof personalNavigator.getCurrentPage().options.param!=='undefined')
 	{
-		console.log('personal');
+		// console.log('personal');
 		var param=personalNavigator.getCurrentPage().options.param;
 		delete personalNavigator.getCurrentPage().options.param;
 		$scope.navigator=param;
@@ -40,13 +39,13 @@ myApp.controller('BeginButtonController', ['$scope', function($scope){
 
 	if(typeof homeNavigator!=='undefined'&&typeof homeNavigator.getCurrentPage()!=='undefined'&&typeof homeNavigator.getCurrentPage().options.param!=='undefined')
 	{
-		console.log('home');
+		// console.log('home');
 		var param=homeNavigator.getCurrentPage().options.param;
 		delete homeNavigator.getCurrentPage().options.param;
 		$scope.navigator=param;
 	}
 	$scope.beginButton = function(){
-		console.log($scope.navigator);
+		// console.log($scope.navigator);
 		if($scope.navigator=='home')
 		{
 			homeNavigator.pushPage('views/personal/questionnaires/questionnaires.html');

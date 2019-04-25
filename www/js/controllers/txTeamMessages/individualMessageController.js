@@ -30,7 +30,7 @@
                 vm.FirstName = Patient.getFirstName();
 
 
-                console.log(parameters.Post);
+                // console.log(parameters.Post);
             });
         }
     }
