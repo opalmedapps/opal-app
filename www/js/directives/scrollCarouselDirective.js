@@ -13,18 +13,18 @@ app.directive('scrollCarousel',function()
         },
         link:function(scope, element,attr)
         {
-            console.log(attr.david);
-            console.log(element);
-            console.log(scope);
+            // console.log(attr.david);
+            // console.log(element);
+            // console.log(scope);
             var pageContent = element[0].firstElementChild.querySelector('.page__content');
             pageContent.addEventListener('scroll',function(event)
             {
-                console.log( this.scrollTop);
+                // console.log( this.scrollTop);
                 
             });
             scope.$watch('lee',function()
             {
-                console.log(scope.lee);
+                // console.log(scope.lee);
             });
             var text = (new Array(100)).join('Lorem ipsum dolor sit amet. ');
 	// var each = function(selector, f) {

@@ -19,8 +19,6 @@
         ///////////////////////
 
         function activate(){
-            console.log('here');
-
 
             vm.my_map=NavigatorParameters.getParameters();
             language = UserPreferences.getLanguage().toUpperCase();

@@ -95,7 +95,7 @@
         {
             if(!array) return;
             if (array[0] === "undefined") {
-                console.log ('array undefined');
+                // console.log ('array undefined');
                 return;
             }
 
@@ -134,7 +134,7 @@
          **/
         function updateAnnouncements(array)
         {
-            console.log('updating announcements');
+            // console.log('updating announcements');
             findAndDeleteAnnouncements(array);
             addAnnouncements(array);
         }
@@ -195,7 +195,7 @@
          *@returns {Object} Returns object containing annoucement
          **/
         function getAnnouncementBySerNum(serNum) {
-            console.log(announcements);
+            // console.log(announcements);
 
             for (var i = 0; i < announcements.length; i++) {
                 if(announcements[i].AnnouncementSerNum===serNum) {
