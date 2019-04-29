@@ -302,7 +302,7 @@ app1.controller('QuestionnaireMainController', function ($scope, $location, $anc
 
 
             } else if ($scope.question.QuestionType == 'SA') {
-                $scope.longAns = $scope.answers[$scope.index - 1];
+                if ($scope.answers != undefined) $scope.longAns = $scope.answers[$scope.index - 1];
             }
 
 
