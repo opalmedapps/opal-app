@@ -333,6 +333,23 @@ myApp.service('EducationalMaterial',['$q','$filter','LocalStorage','FileManagerS
             }
         },
 
+        /**
+         *@ngdoc method
+         *@name readEducationalMaterial
+         *@methodOf MUHCApp.service:EducationalMaterial
+         *@param {String} serNum EducationalMaterialSerNum to be read
+         *@description Sets ReadStatus in educational material to 1, sends request to backend, and syncs with device storage
+         **/
+        readEducationalMaterial:function(serNum) {
+            for (var i = 0; i < educationalMaterialArray.length; i++) {
+                if (educationalMaterialArray[i].EducationalMaterialSerNum == serNum) {
+                    educationalMaterialArray[i].ReadStatus = '1';
+                    LocalStorage.WriteToLocalStorage('EducationalMaterial', educationalMaterialArray);
+                    RequestToServer.sendRequest('Read', {'Id': serNum, 'Field': 'EducationalMaterial'});
+                }
+            }
+        },
+
         // Sends a request to the backend to mark the row numbered 'serNum' of the table EducationalMaterial as read.
         // Author: Tongyou (Eason) Yang
         readMaterial:function(serNum)
