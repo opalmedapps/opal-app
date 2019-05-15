@@ -1593,11 +1593,11 @@ html[dir='rtl'] #documentPropertiesOverlay .row > * {
 #PDFBug button.active {
   font-weight: bold;
 }
-.debuggerShowText {
+.ShowText {
   background: none repeat scroll 0 0 yellow;
   color: blue;
 }
-.debuggerHideText:hover {
+.HideText:hover {
   background: none repeat scroll 0 0 yellow;
 }
 #PDFBug .stats {

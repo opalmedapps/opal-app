@@ -49,6 +49,7 @@ app.service('DeviceIdentifiers', [ 'RequestToServer', '$q','Constants','UserAuth
          **/
         setDeviceIdentifiers:function(browserUUID)
         {
+            ;
             deviceIdentifiers.deviceUUID = Constants.app ? device.uuid : browserUUID;
             deviceIdentifiers.deviceType = Constants.app ? device.platform : 'browser';
             haveBeenSend = false;

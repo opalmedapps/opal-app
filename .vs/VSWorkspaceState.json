@@ -1,0 +1,12 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\www",
+    "\\www\\lib",
+    "\\www\\lib\\js",
+    "\\www\\lib\\js\\pdfjs-viewer",
+    "\\www\\lib\\js\\pdfjs-viewer\\web"
+  ],
+  "SelectedNode": "\\www\\lib\\js\\pdfjs-viewer\\web\\debugger.js",
+  "PreviewInSolutionExplorer": false
+}
