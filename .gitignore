@@ -22,3 +22,5 @@ heartbeatdb.log*
 
 buildOpal.sh
 CHANGELOG.md
+
+.vs/
