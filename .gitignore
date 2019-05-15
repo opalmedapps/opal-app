@@ -4,6 +4,7 @@ credentials.js
 *.swp
 .DS_Store
 .idea/
+.vscode/
 /backend/listener/logs/*.log
 /www/js/config.js
 /backend/listener/config.json
