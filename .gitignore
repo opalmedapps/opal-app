@@ -25,3 +25,4 @@ buildOpal.sh
 CHANGELOG.md
 
 .vs/
+.vscode/
