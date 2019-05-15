@@ -110,7 +110,7 @@
                                 success : function () {
                                     // file opened successfully by Default PDF Viewer on Android.
                                     // Nothing else to do at this point
-                                    console.log('file opened successfully with fileOpener2');
+                                    // console.log('file opened successfully with fileOpener2');
 
                                     // Now add the filename to an array to be deleted OnExit of the app (CleanUp.Clear())
                                     Documents.addToDocumentsDownloaded(path, docName);    // add file info to the array
@@ -132,63 +132,6 @@
             }
             vm.loading = false;
         }
-
-
-        // // This is using an OLD/Outdated Plugin: window.cordova.plugins.FileOpener
-        // function openPDF() {
-        //     if (Constants.app) {
-        //         if (ons.platform.isAndroid()) {
-        //             var targetPath = FileManagerService.generatePath(docParams);
-        //
-        //             var path = FileManagerService.getPathToDocuments();
-        //             var docName = FileManagerService.generateDocumentName(docParams);
-        //
-        //             FileManagerService.downloadFileIntoStorage("data:application/pdf;base64," + docParams.Content, targetPath).then(function () {
-        //
-        //                 window.cordova.plugins.FileOpener.canOpenFile(targetPath, function (data2) {
-        //                     // at this point it means data2.canBeOpen = true. A PDF Viewer "is" indeed available to show the document
-        //
-        //                     var onSuccess = function (data) {
-        //                         // file opened successfully by Default PDF Viewer on Android. Nothing else to do at this point
-        //                         console.log('file opened successfully by Default PDF Viewer on Android. Nothing else to do at this point');
-        //
-        //                         // Now add the filename to an array to be deleted OnExit of the app (CleanUp.Clear())
-        //                         Documents.addToDocumentsDownloaded(path, docName);    // add file info to the array
-        //                         //////////////////////////////////////////////////////
-        //
-        //                     };
-        //
-        //                     function onError(error) {
-        //                         // Unexpected Error occurred. For some reason, file could not be opened and viewed, although canOpenFile function returned (data2.canBeOpen = true)
-        //                         console.log('openPDF (FileOpener.openFile) Error: ' + error.status + ' - Error message: ' + error.message);
-        //                         ons.notification.alert({message: $filter('translate')('UNABLETOOPEN')});
-        //                     }
-        //
-        //                     window.cordova.plugins.FileOpener.openFile(targetPath, onSuccess, onError);
-        //
-        //
-        //                 }, function (error) {   // at this point it means data2.canBeOpen = false. A PDF Viewer is NOT available to show the document
-        //                     ons.notification.alert({message: $filter('translate')('UNABLETOOPEN')});
-        //                     console.log('canOpen 3 Error (A PDF Viewer is NOT available to show the document): ' + error.status + ' - Error message: ' + error.message);
-        //                 });
-        //
-        //
-        //
-        //             }).catch(function (error) {
-        //                 //Unable to save document on server
-        //                 console.log('Error saving/downloading document from Server downloadFileIntoStorage(): ' + error.status + ' - Error message: ' + error.message);
-        //
-        //             });
-        //
-        //         } else {
-        //             cordova.InAppBrowser.open("data:application/pdf;base64," + docParams.Content, '_blank', 'EnableViewPortScale=yes');
-        //         }
-        //     } else {
-        //         window.open("data:application/pdf;base64, " + docParams.Content, '_blank', 'location=no,enableViewportScale=true');
-        //     }
-        //     vm.loading = false;
-        // }
-
 
         function setUpPDF(document) {
             uint8pf = FileManagerService.convertToUint8Array(document.Content);

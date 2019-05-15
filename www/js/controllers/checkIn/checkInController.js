@@ -57,7 +57,7 @@
             CheckInService.attemptCheckin()
                 .then(function(response){
 
-                    console.log('CheckIn Response: ' + response);
+                    // console.log('CheckIn Response: ' + response);
 
                     if(response === 'NOT_ALLOWED'){
                         NewsBanner.showCustomBanner($filter('translate')("NOT_ALLOWED"), '#333333', function(){}, 3000);
