@@ -1,15 +1,24 @@
 <ons-page ng-controller="EducationalMaterialController as edu" ng-device-backbutton="edu.educationDeviceBackButton()">
+
+    <!-- TOOLBAR -->
     <ons-toolbar fixed-style>
         <div class="center" ng-class="fontSizeTitle">{{"EDUCATION"|translate}}</div>
         <div class="right"><ons-toolbar-button ng-click="educationNavigator.pushPage('./views/tabs/info-page-tabs.html')"><ons-icon icon="fa-info-circle"></ons-icon></ons-toolbar-button></div>
     </ons-toolbar>
+
+    <!-- NETWORK BANNER -->
+    <network-banner></network-banner>
+
+    <!-- SEARCH BAR -->
+    <input ng-hide="edu.noMaterials" type="text" placeholder="Search" class="search-input"
+           ng-model="edu.searchString" ng-change="edu.filterMaterial()">
+
+    <!-- NO MATERIAL TEXT -->
     <div style="color:grey;margin-top:25vh" ng-show="edu.noMaterials" align="center" ng-class="fontSizeTitle" style="margin-left: 10px; margin-right: 10px">
         {{"NOEDUCATIONALMATERIAL"|translate}}
     </div>
-    <network-banner></network-banner>
 
-    <input type="text" placeholder="Search" class="search-input" ng-model="edu.searchString" ng-change="edu.filterMaterial()">
-
+    <!-- LIST OF EDUCATIONAL MATERIALS -->
     <ons-list>
         <ons-list-header ng-repeat-start = "edumaterial in edu.filteredEduMaterials" class="person-list-header" ng-class="fontSizeTitle"  ng-if ="edu.showHeader($index)">
             {{edumaterial.PhaseInTreatment}}
@@ -36,8 +45,8 @@
                 </ons-col>
             </ons-row>
         </ons-list-item >
-
     </ons-list>
+
 </ons-page>
 
 
