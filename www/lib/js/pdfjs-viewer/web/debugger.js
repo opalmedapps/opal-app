@@ -33,7 +33,7 @@ var FontInspector = (function FontInspectorClosure() {
     var divs = document.querySelectorAll('div[' + fontAttribute + ']');
     for (var i = 0, ii = divs.length; i < ii; ++i) {
       var div = divs[i];
-      div.className = 'debuggerHideText';
+      div.className = 'HideText';
     }
   }
   function selectFont(fontName, show) {
@@ -41,7 +41,7 @@ var FontInspector = (function FontInspectorClosure() {
                                          fontName + ']');
     for (var i = 0, ii = divs.length; i < ii; ++i) {
       var div = divs[i];
-      div.className = show ? 'debuggerShowText' : 'debuggerHideText';
+      div.className = show ? 'ShowText' : 'HideText';
     }
   }
   function textLayerClick(e) {

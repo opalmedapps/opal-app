@@ -16,7 +16,6 @@
     /* @ngInject */
     function DateLabTestController(LabResults) {
         var vm = this;
-
         activate();
 
         /////////////////////

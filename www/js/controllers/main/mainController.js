@@ -36,6 +36,7 @@
 
             bindEvents();
             setPushPermissions();
+            ;
             DeviceIdentifiers.setDeviceIdentifiers();
 
         }

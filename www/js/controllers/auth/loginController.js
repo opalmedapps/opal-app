@@ -51,7 +51,7 @@
          * @returns string
          * @description binds the user's input for their email to the controller
          */
-        vm.email = "";
+        vm.email = "muhc.app.mobile@gmail.com";
 
         /**
          * @ngdoc property
@@ -60,7 +60,7 @@
          * @returns string
          * @description binds the user's input for their password to the controller
          */
-        vm.password = "";
+        vm.password = "12345opal";
 
         /**
          * @ngdoc property
@@ -144,13 +144,13 @@
                 // Save the current session token to the users "logged in users" node.
                 // This is used to make sure that the user is only logged in for one session at a time.
                 //
-                var Ref= firebase.database().ref(FirebaseService.getFirebaseUrl(null));
-                var refCurrentUser = Ref.child(FirebaseService.getFirebaseChild('logged_in_users') + firebaseUser.uid);
+                //var Ref= firebase.database().ref(FirebaseService.getFirebaseUrl(null));
+                //var refCurrentUser = Ref.child(FirebaseService.getFirebaseChild('logged_in_users') + firebaseUser.uid);
 
-                refCurrentUser.set({ 'Token' : sessionToken });
+                //refCurrentUser.set({ 'Token' : sessionToken });
 
-                // Evoke an observer function in mainController
-                $rootScope.$emit("MonitorLoggedInUsers", firebaseUser.uid);
+                //// Evoke an observer function in mainController
+                //$rootScope.$emit("MonitorLoggedInUsers", firebaseUser.uid);
                 /**************************************************************************************************** */
 
 
@@ -215,7 +215,7 @@
 
             //Now that we know that both the password and security answer are hashed, we can create our encryption hash
             EncryptionService.generateEncryptionHash();
-
+            ;
             UUID.setUUID(deviceID);
             DeviceIdentifiers.sendIdentifiersToServer()
                 .then(function () {
