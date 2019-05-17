@@ -33,11 +33,11 @@ myApp.service('ResetPassword',function(){
          **/
         verifyLinkCode: function (url) {
 
-            console.log("url: " + url);
+            // console.log("url: " + url);
 
             var oobCode = this.getParameter('oobCode', url);
 
-            console.log("oobcode: " + oobCode);
+            // console.log("oobcode: " + oobCode);
 
             if(oobCode){
                 return auth.verifyPasswordResetCode(oobCode[1]);

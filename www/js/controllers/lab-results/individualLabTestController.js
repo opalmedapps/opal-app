@@ -30,25 +30,26 @@
         function activate() {
             page = personalNavigator.getCurrentPage();
             test = page.options.param;
-
-
+            
             if (test.testResults) {
                 vm.test = test;
                 vm.selectedLabResults = test.testResults;
                 vm.testDate = test.testDate;
+                
                 vm.testResultsByCategory = LabResults.getTestResultsByCategory();
 
             }
 
             // Update title
             vm.title = 'Lab Results - ' + vm.testDate;
-            vm.goToSpecificTestView=function(test)
-            {
-                personalNavigator.pushPage('./views/personal/lab-results/specific-test-component.html',{param:test});
+            vm.goToSpecificTestView = function (test) {
+                
+                personalNavigator.pushPage('./views/personal/lab-results/specific-test-component.html', { param: test });
             }
         }
 
-        function getTestClass(test){
+        function getTestClass(test) {
+
             return LabResults.getTestClass(test);
         }
 
@@ -62,11 +63,11 @@
          * @param test Test for which to format the abnormal flag.
          * @returns {string} Formatted abnormal flag.
          */
-        function getAbnormalFlagString(test){
-            if (test.AbnormalFlag){
-                return " ("+test.AbnormalFlag+")";
+        function getAbnormalFlagString(test) {
+            if (test.AbnormalFlag) {
+                return " (" + test.AbnormalFlag + ")";
             }
-            else{
+            else {
                 return "";
             }
         }

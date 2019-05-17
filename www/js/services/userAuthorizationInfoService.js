@@ -148,6 +148,7 @@ myApp.service('UserAuthorizationInfo', function () {
         */
         getToken:function()
         {
+            
           return token;
         },
         /**

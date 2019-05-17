@@ -71,7 +71,6 @@
         }
         function goToWebsite(url)
         {
-            console.log("WHAT IS UP", url);
             if(Constants.app)
             {
 	            cordova.InAppBrowser.open(url, '_blank', 'EnableViewPortScale=yes');
