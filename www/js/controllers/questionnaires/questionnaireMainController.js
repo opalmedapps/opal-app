@@ -200,17 +200,17 @@ app1.controller('QuestionnaireMainController', function ($scope, $location, $anc
                 }
 
             } else if ($scope.question.QuestionType == 'yes') {
-                if ($scope.answers[$scope.index - 1] == 'Yes') {
+                if (typeof $scope.answers !== "undefined" && $scope.answers[$scope.index - 1] == 'Yes') {
                     $scope.checkedYes = true;
                     $scope.checkedNo = false;
-                } else if ($scope.answers[$scope.index - 1] == 'No') {
+                } else if (typeof $scope.answers !== "undefined" && $scope.answers[$scope.index - 1] == 'No') {
                     $scope.checkedYes = false;
                     $scope.checkedNo = true;
                 } else {
                     $scope.checkedYes = false;
                     $scope.checkedNo = false;
                 }
-                // checkbo stores the value of the clicked button
+                // checkbox stores the value of the clicked button
                 $scope.checkbox = undefined;
             } else if ($scope.question.QuestionType == 'image') {
                 $scope.colors = ['lime', 'lime', 'orange', 'orange', 'orange', 'red', 'red', 'red', 'darkred', 'darkred'];
@@ -302,7 +302,7 @@ app1.controller('QuestionnaireMainController', function ($scope, $location, $anc
 
 
             } else if ($scope.question.QuestionType == 'SA') {
-                $scope.longAns = $scope.answers[$scope.index - 1];
+                if ($scope.answers != undefined) $scope.longAns = $scope.answers[$scope.index - 1];
             }
 
 
@@ -436,48 +436,62 @@ app1.controller('QuestionnaireMainController', function ($scope, $location, $anc
             ans = $scope.answers[$scope.index - 1];
             for ($i = 0; $i < $scope.options.length; $i++) {
                 choiceDescription = ($scope.language === "EN") ? $scope.options[$i].ChoiceDescription_EN : $scope.options[$i].ChoiceDescription_FR;
-                if ((ans != undefined) && (ans.Answer == choiceDescription)) {
+                if ((ans != undefined) && (ans == choiceDescription)) {
                     $scope.checked1[$i] = true;
                 } else {
                     $scope.checked1[$i] = false;
                 }
             }
-            if (((ans != undefined) && (ans.Answer == 'other')) || ($scope.checkbox == 'other')) {
-                $scope.checked1[$scope.options.length] = true;
-            } else {
-                $scope.checked1[$scope.options.length] = false;
-            }
+            // if (((ans != undefined) && (ans.Answer == 'other')) || ($scope.checkbox == 'other')) {
+            //     $scope.checked1[$scope.options.length] = true;
+            // } else {
+            //     $scope.checked1[$scope.options.length] = false;
+            // }
         }
-
     }
 
     // Run when one of the options is clicked
     $scope.clicked1 = function (option, i, otherAns) {
+
+        // Get the option text
+        var optionText;
+        if (option === "other") {
+            console.log("'Other' option for multiple choice where the user can enter in what they want has not been configured.");
+            optionText = option;
+        }
+        else if (typeof option.ChoiceDescription_EN !== "undefined" || typeof option.ChoiceDescription_FR !== "undefined") {
+            optionText = ($scope.language === 'EN') ? option.ChoiceDescription_EN : option.ChoiceDescription_FR;
+        }
+        else {
+            optionText = "MISSING_VALUE";
+        }
+
         // iterates the number of answered questions if something is clicked
         if ($scope.answers[$scope.index - 1] == undefined) {
             $scope.numAnswered = $scope.numAnswered + 1;
         }
         // checkbox stores the answer chosen.
-        $scope.checkbox1[$scope.index - 1] = option;
+        $scope.checkbox1[$scope.index - 1] = optionText;
+
         // makes all the checked values false for the moment
         for ($i = 0; $i <= $scope.options.length; $i++) {
             $scope.checked1[$i] = false;
         }
         // makes the clicked, checked value, undefined because of the bug mentioned earlier.
         $scope.checked1[i] = true;
-        $scope.answer = option;
+        $scope.answer = optionText;
         // Stores the answer as an object where there is the clicked answer and a possibly defined variable called otherAns
         // this stores the possibly filled out other value
-        $scope.answers[$scope.index - 1] = option;
+        $scope.answers[$scope.index - 1] = optionText;
 
             // $scope.answers[$scope.index - 1] = {
-        //     Answer: option,
+        //     Answer: optionText,
         //     // otherAns: otherAns    // DO NOT SEND BACK otherAns because management do not want this option + Column does not exist in the database.
         // };
         Questionnaires.setQuestionnaireAnswers($scope.answers[$scope.index - 1], $scope.questions[$scope.index - 1].QuestionnaireQuestionSerNum, $scope.questionnaireDBSerNum, $scope.questionnaireSerNum);
         // If other is chosen but they havent filled it in than the answer is made undefined and the number of answered questions is
         // subtracted by 1
-        if ((option == 'other') && ((otherAns == undefined) || (otherAns == ""))) {
+        if ((optionText == 'other') && ((otherAns == undefined) || (otherAns == ""))) {
             $scope.answers[$scope.index - 1] = undefined;
             Questionnaires.setQuestionnaireAnswers(undefined, $scope.questions[$scope.index - 1].QuestionnaireQuestionSerNum, $scope.questionnaireDBSerNum, $scope.questionnaireSerNum);
             $scope.numAnswered = $scope.numAnswered - 1;
@@ -710,12 +724,25 @@ app1.controller('QuestionnaireMainController', function ($scope, $location, $anc
     /////////////////////////
 
 
-    $scope.chosen = function (choice, index) {
+    $scope.chosen = function (option, index) {
+
+        // Get the option text
+        var optionText;
+        if (option === "QUESTIONNAIRE_NONE_OF_THE_ABOVE") {
+            optionText = $filter('translate')(option);
+        }
+        else if (typeof option.ChoiceDescription_EN !== "undefined" || typeof option.ChoiceDescription_FR !== "undefined") {
+            optionText = ($scope.language === 'EN') ? option.ChoiceDescription_EN : option.ChoiceDescription_FR;
+        }
+        else {
+            optionText = "MISSING_VALUE";
+        }
+
         if (($scope.noneChecked == true) && ($scope.checked[$scope.checked.length - 1] == true)) {
             $scope.checked[$scope.checked.length - 1] = false;
             $scope.choices[$scope.checked.length - 1] = undefined;
         }
-        if (choice == 'None of the Above') {
+        if (option === "QUESTIONNAIRE_NONE_OF_THE_ABOVE") {
             for ($i = 0; $i < $scope.checked.length - 1; $i++) {
                 $scope.checked[$i] = false;
                 $scope.choices[$i] = undefined;
@@ -732,9 +759,9 @@ app1.controller('QuestionnaireMainController', function ($scope, $location, $anc
         }
 
 
-        var i = $scope.choices.indexOf(choice);
+        var i = $scope.choices.indexOf(optionText);
         if (i < 0) {
-            $scope.choices[index] = choice;
+            $scope.choices[index] = optionText;
         } else {
             $scope.choices[index] = undefined;
         }
@@ -867,5 +894,23 @@ app1.controller('QuestionnaireMainController', function ($scope, $location, $anc
 
     $scope.contact = function () {
         $window.location.href = "mailto:muhc.app.mobile@gmail.com";
+    }
+
+    /**
+     * styleIfSelected
+     * @author Stacey Beard
+     * @date 2019-03-21
+     * @desc Returns the style to apply to a button based on whether it's selected or not.
+     *       This is what makes selected buttons a different colour than unselected ones.
+     * @param isSelected Condition that should evaluate to true if the button is selected or to false if it isn't.
+     * @returns {*} The style to apply to the button.
+     */
+    $scope.styleIfSelected = function(isSelected) {
+        if (isSelected) {
+            return {"background-color":"#d6f2ff"} // Light blue
+        }
+        else {
+            return {}
+        }
     }
 });

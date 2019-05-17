@@ -1,3 +1,54 @@
+Version 1.8.6.0:
+ - Staging bump to 1.8.6.0
+ -     Modified .gitignore to exclude vscode folder
+ - Merge branch 'Issue_674' into staging
+ - Merge branch 'staging_1.8.0.1' into staging
+ - Remove debugger form all files. Chanes in to  french translation(Issue list:  #636,#634,#632,#653,#506, #664)
+ - Merge branch 'legacy_questionnaires_fixes' into staging
+ - Merge branch 'Issue_669' into staging
+ - Merge branch 'Issue_663' into staging
+ - Merge branch 'Issue_638' into staging
+ - Restore function readEducationalMaterial
+ - Bug-fix: Questionnaires starting with a short answer question aren't working
+ - Fix bug for CT for Radiotherapy Planning when physician has no tasks and removed some console.log
+ - Bug-fix: Questionnaires starting with a Yes/No question aren't working
+ - Fix typo in function name
+ - Bug-fix: Multiple choice answers disappear when moving between questions in a questionnaire
+ - Removed duplicate code for questionnaire answer options
+ - Bug-fix: wrong answers saved for multiple choice and checkbox question types (questionnaires)
+ - Bug-fix: Educational material notifications not being marked as read
+ - Fix bug where rating edu material using the popover doesn't work
+ - 638: Fix 'no educational material' message
+
+Staging 1.8.6.0:
+ -     Modified .gitignore to exclude vscode folder
+ - Merge branch 'Issue_674' into staging
+ - Merge branch 'staging_1.8.0.1' into staging
+ - Remove debugger form all files. Chanes in to  french translation(Issue list:  #636,#634,#632,#653,#506, #664)
+ - Merge branch 'legacy_questionnaires_fixes' into staging
+ - Merge branch 'Issue_669' into staging
+ - Merge branch 'Issue_663' into staging
+ - Merge branch 'Issue_638' into staging
+ - Restore function readEducationalMaterial
+ - Bug-fix: Questionnaires starting with a short answer question aren't working
+ - Fix bug for CT for Radiotherapy Planning when physician has no tasks and removed some console.log
+ - Bug-fix: Questionnaires starting with a Yes/No question aren't working
+ - Fix typo in function name
+ - Bug-fix: Multiple choice answers disappear when moving between questions in a questionnaire
+ - Removed duplicate code for questionnaire answer options
+ - Bug-fix: wrong answers saved for multiple choice and checkbox question types (questionnaires)
+ - Bug-fix: Educational material notifications not being marked as read
+ - Fix bug where rating edu material using the popover doesn't work
+ - 638: Fix 'no educational material' message
+ - Version bump to 1.8.1.0
+ - config.xml 1.8.1
+ - Merge branch 'staging_1.8.0.1' into opal_pre_prod
+ - Corrected the bumping of staging
+ - config.xml 1.8.0
+ - Change permissions
+ - Version bump to 1.8.0.0
+ - Merge branch 'staging_1.8.0' into opal_pre_prod
+
 Version 1.8.1.0:
  - config.xml 1.8.1
  - Merge branch 'staging_1.8.0.1' into opal_pre_prod

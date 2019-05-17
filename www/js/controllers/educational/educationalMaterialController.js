@@ -30,6 +30,9 @@
         // Variable containing the search string entered into the search bar
         vm.searchString = "";
 
+        // Variable to toggle visibility of the 'no materials' text. Default is false to avoid errors.
+        vm.noMaterials = false;
+
         vm.showHeader = showHeader;
         vm.goToEducationalMaterial = goToEducationalMaterial;
         vm.educationDeviceBackButton = educationDeviceBackButton;
@@ -44,12 +47,7 @@
             NavigatorParameters.setParameters({'Navigator':'educationNavigator'});
 
             bindEvents();
-
-            if(NetworkStatus.isOnline()) {
-                configureState();
-            } else {
-                vm.noMaterials = true;
-            }
+            configureState();
         }
 
         function initData() {
@@ -76,11 +74,7 @@
             educationNavigator.on('prepop',function()
             {
                 backButtonPressed = 0;
-                if(NetworkStatus.isOnline()){
-                    configureState();
-                } else {
-                    vm.noMaterials = true;
-                }
+                configureState();
             });
 
             educationNavigator.on('prepush', function(event) {

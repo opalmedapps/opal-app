@@ -154,7 +154,7 @@
                         isWithinCheckinRange()
                             .then(function (isInRange) {
 
-                                console.log('is allowed to checkin ... is in range: ' + isInRange);
+                                // console.log('is allowed to checkin ... is in range: ' + isInRange);
 
                                 r.resolve(isInRange)
                             });
@@ -217,7 +217,7 @@
                 isWithinCheckinRange()
                     .then(function(canCheckin){
 
-                        console.log("can checkin : " + canCheckin);
+                        // console.log("can checkin : " + canCheckin);
 
                         if(!canCheckin) {
                             setCheckinState("NOT_ALLOWED", appts.length);
@@ -368,7 +368,7 @@
             navigator.geolocation.getCurrentPosition(function(position){
                 var distanceMeters = 1000 * getDistanceFromLatLonInKm(position.coords.latitude, position.coords.longitude, 45.474127399999996, -73.6011402);
 
-                console.log(distanceMeters);
+                // console.log(distanceMeters);
 
                 if (distanceMeters <= 500) {
                     positionCheckinAppointment = {
@@ -379,7 +379,7 @@
                     r.resolve(true);
                 } else {
 
-                    console.log('not within range!');
+                    // console.log('not within range!');
 
                     r.resolve(false);
                 }
