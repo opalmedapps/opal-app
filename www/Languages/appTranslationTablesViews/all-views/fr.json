@@ -195,6 +195,7 @@
   "LOCATION": "Lieu d'attente",
   "LOCATION_ERROR": "Veuillez activer la localisation de votre téléphone.",
   "LOCKEDOUT": "Verrouillé en raison de l'inactivité",
+  "LONGERTIMEALERT": "La demande prend plus de temps que prévu... veuillez réessayer plus tard.",
   "MAPS": "Plan",
   "MEDICATIONALERTS": "Alerte Médicaments",
   "MEDICATIONINFO": "Information Médicale",
@@ -326,6 +327,7 @@
   "SEND": "Envoyer",
   "SEND_ANOTHER": "Envoyer un autre",
   "SENDFEEDBACK": "Envoyez Des Commentaires",
+  "SERVERERRORALERT": "Problème de serveur: impossible de télécharger les données, réessayez plus tard",
   "SERVERPROBLEM": "Problème de serveur, contactez l'hôpital.",
   "SETPASSWORDBUTTON": "Créer un mot de passe",
   "SETPASSWORDLABEL": "Nouveau mot de passe",
@@ -381,7 +383,5 @@
   "WAITING_ROOM": "Salle d'attente:",
   "WARNING": "Attention",
   "WELCOME": "Bienvenue au",
-  "YES": "Oui",
-  "SERVERERRORALERT": "Problème de serveur: impossible de télécharger les données, réessayez plus tard",
-  "LONGERTIMEALERT": "La demande prend plus de temps que prévu... veuillez réessayer plus tard."
+  "YES": "Oui"
 }
