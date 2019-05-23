@@ -45,6 +45,14 @@ app1.controller('QuestionnaireMainController', function ($scope, $location, $anc
         for (key in questionsObject) {
             $scope.questions.push(questionsObject[key]);
         }
+
+        /* Each question's OrderNum is received as a string. It must be converted to an int so that the orderBy filter
+         * can sort the questions correctly.
+         * -SB */
+        for (let i = 0; i < $scope.questions.length; i++) {
+            $scope.questions[i].OrderNum = parseInt($scope.questions[i].OrderNum);
+        }
+
         $scope.questions = $filter('orderBy')($scope.questions, 'OrderNum', false);
         $scope.clickedScrollArrow = new Array($scope.questions.length);
 
