@@ -1,3 +1,13 @@
+Version 1.8.6.1:
+ - Staging bump to 1.8.6.1
+ - Merge branch 'Issue_678' into staging
+ - Bug-fix 678: Questions are ordered wrong (by string instead of int)
+
+Staging 1.8.6.1:
+ - Merge branch 'Issue_678' into staging
+ - Bug-fix 678: Questions are ordered wrong (by string instead of int)
+ - Version bump to 1.8.6.0
+
 Version 1.8.6.0:
  - Staging bump to 1.8.6.0
  -     Modified .gitignore to exclude vscode folder
