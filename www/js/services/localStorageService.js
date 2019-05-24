@@ -131,7 +131,7 @@ myApp.service('LocalStorage',['UserAuthorizationInfo', 'EncryptionService',funct
          **/
         updateLocalStorageAfterPasswordChange:function(oldPassword, newPassword)
         {
-            console.log(oldPassword,newPassword);
+            // console.log(oldPassword,newPassword);
             var user=window.localStorage.getItem('UserAuthorizationInfo');
             user=JSON.parse(user);
             storage=window.localStorage.getItem(user.UserName);

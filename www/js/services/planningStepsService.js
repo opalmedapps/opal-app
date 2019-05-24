@@ -121,16 +121,19 @@
             var appointments = Appointments.getUserAppointments();
             var mdTask = Tasks.getRecentPhysicianTask();
             var ctAppointment = {};
-            // Appointments are sorted, so scanning starts at the end
-            for (var i = appointments.length-1; i>=0; i--){
-                //
-                if (appointments[i].AppointmentType_EN === 'CT for Radiotherapy Planning'
-                    && appointments[i].ScheduledStartTime < mdTask.physicianTask.DueDateTime
-                    && appointments[i].Status.toLowerCase().indexOf('completed') !== -1) {
+            // Do not proceed if physician task is undefined
+            if (mdTask.physicianTask !== undefined) {
+                // Appointments are sorted, so scanning starts at the end
+                for (var i = appointments.length-1; i>=0; i--){
+                    //
+                    if (appointments[i].AppointmentType_EN === 'CT for Radiotherapy Planning'
+                        && appointments[i].ScheduledStartTime < mdTask.physicianTask.DueDateTime
+                        && appointments[i].Status.toLowerCase().indexOf('completed') !== -1) {
 
-                    ctAppointment = appointments[i];
-                    break;
+                        ctAppointment = appointments[i];
+                        break;
 
+                    }
                 }
             }
 

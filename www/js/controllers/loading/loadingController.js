@@ -8,17 +8,18 @@
         .module('MUHCApp')
         .controller('LoadingController', LoadingController);
 
-    LoadingController.$inject = ['$state', 'UpdateUI', 'UserAuthorizationInfo','UserPreferences', 'Patient', 'RequestToServer', 'PlanningSteps', 'MetaData'];
+    LoadingController.$inject = ['$state', '$filter','UpdateUI', 'UserAuthorizationInfo','UserPreferences', 'Patient', 'RequestToServer', 'PlanningSteps', 'MetaData'];
 
     /* @ngInject */
-    function LoadingController($state, UpdateUI, UserAuthorizationInfo, UserPreferences, Patient, RequestToServer, PlanningSteps, MetaData) {
+    function LoadingController($state, $filter, UpdateUI, UserAuthorizationInfo, UserPreferences, Patient, RequestToServer, PlanningSteps, MetaData) {
 
         activate();
         ///////////////////////////
 
         function activate() {
+            
             var userAuthorizationInfo = UserAuthorizationInfo.getUserAuthData();
-
+            
             if(!userAuthorizationInfo) {
                 $state.go('init');
             }
@@ -56,7 +57,8 @@
                 }
                 loadingmodal.hide();
                 ons.notification.alert({
-                    message: 'Server problem: could not fetch data, try again later',
+                    //message: 'Server problem: could not fetch data, try again later',
+                    message: $filter('translate')("SERVERERRORALERT"),
                     modifier: mod,
                     callback: function(idx) {
                         $state.go('logOut');
@@ -71,7 +73,8 @@
                 }
                 ons.notification.alert({
 
-                    message: 'Request is taking longer than usual...please try again later.',
+                    //message: 'Request is taking longer than usual...please try again later.',
+                    message: $filter('translate')("LONGERTIMEALERT"),
                     modifier: mod,
                     callback: function(idx) {
                         $state.go('logOut');

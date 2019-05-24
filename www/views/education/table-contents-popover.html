@@ -1,7 +1,7 @@
 <ons-popover direction="up down"  cancelable animation="none" style="min-width:90vw;max-height:80vh;overflow-y:scroll">
     <div style="text-align: center;">
         <h3>{{contentsEduBooklet.Booklet.Name}}</h3>
-       <rate-material ser-num="edumaterial.EducationalMaterialControlSerNum"></rate-material>
+       <rate-material ser-num="contentsEduBooklet.Booklet.EducationalMaterialControlSerNum"></rate-material>
        <ons-list style="margin: 10px 0 0 0">
     <ons-list-header class="person-list-header" ng-class="fontSizeTitle" >{{"TABLEOFCONTENTS"|translate}}</ons-list-header>
     <ons-list-item modifier="chevron" ng-repeat= "edumaterial in contentsEduBooklet.TableOfContents" class="item gpu_efficiency" ng-click="goToSectionBooklet($index)" >

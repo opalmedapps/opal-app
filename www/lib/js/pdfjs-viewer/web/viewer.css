@@ -1594,11 +1594,11 @@ html[dir='rtl'] #documentPropertiesOverlay .row > * {
   font-weight: bold;
 }
 .debuggerShowText {
-  background: none repeat scroll 0 0 yellow;
-  color: blue;
+    background: none repeat scroll 0 0 yellow;
+    color: blue;
 }
 .debuggerHideText:hover {
-  background: none repeat scroll 0 0 yellow;
+    background: none repeat scroll 0 0 yellow;
 }
 #PDFBug .stats {
   font-family: courier;
