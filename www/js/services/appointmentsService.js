@@ -449,7 +449,7 @@ myApp.service('Appointments', ['$q', 'RequestToServer','$cordovaCalendar','UserA
             userAppointmentsArray = userAppointmentsArray.map(function(apt) {
                 if(appts.includes(apt.AppointmentSerNum)) {
 
-                    console.log("updating appointment", apt);
+                    // console.log("updating appointment", apt);
 
                     apt.Checkin = 1;
                 }

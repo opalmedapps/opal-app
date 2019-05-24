@@ -298,8 +298,6 @@ myApp.service('Notifications', ['$filter', 'RequestToServer', 'LocalStorage', 'A
          **/
         function setUserNotifications(notifications) {
 
-            console.log(notifications);
-
             Notifications = [];
             addUserNotifications(notifications);
             hasFetchedAll = true;

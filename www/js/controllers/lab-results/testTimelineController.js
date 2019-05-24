@@ -27,8 +27,7 @@
         var max;
         var min;
         var language;
-        var chartSelectedDateRange = 4;
-
+        var chartSelectedDateRangeDefault = 4; // Default to use for the date range (0,1,2,3,4 = 1m,3m,6m,1y,All)
 
         vm.about = about;
         vm.gotoUrl = gotoUrl;
@@ -60,24 +59,8 @@
         }
 
         function bindEvents(){
-            $(window).on('resize.doResize', function () {
-                var newWidth = $(window).width(),
-                    updateStuffTimer;
-
-                if(newWidth !== windowWidth) {
-                    $timeout.cancel(updateStuffTimer);
-                }
-
-                updateStuffTimer = $timeout(function() {
-                    // Update the attribute based on window.innerWidth
-                    //Need a function here to resize the graph size
-                }, 500);
-            });
-
-            $scope.$on('$destroy',function (){
-                $(window).off('resize.doResize'); // remove the handler added earlier
-            });
-
+            // Event binding that doesn't require controller variables should be done in lineChartDirective.js.
+            // Event binding that does require controller variables should be done here.
         }
 
         function configureViewModel(){
@@ -115,35 +98,42 @@
 
             vm.testResultsByDateArray = LabResults.getTestResultsArrayByDate();
 
-            if (!$rootScope.chartSelectedDateRange) {
-                $rootScope.chartSelectedDateRange = 4;    // this to select All by Default as the date range: 0,1,2,3,4   1m, 3m, 6m, 1y, All
+            // If there is no Date Range stored in $rootScope memory, set it to the default.
+            if ($rootScope.chartSelectedDateRange === undefined) {
+                $rootScope.chartSelectedDateRange = chartSelectedDateRangeDefault;
             }
         }
 
         /**
-         * This is to save the user's choice of Date Range on the chart (1m, 3m, 6m, 1y, All).
-         * This event is triggered (through HighCharts) when the user Clicks on a Date Range (1m, 3m, 6m, 1y, All) on the chart
+         * afterSetExtremes
+         * @author re-written by Stacey Beard
+         * @date 2019-01-17
+         * @desc Saves the user's choice of Date Range when selecting a button on the chart (1m, 3m, 6m, 1y, All).
+         *       This is done by giving each button an id number that matches its index in the buttons array, and
+         *       saving this id number in $rootScope memory (as chartSelectedDateRange). The variable
+         *       chartSelectedDateRange is associated back to the chart in the chart option "rangeSelector: selected:"
+         *       to select the right button when returning to a chart.
+         *       This event is triggered (through HighCharts) when the chart extremes change, including when a Date
+         *       Range button is pressed.
          * @param e (event)
          */
         function afterSetExtremes(e) {
-            //console.log(this);
-            //console.log(e);
+            // Only process the event e if it contains a rangeSelectorButton.
+            // Otherwise, it is not relevant to this function.
+            if(e && e.rangeSelectorButton) {
 
-            console.log(e);
+                var button = e.rangeSelectorButton;
 
-            var current_selection = e.rangeSelectorButton.text;
-
-            if (current_selection === '1m')
-                $rootScope.chartSelectedDateRange = 0;
-            else if (current_selection === '3m')
-                $rootScope.chartSelectedDateRange = 1;
-            else if (current_selection === '6m')
-                $rootScope.chartSelectedDateRange = 2;
-            else if (current_selection === '1y')
-                $rootScope.chartSelectedDateRange = 3;
-            else if (current_selection === 'All')
-                $rootScope.chartSelectedDateRange = 4;
-            else $rootScope.chartSelectedDateRange = 2;
+                if (button.id === undefined) {
+                    console.log("Error: range selector button with text '"+button.text
+                        +"' was not given an id attribute and will not be saved in memory.");
+                    console.log("Setting range selector to default.");
+                    $rootScope.chartSelectedDateRange = chartSelectedDateRangeDefault;
+                }
+                else {
+                    $rootScope.chartSelectedDateRange = button.id;
+                }
+            }
         }
 
         function configureChart(){
@@ -196,14 +186,24 @@
             fontSize = style.fontSize;
             var zoomTextFont = fontSize;
 
-            // Computing the position of the range buttons depending on the client width
-            var buttonWidth;
+            /* Computing the position of the range buttons depending on the text size.
+             * The best result was produced by 70 px for all font sizes. The if statements were left for
+             * future customization.
+             */
+            var buttonPositionX;
             if (fontSizeText == "Xlarge") {
-                buttonWidth = document.body.clientWidth - 320;
+                buttonPositionX = 70;
                 zoomTextFont = "16px";
             }
-            else if (fontSizeText == "Large") buttonWidth = document.body.clientWidth - 280;
-            else buttonWidth = document.body.clientWidth - 240;
+            else if (fontSizeText == "Large") {
+                buttonPositionX = 70;
+            }
+            else if (fontSizeText == "Medium") {
+                buttonPositionX = 70;
+            }
+            else{
+                buttonPositionX = 70; // Default
+            }
 
             // Sample options for first chart
             if (UserPreferences.getLanguage().toUpperCase() === 'FR')
@@ -215,7 +215,7 @@
                         weekdays: ['dimanche', 'lundi', 'lardi', 'mercredi',
                             'jeudi', 'vendredi', 'samedi'],
                         shortMonths: ['janv.', 'févr.', 'mars', 'avr.', 'mai', 'juin', 'juill.',
-                            'août', 'sept.', 'oct.', 'nov.', 'déc'],
+                            'août', 'sept.', 'oct.', 'nov.', 'déc.'],
                         decimalPoint: ',',
                         downloadPNG: 'Télécharger en image PNG',
                         downloadJPEG: 'Télécharger en image JPEG',
@@ -237,23 +237,31 @@
                         }
                     },
                     rangeSelector: {
+                        /* Button id attribute is used to remember which button was pressed. It must match the index of
+                         * the button in the buttons array to work properly.
+                         * -SB */
                         buttons: [{
+                            id: 0,
                             type: 'month',
                             count: 1,
                             text: '1m'
                         }, {
+                            id: 1,
                             type: 'month',
                             count: 3,
                             text: '3m'
                         }, {
+                            id: 2,
                             type: 'month',
                             count: 6,
                             text: '6m'
                         }, {
+                            id: 3,
                             type: 'year',
                             count: 1,
                             text: '1a'
                         }, {
+                            id: 4,
                             type: 'all',
                             text: 'Tout'
                         }]
@@ -290,23 +298,31 @@
                        }
                     },
                     rangeSelector: {
+                        /* Button id attribute is used to remember which button was pressed. It must match the index of
+                         * the button in the buttons array to work properly.
+                         * -SB */
                         buttons: [{
+                            id: 0,
                             type: 'month',
                             count: 1,
                             text: '1m'
                         }, {
+                            id: 1,
                             type: 'month',
                             count: 3,
                             text: '3m'
                         }, {
+                            id: 2,
                             type: 'month',
                             count: 6,
                             text: '6m'
                         },  {
+                            id: 3,
                             type: 'year',
                             count: 1,
                             text: '1y'
                         }, {
+                            id: 4,
                             type: 'all',
                             text: 'All'
                         }]
@@ -330,9 +346,15 @@
                         fontSize: zoomTextFont
                     },
                     buttonPosition: {
-                        x: buttonWidth,
+                        // align: "right", // This feature will be available after updating Highcharts.
+                        x: buttonPositionX,
                         y: 10
-                    }
+                    },
+                    // Disable the date box input (from <date> to <date>) which causes display problems.
+                    inputEnabled: false
+                },
+                navigator: {
+                    margin: 5,
                 },
                 chart: {
                     // Explicitly tell the width and height of a chart
@@ -356,7 +378,9 @@
                     //     }
                     // },
                     labels: {
-                        rotation: 0,
+                        y : 20,
+                        rotation: -35,
+                        align: 'right',
                         style: {
                             fontSize: fontSize,
                             textOverflow: false
