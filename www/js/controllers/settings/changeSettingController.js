@@ -50,7 +50,7 @@
                 vm.valueLabel = parameters;
                 vm.personal = true;
                 vm.type1 = 'text';
-
+                
                 //Sets the instructions depending on the value to update
                 if (parameters === 'ALIAS') {
                     vm.actualValue = Patient.getAlias();
@@ -72,14 +72,16 @@
                 } else if (parameters === 'PASSWORD') {
                     vm.type1 = 'password';
                     vm.type2 = 'password';
+                    vm.title = 'UPDATEPASSWORDTITLE';
                     vm.newValue = '';
                     vm.newValueValidate = '';
                     vm.oldValue = '';
-                    var label = $filter('translate')('ENTEROLD');
-                    vm.placeHolder = label + ' ' + $filter('translate')(vm.valueLabel);
+                    var label = $filter('translate')("ENTEROLDPASSWORDPLACEHOLDER");
+                    vm.placeHolder = label;
                     vm.instruction = "ENTERNEWPASSWORD";
                     vm.instructionOld = "ENTEROLDPASSWORD";
-                    vm.inputInstruction = "REENTER_PASSWORD";
+                    vm.inputInstruction = $filter('translate')("REENTERPASSWORDPLACEHOLDER");
+                    vm.valueLabel = $filter('translate')("SETNEWPASSWORDPLACEHOLDER");
                 } else if (parameters === 'LANGUAGE') {
                     var value = UserPreferences.getLanguage();
                     vm.instruction = 'SELECTLANGUAGE';
