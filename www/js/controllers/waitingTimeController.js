@@ -48,7 +48,7 @@
             if (!vm.checkedInAppointments) {
                 return;
             }
-            console.log("vm.checkedInAppointments length: " + vm.checkedInAppointments.length);
+            // console.log("vm.checkedInAppointments length: " + vm.checkedInAppointments.length);
             TimeEstimate.requestTimeEstimate(vm.checkedInAppointments).then(function () {
                 var timeEstimate = TimeEstimate.getTimeEstimate();
                 for (var i = 0; i < timeEstimate.length; i++) {
@@ -92,7 +92,7 @@
                         else tmpDict["percent"] = percent + "%";
                     }
                     vm.appointments[i] = tmpDict;
-                    console.log("vm.appointments length: " + vm.appointments.length);
+                    // console.log("vm.appointments length: " + vm.appointments.length);
                 }
                 vm.appointments = vm.appointments.sort(function(a, b){
                     if (a.numPrevPatients < b.numPrevPatients) {

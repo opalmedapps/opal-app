@@ -40,7 +40,7 @@
                 link = nav.getCurrentPage().options.contentLink;
                 contentType = nav.getCurrentPage().options.contentType;
             } catch (err) {
-                console.log("contentController: ", err.message, "  $rootScope.contentType: ", $rootScope.contentType, " will be used instead.");
+                // console.log("contentController: ", err.message, "  $rootScope.contentType: ", $rootScope.contentType, " will be used instead.");
                 contentType = $rootScope.contentType;
                 $rootScope.contentType = "";
                 // For some reason, pushing this page from settingsNavigator (settingsNavigator.pushPage)

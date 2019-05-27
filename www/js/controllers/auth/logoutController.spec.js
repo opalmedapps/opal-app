@@ -42,7 +42,7 @@ describe('LogoutController', function() {
 
         FirebaseService = {
             getDBRef: function(stuff){
-                console.log('called');
+                // console.log('called');
                 return { remove: function() {return true;}}
             },
             signOut: function(){
