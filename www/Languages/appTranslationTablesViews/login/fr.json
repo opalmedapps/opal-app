@@ -136,6 +136,8 @@
   "UPDATEMESSAGE": "Cette version d'Opal est discontinuée. Veuillez installer la nouvelle version pour accéder à votre compte.",
   "UPDATEREQUIRED": "Mise à jour requise",
   "USER_DISABLED": "Le compte d'utilisateur a été désactivé",
-  "WARNING": "Attention"
-  
+  "WARNING": "Attention",
+  "REENTER_PASSWORD": "Confirmer le mot de passe",
+  "SERVERERRORALERT": "Problème de serveur: impossible de télécharger les données, réessayez plus tard",
+  "LONGERTIMEALERT": "La demande prend plus de temps que prévu... veuillez réessayer plus tard."
 }
