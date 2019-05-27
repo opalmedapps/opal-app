@@ -13,22 +13,23 @@ If you have a newer Mac (MacOS High Sierra or later), or are using a firewall or
 
 In order to run the app in your browser for development and basic testing purposes, there are a few steps you must take:
 
-* Clone the repository to the desired folder in your computer (create an empty folder for this). **(NOTE: You need to be added as a contributer to the project before being able to do this!)**
+**Note:** To follow best practices, especially if you intend to also install the listener and database (a "full local copy" of Opal), create the folder structure below (only create the `qplus` folder if you're using a git GUI like Sourcetree; otherwise, `git clone` will create it for you).
+```
+<root folder> (wherever you want to keep your documents)
+|_
+  Opal
+  |_ 
+    Opal_Installation (this folder will contain all your installation files)
+    |_
+      qplus (this is the frontend repository)
+```
+Never put any new documents in qplus (except for new code files). You can keep documents in the Opal folder.
+
+* Open a terminal and navigate to the Opal_Installation folder. Clone the qplus repository. If you use the command line, `git clone` will create the folder `qplus` for you.
 
 ```
 git clone https://github.com/Sable/qplus.git
 ```
-
-**Note:** to follow best practices, especially if you intend to also install the listener and database (a "full local copy" of Opal), your folder structure should look like this:
-```
-<root folder> (wherever you want to keep your documents; this can be an existing folder or a new "Opal" folder)
-|_
-  Opal Installation (you can change the name if you want; this folder will contain all your installation files)
-  |_
-    qplus (this is the frontend repository)
-```
-Never put any new documents in qplus (except for new code files).
-You can keep documents in Opal Installation, or in the root folder, whichever you prefer. Just keep everything organized.
 
 * Checkout the `opal_student` branch for installation. You will be able to switch to a different branch when your installation is complete, but you must install using the `opal_student` branch to ensure that your installation will run correctly. Depending on the file structure that was created when cloning, you may need to enter `cd qplus` first to go into the folder containing the repository.
 
