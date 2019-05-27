@@ -1,3 +1,13 @@
+Staging 1.8.6.2:
+ - Merge branch 'opal_pre_prod' into staging
+ - Translation
+ - config.xml 1.8.7
+ - Add Translation
+ - Merge branch 'staging' into opal_pre_prod
+ - Version bump to 1.8.6.1
+ - Merge branch 'staging' into opal_pre_prod
+ - config.xml
+
 Version 1.8.6.1:
  - Staging bump to 1.8.6.1
  - Merge branch 'Issue_678' into staging
