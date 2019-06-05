@@ -1,3 +1,23 @@
+Version 1.8.8.9:
+ - Staging bump to 1.8.8.9
+ - Merge branch 'staging_language_fix' into staging
+ - Merge branch 'staging_Issues_683_684' into staging_language_fix
+ - changed placeholder search into search by title
+ - Fix language strings / translations
+ - Make the search bar's label in Education tab change languages and font size
+ - Makes information tab's font change size accordingly to setting
+ - Fixed translation and changed SSN for SIN
+
+Staging 1.8.8.9:
+ - Merge branch 'staging_language_fix' into staging
+ - Merge branch 'staging_Issues_683_684' into staging_language_fix
+ - changed placeholder search into search by title
+ - Fix language strings / translations
+ - Make the search bar's label in Education tab change languages and font size
+ - Makes information tab's font change size accordingly to setting
+ - Fixed translation and changed SSN for SIN
+ - Version bump to 1.8.6.3
+
 Version 1.8.6.3:
  - Staging bump to 1.8.6.3
  -     ----Translation text  for password reset and server alert message.
