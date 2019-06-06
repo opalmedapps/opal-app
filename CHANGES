@@ -1,3 +1,13 @@
+Version 1.8.10.0:
+ - Staging bump to 1.8.10.0
+ - Merge branch 'bug-issues' into staging
+ - Translation modifications and fixes
+ - Merge branch 'opal_pre_prod' into bug-issues
+ - Merge branch 'staging' into opal_pre_prod
+ - Merge branch 'staging' into opal_pre_prod
+ - Merge branch 'staging' into opal_pre_prod
+ - Merge branch 'opal_pre_prod' into bug-issues
+
 Staging 1.8.10.0:
  - Merge branch 'bug-issues' into staging
  - Translation modifications and fixes
