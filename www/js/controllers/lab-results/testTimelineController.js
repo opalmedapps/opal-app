@@ -425,7 +425,8 @@
                     }
                 },
                 series: [{
-                    name: 'Result',
+                    // name: 'Result',
+                    name: $filter('translate')("RESULT"),
                     data: reformedData,
                     marker: {
                         enabled: true,

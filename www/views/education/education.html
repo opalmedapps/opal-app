@@ -10,8 +10,13 @@
     <network-banner></network-banner>
 
     <!-- SEARCH BAR -->
-    <input ng-hide="edu.noMaterials" type="text" placeholder="Search" class="search-input"
-           ng-model="edu.searchString" ng-change="edu.filterMaterial()">
+    <div class="navigation-bar" style="position:sticky; top:0">
+        <div class="navigation-bar__center" style="display:block">
+            <input ng-hide="edu.noMaterials" ng-model="edu.searchString" ng-change="edu.filterMaterial()"
+                   type="search" class="search-input" style="width: 96%; margin: 6px auto 6px auto;"
+                   placeholder="{{'SEARCH_EDU'|translate}}" ng-class="fontSizeDesc">
+        </div>
+    </div>
 
     <!-- NO MATERIAL TEXT -->
     <div style="color:grey;margin-top:25vh" ng-show="edu.noMaterials" align="center" ng-class="fontSizeTitle" style="margin-left: 10px; margin-right: 10px">
