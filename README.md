@@ -38,7 +38,7 @@ git fetch    [Optional: only do this step if you cloned the repository several h
 git checkout -b opal_student origin/opal_student
 ```
 
-* Install the latest version of [NodeJS](https://nodejs.org/en/download/) globally. If you have already done this, skip this step, but follow the instruction for verifying that Node is installed globally. **(NOTE: For proper access to the backend you must have version 6+)**
+* Install NodeJS globally. If you have already done this, skip this step, but follow the instruction for verifying that Node is installed globally **(Note: for proper access to the backend you must have version 6+; for best results, install [version 8.11.1](https://nodejs.org/dist/v8.11.1/))**.
 
 Verify that Node is installed globally by running `node -v`.
 
