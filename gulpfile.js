@@ -171,6 +171,9 @@ gulp.task('minify-vendor-js',function()
         'www/lib/bower_components/tweetnacl/nacl-fast.min.js',
         'www/lib/bower_components/tweetnacl-util/nacl-util.min.js',
         'www/lib/bower_components/highcharts/highstock.js',
+        //TESSA
+        'www/lib/bower_components/highcharts/modules/exporting.js',
+        //End TESSA
         'www/lib/bower_components/moment/moment.js',
         // 'www/lib/bower_components/pdfjs-dist/build/pdf.js',
         // 'www/lib/bower_components/pdfjs-dist/build/pdf.worker.min.js',
