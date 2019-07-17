@@ -3,14 +3,19 @@
         <div class="left">
             <ons-back-button>{{"BACK"|translate}}</ons-back-button>
         </div>
-        <div class="center">{{vm.app["AppointmentType_" + vm.language]}}</div>
+        <div class="center">{{vm.app["AppointmentType_" + vm.language]|ellipsis:30}}</div>
     </ons-toolbar>
     <div>
         <ons-list class="settings-list">
             <ons-list-item class="item">
                 <div style="line-height:1" align="left" ng-show="!!vm.delays.err">{{vm.delays.err}}</div>
                 <div style="line-height:1" align="left" style="text-align:center;" ng-show="!vm.app.Delays && !vm.delays.err">{{"APPOINTMENT_LOADING_HISTORICAL_DELAYS" | translate}}</div>
-                <div style="line-height:1" align="left" ng-show="!!vm.app.Delays && !vm.delays.err">
+                <div style="..." align="left" style="..." ng-show="!!vm.app.Delays && !vm.delays.err && !vm.nonZeroData">
+                    <p class="item-desc" ng-class="fontSizeDesc">{{vm.delays.presenter.date}}</p>
+                    <p class="item-desc" ng-class="fontSizeDesc">{{vm.delays.presenter.description}}</p>
+                </div>
+
+                <div style="line-height:1" align="left" style="..." ng-show="!!vm.app.Delays && !vm.delays.err && vm.nonZeroData">
                     <p class="item-desc" ng-class="fontSizeDesc">{{vm.delays.presenter.date}}</p>
                     <p class="item-desc" ng-class="fontSizeDesc">{{vm.delays.presenter.description}}</p>
                     <p class="item-title" style="font-weight:bold;text-align:center;" ng-class="fontSizeTitle">{{"APPOINTMENT_HISTORICAL_DELAYS" | translate}}</p>

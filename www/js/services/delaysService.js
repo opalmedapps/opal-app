@@ -19,8 +19,10 @@ angular.module('MUHCApp').service('DelaysService', [
             daysPlural: ['Mondays', 'Tuesdays', 'Wednesdays', 'Thursdays', 'Fridays', 'Saturdays', 'Sundays'],
             months: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
             daySuffixes: ['th', 'st', 'nd', 'rd'],
-            unknownAppointment: 'unknown',
+            unknownAppointment: 'Sorry, but there are no visualizations for this appointment yet',
             unknownAppointmentType: 'Sorry, but there are no visualizations for this kind of appointment yet.',
+            notEnoughData: "There isn't enough data for a visualization for this kind of appointment at this time. " +
+                "Please stay tuned",
             setsName: {
                 set1: '0-15 minutes',
                 set2: '15-30 minutes',
@@ -41,26 +43,57 @@ angular.module('MUHCApp').service('DelaysService', [
                 return '' + day + '' + (this.daySuffixes[(trim - 20) % 10] || this.daySuffixes[trim] || this.daySuffixes[0])
             },
             formatHour: function (hour) {
-                return {
-                    time: hour >= 13 ? hour - 12 : hour,
-                    daySuffix: hour >= 18 ? 'evening' : (hour >= 12 ? 'afternoon' : 'morning'),
-                    timeSuffix: hour >= 12 ? 'PM' : 'AM'
+                if (hour !== 0) {
+                    return {
+                        time: hour >= 13 ? hour - 12 : hour,
+                        daySuffix: hour >= 18 ? 'evening' : (hour >= 12 ? 'afternoon' : 'morning'),
+                        timeSuffix: hour >= 12 ? 'PM' : 'AM'
+                    }
+                } else{
+                    return{
+                        time: 12,
+                        daySuffix: 'morning',
+                        timeSuffix: 'AM'
+                    }
                 }
             },
             formatDate: function (scheduledDate) {
                 var day = scheduledDate.getDate()
                 return this.months[scheduledDate.getMonth()] + ' ' + this.formatDay(day) + ', ' + scheduledDate.getFullYear()
             },
+            formatMinutes: function(scheduledMinute){
+                if (scheduledMinute < 10){
+                    return '0' + scheduledMinute
+                } else{
+                    return scheduledMinute
+                }
+            },
             buildHistoricalDelayInfo: function (appointmentDescription, scheduledDate, delayData) {
-                var hourFormat = this.formatHour(delayData.scheduledHour)
-                var date = this.formatDate(scheduledDate)
-                var amountOfTime = this.setsDescription[retrieveSet(delayData)] || this.setsDescription.unknown
-                var day = [this.daysSingular[delayData.scheduledDay], this.daysPlural[delayData.scheduledDay]]
-                return {
-                    date,
-                    title: delayData.appointmentType + ' on ' + day[1] + ' at ' + hourFormat.time + ':' + delayData.scheduledMinutes + ' ' + hourFormat.timeSuffix,
-                    description: 'Your ' + appointmentDescription + ' appointment is on a ' + day[0] + ' ' + hourFormat.daySuffix + ', at ' + hourFormat.time + ':' + delayData.scheduledMinutes + ' ' + hourFormat.timeSuffix + '.',
-                    delayInfo: 'Patients usually wait ' + amountOfTime + ' for this kind of appointment.'
+                if (delayData !== null && delayData.appointmentType !== null) {
+                    console.log("nothing is null")
+                    var hourFormat = this.formatHour(delayData.scheduledHour)
+                    console.log("hourFormat: ", hourFormat)
+                    var minuteFormat = this.formatMinutes(delayData.scheduledMinutes)
+                    console.log("minuteFormat: ", minuteFormat)
+                    var date = this.formatDate(scheduledDate)
+                    console.log("date: ", date)
+                    var amountOfTime = this.setsDescription[retrieveSet(delayData)] || this.setsDescription.unknown
+                    console.log("amountOfTime: ", amountOfTime)
+                    var day = [this.daysSingular[delayData.scheduledDay], this.daysPlural[delayData.scheduledDay]]
+                    console.log("day: ", day)
+                    return {
+                        date,
+                        title: delayData.appointmentType + ' on ' + day[1] + ' at ' + hourFormat.time + ':' + minuteFormat + ' ' + hourFormat.timeSuffix,
+                        description: 'Your ' + appointmentDescription + ' appointment is on a ' + day[0] + ' ' + hourFormat.daySuffix + ', at ' + hourFormat.time + ':' + minuteFormat + ' ' + hourFormat.timeSuffix + '.',
+                        delayInfo: 'Patients usually wait ' + amountOfTime + ' for this kind of appointment.'
+                    }
+                } else{
+                    return {
+                        date,
+                        title: appointmentDescription,
+                        description: 'Your ' + appointmentDescription + " has not yet been visualized. ",
+                        delayInfo: this.notEnoughData
+                    }
                 }
             }
         }
@@ -69,7 +102,9 @@ angular.module('MUHCApp').service('DelaysService', [
             daysPlural: ['lundis', 'mardis', 'mercredis', 'jeudis', 'vendredis', 'samedis', 'dimanches'],
             months: ['janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'],
             unknownAppointment: 'Inconnu',
+            unknownAppointment2: 'Il n\'y a pas encore de visualization pour ce rendez-vous',
             unknownAppointmentType: 'Il n\'y a pas encore de visualization pour ce genre de rendez-vous.',
+            notEnoughData: 'Il n\'y a pas encore de visualization pour ce rendez-vous',
             setsName: {
                 set1: '0-15 minutes',
                 set2: '15-30 minutes',
@@ -95,16 +130,33 @@ angular.module('MUHCApp').service('DelaysService', [
             formatDate: function (scheduledDate) {
                 return scheduledDate.getDate() + ' ' + this.months[scheduledDate.getMonth()] + ' ' + scheduledDate.getFullYear()
             },
+            formatMinutes: function(scheduledMinute){
+                if (scheduledMinute < 10){
+                    return '0' + scheduledMinute
+                } else{
+                    return scheduledMinute
+                }
+            },
             buildHistoricalDelayInfo: function (appointmentDescription, scheduledDate, delayData) {
-                var hourFormat = this.formatHour(delayData.scheduledHour)
-                var date = this.formatDate(scheduledDate)
-                var amountOfTime = this.setsDescription[retrieveSet(delayData)] || this.setsDescription.unknown
-                var day = [this.daysSingular[delayData.scheduledDay], this.daysPlural[delayData.scheduledDay]]
-                return {
-                    date,
-                    title: delayData.appointmentType + ' les ' + day[1] + ' à ' + hourFormat.time + 'h' + delayData.scheduledMinutes,
-                    description: 'Votre rendez-vous de ' + appointmentDescription + ' est un ' + day[0] + ' ' + hourFormat.daySuffix + ', à ' + hourFormat.time + 'h' + delayData.scheduledMinutes + '.',
-                    delayInfo: 'Les patients attendent habituellement ' + amountOfTime + ' pour ce genre de rendez-vous.'
+                if (delayData !== null && delayData.appointmentType !== null) {
+                    var hourFormat = this.formatHour(delayData.scheduledHour)
+                    var minuteFormat = this.formatMinutes(delayData.scheduledMinutes)
+                    var date = this.formatDate(scheduledDate)
+                    var amountOfTime = this.setsDescription[retrieveSet(delayData)] || this.setsDescription.unknown
+                    var day = [this.daysSingular[delayData.scheduledDay], this.daysPlural[delayData.scheduledDay]]
+                    return {
+                        date,
+                        title: delayData.appointmentType + ' les ' + day[1] + ' à ' + hourFormat.time + 'h' + delayData.scheduledMinutes,
+                        description: 'Votre rendez-vous de ' + appointmentDescription + ' est un ' + day[0] + ' ' + hourFormat.daySuffix + ', à ' + hourFormat.time + 'h' + minuteFormat + '.',
+                        delayInfo: 'Les patients attendent habituellement ' + amountOfTime + ' pour ce genre de rendez-vous.'
+                    }
+                } else{
+                    return {
+                        date,
+                        title: appointmentDescription,
+                        description: 'Votre rendez-vous de ' + appointmentDescription + " est " + unknownAppointment,
+                        delayInfo: this.notEnoughData
+                    }
                 }
             }
         }
@@ -124,21 +176,28 @@ angular.module('MUHCApp').service('DelaysService', [
                 }
             }
             return appointmentSet
-        }
+        }//Appointment Delays
         function requestWaitingTimes (appointment, language, onDone, onError) {
             var requestObject = {
                 refSource: appointment.SourceDatabaseSerNum,
                 refId: appointment.AppointmentAriaSer
             }
+
             RequestToServer.sendRequestWithResponse('AppointmentDelays', requestObject)
                 .then(function (response) {
                     var data = response.data
                     var err = data.err
                     if (err) {
-                        var translator = languages[language] || languages.EN
+                        var translator = languages[language] || languages.EN //Is this an issue? Tessa
+                        console.log("This is the error being tested: ", err)
                         if(/Unknown appointment type/gm.test(err)) {
+                            console.log("Unknown appointment type")
                             appointment.UnavailableDelays = true
                             onError(translator.unknownAppointmentType)
+                        } else if(/Appointment not found/gm.test(err)){
+                            console.log("Appointment not found")
+                            appointment.UnavailableDelays = true
+                            onError(translator.unknownAppointment)
                         } else {
                             onError(err)
                         }
@@ -170,7 +229,7 @@ angular.module('MUHCApp').service('DelaysService', [
             newDelaysChart: function (language) {
                 var translator = languages[language] || languages.EN
                 var updater = {cached: null, deliver: function (newData) {
-                    this.cached = newData
+                    this.cached = newData;
                 }}
                 return {
                     updater,
@@ -181,8 +240,8 @@ angular.module('MUHCApp').service('DelaysService', [
                             load: function () {
                                 var chartSeries = this.series
                                 updater.deliver = function (newData) {
-                                    for (var series = 0; series < 4; ++series) {
-                                        chartSeries[series].setData([newData[series]], true, true)
+                                    for (var setIndex = 0; setIndex < 4; ++setIndex) {
+                                        chartSeries[setIndex].setData([newData[setIndex]], true, true)
                                     }
                                 }
                                 if (updater.cached) {
@@ -216,9 +275,9 @@ angular.module('MUHCApp').service('DelaysService', [
                         pointFormat: translator.setsDescription.point,
                         shared: false
                     },
-                    plotOptions: { bar: { dataLabels: { enabled: true } } },
+                    plotOptions: { bar: { dataLabels: { enabled: false } } }, //the zeros
                     legend: {
-                        enabled: true,
+                        enabled: false, //the labeled dots
                         align: 'center',
                         verticalAlign: 'top'
                     },

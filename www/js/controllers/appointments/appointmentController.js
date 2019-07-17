@@ -69,10 +69,11 @@
 
         vm.goToMap = goToMap;
         vm.historicalDelays = historicalDelays;
-        vm.hasWaitingTimes = hasWaitingTimes;
+        vm.hasWaitingTimes = hasWaitingTimes; //wasn't doing this
         vm.aboutAppointment = aboutAppointment;
         vm.moreEducationalMaterial = moreEducationalMaterial;
         vm.openMap = openMap;
+        vm.nonZeroData = true;
 
         activate();
 
@@ -83,21 +84,29 @@
             var language = UserPreferences.getLanguage().toUpperCase();
             navigatorName = parameters.Navigator;
             vm.delays.chart = DelaysService.newDelaysChart(language);
+            vm.hasWaitingTimes = hasWaitingTimes
             $timeout(function(){
                 vm.language = language;
                 vm.app = parameters.Post;
+
                 if (!(vm.corrupted_appointment = !vm.app || Object.keys(vm.app).length === 0)) {
                     DelaysService.getWaitingTimes(vm.app, language)
                         .then(function(response) {
                             var sets = response.sets;
                             var sum = sets.set1 + sets.set2 + sets.set3 + sets.set4;
                             vm.delays.presenter = DelaysService.getPresenter(vm.app, response, language);
-                            vm.delays.chart.updater.deliver([
-                                +((sets.set1 / sum) * 100).toFixed(2),
-                                +((sets.set2 / sum) * 100).toFixed(2),
-                                +((sets.set3 / sum) * 100).toFixed(2),
-                                +((sets.set4 / sum) * 100).toFixed(2)
-                            ]);
+                            if (sum !== 0) {
+                                vm.nonZeroData = true;
+                                vm.delays.chart.updater.deliver([
+                                    +((sets.set1 / sum) * 100).toFixed(2),
+                                    +((sets.set2 / sum) * 100).toFixed(2),
+                                    +((sets.set3 / sum) * 100).toFixed(2),
+                                    +((sets.set4 / sum) * 100).toFixed(2)
+                                ]);
+                            } else{
+                                vm.delays.presenter = DelaysService.getPresenter(vm.app, null, language)
+                                vm.nonZeroData = false;
+                            }
                         }).catch(function(err) {
                             $timeout(function () {
                                 vm.delays.err = err;
@@ -159,22 +168,23 @@
 
         function hasWaitingTimes () {
             var appointment = vm.app;
+            console.log("appointment: ", appointment)
             var source;
             if (appointment && !appointment.UnavailableDelays && ((source = appointment.SourceDatabaseSerNum) === '2' || source === 2)) { // checks if the source has a parser in the listener. available parsers: [2]
                 var current = new Date();
                 var scheduledTime = appointment.ScheduledStartTime;
                 var scheduledFullYear = scheduledTime.getFullYear();
                 var currentFullYear = current.getFullYear();
-                if (scheduledFullYear > currentFullYear) {
+                if (scheduledFullYear < currentFullYear) {
                     return true;
                 } else if (scheduledFullYear === currentFullYear) {
                     var scheduledMonth = scheduledTime.getMonth();
                     var currentMonth = current.getMonth();
-                    if (scheduledMonth > currentMonth) {
+                    if (scheduledMonth < currentMonth) {
                         return true;
                     } else if (scheduledMonth === currentMonth) {
-                        return current.getDate() <= scheduledTime.getDate();
-                    }
+                        return current.getDate() >= scheduledTime.getDate();
+                    }//Tessa changed it so it's if scheduled time was before the current time
                 }
             }
             return false;
