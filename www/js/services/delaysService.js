@@ -19,8 +19,8 @@ angular.module('MUHCApp').service('DelaysService', [
             daysPlural: ['Mondays', 'Tuesdays', 'Wednesdays', 'Thursdays', 'Fridays', 'Saturdays', 'Sundays'],
             months: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
             daySuffixes: ['th', 'st', 'nd', 'rd'],
-            unknownAppointment: 'Sorry, but there are no visualizations for this appointment yet',
-            unknownAppointmentType: 'Sorry, but there are no visualizations for this kind of appointment yet.',
+            unknownAppointment: 'There are no visualizations for this appointment yet',
+            unknownAppointmentType: 'There are no visualizations for this kind of appointment yet.',
             notEnoughData: "There isn't enough data for a visualization for this kind of appointment at this time. " +
                 "Please stay tuned",
             setsName: {
@@ -70,20 +70,30 @@ angular.module('MUHCApp').service('DelaysService', [
             },
             buildHistoricalDelayInfo: function (appointmentDescription, scheduledDate, delayData) {
                 if (delayData !== null && delayData.appointmentType !== null) {
-                    console.log("nothing is null")
+                    var pluralize = appointmentDescription.split(" ")
+                    var i = pluralize.indexOf("Appointment")
+                    console.log(i)
+                    if(i !== -1) {
+                        pluralize[i] = "Appointments"
+                    }
+                    var m = pluralize.indexOf("a")
+                    if(m !== -1){
+                        pluralize[m+2] = "Tests"
+                        pluralize[m] = null
+                    }
+                    pluralAppointmentDescription = pluralize.join(" ")
                     var hourFormat = this.formatHour(delayData.scheduledHour)
-                    console.log("hourFormat: ", hourFormat)
+                    var lowerLimit = delayData.scheduledHour -1
+                    lowerLimit = this.formatHour(lowerLimit)
+                    var upperLimit = delayData.scheduledHour + 1
+                    upperLimit = this.formatHour(upperLimit)
                     var minuteFormat = this.formatMinutes(delayData.scheduledMinutes)
-                    console.log("minuteFormat: ", minuteFormat)
                     var date = this.formatDate(scheduledDate)
-                    console.log("date: ", date)
                     var amountOfTime = this.setsDescription[retrieveSet(delayData)] || this.setsDescription.unknown
-                    console.log("amountOfTime: ", amountOfTime)
                     var day = [this.daysSingular[delayData.scheduledDay], this.daysPlural[delayData.scheduledDay]]
-                    console.log("day: ", day)
                     return {
                         date,
-                        title: delayData.appointmentType + ' on ' + day[1] + ' at ' + hourFormat.time + ':' + minuteFormat + ' ' + hourFormat.timeSuffix,
+                        title: pluralAppointmentDescription + ' on ' + day[1] + ' between ' + lowerLimit.time + ':' + minuteFormat + ' ' + lowerLimit.timeSuffix + ' and ' + upperLimit.time + ':' + minuteFormat + ' ' + upperLimit.timeSuffix,
                         description: 'Your ' + appointmentDescription + ' appointment is on a ' + day[0] + ' ' + hourFormat.daySuffix + ', at ' + hourFormat.time + ':' + minuteFormat + ' ' + hourFormat.timeSuffix + '.',
                         delayInfo: 'Patients usually wait ' + amountOfTime + ' for this kind of appointment.'
                     }
@@ -282,6 +292,7 @@ angular.module('MUHCApp').service('DelaysService', [
                         verticalAlign: 'top'
                     },
                     credits: { enabled: false },
+                    exporting: {enabled: false},
                     series: [
                         {
                             name: translator.setsName.set1,
