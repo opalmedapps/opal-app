@@ -89,7 +89,17 @@ angular.module('MUHCApp').service('MyWaitingTimeService', [
                         }
                     },
                     navigator: { enabled: true},
-                    rangeSelector: {enable: true}, //selected: 0
+                    rangeSelector: {enabled: true,
+                                    buttonTheme: {
+                                        visibility: 'hidden'
+                                     },
+                                    inputEnabled: true,
+                                    inputPosition:
+                                        {
+                                            x:0,
+                                            y: 10
+                                        }
+                        },
                     scrollbar: { enabled: false },
                     title: { text: '' },
                     xAxis: {
@@ -141,6 +151,57 @@ angular.module('MUHCApp').service('MyWaitingTimeService', [
                         verticalAlign: 'bottom'
                     },
                     credits: { enabled: false },
+                    exporting: {
+                        buttons: {
+                            contextButton: {
+                                enabled: false,
+                            },
+                            toggle: {
+                                align: 'left',
+                                text: 'Click to Zoom',
+                                style: {
+                                    fontWeight: 'bold',
+                                    color: 'white'
+                                },
+                                theme: {
+                                    fill: '#c3c3f3',
+                                    stroke:'#0000ff',
+                                    padding: 7
+                                },
+                                menuItems: [{
+                                    text: '1M',
+                                    onclick: function() {
+                                        this.rangeSelector.clickButton(0, true);
+                                    },
+                                }, {
+                                    text: '3M',
+                                    onclick: function() {
+                                        this.rangeSelector.clickButton(1, true);
+                                    }
+                                }, {
+                                    text: '6M',
+                                    onclick: function() {
+                                        this.rangeSelector.clickButton(2, true);
+                                    }
+                                }, {
+                                    text: 'YTD',
+                                    onclick: function() {
+                                        this.rangeSelector.clickButton(3, true);
+                                    }
+                                }, {
+                                    text: '1Y',
+                                    onclick: function() {
+                                        this.rangeSelector.clickButton(4, true);
+                                    }
+                                }, {
+                                    text: 'All',
+                                    onclick: function() {
+                                        this.rangeSelector.clickButton(5, true);
+                                    }
+                                }]
+                            }
+                        }
+                    },
                     series: [
                         {
                             name: translator.waitingDueHospitalDelay,
