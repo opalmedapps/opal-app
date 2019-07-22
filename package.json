@@ -4,6 +4,7 @@
   "description": "Oncology Portal and Application",
   "main": "index.js",
   "scripts": {
+    "start": "http-server ./www -p 9000 -o",
     "postinstall": "bower install",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -62,6 +63,7 @@
     "yargs": "^8.0.1"
   },
   "dependencies": {
+    "angular-sanitize": "^1.7.3",
     "cordova-android": "^6.3.0",
     "cordova-auto-patch": "^1.2.2",
     "cordova-ios": "^4.5.5"
