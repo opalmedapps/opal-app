@@ -43,17 +43,25 @@ angular.module('MUHCApp').service('DelaysService', [
                 return '' + day + '' + (this.daySuffixes[(trim - 20) % 10] || this.daySuffixes[trim] || this.daySuffixes[0])
             },
             formatHour: function (hour) {
-                if (hour !== 0) {
+                if (hour > 0) {
                     return {
                         time: hour >= 13 ? hour - 12 : hour,
                         daySuffix: hour >= 18 ? 'evening' : (hour >= 12 ? 'afternoon' : 'morning'),
                         timeSuffix: hour >= 12 ? 'PM' : 'AM'
                     }
                 } else{
-                    return{
-                        time: 12,
-                        daySuffix: 'morning',
-                        timeSuffix: 'AM'
+                    if(hour == 0){
+                        return {
+                            time: 12,
+                            daySuffix: 'morning',
+                            timeSuffix: 'AM'
+                        }
+                    }else {
+                        return {
+                            time: 12 + hour,
+                            daySuffix: 'evening',
+                            timeSuffix: 'PM'
+                        }
                     }
                 }
             },
@@ -68,20 +76,30 @@ angular.module('MUHCApp').service('DelaysService', [
                     return scheduledMinute
                 }
             },
+            makePlural: function(appointmentDescription){
+                var inProgress = appointmentDescription.split(" ")
+                var i = inProgress.indexOf("Appointment")
+                if(i !== -1) {
+                    inProgress[i] = "Appointments"
+                }
+                var a = inProgress.indexOf("a")
+                if(a !== -1){
+                    var at = inProgress.indexOf("at")
+                    //if there's an at, the noun to make plural came just before, and if not, it's at the end
+                    if(at == -1){
+                        var length = inProgress.length
+                        inProgress[length-1] = inProgress[length-1] + 's'
+                    }else{
+                        inProgress[at - 1] = inProgress[at -1] + 's'
+                    }
+                    inProgress[a] = null
+                }
+                var pluralAppointmentDescription = inProgress.join(" ")
+                return pluralAppointmentDescription
+            },
             buildHistoricalDelayInfo: function (appointmentDescription, scheduledDate, delayData) {
                 if (delayData !== null && delayData.appointmentType !== null) {
-                    var pluralize = appointmentDescription.split(" ")
-                    var i = pluralize.indexOf("Appointment")
-                    console.log(i)
-                    if(i !== -1) {
-                        pluralize[i] = "Appointments"
-                    }
-                    var m = pluralize.indexOf("a")
-                    if(m !== -1){
-                        pluralize[m+2] = "Tests"
-                        pluralize[m] = null
-                    }
-                    pluralAppointmentDescription = pluralize.join(" ")
+                    var pluralAppointmentDescription = this.makePlural(appointmentDescription)
                     var hourFormat = this.formatHour(delayData.scheduledHour)
                     var lowerLimit = delayData.scheduledHour -1
                     lowerLimit = this.formatHour(lowerLimit)
@@ -94,7 +112,7 @@ angular.module('MUHCApp').service('DelaysService', [
                     return {
                         date,
                         title: pluralAppointmentDescription + ' on ' + day[1] + ' between ' + lowerLimit.time + ':' + minuteFormat + ' ' + lowerLimit.timeSuffix + ' and ' + upperLimit.time + ':' + minuteFormat + ' ' + upperLimit.timeSuffix,
-                        description: 'Your ' + appointmentDescription + ' appointment is on a ' + day[0] + ' ' + hourFormat.daySuffix + ', at ' + hourFormat.time + ':' + minuteFormat + ' ' + hourFormat.timeSuffix + '.',
+                        description: 'Your ' + appointmentDescription + ' is on a ' + day[0] + ' ' + hourFormat.daySuffix + ', at ' + hourFormat.time + ':' + minuteFormat + ' ' + hourFormat.timeSuffix + '.',
                         delayInfo: 'Patients usually wait ' + amountOfTime + ' for this kind of appointment.'
                     }
                 } else{
@@ -186,8 +204,9 @@ angular.module('MUHCApp').service('DelaysService', [
                 }
             }
             return appointmentSet
-        }//Appointment Delays
+        }
         function requestWaitingTimes (appointment, language, onDone, onError) {
+
             var requestObject = {
                 refSource: appointment.SourceDatabaseSerNum,
                 refId: appointment.AppointmentAriaSer
@@ -198,7 +217,7 @@ angular.module('MUHCApp').service('DelaysService', [
                     var data = response.data
                     var err = data.err
                     if (err) {
-                        var translator = languages[language] || languages.EN //Is this an issue? Tessa
+                        var translator = languages[language] || languages.EN
                         console.log("This is the error being tested: ", err)
                         if(/Unknown appointment type/gm.test(err)) {
                             console.log("Unknown appointment type")

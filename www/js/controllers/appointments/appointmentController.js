@@ -89,6 +89,11 @@
             $timeout(function(){
                 vm.language = language;
                 vm.app = parameters.Post;
+
+
+                //This code launches the historical delays calculations as soon as the individual appointment is selected
+                //It's moved to appointmentDelaysController so that the calculations start when the historical delays
+                //tab is selected
 /*
                 if (!(vm.corrupted_appointment = !vm.app || Object.keys(vm.app).length === 0)) {
                     DelaysService.getWaitingTimes(vm.app, language)
@@ -135,6 +140,10 @@
           //  NavigatorParameters.setParameters(vm.app);
             $window[navigatorName].pushPage('./views/personal/appointments/about-appointment.html');
         }
+
+
+        //Another place to implement the historical delays calculations. However, because appointmentController was
+        //called when it reached the second page, the delays chart was reset, necessitating a second controller
 
 /*
         function chrysanthemums()
@@ -192,7 +201,6 @@
         {
            // chrysanthemums().then(function() {
                 NavigatorParameters.setParameters({'Navigator': navigatorName, 'Post': vm.app});
-                console.log("navigatorName: ", navigatorName)
                 $window[navigatorName].pushPage('./views/personal/appointments/appointment-historical-delays.html')
             //})
         }
@@ -223,10 +231,20 @@
         }
 
         function hasWaitingTimes () {
-            return true
+
+
+            //This can be used to create the historical delays tab
+            // If hasWaitingTimes is false, it just won't be created and the user won't have the option
+            //Currently commented out, because it needs information from delaysService within the individual appointment
+            //tab. Once it doesn't need to be hidden in the app, this can be added
+
+            return true;
+
             /*
+
+
+
             var appointment = vm.app;
-            console.log("appointment: ", appointment)
             var source;
             if (appointment && !appointment.UnavailableDelays && ((source = appointment.SourceDatabaseSerNum) === '2' || source === 2)) { // checks if the source has a parser in the listener. available parsers: [2]
                 var current = new Date();
