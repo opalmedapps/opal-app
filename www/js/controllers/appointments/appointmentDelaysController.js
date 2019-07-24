@@ -64,11 +64,33 @@
                                         }
                                     }).catch(function(err) {
                                         $timeout(function () {
-                                            vm.delays.err = err
+                                            if(err == 'There are no visualizations for this appointment yet' ||
+                                                err == 'There are no visualizations for this kind of appointment yet.' ||
+                                            err == 'Inconnu' || err == 'Il n\'y a pas encore de visualization pour ce genre de rendez-vous.'){
+                                                vm.delays.err = err
+                                            } else{
+                                                var phrase = translate(language)
+                                                vm.delays.err = phrase
+                                            }
                                         })
                         })
         }
         })
+        }
+
+        function translate(language){
+            var languages_en = {
+                unknownAppointment: "The visualizations for this appointment haven't been developed yet"
+            }
+            var languages_fr = {
+                unknownAppointment: "Il n'y a pas encore de visualization pour ce rendez-vous"
+            }
+            var languages = {
+                EN: languages_en,
+                FR: languages_fr
+            }
+            var translator = languages[language] || languages.EN
+            return translator.unknownAppointment
         }
 }
 })();
