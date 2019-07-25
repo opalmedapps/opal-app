@@ -63,10 +63,9 @@ angular.module('MUHCApp').service('MyWaitingTimeService', [
                     updater,
                     chart: {
                         type: 'column',
-                        //styledMode: true,
                         width: $(window).width() - 16,
                         events: {
-                            load: function () { //Was missing "load" so it literally just didn't load
+                            load: function () {
                                 var chartSeries = this.series
                                 updater.deliver = function (newData) {
                                     var hospitalDelays = []
@@ -88,7 +87,20 @@ angular.module('MUHCApp').service('MyWaitingTimeService', [
                             }
                         }
                     },
-                    navigator: { enabled: true},
+                    navigator: { enabled: true,
+                                    pointInterval: 3600 * 24 * 50,
+                                    xAxis: {
+                                        labels: {
+                                            align: 'left'
+                                        },
+                                        type: 'datetime',
+                                        dateTimeLabelFormats: {
+                                            day: '%Y<br/>%m-%d'
+                                        },
+                                        showLastLabel: false,
+                                        tickPixelInterval: 100
+                                    }
+                                    },
                     rangeSelector: {enabled: true,
                                     buttonTheme: {
                                         visibility: 'hidden'

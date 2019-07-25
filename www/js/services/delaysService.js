@@ -218,13 +218,10 @@ angular.module('MUHCApp').service('DelaysService', [
                     var err = data.err
                     if (err) {
                         var translator = languages[language] || languages.EN
-                        console.log("This is the error being tested: ", err)
                         if(/Unknown appointment type/gm.test(err)) {
-                            console.log("Unknown appointment type")
                             appointment.UnavailableDelays = true
                             onError(translator.unknownAppointmentType)
                         } else if(/Appointment not found/gm.test(err)){
-                            console.log("Appointment not found")
                             appointment.UnavailableDelays = true
                             onError(translator.unknownAppointment)
                         } else {

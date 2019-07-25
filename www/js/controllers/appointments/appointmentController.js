@@ -142,67 +142,11 @@
         }
 
 
-        //Another place to implement the historical delays calculations. However, because appointmentController was
-        //called when it reached the second page, the delays chart was reset, necessitating a second controller
-
-/*
-        function chrysanthemums()
-        {
-            var deferred = $q.defer();
-
-            var parameters = NavigatorParameters.getParameters();
-            var language = UserPreferences.getLanguage().toUpperCase();
-            vm.language = language;
-            vm.app = parameters.Post;
-            //vm.delays.chart = DelaysService.newDelaysChart(language);
-            $timeout(function(){
-                if (!(vm.corrupted_appointment = !vm.app || Object.keys(vm.app).length === 0)) {
-                    DelaysService.getWaitingTimes(vm.app, language)
-                        .then(function (response) {
-                            var sets = response.sets;
-                            console.log("sets: ", sets)
-                            var sum = sets.set1 + sets.set2 + sets.set3 + sets.set4;
-                            console.log("sum: ", sum)
-                            vm.delays.presenter = DelaysService.getPresenter(vm.app, response, language);
-                            if (sum !== 0) {
-                                vm.nonZeroData = true;
-                                console.log("sets.set1: ", +((sets.set1 / sum) * 100).toFixed(2))
-                                console.log("sets.set2: ", +((sets.set2 / sum) * 100).toFixed(2))
-                                console.log("sets.set3: ", +((sets.set3 / sum) * 100).toFixed(2))
-                                console.log("sets.set4: ", +((sets.set4 / sum) * 100).toFixed(2))
-                                vm.delays.chart.updater.deliver([
-                                    +((sets.set1 / sum) * 100).toFixed(2),
-                                    +((sets.set2 / sum) * 100).toFixed(2),
-                                    +((sets.set3 / sum) * 100).toFixed(2),
-                                    +((sets.set4 / sum) * 100).toFixed(2)
-                                ])
-                                console.log("shot in the dark: ")
-                                console.log("resolving")
-                                deferred.resolve([])
-                            } else {
-                                vm.delays.presenter = DelaysService.getPresenter(vm.app, null, language)
-                                vm.nonZeroData = false;
-                                console.log("resolving")
-                                deferred.resolve([])
-                            }
-                        }).catch(function (err) {
-                        $timeout(function () {
-                            vm.delays.err = err
-                            deferred.reject(err)
-                        })
-                    })
-                }
-            })
-            return deferred.promise;
-
-        }*/
 
         function historicalDelays()
         {
-           // chrysanthemums().then(function() {
                 NavigatorParameters.setParameters({'Navigator': navigatorName, 'Post': vm.app});
                 $window[navigatorName].pushPage('./views/personal/appointments/appointment-historical-delays.html')
-            //})
         }
 
         /**
