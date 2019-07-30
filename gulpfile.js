@@ -191,7 +191,6 @@ gulp.task('minify-vendor-js',function()
         'www/lib/bower_components/highcharts/highstock.js',
         'www/lib/bower_components/highcharts/highcharts.js',
         'www/lib/bower_components/highcharts/modules/exporting.js',
-        //End TESSA
         'www/lib/bower_components/moment/moment.js',
         'www/lib/js/materialize.min.js',
         'www/lib/bower_components/crypto-js/crypto-js.js',
