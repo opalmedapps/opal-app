@@ -62,6 +62,7 @@ angular.module('MUHCApp').service('MyWaitingTimeService', [
                 return {
                     updater,
                     chart: {
+                        showAxes: true,
                         type: 'column',
                         width: $(window).width() - 16,
                         events: {
@@ -88,17 +89,17 @@ angular.module('MUHCApp').service('MyWaitingTimeService', [
                         }
                     },
                     navigator: { enabled: true,
+                        ordinal: false,
                                     pointInterval: 3600 * 24 * 50,
                                     xAxis: {
+                                        ordinal: false,
                                         labels: {
                                             align: 'left'
                                         },
                                         type: 'datetime',
                                         dateTimeLabelFormats: {
                                             day: '%Y<br/>%m-%d'
-                                        },
-                                        showLastLabel: false,
-                                        tickPixelInterval: 100
+                                        }
                                     }
                                     },
                     rangeSelector: {enabled: true,
@@ -115,6 +116,7 @@ angular.module('MUHCApp').service('MyWaitingTimeService', [
                     scrollbar: { enabled: false },
                     title: { text: '' },
                     xAxis: {
+                        max: Date.now(),
                         type: 'datetime',
                         categories: [''],
                         title: { text: translator.waitingTitle },
@@ -142,6 +144,7 @@ angular.module('MUHCApp').service('MyWaitingTimeService', [
                         shared: false
                     },
                     plotOptions: {
+                        kdNow: true,
                         column: {
                             stacking: 'normal',
                             dataLabels: {
