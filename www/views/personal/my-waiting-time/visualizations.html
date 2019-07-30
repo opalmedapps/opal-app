@@ -14,12 +14,10 @@
                     <p class="item-desc" style="text-align:center;" ng-class="fontSizeTitle">{{ "MY_WAITING_TIME_HOW_LONG" | translate }}</p>
                     <p class="item-desc" style="text-align:center;" ng-class="fontSizeDesc" ng-show="!vm.hasData">{{ "MY_WAITING_TIME_LOADING" | translate }}</p>
                     <hc-chart options="vm.waitingTimesChart" ng-show="vm.hasData">
-                        Placeholder for the "waiting times" chart
                     </hc-chart>
                     <p class="item-desc" style="text-align:center;" ng-class="fontSizeTitle">{{ "MY_WAITING_TIME_HOW_OFTEN" | translate }}</p>
                     <p class="item-desc" style="text-align:center;" ng-class="fontSizeDesc" ng-show="!vm.hasData">{{ "MY_WAITING_TIME_LOADING" | translate }}</p>
                     <hc-chart options="vm.onTimeChart" ng-show="vm.hasData">
-                        Placeholder for the "on time" chart
                     </hc-chart>
                     <p class="item-desc" style="text-align:center;" ng-class="fontSizeDesc" ng-show="vm.hasData && vm.patientFrequencyInformation">{{ vm.patientFrequencyInformation | translate }}</p>
                 </div>

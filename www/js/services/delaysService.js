@@ -301,33 +301,49 @@ angular.module('MUHCApp').service('DelaysService', [
                         pointFormat: translator.setsDescription.point,
                         shared: false
                     },
-                    plotOptions: { bar: { dataLabels: { enabled: false } } }, //the zeros
+                    plotOptions: { bar:
+                                    {
+                                         events: {
+                                             legendItemClick: function(){
+                                                 return false;
+                                             }
+                                         },
+                                        //pointPadding: 0,
+                                        dataLabels:
+                                            { enabled: true,
+                                            //formatter: function(){ return 0},
+                                            //inside: true,
+                                            fontWeight: 'normal',
+                                            color: 'gray'
+                                            }
+                                    }
+                                    },
                     legend: {
-                        enabled: false, //the labeled dots
+                        enabled: true,
                         align: 'center',
-                        verticalAlign: 'top'
+                        verticalAlign: 'bottom'
                     },
                     credits: { enabled: false },
                     exporting: {enabled: false},
                     series: [
                         {
                             name: translator.setsName.set1,
-                            data: [0],
+                            data:  [0],
                             color: '#00d652'
                         },
                         {
                             name: translator.setsName.set2,
-                            data: [0],
+                            data:  [0],
                             color: '#ffc400'
                         },
                         {
                             name: translator.setsName.set3,
-                            data: [0],
+                            data:  [0],
                             color: '#ff8200'
                         },
                         {
                             name: translator.setsName.set4,
-                            data: [0],
+                            data:  [0],
                             color: '#ff0000'
                         }
                     ]

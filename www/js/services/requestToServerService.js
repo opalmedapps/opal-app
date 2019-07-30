@@ -53,7 +53,6 @@ myApp.service('RequestToServer',['$filter','$state','NewsBanner','UserAuthorizat
         return {
 
             sendRequestWithResponse:function(typeOfRequest, parameters, encryptionKey, referenceField, responseField) {
-                console.log("This is the type of Request: ", typeOfRequest)
                 return new Promise((resolve, reject) => {
 
                     //Sends request and gets random key for request
@@ -73,10 +72,8 @@ myApp.service('RequestToServer',['$filter','$state','NewsBanner','UserAuthorizat
 
                                     data = ResponseValidator.validate(data, encryptionKey, timeOut);
                                     if (data.success) {
-                                        console.log("Type: ", typeOfRequest, "success: ", data.success)
                                         resolve(data.success)
                                     } else {
-                                        console.log("Type: ", typeOfRequest, "failure: ", data.error)
                                         reject(data.error)
                                     }
                                 }
@@ -91,10 +88,8 @@ myApp.service('RequestToServer',['$filter','$state','NewsBanner','UserAuthorizat
                     const timeOut = setTimeout(function() {
                         response_url.set(null);
                         response_url.off();
-                        //Tessa
-                        console.log("this is timing out: ", typeOfRequest)
                         reject({Response:'timeout'});
-                    }, 600000);//TESSA
+                    }, 30000);
                 }).catch(err=> console.log(err));
             },
 
