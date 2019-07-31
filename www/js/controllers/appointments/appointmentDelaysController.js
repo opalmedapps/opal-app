@@ -56,7 +56,11 @@
                                                 +((sets.set1 / sum) * 100).toFixed(2),
                                                 +((sets.set2 / sum) * 100).toFixed(2),
                                                 +((sets.set3 / sum) * 100).toFixed(2),
-                                                +((sets.set4 / sum) * 100).toFixed(2)
+                                                +((sets.set4 / sum) * 100).toFixed(2),
+                                                +((sets.set1)),
+                                                +((sets.set2)),
+                                                +((sets.set3)),
+                                                +((sets.set4))
                                             ]);
                                         } else{
                                             vm.delays.presenter = DelaysService.getPresenter(vm.app, null, language)

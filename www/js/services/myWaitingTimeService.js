@@ -65,6 +65,7 @@ angular.module('MUHCApp').service('MyWaitingTimeService', [
                         showAxes: true,
                         type: 'column',
                         width: $(window).width() - 16,
+                        kdNow: true,
                         events: {
                             load: function () {
                                 var chartSeries = this.series
