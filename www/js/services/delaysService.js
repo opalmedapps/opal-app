@@ -265,9 +265,16 @@ angular.module('MUHCApp').service('DelaysService', [
                         events: {
                             load: function () {
                                 var chartSeries = this.series
+                                var valuePercentage = []
                                 updater.deliver = function (newData) {
                                     for (var setIndex = 0; setIndex < 4; ++setIndex) {
-                                        chartSeries[setIndex].setData([newData[setIndex]], true, true)
+                                        valuePercentage.push({
+                                            y: newData[setIndex],
+                                            z: newData[setIndex + 4]
+                                        })
+
+                                        chartSeries[setIndex].setData(valuePercentage, true, true)
+                                        valuePercentage = []
                                     }
                                 }
                                 if (updater.cached) {
@@ -298,7 +305,7 @@ angular.module('MUHCApp').service('DelaysService', [
                     tooltip: {
                         enabled: true,
                         headerFormat: '',
-                        pointFormat: translator.setsDescription.point,
+                        pointFormat: translator.setsDescription.point + ' ({point.z} patients) ',
                         shared: false
                     },
                     plotOptions: { bar:
@@ -307,15 +314,13 @@ angular.module('MUHCApp').service('DelaysService', [
                                              legendItemClick: function(){
                                                  return false;
                                              }
-                                         },
-                                        //pointPadding: 0,
+                                         }/*, //Thoughts?
+
                                         dataLabels:
                                             { enabled: true,
-                                            //formatter: function(){ return 0},
-                                            //inside: true,
                                             fontWeight: 'normal',
                                             color: 'gray'
-                                            }
+                                            }*/
                                     }
                                     },
                     legend: {
@@ -328,7 +333,10 @@ angular.module('MUHCApp').service('DelaysService', [
                     series: [
                         {
                             name: translator.setsName.set1,
-                            data:  [0],
+                            data: {
+                                y: [0],
+                                z: [0]
+                            },
                             color: '#00d652'
                         },
                         {
