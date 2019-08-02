@@ -23,10 +23,10 @@
         .module('MUHCApp')
         .controller('AppointmentController', AppointmentController);
 
-    AppointmentController.$inject = ['NavigatorParameters', 'UserPreferences', 'DelaysService', '$timeout', '$window', '$q', '$scope'];
+    AppointmentController.$inject = ['NavigatorParameters', 'UserPreferences', 'Patient', 'DelaysService', '$timeout', '$window', '$q', '$scope'];
 
     /* @ngInject */
-    function AppointmentController(NavigatorParameters, UserPreferences, DelaysService, $timeout, $window, $q, $scope) {
+    function AppointmentController(NavigatorParameters, UserPreferences, Patient, DelaysService, $timeout, $window, $q, $scope) {
 
         var vm = this;
 
@@ -67,8 +67,10 @@
          */
         vm.corrupted_appointment = false;
 
+        vm.TestUser = Patient.getTestUser();
         vm.goToMap = goToMap;
-        vm.hasWaitingTimes = hasWaitingTimes;
+        vm.hasWaitingTimes = true;
+        //vm.hasWaitingTimes = hasWaitingTimes;
         vm.aboutAppointment = aboutAppointment;
         vm.moreEducationalMaterial = moreEducationalMaterial;
         vm.openMap = openMap;
@@ -83,8 +85,14 @@
             var parameters = NavigatorParameters.getParameters();
             var language = UserPreferences.getLanguage().toUpperCase();
             navigatorName = parameters.Navigator;
-            vm.delays.chart = DelaysService.newDelaysChart(language);
-            vm.hasWaitingTimes = hasWaitingTimes
+            if(vm.TestUser) {
+                vm.hasWaitingTimes = true
+                vm.delays.chart = DelaysService.newDelaysChart(language);
+            }
+            else {
+                vm.hasWaitingTimes = false
+            }
+
 
             $timeout(function(){
                 vm.language = language;
@@ -174,7 +182,7 @@
             }
         }
 
-        function hasWaitingTimes () {
+       /* function hasWaitingTimes () {
 
 
             //This can be used to create the historical delays tab
@@ -182,9 +190,8 @@
             //Currently commented out, because it needs information from delaysService within the individual appointment
             //tab. Once it doesn't need to be hidden in the app, this can be added
 
-            return true;
 
-            /*
+
 
 
 
@@ -208,6 +215,6 @@
                 }
             }
             return false;
-       */ }
+        }*/
     }
 })();
