@@ -112,6 +112,7 @@
 
             patientSerNum = Patient.getUserSerNum();
 
+
             //Locked out alert
             if(patientSerNum) NewsBanner.showCustomBanner($filter('translate')('LOCKEDOUT'),'black', null, 2000);
 
