@@ -58,19 +58,23 @@ myApp.service('RequestToServer',['$filter','$state','NewsBanner','UserAuthorizat
                     //Sends request and gets random key for request
                     sendRequest(typeOfRequest,parameters,encryptionKey, referenceField)
                         .then(key=> {
+
                             //Sets the reference to fetch data for that request
                             let refRequestResponse = (!referenceField) ?
                                 response_url.child(UserAuthorizationInfo.getUsername() + '/' + key) :
                                 firebase_url.child(responseField).child(key);
+
                             //Waits to obtain the request data.
                             refRequestResponse.on('value', snapshot => {
                                 if (snapshot.exists()) {
+
                                     let data = snapshot.val();
 
                                     refRequestResponse.set(null);
                                     refRequestResponse.off();
 
                                     data = ResponseValidator.validate(data, encryptionKey, timeOut);
+
                                     if (data.success) {
                                         resolve(data.success)
                                     } else {
@@ -78,18 +82,20 @@ myApp.service('RequestToServer',['$filter','$state','NewsBanner','UserAuthorizat
                                     }
                                 }
                             }, error => {
-                                console.log(error)
+                                console.log(error);
                                 refRequestResponse.set(null);
                                 refRequestResponse.off();
                                 reject(error);
                             });
                     });
+
                     //If request takes longer than 30000 to come back with timeout request, delete reference
                     const timeOut = setTimeout(function() {
                         response_url.set(null);
                         response_url.off();
                         reject({Response:'timeout'});
                     }, 30000);
+
                 }).catch(err=> console.log(err));
             },
 
