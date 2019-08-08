@@ -1,4 +1,12 @@
 <ons-page ng-controller="CategoryLabTestController as cat" >
+    <!--<ons-toolbar fixed-style>-->
+        <!--<div class="left">-->
+            <!--<ons-back-button>{{"BACK"|translate}}</ons-back-button>-->
+        <!--</div>-->
+        <!--<div class="center" ng-class="fontSizeTitle">{{"LAB_BYTYPE"|translate}}</div>-->
+        <!--<div class="right"><ons-toolbar-button ng-click="labs.refresh()"><ons-icon icon="ion-ios-refresh-empty" size="2x" style="color: #4F81BB"></ons-icon></ons-toolbar-button></ons-icon></div>-->
+    <!--</ons-toolbar>-->
+
     <div>
         <ons-list ng-repeat="testCategory in cat.testResultsByCategory" >
             <ons-list-header ng-class="fontSizeTitle">{{testCategory.testCategory|translate}}</ons-list-header>
