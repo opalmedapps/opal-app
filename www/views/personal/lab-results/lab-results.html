@@ -14,18 +14,42 @@
         <p style="margin-top: 30px">{{ "LOADINGLABRESULTS" | translate }}</p>
     </div>
 
-    <!--<div>-->
-        <!--<ons-button style="margin-top: 5%" ng-click="personalNavigator.pushPage('./views/personal/lab-results/date-view.html');">{{'LAB_BYDATE'|translate}}</ons-button>-->
-    <!--</div>-->
-    <!--<div>-->
-        <!--<ons-button style="margin-top: 5%" ng-click="personalNavigator.pushPage('./views/personal/lab-results/category-view.html');">{{'LAB_BYTYPE'|translate}}</ons-button>-->
-    <!--</div>-->
+    <!-- TEMPORARY SOLUTION TO ons-tabbar EMBEDDED PAGE NOT WORKING ON ANDROID -->
+    <div ng-hide="labs.loading">
+        <ons-list>
+            <ons-list-item class="list-item-container" modifier="chevron" ng-click="personalNavigator.pushPage('./views/personal/lab-results/date-view.html');">
+                <ons-row align="center">
+                    <ons-col width="60px" style="text-align: center">
+                        <div>
+                            <ons-icon icon="fa-calendar" size="2x" style="color:#2196F3"></ons-icon>
+                        </div>
+                    </ons-col>
+                    <ons-col>
+                        <header>
+                            <span class="item-title" ng-class="fontSizeTitle">{{"LAB_BYDATE"|translate}}</span>
+                        </header>
+                    </ons-col>
+                </ons-row>
+            </ons-list-item>
+            <ons-list-item class="list-item-container" modifier="chevron" ng-click="personalNavigator.pushPage('./views/personal/lab-results/category-view.html');">
+                <ons-row align="center">
+                    <ons-col width="60px" style="text-align: center">
+                        <div>
+                            <ons-icon icon="fa-tags" size="2x" style="color:#2196F3"></ons-icon>
+                        </div>
+                    </ons-col>
+                    <ons-col>
+                        <header>
+                            <span class="item-title" ng-class="fontSizeTitle">{{"LAB_BYTYPE"|translate}}</span>
+                        </header>
+                    </ons-col>
+                </ons-row>
+            </ons-list-item>
+        </ons-list>
+    </div>
+    <!---------------------------->
 
-    <ons-tabbar class="shadow-2" position="top" animation="fade" var="labbar" ng-hide="labs.loading">
-        <ons-tabbar-item page="./views/personal/lab-results/date-view.html" class="shadow-2" style="background-color:#ECEFF1;" label="{{'LAB_BYDATE'|translate}}" icon="fa-calendar" active="true"></ons-tabbar-item>
-        <ons-tabbar-item page="./views/personal/lab-results/category-view.html" class="shadow-2" style="background-color:#ECEFF1;" label="{{'LAB_BYTYPE'|translate}}" icon="fa-tags"></ons-tabbar-item>
-    </ons-tabbar>
-
+    <!-- ons-tabbar WITH EMBEDDED PAGE NOT WORKING ON ANDROID -->
     <!--<ons-tabbar class="shadow-2" position="top" animation="fade" var="labbar" ng-hide="labs.loading">-->
         <!--<ons-tab class="shadow-2" style="background-color:#ECEFF1;" page="./views/personal/lab-results/date-view.html" label="{{'LAB_BYDATE'|translate}}" icon="fa-calendar" active="true"></ons-tab>-->
         <!--<ons-tab class="shadow-2" style="background-color:#ECEFF1;" page="./views/personal/lab-results/category-view.html" label="{{'LAB_BYTYPE'|translate}}" icon="fa-tags"></ons-tab>-->
