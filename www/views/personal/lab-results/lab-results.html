@@ -13,13 +13,16 @@
         </svg>
         <p style="margin-top: 30px">{{ "LOADINGLABRESULTS" | translate }}</p>
     </div>
-    <!--<ons-tabbar class="shadow-2" position="top" animation="fade" var="labbar" ng-hide="labs.loading">-->
-        <!--Tabs Here-->
-        <!--<ons-tab class="shadow-2" style="background-color:#ECEFF1;" page="./views/personal/lab-results/date-view.html" label="{{'LAB_BYDATE'|translate}}" icon="fa-calendar" active="true"></ons-tab>-->
-        <!--Tab ONE-->
-        <!--<ons-tab class="shadow-2" style="background-color:#ECEFF1;" page="./views/personal/lab-results/category-view.html" label="{{'LAB_BYTYPE'|translate}}" icon="fa-tags"></ons-tab>-->
-        <!--Tabe TWO-->
-    <!--</ons-tabbar>-->
-    <ons-button style="margin-top: 5%" ng-click="personalNavigator.pushPage('./views/personal/lab-results/date-view.html');">{{"Go to Labs By Date"}}</ons-button>
 
+    <!--<div>-->
+        <!--<ons-button style="margin-top: 5%" ng-click="personalNavigator.pushPage('./views/personal/lab-results/date-view.html');">{{'LAB_BYDATE'|translate}}</ons-button>-->
+    <!--</div>-->
+    <!--<div>-->
+        <!--<ons-button style="margin-top: 5%" ng-click="personalNavigator.pushPage('./views/personal/lab-results/category-view.html');">{{'LAB_BYTYPE'|translate}}</ons-button>-->
+    <!--</div>-->
+
+    <ons-tabbar class="shadow-2" position="top" animation="fade" var="labbar" ng-hide="labs.loading">
+        <ons-tab class="shadow-2" style="background-color:#ECEFF1;" page="./views/personal/lab-results/date-view.html" label="{{'LAB_BYDATE'|translate}}" icon="fa-calendar" active="true"></ons-tab>
+        <ons-tab class="shadow-2" style="background-color:#ECEFF1;" page="./views/personal/lab-results/category-view.html" label="{{'LAB_BYTYPE'|translate}}" icon="fa-tags"></ons-tab>
+    </ons-tabbar>
 </ons-page>
