@@ -1,5 +1,8 @@
+
 <ons-page ng-controller="DateLabTestController as labs">
+    <div> outside ons-list</div>
     <ons-list>
+        Labs Start here
         {{labs.selectedTests}}
         -----------------------
         <ons-list-item ng-repeat="testResultByDate in labs.selectedTests"
@@ -24,7 +27,7 @@
                     ******** testResultByDateFormat *****
                     {{testResultByDate.testDateFormat}}
                     \*\*\*\*\*\
-                   
+
                     <div style="line-height:1;">
                         <span ng-class="fontSizeTitle"> {{testResultByDate.testDateFormat|date:'longDate'}}</span>
                         <p class="item-desc" ng-class="fontSizeDesc">{{"ADDED"|translate}}
@@ -34,4 +37,5 @@
             </ons-row>
         </ons-list-item>
     </ons-list>
+    Outside OnsList
 </ons-page>
