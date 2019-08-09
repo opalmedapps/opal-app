@@ -1,4 +1,14 @@
 <ons-page ng-controller="DateLabTestController as labs">
+
+    <!-- HEADER ADDED FOR TEMPORARY SOLUTION TO ons-tabbar EMBEDDED PAGE NOT WORKING ON ANDROID -->
+    <ons-toolbar fixed-style>
+        <div class="left">
+            <ons-back-button>{{"BACK"|translate}}</ons-back-button>
+        </div>
+        <div class="center" ng-class="fontSizeTitle">{{"LAB_BYDATE"|translate}}</div>
+    </ons-toolbar>
+    <!---------------------------->
+
     <ons-list>
         <ons-list-item ng-repeat="testResultByDate in labs.selectedTests | orderBy:'-testDateFormat'"
                        ng-click="personalNavigator.pushPage('./views/personal/lab-results/test-view.html',{param:testResultByDate})"
