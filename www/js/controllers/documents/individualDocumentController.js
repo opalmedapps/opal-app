@@ -29,6 +29,7 @@
         var viewerSize;
         var containerEl;
 
+
         vm.loading = true;
         vm.errorDownload = false;
         vm.show = false;
@@ -61,6 +62,7 @@
             scale = 3;
 
             vm.doc_title = docParams.Title;
+            vm.DocumentDescription = docParams.Description;
 
             //Create popover
             ons.createPopover('./views/personal/documents/info-popover.html', {parentScope: $scope}).then(function (popover) {
@@ -263,17 +265,22 @@
 
         function about() {
 
-            // Check if there is any about link
-            var link = null;
-            docParams.hasOwnProperty("URL_EN") ? link = docParams["URL_" + UserPreferences.getLanguage()] : {};
+            if (vm.DocumentDescription != '') {
+                personalNavigator.pushPage('./views/personal/documents/about-document.html');
+            } else {
+                // Check if there is any about link
+                var link = null;
+                docParams.hasOwnProperty("URL_EN") ? link = docParams["URL_" + UserPreferences.getLanguage()] : {};
 
-            // Set the options to send to the content controller
-            var contentOptions = {
-                contentType: docParams.AliasName_EN,
-                contentLink: link
-            };
+                // Set the options to send to the content controller
+                var contentOptions = {
+                    contentType: docParams.AliasName_EN,
+                    contentLink: link
+                };
 
-            personalNavigator.pushPage('./views/templates/content.html', contentOptions);
+                personalNavigator.pushPage('./views/templates/content.html', contentOptions);
+            }
+
             $scope.popoverDocsInfo.hide();
         }
     }
