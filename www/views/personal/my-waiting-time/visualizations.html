@@ -19,7 +19,6 @@
                     <p class="item-desc" style="text-align:center;" ng-class="fontSizeDesc" ng-show="!vm.hasData">{{ "MY_WAITING_TIME_LOADING" | translate }}</p>
                     <hc-chart options="vm.onTimeChart" ng-show="vm.hasData">
                     </hc-chart>
-                    <p class="item-desc" style="text-align:center;" ng-class="fontSizeDesc" ng-show="vm.hasData && vm.patientFrequencyInformation">{{ vm.patientFrequencyInformation | translate }}</p>
                 </div>
             </ons-list-item>
         </ons-list>
