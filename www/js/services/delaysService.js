@@ -304,25 +304,34 @@ angular.module('MUHCApp').service('DelaysService', [
                     },
                     tooltip: {
                         enabled: true,
+                        positioner: function () {
+                            return { x: 0, y: 0 };
+                        },
                         headerFormat: '',
-                        pointFormat: translator.setsDescription.point + ' ({point.z} patients) ',
+                        pointFormat: translator.setsDescription.point + " (Number of Patients: {point.z}) ",
                         shared: false
                     },
-                    plotOptions: { bar:
-                                    {
-                                         events: {
-                                             legendItemClick: function(){
-                                                 return false;
-                                             }
-                                         }/*, //Thoughts?
-
-                                        dataLabels:
-                                            { enabled: true,
-                                            fontWeight: 'normal',
-                                            color: 'gray'
-                                            }*/
-                                    }
+                    plotOptions: {
+                        bar:
+                            {
+                                dataLabels:{
+                                    enabled: true,
+                                    distance: -50,
+                                    style:{
+                                        fontSize: '20px',
+                                        fontWeight: 'bold',
+                                        borderColor: 'white'
                                     },
+                                    formatter: function() {return this.y + "%"},
+                                    color: 'white'
+                                },
+                                events: {
+                                    legendItemClick: function(){
+                                        return false;
+                                    }
+                                }
+                            }
+                            },
                     legend: {
                         enabled: true,
                         align: 'center',
@@ -337,21 +346,38 @@ angular.module('MUHCApp').service('DelaysService', [
                                 y: [0],
                                 z: [0]
                             },
+                            pointPadding: 0,
+                            groupPadding: 0,
                             color: '#00d652'
                         },
                         {
                             name: translator.setsName.set2,
-                            data:  [0],
+                            data: {
+                                y: [0],
+                                z: [0]
+                            },
+                            pointPadding: 0,
+                            groupPadding: 0,
                             color: '#ffc400'
                         },
                         {
                             name: translator.setsName.set3,
-                            data:  [0],
+                            data: {
+                                y: [0],
+                                z: [0]
+                            },
+                            pointPadding: 0,
+                            groupPadding: 0,
                             color: '#ff8200'
                         },
                         {
                             name: translator.setsName.set4,
-                            data:  [0],
+                            data: {
+                                y: [0],
+                                z: [0]
+                            },
+                            pointPadding: 0,
+                            groupPadding: 0,
                             color: '#ff0000'
                         }
                     ]
