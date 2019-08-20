@@ -89,17 +89,17 @@ angular.module('MUHCApp').service('MyWaitingTimeService', [
                             }
                         }
                     },
-                    navigator: { enabled: true,
-                        ordinal: false,
-                                    pointInterval: 3600 * 24 * 50,
-                                    xAxis: {
+                    navigator: {
+                                enabled: true,
+                                pointInterval: 3600 * 24 * 50,
+                                xAxis: {
                                         ordinal: false,
                                         labels: {
-                                            align: 'left'
+                                                align: 'left'
                                         },
                                         type: 'datetime',
                                         dateTimeLabelFormats: {
-                                            day: '%Y<br/>%m-%d'
+                                                day: '%Y<br/>%m-%d'
                                         }
                                     }
                                     },
@@ -121,7 +121,10 @@ angular.module('MUHCApp').service('MyWaitingTimeService', [
                         type: 'datetime',
                         categories: [''],
                         title: { text: translator.waitingTitle },
-                        labels: { enabled: false }
+                        labels: {
+                            enabled: true,
+                            staggerLines: 2
+                        }
                     },
                     yAxis: {
                         type: 'linear',
@@ -131,7 +134,7 @@ angular.module('MUHCApp').service('MyWaitingTimeService', [
                             align: 'middle'
                         },
                         stackLabels: {
-                            enabled: true,
+                            enabled: false,
                             style: {
                                 fontWeight: 'bold',
                                 color: 'gray'
@@ -146,10 +149,13 @@ angular.module('MUHCApp').service('MyWaitingTimeService', [
                     },
                     plotOptions: {
                         kdNow: true,
+                        series: {
+                            pointWidth: 10
+                        },
                         column: {
                             stacking: 'normal',
                             dataLabels: {
-                                enabled: true,
+                                enabled: false,
                                 color: 'white'
                             },
                             dataGrouping: {
@@ -222,12 +228,14 @@ angular.module('MUHCApp').service('MyWaitingTimeService', [
                         {
                             name: translator.waitingDueHospitalDelay,
                             data: [[todayTime, 0]],
-                            color: '#c3c3f3'
+                            color: '#c3c3f3',
+                            showInNavigator: false
                         },
                         {
                             name: translator.waitingDueEarlyArrival,
                             data: [[todayTime, 0]],
-                            color: '#0000ff'
+                            color: '#0000ff',
+                            showInNavigator: true
                         }
                     ]
                 }
@@ -292,7 +300,7 @@ angular.module('MUHCApp').service('MyWaitingTimeService', [
                     scrollbar: { enabled: false },
                     title: { text: '' },
                     tooltip: {
-                        enabled: true,
+                        enabled: false,
                         headerFormat: '',
                         pointFormat: '<span style="color:{point.color}"> \u25CF </span> <b>{point.name}:</b><br/>{point.y}%<br/>',
                         shared: false
@@ -302,7 +310,16 @@ angular.module('MUHCApp').service('MyWaitingTimeService', [
                             allowPointSelect: true,
                             cursor: 'pointer',
                             dataLabels: {
-                                enabled: false
+                                enabled: true,
+                                distance: -50,
+                                style:{
+                                    fontSize: '20px',
+                                    fontWeight: 'bold',
+                                    borderColor: 'white'
+                                },
+
+                                formatter: function() {return this.percentage + "%"},
+                                color: 'white'
                             },
                             showInLegend: true
                         }
@@ -313,6 +330,7 @@ angular.module('MUHCApp').service('MyWaitingTimeService', [
                         verticalAlign: 'top'
                     },
                     credits: { enabled: false },
+                    exporting: { buttons: {contextButton: {enabled: false }}},
                     series: [
                         {
                             name: '',
