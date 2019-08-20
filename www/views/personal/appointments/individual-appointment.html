@@ -19,7 +19,7 @@
                 </div>
             </ons-list-item>
 
-            <ons-list-item style="background-color:#E3F2FD" modifier="chevron tappable" ng-show="vm.hasWaitingTimes" ng-class="fontSizeDesc"
+            <ons-list-item style="background-color:#E3F2FD" modifier="chevron tappable" ng-if="vm.hasWaitingTimes" ng-class="fontSizeDesc"
                            ng-click="vm.historicalDelays()" >
                 <strong class="item-desc" ng-class="fontSizeDesc">{{"APPOINTMENT_CHECK_HISTORICAL_DELAYS" | translate}} {{vm.title}} </strong>
             </ons-list-item>

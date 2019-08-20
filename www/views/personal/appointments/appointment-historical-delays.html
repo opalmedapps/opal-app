@@ -16,8 +16,8 @@
                 </div>
 
                 <div style="line-height:1" align="left" style="text-align:center;" ng-show="!!vm.app.Delays && !vm.delays.err && !!vm.nonZeroData">
-                    <p class="item-desc" ng-class="fontSizeDesc">{{vm.delays.presenter.date}}</p>
-                    <p class="item-desc" ng-class="fontSizeDesc">{{vm.delays.presenter.description}}</p>
+                    <!--<p class="item-desc" ng-class="fontSizeDesc">{{vm.delays.presenter.date}}</p>
+                    <p class="item-desc" ng-class="fontSizeDesc">{{vm.delays.presenter.description}}</p>-->
                     <p class="item-title" style="font-weight:bold;text-align:center;" ng-class="fontSizeTitle">{{"APPOINTMENT_HISTORICAL_DELAYS" | translate}}</p>
                     <p class="item-title" style="text-align:center;" ng-class="fontSizeTitle">{{vm.delays.presenter.title}}</p>
                     <hc-chart options="vm.delays.chart">
