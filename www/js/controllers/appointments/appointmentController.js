@@ -87,7 +87,6 @@
             navigatorName = parameters.Navigator;
             if(vm.TestUser) {
                 vm.hasWaitingTimes = true
-                vm.delays.chart = DelaysService.newDelaysChart(language);
             }
             else {
                 vm.hasWaitingTimes = false

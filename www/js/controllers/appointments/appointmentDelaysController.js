@@ -38,7 +38,6 @@
             var language = UserPreferences.getLanguage().toUpperCase();
             navigatorName = parameters.Navigator;
             vm.delays.chart = DelaysService.newDelaysChart(language);
-            vm.hasWaitingTimes = true;
 
                         $timeout(function(){
                             vm.language = language;
