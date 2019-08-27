@@ -298,8 +298,13 @@ then
 	echo ""
 
 	#All checks have been met... time to build...
+<<<<<<< Updated upstream
 #    cordova build android --release
     cordova build ios --release --device
+=======
+    cordova build android --release
+#    cordova build ios --release --device
+>>>>>>> Stashed changes
 #    cordova build -verbose
 
 
