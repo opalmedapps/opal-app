@@ -47,6 +47,7 @@
         vm.goToParking = goToParking;
         vm.goToGeneralSettings = goToGeneralSettings;
         vm.goToPatientCharter = goToPatientCharter;
+        vm.goToAcknowledgements = goToAcknowledgements;
         vm.reportBugs = reportBugs;
         vm.goToLogin = goToLogin;
         vm.showMessageOfTheDay = showMessageOfTheDay;
@@ -159,6 +160,15 @@
         {
             initNavigator.pushPage('./views/templates/content.html', {contentType : 'patient_charter'});
         }
+
+        /**
+         * Go to Acknowledgements
+         */
+        function goToAcknowledgements()
+        {
+            initNavigator.pushPage('./views/templates/content.html', {contentType : 'acknowledgements'});
+        }
+
 
         /**
          * Report issues function

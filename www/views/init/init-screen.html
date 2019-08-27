@@ -44,17 +44,30 @@
                 </ons-button>
             </div>
 
-            <!-- PATIENT CHARTER -->
+            <!-- ACKNOWLEDGEMTNS -->
             <div class="initScreenButtonDiv">
                 <ons-button class="shadow-2 initScreenWhiteButton" modifier="large"
-                            ng-click="init.goToPatientCharter()" var="initButton">
-                    <ons-icon icon="fa-list-alt fa-lg pull-left"
-                              style="color:#2196F3; display: inline-block"></ons-icon>
+                            ng-click="init.goToAcknowledgements()" var="initButton">
+                    <ons-icon icon="fa-star fa-lg pull-left"
+                              style="color:#FFEB3B; display: inline-block"></ons-icon>
                     <div class="initScreenButtonText" align="center">
-                        {{"PATIENTCHARTER"|translate}}
+                        {{"OPAL_ACKNOWLEDGEMENTS"|translate}}
                     </div>
                 </ons-button>
             </div>
+
+
+            <!-- PATIENT CHARTER -->
+            <!--<div class="initScreenButtonDiv">-->
+                <!--<ons-button class="shadow-2 initScreenWhiteButton" modifier="large"-->
+                            <!--ng-click="init.goToPatientCharter()" var="initButton">-->
+                    <!--<ons-icon icon="fa-list-alt fa-lg pull-left"-->
+                              <!--style="color:#2196F3; display: inline-block"></ons-icon>-->
+                    <!--<div class="initScreenButtonText" align="center">-->
+                        <!--{{"PATIENTCHARTER"|translate}}-->
+                    <!--</div>-->
+                <!--</ons-button>-->
+            <!--</div>-->
 
             <!-- REPORT A BUG -->
             <!--
