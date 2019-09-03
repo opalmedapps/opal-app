@@ -22,11 +22,12 @@
         .module('MUHCApp')
         .controller('ContactIndividualController', ContactIndividualController);
 
-    ContactIndividualController.$inject = ['NavigatorParameters'];
+    ContactIndividualController.$inject = ['NavigatorParameters','UserPreferences'];
 
     /* @ngInject */
-    function ContactIndividualController(NavigatorParameters) {
+    function ContactIndividualController(NavigatorParameters, UserPreferences) {
         var vm = this;
+        vm.language;
         vm.doctor = null;
         vm.header = '';
 
@@ -38,6 +39,7 @@
             var navi = NavigatorParameters.getNavigator();
             var page = navi.getCurrentPage();
             vm.doctor = page.options.doctor;
+            vm.language = UserPreferences.getLanguage();
         }
     }
 
