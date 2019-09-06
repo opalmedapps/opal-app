@@ -157,7 +157,10 @@ If you are getting errors during your installation, here are some things you can
   - You have an extra firewall or security plugin installed, which is preventing the packages from installing. For example, the browser extension Ghostery is known to interfere with installation. Try disabling firewalls and security plugins and re-installing the packages.
   - Your computer security is too strong. For example, newer Mac devices running MacOS High Sierra or newer have been known to prevent some packages from installing. For newer Macs, follow the instructions on [this website](https://www.imore.com/how-turn-system-integrity-protection-macos) to turn off System Integrity Protection. Then, try re-installing the packages using the instructions above. Don't forget to re-enable System Integrity Protection once you're done.
   - You have a too-recent version of npm installed. Try installing an older version of npm such as version 6 instead of 8 or 10, and re-install the packages.
-  
+* If you got an error from `npm install` like `UNABLE_TO_GET_ISSUER_CERT_LOCALLY` or you are behind a firewall, you can try the following commands:
+  - Go to `qplus/.bowerrc` and add the following `{"directory" : "www/lib/bower_components", "strict-ssl": false,  "https-proxy": "" }`
+  - Run `npm config set strict-ssl false` and `set NODE_TLS_REJECT_UNAUTHORIZED=0` on the terminal. If this solution worked, you have to run these two commands again for the listener's installation. You also need to run `set NODE_TLS_REJECT_UNAUTHORIZED=0` everytime you restart the terminal.
+
 If at this point you have been unable to install everything properly, reach out to an Opal team member for help.
 
 This is the end of the section on installing the frontend Opal app. If you are a student or if you weren't explicitly asked to test, build or deploy the app, skip ahead to [Best Practices](#best-practices).
