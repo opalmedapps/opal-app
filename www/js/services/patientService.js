@@ -79,6 +79,13 @@ myApp.service('Patient',['$q','$cordovaDevice','FileManagerService','LocalStorag
      *@description Property containing patientid of the patient
      **/
     var PatientId='';
+        /**
+         *@ngdoc property
+         *@name  MUHCApp.service.#TestUser
+         *@propertyOf MUHCApp.service:Patient
+         *@description Property containing boolean determining whether the patient is a test user
+         **/
+    var TestUser ='';
 
     /**
      *@ngdoc property
@@ -134,6 +141,7 @@ myApp.service('Patient',['$q','$cordovaDevice','FileManagerService','LocalStorag
             TelNum=patientFields.TelNum;
             Email=patientFields.Email;
             PatientId=patientFields.PatientId;
+            TestUser=patientFields.TestUser;
             UserSerNum=patientFields.PatientSerNum;
             ProfileImage=(patientFields.ProfileImage&&typeof patientFields.ProfileImage!=='undefined'&&patientFields.ProfileImage!=='')?'data:image/'+patientFields.DocumentType+';base64,'+patientFields.ProfileImage:'./img/patient.png';
             var app = document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'https://' ) === -1;
@@ -208,6 +216,7 @@ myApp.service('Patient',['$q','$cordovaDevice','FileManagerService','LocalStorag
             TelNum=patientFields.TelNum;
             Email=patientFields.Email;
             PatientId=patientFields.PatientId;
+            TestUser=patientFields.TestUser;
             UserSerNum=patientFields.PatientSerNum;
             ProfileImage= (patientFields.ProfileImage)?patientFields.ProfileImage:'./img/patient.png';
             Alias=patientFields.Alias;
@@ -260,6 +269,19 @@ myApp.service('Patient',['$q','$cordovaDevice','FileManagerService','LocalStorag
         getPatientId:function()
         {
             return PatientId;
+        },
+        /**
+         *@ngdoc method
+         *@name getTestUser
+         *@methodOf MUHCApp.service:Patient
+         *@returns {Boolean} Returns if patient is test user
+         **/
+        getTestUser:function() {
+            var test = parseInt(TestUser, 10)
+            if(test===1){
+               return true
+            }
+            return false;
         },
         /**
          *@ngdoc method
