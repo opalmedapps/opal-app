@@ -28,6 +28,7 @@
                 <ul class="list" ng-show="vm.desiredQuestionnaires.length > 0">
                     <li class="list__item list__item--chevron" ng-repeat="questionnaire in vm.desiredQuestionnaires"
                         ng-click="vm.goToQuestionnaire(questionnaire, questionnaire.QuestionnaireDBSerNum, questionnaire.QuestionnaireSerNum)">
+
                         <p style="margin-top: 7px" ng-class="fontSizeDesc">
                             {{(vm.language === "EN") ? vm.questionnaires[questionnaire.QuestionnaireDBSerNum].QuestionnaireName_EN :
                                                        vm.questionnaires[questionnaire.QuestionnaireDBSerNum].QuestionnaireName_FR}}

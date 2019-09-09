@@ -16,10 +16,10 @@
         .module('MUHCApp')
         .controller('IndividualDocumentController', IndividualDocumentController);
 
-    IndividualDocumentController.$inject = ['$scope', 'NavigatorParameters', 'Documents', '$timeout', 'FileManagerService', 'Constants', '$q', 'UserPreferences', 'Logger'];
+    IndividualDocumentController.$inject = ['$rootScope', '$scope', 'NavigatorParameters', 'Documents', '$timeout', 'FileManagerService', 'Constants', '$q', 'UserPreferences', 'Logger'];
 
     /* @ngInject */
-    function IndividualDocumentController($scope, NavigatorParameters, Documents, $timeout, FileManagerService, Constants, $q, UserPreferences, Logger) {
+    function IndividualDocumentController($rootScope, $scope, NavigatorParameters, Documents, $timeout, FileManagerService, Constants, $q, UserPreferences, Logger) {
         var vm = this;
 
         var parameters;
@@ -28,6 +28,8 @@
         var scale;
         var viewerSize;
         var containerEl;
+
+
 
         vm.loading = true;
         vm.errorDownload = false;
@@ -43,6 +45,7 @@
         $scope.warn2 = warn2;
         $scope.docParams = docParams;
         $scope.isAndroid = isAndroid;
+
 
 
         activate();
@@ -61,6 +64,7 @@
             scale = 3;
 
             vm.doc_title = docParams.Title;
+            vm.DocumentDescription = docParams.Description;
 
             //Create popover
             ons.createPopover('./views/personal/documents/info-popover.html', {parentScope: $scope}).then(function (popover) {
@@ -72,7 +76,10 @@
                 $scope.popoverDocsInfo.destroy();
             });
 
-            initializeDocument(docParams);
+            if ($rootScope.DocAlreadyInitialized === undefined || $rootScope.DocAlreadyInitialized === false) {
+                initializeDocument(docParams);
+            }
+            $rootScope.DocAlreadyInitialized = false;
         }
 
         function initializeDocument(document) {
@@ -263,17 +270,24 @@
 
         function about() {
 
-            // Check if there is any about link
-            var link = null;
-            docParams.hasOwnProperty("URL_EN") ? link = docParams["URL_" + UserPreferences.getLanguage()] : {};
+            $rootScope.DocAlreadyInitialized = true;
 
-            // Set the options to send to the content controller
-            var contentOptions = {
-                contentType: docParams.AliasName_EN,
-                contentLink: link
-            };
+            if (vm.DocumentDescription != '') {
+                personalNavigator.pushPage('./views/personal/documents/about-document.html');
+            } else {
+                // Check if there is any about link
+                var link = null;
+                docParams.hasOwnProperty("URL_EN") ? link = docParams["URL_" + UserPreferences.getLanguage()] : {};
 
-            personalNavigator.pushPage('./views/templates/content.html', contentOptions);
+                // Set the options to send to the content controller
+                var contentOptions = {
+                    contentType: docParams.AliasName_EN,
+                    contentLink: link
+                };
+
+                personalNavigator.pushPage('./views/templates/content.html', contentOptions);
+            }
+
             $scope.popoverDocsInfo.hide();
         }
     }

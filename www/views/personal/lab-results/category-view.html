@@ -1,4 +1,14 @@
 <ons-page ng-controller="CategoryLabTestController as cat" >
+
+    <!-- HEADER ADDED FOR TEMPORARY SOLUTION TO ons-tabbar EMBEDDED PAGE NOT WORKING ON ANDROID -->
+    <ons-toolbar fixed-style>
+        <div class="left">
+            <ons-back-button>{{"BACK"|translate}}</ons-back-button>
+        </div>
+        <div class="center" ng-class="fontSizeTitle">{{"LAB_BYTYPE"|translate}}</div>
+    </ons-toolbar>
+    <!---------------------------->
+
     <div>
         <ons-list ng-repeat="testCategory in cat.testResultsByCategory" >
             <ons-list-header ng-class="fontSizeTitle">{{testCategory.testCategory|translate}}</ons-list-header>
