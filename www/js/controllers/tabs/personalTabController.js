@@ -40,6 +40,7 @@
 
             $timeout(function(){
                 vm.censor = Patient.getAccessLevel() == 3;
+                vm.TestUser = Patient.getTestUser()
             });
 
 
