@@ -1,0 +1,26 @@
+<ons-page ng-controller="MyWaitingTimeController as vm">
+    <ons-toolbar fixed-style>
+        <div class="left">
+            <ons-back-button>{{ "BACK" | translate }}</ons-back-button>
+        </div>
+        <div class="center">{{ "MY_WAITING_TIME" | translate }}</div>
+        <div class="right"><ons-toolbar-button ng-click="personalNavigator.pushPage('views/personal/my-waiting-time/help.html')"><ons-icon icon="fa-info-circle"></ons-icon></ons-toolbar-button></div>
+    </ons-toolbar>
+    <div>
+        <ons-list class="settings-list">
+            <ons-list-item class="item">
+                <div style="line-height:1" align="left" ng-show="!!vm.err">{{vm.delays.err}}</div>
+                <div style="line-height:1" align="left" ng-show="!vm.err">
+                    <p class="item-desc" style="text-align:center;" ng-class="fontSizeTitle">{{ "MY_WAITING_TIME_HOW_LONG" | translate }}</p>
+                    <p class="item-desc" style="text-align:center;" ng-class="fontSizeDesc" ng-show="!vm.hasData">{{ "MY_WAITING_TIME_LOADING" | translate }}</p>
+                    <hc-chart options="vm.waitingTimesChart" ng-show="vm.hasData">
+                    </hc-chart>
+                    <p class="item-desc" style="text-align:center;" ng-class="fontSizeTitle">{{ "MY_WAITING_TIME_HOW_OFTEN" | translate }}</p>
+                    <p class="item-desc" style="text-align:center;" ng-class="fontSizeDesc" ng-show="!vm.hasData">{{ "MY_WAITING_TIME_LOADING" | translate }}</p>
+                    <hc-chart options="vm.onTimeChart" ng-show="vm.hasData">
+                    </hc-chart>
+                </div>
+            </ons-list-item>
+        </ons-list>
+    </div>
+</ons-page>
