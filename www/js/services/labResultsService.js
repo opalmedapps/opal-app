@@ -37,14 +37,14 @@ myApp.service('LabResults',['$filter','LocalStorage','RequestToServer','$q',
         var lastUpdated = 0;
 
         //var testResultsToLocalStorage=[];
-        var CATEGORY_ONE = 'Complete Blood Count'; // WBC, RBC, HGB, HCT, Platelet, Neutrophils, Eosinophils
-        var CATEGORY_TWO = 'Electrolytes'; // Sodium, potassium, glucose, creatinine, calcium, corrected calcium, magnesium
-        var CATEGORY_THREE = 'Other'; // LDH, T4, TSH, albumin, protein, AST, ALT, alkaline phosophatase
-        var CATEGORY_FOUR = 'Tumor markers'; //CEA, CA 15-3, CA-125
-        var categoryOneTests = ['WBC', 'RBC', 'HGB', 'HCT', 'Platelet Count', 'Neutrophils', 'Eosinophils'];
-        var categoryTwoTests = ['Sodium', 'Potassium', 'Glucose, Random', 'Creatinine', 'Calcium', 'Corrected Calcium', 'Magnesium'];
-        var categoryThreeTests = ['LDH', 'T4', 'T4, Free', 'TSH', 'Albumin', 'Protein, Total', 'AST (SGOT)', 'ALT (SGPT)', 'Alkaline Phosphatase', 'Rapamune (Sirolimus)'];
-        var categoryFourTests = ['CEA', 'CA 15-3', 'CA-125'];
+        // var CATEGORY_ONE = 'Complete Blood Count'; // WBC, RBC, HGB, HCT, Platelet, Neutrophils, Eosinophils
+        // var CATEGORY_TWO = 'Electrolytes'; // Sodium, potassium, glucose, creatinine, calcium, corrected calcium, magnesium
+        // var CATEGORY_THREE = 'Other'; // LDH, T4, TSH, albumin, protein, AST, ALT, alkaline phosophatase
+        // var CATEGORY_FOUR = 'Tumor markers'; //CEA, CA 15-3, CA-125
+        // var categoryOneTests = ['WBC', 'RBC', 'HGB', 'HCT', 'Platelet Count', 'Neutrophils', 'Eosinophils'];
+        // var categoryTwoTests = ['Sodium', 'Potassium', 'Glucose, Random', 'Creatinine', 'Calcium', 'Corrected Calcium', 'Magnesium'];
+        // var categoryThreeTests = ['LDH', 'T4', 'T4, Free', 'TSH', 'Albumin', 'Protein, Total', 'AST (SGOT)', 'ALT (SGPT)', 'Alkaline Phosphatase', 'Rapamune (Sirolimus)'];
+        // var categoryFourTests = ['CEA', 'CA 15-3', 'CA-125'];
 
         // Function that saves tests results to the service
         function addTestResults(tests) {
@@ -58,18 +58,19 @@ myApp.service('LabResults',['$filter','LocalStorage','RequestToServer','$q',
                 //
                 var testResultDate = testResult.TestDate.replace(/ /g, '');
                 var testResultType = testResult.FacComponentName;
-                var testCategory = undefined;
+                var testCategory = testResult.Group_EN;
 
                 // Assign test to category
-                if (categoryOneTests.indexOf(testResultType) > -1) {
-                    testCategory = CATEGORY_ONE;
-                } else if (categoryTwoTests.indexOf(testResultType) > -1) {
-                    testCategory = CATEGORY_TWO;
-                } else if (categoryThreeTests.indexOf(testResultType) > -1) {
-                    testCategory = CATEGORY_THREE;
-                } else if (categoryFourTests.indexOf(testResultType) > -1) {
-                    testCategory = CATEGORY_FOUR;
-                }
+                // if (categoryOneTests.indexOf(testResultType) > -1) {
+                //     testCategory = CATEGORY_ONE;
+                // } else if (categoryTwoTests.indexOf(testResultType) > -1) {
+                //     testCategory = CATEGORY_TWO;
+                // } else if (categoryThreeTests.indexOf(testResultType) > -1) {
+                //     testCategory = CATEGORY_THREE;
+                // } else if (categoryFourTests.indexOf(testResultType) > -1) {
+                //     testCategory = CATEGORY_FOUR;
+                // }
+
                 testResult.testCategory = testCategory;
 
                 // Filter by test date
