@@ -89,12 +89,12 @@ myApp.service('RequestToServer',['$filter','$state','NewsBanner','UserAuthorizat
                             });
                     });
 
-                    //If request takes longer than 30000 to come back with timeout request, delete reference
+                    //If request takes longer than 1.5 minutes to come back with timeout request, delete reference
                     const timeOut = setTimeout(function() {
                         response_url.set(null);
                         response_url.off();
                         reject({Response:'timeout'});
-                    }, 30000);
+                    }, 90000);
 
                 }).catch(err=> console.log(err));
             },

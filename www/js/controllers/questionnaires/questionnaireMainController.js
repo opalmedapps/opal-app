@@ -900,10 +900,6 @@ app1.controller('QuestionnaireMainController', function ($scope, $location, $anc
         $window.location.href = 'views/personal/personal.html';
     }
 
-    $scope.contact = function () {
-        $window.location.href = "mailto:muhc.app.mobile@gmail.com";
-    }
-
     /**
      * styleIfSelected
      * @author Stacey Beard
