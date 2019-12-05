@@ -64,7 +64,8 @@
         <!-- LIST OF LAB RESULTS -->
         <ons-list ng-class="fontSizeDesc">
             <ons-list ng-repeat="testCategory in vm.testResultsByCategory">
-                <ons-list-header ng-class="fontSizeDesc">{{testCategory.testCategory|translate}}</ons-list-header>
+                <!--<ons-list-header ng-class="fontSizeDesc">{{testCategory.testCategory|translate}}</ons-list-header>-->
+                <ons-list-header ng-class="fontSizeDesc">{{testCategory.testCategory}}</ons-list-header>
                 <ons-list-item modifier="tappable chevron"
                                ng-repeat="test in vm.selectedLabResults | filter: searchText | orderBy:['testCategory']"
                                ng-click="personalNavigator.pushPage('./views/personal/lab-results/timeline-test-component.html',{param:test});"

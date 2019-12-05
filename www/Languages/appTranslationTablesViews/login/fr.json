@@ -16,7 +16,7 @@
   "ENTERANANSWER": "Entrer une réponse",
   "ENTERANSWERPLACEHOLDER": "Entrer votre réponse...",
   "ENTEREMAIL": "Entrez votre adresse courriel:",
-  "ENTERRAMQ": "Veuillez entrer votre numéro d’assurance maladie (RAMQ)",
+  "ENTERRAMQ": "Veuillez entrer votre numéro d’assurance maladie (RAMQ) sans espace",
   "ENTERRAMQPLACEHOLDER": "Entrer RAMQ",
   "ENTERVALIDPASSWORD": "Entrer un mot de passe valide",
   "ERROR": "Erreur",
