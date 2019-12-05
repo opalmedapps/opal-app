@@ -17,9 +17,9 @@
         ///////////////////////////
 
         function activate() {
-            
+
             var userAuthorizationInfo = UserAuthorizationInfo.getUserAuthData();
-            
+
             if(!userAuthorizationInfo) {
                 $state.go('init');
             }
@@ -81,6 +81,6 @@
                     }
                 });
             }
-        }, 30000);
+        }, 90000);
     }
 })();
