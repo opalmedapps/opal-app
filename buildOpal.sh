@@ -305,7 +305,7 @@ then
 
 	echo ""
 	echo "*********************************************"
-	echo "Build was successful!"
+	echo "Build was done!"
 	echo "*********************************************"
 	echo ""
 
