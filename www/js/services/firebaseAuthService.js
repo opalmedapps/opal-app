@@ -14,7 +14,7 @@ var myApp=angular.module('MUHCApp');
 myApp.factory("FirebaseService", ['$firebaseAuth','$firebaseObject','UserAuthorizationInfo',
   function ($firebaseAuth) {
 
-    var firebaseUrl="SMHC/";
+    var firebaseUrl="dev2/";
 
     return {
        /**
