@@ -35,10 +35,10 @@
 
             if(type === 'general') {
                 if (UserPreferences.getLanguage().toUpperCase() === "EN") {
-                    url = 'https://muhc.ca/glen/handbook/parking-hospital';
+                    url = 'https://muhc.ca/patient-and-visitor-parking#glen';
                     // window.open('https://muhc.ca/glen/handbook/parking-hospital', '_blank');
                 } else {
-                    url = 'https://cusm.ca/glen/handbook/stationnement';
+                    url = 'https://cusm.ca/stationnement';
                     // window.open('https://cusm.ca/glen/handbook/stationnement', '_blank');
                 }
                 
@@ -50,10 +50,10 @@
             }
             else if (type === 'gettingtohospital') {
                 if (UserPreferences.getLanguage().toUpperCase() === "EN") {
-                    url = 'https://muhc.ca/glen/handbook/getting-hospital-5';
+                    url = 'https://muhc.ca/glen';
                     // window.open('https://muhc.ca/glen/handbook/getting-hospital-5', '_blank');
                 } else {
-                    url = 'https://cusm.ca/glen/handbook/comment-vous-y-rendre';
+                    url = 'https://cusm.ca/glen';
                     // window.open('https://cusm.ca/glen/handbook/comment-vous-y-rendre', '_blank');
                 }
 
