@@ -4,8 +4,13 @@
     <name>Opal</name>
 
     <!--Pre-Production-->
+<<<<<<< HEAD
     <!--<widget id="com.hig.opaldev2" android-packageName="com.hig.opaldev2" version="1.8.12" android-versionCode="18012" >-->
     <!--<name>Opal-dev</name>-->
+=======
+    <widget id="com.hig.opaldev2" android-packageName="com.hig.opaldev2" version="1.8.16" android-versionCode="1816" >
+    <name>Opal-dev</name>
+>>>>>>> opal_pre_prod
 
     <description>
         Opal - the MUHC Oncology Patient Application for mobile phones and the web -

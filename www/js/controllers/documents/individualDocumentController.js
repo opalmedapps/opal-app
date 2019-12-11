@@ -16,10 +16,10 @@
         .module('MUHCApp')
         .controller('IndividualDocumentController', IndividualDocumentController);
 
-    IndividualDocumentController.$inject = ['$scope', 'NavigatorParameters', 'Documents', '$timeout', 'FileManagerService', 'Constants', '$q', 'UserPreferences', 'Logger'];
+    IndividualDocumentController.$inject = ['$rootScope', '$scope', 'NavigatorParameters', 'Documents', '$timeout', 'FileManagerService', 'Constants', '$q', 'UserPreferences', 'Logger'];
 
     /* @ngInject */
-    function IndividualDocumentController($scope, NavigatorParameters, Documents, $timeout, FileManagerService, Constants, $q, UserPreferences, Logger) {
+    function IndividualDocumentController($rootScope, $scope, NavigatorParameters, Documents, $timeout, FileManagerService, Constants, $q, UserPreferences, Logger) {
         var vm = this;
 
         var parameters;
@@ -28,6 +28,7 @@
         var scale;
         var viewerSize;
         var containerEl;
+
 
 
         vm.loading = true;
@@ -44,6 +45,7 @@
         $scope.warn2 = warn2;
         $scope.docParams = docParams;
         $scope.isAndroid = isAndroid;
+
 
 
         activate();
@@ -74,7 +76,10 @@
                 $scope.popoverDocsInfo.destroy();
             });
 
-            initializeDocument(docParams);
+            if ($rootScope.DocAlreadyInitialized === undefined || $rootScope.DocAlreadyInitialized === false) {
+                initializeDocument(docParams);
+            }
+            $rootScope.DocAlreadyInitialized = false;
         }
 
         function initializeDocument(document) {
@@ -264,6 +269,8 @@
         }
 
         function about() {
+
+            $rootScope.DocAlreadyInitialized = true;
 
             if (vm.DocumentDescription != '') {
                 personalNavigator.pushPage('./views/personal/documents/about-document.html');
