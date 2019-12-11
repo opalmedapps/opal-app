@@ -16,7 +16,7 @@
   "ENTERANANSWER": "Enter an answer",
   "ENTERANSWERPLACEHOLDER": "Enter your answer...",
   "ENTEREMAIL": "Enter your Email Address:",
-  "ENTERRAMQ": "Please enter your Health Insurance Number (RAMQ)",
+  "ENTERRAMQ": "Please enter your Health Insurance Number (RAMQ) without any spaces",
   "ENTERRAMQPLACEHOLDER": "Enter RAMQ",
   "ENTERVALIDPASSWORD": "Enter a valid password",
   "ERROR": "Error",
