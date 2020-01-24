@@ -188,8 +188,10 @@
             gettingHospitalUrlFr: 'https://cusm.ca/glen'
         },
 
+        /** Questionnaire Controller conttants **/
         colorsArray: ['lime', 'lime', 'orange', 'orange', 'orange', 'red', 'red', 'red', 'darkred', 'darkred'],
 
+        /** ChangeSettingsController Constants **/
         setAliasParam: 'ALIAS',
         setAliasLowerCaseParam: 'Alias',
         setAliasInstruction: 'ENTERYOURALIAS',
@@ -224,6 +226,7 @@
         setNicknameAlias: 'NICKNAME',
         setTelephoneNumberParam: 'TelNum',
         setUpdateMessageField: 'FIELD_UPDATED',
+        /** Status Controller **/
         setMap: {
             'CT for Radiotherapy Planning': 1,
             'Physician Plan Preparation': 2,
@@ -231,6 +234,8 @@
             'Physics Quality Control': 4,
             'Scheduling Treatments': 5
         },
+
+        /** PlanningStep Service **/
         setSequence: {
             'CT for Radiotherapy Planning': [],
             'Physician Plan Preparation': [],
@@ -238,6 +243,8 @@
             'Physics Quality Control': [],
             'Scheduling Treatments': []
         },
+
+        /** GeneralTab Controller **/
         findDoctorCase: 'finddoctor',
         findDoctorUrl: {
             findDoctorUrlEn: 'http://www.gamf.gouv.qc.ca/index_en.html',
@@ -251,10 +258,12 @@
         carnetSanteCase: 'carnetsante',
         carnetSanteUrl: 'https://carnetsante.gouv.qc.ca/portail',
 
+        /** CheckIn Service Constants **/
         hospitalSite: {
             hospitalCoordinates : [45.474127399999996, -73.6011402] //Glen Coordinates
         },
 
+        /** EducationalMaterial Service Constants **/
         educationalMaterial: {
             'Video':{
                 icon:'fa fa-film',
@@ -282,6 +291,7 @@
             },
         },
 
+        /** Delay Service constants **/
         delayServiceEn: {
             daysSingular: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
             daysPlural: ['Mondays', 'Tuesdays', 'Wednesdays', 'Thursdays', 'Fridays', 'Saturdays', 'Sundays'],
@@ -334,6 +344,8 @@
             },
             yAxisTitle: 'Fréquence (%)'
         },
+
+        /** Documents, doctors and patient service constants **/
         cdvDoctorsFilePathAndroid: 'cdvfile://localhost/files/Doctors/',
         cdvDoctorsFilePathIos: 'cdvfile://localhost/persistent/Doctors/',
         cdvDocumentFilePathAndroid: 'cdvfile://localhost/sdcard/Documents/',
@@ -341,6 +353,7 @@
         cdvPatientFilePathAndroid: 'cdvfile://localhost/files/Patient/',
         cdvPatientFilePathIos: 'cdvfile://localhost/persistent/Patient/',
 
+        /** LabResults Service constants **/
         categoryOne: 'Complete Blood Count', // WBC, RBC, HGB, HCT, Platelet, Neutrophils, Eosinophils,
         categoryTwo: 'Electrolytes', // Sodium, potassium, glucose, creatinine, calcium, corrected calcium, magnesium,
         categoryThree: 'Other', // LDH, T4, TSH, albumin, protein, AST, ALT, alkaline phosophatase
@@ -349,6 +362,8 @@
         categoryTwoTests: ['Sodium', 'Potassium', 'Glucose, Random', 'Creatinine', 'Calcium', 'Corrected Calcium', 'Magnesium'],
         categoryThreeTests: ['LDH', 'T4', 'T4, Free', 'TSH', 'Albumin', 'Protein, Total', 'AST (SGOT)', 'ALT (SGPT)', 'Alkaline Phosphatase', 'Rapamune (Sirolimus)'],
         categoryFourTests: ['CEA', 'CA 15-3', 'CA-125'],
+
+        /** myWaitingTime Service Constants **/
         waitingTimeEn: {
             waitingTitle: 'Appointments',
             waitingUnit: 'Waiting times (minutes)',
@@ -367,6 +382,8 @@
             usuallyTooEarly: 'Trop tôt',
             usuallyLate: 'En retard'
         },
+
+        /** newsBanner Service constants **/
         newsAlertTypes: {
             'notifications': {
                 Type: 'notifications',
@@ -384,6 +401,8 @@
                 Duration: 'short'
             }
         },
+
+        /** UpdateUi Service constants **/
         lastUpdateTimestamp: {
             'All':0,
             'Appointments':0,
