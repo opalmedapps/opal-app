@@ -1,7 +1,7 @@
 /*
  * Filename     :   labResultsService.js
  * Description  :   Service that requests test results from the hospital server and stores them in this service.
- * Created by   :   David Herrera, Robert Maglieri 
+ * Created by   :   David Herrera, Robert Maglieri
  * Date         :   02 Mar 2017
  * Copyright    :   Copyright 2016, HIG, All rights reserved.
  * Licence      :   This file is subject to the terms and conditions defined in
@@ -19,8 +19,8 @@
  *@description Service that requests and manages the lab results (blood tests) from the server.
  **/
 var myApp=angular.module('MUHCApp');
-myApp.service('LabResults',['$filter','LocalStorage','RequestToServer','$q',
-    function($filter,LocalStorage,RequestToServer,$q){
+myApp.service('LabResults',['$filter','LocalStorage','RequestToServer','$q', "Params",
+    function($filter,LocalStorage,RequestToServer,$q, Params){
 
         /**
          *@ngdoc property
@@ -36,15 +36,6 @@ myApp.service('LabResults',['$filter','LocalStorage','RequestToServer','$q',
         var testResultsByTypeArray=[];
         var lastUpdated = 0;
 
-        //var testResultsToLocalStorage=[];
-        var CATEGORY_ONE = 'Complete Blood Count'; // WBC, RBC, HGB, HCT, Platelet, Neutrophils, Eosinophils
-        var CATEGORY_TWO = 'Electrolytes'; // Sodium, potassium, glucose, creatinine, calcium, corrected calcium, magnesium
-        var CATEGORY_THREE = 'Other'; // LDH, T4, TSH, albumin, protein, AST, ALT, alkaline phosophatase
-        var CATEGORY_FOUR = 'Tumor markers'; //CEA, CA 15-3, CA-125
-        var categoryOneTests = ['WBC', 'RBC', 'HGB', 'HCT', 'Platelet Count', 'Neutrophils', 'Eosinophils'];
-        var categoryTwoTests = ['Sodium', 'Potassium', 'Glucose, Random', 'Creatinine', 'Calcium', 'Corrected Calcium', 'Magnesium'];
-        var categoryThreeTests = ['LDH', 'T4', 'T4, Free', 'TSH', 'Albumin', 'Protein, Total', 'AST (SGOT)', 'ALT (SGPT)', 'Alkaline Phosphatase', 'Rapamune (Sirolimus)'];
-        var categoryFourTests = ['CEA', 'CA 15-3', 'CA-125'];
 
         // Function that saves tests results to the service
         function addTestResults(tests) {
@@ -61,14 +52,14 @@ myApp.service('LabResults',['$filter','LocalStorage','RequestToServer','$q',
                 var testCategory = undefined;
 
                 // Assign test to category
-                if (categoryOneTests.indexOf(testResultType) > -1) {
-                    testCategory = CATEGORY_ONE;
-                } else if (categoryTwoTests.indexOf(testResultType) > -1) {
-                    testCategory = CATEGORY_TWO;
-                } else if (categoryThreeTests.indexOf(testResultType) > -1) {
-                    testCategory = CATEGORY_THREE;
-                } else if (categoryFourTests.indexOf(testResultType) > -1) {
-                    testCategory = CATEGORY_FOUR;
+                if (Params.categoryOneTests.indexOf(testResultType) > -1) {
+                    testCategory = Params.categoryOne;
+                } else if (Params.categoryTwoTests.indexOf(testResultType) > -1) {
+                    testCategory = Params.categoryTwo;
+                } else if (Params.categoryThreeTests.indexOf(testResultType) > -1) {
+                    testCategory = Params.categoryThree;
+                } else if (Params.categoryFourTests.indexOf(testResultType) > -1) {
+                    testCategory = Params.categoryFour;
                 }
                 testResult.testCategory = testCategory;
 

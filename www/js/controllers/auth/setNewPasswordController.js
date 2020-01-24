@@ -17,11 +17,12 @@
         'EncryptionService',
         'ResetPassword',
         '$timeout',
-        'DeviceIdentifiers'
+        'DeviceIdentifiers',
+        'Params'
     ];
 
     /* @ngInject */
-    function SetNewPasswordController(RequestToServer, UserAuthorizationInfo, EncryptionService, ResetPassword, $timeout, DeviceIdentifiers) {
+    function SetNewPasswordController(RequestToServer, UserAuthorizationInfo, EncryptionService, ResetPassword, $timeout, DeviceIdentifiers, Params) {
 
         var vm = this;
         var parameters;
@@ -90,14 +91,14 @@
             if(!vm.newValue || invalid) {
                 $timeout(function() {
                     vm.invalidPassword = invalid;
-                    vm.alert.type = 'danger';
-                    vm.alert.content = "ENTERVALIDPASSWORD";
+                    vm.alert.type = Params.alertTypeDanger;
+                    vm.alert.content = Params.setNewPasswordMessage;
                 })
             } else if (vm.newValue !== vm.validateNewValue){
                 $timeout(function() {
                     vm.invalidPassword = true;
-                    vm.alert.type = 'danger';
-                    vm.alert.content = "Passwords do no match!";
+                    vm.alert.type = Params.alertTypeDanger;
+                    vm.alert.content = Params.passwordMismatchMessage;
                 });
             }else{
                 vm.submitting = true;
@@ -115,8 +116,8 @@
                         UserAuthorizationInfo.clearUserAuthorizationInfo();
                         EncryptionService.removeTempEncryptionHash();
                         $timeout(function() {
-                            vm.alert.type = 'success';
-                            vm.alert.content = "PASSWORDUPDATED";
+                            vm.alert.type = Params.alertTypeSuccess;
+                            vm.alert.content = Params.passwordUpdateMessage;
                             vm.resetSuccess = true;
                         });
                         localStorage.removeItem("deviceID");
@@ -125,19 +126,19 @@
                     .catch(function (error) {
                         $timeout(function(){
                             vm.submitting = false;
-                            vm.alert.type='danger';
+                            vm.alert.type = Params.alertTypeDanger;
                             switch (error.code) {
-                                case "auth/invalid-action-code":
-                                    vm.alert.content = "CODE_INVALID";
+                                case Params.invalidActionCode:
+                                    vm.alert.content = Params.invalidActionCodeMessage;
                                     break;
-                                case "auth/expired-action-code":
-                                    vm.alert.content = "CODE_EXPIRED";
+                                case Params.expiredActionCode:
+                                    vm.alert.content = Params.expiredActionCode;
                                     break;
-                                case "auth/weak-password":
-                                    vm.alert.content = "WEAK_PASSWORD";
+                                case Params.weakPasswordCase:
+                                    vm.alert.content = Params.weakPasswordMessage;
                                     break;
                                 default:
-                                    vm.alert.content = "PASSWORDRESETSERVERERROR";
+                                    vm.alert.content = Params.passwordServerErrorMessage;
                                     break;
                             }
                         })

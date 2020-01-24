@@ -1,6 +1,6 @@
 /*
  * Filename     :   delaysService.js
- * Description  :   
+ * Description  :
  * Created by   :   Arthur A. Bergamaschi <arthurbergmz@gmail.com>
  * Date         :   September 2018
  * Copyright    :   Copyright 2018, HIG, All rights reserved.
@@ -12,62 +12,40 @@
  *@ngdoc service
  **/
 angular.module('MUHCApp').service('DelaysService', [
-    '$q', 'RequestToServer', '$timeout',
-    function ($q, RequestToServer, $timeout) {
+    '$q', 'RequestToServer', '$timeout', 'Params',
+    function ($q, RequestToServer, $timeout, Params) {
         var languages_en = {
-            daysSingular: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
-            daysPlural: ['Mondays', 'Tuesdays', 'Wednesdays', 'Thursdays', 'Fridays', 'Saturdays', 'Sundays'],
-            months: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
-            daySuffixes: ['th', 'st', 'nd', 'rd'],
-            unknownAppointment: 'There are no visualizations for this appointment yet',
-            unknownAppointmentType: 'There are no visualizations for this kind of appointment yet.',
-            notEnoughData: "There isn't enough data for a visualization for this kind of appointment at this time. " +
-                "Please stay tuned",
-            setsName: {
-                set1: '0-15 minutes',
-                set2: '15-30 minutes',
-                set3: '30-45 minutes',
-                set4: '45+ minutes'
-            },
-            setsDescription: {
-                set1: 'from 0 to 15 minutes',
-                set2: 'from 15 to 30 minutes',
-                set3: 'from 30 to 45 minutes',
-                set4: 'more than 45 minutes',
-                point: '<span style="color:{point.color}">\u25CF</span> {series.name}: <b>{point.y}%</b> of the patients waited this amount of time.<br/>',
-                unknown: 'an unknown amount of time'
-            },
-            yAxisTitle: 'Frequency (%)',
+            appointmentData: Params.delayServiceEn,
             formatDay: function (day) {
                 var trim = day % 100
-                return '' + day + '' + (this.daySuffixes[(trim - 20) % 10] || this.daySuffixes[trim] || this.daySuffixes[0])
+                return '' + day + '' + (Params.delayServiceEn.daySuffixes[(trim - 20) % 10] || Params.delayServiceEn.daySuffixes[trim] || Params.delayServiceEn.daySuffixes[0])
             },
             formatHour: function (hour) {
                 if (hour > 0) {
                     return {
                         time: hour >= 13 ? hour - 12 : hour,
-                        daySuffix: hour >= 18 ? 'evening' : (hour >= 12 ? 'afternoon' : 'morning'),
-                        timeSuffix: hour >= 12 ? 'PM' : 'AM'
+                        daySuffix: hour >= 18 ? Params.delayServiceEn.dayInterval[0] : (hour >= 12 ? Params.delayServiceEn.dayInterval[1] : Params.delayServiceEn.dayInterval[2]),
+                        timeSuffix: hour >= 12 ? Params.delayServiceEn.timeInterval[1] : Params.delayServiceEn.timeInterval[0]
                     }
-                } else{
-                    if(hour == 0){
+                } else {
+                    if(hour == 0) {
                         return {
                             time: 12,
-                            daySuffix: 'morning',
-                            timeSuffix: 'AM'
+                            daySuffix: Params.delayServiceEn.dayInterval[2],
+                            timeSuffix: Params.delayServiceEn.timeInterval[0]
                         }
-                    }else {
+                    } else {
                         return {
                             time: 12 + hour,
-                            daySuffix: 'evening',
-                            timeSuffix: 'PM'
+                            daySuffix: Params.delayServiceEn.dayInterval[0],
+                            timeSuffix: Params.delayServiceEn.timeInterval[1]
                         }
                     }
                 }
             },
             formatDate: function (scheduledDate) {
                 var day = scheduledDate.getDate()
-                return this.months[scheduledDate.getMonth()] + ' ' + this.formatDay(day) + ', ' + scheduledDate.getFullYear()
+                return Params.delayServiceEn.months[scheduledDate.getMonth()] + ' ' + this.formatDay(day) + ', ' + scheduledDate.getFullYear()
             },
             formatMinutes: function(scheduledMinute){
                 if (scheduledMinute < 10){
@@ -107,8 +85,8 @@ angular.module('MUHCApp').service('DelaysService', [
                     upperLimit = this.formatHour(upperLimit)
                     var minuteFormat = this.formatMinutes(delayData.scheduledMinutes)
                     var date = this.formatDate(scheduledDate)
-                    var amountOfTime = this.setsDescription[retrieveSet(delayData)] || this.setsDescription.unknown
-                    var day = [this.daysSingular[delayData.scheduledDay], this.daysPlural[delayData.scheduledDay]]
+                    var amountOfTime = Params.delayServiceEn.setsDescription[retrieveSet(delayData)] || Params.delayServiceEn.setsDescription.unknown
+                    var day = [Params.delayServiceEn.daysSingular[delayData.scheduledDay], Params.delayServiceEn.daysPlural[delayData.scheduledDay]]
                     return {
                         date,
                         title: pluralAppointmentDescription + ' on ' + day[1] + ' between ' + lowerLimit.time + ':' + minuteFormat + ' ' + lowerLimit.timeSuffix + ' and ' + upperLimit.time + ':' + minuteFormat + ' ' + upperLimit.timeSuffix,
@@ -120,38 +98,17 @@ angular.module('MUHCApp').service('DelaysService', [
                         date,
                         title: appointmentDescription,
                         description: 'Your ' + appointmentDescription + " has not yet been visualized. ",
-                        delayInfo: this.notEnoughData
+                        delayInfo: Params.delayServiceEn.notEnoughData
                     }
                 }
             }
-        }
+        };
         var languages_fr = {
-            daysSingular: ['lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi', 'dimanche'],
-            daysPlural: ['lundis', 'mardis', 'mercredis', 'jeudis', 'vendredis', 'samedis', 'dimanches'],
-            months: ['janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'],
-            unknownAppointment: 'Inconnu',
-            unknownAppointment2: 'Il n\'y a pas encore de visualization pour ce rendez-vous',
-            unknownAppointmentType: 'Il n\'y a pas encore de visualization pour ce genre de rendez-vous.',
-            notEnoughData: 'Il n\'y a pas encore de visualization pour ce rendez-vous',
-            setsName: {
-                set1: '0-15 minutes',
-                set2: '15-30 minutes',
-                set3: '30-45 minutes',
-                set4: '45+ minutes'
-            },
-            setsDescription: {
-                set1: 'de 0 à 15 minutes',
-                set2: 'de 15 à 30 minutes',
-                set3: 'de 30 à 45 minutes',
-                set4: 'plus de 45 minutes',
-                point: '<span style="color:{point.color}">\u25CF</span> {series.name}: <b>{point.y}%</b> des patients ont attendu cette période de temps.<br/>',
-                unknown: 'une durée de temps inconnue'
-            },
-            yAxisTitle: 'Fréquence (%)',
+            appointmentData: Params.delayServiceFr,
             formatHour: function (hour) {
                 return {
                     time: hour,
-                    daySuffix: hour >= 18 ? 'soir' : (hour >= 12 ? 'après-midi' : 'matin'),
+                    daySuffix: hour >= 18 ? Params.delayServiceFr.dayInterval[0] : (hour >= 12 ? Params.delayServiceFr.dayInterval[1] : Params.delayServiceFr.dayInterval[2]),
                     timeSuffix: ''
                 }
             },
@@ -171,7 +128,7 @@ angular.module('MUHCApp').service('DelaysService', [
                     var minuteFormat = this.formatMinutes(delayData.scheduledMinutes)
                     var date = this.formatDate(scheduledDate)
                     var amountOfTime = this.setsDescription[retrieveSet(delayData)] || this.setsDescription.unknown
-                    var day = [this.daysSingular[delayData.scheduledDay], this.daysPlural[delayData.scheduledDay]]
+                    var day = [Params.delayServiceFr.daysSingular[delayData.scheduledDay], Params.delayServiceFr.daysPlural[delayData.scheduledDay]];
                     return {
                         date,
                         title: delayData.appointmentType + ' les ' + day[1] + ' à ' + hourFormat.time + 'h' + delayData.scheduledMinutes,
@@ -182,16 +139,16 @@ angular.module('MUHCApp').service('DelaysService', [
                     return {
                         date,
                         title: appointmentDescription,
-                        description: 'Votre rendez-vous de ' + appointmentDescription + " est " + unknownAppointment,
-                        delayInfo: this.notEnoughData
+                        description: 'Votre rendez-vous de ' + appointmentDescription + " est " + Params.delayServiceFr.unknownAppointment,
+                        delayInfo: Params.delayServiceFr.notEnoughData
                     }
                 }
             }
-        }
+        };
         var languages = {
             EN: languages_en,
             FR: languages_fr
-        }
+        };
         function retrieveSet (delayData) {
             var sets = delayData.sets
             var appointmentSet
@@ -220,10 +177,10 @@ angular.module('MUHCApp').service('DelaysService', [
                         var translator = languages[language] || languages.EN
                         if(/Unknown appointment type/gm.test(err)) {
                             appointment.UnavailableDelays = true
-                            onError(translator.unknownAppointmentType)
+                            onError(translator.appointmentData.unknownAppointmentType)
                         } else if(/Appointment not found/gm.test(err)){
                             appointment.UnavailableDelays = true
-                            onError(translator.unknownAppointment)
+                            onError(translator.appointmentData.unknownAppointment)
                         } else {
                             onError(err)
                         }
@@ -237,7 +194,7 @@ angular.module('MUHCApp').service('DelaysService', [
             getPresenter: function (appointment, delayData, language) {
                 var translator = languages[language] || languages.EN
                 return translator.buildHistoricalDelayInfo(
-                    appointment['AppointmentType_' + language] || translator.unknownAppointment,
+                    appointment['AppointmentType_' + language] || translator.appointmentData.unknownAppointment,
                     appointment.ScheduledStartTime,
                     delayData
                 )
@@ -298,7 +255,7 @@ angular.module('MUHCApp').service('DelaysService', [
                         type: 'linear',
                         min: 0,
                         title: {
-                            text: translator.yAxisTitle,
+                            text: translator.appointmentData.yAxisTitle,
                             align: 'high'
                         }
                     },
@@ -308,7 +265,7 @@ angular.module('MUHCApp').service('DelaysService', [
                             return { x: 0, y: 0 };
                         },
                         headerFormat: '',
-                        pointFormat: translator.setsDescription.point + " (Number of Patients: {point.z}) ",
+                        pointFormat: translator.appointmentData.setsDescription.point + " (Number of Patients: {point.z}) ",
                         shared: false
                     },
                     plotOptions: {
@@ -341,7 +298,7 @@ angular.module('MUHCApp').service('DelaysService', [
                     exporting: {enabled: false},
                     series: [
                         {
-                            name: translator.setsName.set1,
+                            name: translator.appointmentData.setsName.set1,
                             data: {
                                 y: [0],
                                 z: [0]
@@ -351,7 +308,7 @@ angular.module('MUHCApp').service('DelaysService', [
                             color: '#00d652'
                         },
                         {
-                            name: translator.setsName.set2,
+                            name: translator.appointmentData.setsName.set2,
                             data: {
                                 y: [0],
                                 z: [0]
@@ -361,7 +318,7 @@ angular.module('MUHCApp').service('DelaysService', [
                             color: '#ffc400'
                         },
                         {
-                            name: translator.setsName.set3,
+                            name: translator.appointmentData.setsName.set3,
                             data: {
                                 y: [0],
                                 z: [0]
@@ -371,7 +328,7 @@ angular.module('MUHCApp').service('DelaysService', [
                             color: '#ff8200'
                         },
                         {
-                            name: translator.setsName.set4,
+                            name: translator.appointmentData.setsName.set4,
                             data: {
                                 y: [0],
                                 z: [0]

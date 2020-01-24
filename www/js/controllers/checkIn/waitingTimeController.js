@@ -12,12 +12,12 @@
         .controller('WaitingTimeController', WaitingTimeController);
 
     WaitingTimeController.$inject = [
-        '$scope', '$timeout', 'TimeEstimate', 'NavigatorParameters'
+        '$scope', '$timeout', 'TimeEstimate', 'NavigatorParameters', 'Params'
     ];
 
     /* @ngInject */
     function WaitingTimeController(
-        $scope, $timeout, TimeEstimate, NavigatorParameters)
+        $scope, $timeout, TimeEstimate, NavigatorParameters, Params)
     {
         var vm = this;
 
@@ -57,7 +57,7 @@
                         var tmpNumNotCheckedIn = 0;
                         for (var j = 0; j < Object.keys(timeEstimate[i]).length - 4; j++) {
                             if (timeEstimate[i][j]["details"]["status"] == "In Progress") {
-                                var tmpSlicedTime = Number(timeEstimate[i][j]["details"]["estimated_duration"]) - ((new Date() - new Date(timeEstimate[i][j]["details"]["actual_start"]))/60000);
+                                var tmpSlicedTime = Number(timeEstimate[i][j]["details"]["estimated_duration"]) - ((new Date() - new Date(timeEstimate[i][j]["details"]["actual_start"]))/Params.timeoutInterval);
                                 if (tmpSlicedTime > 0) {
                                     tmpDur.push(tmpSlicedTime);
                                 }
@@ -81,7 +81,7 @@
                             element.style.animation = "";
                         }
                         tmpDict["estimatedWait"] = estimateWait(tmpDict);
-                        tmpDict["title"] = "Daily Radiotherapy Treatment";
+                        tmpDict["title"] = Params.radiothereapyString;
                         tmpDict["appointmentAriaSer"] = timeEstimate[i].appointmentAriaSer;
                         index = index + 1;
                         var percent = (tmpDict["initialNumPrevPatients"] - tmpDict["numPrevPatients"])/tmpDict["initialNumPrevPatients"] * 90;
@@ -100,7 +100,7 @@
                         }
                         else return 1;
                     });
-                    myTimeOut = $timeout(tick, 60000);
+                    myTimeOut = $timeout(tick, Params.timeoutInterval);
                 },
                 function(error){
                     vm.estimatedWait = "No estimation available!";
