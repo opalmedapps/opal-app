@@ -175,8 +175,8 @@
             generalParkingTitleEn: 'Parking',
             generalParkingTitleFr: 'Stationnement',
             generalParkingUrl: 'https://www.depdocs.com/opal/parking/parking.php',
-            generalParkingGlenUrlEn: 'https://muhc.ca/glen/handbook/parking-hospital',
-            generalParkingGlenUrlFr:  'https://cusm.ca/glen/handbook/stationnement'
+            generalParkingGlenUrlEn: 'https://muhc.ca/patient-and-visitor-parking#glen',
+            generalParkingGlenUrlFr:  'https://cusm.ca/stationnement'
         },
         oncology: {
             oncologyParkingTitleEn: 'Oncology Parking',
@@ -184,8 +184,8 @@
             oncologyParkingUrl: 'https://www.depdocs.com/opal/parking/oncology_parking.php'
         },
         gettingHospitalUrl: {
-            gettingHospitalUrlEn: 'https://muhc.ca/glen/handbook/getting-hospital-5',
-            gettingHospitalUrlFr: 'https://cusm.ca/glen/handbook/comment-vous-y-rendre'
+            gettingHospitalUrlEn: 'https://muhc.ca/glen',
+            gettingHospitalUrlFr: 'https://cusm.ca/glen'
         },
 
         colorsArray: ['lime', 'lime', 'orange', 'orange', 'orange', 'red', 'red', 'red', 'darkred', 'darkred'],
