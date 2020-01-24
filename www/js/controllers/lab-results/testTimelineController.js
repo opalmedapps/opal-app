@@ -12,10 +12,10 @@
         .module('MUHCApp')
         .controller('TestTimelineController', TestTimelineController);
 
-    TestTimelineController.$inject = ['$rootScope','$scope','$timeout','LabResults','$filter','UserPreferences', 'Logger', 'Constants'];
+    TestTimelineController.$inject = ['$rootScope','$scope','$timeout','LabResults','$filter','UserPreferences', 'Logger', 'Constants', 'Params'];
 
     /* @ngInject */
-    function TestTimelineController($rootScope, $scope, $timeout, LabResults, $filter, UserPreferences, Logger, Constants) {
+    function TestTimelineController($rootScope, $scope, $timeout, LabResults, $filter, UserPreferences, Logger, Constants, Params) {
 
         var vm = this;
         var page;
@@ -78,7 +78,7 @@
                 vm.url = vm.selectedTest.URL_EN || ((test.testResults === undefined) ? "" : test.testResults[0].URL_EN);
             else
                 vm.url = vm.selectedTest.URL_FR || ((test.testResults === undefined) ? "" : test.testResults[0].URL_FR);
-            
+
             if (vm.url.length <= 0) vm.noUrl = true;
 
             max = vm.selectedTest.MaxNorm || test.testResults[0].MaxNorm;
@@ -210,25 +210,22 @@
             {
                 Highcharts.setOptions({
                     lang: {
-                        months: ['janvier', 'février', 'mars', 'avril', 'mai', 'juin',
-                            'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'],
-                        weekdays: ['dimanche', 'lundi', 'lardi', 'mercredi',
-                            'jeudi', 'vendredi', 'samedi'],
-                        shortMonths: ['janv.', 'févr.', 'mars', 'avr.', 'mai', 'juin', 'juill.',
-                            'août', 'sept.', 'oct.', 'nov.', 'déc.'],
+                        months: Params.monthsArray.monthsArrayFr,
+                        weekdays: Params.daysArray.daysArrayFr,
+                        shortMonths: Params.monthsArray.monthsShortFr,
                         decimalPoint: ',',
-                        downloadPNG: 'Télécharger en image PNG',
-                        downloadJPEG: 'Télécharger en image JPEG',
-                        downloadPDF: 'Télécharger en document PDF',
-                        downloadSVG: 'Télécharger en document Vectoriel',
-                        exportButtonTitle: 'Export du graphique',
-                        loading: 'Chargement en cours...',
-                        printChart: 'Imprimer le graphique',
-                        resetZoom: 'Réinitialiser le zoom',
-                        resetZoomTitle: 'Réinitialiser le zoom au niveau 1:1',
+                        downloadPNG: Params.download.imageDownloadPngFr,
+                        downloadJPEG: Params.download.imageDownloadJpegFr,
+                        downloadPDF: Params.download.downloadPdfFr,
+                        downloadSVG: Params.download.downloadSvgFr,
+                        exportButtonTitle: Params.exportButtonTitle.exportButtonTitleFr,
+                        loading: Params.loadingMessage.loadingMessageFr,
+                        printChart: Params.printChart.printChartFr,
+                        resetZoom: Params.resetZoom.resetZoomMessageFr,
+                        resetZoomTitle: Params.resetZoom.resetZoomMessageTitleFr,
                         thousandsSep: ' ',
-                        rangeSelectorFrom: "Du",
-                        rangeSelectorTo: "au",
+                        rangeSelectorFrom: Params.rangeSelector.rangeSelectorFromFr,
+                        rangeSelectorTo: Params.rangeSelector.rangeSelectorToFr,
                         rangeSelectorZoom: ''
                     },
                     xAxis: {
@@ -272,24 +269,22 @@
             else {
                 Highcharts.setOptions({
                     lang: {
-                        months: [ "January" , "February" , "March" , "April" , "May" ,
-                            "June" , "July" , "August" , "September" , "October" , "November" , "December"],
-                        weekdays: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
-                        shortMonths: [ "Jan" , "Feb" , "Mar" , "Apr" , "May" , "Jun" ,
-                            "Jul" , "Aug" , "Sep" , "Oct" , "Nov" , "Dec"],
+                        months: Params.monthsArray.monthsArrayEn,
+                        weekdays: Params.daysArray.daysArrayEn,
+                        shortMonths: Params.monthsArray.monthsShortEn,
                         decimalPoint: '.',
-                        downloadPNG: 'Download PNG image',
-                        downloadJPEG: 'Download JPEG image',
-                        downloadPDF: 'Download PDF document',
-                        downloadSVG: 'Download SVG vector image',
-                        exportButtonTitle: 'Graphics export',
-                        loading: 'Loading...',
-                        printChart: 'Print chart',
-                        resetZoom: 'Reset zoom',
-                        resetZoomTitle: 'Reset zoom level 1:1',
+                        downloadPNG: Params.download.imageDownloadPngEn,
+                        downloadJPEG: Params.download.imageDownloadJpegEn,
+                        downloadPDF: Params.download.downloadPdfEn,
+                        downloadSVG: Params.download.downloadSvgEn,
+                        exportButtonTitle: Params.exportButtonTitle.exportButtonTitleEn,
+                        loading: Params.loadingMessage.loadingMessageEn,
+                        printChart: Params.printChart.printChartEn,
+                        resetZoom: Params.resetZoom.resetZoomMessageEn,
+                        resetZoomTitle: Params.resetZoom.resetZoomMessageTitleEn,
                         thousandsSep: ' ',
-                        rangeSelectorFrom: 'From',
-                        rangeSelectorTo: 'To',
+                        rangeSelectorFrom: Params.rangeSelector.rangeSelectorFromEn,
+                        rangeSelectorTo: Params.rangeSelector.rangeSelectorToEn,
                         rangeSelectorZoom: ''
                     },
                     xAxis: {

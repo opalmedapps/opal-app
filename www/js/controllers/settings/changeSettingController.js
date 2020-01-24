@@ -13,11 +13,11 @@
         .controller('ChangeSettingController', ChangeSettingController);
 
     ChangeSettingController.$inject = ['$filter', 'FirebaseService', 'UserPreferences', 'Patient', 'RequestToServer',
-        '$timeout', 'UserAuthorizationInfo', 'NavigatorParameters', '$window'];
+        '$timeout', 'UserAuthorizationInfo', 'NavigatorParameters', '$window', 'Params'];
 
     /* @ngInject */
     function ChangeSettingController($filter, FirebaseService, UserPreferences, Patient, RequestToServer, $timeout,
-                                     UserAuthorizationInfo, NavigatorParameters, $window) {
+                                     UserAuthorizationInfo, NavigatorParameters, $window, Params) {
 
         var vm = this;
         var page;
@@ -45,59 +45,59 @@
             $timeout(function () {
                 //Instantiates values and parameters
                 vm.disableButton = true;
-                vm.title = 'UPDATE';
+                vm.title = Params.setUpdateTitle;
                 vm.value = parameters;
                 vm.valueLabel = parameters;
                 vm.personal = true;
                 vm.type1 = 'text';
-                
+
                 //Sets the instructions depending on the value to update
-                if (parameters === 'ALIAS') {
+                if (parameters === Params.setAliasParam) {
                     vm.actualValue = Patient.getAlias();
                     vm.newValue = vm.actualValue;
-                    vm.instruction = "ENTERYOURALIAS";
-                } else if (parameters === 'PHONENUMBER') {
+                    vm.instruction = Params.setAliasInstruction;
+                } else if (parameters === Params.setPhoneNumbersParam) {
                     vm.actualValue = Patient.getTelNum();
                     vm.newValue = vm.actualValue;
-                    vm.instruction = "ENTERNEWTELEPHONE";
-                } else if (parameters === 'EMAIL') {
-                    vm.type1 = 'email';
-                    vm.type2 = 'password';
+                    vm.instruction = Params.setPhoneNumberInstruction;
+                } else if (parameters === Params.setEmailParam) {
+                    vm.type1 = Params.setEmailType;
+                    vm.type2 = Params.setPasswordType;
                     vm.newValue = '';
                     vm.oldValue = '';
                     vm.placeHolder = $filter('translate')("ENTERPASSWORD");
-                    vm.instruction = "ENTEREMAILADDRESS";
-                    vm.instructionOld = "ENTERPASSWORD";
-                    vm.inputInstruction = "REENTER_EMAIL";
-                } else if (parameters === 'PASSWORD') {
-                    vm.type1 = 'password';
-                    vm.type2 = 'password';
-                    vm.title = 'UPDATEPASSWORDTITLE';
+                    vm.instruction = Params.setEmailInstruction;
+                    vm.instructionOld = Params.setPasswordInstruction;
+                    vm.inputInstruction = Params.setEmailInputInstruction;
+                } else if (parameters === Params.setPasswordParam) {
+                    vm.type1 = Params.setPasswordType;
+                    vm.type2 = Params.setPasswordType;
+                    vm.title = Params.setUpdatePasswordParam;
                     vm.newValue = '';
                     vm.newValueValidate = '';
                     vm.oldValue = '';
                     var label = $filter('translate')("ENTEROLDPASSWORDPLACEHOLDER");
                     vm.placeHolder = label;
-                    vm.instruction = "ENTERNEWPASSWORD";
-                    vm.instructionOld = "ENTEROLDPASSWORD";
+                    vm.instruction = Params.setInstructionNewPassword;
+                    vm.instructionOld = Params.setInstructionOldPassword;
                     vm.inputInstruction = $filter('translate')("REENTERPASSWORDPLACEHOLDER");
                     vm.valueLabel = $filter('translate')("SETNEWPASSWORDPLACEHOLDER");
-                } else if (parameters === 'LANGUAGE') {
+                } else if (parameters === Params.setLanguageParam) {
                     var value = UserPreferences.getLanguage();
-                    vm.instruction = 'SELECTLANGUAGE';
+                    vm.instruction = Params.setLanguageInstruction;
                     vm.personal = false;
                     vm.fontUpdated = false;
                     vm.pickLanguage = value;
-                    vm.firstOption = 'EN';
-                    vm.secondOption = 'FR';
-                    vm.valueLabel = 'LANGUAGE';
-                    vm.title = 'UPDATE';
-                } else if (parameters === 'FONTSIZE') {
+                    vm.firstOption = Params.setFirstLanguageInstruction;
+                    vm.secondOption = Params.setSecondLanguageInstruction;
+                    vm.valueLabel = Params.setLanguageParam;
+                    vm.title = Params.setUpdateTitle;
+                } else if (parameters === Params.setFontSizeParam) {
                     var value = UserPreferences.getFontSize();
-                    vm.firstOption = 'medium';
-                    vm.secondOption = 'large';
-                    vm.thirdOption = 'xlarge';
-                    vm.instruction = "SELECTFONTSIZE";
+                    vm.firstOption = Params.setFontOptionMedium;
+                    vm.secondOption = Params.setFontOptionLarge;
+                    vm.thirdOption = Params.setFontOptionExtraLarge;
+                    vm.instruction = Params.setFontSizeTitle;
                     vm.personal = false;
                     vm.fontUpdated = true;
                     vm.pickFont = value;
@@ -108,12 +108,12 @@
         //Sets a watch on the values typed and runs the validation scripts for the respective values
         function evaluate () {
             vm.newUpdate = false;
-            if (parameters !== 'LANGUAGE' && parameters !== 'FONTSIZE') {
-                if (parameters == 'EMAIL') {
+            if (parameters !== Params.setLanguageParam && parameters !== Params.setFontSizeParam) {
+                if (parameters === Params.setEmailParam) {
                     vm.disableButton = !validateEmail();
-                } else if (parameters == 'PASSWORD') {
+                } else if (parameters === Params.setPasswordParam) {
                     vm.disableButton = !validatePassword();
-                } else if (parameters == 'PHONENUMBER') {
+                } else if (parameters === Params.setPhoneNumbersParam) {
                     vm.disableButton = !validateTelNum();
                 } else {
                     vm.disableButton = !validateAlias();
@@ -126,9 +126,9 @@
             var objectToSend = {};
             objectToSend.NewValue = vm.newValue;
 
-            if (val.toUpperCase() === 'PASSWORD') {
+            if (val.toUpperCase() === Params.setPasswordParam) {
                 changePassword();
-            } else if (val.toUpperCase() === 'EMAIL') {
+            } else if (val.toUpperCase() === Params.setEmailParam) {
                 changeEmail();
             }else{
                 changeField(val, vm.newValue);
@@ -139,17 +139,17 @@
         //Function to change Nickname and phone number
         function changeField(type, value)
         {
-            var typeVal = (type.toUpperCase() === 'NICKNAME')?'Alias':'TelNum';
+            var typeVal = (type.toUpperCase() === Params.setNicknameAlias) ? Params.setAliasLowerCaseParam : Params.setTelephoneNumberParam;
             var objectToSend = {};
             objectToSend.NewValue = value;
             objectToSend.FieldToChange = typeVal;
             RequestToServer.sendRequest('AccountChange', objectToSend);
-            if (type.toUpperCase() === 'NICKNAME') Patient.setAlias(value);
+            if (type.toUpperCase() === Params.setNicknameAlias) Patient.setAlias(value);
             else Patient.setTelNum(value);
             vm.actualValue = value;
             vm.newUpdate = true;
-            vm.alertClass = "bg-success updateMessage-success";
-            vm.updateMessage = "FIELD_UPDATED";
+            vm.alertClass = Params.alertClassUpdateMessageSuccess;
+            vm.updateMessage = Params.setUpdateMessageField;
         }
 
         //Function to change font size
@@ -161,7 +161,7 @@
         function changeLanguage (val) {
             var objectToSend = {};
             objectToSend.NewValue = val;
-            objectToSend.FieldToChange = 'Language';
+            objectToSend.FieldToChange = Params.setLanguageParamLowerCase;
             RequestToServer.sendRequest('AccountChange', objectToSend);
             UserPreferences.setLanguage(val);
         }
@@ -187,13 +187,13 @@
 
             function updateOnServer(){
                 var objectToSend = {};
-                objectToSend.FieldToChange = 'Password';
+                objectToSend.FieldToChange = Params.setPasswordField;
                 objectToSend.NewValue = vm.newValue;
                 RequestToServer.sendRequestWithResponse('AccountChange', objectToSend)
                     .then(function () {
                         $timeout(function(){
-                            vm.alertClass = "bg-success updateMessage-success";
-                            vm.updateMessage = "PASSWORDUPDATED";
+                            vm.alertClass = Params.alertClassUpdateMessageSuccess;
+                            vm.updateMessage = Params.setUpdatePasswordMessage;
                             vm.newUpdate = true;
                         });
 
@@ -203,8 +203,8 @@
                     .catch(function (error) {
                         $timeout(function() {
                             vm.newUpdate = true;
-                            vm.alertClass = "bg-danger updateMessage-error";
-                            vm.updateMessage = "INTERNETERROR";
+                            vm.alertClass = Params.alertClassUpdateMessageSuccess;
+                            vm.updateMessage = Params.secondNetworkErrorMessage;
                         });
                     })
             }
@@ -221,15 +221,15 @@
 
             function updateOnServer(){
                 var objectToSend = {};
-                objectToSend.FieldToChange = 'Email';
+                objectToSend.FieldToChange = Params.setEmailField;
                 objectToSend.NewValue = vm.newValue;
                 Patient.setEmail(vm.newValue);
-                window.localStorage.setItem('Email',vm.newValue);
+                window.localStorage.setItem(Params.setEmailField,vm.newValue);
                 RequestToServer.sendRequestWithResponse('AccountChange', objectToSend)
                     .then(function(){
                         $timeout(function(){
-                            vm.alertClass = "bg-success updateMessage-success";
-                            vm.updateMessage = "UPDATED_EMAIL";
+                            vm.alertClass = Params.alertClassUpdateMessageSuccess;
+                            vm.updateMessage = Params.setEmailUpdateParam;
                             vm.newUpdate = true;
                         });
                     }).catch(handleError);
@@ -274,50 +274,50 @@
         function handleError(error) {
             $timeout(function(){
                 switch(error.code){
-                    case "auth/user-mismatch":
+                    case Params.userMismatch:
                         vm.newUpdate = true;
-                        vm.alertClass = "bg-danger updateMessage-error";
-                        vm.updateMessage = "INVALID_ASSOCIATION";
+                        vm.alertClass = Params.alertClassUpdateMessageError;
+                        vm.updateMessage = Params.invalidUserAssociation;
                         break;
-                    case "auth/user-not-found":
+                    case Params.invalidUser:
                         vm.newUpdate = true;
-                        vm.alertClass = "bg-danger updateMessage-error";
-                        vm.updateMessage = "INVALID_USER";
+                        vm.alertClass = Params.alertClassUpdateMessageError;
+                        vm.updateMessage = Params.invalidUserMessage;
                         break;
-                    case "auth/invalid-credential":
+                    case Params.invalidCredentials:
                         vm.newUpdate = true;
-                        vm.alertClass = "bg-danger updateMessage-error";
-                        vm.updateMessage = "INVALID_CREDENTIAL";
+                        vm.alertClass = Params.alertClassUpdateMessageError;
+                        vm.updateMessage = Params.invalidCredentialsMessage;
                         break;
-                    case "auth/invalid-email":
+                    case Params.invalidEmail:
                         vm.newUpdate = true;
-                        vm.alertClass = "bg-danger updateMessage-error";
-                        vm.updateMessage = "INVALID_EMAIL";
+                        vm.alertClass = Params.alertClassUpdateMessageError;
+                        vm.updateMessage = Params.invalidEmailMessage;
                         break;
-                    case "auth/wrong-password":
+                    case Params.invalidPassword:
                         vm.newUpdate = true;
-                        vm.alertClass = "bg-danger updateMessage-error";
-                        vm.updateMessage = "INVALID_PASSWORD";
+                        vm.alertClass = Params.alertClassUpdateMessageError;
+                        vm.updateMessage = Params.invalidPasswordMessage;
                         break;
-                    case "auth/email-already-in-use":
-                        vm.alertClass = "bg-danger updateMessage-error";
+                    case Params.emailInUse:
+                        vm.alertClass = Params.alertClassUpdateMessageError;
                         vm.newUpdate = true;
-                        vm.updateMessage = "EMAIL_TAKEN";
+                        vm.updateMessage = Params.emailInUseMessage;
                         break;
-                    case "auth/weak-password":
+                    case Params.weakPasswordCase:
                         vm.newUpdate = true;
-                        vm.alertClass = "bg-danger updateMessage-error";
-                        vm.updateMessage = "INVALID_PASSWORD";
+                        vm.alertClass = Params.alertClassUpdateMessageError;
+                        vm.updateMessage = Params.invalidPasswordMessage;
                         break;
-                    case "password-disrespects-criteria":
+                    case Params.passwordDisrespectCase:
                         vm.newUpdate = true;
-                        vm.alertClass = "bg-danger updateMessage-error";
-                        vm.updateMessage = "PASSWORD_CRITERIA";
+                        vm.alertClass = Params.alertClassUpdateMessageError;
+                        vm.updateMessage = Params.passwordDisrespectMessage;
                         break;
                     default:
                         vm.newUpdate = true;
-                        vm.alertClass = "bg-danger updateMessage-error";
-                        vm.updateMessage = "INTERNETERROR";
+                        vm.alertClass = Params.alertClassUpdateMessageError;
+                        vm.updateMessage = Params.secondNetworkErrorMessage;
                         break;
                 }
             })

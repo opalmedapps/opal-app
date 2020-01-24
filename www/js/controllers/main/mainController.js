@@ -13,16 +13,16 @@
 
     MainController.$inject = ["$window", "$state", '$rootScope','FirebaseService','DeviceIdentifiers',
         '$translatePartialLoader', "LocalStorage", 'Constants', 'CleanUp',
-        'NavigatorParameters', 'NetworkStatus', 'RequestToServer', 'NewsBanner', 'Security', '$filter'];
+        'NavigatorParameters', 'NetworkStatus', 'RequestToServer', 'NewsBanner', 'Security', '$filter', 'Params'];
 
     /* @ngInject */
     function MainController($window, $state, $rootScope, FirebaseService, DeviceIdentifiers,
                             $translatePartialLoader, LocalStorage, Constants, CleanUp,
-                            NavigatorParameters, NetworkStatus, RequestToServer, NewsBanner, Security, $filter) {
+                            NavigatorParameters, NetworkStatus, RequestToServer, NewsBanner, Security, $filter, Params) {
 
         var timeoutLockout;
         var currentTime;
-        var maxIdleTimeAllowed = 300000;    // 1000 = 1 second;   300000 = 300 seconds = 5 minutes
+       // var maxIdleTimeAllowed = 300000;    // 1000 = 1 second;   300000 = 300 seconds = 5 minutes
 
         activate();
 
@@ -36,7 +36,7 @@
 
             bindEvents();
             setPushPermissions();
-            
+
             DeviceIdentifiers.setDeviceIdentifiers();
 
         }
@@ -100,12 +100,12 @@
 
 
         function startTimer() {
-            timeoutLockout = window.setTimeout(goInactive, maxIdleTimeAllowed);
+            timeoutLockout = window.setTimeout(goInactive, Params.maxIdleTimeAllowed);
         }
 
         function resetTimer() {
 
-            if (Date.now() - currentTime > maxIdleTimeAllowed) {
+            if (Date.now() - currentTime > Params.maxIdleTimeAllowed) {
                 currentTime = Date.now();
                 goInactive();
                 return;
