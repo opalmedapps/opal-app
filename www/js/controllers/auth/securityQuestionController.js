@@ -205,7 +205,7 @@
                         vm.alert.content = Params.corruptedDataMessage;
                         break;
                     case Params.wrongAnswerCase:
-                        vm.alert.content = Params.expiredActionCode;
+                        vm.alert.content = Params.wrongAnswerMessage;
                         break;
                     default:
                         vm.alert.content = Params.networkErrorMessage;
