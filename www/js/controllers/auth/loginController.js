@@ -109,34 +109,7 @@
 
             //Obtain email from localStorage and show that email
             savedEmail = $window.localStorage.getItem('Email');
-            var savedPassword = null;
             if(savedEmail) vm.email = savedEmail;
-
-            if (ons.platform.isAndroid() || ons.platform.isAndroid() ) {
-                window.plugins.touchid.isAvailable(
-                    function(type) {
-                        if (type === 'face' || type === 'touch') {
-                            window.plugins.touchid.verifyFingerprint(
-                                'Scan your fingerprint please',
-                                function(msg) {
-                                        savedPassword = $window.localStorage.getItem('Password');
-                                        if(savedPassword) vm.password = savedPassword;
-                                    }, // success handler: fingerprint accepted
-                                function(msg) {
-                                    alert('Fingerprint not accepted: ' + JSON.stringify(msg));
-                                } // error handler with errorcode and localised reason
-                            );
-                        }
-
-                    },
-                    function(msg) {
-                        alert('FingerPrint not available, message: ' + msg);
-                    }
-
-                );
-
-            }
-
 
             patientSerNum = Patient.getUserSerNum();
 
