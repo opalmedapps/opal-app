@@ -112,7 +112,7 @@
                                             <ul class="list">
                                                 <li class="list__item list__item--tappable"
                                                     ng-repeat="option in options track by $index">
-                                                    
+
                                                     <div ng-style="styleIfSelected(checked1[$index])">
                                                         <label class="radio-button radio-button--list-item">
                                                             <input type="radio" ng-checked="checked1[$index]"
@@ -679,26 +679,19 @@
                 <div>
                     <div class="row text-center" style="margin: 0 auto;" align="center">
                         <div class="col-xs-12 text-center">
-                            <img src="./img/MUHC.png" alt="MUHC Logo" style="margin-top: 1cm;"></img>
+                            <img src="./img/Opal_Name_Logo_Green_Transparent.png" alt="Opal Logo" style="margin-top: 1cm;max-width: 75%; height: auto"></img>
                         </div>
                     </div>
                     <br>
                     <div class="row text-center" style="margin: 0 auto; align: center">
                         <div class="col-xs-12 text-center" style="margin: 0 auto; align: center">
-                            <h3>{{"QUESTIONNAIRE_THANKS"|translate}} <b><span style="color: darkmagenta">  {{(language === "EN") ? questionaire.QuestionnaireName_EN : questionaire.QuestionnaireName_FR}}</span></b>
+                            <h3>
+                                {{"QUESTIONNAIRE_THANKS"|translate}}
                             </h3><br>
-                            <p>{{"QUESTIONNAIRE_INSTRUCTIONS3"|translate}}</p>
+                            <p>{{"QUESTIONNAIRE_CONTACT"|translate}}</p>
                         </div>
                     </div>
                     <br>
-
-                    <div class="row text-center" style="margin: 0 auto; align: center">
-                        <div class="col-xs-12 col-md-6">
-                            <button style="border-top: 4px solid white" class="button--large--cta" ng-click="contact()">
-                                {{"CONTACTUS"|translate}}
-                            </button>
-                        </div>
-                    </div>
                 </div>
             </div>
             <br>
