@@ -11,10 +11,10 @@
         .module('MUHCApp')
         .controller('ParkingController', ParkingController);
 
-    ParkingController.$inject = ['NavigatorParameters', 'UserPreferences'];
+    ParkingController.$inject = ['NavigatorParameters', 'UserPreferences', 'Params'];
 
     /* @ngInject */
-    function ParkingController(NavigatorParameters, UserPreferences) {
+    function ParkingController(NavigatorParameters, UserPreferences, Params) {
         const vm = this;
 
         let navigatorName;
@@ -35,13 +35,13 @@
 
             if(type === 'general') {
                 if (UserPreferences.getLanguage().toUpperCase() === "EN") {
-                    url = 'https://muhc.ca/glen/handbook/parking-hospital';
+                    url = Params.general.generalParkingGlenUrlEn;
                     // window.open('https://muhc.ca/glen/handbook/parking-hospital', '_blank');
                 } else {
-                    url = 'https://cusm.ca/glen/handbook/stationnement';
+                    url = Params.general.generalParkingGlenUrlFr;
                     // window.open('https://cusm.ca/glen/handbook/stationnement', '_blank');
                 }
-                
+
                 if (app) {
                     cordova.InAppBrowser.open(url, '_blank', 'location=yes');
                 } else {
@@ -50,10 +50,10 @@
             }
             else if (type === 'gettingtohospital') {
                 if (UserPreferences.getLanguage().toUpperCase() === "EN") {
-                    url = 'https://muhc.ca/glen/handbook/getting-hospital-5';
+                    url = Params.gettingHospitalUrl.gettingHospitalUrlEn;
                     // window.open('https://muhc.ca/glen/handbook/getting-hospital-5', '_blank');
                 } else {
-                    url = 'https://cusm.ca/glen/handbook/comment-vous-y-rendre';
+                    url = Params.gettingHospitalUrl.gettingHospitalUrlFr;
                     // window.open('https://cusm.ca/glen/handbook/comment-vous-y-rendre', '_blank');
                 }
 

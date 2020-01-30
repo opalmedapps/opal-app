@@ -1,5 +1,6 @@
 /*
  * Filename     :   loginController.js
+ // eslint-disable-next-line max-len
  * Description  :   Controller in charge of the login process using FireBase as the authentication API.
  * Created by   :   David Herrera, Robert Maglieri
  * Date         :   May 20, 2015
@@ -13,7 +14,6 @@
  *  @ngdoc controller
  *  @name MUHCApp.controllers: LoginController
  *  @description
- *
  *  Controller in charge of the login process using FireBase as the authentication API.
  */
 (function () {
@@ -24,10 +24,10 @@
         .controller('LoginController', LoginController);
 
     LoginController.$inject = ['$timeout', '$state', 'UserAuthorizationInfo', '$filter','DeviceIdentifiers',
-        'UserPreferences', 'Patient', 'NewsBanner', 'UUID', 'Constants', 'EncryptionService', 'CleanUp', '$window', '$scope', 'FirebaseService', '$rootScope'];
+        'UserPreferences', 'Patient', 'NewsBanner', 'UUID', 'Constants', 'EncryptionService', 'CleanUp', '$window', '$scope', 'FirebaseService', '$rootScope', 'Params'];
 
     /* @ngInject */
-    function LoginController($timeout, $state, UserAuthorizationInfo, $filter, DeviceIdentifiers, UserPreferences, Patient, NewsBanner, UUID, Constants, EncryptionService, CleanUp, $window, $scope, FirebaseService, $rootScope) {
+    function LoginController($timeout, $state, UserAuthorizationInfo, $filter, DeviceIdentifiers, UserPreferences, Patient, NewsBanner, UUID, Constants, EncryptionService, CleanUp, $window, $scope, FirebaseService, $rootScope, Params) {
 
         var vm = this;
 
@@ -106,6 +106,7 @@
                 },200);
             }
 
+
             //Obtain email from localStorage and show that email
             savedEmail = $window.localStorage.getItem('Email');
             if(savedEmail) vm.email = savedEmail;
@@ -168,16 +169,23 @@
                 var authenticationToLocalStorage={
                     UserName:firebaseUser.uid,
                     Email: vm.email,
+                //    Password: vm.password,
                     Token:sessionToken,
                     LastActive: lastActive
                 };
 
+
                 $window.sessionStorage.setItem('UserAuthorizationInfo', JSON.stringify(authenticationToLocalStorage));
                 $window.localStorage.setItem('Email', vm.email);
+                if (ons.platform.isAndroid() || ons.platform.isIOS()) {
+                    $window.localStorage.setItem('Password', vm.password);
+                }
+
 
                 // If user sets not trusted remove the local storage as to not continue to the next part which skips the security question
                 if (!vm.trusted) {
                     $window.localStorage.removeItem('Email');
+                    $window.localStorage.removeItem('Password');
                     $window.localStorage.removeItem("deviceID");
                     $window.localStorage.removeItem(UserAuthorizationInfo.getUsername()+"/securityAns");
                 }
@@ -275,13 +283,13 @@
             var code = (error.code)? error.code : error.Code;
 
             switch (code) {
-                case "auth/invalid-email":
-                case "auth/wrong-password":
-                case "auth/user-not-found":
-                case "auth/too-many-requests":   // This is temporary (too many attempts), until we decide what to do in this case
+                case Params.invalidEmail:
+                case Params.invalidPassword:
+                case Params.invalidUser:
+                case Params.largeNumberOfRequests:   // This is temporary (too many attempts), until we decide what to do in this case
                     $timeout(function(){
-                        vm.alert.type='danger';
-                        vm.alert.message="INVALID_EMAIL_OR_PWD";
+                        vm.alert.type = Params.alertTypeDanger;
+                        vm.alert.message= Params.loginEmailFailureMessage;
                         vm.loading = false;
                     });
                     break;
@@ -292,34 +300,34 @@
                 //         vm.loading = false;
                 //     });
                 //     break;
-                case "auth/user-disabled":
+                case Params.userDisabled:
                     $timeout(function () {
-                        vm.alert.type='danger';
-                        vm.alert.message="USER_DISABLED";
+                        vm.alert.type = Params.alertTypeDanger;
+                        vm.alert.message = Params.loginDisabledUserMessage;
                         vm.loading = false;
                     });
                     break;
-                case "auth/network-request-failed":
+                case Params.networkRequestFailure:
                     $timeout(function(){
-                        vm.alert.type='danger';
-                        vm.alert.message="ERROR_NETWORK";
+                        vm.alert.type = Params.alertTypeDanger;
+                        vm.alert.message = Params.loginNetworkErrorMessage;
                         vm.loading = false;
                     });
                     break;
-                case "LIMITS_EXCEEDED":
+                case Params.loginLimitExceededMessage:
                     $timeout(function(){
-                        vm.alert.type='danger';
-                        vm.alert.message="LIMITS_EXCEEDED";
+                        vm.alert.type = Params.alertTypeDanger;
+                        vm.alert.message = Params.loginLimitExceededMessage;
                         vm.loading = false;
                     });
                     break;
-                case "ENCRYPTION_ERROR":
+                case Params.loginEncryptionErrorMessage:
                     $timeout(function(){
                         vm.loading = false;
                         loginerrormodal.show();
                     });
                     break;
-                case "WRONG_SAVED_HASH":
+                case Params.loginWrongHashMessage:
                     $timeout(function(){
                         vm.loading = false;
                         wronghashmodal.show();
@@ -327,8 +335,8 @@
                     break;
                 default:
                     $timeout(function(){
-                        vm.alert.type='danger';
-                        vm.alert.message="ERROR_GENERIC";
+                        vm.alert.type = Params.alertTypeDanger;
+                        vm.alert.message = Params.loginGenericErrormessage;
                         vm.loading = false;
                     });
             }
@@ -366,8 +374,8 @@
             if(!vm.email || vm.email === '' || !vm.password || vm.password ==='')
             {
                 $timeout(function() {
-                    vm.alert.type = 'danger';
-                    vm.alert.message = "INVALID_EMAIL_OR_PWD";
+                    vm.alert.type = Params.alertTypeDanger;
+                    vm.alert.message = Params.loginEmailFailureMessage;
                 });
 
             }else{
@@ -384,7 +392,7 @@
                 if (authDetails) {
                     var now = new Date();
                     now = now.getTime();
-                    var tenMinutesAgo = now - 600000;
+                    var tenMinutesAgo = now - Params.tenMinutesMilliSeconds;
                     authDetails = JSON.parse(authDetails);
                     stillActive = (authDetails.LastActive > tenMinutesAgo);
                 }

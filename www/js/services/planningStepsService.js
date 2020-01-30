@@ -27,10 +27,10 @@
         .module('MUHCApp')
         .factory('PlanningSteps', PlanningSteps);
 
-    PlanningSteps.$inject = ['Tasks', 'Appointments'];
+    PlanningSteps.$inject = ['Tasks', 'Appointments', 'Params'];
 
     /* @ngInject */
-    function PlanningSteps(Tasks, Appointments) {
+    function PlanningSteps(Tasks, Appointments, Params) {
 
         /**
          *@ngdoc property
@@ -46,13 +46,7 @@
          *@propertyOf MUHCApp.service:PlanningSteps
          *@description Object containing five arrays: CTs, Physician Planning, Dose Calc, Physics QA, Scheduling Treatments
          **/
-        var sequence = {
-            'CT for Radiotherapy Planning': [],
-            'Physician Plan Preparation': [],
-            'Calculation of Dose': [],
-            'Physics Quality Control': [],
-            'Scheduling Treatments': []
-        };
+        var sequence = Params.setSequence;
 
         var service = {
             getPlanningSequence: getPlanningSequence,
@@ -92,7 +86,6 @@
             destroy();
             var ctAppointment = getCTSimAppointment();
             var planningTasks = Tasks.getAllRecentTasks();
-
             planningTasks.unshift(ctAppointment);
 
             for (var i = 0; i!==planningTasks.length; ++i){
@@ -106,6 +99,7 @@
                 }
             }
             currentStep = planningTasks[i-1];
+
 
         }
 
@@ -148,7 +142,7 @@
          *@returns {Boolean} Returns plan completion.
          **/
         function isCompleted(){
-            return sequence['Scheduling Treatments'].length > 0 && sequence['CT for Radiotherapy Planning'].length > 0;
+            return sequence['CT for Radiotherapy Planning'].length > 0 && sequence['Scheduling Treatments'].length > 0;
         }
 
         /**

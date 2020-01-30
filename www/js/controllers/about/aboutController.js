@@ -23,10 +23,10 @@
         .module('MUHCApp')
         .controller('AboutController', AboutController);
 
-    AboutController.$inject = ['$window', 'UserPreferences', 'NavigatorParameters'];
+    AboutController.$inject = ['$window', 'UserPreferences', 'NavigatorParameters', 'Params'];
 
     /* @ngInject */
-    function AboutController($window, UserPreferences, NavigatorParameters) {
+    function AboutController($window, UserPreferences, NavigatorParameters, Params) {
         const vm = this;
 
         vm.openUrl = openUrl;
@@ -60,24 +60,23 @@
             let app = document.URL.indexOf('http://') === -1 && document.URL.indexOf('https://') === -1;
 
             switch (openWhat.toLowerCase()) {
-                case 'aboutmuhc':
-                    url = (vm.language === "EN") ? 'https://muhc.ca/homepage/page/about-muhc' : 'https://cusm.ca/homepage/page/propos-du-cusm';
+                case Params.aboutMuhcCase:
+                    url = (vm.language === "EN") ? Params.aboutMuhcUrl.aboutMuhcUrlEn : Params.aboutMuhcUrl.aboutMuhcUrlFr;
                     break;
-                case 'cedarscancercenter':
-                    url = (vm.language === "EN") ? 'https://muhc.ca/glen/cedars-cancer-centre' : 'https://cusm.ca/glen/page/centre-du-cancer-c%C3%A8dres';
+                case Params.cedarsCancerCenterCase:
+                    url = (vm.language === "EN") ? Params.cedarsCancerCenterUrl.cedarsCancerCenterUrlEn : Params.cedarsCancerCenterUrl.cedarsCancerCenterUrlFr;
                     break;
-                case 'cedarscancerfoundation':
-                    url = (vm.language === "EN") ? 'https://www.cedars.ca/cedars/en/home' : 'https://www.cedars.ca/cedars/fr/home';
+                case Params.cedarsCancerFoundationCase:
+                    url = (vm.language === "EN") ? Params.cedarsCancerFoundationUrl.cedarsCancerFoundationUrlEn : Params.cedarsCancerFoundationUrl.cedarsCancerFoundationUrlFr;
                     break;
-                case 'cedarscansupport':
-                    url = (vm.language === "EN") ? 'http://www.cansupport.ca/' : 'http://www.cansupport.ca/fr';
+                case Params.cedarsCancerSupportCase:
+                    url = (vm.language === "EN") ? Params.cedarsCanSupportUrl.cedarsCanSupportUrlEn : Params.cedarsCanSupportUrl.cedarsCanSupportUrlFr;
                     break;
-                case 'donation':
-                    url = (vm.language === "EN") ? 'https://www.cedars.ca/cedars/en/donate/donate_online?designation=radiation-oncology-opal-fund' :
-                        'https://www.cedars.ca/cedars/fr/donate/donate_online?designation=radiation-oncology-opal-fund';
+                case Params.donationCase:
+                    url = (vm.language === "EN") ? Params.donationUrl.donationUrlEn : Params.donationUrl.donationUrlFr;
                     break;
-                case 'opalwebsite':
-                    url = (vm.language === "EN") ? 'https://www.opalmedapps.com' : 'https://www.opalmedapps.com/fr-selected';
+                case Params.opalWebsiteCase:
+                    url = (vm.language === "EN") ? Params.opalWebsiteUrl.opalWebsiteUrlEn : Params.opalWebsiteUrl.opalWebsiteUrlFr;
                     break;
                 default:
                     break;

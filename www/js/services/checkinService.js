@@ -24,10 +24,10 @@
         .module('MUHCApp')
         .factory('CheckInService', CheckInService);
 
-    CheckInService.$inject = ['$q', 'RequestToServer', 'Appointments', 'Patient'];
+    CheckInService.$inject = ['$q', 'RequestToServer', 'Appointments', 'Patient', 'Params'];
 
     /* @ngInject */
-    function CheckInService($q, RequestToServer, Appointments, Patient) {
+    function CheckInService($q, RequestToServer, Appointments, Patient, Params) {
 
         /**
          *@ngdoc property
@@ -204,13 +204,13 @@
 
             //First evaluate the current state of existing appointments, see if they were already checked in and if so what the state is (all success or some errors)
             if(appts.length === 0){
-                setCheckinState('CHECKIN_NONE');
+                setCheckinState(Params.checkinNoneMessage);
                 r.resolve()
             } else if(alreadyCheckedIn(appts)){
-                setCheckinState("CHECKIN_MESSAGE_AFTER" + setPlural(appts));
+                setCheckinState(Params.checkInAfterMessage + setPlural(appts));
                 r.resolve()
             } else if (checkinErrorsExist(appts)) {
-                setCheckinState("CHECKIN_ERROR");
+                setCheckinState(Params.checkinErrorMessage);
                 r.resolve()
             } else {
                 //This means at this point there exists appointments today and none of them have been checked in
@@ -220,15 +220,15 @@
                         // console.log("can checkin : " + canCheckin);
 
                         if(!canCheckin) {
-                            setCheckinState("NOT_ALLOWED", appts.length);
+                            setCheckinState(Params.notAllowedResponse, appts.length);
                         }
                         else {
-                            setCheckinState("CHECKIN_MESSAGE_BEFORE" + setPlural(appts), appts.length);
+                            setCheckinState(Params.checkInBeforeMessage + setPlural(appts), appts.length);
                         }
                         r.resolve()
                     })
                     .catch(function() {
-                        setCheckinState("NOT_ALLOWED", appts.length);
+                        setCheckinState(Params.notAllowedResponse, appts.length);
                         r.reject()
                     })
             }
@@ -242,11 +242,11 @@
 
             //First evaluate the current state of existing appointments, see if they were already checked in and if so what the state is (all success or some errors)
             if(alreadyCheckedIn(appts)){
-                setCheckinState("CHECKIN_MESSAGE_AFTER" + setPlural(appts));
+                setCheckinState(Params.checkInAfterMessage + setPlural(appts));
             } else if (checkinErrorsExist(appts)) {
-                setCheckinState("CHECKIN_ERROR");
+                setCheckinState(Params.checkinError);
             } else {
-                setCheckinState("NOT_ALLOWED", appts.length);
+                setCheckinState(Params.notAllowedResponse, appts.length);
             }
         }
 
@@ -297,7 +297,7 @@
             state.message = status;
 
             switch(status){
-                case 'CHECKIN_ERROR':
+                case Params.checkinError:
                     attemptedCheckin = true;
                     errorsExist = true;
                     state.canNavigate = true;
@@ -306,8 +306,8 @@
                     state.noAppointments = false;
                     state.allCheckedIn = false;
                     break;
-                case 'CHECKIN_MESSAGE_AFTER':
-                case 'CHECKIN_MESSAGE_AFTER_PLURAL':
+                case Params.checkInAfterMessage:
+                case Params.checkInAfterPluralMessage:
                     attemptedCheckin = true;
                     allCheckedIn = true;
                     state.canNavigate = true;
@@ -316,22 +316,22 @@
                     state.noAppointments = false;
                     state.allCheckedIn = true;
                     break;
-                case 'CHECKIN_NONE':
+                case Params.checkinNoneMessage:
                     state.canNavigate = false;
                     state.numberOfAppts = 0;
                     state.checkinError = false;
                     state.noAppointments = true;
                     state.allCheckedIn = false;
                     break;
-                case 'CHECKIN_MESSAGE_BEFORE':
-                case 'CHECKIN_MESSAGE_BEFORE_PLURAL':
+                case Params.checkInBeforeMessage:
+                case Params.checkInBeforePluralMessage:
                     state.canNavigate = true;
                     state.numberOfAppts = numAppts;
                     state.checkinError = false;
                     state.noAppointments = false;
                     state.allCheckedIn = false;
                     break;
-                case 'NOT_ALLOWED':
+                case Params.notAllowedResponse:
                     state.canNavigate = false;
                     state.numberOfAppts = numAppts;
                     state.checkinError = false;
@@ -366,7 +366,7 @@
         function isWithinCheckinRange() {
             var r=$q.defer();
             navigator.geolocation.getCurrentPosition(function(position){
-                var distanceMeters = 1000 * getDistanceFromLatLonInKm(position.coords.latitude, position.coords.longitude, 45.474127399999996, -73.6011402);
+                var distanceMeters = 1000 * getDistanceFromLatLonInKm(position.coords.latitude, position.coords.longitude, Params.hospitalSite.hospitalCoordinates[0], Params.hospitalSite.hospitalCoordinates[1]);
 
                 // console.log(distanceMeters);
 
