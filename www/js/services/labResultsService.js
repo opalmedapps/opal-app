@@ -49,18 +49,19 @@ myApp.service('LabResults',['$filter','LocalStorage','RequestToServer','$q', "Pa
                 //
                 var testResultDate = testResult.TestDate.replace(/ /g, '');
                 var testResultType = testResult.FacComponentName;
-                var testCategory = undefined;
+                var testCategory = testResult.Group_EN;
 
                 // Assign test to category
-                if (Params.categoryOneTests.indexOf(testResultType) > -1) {
-                    testCategory = Params.categoryOne;
-                } else if (Params.categoryTwoTests.indexOf(testResultType) > -1) {
-                    testCategory = Params.categoryTwo;
-                } else if (Params.categoryThreeTests.indexOf(testResultType) > -1) {
-                    testCategory = Params.categoryThree;
-                } else if (Params.categoryFourTests.indexOf(testResultType) > -1) {
-                    testCategory = Params.categoryFour;
-                }
+                // if (categoryOneTests.indexOf(testResultType) > -1) {
+                //     testCategory = CATEGORY_ONE;
+                // } else if (categoryTwoTests.indexOf(testResultType) > -1) {
+                //     testCategory = CATEGORY_TWO;
+                // } else if (categoryThreeTests.indexOf(testResultType) > -1) {
+                //     testCategory = CATEGORY_THREE;
+                // } else if (categoryFourTests.indexOf(testResultType) > -1) {
+                //     testCategory = CATEGORY_FOUR;
+                // }
+
                 testResult.testCategory = testCategory;
 
                 // Filter by test date
