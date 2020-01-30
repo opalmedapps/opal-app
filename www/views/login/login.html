@@ -23,10 +23,18 @@
                         <div style="width: 100%" class="style-4">
                             <input name="password" ng-model="login.password" placeholder='{{"PASSWORD"|translate}}' type="password" required ng-change="login.clearErrors()"></div>
                         <br/>
+                        <ons-list>
+                            <ons-list-item modifier="chevron" ng-click="login.goToHospital()">
+                                {{"HOSPITAL"|translate}}
+                                <span class="list-item-note lucent">{{login.getSelectedHospitalAcronym()|translate}}</span>
+                            </ons-list-item>
+                        </ons-list>
+                        <br/>
                         <div ng-show="login.alert.type">
                             <uib-alert type="{{login.alert.type}}">{{login.alert.message|translate}}</uib-alert>
                         </div>
                     </div>
+<!--                    the selected one is {{login.selectedHospital}}-->
 
                     <div>{{"TRUST_DEVICE"|translate}}
                         <span><ons-switch var="login.trustSwitch" ng-model="login.trusted"></ons-switch></span>

@@ -13,7 +13,7 @@ var myApp=angular.module('MUHCApp');
  *@requires MUHCApp.service:UserAuthorizationInfo
  *@description Service stores and manages user preferences
  **/
-myApp.service('UserPreferences',[ 'UserAuthorizationInfo','$rootScope','tmhDynamicLocale','$translate','$q', function(UserAuthorizationInfo,$rootScope,tmhDynamicLocale,$translate,$q){
+myApp.service('UserPreferences',[ 'UserAuthorizationInfo','$rootScope','tmhDynamicLocale','$translate','$q', 'Params', function(UserAuthorizationInfo,$rootScope,tmhDynamicLocale,$translate,$q,Params){
     var app = document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'https://' ) === -1;
 
     //Fields for user preference and authentication
@@ -45,7 +45,13 @@ myApp.service('UserPreferences',[ 'UserAuthorizationInfo','$rootScope','tmhDynam
      *@description Enable SMS property
      **/
     var enableSMS = '';
-
+    /**
+     *@ngdoc property
+     *@name MUHCApp.service.#hospital
+     *@propertyOf MUHCApp.service:UserPreferences
+     *@description Hospital property
+     */
+    var hospital = '';
 
     return{
 
@@ -220,6 +226,46 @@ myApp.service('UserPreferences',[ 'UserAuthorizationInfo','$rootScope','tmhDynam
         setUserPreferences:function(preferences){
             language=preferences.Language;
             enableSMS=preferences.EnableSMS;
+        },
+        getHospital:function(){
+            return hospital;
+        },
+        /**
+         *@ngdoc method
+         *@name setHospital
+         *@methodOf MUHCApp.service:UserPreferences
+         *@param {String} hospitalKey Must be a hospital in the available hospital list
+         *@description Setter method for patient hospital of preference
+         **/
+        setHospital: function(hospitalKey){
+            let localStorageHospitalKey = 'hospital';
+
+            if (!Object.keys(Params.hospitalList).includes(hospitalKey)){
+                // TODO: error handling. This means that the hospital the user have entered does not exist
+                return;
+            }
+
+            window.localStorage.setItem(localStorageHospitalKey, hospitalKey);
+            hospital = hospitalKey;
+        },
+        /**
+         *@ngdoc method
+         *@name initializeHospital
+         *@methodOf MUHCApp.service:UserPreferences
+         *@description If hospital was already set previously within the app, set default to that hospital. Otherwise it sets hospital to '' as default.
+         **/
+        initializeHospital: function(){
+            console.log('initialize hospital');
+
+            let localStorageHospitalKey = 'hospital';
+
+            let localStorageHospital = window.localStorage.getItem(localStorageHospitalKey);
+
+            if (localStorageHospital === undefined || localStorageHospital === null || !Object.keys(Params.hospitalList).includes(localStorageHospital)){
+                hospital = '';
+            } else {
+                hospital = localStorageHospital;
+            }
         },
         /**
          *@ngdoc method

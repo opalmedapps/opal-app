@@ -24,10 +24,10 @@
         .controller('LoginController', LoginController);
 
     LoginController.$inject = ['$timeout', '$state', 'UserAuthorizationInfo', '$filter','DeviceIdentifiers',
-        'UserPreferences', 'Patient', 'NewsBanner', 'UUID', 'Constants', 'EncryptionService', 'CleanUp', '$window', '$scope', 'FirebaseService', '$rootScope'];
+        'UserPreferences', 'Patient', 'NewsBanner', 'UUID', 'Constants', 'EncryptionService', 'CleanUp', '$window', '$scope', 'FirebaseService', '$rootScope', 'Params'];
 
     /* @ngInject */
-    function LoginController($timeout, $state, UserAuthorizationInfo, $filter, DeviceIdentifiers, UserPreferences, Patient, NewsBanner, UUID, Constants, EncryptionService, CleanUp, $window, $scope, FirebaseService, $rootScope) {
+    function LoginController($timeout, $state, UserAuthorizationInfo, $filter, DeviceIdentifiers, UserPreferences, Patient, NewsBanner, UUID, Constants, EncryptionService, CleanUp, $window, $scope, FirebaseService, $rootScope, Params) {
 
         var vm = this;
 
@@ -83,11 +83,12 @@
          */
         vm.trusted = false;
 
-
         vm.clearErrors = clearErrors;
         vm.submit = submit;
         vm.goToInit = goToInit;
         vm.goToReset = goToReset;
+        vm.goToHospital = goToHospital;
+        vm.getSelectedHospitalAcronym = getSelectedHospitalAcronym;
 
         activate();
         //////////////////////////////////
@@ -119,7 +120,6 @@
             $timeout(function(){
                 vm.trusted = !!($window.localStorage.getItem("deviceID"));
             });
-
         }
 
         /**
@@ -428,6 +428,34 @@
         function goToReset(){
             loginerrormodal.hide();
             initNavigator.pushPage('./views/login/forgot-password.html',{})
+        }
+
+        /**
+         * @ngdoc method
+         * @name goToHospital
+         * @methodOf MUHCApp.controllers.LoginController
+         * @description brings user to the hospital selection screen
+         */
+        function goToHospital(){
+            loginerrormodal.hide();
+            initNavigator.pushPage('./views/login/set-hospital.html', {});
+        }
+
+        /**
+         * @ngdoc method
+         * @name getSelectedHospitalAcronym
+         * @methodOf MUHCApp.controllers.LoginController
+         * @description return the selected hospital acronym to the view
+         * @returns {string} selected hospital acronym
+         */
+        function getSelectedHospitalAcronym(){
+            let selectedHospitalKey = UserPreferences.getHospital();
+
+            if (selectedHospitalKey !== '' && selectedHospitalKey !== null && selectedHospitalKey !== undefined){
+                return vm.selectedHospital = Params.hospitalList[selectedHospitalKey]['acronym'];
+            } else {
+                return "TAP_TO_SELECT_HOSPITAL";
+            }
         }
     }
 })();

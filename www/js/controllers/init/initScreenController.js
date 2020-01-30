@@ -88,7 +88,9 @@
             //Initialize language if not initialized
             UserPreferences.initializeLanguage();
 
-            
+            //Initialize hospital chosen if not initialized
+            UserPreferences.initializeHospital();
+
             //Do not show the list breaking, equivalent of ng-cloak for angularjs, LOOK IT UP!!! https://docs.angularjs.org/api/ng/directive/ngCloak
             setTimeout(function(){
                 $("#listInitApp").css({display:'block'});
