@@ -23,10 +23,10 @@
         .module('MUHCApp')
         .controller('ForgotPasswordController', ForgotPasswordController);
 
-    ForgotPasswordController.$inject = ['$timeout','$firebaseAuth', '$state'];
+    ForgotPasswordController.$inject = ['$timeout','$firebaseAuth', '$state', 'Params'];
 
     /* @ngInject */
-    function ForgotPasswordController($timeout, $firebaseAuth, $state) {
+    function ForgotPasswordController($timeout, $firebaseAuth, $state, Params) {
         var vm = this;
 
         /**
@@ -88,13 +88,13 @@
              * -SB */
             userAuth.$sendPasswordResetEmail(vm.email).then(function(){
                 $timeout(function(){
-                    vm.alert.type="success";
-                    vm.alert.message="RESET_PASSWORD_SENT";
+                    vm.alert.type = Params.forgotPasswordAlertSuccess;
+                    vm.alert.message = Params.forgotPasswordAlertSuccessMessage;
                 });
             }).catch(function(error){
                 $timeout(function(){
-                    vm.alert.type="success";
-                    vm.alert.message="RESET_PASSWORD_SENT";
+                    vm.alert.type = Params.forgotPasswordAlertSuccess;
+                    vm.alert.message = Params.forgotPasswordAlertSuccessMessage;
                 });
             });
         }

@@ -1,7 +1,7 @@
 /*
  * Filename     :   doctorsService.js
  * Description  :   Service that stores and manages the patient's doctors. To be converted to contacts.
- * Created by   :   David Herrera, Robert Maglieri 
+ * Created by   :   David Herrera, Robert Maglieri
  * Date         :   02 Mar 2017
  * Copyright    :   Copyright 2016, HIG, All rights reserved.
  * Licence      :   This file is subject to the terms and conditions defined in
@@ -21,7 +21,7 @@ var myApp=angular.module('MUHCApp');
  *@requires $filter
  *@description Sets the doctors and contacts and provides an API to interact with them and the server
  **/
-myApp.service('Doctors',['$q','LocalStorage','$filter','FileManagerService', function($q,LocalStorage,$filter,FileManagerService){
+myApp.service('Doctors',['$q','LocalStorage','$filter','FileManagerService', 'Params', function( $q,LocalStorage,$filter,FileManagerService, Params ){
 
     //Arrays containining the different doctors.
     /**
@@ -133,10 +133,10 @@ myApp.service('Doctors',['$q','LocalStorage','$filter','FileManagerService', fun
                         doctors[i].NameFileSystem='doctor'+doctors[i].DoctorSerNum+"."+doctors[i].DocumentType;
                         if(ons.platform.isAndroid()){
                             targetPath = cordova.file.dataDirectory+'Doctors/doctor'+doctors[doctorKeyArray[i]].DoctorSerNum+"."+doctors[doctorKeyArray[i]].DocumentType;
-                            doctors[i].CDVfilePath="cdvfile://localhost/files/Doctors/"+doctors[i].NameFileSystem;
+                            doctors[i].CDVfilePath = Params.cdvDoctorsFilePathAndroid + doctors[i].NameFileSystem;
                         }else if(ons.platform.isIOS()){
                             targetPath = cordova.file.documentsDirectory+ 'Doctors/doctor'+doctors[doctorKeyArray[i]].DoctorSerNum+"."+doctors[doctorKeyArray[i]].DocumentType;
-                            doctors[i].CDVfilePath="cdvfile://localhost/persistent/Doctors/"+doctors[i].NameFileSystem;
+                            doctors[i].CDVfilePath =  Params.cdvDoctorsFilePathIos + doctors[i].NameFileSystem;
                         }
                         var url = doctors[doctorKeyArray[i]].ProfileImage;
                         var trustHosts = true
@@ -165,7 +165,7 @@ myApp.service('Doctors',['$q','LocalStorage','$filter','FileManagerService', fun
                 // }
                 Doctors.push(copyDoctor);
             };
-         
+
             LocalStorage.WriteToLocalStorage('Doctors',doctorsStorage);
             $q.all(promises).then(function(){
                 r.resolve(true);

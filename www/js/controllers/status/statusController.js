@@ -13,9 +13,9 @@
         .module('MUHCApp')
         .controller('StatusController', StatusController);
 
-    StatusController.$inject = ['$anchorScroll','$location', 'NavigatorParameters', '$filter', 'PlanningSteps', 'UserPreferences', 'Logger'];
+    StatusController.$inject = ['$anchorScroll','$location', 'NavigatorParameters', '$filter', 'PlanningSteps', 'UserPreferences', 'Logger', 'Params'];
 
-    function StatusController($anchorScroll, $location, NavigatorParameters, $filter, PlanningSteps, UserPreferences, Logger)
+    function StatusController($anchorScroll, $location, NavigatorParameters, $filter, PlanningSteps, UserPreferences, Logger, Params)
     {
         var statusVm = this;
 
@@ -36,13 +36,7 @@
         statusVm.endingDate = '';               // treatment end date
         statusVm.today = new Date();
         statusVm.language = UserPreferences.getLanguage();
-        statusVm.stepMapping = {
-            'CT for Radiotherapy Planning': 1,
-            'Physician Plan Preparation': 2,
-            'Calculation of Dose': 3,
-            'Physics Quality Control': 4,
-            'Scheduling Treatments': 5
-        };
+        statusVm.stepMapping = Params.setMap;
 
         statusVm.getStyle = getStyle;           // function which determines style
         statusVm.goToStep = goToStep;           // function which provides details on the event

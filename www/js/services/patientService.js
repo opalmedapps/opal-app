@@ -13,8 +13,8 @@ var myApp=angular.module('MUHCApp');
  *@description API service used to access the patient fields.
  **/
 myApp.service('Patient',['$q','$cordovaDevice','FileManagerService','LocalStorage',
-    'UserPreferences', 'UserAuthorizationInfo',
-    function($q, $cordovaDevice,FileManagerService,LocalStorage,UserPreferences, UserAuthorizationInfo){
+    'UserPreferences', 'UserAuthorizationInfo', 'Params',
+    function($q, $cordovaDevice,FileManagerService,LocalStorage,UserPreferences, UserAuthorizationInfo, Params){
 
     /**
      *@ngdoc property
@@ -152,12 +152,12 @@ myApp.service('Patient',['$q','$cordovaDevice','FileManagerService','LocalStorag
                     patientFields.NameFileSystem='patient'+patientFields.PatientSerNum+"."+patientFields.DocumentType;
                     var platform=$cordovaDevice.getPlatform();
                     var targetPath='';
-                    if(platform==='Android'){
+                    if(platform ==='Android') {
                         targetPath = cordova.file.dataDirectory+'Patient/patient'+patientFields.PatientSerNum+"."+patientFields.DocumentType;
-                        patientFields.CDVfilePath="cdvfile://localhost/files/Patient/"+patientFields.NameFileSystem;
-                    }else if(platform==='iOS'){
+                        patientFields.CDVfilePath = Params.cdvPatientFilePathAndroid + patientFields.NameFileSystem;
+                    } else if(platform ==='iOS'){
                         targetPath = cordova.file.documentsDirectory+ 'Patient/patient'+patientFields.PatientSerNum+"."+patientFields.DocumentType;
-                        patientFields.CDVfilePath="cdvfile://localhost/persistent/Patient/"+patientFields.NameFileSystem;
+                        patientFields.CDVfilePath = Params.cdvPatientFilePathIos + patientFields.NameFileSystem;
 
                     }
                     var url = patientFields.ProfileImage;

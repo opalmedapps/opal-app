@@ -13,10 +13,10 @@
         .controller('PersonalTabController', PersonalTabController);
 
     PersonalTabController.$inject = ['Appointments','TxTeamMessages','Documents','NavigatorParameters', 'Notifications',
-        'Questionnaires', 'Patient', 'NetworkStatus', 'MetaData', '$timeout', 'UserPreferences'];
+        'Questionnaires', 'Patient', 'NetworkStatus', 'MetaData', '$timeout', 'UserPreferences', 'Params'];
 
     function PersonalTabController( Appointments, TxTeamMessages, Documents, NavigatorParameters,
-                                   Notifications, Questionnaires, Patient, NetworkStatus, MetaData, $timeout, UserPreferences) {
+                                   Notifications, Questionnaires, Patient, NetworkStatus, MetaData, $timeout, UserPreferences, Params) {
         var vm = this;
 
         vm.goToStatus = goToStatus;
@@ -97,7 +97,7 @@
             let url = '';
             let app = document.URL.indexOf('http://') === -1 && document.URL.indexOf('https://') === -1;
 
-            url = (vm.language === "EN") ? 'https://carnetsante.gouv.qc.ca/portail' : 'https://carnetsante.gouv.qc.ca/portail';  // English site available after opening the French one
+            url = Params.carnetSanteUrl;  // English site available after opening the French one
 
             if (app) {
                 cordova.InAppBrowser.open(url, '_blank', 'location=yes');
