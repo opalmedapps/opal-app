@@ -12,15 +12,19 @@
             .module('MUHCApp')
             .controller('GeneralTabController', GeneralTabController);
 
-        GeneralTabController.$inject = ['$scope', 'Announcements', 'UpdateUI', 'NavigatorParameters', 'NetworkStatus', 'MetaData', 'UserPreferences'];
+        GeneralTabController.$inject = ['$scope', 'Announcements', 'UpdateUI', 'NavigatorParameters', 'NetworkStatus', 'MetaData', 'UserPreferences', 'Params'];
 
-        function GeneralTabController($scope, Announcements, UpdateUI, NavigatorParameters, NetworkStatus, MetaData, UserPreferences) {
+        function GeneralTabController($scope, Announcements, UpdateUI, NavigatorParameters, NetworkStatus, MetaData, UserPreferences, Params) {
             var vm = this;
+            let selectedHospitalKey = UserPreferences.getHospital();
 
             vm.goToPatientCharter = goToPatientCharter;
             vm.goToParking = goToParking;
             vm.generalDeviceBackButton = generalDeviceBackButton;
             vm.goToUrl = goToUrl;
+
+            // variable to let the user know which hospital they are logged in
+            vm.selectedHospitalToDisplay = "";
 
             activate();
 
@@ -41,6 +45,16 @@
                 bindEvents();
 
                 vm.language = UserPreferences.getLanguage();
+                configureSelectedHospital();
+            }
+
+            /**
+             * @name configureSelectedHospital
+             * @desc Set the hospital name to display
+             */
+            function configureSelectedHospital() {
+                let hospitalList = Params.hospitalList;
+                vm.selectedHospitalToDisplay = hospitalList[selectedHospitalKey].fullName;
             }
 
             function bindEvents() {

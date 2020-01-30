@@ -19,19 +19,23 @@
         .controller('EducationalMaterialController', EducationalMaterialController);
 
     EducationalMaterialController.$inject = ['NavigatorParameters', '$scope', 'EducationalMaterial','NetworkStatus',
-        'Patient', 'Logger'];
+        'Patient', 'Logger', 'UserPreferences', 'Params'];
 
     /* @ngInject */
     function EducationalMaterialController(NavigatorParameters, $scope, EducationalMaterial, NetworkStatus,
-                                           Patient, Logger) {
+                                           Patient, Logger, UserPreferences, Params) {
         var vm = this;
         var backButtonPressed = 0;
+        let selectedHospitalKey = UserPreferences.getHospital();
 
         // Variable containing the search string entered into the search bar
         vm.searchString = "";
 
         // Variable to toggle visibility of the 'no materials' text. Default is false to avoid errors.
         vm.noMaterials = false;
+
+        // variable to let the user know which hospital they are logged in
+        vm.selectedHospitalToDisplay = "";
 
         vm.showHeader = showHeader;
         vm.goToEducationalMaterial = goToEducationalMaterial;
@@ -48,6 +52,7 @@
 
             bindEvents();
             configureState();
+            configureSelectedHospital();
         }
 
         function initData() {
@@ -68,6 +73,15 @@
             } else {
                 vm.noMaterials = true;
             }
+        }
+
+        /**
+         * @name configureSelectedHospital
+         * @desc Set the hospital name to display
+         */
+        function configureSelectedHospital() {
+            let hospitalList = Params.hospitalList;
+            vm.selectedHospitalToDisplay = hospitalList[selectedHospitalKey].fullName;
         }
 
         function bindEvents() {

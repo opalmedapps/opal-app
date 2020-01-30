@@ -8,14 +8,16 @@
     HomeController.$inject = [
         'Appointments', 'CheckInService', 'Patient', 'UpdateUI','$scope', '$timeout','$filter', 'Notifications',
         'NavigatorParameters', 'NewsBanner', 'PlanningSteps', 'Permissions', 'UserPreferences', 'NetworkStatus',
-        'MetaData'];
+        'MetaData', 'Params'];
 
     /* @ngInject */
     function HomeController(Appointments, CheckInService, Patient, UpdateUI, $scope, $timeout, $filter, Notifications,
                             NavigatorParameters, NewsBanner, PlanningSteps, Permissions, UserPreferences, NetworkStatus,
-                            MetaData)
+                            MetaData, Params)
     {
         var vm = this;
+
+        let selectedHospitalKey = UserPreferences.getHospital();
 
         vm.PatientId ='';
         vm.FirstName = '';
@@ -40,6 +42,9 @@
             checkinError: false,
             inRange: true
         };
+
+        // variable to let the user know which hospital they are logged in
+        vm.selectedHospitalToDisplay = "";
 
         vm.homeDeviceBackButton = homeDeviceBackButton;
         vm.goToStatus = goToStatus;
@@ -96,6 +101,9 @@
                 //Basic patient information that may or many not be available... but won't break app if not there and it makes the app look less broken if not internet connection
                 setPatientInfo();
             }
+
+            // set the hospital banner
+            configureSelectedHospital();
         }
 
         /**
@@ -223,6 +231,15 @@
                 rcorners.setAttribute("style", "height: 60%");
             }
             else rcorners.setAttribute("style", "height: 50%");
+        }
+
+        /**
+         * @name configureSelectedHospital
+         * @desc Set the hospital name to display
+         */
+        function configureSelectedHospital() {
+            let hospitalList = Params.hospitalList;
+            vm.selectedHospitalToDisplay = hospitalList[selectedHospitalKey].fullName;
         }
 
         /*

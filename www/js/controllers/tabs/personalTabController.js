@@ -13,11 +13,15 @@
         .controller('PersonalTabController', PersonalTabController);
 
     PersonalTabController.$inject = ['Appointments','TxTeamMessages','Documents','NavigatorParameters', 'Notifications',
-        'Questionnaires', 'Patient', 'NetworkStatus', 'MetaData', '$timeout', 'UserPreferences'];
+        'Questionnaires', 'Patient', 'NetworkStatus', 'MetaData', '$timeout', 'UserPreferences', 'Params'];
 
     function PersonalTabController( Appointments, TxTeamMessages, Documents, NavigatorParameters,
-                                   Notifications, Questionnaires, Patient, NetworkStatus, MetaData, $timeout, UserPreferences) {
+                                   Notifications, Questionnaires, Patient, NetworkStatus, MetaData, $timeout, UserPreferences, Params) {
         var vm = this;
+        let selectedHospitalKey = UserPreferences.getHospital();
+
+        // variable to let the user know which hospital they are logged in
+        vm.selectedHospitalToDisplay = "";
 
         vm.goToStatus = goToStatus;
         vm.personalDeviceBackButton = personalDeviceBackButton;
@@ -37,12 +41,12 @@
             setMetaData();
 
             vm.language = UserPreferences.getLanguage();
+            configureSelectedHospital();
 
             $timeout(function(){
                 vm.censor = Patient.getAccessLevel() == 3;
                 vm.TestUser = Patient.getTestUser()
             });
-
 
             //Sets appointments and treatment plan stage tab
             if(NetworkStatus.isOnline()){
@@ -106,5 +110,13 @@
             }
         }
 
+        /**
+         * @name configureSelectedHospital
+         * @desc Set the hospital name to display
+         */
+        function configureSelectedHospital() {
+            let hospitalList = Params.hospitalList;
+            vm.selectedHospitalToDisplay = hospitalList[selectedHospitalKey].fullName;
+        }
     }
 })();
