@@ -88,6 +88,7 @@
         vm.goToInit = goToInit;
         vm.goToReset = goToReset;
         vm.goToHospital = goToHospital;
+        vm.isThereSelectedHospital = isThereSelectedHospital;
         vm.getSelectedHospitalAcronym = getSelectedHospitalAcronym;
 
         activate();
@@ -443,16 +444,27 @@
 
         /**
          * @ngdoc method
+         * @name isThereSelectedHospital
+         * @methodOf MUHCApp.controllers.LoginController
+         * @description return whethere the user has selected a hospital before hand
+         * @returns {boolean} true if there is a hospital selected. false otherwise.
+         */
+        function isThereSelectedHospital() {
+            let selectedHospitalKey = UserPreferences.getHospital();
+            return selectedHospitalKey !== '' && selectedHospitalKey !== null && selectedHospitalKey !== undefined;
+        }
+
+        /**
+         * @ngdoc method
          * @name getSelectedHospitalAcronym
          * @methodOf MUHCApp.controllers.LoginController
          * @description return the selected hospital acronym to the view
          * @returns {string} selected hospital acronym
          */
         function getSelectedHospitalAcronym(){
-            let selectedHospitalKey = UserPreferences.getHospital();
 
-            if (selectedHospitalKey !== '' && selectedHospitalKey !== null && selectedHospitalKey !== undefined){
-                return vm.selectedHospital = Params.hospitalList[selectedHospitalKey]['acronym'];
+            if (isThereSelectedHospital()){
+                return vm.selectedHospital = Params.hospitalList[UserPreferences.getHospital()]['acronym'];
             } else {
                 return "TAP_TO_SELECT_HOSPITAL";
             }
