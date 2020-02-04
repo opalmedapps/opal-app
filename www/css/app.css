@@ -2907,4 +2907,7 @@ and (max-device-width : 321px)
     background-color: #F9F9F9;
     border-bottom: 1px solid #DDDDDD;
     font-size: 15px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
 }
