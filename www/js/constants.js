@@ -212,7 +212,7 @@
         setInstructionNewPassword: 'ENTERNEWPASSWORD',
         setInstructionOldPassword: 'ENTEROLDPASSWORD',
         setLanguageParam: 'LANGUAGE',
-        setLanguageParamLowerCase: 'Language',
+        setLanguageParamProperCase: 'Language',
         setLanguageInstruction: 'SELECTLANGUAGE',
         setFirstLanguageInstruction: 'EN',
         setSecondLanguageInstruction: 'FR',
