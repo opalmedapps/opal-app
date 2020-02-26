@@ -161,7 +161,7 @@
         function changeLanguage (val) {
             var objectToSend = {};
             objectToSend.NewValue = val;
-            objectToSend.FieldToChange = Params.setLanguageParamLowerCase;
+            objectToSend.FieldToChange = Params.setLanguageParamProperCase;
             RequestToServer.sendRequest('AccountChange', objectToSend);
             UserPreferences.setLanguage(val);
         }
