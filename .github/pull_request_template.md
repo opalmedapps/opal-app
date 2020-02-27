@@ -2,8 +2,7 @@
 name: Pull Request Staging
 about: Make a pull request to staging branch
 title: ''
-branches: staging
-labels: 
+labels:
 assignees: '@yickmo'
 ---
 [ISSUE: ###](https://github.com/Sable/qplus/issues/###)
