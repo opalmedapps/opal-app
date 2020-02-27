@@ -4,7 +4,6 @@ about: Suggested Enhancement Request
 title: ''
 labels: enhancement
 assignees: ''
-
 ---
 
 **Issue Tracker No:**
