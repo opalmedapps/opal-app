@@ -13,45 +13,45 @@
         </svg>
         <p style="margin-top: 30px">{{ "LOADINGLABRESULTS" | translate }}</p>
     </div>
-
-    <!-- TEMPORARY SOLUTION TO ons-tabbar EMBEDDED PAGE NOT WORKING ON ANDROID -->
-    <div ng-hide="labs.loading">
-        <ons-list>
-            <ons-list-item class="list-item-container" modifier="chevron" ng-click="personalNavigator.pushPage('./views/personal/lab-results/date-view.html');">
+    <ons-tabbar ng-hide="labs.loading" id="questionnairesNavbar" position="top" style="position: fixed; margin-top: 43px; z-index: 1; height: 49px;">
+        <ons-tab class="shadow-2" style="background-color:#ECEFF1;"
+                 label="{{'LAB_BYDATE'|translate}}" icon="fa-calendar" active="true" ng-click="labs.showTestResultsByDate()"></ons-tab>
+        <ons-tab class="shadow-2" style="background-color:#ECEFF1;"
+                 label="{{'LAB_BYTYPE'|translate}}" icon="fa-tags" ng-click="labs.showTestResultsByType()"></ons-tab>
+    </ons-tabbar>
+    <div ng-hide="labs.loading" style="margin-top: 49px">
+        <ons-list ng-show="labs.showByDate">
+            <ons-list-item ng-repeat="testResultByDate in labs.tests | orderBy:'-testDateFormat'"
+                           ng-click="personalNavigator.pushPage('./views/personal/lab-results/test-view.html',{param:testResultByDate})"
+                           modifier="chevron tappable" class="list-item-container">
                 <ons-row align="center">
-                    <ons-col width="60px" style="text-align: center">
-                        <div>
-                            <ons-icon icon="fa-calendar" size="2x" style="color:#2196F3"></ons-icon>
+                    <ons-col width="60px" align="center">
+                        <div style="margin-left:10px">
+                            <ons-icon icon="ion-erlenmeyer-flask" style="color:#8BC34A" size="2x"></ons-icon>
+                            <span class="notification" ng-if="testResultByDate.ReadStatus==='0'">&nbsp;</span>
                         </div>
                     </ons-col>
-                    <ons-col>
-                        <header>
-                            <span class="item-title" ng-class="fontSizeTitle">{{"LAB_BYDATE"|translate}}</span>
-                        </header>
-                    </ons-col>
-                </ons-row>
-            </ons-list-item>
-            <ons-list-item class="list-item-container" modifier="chevron" ng-click="personalNavigator.pushPage('./views/personal/lab-results/category-view.html');">
-                <ons-row align="center">
-                    <ons-col width="60px" style="text-align: center">
-                        <div>
-                            <ons-icon icon="fa-tags" size="2x" style="color:#2196F3"></ons-icon>
+                    <ons-col style="word-wrap: break-word;">
+                        <div style="line-height:1;">
+                            <span ng-class="fontSizeTitle"> {{testResultByDate.testDateFormat|date:'longDate'}}</span>
+                            <p class="item-desc" ng-class="fontSizeDesc">{{"ADDED"|translate}}
+                                {{testResultByDate.testDateFormat|date:'shortTime'}}</p>
                         </div>
-                    </ons-col>
-                    <ons-col>
-                        <header>
-                            <span class="item-title" ng-class="fontSizeTitle">{{"LAB_BYTYPE"|translate}}</span>
-                        </header>
                     </ons-col>
                 </ons-row>
             </ons-list-item>
         </ons-list>
+        <ons-list ng-hide="labs.showByDate"
+                  ng-repeat="test in labs.tests" >
+            <ons-list-header ng-if="$index == 0 || labs.tests[$index-1].testCategory !== test.testCategory"
+                             ng-class="fontSizeTitle">{{test.testCategory|translate}}</ons-list-header>
+            <ons-list-item modifier="tappable chevron"
+                           ng-click="personalNavigator.pushPage('./views/personal/lab-results/timeline-test-component.html',{param:test});"
+                           class="list-item-container">
+                <div class="name" ng-class="fontSizeTitle">
+                    {{test.testName}}
+                </div>
+            </ons-list-item>
+        </ons-list>
     </div>
-    <!---------------------------->
-
-    <!-- ons-tabbar WITH EMBEDDED PAGE NOT WORKING ON ANDROID -->
-    <!--<ons-tabbar class="shadow-2" position="top" animation="fade" var="labbar" ng-hide="labs.loading">-->
-        <!--<ons-tab class="shadow-2" style="background-color:#ECEFF1;" page="./views/personal/lab-results/date-view.html" label="{{'LAB_BYDATE'|translate}}" icon="fa-calendar" active="true"></ons-tab>-->
-        <!--<ons-tab class="shadow-2" style="background-color:#ECEFF1;" page="./views/personal/lab-results/category-view.html" label="{{'LAB_BYTYPE'|translate}}" icon="fa-tags"></ons-tab>-->
-    <!--</ons-tabbar>-->
 </ons-page>
