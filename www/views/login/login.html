@@ -13,7 +13,7 @@
                 <img src="./img/Opal_Name_Logo_Green_Transparent.png" style="margin-top: 1%; width:auto;max-width:70%;height:auto">
             </div>
             <div class="container" style="margin-top: 1%">
-                <form align="center" class="form-group">
+                <form style="text-align: center" novalidate>
                     <div>
                         <div style="width: 100%" class="style-4">
                             <input placeholder='{{"EMAIL"|translate}}' name="email" ng-model="login.email" type="email" required ng-change=login.clearErrors()></div>
@@ -29,21 +29,16 @@
                     <div>{{"TRUST_DEVICE"|translate}}
                         <span><ons-switch var="login.trustSwitch" ng-model="login.trusted"></ons-switch></span>
                     </div>
-                    <div style="max-width:400px; margin-top: 5%">
-                        <button class="shadow-2 button button--large " style="background-color: #4CAF50; font-weight: bolder;" ng-click="login.submit()" ng-disabled="login.loading">
+                        <button class="shadow-2 button button--large " style="max-width:400px;background-color: #4CAF50; font-weight: bolder;margin: auto"
+                                ng-click="login.submit()" ng-disabled="login.loading" >
                             <span ng-if = "!login.loading" > {{"LOGIN"|translate}} </span>
                             <span ng-if = "login.loading" > {{"LOGGINGIN"|translate}} <ons-icon icon="ion-load-d" spin="true"></ons-icon></span>
                         </button>
-                    </div>
-
-
                     <br>
                 </form>
-                <div style="text-align:center;">
                     <button class="button button--large--quiet" ng-click="initNavigator.pushPage('./views/login/forgot-password.html',{})" >
                         {{"FORGOTPASSWORD"|translate}}
                     </button>
-                </div>
             </div>
         </ons-col>
     </ons-row>
