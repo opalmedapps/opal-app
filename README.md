@@ -24,7 +24,7 @@ git fetch
 git checkout -b opal_student origin/opal_student
 ```
 
-* Install the latest version of [NodeJS](https://nodejs.org/en/download/). If you have already done this, skip this step. **(NOTE: For proper access to the backend you must have version 6+)**
+* Install the latest version of [NodeJS](https://nodejs.org/en/download/) and the [yarn](https://classic.yarnpkg.com/en/docs/getting-started) package manager. If you have already done this, skip this step. **(NOTE: For proper access to the backend you must have version 6+)**
 
 Once this is done, verify that you installed Node globally by running
 running `$node -v`
@@ -32,31 +32,18 @@ running `$node -v`
 If you see the current version of the Node runtime installed, then all is good! Otherwise please consult Node's troubleshooting manual or Google the error that occurs.
 
 
-This installation also installs the Node.js package manager ([npm](https://docs.npmjs.com/getting-started/what-is-npm)).
-This package manager is in charge of installing all the libraries and dependencies
-for development. The main file is the
+This installation also installs the Node.js package manager [npm](https://docs.npmjs.com/getting-started/what-is-npm).
+The main/description file for a Node.js application is the 
 [package.json](./package.json) file. This file states all the depedencies
-and the versions for each of them.
-
-
-* Open a command prompt and navigate to the folder in which you have cloned the repository.
-
-* Install [Bower](https://bower.io/) globally. If you have already done this, skip this step.
-
-**Note:** you may need to replace `npm` with `sudo npm` if you are running a Mac or Linux system without root access.
-
-```
-npm install -g bower
-```
-
- Bower is our front-end libraries package manager. This allows all of our libraries to stay in sync and updated across all developing platforms.
-The main file for this dependencies is [bower.json](./bower.json), this file
-contains all the dependencies that are required to run the front-end.
+and the versions for each of them. Normally dependencies are manage by `npm`,
+in this project we use `yarn` to manage these dependencies, [yarn](https://classic.yarnpkg.com/en/docs/getting-started) is a Node.js package manager that overcomes the shortcomings
+of `npm` in many [ways](https://www.positronx.io/yarn-vs-npm-best-package-manager/) mostly based on speed, security, and reproducible packages.
+To install `yarn` follow [this](https://classic.yarnpkg.com/en/docs/install) guide. 
 
 * Install [Gulp](https://gulpjs.com/) globally. If you have already done this, skip this step.
 
 ```
-npm install gulp-cli -g
+yarn global add gulp-cli 
 ```
 
 Gulp is a task manager that allows to have readily available and useful tasks,
@@ -66,11 +53,12 @@ for production.
 
 * Install all the front-end and back-end dependencies.
 
+
 ```
-npm install
+yarn
 ```
 
-This will install the npm and bower dependencies.
+This will install the front-end and development dependencies for the app.
 
 * Run the app
 
@@ -86,7 +74,7 @@ by navigating to `http://localhost:9000`
 * Install http-server
 
 ```
-npm install -g http-server
+yarn global add http-server
 ```
 This globally installs a simple, zero-configuration command line server that may be used to host the Opal app locally when developing in the browser.
 Sometimes it is useful to quickly have a server in order to
@@ -181,7 +169,7 @@ Linux or Windows you can only build Android distribution**
 5) Install [Cordova](https://cordova.apache.org/) globally with the following command:
 
 ```
-npm install -g cordova
+yarn global add cordova
 ```
 
 6) Create a Cordova project in any desired directory that's **NOT** the in qplus directory:
@@ -214,7 +202,7 @@ are still some dependencies needed for the build script to run properly...
 8) Install [Gulp](https://gulpjs.com/) globally
 
 ```
-npm install gulp-cli -g
+yarn global add gulp-cli
 ```
 
 Gulp is in charge of automating a lot of the build process such as minifying html/css/javascript, compressing images,
