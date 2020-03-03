@@ -247,8 +247,8 @@
         /** GeneralTab Controller **/
         findDoctorCase: 'finddoctor',
         findDoctorUrl: {
-            findDoctorUrlEn: 'http://www.gamf.gouv.qc.ca/index_en.html',
-            findDoctorUrlFr: 'http://www.gamf.gouv.qc.ca/index.html'
+            findDoctorUrlEn: 'https://www.quebec.ca/en/health/finding-a-resource/registering-with-a-family-doctor/',
+            findDoctorUrlFr: 'https://www.quebec.ca/sante/trouver-une-ressource/inscription-aupres-d-un-medecin-de-famille/'
         },
         medicalSchedulerCase: 'medicalscheduler',
         medicalSchedulerUrl: {
