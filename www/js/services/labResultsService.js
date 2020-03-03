@@ -108,6 +108,7 @@ myApp.service('LabResults',['$filter','LocalStorage','RequestToServer','$q', "Pa
             }
 
             testResultsByDateArray = $filter('orderBy')(testResultsByDateArray, 'testDateFormat', true);
+            testResultsByTypeArray = $filter('orderBy')(testResultsByTypeArray, 'testCategory');
         }
 
         return{
