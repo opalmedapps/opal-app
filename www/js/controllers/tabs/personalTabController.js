@@ -101,7 +101,7 @@
             let url = '';
             let app = document.URL.indexOf('http://') === -1 && document.URL.indexOf('https://') === -1;
 
-            url = (vm.language === "EN") ? 'https://carnetsante.gouv.qc.ca/portail' : 'https://carnetsante.gouv.qc.ca/portail';  // English site available after opening the French one
+            url = Params.carnetSanteUrl;  // English site available after opening the French one
 
             if (app) {
                 cordova.InAppBrowser.open(url, '_blank', 'location=yes');

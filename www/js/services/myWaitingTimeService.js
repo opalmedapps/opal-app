@@ -1,6 +1,6 @@
 /*
  * Filename     :   myWaitingTimeService.js
- * Description  :   
+ * Description  :
  * Created by   :   Arthur A. Bergamaschi <arthurbergmz@gmail.com>
  * Date         :   September 2018
  * Copyright    :   Copyright 2018, HIG, All rights reserved.
@@ -12,26 +12,10 @@
  *@ngdoc service
  **/
 angular.module('MUHCApp').service('MyWaitingTimeService', [
-    '$q', 'RequestToServer',
-    function ($q, RequestToServer) {
-        var languages_EN = {
-            waitingTitle: 'Appointments',
-            waitingUnit: 'Waiting times (minutes)',
-            waitingDueHospitalDelay: 'Minutes waiting due to hospital\'s delay',
-            waitingDueEarlyArrival: 'Minutes waiting due to early arrival',
-            usuallyOnTime: 'On time',
-            usuallyTooEarly: 'Too early',
-            usuallyLate: 'Late'
-        }
-        var languages_FR = {
-            waitingTitle: 'Rendez-vous',
-            waitingUnit: 'Temps d\'attente (minutes)',
-            waitingDueHospitalDelay: 'Temps d\'attente causé par les délais de l\'hôpital',
-            waitingDueEarlyArrival: 'Temps d\'attente causé par l\'arrivée d\'avance',
-            usuallyOnTime: 'À l\'heure',
-            usuallyTooEarly: 'Trop tôt',
-            usuallyLate: 'En retard'
-        }
+    '$q', 'RequestToServer', 'Params',
+    function ($q, RequestToServer, Params) {
+        var languages_EN = Params.waitingTimeEn;
+        var languages_FR = Params.waitingTimeFr;
         var languages = {
             EN: languages_EN,
             FR: languages_FR

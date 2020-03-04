@@ -119,14 +119,14 @@
                 let app = document.URL.indexOf('http://') === -1 && document.URL.indexOf('https://') === -1;
 
                 switch (openWhat.toLowerCase()) {
-                    case 'finddoctor':
-                        url = (vm.language === "EN") ? 'http://www.gamf.gouv.qc.ca/index_en.html' : 'http://www.gamf.gouv.qc.ca/index.html';
+                    case Params.findDoctorCase:
+                        url = (vm.language === "EN") ? Params.findDoctorUrl.findDoctorUrlEn : Params.findDoctorUrl.findDoctorUrlFr ;
                         break;
-                    case 'medicalscheduler':
-                        url = (vm.language === "EN") ? 'https://www.rvsq.gouv.qc.ca/en/public/Pages/home.aspx' : 'https://www.rvsq.gouv.qc.ca/fr/public/Pages/accueil.aspx';
+                    case Params.medicalSchedulerCase:
+                        url = (vm.language === "EN") ? Params.medicalSchedulerUrl.medicalSchedulerUrlEn : Params.medicalSchedulerUrl.medicalSchedulerUrlFr ;
                         break;
-                    case 'carnetsante':
-                        url = (vm.language === "EN") ? 'https://carnetsante.gouv.qc.ca/portail' : 'https://carnetsante.gouv.qc.ca/portail';  // English site available after opening the French one
+                    case Params.carnetSanteCase:
+                        url =  Params.carnetSanteUrl ;  // English site available after opening the French one
                         break;
                     default:
                         break;

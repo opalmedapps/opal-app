@@ -24,8 +24,8 @@ var myApp=angular.module('MUHCApp');
  *@description Sets the educational material and provides an API to interact with it and the server
  **/
 myApp.service('EducationalMaterial',['$q','$filter','LocalStorage','FileManagerService', 'UserPreferences',
-    'RequestToServer', '$http', 'Logger',
-    function ($q, $filter, LocalStorage, FileManagerService, UserPreferences, RequestToServer, $http, Logger) {
+    'RequestToServer', '$http', 'Logger', 'Params',
+    function ($q, $filter, LocalStorage, FileManagerService, UserPreferences, RequestToServer, $http, Logger, Params) {
 
     /**
      *@ngdoc property
@@ -46,32 +46,7 @@ myApp.service('EducationalMaterial',['$q','$filter','LocalStorage','FileManagerS
      *@propertyOf MUHCApp.service:EducationalMaterial
      *@description Object contains the mapping betweem the type of educational material and the icon and color of the icon for that particular educational material.
      **/
-    var educationalMaterialType={
-        'Video':{
-            icon:'fa fa-film',
-            color:'#ef5350'
-        },
-        'Factsheet':{
-            icon:'fa fa-list',
-            color:'#1E88E5'
-        },
-        'Booklet':{
-            icon:'fa fa-leanpub',
-            color:'#66BB6A'
-        },
-        'Treatment Guidelines':{
-            icon:'fa fa-list-ol',
-            color:'#7E57C2'
-        },
-        'Package':{
-            icon:'fa fa-cube',
-            color:'#8A5B45'
-        },
-        'Other':{
-            icon:'fa fa-book',
-            color:'#FF7043'
-        },
-    };
+    var educationalMaterialType = Params.educationalMaterial;
     function setLanguageEduMaterial(array)
     {
         var language = UserPreferences.getLanguage();

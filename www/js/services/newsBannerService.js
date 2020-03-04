@@ -10,9 +10,9 @@ var myApp=angular.module('MUHCApp');
 *@requires $translatePartialLoader
 *@description API services used to display message banner alerts for the app, e.g. internet connectivity banners, notification banners, etc. For more information on the plugin, {@link https://github.com/EddyVerbruggen/Toast-PhoneGap-Plugin Cordova Toast Plugin}
 **/
-myApp.service('NewsBanner',['$cordovaNetwork','$filter','$translatePartialLoader',function($cordovaNetwork,$filter,$translatePartialLoader){
+myApp.service('NewsBanner',['$cordovaNetwork','$filter','$translatePartialLoader', 'Params', function($cordovaNetwork,$filter,$translatePartialLoader, Params) {
 
-  //Adds the top-view translation tables in order to always display the alert banners correctly. 
+  //Adds the top-view translation tables in order to always display the alert banners correctly.
   $translatePartialLoader.addPart('top-view');
 
   //Determine if its an device or a browser
@@ -87,10 +87,10 @@ myApp.service('NewsBanner',['$cordovaNetwork','$filter','$translatePartialLoader
       },
       function(result){},
       function(error){});
-      
+
     }
-  
-   
+
+
   }
   //Alert mappings for types
     /**
@@ -99,17 +99,13 @@ myApp.service('NewsBanner',['$cordovaNetwork','$filter','$translatePartialLoader
   *@propertyOf MUHCApp.service:NewsBanner
   *@description Alert mappings for types, Returns an object with message, duration, colorf for the specific types. The types are the following: nointernet, connected, notifications
   **/
-  var alertTypes = {
-      'notifications':{Type:'notifications',Color:'#5bc0de',Message:"NEWNOTIFICATIONS",Duration:'short'},
-      'nointernet':{Type:'nointernet',Message:"NOINTERNETCONNECTION",Duration:10000},
-      'connected':{Type:'connected',Color:'#5cb85c',Message:"CONNECTED",Duration:'short'}
-    };
+  var alertTypes = Params.newsAlertTypes;
   return {
       /**
 		*@ngdoc method
 		*@name showCustomBanner
 		*@methodOf MUHCApp.service:NewsBanner
-    *@param {String} message Message for the alert 
+    *@param {String} message Message for the alert
     *@param {String} color Color for the alert
     *@param {Function} callback Callback function for the alert
 		*@param {Number} duration Duration in milliseconds
@@ -119,8 +115,8 @@ myApp.service('NewsBanner',['$cordovaNetwork','$filter','$translatePartialLoader
       {
         if(app)
         {
-          showCustomBanner(message,color, callback, duration); 
-        }  
+          showCustomBanner(message,color, callback, duration);
+        }
       },
         /**
 		*@ngdoc method
@@ -131,7 +127,7 @@ myApp.service('NewsBanner',['$cordovaNetwork','$filter','$translatePartialLoader
       setAlertOffline:function()
       {
         if(app){
-          if (!$cordovaNetwork.isOnline()) showBanner('nointernet'); 
+          if (!$cordovaNetwork.isOnline()) showBanner('nointernet');
         }
       },
       /**

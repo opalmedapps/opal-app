@@ -20,7 +20,8 @@
         'NavigatorParameters',
         'UserPreferences',
         'NewsBanner',
-        '$filter'
+        '$filter',
+        'Params'
     ];
 
     /* @ngInject */
@@ -29,7 +30,8 @@
         NavigatorParameters,
         UserPreferences,
         NewsBanner,
-        $filter
+        $filter,
+        Params
     ) {
 
         var vm = this;
@@ -59,19 +61,17 @@
 
                     // console.log('CheckIn Response: ' + response);
 
-                    if(response === 'NOT_ALLOWED'){
+                    if(response === Params.notAllowedResponse){
                         NewsBanner.showCustomBanner($filter('translate')("NOT_ALLOWED"), '#333333', function(){}, 3000);
-                        vm.alert.type = "warning";
-                        vm.checkInMessage = "CHECKIN_IN_HOSPITAL_ONLY";
-                        vm.error = "";
-                    } else if (response === 'SUCCESS') {
-                        vm.alert.type = "success";
-                        vm.checkInMessage = "CHECKED_IN";
+                        vm.alert.type = Params.alertTypeWarning;
+                        vm.checkInMessage = Params.checkinHospitalMessage;
+                    } else if (response === Params.successResponse) {
+                        vm.alert.type = Params.alertTypeSuccess;
+                        vm.checkInMessage = Params.checkedInMessage;
                         vm.apps = CheckInService.getCheckInApps();
-                        vm.error = "";
                     } else {
-                        vm.alert.type = "danger";
-                        vm.checkInMessage = "CHECKIN_ERROR";
+                        vm.alert.type = Params.alertTypeDanger;
+                        vm.checkInMessage = Params.checkinErrorMessage;
                         vm.apps = CheckInService.getCheckInApps();
                         vm.error = "ERROR";
                     }
@@ -90,7 +90,7 @@
          * @returns {boolean}
          */
         function HasMeaningfulAlias(appointmentType) {
-            return (appointmentType.toLowerCase() !== "appointment" && appointmentType.toLowerCase() !== "rendez-vous");
+            return (appointmentType.toLowerCase() !== Params.appointmentType.appointmentTypeEn && appointmentType.toLowerCase() !== Params.appointmentType.appointmentTypeFr);
         }
 
         /**

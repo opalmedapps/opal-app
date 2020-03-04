@@ -12,10 +12,10 @@
         .module('MUHCApp')
         .controller('IndividualParkingController', IndividualParkingController);
 
-    IndividualParkingController.$inject = ['NavigatorParameters', 'UserPreferences', '$scope'];
+    IndividualParkingController.$inject = ['NavigatorParameters', 'UserPreferences', '$scope', 'Params'];
 
     /* @ngInject */
-    function IndividualParkingController(NavigatorParameters, UserPreferences, $scope) {
+    function IndividualParkingController(NavigatorParameters, UserPreferences, $scope, Params) {
 
         var vm = this;
 
@@ -30,22 +30,22 @@
             var parkingInformation = {
                 'EN':{
                     'general':{
-                        title:"Parking",
-                        link:"https://www.depdocs.com/opal/parking/parking.php"
+                        title: Params.general.generalParkingTitleEn,
+                        link: Params.general.generalParkingUrl
                     },
                     'oncology':{
-                        title:"Oncology Parking",
-                        link:"https://www.depdocs.com/opal/parking/oncology_parking.php"
+                        title: Params.oncology.oncologyParkingTitleEn,
+                        link: Params.oncology.oncologyParkingUrl
                     }
                 },
                 'FR':{
                     'general':{
-                        title:"Stationnement",
-                        link:"https://www.depdocs.com/opal/parking/stationnement.php"
+                        title: Params.general.generalParkingTitleFr,
+                        link: Params.general.generalParkingUrl
                     },
                     'oncology':{
-                        title:"Stationnement Radiothérapie",
-                        link:"https://www.depdocs.com/opal/parking/radiotherapie_stationnement.php"
+                        title: Params.oncology.oncologyParkingTitleFr,
+                        link: Params.oncology.oncologyParkingUrl
                     }
                 }
             };

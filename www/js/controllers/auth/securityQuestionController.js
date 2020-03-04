@@ -26,11 +26,11 @@
         .controller('SecurityQuestionController', SecurityQuestionController);
 
     SecurityQuestionController.$inject = ['$window', '$timeout', 'ResetPassword', 'RequestToServer', 'EncryptionService',
-        'UUID', 'UserAuthorizationInfo', '$state', 'DeviceIdentifiers', 'NavigatorParameters', '$scope'];
+        'UUID', 'UserAuthorizationInfo', '$state', 'DeviceIdentifiers', 'NavigatorParameters', '$scope', 'Params'];
 
     /* @ngInject */
     function SecurityQuestionController($window, $timeout, ResetPassword, RequestToServer, EncryptionService, UUID,
-                                        UserAuthorizationInfo, $state, DeviceIdentifiers, NavigatorParameters, $scope) {
+                                        UserAuthorizationInfo, $state, DeviceIdentifiers, NavigatorParameters, $scope, Params) {
 
         var vm = this;
         var deviceID;
@@ -185,31 +185,30 @@
         function handleError(error) {
             $timeout(function(){
                 var code = (error.code)? error.code : error.Code;
-                vm.alert.type='danger';
+                vm.alert.type = Params.alertTypeDanger;
                 switch (code){
-                    case "auth/expired-action-Code":
-                    case "auth/invalid-action-Code":
-                    case "auth/invalid-action-code":
+                    case Params.expiredActionCode:
+                    case Params.invalidActionCode:
                         vm.invalidCode=true;
                         errormodal.show();
                         break;
-                    case "auth/user-disabled":
-                        vm.alert.content = "USER_DISABLED";
+                    case Params.userDisabled:
+                        vm.alert.content = Params.loginDisabledUserMessage;
                         break;
-                    case "auth/user-not-found":
-                        vm.alert.content = "INVALID_USER";
+                    case Params.invalidUser:
+                        vm.alert.content = Params.invalidUserMessage;
                         break;
                     case 4:
-                        vm.alert.content = "OUTOFTRIES";
+                        vm.alert.content = Params.outOfTriesMessage;
                         break;
-                    case "corrupted-data":
-                        vm.alert.content = "CONTACTHOSPITAL";
+                    case Params.corruptedDataCase:
+                        vm.alert.content = Params.corruptedDataMessage;
                         break;
-                    case "wrong-answer":
-                        vm.alert.content="ERRORANSWERNOTMATCH";
+                    case Params.wrongAnswerCase:
+                        vm.alert.content = Params.wrongAnswerMessage;
                         break;
                     default:
-                        vm.alert.content="INTERNETERROR2";
+                        vm.alert.content = Params.networkErrorMessage;
                         break;
                 }
             })
@@ -254,8 +253,8 @@
          */
         function submitAnswer (answer) {
             if (!answer || (!vm.ssn && passwordReset)) {
-                vm.alert.type = 'danger';
-                vm.alert.content = 'ENTERANANSWER';
+                vm.alert.type = Params.alertTypeDanger;
+                vm.alert.content = Params.enterSecurityQuestionAnswerMessage;
 
             } else {
                 vm.alertShow = false;

@@ -21,12 +21,12 @@
 
             <ons-list-item style="background-color:#E3F2FD" modifier="chevron tappable" ng-if="vm.hasWaitingTimes" ng-class="fontSizeDesc"
                            ng-click="vm.historicalDelays()" >
-                <strong class="item-desc" ng-class="fontSizeDesc">{{"APPOINTMENT_CHECK_HISTORICAL_DELAYS" | translate}} {{vm.title}} </strong>
+                <strong class="item-desc" style="font-weight: bold;" ng-class="fontSizeDesc">{{"APPOINTMENT_CHECK_HISTORICAL_DELAYS" | translate}} {{vm.title}} <ons-icon icon="fas fa-question-circle"></ons-icon > </strong>
             </ons-list-item>
 
             <ons-list-item style="background-color:#E3F2FD" modifier="chevron tappable" ng-class="fontSizeDesc"
                            ng-click="vm.aboutAppointment()" >
-                <p class="item-desc" ng-class="fontSizeDesc">{{"APPOINTMENT_ABOUT" | translate}} {{vm.title}} </p>
+                <p class="item-desc" style="font-weight: bold;" ng-class="fontSizeDesc">{{"APPOINTMENT_ABOUT" | translate}} {{vm.title}}  <ons-icon icon="fas fa-info-circle"></ons-icon>  </p>
             </ons-list-item>
 
             <!--<ons-list-item style="background-color:#E3F2FD" modifier="chevron tappable" ng-click="vm.aboutAppointment()" ng-class="fontSizeDesc">-->

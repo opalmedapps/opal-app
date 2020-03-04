@@ -6,7 +6,7 @@
 
 
 var app1 = angular.module('MUHCApp');
-app1.controller('QuestionnaireMainController', function ($scope, $location, $anchorScroll, $rootScope, $sce, $http, $window, $filter, progressBarManager, Questionnaires, $timeout, NavigatorParameters, UserPreferences) {
+app1.controller('QuestionnaireMainController', function ($scope, $location, $anchorScroll, $rootScope, $sce, $http, $window, $filter, progressBarManager, Questionnaires, $timeout, NavigatorParameters, UserPreferences, Params) {
 
     // Questionnaires.getQuestionnaireAnswers();
     if (Questionnaires.isEmpty()) {
@@ -221,7 +221,7 @@ app1.controller('QuestionnaireMainController', function ($scope, $location, $anc
                 // checkbox stores the value of the clicked button
                 $scope.checkbox = undefined;
             } else if ($scope.question.QuestionType == 'image') {
-                $scope.colors = ['lime', 'lime', 'orange', 'orange', 'orange', 'red', 'red', 'red', 'darkred', 'darkred'];
+                $scope.colors = Params.colorsArray;
 
                 if ($scope.answers == undefined) {
                     $scope.answers = new Array(Questionnaires.getQuestions().length);

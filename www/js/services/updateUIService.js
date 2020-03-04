@@ -28,12 +28,12 @@ var myApp=angular.module('MUHCApp');
 myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors','Appointments',
     'Documents','EducationalMaterial', 'UserAuthorizationInfo', '$q', 'Notifications',
     '$cordovaNetwork', 'LocalStorage','RequestToServer','$filter','Diagnoses','Questionnaires',
-    'NativeNotification','LabResults', 'Tasks',
+    'NativeNotification','LabResults', 'Tasks', 'Params',
 
     function (Announcements, TxTeamMessages, Patient,Doctors, Appointments, Documents,
               EducationalMaterial, UserAuthorizationInfo, $q, Notifications,
               $cordovaNetwork,LocalStorage,RequestToServer,$filter,Diagnoses,Questionnaires,
-              NativeNotification,LabResults, Tasks ) {
+              NativeNotification,LabResults, Tasks, Params ) {
         /**
          *@ngdoc property
          *@name  MUHCApp.service.#lastUpdateTimestamp
@@ -53,19 +53,7 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors',
         'Questionnaires':0
   };</pre>
          **/
-        var lastUpdateTimestamp={
-            'All':0,
-            'Appointments':0,
-            'Messages':0,
-            'Documents':0,
-            'Tasks':0,
-            'Doctors':0,
-            'LabTests':0,
-            'Patient':0,
-            'Notifications':0,
-            'EducationalMaterial':0,
-            'Questionnaires':0
-        };
+        var lastUpdateTimestamp = Params.lastUpdateTimestamp;
         /**
          *@ngdoc property
          *@name  MUHCApp.service.#promiseFields
@@ -399,19 +387,7 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors',
              **/
             clearUpdateUI:function()
             {
-                lastUpdateTimestamp={
-                    'All':0,
-                    'Appointments':0,
-                    'Messages':0,
-                    'Documents':0,
-                    'Tasks':0,
-                    'Doctors':0,
-                    'LabTests':0,
-                    'Patient':0,
-                    'Notifications':0,
-                    'EducationalMaterial':0,
-                    'Questionnaires':0
-                };
+                lastUpdateTimestamp = Params.lastUpdateTimestamp;
             }
         };
 

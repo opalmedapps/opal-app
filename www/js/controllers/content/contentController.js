@@ -1,7 +1,7 @@
 /*
  * Filename     :   contentController.js
  * Description  :   Manages the dynamic content grabbed from depdocs. It can take a content link as input.
- * Created by   :   David Herrera, Robert Maglieri 
+ * Created by   :   David Herrera, Robert Maglieri
  * Date         :   27 Apr 2017
  * Copyright    :   Copyright 2016, HIG, All rights reserved.
  * Licence      :   This file is subject to the terms and conditions defined in
@@ -15,10 +15,10 @@
         .module('MUHCApp')
         .controller('ContentController', ContentController);
 
-    ContentController.$inject = ['DynamicContentService', 'NavigatorParameters', 'Logger', '$rootScope'];
+    ContentController.$inject = ['DynamicContentService', 'NavigatorParameters', 'Logger', '$rootScope', 'Params'];
 
     /* @ngInject */
-    function ContentController(DynamicContentService, NavigatorParameters, Logger, $rootScope) {
+    function ContentController(DynamicContentService, NavigatorParameters, Logger, $rootScope, Params) {
         var vm = this;
         vm.pageContent = {};
         vm.loading = true;
@@ -81,16 +81,16 @@
         function handleError(response) {
             vm.loading = false;
             switch (response.code) {
-                case "NO_PAGE":
+                case Params.noPageResponseCase:
                     vm.alert = {
-                        type: 'info',
-                        content: "NO_CONTENT"
+                        type: Params.alertTypeInfo,
+                        content: Params.noContentMessage
                     };
                     break;
                 default:
                     vm.alert = {
-                        type: 'danger',
-                        content: "INTERNETERROR"
+                        type: Params.alertTypeDanger,
+                        content: Params.secondNetworkErrorMessage
                     };
             }
         }
