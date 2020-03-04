@@ -1,7 +1,7 @@
 <ons-page ng-controller="SetHospitalController as vm" style="background-color: white">
     <ons-toolbar fixed-style>
         <div class="left">
-            <ons-back-button ng-click="vm.saveSelectedHospital();">{{"BACK"|translate}}</ons-back-button>
+            <ons-back-button>{{"BACK"|translate}}</ons-back-button>
         </div>
         <div class="center">{{"SELECT_HOSPITAL"|translate}}</div>
     </ons-toolbar>
@@ -12,7 +12,7 @@
             </li>
             <li class="list__item list__item--tappable" ng-repeat="(hospitalKey, hospitalValue) in vm.hospitalObj track by hospitalKey">
                 <label class="radio-button radio-button--list-item">
-                    <input type="radio" value="{{hospitalKey}}" ng-model="vm.selectedHospitalKey">
+                    <input type="radio" value="{{hospitalKey}}" ng-change="vm.saveSelectedHospital();" ng-model="vm.selectedHospitalKey">
                     <div class="radio-button__checkmark radio-button--list-item__checkmark"></div>
                     {{hospitalValue.fullName|translate}}
                 </label>
