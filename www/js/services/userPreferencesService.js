@@ -255,8 +255,6 @@ myApp.service('UserPreferences',[ 'UserAuthorizationInfo','$rootScope','tmhDynam
          *@description If hospital was already set previously within the app, set default to that hospital. Otherwise it sets hospital to '' as default.
          **/
         initializeHospital: function(){
-            console.log('initialize hospital');
-
             let localStorageHospitalKey = 'hospital';
 
             let localStorageHospital = window.localStorage.getItem(localStorageHospitalKey);

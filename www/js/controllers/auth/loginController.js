@@ -122,6 +122,13 @@
             $timeout(function(){
                 vm.trusted = !!($window.localStorage.getItem("deviceID"));
             });
+
+            // set firebase branch
+            if (isThereSelectedHospital()){
+                let branchName = Params.hospitalList[UserPreferences.getHospital()]['uniqueHospitalCode'] + '/';
+                FirebaseService.updateFirebaseUrl(branchName);
+            }
+
         }
 
         /**
@@ -145,9 +152,7 @@
 
                 // Save the current session token to the users "logged in users" node.
                 // This is used to make sure that the user is only logged in for one session at a time.
-                //
-                var Ref= firebase.database().ref(FirebaseService.getFirebaseUrl(null));
-                var refCurrentUser = Ref.child(FirebaseService.getFirebaseChild('logged_in_users') + firebaseUser.uid);
+                let refCurrentUser = FirebaseService.getDBRef(FirebaseService.getFirebaseChild('logged_in_users') + firebaseUser.uid);
 
                 refCurrentUser.set({ 'Token' : sessionToken });
 
