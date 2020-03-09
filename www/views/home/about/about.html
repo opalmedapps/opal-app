@@ -39,7 +39,7 @@
             </ons-row>
         </ons-list-item>
 
-        <ons-list-item modifier="tappable" ng-click="modalOpenViewer2.show()">
+        <ons-list-item modifier="tappable" ng-click="modalOpenViewer2.show()" ng-show="about.allowedModules.hasOwnProperty('SUP') && about.allowedModules['SUP']">
             <ons-row align="center">
                 <ons-col width="60px" style="text-align: center">
                     <div>
@@ -81,7 +81,7 @@
             </ons-row>
         </ons-list-item>
 
-        <ons-list-item modifier="tappable chevron" ng-click="about.openCedars()">
+        <ons-list-item modifier="tappable chevron" ng-click="about.openCedars()" ng-if="about.allowedModules.hasOwnProperty('CED') && about.allowedModules['CED']">
             <ons-row align="center">
                 <ons-col width="60px" style="text-align: center">
                     <div>
@@ -95,7 +95,7 @@
         </ons-list-item>
 
         <!--<ons-list-item modifier="tappable" ng-click="about.openAboutMUHC()">-->
-        <ons-list-item modifier="tappable" ng-click="about.openUrl('aboutmuhc')">
+        <ons-list-item modifier="tappable" ng-click="about.openUrl('aboutmuhc')" ng-if="about.allowedModules.hasOwnProperty('HOS') && about.allowedModules['HOS']">
             <ons-row align="center">
                 <ons-col width="60px" style="text-align: center">
                     <div>

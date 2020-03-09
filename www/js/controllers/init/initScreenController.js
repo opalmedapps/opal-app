@@ -23,7 +23,8 @@
         'Constants',
         'Permissions',
         'DynamicContentService',
-        'NewsBanner'
+        'NewsBanner',
+        'Params'
     ];
 
     /* @ngInject */
@@ -35,7 +36,8 @@
         Constants,
         Permissions,
         DynamicContentService,
-        NewsBanner
+        NewsBanner,
+        Params
     ) {
         var vm = this;
         vm.globalMessage = '';
@@ -44,7 +46,8 @@
 
         vm.goToMessage = goToMessage;
         vm.gotoLearnAboutOpal = gotoLearnAboutOpal;
-        vm.goToParking = goToParking;
+        // vm.goToParking = goToParking;
+        vm.goToRegister = goToRegister;
         vm.goToGeneralSettings = goToGeneralSettings;
         vm.goToPatientCharter = goToPatientCharter;
         vm.goToAcknowledgements = goToAcknowledgements;
@@ -136,15 +139,28 @@
             initNavigator.pushPage('./views/home/about/about.html');
         }
 
+        /**
+         * Go to registration page
+         */
+        function goToRegister(){
+            let url = Params.registrationPage;
+            let app = document.URL.indexOf('http://') === -1 && document.URL.indexOf('https://') === -1;
+
+            if (!app) {
+                window.open(url, '_blank');
+            } else {
+                cordova.InAppBrowser.open(url, '_system');   // _system: opens in External Browser (Safari, etc...) on the device
+            }
+        }
 
         /**
          * Go to parking function
          */
-        function goToParking()
-        {
-            NavigatorParameters.setParameters('initNavigator');
-            initNavigator.pushPage('./views/general/parking/parking.html');
-        }
+        // function goToParking()
+        // {
+        //     NavigatorParameters.setParameters('initNavigator');
+        //     initNavigator.pushPage('./views/general/parking/parking.html');
+        // }
 
         /**
          * Go to general settings (About)

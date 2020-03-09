@@ -52,6 +52,8 @@
         alertClassUpdateMessageError: 'bg-danger updateMessage-error',
         alertClassUpdateMessageSuccess: "bg-success updateMessage-success",
 
+        /** Registration link**/
+        registrationPage: 'https://registration.opalmedapps.ca/',
 
         /** Error Constants **/
         invalidEmail: 'auth/invalid-email',
@@ -188,7 +190,7 @@
             gettingHospitalUrlFr: 'https://cusm.ca/glen'
         },
 
-        /** Questionnaire Controller conttants **/
+        /** Questionnaire Controller constants **/
         colorsArray: ['lime', 'lime', 'orange', 'orange', 'orange', 'red', 'red', 'red', 'darkred', 'darkred'],
 
         /** ChangeSettingsController Constants **/
@@ -474,7 +476,7 @@
                     "FFD": 1,
                     "MAS": 1,
                     "EDU": 1,
-                    "SUP": 0,
+                    "SUP": 1,
                     "CED": 0,
                     "HOS": 0,
                 },
@@ -504,7 +506,7 @@
                     "FFD": 1,
                     "MAS": 1,
                     "EDU": 1,
-                    "SUP": 0,
+                    "SUP": 1,
                     "CED": 0,
                     "HOS": 0,
                 },
@@ -534,7 +536,7 @@
                     "FFD": 1,
                     "MAS": 1,
                     "EDU": 1,
-                    "SUP": 0,
+                    "SUP": 1,
                     "CED": 0,
                     "HOS": 0,
                 },
@@ -564,7 +566,7 @@
                     "FFD": 1,
                     "MAS": 1,
                     "EDU": 1,
-                    "SUP": 0,
+                    "SUP": 1,
                     "CED": 0,
                     "HOS": 0,
                 },
@@ -594,7 +596,7 @@
                     "FFD": 1,
                     "MAS": 1,
                     "EDU": 1,
-                    "SUP": 0,
+                    "SUP": 1,
                     "CED": 0,
                     "HOS": 0,
                 },
@@ -624,7 +626,7 @@
                     "FFD": 1,
                     "MAS": 1,
                     "EDU": 1,
-                    "SUP": 0,
+                    "SUP": 1,
                     "CED": 0,
                     "HOS": 0,
                 },

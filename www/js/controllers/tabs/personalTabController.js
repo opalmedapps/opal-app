@@ -13,15 +13,15 @@
         .controller('PersonalTabController', PersonalTabController);
 
     PersonalTabController.$inject = ['Appointments','TxTeamMessages','Documents','NavigatorParameters', 'Notifications',
-        'Questionnaires', 'Patient', 'NetworkStatus', 'MetaData', '$timeout', 'UserPreferences', 'Params'];
+        'Questionnaires', 'Patient', 'NetworkStatus', 'MetaData', '$timeout', 'UserPreferences', 'Params', 'HospitalModulePermission'];
 
-    function PersonalTabController( Appointments, TxTeamMessages, Documents, NavigatorParameters,
-                                   Notifications, Questionnaires, Patient, NetworkStatus, MetaData, $timeout, UserPreferences, Params) {
+    function PersonalTabController( Appointments, TxTeamMessages, Documents, NavigatorParameters, Notifications, Questionnaires,
+                                    Patient, NetworkStatus, MetaData, $timeout, UserPreferences, Params, HospitalModulePermission) {
         var vm = this;
-        let selectedHospitalKey = UserPreferences.getHospital();
 
         // variable to let the user know which hospital they are logged in
         vm.selectedHospitalToDisplay = "";
+        vm.allowedModules = {};
 
         vm.goToStatus = goToStatus;
         vm.personalDeviceBackButton = personalDeviceBackButton;
@@ -98,15 +98,17 @@
         }
 
         function goToCarnetSante() {
-            let url = '';
-            let app = document.URL.indexOf('http://') === -1 && document.URL.indexOf('https://') === -1;
+            if (tab.allowedModules.hasOwnProperty('CSQ') && tab.allowedModules['CSQ']){
+                let url = '';
+                let app = document.URL.indexOf('http://') === -1 && document.URL.indexOf('https://') === -1;
 
-            url = Params.carnetSanteUrl;  // English site available after opening the French one
+                url = Params.carnetSanteUrl;  // English site available after opening the French one
 
-            if (app) {
-                cordova.InAppBrowser.open(url, '_blank', 'location=yes');
-            } else {
-                window.open(url, '_blank');
+                if (app) {
+                    cordova.InAppBrowser.open(url, '_blank', 'location=yes');
+                } else {
+                    window.open(url, '_blank');
+                }
             }
         }
 
@@ -115,8 +117,8 @@
          * @desc Set the hospital name to display
          */
         function configureSelectedHospital() {
-            let hospitalList = Params.hospitalList;
-            vm.selectedHospitalToDisplay = hospitalList[selectedHospitalKey].fullName;
+            vm.selectedHospitalToDisplay = HospitalModulePermission.getHospitalFullName();
+            vm.allowedModules = HospitalModulePermission.getHospitalAllowedModules();
         }
     }
 })();

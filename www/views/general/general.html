@@ -34,6 +34,7 @@
                 <!--</ons-row>-->
             <!--</ons-list-item>-->
             <ons-list-item modifier="chevron" class="item"
+                           ng-if="tab.allowedModules.hasOwnProperty('ANN') && tab.allowedModules['ANN']"
                            ng-click="generalNavigator.pushPage('views/general/announcements/announcements.html')">
                 <ons-row align="center">
                     <ons-col width="60px" style="text-align: center">
@@ -51,7 +52,9 @@
                     </ons-col>
                 </ons-row>
             </ons-list-item>
-            <ons-list-item modifier="chevron" class="item" ng-click="tab.goToParking()">
+            <ons-list-item modifier="chevron" class="item"
+                           ng-if="tab.allowedModules.hasOwnProperty('PAT') && tab.allowedModules['PAT']"
+                           ng-click="tab.goToParking()">
                 <ons-row align="center">
                     <ons-col width="60px" style="text-align: center">
                         <div>
@@ -67,6 +70,7 @@
                 </ons-row>
             </ons-list-item>
             <ons-list-item modifier="chevron" class="item"
+                           ng-if="tab.allowedModules.hasOwnProperty('PFP') && tab.allowedModules['PFP']"
                            ng-click="generalNavigator.pushPage('views/general/patientsforpatients/patientsforpatients.html')">
                 <ons-row align="center">
                     <ons-col width="60px" style="text-align: center">
@@ -83,6 +87,7 @@
                 </ons-row>
             </ons-list-item>
             <ons-list-item modifier="chevron" class="item"
+                           ng-if="tab.allowedModules.hasOwnProperty('FEE') && tab.allowedModules['FEE']"
                            ng-click="generalNavigator.pushPage('views/general/feedback/feedback.html')">
                 <ons-row align="center">
                     <ons-col width="60px" style="text-align: center">
@@ -98,7 +103,9 @@
                     </ons-col>
                 </ons-row>
             </ons-list-item>
-            <ons-list-item class="item" ng-click="tab.goToUrl('FindDoctor')">
+            <ons-list-item class="item"
+                           ng-if="tab.allowedModules.hasOwnProperty('FFD') && tab.allowedModules['FFD']"
+                           ng-click="tab.goToUrl('FindDoctor')">
                 <ons-row align="center">
                     <ons-col width="60px" style="text-align: center">
                         <div>
@@ -119,7 +126,9 @@
                     </ons-col>
                 </ons-row>
             </ons-list-item>
-            <ons-list-item class="item" ng-click="tab.goToUrl('MedicalScheduler')">
+            <ons-list-item class="item"
+                           ng-if="tab.allowedModules.hasOwnProperty('MAS') && tab.allowedModules['MAS']"
+                           ng-click="tab.goToUrl('MedicalScheduler')">
                 <ons-row align="center">
                     <ons-col width="60px" style="text-align: center">
                         <div>

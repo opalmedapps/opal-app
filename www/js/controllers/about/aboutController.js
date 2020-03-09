@@ -23,16 +23,17 @@
         .module('MUHCApp')
         .controller('AboutController', AboutController);
 
-    AboutController.$inject = ['$window', 'UserPreferences', 'NavigatorParameters', 'Params'];
+    AboutController.$inject = ['$window', 'UserPreferences', 'NavigatorParameters', 'Params', 'HospitalModulePermission'];
 
     /* @ngInject */
-    function AboutController($window, UserPreferences, NavigatorParameters, Params) {
+    function AboutController($window, UserPreferences, NavigatorParameters, Params, HospitalModulePermission) {
         const vm = this;
 
         vm.openUrl = openUrl;
         vm.openTeam = openTeam;
         vm.openAcknowledge = openAcknowledge;
         vm.openCedars = openCedars;
+        vm.allowedModules = {};
 
         // vm.openDonation = openDonation;
         // vm.openAboutMUHC = openAboutMUHC;
@@ -53,6 +54,28 @@
             navigatorName = parameters.Navigator;
 
             vm.language = UserPreferences.getLanguage();
+
+            setAllowedModules();
+        }
+
+        function setAllowedModules (){
+            // first check if we are logged in or not by checking the navigator name
+
+            /**
+             * navigatorName = 'initNavigator' or 'homeNavigator'
+             * navigatorName = 'initNavigator' when about.html is called from init-Screen.html (initScreenController)
+             * navigatorName = 'homeNavigator' when about.html is called from home.html (homeController)
+             *
+             * about.html (Learn About Opal) is called twice: once from init-Screen.html (very first screen) and once from home.html (after logging in)
+             */
+
+            let navigatorNameAfterLogin = 'homeNavigator';
+
+            if (navigatorName === navigatorNameAfterLogin){
+                vm.allowedModules = HospitalModulePermission.getHospitalAllowedModules(false);
+            } else {
+                vm.allowedModules = HospitalModulePermission.getHospitalAllowedModules(true);
+            }
         }
 
         function openUrl(openWhat, openInExternalBrowser = false) {
@@ -108,7 +131,9 @@
         }
 
         function openCedars() {
-            window[navigatorName].pushPage('views/home/about/cedars.html');
+           if (vm.allowedModules.hasOwnProperty('CED') && vm.allowedModules['CED']){
+               window[navigatorName].pushPage('views/home/about/cedars.html');
+           }
         }
 
 

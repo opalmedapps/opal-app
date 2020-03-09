@@ -8,16 +8,14 @@
     HomeController.$inject = [
         'Appointments', 'CheckInService', 'Patient', 'UpdateUI','$scope', '$timeout','$filter', 'Notifications',
         'NavigatorParameters', 'NewsBanner', 'PlanningSteps', 'Permissions', 'UserPreferences', 'NetworkStatus',
-        'MetaData', 'Params'];
+        'MetaData', 'HospitalModulePermission'];
 
     /* @ngInject */
     function HomeController(Appointments, CheckInService, Patient, UpdateUI, $scope, $timeout, $filter, Notifications,
                             NavigatorParameters, NewsBanner, PlanningSteps, Permissions, UserPreferences, NetworkStatus,
-                            MetaData, Params)
+                            MetaData, HospitalModulePermission)
     {
         var vm = this;
-
-        let selectedHospitalKey = UserPreferences.getHospital();
 
         vm.PatientId ='';
         vm.FirstName = '';
@@ -45,6 +43,8 @@
 
         // variable to let the user know which hospital they are logged in
         vm.selectedHospitalToDisplay = "";
+        // control the modules to display to users
+        vm.allowedModules = {};
 
         vm.homeDeviceBackButton = homeDeviceBackButton;
         vm.goToStatus = goToStatus;
@@ -102,7 +102,7 @@
                 setPatientInfo();
             }
 
-            // set the hospital banner
+            // set the hospital banner and available modules
             configureSelectedHospital();
         }
 
@@ -238,8 +238,8 @@
          * @desc Set the hospital name to display
          */
         function configureSelectedHospital() {
-            let hospitalList = Params.hospitalList;
-            vm.selectedHospitalToDisplay = hospitalList[selectedHospitalKey].fullName;
+            vm.selectedHospitalToDisplay = HospitalModulePermission.getHospitalFullName();
+            vm.allowedModules = HospitalModulePermission.getHospitalAllowedModules();
         }
 
         /*
@@ -271,7 +271,9 @@
          * Takes the user the treatment status page
          */
         function goToStatus() {
-            homeNavigator.pushPage('views/home/status/status_new.html');
+            if (vm.allowedModules.hasOwnProperty('TRP') && vm.allowedModules['TRP']){
+                homeNavigator.pushPage('views/home/status/status_new.html');
+            }
         }
 
         /**
@@ -306,8 +308,10 @@
          * Takes the user to the selected appointment to view more details about it
          */
         function goToAppointments(){
-            NavigatorParameters.setParameters({'Navigator':'homeNavigator'});
-            homeNavigator.pushPage('./views/personal/appointments/appointments.html');
+            if (vm.allowedModules.hasOwnProperty('APT') && vm.allowedModules['APT']){
+                NavigatorParameters.setParameters({'Navigator':'homeNavigator'});
+                homeNavigator.pushPage('./views/personal/appointments/appointments.html');
+            }
         }
 
         /**
@@ -321,7 +325,7 @@
          * Takes the user to the checkin view
          */
         function goToCheckinAppointments() {
-            if (vm.checkinState.noAppointments) return;
+            if (vm.checkinState.noAppointments || !vm.allowedModules.hasOwnProperty('CHK') || !vm.allowedModules['CHK']) return;
             NavigatorParameters.setParameters({'Navigator':'homeNavigator'});
             homeNavigator.pushPage('./views/home/checkin/checkin-list.html');
         }

@@ -24,10 +24,10 @@
         .controller('LoginController', LoginController);
 
     LoginController.$inject = ['$timeout', '$state', 'UserAuthorizationInfo', '$filter','DeviceIdentifiers',
-        'UserPreferences', 'Patient', 'NewsBanner', 'UUID', 'Constants', 'EncryptionService', 'CleanUp', '$window', '$scope', 'FirebaseService', '$rootScope', 'Params'];
+        'UserPreferences', 'Patient', 'NewsBanner', 'UUID', 'Constants', 'EncryptionService', 'CleanUp', '$window', '$scope', 'FirebaseService', '$rootScope', 'Params', 'HospitalModulePermission'];
 
     /* @ngInject */
-    function LoginController($timeout, $state, UserAuthorizationInfo, $filter, DeviceIdentifiers, UserPreferences, Patient, NewsBanner, UUID, Constants, EncryptionService, CleanUp, $window, $scope, FirebaseService, $rootScope, Params) {
+    function LoginController($timeout, $state, UserAuthorizationInfo, $filter, DeviceIdentifiers, UserPreferences, Patient, NewsBanner, UUID, Constants, EncryptionService, CleanUp, $window, $scope, FirebaseService, $rootScope, Params, HospitalModulePermission) {
 
         var vm = this;
 
@@ -125,7 +125,7 @@
 
             // set firebase branch
             if (isThereSelectedHospital()){
-                let branchName = Params.hospitalList[UserPreferences.getHospital()]['uniqueHospitalCode'] + '/';
+                let branchName = HospitalModulePermission.getHospitalUniqueCode() + '/';
                 FirebaseService.updateFirebaseUrl(branchName);
             }
 
@@ -463,8 +463,7 @@
          * @returns {boolean} true if there is a hospital selected. false otherwise.
          */
         function isThereSelectedHospital() {
-            let selectedHospitalKey = UserPreferences.getHospital();
-            return selectedHospitalKey !== '' && selectedHospitalKey !== null && selectedHospitalKey !== undefined;
+            return HospitalModulePermission.isThereSelectedHospital();
         }
 
         /**
@@ -477,7 +476,7 @@
         function getSelectedHospitalAcronym(){
 
             if (isThereSelectedHospital()){
-                return vm.selectedHospital = Params.hospitalList[UserPreferences.getHospital()]['acronym'];
+                return HospitalModulePermission.getHospitalAcronym();
             } else {
                 return "TAP_TO_SELECT_HOSPITAL";
             }

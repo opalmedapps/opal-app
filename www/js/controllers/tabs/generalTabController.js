@@ -12,11 +12,10 @@
             .module('MUHCApp')
             .controller('GeneralTabController', GeneralTabController);
 
-        GeneralTabController.$inject = ['$scope', 'Announcements', 'UpdateUI', 'NavigatorParameters', 'NetworkStatus', 'MetaData', 'UserPreferences', 'Params'];
+        GeneralTabController.$inject = ['$scope', 'Announcements', 'UpdateUI', 'NavigatorParameters', 'NetworkStatus', 'MetaData', 'UserPreferences', 'Params', 'HospitalModulePermission'];
 
-        function GeneralTabController($scope, Announcements, UpdateUI, NavigatorParameters, NetworkStatus, MetaData, UserPreferences, Params) {
+        function GeneralTabController($scope, Announcements, UpdateUI, NavigatorParameters, NetworkStatus, MetaData, UserPreferences, Params, HospitalModulePermission) {
             var vm = this;
-            let selectedHospitalKey = UserPreferences.getHospital();
 
             vm.goToPatientCharter = goToPatientCharter;
             vm.goToParking = goToParking;
@@ -25,6 +24,7 @@
 
             // variable to let the user know which hospital they are logged in
             vm.selectedHospitalToDisplay = "";
+            vm.allowedModules = {};
 
             activate();
 
@@ -50,11 +50,11 @@
 
             /**
              * @name configureSelectedHospital
-             * @desc Set the hospital name to display
+             * @desc Set the hospital name and module to display
              */
             function configureSelectedHospital() {
-                let hospitalList = Params.hospitalList;
-                vm.selectedHospitalToDisplay = hospitalList[selectedHospitalKey].fullName;
+                vm.selectedHospitalToDisplay = HospitalModulePermission.getHospitalFullName();
+                vm.allowedModules = HospitalModulePermission.getHospitalAllowedModules();
             }
 
             function bindEvents() {
@@ -105,8 +105,10 @@
             }
 
             function goToParking() {
-                NavigatorParameters.setParameters('generalNavigator');
-                generalNavigator.pushPage('views/general/parking/parking.html')
+                if (vm.allowedModules.hasOwnProperty('PAT') && vm.allowedModules['PAT']){
+                    NavigatorParameters.setParameters('generalNavigator');
+                    generalNavigator.pushPage('views/general/parking/parking.html');
+                }
             }
 
             function generalDeviceBackButton() {
