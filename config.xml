@@ -1,12 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
-    <!-- PRODUCTION -->
-    <!--<widget id="com.hig.opal2" android-packageName="com.hig.opal2" android-versionCode="1722" version="1.7.22" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">-->
-    <!--<name>Opal</name>-->
-
-    <!--Pre-Production-->
-    <widget id="com.hig.opaldev2" android-packageName="com.hig.opaldev2" version="1.8.13" android-versionCode="1813" >
-    <name>Opal-dev</name>
-
+<widget android-versionCode="1817" id="com.hig.opalstaging" version="1.8.17" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>Opal Staging</name>
     <description>
         Opal - the MUHC Oncology Patient Application for mobile phones and the web -
         is a product that has arisen from the winning project of the 2014 MUHC Q+ initiative.
@@ -15,8 +9,8 @@
         addressing the pain of waiting”. It had as its goal the provision of waiting time estimates to
         radiation oncology patients.
     </description>
-    <author email="muhc.app.mobile@gmail.com" href="http://cordova.io">
-        Health Informatics Group (HIG)
+    <author email="muhc.app.mobile@gmail.com" href="https://opalmedapps.com">
+	    Opal Meds App Inc.
     </author>
     <content src="index.html" />
     <access origin="*" />
@@ -24,6 +18,7 @@
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
     <allow-intent href="tel:*" />
+    <allow-intent href="sms:*" />
     <allow-intent href="mailto:*" />
     <allow-intent href="geo:*" />
     <allow-intent href="opal:" />
@@ -32,9 +27,12 @@
     <preference name="DisallowOverscroll" value="true" />
     <preference name="FadeSplashScreen" value="true" />
     <preference name="FadeSplashScreenDuration" value="500" />
-    <preference name="ErrorUrl" value="www/views/error/error-page.html"/>
-    <icon src="./www/img/OpalHealth_App_Apple_Icon_2.png" />
+    <preference name="ErrorUrl" value="www/views/error/error-page.html" />
+    <icon src="./res/OpalHealth_App_Apple_Icon_2.png" />
     <platform name="android">
+        <edit-config file="app/src/main/AndroidManifest.xml" mode="merge" target="/manifest/application">
+            <application android:usesCleartextTraffic="true" />
+        </edit-config>
         <resource-file src="google-services.json" target="app/google-services.json" />
         <splash density="land-hdpi" src="res/screen/android/splash-land-hdpi.png" />
         <splash density="land-ldpi" src="res/screen/android/splash-land-ldpi.png" />
@@ -52,33 +50,8 @@
         <allow-intent href="market:*" />
     </platform>
     <platform name="ios">
+        <preference name="deployment-target" value="9.0" />
         <splash src="res/screen/ios/Default@2x~universal~anyany.png" />
-        <!--<splash height="768" src="/res/screen/ios/iPad-Landscape.png" width="1024" />-->
-        <!--<splash height="1536" src="/res/screen/ios/iPad-Landscape@2x.png" width="2048" />-->
-        <!--<splash height="2304" src="/res/screen/ios/iPad-Landscape@3x.png" width="3072" />-->
-        <!--<splash height="1024" src="/res/screen/ios/iPad-Portrait.png" width="768" />-->
-        <!--<splash height="1536" src="/res/screen/ios/iPad-Portrait@2x.png" width="2048" />-->
-        <!--<splash height="3072" src="/res/screen/ios/iPad-Portrait@3x.png" width="2304" />-->
-        <!--<splash height="1024" src="/res/screen/ios/iPadPro-Landscape.png" width="1366" />-->
-        <!--<splash height="2048" src="/res/screen/ios/iPadPro-Landscape@2x.png" width="2732" />-->
-        <!--<splash height="3072" src="/res/screen/ios/iPadPro-Landscape@3x.png" width="4098" />-->
-        <!--<splash height="1366" src="/res/screen/ios/iPadPro-Portrait.png" width="1024" />-->
-        <!--<splash height="2732" src="/res/screen/ios/iPadPro-Portrait@2x.png" width="2048" />-->
-        <!--<splash height="4098" src="/res/screen/ios/iPadPro-Portrait@3x.png" width="3072" />-->
-        <!--<splash height="480" src="/res/screen/ios/iPhone4.png" width="320" />-->
-        <!--<splash height="960" src="/res/screen/ios/iPhone4@2x.png" width="640" />-->
-        <!--<splash height="568" src="/res/screen/ios/iPhone5-4.png" width="320" />-->
-        <!--<splash height="1136" src="/res/screen/ios/iPhone5-4@2x.png" width="640" />-->
-        <!--<splash height="667" src="/res/screen/ios/iPhone6-4.7.png" width="375" />-->
-        <!--<splash height="1334" src="/res/screen/ios/iPhone6-4.7@2x.png" width="750" />-->
-        <!--<splash height="414" src="/res/screen/ios/iPhone6plus-5.5-Landscape.png" width="736" />-->
-        <!--<splash height="1242" src="/res/screen/ios/iPhone6plus-5.5-Landscape@3x.png" width="2208" />-->
-        <!--<splash height="736" src="/res/screen/ios/iPhone6plus-5.5-Portrait.png" width="414" />-->
-        <!--<splash height="2208" src="/res/screen/ios/iPhone6plus-5.5-Portrait@3x.png" width="1242" />-->
-        <!--<splash height="375" src="/res/screen/ios/iPhoneX-5.8-Landscape.png" width="812" />-->
-        <!--<splash height="1126" src="/res/screen/ios/iPhoneX-5.8-Landscape@3x.png" width="2436" />-->
-        <!--<splash height="812" src="/res/screen/ios/iPhoneX-5.8-Portrait.png" width="375" />-->
-        <!--<splash height="2436" src="/res/screen/ios/iPhoneX-5.8-Portrait@3x.png" width="1125" />-->
         <allow-intent href="itms:*" />
         <allow-intent href="itms-apps:*" />
         <icon height="180" src="res/ios/Icon-60@3x.png" width="180" />
@@ -95,55 +68,42 @@
         <icon height="29" src="res/ios/Icon-small.png" width="29" />
         <icon height="58" src="res/ios/Icon-small@2x.png" width="58" />
     </platform>
-    <plugin name="com-badrit-printplugin" spec="^0.2.0" />
-    <plugin name="cordova-fabric-plugin" spec="^1.1.1">
-        <variable name="FABRIC_API_KEY" value="710b104a1e625dfb3b338b72b0bce05b0b5d644c" />
-        <variable name="FABRIC_API_SECRET" value="0a1e191ff6a6adda560608fb68cc56f9e16624f531bdc62f0e261c0e688fbdea" />
-    </plugin>
-    <plugin name="cordova-plugin-android-permissions" spec="^0.10.0" />
+    <engine name="android" spec="^8.1.0" />
+    <engine name="ios" spec="^5.1.1" />
+    <plugin name="cordova-plugin-whitelist" spec="1" />
+    <plugin name="cordova-plugin-android-permissions" spec="^1.0.2" />
     <plugin name="cordova-plugin-app-version" spec="^0.1.9" />
-    <plugin name="cordova-plugin-customurlscheme" spec="^4.2.0">
+    <plugin name="cordova-plugin-calendar" spec="^5.1.5">
+        <variable name="CALENDAR_USAGE_DESCRIPTION" value=" " />
+        <variable name="CONTACTS_USAGE_DESCRIPTION" value=" " />
+    </plugin>
+    <plugin name="cordova-plugin-customurlscheme" spec="5.0.0">
         <variable name="URL_SCHEME" value="opal" />
-        <variable name="ANDROID_SCHEME" value=" " />
-        <variable name="ANDROID_HOST" value=" " />
-        <variable name="ANDROID_PATHPREFIX" value="/" />
     </plugin>
-    <plugin name="cordova-plugin-device" spec="^1.1.5" />
-    <plugin name="cordova-plugin-dialogs" spec="^1.3.1" />
-    <!--<plugin name="cordova-plugin-email" spec="^1.2.6" />-->
-    <plugin name="cordova-plugin-file" spec="^5.0.0" />
-    <plugin name="cordova-plugin-file-opener2" spec="^2.0.19" />
-    <plugin name="cordova-plugin-file-transfer" spec="^1.6.1" />
+    <plugin name="cordova-plugin-device" spec="^2.0.3" />
+    <plugin name="cordova-plugin-email" spec="^1.2.7" />
+    <plugin name="cordova-plugin-file" spec="^6.0.2" />
+    <plugin name="cordova-plugin-file-opener2" spec="^3.0.0">
+        <variable name="ANDROID_SUPPORT_V4_VERSION" value="27.+" />
+    </plugin>
+    <plugin name="cordova-plugin-file-transfer" spec="^1.7.1" />
     <plugin name="cordova-plugin-fileopener" spec="^1.0.5" />
-    <plugin name="cordova-plugin-geolocation" spec="^2.4.1" />
-    <plugin name="cordova-plugin-globalization" spec="^1.0.5" />
-    <plugin name="cordova-plugin-inappbrowser" spec="^1.6.1" />
-    <!--<plugin name="cordova-plugin-media" spec="^2.4.1" />-->
-    <plugin name="cordova-plugin-network-information" spec="^1.3.1" />
-    <plugin name="cordova-plugin-splashscreen" spec="^4.0.1" />
-    <plugin name="cordova-plugin-whitelist" spec="^1.3.1" />
-    <plugin name="cordova-plugin-x-socialsharing" spec="^5.1.5" />
-    <plugin name="cordova-plugin-x-toast" spec="^2.5.2" />
-    <plugin name="de.appplant.cordova.plugin.printer" spec="^0.7.1" />
-
-    <!--<plugin name="phonegap-plugin-push" spec="^1.9.2">-->
-        <!--PRODUCTION -->
-        <!--<variable name="SENDER_ID" value="810896751588" />-->
-
-        <!--pre-prod-->
-        <!--<variable name="SENDER_ID" value="476395494069" />-->
-    <!--</plugin>-->
-
-    <plugin name="phonegap-plugin-push" spec="^2.1.2">
-        <variable name="FCM_VERSION" value="11.0.1" />
-        <!--<variable name="SENDER_ID" value="476395494069" />-->
+    <plugin name="cordova-plugin-geolocation" spec="^4.0.2" />
+    <plugin name="cordova-plugin-globalization" spec="^1.11.0" />
+    <plugin name="cordova-plugin-inappbrowser" spec="^3.2.0" />
+    <plugin name="cordova-plugin-network-information" spec="^2.0.2" />
+    <plugin name="cordova-plugin-splashscreen" spec="^5.0.3" />
+    <plugin name="cordova-plugin-x-socialsharing" spec="^5.6.4">
+        <variable name="ANDROID_SUPPORT_V4_VERSION" value="24.1.1+" />
+        <variable name="PHOTO_LIBRARY_ADD_USAGE_DESCRIPTION" value="This app requires photo library access to function properly." />
+        <variable name="PHOTO_LIBRARY_USAGE_DESCRIPTION" value="This app requires photo library access to function properly." />
     </plugin>
-
-    <plugin name="cordova-plugin-compat" spec="^1.1.0" />
-    <plugin name="cordova-plugin-cookiemaster" spec="^1.0.5" />
-    <plugin name="cordova-plugin-vibration" spec="^3.1.0" />
+    <plugin name="cordova-plugin-x-toast" spec="^2.7.2" />
+    <plugin name="com.cordova.plugins.cookiemaster" spec="^1.0.1" />
+    <plugin name="cordova-plugin-vibration" spec="^3.1.1" />
     <plugin name="es6-promise-plugin" spec="^4.2.2" />
-    <engine name="android" spec="^6.3.0" />
-    <engine name="ios" spec="^4.5.5" />
-
+    <plugin name="phonegap-plugin-push" spec="^2.3.0">
+        <variable name="ANDROID_SUPPORT_V13_VERSION" value="27.+" />
+        <variable name="FCM_VERSION" value="17.0.+" />
+    </plugin>
 </widget>

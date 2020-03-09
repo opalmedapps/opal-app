@@ -17,79 +17,124 @@ In order to run the app in your browsing for development and basic testing purpo
 git clone https://github.com/Sable/qplus.git
 ```
 
-* Checkout the branch you wish to install. In the example below, this is the `opal_student` branch (if you are a student, this is likely the branch you will use). To checkout a different branch, replace `opal_student` with the name of your desired branch. Depending on the file structure that was created when cloning, you may need to enter `cd qplus` first to go into the folder containing the repository.
+* Checkout the branch you wish to install. Normally the development branch is the `staging` branch. Here we branch off 
+and add the require logic. 
 
 ```
 git fetch
-git checkout -b opal_student origin/opal_student
+git checkout -b staging origin/staging # This pull staging from remove creates a local staging branch
+git checkout -b staging_new_branch # This creates the new branch of the `staging` branch
 ```
 
-* Install the latest version of [NodeJS](https://nodejs.org/en/download/) and the [yarn](https://classic.yarnpkg.com/en/docs/getting-started) package manager. If you have already done this, skip this step. **(NOTE: For proper access to the backend you must have version 6+)**
+* Install the latest version of [NodeJS](https://nodejs.org/en/download/). If you have already done this, skip this step. **(NOTE: For proper access to the backend you must have version 12+)**
 
 Once this is done, verify that you installed Node globally by running
 running `$node -v`
 
 If you see the current version of the Node runtime installed, then all is good! Otherwise please consult Node's troubleshooting manual or Google the error that occurs.
 
-
 This installation also installs the Node.js package manager [npm](https://docs.npmjs.com/getting-started/what-is-npm).
 The main/description file for a Node.js application is the 
-[package.json](./package.json) file. This file states all the depedencies
-and the versions for each of them. Normally dependencies are manage by `npm`,
-in this project we use `yarn` to manage these dependencies, [yarn](https://classic.yarnpkg.com/en/docs/getting-started) is a Node.js package manager that overcomes the shortcomings
-of `npm` in many [ways](https://www.positronx.io/yarn-vs-npm-best-package-manager/) mostly based on speed, security, and reproducible packages.
-To install `yarn` follow [this](https://classic.yarnpkg.com/en/docs/install) guide. 
-
-* Install [Gulp](https://gulpjs.com/) globally. If you have already done this, skip this step.
-
+[package.json](./package.json) file. This file states all the dependencies for the app
+and the versions for each of them. _npm_'s job is to manage these dependencies.
+* Install globally `webpack`, `webpack-dev-server`, `cordova`.
 ```
-yarn global add gulp-cli 
+    npm install -g webpack webpack-dev-server cordova
+```
+[Webpack](https://webpack.js.org/) is a compiler & task manager which packages your app, some of the jobs it has are as follows
+1. Control the Opal environments, Opal uses different development environments,
+_webpack_ allows us to easily specify environment variables for each.
+2. Emit [uglify](https://webpack.js.org/plugins/terser-webpack-plugin/) version of your code in one file.
+3. Compile the code to an older version of JavaScript using [babel](https://babeljs.io/), this allows us to use the latest features from 
+JavaScript without worrying about JavaScript compatibility in patient devices.
+4. Optimize the code in different ways.
+For more information on _webpack_ see: https://survivejs.com/webpack/what-is-webpack/
+
+[webpack-dev-server](https://webpack.js.org/configuration/dev-server/) is an web server which to serve _webpack_'s bundles.
+
+[Cordova](https://cordova.apache.org/) is the build tool to build the web application for both Android and iOS.
+
+* Install the app dependencies
+```
+ npm install
+```  
+* Prepare environment and Cordova code regarding platforms (iOS, Android), and cordova plugin dependencies
+```
+npm run prepare:staging
+```
+* To test your app build in a browser run: (Make sure port 9000 isn't used up by your computer, otherwise modify the `webpack.config.js` file)
+```
+npm run start:web:staging
+```
+This command should open a browser in the address `http://localhost:9000` and once the app compiles,
+open the app. 
+### Building the app in a mobile device
+The following steps will allow you to set up the app with Cordova. For more information and troubleshooting:
+https://cordova.apache.org/docs/en/latest/guide/platforms/android/index.html, https://cordova.apache.org/docs/en/latest/guide/platforms/ios/index.html
+1) Install [JDK 8](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html) and update your OS's JAVA_HOME variable (you'll need to Google how to do this depending on your OS). **NOTE: Cordova has an issue with JDK 9 so you need to make sure you have JDK 8 installed and referenced as an environment variable or Cordova will not be able to build**
+2) Install [Android Studio](https://developer.android.com/studio/index.html) and [Xcode](https://developer.apple.com/xcode/) (if using macOS)
+3) **(macOS Only)** Install and setup [CocoaPods](https://stackoverflow.com/questions/20755044/how-to-install-cocoa-pods) 
+4) Install [Cordova](https://cordova.apache.org/) globally with the following command:
+ 
+ 
+* Run the build command 
+```
+npm run build:staging
+```
+The command above builds the app for both Android and iOS to build platform specific code use:
+```
+npm run build:staging:ios
+npm run build:staging:android
 ```
 
-Gulp is a task manager that allows to have readily available and useful tasks,
-some examples include, instantiating a server, running tests, generating
- documentation or simply packaging the app
-for production.
-
-* Install all the front-end and back-end dependencies.
-
-
+* Finally run the Cordova app
 ```
-yarn
+npm run start:staging:ios
+npm run start:staging:android
 ```
-
-This will install the front-end and development dependencies for the app.
-
-* Run the app
-
+Lastly, we have added commands for developer convenience to the `package.json`. Take some
+time to understand what they do, here is a list of them.
 ```
-gulp serve
+  "scripts": {
+    "prepare:prod": "node -e \"require('./opal_env.setup.js').copyEnvironmentFiles('prod')\" && cordova prepare",
+    "prepare:preprod": "node -e \"require('./opal_env.setup.js').copyEnvironmentFiles('preprod')\" && cordova prepare",
+    "prepare:staging": "node -e \"require('./opal_env.setup.js').copyEnvironmentFiles('staging')\" && cordova prepare",
+    "build:web": "webpack",
+    "build:web:prod": "npm run prepare:prod && webpack --env.opal_environment=prod",
+    "build:web:preprod": "npm run prepare:preprod && webpack --env.opal_environment=preprod",
+    "build:web:staging": "npm run prepare:staging && webpack --env.opal_environment=staging",
+    "build": "npm run build:web && cordova build --device --verbose",
+    "build:prod": "npm run build:web:prod && cordova build --release  --verbose",
+    "build:preprod": "npm run build:web:preprod && cordova build --device --verbose",
+    "build:staging": "npm run build:web:staging && cordova build --verbose",
+    "build:staging:ios": "npm run build:web:staging && cordova build ios --verbose",
+    "build:staging:android": "npm run build:web:staging && cordova build android --verbose",
+    "start": "webpack-dev-server --open",
+    "start:web:prod": "webpack-dev-server --open --env.opal_environment=prod",
+    "start:web:preprod": "webpack-dev-server --open --env.opal_environment=preprod",
+    "start:web:staging": "webpack-dev-server --open --env.opal_environment=staging",
+    "start:staging": "npm run build:staging && cordova run",
+    "start:staging:ios": "npm run build:staging:ios && cordova run ios",
+    "start:staging:android": "npm run build:staging:android && cordova run android",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
 ```
-
-
-After these steps if all the installation is correct, you should be able to see the app
-by navigating to `http://localhost:9000`
 
 ### Optional
 * Install http-server
 
 ```
-yarn global add http-server
+npm install http-server -g
 ```
 This globally installs a simple, zero-configuration command line server that may be used to host the Opal app locally when developing in the browser.
 Sometimes it is useful to quickly have a server in order to
 test a particular page or app. For this http-server is a great package.
-For instance, an alternative to `gulp serve` is to run from the root of the repository
-run:
+For instance, an alternative to `npm run start:web:staging` which uses _webpack-dev-server_,
+is to build the web app using `npm run build:web:staging`, change directory to
+the `www` and run `http-server` inside this directory. In one command
 ```
-http-server ./www -p 9000 -o
+$npm run build:web:staging && cd www && http-server -p 9000 -o # Build the app, and serve it in port 9000
 ```
-
-Similar to `gulp serve`, this opens automatically the app at address
-`http://localhost:9000`.
-
-**NOTE: In the past there have been multiple students who have had trouble install dependencies due to strange permission issues that would block the ability to write to certain directories... so don't worry if this happens to you! If this occurs, the problem is easily fixable by some simple Google searching. There seemed to have been various solutions for different people so I can't really provide a troubleshooting manual for every case.**
-
 
 ### Running Development Environment
 
@@ -98,17 +143,8 @@ A step by step series of examples that tell you have to get a development env ru
 #### Front-End
 
 1) Run the following command:
-
 ```
-gulp serve
-```
-
-and you should see something similar appear in your console:
-
-```
-[22:08:53] Server started http://localhost:9000
-[22:08:53] LiveReload started on port 35729
-[22:08:53] Running server
+npm run start:web:staging
 ```
 2) In Chrome or Firefox (they have the best debug console) navigate to one of the addresses provided from the previous step.
 3) Open the [developer console](https://developer.chrome.com/devtools) and switch to mobile view and [disable caching](http://nicholasbering.ca/tools/2016/10/09/devtools-disable-caching/).
@@ -140,10 +176,8 @@ Once you have built the app you have two options...
 2) Use Cordova to load APK onto phone using
 
 ```
-cordova run
+npm run start:staging[:ios|:android]
 ```
-
-in your Cordova project directory
 
 3) Using [XCode](https://developer.apple.com/library/content/documentation/IDEs/Conceptual/iOS_Simulator_Guide/Introduction/Introduction.html) or [Android Studio](https://developer.android.com/studio/run/emulator.html) to run emulator or load APK onto phone. 
 
@@ -153,85 +187,6 @@ Building is a rather rigorous process due to the nature of producing software th
 has written a simple, yet practical build script that avoids a lot of the headaches in building the app. It is planned to extend the build script
 in order to make deployment automated as well...
 
-### Prerequisites
-
-Before being able to run build script there are a few steps one has to take that involves configuring the build script and cordova project.
-
-**NOTE: You will need to follow these steps for both PreProd and Prod since they both have unique app distributions, configurations, and build processes!**
-
-**IMPORTANT: In order to build iOS versions of the app you must have XCode installed which requires an Apple Computer. If you have
-Linux or Windows you can only build Android distribution**
-
-1) Follow the the instructions in the Installation section.
-2) Install [JDK 8](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html) and update your OS's JAVA_HOME variable (you'll need to Google how to do this depending on your OS). **NOTE: Cordova has an issue with JDK 9 so you need to make sure you have JDK 8 installed and referenced as an environment variable or Cordova will not be able to build**
-3) Install [Android Studio](https://developer.android.com/studio/index.html) and [Xcode](https://developer.apple.com/xcode/) (if using macOS)
-4) **(macOS Only)** Install and setup [CocoaPods](https://stackoverflow.com/questions/20755044/how-to-install-cocoa-pods) 
-5) Install [Cordova](https://cordova.apache.org/) globally with the following command:
-
-```
-yarn global add cordova
-```
-
-6) Create a Cordova project in any desired directory that's **NOT** the in qplus directory:
-
-```
-cordova create <NameOfProject>
-```
-
-7) Navigate to this newly created directory.
-
-8) Replace the current config.xml, 'www' directory and 'res' directory with the ones in the qplus directory
-
-**NOTE: Both Prod and PreProd branches have their own config.xml. Carefully make sure you are copying over the correct one!**
-
-9) Add Android and iOS (if on macOS) platforms to cordova project:
-
-**If using Cordova version >= 7.0.0**
-```
-cordova plugin add cordova-plugin-ios-base64 --nofetch
-```
-
-```
-cordova platform add ios
-cordova platform add android
-```
-
-Now you should have a properly configured Cordova project that can be compiled into both Android and iOS native code. However there
-are still some dependencies needed for the build script to run properly...
-
-8) Install [Gulp](https://gulpjs.com/) globally
-
-```
-yarn global add gulp-cli
-```
-
-Gulp is in charge of automating a lot of the build process such as minifying html/css/javascript, compressing images,
-and removing debug statements.
-
-9) (**WINDOWS AND LINUX ONLY**) Change build script to only build Android distribution
-
-10) Change working (qplus project parent) and target (Cordova project parents) directories in build script to match your computer's destinations. The variables you need to change in the build script are titled: 
-    * WORKING_DIR - this is the complete path from root to your working directory , i.e. the cloned qplus repo. You need to point this to the root of the cloned repo i.e should end in '/qplus' 
-    * PREPROD_DIR - this is the complete path to your PreProd cordova project. It should point to the root of the project directory. 
-    * PROD_DIR - this is the complete path to your Prod cordova project. It should point to the root of the project directory. 
-
-Voila! You are now ready to run build script. If you didn't follow any of these properly the build script will catch and report it you.
-
-
-### Building
-
-The build script is very simple and detailed instructions can be found by running the script without any arguments.
-
-1) Follow the instructions in the prerequisites if you haven't already
-2) Make sure you are on the correct branch (either PreProd or Prod)
-3) Update the version number in the config.xml file found in your qplus project parent directory (**This will soon be a deprecated step as it will be handled by the script itself**)
-4) Run the script with the target as first argument and version as the second argument
-
-```
-./buildOpal.sh prod 1.10.1
-```
-
-5) The script will catch and display ALL errors and will stop the build process if any occur.
 
 ## Deployment
 
