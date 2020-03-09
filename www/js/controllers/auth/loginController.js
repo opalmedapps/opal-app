@@ -194,6 +194,7 @@
                     $window.localStorage.removeItem('Password');
                     $window.localStorage.removeItem("deviceID");
                     $window.localStorage.removeItem(UserAuthorizationInfo.getUsername()+"/securityAns");
+                    $window.localStorage.removeItem('hospital');
                 }
 
                 var deviceID = localStorage.getItem("deviceID");
