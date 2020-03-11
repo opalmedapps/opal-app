@@ -22,8 +22,7 @@
             vm.generalDeviceBackButton = generalDeviceBackButton;
             vm.goToUrl = goToUrl;
 
-            // variable to let the user know which hospital they are logged in
-            vm.selectedHospitalToDisplay = "";
+            // variable to restrict the modules depending on which hospital they are logged in
             vm.allowedModules = {};
 
             activate();
@@ -53,7 +52,6 @@
              * @desc Set the hospital name and module to display
              */
             function configureSelectedHospital() {
-                vm.selectedHospitalToDisplay = HospitalModulePermission.getHospitalFullName();
                 vm.allowedModules = HospitalModulePermission.getHospitalAllowedModules();
             }
 

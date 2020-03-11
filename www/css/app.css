@@ -2897,17 +2897,3 @@ and (max-device-width : 321px)
     position: absolute;
     margin-left: -10px;
 }
-
-/* Multi-institutional hospital name bar */
-.hospital-name-bar {
-    text-align: center;
-    font-weight: 600;
-    line-height: 1;
-    padding: 7px 10px;
-    background-color: #F9F9F9;
-    border-bottom: 1px solid #DDDDDD;
-    font-size: 15px;
-    position: sticky;
-    top: 0;
-    z-index: 100;
-}
