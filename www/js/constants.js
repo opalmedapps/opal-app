@@ -420,6 +420,30 @@
         },
 
         /** Multi-institutional hospital name **/
+        allowedModulesBeforeLogin: {
+            "DIA": 0,
+            "TRP": 0,
+            "APT": 0,
+            "LAB": 0,
+            "DOC": 0,
+            "TRT": 0,
+            "TTM": 0,
+            "QUE": 0,
+            "CSQ": 0,
+            "CHK": 0,
+            "LAO": 1,
+            "NTF": 0,
+            "ANN": 0,
+            "PAT": 0,
+            "PFP": 0,
+            "FEE": 0,
+            "FFD": 0,
+            "MAS": 0,
+            "EDU": 0,
+            "SUP": 0,
+            "CED": 0,
+            "HOS": 0,
+        },
         hospitalList: {
             'MUHC': {
                 acronym: 'MUHC',
