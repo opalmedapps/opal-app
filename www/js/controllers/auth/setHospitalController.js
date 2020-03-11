@@ -39,13 +39,8 @@
          * @description Add the selected hospital to local storage
          */
         function saveSelectedHospital(){
-            // add the selected hospital to the local storage
+            // add the selected hospital to the local storage and update firebase branch
             UserPreferences.setHospital(vm.selectedHospitalKey);
-
-            // set firebase branch
-            if (vm.hospitalObj.hasOwnProperty(vm.selectedHospitalKey) && vm.hospitalObj[vm.selectedHospitalKey].hasOwnProperty('uniqueHospitalCode')){
-                FirebaseService.updateFirebaseUrl(vm.hospitalObj[vm.selectedHospitalKey].uniqueHospitalCode + '/');
-            }
         }
     }
 })();

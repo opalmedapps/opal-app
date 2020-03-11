@@ -8,10 +8,9 @@ var myApp=angular.module('MUHCApp');
 *@ngdoc service
 *@name MUHCApp.service:FirebaseService
 *@requires $firebaseAuth
-*@requires MUHCApp.service:UserAuthorizationInfo
 *@description Allows the app controllers or services obtain the authentication state and credentials, it also returns the urls inside for the firebase connection
 **/
-myApp.factory("FirebaseService", ['$firebaseAuth','$firebaseObject','UserAuthorizationInfo',
+myApp.factory("FirebaseService", ['$firebaseAuth',
   function ($firebaseAuth) {
 
       let firebaseBaseUrl = "dev2/";

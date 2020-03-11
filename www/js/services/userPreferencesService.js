@@ -13,7 +13,7 @@ var myApp=angular.module('MUHCApp');
  *@requires MUHCApp.service:UserAuthorizationInfo
  *@description Service stores and manages user preferences
  **/
-myApp.service('UserPreferences',[ 'UserAuthorizationInfo','$rootScope','tmhDynamicLocale','$translate','$q', 'Params', function(UserAuthorizationInfo,$rootScope,tmhDynamicLocale,$translate,$q,Params){
+myApp.service('UserPreferences', ['FirebaseService','UserAuthorizationInfo','$rootScope','tmhDynamicLocale','$translate','$q', 'Params', function(FirebaseService,UserAuthorizationInfo,$rootScope,tmhDynamicLocale,$translate,$q,Params){
     var app = document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'https://' ) === -1;
 
     //Fields for user preference and authentication
@@ -245,7 +245,13 @@ myApp.service('UserPreferences',[ 'UserAuthorizationInfo','$rootScope','tmhDynam
                 return;
             }
 
+            // store hospital choice in local storage
             window.localStorage.setItem(localStorageHospitalKey, hospitalKey);
+
+            // update firebase hospital branch
+            FirebaseService.updateFirebaseUrl(Params.hospitalList[hospitalKey].uniqueHospitalCode + '/');
+
+            // update local hospital
             hospital = hospitalKey;
         },
         /**
@@ -263,6 +269,9 @@ myApp.service('UserPreferences',[ 'UserAuthorizationInfo','$rootScope','tmhDynam
                 hospital = '';
             } else {
                 hospital = localStorageHospital;
+
+                // set hospital firebase branch
+                FirebaseService.updateFirebaseUrl(Params.hospitalList[localStorageHospital].uniqueHospitalCode + '/');
             }
         },
         /**

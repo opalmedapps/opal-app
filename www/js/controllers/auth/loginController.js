@@ -122,13 +122,6 @@
             $timeout(function(){
                 vm.trusted = !!($window.localStorage.getItem("deviceID"));
             });
-
-            // set firebase branch
-            if (isThereSelectedHospital()){
-                let branchName = HospitalModulePermission.getHospitalUniqueCode() + '/';
-                FirebaseService.updateFirebaseUrl(branchName);
-            }
-
         }
 
         /**
