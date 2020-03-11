@@ -52,6 +52,7 @@
         vm.goToAppointments = goToAppointments;
         vm.goToSettings = goToSettings;
         vm.goToCheckinAppointments = goToCheckinAppointments;
+        vm.gotoLearnAboutOpal = gotoLearnAboutOpal;
 
         activate();
 
@@ -271,9 +272,7 @@
          * Takes the user the treatment status page
          */
         function goToStatus() {
-            if (vm.allowedModules.hasOwnProperty('TRP') && vm.allowedModules['TRP']){
-                homeNavigator.pushPage('views/home/status/status_new.html');
-            }
+            homeNavigator.pushPage('views/home/status/status_new.html');
         }
 
         /**
@@ -305,13 +304,19 @@
         }
 
         /**
+         * @desc Go to learn about Opal page
+         */
+        function gotoLearnAboutOpal(){
+            NavigatorParameters.setParameters({'Navigator':'homeNavigator', 'isBeforeLogin': false});
+            homeNavigator.pushPage('./views/home/about/about.html');
+        }
+
+        /**
          * Takes the user to the selected appointment to view more details about it
          */
         function goToAppointments(){
-            if (vm.allowedModules.hasOwnProperty('APT') && vm.allowedModules['APT']){
-                NavigatorParameters.setParameters({'Navigator':'homeNavigator'});
-                homeNavigator.pushPage('./views/personal/appointments/appointments.html');
-            }
+            NavigatorParameters.setParameters({'Navigator':'homeNavigator'});
+            homeNavigator.pushPage('./views/personal/appointments/appointments.html');
         }
 
         /**
@@ -325,7 +330,7 @@
          * Takes the user to the checkin view
          */
         function goToCheckinAppointments() {
-            if (vm.checkinState.noAppointments || !vm.allowedModules.hasOwnProperty('CHK') || !vm.allowedModules['CHK']) return;
+            if (vm.checkinState.noAppointments) return;
             NavigatorParameters.setParameters({'Navigator':'homeNavigator'});
             homeNavigator.pushPage('./views/home/checkin/checkin-list.html');
         }

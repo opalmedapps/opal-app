@@ -19,14 +19,13 @@
         .controller('EducationalMaterialController', EducationalMaterialController);
 
     EducationalMaterialController.$inject = ['NavigatorParameters', '$scope', 'EducationalMaterial','NetworkStatus',
-        'Patient', 'Logger', 'UserPreferences', 'Params'];
+        'Patient', 'Logger', 'HospitalModulePermission'];
 
     /* @ngInject */
     function EducationalMaterialController(NavigatorParameters, $scope, EducationalMaterial, NetworkStatus,
-                                           Patient, Logger, UserPreferences, Params) {
+                                           Patient, Logger, HospitalModulePermission) {
         var vm = this;
         var backButtonPressed = 0;
-        let selectedHospitalKey = UserPreferences.getHospital();
 
         // Variable containing the search string entered into the search bar
         vm.searchString = "";
@@ -80,8 +79,7 @@
          * @desc Set the hospital name to display
          */
         function configureSelectedHospital() {
-            let hospitalList = Params.hospitalList;
-            vm.selectedHospitalToDisplay = hospitalList[selectedHospitalKey].fullName;
+            vm.selectedHospitalToDisplay = HospitalModulePermission.getHospitalFullName();
         }
 
         function bindEvents() {

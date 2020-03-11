@@ -98,17 +98,15 @@
         }
 
         function goToCarnetSante() {
-            if (tab.allowedModules.hasOwnProperty('CSQ') && tab.allowedModules['CSQ']){
-                let url = '';
-                let app = document.URL.indexOf('http://') === -1 && document.URL.indexOf('https://') === -1;
+            let url = '';
+            let app = document.URL.indexOf('http://') === -1 && document.URL.indexOf('https://') === -1;
 
-                url = Params.carnetSanteUrl;  // English site available after opening the French one
+            url = Params.carnetSanteUrl;  // English site available after opening the French one
 
-                if (app) {
-                    cordova.InAppBrowser.open(url, '_blank', 'location=yes');
-                } else {
-                    window.open(url, '_blank');
-                }
+            if (app) {
+                cordova.InAppBrowser.open(url, '_blank', 'location=yes');
+            } else {
+                window.open(url, '_blank');
             }
         }
 

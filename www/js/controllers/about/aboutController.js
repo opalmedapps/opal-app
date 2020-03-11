@@ -43,6 +43,7 @@
 
         let parameters;
         let navigatorName;
+        let isBeforeLogin = true;
 
         activate();
 
@@ -53,29 +54,20 @@
             parameters = NavigatorParameters.getParameters();
             navigatorName = parameters.Navigator;
 
+            /**
+             * about.html (Learn About Opal) is called twice: once from init-Screen.html (very first screen) and once from home.html (after logging in)
+             * Different modules are enabled depending on whether it is called before or after login
+             * the parameter isBeforeLogin determines whether the page is called before login or after
+             * if the parameter isBeforeLogin is not passed, default to true
+             */
+            if (parameters.hasOwnProperty('isBeforeLogin')){
+                isBeforeLogin = parameters.isBeforeLogin;
+            }
+
             vm.language = UserPreferences.getLanguage();
 
-            setAllowedModules();
-        }
-
-        function setAllowedModules (){
-            // first check if we are logged in or not by checking the navigator name
-
-            /**
-             * navigatorName = 'initNavigator' or 'homeNavigator'
-             * navigatorName = 'initNavigator' when about.html is called from init-Screen.html (initScreenController)
-             * navigatorName = 'homeNavigator' when about.html is called from home.html (homeController)
-             *
-             * about.html (Learn About Opal) is called twice: once from init-Screen.html (very first screen) and once from home.html (after logging in)
-             */
-
-            let navigatorNameAfterLogin = 'homeNavigator';
-
-            if (navigatorName === navigatorNameAfterLogin){
-                vm.allowedModules = HospitalModulePermission.getHospitalAllowedModules(false);
-            } else {
-                vm.allowedModules = HospitalModulePermission.getHospitalAllowedModules(true);
-            }
+            // set the modules which are allowed to display depending on whether the user has logged in or not
+            vm.allowedModules = HospitalModulePermission.getHospitalAllowedModules(isBeforeLogin);
         }
 
         function openUrl(openWhat, openInExternalBrowser = false) {
@@ -131,9 +123,7 @@
         }
 
         function openCedars() {
-           if (vm.allowedModules.hasOwnProperty('CED') && vm.allowedModules['CED']){
-               window[navigatorName].pushPage('views/home/about/cedars.html');
-           }
+            window[navigatorName].pushPage('views/home/about/cedars.html');
         }
 
 

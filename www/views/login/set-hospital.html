@@ -14,7 +14,7 @@
                 <label class="radio-button radio-button--list-item">
                     <input type="radio" value="{{hospitalKey}}" ng-change="vm.saveSelectedHospital();" ng-model="vm.selectedHospitalKey">
                     <div class="radio-button__checkmark radio-button--list-item__checkmark"></div>
-                    {{hospitalValue.fullName|translate}}
+                    {{hospitalValue.fullName|translate}} ({{hospitalValue.acronym|translate}})
                 </label>
             </li>
         </ul>

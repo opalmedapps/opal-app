@@ -43,7 +43,7 @@
             <ons-list style="margin-top:5px;position:relative;z-index:2">
                 <!--<ons-list-header class="person-list-header" ng-class="fontSizeTitle">Opal</ons-list-header>-->
                 <ons-list-header class="person-list-header" ng-class="fontSizeTitle"></ons-list-header>
-                <ons-list-item modifier="chevron tappable" class="item" ng-if="h.allowedModules.hasOwnProperty('LAO') && h.allowedModules['LAO']" ng-click="homeNavigator.pushPage('views/home/about/about.html')">
+                <ons-list-item modifier="chevron tappable" class="item" ng-if="h.allowedModules.hasOwnProperty('LAO') && h.allowedModules['LAO']" ng-click="h.gotoLearnAboutOpal()">
                     <ons-row align="center">
                         <ons-col width="60px" align="center" style="text-align: center">
                             <img style="width: 60px;" src="img/Opal_Logo_Transparent_Inverse.png">

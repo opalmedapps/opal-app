@@ -135,7 +135,7 @@
          */
         function gotoLearnAboutOpal()
         {
-            NavigatorParameters.setParameters({'Navigator':'initNavigator'});
+            NavigatorParameters.setParameters({'Navigator':'initNavigator', 'isBeforeLogin': true});
             initNavigator.pushPage('./views/home/about/about.html');
         }
 

@@ -105,10 +105,8 @@
             }
 
             function goToParking() {
-                if (vm.allowedModules.hasOwnProperty('PAT') && vm.allowedModules['PAT']){
-                    NavigatorParameters.setParameters('generalNavigator');
-                    generalNavigator.pushPage('views/general/parking/parking.html');
-                }
+                NavigatorParameters.setParameters('generalNavigator');
+                generalNavigator.pushPage('views/general/parking/parking.html');
             }
 
             function generalDeviceBackButton() {
