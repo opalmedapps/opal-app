@@ -19,7 +19,8 @@
                                     Patient, NetworkStatus, MetaData, $timeout, UserPreferences, Params, HospitalModulePermission) {
         var vm = this;
 
-        // variable to restrict modules depending on which hospital they are logged in
+        // variable to let the user know which hospital they are logged in
+        vm.selectedHospitalToDisplay = "";
         vm.allowedModules = {};
 
         vm.goToStatus = goToStatus;
@@ -114,6 +115,7 @@
          * @desc Set the hospital name to display
          */
         function configureSelectedHospital() {
+            vm.selectedHospitalToDisplay = HospitalModulePermission.getHospitalFullName();
             vm.allowedModules = HospitalModulePermission.getHospitalAllowedModules();
         }
     }

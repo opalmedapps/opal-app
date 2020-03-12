@@ -41,6 +41,8 @@
             inRange: true
         };
 
+        // variable to let the user know which hospital they are logged in
+        vm.selectedHospitalToDisplay = "";
         // control the modules to display to users
         vm.allowedModules = {};
 
@@ -237,6 +239,7 @@
          * @desc Set the hospital name to display
          */
         function configureSelectedHospital() {
+            vm.selectedHospitalToDisplay = HospitalModulePermission.getHospitalFullName();
             vm.allowedModules = HospitalModulePermission.getHospitalAllowedModules();
         }
 
