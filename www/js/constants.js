@@ -444,6 +444,7 @@
             "CED": 0,
             "HOS": 0,
         },
+        localStorageHospitalKey: 'hospital',
         hospitalList: {
             'MUHC': {
                 acronym: 'MUHC',

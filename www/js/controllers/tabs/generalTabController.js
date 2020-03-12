@@ -12,9 +12,9 @@
             .module('MUHCApp')
             .controller('GeneralTabController', GeneralTabController);
 
-        GeneralTabController.$inject = ['$scope', 'Announcements', 'UpdateUI', 'NavigatorParameters', 'NetworkStatus', 'MetaData', 'UserPreferences', 'Params', 'HospitalModulePermission'];
+        GeneralTabController.$inject = ['$scope', 'Announcements', 'UpdateUI', 'NavigatorParameters', 'NetworkStatus', 'MetaData', 'UserPreferences', 'Params', 'UserHospitalPreferences'];
 
-        function GeneralTabController($scope, Announcements, UpdateUI, NavigatorParameters, NetworkStatus, MetaData, UserPreferences, Params, HospitalModulePermission) {
+        function GeneralTabController($scope, Announcements, UpdateUI, NavigatorParameters, NetworkStatus, MetaData, UserPreferences, Params, UserHospitalPreferences) {
             var vm = this;
 
             vm.goToPatientCharter = goToPatientCharter;
@@ -53,8 +53,8 @@
              * @desc Set the hospital name and module to display
              */
             function configureSelectedHospital() {
-                vm.selectedHospitalToDisplay = HospitalModulePermission.getHospitalFullName();
-                vm.allowedModules = HospitalModulePermission.getHospitalAllowedModules();
+                vm.selectedHospitalToDisplay = UserHospitalPreferences.getHospitalFullName();
+                vm.allowedModules = UserHospitalPreferences.getHospitalAllowedModules();
             }
 
             function bindEvents() {

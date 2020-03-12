@@ -24,7 +24,8 @@
         'Permissions',
         'DynamicContentService',
         'NewsBanner',
-        'Params'
+        'Params',
+        'UserHospitalPreferences'
     ];
 
     /* @ngInject */
@@ -37,7 +38,8 @@
         Permissions,
         DynamicContentService,
         NewsBanner,
-        Params
+        Params,
+        UserHospitalPreferences
     ) {
         var vm = this;
         vm.globalMessage = '';
@@ -92,7 +94,7 @@
             UserPreferences.initializeLanguage();
 
             //Initialize hospital chosen if not initialized
-            UserPreferences.initializeHospital();
+            UserHospitalPreferences.initializeHospital();
 
             //Do not show the list breaking, equivalent of ng-cloak for angularjs, LOOK IT UP!!! https://docs.angularjs.org/api/ng/directive/ngCloak
             setTimeout(function(){
@@ -152,15 +154,6 @@
                 cordova.InAppBrowser.open(url, '_system');   // _system: opens in External Browser (Safari, etc...) on the device
             }
         }
-
-        /**
-         * Go to parking function
-         */
-        // function goToParking()
-        // {
-        //     NavigatorParameters.setParameters('initNavigator');
-        //     initNavigator.pushPage('./views/general/parking/parking.html');
-        // }
 
         /**
          * Go to general settings (About)

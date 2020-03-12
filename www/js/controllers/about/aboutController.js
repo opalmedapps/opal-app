@@ -23,10 +23,10 @@
         .module('MUHCApp')
         .controller('AboutController', AboutController);
 
-    AboutController.$inject = ['$window', 'UserPreferences', 'NavigatorParameters', 'Params', 'HospitalModulePermission'];
+    AboutController.$inject = ['$window', 'UserPreferences', 'NavigatorParameters', 'Params', 'UserHospitalPreferences'];
 
     /* @ngInject */
-    function AboutController($window, UserPreferences, NavigatorParameters, Params, HospitalModulePermission) {
+    function AboutController($window, UserPreferences, NavigatorParameters, Params, UserHospitalPreferences) {
         const vm = this;
 
         vm.openUrl = openUrl;
@@ -64,10 +64,14 @@
                 isBeforeLogin = parameters.isBeforeLogin;
             }
 
-            vm.language = UserPreferences.getLanguage();
-
             // set the modules which are allowed to display depending on whether the user has logged in or not
-            vm.allowedModules = HospitalModulePermission.getHospitalAllowedModules(isBeforeLogin);
+            if (isBeforeLogin){
+                vm.allowedModules = UserHospitalPreferences.getAllowedModulesBeforeLogin();
+            } else {
+                vm.allowedModules = UserHospitalPreferences.getHospitalAllowedModules();
+            }
+
+            vm.language = UserPreferences.getLanguage();
         }
 
         function openUrl(openWhat, openInExternalBrowser = false) {

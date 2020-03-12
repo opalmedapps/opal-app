@@ -13,10 +13,10 @@
         .controller('PersonalTabController', PersonalTabController);
 
     PersonalTabController.$inject = ['Appointments','TxTeamMessages','Documents','NavigatorParameters', 'Notifications',
-        'Questionnaires', 'Patient', 'NetworkStatus', 'MetaData', '$timeout', 'UserPreferences', 'Params', 'HospitalModulePermission'];
+        'Questionnaires', 'Patient', 'NetworkStatus', 'MetaData', '$timeout', 'UserPreferences', 'Params', 'UserHospitalPreferences'];
 
     function PersonalTabController( Appointments, TxTeamMessages, Documents, NavigatorParameters, Notifications, Questionnaires,
-                                    Patient, NetworkStatus, MetaData, $timeout, UserPreferences, Params, HospitalModulePermission) {
+                                    Patient, NetworkStatus, MetaData, $timeout, UserPreferences, Params, UserHospitalPreferences) {
         var vm = this;
 
         // variable to let the user know which hospital they are logged in
@@ -115,8 +115,8 @@
          * @desc Set the hospital name to display
          */
         function configureSelectedHospital() {
-            vm.selectedHospitalToDisplay = HospitalModulePermission.getHospitalFullName();
-            vm.allowedModules = HospitalModulePermission.getHospitalAllowedModules();
+            vm.selectedHospitalToDisplay = UserHospitalPreferences.getHospitalFullName();
+            vm.allowedModules = UserHospitalPreferences.getHospitalAllowedModules();
         }
     }
 })();

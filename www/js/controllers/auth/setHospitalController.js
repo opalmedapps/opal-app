@@ -5,10 +5,10 @@
         .module('MUHCApp')
         .controller('SetHospitalController', SetHospitalController);
 
-    SetHospitalController.$inject = ['UserPreferences', 'Params', 'FirebaseService'];
+    SetHospitalController.$inject = ['UserHospitalPreferences'];
 
     /* @ngInject */
-    function SetHospitalController(UserPreferences, Params, FirebaseService) {
+    function SetHospitalController(UserHospitalPreferences) {
         var vm = this;
 
         vm.hospitalObj = {};
@@ -22,10 +22,10 @@
 
         function activate() {
             // bring hospital list into view
-            vm.hospitalObj = Params.hospitalList;
+            vm.hospitalObj = UserHospitalPreferences.getHospitalList();
 
             // set to selected the one choice stored
-            vm.selectedHospitalKey = UserPreferences.getHospital();
+            vm.selectedHospitalKey = UserHospitalPreferences.getHospital();
         }
 
         /*************************
@@ -36,11 +36,11 @@
          * @ngdoc method
          * @name saveSelectedHospital
          * @methodOf MUHCApp.controllers.SetHospitalController
-         * @description Add the selected hospital to local storage
+         * @description Add the selected hospital to local storage and update firebase branch
          */
         function saveSelectedHospital(){
             // add the selected hospital to the local storage and update firebase branch
-            UserPreferences.setHospital(vm.selectedHospitalKey);
+            UserHospitalPreferences.setHospital(vm.selectedHospitalKey);
         }
     }
 })();

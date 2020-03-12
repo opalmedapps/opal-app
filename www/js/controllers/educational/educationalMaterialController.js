@@ -19,11 +19,11 @@
         .controller('EducationalMaterialController', EducationalMaterialController);
 
     EducationalMaterialController.$inject = ['NavigatorParameters', '$scope', 'EducationalMaterial','NetworkStatus',
-        'Patient', 'Logger', 'HospitalModulePermission'];
+        'Patient', 'Logger', 'UserHospitalPreferences'];
 
     /* @ngInject */
     function EducationalMaterialController(NavigatorParameters, $scope, EducationalMaterial, NetworkStatus,
-                                           Patient, Logger, HospitalModulePermission) {
+                                           Patient, Logger, UserHospitalPreferences) {
         var vm = this;
         var backButtonPressed = 0;
 
@@ -79,7 +79,7 @@
          * @desc Set the hospital name to display
          */
         function configureSelectedHospital() {
-            vm.selectedHospitalToDisplay = HospitalModulePermission.getHospitalFullName();
+            vm.selectedHospitalToDisplay = UserHospitalPreferences.getHospitalFullName();
         }
 
         function bindEvents() {

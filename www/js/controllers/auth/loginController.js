@@ -24,10 +24,10 @@
         .controller('LoginController', LoginController);
 
     LoginController.$inject = ['$timeout', '$state', 'UserAuthorizationInfo', '$filter','DeviceIdentifiers',
-        'UserPreferences', 'Patient', 'NewsBanner', 'UUID', 'Constants', 'EncryptionService', 'CleanUp', '$window', '$scope', 'FirebaseService', '$rootScope', 'Params', 'HospitalModulePermission'];
+        'UserPreferences', 'Patient', 'NewsBanner', 'UUID', 'Constants', 'EncryptionService', 'CleanUp', '$window', '$scope', 'FirebaseService', '$rootScope', 'Params', 'UserHospitalPreferences'];
 
     /* @ngInject */
-    function LoginController($timeout, $state, UserAuthorizationInfo, $filter, DeviceIdentifiers, UserPreferences, Patient, NewsBanner, UUID, Constants, EncryptionService, CleanUp, $window, $scope, FirebaseService, $rootScope, Params, HospitalModulePermission) {
+    function LoginController($timeout, $state, UserAuthorizationInfo, $filter, DeviceIdentifiers, UserPreferences, Patient, NewsBanner, UUID, Constants, EncryptionService, CleanUp, $window, $scope, FirebaseService, $rootScope, Params, UserHospitalPreferences) {
 
         var vm = this;
 
@@ -457,7 +457,7 @@
          * @returns {boolean} true if there is a hospital selected. false otherwise.
          */
         function isThereSelectedHospital() {
-            return HospitalModulePermission.isThereSelectedHospital();
+            return UserHospitalPreferences.isThereSelectedHospital();
         }
 
         /**
@@ -470,7 +470,7 @@
         function getSelectedHospitalAcronym(){
 
             if (isThereSelectedHospital()){
-                return HospitalModulePermission.getHospitalAcronym();
+                return UserHospitalPreferences.getHospitalAcronym();
             } else {
                 return "TAP_TO_SELECT_HOSPITAL";
             }

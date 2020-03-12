@@ -8,12 +8,12 @@
     HomeController.$inject = [
         'Appointments', 'CheckInService', 'Patient', 'UpdateUI','$scope', '$timeout','$filter', 'Notifications',
         'NavigatorParameters', 'NewsBanner', 'PlanningSteps', 'Permissions', 'UserPreferences', 'NetworkStatus',
-        'MetaData', 'HospitalModulePermission'];
+        'MetaData', 'UserHospitalPreferences'];
 
     /* @ngInject */
     function HomeController(Appointments, CheckInService, Patient, UpdateUI, $scope, $timeout, $filter, Notifications,
                             NavigatorParameters, NewsBanner, PlanningSteps, Permissions, UserPreferences, NetworkStatus,
-                            MetaData, HospitalModulePermission)
+                            MetaData, UserHospitalPreferences)
     {
         var vm = this;
 
@@ -239,8 +239,8 @@
          * @desc Set the hospital name to display
          */
         function configureSelectedHospital() {
-            vm.selectedHospitalToDisplay = HospitalModulePermission.getHospitalFullName();
-            vm.allowedModules = HospitalModulePermission.getHospitalAllowedModules();
+            vm.selectedHospitalToDisplay = UserHospitalPreferences.getHospitalFullName();
+            vm.allowedModules = UserHospitalPreferences.getHospitalAllowedModules();
         }
 
         /*
