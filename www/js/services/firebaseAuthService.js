@@ -14,9 +14,6 @@ myApp.factory("FirebaseService", ['$firebaseAuth',
   function ($firebaseAuth) {
 
       let firebaseBaseUrl = "dev2/";
-      let userUrl = 'users/';
-      let requestUrl = 'requests/';
-      let loggedInUserUrl = 'logged_in_users/';
       let firebaseUrl = firebaseBaseUrl;
       let firebaseDBRef = firebase.database().ref(firebaseUrl);
 
@@ -46,11 +43,11 @@ myApp.factory("FirebaseService", ['$firebaseAuth',
       getFirebaseChild:function(child){
           switch(child){
               case 'users':
-                  return userUrl;
+                  return 'users/';
               case 'requests':
-                  return requestUrl;
+                  return 'requests/';
               case 'logged_in_users':
-                  return loggedInUserUrl;
+                  return 'logged_in_users/';
               default:
                   return '';
           }
