@@ -48,7 +48,6 @@
 
         vm.goToMessage = goToMessage;
         vm.gotoLearnAboutOpal = gotoLearnAboutOpal;
-        // vm.goToParking = goToParking;
         vm.goToRegister = goToRegister;
         vm.goToGeneralSettings = goToGeneralSettings;
         vm.goToPatientCharter = goToPatientCharter;

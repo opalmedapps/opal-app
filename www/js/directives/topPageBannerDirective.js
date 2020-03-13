@@ -12,12 +12,12 @@
      */
     angular
         .module('MUHCApp')
-        .directive('topBar', topBar);
+        .directive('topPageBanner', topPageBanner);
 
-    topBar.$inject = [];
+    topPageBanner.$inject = [];
 
     /* @ngInject */
-    function topBar() {
+    function topPageBanner() {
         var directive = {
             restrict: 'E',
             scope: {

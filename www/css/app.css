@@ -2898,7 +2898,7 @@ and (max-device-width : 321px)
     margin-left: -10px;
 }
 
-/* Used in www/js/directives/topBarDirective.js */
+/* Used in www/js/directives/topPageBannerDirective.js */
 .top-bar{
     text-align: center;
     font-weight: 600;
