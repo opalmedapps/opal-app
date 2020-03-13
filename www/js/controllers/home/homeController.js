@@ -8,12 +8,12 @@
     HomeController.$inject = [
         'Appointments', 'CheckInService', 'Patient', 'UpdateUI','$scope', '$timeout','$filter', 'Notifications',
         'NavigatorParameters', 'NewsBanner', 'PlanningSteps', 'Permissions', 'UserPreferences', 'NetworkStatus',
-        'MetaData'];
+        'MetaData', 'UserHospitalPreferences'];
 
     /* @ngInject */
     function HomeController(Appointments, CheckInService, Patient, UpdateUI, $scope, $timeout, $filter, Notifications,
                             NavigatorParameters, NewsBanner, PlanningSteps, Permissions, UserPreferences, NetworkStatus,
-                            MetaData)
+                            MetaData, UserHospitalPreferences)
     {
         var vm = this;
 
@@ -41,12 +41,18 @@
             inRange: true
         };
 
+        // variable to let the user know which hospital they are logged in
+        vm.selectedHospitalToDisplay = "";
+        // control the modules to display to users
+        vm.allowedModules = {};
+
         vm.homeDeviceBackButton = homeDeviceBackButton;
         vm.goToStatus = goToStatus;
         vm.goToNotification = goToNotification;
         vm.goToAppointments = goToAppointments;
         vm.goToSettings = goToSettings;
         vm.goToCheckinAppointments = goToCheckinAppointments;
+        vm.gotoLearnAboutOpal = gotoLearnAboutOpal;
 
         activate();
 
@@ -96,6 +102,9 @@
                 //Basic patient information that may or many not be available... but won't break app if not there and it makes the app look less broken if not internet connection
                 setPatientInfo();
             }
+
+            // set the hospital banner and available modules
+            configureSelectedHospital();
         }
 
         /**
@@ -225,6 +234,15 @@
             else rcorners.setAttribute("style", "height: 50%");
         }
 
+        /**
+         * @name configureSelectedHospital
+         * @desc Set the hospital name to display
+         */
+        function configureSelectedHospital() {
+            vm.selectedHospitalToDisplay = UserHospitalPreferences.getHospitalFullName();
+            vm.allowedModules = UserHospitalPreferences.getHospitalAllowedModules();
+        }
+
         /*
          * PUBLIC METHODS
          * =========================================
@@ -283,6 +301,14 @@
                     homeNavigator.pushPage(result.Url);
                 }
             }
+        }
+
+        /**
+         * @desc Go to learn about Opal page
+         */
+        function gotoLearnAboutOpal(){
+            NavigatorParameters.setParameters({'Navigator':'homeNavigator', 'isBeforeLogin': false});
+            homeNavigator.pushPage('./views/home/about/about.html');
         }
 
         /**

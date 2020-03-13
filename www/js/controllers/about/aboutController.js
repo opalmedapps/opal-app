@@ -23,16 +23,17 @@
         .module('MUHCApp')
         .controller('AboutController', AboutController);
 
-    AboutController.$inject = ['$window', 'UserPreferences', 'NavigatorParameters', 'Params'];
+    AboutController.$inject = ['$window', 'UserPreferences', 'NavigatorParameters', 'Params', 'UserHospitalPreferences'];
 
     /* @ngInject */
-    function AboutController($window, UserPreferences, NavigatorParameters, Params) {
+    function AboutController($window, UserPreferences, NavigatorParameters, Params, UserHospitalPreferences) {
         const vm = this;
 
         vm.openUrl = openUrl;
         vm.openTeam = openTeam;
         vm.openAcknowledge = openAcknowledge;
         vm.openCedars = openCedars;
+        vm.allowedModules = {};
 
         // vm.openDonation = openDonation;
         // vm.openAboutMUHC = openAboutMUHC;
@@ -42,6 +43,7 @@
 
         let parameters;
         let navigatorName;
+        let isBeforeLogin = true;
 
         activate();
 
@@ -51,6 +53,23 @@
 
             parameters = NavigatorParameters.getParameters();
             navigatorName = parameters.Navigator;
+
+            /**
+             * about.html (Learn About Opal) is called twice: once from init-Screen.html (very first screen) and once from home.html (after logging in)
+             * Different modules are enabled depending on whether it is called before or after login
+             * the parameter isBeforeLogin determines whether the page is called before login or after
+             * if the parameter isBeforeLogin is not passed, default to true
+             */
+            if (parameters.hasOwnProperty('isBeforeLogin')){
+                isBeforeLogin = parameters.isBeforeLogin;
+            }
+
+            // set the modules which are allowed to display depending on whether the user has logged in or not
+            if (isBeforeLogin){
+                vm.allowedModules = UserHospitalPreferences.getAllowedModulesBeforeLogin();
+            } else {
+                vm.allowedModules = UserHospitalPreferences.getHospitalAllowedModules();
+            }
 
             vm.language = UserPreferences.getLanguage();
         }

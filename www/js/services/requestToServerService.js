@@ -14,10 +14,14 @@ myApp.service('RequestToServer',['$filter','$state','NewsBanner','UserAuthorizat
              $q, Constants, UUID, ResponseValidator){
 
 
-        const firebase_url= firebase.database().ref(FirebaseService.getFirebaseUrl(null));
-        const response_url = firebase_url.child(FirebaseService.getFirebaseChild('users'));
+        let firebase_url = FirebaseService.getDBRef();
+        let response_url = FirebaseService.getDBRef(FirebaseService.getFirebaseChild('users'));
 
         function sendRequest(typeOfRequest,parameters, encryptionKey, referenceField) {
+            // update the firebase_url in case that the firebase url got changed
+            firebase_url = FirebaseService.getDBRef();
+            response_url = FirebaseService.getDBRef(FirebaseService.getFirebaseChild('users'));
+
             return new Promise((resolve) => {
                 let requestType;
                 let requestParameters;

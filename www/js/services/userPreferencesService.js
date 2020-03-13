@@ -13,7 +13,7 @@ var myApp=angular.module('MUHCApp');
  *@requires MUHCApp.service:UserAuthorizationInfo
  *@description Service stores and manages user preferences
  **/
-myApp.service('UserPreferences',[ 'UserAuthorizationInfo','$rootScope','tmhDynamicLocale','$translate','$q', function(UserAuthorizationInfo,$rootScope,tmhDynamicLocale,$translate,$q){
+myApp.service('UserPreferences', ['UserAuthorizationInfo','$rootScope','tmhDynamicLocale','$translate','$q', function(UserAuthorizationInfo,$rootScope,tmhDynamicLocale,$translate,$q){
     var app = document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'https://' ) === -1;
 
     //Fields for user preference and authentication
@@ -45,7 +45,6 @@ myApp.service('UserPreferences',[ 'UserAuthorizationInfo','$rootScope','tmhDynam
      *@description Enable SMS property
      **/
     var enableSMS = '';
-
 
     return{
 
