@@ -12,15 +12,19 @@
             .module('MUHCApp')
             .controller('GeneralTabController', GeneralTabController);
 
-        GeneralTabController.$inject = ['$scope', 'Announcements', 'UpdateUI', 'NavigatorParameters', 'NetworkStatus', 'MetaData', 'UserPreferences', 'Params'];
+        GeneralTabController.$inject = ['$scope', 'Announcements', 'UpdateUI', 'NavigatorParameters', 'NetworkStatus', 'MetaData', 'UserPreferences', 'Params', 'UserHospitalPreferences'];
 
-        function GeneralTabController($scope, Announcements, UpdateUI, NavigatorParameters, NetworkStatus, MetaData, UserPreferences, Params) {
+        function GeneralTabController($scope, Announcements, UpdateUI, NavigatorParameters, NetworkStatus, MetaData, UserPreferences, Params, UserHospitalPreferences) {
             var vm = this;
 
             vm.goToPatientCharter = goToPatientCharter;
             vm.goToParking = goToParking;
             vm.generalDeviceBackButton = generalDeviceBackButton;
             vm.goToUrl = goToUrl;
+
+            // variable to let the user know which hospital they are logged in
+            vm.selectedHospitalToDisplay = "";
+            vm.allowedModules = {};
 
             activate();
 
@@ -41,6 +45,16 @@
                 bindEvents();
 
                 vm.language = UserPreferences.getLanguage();
+                configureSelectedHospital();
+            }
+
+            /**
+             * @name configureSelectedHospital
+             * @desc Set the hospital name and module to display
+             */
+            function configureSelectedHospital() {
+                vm.selectedHospitalToDisplay = UserHospitalPreferences.getHospitalFullName();
+                vm.allowedModules = UserHospitalPreferences.getHospitalAllowedModules();
             }
 
             function bindEvents() {
@@ -92,7 +106,7 @@
 
             function goToParking() {
                 NavigatorParameters.setParameters('generalNavigator');
-                generalNavigator.pushPage('views/general/parking/parking.html')
+                generalNavigator.pushPage('views/general/parking/parking.html');
             }
 
             function generalDeviceBackButton() {

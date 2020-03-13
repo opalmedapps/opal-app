@@ -15,10 +15,10 @@
         .module('MUHCApp')
         .controller('accountSettingController', accountSettingController);
 
-    accountSettingController.$inject = ['Patient', 'UserPreferences', '$scope', '$timeout', 'NavigatorParameters', '$window'];
+    accountSettingController.$inject = ['Patient', 'UserPreferences', '$scope', '$timeout', 'NavigatorParameters', '$window', 'UserHospitalPreferences'];
 
     /* @ngInject */
-    function accountSettingController(Patient, UserPreferences, $scope, $timeout, NavigatorParameters, $window) {
+    function accountSettingController(Patient, UserPreferences, $scope, $timeout, NavigatorParameters, $window, UserHospitalPreferences) {
 
         var vm = this;
         vm.title = 'accountSettingController';
@@ -32,6 +32,7 @@
         vm.Language = UserPreferences.getLanguage();
         vm.ProfilePicture = Patient.getProfileImage();
         vm.passwordLength = 6;
+        vm.selectedHospitalToDisplay = "";
         var navigatorName;
 
         vm.accountDeviceBackButton = accountDeviceBackButton;
@@ -71,7 +72,6 @@
 
         }
 
-
         function accountDeviceBackButton() {
             tabbar.setActiveTab(0);
         }
@@ -94,6 +94,7 @@
             vm.TelNum = Patient.getTelNum();
             vm.Language = UserPreferences.getLanguage();
             vm.ProfilePicture = Patient.getProfileImage();
+            vm.selectedHospitalToDisplay = UserHospitalPreferences.getHospitalFullName();
         }
     }
 })();

@@ -21,6 +21,13 @@
                         <div style="width: 100%" class="style-4">
                             <input name="password" ng-model="login.password" placeholder='{{"PASSWORD"|translate}}' type="password" required ng-change="login.clearErrors()"></div>
                         <br/>
+                        <ons-list>
+                            <ons-list-item modifier="chevron" ng-click="login.goToHospital()" ng-style="!login.isThereSelectedHospital() && {'background-color': 'rgba(241, 241, 88, 0.25882352941176473)'}">
+                                {{"HOSPITAL"|translate}}
+                                <span class="list-item-note lucent">{{login.getSelectedHospitalAcronym()|translate}}</span>
+                            </ons-list-item>
+                        </ons-list>
+                        <br/>
                         <div ng-show="login.alert.type">
                             <uib-alert type="{{login.alert.type}}">{{login.alert.message|translate}}</uib-alert>
                         </div>
@@ -30,7 +37,7 @@
                         <span><ons-switch var="login.trustSwitch" ng-model="login.trusted"></ons-switch></span>
                     </div>
                         <button class="shadow-2 button button--large " style="max-width:400px;background-color: #4CAF50; font-weight: bolder;margin: auto"
-                                ng-click="login.submit()" ng-disabled="login.loading" >
+                                ng-click="login.submit()" ng-disabled="!login.isThereSelectedHospital() || login.loading" >
                             <span ng-if = "!login.loading" > {{"LOGIN"|translate}} </span>
                             <span ng-if = "login.loading" > {{"LOGGINGIN"|translate}} <ons-icon icon="ion-load-d" spin="true"></ons-icon></span>
                         </button>

@@ -23,7 +23,9 @@
         'Constants',
         'Permissions',
         'DynamicContentService',
-        'NewsBanner'
+        'NewsBanner',
+        'Params',
+        'UserHospitalPreferences'
     ];
 
     /* @ngInject */
@@ -35,7 +37,9 @@
         Constants,
         Permissions,
         DynamicContentService,
-        NewsBanner
+        NewsBanner,
+        Params,
+        UserHospitalPreferences
     ) {
         var vm = this;
         vm.globalMessage = '';
@@ -44,7 +48,7 @@
 
         vm.goToMessage = goToMessage;
         vm.gotoLearnAboutOpal = gotoLearnAboutOpal;
-        vm.goToParking = goToParking;
+        vm.goToRegister = goToRegister;
         vm.goToGeneralSettings = goToGeneralSettings;
         vm.goToPatientCharter = goToPatientCharter;
         vm.goToAcknowledgements = goToAcknowledgements;
@@ -88,7 +92,9 @@
             //Initialize language if not initialized
             UserPreferences.initializeLanguage();
 
-            
+            //Initialize hospital chosen if not initialized
+            UserHospitalPreferences.initializeHospital();
+
             //Do not show the list breaking, equivalent of ng-cloak for angularjs, LOOK IT UP!!! https://docs.angularjs.org/api/ng/directive/ngCloak
             setTimeout(function(){
                 $("#listInitApp").css({display:'block'});
@@ -130,18 +136,22 @@
          */
         function gotoLearnAboutOpal()
         {
-            NavigatorParameters.setParameters({'Navigator':'initNavigator'});
+            NavigatorParameters.setParameters({'Navigator':'initNavigator', 'isBeforeLogin': true});
             initNavigator.pushPage('./views/home/about/about.html');
         }
 
-
         /**
-         * Go to parking function
+         * Go to registration page
          */
-        function goToParking()
-        {
-            NavigatorParameters.setParameters('initNavigator');
-            initNavigator.pushPage('./views/general/parking/parking.html');
+        function goToRegister(){
+            let url = Params.registrationPage;
+            let app = document.URL.indexOf('http://') === -1 && document.URL.indexOf('https://') === -1;
+
+            if (!app) {
+                window.open(url, '_blank');
+            } else {
+                cordova.InAppBrowser.open(url, '_system');   // _system: opens in External Browser (Safari, etc...) on the device
+            }
         }
 
         /**

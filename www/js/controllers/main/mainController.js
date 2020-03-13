@@ -196,8 +196,7 @@
             // add a listener to the firebase database that watches for the changing of the token value
             // (this means that the same user has logged in somewhere else)
             //
-            var Ref = firebase.database().ref(FirebaseService.getFirebaseUrl(null));
-            var refCurrentUser = Ref.child(FirebaseService.getFirebaseChild('logged_in_users') + uid);
+            let refCurrentUser = FirebaseService.getDBRef(FirebaseService.getFirebaseChild('logged_in_users') + uid);
 
             refCurrentUser.on('value', function () {
                 if (!$rootScope.firstTime && !localStorage.getItem('locked')) {
