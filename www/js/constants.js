@@ -53,7 +53,7 @@
         alertClassUpdateMessageSuccess: "bg-success updateMessage-success",
 
         /** Registration link**/
-        registrationPage: 'https://registration.opalmedapps.ca/',
+        registrationPage: 'https://registration.opalmedapps.ca/#!/welcomePage',
 
         /** Error Constants **/
         invalidEmail: 'auth/invalid-email',
