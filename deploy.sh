@@ -8,9 +8,10 @@ FIREBASE_TOKEN="1//0f2B50Bte2dbtCgYIARAAGA8SNwF-L9IrM4C-06qkQB7nzW8NVbzkHRdtvnFL
 #npm run build:staging
 #echo "DEPLOYING REDIRECT WEBSITE"
 #firebase deploy
-#echo "DISTRIBUTION APP"
+echo "DISTRIBUTION APP"
 release_notes="$(git log --format=%B -n 1)"
 echo "RELEASE NOTES: $release_notes"
 # Deploy iOS
-firebase appdistribution:distribute ./platforms/ios/build/device/Opal\ Staging.ipa --app 1:476395494069:ios:240e439dca2279403afcfc --release-notes "$release_notes" --token "$FIREBASE_TOKEN" --testers "davidfherrerar@gmail.com"
-
+firebase appdistribution:distribute  ./platforms/ios/build/device/Opal\ Staging.ipa --app 1:652464215237:ios:a42a98feebcb5883f94cac --release-notes "$release_notes" --token "$FIREBASE_TOKEN"  --groups "staging"
+# Deploy Android
+firebase appdistribution:distribute ./platforms/android/app/build/outputs/apk/debug/app-debug.apk --app 1:652464215237:android:a281bac842624c92f94cac --release-notes "$release_notes" --token "$FIREBASE_TOKEN"  --groups "staging"
