@@ -92,7 +92,7 @@
 
             Permissions.enablePermission('WRITE_EXTERNAL_STORAGE', 'PERMISSION_STORAGE_DENIED')
                 .catch(function (response) {
-                    NewsBanner.showCustomBanner($filter('translate')(response.Message), '#333333', function(){}, 5000);
+					NewsBanner.showCustomBanner($filter('translate')(response.Message), '#333333', '#F0F3F4', 13, 'top', function () {}, 5000);
                 });
 
             // Initialize the page data if online

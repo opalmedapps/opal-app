@@ -179,8 +179,7 @@ myApp.service('FileManagerService', function ($q, $cordovaFileTransfer, $cordova
                 //Defines on error function
                 var onError = function (msg) {
                     //Show alert banner with error
-                    NewsBanner.showCustomBanner($filter('translate')("UNABLETOSHAREMATERIAL"), '#f2dede', null, 2000);
-
+                    NewsBanner.showCustomBanner($filter('translate')("UNABLETOSHAREMATERIAL"), '#333333', '#F0F3F4', 13, 'top', null, 2000);
                 };
 
                 if (fileType === 'Video') {

@@ -161,7 +161,7 @@
                 push.on('notification', function (data) {
                     if (ons.platform.isIOS() && data.additionalData.foreground) {
                         // on iOS, it will allow push notification to appear when app is running
-                        NewsBanner.showCustomBanner(data.title + "\n" + data.message, '#333333', function(){}, 9000);
+						NewsBanner.showCustomBanner(data.title + "\n" + data.message, '#333333', '#F0F3F4', 13, 'top', function(){}, 9000);
                         navigator.vibrate(3000);
                     }
                 });
@@ -208,8 +208,7 @@
                     CleanUp.clear();
 
                     // Show message "You have logged in on another device."
-                    NewsBanner.showCustomBanner($filter('translate')("KICKEDOUT"), '#333333', function () {
-                    }, 5000);
+					NewsBanner.showCustomBanner($filter('translate')("KICKEDOUT"), '#333333', '#F0F3F4', 13, 'top', function () {}, 5000);
                     refCurrentUser.off();
                     $state.go('init');
                 }

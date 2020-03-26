@@ -29,7 +29,7 @@
         function refresh() {
             // Only allowed to refresh once every 60s.
             if(LabResults.getLastUpdated() < Date.now() - 60000) getLabResultsFromServer();
-            else NewsBanner.showCustomBanner($filter('translate')("REFRESH_WAIT"), '#333333', function(){}, 3000);
+            else NewsBanner.showCustomBanner($filter('translate')("REFRESH_WAIT"), '#333333', '#F0F3F4', 13, 'top', function(){}, 3000);
         }
 
         function getLabResultsFromServer() {

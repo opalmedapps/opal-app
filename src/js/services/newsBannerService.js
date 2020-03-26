@@ -19,23 +19,24 @@ myApp.service('NewsBanner',['$cordovaNetwork','$filter','$translatePartialLoader
   var app = document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'https://' ) === -1;
 
   //Helper method to show banner
-  function showCustomBanner(message,color, callback, duration)
+  function showCustomBanner(messageValue,backgroundColorValue, textColorValue, textSizeValue, positionValue, callbackValue, durationValue)
   {
     if(app)
     {
       window.plugins.toast.showWithOptions(
       {
-        message: message,
-        duration:duration,
-        position: "top",
-        addPixelsY: 40,
+        message: messageValue,
+        duration:durationValue,
+        position: positionValue,
+        addPixelsY: 100,
         styling: {
           opacity:0.8,
-          backgroundColor: color, // make sure you use #RRGGBB. Default #333333
-          textColor: '#F0F3F4', // Ditto. Default #FFFFFF
+          backgroundColor: backgroundColorValue, // make sure you use #RRGGBB. Default #333333
+          textColor: textColorValue, // Ditto. Default #FFFFFF
+          textSize: textSizeValue, // Default 13
         }
       },
-      callback,
+      callbackValue,
       function(error){});
     }
   }
@@ -89,8 +90,6 @@ myApp.service('NewsBanner',['$cordovaNetwork','$filter','$translatePartialLoader
       function(error){});
 
     }
-
-
   }
   //Alert mappings for types
     /**
@@ -101,21 +100,22 @@ myApp.service('NewsBanner',['$cordovaNetwork','$filter','$translatePartialLoader
   **/
   var alertTypes = Params.newsAlertTypes;
   return {
-      /**
-		*@ngdoc method
+        /**
+	    *@ngdoc method
 		*@name showCustomBanner
 		*@methodOf MUHCApp.service:NewsBanner
-    *@param {String} message Message for the alert
-    *@param {String} color Color for the alert
-    *@param {Function} callback Callback function for the alert
+		*@param {String} message Message for the alert
+		*@param {String}  Background Color for the alert
+		*@param {String}  Text Color for the alert
+		*@param {String}  Position for the alert
+		*@param {Function} callback Callback function for the alert
 		*@param {Number} duration Duration in milliseconds
 		*@description Displays alert based on the parameters
 		**/
-      showCustomBanner:function(message,color, callback, duration)
-      {
+		showCustomBanner:function(messageValue,backgroundColorValue, textColorValue, textSizeValue, positionValue, callbackValue, durationValue){
         if(app)
         {
-          showCustomBanner(message,color, callback, duration);
+          showCustomBanner(messageValue,backgroundColorValue, textColorValue, textSizeValue, positionValue, callbackValue, durationValue);
         }
       },
         /**

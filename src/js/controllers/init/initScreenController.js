@@ -109,8 +109,7 @@
 			// Get location permission
 			Permissions.enablePermission('ACCESS_FINE_LOCATION', 'LOCATION_PERMISSION_DENIED')
 				.catch(function (response) {
-					NewsBanner.showCustomBanner($filter('translate')(response.Message), '#333333', function () {
-					}, 5000);
+					NewsBanner.showCustomBanner($filter('translate')(response.Message), '#333333', '#F0F3F4', 13, 'top', function () {}, 5000);
 				});
 		}
 
@@ -118,8 +117,7 @@
 			if (vm.globalMessageDescription !== '') {
 				if (vm.firstTime) {
 					vm.firstTime = false;
-					NewsBanner.showCustomBanner(vm.globalMessage + "\n" + vm.globalMessageDescription, '#333333', function () {
-					}, 30000); // message stays visible for 30 seconds, or tap on it to disappear
+					NewsBanner.showCustomBanner(vm.globalMessage + "\n" + vm.globalMessageDescription,'#333333', '#F0F3F4', 25, 'top', function(){}, 'long')
 				}
 			}
 		}
