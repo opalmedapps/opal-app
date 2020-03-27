@@ -3,21 +3,23 @@ Opal - the MUHC Oncology Patient Application for mobile phones and the web - is 
 
 ## Getting Started
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
+The first section of these instructions will get you a copy of the frontend Opal app up and running on your local machine for development and testing purposes. This frontend copy will communicate with the backend infrastructure (listener, database, etc.) already in place at the MUHC. Please note that you must have git installed to follow this guide. The second section (from "Running the tests" on) addresses testing, building and deployment on a live system. This section should be skipped for students or new developers who just want to get started with a frontend copy of Opal for development.
+
+If you have a newer Mac (MacOS High Sierra or later), or are using a firewall or security plugins, you may want to skip directly to [Troubleshooting](#troubleshooting). This may save you some time dealing with installation errors later.
 
 ### Prerequisites
 
 #### Front-End
 
-In order to run the app in your browsing for development and basic testing purposes, there are a few steps you must take:
+In order to run the app in your browser for development and basic testing purposes, there are a few steps you must take:
 
-* Clone the repository to the desired folder in your computer (create an empty folder for this). **(NOTE: You need to be added as a contributer to the project before being able to do this!)**
+* Clone the repository to the desired folder in your computer (create a dedicated folder for this). **(NOTE: You need to be added as a contributer to the project before being able to do this!)**
 
 ```
 git clone https://github.com/Sable/qplus.git
 ```
 
-* Checkout the branch you wish to install. Normally the development branch is the `staging` branch. Here we branch off 
+* Change directories into the qplus folder, then checkout the branch you wish to install. Normally, the development branch is the `staging` branch. Here we branch off 
 and add the require logic. 
 
 ```
@@ -26,17 +28,18 @@ git checkout -b staging origin/staging # This pull staging from remove creates a
 git checkout -b staging_new_branch # This creates the new branch of the `staging` branch
 ```
 
-* Install the latest version of [NodeJS](https://nodejs.org/en/download/). If you have already done this, skip this step. **(NOTE: For proper access to the backend you must have version 12+)**
+* Install the latest version of [NodeJS](https://nodejs.org/en/download/). If you have already done this, skip this step, but follow the instruction for verifying that Node is installed globally. **(NOTE: For proper access to the backend you must have version 12+)**
 
-Once this is done, verify that you installed Node globally by running
-running `$node -v`
+Verify that Node is installed globally by running `node -v`.
 
-If you see the current version of the Node runtime installed, then all is good! Otherwise please consult Node's troubleshooting manual or Google the error that occurs.
+If you see the current version of the Node runtime installed after running `node -v`, then all is good! Otherwise please consult Node's troubleshooting manual or Google the error that occurs.
 
 This installation also installs the Node.js package manager [npm](https://docs.npmjs.com/getting-started/what-is-npm).
-The main/description file for a Node.js application is the 
+This package manager is in charge of installing all the libraries and dependencies
+for development. The main/description file for a Node.js application is the 
 [package.json](./package.json) file. This file states all the dependencies for the app
 and the versions for each of them. _npm_'s job is to manage these dependencies.
+
 * Install globally `webpack`, `webpack-dev-server`, `cordova`.
 ```
     npm install -g webpack webpack-dev-server cordova
@@ -55,6 +58,9 @@ For more information on _webpack_ see: https://survivejs.com/webpack/what-is-web
 [Cordova](https://cordova.apache.org/) is the build tool to build the web application for both Android and iOS.
 
 * Install the app dependencies
+
+**Note:** you may need to replace `npm` with `sudo npm` if you are running a Mac or Linux system without root access. If this is the case, use `sudo npm` for all the `npm` steps that follow.
+
 ```
  npm install
 ```  
@@ -66,8 +72,12 @@ npm run prepare:staging
 ```
 npm run start:web:staging
 ```
-This command should open a browser in the address `http://localhost:9000` and once the app compiles,
-open the app. 
+This command should open a browser at the address `http://localhost:9000` and once the app compiles,
+it will launch the app.
+
+If the app looks normal (though stretched out), with the Opal logo and buttons, your installation was successful.
+If the app looks jumbled (a green screen, strange labels, no buttons, etc.), the app code is fine, but the package installations failed --> skip ahead to [Troubleshooting](#troubleshooting).
+
 ### Building the app in a mobile device
 The following steps will allow you to set up the app with Cordova. For more information and troubleshooting:
 https://cordova.apache.org/docs/en/latest/guide/platforms/android/index.html, https://cordova.apache.org/docs/en/latest/guide/platforms/ios/index.html
@@ -131,10 +141,12 @@ Sometimes it is useful to quickly have a server in order to
 test a particular page or app. For this http-server is a great package.
 For instance, an alternative to `npm run start:web:staging` which uses _webpack-dev-server_,
 is to build the web app using `npm run build:web:staging`, change directory to
-the `www` and run `http-server` inside this directory. In one command
+the `www` and run `http-server` inside this directory. In one command:
 ```
 $npm run build:web:staging && cd www && http-server -p 9000 -o # Build the app, and serve it in port 9000
 ```
+
+The -p flag is used to specify the port number, and the -o flag is used to automatically open a browser window at the right address. 
 
 ### Running Development Environment
 
@@ -148,14 +160,33 @@ npm run start:web:staging
 ```
 2) In Chrome or Firefox (they have the best debug console) navigate to one of the addresses provided from the previous step.
 3) Open the [developer console](https://developer.chrome.com/devtools) and switch to mobile view and [disable caching](http://nicholasbering.ca/tools/2016/10/09/devtools-disable-caching/).
-4) If you followed all the steps correctly there should not be any errors in the debug console other than a missing cordova.js file. Otherwise please use Google or StackOverflow to solve any issues that arise, or try repeating all the steps again.
-5) If all is well you can login to the app with the following credentials:
+4) If you followed all the steps correctly, the only errors you should see in the debug console are a 404 error for cordova.js, a 404 error for favicon.ico, and many warnings for translations that don't exist. Otherwise, skip ahead to [Troubleshooting](#troubleshooting).
+5) If all is well you can log in to the app with the following credentials:
 
 ```
 email: muhc.app.mobile@gmail.com
 password: 12345opal
-security answer (depending on question): red, guitar, superman, dog, bob, cuba
+security answer (depending on the question): red, guitar, superman, dog, bob, cuba
 ```
+
+**NOTE: In the past, several students have had trouble installing dependencies due to strange permission issues that block the ability to write to certain directories. Don't worry if this happens to you! Please consult the [Troubleshooting](#troubleshooting) section below.**
+
+## Troubleshooting
+If you are getting errors during your installation, here are some things you can try:
+* If you got unexpected errors in the developer console, and the app looks jumbled, it is likely that one of the packages used by Opal was not properly installed.
+* If one or many packages didn't install correctly, one of the reasons below may be preventing `npm install` from installing the packages correctly. [Note: if you want to try installing the packages again, you can navigate to your local qplus repository and delete the folder `www/lib/bower_components`. Then, in the root of the repository, run `npm install`. Npm will detect that you deleted the folder and install the packages again.] You may be having one of the following problems:
+  - You don't have the required permissions to perform the installation. Make sure you are logged in as an administrator on your computer, and try re-installing the packages. If you have a Mac, precede your npm commands with `sudo` to run the command with administrator permissions.
+  - You have an extra firewall or security plugin installed, which is preventing the packages from installing. For example, the browser extension Ghostery is known to interfere with installation. Try disabling firewalls and security plugins and re-installing the packages.
+  - Your computer security is too strong. For example, newer Mac devices running MacOS High Sierra or newer have been known to prevent some packages from installing. For newer Macs, follow the instructions on [this website](https://www.imore.com/how-turn-system-integrity-protection-macos) to turn off System Integrity Protection. Then, try re-installing the packages using the instructions above. Don't forget to re-enable System Integrity Protection once you're done.
+  - You have a too-recent version of npm installed. Try installing an older version of npm such as version 6 instead of 8 or 10, and re-install the packages.
+* If you got an error from `npm install` like `UNABLE_TO_GET_ISSUER_CERT_LOCALLY` or you are behind a firewall, you can try the following commands:
+  - Go to `qplus/.bowerrc` and add the following `{"directory" : "www/lib/bower_components", "strict-ssl": false,  "https-proxy": "" }`
+  - Run `npm config set strict-ssl false` and `set NODE_TLS_REJECT_UNAUTHORIZED=0` on the terminal. If this solution worked, you have to run these two commands again for the listener's installation. You also need to run `set NODE_TLS_REJECT_UNAUTHORIZED=0` everytime you restart the terminal.
+
+If at this point you have been unable to install everything properly, reach out to an Opal team member for help.
+
+This is the end of the section on installing the frontend Opal app. If you are a student or if you weren't explicitly asked to test, build or deploy the app, skip ahead to [Best Practices](#best-practices).
+
 ## Running the tests
 
 Currently the Opal Development team has been making an effort to write tests for all new features. It's important to try
@@ -238,6 +269,7 @@ We use [SemVer](http://semver.org/) for versioning. For the versions available, 
 * **Robert Maglieri**
 * **James Brace**
 * **Yick Mo**
+* **Stacey Beard**
 
 <!-- See also the list of [contributors](https://github.com/Sable/dh/contributors) who participated in this project. -->
 
@@ -250,5 +282,4 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 * Medical Physics department at the MUHC for providing a space to work in
 * Cedar's Cancer Centre
 * Laurie Hendren, John Kildea, and Tarek Hijal for founding the initiative
-* All the McGill students who have graciously contributed to the development
-
+* All the McGill students who have graciously contributed to the project development
