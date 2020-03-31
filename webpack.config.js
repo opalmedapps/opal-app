@@ -32,7 +32,7 @@ const config = env => {
 		mode: (isProduction) ? 'production' : 'development',
 		devServer: {
 			contentBase: './www',
-			compress: false,
+			compress: true,
 			hot: false,
 			watchContentBase: true,
 			port: 9000

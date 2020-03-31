@@ -4,7 +4,17 @@
  * Date: 2017-09-18
  * Time: 3:17 PM
  */
-import Highcharts from 'highcharts';
+import Highcharts from 'highcharts/highstock';
+import addMore from "highcharts/highcharts-more";
+import addDrilldown from "highcharts/modules/drilldown";
+import addNoData from "highcharts/modules/no-data-to-display";
+import addOfflineExporting from "highcharts/modules/offline-exporting";
+import addExporting from "highcharts/modules/exporting";
+addMore(Highcharts);
+addDrilldown(Highcharts);
+addNoData(Highcharts);
+addOfflineExporting(Highcharts);
+addExporting(Highcharts);
 (function () {
     'use strict';
 
@@ -204,7 +214,6 @@ import Highcharts from 'highcharts';
             else{
                 buttonPositionX = 70; // Default
             }
-
             // Sample options for first chart
             if (UserPreferences.getLanguage().toUpperCase() === 'FR')
             {
@@ -267,6 +276,7 @@ import Highcharts from 'highcharts';
                 Highcharts.dateFormat('%e%a');
             }
             else {
+                
                 Highcharts.setOptions({
                     lang: {
                         months: Params.monthsArray.monthsArrayEn,

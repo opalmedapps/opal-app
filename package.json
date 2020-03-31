@@ -101,7 +101,7 @@
     "es6-promise-plugin": "^4.2.2",
     "firebase": "^3.9.0",
     "font-awesome": "^4.6.1",
-    "highcharts": "^5.0.7",
+    "highcharts": "^5.0.15",
     "ionicons": "^2.0.1",
     "jquery": "^3.4.1",
     "jquery.panzoom": "^3.2.2",
