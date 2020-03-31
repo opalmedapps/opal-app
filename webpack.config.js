@@ -18,6 +18,7 @@ let entry = [
 	"./src/js/app.values.js"];
 
 const config = env => {
+
 	const isProduction = env && env.production;
 	// opal environment e.g. `$webpack --env.opal_environment=preprod`
 	const OPAL_ENV = (env) ? env.opal_environment : null;
@@ -38,7 +39,7 @@ const config = env => {
 		},
 		output: {
 			path: path.resolve(__dirname, 'www'),
-			filename: (isProduction) ? '[name].[chunkhash].js' : '[name].[hash].js',
+			filename: (isProduction) ? '[name].[chunkhash].js' : '[name].js',
 		},
 		module: {
 			rules: [
@@ -63,7 +64,7 @@ const config = env => {
 							options: {
 								name: '[name].[ext]',
 								outputPath: 'fonts/'
-							}
+							},
 						}
 					]
 				},

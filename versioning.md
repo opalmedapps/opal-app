@@ -4,6 +4,8 @@ The versioning of the app will be handled via two numbers: (1) the version numbe
 and (2) the build number. The version number will be the publicly facing version while
 the build number will be internal to our builds of the app (every commit to a main opal branch).
 
+For the main version version we use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags). 
+
 The main Opal branches are: `prod` for production, `preprod` for pre-production,
 and `staging` for development. 
 # Version number
