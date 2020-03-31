@@ -145,7 +145,7 @@ Install http-server
 2. Install and set up Cordova for the desired target platforms by following the steps in the Android and iOS cordova environments: **Note: iOS may only be built by a machine with macOS as the operating sytem**
     - **Android**: https://cordova.apache.org/docs/en/latest/guide/platforms/android/index.html
     - **iOS**: https://cordova.apache.org/docs/en/latest/guide/platforms/ios/index.html
-3. Run the build command 
+3. To build the app run:
     ```
     npm run build:staging
     ```
@@ -154,17 +154,18 @@ Install http-server
   npm run build:staging:ios
   npm run build:staging:android
   ```
-  A few notes on this:
-    - If building for iOS make sure the app is signed under a development profile, otherwise the build process will fail, follow this guide for help:
-4. Finally run the Cordova app
+
+4. Finally, to run the app in an emulator run:
 ```
 npm run start:app:staging:ios # To run app in an for iOS emulator
 npm run start:app:staging:android # To run app in an Android emulator.
 ```
+A few notes on this:
+ - If building for iOS you may need a developer profile in Apple depending on what you want to do. Running in an emulator does not require development profiles.
 
 ### Opal App Scripts
 We have added commands for developer convenience to the `package.json`. Take some
-time to understand what they do, this wil help you manipulate the project better, here is a list of them.
+time to understand what they do, this wil help you manipulate the project better. 
 ```json
   "scripts": {
     "prepare:web": "npm run prepare:web:staging",
@@ -207,6 +208,8 @@ time to understand what they do, this wil help you manipulate the project better
     "test": "echo \"Error: no test specified\" && exit 1"
   }
 ```
+
+
 ## Troubleshooting
 If you are getting errors during your installation, here are some things you can try:
 * If you got unexpected errors in the developer console, and the app looks jumbled, it is likely that one of the packages used by Opal was not properly installed.
