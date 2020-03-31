@@ -11,6 +11,8 @@ const config = {
         appId: "1:652464215237:web:0254157de7cc10f8f94cac",
 
     },
+    version: "1.8.7-beta",
+    buildNumber: 1817,
     opalProtocolURI: "opal-staging://"
 };
 

@@ -131,7 +131,9 @@ class OpalEnv {
 		this.writeToConfigXML(this.setXMLWidgetAttributeText(this.getConfigXMLJSON(),
 			"version", newVersion));
 	}
-
+	static bumpBuildNumbers(){
+		OpalEnv.setBuildNumbers();
+	}
 	/**
 	 * Sets build number in config.xml for cordova file
 	 * @param {string|null} env Environment to update
@@ -159,11 +161,14 @@ class OpalEnv {
 				"ios-CFBundleVersion")),
 				Number(this.getXMLWidgetAttributeText(configFile, "android-versionCode"))];
 			buildNumber = [ios + 1, android + 1];
+			console.log(`OLD VERSIONS iOS: ${ios}, Android ${android}`);
+			console.log(`NEW VERSIONS iOS: ${buildNumber[0]}, Android ${buildNumber[1]}`);
 		}
 
 		this.setXMLWidgetAttributeText(configFile, "ios-CFBundleVersion", buildNumber[0]);
 		this.setXMLWidgetAttributeText(configFile, "android-versionCode", buildNumber[1]);
 		this.writeToConfigXML(configFile);
+
 	}
 
 	static getEnvironmentFolder(env = null) {
@@ -193,7 +198,7 @@ class OpalEnv {
 			{
 				fullTagEmptyElement: false,
 				indentCdata: true,
-				indentAttributes: true
+				spaces: 4,
 			}));
 	}
 

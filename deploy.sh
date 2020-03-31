@@ -1,13 +1,14 @@
 #!/usr/bin/env bash
 ## Get last commit message
-FIREBASE_TOKEN="1//0f2B50Bte2dbtCgYIARAAGA8SNwF-L9IrM4C-06qkQB7nzW8NVbzkHRdtvnFL90wH26ah6SHkwOs7jrgEXzd2nTLnjRJYrgDlwfU"
 # Set the project to preprod
-#echo "SETTING UP ENVIRONMENT"
-#firebase use staging --token "$FIREBASE_TOKEN"
-#echo "BUILDING APP"
-#npm run build:staging
-#echo "DEPLOYING REDIRECT WEBSITE"
-#firebase deploy
+echo "SETTING UP ENVIRONMENT"
+firebase use staging --token "$FIREBASE_TOKEN"
+echo "BUMPING BUILD_VERSION for app in staging"
+echo "BUILDING APP"
+npm run build:staging
+node -e "require('./opal_env.setup').bumpBuildNumbers('staging')"
+echo "DEPLOYING REDIRECT WEBSITE"
+firebase deploy
 echo "DISTRIBUTION APP"
 release_notes="$(git log --format=%B -n 1)"
 echo "RELEASE NOTES: $release_notes"
