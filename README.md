@@ -6,7 +6,7 @@ Opal - the MUHC Oncology Patient Application for mobile phones and the web - is 
   - [Getting Started](#getting-started)
     - [The Opal front-end codebase](#the-opal-front-end-codebase)
     - [Installing, building and serving web code](#installing-building-and-serving-web-code)
-      - [Notes on the development of web](#notes-on-the-development-of-web)
+      - [Notes on the development of web code](#notes-on-the-development-of-web-code)
       - [Optional dev server](#optional-dev-server)
     - [Installing, building, and serving the mobile app code](#installing-building-and-serving-the-mobile-app-code)
     - [Opal App Scripts](#opal-app-scripts)
@@ -120,7 +120,7 @@ In Opal we have three main branches: `staging`, `preprod`, and `prod`. In terms 
     password: 12345opal
     security answer (depending on the question): red, guitar, superman, dog, bob, cuba
     ```
-#### Notes on the development of web c
+#### Notes on the development of web code
 - We recommend the use of Chrome or Firefox as they have the best debug console, the Opal web code does not currently support Internet Explorer
 - To debug the code use the [developer console](https://developer.chrome.com/devtools), switch to mobile view and [disable caching](http://nicholasbering.ca/tools/2016/10/09/devtools-disable-caching/). Sometimes the browser caches pages disallowing developers from seeing change to the code.
 - If you followed all the steps in [Installing Building and Serving web code](#installing-building-and-serving-web-code) correctly, the only errors you should see in the debug console are a 404 error for cordova.js, a 404 error for favicon.ico, and many warnings for translations that don't exist. Otherwise, skip ahead to [Troubleshooting](#troubleshooting).
@@ -154,11 +154,14 @@ Install http-server
   npm run build:staging:ios
   npm run build:staging:android
   ```
+  A few notes on this:
+    - If building for iOS make sure the app is signed under a development profile, otherwise the build process will fail, follow this guide for help:
 4. Finally run the Cordova app
 ```
 npm run start:app:staging:ios # To run app in an for iOS emulator
 npm run start:app:staging:android # To run app in an Android emulator.
 ```
+
 ### Opal App Scripts
 We have added commands for developer convenience to the `package.json`. Take some
 time to understand what they do, this wil help you manipulate the project better, here is a list of them.
@@ -168,31 +171,39 @@ time to understand what they do, this wil help you manipulate the project better
     "prepare:web:prod": "node -e \"require('./opal_env.setup.js').copyEnvironmentFiles('prod')\"",
     "prepare:web:preprod": "node -e \"require('./opal_env.setup.js').copyEnvironmentFiles('preprod')\"",
     "prepare:web:staging": "node -e \"require('./opal_env.setup.js').copyEnvironmentFiles('staging')\"",
-    "prepare:app:prod": "node run prepare:web:prod && cordova prepare",
-    "prepare:app:preprod": "node run prepare:web:preprod && cordova prepare",
-    "prepare:app:staging": "node run prepare:web:staging && cordova prepare",
+    "prepare:app:prod": "npm run prepare:web:prod && cordova prepare",
+    "prepare:app:preprod": "npm run prepare:web:preprod && cordova prepare",
+    "prepare:app:staging": "npm run prepare:web:staging && cordova prepare",
     "build:web": "npm run build:web:staging",
     "build:web:prod": "npm run prepare:web:prod && webpack --env.opal_environment=prod",
     "build:web:preprod": "npm run prepare:web:preprod && webpack --env.opal_environment=preprod",
     "build:web:staging": "npm run prepare:web:staging && webpack --env.opal_environment=staging",
-    "build:app": "npm run build:web:staging && cordova build --device --verbose",
-    "build:app:prod": "npm run build:web:prod && cordova build --release  --verbose",
-    "build:app:preprod": "npm run build:web:preprod && cordova build --device --verbose",
-    "build:app:staging": "npm run build:web:staging && cordova build --device --verbose",
-    "build:app:staging:ios": "npm run build:web:staging && cordova build ios --device --verbose",
-    "build:app:staging:android": "npm run build:web:staging && cordova build android --device --verbose",
+    "build:app": "npm run build:app:staging",
+    "build:app:prod": "npm run prepare:app:prod && npm run build:web:prod && cordova build --release --verbose",
+    "build:app:preprod": "npm run prepare:app:preprod && npm run build:web:preprod && cordova build --verbose",
+    "build:app:preprod:ios": "npm run prepare:app:preprod && npm run build:web:preprod && cordova build android --verbose",
+    "build:app:preprod:android": "npm run prepare:app:preprod && npm run build:web:preprod && cordova build ios --verbose",
+    "build:app:preprod:package": "npm run prepare:app:preprod && npm run build:web:preprod && cordova build --device --verbose",
+    "build:app:preprod:package:ios": "npm run prepare:app:preprod && npm run build:web:preprod && cordova build ios --device --verbose",
+    "build:app:preprod:package:android": "npm run prepare:app:preprod && npm run build:web:preprod && cordova build android --device --verbose",
+    "build:app:staging": "npm run prepare:app:staging && npm run build:web:staging && cordova build --verbose",
+    "build:app:staging:ios": "npm run prepare:app:staging && npm run build:web:staging && cordova build ios --verbose",
+    "build:app:staging:android": "npm run prepare:app:staging && npm run build:web:staging && cordova build android --verbose",
+    "build:app:staging:package": "npm run prepare:app:staging && npm run build:web:staging && cordova build --device --verbose",
+    "build:app:staging:package:ios": "npm run prepare:app:staging && npm run build:web:staging && cordova build ios  --device --verbose",
+    "build:app:staging:package:android": "npm run prepare:app:staging && npm run build:web:staging && cordova build android --device --verbose",
     "start": "npm run start:web:staging",
     "start:web": "npm run start:web:staging",
     "start:web:prod": "webpack-dev-server --open --env.opal_environment=prod --watch --progress --colors",
     "start:web:preprod": "webpack-dev-server --open --env.opal_environment=preprod --watch --progress --colors",
     "start:web:staging": "webpack-dev-server --open --env.opal_environment=staging --watch --progress --colors",
-    "start:app": "nnpm run build:web:staging && cordova run",
-    "start:app:prod:ios": "npm run build:web:prod && cordova run ios",
-    "start:app:prod:android": "npm run build:web:prod && cordova run android",
-    "start:app:preprod:ios": "npm run build:web:preprod && cordova run ios",
-    "start:app:preprod:android": "npm run build:web:preprod && cordova run android",
-    "start:app:staging:ios": "npm run build:web:staging && cordova run ios",
-    "start:app:staging:android": "npm run build:web:staging && cordova run android",
+    "start:app": "npm run build:app:staging && cordova run",
+    "start:app:prod:ios": "npm run build:app:prod && cordova run ios",
+    "start:app:prod:android": "npm run build:app:prod && cordova run android",
+    "start:app:preprod:ios": "npm run build:app:preprod && cordova run ios",
+    "start:app:preprod:android": "npm run build:app:preprod && cordova run android",
+    "start:app:staging:ios": "npm run build:app:staging:ios && cordova run ios",
+    "start:app:staging:android": "npm run build:app:staging:android && cordova run android",
     "test": "echo \"Error: no test specified\" && exit 1"
   }
 ```
