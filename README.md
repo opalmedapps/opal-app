@@ -91,7 +91,7 @@ In Opal we have three main branches: `staging`, `preprod`, and `prod`. In terms 
       JavaScript without worrying about JavaScript compatibility in patient devices.
       1. Optimize the code in different ways.
       For more information on _webpack_ see: https://survivejs.com/webpack/what-is-webpack/
-    - [webpack-dev-server](https://webpack.js.org/configuration/dev-server/) is an web server which to serve _webpack_'s bundles.
+    - [webpack-dev-server](https://webpack.js.org/configuration/dev-server/) is a web server which is used to serve _webpack_'s bundles.
 
 5. Install the app dependencies
   **Note:you may need to replace `npm` with `sudo npm` if you are running a Mac or Linux system without root access. If this is the case, use `sudo npm` for all the `npm` steps that follow.**
