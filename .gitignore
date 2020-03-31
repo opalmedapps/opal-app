@@ -5,3 +5,10 @@
 *.swp
 .DS_Store
 .vscode/
+www/*
+plugins/
+platforms/
+./opal.config.js
+./config.xml
+./google-services.js
+./GoogleService-Info.plist
