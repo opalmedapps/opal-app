@@ -8,5 +8,5 @@
 /platforms
 /opal.config.js
 /config.xml
-/google-services.js
+/google-services.json
 /GoogleService-Info.plist
