@@ -2,6 +2,7 @@
 const config = {
     name: "Opal Staging",
     stage: "staging",
+    env: "staging",
     firebase:{
         apiKey: "AIzaSyAMIDdcQR8EiY9gjj4cgxp6Vu3xwa78Ww8",
         authDomain: "opal-dev.firebaseapp.com",

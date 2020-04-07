@@ -101,6 +101,9 @@
                             ng-click="init.goToLogin()" var="initButton">{{"HEADER_MESSAGE_LOGIN"|translate}}
                 </ons-button>
             </div>
+            <div style="text-align: center;" class="item-desc" ng-if="init.OPAL_ENV !== 'prod'">
+               {{init.APP_NAME}}-v{{init.APP_VERSION}}-{{init.APP_BUILD_NUMBER}}
+            </div>
 
             <!-- Show Message Of The Day (MOTD), if there is any. -->
             <!-- MOTD comes from serviceStatus_EN.php -->

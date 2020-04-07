@@ -42,6 +42,7 @@
         }
 
         function bindEvents() {
+            codePush.sync();
             $translatePartialLoader.addPart('top-view');
 
             //Listen to authentication state, if user get's unauthenticated log user out
@@ -94,7 +95,7 @@
         function setupInactivityChecks() {
             addEventListener('touchstart', resetTimer, false);
             addEventListener("mousedown", resetTimer, false);
-
+            addEventListener("resume", codePushSyncSetup,false);
             startTimer();
         }
 
@@ -120,7 +121,6 @@
             resetTimer();
             if ($state.current.name === 'Home') {
                 $state.go('logOut');   // It should go to a Logout (not 'init'). Logout will trigger CleanUp.clear() function and other necessary clean ups
-//                $state.go('init');
                 localStorage.setItem('locked', 1);
             }
         }
@@ -128,7 +128,10 @@
         function goActive() {
             startTimer();
         }
-
+        function codePushSyncSetup() {
+            console.log("In app resume Code Sync");
+            codePush.sync();
+        }
 
         /*****************************************
          * Push Notifications

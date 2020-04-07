@@ -34,6 +34,7 @@
     <preference name="ErrorUrl" value="www/views/error/error-page.html"/>
     <icon src="./res/OpalHealth_App_Apple_Icon_2.png" />
     <platform name="android">
+        <preference name="CodePushDeploymentKey" value="UfYr4hoPUuj1lcXw9XRdBWQ4b2mYmucZN6UX1" />
         <edit-config file="app/src/main/AndroidManifest.xml" mode="merge" target="/manifest/application">
             <application android:usesCleartextTraffic="true" />
         </edit-config>
@@ -54,6 +55,7 @@
         <allow-intent href="market:*" />
     </platform>
     <platform name="ios">
+        <preference name="CodePushDeploymentKey" value="VWyrpbKOI-mRLXDQodtOsTreefcXS_hWeeLp0" />
         <preference name="deployment-target" value="9.0" />
 <!--        <resource-file src="GoogleService-Info.plist" />-->
         <splash src="res/screen/ios/Default@2x~universal~anyany.png" />
