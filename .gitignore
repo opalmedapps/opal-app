@@ -3,7 +3,6 @@
 .DS_Store
 .vscode/
 /node_modules
-/www/*
 /plugins
 /platforms
 /opal.config.js

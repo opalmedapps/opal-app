@@ -1,0 +1,63 @@
+<ons-page ng-controller="ParkingController as parking">
+    <ons-toolbar fixed-style>
+        <div class="left">
+            <span><ons-back-button>{{"BACK"|translate}}</ons-back-button></span>
+        </div>
+        <div class="center" ng-class="fontSizeTitle">{{"PARKING"|translate}}</div>
+    </ons-toolbar>
+
+    <network-banner></network-banner>
+
+    <ons-list-header  ng-class="fontSizeTitle">{{"PARKINGINFORMATION"|translate}}</ons-list-header>
+    <ons-list modifier="chevron tappable" class="settings-list">
+        <ons-list-item ng-click="parking.goToParkingLink('general')" ng-class="fontSizeDesc">
+
+        <ons-row align="center">
+                <ons-col width="60px" style="text-align: center">
+                    <div>
+                        <ons-icon icon="fa-h-square" class="iconHomeView" style="color:#0D47A1"></ons-icon>
+                    </div>
+                </ons-col>
+                <ons-col>
+
+                    <span class="item-title" ng-class="fontSizeTitle">{{"HOSPITALPARKING"|translate}}</span>
+                    <ons-icon  icon="ion-android-open" style="color:#ddd; margin-top: 5%; margin-right: -10px" class="pull-right" size="1.2em">  </ons-icon>
+
+
+                </ons-col>
+            </ons-row>
+        </ons-list-item>
+        <ons-list-item modifier="chevron" ng-click="parking.goToParkingLink('oncology')" ng-class="fontSizeDesc">
+            <ons-row align="center">
+                <ons-col width="60px" style="text-align: center">
+                    <div>
+                        <ons-icon icon="fa-h-square" class="iconHomeView" style="color:#1B5E20"></ons-icon>
+                    </div>
+                </ons-col>
+                <ons-col>
+
+                    <span class="item-title" ng-class="fontSizeTitle"> {{"ONCOLOGYPARKING"|translate}}</span>
+
+                </ons-col>
+            </ons-row>
+
+        </ons-list-item>
+        <ons-list-item ng-click="parking.goToParkingLink('gettingtohospital')" ng-class="fontSizeDesc">
+            <ons-row align="center">
+                <ons-col width="60px" style="text-align: center">
+                    <div>
+                        <ons-icon icon="fa-bus" class="iconHomeView" style="color:#3399ff"></ons-icon>
+                    </div>
+                </ons-col>
+                <ons-col>
+
+                    <span class="item-title" ng-class="fontSizeTitle"> {{"GETTINGTOHOSPITAL"|translate}}</span>
+                    <ons-icon  icon="ion-android-open" style="color:#ddd; margin-top: 5%; margin-right: -10px" class="pull-right" size="1.2em" > </ons-icon>
+                </ons-col>
+            </ons-row>
+
+        </ons-list-item>
+    </ons-list>
+
+
+</ons-page>

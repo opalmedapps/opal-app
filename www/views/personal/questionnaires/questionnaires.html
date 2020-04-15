@@ -1,0 +1,700 @@
+<ons-page ng-controller="QuestionnaireMainController">
+    <ons-toolbar fixed-style>
+        <!--<div class="left"><p style="font-size: 10pt">Answered {{numAnswered}}/{{questions.length}}</div>-->
+        <div class="left">
+            <ons-back-button>{{"BACK"|translate}}</ons-back-button>
+        </div>
+        <div class="center">
+            <span ng-hide="index>0">{{"QUESTIONNAIRE_HOME"|translate}}</span>
+            <span ng-show="(index > 0) && index <= (questions.length)"><ons-toolbar-button><i
+                    style="color: rgba(38,100,171,0.81);" class="ion-chevron-left"
+                    ng-click="back()"></i></ons-toolbar-button>{{index}}/{{questions.length}}<ons-toolbar-button><i
+                    style="color: rgba(38,100,171,0.81);" class="ion-chevron-right"
+                    ng-click="forward()"></i></ons-toolbar-button></span>
+            <span ng-show="(index == (questions.length + 1))"><ons-toolbar-button><i
+                    style="color: rgba(38,100,171,0.81);" class="ion-chevron-left"
+                    ng-click="back()"></i></ons-toolbar-button>{{"QUESTIONNAIRE_END"|translate}}<ons-toolbar-button
+                    ng-disabled="true"><i
+                    style="color: rgba(38,100,171,0.81);" class="ion-chevron-right"
+                    ng-disabled="true"></i></ons-toolbar-button></span>
+        </div>
+        <div class="right">
+          <span span ng-hide="index>0" class="toolbar-button--quiet navigation-bar__line-height" ng-click="start()">
+              <span ng-show="sourceTab==='new'" style="vertical-align: top; display: inline-block; line-height: 44px; height: 44px;">{{"BEGIN"|translate}}</span>
+              <span ng-show="sourceTab==='progress'" style="vertical-align: top; display: inline-block; line-height: 44px; height: 44px;">{{"RESUME"|translate}}</span>
+              <i class="ion-chevron-right" style="font-size:26px"></i>
+          </span>
+        </div>
+    </ons-toolbar>
+
+    <ons-carousel fullscreen swipeable overscrollable auto-scroll var="carousel" ng-class="fontSizeDesc">
+        <ons-carousel-item style="overflow-y: scroll;" ng-if="!progress" ng-class="fontSizeDesc">
+        <div class="container">
+                <div>
+                    <div class="row" style="margin: 0 auto;">
+                        <div class="col-xs-12" style="margin-top: 2.5vh">
+                            <h3>
+                                <!--
+                                {{"WELCOME"|translate}} <b><span style="color: darkmagenta"> {{questionaire.QuestionnaireName}}</span></b>
+                                -->
+                                <b><span style="color: darkmagenta"> {{(language === "EN") ? questionaire.QuestionnaireName_EN : questionaire.QuestionnaireName_FR}}</span></b>
+                            </h3>
+                        </div>
+                    </div>
+
+                    <!-- Home page image -->
+                    <div class="row" style="margin: 0 auto;">
+                        <div class="col-xs-12">
+                            <!--
+                            <img src="./img/MUHC.png" alt="MUHC Logo" style="margin-top: 1cm; margin-bottom: 1cm"></img>
+                            -->
+                            <br>
+                            <div ng-bind-html="trustThisAsHtml()" ></div>
+                            <br>
+                        </div>
+                    </div>
+
+                    <div class="row" style="margin: 0 auto;">
+                        <div class="col-xs-12" ng-class="fontSizeDesc">
+                            <p>{{"QUESTIONNAIRE_INSTRUCTIONS2"|translate}}</p>
+                            <br>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </ons-carousel-item>
+
+        <!-- End of home page -->
+
+        <!-- ng-repeat to have one carousel item for each question -->
+        <ons-carousel-item ng-repeat="question in questions track by $index">
+            <ons-page>
+                <!-- <div class="navigation-bar" ng-show="toolbarIndex > 0" style="margin-top: 0px; width: 100vw;"> -->
+                <!--   <div class="navigation-bar__left">
+        <span class="toolbar-button--quiet navigation-bar__line-height" ng-click="back()">
+          <i class="ion-chevron-left"></i> Back
+        </span>
+      </div>
+
+      <div class="navigation-bar__center">
+        Question {{$index+1}}/{{questions.length}}
+      </div>
+
+      <div class="navigation-bar__right">
+        <span class="toolbar-button--quiet navigation-bar__line-height" ng-click="forward()">Next <i class="ion-chevron-right"></i></span>
+      </div>
+    </div> -->
+
+
+                <!-- Toolbar with forward and backward buttons to go back and forth between pages. -->
+                <!-- End of toolbar -->
+
+                <!-- Question text  -->
+                <div class="row" style="margin:0;padding:0" id="questionText" ng-show="shown[$index]">
+                    <div class="col-xs-12" ng-class="fontSizeDesc">
+                        <div style="color:black;" ng-bind-html="trustAsHtml(questionText)" id="qText" ng-class="fontSizeDesc"></div>
+                    </div>
+                </div>
+                <div class="row" style="margin:0;padding:0">
+                    <div class="col-xs-14">
+
+                        <!-- Multiple choice question type page -->
+                        <div ng-show="(question.QuestionType == 'MC' && (shown[$index]))">
+                            <div>
+                                <div class="container">
+
+                                    <div class="row" style="margin:0 auto">
+                                        <div class="col-xs-14">
+                                            <br>
+
+                                            <!-- Repeat all the list item for every option in options -->
+                                            <ul class="list">
+                                                <li class="list__item list__item--tappable"
+                                                    ng-repeat="option in options track by $index">
+
+                                                    <div ng-style="styleIfSelected(checked1[$index])">
+                                                        <label class="radio-button radio-button--list-item">
+                                                            <input type="radio" ng-checked="checked1[$index]"
+                                                                   ng-click="clicked1(option, $index, undefined)">
+                                                            <div class="radio-button__checkmark radio-button--list-item__checkmark"></div>
+                                                            {{(language === "EN") ? option.ChoiceDescription_EN :
+                                                            option.ChoiceDescription_FR}}
+                                                        </label>
+                                                    </div>
+                                                </li>
+
+                                                <!-- Also an "other" option for all types of multiple choice where the user can enter in what they want. -->
+                                                <!--
+                                                <li class="list__item list__item--tappable">
+                                                    <label class="radio-button radio-button--list-item">
+                                                        <input type="radio"
+                                                               ng-click="clicked1('other', options.length, undefined)"
+                                                               ng-checked="checked1[options.length]">
+                                                        <div class="radio-button__checkmark radio-button--list-item__checkmark"></div>
+                                                        {{"OTHER"|translate}}
+                                                    </label>
+                                                </li>
+                                                -->
+                                            </ul>
+                                            <!--  Where the user can enter their answer -->
+                                            <!--
+                                            <center>
+                                                <div ng-show="checkCollapse(answer)">
+                                                    <input ng-change="clicked1('other', options.length, otherAns)"
+                                                           type="text" class="text-input" placeholder="Please Specify"
+                                                           ng-model="otherAns" maxlength="30">
+                                                </div>
+                                            </center>
+                                            -->
+                                        </div>
+                                    </div>
+                                    <br>
+
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+                <!--   End of multiple choice question page -->
+
+
+                <!--   Scale type question -->
+
+
+                <div ng-show="((!shown[$index]))">
+                    <div class="row text-center" style="margin: 0 auto">
+                        <div class="col-xs-12" style="margin: 0 auto">
+                            <img src="./img/spin.gif"></img>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div ng-show="(question.QuestionType == 'MinMax') && (shown[$index])">
+
+
+                    <div>
+                        <div class="container">
+
+                            <div class="row text-center" style="margin:0 auto" align="center">
+                                <div class="col-xs-8" style="margin-left: auto; text-align: center;"
+                                     ng-init="indexForTopBottomChoice = $index">    <!-- This is line is Important to get/save the $index value to be used later down -->
+                                    <center>
+                                        <!--
+                                        <p>{{(language === "EN") ? questions[$index].Choices[1].ChoiceDescription_EN : questions[$index].Choices[1].ChoiceDescription_FR}}</p>
+                                        -->
+                                    </center>
+                                </div>
+                            </div>
+
+                            <div class="row text-center" style="margin:0 auto" align="center">
+                                <div class="col-xs-12 text-center" style="text-align:center">
+                                    <!-- Min height of list item is 44px so the height of this should be 44 * the number of elements its displaying -->
+
+                                    <!-- Only shown if buttons[index] is true -->
+                                    <!--
+
+                                    <div class="col-xs-4" ng-repeat="number in numbers track by $index"
+                                     style="height: {{62*(heights.length-1)}}px;" ng-show="buttons[$index]">
+                                       <tek-progress-bar mode="vertical">
+                                            <div class="progress vertical" ng-class="bar.containerClass">
+                                                <div class="vertprogress-bar" ng-class="bar.barClass" style="bottom: 0; position: absolute;height: {{heights[$index]}}%;">
+                                                    <div class="progress vertical full-bar ng-scope" ng-class="bar.containerClass" style="background: {{colors[$index]}};">
+                                                        <div class="vertprogress-bar progress-bar-warning" ng-class="bar.barClass" style="height: 100%;">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </tek-progress-bar>
+                                    </div>
+                                        -->
+
+                                    <div class="col-xs-14" style="bottom: 5px;">
+                                        <ul class="list">
+                                            <li class="list__item list__item--tappable"
+                                                ng-repeat="number in numbers track by $index" ng-show="$index>0">
+
+                                                <div ng-style="styleIfSelected(getChecked(heights.length-$index))">
+                                                    <label class="radio-button radio-button--list-item">
+                                                        <input type="radio" ng-checked="getChecked(heights.length-$index)"
+                                                               ng-click="clicked2(numAnswers[heights.length-$index], $index)">
+                                                        <div class="radio-button__checkmark radio-button--list-item__checkmark"></div>
+                                                        {{heights.length-$index}} &nbsp
+                                                        <label ng-show="$index === 1" ng-click="clicked2(numAnswers[heights.length-$index], $index)">
+                                                            {{(language === "EN")
+                                                            ?
+                                                            questions[indexForTopBottomChoice].Choices[1].ChoiceDescription_EN
+                                                            :
+                                                            questions[indexForTopBottomChoice].Choices[1].ChoiceDescription_FR}}</label>
+                                                        <label ng-show="$index === heights.length-1" ng-click="clicked2(numAnswers[heights.length-$index], $index)">{{(language === "EN")
+                                                            ?
+                                                            questions[indexForTopBottomChoice].Choices[0].ChoiceDescription_EN
+                                                            :
+                                                            questions[indexForTopBottomChoice].Choices[0].ChoiceDescription_FR}}</label>
+                                                    </label>
+                                                </div>
+                                            </li>
+
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--
+                            <div id="bottom{{$index}}" class="row text-center" style="margin:0 auto" align="center">
+                                <div class="col-xs-8" style="margin-left: auto; text-align: center;">
+                                    <center>
+                                        <p>{{(language === "EN") ? questions[$index].Choices[0].ChoiceDescription_EN : questions[$index].Choices[0].ChoiceDescription_FR}}</p>
+                                    </center>
+                                </div>
+                            </div>
+                            <br>
+                            -->
+
+                            <!--<ons-row id="button{{$index}}" style="position:fixed;bottom:0px;padding-bottom:5px" ng-click="goToBottom('bottom' + $index, $index)"
+                              ng-hide="clickedScrollArrow[$index]">
+                              <ons-col align="center">
+                                <div class="text-center" style="width:150px; margin: 0 auto; border: 1px solid rgba(38,100,171,0.81); color: rgba(38,100,171,0.81); background: white; border-radius: 200px">scroll to bottom <i class="ion-arrow-down-c"></i></div>
+                              </ons-col>
+                            </ons-row>-->
+
+                        </div>
+                    </div>
+
+
+                </div>
+
+                <!-- End of scale question page -->
+
+                <!-- Yes/no question page -->
+                <div ng-show="(question.QuestionType == 'yes') && (shown[$index])">
+
+                    <div>
+                        <div class="container">
+
+                            <div class="row text-center" style="margin:0 auto" align="center">
+                                <div class="col-xs-12 text-center" style="margin-top:15%" align="center">
+                                    <ul class="list">
+
+                                        <div ng-style="styleIfSelected(checkedYes)">
+                                            <li class="list__item list__item--tappable">
+                                                <label class="radio-button radio-button--list-item">
+                                                    <input type="radio" value="Yes" ng-model="checkbox"
+                                                           ng-click="answer3(checkbox, 1)" ng-checked="checkedYes">
+                                                    <div class="radio-button__checkmark radio-button--list-item__checkmark"></div>
+                                                    {{"YES"|translate}}
+                                                </label>
+                                            </li>
+                                        </div>
+
+                                        <div ng-style="styleIfSelected(checkedNo)">
+                                            <li class="list__item list__item--tappable">
+                                                <label class="radio-button radio-button--list-item">
+                                                    <input type="radio" value="No" ng-model="checkbox"
+                                                           ng-click="answer3(checkbox, 0)" ng-checked="checkedNo">
+                                                    <div class="radio-button__checkmark radio-button--list-item__checkmark"></div>
+                                                    {{"NO"|translate}}
+                                                </label>
+                                            </li>
+                                        </div>
+                                    </ul>
+                                </div>
+                            </div>
+                            <br>
+                        </div>
+                    </div>
+
+
+                </div>
+
+                <!-- End of yes/no question page -->
+
+                <!-- Input type question  -->
+
+
+                <div ng-show="(question.QuestionType == 'SA') && (shown[$index])">
+
+
+                    <div>
+                        <div class="container">
+                            <div class="row text-center" style="margin:0 auto" align="center">
+                                <div class="col-xs-12">
+                                        <!--
+                                        <p>(Max 100 characters)</p>
+                                        -->
+                        <textarea class="textarea ng-untouched ng-valid ng-valid-maxlength ng-dirty ng-valid-parse"
+                                  rows="10" ng-model="longAns"
+                                  ng-change="answer4(longAns)"
+                                  style="width: 100%; height: 50vh;" ng-class="fontSizeDesc"></textarea>
+                                    <br>
+                                </div>
+                            </div>
+                            <br>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- End of input type question -->
+
+                <!-- <div ng-show="(question.type == 'image') && (shown[$index])">
+
+      Image page in progress. Just skip this for now -->
+
+                <!--<div>
+
+        <div class="row" style="margin: 0 auto; position: relative; width: 100vw" ng-click="print1()">
+          <br>
+          <div class="col-xs-6">
+            <div class="col-xs-12" ng-show="answers[index-1] != undefined" style="height: {{iHeight}}; overflow-y:scroll; margin: 0 auto; border: 1px solid lightgray">
+              <div class="row" style="margin: 0 auto">
+                <div class="col-xs-12" ng-repeat="val in barTrack" ng-init="key = getKey($index)">
+                  {{key}}: {{val/10}}/10
+                  <div class="progress">
+                    <div class="myprogress-bar" role="progressbar" style="width: {{val}}%; background: {{colors[(val/10)-1]}}">
+                    </div>
+                  </div><button class="button--quiet" value="Submit Answer"
+                  ng-click="reset($index)" style="margin-top: -25px">Reset</button>
+                  <br>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-xs-6">
+            <div class="row" style="position: absolute">
+              <div class="row" style="margin-left: 0;">
+                <div class="col-xs-12" ng-value="head" ng-model="areaClicked" style="height: {{headHeight}}; width: {{headWidth}};
+                margin: 0 auto;">
+                <div ng-click="clickedImage('Head')" style="height: {{.7*headHeight}}; width: {{headWidth}}; margin-left: {{innerTorsoMarginLeft}}" ng-mousedown="startCounter('Head')" ng-mouseup="stopCounter('')">
+                </div>
+                <div ng-click="clickedImage('Neck')" style="height: {{.3*headHeight}}; width: {{headWidth}};
+                margin-left: {{innerTorsoMarginLeft}}" ng-mousedown="startCounter('Neck')" ng-mouseup="stopCounter()">
+
+              </div>
+            </div>
+          </div>
+          <div class="row" style="margin-left: 0; width: 100%">
+            <div class="col-xs-3" style="margin-left: {{leftMarginArm}};
+            width: {{leftArmWidth}}; height: {{midSectionHeight}};">
+            <div  ng-click="clickedImage('Upper ' + left + ' Arm')" style="
+            width: {{leftArmWidth}}; height: {{0.58571429*midSectionHeight}}; margin-left: {{innerTorsoMarginLeft}}"
+            ng-mousedown="startCounter('Upper ' + left + ' Arm')" ng-mouseup="stopCounter()">
+
+          </div>
+          <div  ng-click="clickedImage('Lower ' + left + ' Arm')" style="
+          width: {{leftArmWidth}}; height: {{0.41428571*midSectionHeight}}; margin-left: {{innerTorsoMarginLeft}}"
+          ng-mousedown="startCounter('Lower ' + left + ' Arm')" ng-mouseup="stopCounter()">
+
+        </div>
+      </div>
+      <div class="col-xs-6" style="height: {{midSectionHeight}}; width: {{torsoWidth}}">
+        <div ng-click="clickedImage(midSection)" style="height: {{0.7*midSectionHeight}}; width: {{torsoWidth}};
+        margin-left: {{innerTorsoMarginLeft}}"
+        ng-mousedown="startCounter(midSection)" ng-mouseup="stopCounter()">
+        <br>
+
+      </div>
+      <div ng-click="clickedImage(lowSection)" style="height: {{0.3*midSectionHeight}}; width: {{torsoWidth}}; margin-left: {{innerTorsoMarginLeft}}" ng-mousedown="startCounter(lowSection)" ng-mouseup="stopCounter()">
+
+      </div>
+    </div>
+    <div class="col-xs-3" style="width: {{leftArmWidth}};">
+      <div ng-click="clickedImage('Upper ' + right + ' Arm')" style="height: {{0.54285714*midSectionHeight}}; width: {{leftArmWidth}}; margin-left: {{innerTorsoMarginLeft}}"
+      ng-mousedown="startCounter('Upper ' + right + ' Arm')" ng-mouseup="stopCounter()">
+
+    </div>
+    <div ng-click="clickedImage('Lower ' + right + ' Arm')" style="height: {{0.45714286*midSectionHeight}}; width: {{leftArmWidth}}; margin-left: {{innerTorsoMarginLeft}}"
+    ng-mousedown="startCounter('Lower ' + right + ' Arm')" ng-mouseup="stopCounter()">
+
+    </div>
+    </div>
+    </div>
+    <div class="row" style="width: {{width}}; margin-left: {{leftMarginArm}}; margin-right: {{leftMarginArm}}">
+      <div ng-click="clickedImage(left + ' Hand')" class="col-xs-3" style="
+      height: {{0.27142857*midSectionHeight}}; width: {{rightHandWidth}}"
+      ng-mousedown="startCounter(left + ' Hand')" ng-mouseup="stopCounter()">
+
+    </div>
+    <div ng-click="clickedImage('Upper ' + left + ' Leg')" class="col-xs-3" style="
+    height:  {{0.27142857*midSectionHeight}}; width: {{rightHandWidth}}"
+    ng-mousedown="startCounter('Upper ' + left + ' Leg')" ng-mouseup="stopCounter()">
+
+    </div>
+    <div ng-click="clickedImage('Upper ' + right + ' Leg')" class="col-xs-3" style="
+    height:  {{0.27142857*midSectionHeight}}; width: {{rightHandWidth}}"
+    ng-mousedown="startCounter('Upper ' + right + ' Leg')" ng-mouseup="stopCounter()">
+
+    </div>
+    <div ng-click="clickedImage(right +  ' Hand')" class="col-xs-3" style="
+    height:  {{0.27142857*midSectionHeight}};
+    width: {{leftHandWidth}}"
+    ng-mousedown="startCounter(right + ' Hand')" ng-mouseup="stopCounter()">
+
+    </div>
+    </div>
+    <div class="row" style="width: {{width}}; margin-left: {{leftMarginArm}}; margin-right: {{leftMarginArm}}">
+      <div ng-click="clickedImage('Upper ' + left + ' Leg')"  class="col-xs-6" style=" margin-left: {{rightHandWidth}}; width: {{torsoWidth/2}};
+      height: {{.34285714*midSectionHeight}}"
+      ng-mousedown="startCounter('Upper ' + left + ' Leg')" ng-mouseup="stopCounter()">
+
+    </div>
+    <div ng-click="clickedImage('Upper ' + right + ' Leg')" class="col-xs-6" style="bwidth: {{torsoWidth/2}};
+    height: {{.34285714*midSectionHeight}}"
+    ng-mousedown="startCounter('Upper ' + right + ' Leg')" ng-mouseup="stopCounter()">
+
+    </div>
+    </div>
+    <div class="row" style="width: {{width}}; margin-left: {{leftMarginArm}}; margin-right: {{leftMarginArm}}">
+      <div ng-click="clickedImage('Lower ' + left  + ' Leg')"  class="col-xs-6" style="margin-left: {{rightHandWidth}}; width: {{torsoWidth/2}};
+      height: {{0.45714286*midSectionHeight}}"
+      ng-mousedown="startCounter('Lower ' + left  + ' Leg')" ng-mouseup="stopCounter()">
+
+    </div>
+    <div ng-click="clickedImage('Lower ' + right + ' Leg')" class="col-xs-6" style="width: {{torsoWidth/2}};
+    height: {{0.45714286*midSectionHeight}}"
+    ng-mousedown="startCounter('Lower ' + right  + ' Leg')" ng-mouseup="stopCounter()">
+
+    </div>
+    </div>
+    <div class="row" style="width: {{width}}; margin-left: {{leftMarginArm}}; margin-right: {{leftMarginArm}}">
+      <div ng-click="clickedImage(left + ' Foot')"  class="col-xs-6" style="margin-left: {{rightHandWidth}}; width: {{torsoWidth/2}};
+      height: {{.34285714*midSectionHeight}}"
+      ng-mousedown="startCounter(left + ' Foot')" ng-mouseup="stopCounter()">
+
+    </div>
+    <div ng-click="clickedImage(right + ' Foot')" class="col-xs-6" style="width: {{torsoWidth/2}};
+    height: {{.34285714*midSectionHeight}}"
+    ng-mousedown="startCounter(right + ' Foot')" ng-mouseup="stopCounter()">
+
+    </div>
+    </div>
+    </div>
+    <img src="images/pain-front.png" ng-show="frontPic" id="front" style="width: 45vw">
+    <img src="images/pain-back.png" ng-show="!frontPic" id="back" style="width: 45vw">
+    </div>
+    </div>
+
+    <br>
+
+    </div>
+    </div> -->
+                <!-- Checkbox question page -->
+
+                <div ng-show="(question.QuestionType == 'Checkbox') && (shown[$index])">
+
+                    <div>
+                        <br>
+                        <ul class="list">
+                            <li class="list__item list__item--tappable" ng-repeat="option in options"
+                                ng-show="$index < options.length-1">
+
+                                <div ng-style="styleIfSelected(checked[$index])">
+                                    <label class="lee-checkbox lee-checkbox--list-item">
+                                        <input type="checkbox"
+                                               ng-click="chosen(option, $index)"
+                                               ng-model="checked[$index]">
+                                        <div class="lee-checkbox__checkmark lee-checkbox--list-item__checkmark"></div>
+                                        {{(language === "EN") ? option.ChoiceDescription_EN : option.ChoiceDescription_FR}}
+                                    </label>
+                                </div>
+                            </li>
+                            <li class="list__item list__item--tappable">
+
+                                <div ng-style="styleIfSelected(checked[options.length-1])">
+                                    <label class="checkbox checkbox--list-item">
+                                        <input type="checkbox" ng-click="chosen('QUESTIONNAIRE_NONE_OF_THE_ABOVE', options.length-1)"
+                                               ng-model="checked[options.length-1]">
+                                        <div class="checkbox__checkmark checkbox--list-item__checkmark"></div>
+                                        {{"QUESTIONNAIRE_NONE_OF_THE_ABOVE"|translate}}
+                                    </label>
+                                </div>
+                            </li>
+                        </ul>
+
+                        <br>
+                    </div>
+                </div>
+
+                <!-- End of checkbox question page -->
+
+                <!--  Only shows if they have reached the last page -->
+                <div align="center" style="margin-top: 20px">
+                    <button class="button--large--cta" value="Submit Answer" ng-click="goToSummary()" ng-show="reachEnd"
+                            style="width:80%">{{"GOTOSUMMARY"|translate}}
+                    </button>
+                    <br>
+                </div>
+
+            </ons-page>
+        </ons-carousel-item>
+
+
+        <!-- End of all questions -->
+
+        <ons-carousel-item style="overflow-y: scroll;">
+            <!--   <div ng-show="(sumpage == false)">
+        <div class="row text-center" style="margin: 0 auto">
+        <div class="col-xs-12" style="margin: 0 auto">
+          <img src="http://i.stack.imgur.com/h6viz.gif"></img>
+        </div>
+      </div>
+    </div> -->
+
+            <div>
+
+                <!-- Summary page that displays all the question and allows you to go back -->
+
+                <!-- <div class="navigation-bar" ng-show="toolbarIndex == (questions.length + 1)"
+    style="margin-top: 0px; width: 100vw;">
+      <div class="navigation-bar__center">
+        Summary Page
+      </div>
+    </div> -->
+
+                <!-- <ons-toolbar ng-show="toolbarIndex == (questions.length + 1)"> -->
+                <!--<div class="left"><p style="font-size: 10pt">Answered {{numAnswered}}/{{questions.length}}</div>-->
+                <!-- <div class="center">Summary Page</div>
+    </ons-toolbar> -->
+                <div>
+                    <div class="ons-row">
+                        <div class="ons-col" align="left">
+                            <p style="color: gray; padding-left: 10px; padding-right: 10px;">
+                                {{"QUESTIONNAIRE_INSTRUCTIONS"|translate}}
+                            </p>
+                        </div>
+                    </div>
+                    <div align="center" style="margin-top:10px;margin-bottom:10px">
+                        <button class="button--large--cta" value="Submit Answer" style="width:80%" ng-click="subPros()"
+                                ng-disabled="checkSubmit()">{{"SUBMITANSWERS"|translate}}
+                        </button>
+                    </div>
+                    <div>
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <ul class="list"
+                                        style="margin-left: -15px; width: 100vw; background: #5cd65c;color:white"
+                                        ng-repeat="question in questions track by $index">
+                                        <li class="list__item" style="border: none !important; font-size: 15"
+                                            ng-class="{'question-not-answered': answers[$index] == undefined};"
+                                            ng-click="chooseAction($index, question)">
+                                            <ons-row style="margin:0;padding:0" align="center">
+                                                <ons-col align="left" style="border:1px solid white;color:white">
+                                                    <div style="line-height: 1.4;">
+                                                        #{{$index+1}}: {{(language === "EN") ? question.Asseses_EN :
+                                                        question.Asseses_FR}}
+                                                    </div>
+                                                </ons-col>
+                                                <ons-col align="center" width="30%">
+                                                    <div>
+                                <span ng-show="answers[$index] != undefined" style="float: right; color: white;">
+                  <!-- If its not an input question than the otherAns is shown or the answer is shown, both of those for the multiple choice questions.
+                  If both of those are undefined than its a scale question and only the answer[$index] is needed to be shown.
+                  -->
+                  <span ng-show="(question.QuestionType != 'SA') && (question.QuestionType != 'Checkbox') && (question.QuestionType != 'image')  && (question.QuestionType != 'MC') ">
+                          <!--
+                          <i class="ion-chevron-left"></i> {{answers[$index].otherAns || answers[$index].answer || answers[$index]}}</span>
+                          -->
+                          <i class="ion-chevron-left"></i> {{answers[$index].answer || answers[$index]}} </span>
+
+                                <span ng-show="(question.QuestionType === 'MinMax')"> / {{question.Choices[1].OrderNum}}</span>
+
+                                <!-- <span ng-show="(question.Choices[1].OrderNum == 5) && (question.QuestionType == 'MinMax')">/5</span> -->
+                                <!-- <span ng-show="(question.Choices[1].OrderNum == 10) && (question.QuestionType == 'MinMax')">/10</span> -->
+
+                                    <!--            If its an input question and its answered all we say is "asnwered" and the user can preview it by clicking the eye -->
+                                <span ng-show="(question.QuestionType == 'SA' || question.QuestionType == 'Checkbox' || question.QuestionType == 'image' || question.QuestionType == 'MC')
+                                                && (answers[$index] != undefined) && (!answerShown[$index])"><p
+                                        style="margin-top: 5px; line-height: 1; text-align: center">{{"SHOW"|translate}} <br>{{"ANSWER2"|translate}}<i
+                                        class="ion-chevron-down" style="padding-left: 2vw"></i></p></span>
+                                <span ng-show="(question.QuestionType == 'SA' || question.QuestionType == 'Checkbox' || question.QuestionType == 'image' || question.QuestionType == 'MC')
+                                                && (answers[$index] != undefined) && (answerShown[$index])"><p
+                                        style="margin-top: 5px; margin-top:5px;line-height:1; text-align: center">{{"HIDE"|translate}} <br>{{"ANSWER2"|translate}}<i
+                                        class="ion-chevron-up" style="padding-left: 2vw"></p></i></span>
+                                </span>
+                                                        <span ng-click="goToPage($index)"
+                                                              ng-show="(answers[$index] == undefined)"
+                                                              style="float: right; margin-right: 0px; color: white"><i
+                                                                class="ion-chevron-left"></i> {{"ANSWER"|translate}}</span>
+                                                    </div>
+                                                </ons-col>
+                                            </ons-row>
+
+                                        </li>
+                                        <!--      Eye preview -->
+                                        <li ng-show="answerShown[$index]"
+                                            style="background:white;color:black;padding:5px 5px 0 5px;border:1px solid lightgrey"
+                                            ng-class="animateShowAnswer">
+                                            <strong>{{"ANSWER"|translate}}:</strong>
+                                            <div class="card">
+                                                <div class="item">
+                                                    {{answerToShow[$index]}}
+                                                </div>
+                                            </div>
+                                            <div align="center">
+                                                <button class="button--quiet" ng-click="goToPage($index)"><i
+                                                        class="ion-chevron-left"></i>
+                                                    {{"QUESTIONNAIRE_INSTRUCTIONS4"|translate}}
+                                                </button>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <br>
+
+
+                            <div class="row" ng-show="submitted" style="height: 100vh;width: 100%;top: 0;left: 0;
+      position: absolute; margin: auto">
+                                <div class="col-xs-12" style="height: 100vh;width: 100%;top: 0;left: 0;
+      position: absolute; margin: auto">
+                                    <div class="alert-dialog-mask" style="height: 100vh"></div>
+                                    <div class="alert-dialog">
+                                        <div class="alert-dialog-content">
+                                            {{"QUESTIONNAIRE_SUBMIT"|translate}}
+                                        </div>
+
+                                        <div class="alert-dialog-footer">
+                                            <button class="alert-dialog-button"
+                                                    ng-click="subAnswers = true; submitAns()">{{"SUBMIT"|translate}}
+                                            </button>
+                                            <button class="alert-dialog-button alert-dialog-button--primal"
+                                                    ng-click="cancel()">{{"BACK"|translate}}
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </ons-carousel-item>
+
+        <ons-carousel-item style="overflow-y: scroll;" ng-if="subAnswers">
+            <div style="margin-top: 30px">
+                <div>
+                    <div class="row text-center" style="margin: 0 auto;" align="center">
+                        <div class="col-xs-12 text-center">
+                            <img src="./img/Opal_Name_Logo_Green_Transparent.png" alt="Opal Logo" style="margin-top: 1cm;max-width: 75%; height: auto"></img>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row text-center" style="margin: 0 auto; align: center">
+                        <div class="col-xs-12 text-center" style="margin: 0 auto; align: center">
+                            <h3>
+                                {{"QUESTIONNAIRE_THANKS"|translate}}
+                            </h3><br>
+                            <p>{{"QUESTIONNAIRE_CONTACT"|translate}}</p>
+                        </div>
+                    </div>
+                    <br>
+                </div>
+            </div>
+            <br>
+        </ons-carousel-item>
+    </ons-carousel>
+</ons-page>
