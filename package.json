@@ -24,7 +24,7 @@
     "build:app:preprod:package:ios": "npm run prepare:app:preprod && npm run build:web:preprod && cordova build ios --device --verbose",
     "build:app:preprod:package:android": "npm run prepare:app:preprod && npm run build:web:preprod && cordova build android --device --verbose",
     "build:app:staging": "npm run prepare:app:staging && npm run build:web:staging && cordova build --verbose",
-    "build:app:staging:ios": "npm run prepare:app:staging && npm run build:web:staging && cordova build ios --verbose",
+    "build:app:staging:ios": "npm run prepare:app:staging && npm run build:web:staging && cordova build ios --verbose --device",
     "build:app:staging:android": "npm run prepare:app:staging && npm run build:web:staging && cordova build android --verbose",
     "build:app:staging:package": "npm run prepare:app:staging && npm run build:web:staging && cordova build --device --verbose",
     "build:app:staging:package:ios": "npm run prepare:app:staging && npm run build:web:staging && cordova build ios  --device --verbose",

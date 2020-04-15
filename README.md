@@ -147,12 +147,12 @@ Install http-server
     - **iOS**: https://cordova.apache.org/docs/en/latest/guide/platforms/ios/index.html
 3. To build the app run:
     ```
-    npm run build:staging
+    npm run build:app:staging
     ```
   The command above builds the web app and then runs the `cordova build` command for both Android and iOS resulting in the compiled `platforms` folder. To build platform specific code run:
   ```
-  npm run build:staging:ios
-  npm run build:staging:android
+  npm run build:app:staging:ios
+  npm run build:app:staging:android
   ```
 
 4. Finally, to run the app in an emulator run:
