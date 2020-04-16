@@ -155,17 +155,18 @@ Install http-server
   ```
 
 4. Finally, to run the app in an emulator run:
-```
-npm run start:app:staging:ios # To run app in an for iOS emulator
-npm run start:app:staging:android # To run app in an Android emulator.
-```
+  ```
+    cordova run [android|ios]
+  ```
+
 A few notes on this:
  - If building for iOS you may need a developer profile in Apple depending on what you want to do. Running in an emulator does not require development profiles.
- - Once the build commands have been run once the project becomes a valid Cordova project, this means you may use any of the [Cordova related cli commands](https://cordova.apache.org/docs/en/latest/reference/cordova-cli/).
+ - Once the build commands have been ran, the project becomes a valid Cordova project (Step 3), this means you may use any of the [Cordova related cli commands](https://cordova.apache.org/docs/en/latest/reference/cordova-cli/).
 
 ### Opal App Scripts
 We have added commands for developer convenience to the `package.json`. Take some
-time to understand what they do, this wil help you manipulate the project better. 
+time to understand what they do, this wil help you manipulate the project better.  
+
 ```json
     "scripts": {
       "prepare:web": "npm run prepare:web:staging",
@@ -209,6 +210,11 @@ time to understand what they do, this wil help you manipulate the project better
   },
 ```
 
+Note that the commands are explicitely related in terms of dependent steps, once you understand the structure, you may choose to run them differently. For instance, the command:
+```
+  npm run start:app:staging:ios # Build and run in iOS
+```
+Call in sequence `npm run build:app:staging:ios && cordova run ios`, you may choose to simply run `cordova run ios`, if you know there is a current valid Cordova build.
 
 ## Troubleshooting
 If you are getting errors during your installation, here are some things you can try:
@@ -217,9 +223,8 @@ If you are getting errors during your installation, here are some things you can
   - You don't have the required permissions to perform the installation. Make sure you are logged in as an administrator on your computer, and try re-installing the packages. If you have a Mac, precede your npm commands with `sudo` to run the command with administrator permissions.
   - You have an extra firewall or security plugin installed, which is preventing the packages from installing. For example, the browser extension Ghostery is known to interfere with installation. Try disabling firewalls and security plugins and re-installing the packages.
   - Your computer security is too strong. For example, newer Mac devices running MacOS High Sierra or newer have been known to prevent some packages from installing. For newer Macs, follow the instructions on [this website](https://www.imore.com/how-turn-system-integrity-protection-macos) to turn off System Integrity Protection. Then, try re-installing the packages using the instructions above. Don't forget to re-enable System Integrity Protection once you're done.
-  - You have a too-recent version of npm installed. Try installing an older version of npm such as version 6 instead of 8 or 10, and re-install the packages.
+  - You have a too recent (or old) version of node installed. Try installing version ~12.0.0 of node, and re-install the packages.
 * If you got an error from `npm install` like `UNABLE_TO_GET_ISSUER_CERT_LOCALLY` or you are behind a firewall, you can try the following commands:
-  - Go to `qplus/.bowerrc` and add the following `{"directory" : "www/lib/bower_components", "strict-ssl": false,  "https-proxy": "" }`
   - Run `npm config set strict-ssl false` and `set NODE_TLS_REJECT_UNAUTHORIZED=0` on the terminal. If this solution worked, you have to run these two commands again for the listener's installation. You also need to run `set NODE_TLS_REJECT_UNAUTHORIZED=0` everytime you restart the terminal.
 
 If at this point you have been unable to install everything properly, reach out to an Opal team member for help.
