@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget android-versionCode="1817" 
-    ios-CFBundleVersion="1817"
-    id="com.hig.opalstaging" version="1.8.17" xmlns="http://www.w3.org/ns/widgets"
+<widget android-versionCode="0" 
+    ios-CFBundleVersion="0"
+    id="com.hig.opalstaging" version="1.8.2" xmlns="http://www.w3.org/ns/widgets"
     xmlns:cdv="http://cordova.apache.org/ns/1.0" 
     xmlns:android="http://schemas.android.com/apk/res/android">
     <name>Opal Staging</name>

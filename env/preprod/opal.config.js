@@ -2,7 +2,6 @@
 const config = {
     name: "Opal Pre Prod",
     stage: "preprod",
-    buildVersion: "1817",
     firebase:{
         apiKey: "AIzaSyAGBV2Zwr0SYKy_J92jceof-OFeeFmm0Gw",
         authDomain: "opal-prod.firebaseapp.com",
@@ -12,7 +11,9 @@ const config = {
         messagingSenderId: "476395494069",
         appId: "1:476395494069:web:fe7854c0038a34663afcfc",
     },
-    opalProtocolURI: "opal-preprod://"
+    version: "1.8.7-rc",
+    buildNumber: 0,
+    opalProtocolURI: "opal-preprod://",
 };
 
 module.exports = config;
