@@ -1,8 +1,8 @@
 # MUHC Oncology Patient Application
 Opal - the MUHC Oncology Patient Application for mobile phones and the web - is a product that has arisen from the winning project of the 2014 MUHC Q+ initiative. The project proposal was submitted by the Health Informatics Group (HIG, see below) and was entitled “Realistic knowledge-based waiting time estimates for radiation oncology patients - addressing the pain of waiting”. It had as its goal the provision of waiting time estimates to radiation oncology patients. The app has now extended its initiative to provide appointments, lab results, clinical documents, educational material and much more, making it a full-fledged, empowerment tool for those undergoing radiation treatment.
-# Table of contents
+## Table of contents
 - [MUHC Oncology Patient Application](#muhc-oncology-patient-application)
-- [Table of contents](#table-of-contents)
+  - [Table of contents](#table-of-contents)
   - [Getting Started](#getting-started)
     - [The Opal front-end codebase](#the-opal-front-end-codebase)
     - [Installing, building and serving web code](#installing-building-and-serving-web-code)
@@ -148,16 +148,16 @@ Install http-server
     ```
     npm run build:app:staging
     ```
-  The command above makes sure the Cordova plugins and platforms are *up-to-date*, builds the web app and then runs the `cordova build` command for both Android and iOS resulting in the compiled `platforms` folder. To build platform specific code run:
-  ```
-  npm run build:app:staging:ios
-  npm run build:app:staging:android
-  ```
+    The command above makes sure the Cordova plugins and platforms are *up-to-date*, builds the web app and then runs the `cordova build` command for both Android and iOS resulting in the compiled `platforms` folder. To build platform specific code run:
+    ```
+    npm run build:app:staging:ios
+    npm run build:app:staging:android
+    ```
 
 4. Finally, to run the app in an emulator run:
-  ```
-    cordova run [android|ios]
-  ```
+    ```
+      cordova run [android|ios]
+    ```
 
 A few notes on this:
  - If building for iOS you may need a developer profile in Apple depending on what you want to do. Running in an emulator does not require development profiles.
@@ -214,7 +214,7 @@ Note that the commands are explicitely related in terms of dependent steps, once
 ```
   npm run start:app:staging:ios # Build and run in iOS
 ```
-Call in sequence `npm run build:app:staging:ios && cordova run ios`, you may choose to simply run `cordova run ios`, if you know there is a current valid Cordova build.
+Calls in sequence `npm run build:app:staging:ios && cordova run ios`, you may choose to simply run `cordova run ios`, if you know there is a current valid Cordova build.
 
 ## Troubleshooting
 If you are getting errors during your installation, here are some things you can try:
