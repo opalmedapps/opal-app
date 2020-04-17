@@ -1,0 +1,218 @@
+<ons-page ng-controller="PersonalTabController as tab" ng-device-backbutton="tab.personalDeviceBackButton()">
+    <ons-toolbar fixed-style>
+        <div class="left">
+            <ons-back-button>{{"BACK"|translate}}</ons-back-button>
+        </div>
+        <div class="center" ng-class="fontSizeTitle">{{"MYCHART"|translate}}</div>
+        <div class="right"><ons-toolbar-button ng-click="personalNavigator.pushPage('views/tabs/info-page-tabs.html',{param:home})"><ons-icon icon="fa-info-circle"></ons-icon></ons-toolbar-button></div>
+    </ons-toolbar>
+    <!-- HOSPITAL NAME BAR -->
+    <top-page-banner title="tab.selectedHospitalToDisplay"></top-page-banner>
+
+    <network-banner></network-banner>
+    <div>
+        <ons-list style="margin: 0px 0">
+            <ons-list-item modifier="chevron"
+                           ng-if="tab.censor && tab.allowedModules.hasOwnProperty('DIA') && tab.allowedModules['DIA']"
+                           class="item"
+                           ng-click="personalNavigator.pushPage('views/personal/diagnosis/diagnosis.html')">
+                <ons-row align="center">
+                    <ons-col width="60px" style="text-align: center">
+                        <div>
+                            <ons-icon icon="fa-heartbeat" size="2x" style="color:#f44336"></ons-icon>
+                        </div>
+                    </ons-col>
+                    <ons-col>
+                        <header>
+                            <span class="item-title" ng-class="fontSizeTitle">{{"DIAGNOSIS"|translate}}</span>
+                        </header>
+                        <p class="item-desc" ng-class="fontSizeDesc"></p>
+                    </ons-col>
+                </ons-row>
+            </ons-list-item>
+            <!--<ons-list-item modifier="chevron" class="item" ng-click="personalNavigator.pushPage('views/personal/notifications/notifications.html')">-->
+                <!--<ons-row align="center">-->
+                    <!--<ons-col width="60px" style="text-align: center">-->
+                        <!--<ons-icon icon="ion-android-notifications" size="2x" style="color:#FFC107"></ons-icon><span class="notification"-->
+                         <!--ng-show="tab.notificationsUnreadNumber>0">{{tab.notificationsUnreadNumber}}</span>-->
+                    <!--</ons-col>-->
+                    <!--<ons-col>-->
+                        <!--<header>-->
+                            <!--<span class="item-title" ng-class="fontSizeTitle">{{"NOTIFICATIONS"|translate}}</span>-->
+                        <!--</header>-->
+                        <!--<p class="item-desc" ng-class="fontSizeDesc"></p>-->
+                    <!--</ons-col>-->
+                <!--</ons-row>-->
+            <!--</ons-list-item>-->
+            <ons-list-item modifier="chevron" class="item"
+                           ng-if="tab.allowedModules.hasOwnProperty('TRP') && tab.allowedModules['TRP']"
+                           ng-click="tab.goToStatus()">
+                <ons-row align="center">
+                    <ons-col width="60px" style="text-align: center">
+                        <ons-icon style="color: #9575CD" size="2x" icon="fa-tasks" aria-hidden="true" ></ons-icon>
+                    </ons-col>
+                    <ons-col>
+                        <header>
+                            <span class="item-title" ng-class="fontSizeTitle">{{"TREATMENTPLANNING"|translate}}</span>
+                        </header>
+                        <!--<p class="item-desc" ng-class="fontSizeDesc">{{ 'STAGEOF' | translate:outOf}}</p>-->
+                    </ons-col>
+                </ons-row>
+            </ons-list-item>
+            <ons-list-item modifier="chevron" class="item"
+                           ng-if="tab.allowedModules.hasOwnProperty('APT') && tab.allowedModules['APT']"
+                           ng-click="personalNavigator.pushPage('views/personal/appointments/appointments.html')">
+                <ons-row align="center">
+                    <ons-col width="60px" style="text-align: center">
+                        <ons-icon style="color: #FFC107" size="2x" icon="fa-calendar"></ons-icon>
+                    </ons-col>
+                    <ons-col>
+                        <header>
+                            <span class="item-title" ng-class="fontSizeTitle">{{"APPOINTMENTS"|translate}}</span>
+                        </header>
+                        <!--<p class="item-desc" ng-class="fontSizeDesc" ng-show="appointmentTitle!=='undefined'"><span translate= "{{appointmentTitle}}"></span> {{appointment.ScheduledStartTime|formatDateAppointmentTask}}</p>-->
+                    </ons-col>
+                </ons-row>
+            </ons-list-item>
+            <ons-list-item modifier="chevron" class="item"
+                           ng-if="tab.censor && tab.allowedModules.hasOwnProperty('LAB') && tab.allowedModules['LAB']"
+                           ng-click="personalNavigator.pushPage('views/personal/lab-results/lab-results.html')" >
+                <ons-row align="center" >
+                    <ons-col width="60px" style="text-align: center">
+                        <div>
+                            <ons-icon icon="ion-erlenmeyer-flask" size="2x" style="color:#8BC34A"></ons-icon>
+                        </div>
+                    </ons-col>
+                    <ons-col>
+                        <header>
+                            <span class="item-title" ng-class="fontSizeTitle">{{"LAB_RESULTS"|translate}}</span>
+                        </header>
+                        <p class="item-desc" ng-class="fontSizeDesc"></p>
+                    </ons-col>
+                </ons-row>
+            </ons-list-item>
+            <ons-list-item modifier="chevron" class="item"
+                           ng-if="tab.censor && tab.allowedModules.hasOwnProperty('DOC') && tab.allowedModules['DOC']"
+                           ng-click="personalNavigator.pushPage('views/personal/documents/documents.html')">
+                <ons-row align="center" >
+                    <ons-col width="60px" style="text-align: center">
+                        <div>
+                            <ons-icon icon="fa-folder" size="2x" style="color:#ffdf80"></ons-icon><span class="notification" ng-show="tab.documentsUnreadNumber>0">{{tab.documentsUnreadNumber}}</span>
+                        </div>
+                    </ons-col>
+                    <ons-col>
+                        <header>
+                            <span class="item-title" ng-class="fontSizeTitle">{{"CLINICAL_NOTES"|translate}}</span>
+                        </header>
+                        <p class="item-desc" ng-class="fontSizeDesc"></p>
+                    </ons-col>
+                </ons-row>
+            </ons-list-item>
+            <ons-list-item modifier="chevron" class="item" ng-if="tab.censor && tab.TestUser" ng-click="personalNavigator.pushPage('views/personal/my-waiting-time/visualizations.html')">
+                <ons-row align="center" >
+                    <ons-col width="60px" style="text-align: center">
+                        <ons-icon icon="fa-clock-o" size="2x" style="color:#444444"></ons-icon>
+                    </ons-col>
+                    <ons-col>
+                        <header>
+                            <span class="item-title" ng-class="fontSizeTitle">{{ "MY_WAITING_TIME" | translate }}</span>
+                        </header>
+                        <p class="item-desc" ng-class="fontSizeDesc"></p>
+                    </ons-col>
+                </ons-row>
+            </ons-list-item>
+            <ons-list-item modifier="chevron" class="item"
+                           ng-if="tab.allowedModules.hasOwnProperty('TRT') && tab.allowedModules['TRT']"
+                           ng-click="personalNavigator.pushPage('views/general/contacts/contacts.html')">
+                <ons-row align="center">
+                    <ons-col width="60px" style="text-align: center">
+                        <div>
+                            <ons-icon icon="fa-address-book" size="2x" style="color:#2196F3"></ons-icon>
+                        </div>
+                    </ons-col>
+                    <ons-col>
+                        <header>
+                            <span class="item-title" ng-class="fontSizeTitle">{{"CONTACTS"|translate}}</span>
+                        </header>
+                        <p class="item-desc"></p>
+                    </ons-col>
+                </ons-row>
+            </ons-list-item>
+            <ons-list-item modifier="chevron" class="item"
+                           ng-if="tab.allowedModules.hasOwnProperty('TTM') && tab.allowedModules['TTM']"
+                           ng-click="personalNavigator.pushPage('views/personal/treatment-team-messages/team-messages.html')">
+                <ons-row align="center" >
+                    <ons-col width="60px" style="text-align: center">
+                        <div>
+                            <ons-icon icon="fa-user-md" size="2x" style="color:#2196F3"></ons-icon><span class="notification" ng-show="tab.txTeamMessagesUnreadNumber>0">{{tab.txTeamMessagesUnreadNumber}}</span>
+                        </div>
+                    </ons-col>
+                    <ons-col>
+                        <header>
+                            <span class="item-title" ng-class="fontSizeTitle">{{"TREATINGTEAMNOTIFICATIONS"|translate}}</span>
+                        </header>
+                        <p class="item-desc" ng-class="fontSizeDesc"></p>
+                    </ons-col>
+                </ons-row>
+            </ons-list-item>
+            <ons-list-item class="item"
+                           ng-if="tab.allowedModules.hasOwnProperty('CSQ') && tab.allowedModules['CSQ']"
+                           ng-click="tab.goToCarnetSante()">
+                <ons-row align="center">
+                    <ons-col width="60px" style="text-align: center">
+                        <div>
+                            <img style="width: 35px;" src="./img/quebec.png">
+                        </div>
+                    </ons-col>
+                    <ons-col>
+                        <header>
+                            <span class="item-title"
+                                  ng-class="fontSizeTitle">{{"CARNETSANTE"|translate}}</span>
+                            <ons-icon icon="ion-android-open" style="color:#ddd; margin-top: 1%; margin-right: -10px" class="pull-right"
+                                      size="1.2em">
+                            </ons-icon>
+                        </header>
+                        <p class="item-desc"></p>
+                    </ons-col>
+                </ons-row>
+            </ons-list-item>
+
+            <!--<ons-list-item modifier="chevron" class="item" ng-click="personalNavigator.pushPage('views/personal/questionnaires/questionnairesList.html')">-->
+                <!--<ons-row align="center">-->
+                    <!--<ons-col width="60px" style="text-align: center">-->
+                        <!--<div>-->
+                            <!--<img style="width: 35px;" src="./img/note.png"><span class="notification" ng-show="tab.questionnairesUnreadNumber>0">{{tab.questionnairesUnreadNumber}}</span>-->
+                        <!--</div>-->
+                    <!--</ons-col>-->
+                    <!--<ons-col>-->
+                        <!--<header>-->
+                            <!--<span class="item-title" ng-class="fontSizeTitle">{{"QUESTIONNAIRES"|translate}}</span>-->
+                        <!--</header>-->
+                        <!--<p class="item-desc" ng-class="fontSizeDesc"></p>-->
+                    <!--</ons-col>-->
+                <!--</ons-row>-->
+            <!--</ons-list-item>-->
+            <ons-list-item modifier="chevron" class="item"
+                           ng-if="tab.allowedModules.hasOwnProperty('QUE') && tab.allowedModules['QUE']"
+                           ng-click="personalNavigator.pushPage('views/personal/questionnaires/questionnairesList.html')">
+                <ons-row align="center">
+                    <ons-col width="60px" style="text-align: center">
+                        <div>
+                            <ons-icon icon="ion-clipboard" size="2x" style="color: #607d8b;"></ons-icon><span class="notification" ng-show="tab.questionnairesUnreadNumber>0">{{tab.questionnairesUnreadNumber}}</span>
+                        </div>
+                    </ons-col>
+                    <ons-col>
+                        <header>
+                            <span class="item-title" ng-class="fontSizeTitle">{{"QUESTIONNAIRES"|translate}}</span>
+                        </header>
+                        <p class="item-desc" ng-class="fontSizeDesc"></p>
+                    </ons-col>
+                </ons-row>
+            </ons-list-item>
+
+          <!-- inject:tab-->
+          <!-- endinject -->
+
+        </ons-list>
+    </div>
+</ons-page>

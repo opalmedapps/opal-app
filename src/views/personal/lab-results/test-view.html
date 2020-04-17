@@ -1,0 +1,109 @@
+<ons-page ng-controller="IndividualLabTestController as vm">
+
+    <!-- TOOLBAR -->
+    <ons-toolbar fixed-style>
+        <div class="left">
+            <ons-back-button>{{"BACK"|translate}}</ons-back-button>
+        </div>
+        <div class="center" ng-class="fontSizeTitle">{{vm.test.testDateFormat|date:'longDate'}}</div>
+        <div class="right">
+            <ons-toolbar-button ng-click="personalNavigator.pushPage('views/personal/lab-results/labs-info.html')">
+                <ons-icon icon="fa-info-circle"></ons-icon>
+            </ons-toolbar-button>
+        </div>
+    </ons-toolbar>
+
+    <!-- PAGE CONTENTS -->
+    <ons-col>
+        <!-- STICKY HEADER -->
+        <div style="position:sticky; top:0; z-index:9999;">
+            <!-- SEARCH BAR -->
+            <div class="navigation-bar" style="position:sticky; top:0">
+                <div class="navigation-bar__center" style="display:block">
+                    <input ng-model="searchText" type="search" class="search-input"
+                           style="width: 96%; margin: 6px auto 6px auto;" placeholder="{{'SEARCH'|translate}}"
+                           ng-class="fontSizeDesc">
+                </div>
+            </div>
+            <!-- HEADER WITH COLUMN TITLES -->
+            <ons-list>
+                <ons-list-item class="list-item-container">
+                    <ons-row ng-class="fontSizeDesc" style="font-weight:bold" vertical-align="center">
+                        <!-- HEADER - LEFT (NAME AND UNIT) -->
+                        <ons-col width="30%" class="labtest-col" vertical-align="center">
+                            <div align="left" style="margin-left:4px">
+                                {{"LAB_NAME"|translate}}
+                            </div>
+                        </ons-col>
+
+                        <!-- HEADER - CENTRE (VALUE) -->
+                        <ons-col width="30%" class="labtest-col" vertical-align="center">
+                            <div align="center">
+                                {{"LAB_YOUR_RESULT"|translate}}
+                            </div>
+                        </ons-col>
+
+                        <!-- HEADER - RIGHT (NORMAL RANGE) -->
+                        <ons-col width="32%" class="labtest-col" vertical-align="center">
+                            <div align="right">
+                                {{"LAB_NORM"|translate}}
+                            </div>
+                        </ons-col>
+
+                        <!-- HEADER - SPACE FOR CHEVRON -->
+                        <ons-col width="8%" class="labtest-col" vertical-align="center">
+                            <div align="right">
+
+                            </div>
+                        </ons-col>
+                    </ons-row>
+                </ons-list-item>
+            </ons-list>
+        </div>
+
+        <!-- LIST OF LAB RESULTS -->
+        <ons-list ng-class="fontSizeDesc">
+            <ons-list ng-repeat="testCategory in vm.testResultsByCategory">
+                <!--<ons-list-header ng-class="fontSizeDesc">{{testCategory.testCategory|translate}}</ons-list-header>-->
+                <ons-list-header ng-class="fontSizeDesc">{{testCategory.testCategory}}</ons-list-header>
+                <ons-list-item modifier="tappable chevron"
+                               ng-repeat="test in vm.selectedLabResults | filter: searchText | orderBy:['testCategory']"
+                               ng-click="personalNavigator.pushPage('./views/personal/lab-results/timeline-test-component.html',{param:test});"
+                               class="list-item-container" ng-if="test.testCategory == testCategory.testCategory">
+
+                    <ons-row ng-class="[vm.getTestClass(test), fontSizeDesc]" vertical-align="center">
+                        <!-- LAB RESULT - LEFT (NAME AND UNIT) -->
+                        <ons-col width="30%" class="labtest-col" vertical-align="center">
+                            <div align="left" style="margin-left:4px">
+                                {{test.FacComponentName}}
+                                <br>
+                                ({{test.UnitDescription}})
+                            </div>
+                        </ons-col>
+
+                        <!-- LAB RESULT - CENTRE (VALUE) -->
+                        <ons-col width="30%" class="labtest-col" vertical-align="center">
+                            <div align="center">
+                                {{test.TestValue}}{{vm.getAbnormalFlagString(test)}}
+                            </div>
+                        </ons-col>
+
+                        <!-- LAB RESULT - RIGHT (NORMAL RANGE) -->
+                        <ons-col width="32%" class="labtest-col" vertical-align="center">
+                            <div align="right">
+                                {{test.MinNorm}} - {{test.MaxNorm}}
+                            </div>
+                        </ons-col>
+
+                        <!-- LAB RESULT - SPACE FOR CHEVRON -->
+                        <ons-col width="8%" class="labtest-col" vertical-align="center">
+                            <div align="right">
+
+                            </div>
+                        </ons-col>
+                    </ons-row>
+                </ons-list-item>
+            </ons-list>
+        </ons-list>
+    </ons-col>
+</ons-page>
