@@ -5,13 +5,6 @@ const semver = require("semver");
 const xmlJs = require("xml-js");
 
 class OpalEnv {
-	static setOpalEnvironment(env=null){
-		if(!env) {
-			this.copyEnvironmentFiles(env);
-			this.setDirectory(env);
-			this.setApplicationName(env);
-		}
-	}
 	/**
 	 * Function verifies the Opal environment directory exists, throws error if it does not find it.
 	 * @param {string} env string value for the environment normally one of ['staging', 'preprod', 'prod']
@@ -69,11 +62,20 @@ class OpalEnv {
 	 */
 	static setApplicationName(newName/*:string*/, env = null) {
 		if (newName) {
+			let name = `Opal ${this.capitalize(newName)}`;
 			this.setDirectory(env);
 			this.writeToConfigXML(this.setXMLWidgetChildText(this.getConfigXMLJSON(),
-				"name", newName));
+				"name", name));
 		}
 
+	}
+	/**
+	 * Creates www folder, this step is a necessary post-installed step as the app is not a consider a "proper"
+	 * cordova project otherwise for the `cordova prepare` step to run.
+	 */
+	static createWWWFolder(){
+		const path = "www";
+		if(!shelljs.test('-d', path)) shelljs.mkdir("www");
 	}
 
 	/**
@@ -218,6 +220,12 @@ class OpalEnv {
 			return xmlObject.elements[0].attributes[String(attributeName)];
 		}
 		return {};
+	}
+	static capitalize(str){
+		if(typeof str === "string"){
+			str = str.charAt(0).toUpperCase() + str.slice(1);
+		}
+		return str;
 	}
 }
 module.exports = OpalEnv;
