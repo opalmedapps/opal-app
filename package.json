@@ -178,7 +178,8 @@
       "phonegap-plugin-push": {
         "ANDROID_SUPPORT_V13_VERSION": "27.+",
         "FCM_VERSION": "17.0.+"
-      }
+      },
+      "cordova-plugin-ios-detect-screenshot": {}
     },
     "platforms": [
       "android",
