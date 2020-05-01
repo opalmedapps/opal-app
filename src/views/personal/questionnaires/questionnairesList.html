@@ -17,88 +17,98 @@
 
     <div ng-hide="questionnaireListVm.loading">
         <!--TABBAR-->
-        <ons-tabbar class="shadow-2" position="top" animation="fade"
-                    style="position: fixed; margin-top: 43px; z-index: 1; height: 49px;">
-            <ons-tab class="shadow-2" style="background-color:#ECEFF1;" label='{{"QUESTIONNAIRE_NEW"|translate}}'
-                     ng-click="questionnaireListVm.setTab('new')" icon="ion-android-star" active="true"></ons-tab>
-            <ons-tab class="shadow-2" style="background-color:#ECEFF1;"
-                     label='{{"QUESTIONNAIRE_IN_PROGRESS"|translate}}' ng-click="questionnaireListVm.setTab('progress')"
-                     icon="ion-edit"></ons-tab>
-            <ons-tab class="shadow-2" style="background-color:#ECEFF1;" label='{{"QUESTIONNAIRE_COMPLETED"|translate}}'
-                     ng-click="questionnaireListVm.setTab('completed')" icon="ion-android-done"></ons-tab>
-        </ons-tabbar>
-
-        <div class="ons-row" align="center" ng-init="questionnaireListVm.tab.new = true;" style="margin-top: 50px">
-            <div class="ons-col" align="center">
-
-                <!--new questionnaires-->
-                <div ng-if="questionnaireListVm.tab.new" class="ons-row" align="center" style="margin-top: 50px">
-                    <div class="ons-col" align="center">
-
-                        <!--no new questionnaires-->
-                        <p ng-if="!questionnaireListVm.newQuestionnaireExist()" ng-class="fontSizeTitle"
-                           style="color: grey; margin-top: 25vh;">
-                            {{"QUESTIONNAIRE_NONE_NEW"|translate}}
-                        </p>
-
-                        <!--if there are questionnaires, list them-->
-                        <ul class="list">
-                            <li class="list__item list__item--chevron" ng-repeat="questionnaire in questionnaireListVm.newQuestionnaireList | orderBy:'-created' track by $index"
-                                ng-click="questionnaireListVm.goToQuestionnaire(questionnaire)">
-                                <p style="margin-top: 2.7vh; margin-bottom: 2.4vh; line-height: 3.6vh;"
-                                   ng-class="fontSizeTitle">{{questionnaire.nickname}}</p>
-                                <p style="margin-top: -2.6vh; color: #757575;" ng-class="fontSizeDesc">
-                                    {{"QUESTIONNAIRE_DATE_ADDED"|translate}} {{questionnaire.created | date:'yyyy-MM-dd HH:mm'}}</p>
-                            </li>
-                        </ul>
+        <div class="navigation-bar" ng-hide="tests.loading">
+            <div class="navigation-bar__center">
+                <div class="button-bar" style="margin-top:10px;width:70%;left:15%;" >
+                    <div class="button-bar__item">
+                        <input type="radio" name="navi-segment-questionnaire" checked ng-model="questionnaireListVm.tab" value="new">
+                        <div class="button-bar__button">{{"QUESTIONNAIRE_NEW"|translate}}</div>
                     </div>
-                </div>
-
-                <!--in progress questionnaires-->
-                <div ng-if="questionnaireListVm.tab.progress" class="ons-row" align="center" style="margin-top: 50px">
-                    <div class="ons-col" align="center">
-
-                        <!--no in progress questionnaires-->
-                        <p ng-show="!questionnaireListVm.inProgressQuestionnaireExist()" ng-class="fontSizeTitle"
-                           style="color: grey; margin-top: 25vh;">{{"QUESTIONNAIRE_NONE_PROGRESS"|translate}}</p>
-
-                        <!--if there are in progress questionnaires: list them-->
-                        <ul class="list">
-                            <li class="list__item list__item--chevron"
-                                ng-repeat="questionnaire in questionnaireListVm.inProgressQuestionnaireList | orderBy:'-last_updated' track by $index"
-                                ng-click="questionnaireListVm.goToQuestionnaire(questionnaire)">
-                                <p style="margin-top: 2.7vh; margin-bottom: 2.4vh; line-height: 3.6vh;"
-                                   ng-class="fontSizeTitle">{{questionnaire.nickname}}</p>
-                                <p style="margin-top: -2.6vh; color: #757575;" ng-class="fontSizeDesc">
-                                    {{"QUESTIONNAIRE_DATE_LAST_UPDATED"|translate}} {{questionnaire.last_updated |
-                                    date:'yyyy-MM-dd HH:mm:ss'}}</p>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-
-                <!--completed questionnaires-->
-                <div ng-if="questionnaireListVm.tab.completed" class="ons-row" align="center" style="margin-top: 50px">
-                    <div class="ons-col" align="center">
-
-                        <!--no completed questionnaires-->
-                        <p ng-show="!questionnaireListVm.completedQuestionnaireExist()" ng-class="fontSizeTitle"
-                           style="color: grey; margin-top: 25vh;">{{"QUESTIONNAIRE_NONE_COMPLETED"|translate}}</p>
-
-                        <!--if there are completed questionnaires: list them-->
-                        <ul class="list">
-                            <li class="list__item list__item--chevron"
-                                ng-repeat="questionnaire in questionnaireListVm.completedQuestionnaireList | orderBy:'-last_updated' track by $index"
-                                ng-click="questionnaireListVm.goToQuestionnaireSummary(questionnaire)">
-                                <p style="margin-top: 2.7vh; margin-bottom: 2.4vh; line-height: 3.6vh;"
-                                   ng-class="fontSizeTitle">{{questionnaire.nickname}}</p>
-                                <p style="margin-top: -2.6vh; color: #757575;" ng-class="fontSizeDesc">
-                                    {{"QUESTIONNAIRE_DATE_ANSWERED"|translate}} {{questionnaire.last_updated | date:'yyyy-MM-dd HH:mm'}}</p>
-                            </li>
-                        </ul>
+                    <div class="button-bar__item">
+                        <input type="radio" name="navi-segment-questionnaire" ng-model="questionnaireListVm.tab" value="progress">
+                        <div class="button-bar__button">{{"QUESTIONNAIRE_IN_PROGRESS"|translate}}</div>
+                    </div> 
+                    <div class="button-bar__item">
+                        <input type="radio" name="navi-segment-questionnaire" ng-model="questionnaireListVm.tab" value="completed">
+                        <div class="button-bar__button">{{"QUESTIONNAIRE_COMPLETED"|translate}}</div>
                     </div>
                 </div>
             </div>
         </div>
+        <ons-scroller style="height: calc(100vh - 140px);">
+            <div class="ons-row" align="center">
+                <div class="ons-col" align="center">
+    
+                    <!--new questionnaires-->
+                    <div ng-if="questionnaireListVm.tab === 'new'" class="ons-row" align="center" style="margin-top: 10px">
+                        <div class="ons-col" align="center">
+    
+                            <!--no new questionnaires-->
+                            <p ng-if="!questionnaireListVm.newQuestionnaireExist()" ng-class="fontSizeTitle"
+                               style="color: grey; margin-top: 25vh;">
+                                {{"QUESTIONNAIRE_NONE_NEW"|translate}}
+                            </p>
+    
+                            <!--if there are questionnaires, list them-->
+                            <ul class="list">
+                                <li class="list__item list__item--chevron" ng-repeat="questionnaire in questionnaireListVm.newQuestionnaireList | orderBy:'-created' track by $index"
+                                    ng-click="questionnaireListVm.goToQuestionnaire(questionnaire)">
+                                    <p style="margin-top: 2.7vh; margin-bottom: 2.4vh; line-height: 3.6vh;"
+                                       ng-class="fontSizeTitle">{{questionnaire.nickname}}</p>
+                                    <p style="margin-top: -2.6vh; color: #757575;" ng-class="fontSizeDesc">
+                                        {{"QUESTIONNAIRE_DATE_ADDED"|translate}} {{questionnaire.created | date:'yyyy-MM-dd HH:mm'}}</p>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+    
+                    <!--in progress questionnaires-->
+                    <div ng-if="questionnaireListVm.tab === 'progress'" class="ons-row" align="center" style="margin-top: 10px">
+                        <div class="ons-col" align="center">
+    
+                            <!--no in progress questionnaires-->
+                            <p ng-show="!questionnaireListVm.inProgressQuestionnaireExist()" ng-class="fontSizeTitle"
+                               style="color: grey; margin-top: 25vh;">{{"QUESTIONNAIRE_NONE_PROGRESS"|translate}}</p>
+    
+                            <!--if there are in progress questionnaires: list them-->
+                            <ul class="list">
+                                <li class="list__item list__item--chevron"
+                                    ng-repeat="questionnaire in questionnaireListVm.inProgressQuestionnaireList | orderBy:'-last_updated' track by $index"
+                                    ng-click="questionnaireListVm.goToQuestionnaire(questionnaire)">
+                                    <p style="margin-top: 2.7vh; margin-bottom: 2.4vh; line-height: 3.6vh;"
+                                       ng-class="fontSizeTitle">{{questionnaire.nickname}}</p>
+                                    <p style="margin-top: -2.6vh; color: #757575;" ng-class="fontSizeDesc">
+                                        {{"QUESTIONNAIRE_DATE_LAST_UPDATED"|translate}} {{questionnaire.last_updated |
+                                        date:'yyyy-MM-dd HH:mm:ss'}}</p>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+    
+                    <!--completed questionnaires-->
+                    <div ng-if="questionnaireListVm.tab === 'completed'" class="ons-row" align="center" style="margin-top: 10px">
+                        <div class="ons-col" align="center">
+    
+                            <!--no completed questionnaires-->
+                            <p ng-show="!questionnaireListVm.completedQuestionnaireExist()" ng-class="fontSizeTitle"
+                               style="color: grey; margin-top: 25vh;">{{"QUESTIONNAIRE_NONE_COMPLETED"|translate}}</p>
+    
+                            <!--if there are completed questionnaires: list them-->
+                            <ul class="list">
+                                <li class="list__item list__item--chevron"
+                                    ng-repeat="questionnaire in questionnaireListVm.completedQuestionnaireList | orderBy:'-last_updated' track by $index"
+                                    ng-click="questionnaireListVm.goToQuestionnaireSummary(questionnaire)">
+                                    <p style="margin-top: 2.7vh; margin-bottom: 2.4vh; line-height: 3.6vh;"
+                                       ng-class="fontSizeTitle">{{questionnaire.nickname}}</p>
+                                    <p style="margin-top: -2.6vh; color: #757575;" ng-class="fontSizeDesc">
+                                        {{"QUESTIONNAIRE_DATE_ANSWERED"|translate}} {{questionnaire.last_updated | date:'yyyy-MM-dd HH:mm'}}</p>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </ons-scroller>
+
     </div>
 </ons-page>

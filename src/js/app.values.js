@@ -145,7 +145,7 @@
                         'août', 'sept.', 'oct.', 'nov.', 'déc.'],
                 },
                 daysArray: {
-                    daysArrayFr: ['dimanche', 'lundi', 'lardi', 'mercredi',
+                    daysArrayFr: ['dimanche', 'lundi', 'mardi', 'mercredi',
                         'jeudi', 'vendredi', 'samedi'],
                     daysArrayEn: ["Sunday", "Monday", "Tuesday", "Wednesday",
                         "Thursday", "Friday", "Saturday"]
@@ -167,6 +167,10 @@
                 loadingMessage: {
                     loadingMessageFr: 'Chargement en cours...',
                     loadingMessageEn: 'Loading...'
+                },
+                noDataAvailable: {
+                    noDataAvailableEn:"No plot available",
+                    noDataAvailableFr: "Aucun graphique disponible",
                 },
                 printChart: {
                     printChartFr: 'Imprimer le graphique',

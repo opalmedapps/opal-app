@@ -3,11 +3,11 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
-const {CleanWebpackPlugin} = require('clean-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const OpalEnv = require("./opal_env.setup");
 
 let entry = [
-    "./src/js/app.js",
+	"./src/js/app.js",
 	"./src/js/app.services.js",
 	"./src/js/app.routes.js",
 	"./src/js/app.configs.js",
@@ -28,20 +28,22 @@ const config = env => {
 	const OPAL_ENV_FOLDER = path.join(__dirname, (OPAL_ENV) ? `./env/${OPAL_ENV}` : './');
 	return {
 		entry: entry,
-		devtool: (isProduction) ? 'source-map' : 'source-map',
+		devtool: (isProduction) ? 'source-map' : 'eval-cheap-source-map',
 		mode: (isProduction) ? 'production' : 'development',
 		devServer: {
 			contentBase: './www',
 			compress: true,
 			hot: false,
 			watchContentBase: true,
+			liveReload: true,
 			port: 9000
 		},
 		output: {
 			path: path.resolve(__dirname, 'www'),
-			filename: (isProduction) ? '[name].[chunkhash].js' : '[name].js',
+			filename: (isProduction) ? '[name].[chunkhash].js' : '[name].[hash].js',
 		},
 		module: {
+			noParse: /jquery|lodash/,
 			rules: [
 				{
 					test: /\.html$/,
@@ -49,8 +51,19 @@ const config = env => {
 				},
 				{
 					test: /\.js$/,
-					use: 'babel-loader',
-					exclude: /node_modules/
+					exclude: /node_modules/,
+					use: {
+						loader: 'babel-loader',
+						options: {
+							presets: ['@babel/preset-env'],
+							plugins: ['@babel/plugin-proposal-private-methods',
+								'@babel/plugin-proposal-class-properties', 
+								["@babel/plugin-transform-runtime", {
+									regenerator: true
+								}]]
+
+						}
+					}
 				},
 				{
 					test: /\.css$/,
@@ -99,9 +112,9 @@ const config = env => {
 		plugins: [
 			// new CleanWebpackPlugin(),
 			new CopyPlugin([
-				{from: './src/img', to: './img'},
-				{from: './src/Languages', to: './Languages'},
-				{from: './src/views', to: './views'},
+				{ from: './src/img', to: './img' },
+				{ from: './src/Languages', to: './Languages' },
+				{ from: './src/views', to: './views' },
 			]),
 			new webpack.ProvidePlugin({
 				OPAL_CONFIG: path.join(OPAL_ENV_FOLDER, "opal.config.js"),

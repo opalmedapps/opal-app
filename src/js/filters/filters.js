@@ -260,3 +260,12 @@ myApp.filter('toTrusted', function ($sce) {
         return $sce.trustAsHtml(value);
     };
 });
+myApp.filter('capitalize', function () {
+    /**
+     * Capitalizes the string
+     * @param {string} value String to transform
+     */
+    return function (value) {
+        return value.charAt(0).toUpperCase()+ value.slice(1);
+    };
+});

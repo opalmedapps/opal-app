@@ -311,7 +311,8 @@ img
 .nav, .pagination, .carousel, .panel-title a { cursor: pointer; }
 /*onsen notificatins page*/
 .list-item-container {
-  line-height: 1;
+  line-height: 1.3;
+  font-size: 14px;
   padding: 15px 0px 15px 15px;
 }
 
@@ -678,11 +679,6 @@ a.muhcapp-home-account:link, a.muhcapp-home-account:hover{
   width: 35px;
   border-radius: 50%;
   -webkit-border-radius: 50%;
-}
-.list-item-container {
-  line-height: 1;
-  font-size: 14px;
-  padding: 15px 0px 15px 15px;
 }
 
 .list-item-left {
@@ -2901,16 +2897,9 @@ and (max-device-width : 321px)
     margin-left: -10px;
 }
 
-/* Used in www/js/directives/topPageBannerDirective.js */
-.top-bar{
-    text-align: center;
-    font-weight: 600;
-    line-height: 1;
-    padding: 7px 10px;
-    background-color: #F9F9F9;
-    border-bottom: 1px solid #DDDDDD;
-    font-size: 15px;
-    position: sticky;
-    top: 0;
-    z-index: 100;
+.overflow-text-ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-break: break-word;
 }

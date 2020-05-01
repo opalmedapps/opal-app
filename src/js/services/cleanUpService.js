@@ -18,23 +18,23 @@
     CleanUp.$inject = ['UserAuthorizationInfo', 'LocalStorage', 'Documents', 'Diagnoses',
         'Appointments', 'Patient', 'Doctors', 'TxTeamMessages', 'Questionnaires',
         'Announcements', 'EducationalMaterial', 'Notifications', 'UserPreferences',
-        'UpdateUI', 'Tasks', 'PlanningSteps', 'LabResults', 'CheckInService', 'Constants'];
+        'UpdateUI', 'Tasks', 'PlanningSteps', 'PatientTestResults', 'CheckInService', 
+        'Constants'];
 
-    /* @ngInject */
     function CleanUp(UserAuthorizationInfo, LocalStorage, Documents, Diagnoses,
                      Appointments, Patient, Doctors, TxTeamMessages, Questionnaires,
                      Announcements, EducationalMaterial, Notifications, UserPreferences,
-                     UpdateUI, Tasks, PlanningSteps, LabResults, CheckInService, Constants) {
+                     UpdateUI, Tasks, PlanningSteps, PatientTestResults, CheckInService, Constants) {
         var service = {
             clear: clear,
             clearSensitive: clearSensitive
         };
         return service;
-
+        
         ////////////////
-
-        function clear() {
-            LabResults.destroy();
+        
+        function clear() {    
+            PatientTestResults.clear();
             LocalStorage.resetUserLocalStorage();
             Tasks.destroy();
             PlanningSteps.destroy();
@@ -69,7 +69,7 @@
         }
 
         function clearSensitive() {
-            LabResults.destroy();
+            PatientTestResults.clear();
             Documents.clearDocumentContent();
         }
 

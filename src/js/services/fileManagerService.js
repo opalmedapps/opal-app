@@ -11,7 +11,7 @@ var myApp = angular.module('MUHCApp');
  *@requires $filter
  *@description Allows the app's controllers or services interact with the file storage of the device. For more information look at {@link https://github.com/apache/cordova-plugin-file Cordova File Plugin}, reference for social sharing plugin {@link https://github.com/EddyVerbruggen/SocialSharing-PhoneGap-Plugin Cordova Sharing Plugin}
  **/
-myApp.service('FileManagerService', function ($q, $cordovaFileTransfer, $cordovaFileOpener2, $filter, NewsBanner, $injector, Params) {
+myApp.service('FileManagerService', ['$q', '$cordovaFileTransfer', '$cordovaFileOpener2', '$filter', 'NewsBanner', '$injector', 'Params', function ($q, $cordovaFileTransfer, $cordovaFileOpener2, $filter, NewsBanner, $injector, Params) {
     //Determing whether is a device or the browser
     var app = document.URL.indexOf('http://') === -1 && document.URL.indexOf('https://') === -1;
 
@@ -439,4 +439,4 @@ myApp.service('FileManagerService', function ($q, $cordovaFileTransfer, $cordova
         }
 
     };
-});
+}]);

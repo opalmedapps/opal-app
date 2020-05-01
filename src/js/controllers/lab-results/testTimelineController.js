@@ -65,7 +65,6 @@ addExporting(Highcharts);
             } else {
                 window.open(vm.url);
             }
-
         }
 
         function bindEvents(){
