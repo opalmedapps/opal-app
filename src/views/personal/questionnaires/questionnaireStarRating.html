@@ -1,0 +1,18 @@
+<ons-page ng-controller="AnsweredQuestionnaireController as vm">
+    <ons-toolbar fixed-style>
+        <div class="center" ng-class="fontSizeDesc">{{"Questionnaire Rating"|translate}}</div>
+    </ons-toolbar>
+    <ons-list>
+        <ons-list-item class="item">
+            <div style="line-height:1" align="center">
+                <header>
+                    <span class="item-title" ng-class="fontSizeTitle">{{vm.questionnaire.nickname}}</span>
+                </header>
+                <div style="text-align: center;margin-top:10px" ng-class="fontSizeDesc">
+                    <rate-questionnaire qp_ser_num="vm.questionnaire.qp_ser_num"></rate-questionnaire>
+                </div>
+            </div>
+        </ons-list-item>
+    </ons-list>
+
+</ons-page>

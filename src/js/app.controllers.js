@@ -41,7 +41,6 @@ import "./controllers/parking/individualParkingController.js";
 import "./controllers/pfp/pfpController.js";
 import "./controllers/pfp/pfpContactsController.js";
 import "./controllers/pfp/individualPfpContactController.js";
-import "./controllers/questionnaires/questionnairesController.js";
 import "./controllers/questionnaires/questionnaireMainController.js";
 import "./controllers/questionnaires/answeredQuestionnaireController.js";
 import "./controllers/questionnaires/questionnairesListController.js";

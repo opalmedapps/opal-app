@@ -100,7 +100,7 @@ myApp.service('RequestToServer',['$filter','$state','NewsBanner','UserAuthorizat
                         reject({Response:'timeout'});
                     }, 90000);
 
-                }).catch(err=> console.log(err));
+                });
             },
 
             sendRequest:function(typeOfRequest,content,key){

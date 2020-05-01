@@ -76,3 +76,4 @@ import "./services/securityService.js";
 import "./services/delaysService.js";
 import "./services/myWaitingTimeService.js";
 import "./services/UserHospitalPreferencesService.js";
+import "./services/questionnaireDataService.js";
