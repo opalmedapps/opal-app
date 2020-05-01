@@ -1,201 +1,220 @@
-/*
- *Code by David Herrera May 20, 2015
- *Github: dherre3
- *Email:davidfherrerar@gmail.com
- */
-(function () {
+(function() {
     'use strict';
+
+    /**
+     * @name QuestionnairesListController
+     * @desc This is the controller of questionnairesList.html. It is responsible of getting and displaying the list of questionnaire.
+     *      It is also the page pushed when users click on a new questionnaire notification
+     *      Note that it uses new, progress, completed to communicate with the view but use the DB constants to communicate with the service
+     */
 
     angular
         .module('MUHCApp')
         .controller('QuestionnairesListController', QuestionnairesListController);
 
     QuestionnairesListController.$inject = [
-        'Questionnaires', 'NavigatorParameters', '$timeout', 'UserPreferences', '$window'
+        '$scope',
+        'Questionnaires',
+        'NavigatorParameters',
+        'Params',
+        '$timeout',
+        '$filter'
     ];
 
     /* @ngInject */
-    function QuestionnairesListController(Questionnaires, NavigatorParameters, $timeout, UserPreferences, $window) {
-        var vm = this;
-        var questionnaireSerNum;
-        var navigatorName = NavigatorParameters.getNavigatorName();
+    function QuestionnairesListController($scope, Questionnaires, NavigatorParameters, Params, $timeout, $filter) {
+        let vm = this;
 
-        vm.loading = true;
-        vm.current_type = 'new';
+        // constants
+        const allowedStatus = Params.QUESTIONNAIRE_DB_STATUS_CONVENTIONS;
 
-        vm.language = UserPreferences.getLanguage().toUpperCase();
-        vm.getDesiredQuestionnaires = getDesiredQuestionnaires;
+        // variables for controller
+        let navigator = null;
+        let navigatorName = '';
+
+        // variables seen from view
+        vm.loading = true;  // This is for loading the list of questionnaires
+        vm.newQuestionnaireList = [];
+        vm.inProgressQuestionnaireList = [];
+        vm.completedQuestionnaireList = [];
+        vm.tab = {
+            'new':false,
+            'progress':false,
+            'completed':false
+        };
+
+        // functions that can be used from view, sorted alphabetically
+        vm.completedQuestionnaireExist = completedQuestionnaireExist;
         vm.goToQuestionnaire = goToQuestionnaire;
-        vm.refreshQuestionnairesList = refreshQuestionnairesList;
+        vm.inProgressQuestionnaireExist = inProgressQuestionnaireExist;
+        vm.goToQuestionnaireSummary = goToQuestionnaireSummary;
+        vm.newQuestionnaireExist = newQuestionnaireExist;
+        vm.setTab = setTab;
+
 
         activate();
 
-        ////////////////////
+        // //////////////
 
-        /************************
-         * PRIVATE FUNCTIONS
-         ***********************/
+        function activate() {
 
-        function activate(){
+            vm.loading = true;
 
-            if (ons.platform.isIOS()) {
-                var tabbar = document.getElementById("questionnairesNavbar");
-                tabbar.style.marginTop = "63px";
-            }
+            navigator = NavigatorParameters.getNavigator();
+            navigatorName = NavigatorParameters.getNavigatorName();
 
-            if(!Questionnaires.isEmpty() && !Questionnaires.needsRefreshing()){
-                vm.questionnaires = Questionnaires.getPatientQuestionnaires().Questionnaires;
-                vm.patientQuestionnaires = Questionnaires.getPatientQuestionnaires().PatientQuestionnaires;
-                getDesiredQuestionnaires('new');
-                getBadgeNumbers();
-                vm.loading = false;
-                return;
-            }
-
-            Questionnaires.requestQuestionnaires()
+            Questionnaires.requestQuestionnaireList()
                 .then(function () {
-                        vm.questionnaires = Questionnaires.getPatientQuestionnaires().Questionnaires;
-                        vm.patientQuestionnaires = Questionnaires.getPatientQuestionnaires().PatientQuestionnaires;
-                        getDesiredQuestionnaires('new');
-                        getBadgeNumbers();
+                    loadQuestionnaireList();
+
+                    vm.loading = false;
+                })
+                .catch(function(error){
+                    $timeout(function(){
                         vm.loading = false;
-                    },
-                    function(error){
-                        vm.loading = false;
-                    });
+                        handleRequestError();
+                    })
+                });
 
+            // this is for when the back button is pressed for a questionnaire, reload the questionnaire list to keep the list up to date
+            navigator.on('postpop', function(){
+                loadQuestionnaireList();
+            });
 
-            if(typeof personalNavigator !== 'undefined'){
-                 personalNavigator.on('postpop', popPost);
-            }
-        }
-
-        function getBadgeNumbers () {
-            for (var key in vm.patientQuestionnaires) {
-                var questionnaireSerNum = vm.patientQuestionnaires[key].QuestionnaireSerNum;
-                if ((!isQuestionnaireComplete(vm.patientQuestionnaires[key])) && (!Questionnaires.isQuestionnaireInProgress(questionnaireSerNum))) {
-                    if (!vm.numQuestionnairesNew) {
-                        vm.numQuestionnairesNew = 1;
-                    } else {
-                        vm.numQuestionnairesNew = vm.numQuestionnairesNew + 1;
-                    }
-                }
-                if ((!isQuestionnaireComplete(vm.patientQuestionnaires[key])) && (Questionnaires.isQuestionnaireInProgress(questionnaireSerNum))) {
-                    if (!vm.numQuestionnairesInProgress) {
-                        vm.numQuestionnairesInProgress = 1;
-                    } else {
-                        vm.numQuestionnairesInProgress = vm.numQuestionnairesInProgress + 1;
-                    }
-                }
-            }
-        }
-
-        function isQuestionnaireComplete (patientQuestionnaire) {
-            return patientQuestionnaire.CompletedFlag !== "0";
-        }
-
-        function setQuestionnaireAnswersObject(object) {
-
-            var oneQuestionnaireAnswer = {};
-            if (!object) {
-                return;
-            }
-            var answers = object.Answers;
-
-            vm.answers = {};
-            for(var key in answers) {
-                oneQuestionnaireAnswer[key] = answers[key];
-            }
-            return oneQuestionnaireAnswer;
-        }
-
-
-        function popPost() {
-            $timeout(function() {
-                vm.refreshQuestionnairesList();
-                getBadgeNumbers();
+            // listen to the event of destroy the controller in order to do clean up
+            $scope.$on('$destroy', function() {
+                removeListener();
             });
         }
 
+        /**
+         * @name goToQuestionnaire
+         * @desc This function request the questionnaire selected from back-end and push it to the carousel
+         * @param selectedQuestionnaire {object} The questionnaire selected in the list
+         */
+        function goToQuestionnaire(selectedQuestionnaire) {
+            // putting editQuestion false to claim that we are not coming from a summary page
+            NavigatorParameters.setParameters({
+                Navigator: navigatorName,
+                answerQuestionnaireId: selectedQuestionnaire.qp_ser_num,
+                editQuestion: false
+            });
 
-        /************************
-         * PUBLIC FUNCTIONS
-         ***********************/
+            navigator.pushPage('views/personal/questionnaires/questionnaires.html');
+        }
 
-        function getDesiredQuestionnaires (type) {
-            vm.current_type = type;
-            vm.desiredQuestionnaires = [];
+        /**
+         * @name goToQuestionnaireSummary
+         * @desc This function requests the questionnaire selected from the back-end and push it to the answerQuestionnaire page
+         * @param selectedQuestionnaire {object} The questionnaire selected in the list
+         */
+        function goToQuestionnaireSummary(selectedQuestionnaire){
+            NavigatorParameters.setParameters({
+                Navigator: navigatorName,
+                answerQuestionnaireId: selectedQuestionnaire.qp_ser_num
+            });
 
-            if (type === 'completed') {
-                for (var key in vm.patientQuestionnaires) {
-                    if (isQuestionnaireComplete(vm.patientQuestionnaires[key])) {
-                        vm.desiredQuestionnaires.push(vm.patientQuestionnaires[key]);
-                    }
-                }
-                vm.isAnswered = "Questionnaires Completed";
-                vm.clickedText = "completed";
+            navigator.pushPage('views/personal/questionnaires/answeredQuestionnaire.html', {animation: 'slide'});
+        }
 
-                vm.desiredQuestionnaires.sort(function(a, b) {
+        /**
+         * @name newQuestionnaireExist
+         * @desc This public lets the view know whether we should display a "no new questionnaire" message or not
+         * @returns {boolean} True if there are new questionnaires, false otherwise
+         */
+        function newQuestionnaireExist(){
+            return Questionnaires.getQuestionnaireCount(allowedStatus.NEW_QUESTIONNAIRE_STATUS) > 0;
+        }
 
-                    // TODO: USE EXTERNAL HELPER WHEN CALLING SORT FUNCTION
+        /**
+         * @name inProgressQuestionnaireExist
+         * @desc This public lets the view know whether we should display a "no in progress questionnaire" message or not
+         * @returns {boolean} True if there are in progress questionnaires, false otherwise
+         */
+        function inProgressQuestionnaireExist(){
+            return Questionnaires.getQuestionnaireCount(allowedStatus.IN_PROGRESS_QUESTIONNAIRE_STATUS) > 0;
+        }
 
-                    return new Date(b.CompletionDate) - new Date(a.CompletionDate);
-                });
-            } else if (type === 'new') {
-                for (var key in vm.patientQuestionnaires) {
-                    questionnaireSerNum = vm.patientQuestionnaires[key].QuestionnaireSerNum;
-                    // if ((!isQuestionnaireComplete(vm.patientQuestionnaires[key])) && (!Questionnaires.isQuestionnaireInProgress(questionnaireSerNum))) {
-                    //     vm.desiredQuestionnaires.push(vm.patientQuestionnaires[key]);
-                    // }
-                    // TEMPORARY CHANGE: While the 'In progress' tab is not working and has been removed,
-                    //   we don't want in progress questionnaires to vanish from the new questionnaires list. -SB
-                    if (!isQuestionnaireComplete(vm.patientQuestionnaires[key])) {
-                        vm.desiredQuestionnaires.push(vm.patientQuestionnaires[key]);
-                    }
-                }
-                vm.isAnswered = "New Questionnaires";
-                vm.clickedText = 'new';
+        /**
+         * @name completedQuestionnaireExist
+         * @desc This public lets the view know whether we should display a "no completed questionnaire" message or not
+         * @returns {boolean} True if there are completed questionnaires, false otherwise
+         */
+        function completedQuestionnaireExist(){
+            return Questionnaires.getQuestionnaireCount(allowedStatus.COMPLETED_QUESTIONNAIRE_STATUS) > 0;
+        }
 
-                vm.desiredQuestionnaires.sort(function(a, b) {
+        /**
+         * @name setTab
+         * @desc This public function influences the tab displayed for the questionnaire list. Default is new
+         * @param tabName {string} The valid parameters are: new, progress, completed.
+         */
+        function setTab (tabName) {
+            clearTab();
 
-                    // TODO: USE EXTERNAL HELPER WHEN CALLING SORT FUNCTION
-
-                    return new Date(b.DateAdded) - new Date(a.DateAdded);
-                });
-            } else if (type === 'progress') {
-                for (var key in vm.patientQuestionnaires) {
-                    questionnaireSerNum = vm.patientQuestionnaires[key].QuestionnaireSerNum;
-                    if ((!isQuestionnaireComplete(vm.patientQuestionnaires[key])) && (Questionnaires.isQuestionnaireInProgress(questionnaireSerNum))) {
-                        vm.desiredQuestionnaires.push(vm.patientQuestionnaires[key]);
-                    }
-                }
-                vm.isAnswered = "Questionnaires In Progress";
-                vm.clickedText = 'progress';
+            switch (tabName){
+                case 'new':
+                    vm.tab.new = true;
+                    break;
+                case 'progress':
+                    vm.tab.progress = true;
+                    break;
+                case 'completed':
+                    vm.tab.completed = true;
+                    break;
+                default:
+                    vm.tab.new = true;
             }
         }
 
-        function goToQuestionnaire(patientQuestionnaire, questionnaireDBSerNum, questionnaireSerNum) {
+        /*
+            Private functions
+         */
 
-            if(!(isQuestionnaireComplete(patientQuestionnaire))) {
-                NavigatorParameters.setParameters({DBSerNum: questionnaireDBSerNum, SerNum: questionnaireSerNum, Tab: vm.current_type});
-                $window[navigatorName].pushPage('views/personal/questionnaires/questionnaires.html', {param:questionnaireDBSerNum, QuestionnaireSerNum:questionnaireSerNum},{ animation : 'slide' });
-                // NavigatorParameters.setParameters({Navigator:'personalNavigator', DBSerNum: questionnaireDBSerNum, SerNum: questionnaireSerNum});
-                // personalNavigator.pushPage('views/personal/questionnaires/questionnaires.html', {param:questionnaireDBSerNum, QuestionnaireSerNum:questionnaireSerNum},{ animation : 'slide' });
-            } else {
-                NavigatorParameters.setParameters({DBSerNum: questionnaireDBSerNum, SerNum: questionnaireSerNum, Tab: vm.current_type});
-                $window[navigatorName].pushPage('views/personal/questionnaires/answeredQuestionnaire.html', {param:questionnaireDBSerNum, QuestionnaireSerNum:questionnaireSerNum},{ animation : 'slide' });
-                // NavigatorParameters.setParameters({Navigator:'personalNavigator', DBSerNum: questionnaireDBSerNum, SerNum: questionnaireSerNum});
-                // personalNavigator.pushPage('views/personal/questionnaires/answeredQuestionnaire.html', {param:questionnaireDBSerNum, QuestionnaireSerNum:questionnaireSerNum},{ animation : 'slide' });
+        /**
+         * @name clearTab
+         * @desc this private function reset the variable vm.tab
+         */
+        function clearTab (){
+            for (let tabName in vm.tab){
+                vm.tab[tabName] = false;
             }
         }
 
-        function refreshQuestionnairesList() {
+        /**
+         * @name loadQuestionnaireList
+         * @desc get the questionnaire list from the service
+         */
+        function loadQuestionnaireList (){
 
-            if (!vm.isAnswered) {
-                getDesiredQuestionnaires('new');
-            } else {
-                getDesiredQuestionnaires(vm.clickedText);
-            }
+            $timeout(function(){
+                vm.newQuestionnaireList = Questionnaires.getQuestionnaireList(allowedStatus.NEW_QUESTIONNAIRE_STATUS);
+                vm.inProgressQuestionnaireList = Questionnaires.getQuestionnaireList(allowedStatus.IN_PROGRESS_QUESTIONNAIRE_STATUS);
+                vm.completedQuestionnaireList = Questionnaires.getQuestionnaireList(allowedStatus.COMPLETED_QUESTIONNAIRE_STATUS);
+            });
+        }
+
+        /**
+         * @name handleRequestError
+         * @desc show a notification to the user in case a request to server fails
+         */
+        function handleRequestError (){
+            ons.notification.alert({
+                //message: 'Server problem: could not fetch data, try again later',
+                message: $filter('translate')("SERVERERRORALERT"),
+                modifier: (ons.platform.isAndroid())?'material':null
+            })
+        }
+
+        /**
+         * @name removeListener
+         * @desc This private function serves to remove any listener for this controller
+         */
+        function removeListener(){
+            navigator.off('postpop');
         }
     }
+
 })();
+
+

@@ -1,7 +1,7 @@
 /*
  * Filename     :   cleanUpService.js
  * Description  :   Clears all the app data on New Login so there are no inconsistencies.
- * Created by   :   David Herrera, Robert Maglieri 
+ * Created by   :   David Herrera, Robert Maglieri
  * Date         :   08 Mar 2017
  * Copyright    :   Copyright 2016, HIG, All rights reserved.
  * Licence      :   This file is subject to the terms and conditions defined in
@@ -45,7 +45,7 @@
             Patient.clearPatient();
             Doctors.clearDoctors();
             TxTeamMessages.clearTxTeamMessages();
-            Questionnaires.clearQuestionnaires();
+            Questionnaires.clearAllQuestionnaire();
             Announcements.clearAnnouncements();
             EducationalMaterial.clearEducationalMaterial();
             Notifications.clearNotifications();

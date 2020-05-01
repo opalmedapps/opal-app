@@ -51,7 +51,7 @@ myApp.service('Notifications', ['$filter', 'RequestToServer', 'LocalStorage', 'A
             SerNum:'DocumentSerNum',
             readFunction:Documents.readDocument,
             searchFunction:Documents.getDocumentBySerNum,
-            namesFunction:Documents.getDocumentNames,
+            getName:Documents.getDocumentNames,
             PageUrl:Documents.getDocumentUrl
           }...
         </pre>
@@ -66,7 +66,7 @@ myApp.service('Notifications', ['$filter', 'RequestToServer', 'LocalStorage', 'A
                     SerNum: 'DocumentSerNum',
                     readFunction: Documents.readDocument,
                     searchFunction: Documents.getDocumentBySerNum,
-                    namesFunction: Documents.getDocumentNames,
+                    getName: Documents.getDocumentNames,
                     updateFunction: Documents.updateDocuments,
                     PageUrl: Documents.getDocumentUrl,
                     refreshType: 'Documents'
@@ -80,7 +80,7 @@ myApp.service('Notifications', ['$filter', 'RequestToServer', 'LocalStorage', 'A
                     SerNum: 'DocumentSerNum',
                     readFunction: Documents.readDocument,
                     searchFunction: Documents.getDocumentBySerNum,
-                    namesFunction: Documents.getDocumentNames,
+                    getName: Documents.getDocumentNames,
                     PageUrl: Documents.getDocumentUrl,
                     updateFunction: Documents.updateDocuments,
                     refreshType: 'Documents'
@@ -94,7 +94,7 @@ myApp.service('Notifications', ['$filter', 'RequestToServer', 'LocalStorage', 'A
                     SerNum: 'AppointmentSerNum',
                     readFunction: Appointments.readAppointmentBySerNum,
                     searchFunction: Appointments.getAppointmentBySerNum,
-                    namesFunction: Appointments.getAppointmentName,
+                    getName: Appointments.getAppointmentName,
                     PageUrl: Appointments.getAppointmentUrl
                 },
             'TxTeamMessage':
@@ -105,7 +105,7 @@ myApp.service('Notifications', ['$filter', 'RequestToServer', 'LocalStorage', 'A
                     NameFR: 'PostName_FR',
                     SerNum: 'TxTeamMessageSerNum',
                     searchFunction: TxTeamMessages.getTxTeamMessageBySerNum,
-                    namesFunction: TxTeamMessages.getTxTeamMessageName,
+                    getName: TxTeamMessages.getTxTeamMessageName,
                     readFunction: TxTeamMessages.readTxTeamMessage,
                     updateFunction: TxTeamMessages.updateTxTeamMessages,
                     PageUrl: TxTeamMessages.getTxTeamMessageUrl,
@@ -119,7 +119,7 @@ myApp.service('Notifications', ['$filter', 'RequestToServer', 'LocalStorage', 'A
                 SerNum: 'AnnouncementSerNum',
                 readFunction: Announcements.readAnnouncementBySerNum,
                 searchFunction: Announcements.getAnnouncementBySerNum,
-                namesFunction: Announcements.getAnnouncementName,
+                getName: Announcements.getAnnouncementName,
                 updateFunction: Announcements.updateAnnouncements,
                 PageUrl: Announcements.getAnnouncementUrl,
                 refreshType: 'Announcements'
@@ -132,7 +132,7 @@ myApp.service('Notifications', ['$filter', 'RequestToServer', 'LocalStorage', 'A
                 NameFR: 'Name_FR',
                 readFunction: EducationalMaterial.readEducationalMaterial,
                 searchFunction: EducationalMaterial.getEducationaMaterialBySerNum,
-                namesFunction: EducationalMaterial.getEducationalMaterialName,
+                getName: EducationalMaterial.getEducationalMaterialName,
                 openFunction: EducationalMaterial.getEducationalMaterialUrl,
                 updateFunction: EducationalMaterial.updateEducationalMaterial,
                 refreshType: 'EducationalMaterial'
@@ -153,7 +153,7 @@ myApp.service('Notifications', ['$filter', 'RequestToServer', 'LocalStorage', 'A
                 SerNum: 'AppointmentSerNum',
                 readFunction: Appointments.readAppointmentBySerNum,
                 searchFunction: Appointments.getAppointmentBySerNum,
-                namesFunction: Appointments.getAppointmentName,
+                getName: Appointments.getAppointmentName,
                 PageUrl: Appointments.getAppointmentUrl,
                 refreshType: 'Appointments'
             },
@@ -173,7 +173,7 @@ myApp.service('Notifications', ['$filter', 'RequestToServer', 'LocalStorage', 'A
                 color: '#4CAF50',
                 readFunction: Appointments.readAppointmentBySerNum,
                 searchFunction: Appointments.getAppointmentBySerNum,
-                namesFunction: Appointments.getAppointmentName,
+                getName: Appointments.getAppointmentName,
                 PageUrl: Appointments.getAppointmentUrl,
             },
             'CheckInError': {
@@ -182,7 +182,7 @@ myApp.service('Notifications', ['$filter', 'RequestToServer', 'LocalStorage', 'A
                 color: '#F44336',
                 readFunction: Appointments.readAppointmentBySerNum,
                 searchFunction: Appointments.getAppointmentBySerNum,
-                namesFunction: Appointments.getAppointmentName,
+                getName: Appointments.getAppointmentName,
                 PageUrl: Appointments.getAppointmentUrl,
             },
             'Questionnaire': {
@@ -190,9 +190,7 @@ myApp.service('Notifications', ['$filter', 'RequestToServer', 'LocalStorage', 'A
                 icon: 'ion-clipboard',
                 color: '#607d8b',
                 NameEN: 'QuestionnaireName_EN',
-                updateFunction: Questionnaires.updateQuestionnairesFromNotification,
-                namesFunction: Questionnaires.getQuestionnaireName,
-                PageUrl: Questionnaires.getQuestionnaireUrl,
+                PageUrl: Questionnaires.getQuestionnaireStartUrl,
                 searchFunction: function () {
                     return true
                 },
@@ -205,9 +203,7 @@ myApp.service('Notifications', ['$filter', 'RequestToServer', 'LocalStorage', 'A
                 icon: 'ion-clipboard',
                 color: '#607d8b',
                 NameEN: 'QuestionnaireName_EN',
-                updateFunction: Questionnaires.updateQuestionnairesFromNotification,
-                namesFunction: Questionnaires.getQuestionnaireName,
-                PageUrl: Questionnaires.getQuestionnaireUrl,
+                PageUrl: Questionnaires.getQuestionnaireStartUrl,
                 searchFunction: function () {
                     return true
                 },
@@ -278,7 +274,10 @@ myApp.service('Notifications', ['$filter', 'RequestToServer', 'LocalStorage', 'A
                     temp[i].PageUrl = notificationTypes[temp[i].NotificationType].PageUrl(temp[i].RefTableRowSerNum);
                 }
 
-                temp[i].Content = notificationTypes[temp[i].NotificationType].namesFunction(temp[i].RefTableRowSerNum);
+                if (notificationTypes[temp[i].NotificationType].hasOwnProperty('getName')){
+                    temp[i].Content = notificationTypes[temp[i].NotificationType].getName(temp[i].RefTableRowSerNum);
+                }
+
                 temp[i].DateAdded = $filter('formatDate')(temp[i].DateAdded);
 
                 temp[i].refreshType = notificationTypes[temp[i].NotificationType].refreshType;
@@ -452,8 +451,8 @@ myApp.service('Notifications', ['$filter', 'RequestToServer', 'LocalStorage', 'A
                 for (var i = notifications.length - 1; i >= 0; i--) {
                     notifications[i].Title = (language == 'EN') ? notifications[i].Name_EN : notifications[i].Name_FR;
                     try {
-                        if (typeof notifications[i].Content == 'undefined') {
-                            notifications[i].Content = notificationTypes[notifications[i].NotificationType].namesFunction(notifications[i].RefTableRowSerNum);
+                        if (typeof notifications[i].Content == 'undefined' && notificationTypes[notifications[i].NotificationType].hasOwnProperty('getName')) {
+                            notifications[i].Content = notificationTypes[notifications[i].NotificationType].getName(notifications[i].RefTableRowSerNum);
                         }
 
                         if (notifications[i].NotificationType == 'Questionnaire' || notifications[i].NotificationType == 'LegacyQuestionnaire') {
@@ -500,7 +499,8 @@ myApp.service('Notifications', ['$filter', 'RequestToServer', 'LocalStorage', 'A
                                 response.Data.forEach(function (notif) {
 
                                     // If notification content exists.. update the notification content
-                                    if (notif[1] !== "undefined" && notif[1] !== undefined) {
+                                    if (notif[1] !== "undefined" && notif[1] !== undefined
+                                        && notificationTypes[notif[0].NotificationType].hasOwnProperty('updateFunction')) {
                                         notificationTypes[notif[0].NotificationType].updateFunction([notif[1]]);
                                     }
 
