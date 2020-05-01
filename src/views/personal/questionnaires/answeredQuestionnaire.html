@@ -1,4 +1,5 @@
 <ons-page ng-controller="AnsweredQuestionnaireController as vm">
+<!-- Note: this file is extremely hard coded to obey the desired inconsistent functionality-->
     <ons-toolbar fixed-style>
         <div class="left">
             <ons-back-button>{{"BACK"|translate}}</ons-back-button>
@@ -6,57 +7,146 @@
         <div class="center">{{"SUMMARY"|translate}}</div>
     </ons-toolbar>
 
-    <ons-row align="center" style="margin-left: 0.12vw;">
+    <!-- LOADING CIRCLE FOR SUBMITTING QUESTIONNAIRE -->
+    <div ng-show="vm.loadingSubmitQuestionnaire" align="center" style="margin-top:25vh">
+        <svg class="progress-circular">
+            <circle class="progress-circular__primary" cx="50%" cy="50%" r="40%" fill="none" stroke-width="10%"
+                    stroke-miterlimit="10"> </circle>
+        </svg>
+        <p style="margin-top: 30px">{{"SUBMITTING_QUESTIONNAIRE"| translate}}</p>
+    </div>
+
+    <!--LOADING CIRCLE FOR QUESTIONNAIRE -->
+    <div ng-show="vm.loadingQuestionnaire" align="center" style="margin-top:25vh">
+        <svg class="progress-circular">
+            <circle class="progress-circular__primary" cx="50%" cy="50%" r="40%" fill="none" stroke-width="10%"
+                    stroke-miterlimit="10"> </circle>
+        </svg>
+        <p style="margin-top: 30px">{{"LOADINGQUESTIONNAIRE"| translate }}</p>
+    </div>
+
+    <div ng-if="vm.questionnaire.status !== vm.allowedStatus.COMPLETED_QUESTIONNAIRE_STATUS" ng-hide="vm.loadingSubmitQuestionnaire || vm.loadingQuestionnaire">
+        <!-- Instruction to submit -->
+        <div ng-if="vm.submitAllowed" ng-class="fontSizeDesc" align="center" style="color: gray; padding-left: 10px; padding-right: 10px;">
+            {{"QUESTIONNAIRE_SUBMIT_INSTRUCTION"|translate}}
+        </div>
+        <div ng-if="!vm.submitAllowed" ng-class="fontSizeDesc" align="center" style="color: gray; padding-left: 10px; padding-right: 10px;">
+            {{"QUESTIONNAIRE_INSTRUCTIONS"|translate}}
+        </div>
+
+        <!-- Submit button -->
+        <div align="center" style="margin-top:10px;margin-bottom:10px">
+            <button class="button--large--cta" style="width:80%" ng-click="vm.submitQuestionnaire()"
+                    ng-disabled="!vm.submitAllowed">{{"SUBMITANSWERS"|translate}}
+            </button>
+        </div>
+
+        <br>
+    </div>
+
+    <ons-row align="center" style="margin-left: 0.12vw;" ng-hide="vm.loadingSubmitQuestionnaire || vm.loadingQuestionnaire">
         <ons-col align="center">
-            <ul class="list" style="width: 100vw;" ng-repeat="question in vm.questions track by $index">
-                <li class="list__item" ng-click="vm.chooseAction($index, question)">
-                    <ons-row style="margin:0;padding:0" align="center">
-                        <ons-col align="left" style="border:1px solid white;color:white">
-                            <div style="line-height: 1.4;">
-                               #{{$index+1}}: {{(vm.language === "EN") ? question.Asseses_EN : question.Asseses_FR}}
-                            </div>
-                        </ons-col>
-                        <ons-col align="center" width="30%">
-                            <span ng-show="vm.answers[$index]" style="float: right; color: black;">
-                                <!-- If its not an input question than the otherAns is shown or the answer is shown, both of those for the multiple choice questions. If both of those are undefined than its a scale quesiton and only the answer[$index] is needed to be shown. If the source is LEE the question is out of 5 and if its ESAS its out of 5 -->
-                                <span ng-show="(question.QuestionType !== 'SA') && (question.QuestionType !== 'Checkbox') && (question.QuestionType !== 'image') && (question.QuestionType !== 'MC')" style="color: #4CAF50">
-                                    {{vm.answers[$index].answer || vm.answers[$index]}}
-                                    <!--
-                                    {{vm.answers[$index].otherAns || vm.answers[$index].answer || vm.answers[$index]}}
-                                    -->
+            <!-- Section -->
+            <div ng-repeat="section in vm.questionnaire.sections | orderBy: 'section_position' track by $index ">
+                <ons-row style="margin:0;padding:0;" align="center">
+                    <ons-col align="center">
+                        <div class="text-center" ng-class="fontSizeDesc" style="border-bottom: 1px solid #ddd;">
+                            {{section.section_title}}
+                        </div>
+                    </ons-col>
+                </ons-row>
 
+                <!-- Question -->
+                <ul class="list" style="width: 100vw;" ng-repeat="question in section.questions | orderBy: 'question_position' track by $index">
+
+                    <li class="list__item"
+                        ng-style="question.style"
+                        style="border-bottom: none !important; border-top: 1px solid #ddd">
+
+                        <ons-row style="margin:0;padding:0" align="center" ng-click="vm.questionOnClick($parent.$index, $index, question);">
+                            <ons-col align="left" style="border:1px solid white;color:white">
+                                <div style="line-height: 1.4;margin-top:10px;margin-bottom:10px">
+                                    <span style="color:rgba(38,100,171,0.81)">#{{$index+1}}</span>
+                                    <span ng-bind-html="question.question_display"></span>
+                                </div>
+                            </ons-col>
+                            <ons-col align="center" width="25%">
+                                <!-- completed questionnaire but slider type: special case-->
+                                <span ng-if="vm.questionnaire.status === vm.allowedStatus.COMPLETED_QUESTIONNAIRE_STATUS && question.type_id === vm.allowedType.SLIDER_TYPE_ID"
+                                      style="float: right; color: rgba(38,100,171,0.81);">
+                                    {{question.patient_answer.answer[0].answer_value}}/{{question.options[0].max_value}}
                                 </span>
-                                <span ng-show="(question.QuestionType === 'MinMax')"> / {{question.Choices[1].OrderNum}}</span>
 
-                                <!-- <span ng-show="(question.Choices[1].OrderNum === '5') && (question.QuestionType === 'MinMax')"> / 5</span> -->
-                                <!-- <span ng-show="(question.Choices[1].OrderNum == '10') && (question.QuestionType == 'MinMax')"> / 10</span> -->
-
-                                <!-- If its an input question and its answered all we say is "asnwered" and the user can preview it by clicking the eye -->
-                                <span ng-show="(question.QuestionType === 'SA' || question.QuestionType === 'Checkbox' || question.QuestionType === 'image' || question.QuestionType === 'MC') && (vm.answers[$index]) && (!vm.answerShown[$index])">
-                                    <p style="color: rgba(38,100,171,0.81); margin-left:3px;margin-top: 5px; line-height: 1; text-align: center">
-                                        <span>{{"SHOW"|translate}} <i class="ion-chevron-right" style="padding-left: 2vw"></i></span>
+                                <!-- completed questionnaire but not slider type: toggle dropdown menu -->
+                                <span ng-if="vm.questionnaire.status === vm.allowedStatus.COMPLETED_QUESTIONNAIRE_STATUS && question.type_id !== vm.allowedType.SLIDER_TYPE_ID">
+                                    <p ng-if="!question.showAnswer" style="float: right; margin-right: 0px; color: rgba(38,100,171,0.81);">
+                                        {{"SHOW"|translate}} <i class="ion-chevron-right" style="padding-left: 2vw"></i>
                                     </p>
-                                </span>
-                                <span ng-show="(question.QuestionType === 'SA' || question.QuestionType === 'Checkbox' || question.QuestionType === 'image' || question.QuestionType === 'MC') && (vm.answers[$index]) && (vm.answerShown[$index])">
-                                    <p style="color: rgba(38,100,171,0.81); margin-top:5px;line-height:1; text-align: center">
+                                    <p ng-if="question.showAnswer" style="float: right; margin-right: 0px; color: rgba(38,100,171,0.81);">
                                         {{"HIDE"|translate}}<i class="ion-chevron-down" style="padding-left: 2vw"></i>
                                     </p>
                                 </span>
-                            </span>
-                            <span ng-click="vm.goToPage($index)" ng-show="(!vm.answers[$index])" style="float: right; color: #F44336">{{"ANSWER"|translate}} <i class="ion-chevron-right" style="padding-left: 2vw"></i></span>
-                        </ons-col>
-                    </ons-row>
-                </li>
-                <!-- Eye preview -->
-                <li ng-show="vm.answerShown[$index]" style="background:white;color:black;padding:5px 5px 0 5px;border:1px solid lightgrey">
-                     <strong>{{"ANSWER"|translate}}:</strong>
-                    <div class="card" >
+
+                                <!-- Non completed questionnaire and invalid answer for the question -->
+                                <span ng-if="vm.questionnaire.status !== vm.allowedStatus.COMPLETED_QUESTIONNAIRE_STATUS && question.optional === '0' && question.patient_answer.is_defined !== vm.answerSavedInDBValidStatus.ANSWER_SAVED_CONFIRMED"
+                                      style="float: right; margin-right: 0px; color: white">
+                                    <i class="ion-chevron-left"></i> {{"ANSWER"|translate}}
+                                </span>
+
+                                <!-- Non completed questionnaire, valid answer for the question, and not slider -->
+                                <span ng-if="vm.questionnaire.status !== vm.allowedStatus.COMPLETED_QUESTIONNAIRE_STATUS && question.type_id !== vm.allowedType.SLIDER_TYPE_ID && (question.optional !== '0' || question.patient_answer.is_defined === vm.answerSavedInDBValidStatus.ANSWER_SAVED_CONFIRMED)">
+                                    <p ng-if="!question.showAnswer" style="float: right; margin-right: 0px; color: white">
+                                        {{"SHOW"|translate}} <i class="ion-chevron-right" style="padding-left: 2vw"></i>
+                                    </p>
+                                    <p ng-if="question.showAnswer" style="float: right; margin-right: 0px; color: white">
+                                        {{"HIDE"|translate}}<i class="ion-chevron-down" style="padding-left: 2vw"></i>
+                                    </p>
+                                </span>
+
+                                <!-- Non completed questionnaire, valid answer for the question, and slider -->
+                                <span ng-if="vm.questionnaire.status !== vm.allowedStatus.COMPLETED_QUESTIONNAIRE_STATUS && question.type_id === vm.allowedType.SLIDER_TYPE_ID && (question.optional !== '0' || question.patient_answer.is_defined === vm.answerSavedInDBValidStatus.ANSWER_SAVED_CONFIRMED)" style="float: right; margin-right: 0px; color: white">
+                                    <i class="ion-chevron-left"></i> {{question.patient_answer.answer[0].answer_value}}/{{question.options[0].max_value}}
+                                </span>
+
+                            </ons-col>
+                        </ons-row>
+                    </li>
+                    <!-- Eye preview -->
+                    <li ng-show="question.showAnswer" style="background:white;color:rgba(38,100,171,0.81);padding:5px 5px 0px 5px;">
                         <div class="item">
-                         {{vm.answerToShow[$index]}}
+                            <div ng-repeat="answer in question.patient_answer.answer track by $index">
+                                <!-- Textbox-->
+                                <span ng-if="question.type_id == vm.allowedType.TEXTBOX_TYPE_ID"
+                                      style="color: rgba(38,100,171,0.81);display:block;width:100%;word-wrap:break-word;">
+                                    {{question.patient_answer.answer[0].answer_value}}
+                                </span>
+                                <!-- Multiple choice-->
+                                <span ng-if="question.type_id == vm.allowedType.RADIOBUTTON_TYPE_ID"
+                                      style="color: rgba(38,100,171,0.81);">
+                                    {{question.patient_answer.answer[0].answer_option_text}}
+                                </span>
+                                <!--Checkbox-->
+                                <span ng-if="question.type_id == vm.allowedType.CHECKBOX_TYPE_ID"
+                                      style="color: rgba(38,100,171,0.81);">
+                                    {{answer.answer_option_text}}
+                                </span>
+
+                            </div>
                         </div>
-                    </div>
-                </li>
-            </ul>
+
+                        <!-- allow non completed questionnaire to edit question -->
+                        <div align="center" ng-if="vm.questionnaire.status !== vm.allowedStatus.COMPLETED_QUESTIONNAIRE_STATUS">
+                            <!-- need twice parent due to ng-repeat -->
+                            <button class="button" style="margin-bottom: 10px"
+                                    ng-click="vm.editQuestion($parent.$parent.$index, $index)">
+                                <i class="ion-chevron-left"></i>
+                                {{"QUESTIONNAIRE_INSTRUCTIONS4"|translate}}
+                            </button>
+                        </div>
+
+                    </li>
+                </ul>
+            </div>
         </ons-col>
     </ons-row>
 </ons-page>

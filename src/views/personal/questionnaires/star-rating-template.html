@@ -1,0 +1,37 @@
+<div>
+    <div>
+        <p style="color:grey" ng-class="fontSizeDesc">{{"Rate this questionnaire and leave an optional comment!"|translate}}</p>
+    </div>
+    <span  style="display:inline-block;opacity:0.5;text-align:center;" ng-repeat="star in rate" ng-click="rateQuestionnaire($index)">
+            <i ng-class="star.Icon" style="font-size:35px;color:#DAA520" ></i>
+        </span>
+    <div>
+        <textarea maxlength="512" style="height:200px; margin-bottom:20px;margin-top:20px;" id="starText" wrap="hard" ng-change="emptyComment=false;tempRateSkip = false;" ng-model="starComment"></textarea>
+        <style>
+            #starText{
+                width: 100%;
+                height: 80%;
+                padding: 12px 20px;
+                box-sizing: border-box;
+                border: 2px solid #ccc;
+                border-radius: 4px;
+                background-color: #f8f8f8;
+                font-size: 16px;
+                resize: none;
+            }
+        </style>
+    </div>
+    <div style="margin-bottom:20px;margin-top:20px">
+
+                <label class="checkbox checkbox--list-item list__item--tappable">
+                    <input type="checkbox" id="mySkipped" value='SKIPPED' ng-model="tempRateSkip" ng-click="toggleSkip(tempRateSkip)">
+                    <div class="checkbox__checkmark checkbox--list-item__checkmark"></div>
+                    {{"Prefer not to rate"|translate}}
+                </label>
+
+    </div>
+    <span style="margin-left:10px;right:10px;bottom:10px" ng-class="fontSizeDesc"><ons-button style="touch-action: manipulation;" ng-click="submitRating(starComment)" ng-disabled="emptyRating && emptyComment && !tempRateSkip">{{"RATEIT" | translate}}</ons-button></span>
+</div>
+<div ng-show="submitted" style="margin-top:5px" ng-class="fontSizeDesc">
+    <p style="color:#5cb85c;opacity:0.8;">{{"THANKYOUFORFEEDBACK"|translate}}</p>
+</div>
