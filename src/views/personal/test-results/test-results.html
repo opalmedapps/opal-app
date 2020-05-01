@@ -110,7 +110,7 @@
             <ons-scroller style="height: calc(100vh - 250px); width: 100%">
                 <ons-list >
                     <ons-list-item modifier="tappable chevron"
-                                   ng-repeat="testResult in tests.testTypes | filter: tests.searchText"
+                                   ng-repeat="testResult in tests.testTypes | filter: tests.searchTestTypeText"
                                    ng-click="tests.goToTestTypeResults(testResult.testExpressionSerNum)"
                                    class="list-item-container">
                         <ons-row ng-class="fontSizeDesc"
