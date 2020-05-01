@@ -63,7 +63,7 @@ class PatientTestResultsController {
 			this.#getTestResultsMetadata(true)
 				.then(this.#updateView)
 				.catch(this.#handlerServerError);
-		} else this.#newsBanner.showCustomBanner($filter('translate')("REFRESH_WAIT"), '#333333', 
+		} else this.#newsBanner.showCustomBanner(this.#$filter('translate')("REFRESH_WAIT"), '#333333', 
 			'#F0F3F4', 13, 'top', null, 3000);
 	}
 
