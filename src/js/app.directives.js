@@ -8,3 +8,5 @@ import "./directives/rateEducationalMaterialDirective.js";
 import "./directives/scrollCarouselDirective.js";
 import "./directives/offlineBannerDirective.js";
 import "./directives/topPageBannerDirective";
+import "./directives/loading-spinning-circle.directive";
+import "./directives/search-bar.directive";

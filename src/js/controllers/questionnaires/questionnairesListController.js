@@ -37,11 +37,7 @@
         vm.newQuestionnaireList = [];
         vm.inProgressQuestionnaireList = [];
         vm.completedQuestionnaireList = [];
-        vm.tab = {
-            'new':false,
-            'progress':false,
-            'completed':false
-        };
+        vm.tab = 'new';
 
         // functions that can be used from view, sorted alphabetically
         vm.completedQuestionnaireExist = completedQuestionnaireExist;
@@ -142,43 +138,6 @@
          */
         function completedQuestionnaireExist(){
             return Questionnaires.getQuestionnaireCount(allowedStatus.COMPLETED_QUESTIONNAIRE_STATUS) > 0;
-        }
-
-        /**
-         * @name setTab
-         * @desc This public function influences the tab displayed for the questionnaire list. Default is new
-         * @param tabName {string} The valid parameters are: new, progress, completed.
-         */
-        function setTab (tabName) {
-            clearTab();
-
-            switch (tabName){
-                case 'new':
-                    vm.tab.new = true;
-                    break;
-                case 'progress':
-                    vm.tab.progress = true;
-                    break;
-                case 'completed':
-                    vm.tab.completed = true;
-                    break;
-                default:
-                    vm.tab.new = true;
-            }
-        }
-
-        /*
-            Private functions
-         */
-
-        /**
-         * @name clearTab
-         * @desc this private function reset the variable vm.tab
-         */
-        function clearTab (){
-            for (let tabName in vm.tab){
-                vm.tab[tabName] = false;
-            }
         }
 
         /**
