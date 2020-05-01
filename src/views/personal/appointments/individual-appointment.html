@@ -26,7 +26,7 @@
 
             <ons-list-item style="background-color:#E3F2FD" modifier="chevron tappable" ng-class="fontSizeDesc"
                            ng-click="vm.aboutAppointment()" >
-                <p class="item-desc" style="font-weight: bold;" ng-class="fontSizeDesc">{{"APPOINTMENT_ABOUT" | translate}} {{vm.title}}  <ons-icon icon="fas fa-info-circle"></ons-icon>  </p>
+                <p class="item-desc" style="font-weight: bold;" ng-class="fontSizeDesc"> <ons-icon icon="fas fa-info-circle"></ons-icon> {{"APPOINTMENT_ABOUT" | translate}} {{vm.title}} </p>
             </ons-list-item>
 
             <!--<ons-list-item style="background-color:#E3F2FD" modifier="chevron tappable" ng-click="vm.aboutAppointment()" ng-class="fontSizeDesc">-->
@@ -40,7 +40,7 @@
 
             <ons-list-item ng-class="fontSizeDesc">
                 <!--<p class="item-desc" ng-class="fontSizeDesc">{{vm.app["MapDescription_" + vm.language]}}</p>-->
-                <p class="item-desc" ng-class="fontSizeDesc" ng-bind-html="vm.app['MapDescription_' + vm.language]"></p>
+                <p class="item-desc" ng-class="fontSizeDesc" ng-bind-html="vm.app['MapDescription_' + vm.language]" align="center"></p>
             </ons-list-item>
 
             <ons-list class="settings-list" align="center">
