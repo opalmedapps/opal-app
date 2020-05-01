@@ -1,0 +1,9 @@
+diff a/www/js/controllers/auth/loginController.js b/www/js/controllers/auth/loginController.js	(rejected hunks)
+@@ -51,7 +51,6 @@
+          * @returns string
+          * @description binds the user's input for their email to the controller
+          */
+-        vm.email = "";
+         vm.email = "muhc.app.mobile@gmail.com";
+ 
+         /**
