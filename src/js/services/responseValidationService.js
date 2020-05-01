@@ -24,6 +24,7 @@
          */
         const ENCRYPTION_ERROR = 1;
         const SERVER_RESPONSE_ERROR = 2;
+        const CLIENT_ERROR = 400;
         const TOO_MANY_ATTEMPTS_ERROR = 4;
         const INVALID_VERSION_ERROR = 5;
 
@@ -79,6 +80,8 @@
                 case SERVER_RESPONSE_ERROR:
                     return {error: response};
                 case TOO_MANY_ATTEMPTS_ERROR:
+                    return {error: response};
+                case CLIENT_ERROR:
                     return {error: response};
                 case INVALID_VERSION_ERROR:
                     handleInvalidVersionError();

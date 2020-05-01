@@ -18,7 +18,6 @@ angular.module('MUHCApp')
       },
       link: function (scope, element) {
           var chart = new Highcharts.stockChart(element[0], scope.options);
-
           // Add a listener to resize the chart when the screen is rotated
           $window.addEventListener("orientationchange", resizeChart);
 
@@ -45,7 +44,7 @@ angular.module('MUHCApp')
                    */
                   chart.update({
                       chart: {
-                          width: $window.innerWidth,
+                          width: $window.innerWidth - 10,
                           height: null,
                       },
                   });
