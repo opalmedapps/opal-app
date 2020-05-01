@@ -180,7 +180,7 @@
                     $window.localStorage.setItem('Password', vm.password);
                 }
 
-
+                $window.localStorage.setItem("Language", UserPreferences.getLanguage());
                 // If user sets not trusted remove the local storage as to not continue to the next part which skips the security question
                 if (!vm.trusted) {
                     $window.localStorage.removeItem('Email');
@@ -255,7 +255,7 @@
                     vm.loading = false;
                     //if all goes well, take the user to be asked security question
                     var language = UserPreferences.getLanguage();
-                    if(!language) language = 'EN';
+
                     initNavigator.pushPage('./views/login/security-question.html', {
                         securityQuestion: response.Data.securityQuestion["securityQuestion_" + language],
                         trusted: vm.trusted
