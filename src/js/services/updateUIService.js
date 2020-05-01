@@ -28,12 +28,12 @@ var myApp=angular.module('MUHCApp');
 myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors','Appointments',
     'Documents','EducationalMaterial', 'UserAuthorizationInfo', '$q', 'Notifications',
     '$cordovaNetwork', 'LocalStorage','RequestToServer','$filter','Diagnoses','Questionnaires',
-    'NativeNotification', 'Tasks', 'Params',
+    'NativeNotification','LabResults', 'Tasks', 'Params',
 
     function (Announcements, TxTeamMessages, Patient,Doctors, Appointments, Documents,
               EducationalMaterial, UserAuthorizationInfo, $q, Notifications,
               $cordovaNetwork,LocalStorage,RequestToServer,$filter,Diagnoses,Questionnaires,
-              NativeNotification, Tasks, Params ) {
+              NativeNotification,LabResults, Tasks, Params ) {
         /**
          *@ngdoc property
          *@name  MUHCApp.service.#lastUpdateTimestamp
@@ -109,6 +109,10 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors',
                 init: Tasks.setPlanningTasks,
                 update:Tasks.setPlanningTasks
             },
+            'LabTests': {
+                 init:LabResults.setTestResults,
+                 update:LabResults.updateTestResults
+             },
             'Diagnosis':
             {
                 init:Diagnoses.setDiagnoses,
