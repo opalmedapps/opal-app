@@ -45,8 +45,6 @@
         vm.inProgressQuestionnaireExist = inProgressQuestionnaireExist;
         vm.goToQuestionnaireSummary = goToQuestionnaireSummary;
         vm.newQuestionnaireExist = newQuestionnaireExist;
-        vm.setTab = setTab;
-
 
         activate();
 
