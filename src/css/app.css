@@ -1585,16 +1585,16 @@ Button appointments
  }
  .image-profile-wrapper-home
  {
-   height: 100px;
-   width:100px;
+   height: 150px;
+   width:150px;
    border-radius: 50%;
    border:1px dashed darkgreen;
 
  }
  .image-profile-home{
    margin:5px 5px 5px 5px;
-   height: 90px;
-   width:90px;
+   height: 150px;
+   width:150px;
    border-radius: 50%;
  }
  .image-profile-wrapper

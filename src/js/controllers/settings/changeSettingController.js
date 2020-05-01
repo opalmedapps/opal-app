@@ -163,7 +163,7 @@
             objectToSend.NewValue = val;
             objectToSend.FieldToChange = Params.setLanguageParamProperCase;
             RequestToServer.sendRequest('AccountChange', objectToSend);
-            UserPreferences.setLanguage(val);
+            UserPreferences.setLanguage(val, true);
         }
 
         //Change password function
