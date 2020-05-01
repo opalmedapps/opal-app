@@ -10,8 +10,7 @@ var myApp=angular.module('MUHCApp');
 *@requires $translatePartialLoader
 *@description API services used to display message banner alerts for the app, e.g. internet connectivity banners, notification banners, etc. For more information on the plugin, {@link https://github.com/EddyVerbruggen/Toast-PhoneGap-Plugin Cordova Toast Plugin}
 **/
-myApp.service('NewsBanner',['$cordovaNetwork','$filter','$translatePartialLoader', 'Params', 
-  function($cordovaNetwork,$filter,$translatePartialLoader, Params) {
+myApp.service('NewsBanner',['$cordovaNetwork','$filter','$translatePartialLoader', 'Params', function($cordovaNetwork,$filter,$translatePartialLoader, Params) {
 
   //Adds the top-view translation tables in order to always display the alert banners correctly.
   $translatePartialLoader.addPart('top-view');
@@ -20,25 +19,23 @@ myApp.service('NewsBanner',['$cordovaNetwork','$filter','$translatePartialLoader
   var app = document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'https://' ) === -1;
 
   //Helper method to show banner
-  function showCustomBanner(messageValue,backgroundColorValue, textColorValue, textSizeValue,
-      positionValue, callbackValue, durationValue)
+  function showCustomBanner(message,color, callback, duration)
   {
     if(app)
     {
       window.plugins.toast.showWithOptions(
       {
-        message: messageValue,
-        duration:durationValue,
-        position: positionValue,
-        addPixelsY: 100,
+        message: message,
+        duration:duration,
+        position: "top",
+        addPixelsY: 40,
         styling: {
           opacity:0.8,
-          backgroundColor: backgroundColorValue, // make sure you use #RRGGBB. Default #333333
-          textColor: textColorValue, // Ditto. Default #FFFFFF
-          textSize: textSizeValue, // Default 13
+          backgroundColor: color, // make sure you use #RRGGBB. Default #333333
+          textColor: '#F0F3F4', // Ditto. Default #FFFFFF
         }
       },
-      callbackValue,
+      callback,
       function(error){});
     }
   }
@@ -92,6 +89,8 @@ myApp.service('NewsBanner',['$cordovaNetwork','$filter','$translatePartialLoader
       function(error){});
 
     }
+
+
   }
   //Alert mappings for types
     /**
@@ -102,22 +101,21 @@ myApp.service('NewsBanner',['$cordovaNetwork','$filter','$translatePartialLoader
   **/
   var alertTypes = Params.newsAlertTypes;
   return {
-        /**
-	    *@ngdoc method
+      /**
+		*@ngdoc method
 		*@name showCustomBanner
 		*@methodOf MUHCApp.service:NewsBanner
-		*@param {String} message Message for the alert
-		*@param {String}  Background Color for the alert
-		*@param {String}  Text Color for the alert
-		*@param {String}  Position for the alert
-		*@param {Function} callback Callback function for the alert
+    *@param {String} message Message for the alert
+    *@param {String} color Color for the alert
+    *@param {Function} callback Callback function for the alert
 		*@param {Number} duration Duration in milliseconds
 		*@description Displays alert based on the parameters
 		**/
-		showCustomBanner:function(messageValue,backgroundColorValue, textColorValue, textSizeValue, positionValue, callbackValue, durationValue){
+      showCustomBanner:function(message,color, callback, duration)
+      {
         if(app)
         {
-          showCustomBanner(messageValue,backgroundColorValue, textColorValue, textSizeValue, positionValue, callbackValue, durationValue);
+          showCustomBanner(message,color, callback, duration);
         }
       },
         /**
