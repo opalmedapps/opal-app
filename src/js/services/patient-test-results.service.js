@@ -71,7 +71,7 @@ class PatientTestResults {
 			let results = await this.#requestToServer.sendRequestWithResponse("PatientTestDates");
 			this.#testDatesLastUpdated = Date.now();
 			this.testDates = results.data.collectedDates || [];
-			this.testDates = this.testDates.map((testDate) => new Date(testDate));
+			this.testDates = this.testDates.map((testDate) => new Date(testDate.replace(/-/g,"/")));
 			this.testResultsByDate = {};
 			return this.testDates;
 		}
@@ -157,7 +157,7 @@ class TestResult {
 	constructor({ testValue, collectedDateTime }) {
 		this.testValue = Number(testValue);
 		this.testValueString = testValue;
-		this.collectedDateTime = Date.parse(collectedDateTime);
+		this.collectedDateTime = Date.parse(collectedDateTime.replace(/-/g,"/"));
 	}
 }
 /**
@@ -171,7 +171,7 @@ class TestType {
 		this.educationalMaterialURL_EN = educationalMaterialURL_EN;
 		this.educationalMaterialURL_FR = educationalMaterialURL_FR;
 		this.latestAbnormalFlag = latestAbnormalFlag;
-		this.latestCollectedDateTime = Date.parse(latestCollectedDateTime);
+		this.latestCollectedDateTime = Date.parse(latestCollectedDateTime.replace(/-/g,"/"));
 		this.latestPatientTestResultSerNum = Number(latestPatientTestResultSerNum);
 		this.latestTestValue = Number(latestTestValue);
 		this.name_EN = name_EN;
