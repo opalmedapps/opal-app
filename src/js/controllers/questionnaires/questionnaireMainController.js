@@ -331,14 +331,27 @@
 
         /**
          * @name initSliderQuestion
-         * @desc the initialization function for the slider type question. Currently (January 2020), the only the dots scale questions
-         * @param question {object}
-         * @returns {object} contain the options and the formatting for the dots scale questions
+         * @desc the initialization function for the slider type question. Currently (May 2020), the only the vertical scale questions
+         * @param {object} question
+         * @returns {[]} contain the options for the dots scale questions
          */
         function initSliderQuestion(question) {
             question.answerChangedFlag = false;
 
-            return bindScaleParameters(question);
+            // set the style of the options
+            let min = Number(question.options[0].min_value);
+            let max = Number(question.options[0].max_value);
+            let inc = Number(question.options[0].increment);
+
+            let options = [];
+
+            options.push({text: `${min} ${question.options[0].min_caption}`, value: min});
+            for(let i = min+inc; i < max; i+=inc) {
+                options.push({text: `${i}`, value: i});
+            }
+            options.push({text: `${max} ${question.options[0]. max_caption}`, value: max});
+
+            return options;
         }
 
         /**
@@ -406,43 +419,6 @@
 
             // go to summary page directly
             navigator.replacePage('views/personal/questionnaires/answeredQuestionnaire.html');
-        }
-
-        /**
-         * @name bindScaleParameters
-         * @desc This function is for slider type questions, used to set the options and the formatting for the dots scale questions now
-         * @param question {object}
-         * @returns {{options: *, formatting: *}}
-         */
-        function bindScaleParameters(question) {
-            // set the style of the options
-            let min = Number(question.options[0].min_value);
-            let max = Number(question.options[0].max_value);
-            let inc = Number(question.options[0].increment);
-
-            let options = [];
-
-            let i = min;
-            while (i <= max){
-                options.push({text: i.toString(), value: i});
-                i += inc;
-            }
-
-            // let scalewidth = $('.scale').width();
-            let scalebtn = {
-                'height': 'auto',
-                'float': 'left',
-                'text-align': 'center',
-                'width': Math.floor(100 / options.length) + '\%'
-            };
-
-            // this is to avoid the problem of html not updating when controller updates
-            let returning = {
-                options: options,
-                formatting: scalebtn,
-            };
-
-            return returning;
         }
 
         /**
