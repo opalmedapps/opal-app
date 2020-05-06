@@ -31,7 +31,7 @@
         function activate() {
             $rootScope.firstTime = true;
             $rootScope.online = navigator.onLine;
-
+            codePushSyncSetup();
             currentTime = Date.now();
 
             bindEvents();
@@ -42,7 +42,6 @@
         }
 
         function bindEvents() {
-            codePush.sync();
             $translatePartialLoader.addPart('top-view');
 
             //Listen to authentication state, if user get's unauthenticated log user out
@@ -73,6 +72,8 @@
                     NetworkStatus.setStatus(true);
                 });
             }, false);
+            
+            addEventListener("resume", codePushSyncSetup,false);
 
             setupInactivityChecks();
 
@@ -95,7 +96,7 @@
         function setupInactivityChecks() {
             addEventListener('touchstart', resetTimer, false);
             addEventListener("mousedown", resetTimer, false);
-            addEventListener("resume", codePushSyncSetup,false);
+
             startTimer();
         }
 
@@ -129,7 +130,6 @@
             startTimer();
         }
         function codePushSyncSetup() {
-            console.log("In app resume Code Sync");
             codePush.sync();
         }
 
