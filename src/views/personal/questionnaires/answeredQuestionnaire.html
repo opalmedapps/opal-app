@@ -4,11 +4,11 @@
         <div class="left">
             <ons-back-button>{{"BACK"|translate}}</ons-back-button>
         </div>
-        <div class="center">{{"SUMMARY"|translate}}</div>
+        <div class="center" ng-class="fontSizeDesc">{{"SUMMARY"|translate}}</div>
     </ons-toolbar>
 
     <!-- LOADING CIRCLE FOR SUBMITTING QUESTIONNAIRE -->
-    <div ng-show="vm.loadingSubmitQuestionnaire" align="center" style="margin-top:25vh">
+    <div ng-show="vm.loadingSubmitQuestionnaire" align="center" style="margin-top:25vh" ng-class="fontSizeDesc">
         <svg class="progress-circular">
             <circle class="progress-circular__primary" cx="50%" cy="50%" r="40%" fill="none" stroke-width="10%"
                     stroke-miterlimit="10"> </circle>
@@ -36,7 +36,7 @@
 
         <!-- Submit button -->
         <div align="center" style="margin-top:10px;margin-bottom:10px">
-            <button class="button--large--cta" style="width:80%" ng-click="vm.submitQuestionnaire()"
+            <button class="button--large--cta" style="width:80%" ng-click="vm.submitQuestionnaire()" ng-class="fontSizeDesc"
                     ng-disabled="!vm.submitAllowed">{{"SUBMITANSWERS"|translate}}
             </button>
         </div>
@@ -61,7 +61,8 @@
 
                     <li class="list__item"
                         ng-style="question.style"
-                        style="border-bottom: none !important; border-top: 1px solid #ddd">
+                        style="border-bottom: none !important; border-top: 1px solid #ddd"
+                        ng-class="fontSizeDesc">
 
                         <ons-row style="margin:0;padding:0" align="center" ng-click="vm.questionOnClick($parent.$index, $index, question);">
                             <ons-col align="left" style="border:1px solid white;color:white">
@@ -112,7 +113,7 @@
                         </ons-row>
                     </li>
                     <!-- Eye preview -->
-                    <li ng-show="question.showAnswer" style="background:white;color:rgba(38,100,171,0.81);padding:5px 5px 0px 5px;">
+                    <li ng-show="question.showAnswer" style="background:white;color:rgba(38,100,171,0.81);padding:5px 5px 0px 5px;" ng-class="fontSizeDesc">
                         <div class="item">
                             <div ng-repeat="answer in question.patient_answer.answer track by $index">
                                 <!-- Textbox-->
@@ -137,7 +138,7 @@
                         <!-- allow non completed questionnaire to edit question -->
                         <div align="center" ng-if="vm.questionnaire.status !== vm.allowedStatus.COMPLETED_QUESTIONNAIRE_STATUS">
                             <!-- need twice parent due to ng-repeat -->
-                            <button class="button" style="margin-bottom: 10px"
+                            <button class="button" style="margin-bottom: 10px" ng-class="fontSizeDesc"
                                     ng-click="vm.editQuestion($parent.$parent.$index, $index)">
                                 <i class="ion-chevron-left"></i>
                                 {{"QUESTIONNAIRE_INSTRUCTIONS4"|translate}}

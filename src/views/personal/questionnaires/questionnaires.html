@@ -124,8 +124,10 @@
                                 </div>
                                 <!--progress number-->
                                 <div class="col-xs-6">
-                                    <h3 style="margin-top:10px;text-align: center;" ng-class="fontSizeDesc">
-                                        {{"SECTION" | translate}} {{parseInt(item.position) + 1}} / {{vm.questionnaire.sections.length}}</h3>
+                                    <h3 style="margin-top:0px;text-align: center;" ng-class="fontSizeDesc">
+                                        {{"SECTION" | translate}}
+                                        <br>
+                                        {{parseInt(item.position) + 1}} / {{vm.questionnaire.sections.length}}</h3>
                                 </div>
                                 <!--right arrow, if it is the last item, do not show -->
                                 <div class="col-xs-3"
@@ -177,7 +179,9 @@
                             </ons-col>
                             <ons-col align="center">
                                 <h5 class="text-center" style="margin: 0px;" ng-class="fontSizeDesc">
-                                    {{"QUESTION"|translate}} {{item.data.question_position}} / {{vm.questionnaire.sections[vm.sectionIndex].questions.length}}
+                                    {{"QUESTION"|translate}}
+                                    <br>
+                                    {{item.data.question_position}} / {{vm.questionnaire.sections[vm.sectionIndex].questions.length}}
                                 </h5>
                             </ons-col>
                             <ons-col align="right">
@@ -192,7 +196,7 @@
                             </ons-col>
                         </ons-row>
                     </div>
-
+                    <br>
                     <div style="height:93%; position: relative">
                         <!-- QUESTION -->
                         <div class="center" style="margin-top:10px;padding-left:5vw;padding-right:5vw;">
@@ -227,11 +231,11 @@
                             <h4 ng-if="item.data.options[0].minAnswer === item.data.options[0].maxAnswer">
                                 <span ng-class="fontSizeDesc">{{"QUESTIONNAIRE_SELECT"|translate}} {{item.data.options[0].minAnswer}} {{"QUESTIONNAIRE_CHECKBOX_OPTION"|translate}}. {{"QUESTIONNAIRE_CHECKBOX_CHOSEN"|translate}} {{vm.checkedNumber}} {{"QUESTIONNAIRE_CHECKBOX_OPTION"|translate}}. </span>
                             </h4>
-                            <ul class="list">
                                 <li class="list__item list__item--tappable"
                                     ng-repeat="value in item.data.options | orderBy: 'order' track by $index"
                                     ng-style="vm.isCheckedCheckmark(item.data, value.option_id) ? {'background-color':'#e9e9e9'} : {'background-color':'#f9f9f9'}">
                                     <label ng-class="fontSizeDesc"
+                                           class="lee-checkbox lee-checkbox--list-item"
                                            ng-style="vm.isCheckedCheckmark(item.data, value.option_id) ? {'background-color':'#e9e9e9', 'margin':'0px', 'padding':'10px'} : {'background-color':'#f9f9f9', 'margin':'0px', 'padding':'10px'}">
                                         <input type="checkbox"
                                                id="{{'mcCheckbox'+item.data.question_id+'_'+value.option_id}}"
@@ -240,40 +244,28 @@
                                                ng-checked="vm.isCheckedCheckmark(item.data, value.option_id) "
                                                ng-click="vm.toggleCheckboxSelection(item.data, value.option_id, value.option_text)"
                                                ng-disabled="vm.isCheckboxDisabled(item.data, value.option_id);">
-                                        <label for="{{'mcCheckbox'+item.data.question_id+'_'+value.option_id}}">{{value.option_text}}</label>
+                                        <div class="lee-checkbox__checkmark lee-checkbox--list-item__checkmark"></div>
+                                        <span ng-class="fontSizeDesc">{{value.option_text}}</span>
                                     </label>
                                 </li>
                             </ul>
                         </div>
 
                         <!-- SMALL RANGE SCALE (SLIDER TYPE OF QUESTION)-->
-                        <div ng-if="item.data.type_id === vm.allowedType.SLIDER_TYPE_ID" class="center scale" style="margin-top:10px;padding-left:5vw;padding-right:5vw;"
+                        <div ng-if="item.data.type_id === vm.allowedType.SLIDER_TYPE_ID" class="center" style="margin-top:10px;padding-left:5vw;padding-right:5vw;"
                              ng-init="options = vm.initSliderQuestion(item.data)">
-                            <div style="margin-left:0px;margin-right:0px;">
-                                <div class="scale_option" ng-repeat="op in options.options track by $index"
-                                     ng-style="options.formatting">
-                                    {{op.text}}
-                                    <input type="radio" value="{{op.value}}"
-                                           ng-model="item.data.patient_answer.answer[0].answer_value"
-                                           ng-change="item.data.answerChangedFlag = true;"/>
-                                </div>
-                            </div>
-                            <br>
-                            <!--caption-->
-                            <ons-row style="margin-left:0px;margin-right:0px;margin-top:30px;">
-                                <ons-col width="40%" style="text-align: left; line-height: 31px;"
-                                         ng-class="fontSizeDesc">
-                                    {{item.data.options[0].min_value}} - {{item.data.options[0].min_caption}}
-                                </ons-col>
-                                <ons-col width="20%" style="text-align: center;padding-top:6vw;"
-                                         ng-class="fontSizeDesc">
-                                </ons-col>
-                                <ons-col width="40%" style="text-align: right; line-height: 31px;"
-                                         ng-class="fontSizeDesc">
-                                    {{item.data.options[0].max_value}} - {{item.data.options[0].max_caption}}
-                                </ons-col>
-                            </ons-row>
-                            <br>
+                            <ul class="list">
+                                <li class="list__item list__item--tappable" ng-style="{'background-color':'#f9f9f9'}"
+                                    ng-repeat="op in options track by $index">
+                                    <label ng-class="fontSizeDesc" class="radio-button radio-button--list-item">
+                                        <input type="radio" name="{{'slider'+item.data.question_id}}" value={{op.value}}
+                                               ng-model="item.data.patient_answer.answer[0].answer_value"
+                                               ng-change="item.data.answerChangedFlag = true;">
+                                        <div class="radio-button__checkmark radio-button--list-item__checkmark"></div>
+                                        {{op.text}}
+                                    </label>
+                                </li>
+                            </ul>
                         </div>
 
                         <!-- TEXTBOX -->
