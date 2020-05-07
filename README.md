@@ -141,7 +141,7 @@ Install http-server
    $npm run build:web:staging && cd www && http-server --port 9000 --open # Build the app, and serve it in port 9000
    ```
    This will watch the app code for changes, update the distribution folder (www) when a change is made which the 
-   http-server would then pickup upon refresh.
+   http-server would then pickup upon refreshing the page.
 
 ### Installing, building, and serving the mobile app code
 1. Make sure you have ran step 5, [Installing, building, and serving the mobile web code](#installing-building-and-serving-web-code) guide.
@@ -210,8 +210,8 @@ time to understand what they do, this wil help you manipulate the project better
       "start:app:preprod:android": "npm run build:app:preprod && cordova run android",
       "start:app:staging:ios": "npm run build:app:staging:ios && cordova run ios",
       "start:app:staging:android": "npm run build:app:staging:android && cordova run android",
-    "update:app:staging:ios": "npm run prepare:app:staging && npm run build:web:staging && appcenter codepush release-cordova -a Opal-Med-Apps/Opal-Staging-iOS",
-    "update:app:staging:android": "npm run prepare:app:staging && npm run build:web:staging && appcenter codepush release-cordova -a Opal-Med-Apps/Opal-Staging-Android",
+      "update:app:staging:ios": "npm run prepare:app:staging && npm run build:web:staging && appcenter codepush release-cordova -a Opal-Med-Apps/Opal-Staging-iOS",
+      "update:app:staging:android": "npm run prepare:app:staging && npm run build:web:staging && appcenter codepush release-cordova -a Opal-Med-Apps/Opal-Staging-Android",
       "test": "echo \"Error: no test specified\" && exit 1"
   },
 ```
