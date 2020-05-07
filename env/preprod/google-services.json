@@ -32,10 +32,10 @@
               "client_type": 3
             },
             {
-              "client_id": "476395494069-pcab05cj5b0p6bg12iu6no1c1fg78h6i.apps.googleusercontent.com",
+              "client_id": "476395494069-4q72dll0le34b7287mklk45pna7bvkq2.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.hig.opaldev2"
+                "bundle_id": "com.hig.opalpreprod"
               }
             }
           ]
@@ -68,10 +68,10 @@
               "client_type": 3
             },
             {
-              "client_id": "476395494069-pcab05cj5b0p6bg12iu6no1c1fg78h6i.apps.googleusercontent.com",
+              "client_id": "476395494069-4q72dll0le34b7287mklk45pna7bvkq2.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.hig.opaldev2"
+                "bundle_id": "com.hig.opalpreprod"
               }
             }
           ]
@@ -104,10 +104,10 @@
               "client_type": 3
             },
             {
-              "client_id": "476395494069-pcab05cj5b0p6bg12iu6no1c1fg78h6i.apps.googleusercontent.com",
+              "client_id": "476395494069-4q72dll0le34b7287mklk45pna7bvkq2.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.hig.opaldev2"
+                "bundle_id": "com.hig.opalpreprod"
               }
             }
           ]

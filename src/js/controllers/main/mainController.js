@@ -130,7 +130,7 @@
             startTimer();
         }
         function codePushSyncSetup() {
-            codePush.sync();
+            if(Constants.app) codePush.sync();
         }
 
         /*****************************************

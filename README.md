@@ -135,11 +135,13 @@ Install http-server
    Sometimes it is useful to quickly have a server in order to
    test a particular page or app. For this http-server is a great package.
    For instance, an alternative to `npm run start:web:staging` which uses the _webpack-dev-server_,
-   is to build the web app using `npm run build:web:staging`, change directory to
+   is to build the web app using `npm run build:web:staging -- --watch`, change directory to
    the `www` folder and run `http-server` inside this directory. In one command:
    ```
    $npm run build:web:staging && cd www && http-server --port 9000 --open # Build the app, and serve it in port 9000
    ```
+   This will watch the app code for changes, update the distribution folder (www) when a change is made which the 
+   http-server would then pickup upon refresh.
 
 ### Installing, building, and serving the mobile app code
 1. Make sure you have ran step 5, [Installing, building, and serving the mobile web code](#installing-building-and-serving-web-code) guide.
@@ -208,6 +210,8 @@ time to understand what they do, this wil help you manipulate the project better
       "start:app:preprod:android": "npm run build:app:preprod && cordova run android",
       "start:app:staging:ios": "npm run build:app:staging:ios && cordova run ios",
       "start:app:staging:android": "npm run build:app:staging:android && cordova run android",
+    "update:app:staging:ios": "npm run prepare:app:staging && npm run build:web:staging && appcenter codepush release-cordova -a Opal-Med-Apps/Opal-Staging-iOS",
+    "update:app:staging:android": "npm run prepare:app:staging && npm run build:web:staging && appcenter codepush release-cordova -a Opal-Med-Apps/Opal-Staging-Android",
       "test": "echo \"Error: no test specified\" && exit 1"
   },
 ```
@@ -247,6 +251,7 @@ made to the app in production.
    ```
     appcenter codepush release-cordova Opal-Med-Apps/Opal-Staging-Android
    ```
+   **Note**: Alternatively, to run steps 4 & 5, one can use the utility script: `npm run update:app:staging:android`
 6. To check deployment status, navigate to: https://appcenter.ms/orgs/Opal-Med-Apps/apps/Opal-Staging-Android/distribute/code-push
 For more information please check: https://docs.microsoft.com/en-us/appcenter/distribution/codepush/. 
 
