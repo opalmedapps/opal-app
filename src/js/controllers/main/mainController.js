@@ -130,7 +130,13 @@
             startTimer();
         }
         function codePushSyncSetup() {
-            if(Constants.app) codePush.sync();
+            if(Constants.app){
+                if(OPAL_CONFIG.dev){
+                    codePush.sync(null, { updateDialog: true, installMode: InstallMode.IMMEDIATE });
+                }else{
+                    codePush.sync();
+                }
+            }
         }
 
         /*****************************************
