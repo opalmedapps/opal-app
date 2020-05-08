@@ -1,7 +1,8 @@
 // Environment variables to be used by the app for Opal Pre Prod
 const config = {
     name: "Opal Pre Prod",
-    stage: "preprod",
+    env: "preprod",
+    dev: true,
     firebase:{
         apiKey: "AIzaSyAGBV2Zwr0SYKy_J92jceof-OFeeFmm0Gw",
         authDomain: "opal-prod.firebaseapp.com",
@@ -11,8 +12,8 @@ const config = {
         messagingSenderId: "476395494069",
         appId: "1:476395494069:web:fe7854c0038a34663afcfc",
     },
-    version: "1.8.7-rc",
-    buildNumber: 0,
+    version: "1.8.2-rc",
+    buildNumber: 1,
     opalProtocolURI: "opal-preprod://",
 };
 
