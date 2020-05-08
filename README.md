@@ -223,12 +223,12 @@ Note that the commands are explicitly related in terms of dependent steps, once 
 ```
 Calls in sequence `npm run build:app:staging:ios && cordova run ios`, you may choose to simply run `cordova run ios`, if you know there is a current valid Cordova build.
 ## Updating and developing with Codepush
-Codepush is a Microsoft plugin that allows a Cordova application to update the application code under `www`, without the need to build an entire mobile app with Cordova. This is useful for two instances:
+Codepush is a Microsoft plugin that allows a Cordova application to update the application code under `www` without the need to build an entire mobile app with Cordova. This is useful for two instances:
 1. When a developer makes changes explicitely to the `html,css,js` code in development and wants to test the changes using
   the app. This should only be done for the app in development, not staging/preprod/prod.
 2. To update the code in the staging/preprod/production apps without the need to release new versions for them. For this you must have the right level of privilege.
 
-The second point brings advantages in terms of the changes. It allows not only to push updates, but also to rollback changes 
+The second point brings advantages in terms of the changes. It allows not only to push updates but also to rollback changes 
 made to the app in production.
 ### Making an update
 1. Obtain invitation from the project maintainers to the [Appcenter](https://appcenter.ms/) OpalMedApps organization.
@@ -254,7 +254,7 @@ made to the app in production.
    ```
    **Note**: Alternatively, to run steps 4 & 5, one can use the utility script: `npm run update:app:staging:android`
 6. To check deployment status, navigate to: https://appcenter.ms/orgs/Opal-Med-Apps/apps/Opal-Staging-Android/distribute/code-push
-For more information please check: https://docs.microsoft.com/en-us/appcenter/distribution/codepush/. 
+For more information, please check: https://docs.microsoft.com/en-us/appcenter/distribution/codepush/. 
 
 ## Troubleshooting
 If you are getting errors during your installation, here are some things you can try:

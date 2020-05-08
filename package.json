@@ -39,7 +39,7 @@
     "start:app:prod:ios": "npm run prepare:app:prod && npm run build:web:prod && cordova run ios",
     "start:app:prod:android": "npm run prepare:app:prod && npm run build:web:prod && cordova run android",
     "start:app:preprod:ios": "npm run prepare:app:preprod && npm run build:web:preprod && cordova run ios",
-    "start:app:preprod:android": "npm run prepare:app:preprod && npm run build:web:preprod&& cordova run android",
+    "start:app:preprod:android": "npm run prepare:app:preprod && npm run build:web:preprod && cordova run android",
     "start:app:staging:ios": "npm run prepare:app:staging && npm run build:web:staging && cordova run ios",
     "start:app:staging:android": "npm run prepare:app:staging && npm run build:web:staging && cordova run android",
     "update:app:staging:ios": "npm run prepare:app:staging && npm run build:web:staging && appcenter codepush release-cordova -a Opal-Med-Apps/Opal-Staging-iOS",
