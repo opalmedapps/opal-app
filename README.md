@@ -173,6 +173,7 @@ time to understand what they do, this wil help you manipulate the project better
 
 ```json
     "scripts": {
+      "postinstall": "node -e \"require('./opal_env.setup.js').createWWWFolder()\"",
       "prepare:web": "npm run prepare:web:staging",
       "prepare:web:prod": "node -e \"require('./opal_env.setup.js').copyEnvironmentFiles('prod')\"",
       "prepare:web:preprod": "node -e \"require('./opal_env.setup.js').copyEnvironmentFiles('preprod')\"",
@@ -187,14 +188,14 @@ time to understand what they do, this wil help you manipulate the project better
       "build:app": "npm run build:app:staging",
       "build:app:prod": "npm run prepare:app:prod && npm run build:web:prod && cordova build --release --verbose",
       "build:app:preprod": "npm run prepare:app:preprod && npm run build:web:preprod && cordova build --verbose",
-      "build:app:preprod:ios": "npm run prepare:app:preprod && npm run build:web:preprod && cordova build android --verbose",
-      "build:app:preprod:android": "npm run prepare:app:preprod && npm run build:web:preprod && cordova build ios --verbose",
+      "build:app:preprod:ios": "npm run prepare:app:preprod && npm run build:web:preprod && cordova build ios --verbose",
+      "build:app:preprod:android": "npm run prepare:app:preprod && npm run build:web:preprod && cordova build android --verbose",
       "build:app:preprod:package": "npm run prepare:app:preprod && npm run build:web:preprod && cordova build --device --verbose",
       "build:app:preprod:ios:package": "npm run prepare:app:preprod && npm run build:web:preprod && cordova build ios --device --verbose",
       "build:app:preprod:android:package": "npm run prepare:app:preprod && npm run build:web:preprod && cordova build android --device --verbose",
       "build:app:staging": "npm run prepare:app:staging && npm run build:web:staging && cordova build --verbose",
-      "build:app:staging:ios": "npm run prepare:app:staging && npm run build:web:staging && cordova build ios --verbose --device",
-      "build:app:staging:android": "npm run prepare:app:staging && npm run build:web:staging && cordova build android --device --verbose",
+      "build:app:staging:ios": "npm run prepare:app:staging && npm run build:web:staging && cordova build ios --verbose",
+      "build:app:staging:android": "npm run prepare:app:staging && npm run build:web:staging && cordova build android --verbose",
       "build:app:staging:ios:package": "npm run prepare:app:staging && npm run build:web:staging && cordova build ios  --device --verbose",
       "build:app:staging:android:package": "npm run prepare:app:staging && npm run build:web:staging && cordova build android --device --verbose",
       "build:app:staging:package": "npm run prepare:app:staging && npm run build:web:staging && cordova build --device --verbose",
@@ -204,12 +205,12 @@ time to understand what they do, this wil help you manipulate the project better
       "start:web:preprod": "webpack-dev-server --open --env.opal_environment=preprod --watch --progress --colors",
       "start:web:staging": "webpack-dev-server --open --env.opal_environment=staging --watch --progress --colors",
       "start:app": "npm run build:app:staging && cordova run",
-      "start:app:prod:ios": "npm run build:app:prod && cordova run ios",
-      "start:app:prod:android": "npm run build:app:prod && cordova run android",
-      "start:app:preprod:ios": "npm run build:app:preprod && cordova run ios",
-      "start:app:preprod:android": "npm run build:app:preprod && cordova run android",
-      "start:app:staging:ios": "npm run build:app:staging:ios && cordova run ios",
-      "start:app:staging:android": "npm run build:app:staging:android && cordova run android",
+      "start:app:prod:ios": "npm run prepare:app:prod && npm run build:web:prod && cordova run ios",
+      "start:app:prod:android": "npm run prepare:app:prod && npm run build:web:prod && cordova run android",
+      "start:app:preprod:ios": "npm run prepare:app:preprod && npm run build:web:preprod && cordova run ios",
+      "start:app:preprod:android": "npm run prepare:app:preprod && npm run build:web:preprod&& cordova run android",
+      "start:app:staging:ios": "npm run prepare:app:staging && npm run build:web:staging && cordova run ios",
+      "start:app:staging:android": "npm run prepare:app:staging && npm run build:web:staging && cordova run android",
       "update:app:staging:ios": "npm run prepare:app:staging && npm run build:web:staging && appcenter codepush release-cordova -a Opal-Med-Apps/Opal-Staging-iOS",
       "update:app:staging:android": "npm run prepare:app:staging && npm run build:web:staging && appcenter codepush release-cordova -a Opal-Med-Apps/Opal-Staging-Android",
       "test": "echo \"Error: no test specified\" && exit 1"
@@ -245,11 +246,11 @@ made to the app in production.
    ```
 5. Finally to push an update to an existing app use:
    ```
-    appcenter codepush release-cordova -a <ownerName>/MyApp
+    appcenter codepush release-cordova --app <ownerName>/MyApp
    ```
    For instance, to push a deployment update to the Opal Staging Android app web code run:
    ```
-    appcenter codepush release-cordova Opal-Med-Apps/Opal-Staging-Android
+    appcenter codepush release-cordova --app Opal-Med-Apps/Opal-Staging-Android
    ```
    **Note**: Alternatively, to run steps 4 & 5, one can use the utility script: `npm run update:app:staging:android`
 6. To check deployment status, navigate to: https://appcenter.ms/orgs/Opal-Med-Apps/apps/Opal-Staging-Android/distribute/code-push
