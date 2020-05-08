@@ -45,6 +45,10 @@
 		vm.globalMessage = '';
 		vm.globalMessageDescription = '';
 		vm.firstTime = true;
+		vm.APP_NAME = OPAL_CONFIG.name;
+		vm.APP_VERSION = OPAL_CONFIG.version;
+		vm.OPAL_ENV = OPAL_CONFIG.env;
+		vm.APP_BUILD_NUMBER = OPAL_CONFIG.buildNumber;
 
 		vm.goToMessage = goToMessage;
 		vm.gotoLearnAboutOpal = gotoLearnAboutOpal;
@@ -55,7 +59,6 @@
 		vm.reportBugs = reportBugs;
 		vm.goToLogin = goToLogin;
 		vm.showMessageOfTheDay = showMessageOfTheDay;
-
 
 		activate();
 
