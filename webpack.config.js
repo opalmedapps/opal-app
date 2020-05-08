@@ -146,8 +146,6 @@ const config = env => {
 						'http-equiv': 'Content-Type',
 						'content': 'text/html; charset=UTF-8; X-Content-Type-Options=nosniff'
 					},
-
-					"viewport": "width=device-width, height=device-height, initial-scale=1, minimum-scale=1, maximum-scale=1.5, user-scalable=1",
 					"format-detection": "telephone=no",
 					"apple-mobile-web-app-capable": "yes",
 					"mobile-web-app-capable": "yes"

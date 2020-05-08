@@ -10,6 +10,8 @@ Opal - the MUHC Oncology Patient Application for mobile phones and the web - is 
       - [Optional dev server](#optional-dev-server)
     - [Installing, building, and serving the mobile app code](#installing-building-and-serving-the-mobile-app-code)
     - [Opal App Scripts](#opal-app-scripts)
+  - [Updating and developing with Codepush](#updating-and-developing-with-codepush)
+    - [Making an update](#making-an-update)
   - [Troubleshooting](#troubleshooting)
   - [Running the tests](#running-the-tests)
   - [Best Practices](#best-practices)
@@ -133,11 +135,13 @@ Install http-server
    Sometimes it is useful to quickly have a server in order to
    test a particular page or app. For this http-server is a great package.
    For instance, an alternative to `npm run start:web:staging` which uses the _webpack-dev-server_,
-   is to build the web app using `npm run build:web:staging`, change directory to
+   is to build the web app using `npm run build:web:staging -- --watch`, change directory to
    the `www` folder and run `http-server` inside this directory. In one command:
    ```
    $npm run build:web:staging && cd www && http-server --port 9000 --open # Build the app, and serve it in port 9000
    ```
+   This will watch the app code for changes, update the distribution folder (www) when a change is made which the 
+   http-server would then pickup upon refreshing the page.
 
 ### Installing, building, and serving the mobile app code
 1. Make sure you have ran step 5, [Installing, building, and serving the mobile web code](#installing-building-and-serving-web-code) guide.
@@ -169,6 +173,7 @@ time to understand what they do, this wil help you manipulate the project better
 
 ```json
     "scripts": {
+      "postinstall": "node -e \"require('./opal_env.setup.js').createWWWFolder()\"",
       "prepare:web": "npm run prepare:web:staging",
       "prepare:web:prod": "node -e \"require('./opal_env.setup.js').copyEnvironmentFiles('prod')\"",
       "prepare:web:preprod": "node -e \"require('./opal_env.setup.js').copyEnvironmentFiles('preprod')\"",
@@ -183,14 +188,14 @@ time to understand what they do, this wil help you manipulate the project better
       "build:app": "npm run build:app:staging",
       "build:app:prod": "npm run prepare:app:prod && npm run build:web:prod && cordova build --release --verbose",
       "build:app:preprod": "npm run prepare:app:preprod && npm run build:web:preprod && cordova build --verbose",
-      "build:app:preprod:ios": "npm run prepare:app:preprod && npm run build:web:preprod && cordova build android --verbose",
-      "build:app:preprod:android": "npm run prepare:app:preprod && npm run build:web:preprod && cordova build ios --verbose",
+      "build:app:preprod:ios": "npm run prepare:app:preprod && npm run build:web:preprod && cordova build ios --verbose",
+      "build:app:preprod:android": "npm run prepare:app:preprod && npm run build:web:preprod && cordova build android --verbose",
       "build:app:preprod:package": "npm run prepare:app:preprod && npm run build:web:preprod && cordova build --device --verbose",
       "build:app:preprod:ios:package": "npm run prepare:app:preprod && npm run build:web:preprod && cordova build ios --device --verbose",
       "build:app:preprod:android:package": "npm run prepare:app:preprod && npm run build:web:preprod && cordova build android --device --verbose",
       "build:app:staging": "npm run prepare:app:staging && npm run build:web:staging && cordova build --verbose",
-      "build:app:staging:ios": "npm run prepare:app:staging && npm run build:web:staging && cordova build ios --verbose --device",
-      "build:app:staging:android": "npm run prepare:app:staging && npm run build:web:staging && cordova build android --device --verbose",
+      "build:app:staging:ios": "npm run prepare:app:staging && npm run build:web:staging && cordova build ios --verbose",
+      "build:app:staging:android": "npm run prepare:app:staging && npm run build:web:staging && cordova build android --verbose",
       "build:app:staging:ios:package": "npm run prepare:app:staging && npm run build:web:staging && cordova build ios  --device --verbose",
       "build:app:staging:android:package": "npm run prepare:app:staging && npm run build:web:staging && cordova build android --device --verbose",
       "build:app:staging:package": "npm run prepare:app:staging && npm run build:web:staging && cordova build --device --verbose",
@@ -200,21 +205,56 @@ time to understand what they do, this wil help you manipulate the project better
       "start:web:preprod": "webpack-dev-server --open --env.opal_environment=preprod --watch --progress --colors",
       "start:web:staging": "webpack-dev-server --open --env.opal_environment=staging --watch --progress --colors",
       "start:app": "npm run build:app:staging && cordova run",
-      "start:app:prod:ios": "npm run build:app:prod && cordova run ios",
-      "start:app:prod:android": "npm run build:app:prod && cordova run android",
-      "start:app:preprod:ios": "npm run build:app:preprod && cordova run ios",
-      "start:app:preprod:android": "npm run build:app:preprod && cordova run android",
-      "start:app:staging:ios": "npm run build:app:staging:ios && cordova run ios",
-      "start:app:staging:android": "npm run build:app:staging:android && cordova run android",
+      "start:app:prod:ios": "npm run prepare:app:prod && npm run build:web:prod && cordova run ios",
+      "start:app:prod:android": "npm run prepare:app:prod && npm run build:web:prod && cordova run android",
+      "start:app:preprod:ios": "npm run prepare:app:preprod && npm run build:web:preprod && cordova run ios",
+      "start:app:preprod:android": "npm run prepare:app:preprod && npm run build:web:preprod&& cordova run android",
+      "start:app:staging:ios": "npm run prepare:app:staging && npm run build:web:staging && cordova run ios",
+      "start:app:staging:android": "npm run prepare:app:staging && npm run build:web:staging && cordova run android",
+      "update:app:staging:ios": "npm run prepare:app:staging && npm run build:web:staging && appcenter codepush release-cordova -a Opal-Med-Apps/Opal-Staging-iOS",
+      "update:app:staging:android": "npm run prepare:app:staging && npm run build:web:staging && appcenter codepush release-cordova -a Opal-Med-Apps/Opal-Staging-Android",
       "test": "echo \"Error: no test specified\" && exit 1"
   },
 ```
 
-Note that the commands are explicitely related in terms of dependent steps, once you understand the structure, you may choose to run them differently. For instance, the command:
+Note that the commands are explicitly related in terms of dependent steps, once you understand the structure, you may choose to run them differently. For instance, the command:
 ```
   npm run start:app:staging:ios # Build and run in iOS
 ```
 Calls in sequence `npm run build:app:staging:ios && cordova run ios`, you may choose to simply run `cordova run ios`, if you know there is a current valid Cordova build.
+## Updating and developing with Codepush
+Codepush is a Microsoft plugin that allows a Cordova application to update the application code under `www` without the need to build an entire mobile app with Cordova. This is useful for two instances:
+1. When a developer makes changes explicitely to the `html,css,js` code in development and wants to test the changes using
+  the app. This should only be done for the app in development, not staging/preprod/prod.
+2. To update the code in the staging/preprod/production apps without the need to release new versions for them. For this you must have the right level of privilege.
+
+The second point brings advantages in terms of the changes. It allows not only to push updates but also to rollback changes 
+made to the app in production.
+### Making an update
+1. Obtain invitation from the project maintainers to the [Appcenter](https://appcenter.ms/) OpalMedApps organization.
+2. Once access has been granted, install the cli for Codepush
+   ```
+    npm install -g appcenter-cli
+   ```
+3. Login to the cli:
+   ```
+    appcenter login
+   ```
+4. Build the webcode:
+   ```
+    npm run build:web:staging
+   ```
+5. Finally to push an update to an existing app use:
+   ```
+    appcenter codepush release-cordova --app <ownerName>/MyApp
+   ```
+   For instance, to push a deployment update to the Opal Staging Android app web code run:
+   ```
+    appcenter codepush release-cordova --app Opal-Med-Apps/Opal-Staging-Android
+   ```
+   **Note**: Alternatively, to run steps 4 & 5, one can use the utility script: `npm run update:app:staging:android`
+6. To check deployment status, navigate to: https://appcenter.ms/orgs/Opal-Med-Apps/apps/Opal-Staging-Android/distribute/code-push
+For more information, please check: https://docs.microsoft.com/en-us/appcenter/distribution/codepush/. 
 
 ## Troubleshooting
 If you are getting errors during your installation, here are some things you can try:
