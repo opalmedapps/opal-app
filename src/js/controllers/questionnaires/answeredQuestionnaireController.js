@@ -115,7 +115,7 @@
                     vm.questionnaire.status = vm.allowedStatus.COMPLETED_QUESTIONNAIRE_STATUS;
 
                     NavigatorParameters.setParameters({Navigator: navigatorName});
-                    navigator.popPage();
+                    navigator.replacePage('views/personal/questionnaires/questionnaireCompletedConfirmation.html', {animation: 'slide'});
                 })
                 .catch(function(){
                     vm.loadingSubmitQuestionnaire = false;

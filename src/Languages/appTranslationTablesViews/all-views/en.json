@@ -250,6 +250,7 @@
   "QUESTIONNAIRE_DATE_LAST_UPDATED": "Last Updated:",
   "QUESTIONNAIRE_DESCRIPTION": "Description: ",
   "QUESTIONNAIRE_END": "End",
+  "QUESTIONNAIRE_GO_BACK_TO_LIST": "Go back to questionnaire list",
   "QUESTIONNAIRE_HOME": "Home",
   "QUESTIONNAIRE_INSTRUCTION": "Instruction: ",
   "QUESTIONNAIRE_INSTRUCTIONS": "Answer the questions in red. Questions in green can be edited. Once all questions are answered, you can submit.",
