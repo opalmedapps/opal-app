@@ -250,6 +250,7 @@
     "QUESTIONNAIRE_DATE_LAST_UPDATED": "Dernière mise à jour:",
     "QUESTIONNAIRE_DESCRIPTION": "Description: ",
     "QUESTIONNAIRE_END": "Fin",
+    "QUESTIONNAIRE_GO_BACK_TO_LIST": "Retourner à la liste",
     "QUESTIONNAIRE_HOME": "Accueil",
     "QUESTIONNAIRE_INSTRUCTION": "Instruction: ",
     "QUESTIONNAIRE_INSTRUCTIONS": "Répondez aux questions en rouge. Les questions en vert peuvent être modifiées. Une fois toutes les questions répondues, vous pouvez soumettre vos réponses.",
