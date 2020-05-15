@@ -46,9 +46,9 @@
 		vm.globalMessageDescription = '';
 		vm.firstTime = true;
 		vm.APP_NAME = OPAL_CONFIG.name;
-		vm.APP_VERSION = OPAL_CONFIG.version;
+		vm.APP_VERSION = Constants.version();
 		vm.OPAL_ENV = OPAL_CONFIG.env;
-		vm.APP_BUILD_NUMBER = OPAL_CONFIG.buildNumber;
+		vm.APP_BUILD_NUMBER = Constants.build();
 
 		vm.goToMessage = goToMessage;
 		vm.gotoLearnAboutOpal = gotoLearnAboutOpal;

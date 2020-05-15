@@ -213,7 +213,7 @@
          */
         function setScrollHeight(){
             let divTreatment = document.getElementById('scrollerAppointments');
-            let heightTreatment = document.documentElement.clientHeight-document.documentElement.clientHeight*0.35-180;
+            let heightTreatment = document.documentElement.clientHeight-document.documentElement.clientHeight*0.35-200;
             if(divTreatment) divTreatment.style.height=heightTreatment+'px';
         }
 

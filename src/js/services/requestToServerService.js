@@ -8,11 +8,10 @@
 var myApp = angular.module('MUHCApp');
 
 
-myApp.service('RequestToServer',['$filter','$state','NewsBanner','UserAuthorizationInfo', 'EncryptionService',
-    'FirebaseService','$q', 'Constants', 'UUID', 'ResponseValidator',
-    function($filter, $state, NewsBanner, UserAuthorizationInfo, EncryptionService, FirebaseService,
-             $q, Constants, UUID, ResponseValidator){
-
+myApp.service('RequestToServer',['UserAuthorizationInfo', 'EncryptionService',
+    'FirebaseService', 'Constants', 'UUID', 'ResponseValidator',
+    function( UserAuthorizationInfo, EncryptionService, FirebaseService,
+              Constants, UUID, ResponseValidator){
 
         let firebase_url = FirebaseService.getDBRef();
         let response_url = FirebaseService.getDBRef(FirebaseService.getFirebaseChild('users'));
@@ -22,75 +21,62 @@ myApp.service('RequestToServer',['$filter','$state','NewsBanner','UserAuthorizat
             firebase_url = FirebaseService.getDBRef();
             response_url = FirebaseService.getDBRef(FirebaseService.getFirebaseChild('users'));
 
-            return new Promise((resolve) => {
-                let requestType;
-                let requestParameters;
+            let requestType;
+            let requestParameters;
 
-                if (encryptionKey) {
-                    requestType = typeOfRequest;
-                    requestParameters = EncryptionService.encryptWithKey(parameters, encryptionKey);
-                } else {
-                    requestType = EncryptionService.encryptData(typeOfRequest);
-                    requestParameters = EncryptionService.encryptData(parameters);
-                }
-
-                Constants.version()
-                    .then(version=> {
-                        let request_object = {
-                            'Request' : requestType,
-                            'DeviceId': UUID.getUUID(),
-                            'Token':UserAuthorizationInfo.getToken(),
-                            'UserID': UserAuthorizationInfo.getUsername(),
-                            'Parameters':requestParameters,
-                            'Timestamp':firebase.database.ServerValue.TIMESTAMP,
-                            'UserEmail': UserAuthorizationInfo.getEmail(),
-                            'AppVersion': version
-                        };
-
-                        let reference = referenceField || 'requests';
-                        let pushID =  firebase_url.child(reference).push(request_object);
-                        resolve(pushID.key);
-                    });
-            });
+            if (encryptionKey) {
+                requestType = typeOfRequest;
+                requestParameters = EncryptionService.encryptWithKey(parameters, encryptionKey);
+            } else {
+                requestType = EncryptionService.encryptData(typeOfRequest);
+                requestParameters = EncryptionService.encryptData(parameters);
+            }
+            let request_object = {
+                'Request' : requestType,
+                'DeviceId': UUID.getUUID(),
+                'Token':UserAuthorizationInfo.getToken(),
+                'UserID': UserAuthorizationInfo.getUsername(),
+                'Parameters':requestParameters,
+                'UserEmail': UserAuthorizationInfo.getEmail(),
+                'AppVersion': Constants.version(),
+                'Timestamp':firebase.database.ServerValue.TIMESTAMP
+            };
+            let reference = referenceField || 'requests';
+            let pushID =  firebase_url.child(reference).push(request_object);
+            return pushID.key;
         }
-
+        
         return {
-
             sendRequestWithResponse:function(typeOfRequest, parameters, encryptionKey, referenceField, responseField) {
                 return new Promise((resolve, reject) => {
-
                     //Sends request and gets random key for request
-                    sendRequest(typeOfRequest,parameters,encryptionKey, referenceField)
-                        .then(key=> {
+                    let key = sendRequest(typeOfRequest,parameters,encryptionKey, referenceField);
+                    //Sets the reference to fetch data for that request
+                    let refRequestResponse = (!referenceField) ?
+                        response_url.child(UserAuthorizationInfo.getUsername() + '/' + key) :
+                        firebase_url.child(responseField).child(key);
 
-                            //Sets the reference to fetch data for that request
-                            let refRequestResponse = (!referenceField) ?
-                                response_url.child(UserAuthorizationInfo.getUsername() + '/' + key) :
-                                firebase_url.child(responseField).child(key);
+                    //Waits to obtain the request data.
+                    refRequestResponse.on('value', snapshot => {
+                        if (snapshot.exists()) {
 
-                            //Waits to obtain the request data.
-                            refRequestResponse.on('value', snapshot => {
-                                if (snapshot.exists()) {
+                            let data = snapshot.val();
 
-                                    let data = snapshot.val();
+                            refRequestResponse.set(null);
+                            refRequestResponse.off();
 
-                                    refRequestResponse.set(null);
-                                    refRequestResponse.off();
+                            data = ResponseValidator.validate(data, encryptionKey, timeOut);
 
-                                    data = ResponseValidator.validate(data, encryptionKey, timeOut);
-
-                                    if (data.success) {
-                                        resolve(data.success)
-                                    } else {
-                                        reject(data.error)
-                                    }
-                                }
-                            }, error => {
-                                console.log(error);
-                                refRequestResponse.set(null);
-                                refRequestResponse.off();
-                                reject(error);
-                            });
+                            if (data.success) {
+                                resolve(data.success)
+                            } else {
+                                reject(data.error)
+                            }
+                        }
+                    }, error => {
+                        refRequestResponse.set(null);
+                        refRequestResponse.off();
+                        reject(error);
                     });
 
                     //If request takes longer than 1.5 minutes to come back with timeout request, delete reference
@@ -102,9 +88,8 @@ myApp.service('RequestToServer',['$filter','$state','NewsBanner','UserAuthorizat
 
                 });
             },
-
             sendRequest:function(typeOfRequest,content,key){
-                sendRequest(typeOfRequest,content,key);
+                return sendRequest(typeOfRequest,content,key);
             }
         };
 }]);

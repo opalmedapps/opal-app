@@ -1,7 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget android-versionCode="1820"
-    ios-CFBundleVersion="1820"
-    id="com.hig.opalstaging" version="1.8.2" xmlns="http://www.w3.org/ns/widgets"
+<widget android-versionCode="1" ios-CFBundleVersion="1" id="com.hig.opalstaging" version="1.9.0" 
+    xmlns="http://www.w3.org/ns/widgets" 
     xmlns:cdv="http://cordova.apache.org/ns/1.0" 
     xmlns:android="http://schemas.android.com/apk/res/android">
     <name>Opal Staging</name>
@@ -76,7 +75,7 @@
     </platform>
     <plugin name="cordova-plugin-whitelist" spec="1" />
     <plugin name="cordova-plugin-android-permissions" spec="^1.0.2" />
-    <plugin name="cordova-plugin-app-version" spec="^0.1.9" />
+    <plugin name="cordova-plugin-appversion" spec="^1.0.0" />
     <plugin name="cordova-plugin-calendar" spec="^5.1.5" />
     <plugin name="cordova-plugin-customurlscheme" spec="~5.0.0">
         <variable name="URL_SCHEME" value="opal_staging" />

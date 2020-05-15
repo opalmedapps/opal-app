@@ -52,7 +52,7 @@
     APPOINTMENT LIST
     =============================-->
     <div ng-hide="calendar.loading" id="topListAnchor" style="height:5px; background-color:lightgrey; position:relative; z-index:1"></div>
-    <ons-scroller id="scrollerAppointments">
+    <ons-scroller id="scrollerAppointments" style="border-bottom: 1px solid lightgray;">
         <div id="firstAnchor"></div>
         <div style="color:grey;margin-top:10vh" ng-show="calendar.noAppointments" align="center" ng-class="fontSizeTitle">{{"NOAPPOINTMENTS"|translate}}</div>
 
