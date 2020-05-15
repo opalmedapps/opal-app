@@ -12,6 +12,9 @@ Opal - the MUHC Oncology Patient Application for mobile phones and the web - is 
     - [Opal App Scripts](#opal-app-scripts)
   - [Updating and developing with Codepush](#updating-and-developing-with-codepush)
     - [Making an update](#making-an-update)
+    - [Clearing deployments](#clearing-deployments)
+    - [Performing rollbacks](#performing-rollbacks)
+  - [Distributing app in staging and preprod manually](#distributing-app-in-staging-and-preprod-manually)
   - [Troubleshooting](#troubleshooting)
   - [Running the tests](#running-the-tests)
   - [Best Practices](#best-practices)
@@ -246,15 +249,54 @@ made to the app in production.
    ```
 5. Finally to push an update to an existing app use:
    ```
-    appcenter codepush release-cordova --app <ownerName>/MyApp
+    appcenter codepush release-cordova --app <ownerName>/MyApp -d Staging
    ```
    For instance, to push a deployment update to the Opal Staging Android app web code run:
    ```
-    appcenter codepush release-cordova --app Opal-Med-Apps/Opal-Staging-Android
+    appcenter codepush release-cordova --app Opal-Med-Apps/Opal-Staging-Android -d Staging
    ```
+   The last flag indicates the deployment in the appcenter (Staging or Production), 
+   for staging, preprod, the deployment is Staging, for prod the appcenter deployment Production.
    **Note**: Alternatively, to run steps 4 & 5, one can use the utility script: `npm run update:app:staging:android`
 6. To check deployment status, navigate to: https://appcenter.ms/orgs/Opal-Med-Apps/apps/Opal-Staging-Android/distribute/code-push
-For more information, please check: https://docs.microsoft.com/en-us/appcenter/distribution/codepush/. 
+For more information, please check: 
+- https://docs.microsoft.com/en-us/appcenter/distribution/codepush/. 
+- https://docs.microsoft.com/en-us/appcenter/distribution/codepush/cli
+### Clearing deployments
+To clear deployments run:
+```
+appcenter codepush deployment clear Staging -a Opal-Med-Apps/Opal-Staging-iOS
+```
+### Performing rollbacks
+For in-depth information read: https://docs.microsoft.com/en-us/appcenter/distribution/codepush/cli#rolling-back-updates.
+
+A deployment's release history is immutable, so you cannot delete or remove an update once it has been released. However, if you release an update that is broken or contains unintended features, it is easy to roll it back using the rollback command:
+```
+appcenter codepush rollback <ownerName>/<appName> <deploymentName>
+```
+Executing this command has the effect of creating a new release for the deployment that includes the exact same code and metadata as the version prior to the latest one
+
+## Distributing app in staging and preprod manually
+*Requirement*: A macOS machine with access to the RI-MUHC Apple Developer Account.
+This build and deployment section of the Opal app applies only and should be done when a new commit to staging or preprod is performed.
+1. Bump up build number for the Opal app: `node -e "require('./opal_env.setup').bumpBuildNumbers('staging')"`
+2. Build the app and obtain packaged application files (.ipa/.apk): `npm run build:app:[staging|preprod]:package`
+3. Sign-in to firebase: `firebase login`
+4. Select Firebase project: `firebase use [preprod|staging]`
+5. Create release notes, they could be as simple as the latest commit: `git log --format=%B -n 1`
+6. Locate .ipa (iOS), .apk files (Android):
+   - iOS Location: ./platforms/ios/build/device/
+   - Android Location: ./platforms/android/app/build/outputs/apk/debug/ 
+7. Obtain the Firebase App Ids for iOS and Android apps using: `firebase open settings`
+8. Distribute apps via Firebase:
+   - iOS: 
+      ```
+      firebase appdistribution:distribute  <path-to-ios-ipa-file> --app <ios-app-id> --release-notes "<release-notes>" --groups ["staging"|"preprod"]
+      ```
+   - Android:
+      ```
+      firebase appdistribution:distribute  <path-to-android-apk-file> --app <android-app-id> --release-notes "<release-notes>" --groups ["staging"|"preprod"]
+      ```
 
 ## Troubleshooting
 If you are getting errors during your installation, here are some things you can try:
