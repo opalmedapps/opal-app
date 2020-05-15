@@ -214,8 +214,8 @@ time to understand what they do, this wil help you manipulate the project better
       "start:app:preprod:android": "npm run prepare:app:preprod && npm run build:web:preprod&& cordova run android",
       "start:app:staging:ios": "npm run prepare:app:staging && npm run build:web:staging && cordova run ios",
       "start:app:staging:android": "npm run prepare:app:staging && npm run build:web:staging && cordova run android",
-      "update:app:staging:ios": "npm run prepare:app:staging && npm run build:web:staging && appcenter codepush release-cordova -a Opal-Med-Apps/Opal-Staging-iOS",
-      "update:app:staging:android": "npm run prepare:app:staging && npm run build:web:staging && appcenter codepush release-cordova -a Opal-Med-Apps/Opal-Staging-Android",
+      "update:app:staging:ios": "npm run prepare:app:staging && npm run build:web:staging && appcenter codepush release-cordova -a Opal-Med-Apps/Opal-Staging-iOS -d Staging",
+      "update:app:staging:android": "npm run prepare:app:staging && npm run build:web:staging && appcenter codepush release-cordova -a Opal-Med-Apps/Opal-Staging-Android -d Staging",
       "test": "echo \"Error: no test specified\" && exit 1"
   },
 ```
