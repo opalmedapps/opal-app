@@ -30,7 +30,7 @@
 
     <div ng-hide="tests.loading">
         <div ng-show="tests.showByDate">
-            <ons-scroller style="height: calc(100vh - 140px); width: 100%">
+            <ons-scroller set-ons-scroller-height>
                 <div ng-if="tests.testDates.length === 0" style="margin-top: 25px; text-align: center;">
                     <p ng-class="fontSizeTitle">
                         {{"NO"|translate}} {{"LAB_RESULTS"|translate}}
@@ -107,7 +107,7 @@
                     </ons-list-item>
                 </ons-list>
             </div>
-            <ons-scroller style="height: calc(100vh - 250px); width: 100%">
+            <ons-scroller set-ons-scroller-height="170">
                 <ons-list >
                     <ons-list-item modifier="tappable chevron"
                                    ng-repeat="testResult in tests.testTypes | filter: tests.searchTestTypeText"

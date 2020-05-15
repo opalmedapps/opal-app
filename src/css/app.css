@@ -1785,22 +1785,22 @@ Button appointments
 *Font size app
 */
 .fontDescMedium{
-  font-size: 15px;
+  font-size: 16px;
 }
 .fontTitleMedium{
-  font-size:16px;
+  font-size:17px;
 }
 .fontDescLarge{
-  font-size: 18px;
+  font-size: 19px;
 }
 .fontTitleLarge{
-  font-size: 21px;
+  font-size: 22px;
 }
 .fontDescXlarge{
-    font-size: 23px;
+    font-size: 24px;
 }
 .fontTitleXlarge{
-    font-size: 24px;
+    font-size: 25px;
 }
 /*
 Home screen checkin button

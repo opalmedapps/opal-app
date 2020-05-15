@@ -83,7 +83,7 @@
     "cordova-android": "^8.1.0",
     "cordova-ios": "^5.1.1",
     "cordova-plugin-android-permissions": "^1.0.2",
-    "cordova-plugin-app-version": "^0.1.9",
+    "cordova-plugin-appversion": "^1.0.0",
     "cordova-plugin-calendar": "^5.1.5",
     "cordova-plugin-code-push": "^1.12.0",
     "cordova-plugin-customurlscheme": "5.0.0",
@@ -155,7 +155,6 @@
     "plugins": {
       "cordova-plugin-whitelist": {},
       "cordova-plugin-android-permissions": {},
-      "cordova-plugin-app-version": {},
       "cordova-plugin-calendar": {
         "CALENDAR_USAGE_DESCRIPTION": " ",
         "CONTACTS_USAGE_DESCRIPTION": " "
@@ -191,7 +190,8 @@
       },
       "cordova-plugin-ios-detect-screenshot": {},
       "cordova-plugin-code-push": {},
-      "cordova-plugin-zip": {}
+      "cordova-plugin-zip": {},
+      "cordova-plugin-appversion": {}
     },
     "platforms": [
       "android",

@@ -59,55 +59,53 @@
             </ons-list>
         </div>
         <!-- LIST OF LAB RESULTS -->
-        <div>
-            <ons-scroller style="height: calc(100vh - 205px);margin-top:0px">
-                <ons-list ng-class="fontSizeDesc">
-                    <div ng-repeat="testResult in testsByDate.results | filter: testsByDate.searchText">
-                        <ons-list-header ng-class="fontSizeDesc" ng-if="testsByDate.showGroupHeader($index)">
-                            {{testsByDate.getDisplayedGroupName(testResult.groupName)}}
-                        </ons-list-header>
-                        <ons-list-item modifier="tappable chevron"
-                            ng-click="testsByDate.goToTestTypeResults(testResult.testExpressionSerNum)"
-                            class="list-item-container">
-                            <ons-row ng-class="[testsByDate.getTestClass(testResult), fontSizeDesc]"
-                                vertical-align="center">
-                                <!-- LAB RESULT - LEFT (NAME AND UNIT) -->
-                                <ons-col width="35%" class="labtest-col" vertical-align="center">
-                                    <div align="left" style="margin-left:4px">
-                                        {{testsByDate.getTestName(testResult)}}
-                                    </div>
-                                </ons-col>
+        <ons-scroller  set-ons-scroller-height="125">
+            <ons-list ng-class="fontSizeDesc">
+                <div ng-repeat="testResult in testsByDate.results | filter: testsByDate.searchText">
+                    <ons-list-header ng-class="fontSizeDesc" ng-if="testsByDate.showGroupHeader($index)">
+                        {{testsByDate.getDisplayedGroupName(testResult.groupName)}}
+                    </ons-list-header>
+                    <ons-list-item modifier="tappable chevron"
+                        ng-click="testsByDate.goToTestTypeResults(testResult.testExpressionSerNum)"
+                        class="list-item-container">
+                        <ons-row ng-class="[testsByDate.getTestClass(testResult), fontSizeDesc]"
+                            vertical-align="center">
+                            <!-- LAB RESULT - LEFT (NAME AND UNIT) -->
+                            <ons-col width="35%" class="labtest-col" vertical-align="center">
+                                <div align="left" style="margin-left:4px">
+                                    {{testsByDate.getTestName(testResult)}}
+                                </div>
+                            </ons-col>
 
-                                <!-- LAB RESULT - CENTRE (VALUE) -->
-                                <ons-col width="25%" class="labtest-col" vertical-align="center">
-                                    <div align="center">
-                                        {{testResult.testValue}}
-                                        <span ng-if="testResult.abnormalFlag">
-                                            ({{testResult.abnormalFlag}})
-                                        </span>
-                                        <div>
-                                            ({{testResult.unitDescription}})
-                                        </div>
+                            <!-- LAB RESULT - CENTRE (VALUE) -->
+                            <ons-col width="25%" class="labtest-col" vertical-align="center">
+                                <div align="center">
+                                    {{testResult.testValue}}
+                                    <span ng-if="testResult.abnormalFlag">
+                                        ({{testResult.abnormalFlag}})
+                                    </span>
+                                    <div>
+                                        ({{testResult.unitDescription}})
                                     </div>
-                                </ons-col>
+                                </div>
+                            </ons-col>
 
-                                <!-- LAB RESULT - RIGHT (NORMAL RANGE) -->
-                                <ons-col width="33%" class="labtest-col" vertical-align="center">
-                                    <div align="right">
-                                        {{testResult.normalRange}}
-                                        <div>
-                                            ({{testResult.unitDescription}})
-                                        </div>
+                            <!-- LAB RESULT - RIGHT (NORMAL RANGE) -->
+                            <ons-col width="33%" class="labtest-col" vertical-align="center">
+                                <div align="right">
+                                    {{testResult.normalRange}}
+                                    <div>
+                                        ({{testResult.unitDescription}})
                                     </div>
-                                </ons-col>
-                                <!-- LAB RESULT - SPACE FOR CHEVRON -->
-                                <ons-col width="5%" class="labtest-col" vertical-align="center">
-                                </ons-col>
-                            </ons-row>
-                        </ons-list-item>
-                    </div>
-                </ons-list>
-            </ons-scroller>
-        </div>
+                                </div>
+                            </ons-col>
+                            <!-- LAB RESULT - SPACE FOR CHEVRON -->
+                            <ons-col width="5%" class="labtest-col" vertical-align="center">
+                            </ons-col>
+                        </ons-row>
+                    </ons-list-item>
+                </div>
+            </ons-list>
+        </ons-scroller>
     </div>
 </ons-page>

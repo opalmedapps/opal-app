@@ -12,9 +12,7 @@ const config = {
         messagingSenderId: "476395494069",
         appId: "1:476395494069:web:fe7854c0038a34663afcfc",
     },
-    version: "1.8.2-rc",
-    buildNumber: 1,
-    opalProtocolURI: "opal-preprod://",
+    opalProtocolURI: "opal://",
 };
 
 module.exports = config;

@@ -10,3 +10,4 @@ import "./directives/offlineBannerDirective.js";
 import "./directives/topPageBannerDirective";
 import "./directives/loading-spinning-circle.directive";
 import "./directives/search-bar.directive";
+import "./directives/set-ons-scroller-height.directive";
