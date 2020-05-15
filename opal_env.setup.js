@@ -133,8 +133,8 @@ class OpalEnv {
 		this.writeToConfigXML(this.setXMLWidgetAttributeText(this.getConfigXMLJSON(),
 			"version", newVersion));
 	}
-	static bumpBuildNumbers(){
-		OpalEnv.setBuildNumbers();
+	static bumpBuildNumbers(env=null){
+		OpalEnv.setBuildNumbers(null, env);
 	}
 	/**
 	 * Sets build number in config.xml for cordova file

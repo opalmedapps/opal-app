@@ -100,7 +100,7 @@ const config = env => {
 					test: /\.png$/,
 					use: [
 						{
-							loader: 'url-loader',
+							loader: 'file-loader',
 							options: {
 								mimetype: 'image/png'
 							}
@@ -110,7 +110,7 @@ const config = env => {
 			]
 		},
 		plugins: [
-			// new CleanWebpackPlugin(),
+			new CleanWebpackPlugin(),
 			new CopyPlugin([
 				{ from: './src/img', to: './img' },
 				{ from: './src/Languages', to: './Languages' },
