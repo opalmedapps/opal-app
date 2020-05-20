@@ -56,7 +56,6 @@ import ProgressBar from "progressbar.js";
             events = PlanningSteps.getPlanningSequence();
             var currentStep = PlanningSteps.getCurrentStep();
 
-
             initTreatmentPlanStatus(events,currentStep);
             //setHeightElement();
         }

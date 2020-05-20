@@ -39,21 +39,8 @@
 			var authData = FirebaseService.getAuthentication().$getAuth();
 			vm.authenticated = !!authData;
 			vm.languageSwitch = (UserPreferences.getLanguage().toUpperCase() !== 'EN');
-			$timeout(function () {
-				vm.currentYear = new Date().getFullYear();
-			});
-
-			if (Constants.app) {
-				cordova.getAppVersion.getVersionNumber().then(function (version) {
-					$timeout(function () {
-						vm.version = version;
-					});
-				});
-			} else {
-				$timeout(function () {
-					vm.version = '1.2.0';
-				})
-			}
+			vm.currentYear = new Date().getFullYear();
+			vm.version = Constants.version();
 		}
 
 		function changeLanguage(value) {

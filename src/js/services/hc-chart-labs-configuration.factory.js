@@ -130,6 +130,7 @@ class HcChartLabsConfiguration{
 		const minChart = Math.min(minValue, normalRangeMin)*0.95;
 		const maxChart = Math.max(maxValue, normalRangeMax)*1.05;
 		return {
+			exporting: false,
 			rangeSelector: {
 				selected: this.#$rootScope.chartSelectedDateRange,
 				buttonTheme: {
