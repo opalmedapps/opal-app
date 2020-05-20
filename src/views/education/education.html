@@ -27,7 +27,7 @@
     </div>
 
     <!-- LIST OF EDUCATIONAL MATERIALS -->
-    <ons-scroller set-ons-scroller-height="78">
+    <ons-scroller-height offset-height="78">
         <ons-list >
             <ons-list-header ng-repeat-start = "edumaterial in edu.filteredEduMaterials" class="person-list-header" ng-class="fontSizeTitle"  ng-if ="edu.showHeader($index)">
                 {{edumaterial.PhaseInTreatment}}
@@ -55,7 +55,7 @@
                 </ons-row>
             </ons-list-item>
         </ons-list>
-    </ons-scroller>
+    </ons-scroller-height>
 </ons-page>
 
 

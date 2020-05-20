@@ -12,7 +12,7 @@
     </ons-toolbar>
     <loading-spinning-circle ng-if="tests.loading" loading-message="{{'LOADINGLABRESULTS'|translate}}">
     </loading-spinning-circle>
-    <div class="navigation-bar" ng-hide="tests.loading">
+    <div class="navigation-bar" ng-if="!tests.loading">
         <div class="navigation-bar__center">
             <div class="button-bar" style="margin-top:10px;width:70%;left:15%;" >
                 <div class="button-bar__item">
@@ -28,9 +28,9 @@
         </div>
     </div>
 
-    <div ng-hide="tests.loading">
+    <div ng-if="!tests.loading">
         <div ng-show="tests.showByDate">
-            <ons-scroller set-ons-scroller-height>
+            <ons-scroller-height>
                 <div ng-if="tests.testDates.length === 0" style="margin-top: 25px; text-align: center;">
                     <p ng-class="fontSizeTitle">
                         {{"NO"|translate}} {{"LAB_RESULTS"|translate}}
@@ -66,9 +66,9 @@
                     </ons-list>
 
                 </div>
-            </ons-scroller>
+            </ons-scroller-height>
         </div>
-        <div ng-hide="tests.showByDate">
+        <div ng-if="!tests.showByDate">
             <div style="position:sticky; top:0; z-index:9999;">
                 <!-- SEARCH BAR -->
                 <search-bar search-text="tests.searchTestTypeText" placeholder="{{'SEARCH'|translate}}" style-class="fontSizeDesc"></search-bar>
@@ -107,7 +107,7 @@
                     </ons-list-item>
                 </ons-list>
             </div>
-            <ons-scroller set-ons-scroller-height="170">
+            <ons-scroller-height>
                 <ons-list >
                     <ons-list-item modifier="tappable chevron"
                                    ng-repeat="testResult in tests.testTypes | filter: tests.searchTestTypeText"
@@ -143,7 +143,7 @@
                         </ons-row>
                     </ons-list-item>
                 </ons-list>
-            </ons-scroller>
+            </ons-scroller-height>
         </div>
     </div>
 

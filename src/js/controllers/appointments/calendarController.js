@@ -72,12 +72,6 @@
         vm.todays_date = new Date();
 
         /**
-         * Flag to toggle loading icon
-         * @type {boolean}
-         */
-        vm.loading = true;
-
-        /**
          * DOM Functions
          */
         vm.showDotColor = showDotColor;
@@ -87,6 +81,7 @@
         vm.goToAppointment=goToAppointment;
         vm.goToCalendarOptions = goToCalendarOptions;
         vm.onDateChange = onDateChange;
+        vm.scrollToAnchor = scrollToAnchor;
 
         activate();
 
@@ -115,32 +110,20 @@
             // Get the name of the current navigator
             navigatorName = NavigatorParameters.getParameters().Navigator;
 
-            //the reason we add a delay here is because the calendar view needs to render first, otherwise the list takes up the entire view.
-            // TODO: THINK OF MORE ELEGANT WAY TO PERFORM THIS THAT REDUCES LOAD TIME --> I.E. LIST VIRTUALIZATION
-            $timeout(function(){
-                vm.appointments=Appointments.getUserAppointments();
-                vm.noAppointments = (vm.appointments.length === 0);
-            }, 450)
-                .then(function(){
-                    if(vm.appointments.length>0) {
-
-                        //Setting time in milliseconds for last appointment
-                        dateLast=(new Date(vm.appointments[vm.appointments.length-1].ScheduledStartTime.getTime()));
-                        dateLast.setHours(0,0,0,0);
-                        dateLast = dateLast.getTime();
-
-                        //Setting time in milliseconds for first appointment
-                        dateFirst=(new Date(vm.appointments[0].ScheduledStartTime.getTime()));
-                        dateFirst.setHours(0,0,0,0);
-                        dateFirst = dateFirst.getTime();
-                    }
-
-                    $timeout(function(){
-                        vm.loading = false;
-                        setScrollHeight();
-                        setTimeout(scrollToAnchor, 50);
-                    })
-                })
+            vm.appointments=Appointments.getUserAppointments();
+            vm.noAppointments = (vm.appointments.length === 0);
+            if(vm.appointments.length>0) {
+                
+                //Setting time in milliseconds for last appointment
+                dateLast=(new Date(vm.appointments[vm.appointments.length-1].ScheduledStartTime.getTime()));
+                dateLast.setHours(0,0,0,0);
+                dateLast = dateLast.getTime();
+                
+                //Setting time in milliseconds for first appointment
+                dateFirst=(new Date(vm.appointments[0].ScheduledStartTime.getTime()));
+                dateFirst.setHours(0,0,0,0);
+                dateFirst = dateFirst.getTime();
+            }
         }
 
         /**
@@ -207,17 +190,6 @@
             else
                 style.sheet.insertRule(name+"{"+rules+"}",0);
         }
-
-        /**
-         * Initializes the scroll height for when the appointments load
-         */
-        function setScrollHeight(){
-            let divTreatment = document.getElementById('scrollerAppointments');
-            let heightTreatment = document.documentElement.clientHeight-document.documentElement.clientHeight*0.35-200;
-            if(divTreatment) divTreatment.style.height=heightTreatment+'px';
-        }
-
-
 
 
         /*************************

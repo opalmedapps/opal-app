@@ -73,8 +73,6 @@
                 });
             }, false);
             
-            addEventListener("resume", codePushSyncSetup,false);
-
             setupInactivityChecks();
 
             addiOSscreenshotDetection();

@@ -13,7 +13,7 @@
             </ons-toolbar-button>
         </div>
     </ons-toolbar>
-    <loading-spinning-circle ng-show="testsByDate.loading" loading-message="{{'LOADINGLABRESULTS'|translate}}">
+    <loading-spinning-circle ng-if="testsByDate.loading" loading-message="{{'LOADINGLABRESULTS'|translate}}">
     </loading-spinning-circle>
 
     <div ng-if="!testsByDate.loading">
@@ -59,7 +59,7 @@
             </ons-list>
         </div>
         <!-- LIST OF LAB RESULTS -->
-        <ons-scroller  set-ons-scroller-height="125">
+        <ons-scroller-height>
             <ons-list ng-class="fontSizeDesc">
                 <div ng-repeat="testResult in testsByDate.results | filter: testsByDate.searchText">
                     <ons-list-header ng-class="fontSizeDesc" ng-if="testsByDate.showGroupHeader($index)">
@@ -106,6 +106,6 @@
                     </ons-list-item>
                 </div>
             </ons-list>
-        </ons-scroller>
+        </ons-scroller-height>
     </div>
 </ons-page>

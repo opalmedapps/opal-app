@@ -85,7 +85,7 @@
     "cordova-plugin-android-permissions": "^1.0.2",
     "cordova-plugin-appversion": "^1.0.0",
     "cordova-plugin-calendar": "^5.1.5",
-    "cordova-plugin-code-push": "^1.12.0",
+    "cordova-plugin-code-push": "^1.12.3",
     "cordova-plugin-customurlscheme": "5.0.0",
     "cordova-plugin-device": "^2.0.3",
     "cordova-plugin-dialogs": "^2.0.2",
@@ -184,14 +184,14 @@
       "com.cordova.plugins.cookiemaster": {},
       "cordova-plugin-vibration": {},
       "es6-promise-plugin": {},
+      "cordova-plugin-ios-detect-screenshot": {},
+      "cordova-plugin-zip": {},
+      "cordova-plugin-appversion": {},
+      "cordova-plugin-code-push": {},
       "phonegap-plugin-push": {
         "ANDROID_SUPPORT_V13_VERSION": "27.+",
         "FCM_VERSION": "17.0.+"
-      },
-      "cordova-plugin-ios-detect-screenshot": {},
-      "cordova-plugin-code-push": {},
-      "cordova-plugin-zip": {},
-      "cordova-plugin-appversion": {}
+      }
     },
     "platforms": [
       "android",
