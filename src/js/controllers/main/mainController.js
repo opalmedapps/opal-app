@@ -31,7 +31,7 @@
         function activate() {
             $rootScope.firstTime = true;
             $rootScope.online = navigator.onLine;
-            codePushSyncSetup();
+
             currentTime = Date.now();
 
             bindEvents();
@@ -128,15 +128,6 @@
 
         function goActive() {
             startTimer();
-        }
-        function codePushSyncSetup() {
-            if(Constants.app){
-                if(OPAL_CONFIG.dev){
-                    codePush.sync(null, { updateDialog: true, installMode: InstallMode.IMMEDIATE });
-                }else{
-                    codePush.sync();
-                }
-            }
         }
 
         /*****************************************

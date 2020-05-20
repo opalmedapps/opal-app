@@ -10,10 +10,6 @@ Opal - the MUHC Oncology Patient Application for mobile phones and the web - is 
       - [Optional dev server](#optional-dev-server)
     - [Installing, building, and serving the mobile app code](#installing-building-and-serving-the-mobile-app-code)
     - [Opal App Scripts](#opal-app-scripts)
-  - [Updating and developing with Codepush](#updating-and-developing-with-codepush)
-    - [Making an update](#making-an-update)
-    - [Clearing deployments](#clearing-deployments)
-    - [Performing rollbacks](#performing-rollbacks)
   - [Distributing app in staging and preprod manually](#distributing-app-in-staging-and-preprod-manually)
   - [Troubleshooting](#troubleshooting)
   - [Running the tests](#running-the-tests)
@@ -214,8 +210,6 @@ time to understand what they do, this wil help you manipulate the project better
       "start:app:preprod:android": "npm run prepare:app:preprod && npm run build:web:preprod&& cordova run android",
       "start:app:staging:ios": "npm run prepare:app:staging && npm run build:web:staging && cordova run ios",
       "start:app:staging:android": "npm run prepare:app:staging && npm run build:web:staging && cordova run android",
-      "update:app:staging:ios": "npm run prepare:app:staging && npm run build:web:staging && appcenter codepush release-cordova -a Opal-Med-Apps/Opal-Staging-iOS -d Staging",
-      "update:app:staging:android": "npm run prepare:app:staging && npm run build:web:staging && appcenter codepush release-cordova -a Opal-Med-Apps/Opal-Staging-Android -d Staging",
       "test": "echo \"Error: no test specified\" && exit 1"
   },
 ```
@@ -225,57 +219,6 @@ Note that the commands are explicitly related in terms of dependent steps, once 
   npm run start:app:staging:ios # Build and run in iOS
 ```
 Calls in sequence `npm run build:app:staging:ios && cordova run ios`, you may choose to simply run `cordova run ios`, if you know there is a current valid Cordova build.
-## Updating and developing with Codepush
-Codepush is a Microsoft plugin that allows a Cordova application to update the application code under `www` without the need to build an entire mobile app with Cordova. This is useful for two instances:
-1. When a developer makes changes explicitely to the `html,css,js` code in development and wants to test the changes using
-  the app. This should only be done for the app in development, not staging/preprod/prod.
-2. To update the code in the staging/preprod/production apps without the need to release new versions for them. For this you must have the right level of privilege.
-
-The second point brings advantages in terms of the changes. It allows not only to push updates but also to rollback changes 
-made to the app in production.
-### Making an update
-1. Obtain invitation from the project maintainers to the [Appcenter](https://appcenter.ms/) OpalMedApps organization.
-2. Once access has been granted, install the cli for Codepush
-   ```
-    npm install -g appcenter-cli
-   ```
-3. Login to the cli:
-   ```
-    appcenter login
-   ```
-4. Build the webcode:
-   ```
-    npm run build:web:staging
-   ```
-5. Finally to push an update to an existing app use:
-   ```
-    appcenter codepush release-cordova --app <ownerName>/MyApp -d Staging
-   ```
-   For instance, to push a deployment update to the Opal Staging Android app web code run:
-   ```
-    appcenter codepush release-cordova --app Opal-Med-Apps/Opal-Staging-Android -d Staging
-   ```
-   The last flag indicates the deployment in the appcenter (Staging or Production), 
-   for staging, preprod, the deployment is Staging, for prod the appcenter deployment Production.
-   **Note**: Alternatively, to run steps 4 & 5, one can use the utility script: `npm run update:app:staging:android`
-6. To check deployment status, navigate to: https://appcenter.ms/orgs/Opal-Med-Apps/apps/Opal-Staging-Android/distribute/code-push
-For more information, please check: 
-- https://docs.microsoft.com/en-us/appcenter/distribution/codepush/. 
-- https://docs.microsoft.com/en-us/appcenter/distribution/codepush/cli
-### Clearing deployments
-To clear deployments run:
-```
-appcenter codepush deployment clear Staging -a Opal-Med-Apps/Opal-Staging-iOS
-```
-### Performing rollbacks
-For in-depth information read: https://docs.microsoft.com/en-us/appcenter/distribution/codepush/cli#rolling-back-updates.
-
-A deployment's release history is immutable, so you cannot delete or remove an update once it has been released. However, if you release an update that is broken or contains unintended features, it is easy to roll it back using the rollback command:
-```
-appcenter codepush rollback <ownerName>/<appName> <deploymentName>
-```
-Executing this command has the effect of creating a new release for the deployment that includes the exact same code and metadata as the version prior to the latest one
-
 ## Distributing app in staging and preprod manually
 *Requirement*: A macOS machine with access to the RI-MUHC Apple Developer Account.
 This build and deployment section of the Opal app applies only and should be done when a new commit to staging or preprod is performed.
