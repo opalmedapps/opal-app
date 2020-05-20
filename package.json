@@ -42,8 +42,6 @@
     "start:app:preprod:android": "npm run prepare:app:preprod && npm run build:web:preprod && cordova run android",
     "start:app:staging:ios": "npm run prepare:app:staging && npm run build:web:staging && cordova run ios",
     "start:app:staging:android": "npm run prepare:app:staging && npm run build:web:staging && cordova run android",
-    "update:app:staging:ios": "npm run prepare:app:staging && npm run build:web:staging && appcenter codepush release-cordova -a Opal-Med-Apps/Opal-Staging-iOS -d Staging",
-    "update:app:staging:android": "npm run prepare:app:staging && npm run build:web:staging && appcenter codepush release-cordova -a Opal-Med-Apps/Opal-Staging-Android -d Staging",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -78,17 +76,14 @@
     "angularjs-scroll-glue": "^2.2.0",
     "animate.css": "^3.7.2",
     "bootstrap": "^3.3.6",
-    "code-push": "^3.0.1",
     "com.cordova.plugins.cookiemaster": "^1.0.1",
     "cordova-android": "^8.1.0",
     "cordova-ios": "^5.1.1",
     "cordova-plugin-android-permissions": "^1.0.2",
     "cordova-plugin-appversion": "^1.0.0",
     "cordova-plugin-calendar": "^5.1.5",
-    "cordova-plugin-code-push": "^1.12.3",
     "cordova-plugin-customurlscheme": "5.0.0",
     "cordova-plugin-device": "^2.0.3",
-    "cordova-plugin-dialogs": "^2.0.2",
     "cordova-plugin-email": "^1.2.7",
     "cordova-plugin-file": "^6.0.2",
     "cordova-plugin-file-opener2": "^3.0.0",
@@ -187,7 +182,6 @@
       "cordova-plugin-ios-detect-screenshot": {},
       "cordova-plugin-zip": {},
       "cordova-plugin-appversion": {},
-      "cordova-plugin-code-push": {},
       "phonegap-plugin-push": {
         "ANDROID_SUPPORT_V13_VERSION": "27.+",
         "FCM_VERSION": "17.0.+"
