@@ -1,4 +1,3 @@
-// TODO: Once app code has been split between modules, move this code a separate file per class
 import { PatientTestResult } from "./PatientTestResult";
 /**
  * TestType class to model the TestTypes from the back-end
