@@ -438,7 +438,7 @@
                     'Questionnaires': 0
                 },
 
-                /** Multi-institutional hospital name **/
+                /** Multi-institutional hospital modules and codes **/
                 allowedModulesBeforeLogin: {
                     "DIA": 0,
                     "TRP": 0,
@@ -468,7 +468,7 @@
                     'MUHC': {
                         acronym: 'MUHC',
                         fullName: 'MUHC_FULL',
-                        uniqueHospitalCode: 'M0K2QB',
+                        uniqueHospitalCode: 'A0',
                         modules: {
                             "_comment": "LIST OF MODULES ENABLED IN THIS HOSPITAL. MODULE_CODE: 0 = DISABLED; 1 = ENABLED; NO QUOTATION MARKS; SEE EXAMPLES BELOW",
                             "DIA": 1,
@@ -498,7 +498,7 @@
                     'CHUM': {
                         acronym: 'CHUM_ACRONYM',
                         fullName: 'CHUM_FULL',
-                        uniqueHospitalCode: 'C1Q7ZU',
+                        uniqueHospitalCode: 'A2',
                         modules: {
                             "_comment": "LIST OF MODULES ENABLED IN THIS HOSPITAL. MODULE_CODE: 0 = DISABLED; 1 = ENABLED; NO QUOTATION MARKS; SEE EXAMPLES BELOW",
                             "DIA": 1,
@@ -528,7 +528,7 @@
                     'HMR': {
                         acronym: 'HMR_ACRONYM',
                         fullName: 'HMR_FULL',
-                        uniqueHospitalCode: 'H6U9LB',
+                        uniqueHospitalCode: 'A3',
                         modules: {
                             "_comment": "LIST OF MODULES ENABLED IN THIS HOSPITAL. MODULE_CODE: 0 = DISABLED; 1 = ENABLED; NO QUOTATION MARKS; SEE EXAMPLES BELOW",
                             "DIA": 1,
@@ -558,7 +558,7 @@
                     'SMHC': {
                         acronym: 'SMHC_ACRONYM',
                         fullName: 'SMHC_FULL',
-                        uniqueHospitalCode: 'S6B9TT',
+                        uniqueHospitalCode: 'A1',
                         modules: {
                             "_comment": "LIST OF MODULES ENABLED IN THIS HOSPITAL. MODULE_CODE: 0 = DISABLED; 1 = ENABLED; NO QUOTATION MARKS; SEE EXAMPLES BELOW",
                             "DIA": 1,
@@ -588,7 +588,7 @@
                     'CHU_SJ': {
                         acronym: 'CHU_SJ_ACRONYM',
                         fullName: 'CHU_SJ_FULL',
-                        uniqueHospitalCode: 'C5T8NN',
+                        uniqueHospitalCode: 'A4',
                         modules: {
                             "_comment": "LIST OF MODULES ENABLED IN THIS HOSPITAL. MODULE_CODE: 0 = DISABLED; 1 = ENABLED; NO QUOTATION MARKS; SEE EXAMPLES BELOW",
                             "DIA": 1,
@@ -618,7 +618,7 @@
                     'Cite-de-la-sante': {
                         acronym: 'CITE_ACRONYM',
                         fullName: 'CITE_FULL',
-                        uniqueHospitalCode: 'C1K6NY',
+                        uniqueHospitalCode: 'A5',
                         modules: {
                             "_comment": "LIST OF MODULES ENABLED IN THIS HOSPITAL. MODULE_CODE: 0 = DISABLED; 1 = ENABLED; NO QUOTATION MARKS; SEE EXAMPLES BELOW",
                             "DIA": 1,
@@ -648,7 +648,7 @@
                     'RI-MUHC': {
                         acronym: 'RI_MUHC_ACRONYM',
                         fullName: 'RI_MUHC_FULL',
-                        uniqueHospitalCode: 'R4F5UJ',
+                        uniqueHospitalCode: 'A6',
                         modules: {
                             "_comment": "LIST OF MODULES ENABLED IN THIS HOSPITAL. MODULE_CODE: 0 = DISABLED; 1 = ENABLED; NO QUOTATION MARKS; SEE EXAMPLES BELOW",
                             "DIA": 1,
