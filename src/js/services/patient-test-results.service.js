@@ -1,3 +1,4 @@
+import { PatientTestType } from "./../models/personal/test-results/PatientTestType";
 /**
  * PatienTest class serves as a model for the PatientTest module of the app.
  */
@@ -54,7 +55,7 @@ class PatientTestResults {
 			let results = await this.#requestToServer.sendRequestWithResponse("PatientTestTypes");
 			this.#testTypesLastUpdated = Date.now();
 			this.testTypes = results.data.testTypes || [];
-			this.testTypes = this.testTypes.map((testType) => new TestType(testType));
+			this.testTypes = this.testTypes.map((testType) => new PatientTestType(testType));
 			this.testResultsByType = {};
 			return this.testTypes;
 		}
@@ -71,7 +72,7 @@ class PatientTestResults {
 			let results = await this.#requestToServer.sendRequestWithResponse("PatientTestDates");
 			this.#testDatesLastUpdated = Date.now();
 			this.testDates = results.data.collectedDates || [];
-			this.testDates = this.testDates.map((testDate) => new Date(testDate.replace(/-/g,"/")));
+			this.testDates = this.testDates.map((testDate) => new Date(testDate.replace(/-/g, "/")));
 			this.testResultsByDate = {};
 			return this.testDates;
 		}
@@ -90,7 +91,7 @@ class PatientTestResults {
 			let results = await this.#requestToServer.sendRequestWithResponse("PatientTestTypeResults",
 				{ testTypeSerNum: typeSerNum });
 			results = results.data || [];
-			this.testResultsByType[typeSerNum] = new TestType(results);
+			this.testResultsByType[typeSerNum] = new PatientTestType(results);
 			return this.testResultsByType[typeSerNum];
 		}
 	}
@@ -148,42 +149,3 @@ class PatientTestResults {
 angular.module("MUHCApp").service("PatientTestResults", PatientTestResults);
 
 PatientTestResults.$inject = ["RequestToServer"];
-
-// TODO: Once app code has been split between modules, move this code a separate file per class
-/**
- * TestResult class manages a result
- */
-class TestResult {
-	constructor({ testValue, collectedDateTime }) {
-		this.testValue = Number(testValue);
-		this.testValueString = testValue;
-		this.collectedDateTime = Date.parse(collectedDateTime.replace(/-/g,"/"));
-	}
-}
-/**
- * TestType class to model the TestTypes from the back-end
- */
-class TestType {
-	constructor({ educationalMaterialURL_EN, educationalMaterialURL_FR, latestAbnormalFlag, latestCollectedDateTime,
-		latestPatientTestResultSerNum, latestTestValue, name_EN, name_FR, normalRange, normalRangeMax,
-		normalRangeMin, readStatus, testExpressionSerNum, unitDescription, hasNumericValues = "false",
-		results = null }) {
-		this.educationalMaterialURL_EN = educationalMaterialURL_EN;
-		this.educationalMaterialURL_FR = educationalMaterialURL_FR;
-		this.latestAbnormalFlag = latestAbnormalFlag;
-		this.latestCollectedDateTime = Date.parse(latestCollectedDateTime.replace(/-/g,"/"));
-		this.latestPatientTestResultSerNum = Number(latestPatientTestResultSerNum);
-		this.latestTestValue = Number(latestTestValue);
-		this.name_EN = name_EN;
-		this.name_FR = name_FR;
-		this.normalRange = normalRange;
-		this.normalRangeMax = Number(normalRangeMax);
-		this.normalRangeMin = Number(normalRangeMin);
-		this.readStatus = readStatus === "1";
-		this.testExpressionSerNum = Number(testExpressionSerNum);
-		this.unitDescription = unitDescription;
-		this.hasNumericValues = hasNumericValues === "true";
-		this.results = results || [];
-		this.results = this.results.map((testResult) => new TestResult(testResult));
-	}
-}
