@@ -32,9 +32,16 @@
     <preference name="ErrorUrl" value="www/views/error/error-page.html"/>
     <icon src="./res/OpalHealth_App_Apple_Icon_2.png" />
     <platform name="android">
-        <edit-config file="app/src/main/AndroidManifest.xml" mode="merge" target="/manifest/application">
-            <application android:usesCleartextTraffic="true" />
+        <edit-config file="app/src/main/AndroidManifest.xml" mode="merge" target="/manifest/application/activity">
+          <application android:allowBackup="false" />
         </edit-config>
+        <edit-config file="app/src/main/AndroidManifest.xml" mode="merge" target="/manifest/application">
+          <application android:debuggable="false" />
+        </edit-config>
+        <edit-config file="app/src/main/AndroidManifest.xml" mode="merge" target="/manifest/application">
+            <application android:usesCleartextTraffic="false"/>
+        </edit-config>
+       
         <resource-file src="google-services.json" target="app/google-services.json" />
         <splash density="land-hdpi" src="res/screen/android/splash-land-hdpi.png" />
         <splash density="land-ldpi" src="res/screen/android/splash-land-ldpi.png" />
@@ -74,7 +81,6 @@
     <plugin name="cordova-plugin-whitelist" spec="1" />
     <plugin name="cordova-plugin-android-permissions" spec="^1.0.2" />
     <plugin name="cordova-plugin-app-version" spec="^0.1.9" />
-    <plugin name="cordova-plugin-calendar" spec="^5.1.5" />
     <plugin name="cordova-plugin-customurlscheme" spec="~5.0.0">
         <variable name="URL_SCHEME" value="opal" />
     </plugin>
