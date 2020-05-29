@@ -29,8 +29,8 @@
             <!--this is for the last question going into the summary page-->
             <span ng-if="vm.isQuestion && (carousel.getActiveCarouselItemIndex() == vm.carouselItems.length) && !vm.loadingQuestionnaire"
                   style="padding-left:0px" class="toolbar-button--quiet navigation-bar__line-height"
-                  ng-click="vm.finishQuestionnaireFromQuestion(); console.log('this is clicked on the toolbar')">
-            {{"DONE"|translate}} <!-- TODO: is Last question-->
+                  ng-click="vm.finishQuestionnaireFromQuestion();">
+            {{"DONE"|translate}}
             </span>
         </div>
     </ons-toolbar>
