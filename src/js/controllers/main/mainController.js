@@ -11,18 +11,18 @@
         .module('MUHCApp')
         .controller('MainController', MainController);
 
-    MainController.$inject = ["$window", "$state", '$rootScope','FirebaseService','DeviceIdentifiers',
+    MainController.$inject = ["$window", "$state", '$rootScope', 'FirebaseService', 'DeviceIdentifiers',
         '$translatePartialLoader', "LocalStorage", 'Constants', 'CleanUp',
         'NavigatorParameters', 'NetworkStatus', 'RequestToServer', 'NewsBanner', 'Security', '$filter', 'Params'];
 
     /* @ngInject */
     function MainController($window, $state, $rootScope, FirebaseService, DeviceIdentifiers,
-                            $translatePartialLoader, LocalStorage, Constants, CleanUp,
-                            NavigatorParameters, NetworkStatus, RequestToServer, NewsBanner, Security, $filter, Params) {
+        $translatePartialLoader, LocalStorage, Constants, CleanUp,
+        NavigatorParameters, NetworkStatus, RequestToServer, NewsBanner, Security, $filter, Params) {
 
         var timeoutLockout;
         var currentTime;
-       // var maxIdleTimeAllowed = 300000;    // 1000 = 1 second;   300000 = 300 seconds = 5 minutes
+        // var maxIdleTimeAllowed = 300000;    // 1000 = 1 second;   300000 = 300 seconds = 5 minutes
 
         activate();
 
@@ -33,6 +33,9 @@
             $rootScope.online = navigator.onLine;
 
             currentTime = Date.now();
+
+
+
 
             bindEvents();
             setPushPermissions();
@@ -73,6 +76,8 @@
                 });
             }, false);
             
+            addAppInBackgroundScreen();
+
             setupInactivityChecks();
 
             addiOSscreenshotDetection();
@@ -83,7 +88,7 @@
 
             $rootScope.$on("MonitorLoggedInUsers", function (event, uid) {
                 $rootScope.firstTime = true;
-                if(OPAL_CONFIG.env !=="staging"){
+                if (OPAL_CONFIG.env !== "staging") {
                     addUserListener(uid);
                 }
             });
@@ -161,7 +166,7 @@
                 push.on('notification', function (data) {
                     if (ons.platform.isIOS() && data.additionalData.foreground) {
                         // on iOS, it will allow push notification to appear when app is running
-                        NewsBanner.showCustomBanner(data.title + "\n" + data.message, '#333333', '#F0F3F4', 13, 
+                        NewsBanner.showCustomBanner(data.title + "\n" + data.message, '#333333', '#F0F3F4', 13,
                             'top', null, 9000);
                         navigator.vibrate(3000);
                     }
@@ -210,7 +215,7 @@
 
                     // Show message "You have logged in on another device."
                     NewsBanner.showCustomBanner($filter('translate')("KICKEDOUT"), '#333333', '#F0F3F4',
-                         13, 'top', null, 5000);
+                        13, 'top', null, 5000);
                     refCurrentUser.off();
                     $state.go('init');
                 }
@@ -238,14 +243,44 @@
         /*****************************************
          * Update-Required Modal
          *****************************************/
-        function addUpdateRequiredDetection(){
+        function addUpdateRequiredDetection() {
             Security.register('validVersion', showVersionUpdateScreen)
         }
 
-        function showVersionUpdateScreen(){
+        function showVersionUpdateScreen() {
             loadingmodal.hide();
             updateRequiredModal.show();
             $state.go('init')
+        }
+        /**
+         * Function takes care of displaying the splash screen when app is placed in the background. Note that this
+         * works with the plugin: cordova-plugin-privacyscreen which offers a black screen. This is not so pretty 
+         * so this code below is an attempt to mitigate that slightly.
+         * For iOS the right events to use is active, resign; these are iOS only events
+         * In Android we can use pause and resume but since these fire for iOS as well we have to make sure to only
+         * run in Android.
+         */
+        function addAppInBackgroundScreen(){
+            // Events only affects iOS: https://cordova.apache.org/docs/en/latest/cordova/events/events.html#resume
+            document.addEventListener('active', () => {
+                setTimeout(navigator.splashscreen.hide, 0);                
+            });
+            // Events only affects iOS: https://cordova.apache.org/docs/en/latest/cordova/events/events.html#pause
+            document.addEventListener('resign', () => {
+                setTimeout(navigator.splashscreen.show, 0);                
+            });
+            // Same as above but we are only interested in running it for Android
+            document.addEventListener('resume', () => {
+                setTimeout(()=>{
+                    if(ons.platform.isAndroid())
+                        navigator.splashscreen.hide();
+                },0);                
+            });
+            document.addEventListener('pause', () => {
+                setTimeout(()=>{
+                    if(ons.platform.isAndroid()) navigator.splashscreen.show();
+                },0);                
+            });
         }
     }
 })();
