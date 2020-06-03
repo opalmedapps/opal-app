@@ -17,7 +17,6 @@
 
 	InitScreenController.$inject = [
 		'NavigatorParameters',
-		'$translatePartialLoader',
 		'UserPreferences',
 		'$filter',
 		'Constants',
@@ -31,7 +30,6 @@
 	/* @ngInject */
 	function InitScreenController(
 		NavigatorParameters,
-		$translatePartialLoader,
 		UserPreferences,
 		$filter,
 		Constants,
@@ -89,8 +87,6 @@
 
 				});
 
-			//Add the login translation
-			$translatePartialLoader.addPart('login');
 
 			//Initialize language if not initialized
 			UserPreferences.initializeLanguage();

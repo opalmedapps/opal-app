@@ -12,12 +12,12 @@
         .controller('MainController', MainController);
 
     MainController.$inject = ["$window", "$state", '$rootScope', 'FirebaseService', 'DeviceIdentifiers',
-        '$translatePartialLoader', "LocalStorage", 'Constants', 'CleanUp',
+         "LocalStorage", 'Constants', 'CleanUp',
         'NavigatorParameters', 'NetworkStatus', 'RequestToServer', 'NewsBanner', 'Security', '$filter', 'Params'];
 
     /* @ngInject */
     function MainController($window, $state, $rootScope, FirebaseService, DeviceIdentifiers,
-        $translatePartialLoader, LocalStorage, Constants, CleanUp,
+        LocalStorage, Constants, CleanUp,
         NavigatorParameters, NetworkStatus, RequestToServer, NewsBanner, Security, $filter, Params) {
 
         var timeoutLockout;
@@ -45,7 +45,6 @@
         }
 
         function bindEvents() {
-            $translatePartialLoader.addPart('top-view');
 
             //Listen to authentication state, if user get's unauthenticated log user out
             firebase.auth().onAuthStateChanged(function (authData) {

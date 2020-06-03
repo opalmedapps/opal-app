@@ -25,6 +25,7 @@ const config = env => {
 	console.log(`OPAL ENVIRONMENT: ${OPAL_ENV || "default (root directory)"}`);
 	// Throws error if the defined folder for environment does not exist.
 	OpalEnv.verifyOpalEnvironmentExists(OPAL_ENV);
+	const minimizer = (isProduction)?[new TerserPlugin()]: [];
 	const OPAL_ENV_FOLDER = path.join(__dirname, (OPAL_ENV) ? `./env/${OPAL_ENV}` : './');
 	return {
 		entry: entry,
@@ -155,21 +156,7 @@ const config = env => {
 		],
 		optimization: {
 			minimize: true,
-			minimizer: [
-				new TerserPlugin({
-					terserOptions: {
-						output: {
-							comments: false, // Do not include
-						},
-					},
-					extractComments: true,
-					chunkFilter: (chunk) => {
-						// Our AngularJS js files do not minimize correctly due to the way the code is written.
-						// Therefore we skip minification for these files.
-						return chunk.name !== 'main';
-					},
-				}),
-			],
+			minimizer: minimizer,
 		}
 	};
 };

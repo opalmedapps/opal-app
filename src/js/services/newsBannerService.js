@@ -7,14 +7,10 @@ var myApp=angular.module('MUHCApp');
 *@name MUHCApp.service:NewsBanner
 *@requires $cordovaNetwork
 *@requires $filter
-*@requires $translatePartialLoader
 *@description API services used to display message banner alerts for the app, e.g. internet connectivity banners, notification banners, etc. For more information on the plugin, {@link https://github.com/EddyVerbruggen/Toast-PhoneGap-Plugin Cordova Toast Plugin}
 **/
-myApp.service('NewsBanner',['$cordovaNetwork','$filter','$translatePartialLoader', 'Params', 
-  function($cordovaNetwork,$filter,$translatePartialLoader, Params) {
-
-  //Adds the top-view translation tables in order to always display the alert banners correctly.
-  $translatePartialLoader.addPart('top-view');
+myApp.service('NewsBanner',['$cordovaNetwork','$filter', 'Params',
+  function($cordovaNetwork,$filter, Params) {
 
   //Determine if its an device or a browser
   var app = document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'https://' ) === -1;

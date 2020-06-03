@@ -70,6 +70,8 @@
     "angular-translate": "^2.18.2",
     "angular-translate-handler-log": "^2.7.2",
     "angular-translate-loader-partial": "^2.18.2",
+    "angular-translate-loader-static-files": "^2.18.2",
+    "angular-translate-loader-url": "^2.18.2",
     "angular-ui-bootstrap": "^2.3.1",
     "angular-ui-router": "^1.0.25",
     "angularfire": "^2.1.0",

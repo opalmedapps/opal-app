@@ -10,9 +10,9 @@
         .module('MUHCApp')
         .controller('TabsController', TabsController);
 
-    TabsController.$inject = ['$timeout', '$translatePartialLoader', '$scope'];
+    TabsController.$inject = ['$timeout',  '$scope'];
 
-    function TabsController($timeout, $translatePartialLoader, $scope) {
+    function TabsController($timeout, $scope) {
 
         var vm = this;
 
@@ -31,7 +31,6 @@
                     tourModal.show();
                 },500);
             }
-            $translatePartialLoader.addPart('all-views');
         }
 
         function analyze(event){

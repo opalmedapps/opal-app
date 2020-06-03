@@ -97,7 +97,7 @@ import "../lib/ui-bootstrap-tpls-1.1.2";
 import "angular-translate";
 import "angular-dynamic-locale";
 import "angular-translate-handler-log";
-import "angular-translate-loader-partial";
+import "angular-translate-loader-static-files";
 import "angular-ui-router";
 import "angular-touch";
 import "bootstrap";
