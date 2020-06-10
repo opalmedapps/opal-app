@@ -1,0 +1,7 @@
+{
+  "projects": {
+    "default": "firebase-brilliant-inferno-767",
+    "preprod": "opal-prod",
+    "staging": "opal-dev"
+  }
+}
