@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<widget android-versionCode="4" ios-CFBundleVersion="4" id="com.hig.opalstaging" version="1.9.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0" xmlns:android="http://schemas.android.com/apk/res/android">
+<widget android-versionCode="5" ios-CFBundleVersion="5" id="com.hig.opalstaging" version="1.9.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0" xmlns:android="http://schemas.android.com/apk/res/android">
     <name>Opal Staging</name>
     <description>
         Opal - the MUHC Oncology Patient Application for mobile phones and the web -
@@ -31,14 +31,14 @@
     <icon src="./res/OpalHealth_App_Apple_Icon_2.png"/>
     <platform name="android">
         <edit-config file="app/src/main/AndroidManifest.xml" mode="merge" target="/manifest/application/activity">
-          <application android:allowBackup="false" />
+            <application android:allowBackup="false"/>
         </edit-config>
         <edit-config file="app/src/main/AndroidManifest.xml" mode="merge" target="/manifest/application">
-          <application android:debuggable="true" />
+            <application android:debuggable="true"/>
         </edit-config>
         <edit-config file="app/src/main/AndroidManifest.xml" mode="merge" target="/manifest/application">
             <application android:usesCleartextTraffic="false"/>
-        </edit-config>       
+        </edit-config>
         <resource-file src="google-services.json" target="app/google-services.json"/>
         <splash density="land-hdpi" src="res/screen/android/splash-land-hdpi.png"/>
         <splash density="land-ldpi" src="res/screen/android/splash-land-ldpi.png"/>
