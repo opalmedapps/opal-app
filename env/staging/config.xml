@@ -34,9 +34,6 @@
             <application android:allowBackup="false"/>
         </edit-config>
         <edit-config file="app/src/main/AndroidManifest.xml" mode="merge" target="/manifest/application">
-            <application android:debuggable="true"/>
-        </edit-config>
-        <edit-config file="app/src/main/AndroidManifest.xml" mode="merge" target="/manifest/application">
             <application android:usesCleartextTraffic="false"/>
         </edit-config>
         <resource-file src="google-services.json" target="app/google-services.json"/>
