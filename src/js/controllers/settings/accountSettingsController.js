@@ -15,10 +15,12 @@
         .module('MUHCApp')
         .controller('accountSettingController', accountSettingController);
 
-    accountSettingController.$inject = ['Patient', 'UserPreferences', '$scope', '$timeout', 'NavigatorParameters', '$window', 'UserHospitalPreferences'];
+    accountSettingController.$inject = ['Patient', 'UserPreferences', '$scope', '$timeout', 'NavigatorParameters',
+        'UserHospitalPreferences', 'LogOutService'];
 
     /* @ngInject */
-    function accountSettingController(Patient, UserPreferences, $scope, $timeout, NavigatorParameters, $window, UserHospitalPreferences) {
+    function accountSettingController(Patient, UserPreferences, $scope, $timeout, NavigatorParameters,
+                                      UserHospitalPreferences, LogOutService) {
 
         var vm = this;
         vm.title = 'accountSettingController';
@@ -38,6 +40,7 @@
         vm.accountDeviceBackButton = accountDeviceBackButton;
         vm.goToGeneralSettings = goToGeneralSettings;
         vm.goToUpdateAccountField = goToUpdateAccountField;
+        vm.logOut = logOut;
 
         activate();
 
@@ -49,27 +52,27 @@
             NavigatorParameters.setParameters({
                 'Navigator':'settingsNavigator'
             });
-            navigatorName = NavigatorParameters.getParameters().Navigator;
+            NavigatorParameters.setNavigator(settingsNavigator);
+            navigatorName = NavigatorParameters.getNavigatorName();
 
             // After a page is popped reintialize the settings.
-            $window[navigatorName].on('postpop', function() {
+            settingsNavigator.on('postpop', function() {
                 $timeout(function() {
                     loadSettings();
                 });
             });
 
-            $window[navigatorName].on('prepush', function(event) {
-                if ($window[navigatorName]._doorLock.isLocked()) {
+            settingsNavigator.on('prepush', function(event) {
+                if (settingsNavigator._doorLock.isLocked()) {
                     event.cancel();
                 }
             });
 
             //On destroy, dettach listener
             $scope.$on('$destroy', function() {
-                $window[navigatorName].off('postpop');
-                $window[navigatorName].off('prepush');
+                settingsNavigator.off('postpop');
+                settingsNavigator.off('prepush');
             });
-
         }
 
         function accountDeviceBackButton() {
@@ -78,11 +81,11 @@
 
         function goToGeneralSettings() {
             NavigatorParameters.setParameters({'Navigator': navigatorName});
-            $window[navigatorName].pushPage('./views/init/init-settings.html');
+            settingsNavigator.pushPage('./views/init/init-settings.html');
         }
 
         function goToUpdateAccountField(param, animation) {
-            $window[navigatorName].pushPage('views/settings/update-account-field.html', {param:param},{ animation : animation } );
+            settingsNavigator.pushPage('views/settings/update-account-field.html', {param:param},{ animation : animation } );
         }
 
         function loadSettings() {
@@ -95,6 +98,10 @@
             vm.Language = UserPreferences.getLanguage();
             vm.ProfilePicture = Patient.getProfileImage();
             vm.selectedHospitalToDisplay = UserHospitalPreferences.getHospitalFullName();
+        }
+
+        function logOut() {
+            LogOutService.logOut();
         }
     }
 })();
