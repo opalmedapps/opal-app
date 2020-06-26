@@ -227,12 +227,6 @@ Calls in sequence `npm run build:app:staging:ios && cordova run ios`, you may ch
 ## Distributing app in staging and preprod manually
 *Requirement*: A macOS machine with access to the RI-MUHC Apple Developer Account.
 This build and deployment section of the Opal app applies only and should be done when a new commit to staging or preprod is performed.
-
-Install globally `firebase-tools` to distribute via Firebase.
-```
-npm install -g firebase-tools
-```
-
 1. Bump up build number for the Opal app: `node -e "require('./opal_env.setup').bumpBuildNumbers('staging')"`
 2. Build the app and obtain packaged application files (.ipa/.apk): `npm run build:app:[staging|preprod]:package`
 3. Sign-in to firebase: `firebase login`
