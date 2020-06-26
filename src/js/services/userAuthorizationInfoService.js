@@ -51,6 +51,14 @@ myApp.service('UserAuthorizationInfo', function () {
      *@description Email property
      */
     var email = '';
+    /**
+     * @ngdoc property
+     * @name  MUHCApp.service.#trusted
+     * @propertyOf MUHCApp.service:UserAuthorizationInfo
+     * @description whether the device is trusted or not
+     * @type {boolean}
+     */
+    var trusted = false;
 
     return {
         /**
@@ -61,14 +69,16 @@ myApp.service('UserAuthorizationInfo', function () {
         *@param {String} pass Hashed of password
         *@param {String} exp  Expires
         *@param {String} tok  Authentication token
+        *@param {boolean} trustedDevice whether the device is trusted or not
         *@description Sets all the user authorization.
         */
-        setUserAuthData: function (user, pass, exp, tok, Email) {
+        setUserAuthData: function (user, pass, exp, tok, Email, trustedDevice) {
             username= user;
             password=pass;
             expires = exp;
             token=tok;
             email = Email;
+            trusted = trustedDevice;
         },
         /**
         *@ngdoc method
@@ -184,9 +194,16 @@ myApp.service('UserAuthorizationInfo', function () {
              password='';
              token='';
              identifier = '';
+        },
+        /**
+         *@ngdoc method
+         *@name getTrusted
+         *@methodOf MUHCApp.service:UserAuthorizationInfo
+         *@returns {boolean} Returns trusted flag
+         */
+        getTrusted: function () {
+            return trusted;
         }
-
-
 };
 
 });

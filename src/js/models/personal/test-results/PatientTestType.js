@@ -1,6 +1,6 @@
 import { PatientTestResult } from "./PatientTestResult";
 /**
- * TestType class to model the TestTypes from the back-end
+ * PatientTestType class to model the TestTypes from the back-end
  */
 export class PatientTestType {
 	constructor({ educationalMaterialURL_EN, educationalMaterialURL_FR, latestAbnormalFlag, latestCollectedDateTime,
