@@ -8,12 +8,10 @@
         .module('MUHCApp')
         .controller('LoadingController', LoadingController);
 
-    LoadingController.$inject = ['$state', '$filter','UpdateUI', 'UserAuthorizationInfo','UserPreferences', 'Patient',
-        'RequestToServer', 'PlanningSteps', 'MetaData', 'LogOutService'];
+    LoadingController.$inject = ['$state', '$filter','UpdateUI', 'UserAuthorizationInfo','UserPreferences', 'Patient', 'RequestToServer', 'PlanningSteps', 'MetaData'];
 
     /* @ngInject */
-    function LoadingController($state, $filter, UpdateUI, UserAuthorizationInfo, UserPreferences, Patient,
-                               RequestToServer, PlanningSteps, MetaData, LogOutService) {
+    function LoadingController($state, $filter, UpdateUI, UserAuthorizationInfo, UserPreferences, Patient, RequestToServer, PlanningSteps, MetaData) {
 
         activate();
         ///////////////////////////
@@ -63,7 +61,7 @@
                     message: $filter('translate')("SERVERERRORALERT"),
                     modifier: mod,
                     callback: function(idx) {
-                        LogOutService.logOut();
+                        $state.go('logOut');
                     }
                 });
             }
@@ -79,7 +77,7 @@
                     message: $filter('translate')("LONGERTIMEALERT"),
                     modifier: mod,
                     callback: function(idx) {
-                        LogOutService.logOut();
+                        $state.go('logOut');
                     }
                 });
             }

@@ -13,7 +13,7 @@ class PatientTestResults {
 	#testDatesLastUpdated = 0;
 	/**
 	 * Cache of test types for the patient
-	 * @type {PatientTestType[]}
+	 * @type {TestType[]}
 	 */
 	testTypes = [];
 	/**
@@ -28,7 +28,7 @@ class PatientTestResults {
 	testResultsByDate = {};
 	/**
 	 * Cache of test results by type, it contains test results up to the {@link #lastUpdated}
-	 * @type {Record<string, PatientTestType>} testResultsByDate contains map from string date to list of type test results
+	 * @type {Record<string, TestType>} testResultsByDate contains map from string date to list of type test results
 	 *                            in that date
 	 */
 	testResultsByType = {};
@@ -48,7 +48,7 @@ class PatientTestResults {
 	/**
 	 * Returns list of test types for the patient
 	 * @param {Boolean} useServer Decides whether the testTypes should be fetched from the server
-	 * @returns {Promise<PatientTestType[]>} Upon full-filling promise it returns list of test types for the patient
+	 * @returns {Promise<TestType[]>} Upon full-filling promise it returns list of test types for the patient
 	 */
 	async getTestTypes(useServer = true) {
 		if (useServer) {
@@ -82,7 +82,7 @@ class PatientTestResults {
 	/**
 	 * Returns test type results for the patient
 	 * @param typeSerNum ExpressionSerNum
-	 * @returns {Promise<PatientTestType>} Returns results for the given test type
+	 * @returns {Promise<TestType>} Returns results for the given test type
 	 */
 	async getTestResultsByType(typeSerNum) {
 		if (this.#testResultByTypeIsCached(typeSerNum)) {

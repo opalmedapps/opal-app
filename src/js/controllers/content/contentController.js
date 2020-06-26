@@ -15,10 +15,10 @@
         .module('MUHCApp')
         .controller('ContentController', ContentController);
 
-    ContentController.$inject = ['DynamicContentService', 'NavigatorParameters', 'Logger', 'Params'];
+    ContentController.$inject = ['DynamicContentService', 'NavigatorParameters', 'Logger', '$rootScope', 'Params'];
 
     /* @ngInject */
-    function ContentController(DynamicContentService, NavigatorParameters, Logger, Params) {
+    function ContentController(DynamicContentService, NavigatorParameters, Logger, $rootScope, Params) {
         var vm = this;
         vm.pageContent = {};
         vm.loading = true;
@@ -33,8 +33,23 @@
 
             var nav = NavigatorParameters.getNavigator();
 
-            let link = nav.getCurrentPage().options.contentLink;
-            let contentType = nav.getCurrentPage().options.contentType;
+            var link = "";
+            var contentType = "";
+
+            try {
+                link = nav.getCurrentPage().options.contentLink;
+                contentType = nav.getCurrentPage().options.contentType;
+            } catch (err) {
+                // console.log("contentController: ", err.message, "  $rootScope.contentType: ", $rootScope.contentType, " will be used instead.");
+                contentType = $rootScope.contentType;
+                $rootScope.contentType = "";
+                // For some reason, pushing this page from settingsNavigator (settingsNavigator.pushPage)
+                // causes NavigatorParameters.getNavigator() to return null (i.e. no Navigator).
+                // That's why we end up here in the Catch section.
+                // Consequesntly, .options.contentType becomes null so we used $rootScope.contentType
+                // to hold the value from the caller, mainly initSettingsController.js where
+                // settingNavigator is used. We should find out why this is happening
+            }
 
             vm.pageContent.title = contentType;
             link ? loadFromURL(link, contentType) : loadPageContent(contentType);

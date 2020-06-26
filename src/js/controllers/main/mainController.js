@@ -11,14 +11,14 @@
         .module('MUHCApp')
         .controller('MainController', MainController);
 
-    MainController.$inject = ["$window", "$state", '$rootScope','FirebaseService','DeviceIdentifiers',
-        '$translatePartialLoader', "LocalStorage", 'Constants', 'CleanUp', 'NavigatorParameters', 'NetworkStatus',
-        'RequestToServer', 'NewsBanner', 'Security', '$filter', 'Params', 'LogOutService'];
+    MainController.$inject = ["$window", "$state", '$rootScope', 'FirebaseService', 'DeviceIdentifiers',
+        '$translatePartialLoader', "LocalStorage", 'Constants', 'CleanUp',
+        'NavigatorParameters', 'NetworkStatus', 'RequestToServer', 'NewsBanner', 'Security', '$filter', 'Params'];
 
     /* @ngInject */
     function MainController($window, $state, $rootScope, FirebaseService, DeviceIdentifiers,
-                            $translatePartialLoader, LocalStorage, Constants, CleanUp, NavigatorParameters, NetworkStatus,
-                            RequestToServer, NewsBanner, Security, $filter, Params, LogOutService) {
+        $translatePartialLoader, LocalStorage, Constants, CleanUp,
+        NavigatorParameters, NetworkStatus, RequestToServer, NewsBanner, Security, $filter, Params) {
 
         var timeoutLockout;
         var currentTime;
@@ -33,6 +33,9 @@
             $rootScope.online = navigator.onLine;
 
             currentTime = Date.now();
+
+
+
 
             bindEvents();
             setPushPermissions();
@@ -49,7 +52,7 @@
                 var authInfoLocalStorage = window.sessionStorage.getItem('UserAuthorizationInfo');
                 if (!authData) {
                     if ($state.current.name === 'Home') {
-                        LogOutService.logOut();
+                        $state.go('logOut');
                     } else if (authInfoLocalStorage) {
                         LocalStorage.resetUserLocalStorage();
                     }
@@ -123,7 +126,7 @@
         function goInactive() {
             resetTimer();
             if ($state.current.name === 'Home') {
-                LogOutService.logOut();  // It should go to a Logout (not 'init'). Logout will trigger CleanUp.clear() function and other necessary clean ups
+                $state.go('logOut');   // It should go to a Logout (not 'init'). Logout will trigger CleanUp.clear() function and other necessary clean ups
                 localStorage.setItem('locked', 1);
             }
         }
@@ -207,6 +210,7 @@
                     // If it is detected that a user has concurrently logged on with a different device.
                     // Then force the "first" user to log out and clear the observer
                     //
+                    RequestToServer.sendRequest('Logout');
                     CleanUp.clear();
 
                     // Show message "You have logged in on another device."
@@ -250,7 +254,7 @@
         }
         /**
          * Function takes care of displaying the splash screen when app is placed in the background. Note that this
-         * works with the plugin: cordova-plugin-privacyscreen which offers a black screen. This is not so pretty
+         * works with the plugin: cordova-plugin-privacyscreen which offers a black screen. This is not so pretty 
          * so this code below is an attempt to mitigate that slightly.
          * For iOS the right events to use is active, resign; these are iOS only events
          * In Android we can use pause and resume but since these fire for iOS as well we have to make sure to only
@@ -259,23 +263,23 @@
         function addAppInBackgroundScreen(){
             // Events only affects iOS: https://cordova.apache.org/docs/en/latest/cordova/events/events.html#resume
             document.addEventListener('active', () => {
-                setTimeout(navigator.splashscreen.hide, 0);
+                setTimeout(navigator.splashscreen.hide, 0);                
             });
             // Events only affects iOS: https://cordova.apache.org/docs/en/latest/cordova/events/events.html#pause
             document.addEventListener('resign', () => {
-                setTimeout(navigator.splashscreen.show, 0);
+                setTimeout(navigator.splashscreen.show, 0);                
             });
             // Same as above but we are only interested in running it for Android
             document.addEventListener('resume', () => {
                 setTimeout(()=>{
                     if(ons.platform.isAndroid())
                         navigator.splashscreen.hide();
-                },0);
+                },0);                
             });
             document.addEventListener('pause', () => {
                 setTimeout(()=>{
                     if(ons.platform.isAndroid()) navigator.splashscreen.show();
-                },0);
+                },0);                
             });
         }
     }
