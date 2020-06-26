@@ -9,12 +9,10 @@
         .module('MUHCApp')
         .controller('InitLegalController', InitLegalController);
 
-    InitLegalController.$inject = [
-        'FirebaseService', 'NavigatorParameters', 'UserPreferences', '$timeout'
-    ];
+    InitLegalController.$inject = ['NavigatorParameters'];
 
     /* @ngInject */
-    function InitLegalController(FirebaseService, NavigatorParameters, UserPreferences, $timeout) {
+    function InitLegalController(NavigatorParameters) {
 
         var vm = this;
         var params;
