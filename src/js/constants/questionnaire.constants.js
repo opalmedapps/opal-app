@@ -4,7 +4,7 @@
     /**
      * This is a angular constant to store all the constants related to questionnaires
      *
-     * This file is injected into the Params (src/js/app.values.js) and the constants are accessed from there
+     * This file is injected into the Params (www/js/constants.js) and the constants are accessed from there
      *
      * Note: Change this will probably break the questionnaire
      */
