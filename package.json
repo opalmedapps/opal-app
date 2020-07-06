@@ -93,7 +93,7 @@
     "cordova-plugin-globalization": "^1.11.0",
     "cordova-plugin-inappbrowser": "^3.2.0",
     "cordova-plugin-network-information": "^2.0.2",
-    "cordova-plugin-privacyscreen": "0.4.0",
+    "cordova-plugin-prevent-screenshot": "1.0.3",
     "cordova-plugin-splashscreen": "^5.0.3",
     "cordova-plugin-vibration": "^3.1.1",
     "cordova-plugin-whitelist": "1",
@@ -183,8 +183,8 @@
         "ANDROID_SUPPORT_V13_VERSION": "27.+",
         "FCM_VERSION": "17.0.+"
       },
-      "cordova-plugin-privacyscreen": {},
-      "cordova-plugin-cache-clear": {}
+      "cordova-plugin-cache-clear": {},
+      "cordova-plugin-prevent-screenshot": {}
     },
     "platforms": [
       "android",
