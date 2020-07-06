@@ -79,6 +79,8 @@
 
             addiOSscreenshotDetection();
 
+            preventAndroidScreenshot();
+
             addUpdateRequiredDetection();
 
             document.addEventListener("pause", onPause, false);
@@ -235,6 +237,18 @@
 
         }
 
+        /*****************************************
+         * Prevent screenshot being taken on Android device
+         * work with the cordova-plugin-prevent-screenshot plugin
+         *****************************************/
+        function preventAndroidScreenshot() {
+            if (Constants.app) {
+                window.plugins.preventscreenshot.disable(
+                    (status) => console.log('Android screenshot successfully disabled:', !status), // true - enabled, false - disabled
+                    (err) => console.log('Android screenshot cannot be disabled:', err)
+                );
+            }
+        }
 
         /*****************************************
          * Update-Required Modal
