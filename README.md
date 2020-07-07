@@ -165,6 +165,11 @@ Install http-server
 A few notes on this:
  - If building for iOS you may need a developer profile in Apple depending on what you want to do. Running in an emulator does not require development profiles.
  - Once the build commands have been ran, the project becomes a valid Cordova project (Step 3), this means you may use any of the [Cordova related cli commands](https://cordova.apache.org/docs/en/latest/reference/cordova-cli/).
+ - The build commands for staging and preprod build development apps, while the ones for production build release apps. 
+ The development apps allow debugging, among other security risks such as self-signed certificates. 
+ To disable them, use the release mode: `cordova build --release --verbose`. 
+ In particular, release mode should be used for builds that are sent in for penetration or security testing, to ensure that common security vulnerabilities such as debugging being enabled are not flagged.
+ 
 
 ### Opal App Scripts
 We have added commands for developer convenience to the `package.json`. Take some
@@ -222,6 +227,12 @@ Calls in sequence `npm run build:app:staging:ios && cordova run ios`, you may ch
 ## Distributing app in staging and preprod manually
 *Requirement*: A macOS machine with access to the RI-MUHC Apple Developer Account.
 This build and deployment section of the Opal app applies only and should be done when a new commit to staging or preprod is performed.
+
+Install globally `firebase-tools` to distribute via Firebase.
+```
+npm install -g firebase-tools
+```
+
 1. Bump up build number for the Opal app: `node -e "require('./opal_env.setup').bumpBuildNumbers('staging')"`
 2. Build the app and obtain packaged application files (.ipa/.apk): `npm run build:app:[staging|preprod]:package`
 3. Sign-in to firebase: `firebase login`
