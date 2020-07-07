@@ -2,12 +2,12 @@
     'use strict';
     angular
         .module('MUHCApp')
-        .controller('UsefulInfoController', UsefulInfoController);
+        .controller('ReferenceMaterialController', ReferenceMaterialController);
 
-    UsefulInfoController.$inject = ['NavigatorParameters', 'UserPreferences'];
+    ReferenceMaterialController.$inject = ['NavigatorParameters', 'UserPreferences'];
 
     /* @ngInject */
-    function UsefulInfoController(NavigatorParameters, UserPreferences)
+    function ReferenceMaterialController(NavigatorParameters, UserPreferences)
     {
         var vm = this;
         let navigator = null;

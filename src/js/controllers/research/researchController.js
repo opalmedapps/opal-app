@@ -10,8 +10,8 @@
     function ResearchController(NavigatorParameters) {
         var vm = this;
 
-        vm.openClinicalTrials = openClinicalTrials;
-        vm.openUsefulInfo = openUsefulInfo;
+        vm.openResearchStudies = openResearchStudies;
+        vm.openReferenceMaterial = openReferenceMaterial;
         vm.openResearchQuestionnaires = openResearchQuestionnaires;
         vm.openConsentForms = openConsentForms;
 
@@ -28,12 +28,12 @@
         }
 
 
-        function openClinicalTrials() {
-            window[navigatorName].pushPage('views/personal/research/clinical-trials/clinical-trials.html');
+        function openResearchStudies() {
+            window[navigatorName].pushPage('views/personal/research/research-studies/research-studies.html');
         }
 
-        function openUsefulInfo() {
-            window[navigatorName].pushPage('views/personal/research/useful-info/useful-info.html');
+        function openReferenceMaterial() {
+            window[navigatorName].pushPage('views/personal/research/reference-material/reference-material.html');
         }
 
         function openResearchQuestionnaires() {
