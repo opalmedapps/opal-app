@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <widget android-versionCode="1" ios-CFBundleVersion="1" id="com.hig.opalpreprod" version="1.10.2"
-  xmlns="http://www.w3.org/ns/widgets"
-  xmlns:cdv="http://cordova.apache.org/ns/1.0"
-  xmlns:android="http://schemas.android.com/apk/res/android">
+        xmlns="http://www.w3.org/ns/widgets"
+        xmlns:cdv="http://cordova.apache.org/ns/1.0"
+        xmlns:android="http://schemas.android.com/apk/res/android">
     <name>Opal Pre Prod</name>
     <description>
         Opal - the MUHC Oncology Patient Application for mobile phones and the web -
@@ -33,6 +33,9 @@
     <preference name="ErrorUrl" value="www/views/error/error-page.html"/>
     <icon src="./res/OpalHealth_App_Apple_Icon_2.png"/>
     <platform name="android">
+        <edit-config file="app/src/main/AndroidManifest.xml" mode="merge" target="/manifest/application">
+            <application android:debuggable="false"/>
+        </edit-config>
         <edit-config file="app/src/main/AndroidManifest.xml" mode="merge" target="/manifest/application/activity">
             <application android:allowBackup="false"/>
         </edit-config>
