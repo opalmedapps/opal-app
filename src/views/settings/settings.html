@@ -42,6 +42,12 @@
         </ons-list-item>
     </ons-list>
 
+    <ons-list class="settings-list">
+        <ons-list-item modifier="chevron" ng-click="settingsNavigator.pushPage('views/settings/update-security-question.html', { animation : 'slide' } )" ng-class="fontSizeDesc">
+            {{"SECURITY_QUESTIONS"|translate}}
+        </ons-list-item>
+    </ons-list>
+
     <div class="settings-header" ng-class="fontSizeTitle">{{"PREFERENCES"|translate}}</div>
     <ons-list>
         <ons-list-item modifier="chevron" ng-click="asc.goToUpdateAccountField('LANGUAGE', 'slide')" ng-class="fontSizeDesc">
@@ -53,7 +59,7 @@
         </ons-list-item>
     </ons-list>
     <ons-list class="settings-list" ng-class="fontSizeDesc">
-        <ons-list-item ng-click="$state.go('logOut')" modifier="tappable">
+        <ons-list-item ng-click="asc.logOut()" modifier="tappable">
             {{"SIGNOUT"|translate}}
             <ons-icon icon="fa-sign-out"  style="margin-top: 10px; color:#1284FF" class="pull-right"></ons-icon>
         </ons-list-item>
