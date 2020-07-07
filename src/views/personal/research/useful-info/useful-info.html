@@ -1,0 +1,33 @@
+<ons-page ng-controller="UsefulInfoController as tab">  
+    <ons-toolbar>
+        <div class="left">
+            <ons-back-button>{{"BACK"|translate}}</ons-back-button>
+        </div>
+        <div class="center" ng-class="fontSizeTitle">{{"USEFUL_INFO"|translate}}</div>
+    </ons-toolbar>
+
+    <network-banner></network-banner>
+
+    <ons-list style="margin: 0px 0">
+            <ons-list-item class="item"
+                           ng-click="tab.goToResearchFAQ()">
+                <ons-row align="center">
+                    <ons-col width="60px" style="text-align: center">
+                        <div>
+                            <ons-icon icon="fa-question-circle-o" size="2x" style="color:rgb(19, 88, 2)"></ons-icon>
+                        </div>
+                    </ons-col>
+                    <ons-col>
+                        <header>
+                            <span class="item-title"
+                                  ng-class="fontSizeTitle">{{"RESEARCH_FAQ"|translate}}</span>
+                            <ons-icon icon="ion-android-open" style="color:#ddd; margin-top: 1%; margin-right: -10px" class="pull-right"
+                                      size="1.2em">
+                            </ons-icon>
+                        </header>
+                        <p class="item-desc"></p>
+                    </ons-col>
+                </ons-row>
+            </ons-list-item>
+    </ons-list>
+</ons-page>

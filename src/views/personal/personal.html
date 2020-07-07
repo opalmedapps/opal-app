@@ -179,6 +179,25 @@
                     </ons-col>
                 </ons-row>
             </ons-list-item>
-        </ons-list>
+
+            <!-- TODO: Add notifications for research tab -->
+            <ons-list-item modifier="chevron" class="item"
+                           ng-if="tab.allowedModules.hasOwnProperty('RES') && tab.allowedModules['RES']" 
+                           ng-click="personalNavigator.pushPage('views/personal/research/research.html')"> 
+                <ons-row align="center">
+                    <ons-col width="60px" style="text-align: center">
+                        <div>
+                            <img style="width: 35px;" src="./img/microscope.png">
+                        </div>
+                    </ons-col>
+                    <ons-col>
+                        <header>
+                            <span class="item-title" ng-class="fontSizeTitle">{{"RESEARCH"|translate}}</span>
+                        </header>
+                        <p class="item-desc" ng-class="fontSizeDesc"></p>
+                    </ons-col>
+                </ons-row>
+            </ons-list-item>
+            </ons-list>
     </div>
 </ons-page>

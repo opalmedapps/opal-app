@@ -1,0 +1,15 @@
+<ons-page>  
+    <ons-toolbar fixed-style>
+        <div class="left">
+            <ons-back-button>{{"BACK"|translate}}</ons-back-button>
+        </div>
+        <div class="center" ng-class="fontSizeTitle">{{"CLINICAL_TRIALS"|translate}}</div>
+    </ons-toolbar>
+    <network-banner></network-banner>
+    <!-- TODO: Add clinical trials when available -->
+
+    <!-- TODO: Add ng-show below to check if there are clinical trials -->
+    <div style="color:grey;margin-top:25vh" align="center" ng-class="fontSizeTitle">
+        {{"CLINICAL_TRIALS_NONE"|translate}}
+    </div>
+</ons-page>

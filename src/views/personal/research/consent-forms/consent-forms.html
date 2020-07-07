@@ -1,0 +1,15 @@
+<ons-page>  
+    <ons-toolbar fixed-style>
+        <div class="left">
+            <ons-back-button>{{"BACK"|translate}}</ons-back-button>
+        </div>
+        <div class="center" ng-class="fontSizeTitle">{{"STUDY_CONSENT_FORMS"|translate}}</div>
+    </ons-toolbar>
+    <network-banner></network-banner>
+    <!-- TODO: Add ng-repeat to display each consent form available -->
+
+    <!-- TODO: Add ng-show below to check if there are consent forms -->
+    <div style="color:grey;margin-top:25vh" align="center" ng-class="fontSizeTitle">
+        {{"STUDY_CONSENT_FORMS_NONE"|translate}}
+    </div>
+</ons-page>
