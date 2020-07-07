@@ -1,5 +1,5 @@
 /**
- * TestResult class manages a result
+ * PatientTestResult class manages a result
  */
 export class PatientTestResult {
 	constructor({ testValue, collectedDateTime }) {

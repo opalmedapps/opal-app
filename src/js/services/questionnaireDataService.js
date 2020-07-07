@@ -150,7 +150,11 @@
         function requestQuestionnaireList() {
             return RequestToServer.sendRequestWithResponse(api.GET_LIST)
                 .then(function (response) {
-                    return response.Data;
+                    // this is in case firebase delete the property when it is empty
+                    if (response.hasOwnProperty('Data')) {
+                        return response.Data;
+                    }
+                    return [];
                 });
         }
 
@@ -168,7 +172,11 @@
 
             return RequestToServer.sendRequestWithResponse(api.GET_QUESTIONNAIRE, params)
                 .then(function (response) {
-                    return response.Data;
+                    // this is in case firebase delete the property when it is empty
+                    if (response.hasOwnProperty('Data')) {
+                        return response.Data;
+                    }
+                    return {};
                 });
         }
     }
