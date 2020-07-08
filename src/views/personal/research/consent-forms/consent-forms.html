@@ -6,10 +6,36 @@
         <div class="center" ng-class="fontSizeTitle">{{"STUDY_CONSENT_FORMS"|translate}}</div>
     </ons-toolbar>
     <network-banner></network-banner>
-    <!-- TODO: Add ng-repeat to display each consent form available -->
+    
+    <!--TODO: add loading circle similar to in questionnaires-->
 
-    <!-- TODO: Add ng-show below to check if there are consent forms -->
-    <div style="color:grey;margin-top:25vh" align="center" ng-class="fontSizeTitle">
-        {{"STUDY_CONSENT_FORMS_NONE"|translate}}
+    <div>
+        <!--TABBAR-->
+        <div class="navigation-bar">
+            <div class="navigation-bar__center">
+                <div class="button-bar" style="margin-top:10px;width:90%;left:5%;" >
+                    <!--  TODO: add ng-model="questionnaireListVm.tab or similar to each tab -->
+                    <div class="button-bar__item">
+                        <input type="radio" name="navi-segment-questionnaire" checked value="new">
+                        <div class="button-bar__button">{{"STUDY_CONSENT_FORMS_NEW"|translate}}</div>
+                    </div>
+                    <div class="button-bar__item">
+                        <input type="radio" name="navi-segment-questionnaire" value="progress">
+                        <div class="button-bar__button">{{"STUDY_CONSENT_FORMS_IN_PROGRESS"|translate}}</div>
+                    </div> 
+                    <div class="button-bar__item">
+                        <input type="radio" name="navi-segment-questionnaire" value="completed">
+                        <div class="button-bar__button">{{"STUDY_CONSENT_FORMS_COMPLETED"|translate}}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- TODO: Add ng-show below to check if there are consent forms -->
+        <div style="color:grey;margin-top:25vh" align="center" ng-class="fontSizeTitle">
+            {{"STUDY_CONSENT_FORMS_NONE"|translate}}
+        </div>
+
+        <!-- TODO: Add consent forms when available similar to in quesitonnaires -->
     </div>
 </ons-page>

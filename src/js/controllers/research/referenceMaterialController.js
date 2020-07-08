@@ -12,7 +12,18 @@
         var vm = this;
         let navigator = null;
         let navigatorName = '';
-        vm.goToResearchFAQ = goToResearchFAQ;
+
+        // Variable containing the search string entered into the search bar
+        vm.searchString = "";
+
+        // Variable to toggle visibility of the 'no materials' text. Default is false to avoid errors.
+        vm.noMaterials = false;
+
+        vm.showHeader = showHeader;
+        vm.goToReferenceMaterial = goToReferenceMaterial;
+
+        // Function used to filter the materials shown based on the search string
+        vm.filterMaterial = filterMaterial;
 
         activate();
 
@@ -23,22 +34,7 @@
             navigatorName = NavigatorParameters.getNavigatorName();
         }
 
-        function goToResearchFAQ() {
-            let url = '';
-            let app = document.URL.indexOf('http://') === -1 && document.URL.indexOf('https://') === -1;
-
-            if (UserPreferences.getLanguage().toUpperCase() === "EN") {
-                url = 'https://ethics.gc.ca/eng/education_FAQs_gen.html';
-            } else {
-                url = 'https://ethics.gc.ca/fra/education_FAQs_gen.html';
-            }
-
-            if (app) {
-                cordova.InAppBrowser.open(url, '_blank', 'location=yes');
-            } else {
-                window.open(url, '_blank');
-            }
-        }
+        // TODO: Add functionality
     }
 
 })();
