@@ -123,8 +123,7 @@ import "bootstrap/dist/css/bootstrap.css";
 import "animate.css";
 import "font-awesome/css/font-awesome.css";
 import "../css/app.css";
-import "./Languages/angular-locales/angular-locale_en.js";
-
+import "../Languages/angular-locales/angular-locale_en.js"
 
 // Load angular module bootstrap script
 import "./app.bootstrap";
@@ -194,5 +193,4 @@ app.run(function ($state, $stateParams,$q, $rootScope,$translate, Patient,$locat
         }
     });
 });
-//
 
