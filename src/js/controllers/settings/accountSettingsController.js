@@ -73,7 +73,6 @@
                 settingsNavigator.off('postpop');
                 settingsNavigator.off('prepush');
             });
-
         }
 
         function accountDeviceBackButton() {
