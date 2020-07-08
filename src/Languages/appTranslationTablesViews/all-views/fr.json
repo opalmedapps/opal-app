@@ -278,6 +278,7 @@
     "REFERENCE_MATERIAL_NONE": "Aucun matériel de référence",
     "REFRESH_WAIT": "Les données sont à jour. Réessayez dans 60 secondes.",
     "RESEARCH": "Recherche",
+    "RESEARCH_DESCRIPTION":"La section Recherche contient des informations sur les études de recherche auxquelles vous participez.",
     "RESEARCH_FAQ": "FAQ participation à la recherche",
     "RESEARCH_QUESTIONNAIRES": "Questionnaires de recherche",
     "RESEARCH_STUDIES": "Études de recherche",

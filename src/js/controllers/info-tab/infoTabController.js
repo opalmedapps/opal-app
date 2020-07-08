@@ -15,13 +15,16 @@
         .module('MUHCApp')
         .controller('InfoTabController', InfoTabController);
 
-    InfoTabController.$inject = ['$timeout','$filter','$sce'];
+    InfoTabController.$inject = ['$timeout','$filter','$sce', '$scope', 'NavigatorParameters'];
 
   /* @ngInject */
-    function InfoTabController($timeout,$filter,$sce) {
+    function InfoTabController($timeout,$filter,$sce,$scope, NavigatorParameters) {
         var vm = this;
         vm.title = 'InfoTabController';
         vm.view = {};
+
+        let params = {};
+        let navigatorName = '';
 
         var views=[
             {
@@ -50,14 +53,50 @@
             }
         ];
 
+        var subViews=[
+            {
+                subViewName:'research',
+                icon:'./img/microscope.png',
+                name:"RESEARCH",
+                description:"RESEARCH_DESCRIPTION"
+            }
+        ];
+
+        vm.isIcon = isIcon;
+
         activate();
 
         ////////////////
 
         function activate() {
             var tab=tabbar.getActiveTabIndex();
-            vm.view = views[tab];
-            vm.view.description = $filter('translate')(vm.view.description );
+            
+            params = NavigatorParameters.getParameters();
+            navigatorName = NavigatorParameters.getNavigatorName();
+
+            // Check if requesting info on subView of tab or tab itself
+            if(params.hasOwnProperty('subView') && subViews.some(x => x.subViewName === params.subView)){
+                vm.view = subViews[subViews.findIndex(x => x.subViewName === params.subView)];
+            } else {
+                vm.view = views[tab];
+            }
+            vm.view.description = $filter('translate')(vm.view.description);
+
+            // Remove subView 
+            $scope.$on('$destroy', function () {
+                NavigatorParameters.setParameters({'Navigator':navigatorName, 'subView':null});
+            });
+        }
+
+        /**
+         * @name isIcon
+         * @desc Check if icon is an uploaded image (in img/ directory) or is otherwise a regular ons-icon
+         */
+        function isIcon(){
+            if (vm.view.icon.includes("img/")){
+                return false;
+            }
+            return true;
         }
     }
 

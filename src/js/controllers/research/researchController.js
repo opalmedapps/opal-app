@@ -14,6 +14,7 @@
         vm.openReferenceMaterial = openReferenceMaterial;
         vm.openResearchQuestionnaires = openResearchQuestionnaires;
         vm.openConsentForms = openConsentForms;
+        vm.openInfoPage = openInfoPage;
 
         let navigator = null;
         let navigatorName = '';
@@ -43,5 +44,11 @@
         function openConsentForms() {
             window[navigatorName].pushPage('views/personal/research/consent-forms/consent-forms.html');
         }
+
+        function openInfoPage() {
+            NavigatorParameters.setParameters({'Navigator':navigatorName, 'subView':'research'});
+            window[navigatorName].pushPage('views/tabs/info-page-tabs.html');
+        }
+        
     }
 })();
