@@ -2515,12 +2515,14 @@ width: 30px;
     position: absolute;
     bottom: 0;
     text-align: center;
-    width: 85%;
+    width: 90%;
 }
 
-.tour-icon{
-    font-size: 500%;
+.tour-icon {
     color: white;
+    font-size: 64px;
+    padding-bottom: 10px;
+    margin-top: 3px;
 }
 
 input {
@@ -2902,4 +2904,22 @@ and (max-device-width : 321px)
   overflow: hidden;
   text-overflow: ellipsis;
   word-break: break-word;
+}
+
+#tourModalBackground {
+    padding: 20px;
+    width: 90%;
+    margin: auto;
+    position: relative;
+    height: 76%;
+}
+
+.icon-size {
+    max-width: 64px;
+    padding-bottom: 10px;
+}
+
+.tourModalCarousel {
+    height: 100%;
+    overflow-y: scroll;
 }

@@ -111,35 +111,35 @@
     </ons-list>
 
     <ons-modal var="tourModal">
-        <div id="rcorners" style="height: 60%">
-            <ons-carousel swipeable overscrollable auto-scroll style="height: 100%" var="tourCarousel">
+        <div id="tourModalBackground">
+            <ons-carousel swipeable overscrollable auto-scroll class="tourModalCarousel" var="tourCarousel">
                 <ons-carousel-item>
-                    <img src="img/opal_notification.png" style="max-width:20vw">
+                    <img src="img/opal_notification.png" class="icon-size">
                     <div ng-class="fontSizeTitle">{{"TOUR_WELCOME"|translate}}</div>
                     <div ng-class="fontSizeDesc">{{"TOUR_WELCOME_DESC"|translate}}</div>
                 </ons-carousel-item>
                 <ons-carousel-item>
-                    <ons-icon icon="fa-home" size="20vw" class="tour-icon" aria-hidden="true"></ons-icon>
+                    <ons-icon icon="fa-home" class="tour-icon" aria-hidden="true"></ons-icon>
                     <div ng-class="fontSizeTitle">{{"HOME"|translate}}</div>
                     <div ng-class="fontSizeDesc">{{"TOUR_HOME"|translate}}</div>
                 </ons-carousel-item>
                 <ons-carousel-item>
-                    <ons-icon icon="fa-user" size="20vw" class="tour-icon" aria-hidden="true"></ons-icon>
+                    <ons-icon icon="fa-user" class="tour-icon" aria-hidden="true"></ons-icon>
                     <div ng-class="fontSizeTitle">{{"MYCHART"|translate}}</div>
                     <div ng-class="fontSizeDesc">{{"TOUR_MYCHART"|translate}}</div>
                 </ons-carousel-item>
                 <ons-carousel-item>
-                    <ons-icon icon="fa-th" size="20vw" class="tour-icon" aria-hidden="true"></ons-icon>
+                    <ons-icon icon="fa-th" class="tour-icon" aria-hidden="true"></ons-icon>
                     <div ng-class="fontSizeTitle">{{"GENERAL"|translate}}</div>
                     <div ng-class="fontSizeDesc">{{"TOUR_GENERAL"|translate}}</div>
                 </ons-carousel-item>
                 <ons-carousel-item>
-                    <ons-icon icon="fa-mortar-board" size="20vw" class="tour-icon" aria-hidden="true"></ons-icon>
+                    <ons-icon icon="fa-mortar-board" class="tour-icon" aria-hidden="true"></ons-icon>
                     <div ng-class="fontSizeTitle">{{"EDUCATION"|translate}}</div>
                     <div ng-class="fontSizeDesc">{{"TOUR_EDUCATION"|translate}}</div>
                 </ons-carousel-item>
                 <ons-carousel-item>
-                    <ons-icon icon="fa-info-circle" size="20vw" class="tour-icon" aria-hidden="true"></ons-icon>
+                    <ons-icon icon="fa-info-circle" class="tour-icon" aria-hidden="true"></ons-icon>
                     <div ng-class="fontSizeTitle">{{"ABOUT"|translate}}</div>
                     <div ng-class="fontSizeDesc">{{"TOUR_INFO"|translate}}</div>
                 </ons-carousel-item>
