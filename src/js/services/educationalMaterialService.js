@@ -64,10 +64,6 @@ myApp.service('EducationalMaterial',['$q','$filter','LocalStorage','FileManagerS
                 array.Language = language;
             }
             for (var i = 0; i < array.length; i++) {
-                //set language
-                if (array[i].PhaseName_EN || array[i].PhaseName_FR) {
-                    array[i].PhaseInTreatment = (language === 'EN') ? array[i].PhaseName_EN : array[i].PhaseName_FR;
-                }
                 array[i].Url = (language ==='EN')?array[i].URL_EN:array[i].URL_FR;
                 array[i].Name =(language==='EN')? array[i].Name_EN : array[i].Name_FR;
                 array[i].ShareURL =(language ==='EN')? array[i].ShareURL_EN : array[i].ShareURL_FR;
@@ -78,9 +74,6 @@ myApp.service('EducationalMaterial',['$q','$filter','LocalStorage','FileManagerS
             if (array.Language != language) {
                 delete array.Content;
                 array.Language = language;
-            }
-            if (array.PhaseName_EN || array.PhaseName_FR) {
-                array.PhaseInTreatment = (language === 'EN') ? array.PhaseName_EN : array.PhaseName_FR;
             }
             array.Url = (language ==='EN')?array.URL_EN:array.URL_FR;
             array.Name =(language ==='EN')? array.Name_EN : array.Name_FR;
@@ -147,10 +140,7 @@ myApp.service('EducationalMaterial',['$q','$filter','LocalStorage','FileManagerS
             //Add to my annoucements array
             educationalMaterialArray.push(edumaterial[i]);
         }
-        educationalMaterialArray = $filter('orderBy')(educationalMaterialArray, 'DateAdded');
-        var temp1 = $filter('filter')(educationalMaterialArray, {PhaseName_EN:'Prior To Treatment'});
-        educationalMaterialArray = temp1.concat(($filter('filter')(educationalMaterialArray, {PhaseName_EN:'During Treatment'})).concat($filter('filter')(educationalMaterialArray, {PhaseName_EN:'After Treatment'})));
-
+        
         //Get pfpresources
         pfpresources=getEducationalMaterialByControlSerNum(310);
         //Exclude the pfp resources
