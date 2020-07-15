@@ -6,10 +6,10 @@
         <div class="center">{{"INFO"|translate}}</div>
     </ons-toolbar>
     <div style="margin-top:10vh;padding: 0 20px 0 20px" class="text-center">
-      <div ng-show="info.isIcon()">
+      <div ng-if="info.isIcon()==1">
         <ons-icon icon="{{info.view.icon}}" style="font-size:80px; color: #2196F3"></ons-icon>
       </div>
-      <div ng-hide="info.isIcon()">
+      <div ng-if="info.isIcon()==0">
         <img style="width: 80px;" src="{{info.view.icon}}">
       </div>
       <p class="item-title" ng-class="fontSizeTitle" ng-style="{color:view.color}" style="font-weight: bold;" translate= "{{info.view.name}}"></p>

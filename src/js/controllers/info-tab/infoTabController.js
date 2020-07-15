@@ -53,14 +53,13 @@
             }
         ];
 
-        var subViews=[
-            {
-                subViewName:'research',
+        var subViews={
+            research:{
                 icon:'./img/microscope.png',
                 name:"RESEARCH",
                 description:"RESEARCH_DESCRIPTION"
             }
-        ];
+        };
 
         vm.isIcon = isIcon;
 
@@ -75,8 +74,8 @@
             navigatorName = NavigatorParameters.getNavigatorName();
 
             // Check if requesting info on subView of tab or tab itself
-            if(params.hasOwnProperty('subView') && subViews.some(x => x.subViewName === params.subView)){
-                vm.view = subViews[subViews.findIndex(x => x.subViewName === params.subView)];
+            if(params.hasOwnProperty('subView') && subViews.hasOwnProperty(params.subView)){
+                vm.view = subViews[params.subView];
             } else {
                 vm.view = views[tab];
             }
