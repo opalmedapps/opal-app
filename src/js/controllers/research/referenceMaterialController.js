@@ -19,12 +19,9 @@
         // Variable to toggle visibility of the 'no materials' text. Default is false to avoid errors.
         vm.noMaterials = false;
 
-        vm.showHeader = showHeader;
-        vm.goToReferenceMaterial = goToReferenceMaterial;
 
-        // Function used to filter the materials shown based on the search string
-        vm.filterMaterial = filterMaterial;
-
+        // TODO: Add search functionality (see src/js/directives/search-bar.firective.js)
+        
         activate();
 
         ///////////////////////////////////////////////////////////////////////////////////

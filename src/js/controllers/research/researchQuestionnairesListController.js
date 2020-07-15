@@ -14,7 +14,6 @@
 
     ResearchQuestionnairesListController.$inject = [
         '$scope',
-        'Questionnaires',
         'NavigatorParameters',
         'Params',
         '$timeout',
@@ -22,7 +21,8 @@
     ];
 
     /* @ngInject */
-    function ResearchQuestionnairesListController($scope, Questionnaires, NavigatorParameters, Params, $timeout, $filter) {
+    // TODO: inject dependency to load research questionnaires
+    function ResearchQuestionnairesListController($scope, NavigatorParameters, Params, $timeout, $filter) {
         let vm = this;
 
         // variables for controller
@@ -49,23 +49,24 @@
 
         function activate() {
            
-            vm.loading = true; 
+            vm.loading = false; 
 
             navigator = NavigatorParameters.getNavigator();
             navigatorName = NavigatorParameters.getNavigatorName();
 
-            Questionnaires.requestQuestionnaireList()
-                .then(function () {
-                    loadQuestionnaireList();
+            // TODO: load questionnaire list similar to:
+            // Questionnaires.requestQuestionnaireList()
+            //     .then(function () {
+            //         loadQuestionnaireList();
 
-                    vm.loading = false;
-                })
-                .catch(function(error){
-                    $timeout(function(){
-                        vm.loading = false;
-                        handleRequestError();
-                    })
-                });
+            //         vm.loading = false;
+            //     })
+            //     .catch(function(error){
+            //         $timeout(function(){
+            //             vm.loading = false;
+            //             handleRequestError();
+            //         })
+            //     });
 
             // this is for when the back button is pressed for a questionnaire, reload the questionnaire list to keep the list up to date
             navigator.on('postpop', function(){
@@ -162,5 +163,3 @@
     }
 
 })();
-
-

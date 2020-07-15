@@ -30,24 +30,24 @@
 
 
         function openResearchStudies() {
-            window[navigatorName].pushPage('views/personal/research/research-studies/research-studies.html');
+            navigator.pushPage('views/personal/research/research-studies/research-studies.html');
         }
 
         function openReferenceMaterial() {
-            window[navigatorName].pushPage('views/personal/research/reference-material/reference-material.html');
+            navigator.pushPage('views/personal/research/reference-material/reference-material.html');
         }
 
         function openResearchQuestionnaires() {
-            window[navigatorName].pushPage('views/personal/research/research-questionnaires/research-questionnaires-list.html');
+            navigator.pushPage('views/personal/research/research-questionnaires/research-questionnaires-list.html');
         }
 
         function openConsentForms() {
-            window[navigatorName].pushPage('views/personal/research/consent-forms/consent-forms.html');
+            navigator.pushPage('views/personal/research/consent-forms/consent-forms.html');
         }
 
         function openInfoPage() {
             NavigatorParameters.setParameters({'Navigator':navigatorName, 'subView':'research'});
-            window[navigatorName].pushPage('views/tabs/info-page-tabs.html');
+            navigator.pushPage('views/tabs/info-page-tabs.html');
         }
         
     }
