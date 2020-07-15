@@ -17,21 +17,23 @@
         'EncryptionService',
         'ResetPassword',
         '$timeout',
-        'DeviceIdentifiers',
         'Params'
     ];
 
     /* @ngInject */
-    function SetNewPasswordController(RequestToServer, UserAuthorizationInfo, EncryptionService, ResetPassword, $timeout, DeviceIdentifiers, Params) {
+    function SetNewPasswordController(RequestToServer, UserAuthorizationInfo, EncryptionService, ResetPassword, $timeout, Params) {
 
         var vm = this;
         var parameters;
+        const MIN_PASSWORD_LENGTH = 8;
         vm.alert = {};
         vm.resetSuccess = false;
         vm.invalidPassword = true;
         vm.goToLogin = goToLogin;
         vm.submitNewPassword = submitNewPassword;
         vm.evaluatePassword = evaluatePassword;
+        vm.newValue = '';
+        vm.validateNewValue = '';
 
         activate();
 
@@ -42,29 +44,19 @@
          ********************************/
 
         function activate() {
-            parameters =  initNavigator.getCurrentPage().options;
+            parameters = initNavigator.getCurrentPage().options;
             parameters = parameters.data;
         }
 
-
         function newPasswordIsValid() {
             var str = vm.newValue;
-            if (str && typeof str === 'string')
+            if (str !== null && str !== undefined && typeof str === 'string')
             {
-                if ( str.length < 6) {
-                    return false;
-                } else if (str.length > 50) {
-                    return false;
-                } else if (str.search(/\d/) === -1) {
-                    return false;
-                } else if (str.search(/[a-zA-Z]/) === -1) {
-                    return false;
-                } else if (str.search(/[^a-zA-Z0-9\!\@\#\$\%\^\&\*\(\)\_\+]/) !== -1) {
-                    return false;
-                }
+                return !(str.length < MIN_PASSWORD_LENGTH || str.length > 50 || str.search(/\d/) === -1 ||
+                    str.search(/[A-Z]/) === -1 || str.search(/\W|_{1}/) <= -1);
             }
 
-            return true;
+            return false;
         }
 
         /*********************************
@@ -84,7 +76,6 @@
                 delete vm.alert.content;
             }
         }
-
 
         function submitNewPassword() {
             var invalid = !newPasswordIsValid();

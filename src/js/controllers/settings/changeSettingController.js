@@ -23,6 +23,7 @@
         var page;
         var parameters;
         var navigatorName;
+        const MIN_PASSWORD_LENGTH = 8;
         vm.updateValue = updateValue;
         vm.changeFont = changeFont;
         vm.changeLanguage = changeLanguage;
@@ -248,23 +249,25 @@
 
         // Used to enable or disable the UPDATE button
         function validatePassword() {
-            return (vm.newValue.length > 5 && vm.newValue === vm.newValueValidate);
+            return (vm.newValue.length >= MIN_PASSWORD_LENGTH && vm.newValue === vm.newValueValidate);
         }
 
         /**
          * validatePasswordContents
-         * @author Stacey Beard
-         * @date 2018-10-09
+         * @author Stacey Beard, Yuan Chen
+         * @date 2020-06-08
          * @desc Checks the contents of a password to make sure it matches security criteria.
-         *       For example, checks that the password contains at least one letter and one number.
+         *       For example, checks that the password contains at least one capital letter, one special character and one number.
          *       Used after the UPDATE button is pressed to refuse the password and produce an error message
          *       if necessary.
          * @returns {boolean} True if the password contents are valid; false otherwise
          */
         function validatePasswordContents() {
-            let containsALetter = vm.newValue.search(/[a-zA-Z]{1}/) > -1;
             let containsANumber = vm.newValue.search(/\d{1}/) > -1;
-            return containsALetter && containsANumber;
+            let containsACapitalLetter = vm.newValue.search(/[A-Z]{1}/) > -1;
+            let containsSpecialChar = vm.newValue.search(/\W|_{1}/) > -1;
+
+            return containsACapitalLetter && containsANumber && containsSpecialChar;
         }
 
         function validateAlias() {

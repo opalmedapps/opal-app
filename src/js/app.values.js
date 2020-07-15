@@ -38,13 +38,13 @@
                 },
                 cedarsCancerSupportCase: 'cedarscansupport',
                 cedarsCanSupportUrl: {
-                    cedarsCanSupportUrlEn: 'http://www.cansupport.ca/',
-                    cedarsCanSupportUrlFr: 'http://www.cansupport.ca/fr'
+                    cedarsCanSupportUrlEn: 'https://cansupport.ca/',
+                    cedarsCanSupportUrlFr: 'https://www.cansupport.ca/fr/'
                 },
                 donationCase: 'donation',
                 donationUrl: {
-                    donationUrlEn: 'https://www.cedars.ca/cedars/en/donate/donate_online?designation=radiation-oncology-opal-fund',
-                    donationUrlFr: 'https://www.cedars.ca/cedars/fr/donate/donate_online?designation=radiation-oncology-opal-fund'
+                    donationUrlEn: 'https://www.cedars.ca/en/how-to-help/donations',
+                    donationUrlFr: 'https://www.cedars.ca/aidez-nous/donations'
                 },
                 opalWebsiteCase: 'opalwebsite',
                 opalWebsiteUrl: {
@@ -112,7 +112,7 @@
                 /** SetNewPassword Controller Constants **/
                 weakPasswordCase: 'auth/weak-password',
                 setNewPasswordMessage: 'ENTERVALIDPASSWORD',
-                passwordMismatchMessage: 'Passwords do no match!',
+                passwordMismatchMessage: 'PASSWORD_MISMATCH_ERROR',
                 passwordUpdateMessage: 'PASSWORDUPDATED',
                 invalidActionCodeMessage: 'CODE_INVALID',
                 expiredActionCodeMessage: 'CODE_EXPIRED',
