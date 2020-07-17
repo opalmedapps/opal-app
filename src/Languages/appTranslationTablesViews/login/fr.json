@@ -127,7 +127,7 @@
   "TOUR_EDUCATION": "Dans l'onglet Éducation, vous recevrez du matériel éducatif tout au long de votre trajet en radiothérapie. Nous vous enverrons des vidéos, dépliants, brochures et documents personalisés.",
   "TOUR_GENERAL": "Dans l'onglet Général, vous trouverez votre équipe soignante, des annonces générales et des informations concernant le stationnement. Vous pouvez aussi nous laisser des commentaires.",
   "TOUR_HOME": "Dans l'onglet Accueil, vous trouverez des informations concernant l'actualité de votre statut médical, documents et rendez-vous.",
-  "TOUR_INFO": "Le bouton Informations vous donnera des informations supplémentaires si vous en avez besoin. Appuyez sur «Fermer» si vous voulez quitter la visite ou vous pouvez appuyer sur la flèche gauche pour voir les conseils précédents.",
+  "TOUR_INFO": "Le bouton Information vous donnera des informations supplémentaires si vous en avez besoin.",
   "TOUR_MYCHART": "Dans l'onglet Dossier, vous trouverez vos rendez-vous, documents et toutes autres informations.",
   "TOUR_WELCOME": "Bienvenue à Opal",
   "TOUR_WELCOME_DESC": "Vous pouvez trouver toutes vos données de radiothérapie grâce à cette application. Pour commencer, cliquez sur la flèche pour changer de diapositive.",
@@ -141,4 +141,5 @@
   "SERVERERRORALERT": "Problème de serveur: impossible de télécharger les données, veuillez réessayer plus tard",
   "TAP_TO_SELECT_HOSPITAL": "Appuyez pour choisir",
   "LONGERTIMEALERT": "La demande prend plus de temps que prévu... veuillez réessayer plus tard."
+
 }

@@ -8,8 +8,7 @@
     <network-banner></network-banner>
 
     <ons-list>
-        <!--<ons-list-item modifier="tappable chevron" ng-click="tourModal.show()" >-->
-        <ons-list-item modifier="tappable chevron" ng-click="tourModal.show()" >
+         <ons-list-item modifier="tappable chevron" ng-click="about.openTourModal()">
             <ons-row align="center">
                 <ons-col width="60px" style="text-align: center">
                     <div>
@@ -17,7 +16,7 @@
                     </div>
                 </ons-col>
                 <ons-col>
-                        <span ng-class="fontSizeTitle">{{"OPAL_TOUR"|translate}}</span>
+                    <span ng-class="fontSizeTitle">{{"OPAL_TOUR"|translate}}</span>
                 </ons-col>
             </ons-row>
         </ons-list-item>
@@ -109,49 +108,6 @@
             </ons-row>
         </ons-list-item>
     </ons-list>
-
-    <ons-modal var="tourModal">
-        <div id="tourModalBackground">
-            <ons-carousel swipeable overscrollable auto-scroll class="tourModalCarousel" var="tourCarousel">
-                <ons-carousel-item>
-                    <img src="img/opal_notification.png" class="icon-size">
-                    <div ng-class="fontSizeTitle">{{"TOUR_WELCOME"|translate}}</div>
-                    <div ng-class="fontSizeDesc">{{"TOUR_WELCOME_DESC"|translate}}</div>
-                </ons-carousel-item>
-                <ons-carousel-item>
-                    <ons-icon icon="fa-home" class="tour-icon" aria-hidden="true"></ons-icon>
-                    <div ng-class="fontSizeTitle">{{"HOME"|translate}}</div>
-                    <div ng-class="fontSizeDesc">{{"TOUR_HOME"|translate}}</div>
-                </ons-carousel-item>
-                <ons-carousel-item>
-                    <ons-icon icon="fa-user" class="tour-icon" aria-hidden="true"></ons-icon>
-                    <div ng-class="fontSizeTitle">{{"MYCHART"|translate}}</div>
-                    <div ng-class="fontSizeDesc">{{"TOUR_MYCHART"|translate}}</div>
-                </ons-carousel-item>
-                <ons-carousel-item>
-                    <ons-icon icon="fa-th" class="tour-icon" aria-hidden="true"></ons-icon>
-                    <div ng-class="fontSizeTitle">{{"GENERAL"|translate}}</div>
-                    <div ng-class="fontSizeDesc">{{"TOUR_GENERAL"|translate}}</div>
-                </ons-carousel-item>
-                <ons-carousel-item>
-                    <ons-icon icon="fa-mortar-board" class="tour-icon" aria-hidden="true"></ons-icon>
-                    <div ng-class="fontSizeTitle">{{"EDUCATION"|translate}}</div>
-                    <div ng-class="fontSizeDesc">{{"TOUR_EDUCATION"|translate}}</div>
-                </ons-carousel-item>
-                <ons-carousel-item>
-                    <ons-icon icon="fa-info-circle" class="tour-icon" aria-hidden="true"></ons-icon>
-                    <div ng-class="fontSizeTitle">{{"ABOUT"|translate}}</div>
-                    <div ng-class="fontSizeDesc">{{"TOUR_INFO"|translate}}</div>
-                </ons-carousel-item>
-            </ons-carousel>
-
-            <div id="tourButtons">
-                <span><ons-icon icon="fa-arrow-left" aria-hidden="true" style="color:white" ng-click="tourCarousel.prev()"></ons-icon></span>
-                <ons-button modifier="cta" ng-click="tourModal.hide()" style="background-color: inherit; font-size: 125%">{{"CLOSE"|translate}}</ons-button>
-                <ons-icon icon="fa-arrow-right" aria-hidden="true" style="color:white" ng-click="tourCarousel.next()"></ons-icon>
-            </div>
-        </div>
-    </ons-modal>
 
     <ons-modal var="modalOpenViewer">
         <h3>{{"WARNING"|translate}}</h3>

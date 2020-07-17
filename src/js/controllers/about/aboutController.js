@@ -31,6 +31,7 @@
 
         vm.openUrl = openUrl;
         vm.openTeam = openTeam;
+        vm.openTourModal = openTourModal;
         vm.openAcknowledge = openAcknowledge;
         vm.openCedars = openCedars;
         vm.allowedModules = {};
@@ -118,6 +119,9 @@
          *
          * about.html (Learn About Opal) is called twice: once from init-Screen.html (very first screen) and once from home.html (after logging in)
          */
+        function openTourModal() {
+            window[navigatorName].pushPage('/views/home/tour/tour.html');
+        }
         function openTeam() {
             window[navigatorName].pushPage('views/templates/content.html', {contentType: 'hig'});
         }

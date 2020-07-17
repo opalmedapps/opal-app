@@ -127,7 +127,7 @@
   "TOUR_EDUCATION": "In your Education tab, you will receive educational material as you progress through your radiotherapy. We will show you videos, booklets and documents specific to you.",
   "TOUR_GENERAL": "In your General tab, you can see your treating team, announcements and parking information. You can also provide us with feedback on the app.",
   "TOUR_HOME": "In your Home tab, you will be provided with news about your medical status, documents and appointments.",
-  "TOUR_INFO": "The Information button will give you any extra information if you need it. Press 'Close' if you want to exit the tour or you can press the left arrow to see the previous tips.",
+  "TOUR_INFO": "The Information button will give you any extra information if you need it.",
   "TOUR_MYCHART": "In your Chart tab, you can see your appointments, documents and any other chart information.",
   "TOUR_WELCOME": "Welcome to Opal",
   "TOUR_WELCOME_DESC": "You can find all your radiotherapy data through this app. To get started, click on the arrow to change slide.",
@@ -142,3 +142,4 @@
   "TAP_TO_SELECT_HOSPITAL": "Tap to select",
   "LONGERTIMEALERT": "Request is taking longer than usual...please try again later.."
 }
+

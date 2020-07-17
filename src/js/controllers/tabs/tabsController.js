@@ -22,8 +22,7 @@
 
         /////////////////////////
 
-        function activate(){
-            $scope.tour = './views/home/tour/tour.html';
+        function activate() {
 
             if (!localStorage.getItem('firstInstall')){
                 localStorage.setItem('firstInstall', '1');
