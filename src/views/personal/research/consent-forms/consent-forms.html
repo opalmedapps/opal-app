@@ -3,7 +3,7 @@
         <div class="left">
             <ons-back-button>{{"BACK"|translate}}</ons-back-button>
         </div>
-        <div class="center" ng-class="fontSizeTitle"><p class="overflow-text-ellipsis">{{"STUDY_CONSENT_FORMS"|translate}}</p></div>
+        <div class="center" ng-class="fontSizeTitle"><p class="overflow-text-ellipsis">{{"CONSENT_FORMS"|translate}}</p></div>
     </ons-toolbar>
     <network-banner></network-banner>
     
@@ -33,13 +33,13 @@
         
         <!-- TODO: Add ng-show below to check if there are consent forms -->
         <div ng-if="questionnaireListVm.tab === 'new'" style="color:grey;margin-top:25vh" align="center" ng-class="fontSizeTitle">
-            {{"STUDY_CONSENT_FORMS_NONE_NEW"|translate}}
+            {{"CONSENT_FORMS_NONE_NEW"|translate}}
         </div>
         <div ng-if="questionnaireListVm.tab === 'progress'" style="color:grey;margin-top:25vh" align="center" ng-class="fontSizeTitle">
-            {{"STUDY_CONSENT_FORMS_NONE_PROGRESS"|translate}}
+            {{"CONSENT_FORMS_NONE_PROGRESS"|translate}}
         </div>
         <div ng-if="questionnaireListVm.tab === 'completed'" style="color:grey;margin-top:25vh" align="center" ng-class="fontSizeTitle">
-            {{"STUDY_CONSENT_FORMS_NONE_COMPLETED"|translate}}
+            {{"CONSENT_FORMS_NONE_COMPLETED"|translate}}
         </div>
 
         <!-- TODO: Add consent forms when available similar to in quesitonnaires -->
