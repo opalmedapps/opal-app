@@ -10,22 +10,20 @@
     <network-banner></network-banner>
 
     <div class="container">
-        <a ng-click="tabbar.setActiveTab(4)">
-            <ons-row style="padding:5px">
-                <ons-col width="90px">
-                    <div class="image-profile-wrapper">
-                        <img ng-src="{{asc.ProfilePicture}}"  class="image-profile">
-                    </div>
-                </ons-col>
-                <ons-col>
-                    <div>
-                        <p><strong ng-class="fontSizeTitle">{{asc.FirstName}} {{asc.LastName}}</strong><br>
-                            <span class="profile-id" ng-class="fontSizeDesc">{{"PATIENTID"|translate}} {{asc.PatientId}}</span>
-                        </p>
-                    </div>
-                </ons-col>
-            </ons-row>
-        </a>
+        <ons-row style="padding:5px">
+            <ons-col width="90px">
+                <div class="image-profile-wrapper">
+                    <img ng-src="{{asc.ProfilePicture}}"  class="image-profile">
+                </div>
+            </ons-col>
+            <ons-col>
+                <div>
+                    <p><strong ng-class="fontSizeTitle">{{asc.FirstName}} {{asc.LastName}}</strong><br>
+                        <span class="profile-id" ng-class="fontSizeDesc">{{"PATIENTID"|translate}} {{asc.PatientId}}</span>
+                    </p>
+                </div>
+            </ons-col>
+        </ons-row>
     </div>
 
     <ons-list class="settings-list">

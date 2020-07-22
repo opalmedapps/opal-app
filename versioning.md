@@ -4,10 +4,11 @@ The versioning of the app will be handled via two numbers: (1) the version numbe
 and (2) the build number. The version number will be the publicly facing version while
 the build number will be internal to our builds of the app (every commit to a main opal branch).
 
-For the main version version we use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags). 
+For the main version we use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags). 
 
 The main Opal branches are: `prod` for production, `preprod` for pre-production,
 and `staging` for development. 
+
 # Version number
 The version number will have the following format: 
 `major.minor.patch`. We will decide ahead of time what features 
@@ -15,7 +16,10 @@ the new version of production will contain. If it contains too many new features
 may decide to bump up the major number. On the other hand, if it contains fixes to current views, or a
 re-design of current views we then may simply bump the minor version.
 If we set the production version to 1.8.0, the `preprod` version will become
-1.8.0-rc, while the `staging` version will be 1.8.0-beta. These version numbers will not be
+1.8.0-rc, while the `staging` version will be 1.8.0-beta. 
+(We would like to follow this versioning system, but non-numerical characters would break the build. 
+Thus, the semantic tags are not included in the actual version). 
+These version numbers will not be
 updated in `staging` and `preprod` until they are updated in production which will only happen when we
 have determined the set of features the new release will contain.
 
@@ -31,7 +35,7 @@ once this request is approved, a new version of the `staging` app will be built 
 staging *build number* by one. Every developer/manager or related party to `staging` then automatically gets this 
 released.
 
-A commit to `staging` has requirements for specificiations and code reviews, once fulfilled and merged, 
+A commit to `staging` has requirements for specifications and code reviews, once fulfilled and merged, 
 the developer that committed the request will provide a JIRA task with a set of tests for the given commit,
 once that task has been fulfilled by another developer, the feature will be considered stable enough to go into 
 `preprod`. 
@@ -44,11 +48,11 @@ The serves as a testing area for clinical staff involve with the Opal project. T
 To merge from `staging` to `preprod`:
 1. Create a branch from `staging` called `staging-preprod-1.8.0` where the last appended string, `-1.8.10` represents the version number.
 2. Make the following changes to the `preprod` environment files under the `./env` directory:
-   1. Any change to the config.xml in the staging environment has to be migrated over to the config.xml of the preprod 
+   1. Any change to the `config.xml` in the staging environment has to be migrated over to the `config.xml` of the preprod 
          - Diff the two files in the environment folder to find the differences.
-   2. The buildNumber will be set to 0 (these is represented by two variables `android-versionCode`, and `ios-CFBundleVersion` in the `config.xml` file and `buildNumber` in the `opal.config.js` file.)
+   2. The buildNumber will be set to 1 (this is represented by two variables `android-versionCode`, and `ios-CFBundleVersion` in the `config.xml` file.)
    3. Migrate any change to the environment variables for the Opal app set in `staging` (`opal.config.js`).
-   4. Set the `preprod` version in the `config.xml` and `opal.config.js` to the proposed version for the master branch albeit with the `rc` label attached at the end indicating the following commit in `preprod` is a release candidate. e.g. `1.8.17-rc`.
+   4. Set the `preprod` version in the `config.xml` and `opal.config.js` to the proposed version for the master branch.
 3. Make a MR to the `preprod` branch.
 
 Once the MR is merged, the commit should automatically build the `preprod` app, and sending the app to all the `preprod` related parties.
@@ -75,4 +79,4 @@ If there are any hot fixes in production here is the procedure:
 **NOTE: Bringing the commit back upon fixes is a mandatory step (if it makes sense)**
 
 ### `preprod` and preparing for production
-Follow the steps given in the (Merging From Staging)[#merging-from-staging], in this case however, set the appropriate files to version stipulated by `MAJOR.MINOR.PATCH`.
+Follow the steps given in the [Merging From Staging](#merging-from-staging), in this case however, set the appropriate files to version stipulated by `MAJOR.MINOR.PATCH`.
