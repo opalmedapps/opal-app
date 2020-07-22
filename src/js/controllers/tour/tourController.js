@@ -13,34 +13,29 @@
         .controller('TourController', TourController);
 
     TourController.$inject = ['$timeout'];
+
     function TourController($timeout) {
 
         var vm = this;
 
-        vm.currentIndex;
-        vm.carousel;
-        
+        vm.currentIndex = 0;
+
         vm.next = next;
         vm.prev = prev;
-        
+
+        let carousel = null;
         activate();
 
         ////////////////
 
         function activate() {
-            debugger;
             document.addEventListener('ons-carousel:init', initCarouselEvent);
-            
+
         }
-        
+
         function initCarouselEvent(e) {
-            $timeout(function () {
-                debugger;
-                vm.carousel = e.component;
-                vm.leftArrow = true;
-                
-                vm.carousel.on('postchange', postChangeCarouseIndex);
-            });
+            carousel = e.component;
+            carousel.on('postchange', postChangeCarouseIndex);
         }
 
         /**
@@ -48,33 +43,26 @@
         * @desc This public function serves to move the carousel on to the next item
         */
         function next() {
-            debugger;
-            vm.carousel.next();
+            carousel.next();
         }
-       
+
         /**
          * @name prev
          * @desc this public function serves to move the carousel to the previous item
          */
         function prev() {
-            debugger;
-            vm.carousel.prev();
+            carousel.prev();
         }
 
         function postChangeCarouseIndex(event) {
             $timeout(function () {
                 vm.currentIndex = event.activeIndex;
-                if (vm.currentIndex == 0)
-                    vm.leftArrow = true;
-                else
-                    vm.leftArrow = false;
             });
         }
 
         vm.$onDestroy = function () {
-            debugger;
             document.removeEventListener('ons-carousel:init', initCarouselEvent);
-            vm.carousel.off('postchange');
+            carousel.off('postchange');
         };
     }
 })();

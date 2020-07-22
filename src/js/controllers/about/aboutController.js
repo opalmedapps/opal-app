@@ -23,27 +23,21 @@
         .module('MUHCApp')
         .controller('AboutController', AboutController);
 
-    AboutController.$inject = ['$window', 'UserPreferences', 'NavigatorParameters', 'Params', 'UserHospitalPreferences'];
+    AboutController.$inject = ['UserPreferences', 'NavigatorParameters', 'Params', 'UserHospitalPreferences'];
 
     /* @ngInject */
-    function AboutController($window, UserPreferences, NavigatorParameters, Params, UserHospitalPreferences) {
+    function AboutController(UserPreferences, NavigatorParameters, Params, UserHospitalPreferences) {
         const vm = this;
+        var navigator = null;
 
         vm.openUrl = openUrl;
         vm.openTeam = openTeam;
-        vm.openTourModal = openTourModal;
+        vm.openTour = openTour;
         vm.openAcknowledge = openAcknowledge;
         vm.openCedars = openCedars;
         vm.allowedModules = {};
-
-        // vm.openDonation = openDonation;
-        // vm.openAboutMUHC = openAboutMUHC;
-        // vm.openCedarsCancerCenter = openCedarsCancerCenter;
-        // vm.openCedarsCancerFoundation = openCedarsCancerFoundation;
-        // vm.openCedarsCanSupport = openCedarsCanSupport;
-
+       
         let parameters;
-        let navigatorName;
         let isBeforeLogin = true;
 
         activate();
@@ -53,8 +47,8 @@
         function activate() {
 
             parameters = NavigatorParameters.getParameters();
-            navigatorName = parameters.Navigator;
-
+            navigator = NavigatorParameters.getNavigator();
+            
             /**
              * about.html (Learn About Opal) is called twice: once from init-Screen.html (very first screen) and once from home.html (after logging in)
              * Different modules are enabled depending on whether it is called before or after login
@@ -119,59 +113,20 @@
          *
          * about.html (Learn About Opal) is called twice: once from init-Screen.html (very first screen) and once from home.html (after logging in)
          */
-        function openTourModal() {
-            window[navigatorName].pushPage('/views/home/tour/tour.html');
+        function openTour() {
+            navigator.pushPage('/views/home/tour/tour.html');
         }
         function openTeam() {
-            window[navigatorName].pushPage('views/templates/content.html', {contentType: 'hig'});
+            navigator.pushPage('views/templates/content.html', {contentType: 'hig'});
         }
 
         function openAcknowledge() {
-            window[navigatorName].pushPage('./views/templates/content.html', {contentType: 'acknowledgements'});
+            navigator.pushPage('./views/templates/content.html', {contentType: 'acknowledgements'});
         }
 
         function openCedars() {
-            window[navigatorName].pushPage('views/home/about/cedars.html');
+            navigator.pushPage('views/home/about/cedars.html');
         }
-
-
-        // function openDonation() {
-        //     $window.open('https://www.cedars.ca/cedars/' + vm.language.toLowerCase() + '/donate/donate_online?designation=radiation-oncology-opal-fund', '_self');
-        // }
-        //
-        // function openAboutMUHC() {
-        //     if (vm.language === "EN") {
-        //         window.open('https://muhc.ca/homepage/page/about-muhc', '_self');
-        //     } else {
-        //         window.open('https://cusm.ca/homepage/page/propos-du-cusm', '_self');
-        //     }
-        // }
-        //
-        // function openCedarsCancerCenter() {
-        //     if (vm.language === "EN") {
-        //         window.open('https://muhc.ca/glen/cedars-cancer-centre', '_self');
-        //     } else {
-        //         window.open('https://cusm.ca/glen/page/centre-du-cancer-c%C3%A8dres', '_self');
-        //     }
-        // }
-        //
-        // function openCedarsCancerFoundation() {
-        //     if (vm.language === "EN") {
-        //         window.open('https://www.cedars.ca/cedars/en/home', '_self');
-        //     } else {
-        //         window.open('https://www.cedars.ca/cedars/fr/home', '_self');
-        //     }
-        // }
-        //
-        // function openCedarsCanSupport() {
-        //     if (vm.language === "EN") {
-        //         window.open('http://www.cansupport.ca/', '_self');
-        //     } else {
-        //         window.open('http://www.cansupport.ca/fr', '_self');
-        //     }
-        // }
-
-
     }
 })();
 

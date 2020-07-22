@@ -3102,9 +3102,9 @@ input {
     max-width: 64px;
 }
 
-.tourModalCarousel {
+.tourCarousel {
     height: 100%;
     text-align: center;
-    margin-top: 40px;
+    margin-top: 50px;
     width:99%;
 }
