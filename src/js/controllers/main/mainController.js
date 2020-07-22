@@ -127,6 +127,10 @@
             if ($state.current.name === 'Home') {
                 LogOutService.logOut();  // It should go to a Logout (not 'init'). Logout will trigger CleanUp.clear() function and other necessary clean ups
                 localStorage.setItem('locked', 1);
+
+                // Display a warning message to the users after being disconnected
+                NewsBanner.showCustomBanner($filter('translate')("INACTIVE"), '#333333', '#F0F3F4',
+                    13, 'top', null, 5000);
             }
         }
 
