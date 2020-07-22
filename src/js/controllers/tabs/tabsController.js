@@ -27,7 +27,7 @@
             if (!localStorage.getItem('firstInstall')){
                 localStorage.setItem('firstInstall', '1');
                 $timeout(function () {
-                    tourModal.show();
+                    firstLoginTourModal.show();
                 },500);
             }
             $translatePartialLoader.addPart('all-views');

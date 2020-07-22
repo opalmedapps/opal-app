@@ -3108,3 +3108,7 @@ input {
     margin-top: 50px;
     width:99%;
 }
+
+.btnColor {
+    background-color: #F44336;
+}

@@ -8,7 +8,7 @@
     <network-banner></network-banner>
 
     <ons-list>
-         <ons-list-item modifier="tappable chevron" ng-click="about.openTour()">
+        <ons-list-item modifier="tappable chevron" ng-click="about.openTour()">
             <ons-row align="center">
                 <ons-col width="60px" style="text-align: center">
                     <div>
@@ -25,7 +25,6 @@
             <ons-row align="center">
                 <ons-col width="60px" style="text-align: center">
                     <div>
-                        <!--<ons-icon icon="fa-heart" style="color:#f44336" size="1.7em" fixed-width="true"></ons-icon>-->
                         <img style="width: 50px;" src="./img/Opal_Logo_Transparent_Inverse.png">
                     </div>
                 </ons-col>
@@ -109,15 +108,28 @@
         </ons-list-item>
     </ons-list>
 
+    <ons-modal var="firstLoginTourModal">
+        <ons-button ng-class="fontSizeTitle"
+                    ng-click="firstLoginTourModal.hide(); about.openTour()">
+            {{"CONTINUE"|translate}}
+        </ons-button>
+        <ons-button ng-class="fontSizeTitle" class="btnColor"
+                    ng-click="firstLoginTourModal.hide()">
+            {{"CANCEL"|translate}}
+        </ons-button>
+    </ons-modal>
+
     <ons-modal var="modalOpenViewer">
         <h3>{{"WARNING"|translate}}</h3>
         <ons-icon icon="ion-alert-circled" size="60px"></ons-icon>
         <p style="margin-top: 5%" class="secure-message">{{"LEAVING_APP4"|translate}}</p>
         <ons-button style="margin-top: 5%; font-size: 22px;"
-                    ng-click="modalOpenViewer.hide()">{{"CANCEL"|translate}}
+                    ng-click="modalOpenViewer.hide()">
+            {{"CANCEL"|translate}}
         </ons-button>
         <ons-button style="margin-top: 5%; margin-left: 50px; font-size: 22px; background-color: #F44336"
-                    ng-click="modalOpenViewer.hide(); about.openUrl('opalwebsite',true)">{{"CONTINUE"|translate}}
+                    ng-click="modalOpenViewer.hide(); about.openUrl('opalwebsite',true)">
+            {{"CONTINUE"|translate}}
         </ons-button>
     </ons-modal>
 
@@ -126,10 +138,12 @@
         <ons-icon icon="ion-alert-circled" size="60px"></ons-icon>
         <p style="margin-top: 5%" class="secure-message">{{"LEAVING_APP4"|translate}}</p>
         <ons-button style="margin-top: 5%; font-size: 22px;"
-                    ng-click="modalOpenViewer2.hide()">{{"CANCEL"|translate}}
+                    ng-click="modalOpenViewer2.hide()">
+            {{"CANCEL"|translate}}
         </ons-button>
         <ons-button style="margin-top: 5%; margin-left: 50px; font-size: 22px; background-color: #F44336"
-                    ng-click="modalOpenViewer2.hide(); about.openUrl('donation',true)">{{"CONTINUE"|translate}}
+                    ng-click="modalOpenViewer2.hide(); about.openUrl('donation',true)">
+            {{"CONTINUE"|translate}}
         </ons-button>
     </ons-modal>
 
