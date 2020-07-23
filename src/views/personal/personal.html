@@ -164,16 +164,16 @@
             </ons-list-item>
             <ons-list-item modifier="chevron" class="item"
                            ng-if="tab.allowedModules.hasOwnProperty('QUE') && tab.allowedModules['QUE']"
-                           ng-click="personalNavigator.pushPage('views/personal/questionnaires/questionnairesList.html')">
+                           ng-click="tab.goToClinicalQuestionnaire()">
                 <ons-row align="center">
                     <ons-col width="60px" style="text-align: center">
                         <div>
-                            <ons-icon icon="ion-clipboard" size="2x" style="color: #607d8b;"></ons-icon><span class="notification" ng-show="tab.questionnairesUnreadNumber>0">{{tab.questionnairesUnreadNumber}}</span>
+                            <ons-icon icon="ion-clipboard" size="2x" style="color: #607d8b;"></ons-icon>
                         </div>
                     </ons-col>
                     <ons-col>
                         <header>
-                            <span class="item-title" ng-class="fontSizeTitle">{{"QUESTIONNAIRES"|translate}}</span>
+                            <span class="item-title" ng-class="fontSizeTitle">{{"CLINICAL_QUESTIONNAIRES"|translate}}</span>
                         </header>
                         <p class="item-desc" ng-class="fontSizeDesc"></p>
                     </ons-col>

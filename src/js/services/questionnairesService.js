@@ -49,7 +49,6 @@
             findInProgressQuestionIndex: findInProgressQuestionIndex,
             getCarouselItems: getCarouselItems,
             getCurrentQuestionnaire: getCurrentQuestionnaire,
-            getNumberOfUnreadQuestionnaires: getNumberOfUnreadQuestionnaires,
             getQuestionnaireCount: getQuestionnaireCount,
             getQuestionnaireList: getQuestionnaireList,
             getQuestionnaireStartUrl: getQuestionnaireStartUrl,
@@ -131,14 +130,16 @@
 
         /**
          * @name requestQuestionnaireList
-         * @desc this function is requesting the list of questionnaires from questionnaireDataService and process this list to set the questionnaire list variables
+         * @desc this function is requesting the list of questionnaires from questionnaireDataService and
+         *       process this list to set the questionnaire list variables
+         * @param {string} questionnaireCategory the category of questionnaires requested
          * @returns {Promise}
          */
-        function requestQuestionnaireList() {
+        function requestQuestionnaireList(questionnaireCategory) {
             // re-initiate all the questionnaire related variables
             clearAllQuestionnaire();
 
-            return QuestionnaireDataService.requestQuestionnaireList()
+            return QuestionnaireDataService.requestQuestionnaireList(questionnaireCategory)
                 .then(function(responseQuestionnaireList){
                     setQuestionnaireList(responseQuestionnaireList);
                     return {Success: true, Location: 'Server'};
@@ -367,15 +368,6 @@
 
             // TODO: error log
             return 0;
-        }
-
-        /**
-         * @name getNumberOfUnreadQuestionnaires
-         * @desc This public function is used for showing the badge (count how many questionnaires non completed by patient) by the personalTabController.js
-         * @returns {Number} returns the number of new and in progress questionnaires
-         */
-        function getNumberOfUnreadQuestionnaires(){
-            return getQuestionnaireCount(questionnaireValidStatus.NEW_QUESTIONNAIRE_STATUS) + getQuestionnaireCount(questionnaireValidStatus.IN_PROGRESS_QUESTIONNAIRE_STATUS);
         }
 
         /**

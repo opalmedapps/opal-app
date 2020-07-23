@@ -27,6 +27,12 @@
 
         // constants
         const allowedStatus = Params.QUESTIONNAIRE_DB_STATUS_CONVENTIONS;
+        const CATEGORY_TITLE_MAP = {
+            clinical: 'CLINICAL_QUESTIONNAIRES',
+            research: 'RESEARCH_QUESTIONNAIRES',
+            consent: 'STUDY_CONSENT_FORMS',
+            default: 'QUESTIONNAIRES',
+        };  // this is not in the constants file since it concerns translation and is relevant for this controller only
 
         // variables for controller
         let navigator = null;
@@ -37,6 +43,7 @@
         vm.newQuestionnaireList = [];
         vm.inProgressQuestionnaireList = [];
         vm.completedQuestionnaireList = [];
+        vm.pageTitle = '';  // the page title varies according to the questionnaire category
         vm.tab = 'new';
 
         // functions that can be used from view, sorted alphabetically
@@ -56,19 +63,27 @@
 
             navigator = NavigatorParameters.getNavigator();
             navigatorName = NavigatorParameters.getNavigatorName();
+            let params = NavigatorParameters.getParameters();
 
-            Questionnaires.requestQuestionnaireList()
-                .then(function () {
-                    loadQuestionnaireList();
+            if (!params.hasOwnProperty('questionnaireCategory')) {
+                setPageTitle();
+                vm.loading = false;
+                handleRequestError();
+            } else {
+                setPageTitle(params.questionnaireCategory);
+                Questionnaires.requestQuestionnaireList(params.questionnaireCategory)
+                    .then(function () {
+                        loadQuestionnaireList();
 
-                    vm.loading = false;
-                })
-                .catch(function(error){
-                    $timeout(function(){
                         vm.loading = false;
-                        handleRequestError();
                     })
-                });
+                    .catch(function(error){
+                        $timeout(function(){
+                            vm.loading = false;
+                            handleRequestError();
+                        })
+                    });
+            }
 
             // this is for when the back button is pressed for a questionnaire, reload the questionnaire list to keep the list up to date
             navigator.on('postpop', function(){
@@ -149,6 +164,21 @@
                 vm.inProgressQuestionnaireList = Questionnaires.getQuestionnaireList(allowedStatus.IN_PROGRESS_QUESTIONNAIRE_STATUS);
                 vm.completedQuestionnaireList = Questionnaires.getQuestionnaireList(allowedStatus.COMPLETED_QUESTIONNAIRE_STATUS);
             });
+        }
+
+        /**
+         * @name setPageTitle
+         * @desc set the page title according to the questionnaire category requested on the list page
+         *      if the category does not have a translation, the title will default to CATEGORY_TITLE_MAP.default's translation
+         * @param {string} questionnaireCategory
+         */
+        function setPageTitle(questionnaireCategory='default') {
+            questionnaireCategory = questionnaireCategory.toLowerCase();
+            if (CATEGORY_TITLE_MAP.hasOwnProperty(questionnaireCategory)) {
+                vm.pageTitle = $filter('translate')(CATEGORY_TITLE_MAP[questionnaireCategory]);
+            } else {
+                vm.pageTitle = $filter('translate')(CATEGORY_TITLE_MAP.default);
+            }
         }
 
         /**

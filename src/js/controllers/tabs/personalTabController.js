@@ -13,9 +13,9 @@
         .controller('PersonalTabController', PersonalTabController);
 
     PersonalTabController.$inject = ['Appointments','TxTeamMessages','Documents','NavigatorParameters', 'Notifications',
-        'Questionnaires', 'Patient', 'NetworkStatus', 'MetaData', '$timeout', 'UserPreferences', 'Params', 'UserHospitalPreferences'];
+        'Patient', 'NetworkStatus', 'MetaData', '$timeout', 'UserPreferences', 'Params', 'UserHospitalPreferences'];
 
-    function PersonalTabController( Appointments, TxTeamMessages, Documents, NavigatorParameters, Notifications, Questionnaires,
+    function PersonalTabController( Appointments, TxTeamMessages, Documents, NavigatorParameters, Notifications,
                                     Patient, NetworkStatus, MetaData, $timeout, UserPreferences, Params, UserHospitalPreferences) {
         var vm = this;
 
@@ -26,6 +26,7 @@
         vm.goToStatus = goToStatus;
         vm.personalDeviceBackButton = personalDeviceBackButton;
         vm.goToCarnetSante = goToCarnetSante;
+        vm.goToClinicalQuestionnaire = goToClinicalQuestionnaire;
 
         activate();
 
@@ -73,7 +74,6 @@
                 vm.documentsUnreadNumber = meta.documentsUnreadNumber;
                 vm.txTeamMessagesUnreadNumber = meta.txTeamMessagesUnreadNumber;
                 vm.notificationsUnreadNumber = meta.notificationsUnreadNumber;
-                vm.questionnairesUnreadNumber = meta.questionnairesUnreadNumber;
                 MetaData.setFetchedPersonal();
             }
         }
@@ -85,7 +85,6 @@
             vm.documentsUnreadNumber = Documents.getNumberUnreadDocuments();
             vm.txTeamMessagesUnreadNumber = TxTeamMessages.getNumberUnreadTxTeamMessages();
             vm.notificationsUnreadNumber = Notifications.getNumberUnreadNotifications();
-            vm.questionnairesUnreadNumber = Questionnaires.getNumberOfUnreadQuestionnaires();
         }
 
         function goToStatus(){
@@ -117,6 +116,11 @@
         function configureSelectedHospital() {
             vm.selectedHospitalToDisplay = UserHospitalPreferences.getHospitalFullName();
             vm.allowedModules = UserHospitalPreferences.getHospitalAllowedModules();
+        }
+
+        function goToClinicalQuestionnaire() {
+            NavigatorParameters.setParameters({questionnaireCategory: 'clinical'});
+            personalNavigator.pushPage('views/personal/questionnaires/questionnairesList.html');
         }
     }
 })();
