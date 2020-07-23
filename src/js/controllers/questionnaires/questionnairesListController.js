@@ -27,14 +27,39 @@
 
         // constants
         const allowedStatus = Params.QUESTIONNAIRE_DB_STATUS_CONVENTIONS;
+        const allowedCategory = Params.QUESTIONNAIRE_CATEGORIES;
+
+        // the following are not in the constants file since they concern translation and are relevant for this controller only
         const CATEGORY_TITLE_MAP = {
             clinical: 'CLINICAL_QUESTIONNAIRES',
             research: 'RESEARCH_QUESTIONNAIRES',
             consent: 'STUDY_CONSENT_FORMS',
             default: 'QUESTIONNAIRES',
-        };  // this is not in the constants file since it concerns translation and is relevant for this controller only
+        };
+
+        const CATEGORY_EMPTY_LIST_MAP = {
+            new: {
+                clinical: 'QUESTIONNAIRE_NONE_NEW',
+                research: 'QUESTIONNAIRE_NONE_NEW',
+                consent: 'STUDY_CONSENT_FORMS_NONE_NEW',
+                default: 'QUESTIONNAIRE_NONE_NEW',
+            },
+            progress: {
+                clinical: 'QUESTIONNAIRE_NONE_PROGRESS',
+                research: 'QUESTIONNAIRE_NONE_PROGRESS',
+                consent: 'STUDY_CONSENT_FORMS_NONE_PROGRESS',
+                default: 'QUESTIONNAIRE_NONE_PROGRESS',
+            },
+            completed: {
+                clinical: 'QUESTIONNAIRE_NONE_COMPLETED',
+                research: 'QUESTIONNAIRE_NONE_COMPLETED',
+                consent: 'STUDY_CONSENT_FORMS_NONE_COMPLETED',
+                default: 'QUESTIONNAIRE_NONE_COMPLETED',
+            }
+        };
 
         // variables for controller
+        let category = 'default';
         let navigator = null;
         let navigatorName = '';
 
@@ -43,6 +68,9 @@
         vm.newQuestionnaireList = [];
         vm.inProgressQuestionnaireList = [];
         vm.completedQuestionnaireList = [];
+        vm.noNewQuestionnaireText = '';     // the description varies according to the questionnaire category
+        vm.noProgressQuestionnaireText = '';    // the description varies according to the questionnaire category
+        vm.noCompletedQuestionnaireText = '';   // the description varies according to the questionnaire category
         vm.pageTitle = '';  // the page title varies according to the questionnaire category
         vm.tab = 'new';
 
@@ -65,12 +93,15 @@
             navigatorName = NavigatorParameters.getNavigatorName();
             let params = NavigatorParameters.getParameters();
 
-            if (!params.hasOwnProperty('questionnaireCategory')) {
-                setPageTitle();
+            if (!params.hasOwnProperty('questionnaireCategory') || !validateCategory(params.questionnaireCategory)) {
+                setPageText();
                 vm.loading = false;
                 handleRequestError();
+
             } else {
-                setPageTitle(params.questionnaireCategory);
+                category = params.questionnaireCategory.toLowerCase();
+                setPageText(category);
+
                 Questionnaires.requestQuestionnaireList(params.questionnaireCategory)
                     .then(function () {
                         loadQuestionnaireList();
@@ -167,18 +198,29 @@
         }
 
         /**
-         * @name setPageTitle
-         * @desc set the page title according to the questionnaire category requested on the list page
-         *      if the category does not have a translation, the title will default to CATEGORY_TITLE_MAP.default's translation
+         * @name setPageText
+         * @desc set the page title and descriptions according to the questionnaire category requested on the list page
+         *      if the category is not passed as an argument, the text will default to the default's translation
          * @param {string} questionnaireCategory
          */
-        function setPageTitle(questionnaireCategory='default') {
-            questionnaireCategory = questionnaireCategory.toLowerCase();
-            if (CATEGORY_TITLE_MAP.hasOwnProperty(questionnaireCategory)) {
-                vm.pageTitle = $filter('translate')(CATEGORY_TITLE_MAP[questionnaireCategory]);
-            } else {
-                vm.pageTitle = $filter('translate')(CATEGORY_TITLE_MAP.default);
-            }
+        function setPageText(questionnaireCategory='default') {
+            // set the page title
+            vm.pageTitle = $filter('translate')(CATEGORY_TITLE_MAP[questionnaireCategory]);
+
+            // set the messages when the lists is null
+            vm.noCompletedQuestionnaireText = $filter('translate')(CATEGORY_EMPTY_LIST_MAP.completed[questionnaireCategory]);
+            vm.noNewQuestionnaireText = $filter('translate')(CATEGORY_EMPTY_LIST_MAP.new[questionnaireCategory]);
+            vm.noProgressQuestionnaireText = $filter('translate')(CATEGORY_EMPTY_LIST_MAP.progress[questionnaireCategory]);
+        }
+
+        /**
+         * @name validateCategory
+         * @desc check whether the category requested is valid
+         * @param {string} questionnaireCategory
+         * @returns {boolean} true if it is valid, false otherwise
+         */
+        function validateCategory(questionnaireCategory) {
+            return allowedCategory.includes(questionnaireCategory.toLowerCase());
         }
 
         /**
