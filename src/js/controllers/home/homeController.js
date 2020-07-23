@@ -132,9 +132,8 @@
 
             setMetaData();
 
-            // Display Notifications badge (unread number)
+            // Display notifications badge (unread number)
             setBadges();
-
         }
 
 
@@ -200,12 +199,17 @@
 
                         vm.notifications=$filter('orderBy')(vm.notifications,'DateAdded',true);  // Sort Descending (chronological order)
                     }
+                    // Display notifications badge (unread number)
+                    setBadges();
                 })
                 .catch(function(error){
                     vm.loading = false;
 
                     // TODO: Notify user about error
                     console.log(error);
+
+                    // Display notifications badge (unread number)
+                    setBadges();
                 });
         }
 
