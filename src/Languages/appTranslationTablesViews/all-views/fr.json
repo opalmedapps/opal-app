@@ -47,6 +47,8 @@
     "CONFIRM_OPEN": "Le fichier pdf sera téléchargé dans le dossier Documents avant d'être ouvert. Ouvrir?",
     "CONFIRM_SHARE": "Il est nécéssaire de télécharger le document dans le répertoire Documents avant de partager. Partager?",
     "CONNECTED": "Connecté",
+    "CONSENT_FORM_THANKS": "Merci d'avoir complété ce formulaire",
+    "CONSENT_FORM_GO_BACK_TO_LIST": "Retourner à la liste",
     "CONTACTHOSPITAL": "Contactez l'hôpital pour assistance",
     "CONTACTS": "Mon équipe soignante",
     "CONTINUE": "Continuer",

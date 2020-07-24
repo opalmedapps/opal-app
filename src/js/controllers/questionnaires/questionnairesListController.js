@@ -27,36 +27,6 @@
 
         // constants
         const allowedStatus = Params.QUESTIONNAIRE_DB_STATUS_CONVENTIONS;
-        const allowedCategory = Params.QUESTIONNAIRE_CATEGORIES;
-
-        // the following are not in the constants file since they concern translation and are relevant for this controller only
-        const CATEGORY_TITLE_MAP = {
-            clinical: 'CLINICAL_QUESTIONNAIRES',
-            research: 'RESEARCH_QUESTIONNAIRES',
-            consent: 'STUDY_CONSENT_FORMS',
-            default: 'QUESTIONNAIRES',
-        };
-
-        const CATEGORY_EMPTY_LIST_MAP = {
-            new: {
-                clinical: 'QUESTIONNAIRE_NONE_NEW',
-                research: 'QUESTIONNAIRE_NONE_NEW',
-                consent: 'STUDY_CONSENT_FORMS_NONE_NEW',
-                default: 'QUESTIONNAIRE_NONE_NEW',
-            },
-            progress: {
-                clinical: 'QUESTIONNAIRE_NONE_PROGRESS',
-                research: 'QUESTIONNAIRE_NONE_PROGRESS',
-                consent: 'STUDY_CONSENT_FORMS_NONE_PROGRESS',
-                default: 'QUESTIONNAIRE_NONE_PROGRESS',
-            },
-            completed: {
-                clinical: 'QUESTIONNAIRE_NONE_COMPLETED',
-                research: 'QUESTIONNAIRE_NONE_COMPLETED',
-                consent: 'STUDY_CONSENT_FORMS_NONE_COMPLETED',
-                default: 'QUESTIONNAIRE_NONE_COMPLETED',
-            }
-        };
 
         // variables for controller
         let category = 'default';
@@ -93,7 +63,7 @@
             navigatorName = NavigatorParameters.getNavigatorName();
             let params = NavigatorParameters.getParameters();
 
-            if (!params.hasOwnProperty('questionnaireCategory') || !validateCategory(params.questionnaireCategory)) {
+            if (!params.hasOwnProperty('questionnaireCategory') || !Questionnaires.validateQuestionnaireCategory(params.questionnaireCategory)) {
                 setPageText();
                 vm.loading = false;
                 handleRequestError();
@@ -205,22 +175,15 @@
          */
         function setPageText(questionnaireCategory='default') {
             // set the page title
-            vm.pageTitle = $filter('translate')(CATEGORY_TITLE_MAP[questionnaireCategory]);
+            vm.pageTitle = $filter('translate')(Questionnaires.getQuestionnaireTitleByCategory(questionnaireCategory));
 
             // set the messages when the lists is null
-            vm.noCompletedQuestionnaireText = $filter('translate')(CATEGORY_EMPTY_LIST_MAP.completed[questionnaireCategory]);
-            vm.noNewQuestionnaireText = $filter('translate')(CATEGORY_EMPTY_LIST_MAP.new[questionnaireCategory]);
-            vm.noProgressQuestionnaireText = $filter('translate')(CATEGORY_EMPTY_LIST_MAP.progress[questionnaireCategory]);
-        }
-
-        /**
-         * @name validateCategory
-         * @desc check whether the category requested is valid
-         * @param {string} questionnaireCategory
-         * @returns {boolean} true if it is valid, false otherwise
-         */
-        function validateCategory(questionnaireCategory) {
-            return allowedCategory.includes(questionnaireCategory.toLowerCase());
+            vm.noCompletedQuestionnaireText
+                = $filter('translate')(Questionnaires.getQuestionnaireNoListMessageByCategory(allowedStatus.COMPLETED_QUESTIONNAIRE_STATUS));
+            vm.noNewQuestionnaireText
+                = $filter('translate')(Questionnaires.getQuestionnaireNoListMessageByCategory(allowedStatus.NEW_QUESTIONNAIRE_STATUS));
+            vm.noProgressQuestionnaireText
+                = $filter('translate')(Questionnaires.getQuestionnaireNoListMessageByCategory(allowedStatus.IN_PROGRESS_QUESTIONNAIRE_STATUS));
         }
 
         /**

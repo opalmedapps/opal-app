@@ -47,6 +47,8 @@
   "CONFIRM_OPEN": "The pdf file will be downloaded to the Documents folder before opening. Open?",
   "CONFIRM_SHARE": "The PDF must be downloaded to the Documents folder before sharing. Share?",
   "CONNECTED": "Connected",
+  "CONSENT_FORM_THANKS": "Thank you for completing this consent form",
+  "CONSENT_FORM_GO_BACK_TO_LIST": "Go back to the consent form list",
   "CONTACTHOSPITAL": "Contact the hospital for assistance",
   "CONTACTS": "My Treating Team",
   "CONTINUE": "Continue",
