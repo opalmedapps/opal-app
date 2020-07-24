@@ -23,7 +23,6 @@
 
     
     <!-- NO MATERIAL TEXT -->
-    <!-- TODO: add ng-show when no material -->
     <div style="color:grey;margin-top:25vh"  ng-show="edu.noMaterials" align="center" ng-class="fontSizeTitle" style="margin-left: 10px; margin-right: 10px">
         {{"REFERENCE_MATERIAL_NONE"|translate}}
     </div>
@@ -31,7 +30,6 @@
     <!-- LIST OF EDUCATIONAL MATERIALS -->
     <ons-scroller-height offset-height="78">
         <ons-list >
-            <!-- Note: add header here if this is to later be added -->
             </ons-list-header> -->
             <ons-list-item modifier="chevron" class="item" ng-repeat="edumaterial in edu.filteredEduMaterials" ng-click="edu.goToEducationalMaterial(edumaterial)" ng-if="edumaterial.Category=='research'">
                 <ons-row align="center">

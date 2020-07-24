@@ -28,11 +28,8 @@
 
     <!-- LIST OF EDUCATIONAL MATERIALS -->
     <ons-scroller-height offset-height="78">
-        <ons-list >
-            <ons-list-header ng-repeat-start = "edumaterial in edu.filteredEduMaterials" class="person-list-header" ng-class="fontSizeTitle"  ng-if ="edu.showHeader($index)">
-                {{edumaterial.PhaseInTreatment}}
-            </ons-list-header>
-            <ons-list-item modifier="chevron" class="item" ng-repeat-end ng-click="edu.goToEducationalMaterial(edumaterial)" ng-if="edumaterial.Category=='clinical'">
+        <ons-list>
+            <ons-list-item modifier="chevron" class="item" ng-repeat = "edumaterial in edu.filteredEduMaterials | orderBy: '-DateAdded'" ng-click="edu.goToEducationalMaterial(edumaterial)" ng-if="edumaterial.Category=='clinical'">
                 <ons-row align="center">
                     <ons-col width="60px" align="center">
                         <div>

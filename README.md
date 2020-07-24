@@ -120,11 +120,13 @@ In Opal we have three main branches: `staging`, `preprod`, and `prod`. In terms 
     password: 12345opal
     security answer (depending on the question): red, guitar, superman, dog, bob, cuba
     ```
+   
 #### Notes on the development of web code
 - We recommend the use of Chrome or Firefox as they have the best debug console, the Opal web code does not currently support Internet Explorer
 - To debug the code, use the [developer console](https://developer.chrome.com/devtools), switch to mobile view and [disable caching](http://nicholasbering.ca/tools/2016/10/09/devtools-disable-caching/). Sometimes the browser caches pages disallowing developers from seeing change to the code.
 - If you followed all the steps in [Installing Building and Serving web code](#installing-building-and-serving-web-code) correctly, the only errors you should see in the debug console are a 404 error for cordova.js, a 404 error for favicon.ico, and many warnings for translations that don't exist. Otherwise, skip ahead to [Troubleshooting](#troubleshooting).
 **NOTE: In the past, several students have had trouble installing dependencies due to strange permission issues that block the ability to write to certain directories. Don't worry if this happens to you! Please consult the [Troubleshooting](#troubleshooting) section below.**
+
 #### Optional dev server
 Install http-server
    ```
