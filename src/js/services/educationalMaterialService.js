@@ -72,6 +72,7 @@ myApp.service('EducationalMaterial',['$q','$filter','LocalStorage','FileManagerS
                 array[i].Name =(language==='EN')? array[i].Name_EN : array[i].Name_FR;
                 array[i].ShareURL =(language ==='EN')? array[i].ShareURL_EN : array[i].ShareURL_FR;
                 array[i].Type = (language ==='EN')? array[i].EducationalMaterialType_EN : array[i].EducationalMaterialType_FR;
+                array[i].Category = (array[i].EducationalMaterialCategoryId ==='1')? 'research' : 'clinical';
             }
         }else{
             //set language if string
@@ -85,6 +86,7 @@ myApp.service('EducationalMaterial',['$q','$filter','LocalStorage','FileManagerS
             array.Url = (language ==='EN')?array.URL_EN:array.URL_FR;
             array.Name =(language ==='EN')? array.Name_EN : array.Name_FR;
             array.Type = (language ==='EN')? array.EducationalMaterialType_EN : array.EducationalMaterialType_FR;
+            array.Category = (array.EducationalMaterialCategoryId ==='1')? 'research' : 'clinical';
         }
         //console.log('Set edu material language:');
         //console.log(array);
@@ -223,10 +225,12 @@ myApp.service('EducationalMaterial',['$q','$filter','LocalStorage','FileManagerS
          *@description Setter method for educational material
          *@return {Boolean} Returns whether the patient has any educational material available.
          **/
-        materialExists:function()
+        materialExists:function(eduCategory)
         {
-            //Check if the educational material array has any elements
-            return educationalMaterialArray.length>0;
+            eduId = (eduCategory ==='research')? '1' : '2';
+            
+            //Check if the educational material array has any element
+            return educationalMaterialArray.some(eduMaterial => eduMaterial.EducationalMaterialCategoryId  === eduId);
         },
         /**
          *@ngdoc method

@@ -42,12 +42,29 @@
 
         // Function used to filter the materials shown based on the search string
         vm.filterMaterial = filterMaterial;
+        
+        // Default to clinical
+        vm.eduCategory = 'clinical';
+
+        let navigator = null;
+        let params = null;
 
         activate();
         ///////////////////////////////////
 
-        function activate(){
-            NavigatorParameters.setParameters({'Navigator':'educationNavigator'});
+        function activate(){         
+            navigator = NavigatorParameters.getNavigator();
+            params = NavigatorParameters.getParameters();
+
+            // Set category if specified in NavigatorParameters, otherwise defaults to clinical
+            if(params.hasOwnProperty('category')){
+                vm.eduCategory = params.category;
+            }          
+
+            // Set navigator to educationNavigator when in clinical educational material
+            if(vm.eduCategory === 'clinical'){
+               navigator = educationNavigator;
+            }
 
             bindEvents();
             configureState();
@@ -67,7 +84,7 @@
         }
 
         function configureState() {
-            if(EducationalMaterial.materialExists()) {
+            if(EducationalMaterial.materialExists(vm.eduCategory)) {
                 initData();
             } else {
                 vm.noMaterials = true;
@@ -83,14 +100,14 @@
         }
 
         function bindEvents() {
-            educationNavigator.on('prepop',function()
+            navigator.on('prepop',function()
             {
                 backButtonPressed = 0;
                 configureState();
             });
 
-            educationNavigator.on('prepush', function(event) {
-                if (educationNavigator._doorLock.isLocked()) {
+            navigator.on('prepush', function(event) {
+                if (navigator._doorLock.isLocked()) {
                     event.cancel();
                 }
             });
@@ -98,15 +115,18 @@
             //Cleaning up
             $scope.$on('$destroy',function()
             {
-                educationNavigator.off('prepop');
+                navigator.off('prepop');
+                // Set to default educationNavigator (necessary for headers to appeaar when going directly from personal to edu tab)
+                NavigatorParameters.setParameters({'Navigator':'educationNavigator'});
             });
         }
-
+        
         //Function to decide whether or not to show the header
+        // TODO: If research material is to have headers, change below
         function showHeader(index) {
-            if (index === 0) {
+            if (vm.eduCategory === 'clinical' && index === 0) {
                 return true;
-            } else if (vm.edumaterials[index - 1].PhaseInTreatment !== vm.edumaterials[index].PhaseInTreatment) {
+            } else if (vm.eduCategory === 'clinical' && vm.edumaterials[index - 1].PhaseInTreatment !== vm.edumaterials[index].PhaseInTreatment) {
                 return true;
             }
             return false;
@@ -129,8 +149,8 @@
             }
 
             // RStep refers to recursive depth in a package (since packages can contain other packages).
-            NavigatorParameters.setParameters({ 'Navigator': 'educationNavigator', 'Post': edumaterial, 'RStep':1 });
-            educationNavigator.pushPage('./views/education/individual-material.html');
+            NavigatorParameters.setParameters({'Post': edumaterial, 'RStep':1 });
+            navigator.pushPage('./views/education/individual-material.html');
         }
 
         // Function used to filter the materials shown based on the search string.

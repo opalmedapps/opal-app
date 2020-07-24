@@ -34,6 +34,7 @@
         }
 
         function openReferenceMaterial() {
+            NavigatorParameters.setParameters({'Navigator':navigatorName, 'category':'research'});
             navigator.pushPage('views/personal/research/reference-material/reference-material.html');
         }
 
