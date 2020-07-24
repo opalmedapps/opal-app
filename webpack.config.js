@@ -25,6 +25,7 @@ const config = env => {
 	console.log(`OPAL ENVIRONMENT: ${OPAL_ENV || "default (root directory)"}`);
 	// Throws error if the defined folder for environment does not exist.
 	OpalEnv.verifyOpalEnvironmentExists(OPAL_ENV);
+	const OPAL_ENV_ROOT = path.join(__dirname, './env');
 	const OPAL_ENV_FOLDER = path.join(__dirname, (OPAL_ENV) ? `./env/${OPAL_ENV}` : './');
 	return {
 		entry: entry,
@@ -118,6 +119,7 @@ const config = env => {
 			]),
 			new webpack.ProvidePlugin({
 				OPAL_CONFIG: path.join(OPAL_ENV_FOLDER, "opal.config.js"),
+                WEB_VERSION: path.join(OPAL_ENV_ROOT, "web-version.json"),
 				$: "jquery",
 				jQuery: "jquery",
 				firebase: "firebase",
