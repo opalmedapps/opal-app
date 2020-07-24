@@ -9,4 +9,5 @@
 /config.xml
 /google-services.json
 /GoogleService-Info.plist
+/env/web-version.json
 /www
