@@ -16,12 +16,12 @@
         .module('MUHCApp')
         .controller('IndividualDocumentController', IndividualDocumentController);
 
-    IndividualDocumentController.$inject = ['$rootScope', '$scope', 'NavigatorParameters', 'Documents', '$timeout', 'FileManagerService', 'Constants', '$q', 'UserPreferences', 'Logger'];
+    IndividualDocumentController.$inject = ['$rootScope', '$scope', 'NavigatorParameters', 'Documents', '$timeout', 'FileManagerService', 'Constants', '$q', 'UserPreferences'];
 
     /* @ngInject */
-    function IndividualDocumentController($rootScope, $scope, NavigatorParameters, Documents, $timeout, FileManagerService, Constants, $q, UserPreferences, Logger) {
+    function IndividualDocumentController($rootScope, $scope, NavigatorParameters, Documents, $timeout, FileManagerService, Constants, $q, UserPreferences) {
         var vm = this;
-
+        var navigator = null;
         var parameters;
         var docParams;
         var uint8pf;
@@ -38,8 +38,7 @@
 
         vm.share = share;
         vm.openPDF = openPDF;
-
-        //$scope.share = share;
+        
         $scope.about = about;
         $scope.warn = warn;
         $scope.warn2 = warn2;
@@ -54,6 +53,7 @@
 
         function activate() {
             parameters = NavigatorParameters.getParameters();
+            navigator = NavigatorParameters.getNavigator();
 
             //PDF params
             docParams = Documents.setDocumentsLanguage(parameters.Post);
@@ -272,8 +272,8 @@
 
             $rootScope.DocAlreadyInitialized = true;
 
-            if (vm.DocumentDescription != '') {
-                personalNavigator.pushPage('./views/personal/documents/about-document.html');
+            if (vm.DocumentDescription !== '') {
+                navigator.pushPage('./views/personal/documents/about-document.html');
             } else {
                 // Check if there is any about link
                 var link = null;
@@ -285,7 +285,7 @@
                     contentLink: link
                 };
 
-                personalNavigator.pushPage('./views/templates/content.html', contentOptions);
+                navigator.pushPage('./views/templates/content.html', contentOptions);
             }
 
             $scope.popoverDocsInfo.hide();
