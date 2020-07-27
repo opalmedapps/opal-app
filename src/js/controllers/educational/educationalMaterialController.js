@@ -115,8 +115,6 @@
             $scope.$on('$destroy',function()
             {
                 navigator.off('prepop');
-                // Set to default educationNavigator (necessary for headers to appeaar when going directly from personal to edu tab)
-                NavigatorParameters.setParameters({'Navigator':'educationNavigator'});
             });
         }
         
