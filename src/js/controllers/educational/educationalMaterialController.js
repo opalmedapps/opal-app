@@ -9,6 +9,9 @@
  *           Developed by Tongyou (Eason) Yang in Summer 2018
  *           Merged by Stacey Beard
  *           Commit # 6706edfb776eabef4ef4a2c9b69d834960863435
+ * 
+ * 2020 Jul: Project: Research Menu --> Education material now categorized as 'clinical' or 'research', which are 
+ *                    displayed in Education tab or Research menu, respectively.
  */
 
 (function () {
@@ -26,6 +29,8 @@
                                            Patient, Logger, UserHospitalPreferences) {
         var vm = this;
         var backButtonPressed = 0;
+        let navigator = null;
+        let params = null;
 
         // Variable containing the search string entered into the search bar
         vm.searchString = "";
@@ -35,6 +40,9 @@
 
         // variable to let the user know which hospital they are logged in
         vm.selectedHospitalToDisplay = "";
+
+        // Variable that stores the current category of material (clinical or research)
+        vm.eduCategory = '';       
         
         vm.goToEducationalMaterial = goToEducationalMaterial;
         vm.educationDeviceBackButton = educationDeviceBackButton;
@@ -43,29 +51,13 @@
         // Function used to filter the materials shown based on the search string
         vm.filterMaterial = filterMaterial;
         
-        // Default to clinical
-        vm.eduCategory = 'clinical';
-
-        let navigator = null;
-        let params = null;
 
         activate();
         ///////////////////////////////////
 
         function activate(){
-            params = NavigatorParameters.getParameters();
-
-            // Set category if specified in NavigatorParameters, otherwise defaults to clinical
-            if(params.hasOwnProperty('category')){
-                vm.eduCategory = params.category;
-            }          
-
-            // Set navigator to educationNavigator when in clinical educational material
-            if(vm.eduCategory === 'clinical'){
-                NavigatorParameters.setNavigator(educationNavigator);
-            }
-
-            navigator = NavigatorParameters.getNavigator();
+            setEduCategory();
+            configureNavigator();
 
             bindEvents();
             configureState();
@@ -84,6 +76,34 @@
 
         function educationDeviceBackButton(){
             tabbar.setActiveTab(0);
+        }
+
+        /**
+         * @name setEduCategory
+         * @desc Sets the education material category based on navigator parameters (defaults to clinical)
+         */
+        function setEduCategory(){
+            params = NavigatorParameters.getParameters();
+
+            // Set category if specified in NavigatorParameters, otherwise defaults to clinical
+            if(params.hasOwnProperty('category')){
+                vm.eduCategory = params.category;
+            }else{ 
+                vm.eduCategory = 'clinical';
+            }  
+        }
+    
+        /**
+         * @name configureNavigator
+         * @desc Sets navigator to educationNavigator if type clinical, otherwise gets current navigator.
+         *       Needed since navigator does not automatically update when switching to education tab.
+         */
+        function configureNavigator(){
+            // Set navigator to educationNavigator when in clinical educational material
+            if(vm.eduCategory === 'clinical'){
+                NavigatorParameters.setNavigator(educationNavigator);
+            }
+            navigator = NavigatorParameters.getNavigator();
         }
 
         function configureState() {
@@ -145,6 +165,10 @@
             navigator.pushPage('./views/education/individual-material.html');
         }
 
+        /**
+         * @name openInfoPage
+         * @desc Open info page (currently only on education tab)
+         */
         function openInfoPage() {
             navigator.pushPage('views/tabs/info-page-tabs.html');
         }
@@ -175,7 +199,10 @@
             vm.filteredEduMaterials = filtered;//assign to new show list
         }
 
-        // Function to filter material based on current category
+        /**
+         * @name filterMaterialCategory
+         * @desc Function to filter material based on current category
+         */
         function filterMaterialCategory() {
             var filteredCategory = [];
 
