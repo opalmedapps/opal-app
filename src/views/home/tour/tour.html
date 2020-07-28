@@ -9,44 +9,44 @@
     <div align="center" style="padding-top:10px;">
         <ons-row>
             <ons-col>
-                <div class="ion-chevron-left" aria-hidden="true" ng-click="vm.prev()" ng-hide="vm.currentIndex == 0"></div>
+                <div class="ion-chevron-left tour-carousel-arrow-margin" aria-hidden="true" ng-click="vm.prev()" ng-hide="vm.currentIndex == 0"></div>
             </ons-col>
             <ons-col ng-class="fontSizeTitle">
                 {{vm.currentIndex+1}} / 6
             </ons-col>
             <ons-col>
-                <div class="ion-chevron-right" aria-hidden="true" ng-click="vm.next()" ng-hide="vm.currentIndex == 5"></div>
+                <div class="ion-chevron-right tour-carousel-arrow-margin" aria-hidden="true" ng-click="vm.next()" ng-hide="vm.currentIndex == 5"></div>
             </ons-col>
         </ons-row>
     </div>
 
     <ons-carousel swipeable overscrollable auto-scroll fullscreen class="tourCarousel">
-        <ons-carousel-item>
+        <ons-carousel-item class="tour-carousel-text-margin">
             <img src="img/opal-blackImage.png" class="icon-size">
             <div ng-class="fontSizeTitle">{{"TOUR_WELCOME"|translate}}</div>
             <div ng-class="fontSizeDesc">{{"TOUR_WELCOME_DESC"|translate}}</div>
         </ons-carousel-item>
-        <ons-carousel-item>
+        <ons-carousel-item class="tour-carousel-text-margin">
             <ons-icon icon="fa-home" class="tour-icon" aria-hidden="true"></ons-icon>
             <div ng-class="fontSizeTitle">{{"HOME"|translate}}</div>
             <div ng-class="fontSizeDesc">{{"TOUR_HOME"|translate}}</div>
         </ons-carousel-item>
-        <ons-carousel-item>
+        <ons-carousel-item class="tour-carousel-text-margin">
             <ons-icon icon="fa-user" class="tour-icon" aria-hidden="true"></ons-icon>
             <div ng-class="fontSizeTitle">{{"MYCHART"|translate}}</div>
             <div ng-class="fontSizeDesc">{{"TOUR_MYCHART"|translate}}</div>
         </ons-carousel-item>
-        <ons-carousel-item>
+        <ons-carousel-item class="tour-carousel-text-margin">
             <ons-icon icon="fa-th" class="tour-icon" aria-hidden="true"></ons-icon>
             <div ng-class="fontSizeTitle">{{"GENERAL"|translate}}</div>
             <div ng-class="fontSizeDesc">{{"TOUR_GENERAL"|translate}}</div>
         </ons-carousel-item>
-        <ons-carousel-item>
+        <ons-carousel-item class="tour-carousel-text-margin">
             <ons-icon icon="fa-mortar-board" class="tour-icon" aria-hidden="true"></ons-icon>
             <div ng-class="fontSizeTitle">{{"EDUCATION"|translate}}</div>
             <div ng-class="fontSizeDesc">{{"TOUR_EDUCATION"|translate}}</div>
         </ons-carousel-item>
-        <ons-carousel-item>
+        <ons-carousel-item class="tour-carousel-text-margin">
             <ons-icon icon="fa-info-circle" class="tour-icon" aria-hidden="true"></ons-icon>
             <div ng-class="fontSizeTitle">{{"ABOUT"|translate}}</div>
             <div ng-class="fontSizeDesc">{{"TOUR_INFO"|translate}}</div>

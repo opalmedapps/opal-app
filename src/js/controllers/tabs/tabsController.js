@@ -16,15 +16,17 @@
 
         var vm = this;
 
+       // vm.openTour = openTour;
         vm.analyze = analyze;
-
+        
         activate();
 
         /////////////////////////
 
         function activate() {
-
-            if (!localStorage.getItem('firstInstall')){
+            
+            if (!localStorage.getItem('firstInstall')) {
+                
                 localStorage.setItem('firstInstall', '1');
                 $timeout(function () {
                     firstLoginTourModal.show();
@@ -41,5 +43,15 @@
                 tabbar.setActiveTab(e.index);
             }
         }
+
+        //function openTour() {
+        //    //NavigatorParameters.setParameters({
+        //    //    Navigator: navigatorName
+        //    //});
+        //    //navigator.pushPage('/views/home/tour/tour.html');
+
+        //    NavigatorParameters.setParameters({ 'Navigator': navigatorName });
+        //    $window[navigatorName].pushPage('./views/home/tour/tour.html')
+        //}
     }
 })();

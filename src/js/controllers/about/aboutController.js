@@ -116,6 +116,7 @@
         function openTour() {
             navigator.pushPage('/views/home/tour/tour.html');
         }
+
         function openTeam() {
             navigator.pushPage('views/templates/content.html', {contentType: 'hig'});
         }

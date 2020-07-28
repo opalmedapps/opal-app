@@ -32,3 +32,14 @@
         </div>
     </ons-tab>
 </ons-tabbar>
+
+<ons-modal var="firstLoginTourModal"  ng-controller="TabsController as tabs">
+    <ons-button ng-class="fontSizeTitle"
+                ng-click="firstLoginTourModal.hide(); tabs.openTour();">
+        {{"CONTINUE"|translate}}
+    </ons-button>
+    <ons-button ng-class="fontSizeTitle" class="btnColor"
+                ng-click="firstLoginTourModal.hide()">
+        {{"CANCEL"|translate}}
+    </ons-button>
+</ons-modal>

@@ -3112,3 +3112,12 @@ input {
 .btnColor {
     background-color: #F44336;
 }
+
+.tour-carousel-arrow-margin {
+    margin-top:4px;
+}
+
+.tour-carousel-text-margin {
+    padding-left: 2vw;
+    padding-right: 2vw;
+}
