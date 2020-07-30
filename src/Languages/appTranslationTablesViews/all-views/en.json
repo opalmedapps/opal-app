@@ -327,6 +327,10 @@
   "TODAY": "Today",
   "TOO_MANY_REQUESTS": "Too many login attempts. Please try again later.",
   "TOU": "Terms of Use",
+  "TOURMODALTITLE": "Welcome to Opal!",
+  "TOURMODALINTRODUCTION": "To help you get started, a quick tour is available to guide you through the main sections of the app. If you choose to skip it or would like to visit it again later, the tour is always available under \"Learn About Opal\" on your Home tab.",
+  "TOURMODALLATERBUTTON": "Later",
+  "TOURMODALTAKETOURBUTTON": "Take the tour",
   "TREATINGTEAMNOTIFICATIONS": "Treating Team Messages",
   "TREATMENTPLANCOMPLETEDON": "Completed On:",
   "TREATMENTPLANNING": "Treatment Planning",
@@ -348,3 +352,4 @@
   "WARNING": "Warning",
   "YES": "Yes"
 }
+
