@@ -2722,23 +2722,6 @@ and (max-device-width : 321px)
     transition: all 0.3s cubic-bezier(.25,.8,.25,1);
 }
 
-
-/* Waiting Time Estimates */
-#last-updated {
-  position: absolute;
-  right: 2%;
-}
-
-#wait-time-timeline {
-  margin-top: 20px;
-  position: relative;
-  height: 5px;
-  /*animation: expand_line 1.5s ease-out forwards;
-  animation-delay: 0.3s;*/
-  background-color: lightgrey;
-  width: 100%;
-}
-
 @keyframes expand_line {
     0% {
       width: 0%;
@@ -2805,54 +2788,12 @@ and (max-device-width : 321px)
     }
 }
 
-.horizontal-center-outer {
-  text-align: center;
-}
-
-.horizontal-center-inner {
-  display: inline-block;
-}
-
-#waiting-time-container-info {
-  text-align: left;
-  margin: 4px;
-}
-
-#waiting-time-container {
-  margin-bottom: -10px;
-  margin-top: -10px;
-}
-
 #time-outline {
   position: absolute;
   width: 100%;
   text-align: center;
   top: 237px;
   font-size: small;
-}
-
-.checked-in {
-  height: 22px;
-  width: 22px;
-  float: left;
-  background-color: #59D45D;
-}
-
-.not-checked-in {
-  height: 22px;
-  width: 22px;
-  float: left;
-  background-color: #1A651D;
-}
-
-#no-prev-patient {
-  display: none;
-  height: 50%;
-  position: relative;
-  top: 50%;
-  transform: translateY(-50%);
-  margin: 20px;
-  text-align: center;
 }
 
 .dividing-horizontal-line {
