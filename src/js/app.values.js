@@ -310,60 +310,6 @@
                     },
                 },
 
-                /** Delay Service constants **/
-                delayServiceEn: {
-                    daysSingular: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
-                    daysPlural: ['Mondays', 'Tuesdays', 'Wednesdays', 'Thursdays', 'Fridays', 'Saturdays', 'Sundays'],
-                    months: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
-                    daySuffixes: ['th', 'st', 'nd', 'rd'],
-                    dayInterval: ['evening', 'afternoon', 'morning'],
-                    timeInterval: ['AM', 'PM'],
-                    unknownAppointment: 'There are no visualizations for this appointment yet',
-                    unknownAppointmentType: 'There are no visualizations for this kind of appointment yet.',
-                    notEnoughData: "There isn't enough data for a visualization for this kind of appointment at this time. " +
-                    "Please stay tuned",
-                    setsName: {
-                        set1: '0-15 minutes',
-                        set2: '15-30 minutes',
-                        set3: '30-45 minutes',
-                        set4: '45+ minutes'
-                    },
-                    setsDescription: {
-                        set1: 'from 0 to 15 minutes',
-                        set2: 'from 15 to 30 minutes',
-                        set3: 'from 30 to 45 minutes',
-                        set4: 'more than 45 minutes',
-                        point: '<span style="color:{point.color}">\u25CF</span> {series.name}: <b>{point.y}%</b> of the patients waited this amount of time.<br/>',
-                        unknown: 'an unknown amount of time'
-                    },
-                    yAxisTitle: 'Frequency (%)'
-                },
-                delayServiceFr: {
-                    daysSingular: ['lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi', 'dimanche'],
-                    daysPlural: ['lundis', 'mardis', 'mercredis', 'jeudis', 'vendredis', 'samedis', 'dimanches'],
-                    months: ['janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'],
-                    dayInterval: ['soir', 'après-midi', 'matin'],
-                    unknownAppointment: 'Inconnu',
-                    unknownAppointment2: 'Il n\'y a pas encore de visualization pour ce rendez-vous',
-                    unknownAppointmentType: 'Il n\'y a pas encore de visualization pour ce genre de rendez-vous.',
-                    notEnoughData: 'Il n\'y a pas encore de visualization pour ce rendez-vous',
-                    setsName: {
-                        set1: '0-15 minutes',
-                        set2: '15-30 minutes',
-                        set3: '30-45 minutes',
-                        set4: '45+ minutes'
-                    },
-                    setsDescription: {
-                        set1: 'de 0 à 15 minutes',
-                        set2: 'de 15 à 30 minutes',
-                        set3: 'de 30 à 45 minutes',
-                        set4: 'plus de 45 minutes',
-                        point: '<span style="color:{point.color}">\u25CF</span> {series.name}: <b>{point.y}%</b> des patients ont attendu cette période de temps.<br/>',
-                        unknown: 'une durée de temps inconnue'
-                    },
-                    yAxisTitle: 'Fréquence (%)'
-                },
-
                 /** Documents, doctors and patient service constants **/
                 cdvDoctorsFilePathAndroid: 'cdvfile://localhost/files/Doctors/',
                 cdvDoctorsFilePathIos: 'cdvfile://localhost/persistent/Doctors/',
@@ -381,26 +327,6 @@
                 categoryTwoTests: ['Sodium', 'Potassium', 'Glucose, Random', 'Creatinine', 'Calcium', 'Corrected Calcium', 'Magnesium'],
                 categoryThreeTests: ['LDH', 'T4', 'T4, Free', 'TSH', 'Albumin', 'Protein, Total', 'AST (SGOT)', 'ALT (SGPT)', 'Alkaline Phosphatase', 'Rapamune (Sirolimus)'],
                 categoryFourTests: ['CEA', 'CA 15-3', 'CA-125'],
-
-                /** myWaitingTime Service Constants **/
-                waitingTimeEn: {
-                    waitingTitle: 'Appointments',
-                    waitingUnit: 'Waiting times (minutes)',
-                    waitingDueHospitalDelay: 'Minutes waiting due to hospital\'s delay',
-                    waitingDueEarlyArrival: 'Minutes waiting due to early arrival',
-                    usuallyOnTime: 'On time',
-                    usuallyTooEarly: 'Too early',
-                    usuallyLate: 'Late'
-                },
-                waitingTimeFr: {
-                    waitingTitle: 'Rendez-vous',
-                    waitingUnit: 'Temps d\'attente (minutes)',
-                    waitingDueHospitalDelay: 'Temps d\'attente causé par les délais de l\'hôpital',
-                    waitingDueEarlyArrival: 'Temps d\'attente causé par l\'arrivée d\'avance',
-                    usuallyOnTime: 'À l\'heure',
-                    usuallyTooEarly: 'Trop tôt',
-                    usuallyLate: 'En retard'
-                },
 
                 /** newsBanner Service constants **/
                 newsAlertTypes: {
