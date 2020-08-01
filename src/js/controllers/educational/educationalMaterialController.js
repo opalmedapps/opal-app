@@ -38,6 +38,7 @@
         
         vm.goToEducationalMaterial = goToEducationalMaterial;
         vm.educationDeviceBackButton = educationDeviceBackButton;
+        vm.openInfoPage = openInfoPage;
 
         // Function used to filter the materials shown based on the search string
         vm.filterMaterial = filterMaterial;
@@ -51,8 +52,7 @@
         activate();
         ///////////////////////////////////
 
-        function activate(){         
-            navigator = NavigatorParameters.getNavigator();
+        function activate(){
             params = NavigatorParameters.getParameters();
 
             // Set category if specified in NavigatorParameters, otherwise defaults to clinical
@@ -62,8 +62,10 @@
 
             // Set navigator to educationNavigator when in clinical educational material
             if(vm.eduCategory === 'clinical'){
-               navigator = educationNavigator;
+                NavigatorParameters.setNavigator(educationNavigator);
             }
+
+            navigator = NavigatorParameters.getNavigator();
 
             bindEvents();
             configureState();
@@ -74,6 +76,8 @@
             vm.noMaterials = false;
             // Full list of educational materials in the right language.
             vm.edumaterials = EducationalMaterial.setLanguage(EducationalMaterial.getEducationalMaterial());
+            // Get material from current category only
+            filterMaterialCategory();
             // Educational materials filtered based on the search string.
             vm.filteredEduMaterials = vm.edumaterials;
         }
@@ -115,6 +119,8 @@
             $scope.$on('$destroy',function()
             {
                 navigator.off('prepop');
+                // Reset navigator to default (needed when switching from reference materials to edu tab directly)
+                NavigatorParameters.setParameters({'Navigator':'educationNavigator'});
             });
         }
         
@@ -137,6 +143,10 @@
             // RStep refers to recursive depth in a package (since packages can contain other packages).
             NavigatorParameters.setParameters({'Post': edumaterial, 'RStep':1 });
             navigator.pushPage('./views/education/individual-material.html');
+        }
+
+        function openInfoPage() {
+            navigator.pushPage('views/tabs/info-page-tabs.html');
         }
 
         // Function used to filter the materials shown based on the search string.
@@ -163,6 +173,19 @@
             });
 
             vm.filteredEduMaterials = filtered;//assign to new show list
+        }
+
+        // Function to filter material based on current category
+        function filterMaterialCategory() {
+            var filteredCategory = [];
+
+            vm.edumaterials.forEach(function(edumaterial){
+                if(edumaterial.Category === vm.eduCategory){
+                    filteredCategory.push(edumaterial);
+                }
+            });
+
+            vm.edumaterials = filteredCategory;
         }
     }
 })();

@@ -3,7 +3,8 @@
     <!-- TOOLBAR -->
     <ons-toolbar fixed-style >
         <div class="center" ng-class="fontSizeTitle">{{"EDUCATION"|translate}}</div>
-        <div class="right"><ons-toolbar-button ng-click="educationNavigator.pushPage('./views/tabs/info-page-tabs.html')"><ons-icon icon="fa-info-circle"></ons-icon></ons-toolbar-button></div>
+        <div class="right"><ons-toolbar-button ng-click="edu.openInfoPage()" ng-if="edu.eduCategory=='clinical'">
+            <ons-icon icon="fa-info-circle"></ons-icon></ons-toolbar-button></div>
     </ons-toolbar>
 
     <!-- HOSPITAL NAME BAR -->
@@ -29,7 +30,7 @@
     <!-- LIST OF EDUCATIONAL MATERIALS -->
     <ons-scroller-height offset-height="78">
         <ons-list>
-            <ons-list-item modifier="chevron" class="item" ng-repeat = "edumaterial in edu.filteredEduMaterials | orderBy: '-DateAdded'" ng-click="edu.goToEducationalMaterial(edumaterial)" ng-if="edumaterial.Category=='clinical'">
+            <ons-list-item modifier="chevron" class="item" ng-repeat = "edumaterial in edu.filteredEduMaterials | orderBy: '-DateAdded'" ng-click="edu.goToEducationalMaterial(edumaterial)">
                 <ons-row align="center">
                     <ons-col width="60px" align="center">
                         <div>
