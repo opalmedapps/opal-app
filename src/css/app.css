@@ -2844,3 +2844,19 @@ and (max-device-width : 321px)
   text-overflow: ellipsis;
   word-break: break-word;
 }
+
+.questionnaires-list {
+    margin-left: 15px;
+}
+
+.individual-questionnaires {
+    margin-bottom: 2.4vh;
+}
+
+.questionnaires-list-date {
+    color: #757575;
+}
+
+.questionnaires-list-text {
+    word-wrap: break-word;
+}
