@@ -3,7 +3,7 @@
         <div class="left">
             <ons-back-button>{{"BACK"|translate}}</ons-back-button>
         </div>
-        <div class="center" ng-class="fontSizeTitle">{{"QUESTIONNAIRES"|translate}}</div>
+        <div class="center" ng-class="fontSizeTitle">{{questionnaireListVm.pageTitle}}</div>
     </ons-toolbar>
 
     <!--LOADING CIRCLE FOR LIST OF QUESTIONNAIRES-->
@@ -46,7 +46,7 @@
                             <!--no new questionnaires-->
                             <p ng-if="!questionnaireListVm.newQuestionnaireExist()" ng-class="fontSizeTitle"
                                style="color: grey; margin-top: 25vh;">
-                                {{"QUESTIONNAIRE_NONE_NEW"|translate}}
+                                {{questionnaireListVm.noNewQuestionnaireText}}
                             </p>
     
                             <!--if there are questionnaires, list them-->
@@ -68,7 +68,7 @@
     
                             <!--no in progress questionnaires-->
                             <p ng-show="!questionnaireListVm.inProgressQuestionnaireExist()" ng-class="fontSizeTitle"
-                               style="color: grey; margin-top: 25vh;">{{"QUESTIONNAIRE_NONE_PROGRESS"|translate}}</p>
+                               style="color: grey; margin-top: 25vh;">{{questionnaireListVm.noProgressQuestionnaireText}}</p>
     
                             <!--if there are in progress questionnaires: list them-->
                             <ul class="list">
@@ -91,7 +91,7 @@
     
                             <!--no completed questionnaires-->
                             <p ng-show="!questionnaireListVm.completedQuestionnaireExist()" ng-class="fontSizeTitle"
-                               style="color: grey; margin-top: 25vh;">{{"QUESTIONNAIRE_NONE_COMPLETED"|translate}}</p>
+                               style="color: grey; margin-top: 25vh;">{{questionnaireListVm.noCompletedQuestionnaireText}}</p>
     
                             <!--if there are completed questionnaires: list them-->
                             <ul class="list">

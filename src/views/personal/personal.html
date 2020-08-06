@@ -151,7 +151,7 @@
             </ons-list-item>
             <ons-list-item modifier="chevron" class="item"
                            ng-if="tab.allowedModules.hasOwnProperty('QUE') && tab.allowedModules['QUE']"
-                           ng-click="personalNavigator.pushPage('views/personal/questionnaires/questionnairesList.html')">
+                           ng-click="tab.goToClinicalQuestionnaire()">
                 <ons-row align="center">
                     <ons-col width="60px" style="text-align: center">
                         <div>

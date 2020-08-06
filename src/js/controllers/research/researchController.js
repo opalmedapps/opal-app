@@ -39,11 +39,13 @@
         }
 
         function openResearchQuestionnaires() {
-            navigator.pushPage('views/personal/research/research-questionnaires/research-questionnaires-list.html');
+            NavigatorParameters.setParameters({questionnaireCategory: 'research'});
+            navigator.pushPage('views/personal/questionnaires/questionnairesList.html');
         }
 
         function openConsentForms() {
-            navigator.pushPage('views/personal/research/consent-forms/consent-forms.html');
+            NavigatorParameters.setParameters({questionnaireCategory: 'consent'});
+            navigator.pushPage('views/personal/questionnaires/questionnairesList.html');
         }
 
         function openInfoPage() {

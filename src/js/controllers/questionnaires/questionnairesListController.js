@@ -29,6 +29,7 @@
         const allowedStatus = Params.QUESTIONNAIRE_DB_STATUS_CONVENTIONS;
 
         // variables for controller
+        let category = 'default';
         let navigator = null;
         let navigatorName = '';
 
@@ -37,6 +38,10 @@
         vm.newQuestionnaireList = [];
         vm.inProgressQuestionnaireList = [];
         vm.completedQuestionnaireList = [];
+        vm.noNewQuestionnaireText = '';     // the description varies according to the questionnaire category
+        vm.noProgressQuestionnaireText = '';    // the description varies according to the questionnaire category
+        vm.noCompletedQuestionnaireText = '';   // the description varies according to the questionnaire category
+        vm.pageTitle = '';  // the page title varies according to the questionnaire category
         vm.tab = 'new';
 
         // functions that can be used from view, sorted alphabetically
@@ -56,6 +61,25 @@
 
             navigator = NavigatorParameters.getNavigator();
             navigatorName = NavigatorParameters.getNavigatorName();
+            let params = NavigatorParameters.getParameters();
+
+            // TODO: Delete both if blocks below when merging with research_questionnaires_yuan for proper solution
+            if (params.hasOwnProperty('questionnaireCategory')){
+                category = params.questionnaireCategory;
+            } 
+            
+            if (category=='consent'){
+                vm.noNewQuestionnaireText = $filter('translate')("CONSENT_FORMS_NONE_NEW");     
+                vm.noProgressQuestionnaireText = $filter('translate')("CONSENT_FORMS_NONE_PROGRESS");    
+                vm.noCompletedQuestionnaireText = $filter('translate')("CONSENT_FORMS_NONE_COMPLETED");   
+                vm.pageTitle = $filter('translate')("CONSENT_FORMS");
+            } else {
+                vm.noNewQuestionnaireText = $filter('translate')("QUESTIONNAIRE_NONE_NEW");     
+                vm.noProgressQuestionnaireText = $filter('translate')("QUESTIONNAIRE_NONE_PROGRESS");    
+                vm.noCompletedQuestionnaireText = $filter('translate')("QUESTIONNAIRE_NONE_COMPLETED");   
+                vm.pageTitle = $filter('translate')("RESEARCH_QUESTIONNAIRES");
+            }
+
 
             Questionnaires.requestQuestionnaireList()
                 .then(function () {
@@ -117,6 +141,8 @@
          * @returns {boolean} True if there are new questionnaires, false otherwise
          */
         function newQuestionnaireExist(){
+            // TODO: delete if statement after merge with research_questionnaires_yuan
+            if (category=='research'||category=='consent') return false;
             return Questionnaires.getQuestionnaireCount(allowedStatus.NEW_QUESTIONNAIRE_STATUS) > 0;
         }
 
@@ -126,6 +152,8 @@
          * @returns {boolean} True if there are in progress questionnaires, false otherwise
          */
         function inProgressQuestionnaireExist(){
+            // TODO: delete if statement after merge with research_questionnaires_yuan
+            if (category=='research'||category=='consent') return false;
             return Questionnaires.getQuestionnaireCount(allowedStatus.IN_PROGRESS_QUESTIONNAIRE_STATUS) > 0;
         }
 
@@ -135,6 +163,8 @@
          * @returns {boolean} True if there are completed questionnaires, false otherwise
          */
         function completedQuestionnaireExist(){
+            // TODO: delete if statement after merge with research_questionnaires_yuan
+            if (category=='research'||category=='consent') return false;
             return Questionnaires.getQuestionnaireCount(allowedStatus.COMPLETED_QUESTIONNAIRE_STATUS) > 0;
         }
 
@@ -143,11 +173,13 @@
          * @desc get the questionnaire list from the service
          */
         function loadQuestionnaireList (){
-
+            // TODO: delete if statement after merge with research_questionnaires_yuan
             $timeout(function(){
-                vm.newQuestionnaireList = Questionnaires.getQuestionnaireList(allowedStatus.NEW_QUESTIONNAIRE_STATUS);
-                vm.inProgressQuestionnaireList = Questionnaires.getQuestionnaireList(allowedStatus.IN_PROGRESS_QUESTIONNAIRE_STATUS);
-                vm.completedQuestionnaireList = Questionnaires.getQuestionnaireList(allowedStatus.COMPLETED_QUESTIONNAIRE_STATUS);
+                if (category!=='research'&&category!=='consent'){
+                    vm.newQuestionnaireList = Questionnaires.getQuestionnaireList(allowedStatus.NEW_QUESTIONNAIRE_STATUS);
+                    vm.inProgressQuestionnaireList = Questionnaires.getQuestionnaireList(allowedStatus.IN_PROGRESS_QUESTIONNAIRE_STATUS);
+                    vm.completedQuestionnaireList = Questionnaires.getQuestionnaireList(allowedStatus.COMPLETED_QUESTIONNAIRE_STATUS);
+                }
             });
         }
 

@@ -26,6 +26,7 @@
         vm.goToStatus = goToStatus;
         vm.personalDeviceBackButton = personalDeviceBackButton;
         vm.goToCarnetSante = goToCarnetSante;
+        vm.goToClinicalQuestionnaire = goToClinicalQuestionnaire;
 
         activate();
 
@@ -116,6 +117,11 @@
         function configureSelectedHospital() {
             vm.selectedHospitalToDisplay = UserHospitalPreferences.getHospitalFullName();
             vm.allowedModules = UserHospitalPreferences.getHospitalAllowedModules();
+        }
+
+        function goToClinicalQuestionnaire() {
+            NavigatorParameters.setParameters({questionnaireCategory: 'clinical'});
+            personalNavigator.pushPage('views/personal/questionnaires/questionnairesList.html');
         }
     }
 })();
