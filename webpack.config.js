@@ -26,7 +26,7 @@ const config = env => {
 	// Throws error if the defined folder for environment does not exist.
 	OpalEnv.verifyOpalEnvironmentExists(OPAL_ENV);
 	const OPAL_ENV_ROOT = path.join(__dirname, './env');
-	const OPAL_ENV_FOLDER = path.join(__dirname, (OPAL_ENV) ? `./env/${OPAL_ENV}` : './');
+	const OPAL_ENV_FOLDER = (OPAL_ENV) ? path.join(OPAL_ENV_ROOT, OPAL_ENV) : __dirname;
 	return {
 		entry: entry,
 		devtool: (isProduction) ? 'source-map' : 'eval-cheap-source-map',
