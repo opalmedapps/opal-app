@@ -244,9 +244,19 @@ myApp.service('EducationalMaterial',['$q','$filter','LocalStorage','FileManagerS
          *@description Getter for the educational material
          *@returns {Array} Returns array containing educational material
          **/
-        getEducationalMaterial:function()
+        getEducationalMaterial:function(eduCategory='clinical')
         {
-            return educationalMaterialArray;
+            let eduId = (eduCategory ==='research')? '1' : '2';
+            
+            let educationalMaterialArrayByCategory = [];
+
+            educationalMaterialArray.forEach(function(edumaterial){
+                if(edumaterial.EducationalMaterialCategoryId === eduId){
+                    educationalMaterialArrayByCategory.push(edumaterial);
+                }
+            });
+
+            return educationalMaterialArrayByCategory;
         },
         /**
          *@ngdoc method

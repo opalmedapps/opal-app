@@ -66,10 +66,8 @@
 
         function initData() {
             vm.noMaterials = false;
-            // Full list of educational materials in the right language.
-            vm.edumaterials = EducationalMaterial.setLanguage(EducationalMaterial.getEducationalMaterial());
-            // Get material from current category only
-            filterMaterialCategory();
+            // Full list of educational materials in the right language and category.
+            vm.edumaterials = EducationalMaterial.setLanguage(EducationalMaterial.getEducationalMaterial(vm.eduCategory));
             // Educational materials filtered based on the search string.
             vm.filteredEduMaterials = vm.edumaterials;
         }
@@ -199,21 +197,6 @@
             vm.filteredEduMaterials = filtered;//assign to new show list
         }
 
-        /**
-         * @name filterMaterialCategory
-         * @desc Function to filter material based on current category
-         */
-        function filterMaterialCategory() {
-            var filteredCategory = [];
-
-            vm.edumaterials.forEach(function(edumaterial){
-                if(edumaterial.Category === vm.eduCategory){
-                    filteredCategory.push(edumaterial);
-                }
-            });
-
-            vm.edumaterials = filteredCategory;
-        }
     }
 })();
 
