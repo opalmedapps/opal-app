@@ -92,10 +92,7 @@
          * @desc Check if icon is an uploaded image (in img/ directory) or is otherwise a regular ons-icon
          */
         function isIcon(){
-            if (vm.view.icon.includes("img/")){
-                return false;
-            }
-            return true;
+            return !vm.view.icon.includes("img/");
         }
     }
 
