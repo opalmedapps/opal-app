@@ -37,7 +37,7 @@ class OpalEnv {
      * @name updateWebVersion
      * @author Stacey Beard
      * @date 2020-07-24
-     * @description Updates the file env/web-version.json with the app's web version, taken from config.xml of the
+     * @description Updates the file web-version.json with the app's web version, taken from config.xml of the
      *              specified environment. The web version is made available throughout the app as WEB_VERSION.version
      *              and WEB_VERSION.build via webpack's ProvidePlugin.
      *              Note: since the build number in config.xml is repeated twice, the Android one is used here.
