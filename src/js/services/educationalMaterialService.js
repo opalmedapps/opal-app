@@ -27,6 +27,12 @@ myApp.service('EducationalMaterial',['$q','$filter','LocalStorage','FileManagerS
     'RequestToServer', '$http', 'Logger', 'Params',
     function ($q, $filter, LocalStorage, FileManagerService, UserPreferences, RequestToServer, $http, Logger, Params) {
 
+        // Title mapping depending on educational material category
+        const CATEGORY_TITLE_MAP = {
+            clinical: 'EDUCATION',
+            research: 'REFERENCE_MATERIAL',
+        };
+
     /**
      *@ngdoc property
      *@name  MUHCApp.service.#educationalMaterialArray
@@ -519,6 +525,18 @@ myApp.service('EducationalMaterial',['$q','$filter','LocalStorage','FileManagerS
         clearEducationalMaterial:function()
         {
             educationalMaterialArray=[];
+        },
+        /**
+         *@ngdoc method
+         *@name getEducationalMaterialTitle
+         *@methodOf MUHCApp.service:EducationalMaterial
+         *@param {string} eduCategory 
+         *@description Gets title for the education views that corresponds to the educational category param.
+         *@returns {string} The translated title for the education views
+         **/
+        getEducationalMaterialTitle:function()
+        {
+            return $filter('translate')(CATEGORY_TITLE_MAP[eduCategory]);
         }
     };
 

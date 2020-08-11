@@ -41,8 +41,9 @@
         // variable to let the user know which hospital they are logged in
         vm.selectedHospitalToDisplay = "";
 
-        // Variable that stores the current category of material (clinical or research)
-        vm.eduCategory = '';       
+        // Variables to store the current category of material (clinical or research) and corresponding page title
+        vm.eduCategory = '';     
+        vm.pageTitle = '';   
         
         vm.goToEducationalMaterial = goToEducationalMaterial;
         vm.educationDeviceBackButton = educationDeviceBackButton;
@@ -89,6 +90,9 @@
             }else{ 
                 vm.eduCategory = 'clinical';
             }  
+
+            // Set corresponding page title
+            vm.pageTitle = EducationalMaterial.getEducationalMaterialTitle(vm.eduCategory);
         }
     
         /**
