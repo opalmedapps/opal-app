@@ -534,7 +534,7 @@ myApp.service('EducationalMaterial',['$q','$filter','LocalStorage','FileManagerS
          *@description Gets title for the education views that corresponds to the educational category param.
          *@returns {string} The translated title for the education views
          **/
-        getEducationalMaterialTitle:function()
+        getEducationalMaterialTitle:function(eduCategory)
         {
             return $filter('translate')(CATEGORY_TITLE_MAP[eduCategory]);
         }
