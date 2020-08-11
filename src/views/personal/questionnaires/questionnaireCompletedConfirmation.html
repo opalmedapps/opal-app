@@ -3,7 +3,7 @@
         <div class="left">
             <ons-back-button>{{"BACK"|translate}}</ons-back-button>
         </div>
-        <div class="center" ng-class="fontSizeTitle">{{"QUESTIONNAIRES"|translate}}</div>
+        <div class="center" ng-class="fontSizeTitle">{{vm.pageTitle}}</div>
     </ons-toolbar>
 
     <div style="margin-top: 10px">
@@ -17,7 +17,7 @@
             <div class="row text-center" style="margin: 0 auto; align: center" ng-class="fontSizeDesc">
                 <div class="col-xs-12 text-center" style="margin: 0 auto; align: center">
                     <h3>
-                        {{"QUESTIONNAIRE_THANKS"|translate}}
+                        {{vm.thankMessage}}
                     </h3>
                     <br>
                     <p>{{"QUESTIONNAIRE_CONTACT"|translate}}</p>
@@ -28,7 +28,7 @@
         <div align="center" style="margin-bottom:10px">
             <button class="button--large--cta" style="width:80%; white-space: initial"
                     ng-click="vm.goBackToList()" ng-class="fontSizeDesc">
-                {{"QUESTIONNAIRE_GO_BACK_TO_LIST"|translate}}
+                {{vm.backToListMessage}}
             </button>
         </div>
     </div>

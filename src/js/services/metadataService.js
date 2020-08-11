@@ -23,9 +23,9 @@
         .module('MUHCApp')
         .factory('MetaData', MetaData);
 
-    MetaData.$inject = ['Appointments','Documents','TxTeamMessages','Notifications', 'Questionnaires', 'Announcements', 'EducationalMaterial'];
+    MetaData.$inject = ['Appointments','Documents','TxTeamMessages','Notifications', 'Announcements', 'EducationalMaterial'];
 
-    function MetaData(Appointments, Documents, TxTeamMessages, Notifications, Questionnaires, Announcements, EducationalMaterial) {
+    function MetaData(Appointments, Documents, TxTeamMessages, Notifications, Announcements, EducationalMaterial) {
 
         //you only need to use this service the first time entering a tab
         var firstTimeHome = true;
@@ -38,7 +38,6 @@
             documentsUnreadNumber: null,
             txTeamMessagesUnreadNumber: null,
             notificationsUnreadNumber: null,
-            questionnairesUnreadNumber: null
         };
 
         var homeTabData = {
@@ -82,7 +81,6 @@
             personalTabData.txTeamMessagesUnreadNumber = TxTeamMessages.getUnreadTxTeamMessages();
             personalTabData.notificationsUnreadNumber = Notifications.getNumberUnreadNotifications();
             homeTabData.notificationsUnreadNumber = Notifications.getNumberUnreadNotifications();
-            personalTabData.questionnairesUnreadNumber = Questionnaires.getNumberOfUnreadQuestionnaires();
 
             //load the general tab data
             generalTabData.announcementsUnreadNumber = Announcements.getNumberUnreadAnnouncements();

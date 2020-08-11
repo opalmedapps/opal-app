@@ -26,6 +26,50 @@
         const questionnaireValidStatus = Params.QUESTIONNAIRE_DB_STATUS_CONVENTIONS;
         const questionnaireValidType = Params.QUESTIONNAIRE_DB_TYPE_CONVENTIONS;
         const answerSavedInDBValidStatus = Params.ANSWER_SAVED_IN_DB_STATUS;
+        const allowedCategory = Params.QUESTIONNAIRE_CATEGORIES;
+
+        // the following are not in the constants file since they concern translation
+        const CATEGORY_TITLE_MAP = {
+            clinical: 'CLINICAL_QUESTIONNAIRES',
+            research: 'RESEARCH_QUESTIONNAIRES',
+            consent: 'STUDY_CONSENT_FORMS',
+            default: 'QUESTIONNAIRES',
+        };
+
+        const CATEGORY_EMPTY_LIST_MAP = {
+            new: {
+                clinical: 'QUESTIONNAIRE_NONE_NEW',
+                research: 'QUESTIONNAIRE_NONE_NEW',
+                consent: 'STUDY_CONSENT_FORMS_NONE_NEW',
+                default: 'QUESTIONNAIRE_NONE_NEW',
+            },
+            progress: {
+                clinical: 'QUESTIONNAIRE_NONE_PROGRESS',
+                research: 'QUESTIONNAIRE_NONE_PROGRESS',
+                consent: 'STUDY_CONSENT_FORMS_NONE_PROGRESS',
+                default: 'QUESTIONNAIRE_NONE_PROGRESS',
+            },
+            completed: {
+                clinical: 'QUESTIONNAIRE_NONE_COMPLETED',
+                research: 'QUESTIONNAIRE_NONE_COMPLETED',
+                consent: 'STUDY_CONSENT_FORMS_NONE_COMPLETED',
+                default: 'QUESTIONNAIRE_NONE_COMPLETED',
+            }
+        };
+
+        const CATEGORY_THANKS_MAP = {
+            clinical: 'QUESTIONNAIRE_THANKS',
+            research: 'QUESTIONNAIRE_THANKS',
+            consent: 'CONSENT_FORM_THANKS',
+            default: 'QUESTIONNAIRE_THANKS',
+        };
+
+        const CATEGORY_LIST_MAP = {
+            clinical: 'QUESTIONNAIRE_GO_BACK_TO_LIST',
+            research: 'QUESTIONNAIRE_GO_BACK_TO_LIST',
+            consent: 'CONSENT_FORM_GO_BACK_TO_LIST',
+            default: 'QUESTIONNAIRE_GO_BACK_TO_LIST',
+        }
 
         // constants for the app notifications
         const notifConstants = Params.QUESTIONNAIRE_NOTIFICATION_CONSTANTS;
@@ -49,15 +93,19 @@
             findInProgressQuestionIndex: findInProgressQuestionIndex,
             getCarouselItems: getCarouselItems,
             getCurrentQuestionnaire: getCurrentQuestionnaire,
-            getNumberOfUnreadQuestionnaires: getNumberOfUnreadQuestionnaires,
+            getQuestionnaireBackToListByCategory: getQuestionnaireBackToListByCategory,
             getQuestionnaireCount: getQuestionnaireCount,
             getQuestionnaireList: getQuestionnaireList,
+            getQuestionnaireNoListMessageByCategory: getQuestionnaireNoListMessageByCategory,
             getQuestionnaireStartUrl: getQuestionnaireStartUrl,
+            getQuestionnaireTitleByCategory: getQuestionnaireTitleByCategory,
+            getQuestionnaireThankByCategory: getQuestionnaireThankByCategory,
             isWaitingForSavingAnswer: isWaitingForSavingAnswer,
             updateQuestionnaireStatus: updateQuestionnaireStatus,
             requestQuestionnaire: requestQuestionnaire,
             requestQuestionnaireList: requestQuestionnaireList,
-            saveQuestionnaireAnswer: saveQuestionnaireAnswer
+            saveQuestionnaireAnswer: saveQuestionnaireAnswer,
+            validateQuestionnaireCategory: validateQuestionnaireCategory,
         };
 
         return service;
@@ -131,14 +179,16 @@
 
         /**
          * @name requestQuestionnaireList
-         * @desc this function is requesting the list of questionnaires from questionnaireDataService and process this list to set the questionnaire list variables
+         * @desc this function is requesting the list of questionnaires from questionnaireDataService and
+         *       process this list to set the questionnaire list variables
+         * @param {string} questionnaireCategory the category of questionnaires requested
          * @returns {Promise}
          */
-        function requestQuestionnaireList() {
+        function requestQuestionnaireList(questionnaireCategory) {
             // re-initiate all the questionnaire related variables
             clearAllQuestionnaire();
 
-            return QuestionnaireDataService.requestQuestionnaireList()
+            return QuestionnaireDataService.requestQuestionnaireList(questionnaireCategory)
                 .then(function(responseQuestionnaireList){
                     setQuestionnaireList(responseQuestionnaireList);
                     return {Success: true, Location: 'Server'};
@@ -320,6 +370,71 @@
         }
 
         /**
+         * @name validateQuestionnaireCategory
+         * @desc check whether the questionnaire category is valid
+         * @param {string} questionnaireCategory
+         * @returns {boolean} true if it is valid, false otherwise
+         */
+        function validateQuestionnaireCategory(questionnaireCategory) {
+            return allowedCategory.includes(questionnaireCategory.toLowerCase());
+        }
+
+        /**
+         * @name getQuestionnaireTitle
+         * @desc gets the correct translation key for the questionnaire title. It assumes that the category has been validated.
+         * @param {string} questionnaireCategory
+         * @returns {string} the translation key in en.json or fr.json
+         */
+        function getQuestionnaireTitleByCategory(questionnaireCategory = 'default') {
+            return CATEGORY_TITLE_MAP[questionnaireCategory]
+        }
+
+        /**
+         * @name getQuestionnaireThankByCategory
+         * @desc gets the correct translation key for the questionnaire thank you message. It assumes that the category has been validated.
+         * @param {string} questionnaireCategory
+         * @returns {string} the translation key in en.json or fr.json
+         */
+        function getQuestionnaireThankByCategory(questionnaireCategory = 'default') {
+            return CATEGORY_THANKS_MAP[questionnaireCategory]
+        }
+
+        /**
+         * @name getQuestionnaireBackToListByCategory
+         * @desc gets the correct translation key for the questionnaire back to list message.
+         *       It assumes that the category has been validated.
+         * @param {string} questionnaireCategory
+         * @returns {string} the translation key in en.json or fr.json
+         */
+        function getQuestionnaireBackToListByCategory(questionnaireCategory = 'default') {
+            return CATEGORY_LIST_MAP[questionnaireCategory]
+        }
+
+        /**
+         * @name getQuestionnaireNoListMessageByCategory
+         * @desc gets the correct translation key for the message when there is no questionnaires in the list.
+         *       It assumes that the category has been validated.
+         * @param {int} status
+         * @param {string} questionnaireCategory
+         * @returns {string}
+         */
+        function getQuestionnaireNoListMessageByCategory(status, questionnaireCategory = 'default') {
+            switch (status) {
+                case questionnaireValidStatus.NEW_QUESTIONNAIRE_STATUS:
+                    return CATEGORY_EMPTY_LIST_MAP.new[questionnaireCategory];
+
+                case questionnaireValidStatus.IN_PROGRESS_QUESTIONNAIRE_STATUS:
+                    return CATEGORY_EMPTY_LIST_MAP.progress[questionnaireCategory];
+
+                case questionnaireValidStatus.COMPLETED_QUESTIONNAIRE_STATUS:
+                    return CATEGORY_EMPTY_LIST_MAP.completed[questionnaireCategory];
+
+                default:
+                    return CATEGORY_EMPTY_LIST_MAP.new['default'];
+            }
+        }
+
+        /**
          * @name getCarouselItems
          * @desc getter for carouselItems
          * @returns {Array}
@@ -367,15 +482,6 @@
 
             // TODO: error log
             return 0;
-        }
-
-        /**
-         * @name getNumberOfUnreadQuestionnaires
-         * @desc This public function is used for showing the badge (count how many questionnaires non completed by patient) by the personalTabController.js
-         * @returns {Number} returns the number of new and in progress questionnaires
-         */
-        function getNumberOfUnreadQuestionnaires(){
-            return getQuestionnaireCount(questionnaireValidStatus.NEW_QUESTIONNAIRE_STATUS) + getQuestionnaireCount(questionnaireValidStatus.IN_PROGRESS_QUESTIONNAIRE_STATUS);
         }
 
         /**

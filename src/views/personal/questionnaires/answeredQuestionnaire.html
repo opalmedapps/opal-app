@@ -34,6 +34,15 @@
             {{"QUESTIONNAIRE_INSTRUCTIONS"|translate}}
         </div>
 
+        <!-- Password verification -->
+        <div ng-if="vm.requirePassword" class="style-4" style="padding: 10px;">
+            <br>
+            <input type="password" ng-class="fontSizeDesc"
+                   placeholder="{{'PASSWORD'|translate}}"
+                   ng-model="vm.password">
+            <br>
+        </div>
+
         <!-- Submit button -->
         <div align="center" style="margin-top:10px;margin-bottom:10px">
             <button class="button--large--cta" style="width:80%" ng-click="vm.submitQuestionnaire()" ng-class="fontSizeDesc"
