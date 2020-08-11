@@ -63,36 +63,28 @@
             navigatorName = NavigatorParameters.getNavigatorName();
             let params = NavigatorParameters.getParameters();
 
-            // TODO: Delete both if blocks below when merging with research_questionnaires_yuan for proper solution
-            if (params.hasOwnProperty('questionnaireCategory')){
-                category = params.questionnaireCategory;
-            } 
-            
-            if (category=='consent'){
-                vm.noNewQuestionnaireText = $filter('translate')("CONSENT_FORMS_NONE_NEW");     
-                vm.noProgressQuestionnaireText = $filter('translate')("CONSENT_FORMS_NONE_PROGRESS");    
-                vm.noCompletedQuestionnaireText = $filter('translate')("CONSENT_FORMS_NONE_COMPLETED");   
-                vm.pageTitle = $filter('translate')("CONSENT_FORMS");
+            if (!params.hasOwnProperty('questionnaireCategory') || !Questionnaires.validateQuestionnaireCategory(params.questionnaireCategory)) {
+                setPageText();
+                vm.loading = false;
+                handleRequestError();
+
             } else {
-                vm.noNewQuestionnaireText = $filter('translate')("QUESTIONNAIRE_NONE_NEW");     
-                vm.noProgressQuestionnaireText = $filter('translate')("QUESTIONNAIRE_NONE_PROGRESS");    
-                vm.noCompletedQuestionnaireText = $filter('translate')("QUESTIONNAIRE_NONE_COMPLETED");   
-                vm.pageTitle = $filter('translate')("RESEARCH_QUESTIONNAIRES");
-            }
+                category = params.questionnaireCategory.toLowerCase();
+                setPageText(category);
 
+                Questionnaires.requestQuestionnaireList(params.questionnaireCategory)
+                    .then(function () {
+                        loadQuestionnaireList();
 
-            Questionnaires.requestQuestionnaireList()
-                .then(function () {
-                    loadQuestionnaireList();
-
-                    vm.loading = false;
-                })
-                .catch(function(error){
-                    $timeout(function(){
                         vm.loading = false;
-                        handleRequestError();
                     })
-                });
+                    .catch(function(error){
+                        $timeout(function(){
+                            vm.loading = false;
+                            handleRequestError();
+                        })
+                    });
+            }
 
             // this is for when the back button is pressed for a questionnaire, reload the questionnaire list to keep the list up to date
             navigator.on('postpop', function(){
@@ -141,8 +133,6 @@
          * @returns {boolean} True if there are new questionnaires, false otherwise
          */
         function newQuestionnaireExist(){
-            // TODO: delete if statement after merge with research_questionnaires_yuan
-            if (category=='research'||category=='consent') return false;
             return Questionnaires.getQuestionnaireCount(allowedStatus.NEW_QUESTIONNAIRE_STATUS) > 0;
         }
 
@@ -152,8 +142,6 @@
          * @returns {boolean} True if there are in progress questionnaires, false otherwise
          */
         function inProgressQuestionnaireExist(){
-            // TODO: delete if statement after merge with research_questionnaires_yuan
-            if (category=='research'||category=='consent') return false;
             return Questionnaires.getQuestionnaireCount(allowedStatus.IN_PROGRESS_QUESTIONNAIRE_STATUS) > 0;
         }
 
@@ -163,8 +151,6 @@
          * @returns {boolean} True if there are completed questionnaires, false otherwise
          */
         function completedQuestionnaireExist(){
-            // TODO: delete if statement after merge with research_questionnaires_yuan
-            if (category=='research'||category=='consent') return false;
             return Questionnaires.getQuestionnaireCount(allowedStatus.COMPLETED_QUESTIONNAIRE_STATUS) > 0;
         }
 
@@ -173,14 +159,31 @@
          * @desc get the questionnaire list from the service
          */
         function loadQuestionnaireList (){
-            // TODO: delete if statement after merge with research_questionnaires_yuan
+
             $timeout(function(){
-                if (category!=='research'&&category!=='consent'){
-                    vm.newQuestionnaireList = Questionnaires.getQuestionnaireList(allowedStatus.NEW_QUESTIONNAIRE_STATUS);
-                    vm.inProgressQuestionnaireList = Questionnaires.getQuestionnaireList(allowedStatus.IN_PROGRESS_QUESTIONNAIRE_STATUS);
-                    vm.completedQuestionnaireList = Questionnaires.getQuestionnaireList(allowedStatus.COMPLETED_QUESTIONNAIRE_STATUS);
-                }
+                vm.newQuestionnaireList = Questionnaires.getQuestionnaireList(allowedStatus.NEW_QUESTIONNAIRE_STATUS);
+                vm.inProgressQuestionnaireList = Questionnaires.getQuestionnaireList(allowedStatus.IN_PROGRESS_QUESTIONNAIRE_STATUS);
+                vm.completedQuestionnaireList = Questionnaires.getQuestionnaireList(allowedStatus.COMPLETED_QUESTIONNAIRE_STATUS);
             });
+        }
+
+        /**
+         * @name setPageText
+         * @desc set the page title and descriptions according to the questionnaire category requested on the list page
+         *      if the category is not passed as an argument, the text will default to the default's translation
+         * @param {string} questionnaireCategory
+         */
+        function setPageText(questionnaireCategory='default') {
+            // set the page title
+            vm.pageTitle = $filter('translate')(Questionnaires.getQuestionnaireTitleByCategory(questionnaireCategory));
+
+            // set the messages when the lists is null
+            vm.noCompletedQuestionnaireText
+                = $filter('translate')(Questionnaires.getQuestionnaireNoListMessageByCategory(allowedStatus.COMPLETED_QUESTIONNAIRE_STATUS));
+            vm.noNewQuestionnaireText
+                = $filter('translate')(Questionnaires.getQuestionnaireNoListMessageByCategory(allowedStatus.NEW_QUESTIONNAIRE_STATUS));
+            vm.noProgressQuestionnaireText
+                = $filter('translate')(Questionnaires.getQuestionnaireNoListMessageByCategory(allowedStatus.IN_PROGRESS_QUESTIONNAIRE_STATUS));
         }
 
         /**

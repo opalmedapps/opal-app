@@ -25,6 +25,14 @@
         function activate() {
             navigator = NavigatorParameters.getNavigator();
             navigatorName = NavigatorParameters.getNavigatorName();
+            let params = NavigatorParameters.getParameters();
+
+            if (!params.hasOwnProperty('questionnaireCategory') || !validateCategory(params.questionnaireCategory)) {
+                setPageText();
+                vm.loading = false;
+                handleRequestError();
+
+            }
         }
 
         /**

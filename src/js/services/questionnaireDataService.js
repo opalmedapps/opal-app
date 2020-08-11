@@ -144,13 +144,18 @@
 
         /**
          * @name requestQuestionnaireList
-         * @desc Asks the listener for the list of questionnaires this user has
-         * @returns {Promise} resolves to the list of questionnaires if success
+         * @desc Asks the listener for the list of questionnaires under a specific category this user has
+         * @param {string} questionnaireCategory the category of questionnaires requested
+         * @returns {Promise} resolves to an array of questionnaires if success
          */
-        function requestQuestionnaireList() {
-            return RequestToServer.sendRequestWithResponse(api.GET_LIST)
+        function requestQuestionnaireList(questionnaireCategory) {
+            let params = {
+                category: questionnaireCategory
+            };
+
+            return RequestToServer.sendRequestWithResponse(api.GET_LIST, params)
                 .then(function (response) {
-                    // this is in case firebase delete the property when it is empty
+                    // this is in case firebase deletes the property when it is empty
                     if (response.hasOwnProperty('Data')) {
                         return response.Data;
                     }
@@ -172,7 +177,7 @@
 
             return RequestToServer.sendRequestWithResponse(api.GET_QUESTIONNAIRE, params)
                 .then(function (response) {
-                    // this is in case firebase delete the property when it is empty
+                    // this is in case firebase deletes the property when it is empty
                     if (response.hasOwnProperty('Data')) {
                         return response.Data;
                     }

@@ -77,7 +77,7 @@
                             <!--no in progress questionnaires-->
                             <p ng-show="!questionnaireListVm.inProgressQuestionnaireExist()" ng-class="fontSizeTitle"
                                style="color: grey; margin-top: 25vh;">{{questionnaireListVm.noProgressQuestionnaireText}}</p>
-    
+
                             <!--if there are in progress questionnaires: list them-->
                             <ons-list ng-repeat="questionnaire in questionnaireListVm.inProgressQuestionnaireList | orderBy:'-last_updated' track by $index"
                                       ng-click="questionnaireListVm.goToQuestionnaire(questionnaire)">
@@ -106,7 +106,7 @@
                             <!--no completed questionnaires-->
                             <p ng-show="!questionnaireListVm.completedQuestionnaireExist()" ng-class="fontSizeTitle"
                                style="color: grey; margin-top: 25vh;">{{questionnaireListVm.noCompletedQuestionnaireText}}</p>
-    
+
                             <!--if there are completed questionnaires: list them-->
                             <ons-list ng-repeat="questionnaire in questionnaireListVm.completedQuestionnaireList | orderBy:'-last_updated' track by $index"
                                      ng-click="questionnaireListVm.goToQuestionnaireSummary(questionnaire)">
