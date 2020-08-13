@@ -72,9 +72,11 @@
 					if (!response.exists) {
 						DynamicContentService.setContentData(response.data);
 					}
-					// This line reads the Message Of The Day from serviceStatus_EN.php on depDocs
-					// 'service' in links.php will grab the url (location) of serviceStatus_EN.php (or _FR.php)
-					return DynamicContentService.getPageContent('service');
+
+					// This line reads the Message Of The Day from [staging|preprod|prod]_serviceStatus_[EN|FR].php on depDocs
+					// '[staging|preprod|prod]_service' in links.php will grab the url (location) of
+					// [staging|preprod|prod]_serviceStatus_[EN|FR].php
+					return DynamicContentService.getPageContent(`${vm.OPAL_ENV}_service`);
 				})
 				.then(function successCallback(response) {
 					for (var key in response.data) {
