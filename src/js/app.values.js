@@ -18,7 +18,6 @@
             {
                 maxIdleTimeAllowed: 300000,
                 tenMinutesMilliSeconds: 600000,
-                timeoutInterval: 60000,
 
                 /** About Controller URL's **/
                 aboutMuhcCase: 'aboutmuhc',
@@ -130,7 +129,6 @@
                 checkInAfterPluralMessage: 'CHECKIN_MESSAGE_AFTER_PLURAL',
 
                 /** Content Controller **/
-                radiothereapyString: 'Daily Radiotherapy Treatment',
                 noContentMessage: 'NO_CONTENT',
                 noPageResponseCase: 'NO_PAGE',
 
