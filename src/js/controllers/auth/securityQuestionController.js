@@ -8,7 +8,6 @@
  *                  file 'LICENSE.txt', which is part of this source Code package.
  */
 
-
 /**
  *  @ngdoc controller
  *  @name MUHCApp.controllers: SecurityQuestionController
@@ -40,12 +39,12 @@
 
         /**
          * @ngdoc property
-         * @name attempts
+         * @name tooManyAttempts
          * @propertyOf SecurityQuestionController
-         * @returns int
-         * @description used by the controller to only allow 3 security question attempts
+         * @description Used to block the submit button after too many invalid security answer attempts.
+         * @type {boolean}
          */
-        vm.attempts= 0;
+        vm.tooManyAttempts = false;
 
         /**
          * @ngdoc property
@@ -102,6 +101,16 @@
 	     * @description momentarily hides the button while submitting
 	     */
 	    vm.alertShow = true;
+
+        /**
+         * @ngdoc property
+         * @name ssn
+         * @propertyOf SecurityQuestionController
+         * @returns string
+         * @description RAMQ value (called "ssn" here) bound to user input in the view.
+         */
+        vm.ssn = "";
+	    
         vm.submitAnswer = submitAnswer;
         vm.clearErrors = clearErrors;
         vm.goToInit = goToInit;
@@ -142,6 +151,16 @@
                 vm.Question = parameters.securityQuestion;
             }
 
+            bindEvents();
+        }
+
+        /**
+         * @ngdoc function
+         * @name bindEvents
+         * @methodOf MUHCApp.controllers.SecurityQuestionController
+         * @description Sets up event bindings for this controller.
+         */
+        function bindEvents() {
             // In case someone presses back button, need to remove the deviceID and security answer.
             $scope.initNavigator.once('prepop', function () {
                 removeUserData();
@@ -193,22 +212,26 @@
                         errormodal.show();
                         break;
                     case Params.userDisabled:
-                        vm.alert.content = Params.loginDisabledUserMessage;
+                        vm.alert.content = "USER_DISABLED";
                         break;
                     case Params.invalidUser:
-                        vm.alert.content = Params.invalidUserMessage;
+                        vm.alert.content = "INVALID_USER";
                         break;
                     case 4:
-                        vm.alert.content = Params.outOfTriesMessage;
+                        vm.alert.content = "OUTOFTRIES";
+                        vm.tooManyAttempts = true;
                         break;
-                    case Params.corruptedDataCase:
-                        vm.alert.content = Params.corruptedDataMessage;
+                    case "corrupted-data":
+                        vm.alert.content = "CONTACTHOSPITAL";
                         break;
-                    case Params.wrongAnswerCase:
-                        vm.alert.content = Params.wrongAnswerMessage;
+                    case "wrong-answer":
+                        vm.alert.content = "ERRORANSWERNOTMATCH";
+                        break;
+                    case "no-answer":
+                        vm.alert.content = "ENTERANANSWER";
                         break;
                     default:
-                        vm.alert.content = Params.networkErrorMessage;
+                        vm.alert.content = "INTERNETERROR2";
                         break;
                 }
             })
@@ -241,6 +264,9 @@
             if(vm.alert.hasOwnProperty('type')) {
                 delete vm.alert.type;
             }
+            if(vm.alert.hasOwnProperty('content')) {
+                delete vm.alert.content;
+            }
         }
 
         /**
@@ -252,9 +278,10 @@
          * Sends request object containing user-inputted answer to our servers to be validated
          */
         function submitAnswer (answer) {
+            clearErrors();
+
             if (!answer || (!vm.ssn && passwordReset)) {
-                vm.alert.type = Params.alertTypeDanger;
-                vm.alert.content = Params.enterSecurityQuestionAnswerMessage;
+                handleError({code: "no-answer"});
 
             } else {
                 vm.alertShow = false;
@@ -296,7 +323,7 @@
 	                vm.alertShow = true;
 	                vm.submitting = false;
 	                removeUserData();
-                    if(error.Reason && error.Reason.toLowerCase().indexOf('malformed utf-8') !== -1) {
+                    if(error.hasOwnProperty('Reason') && error.Reason && error.Reason.toLowerCase().indexOf('malformed utf-8') !== -1) {
                         handleError({Code: "corrupted-data"});
                     } else {
                         handleError(error);

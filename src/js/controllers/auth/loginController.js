@@ -1,6 +1,5 @@
 /*
  * Filename     :   loginController.js
- // eslint-disable-next-line max-len
  * Description  :   Controller in charge of the login process using FireBase as the authentication API.
  * Created by   :   David Herrera, Robert Maglieri
  * Date         :   May 20, 2015
@@ -8,7 +7,6 @@
  * Licence      :   This file is subject to the terms and conditions defined in
  *                  file 'LICENSE.txt', which is part of this source code package.
  */
-
 
 /**
  *  @ngdoc controller
@@ -288,48 +286,40 @@
                 case Params.invalidEmail:
                 case Params.invalidPassword:
                 case Params.invalidUser:
-                case Params.largeNumberOfRequests:   // This is temporary (too many attempts), until we decide what to do in this case
                     $timeout(function(){
                         vm.alert.type = Params.alertTypeDanger;
-                        vm.alert.message= Params.loginEmailFailureMessage;
+                        vm.alert.message= "INVALID_EMAIL_OR_PWD";
                         vm.loading = false;
                     });
                     break;
-                // case "auth/too-many-requests":
-                //     $timeout(function () {
-                //         vm.alert.type='danger';
-                //         vm.alert.message="TOO_MANY_REQUESTS";
-                //         vm.loading = false;
-                //     });
-                //     break;
-                case Params.userDisabled:
-                    $timeout(function () {
+                case Params.largeNumberOfRequests:
+                    $timeout(function (){
                         vm.alert.type = Params.alertTypeDanger;
-                        vm.alert.message = Params.loginDisabledUserMessage;
+                        vm.alert.message = "TOO_MANY_REQUESTS";
+                        vm.loading = false;
+                    });
+                    break;
+                case Params.userDisabled:
+                    $timeout(function (){
+                        vm.alert.type = Params.alertTypeDanger;
+                        vm.alert.message = "USER_DISABLED";
                         vm.loading = false;
                     });
                     break;
                 case Params.networkRequestFailure:
                     $timeout(function(){
                         vm.alert.type = Params.alertTypeDanger;
-                        vm.alert.message = Params.loginNetworkErrorMessage;
+                        vm.alert.message = "ERROR_NETWORK";
                         vm.loading = false;
                     });
                     break;
-                case Params.loginLimitExceededMessage:
-                    $timeout(function(){
-                        vm.alert.type = Params.alertTypeDanger;
-                        vm.alert.message = Params.loginLimitExceededMessage;
-                        vm.loading = false;
-                    });
-                    break;
-                case Params.loginEncryptionErrorMessage:
+                case "ENCRYPTION_ERROR":
                     $timeout(function(){
                         vm.loading = false;
                         loginerrormodal.show();
                     });
                     break;
-                case Params.loginWrongHashMessage:
+                case "WRONG_SAVED_HASH":
                     $timeout(function(){
                         vm.loading = false;
                         wronghashmodal.show();
@@ -338,7 +328,7 @@
                 default:
                     $timeout(function(){
                         vm.alert.type = Params.alertTypeDanger;
-                        vm.alert.message = Params.loginGenericErrormessage;
+                        vm.alert.message = "ERROR_GENERIC";
                         vm.loading = false;
                     });
             }
@@ -372,15 +362,14 @@
          */
         function submit() {
             clearErrors();
-            
-            if(!vm.email || vm.email === '' || !vm.password || vm.password ==='')
-            {
-                $timeout(function() {
-                    vm.alert.type = Params.alertTypeDanger;
-                    vm.alert.message = Params.loginEmailFailureMessage;
-                });
 
-            }else{
+            if (!vm.email || vm.email === '') {
+                handleError({code: Params.invalidEmail});
+
+            } else if (!vm.password || vm.password === '') {
+                handleError({code: Params.invalidPassword});
+
+            } else {
                 vm.loading = true;
 
                 //the user is still logged in if this is present
