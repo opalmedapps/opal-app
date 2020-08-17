@@ -70,7 +70,7 @@
         function evaluatePassword(){
             vm.invalidPassword = !newPasswordIsValid();
 
-            if(vm.alert.hasOwnProperty('type') && vm.alert.type === 'danger')
+            if(vm.alert.hasOwnProperty('type') && vm.alert.type === Params.alertTypeDanger)
             {
                 delete vm.alert.type;
                 delete vm.alert.content;
@@ -83,13 +83,13 @@
                 $timeout(function() {
                     vm.invalidPassword = invalid;
                     vm.alert.type = Params.alertTypeDanger;
-                    vm.alert.content = Params.setNewPasswordMessage;
+                    vm.alert.content = "ENTERVALIDPASSWORD";
                 })
             } else if (vm.newValue !== vm.validateNewValue){
                 $timeout(function() {
                     vm.invalidPassword = true;
                     vm.alert.type = Params.alertTypeDanger;
-                    vm.alert.content = Params.passwordMismatchMessage;
+                    vm.alert.content = "PASSWORD_MISMATCH_ERROR";
                 });
             }else{
                 vm.submitting = true;
@@ -108,7 +108,7 @@
                         EncryptionService.removeTempEncryptionHash();
                         $timeout(function() {
                             vm.alert.type = Params.alertTypeSuccess;
-                            vm.alert.content = Params.passwordUpdateMessage;
+                            vm.alert.content = "PASSWORDUPDATED";
                             vm.resetSuccess = true;
                         });
                         localStorage.removeItem("deviceID");
@@ -120,16 +120,16 @@
                             vm.alert.type = Params.alertTypeDanger;
                             switch (error.code) {
                                 case Params.invalidActionCode:
-                                    vm.alert.content = Params.invalidActionCodeMessage;
+                                    vm.alert.content = "RESET_PASSWORD_CODE_INVALID";
                                     break;
                                 case Params.expiredActionCode:
-                                    vm.alert.content = Params.expiredActionCode;
+                                    vm.alert.content = "RESET_PASSWORD_CODE_EXPIRED";
                                     break;
-                                case Params.weakPasswordCase:
-                                    vm.alert.content = Params.weakPasswordMessage;
+                                case Params.weakPassword:
+                                    vm.alert.content = "PASSWORD_CRITERIA";
                                     break;
                                 default:
-                                    vm.alert.content = Params.passwordServerErrorMessage;
+                                    vm.alert.content = "PASSWORDRESETSERVERERROR";
                                     break;
                             }
                         })

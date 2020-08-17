@@ -50,7 +50,6 @@
 		vm.OPAL_ENV = OPAL_CONFIG.env;
 		vm.APP_BUILD_NUMBER = Constants.build();
 
-		vm.goToMessage = goToMessage;
 		vm.gotoLearnAboutOpal = gotoLearnAboutOpal;
 		vm.goToRegister = goToRegister;
 		vm.goToGeneralSettings = goToGeneralSettings;
@@ -88,7 +87,7 @@
 					}
 				})
 				.catch(function errorCallback(error) {
-
+					console.log("Error initializing links using the DynamicContentService.", error);
 				});
 
 			//Add the login translation
@@ -127,14 +126,6 @@
 						'#F0F3F4', 25, 'top', function(){}, 'long');
 				}
 			}
-		}
-
-		/**
-		 * Views the details of the global message
-		 */
-		function goToMessage() {
-			NavigatorParameters.setParameters('initNavigator');
-			initNavigator.pushPage('./views/init/message.html', {animation: 'lift'});
 		}
 
 		/**
