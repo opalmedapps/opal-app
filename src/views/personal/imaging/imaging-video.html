@@ -1,0 +1,12 @@
+<ons-page ng-controller="imagingController as img">
+    <ons-toolbar fixed-style>
+        <div class="left"><ons-back-button>{{"BACK"|translate}}</ons-back-button></div>
+        <div class="center" ng-class="fontSizeTitle">{{"IMAGING"|translate}}</div>
+    </ons-toolbar>
+    
+    <div style="color:grey; padding:5px;" align="center" ng-class="fontSizeTitle" >
+        <video controls loop width="100%">   <!--width="1200" height="750" -->
+            <source src="./img/dicom/testvid.mp4" type="video/mp4">
+        </video>
+    </div>
+</ons-page>
