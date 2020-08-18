@@ -386,7 +386,7 @@
          * @returns {string} the translation key in en.json or fr.json
          */
         function getQuestionnaireTitleByCategory(questionnaireCategory = 'default') {
-            return CATEGORY_TITLE_MAP[questionnaireCategory]
+            return CATEGORY_TITLE_MAP[questionnaireCategory];
         }
 
         /**
@@ -396,7 +396,7 @@
          * @returns {string} the translation key in en.json or fr.json
          */
         function getQuestionnaireThankByCategory(questionnaireCategory = 'default') {
-            return CATEGORY_THANKS_MAP[questionnaireCategory]
+            return CATEGORY_THANKS_MAP[questionnaireCategory];
         }
 
         /**
@@ -407,7 +407,7 @@
          * @returns {string} the translation key in en.json or fr.json
          */
         function getQuestionnaireBackToListByCategory(questionnaireCategory = 'default') {
-            return CATEGORY_LIST_MAP[questionnaireCategory]
+            return CATEGORY_LIST_MAP[questionnaireCategory];
         }
 
         /**

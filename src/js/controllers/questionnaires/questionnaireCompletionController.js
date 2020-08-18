@@ -15,6 +15,10 @@
         let navigator = null;
         let navigatorName = '';
 
+        vm.backToListMessage = '';  // the message varies according to the questionnaire category
+        vm.pageTitle = '';  // the page title varies according to the questionnaire category
+        vm.thankMessage = '';    // the message varies according to the questionnaire category
+
         // functions that can be seen from view, sorted alphabetically
         vm.goBackToList = goBackToList;
 
@@ -30,8 +34,6 @@
             if (!params.hasOwnProperty('questionnaireCategory') || !validateCategory(params.questionnaireCategory)) {
                 setPageText();
                 vm.loading = false;
-                handleRequestError();
-
             }
         }
 
@@ -43,6 +45,21 @@
             NavigatorParameters.setParameters({Navigator: navigatorName});
             navigator.popPage();
         }
+
+        /**
+         * @name setPageText
+         * @desc set the page title and descriptions according to the questionnaire category requested
+         *      if the category is not passed as an argument, the text will default to the default's translation
+         * @param {string} category
+         */
+        function setPageText(category = 'default') {
+            vm.pageTitle = $filter('translate')(Questionnaires.getQuestionnaireTitleByCategory(category));
+
+            vm.backToListMessage = $filter('translate')(Questionnaires.getQuestionnaireBackToListByCategory(category));
+
+            vm.thankMessage = $filter('translate')(Questionnaires.getQuestionnaireThankByCategory(category));
+        }
+
     }
 
 })();
