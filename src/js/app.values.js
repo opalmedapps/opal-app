@@ -153,9 +153,6 @@
                     gettingHospitalUrlFr: 'https://cusm.ca/glen'
                 },
 
-                /** Questionnaire Controller constants **/
-                colorsArray: ['lime', 'lime', 'orange', 'orange', 'orange', 'red', 'red', 'red', 'darkred', 'darkred'],
-
                 /** ChangeSettingsController Constants **/
                 setAliasParam: 'ALIAS',
                 setAliasLowerCaseParam: 'Alias',
@@ -172,7 +169,6 @@
                 setSecondLanguageInstruction: 'FR',
                 setFontSizeParam: 'FONTSIZE',
                 setFontOptionMedium: 'medium',
-                setFontOptionSmall: 'small',
                 setFontOptionLarge: 'large',
                 setFontOptionExtraLarge: 'xlarge',
                 setNicknameAlias: 'NICKNAME',
@@ -250,16 +246,6 @@
                 cdvDocumentFilePathIos: 'cdvfile://localhost/persistent/Documents/',
                 cdvPatientFilePathAndroid: 'cdvfile://localhost/files/Patient/',
                 cdvPatientFilePathIos: 'cdvfile://localhost/persistent/Patient/',
-
-                /** LabResults Service constants **/
-                categoryOne: 'Complete Blood Count', // WBC, RBC, HGB, HCT, Platelet, Neutrophils, Eosinophils,
-                categoryTwo: 'Electrolytes', // Sodium, potassium, glucose, creatinine, calcium, corrected calcium, magnesium,
-                categoryThree: 'Other', // LDH, T4, TSH, albumin, protein, AST, ALT, alkaline phosophatase
-                categoryFour: 'Tumor markers', //CEA, CA 15-3, CA-125
-                categoryOneTests: ['WBC', 'RBC', 'HGB', 'HCT', 'Platelet Count', 'Neutrophils', 'Eosinophils'],
-                categoryTwoTests: ['Sodium', 'Potassium', 'Glucose, Random', 'Creatinine', 'Calcium', 'Corrected Calcium', 'Magnesium'],
-                categoryThreeTests: ['LDH', 'T4', 'T4, Free', 'TSH', 'Albumin', 'Protein, Total', 'AST (SGOT)', 'ALT (SGPT)', 'Alkaline Phosphatase', 'Rapamune (Sirolimus)'],
-                categoryFourTests: ['CEA', 'CA 15-3', 'CA-125'],
 
                 /** newsBanner Service constants **/
                 newsAlertTypes: {
