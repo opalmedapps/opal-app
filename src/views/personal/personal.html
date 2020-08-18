@@ -110,7 +110,22 @@
                     </ons-col>
                 </ons-row>
             </ons-list-item>
-                        <!-- ng-if="tab.censor && tab.allowedModules.hasOwnProperty('DOC') && tab.allowedModules['DOC']" -->
+            <ons-list-item modifier="chevron" class="item"               
+            ng-click="personalNavigator.pushPage('views/personal/imaging/imaging.html')">
+                <ons-row align="center" >
+                    <ons-col width="60px" style="text-align: center">
+                        <div>
+                            <img style="width: 35px;" src="./img/xray.png">
+                        </div>
+                    </ons-col>
+                    <ons-col>
+                        <header>
+                            <span class="item-title" ng-class="fontSizeTitle">{{"IMAGING"|translate}}</span>
+                        </header>
+                        <p class="item-desc" ng-class="fontSizeDesc"></p>
+                    </ons-col>
+                </ons-row>
+            </ons-list-item>
             <ons-list-item modifier="chevron" class="item"
                            ng-if="tab.allowedModules.hasOwnProperty('TRT') && tab.allowedModules['TRT']"
                            ng-click="personalNavigator.pushPage('views/general/contacts/contacts.html')">
