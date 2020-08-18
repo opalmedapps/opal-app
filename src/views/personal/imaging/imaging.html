@@ -1,0 +1,30 @@
+<ons-page ng-controller="imagingController as img">
+    <ons-toolbar fixed-style>
+        <div class="left"><ons-back-button>{{"BACK"|translate}}</ons-back-button></div>
+        <div class="center" ng-class="fontSizeTitle">{{"IMAGING"|translate}}</div>
+    </ons-toolbar>
+    <network-banner></network-banner>
+    <div>
+        <ons-list class="settings-list" ng-repeat="image in img.images">
+            <!-- <ons-list-header   class="person-list-header" ng-class="fontSizeTitle" ng-show="diag.showHeader($index)">{{image.CreationDate|date:'fullDate'}}</ons-list-header> -->
+            <ons-list-item class="item" ng-click=img.openImage(image)>
+                <ons-row style="padding:5px;">
+                    <ons-col width="50px" align="center" style="text-align: center">
+                        <img style="width:35px;" src="./img/xray.png">
+                    </ons-col>
+                    <ons-col align="center">
+                        <span class="item-title" ng-class="fontSizeTitle"> {{"IMAGING"|translate}}</span>
+                        <span class="item-desc" ng-class="fontSizeDesc">{{image.name}}</span><br>
+                        <!--<span class="item-title" ng-class="fontSizeTitle"> {{"DATE"|translate}}:</span>
+                        <span class="item-desc" ng-class="fontSizeDesc">{{image.CreationDate|date:'fullDate'}}</span>-->
+                    </ons-col>
+                </ons-row>
+            </ons-list-item>
+        </ons-list>
+
+    </div>
+
+    <div style="color:grey;margin-top:25vh" ng-show="img.noImage" align="center" ng-class="fontSizeTitle">
+        {{"NOIMAGE"|translate}}
+    </div>
+</ons-page>

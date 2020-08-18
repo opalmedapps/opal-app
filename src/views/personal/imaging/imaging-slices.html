@@ -1,0 +1,15 @@
+<ons-page ng-controller="imagingController as img">
+    <ons-toolbar fixed-style>
+        <div class="left"><ons-back-button>{{"BACK"|translate}}</ons-back-button></div>
+        <div class="center" ng-class="fontSizeTitle">{{"IMAGING"|translate}}</div>
+    </ons-toolbar>
+
+    <div>
+        <input type="range" id = "labelSlider" ng-model = "img.slice" ng-input="img.updateSlice()"
+        min=0 max=360 step=1 />
+    </div>
+    <div style="color:grey;" align="center" ng-class="fontSizeTitle">
+        <img src="{{img.getSlicePath()}}"> 
+    </div>
+</ons-page>
+
