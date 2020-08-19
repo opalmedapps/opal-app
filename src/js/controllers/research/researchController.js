@@ -34,7 +34,7 @@
         }
 
         function openReferenceMaterial() {
-            NavigatorParameters.setParameters({'Navigator':navigatorName, 'category':'research'});
+            NavigatorParameters.setParameters({Navigator:navigatorName, category:'research'});
             navigator.pushPage('views/education/education.html');
         }
 
@@ -49,7 +49,7 @@
         }
 
         function openInfoPage() {
-            NavigatorParameters.setParameters({'Navigator':navigatorName, 'subView':'research'});
+            NavigatorParameters.setParameters({Navigator:navigatorName, subView:'research'});
             navigator.pushPage('views/tabs/info-page-tabs.html');
         }
         

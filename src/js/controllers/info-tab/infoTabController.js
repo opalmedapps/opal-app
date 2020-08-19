@@ -15,10 +15,10 @@
         .module('MUHCApp')
         .controller('InfoTabController', InfoTabController);
 
-    InfoTabController.$inject = ['$timeout','$filter','$sce', '$scope', 'NavigatorParameters'];
+    InfoTabController.$inject = ['$filter', '$scope', 'NavigatorParameters'];
 
   /* @ngInject */
-    function InfoTabController($timeout,$filter,$sce,$scope, NavigatorParameters) {
+    function InfoTabController($filter, $scope, NavigatorParameters) {
         var vm = this;
         vm.title = 'InfoTabController';
         vm.view = {};
@@ -83,13 +83,14 @@
 
             // Remove subView 
             $scope.$on('$destroy', function () {
-                NavigatorParameters.setParameters({'Navigator':navigatorName, 'subView':null});
+                NavigatorParameters.setParameters({Navigator:navigatorName, subView:null});
             });
         }
 
         /**
          * @name isIcon
          * @desc Check if icon is an uploaded image (in img/ directory) or is otherwise a regular ons-icon
+         * @returns true if the icon is a proper icon, false if it is an image stored in the ./img/ folder 
          */
         function isIcon(){
             return !vm.view.icon.includes("img/");

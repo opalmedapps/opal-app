@@ -12,6 +12,7 @@
  * 
  * 2020 Jul: Project: Research Menu --> Education material now categorized as 'clinical' or 'research', which are 
  *                    displayed in Education tab or Research menu, respectively.
+ *           Developed by Kayla O'Sullivan-Steben
  */
 
 (function () {
@@ -21,12 +22,12 @@
         .module('MUHCApp')
         .controller('EducationalMaterialController', EducationalMaterialController);
 
-    EducationalMaterialController.$inject = ['NavigatorParameters', '$scope', 'EducationalMaterial','NetworkStatus',
-        'Patient', 'Logger', 'UserHospitalPreferences'];
+    EducationalMaterialController.$inject = ['NavigatorParameters', '$scope', 'EducationalMaterial',
+        'Logger', 'UserHospitalPreferences'];
 
     /* @ngInject */
-    function EducationalMaterialController(NavigatorParameters, $scope, EducationalMaterial, NetworkStatus,
-                                           Patient, Logger, UserHospitalPreferences) {
+    function EducationalMaterialController(NavigatorParameters, $scope, EducationalMaterial,
+                                           Logger, UserHospitalPreferences) {
         var vm = this;
         var backButtonPressed = 0;
         let navigator = null;

@@ -2,10 +2,17 @@
 
     <!-- TOOLBAR -->
     <ons-toolbar fixed-style >
-        <div class="left"><ons-back-button ng-if="edu.eduCategory=='research'">{{"BACK"|translate}}</ons-back-button></div>
-        <div class="center" ng-class="fontSizeTitle"><p class="overflow-text-ellipsis">{{edu.pageTitle}}</p></div>
-        <div class="right"><ons-toolbar-button ng-click="edu.openInfoPage()" ng-if="edu.eduCategory=='clinical'">
-            <ons-icon icon="fa-info-circle"></ons-icon></ons-toolbar-button></div>
+        <div class="left">
+            <ons-back-button ng-if="edu.eduCategory==='research'">{{"BACK"|translate}}</ons-back-button>
+        </div>
+        <div class="center" ng-class="fontSizeTitle">
+            <p class="overflow-text-ellipsis">{{edu.pageTitle}}</p>
+        </div>
+        <div class="right">
+            <ons-toolbar-button ng-click="edu.openInfoPage()" ng-if="edu.eduCategory==='clinical'">
+                <ons-icon icon="fa-info-circle"></ons-icon>
+            </ons-toolbar-button>
+        </div>
     </ons-toolbar>
 
     <!-- HOSPITAL NAME BAR -->

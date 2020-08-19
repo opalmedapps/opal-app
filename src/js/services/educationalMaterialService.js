@@ -217,10 +217,11 @@ myApp.service('EducationalMaterial',['$q','$filter','LocalStorage','FileManagerS
          *@ngdoc method
          *@name isThereEducationalMaterial
          *@methodOf MUHCApp.service:EducationalMaterial
+         *@param {String} eduCategory String indicating the type of material, eg: 'clinical' (default) or 'research'
          *@description Setter method for educational material
          *@return {Boolean} Returns whether the patient has any educational material available.
          **/
-        materialExists:function(eduCategory)
+        materialExists:function(eduCategory='clinical')
         {
             //Check if the educational material array has any element
             return educationalMaterialArray.some(eduMaterial => eduMaterial.Category  === eduCategory);
@@ -244,10 +245,11 @@ myApp.service('EducationalMaterial',['$q','$filter','LocalStorage','FileManagerS
          *@ngdoc method
          *@name getEducationalMaterial
          *@methodOf MUHCApp.service:EducationalMaterial
+         *@param {String} eduCategory String indicating the type of material, eg: 'clinical' (default) or 'research'
          *@description Getter for the educational material
          *@returns {Array} Returns array containing educational material
          **/
-        getEducationalMaterial:function(eduCategory)
+        getEducationalMaterial:function(eduCategory='clinical')
         {
             
             let educationalMaterialArrayByCategory = [];
@@ -531,11 +533,11 @@ myApp.service('EducationalMaterial',['$q','$filter','LocalStorage','FileManagerS
          *@ngdoc method
          *@name getEducationalMaterialTitle
          *@methodOf MUHCApp.service:EducationalMaterial
-         *@param {string} eduCategory 
+         *@param {String} eduCategory String indicating the type of material, eg: 'clinical' (default) or 'research' 
          *@description Gets title for the education views that corresponds to the educational category param.
-         *@returns {string} The translated title for the education views
+         *@returns {String} The translated title for the education views
          **/
-        getEducationalMaterialTitle:function(eduCategory)
+        getEducationalMaterialTitle:function(eduCategory='clinical')
         {
             return $filter('translate')(CATEGORY_TITLE_MAP[eduCategory]);
         }
