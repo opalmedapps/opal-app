@@ -1,5 +1,5 @@
 (function() {
-    'use strict'
+    'use strict';
 
     angular
         .module('MUHCApp')
@@ -18,9 +18,8 @@
             {
                 maxIdleTimeAllowed: 300000,
                 tenMinutesMilliSeconds: 600000,
-                timeoutInterval: 60000,
 
-                /** About Controller URL's **/
+                /** About Controller URLs **/
                 aboutMuhcCase: 'aboutmuhc',
                 aboutMuhcUrl: {
                     aboutMuhcUrlEn: 'https://muhc.ca/homepage/page/about-muhc',
@@ -56,19 +55,18 @@
                     appointmentTypeFr: 'rendez-vous'
                 },
 
+                /** Alert Types and Classes **/
                 alertTypeDanger: 'danger',
                 alertTypeSuccess: 'success',
                 alertTypeWarning: 'warning',
                 alertTypeInfo: 'info',
-                notAllowedResponse: 'NOT_ALLOWED',
-                successResponse: 'SUCCESS',
                 alertClassUpdateMessageError: 'bg-danger updateMessage-error',
                 alertClassUpdateMessageSuccess: "bg-success updateMessage-success",
 
-                /** Registration link**/
+                /** Registration Link **/
                 registrationPage: 'https://registration.opalmedapps.ca/#!/welcomePage',
 
-                /** Error Constants **/
+                /** Firebase Authentication Error Codes **/
                 invalidEmail: 'auth/invalid-email',
                 invalidPassword: 'auth/wrong-password',
                 invalidUser: 'auth/user-not-found',
@@ -76,63 +74,11 @@
                 userDisabled: 'auth/user-disabled',
                 userMismatch: 'auth/user-mismatch',
                 networkRequestFailure: 'auth/network-request-failed',
-                expiredActionCode: 'auth/expired-action-Code',
+                expiredActionCode: 'auth/expired-action-code',
                 invalidActionCode: 'auth/invalid-action-code',
                 invalidCredentials: 'auth/invalid-credential',
                 emailInUse: 'auth/email-already-in-use',
                 weakPassword: 'auth/weak-password',
-                passwordDisrespectCase: 'password-disrespects-criteria',
-
-                forgotPasswordAlertSuccess: 'success',
-                forgotPasswordAlertSuccessMessage: 'RESET_PASSWORD_SENT',
-                invalidPasswordMessage: 'INVALID_PASSWORD',
-                loginEmailFailureMessage: 'INVALID_EMAIL_OR_PWD',
-                loginDisabledUserMessage: 'USER_DISABLED',
-                invalidUserAssociation: 'INVALID_ASSOCIATION',
-                invalidCredentialsMessage: 'INVALID_CREDENTIAL',
-                loginNetworkErrorMessage: 'ERROR_NETWORK',
-                loginLimitExceededMessage: 'LIMITS_EXCEEDED',
-                loginEncryptionErrorMessage: 'ENCRYPTION_ERROR',
-                loginGenericErrormessage: 'ERROR_GENERIC',
-                loginWrongHashMessage: 'WRONG_SAVED_HASH',
-                corruptedDataCase: 'corrupted-data',
-                wrongAnswerCase: 'wrong-answer',
-                invalidUserMessage: 'INVALID_USER',
-                invalidEmailMessage: 'INVALID_EMAIL',
-                outOfTriesMessage: 'OUTOFTRIES',
-                corruptedDataMessage: 'CONTACTHOSPITAL',
-                wrongAnswerMessage: 'ERRORANSWERNOTMATCH',
-                networkErrorMessage: 'INTERNETERROR2',
-                secondNetworkErrorMessage: 'INTERNETERROR',
-                enterSecurityQuestionAnswerMessage: 'ENTERANANSWER',
-                emailInUseMessage: 'EMAIL_TAKEN',
-                passwordDisrespectMessage: 'PASSWORD_CRITERIA',
-
-
-                /** SetNewPassword Controller Constants **/
-                weakPasswordCase: 'auth/weak-password',
-                setNewPasswordMessage: 'ENTERVALIDPASSWORD',
-                passwordMismatchMessage: 'PASSWORD_MISMATCH_ERROR',
-                passwordUpdateMessage: 'PASSWORDUPDATED',
-                invalidActionCodeMessage: 'CODE_INVALID',
-                expiredActionCodeMessage: 'CODE_EXPIRED',
-                weakPasswordMessage: 'WEAK_PASSWORD',
-                passwordServerErrorMessage: 'PASSWORDRESETSERVERERROR',
-
-                /** CheckIn Controller **/
-                checkinHospitalMessage: 'CHECKIN_IN_HOSPITAL_ONLY',
-                checkedInMessage: 'CHECKED_IN',
-                checkinErrorMessage: 'CHECKIN_ERROR',
-                checkinNoneMessage: 'CHECKIN_NONE',
-                checkInAfterMessage: 'CHECKIN_MESSAGE_AFTER',
-                checkInBeforeMessage: 'CHECKIN_MESSAGE_BEFORE',
-                checkInBeforePluralMessage: 'CHECKIN_MESSAGE_BEFORE_PLURAL',
-                checkInAfterPluralMessage: 'CHECKIN_MESSAGE_AFTER_PLURAL',
-
-                /** Content Controller **/
-                radiothereapyString: 'Daily Radiotherapy Treatment',
-                noContentMessage: 'NO_CONTENT',
-                noPageResponseCase: 'NO_PAGE',
 
                 monthsArray: {
                     monthsArrayEn: ["January", "February", "March", "April", "May",
@@ -207,44 +153,27 @@
                     gettingHospitalUrlFr: 'https://cusm.ca/glen'
                 },
 
-                /** Questionnaire Controller constants **/
-                colorsArray: ['lime', 'lime', 'orange', 'orange', 'orange', 'red', 'red', 'red', 'darkred', 'darkred'],
-
                 /** ChangeSettingsController Constants **/
                 setAliasParam: 'ALIAS',
                 setAliasLowerCaseParam: 'Alias',
-                setAliasInstruction: 'ENTERYOURALIAS',
                 setPhoneNumbersParam: 'PHONENUMBER',
-                setPhoneNumberInstruction: 'ENTERNEWTELEPHONE',
                 setEmailParam: 'EMAIL',
                 setEmailType: 'email',
                 setEmailField: 'Email',
                 setPasswordType: 'password',
                 setPasswordField: 'Password',
-                setEmailInstruction: 'ENTEREMAILADDRESS',
-                setPasswordInstruction: 'ENTERPASSWORD',
-                setEmailInputInstruction: 'REENTER_EMAIL',
                 setPasswordParam: 'PASSWORD',
-                setUpdatePasswordParam: 'UPDATEPASSWORDTITLE',
-                setEmailUpdateParam: 'UPDATED_EMAIL',
-                setUpdatePasswordMessage: 'PASSWORDUPDATED',
-                setInstructionNewPassword: 'ENTERNEWPASSWORD',
-                setInstructionOldPassword: 'ENTEROLDPASSWORD',
                 setLanguageParam: 'LANGUAGE',
                 setLanguageParamProperCase: 'Language',
-                setLanguageInstruction: 'SELECTLANGUAGE',
                 setFirstLanguageInstruction: 'EN',
                 setSecondLanguageInstruction: 'FR',
-                setUpdateTitle: 'UPDATE',
                 setFontSizeParam: 'FONTSIZE',
                 setFontOptionMedium: 'medium',
-                setFontOptionSmall: 'small',
                 setFontOptionLarge: 'large',
                 setFontOptionExtraLarge: 'xlarge',
-                setFontSizeTitle: 'SELECTFONTSIZE',
                 setNicknameAlias: 'NICKNAME',
                 setTelephoneNumberParam: 'TelNum',
-                setUpdateMessageField: 'FIELD_UPDATED',
+
                 /** Status Controller **/
                 setMap: {
                     'CT for Radiotherapy Planning': 1,
@@ -317,16 +246,6 @@
                 cdvDocumentFilePathIos: 'cdvfile://localhost/persistent/Documents/',
                 cdvPatientFilePathAndroid: 'cdvfile://localhost/files/Patient/',
                 cdvPatientFilePathIos: 'cdvfile://localhost/persistent/Patient/',
-
-                /** LabResults Service constants **/
-                categoryOne: 'Complete Blood Count', // WBC, RBC, HGB, HCT, Platelet, Neutrophils, Eosinophils,
-                categoryTwo: 'Electrolytes', // Sodium, potassium, glucose, creatinine, calcium, corrected calcium, magnesium,
-                categoryThree: 'Other', // LDH, T4, TSH, albumin, protein, AST, ALT, alkaline phosophatase
-                categoryFour: 'Tumor markers', //CEA, CA 15-3, CA-125
-                categoryOneTests: ['WBC', 'RBC', 'HGB', 'HCT', 'Platelet Count', 'Neutrophils', 'Eosinophils'],
-                categoryTwoTests: ['Sodium', 'Potassium', 'Glucose, Random', 'Creatinine', 'Calcium', 'Corrected Calcium', 'Magnesium'],
-                categoryThreeTests: ['LDH', 'T4', 'T4, Free', 'TSH', 'Albumin', 'Protein, Total', 'AST (SGOT)', 'ALT (SGPT)', 'Alkaline Phosphatase', 'Rapamune (Sirolimus)'],
-                categoryFourTests: ['CEA', 'CA 15-3', 'CA-125'],
 
                 /** newsBanner Service constants **/
                 newsAlertTypes: {

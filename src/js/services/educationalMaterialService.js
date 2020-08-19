@@ -40,11 +40,11 @@ myApp.service('EducationalMaterial',['$q','$filter','LocalStorage','FileManagerS
      *@description Initializing array that represents all the information regarding educational material
      *             for the patient, this array is passed to appropriate controllers.
      **/
-
-    //Initializing array that represents all the informations for Announcements
     var educationalMaterialArray=[];
+
     //Initializing an object for pfpresources.
     var pfpresources={};
+
     //Types of educational material
     /**
      *@ngdoc property
@@ -53,6 +53,7 @@ myApp.service('EducationalMaterial',['$q','$filter','LocalStorage','FileManagerS
      *@description Object contains the mapping betweem the type of educational material and the icon and color of the icon for that particular educational material.
      **/
     var educationalMaterialType = Params.educationalMaterial;
+
     function setLanguageEduMaterial(array)
     {
         var language = UserPreferences.getLanguage();

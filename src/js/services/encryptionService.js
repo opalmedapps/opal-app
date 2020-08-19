@@ -192,7 +192,7 @@ myApp.service('EncryptionService', function (UserAuthorizationInfo) {
 
         /**
          *@ngdoc method
-         *@name encryptPassword
+         *@name hash
          *@methodOf MUHCApp.service:EncryptionService
          *@description Encrypts a given password using SHA512
          *@return {String} Returns hashed password
@@ -229,7 +229,7 @@ myApp.service('EncryptionService', function (UserAuthorizationInfo) {
 
         /**
          *@ngdoc method
-         *@name setEncryptionHash
+         *@name generateEncryptionHash
          *@methodOf MUHCApp.service:EncryptionService
          *@description Encrypts a given password using SHA512
          *@return {String} Returns hashed password
