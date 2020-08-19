@@ -34,15 +34,12 @@
         vm.answerSavedInDBValidStatus = Params.ANSWER_SAVED_IN_DB_STATUS;
 
         // variables that can be seen from view, sorted alphabetically
-        vm.backToListMessage = '';  // the message varies according to the questionnaire category
         vm.loadingQuestionnaire = true;     // the loading circle for one questionnaire
         vm.loadingSubmitQuestionnaire = false;  // the loading circle for saving questionnaire
-        vm.pageTitle = '';  // the page title varies according to the questionnaire category
         vm.password = '';   // the password that the user may enter for consent form
         vm.questionnaire = {};  // the questionnaire itself
         vm.requirePassword = false;     // determine whether the password is required for submission or not
         vm.submitAllowed = false;   // if all questions are completed, then the user is allowed to submit.
-        vm.thankMessage = '';    // the message varies according to the questionnaire category
 
         // functions that can be seen from view, sorted alphabetically
         vm.editQuestion = editQuestion;
@@ -90,20 +87,6 @@
                         handleLoadQuestionnaireErr();
                     });
                 });
-        }
-
-        /**
-         * @name setPageText
-         * @desc set the page title and descriptions according to the questionnaire category requested
-         *      if the category is not passed as an argument, the text will default to the default's translation
-         * @param {string} category
-         */
-        function setPageText(category = 'default') {
-            vm.pageTitle = $filter('translate')(Questionnaires.getQuestionnaireTitleByCategory(category));
-
-            vm.backToListMessage = $filter('translate')(Questionnaires.getQuestionnaireBackToListByCategory(category));
-
-            vm.thankMessage = $filter('translate')(Questionnaires.getQuestionnaireThankByCategory(category));
         }
 
         /**

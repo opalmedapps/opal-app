@@ -179,11 +179,11 @@
 
             // set the messages when the lists is null
             vm.noCompletedQuestionnaireText
-                = $filter('translate')(Questionnaires.getQuestionnaireNoListMessageByCategory(allowedStatus.COMPLETED_QUESTIONNAIRE_STATUS));
+                = $filter('translate')(Questionnaires.getQuestionnaireNoListMessageByCategory(allowedStatus.COMPLETED_QUESTIONNAIRE_STATUS, questionnaireCategory));
             vm.noNewQuestionnaireText
-                = $filter('translate')(Questionnaires.getQuestionnaireNoListMessageByCategory(allowedStatus.NEW_QUESTIONNAIRE_STATUS));
+                = $filter('translate')(Questionnaires.getQuestionnaireNoListMessageByCategory(allowedStatus.NEW_QUESTIONNAIRE_STATUS, questionnaireCategory));
             vm.noProgressQuestionnaireText
-                = $filter('translate')(Questionnaires.getQuestionnaireNoListMessageByCategory(allowedStatus.IN_PROGRESS_QUESTIONNAIRE_STATUS));
+                = $filter('translate')(Questionnaires.getQuestionnaireNoListMessageByCategory(allowedStatus.IN_PROGRESS_QUESTIONNAIRE_STATUS, questionnaireCategory));
         }
 
         /**
