@@ -1,21 +1,29 @@
 (function() {
     'use strict';
 
+    /**
+     * @name QuestionnaireMainController
+     * @desc This is the controller for src/views/personal/questionnaires/questionnaires.html
+     *       It is responsible for the carousel of in progress and new questionnaires
+     *       For more information of the use cases, see the activate() function
+     */
+
     angular
         .module('MUHCApp')
         .controller('QuestionnaireMainController', QuestionnaireMainController);
 
     QuestionnaireMainController.$inject = [
+        '$filter',
         '$scope',
         '$timeout',
-        'Questionnaires',
+        'NativeNotification',
         'NavigatorParameters',
         'Params',
-        '$filter'
+        'Questionnaires'
     ];
 
     /* @ngInject */
-    function QuestionnaireMainController($scope, $timeout, Questionnaires, NavigatorParameters, Params, $filter) {
+    function QuestionnaireMainController($filter, $scope, $timeout, NativeNotification, NavigatorParameters, Params, Questionnaires) {
         let vm = this;
 
         // constants
@@ -164,7 +172,7 @@
 
         /**
          * @name beginQuestionnaire
-         * @param bySwipe {boolean} if it is activated by swiping to the right then True
+         * @param {boolean} bySwipe if it is activated by swiping to the right then True
          * @desc This function is used to update the questionnaire status when beginning a questionnaire and, in case that the user uses the button "begin" instead of swiping, move the carousel
          */
         function beginQuestionnaire(bySwipe){
@@ -212,7 +220,7 @@
         /**
          * @name resumeQuestionnaire
          * @desc this public function serves to resume the questionnaire.
-         * @param startIndex {int}
+         * @param {int} startIndex
          */
         function resumeQuestionnaire(startIndex) {
 
@@ -288,7 +296,7 @@
                     }).catch(function(err){
 
                         $timeout(function(){
-                            console.log(err);
+                            console.error(err);
                             loadingSaveAnswerModal.hide();
                             handleSaveAnswerErr();
                         });
@@ -298,8 +306,8 @@
 
         /**
          * @name initTextboxQuestion
-         * @desc function for initialization of textbox question
-         * @param question {object}
+         * @desc function for initialization of text box question
+         * @param {object} question
          */
         function initTextboxQuestion(question){
             question.answerChangedFlag = false;
@@ -311,7 +319,7 @@
         /**
          * @name initRadioButtonQuestion
          * @desc function for initialization of radio button question
-         * @param question {object}
+         * @param {object} question
          */
         function initRadioButtonQuestion(question){
             question.answerChangedFlag = false;
@@ -320,7 +328,7 @@
         /**
          * @name initCheckboxQuestion
          * @desc function for initialization of checkbox question
-         * @param question {object}
+         * @param {object} question
          */
         function initCheckboxQuestion(question) {
 
@@ -333,7 +341,7 @@
          * @name initSliderQuestion
          * @desc the initialization function for the slider type question. Currently (May 2020), the only the vertical scale questions
          * @param {object} question
-         * @returns {[]} contain the options for the dots scale questions
+         * @returns {Array} contain the options for the dots scale questions
          */
         function initSliderQuestion(question) {
             question.answerChangedFlag = false;
@@ -357,8 +365,8 @@
         /**
          * @name isCheckedCheckmark
          * @desc this public function serves to determine whether an option is selected for a checkbox question. It influences the style and the checkmark displayed in the html
-         * @param question {object} the question itself
-         * @param optionKey {int} the id of the option
+         * @param {object} question the question itself
+         * @param {int} optionKey the id of the option
          * @returns {boolean} true if it is checked
          */
         function isCheckedCheckmark(question, optionKey) {
@@ -368,8 +376,8 @@
         /**
          * @name isCheckboxDisabled
          * @desc this public function is used to determine whether the number of checked options is over the set limit. If it is, disable the options in the html file such that the user is no longer able to touch it.
-         * @param question {object} the question itself
-         * @param optionKey {int} the id of the option
+         * @param {object} question the question itself
+         * @param {int} optionKey the id of the option
          * @returns {boolean} true if the option cannot be checked
          */
         function isCheckboxDisabled(question, optionKey) {
@@ -381,9 +389,9 @@
         /**
          * @name toggleCheckboxSelection
          * @desc this public function is used to check or uncheck the checkbox question's option. TODO: can this be done better using ng-model?
-         * @param question {object} the question itself
-         * @param optionKey {int} the id of the option
-         * @param optionText {string} the text of the option itself, not sent to the backed, but saved for display purpose
+         * @param {object} question the question itself
+         * @param {int} optionKey the id of the option
+         * @param {string} optionText the text of the option itself, not sent to the backed, but saved for display purpose
          */
         function toggleCheckboxSelection(question, optionKey, optionText) {
             question.answerChangedFlag = true;
@@ -424,7 +432,7 @@
         /**
          * @name initializeIndex
          * @desc This private function set the startIndex, sectionIndex and the questionIndex for the first time
-         * @param params {object} the parameter passed from the navigator
+         * @param {object} params the parameter passed from the navigator
          */
         function initializeIndex(params){
             // get the indices for the questionnaire and the carousel
@@ -527,12 +535,12 @@
          * @name leftSwipe
          * @desc this private function deals with whatever we have to do when the carousel detects a left swipe.
          *      It relays most of the tasks to other private functions, but mostly updates the indices questionIndex and sectionIndex itself.
-         * @param activeIndex {int} the current active index of the carousel
-         * @param lastActiveIndex {int} the last active index of the carousel
-         * @param activeItem {object} the current item shown on the carousel
-         * @param activeItemType {string} the type of the current item
-         * @param lastItem {object} the previous item shown on the carousel
-         * @param lastItemType {string} the type of the previous item
+         * @param {int} activeIndex the current active index of the carousel
+         * @param {int} lastActiveIndex the last active index of the carousel
+         * @param {object} activeItem the current item shown on the carousel
+         * @param {string} activeItemType the type of the current item
+         * @param {object} lastItem the previous item shown on the carousel
+         * @param {string} lastItemType the type of the previous item
          */
         function leftSwipe(activeIndex, lastActiveIndex, activeItem, activeItemType, lastItem, lastItemType){
             /*
@@ -584,12 +592,12 @@
          * @name rightSwipe
          * @desc this private function deals with whatever we have to do when the carousel detects a right swipe.
          *      It relays most of the tasks to other private functions, but updates the indices questionIndex and sectionIndex itself.
-         * @param activeIndex {int} the current active index of the carousel
-         * @param lastActiveIndex {int} the last active index of the carousel
-         * @param activeItem {object} the current item shown on the carousel
-         * @param activeItemType {string} the type of the current item
-         * @param lastItem {object} the previous item shown on the carousel
-         * @param lastItemType {string} the type of the previous item
+         * @param {int} activeIndex the current active index of the carousel
+         * @param {int} lastActiveIndex the last active index of the carousel
+         * @param {object} activeItem the current item shown on the carousel
+         * @param {string} activeItemType the type of the current item
+         * @param {object} lastItem the previous item shown on the carousel
+         * @param {string} lastItemType the type of the previous item
          */
         function rightSwipe(activeIndex, lastActiveIndex, activeItem, activeItemType, lastItem, lastItemType){
             /*
@@ -757,7 +765,7 @@
         /**
          * @name verifyCheckboxNumberOfAnswer
          * @desc this function performs a check for a user that have completed a checkbox type of question but did not fulfill the number of answers requirements
-         * @param question {object}
+         * @param {object} question
          * @returns {boolean} true if the number of answers given matches the requirements, false otherwise
          */
         function verifyCheckboxNumberOfAnswer(question){
@@ -775,7 +783,7 @@
         /**
          * @name answerInvalid
          * @desc this function is used when the answer given by the user does not respect the required constraints
-         * @param question {object}
+         * @param {object} question
          */
         function answerInvalid(question){
             question.patient_answer.is_defined = answerSavedInDBValidStatus.ANSWER_INVALID;
@@ -796,7 +804,7 @@
          *      If a question is a checkbox question AND it is skipped then vm.checkedNumber = 0. If a question is not a checkbox question vm.checkedNumber is also 0.
          *      If a question is a checkbox question but has answers in its array, then the checkedNumber is changed to the number of answers for that question.
          *      Note that skipped functionality is non-extant as of January 2020
-         * @param question {object}
+         * @param {object} question
          */
         function updateCheckedNumber(question) {
             if (question.type_id === vm.allowedType.CHECKBOX_TYPE_ID && question.patient_answer.is_defined === '1') {
@@ -809,7 +817,7 @@
         /**
          * @name saveAnswer
          * @desc this function serves to save the answer of a question if the question is changed
-         * @param question {object}
+         * @param {object} question
          * @returns {Promise}
          */
         function saveAnswer(question){
@@ -826,10 +834,7 @@
             NavigatorParameters.setParameters({Navigator: navigatorName});
             navigator.popPage();
 
-            ons.notification.alert({
-                message: $filter('translate')("SERVER_ERROR_SUBMIT_ANSWER"),
-                modifier: (ons.platform.isAndroid())?'material':null
-            })
+            NativeNotification.showNotificationAlert($filter('translate')("SERVER_ERROR_SUBMIT_ANSWER"));
         }
 
         /**
@@ -842,10 +847,7 @@
             NavigatorParameters.setParameters({Navigator: navigatorName});
             navigator.popPage();
 
-            ons.notification.alert({
-                message: $filter('translate')("SERVERERRORALERT"),
-                modifier: (ons.platform.isAndroid())?'material':null
-            })
+            NativeNotification.showNotificationAlert($filter('translate')("SERVERERRORALERT"));
         }
 
         /**
@@ -860,7 +862,7 @@
         }
 
         /**
-         * @name  delayLoading
+         * @name delayLoading
          * @desc Continue displaying the loading page even if the loading itself has finished
          *      This function is needed because the onsen navigator does not immediately update after after pushing
          */
