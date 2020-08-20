@@ -1,12 +1,6 @@
 (function () {
     'use strict';
 
-    /**
-     * @name QuestionnaireCompletionController
-     * @desc this controller is used in src/views/personal/questionnaires/questionnaireCompletedConfirmation.html
-     *       It is responsible of the confirmation page for questionnaires
-     */
-
     angular
         .module('MUHCApp')
         .controller('QuestionnaireCompletionController', QuestionnaireCompletionController);
