@@ -7,10 +7,13 @@
     </ons-toolbar>
 
     <!--LOADING CIRCLE FOR LIST OF QUESTIONNAIRES-->
-    <loading-spinning-circle
-            ng-show="questionnaireListVm.loading"
-            loading-message="{{'LOADINGQUESTIONNAIRES'|translate}}">
-    </loading-spinning-circle>
+    <div ng-show="questionnaireListVm.loading" align="center" style="margin-top:25vh">
+        <svg class="progress-circular">
+            <circle class="progress-circular__primary" cx="50%" cy="50%" r="40%" fill="none" stroke-width="10%"
+                    stroke-miterlimit="10"></circle>
+        </svg>
+        <p style="margin-top: 30px">{{"LOADINGQUESTIONNAIRES"| translate }}</p>
+    </div>
 
     <div ng-hide="questionnaireListVm.loading">
         <!--TABBAR-->
