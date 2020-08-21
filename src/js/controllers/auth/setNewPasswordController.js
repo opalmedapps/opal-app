@@ -17,21 +17,23 @@
         'EncryptionService',
         'ResetPassword',
         '$timeout',
-        'DeviceIdentifiers',
         'Params'
     ];
 
     /* @ngInject */
-    function SetNewPasswordController(RequestToServer, UserAuthorizationInfo, EncryptionService, ResetPassword, $timeout, DeviceIdentifiers, Params) {
+    function SetNewPasswordController(RequestToServer, UserAuthorizationInfo, EncryptionService, ResetPassword, $timeout, Params) {
 
         var vm = this;
         var parameters;
+        const MIN_PASSWORD_LENGTH = 8;
         vm.alert = {};
         vm.resetSuccess = false;
         vm.invalidPassword = true;
         vm.goToLogin = goToLogin;
         vm.submitNewPassword = submitNewPassword;
         vm.evaluatePassword = evaluatePassword;
+        vm.newValue = '';
+        vm.validateNewValue = '';
 
         activate();
 
@@ -42,29 +44,19 @@
          ********************************/
 
         function activate() {
-            parameters =  initNavigator.getCurrentPage().options;
+            parameters = initNavigator.getCurrentPage().options;
             parameters = parameters.data;
         }
 
-
         function newPasswordIsValid() {
             var str = vm.newValue;
-            if (str && typeof str === 'string')
+            if (str !== null && str !== undefined && typeof str === 'string')
             {
-                if ( str.length < 6) {
-                    return false;
-                } else if (str.length > 50) {
-                    return false;
-                } else if (str.search(/\d/) === -1) {
-                    return false;
-                } else if (str.search(/[a-zA-Z]/) === -1) {
-                    return false;
-                } else if (str.search(/[^a-zA-Z0-9\!\@\#\$\%\^\&\*\(\)\_\+]/) !== -1) {
-                    return false;
-                }
+                return !(str.length < MIN_PASSWORD_LENGTH || str.length > 50 || str.search(/\d/) === -1 ||
+                    str.search(/[A-Z]/) === -1 || str.search(/\W|_{1}/) <= -1);
             }
 
-            return true;
+            return false;
         }
 
         /*********************************
@@ -78,13 +70,12 @@
         function evaluatePassword(){
             vm.invalidPassword = !newPasswordIsValid();
 
-            if(vm.alert.hasOwnProperty('type') && vm.alert.type === 'danger')
+            if(vm.alert.hasOwnProperty('type') && vm.alert.type === Params.alertTypeDanger)
             {
                 delete vm.alert.type;
                 delete vm.alert.content;
             }
         }
-
 
         function submitNewPassword() {
             var invalid = !newPasswordIsValid();
@@ -92,13 +83,13 @@
                 $timeout(function() {
                     vm.invalidPassword = invalid;
                     vm.alert.type = Params.alertTypeDanger;
-                    vm.alert.content = Params.setNewPasswordMessage;
+                    vm.alert.content = "ENTERVALIDPASSWORD";
                 })
             } else if (vm.newValue !== vm.validateNewValue){
                 $timeout(function() {
                     vm.invalidPassword = true;
                     vm.alert.type = Params.alertTypeDanger;
-                    vm.alert.content = Params.passwordMismatchMessage;
+                    vm.alert.content = "PASSWORD_MISMATCH_ERROR";
                 });
             }else{
                 vm.submitting = true;
@@ -117,7 +108,7 @@
                         EncryptionService.removeTempEncryptionHash();
                         $timeout(function() {
                             vm.alert.type = Params.alertTypeSuccess;
-                            vm.alert.content = Params.passwordUpdateMessage;
+                            vm.alert.content = "PASSWORDUPDATED";
                             vm.resetSuccess = true;
                         });
                         localStorage.removeItem("deviceID");
@@ -129,16 +120,16 @@
                             vm.alert.type = Params.alertTypeDanger;
                             switch (error.code) {
                                 case Params.invalidActionCode:
-                                    vm.alert.content = Params.invalidActionCodeMessage;
+                                    vm.alert.content = "RESET_PASSWORD_CODE_INVALID";
                                     break;
                                 case Params.expiredActionCode:
-                                    vm.alert.content = Params.expiredActionCode;
+                                    vm.alert.content = "RESET_PASSWORD_CODE_EXPIRED";
                                     break;
-                                case Params.weakPasswordCase:
-                                    vm.alert.content = Params.weakPasswordMessage;
+                                case Params.weakPassword:
+                                    vm.alert.content = "PASSWORD_CRITERIA";
                                     break;
                                 default:
-                                    vm.alert.content = Params.passwordServerErrorMessage;
+                                    vm.alert.content = "PASSWORDRESETSERVERERROR";
                                     break;
                             }
                         })

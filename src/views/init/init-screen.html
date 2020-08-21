@@ -1,115 +1,115 @@
-    <ons-page id="popoverLanguage" ng-controller="InitScreenController as init">
+<ons-page id="popoverLanguage" ng-controller="InitScreenController as init">
 
-         <!-- IMAGE HEADER -->
-         <div style="position: relative; height: 40%">
-            <div style="z-index:2;width:100%" align="center">
-                <!-- Style on network banner used to make it overlap the picture-logo instead of push it down. -->
-                <network-banner style="position:absolute; top:0; left:0; z-index:9999"></network-banner>
-                <div style="position: absolute; top: 50%;transform: translateY(-50%);" align="center">
-                    <img src="img/Opal_Name_Logo_Transparent.png" style="width:75%;height:auto">
+     <!-- IMAGE HEADER -->
+     <div style="position: relative; height: 40%">
+        <div style="z-index:2;width:100%" align="center">
+            <!-- Style on network banner used to make it overlap the picture-logo instead of push it down. -->
+            <network-banner style="position:absolute; top:0; left:0; z-index:9999"></network-banner>
+            <div style="position: absolute; top: 50%;transform: translateY(-50%);" align="center">
+                <img src="img/Opal_Name_Logo_Transparent.png" style="width:75%;height:auto">
+            </div>
+        </div>
+        <div style="height: 100%">
+            <img id="init-background" src="img/opal-init-photo.jpg" style="width: 100%; height: 100%; object-fit: cover">
+        </div>
+    </div>
+
+    <!-- LIST OF BUTTONS -->
+    <div id="listInitApp" class="animated fadeIn ng-cloak listInitApp">
+
+        <!-- LEARN ABOUT OPAL -->
+        <div class="initScreenButtonDiv">
+            <ons-button class="shadow-2 initScreenWhiteButton" modifier="large"
+                        ng-click="init.gotoLearnAboutOpal()" var="initButton">
+                <ons-row align="center">
+                    <ons-col width="60px" align="center">
+                        <img style="width: 50px;" src="img/Opal_Logo_Transparent_Inverse.png">
+                    </ons-col>
+                    <ons-col>
+                        <div class="initScreenButtonText" align="center">{{"OPAL_ABOUT"|translate}}</div>
+                    </ons-col>
+                </ons-row>
+            </ons-button>
+        </div>
+
+        <!-- ACKNOWLEDGEMTNS -->
+        <div class="initScreenButtonDiv">
+            <ons-button class="shadow-2 initScreenWhiteButton" modifier="large"
+                        ng-click="init.goToAcknowledgements()" var="initButton">
+                <ons-icon icon="fa-star fa-lg pull-left"
+                          style="color:#FFEB3B; display: inline-block"></ons-icon>
+                <div class="initScreenButtonText" align="center">
+                    {{"OPAL_ACKNOWLEDGEMENTS"|translate}}
                 </div>
-            </div>
-            <div style="height: 100%">
-                <img id="init-background" src="img/opal-init-photo.jpg" style="width: 100%; height: 100%; object-fit: cover">
-            </div>
+            </ons-button>
         </div>
 
-        <!-- LIST OF BUTTONS -->
-        <div id="listInitApp" class="animated fadeIn ng-cloak listInitApp">
 
-            <!-- LEARN ABOUT OPAL -->
-            <div class="initScreenButtonDiv">
-                <ons-button class="shadow-2 initScreenWhiteButton" modifier="large"
-                            ng-click="init.gotoLearnAboutOpal()" var="initButton">
-                    <ons-row align="center">
-                        <ons-col width="60px" align="center">
-                            <img style="width: 50px;" src="img/Opal_Logo_Transparent_Inverse.png">
-                        </ons-col>
-                        <ons-col>
-                            <div class="initScreenButtonText" align="center">{{"OPAL_ABOUT"|translate}}</div>
-                        </ons-col>
-                    </ons-row>
-                </ons-button>
-            </div>
+        <!-- PATIENT CHARTER -->
+        <!--<div class="initScreenButtonDiv">-->
+            <!--<ons-button class="shadow-2 initScreenWhiteButton" modifier="large"-->
+                        <!--ng-click="init.goToPatientCharter()" var="initButton">-->
+                <!--<ons-icon icon="fa-list-alt fa-lg pull-left"-->
+                          <!--style="color:#2196F3; display: inline-block"></ons-icon>-->
+                <!--<div class="initScreenButtonText" align="center">-->
+                    <!--{{"PATIENTCHARTER"|translate}}-->
+                <!--</div>-->
+            <!--</ons-button>-->
+        <!--</div>-->
 
-            <!-- ACKNOWLEDGEMTNS -->
-            <div class="initScreenButtonDiv">
-                <ons-button class="shadow-2 initScreenWhiteButton" modifier="large"
-                            ng-click="init.goToAcknowledgements()" var="initButton">
-                    <ons-icon icon="fa-star fa-lg pull-left"
-                              style="color:#FFEB3B; display: inline-block"></ons-icon>
-                    <div class="initScreenButtonText" align="center">
-                        {{"OPAL_ACKNOWLEDGEMENTS"|translate}}
-                    </div>
-                </ons-button>
-            </div>
-
-
-            <!-- PATIENT CHARTER -->
-            <!--<div class="initScreenButtonDiv">-->
-                <!--<ons-button class="shadow-2 initScreenWhiteButton" modifier="large"-->
-                            <!--ng-click="init.goToPatientCharter()" var="initButton">-->
-                    <!--<ons-icon icon="fa-list-alt fa-lg pull-left"-->
-                              <!--style="color:#2196F3; display: inline-block"></ons-icon>-->
-                    <!--<div class="initScreenButtonText" align="center">-->
-                        <!--{{"PATIENTCHARTER"|translate}}-->
-                    <!--</div>-->
-                <!--</ons-button>-->
-            <!--</div>-->
-
-            <!-- REPORT A BUG -->
-            <!--
-            <div class="initScreenButtonDiv">
-                <ons-button class="shadow-2 initScreenWhiteButton" modifier="large"
-                            ng-click="init.reportBugs()" var="initButton">
-                    <i class="fa fa-exclamation-triangle fa-lg pull-left"
-                              style="color:#FFC107; display: inline-block"></i>
-                    <div class="initScreenButtonText" align="center">
-                        {{"REPORTBUGS"|translate}}
-                    </div>
-                </ons-button>
-            </div>
-            -->
-
-            <!-- LEGAL INFO -->
-            <div class="initScreenButtonDiv">
-                <ons-button class="shadow-2 initScreenWhiteButton" modifier="large"
-                            ng-click="init.goToGeneralSettings()" var="initButton">
-                    <i class="fa fa-info-circle fa-lg pull-left"
-                              style="color:grey; display: inline-block"></i>
-                    <div class="initScreenButtonText" align="center">
-                        {{"LEGALINFO"|translate}}
-                    </div>
-                </ons-button>
-            </div>
-
-            <!-- REGISTER OPAL -->
-            <div class="initScreenButtonDiv">
-                <ons-button class="shadow-2 initScreenWhiteButton" modifier="large"
-                            ng-click="init.goToRegister()" var="initButton">
-                    <i class="fa fa-user-circle fa-lg pull-left"
-                       style="color:#4CAF50; display: inline-block"></i>
-                    <div class="initScreenButtonText" align="center">
-                        {{"REGISTER_OPAL"|translate}}
-                    </div>
-                </ons-button>
-            </div>
-
-            <!-- SIGN IN -->
-            <div class="initScreenButtonDiv">
-                <ons-button class="animated pulse ng-cloak shadow-2 initScreenGreenButton" modifier="large"
-                            ng-click="init.goToLogin()" var="initButton">{{"HEADER_MESSAGE_LOGIN"|translate}}
-                </ons-button>
-            </div>
-            <div style="text-align: center;" class="item-desc" ng-if="init.OPAL_ENV !== 'prod'">
-               {{init.APP_NAME}}-v{{init.APP_VERSION}}-{{init.APP_BUILD_NUMBER}}
-            </div>
-
-            <!-- Show Message Of The Day (MOTD), if there is any. -->
-            <!-- MOTD comes from serviceStatus_EN.php -->
-            <!-- if there is a Message, then show it -->
-            <div ng-show="init.globalMessageDescription !== ''">
-                 {{init.showMessageOfTheDay()}}
-            </div>
+        <!-- REPORT A BUG -->
+        <!--
+        <div class="initScreenButtonDiv">
+            <ons-button class="shadow-2 initScreenWhiteButton" modifier="large"
+                        ng-click="init.reportBugs()" var="initButton">
+                <i class="fa fa-exclamation-triangle fa-lg pull-left"
+                          style="color:#FFC107; display: inline-block"></i>
+                <div class="initScreenButtonText" align="center">
+                    {{"REPORTBUGS"|translate}}
+                </div>
+            </ons-button>
         </div>
-    </ons-page>
+        -->
+
+        <!-- LEGAL INFO -->
+        <div class="initScreenButtonDiv">
+            <ons-button class="shadow-2 initScreenWhiteButton" modifier="large"
+                        ng-click="init.goToGeneralSettings()" var="initButton">
+                <i class="fa fa-info-circle fa-lg pull-left"
+                          style="color:grey; display: inline-block"></i>
+                <div class="initScreenButtonText" align="center">
+                    {{"LEGALINFO"|translate}}
+                </div>
+            </ons-button>
+        </div>
+
+        <!-- REGISTER OPAL -->
+        <div class="initScreenButtonDiv">
+            <ons-button class="shadow-2 initScreenWhiteButton" modifier="large"
+                        ng-click="init.goToRegister()" var="initButton">
+                <i class="fa fa-user-circle fa-lg pull-left"
+                   style="color:#4CAF50; display: inline-block"></i>
+                <div class="initScreenButtonText" align="center">
+                    {{"REGISTER_OPAL"|translate}}
+                </div>
+            </ons-button>
+        </div>
+
+        <!-- SIGN IN -->
+        <div class="initScreenButtonDiv">
+            <ons-button class="animated pulse ng-cloak shadow-2 initScreenGreenButton" modifier="large"
+                        ng-click="init.goToLogin()" var="initButton">{{"HEADER_MESSAGE_LOGIN"|translate}}
+            </ons-button>
+        </div>
+        <div style="text-align: center;" class="item-desc" ng-if="init.OPAL_ENV !== 'prod'">
+           {{init.APP_NAME}}-v{{init.APP_VERSION}}-{{init.APP_BUILD_NUMBER}}
+        </div>
+
+        <!-- Show Message Of The Day (MOTD), if there is any. -->
+        <!-- MOTD comes from serviceStatus_EN.php -->
+        <!-- if there is a Message, then show it -->
+        <div ng-show="init.globalMessageDescription !== ''">
+             {{init.showMessageOfTheDay()}}
+        </div>
+    </div>
+</ons-page>

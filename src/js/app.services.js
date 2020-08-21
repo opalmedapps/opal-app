@@ -34,8 +34,6 @@ import "./services/metadataService.js";
 import "./services/pfpService.js";
 import "./services/responseValidationService.js";
 import "./services/securityService.js";
-import "./services/delaysService.js";
-import "./services/myWaitingTimeService.js";
 import "./services/UserHospitalPreferencesService.js";
 import "./services/hc-chart-labs-configuration.factory.js";
 import "./services/patient-test-results.service";

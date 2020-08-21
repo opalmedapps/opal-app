@@ -45,7 +45,6 @@
 
             $timeout(function(){
                 vm.censor = Patient.getAccessLevel() == 3;
-                vm.TestUser = Patient.getTestUser()
             });
 
             //Sets appointments and treatment plan stage tab

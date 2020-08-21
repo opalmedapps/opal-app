@@ -18,7 +18,6 @@ var myApp=angular.module('MUHCApp');
  *@requires MUHCApp.service:LocalStorage
  *@requires MUHCApp.service:RequestToServer
  *@requires MUHCApp.service:Diagnoses
- *@requires MUHCApp.service:Questionnaires
  *@requires MUHCApp.service:NativeNotification
  *@requires $q
  *@requires $cordovaNetwork
@@ -27,12 +26,12 @@ var myApp=angular.module('MUHCApp');
  **/
 myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors','Appointments',
     'Documents','EducationalMaterial', 'UserAuthorizationInfo', '$q', 'Notifications',
-    '$cordovaNetwork', 'LocalStorage','RequestToServer','$filter','Diagnoses','Questionnaires',
+    '$cordovaNetwork', 'LocalStorage','RequestToServer','$filter','Diagnoses',
     'NativeNotification', 'Tasks', 'Params',
 
     function (Announcements, TxTeamMessages, Patient,Doctors, Appointments, Documents,
               EducationalMaterial, UserAuthorizationInfo, $q, Notifications,
-              $cordovaNetwork,LocalStorage,RequestToServer,$filter,Diagnoses,Questionnaires,
+              $cordovaNetwork,LocalStorage,RequestToServer,$filter,Diagnoses,
               NativeNotification, Tasks, Params ) {
         /**
          *@ngdoc property
@@ -50,7 +49,6 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors',
         'Patient':0,
         'Notifications':0,
         'EducationalMaterial':0,
-        'Questionnaires':0
   };</pre>
          **/
         var lastUpdateTimestamp = Params.lastUpdateTimestamp;
@@ -119,11 +117,6 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors',
                 init:TxTeamMessages.setTxTeamMessages,
                 update:TxTeamMessages.updateTxTeamMessages
             },
-            'Questionnaires':
-             {
-                 init:Questionnaires.setPatientQuestionnaires,
-                 update:Questionnaires.updatePatientQuestionnaires
-             },
             'Announcements':
             {
                 init:Announcements.setAnnouncements,
@@ -193,7 +186,7 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors',
         /**
          * Initialize sections
          */
-        //Initiatiates all the services online at either login, or simple entering the app once
+        //Initializes all the services online at either login, or simple entering the app once
         //patient is already register
         function initServicesFromServer(parameters)
         {

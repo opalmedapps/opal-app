@@ -23,10 +23,10 @@
         .module('MUHCApp')
         .controller('ForgotPasswordController', ForgotPasswordController);
 
-    ForgotPasswordController.$inject = ['$timeout','$firebaseAuth', '$state', 'Params'];
+    ForgotPasswordController.$inject = ['$timeout', '$firebaseAuth', 'Params'];
 
     /* @ngInject */
-    function ForgotPasswordController($timeout, $firebaseAuth, $state, Params) {
+    function ForgotPasswordController($timeout, $firebaseAuth, Params) {
         var vm = this;
 
         /**
@@ -63,7 +63,7 @@
          * @description
          * Clears errors
          */
-        function clearErrors(){
+        function clearErrors() {
             vm.alert.type = null;
             vm.alert.message = null;
         }
@@ -83,19 +83,30 @@
         function submitPasswordReset() {
             var userAuth = $firebaseAuth();
 
-            /* Note: for security reasons, the success and failure cases must show the exact same message,
-             * in the same colour (success = green).
-             * -SB */
-            userAuth.$sendPasswordResetEmail(vm.email).then(function(){
-                $timeout(function(){
-                    vm.alert.type = Params.forgotPasswordAlertSuccess;
-                    vm.alert.message = Params.forgotPasswordAlertSuccessMessage;
+            userAuth.$sendPasswordResetEmail(vm.email).then(function () {
+
+                $timeout(function () {
+                    vm.alert.type = Params.alertTypeSuccess;
+                    vm.alert.message = "RESET_PASSWORD_SENT";
                 });
-            }).catch(function(error){
-                $timeout(function(){
-                    vm.alert.type = Params.forgotPasswordAlertSuccess;
-                    vm.alert.message = Params.forgotPasswordAlertSuccessMessage;
-                });
+            }).catch(function (error) {
+                if (error.code === Params.networkRequestFailure) {
+                    $timeout(function () {
+                        vm.alert.type = Params.alertTypeDanger;
+                        vm.alert.message = "ERROR_NETWORK";
+                    });
+                }
+                else {
+
+                    /* Note: for security reasons, the email success and failure cases must show the exact same message,
+                     * in the same colour (success = green).
+                     * -SB */
+
+                    $timeout(function () {
+                        vm.alert.type = Params.alertTypeSuccess;
+                        vm.alert.message = "RESET_PASSWORD_SENT";
+                    });
+                }
             });
         }
 
