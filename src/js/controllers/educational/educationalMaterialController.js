@@ -35,8 +35,7 @@
 
         // variable to let the user know which hospital they are logged in
         vm.selectedHospitalToDisplay = "";
-
-        vm.showHeader = showHeader;
+        
         vm.goToEducationalMaterial = goToEducationalMaterial;
         vm.educationDeviceBackButton = educationDeviceBackButton;
 
@@ -101,17 +100,7 @@
                 educationNavigator.off('prepop');
             });
         }
-
-        //Function to decide whether or not to show the header
-        function showHeader(index) {
-            if (index === 0) {
-                return true;
-            } else if (vm.edumaterials[index - 1].PhaseInTreatment !== vm.edumaterials[index].PhaseInTreatment) {
-                return true;
-            }
-            return false;
-        }
-
+        
         /**
          * @method goToEducationalMaterial
          * @description If not read reads material, then it opens the material into its individual controller

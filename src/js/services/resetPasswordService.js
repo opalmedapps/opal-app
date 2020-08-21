@@ -1,29 +1,40 @@
 /*
  * Filename     :   resetPasswordService.js
  * Description  :
- * Created by   :   David Herrera, Robert Maglieri 
+ * Created by   :   David Herrera, Robert Maglieri
  * Date         :   03 Mar 2017
  * Copyright    :   Copyright 2016, HIG, All rights reserved.
  * Licence      :   This file is subject to the terms and conditions defined in
  *                  file 'LICENSE.txt', which is part of this source code package.
  */
- 
- 
- 
 
 /**
- *@ngdoc service
- *@name MUHCApp.service:ResetPassword
- *@requires Firebase
- *@description Service used to verify and confirm password resets.
+ * @ngdoc service
+ * @name MUHCApp.service:ResetPassword
+ * @requires MUHCApp.service:Params
+ * @description Service used to verify and confirm password resets.
  **/
+(function() {
+    'use strict';
 
-var myApp=angular.module('MUHCApp');
-myApp.service('ResetPassword',function(){
+    angular
+        .module('MUHCApp')
+        .factory('ResetPassword', ResetPassword);
 
-    var auth = firebase.app().auth();
+    ResetPassword.$inject = ['Params'];
 
-    return{
+    function ResetPassword(Params) {
+
+        let auth = firebase.app().auth();
+
+        let service =  {
+            verifyLinkCode: verifyLinkCode,
+            completePasswordChange: completePasswordChange,
+            getParameter: getParameter,
+        };
+
+        return service;
+
         /**
          *@ngdoc method
          *@name verifyLinkCode
@@ -31,21 +42,17 @@ myApp.service('ResetPassword',function(){
          *@methodOf MUHCApp.service:ResetPassword
          *@description verifies the password reset code sent to the user.
          **/
-        verifyLinkCode: function (url) {
-
-            // console.log("url: " + url);
+        function verifyLinkCode(url) {
 
             var oobCode = this.getParameter('oobCode', url);
-
-            // console.log("oobcode: " + oobCode);
 
             if(oobCode){
                 return auth.verifyPasswordResetCode(oobCode[1]);
             } else {
-                return Promise.reject({Code: "auth/invalid-action-code"})
+                return Promise.reject({Code: Params.invalidActionCode});
             }
 
-        },
+        }
 
         /**
          *@ngdoc method
@@ -56,10 +63,10 @@ myApp.service('ResetPassword',function(){
          *@description confirms the password reset.
          *@returns {Promise} Returns promise containing void.
          **/
-        completePasswordChange : function (oobCode, newPassword) {
+        function completePasswordChange(oobCode, newPassword) {
 
             return auth.confirmPasswordReset(oobCode[1], newPassword)
-        },
+        }
 
         /**
          *@ngdoc method
@@ -70,12 +77,10 @@ myApp.service('ResetPassword',function(){
          *@description Scans the URL using regular expressions for parameters.
          *@returns {Object} The parameter and its value.
          **/
-        getParameter: function(param, url){
+        function getParameter(param, url){
             // Getting the query string param and value
             var regex = new RegExp('[?&]' + param +'=([^&#]*)', 'i');
             return regex.exec(url);
         }
-    };
-
-
-});
+    }
+})();
