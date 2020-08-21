@@ -123,8 +123,7 @@ import "bootstrap/dist/css/bootstrap.css";
 import "animate.css";
 import "font-awesome/css/font-awesome.css";
 import "../css/app.css";
-import "./Languages/angular-locales/angular-locale_en.js";
-
+import "../Languages/angular-locales/angular-locale_en.js"
 
 // Load angular module bootstrap script
 import "./app.bootstrap";
@@ -142,10 +141,6 @@ const app = angular
  in the Firebase localstorage,  Check run service on angular {{link}}
  **/
 app.run(function ($state, $stateParams,$q, $rootScope,$translate, Patient,$location, NetworkStatus) {
-
-    if (!firebase.apps.length) {
-        firebase.initializeApp({});
-    }
 
     var isOffline = 'onLine' in navigator && !navigator.onLine;
 
@@ -194,5 +189,4 @@ app.run(function ($state, $stateParams,$q, $rootScope,$translate, Patient,$locat
         }
     });
 });
-//
 

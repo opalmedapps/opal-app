@@ -69,7 +69,6 @@
         var url =  window.location.href;
         var regex = new RegExp('[?&]env=([^&#]*)', 'i');
         var opal_env = regex.exec(url);
-        window.alert(opal_env);
         if(opal_env !== null){
           window.location.replace(opal_env[1]+"://"+ url);
         }else{
