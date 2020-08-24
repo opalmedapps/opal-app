@@ -144,8 +144,7 @@
             $scope.$on('$destroy',function()
             {
                 navigator.off('prepop');
-                // Reset navigator to default (needed when switching from reference materials to edu tab directly)
-                //NavigatorParameters.setParameters({'Navigator':'educationNavigator'});
+                // Clear navigator parameters
                 NavigatorParameters.setParameters({});
             });
         }
