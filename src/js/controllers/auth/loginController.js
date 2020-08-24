@@ -313,7 +313,7 @@
                         vm.loading = false;
                     });
                     break;
-                case "ENCRYPTION_ERROR":
+                case '1': // Encryption error
                     $timeout(function(){
                         vm.loading = false;
                         loginerrormodal.show();
