@@ -11,11 +11,12 @@
         'NavigatorParameters',
         '$filter',
         '$timeout',
-        'FirebaseService'
+        'FirebaseService',
+        'NativeNotification'
     ];
 
     /* @ngInject */
-    function AnsweredQuestionnaireController(Questionnaires, Params, NavigatorParameters, $filter, $timeout, FirebaseService) {
+    function AnsweredQuestionnaireController(Questionnaires, Params, NavigatorParameters, $filter, $timeout, FirebaseService, NativeNotification) {
         // Note: this file has many exceptions / hard coding to obey the desired inconsistent functionality
 
         var vm = this;
@@ -74,8 +75,6 @@
                             // process the answers and check if submit is allowed.
                             init();
                         }
-
-                        setPageText(category);
 
                         vm.loadingQuestionnaire = false;
                     });
@@ -327,10 +326,7 @@
             NavigatorParameters.setParameters({Navigator: navigatorName});
             navigator.popPage();
 
-            ons.notification.alert({
-                message: $filter('translate')("SERVERERRORALERT"),
-                modifier: (ons.platform.isAndroid())?'material':null
-            })
+            NativeNotification.showNotificationAlert($filter('translate')("SERVERERRORALERT"));
         }
 
         /**
@@ -371,10 +367,7 @@
                 $timeout(function() {
                     vm.loadingSubmitQuestionnaire = false;
 
-                    ons.notification.alert({
-                        message: $filter('translate')(Params.invalidPasswordMessage),
-                        modifier: (ons.platform.isAndroid()) ? 'material' : null
-                    });
+                    NativeNotification.showNotificationAlert($filter('translate')("INVALID_PASSWORD"));
                 });
             } else {
                 vm.loadingSubmitQuestionnaire = false;
@@ -383,10 +376,7 @@
                 NavigatorParameters.setParameters({Navigator: navigatorName});
                 navigator.popPage();
 
-                ons.notification.alert({
-                    message: $filter('translate')("SERVER_ERROR_SUBMIT_QUESTIONNAIRE"),
-                    modifier: (ons.platform.isAndroid()) ? 'material' : null
-                })
+                NativeNotification.showNotificationAlert($filter('translate')("SERVER_ERROR_SUBMIT_QUESTIONNAIRE"));
             }
         }
 
