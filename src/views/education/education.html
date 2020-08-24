@@ -22,9 +22,9 @@
     <network-banner></network-banner>
 
     <!-- SEARCH BAR -->
-    <div class="navigation-bar">
+    <div class="navigation-bar" ng-hide="edu.noMaterials">
         <div class="navigation-bar__center" style="display:block">
-            <input ng-hide="edu.noMaterials" ng-model="edu.searchString" ng-change="edu.filterMaterial()"
+            <input ng-model="edu.searchString" ng-change="edu.filterMaterial()"
                    type="search" class="search-input" style="width: 96%; margin: 6px auto 6px auto;"
                    placeholder="{{'SEARCH_EDU'|translate}}" ng-class="fontSizeDesc">
         </div>
