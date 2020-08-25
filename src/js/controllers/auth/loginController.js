@@ -85,8 +85,10 @@
         vm.submit = submit;
         vm.goToInit = goToInit;
         vm.goToReset = goToReset;
+        vm.isThereSelectedHospital = isThereSelectedHospital;
 
         activate();
+
         //////////////////////////////////
 
         /*************************
@@ -424,6 +426,17 @@
         function goToReset(){
             loginerrormodal.hide();
             initNavigator.pushPage('./views/login/forgot-password.html',{})
+        }
+
+        /**
+         * @ngdoc method
+         * @name isThereSelectedHospital
+         * @methodOf MUHCApp.controllers.LoginController
+         * @description Returns whether the user has already selected a hospital.
+         * @returns {boolean} True if there is a hospital selected; false otherwise.
+         */
+        function isThereSelectedHospital() {
+            return UserHospitalPreferences.isThereSelectedHospital();
         }
     }
 })();
