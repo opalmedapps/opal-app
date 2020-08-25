@@ -85,9 +85,6 @@
         vm.submit = submit;
         vm.goToInit = goToInit;
         vm.goToReset = goToReset;
-        vm.goToHospital = goToHospital;
-        vm.isThereSelectedHospital = isThereSelectedHospital;
-        vm.getSelectedHospitalAcronym = getSelectedHospitalAcronym;
 
         activate();
         //////////////////////////////////
@@ -427,44 +424,6 @@
         function goToReset(){
             loginerrormodal.hide();
             initNavigator.pushPage('./views/login/forgot-password.html',{})
-        }
-
-        /**
-         * @ngdoc method
-         * @name goToHospital
-         * @methodOf MUHCApp.controllers.LoginController
-         * @description brings user to the hospital selection screen
-         */
-        function goToHospital(){
-            loginerrormodal.hide();
-            initNavigator.pushPage('./views/login/set-hospital.html', {});
-        }
-
-        /**
-         * @ngdoc method
-         * @name isThereSelectedHospital
-         * @methodOf MUHCApp.controllers.LoginController
-         * @description return whethere the user has selected a hospital before hand
-         * @returns {boolean} true if there is a hospital selected. false otherwise.
-         */
-        function isThereSelectedHospital() {
-            return UserHospitalPreferences.isThereSelectedHospital();
-        }
-
-        /**
-         * @ngdoc method
-         * @name getSelectedHospitalAcronym
-         * @methodOf MUHCApp.controllers.LoginController
-         * @description return the selected hospital acronym to the view
-         * @returns {string} selected hospital acronym
-         */
-        function getSelectedHospitalAcronym(){
-
-            if (isThereSelectedHospital()){
-                return UserHospitalPreferences.getHospitalAcronym();
-            } else {
-                return "TAP_TO_SELECT_HOSPITAL";
-            }
         }
     }
 })();
