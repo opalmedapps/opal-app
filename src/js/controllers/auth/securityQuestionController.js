@@ -94,16 +94,6 @@
          * @description determines which back button to show
          */
         vm.passwordReset = false;
-
-        /**
-         * @ngdoc property
-         * @name loading
-         * @propertyOf SecurityQuestionController
-         * @returns boolean
-         * @description Toggles the loading spinner shown during password reset.
-         */
-        vm.loading = false;
-
 	    /**
 	     * @ngdoc property
 	     * @name alertShow
@@ -134,7 +124,6 @@
             // this checks whether or not the security question is being asked in order to log the user in or to trigger a password reset request
             if (parameters.passwordReset){
 
-                vm.loading = true;
                 passwordReset = parameters.passwordReset;
                 vm.passwordReset = passwordReset;
 
@@ -146,13 +135,9 @@
                     .then(function (response) {
                         $timeout(function() {
                             vm.Question = response.Data.securityQuestion.securityQuestion_EN + " / " + response.Data.securityQuestion.securityQuestion_FR;
-                            vm.loading = false;
-                        });
+                        })
                     })
-                    .catch(function (error) {
-                        vm.loading = false;
-                        handleError(error);
-                    });
+                    .catch(handleError);
             } else {
                 vm.Question = parameters.securityQuestion;
             }

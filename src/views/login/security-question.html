@@ -7,19 +7,11 @@
         <div class="center">{{"SECURITYQUESTION"|translate}}</div>
     </ons-toolbar>
     <network-banner></network-banner>
-
-    <!-- LOADING SPINNER -->
-    <loading-spinning-circle ng-if="security.loading" loading-message="{{'LOADING'|translate}}"></loading-spinning-circle>
-
-    <ons-row ng-if="!security.loading" align="center" style="height:70vh;margin:0;top:0">
+    <ons-row align="center" style="height:70vh;margin:0;top:0">
         <ons-col align="center" style="margin:0;top:0">
-
-            <!-- OPAL LOGO -->
             <div align="center">
                 <img src="./img/Opal_Name_Logo_Green_Transparent.png" style="max-width:300px;width:90vw;height:auto">
             </div>
-
-            <!-- SECURITY ANSWER FIELDS -->
             <div ng-if="!security.invalidCode" class="container" align="center" style="margin-top:20px">
                 <form name="formPassword" novalidate>
                     <div class="form-group" align="center" style="margin-top: 20px">
