@@ -22,7 +22,7 @@
             </div>
 
             <!-- LOADING SPINNER -->
-            <loading-spinning-circle ng-if="security.loading && security.isThereSelectedHospital()" loading-message="{{'LOADING'|translate}}"></loading-spinning-circle>
+            <loading-spinning-circle ng-if="security.loading && security.isThereSelectedHospital()" loading-message="{{'LOADING'|translate}}" margintop="15vh"></loading-spinning-circle>
 
             <!-- SECURITY ANSWER FIELDS -->
             <div ng-if="!security.loading && !security.invalidCode && security.isThereSelectedHospital()" class="container" align="center" style="margin-top:20px">
