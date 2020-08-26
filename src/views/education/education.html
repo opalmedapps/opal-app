@@ -22,13 +22,7 @@
     <network-banner></network-banner>
 
     <!-- SEARCH BAR -->
-    <div class="navigation-bar" ng-hide="edu.noMaterials">
-        <div class="navigation-bar__center" style="display:block">
-            <input ng-model="edu.searchString" ng-change="edu.filterMaterial()"
-                   type="search" class="search-input" style="width: 96%; margin: 6px auto 6px auto;"
-                   placeholder="{{'SEARCH_EDU'|translate}}" ng-class="fontSizeDesc">
-        </div>
-    </div>
+    <search-bar ng-hide="edu.noMaterials" search-text="edu.searchString" placeholder="{{'SEARCH_EDU'|translate}}" style-class="fontSizeDesc"></search-bar>
 
     <!-- NO MATERIAL TEXT -->
     <div style="color:grey;margin-top:25vh" ng-show="edu.noMaterials" align="center" ng-class="fontSizeTitle" style="margin-left: 10px; margin-right: 10px">
@@ -38,7 +32,7 @@
     <!-- LIST OF EDUCATIONAL MATERIALS -->
     <ons-scroller-height offset-height="78">
         <ons-list>
-            <ons-list-item modifier="chevron" class="item" ng-repeat = "edumaterial in edu.filteredEduMaterials | orderBy: '-DateAdded'" ng-click="edu.goToEducationalMaterial(edumaterial)">
+            <ons-list-item modifier="chevron" class="item" ng-repeat = "edumaterial in edu.edumaterials | filter: edu.searchString | orderBy: '-DateAdded'" ng-click="edu.goToEducationalMaterial(edumaterial)">
                 <ons-row align="center">
                     <ons-col width="60px" align="center">
                         <div>

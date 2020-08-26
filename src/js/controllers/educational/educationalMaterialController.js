@@ -51,8 +51,6 @@
         vm.educationDeviceBackButton = educationDeviceBackButton;
         vm.openInfoPage = openInfoPage;
 
-        // Function used to filter the materials shown based on the search string
-        vm.filterMaterial = filterMaterial;
         
 
         activate();
@@ -71,8 +69,6 @@
             vm.noMaterials = false;
             // Full list of educational materials in the right language and category.
             vm.edumaterials = EducationalMaterial.setLanguage(EducationalMaterial.getEducationalMaterial(vm.eduCategory));
-            // Educational materials filtered based on the search string.
-            vm.filteredEduMaterials = vm.edumaterials;
         }
 
         function educationDeviceBackButton(){
@@ -183,31 +179,6 @@
             navigator.pushPage('views/tabs/info-page-tabs.html');
         }
 
-        // Function used to filter the materials shown based on the search string.
-        // Author: Tongyou (Eason) Yang
-        function filterMaterial() {
-
-            var searchString_parts = vm.searchString.toLowerCase().split(" ");//split into different parts
-
-            var filtered = [];//generate new show list for educational material
-            vm.edumaterials.forEach(function(edumaterial){
-
-                var name_no_space = edumaterial.Name.replace(/\s/g, '').toLowerCase();
-                var show = true;
-                searchString_parts.forEach(function(part){
-                    if(!name_no_space.includes(part)){
-                        show = false;
-                    }
-                });
-
-                if(show){
-                    filtered.push(edumaterial);
-                }
-
-            });
-
-            vm.filteredEduMaterials = filtered;//assign to new show list
-        }
 
     }
 })();
