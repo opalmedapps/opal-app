@@ -173,7 +173,7 @@
                 vm.invalidCode = false;
                 vm.alertShow = true;
 
-                // Only proceed with requests if the patient has selected a hospital; if not, wait for them to do so.
+                // Only proceed with requests if the patient has selected a hospital; if not, wait for them to do so
                 if (UserHospitalPreferences.isThereSelectedHospital()) {
 
                     ResetPassword.verifyLinkCode(parameters.url).then(function (email) {

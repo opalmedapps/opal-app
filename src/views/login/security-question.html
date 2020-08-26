@@ -17,8 +17,8 @@
             </div>
 
             <!-- HOSPITAL SELECTOR -->
-            <div class="container">
-                <hospital-selector ng-if="security.passwordReset"></hospital-selector>
+            <div ng-if="security.passwordReset" class="container">
+                <hospital-selector></hospital-selector>
             </div>
 
             <!-- LOADING SPINNER -->

@@ -24,6 +24,6 @@ function LoadingSpinningCircle() {
                 </svg>
                 <p style="margin-top: 30px" ng-class="fontSizeDesc">{{ loadingMessage }}</p>
             </div>                      
-		`,
+        `,
 	};
 }
