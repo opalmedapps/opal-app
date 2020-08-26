@@ -76,7 +76,12 @@
         }
 
         function educationDeviceBackButton(){
-            tabbar.setActiveTab(0);
+            if (vm.eduCategory === 'clinical'){
+                tabbar.setActiveTab(0);
+            } else {
+                // Regular back button navigation
+                navigator.popPage();
+            }
         }
 
         /**
