@@ -62,7 +62,7 @@
 
         /**
          * @ngdoc property
-         * @name error
+         * @name alert
          * @propertyOf LoginController
          * @returns object
          * @description stores the alert type and message to be displayed to the user if an error were to occur
