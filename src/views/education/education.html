@@ -30,7 +30,7 @@
     </div>
 
     <!-- LIST OF EDUCATIONAL MATERIALS -->
-    <ons-scroller-height offset-height="78">
+    <ons-scroller-height offset-height="78" ng-hide="edu.noMaterials">
         <ons-list>
             <ons-list-item modifier="chevron" class="item" ng-repeat = "edumaterial in edu.edumaterials | filter: edu.searchString | orderBy: '-DateAdded'" ng-click="edu.goToEducationalMaterial(edumaterial)">
                 <ons-row align="center">
