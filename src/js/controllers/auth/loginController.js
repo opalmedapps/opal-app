@@ -22,10 +22,10 @@
         .controller('LoginController', LoginController);
 
     LoginController.$inject = ['$timeout', '$state', 'UserAuthorizationInfo', '$filter','DeviceIdentifiers',
-        'UserPreferences', 'Patient', 'NewsBanner', 'UUID', 'Constants', 'EncryptionService', 'CleanUp', '$window', '$scope', 'FirebaseService', '$rootScope', 'Params', 'UserHospitalPreferences'];
+        'UserPreferences', 'Patient', 'NewsBanner', 'UUID', 'Constants', 'EncryptionService', 'CleanUp', '$window', 'FirebaseService', '$rootScope', 'Params', 'UserHospitalPreferences'];
 
     /* @ngInject */
-    function LoginController($timeout, $state, UserAuthorizationInfo, $filter, DeviceIdentifiers, UserPreferences, Patient, NewsBanner, UUID, Constants, EncryptionService, CleanUp, $window, $scope, FirebaseService, $rootScope, Params, UserHospitalPreferences) {
+    function LoginController($timeout, $state, UserAuthorizationInfo, $filter, DeviceIdentifiers, UserPreferences, Patient, NewsBanner, UUID, Constants, EncryptionService, CleanUp, $window, FirebaseService, $rootScope, Params, UserHospitalPreferences) {
 
         var vm = this;
 
