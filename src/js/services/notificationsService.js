@@ -267,7 +267,7 @@
             if (typeof notifications === 'undefined') return;
             let temp = angular.copy(notifications);
             for (let i = 0; i < notifications.length; i++) {
-                if (typeof notificationTypes[temp[i].NotificationType] === 'undefined') break;
+                if (typeof notificationTypes[temp[i].NotificationType] === 'undefined') continue;
                 temp[i].Custom = notificationTypes[temp[i].NotificationType].Custom;
                 temp[i].Icon = notificationTypes[temp[i].NotificationType].icon;
                 temp[i].Color = notificationTypes[temp[i].NotificationType].color;
