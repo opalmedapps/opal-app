@@ -42,6 +42,10 @@
         <edit-config file="app/src/main/AndroidManifest.xml" mode="merge" target="/manifest/application">
             <application android:usesCleartextTraffic="false"/>
         </edit-config>
+        <!-- requestLegacyExternalStorage fixes file access issues in Android 10 / API Level 29. This parameter will be ignored by API Level 30+ -->
+        <edit-config file="app/src/main/AndroidManifest.xml" mode="merge" target="/manifest/application">
+            <application android:requestLegacyExternalStorage="true"/>
+        </edit-config>
         <resource-file src="google-services.json" target="app/google-services.json"/>
         <splash density="land-hdpi" src="res/screen/android/splash-land-hdpi.png"/>
         <splash density="land-ldpi" src="res/screen/android/splash-land-ldpi.png"/>
