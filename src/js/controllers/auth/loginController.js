@@ -22,10 +22,10 @@
         .controller('LoginController', LoginController);
 
     LoginController.$inject = ['$timeout', '$state', 'UserAuthorizationInfo', '$filter','DeviceIdentifiers',
-        'UserPreferences', 'Patient', 'NewsBanner', 'UUID', 'Constants', 'EncryptionService', 'CleanUp', '$window', '$scope', 'FirebaseService', '$rootScope', 'Params', 'UserHospitalPreferences'];
+        'UserPreferences', 'Patient', 'NewsBanner', 'UUID', 'Constants', 'EncryptionService', 'CleanUp', '$window', 'FirebaseService', '$rootScope', 'Params', 'UserHospitalPreferences'];
 
     /* @ngInject */
-    function LoginController($timeout, $state, UserAuthorizationInfo, $filter, DeviceIdentifiers, UserPreferences, Patient, NewsBanner, UUID, Constants, EncryptionService, CleanUp, $window, $scope, FirebaseService, $rootScope, Params, UserHospitalPreferences) {
+    function LoginController($timeout, $state, UserAuthorizationInfo, $filter, DeviceIdentifiers, UserPreferences, Patient, NewsBanner, UUID, Constants, EncryptionService, CleanUp, $window, FirebaseService, $rootScope, Params, UserHospitalPreferences) {
 
         var vm = this;
 
@@ -62,7 +62,7 @@
 
         /**
          * @ngdoc property
-         * @name error
+         * @name alert
          * @propertyOf LoginController
          * @returns object
          * @description stores the alert type and message to be displayed to the user if an error were to occur
@@ -85,11 +85,10 @@
         vm.submit = submit;
         vm.goToInit = goToInit;
         vm.goToReset = goToReset;
-        vm.goToHospital = goToHospital;
         vm.isThereSelectedHospital = isThereSelectedHospital;
-        vm.getSelectedHospitalAcronym = getSelectedHospitalAcronym;
 
         activate();
+
         //////////////////////////////////
 
         /*************************
@@ -313,7 +312,7 @@
                         vm.loading = false;
                     });
                     break;
-                case "ENCRYPTION_ERROR":
+                case '1': // Encryption error
                     $timeout(function(){
                         vm.loading = false;
                         loginerrormodal.show();
@@ -431,40 +430,13 @@
 
         /**
          * @ngdoc method
-         * @name goToHospital
-         * @methodOf MUHCApp.controllers.LoginController
-         * @description brings user to the hospital selection screen
-         */
-        function goToHospital(){
-            loginerrormodal.hide();
-            initNavigator.pushPage('./views/login/set-hospital.html', {});
-        }
-
-        /**
-         * @ngdoc method
          * @name isThereSelectedHospital
          * @methodOf MUHCApp.controllers.LoginController
-         * @description return whethere the user has selected a hospital before hand
-         * @returns {boolean} true if there is a hospital selected. false otherwise.
+         * @description Returns whether the user has already selected a hospital.
+         * @returns {boolean} True if there is a hospital selected; false otherwise.
          */
         function isThereSelectedHospital() {
             return UserHospitalPreferences.isThereSelectedHospital();
-        }
-
-        /**
-         * @ngdoc method
-         * @name getSelectedHospitalAcronym
-         * @methodOf MUHCApp.controllers.LoginController
-         * @description return the selected hospital acronym to the view
-         * @returns {string} selected hospital acronym
-         */
-        function getSelectedHospitalAcronym(){
-
-            if (isThereSelectedHospital()){
-                return UserHospitalPreferences.getHospitalAcronym();
-            } else {
-                return "TAP_TO_SELECT_HOSPITAL";
-            }
         }
     }
 })();
