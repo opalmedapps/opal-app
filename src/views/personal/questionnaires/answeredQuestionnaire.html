@@ -80,10 +80,10 @@
 
                                 <!-- completed questionnaire but not slider type: toggle dropdown menu -->
                                 <span ng-if="vm.questionnaire.status === vm.allowedStatus.COMPLETED_QUESTIONNAIRE_STATUS && question.type_id !== vm.allowedType.SLIDER_TYPE_ID">
-                                    <p ng-if="!question.showAnswer" style="float: right; margin-right: 0px; color: rgba(38,100,171,0.81);">
-                                        {{"SHOW"|translate}} <i class="ion-chevron-right" style="padding-left: 2vw"></i>
+                                    <p ng-if="!question.showAnswer" style="float: right; margin-right: 0px; color: rgba(38,100,171,0.81); white-space:nowrap;">
+                                        {{"SHOW"|translate}} <i class="ion-chevron-right" style="padding-left: 2vw;"></i>
                                     </p>
-                                    <p ng-if="question.showAnswer" style="float: right; margin-right: 0px; color: rgba(38,100,171,0.81);">
+                                    <p ng-if="question.showAnswer" style="float: right; margin-right: 0px; color: rgba(38,100,171,0.81); white-space:nowrap;">
                                         {{"HIDE"|translate}}<i class="ion-chevron-down" style="padding-left: 2vw"></i>
                                     </p>
                                 </span>
@@ -91,15 +91,15 @@
                                 <!-- Non completed questionnaire and invalid answer for the question -->
                                 <span ng-if="vm.questionnaire.status !== vm.allowedStatus.COMPLETED_QUESTIONNAIRE_STATUS && question.optional === '0' && question.patient_answer.is_defined !== vm.answerSavedInDBValidStatus.ANSWER_SAVED_CONFIRMED"
                                       style="float: right; margin-right: 0px; color: white">
-                                    <i class="ion-chevron-left"></i> {{"ANSWER"|translate}}
+                                    <p style="white-space: nowrap;"><i class="ion-chevron-left"></i> {{"ANSWER"|translate}} </p>
                                 </span>
 
                                 <!-- Non completed questionnaire, valid answer for the question, and not slider -->
                                 <span ng-if="vm.questionnaire.status !== vm.allowedStatus.COMPLETED_QUESTIONNAIRE_STATUS && question.type_id !== vm.allowedType.SLIDER_TYPE_ID && (question.optional !== '0' || question.patient_answer.is_defined === vm.answerSavedInDBValidStatus.ANSWER_SAVED_CONFIRMED)">
-                                    <p ng-if="!question.showAnswer" style="float: right; margin-right: 0px; color: white">
+                                    <p ng-if="!question.showAnswer" style="float: right; margin-right: 0px; color: white; white-space:nowrap;">
                                         {{"SHOW"|translate}} <i class="ion-chevron-right" style="padding-left: 2vw"></i>
                                     </p>
-                                    <p ng-if="question.showAnswer" style="float: right; margin-right: 0px; color: white">
+                                    <p ng-if="question.showAnswer" style="float: right; margin-right: 0px; color: white; white-space:nowrap;">
                                         {{"HIDE"|translate}}<i class="ion-chevron-down" style="padding-left: 2vw"></i>
                                     </p>
                                 </span>
