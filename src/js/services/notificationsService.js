@@ -200,9 +200,7 @@
                 color: '#607d8b',
                 NameEN: 'QuestionnaireName_EN',
                 PageUrl: Questionnaires.getQuestionnaireStartUrl,
-                searchFunction: function () {
-                    return true
-                },
+                searchFunction: (refTableRowSerNum => refTableRowSerNum),
                 readFunction: function () {
                     return true
                 },
@@ -213,9 +211,7 @@
                 color: '#607d8b',
                 NameEN: 'QuestionnaireName_EN',
                 PageUrl: Questionnaires.getQuestionnaireStartUrl,
-                searchFunction: function () {
-                    return true
-                },
+                searchFunction: (refTableRowSerNum => refTableRowSerNum),
                 readFunction: function () {
                     return true
                 },
