@@ -81,7 +81,7 @@
     <plugin name="cordova-plugin-android-permissions" spec="^1.0.2"/>
     <plugin name="cordova-plugin-appversion" spec="^1.0.0"/>
     <plugin name="cordova-plugin-customurlscheme" spec="~5.0.0">
-        <variable name="URL_SCHEME" value="opal_preprod"/>
+        <variable name="URL_SCHEME" value="opal"/>
     </plugin>
     <plugin name="cordova-plugin-device" spec="~2.0.3"/>
     <plugin name="cordova-plugin-email" spec="~1.2.7"/>
