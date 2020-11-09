@@ -54,6 +54,10 @@
             carousel.prev();
         }
 
+        /**
+         * @name postChangeCarouseIndex
+         * @desc this public function serves to maintain courseIndex number
+         */
         function postChangeCarouseIndex(event) {
             $timeout(function () {
                 vm.currentIndex = event.activeIndex;

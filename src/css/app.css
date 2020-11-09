@@ -274,9 +274,9 @@ img {
     /*text-shadow: rgba(0, 0, 0, 0.4) 0px 1px 0px;*/
 }
 
-    .menu-item:active {
-        background-color: rgba(255, 255, 255, 0.1);
-    }
+.menu-item:active {
+    background-color: rgba(255, 255, 255, 0.1);
+}
 
 .menu-notification {
     display: inline-block;
@@ -296,9 +296,9 @@ img {
     color: #626262;
 }
 
-    .bottom-menu-item:active {
-        background-color: rgba(255, 255, 255, 0.1);
-    }
+.bottom-menu-item:active {
+    background-color: rgba(255, 255, 255, 0.1);
+}
 
 .editFirstNameIcon:hover {
     display: none;
@@ -336,10 +336,12 @@ img {
     height: 150px;
     border-radius: 50%;
 }
-/*Onsen's carouse;*/
+
+/*Onsen's carouseL;*/
 .nav, .pagination, .carousel, .panel-title a {
     cursor: pointer;
 }
+
 /*onsen notificatins page*/
 .list-item-container {
     line-height: 1.3;
@@ -371,6 +373,7 @@ img {
     line-height: 1.2;
     font-size: 13px;
 }
+
 /*Onsen's css for Home page*/
 .profile-card {
     width: 100%;
@@ -423,6 +426,7 @@ a.muhcapp-home-account:link, a.muhcapp-home-account:hover {
     font-size: 14px;
     opacity: 0.4;
 }
+
 /*Onsen's css for contact me page*/
 .person-list {
     border-top: none;
@@ -506,58 +510,58 @@ a.muhcapp-home-account:link, a.muhcapp-home-account:hover {
         width: 100%;
     }
 
-        ul.checkout-bar:before {
-            background-size: 35px 35px;
-            background-color: #57aed1;
-            background-image: -webkit-linear-gradient(-45deg, rgba(255, 255, 255, 0.2) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.2) 50%, rgba(255, 255, 255, 0.2) 75%, transparent 75%, transparent);
-            background-image: -moz-linear-gradient(-45deg, rgba(255, 255, 255, 0.2) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.2) 50%, rgba(255, 255, 255, 0.2) 75%, transparent 75%, transparent);
-            -webkit-box-shadow: inset 2px 2px 2px 0px rgba(0, 0, 0, 0.2);
-            box-shadow: inset 2px 2px 2px 0px rgba(0, 0, 0, 0.2);
-            border-radius: 15px;
-            content: " ";
-            height: 15px;
-            left: 0;
-            position: absolute;
-            width: 10%;
-        }
+    ul.checkout-bar:before {
+        background-size: 35px 35px;
+        background-color: #57aed1;
+        background-image: -webkit-linear-gradient(-45deg, rgba(255, 255, 255, 0.2) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.2) 50%, rgba(255, 255, 255, 0.2) 75%, transparent 75%, transparent);
+        background-image: -moz-linear-gradient(-45deg, rgba(255, 255, 255, 0.2) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.2) 50%, rgba(255, 255, 255, 0.2) 75%, transparent 75%, transparent);
+        -webkit-box-shadow: inset 2px 2px 2px 0px rgba(0, 0, 0, 0.2);
+        box-shadow: inset 2px 2px 2px 0px rgba(0, 0, 0, 0.2);
+        border-radius: 15px;
+        content: " ";
+        height: 15px;
+        left: 0;
+        position: absolute;
+        width: 10%;
+    }
 
-        ul.checkout-bar li {
-            display: inline-block;
-            margin: 50px 0 0;
-            padding: 0;
-            text-align: center;
-            width: 14%;
-        }
+    ul.checkout-bar li {
+        display: inline-block;
+        margin: 50px 0 0;
+        padding: 0;
+        text-align: center;
+        width: 14%;
+    }
 
-            ul.checkout-bar li:before {
-                height: 45px;
-                left: 40%;
-                line-height: 45px;
-                position: absolute;
-                top: -65px;
-                width: 45px;
-                z-index: 99;
-            }
+    ul.checkout-bar li:before {
+        height: 45px;
+        left: 40%;
+        line-height: 45px;
+        position: absolute;
+        top: -65px;
+        width: 45px;
+        z-index: 99;
+    }
 
-            ul.checkout-bar li.visited {
-                background: none;
-            }
+    ul.checkout-bar li.visited {
+        background: none;
+    }
 
-                ul.checkout-bar li.visited:after {
-                    background-size: 35px 35px;
-                    background-color: #57aed1;
-                    background-image: -webkit-linear-gradient(-45deg, rgba(255, 255, 255, 0.2) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.2) 50%, rgba(255, 255, 255, 0.2) 75%, transparent 75%, transparent);
-                    background-image: -moz-linear-gradient(-45deg, rgba(255, 255, 255, 0.2) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.2) 50%, rgba(255, 255, 255, 0.2) 75%, transparent 75%, transparent);
-                    -webkit-box-shadow: inset 2px 2px 2px 0px rgba(0, 0, 0, 0.2);
-                    box-shadow: inset 2px 2px 2px 0px rgba(0, 0, 0, 0.2);
-                    content: "";
-                    height: 15px;
-                    left: 50%;
-                    position: absolute;
-                    top: -50px;
-                    width: 100%;
-                    z-index: 99;
-                }
+    ul.checkout-bar li.visited:after {
+        background-size: 35px 35px;
+         background-color: #57aed1;
+         background-image: -webkit-linear-gradient(-45deg, rgba(255, 255, 255, 0.2) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.2) 50%, rgba(255, 255, 255, 0.2) 75%, transparent 75%, transparent);
+         background-image: -moz-linear-gradient(-45deg, rgba(255, 255, 255, 0.2) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.2) 50%, rgba(255, 255, 255, 0.2) 75%, transparent 75%, transparent);
+         -webkit-box-shadow: inset 2px 2px 2px 0px rgba(0, 0, 0, 0.2);
+         box-shadow: inset 2px 2px 2px 0px rgba(0, 0, 0, 0.2);
+         content: "";
+         height: 15px;
+         left: 50%;
+         position: absolute;
+         top: -50px;
+         width: 100%;
+         z-index: 99;
+    }
 }
 /*Treatment Plan List Of Appointments*/
 .plan-list {
@@ -625,89 +629,87 @@ a.muhcapp-home-account:link, a.muhcapp-home-account:hover {
     border-radius: 10px;
 }
 
-    /* Variant : for left positioned triangle
+/* Variant : for left positioned triangle
 ------------------------------------------ */
+.triangle-border.left {
+    margin-left: 30px;
+}
 
-    .triangle-border.left {
-        margin-left: 30px;
-    }
-
-    /* Variant : for right positioned triangle
+/* Variant : for right positioned triangle
 ------------------------------------------ */
+.triangle-border.right {
+    margin-right: 30px;
+}
 
-    .triangle-border.right {
-        margin-right: 30px;
-    }
+.triangle-border:before {
+    content: "";
+    position: absolute;
+    bottom: -20px; /* value = - border-top-width - border-bottom-width */
+    left: 40px; /* controls horizontal position */
+    border-width: 20px 20px 0;
+    border-style: solid;
+    border-color: #5a8f00 transparent;
+    /* reduce the damage in FF3.0 */
+    display: block;
+    width: 0;
+}
 
-    .triangle-border:before {
-        content: "";
-        position: absolute;
-        bottom: -20px; /* value = - border-top-width - border-bottom-width */
-        left: 40px; /* controls horizontal position */
-        border-width: 20px 20px 0;
-        border-style: solid;
-        border-color: #5a8f00 transparent;
-        /* reduce the damage in FF3.0 */
-        display: block;
-        width: 0;
-    }
+/* creates the smaller  triangle */
+.triangle-border:after {
+    content: "";
+    position: absolute;
+    bottom: -13px; /* value = - border-top-width - border-bottom-width */
+    left: 47px; /* value = (:before left) + (:before border-left) - (:after border-left) */
+    border-width: 13px 13px 0;
+    border-style: solid;
+    border-color: #fff transparent;
+    /* reduce the damage in FF3.0 */
+    display: block;
+    width: 0;
+}
 
-    /* creates the smaller  triangle */
-    .triangle-border:after {
-        content: "";
-        position: absolute;
-        bottom: -13px; /* value = - border-top-width - border-bottom-width */
-        left: 47px; /* value = (:before left) + (:before border-left) - (:after border-left) */
-        border-width: 13px 13px 0;
-        border-style: solid;
-        border-color: #fff transparent;
-        /* reduce the damage in FF3.0 */
-        display: block;
-        width: 0;
-    }
-    /* Variant : left
+/* Variant : left
 ------------------------------------------ */
+/* creates the larger triangle */
+.triangle-border.left:before {
+    top: 10px; /* controls vertical position */
+    bottom: auto;
+    left: -30px; /* value = - border-left-width - border-right-width */
+    border-width: 15px 30px 15px 0;
+    border-color: transparent #5a8f00;
+}
 
-    /* creates the larger triangle */
-    .triangle-border.left:before {
-        top: 10px; /* controls vertical position */
-        bottom: auto;
-        left: -30px; /* value = - border-left-width - border-right-width */
-        border-width: 15px 30px 15px 0;
-        border-color: transparent #5a8f00;
-    }
+/* creates the smaller  triangle */
+.triangle-border.left:after {
+    top: 16px; /* value = (:before top) + (:before border-top) - (:after border-top) */
+    bottom: auto;
+    left: -21px; /* value = - border-left-width - border-right-width */
+    border-width: 9px 21px 9px 0;
+    border-color: transparent #fff;
+}
 
-    /* creates the smaller  triangle */
-    .triangle-border.left:after {
-        top: 16px; /* value = (:before top) + (:before border-top) - (:after border-top) */
-        bottom: auto;
-        left: -21px; /* value = - border-left-width - border-right-width */
-        border-width: 9px 21px 9px 0;
-        border-color: transparent #fff;
-    }
-
-    /* Variant : right
+/* Variant : right
 ------------------------------------------ */
+/* creates the larger triangle */
+.triangle-border.right:before {
+    top: 10px; /* controls vertical position */
+    bottom: auto;
+    left: auto;
+    right: -30px; /* value = - border-left-width - border-right-width */
+    border-width: 15px 0 15px 30px;
+    border-color: transparent #5a8f00;
+}
 
-    /* creates the larger triangle */
-    .triangle-border.right:before {
-        top: 10px; /* controls vertical position */
-        bottom: auto;
-        left: auto;
-        right: -30px; /* value = - border-left-width - border-right-width */
-        border-width: 15px 0 15px 30px;
-        border-color: transparent #5a8f00;
-    }
+/* creates the smaller  triangle */
+.triangle-border.right:after {
+    top: 16px; /* value = (:before top) + (:before border-top) - (:after border-top) */
+    bottom: auto;
+    left: auto;
+    right: -21px; /* value = - border-left-width - border-right-width */
+    border-width: 9px 0 9px 21px;
+    border-color: transparent #fff;
+}
 
-    /* creates the smaller  triangle */
-    .triangle-border.right:after {
-        top: 16px; /* value = (:before top) + (:before border-top) - (:after border-top) */
-        bottom: auto;
-        left: auto;
-        right: -21px; /* value = - border-left-width - border-right-width */
-        border-width: 9px 0 9px 21px;
-        border-color: transparent #fff;
-    }
 /*
 * Messages to Doctor
 */
@@ -794,21 +796,21 @@ a.muhcapp-home-account:link, a.muhcapp-home-account:hover {
     overflow: hidden;
 }
 
-    .btn-file input[type=file] {
-        position: absolute;
-        top: 0;
-        right: 0;
-        min-width: 100%;
-        min-height: 100%;
-        font-size: 100px;
-        text-align: right;
-        filter: alpha(opacity=0);
-        opacity: 0;
-        outline: none;
-        background: white;
-        cursor: inherit;
-        display: block;
-    }
+.btn-file input[type=file] {
+    position: absolute;
+    top: 0;
+    right: 0;
+    min-width: 100%;
+    min-height: 100%;
+    font-size: 100px;
+    text-align: right;
+    filter: alpha(opacity=0);
+    opacity: 0;
+    outline: none;
+    background: white;
+    cursor: inherit;
+    display: block;
+}
 
 
 /*
@@ -1015,25 +1017,25 @@ Tabbar treatment plan
     border-radius: 0;
 }
 
-    .tab-bar__item > input {
-        position: absolute;
-        overflow: hidden;
-        right: 0px;
-        top: 0px;
-        left: 0px;
-        bottom: 0px;
-        padding: 0;
-        border: 0;
-        opacity: 0.001;
-        z-index: 1;
-        vertical-align: top;
-        outline: none;
-        width: 100%;
-        height: 100%;
-        margin: 0;
-        -webkit-appearance: none;
-        appearance: none;
-    }
+.tab-bar__item > input {
+    position: absolute;
+    overflow: hidden;
+    right: 0px;
+    top: 0px;
+    left: 0px;
+    bottom: 0px;
+    padding: 0;
+    border: 0;
+    opacity: 0.001;
+    z-index: 1;
+    vertical-align: top;
+    outline: none;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    -webkit-appearance: none;
+    appearance: none;
+}
 
 .tab-bar__button {
     position: relative;
@@ -1129,9 +1131,9 @@ Tabbar treatment plan
     border-top: none;
 }
 
-    :checked + .tab-bar__button > .tab-bar__icon {
-        color: #1284ff;
-    }
+:checked + .tab-bar__button > .tab-bar__icon {
+    color: #1284ff;
+}
 
 .tab-bar__button:disabled {
     opacity: 0.3;
@@ -1212,10 +1214,10 @@ p {
     height: 200px;
 }
 
-    .progressStatus > svg {
-        height: 100%;
-        display: block;
-    }
+.progressStatus > svg {
+    height: 100%;
+    display: block;
+}
 
 .progressStatusTextBox {
     margin-top: -165px;
@@ -1296,19 +1298,19 @@ p {
     line-height: inherit;
 }
 
-    .list__item--tight:active {
-        -webkit-transition: none;
-        -moz-transition: none;
-        -o-transition: none;
-        transition: none;
-    }
+.list__item--tight:active {
+    -webkit-transition: none;
+    -moz-transition: none;
+    -o-transition: none;
+    transition: none;
+}
 
-    .list__item--tight:hover {
-        -webkit-transition: none;
-        -moz-transition: none;
-        -o-transition: none;
-        transition: none;
-    }
+.list__item--tight:hover {
+    -webkit-transition: none;
+    -moz-transition: none;
+    -o-transition: none;
+    transition: none;
+}
 /*
 Button appointments
 */
@@ -1363,33 +1365,33 @@ Button appointments
     color: #fff;
 }
 
-    .button--appointments-past--cta:hover {
-        -webkit-transition: none;
-        -moz-transition: none;
-        -o-transition: none;
-        transition: none;
-    }
+.button--appointments-past--cta:hover {
+    -webkit-transition: none;
+    -moz-transition: none;
+    -o-transition: none;
+    transition: none;
+}
 
-    .button--appointments-past--cta:focus {
-        outline: 0;
-    }
+.button--appointments-past--cta:focus {
+    outline: 0;
+}
 
-    .button--appointments-past--cta:active {
-        color: var-button-cat-color;
-        background-color: #4cda64;
-        -webkit-transition: none;
-        -moz-transition: none;
-        -o-transition: none;
-        transition: none;
-        opacity: 0.2;
-    }
+.button--appointments-past--cta:active {
+    color: var-button-cat-color;
+    background-color: #4cda64;
+    -webkit-transition: none;
+    -moz-transition: none;
+    -o-transition: none;
+    transition: none;
+    opacity: 0.2;
+}
 
-    .button--appointments-past--cta:disabled,
-    .button--appointments-past--cta[disabled] {
-        opacity: 0.3;
-        cursor: default;
-        pointer-events: none;
-    }
+.button--appointments-past--cta:disabled,
+.button--appointments-past--cta[disabled] {
+    opacity: 0.3;
+    cursor: default;
+    pointer-events: none;
+}
 /*Future Appoinments
 */
 .button--appointments-future--cta {
@@ -1442,33 +1444,33 @@ Button appointments
     color: #fff;
 }
 
-    .button--appointments-future--cta:hover {
-        -webkit-transition: none;
-        -moz-transition: none;
-        -o-transition: none;
-        transition: none;
-    }
+.button--appointments-future--cta:hover {
+    -webkit-transition: none;
+    -moz-transition: none;
+    -o-transition: none;
+    transition: none;
+}
 
-    .button--appointments-future--cta:focus {
-        outline: 0;
-    }
+.button--appointments-future--cta:focus {
+    outline: 0;
+}
 
-    .button--appointments-future--cta:active {
-        color: var-button-cat-color;
-        background-color: #c8ccc9;
-        -webkit-transition: none;
-        -moz-transition: none;
-        -o-transition: none;
-        transition: none;
-        opacity: 0.2;
-    }
+.button--appointments-future--cta:active {
+    color: var-button-cat-color;
+    background-color: #c8ccc9;
+    -webkit-transition: none;
+    -moz-transition: none;
+    -o-transition: none;
+    transition: none;
+    opacity: 0.2;
+}
 
-    .button--appointments-future--cta:disabled,
-    .button--appointments-future--cta[disabled] {
-        opacity: 0.3;
-        cursor: default;
-        pointer-events: none;
-    }
+.button--appointments-future--cta:disabled,
+.button--appointments-future--cta[disabled] {
+    opacity: 0.3;
+    cursor: default;
+    pointer-events: none;
+}
 /*
 *Checkin button home
 */
@@ -1482,36 +1484,36 @@ Button appointments
     text-align: center;
 }
 
-    .button--large-danger:active {
-        background-color: #eb482f;
-        -webkit-transition: none;
-        -moz-transition: none;
-        -o-transition: none;
-        transition: none;
-        opacity: 0.2;
-        -webkit-transition: none;
-        -moz-transition: none;
-        -o-transition: none;
-        transition: none;
-    }
+.button--large-danger:active {
+    background-color: #eb482f;
+    -webkit-transition: none;
+    -moz-transition: none;
+    -o-transition: none;
+    transition: none;
+    opacity: 0.2;
+    -webkit-transition: none;
+    -moz-transition: none;
+    -o-transition: none;
+    transition: none;
+}
 
-    .button--large-danger:disabled,
-    .button--large-danger[disabled] {
-        opacity: 0.3;
-        cursor: default;
-        pointer-events: none;
-    }
+.button--large-danger:disabled,
+.button--large-danger[disabled] {
+    opacity: 0.3;
+    cursor: default;
+    pointer-events: none;
+}
 
-    .button--large-danger:hover {
-        -webkit-transition: none;
-        -moz-transition: none;
-        -o-transition: none;
-        transition: none;
-    }
+.button--large-danger:hover {
+    -webkit-transition: none;
+    -moz-transition: none;
+    -o-transition: none;
+    transition: none;
+}
 
-    .button--large-danger:focus {
-        outline: 0;
-    }
+.button--large-danger:focus {
+    outline: 0;
+}
 /*
 *Checkin button success
 */
@@ -1526,36 +1528,37 @@ Button appointments
     background-color: #4cda64;
 }
 
-    .button--large-success:active {
-        background-color: #4cda64;
-        -webkit-transition: none;
-        -moz-transition: none;
-        -o-transition: none;
-        transition: none;
-        opacity: 0.2;
-        -webkit-transition: none;
-        -moz-transition: none;
-        -o-transition: none;
-        transition: none;
-    }
+.button--large-success:active {
+    background-color: #4cda64;
+    -webkit-transition: none;
+    -moz-transition: none;
+    -o-transition: none;
+    transition: none;
+    opacity: 0.2;
+    -webkit-transition: none;
+    -moz-transition: none;
+    -o-transition: none;
+    transition: none;
+}
 
-    .button--large-success:disabled,
-    .button--large-success[disabled] {
-        opacity: 0.3;
-        cursor: default;
-        pointer-events: none;
-    }
+.button--large-success:disabled,
+.button--large-success[disabled] {
+    opacity: 0.3;
+    cursor: default;
+    pointer-events: none;
+}
 
-    .button--large-success:hover {
-        -webkit-transition: none;
-        -moz-transition: none;
-        -o-transition: none;
-        transition: none;
-    }
+.button--large-success:hover {
+    -webkit-transition: none;
+    -moz-transition: none;
+    -o-transition: none;
+    transition: none;
+}
 
-    .button--large-success:focus {
-        outline: 0;
-    }
+.button--large-success:focus {
+    outline: 0;
+}
+
 /*
 *Text class
 */
@@ -1604,18 +1607,18 @@ Button appointments
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
 }
 
-    .card .item {
-        border-left: 0;
-        border-right: 0;
-    }
+.card .item {
+    border-left: 0;
+    border-right: 0;
+}
 
-        .card .item:first-child {
-            border-top: 0;
-        }
+.card .item:first-child {
+    border-top: 0;
+}
 
-        .card .item:last-child {
-            border-bottom: 0;
-        }
+.card .item:last-child {
+    border-bottom: 0;
+}
 
 .tab {
     line-height: 1;
@@ -1936,10 +1939,10 @@ Home screen checkin button
     border-right: 1px solid lightgrey;
 }
 
-    .action-col:active {
-        opacity: 1.0;
-        color: grey;
-    }
+.action-col:active {
+    opacity: 1.0;
+    color: grey;
+}
 
 a .action-col {
     text-decoration: none;
@@ -2002,20 +2005,20 @@ a .action-col {
     animation: none;
 }
 
-    .progress-circular--determinate > .progress-circular__primary {
-        -webkit-animation: none;
-        -moz-animation: none;
-        -o-animation: none;
-        animation: none;
-    }
+.progress-circular--determinate > .progress-circular__primary {
+    -webkit-animation: none;
+    -moz-animation: none;
+    -o-animation: none;
+    animation: none;
+}
 
-    .progress-circular--determinate > .progress-circular__secondary {
-        -webkit-animation: none;
-        -moz-animation: none;
-        -o-animation: none;
-        animation: none;
-        stroke: #2196F3;
-    }
+.progress-circular--determinate > .progress-circular__secondary {
+    -webkit-animation: none;
+    -moz-animation: none;
+    -o-animation: none;
+    animation: none;
+    stroke: #2196F3;
+}
 
 @-moz-keyframes progress__rotate {
     100% {
@@ -2181,19 +2184,19 @@ a .action-col {
     align-content: center;
 }
 
-    .fab:active {
-        -webkit-box-shadow: 0 8px 10px 1px rgba(0,0,0,0.14), 0 3px 14px 2px rgba(0,0,0,0.12), 0 5px 5px -3px rgba(0,0,0,0.4);
-        box-shadow: 0 8px 10px 1px rgba(0,0,0,0.14), 0 3px 14px 2px rgba(0,0,0,0.12), 0 5px 5px -3px rgba(0,0,0,0.4);
-        background-color: #009688;
-        -webkit-transition: all 0.2s ease;
-        -moz-transition: all 0.2s ease;
-        -o-transition: all 0.2s ease;
-        transition: all 0.2s ease;
-    }
+.fab:active {
+    -webkit-box-shadow: 0 8px 10px 1px rgba(0,0,0,0.14), 0 3px 14px 2px rgba(0,0,0,0.12), 0 5px 5px -3px rgba(0,0,0,0.4);
+    box-shadow: 0 8px 10px 1px rgba(0,0,0,0.14), 0 3px 14px 2px rgba(0,0,0,0.12), 0 5px 5px -3px rgba(0,0,0,0.4);
+    background-color: #009688;
+    -webkit-transition: all 0.2s ease;
+    -moz-transition: all 0.2s ease;
+    -o-transition: all 0.2s ease;
+    transition: all 0.2s ease;
+}
 
-    .fab:focus {
-        outline: 0;
-    }
+.fab:focus {
+    outline: 0;
+}
 
 .fab__icon {
     position: relative;
@@ -2274,9 +2277,9 @@ a .action-col {
     line-height: 1;
 }
 
-    .fab--mini .fab__icon {
-        line-height: 1;
-    }
+.fab--mini .fab__icon {
+    line-height: 1;
+}
 
 .speed-dial__item {
     position: absolute;
@@ -2355,15 +2358,15 @@ a .action-col {
     width: 0px;
 }
 
-    .radio-button > input[type="radio"]:active,
-    .radio-button > input[type="radio"]:focus {
-        outline: 0;
-        -webkit-tap-highlight-color: rgba(0,0,0,0);
-    }
+.radio-button > input[type="radio"]:active,
+.radio-button > input[type="radio"]:focus {
+    outline: 0;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
 
-    .radio-button > input[type="radio"]:checked + .radio-button__checkmark:after {
-        opacity: 1;
-    }
+.radio-button > input[type="radio"]:checked + .radio-button__checkmark:after {
+    opacity: 1;
+}
 
 .radio-button > .radio-button__checkmark:before {
     background: transparent;
@@ -2493,144 +2496,144 @@ a .action-col {
     margin: 10px 0;
 }
 
-    .lee-checkbox > .lee-checkbox__checkmark {
-        -webkit-box-sizing: border-box;
-        -moz-box-sizing: border-box;
-        box-sizing: border-box;
-        -webkit-background-clip: padding-box;
-        background-clip: padding-box;
-        position: relative;
-        display: inline-block;
-        vertical-align: top;
-        cursor: default;
-        -webkit-user-select: none;
-        -moz-user-select: none;
-        -ms-user-select: none;
-        user-select: none;
-        /*font-family: 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif;*/
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-        font-weight: 400;
-        font-size: 17px;
-        position: relative;
-        overflow: hidden;
-        height: 24px;
-        pointer-events: none;
-    }
+.lee-checkbox > .lee-checkbox__checkmark {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    -webkit-background-clip: padding-box;
+    background-clip: padding-box;
+    position: relative;
+    display: inline-block;
+    vertical-align: top;
+    cursor: default;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    /*font-family: 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif;*/
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-weight: 400;
+    font-size: 17px;
+    position: relative;
+    overflow: hidden;
+    height: 24px;
+    pointer-events: none;
+}
 
-    .lee-checkbox > input[type="checkbox"] {
-        position: absolute;
-        overflow: hidden;
-        right: 0px;
-        top: 0px;
-        left: 0px;
-        bottom: 0px;
-        padding: 0;
-        border: 0;
-        opacity: 0.001;
-        z-index: 1;
-        vertical-align: top;
-        outline: none;
-        width: 100%;
-        height: 100%;
-        margin: 0;
-        -webkit-appearance: none;
-        appearance: none;
-        height: 0;
-        width: 0;
-    }
+.lee-checkbox > input[type="checkbox"] {
+    position: absolute;
+    overflow: hidden;
+    right: 0px;
+    top: 0px;
+    left: 0px;
+    bottom: 0px;
+    padding: 0;
+    border: 0;
+    opacity: 0.001;
+    z-index: 1;
+    vertical-align: top;
+    outline: none;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    -webkit-appearance: none;
+    appearance: none;
+    height: 0;
+    width: 0;
+}
 
-        .lee-checkbox > input[type="checkbox"]:checked {
-            background: rgba(24,103,194,0.81);
-        }
+.lee-checkbox > input[type="checkbox"]:checked {
+    background: rgba(24,103,194,0.81);
+}
 
-            .lee-checkbox > input[type="checkbox"]:checked + .lee-checkbox__checkmark:before {
-                background: rgba(24,103,194,0.81);
-                border: 1px solid rgba(24,103,194,0.81);
-            }
+.lee-checkbox > input[type="checkbox"]:checked + .lee-checkbox__checkmark:before {
+    background: rgba(24,103,194,0.81);
+    border: 1px solid rgba(24,103,194,0.81);
+}
 
-            .lee-checkbox > input[type="checkbox"]:checked + .lee-checkbox__checkmark:after {
-                opacity: 1;
-            }
+.lee-checkbox > input[type="checkbox"]:checked + .lee-checkbox__checkmark:after {
+    opacity: 1;
+}
 
-    .lee-checkbox > .lee-checkbox__checkmark:before {
-        content: '';
-        position: absolute;
-        -webkit-box-sizing: border-box;
-        -moz-box-sizing: border-box;
-        box-sizing: border-box;
-        -webkit-background-clip: padding-box;
-        background-clip: padding-box;
-        width: 24px;
-        height: 24px;
-        background: transparent;
-        border: 1px solid rgba(24,103,194,0.81);
-        -webkit-box-shadow: none;
-        box-shadow: none;
-        left: 0;
-    }
+.lee-checkbox > .lee-checkbox__checkmark:before {
+    content: '';
+    position: absolute;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    -webkit-background-clip: padding-box;
+    background-clip: padding-box;
+    width: 24px;
+    height: 24px;
+    background: transparent;
+    border: 1px solid rgba(24,103,194,0.81);
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    left: 0;
+}
 
-    .lee-checkbox > .lee-checkbox__checkmark {
-        -webkit-box-sizing: border-box;
-        -moz-box-sizing: border-box;
-        box-sizing: border-box;
-        -webkit-background-clip: padding-box;
-        background-clip: padding-box;
-        position: relative;
-        display: inline-block;
-        vertical-align: top;
-        cursor: default;
-        -webkit-user-select: none;
-        -moz-user-select: none;
-        -ms-user-select: none;
-        user-select: none;
-        /*font-family: 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif;*/
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-        font-weight: 400;
-        font-size: 17px;
-        position: relative;
-        overflow: hidden;
-        width: 24px;
-        height: 24px;
-    }
+.lee-checkbox > .lee-checkbox__checkmark {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    -webkit-background-clip: padding-box;
+    background-clip: padding-box;
+    position: relative;
+    display: inline-block;
+    vertical-align: top;
+    cursor: default;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    /*font-family: 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif;*/
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-weight: 400;
+    font-size: 17px;
+    position: relative;
+    overflow: hidden;
+    width: 24px;
+    height: 24px;
+}
 
-        .lee-checkbox > .lee-checkbox__checkmark:after {
-            content: '';
-            position: absolute;
-            top: 6px;
-            left: 5px;
-            width: 12px;
-            height: 6px;
-            background: transparent;
-            border: 3px solid #fff;
-            border-width: 2px;
-            border-top: none;
-            border-right: none;
-            -webkit-transform: rotate(-45deg);
-            -moz-transform: rotate(-45deg);
-            -ms-transform: rotate(-45deg);
-            -o-transform: rotate(-45deg);
-            transform: rotate(-45deg);
-            opacity: 0;
-        }
+.lee-checkbox > .lee-checkbox__checkmark:after {
+    content: '';
+    position: absolute;
+    top: 6px;
+    left: 5px;
+    width: 12px;
+    height: 6px;
+    background: transparent;
+    border: 3px solid #fff;
+    border-width: 2px;
+    border-top: none;
+    border-right: none;
+    -webkit-transform: rotate(-45deg);
+    -moz-transform: rotate(-45deg);
+    -ms-transform: rotate(-45deg);
+    -o-transform: rotate(-45deg);
+    transform: rotate(-45deg);
+    opacity: 0;
+}
 
-    .lee-checkbox > input[type="checkbox"]:focus + .lee-checkbox__checkmark:before {
-        -webkit-box-shadow: none;
-        box-shadow: none;
-    }
+.lee-checkbox > input[type="checkbox"]:focus + .lee-checkbox__checkmark:before {
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
 
-    .lee-checkbox > input[type="checkbox"]:disabled + .lee-checkbox__checkmark {
-        opacity: 0.3;
-        cursor: default;
-        pointer-events: none;
-    }
+.lee-checkbox > input[type="checkbox"]:disabled + .lee-checkbox__checkmark {
+    opacity: 0.3;
+    cursor: default;
+    pointer-events: none;
+}
 
-    .lee-checkbox > input[type="checkbox"]:disabled:active + .lee-checkbox__checkmark:before {
-        background: transparent;
-        -webkit-box-shadow: none;
-        box-shadow: none;
-    }
+.lee-checkbox > input[type="checkbox"]:disabled:active + .lee-checkbox__checkmark:before {
+    background: transparent;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
 
 .lee-checkbox--list-item {
     width: 100%;
@@ -2694,9 +2697,9 @@ input {
     border-radius: none;
 }
 
-    input:focus {
-        outline: none;
-    }
+input:focus {
+    outline: none;
+}
 
 .style-4 input {
     padding: 10px;
@@ -2705,10 +2708,10 @@ input {
     transition: border 0.3s;
 }
 
-    .style-4 input:focus,
-    .style-4 input.focus {
-        border-bottom: solid 2px #969696;
-    }
+.style-4 input:focus,
+.style-4 input.focus {
+    border-bottom: solid 2px #969696;
+}
 
 #holder {
     margin-top: 5px;
@@ -2896,10 +2899,6 @@ input {
     }
 }
 
-
-
-
-
 /* MATERIAL DESIGN */
 .shadow-2 {
     box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
@@ -3074,9 +3073,9 @@ input {
     background-color: #F5F5F5;
 }
 
-    #more-info-button:hover {
-        background-color: #59D45D;
-    }
+#more-info-button:hover {
+    background-color: #59D45D;
+}
 
 .notification {
     position: absolute;
