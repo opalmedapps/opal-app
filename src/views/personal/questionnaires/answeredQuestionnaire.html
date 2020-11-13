@@ -41,6 +41,7 @@
     <ons-row align="center" style="margin-left: 0.12vw;" ng-hide="vm.loadingSubmitQuestionnaire || vm.loadingQuestionnaire">
         <ons-col align="center">
             <!-- Section -->
+            <!-- this will not be displayed until multi-section questionnaire is implemented in OpalAdmin -->
             <div ng-repeat="section in vm.questionnaire.sections | orderBy: 'section_position' track by $index ">
                 <ons-row style="margin:0;padding:0;" align="center">
                     <ons-col align="center">

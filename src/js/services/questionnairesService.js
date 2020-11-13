@@ -87,7 +87,9 @@
 
                 for (let i = 0; i < currentQuestionnaire.sections.length; i++){
                     sectionIndex = i;
-                    startIndex ++;  // add one to index to count for the section in the carousel
+
+                    // note: uncomment the following line for when multi-section questionnaires are available in OpalAdmin
+                    // startIndex ++;  // add one to index to count for the section in the carousel
 
                     for (let j = 0; j < currentQuestionnaire.sections[i].questions.length; j++){
 
@@ -114,10 +116,12 @@
                 startIndex ++;  // this is for the questionnaire home page index
 
                 for (let i = 0; i < currentQuestionnaire.sections.length; i++){
-                    startIndex ++;  // this is for the number of sections to reach the wanted section
+                    // note: uncomment the following line for when multi-section questionnaires are available in OpalAdmin
+                    // startIndex ++;  // this is for the number of sections to reach the wanted section
 
                     if (i !== sectionIndex){
-                        startIndex += currentQuestionnaire.sections[i].questions.length;    // this is for the number of questions in that sections
+                        // this is for the number of questions in that section
+                        startIndex += currentQuestionnaire.sections[i].questions.length;
                     }else{
                         startIndex += questionIndex;  // this is for the number of questions up to the wanted question
                     }
@@ -458,17 +462,19 @@
                     // TODO: error handling: preferably going back to the questionnaire list and display an error message for the user to try again in some amount of time
                 }
 
-                currentQuestionnaire.sections[i].section_position = parseInt(currentQuestionnaire.sections[i].section_position);
-
-                // format carousel
-                let sectionObjectForCarousel = {
-                    type: 'section',
-                    position: currentQuestionnaire.sections[i].section_position,
-                    instruction: currentQuestionnaire.sections[i].section_instruction,
-                    title: currentQuestionnaire.sections[i].section_title
-                };
-
-                carouselItems.push(sectionObjectForCarousel);
+                // Note: the following should be uncommented for when the questionnaire has more than 1 section in OpalAdmin
+                //
+                // currentQuestionnaire.sections[i].section_position = parseInt(currentQuestionnaire.sections[i].section_position);
+                //
+                // // format carousel
+                // let sectionObjectForCarousel = {
+                //     type: 'section',
+                //     position: currentQuestionnaire.sections[i].section_position,
+                //     instruction: currentQuestionnaire.sections[i].section_instruction,
+                //     title: currentQuestionnaire.sections[i].section_title
+                // };
+                //
+                // carouselItems.push(sectionObjectForCarousel);
 
                 // loop through questions
                 for (let j = 0; j < currentQuestionnaire.sections[i].questions.length; j++) {

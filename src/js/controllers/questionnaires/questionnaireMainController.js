@@ -553,6 +553,9 @@
                 Note that it is not possible to swipe back from a summary page
             */
 
+            // note that cases 2, 3 and 4 are not displayed for the view in the current version,
+            // until multi-section questionnaire is available in OpalAdmin
+
             // coming from question, going to question
             if (lastActiveIndex > 0 && lastItemType === 'question' && activeItemType === 'question') {
                 comingFromQuestion();
@@ -610,6 +613,9 @@
                 6) coming from a question, going to the summary page
                 7) coming from a section, going to the summary page
              */
+
+            // note that cases 2, 3, and 4 are not displayed for the view in the current version,
+            // until multi-section questionnaire is available in OpalAdmin
 
             // note: index access to vm.carouselItems is lastActiveIndex/activeIndex - 1 because the carouselItems does not include the questionnaire home page
 
