@@ -25,11 +25,13 @@
         .controller('SecurityQuestionController', SecurityQuestionController);
 
     SecurityQuestionController.$inject = ['$window', '$timeout', 'ResetPassword', 'RequestToServer', 'EncryptionService',
-        'UUID', 'UserAuthorizationInfo', '$state', 'DeviceIdentifiers', 'NavigatorParameters', '$scope', 'Params'];
+        'UUID', 'UserAuthorizationInfo', '$state', 'DeviceIdentifiers', 'NavigatorParameters', '$scope', 'Params',
+        'UserHospitalPreferences'];
 
     /* @ngInject */
     function SecurityQuestionController($window, $timeout, ResetPassword, RequestToServer, EncryptionService, UUID,
-                                        UserAuthorizationInfo, $state, DeviceIdentifiers, NavigatorParameters, $scope, Params) {
+                                        UserAuthorizationInfo, $state, DeviceIdentifiers, NavigatorParameters, $scope,
+                                        Params, UserHospitalPreferences) {
 
         var vm = this;
         var deviceID;
@@ -83,7 +85,7 @@
          * @returns boolean
          * @description hides input div if set to true
          */
-        vm.invalidCode=false;
+        vm.invalidCode = false;
 
         /**
          * @ngdoc property
@@ -93,7 +95,17 @@
          * @description determines which back button to show
          */
         vm.passwordReset = false;
-	    /**
+
+        /**
+         * @ngdoc property
+         * @name loading
+         * @propertyOf SecurityQuestionController
+         * @returns boolean
+         * @description Toggles the loading spinner shown during password reset.
+         */
+        vm.loading = false;
+
+        /**
 	     * @ngdoc property
 	     * @name alertShow
 	     * @propertyOf SecurityQuestionController
@@ -115,6 +127,7 @@
         vm.clearErrors = clearErrors;
         vm.goToInit = goToInit;
         vm.goToReset = goToReset;
+        vm.isThereSelectedHospital = isThereSelectedHospital;
 
         activate();
 
@@ -130,28 +143,57 @@
             parameters = nav.getCurrentPage().options;
             trusted = parameters.trusted;
 
+            initializeData();
+
+            bindEvents();
+        }
+
+        /**
+         * @ngdoc function
+         * @name initializeData
+         * @methodOf MUHCApp.controllers.SecurityQuestionController
+         * @description Fetches and sets the data for this controller. This function is called again after the postpop
+         *              event (to attempt to load data after the user has chosen a hospital to target).
+         */
+        function initializeData() {
             // this checks whether or not the security question is being asked in order to log the user in or to trigger a password reset request
             if (parameters.passwordReset){
 
+                vm.loading = true;
                 passwordReset = parameters.passwordReset;
                 vm.passwordReset = passwordReset;
 
-                ResetPassword.verifyLinkCode(parameters.url)
-                    .then(function (email) {
+                // Reset some controller variables to prevent old results or errors from showing when trying to load data again
+                vm.tooManyAttempts = false;
+                vm.Question = "";
+                vm.alert = {
+                    type: "",
+                    message: ""
+                };
+                vm.invalidCode = false;
+                vm.alertShow = true;
+
+                // Only proceed with requests if the patient has selected a hospital; if not, wait for them to do so
+                if (UserHospitalPreferences.isThereSelectedHospital()) {
+
+                    ResetPassword.verifyLinkCode(parameters.url).then(function (email) {
                         UserAuthorizationInfo.setEmail(email);
                         return DeviceIdentifiers.sendDevicePasswordRequest(email);
                     })
                     .then(function (response) {
-                        $timeout(function() {
+                        $timeout(function () {
                             vm.Question = response.Data.securityQuestion.securityQuestion_EN + " / " + response.Data.securityQuestion.securityQuestion_FR;
-                        })
+                            vm.loading = false;
+                        });
                     })
-                    .catch(handleError);
+                    .catch(function (error) {
+                        vm.loading = false;
+                        handleError(error);
+                    });
+                }
             } else {
                 vm.Question = parameters.securityQuestion;
             }
-
-            bindEvents();
         }
 
         /**
@@ -162,8 +204,21 @@
          */
         function bindEvents() {
             // In case someone presses back button, need to remove the deviceID and security answer.
-            $scope.initNavigator.once('prepop', function () {
+            $scope.initNavigator.on('prepop', function () {
                 removeUserData();
+            });
+
+            // Re-launch data requests after selecting a different hospital and going back to this page
+            $scope.initNavigator.on('postpop', function () {
+                $timeout(function() {
+                    if (vm.passwordReset) initializeData();
+                });
+            });
+
+            // Remove the event listeners
+            $scope.$on('$destroy', function() {
+                $scope.initNavigator.off('prepop');
+                $scope.initNavigator.off('postpop');
             });
         }
 
@@ -202,7 +257,11 @@
          * Handles errors in order to display the proper message to the user.
          */
         function handleError(error) {
-            $timeout(function(){
+            $timeout(function() {
+
+                // This check prevents from handling old request timeouts that were followed by a successful re-attempt
+                if (error.Response === "timeout" && vm.Question !== "") return;
+
                 var code = (error.code)? error.code : error.Code;
                 vm.alert.type = Params.alertTypeDanger;
                 switch (code){
@@ -353,6 +412,17 @@
          */
         function goToReset(){
             initNavigator.pushPage('./views/login/forgot-password.html',{})
+        }
+
+        /**
+         * @ngdoc method
+         * @name isThereSelectedHospital
+         * @methodOf MUHCApp.controllers.LoginController
+         * @description Returns whether the user has already selected a hospital.
+         * @returns {boolean} True if there is a hospital selected; false otherwise.
+         */
+        function isThereSelectedHospital() {
+            return UserHospitalPreferences.isThereSelectedHospital();
         }
     }
 })();
