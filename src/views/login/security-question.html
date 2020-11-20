@@ -4,15 +4,31 @@
             <ons-back-button ng-if="!security.passwordReset">{{"BACK"|translate}}</ons-back-button>
             <ons-back-button ng-if="security.passwordReset" ng-click="initNavigator.resetToPage('./views/init/init-screen.html',{animation:'none'});">{{"HOME"|translate}}</ons-back-button>
         </div>
-        <div class="center">{{"SECURITYQUESTION"|translate}}</div>
+        <div class="center">
+            <div ng-if="!security.passwordReset">{{"SECURITYQUESTION"|translate}}</div>
+            <div ng-if="security.passwordReset">{{"FORGOTPASSWORD_NOQUESTION"|translate}}</div>
+        </div>
     </ons-toolbar>
     <network-banner></network-banner>
+
     <ons-row align="center" style="height:70vh;margin:0;top:0">
         <ons-col align="center" style="margin:0;top:0">
+
+            <!-- OPAL LOGO -->
             <div align="center">
-                <img src="./img/Opal_Name_Logo_Green_Transparent.png" style="max-width:300px;width:90vw;height:auto">
+                <img src="./img/Opal_Name_Logo_Green_Transparent.png" style="max-width:300px;width:70vw;height:auto">
             </div>
-            <div ng-if="!security.invalidCode" class="container" align="center" style="margin-top:20px">
+
+            <!-- HOSPITAL SELECTOR -->
+            <div ng-if="security.passwordReset" class="container">
+                <hospital-selector></hospital-selector>
+            </div>
+
+            <!-- LOADING SPINNER -->
+            <loading-spinning-circle ng-if="security.loading && security.isThereSelectedHospital()" loading-message="{{'LOADING'|translate}}" margintop="15vh"></loading-spinning-circle>
+
+            <!-- SECURITY ANSWER FIELDS -->
+            <div ng-if="!security.loading && !security.invalidCode && security.isThereSelectedHospital()" class="container" align="center" style="margin-top:20px">
                 <form name="formPassword" novalidate>
                     <div class="form-group" align="center" style="margin-top: 20px">
 

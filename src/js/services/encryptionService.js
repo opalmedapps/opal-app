@@ -115,6 +115,17 @@ myApp.service('EncryptionService', function (UserAuthorizationInfo) {
         return tmp;
     };
 
+    /**
+     *@ngdoc method
+     *@name hash
+     *@methodOf MUHCApp.service:EncryptionService
+     *@description Encrypts a given password using SHA512
+     *@return {String} Returns hashed password
+     **/
+    function hash(incoming) {
+        return CryptoJS.SHA512(incoming).toString();
+    }
+
     return {
         /**
          *@ngdoc method
@@ -194,11 +205,10 @@ myApp.service('EncryptionService', function (UserAuthorizationInfo) {
          *@ngdoc method
          *@name hash
          *@methodOf MUHCApp.service:EncryptionService
-         *@description Encrypts a given password using SHA512
-         *@return {String} Returns hashed password
+         *@description Forwarded to private function.
          **/
         hash: function (incoming) {
-            return CryptoJS.SHA512(incoming).toString();
+            return hash(incoming);
         },
 
         /**
@@ -235,7 +245,7 @@ myApp.service('EncryptionService', function (UserAuthorizationInfo) {
          *@return {String} Returns hashed password
          **/
         generateEncryptionHash: function () {
-            encryptionHash = CryptoJS.PBKDF2(UserAuthorizationInfo.getPassword(), securityAnswerHash, {
+            encryptionHash = CryptoJS.PBKDF2(hash(UserAuthorizationInfo.getUsername()), securityAnswerHash, {
                 keySize: 512 / 32,
                 iterations: 1000
             }).toString(CryptoJS.enc.Hex);
