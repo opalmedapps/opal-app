@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<widget android-versionCode="1" ios-CFBundleVersion="1" id="com.hig.opalpreprod" version="1.10.2"
+<widget android-versionCode="2006" ios-CFBundleVersion="2006" id="com.hig.opalpreprod" version="1.10.8"
         xmlns="http://www.w3.org/ns/widgets"
         xmlns:cdv="http://cordova.apache.org/ns/1.0"
         xmlns:android="http://schemas.android.com/apk/res/android">
@@ -13,7 +13,7 @@
         radiation oncology patients.
     </description>
     <author email="muhc.app.mobile@gmail.com" href="https://opalmedapps.com">
-	    Opal Meds App Inc.
+        Opal Med Apps Inc.
     </author>
     <content src="index.html"/>
     <access origin="*"/>
@@ -34,13 +34,17 @@
     <icon src="./res/OpalHealth_App_Apple_Icon_2.png"/>
     <platform name="android">
         <edit-config file="app/src/main/AndroidManifest.xml" mode="merge" target="/manifest/application">
-            <application android:debuggable="false"/>
+            <application android:debuggable="true"/>
         </edit-config>
         <edit-config file="app/src/main/AndroidManifest.xml" mode="merge" target="/manifest/application/activity">
             <application android:allowBackup="false"/>
         </edit-config>
         <edit-config file="app/src/main/AndroidManifest.xml" mode="merge" target="/manifest/application">
             <application android:usesCleartextTraffic="false"/>
+        </edit-config>
+        <!-- requestLegacyExternalStorage fixes file access issues in Android 10 / API Level 29. This parameter will be ignored by API Level 30+ -->
+        <edit-config file="app/src/main/AndroidManifest.xml" mode="merge" target="/manifest/application">
+            <application android:requestLegacyExternalStorage="true"/>
         </edit-config>
         <resource-file src="google-services.json" target="app/google-services.json"/>
         <splash density="land-hdpi" src="res/screen/android/splash-land-hdpi.png"/>
