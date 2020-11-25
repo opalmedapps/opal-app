@@ -65,6 +65,17 @@ myApp.filter('formatDateAppointmentTask',function($filter){
     };
 });
 
+myApp.filter('formatDateDicom',function($filter){
+    return function(date)
+    {
+        var year = date.substring(0,4);
+        var month = date.substring(4,6);
+        var day = date.substring(6,8);
+
+        return year + '-' + month + '-' + day;
+    };
+});
+
 myApp.filter('formatDateToFirebaseString',function(){
     return function(date){
         var month=date.getMonth()+1;

@@ -1,0 +1,15 @@
+<ons-page ng-controller="imagingController as image">
+    <!-- <input id="fileItem" type="file" on-change="image.readFile()"> -->
+    <ons-toolbar fixed-style>
+        <div class="left">
+            <ons-back-button>{{"BACK"|translate}}</ons-back-button>
+        </div>
+    </ons-toolbar> 
+
+    <div class="button-bar">
+        <p>
+        <input type="file" id="importFile" multiple='multiple' ng-model="image.filemodel"/>
+        <button ng-click = "image.uploadFiles()">Go</button>
+        </p>
+    </div>
+</ons-page>
