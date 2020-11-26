@@ -81,11 +81,6 @@ cornerstoneTools.init({
 
             vm.images=[
                 {
-                    name: 'Test Movie',
-                    filePath: './img/dicom/testmvid.mp4',
-                    type: 'video'
-                },
-                {
                     name: 'Test DICOM Movie',
                     filePath: '',
                     type:'dicom-movie'
@@ -132,7 +127,7 @@ cornerstoneTools.init({
 
             vm.imageType = image.type;
 
-            if (image.type==='video') personalNavigator.pushPage('./views/personal/imaging/imaging-video.html');
+            
             if (image.type==='dicom-movie') personalNavigator.pushPage('./views/personal/imaging/imaging-dicom.html');
             if (image.type==='RT') personalNavigator.pushPage('./views/personal/imaging/RT.html');
 
