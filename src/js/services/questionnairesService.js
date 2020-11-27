@@ -16,12 +16,13 @@
      this factory is named with a s for questionnaire simply to match the existing file name, which is not good
     */
     Questionnaires.$inject = [
+        '$sce',
         'Params',
         'QuestionnaireDataService',
-        '$sce'];
+    ];
 
     /* @ngInject */
-    function Questionnaires(Params, QuestionnaireDataService, $sce) {
+    function Questionnaires($sce, Params, QuestionnaireDataService) {
         // constants for DB conventions
         const questionnaireValidStatus = Params.QUESTIONNAIRE_DB_STATUS_CONVENTIONS;
         const questionnaireValidType = Params.QUESTIONNAIRE_DB_TYPE_CONVENTIONS;
@@ -55,6 +56,7 @@
             getQuestionnaireStartUrl: getQuestionnaireStartUrl,
             isWaitingForSavingAnswer: isWaitingForSavingAnswer,
             updateQuestionnaireStatus: updateQuestionnaireStatus,
+            requestOpalQuestionnaireFromSerNum: requestOpalQuestionnaireFromSerNum,
             requestQuestionnaire: requestQuestionnaire,
             requestQuestionnaireList: requestQuestionnaireList,
             saveQuestionnaireAnswer: saveQuestionnaireAnswer
@@ -72,9 +74,9 @@
          * @desc this function is used to find the index of the question for the in progress current questionnaires,
          *      i.e. if in progress, find the place where the user left off at
          *      This is used in 2 locations, namely when an in progress is resumed, or when the user wants to edit a question in the summary page
-         * @param editQuestion {boolean} if True, then it is used for when the user comes from the summary page, otherwise, the user is resuming a questionnaire
-         * @param sectionIndex {int} the index of the wanted section
-         * @param questionIndex {int} the index of the wanted question
+         * @param {boolean} editQuestion if True, then it is used for when the user comes from the summary page, otherwise, the user is resuming a questionnaire
+         * @param {int} sectionIndex the index of the wanted section
+         * @param {int} questionIndex the index of the wanted question
          * @return {object} this object contain the startIndex (-1 if all questions are answered), sectionIndex, and the questionIndex
          */
         function findInProgressQuestionIndex(editQuestion, sectionIndex, questionIndex){
@@ -85,7 +87,9 @@
 
                 for (let i = 0; i < currentQuestionnaire.sections.length; i++){
                     sectionIndex = i;
-                    startIndex ++;  // add one to index to count for the section in the carousel
+
+                    // note: uncomment the following line for when multi-section questionnaires are available in OpalAdmin
+                    // startIndex ++;  // add one to index to count for the section in the carousel
 
                     for (let j = 0; j < currentQuestionnaire.sections[i].questions.length; j++){
 
@@ -112,10 +116,12 @@
                 startIndex ++;  // this is for the questionnaire home page index
 
                 for (let i = 0; i < currentQuestionnaire.sections.length; i++){
-                    startIndex ++;  // this is for the number of sections to reach the wanted section
+                    // note: uncomment the following line for when multi-section questionnaires are available in OpalAdmin
+                    // startIndex ++;  // this is for the number of sections to reach the wanted section
 
                     if (i !== sectionIndex){
-                        startIndex += currentQuestionnaire.sections[i].questions.length;    // this is for the number of questions in that sections
+                        // this is for the number of questions in that section
+                        startIndex += currentQuestionnaire.sections[i].questions.length;
                     }else{
                         startIndex += questionIndex;  // this is for the number of questions up to the wanted question
                     }
@@ -146,9 +152,21 @@
         }
 
         /**
+         * @name requestOpalQuestionnaireFromSerNum
+         * @desc this function gets the basic information concerning a questionnaire stored in the OpalDB from its SerNum
+         *       In particular, it gets the answerQuestionnaireId of that questionnaire,
+         *       which allows the questionnaire to be found in the questionnaireDB
+         * @param {string|int} questionnaireSerNum
+         * @returns {Promise}
+         */
+        function requestOpalQuestionnaireFromSerNum(questionnaireSerNum) {
+            return QuestionnaireDataService.requestOpalQuestionnaireFromSerNum(questionnaireSerNum);
+        }
+
+        /**
          * @name requestQuestionnaire
          * @desc this function request one single questionnaire from the data service and set it as the current questionnaire
-         * @param answerQuestionnaireId {int} this is the qp_ser_num or the answerQuestionnaireId for the DB (unique identifier for a questionnaire sent to a user)
+         * @param {int} answerQuestionnaireId this is the qp_ser_num or the answerQuestionnaireId for the DB (unique identifier for a questionnaire sent to a user)
          * @returns {Promise}
          */
         function requestQuestionnaire(answerQuestionnaireId){
@@ -193,9 +211,9 @@
          * @name updateQuestionnaireStatus
          * @desc this function updates the status of a given questionnaire in the app and also in the database.
          *       Note that this function does not do any input check. It is relayed to the helper functions
-         * @param answerQuestionnaireId {int} ID of particular questionnaire received by patient
-         * @param newStatus {int} the new status to be updated in
-         * @param oldStatus {int} the old status of the questionnaire
+         * @param {int} answerQuestionnaireId ID of particular questionnaire received by patient
+         * @param {int} newStatus the new status to be updated in
+         * @param {int} oldStatus the old status of the questionnaire
          * @return {Promise}
          *
          */
@@ -216,10 +234,10 @@
         /**
          * @name saveQuestionnaireAnswer
          * @desc This function saves the answer for a single question (even if it is skipped). The type verification is done in the function called
-         * @param answerQuestionnaireId {int}
-         * @param sectionId {int}
-         * @param question {object}
-         * @param isSkipped {int}
+         * @param {int} answerQuestionnaireId
+         * @param {int} sectionId
+         * @param {object} question
+         * @param {int} isSkipped
          * @returns {Promise}
          */
         function saveQuestionnaireAnswer(answerQuestionnaireId, sectionId, question, isSkipped){
@@ -327,10 +345,11 @@
         function getCarouselItems(){
             return carouselItems;
         }
+
         /**
          * @name getQuestionnaires
          * @desc This function gets the list of questionnaires according to the status given.
-         * @param status
+         * @param {Number} status
          * @return {object} The object containing the questionnaires with the given status
          */
         function getQuestionnaireList(status){
@@ -343,7 +362,7 @@
                     return Object.values(completeQuestionnaires);
                 default:
                     // TODO: logging
-                    console.log("invalid type of questionnaire requested from questionnairesService.js");
+                    console.error("invalid type of questionnaire requested from questionnairesService.js");
                     return completeQuestionnaires;
             }
         }
@@ -351,7 +370,7 @@
         /**
          * @name getQuestionnaireCount
          * @desc this public function gives the number of questionnaires which is of the type given
-         * @param type {int} the type of questionnaire, i.e. new, progress, completed, in int.
+         * @param {int} type the type of questionnaire, i.e. new, progress, completed, in int.
          * @returns {int} the number of questionnaires belonging to that type. If the type is not found, return 0 which will mean that the type has 0 questionnaire
          */
         function getQuestionnaireCount(type){
@@ -438,22 +457,24 @@
 
                 // check for properties
                 if (!verifySectionProperty(currentQuestionnaire.sections[i])){
-                    console.log("ERROR: cannot format carousel item because the section's property is not conforming to the correct format");
+                    console.error("ERROR: cannot format carousel item because the section's property is not conforming to the correct format");
                     break;
                     // TODO: error handling: preferably going back to the questionnaire list and display an error message for the user to try again in some amount of time
                 }
 
-                currentQuestionnaire.sections[i].section_position = parseInt(currentQuestionnaire.sections[i].section_position);
-
-                // format carousel
-                let sectionObjectForCarousel = {
-                    type: 'section',
-                    position: currentQuestionnaire.sections[i].section_position,
-                    instruction: currentQuestionnaire.sections[i].section_instruction,
-                    title: currentQuestionnaire.sections[i].section_title
-                };
-
-                carouselItems.push(sectionObjectForCarousel);
+                // Note: the following should be uncommented for when the questionnaire has more than 1 section in OpalAdmin
+                //
+                // currentQuestionnaire.sections[i].section_position = parseInt(currentQuestionnaire.sections[i].section_position);
+                //
+                // // format carousel
+                // let sectionObjectForCarousel = {
+                //     type: 'section',
+                //     position: currentQuestionnaire.sections[i].section_position,
+                //     instruction: currentQuestionnaire.sections[i].section_instruction,
+                //     title: currentQuestionnaire.sections[i].section_title
+                // };
+                //
+                // carouselItems.push(sectionObjectForCarousel);
 
                 // loop through questions
                 for (let j = 0; j < currentQuestionnaire.sections[i].questions.length; j++) {
@@ -465,7 +486,7 @@
                         currentQuestionnaire.sections[i].questions[j].patient_answer.answer = [];
                     }else if (!Array.isArray(currentQuestionnaire.sections[i].questions[j].patient_answer.answer)){
                         // verify that answer is an array
-                        console.log("ERROR: cannot format carousel item because the answers have the wrong format");
+                        console.error("ERROR: cannot format carousel item because the answers have the wrong format");
 
                         // TODO: error handling
                     }
@@ -473,7 +494,7 @@
                     // check for properties
                     if (!verifyQuestionProperty(currentQuestionnaire.sections[i].questions[j])){
 
-                        console.log("ERROR: cannot format carousel item because the questions do not have the required properties");
+                        console.error("ERROR: cannot format carousel item because the questions do not have the required properties");
 
                         i = currentQuestionnaire.sections.length;   // break the outer loop too
                         break;  // break inner loop
@@ -503,7 +524,7 @@
             if(verifyQuestionnaireProperty(questionnaire)){
                 currentQuestionnaire = questionnaire;
             }else{
-                console.log('error in the questionnaire format');
+                console.error('error in the questionnaire format');
                 clearCurrentQuestionnaire();
                 // TODO: error handling: preferably going back to the questionnaire list and display an error message for the user to try again in some amount of time
             }
@@ -514,7 +535,7 @@
         /**
          * @name verifyQuestionnaireProperty
          * @desc This private function verify the format and the property of the outer layer of the questionnaire object. Also format html.
-         * @param questionnaire {object} the object to be verified
+         * @param {object} questionnaire the object to be verified
          * @returns {boolean} false if the questionnaire did not pass the check, true otherwise
          */
         function verifyQuestionnaireProperty(questionnaire){
@@ -550,7 +571,7 @@
         /**
          * @name verifySectionProperty
          * @desc verify properties that the section should have. Also convert html string.
-         * @param section {object} a section of a questionnaire
+         * @param {object} section a section of a questionnaire
          * @returns {boolean} if the section matches the format then return true, else false
          */
         function verifySectionProperty(section){
@@ -575,7 +596,7 @@
         /**
          * @name verifyQuestionProperty
          * @desc verify the properties of questions, as well as the options and answers for it. Also sort the options according to their orders and convert html string
-         * @param question {object}
+         * @param {object} question
          * @returns {boolean} true if pass all checks, false otherwise
          */
         function verifyQuestionProperty(question) {
@@ -592,7 +613,7 @@
                 !question.hasOwnProperty('section_id') ||
                 !question.hasOwnProperty('type_id')){
                 // section_id is not really needed, if troublesome delete it from the checklist of properties
-                console.log('ERROR: question does not have the required property');
+                console.error('ERROR: question does not have the required property');
 
                 return false;
             }
@@ -601,17 +622,17 @@
             question.question_text = $sce.trustAsHtml(question.question_text);
 
             if (isNaN(parseInt(question.type_id))){
-                console.log("ERROR: the question's type_id is not valid");
+                console.error("ERROR: the question's type_id is not valid");
                 return false;
             }
 
             if (!verifyOptionsProperty(question)){
-                console.log("ERROR: the question's options does not have the required properties");
+                console.error("ERROR: the question's options does not have the required properties");
                 return false;
             }
 
             if (!verifyPatientAnswerProperty(question)){
-                console.log("ERROR: the question's answer does not pass the property check");
+                console.error("ERROR: the question's answer does not pass the property check");
                 return false;
             }
 
@@ -621,7 +642,7 @@
         /**
          * @name verifyPatientAnswerProperty
          * @desc this function is used to verify the properties of the array answer.
-         * @param question {object}
+         * @param {object} question
          * @returns {boolean} true if no error, false otherwise
          */
         function verifyPatientAnswerProperty(question){
@@ -673,7 +694,7 @@
         /**
          * @name verifyOptionsProperty
          * @desc this function is used to verify the properties of the array options and order them according to their order property.
-         * @param question {object}
+         * @param {object} question
          * @returns {boolean} true if pass all checks, false otherwise
          */
         function verifyOptionsProperty(question){
@@ -730,9 +751,9 @@
         /**
          * @name updateAppQuestionnaireStatus
          * @desc this function updates the app's status of a single questionnaire received by the patient
-         * @param answerQuestionnaireId {int} ID of particular questionnaire received by patient
-         * @param newStatus {int} the new status to be updated in
-         * @param oldStatus {int} the old status of the questionnaire. If this parameter is non-existent then the function has to check if the questionnaire exist in every object.
+         * @param {int} answerQuestionnaireId ID of particular questionnaire received by patient
+         * @param {int} newStatus the new status to be updated in
+         * @param {int} oldStatus the old status of the questionnaire. If this parameter is non-existent then the function has to check if the questionnaire exist in every object.
          * @return {boolean} true if success, false if failure
          */
         function updateAppQuestionnaireStatus (answerQuestionnaireId, newStatus, oldStatus){
@@ -740,7 +761,7 @@
 
             // verify status
             if (!verifyStatus(newStatus)){
-                console.log("ERROR: error in updating the questionnaire status, the status is not valid");
+                console.error("ERROR: error in updating the questionnaire status, the status is not valid");
                 return false;
             }
 
@@ -759,7 +780,7 @@
                     delete completeQuestionnaires[answerQuestionnaireId];
 
                 }else{
-                    console.log("ERROR: error in updating the questionnaire status, it does not exist in the existing questionnaires arrays");
+                    console.error("ERROR: error in updating the questionnaire status, it does not exist in the existing questionnaires arrays");
                     return false;
                 }
             }else{
@@ -781,7 +802,7 @@
                         break;
 
                     default:
-                        console.log("ERROR: error in updating the questionnaire status, it does not have a valid new status");
+                        console.error("ERROR: error in updating the questionnaire status, it does not have a valid new status");
                         return false;
                 }
             }
@@ -804,7 +825,7 @@
                     break;
 
                 default:
-                    console.log("ERROR: error in updating the questionnaire status, it does not have a valid new status");
+                    console.error("ERROR: error in updating the questionnaire status, it does not have a valid new status");
                     return false;
             }
 
@@ -822,8 +843,8 @@
         /**
          * @name updateAppQuestionnaireLastUpdated
          * @desc This private function helps update the last updated time for the list of questionnaire. The last updated will have ISO 8601 format and have zero UTC offset
-         * @param qp_ser_num {int} the qp_ser_num or the answerQuestionnaireId of the questionnaire to be updated
-         * @param status {status} the status of the questionnaire to be updated
+         * @param {int} qp_ser_num the qp_ser_num or the answerQuestionnaireId of the questionnaire to be updated
+         * @param {status} status the status of the questionnaire to be updated
          * @returns {boolean} true if success, false otherwise
          */
         function updateAppQuestionnaireLastUpdated(qp_ser_num, status){
@@ -844,7 +865,7 @@
                     break;
 
                 default:
-                    console.log("ERROR: error in updating the questionnaire status, it does not have a valid new status");
+                    console.error("ERROR: error in updating the questionnaire status, it does not have a valid new status");
                     return false;
             }
 
@@ -854,7 +875,7 @@
         /**
          * @name verifyStatus
          * @desc This function verifies if a status is existent for
-         * @param status {int}
+         * @param {int} status
          * @returns {boolean} true if the status is a valid one for the current implementation, false otherwise.
          */
         function verifyStatus(status){
@@ -889,7 +910,7 @@
             // verify input
             if (questionnaireList_local.constructor !== Array){
                 clearAllQuestionnaire();
-                console.log('Error in setting questionnaire list, did not get an array from listener');
+                console.error('Error in setting questionnaire list, did not get an array from listener');
                 // TODO: Error handling
                 return;
             }
@@ -904,7 +925,7 @@
                     !questionnaire.hasOwnProperty('questionnaire_id') || !questionnaire.hasOwnProperty('status')) {
 
                     // TODO: error handling
-                    console.log('Error in setting questionnaire list, did not get the required property for a questionnaire from listener');
+                    console.error('Error in setting questionnaire list, did not get the required property for a questionnaire from listener');
                     clearAllQuestionnaire();
 
                     return;
@@ -934,7 +955,7 @@
                         break;
 
                     default:
-                        console.log("in setQuestionnaireList, the questionnaire status is invalid");
+                        console.error("in setQuestionnaireList, the questionnaire status is invalid");
                         // TODO: error handling
                         clearAllQuestionnaire();
                         return;
@@ -947,20 +968,20 @@
          * @desc This function is used to save a question's answer for the current questionnaire inside the app.
          *      Since all the changes done to the carousel questions are reflected to the currentQuestionnaire, we do not need to update the currentQuestionnaire object explicitly.
          *      We still need to update the lastUpdated date and prepare the flat which confirms that the answer being saved into the DB (the flag is_defined)
-         * @param answerQuestionnaireId {int}
-         * @param sectionId {int}
-         * @param questionId {int}
-         * @param questionSectionId {int}
-         * @param answerArray {array}
-         * @param isSkipped {int}
-         * @returns {boolean}
+         * @param {int} answerQuestionnaireId
+         * @param {int} sectionId
+         * @param {int} questionId
+         * @param {int} questionSectionId
+         * @param {array} answerArray
+         * @param {int} isSkipped
+         * @returns {boolean} true if success, false otherwise
          */
         function saveAppQuestionnaireAnswer(answerQuestionnaireId, sectionId, questionId, questionSectionId, answerArray, isSkipped){
             const SUCCESS = true;
 
             // check if we are saving for the current questionnaire
             if (currentQuestionnaire.qp_ser_num !== answerQuestionnaireId){
-                console.log("ERROR: not saving for the current questionnaire");
+                console.error("ERROR: not saving for the current questionnaire");
                 return !SUCCESS;
             }
 
@@ -973,8 +994,8 @@
         /**
          * @name toggleIsDefinedFlag
          * @desc this private function serves to modify the flag is_defined for a question's answer
-         * @param question {object} the question itself
-         * @param status {string} the status to be changed to. This should be one of the valid status for saving answer
+         * @param {object} question the question itself
+         * @param {string} status the status to be changed to. This should be one of the valid status for saving answer
          * @returns {boolean} true if success, false otherwise
          */
         function toggleIsDefinedFlag(question, status){
@@ -989,7 +1010,7 @@
             }
 
             if (!isStatusValid){
-                console.log('the status of the saving answer process is invalid');
+                console.error('the status of the saving answer process is invalid');
                 return false;
             }
 

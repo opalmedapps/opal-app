@@ -59,20 +59,18 @@
             CheckInService.attemptCheckin()
                 .then(function(response){
 
-                    // console.log('CheckIn Response: ' + response);
-
-                    if(response === Params.notAllowedResponse){
+                    if(response === "NOT_ALLOWED"){
                         NewsBanner.showCustomBanner($filter('translate')("NOT_ALLOWED"), '#333333', '#F0F3F4', 
                             13, 'top', function(){}, 3000);
                         vm.alert.type = Params.alertTypeWarning;
-                        vm.checkInMessage = Params.checkinHospitalMessage;
-                    } else if (response === Params.successResponse) {
+                        vm.checkInMessage = "CHECKIN_IN_HOSPITAL_ONLY";
+                    } else if (response === "SUCCESS") {
                         vm.alert.type = Params.alertTypeSuccess;
-                        vm.checkInMessage = Params.checkedInMessage;
+                        vm.checkInMessage = "CHECKED_IN";
                         vm.apps = CheckInService.getCheckInApps();
                     } else {
                         vm.alert.type = Params.alertTypeDanger;
-                        vm.checkInMessage = Params.checkinErrorMessage;
+                        vm.checkInMessage = "CHECKIN_ERROR";
                         vm.apps = CheckInService.getCheckInApps();
                         vm.error = "ERROR";
                     }

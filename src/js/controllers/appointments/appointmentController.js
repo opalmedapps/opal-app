@@ -23,14 +23,16 @@
         .module('MUHCApp')
         .controller('AppointmentController', AppointmentController);
 
-    AppointmentController.$inject = ['NavigatorParameters', 'UserPreferences', 'Patient', '$timeout', '$window', '$q', '$scope'];
+    AppointmentController.$inject = ['NavigatorParameters', 'UserPreferences', 'Patient', '$timeout', 'Constants'];
 
     /* @ngInject */
-    function AppointmentController(NavigatorParameters, UserPreferences, Patient, $timeout, $window, $q, $scope) {
+    function AppointmentController(NavigatorParameters, UserPreferences, Patient, $timeout, Constants) {
 
-        var vm = this;
+        let vm = this;
 
-        var navigatorName;
+        let navigator = null;
+        let navigatorName = '';
+
         /**
          * @ngdoc property
          * @name language
@@ -68,9 +70,11 @@
         //////////////////////////////////////
 
         function activate() {
-            var parameters = NavigatorParameters.getParameters();
-            var language = UserPreferences.getLanguage().toUpperCase();
-            navigatorName = parameters.Navigator;
+            navigator = NavigatorParameters.getNavigator();
+            navigatorName = NavigatorParameters.getNavigatorName();
+
+            let parameters = NavigatorParameters.getParameters();
+            let language = UserPreferences.getLanguage().toUpperCase();
 
             $timeout(function(){
                 vm.language = language;
@@ -88,13 +92,12 @@
         function goToMap()
         {
             NavigatorParameters.setParameters(vm.app);
-            $window[navigatorName].pushPage('./views/general/maps/individual-map.html');
+            navigator.pushPage('./views/general/maps/individual-map.html');
         }
 
         function aboutAppointment()
         {
-          //  NavigatorParameters.setParameters(vm.app);
-            $window[navigatorName].pushPage('./views/personal/appointments/about-appointment.html');
+            navigator.pushPage('./views/personal/appointments/about-appointment.html');
         }
 
         /**
@@ -105,7 +108,7 @@
          * Takes the user to the About-This-Appointment view of the specified appointment
          */
         function moreEducationalMaterial() {
-            $window[navigatorName].pushPage('./views/templates/content.html', {
+            navigator.pushPage('./views/templates/content.html', {
                 contentLink: vm.app["URL_"+ vm.language],
                 contentType: vm.app["AppointmentType_" + vm.language]
             });
@@ -113,9 +116,7 @@
         }
 
         function openMap(){
-            var app = document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'https://' ) === -1;
-            if(app)
-            {
+            if (Constants.app) {
                 var ref = cordova.InAppBrowser.open(vm.app["MapUrl_"+ vm.language], '_blank', 'EnableViewPortScale=yes');
             } else {
                 window.open(vm.app["MapUrl_"+ vm.language]);

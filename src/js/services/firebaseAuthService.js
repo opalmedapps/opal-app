@@ -68,7 +68,7 @@ myApp.factory("FirebaseService", ['$firebaseAuth',
 				this.getAuthentication().$signOut()
 					.then(function (response) {
 						"use strict";
-						console.log(response)
+						console.log('Firebase sign out response: ', JSON.stringify(response));
 					})
 			},
 

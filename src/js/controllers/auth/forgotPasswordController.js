@@ -86,14 +86,14 @@
             userAuth.$sendPasswordResetEmail(vm.email).then(function () {
 
                 $timeout(function () {
-                    vm.alert.type = Params.forgotPasswordAlertSuccess;
-                    vm.alert.message = Params.forgotPasswordAlertSuccessMessage;
+                    vm.alert.type = Params.alertTypeSuccess;
+                    vm.alert.message = "RESET_PASSWORD_SENT";
                 });
             }).catch(function (error) {
                 if (error.code === Params.networkRequestFailure) {
                     $timeout(function () {
                         vm.alert.type = Params.alertTypeDanger;
-                        vm.alert.message = Params.loginNetworkErrorMessage;
+                        vm.alert.message = "ERROR_NETWORK";
                     });
                 }
                 else {
@@ -103,8 +103,8 @@
                      * -SB */
 
                     $timeout(function () {
-                        vm.alert.type = Params.forgotPasswordAlertSuccess;
-                        vm.alert.message = Params.forgotPasswordAlertSuccessMessage;
+                        vm.alert.type = Params.alertTypeSuccess;
+                        vm.alert.message = "RESET_PASSWORD_SENT";
                     });
                 }
             });

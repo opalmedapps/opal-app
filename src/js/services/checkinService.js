@@ -204,13 +204,13 @@
 
             //First evaluate the current state of existing appointments, see if they were already checked in and if so what the state is (all success or some errors)
             if(appts.length === 0){
-                setCheckinState(Params.checkinNoneMessage);
+                setCheckinState("CHECKIN_NONE");
                 r.resolve()
             } else if(alreadyCheckedIn(appts)){
-                setCheckinState(Params.checkInAfterMessage + setPlural(appts));
+                setCheckinState("CHECKIN_MESSAGE_AFTER" + setPlural(appts));
                 r.resolve()
             } else if (checkinErrorsExist(appts)) {
-                setCheckinState(Params.checkinErrorMessage);
+                setCheckinState("CHECKIN_ERROR");
                 r.resolve()
             } else {
                 //This means at this point there exists appointments today and none of them have been checked in
@@ -220,15 +220,15 @@
                         // console.log("can checkin : " + canCheckin);
 
                         if(!canCheckin) {
-                            setCheckinState(Params.notAllowedResponse, appts.length);
+                            setCheckinState("NOT_ALLOWED", appts.length);
                         }
                         else {
-                            setCheckinState(Params.checkInBeforeMessage + setPlural(appts), appts.length);
+                            setCheckinState("CHECKIN_MESSAGE_BEFORE" + setPlural(appts), appts.length);
                         }
                         r.resolve()
                     })
                     .catch(function() {
-                        setCheckinState(Params.notAllowedResponse, appts.length);
+                        setCheckinState("NOT_ALLOWED", appts.length);
                         r.reject()
                     })
             }
@@ -242,11 +242,11 @@
 
             //First evaluate the current state of existing appointments, see if they were already checked in and if so what the state is (all success or some errors)
             if(alreadyCheckedIn(appts)){
-                setCheckinState(Params.checkInAfterMessage + setPlural(appts));
+                setCheckinState("CHECKIN_MESSAGE_AFTER" + setPlural(appts));
             } else if (checkinErrorsExist(appts)) {
-                setCheckinState(Params.checkinError);
+                setCheckinState("CHECKIN_ERROR");
             } else {
-                setCheckinState(Params.notAllowedResponse, appts.length);
+                setCheckinState("NOT_ALLOWED", appts.length);
             }
         }
 
@@ -297,7 +297,7 @@
             state.message = status;
 
             switch(status){
-                case Params.checkinError:
+                case "CHECKIN_ERROR":
                     attemptedCheckin = true;
                     errorsExist = true;
                     state.canNavigate = true;
@@ -306,8 +306,8 @@
                     state.noAppointments = false;
                     state.allCheckedIn = false;
                     break;
-                case Params.checkInAfterMessage:
-                case Params.checkInAfterPluralMessage:
+                case "CHECKIN_MESSAGE_AFTER":
+                case "CHECKIN_MESSAGE_AFTER_PLURAL":
                     attemptedCheckin = true;
                     allCheckedIn = true;
                     state.canNavigate = true;
@@ -316,22 +316,22 @@
                     state.noAppointments = false;
                     state.allCheckedIn = true;
                     break;
-                case Params.checkinNoneMessage:
+                case "CHECKIN_NONE":
                     state.canNavigate = false;
                     state.numberOfAppts = 0;
                     state.checkinError = false;
                     state.noAppointments = true;
                     state.allCheckedIn = false;
                     break;
-                case Params.checkInBeforeMessage:
-                case Params.checkInBeforePluralMessage:
+                case "CHECKIN_MESSAGE_BEFORE":
+                case "CHECKIN_MESSAGE_BEFORE_PLURAL":
                     state.canNavigate = true;
                     state.numberOfAppts = numAppts;
                     state.checkinError = false;
                     state.noAppointments = false;
                     state.allCheckedIn = false;
                     break;
-                case Params.notAllowedResponse:
+                case "NOT_ALLOWED":
                     state.canNavigate = false;
                     state.numberOfAppts = numAppts;
                     state.checkinError = false;

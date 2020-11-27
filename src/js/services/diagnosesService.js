@@ -56,7 +56,7 @@ myApp.service('Diagnoses',function($filter,LocalStorage){
         diag[i].CreationDate=$filter('formatDate')(diag[i].CreationDate);
         diagnoses.push(diag[i]);
       }
-      diagnoses=$filter('orderBy')(diagnoses, 'CreationDate');
+      diagnoses=$filter('orderBy')(diagnoses, '-CreationDate');
     }
     return{
        /**

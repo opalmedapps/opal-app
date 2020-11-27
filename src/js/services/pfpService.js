@@ -49,7 +49,7 @@
                     }.bind(this))
                     .catch(function (error)
                     {
-                        if(error.Code==='2')
+                        if(error.Code !== '3')
                         {
                             NativeNotification.showNotificationAlert($filter('translate')("ERRORCONTACTINGHOSPITAL"));
                         }

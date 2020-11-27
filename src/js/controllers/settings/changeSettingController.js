@@ -33,7 +33,7 @@
 
         ////////////////////////
 
-        //Sets all the account settings depeding on the field that needs to be changed
+        //Sets all the account settings depending on the field that needs to be changed
         function activate() {
             //Mappings between parameters and translation
             //Navigator parameter
@@ -46,7 +46,7 @@
             $timeout(function () {
                 //Instantiates values and parameters
                 vm.disableButton = true;
-                vm.title = Params.setUpdateTitle;
+                vm.title = "UPDATE";
                 vm.value = parameters;
                 vm.valueLabel = parameters;
                 vm.personal = true;
@@ -56,49 +56,49 @@
                 if (parameters === Params.setAliasParam) {
                     vm.actualValue = Patient.getAlias();
                     vm.newValue = vm.actualValue;
-                    vm.instruction = Params.setAliasInstruction;
+                    vm.instruction = "ENTERYOURALIAS";
                 } else if (parameters === Params.setPhoneNumbersParam) {
                     vm.actualValue = Patient.getTelNum();
                     vm.newValue = vm.actualValue;
-                    vm.instruction = Params.setPhoneNumberInstruction;
+                    vm.instruction = "ENTERNEWTELEPHONE";
                 } else if (parameters === Params.setEmailParam) {
                     vm.type1 = Params.setEmailType;
                     vm.type2 = Params.setPasswordType;
                     vm.newValue = '';
                     vm.oldValue = '';
                     vm.placeHolder = $filter('translate')("ENTERPASSWORD");
-                    vm.instruction = Params.setEmailInstruction;
-                    vm.instructionOld = Params.setPasswordInstruction;
-                    vm.inputInstruction = Params.setEmailInputInstruction;
+                    vm.instruction = "ENTEREMAILADDRESS";
+                    vm.instructionOld = "ENTERPASSWORD";
+                    vm.inputInstruction = "REENTER_EMAIL";
                 } else if (parameters === Params.setPasswordParam) {
                     vm.type1 = Params.setPasswordType;
                     vm.type2 = Params.setPasswordType;
-                    vm.title = Params.setUpdatePasswordParam;
+                    vm.title = "UPDATEPASSWORDTITLE";
                     vm.newValue = '';
                     vm.newValueValidate = '';
                     vm.oldValue = '';
                     var label = $filter('translate')("ENTEROLDPASSWORDPLACEHOLDER");
                     vm.placeHolder = label;
-                    vm.instruction = Params.setInstructionNewPassword;
-                    vm.instructionOld = Params.setInstructionOldPassword;
+                    vm.instruction = "ENTERNEWPASSWORD";
+                    vm.instructionOld = "ENTEROLDPASSWORD";
                     vm.inputInstruction = $filter('translate')("REENTERPASSWORDPLACEHOLDER");
                     vm.valueLabel = $filter('translate')("SETNEWPASSWORDPLACEHOLDER");
                 } else if (parameters === Params.setLanguageParam) {
                     var value = UserPreferences.getLanguage();
-                    vm.instruction = Params.setLanguageInstruction;
+                    vm.instruction = "SELECTLANGUAGE";
                     vm.personal = false;
                     vm.fontUpdated = false;
                     vm.pickLanguage = value;
                     vm.firstOption = Params.setFirstLanguageInstruction;
                     vm.secondOption = Params.setSecondLanguageInstruction;
                     vm.valueLabel = Params.setLanguageParam;
-                    vm.title = Params.setUpdateTitle;
+                    vm.title = "UPDATE";
                 } else if (parameters === Params.setFontSizeParam) {
                     var value = UserPreferences.getFontSize();
                     vm.firstOption = Params.setFontOptionMedium;
                     vm.secondOption = Params.setFontOptionLarge;
                     vm.thirdOption = Params.setFontOptionExtraLarge;
-                    vm.instruction = Params.setFontSizeTitle;
+                    vm.instruction = "SELECTFONTSIZE";
                     vm.personal = false;
                     vm.fontUpdated = true;
                     vm.pickFont = value;
@@ -150,7 +150,7 @@
             vm.actualValue = value;
             vm.newUpdate = true;
             vm.alertClass = Params.alertClassUpdateMessageSuccess;
-            vm.updateMessage = Params.setUpdateMessageField;
+            vm.updateMessage = "FIELD_UPDATED";
         }
 
         //Function to change font size
@@ -158,7 +158,7 @@
             UserPreferences.setFontSize(newVal);
         }
 
-        //FUnction to change the language
+        //Function to change the language
         function changeLanguage (val) {
             var objectToSend = {};
             objectToSend.NewValue = val;
@@ -194,7 +194,7 @@
                     .then(function () {
                         $timeout(function(){
                             vm.alertClass = Params.alertClassUpdateMessageSuccess;
-                            vm.updateMessage = Params.setUpdatePasswordMessage;
+                            vm.updateMessage = "PASSWORDUPDATED";
                             vm.newUpdate = true;
                         });
 
@@ -205,7 +205,7 @@
                         $timeout(function() {
                             vm.newUpdate = true;
                             vm.alertClass = Params.alertClassUpdateMessageSuccess;
-                            vm.updateMessage = Params.secondNetworkErrorMessage;
+                            vm.updateMessage = "INTERNETERROR";
                         });
                     })
             }
@@ -230,7 +230,7 @@
                     .then(function(){
                         $timeout(function(){
                             vm.alertClass = Params.alertClassUpdateMessageSuccess;
-                            vm.updateMessage = Params.setEmailUpdateParam;
+                            vm.updateMessage = "UPDATED_EMAIL";
                             vm.newUpdate = true;
                         });
                     }).catch(handleError);
@@ -280,47 +280,47 @@
                     case Params.userMismatch:
                         vm.newUpdate = true;
                         vm.alertClass = Params.alertClassUpdateMessageError;
-                        vm.updateMessage = Params.invalidUserAssociation;
+                        vm.updateMessage = "INVALID_ASSOCIATION";
                         break;
                     case Params.invalidUser:
                         vm.newUpdate = true;
                         vm.alertClass = Params.alertClassUpdateMessageError;
-                        vm.updateMessage = Params.invalidUserMessage;
+                        vm.updateMessage = "INVALID_USER";
                         break;
                     case Params.invalidCredentials:
                         vm.newUpdate = true;
                         vm.alertClass = Params.alertClassUpdateMessageError;
-                        vm.updateMessage = Params.invalidCredentialsMessage;
+                        vm.updateMessage = "INVALID_CREDENTIAL";
                         break;
                     case Params.invalidEmail:
                         vm.newUpdate = true;
                         vm.alertClass = Params.alertClassUpdateMessageError;
-                        vm.updateMessage = Params.invalidEmailMessage;
+                        vm.updateMessage = "INVALID_EMAIL";
                         break;
                     case Params.invalidPassword:
                         vm.newUpdate = true;
                         vm.alertClass = Params.alertClassUpdateMessageError;
-                        vm.updateMessage = Params.invalidPasswordMessage;
+                        vm.updateMessage = "INVALID_PASSWORD";
                         break;
                     case Params.emailInUse:
                         vm.alertClass = Params.alertClassUpdateMessageError;
                         vm.newUpdate = true;
-                        vm.updateMessage = Params.emailInUseMessage;
+                        vm.updateMessage = "EMAIL_TAKEN";
                         break;
-                    case Params.weakPasswordCase:
+                    case Params.weakPassword:
                         vm.newUpdate = true;
                         vm.alertClass = Params.alertClassUpdateMessageError;
-                        vm.updateMessage = Params.invalidPasswordMessage;
+                        vm.updateMessage = "INVALID_PASSWORD";
                         break;
-                    case Params.passwordDisrespectCase:
+                    case "password-disrespects-criteria":
                         vm.newUpdate = true;
                         vm.alertClass = Params.alertClassUpdateMessageError;
-                        vm.updateMessage = Params.passwordDisrespectMessage;
+                        vm.updateMessage = "PASSWORD_CRITERIA";
                         break;
                     default:
                         vm.newUpdate = true;
                         vm.alertClass = Params.alertClassUpdateMessageError;
-                        vm.updateMessage = Params.secondNetworkErrorMessage;
+                        vm.updateMessage = "INTERNETERROR";
                         break;
                 }
             })

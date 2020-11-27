@@ -11,3 +11,4 @@ import "./directives/topPageBannerDirective";
 import "./directives/loading-spinning-circle.directive";
 import "./directives/search-bar.directive";
 import "./directives/ons-scroller-height.directive";
+import "./directives/hospitalSelectorDirective";

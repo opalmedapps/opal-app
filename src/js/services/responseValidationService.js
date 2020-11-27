@@ -53,9 +53,8 @@
         function validate(response, encryptionKey, timeOut) {
             let timestamp = response.Timestamp;
 
-            // TODO: it seems that encryption errors are no longer being handled properly by the app. This could be due to fact that response code is sometimes being returned encrypted
             if (response.Code === ENCRYPTION_ERROR) {
-                return {error: {Code: 'ENCRYPTION_ERROR'}}
+                return {error: response}
             } else {
                 response.Timestamp = timestamp;
                 clearTimeout(timeOut);

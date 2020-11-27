@@ -66,16 +66,16 @@
         function handleError(response) {
             vm.loading = false;
             switch (response.code) {
-                case Params.noPageResponseCase:
+                case "NO_PAGE":
                     vm.alert = {
                         type: Params.alertTypeInfo,
-                        content: Params.noContentMessage
+                        content: "NO_CONTENT"
                     };
                     break;
                 default:
                     vm.alert = {
                         type: Params.alertTypeDanger,
-                        content: Params.secondNetworkErrorMessage
+                        content: "INTERNETERROR"
                     };
             }
         }

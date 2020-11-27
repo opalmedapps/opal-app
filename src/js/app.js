@@ -142,10 +142,6 @@ const app = angular
  **/
 app.run(function ($state, $stateParams,$q, $rootScope,$translate, Patient,$location, NetworkStatus) {
 
-    if (!firebase.apps.length) {
-        firebase.initializeApp({});
-    }
-
     var isOffline = 'onLine' in navigator && !navigator.onLine;
 
     if ( isOffline ) {

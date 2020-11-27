@@ -28,30 +28,3 @@ Bootstraping the application
 		})
 	}
 })();
-
-
-/**
- * @ngdoc object
- * @name Globals
- * @description Collection of all globally defined functions.
- */
-
-/**
- * @ngdoc function
- * @methodOf Globals
- * @name handleOpenURL
- * @param {String} url Url of the reset password email link
- * @description Push a new page to the initNavigator stack along with the url and a passwordReset
- *              flag. This only occurs when the app is opened via CustomURLScheme plugin from a password
- *              reset email link.
- */
-
-function handleOpenURL(url) {
-    if(url.indexOf("opal://")!==-1){
-        setTimeout(function() {
-            if(typeof initNavigator!== "undefined"){
-                initNavigator.pushPage("./views/login/security-question.html", {url: url, passwordReset: true});
-            }
-        }, 0);
-    }
-}

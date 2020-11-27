@@ -37,7 +37,7 @@ myApp.service('FileManagerService', ['$q', '$cordovaFileTransfer', '$cordovaFile
             urlCDVPathDocuments = Params.cdvDocumentFilePathAndroid;
         } else {
             urlDeviceDocuments = cordova.file.documentsDirectory + '/Documents/';
-            urlCDVPathDocuments = Params.cdvDoctorsFilePathIos;
+            urlCDVPathDocuments = Params.cdvDocumentFilePathIos;
         }
 
     }

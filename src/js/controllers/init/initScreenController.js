@@ -50,7 +50,6 @@
 		vm.OPAL_ENV = OPAL_CONFIG.env;
 		vm.APP_BUILD_NUMBER = Constants.build();
 
-		vm.goToMessage = goToMessage;
 		vm.gotoLearnAboutOpal = gotoLearnAboutOpal;
 		vm.goToRegister = goToRegister;
 		vm.goToGeneralSettings = goToGeneralSettings;
@@ -72,9 +71,11 @@
 					if (!response.exists) {
 						DynamicContentService.setContentData(response.data);
 					}
-					// This line reads the Message Of The Day from serviceStatus_EN.php on depDocs
-					// 'service' in links.php will grab the url (location) of serviceStatus_EN.php (or _FR.php)
-					return DynamicContentService.getPageContent('service');
+
+					// This line reads the Message Of The Day from [staging|preprod|prod]_serviceStatus_[EN|FR].php on depDocs
+					// '[staging|preprod|prod]_service' in links.php will grab the url (location) of
+					// [staging|preprod|prod]_serviceStatus_[EN|FR].php
+					return DynamicContentService.getPageContent(`${vm.OPAL_ENV}_service`);
 				})
 				.then(function successCallback(response) {
 					for (var key in response.data) {
@@ -86,7 +87,7 @@
 					}
 				})
 				.catch(function errorCallback(error) {
-
+					console.log("Error initializing links using the DynamicContentService.", error);
 				});
 
 			//Add the login translation
@@ -125,14 +126,6 @@
 						'#F0F3F4', 25, 'top', function(){}, 'long');
 				}
 			}
-		}
-
-		/**
-		 * Views the details of the global message
-		 */
-		function goToMessage() {
-			NavigatorParameters.setParameters('initNavigator');
-			initNavigator.pushPage('./views/init/message.html', {animation: 'lift'});
 		}
 
 		/**

@@ -740,7 +740,7 @@ myApp.service('Appointments', ['$q', 'RequestToServer','$cordovaCalendar','UserA
         },
         /**
          *@ngdoc method
-         *@name setAppointmentsLanguage
+         *@name clearAppointments
          *@methodOf MUHCApp.service:Appointments
          *@description Cleans all the Appointments service state and reinstantiates.
          **/

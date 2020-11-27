@@ -79,10 +79,9 @@ myApp.service('RequestToServer',['UserAuthorizationInfo', 'EncryptionService',
                         reject(error);
                     });
 
-                    //If request takes longer than 1.5 minutes to come back with timeout request, delete reference
+                    // If request takes longer than 1.5 minutes to come back with timeout request, delete the listener
                     const timeOut = setTimeout(function() {
-                        response_url.set(null);
-                        response_url.off();
+                        refRequestResponse.off();
                         reject({Response:'timeout'});
                     }, 90000);
 
