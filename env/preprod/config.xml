@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<widget android-versionCode="2006" ios-CFBundleVersion="2006" id="com.hig.opalpreprod" version="1.10.8"
+<widget android-versionCode="2008" ios-CFBundleVersion="2008" id="com.hig.opalpreprod" version="1.10.9"
         xmlns="http://www.w3.org/ns/widgets"
         xmlns:cdv="http://cordova.apache.org/ns/1.0"
         xmlns:android="http://schemas.android.com/apk/res/android">
