@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>OPAL</title>
+    <meta charset="utf-8">
+
+    <!-- Cordova -->
+    <script src="./cordova.js"></script>
+
+    <!-- Immediately Accessible Functions -->
+    <script type="text/javascript">
+        /**
+         * @ngdoc function
+         * @methodOf Globals
+         * @name handleOpenURL
+         * @author Robert Maglieri, Khodr Ghattas
+         * @param {String} url Url from the reset password email link, prefixed with the app's custom url scheme.
+         *                     e.g.: opal://https://opal-dev.firebaseapp.com/?mode=resetPassword&oobCode=......
+         * @description Pushes a new page to the initNavigator stack along with the url and a passwordReset
+         *              flag. This occurs when the app is opened via the CustomURLScheme plugin from a password
+         *              reset email link.
+         *
+         *              Note: this function must be available immediately from index.html, or else it is not picked up
+         *              by the CustomURLScheme plugin. - S.B.
+         */
+        function handleOpenURL(url) {
+            if(url.indexOf("opal://") !== -1) {
+                setTimeout(function() {
+                    if(typeof initNavigator!== "undefined") {
+                        initNavigator.pushPage("./views/login/security-question.html", {url: url, passwordReset: true});
+                    }
+                }, 0);
+            }
+        }
+    </script>
+
+</head>
+<body ng-cloak>
+    <!--
+    Loading Modal
+    =================================-->
+    <ons-modal var="loadingmodal" style="background-color: white !important;">
+        <div style="margin-top: 5%" class="container text-center" align="center">
+            <img style="margin-top: -40%; width: 70%; height: auto;" ng-src="./img/Opal_Name_Logo_Green_Transparent.png">
+        </div>
+        <br>
+        <ons-icon style="color: #0D47A1" size="50px" icon="ion-load-c" spin="true"></ons-icon>
+        <br><br>
+        <p style="color: #0D47A1" id="loadingData">{{"LOADINGDATA"|translate}}...</p>
+    </ons-modal>
+
+    <!--
+    Backsplash Modal
+    =================================-->
+    <ons-modal var="backsplashmodal">
+        <img src="img/backsplash.png">
+    </ons-modal>
+
+    <!--
+    Update Required Modal
+    =================================-->
+    <ons-modal var="updateRequiredModal">
+        <h4>{{"UPDATEREQUIRED"|translate}}</h4>
+        <ons-icon icon="ion-alert-circled" size="60px"></ons-icon>
+        <p style="margin-top: 5%" class="unattended-message">{{"UPDATEMESSAGE"|translate}}</p>
+    </ons-modal>
+
+    <!--
+     ScreenshotTaken Modal
+     =================================-->
+    <ons-modal var="screenshotTakenModal">
+        <div id="rcorners">
+            <h3>Attention!</h3>
+            <ons-icon icon="ion-alert-circled" size="60px"></ons-icon>
+            <p style="margin-top: 5%" class="unattended-message">{{"SCREENSHOTTAKEN"|translate}}</p>
+            <ons-button style="margin-top: 5%" ng-click="screenshotTakenModal.hide()">{{"OK"|translate}}</ons-button>
+        </div>
+    </ons-modal>
+
+    <!--
+     LOADING MODAL FOR SECURITY ANSWER SUBMISSION
+     =================================-->
+    <ons-modal var="loadingSubmit" style="background-color: rgba(250, 250, 250, 0.80)">
+        <div style="margin-bottom:15vh" align="center">
+            <svg class="progress-circular" style="opacity: 1">
+                <circle class="progress-circular__primary" cx="50%" cy="50%" r="40%" fill="none" stroke-width="10%"
+                        stroke-miterlimit="10"> </circle>
+            </svg>
+            <p style="margin-top: 30px; color: black; margin-left: 5%; margin-right: 5%" ng-class="fontSizeDesc">
+                {{"SUBMITTING"| translate}}
+            </p>
+        </div>
+    </ons-modal>
+
+    <!--
+    App
+    =================================-->
+    <div ng-controller="MainController">
+        <div ui-view></div>
+    </div>
+
+</body>
+</html>
