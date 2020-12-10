@@ -7,6 +7,7 @@ import * as cornerstoneWADOImageLoader from 'cornerstone-wado-image-loader';
 import Hammer from "hammerjs";
 
 import {TAG_DICT} from './dataDictionary.js';
+import  {spine, brain,eye1,eye2,chiasm} from './pixels.js';
 
 cornerstoneWADOImageLoader.external.cornerstone = cornerstone;
 cornerstoneWADOImageLoader.external.dicomParser = dicomParser;
@@ -129,17 +130,15 @@ cornerstoneTools.init({
 
             
             if (image.type==='dicom-movie') personalNavigator.pushPage('./views/personal/imaging/imaging-dicom.html');
-            if (image.type==='RT') personalNavigator.pushPage('./views/personal/imaging/RT.html');
+            if (image.type==='RT') personalNavigator.pushPage('./views/personal/imaging/imaging-details.html');
 
         }        
 
         function parseByteArray(byteArray){
-            console.log("test")
             try{
                 var dataSet = dicomParser.parseDicom(byteArray);
                 console.log(dataSet)
                 getTagOutput(dataSet);
-                console.log("TEST")
             } catch (err){}
             vm.loaded = true;
 
@@ -158,9 +157,54 @@ cornerstoneTools.init({
                 // Here we have the file data as an ArrayBuffer.  dicomParser requires as input a
                 // Uint8Array so we create that here
                 var byteArray = new Uint8Array(arrayBuffer);
-                parseByteArray(byteArray);
+                // parseByteArray(byteArray);
+
+                var testdata = dicomParser.parseDicom(byteArray); //, {untilTag: "x30060046"}
+                
+                // var ROIContourSequence = testdata.elements.x30060039.items;
+                var ROIDisplayColor = [];
+               // var contourData = [];
+
+               ROIContourSequence.forEach(function(element){
+                    var color = Array.from(element.dataSet.string('x3006002a').split("\\")).map(Number);
+                    ROIDisplayColor.push(color);
+               })
+               console.log(ROIDisplayColor)
+
+               var structureSetROISequence = testdata.elements.x30060020.items;
+               var ROIName = [];
+
+               structureSetROISequence.forEach(function(element){
+                    var name = Array.from(element.dataSet.string('x30060026'));
+                    ROIName.push(name);
+               });
+
+               console.log(ROIContourSequence)
+                
+                
+                // get the pixel data element (contains the offset and length of the data)
+                var pixelDataElement = testdata.elements.x30060039.items[0].dataSet.elements.x30060050;
+
+                // create a typed array on the pixel data (this example assumes 16 bit unsigned data)
+                // var pixelData = new Uint16Array(testdata.byteArray.buffer, pixelDataElement.dataOffset, pixelDataElement.length);
+                // console.log(pixelDataElement);
+                // console.log(pixelData)
+                console.log([ (testdata.elements.x30060039.items[0].dataSet.elements.x30060040)])
             }
             reader.readAsArrayBuffer(file);
+
+
+
+            // const imageId = cornerstoneWADOImageLoader.wadouri.fileManager.add(file);
+           // cornerstoneWADOImageLoader.wadouri.fileManager.add(file);
+
+            // cornerstone.loadImage(imageId).then(function(image){
+            //     getTagOutput(image.data);
+            // });
+
+
+
+            // dataSet = dicomParser.parseDicom(byteArray, options);
         }
 
         function uploadRT(){
@@ -372,7 +416,7 @@ cornerstoneTools.init({
                 document.getElementById('modality').textContent = image.data.string('x00080060');
                 document.getElementById('date').textContent = $filter('formatDateDicom')(image.data.string('x00080020'));
                 console.log(image.data.string('x00080020'))
-                
+                console.log(cornerstone.metaData.get('imagePlaneModule', imageIds[0]));
                 // if (document.getElementById("navi-segment-a")=== false){
                 //     document.getElementById('tagContent').innerHTML = vm.output.join('');
                 // }
@@ -398,8 +442,31 @@ cornerstoneTools.init({
            })
         }
 
+        function drawContours(contour_data, colour, canvasContext){
+            
+            canvasContext.beginPath();
+            canvasContext.strokeStyle=colour;
+            canvasContext.lineWidth=2
+
+            canvasContext.moveTo(contour_data[0][1]*375/512,contour_data[0][0]*375/512)
+            var datalength = contour_data.length -1;
+            for (let ix = 0; ix < datalength; ix++){
+                if (ix < datalength){
+                    canvasContext.lineTo(contour_data[ix+1][1]*375/512,contour_data[ix+1][0]*375/512);
+                } else {
+                    canvasContext.lineTo(contour_data[0][1]*375/512,contour_data[0][0]*375/512)
+                }
+                canvasContext.stroke();
+            }
+                
+        }
 
         function loadSingleDICOM(imageId) {
+
+            const canvas = document.createElement('canvas');
+            const canvasContext = canvas.getContext('2d');
+
+
             const element = document.getElementById('dicomImage');
             cornerstone.enable(element);
       
@@ -414,6 +481,32 @@ cornerstoneTools.init({
                 document.getElementById('modality').textContent = image.data.string('x00080060');
                 document.getElementById('date').textContent = $filter('formatDateDicom')(image.data.string('x00080020'));
                
+
+                const canvas = document.getElementById('canvas');
+                canvas.width  = window.innerWidth;
+                canvas.height = window.innerWidth;
+
+                var height = canvas.height;
+                var width = canvas.width;
+
+                console.log(height) 
+                console.log(width)
+                
+
+                const canvasContext = canvas.getContext('2d');
+                // const imageData = canvasContext.createImageData(width, height);
+                // const pixelData = imageData.data;
+
+               
+                
+                drawContours(spine, "#cc0000",canvasContext);
+                drawContours(brain, "#FFFF00",canvasContext);
+                drawContours(eye1, "#FFC0CB",canvasContext);
+                drawContours(eye2, "#ADFF2F",canvasContext);
+                drawContours(chiasm, "#B0E0E6",canvasContext);
+
+                //cornerstoneTools.getModule('rtstruct');
+
 
             }, function(err) {
                 alert(err);
