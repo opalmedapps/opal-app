@@ -114,7 +114,6 @@ cornerstoneTools.init({
 
         function showDetailedInfo(){
             vm.showDetails = true;
-            console.log(vm.output.length)
            
             ons.ready(function() {
                 document.getElementById('tagContent').innerHTML = vm.output.join('');
@@ -442,30 +441,28 @@ cornerstoneTools.init({
            })
         }
 
-        function drawContours(contour_data, colour, canvasContext){
-            
-            canvasContext.beginPath();
-            canvasContext.strokeStyle=colour;
-            canvasContext.lineWidth=2
+        function drawContours(contourData, colour, canvasContext, element, scale){
+            var startCoord = cornerstone.pixelToCanvas(element, {x:contourData[0][1], y:contourData[0][0]})
+            var dataLength = contourData.length;
+            var pixelCoords = [];
 
-            canvasContext.moveTo(contour_data[0][1]*375/512,contour_data[0][0]*375/512)
-            var datalength = contour_data.length -1;
-            for (let ix = 0; ix < datalength; ix++){
-                if (ix < datalength){
-                    canvasContext.lineTo(contour_data[ix+1][1]*375/512,contour_data[ix+1][0]*375/512);
+            canvasContext.beginPath();
+            canvasContext.strokeStyle = colour;
+            canvasContext.lineWidth = 2;
+            canvasContext.moveTo(startCoord.x/scale, startCoord.y/scale)
+           
+            for (let i = 1; i < dataLength; i++){
+                pixelCoords = cornerstone.pixelToCanvas(element, {x:contourData[i][1], y:contourData[i][0]})
+                if (i < dataLength - 1){
+                    canvasContext.lineTo(pixelCoords.x/scale, pixelCoords.y/scale);
                 } else {
-                    canvasContext.lineTo(contour_data[0][1]*375/512,contour_data[0][0]*375/512)
+                    canvasContext.lineTo(startCoord.x/scale, startCoord.y/scale)
                 }
                 canvasContext.stroke();
             }
-                
         }
 
         function loadSingleDICOM(imageId) {
-
-            const canvas = document.createElement('canvas');
-            const canvasContext = canvas.getContext('2d');
-
 
             const element = document.getElementById('dicomImage');
             cornerstone.enable(element);
@@ -481,33 +478,22 @@ cornerstoneTools.init({
                 document.getElementById('modality').textContent = image.data.string('x00080060');
                 document.getElementById('date').textContent = $filter('formatDateDicom')(image.data.string('x00080020'));
                
+                element.addEventListener("cornerstoneimagerendered", function(e) {
+                    const eventData = e.detail;
+                    const canvas = eventData.canvasContext.canvas;
+                    const canvasContext = canvas.getContext('2d');
 
-                const canvas = document.getElementById('canvas');
-                canvas.width  = window.innerWidth;
-                canvas.height = window.innerWidth;
+                    var scale = viewport.scale;
 
-                var height = canvas.height;
-                var width = canvas.width;
-
-                console.log(height) 
-                console.log(width)
-                
-
-                const canvasContext = canvas.getContext('2d');
-                // const imageData = canvasContext.createImageData(width, height);
-                // const pixelData = imageData.data;
-
-               
-                
-                drawContours(spine, "#cc0000",canvasContext);
-                drawContours(brain, "#FFFF00",canvasContext);
-                drawContours(eye1, "#FFC0CB",canvasContext);
-                drawContours(eye2, "#ADFF2F",canvasContext);
-                drawContours(chiasm, "#B0E0E6",canvasContext);
+                    drawContours(spine, "#cc0000",canvasContext,element, scale);
+                    drawContours(brain, "#FFFF00",canvasContext,element, scale);
+                    drawContours(eye1, "#FFC0CB",canvasContext,element, scale);
+                    drawContours(eye2, "#ADFF2F",canvasContext,element, scale);
+                    drawContours(chiasm, "#B0E0E6",canvasContext,element, scale);
 
                 //cornerstoneTools.getModule('rtstruct');
 
-
+                });
             }, function(err) {
                 alert(err);
             });
