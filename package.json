@@ -25,7 +25,6 @@
     "build:app:prod:android": "npm run prepare:app:prod && npm run build:web:prod && cordova build android --release --verbose",
     "build:app:prod:package": "npm run prepare:app:prod && npm run build:web:prod && cordova build --release --device --verbose",
     "build:app:prod:ios:package": "npm run prepare:app:prod && npm run build:web:prod && cordova build ios --release --device --verbose",
-    "build:app:prod:ios:package:norelease": "npm run prepare:app:prod && npm run build:web:prod && cordova build ios --device --verbose",
     "build:app:prod:android:package": "npm run prepare:app:prod && npm run build:web:prod && cordova build android --release --device --verbose",
     "build:app:preprod": "npm run prepare:app:preprod && npm run build:web:preprod && cordova build --verbose",
     "build:app:preprod:ios": "npm run prepare:app:preprod && npm run build:web:preprod && cordova build ios --verbose",
