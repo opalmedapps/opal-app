@@ -59,7 +59,6 @@ cornerstoneTools.init({
 
 
         vm.filePath = '';
-        vm.filemodel = '';
         vm.pixelData = [];
         vm.url = '';
         vm.loaded = false;
@@ -74,6 +73,8 @@ cornerstoneTools.init({
       
         var params = null;
         
+        var RTLoaded = false;
+        var contourDict = {};
 
         activate();
 
@@ -128,9 +129,9 @@ cornerstoneTools.init({
 
             vm.imageType = image.type;
 
-            
+              
             if (image.type==='dicom-movie') personalNavigator.pushPage('./views/personal/imaging/imaging-dicom.html');
-            if (image.type==='RT') personalNavigator.pushPage('./views/personal/imaging/imaging-details.html');
+            if (image.type==='RT') personalNavigator.pushPage('./views/personal/imaging/imaging-rt.html');
 
         }        
 
@@ -159,26 +160,73 @@ cornerstoneTools.init({
                 // parseByteArray(byteArray);
 
                 var testdata = dicomParser.parseDicom(byteArray); //, {untilTag: "x30060046"}
+                // console.log(testdata)
+
+                // var contourDict = {};
+
+                var structureSetROISequence = testdata.elements.x30060020.items;
+
+                structureSetROISequence.forEach(function(sequence){
+                    var ROINum = sequence.dataSet.string('x30060022');
+                    var ROIName = sequence.dataSet.string('x30060026');
+                    contourDict[ROINum] = {};
+                    contourDict[ROINum]['name'] = ROIName;
+                });
                 
-                // var ROIContourSequence = testdata.elements.x30060039.items;
-                var ROIDisplayColor = [];
-               // var contourData = [];
 
-               ROIContourSequence.forEach(function(element){
-                    var color = Array.from(element.dataSet.string('x3006002a').split("\\")).map(Number);
-                    ROIDisplayColor.push(color);
+
+                var ROIContourSequence = testdata.elements.x30060039.items;
+             
+                // TODO: geometric type
+                // var contourGeometricType = "";
+                var contourData = [];
+
+                // console.log(ROIContourSequence)
+
+                ROIContourSequence.forEach(function(ROIsequence){
+                    var refROINum = ROIsequence.dataSet.string('x30060084')
+                    var ROIDisplayColor = "rgb(0,0,0)";
+                    if (ROIsequence.dataSet.string('x3006002a')){
+                        var colorArray = ROIsequence.dataSet.string('x3006002a').split("\\");
+                        ROIDisplayColor = "rgb(".concat(colorArray[0],",",colorArray[1],",",colorArray[2],")");
+                    } 
+
+                    contourDict[refROINum]['colour'] = ROIDisplayColor;
+                    // console.log(ROIsequence.dataSet.string('x30060084'))
+
+                    // console.log(ROIsequence)
+                    var contourSequence = ROIsequence.dataSet.elements.x30060040.items;
+                    contourSequence.forEach(function(contSequence){
+                        // console.log(contSequence)
+                        //TODO: contour data
+                        var contourData = contSequence.dataSet.string('x30060050').split("\\").map(Number);
+                        var SOPInstanceUID = contSequence.dataSet.elements.x30060016.items[0].dataSet.string('x00081155');
+                    //    console.log(contourData)
+                        contourDict[refROINum][SOPInstanceUID] = contourData;
+
+
+
+                        // np.array(roi_coords).reshape(int(len(roi_coords)/3),3)
+                        // contourDict[]
+                        // console.log(contourData)
+                        // console.log(SOPInstanceUID)
+                       
+                    })
+                    // var contourGeometricType = contourSequence.
+                    // var contourSequence = sequence.
+                    // console.log(contourSequence)
+                    //    
+                //    var color = "";
+                //    if (sequence.dataSet.string('x3006002a')){
+                //     var colorArray = sequence.dataSet.string('x3006002a').split("\\");
+                //     color = "rgb(".concat(colorArray[0],",",colorArray[1],",",colorArray[2],")");
+
+                //    } else {
+                //        color = "rgb(0,0,0)"
+                //    }
+                    
+                //     ROIDisplayColor.push(color);
                })
-               console.log(ROIDisplayColor)
-
-               var structureSetROISequence = testdata.elements.x30060020.items;
-               var ROIName = [];
-
-               structureSetROISequence.forEach(function(element){
-                    var name = Array.from(element.dataSet.string('x30060026'));
-                    ROIName.push(name);
-               });
-
-               console.log(ROIContourSequence)
                 
                 
                 // get the pixel data element (contains the offset and length of the data)
@@ -188,11 +236,11 @@ cornerstoneTools.init({
                 // var pixelData = new Uint16Array(testdata.byteArray.buffer, pixelDataElement.dataOffset, pixelDataElement.length);
                 // console.log(pixelDataElement);
                 // console.log(pixelData)
-                console.log([ (testdata.elements.x30060039.items[0].dataSet.elements.x30060040)])
+                // console.log([ (testdata.elements.x30060039.items[0].dataSet.elements.x30060040)])
             }
             reader.readAsArrayBuffer(file);
 
-
+            RTLoaded = true;
 
             // const imageId = cornerstoneWADOImageLoader.wadouri.fileManager.add(file);
            // cornerstoneWADOImageLoader.wadouri.fileManager.add(file);
@@ -356,7 +404,7 @@ cornerstoneTools.init({
         function uploadDICOM(){
             //var file = document.getElementById('importFile').files[0];
             
-            var files = document.getElementById('importFile').files;
+            var files = document.getElementById('importFiles').files;
             var file = files[0];        
 
             var numImages = files.length;
@@ -376,7 +424,7 @@ cornerstoneTools.init({
             vm.loaded = true;
         }
 
-        function loadMultipleDICOM(files, numImages){
+        function loadMultipleDICOM(files){
             //const StackScrollMultiTouchTool = cornerstoneTools.StackScrollMultiTouchTool;
             const StackScrollTool = cornerstoneTools.StackScrollTool;
             const ZoomTouchPinchTool = cornerstoneTools.ZoomTouchPinchTool;
@@ -397,6 +445,8 @@ cornerstoneTools.init({
             cornerstone.enable(element);
 
             var viewport;
+            var pixelSpacing = [];
+            var imgPosition = [];
 
             cornerstone.loadImage(imageIds[0]).then(function(image){
                 getTagOutput(image.data);
@@ -411,6 +461,11 @@ cornerstoneTools.init({
 
                 document.getElementById('modality').textContent = image.data.string('x00080060');
                 document.getElementById('date').textContent = $filter('formatDateDicom')(image.data.string('x00080020'));
+
+                pixelSpacing = image.data.string('x00280030').split("\\").map(Number);
+                imgPosition = image.data.string('x00200032').split("\\").map(Number);
+
+               
                 // if (document.getElementById("navi-segment-a")=== false){
                 //     document.getElementById('tagContent').innerHTML = vm.output.join('');
                 // }
@@ -431,17 +486,22 @@ cornerstoneTools.init({
                 const eventData = e.detail;
                 const canvas = eventData.canvasContext.canvas;
                 const canvasContext = canvas.getContext('2d');
+                
                 var scale = viewport.scale;
 
                 // UID of current image slice
                 var UID = e.detail.image.data.string('x00080018');
 
                 // Draw all contours present on current slice (by UID)
-                Object.values(dataset).forEach(function (contour){
-                    if (contour.hasOwnProperty(UID)){
-                        drawContours(contour[UID],contour['color'],canvasContext,element,scale)
-                    }
-                });
+                if (RTLoaded == true){
+                    Object.values(contourDict).forEach(function (contour){
+                        if (contour.hasOwnProperty(UID)){
+                            drawContours(contour[UID],contour['colour'],canvasContext,element,scale, imgPosition, pixelSpacing)
+                        }
+                    });
+
+                }
+               
             });
 
            element.addEventListener('nagi-segment-a', function(e){
@@ -449,23 +509,47 @@ cornerstoneTools.init({
                 
            })
         }
+ 
+        function drawContours(contourData, colour, canvasContext, element, scale, imgPosition, pixelSpacing){
 
-        function drawContours(contourData, colour, canvasContext, element, scale){
-            var startCoord = cornerstone.pixelToCanvas(element, {x:contourData[0][1], y:contourData[0][0]})
+            var startCoord = cornerstone.pixelToCanvas(element, {x:(contourData[0]-imgPosition[0])/pixelSpacing[0]/scale, y:(contourData[1]-imgPosition[1])/pixelSpacing[1]/scale})
             var canvasCoords = [];
+
 
             canvasContext.beginPath();
             canvasContext.strokeStyle = colour;
             canvasContext.lineWidth = 3;
-            canvasContext.moveTo(startCoord.x/scale, startCoord.y/scale)
+            canvasContext.moveTo(startCoord.x, startCoord.y)
            
-            contourData.forEach(function(pixelCoord){
-                canvasCoords = cornerstone.pixelToCanvas(element, {x:pixelCoord[1], y:pixelCoord[0]})
-                canvasContext.lineTo(canvasCoords.x/scale, canvasCoords.y/scale);                
-            });
-            canvasContext.lineTo(startCoord.x/scale, startCoord.y/scale)
+            for (var i = 3; i < contourData.length; i+=3){
+                canvasCoords = cornerstone.pixelToCanvas(element, {x:(contourData[i]-imgPosition[0])/pixelSpacing[0]/scale, y:(contourData[i+1]-imgPosition[1])/pixelSpacing[1]/scale})
+                canvasContext.lineTo(canvasCoords.x, canvasCoords.y);                
+            }
+            // contourData.forEach(function(pixelCoord){
+            //     canvasCoords = cornerstone.pixelToCanvas(element, {x:pixelCoord[1], y:pixelCoord[0]})
+            //     canvasContext.lineTo(canvasCoords.x/scale, canvasCoords.y/scale);                
+            // });
+            canvasContext.lineTo(startCoord.x, startCoord.y)
             canvasContext.stroke();
         }
+        
+
+        // function drawContours(contourData, colour, canvasContext, element, scale){
+        //     var startCoord = cornerstone.pixelToCanvas(element, {x:contourData[0][1], y:contourData[0][0]})
+        //     var canvasCoords = [];
+
+        //     canvasContext.beginPath();
+        //     canvasContext.strokeStyle = colour;
+        //     canvasContext.lineWidth = 3;
+        //     canvasContext.moveTo(startCoord.x/scale, startCoord.y/scale)
+           
+        //     contourData.forEach(function(pixelCoord){
+        //         canvasCoords = cornerstone.pixelToCanvas(element, {x:pixelCoord[1], y:pixelCoord[0]})
+        //         canvasContext.lineTo(canvasCoords.x/scale, canvasCoords.y/scale);                
+        //     });
+        //     canvasContext.lineTo(startCoord.x/scale, startCoord.y/scale)
+        //     canvasContext.stroke();
+        // }
 
         function loadSingleDICOM(imageId) {
 
@@ -490,12 +574,12 @@ cornerstoneTools.init({
 
                     var scale = viewport.scale;
 
-                    drawContours(GTV, 'rgb(0,255,0)',canvasContext,element, scale);
-                    drawContours(PTV70,'rgb(255,0,0)',canvasContext,element, scale);
-                    drawContours(parotid_r, 'rgb(255,0,255)',canvasContext,element, scale);
-                    drawContours(parotid_l, 'rgb(0,255,255)',canvasContext,element, scale);
-                    drawContours(brainstem, 'rgb(255,150,0)',canvasContext,element, scale);
-                    drawContours(brain2, 'rgb(127,255,0)',canvasContext,element, scale);
+                    // drawContours(GTV, 'rgb(0,255,0)',canvasContext,element, scale);
+                    // drawContours(PTV70,'rgb(255,0,0)',canvasContext,element, scale);
+                    // drawContours(parotid_r, 'rgb(255,0,255)',canvasContext,element, scale);
+                    // drawContours(parotid_l, 'rgb(0,255,255)',canvasContext,element, scale);
+                    // drawContours(brainstem, 'rgb(255,150,0)',canvasContext,element, scale);
+                    // drawContours(brain2, 'rgb(127,255,0)',canvasContext,element, scale);
                 });
             }, function(err) {
                 alert(err);
