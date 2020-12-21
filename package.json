@@ -25,6 +25,7 @@
     "build:app:prod:android": "npm run prepare:app:prod && npm run build:web:prod && cordova build android --release --verbose",
     "build:app:prod:package": "npm run prepare:app:prod && npm run build:web:prod && cordova build --release --device --verbose",
     "build:app:prod:ios:package": "npm run prepare:app:prod && npm run build:web:prod && cordova build ios --release --device --verbose",
+    "build:app:prod:ios:package:norelease": "npm run prepare:app:prod && npm run build:web:prod && cordova build ios --device --verbose",
     "build:app:prod:android:package": "npm run prepare:app:prod && npm run build:web:prod && cordova build android --release --device --verbose",
     "build:app:preprod": "npm run prepare:app:preprod && npm run build:web:preprod && cordova build --verbose",
     "build:app:preprod:ios": "npm run prepare:app:preprod && npm run build:web:preprod && cordova build ios --verbose",
@@ -100,6 +101,7 @@
     "cordova-plugin-geolocation": "^4.0.2",
     "cordova-plugin-globalization": "^1.11.0",
     "cordova-plugin-inappbrowser": "^3.2.0",
+    "cordova-plugin-ios-detect-screenshot": "^1.0.0",
     "cordova-plugin-network-information": "^2.0.2",
     "cordova-plugin-prevent-screenshot": "1.0.3",
     "cordova-plugin-splashscreen": "^5.0.3",
@@ -123,6 +125,7 @@
     "pdfjs-dist": "^1.6.446",
     "phonegap-plugin-multidex": "^1.0.0",
     "phonegap-plugin-push": "^2.3.0",
+    "platform": "^1.3.6",
     "progressbar.js": "^1.0.1",
     "tweetnacl": "^1.0.0",
     "tweetnacl-util": "^0.15.0"
