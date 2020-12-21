@@ -1,4 +1,3 @@
-
 <!--TODO: ADD FRENCH TRANSLATIONS -->
 
 <ons-page ng-controller="imagingController as image" class="img-page-background">
@@ -14,6 +13,12 @@
             <p>
             <input type="file" id="importFiles" multiple='multiple'/>
             <button ng-click = "image.uploadDICOM()">Go</button>
+            </p>
+        </div>
+        <div class="button-bar">
+            <p>
+            <input type="file" id="importFile" />
+            <button ng-click = "image.uploadRT()">Go</button>
             </p>
         </div>
 
@@ -37,8 +42,6 @@
     <ons-row  style="margin-left:2px;text-align:center;color:white" ng-show="image.loaded">
         <ons-col style="text-align:center;" width="50%"><b>Date: </b><span id="date"></span>  </ons-col>
         <ons-col style="text-align:center;" ><b>Scan Type: </b><span id="modality" ></span></ons-col> <br>
-        
-
     </ons-row>
     <ons-row  style="margin-left:2px;text-align:center;color:white" ng-show="image.loaded">
         <ons-col style="text-align:center;" width="50%"></ons-col>  
@@ -62,5 +65,3 @@
         </ons-row>   
     </div>
 </ons-page>
-
-
