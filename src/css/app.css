@@ -2860,3 +2860,8 @@ and (max-device-width : 321px)
 .questionnaires-list-text {
     word-wrap: break-word;
 }
+
+.about-link {
+    background-color: #E3F2FD;
+    font-weight: bold;
+}

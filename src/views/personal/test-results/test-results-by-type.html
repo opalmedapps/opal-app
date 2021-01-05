@@ -79,27 +79,31 @@
         </div>
         <ons-list>
             <ons-list-header ng-class="fontSizeDesc">{{"LAB_TEST_INFO"|translate}}</ons-list-header>
-            <ons-list-item class="list-item-container" modifier="tappable"
-                           ng-class="fontSizeDesc" ng-click="testTypeCtrl.showAboutTestAlert()" modifier="tappable">
-                        {{"LAB_LEARN_ABOUT" | translate}}
-                        <br>
-                        <p>{{testTypeCtrl.getTestName(testTypeCtrl.test)}}</p>
-                        <span style="right:10px" class="list-item-note">
-                            <ons-icon icon="ion-android-open" style="color:#000000; margin-top: 50%"
-                                      size="25px"></ons-icon>
-                        </span>
+            <ons-list-item class="about-link list-item-container" modifier="tappable"
+                           ng-class="fontSizeDesc" ng-click="testTypeCtrl.showAboutTestAlert()">
+                <ons-icon icon="fas fa-info-circle"></ons-icon>
+                {{"LAB_LEARN_ABOUT" | translate}}
+                <br>
+                <p>{{testTypeCtrl.getTestName(testTypeCtrl.test)}}</p>
+                <span style="right:10px" class="list-item-note">
+                    <ons-icon icon="ion-android-open" style="color:#000000; margin-top: 50%"
+                              size="25px"></ons-icon>
+                </span>
             </ons-list-item>
+
             <ons-list-item ng-class="fontSizeDesc" style="line-height:1.3">
                 {{"LAB_RECENT_RESULT" | translate}}
                 <span class="list-item-note lucent" ng-class="fontSizeDesc" style="right: 10px">
-                    {{testTypeCtrl.test.latestTestValue}} ({{testTypeCtrl.test.unitDescription}})</span><br>
+                    {{testTypeCtrl.test.latestTestValue}} ({{testTypeCtrl.test.unitDescription}})
+                </span><br>
                 <p class="item-desc" ng-class="fontSizeDesc">
-                    {{testTypeCtrl.test.latestCollectedDateTime|date:'medium'}}</p>
+                    {{testTypeCtrl.test.latestCollectedDateTime|date:'medium'}}
+                </p>
             </ons-list-item>
             <ons-list-item ng-class="fontSizeDesc">
                 {{"NORMAL_RANGE"| translate}}
                 <span class="list-item-note lucent" ng-class="fontSizeDesc"
-                      style="right: 10px">{{testTypeCtrl.test.normalRange}} ({{testTypeCtrl.test.unitDescription}})</span>
+                      style="right: 10px">{{testTypeCtrl.test.normalRange}}({{testTypeCtrl.test.unitDescription}})</span>
             </ons-list-item>
         </ons-list>
 
