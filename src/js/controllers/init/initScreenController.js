@@ -139,10 +139,10 @@
 		/**
 		 * Go to registration page
 		 */
-		function goToRegister() {
+        function goToRegister(openInExternalBrowser = false) {
 			let url = Params.registrationPage;
 			let app = document.URL.indexOf('http://') === -1 && document.URL.indexOf('https://') === -1;
-
+            
 			if (!app) {
 				window.open(url, '_blank');
 			} else {
