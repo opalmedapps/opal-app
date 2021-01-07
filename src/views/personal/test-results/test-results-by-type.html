@@ -85,8 +85,8 @@
                 {{"LAB_LEARN_ABOUT" | translate}}
                 <br>
                 <p>{{testTypeCtrl.getTestName(testTypeCtrl.test)}}</p>
-                <span style="right:10px" class="list-item-note">
-                    <ons-icon icon="ion-android-open" style="color:#000000; margin-top: 50%"
+                <span style="right:10px" class="list-item-note about-link">
+                    <ons-icon icon="ion-android-open" style="margin-top: 50%"
                               size="25px"></ons-icon>
                 </span>
             </ons-list-item>
@@ -103,7 +103,7 @@
             <ons-list-item ng-class="fontSizeDesc">
                 {{"NORMAL_RANGE"| translate}}
                 <span class="list-item-note lucent" ng-class="fontSizeDesc"
-                      style="right: 10px">{{testTypeCtrl.test.normalRange}}({{testTypeCtrl.test.unitDescription}})</span>
+                      style="right: 10px">{{testTypeCtrl.test.normalRange}} ({{testTypeCtrl.test.unitDescription}})</span>
             </ons-list-item>
         </ons-list>
 
