@@ -139,14 +139,14 @@
 		/**
 		 * Go to registration page
 		 */
-		function goToRegister() {
+        function goToRegister() {
 			let url = Params.registrationPage;
 			let app = document.URL.indexOf('http://') === -1 && document.URL.indexOf('https://') === -1;
-
+            
 			if (!app) {
 				window.open(url, '_blank');
 			} else {
-				cordova.InAppBrowser.open(url, '_system');   // _system: opens in External Browser (Safari, etc...) on the device
+				cordova.InAppBrowser.open(url, '_blank', 'location=yes');  // Opens inside the app
 			}
 		}
 
