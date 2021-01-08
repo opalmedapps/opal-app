@@ -8,7 +8,6 @@
     <network-banner></network-banner>
 
     <ons-list>
-        <!--<ons-list-item modifier="tappable chevron" ng-click="tourModal.show()" >-->
         <ons-list-item modifier="tappable chevron" ng-click="tourModal.show()" >
             <ons-row align="center">
                 <ons-col width="60px" style="text-align: center">
@@ -22,11 +21,10 @@
             </ons-row>
         </ons-list-item>
 
-        <ons-list-item modifier="tappable" ng-click="modalOpenViewer.show()">
+        <ons-list-item modifier="tappable" ng-click="about.openUrl('opalWebsite')">
             <ons-row align="center">
                 <ons-col width="60px" style="text-align: center">
                     <div>
-                        <!--<ons-icon icon="fa-heart" style="color:#f44336" size="1.7em" fixed-width="true"></ons-icon>-->
                         <img style="width: 50px;" src="./img/Opal_Logo_Transparent_Inverse.png">
                     </div>
                 </ons-col>
@@ -94,7 +92,6 @@
             </ons-row>
         </ons-list-item>
 
-        <!--<ons-list-item modifier="tappable" ng-click="about.openAboutMUHC()">-->
         <ons-list-item modifier="tappable" ng-click="about.openUrl('aboutmuhc')" ng-if="about.allowedModules.hasOwnProperty('HOS') && about.allowedModules['HOS']">
             <ons-row align="center">
                 <ons-col width="60px" style="text-align: center">
