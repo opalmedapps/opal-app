@@ -32,12 +32,12 @@
                 },
                 cedarsCancerFoundationCase: 'cedarscancerfoundation',
                 cedarsCancerFoundationUrl: {
-                    cedarsCancerFoundationUrlEn: 'https://www.cedars.ca/cedars/en/home',
-                    cedarsCancerFoundationUrlFr: 'https://www.cedars.ca/cedars/fr/home'
+                    cedarsCancerFoundationUrlEn: 'https://www.cedars.ca',
+                    cedarsCancerFoundationUrlFr: 'https://www.cedars.ca'
                 },
                 cedarsCancerSupportCase: 'cedarscansupport',
                 cedarsCanSupportUrl: {
-                    cedarsCanSupportUrlEn: 'https://cansupport.ca/',
+                    cedarsCanSupportUrlEn: 'https://www.cansupport.ca/',
                     cedarsCanSupportUrlFr: 'https://www.cansupport.ca/fr/'
                 },
                 donationCase: 'donation',
@@ -146,7 +146,8 @@
                 oncology: {
                     oncologyParkingTitleEn: 'Oncology Parking',
                     oncologyParkingTitleFr: 'Stationnement Radiothérapie',
-                    oncologyParkingUrl: 'https://www.depdocs.com/opal/parking/oncology_parking.php'
+                    oncologyParkingUrlEn: 'https://www.depdocs.com/opal/parking/oncology_parking.php',
+                    oncologyParkingUrlFr: 'https://www.depdocs.com/opal/parking/radiotherapie_stationnement.php'
                 },
                 gettingHospitalUrl: {
                     gettingHospitalUrlEn: 'https://muhc.ca/glen',

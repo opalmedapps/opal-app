@@ -40,7 +40,8 @@
 			vm.authenticated = !!authData;
 			vm.languageSwitch = (UserPreferences.getLanguage().toUpperCase() !== 'EN');
 			vm.currentYear = new Date().getFullYear();
-			vm.version = Constants.version();
+			vm.APP_VERSION = Constants.version();
+			vm.APP_BUILD_NUMBER = Constants.build();
 		}
 
 		function changeLanguage(value) {

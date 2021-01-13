@@ -1,6 +1,7 @@
 .idea
 *.swp
 .DS_Store
+.firebase/
 .vs/
 .vscode/
 /node_modules

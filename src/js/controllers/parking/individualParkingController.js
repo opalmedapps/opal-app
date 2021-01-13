@@ -35,7 +35,7 @@
                     },
                     'oncology':{
                         title: Params.oncology.oncologyParkingTitleEn,
-                        link: Params.oncology.oncologyParkingUrl
+                        link: Params.oncology.oncologyParkingUrlEn
                     }
                 },
                 'FR':{
@@ -45,7 +45,7 @@
                     },
                     'oncology':{
                         title: Params.oncology.oncologyParkingTitleFr,
-                        link: Params.oncology.oncologyParkingUrl
+                        link: Params.oncology.oncologyParkingUrlFr
                     }
                 }
             };
