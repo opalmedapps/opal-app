@@ -122,6 +122,7 @@
     "phonegap-plugin-multidex": "^1.0.0",
     "phonegap-plugin-push": "^2.3.0",
     "progressbar.js": "^1.0.1",
+    "three": "^0.124.0",
     "tweetnacl": "^1.0.0",
     "tweetnacl-util": "^0.15.0"
   },
