@@ -167,7 +167,7 @@
             }
 
             // RStep refers to recursive depth in a package (since packages can contain other packages).
-            NavigatorParameters.setParameters({'Post': edumaterial, 'RStep':1 });
+            NavigatorParameters.setParameters({'Navigator': navigator, 'Post': edumaterial, 'RStep':1 });
             navigator.pushPage('./views/education/individual-material.html');
         }
 
