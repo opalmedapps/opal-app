@@ -83,7 +83,7 @@
 
             // Remove subView 
             $scope.$on('$destroy', function () {
-                NavigatorParameters.setParameters({Navigator:navigatorName, subView:null});
+                NavigatorParameters.setParameters({Navigator:navigatorName});
             });
         }
 

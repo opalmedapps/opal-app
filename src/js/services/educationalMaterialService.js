@@ -221,10 +221,10 @@ myApp.service('EducationalMaterial',['$q','$filter','LocalStorage','FileManagerS
         },
         /**
          *@ngdoc method
-         *@name isThereEducationalMaterial
+         *@name materialExists
          *@methodOf MUHCApp.service:EducationalMaterial
          *@param {String} eduCategory String indicating the type of material, eg: 'clinical' (default) or 'research'
-         *@description Setter method for educational material
+         *@description Checks whether educational material exists
          *@return {Boolean} Returns whether the patient has any educational material available.
          **/
         materialExists:function(eduCategory='clinical')

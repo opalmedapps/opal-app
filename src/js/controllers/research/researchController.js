@@ -8,7 +8,7 @@
     ResearchController.$inject = ['NavigatorParameters'];
 
     function ResearchController(NavigatorParameters) {
-        var vm = this;
+        let vm = this;
 
         vm.openResearchStudies = openResearchStudies;
         vm.openReferenceMaterial = openReferenceMaterial;
