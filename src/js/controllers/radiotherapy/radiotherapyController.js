@@ -2,6 +2,7 @@
 
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+import {body} from './testdata.js';
 
 
 (function () {
@@ -47,8 +48,8 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
             //grab the language
             vm.language = UserPreferences.getLanguage();
 
-            init();
-
+            // initCube();
+            initBody();
         }
 
         // Determines whether or not to show the date header in the view. Announcements are grouped by day.
@@ -60,6 +61,7 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
                // return current !== previous;
         }
 
+        // Not used yet
         function goToRTPlan(plan){
     
 
@@ -67,13 +69,13 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
             personalNavigator.pushPage('./views/personal/radiotherapy/radiotherapy-plan.html', {plan});
             
-            init();
+            // init();
            
 
 
         }
         
-        function init() {
+        function initCube() {
 
             var scene = new THREE.Scene();
             var camera = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 0.1, 1000 );
@@ -99,6 +101,58 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
               
               animate();
             
+        }
+
+        function initBody(){
+            var scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x000000);
+
+            var camera = new THREE.PerspectiveCamera( 70, window.innerWidth/window.innerHeight, 1, 500 );
+            camera.position.z = 100;
+
+            const light = new THREE.PointLight(0xffffff, 1.5);
+            light.position.set(1000,1000,2000);
+            scene.add(light);
+
+            const geometry = new THREE.BufferGeometry();
+            const vertices = new Float32Array(body);
+            geometry.setAttribute('position', new THREE.BufferAttribute(vertices, 3));
+        
+
+            const material = new THREE.MeshBasicMaterial({color: 0x00ff00, wireframe:true});
+            const mesh = new THREE.Mesh(geometry, material);
+            scene.add(mesh);
+
+
+
+            const geometry2 = new THREE.SphereGeometry( 5);
+            const material2 = new THREE.MeshBasicMaterial( {color: 0xff0000} );
+            const sphere = new THREE.Mesh( geometry2, material2 );
+            sphere.position.set(84.86,-61.08,-0.5)
+            scene.add( sphere );
+
+
+            var renderer = new THREE.WebGLRenderer({antialias: true});
+            renderer.setPixelRatio(window.devicePixelRatio)
+            renderer.setSize( window.innerWidth, window.innerHeight );
+            document.getElementById("holder").appendChild( renderer.domElement );
+
+
+
+            
+
+            const controls = new OrbitControls( camera, renderer.domElement );
+
+
+            var animate = function () {
+                requestAnimationFrame( animate );
+              
+                renderer.render( scene, camera );
+              };
+              
+              animate();
+            
+
         }
       
 
