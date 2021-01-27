@@ -13,9 +13,9 @@
         .controller('PersonalTabController', PersonalTabController);
 
     PersonalTabController.$inject = ['Appointments','TxTeamMessages','Documents','NavigatorParameters', 'Notifications',
-        'Patient', 'NetworkStatus', 'MetaData', '$timeout', 'UserPreferences', 'Params', 'UserHospitalPreferences'];
+        'Questionnaires', 'Patient', 'NetworkStatus', 'MetaData', '$timeout', 'UserPreferences', 'Params', 'UserHospitalPreferences'];
 
-    function PersonalTabController( Appointments, TxTeamMessages, Documents, NavigatorParameters, Notifications,
+    function PersonalTabController( Appointments, TxTeamMessages, Documents, NavigatorParameters, Notifications, Questionnaires,
                                     Patient, NetworkStatus, MetaData, $timeout, UserPreferences, Params, UserHospitalPreferences) {
         var vm = this;
 
@@ -73,17 +73,19 @@
                 vm.documentsUnreadNumber = meta.documentsUnreadNumber;
                 vm.txTeamMessagesUnreadNumber = meta.txTeamMessagesUnreadNumber;
                 vm.notificationsUnreadNumber = meta.notificationsUnreadNumber;
+                vm.questionnairesUnreadNumber = meta.questionnairesUnreadNumber;
                 MetaData.setFetchedPersonal();
             }
         }
 
-        //Setting up numbers on the
+        //Setting up numbers on the notification badges
         function setBadges()
         {
             vm.appointmentsUnreadNumber = Appointments.getNumberUnreadAppointments();
             vm.documentsUnreadNumber = Documents.getNumberUnreadDocuments();
             vm.txTeamMessagesUnreadNumber = TxTeamMessages.getNumberUnreadTxTeamMessages();
             vm.notificationsUnreadNumber = Notifications.getNumberUnreadNotifications();
+            vm.questionnairesUnreadNumber = Questionnaires.getNumberOfUnreadQuestionnairesByCategory('clinical');          
         }
 
         function goToStatus(){

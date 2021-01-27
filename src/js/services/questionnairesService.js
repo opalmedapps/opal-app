@@ -87,12 +87,23 @@
         // variables for the summary page -- saving answer
         let waitingForSavingAnswer = false;
 
+        // Variables for questionnaire notifications
+        let currentCategory = 'default';
+        let numberOfUnreadQuestionnaires = {
+            clinical: 0,
+            research: 0,
+            consent: 0,
+            default: 0,
+        }
+
         // this is redundant but written for clarity, ordered alphabetically
         let service = {
             clearAllQuestionnaire: clearAllQuestionnaire,
             findInProgressQuestionIndex: findInProgressQuestionIndex,
             getCarouselItems: getCarouselItems,
             getCurrentQuestionnaire: getCurrentQuestionnaire,
+            getNumberOfUnreadQuestionnaires: getNumberOfUnreadQuestionnaires,
+            getNumberOfUnreadQuestionnairesByCategory: getNumberOfUnreadQuestionnairesByCategory,
             getQuestionnaireBackToListByCategory: getQuestionnaireBackToListByCategory,
             getQuestionnaireCount: getQuestionnaireCount,
             getQuestionnaireList: getQuestionnaireList,
@@ -188,9 +199,13 @@
             // re-initiate all the questionnaire related variables
             clearAllQuestionnaire();
 
+            currentCategory = questionnaireCategory;
+
             return QuestionnaireDataService.requestQuestionnaireList(questionnaireCategory)
                 .then(function(responseQuestionnaireList){
                     setQuestionnaireList(responseQuestionnaireList);
+                    // Set number of unread questionnaires of current category for notifications
+                    numberOfUnreadQuestionnaires[questionnaireCategory] = getNumberOfUnreadQuestionnaires();
                     return {Success: true, Location: 'Server'};
                 });
         }
@@ -253,6 +268,12 @@
 
             return QuestionnaireDataService.updateQuestionnaireStatus(answerQuestionnaireId, newStatus)
                 .then(function (response) {
+
+                    // When a questionnaire is completed, immediately update the number unread for notifications
+                    if (newStatus===2){
+                        numberOfUnreadQuestionnaires[currentCategory] -= 1;
+                    }
+
                     let isFailure = updateAppQuestionnaireStatus(answerQuestionnaireId, newStatus, oldStatus);
 
                     if (!isFailure){
@@ -484,6 +505,24 @@
             return 0;
         }
 
+        /**
+         * @name getNumberOfUnreadQuestionnaires
+         * @desc This function is used for getting the number of unread questionnaires (count how many questionnaires non completed by patient) in the current category
+         * @returns {Number} returns the number of new and in progress questionnaires of the current category
+         */
+        function getNumberOfUnreadQuestionnaires(){
+            return getQuestionnaireCount(questionnaireValidStatus.NEW_QUESTIONNAIRE_STATUS) + getQuestionnaireCount(questionnaireValidStatus.IN_PROGRESS_QUESTIONNAIRE_STATUS);
+        }
+
+        /**
+         * @name getNumberOfUnreadQuestionnairesByCategory
+         * @desc This public function is used for showing the badge by the personalTabController.js and researchController.js for the appropriate category
+         * @param {string} questionnaireCategory the category of questionnaires requested
+         * @returns {Number} returns the number of new and in progress questionnaires of the given questionnaireCategory
+         */
+        function getNumberOfUnreadQuestionnairesByCategory(questionnaireCategory = 'default'){
+            return numberOfUnreadQuestionnaires[questionnaireCategory];
+        }
         /**
          * @name getQuestionnaireStartUrl
          * @desc This public function is created for notifications.

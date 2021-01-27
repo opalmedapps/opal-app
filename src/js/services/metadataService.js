@@ -23,21 +23,23 @@
         .module('MUHCApp')
         .factory('MetaData', MetaData);
 
-    MetaData.$inject = ['Appointments','Documents','TxTeamMessages','Notifications', 'Announcements', 'EducationalMaterial'];
+    MetaData.$inject = ['Appointments','Documents','TxTeamMessages','Notifications', 'Questionnaires', 'Announcements', 'EducationalMaterial'];
 
-    function MetaData(Appointments, Documents, TxTeamMessages, Notifications, Announcements, EducationalMaterial) {
+    function MetaData(Appointments, Documents, TxTeamMessages, Notifications, Questionnaires, Announcements, EducationalMaterial) {
 
         //you only need to use this service the first time entering a tab
         var firstTimeHome = true;
         var firstTimePersonal = true;
         var firstTimeGeneral = true;
         var firstTimeEducational = true;
+        var firstTimeResearch = true;
 
         var personalTabData = {
             appointmentsUnreadNumber : null,
             documentsUnreadNumber: null,
             txTeamMessagesUnreadNumber: null,
             notificationsUnreadNumber: null,
+            questionnairesUnreadNumber: null
         };
 
         var homeTabData = {
@@ -46,6 +48,10 @@
 
         var generalTabData = {
             announcementsUnreadNumber: null
+        };
+
+        var researchTabData = {
+            researchQuestionnairesUnreadNumber: null
         };
 
         var eduMaterials = null;
@@ -57,14 +63,17 @@
             fetchHomeMeta: fetchHomeMeta,
             fetchGeneralMeta: fetchGeneralMeta,
             fetchEducationalMeta: fetchEducationalMeta,
+            fetchResearchMeta: fetchResearchMeta,
             isFirstTimePersonal: isFirstTimePersonal,
             isFirstTimeHome: isFirstTimeHome,
             isFirstTimeGeneral: isFirstTimeGeneral,
             isFirstTimeEducational: isFirstTimeEducational,
+            isFirstTimeResearch: isFirstTimeResearch,
             setFetchedPersonal: setFetchedPersonal,
             setFetchedHome: setFetchedHome,
             setFetchedGeneral: setFetchedGeneral,
             setFetchedEducational: setFetchedEducational,
+            setFetchedResearch: setFetchedResearch,
             noEduMaterial: noEduMaterial,
         };
 
@@ -91,6 +100,16 @@
             //Setting the language for view
             eduMaterials = EducationalMaterial.setLanguage(materials);
 
+            // Load clinical and research questionnaires to immediately display notification badges 
+            Questionnaires.requestQuestionnaireList('clinical').then(function () {
+                personalTabData.questionnairesUnreadNumber = Questionnaires.getNumberOfUnreadQuestionnairesByCategory('clinical');
+            }).then(function(){
+                Questionnaires.requestQuestionnaireList('research').then(function () {
+                    researchTabData.researchQuestionnairesUnreadNumber = Questionnaires.getNumberOfUnreadQuestionnairesByCategory('research');
+                })
+            }).catch(function(error){
+                // Unable to load questionnaires
+            });
         }
 
         function fetchHomeMeta(){
@@ -145,6 +164,17 @@
             return noMaterials;
         }
 
+        function fetchResearchMeta(){
+            return researchTabData;
+        }
+
+        function isFirstTimeResearch() {
+            return firstTimeResearch;
+        }
+
+        function setFetchedResearch() {
+            firstTimeResearch = false;
+        }
     }
 
 })();

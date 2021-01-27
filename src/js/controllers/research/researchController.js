@@ -5,9 +5,9 @@
         .module('MUHCApp')
         .controller('ResearchController', ResearchController);
     
-    ResearchController.$inject = ['NavigatorParameters'];
+    ResearchController.$inject = ['MetaData','NavigatorParameters','Questionnaires'];
 
-    function ResearchController(NavigatorParameters) {
+    function ResearchController(MetaData, NavigatorParameters, Questionnaires) {
         let vm = this;
 
         vm.openResearchStudies = openResearchStudies;
@@ -26,8 +26,29 @@
         function activate(){
             navigator = NavigatorParameters.getNavigator();
             navigatorName = NavigatorParameters.getNavigatorName();          
+            
+            bindEvents();
+            setMetaData();
+            setBadges();
         }
 
+        function bindEvents(){
+            navigator.on('prepop',function(){
+               setBadges();
+            });
+        }
+
+        function setMetaData(){
+            if(MetaData.isFirstTimeResearch()){
+                var meta = MetaData.fetchResearchMeta();
+                vm.researchQuestionnairesUnreadNumber = meta.researchQuestionnairesUnreadNumber;
+                MetaData.setFetchedResearch();
+            } 
+        }
+
+        function setBadges(){
+            vm.researchQuestionnairesUnreadNumber = Questionnaires.getNumberOfUnreadQuestionnairesByCategory('research');    
+        }
 
         function openResearchStudies() {
             navigator.pushPage('views/personal/research/research-studies/research-studies.html');
