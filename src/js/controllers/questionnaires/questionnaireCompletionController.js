@@ -5,13 +5,14 @@
         .module('MUHCApp')
         .controller('QuestionnaireCompletionController', QuestionnaireCompletionController);
 
-    QuestionnaireCompletionController.$inject = ['NavigatorParameters', 'Questionnaires'];
+    QuestionnaireCompletionController.$inject = ['$filter', 'NavigatorParameters', 'Questionnaires'];
 
     /* @ngInject */
-    function QuestionnaireCompletionController(NavigatorParameters, Questionnaires) {
+    function QuestionnaireCompletionController($filter, NavigatorParameters, Questionnaires) {
         var vm = this;
 
         // variables for controller
+        let category = 'default';
         let navigator = null;
         let navigatorName = '';
 
@@ -33,6 +34,10 @@
 
             if (!params.hasOwnProperty('questionnaireCategory') || !Questionnaires.validateQuestionnaireCategory(params.questionnaireCategory)) {
                 setPageText();
+                vm.loading = false;
+            } else {
+                category = params.questionnaireCategory.toLowerCase();
+                setPageText(category);
                 vm.loading = false;
             }
         }
