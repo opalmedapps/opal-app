@@ -1,3 +1,13 @@
+/*
+ * Filename     :   researchController.js
+ * Description  :   Manages the research view.
+ * Created by   :   Kayla O'Sullivan-Steben 
+ * Date         :   Jan 2021
+ *
+ * TODO: once studies are added, replace 'vm.studiesUnreadNumber = 0;' with actual implementation 
+ *       (also replace in metadataService.js and personalTabControler.js)
+ */
+
 (function () {
     'use strict';
 
@@ -41,13 +51,17 @@
         function setMetaData(){
             if(MetaData.isFirstTimeResearch()){
                 var meta = MetaData.fetchResearchMeta();
+                vm.studiesUnreadNumber = meta.studiesUnreadNumber;
                 vm.researchQuestionnairesUnreadNumber = meta.researchQuestionnairesUnreadNumber;
+                vm.consentQuestionnairesUnreadNumber = meta.consentQuestionnairesUnreadNumber;
                 MetaData.setFetchedResearch();
             } 
         }
 
         function setBadges(){
+            vm.studiesUnreadNumber = 0; //TODO: add implementation
             vm.researchQuestionnairesUnreadNumber = Questionnaires.getNumberOfUnreadQuestionnairesByCategory('research');    
+            vm.consentQuestionnairesUnreadNumber = Questionnaires.getNumberOfUnreadQuestionnairesByCategory('consent'); 
         }
 
         function openResearchStudies() {

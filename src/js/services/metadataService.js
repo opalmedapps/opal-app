@@ -14,6 +14,9 @@
  *@description Service that handles the tab metadata. Right now it fetches the necessary data on first load
  *
  * TODO: implement background refresh feature
+ * 
+ * TODO: once studies are added, replace 'researchTabData.studiesUnreadNumber = 0;' with actual implementation 
+ *       (also replace in researchController.js and personalTabController.js)
  **/
 
 (function () {
@@ -39,7 +42,8 @@
             documentsUnreadNumber: null,
             txTeamMessagesUnreadNumber: null,
             notificationsUnreadNumber: null,
-            questionnairesUnreadNumber: null
+            questionnairesUnreadNumber: null,
+            researchUnreadNumber: null
         };
 
         var homeTabData = {
@@ -51,7 +55,9 @@
         };
 
         var researchTabData = {
-            researchQuestionnairesUnreadNumber: null
+            studiesUnreadNumber: null,
+            researchQuestionnairesUnreadNumber: null,
+            consentQuestionnairesUnreadNumber: null
         };
 
         var eduMaterials = null;
@@ -100,16 +106,24 @@
             //Setting the language for view
             eduMaterials = EducationalMaterial.setLanguage(materials);
 
-            // Load clinical and research questionnaires to immediately display notification badges 
-            Questionnaires.requestQuestionnaireList('clinical').then(function () {
-                personalTabData.questionnairesUnreadNumber = Questionnaires.getNumberOfUnreadQuestionnairesByCategory('clinical');
-            }).then(function(){
-                Questionnaires.requestQuestionnaireList('research').then(function () {
+            //load the research tab data
+            researchTabData.studiesUnreadNumber = 1; //TODO: add implementation
+
+
+            //load all questionnaires to immediately display notification badges 
+            Questionnaires.requestQuestionnaireList('clinical')
+                .then(()=>Questionnaires.requestQuestionnaireList('research'))
+                .then(()=>Questionnaires.requestQuestionnaireList('consent'))
+                .then(()=>{
+                    //get number of unread questionnaires in each category
+                    personalTabData.questionnairesUnreadNumber = Questionnaires.getNumberOfUnreadQuestionnairesByCategory('clinical');
                     researchTabData.researchQuestionnairesUnreadNumber = Questionnaires.getNumberOfUnreadQuestionnairesByCategory('research');
-                })
-            }).catch(function(error){
-                // Unable to load questionnaires
-            });
+                    researchTabData.consentQuestionnairesUnreadNumber = Questionnaires.getNumberOfUnreadQuestionnairesByCategory('consent');
+                    //sum all notifications in researchTabData 
+                    personalTabData.researchUnreadNumber = researchTabData.studiesUnreadNumber + researchTabData.researchQuestionnairesUnreadNumber + researchTabData.consentQuestionnairesUnreadNumber;  
+                }).catch(function(error){
+                    // Unable to load questionnaires
+                });
         }
 
         function fetchHomeMeta(){

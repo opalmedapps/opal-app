@@ -3,6 +3,9 @@
  * User: James Brace
  * Date: 2017-09-20
  * Time: 12:00 PM
+ * 
+ * TODO: once studies are added, replace 'vm.researchUnreadNumber = 0 + ...' with actual implementation 
+ *       (also replace in metadataService.js and researchController.js)
  */
 
 (function() {
@@ -74,6 +77,7 @@
                 vm.txTeamMessagesUnreadNumber = meta.txTeamMessagesUnreadNumber;
                 vm.notificationsUnreadNumber = meta.notificationsUnreadNumber;
                 vm.questionnairesUnreadNumber = meta.questionnairesUnreadNumber;
+                vm.researchUnreadNumber = meta.researchUnreadNumber;
                 MetaData.setFetchedPersonal();
             }
         }
@@ -85,7 +89,9 @@
             vm.documentsUnreadNumber = Documents.getNumberUnreadDocuments();
             vm.txTeamMessagesUnreadNumber = TxTeamMessages.getNumberUnreadTxTeamMessages();
             vm.notificationsUnreadNumber = Notifications.getNumberUnreadNotifications();
-            vm.questionnairesUnreadNumber = Questionnaires.getNumberOfUnreadQuestionnairesByCategory('clinical');          
+            vm.questionnairesUnreadNumber = Questionnaires.getNumberOfUnreadQuestionnairesByCategory('clinical');  
+            //TODO: replace 0 with number of unread studies once available
+            vm.researchUnreadNumber = 0 + Questionnaires.getNumberOfUnreadQuestionnairesByCategory('research') + Questionnaires.getNumberOfUnreadQuestionnairesByCategory('consent');   
         }
 
         function goToStatus(){
