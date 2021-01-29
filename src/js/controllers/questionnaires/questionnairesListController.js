@@ -13,16 +13,17 @@
         .controller('QuestionnairesListController', QuestionnairesListController);
 
     QuestionnairesListController.$inject = [
+        '$filter',
         '$scope',
-        'Questionnaires',
+        '$timeout',
+        'NativeNotification',
         'NavigatorParameters',
         'Params',
-        '$timeout',
-        '$filter'
+        'Questionnaires'
     ];
 
     /* @ngInject */
-    function QuestionnairesListController($scope, Questionnaires, NavigatorParameters, Params, $timeout, $filter) {
+    function QuestionnairesListController($filter, $scope, $timeout, NativeNotification, NavigatorParameters, Params, Questionnaires) {
         let vm = this;
 
         // constants
@@ -100,7 +101,7 @@
         /**
          * @name goToQuestionnaire
          * @desc This function request the questionnaire selected from back-end and push it to the carousel
-         * @param selectedQuestionnaire {object} The questionnaire selected in the list
+         * @param {object} selectedQuestionnaire The questionnaire selected in the list
          */
         function goToQuestionnaire(selectedQuestionnaire) {
             // putting editQuestion false to claim that we are not coming from a summary page
@@ -116,7 +117,7 @@
         /**
          * @name goToQuestionnaireSummary
          * @desc This function requests the questionnaire selected from the back-end and push it to the answerQuestionnaire page
-         * @param selectedQuestionnaire {object} The questionnaire selected in the list
+         * @param {object} selectedQuestionnaire The questionnaire selected in the list
          */
         function goToQuestionnaireSummary(selectedQuestionnaire){
             NavigatorParameters.setParameters({
@@ -191,11 +192,8 @@
          * @desc show a notification to the user in case a request to server fails
          */
         function handleRequestError (){
-            ons.notification.alert({
-                //message: 'Server problem: could not fetch data, try again later',
-                message: $filter('translate')("SERVERERRORALERT"),
-                modifier: (ons.platform.isAndroid())?'material':null
-            })
+            //message: 'Server problem: could not fetch data, try again later',
+            NativeNotification.showNotificationAlert($filter('translate')("SERVERERRORALERT"));
         }
 
         /**

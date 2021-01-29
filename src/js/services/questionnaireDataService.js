@@ -28,6 +28,7 @@
         // this is redundant, but written for clarity, ordered alphabetically
         let requestQuestionnaireDataService = {
             updateQuestionnaireStatus: updateQuestionnaireStatus,
+            requestOpalQuestionnaireFromSerNum: requestOpalQuestionnaireFromSerNum,
             requestQuestionnaire: requestQuestionnaire,
             requestQuestionnaireList: requestQuestionnaireList,
             saveQuestionnaireAnswer: saveQuestionnaireAnswer
@@ -37,11 +38,34 @@
 
         // //////////////
 
+
+        /**
+         * @name requestOpalQuestionnaireFromSerNum
+         * @desc this function gets a questionnaire's general information stored in OpalDB from the listener
+         * @param {string|int} questionnaireSerNum
+         * @returns {Promise}
+         */
+        function requestOpalQuestionnaireFromSerNum(questionnaireSerNum) {
+            // sends to listener
+            let params = {
+                'questionnaireSerNum': questionnaireSerNum
+            };
+
+            return RequestToServer.sendRequestWithResponse(api.GET_OPAL_QUESTIONNAIRE_FROM_SERNUM, params)
+                .then(function (response) {
+                    // this is in case firebase delete the property when it is empty
+                    if (response.hasOwnProperty('Data')) {
+                        return response.Data;
+                    }
+                    return {};
+                });
+        }
+
         /**
          * @name updateQuestionnaireStatus
          * @desc this function calls the listener to update the status related to a particular questionnaire received by patient
-         * @param answerQuestionnaireId: ID of particular questionnaire received by patient
-         * @param newStatus {int} the new status to be updated in
+         * @param {int} answerQuestionnaireId: ID of particular questionnaire received by patient
+         * @param {int} newStatus the new status to be updated in
          * @return {Promise}
          */
         function updateQuestionnaireStatus(answerQuestionnaireId, newStatus){
@@ -82,13 +106,13 @@
         /**
          * @name saveQuestionnaireAnswer
          * @desc This function saves the answer for a single question (even if it is skipped)
-         * @param answerQuestionnaireId {int} ID of particular questionnaire received by patient
-         * @param sectionId {int} ID of particular section of the question answered
-         * @param questionId {int} ID of the question answered
-         * @param questionSectionId {int} unique ID between the question and the section
-         * @param answerArray {array} Array of answers
-         * @param questionTypeId {int} ID of the question type
-         * @param isSkipped {int} is this question skipped or not
+         * @param {int} answerQuestionnaireId ID of particular questionnaire received by patient
+         * @param {int} sectionId ID of particular section of the question answered
+         * @param {int} questionId ID of the question answered
+         * @param {int} questionSectionId unique ID between the question and the section
+         * @param {array} answerArray Array of answers
+         * @param {int} questionTypeId ID of the question type
+         * @param {int} isSkipped is this question skipped or not
          * @returns {Promise}
          */
         function saveQuestionnaireAnswer(answerQuestionnaireId, sectionId, questionId, questionSectionId, answerArray, questionTypeId, isSkipped){
@@ -166,7 +190,7 @@
         /**
          * @name requestQuestionnaire
          * @desc this function gets one particular questionnaire's data from the listener
-         * @param answerQuestionnaireID {int} ID of that particular questionnaire
+         * @param {int} answerQuestionnaireID ID of that particular questionnaire
          * @returns {Promise} resolves to the questionnaire's data if success
          */
         function requestQuestionnaire(answerQuestionnaireID){

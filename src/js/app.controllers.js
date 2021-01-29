@@ -39,6 +39,7 @@ import "./controllers/questionnaires/questionnaireMainController.js";
 import "./controllers/questionnaires/answeredQuestionnaireController.js";
 import "./controllers/questionnaires/questionnairesListController.js";
 import "./controllers/questionnaires/questionnaireCompletionController.js";
+import "./controllers/questionnaires/questionnaireNotifRedirectController";
 import "./controllers/research/researchController.js";
 import "./controllers/settings/accountSettingsController.js";
 import "./controllers/settings/changeSettingController.js";

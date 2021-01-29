@@ -46,7 +46,7 @@
                 description:"GENERAL_DESCRIPTION"
             },
             {
-                icon:'fa-mortar-board',
+                icon:'fa-book',
                 color:'Chocolate',
                 name:"EDUCATION",
                 description:"EDUCATION_DESCRIPTION"
