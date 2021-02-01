@@ -15,10 +15,10 @@
         .module('MUHCApp')
         .controller('PersonalTabController', PersonalTabController);
 
-    PersonalTabController.$inject = ['Appointments','TxTeamMessages','Documents','NavigatorParameters', 'Notifications',
+    PersonalTabController.$inject = ['Appointments','TxTeamMessages','Documents','EducationalMaterial','NavigatorParameters', 'Notifications',
         'Questionnaires', 'Patient', 'NetworkStatus', 'MetaData', '$timeout', 'UserPreferences', 'Params', 'UserHospitalPreferences'];
 
-    function PersonalTabController( Appointments, TxTeamMessages, Documents, NavigatorParameters, Notifications, Questionnaires,
+    function PersonalTabController( Appointments, TxTeamMessages, Documents, EducationalMaterial, NavigatorParameters, Notifications, Questionnaires,
                                     Patient, NetworkStatus, MetaData, $timeout, UserPreferences, Params, UserHospitalPreferences) {
         var vm = this;
 
@@ -91,7 +91,9 @@
             vm.notificationsUnreadNumber = Notifications.getNumberUnreadNotifications();
             vm.questionnairesUnreadNumber = Questionnaires.getNumberOfUnreadQuestionnairesByCategory('clinical');  
             //TODO: replace 0 with number of unread studies once available
-            vm.researchUnreadNumber = 0 + Questionnaires.getNumberOfUnreadQuestionnairesByCategory('research') + Questionnaires.getNumberOfUnreadQuestionnairesByCategory('consent');   
+            vm.researchUnreadNumber = 0 + Questionnaires.getNumberOfUnreadQuestionnairesByCategory('research') 
+                                        + EducationalMaterial.getNumberOfUnreadEducationalMaterialByCategory('research')
+                                        + Questionnaires.getNumberOfUnreadQuestionnairesByCategory('consent');   
         }
 
         function goToStatus(){

@@ -15,8 +15,6 @@
 
     <network-banner></network-banner>
 
-    <!-- TODO: Add reference material notifications -->
-
     <ons-list style="margin: 0px 0">
         <ons-list-item modifier="chevron" class="item"
                        ng-click="tab.openResearchStudies()"> 
@@ -40,7 +38,7 @@
                 
                 <ons-col width="60px" style="text-align: center">
                     <div>
-                        <ons-icon icon="fa-book" size="2x" style="color:rgb(0, 192, 166)"></ons-icon>
+                        <ons-icon icon="fa-book" size="2x" style="color:rgb(0, 192, 166)"></ons-icon><span class="notification" ng-show="tab.eduMaterialUnreadNumber>0">{{tab.eduMaterialUnreadNumber}}</span>
                     </div>
                 </ons-col>
                 <ons-col>

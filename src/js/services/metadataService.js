@@ -57,6 +57,7 @@
         var researchTabData = {
             studiesUnreadNumber: null,
             researchQuestionnairesUnreadNumber: null,
+            researchEduMaterialsUnreadNumber: null,
             consentQuestionnairesUnreadNumber: null
         };
 
@@ -107,7 +108,8 @@
             eduMaterials = EducationalMaterial.setLanguage(materials);
 
             //load the research tab data
-            researchTabData.studiesUnreadNumber = 1; //TODO: add implementation
+            researchTabData.studiesUnreadNumber = 0; //TODO: add implementation
+            researchTabData.researchEduMaterialsUnreadNumber = EducationalMaterial.getNumberOfUnreadEducationalMaterialByCategory('research');
 
 
             //load all questionnaires to immediately display notification badges 
@@ -120,7 +122,8 @@
                     researchTabData.researchQuestionnairesUnreadNumber = Questionnaires.getNumberOfUnreadQuestionnairesByCategory('research');
                     researchTabData.consentQuestionnairesUnreadNumber = Questionnaires.getNumberOfUnreadQuestionnairesByCategory('consent');
                     //sum all notifications in researchTabData 
-                    personalTabData.researchUnreadNumber = researchTabData.studiesUnreadNumber + researchTabData.researchQuestionnairesUnreadNumber + researchTabData.consentQuestionnairesUnreadNumber;  
+                    personalTabData.researchUnreadNumber = researchTabData.studiesUnreadNumber + researchTabData.researchQuestionnairesUnreadNumber 
+                                                            + researchTabData.researchEduMaterialsUnreadNumber + researchTabData.consentQuestionnairesUnreadNumber;  
                 }).catch(function(error){
                     // Unable to load questionnaires
                 });

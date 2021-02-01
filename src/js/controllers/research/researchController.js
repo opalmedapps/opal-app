@@ -15,9 +15,9 @@
         .module('MUHCApp')
         .controller('ResearchController', ResearchController);
     
-    ResearchController.$inject = ['MetaData','NavigatorParameters','Questionnaires'];
+    ResearchController.$inject = ['EducationalMaterial','MetaData','NavigatorParameters','Questionnaires'];
 
-    function ResearchController(MetaData, NavigatorParameters, Questionnaires) {
+    function ResearchController(EducationalMaterial, MetaData, NavigatorParameters, Questionnaires) {
         let vm = this;
 
         vm.openResearchStudies = openResearchStudies;
@@ -62,6 +62,7 @@
             vm.studiesUnreadNumber = 0; //TODO: add implementation
             vm.researchQuestionnairesUnreadNumber = Questionnaires.getNumberOfUnreadQuestionnairesByCategory('research');    
             vm.consentQuestionnairesUnreadNumber = Questionnaires.getNumberOfUnreadQuestionnairesByCategory('consent'); 
+            vm.eduMaterialUnreadNumber = EducationalMaterial.getNumberOfUnreadEducationalMaterialByCategory('research');
         }
 
         function openResearchStudies() {

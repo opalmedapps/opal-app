@@ -39,6 +39,12 @@ myApp.service('EducationalMaterial',['$q','$filter','LocalStorage','FileManagerS
             research: 'REFERENCE_MATERIAL_NONE',
         };
 
+         // Variables for education material notifications
+         let numberOfUnreadMaterial = {
+            clinical: 0,
+            research: 0
+         }
+
     /**
      *@ngdoc property
      *@name  MUHCApp.service.#educationalMaterialArray
@@ -257,12 +263,20 @@ myApp.service('EducationalMaterial',['$q','$filter','LocalStorage','FileManagerS
          **/
         getEducationalMaterial:function(eduCategory='clinical')
         {
-            
             let educationalMaterialArrayByCategory = [];
 
+            // reset number of unread educational material on reload
+            numberOfUnreadMaterial['clinical'] = 0;
+            numberOfUnreadMaterial['research'] = 0;
+
             educationalMaterialArray.forEach(function(edumaterial){
+                // get material for specified category
                 if(edumaterial.Category === eduCategory){
                     educationalMaterialArrayByCategory.push(edumaterial);
+                }
+                // count number of unread materials for both categories
+                if(edumaterial.ReadStatus === '0' && numberOfUnreadMaterial.hasOwnProperty(edumaterial.Category)){
+                    numberOfUnreadMaterial[edumaterial.Category] += 1;
                 }
             });
 
@@ -285,6 +299,21 @@ myApp.service('EducationalMaterial',['$q','$filter','LocalStorage','FileManagerS
                 }
             }
             return array;
+        },
+        /**
+         *@ngdoc method
+         *@name getNumberOfUnreadEducationalMaterialByCategory
+         *@methodOf MUHCApp.service:EducationalMaterial
+         *@param {String} eduCategory String indicating the type of material, eg: 'clinical' (default) or 'research'
+         *@description Gets the number of unread materials in a given category
+         *@returns {int} Returns number of unread educational material of type eduCategory
+         **/
+        getNumberOfUnreadEducationalMaterialByCategory:function(eduCategory='clinical')
+        {
+            if(numberOfUnreadMaterial.hasOwnProperty(eduCategory)){
+                return numberOfUnreadMaterial[eduCategory];
+            }
+            return 0;
         },
         /**
          *@ngdoc method
