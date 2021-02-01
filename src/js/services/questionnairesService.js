@@ -419,7 +419,7 @@
         }
 
         /**
-         * @name getQuestionnaireTitle
+         * @name getQuestionnaireTitleByCategory
          * @desc gets the correct translation key for the questionnaire title. It assumes that the category has been validated.
          * @param {string} questionnaireCategory
          * @returns {string} the translation key in en.json or fr.json
