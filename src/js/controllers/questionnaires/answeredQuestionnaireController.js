@@ -375,6 +375,14 @@
 
                     NativeNotification.showNotificationAlert($filter('translate')("INVALID_PASSWORD"));
                 });
+            } else if (error.code === Params.largeNumberOfRequests) {
+                vm.loadingSubmitQuestionnaire = false;
+
+                // go to the questionnaire list page if there is an error
+                NavigatorParameters.setParameters({Navigator: navigatorName});
+                navigator.popPage();
+
+                NativeNotification.showNotificationAlert($filter('translate')("TOO_MANY_REQUESTS_CONSENT"));     
             } else {
                 vm.loadingSubmitQuestionnaire = false;
 
