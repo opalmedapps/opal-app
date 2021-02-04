@@ -112,15 +112,16 @@
             researchTabData.researchEduMaterialsUnreadNumber = EducationalMaterial.getNumberOfUnreadEducationalMaterialByCategory('research');
 
 
-            //load all questionnaires to immediately display notification badges 
-            Questionnaires.requestQuestionnaireList('clinical')
-                .then(()=>Questionnaires.requestQuestionnaireList('research'))
-                .then(()=>Questionnaires.requestQuestionnaireList('consent'))
+            //Request number of unread questionnaires in each category
+            Questionnaires.requestQuestionnaireUnreadNumber('clinical')
+                .then(()=>Questionnaires.requestQuestionnaireUnreadNumber('research'))
+                .then(()=>Questionnaires.requestQuestionnaireUnreadNumber('consent'))
                 .then(()=>{
                     //get number of unread questionnaires in each category
                     personalTabData.questionnairesUnreadNumber = Questionnaires.getNumberOfUnreadQuestionnairesByCategory('clinical');
                     researchTabData.researchQuestionnairesUnreadNumber = Questionnaires.getNumberOfUnreadQuestionnairesByCategory('research');
                     researchTabData.consentQuestionnairesUnreadNumber = Questionnaires.getNumberOfUnreadQuestionnairesByCategory('consent');
+                    
                     //sum all notifications in researchTabData 
                     personalTabData.researchUnreadNumber = researchTabData.studiesUnreadNumber + researchTabData.researchQuestionnairesUnreadNumber 
                                                             + researchTabData.researchEduMaterialsUnreadNumber + researchTabData.consentQuestionnairesUnreadNumber;  

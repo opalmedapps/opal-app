@@ -31,6 +31,7 @@
             requestOpalQuestionnaireFromSerNum: requestOpalQuestionnaireFromSerNum,
             requestQuestionnaire: requestQuestionnaire,
             requestQuestionnaireList: requestQuestionnaireList,
+            requestQuestionnaireUnreadNumber: requestQuestionnaireUnreadNumber,
             saveQuestionnaireAnswer: saveQuestionnaireAnswer
         };
 
@@ -206,6 +207,26 @@
                         return response.Data;
                     }
                     return {};
+                });
+        }
+
+          /**
+         * @name requestQuestionnaireUnreadNumber
+         * @desc Asks the listener for the number of unread (e.g. 'New') questoinnaires under a specific category for this user
+         * @param {string} questionnaireCategory the category of questionnaires requested
+         * @returns {Promise} resolves to the number of unread questionnaires data
+         */
+        function requestQuestionnaireUnreadNumber(questionnaireCategory) {
+            let params = {
+                category: questionnaireCategory
+            };
+            return RequestToServer.sendRequestWithResponse(api.GET_NUMBER_UNREAD, params)
+                .then(function (response) {
+                    // this is in case firebase deletes the property when it is empty
+                    if (response.hasOwnProperty('Data')) {
+                        return response.Data;
+                    }
+                    return [];
                 });
         }
     }

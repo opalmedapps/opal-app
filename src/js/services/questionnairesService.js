@@ -103,7 +103,6 @@
             findInProgressQuestionIndex: findInProgressQuestionIndex,
             getCarouselItems: getCarouselItems,
             getCurrentQuestionnaire: getCurrentQuestionnaire,
-            getNumberOfUnreadQuestionnaires: getNumberOfUnreadQuestionnaires,
             getNumberOfUnreadQuestionnairesByCategory: getNumberOfUnreadQuestionnairesByCategory,
             getQuestionnaireBackToListByCategory: getQuestionnaireBackToListByCategory,
             getQuestionnaireCount: getQuestionnaireCount,
@@ -117,6 +116,7 @@
             requestOpalQuestionnaireFromSerNum: requestOpalQuestionnaireFromSerNum,
             requestQuestionnaire: requestQuestionnaire,
             requestQuestionnaireList: requestQuestionnaireList,
+            requestQuestionnaireUnreadNumber: requestQuestionnaireUnreadNumber,
             saveQuestionnaireAnswer: saveQuestionnaireAnswer,
             validateQuestionnaireCategory: validateQuestionnaireCategory,
         };
@@ -210,8 +210,9 @@
             return QuestionnaireDataService.requestQuestionnaireList(questionnaireCategory)
                 .then(function(responseQuestionnaireList){
                     setQuestionnaireList(responseQuestionnaireList);
-                    // Set number of unread questionnaires of current category for notifications
+                    // Update number of unread questionnaires of current category for notifications
                     numberOfUnreadQuestionnaires[questionnaireCategory] = getNumberOfUnreadQuestionnaires();
+
                     return {Success: true, Location: 'Server'};
                 });
         }
@@ -255,6 +256,23 @@
         }
 
         /**
+         * @name requestQuestionnaireUnreadNumber
+         * @desc this function is requesting the number of unread (e.g. 'New') questionnaires from questionnaireDataService and
+         *       processes this response to set the number of unread questionnaires variable for notifications 
+         * @param {string} questionnaireCategory the category of questionnaires requested
+         * @returns {Promise}
+         */
+        function requestQuestionnaireUnreadNumber(questionnaireCategory) {
+            return QuestionnaireDataService.requestQuestionnaireUnreadNumber(questionnaireCategory)
+                .then(function(responseUnreadNumber){
+
+                    numberOfUnreadQuestionnaires[questionnaireCategory] = parseInt(responseUnreadNumber.numberUnread);
+
+                    return {Success: true, Location: 'Server'};
+                });
+        }
+
+        /**
          * @name isWaitingForSavingAnswer
          * @desc getter for the boolean waitingForSavingAnswer. Used for the answerQuestionnaireController
          * @returns {boolean} true if still waiting for any answer to be saved, false otherwise
@@ -287,8 +305,8 @@
             return QuestionnaireDataService.updateQuestionnaireStatus(answerQuestionnaireId, newStatus)
                 .then(function (response) {
 
-                    // When a questionnaire is completed, immediately update the number unread for notifications
-                    if (newStatus===2){
+                    // When a questionnaire status is changed from 'New', immediately update the number unread for notifications
+                    if (newStatus!=0){
                         numberOfUnreadQuestionnaires[currentCategory] -= 1;
                     }
 
@@ -526,11 +544,11 @@
 
         /**
          * @name getNumberOfUnreadQuestionnaires
-         * @desc This function is used for getting the number of unread questionnaires (count how many questionnaires non completed by patient) in the current category
+         * @desc This function is used for getting the number of unread questionnaires (e.g. 'New') in the current category
          * @returns {Number} returns the number of new and in progress questionnaires of the current category
          */
         function getNumberOfUnreadQuestionnaires(){
-            return getQuestionnaireCount(questionnaireValidStatus.NEW_QUESTIONNAIRE_STATUS) + getQuestionnaireCount(questionnaireValidStatus.IN_PROGRESS_QUESTIONNAIRE_STATUS);
+            return getQuestionnaireCount(questionnaireValidStatus.NEW_QUESTIONNAIRE_STATUS);
         }
 
         /**
