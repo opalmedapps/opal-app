@@ -33,7 +33,7 @@
         const CATEGORY_TITLE_MAP = {
             clinical: 'CLINICAL_QUESTIONNAIRES',
             research: 'RESEARCH_QUESTIONNAIRES',
-            consent: 'STUDY_CONSENT_FORMS',
+            consent: 'CONSENT_FORMS',
             default: 'QUESTIONNAIRES',
         };
 
@@ -41,19 +41,19 @@
             new: {
                 clinical: 'QUESTIONNAIRE_NONE_NEW',
                 research: 'QUESTIONNAIRE_NONE_NEW',
-                consent: 'STUDY_CONSENT_FORMS_NONE_NEW',
+                consent: 'CONSENT_FORMS_NONE_NEW',
                 default: 'QUESTIONNAIRE_NONE_NEW',
             },
             progress: {
                 clinical: 'QUESTIONNAIRE_NONE_PROGRESS',
                 research: 'QUESTIONNAIRE_NONE_PROGRESS',
-                consent: 'STUDY_CONSENT_FORMS_NONE_PROGRESS',
+                consent: 'CONSENT_FORMS_NONE_PROGRESS',
                 default: 'QUESTIONNAIRE_NONE_PROGRESS',
             },
             completed: {
                 clinical: 'QUESTIONNAIRE_NONE_COMPLETED',
                 research: 'QUESTIONNAIRE_NONE_COMPLETED',
-                consent: 'STUDY_CONSENT_FORMS_NONE_COMPLETED',
+                consent: 'CONSENT_FORMS_NONE_COMPLETED',
                 default: 'QUESTIONNAIRE_NONE_COMPLETED',
             }
         };
@@ -305,8 +305,7 @@
             return QuestionnaireDataService.updateQuestionnaireStatus(answerQuestionnaireId, newStatus)
                 .then(function (response) {
 
-                    // When a questionnaire status is changed from 'New', immediately update the number unread for notifications
-                    if (newStatus!=0){
+                    if (newStatus === 1){
                         numberOfUnreadQuestionnaires[currentCategory] -= 1;
                     }
 
@@ -545,7 +544,7 @@
         /**
          * @name getNumberOfUnreadQuestionnaires
          * @desc This function is used for getting the number of unread questionnaires (e.g. 'New') in the current category
-         * @returns {Number} returns the number of new and in progress questionnaires of the current category
+         * @returns {Number} returns the number of new questionnaires of the current category
          */
         function getNumberOfUnreadQuestionnaires(){
             return getQuestionnaireCount(questionnaireValidStatus.NEW_QUESTIONNAIRE_STATUS);
@@ -555,7 +554,7 @@
          * @name getNumberOfUnreadQuestionnairesByCategory
          * @desc This public function is used for showing the badge by the personalTabController.js and researchController.js for the appropriate category
          * @param {string} questionnaireCategory the category of questionnaires requested
-         * @returns {Number} returns the number of new and in progress questionnaires of the given questionnaireCategory
+         * @returns {Number} returns the number of new questionnaires of the given questionnaireCategory
          */
         function getNumberOfUnreadQuestionnairesByCategory(questionnaireCategory = 'default'){
             return numberOfUnreadQuestionnaires[questionnaireCategory];

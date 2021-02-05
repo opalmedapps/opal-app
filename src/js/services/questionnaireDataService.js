@@ -226,7 +226,7 @@
                     if (response.hasOwnProperty('Data')) {
                         return response.Data;
                     }
-                    return [];
+                    return {numberUnread: "0"};
                 });
         }
     }
