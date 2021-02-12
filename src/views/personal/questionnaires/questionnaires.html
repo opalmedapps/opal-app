@@ -71,10 +71,10 @@
                                 <div class="col-xs-12">
                                     <h4 ng-if="vm.questionnaire.status === vm.allowedStatus.NEW_QUESTIONNAIRE_STATUS"
                                         ng-class="fontSizeDesc">
-                                        {{"QUESTIONNAIRE_BEGIN_INSTRUCTION"|translate}}</h4>
+                                        {{vm.beginInstructions}}</h4>
                                     <h4 ng-if="vm.questionnaire.status === vm.allowedStatus.IN_PROGRESS_QUESTIONNAIRE_STATUS"
                                         ng-class="fontSizeDesc">
-                                        {{"QUESTIONNAIRE_RESUME_INSTRUCTION"|translate}}</h4>
+                                        {{vm.resumeInstructions}}</h4>
                                     <p ng-if="vm.hasDescription" style="margin-top:2vh; margin-bottom:2vh"
                                        ng-class="fontSizeDesc">
                                         <b>
@@ -82,7 +82,9 @@
                                                 {{"QUESTIONNAIRE_DESCRIPTION"|translate}}
                                             </span>
                                         </b>
-                                        <span ng-bind-html="vm.questionnaire.description"></span>
+                                        <!-- Left align decription for consent forms, centered otherwise -->
+                                        <span ng-if="vm.isConsent" align="left" ng-bind-html="vm.questionnaire.description"></span>
+                                        <span ng-if="!vm.isConsent" ng-bind-html="vm.questionnaire.description"></span>
                                     </p>
                                     <p ng-if="vm.hasInstruction" style="margin-top:2vh; margin-bottom:2vh"
                                        ng-class="fontSizeDesc">

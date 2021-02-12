@@ -21,15 +21,15 @@
 
     <div ng-if="vm.questionnaire.status !== vm.allowedStatus.COMPLETED_QUESTIONNAIRE_STATUS" ng-hide="vm.loadingSubmitQuestionnaire || vm.loadingQuestionnaire">
         <!-- Instruction to submit -->
-        <div ng-if="vm.submitAllowed" ng-class="fontSizeDesc" align="center" style="color: gray; padding-left: 10px; padding-right: 10px;">
-            {{"QUESTIONNAIRE_SUBMIT_INSTRUCTION"|translate}}
+        <div ng-if="vm.submitAllowed" ng-class="fontSizeDesc" align="center" style="padding-left: 10px; padding-right: 10px;">
+            {{vm.submitInstructions}}
         </div>
-        <div ng-if="!vm.submitAllowed" ng-class="fontSizeDesc" align="center" style="color: gray; padding-left: 10px; padding-right: 10px;">
+        <div ng-if="!vm.submitAllowed" ng-class="fontSizeDesc" align="center" style="padding-left: 10px; padding-right: 10px;">
             {{"QUESTIONNAIRE_INSTRUCTIONS"|translate}}
         </div>
 
         <!-- Password verification -->
-        <div ng-if="vm.requirePassword" class="style-4" style="padding: 10px;">
+        <div ng-if="vm.requirePassword && vm.submitAllowed" class="style-4" style="padding: 10px;">
             <br>
             <input type="password" ng-class="fontSizeDesc"
                    placeholder="{{'PASSWORD'|translate}}"
@@ -40,7 +40,7 @@
         <!-- Submit button -->
         <div align="center" style="margin-top:10px;margin-bottom:10px">
             <button class="button--large--cta" style="width:80%" ng-click="vm.submitQuestionnaire()" ng-class="fontSizeDesc"
-                    ng-disabled="!vm.submitAllowed">{{"SUBMITANSWERS"|translate}}
+                    ng-disabled="!vm.submitAllowed || (vm.password == '' && vm.requirePassword)">{{vm.submitButtonText}}
             </button>
         </div>
 

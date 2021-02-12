@@ -72,6 +72,34 @@
             default: 'QUESTIONNAIRE_GO_BACK_TO_LIST',
         }
 
+        const CATEGORY_BEGIN_MAP = {
+            clinical: 'QUESTIONNAIRE_BEGIN_INSTRUCTION',
+            research: 'QUESTIONNAIRE_BEGIN_INSTRUCTION',
+            consent: 'CONSENT_FORM_BEGIN_INSTRUCTION',
+            default: 'QUESTIONNAIRE_BEGIN_INSTRUCTION',
+        };
+
+        const CATEGORY_RESUME_MAP = {
+            clinical: 'QUESTIONNAIRE_RESUME_INSTRUCTION',
+            research: 'QUESTIONNAIRE_RESUME_INSTRUCTION',
+            consent: 'CONSENT_FORM_RESUME_INSTRUCTION',
+            default: 'QUESTIONNAIRE_RESUME_INSTRUCTION',
+        };
+        
+        const CATEGORY_SUBMIT_BUTTON_MAP = {
+            clinical: 'SUBMITANSWERS',
+            research: 'SUBMITANSWERS',
+            consent: 'SUBMITCONSENT',
+            default: 'SUBMITANSWERS',
+        };
+
+        const CATEGORY_SUBMIT_INSTRUCTION_MAP = {
+            clinical: 'QUESTIONNAIRE_SUBMIT_INSTRUCTION',
+            research: 'QUESTIONNAIRE_SUBMIT_INSTRUCTION',
+            consent: 'CONSENT_FORM_SUBMIT_INSTRUCTION',
+            default: 'QUESTIONNAIRE_SUBMIT_INSTRUCTION',
+        };
+
         // constants for the app notifications
         const notifConstants = Params.QUESTIONNAIRE_NOTIFICATION_CONSTANTS;
 
@@ -105,10 +133,14 @@
             getCurrentQuestionnaire: getCurrentQuestionnaire,
             getNumberOfUnreadQuestionnairesByCategory: getNumberOfUnreadQuestionnairesByCategory,
             getQuestionnaireBackToListByCategory: getQuestionnaireBackToListByCategory,
+            getQuestionnaireBeginByCategory: getQuestionnaireBeginByCategory,
             getQuestionnaireCount: getQuestionnaireCount,
             getQuestionnaireList: getQuestionnaireList,
             getQuestionnaireNoListMessageByCategory: getQuestionnaireNoListMessageByCategory,
+            getQuestionnaireResumeByCategory: getQuestionnaireResumeByCategory,
             getQuestionnaireStartUrl: getQuestionnaireStartUrl,
+            getQuestionnaireSubmitButtonByCategory: getQuestionnaireSubmitButtonByCategory,
+            getQuestionnaireSubmitInstructionByCategory: getQuestionnaireSubmitInstructionByCategory,
             getQuestionnaireTitleByCategory: getQuestionnaireTitleByCategory,
             getQuestionnaireThankByCategory: getQuestionnaireThankByCategory,
             isWaitingForSavingAnswer: isWaitingForSavingAnswer,
@@ -488,6 +520,46 @@
                 default:
                     return CATEGORY_EMPTY_LIST_MAP.new['default'];
             }
+        }
+
+        /**
+         * @name getQuestionnaireBeginByCategory
+         * @desc gets the correct translation key for the begin questionnaire instruction. It assumes that the category has been validated.
+         * @param {string} questionnaireCategory
+         * @returns {string} the translation key in en.json or fr.json
+         */
+        function getQuestionnaireBeginByCategory(questionnaireCategory = 'default') {
+            return CATEGORY_BEGIN_MAP[questionnaireCategory];
+        }
+
+        /**
+         * @name getQuestionnaireResumeByCategory
+         * @desc gets the correct translation key for the resume questionnaire instruction. It assumes that the category has been validated.
+         * @param {string} questionnaireCategory
+         * @returns {string} the translation key in en.json or fr.json
+         */
+        function getQuestionnaireResumeByCategory(questionnaireCategory = 'default') {
+            return CATEGORY_RESUME_MAP[questionnaireCategory];
+        }
+
+        /**
+         * @name getQuestionnaireSubmitButtonByCategory
+         * @desc gets the correct translation key for the questionnaire submit button. It assumes that the category has been validated.
+         * @param {string} questionnaireCategory
+         * @returns {string} the translation key in en.json or fr.json
+         */
+        function getQuestionnaireSubmitButtonByCategory(questionnaireCategory = 'default') {
+            return CATEGORY_SUBMIT_BUTTON_MAP[questionnaireCategory];
+        }
+        
+        /**
+         * @name getQuestionnaireSubmitInstructionByCategory
+         * @desc gets the correct translation key for the submit questionnaire instruction. It assumes that the category has been validated.
+         * @param {string} questionnaireCategory
+         * @returns {string} the translation key in en.json or fr.json
+         */
+        function getQuestionnaireSubmitInstructionByCategory(questionnaireCategory = 'default') {
+            return CATEGORY_SUBMIT_INSTRUCTION_MAP[questionnaireCategory];
         }
 
         /**

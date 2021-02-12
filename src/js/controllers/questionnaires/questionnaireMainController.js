@@ -32,11 +32,13 @@
         const answerSavedInDBValidStatus = Params.ANSWER_SAVED_IN_DB_STATUS;
 
         // variables global to this controller
+        let category = 'default';
         let hasGoneBackToHomeScreen = false;    // this variable is used for noting whether the user has gone back to the home screen or not because if they did, we have to update the startIndex.
         let navigator = null;
         let navigatorName = '';
 
         // variables that can be seen from view, sorted alphabetically
+        vm.beginInstructions = '';
         vm.carouselItems = [];  // the items that the carousel will display
             /*
                 If a question is a checkbox question AND it is skipped then vm.checkedNumber = 0. If a question is not a checkbox question vm.checkedNumber is also 0.
@@ -45,6 +47,7 @@
              */
         vm.checkedNumber = 0;   // this is the number of items check for a checkbox question.
         vm.editQuestion = false;    // true if the user completed the questionnaire but came back to edit their answer, false otherwise. Used in the toolbar.
+        vm.isConsent = false;
         vm.isQuestion = false;  // this boolean represent whether the current item in the carousel is a question or not. It is not really needed as of 07 January 2020 but coded for future use, for example for information button.
         vm.hasDescription = false;  // the questionnaire has a description
         vm.hasInstruction = false;      // the questionnaire has an instruction to display
@@ -54,6 +57,7 @@
         vm.progressBarPercent = 0;  // this is for the progress bar in the carousel
         vm.questionnaire = {}; // the questionnaire that this controller is dealing with
         vm.questionnaireStart = true;   // marks whether we just started a questionnaire or not (i.e. the questionnaire home page)
+        vm.resumeInstructions = '';
         vm.startIndex = 1;  // the index where the carousel will start in, skip the questionnaire start home page
         vm.sectionIndex = 0;
         vm.questionIndex = 0;
@@ -81,6 +85,16 @@
             navigatorName = NavigatorParameters.getNavigatorName();
 
             let params = NavigatorParameters.getParameters();
+
+            if (!params.hasOwnProperty('questionnaireCategory') || !Questionnaires.validateQuestionnaireCategory(params.questionnaireCategory)) {    
+                setPageText();
+                vm.loading = false;
+                handleLoadQuestionnaireErr();
+            } else {
+                category = params.questionnaireCategory.toLowerCase();
+                vm.isConsent = category === 'consent';
+                setPageText(category);
+            }
 
             /*
              now there are 3 cases:
@@ -427,6 +441,17 @@
 
             // go to summary page directly
             navigator.replacePage('views/personal/questionnaires/answeredQuestionnaire.html');
+        }
+
+         /**
+         * @name setPageText
+         * @desc set the page title and descriptions according to the questionnaire category requested on the list page
+         *      if the category is not passed as an argument, the text will default to the default's translation
+         * @param {string} questionnaireCategory
+         */
+        function setPageText(questionnaireCategory='default') {
+            vm.beginInstructions = $filter('translate')(Questionnaires.getQuestionnaireBeginByCategory(questionnaireCategory));
+            vm.resumeInstructions = $filter('translate')(Questionnaires.getQuestionnaireResumeByCategory(questionnaireCategory));
         }
 
         /**

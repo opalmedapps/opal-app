@@ -108,7 +108,8 @@
             NavigatorParameters.setParameters({
                 Navigator: navigatorName,
                 answerQuestionnaireId: selectedQuestionnaire.qp_ser_num,
-                editQuestion: false
+                editQuestion: false,
+                questionnaireCategory: category
             });
 
             navigator.pushPage('views/personal/questionnaires/questionnaires.html');

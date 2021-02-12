@@ -47,6 +47,8 @@
         vm.questionnaire = {};  // the questionnaire itself
         vm.requirePassword = false;     // determine whether the password is required for submission or not
         vm.submitAllowed = false;   // if all questions are completed, then the user is allowed to submit.
+        vm.submitButtonText = '';
+        vm.submitInstructions = '';
 
         // functions that can be seen from view, sorted alphabetically
         vm.editQuestion = editQuestion;
@@ -107,7 +109,8 @@
                 sectionIndex: sIndex,
                 questionIndex: qIndex,
                 editQuestion: true,
-                answerQuestionnaireId: vm.questionnaire.qp_ser_num
+                answerQuestionnaireId: vm.questionnaire.qp_ser_num,
+                questionnaireCategory: category
             });
             navigator.replacePage('views/personal/questionnaires/questionnaires.html', {animation: 'slide'});
         }
@@ -206,7 +209,8 @@
                 handleLoadQuestionnaireErr();
             }
 
-            category = vm.questionnaire.questionnaire_category;
+            category = vm.questionnaire.questionnaire_category.toLowerCase();
+            setPageText(category);
 
             // this if for consent forms
             setRequirePassword(category);
@@ -292,6 +296,17 @@
          */
         function resetShowAnswer(question){
             question.showAnswer = false;
+        }
+
+         /**
+         * @name setPageText
+         * @desc set the page text and descriptions according to the questionnaire category requested 
+         *      if the category is not passed as an argument, the text will default to the default's translation
+         * @param {string} questionnaireCategory
+         */
+        function setPageText(questionnaireCategory='default') {
+            vm.submitButtonText = $filter('translate')(Questionnaires.getQuestionnaireSubmitButtonByCategory(questionnaireCategory));
+            vm.submitInstructions = $filter('translate')(Questionnaires.getQuestionnaireSubmitInstructionByCategory(questionnaireCategory));
         }
 
         /**
@@ -400,7 +415,7 @@
          * @param {string} category
          */
         function setRequirePassword(category) {
-            vm.requirePassword = category.toLowerCase() === 'consent';
+            vm.requirePassword = category === 'consent';
         }
     }
 
