@@ -129,7 +129,55 @@ import {body} from './testdata.js';
             const material2 = new THREE.MeshBasicMaterial( {color: 0xff0000} );
             const sphere = new THREE.Mesh( geometry2, material2 );
             sphere.position.set(84.86,-61.08,-0.5)
-            scene.add( sphere );
+            // scene.add( sphere );
+
+            // const geometry2 = new THREE.SphereGeometry( 5);
+            // const material2 = new THREE.MeshBasicMaterial( {color: 0xff0000} );
+            const sphere2 = new THREE.Mesh( geometry2, material2 );
+            sphere2.position.set(-609.84,-780.38,-0.5)
+            scene.add( sphere2 );
+
+            const sphere3 = new THREE.Mesh( geometry2, material2 );
+            sphere3.position.set(145.9,-120.7,-0.5)
+            // scene.add( sphere3 );
+
+            const sphere4 = new THREE.Mesh( geometry2, material2 );
+            sphere4.position.set(84.86,-61.08,-90.5)
+            scene.add( sphere4 );
+
+            const sphere5 = new THREE.Mesh( geometry2, material2 );
+            sphere5.position.set(84.86,-61.08,70.5)
+            scene.add( sphere5 );
+
+            const sphere6 = new THREE.Mesh( geometry2, material2 );
+            sphere6.position.set(145.9,-120.7,70.5)
+            scene.add( sphere6 );
+
+            const sphere7 = new THREE.Mesh( geometry2, material2 );
+            sphere7.position.set(145.9,-120.7,-90.5)
+            scene.add( sphere7 );
+            // const colx1 
+
+            const points = [];
+            // points.push( new THREE.Vector3(84.86,-61.08,-0.5));
+            // points.push( new THREE.Vector3(-609.84,-780.38,-0.5));
+            // points.push( new THREE.Vector3(145.9,-120.7,-0.5));
+            // points.push( new THREE.Vector3(-609.84,-780.38,-0.5));
+            points.push( new THREE.Vector3(84.86,-61.08,-90.5));
+            points.push( new THREE.Vector3(-609.84,-780.38,-0.5));
+            points.push( new THREE.Vector3(84.86,-61.08,70.5));
+            points.push( new THREE.Vector3(-609.84,-780.38,-0.5));
+            points.push( new THREE.Vector3(145.9,-120.7,70.5));
+            points.push( new THREE.Vector3(-609.84,-780.38,-0.5));
+            points.push( new THREE.Vector3(145.9,-120.7,-90.5));
+            points.push( new THREE.Vector3(145.9,-120.7,70.5));
+            points.push( new THREE.Vector3(84.86,-61.08,70.5));
+            points.push( new THREE.Vector3(84.86,-61.08,-90.5));
+            points.push( new THREE.Vector3(145.9,-120.7,-90.5));
+            const material3 = new THREE.LineBasicMaterial( { color: 0xff0000, linewidth: 4 } );
+            const geometry3 = new THREE.BufferGeometry().setFromPoints( points );
+            const line = new THREE.Line( geometry3, material3 );
+            scene.add(line)
 
 
             var renderer = new THREE.WebGLRenderer({antialias: true});
