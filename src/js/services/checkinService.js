@@ -430,7 +430,6 @@
             var r = $q.defer();
 
             var objectToSend = {};
-            objectToSend.PatientId = Patient.getPatientId();
             objectToSend.PatientSerNum = Patient.getUserSerNum();
 
             RequestToServer.sendRequestWithResponse('Checkin', objectToSend)

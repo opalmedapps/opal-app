@@ -17,7 +17,6 @@
     {
         var vm = this;
 
-        vm.PatientId ='';
         vm.FirstName = '';
         vm.LastName = '';
         vm.ProfileImage = null;
@@ -182,7 +181,6 @@
          */
         function setPatientInfo(){
             //Basic patient information
-            vm.PatientId = Patient.getPatientId();
             vm.FirstName = Patient.getFirstName();
             vm.LastName = Patient.getLastName();
             vm.ProfileImage=Patient.getProfileImage();
