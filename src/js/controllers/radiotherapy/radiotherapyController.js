@@ -6,6 +6,7 @@ import { ConvexGeometry } from 'three/examples/jsm/geometries/ConvexGeometry.js'
 import { ConvexHull } from 'three/examples/jsm/math/ConvexHull.js';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import {body,head, s1, s2, s3, s4, s5, s6 } from './testdata.js';
+import * as dicomParser from 'dicom-parser';
 
 (function () {
     'use strict';
@@ -26,19 +27,26 @@ import {body,head, s1, s2, s3, s4, s5, s6 } from './testdata.js';
 
         vm.showHeader = showHeader;
         vm.goToRTPlan = goToRTPlan;
+        vm.uploadDICOM = uploadDICOM;
      
+        vm.filesUploaded = false;
 
-        let camera, scene, renderer, group;
+        let camera, scene, renderer;
+        let group = new THREE.Group();
         let smoothMeshx, geometry, tube, mesh, points, points3d;
         var pointsno = [];
         var pointsyes = []
         var meshes = [];
+        var topZ, bottomZ;
         // let geometry, material, mesh;
 
         var SAD = 1000;
-        var beams = {
+        var numFractions = 0;
+        var numBeams = 0;
+        var beams = {}
+        var beams_manual = {
             1:{
-                isocenter: {x:84.86, y:-61.08,z:-0.5},
+                isocenter: [84.86,-61.08,-0.5],
                 gantryAngle: 316,
                 X1: 0,
                 X2: 86,
@@ -46,7 +54,7 @@ import {body,head, s1, s2, s3, s4, s5, s6 } from './testdata.js';
                 Y2: 80
             },
             2:{
-                isocenter: {x:84.86, y:-61.08,z:-0.5},
+                isocenter: [84.86,-61.08,-0.5],
                 gantryAngle: 136,
                 X1: -103.33,
                 X2: 0,
@@ -73,8 +81,8 @@ import {body,head, s1, s2, s3, s4, s5, s6 } from './testdata.js';
             //grab the language
             vm.language = UserPreferences.getLanguage();
 
-            renderElements();
-            
+            // renderElements()
+
         }
 
         // Determines whether or not to show the date header in the view. Announcements are grouped by day.
@@ -86,6 +94,135 @@ import {body,head, s1, s2, s3, s4, s5, s6 } from './testdata.js';
                // return current !== previous;
         }
 
+        function uploadDICOM(){
+            vm.filesUploaded = true;
+            var file_plan = document.getElementById('importFile').files[0];
+            var file_struct = document.getElementById('importFile').files[1];
+            loadDICOM(file_plan);
+            loadDICOM(file_struct)
+
+        }
+
+        function loadDICOM(file){
+            console.log("uploading...")
+            var reader = new FileReader();
+            reader.onload = function(file) {
+    
+                var arrayBuffer = reader.result;
+                // Here we have the file data as an ArrayBuffer.  dicomParser requires as input a
+                // Uint8Array so we create that here
+                var byteArray = new Uint8Array(arrayBuffer);
+
+                var rtData = dicomParser.parseDicom(byteArray); 
+                var modality = rtData.string('x00080060')
+
+                if (modality === 'RTPLAN'){
+
+                SAD =  parseFloat(rtData.elements.x300a00b0.items[0].dataSet.string('x300a00b4'))
+                SAD =  parseFloat(rtData.elements.x300a00b0.items[1].dataSet.string('x300a00b4'))
+                numFractions = parseInt(rtData.elements.x300a0070.items[0].dataSet.string('x300a0078'))
+                numBeams = parseInt(rtData.elements.x300a0070.items[0].dataSet.string('x300a0080'))
+
+                var beamSequence = rtData.elements.x300a00b0.items;
+                var beamNumber, gantryAngle, isocenter, controlPt, beamPositionSequence, jawType, X, Y
+                beamSequence.forEach(function(beam){
+                    beamNumber = beam.dataSet.string('x300a00c0')
+                    controlPt = beam.dataSet.elements.x300a0111.items[0]
+
+                    gantryAngle = parseInt(controlPt.dataSet.string('x300a011e'))
+                    isocenter = controlPt.dataSet.string('x300a012c').split("\\").map(Number);
+
+                    beamPositionSequence = controlPt.dataSet.elements.x300a011a.items
+
+                    beamPositionSequence.forEach(function(beamPosition){
+                        jawType = beamPosition.dataSet.string('x300a00b8')
+        
+                        if (jawType == 'X' || jawType == 'ASYMX'){
+                            X = beamPosition.dataSet.string('x300a011c').split("\\").map(Number)
+                        } else if (jawType == 'Y' || jawType == 'ASYMY'){
+                            Y = beamPosition.dataSet.string('x300a011c').split("\\").map(Number)
+                        }
+
+                    })
+
+                    beams[beamNumber] = {
+                        isocenter: isocenter,
+                        gantryAngle: gantryAngle,
+                        X1: X[0],
+                        X2: X[1],
+                        Y1: Y[0],
+                        Y2: Y[1]
+                    }
+
+                    // var patientSetup = rtData.elements.x300a0180.items;//[0].dataSet.string('x00185100')
+                    // patientSetup.forEach(function(setup){
+                    //     console.log(setup.dataSet.string('x00185100'))
+                    // })
+                    // console.log(patientPosition)
+                    
+                })
+            } else if (modality === 'RTSTRUCT'){
+                var ROINumber;
+                var ROIName;
+
+                var structureSetROISequence = rtData.elements.x30060020.items;
+                
+                // structureSetROISequence.forEach(function(sequence){
+                for (var i = 0; i < structureSetROISequence.length; i++){
+                    ROIName = structureSetROISequence[i].dataSet.string('x30060026')
+                    if (ROIName.toLowerCase().includes("body")){
+                        // console.log(ROIName)
+                        ROINumber = parseInt(structureSetROISequence[i].dataSet.string('x30060022'))
+                        // return false
+                        break;
+                    }
+
+                }
+
+                var ROIContourSequence = rtData.elements.x30060039.items;
+                var refROINumber, contours;
+                // ROIContourSequence.forEach(function(contourSequence){
+                
+                for (var i = 0; i < ROIContourSequence.length; i++){
+                    refROINumber = parseInt(ROIContourSequence[i].dataSet.string('x30060084'))
+                    if (refROINumber === ROINumber){
+                        // console.log("ROINumber: ", ROINumber)
+
+                        contours = ROIContourSequence[i].dataSet.elements.x30060040.items
+                        break
+                    }
+
+                }
+
+
+                var slice;
+                var firstIteration = true;
+                contours.forEach(function(contour){
+
+                    slice = contour.dataSet.string('x30060050').split("\\").map(Number);
+                    if (firstIteration){
+                        renderSliceCap(slice)
+                        topZ = slice[2]
+                        firstIteration = false;
+                    }
+                    renderSlice(slice)
+                    bottomZ = slice[2]
+
+                })
+                renderSliceCap(slice)
+
+
+                renderElements()
+            }
+
+               
+
+            
+
+            }
+            reader.readAsArrayBuffer(file);
+            
+        }
         // Not used yet
         function goToRTPlan(plan){
     
@@ -106,11 +243,18 @@ import {body,head, s1, s2, s3, s4, s5, s6 } from './testdata.js';
             scene = new THREE.Scene();
             scene.background = new THREE.Color(0xf1f1f1);
 
-            group = new THREE.Group();
 
-            camera = new THREE.PerspectiveCamera( 100, window.innerWidth/window.innerHeight, 1, 1000 );
+            camera = new THREE.PerspectiveCamera( 100, window.innerWidth/window.innerHeight, 1, 750 );
+            // camera.up.set( 0, 0, 1 );
             camera.position.y = -300
             camera.position.z = 100
+            var avg = (topZ+bottomZ)/2
+            if (avg < 0){
+                group.position.z +- avg + 25
+            }
+            group.position.x = 0
+            group.position.y = 0
+
             
 
             const light = new THREE.PointLight(0xffffff, 1.5);
@@ -129,13 +273,17 @@ import {body,head, s1, s2, s3, s4, s5, s6 } from './testdata.js';
             light4.position.set(-1000,1000,0);
             scene.add(light4);
 
-            // const axesHelper = new THREE.AxesHelper( 300 );
-            // scene.add( axesHelper );
+            const axesHelper = new THREE.AxesHelper( 300 );
+            scene.add( axesHelper );
           
-            renderBody();
-            renderBeam(beams[1])
-            renderBeam(beams[2])
-
+            // renderBody();
+            // renderBeam(beams_manual[1])
+            // renderBeam(beams_manual[2])
+        
+            for (let i = 1; i <= numBeams; i++){
+                console.log(beams_manual[i])
+                renderBeam(beams_manual[i])
+            }
 
         //     let hull = new ConvexHull().setFromObject(meshes[0])
         //     let hull1 = new ConvexHull().setFromObject(meshes[1])
@@ -206,9 +354,53 @@ import {body,head, s1, s2, s3, s4, s5, s6 } from './testdata.js';
               animate();
         }
 
-        function renderBody(){
+        function renderSliceCap(slice){
+            let colour = 0x29293d
+            var slice1 = []
+
+            for (let i = 0; i < slice.length; i+=21){
+                slice1.push(new THREE.Vector2(slice[i], slice[i+1]))
+            }
+            const s1shape = new THREE.Shape(slice1)
+            const geo1 = new THREE.ShapeBufferGeometry(s1shape)
+
+            const mesh1 = new THREE.Mesh( geo1, new THREE.MeshPhongMaterial( {color:colour, side:THREE.DoubleSide,shininess:30}))
+            mesh1.position.z = slice[2]
+            group.add(mesh1)  
+        }
+
+        function renderSlice(slice){
             
             let colour = 0x29293d//3104B4//0B4C5F//// 0x//0xa29093 //0x669999
+            var array = [];
+
+            var shape, geo, mesh;
+
+
+            shape = new THREE.Shape();
+            shape.moveTo(0,0);
+            shape.lineTo(1.5,0)
+            shape.lineTo(1.5,1)
+            shape.lineTo( -1.5, 1);
+            shape.lineTo(-1.5,0)
+            shape.lineTo( 0, 0 );
+
+            // console.log(slice[2]);
+            for (let i = 0; i < slice.length; i+=3){
+                array.push(new THREE.Vector3(slice[i], slice[i+1], slice[i+2]))  
+            }
+            
+            var sampleClosedSpline = new THREE.CatmullRomCurve3( array, true);
+            // var tube = new THREE.TubeBufferGeometry( sampleClosedSpline, 64, 2, 4, true);
+            geo = new THREE.ExtrudeBufferGeometry(shape, {extrudePath:sampleClosedSpline,steps:500})
+            mesh = new THREE.Mesh(geo, new THREE.MeshPhongMaterial({color:colour, side:THREE.DoubleSide, shininess:40})) //LineBasicMaterial())//
+            group.add(mesh)
+    }
+
+
+        function renderBody(){
+            
+            let colour = 0x515151 //0x29293d//3104B4//0B4C5F//// 0x//0xa29093 //0x669999
             geometry = new THREE.BufferGeometry();
             const vertices = new Float32Array(body);
             geometry.setAttribute('position', new THREE.BufferAttribute(vertices, 3));
@@ -218,15 +410,15 @@ import {body,head, s1, s2, s3, s4, s5, s6 } from './testdata.js';
             var hole = []
             var total = []
 
-            for ( let i = 0; i < positionAttribute.count; i += 3 ) {
-                const vertex = new THREE.Vector3();
-                vertex.fromBufferAttribute( positionAttribute, i );
-                points3d.push( vertex );
-                total.push(vertex)
-                hole.push(new THREE.Vector3(vertex.x*.9, vertex.y*.9, vertex.z))
-                total.push(new THREE.Vector3(vertex.x*.9, vertex.y*.9, vertex.z))
+            // for ( let i = 0; i < positionAttribute.count; i += 3 ) {
+            //     const vertex = new THREE.Vector3();
+            //     vertex.fromBufferAttribute( positionAttribute, i );
+            //     points3d.push( vertex );
+            //     total.push(vertex)
+            //     hole.push(new THREE.Vector3(vertex.x*.9, vertex.y*.9, vertex.z))
+            //     total.push(new THREE.Vector3(vertex.x*.9, vertex.y*.9, vertex.z))
           
-            }
+            // }
 
 
             var slice1 = []
@@ -268,7 +460,7 @@ import {body,head, s1, s2, s3, s4, s5, s6 } from './testdata.js';
             shape.lineTo(-1.5,0)
             shape.lineTo( 0, 0 );
 
-            for (let i = 0; i < body.length; i+=18){
+            for (let i = 0; i < body.length; i+=21){
                 newZ = body[i+2]
                 if (newZ != currZ){ 
 
@@ -288,9 +480,9 @@ import {body,head, s1, s2, s3, s4, s5, s6 } from './testdata.js';
 
 
         function renderBeam(beam){
-            let xi = beam.isocenter.x;
-            let yi = beam.isocenter.y;
-            let zi = beam.isocenter.z;
+            let xi = beam.isocenter[0]//.x;
+            let yi = beam.isocenter[1]//.y;
+            let zi = beam.isocenter[2]//.z;
 
             let angle = beam.gantryAngle * Math.PI / 180;
 

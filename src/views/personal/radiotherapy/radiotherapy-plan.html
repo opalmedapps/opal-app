@@ -6,7 +6,11 @@
         <div class="left">
             <ons-back-button>{{"BACK"|translate}}</ons-back-button>
         </div>
-    </ons-toolbar>    
+    </ons-toolbar>
+    <div ng-hide=rad.filesUploaded>
+        <input type="file" id="importFile" multiple='multiple'/>
+        <button ng-click = "rad.uploadDICOM()">Go</button>
+    </div> 
 <div id="holder"></div>
 </ons-page>
 
