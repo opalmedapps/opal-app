@@ -74,17 +74,10 @@ myApp.service('Patient',['$q','$cordovaDevice','FileManagerService','LocalStorag
 
     /**
      *@ngdoc property
-     *@name  MUHCApp.service.#PatientId
+     *@name  MUHCApp.service.#TestUser
      *@propertyOf MUHCApp.service:Patient
-     *@description Property containing patientid of the patient
+     *@description Property containing boolean determining whether the patient is a test user
      **/
-    var PatientId='';
-        /**
-         *@ngdoc property
-         *@name  MUHCApp.service.#TestUser
-         *@propertyOf MUHCApp.service:Patient
-         *@description Property containing boolean determining whether the patient is a test user
-         **/
     var TestUser ='';
 
     /**
@@ -140,7 +133,6 @@ myApp.service('Patient',['$q','$cordovaDevice','FileManagerService','LocalStorag
             Alias=patientFields.Alias;
             TelNum=patientFields.TelNum;
             Email=patientFields.Email;
-            PatientId=patientFields.PatientId;
             TestUser=patientFields.TestUser;
             UserSerNum=patientFields.PatientSerNum;
             ProfileImage=(patientFields.ProfileImage&&typeof patientFields.ProfileImage!=='undefined'&&patientFields.ProfileImage!=='')?'data:image/'+patientFields.DocumentType+';base64,'+patientFields.ProfileImage:'./img/patient.png';
@@ -215,7 +207,6 @@ myApp.service('Patient',['$q','$cordovaDevice','FileManagerService','LocalStorag
             Alias=patientFields.Alias;
             TelNum=patientFields.TelNum;
             Email=patientFields.Email;
-            PatientId=patientFields.PatientId;
             TestUser=patientFields.TestUser;
             UserSerNum=patientFields.PatientSerNum;
             ProfileImage= (patientFields.ProfileImage)?patientFields.ProfileImage:'./img/patient.png';
@@ -259,16 +250,6 @@ myApp.service('Patient',['$q','$cordovaDevice','FileManagerService','LocalStorag
          **/
         setEmail:function(email){
             Email=email;
-        },
-        /**
-         *@ngdoc method
-         *@name getPatientId
-         *@methodOf MUHCApp.service:Patient
-         *@returns {String} Returns patient id
-         **/
-        getPatientId:function()
-        {
-            return PatientId;
         },
         /**
          *@ngdoc method
@@ -369,7 +350,6 @@ myApp.service('Patient',['$q','$cordovaDevice','FileManagerService','LocalStorag
             Alias='';
             TelNum='';
             Email='';
-            PatientId='';
             UserSerNum='';
             NameFileSystem='';
             PathFileSystem='';
