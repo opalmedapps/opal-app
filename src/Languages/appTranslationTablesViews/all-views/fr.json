@@ -322,5 +322,6 @@
     "USER_DISABLED": "Votre compte a été bloqué. Veuillez contacter l'hôpital pour obtenir de l'aide.",
     "WAITING_ROOM": "Salle d'attente:",
     "WARNING": "Attention",
-    "YES": "Oui"
+    "YES": "Oui",
+    "VIDEO": "Vidéo"
 }
