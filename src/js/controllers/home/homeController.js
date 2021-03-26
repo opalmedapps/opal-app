@@ -77,6 +77,7 @@
             // // Refresh the page on coming back from checkin
             homeNavigator.on('prepop', function(event) {
                 if (event.currentPage.name === "./views/home/checkin/checkin-list.html" && NetworkStatus.isOnline()) evaluateCheckIn();
+                if (event.currentPage.name === "views/personal/notifications/notifications.html" && NetworkStatus.isOnline()) setBadges();
             });
 
             //This avoids constant repushing which causes bugs
@@ -137,7 +138,7 @@
         }
 
 
-        function setMetaData(){
+        function setMetaData() {
             if(MetaData.isFirstTimeHome()){
                 var meta = MetaData.fetchHomeMeta();
                 vm.notificationsUnreadNumber = meta.notificationsUnreadNumber;
