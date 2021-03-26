@@ -187,7 +187,7 @@ myApp.service('FileManagerService', ['$q', '$cordovaFileTransfer', '$cordovaFile
                          13, 'top', null, 2000);
                 };
 
-                if (fileType === 'Video') {
+                if (fileType === $filter('translate')("VIDEO")) {
                     window.plugins.socialsharing.share(name, name, '', url);
                 } else {
                     //Plugin usage
