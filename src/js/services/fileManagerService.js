@@ -166,11 +166,15 @@ myApp.service('FileManagerService', ['$q', '$cordovaFileTransfer', '$cordovaFile
          **/
         shareDocument: function (name, url, fileType) {
             //Check if its an app
+            
             if (app) {
 
                 //Set the subject for the document
-                var options = {subject: name};
-                options.files = [url];
+                var options = {
+                    subject: name,
+                    url: url
+                };
+                
                 //Defines on success function
                 var onSuccess = function (result) {
 
