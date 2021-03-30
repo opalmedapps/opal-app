@@ -39,18 +39,31 @@
         ////////////////
 
         function activate() {
-            //load the diagnoses array into view
-            vm.diagnoses=Diagnoses.getDiagnoses();
 
+            //load the diagnoses array into view
+            vm.diagnoses = Diagnoses.getDiagnoses();
+            setDiagnosesView(vm.diagnoses);
 
             if(vm.diagnoses.length === 0){
                 vm.noDiagnosis = true;
             }
-            
+
             //grab the language
             vm.language = UserPreferences.getLanguage();
         }
 
+        // Function to remove the diagnoses from the list if the diagnoses name has N/A or n/a
+        function setDiagnosesView(diagnoses) {
+            let filterDiagnoses = [];
+            for (var i = 0, j = 0; i < diagnoses.length; i++) {
+                if ((diagnoses[i].Description_EN).toUpperCase() !== 'N/A' || (diagnoses[i].Description_FR).toUpperCase() !== 'N/A') {
+                    filterDiagnoses[j] = diagnoses[i];
+                    j++;
+                }
+            }
+            vm.diagnoses = filterDiagnoses;
+        }
+        
         // Determines whether or not to show the date header in the view. Announcements are grouped by day.
         function showHeader(index)
         {

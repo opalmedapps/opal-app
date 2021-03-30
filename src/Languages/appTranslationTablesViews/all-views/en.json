@@ -54,8 +54,7 @@
   "DOC_INFO": "Document Info",
   "DOC_SIGNEDBY": "Signed By:",
   "DONE": "Done",
-  "EDUCATION": "Education",
-  "EDUCATION_DESCRIPTION": "In your Education tab you will find educational material specific to your treatment and general to radiation oncology.",
+  "EDUCATION_DESCRIPTION": "In your Library tab, you will find educational material specific to your treatment and general diagnosis.",
   "EMAIL": "Email",
   "EMAIL_TAKEN": "E-mail has already been taken",
   "ENTERANANSWER": "Enter an answer",
@@ -323,5 +322,7 @@
   "USER_DISABLED": "Your account has been blocked, please contact the hospital for further assistance.",
   "WAITING_ROOM": "Waiting Room:",
   "WARNING": "Warning",
-  "YES": "Yes"
+  "YES": "Yes",
+  "VIDEO": "Video"
 }
+
