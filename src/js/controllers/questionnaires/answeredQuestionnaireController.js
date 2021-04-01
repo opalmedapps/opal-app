@@ -41,6 +41,7 @@
         vm.answerSavedInDBValidStatus = Params.ANSWER_SAVED_IN_DB_STATUS;
 
         // variables that can be seen from view, sorted alphabetically
+        vm.hasDescription = false;
         vm.loadingQuestionnaire = true;     // the loading circle for one questionnaire
         vm.loadingSubmitQuestionnaire = false;  // the loading circle for saving questionnaire
         vm.password = '';   // the password that the user may enter for consent form
@@ -203,6 +204,7 @@
          */
         function init(){
             vm.submitAllowed = true;
+            vm.hasDescription = vm.questionnaire.description !== '' && vm.questionnaire.description !== null && vm.questionnaire.description !== undefined;
 
             if (!vm.questionnaire.hasOwnProperty('questionnaire_category')) {
                 vm.submitAllowed = false;

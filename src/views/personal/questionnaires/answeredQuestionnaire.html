@@ -48,6 +48,13 @@
     </div>
 
     <ons-row align="center" style="margin-left: 0.12vw;" ng-hide="vm.loadingSubmitQuestionnaire || vm.loadingQuestionnaire">
+        <!-- Display questionnaire title and description on completed questionnaire view -->
+        <div class="col-xs-12" align="center">
+            <p ng-if="vm.hasDescription && vm.questionnaire.status === vm.allowedStatus.COMPLETED_QUESTIONNAIRE_STATUS" style="margin-top:2vh; margin-bottom:2vh" ng-class="fontSizeDesc">
+                <h3><b><span style="color: darkmagenta" ng-class="fontSizeTitle">{{vm.questionnaire.nickname}}</span></b></h3>
+                <span align="justify" ng-bind-html="vm.questionnaire.description"></span>
+            </p>
+        </div>
         <ons-col align="center">
             <!-- Section -->
             <!-- this will not be displayed until multi-section questionnaire is implemented in OpalAdmin -->
