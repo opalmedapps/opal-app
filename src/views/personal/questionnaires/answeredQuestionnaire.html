@@ -28,6 +28,25 @@
             {{"QUESTIONNAIRE_INSTRUCTIONS"|translate}}
         </div>
 
+        <div ng-if="vm.isConsent">
+            <li class="list__item list__item--tappable" style="background-color:chartreuse"  >
+            <label ng-class="fontSizeDesc" class="radio-button radio-button--list-item">
+                <input type="radio" name="navi-segment-a" ng-model="vm.consentStatus" ng-value="true" ng-change="vm.updateRequirePassword()">
+                <!-- <input type="radio" name="navi-segment-a" ng-model="vm.requirePassword" ng-value="true"> -->
+                <div class="radio-button__checkmark radio-button--list-item__checkmark"></div> 
+                Consent
+            </label>
+        </li>
+        <li class="list__item list__item--tappable" style="background-color:crimson"  >
+            <label ng-class="fontSizeDesc" class="radio-button radio-button--list-item">
+                <input type="radio" name="navi-segment-a" ng-model="vm.consentStatus" ng-value="false" ng-change="vm.updateRequirePassword()">
+                <!-- <input type="radio" name="navi-segment-a" ng-model="vm.requirePassword" ng-value="false"> -->
+                <div  class="radio-button__checkmark radio-button--list-item__checkmark"></div> 
+                Decline
+            </label>
+        </li>
+        </div> 
+
         <!-- Password verification -->
         <div ng-if="vm.requirePassword && vm.submitAllowed" class="style-4" style="padding: 10px;">
             <br>
@@ -40,7 +59,7 @@
         <!-- Submit button -->
         <div align="center" style="margin-top:10px;margin-bottom:10px">
             <button class="button--large--cta" style="width:80%" ng-click="vm.submitQuestionnaire()" ng-class="fontSizeDesc"
-                    ng-disabled="!vm.submitAllowed || (vm.password == '' && vm.requirePassword)">{{vm.submitButtonText}}
+                    ng-disabled="!vm.submitAllowed || (vm.password == '' && vm.requirePassword) || (vm.isConsent && vm.consentStatus == null)">{{vm.submitButtonText}}
             </button>
         </div>
 
@@ -49,10 +68,10 @@
 
     <ons-row align="center" style="margin-left: 0.12vw;" ng-hide="vm.loadingSubmitQuestionnaire || vm.loadingQuestionnaire">
         <!-- Display questionnaire title and description on completed questionnaire view -->
-        <div class="col-xs-12" align="center">
-            <p ng-if="vm.hasDescription && vm.questionnaire.status === vm.allowedStatus.COMPLETED_QUESTIONNAIRE_STATUS" style="margin-top:2vh; margin-bottom:2vh" ng-class="fontSizeDesc">
+        <div class="col-xs-12" align="center" ng-if="vm.questionnaire.status === vm.allowedStatus.COMPLETED_QUESTIONNAIRE_STATUS">
+            <p style="margin-top:2vh; margin-bottom:2vh" ng-class="fontSizeDesc">
                 <h3><b><span style="color: darkmagenta" ng-class="fontSizeTitle">{{vm.questionnaire.nickname}}</span></b></h3>
-                <span align="justify" ng-bind-html="vm.questionnaire.description"></span>
+                <span ng-if="vm.hasDescription" align="justify" ng-bind-html="vm.questionnaire.description"></span>
             </p>
         </div>
         <ons-col align="center">

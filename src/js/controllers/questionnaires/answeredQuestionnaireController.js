@@ -41,6 +41,8 @@
         vm.answerSavedInDBValidStatus = Params.ANSWER_SAVED_IN_DB_STATUS;
 
         // variables that can be seen from view, sorted alphabetically
+        vm.consentStatus = null;
+        vm.isConsent = false;
         vm.hasDescription = false;
         vm.loadingQuestionnaire = true;     // the loading circle for one questionnaire
         vm.loadingSubmitQuestionnaire = false;  // the loading circle for saving questionnaire
@@ -55,6 +57,7 @@
         vm.editQuestion = editQuestion;
         vm.questionOnClick = questionOnClick;
         vm.submitQuestionnaire = submitQuestionnaire;
+        vm.updateRequirePassword = updateRequirePassword
 
         activate();
 
@@ -212,10 +215,11 @@
             }
 
             category = vm.questionnaire.questionnaire_category.toLowerCase();
+            vm.isConsent = category === 'consent';
             setPageText(category);
 
             // this if for consent forms
-            setRequirePassword(category);
+            // setRequirePassword(category);
 
             for (let i = 0; i < vm.questionnaire.sections.length; i++) {
 
@@ -418,6 +422,11 @@
          */
         function setRequirePassword(category) {
             vm.requirePassword = category === 'consent';
+        }
+
+        function updateRequirePassword() {
+            console.log(vm.consentStatus)
+            vm.requirePassword = category === 'consent' && vm.consentStatus === true;
         }
     }
 
