@@ -60,8 +60,8 @@
 
         function setBadges(){
             vm.studiesUnreadNumber = 0; //TODO: add implementation
-            vm.researchQuestionnairesUnreadNumber = Questionnaires.getNumberOfUnreadQuestionnairesByCategory('research');    
-            vm.consentQuestionnairesUnreadNumber = Questionnaires.getNumberOfUnreadQuestionnairesByCategory('consent'); 
+            vm.researchQuestionnairesUnreadNumber = Questionnaires.getNumberOfUnreadQuestionnairesByPurpose('research');    
+            vm.consentQuestionnairesUnreadNumber = Questionnaires.getNumberOfUnreadQuestionnairesByPurpose('consent'); 
             vm.eduMaterialUnreadNumber = EducationalMaterial.getNumberOfUnreadEducationalMaterialByCategory('research');
         }
 
@@ -75,12 +75,12 @@
         }
 
         function openResearchQuestionnaires() {
-            NavigatorParameters.setParameters({questionnaireCategory: 'research'});
+            NavigatorParameters.setParameters({questionnairePurpose: 'research'});
             navigator.pushPage('views/personal/questionnaires/questionnairesList.html');
         }
 
         function openConsentForms() {
-            NavigatorParameters.setParameters({questionnaireCategory: 'consent'});
+            NavigatorParameters.setParameters({questionnairePurpose: 'consent'});
             navigator.pushPage('views/personal/questionnaires/questionnairesList.html');
         }
 

@@ -118,9 +118,9 @@
                 .then(()=>Questionnaires.requestQuestionnaireUnreadNumber('consent'))
                 .then(()=>{
                     //get number of unread questionnaires in each category
-                    personalTabData.questionnairesUnreadNumber = Questionnaires.getNumberOfUnreadQuestionnairesByCategory('clinical');
-                    researchTabData.researchQuestionnairesUnreadNumber = Questionnaires.getNumberOfUnreadQuestionnairesByCategory('research');
-                    researchTabData.consentQuestionnairesUnreadNumber = Questionnaires.getNumberOfUnreadQuestionnairesByCategory('consent');
+                    personalTabData.questionnairesUnreadNumber = Questionnaires.getNumberOfUnreadQuestionnairesByPurpose('clinical');
+                    researchTabData.researchQuestionnairesUnreadNumber = Questionnaires.getNumberOfUnreadQuestionnairesByPurpose('research');
+                    researchTabData.consentQuestionnairesUnreadNumber = Questionnaires.getNumberOfUnreadQuestionnairesByPurpose('consent');
                     
                     //sum all notifications in researchTabData 
                     personalTabData.researchUnreadNumber = researchTabData.studiesUnreadNumber + researchTabData.researchQuestionnairesUnreadNumber 

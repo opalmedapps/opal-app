@@ -30,7 +30,7 @@
         const allowedStatus = Params.QUESTIONNAIRE_DB_STATUS_CONVENTIONS;
 
         // variables for controller
-        let category = 'default';
+        let purpose = 'default';
         let navigator = null;
         let navigatorName = '';
 
@@ -39,10 +39,10 @@
         vm.newQuestionnaireList = [];
         vm.inProgressQuestionnaireList = [];
         vm.completedQuestionnaireList = [];
-        vm.noNewQuestionnaireText = '';     // the description varies according to the questionnaire category
-        vm.noProgressQuestionnaireText = '';    // the description varies according to the questionnaire category
-        vm.noCompletedQuestionnaireText = '';   // the description varies according to the questionnaire category
-        vm.pageTitle = '';  // the page title varies according to the questionnaire category
+        vm.noNewQuestionnaireText = '';     // the description varies according to the questionnaire purpose
+        vm.noProgressQuestionnaireText = '';    // the description varies according to the questionnaire purpose
+        vm.noCompletedQuestionnaireText = '';   // the description varies according to the questionnaire purpose
+        vm.pageTitle = '';  // the page title varies according to the questionnaire purpose
         vm.tab = 'new';
 
         // functions that can be used from view, sorted alphabetically
@@ -64,16 +64,16 @@
             navigatorName = NavigatorParameters.getNavigatorName();
             let params = NavigatorParameters.getParameters();
 
-            if (!params.hasOwnProperty('questionnaireCategory') || !Questionnaires.validateQuestionnaireCategory(params.questionnaireCategory)) {
+            if (!params.hasOwnProperty('questionnairePurpose') || !Questionnaires.validateQuestionnairePurpose(params.questionnairePurpose)) {
                 setPageText();
                 vm.loading = false;
                 handleRequestError();
 
             } else {
-                category = params.questionnaireCategory.toLowerCase();
-                setPageText(category);
+                purpose = params.questionnairePurpose.toLowerCase();
+                setPageText(purpose);
 
-                Questionnaires.requestQuestionnaireList(params.questionnaireCategory)
+                Questionnaires.requestQuestionnaireList(params.questionnairePurpose)
                     .then(function () {
                         loadQuestionnaireList();
 
@@ -109,7 +109,7 @@
                 Navigator: navigatorName,
                 answerQuestionnaireId: selectedQuestionnaire.qp_ser_num,
                 editQuestion: false,
-                questionnaireCategory: category
+                questionnairePurpose: purpose
             });
 
             navigator.pushPage('views/personal/questionnaires/questionnaires.html');
@@ -171,21 +171,21 @@
 
         /**
          * @name setPageText
-         * @desc set the page title and descriptions according to the questionnaire category requested on the list page
-         *      if the category is not passed as an argument, the text will default to the default's translation
-         * @param {string} questionnaireCategory
+         * @desc set the page title and descriptions according to the questionnaire purpose requested on the list page
+         *      if the purpose is not passed as an argument, the text will default to the default's translation
+         * @param {string} questionnairePurpose
          */
-        function setPageText(questionnaireCategory='default') {
+        function setPageText(questionnairePurpose='default') {
             // set the page title
-            vm.pageTitle = $filter('translate')(Questionnaires.getQuestionnaireTitleByCategory(questionnaireCategory));
+            vm.pageTitle = $filter('translate')(Questionnaires.getQuestionnaireTitleByPurpose(questionnairePurpose));
 
             // set the messages when the lists is null
             vm.noCompletedQuestionnaireText
-                = $filter('translate')(Questionnaires.getQuestionnaireNoListMessageByCategory(allowedStatus.COMPLETED_QUESTIONNAIRE_STATUS, questionnaireCategory));
+                = $filter('translate')(Questionnaires.getQuestionnaireNoListMessageByPurpose(allowedStatus.COMPLETED_QUESTIONNAIRE_STATUS, questionnairePurpose));
             vm.noNewQuestionnaireText
-                = $filter('translate')(Questionnaires.getQuestionnaireNoListMessageByCategory(allowedStatus.NEW_QUESTIONNAIRE_STATUS, questionnaireCategory));
+                = $filter('translate')(Questionnaires.getQuestionnaireNoListMessageByPurpose(allowedStatus.NEW_QUESTIONNAIRE_STATUS, questionnairePurpose));
             vm.noProgressQuestionnaireText
-                = $filter('translate')(Questionnaires.getQuestionnaireNoListMessageByCategory(allowedStatus.IN_PROGRESS_QUESTIONNAIRE_STATUS, questionnaireCategory));
+                = $filter('translate')(Questionnaires.getQuestionnaireNoListMessageByPurpose(allowedStatus.IN_PROGRESS_QUESTIONNAIRE_STATUS, questionnairePurpose));
         }
 
         /**

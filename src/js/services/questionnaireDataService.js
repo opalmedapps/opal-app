@@ -169,13 +169,13 @@
 
         /**
          * @name requestQuestionnaireList
-         * @desc Asks the listener for the list of questionnaires under a specific category this user has
-         * @param {string} questionnaireCategory the category of questionnaires requested
+         * @desc Asks the listener for the list of questionnaires under a specific purpose this user has
+         * @param {string} questionnairePurpose the purpose of questionnaires requested
          * @returns {Promise} resolves to an array of questionnaires if success
          */
-        function requestQuestionnaireList(questionnaireCategory) {
+        function requestQuestionnaireList(questionnairePurpose) {
             let params = {
-                category: questionnaireCategory
+                purpose: questionnairePurpose
             };
 
             return RequestToServer.sendRequestWithResponse(api.GET_LIST, params)
@@ -212,13 +212,13 @@
 
           /**
          * @name requestQuestionnaireUnreadNumber
-         * @desc Asks the listener for the number of unread (e.g. 'New') questoinnaires under a specific category for this user
-         * @param {string} questionnaireCategory the category of questionnaires requested
+         * @desc Asks the listener for the number of unread (e.g. 'New') questoinnaires under a specific purpose for this user
+         * @param {string} questionnairePurpose the purpose of questionnaires requested
          * @returns {Promise} resolves to the number of unread questionnaires data
          */
-        function requestQuestionnaireUnreadNumber(questionnaireCategory) {
+        function requestQuestionnaireUnreadNumber(questionnairePurpose) {
             let params = {
-                category: questionnaireCategory
+                purpose: questionnairePurpose
             };
             return RequestToServer.sendRequestWithResponse(api.GET_NUMBER_UNREAD, params)
                 .then(function (response) {

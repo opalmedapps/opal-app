@@ -18,13 +18,13 @@
         var vm = this;
 
         // variables for controller
-        let category = 'default';
+        let purpose = 'default';
         let navigator = null;
         let navigatorName = '';
 
-        vm.backToListMessage = '';  // the message varies according to the questionnaire category
-        vm.pageTitle = '';  // the page title varies according to the questionnaire category
-        vm.thankMessage = '';    // the message varies according to the questionnaire category
+        vm.backToListMessage = '';  // the message varies according to the questionnaire purpose
+        vm.pageTitle = '';  // the page title varies according to the questionnaire purpose
+        vm.thankMessage = '';    // the message varies according to the questionnaire purpose
 
         // functions that can be seen from view, sorted alphabetically
         vm.goBackToList = goBackToList;
@@ -38,12 +38,12 @@
             navigatorName = NavigatorParameters.getNavigatorName();
             let params = NavigatorParameters.getParameters();
 
-            if (!params.hasOwnProperty('questionnaireCategory') || !Questionnaires.validateQuestionnaireCategory(params.questionnaireCategory)) {
+            if (!params.hasOwnProperty('questionnairePurpose') || !Questionnaires.validateQuestionnairePurpose(params.questionnairePurpose)) {
                 setPageText();
                 vm.loading = false;
             } else {
-                category = params.questionnaireCategory.toLowerCase();
-                setPageText(category);
+                purpose = params.questionnairePurpose.toLowerCase();
+                setPageText(purpose);
                 vm.loading = false;
             }
         }
@@ -59,16 +59,16 @@
 
         /**
          * @name setPageText
-         * @desc set the page title and descriptions according to the questionnaire category requested
-         *      if the category is not passed as an argument, the text will default to the default's translation
-         * @param {string} category
+         * @desc set the page title and descriptions according to the questionnaire purpose requested
+         *      if the purpose is not passed as an argument, the text will default to the default's translation
+         * @param {string} purpose
          */
-        function setPageText(category = 'default') {
-            vm.pageTitle = $filter('translate')(Questionnaires.getQuestionnaireTitleByCategory(category));
+        function setPageText(purpose = 'default') {
+            vm.pageTitle = $filter('translate')(Questionnaires.getQuestionnaireTitleByPurpose(purpose));
 
-            vm.backToListMessage = $filter('translate')(Questionnaires.getQuestionnaireBackToListByCategory(category));
+            vm.backToListMessage = $filter('translate')(Questionnaires.getQuestionnaireBackToListByPurpose(purpose));
 
-            vm.thankMessage = $filter('translate')(Questionnaires.getQuestionnaireThankByCategory(category));
+            vm.thankMessage = $filter('translate')(Questionnaires.getQuestionnaireThankByPurpose(purpose));
         }
 
     }

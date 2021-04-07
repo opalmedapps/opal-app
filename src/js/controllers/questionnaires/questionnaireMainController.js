@@ -32,7 +32,7 @@
         const answerSavedInDBValidStatus = Params.ANSWER_SAVED_IN_DB_STATUS;
 
         // variables global to this controller
-        let category = 'default';
+        let purpose = 'default';
         let hasGoneBackToHomeScreen = false;    // this variable is used for noting whether the user has gone back to the home screen or not because if they did, we have to update the startIndex.
         let navigator = null;
         let navigatorName = '';
@@ -86,14 +86,14 @@
 
             let params = NavigatorParameters.getParameters();
 
-            if (!params.hasOwnProperty('questionnaireCategory') || !Questionnaires.validateQuestionnaireCategory(params.questionnaireCategory)) {    
+            if (!params.hasOwnProperty('questionnairePurpose') || !Questionnaires.validateQuestionnairePurpose(params.questionnairePurpose)) {    
                 setPageText();
                 vm.loading = false;
                 handleLoadQuestionnaireErr();
             } else {
-                category = params.questionnaireCategory.toLowerCase();
-                vm.isConsent = category === 'consent';
-                setPageText(category);
+                purpose = params.questionnairePurpose.toLowerCase();
+                vm.isConsent = purpose === 'consent';
+                setPageText(purpose);
             }
 
             /*
@@ -445,13 +445,13 @@
 
          /**
          * @name setPageText
-         * @desc set the page title and descriptions according to the questionnaire category requested on the list page
-         *      if the category is not passed as an argument, the text will default to the default's translation
-         * @param {string} questionnaireCategory
+         * @desc set the page title and descriptions according to the questionnaire purpose requested on the list page
+         *      if the purpose is not passed as an argument, the text will default to the default's translation
+         * @param {string} questionnairePurpose
          */
-        function setPageText(questionnaireCategory='default') {
-            vm.beginInstructions = $filter('translate')(Questionnaires.getQuestionnaireBeginByCategory(questionnaireCategory));
-            vm.resumeInstructions = $filter('translate')(Questionnaires.getQuestionnaireResumeByCategory(questionnaireCategory));
+        function setPageText(questionnairePurpose='default') {
+            vm.beginInstructions = $filter('translate')(Questionnaires.getQuestionnaireBeginByPurpose(questionnairePurpose));
+            vm.resumeInstructions = $filter('translate')(Questionnaires.getQuestionnaireResumeByPurpose(questionnairePurpose));
         }
 
         /**

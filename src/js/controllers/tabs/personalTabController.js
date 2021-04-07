@@ -89,11 +89,11 @@
             vm.documentsUnreadNumber = Documents.getNumberUnreadDocuments();
             vm.txTeamMessagesUnreadNumber = TxTeamMessages.getNumberUnreadTxTeamMessages();
             vm.notificationsUnreadNumber = Notifications.getNumberUnreadNotifications();
-            vm.questionnairesUnreadNumber = Questionnaires.getNumberOfUnreadQuestionnairesByCategory('clinical');  
+            vm.questionnairesUnreadNumber = Questionnaires.getNumberOfUnreadQuestionnairesByPurpose('clinical');  
             //TODO: replace 0 with number of unread studies once available
-            vm.researchUnreadNumber = 0 + Questionnaires.getNumberOfUnreadQuestionnairesByCategory('research') 
+            vm.researchUnreadNumber = 0 + Questionnaires.getNumberOfUnreadQuestionnairesByPurpose('research') 
                                         + EducationalMaterial.getNumberOfUnreadEducationalMaterialByCategory('research')
-                                        + Questionnaires.getNumberOfUnreadQuestionnairesByCategory('consent');   
+                                        + Questionnaires.getNumberOfUnreadQuestionnairesByPurpose('consent');   
         }
 
         function goToStatus(){
@@ -128,7 +128,7 @@
         }
 
         function goToClinicalQuestionnaire() {
-            NavigatorParameters.setParameters({questionnaireCategory: 'clinical'});
+            NavigatorParameters.setParameters({questionnairePurpose: 'clinical'});
             personalNavigator.pushPage('views/personal/questionnaires/questionnairesList.html');
         }
     }

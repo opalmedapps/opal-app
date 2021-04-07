@@ -27,17 +27,17 @@
         const questionnaireValidStatus = Params.QUESTIONNAIRE_DB_STATUS_CONVENTIONS;
         const questionnaireValidType = Params.QUESTIONNAIRE_DB_TYPE_CONVENTIONS;
         const answerSavedInDBValidStatus = Params.ANSWER_SAVED_IN_DB_STATUS;
-        const allowedCategory = Params.QUESTIONNAIRE_CATEGORIES;
+        const allowedPurpose = Params.QUESTIONNAIRE_PURPOSES;
 
         // the following are not in the constants file since they concern translation
-        const CATEGORY_TITLE_MAP = {
+        const PURPOSE_TITLE_MAP = {
             clinical: 'CLINICAL_QUESTIONNAIRES',
             research: 'RESEARCH_QUESTIONNAIRES',
             consent: 'CONSENT_FORMS',
             default: 'QUESTIONNAIRES',
         };
 
-        const CATEGORY_EMPTY_LIST_MAP = {
+        const PURPOSE_EMPTY_LIST_MAP = {
             new: {
                 clinical: 'QUESTIONNAIRE_NONE_NEW',
                 research: 'QUESTIONNAIRE_NONE_NEW',
@@ -58,42 +58,42 @@
             }
         };
 
-        const CATEGORY_THANKS_MAP = {
+        const PURPOSE_THANKS_MAP = {
             clinical: 'QUESTIONNAIRE_THANKS',
             research: 'QUESTIONNAIRE_THANKS',
             consent: 'CONSENT_FORM_THANKS',
             default: 'QUESTIONNAIRE_THANKS',
         };
 
-        const CATEGORY_LIST_MAP = {
+        const PURPOSE_LIST_MAP = {
             clinical: 'QUESTIONNAIRE_GO_BACK_TO_LIST',
             research: 'QUESTIONNAIRE_GO_BACK_TO_LIST',
             consent: 'CONSENT_FORM_GO_BACK_TO_LIST',
             default: 'QUESTIONNAIRE_GO_BACK_TO_LIST',
         }
 
-        const CATEGORY_BEGIN_MAP = {
+        const PURPOSE_BEGIN_MAP = {
             clinical: 'QUESTIONNAIRE_BEGIN_INSTRUCTION',
             research: 'QUESTIONNAIRE_BEGIN_INSTRUCTION',
             consent: 'CONSENT_FORM_BEGIN_INSTRUCTION',
             default: 'QUESTIONNAIRE_BEGIN_INSTRUCTION',
         };
 
-        const CATEGORY_RESUME_MAP = {
+        const PURPOSE_RESUME_MAP = {
             clinical: 'QUESTIONNAIRE_RESUME_INSTRUCTION',
             research: 'QUESTIONNAIRE_RESUME_INSTRUCTION',
             consent: 'CONSENT_FORM_RESUME_INSTRUCTION',
             default: 'QUESTIONNAIRE_RESUME_INSTRUCTION',
         };
         
-        const CATEGORY_SUBMIT_BUTTON_MAP = {
+        const PURPOSE_SUBMIT_BUTTON_MAP = {
             clinical: 'SUBMITANSWERS',
             research: 'SUBMITANSWERS',
             consent: 'SUBMITCONSENT',
             default: 'SUBMITANSWERS',
         };
 
-        const CATEGORY_SUBMIT_INSTRUCTION_MAP = {
+        const PURPOSE_SUBMIT_INSTRUCTION_MAP = {
             clinical: 'QUESTIONNAIRE_SUBMIT_INSTRUCTION',
             research: 'QUESTIONNAIRE_SUBMIT_INSTRUCTION',
             consent: 'CONSENT_FORM_SUBMIT_INSTRUCTION',
@@ -117,7 +117,7 @@
         let waitingForSavingAnswer = false;
 
         // Variables for questionnaire notifications
-        let currentCategory = 'default';
+        let currentPurpose = 'default';
         let numberOfUnreadQuestionnaires = {
             clinical: 0,
             research: 0,
@@ -131,18 +131,18 @@
             findInProgressQuestionIndex: findInProgressQuestionIndex,
             getCarouselItems: getCarouselItems,
             getCurrentQuestionnaire: getCurrentQuestionnaire,
-            getNumberOfUnreadQuestionnairesByCategory: getNumberOfUnreadQuestionnairesByCategory,
-            getQuestionnaireBackToListByCategory: getQuestionnaireBackToListByCategory,
-            getQuestionnaireBeginByCategory: getQuestionnaireBeginByCategory,
+            getNumberOfUnreadQuestionnairesByPurpose: getNumberOfUnreadQuestionnairesByPurpose,
+            getQuestionnaireBackToListByPurpose: getQuestionnaireBackToListByPurpose,
+            getQuestionnaireBeginByPurpose: getQuestionnaireBeginByPurpose,
             getQuestionnaireCount: getQuestionnaireCount,
             getQuestionnaireList: getQuestionnaireList,
-            getQuestionnaireNoListMessageByCategory: getQuestionnaireNoListMessageByCategory,
-            getQuestionnaireResumeByCategory: getQuestionnaireResumeByCategory,
+            getQuestionnaireNoListMessageByPurpose: getQuestionnaireNoListMessageByPurpose,
+            getQuestionnaireResumeByPurpose: getQuestionnaireResumeByPurpose,
             getQuestionnaireStartUrl: getQuestionnaireStartUrl,
-            getQuestionnaireSubmitButtonByCategory: getQuestionnaireSubmitButtonByCategory,
-            getQuestionnaireSubmitInstructionByCategory: getQuestionnaireSubmitInstructionByCategory,
-            getQuestionnaireTitleByCategory: getQuestionnaireTitleByCategory,
-            getQuestionnaireThankByCategory: getQuestionnaireThankByCategory,
+            getQuestionnaireSubmitButtonByPurpose: getQuestionnaireSubmitButtonByPurpose,
+            getQuestionnaireSubmitInstructionByPurpose: getQuestionnaireSubmitInstructionByPurpose,
+            getQuestionnaireTitleByPurpose: getQuestionnaireTitleByPurpose,
+            getQuestionnaireThankByPurpose: getQuestionnaireThankByPurpose,
             isWaitingForSavingAnswer: isWaitingForSavingAnswer,
             updateQuestionnaireStatus: updateQuestionnaireStatus,
             requestOpalQuestionnaireFromSerNum: requestOpalQuestionnaireFromSerNum,
@@ -150,7 +150,7 @@
             requestQuestionnaireList: requestQuestionnaireList,
             requestQuestionnaireUnreadNumber: requestQuestionnaireUnreadNumber,
             saveQuestionnaireAnswer: saveQuestionnaireAnswer,
-            validateQuestionnaireCategory: validateQuestionnaireCategory,
+            validateQuestionnairePurpose: validateQuestionnairePurpose,
         };
 
         return service;
@@ -230,20 +230,20 @@
          * @name requestQuestionnaireList
          * @desc this function is requesting the list of questionnaires from questionnaireDataService and
          *       process this list to set the questionnaire list variables
-         * @param {string} questionnaireCategory the category of questionnaires requested
+         * @param {string} questionnairePurpose the purpose of questionnaires requested
          * @returns {Promise}
          */
-        function requestQuestionnaireList(questionnaireCategory) {
+        function requestQuestionnaireList(questionnairePurpose) {
             // re-initiate all the questionnaire related variables
             clearAllQuestionnaire();
 
-            currentCategory = questionnaireCategory;
+            currentPurpose = questionnairePurpose;
 
-            return QuestionnaireDataService.requestQuestionnaireList(questionnaireCategory)
+            return QuestionnaireDataService.requestQuestionnaireList(questionnairePurpose)
                 .then(function(responseQuestionnaireList){
                     setQuestionnaireList(responseQuestionnaireList);
-                    // Update number of unread questionnaires of current category for notifications
-                    numberOfUnreadQuestionnaires[questionnaireCategory] = getNumberOfUnreadQuestionnaires();
+                    // Update number of unread questionnaires of current purpose for notifications
+                    numberOfUnreadQuestionnaires[questionnairePurpose] = getNumberOfUnreadQuestionnaires();
 
                     return {Success: true, Location: 'Server'};
                 });
@@ -291,14 +291,14 @@
          * @name requestQuestionnaireUnreadNumber
          * @desc this function is requesting the number of unread (e.g. 'New') questionnaires from questionnaireDataService and
          *       processes this response to set the number of unread questionnaires variable for notifications 
-         * @param {string} questionnaireCategory the category of questionnaires requested
+         * @param {string} questionnairePurpose the purpose of questionnaires requested
          * @returns {Promise}
          */
-        function requestQuestionnaireUnreadNumber(questionnaireCategory) {
-            return QuestionnaireDataService.requestQuestionnaireUnreadNumber(questionnaireCategory)
+        function requestQuestionnaireUnreadNumber(questionnairePurpose) {
+            return QuestionnaireDataService.requestQuestionnaireUnreadNumber(questionnairePurpose)
                 .then(function(responseUnreadNumber){
 
-                    numberOfUnreadQuestionnaires[questionnaireCategory] = parseInt(responseUnreadNumber.numberUnread);
+                    numberOfUnreadQuestionnaires[questionnairePurpose] = parseInt(responseUnreadNumber.numberUnread);
 
                     return {Success: true, Location: 'Server'};
                 });
@@ -338,7 +338,7 @@
                 .then(function (response) {
 
                     if (newStatus === 1){
-                        numberOfUnreadQuestionnaires[currentCategory] -= 1;
+                        numberOfUnreadQuestionnaires[currentPurpose] -= 1;
                     }
 
                     let isFailure = updateAppQuestionnaireStatus(answerQuestionnaireId, newStatus, oldStatus);
@@ -458,108 +458,108 @@
         }
 
         /**
-         * @name validateQuestionnaireCategory
-         * @desc check whether the questionnaire category is valid
-         * @param {string} questionnaireCategory
+         * @name validateQuestionnairePurpose
+         * @desc check whether the questionnaire purpose is valid
+         * @param {string} questionnairePurpose
          * @returns {boolean} true if it is valid, false otherwise
          */
-        function validateQuestionnaireCategory(questionnaireCategory) {
-            return allowedCategory.includes(questionnaireCategory.toLowerCase());
+        function validateQuestionnairePurpose(questionnairePurpose) {
+            return allowedPurpose.includes(questionnairePurpose.toLowerCase());
         }
 
         /**
-         * @name getQuestionnaireTitleByCategory
-         * @desc gets the correct translation key for the questionnaire title. It assumes that the category has been validated.
-         * @param {string} questionnaireCategory
+         * @name getQuestionnaireTitleByPurpose
+         * @desc gets the correct translation key for the questionnaire title. It assumes that the purpose has been validated.
+         * @param {string} questionnairePurpose
          * @returns {string} the translation key in en.json or fr.json
          */
-        function getQuestionnaireTitleByCategory(questionnaireCategory = 'default') {
-            return CATEGORY_TITLE_MAP[questionnaireCategory];
+        function getQuestionnaireTitleByPurpose(questionnairePurpose = 'default') {
+            return PURPOSE_TITLE_MAP[questionnairePurpose];
         }
 
         /**
-         * @name getQuestionnaireThankByCategory
-         * @desc gets the correct translation key for the questionnaire thank you message. It assumes that the category has been validated.
-         * @param {string} questionnaireCategory
+         * @name getQuestionnaireThankByPurpose
+         * @desc gets the correct translation key for the questionnaire thank you message. It assumes that the purpose has been validated.
+         * @param {string} questionnairePurpose
          * @returns {string} the translation key in en.json or fr.json
          */
-        function getQuestionnaireThankByCategory(questionnaireCategory = 'default') {
-            return CATEGORY_THANKS_MAP[questionnaireCategory];
+        function getQuestionnaireThankByPurpose(questionnairePurpose = 'default') {
+            return PURPOSE_THANKS_MAP[questionnairePurpose];
         }
 
         /**
-         * @name getQuestionnaireBackToListByCategory
+         * @name getQuestionnaireBackToListByPurpose
          * @desc gets the correct translation key for the questionnaire back to list message.
-         *       It assumes that the category has been validated.
-         * @param {string} questionnaireCategory
+         *       It assumes that the purpose has been validated.
+         * @param {string} questionnairePurpose
          * @returns {string} the translation key in en.json or fr.json
          */
-        function getQuestionnaireBackToListByCategory(questionnaireCategory = 'default') {
-            return CATEGORY_LIST_MAP[questionnaireCategory];
+        function getQuestionnaireBackToListByPurpose(questionnairePurpose = 'default') {
+            return PURPOSE_LIST_MAP[questionnairePurpose];
         }
 
         /**
-         * @name getQuestionnaireNoListMessageByCategory
+         * @name getQuestionnaireNoListMessageByPurpose
          * @desc gets the correct translation key for the message when there is no questionnaires in the list.
-         *       It assumes that the category has been validated.
+         *       It assumes that the purpose has been validated.
          * @param {int} status
-         * @param {string} questionnaireCategory
+         * @param {string} questionnairePurpose
          * @returns {string}
          */
-        function getQuestionnaireNoListMessageByCategory(status, questionnaireCategory = 'default') {
+        function getQuestionnaireNoListMessageByPurpose(status, questionnairePurpose = 'default') {
             switch (status) {
                 case questionnaireValidStatus.NEW_QUESTIONNAIRE_STATUS:
-                    return CATEGORY_EMPTY_LIST_MAP.new[questionnaireCategory];
+                    return PURPOSE_EMPTY_LIST_MAP.new[questionnairePurpose];
 
                 case questionnaireValidStatus.IN_PROGRESS_QUESTIONNAIRE_STATUS:
-                    return CATEGORY_EMPTY_LIST_MAP.progress[questionnaireCategory];
+                    return PURPOSE_EMPTY_LIST_MAP.progress[questionnairePurpose];
 
                 case questionnaireValidStatus.COMPLETED_QUESTIONNAIRE_STATUS:
-                    return CATEGORY_EMPTY_LIST_MAP.completed[questionnaireCategory];
+                    return PURPOSE_EMPTY_LIST_MAP.completed[questionnairePurpose];
 
                 default:
-                    return CATEGORY_EMPTY_LIST_MAP.new['default'];
+                    return PURPOSE_EMPTY_LIST_MAP.new['default'];
             }
         }
 
         /**
-         * @name getQuestionnaireBeginByCategory
-         * @desc gets the correct translation key for the begin questionnaire instruction. It assumes that the category has been validated.
-         * @param {string} questionnaireCategory
+         * @name getQuestionnaireBeginByPurpose
+         * @desc gets the correct translation key for the begin questionnaire instruction. It assumes that the purpose has been validated.
+         * @param {string} questionnairePurpose
          * @returns {string} the translation key in en.json or fr.json
          */
-        function getQuestionnaireBeginByCategory(questionnaireCategory = 'default') {
-            return CATEGORY_BEGIN_MAP[questionnaireCategory];
+        function getQuestionnaireBeginByPurpose(questionnairePurpose = 'default') {
+            return PURPOSE_BEGIN_MAP[questionnairePurpose];
         }
 
         /**
-         * @name getQuestionnaireResumeByCategory
-         * @desc gets the correct translation key for the resume questionnaire instruction. It assumes that the category has been validated.
-         * @param {string} questionnaireCategory
+         * @name getQuestionnaireResumeByPurpose
+         * @desc gets the correct translation key for the resume questionnaire instruction. It assumes that the purpose has been validated.
+         * @param {string} questionnairePurpose
          * @returns {string} the translation key in en.json or fr.json
          */
-        function getQuestionnaireResumeByCategory(questionnaireCategory = 'default') {
-            return CATEGORY_RESUME_MAP[questionnaireCategory];
+        function getQuestionnaireResumeByPurpose(questionnairePurpose = 'default') {
+            return PURPOSE_RESUME_MAP[questionnairePurpose];
         }
 
         /**
-         * @name getQuestionnaireSubmitButtonByCategory
-         * @desc gets the correct translation key for the questionnaire submit button. It assumes that the category has been validated.
-         * @param {string} questionnaireCategory
+         * @name getQuestionnaireSubmitButtonByPurpose
+         * @desc gets the correct translation key for the questionnaire submit button. It assumes that the purpose has been validated.
+         * @param {string} questionnairePurpose
          * @returns {string} the translation key in en.json or fr.json
          */
-        function getQuestionnaireSubmitButtonByCategory(questionnaireCategory = 'default') {
-            return CATEGORY_SUBMIT_BUTTON_MAP[questionnaireCategory];
+        function getQuestionnaireSubmitButtonByPurpose(questionnairePurpose = 'default') {
+            return PURPOSE_SUBMIT_BUTTON_MAP[questionnairePurpose];
         }
         
         /**
-         * @name getQuestionnaireSubmitInstructionByCategory
-         * @desc gets the correct translation key for the submit questionnaire instruction. It assumes that the category has been validated.
-         * @param {string} questionnaireCategory
+         * @name getQuestionnaireSubmitInstructionByPurpose
+         * @desc gets the correct translation key for the submit questionnaire instruction. It assumes that the purpose has been validated.
+         * @param {string} questionnairePurpose
          * @returns {string} the translation key in en.json or fr.json
          */
-        function getQuestionnaireSubmitInstructionByCategory(questionnaireCategory = 'default') {
-            return CATEGORY_SUBMIT_INSTRUCTION_MAP[questionnaireCategory];
+        function getQuestionnaireSubmitInstructionByPurpose(questionnairePurpose = 'default') {
+            return PURPOSE_SUBMIT_INSTRUCTION_MAP[questionnairePurpose];
         }
 
         /**
@@ -615,21 +615,21 @@
 
         /**
          * @name getNumberOfUnreadQuestionnaires
-         * @desc This function is used for getting the number of unread questionnaires (e.g. 'New') in the current category
-         * @returns {Number} returns the number of new questionnaires of the current category
+         * @desc This function is used for getting the number of unread questionnaires (e.g. 'New') in the current purpose
+         * @returns {Number} returns the number of new questionnaires of the current purpose
          */
         function getNumberOfUnreadQuestionnaires(){
             return getQuestionnaireCount(questionnaireValidStatus.NEW_QUESTIONNAIRE_STATUS);
         }
 
         /**
-         * @name getNumberOfUnreadQuestionnairesByCategory
-         * @desc This public function is used for showing the badge by the personalTabController.js and researchController.js for the appropriate category
-         * @param {string} questionnaireCategory the category of questionnaires requested
-         * @returns {Number} returns the number of new questionnaires of the given questionnaireCategory
+         * @name getNumberOfUnreadQuestionnairesByPurpose
+         * @desc This public function is used for showing the badge by the personalTabController.js and researchController.js for the appropriate purpose
+         * @param {string} questionnairePurpose the purpose of questionnaires requested
+         * @returns {Number} returns the number of new questionnaires of the given questionnairePurpose
          */
-        function getNumberOfUnreadQuestionnairesByCategory(questionnaireCategory = 'default'){
-            return numberOfUnreadQuestionnaires[questionnaireCategory];
+        function getNumberOfUnreadQuestionnairesByPurpose(questionnairePurpose = 'default'){
+            return numberOfUnreadQuestionnaires[questionnairePurpose];
         }
         /**
          * @name getQuestionnaireStartUrl

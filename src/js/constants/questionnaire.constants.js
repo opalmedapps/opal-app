@@ -48,6 +48,6 @@
                 'ANSWER_CHANGED': '2',
                 'ANSWER_SAVING_WAITING_TIME': 30000
             },
-            QUESTIONNAIRE_CATEGORIES: ['clinical', 'research', 'consent'],
+            QUESTIONNAIRE_PURPOSES: ['clinical', 'research', 'quality', 'consent', 'clerical', 'opal'],
         });
 })();

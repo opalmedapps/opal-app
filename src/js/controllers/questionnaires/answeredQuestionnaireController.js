@@ -31,7 +31,7 @@
         const NON_EXISTING_ANSWER = Params.QUESTIONNAIRE_DISPLAY_STRING.NON_EXISTING_ANSWER;
 
         // variables for controller
-        let category = 'default';
+        let purpose = 'default';
         let navigator = null;
         let navigatorName = '';
 
@@ -114,7 +114,7 @@
                 questionIndex: qIndex,
                 editQuestion: true,
                 answerQuestionnaireId: vm.questionnaire.qp_ser_num,
-                questionnaireCategory: category
+                questionnairePurpose: purpose
             });
             navigator.replacePage('views/personal/questionnaires/questionnaires.html', {animation: 'slide'});
         }
@@ -139,7 +139,7 @@
                     vm.loadingSubmitQuestionnaire = false;
                     vm.questionnaire.status = vm.allowedStatus.COMPLETED_QUESTIONNAIRE_STATUS;
 
-                    NavigatorParameters.setParameters({Navigator: navigatorName, questionnaireCategory: category});
+                    NavigatorParameters.setParameters({Navigator: navigatorName, questionnairePurpose: purpose});
                     navigator.replacePage('views/personal/questionnaires/questionnaireCompletedConfirmation.html', {animation: 'slide'});
 
                 })
@@ -203,23 +203,23 @@
          *      2) initialize the answers in case they do not exist due to the migration
          *      3) verify if the questionnaire is properly completed and ready to be submitted
          *      4) add / reset the show hide property of the question itself
-         *      5) decide whether or not to prompt for the password depending on the questionnaire category
+         *      5) decide whether or not to prompt for the password depending on the questionnaire purpose
          */
         function init(){
             vm.submitAllowed = true;
             vm.hasDescription = vm.questionnaire.description !== '' && vm.questionnaire.description !== null && vm.questionnaire.description !== undefined;
 
-            if (!vm.questionnaire.hasOwnProperty('questionnaire_category')) {
+            if (!vm.questionnaire.hasOwnProperty('questionnaire_purpose')) {
                 vm.submitAllowed = false;
                 handleLoadQuestionnaireErr();
             }
 
-            category = vm.questionnaire.questionnaire_category.toLowerCase();
-            vm.isConsent = category === 'consent';
-            setPageText(category);
+            purpose = vm.questionnaire.questionnaire_purpose.toLowerCase();
+            vm.isConsent = purpose === 'consent';
+            setPageText(purpose);
 
             // this if for consent forms
-            // setRequirePassword(category);
+            // setRequirePassword(purpose);
 
             for (let i = 0; i < vm.questionnaire.sections.length; i++) {
 
@@ -306,13 +306,13 @@
 
          /**
          * @name setPageText
-         * @desc set the page text and descriptions according to the questionnaire category requested 
-         *      if the category is not passed as an argument, the text will default to the default's translation
-         * @param {string} questionnaireCategory
+         * @desc set the page text and descriptions according to the questionnaire purpose requested 
+         *      if the purpose is not passed as an argument, the text will default to the default's translation
+         * @param {string} questionnairePurpose
          */
-        function setPageText(questionnaireCategory='default') {
-            vm.submitButtonText = $filter('translate')(Questionnaires.getQuestionnaireSubmitButtonByCategory(questionnaireCategory));
-            vm.submitInstructions = $filter('translate')(Questionnaires.getQuestionnaireSubmitInstructionByCategory(questionnaireCategory));
+        function setPageText(questionnairePurpose='default') {
+            vm.submitButtonText = $filter('translate')(Questionnaires.getQuestionnaireSubmitButtonByPurpose(questionnairePurpose));
+            vm.submitInstructions = $filter('translate')(Questionnaires.getQuestionnaireSubmitInstructionByPurpose(questionnairePurpose));
         }
 
         /**
@@ -417,16 +417,16 @@
 
         /**
          * @name setRequirePassword
-         * @desc set the flag vm.requirePassword depending on category of the questionnaire
-         * @param {string} category
+         * @desc set the flag vm.requirePassword depending on purpose of the questionnaire
+         * @param {string} purpose
          */
-        function setRequirePassword(category) {
-            vm.requirePassword = category === 'consent';
+        function setRequirePassword(purpose) {
+            vm.requirePassword = purpose === 'consent';
         }
 
         function updateRequirePassword() {
             console.log(vm.consentStatus)
-            vm.requirePassword = category === 'consent' && vm.consentStatus === true;
+            vm.requirePassword = purpose === 'consent' && vm.consentStatus === true;
         }
     }
 
