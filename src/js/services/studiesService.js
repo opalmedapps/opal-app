@@ -25,6 +25,9 @@
                     .then(function (response) {
                         studies = response.Data;
                         q.resolve(studies);
+                        
+                        if(typeof studies =='undefined') return ;
+
                         studies.forEach(function(study){
                             study.creationDate = $filter('formatDate')(study.creationDate)
                             if (study.hasOwnProperty('startDate')){

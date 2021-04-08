@@ -18,7 +18,7 @@
                         <span ng-class="fontSizeDesc"><b>Investigator: </b>{{stud.study["investigator"]}}</span></b>
                         <span ng-hide="stud.hasEndDate || stud.hasStartDate" ng-class="fontSizeDesc"><b><br>Date Created: </b>{{stud.study["creationDate"] | date:'longDate'}}</span></b>
                         <span ng-show="stud.hasStartDate" ng-class="fontSizeDesc"><br><b>Start Date: </b>{{stud.study["startDate"] | date:'longDate'}}</span></b>
-                        <span ng-show="stud.hasEndDate" ng-class="fontSizeDesc"><br><b>End Date: </b>{{stud.study["creationDate"] | date:'longDate'}}</span></b>
+                        <span ng-show="stud.hasEndDate" ng-class="fontSizeDesc"><br><b>End Date: </b>{{stud.study["endDate"] | date:'longDate'}}</span></b>
 
                     </div>
                 </div>
