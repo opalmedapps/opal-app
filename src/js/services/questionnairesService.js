@@ -148,6 +148,7 @@
             requestOpalQuestionnaireFromSerNum: requestOpalQuestionnaireFromSerNum,
             requestQuestionnaire: requestQuestionnaire,
             requestQuestionnaireList: requestQuestionnaireList,
+            requestQuestionnairePurpose: requestQuestionnairePurpose,
             requestQuestionnaireUnreadNumber: requestQuestionnaireUnreadNumber,
             saveQuestionnaireAnswer: saveQuestionnaireAnswer,
             validateQuestionnairePurpose: validateQuestionnairePurpose,
@@ -285,6 +286,16 @@
 
                     return {Success: true, Location: 'Server'};
                 });
+        }
+
+        /**
+         * @name requestQuestionnairePurpose
+         * @desc this function gets the purpose of a given questionnaire from its qp_ser_num or answerQuestionnaireId
+         * @param {string|int} qp_ser_num the qp_ser_num or answerQuestionnaireId of the questionnaire
+         * @returns {Promise}
+         */
+        function requestQuestionnairePurpose(qp_ser_num) {
+            return QuestionnaireDataService.requestQuestionnairePurpose(qp_ser_num);
         }
 
         /**

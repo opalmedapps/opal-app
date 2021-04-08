@@ -31,7 +31,8 @@
                 'GET_LIST': 'QuestionnaireList',
                 'GET_QUESTIONNAIRE': 'Questionnaire',
                 'GET_OPAL_QUESTIONNAIRE_FROM_SERNUM': 'QuestionnaireInOpalDBFromSerNum',
-                'GET_NUMBER_UNREAD': 'QuestionnaireNumberUnread'
+                'GET_NUMBER_UNREAD': 'QuestionnaireNumberUnread',
+                'GET_PURPOSE': 'QuestionnairePurpose'
             },
             QUESTIONNAIRE_NOTIFICATION_CONSTANTS: {
                 'QUESTIONNAIRE_URL': './views/personal/questionnaires/questionnaireNotifRedirect.html',

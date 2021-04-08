@@ -31,6 +31,7 @@
             requestOpalQuestionnaireFromSerNum: requestOpalQuestionnaireFromSerNum,
             requestQuestionnaire: requestQuestionnaire,
             requestQuestionnaireList: requestQuestionnaireList,
+            requestQuestionnairePurpose: requestQuestionnairePurpose,
             requestQuestionnaireUnreadNumber: requestQuestionnaireUnreadNumber,
             saveQuestionnaireAnswer: saveQuestionnaireAnswer
         };
@@ -209,6 +210,27 @@
                     return {};
                 });
         }
+
+        /**
+         * @name function requestQuestionnairePurpose
+         * @desc Asks the listener for the purpose of the given questionnaire
+         * @param {string} qp_ser_num the qp_ser_num or answerQuestionnaireId of the questionnaire
+         * @returns {Promise} resolves to the questionnaire purpose data
+         */
+        function requestQuestionnairePurpose(qp_ser_num) {
+            let params = {
+                qp_ser_num: qp_ser_num
+            };
+
+            return RequestToServer.sendRequestWithResponse(api.GET_PURPOSE, params)
+                .then(function (response) {
+                    // this is in case firebase deletes the property when it is empty
+                    if (response.hasOwnProperty('Data')) {
+                        return response.Data;
+                    }
+                    return {purpose: "default"};
+                });
+        }
 
           /**
          * @name requestQuestionnaireUnreadNumber
