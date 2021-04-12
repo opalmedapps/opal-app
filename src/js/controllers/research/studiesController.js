@@ -32,6 +32,7 @@
         vm.studies = [];
 
         vm.showHeader = showHeader;
+        vm.openInfoPage = openInfoPage;
         vm.openStudy = openStudy;
         
         let navigator = null;
@@ -72,6 +73,11 @@
         }
         
 
+
+        function openInfoPage() {
+            NavigatorParameters.setParameters({Navigator:navigatorName, subView:'studies'});
+            navigator.pushPage('views/tabs/info-page-tabs.html');
+        }
 
         function openStudy(study) {
             NavigatorParameters.setParameters({'Navigator': navigator, 'Post': study});

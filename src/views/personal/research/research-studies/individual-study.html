@@ -1,7 +1,7 @@
 <ons-page ng-controller="IndividualStudiesController as stud">
     <ons-toolbar fixed-style>
         <div class="left"><ons-back-button>{{"BACK"|translate}}</ons-back-button></div>
-        <div class="center" ng-class="fontSizeTitle">Study</div>
+        <div class="center" ng-class="fontSizeTitle">{{"STUDY"|translate}}</div>
     </ons-toolbar>
     <ons-row align="center" style="margin-left: 0.12vw; margin-top: 3.5vh">
         <ons-col align="center">
@@ -15,11 +15,11 @@
                 </div>
                 <div class="row text-center" style="margin: 0 auto;" align="center">
                     <div class="col-xs-12">
-                        <span ng-class="fontSizeDesc"><b>Investigator: </b>{{stud.study["investigator"]}}</span></b>
-                        <span ng-hide="stud.hasEndDate || stud.hasStartDate" ng-class="fontSizeDesc"><b><br>Date Created: </b>{{stud.study["creationDate"] | date:'longDate'}}</span></b>
-                        <span ng-show="stud.hasStartDate" ng-class="fontSizeDesc"><br><b>Start Date: </b>{{stud.study["startDate"] | date:'longDate'}}</span></b>
-                        <span ng-show="stud.hasEndDate" ng-class="fontSizeDesc"><br><b>End Date: </b>{{stud.study["endDate"] | date:'longDate'}}</span></b>
+                        <span ng-hide="stud.hasEndDate || stud.hasStartDate" ng-class="fontSizeDesc"><b>{{"DOC_DATE_CREATED"|translate}}: </b>{{stud.study["creationDate"] | date:'longDate'}}</span></b>
+                        <span ng-show="stud.hasStartDate" ng-class="fontSizeDesc"><b>{{"DATE_START"|translate}}: </b>{{stud.study["startDate"] | date:'longDate'}}</span></b>
+                        <span ng-show="stud.hasEndDate" ng-class="fontSizeDesc"><br><b>{{"DATE_END"|translate}}: </b>{{stud.study["endDate"] | date:'longDate'}}</span></b>
 
+                        <span ng-class="fontSizeDesc"><br><br><b>{{"INVESTIGATOR"|translate}}: </b>{{stud.study["investigator"]}}</span></b>
                     </div>
                 </div>
 

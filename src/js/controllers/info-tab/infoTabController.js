@@ -58,6 +58,11 @@
                 icon:'./img/microscope.png',
                 name:"RESEARCH",
                 description:"RESEARCH_DESCRIPTION"
+            },
+            studies:{
+                icon:'./img/dna.png',
+                name:"STUDIES",
+                description:"STUDIES_DESCRIPTION"
             }
         };
 
