@@ -5,8 +5,9 @@ import { ConvexBufferGeometry } from 'three/examples/jsm/geometries/ConvexGeomet
 import { ConvexGeometry } from 'three/examples/jsm/geometries/ConvexGeometry.js';
 import { ConvexHull } from 'three/examples/jsm/math/ConvexHull.js';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
-import {body,head, s1, s2, s3, s4, s5, s6 } from './testdata.js';
+// import {body,head, s1, s2, s3, s4, s5, s6 } from './testdata.js';
 import * as dicomParser from 'dicom-parser';
+import { CompressedPixelFormat } from 'three';
 
 (function () {
     'use strict';
@@ -16,14 +17,24 @@ import * as dicomParser from 'dicom-parser';
         .controller('radiotherapyController', radiotherapyController);
 
     /* @ngInject */
-    radiotherapyController.$inject = ['$filter','$scope','$timeout','NavigatorParameters','UserPreferences'];
+    radiotherapyController.$inject = ['$filter','$scope','$timeout','$translatePartialLoader','NavigatorParameters','Radiotherapy','UserPreferences'];
 
 
-    function radiotherapyController($filter, $scope, $timeout, NavigatorParameters, UserPreferences) {
+    function radiotherapyController($filter, $scope, $timeout, $translatePartialLoader, NavigatorParameters, Radiotherapy, UserPreferences) {
         var vm = this;
 
         vm.rtPlans = [];
         
+
+        vm.numFractions = 16; 
+        vm.position = 'HFS';
+        vm.cancerType = 'breast';
+        vm.numBeams = 2;
+        vm.beamType = 'photon';
+        vm.energy = '6 MV';
+        vm.hasMLC = true;
+        vm.dose = '40 Gy'; 
+
 
         vm.showHeader = showHeader;
         vm.goToRTPlan = goToRTPlan;
@@ -80,6 +91,7 @@ import * as dicomParser from 'dicom-parser';
             
             //grab the language
             vm.language = UserPreferences.getLanguage();
+            $translatePartialLoader.addPart('radiotherapy');
 
             // renderElements()
 
@@ -170,7 +182,7 @@ import * as dicomParser from 'dicom-parser';
                 // structureSetROISequence.forEach(function(sequence){
                 for (var i = 0; i < structureSetROISequence.length; i++){
                     ROIName = structureSetROISequence[i].dataSet.string('x30060026')
-                    if (ROIName.toLowerCase().includes("body")){
+                    if (ROIName.toLowerCase().includes("body") || ROIName.toLowerCase().includes("skin") ){
                         // console.log(ROIName)
                         ROINumber = parseInt(structureSetROISequence[i].dataSet.string('x30060022'))
                         // return false
@@ -228,8 +240,9 @@ import * as dicomParser from 'dicom-parser';
     
 
             NavigatorParameters.setParameters({'navigatorName':'personalNavigator'});//, imageCategory: image.type});
+            personalNavigator.pushPage('./views/personal/radiotherapy/radiotherapy-test.html', {plan});
 
-            personalNavigator.pushPage('./views/personal/radiotherapy/radiotherapy-plan.html', {plan});
+            // personalNavigator.pushPage('./views/personal/radiotherapy/radiotherapy-plan.html', {plan});
             
             // init();
            
@@ -244,45 +257,47 @@ import * as dicomParser from 'dicom-parser';
             scene.background = new THREE.Color(0xf1f1f1);
 
 
-            camera = new THREE.PerspectiveCamera( 100, window.innerWidth/window.innerHeight, 1, 750 );
+            camera = new THREE.PerspectiveCamera( 100, window.innerWidth/window.innerHeight, 10 , 500 );
             // camera.up.set( 0, 0, 1 );
-            camera.position.y = -300
+            camera.position.y = -400
             camera.position.z = 100
             var avg = (topZ+bottomZ)/2
-            if (avg < 0){
-                group.position.z +- avg + 25
-            }
+            console.log(group.position.z)
+            console.log(avg)
+            // if (avg < 0){
+                group.position.z -= (avg - 100)
+            // }
             group.position.x = 0
             group.position.y = 0
 
+            console.log(group.position.z)
             
 
-            const light = new THREE.PointLight(0xffffff, 1.5);
+            const light = new THREE.PointLight(0xffffff, 1);
             light.position.set(0,0,2000);
             scene.add(light);
 
-            const light2 = new THREE.PointLight(0xffffff, 1.5);
+            const light2 = new THREE.PointLight(0xffffff, 1);
             light2.position.set(0,0,-2000);
             scene.add(light2);
 
-            const light3 = new THREE.PointLight(0xffffff, 1.5);
+            const light3 = new THREE.PointLight(0xffffff, 1);
             light3.position.set(1000,-1000,0);
             scene.add(light3);
 
-            const light4 = new THREE.PointLight(0xffffff, 1.5);
+            const light4 = new THREE.PointLight(0xffffff, 1);
             light4.position.set(-1000,1000,0);
             scene.add(light4);
 
-            const axesHelper = new THREE.AxesHelper( 300 );
-            scene.add( axesHelper );
+            // const axesHelper = new THREE.AxesHelper( 300 );
+            // scene.add( axesHelper );
           
             // renderBody();
             // renderBeam(beams_manual[1])
             // renderBeam(beams_manual[2])
         
             for (let i = 1; i <= numBeams; i++){
-                console.log(beams_manual[i])
-                renderBeam(beams_manual[i])
+                renderBeam(beams[i])
             }
 
         //     let hull = new ConvexHull().setFromObject(meshes[0])
@@ -355,7 +370,7 @@ import * as dicomParser from 'dicom-parser';
         }
 
         function renderSliceCap(slice){
-            let colour = 0x29293d
+            let colour = 0xA1AFBF//0x657383//0x29293d
             var slice1 = []
 
             for (let i = 0; i < slice.length; i+=21){
@@ -371,7 +386,7 @@ import * as dicomParser from 'dicom-parser';
 
         function renderSlice(slice){
             
-            let colour = 0x29293d//3104B4//0B4C5F//// 0x//0xa29093 //0x669999
+            let colour = 0xA1AFBF//0x657383//0x29293d//3104B4//0B4C5F//// 0x//0xa29093 //0x669999
             var array = [];
 
             var shape, geo, mesh;
@@ -400,7 +415,7 @@ import * as dicomParser from 'dicom-parser';
 
         function renderBody(){
             
-            let colour = 0x515151 //0x29293d//3104B4//0B4C5F//// 0x//0xa29093 //0x669999
+            let colour = 0xBEBBD5//0x29293d//3104B4//0B4C5F//// 0x//0xa29093 //0x669999
             geometry = new THREE.BufferGeometry();
             const vertices = new Float32Array(body);
             geometry.setAttribute('position', new THREE.BufferAttribute(vertices, 3));
@@ -467,7 +482,7 @@ import * as dicomParser from 'dicom-parser';
                     var sampleClosedSpline = new THREE.CatmullRomCurve3( array, true);
                     var tube = new THREE.TubeBufferGeometry( sampleClosedSpline, 64, 2, 4, true);
                     geo = new THREE.ExtrudeBufferGeometry(shape, {extrudePath:sampleClosedSpline,steps:500})
-                    mesh = new THREE.Mesh(geo, new THREE.MeshPhongMaterial({color:colour, side:THREE.DoubleSide, shininess:40})) //LineBasicMaterial())//
+                    mesh = new THREE.Mesh(geo, new THREE.MeshPhongMaterial({color:colour, side:THREE.DoubleSide, shininess:30})) //LineBasicMaterial())//
                     currZ = newZ;
                     group.add(mesh)
                     
@@ -511,7 +526,7 @@ import * as dicomParser from 'dicom-parser';
             pointsGeometry.setAttribute('position', new THREE.Float32BufferAttribute(beamPoints, 3));
 
             const geometry2 = new THREE.SphereGeometry( 5);
-            const material2 = new THREE.MeshBasicMaterial( {color: 0xff0000} );
+            const material2 = new THREE.MeshBasicMaterial( {color:0xff0000} );
             beamPoints.forEach(function(point){
                 let sphere = new THREE.Mesh(geometry2, material2);
                 sphere.position.set(point[0], point[1], point[2])
@@ -533,7 +548,7 @@ import * as dicomParser from 'dicom-parser';
             points.push( new THREE.Vector3(c2[0],c2[1],c2[2]));
             points.push( new THREE.Vector3(c3[0],c3[1],c3[2]));
             points.push( new THREE.Vector3(c4[0],c4[1],c4[2]));
-            const lineMaterial = new THREE.LineBasicMaterial( { color: 0xff0000, linewidth: 4 } );
+            const lineMaterial = new THREE.LineBasicMaterial( { color: 0xff0000} );//0xff0000, linewidth: 4 } );
             const lineGeometry = new THREE.BufferGeometry().setFromPoints( points );
             const lines = new THREE.Line( lineGeometry, lineMaterial );
             group.add(lines)
@@ -541,7 +556,7 @@ import * as dicomParser from 'dicom-parser';
             lineGeometry.computeVertexNormals();
 
             const meshGeometry3 = new ConvexGeometry( points );
-            const smoothMaterialx = new THREE.MeshMatcapMaterial({color: 0xff0000, side: THREE.DoubleSide, transparent: true, opacity: 0.2});
+            const smoothMaterialx = new THREE.MeshMatcapMaterial({color: 0xff0000, side: THREE.DoubleSide, transparent: true, opacity: 0.2});//0xff0000} );0xff0000, side: THREE.DoubleSide, transparent: true, opacity: 0.2});
             smoothMeshx = new THREE.Mesh( meshGeometry3, smoothMaterialx)
             group.add(smoothMeshx)
 

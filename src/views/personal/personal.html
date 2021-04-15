@@ -95,21 +95,22 @@
                 </ons-row>
             </ons-list-item>
             <ons-list-item modifier="chevron" class="item"               
-                           ng-click="personalNavigator.pushPage('views/personal/radiotherapy/radiotherapy-plan.html')">
+                           ng-click="personalNavigator.pushPage('views/personal/radiotherapy/radiotherapy-test.html')">
                 <ons-row align="center" >
                     <ons-col width="60px" style="text-align: center">
                         <div>
-                            <img style="width: 35px;"> <!--TODO: Add icon -->
+                            <img style="width: 35px;" src="./img/radiotherapy.png">
                         </div>
                     </ons-col>
                     <ons-col>
                         <header>
-                            <span class="item-title" ng-class="fontSizeTitle">Radiotherapy</span>
+                            <span class="item-title" ng-class="fontSizeTitle">{{"RADIOTHERAPY"|translate}}</span>
                         </header>
                         <p class="item-desc" ng-class="fontSizeDesc"></p>
                     </ons-col>
                 </ons-row>
             </ons-list-item>
+                        <!-- ng-if="tab.censor && tab.allowedModules.hasOwnProperty('DOC') && tab.allowedModules['DOC']" -->
             <ons-list-item modifier="chevron" class="item"
                            ng-if="tab.allowedModules.hasOwnProperty('TRT') && tab.allowedModules['TRT']"
                            ng-click="personalNavigator.pushPage('views/general/contacts/contacts.html')">
