@@ -237,6 +237,7 @@
   "QUESTIONNAIRE_SUBMIT_INSTRUCTION": "Please click the submit button to complete the questionnaire",
   "QUESTIONNAIRE_THANKS": "Thank you for completing this questionnaire",
   "RADIOTHERAPY": "Radiotherapy",
+  "RADIOTHERAPY_NONE": "No radiotherapy plans available.",
   "RATEIT": "Rate It",
   "RATETHISAPP": "Rate This App",
   "RATETHISMATERIAL": "Rate this educational material",

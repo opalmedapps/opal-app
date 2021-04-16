@@ -237,6 +237,7 @@
     "QUESTIONNAIRE_SUBMIT_INSTRUCTION": "Veuillez appuyer sur le bouton \"Soumettre les réponses\" pour compléter le questionnaire.",
     "QUESTIONNAIRE_THANKS": "Merci d'avoir complété ce questionnaire",
     "RADIOTHERAPY": "Radiothérapie",
+    "RADIOTHERAPY_NONE": "Aucun plan de traitement de radiothérapie disponible.",
     "RATEIT": "Évaluez-le",
     "RATETHISAPP": "Évaluer l'application",
     "RATETHISMATERIAL": "Évaluer ce matériel éducatif",
