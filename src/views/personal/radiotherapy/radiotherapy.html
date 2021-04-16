@@ -1,0 +1,39 @@
+<ons-page ng-controller="RadiotherapyController as rad">  
+    <ons-toolbar fixed-style>
+        <div class="left">
+            <ons-back-button>{{"BACK"|translate}}</ons-back-button>
+        </div>
+        <div class="center" ng-class="fontSizeTitle">{{"RADIOTHERAPY"|translate}}</div>
+        <div class="right">
+            <ons-toolbar-button> <!-- TODO: ng-click -->
+                <ons-icon icon="fa-info-circle"></ons-icon>
+            </ons-toolbar-button>
+        </div>
+    </ons-toolbar>
+    <network-banner></network-banner>
+
+    <ons-list class="settings-list" ng-repeat = "plan in rad.RTPlans | orderBy: '-DateAdded'" ng-hide="rad.noRTPlans">
+        <ons-list-header class="person-list-header" ng-class="fontSizeTitle" ng-show="rad.showHeader($index)">{{plan.DateAdded|date:'fullDate'}}</ons-list-header>
+        <ons-list-item modifier="chevron" ng-click="rad.openRTPlan(plan)" ng-repeat-end>
+        <ons-row>
+            <ons-col width="5px"></ons-col>
+            <ons-col width="40px" align="center">
+                <div style="padding:5px">
+                    <img ng-src="./img/radiotherapy.png">
+                </div>
+            </ons-col>
+            <ons-col align="center">
+                <div style="padding:4px;line-height:1">
+                    <header>
+                        <span class="item-title" ng-class="fontSizeTitle">{{plan["Name_" + rad.language]}}</span>
+                    </header>
+                </div>
+            </ons-col>
+        </ons-row>
+        </ons-list-item>
+    </ons-list>
+
+    <div style="color:grey;margin-top:25vh" align="center" ng-show="rad.noRTPlans" ng-class="fontSizeTitle">
+        {{"RADIOTHERAPY_NONE"|translate}}
+    </div>
+</ons-page>
