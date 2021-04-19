@@ -12,6 +12,8 @@
     </ons-toolbar>
     <network-banner></network-banner>
 
+    <loading-spinning-circle ng-if="rad.loading" loading-message="{{'LOADINGRADIOTHERAPYPLANS'|translate}}"></loading-spinning-circle>
+
     <ons-list class="settings-list" ng-repeat = "plan in rad.RTPlans | orderBy: '-DateAdded'" ng-hide="rad.noRTPlans">
         <ons-list-header class="person-list-header" ng-class="fontSizeTitle" ng-show="rad.showHeader($index)">{{plan.DateAdded|date:'fullDate'}}</ons-list-header>
         <ons-list-item modifier="chevron" ng-click="rad.openRTPlan(plan)" ng-repeat-end>
@@ -33,7 +35,7 @@
         </ons-list-item>
     </ons-list>
 
-    <div style="color:grey;margin-top:25vh" align="center" ng-show="rad.noRTPlans" ng-class="fontSizeTitle">
+    <div style="color:grey;margin-top:25vh" align="center" ng-show="rad.noRTPlans && !rad.loading" ng-class="fontSizeTitle">
         {{"RADIOTHERAPY_NONE"|translate}}
     </div>
 </ons-page>
