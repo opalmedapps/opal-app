@@ -1,13 +1,14 @@
-// add description see diagnosescontroller
+/*
+ * Filename     :   individualRadiotherapyController.js
+ * Description  :   Manages the individual radiotherapy views.
+ * Created by   :   Kayla O'Sullivan-Steben
+ * Date         :   April 2021
+ */
 
 import * as THREE from 'three';
-import { ConvexBufferGeometry } from 'three/examples/jsm/geometries/ConvexGeometry.js';
 import { ConvexGeometry } from 'three/examples/jsm/geometries/ConvexGeometry.js';
-import { ConvexHull } from 'three/examples/jsm/math/ConvexHull.js';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
-// import {body,head, s1, s2, s3, s4, s5, s6 } from './testdata.js';
 import * as dicomParser from 'dicom-parser';
-import { CompressedPixelFormat } from 'three';
 
 (function () {
     'use strict';
@@ -25,23 +26,18 @@ import { CompressedPixelFormat } from 'three';
 
         vm.rtPlans = [];
         vm.plan = {};
+        vm.RTPlan = {};
 
         let navigator = null;
         let navigatorName = '';
         let parameters;
         
+        vm.loading = true;
 
-        vm.numFractions = 16; 
-        vm.position = 'HFS';
         vm.cancerType = 'breast';
-        vm.numBeams = 2;
-        vm.beamType = 'photon';
-        vm.energy = '6 MV';
-        vm.hasMLC = true;
-        vm.dose = '40 Gy'; 
+        vm.energyText = '';
+        vm.isSingularEnergy = true;
 
-
-        vm.showHeader = showHeader;
         vm.goToRTPlan = goToRTPlan;
         vm.uploadDICOM = uploadDICOM;
      
@@ -50,34 +46,13 @@ import { CompressedPixelFormat } from 'three';
         let camera, scene, renderer;
         let group = new THREE.Group();
         let smoothMeshx, geometry, tube, mesh, points, points3d;
-        var pointsno = [];
-        var pointsyes = []
         var meshes = [];
         var topZ, bottomZ;
-        // let geometry, material, mesh;
 
         var SAD = 1000;
         var numFractions = 0;
         var numBeams = 0;
         var beams = {}
-        var beams_manual = {
-            1:{
-                isocenter: [84.86,-61.08,-0.5],
-                gantryAngle: 316,
-                X1: 0,
-                X2: 86,
-                Y1: -90,
-                Y2: 80
-            },
-            2:{
-                isocenter: [84.86,-61.08,-0.5],
-                gantryAngle: 136,
-                X1: -103.33,
-                X2: 0,
-                Y1: -90,
-                Y2: 80
-            }
-        }
 
         activate();
 
@@ -95,9 +70,10 @@ import { CompressedPixelFormat } from 'three';
 
         
         Radiotherapy.requestRTDicomContent(vm.plan.DicomSerNum)
-        .then(function (result) {
-            // returned = getDicomContent();
-            console.log(result)
+        .then(function (plan) {
+            vm.RTPlan = plan;  
+            console.log(vm.RTPlan)
+            setEnergyText();
 
             vm.loading = false;
         })
@@ -108,17 +84,6 @@ import { CompressedPixelFormat } from 'three';
             // })
         });
 
-
-            
-
-            // vm.rtPlans = [
-            //     {
-            //         name: "Test brainstem 3D"
-            //     }
-
-            // ]
-         
-
             
             //grab the language
             vm.language = UserPreferences.getLanguage();
@@ -128,13 +93,22 @@ import { CompressedPixelFormat } from 'three';
 
         }
 
-        // Determines whether or not to show the date header in the view. Announcements are grouped by day.
-        function showHeader(index)
-        {
-               // if (index === 0) return true;
-               // var current = (new Date(vm.images[index].CreationDate)).setHours(0,0,0,0);
-               // var previous = (new Date(vm.images[index-1].CreationDate)).setHours(0,0,0,0);
-               // return current !== previous;
+        function setEnergyText(){
+            let energyArray = vm.RTPlan.beamEnergy;
+            if (energyArray.length === 1){
+                vm.isSingularEnergy = true;
+                vm.energyText = energyArray[0];
+            } else {
+                vm.isSingularEnergy = false;
+                vm.energyText = energyArray[0];
+                var i;
+                for (i = 1; i < energyArray.length - 1; i++){
+                    vm.energyText += ", ";
+                    vm.energyText += energyArray[i];
+                } 
+                vm.energyText += " and ";
+                vm.energyText += energyArray[i];
+            }
         }
 
         function uploadDICOM(){

@@ -28,6 +28,7 @@
         var vm = this;
 
         vm.language = '';
+        vm.loading = true;
         vm.noRTPlans = true;
         vm.RTPlans = [];
 

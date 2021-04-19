@@ -52,7 +52,8 @@
             content: "\2796";
         }
         </style>
-
+            <loading-spinning-circle ng-if="rad.loading" loading-message="{{'LOADINGRADIOTHERAPYPLAN'|translate}}"></loading-spinning-circle>
+<div ng-if="!rad.loading">
     <div class="col-xs-12 text-center">
         <h3><b>{{"PERSONALIZED_PLAN"|translate}}</b></h3>
         <div align="justify">
@@ -87,14 +88,14 @@
             <div style="position:relative" id="holder"></div>
         </div> -->
 
-<div align="justify">
+<div align="justify" style="padding-bottom: 30px;">
               <input type="checkbox" id="title1">
          &nbsp; &nbsp;  <label for="title1"><img src="./img/radiotherapy/table_position.png" style="height:30px; vertical-align:middle;"><span><strong>&nbsp;&nbsp;{{"POSITION_TITLE"|translate}}</strong></span></label>
               
               <div class="content">
                 <p>{{"POSITIONING_1"|translate}}</p>
                 <img src="./img/radiotherapy/GANTRY.PNG" style="max-width: 65%; height: auto;" class="center">
-                <p>{{"POSITIONING_2"|translate}} <b><span style="color:darkgreen">{{"POSITIONING_2_" + rad.position | translate}}</span></b>.</p>
+                <p>{{"POSITIONING_2"|translate}} <b><span style="color:darkgreen">{{"POSITIONING_2_" + rad.RTPlan.patientPosition | translate}}</span></b>.</p>
                 <br> <p ng-if="rad.cancerType == 'breast' || rad.cancerType == 'prostate'">{{"POSITIONING_3_" + rad.cancerType.toUpperCase() |translate}}</p> <!---->
             </div>
               
@@ -102,16 +103,21 @@
          &nbsp; &nbsp;  <label for="title2"><img src="./img/radiotherapy/radiation.png" style="height:30px; vertical-align:middle;"><span><strong>&nbsp;&nbsp;{{"BEAMS_TITLE"|translate}}</strong></span></label>
               
               <div class="content">
-                <p>{{"BEAMS_1"|translate}}<b><span style="color:darkgreen">{{rad.numBeams}}</span></b> {{"BEAMS_2"|translate}}
+                <p>{{"BEAMS_1"|translate}}<b><span style="color:darkgreen">{{rad.RTPlan.numBeams}}</span></b> {{"BEAMS_2"|translate}}
                 <img src="./img/radiotherapy/radiotherapy_delivery.png" style="max-width:100%; height: auto;" class="center">
-                <br>{{"BEAMS_3"|translate}} <b><span style="color:darkgreen">{{rad.beamType}}</span></b>  {{"BEAMS_3_" + rad.beamType.toUpperCase()|translate}} 
+                <br>{{"BEAMS_3"|translate}} <b><span style="color:darkgreen">{{rad.RTPlan.radiationType.toLowerCase()}}</span></b>  {{"BEAMS_3_" + rad.RTPlan.radiationType.toUpperCase()|translate}} 
                 <br><br>
-                {{"BEAMS_4_SINGULAR"|translate}}<b><span style="color:darkgreen">{{rad.energy}}</span></b> {{"BEAMS_4_" + rad.beamType.toUpperCase()|translate}}{{"BEAMS_5"|translate}}{{"BEAMS_5_" + rad.beamType.toUpperCase() |translate}}
+                <span ng-if="rad.isSingularEnergy">{{"BEAMS_4_SINGULAR"|translate}}</span>
+                <span ng-if="!rad.isSingularEnergy">{{"BEAMS_4_PLURAL"|translate}}</span>
+                <b><span style="color:darkgreen">{{rad.energyText}}</span></b> {{"BEAMS_4_" + rad.RTPlan.radiationType.toUpperCase()|translate}}{{"BEAMS_5"|translate}}{{"BEAMS_5_" + rad.RTPlan.radiationType.toUpperCase() |translate}}
                 <br><br>
-                {{"BEAMS_6"|translate}} {{"BEAMS_6_MLC"|translate}} <!--In your case, the beam is made even smaller with the use of “<b><span style="color:darkgreen">multileaf collimators</span></b>”, small metal bars that block some of radiation to make a conformal beam.<p></p>-->
+                {{"BEAMS_6"|translate}} 
+                <p ng-if="rad.RTPlan.hasMLC">{{"BEAMS_6_MLC"|translate}} </p><!--In your case, the beam is made even smaller with the use of “<b><span style="color:darkgreen">multileaf collimators</span></b>”, small metal bars that block some of radiation to make a conformal beam.<p></p>-->
                 <img src="./img/radiotherapy/MLC.png" style="max-width: 85%; height: auto;" class="center">              
                 </div>
-        
+
+                <!-- TODO: Implement below w/ variables -->
+        <!--
               <input type="checkbox" id="title3">
               &nbsp; &nbsp;  <label for="title3"><img src="./img/radiotherapy/lung.png" style="height:30px; vertical-align:middle;"><span><strong>&nbsp;&nbsp;{{"BREATHING_TITLE"|translate}}</strong></span></label>
             
@@ -126,26 +132,27 @@
                 &nbsp; &nbsp;  <label for="title4"><img src="./img/radiotherapy/dose.png" style="height:30px; vertical-align:middle;"><span><strong>&nbsp;&nbsp;{{"DOSE_TITLE"|translate}}</strong></span></label>
                 
                 <div class="content">
-                    {{"DOSE_1"|translate}} <b><span style="color:darkgreen">{{rad.dose}}</span></b> {{"DOSE_2"|translate}}
+                    {{"DOSE_1"|translate}} <b><span style="color:darkgreen">{{rad.RTPlan.dose}}</span></b> {{"DOSE_2"|translate}}
                 <br><br>
-                {{"DOSE_3"|translate}} <b><span style="color:darkgreen">{{rad.numFractions}}</span></b> {{"DOSE_4"|translate}}
+                {{"DOSE_3"|translate}} <b><span style="color:darkgreen">{{rad.RTPlan.numFractions}}</span></b> {{"DOSE_4"|translate}}
                 <br><br>
                 The radiation beam type, energy, angle and shape are all chosen so that the tumour receives this prescribed dose, while the surrounding healthy tissues and organs receive the least amount of radiation possible. Our goal is first to effectively remove the tumour, but also to reduce the side effects you may experience.
                 <br><br>
                 <b><span style="color:red">change above text -- see google doc</span></b>
                 </div>
                <input type="checkbox" id="title5">
-               <!-- <ons-icon icon="fa-list-alt" style="height:30px; color:violet"></ons-icon> <label for="title5"><ons-icon style="color: violet" size="2x" icon="fa-tasks" aria-hidden="true" ></ons-icon>-->
+            
                 &nbsp; &nbsp; <label for="title5"> <img src="./img/radiotherapy/graph.png" style="height:30px; vertical-align:middle;"><span><strong>&nbsp;&nbsp;{{"PROCESS_TITLE"|translate}}</strong></span></label>
                         
                 <div class="content">
                     <span style="color:red">blah blah blah add explanations of ctv etc </span>
                     <p></p>
                 </div>
-                     
+            --> 
 
             </div>
         </div>
+    </div>
         
 </ons-page>
 
