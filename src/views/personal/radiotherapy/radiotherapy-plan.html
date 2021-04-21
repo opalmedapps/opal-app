@@ -1,17 +1,21 @@
 
 <!--TODO: ADD FRENCH TRANSLATIONS -->
 
-<ons-page ng-controller="RadiotherapyController as rad">
+<ons-page ng-controller="IndividualRadiotherapyController as rad">
     <ons-toolbar fixed-style>
         <div class="left">
             <ons-back-button>{{"BACK"|translate}}</ons-back-button>
         </div>
     </ons-toolbar>
-    <div ng-hide=rad.filesUploaded>
+    <!-- <div ng-hide=rad.filesUploaded>
         <input type="file" id="importFile" multiple='multiple'/>
         <button ng-click = "rad.uploadDICOM()">Go</button>
-    </div> 
-    <div class="col-xs-12 text-center" style="margin: 0 auto; align: center; position:fixed"> 
+    </div>  -->
+
+    <loading-spinning-circle ng-if="rad.loading" loading-message="{{'LOADINGRADIOTHERAPYPLAN'|translate}} This may take a moment..."></loading-spinning-circle>
+
+
+    <div ng-hide="rad.loading" class="col-xs-12 text-center" style="margin: 0 auto; align: center; position:fixed"> 
             <p>Below is a 3D reconstruction of your body from your CT scan and the beams of radiation you will receive during treatment.</p>
             <div style="position:relative" id="holder"></div>
         </div>

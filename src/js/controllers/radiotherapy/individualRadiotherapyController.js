@@ -75,13 +75,14 @@ import * as dicomParser from 'dicom-parser';
             console.log(vm.RTPlan)
             setEnergyText();
 
+            renderElements();
             vm.loading = false;
         })
         .catch(function(error){
-            // $timeout(function(){
-            //     vm.loading = false;
+            $timeout(function(){
+                vm.loading = false;
             //     handleRequestError();
-            // })
+            })
         });
 
             
@@ -266,16 +267,7 @@ import * as dicomParser from 'dicom-parser';
             // camera.up.set( 0, 0, 1 );
             camera.position.y = -400
             camera.position.z = 100
-            var avg = (topZ+bottomZ)/2
-            console.log(group.position.z)
-            console.log(avg)
-            // if (avg < 0){
-                group.position.z -= (avg - 100)
-            // }
-            group.position.x = 0
-            group.position.y = 0
 
-            console.log(group.position.z)
             
 
             const light = new THREE.PointLight(0xffffff, 1);
@@ -301,8 +293,17 @@ import * as dicomParser from 'dicom-parser';
             // renderBeam(beams_manual[1])
             // renderBeam(beams_manual[2])
         
-            for (let i = 1; i <= numBeams; i++){
-                renderBeam(beams[i])
+            const keys = Object.keys(vm.RTPlan.struct);
+
+            keys.forEach(function(key){
+                renderSlicev2(key, vm.RTPlan.struct[key])
+            })
+           
+              
+
+            for (let i = 1; i <= vm.RTPlan.numBeams; i++){
+                console.log(vm.RTPlan.beams[i])
+                renderBeamv2(vm.RTPlan.beams[i].beamPoints)
             }
 
         //     let hull = new ConvexHull().setFromObject(meshes[0])
@@ -354,6 +355,17 @@ import * as dicomParser from 'dicom-parser';
                 
             // })
 
+            // var avg = (parseFloat(keys[0].replace('_','.') + parseFloat(keys[-1].replace('_','.'))))/2
+            // console.log(avg)
+            // if (avg < 0){
+                // group.position.z -= (avg - 100)
+            // }
+            group.position.z += 100
+            group.position.x = 0
+            group.position.y = 0
+
+            //   var avg = (parseFloat(keys[0])+bottomZ)/2
+
             scene.add(group)
 
             renderer = new THREE.WebGLRenderer({antialias: true});
@@ -389,6 +401,79 @@ import * as dicomParser from 'dicom-parser';
             group.add(mesh1)  
         }
 
+        function renderAllSlices(contourData){
+            var slices = [];
+            contourData.forEach(function(contour){
+                slices.push.apply(slices, contour.dataSet.string('x30060050').split("\\").map(Number));
+            })
+            console.log(slices)
+
+            let colour = 0xA1AFBF//0x657383//0x29293d//3104B4//0B4C5F//// 0x//0xa29093 //0x669999
+            var array = [];
+
+            var shape, geo, mesh;
+
+
+            shape = new THREE.Shape();
+            shape.moveTo(0,0);
+            shape.lineTo(1.5,0)
+            shape.lineTo(1.5,1.5)
+            shape.lineTo( -1.5, 1.5);
+            shape.lineTo(-1.5,0)
+            shape.lineTo( 0, 0 );
+
+            // console.log(slice[2]);
+            for (let i = 0; i < slices.length; i+=9){
+                array.push(new THREE.Vector3(slices[i], slices[i+1], slices[i+2]))  
+            }
+
+            // console.log(array)
+            
+            var sampleClosedSpline = new THREE.CatmullRomCurve3( array, true);
+                       // var tube = new THREE.TubeBufferGeometry( sampleClosedSpline, 64, 2, 4, true);
+            geo = new THREE.ExtrudeBufferGeometry(shape, {extrudePath:sampleClosedSpline,steps:100000})
+            mesh = new THREE.Mesh(geo, new THREE.MeshPhongMaterial({color:colour, side:THREE.DoubleSide, shininess:40})) //LineBasicMaterial())//
+            group.add(mesh)
+            // console.log(group)
+        }
+
+        function renderSlicev2(z, slice){
+           
+            z = parseFloat(z.replace('_','.'))
+            slice = slice.map(Number)
+   
+            
+            
+            let colour = 0xA1AFBF//0x657383//0x29293d//3104B4//0B4C5F//// 0x//0xa29093 //0x669999
+            var array = [];
+
+            var shape, geo, mesh;
+
+
+            shape = new THREE.Shape();
+            shape.moveTo(0,0);
+            shape.lineTo(1.5,0)
+            shape.lineTo(1.5,1)
+            shape.lineTo( -1.5, 1);
+            shape.lineTo(-1.5,0)
+            shape.lineTo( 0, 0 );
+
+            // console.log(slice[2]);
+            // var zz = slice[2]
+            
+            for (let i = 0; i < slice.length; i+=2){
+                array.push(new THREE.Vector3(slice[i], slice[i+1], z))  
+            }
+          
+            
+            var sampleClosedSpline = new THREE.CatmullRomCurve3(array, true)
+            // var tube = new THREE.TubeBufferGeometry( sampleClosedSpline, 64, 2,4, true);
+            geo = new THREE.ExtrudeBufferGeometry(shape, {extrudePath:sampleClosedSpline,steps:500})
+            mesh = new THREE.Mesh(geo, new THREE.MeshPhongMaterial({color:colour, side:THREE.DoubleSide, shininess:40})) //LineBasicMaterial())//
+            // mesh.position.z = slice[2]
+            group.add(mesh)
+
+    }
         function renderSlice(slice){
             
             let colour = 0xA1AFBF//0x657383//0x29293d//3104B4//0B4C5F//// 0x//0xa29093 //0x669999
@@ -412,7 +497,7 @@ import * as dicomParser from 'dicom-parser';
             
             var sampleClosedSpline = new THREE.CatmullRomCurve3( array, true);
             // var tube = new THREE.TubeBufferGeometry( sampleClosedSpline, 64, 2, 4, true);
-            geo = new THREE.ExtrudeBufferGeometry(shape, {extrudePath:sampleClosedSpline,steps:500})
+            geo = new THREE.ExtrudeBufferGeometry(shape, {extrudePath:sampleClosedSpline,steps:1000})
             mesh = new THREE.Mesh(geo, new THREE.MeshPhongMaterial({color:colour, side:THREE.DoubleSide, shininess:40})) //LineBasicMaterial())//
             group.add(mesh)
     }
@@ -566,6 +651,41 @@ import * as dicomParser from 'dicom-parser';
             group.add(smoothMeshx)
 
             meshes.push(smoothMeshx)
+       
+        }
+
+        function renderBeamv2(beamPoints){
+            let points = [];
+            let beamSource = new THREE.Vector3(parseFloat(beamPoints.beamSource[0]),parseFloat(beamPoints.beamSource[1]),parseFloat(beamPoints.beamSource[2]))
+            beamPoints.field.forEach(function(pt){
+                points.push(new THREE.Vector3(parseFloat(pt[0]), parseFloat(pt[1]), parseFloat(pt[2])))
+            })
+            beamPoints.field.forEach(function(pt){
+                points.push(new THREE.Vector3(parseFloat(pt[0]), parseFloat(pt[1]), parseFloat(pt[2])))
+                points.push(beamSource)
+            })
+            // points.push( new THREE.Vector3(c1[0],c1[1],c1[2]));
+            // points.push( new THREE.Vector3(beamSource[0],beamSource[1],beamSource[2]));
+            // points.push( new THREE.Vector3(c2[0],c2[1],c2[2]));
+            // points.push( new THREE.Vector3(beamSource[0],beamSource[1],beamSource[2]));
+            // points.push( new THREE.Vector3(c3[0],c3[1],c3[2]));
+            // points.push( new THREE.Vector3(beamSource[0],beamSource[1],beamSource[2]));
+            // points.push( new THREE.Vector3(c4[0],c4[1],c4[2]));
+            // points.push( new THREE.Vector3(c1[0],c1[1],c1[2]));
+            // points.push( new THREE.Vector3(c2[0],c2[1],c2[2]));
+            // points.push( new THREE.Vector3(c3[0],c3[1],c3[2]));
+            // points.push( new THREE.Vector3(c4[0],c4[1],c4[2]));
+            const lineMaterial = new THREE.LineBasicMaterial( { color: 0xff0000} );//0xff0000, linewidth: 4 } );
+            const lineGeometry = new THREE.BufferGeometry().setFromPoints( points );
+            const lines = new THREE.Line( lineGeometry, lineMaterial );
+            group.add(lines)
+
+            lineGeometry.computeVertexNormals();
+            const meshGeometry3 = new ConvexGeometry( points );
+
+            const smoothMaterialx = new THREE.MeshMatcapMaterial({color: 0xff0000, side: THREE.DoubleSide, transparent: true, opacity: 0.2});//0xff0000} );0xff0000, side: THREE.DoubleSide, transparent: true, opacity: 0.2});
+            smoothMeshx = new THREE.Mesh( meshGeometry3, smoothMaterialx)
+            group.add(smoothMeshx)
        
         }
     }
