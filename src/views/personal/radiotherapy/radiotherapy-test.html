@@ -7,7 +7,7 @@
             <ons-back-button>{{"BACK"|translate}}</ons-back-button>
         </div>
         <div class="right">
-        <ons-toolbar-button ng-click="personalNavigator.pushPage('views/personal/radiotherapy/radiotherapy-plan.html')">Next </ons-toolbar-button> 
+        <ons-toolbar-button ng-click="rad.goTo3DPlan()">Next </ons-toolbar-button> 
         
     </div>
     </ons-toolbar>
@@ -52,7 +52,7 @@
             content: "\2796";
         }
         </style>
-            <loading-spinning-circle ng-if="rad.loading" loading-message="{{'LOADINGRADIOTHERAPYPLAN'|translate}}"></loading-spinning-circle>
+            <loading-spinning-circle ng-if="rad.loading" loading-message="{{'LOADINGRADIOTHERAPYPLAN'|translate}} This may take a moment..."></loading-spinning-circle>
 <div ng-if="!rad.loading">
     <div class="col-xs-12 text-center">
         <h3><b>{{"PERSONALIZED_PLAN"|translate}}</b></h3>
@@ -63,7 +63,7 @@
         </p>
         <div align="center" style="margin-bottom:10px; margin-top: 20px;">
             <button class="button--large--cta" style="width:80%; white-space: initial" 
-      ng-click="personalNavigator.pushPage('views/personal/radiotherapy/radiotherapy-plan.html')" ng-class="fontSizeDesc">
+      ng-click="rad.goTo3DPlan()" ng-class="fontSizeDesc">
       View Treatment Plan
       </button>
   </div>

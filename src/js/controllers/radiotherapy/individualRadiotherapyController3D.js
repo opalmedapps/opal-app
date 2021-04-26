@@ -1,5 +1,5 @@
 /*
- * Filename     :   individualRadiotherapyController.js
+ * Filename     :   individualRadiotherapyController3D.js
  * Description  :   Manages the individual radiotherapy views.
  * Created by   :   Kayla O'Sullivan-Steben
  * Date         :   April 2021
@@ -15,13 +15,13 @@ import * as dicomParser from 'dicom-parser';
 
     angular
         .module('MUHCApp')
-        .controller('IndividualRadiotherapyController', IndividualRadiotherapyController);
+        .controller('IndividualRadiotherapyController3D', IndividualRadiotherapyController3D);
 
     /* @ngInject */
-    IndividualRadiotherapyController.$inject = ['$filter','$scope','$timeout','$translatePartialLoader','NavigatorParameters','Radiotherapy','UserPreferences'];
+    IndividualRadiotherapyController3D.$inject = ['$filter','$scope','$timeout','$translatePartialLoader','NavigatorParameters','Radiotherapy','UserPreferences'];
 
 
-    function IndividualRadiotherapyController($filter, $scope, $timeout, $translatePartialLoader, NavigatorParameters, Radiotherapy, UserPreferences) {
+    function IndividualRadiotherapyController3D($filter, $scope, $timeout, $translatePartialLoader, NavigatorParameters, Radiotherapy, UserPreferences) {
         var vm = this;
 
         vm.rtPlans = [];
@@ -38,12 +38,12 @@ import * as dicomParser from 'dicom-parser';
         vm.energyText = '';
         vm.isSingularEnergy = true;
 
-        vm.goTo3DPlan = goTo3DPlan;
+        vm.goToRTPlan = goToRTPlan;
         vm.uploadDICOM = uploadDICOM;
      
         vm.filesUploaded = false;
 
-        let camera, scene, renderer;
+        let camera, scene, renderer, scene2;
         let group = new THREE.Group();
         let smoothMeshx, geometry, tube, mesh, points, points3d;
         var meshes = [];
@@ -64,26 +64,12 @@ import * as dicomParser from 'dicom-parser';
             navigatorName = NavigatorParameters.getNavigatorName();
             parameters = NavigatorParameters.getParameters();
    
-            vm.plan = parameters.Post;
-
+            vm.RTPlan = parameters.Post;
+            console.log(vm.RTPlan)
             
 
-        
-        Radiotherapy.requestRTDicomContent(vm.plan.DicomSerNum)
-        .then(function (plan) {
-            vm.RTPlan = plan;  
-            console.log(vm.RTPlan)
-            setEnergyText();
-
             renderElements();
-            vm.loading = false;
-        })
-        .catch(function(error){
-            $timeout(function(){
-                vm.loading = false;
-            //     handleRequestError();
-            })
-        });
+
 
             
             //grab the language
@@ -94,23 +80,7 @@ import * as dicomParser from 'dicom-parser';
 
         }
 
-        function setEnergyText(){
-            let energyArray = vm.RTPlan.beamEnergy;
-            if (energyArray.length === 1){
-                vm.isSingularEnergy = true;
-                vm.energyText = energyArray[0];
-            } else {
-                vm.isSingularEnergy = false;
-                vm.energyText = energyArray[0];
-                var i;
-                for (i = 1; i < energyArray.length - 1; i++){
-                    vm.energyText += ", ";
-                    vm.energyText += energyArray[i];
-                } 
-                vm.energyText += " and ";
-                vm.energyText += energyArray[i];
-            }
-        }
+
 
         function uploadDICOM(){
             vm.filesUploaded = true;
@@ -242,11 +212,11 @@ import * as dicomParser from 'dicom-parser';
             
         }
         // Not used yet
-        function goTo3DPlan(plan){
+        function goToRTPlan(plan){
     
 
-            NavigatorParameters.setParameters({'Navigator': navigator, 'Post': vm.RTPlan})
-            navigator.pushPage('./views/personal/radiotherapy/radiotherapy-plan.html', {plan});
+            NavigatorParameters.setParameters({'navigatorName':'personalNavigator'});//, imageCategory: image.type});
+            personalNavigator.pushPage('./views/personal/radiotherapy/radiotherapy-test.html', {plan});
 
             // personalNavigator.pushPage('./views/personal/radiotherapy/radiotherapy-plan.html', {plan});
             
@@ -258,12 +228,11 @@ import * as dicomParser from 'dicom-parser';
 
 
         function renderElements(){
-        
             scene = new THREE.Scene();
             scene.background = new THREE.Color(0xf1f1f1);
 
 
-            camera = new THREE.PerspectiveCamera( 100, window.innerWidth/window.innerHeight, 10 , 500 );
+            camera = new THREE.PerspectiveCamera( 100, window.innerWidth/window.innerHeight, 10 , 550 );
             // camera.up.set( 0, 0, 1 );
             camera.position.y = -400
             camera.position.z = 100
@@ -292,19 +261,88 @@ import * as dicomParser from 'dicom-parser';
             // renderBody();
             // renderBeam(beams_manual[1])
             // renderBeam(beams_manual[2])
-        
-            const keys = Object.keys(vm.RTPlan.struct);
-            console.log("Entering key loop")
-            keys.forEach(function(key){
-                renderSlicev2(key, vm.RTPlan.struct[key])
-            })
-           
-              
 
+            // const loader = new THREE.ObjectLoader();
+            // console.log(vm.RTPlan.struct)
+            // console.log(JSON.parse(vm.RTPlan.struct))
+            // console.log(loader.parse(vm.RTPlan.struct))
+        
+            ////////////////THIS PART WORKS
+            
+            // console.log(vm.RTPlan.struct)
+           
+        //    var slices = JSON.parse(vm.RTPlan.struct)
+            var slices = vm.RTPlan.struct
+            const keys = Object.keys(slices);
+            
+            var shape = new THREE.Shape();
+            var pos = parseFloat(vm.RTPlan.sliceThickness)/2 + 0.5
+            shape.moveTo(0,0);
+            shape.lineTo(pos,0)
+            shape.lineTo(pos,10)
+            shape.lineTo(-pos, 10);
+            shape.lineTo(-pos,0)
+            shape.lineTo( 0, 0 );
+
+
+            keys.forEach(function(key){
+                // console.log(slices[key].length/2)
+                renderSlicev2(key, JSON.parse(slices[key]), shape)
+            })
+            
+
+            // allSlices(slices, keys)
+            
+           //////////////////////////////////////
+            // var loader = new THREE.JSONLoader();
+            // let loader = new THREE.LegacyJSONLoader();
+            // var result = loader.parse(vm.RTPlan.struct)
+            
+          
+//             console.log(slices)
+//             var array = []
+//              for (let i = 0; i < slices.length; i+=3){
+//                         array.push(new THREE.Vector3(slice[i], slice2[i+1], slice2[i+2]))  
+//                     }
+//             // console.log(array)
+//             var geo, mesh;
+//                       var shape = new THREE.Shape();
+//             shape.moveTo(0,0);
+//             shape.lineTo(1.5,1)
+//             shape.lineTo(1.5,-1)
+//             shape.lineTo( -1.5,-1);
+//             shape.lineTo(-1.5,1)
+//             shape.lineTo( 0, 0 );
+
+//             var sampleClosedSpline = new THREE.CatmullRomCurve3( array, true);
+//             // var tube = new THREE.TubeBufferGeometry( sampleClosedSpline, 64, 2, 4, true);
+//  geo = new THREE.ExtrudeBufferGeometry(shape, {extrudePath:sampleClosedSpline,steps:100000})
+//  mesh = new THREE.Mesh(geo, new THREE.MeshPhongMaterial({color:colour, side:THREE.DoubleSide, shininess:40})) //LineBasicMaterial())//
+//  group.add(mesh)
+
+
+            // console.log(JSON.parse(vm.RTPlan.struct))
+            // var json = JSON.parse(vm.RTPlan.struct)
+            // // console.log(geometry)
+            // loader.parseGeometries(json, loader.parseShapes(json.shapes)
+            //     , function(geom){
+            //     console.log(geom)
+            // })
+            // var model = loader.parse( vm.RTPlan.struct );
+            let colour = 0xA1AFBF
+            // var mesh = new THREE.Mesh(geometry, new THREE.MeshPhongMaterial({color:colour, side:THREE.DoubleSide, shininess:40}))
+            
+            // group.add(mesh)
             for (let i = 1; i <= vm.RTPlan.numBeams; i++){
-                console.log(vm.RTPlan.beams[i])
                 renderBeamv2(vm.RTPlan.beams[i].beamPoints)
             }
+
+
+            console.log(group.position.z)
+            console.log("HELLO")
+            console.log(parseFloat(vm.RTPlan.firstSlice) - parseFloat(vm.RTPlan.lastSlice))
+            group.position.z -= (parseFloat(vm.RTPlan.firstSlice) + parseFloat(vm.RTPlan.lastSlice))/2 - 100
+
 
         //     let hull = new ConvexHull().setFromObject(meshes[0])
         //     let hull1 = new ConvexHull().setFromObject(meshes[1])
@@ -360,20 +398,37 @@ import * as dicomParser from 'dicom-parser';
             // if (avg < 0){
                 // group.position.z -= (avg - 100)
             // }
-            
-            group.position.x = 0
-            group.position.y = 0
+            // group.position.z += 100
+            // group.position.x = 0
+            // group.position.y = 0
 
             //   var avg = (parseFloat(keys[0])+bottomZ)/2
 
+            // var group1 = new THREE.Group(JSON.parse(vm.RTPlan.struct))
+     
             scene.add(group)
 
+          
+//             console.log(new THREE.ObjectLoader().parseGeometries(vm.RTPlan.struct))
+// // console.log(JSON.parse(vm.RTPlan.struct))
+//              scene2 = new THREE.ObjectLoader().parse(vm.RTPlan.struct)
+
+            // scene2.background = new THREE.Color(0xf1f1f1);
+            // scene2.add(light)
+            // scene2.add(group)
+
+
+            vm.loading = false;
             renderer = new THREE.WebGLRenderer({antialias: true});
             renderer.setPixelRatio(window.devicePixelRatio)
             renderer.setSize( window.innerWidth, window.innerHeight );
             document.getElementById("holder").appendChild( renderer.domElement );
 
+            // const json = scene.toJSON();
+            
+            // const scene2 = new THREE.ObjectLoader().parse(json)
 
+            // scene.position.z += 100
 
             const controls = new OrbitControls( camera, renderer.domElement );
 
@@ -400,7 +455,7 @@ import * as dicomParser from 'dicom-parser';
             mesh1.position.z = slice[2]
             group.add(mesh1)  
         }
-/*
+
         function renderAllSlices(contourData){
             var slices = [];
             contourData.forEach(function(contour){
@@ -434,10 +489,10 @@ import * as dicomParser from 'dicom-parser';
             geo = new THREE.ExtrudeBufferGeometry(shape, {extrudePath:sampleClosedSpline,steps:100000})
             mesh = new THREE.Mesh(geo, new THREE.MeshPhongMaterial({color:colour, side:THREE.DoubleSide, shininess:40})) //LineBasicMaterial())//
             group.add(mesh)
-            // console.log(group)
+            
         }
-*/
-        function renderSlicev2(z, slice){
+
+        function renderSlicev2(z, slice, shape){
            
             z = parseFloat(z.replace('_','.'))
             slice = slice.map(Number)
@@ -447,16 +502,8 @@ import * as dicomParser from 'dicom-parser';
             let colour = 0xA1AFBF//0x657383//0x29293d//3104B4//0B4C5F//// 0x//0xa29093 //0x669999
             var array = [];
 
-            var shape, geo, mesh;
+            var  geo, mesh;
 
-
-            shape = new THREE.Shape();
-            shape.moveTo(0,0);
-            shape.lineTo(1.5,0)
-            shape.lineTo(1.5,1)
-            shape.lineTo( -1.5, 1);
-            shape.lineTo(-1.5,0)
-            shape.lineTo( 0, 0 );
 
             // console.log(slice[2]);
             // var zz = slice[2]
@@ -467,11 +514,46 @@ import * as dicomParser from 'dicom-parser';
           
             
             var sampleClosedSpline = new THREE.CatmullRomCurve3(array, true)
-            // var tube = new THREE.TubeBufferGeometry( sampleClosedSpline, 64, 2,4, true);
+
+            // const points = sampleClosedSpline.getPoints( 50 );
+            // console.log(points)
+            // const geometry = new THREE.BufferGeometry().setFromPoints( points );
+
+            // var sampleClosedSpline2 = new THREE.CatmullRomCurve3(points, true)
+
+            // // var tube = new THREE.TubeBufferGeometry( sampleClosedSpline, 64, 2,4, true);
             geo = new THREE.ExtrudeBufferGeometry(shape, {extrudePath:sampleClosedSpline,steps:500})
+
+           
+            var mesh2 = new THREE.PointsMaterial({color:colour})
+            const pts = new THREE.Points(geometry, mesh2)
+
             mesh = new THREE.Mesh(geo, new THREE.MeshPhongMaterial({color:colour, side:THREE.DoubleSide, shininess:40})) //LineBasicMaterial())//
             // mesh.position.z = slice[2]
+            // group.add(pts)
+            // group.add(mesh)
+            // console.log(sampleClosedSpline)
+            // var gr = new THREE.Group()
+            // gr.add(mesh)
+            // var json = JSON.stringify(points);
+            // // console.log(json)
+            // var response = JSON.parse(json)
+            // // console.log(response)
+            // var sampleClosedSpline3 = new THREE.CatmullRomCurve3(response, true)
+            // console.log(sampleClosedSpline3)
+
+            // geo = new THREE.ExtrudeBufferGeometry(shape, {extrudePath:sampleClosedSpline3,steps:500})
+
+           
+            // var mesh2 = new THREE.PointsMaterial({color:colour})
+            // const pts = new THREE.Points(geometry, mesh2)
+
+            // mesh = new THREE.Mesh(geo, new THREE.MeshPhongMaterial({color:colour, side:THREE.DoubleSide, shininess:40}))
+            // geo = new THREE.ExtrudeBufferGeometry(shape, {extrudePath:sampleClosedSpline,steps:500})
             group.add(mesh)
+            // const loader = new THREE.ObjectLoader()
+            // var newgeo = loader.parse(json)
+            // console.log(newgeo)
 
     }
         function renderSlice(slice){
@@ -485,8 +567,8 @@ import * as dicomParser from 'dicom-parser';
             shape = new THREE.Shape();
             shape.moveTo(0,0);
             shape.lineTo(1.5,0)
-            shape.lineTo(1.5,1)
-            shape.lineTo( -1.5, 1);
+            shape.lineTo(1.5,2)
+            shape.lineTo( -1.5, 2);
             shape.lineTo(-1.5,0)
             shape.lineTo( 0, 0 );
 
@@ -648,9 +730,9 @@ import * as dicomParser from 'dicom-parser';
             const meshGeometry3 = new ConvexGeometry( points );
             const smoothMaterialx = new THREE.MeshMatcapMaterial({color: 0xff0000, side: THREE.DoubleSide, transparent: true, opacity: 0.2});//0xff0000} );0xff0000, side: THREE.DoubleSide, transparent: true, opacity: 0.2});
             smoothMeshx = new THREE.Mesh( meshGeometry3, smoothMaterialx)
+            // group.add(smoothMeshx)
+          
             group.add(smoothMeshx)
-
-            meshes.push(smoothMeshx)
        
         }
 
@@ -683,11 +765,70 @@ import * as dicomParser from 'dicom-parser';
             lineGeometry.computeVertexNormals();
             const meshGeometry3 = new ConvexGeometry( points );
 
-            const smoothMaterialx = new THREE.MeshMatcapMaterial({color: 0xff0000, side: THREE.DoubleSide, transparent: true, opacity: 0.2});//0xff0000} );0xff0000, side: THREE.DoubleSide, transparent: true, opacity: 0.2});
+            // var convexGeom = new THREE.ConvexBufferGeometry(points);
+            // var convexMat = new THREE.MeshNormalMaterial({wireframe: false});
+            // smoothMeshx = new THREE.Mesh( convexGeom, convexMat)
+
+            const smoothMaterialx = new THREE.MeshMatcapMaterial({color: 0xff0000, side: THREE.DoubleSide, transparent: true, opacity: 0.1});//0xff0000} );0xff0000, side: THREE.DoubleSide, transparent: true, opacity: 0.2});
             smoothMeshx = new THREE.Mesh( meshGeometry3, smoothMaterialx)
+            console.log("adding mesh")
+            
             group.add(smoothMeshx)
        
         }
+
+        function allSlices(slices, keys){
+            var pts = []
+            var indices = []
+            var curr = 0;
+
+            var colour = 0xA1AFBF
+            // let z = parseFloat(z.replace('_','.'))
+            // let slice = slice.map(Number)
+
+            console.log(slices)
+            for (let i=0; i<keys.length; i++){
+                let z = parseFloat(keys[i].replace('_','.'))
+                // console.log(key)
+                // console.log(slices[key])
+                
+                let slice = JSON.parse(slices[keys[i]]).map(Number)
+                
+                for (let j=0; j<slice.length; j+=2){
+                    console.log(slice.length/2)
+
+                    pts.push(new THREE.Vector3(slice[j], slice[j+1], z))
+                    if (j != slice.length-1 && i != keys.length-1){
+                    let a = curr;
+                    let b = curr + slice.length/2
+                    let c = curr+1; 
+                    let d = curr + slice.length/2 + 1
+                    indices.push(a,b,c)
+                    indices.push(b,c,d)
+                }
+
+                   
+
+                    curr ++;
+                    // console.log("j", j)
+                    // console.log("curr", curr)
+                }
+            }
+
+            var geo = new THREE.BufferGeometry().setFromPoints(pts)
+            geo.setIndex(indices)
+            // geo.computeFaceNormals();
+            // geo.computeVertexNormals();
+            var mesh = new THREE.Mesh(geo, new THREE.MeshBasicMaterial({color:colour, side:THREE.DoubleSide, shininess:40, wireframe:true}))
+            group.add(mesh)
+            console.log(indices)
+            group.add( new THREE.AmbientLight( 0xffffff, 0.1 ) );
+            // for (let i=0; i<slice1.length && i<slice2.length; i++){
+            //     slice
+            // }
+
+
+        }    
     }
 
 })();

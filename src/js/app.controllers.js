@@ -39,6 +39,7 @@ import "./controllers/questionnaires/questionnairesListController.js";
 import "./controllers/questionnaires/questionnaireCompletionController.js";
 import "./controllers/questionnaires/questionnaireNotifRedirectController";
 import "./controllers/radiotherapy/individualRadiotherapyController.js";
+import "./controllers/radiotherapy/individualRadiotherapyController3D.js";
 import "./controllers/radiotherapy/radiotherapyController.js";
 import "./controllers/settings/accountSettingsController.js";
 import "./controllers/settings/changeSettingController.js";
