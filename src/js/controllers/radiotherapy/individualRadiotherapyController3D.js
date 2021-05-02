@@ -6,7 +6,6 @@
  */
 
 import * as THREE from 'three';
-import { ConvexGeometry } from 'three/examples/jsm/geometries/ConvexGeometry.js';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
 (function () {
@@ -89,7 +88,7 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
             scene.background = new THREE.Color(0xf1f1f1);
 
 
-            camera = new THREE.PerspectiveCamera( 100, window.innerWidth/window.innerHeight, 10 , 550 );
+            camera = new THREE.PerspectiveCamera( 100, window.innerWidth/window.innerHeight, 10 , 600 );
             // camera.up.set( 0, 0, 1 );
             camera.position.y = -400
             camera.position.z = 100
@@ -137,7 +136,7 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
             let colour = 0xA1AFBF
 
             for (let i = 1; i <= vm.RTPlan.numBeams; i++){
-                // renderBeamv2(vm.RTPlan.beams[i].beamPoints)
+                renderBeamv2(vm.RTPlan.beams[i].beamPoints)
             }
 
 
@@ -167,47 +166,9 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
               animate();
         }
 
-        function renderSliceCap(slice){
-            let colour = 0xA1AFBF//0x657383//0x29293d
-            var slice1 = []
-
-            for (let i = 0; i < slice.length; i+=21){
-                slice1.push(new THREE.Vector2(slice[i], slice[i+1]))
-            }
-            const s1shape = new THREE.Shape(slice1)
-            const geo1 = new THREE.ShapeBufferGeometry(s1shape)
-
-            const mesh1 = new THREE.Mesh( geo1, new THREE.MeshPhongMaterial( {color:colour, side:THREE.DoubleSide,shininess:30}))
-            mesh1.position.z = slice[2]
-            group.add(mesh1)  
-        }
 
         
 
-        function renderSlicev2(z, slice, shape){
-           
-            z = parseFloat(z.replace('_','.'))
-            slice = slice.map(Number)
-   
-            
-            let colour = 0xA1AFBF//0x657383//0x29293d//3104B4//0B4C5F//// 0x//0xa29093 //0x669999
-            var array = [];
-
-            var  geo, mesh;
-
-            
-            for (let i = 0; i < slice.length; i+=2){
-                array.push(new THREE.Vector3(slice[i], slice[i+1], z))  
-            }
-          
-            
-            var sampleClosedSpline = new THREE.CatmullRomCurve3(array, true)
-            geo = new THREE.ExtrudeBufferGeometry(shape, {extrudePath:sampleClosedSpline,steps:500})
-            mesh = new THREE.Mesh(geo, new THREE.MeshPhongMaterial({color:colour, side:THREE.DoubleSide, shininess:40})) //LineBasicMaterial())//
-         
-            group.add(mesh)
-
-    }
 
         
 
@@ -217,35 +178,29 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
             beamPoints.field.forEach(function(pt){
                 points.push(new THREE.Vector3(parseFloat(pt[0]), parseFloat(pt[1]), parseFloat(pt[2])))
             })
-            beamPoints.field.forEach(function(pt){
-                points.push(new THREE.Vector3(parseFloat(pt[0]), parseFloat(pt[1]), parseFloat(pt[2])))
-                points.push(beamSource)
-            })
-            // points.push( new THREE.Vector3(c1[0],c1[1],c1[2]));
-            // points.push( new THREE.Vector3(beamSource[0],beamSource[1],beamSource[2]));
-            // points.push( new THREE.Vector3(c2[0],c2[1],c2[2]));
-            // points.push( new THREE.Vector3(beamSource[0],beamSource[1],beamSource[2]));
-            // points.push( new THREE.Vector3(c3[0],c3[1],c3[2]));
-            // points.push( new THREE.Vector3(beamSource[0],beamSource[1],beamSource[2]));
-            // points.push( new THREE.Vector3(c4[0],c4[1],c4[2]));
-            // points.push( new THREE.Vector3(c1[0],c1[1],c1[2]));
-            // points.push( new THREE.Vector3(c2[0],c2[1],c2[2]));
-            // points.push( new THREE.Vector3(c3[0],c3[1],c3[2]));
-            // points.push( new THREE.Vector3(c4[0],c4[1],c4[2]));
+            points.push(beamSource)
+
+
+
+            var indices = [];
+            indices.push(2,1,4)
+            indices.push(3,2,4)
+            indices.push(0,3,4)
+            indices.push(1,0,4)
+            indices.push(2,1,3)
+            indices.push(1,0,3)
             const lineMaterial = new THREE.LineBasicMaterial( { color: 0xff0000} );//0xff0000, linewidth: 4 } );
+            
             const lineGeometry = new THREE.BufferGeometry().setFromPoints( points );
+            lineGeometry.setIndex(indices)
             const lines = new THREE.Line( lineGeometry, lineMaterial );
             group.add(lines)
 
             lineGeometry.computeVertexNormals();
-            const meshGeometry3 = new ConvexGeometry( points );
 
-            // var convexGeom = new THREE.ConvexBufferGeometry(points);
-            // var convexMat = new THREE.MeshNormalMaterial({wireframe: false});
-            // smoothMeshx = new THREE.Mesh( convexGeom, convexMat)
 
             const smoothMaterialx = new THREE.MeshMatcapMaterial({color: 0xff0000, side: THREE.DoubleSide, transparent: true, opacity: 0.1});//0xff0000} );0xff0000, side: THREE.DoubleSide, transparent: true, opacity: 0.2});
-            smoothMeshx = new THREE.Mesh( meshGeometry3, smoothMaterialx)
+            smoothMeshx = new THREE.Mesh( lineGeometry, smoothMaterialx)
             console.log("adding mesh")
             
             group.add(smoothMeshx)
@@ -257,7 +212,7 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
             var indices = []
             var curr = 0;
             var normals = []
-            var colour = 0xA1AFBF
+            var colour = 0x999289//0x9189CA//0xA1AFBF
 
             console.log(slices)
             console.log(keys.length)
@@ -276,10 +231,24 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
                 let z = parseFloat(keys[i].replace('_','.'))
                 // let z = keys[i]
                 let slice2 = []
-                let slice = JSON.parse(slices[keys[i]]).map(Number)
-                if (i < keys.length -1){
-                    slice2 = JSON.parse(slices[keys[i+1]]).map(Number)
+                let slice = []
+
+                // console.log(JSON.parse(slices[keys[i]])[0])
+                if(JSON.parse(slices[keys[i]]).length > 1) {
+
+                    console.log(JSON.parse(slices[keys[i]])[0])
+                    slice = JSON.parse(slices[keys[i]])[0]//.map(Number)
                 }
+                else slice = JSON.parse(slices[keys[i]])[0]//.map(Number)
+                if (i < keys.length -1){
+                    if(JSON.parse(slices[keys[i+1]]).length > 1) slice2 = JSON.parse(slices[keys[i+1]])[0]//.map(Number)
+                    else slice2 = JSON.parse(slices[keys[i+1]])[0]//.map(Number)
+                    // slice2 = JSON.parse(slices[keys[i+1]])[0].map(Number)
+                }
+
+                
+
+                console.log("conts per z:",JSON.parse(slices[keys[i]]).length)
                 console.log("LENGTH:",slice.length/2)
                 // console.log(slice.length)
                 let index = 0;
@@ -289,49 +258,38 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
                     pts.push(slice[j], slice[j+1], z)
                     // pts.push(new THREE.Vector3(slice[j], slice[j+1], z))
                     
-                    if (z>=0) normals.push( 0, 0, 1 );
-                    else normals.push(0,0,-1)
                     
                     if (j==0){
                         index = closestIndex(slice[j], slice[j+1], slice2)
                        console.log("ind", index)
                     }
 
-                    // if (i == 0){
-                    //     for (let k = 0; k < slice.length; k+=2){
-                    //         indices.push(k)
-                    //     }
-                    //     indices.push(0)
-                        
-
-                    // }
-
-                    // if (i == keys.length-1){
-                    //     for (let k = 0; k < slice.length; k+=2){
-                    //         indices.push(curr + k)
-                    //     }
-                    //     indices.push(curr)
-                        
-
-                    // }
+                   
 
                     if (j != slice.length-2 && i != keys.length-1){
-
-                    let maxdist =0// Math.max(distance(slice[j], slice[j+1], slice[j+2], slice[j+3]),distance(slice[j], slice[j+1], slice2[(j+index)%slice2.length], slice2[(j+index)%slice2.length+1]), distance(slice2[(j+index)%slice2.length], slice2[(j+index+1)%slice2.length],slice2[(j+index+2)%slice2.length],slice2[(j+index+3)%slice2.length]) )
-                    
-                    if ( maxdist < 70){
-                        // console.log(curr)
+                    let distAB = distance(slice[j], slice[j+1], slice2[(j+index) % slice2.length], slice2[1+(j+index) % slice2.length] );
+                    let distAC = distance(slice[j], slice[j+1], slice[j+2], slice[j+3]);;
+                    let distAD = distance(slice[j], slice[j+1],slice2[(2+j+index) % slice2.length], slice2[1+(2+j+index) % slice2.length])//distance(slice2[(2+j+index) % slice2.length], slice2[1+(2+j+index) % slice2.length], slice2[(j+index) % slice2.length], slice2[1+(j+index) % slice2.length]);;
+                    // console.log("dists",distAB,distAC,distAD) 
+                    let maxdist = Math.max(distAB,distAC,distAD)// Math.max(distance(slice[j], slice[j+1], slice[j+2], slice[j+3]),distance(slice[j], slice[j+1], slice2[(j+index)%slice2.length], slice2[(j+index)%slice2.length+1]), distance(slice2[(j+index)%slice2.length], slice2[(j+index+1)%slice2.length],slice2[(j+index+2)%slice2.length],slice2[(j+index+3)%slice2.length]) )
+                    // if (maxdist >100){
+                    //     index = closestIndex(slice[j], slice[j+1], slice2)
+                    // }
+                    // if (maxdist>50 ){
+                    //     console.log("HELLO")
+                    //     console.log("currindex",index)  
+                    //     index = (closestIndex(slice[j], slice[j+1], slice2) - j +slice2.length)  %slice2.length
+                    //     console.log("newindex",index)
+                    //     console.log(j)
+                    //     console.log("lengths",slice.length,slice2.length)
+                    // }
+      
                         let a = curr;
                     let b = curr -j/2 + slice.length/2 + ((index/2)+j/2) % (slice2.length/2)
                     let c = curr+1; 
                     let d = curr -j/2+ slice.length/2 + ((index/2)+j/2 +1) % (slice2.length/2) 
                     
-                    if(true){
-                        console.log("ind/2", index/2)
-                        // console.log(a,b, "ind:",index/2, "j",j/2,"len",slice.length/2, ((index/2)+j/2) % (slice2.length/2) );
-                        console.log(c,a,d)
-                        console.log(a,b,d)
-                    }
+            
                     if (Math.abs(c-d) > 105) console.log("OVER FIFTY", c,a,d,"J",j)
                         if (a<0) console.log("NEG A", a, j)
                         if (b<0) console.log("NEG B", b, j)
@@ -339,41 +297,36 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
                         indices.push(c,a,d)
                         indices.push(a,b,d)
                     }
-                    }
                     // console.log(j)
-                    if (j == slice.length-2 && slice2.length <= slice.length){
-                        console.log(j/2)
-                        console.log("ind:",index/2)
-                        if (true){//(distance(slice[j], slice[j+1], slice[0], slice[1]) < 70 && distance(slice[j], slice[j+1], slice2[0], slice2[1]) < 70){
+                    if (j == slice.length-2 && i!=keys.length-1&& slice2.length <= slice.length){
                             let a = curr;
                             let b = curr  + (((index/2)+ slice2.length/2) )% (slice2.length/2)
                             if (index==0) b += slice2.length/2
-                           //+ ((index/2) + j) //% (slice2.length/2)
-                        //    console.log("currr", curr)
-                        //    console.log("j/2",j/2,"slice/2",slice.length/2)
                             let c = curr-j/2; 
                             let d = curr+1+((index/2)) % (slice2.length/2)
-                            // console.log(curr)
-                            // console.log(j)
-                            // let d = curr - j + slice.length/2 + ((index/2) + j) +1//% (slice2.length/2) + 1
                             console.log("last")
-                            // if (a<0) console.log("NEG A", a, j)
-                            // if (b<0) console.log("NEG B", b, j)
-                            // if (c<0) console.log("NEG C", c, j)
+
+                            indices.push(c,a,d)
+                            indices.push(a,b,d)
+
                             console.log(c,a,d)
                             console.log(a,b,d)
+                    }
 
-                            // console.log(a,b, "ind:",index/2, "j",j/2,"len",slice2.length/2, ((index/2)+j/2) % (slice2.length/2) );
-                            // console.log(c,a,d)
-                            // console.log(a,b,d)
+                    // Cap top and bottom
+                    if ((i == keys.length-1 || i==0) && j==0){
+
+                        for (let k = 1; k < slice.length/4; k++){
+                            let a = curr + k - 1;
+                            let b = curr + (slice.length/2-k)
+                            let c = curr + k;
+                            let d = curr + (slice.length/2 - k - 1)
                             indices.push(c,a,d)
                             indices.push(a,b,d)
                         }
-    
                     }
 
                     
-                console.log("curr:",curr,"j:",j,"slice:",slice[j], slice[j+1], z)
 
                     curr ++;
                    
@@ -412,9 +365,6 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
                             let a = curr-slice.length/2+(index/2 + ( slice2.length-slice.length)/2)%(slice.length/2) //slice.length/2+(index/2 + (j-slice.length)/2)%(slice.length/2)//curr-slice.length/2+(index/2 + (j-slice.length)/2)%(slice.length/2) //newCurr;
                             let b = newCurr//  + (((index/2)+ slice.length/2) )//% (slice2.length/2))
-                           //+ ((index/2) + j) //% (slice2.length/2)
-                        //    console.log("currr", curr)
-                        //    console.log("j/2",j/2,"slice/2",slice.length/2)
                             let c = curr-slice.length/2+(index/2 + ( slice2.length-slice.length)/2 + 1)%(slice.length/2); 
                             let d = curr+ (newCurr+1-curr)%(slice2.length/2)//newCurr - slice2.length/2 //+((index/2) +1) //% (slice2.length/2))
               
@@ -442,17 +392,17 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
             geopts.setAttribute('position', new THREE.Float32BufferAttribute(pts,3))
             // geo.setAttribute('normal', new THREE.Float32BufferAttribute(normals, 3))
             var mesh2 = new THREE.Points(geopts, new THREE.PointsMaterial({color:0xff0000}))
-            scene.add(mesh2)
-            group.add(mesh2)
+            
+            //group.add(mesh2)
             geo.computeBoundingSphere()
             // geo.computeFaceNormals();                                                        
             geo.computeVertexNormals();
             // console.log(pts)
-            colour = 0x6A5ACD
-            var mesh = new THREE.Mesh(geo, new THREE.MeshPhysicalMaterial({color:colour, side:THREE.DoubleSide, shininess:40}))//,wireframe:true}))
+            colour =0x655A4E// 0x967969//0x5E51B1//0x6A5ACD
+            var mesh = new THREE.Mesh(geo, new THREE.MeshPhongMaterial({color:colour, side:THREE.DoubleSide, shininess:20}))//,wireframe:true}))
             group.add(mesh)
             // console.log(indices)
-            group.add( new THREE.AmbientLight( 0xffffff, 0.1 ) );
+            // group.add( new THREE.AmbientLight( 0xffffff, 0.1 ) );
 
 
 
