@@ -6,14 +6,9 @@
         <div class="left">
             <ons-back-button>{{"BACK"|translate}}</ons-back-button>
         </div>
-        <div class="right">
-        <ons-toolbar-button ng-click="rad.goTo3DPlan()">Next </ons-toolbar-button> 
-        
-    </div>
     </ons-toolbar>
-
     <style>
-        input {
+        input[type="checkbox"] {
         display: none;
         }
         label {
@@ -53,107 +48,131 @@
         }
         </style>
             <loading-spinning-circle ng-if="rad.loading" loading-message="{{'LOADINGRADIOTHERAPYPLAN'|translate}} This may take a moment..."></loading-spinning-circle>
-<div ng-if="!rad.loading">
-    <div class="col-xs-12 text-center">
-        <h3><b>{{"PERSONALIZED_PLAN"|translate}}</b></h3>
-        <div align="justify">
-        <p>On this page you will find details about your radiotherapy treatment plan, which has been carefully put together for you based on your CT scan and your specific disease characteristics. The treatment will be repeated over <b><span style="color:darkgreen">16</span></b> sessions.
-<br><br> 
-            On the next page, you will find a 3D reconstruction of your body made from your CT scan, along with the radiation beams you will receive during treatment. This will allow you to visualize where the radiation will enter your body.
-        </p>
-        <div align="center" style="margin-bottom:10px; margin-top: 20px;">
-            <button class="button--large--cta" style="width:80%; white-space: initial" 
-      ng-click="rad.goTo3DPlan()" ng-class="fontSizeDesc">
-      View Treatment Plan
-      </button>
-  </div>
-        
-</div>
-        <!-- <p>On the treatment table, you will lie on your back with your head towards the machine.</p>
-        <img src="./img/radiotherapy/HFS.JPG"style="max-width: 80%; height: auto">
-        <br><br>
-        <p>You will be positioned with the help of a <b><span style="color:darkgreen">head frame</span></b>, which is used to reduce your body's motion for a more accurate delivery of radiation. </span></p>
-        <img src="./img/radiotherapy/HEADFRAME.png"style="width: 40%; height: auto">
-        <br><br>
-        <p>The machine will rotate around you to deliver <b><span style="color:darkgreen">5</span></b> beams at different angles.</p>
-        <img src="./img/radiotherapy/GANTRY.PNG"style="max-width: 65%; height: auto">
-        <br><br>
-        <p>Your treatment will be delivered over the course of <b><span style="color:darkgreen">16</span></b> sessions.</p>
-        <br> -->
+               <div ng-hide="rad.loading">
+            <div class="navigation-bar">
+            <div class="navigation-bar__center">
+                <div class="button-bar" style="margin-top:10px;width:90%;left:5%;">
+                    <div class="button-bar__item">
+                        <input type="radio" name="navi-segment-a" checked ng-model="rad.showDetails" ng-value="true">
+                        <div class="button-bar__button">Description</div>
+                    </div>
+                    <div class="button-bar__item">
+                        <input type="radio" name="navi-segment-a" ng-model="rad.showDetails" ng-value="false" ng-click="rad.show3DPlan()">
+                        <div class="button-bar__button">3D View</div>
+                    </div>
 
-
-    <!-- <div class="col-xs-12 text-center" style="margin: 0 auto; align: center; position:fixed"> 
-            <p>Below is a 3D reconstruction of your body from your CT scan.</p>
-            <p>You can see where the radiation beams will come into contact w     ith your skin.</p>
-            <div style="position:relative" id="holder"></div>
-        </div> -->
-
-<div align="justify" style="padding-bottom: 30px;">
-              <input type="checkbox" id="title1">
-         &nbsp; &nbsp;  <label for="title1"><img src="./img/radiotherapy/table_position.png" style="height:30px; vertical-align:middle;"><span><strong>&nbsp;&nbsp;{{"POSITION_TITLE"|translate}}</strong></span></label>
-              
-              <div class="content">
-                <p>{{"POSITIONING_1"|translate}}</p>
-                <img src="./img/radiotherapy/GANTRY.PNG" style="max-width: 65%; height: auto;" class="center">
-                <p>{{"POSITIONING_2"|translate}} <b><span style="color:darkgreen">{{"POSITIONING_2_" + rad.RTPlan.patientPosition | translate}}</span></b>.</p>
-                <br> <p ng-if="rad.cancerType == 'breast' || rad.cancerType == 'prostate'">{{"POSITIONING_3_" + rad.cancerType.toUpperCase() |translate}}</p> <!---->
-            </div>
-              
-              <input type="checkbox" id="title2">
-         &nbsp; &nbsp;  <label for="title2"><img src="./img/radiotherapy/radiation.png" style="height:30px; vertical-align:middle;"><span><strong>&nbsp;&nbsp;{{"BEAMS_TITLE"|translate}}</strong></span></label>
-              
-              <div class="content">
-                <p>{{"BEAMS_1"|translate}}<b><span style="color:darkgreen">{{rad.RTPlan.numBeams}}</span></b> {{"BEAMS_2"|translate}}
-                <img src="./img/radiotherapy/radiotherapy_delivery.png" style="max-width:100%; height: auto;" class="center">
-                <br>{{"BEAMS_3"|translate}} <b><span style="color:darkgreen">{{rad.RTPlan.radiationType.toLowerCase()}}</span></b>  {{"BEAMS_3_" + rad.RTPlan.radiationType.toUpperCase()|translate}} 
-                <br><br>
-                <span ng-if="rad.isSingularEnergy">{{"BEAMS_4_SINGULAR"|translate}}</span>
-                <span ng-if="!rad.isSingularEnergy">{{"BEAMS_4_PLURAL"|translate}}</span>
-                <b><span style="color:darkgreen">{{rad.energyText}}</span></b> {{"BEAMS_4_" + rad.RTPlan.radiationType.toUpperCase()|translate}}{{"BEAMS_5"|translate}}{{"BEAMS_5_" + rad.RTPlan.radiationType.toUpperCase() |translate}}
-                <br><br>
-                {{"BEAMS_6"|translate}} 
-                <p ng-if="rad.RTPlan.hasMLC">{{"BEAMS_6_MLC"|translate}} </p><!--In your case, the beam is made even smaller with the use of “<b><span style="color:darkgreen">multileaf collimators</span></b>”, small metal bars that block some of radiation to make a conformal beam.<p></p>-->
-                <img src="./img/radiotherapy/MLC.png" style="max-width: 85%; height: auto;" class="center">              
                 </div>
-
-                <!-- TODO: Implement below w/ variables -->
-        <!--
-              <input type="checkbox" id="title3">
-              &nbsp; &nbsp;  <label for="title3"><img src="./img/radiotherapy/lung.png" style="height:30px; vertical-align:middle;"><span><strong>&nbsp;&nbsp;{{"BREATHING_TITLE"|translate}}</strong></span></label>
-            
-                <div class="content">
-                    Breathing techniques are used for tumours that are close to the heart or likely to move significantly while breathing. During treatment, you will need to <b><span style="color:darkgreen">hold a deep breath</span></b>. 
-                    Your therapist will guide you through this process. Since your tumour moves as you breathe, holding a deep breath keeps the tumour at the same place inside the radiation beam.  At this position, the tumour is also further away from your heart, which will help to protect and minimize radiation exposure to your heart.
-                    <img src="./img/radiotherapy/breath_hold.png" style="max-width: 100%; height: auto;" class="center">  
-                </div>
-             
-        
-                <input type="checkbox" id="title4">
-                &nbsp; &nbsp;  <label for="title4"><img src="./img/radiotherapy/dose.png" style="height:30px; vertical-align:middle;"><span><strong>&nbsp;&nbsp;{{"DOSE_TITLE"|translate}}</strong></span></label>
-                
-                <div class="content">
-                    {{"DOSE_1"|translate}} <b><span style="color:darkgreen">{{rad.RTPlan.dose}}</span></b> {{"DOSE_2"|translate}}
-                <br><br>
-                {{"DOSE_3"|translate}} <b><span style="color:darkgreen">{{rad.RTPlan.numFractions}}</span></b> {{"DOSE_4"|translate}}
-                <br><br>
-                The radiation beam type, energy, angle and shape are all chosen so that the tumour receives this prescribed dose, while the surrounding healthy tissues and organs receive the least amount of radiation possible. Our goal is first to effectively remove the tumour, but also to reduce the side effects you may experience.
-                <br><br>
-                <b><span style="color:red">change above text -- see google doc</span></b>
-                </div>
-               <input type="checkbox" id="title5">
-            
-                &nbsp; &nbsp; <label for="title5"> <img src="./img/radiotherapy/graph.png" style="height:30px; vertical-align:middle;"><span><strong>&nbsp;&nbsp;{{"PROCESS_TITLE"|translate}}</strong></span></label>
-                        
-                <div class="content">
-                    <span style="color:red">blah blah blah add explanations of ctv etc </span>
-                    <p></p>
-                </div>
-            --> 
-
             </div>
         </div>
-    </div>
+  
+        <div ng-if="rad.showDetails">
+            <div class="col-xs-12 text-center">
+
+                <h3><b>{{"PERSONALIZED_PLAN"|translate}}</b></h3>
+                <div align="justify">
+                <p>On this page you will find details about your radiotherapy treatment plan, which has been carefully put together for you based on your CT scan and your specific disease characteristics. The treatment will be repeated over <b><span style="color:darkgreen">{{rad.RTPlan.numFractions}}</span></b> sessions.
+        <br><br> 
+                    <!-- On the next page, you will find a 3D reconstruction of your body made from your CT scan, along with the radiation beams you will receive during treatment. This will allow you to visualize where the radiation will enter your body. -->
+                </p>
+
+                
+        </div>
+                <!-- <p>On the treatment table, you will lie on your back with your head towards the machine.</p>
+                <img src="./img/radiotherapy/HFS.JPG"style="max-width: 80%; height: auto">
+                <br><br>
+                <p>You will be positioned with the help of a <b><span style="color:darkgreen">head frame</span></b>, which is used to reduce your body's motion for a more accurate delivery of radiation. </span></p>
+                <img src="./img/radiotherapy/HEADFRAME.png"style="width: 40%; height: auto">
+                <br><br>
+                <p>The machine will rotate around you to deliver <b><span style="color:darkgreen">5</span></b> beams at different angles.</p>
+                <img src="./img/radiotherapy/GANTRY.PNG"style="max-width: 65%; height: auto">
+                <br><br>
+                <p>Your treatment will be delivered over the course of <b><span style="color:darkgreen">16</span></b> sessions.</p>
+                <br> -->
         
-</ons-page>
+        
+            <!-- <div class="col-xs-12 text-center" style="margin: 0 auto; align: center; position:fixed"> 
+                    <p>Below is a 3D reconstruction of your body from your CT scan.</p>
+                    <p>You can see where the radiation beams will come into contact w     ith your skin.</p>
+                    <div style="position:relative" id="holder"></div>
+                </div> -->
+        
+        <div align="justify" style="padding-bottom: 30px;">
+                      <input type="checkbox" id="title1">
+                 &nbsp; &nbsp;  <label for="title1"><img src="./img/radiotherapy/table_position.png" style="height:30px; vertical-align:middle;"><span><strong>&nbsp;&nbsp;{{"POSITION_TITLE"|translate}}</strong></span></label>
+                      
+                      <div class="content">
+                        <p>{{"POSITIONING_1"|translate}}</p>
+                        <img src="./img/radiotherapy/GANTRY.PNG" style="max-width: 65%; height: auto;" class="center">
+                        <p>{{"POSITIONING_2"|translate}} <b><span style="color:darkgreen">{{"POSITIONING_2_" + rad.RTPlan.patientPosition | translate}}</span></b>.</p>
+                        <br> <p ng-if="rad.cancerType == 'breast' || rad.cancerType == 'prostate'">{{"POSITIONING_3_" + rad.cancerType.toUpperCase() |translate}}</p> <!---->
+                    </div>
+                      
+                      <input type="checkbox" id="title2">
+                 &nbsp; &nbsp;  <label for="title2"><img src="./img/radiotherapy/radiation.png" style="height:30px; vertical-align:middle;"><span><strong>&nbsp;&nbsp;{{"BEAMS_TITLE"|translate}}</strong></span></label>
+                      
+                      <div class="content">
+                        <p>{{"BEAMS_1"|translate}}<b><span style="color:darkgreen">{{rad.RTPlan.numBeams}}</span></b> {{"BEAMS_2"|translate}}
+                        <img src="./img/radiotherapy/radiotherapy_delivery.png" style="max-width:100%; height: auto;" class="center">
+                        <br>{{"BEAMS_3"|translate}} <b><span style="color:darkgreen">{{rad.RTPlan.radiationType.toLowerCase()}}</span></b>  {{"BEAMS_3_" + rad.RTPlan.radiationType.toUpperCase()|translate}} 
+                        <br><br>
+                        <span ng-if="rad.isSingularEnergy">{{"BEAMS_4_SINGULAR"|translate}}</span>
+                        <span ng-if="!rad.isSingularEnergy">{{"BEAMS_4_PLURAL"|translate}}</span>
+                        <b><span style="color:darkgreen">{{rad.energyText}}</span></b> {{"BEAMS_4_" + rad.RTPlan.radiationType.toUpperCase()|translate}}{{"BEAMS_5"|translate}}{{"BEAMS_5_" + rad.RTPlan.radiationType.toUpperCase() |translate}}
+                        <br><br>
+                        {{"BEAMS_6"|translate}} 
+                        <p ng-if="rad.RTPlan.hasMLC">{{"BEAMS_6_MLC"|translate}} </p><!--In your case, the beam is made even smaller with the use of “<b><span style="color:darkgreen">multileaf collimators</span></b>”, small metal bars that block some of radiation to make a conformal beam.<p></p>-->
+                        <img src="./img/radiotherapy/MLC.png" style="max-width: 85%; height: auto;" class="center">              
+                        </div>
+        
+                        <!-- TODO: Implement below w/ variables -->
+                
+                      <input type="checkbox" id="title3">
+                      &nbsp; &nbsp;  <label for="title3"><img src="./img/radiotherapy/lung.png" style="height:30px; vertical-align:middle;"><span><strong>&nbsp;&nbsp;{{"BREATHING_TITLE"|translate}}</strong></span></label>
+                    
+                        <div class="content">
+                            Breathing techniques are used for tumours that are close to the heart or likely to move significantly while breathing. During treatment, you will need to <b><span style="color:darkgreen">hold a deep breath</span></b>. 
+                            Your therapist will guide you through this process. Since your tumour moves as you breathe, holding a deep breath keeps the tumour at the same place inside the radiation beam.  At this position, the tumour is also further away from your heart, which will help to protect and minimize radiation exposure to your heart.
+                            <img src="./img/radiotherapy/breath_hold.png" style="max-width: 100%; height: auto;" class="center">  
+                        </div>
+                      
+                
+                        <input type="checkbox" id="title4">
+                        &nbsp; &nbsp;  <label for="title4"><img src="./img/radiotherapy/dose.png" style="height:30px; vertical-align:middle;"><span><strong>&nbsp;&nbsp;{{"DOSE_TITLE"|translate}}</strong></span></label>
+                        
+                        <div class="content">
+                            {{"DOSE_1"|translate}} <b><span style="color:darkgreen">{{rad.RTPlan.dose}}</span></b> {{"DOSE_2"|translate}}
+                        <br><br>
+                        {{"DOSE_3"|translate}} <b><span style="color:darkgreen">{{rad.RTPlan.numFractions}}</span></b> {{"DOSE_4"|translate}}
+                        <br><br>
+                        The radiation beam type, energy, angle and shape are all chosen so that the tumour receives this prescribed dose, while the surrounding healthy tissues and organs receive the least amount of radiation possible. Our goal is first to effectively remove the tumour, but also to reduce the side effects you may experience.
+                        <br><br>
+                        <b><span style="color:red">change above text -- see google doc</span></b>
+                        </div>
+                       <input type="checkbox" id="title5">
+                    
+                        &nbsp; &nbsp; <label for="title5"> <img src="./img/radiotherapy/graph.png" style="height:30px; vertical-align:middle;"><span><strong>&nbsp;&nbsp;{{"PROCESS_TITLE"|translate}}</strong></span></label>
+                                
+                        <div class="content">
+                            <span style="color:red">blah blah blah add explanations of ctv etc </span>
+                            <p></p>
+                        </div>
+            
+
+                    </div>
+                </div>
+            </div>
+
+            <div ng-if="!rad.showDetails">
+                <div class="col-xs-12 text-center" style="margin: 0 auto; align: center; position:fixed"> 
+                    <h3><b>{{"PERSONALIZED_PLAN"|translate}}</b></h3>
+                    <p>Below is a 3D view of your body from your CT scan and the beams of radiation you will receive during treatment.</p>
+                    <div style="position:relative" id="holder"></div>
+                </div>
+            </div>
+               </div>
+                
+        </ons-page>
+
+
 
 

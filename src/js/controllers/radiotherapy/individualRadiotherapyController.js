@@ -5,6 +5,8 @@
  * Date         :   April 2021
  */
 
+import * as THREE from 'three';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
 (function () {
     'use strict';
@@ -31,9 +33,12 @@
         vm.cancerType = 'breast';
         vm.energyText = '';
         vm.isSingularEnergy = true;
+        vm.showDetails = true;
 
+        vm.show3DPlan = show3DPlan
         vm.goTo3DPlan = goTo3DPlan;
 
+        let camera, scene, renderer;
 
         activate();
 
@@ -70,7 +75,20 @@
             vm.language = UserPreferences.getLanguage();
             $translatePartialLoader.addPart('radiotherapy');
 
+            camera = new THREE.PerspectiveCamera( 100, window.innerWidth/window.innerHeight, 10 , 600 );
+            // camera.up.set( 0, 0, 1 );
+            camera.position.y = -400
+            camera.position.z = 100
 
+            renderer = new THREE.WebGLRenderer({antialias: true});
+                renderer.setPixelRatio(window.devicePixelRatio)
+                renderer.setSize( window.innerWidth, window.innerHeight );
+                const controls = new OrbitControls( camera, renderer.domElement );
+
+
+                $scope.$on('$destroy', function() {
+                navigator.off('postpop');
+                })
         }
 
         function setEnergyText(){
@@ -97,6 +115,23 @@
             navigator.pushPage('./views/personal/radiotherapy/radiotherapy-plan.html', {plan});
 
         }
+
+        function show3DPlan(){
+            if (scene==undefined){ scene = Radiotherapy.getScene()
+            var animate = function () {
+                requestAnimationFrame( animate );
+            
+                renderer.render( scene, camera );
+
+            };
+            animate();
+
+        }
+            ons.ready(function() {
+                document.getElementById("holder").appendChild( renderer.domElement );    
+            })
+        }
+
 
     }
 
