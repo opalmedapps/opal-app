@@ -5,7 +5,7 @@
  * Date         :   March 2021
  */
 import * as THREE from 'three';
-
+import { ConvexHull } from 'three/examples/jsm/math/ConvexHull.js';
 (function()
 {
     angular
@@ -21,6 +21,7 @@ import * as THREE from 'three';
 
         let scene = new THREE.Scene()
         let group = new THREE.Group();
+        let meshes = [];
         var vm = this;
         vm.RTPlan;
 
@@ -80,14 +81,16 @@ import * as THREE from 'three';
         }
 
         function clearScene(){
-            console.log("HI")
+            meshes = []
+            group.position.x = 0;
+            group.rotation.y = 0;
             while(scene.children.length > 0){ 
                 scene.remove(scene.children[0]); 
             }
             while(group.children.length > 0){
                 group.remove(group.children[0])
             }
-            group.position.z = 0
+
         }
 
         function renderElements(){
@@ -96,11 +99,11 @@ import * as THREE from 'three';
             scene.background = new THREE.Color(0xf1f1f1);
 
             const light = new THREE.PointLight(0xffffff, 1);
-            light.position.set(0,0,2000);
+            light.position.set(2000,0,0);
             scene.add(light);
 
             const light2 = new THREE.PointLight(0xffffff, 1);
-            light2.position.set(0,0,-2000);
+            light2.position.set(-2000,0,0);
             scene.add(light2);
 
             const light3 = new THREE.PointLight(0xffffff, 1);
@@ -121,8 +124,9 @@ import * as THREE from 'three';
 
             allSlices(slices, keys)
 
-            group.position.z -= (parseFloat(vm.RTPlan.firstSlice) + parseFloat(vm.RTPlan.lastSlice))/2 - 100
+            group.rotation.y = Math.PI / 2;
 
+            group.position.x -= (parseFloat(vm.RTPlan.firstSlice) + parseFloat(vm.RTPlan.lastSlice))/2 - 130
             scene.add(group)
 
 
@@ -151,7 +155,7 @@ import * as THREE from 'three';
             indices.push(1,0,4)
             indices.push(2,1,3)
             indices.push(1,0,3)
-            const lineMaterial = new THREE.LineBasicMaterial( { color: 0xff0000} );//0xff0000, linewidth: 4 } );
+            const lineMaterial = new THREE.LineBasicMaterial( { color: 0x008000} );//0xff0000, linewidth: 4 } );
             
             const lineGeometry = new THREE.BufferGeometry().setFromPoints( points );
             lineGeometry.setIndex(indices)
@@ -161,11 +165,12 @@ import * as THREE from 'three';
             lineGeometry.computeVertexNormals();
 
 
-            const smoothMaterialx = new THREE.MeshMatcapMaterial({color: 0xff0000, side: THREE.DoubleSide, transparent: true, opacity: 0.1});//0xff0000} );0xff0000, side: THREE.DoubleSide, transparent: true, opacity: 0.2});
-            const smoothMeshx = new THREE.Mesh( lineGeometry, smoothMaterialx)
-            console.log("adding mesh")
+            const smoothMaterialx = new THREE.MeshMatcapMaterial({color: 0x90EE90, side: THREE.DoubleSide, transparent: true, opacity: 0.07});//0xff0000} );0xff0000, side: THREE.DoubleSide, transparent: true, opacity: 0.2});
+            let smoothMeshx = new THREE.Mesh( lineGeometry, smoothMaterialx)
             
             group.add(smoothMeshx)
+
+            meshes.push(new ConvexHull().setFromObject(smoothMeshx))
        
         }
 
@@ -174,6 +179,7 @@ import * as THREE from 'three';
             var indices = []
             var curr = 0;
             var colour = 0x999289//0x9189CA//0xA1AFBF
+            var colours = []
 
             keys.sort(function(a, b){return parseFloat(a.replace('_','.'))-parseFloat(b.replace('_','.'))})
 
@@ -205,7 +211,31 @@ import * as THREE from 'three';
                         index = closestIndex(slice[j], slice[j+1], slice2)
                     }
 
-                   
+                   let point = new THREE.Vector3(slice[j], slice[j+1], z)
+                   let isInside = false 
+   
+                   for (let i=0; i<meshes.length; i++){
+                        if (meshes[i].containsPoint(point)){
+                            isInside = true
+                            break;
+                        }
+                    }
+                    if (isInside){
+                        colours.push(153,153,255)
+                    } else {
+                        colours.push(127,127,127)
+                    }
+
+                //    const raycaster = new THREE.Raycaster()
+                //    raycaster.set(point, new THREE.Vector3(1,1,1))
+                //    const intersects = raycaster.intersectObjects(meshes)
+                //    console.log("mesh",meshes)
+                //    if (intersects.length%2 ===1){
+                //        console.log(intersects)
+                //     colours.push(153,153,255)
+                //    } else {
+                //     colours.push(127,127,127)
+                //    }
 
                     if (j != slice.length-2 && i != keys.length-1){
                         let a = curr;
@@ -286,15 +316,15 @@ import * as THREE from 'three';
             geo.setAttribute( 'position', new THREE.Float32BufferAttribute( pts, 3 ) );
             // geopts.setAttribute('position', new THREE.Float32BufferAttribute(pts,3))
 
-            // var mesh2 = new THREE.Points(geopts, new THREE.PointsMaterial({color:0xff0000}))
-            
-            //group.add(mesh2)
             geo.computeBoundingSphere()
                                                      
             geo.computeVertexNormals();
+            colours = new Uint8Array(colours)
+            geo.setAttribute('color',  new THREE.BufferAttribute(colours,3,true))
+            geo.attributes.color.normalized = true     
        
             colour =0x767676//0x655A4E// 0x967969//0x5E51B1//0x6A5ACD
-            var mesh = new THREE.Mesh(geo, new THREE.MeshPhongMaterial({color:colour, side:THREE.DoubleSide, shininess:0}))//,wireframe:true}))
+            var mesh = new THREE.Mesh(geo, new THREE.MeshPhongMaterial({vertexColors:THREE.VertexColors, side:THREE.DoubleSide, shininess:0}))//,wireframe:true}))
             group.add(mesh)
         }    
 
