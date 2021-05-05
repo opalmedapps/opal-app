@@ -38,7 +38,7 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
         vm.show3DPlan = show3DPlan
         vm.goTo3DPlan = goTo3DPlan;
 
-        let camera, scene, renderer;
+        let camera, scene, renderer, controls;
 
         activate();
 
@@ -75,20 +75,19 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
             vm.language = UserPreferences.getLanguage();
             $translatePartialLoader.addPart('radiotherapy');
 
-            camera = new THREE.PerspectiveCamera( 100, window.innerWidth/window.innerHeight, 10 , 600 );
-            // camera.up.set( 0, 0, 1 );
+            camera = new THREE.PerspectiveCamera( 100, window.innerWidth/window.innerHeight, 10 , 700 );
+            camera.up.set( 1, 0, 0 );
             camera.position.y = -400
-            camera.position.z = 100
+            camera.position.x = 100
 
             renderer = new THREE.WebGLRenderer({antialias: true});
-                renderer.setPixelRatio(window.devicePixelRatio)
-                renderer.setSize( window.innerWidth, window.innerHeight );
-                const controls = new OrbitControls( camera, renderer.domElement );
+            renderer.setPixelRatio(window.devicePixelRatio)
+            renderer.setSize( window.innerWidth, window.innerHeight );
+            controls = new OrbitControls( camera, renderer.domElement)
 
-
-                $scope.$on('$destroy', function() {
+            $scope.$on('$destroy', function() {
                 navigator.off('postpop');
-                })
+            })
         }
 
         function setEnergyText(){
@@ -120,6 +119,8 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
             if (scene==undefined){ scene = Radiotherapy.getScene()
             var animate = function () {
                 requestAnimationFrame( animate );
+            
+                controls.update();
             
                 renderer.render( scene, camera );
 
