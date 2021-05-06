@@ -1,5 +1,5 @@
 {
-    "BEAMS_TITLE": "Radiation Delivery",
+    "BEAMS_TITLE": "Radiation Beams",
     "BEAMS_1": "Once positioned, your treatment will begin. The machine will rotate around you to deliver ",
     "BEAMS_2": " beams of radiation at different angles. You can visualize these beams on the next page.",
     "BEAMS_3": "You will be treated with ",
@@ -20,7 +20,7 @@
     "DOSE_2": " (Gray). This number indicates the amount of radiation energy to be deposited in this area.",
     "DOSE_3": "You will not receive the full dose at once. Rather, it will be split up into ",
     "DOSE_4": " \"fractions\" (sessions). There are many reasons for splitting up treatment into smaller fractions. Mostly, it maximizes the chances of killing the tumour cells while also leaving your healthy cells enough time to repair in between sessions.",
-    "PERSONALIZED_PLAN": "Your Personalized Treatment Plan",
+    "PERSONALIZED_PLAN": "Your Radiotherapy Plan",
     "POSITION_TITLE": "Set-Up on the Treatment Table",
     "POSITIONING_1": "The radiation treatment itself will only last a couple of minutes, however, the entire session may take 10-30 minutes. The majority of this time is spent making adjustments to ensure that you are set up exactly as you were during your CT simulation. This is important because the radiation is delivered very precisely based on your CT scan.",
     "POSITIONING_2": "On the treatment table, you will lie on your ",

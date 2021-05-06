@@ -28,6 +28,8 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
         let navigatorName = '';
         let parameters;
         
+        vm.beams;
+
         vm.loading = true;
 
         vm.cancerType = 'breast';
@@ -37,6 +39,7 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
         vm.show3DPlan = show3DPlan
         vm.goTo3DPlan = goTo3DPlan;
+        vm.updateVisibility = updateVisibility;
 
         let camera, scene, renderer, controls;
 
@@ -58,7 +61,7 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
         Radiotherapy.requestRTDicomContent(vm.plan.DicomSerNum)
         .then(function (plan) {
             vm.RTPlan = plan;  
-
+            setBeamNumbers();
             setEnergyText();
 
             vm.loading = false;
@@ -82,12 +85,16 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
             renderer = new THREE.WebGLRenderer({antialias: true});
             renderer.setPixelRatio(window.devicePixelRatio)
-            renderer.setSize( window.innerWidth, window.innerHeight );
+            renderer.setSize( window.innerWidth, window.innerHeight-30);
             controls = new OrbitControls( camera, renderer.domElement)
 
             $scope.$on('$destroy', function() {
                 navigator.off('postpop');
             })
+        }
+
+        function setBeamNumbers(){
+            vm.beams =Array.from({length: vm.RTPlan.numBeams}, (_, i) => i)
         }
 
         function setEnergyText(){
@@ -106,6 +113,11 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
                 vm.energyText += " and ";
                 vm.energyText += energyArray[i];
             }
+        }
+
+        function updateVisibility(n){
+            scene.children[4].children[n*2].visible = document.getElementById("beamCheckbox-"+n).checked
+            scene.children[4].children[n*2+1].visible = document.getElementById("beamCheckbox-"+n).checked
         }
 
         
@@ -129,7 +141,7 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
         }
             ons.ready(function() {
-                document.getElementById("holder").appendChild( renderer.domElement );    
+                document.getElementById("holder").appendChild( renderer.domElement );   
             })
         }
 

@@ -72,7 +72,7 @@ import { ConvexHull } from 'three/examples/jsm/math/ConvexHull.js';
                 renderElements();
                 q.resolve(dicomContent)
             })
-            console.log("HI")
+            
             return q.promise
         }
 
@@ -90,6 +90,8 @@ import { ConvexHull } from 'three/examples/jsm/math/ConvexHull.js';
             while(group.children.length > 0){
                 group.remove(group.children[0])
             }
+            scene = new THREE.Scene()
+            group = new THREE.Group()
 
         }
 

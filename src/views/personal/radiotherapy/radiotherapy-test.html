@@ -8,10 +8,10 @@
         </div>
     </ons-toolbar>
     <style>
-        input[type="checkbox"] {
+        input.dropdown[type="checkbox"] {
         display: none;
         }
-        label {
+        label.dropdown {
         display:block;
         padding: 8px 20px 8px 40px; 
         border: solid 1px;
@@ -28,37 +28,37 @@
         margin-bottom: 0px;
         }
         
-        input + label + .content {
+        input.dropdown + label.dropdown + .content {
             display: none;
         }
         
-        input:checked + label + .content {
+        input.dropdown:checked + label.dropdown + .content {
             display: block;
         }
         
         
-        label::before {
+        label.dropdown::before {
         content:"\02795";
         position: absolute;
         left: 10px;
         }
         
-        input:checked + label::before {
+        input.dropdown:checked + label.dropdown::before {
             content: "\2796";
         }
         </style>
-            <loading-spinning-circle ng-if="rad.loading" loading-message="{{'LOADINGRADIOTHERAPYPLAN'|translate}} This may take a moment..."></loading-spinning-circle>
+            <loading-spinning-circle ng-if="rad.loading" loading-message="{{'LOADINGRADIOTHERAPYPLAN'|translate}}"></loading-spinning-circle>
                <div ng-hide="rad.loading">
             <div class="navigation-bar">
             <div class="navigation-bar__center">
                 <div class="button-bar" style="margin-top:10px;width:90%;left:5%;">
                     <div class="button-bar__item">
                         <input type="radio" name="navi-segment-a" checked ng-model="rad.showDetails" ng-value="true">
-                        <div class="button-bar__button">Description</div>
+                        <div class="button-bar__button">{{"RADIOTHERAPY_DESCRIPTION"|translate}}</div>
                     </div>
                     <div class="button-bar__item">
                         <input type="radio" name="navi-segment-a" ng-model="rad.showDetails" ng-value="false" ng-click="rad.show3DPlan()">
-                        <div class="button-bar__button">3D View</div>
+                        <div class="button-bar__button">{{"RADIOTHERAPY_3D_VIEW"|translate}}</div>
                     </div>
 
                 </div>
@@ -71,7 +71,7 @@
                 <h3><b>{{"PERSONALIZED_PLAN"|translate}}</b></h3>
                 <div align="justify">
                 <p>On this page you will find details about your radiotherapy treatment plan, which has been carefully put together for you based on your CT scan and your specific disease characteristics. The treatment will be repeated over <b><span style="color:darkgreen">{{rad.RTPlan.numFractions}}</span></b> sessions.
-        <br><br> 
+        <br>
                     <!-- On the next page, you will find a 3D reconstruction of your body made from your CT scan, along with the radiation beams you will receive during treatment. This will allow you to visualize where the radiation will enter your body. -->
                 </p>
 
@@ -97,8 +97,8 @@
                 </div> -->
         
         <div align="justify" style="padding-bottom: 30px;">
-                      <input type="checkbox" id="title1">
-                 &nbsp; &nbsp;  <label for="title1"><img src="./img/radiotherapy/table_position.png" style="height:30px; vertical-align:middle;"><span><strong>&nbsp;&nbsp;{{"POSITION_TITLE"|translate}}</strong></span></label>
+                      <input type="checkbox" id="title1" class="dropdown">
+                 &nbsp; &nbsp;  <label class="dropdown" for="title1"><img src="./img/radiotherapy/table_position.png" style="height:30px; vertical-align:middle;"><span><strong>&nbsp;&nbsp;{{"POSITION_TITLE"|translate}}</strong></span></label>
                       
                       <div class="content">
                         <p>{{"POSITIONING_1"|translate}}</p>
@@ -107,8 +107,8 @@
                         <br> <p ng-if="rad.cancerType == 'breast' || rad.cancerType == 'prostate'">{{"POSITIONING_3_" + rad.cancerType.toUpperCase() |translate}}</p> <!---->
                     </div>
                       
-                      <input type="checkbox" id="title2">
-                 &nbsp; &nbsp;  <label for="title2"><img src="./img/radiotherapy/radiation.png" style="height:30px; vertical-align:middle;"><span><strong>&nbsp;&nbsp;{{"BEAMS_TITLE"|translate}}</strong></span></label>
+                      <input type="checkbox" id="title2"  class="dropdown">
+                 &nbsp; &nbsp;  <label class="dropdown" for="title2"><img src="./img/radiotherapy.png" style="height:30px; vertical-align:middle;"><span><strong>&nbsp;&nbsp;{{"BEAMS_TITLE"|translate}}</strong></span></label>
                       
                       <div class="content">
                         <p>{{"BEAMS_1"|translate}}<b><span style="color:darkgreen">{{rad.RTPlan.numBeams}}</span></b> {{"BEAMS_2"|translate}}
@@ -126,7 +126,7 @@
         
                         <!-- TODO: Implement below w/ variables -->
                 
-                      <input type="checkbox" id="title3">
+                      <!-- <input type="checkbox" id="title3"  class="dropdown">
                       &nbsp; &nbsp;  <label for="title3"><img src="./img/radiotherapy/lung.png" style="height:30px; vertical-align:middle;"><span><strong>&nbsp;&nbsp;{{"BREATHING_TITLE"|translate}}</strong></span></label>
                     
                         <div class="content">
@@ -134,10 +134,10 @@
                             Your therapist will guide you through this process. Since your tumour moves as you breathe, holding a deep breath keeps the tumour at the same place inside the radiation beam.  At this position, the tumour is also further away from your heart, which will help to protect and minimize radiation exposure to your heart.
                             <img src="./img/radiotherapy/breath_hold.png" style="max-width: 100%; height: auto;" class="center">  
                         </div>
-                      
+                       -->
                 
-                        <input type="checkbox" id="title4">
-                        &nbsp; &nbsp;  <label for="title4"><img src="./img/radiotherapy/dose.png" style="height:30px; vertical-align:middle;"><span><strong>&nbsp;&nbsp;{{"DOSE_TITLE"|translate}}</strong></span></label>
+                        <input type="checkbox" id="title4"  class="dropdown">
+                        &nbsp; &nbsp;  <label class="dropdown" for="title4"><img src="./img/radiotherapy/dose.png" style="height:30px; vertical-align:middle;"><span><strong>&nbsp;&nbsp;{{"DOSE_TITLE"|translate}}</strong></span></label>
                         
                         <div class="content">
                             {{"DOSE_1"|translate}} <b><span style="color:darkgreen">{{rad.RTPlan.dose}}</span></b> {{"DOSE_2"|translate}}
@@ -148,9 +148,9 @@
                         <br><br>
                         <b><span style="color:red">change above text -- see google doc</span></b>
                         </div>
-                       <input type="checkbox" id="title5">
+                       <input type="checkbox" id="title5"  class="dropdown">
                     
-                        &nbsp; &nbsp; <label for="title5"> <img src="./img/radiotherapy/graph.png" style="height:30px; vertical-align:middle;"><span><strong>&nbsp;&nbsp;{{"PROCESS_TITLE"|translate}}</strong></span></label>
+                        &nbsp; &nbsp; <label class="dropdown" for="title5"> <img src="./img/radiotherapy/graph.png" style="height:30px; vertical-align:middle;"><span><strong>&nbsp;&nbsp;{{"PROCESS_TITLE"|translate}}</strong></span></label>
                                 
                         <div class="content">
                             <span style="color:red">blah blah blah add explanations of ctv etc </span>
@@ -163,12 +163,20 @@
             </div>
 
             <div ng-if="!rad.showDetails">
-                <div class="col-xs-12 text-center" style="margin: 0 auto; align: center; position:fixed"> 
+                <div class="col-xs-12 text-center" style="margin: 0 auto; align: center; position:fixed; overflow:scroll;"> 
                     <h3><b>{{"PERSONALIZED_PLAN"|translate}}</b></h3>
                     <p>Below is a 3D view of your body from your CT scan and the beams of radiation you will receive during treatment.</p>
-                    <div style="position:relative" id="holder"></div>
+                    <div style="position:relative;" id="holder">
+                        <span><b>Beams displayed:</b></span>
+                        <span ng-repeat="n in rad.beams" >
+                            <label style="vertical-align: middle;">
+                                <input type="checkbox" id="beamCheckbox-{{n}}" style="-webkit-appearance: checkbox !important; width:20px; height:20px; vertical-align: top; display:inline;" ng-click="rad.updateVisibility(n)" checked >
+                                <span style="vertical-align: middle;">{{n+1}}</span>
+                            </label>
+                        </span>
                 </div>
             </div>
+               </div>
                </div>
                 
         </ons-page>
