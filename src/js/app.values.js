@@ -197,7 +197,7 @@
                 findDoctorCase: 'finddoctor',
                 findDoctorUrl: {
                     findDoctorUrlEn: 'https://www.quebec.ca/en/health/finding-a-resource/registering-with-a-family-doctor/',
-                    findDoctorUrlFr: 'https://www.quebec.ca/sante/trouver-une-ressource/inscription-aupres-d-un-medecin-de-famille/'
+                    findDoctorUrlFr: 'https://www.quebec.ca/sante/trouver-une-ressource/inscription-aupres-dun-medecin-de-famille'
                 },
                 medicalSchedulerCase: 'medicalscheduler',
                 medicalSchedulerUrl: {
