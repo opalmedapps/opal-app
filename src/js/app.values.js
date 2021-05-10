@@ -201,8 +201,8 @@
                 },
                 medicalSchedulerCase: 'medicalscheduler',
                 medicalSchedulerUrl: {
-                    medicalSchedulerUrlEn: 'https://www.rvsq.gouv.qc.ca/en/public/Pages/home.aspx',
-                    medicalSchedulerUrlFr: 'https://www.rvsq.gouv.qc.ca/fr/public/Pages/accueil.aspx'
+                    medicalSchedulerUrlEn: 'https://www.rvsq.gouv.qc.ca/en/home',
+                    medicalSchedulerUrlFr: 'https://www.rvsq.gouv.qc.ca/fr/accueil'
                 },
                 carnetSanteCase: 'carnetsante',
                 carnetSanteUrl: 'https://carnetsante.gouv.qc.ca/portail',
