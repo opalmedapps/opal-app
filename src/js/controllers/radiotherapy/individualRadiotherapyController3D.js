@@ -152,7 +152,7 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
             renderer = new THREE.WebGLRenderer({antialias: true});
             renderer.setPixelRatio(window.devicePixelRatio)
             renderer.setSize( window.innerWidth, window.innerHeight );
-            document.getElementById("holder").appendChild( renderer.domElement );
+            // document.getElementById("holder").appendChild( renderer.domElement );
 
 
             const controls = new OrbitControls( camera, renderer.domElement );
@@ -398,7 +398,7 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
             // geo.computeFaceNormals();                                                        
             geo.computeVertexNormals();
             // console.log(pts)
-            colour =0x655A4E// 0x967969//0x5E51B1//0x6A5ACD
+            colour =0x767676//0x655A4E// 0x967969//0x5E51B1//0x6A5ACD
             var mesh = new THREE.Mesh(geo, new THREE.MeshPhongMaterial({color:colour, side:THREE.DoubleSide, shininess:20}))//,wireframe:true}))
             group.add(mesh)
             // console.log(indices)
