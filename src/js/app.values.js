@@ -197,12 +197,12 @@
                 findDoctorCase: 'finddoctor',
                 findDoctorUrl: {
                     findDoctorUrlEn: 'https://www.quebec.ca/en/health/finding-a-resource/registering-with-a-family-doctor/',
-                    findDoctorUrlFr: 'https://www.quebec.ca/sante/trouver-une-ressource/inscription-aupres-d-un-medecin-de-famille/'
+                    findDoctorUrlFr: 'https://www.quebec.ca/sante/trouver-une-ressource/inscription-aupres-dun-medecin-de-famille'
                 },
                 medicalSchedulerCase: 'medicalscheduler',
                 medicalSchedulerUrl: {
-                    medicalSchedulerUrlEn: 'https://www.rvsq.gouv.qc.ca/en/public/Pages/home.aspx',
-                    medicalSchedulerUrlFr: 'https://www.rvsq.gouv.qc.ca/fr/public/Pages/accueil.aspx'
+                    medicalSchedulerUrlEn: 'https://www.rvsq.gouv.qc.ca/en/home',
+                    medicalSchedulerUrlFr: 'https://www.rvsq.gouv.qc.ca/fr/accueil'
                 },
                 carnetSanteCase: 'carnetsante',
                 carnetSanteUrl: 'https://carnetsante.gouv.qc.ca/portail',

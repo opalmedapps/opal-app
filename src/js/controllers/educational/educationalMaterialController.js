@@ -35,6 +35,7 @@
 
         // Variable containing the search string entered into the search bar
         vm.searchString = "";
+        vm.filteredEduMaterials;
 
         // Variable to toggle visibility of the 'no materials' text. Default is false to avoid errors.
         vm.noMaterials = false;
@@ -52,6 +53,9 @@
         vm.openInfoPage = openInfoPage;
 
         
+
+        // Function to show data and time header
+        vm.showHeader = showHeader;
 
         activate();
         ///////////////////////////////////
@@ -180,6 +184,15 @@
         }
 
 
+
+
+        function showHeader(index) {
+            if (index === 0) return true;
+
+            var current = (new Date(vm.filteredEduMaterials[index].DateAdded)).setHours(0, 0, 0, 0);
+            var previous = (new Date(vm.filteredEduMaterials[index - 1].DateAdded)).setHours(0, 0, 0, 0);
+            return current !== previous;
+        }
     }
 })();
 
