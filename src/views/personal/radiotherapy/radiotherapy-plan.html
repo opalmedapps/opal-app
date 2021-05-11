@@ -10,7 +10,25 @@
 
 
     <loading-spinning-circle ng-if="rad.loading" loading-message="{{'LOADINGRADIOTHERAPYPLAN'|translate}} "></loading-spinning-circle>
+    <div ng-if="!rad.loading" ng-class="fontSizeDesc">
+        <div class="navigation-bar">
+            <div class="navigation-bar__center" >
+                <div class="button-bar" style="margin-top:10px;width:70%;left:15%;">
+                    <div class="button-bar__item">
+                        <input type="radio" name="navi-segment-b" ng-model="rad.showDetails"
+                               ng-value="true" ng-click="rad.showDetails()">
+                        <div class="button-bar__button">Description</div>
+                    </div>
 
+                    <div class="button-bar__item">
+                        <input type="radio" name="navi-segment-b" checked ng-model="rad.showDetails" ng-value="false">
+                        <div class="button-bar__button">3D View</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+        
 
     <div ng-hide="rad.loading" class="col-xs-12 text-center" style="margin: 0 auto; align: center; position:fixed"> 
             <p>Below is a 3D view of your body from your CT scan and the beams of radiation you will receive during treatment.</p>
