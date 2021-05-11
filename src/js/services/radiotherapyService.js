@@ -18,6 +18,7 @@ import { ConvexHull } from 'three/examples/jsm/math/ConvexHull.js';
               
         var dicomList = [];
         var dicomContent = [];
+        var imageContent;
 
         // Variables for 3D render
         let scene = new THREE.Scene()
@@ -33,6 +34,7 @@ import { ConvexHull } from 'three/examples/jsm/math/ConvexHull.js';
             getDicomContent: getDicomContent,
             getScene: getScene,
             requestRTDicoms: requestRTDicoms,
+            requestImgDicomContent:requestImgDicomContent,
             requestRTDicomContent: requestRTDicomContent
         };
         return service;
@@ -43,9 +45,9 @@ import { ConvexHull } from 'three/examples/jsm/math/ConvexHull.js';
         }
 
         // Requests the list of dicoms
-        function requestRTDicoms(){
+        function requestRTDicoms(dicomType){
             var q = $q.defer();
-            RequestToServer.sendRequestWithResponse('Dicom')
+            RequestToServer.sendRequestWithResponse('Dicom', [dicomType])
                 .then(function (response) {
                     dicomList = response.Data;
                     q.resolve(dicomList);             
@@ -75,6 +77,20 @@ import { ConvexHull } from 'three/examples/jsm/math/ConvexHull.js';
                 vm.RTPlan = response.Data
                 renderElements(); // render 3D scene
                 q.resolve(dicomContent)
+            })
+            
+            return q.promise
+        }
+
+        function requestImgDicomContent(DicomSerNum){
+
+            clearScene()
+            var q = $q.defer();
+            RequestToServer.sendRequestWithResponse('DicomContent', [DicomSerNum])
+            .then(function(response){
+                imageContent = response.Data
+
+                q.resolve(imageContent)
             })
             
             return q.promise

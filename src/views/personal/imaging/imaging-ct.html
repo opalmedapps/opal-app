@@ -1,0 +1,27 @@
+
+<!--TODO: ADD FRENCH TRANSLATIONS -->
+
+<ons-page ng-controller="individualImagingController as image" class="img-page-background">
+    <ons-toolbar fixed-style>
+        <div class="left">
+            <ons-back-button>{{"BACK"|translate}}</ons-back-button>
+        </div>
+    </ons-toolbar>    
+
+    <div class="img-page-background">
+
+
+<div ng-show=image.showImage style="padding-top:30px;border-top: black;">
+    <ons-row  style="margin-left:2px;text-align:center;color:white" ng-show="image.loaded">
+        <ons-col style="text-align:center;" width="50%"><b>Date: </b> {{image.date}} </ons-col>
+        <ons-col style="text-align:center;" ><b>Scan Type: </b>{{image.modality}}</ons-col> <br>    
+        <div ng-show="image.loaded" style="width:100%;overflow:hidden;overflow-wrap:break-word;background:black">
+            
+                <img ng-src="{{image.file}}" >
+           
+        </div>
+
+    </ons-row>
+</ons-page>
+
+

@@ -88,6 +88,11 @@ cornerstoneTools.init({
                     name: 'Test RT Data',
                     filePath: '',
                     type:'RT'
+                },
+                {
+                    name: 'Test Listener Upload',
+                    filePath: '',
+                    type:'CT'
                 }
 
             ]
@@ -128,6 +133,7 @@ cornerstoneTools.init({
               
             if (image.type==='dicom-movie') personalNavigator.pushPage('./views/personal/imaging/imaging-dicom.html');
             if (image.type==='RT') personalNavigator.pushPage('./views/personal/imaging/imaging-rt.html');
+            if (image.type==='CT') personalNavigator.pushPage('./views/personal/imaging/imaging-ct.html');
 
         }        
       
