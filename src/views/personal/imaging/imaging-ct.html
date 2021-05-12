@@ -8,20 +8,22 @@
         </div>
     </ons-toolbar>    
 
-    <div class="img-page-background">
-
-
-<div ng-show=image.showImage style="padding-top:30px;border-top: black;">
-    <ons-row  style="margin-left:2px;text-align:center;color:white" ng-show="image.loaded">
-        <ons-col style="text-align:center;" width="50%"><b>Date: </b> {{image.date}} </ons-col>
-        <ons-col style="text-align:center;" ><b>Scan Type: </b>{{image.modality}}</ons-col> <br>    
-        <div ng-show="image.loaded" style="width:100%;overflow:hidden;overflow-wrap:break-word;background:black">
+    <loading-spinning-circle ng-if="image.loading" loading-message="{{'LOADINGRADIOTHERAPYPLAN'|translate}}"></loading-spinning-circle>
             
-                <img ng-src="{{image.file}}" >
-           
+    <div ng-show="!image.loading" style="padding-top:30px;border-top: black;"  class="img-page-background">
+        <ons-row  style="margin-left:2px;text-align:center;color:white">
+            <ons-col style="text-align:center;" width="50%"><b>Date: </b> {{image.date}} </ons-col>
+            <ons-col style="text-align:center;" ><b>Scan Type: </b>{{image.modality}}</ons-col> <br>    
+        </ons-row>
+        <ons-row  style="margin-left:2px;text-align:center;color:white">
+            <ons-col style="text-align:center;" width="50%"></ons-col>  
+            <ons-col ng-show="image.multiImage" style="text-align:center;"><b>Slice: </b>{{image.index}}/{{image.files.length}}</span></ons-col>
+        </ons-row>
+    
+        <div id="imgs" class="imgs" >
+            <img id={{$index+1}} ng-show="image.index == {{$index+1}}" style="width:100%" ng-src={{image.getSrc($index)}} ng-repeat="img in image.files">
         </div>
+    </div>
 
-    </ons-row>
 </ons-page>
-
 
