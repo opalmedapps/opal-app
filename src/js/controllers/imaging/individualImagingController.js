@@ -52,6 +52,17 @@
         var RTLoaded = false;
         var contourDict = {};
 
+        // Other options: https://dicom.innolitics.com/ciods/ct-image/general-series/00080060
+        var modalityMapping = {
+            CT: "CT",
+            DX: "X-Ray Radiograph",
+            MG: "Mammography",
+            MR: "MRI",
+            US: "Ultrasound",
+            XA: "X-Ray Angiography"
+
+        }
+
         activate();
 
         ////////////////
@@ -65,7 +76,7 @@
             vm.files = file.img
             vm.multiImage = vm.files.length > 1
 
-            vm.modality =file.modality
+            vm.modality = modalityMapping[file.modality]
             vm.date =  $filter('formatDateDicom')(file.date)
 
             console.log(file)
