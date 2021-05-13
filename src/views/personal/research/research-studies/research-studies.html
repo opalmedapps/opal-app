@@ -27,6 +27,7 @@
                     <header>
                         <span class="item-title" ng-class="fontSizeTitle">{{study["title_" + stud.language]}}</span>
                     </header>
+                    <p class="item-desc" ng-class="fontSizeDesc">{{stud.getStatusText(study.consentStatus)}}</p>
                 </div>
             </ons-col>
         </ons-row>

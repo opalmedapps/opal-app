@@ -21,10 +21,10 @@
         .controller('StudiesController', StudiesController);
 
     /* @ngInject */
-    StudiesController.$inject = ['NavigatorParameters','Studies','UserPreferences'];
+    StudiesController.$inject = ['NavigatorParameters','Studies','UserPreferences','$filter'];
 
 
-    function StudiesController(NavigatorParameters, Studies, UserPreferences) {
+    function StudiesController(NavigatorParameters, Studies, UserPreferences, $filter) {
         var vm = this;
 
         vm.language = '';
@@ -34,6 +34,7 @@
         vm.showHeader = showHeader;
         vm.openInfoPage = openInfoPage;
         vm.openStudy = openStudy;
+        vm.getStatusText = getStatusText;
         
         let navigator = null;
         let navigatorName = '';
@@ -72,7 +73,12 @@
             return current !== previous;
         }
         
-
+        // Gets the correct message to display based on consentStatus 
+        function getStatusText(consentStatus){ 
+            if (consentStatus === 'invited') return $filter('translate')('STUDY_STATUS_INVITED');
+            else if (consentStatus === 'declined') return $filter('translate')('STUDY_STATUS_DECLINED');
+            else return $filter('translate')('STUDY_STATUS_CONSENTED'); // opalConsented and otherConsented
+        }
 
         function openInfoPage() {
             NavigatorParameters.setParameters({Navigator:navigatorName, subView:'studies'});
