@@ -19,7 +19,10 @@
                         <span ng-show="stud.hasStartDate" ng-class="fontSizeDesc"><b>{{"DATE_START"|translate}}: </b>{{stud.study["startDate"] | date:'longDate'}}</span></b>
                         <span ng-show="stud.hasEndDate" ng-class="fontSizeDesc"><br><b>{{"DATE_END"|translate}}: </b>{{stud.study["endDate"] | date:'longDate'}}</span></b>
 
-                        <span ng-class="fontSizeDesc"><br><br><b>{{"INVESTIGATOR"|translate}}: </b>{{stud.study["investigator"]}}</span></b>
+                        <span ng-class="fontSizeDesc"><br><br><b>{{"INVESTIGATOR"|translate}}: </b>{{stud.study["investigator"]}}</span>
+                        <span ng-class="fontSizeDesc"><br><b>{{"EMAIL"|translate}}: </b><a href="mailto:{{stud.study['email']}}">{{stud.study["email"]}}</a></span>
+                        <span ng-class="fontSizeDesc"><br><b>{{"PHONENUMBER"|translate}}: </b><a href="tel:{{stud.study['phone']}}"> {{stud.study["phone"]|FormatPhoneNumber}}</a></span> 
+                        <span ng-if="stud.study['phoneExt']!==undefined" ng-class="fontSizeDesc"> x {{stud.study["phoneExt"]}}</span>
                     </div>
                 </div>
 
