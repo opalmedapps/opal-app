@@ -19,6 +19,8 @@
         vm.language;
         vm.hasStartDate = false;
         vm.hasEndDate = false;
+
+        vm.openConsentForms = openConsentForms;
         
         let navigator = null;
         let navigatorName = '';
@@ -39,5 +41,12 @@
             vm.hasStartDate = vm.study.hasOwnProperty('startDate');
             vm.hasEndDate = vm.study.hasOwnProperty('endDate');
         }
+
+
+        function openConsentForms() {
+            NavigatorParameters.setParameters({questionnairePurpose: 'consent'}); 
+            navigator.pushPage('views/personal/questionnaires/questionnairesList.html');
+        }
+
     }
 })();

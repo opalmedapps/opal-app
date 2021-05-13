@@ -20,13 +20,28 @@
                         <span ng-show="stud.hasEndDate" ng-class="fontSizeDesc"><br><b>{{"DATE_END"|translate}}: </b>{{stud.study["endDate"] | date:'longDate'}}</span></b>
 
                         <span ng-class="fontSizeDesc"><br><br><b>{{"INVESTIGATOR"|translate}}: </b>{{stud.study["investigator"]}}</span>
-                        <span ng-class="fontSizeDesc"><br><b>{{"EMAIL"|translate}}: </b><a href="mailto:{{stud.study['email']}}">{{stud.study["email"]}}</a></span>
-                        <span ng-class="fontSizeDesc"><br><b>{{"PHONENUMBER"|translate}}: </b><a href="tel:{{stud.study['phone']}}"> {{stud.study["phone"]|FormatPhoneNumber}}</a></span> 
+                        <span ng-if="stud.study['email']!==undefined" ng-class="fontSizeDesc"><br><b>{{"EMAIL"|translate}}: </b><a href="mailto:{{stud.study['email']}}">{{stud.study["email"]}}</a></span>
+                        <span ng-if="stud.study['phone']!==undefined" ng-class="fontSizeDesc"><br><b>{{"PHONENUMBER"|translate}}: </b><a href="tel:{{stud.study['phone']}}"> {{stud.study["phone"]|FormatPhoneNumber}}</a></span> 
                         <span ng-if="stud.study['phoneExt']!==undefined" ng-class="fontSizeDesc"> x {{stud.study["phoneExt"]}}</span>
                     </div>
                 </div>
-
-
+                <br>
+                <ons-list style="margin: 0px 0">
+                    <ons-list-item modifier="chevron" class="item" ng-click="stud.openConsentForms()">
+                    <ons-row align="center">
+                        <ons-col width="60px" style="text-align: center">
+                            <div>
+                                <img style="width: 35px;" src="./img/file-signature.png">
+                            </div>
+                        </ons-col>
+                        <ons-col>
+                            <header>
+                                <span class="item-title" ng-class="fontSizeTitle">{{stud.study["QuestionnaireName_" + stud.language]}}</span> 
+                            </header>
+                        </ons-col>
+                    </ons-row>
+                    </ons-list-item>
+                </ons-list>
                 <div class="row text-center" style="margin: 0 auto;" align="center">
                     <div class="col-xs-12">
                         <p style="margin-top:2vh; margin-bottom:2vh"
