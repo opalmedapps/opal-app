@@ -20,7 +20,7 @@
         vm.hasStartDate = false;
         vm.hasEndDate = false;
 
-        vm.openConsentForms = openConsentForms;
+        vm.goToQuestionnaire = goToQuestionnaire;
         
         let navigator = null;
         let navigatorName = '';
@@ -42,11 +42,18 @@
             vm.hasEndDate = vm.study.hasOwnProperty('endDate');
         }
 
-
-        function openConsentForms() {
-            NavigatorParameters.setParameters({questionnairePurpose: 'consent'}); 
-            navigator.pushPage('views/personal/questionnaires/questionnairesList.html');
-        }
+    /**
+     * @name goToQuestionnaire
+     * @desc This function goes to the questionnaire redirect page to open the correct questionnaire
+     * @param {int} questionnaireId QuestionnaireSerNum in the Questionnaire table (OpalDB)
+     */
+     function goToQuestionnaire(questionnaireId) {
+        NavigatorParameters.setParameters({
+            Navigator: navigator,
+            Post: questionnaireId
+        });
+        navigator.pushPage('views/personal/questionnaires/questionnaireNotifRedirect.html', {animation: 'fade'});
+    }
 
     }
 })();
