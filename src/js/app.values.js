@@ -114,9 +114,13 @@
                     loadingMessageFr: 'Chargement en cours...',
                     loadingMessageEn: 'Loading...'
                 },
-                noDataAvailable: {
-                    noDataAvailableEn:"No plot available",
-                    noDataAvailableFr: "Aucun graphique disponible",
+                noPlotGeneric: {
+                    noPlotGenericEn: "No plot available",
+                    noPlotGenericFr: "Aucun graphique disponible",
+                },
+                noPlotNonNumeric: {
+                    noPlotNonNumericEn: "These results can't be charted because at least one of them isn't a number",
+                    noPlotNonNumericFr: "Ces résultats ne peuvent pas être représentés car au moins l'un d'entre eux n'est pas un nombre",
                 },
                 printChart: {
                     printChartFr: 'Imprimer le graphique',

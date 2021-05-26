@@ -5,6 +5,7 @@
         </div>
         <div class="center" ng-class="fontSizeTitle"><p class="overflow-text-ellipsis">{{"LAB_RESULTS"|translate}}</p></div>
         <div class="right">
+            <labs-info-button style="margin-right: -10px"></labs-info-button>
             <ons-toolbar-button ng-click="tests.refresh()">
                 <ons-icon icon="ion-ios-refresh-empty" size="2x" style="color: #4F81BB"></ons-icon>
             </ons-toolbar-button>
@@ -15,12 +16,12 @@
     <div class="navigation-bar" ng-if="!tests.loading">
         <div class="navigation-bar__center">
             <div class="button-bar" style="margin-top:10px;width:70%;left:15%;" >
-                <div class="button-bar__item">
+                <div class="button-bar__item" ng-click="tests.checkForRefresh()">
                     <input type="radio" name="navi-segment-a" checked ng-model="tests.showByDate" ng-value="true">
                     <div class="button-bar__button">{{'LAB_BYDATE'|translate}}</div>
                 </div>
 
-                <div class="button-bar__item">
+                <div class="button-bar__item" ng-click="tests.checkForRefresh()">
                     <input type="radio" name="navi-segment-a" ng-model="tests.showByDate" ng-value="false">
                     <div class="button-bar__button">{{'LAB_BYTYPE'|translate}}</div>
                 </div>
@@ -28,7 +29,11 @@
         </div>
     </div>
 
-    <div ng-if="!tests.loading">
+    <div ng-if="!tests.loading && tests.showContent">
+
+        <!-- DISCLAIMER -->
+        <labs-disclaimer></labs-disclaimer>
+
         <div ng-show="tests.showByDate">
             <ons-scroller-height>
                 <div ng-if="tests.testDates.length === 0" style="margin-top: 25px; text-align: center;">
@@ -76,22 +81,23 @@
                 <ons-list>
                     <ons-list-item class="list-item-container">
                         <ons-row ng-class="fontSizeDesc" style="font-weight:bold" vertical-align="center">
+
                             <!-- HEADER - LEFT (NAME) -->
-                            <ons-col width="35%" class="labtest-col" vertical-align="center">
+                            <ons-col width="35%" class="labtest-col hyphens" vertical-align="center">
                                 <div align="left" style="margin-left:4px">
                                     {{"LAB_NAME"|translate}}
                                 </div>
                             </ons-col>
 
                             <!-- HEADER - CENTRE (VALUE) -->
-                            <ons-col width="25%" class="labtest-col" vertical-align="center">
+                            <ons-col width="25%" class="labtest-col hyphens" vertical-align="center">
                                 <div align="center">
                                     {{"LAB_RECENT_RESULT"|translate}}
                                 </div>
                             </ons-col>
 
                             <!-- HEADER - RIGHT (NORMAL RANGE) -->
-                            <ons-col width="33%" class="labtest-col" vertical-align="center">
+                            <ons-col width="33%" class="labtest-col hyphens" vertical-align="center">
                                 <div align="right">
                                     {{"LAB_NORM"|translate}}
                                 </div>
@@ -108,17 +114,18 @@
                 </ons-list>
             </div>
             <ons-scroller-height>
-                <ons-list >
+                <ons-list>
                     <ons-list-item modifier="tappable chevron"
                                    ng-repeat="testResult in tests.testTypes | filter: tests.searchTestTypeText"
                                    ng-click="tests.goToTestTypeResults(testResult.testExpressionSerNum)"
                                    class="list-item-container">
-                        <ons-row ng-class="fontSizeDesc"
+                        <ons-row ng-class="[tests.getTestClass(testResult), fontSizeDesc]"
                                  vertical-align="center">
+
                             <!-- LAB RESULT - LEFT (NAME) -->
                             <ons-col width="35%" class="labtest-col" vertical-align="center">
                                 <div align="left" style="margin-left:4px;">
-                                    <p style="hyphens:auto">{{tests.displayType(testResult)}}</p>
+                                    <p class="hyphens">{{tests.displayType(testResult)}}</p>
                                 </div>
                             </ons-col>
 
@@ -126,17 +133,21 @@
                             <ons-col width="25%" class="labtest-col" vertical-align="center">
                                 <div align="center">
                                     {{testResult.latestTestValue}}
-                                    <div>({{testResult.unitDescription}})</div>
+                                    <span ng-if="testResult.latestAbnormalFlag">
+                                        ({{testResult.latestAbnormalFlag}})
+                                    </span>
+                                    <div class="break-words">{{testResult.unitWithBrackets}}</div>
                                 </div>
                             </ons-col>
 
                             <!-- LAB RESULT - RIGHT (NORMAL RANGE) -->
                             <ons-col width="33%" class="labtest-col" vertical-align="center">
-                                <div align="right" style="line-height: 1.2">
+                                <div align="right">
                                     {{testResult.normalRange}}
-                                    <div>({{testResult.unitDescription}})</div>
+                                    <div ng-if="testResult.normalRange" class="break-words">{{testResult.unitWithBrackets}}</div>
                                 </div>
                             </ons-col>
+
                             <!-- LAB RESULT - SPACE FOR CHEVRON -->
                             <ons-col width="5%" class="labtest-col" vertical-align="center">
                             </ons-col>
