@@ -95,6 +95,14 @@ class PatientTestResultsByTypeController {
 	getTestName(test) {
 		return test[`name_${this.#language}`];
 	}
+
+	/**
+	 * Returns the class for a given test based on its criticality (see forwarded function for details)
+	 */
+	getTestClass(test) {
+		return this.#patientTestResults.getTestClass(test);
+	}
+
 	////////////////////////////////////////////////////
 
 	/**
@@ -115,14 +123,21 @@ class PatientTestResultsByTypeController {
 	 * Configures the timeline results chart
 	 */
 	#configureChart = (test) => {
+		// Non-numeric tests are not plotted (no data or axis label)
 		const data = (test.hasNumericValues) ?
 			test.results.map((testResult) => [testResult.collectedDateTime,
 			testResult.testValue]) : [];
-		Highcharts.setOptions(this.#labsChartConfigurationFactory.getChartLanguageOptions(this.#language));
+		const yAxisLabel = test.hasNumericValues ? test.unitWithBrackets : "";
+
+		Highcharts.setOptions(this.#labsChartConfigurationFactory.getChartLanguageOptions(this.#language,
+			test.hasNumericValues));
 		Highcharts.dateFormat(this.#labsChartConfigurationFactory.getDateFormat(this.#language));
 		this.chartOptions = this.#labsChartConfigurationFactory.getChartConfiguration(data,
+			test.hasNumericValues,
 			this.#$filter("translate")("RESULT"),
-			`(${test.unitDescription})`, test.normalRangeMin, test.normalRangeMax,
+			yAxisLabel,
+			test.normalRangeMin,
+			test.normalRangeMax,
 			this.#getAppFontSizeInPixels());
 	};
 

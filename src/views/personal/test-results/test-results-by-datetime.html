@@ -7,10 +7,7 @@
         </div>
         <div class="center" ng-class="fontSizeTitle">{{testsByDate.testDate|date:'medium'}}</div>
         <div class="right">
-            <ons-toolbar-button
-                ng-click="personalNavigator.pushPage('views/personal/test-results/test-results-info.html')">
-                <ons-icon icon="fa-info-circle"></ons-icon>
-            </ons-toolbar-button>
+            <labs-info-button></labs-info-button>
         </div>
     </ons-toolbar>
     <loading-spinning-circle ng-if="testsByDate.loading" loading-message="{{'LOADINGLABRESULTS'|translate}}">
@@ -23,26 +20,31 @@
             <search-bar search-text="testsByDate.searchText" placeholder="{{'SEARCH'|translate}}"
                 style-class="fontSizeDesc">
             </search-bar>
+
+            <!-- DISCLAIMER -->
+            <labs-disclaimer></labs-disclaimer>
+
             <!-- HEADER WITH COLUMN TITLES -->
             <ons-list>
                 <ons-list-item class="list-item-container" style="padding:10px">
                     <ons-row ng-class="fontSizeDesc" style="font-weight:bold" vertical-align="center">
+
                         <!-- HEADER - LEFT (NAME) -->
-                        <ons-col width="35%" class="labtest-col" vertical-align="center">
+                        <ons-col width="35%" class="labtest-col hyphens" vertical-align="center">
                             <div align="left" style="margin-left:4px">
                                 {{"LAB_NAME"|translate}}
                             </div>
                         </ons-col>
 
                         <!-- HEADER - CENTRE (VALUE) -->
-                        <ons-col width="30%" class="labtest-col" vertical-align="center">
+                        <ons-col width="30%" class="labtest-col hyphens" vertical-align="center">
                             <div align="center">
                                 {{"LAB_YOUR_RESULT"|translate}}
                             </div>
                         </ons-col>
 
                         <!-- HEADER - RIGHT (NORMAL RANGE) -->
-                        <ons-col width="33%" class="labtest-col" vertical-align="center">
+                        <ons-col width="33%" class="labtest-col hyphens" vertical-align="center">
                             <div align="right">
                                 {{"LAB_NORM"|translate}}
                             </div>
@@ -70,10 +72,11 @@
                         class="list-item-container">
                         <ons-row ng-class="[testsByDate.getTestClass(testResult), fontSizeDesc]"
                             vertical-align="center">
-                            <!-- LAB RESULT - LEFT (NAME AND UNIT) -->
+
+                            <!-- LAB RESULT - LEFT (NAME) -->
                             <ons-col width="35%" class="labtest-col" vertical-align="center">
                                 <div align="left" style="margin-left:4px">
-                                    {{testsByDate.getTestName(testResult)}}
+                                    <p class="hyphens">{{testsByDate.getTestName(testResult)}}</p>
                                 </div>
                             </ons-col>
 
@@ -84,9 +87,7 @@
                                     <span ng-if="testResult.abnormalFlag">
                                         ({{testResult.abnormalFlag}})
                                     </span>
-                                    <div>
-                                        ({{testResult.unitDescription}})
-                                    </div>
+                                    <div class="break-words">{{testResult.unitWithBrackets}}</div>
                                 </div>
                             </ons-col>
 
@@ -94,11 +95,10 @@
                             <ons-col width="33%" class="labtest-col" vertical-align="center">
                                 <div align="right">
                                     {{testResult.normalRange}}
-                                    <div>
-                                        ({{testResult.unitDescription}})
-                                    </div>
+                                    <div ng-if="testResult.normalRange" class="break-words">{{testResult.unitWithBrackets}}</div>
                                 </div>
                             </ons-col>
+
                             <!-- LAB RESULT - SPACE FOR CHEVRON -->
                             <ons-col width="5%" class="labtest-col" vertical-align="center">
                             </ons-col>

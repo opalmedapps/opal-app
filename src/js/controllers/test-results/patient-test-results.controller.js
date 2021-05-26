@@ -21,6 +21,18 @@ class PatientTestResultsController {
 	 * @type {boolean}
 	 */
 	showByDate = true;
+	/**
+	 * Can be used to toggle visibility of the content section without using the loading wheel.
+	 * Used to force a refresh of the content.
+	 * @type {boolean}
+	 */
+	showContent = true;
+	/**
+	 * Tracks whether the user has just refreshed the labs from the Type tab.
+	 * If this is the case, the Date tab's display must be forced to update when next visiting it, or it stays blank.
+	 * @type {boolean}
+	 */
+	#justRefreshedByType = false;
 
 	#patientTestResults;
 	#$filter;
@@ -60,6 +72,7 @@ class PatientTestResultsController {
 		// Only allowed to refresh once every 60s.
 		if (this.#shouldFetchTestResultsFromServer()) {
 			this.loading = true;
+			if (!this.showByDate) this.#justRefreshedByType = true;
 			this.#getTestResultsMetadata(true)
 				.then(this.#updateView)
 				.catch(this.#handlerServerError);
@@ -107,6 +120,29 @@ class PatientTestResultsController {
 		return type[`name_${this.#language}`];
 	}
 
+	/**
+	 * Returns the class for a given test based on its criticality (see forwarded function for details)
+	 */
+	getTestClass(test) {
+		return this.#patientTestResults.getTestClass(test);
+	}
+
+	/**
+	 * @name checkForRefresh
+	 * @author Stacey Beard
+	 * @date 2021-05-19
+	 * @desc Checks whether a refresh of the display is required.
+	 *       The display must be refreshed on the Date tab after the lab data was refreshed from the Type tab
+	 *       (otherwise, the Date tab stays blank).
+	 *       However, it does not need to be refreshed after the lab data was refreshed from the Date tab (no issues).
+	 */
+	checkForRefresh() {
+		if (this.showByDate && this.#justRefreshedByType) {
+			this.#refreshDisplay();
+			this.#justRefreshedByType = false;
+		}
+	}
+
 	////////////////////////////////////////
 
 	/**
@@ -124,7 +160,7 @@ class PatientTestResultsController {
 	#getTestResultsMetadata = async (useServer) => {
 		return [await this.#patientTestResults.getTestDates(useServer),
 		await this.#patientTestResults.getTestTypes(useServer)];
-	}
+	};
 
 	/**
 	 * Updates the view with the test dates and test types for the given patient.
@@ -136,7 +172,23 @@ class PatientTestResultsController {
 			this.testDates = testDates;
 			this.testTypes = testTypes;
 		});
-	}
+	};
+
+	/**
+	 * @name refreshDisplay
+	 * @author Stacey Beard
+	 * @date 2021-05-19
+	 * @desc Forces a refresh of the content displayed in the lab results view.
+	 *       This is necessary after refreshing the lab results from the Type tab (after which the Date tab
+	 *       breaks and becomes empty until this function is called).
+	 */
+	#refreshDisplay() {
+		this.showContent = false;
+		this.#$timeout(() => {
+			this.showContent = true;
+		});
+	};
+
 	/**
 	 * Handles a response error from the server. Displays server error alert:
 	 * At the time, Opal does not have a logging mechanism for errors.

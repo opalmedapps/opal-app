@@ -18,12 +18,15 @@ angular.module('MUHCApp')
       },
       link: function (scope, element) {
           var chart = new Highcharts.stockChart(element[0], scope.options);
+
           // Add a listener to resize the chart when the screen is rotated
           $window.addEventListener("orientationchange", resizeChart);
+          $window.addEventListener("resize", resizeChart);
 
           // Remove listeners on destroy
           scope.$on('$destroy', function() {
               $window.removeEventListener("orientationchange", resizeChart);
+              $window.removeEventListener("resize", resizeChart);
           });
 
           /**
@@ -54,7 +57,6 @@ angular.module('MUHCApp')
               }, 500);
           }
       }
-
     }
   }
 ]);
