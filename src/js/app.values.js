@@ -42,8 +42,8 @@
                 },
                 donationCase: 'donation',
                 donationUrl: {
-                    donationUrlEn: 'https://www.cedars.ca/en/how-to-help/donations',
-                    donationUrlFr: 'https://www.cedars.ca/aidez-nous/donations'
+                    donationUrlEn: 'https://www.opalmedapps.com/contribute',
+                    donationUrlFr: 'https://www.opalmedapps.com/contribute/fr'
                 },
                 opalWebsiteCase: 'opalwebsite',
                 opalWebsiteUrl: {
@@ -309,7 +309,7 @@
                     "FFD": 0,
                     "MAS": 0,
                     "EDU": 0,
-                    "SUP": 0,
+                    "SUP": 1,
                     "CED": 0,
                     "HOS": 0,
                 },
