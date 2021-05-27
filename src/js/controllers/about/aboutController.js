@@ -35,12 +35,6 @@
         vm.openCedars = openCedars;
         vm.allowedModules = {};
 
-        // vm.openDonation = openDonation;
-        // vm.openAboutMUHC = openAboutMUHC;
-        // vm.openCedarsCancerCenter = openCedarsCancerCenter;
-        // vm.openCedarsCancerFoundation = openCedarsCancerFoundation;
-        // vm.openCedarsCanSupport = openCedarsCanSupport;
-
         let parameters;
         let navigatorName;
         let isBeforeLogin = true;
@@ -129,45 +123,6 @@
         function openCedars() {
             window[navigatorName].pushPage('views/home/about/cedars.html');
         }
-
-
-        // function openDonation() {
-        //     $window.open('https://www.cedars.ca/cedars/' + vm.language.toLowerCase() + '/donate/donate_online?designation=radiation-oncology-opal-fund', '_self');
-        // }
-        //
-        // function openAboutMUHC() {
-        //     if (vm.language === "EN") {
-        //         window.open('https://muhc.ca/homepage/page/about-muhc', '_self');
-        //     } else {
-        //         window.open('https://cusm.ca/homepage/page/propos-du-cusm', '_self');
-        //     }
-        // }
-        //
-        // function openCedarsCancerCenter() {
-        //     if (vm.language === "EN") {
-        //         window.open('https://muhc.ca/glen/cedars-cancer-centre', '_self');
-        //     } else {
-        //         window.open('https://cusm.ca/glen/page/centre-du-cancer-c%C3%A8dres', '_self');
-        //     }
-        // }
-        //
-        // function openCedarsCancerFoundation() {
-        //     if (vm.language === "EN") {
-        //         window.open('https://www.cedars.ca/cedars/en/home', '_self');
-        //     } else {
-        //         window.open('https://www.cedars.ca/cedars/fr/home', '_self');
-        //     }
-        // }
-        //
-        // function openCedarsCanSupport() {
-        //     if (vm.language === "EN") {
-        //         window.open('http://www.cansupport.ca/', '_self');
-        //     } else {
-        //         window.open('http://www.cansupport.ca/fr', '_self');
-        //     }
-        // }
-
-
     }
 })();
 

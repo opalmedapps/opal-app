@@ -8,7 +8,7 @@
     <network-banner></network-banner>
 
     <ons-list>
-        <ons-list-item modifier="tappable chevron" ng-click="tourModal.show()" >
+        <ons-list-item class="item" modifier="tappable chevron" ng-click="tourModal.show()" >
             <ons-row align="center">
                 <ons-col width="60px" style="text-align: center">
                     <div>
@@ -21,7 +21,7 @@
             </ons-row>
         </ons-list-item>
 
-        <ons-list-item modifier="tappable" ng-click="about.openUrl('opalWebsite')">
+        <ons-list-item class="item" modifier="tappable" ng-click="about.openUrl('opalWebsite')">
             <ons-row align="center">
                 <ons-col width="60px" style="text-align: center">
                     <div>
@@ -37,7 +37,7 @@
             </ons-row>
         </ons-list-item>
 
-        <ons-list-item modifier="tappable" ng-click="modalOpenViewer2.show()" ng-show="about.allowedModules.hasOwnProperty('SUP') && about.allowedModules['SUP']">
+        <ons-list-item class="item" modifier="tappable" ng-click="about.openUrl('donation', true)" ng-show="about.allowedModules.hasOwnProperty('SUP') && about.allowedModules['SUP']">
             <ons-row align="center">
                 <ons-col width="60px" style="text-align: center">
                     <div>
@@ -53,7 +53,7 @@
             </ons-row>
         </ons-list-item>
 
-        <ons-list-item modifier="tappable chevron" ng-click="about.openTeam()">
+        <ons-list-item class="item" modifier="tappable chevron" ng-click="about.openTeam()">
             <ons-row align="center">
                 <ons-col width="60px" style="text-align: center">
                     <div>
@@ -66,7 +66,7 @@
             </ons-row>
         </ons-list-item>
 
-        <ons-list-item modifier="tappable chevron" ng-click="about.openAcknowledge()">
+        <ons-list-item class="item" modifier="tappable chevron" ng-click="about.openAcknowledge()">
             <ons-row align="center">
                 <ons-col width="60px" style="text-align: center">
                     <div>
@@ -79,7 +79,7 @@
             </ons-row>
         </ons-list-item>
 
-        <ons-list-item modifier="tappable chevron" ng-click="about.openCedars()" ng-if="about.allowedModules.hasOwnProperty('CED') && about.allowedModules['CED']">
+        <ons-list-item class="item" modifier="tappable chevron" ng-click="about.openCedars()" ng-if="about.allowedModules.hasOwnProperty('CED') && about.allowedModules['CED']">
             <ons-row align="center">
                 <ons-col width="60px" style="text-align: center">
                     <div>
@@ -92,7 +92,7 @@
             </ons-row>
         </ons-list-item>
 
-        <ons-list-item modifier="tappable" ng-click="about.openUrl('aboutmuhc')" ng-if="about.allowedModules.hasOwnProperty('HOS') && about.allowedModules['HOS']">
+        <ons-list-item class="item" modifier="tappable" ng-click="about.openUrl('aboutmuhc')" ng-if="about.allowedModules.hasOwnProperty('HOS') && about.allowedModules['HOS']">
             <ons-row align="center">
                 <ons-col width="60px" style="text-align: center">
                     <div>
@@ -161,17 +161,4 @@
                     ng-click="modalOpenViewer.hide(); about.openUrl('opalwebsite',true)">{{"CONTINUE"|translate}}
         </ons-button>
     </ons-modal>
-
-    <ons-modal var="modalOpenViewer2">
-        <h3>{{"WARNING"|translate}}</h3>
-        <ons-icon icon="ion-alert-circled" size="60px"></ons-icon>
-        <p style="margin-top: 5%" class="secure-message">{{"LEAVING_APP4"|translate}}</p>
-        <ons-button style="margin-top: 5%; font-size: 22px;"
-                    ng-click="modalOpenViewer2.hide()">{{"CANCEL"|translate}}
-        </ons-button>
-        <ons-button style="margin-top: 5%; margin-left: 50px; font-size: 22px; background-color: #F44336"
-                    ng-click="modalOpenViewer2.hide(); about.openUrl('donation',true)">{{"CONTINUE"|translate}}
-        </ons-button>
-    </ons-modal>
-
 </ons-page>
