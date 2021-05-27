@@ -168,13 +168,9 @@ class HcChartLabsConfiguration{
 					fontSize: fontSize
 				},
 				buttonPosition: {
-					// align: "right", // This feature will be available after updating Highcharts.
-					/* Computing the position of the range buttons depending on the text size.
-					 * The best result was produced by 70 px for all font sizes. The if statements were left for
-					 * future customization.
-					 */
-					x: 70,
-					y: 10
+					align: "left",
+					x: 0,
+					y: 0
 				},
 				// Disable the date box input (from <date> to <date>) which causes display problems.
 				inputEnabled: false
