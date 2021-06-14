@@ -680,8 +680,8 @@ a.muhcapp-home-account:link, a.muhcapp-home-account:hover{
 * Messages to Doctor
 */
 .image-conversation{
-  height: 35px;
-  width: 35px;
+  height: 30px;
+  width: 30px;
   border-radius: 50%;
   -webkit-border-radius: 50%;
 }
