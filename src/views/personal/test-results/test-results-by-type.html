@@ -50,7 +50,7 @@
                             </ons-col>
 
                             <!-- HEADER - RIGHT (VALUE (UNIT)) -->
-                            <ons-col width="40%" class="labtest-col hyphens" vertical-align="center">
+                            <ons-col width="38%" class="labtest-col hyphens" vertical-align="center">
                                 <div align="center">
                                     {{"RESULT"|translate}}
                                     <br>
@@ -71,7 +71,7 @@
                                     {{testResult.collectedDateTime|date:'medium'}}
                                 </div>
                             </ons-col>
-                            <ons-col width="40%" align="center" class="labtest-col" vertical-align="center">
+                            <ons-col width="38%" align="center" class="labtest-col" vertical-align="center">
                                 <div style="text-align: center">
                                     {{testResult.testValueString}}
                                     <span ng-if="testResult.abnormalFlag"> ({{testResult.abnormalFlag}})</span>
@@ -109,7 +109,7 @@
                     </ons-col>
 
                     <!-- LEARN ABOUT - RIGHT (LINK ICON) -->
-                    <ons-col width="15%" class="labtest-col" align="right" vertical-align="center">
+                    <ons-col width="13%" class="labtest-col" align="right" vertical-align="center">
                         <div style="margin-left: 4px">
                             <ons-icon icon="ion-android-open" size="25px"></ons-icon>
                         </div>
@@ -129,7 +129,7 @@
                     </ons-col>
 
                     <!-- RECENT TEST RESULT - RIGHT (VALUE AND UNITS) -->
-                    <ons-col width="50%" class="labtest-col" vertical-align="center">
+                    <ons-col width="48%" class="labtest-col" vertical-align="center">
                         <div align="right">
                             {{testTypeCtrl.test.latestTestValue}}
                             <span ng-if="testTypeCtrl.test.latestAbnormalFlag">
@@ -162,7 +162,7 @@
                     </ons-col>
 
                     <!-- NORMAL RANGE - RIGHT (VALUE AND UNITS) -->
-                    <ons-col width="50%" class="labtest-col" vertical-align="center">
+                    <ons-col width="48%" class="labtest-col" vertical-align="center">
                         <div align="right">
                             {{testTypeCtrl.test.normalRange}}
                             <span ng-if="testTypeCtrl.test.normalRange" class="break-words"> {{testTypeCtrl.test.unitWithBrackets}}</span>

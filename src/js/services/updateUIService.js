@@ -72,12 +72,12 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors',
          <pre>
          //Example:
          var sectionServiceMappings={
-  'Patient':{
-      setOnline:Patient.setUserFieldsOnline,
-      update:Patient.setUserFieldsOnline,
-      setOffline:Patient.setUserFieldsOffline
-    },...
-  **/
+              'Patient':{
+                  setOnline:Patient.setUserFieldsOnline,
+                  update:Patient.setUserFieldsOnline
+              },
+              ...
+         **/
         var sectionServiceMappings={
             'All':
             {
@@ -91,13 +91,11 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors',
             },
             'Patient':{
                 setOnline:Patient.setUserFieldsOnline,
-                update:Patient.setUserFieldsOnline,
-                setOffline:Patient.setUserFieldsOffline
+                update:Patient.setUserFieldsOnline
             },
             'Doctors':{
                 setOnline:Doctors.setUserContactsOnline,
-                update:Doctors.updateUserContacts,
-                setOffline:Doctors.setUserContactsOffline
+                update:Doctors.updateUserContacts
             },
             'Appointments':{
                 init:Appointments.setUserAppointments,

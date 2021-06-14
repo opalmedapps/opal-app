@@ -244,14 +244,6 @@
                     },
                 },
 
-                /** Documents, doctors and patient service constants **/
-                cdvDoctorsFilePathAndroid: 'cdvfile://localhost/files/Doctors/',
-                cdvDoctorsFilePathIos: 'cdvfile://localhost/persistent/Doctors/',
-                cdvDocumentFilePathAndroid: 'cdvfile://localhost/sdcard/Documents/',
-                cdvDocumentFilePathIos: 'cdvfile://localhost/persistent/Documents/',
-                cdvPatientFilePathAndroid: 'cdvfile://localhost/files/Patient/',
-                cdvPatientFilePathIos: 'cdvfile://localhost/persistent/Patient/',
-
                 /** newsBanner Service constants **/
                 newsAlertTypes: {
                     'notifications': {
