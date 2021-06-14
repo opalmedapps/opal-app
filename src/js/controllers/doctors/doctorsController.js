@@ -8,8 +8,6 @@
  *                  file 'LICENSE.txt', which is part of this source code package.
  */
 
-
-
 /**
 * @ngdoc controller
 * @scope
@@ -19,7 +17,6 @@
 * the {@link MUHCApp.controller:HomeController HomeController} view.
 *
 **/
-
 (function () {
     'use strict';
 
@@ -29,23 +26,17 @@
 
     ContactsController.$inject = [
         'Doctors',
-        'NavigatorParameters',
         '$filter'
     ];
 
     /* @ngInject */
     function ContactsController(
         Doctors,
-        NavigatorParameters,
         $filter
     ) {
-        var vm = this;
-        vm.title = 'ContactsController';
-        vm.noContacts = null;
-        vm.oncologists = null;
-        vm.primaryPhysician = null;
-        vm.otherDoctors = null;
-        vm.showHeader = showHeader;
+        let vm = this;
+        vm.noContacts = false;
+        vm.doctors = [];
 
         activate();
 
@@ -53,44 +44,14 @@
 
         function activate() {
             vm.noContacts = Doctors.isEmpty();
-            vm.doctors = Doctors.getDoctors();
-            vm.doctors = setDoctorsView(vm.doctors);
+            vm.doctors = setDoctorsView(Doctors.getDoctors());
+            console.log(vm.doctors);
         }
-
-        function goDoctorContact(doctor){
-
-            NavigatorParameters.setParameters({Navigator:'generalNavigator',Data:doctor});
-            generalNavigator.pushPage('views/general/contacts/individual-contact.html', {param:doctor},{ animation : 'slide' } );
-        }
-
 
         function setDoctorsView(doctors)
         {
-            /*
-            doctors.forEach(function(doctor)
-            {
-                if(doctor.PrimaryFlag === '1' && doctor.OncologistFlag === '1'){
-                    doctor.Role = $filter('translate')("PRIMARYDOCTOR");
-                }else if(doctor.OncologistFlag === '1'){
-                    doctor.Role = $filter('translate')("ONCOLOGIST");
-                }else{
-                    doctor.Role = $filter('translate')("OTHER");
-                }
-            });
-            doctors = $filter('orderBy')(doctors, 'Role',true);
-            */
-
             doctors = $filter('orderBy')(doctors, 'LastName', false);    // Sort ascending by LastName
-
             return doctors;
         }
-        function showHeader(index)
-        {
-            return index === 0 || vm.doctors[index].Role !== vm.doctors[index - 1].Role;
-        }
     }
-
 })();
-
-
-

@@ -111,11 +111,7 @@
 			}, 10);
 
 			// Get location permission
-			Permissions.enablePermission('ACCESS_FINE_LOCATION', 'LOCATION_PERMISSION_DENIED')
-				.catch(function (response) {
-					NewsBanner.showCustomBanner($filter('translate')(response.Message), '#333333', 
-						'#F0F3F4', 13, 'top', function () {}, 5000);
-				});
+			Permissions.enablePermission('ACCESS_FINE_LOCATION').catch(console.error);
 		}
 
 		function showMessageOfTheDay() {

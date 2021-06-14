@@ -91,11 +91,7 @@
                 homeNavigator.off('prepush');
             });
 
-            Permissions.enablePermission('WRITE_EXTERNAL_STORAGE', 'PERMISSION_STORAGE_DENIED')
-                .catch(function (response) {
-                    NewsBanner.showCustomBanner($filter('translate')(response.Message), 
-                        '#333333', '#F0F3F4', 13, 'top', function () {}, 5000);
-                });
+            Permissions.enablePermission('WRITE_EXTERNAL_STORAGE').catch(console.error);
 
             // Initialize the page data if online
             if(NetworkStatus.isOnline()){
