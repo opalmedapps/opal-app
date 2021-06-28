@@ -1,4 +1,4 @@
-<!-- Example title: OPAL-123: Changed the layout of test values in the lab results -->
+<!-- Example title: OPAL-123: Change the layout of test values in the lab results -->
 
 ### Changes
 
@@ -13,6 +13,7 @@ Short summary of the changes in this PR.
 
 ### Jira
 <!-- Paste a link to this PR's related Jira issue. -->
+
 
 ### Acceptance Tests
 <!-- Put an x in the checkbox when done. -->
