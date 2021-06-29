@@ -19,7 +19,6 @@
                                       UserPreferences, Params, UserHospitalPreferences, Browser) {
             var vm = this;
 
-            vm.goToPatientCharter = goToPatientCharter;
             vm.goToParking = goToParking;
             vm.generalDeviceBackButton = generalDeviceBackButton;
             vm.goToUrl = goToUrl;
@@ -101,11 +100,6 @@
              * PUBLIC FUNCTIONS
              */
 
-            function goToPatientCharter() {
-                NavigatorParameters.setParameters('generalNavigator');
-                generalNavigator.pushPage('./views/general/charter/charter.html');
-            }
-
             function goToParking() {
                 NavigatorParameters.setParameters('generalNavigator');
                 generalNavigator.pushPage('views/general/parking/parking.html');
@@ -114,7 +108,6 @@
             function generalDeviceBackButton() {
                 tabbar.setActiveTab(0);
             }
-
 
             function goToUrl(openWhat) {
                 let url = '';
