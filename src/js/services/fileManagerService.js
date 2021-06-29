@@ -11,7 +11,10 @@ var myApp = angular.module('MUHCApp');
  *@requires $filter
  *@description Allows the app's controllers or services interact with the file storage of the device. For more information look at {@link https://github.com/apache/cordova-plugin-file Cordova File Plugin}, reference for social sharing plugin {@link https://github.com/EddyVerbruggen/SocialSharing-PhoneGap-Plugin Cordova Sharing Plugin}
  **/
-myApp.service('FileManagerService', ['$q', '$cordovaFileOpener2', '$filter', 'NewsBanner', '$injector', 'Params', 'Constants', function ($q, $cordovaFileOpener2, $filter, NewsBanner, $injector, Params, Constants) {
+myApp.service('FileManagerService', ['$q', '$cordovaFileOpener2', '$filter', 'NewsBanner', '$injector', 'Params',
+    'Constants', 'Browser',
+
+    function ($q, $cordovaFileOpener2, $filter, NewsBanner, $injector, Params, Constants, Browser) {
 
     /**
      *@ngdoc property
@@ -213,37 +216,32 @@ myApp.service('FileManagerService', ['$q', '$cordovaFileOpener2', '$filter', 'Ne
          *             URL example: https://www.opal.com/myDocument.pdf
          **/
         openPDF: function (url, newDocName) {
-            if (Constants.app) {
-                if (ons.platform.isAndroid()) {
-                    let path = urlDeviceDocuments;
-                    let targetPath = path + newDocName;
+            if (Constants.app && ons.platform.isAndroid()) {
+                let path = urlDeviceDocuments;
+                let targetPath = path + newDocName;
 
-                    downloadFileIntoStorage(url, path, newDocName).then(function () {
+                downloadFileIntoStorage(url, path, newDocName).then(function () {
 
-                        cordova.plugins.fileOpener2.open(targetPath, 'application/pdf', {
-                            error : function(e) {
-                                console.log('Error status in (fileOpener2): ' + e.status + ' - Error message: ' + e.message);
-                            },
-                            success : function () {
-                                // file opened successfully by Default PDF Viewer on Android.
-                                // Nothing else to do at this point
-                                console.log('File opened successfully with fileOpener2');
+                    cordova.plugins.fileOpener2.open(targetPath, 'application/pdf', {
+                        error : function(e) {
+                            console.log('Error status in (fileOpener2): ' + e.status + ' - Error message: ' + e.message);
+                        },
+                        success : function () {
+                            // file opened successfully by Default PDF Viewer on Android.
+                            // Nothing else to do at this point
+                            console.log('File opened successfully with fileOpener2');
 
-                                var Documents = $injector.get('Documents');
-                                // Now add the filename to an array to be deleted OnExit of the app (CleanUp.Clear())
-                                Documents.addToDocumentsDownloaded(path, newDocName);    // add file info to the array
-                            }
-                        });
-                    }).catch(function (error) {
-                        //Unable to download/save document on device
-                        console.log('Error downloading document from Server downloadFileIntoStorage: ' + error.status + ' - Error message: ' + error.message);
+                            var Documents = $injector.get('Documents');
+                            // Now add the filename to an array to be deleted OnExit of the app (CleanUp.Clear())
+                            Documents.addToDocumentsDownloaded(path, newDocName);    // add file info to the array
+                        }
                     });
-                } else {
-                    cordova.InAppBrowser.open(url, '_blank', 'EnableViewPortScale=yes');
-                }
-            } else {
-                window.open(url);
+                }).catch(function (error) {
+                    //Unable to download/save document on device
+                    console.log('Error downloading document from Server downloadFileIntoStorage: ' + error.status + ' - Error message: ' + error.message);
+                });
             }
+            else Browser.openInternal(url);
         },
 
         generatePath: function (document) {
@@ -266,11 +264,7 @@ myApp.service('FileManagerService', ['$q', '$cordovaFileOpener2', '$filter', 'Ne
          *@description Opens a url in the in-app browser, or in another browser window if not on a device.
          **/
         openUrl: function (url) {
-            if (Constants.app) {
-                cordova.InAppBrowser.open(url, '_blank', 'EnableViewPortScale=yes');
-            } else {
-                window.open(url);
-            }
+            Browser.openInternal(url);
         },
 
         convertToUint8Array: function (base64) {

@@ -25,7 +25,8 @@
 		'DynamicContentService',
 		'NewsBanner',
 		'Params',
-		'UserHospitalPreferences'
+		'UserHospitalPreferences',
+		'Browser'
 	];
 
 	/* @ngInject */
@@ -39,7 +40,8 @@
 		DynamicContentService,
 		NewsBanner,
 		Params,
-		UserHospitalPreferences
+		UserHospitalPreferences,
+		Browser
 	) {
 		var vm = this;
 		vm.globalMessage = '';
@@ -135,15 +137,8 @@
 		/**
 		 * Go to registration page
 		 */
-        function goToRegister() {
-			let url = Params.registrationPage;
-			let app = document.URL.indexOf('http://') === -1 && document.URL.indexOf('https://') === -1;
-            
-			if (!app) {
-				window.open(url, '_blank');
-			} else {
-				cordova.InAppBrowser.open(url, '_blank', 'location=yes');  // Opens inside the app
-			}
+		function goToRegister() {
+			Browser.openInternal(Params.registrationPage);
 		}
 
 		/**

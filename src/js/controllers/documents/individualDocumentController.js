@@ -16,10 +16,12 @@
         .module('MUHCApp')
         .controller('IndividualDocumentController', IndividualDocumentController);
 
-    IndividualDocumentController.$inject = ['$rootScope', '$scope', 'NavigatorParameters', 'Documents', '$timeout', 'FileManagerService', 'Constants', '$q', 'UserPreferences'];
+    IndividualDocumentController.$inject = ['$rootScope', '$scope', 'NavigatorParameters', 'Documents', '$timeout',
+        'FileManagerService', 'Constants', '$q', 'UserPreferences', 'Browser', '$filter'];
 
     /* @ngInject */
-    function IndividualDocumentController($rootScope, $scope, NavigatorParameters, Documents, $timeout, FileManagerService, Constants, $q, UserPreferences) {
+    function IndividualDocumentController($rootScope, $scope, NavigatorParameters, Documents, $timeout,
+                                          FileManagerService, Constants, $q, UserPreferences, Browser, $filter) {
         var vm = this;
         var navigator = null;
         var parameters;
@@ -125,15 +127,9 @@
                         canvasElements[i].style.zoom = viewerScale;
 
                         canvasElements[i].onclick = function (event) {
-                            if (Constants.app) {
-                                if (ons.platform.isAndroid()) {
-                                    convertCanvasToImage(event.srcElement);
-                                } else {
-                                    cordova.InAppBrowser.open("data:application/pdf;base64," + document.Content, '_blank', 'EnableViewPortScale=yes');
-                                }
-                            } else {
-                                window.open("data:application/pdf;base64, " + document.Content, '_blank', 'location=no,enableViewportScale=true');
-                            }
+                            Constants.app && ons.platform.isAndroid()
+                                ? convertCanvasToImage(event.srcElement)
+                                : Browser.openInternal("data:application/pdf;base64," + document.Content, true);
                         }
                     }
 
@@ -153,8 +149,8 @@
             var image = new Image();
 
             image.onload = function () {
-                var ref = cordova.InAppBrowser.open(image.src, '_blank', 'location=no,enableViewportScale=true', 'clearcache=yes');
-                ref.addEventListener('loadstop', function () {
+                let browser = Browser.openInternal(image.src, true, "clearCache=yes");
+                if (browser) browser.addEventListener('loadstop', function () {
                     image = null;
                 });
             };
@@ -209,7 +205,7 @@
                     console.log('Error downloading document onto device: ' + error.status + ' - Error message: ' + error.message);
                 });
             } else {
-                window.open("data:application/pdf;base64," + docParams.Content);
+                ons.notification.alert({message: $filter('translate')('AVAILABLEDEVICES')});
             }
         }
 
