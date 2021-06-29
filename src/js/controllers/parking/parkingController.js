@@ -7,10 +7,10 @@
 	angular.module("MUHCApp")
 		.controller("ParkingController", ParkingController);
 
-	ParkingController.$inject = ['NavigatorParameters', 'UserPreferences', 'Params'];
+	ParkingController.$inject = ['NavigatorParameters', 'UserPreferences', 'Params', 'Browser'];
 
 	/* @ngInject */
-	function ParkingController(NavigatorParameters, UserPreferences, Params) {
+	function ParkingController(NavigatorParameters, UserPreferences, Params, Browser) {
 		const vm = this;
 
 		let navigatorName;
@@ -27,39 +27,19 @@
 
 		function goToParkingLink(type){
 			let url = '';
-			let app = document.URL.indexOf('http://') === -1 && document.URL.indexOf('https://') === -1;
-
-			if(type === 'general') {
-				if (UserPreferences.getLanguage().toUpperCase() === "EN") {
-					url = Params.general.generalParkingGlenUrlEn;
-					// window.open('https://muhc.ca/glen/handbook/parking-hospital', '_blank');
-				} else {
-					url = Params.general.generalParkingGlenUrlFr;
-					// window.open('https://cusm.ca/glen/handbook/stationnement', '_blank');
-				}
-
-				if (app) {
-					cordova.InAppBrowser.open(url, '_blank', 'location=yes');
-				} else {
-					window.open(url, '_blank');
-				}
+			if (type === 'general') {
+				UserPreferences.getLanguage().toUpperCase() === "EN"
+					? url = Params.general.generalParkingGlenUrlEn
+					: url = Params.general.generalParkingGlenUrlFr;
+				Browser.openInternal(url);
 			}
 			else if (type === 'gettingtohospital') {
-				if (UserPreferences.getLanguage().toUpperCase() === "EN") {
-					url = Params.gettingHospitalUrl.gettingHospitalUrlEn;
-					// window.open('https://muhc.ca/glen/handbook/getting-hospital-5', '_blank');
-				} else {
-					url = Params.gettingHospitalUrl.gettingHospitalUrlFr;
-					// window.open('https://cusm.ca/glen/handbook/comment-vous-y-rendre', '_blank');
-				}
-
-				if (app) {
-					cordova.InAppBrowser.open(url, '_blank', 'location=yes');
-				} else {
-					window.open(url, '_blank');
-				}
-
-			} else if (type ==='oncology'){
+				UserPreferences.getLanguage().toUpperCase() === "EN"
+					? url = Params.gettingHospitalUrl.gettingHospitalUrlEn
+					: url = Params.gettingHospitalUrl.gettingHospitalUrlFr;
+				Browser.openInternal(url);
+			}
+			else if (type ==='oncology') {
 				NavigatorParameters.setParameters({type:type});
 				window[navigatorName].pushPage('./views/general/parking/parking-details.html');
 			}

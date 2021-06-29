@@ -23,10 +23,10 @@
         .module('MUHCApp')
         .controller('AboutController', AboutController);
 
-    AboutController.$inject = ['$window', 'UserPreferences', 'NavigatorParameters', 'Params', 'UserHospitalPreferences'];
+    AboutController.$inject = ['$window', 'UserPreferences', 'NavigatorParameters', 'Params', 'UserHospitalPreferences', 'Browser'];
 
     /* @ngInject */
-    function AboutController($window, UserPreferences, NavigatorParameters, Params, UserHospitalPreferences) {
+    function AboutController($window, UserPreferences, NavigatorParameters, Params, UserHospitalPreferences, Browser) {
         const vm = this;
 
         vm.openUrl = openUrl;
@@ -70,8 +70,6 @@
 
         function openUrl(openWhat, openInExternalBrowser = false) {
             let url = '';
-            let app = document.URL.indexOf('http://') === -1 && document.URL.indexOf('https://') === -1;
-
             switch (openWhat.toLowerCase()) {
                 case Params.aboutMuhcCase:
                     url = (vm.language === "EN") ? Params.aboutMuhcUrl.aboutMuhcUrlEn : Params.aboutMuhcUrl.aboutMuhcUrlFr;
@@ -94,16 +92,8 @@
                 default:
                     break;
             }
-
-            if (!app) {
-                window.open(url, '_blank');
-            } else if (openInExternalBrowser) {
-                cordova.InAppBrowser.open(url, '_system');   // _system: opens in External Browser (Safari, etc...) on the device
-            } else {
-                cordova.InAppBrowser.open(url, '_blank', 'location=yes');  // Opens inside the app
-            }
-
-         }
+            openInExternalBrowser ? Browser.openExternal(url) : Browser.openInternal(url);
+        }
 
         /**
          * navigatorName = 'initNavigator' or 'homeNavigator'
