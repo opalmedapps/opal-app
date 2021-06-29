@@ -97,7 +97,6 @@
         <variable name="URL_SCHEME" value="opal"/>
     </plugin>
     <plugin name="cordova-plugin-device" spec="^2.0.3"/>
-    <plugin name="cordova-plugin-email" spec="^1.2.7"/>
     <plugin name="cordova-plugin-file" spec="^6.0.2"/>
     <plugin name="cordova-plugin-file-opener2" spec="^3.0.5"/>
     <plugin name="cordova-plugin-fileopener" spec="^1.0.5"/>

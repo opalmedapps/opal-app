@@ -55,9 +55,7 @@
 		vm.gotoLearnAboutOpal = gotoLearnAboutOpal;
 		vm.goToRegister = goToRegister;
 		vm.goToGeneralSettings = goToGeneralSettings;
-		vm.goToPatientCharter = goToPatientCharter;
 		vm.goToAcknowledgements = goToAcknowledgements;
-		vm.reportBugs = reportBugs;
 		vm.goToLogin = goToLogin;
 		vm.showMessageOfTheDay = showMessageOfTheDay;
 
@@ -150,50 +148,10 @@
 		}
 
 		/**
-		 * Go to patient charter
-		 */
-		function goToPatientCharter() {
-			initNavigator.pushPage('./views/templates/content.html', {contentType: 'patient_charter'});
-		}
-
-		/**
 		 * Go to Acknowledgements
 		 */
 		function goToAcknowledgements() {
 			initNavigator.pushPage('./views/templates/content.html', {contentType: 'acknowledgements'});
-		}
-
-
-		/**
-		 * Report issues function
-		 */
-		function reportIssuesMail() {
-			if (Constants.app) {
-				var email = {
-					to: 'opal@muhc.mcgill.ca',
-					cc: '',
-					bcc: [],
-					subject: $filter("translate")("OPALPROBLEMSUBJECT"),
-					body: '',
-					isHtml: true
-				};
-				cordova.plugins.email.isAvailable(function (isAvailable) {
-					if (isAvailable) {
-						cordova.plugins.email.open(email, function (sent) {
-
-						}, this);
-					} else {
-						alert("Not able to send emails currently.")
-					}
-				});
-			}
-		}
-
-		/**
-		 * Report bugs function
-		 */
-		function reportBugs() {
-			initNavigator.pushPage('./views/general/bugreport/bugreport.html');
 		}
 
 		/**
@@ -202,7 +160,5 @@
 		function goToLogin() {
 			initNavigator.pushPage('./views/login/login.html', {animation: 'lift'});
 		}
-
 	}
-
 })();

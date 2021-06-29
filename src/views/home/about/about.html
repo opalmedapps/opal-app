@@ -66,19 +66,6 @@
             </ons-row>
         </ons-list-item>
 
-        <ons-list-item class="item" modifier="tappable chevron" ng-click="about.openAcknowledge()">
-            <ons-row align="center">
-                <ons-col width="60px" style="text-align: center">
-                    <div>
-                        <ons-icon icon="fa-star" style="color:#FFEB3B" size="1.7em" fixed-width="true"></ons-icon>
-                    </div>
-                </ons-col>
-                <ons-col>
-                    <span ng-class="fontSizeTitle"> {{"OPAL_ACKNOWLEDGEMENTS"|translate}}</span>
-                </ons-col>
-            </ons-row>
-        </ons-list-item>
-
         <ons-list-item class="item" modifier="tappable chevron" ng-click="about.openCedars()" ng-if="about.allowedModules.hasOwnProperty('CED') && about.allowedModules['CED']">
             <ons-row align="center">
                 <ons-col width="60px" style="text-align: center">

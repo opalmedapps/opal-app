@@ -31,7 +31,6 @@
 
         vm.openUrl = openUrl;
         vm.openTeam = openTeam;
-        vm.openAcknowledge = openAcknowledge;
         vm.openCedars = openCedars;
         vm.allowedModules = {};
 
@@ -106,13 +105,8 @@
             window[navigatorName].pushPage('views/templates/content.html', {contentType: 'hig'});
         }
 
-        function openAcknowledge() {
-            window[navigatorName].pushPage('./views/templates/content.html', {contentType: 'acknowledgements'});
-        }
-
         function openCedars() {
             window[navigatorName].pushPage('views/home/about/cedars.html');
         }
     }
 })();
-
