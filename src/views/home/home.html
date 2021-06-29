@@ -152,25 +152,6 @@
                         </ons-col>
                     </ons-row>
                 </ons-list-item>
-
-                <!--
-                TREATMENT PLANNING STATUS
-                ================================-->
-                <ons-list-item modifier="chevron" class="item" ng-show="h.statusDescription" ng-if="h.allowedModules.hasOwnProperty('TRP') && h.allowedModules['TRP']" ng-click="h.goToStatus()">
-                    <ons-row align="center">
-                        <ons-col width="60px" align="center" style="text-align: center">
-                            <div>
-                                <i class="fa fa-medkit fa-2x" style="color:#03a9f4"></i>
-                            </div>
-                        </ons-col>
-                        <ons-col>
-                            <header>
-                                <span class="item-title" ng-class="fontSizeTitle">{{"STATUS"|translate}}</span>
-                            </header>
-                            <p class="item-desc" ng-class="fontSizeDesc" translate="{{h.statusDescription}}"></p>
-                        </ons-col>
-                    </ons-row>
-                </ons-list-item>
             </ons-list>
         </div>
     </div>
