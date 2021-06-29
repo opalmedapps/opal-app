@@ -36,24 +36,15 @@ angular.module('MUHCApp')
            * @desc Resizes the chart based on the screen size.
            */
           function resizeChart() {
-
               // A timeout is needed to give time for $window.innerWidth to be set.
               $timeout(function(){
-                  // console.log(screen.orientation.type); // Portrait or landscape
-
-                  /* Update the chart with its new size (more Highcharts options can be passed in the same
-                   * function call if needed).
-                   * By default, the chart is redrawn with an animation.
-                   */
+                  // Portrait or landscape is saved in screen.orientation.type
+                  // Update the chart with its new size (by default, the chart is redrawn with an animation)
                   chart.update({
                       chart: {
-                          width: $window.innerWidth - 10,
-                          height: null,
+                          width: $window.innerWidth,
                       },
                   });
-
-                  // This is an alternate method that can be used instead to resize the chart:
-                  // chart.setSize($window.innerWidth, null, true);
               }, 500);
           }
       }
