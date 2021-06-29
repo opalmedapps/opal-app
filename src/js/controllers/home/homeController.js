@@ -7,12 +7,12 @@
 
     HomeController.$inject = [
         'Appointments', 'CheckInService', 'Patient', 'UpdateUI','$scope', '$timeout','$filter', 'Notifications',
-        'NavigatorParameters', 'NewsBanner', 'PlanningSteps', 'Permissions', 'UserPreferences', 'NetworkStatus',
+        'NavigatorParameters', 'NewsBanner', 'Permissions', 'UserPreferences', 'NetworkStatus',
         'MetaData', 'UserHospitalPreferences'];
 
     /* @ngInject */
     function HomeController(Appointments, CheckInService, Patient, UpdateUI, $scope, $timeout, $filter, Notifications,
-                            NavigatorParameters, NewsBanner, PlanningSteps, Permissions, UserPreferences, NetworkStatus,
+                            NavigatorParameters, NewsBanner, Permissions, UserPreferences, NetworkStatus,
                             MetaData, UserHospitalPreferences)
     {
         var vm = this;
@@ -22,7 +22,6 @@
         vm.LastName = '';
         vm.ProfileImage = null;
         vm.language = 'EN';
-        vm.statusDescription = null;
         vm.appointmentShown = null;
         vm.todaysAppointments = [];
         vm.calledApp = null;
@@ -45,7 +44,6 @@
         vm.allowedModules = {};
 
         vm.homeDeviceBackButton = homeDeviceBackButton;
-        vm.goToStatus = goToStatus;
         vm.goToAppointments = goToAppointments;
         vm.goToSettings = goToSettings;
         vm.goToCheckinAppointments = goToCheckinAppointments;
@@ -113,9 +111,6 @@
             //Set patient info
             setPatientInfo();
 
-            //Set treatment metadata state
-            setTreatmentStatus();
-
             //display next appointment
             setNextAppointment();
 
@@ -144,20 +139,6 @@
         function setBadges()
         {
             vm.notificationsUnreadNumber = Notifications.getNumberUnreadNotifications();
-        }
-
-        /**
-         * @name setTreatmentStatus
-         * @desc displays the latest treatment statements
-         */
-        function setTreatmentStatus() {
-            if(!PlanningSteps.isCompleted() && PlanningSteps.hasCT()) {
-                vm.statusDescription = "PLANNING";
-            }else if (PlanningSteps.isCompleted()){
-                vm.statusDescription = "PLANNING_COMPLETE";
-            } else {
-                vm.statusDescription = '';
-            }
         }
 
         /**
@@ -262,13 +243,6 @@
                     }
                 }
             });
-        }
-
-        /**
-         * Takes the user the treatment status page
-         */
-        function goToStatus() {
-            homeNavigator.pushPage('views/home/status/status_new.html');
         }
 
         /**
