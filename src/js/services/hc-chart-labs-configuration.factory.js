@@ -152,6 +152,7 @@ class HcChartLabsConfiguration{
 		const [ minValue, maxValue ] = (data.length > 0) ? this.#getDataLimits(data) : [NaN, NaN];
 		const minChart = this.#configureYAxisBound(minValue, normalRangeMin, Math.min, 0.95);
 		const maxChart = this.#configureYAxisBound(maxValue, normalRangeMax, Math.max, 1.05);
+		const smallFontSize = fontSize.replace('px', '') - 5 + "px";
 		return {
 			exporting: false,
 			rangeSelector: {
@@ -168,8 +169,8 @@ class HcChartLabsConfiguration{
 					fontSize: fontSize
 				},
 				buttonPosition: {
-					align: "left",
-					x: 0,
+					align: "right",
+					x: -3,
 					y: 0
 				},
 				// Disable the date box input (from <date> to <date>) which causes display problems.
@@ -179,9 +180,9 @@ class HcChartLabsConfiguration{
 				margin: 5,
 			},
 			chart: {
-				// Explicitly tell the width and height of a chart
-				width: $(window).width()-10,
-				height: null
+				width: $(window).innerWidth(),
+				marginRight: 15,
+				height: null,
 			},
 			xAxis: {
 				type: 'datetime',
@@ -192,12 +193,6 @@ class HcChartLabsConfiguration{
 				minTickInterval: 3600 * 24 * 30 * 1000,//time in milliseconds
 				minRange: 3600 * 24 * 30 * 1000,
 				ordinal: false, //this sets the fixed time formats
-				// title: {
-				//     text: 'Date',
-				//     style: {
-				//         fontSize: fontSize
-				//     }
-				// },
 				labels: {
 					y: 20,
 					rotation: -35,
@@ -215,24 +210,14 @@ class HcChartLabsConfiguration{
 					align: 'high',
 					text: yAxisLabel,
 					style: {
+						fontSize: smallFontSize,
 						'text-anchor': 'start'
 					},
 					rotation: 0,
-					y: -10,
+					y: -20,
 					reserveSpace: false
 				},
 				opposite: false,
-				// plotLines: [{
-				//     color: 'rgba(246, 54, 92, 0.53)',
-				//     value: normalRangeMax,
-				//     dashStyle: 'Solid',
-				//     width: 2
-				// },{
-				//     color: 'rgba(246, 54, 92, 0.53)',
-				//     value: normalRangeMin,
-				//     dashStyle: 'Solid',
-				//     width: 2
-				// }],
 				labels: {
 					style: {
 						fontSize: fontSize,
@@ -255,9 +240,9 @@ class HcChartLabsConfiguration{
 				type: 'area',
 				color: 'rgba(21, 148, 187, 0.65)',
 				pointWidth: 100,
-				tooltip: {
-					valueDecimals: 2
-				}
+				dataGrouping: {
+					enabled: false, // Prevents clusters of results from being averaged when they are close together
+				},
 			}],
 			noData: {
 				style: {
@@ -265,6 +250,9 @@ class HcChartLabsConfiguration{
 					// Set the width of the "noData" message to prevent overflow off the edges of the screen
 					width: '200%',
 				}
+			},
+			time: {
+				useUTC: false, // Ensures that the dates on the chart correspond to the dates in the table view
 			},
 		};
 	};
