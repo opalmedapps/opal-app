@@ -22,12 +22,10 @@
         vm.LastName = '';
         vm.ProfileImage = null;
         vm.language = 'EN';
-        vm.notifications = [];
         vm.statusDescription = null;
         vm.appointmentShown = null;
         vm.todaysAppointments = [];
         vm.calledApp = null;
-        //vm.checkInMessage = '';
         vm.RoomLocation = '';
         vm.showHomeScreenUpdate = null;
         vm.loading = true;
@@ -48,11 +46,11 @@
 
         vm.homeDeviceBackButton = homeDeviceBackButton;
         vm.goToStatus = goToStatus;
-        vm.goToNotification = goToNotification;
         vm.goToAppointments = goToAppointments;
         vm.goToSettings = goToSettings;
         vm.goToCheckinAppointments = goToCheckinAppointments;
         vm.gotoLearnAboutOpal = gotoLearnAboutOpal;
+        vm.goToAcknowledgements = goToAcknowledgements;
 
         activate();
 
@@ -74,7 +72,7 @@
                 localStorage.removeItem('locked');
             }
 
-            // // Refresh the page on coming back from checkin
+            // Refresh the page on coming back from other pages
             homeNavigator.on('prepop', function(event) {
                 if (event.currentPage.name === "./views/home/checkin/checkin-list.html" && NetworkStatus.isOnline()) evaluateCheckIn();
                 if (event.currentPage.name === "views/personal/notifications/notifications.html" && NetworkStatus.isOnline()) setBadges();
@@ -191,11 +189,7 @@
             Notifications.requestNewNotifications()
                 .then(function(){
                     vm.loading = false;
-                    if(Notifications.getNumberUnreadNotifications() > 0){
-                        vm.notifications = Notifications.setNotificationsLanguage(Notifications.getUnreadNotifications());
 
-                        vm.notifications=$filter('orderBy')(vm.notifications,'DateAdded',true);  // Sort Descending (chronological order)
-                    }
                     // Display notifications badge (unread number)
                     setBadges();
                 })
@@ -278,34 +272,6 @@
         }
 
         /**
-         * Takes the user to the selected notification in order to view it in detail
-         * @param index
-         * @param notification
-         */
-        function goToNotification(index, notification){
-
-            $timeout(function(){
-                vm.notifications.splice(index, 1);
-            });
-
-            Notifications.readNotification(index, notification);
-
-            if(notification.NotificationType === 'CheckInError' || notification.NotificationType === 'CheckInNotification') goToCheckinAppointments();
-
-            var post = (notification.hasOwnProperty('Post')) ? notification.Post : Notifications.getNotificationPost(notification);
-            if(notification.hasOwnProperty('PageUrl')) {
-                NavigatorParameters.setParameters({'Navigator':'homeNavigator', 'Post':post});
-                homeNavigator.pushPage(notification.PageUrl);
-            }else{
-                var result = Notifications.goToPost(notification.NotificationType, post);
-                if(result !== -1 ) {
-                    NavigatorParameters.setParameters({'Navigator':'homeNavigator', 'Post':post});
-                    homeNavigator.pushPage(result.Url);
-                }
-            }
-        }
-
-        /**
          * @desc Go to learn about Opal page
          */
         function gotoLearnAboutOpal(){
@@ -337,5 +303,11 @@
             homeNavigator.pushPage('./views/home/checkin/checkin-list.html');
         }
 
+        /**
+         * @description Takes the user to the acknowledgements page.
+         */
+        function goToAcknowledgements() {
+            homeNavigator.pushPage('./views/templates/content.html', {contentType: 'acknowledgements'});
+        }
     }
 })();
