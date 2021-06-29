@@ -209,8 +209,8 @@ class HcChartLabsConfiguration{
 				}
 			},
 			yAxis: {
-				max: maxChart,
-				min: minChart,
+				max: hasNumericValues ? maxChart : null,
+				min: hasNumericValues ? minChart : null,
 				title: {
 					align: 'high',
 					text: yAxisLabel,
