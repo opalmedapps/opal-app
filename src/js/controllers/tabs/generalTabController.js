@@ -12,9 +12,11 @@
             .module('MUHCApp')
             .controller('GeneralTabController', GeneralTabController);
 
-        GeneralTabController.$inject = ['$scope', 'Announcements', 'UpdateUI', 'NavigatorParameters', 'NetworkStatus', 'MetaData', 'UserPreferences', 'Params', 'UserHospitalPreferences'];
+        GeneralTabController.$inject = ['$scope', 'Announcements', 'UpdateUI', 'NavigatorParameters', 'NetworkStatus',
+            'MetaData', 'UserPreferences', 'Params', 'UserHospitalPreferences', 'Browser'];
 
-        function GeneralTabController($scope, Announcements, UpdateUI, NavigatorParameters, NetworkStatus, MetaData, UserPreferences, Params, UserHospitalPreferences) {
+        function GeneralTabController($scope, Announcements, UpdateUI, NavigatorParameters, NetworkStatus, MetaData,
+                                      UserPreferences, Params, UserHospitalPreferences, Browser) {
             var vm = this;
 
             vm.goToPatientCharter = goToPatientCharter;
@@ -116,8 +118,6 @@
 
             function goToUrl(openWhat) {
                 let url = '';
-                let app = document.URL.indexOf('http://') === -1 && document.URL.indexOf('https://') === -1;
-
                 switch (openWhat.toLowerCase()) {
                     case Params.findDoctorCase:
                         url = (vm.language === "EN") ? Params.findDoctorUrl.findDoctorUrlEn : Params.findDoctorUrl.findDoctorUrlFr ;
@@ -131,15 +131,8 @@
                     default:
                         break;
                 }
-
-                if (app) {
-                    cordova.InAppBrowser.open(url, '_blank', 'location=yes');
-                } else {
-                    window.open(url, '_blank');
-                }
-
+                Browser.openInternal(url);
             }
-
         }
     }
 )();
