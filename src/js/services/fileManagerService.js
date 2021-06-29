@@ -162,42 +162,41 @@ myApp.service('FileManagerService', ['$q', '$cordovaFileOpener2', '$filter', 'Ne
             return isPDFDocument(url);
         },
 
-        //Shares a url using the social sharing options
         /**
          *@ngdoc method
          *@name shareDocument
          *@methodOf MUHCApp.service:FileManagerService
          *@param {String} name Name of document to be shared
          *@param {String} url url to check
+         *@param {String} fileType The type of the file to share.
          *@description Opens the native shared functionality and allows the user to share the url through different mediums, giving it the name specified in the parameters. Reference {@link https://github.com/EddyVerbruggen/SocialSharing-PhoneGap-Plugin Cordova Sharing Plugin}
          **/
         shareDocument: function (name, url, fileType) {
             if (Constants.app) {
-                //Set the subject for the document
-                var options = {
+
+                // Set the plugin options
+                let options = {
                     subject: name,
-                    url: url
+                    message: name,
                 };
-                
-                //Defines on success function
-                var onSuccess = function (result) {
+                fileType === $filter('translate')("VIDEO")
+                    ? options.url = url // A video is shared by link
+                    : options.files = [url]; // All other files are shared by attachment
 
-
+                let onSuccess = function (result) {
+                    console.log(`Successfully shared "${name}" via ${url}: ${JSON.stringify(result)}`);
                 };
-                //Defines on error function
-                var onError = function (msg) {
+
+                let onError = function (err) {
                     //Show alert banner with error
                     NewsBanner.showCustomBanner($filter('translate')("UNABLETOSHAREMATERIAL"), '#333333', '#F0F3F4',
                          13, 'top', null, 2000);
+                    console.error(`Failed to share "${name}" via ${url}: ${JSON.stringify(err)}`);
                 };
 
-                if (fileType === $filter('translate')("VIDEO")) {
-                    window.plugins.socialsharing.share(name, name, '', url);
-                } else {
-                    //Plugin usage
-                    window.plugins.socialsharing.shareWithOptions(options, onSuccess, onError);
-                }
-            } else {
+                window.plugins.socialsharing.shareWithOptions(options, onSuccess, onError);
+            }
+            else {
                 ons.notification.alert({message: $filter('translate')('AVAILABLEDEVICES')});
             }
         },
