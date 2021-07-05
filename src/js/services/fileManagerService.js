@@ -31,7 +31,7 @@ myApp.service('FileManagerService', ['$q', '$cordovaFileOpener2', '$filter', 'Ne
         if (ons.platform.isAndroid()) {
             urlDeviceDocuments = cordova.file.externalRootDirectory + '/Documents/';
         } else {
-            urlDeviceDocuments = cordova.file.documentsDirectory + '/Documents/';
+            urlDeviceDocuments = cordova.file.documentsDirectory;
         }
     }
 
@@ -123,6 +123,43 @@ myApp.service('FileManagerService', ['$q', '$cordovaFileOpener2', '$filter', 'Ne
         return r.promise;
     }
 
+    /**
+     * @description Determines whether a given file or website should be shared by attachment or by link.
+     *              For example, a pdf or jpg file should be shared by attachment, while a YouTube video or web page
+     *              should be shared by link.
+     *              Note: If the file name contains a French character, this function will return false (share by link).
+     *                    This is due to a bug in cordova-plugin-x-socialsharing where French file names cannot be
+     *                    shared by attachment.
+     * @author Stacey Beard
+     * @date 2021-06-30
+     * @param url The url of the file or website to share.
+     * @returns {boolean} True if the url points to a file with an accepted extension for sharing by attachment; false otherwise.
+     */
+    function toShareByAttachment(url) {
+        // List of extension types to share by attachment, from: https://www.computerhope.com/issues/ch001789.htm
+        let attachmentExtensions = ['aif', 'cda', 'mid', 'midi', 'mp3', 'mpa', 'ogg', 'wav', 'wma', 'wpl', // Audio
+            'ai', 'bmp', 'gif', 'ico', 'jpeg', 'jpg', 'png', 'ps', 'psd', 'raw', 'svg', 'tif', 'tiff', 'webp', // Image
+            '3g2', '3gp', 'avi', 'flv', 'h264', 'm4v', 'mkv', 'mov', 'mp4', 'mpe', 'mpeg', 'mpg', 'rm', 'swf', 'vob', 'wmv', // Video
+            'csv', 'doc', 'docx', 'key', 'odp', 'ods', 'odt', 'pdf', 'pps', 'ppt', 'pptx', 'rtf', 'tex', 'txt', 'wpd', 'xls', 'xlsm', 'xlsx', 'zip' // Other documents
+            ];
+
+        // Extract the last part of the url (this will be the file name, if the url points to a file)
+        let filename = url.split('/').pop();
+
+        // Check whether the file name has an extension (this will return the empty string if there is no extension)
+        // Formula: https://stackoverflow.com/questions/190852/how-can-i-get-file-extensions-with-javascript/12900504#12900504
+        let extension = filename.slice((Math.max(0, filename.lastIndexOf(".")) || Infinity) + 1);
+
+        // Check whether the file name contains a French character (would cause the plugin to fail if shared by attachment)
+        // This check can be removed if cordova-plugin-x-socialsharing is fixed to handle French characters in file names
+        let frenchChars = ['â', 'à', 'ä', 'ç', 'é', 'è', 'ê', 'ë', 'î', 'ì', 'ï', 'ô', 'ò', 'ù', 'û', 'ü', 'œ', 'ÿ'];
+        let hasFrenchChars = frenchChars.some(c => { return filename.toLowerCase().includes(c); });
+
+        // Return whether the extension is in the accepted list (case insensitive), and doesn't contain French characters
+        // In this case, the file should be shared by attachment
+        return !hasFrenchChars && attachmentExtensions.includes(extension.toLowerCase());
+    }
+
     return {
         /**
          * @ngdoc method
@@ -168,10 +205,9 @@ myApp.service('FileManagerService', ['$q', '$cordovaFileOpener2', '$filter', 'Ne
          *@methodOf MUHCApp.service:FileManagerService
          *@param {String} name Name of document to be shared
          *@param {String} url url to check
-         *@param {String} fileType The type of the file to share.
          *@description Opens the native shared functionality and allows the user to share the url through different mediums, giving it the name specified in the parameters. Reference {@link https://github.com/EddyVerbruggen/SocialSharing-PhoneGap-Plugin Cordova Sharing Plugin}
          **/
-        shareDocument: function (name, url, fileType) {
+        shareDocument: function (name, url) {
             if (Constants.app) {
 
                 // Set the plugin options
@@ -179,9 +215,9 @@ myApp.service('FileManagerService', ['$q', '$cordovaFileOpener2', '$filter', 'Ne
                     subject: name,
                     message: name,
                 };
-                fileType === $filter('translate')("VIDEO")
-                    ? options.url = url // A video is shared by link
-                    : options.files = [url]; // All other files are shared by attachment
+                toShareByAttachment(url)    // Check how to share the document
+                    ? options.files = [url] // Share by attachment (the file itself is shared)
+                    : options.url = url;    // Share by link (a link to the file is shared)
 
                 let onSuccess = function (result) {
                     console.log(`Successfully shared "${name}" via ${url}: ${JSON.stringify(result)}`);
