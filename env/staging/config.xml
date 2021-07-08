@@ -47,7 +47,8 @@
             <application android:allowBackup="false"/>
         </edit-config>
         <edit-config file="app/src/main/AndroidManifest.xml" mode="merge" target="/manifest/application">
-            <application android:usesCleartextTraffic="false"/>
+            <!-- Needed to allow http links (non-https) such as labtestsonline.fr -->
+            <application android:usesCleartextTraffic="true"/>
         </edit-config>
         <!-- requestLegacyExternalStorage fixes file access issues in Android 10 / API Level 29. This parameter will be ignored by API Level 30+, when your app is running on Android 11 devices -->
         <edit-config file="app/src/main/AndroidManifest.xml" mode="merge" target="/manifest/application">
