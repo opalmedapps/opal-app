@@ -13,7 +13,8 @@
         <ons-row style="padding:5px">
             <ons-col width="90px">
                 <div class="image-profile-wrapper">
-                    <img ng-src="{{asc.ProfilePicture}}"  class="image-profile">
+                    <img ng-if="!asc.ProfilePicture" src="./img/patient.png" class="image-profile">
+                    <img ng-if="asc.ProfilePicture"  ng-src="{{asc.ProfilePicture}}" class="image-profile">
                 </div>
             </ons-col>
             <ons-col>

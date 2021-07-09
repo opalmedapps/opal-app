@@ -33,9 +33,9 @@
                 <ons-list-item class="plan" modifier="tappable chevron" ng-click="status.goToStep(events[events.length-1],step)" ng-repeat="(step, events) in status.events" id="treatmentSessions{{$index}}">
                     <ons-row id="statusStep{{$index}}">
                         <ons-col width="50px" class="plan-left" align="center">
-                            <div class="plan-date" ng-show="status.eventIndex > status.stepMapping[step]"><img ng-src="./img/checkedbox.png" width="20px" height="20px"></div>
+                            <div class="plan-date" ng-show="status.eventIndex > status.stepMapping[step]"><img src="./img/checkedbox.png" width="20px" height="20px"></div>
                             <div class="plan-duration" ng-show="status.eventIndex <= status.stepMapping[step]">
-                                <img ng-src="./img/uncheckedbox.png" width="20px" height="20px">
+                                <img src="./img/uncheckedbox.png" width="20px" height="20px">
                             </div>
                         </ons-col>
                         <ons-col width="6px" class="plan-center" ng-style="{ 'background-color': getStyle(events[events.length-1]) }"></ons-col>

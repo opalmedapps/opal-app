@@ -1,19 +1,11 @@
 <ons-page ng-controller="ContactIndividualController as cont" ng-cloak>
     <ons-toolbar fixed-style>
         <div class="left"><ons-back-button>{{"BACK"|translate}}</ons-back-button></div>
-        <!--
-        <div class="center" ng-class="fontSizeTitle">{{cont.doctor.Role}}</div>
-        -->
     </ons-toolbar>
     <div class="profile-cardContact">
-
-        <!--<img ng-show="!contact.Image" src="img/logo.png" class="profile-image">-->
-        <div ng-show="cont.doctor.ProfileImage"><img ng-src="{{cont.doctor.ProfileImage}}" class="profile-image"></div>
+        <img ng-if="!cont.doctor.ProfileImage" src="./img/doctor.png" class="profile-image">
+        <img ng-if="cont.doctor.ProfileImage" ng-src="{{cont.doctor.ProfileImage}}" class="profile-image">
         <div class="profile-name" ng-class="fontSizeTitle">{{cont.doctor.FirstName}} {{cont.doctor.LastName}}</div>
-        <!--
-        <div class="profile-desc" ng-class="fontSizeDesc">{{cont.doctor.Role}}</div>
-        -->
-
     </div>
 
     <ons-list style="margin-top: 12px;">
@@ -84,6 +76,5 @@
                 </ons-row>
             </ons-list-item>
         </a>
-
     </ons-list>
 </ons-page>

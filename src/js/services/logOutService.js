@@ -31,6 +31,9 @@
             //
             // refCurrentUser.remove();
 
+            // Log the time when the patient signs out from the app
+            RequestToServer.sendRequest('Logout');
+
             // remove the saved authorized user info from session storage
             $window.sessionStorage.removeItem('UserAuthorizationInfo');
 
