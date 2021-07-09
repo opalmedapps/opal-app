@@ -11,35 +11,28 @@ var myApp = angular.module('MUHCApp');
  *@requires $filter
  *@description Allows the app's controllers or services interact with the file storage of the device. For more information look at {@link https://github.com/apache/cordova-plugin-file Cordova File Plugin}, reference for social sharing plugin {@link https://github.com/EddyVerbruggen/SocialSharing-PhoneGap-Plugin Cordova Sharing Plugin}
  **/
-myApp.service('FileManagerService', ['$q', '$cordovaFileTransfer', '$cordovaFileOpener2', '$filter', 'NewsBanner', '$injector', 'Params', function ($q, $cordovaFileTransfer, $cordovaFileOpener2, $filter, NewsBanner, $injector, Params) {
-    //Determing whether is a device or the browser
-    var app = document.URL.indexOf('http://') === -1 && document.URL.indexOf('https://') === -1;
+myApp.service('FileManagerService', ['$q', '$cordovaFileOpener2', '$filter', 'NewsBanner', '$injector', 'Params',
+    'Constants', 'Browser',
 
-    //Obtaining device paths for documents
+    function ($q, $cordovaFileOpener2, $filter, NewsBanner, $injector, Params, Constants, Browser) {
+
     /**
      *@ngdoc property
-     *@name  MUHCApp.service.#urlDeviceDocuments
+     *@name MUHCApp.service.#urlDeviceDocuments
      *@propertyOf MUHCApp.service:FileManagerService
-     *@description String representing the path for documents in the device, for Android, the path used is cordova.file.externalRootDirectory, which is outside
-     the sandbox for the app, and for IOS we use cordova.file.documentsDirectory which is inside the sandbox for the app. For more information refer to {@link https://github.com/apache/cordova-plugin-file Cordova File Plugin}.
+     *@description String representing the path for documents in the device.
+     *             For Android, the path used is cordova.file.externalRootDirectory, which is outside the sandbox for
+     *             the app, and for IOS we use cordova.file.documentsDirectory which is inside the sandbox for the app.
+     *             For more information refer to {@link https://github.com/apache/cordova-plugin-file Cordova File Plugin}.
      **/
-    var urlDeviceDocuments = '';
-    /**
-     *@ngdoc property
-     *@name  MUHCApp.service.#urlCDVPathDocuments
-     *@propertyOf MUHCApp.service:FileManagerService
-     *@description Same as above but the using th CDV protocol.
-     **/
-    var urlCDVPathDocuments = '';
-    if (app) {
+    let urlDeviceDocuments = '';
+
+    if (Constants.app) {
         if (ons.platform.isAndroid()) {
             urlDeviceDocuments = cordova.file.externalRootDirectory + '/Documents/';
-            urlCDVPathDocuments = Params.cdvDocumentFilePathAndroid;
         } else {
-            urlDeviceDocuments = cordova.file.documentsDirectory + '/Documents/';
-            urlCDVPathDocuments = Params.cdvDocumentFilePathIos;
+            urlDeviceDocuments = cordova.file.documentsDirectory;
         }
-
     }
 
     //Tell me whether a url is a pdf link
@@ -47,57 +40,138 @@ myApp.service('FileManagerService', ['$q', '$cordovaFileTransfer', '$cordovaFile
         var index = url.lastIndexOf('.');
         var substring = url.substring(index + 1, url.length);
 
-        return (substring == 'pdf') ? true : false;
+        return (substring == 'pdf');
     }
 
-    //Reads data from file an return base64 representation
-    function readDataAsUrl(file) {
-        var r = $q.defer();
-        var reader = new FileReader();
-        var img = '';
-        reader.onloadend = function (evt) {
-
-            r.resolve(evt.target.result);
-        };
-        reader.readAsDataURL(file);
-        return r.promise;
-    }
-
-    //Downloads a document into the device storage
     /**
-     *@ngdoc method
-     *@name downloadFileIntoStorage
-     *@methodOf MUHCApp.service:FileManagerService
-     *@param {String} url url to check
-     *@param {String} targetPath Path to download url into
-     *@description Downloads the url into the targetPath specified for the device, Checks if the document has
-     *             been downloaded if it has not, it proceeds
-     *@returns {Promise} If the document has been downloaded before, or if it downloads successfully,
-     *         it function resolves to the file entry representing that document,
-     *         otherwise rejects the promise with the appropiate error.
+     * @ngdoc method
+     * @name downloadFileIntoStorage
+     * @author Stacey Beard
+     * @date 2021-05-31
+     * @methodOf MUHCApp.service:FileManagerService
+     * @description Downloads the file from the url to the targetPath on the device.
+     *              Checks if the document has been downloaded already; if so, it is not downloaded again.
+     *              Code based on: https://cordova.apache.org/blog/2017/10/18/from-filetransfer-to-xhr2.html
+     *                        and: https://cordova.apache.org/docs/en/10.x/reference/cordova-plugin-file/
+     * @param {String} url The url of the file to download from the web.
+     * @param {String} targetPath The path where the downloaded file will be saved on the device
+     *                            (does not include its file name).
+     * @param {String} fileName The name to give the saved file.
+     * @returns {Promise} Resolves to true if the document has been downloaded before, or if it downloads successfully.
+     *                    Otherwise, rejects with an error.
      **/
+    function downloadFileIntoStorage(url, targetPath, fileName) {
+        let r = $q.defer();
+        console.log("downloadFileIntoStorage: url = "+url+", targetPath = "+targetPath+", fileName = "+fileName);
 
-    function downloadFileIntoStorage2 (url, targetPath) {
-        var r = $q.defer();
-        var fileTransfer = new FileTransfer();
-        window.resolveLocalFileSystemURL(targetPath, function (fileEntry) {
-
+        // Check whether the file already exists on the device
+        window.resolveLocalFileSystemURL(targetPath + fileName, () => {
+            // File has already been downloaded
+            console.log("File already exists, skipping download");
             r.resolve(true);
-        }, function () {
-            fileTransfer.download(url, targetPath,
-                function (entry) {
+        }, () => {
+            // File doesn't exist; download it
+            console.log("Starting file download process");
+            window.resolveLocalFileSystemURL(targetPath, function (dirEntry) {
+                console.log("File system open: " + dirEntry.name);
 
-                    r.resolve(entry);
-                },
-                function (err) {
+                dirEntry.getFile(fileName, { create: true, exclusive: true }, function (fileEntry) {
+                    console.log("Created fileEntry: " + fileEntry.name);
+                    console.log("FileEntry is file? " + fileEntry.isFile.toString());
 
+                    var oReq = new XMLHttpRequest();
+                    oReq.open("GET", url, true);
+                    // Define how you want the XHR data to come back
+                    oReq.responseType = "blob";
+
+                    oReq.onload = function (oEvent) {
+                        var blob = oReq.response; // Note: not oReq.responseText
+                        if (blob) {
+                            // Create a FileWriter object to write the blob to the local fileEntry
+                            fileEntry.createWriter(function(fileWriter) {
+                                fileWriter.onwriteend = function(e) {
+                                    console.log("Write completed.");
+                                    r.resolve(true);
+                                };
+
+                                fileWriter.onerror = function(e) {
+                                    console.log("Write failed: " + e.toString());
+                                    r.reject(e);
+                                };
+
+                                fileWriter.write(blob);
+                            }, function (err) {
+                                console.error("Error creating file writer: " + JSON.stringify(err));
+                                r.reject(err);
+                            });
+                        } else {
+                            let msg = "Didn't receive an XHR response";
+                            console.error(msg);
+                            r.reject({status: "error", message: msg});
+                        }
+                    };
+                    oReq.send(null);
+                }, function (err) {
+                    console.error("Error getting file: " + JSON.stringify(err));
                     r.reject(err);
                 });
+            }, function (err) {
+                console.error("Error opening directory at targetPath = " + targetPath +", " + JSON.stringify(err));
+                r.reject(err);
+            });
         });
         return r.promise;
     }
 
+    /**
+     * @description Determines whether a given file or website should be shared by attachment or by link.
+     *              For example, a pdf or jpg file should be shared by attachment, while a YouTube video or web page
+     *              should be shared by link.
+     *              Note: If the file name contains a French character, this function will return false (share by link).
+     *                    This is due to a bug in cordova-plugin-x-socialsharing where French file names cannot be
+     *                    shared by attachment.
+     * @author Stacey Beard
+     * @date 2021-06-30
+     * @param url The url of the file or website to share.
+     * @returns {boolean} True if the url points to a file with an accepted extension for sharing by attachment; false otherwise.
+     */
+    function toShareByAttachment(url) {
+        // List of extension types to share by attachment, from: https://www.computerhope.com/issues/ch001789.htm
+        let attachmentExtensions = ['aif', 'cda', 'mid', 'midi', 'mp3', 'mpa', 'ogg', 'wav', 'wma', 'wpl', // Audio
+            'ai', 'bmp', 'gif', 'ico', 'jpeg', 'jpg', 'png', 'ps', 'psd', 'raw', 'svg', 'tif', 'tiff', 'webp', // Image
+            '3g2', '3gp', 'avi', 'flv', 'h264', 'm4v', 'mkv', 'mov', 'mp4', 'mpe', 'mpeg', 'mpg', 'rm', 'swf', 'vob', 'wmv', // Video
+            'csv', 'doc', 'docx', 'key', 'odp', 'ods', 'odt', 'pdf', 'pps', 'ppt', 'pptx', 'rtf', 'tex', 'txt', 'wpd', 'xls', 'xlsm', 'xlsx', 'zip' // Other documents
+            ];
+
+        // Extract the last part of the url (this will be the file name, if the url points to a file)
+        let filename = url.split('/').pop();
+
+        // Check whether the file name has an extension (this will return the empty string if there is no extension)
+        // Formula: https://stackoverflow.com/questions/190852/how-can-i-get-file-extensions-with-javascript/12900504#12900504
+        let extension = filename.slice((Math.max(0, filename.lastIndexOf(".")) || Infinity) + 1);
+
+        // Check whether the file name contains a French character (would cause the plugin to fail if shared by attachment)
+        // This check can be removed if cordova-plugin-x-socialsharing is fixed to handle French characters in file names
+        let frenchChars = ['â', 'à', 'ä', 'ç', 'é', 'è', 'ê', 'ë', 'î', 'ì', 'ï', 'ô', 'ò', 'ù', 'û', 'ü', 'œ', 'ÿ'];
+        let hasFrenchChars = frenchChars.some(c => { return filename.toLowerCase().includes(c); });
+
+        // Return whether the extension is in the accepted list (case insensitive), and doesn't contain French characters
+        // In this case, the file should be shared by attachment
+        return !hasFrenchChars && attachmentExtensions.includes(extension.toLowerCase());
+    }
+
     return {
+        /**
+         * @ngdoc method
+         * @name downloadFileIntoStorage
+         * @author Stacey Beard
+         * @date 2021-05-31
+         * @methodOf MUHCApp.service:FileManagerService
+         **/
+        downloadFileIntoStorage: function (url, targetPath, fileName) {
+            return downloadFileIntoStorage(url, targetPath, fileName);
+        },
+
         //Obtains file type
         /**
          *@ngdoc method
@@ -111,6 +185,7 @@ myApp.service('FileManagerService', ['$q', '$cordovaFileTransfer', '$cordovaFile
             var index = url.lastIndexOf('.');
             return url.substring(index + 1, url.length);
         },
+
         //Public function to determine whether a link is a PDF file
         /**
          *@ngdoc method
@@ -124,38 +199,6 @@ myApp.service('FileManagerService', ['$q', '$cordovaFileTransfer', '$cordovaFile
             return isPDFDocument(url);
         },
 
-        //Downloads a document into the device storage
-        /**
-         *@ngdoc method
-         *@name downloadFileIntoStorage
-         *@methodOf MUHCApp.service:FileManagerService
-         *@param {String} url url to check
-         *@param {String} targetPath Path to download url into
-         *@description Downloads the url into the targetPath specified for the device, Checks if the document has been downloaded if it has not, it proceeds
-         *@returns {Promise} If the document has been downloaded before, or if it downloads successfully, it function resolves to the file entry representing that document, otherwise rejects the promise with the appropiate error.
-         **/
-        downloadFileIntoStorage: function (url, targetPath) {
-            var r = $q.defer();
-            var fileTransfer = new FileTransfer();
-            window.resolveLocalFileSystemURL(targetPath, function (fileEntry) {
-
-                r.resolve(true);
-            }, function () {
-                fileTransfer.download(url, targetPath,
-                    function (entry) {
-
-                        r.resolve(entry);
-                    },
-                    function (err) {
-
-                        r.reject(err);
-                    });
-            });
-            return r.promise;
-
-        },
-
-        //Shares a url using the social sharing options
         /**
          *@ngdoc method
          *@name shareDocument
@@ -164,271 +207,99 @@ myApp.service('FileManagerService', ['$q', '$cordovaFileTransfer', '$cordovaFile
          *@param {String} url url to check
          *@description Opens the native shared functionality and allows the user to share the url through different mediums, giving it the name specified in the parameters. Reference {@link https://github.com/EddyVerbruggen/SocialSharing-PhoneGap-Plugin Cordova Sharing Plugin}
          **/
-        shareDocument: function (name, url, fileType) {
-            //Check if its an app
-            
-            if (app) {
+        shareDocument: function (name, url) {
+            if (Constants.app) {
 
-                //Set the subject for the document
-                var options = {
+                // Set the plugin options
+                let options = {
                     subject: name,
-                    url: url
+                    message: name,
                 };
-                
-                //Defines on success function
-                var onSuccess = function (result) {
+                toShareByAttachment(url)    // Check how to share the document
+                    ? options.files = [url] // Share by attachment (the file itself is shared)
+                    : options.url = url;    // Share by link (a link to the file is shared)
 
-
+                let onSuccess = function (result) {
+                    console.log(`Successfully shared "${name}" via ${url}: ${JSON.stringify(result)}`);
                 };
-                //Defines on error function
-                var onError = function (msg) {
+
+                let onError = function (err) {
                     //Show alert banner with error
                     NewsBanner.showCustomBanner($filter('translate')("UNABLETOSHAREMATERIAL"), '#333333', '#F0F3F4',
                          13, 'top', null, 2000);
+                    console.error(`Failed to share "${name}" via ${url}: ${JSON.stringify(err)}`);
                 };
 
-                if (fileType === $filter('translate')("VIDEO")) {
-                    window.plugins.socialsharing.share(name, name, '', url);
-                } else {
-                    //Plugin usage
-                    window.plugins.socialsharing.shareWithOptions(options, onSuccess, onError);
-                }
-            } else {
+                window.plugins.socialsharing.shareWithOptions(options, onSuccess, onError);
+            }
+            else {
                 ons.notification.alert({message: $filter('translate')('AVAILABLEDEVICES')});
             }
         },
-        //Gets the base64 representation of a file in the cordova file storage
-        /**
-         *@ngdoc method
-         *@name getFileUrl
-         *@methodOf MUHCApp.service:FileManagerService
-         *@param {String} filePath File path to look for in storage
-         *@description Opens file from device storage and converts into base64 format, it returns the base64 representation via promises
-         *@return {Promise} If fulfilled document base64 representation returned correctly, otherwise, rejects promise with appropiate error.
-         **/
-        getFileUrl: function (filePath) {
-            var r = $q.defer();
-            //Find the file path in stroage
-            window.resolveLocalFileSystemURL(filePath, function (fileEntry) {
-                //Get file entry and turn it into a base64 string
-                fileEntry.file(function (file) {
-                    r.resolve(readDataAsUrl(file));
-                }, function (error) {
-                    //Error transforming file into base64
-                    r.reject(error);
 
-                });
-            }, function (error) {
-                //Document not found
-
-                r.reject(error.code);
-            });
-            return r.promise;
-        },
-        //Opens a pdf depending on the device or browser
         /**
          *@ngdoc method
          *@name openPDF
          *@methodOf MUHCApp.service:FileManagerService
-         *@param {String} url File url to open
+         *@param {String} url URL of the file to open from the web.
+         *@param {String} newDocName New name to give the file if it needs to be downloaded.
          *@description If its an android phone, it opens the pdf using a third party software.
          *             If its an iOS device or a browser, it simply opens it in a new browser window.
          *             In fact, this function should be named openFile() because it opens not only pdf, but many different file types with the following extensions:
          *             .doc, .docx, .xls, .xlsx, .rtf, .wav, .gif, .jpg, .jpeg, .png, .txt, .mpg, .mpeg, .mpe, .mp4, .avi, .ods, .odt, .ppt, .pptx, .apk
          *             It opens the file by passing as a parameter a URL of the location of the file (not .html, should be .pdf .doc etc...) OR a file path to the local storage
          *             URL example: https://www.opal.com/myDocument.pdf
-         *             FileOpener.canOpenFile() will check if there is a default viewer for the requested file type
-         *             FileOpener.openFile() will show the file using the default viewer "if" canOpenFile returned true
          **/
-        openPDF: function (url) {
+        openPDF: function (url, newDocName) {
+            if (Constants.app && ons.platform.isAndroid()) {
+                let path = urlDeviceDocuments;
+                let targetPath = path + newDocName;
 
-            var app = document.URL.indexOf('http://') === -1 && document.URL.indexOf('https://') === -1;
-            if (app) {
-                if (ons.platform.isAndroid()) {
+                downloadFileIntoStorage(url, path, newDocName).then(function () {
 
-                    var filename = url.substring(url.lastIndexOf('/')+1);
-                    var path = urlDeviceDocuments;
-                    var targetPath = path + filename;
+                    cordova.plugins.fileOpener2.open(targetPath, 'application/pdf', {
+                        error : function(e) {
+                            console.log('Error status in (fileOpener2): ' + e.status + ' - Error message: ' + e.message);
+                        },
+                        success : function () {
+                            // file opened successfully by Default PDF Viewer on Android.
+                            // Nothing else to do at this point
+                            console.log('File opened successfully with fileOpener2');
 
-                    downloadFileIntoStorage2(url, targetPath).then(function () {
-
-                        cordova.plugins.fileOpener2.open(
-                            targetPath,
-                            'application/pdf',
-                            {
-                                error : function(e) {
-                                    console.log('Error status in (fileOpener2): ' + e.status + ' - Error message: ' + e.message);
-                                },
-                                success : function () {
-                                    // file opened successfully by Default PDF Viewer on Android.
-                                    // Nothing else to do at this point
-                                    console.log('file opened successfully with fileOpener2');
-
-                                    var Documents = $injector.get('Documents');
-                                    // Now add the filename to an array to be deleted OnExit of the app (CleanUp.Clear())
-                                    Documents.addToDocumentsDownloaded(path, filename);    // add file info to the array
-                                }
-                            }
-                        );
-
-                    }).catch(function (error) {
-                        //Unable to download/save document on device
-                        console.log('Error downloading document from Server downloadFileIntoStorage2(): ' + error.status + ' - Error message: ' + error.message);
-
+                            var Documents = $injector.get('Documents');
+                            // Now add the filename to an array to be deleted OnExit of the app (CleanUp.Clear())
+                            Documents.addToDocumentsDownloaded(path, newDocName);    // add file info to the array
+                        }
                     });
-
-                } else {
-                    var ref = cordova.InAppBrowser.open(url, '_blank', 'EnableViewPortScale=yes');
-                }
-            } else {
-                window.open(url);
+                }).catch(function (error) {
+                    //Unable to download/save document on device
+                    console.log('Error downloading document from Server downloadFileIntoStorage: ' + error.status + ' - Error message: ' + error.message);
+                });
             }
-
+            else Browser.openInternal(url);
         },
 
-        // // This is using an OLD/Outdated Plugin: window.cordova.plugins.FileOpener
-        // openPDF: function (url) {
-        //
-        //     var app = document.URL.indexOf('http://') === -1 && document.URL.indexOf('https://') === -1;
-        //     if (app) {
-        //         if (ons.platform.isAndroid()) {
-        //
-        //
-        //             window.cordova.plugins.FileOpener.canOpenFile(url, function (data2) {
-        //                 // at this point it means data2.canBeOpen = true. A PDF Viewer "is" indeed available to show the document
-        //
-        //                 var onSuccess = function (data) {
-        //                     // file opened successfully by Default PDF Viewer on Android. Nothing else to do at this point
-        //                 };
-        //
-        //                 function onError(error) {
-        //                     // Unexpected Error occurred. For some reason, file could not be opened and viewed, although canOpenFile function returned (data2.canBeOpen = true)
-        //                     ons.notification.alert({message: $filter('translate')('UNABLETOOPEN')});
-        //                 }
-        //
-        //                 window.cordova.plugins.FileOpener.openFile(url, onSuccess, onError);
-        //
-        //
-        //             }, function (error) {   // at this point it means data2.canBeOpen = false. A PDF Viewer is NOT available to show the document
-        //                 ons.notification.alert({message: $filter('translate')('UNABLETOOPEN')});
-        //                 //ons.notification.alert({message: 'canOpen 3 Error status: ' + error.status + ' - Error message: ' + error.message + ' - url: ' + url});
-        //             });
-        //
-        //         } else {
-        //             var ref = cordova.InAppBrowser.open(url, '_blank', 'EnableViewPortScale=yes');
-        //         }
-        //     } else {
-        //         window.open(url);
-        //     }
-        //
-        // },
-
-        //Gets document file storage url
-        /**
-         *@ngdoc method
-         *@name getDocumentUrls
-         *@methodOf MUHCApp.service:FileManagerService
-         *@param {String} document Url to return
-         *@description Gets the path representations of the document inside the device storage
-         *@returns {Object} Object containing the two representations of file paths for the document in the device storage
-         **/
-        getDocumentUrls: function (document) {
-            var documentName = 'docMUHC' + document.DocumentSerNum + "." + document.DocumentType;
-            var urlCDV = urlCDVPathDocuments + documentName;
-            var urlPathFile = urlDeviceDocuments + documentName;
-            return {cdvUrl: urlCDV, urlPathFile: urlPathFile};
-        },
-        //Gets the absolute path for file storage
-        /**
-         *@ngdoc method
-         *@name getFilePathForDocument
-         *@methodOf MUHCApp.service:FileManagerService
-         *@param {String} document Url to return
-         *@description Gets the file path representation of the document inside the device storage
-         *@returns {String} Returns the device path representation of file in stroage
-         **/
-        getFilePathForDocument: function (document) {
-            var documentName = 'docMUHC' + document.DocumentSerNum + "." + document.DocumentType;
-            return urlDeviceDocuments + documentName;
-        },
         generatePath: function (document) {
-            var documentName = document.Title.replace(/ /g, "_") + document.ApprovedTimeStamp.toDateString().replace(/ /g, "-") + "." + document.DocumentType;
+            var documentName = document.Title.replace(/ /g, "_") + "_" + document.ApprovedTimeStamp.toDateString().replace(/ /g, "-") + "." + document.DocumentType;
             return urlDeviceDocuments + documentName;
         },
         generateDocumentName: function (document) {
-            var documentName = document.Title.replace(/ /g, "_") + document.ApprovedTimeStamp.toDateString().replace(/ /g, "-") + "." + document.DocumentType;
+            var documentName = document.Title.replace(/ /g, "_") + "_" + document.ApprovedTimeStamp.toDateString().replace(/ /g, "-") + "." + document.DocumentType;
             return documentName;
         },
         getPathToDocuments: function () {
             return urlDeviceDocuments;
         },
-        //Gets the CDVFile representation for the document
-        /**
-         *@ngdoc method
-         *@name getCDVFilePathForDocument
-         *@methodOf MUHCApp.service:FileManagerService
-         *@param {String} document Url to return
-         *@description Gets the CDV file path representation of the document inside the device storage
-         *@returns {String} Returns the CDV file representation of file in stroage
-         **/
-        getCDVFilePathForDocument: function (document) {
-            var documentName = 'docMUHC' + document.DocumentSerNum + "." + document.DocumentType;
-            return urlCDVPathDocuments + documentName;
-        },
-        //Gets an incomplete base64 string and adds the specific string to it
-        /**
-         *@ngdoc method
-         *@name setBase64Document
-         *@methodOf MUHCApp.service:FileManagerService
-         *@param {Object} document Document object
-         *@description Concatanates appropiate base64 prefix to content according to document type.
-         *@returns {Object} Returns document object with the Content set to a correct base64 url
-         **/
-        setBase64Document: function (document) {
-            if (document.DocumentType == 'pdf') {
-                document.Content = 'data:application/pdf;base64,' + document.Content;
-            } else {
-                document.Content = 'data:image/' + document.DocumentType + ';base64,' + document.Content;
-            }
-            return document;
-        },
-        //Determines whether a document has been saved the device
-        /**
-         *@ngdoc method
-         *@name findDocumentInDevice
-         *@methodOf MUHCApp.service:FileManagerService
-         *@param {String} type Type for document
-         *@param {String} documentSerNum DocumentSerNum
-         *@description If it finds the document in storage, returns file path representations otherwise returns the error,
-         *@returns {Promise} Promise resolves to document paths if document has been found, otherwise returns document not found error.
-         **/
-        findPatientDocumentInDevice: function (type, documentSerNum) {
-            var r = $q.defer();
-            var documentName = 'docMUHC' + documentSerNum + "." + type;
-            var urlCDV = urlCDVPathDocuments + documentName;
-            var urlPathFile = urlDeviceDocuments + documentName;
-            window.resolveLocalFileSystemURL(urlCDV, function (fileEntry) {
-                r.resolve({cdvUrl: urlCDV, urlPathFile: urlPathFile});
-            }, function (error) {
-                r.reject(error);
-            });
-            return r.promise;
-        },
-        //Opens the url for a document
+
         /**
          *@ngdoc method
          *@name openUrl
          *@methodOf MUHCApp.service:FileManagerService
          *@param {String} url Url to be opened
-         *@description Opens url in another browser window.
+         *@description Opens a url in the in-app browser, or in another browser window if not on a device.
          **/
         openUrl: function (url) {
-            var app = document.URL.indexOf('http://') === -1 && document.URL.indexOf('https://') === -1;
-            if (app) {
-                var ref = cordova.InAppBrowser.open(url, '_blank', 'EnableViewPortScale=yes');
-            } else {
-                window.open(url);
-            }
+            Browser.openInternal(url);
         },
 
         convertToUint8Array: function (base64) {
@@ -441,6 +312,5 @@ myApp.service('FileManagerService', ['$q', '$cordovaFileTransfer', '$cordovaFile
             }
             return array;
         }
-
     };
 }]);

@@ -23,23 +23,16 @@
         .module('MUHCApp')
         .controller('AboutController', AboutController);
 
-    AboutController.$inject = ['$window', 'UserPreferences', 'NavigatorParameters', 'Params', 'UserHospitalPreferences'];
+    AboutController.$inject = ['$window', 'UserPreferences', 'NavigatorParameters', 'Params', 'UserHospitalPreferences', 'Browser'];
 
     /* @ngInject */
-    function AboutController($window, UserPreferences, NavigatorParameters, Params, UserHospitalPreferences) {
+    function AboutController($window, UserPreferences, NavigatorParameters, Params, UserHospitalPreferences, Browser) {
         const vm = this;
 
         vm.openUrl = openUrl;
         vm.openTeam = openTeam;
-        vm.openAcknowledge = openAcknowledge;
         vm.openCedars = openCedars;
         vm.allowedModules = {};
-
-        // vm.openDonation = openDonation;
-        // vm.openAboutMUHC = openAboutMUHC;
-        // vm.openCedarsCancerCenter = openCedarsCancerCenter;
-        // vm.openCedarsCancerFoundation = openCedarsCancerFoundation;
-        // vm.openCedarsCanSupport = openCedarsCanSupport;
 
         let parameters;
         let navigatorName;
@@ -76,8 +69,6 @@
 
         function openUrl(openWhat, openInExternalBrowser = false) {
             let url = '';
-            let app = document.URL.indexOf('http://') === -1 && document.URL.indexOf('https://') === -1;
-
             switch (openWhat.toLowerCase()) {
                 case Params.aboutMuhcCase:
                     url = (vm.language === "EN") ? Params.aboutMuhcUrl.aboutMuhcUrlEn : Params.aboutMuhcUrl.aboutMuhcUrlFr;
@@ -100,16 +91,8 @@
                 default:
                     break;
             }
-
-            if (!app) {
-                window.open(url, '_blank');
-            } else if (openInExternalBrowser) {
-                cordova.InAppBrowser.open(url, '_system');   // _system: opens in External Browser (Safari, etc...) on the device
-            } else {
-                cordova.InAppBrowser.open(url, '_blank', 'location=yes');  // Opens inside the app
-            }
-
-         }
+            openInExternalBrowser ? Browser.openExternal(url) : Browser.openInternal(url);
+        }
 
         /**
          * navigatorName = 'initNavigator' or 'homeNavigator'
@@ -122,52 +105,8 @@
             window[navigatorName].pushPage('views/templates/content.html', {contentType: 'hig'});
         }
 
-        function openAcknowledge() {
-            window[navigatorName].pushPage('./views/templates/content.html', {contentType: 'acknowledgements'});
-        }
-
         function openCedars() {
             window[navigatorName].pushPage('views/home/about/cedars.html');
         }
-
-
-        // function openDonation() {
-        //     $window.open('https://www.cedars.ca/cedars/' + vm.language.toLowerCase() + '/donate/donate_online?designation=radiation-oncology-opal-fund', '_self');
-        // }
-        //
-        // function openAboutMUHC() {
-        //     if (vm.language === "EN") {
-        //         window.open('https://muhc.ca/homepage/page/about-muhc', '_self');
-        //     } else {
-        //         window.open('https://cusm.ca/homepage/page/propos-du-cusm', '_self');
-        //     }
-        // }
-        //
-        // function openCedarsCancerCenter() {
-        //     if (vm.language === "EN") {
-        //         window.open('https://muhc.ca/glen/cedars-cancer-centre', '_self');
-        //     } else {
-        //         window.open('https://cusm.ca/glen/page/centre-du-cancer-c%C3%A8dres', '_self');
-        //     }
-        // }
-        //
-        // function openCedarsCancerFoundation() {
-        //     if (vm.language === "EN") {
-        //         window.open('https://www.cedars.ca/cedars/en/home', '_self');
-        //     } else {
-        //         window.open('https://www.cedars.ca/cedars/fr/home', '_self');
-        //     }
-        // }
-        //
-        // function openCedarsCanSupport() {
-        //     if (vm.language === "EN") {
-        //         window.open('http://www.cansupport.ca/', '_self');
-        //     } else {
-        //         window.open('http://www.cansupport.ca/fr', '_self');
-        //     }
-        // }
-
-
     }
 })();
-

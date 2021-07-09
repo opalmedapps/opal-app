@@ -5,10 +5,10 @@
         .module('MUHCApp')
         .controller('MapController', MapController);
 
-    MapController.$inject = ['NavigatorParameters','UserPreferences'];
+    MapController.$inject = ['NavigatorParameters','UserPreferences','Browser'];
 
     /* @ngInject */
-    function MapController(NavigatorParameters,UserPreferences) {
+    function MapController(NavigatorParameters, UserPreferences, Browser) {
         var vm = this;
         var language;
 
@@ -34,13 +34,7 @@
         }
 
         function openMap(){
-            var app = document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'https://' ) === -1;
-            if(app)
-            {
-                var ref = cordova.InAppBrowser.open(vm.my_map.MapUrl, '_blank', 'EnableViewPortScale=yes');
-            } else {
-                window.open(vm.my_map.MapUrl);
-            }
+            Browser.openInternal(vm.my_map.MapUrl, true);
         }
     }
 })();

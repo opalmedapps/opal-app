@@ -27,7 +27,8 @@
         function activate() {
 
             // Check for document permission
-            Permissions.enablePermission('WRITE_EXTERNAL_STORAGE', 'Storage access disabled. Unable to write documents.');
+            Permissions.enablePermission('WRITE_EXTERNAL_STORAGE').catch(console.error);
+
             Logger.sendLog('Documents', 'all');
 
             var documents = Documents.getDocuments();

@@ -16,10 +16,12 @@
         .module('MUHCApp')
         .controller('IndividualDocumentController', IndividualDocumentController);
 
-    IndividualDocumentController.$inject = ['$rootScope', '$scope', 'NavigatorParameters', 'Documents', '$timeout', 'FileManagerService', 'Constants', '$q', 'UserPreferences'];
+    IndividualDocumentController.$inject = ['$rootScope', '$scope', 'NavigatorParameters', 'Documents', '$timeout',
+        'FileManagerService', 'Constants', '$q', 'UserPreferences', 'Browser', '$filter'];
 
     /* @ngInject */
-    function IndividualDocumentController($rootScope, $scope, NavigatorParameters, Documents, $timeout, FileManagerService, Constants, $q, UserPreferences) {
+    function IndividualDocumentController($rootScope, $scope, NavigatorParameters, Documents, $timeout,
+                                          FileManagerService, Constants, $q, UserPreferences, Browser, $filter) {
         var vm = this;
         var navigator = null;
         var parameters;
@@ -97,47 +99,10 @@
         }
 
         function openPDF() {
-            if (Constants.app) {
-                if (ons.platform.isAndroid()) {
-                    var targetPath = FileManagerService.generatePath(docParams);
-
-                    var path = FileManagerService.getPathToDocuments();
-                    var docName = FileManagerService.generateDocumentName(docParams);
-
-                    FileManagerService.downloadFileIntoStorage("data:application/pdf;base64," +
-                                                                docParams.Content, targetPath).then(function () {
-
-                        cordova.plugins.fileOpener2.open(
-                            targetPath,
-                            'application/pdf',
-                            {
-                                error : function(e) {
-                                    console.log('Error status in (fileOpener2): ' + e.status + ' - Error message: ' + e.message);
-                                },
-                                success : function () {
-                                    // file opened successfully by Default PDF Viewer on Android.
-                                    // Nothing else to do at this point
-                                    // console.log('file opened successfully with fileOpener2');
-
-                                    // Now add the filename to an array to be deleted OnExit of the app (CleanUp.Clear())
-                                    Documents.addToDocumentsDownloaded(path, docName);    // add file info to the array
-                                }
-                            }
-                        );
-
-                    }).catch(function (error) {
-                        //Unable to download/save document on device
-                        console.log('Error downloading document from Server downloadFileIntoStorage(): ' + error.status + ' - Error message: ' + error.message);
-
-                    });
-
-                } else {
-                    cordova.InAppBrowser.open("data:application/pdf;base64," + docParams.Content, '_blank', 'EnableViewPortScale=yes');
-                }
-            } else {
-                window.open("data:application/pdf;base64, " + docParams.Content, '_blank', 'location=no,enableViewportScale=true');
-            }
             vm.loading = false;
+            let url = "data:application/pdf;base64," + docParams.Content;
+            let newDocName = FileManagerService.generateDocumentName(docParams);
+            FileManagerService.openPDF(url, newDocName);
         }
 
         function setUpPDF(document) {
@@ -162,15 +127,9 @@
                         canvasElements[i].style.zoom = viewerScale;
 
                         canvasElements[i].onclick = function (event) {
-                            if (Constants.app) {
-                                if (ons.platform.isAndroid()) {
-                                    convertCanvasToImage(event.srcElement);
-                                } else {
-                                    cordova.InAppBrowser.open("data:application/pdf;base64," + document.Content, '_blank', 'EnableViewPortScale=yes');
-                                }
-                            } else {
-                                window.open("data:application/pdf;base64, " + document.Content, '_blank', 'location=no,enableViewportScale=true');
-                            }
+                            Constants.app && ons.platform.isAndroid()
+                                ? convertCanvasToImage(event.srcElement)
+                                : Browser.openInternal("data:application/pdf;base64," + document.Content, true);
                         }
                     }
 
@@ -190,8 +149,8 @@
             var image = new Image();
 
             image.onload = function () {
-                var ref = cordova.InAppBrowser.open(image.src, '_blank', 'location=no,enableViewportScale=true', 'clearcache=yes');
-                ref.addEventListener('loadstop', function () {
+                let browser = Browser.openInternal(image.src, true, "clearCache=yes");
+                if (browser) browser.addEventListener('loadstop', function () {
                     image = null;
                 });
             };
@@ -226,7 +185,6 @@
             };
         }
 
-
         //Share function
         function share() {
 
@@ -236,21 +194,18 @@
                 var path = FileManagerService.getPathToDocuments();
                 var docName = FileManagerService.generateDocumentName(docParams);
 
-                FileManagerService.downloadFileIntoStorage("data:application/pdf;base64," + docParams.Content, targetPath).then(function () {
-                    FileManagerService.shareDocument(docParams.Title.replace(/ /g, "") + docParams.ApprovedTimeStamp.toDateString().replace(/ /g, "-"), targetPath);
+                FileManagerService.downloadFileIntoStorage("data:application/pdf;base64," + docParams.Content, path, docName).then(function () {
+                    FileManagerService.shareDocument(docName, targetPath);
 
                     // Now add the filename to an array to be deleted OnExit of the app (CleanUp.Clear())
                     Documents.addToDocumentsDownloaded(path, docName);    // add file info to the array
-                    //////////////////////////////////////////////////////
-
 
                 }).catch(function (error) {
-                    //Unable to save document on server
-
+                    //Unable to download document on device
+                    console.log('Error downloading document onto device: ' + error.status + ' - Error message: ' + error.message);
                 });
-
             } else {
-                window.open("data:application/pdf;base64," + docParams.Content);
+                ons.notification.alert({message: $filter('translate')('AVAILABLEDEVICES')});
             }
         }
 

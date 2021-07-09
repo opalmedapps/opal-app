@@ -20,7 +20,6 @@ import "./controllers/educational/HTMLMaterialController.js";
 import "./controllers/educational/individualMaterialController.js";
 import "./controllers/educational/educationalMaterialController.js";
 import "./controllers/feedback/feedbackController.js";
-import "./controllers/bugreport/bugReportController.js";
 import "./controllers/home/homeController.js";
 import "./controllers/info-tab/infoTabController.js";
 import "./controllers/init/initLegalController.js";
