@@ -13,8 +13,8 @@ var myApp=angular.module('MUHCApp');
  *@description API service used to access the patient fields.
  **/
 myApp.service('Patient',['$q','$cordovaDevice','FileManagerService','LocalStorage',
-    'UserPreferences', 'UserAuthorizationInfo', 'Params',
-    function($q, $cordovaDevice,FileManagerService,LocalStorage,UserPreferences, UserAuthorizationInfo, Params){
+    'UserPreferences', 'UserAuthorizationInfo', 'Params', 'Constants',
+    function($q, $cordovaDevice,FileManagerService,LocalStorage,UserPreferences, UserAuthorizationInfo, Params, Constants) {
 
     /**
      *@ngdoc property
@@ -95,29 +95,6 @@ myApp.service('Patient',['$q','$cordovaDevice','FileManagerService','LocalStorag
      **/
     var UserSerNum='';
 
-    /**
-     *@ngdoc property
-     *@name  MUHCApp.service.#NameFileSystem
-     *@propertyOf MUHCApp.service:Patient
-     *@description Property containing name of profile image in device storage for the patient
-     **/
-    var NameFileSystem='';
-
-    /**
-     *@ngdoc property
-     *@name  MUHCApp.service.#PathFileSystem
-     *@propertyOf MUHCApp.service:Patient
-     *@description Property containing full path for profile picture in device stroage
-     **/
-    var PathFileSystem='';
-
-    /**
-     *@ngdoc property
-     *@name  MUHCApp.service.#CDVfilePath
-     *@propertyOf MUHCApp.service:Patient
-     *@description Property containing profile CDV file Path for profile pic in device storage
-     **/
-    var CDVfilePath='';
     return{
         /**
          *@ngdoc method
@@ -128,9 +105,9 @@ myApp.service('Patient',['$q','$cordovaDevice','FileManagerService','LocalStorag
          **/
         setUserFieldsOnline:function(patientFields){
             var r=$q.defer();
+
             patientFields=patientFields[0];
             UserPreferences.setEnableSMS(patientFields.EnableSMS);
-            //UserPreferences.setLanguage(patientFields.Language);
             var font = window.localStorage.getItem(UserAuthorizationInfo.getUsername() + 'fontSize');
             UserPreferences.setFontSize(font||'large');
             if(typeof patientFields=='undefined') return;
@@ -143,91 +120,12 @@ myApp.service('Patient',['$q','$cordovaDevice','FileManagerService','LocalStorag
             PatientId=patientFields.PatientId;
             TestUser=patientFields.TestUser;
             UserSerNum=patientFields.PatientSerNum;
-            ProfileImage=(patientFields.ProfileImage&&typeof patientFields.ProfileImage!=='undefined'&&patientFields.ProfileImage!=='')?'data:image/'+patientFields.DocumentType+';base64,'+patientFields.ProfileImage:'./img/patient.png';
-            var app = document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'https://' ) === -1;
-            if(app){
-                if(patientFields.ProfileImage&&typeof patientFields.ProfileImage!=='undefined'&&patientFields.ProfileImage!=='')
-                {
-                    patientFields.ProfileImage='data:image/'+patientFields.DocumentType+';base64,'+patientFields.ProfileImage;
-                    patientFields.NameFileSystem='patient'+patientFields.PatientSerNum+"."+patientFields.DocumentType;
-                    var platform=$cordovaDevice.getPlatform();
-                    var targetPath='';
-                    if(platform ==='Android') {
-                        targetPath = cordova.file.dataDirectory+'Patient/patient'+patientFields.PatientSerNum+"."+patientFields.DocumentType;
-                        patientFields.CDVfilePath = Params.cdvPatientFilePathAndroid + patientFields.NameFileSystem;
-                    } else if(platform ==='iOS'){
-                        targetPath = cordova.file.documentsDirectory+ 'Patient/patient'+patientFields.PatientSerNum+"."+patientFields.DocumentType;
-                        patientFields.CDVfilePath = Params.cdvPatientFilePathIos + patientFields.NameFileSystem;
+            ProfileImage = (patientFields.ProfileImage && typeof patientFields.ProfileImage !== 'undefined' && patientFields.ProfileImage !== '')
+                ? 'data:image/'+patientFields.DocumentType+';base64,'+patientFields.ProfileImage
+                : "";
+            patientFields.ProfileImage = ProfileImage;
 
-                    }
-                    var url = patientFields.ProfileImage;
-                    delete patientFields.ProfileImage;
-                    var trustHosts = true;
-                    var options = {};
-                    CDVfilePath=patientFields.CDVfilePath;
-                    NameFileSystem='patient'+patientFields.PatientSerNum+"."+patientFields.DocumentType;
-                    PathFileSystem=targetPath;
-                    patientFields.PathFileSystem=targetPath;
-                    LocalStorage.WriteToLocalStorage('Patient',[patientFields]);
-                    var promise=[FileManagerService.downloadFileIntoStorage(url, targetPath)];
-                    $q.all(promise).then(function()
-                    {
-                        r.resolve(patientFields);
-                    },function(error){
-
-                        r.resolve(patientFields);
-                    });
-                }else{
-                    delete patientFields.ProfileImage;
-                    LocalStorage.WriteToLocalStorage('Patient',[patientFields]);
-                    r.resolve(patientFields);
-                }
-            }else{
-                if(!patientFields.ProfileImage||typeof patientFields.ProfileImage =='undefined'||patientFields.ProfileImage ==='')
-                {
-                    ProfileImage='./img/patient.png';
-                }
-                delete patientFields.ProfileImage;
-                LocalStorage.WriteToLocalStorage('Patient',[patientFields]);
-                r.resolve(patientFields);
-            }
-            return r.promise;
-        },
-        /**
-         *@ngdoc method
-         *@name setUserFieldsOffline
-         *@methodOf MUHCApp.service:Patient
-         *@param {Object} patientFields Contains patient fields
-         *@description Sets the service offline
-         **/
-        setUserFieldsOffline:function(patientFields)
-        {
-            var r=$q.defer();
-            patientFields=patientFields[0];
-            UserPreferences.setEnableSMS(patientFields.EnableSMS);
-            //UserPreferences.setLanguage(patientFields.Language);
-            var font = window.localStorage.getItem(UserAuthorizationInfo.getUsername() + 'fontSize');
-
-            UserPreferences.setFontSize(font||'large');
-            FirstName=patientFields.FirstName;
-            LastName=patientFields.LastName;
-            accessLevel=patientFields.AccessLevel;
-            Alias=patientFields.Alias;
-            TelNum=patientFields.TelNum;
-            Email=patientFields.Email;
-            PatientId=patientFields.PatientId;
-            TestUser=patientFields.TestUser;
-            UserSerNum=patientFields.PatientSerNum;
-            ProfileImage= (patientFields.ProfileImage)?patientFields.ProfileImage:'./img/patient.png';
-            Alias=patientFields.Alias;
-            if(patientFields.PathFileSystem)
-            {
-                ProfileImage=patientFields.CDVfilePath;
-                r.resolve(true);
-            }else{
-                ProfileImage='./img/patient.png';
-                r.resolve(true);
-            }
+            r.resolve(patientFields);
             return r.promise;
         },
         /**
@@ -348,9 +246,9 @@ myApp.service('Patient',['$q','$cordovaDevice','FileManagerService','LocalStorag
         },
         /**
          *@ngdoc method
-         *@name getProfileImage
+         *@name getAccessLevel
          *@methodOf MUHCApp.service:Patient
-         *@returns {String} Returns patient image
+         *@returns {String} Returns patient access level
          **/
         getAccessLevel:function(){
             return accessLevel;
@@ -371,9 +269,6 @@ myApp.service('Patient',['$q','$cordovaDevice','FileManagerService','LocalStorag
             Email='';
             PatientId='';
             UserSerNum='';
-            NameFileSystem='';
-            PathFileSystem='';
-            CDVfilePath='';
         }
     };
 }]);
