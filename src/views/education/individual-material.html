@@ -3,18 +3,7 @@
         <div class="left"><ons-back-button ng-click="edu.clickBack()">{{"BACK"|translate}}</ons-back-button></div>
         <div class="center">{{edu.edumaterial.Type}}</div>
         <div class="right" ng-show="edu.edumaterial.ShareURL_EN && edu.edumaterial.ShareURL_EN!==''"><ons-toolbar-button ng-click="popoverSharing.show('#buttonShareMaterial');" id="buttonShareMaterial"><ons-icon icon="fa-share"></ons-icon></ons-toolbar-button></div>
-
     </ons-toolbar>
-
-    <!--<style>-->
-    <!--#scroll_content {-->
-    <!--height: 100%;-->
-    <!--width: auto;-->
-    <!--overflow: auto;-->
-    <!--border-style: solid;-->
-    <!--}-->
-
-    <!--</style>-->
 
     <div id="{{edu.recursive_step}}" ng-init="edu.scrollDown()" style="height: 100%; width: auto; overflow: auto;">
 
@@ -135,14 +124,10 @@
 
             <!-- Contents -->
             <ons-list-item class="item">
-                <div class="container" style="background-color:white;overflow-y:scroll" ng-style="{height:edu.heightSection}"   ng-show="edu.edumaterial.Content">
-                    <div ng-bind-html="edu.edumaterial.Content" ng-class="fontSizeDesc"></div>
+                <div class="container" style="background-color:white; overflow-y:scroll" ng-style="{height:edu.heightSection}" ng-show="edu.edumaterial.Content">
+                    <div ng-bind-html="edu.edumaterial.Content | trustHTML" ng-class="fontSizeDesc"></div>
                 </div>
             </ons-list-item>
-
         </ons-list>
-
     </div>
-
 </ons-page>
-
