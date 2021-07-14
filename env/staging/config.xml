@@ -38,6 +38,14 @@
     <preference name="FadeSplashScreen" value="true"/>
     <preference name="FadeSplashScreenDuration" value="500"/>
     <preference name="ErrorUrl" value="www/views/error/error-page.html"/>
+
+    <!-- Preferences used by cordova-plugin-ionic-keyboard -->
+    <preference name="KeyboardResize" value="false"/>
+    <preference name="KeyboardResizeMode" value="body"/>
+    <preference name="KeyboardStyle" value="light"/>
+    <preference name="HideKeyboardFormAccessoryBar" value="false"/>
+    <!-- End of preferences used by cordova-plugin-ionic-keyboard -->
+
     <icon src="./res/OpalHealth_App_Apple_Icon_2.png"/>
     <platform name="android">
         <edit-config file="app/src/main/AndroidManifest.xml" mode="merge" target="/manifest/application">
