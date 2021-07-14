@@ -104,6 +104,7 @@
     <plugin name="cordova-plugin-geolocation" spec="^4.0.2"/>
     <plugin name="cordova-plugin-globalization" spec="^1.11.0"/>
     <plugin name="cordova-plugin-inappbrowser" spec="^5.0.0"/>
+    <plugin name="cordova-plugin-ionic-keyboard" spec="^2.2.0"/>
     <plugin name="cordova-plugin-ios-detect-screenshot" spec="^1.0.0"/>
     <plugin name="cordova-plugin-network-information" spec="^2.0.2"/>
     <plugin name="cordova-plugin-prevent-screenshot" spec="^1.0.3"/>

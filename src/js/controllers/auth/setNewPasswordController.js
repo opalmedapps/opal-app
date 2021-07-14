@@ -17,11 +17,13 @@
         'EncryptionService',
         'ResetPassword',
         '$timeout',
-        'Params'
+        'Params',
+        'Constants'
     ];
 
     /* @ngInject */
-    function SetNewPasswordController(RequestToServer, UserAuthorizationInfo, EncryptionService, ResetPassword, $timeout, Params) {
+    function SetNewPasswordController(RequestToServer, UserAuthorizationInfo, EncryptionService, ResetPassword,
+                                      $timeout, Params, Constants) {
 
         var vm = this;
         var parameters;
@@ -79,6 +81,8 @@
 
         function submitNewPassword() {
             var invalid = !newPasswordIsValid();
+            if (Constants.app) Keyboard.hide();
+
             if(!vm.newValue || invalid) {
                 $timeout(function() {
                     vm.invalidPassword = invalid;

@@ -23,10 +23,10 @@
         .module('MUHCApp')
         .controller('ForgotPasswordController', ForgotPasswordController);
 
-    ForgotPasswordController.$inject = ['$timeout', '$firebaseAuth', 'Params'];
+    ForgotPasswordController.$inject = ['$timeout', '$firebaseAuth', 'Params', 'Constants'];
 
     /* @ngInject */
-    function ForgotPasswordController($timeout, $firebaseAuth, Params) {
+    function ForgotPasswordController($timeout, $firebaseAuth, Params, Constants) {
         var vm = this;
 
         /**
@@ -82,6 +82,7 @@
          */
         function submitPasswordReset() {
             var userAuth = $firebaseAuth();
+            if (Constants.app) Keyboard.hide();
 
             userAuth.$sendPasswordResetEmail(vm.email).then(function () {
 

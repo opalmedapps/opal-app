@@ -17,12 +17,14 @@ import {SecurityAnswer} from "../../models/settings/SecurityAnswer";
         'FirebaseService',
         'LogOutService',
         'RequestToServer',
-        'EncryptionService'
+        'EncryptionService',
+        'Constants'
     ];
 
     /* @ngInject */
     function UpdateSecurityQuestionController(NavigatorParameters, $timeout, $filter, UserPreferences, Params,
-                                              FirebaseService, LogOutService, RequestToServer, EncryptionService) {
+                                              FirebaseService, LogOutService, RequestToServer, EncryptionService,
+                                              Constants) {
 
         let vm = this;
 
@@ -199,6 +201,7 @@ import {SecurityAnswer} from "../../models/settings/SecurityAnswer";
          */
         function submit() {
             loadingSubmit.show();
+            if (Constants.app) Keyboard.hide();
 
             // verify password first
             const user = FirebaseService.getAuthenticationCredentials();

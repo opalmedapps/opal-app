@@ -8,7 +8,7 @@
         <p ng-show="csc.newUpdate" ng-class="csc.alertClass" >{{csc.updateMessage|translate}}</p>
     </div>
 
-    <div class="container" ng-show="csc.personal">
+    <form class="container" ng-show="csc.personal" novalidate>
 
         <div ng-show="csc.value=='PASSWORD'||csc.value=='EMAIL'">
             <div>
@@ -41,11 +41,13 @@
                 <input phone-input type="{{csc.type1}}" ng-class="fontSizeDesc" class="style-4" placeholder="{{csc.valueLabel|translate}}" value="{{csc.valueLabel|translate}}" ng-model="csc.newValue" ng-change="csc.evaluate()">
             </div>
         </div>
-
-        <div class="container" style="margin-top:10px">
-            <button class="button button--large" ng-disabled="csc.disableButton" ng-click="csc.updateValue(csc.value)" style="margin: 0 auto;">{{"UPDATEPASSWORDBUTTON"|translate}}</button><br>
-        </div>
-    </div>
+        <br>
+        <button class="shadow-2 button button--large mediumGreenButton" ng-disabled="csc.disableButton"
+                ng-click="csc.updateValue(csc.value)" style="margin: 0 auto;">
+            {{"UPDATEPASSWORDBUTTON"|translate}}
+        </button>
+        <br>
+    </form>
 
     <div ng-hide="csc.personal">
         <ul class="list">

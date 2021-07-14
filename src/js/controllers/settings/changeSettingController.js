@@ -13,11 +13,11 @@
         .controller('ChangeSettingController', ChangeSettingController);
 
     ChangeSettingController.$inject = ['$filter', 'FirebaseService', 'UserPreferences', 'Patient', 'RequestToServer',
-        '$timeout', 'UserAuthorizationInfo', 'NavigatorParameters', '$window', 'Params'];
+        '$timeout', 'UserAuthorizationInfo', 'NavigatorParameters', '$window', 'Params', 'Constants'];
 
     /* @ngInject */
     function ChangeSettingController($filter, FirebaseService, UserPreferences, Patient, RequestToServer, $timeout,
-                                     UserAuthorizationInfo, NavigatorParameters, $window, Params) {
+                                     UserAuthorizationInfo, NavigatorParameters, $window, Params, Constants) {
 
         var vm = this;
         var page;
@@ -124,6 +124,8 @@
 
         //Function to update new value
         function updateValue (val) {
+            if (Constants.app) Keyboard.hide();
+            
             var objectToSend = {};
             objectToSend.NewValue = vm.newValue;
 

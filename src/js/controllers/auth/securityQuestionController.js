@@ -12,7 +12,7 @@
  *  @ngdoc controller
  *  @name MUHCApp.controllers: SecurityQuestionController
  *  @requires '$scope', '$timeout', 'ResetPassword', 'RequestToServer', 'EncryptionService', 'UUID', 'UserAuthorizationInfo',
- *  '$state', 'Constants', 'DeviceIdentifiers', 'NavigatorParameters'
+ *  '$state', 'Constants', 'DeviceIdentifiers', 'NavigatorParameters', 'Constants'
  *  @description
  *
  *  Controller that submits the user's security question to be validated by our servers. This leads to the generation of the user's encryption key.
@@ -26,12 +26,12 @@
 
     SecurityQuestionController.$inject = ['$window', '$timeout', 'ResetPassword', 'RequestToServer', 'EncryptionService',
         'UUID', 'UserAuthorizationInfo', '$state', 'DeviceIdentifiers', 'NavigatorParameters', '$scope', 'Params',
-        'UserHospitalPreferences'];
+        'UserHospitalPreferences', 'Constants'];
 
     /* @ngInject */
     function SecurityQuestionController($window, $timeout, ResetPassword, RequestToServer, EncryptionService, UUID,
                                         UserAuthorizationInfo, $state, DeviceIdentifiers, NavigatorParameters, $scope,
-                                        Params, UserHospitalPreferences) {
+                                        Params, UserHospitalPreferences, Constants) {
 
         var vm = this;
         var deviceID;
@@ -338,6 +338,7 @@
          */
         function submitAnswer (answer) {
             clearErrors();
+            if (Constants.app) Keyboard.hide();
 
             if (!answer || (!vm.ssn && passwordReset)) {
                 handleError({code: "no-answer"});

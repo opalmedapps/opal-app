@@ -13,13 +13,8 @@
     <network-banner></network-banner>
 
     <!-- SEARCH BAR -->
-    <div class="navigation-bar" style="position:sticky; top:3rem">
-        <div class="navigation-bar__center" style="display:block">
-            <input ng-hide="edu.noMaterials" ng-model="edu.searchString" ng-change="edu.filterMaterial()"
-                   type="search" class="search-input" style="width: 96%; margin: 6px auto 6px auto;"
-                   placeholder="{{'SEARCH_EDU'|translate}}" ng-class="fontSizeDesc">
-        </div>
-    </div>
+    <search-bar search-text="edu.searchString" placeholder="{{'SEARCH'|translate}}" style-class="fontSizeDesc">
+    </search-bar>
 
     <!-- NO MATERIAL TEXT -->
     <div style="color:grey;margin-top:25vh" ng-show="edu.noMaterials" align="center" ng-class="fontSizeTitle" style="margin-left: 10px; margin-right: 10px">
@@ -27,8 +22,8 @@
     </div>
 
     <!-- LIST OF EDUCATIONAL MATERIALS -->
-    <ons-scroller-height offset-height="78">
-        <ons-list ng-repeat="edumaterial in edu.filteredEduMaterials | orderBy: '-DateAdded'" ng-click="edu.goToEducationalMaterial(edumaterial)">
+    <ons-scroller-height offset-height="78" ng-hide="edu.noMaterials">
+        <ons-list ng-repeat="edumaterial in edu.edumaterials | filter: edu.searchString | orderBy: '-DateAdded'" ng-click="edu.goToEducationalMaterial(edumaterial)">
             <ons-list-header class="person-list-header" ng-class="fontSizeTitle" ng-show="edu.showHeader($index)">{{edumaterial.DateAdded|date:'fullDate'}}</ons-list-header>
             <ons-list-item modifier="chevron" class="item">
                 <ons-row align="center">
@@ -55,5 +50,3 @@
         </ons-list>
     </ons-scroller-height>
 </ons-page>
-
-

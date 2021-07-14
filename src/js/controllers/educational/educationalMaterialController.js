@@ -39,9 +39,6 @@
         vm.goToEducationalMaterial = goToEducationalMaterial;
         vm.educationDeviceBackButton = educationDeviceBackButton;
 
-        // Function used to filter the materials shown based on the search string
-        vm.filterMaterial = filterMaterial;
-
         // Function to show data and time header
         vm.showHeader = showHeader;
 
@@ -60,8 +57,6 @@
             vm.noMaterials = false;
             // Full list of educational materials in the right language.
             vm.edumaterials = EducationalMaterial.setLanguage(EducationalMaterial.getEducationalMaterial());
-            // Educational materials filtered based on the search string.
-            vm.filteredEduMaterials = vm.edumaterials;
         }
 
         function educationDeviceBackButton(){
@@ -125,45 +120,11 @@
             educationNavigator.pushPage('./views/education/individual-material.html');
         }
 
-        // Function used to filter the materials shown based on the search string.
-        // Author: Tongyou (Eason) Yang
-        function filterMaterial() {
-
-            var searchString_parts = vm.searchString.toLowerCase().split(" ");//split into different parts
-
-            var filtered = [];//generate new show list for educational material
-            vm.edumaterials.forEach(function(edumaterial){
-
-                var name_no_space = edumaterial.Name.replace(/\s/g, '').toLowerCase();
-                var show = true;
-                searchString_parts.forEach(function(part){
-                    if(!name_no_space.includes(part)){
-                        show = false;
-                    }
-                });
-
-                if(show){
-                    filtered.push(edumaterial);
-                }
-
-            });
-
-            vm.filteredEduMaterials = filtered;//assign to new show list
-        }
-
-
         function showHeader(index) {
-            if (index === vm.filteredEduMaterials.length - 1) return true;
-            var current = (new Date(vm.filteredEduMaterials[index].DateAdded)).setHours(0, 0, 0, 0);
-            var previous = (new Date(vm.filteredEduMaterials[index + 1].DateAdded)).setHours(0, 0, 0, 0);
+            if (index === vm.edumaterials.length - 1) return true;
+            var current = (new Date(vm.edumaterials[index].DateAdded)).setHours(0, 0, 0, 0);
+            var previous = (new Date(vm.edumaterials[index + 1].DateAdded)).setHours(0, 0, 0, 0);
             return current !== previous;
         }
     }
 })();
-
-
-
-
-
-
-

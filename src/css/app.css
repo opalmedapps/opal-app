@@ -89,11 +89,19 @@ body {
     position: relative;
 }
 
-.initScreenGreenButton {
+.largeGreenButton {
     background-color: #4CAF50;
     font-size: xx-large;
     font-weight: bolder;
     height: 100%;
+}
+
+.mediumGreenButton {
+    background-color: #4CAF50;
+    font-weight: bolder;
+    height: 100%;
+    margin: auto;
+    max-width: 400px;
 }
 
 .initScreenButtonText {

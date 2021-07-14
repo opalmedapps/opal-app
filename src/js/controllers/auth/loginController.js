@@ -360,6 +360,7 @@
          * Validates a user's credentials using FireBase's API and then takes the user to the next steps
          */
         function submit() {
+            if (Constants.app) Keyboard.hide();
             clearErrors();
 
             if (!vm.email || vm.email === '') {
