@@ -8,7 +8,7 @@ Short summary of the changes in this PR.
 * Add bullet points as necessary.
 
 ### Dependencies
-<!-- Link to dependant pull requests. Specify whether the PRs are just related, or require each other to run. Write N/A if there are none. -->
+<!-- Link to dependent pull requests. Specify whether the PRs are just related, or require each other to run. Write N/A if there are none. -->
 - **Listener**: 
 
 ### Jira
