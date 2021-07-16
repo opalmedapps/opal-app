@@ -42,8 +42,8 @@
                 },
                 donationCase: 'donation',
                 donationUrl: {
-                    donationUrlEn: 'https://www.cedars.ca/en/how-to-help/donations',
-                    donationUrlFr: 'https://www.cedars.ca/aidez-nous/donations'
+                    donationUrlEn: 'https://www.opalmedapps.com/contribute',
+                    donationUrlFr: 'https://www.opalmedapps.com/contribute/fr'
                 },
                 opalWebsiteCase: 'opalwebsite',
                 opalWebsiteUrl: {
@@ -114,9 +114,13 @@
                     loadingMessageFr: 'Chargement en cours...',
                     loadingMessageEn: 'Loading...'
                 },
-                noDataAvailable: {
-                    noDataAvailableEn:"No plot available",
-                    noDataAvailableFr: "Aucun graphique disponible",
+                noPlotGeneric: {
+                    noPlotGenericEn: "No plot available",
+                    noPlotGenericFr: "Aucun graphique disponible",
+                },
+                noPlotNonNumeric: {
+                    noPlotNonNumericEn: "These results can't be charted because at least one of them isn't a number",
+                    noPlotNonNumericFr: "Ces résultats ne peuvent pas être représentés car au moins l'un d'entre eux n'est pas un nombre",
                 },
                 printChart: {
                     printChartFr: 'Imprimer le graphique',
@@ -146,7 +150,8 @@
                 oncology: {
                     oncologyParkingTitleEn: 'Oncology Parking',
                     oncologyParkingTitleFr: 'Stationnement Radiothérapie',
-                    oncologyParkingUrl: 'https://www.depdocs.com/opal/parking/oncology_parking.php'
+                    oncologyParkingUrlEn: 'https://www.depdocs.com/opal/parking/oncology_parking.php',
+                    oncologyParkingUrlFr: 'https://www.depdocs.com/opal/parking/radiotherapie_stationnement.php'
                 },
                 gettingHospitalUrl: {
                     gettingHospitalUrlEn: 'https://muhc.ca/glen',
@@ -196,7 +201,7 @@
                 findDoctorCase: 'finddoctor',
                 findDoctorUrl: {
                     findDoctorUrlEn: 'https://www.quebec.ca/en/health/finding-a-resource/registering-with-a-family-doctor/',
-                    findDoctorUrlFr: 'https://www.quebec.ca/sante/trouver-une-ressource/inscription-aupres-d-un-medecin-de-famille/'
+                    findDoctorUrlFr: 'https://www.quebec.ca/sante/trouver-une-ressource/inscription-aupres-dun-medecin-de-famille'
                 },
                 medicalSchedulerCase: 'medicalscheduler',
                 medicalSchedulerUrl: {
@@ -238,14 +243,6 @@
                         color: '#FF7043'
                     },
                 },
-
-                /** Documents, doctors and patient service constants **/
-                cdvDoctorsFilePathAndroid: 'cdvfile://localhost/files/Doctors/',
-                cdvDoctorsFilePathIos: 'cdvfile://localhost/persistent/Doctors/',
-                cdvDocumentFilePathAndroid: 'cdvfile://localhost/sdcard/Documents/',
-                cdvDocumentFilePathIos: 'cdvfile://localhost/persistent/Documents/',
-                cdvPatientFilePathAndroid: 'cdvfile://localhost/files/Patient/',
-                cdvPatientFilePathIos: 'cdvfile://localhost/persistent/Patient/',
 
                 /** newsBanner Service constants **/
                 newsAlertTypes: {
@@ -304,7 +301,7 @@
                     "FFD": 0,
                     "MAS": 0,
                     "EDU": 0,
-                    "SUP": 0,
+                    "SUP": 1,
                     "CED": 0,
                     "HOS": 0,
                 },

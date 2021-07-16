@@ -59,17 +59,10 @@ class PatientTestResultsByDatetimeController {
 	}
 
 	/**
-	 * Returns the class for a given test based on its criticality (within normal range, outside normal range,
-	 * critically outside normal range). The resulting class will be used to change the colour of test results
-	 * outside the normal range.
-	 * @param {{AbnormalFlag:string}} test Test for which to get the class.
-	 * @returns {string} Name of the class to use with this test.
+	 * Returns the class for a given test based on its criticality (see forwarded function for details)
 	 */
 	getTestClass(test) {
-		if (!test.abnormalFlag) return "";
-		const abnormalFlag = test.abnormalFlag.toLowerCase();
-		return (abnormalFlag === "h" || abnormalFlag === "l") ? "lab-results-test-in5" :
-			(abnormalFlag === "c") ? "lab-results-test-out5" : "";
+		return this.#patientTestResults.getTestClass(test);
 	}
 
 	/**
@@ -78,10 +71,9 @@ class PatientTestResultsByDatetimeController {
 	 * @param {string} groupName Group name string
 	 * @returns {string} Group name display string
 	 */
-	getDisplayedGroupName(groupName){
-		groupName = (!groupName || groupName === "")? this.#$filter("translate")("OTHER").toLowerCase():
-			groupName.toLowerCase();
-		return this.#$filter('capitalize')(groupName);
+	getDisplayedGroupName(groupName) {
+		if (!groupName || groupName === "") return this.#$filter("translate")("OTHER");
+		else return groupName;
 	}
 
 	/**

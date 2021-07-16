@@ -1,11 +1,14 @@
 <ons-page ng-controller="PatientTestResultsByTypeController as testTypeCtrl">
-    <ons-toolbar>
+    <ons-toolbar fixed-style>
         <div class="left">
             <ons-back-button>{{"BACK"|translate}}</ons-back-button>
         </div>
         <div class="center"
              ng-class="fontSizeTitle">
             <p class="overflow-text-ellipsis">{{testTypeCtrl.getTestName(testTypeCtrl.test)}}</p>
+        </div>
+        <div class="right">
+            <labs-info-button></labs-info-button>
         </div>
     </ons-toolbar>
     <loading-spinning-circle ng-show="testTypeCtrl.loading"
@@ -30,42 +33,49 @@
         </div>
         <div ng-show="!testTypeCtrl.showChart">
             <div style="position:sticky; top:0; z-index:9999;">
-                <div class="navigation-bar" style="position:sticky; top:0">
-                    <div class="navigation-bar__center" style="display:block">
-                        <ons-list>
-                            <ons-list-item class="list-item-container" style="line-height: 1.2;padding:5px">
-                                <ons-row ng-class="fontSizeDesc" style="font-weight:bold" vertical-align="center">
-                                    <!-- HEADER - LEFT (DATE) -->
-                                    <ons-col class="labtest-col" vertical-align="center" width="60%">
-                                        <div align="left" style="margin-left:4px;text-align: center">
-                                            {{"COLLECTION_DATE"|translate}}
-                                        </div>
-                                    </ons-col>
-                                    <!-- HEADER - RIGHT (VALUE (UNIT)) -->
-                                    <ons-col class="labtest-col" vertical-align="center">
-                                        <div align="center" style="text-align: center; ">
-                                            {{"RESULT"|translate}}
-                                            <br>
-                                            <span class="item-desc">({{testTypeCtrl.test.unitDescription}})</span>
-                                        </div>
-                                    </ons-col>
-                                </ons-row>
-                            </ons-list-item>
-                        </ons-list>
-                    </div>
-                </div>
+
+                <!-- DISCLAIMER -->
+                <labs-disclaimer></labs-disclaimer>
+
+                <!-- HEADER WITH COLUMN TITLES -->
+                <ons-list>
+                    <ons-list-item class="list-item-container">
+                        <ons-row ng-class="fontSizeDesc" style="font-weight:bold" vertical-align="center">
+
+                            <!-- HEADER - LEFT (DATE) -->
+                            <ons-col width="60%" class="labtest-col hyphens" vertical-align="center">
+                                <div align="center" style="margin-left:4px">
+                                    {{"COLLECTION_DATE"|translate}}
+                                </div>
+                            </ons-col>
+
+                            <!-- HEADER - RIGHT (VALUE (UNIT)) -->
+                            <ons-col width="38%" class="labtest-col hyphens" vertical-align="center">
+                                <div align="center">
+                                    {{"RESULT"|translate}}
+                                    <br>
+                                    <span class="item-desc break-words">{{testTypeCtrl.test.unitWithBrackets}}</span>
+                                </div>
+                            </ons-col>
+                        </ons-row>
+                    </ons-list-item>
+                </ons-list>
             </div>
-            <ons-scroller style="height: 355px;" >
+            <ons-scroller style="height: 320px;">
                 <ons-list style="margin-top: 20px">
                     <ons-list-item ng-repeat="testResult in testTypeCtrl.test.results|orderBy:'-'" style="padding-top:10px;">
-                        <ons-row align="center" ng-class="fontSizeDesc" style="line-height: 1.5;">
-                            <ons-col align="center" class="labtest-col" vertical-align="center" width="60%">
-                                <div style="text-align: center;margin-left:4px;">
+                        <ons-row align="center" ng-class="[testTypeCtrl.getTestClass(testResult), fontSizeDesc]"
+                                 style="line-height: 1.5;">
+                            <ons-col width="60%" align="center" class="labtest-col" vertical-align="center">
+                                <div style="text-align: center; margin-left:4px;">
                                     {{testResult.collectedDateTime|date:'medium'}}
                                 </div>
                             </ons-col>
-                            <ons-col align="center" class="labtest-col" vertical-align="center">
-                                <div style="text-align: center">{{testResult.testValueString}}</div>
+                            <ons-col width="38%" align="center" class="labtest-col" vertical-align="center">
+                                <div style="text-align: center">
+                                    {{testResult.testValueString}}
+                                    <span ng-if="testResult.abnormalFlag"> ({{testResult.abnormalFlag}})</span>
+                                </div>
                             </ons-col>
                         </ons-row>
                     </ons-list-item>
@@ -73,33 +83,92 @@
             </ons-scroller>
         </div>
         <div ng-show="testTypeCtrl.showChart">
+
+            <!-- DISCLAIMER -->
+            <labs-disclaimer></labs-disclaimer>
+
             <hc-chart options="testTypeCtrl.chartOptions">
                 [Lab results chart]
             </hc-chart>
         </div>
         <ons-list>
+            <!-- SECTION HEADER -->
             <ons-list-header ng-class="fontSizeDesc">{{"LAB_TEST_INFO"|translate}}</ons-list-header>
-            <ons-list-item class="list-item-container" modifier="tappable"
-                           ng-class="fontSizeDesc" ng-click="testTypeCtrl.showAboutTestAlert()" modifier="tappable">
-                        {{"LAB_LEARN_ABOUT" | translate}}
-                        <br>
-                        <p>{{testTypeCtrl.getTestName(testTypeCtrl.test)}}</p>
-                        <span style="right:10px" class="list-item-note">
-                            <ons-icon icon="ion-android-open" style="color:#000000; margin-top: 50%"
-                                      size="25px"></ons-icon>
-                        </span>
+
+            <!-- LEARN ABOUT (LINK) -->
+            <ons-list-item class="about-link list-item-container-narrow" modifier="tappable"
+                           ng-click="testTypeCtrl.showAboutTestAlert()">
+                <ons-row ng-class="fontSizeDesc" vertical-align="center">
+
+                    <!-- LEARN ABOUT - LEFT (LABEL) -->
+                    <ons-col width="85%" class="labtest-col" align="left" vertical-align="center">
+                        <p class="hyphens" style="margin-left: 4px">
+                            <ons-icon icon="fas fa-info-circle"></ons-icon>
+                            {{"LAB_LEARN_ABOUT"|translate}} {{testTypeCtrl.getTestName(testTypeCtrl.test)}}
+                        </p>
+                    </ons-col>
+
+                    <!-- LEARN ABOUT - RIGHT (LINK ICON) -->
+                    <ons-col width="13%" class="labtest-col" align="right" vertical-align="center">
+                        <div style="margin-left: 4px">
+                            <ons-icon icon="ion-android-open" size="25px"></ons-icon>
+                        </div>
+                    </ons-col>
+                </ons-row>
             </ons-list-item>
-            <ons-list-item ng-class="fontSizeDesc" style="line-height:1.3">
-                {{"LAB_RECENT_RESULT" | translate}}
-                <span class="list-item-note lucent" ng-class="fontSizeDesc" style="right: 10px">
-                    {{testTypeCtrl.test.latestTestValue}} ({{testTypeCtrl.test.unitDescription}})</span><br>
-                <p class="item-desc" ng-class="fontSizeDesc">
-                    {{testTypeCtrl.test.latestCollectedDateTime|date:'medium'}}</p>
+
+            <!-- RECENT TEST RESULT -->
+            <ons-list-item class="list-item-container-narrow" ng-class="testTypeCtrl.getTestClass(testTypeCtrl.test)">
+                <ons-row ng-class="fontSizeDesc" vertical-align="center">
+
+                    <!-- RECENT TEST RESULT - LEFT (LABEL) -->
+                    <ons-col width="50%" class="labtest-col" vertical-align="center">
+                        <div align="left" style="margin-left: 4px">
+                            <p class="hyphens">{{"LAB_RECENT_RESULT"|translate}}</p>
+                        </div>
+                    </ons-col>
+
+                    <!-- RECENT TEST RESULT - RIGHT (VALUE AND UNITS) -->
+                    <ons-col width="48%" class="labtest-col" vertical-align="center">
+                        <div align="right">
+                            {{testTypeCtrl.test.latestTestValue}}
+                            <span ng-if="testTypeCtrl.test.latestAbnormalFlag">
+                                ({{testTypeCtrl.test.latestAbnormalFlag}})
+                            </span>
+                            <span class="break-words"> {{testTypeCtrl.test.unitWithBrackets}}</span>
+                        </div>
+                    </ons-col>
+                </ons-row>
+
+                <!-- RECENT TEST RESULT - DATE -->
+                <ons-row ng-class="fontSizeDesc">
+                    <ons-col class="labtest-col lucent-subtle" vertical-align="center">
+                        <div style="margin-left: 4px">
+                            {{testTypeCtrl.test.latestCollectedDateTime|date:'medium'}}
+                        </div>
+                    </ons-col>
+                </ons-row>
             </ons-list-item>
-            <ons-list-item ng-class="fontSizeDesc">
-                {{"NORMAL_RANGE"| translate}}
-                <span class="list-item-note lucent" ng-class="fontSizeDesc"
-                      style="right: 10px">{{testTypeCtrl.test.normalRange}} ({{testTypeCtrl.test.unitDescription}})</span>
+
+            <!-- NORMAL RANGE -->
+            <ons-list-item class="list-item-container-narrow">
+                <ons-row ng-class="fontSizeDesc" vertical-align="center">
+
+                    <!-- NORMAL RANGE - LEFT (LABEL) -->
+                    <ons-col width="50%" class="labtest-col" vertical-align="center">
+                        <div align="left" style="margin-left: 4px">
+                            <p class="hyphens">{{"NORMAL_RANGE"|translate}}</p>
+                        </div>
+                    </ons-col>
+
+                    <!-- NORMAL RANGE - RIGHT (VALUE AND UNITS) -->
+                    <ons-col width="48%" class="labtest-col" vertical-align="center">
+                        <div align="right">
+                            {{testTypeCtrl.test.normalRange}}
+                            <span ng-if="testTypeCtrl.test.normalRange" class="break-words"> {{testTypeCtrl.test.unitWithBrackets}}</span>
+                        </div>
+                    </ons-col>
+                </ons-row>
             </ons-list-item>
         </ons-list>
 
@@ -107,11 +176,11 @@
             <div id="rcorners">
                 <h3>Attention!</h3>
                 <ons-icon icon="ion-alert-circled" size="60px"></ons-icon>
-                <p style="margin-top: 5%" class="unattended-message">{{"LEAVING_APP2"|translate}}</p>
-                <ons-button style="margin-top: 5%" ng-click="disclaimerModal.hide();testTypeCtrl.goToUrl()">
+                <p style="margin-top: 5%" class="unattended-message">{{"LEAVING_APP_LABS"|translate}}</p>
+                <ons-button style="margin-top: 5%" ng-click="disclaimerModal.hide(); testTypeCtrl.goToUrl()">
                     {{"OK"|translate}}
                 </ons-button>
             </div>
         </ons-modal>
-        </div>
+    </div>
 </ons-page>

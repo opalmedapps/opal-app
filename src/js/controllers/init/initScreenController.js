@@ -25,7 +25,8 @@
 		'DynamicContentService',
 		'NewsBanner',
 		'Params',
-		'UserHospitalPreferences'
+		'UserHospitalPreferences',
+		'Browser'
 	];
 
 	/* @ngInject */
@@ -39,7 +40,8 @@
 		DynamicContentService,
 		NewsBanner,
 		Params,
-		UserHospitalPreferences
+		UserHospitalPreferences,
+		Browser
 	) {
 		var vm = this;
 		vm.globalMessage = '';
@@ -53,9 +55,7 @@
 		vm.gotoLearnAboutOpal = gotoLearnAboutOpal;
 		vm.goToRegister = goToRegister;
 		vm.goToGeneralSettings = goToGeneralSettings;
-		vm.goToPatientCharter = goToPatientCharter;
 		vm.goToAcknowledgements = goToAcknowledgements;
-		vm.reportBugs = reportBugs;
 		vm.goToLogin = goToLogin;
 		vm.showMessageOfTheDay = showMessageOfTheDay;
 
@@ -111,11 +111,7 @@
 			}, 10);
 
 			// Get location permission
-			Permissions.enablePermission('ACCESS_FINE_LOCATION', 'LOCATION_PERMISSION_DENIED')
-				.catch(function (response) {
-					NewsBanner.showCustomBanner($filter('translate')(response.Message), '#333333', 
-						'#F0F3F4', 13, 'top', function () {}, 5000);
-				});
+			Permissions.enablePermission('ACCESS_FINE_LOCATION').catch(console.error);
 		}
 
 		function showMessageOfTheDay() {
@@ -140,14 +136,7 @@
 		 * Go to registration page
 		 */
 		function goToRegister() {
-			let url = Params.registrationPage;
-			let app = document.URL.indexOf('http://') === -1 && document.URL.indexOf('https://') === -1;
-
-			if (!app) {
-				window.open(url, '_blank');
-			} else {
-				cordova.InAppBrowser.open(url, '_system');   // _system: opens in External Browser (Safari, etc...) on the device
-			}
+			Browser.openInternal(Params.registrationPage);
 		}
 
 		/**
@@ -159,50 +148,10 @@
 		}
 
 		/**
-		 * Go to patient charter
-		 */
-		function goToPatientCharter() {
-			initNavigator.pushPage('./views/templates/content.html', {contentType: 'patient_charter'});
-		}
-
-		/**
 		 * Go to Acknowledgements
 		 */
 		function goToAcknowledgements() {
 			initNavigator.pushPage('./views/templates/content.html', {contentType: 'acknowledgements'});
-		}
-
-
-		/**
-		 * Report issues function
-		 */
-		function reportIssuesMail() {
-			if (Constants.app) {
-				var email = {
-					to: 'opal@muhc.mcgill.ca',
-					cc: '',
-					bcc: [],
-					subject: $filter("translate")("OPALPROBLEMSUBJECT"),
-					body: '',
-					isHtml: true
-				};
-				cordova.plugins.email.isAvailable(function (isAvailable) {
-					if (isAvailable) {
-						cordova.plugins.email.open(email, function (sent) {
-
-						}, this);
-					} else {
-						alert("Not able to send emails currently.")
-					}
-				});
-			}
-		}
-
-		/**
-		 * Report bugs function
-		 */
-		function reportBugs() {
-			initNavigator.pushPage('./views/general/bugreport/bugreport.html');
 		}
 
 		/**
@@ -211,7 +160,5 @@
 		function goToLogin() {
 			initNavigator.pushPage('./views/login/login.html', {animation: 'lift'});
 		}
-
 	}
-
 })();

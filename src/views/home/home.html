@@ -20,7 +20,8 @@
         <div style="position:relative;z-index:1">
             <img src="./img/opal-init-photo.jpg" style="max-width:100vw">
             <div class="text-center" align="center" style="margin-top:-225px;margin-left:auto;margin-right:auto;position:relative;z-index:4;">
-                <img ng-src="{{h.ProfileImage}}" style="margin-left:auto;margin-right:auto;" class="image-profile-home" ng-click="h.goToSettings()">
+                <img ng-if="!h.ProfileImage" src="./img/patient.png" style="margin-left:auto;margin-right:auto;" class="image-profile-home">
+                <img ng-if="h.ProfileImage" ng-src="{{h.ProfileImage}}" style="margin-left:auto;margin-right:auto;" class="image-profile-home">
             </div>
             <div style="margin-top:6px">
                 <a ng-click="tabbar.setActiveTab(4)">
@@ -36,17 +37,32 @@
         </div>
 
         <div style="margin-top:0;position:relative;z-index:3;padding-top:0;" >
-
-            <!--
-            LEARN MORE ABOUT OPAL
-            ================================-->
             <ons-list style="margin-top:5px;position:relative;z-index:2">
-                <!--<ons-list-header class="person-list-header" ng-class="fontSizeTitle">Opal</ons-list-header>-->
                 <ons-list-header class="person-list-header" ng-class="fontSizeTitle"></ons-list-header>
+
+                <!--
+                ACKNOWLEDGEMENTS
+                ================================-->
+                <ons-list-item modifier="chevron tappable" class="item" ng-click="h.goToAcknowledgements()">
+                    <ons-row align="center">
+                        <ons-col width="60px" align="center" style="text-align: center">
+                            <ons-icon icon="fa-star" size="28px" style="color:#FFEB3B"></ons-icon>
+                        </ons-col>
+                        <ons-col>
+                            <header>
+                                <span class="item-title" ng-class="fontSizeTitle">{{"OPAL_ACKNOWLEDGEMENTS"|translate}}</span>
+                            </header>
+                        </ons-col>
+                    </ons-row>
+                </ons-list-item>
+
+                <!--
+                LEARN ABOUT OPAL
+                ================================-->
                 <ons-list-item modifier="chevron tappable" class="item" ng-if="h.allowedModules.hasOwnProperty('LAO') && h.allowedModules['LAO']" ng-click="h.gotoLearnAboutOpal()">
                     <ons-row align="center">
                         <ons-col width="60px" align="center" style="text-align: center">
-                            <img style="width: 60px;" src="img/Opal_Logo_Transparent_Inverse.png">
+                            <img style="width: 30px; margin: 2px 0px" src="img/Opal_Logo_Transparent_Inverse_Icon.png">
                         </ons-col>
                         <ons-col>
                             <header>
@@ -73,11 +89,6 @@
                         </ons-col>
                     </ons-row>
                 </ons-list-item>
-
-                <!--
-                CHECK-IN TO APPOINTMENTS
-                =============================-->
-                <!--<ons-list-header class="person-list-header" ng-class="fontSizeTitle">{{"OVERVIEW"|translate}}</ons-list-header>-->
 
                 <!--
                 NAVIGABLE CHECKIN STATE (ALL CHECKED IN OR APPOINTMENTS AVAILABLE FOR CHECKING INTO)
@@ -141,61 +152,7 @@
                         </ons-col>
                     </ons-row>
                 </ons-list-item>
-
-                <!--
-                TREATMENT PLANNING STATUS
-                ================================-->
-                <ons-list-item modifier="chevron" class="item" ng-show="h.statusDescription" ng-if="h.allowedModules.hasOwnProperty('TRP') && h.allowedModules['TRP']" ng-click="h.goToStatus()">
-                    <ons-row align="center">
-                        <ons-col width="60px" align="center" style="text-align: center">
-                            <div>
-                                <i class="fa fa-medkit fa-2x" style="color:#03a9f4"></i>
-                            </div>
-                        </ons-col>
-                        <ons-col>
-                            <header>
-                                <span class="item-title" ng-class="fontSizeTitle">{{"STATUS"|translate}}</span>
-                            </header>
-                            <p class="item-desc" ng-class="fontSizeDesc" translate="{{h.statusDescription}}"></p>
-                        </ons-col>
-                    </ons-row>
-                </ons-list-item>
             </ons-list>
-
-            <!--<div ng-show="h.loading" align="center" style="margin:10px">-->
-                <!--<svg class="progress-circular">-->
-                    <!--<circle class="progress-circular__primary" cx="50%" cy="50%" r="40%" fill="none" stroke-width="10%" stroke-miterlimit="10"/>-->
-                <!--</svg>-->
-            <!--</div>-->
-
-            <!--
-            NOTIFICATIONS
-            ===================================-->
-            <!--<div ng-hide="h.loading">-->
-
-                <!--<div  style="padding-top:5px;" class="settings-header" ng-class="fontSizeTitle" ng-show = "h.notifications.length !== 0" >{{"NEWS"|translate}}</div>-->
-                <!--&lt;!&ndash;Making new set up for notifications&ndash;&gt;-->
-                <!--<ons-list style="margin-top:5px;">-->
-                    <!--<ons-list-item modifier="chevron" class="item" ng-repeat="notification in h.notifications" ng-click="h.goToNotification($index, notification)">-->
-                        <!--<ons-row align="center">-->
-                            <!--<ons-col width="60px" align="center">-->
-                                <!--<div>-->
-                                    <!--<i class="iconHomeView {{notification.Icon}}" ng-style="{color: notification.Color}" style="margin-left: 18px"></i><span class="notification" ng-show="notification.Number>=1">{{notification.Number}}</span>-->
-                                <!--</div>-->
-                            <!--</ons-col>-->
-                            <!--<ons-col>-->
-                                <!--<header>-->
-                                    <!--<span class="item-title" ng-class="fontSizeTitle">{{notification["Name_"+h.language]}}</span>-->
-                                <!--</header>-->
-                                <!--<p class="item-desc" ng-class="fontSizeDesc" ng-show="notification.Number<=1">-->
-                                    <!--{{notification["Desc"]}}-->
-                                <!--</p>-->
-                            <!--</ons-col>-->
-                        <!--</ons-row>-->
-                    <!--</ons-list-item>-->
-                <!--</ons-list>-->
-            <!--</div>-->
         </div>
     </div>
-    <div id="bottomNotifications"></div>
 </ons-page>

@@ -41,10 +41,10 @@ class PatientTestResultsByTypeController {
 
 	#patientTestResults;
 	#navigator;
-	#appConstants;
 	#labsChartConfigurationFactory;
 	#$timeout;
 	#$filter;
+	#browser;
 
 	/**
 	 * Class constructor for controller
@@ -52,21 +52,20 @@ class PatientTestResultsByTypeController {
 	 * @param {UserPreferences} userPreferences
 	 * @param {HcChartLabsConfiguration} hcChartLabsConfiguration
 	 * @param {NavigatorParameters} navigatorParameters
-	 * @param {Constants} constants
 	 * @param {$filter} $filter Angular filter
 	 * @param {$timeout} $timeout Angular module
-	 * @param {$rootScope} $rootScope Angular module
+	 * @param {Browser} browser Browser service
 	 */
 	constructor(patientTestResults, userPreferences, hcChartLabsConfiguration,
-		navigatorParameters, constants, $filter, $timeout) {
+		navigatorParameters, $filter, $timeout, browser) {
 		this.#patientTestResults = patientTestResults;
 		this.#language = userPreferences.getLanguage();
 		this.#fontSize = userPreferences.getFontSize();
 		this.#navigator = navigatorParameters.getNavigator();
-		this.#appConstants = constants;
 		this.#$timeout = $timeout;
 		this.#$filter = $filter;
 		this.#labsChartConfigurationFactory = hcChartLabsConfiguration;
+		this.#browser = browser;
 		this.#initialize(this.#navigator.getCurrentPage().options);
 	}
 
@@ -77,17 +76,15 @@ class PatientTestResultsByTypeController {
 		// TODO(dherre3) Centralize modals of this kind, create factory to manage all modals.
 		disclaimerModal.show();
 	}
+
 	/**
 	 * Routing to EducationalMaterialURL for the test type
 	 */
 	goToUrl() {
 		let url = this.test[`educationalMaterialURL_${this.#language}`];
-		if (this.#appConstants.app) {
-			cordova.InAppBrowser.open(url, '_blank', 'location=yes');
-		} else {
-			window.open(url);
-		}
+		this.#browser.openInternal(url);
 	}
+
 	/**
 	 * Returns the test name in the preferred patient language
 	 * @returns {TestType} Returns test name to display in the view
@@ -95,6 +92,14 @@ class PatientTestResultsByTypeController {
 	getTestName(test) {
 		return test[`name_${this.#language}`];
 	}
+
+	/**
+	 * Returns the class for a given test based on its criticality (see forwarded function for details)
+	 */
+	getTestClass(test) {
+		return this.#patientTestResults.getTestClass(test);
+	}
+
 	////////////////////////////////////////////////////
 
 	/**
@@ -115,14 +120,21 @@ class PatientTestResultsByTypeController {
 	 * Configures the timeline results chart
 	 */
 	#configureChart = (test) => {
+		// Non-numeric tests are not plotted (no data or axis label)
 		const data = (test.hasNumericValues) ?
 			test.results.map((testResult) => [testResult.collectedDateTime,
 			testResult.testValue]) : [];
-		Highcharts.setOptions(this.#labsChartConfigurationFactory.getChartLanguageOptions(this.#language));
+		const yAxisLabel = test.hasNumericValues ? test.unitWithBrackets : "";
+
+		Highcharts.setOptions(this.#labsChartConfigurationFactory.getChartLanguageOptions(this.#language,
+			test.hasNumericValues));
 		Highcharts.dateFormat(this.#labsChartConfigurationFactory.getDateFormat(this.#language));
 		this.chartOptions = this.#labsChartConfigurationFactory.getChartConfiguration(data,
+			test.hasNumericValues,
 			this.#$filter("translate")("RESULT"),
-			`(${test.unitDescription})`, test.normalRangeMin, test.normalRangeMax,
+			yAxisLabel,
+			test.normalRangeMin,
+			test.normalRangeMax,
 			this.#getAppFontSizeInPixels());
 	};
 
@@ -170,4 +182,4 @@ angular
 	.controller('PatientTestResultsByTypeController', PatientTestResultsByTypeController);
 
 PatientTestResultsByTypeController.$inject = ['PatientTestResults', 'UserPreferences', 'HcChartLabsConfiguration',
-	'NavigatorParameters', 'Constants', '$filter', '$timeout'];
+	'NavigatorParameters', '$filter', '$timeout', 'Browser'];
