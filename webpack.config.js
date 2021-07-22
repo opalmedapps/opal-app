@@ -111,13 +111,16 @@ const config = env => {
 		},
 		plugins: [
 			new CleanWebpackPlugin(),
-			new CopyPlugin([
-				{ from: './src/img', to: './img' },
-				{ from: './src/Languages', to: './Languages' },
-				{ from: './src/views', to: './views' },
-			]),
+			new CopyPlugin({
+				patterns: [
+					{ from: './src/img', to: './img' },
+					{ from: './src/Languages', to: './Languages' },
+					{ from: './src/views', to: './views' },
+				],
+			}),
 			new webpack.ProvidePlugin({
 				OPAL_CONFIG: path.join(OPAL_ENV_FOLDER, "opal.config.js"),
+				WEB_VERSION: path.join(__dirname, "web-version.json"),
 				$: "jquery",
 				jQuery: "jquery",
 				firebase: "firebase",
@@ -163,11 +166,6 @@ const config = env => {
 						},
 					},
 					extractComments: true,
-					chunkFilter: (chunk) => {
-						// Our AngularJS js files do not minimize correctly due to the way the code is written.
-						// Therefore we skip minification for these files.
-						return chunk.name !== 'main';
-					},
 				}),
 			],
 		}

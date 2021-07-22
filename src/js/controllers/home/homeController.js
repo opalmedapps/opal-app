@@ -7,12 +7,12 @@
 
     HomeController.$inject = [
         'Appointments', 'CheckInService', 'Patient', 'UpdateUI','$scope', '$timeout','$filter', 'Notifications',
-        'NavigatorParameters', 'NewsBanner', 'PlanningSteps', 'Permissions', 'UserPreferences', 'NetworkStatus',
+        'NavigatorParameters', 'NewsBanner', 'Permissions', 'UserPreferences', 'NetworkStatus',
         'MetaData', 'UserHospitalPreferences'];
 
     /* @ngInject */
     function HomeController(Appointments, CheckInService, Patient, UpdateUI, $scope, $timeout, $filter, Notifications,
-                            NavigatorParameters, NewsBanner, PlanningSteps, Permissions, UserPreferences, NetworkStatus,
+                            NavigatorParameters, NewsBanner, Permissions, UserPreferences, NetworkStatus,
                             MetaData, UserHospitalPreferences)
     {
         var vm = this;
@@ -22,12 +22,9 @@
         vm.LastName = '';
         vm.ProfileImage = null;
         vm.language = 'EN';
-        vm.notifications = [];
-        vm.statusDescription = null;
         vm.appointmentShown = null;
         vm.todaysAppointments = [];
         vm.calledApp = null;
-        //vm.checkInMessage = '';
         vm.RoomLocation = '';
         vm.showHomeScreenUpdate = null;
         vm.loading = true;
@@ -47,12 +44,11 @@
         vm.allowedModules = {};
 
         vm.homeDeviceBackButton = homeDeviceBackButton;
-        vm.goToStatus = goToStatus;
-        vm.goToNotification = goToNotification;
         vm.goToAppointments = goToAppointments;
         vm.goToSettings = goToSettings;
         vm.goToCheckinAppointments = goToCheckinAppointments;
         vm.gotoLearnAboutOpal = gotoLearnAboutOpal;
+        vm.goToAcknowledgements = goToAcknowledgements;
 
         activate();
 
@@ -74,9 +70,10 @@
                 localStorage.removeItem('locked');
             }
 
-            // // Refresh the page on coming back from checkin
+            // Refresh the page on coming back from other pages
             homeNavigator.on('prepop', function(event) {
                 if (event.currentPage.name === "./views/home/checkin/checkin-list.html" && NetworkStatus.isOnline()) evaluateCheckIn();
+                if (event.currentPage.name === "views/personal/notifications/notifications.html" && NetworkStatus.isOnline()) setBadges();
             });
 
             //This avoids constant repushing which causes bugs
@@ -90,11 +87,7 @@
                 homeNavigator.off('prepush');
             });
 
-            Permissions.enablePermission('WRITE_EXTERNAL_STORAGE', 'PERMISSION_STORAGE_DENIED')
-                .catch(function (response) {
-                    NewsBanner.showCustomBanner($filter('translate')(response.Message), 
-                        '#333333', '#F0F3F4', 13, 'top', function () {}, 5000);
-                });
+            Permissions.enablePermission('WRITE_EXTERNAL_STORAGE').catch(console.error);
 
             // Initialize the page data if online
             if(NetworkStatus.isOnline()){
@@ -118,9 +111,6 @@
             //Set patient info
             setPatientInfo();
 
-            //Set treatment metadata state
-            setTreatmentStatus();
-
             //display next appointment
             setNextAppointment();
 
@@ -132,13 +122,12 @@
 
             setMetaData();
 
-            // Display Notifications badge (unread number)
+            // Display notifications badge (unread number)
             setBadges();
-
         }
 
 
-        function setMetaData(){
+        function setMetaData() {
             if(MetaData.isFirstTimeHome()){
                 var meta = MetaData.fetchHomeMeta();
                 vm.notificationsUnreadNumber = meta.notificationsUnreadNumber;
@@ -150,20 +139,6 @@
         function setBadges()
         {
             vm.notificationsUnreadNumber = Notifications.getNumberUnreadNotifications();
-        }
-
-        /**
-         * @name setTreatmentStatus
-         * @desc displays the latest treatment statements
-         */
-        function setTreatmentStatus() {
-            if(!PlanningSteps.isCompleted() && PlanningSteps.hasCT()) {
-                vm.statusDescription = "PLANNING";
-            }else if (PlanningSteps.isCompleted()){
-                vm.statusDescription = "PLANNING_COMPLETE";
-            } else {
-                vm.statusDescription = '';
-            }
         }
 
         /**
@@ -195,17 +170,18 @@
             Notifications.requestNewNotifications()
                 .then(function(){
                     vm.loading = false;
-                    if(Notifications.getNumberUnreadNotifications() > 0){
-                        vm.notifications = Notifications.setNotificationsLanguage(Notifications.getUnreadNotifications());
 
-                        vm.notifications=$filter('orderBy')(vm.notifications,'DateAdded',true);  // Sort Descending (chronological order)
-                    }
+                    // Display notifications badge (unread number)
+                    setBadges();
                 })
                 .catch(function(error){
                     vm.loading = false;
 
                     // TODO: Notify user about error
                     console.log(error);
+
+                    // Display notifications badge (unread number)
+                    setBadges();
                 });
         }
 
@@ -270,41 +246,6 @@
         }
 
         /**
-         * Takes the user the treatment status page
-         */
-        function goToStatus() {
-            homeNavigator.pushPage('views/home/status/status_new.html');
-        }
-
-        /**
-         * Takes the user to the selected notification in order to view it in detail
-         * @param index
-         * @param notification
-         */
-        function goToNotification(index, notification){
-
-            $timeout(function(){
-                vm.notifications.splice(index, 1);
-            });
-
-            Notifications.readNotification(index, notification);
-
-            if(notification.NotificationType === 'CheckInError' || notification.NotificationType === 'CheckInNotification') goToCheckinAppointments();
-
-            var post = (notification.hasOwnProperty('Post')) ? notification.Post : Notifications.getNotificationPost(notification);
-            if(notification.hasOwnProperty('PageUrl')) {
-                NavigatorParameters.setParameters({'Navigator':'homeNavigator', 'Post':post});
-                homeNavigator.pushPage(notification.PageUrl);
-            }else{
-                var result = Notifications.goToPost(notification.NotificationType, post);
-                if(result !== -1 ) {
-                    NavigatorParameters.setParameters({'Navigator':'homeNavigator', 'Post':post});
-                    homeNavigator.pushPage(result.Url);
-                }
-            }
-        }
-
-        /**
          * @desc Go to learn about Opal page
          */
         function gotoLearnAboutOpal(){
@@ -336,5 +277,11 @@
             homeNavigator.pushPage('./views/home/checkin/checkin-list.html');
         }
 
+        /**
+         * @description Takes the user to the acknowledgements page.
+         */
+        function goToAcknowledgements() {
+            homeNavigator.pushPage('./views/templates/content.html', {contentType: 'acknowledgements'});
+        }
     }
 })();

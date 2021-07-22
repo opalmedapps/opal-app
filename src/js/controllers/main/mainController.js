@@ -127,6 +127,10 @@
             if ($state.current.name === 'Home') {
                 LogOutService.logOut();  // It should go to a Logout (not 'init'). Logout will trigger CleanUp.clear() function and other necessary clean ups
                 localStorage.setItem('locked', 1);
+
+                // Display a warning message to the users after being disconnected
+                NewsBanner.showCustomBanner($filter('translate')("INACTIVE"), '#333333', '#F0F3F4',
+                    13, 'top', null, 5000);
             }
         }
 
@@ -242,7 +246,7 @@
          * work with the cordova-plugin-prevent-screenshot plugin
          *****************************************/
         function preventAndroidScreenshot() {
-            if (Constants.app) {
+            if (Constants.app && ons.platform.isAndroid()) {
                 window.plugins.preventscreenshot.disable(
                     (status) => console.log('Android screenshot successfully disabled:', !status), // true - enabled, false - disabled
                     (err) => console.log('Android screenshot cannot be disabled:', err)

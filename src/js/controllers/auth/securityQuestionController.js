@@ -8,7 +8,6 @@
  *                  file 'LICENSE.txt', which is part of this source Code package.
  */
 
-
 /**
  *  @ngdoc controller
  *  @name MUHCApp.controllers: SecurityQuestionController
@@ -26,11 +25,13 @@
         .controller('SecurityQuestionController', SecurityQuestionController);
 
     SecurityQuestionController.$inject = ['$window', '$timeout', 'ResetPassword', 'RequestToServer', 'EncryptionService',
-        'UUID', 'UserAuthorizationInfo', '$state', 'DeviceIdentifiers', 'NavigatorParameters', '$scope', 'Params'];
+        'UUID', 'UserAuthorizationInfo', '$state', 'DeviceIdentifiers', 'NavigatorParameters', '$scope', 'Params',
+        'UserHospitalPreferences'];
 
     /* @ngInject */
     function SecurityQuestionController($window, $timeout, ResetPassword, RequestToServer, EncryptionService, UUID,
-                                        UserAuthorizationInfo, $state, DeviceIdentifiers, NavigatorParameters, $scope, Params) {
+                                        UserAuthorizationInfo, $state, DeviceIdentifiers, NavigatorParameters, $scope,
+                                        Params, UserHospitalPreferences) {
 
         var vm = this;
         var deviceID;
@@ -40,12 +41,12 @@
 
         /**
          * @ngdoc property
-         * @name attempts
+         * @name tooManyAttempts
          * @propertyOf SecurityQuestionController
-         * @returns int
-         * @description used by the controller to only allow 3 security question attempts
+         * @description Used to block the submit button after too many invalid security answer attempts.
+         * @type {boolean}
          */
-        vm.attempts= 0;
+        vm.tooManyAttempts = false;
 
         /**
          * @ngdoc property
@@ -84,7 +85,7 @@
          * @returns boolean
          * @description hides input div if set to true
          */
-        vm.invalidCode=false;
+        vm.invalidCode = false;
 
         /**
          * @ngdoc property
@@ -94,7 +95,17 @@
          * @description determines which back button to show
          */
         vm.passwordReset = false;
-	    /**
+
+        /**
+         * @ngdoc property
+         * @name loading
+         * @propertyOf SecurityQuestionController
+         * @returns boolean
+         * @description Toggles the loading spinner shown during password reset.
+         */
+        vm.loading = false;
+
+        /**
 	     * @ngdoc property
 	     * @name alertShow
 	     * @propertyOf SecurityQuestionController
@@ -102,10 +113,21 @@
 	     * @description momentarily hides the button while submitting
 	     */
 	    vm.alertShow = true;
+
+        /**
+         * @ngdoc property
+         * @name ssn
+         * @propertyOf SecurityQuestionController
+         * @returns string
+         * @description RAMQ value (called "ssn" here) bound to user input in the view.
+         */
+        vm.ssn = "";
+	    
         vm.submitAnswer = submitAnswer;
         vm.clearErrors = clearErrors;
         vm.goToInit = goToInit;
         vm.goToReset = goToReset;
+        vm.isThereSelectedHospital = isThereSelectedHospital;
 
         activate();
 
@@ -121,30 +143,82 @@
             parameters = nav.getCurrentPage().options;
             trusted = parameters.trusted;
 
+            initializeData();
+
+            bindEvents();
+        }
+
+        /**
+         * @ngdoc function
+         * @name initializeData
+         * @methodOf MUHCApp.controllers.SecurityQuestionController
+         * @description Fetches and sets the data for this controller. This function is called again after the postpop
+         *              event (to attempt to load data after the user has chosen a hospital to target).
+         */
+        function initializeData() {
             // this checks whether or not the security question is being asked in order to log the user in or to trigger a password reset request
             if (parameters.passwordReset){
 
+                vm.loading = true;
                 passwordReset = parameters.passwordReset;
                 vm.passwordReset = passwordReset;
 
-                ResetPassword.verifyLinkCode(parameters.url)
-                    .then(function (email) {
+                // Reset some controller variables to prevent old results or errors from showing when trying to load data again
+                vm.tooManyAttempts = false;
+                vm.Question = "";
+                vm.alert = {
+                    type: "",
+                    message: ""
+                };
+                vm.invalidCode = false;
+                vm.alertShow = true;
+
+                // Only proceed with requests if the patient has selected a hospital; if not, wait for them to do so
+                if (UserHospitalPreferences.isThereSelectedHospital()) {
+
+                    ResetPassword.verifyLinkCode(parameters.url).then(function (email) {
                         UserAuthorizationInfo.setEmail(email);
                         return DeviceIdentifiers.sendDevicePasswordRequest(email);
                     })
                     .then(function (response) {
-                        $timeout(function() {
+                        $timeout(function () {
                             vm.Question = response.Data.securityQuestion.securityQuestion_EN + " / " + response.Data.securityQuestion.securityQuestion_FR;
-                        })
+                            vm.loading = false;
+                        });
                     })
-                    .catch(handleError);
+                    .catch(function (error) {
+                        vm.loading = false;
+                        handleError(error);
+                    });
+                }
             } else {
                 vm.Question = parameters.securityQuestion;
             }
+        }
 
+        /**
+         * @ngdoc function
+         * @name bindEvents
+         * @methodOf MUHCApp.controllers.SecurityQuestionController
+         * @description Sets up event bindings for this controller.
+         */
+        function bindEvents() {
             // In case someone presses back button, need to remove the deviceID and security answer.
-            $scope.initNavigator.once('prepop', function () {
+            $scope.initNavigator.on('prepop', function () {
                 removeUserData();
+            });
+
+            // Re-launch data requests after selecting a different hospital and going back to this page
+            $scope.initNavigator.on('postpop', function () {
+                $timeout(function() {
+                    if (vm.passwordReset) initializeData();
+                });
+            });
+
+            // Remove the event listeners
+            $scope.$on('$destroy', function() {
+                $scope.initNavigator.off('prepop');
+                $scope.initNavigator.off('postpop');
             });
         }
 
@@ -183,7 +257,11 @@
          * Handles errors in order to display the proper message to the user.
          */
         function handleError(error) {
-            $timeout(function(){
+            $timeout(function() {
+
+                // This check prevents from handling old request timeouts that were followed by a successful re-attempt
+                if (error.Response === "timeout" && vm.Question !== "") return;
+
                 var code = (error.code)? error.code : error.Code;
                 vm.alert.type = Params.alertTypeDanger;
                 switch (code){
@@ -193,22 +271,26 @@
                         errormodal.show();
                         break;
                     case Params.userDisabled:
-                        vm.alert.content = Params.loginDisabledUserMessage;
+                        vm.alert.content = "USER_DISABLED";
                         break;
                     case Params.invalidUser:
-                        vm.alert.content = Params.invalidUserMessage;
+                        vm.alert.content = "INVALID_USER";
                         break;
                     case 4:
-                        vm.alert.content = Params.outOfTriesMessage;
+                        vm.alert.content = "OUTOFTRIES";
+                        vm.tooManyAttempts = true;
                         break;
-                    case Params.corruptedDataCase:
-                        vm.alert.content = Params.corruptedDataMessage;
+                    case "corrupted-data":
+                        vm.alert.content = "CONTACTHOSPITAL";
                         break;
-                    case Params.wrongAnswerCase:
-                        vm.alert.content = Params.wrongAnswerMessage;
+                    case "wrong-answer":
+                        vm.alert.content = "ERRORANSWERNOTMATCH";
+                        break;
+                    case "no-answer":
+                        vm.alert.content = "ENTERANANSWER";
                         break;
                     default:
-                        vm.alert.content = Params.networkErrorMessage;
+                        vm.alert.content = "INTERNETERROR2";
                         break;
                 }
             })
@@ -241,6 +323,9 @@
             if(vm.alert.hasOwnProperty('type')) {
                 delete vm.alert.type;
             }
+            if(vm.alert.hasOwnProperty('content')) {
+                delete vm.alert.content;
+            }
         }
 
         /**
@@ -252,9 +337,10 @@
          * Sends request object containing user-inputted answer to our servers to be validated
          */
         function submitAnswer (answer) {
+            clearErrors();
+
             if (!answer || (!vm.ssn && passwordReset)) {
-                vm.alert.type = Params.alertTypeDanger;
-                vm.alert.content = Params.enterSecurityQuestionAnswerMessage;
+                handleError({code: "no-answer"});
 
             } else {
                 vm.alertShow = false;
@@ -296,7 +382,7 @@
 	                vm.alertShow = true;
 	                vm.submitting = false;
 	                removeUserData();
-                    if(error.Reason && error.Reason.toLowerCase().indexOf('malformed utf-8') !== -1) {
+                    if(error.hasOwnProperty('Reason') && error.Reason && error.Reason.toLowerCase().indexOf('malformed utf-8') !== -1) {
                         handleError({Code: "corrupted-data"});
                     } else {
                         handleError(error);
@@ -326,6 +412,17 @@
          */
         function goToReset(){
             initNavigator.pushPage('./views/login/forgot-password.html',{})
+        }
+
+        /**
+         * @ngdoc method
+         * @name isThereSelectedHospital
+         * @methodOf MUHCApp.controllers.LoginController
+         * @description Returns whether the user has already selected a hospital.
+         * @returns {boolean} True if there is a hospital selected; false otherwise.
+         */
+        function isThereSelectedHospital() {
+            return UserHospitalPreferences.isThereSelectedHospital();
         }
     }
 })();

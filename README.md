@@ -120,11 +120,13 @@ In Opal we have three main branches: `staging`, `preprod`, and `prod`. In terms 
     password: 12345opal
     security answer (depending on the question): red, guitar, superman, dog, bob, cuba
     ```
+   
 #### Notes on the development of web code
 - We recommend the use of Chrome or Firefox as they have the best debug console, the Opal web code does not currently support Internet Explorer
 - To debug the code, use the [developer console](https://developer.chrome.com/devtools), switch to mobile view and [disable caching](http://nicholasbering.ca/tools/2016/10/09/devtools-disable-caching/). Sometimes the browser caches pages disallowing developers from seeing change to the code.
 - If you followed all the steps in [Installing Building and Serving web code](#installing-building-and-serving-web-code) correctly, the only errors you should see in the debug console are a 404 error for cordova.js, a 404 error for favicon.ico, and many warnings for translations that don't exist. Otherwise, skip ahead to [Troubleshooting](#troubleshooting).
 **NOTE: In the past, several students have had trouble installing dependencies due to strange permission issues that block the ability to write to certain directories. Don't worry if this happens to you! Please consult the [Troubleshooting](#troubleshooting) section below.**
+
 #### Optional dev server
 Install http-server
    ```
@@ -183,10 +185,13 @@ time to understand what they do, this will help you manipulate the project bette
 ```json
     "scripts": {
       "postinstall": "node -e \"require('./opal_env.setup.js').createWWWFolder()\"",
+      "prepare:version:prod": "node -e \"require('./opal_env.setup.js').updateWebVersion('prod')\"",
+      "prepare:version:preprod": "node -e \"require('./opal_env.setup.js').updateWebVersion('preprod')\"",
+      "prepare:version:staging": "node -e \"require('./opal_env.setup.js').updateWebVersion('staging')\"",
       "prepare:web": "npm run prepare:web:staging",
-      "prepare:web:prod": "node -e \"require('./opal_env.setup.js').copyEnvironmentFiles('prod')\"",
-      "prepare:web:preprod": "node -e \"require('./opal_env.setup.js').copyEnvironmentFiles('preprod')\"",
-      "prepare:web:staging": "node -e \"require('./opal_env.setup.js').copyEnvironmentFiles('staging')\"",
+      "prepare:web:prod": "npm run prepare:version:prod && node -e \"require('./opal_env.setup.js').copyEnvironmentFiles('prod')\"",
+      "prepare:web:preprod": "npm run prepare:version:preprod && node -e \"require('./opal_env.setup.js').copyEnvironmentFiles('preprod')\"",
+      "prepare:web:staging": "npm run prepare:version:staging && node -e \"require('./opal_env.setup.js').copyEnvironmentFiles('staging')\"",
       "prepare:app:prod": "npm run prepare:web:prod && cordova prepare",
       "prepare:app:preprod": "npm run prepare:web:preprod && cordova prepare",
       "prepare:app:staging": "npm run prepare:web:staging && cordova prepare",
@@ -196,6 +201,11 @@ time to understand what they do, this will help you manipulate the project bette
       "build:web:staging": "npm run prepare:web:staging && webpack --env.opal_environment=staging",
       "build:app": "npm run build:app:staging",
       "build:app:prod": "npm run prepare:app:prod && npm run build:web:prod && cordova build --release --verbose",
+      "build:app:prod:ios": "npm run prepare:app:prod && npm run build:web:prod && cordova build ios --release --verbose",
+      "build:app:prod:android": "npm run prepare:app:prod && npm run build:web:prod && cordova build android --release --verbose",
+      "build:app:prod:package": "npm run prepare:app:prod && npm run build:web:prod && cordova build --release --device --verbose",
+      "build:app:prod:ios:package": "npm run prepare:app:prod && npm run build:web:prod && cordova build ios --release --device --verbose",
+      "build:app:prod:android:package": "npm run prepare:app:prod && npm run build:web:prod && cordova build android --release --device --verbose",
       "build:app:preprod": "npm run prepare:app:preprod && npm run build:web:preprod && cordova build --verbose",
       "build:app:preprod:ios": "npm run prepare:app:preprod && npm run build:web:preprod && cordova build ios --verbose",
       "build:app:preprod:android": "npm run prepare:app:preprod && npm run build:web:preprod && cordova build android --verbose",
@@ -210,14 +220,14 @@ time to understand what they do, this will help you manipulate the project bette
       "build:app:staging:package": "npm run prepare:app:staging && npm run build:web:staging && cordova build --device --verbose",
       "start": "npm run start:web:staging",
       "start:web": "npm run start:web:staging",
-      "start:web:prod": "webpack-dev-server --open --env.opal_environment=prod --watch --progress --colors",
-      "start:web:preprod": "webpack-dev-server --open --env.opal_environment=preprod --watch --progress --colors",
-      "start:web:staging": "webpack-dev-server --open --env.opal_environment=staging --watch --progress --colors",
+      "start:web:prod": "npm run prepare:version:prod && webpack-dev-server --open --env.opal_environment=prod --watch --progress --colors",
+      "start:web:preprod": "npm run prepare:version:preprod && webpack-dev-server --open --env.opal_environment=preprod --watch --progress --colors",
+      "start:web:staging": "npm run prepare:version:staging && webpack-dev-server --open --env.opal_environment=staging --watch --progress --colors",
       "start:app": "npm run build:app:staging && cordova run",
       "start:app:prod:ios": "npm run prepare:app:prod && npm run build:web:prod && cordova run ios",
       "start:app:prod:android": "npm run prepare:app:prod && npm run build:web:prod && cordova run android",
       "start:app:preprod:ios": "npm run prepare:app:preprod && npm run build:web:preprod && cordova run ios",
-      "start:app:preprod:android": "npm run prepare:app:preprod && npm run build:web:preprod&& cordova run android",
+      "start:app:preprod:android": "npm run prepare:app:preprod && npm run build:web:preprod && cordova run android",
       "start:app:staging:ios": "npm run prepare:app:staging && npm run build:web:staging && cordova run ios",
       "start:app:staging:android": "npm run prepare:app:staging && npm run build:web:staging && cordova run android",
       "test": "echo \"Error: no test specified\" && exit 1"

@@ -1,6 +1,8 @@
 .idea
 *.swp
 .DS_Store
+.firebase/
+.vs/
 .vscode/
 /node_modules
 /plugins
@@ -9,4 +11,5 @@
 /config.xml
 /google-services.json
 /GoogleService-Info.plist
+/web-version.json
 /www

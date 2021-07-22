@@ -35,13 +35,15 @@
 
         // variable to let the user know which hospital they are logged in
         vm.selectedHospitalToDisplay = "";
-
-        vm.showHeader = showHeader;
+        
         vm.goToEducationalMaterial = goToEducationalMaterial;
         vm.educationDeviceBackButton = educationDeviceBackButton;
 
         // Function used to filter the materials shown based on the search string
         vm.filterMaterial = filterMaterial;
+
+        // Function to show data and time header
+        vm.showHeader = showHeader;
 
         activate();
         ///////////////////////////////////
@@ -101,17 +103,7 @@
                 educationNavigator.off('prepop');
             });
         }
-
-        //Function to decide whether or not to show the header
-        function showHeader(index) {
-            if (index === 0) {
-                return true;
-            } else if (vm.edumaterials[index - 1].PhaseInTreatment !== vm.edumaterials[index].PhaseInTreatment) {
-                return true;
-            }
-            return false;
-        }
-
+        
         /**
          * @method goToEducationalMaterial
          * @description If not read reads material, then it opens the material into its individual controller
@@ -157,6 +149,14 @@
             });
 
             vm.filteredEduMaterials = filtered;//assign to new show list
+        }
+
+
+        function showHeader(index) {
+            if (index === vm.filteredEduMaterials.length - 1) return true;
+            var current = (new Date(vm.filteredEduMaterials[index].DateAdded)).setHours(0, 0, 0, 0);
+            var previous = (new Date(vm.filteredEduMaterials[index + 1].DateAdded)).setHours(0, 0, 0, 0);
+            return current !== previous;
         }
     }
 })();

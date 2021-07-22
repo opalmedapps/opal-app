@@ -23,20 +23,19 @@
         .module('MUHCApp')
         .controller('AboutController', AboutController);
 
-    AboutController.$inject = ['UserPreferences', 'NavigatorParameters', 'Params', 'UserHospitalPreferences'];
+    AboutController.$inject = ['UserPreferences', 'NavigatorParameters', 'Params', 'UserHospitalPreferences', 'Browser'];
 
     /* @ngInject */
-    function AboutController(UserPreferences, NavigatorParameters, Params, UserHospitalPreferences) {
+    function AboutController(UserPreferences, NavigatorParameters, Params, UserHospitalPreferences, Browser) {
         const vm = this;
         var navigator = null;
 
         vm.openUrl = openUrl;
         vm.openTeam = openTeam;
         vm.openTour = openTour;
-        vm.openAcknowledge = openAcknowledge;
         vm.openCedars = openCedars;
         vm.allowedModules = {};
-       
+
         let parameters;
         let isBeforeLogin = true;
 
@@ -48,7 +47,7 @@
 
             parameters = NavigatorParameters.getParameters();
             navigator = NavigatorParameters.getNavigator();
-            
+
             /**
              * about.html (Learn About Opal) is called twice: once from init-Screen.html (very first screen) and once from home.html (after logging in)
              * Different modules are enabled depending on whether it is called before or after login
@@ -71,8 +70,6 @@
 
         function openUrl(openWhat, openInExternalBrowser = false) {
             let url = '';
-            let app = document.URL.indexOf('http://') === -1 && document.URL.indexOf('https://') === -1;
-
             switch (openWhat.toLowerCase()) {
                 case Params.aboutMuhcCase:
                     url = (vm.language === "EN") ? Params.aboutMuhcUrl.aboutMuhcUrlEn : Params.aboutMuhcUrl.aboutMuhcUrlFr;
@@ -95,16 +92,8 @@
                 default:
                     break;
             }
-
-            if (!app) {
-                window.open(url, '_blank');
-            } else if (openInExternalBrowser) {
-                cordova.InAppBrowser.open(url, '_system');   // _system: opens in External Browser (Safari, etc...) on the device
-            } else {
-                cordova.InAppBrowser.open(url, '_blank', 'location=yes');  // Opens inside the app
-            }
-
-         }
+            openInExternalBrowser ? Browser.openExternal(url) : Browser.openInternal(url);
+        }
 
         /**
          * navigatorName = 'initNavigator' or 'homeNavigator'
@@ -121,13 +110,8 @@
             navigator.pushPage('views/templates/content.html', {contentType: 'hig'});
         }
 
-        function openAcknowledge() {
-            navigator.pushPage('./views/templates/content.html', {contentType: 'acknowledgements'});
-        }
-
         function openCedars() {
             navigator.pushPage('views/home/about/cedars.html');
         }
     }
 })();
-

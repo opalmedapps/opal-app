@@ -1,20 +1,27 @@
 (function () {
     'use strict';
 
+    /**
+     * @name AnsweredQuestionnaireController
+     * @desc This is the controller for src/views/personal/questionnaires/answeredQuestionnaire.html
+     *      It is responsible of displaying the questionnaire summary page, regardless of the questionnaire being completed or not
+     */
+
     angular
         .module('MUHCApp')
         .controller('AnsweredQuestionnaireController', AnsweredQuestionnaireController);
 
     AnsweredQuestionnaireController.$inject = [
-        'Questionnaires',
-        'Params',
-        'NavigatorParameters',
         '$filter',
-        '$timeout'
+        '$timeout',
+        'NativeNotification',
+        'NavigatorParameters',
+        'Params',
+        'Questionnaires'
     ];
 
     /* @ngInject */
-    function AnsweredQuestionnaireController(Questionnaires, Params, NavigatorParameters, $filter, $timeout) {
+    function AnsweredQuestionnaireController($filter, $timeout, NativeNotification, NavigatorParameters, Params, Questionnaires) {
         // Note: this file has many exceptions / hard coding to obey the desired inconsistent functionality
 
         var vm = this;
@@ -86,8 +93,8 @@
         /**
          * @name editQuestion
          * @desc this public function is used for sending the question to be edited back to the carousel page.
-         * @param sIndex {int} the index of the section which the question belongs to
-         * @param qIndex {int} the index of the question to be edited
+         * @param {int} sIndex the index of the section which the question belongs to
+         * @param {int} qIndex the index of the question to be edited
          */
         function editQuestion(sIndex, qIndex) {
 
@@ -124,19 +131,16 @@
                     NavigatorParameters.setParameters({Navigator: navigatorName});
                     navigator.popPage();
 
-                    ons.notification.alert({
-                        message: $filter('translate')("SERVER_ERROR_SUBMIT_QUESTIONNAIRE"),
-                        modifier: (ons.platform.isAndroid())?'material':null
-                    })
+                    NativeNotification.showNotificationAlert($filter('translate')("SERVER_ERROR_SUBMIT_QUESTIONNAIRE"));
                 })
         }
 
         /**
          * @name questionOnClick
          * @desc this public function help the view to decide the appropriate behavior when the user clicks on a question
-         * @param sIndex {int} the index of the section which the question belongs to
-         * @param qIndex {int} the index of the question to be edited
-         * @param question {object} the question object itself
+         * @param {int} sIndex the index of the section which the question belongs to
+         * @param {int} qIndex the index of the question to be edited
+         * @param {object} question the question object itself
          */
         function questionOnClick(sIndex, qIndex, question){
             /*
@@ -260,7 +264,7 @@
          * @name resetShowAnswer
          * @desc this private function serves to add or reset the showAnswer property of a question which will be useful for the hide / show feature of the summary page
          *      Note that since the question is an object, it will change directly the question itself
-         * @param question {object}
+         * @param {object} question
          */
         function resetShowAnswer(question){
             question.showAnswer = false;
@@ -273,8 +277,8 @@
          *          red if the questionnaire is not completed and the question does not have a valid answer
          *          green if the questionnaire is not completed and the question do have a valid answer
          *          white if the questionnaire is completed or otherwise
-         * @param status {int} the status of the questionnaire
-         * @param question {object} the question itself
+         * @param {int} status the status of the questionnaire
+         * @param {object} question the question itself
          */
         function setQuestionStyle(status, question){
             if (status !== vm.allowedStatus.COMPLETED_QUESTIONNAIRE_STATUS){
@@ -299,21 +303,18 @@
          * @desc shows a notification to the user in case a request to server fails to load the questionnaire
          *      and move the user back to the previous page
          */
-        function handleLoadQuestionnaireErr (){
+        function handleLoadQuestionnaireErr() {
             // go to the questionnaire list page if there is an error
             NavigatorParameters.setParameters({Navigator: navigatorName});
             navigator.popPage();
 
-            ons.notification.alert({
-                message: $filter('translate')("SERVERERRORALERT"),
-                modifier: (ons.platform.isAndroid())?'material':null
-            })
+            NativeNotification.showNotificationAlert($filter('translate')("SERVERERRORALERT"));
         }
 
         /**
          * @name toggleShowHideAnswer
          * @desc this private function is used to switch the show / hide flag of a question
-         * @param question
+         * @param {object} question
          */
         function toggleShowHideAnswer(question){
             question.showAnswer = !question.showAnswer

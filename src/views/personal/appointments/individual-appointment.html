@@ -19,27 +19,12 @@
                 </div>
             </ons-list-item>
 
-            <ons-list-item style="background-color:#E3F2FD" modifier="chevron tappable" ng-if="vm.hasWaitingTimes" ng-class="fontSizeDesc"
-                           ng-click="vm.historicalDelays()" >
-                <strong class="item-desc" style="font-weight: bold;" ng-class="fontSizeDesc">{{"APPOINTMENT_CHECK_HISTORICAL_DELAYS" | translate}} {{vm.title}} <ons-icon icon="fas fa-question-circle"></ons-icon > </strong>
-            </ons-list-item>
-
-            <ons-list-item style="background-color:#E3F2FD" modifier="chevron tappable" ng-class="fontSizeDesc"
+            <ons-list-item class="about-link" modifier="chevron tappable" ng-class="fontSizeDesc"
                            ng-click="vm.aboutAppointment()" >
-                <p class="item-desc" style="font-weight: bold;" ng-class="fontSizeDesc"> <ons-icon icon="fas fa-info-circle"></ons-icon> {{"APPOINTMENT_ABOUT" | translate}} {{vm.title}} </p>
+                <label class="item-desc" ng-class="fontSizeDesc"> <ons-icon icon="fas fa-info-circle"></ons-icon> {{"APPOINTMENT_ABOUT" | translate}} {{vm.title}} </label>
             </ons-list-item>
-
-            <!--<ons-list-item style="background-color:#E3F2FD" modifier="chevron tappable" ng-click="vm.aboutAppointment()" ng-class="fontSizeDesc">-->
-                <!--<strong class="item-desc" ng-class="fontSizeDesc">{{"APPOINTMENT_ABOUT" | translate}} {{vm.title}} </strong>-->
-            <!--</ons-list-item>-->
-
-            <!--<ons-list-item modifier="chevron tappable" ng-click="vm.goToMap()" ng-class="fontSizeDesc">-->
-                <!--<strong class="item-desc" ng-class="fontSizeDesc">{{vm.app["MapName_"+vm.language]|ellipsis:25}}</strong>-->
-                <!--<p class="item-desc" ng-class="fontSizeDesc">{{vm.app["MapDescription_" + vm.language]}}</p>-->
-            <!--</ons-list-item>-->
 
             <ons-list-item ng-class="fontSizeDesc">
-                <!--<p class="item-desc" ng-class="fontSizeDesc">{{vm.app["MapDescription_" + vm.language]}}</p>-->
                 <p class="item-desc" ng-class="fontSizeDesc" ng-bind-html="vm.app['MapDescription_' + vm.language]" align="center"></p>
             </ons-list-item>
 

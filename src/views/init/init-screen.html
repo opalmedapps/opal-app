@@ -17,6 +17,18 @@
     <!-- LIST OF BUTTONS -->
     <div id="listInitApp" class="animated fadeIn ng-cloak listInitApp">
 
+        <!-- ACKNOWLEDGEMENTS -->
+        <div class="initScreenButtonDiv">
+            <ons-button class="shadow-2 initScreenWhiteButton" modifier="large"
+                        ng-click="init.goToAcknowledgements()" var="initButton">
+                <ons-icon icon="fa-star fa-lg pull-left"
+                          style="color:#FFEB3B; display: inline-block"></ons-icon>
+                <div class="initScreenButtonText" align="center">
+                    {{"OPAL_ACKNOWLEDGEMENTS"|translate}}
+                </div>
+            </ons-button>
+        </div>
+
         <!-- LEARN ABOUT OPAL -->
         <div class="initScreenButtonDiv">
             <ons-button class="shadow-2 initScreenWhiteButton" modifier="large"
@@ -31,45 +43,6 @@
                 </ons-row>
             </ons-button>
         </div>
-
-        <!-- ACKNOWLEDGEMTNS -->
-        <div class="initScreenButtonDiv">
-            <ons-button class="shadow-2 initScreenWhiteButton" modifier="large"
-                        ng-click="init.goToAcknowledgements()" var="initButton">
-                <ons-icon icon="fa-star fa-lg pull-left"
-                          style="color:#FFEB3B; display: inline-block"></ons-icon>
-                <div class="initScreenButtonText" align="center">
-                    {{"OPAL_ACKNOWLEDGEMENTS"|translate}}
-                </div>
-            </ons-button>
-        </div>
-
-
-        <!-- PATIENT CHARTER -->
-        <!--<div class="initScreenButtonDiv">-->
-            <!--<ons-button class="shadow-2 initScreenWhiteButton" modifier="large"-->
-                        <!--ng-click="init.goToPatientCharter()" var="initButton">-->
-                <!--<ons-icon icon="fa-list-alt fa-lg pull-left"-->
-                          <!--style="color:#2196F3; display: inline-block"></ons-icon>-->
-                <!--<div class="initScreenButtonText" align="center">-->
-                    <!--{{"PATIENTCHARTER"|translate}}-->
-                <!--</div>-->
-            <!--</ons-button>-->
-        <!--</div>-->
-
-        <!-- REPORT A BUG -->
-        <!--
-        <div class="initScreenButtonDiv">
-            <ons-button class="shadow-2 initScreenWhiteButton" modifier="large"
-                        ng-click="init.reportBugs()" var="initButton">
-                <i class="fa fa-exclamation-triangle fa-lg pull-left"
-                          style="color:#FFC107; display: inline-block"></i>
-                <div class="initScreenButtonText" align="center">
-                    {{"REPORTBUGS"|translate}}
-                </div>
-            </ons-button>
-        </div>
-        -->
 
         <!-- LEGAL INFO -->
         <div class="initScreenButtonDiv">

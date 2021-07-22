@@ -13,10 +13,12 @@
         .controller('PersonalTabController', PersonalTabController);
 
     PersonalTabController.$inject = ['Appointments','TxTeamMessages','Documents','NavigatorParameters', 'Notifications',
-        'Questionnaires', 'Patient', 'NetworkStatus', 'MetaData', '$timeout', 'UserPreferences', 'Params', 'UserHospitalPreferences'];
+        'Questionnaires', 'Patient', 'NetworkStatus', 'MetaData', '$timeout', 'UserPreferences', 'Params',
+        'UserHospitalPreferences', 'Browser'];
 
     function PersonalTabController( Appointments, TxTeamMessages, Documents, NavigatorParameters, Notifications, Questionnaires,
-                                    Patient, NetworkStatus, MetaData, $timeout, UserPreferences, Params, UserHospitalPreferences) {
+                                    Patient, NetworkStatus, MetaData, $timeout, UserPreferences, Params,
+                                    UserHospitalPreferences, Browser) {
         var vm = this;
 
         // variable to let the user know which hospital they are logged in
@@ -45,7 +47,6 @@
 
             $timeout(function(){
                 vm.censor = Patient.getAccessLevel() == 3;
-                vm.TestUser = Patient.getTestUser()
             });
 
             //Sets appointments and treatment plan stage tab
@@ -98,16 +99,8 @@
         }
 
         function goToCarnetSante() {
-            let url = '';
-            let app = document.URL.indexOf('http://') === -1 && document.URL.indexOf('https://') === -1;
-
-            url = Params.carnetSanteUrl;  // English site available after opening the French one
-
-            if (app) {
-                cordova.InAppBrowser.open(url, '_blank', 'location=yes');
-            } else {
-                window.open(url, '_blank');
-            }
+            // English site available after opening the French one
+            Browser.openInternal(Params.carnetSanteUrl);
         }
 
         /**

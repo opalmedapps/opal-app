@@ -39,10 +39,9 @@
          *@methodOf MUHCApp.service:Permissions
          *@description Checks if the device has the required permissions enabled. If not, it asks the user permission.
          *@param {String} permission_type Android permission that is requested.
-         *@param {String} msg Message to display.
          *@returns {Promise} Returns a promise containing permission type, success and message.
          **/
-        function enablePermission(permission_type, msg) {
+        function enablePermission(permission_type) {
 
             //Check if enabled required for android 6+
             var deferred = $q.defer();
@@ -52,8 +51,7 @@
                     permissions.hasPermission(permissions[permission_type], function (status) {
                         if (!status.hasPermission) {
                             var errorCallback = function () {
-                                console.warn(msg);
-                                deferred.reject({Permission: permission_type, Success: false, Message: msg})
+                                deferred.reject({Permission: permission_type, Success: false})
                             };
 
                             permissions.requestPermission(permissions[permission_type], function (status) {
@@ -69,14 +67,9 @@
                     deferred.resolve({Permission: permission_type, Success: true})
                 }
             } else{
-                deferred.reject({Reason: 'Not a device'})
+                deferred.resolve({Permission: permission_type, Success: true, Message: "Not a device; permission not required."});
             }
             return deferred.promise;
-
         }
     }
-
 })();
-
-
-

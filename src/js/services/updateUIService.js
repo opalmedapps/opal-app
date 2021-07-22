@@ -72,12 +72,12 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors',
          <pre>
          //Example:
          var sectionServiceMappings={
-  'Patient':{
-      setOnline:Patient.setUserFieldsOnline,
-      update:Patient.setUserFieldsOnline,
-      setOffline:Patient.setUserFieldsOffline
-    },...
-  **/
+              'Patient':{
+                  setOnline:Patient.setUserFieldsOnline,
+                  update:Patient.setUserFieldsOnline
+              },
+              ...
+         **/
         var sectionServiceMappings={
             'All':
             {
@@ -91,13 +91,11 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors',
             },
             'Patient':{
                 setOnline:Patient.setUserFieldsOnline,
-                update:Patient.setUserFieldsOnline,
-                setOffline:Patient.setUserFieldsOffline
+                update:Patient.setUserFieldsOnline
             },
             'Doctors':{
                 setOnline:Doctors.setUserContactsOnline,
-                update:Doctors.updateUserContacts,
-                setOffline:Doctors.setUserContactsOffline
+                update:Doctors.updateUserContacts
             },
             'Appointments':{
                 init:Appointments.setUserAppointments,
@@ -202,7 +200,7 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors',
                 });
             }).catch(function(error) {
                 console.log(error);
-                if(error.Code=='2')
+                if(error.Code !== '3')
                 {
                     NativeNotification.showNotificationAlert($filter('translate')("ERRORCONTACTINGHOSPITAL"));
                 }
@@ -248,7 +246,7 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors',
                 {
                     NativeNotification.showNotificationAlert($filter('translate')("ERRORCONTACTINGHOSPITAL"));
                 }else{
-                    if(error.Code =='2') NativeNotification.showNotificationAlert($filter('translate')("ERRORCONTACTINGHOSPITAL"));
+                    if(error.Code !== '3') NativeNotification.showNotificationAlert($filter('translate')("ERRORCONTACTINGHOSPITAL"));
                 }
                 r.reject(error);
             });
@@ -293,7 +291,7 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors',
                     }
                 }).catch(function(error)
             {
-                if(error.Code ==='2'||error.Response === 'timeout') NativeNotification.showNotificationAlert($filter('translate')("ERRORCONTACTINGHOSPITAL"));
+                if(error.Code !== '3' || error.Response === 'timeout') NativeNotification.showNotificationAlert($filter('translate')("ERRORCONTACTINGHOSPITAL"));
                 r.reject(error);
             });
             return r.promise;
