@@ -2521,11 +2521,6 @@ width: 30px;
     width: 85%;
 }
 
-.tour-icon{
-    font-size: 500%;
-    color: white;
-}
-
 input {
     display: block;
     margin: 0;
@@ -2878,27 +2873,22 @@ and (max-device-width : 321px)
     word-break: break-all;
 }
 
-#tourModalBackground {
-    padding: 20px;
-    width: 90%;
-    margin: auto;
-    position: relative;
-    height: 76%;
-}
-
-.icon-size {
-    max-width: 64px;
-}
-
-.tourCarousel {
+.tour-carousel {
     height: 100%;
     text-align: center;
     margin-top: 50px;
     width:99%;
 }
 
-.btnColor {
-    background-color: #F44336;
+.tour-icon {
+    color: #1f1f21;
+    font-size: 64px;
+    padding-bottom: 10px;
+    margin-top: 3px;
+}
+
+.tour-icon-image {
+    max-width: 64px;
 }
 
 .tour-carousel-arrow-margin {

@@ -13,7 +13,7 @@
     TabsController.$inject = ['$timeout', '$translatePartialLoader'];
 
     function TabsController($timeout, $translatePartialLoader) {
-        
+
         activate();
 
         /////////////////////////
@@ -26,15 +26,6 @@
                 },500);
             }
             $translatePartialLoader.addPart('all-views');
-        }
-
-        function analyze(event){
-            if(event.index === tabbar.getActiveTabIndex()){
-                event.cancel()
-            }
-            else{
-                tabbar.setActiveTab(e.index);
-            }
         }
     }
 })();

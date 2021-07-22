@@ -24,18 +24,27 @@
         vm.prev = prev;
 
         let carousel = null;
+
         activate();
 
         ////////////////
 
         function activate() {
+            bindEvents();
+        }
+
+        function bindEvents(){
             document.addEventListener('ons-carousel:init', initCarouselEvent);
 
+            vm.$onDestroy = function () {
+                document.removeEventListener('ons-carousel:init', initCarouselEvent);
+                carousel.off('postchange');
+            };
         }
 
         function initCarouselEvent(e) {
             carousel = e.component;
-            carousel.on('postchange', postChangeCarouseIndex);
+            carousel.on('postchange', postChangeCarouselIndex);
         }
 
         /**
@@ -48,25 +57,20 @@
 
         /**
          * @name prev
-         * @desc this public function serves to move the carousel to the previous item
+         * @desc This public function serves to move the carousel to the previous item
          */
         function prev() {
             carousel.prev();
         }
 
         /**
-         * @name postChangeCarouseIndex
-         * @desc this public function serves to maintain courseIndex number
+         * @name postChangeCarouselIndex
+         * @desc This public function serves to maintain the carousel's current index number
          */
-        function postChangeCarouseIndex(event) {
+        function postChangeCarouselIndex(event) {
             $timeout(function () {
                 vm.currentIndex = event.activeIndex;
             });
         }
-
-        vm.$onDestroy = function () {
-            document.removeEventListener('ons-carousel:init', initCarouselEvent);
-            carousel.off('postchange');
-        };
     }
 })();
