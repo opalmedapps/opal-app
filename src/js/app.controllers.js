@@ -30,7 +30,6 @@ import "./controllers/main/mainController.js";
 import "./controllers/maps/mapsController.js";
 import "./controllers/notifications/notificationsController.js";
 import "./controllers/parking/parkingController.js";
-import "./controllers/parking/individualParkingController.js";
 import "./controllers/pfp/pfpController.js";
 import "./controllers/pfp/pfpContactsController.js";
 import "./controllers/pfp/individualPfpContactController.js";

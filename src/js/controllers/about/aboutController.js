@@ -1,6 +1,6 @@
 /*
  * Filename     :   aboutController.js
- * Description  :   Manages the about view. Only controls the link to the Cedar's donation page.
+ * Description  :   Manages the about view.
  * Created by   :   David Herrera, Robert Maglieri
  * Date         :   18 Apr 2017
  * Copyright    :   Copyright 2016, HIG, All rights reserved.
@@ -23,10 +23,12 @@
         .module('MUHCApp')
         .controller('AboutController', AboutController);
 
-    AboutController.$inject = ['$window', 'UserPreferences', 'NavigatorParameters', 'Params', 'UserHospitalPreferences', 'Browser'];
+    AboutController.$inject = ['$window', 'UserPreferences', 'NavigatorParameters', 'Params', 'UserHospitalPreferences',
+        'Browser', 'DynamicContent'];
 
     /* @ngInject */
-    function AboutController($window, UserPreferences, NavigatorParameters, Params, UserHospitalPreferences, Browser) {
+    function AboutController($window, UserPreferences, NavigatorParameters, Params, UserHospitalPreferences, Browser,
+                             DynamicContent) {
         const vm = this;
 
         vm.openUrl = openUrl;
@@ -67,30 +69,8 @@
             vm.language = UserPreferences.getLanguage();
         }
 
-        function openUrl(openWhat, openInExternalBrowser = false) {
-            let url = '';
-            switch (openWhat.toLowerCase()) {
-                case Params.aboutMuhcCase:
-                    url = (vm.language === "EN") ? Params.aboutMuhcUrl.aboutMuhcUrlEn : Params.aboutMuhcUrl.aboutMuhcUrlFr;
-                    break;
-                case Params.cedarsCancerCenterCase:
-                    url = (vm.language === "EN") ? Params.cedarsCancerCenterUrl.cedarsCancerCenterUrlEn : Params.cedarsCancerCenterUrl.cedarsCancerCenterUrlFr;
-                    break;
-                case Params.cedarsCancerFoundationCase:
-                    url = (vm.language === "EN") ? Params.cedarsCancerFoundationUrl.cedarsCancerFoundationUrlEn : Params.cedarsCancerFoundationUrl.cedarsCancerFoundationUrlFr;
-                    break;
-                case Params.cedarsCancerSupportCase:
-                    url = (vm.language === "EN") ? Params.cedarsCanSupportUrl.cedarsCanSupportUrlEn : Params.cedarsCanSupportUrl.cedarsCanSupportUrlFr;
-                    break;
-                case Params.donationCase:
-                    url = (vm.language === "EN") ? Params.donationUrl.donationUrlEn : Params.donationUrl.donationUrlFr;
-                    break;
-                case Params.opalWebsiteCase:
-                    url = (vm.language === "EN") ? Params.opalWebsiteUrl.opalWebsiteUrlEn : Params.opalWebsiteUrl.opalWebsiteUrlFr;
-                    break;
-                default:
-                    break;
-            }
+        function openUrl(contentKey, openInExternalBrowser = false) {
+            const url = DynamicContent.getURL(contentKey);
             openInExternalBrowser ? Browser.openExternal(url) : Browser.openInternal(url);
         }
 

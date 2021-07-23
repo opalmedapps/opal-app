@@ -22,11 +22,12 @@
 		'$filter',
 		'Constants',
 		'Permissions',
-		'DynamicContentService',
+		'DynamicContent',
 		'NewsBanner',
 		'Params',
 		'UserHospitalPreferences',
-		'Browser'
+		'Browser',
+		'$timeout'
 	];
 
 	/* @ngInject */
@@ -37,11 +38,12 @@
 		$filter,
 		Constants,
 		Permissions,
-		DynamicContentService,
+		DynamicContent,
 		NewsBanner,
 		Params,
 		UserHospitalPreferences,
-		Browser
+		Browser,
+		$timeout
 	) {
 		var vm = this;
 		vm.globalMessage = '';
@@ -65,30 +67,27 @@
 
 		function activate() {
 
-			// Initialize the service message to all users (links.php)
-			DynamicContentService.initializeLinks()
-				.then(function (response) {
-					if (!response.exists) {
-						DynamicContentService.setContentData(response.data);
-					}
+			DynamicContent.ensureInitialized().then(() => {
+				// Read the Message Of The Day from [staging|preprod|prod]_serviceStatus_[EN|FR].php on depDocs
+				return DynamicContent.getPageContent(`${vm.OPAL_ENV}_service`);
 
-					// This line reads the Message Of The Day from [staging|preprod|prod]_serviceStatus_[EN|FR].php on depDocs
-					// '[staging|preprod|prod]_service' in links.php will grab the url (location) of
-					// [staging|preprod|prod]_serviceStatus_[EN|FR].php
-					return DynamicContentService.getPageContent(`${vm.OPAL_ENV}_service`);
-				})
-				.then(function successCallback(response) {
-					for (var key in response.data) {
-						if (response.data[key] !== "") {
+			}).then(response => {
+				// Save the Message Of The Day
+				if (typeof response.data === "object") for (let key in response.data) {
+					if (response.data[key] !== "") {
+						$timeout(() => {
 							vm.globalMessage = key;
 							vm.globalMessageDescription = response.data[key];
-							break;
-						}
+						});
+						break;
 					}
-				})
-				.catch(function errorCallback(error) {
-					console.log("Error initializing links using the DynamicContentService.", error);
-				});
+				}
+			}).catch(err => {
+				if (err.code === "INIT_ERROR") NewsBanner.showCustomBanner($filter('translate')("ERROR_INIT_LINKS"), '#333333', '#F0F3F4',
+					13, 'top', null, 5000);
+
+				else console.error("Error initializing the message of the day using DynamicContent:", err);
+			});
 
 			//Add the login translation
 			$translatePartialLoader.addPart('login');
@@ -136,7 +135,8 @@
 		 * Go to registration page
 		 */
 		function goToRegister() {
-			Browser.openInternal(Params.registrationPage);
+			const url = DynamicContent.getURL("registration");
+			Browser.openInternal(url);
 		}
 
 		/**
