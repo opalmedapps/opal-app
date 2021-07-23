@@ -21,7 +21,7 @@
             </ons-row>
         </ons-list-item>
 
-        <ons-list-item class="item" modifier="tappable" ng-click="about.openUrl('opalWebsite')">
+        <ons-list-item class="item" modifier="tappable" ng-click="about.openUrl('opal_website')">
             <ons-row align="center">
                 <ons-col width="60px" style="text-align: center">
                     <div>
@@ -79,7 +79,7 @@
             </ons-row>
         </ons-list-item>
 
-        <ons-list-item class="item" modifier="tappable" ng-click="about.openUrl('aboutmuhc')" ng-if="about.allowedModules.hasOwnProperty('HOS') && about.allowedModules['HOS']">
+        <ons-list-item class="item" modifier="tappable" ng-click="about.openUrl('about_muhc')" ng-if="about.allowedModules.hasOwnProperty('HOS') && about.allowedModules['HOS']">
             <ons-row align="center">
                 <ons-col width="60px" style="text-align: center">
                     <div>
@@ -135,17 +135,5 @@
                 <ons-icon icon="fa-arrow-right" aria-hidden="true" style="color:white" ng-click="tourCarousel.next()"></ons-icon>
             </div>
         </div>
-    </ons-modal>
-
-    <ons-modal var="modalOpenViewer">
-        <h3>{{"WARNING"|translate}}</h3>
-        <ons-icon icon="ion-alert-circled" size="60px"></ons-icon>
-        <p style="margin-top: 5%" class="secure-message">{{"LEAVING_APP4"|translate}}</p>
-        <ons-button style="margin-top: 5%; font-size: 22px;"
-                    ng-click="modalOpenViewer.hide()">{{"CANCEL"|translate}}
-        </ons-button>
-        <ons-button style="margin-top: 5%; margin-left: 50px; font-size: 22px; background-color: #F44336"
-                    ng-click="modalOpenViewer.hide(); about.openUrl('opalwebsite',true)">{{"CONTINUE"|translate}}
-        </ons-button>
     </ons-modal>
 </ons-page>

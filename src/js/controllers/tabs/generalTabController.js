@@ -13,10 +13,10 @@
             .controller('GeneralTabController', GeneralTabController);
 
         GeneralTabController.$inject = ['$scope', 'Announcements', 'UpdateUI', 'NavigatorParameters', 'NetworkStatus',
-            'MetaData', 'UserPreferences', 'Params', 'UserHospitalPreferences', 'Browser'];
+            'MetaData', 'UserPreferences', 'Params', 'UserHospitalPreferences', 'Browser', 'DynamicContent'];
 
         function GeneralTabController($scope, Announcements, UpdateUI, NavigatorParameters, NetworkStatus, MetaData,
-                                      UserPreferences, Params, UserHospitalPreferences, Browser) {
+                                      UserPreferences, Params, UserHospitalPreferences, Browser, DynamicContent) {
             var vm = this;
 
             vm.goToParking = goToParking;
@@ -109,21 +109,8 @@
                 tabbar.setActiveTab(0);
             }
 
-            function goToUrl(openWhat) {
-                let url = '';
-                switch (openWhat.toLowerCase()) {
-                    case Params.findDoctorCase:
-                        url = (vm.language === "EN") ? Params.findDoctorUrl.findDoctorUrlEn : Params.findDoctorUrl.findDoctorUrlFr ;
-                        break;
-                    case Params.medicalSchedulerCase:
-                        url = (vm.language === "EN") ? Params.medicalSchedulerUrl.medicalSchedulerUrlEn : Params.medicalSchedulerUrl.medicalSchedulerUrlFr ;
-                        break;
-                    case Params.carnetSanteCase:
-                        url =  Params.carnetSanteUrl ;  // English site available after opening the French one
-                        break;
-                    default:
-                        break;
-                }
+            function goToUrl(contentKey) {
+                const url = DynamicContent.getURL(contentKey);
                 Browser.openInternal(url);
             }
         }

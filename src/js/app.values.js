@@ -19,37 +19,6 @@
                 maxIdleTimeAllowed: 300000,
                 tenMinutesMilliSeconds: 600000,
 
-                /** About Controller URLs **/
-                aboutMuhcCase: 'aboutmuhc',
-                aboutMuhcUrl: {
-                    aboutMuhcUrlEn: 'https://muhc.ca/homepage/page/about-muhc',
-                    aboutMuhcUrlFr: 'https://cusm.ca/homepage/page/propos-du-cusm'
-                },
-                cedarsCancerCenterCase: 'cedarscancercenter',
-                cedarsCancerCenterUrl: {
-                    cedarsCancerCenterUrlEn: 'https://muhc.ca/glen/cedars-cancer-centre',
-                    cedarsCancerCenterUrlFr: 'https://cusm.ca/glen/page/centre-du-cancer-c%C3%A8dres'
-                },
-                cedarsCancerFoundationCase: 'cedarscancerfoundation',
-                cedarsCancerFoundationUrl: {
-                    cedarsCancerFoundationUrlEn: 'https://www.cedars.ca',
-                    cedarsCancerFoundationUrlFr: 'https://www.cedars.ca'
-                },
-                cedarsCancerSupportCase: 'cedarscansupport',
-                cedarsCanSupportUrl: {
-                    cedarsCanSupportUrlEn: 'https://www.cansupport.ca/',
-                    cedarsCanSupportUrlFr: 'https://www.cansupport.ca/fr/'
-                },
-                donationCase: 'donation',
-                donationUrl: {
-                    donationUrlEn: 'https://www.opalmedapps.com/contribute',
-                    donationUrlFr: 'https://www.opalmedapps.com/contribute/fr'
-                },
-                opalWebsiteCase: 'opalwebsite',
-                opalWebsiteUrl: {
-                    opalWebsiteUrlEn: 'https://www.opalmedapps.com',
-                    opalWebsiteUrlFr: 'https://www.opalmedapps.com/fr-selected'
-                },
                 appointmentType: {
                     appointmentTypeEn: 'appointment',
                     appointmentTypeFr: 'rendez-vous'
@@ -62,9 +31,6 @@
                 alertTypeInfo: 'info',
                 alertClassUpdateMessageError: 'bg-danger updateMessage-error',
                 alertClassUpdateMessageSuccess: "bg-success updateMessage-success",
-
-                /** Registration Link **/
-                registrationPage: 'https://registration.opalmedapps.ca/#!/welcomePage',
 
                 /** Firebase Authentication Error Codes **/
                 invalidEmail: 'auth/invalid-email',
@@ -139,25 +105,6 @@
                     rangeSelectorToEr: 'to'
                 },
 
-                /** Parking Controller **/
-                general: {
-                    generalParkingTitleEn: 'Parking',
-                    generalParkingTitleFr: 'Stationnement',
-                    generalParkingUrl: 'https://www.depdocs.com/opal/parking/parking.php',
-                    generalParkingGlenUrlEn: 'https://muhc.ca/patient-and-visitor-parking#glen',
-                    generalParkingGlenUrlFr: 'https://cusm.ca/stationnement'
-                },
-                oncology: {
-                    oncologyParkingTitleEn: 'Oncology Parking',
-                    oncologyParkingTitleFr: 'Stationnement Radiothérapie',
-                    oncologyParkingUrlEn: 'https://www.depdocs.com/opal/parking/oncology_parking.php',
-                    oncologyParkingUrlFr: 'https://www.depdocs.com/opal/parking/radiotherapie_stationnement.php'
-                },
-                gettingHospitalUrl: {
-                    gettingHospitalUrlEn: 'https://muhc.ca/glen',
-                    gettingHospitalUrlFr: 'https://cusm.ca/glen'
-                },
-
                 /** ChangeSettingsController Constants **/
                 setAliasParam: 'ALIAS',
                 setAliasLowerCaseParam: 'Alias',
@@ -196,20 +143,6 @@
                     'Physics Quality Control': [],
                     'Scheduling Treatments': []
                 },
-
-                /** GeneralTab Controller **/
-                findDoctorCase: 'finddoctor',
-                findDoctorUrl: {
-                    findDoctorUrlEn: 'https://www.quebec.ca/en/health/finding-a-resource/registering-with-a-family-doctor/',
-                    findDoctorUrlFr: 'https://www.quebec.ca/sante/trouver-une-ressource/inscription-aupres-dun-medecin-de-famille'
-                },
-                medicalSchedulerCase: 'medicalscheduler',
-                medicalSchedulerUrl: {
-                    medicalSchedulerUrlEn: 'https://www.rvsq.gouv.qc.ca/en/public/Pages/home.aspx',
-                    medicalSchedulerUrlFr: 'https://www.rvsq.gouv.qc.ca/fr/public/Pages/accueil.aspx'
-                },
-                carnetSanteCase: 'carnetsante',
-                carnetSanteUrl: 'https://carnetsante.gouv.qc.ca/portail',
 
                 /** CheckIn Service Constants **/
                 hospitalSite: {
