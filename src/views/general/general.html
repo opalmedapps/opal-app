@@ -17,22 +17,6 @@
     <div>
         <network-banner></network-banner>
         <ons-list style="margin: 0px 0">
-            <!--<ons-list-item modifier="chevron" class="item"-->
-                           <!--ng-click="generalNavigator.pushPage('views/general/contacts/contacts.html')">-->
-                <!--<ons-row align="center">-->
-                    <!--<ons-col width="60px" style="text-align: center">-->
-                        <!--<div>-->
-                            <!--<ons-icon icon="fa-address-book" size="2x" style="color:#2196F3"></ons-icon>-->
-                        <!--</div>-->
-                    <!--</ons-col>-->
-                    <!--<ons-col>-->
-                        <!--<header>-->
-                            <!--<span class="item-title" ng-class="fontSizeTitle">{{"CONTACTS"|translate}}</span>-->
-                        <!--</header>-->
-                        <!--<p class="item-desc"></p>-->
-                    <!--</ons-col>-->
-                <!--</ons-row>-->
-            <!--</ons-list-item>-->
             <ons-list-item modifier="chevron" class="item"
                            ng-if="tab.allowedModules.hasOwnProperty('ANN') && tab.allowedModules['ANN']"
                            ng-click="generalNavigator.pushPage('views/general/announcements/announcements.html')">
@@ -105,7 +89,7 @@
             </ons-list-item>
             <ons-list-item class="item"
                            ng-if="tab.allowedModules.hasOwnProperty('FFD') && tab.allowedModules['FFD']"
-                           ng-click="tab.goToUrl('FindDoctor')">
+                           ng-click="tab.goToUrl('find_doctor')">
                 <ons-row align="center">
                     <ons-col width="60px" style="text-align: center">
                         <div>
@@ -117,7 +101,7 @@
                     </ons-col>
                     <ons-col>
                         <header>
-                            <span class="item-title" ng-class="fontSizeTitle">{{"FINDDOCTOR"|translate}}</span>
+                            <span class="item-title" ng-class="fontSizeTitle">{{"FIND_DOCTOR"|translate}}</span>
                             <ons-icon icon="ion-android-open" style="color:#ddd; margin-top: 1%; margin-right: -10px" class="pull-right"
                                       size="1.2em">
                             </ons-icon>
@@ -128,7 +112,7 @@
             </ons-list-item>
             <ons-list-item class="item"
                            ng-if="tab.allowedModules.hasOwnProperty('MAS') && tab.allowedModules['MAS']"
-                           ng-click="tab.goToUrl('MedicalScheduler')">
+                           ng-click="tab.goToUrl('medical_scheduler')">
                 <ons-row align="center">
                     <ons-col width="60px" style="text-align: center">
                         <div>
@@ -141,7 +125,7 @@
                     <ons-col>
                         <header>
                             <span class="item-title"
-                                  ng-class="fontSizeTitle">{{"QUEBECMEDICALSCHEDULER"|translate}}</span>
+                                  ng-class="fontSizeTitle">{{"QUEBEC_MEDICAL_SCHEDULER"|translate}}</span>
                             <ons-icon icon="ion-android-open" style="color:#ddd; margin-top: 1%; margin-right: -10px" class="pull-right"
                                       size="1.2em">
                             </ons-icon>
@@ -150,27 +134,6 @@
                     </ons-col>
                 </ons-row>
             </ons-list-item>
-            <!--
-            <ons-list-item class="item" ng-click="tab.goToUrl('CarnetSante')">
-                <ons-row align="center">
-                    <ons-col width="60px" style="text-align: center">
-                        <div>
-                            <img style="width: 35px;" src="./img/quebec.png">
-                        </div>
-                    </ons-col>
-                    <ons-col>
-                        <header>
-                            <span class="item-title"
-                                  ng-class="fontSizeTitle">{{"CARNETSANTE"|translate}}</span>
-                            <ons-icon icon="ion-android-open" style="color:#ddd; margin-top: 1%; margin-right: -10px" class="pull-right"
-                                      size="1.2em">
-                            </ons-icon>
-                        </header>
-                        <p class="item-desc"></p>
-                    </ons-col>
-                </ons-row>
-            </ons-list-item>
-            -->
         </ons-list>
     </div>
 </ons-page>

@@ -14,11 +14,11 @@
 
     PersonalTabController.$inject = ['Appointments','TxTeamMessages','Documents','NavigatorParameters', 'Notifications',
         'Questionnaires', 'Patient', 'NetworkStatus', 'MetaData', '$timeout', 'UserPreferences', 'Params',
-        'UserHospitalPreferences', 'Browser'];
+        'UserHospitalPreferences', 'Browser', 'DynamicContent'];
 
     function PersonalTabController( Appointments, TxTeamMessages, Documents, NavigatorParameters, Notifications, Questionnaires,
                                     Patient, NetworkStatus, MetaData, $timeout, UserPreferences, Params,
-                                    UserHospitalPreferences, Browser) {
+                                    UserHospitalPreferences, Browser, DynamicContent) {
         var vm = this;
 
         // variable to let the user know which hospital they are logged in
@@ -99,8 +99,8 @@
         }
 
         function goToCarnetSante() {
-            // English site available after opening the French one
-            Browser.openInternal(Params.carnetSanteUrl);
+            const url = DynamicContent.getURL("carnet_sante");
+            Browser.openInternal(url);
         }
 
         /**

@@ -7,13 +7,13 @@
 	angular.module("MUHCApp")
 		.controller("ParkingController", ParkingController);
 
-	ParkingController.$inject = ['NavigatorParameters', 'UserPreferences', 'Params', 'Browser'];
+	ParkingController.$inject = ['NavigatorParameters', 'UserPreferences', 'Params', 'Browser', 'DynamicContent'];
 
 	/* @ngInject */
-	function ParkingController(NavigatorParameters, UserPreferences, Params, Browser) {
+	function ParkingController(NavigatorParameters, UserPreferences, Params, Browser, DynamicContent) {
 		const vm = this;
 
-		let navigatorName;
+		let navigator;
 
 		vm.goToParkingLink = goToParkingLink;
 
@@ -21,27 +21,17 @@
 
 		/////////////////////////
 
-		function activate(){
-			navigatorName = NavigatorParameters.getParameters();
+		function activate() {
+			navigator = NavigatorParameters.getNavigator();
 		}
 
-		function goToParkingLink(type){
-			let url = '';
-			if (type === 'general') {
-				UserPreferences.getLanguage().toUpperCase() === "EN"
-					? url = Params.general.generalParkingGlenUrlEn
-					: url = Params.general.generalParkingGlenUrlFr;
+		function goToParkingLink(type) {
+			if (type === "parking_general" || type === "parking_gettingtohospital") {
+				const url = DynamicContent.getURL(type);
 				Browser.openInternal(url);
 			}
-			else if (type === 'gettingtohospital') {
-				UserPreferences.getLanguage().toUpperCase() === "EN"
-					? url = Params.gettingHospitalUrl.gettingHospitalUrlEn
-					: url = Params.gettingHospitalUrl.gettingHospitalUrlFr;
-				Browser.openInternal(url);
-			}
-			else if (type ==='oncology') {
-				NavigatorParameters.setParameters({type:type});
-				window[navigatorName].pushPage('./views/general/parking/parking-details.html');
+			else if (type ==="parking_oncology") {
+				navigator.pushPage('./views/templates/content.html', {contentType: type});
 			}
 		}
 	}
