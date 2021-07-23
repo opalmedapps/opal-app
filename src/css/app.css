@@ -2872,30 +2872,3 @@ and (max-device-width : 321px)
 .break-words {
     word-break: break-all;
 }
-
-.tour-carousel {
-    height: 100%;
-    text-align: center;
-    margin-top: 50px;
-    width:99%;
-}
-
-.tour-icon {
-    color: #1f1f21;
-    font-size: 64px;
-    padding-bottom: 10px;
-    margin-top: 3px;
-}
-
-.tour-icon-image {
-    max-width: 64px;
-}
-
-.tour-carousel-arrow-margin {
-    margin-top:4px;
-}
-
-.tour-carousel-text-margin {
-    padding-left: 2vw;
-    padding-right: 2vw;
-}

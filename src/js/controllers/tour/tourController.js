@@ -5,6 +5,8 @@
  * Time: 11:00 PM
  */
 
+import "../../../css/tour.view.css";
+
 (function () {
     'use strict';
 
@@ -15,10 +17,63 @@
     TourController.$inject = ['$timeout'];
 
     function TourController($timeout) {
-
-        var vm = this;
+        let vm = this;
 
         vm.currentIndex = 0;
+
+        /**
+         * @description The sections shown in the tour HTML.
+         */
+        vm.tourSections = [
+            {
+                icon: "img/Opal_Logo_Black.png",
+                iconType: "img",
+                title: "TOUR_WELCOME",
+                description: "TOUR_WELCOME_DESC",
+            },
+            {
+                icon: "fa-home",
+                iconType: "icon",
+                title: "HOME",
+                description: "TOUR_HOME",
+            },
+            {
+                icon: "fa-user",
+                iconType: "icon",
+                title: "MYCHART",
+                description: "TOUR_MYCHART",
+            },
+            {
+                icon: "fa-th",
+                iconType: "icon",
+                title: "GENERAL",
+                description: "TOUR_GENERAL",
+            },
+            {
+                icon: "fa-book",
+                iconType: "icon",
+                title: "EDUCATION",
+                description: "TOUR_EDUCATION",
+            },
+            {
+                icon: "fa-cog",
+                iconType: "icon",
+                title: "ACCOUNT",
+                description: "TOUR_ACCOUNT",
+            },
+            {
+                icon: "fa-info-circle",
+                iconType: "icon",
+                title: "INFO",
+                description: "TOUR_INFO",
+            },
+            {
+                icon: "fa-check-circle",
+                iconType: "icon",
+                title: "TOUR_END_TITLE",
+                description: "TOUR_END_DESC",
+            },
+        ];
 
         vm.next = next;
         vm.prev = prev;

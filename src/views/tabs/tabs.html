@@ -33,13 +33,13 @@
 
 <ons-modal var="firstLoginTourModal">
     <div id="rcorners">
-        <h3>{{"TOURMODALTITLE"|translate}}</h3>
+        <h3>{{"TOUR_WELCOME"|translate}}</h3>
         <p style="margin-top: 10%; margin-bottom:10%;" class="secure-message">{{"TOURMODALINTRODUCTION"|translate}}</p>
-        <ons-button ng-class="fontSizeTitle" style="background-color: #6a6261;"
+        <ons-button ng-class="fontSizeTitle" style="background-color: #6a6261; margin: 2px"
                     ng-click="firstLoginTourModal.hide()">
             {{"TOURMODALLATERBUTTON"|translate}}
         </ons-button>
-        <ons-button ng-class="fontSizeTitle"
+        <ons-button ng-class="fontSizeTitle" style="margin: 2px"
                     ng-click="firstLoginTourModal.hide(); homeNavigator.pushPage('../views/home/tour/tour.html');">
             {{"TOURMODALTAKETOURBUTTON"|translate}}
         </ons-button>
