@@ -14,13 +14,13 @@ import "../../../css/tour.view.css";
         .module('MUHCApp')
         .controller('TourController', TourController);
 
-    TourController.$inject = ['$timeout'];
+    TourController.$inject = ['$filter', '$timeout', 'DynamicContent'];
 
-    function TourController($timeout) {
+    function TourController($filter, $timeout, DynamicContent) {
         let vm = this;
 
         vm.currentIndex = 0;
-        vm.helpEmail = "opal@muhc.mcgill.ca";
+        vm.helpEmail = "";
 
         /**
          * @description The sections shown in the tour HTML.
@@ -86,6 +86,12 @@ import "../../../css/tour.view.css";
         ////////////////
 
         function activate() {
+            // Initialize the support email value
+            let emailFromServer = DynamicContent.getConstant('support_email');
+            vm.helpEmail = emailFromServer === undefined
+                ? `{${$filter('translate')("EMAIL_LOADING_ERROR").toLowerCase()}}`
+                : emailFromServer;
+
             bindEvents();
         }
 

@@ -22,6 +22,7 @@
   "CONTINUE": "Continue",
   "EDUCATION": "Library",
   "EMAIL": "Email",
+  "EMAIL_LOADING_ERROR": "Email loading error",
   "ENTERANANSWER": "Enter an answer",
   "ENTERANSWERPLACEHOLDER": "Enter your answer...",
   "ENTEREMAIL": "Enter your Email Address:",

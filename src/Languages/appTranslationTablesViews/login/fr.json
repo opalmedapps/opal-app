@@ -22,6 +22,7 @@
   "CONTINUE": "Continuer",
   "EDUCATION": "Bibliothèque",
   "EMAIL": "Courriel",
+  "EMAIL_LOADING_ERROR": "Erreur de chargement de l'adresse",
   "ENTERANANSWER": "Entrer une réponse",
   "ENTERANSWERPLACEHOLDER": "Entrer votre réponse...",
   "ENTEREMAIL": "Entrez votre adresse courriel:",
