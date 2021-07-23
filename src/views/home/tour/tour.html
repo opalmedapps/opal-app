@@ -27,7 +27,7 @@
             <img ng-if="section.iconType === 'img'" ng-src="{{section.icon}}" class="tour-icon-image">
             <ons-icon ng-if="section.iconType === 'icon'" icon="{{section.icon}}" class="tour-icon" aria-hidden="true"></ons-icon>
             <div ng-class="fontSizeTitle" class="tour-title">{{section.title | translate}}</div>
-            <div ng-class="fontSizeDesc">{{section.description | translate}}</div>
+            <div ng-class="fontSizeDesc">{{section.description | translate | replace: "%%HELP_EMAIL%%":vm.helpEmail}}</div>
         </ons-carousel-item>
     </ons-carousel>
 </ons-page>

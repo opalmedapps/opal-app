@@ -20,6 +20,7 @@ import "../../../css/tour.view.css";
         let vm = this;
 
         vm.currentIndex = 0;
+        vm.helpEmail = "opal@muhc.mcgill.ca";
 
         /**
          * @description The sections shown in the tour HTML.
