@@ -83,7 +83,7 @@
          * about.html (Learn About Opal) is called twice: once from init-Screen.html (very first screen) and once from home.html (after logging in)
          */
         function openTour() {
-            navigator.pushPage('/views/home/tour/tour.html');
+            navigator.pushPage('views/home/tour/tour.html');
         }
 
         function openTeam() {
