@@ -24,10 +24,10 @@
     <!-- TOUR CAROUSEL -->
     <ons-carousel swipeable overscrollable auto-scroll fullscreen class="tour-carousel">
         <ons-carousel-item ng-repeat="section in vm.tourSections" class="tour-carousel-text-margin">
-            <img ng-if="section.iconType === 'img'" ng-src="{{section.icon}}" class="tour-icon-image">
+            <img ng-if="section.iconType === 'opal-logo'" src="img/Opal_Logo_Black.png" class="tour-icon-image">
             <ons-icon ng-if="section.iconType === 'icon'" icon="{{section.icon}}" class="tour-icon" aria-hidden="true"></ons-icon>
             <div ng-class="fontSizeTitle" class="tour-title">{{section.title | translate}}</div>
-            <div ng-class="fontSizeDesc">{{section.description | translate | replace: "%%HELP_EMAIL%%":vm.helpEmail}}</div>
+            <div ng-class="fontSizeDesc">{{section.description | translate | replaceAll: "%%HELP_EMAIL%%":vm.helpEmail}}</div>
         </ons-carousel-item>
     </ons-carousel>
 </ons-page>

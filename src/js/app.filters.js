@@ -1,2 +1,2 @@
 import "./filters/filters";
-import "./filters/replace.filter";
+import "./filters/replaceAll.filter";
