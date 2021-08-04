@@ -237,20 +237,14 @@ img
 
 .popover {
     display: inline;
-    top: 45.2875px !important;
-    left: 94px !important;
-}
-
-.popover__top-arrow {
-    left: 202.272px !important;
 }
 
 .menu-item {
-    color: #2B6197;
-    padding: 0 0 0 20px;
-    line-height: 52px;
-    height: 52px;
-    /*text-shadow: rgba(0, 0, 0, 0.4) 0px 1px 0px;*/
+  color:#2B6197;
+  padding: 0 0 0 20px;
+  line-height: 52px;
+  height: 52px;
+  /*text-shadow: rgba(0, 0, 0, 0.4) 0px 1px 0px;*/
 }
 
 .menu-item:active {
