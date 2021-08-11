@@ -53,19 +53,6 @@
             UserAuthorizationInfo.clearUserAuthorizationInfo();
             UpdateUI.clearUpdateUI();
             CheckInService.clear();
-
-            /**
-             * Delete All Cookies
-             */
-            if (Constants.app) {
-                window.cookieMaster.clear(
-                    function () {
-                        console.log('Cookies have been cleared');
-                    },
-                    function () {
-                        console.log('Cookies could not be cleared');
-                    });
-            }
         }
 
         function clearSensitive() {
