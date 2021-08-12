@@ -31,7 +31,6 @@
 
         var param;
         var navigatorPage;
-        var app;
 
         vm.loadingContents = false;
         vm.errorLoadingContents = false;
@@ -78,9 +77,6 @@
 
             //Determine if material is a booklet
             var isBooklet = vm.edumaterial.hasOwnProperty('TableContents');
-
-            //Determine if material is an app
-            app = document.URL.indexOf('http://') === -1 && document.URL.indexOf('https://') === -1;
 
             //If its a booklet, translate table of contents
             if (isBooklet) {

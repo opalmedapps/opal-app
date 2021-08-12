@@ -9,12 +9,11 @@ var myApp=angular.module('MUHCApp');
  *@requires $rootScope
  *@requires tmhDynamicLocale
  *@requires $translate
- *@requires $q
  *@requires MUHCApp.service:UserAuthorizationInfo
  *@description Service stores and manages user preferences
  **/
-myApp.service('UserPreferences', ['UserAuthorizationInfo','$rootScope','tmhDynamicLocale','$translate','$q', function(UserAuthorizationInfo,$rootScope,tmhDynamicLocale,$translate,$q){
-    var app = document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'https://' ) === -1;
+myApp.service('UserPreferences', ['UserAuthorizationInfo','$rootScope','tmhDynamicLocale','$translate','Constants',
+    function (UserAuthorizationInfo, $rootScope, tmhDynamicLocale, $translate, Constants) {
 
     //Fields for user preference and authentication
     /**
@@ -143,7 +142,7 @@ myApp.service('UserPreferences', ['UserAuthorizationInfo','$rootScope','tmhDynam
                 var lan = window.localStorage.getItem('Language') || navigator.language || navigator.userLanguage;
                 lan = lan.substring(0, 2).toLowerCase();
                 //If language is not defined and its a device
-                if (!lan && app) {
+                if (!lan && Constants.app) {
                     //Finds out the language of the default storage
                     navigator.globalization.getPreferredLanguage(function (success) {
                         var lan = success.value;

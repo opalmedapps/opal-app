@@ -10,20 +10,35 @@ var myApp=angular.module('MUHCApp');
 *@requires $translatePartialLoader
 *@description API services used to display message banner alerts for the app, e.g. internet connectivity banners, notification banners, etc. For more information on the plugin, {@link https://github.com/EddyVerbruggen/Toast-PhoneGap-Plugin Cordova Toast Plugin}
 **/
-myApp.service('NewsBanner',['$cordovaNetwork','$filter','$translatePartialLoader', 'Params', 
-  function($cordovaNetwork,$filter,$translatePartialLoader, Params) {
+myApp.service('NewsBanner',['$cordovaNetwork','$filter','$translatePartialLoader','Constants','Params',
+  function($cordovaNetwork, $filter, $translatePartialLoader, Constants, Params) {
 
   //Adds the top-view translation tables in order to always display the alert banners correctly.
   $translatePartialLoader.addPart('top-view');
 
-  //Determine if its an device or a browser
-  var app = document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'https://' ) === -1;
+  /**
+   * @author Stacey Beard
+   * @date 2021-08-12
+   * @desc Determines whether the current platform is able to display toast messages.
+   * @returns {boolean} True if toasts can be used; false otherwise.
+   */
+  function platformSupportsToast() {
+    // Check the version number of the OS. If using Android, toasts are not supported on Android 11+.
+    // Use a regular expression to extract the first number of the version; e.g. 11.0 --> 11
+    const versionRegEx = /^\d*/;
+    const versionStr = device.version.match(versionRegEx)[0];
+    const versionNum = parseInt(versionStr);
+
+    // To support toasts, we must be running on mobile ("app"), and not on Android 11+.
+    return Constants.app && !(device.platform === "Android" && versionNum >= 11);
+  }
 
   //Helper method to show banner
   function showCustomBanner(messageValue,backgroundColorValue, textColorValue, textSizeValue,
       positionValue, callbackValue, durationValue)
   {
-    if(app)
+    // TODO add support for Android 11+; display toasts in a different way
+    if(platformSupportsToast())
     {
       window.plugins.toast.showWithOptions(
       {
@@ -59,7 +74,8 @@ myApp.service('NewsBanner',['$cordovaNetwork','$filter','$translatePartialLoader
       message = $filter('translate')(alertTypes[type].Message);
     }
     //If the callback is not undefined call plugin with callback option
-    if(typeof callback !=='undefined')
+    // TODO add support for Android 11+; display toasts in a different way
+    if(typeof callback !=='undefined' && platformSupportsToast())
     {
       window.plugins.toast.showWithOptions(
       {
@@ -75,7 +91,8 @@ myApp.service('NewsBanner',['$cordovaNetwork','$filter','$translatePartialLoader
       },
       callback,
       function(error){});
-    }else{
+    // TODO add support for Android 11+; display toasts in a different way
+    }else if(platformSupportsToast()){
        window.plugins.toast.showWithOptions(
       {
         message: message,
@@ -115,7 +132,7 @@ myApp.service('NewsBanner',['$cordovaNetwork','$filter','$translatePartialLoader
 		*@description Displays alert based on the parameters
 		**/
 		showCustomBanner:function(messageValue,backgroundColorValue, textColorValue, textSizeValue, positionValue, callbackValue, durationValue){
-        if(app)
+        if(Constants.app)
         {
           showCustomBanner(messageValue,backgroundColorValue, textColorValue, textSizeValue, positionValue, callbackValue, durationValue);
         }
@@ -129,7 +146,7 @@ myApp.service('NewsBanner',['$cordovaNetwork','$filter','$translatePartialLoader
 		**/
       setAlertOffline:function()
       {
-        if(app){
+        if(Constants.app){
           if (!$cordovaNetwork.isOnline()) showBanner('nointernet');
         }
       },
@@ -157,4 +174,4 @@ myApp.service('NewsBanner',['$cordovaNetwork','$filter','$translatePartialLoader
         showBanner('notifications', callback,numberOfNotifications);
       }
   };
-  }]);
+}]);
