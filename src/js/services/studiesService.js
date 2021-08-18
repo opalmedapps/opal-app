@@ -17,33 +17,80 @@
         var studies = [];
 
 
-        return {
+        let service = {
+            getStudies:getStudies,
+            getStudiesList:getStudiesList,
+            updateConsentStatus:updateConsentStatus
+        };
+        return service;
 
-        getStudies:function(){
+
+        /**
+         * @name getStudies
+         * @desc Requests the list of all studies from the listener and stores it in the studies array.
+         * @return {promise} 
+         */
+        function getStudies(){
             var q = $q.defer();
-                RequestToServer.sendRequestWithResponse('Studies')
-                    .then(function (response) {
-                        studies = response.Data;
-                        q.resolve(studies);
-                        
-                        if(typeof studies =='undefined') return ;
+            RequestToServer.sendRequestWithResponse('Studies')
+                .then(function (response) {
+                    studies = response.Data;
+                    q.resolve(studies);
+                    
+                    if(typeof studies =='undefined') return ;
 
-                        studies.forEach(function(study){
-                            study.creationDate = $filter('formatDate')(study.creationDate)
-                            if (study.hasOwnProperty('startDate')){
-                                study.startDate = $filter('formatDate')(study.startDate)
-                            }
-                            if (study.hasOwnProperty('endDate')){
-                                study.endDate = $filter('formatDate')(study.endDate)
-                            }
-                        })
-                    }).catch(function (error){
-                        console.log('Error in getStudies: ', error);
-                        q.resolve([]);
-                    });
-    
-                return q.promise
+                    studies.forEach(function(study){
+                        study.creationDate = $filter('formatDate')(study.creationDate)
+                        if (study.hasOwnProperty('startDate')){
+                            study.startDate = $filter('formatDate')(study.startDate)
+                        }
+                        if (study.hasOwnProperty('endDate')){
+                            study.endDate = $filter('formatDate')(study.endDate)
+                        }
+                    })
+                }).catch(function (error){
+                    console.log('Error in getStudies: ', error);
+                    q.resolve([]);
+                });
+
+            return q.promise;
         }
-    }}
+
+
+        /**
+         * @name updateConsentStatus
+         * @desc Updates the consent status for the study corresponding to the given consent form Id.
+         * @param {int} questionnaireId The ID of the consent form (questionnaire Id in QuestionnaireDB).
+         * @param {string} status The consent status submitted, either "opalConsented" or "declined".
+         * @return {promise} 
+         */
+        function updateConsentStatus(questionnaireId, status){
+            var q = $q.defer();
+
+            let params = {
+                questionnaire_id: questionnaireId,
+                status: status
+            }
+
+            RequestToServer.sendRequestWithResponse('StudyUpdateStatus', params)
+                .then(function (response){
+                    q.resolve({Success: true, Location: 'Server'});
+                })
+                .catch(function(err){
+                    q.reject({Success: false, Location: '', Error: err});
+                });
+
+            return q.promise;
+        }
+
+        /**
+        * @name getStudiesList
+        * @desc Returns the current list of studies.
+        * @return {Array} Array of studies.
+        */
+        function getStudiesList(){
+            return studies;
+        }
+    }
 })();
 

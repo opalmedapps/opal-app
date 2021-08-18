@@ -83,7 +83,7 @@
                                             </span>
                                         </b>
                                         <!-- Left align decription for consent forms, centered otherwise -->
-                                        <span ng-if="vm.isConsent" align="left" ng-bind-html="vm.questionnaire.description"></span>
+                                        <span ng-if="vm.isConsent" align="justify" ng-bind-html="vm.questionnaire.description"></span>
                                         <span ng-if="!vm.isConsent" ng-bind-html="vm.questionnaire.description"></span>
                                     </p>
                                     <p ng-if="vm.hasInstruction" style="margin-top:2vh; margin-bottom:2vh"

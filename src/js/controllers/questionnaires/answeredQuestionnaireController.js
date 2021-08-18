@@ -18,11 +18,12 @@
         'NativeNotification',
         'NavigatorParameters',
         'Params',
-        'Questionnaires'
+        'Questionnaires',
+        'Studies'
     ];
 
     /* @ngInject */
-    function AnsweredQuestionnaireController($filter, $timeout, FirebaseService, NativeNotification, NavigatorParameters, Params, Questionnaires) {
+    function AnsweredQuestionnaireController($filter, $timeout, FirebaseService, NativeNotification, NavigatorParameters, Params, Questionnaires, Studies) {
         // Note: this file has many exceptions / hard coding to obey the desired inconsistent functionality
 
         var vm = this;
@@ -128,6 +129,11 @@
 
             verifyPassword(vm.requirePassword, vm.password)
                 .then(function(){
+
+                    // Update consent status to opalConsented or declined
+                    if (vm.isConsent && !vm.requirePassword) Studies.updateConsentStatus(vm.questionnaire.questionnaire_id, 'declined');
+                    else Studies.updateConsentStatus(vm.questionnaire.questionnaire_id, 'opalConsented')
+
                     // mark questionnaire as finished
                     return Questionnaires.updateQuestionnaireStatus(
                         vm.questionnaire.qp_ser_num,
@@ -425,7 +431,6 @@
         }
 
         function updateRequirePassword() {
-            console.log(vm.consentStatus)
             vm.requirePassword = purpose === 'consent' && vm.consentStatus === true;
         }
     }

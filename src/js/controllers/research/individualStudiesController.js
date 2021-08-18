@@ -12,8 +12,8 @@
         .module('MUHCApp')
         .controller('IndividualStudiesController', IndividualStudiesController);
 
-    IndividualStudiesController.$inject = ['NavigatorParameters','UserPreferences'];
-    function IndividualStudiesController(NavigatorParameters,UserPreferences) {
+    IndividualStudiesController.$inject = ['NavigatorParameters','Studies','UserPreferences'];
+    function IndividualStudiesController(NavigatorParameters, Studies, UserPreferences) {
         var vm = this;
         vm.study;
         vm.language;
@@ -40,6 +40,14 @@
             vm.language = UserPreferences.getLanguage();
             vm.hasStartDate = vm.study.hasOwnProperty('startDate');
             vm.hasEndDate = vm.study.hasOwnProperty('endDate');
+
+            // Reload studies list after submitting questionnaire 
+            // Required to update studies list with participation status after submitting consent form opened from the individual studies page
+            navigator.on('prepop', function(event){
+                if (event.hasOwnProperty('currentPage') && event.currentPage.page == 'views/personal/questionnaires/questionnaireCompletedConfirmation.html'){
+                    Studies.getStudies();
+                }
+            });
         }
 
     /**
