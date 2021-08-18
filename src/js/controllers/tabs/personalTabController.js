@@ -4,8 +4,6 @@
  * Date: 2017-09-20
  * Time: 12:00 PM
  * 
- * TODO: once studies are added, replace 'vm.researchUnreadNumber = 0 + ...' with actual implementation 
- *       (also replace in metadataService.js and researchController.js)
  */
 
 (function() {
@@ -16,10 +14,10 @@
         .controller('PersonalTabController', PersonalTabController);
 
     PersonalTabController.$inject = ['Appointments','TxTeamMessages','Documents','EducationalMaterial','NavigatorParameters', 'Notifications',
-        'Questionnaires', 'Patient', 'NetworkStatus', 'MetaData', '$timeout', 'UserPreferences', 'Params', 'UserHospitalPreferences'];
+        'Questionnaires', 'Patient', 'NetworkStatus', 'MetaData', '$timeout', 'UserPreferences', 'Params', 'UserHospitalPreferences','Studies'];
 
     function PersonalTabController( Appointments, TxTeamMessages, Documents, EducationalMaterial, NavigatorParameters, Notifications, Questionnaires,
-                                    Patient, NetworkStatus, MetaData, $timeout, UserPreferences, Params, UserHospitalPreferences) {
+                                    Patient, NetworkStatus, MetaData, $timeout, UserPreferences, Params, UserHospitalPreferences, Studies) {
         var vm = this;
 
         // variable to let the user know which hospital they are logged in
@@ -90,8 +88,8 @@
             vm.txTeamMessagesUnreadNumber = TxTeamMessages.getNumberUnreadTxTeamMessages();
             vm.notificationsUnreadNumber = Notifications.getNumberUnreadNotifications();
             vm.questionnairesUnreadNumber = Questionnaires.getNumberOfUnreadQuestionnairesByPurpose('clinical');  
-            //TODO: replace 0 with number of unread studies once available
-            vm.researchUnreadNumber = 0 + Questionnaires.getNumberOfUnreadQuestionnairesByPurpose('research') 
+            
+            vm.researchUnreadNumber = Studies.getNumberUnreadStudies() + Questionnaires.getNumberOfUnreadQuestionnairesByPurpose('research') 
                                         + EducationalMaterial.getNumberOfUnreadEducationalMaterialByCategory('research')
                                         + Questionnaires.getNumberOfUnreadQuestionnairesByPurpose('consent');   
         }

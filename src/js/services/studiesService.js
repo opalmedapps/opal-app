@@ -18,6 +18,7 @@
 
 
         let service = {
+            getNumberUnreadStudies:getNumberUnreadStudies,
             getStudies:getStudies,
             getStudiesList:getStudiesList,
             readStudy:readStudy,
@@ -106,6 +107,19 @@
                     RequestToServer.sendRequest('Read', {'Id': patientStudyId, 'Field': 'patientStudy'});
                 }
             }
+        }
+
+        /**
+         * @name getNumberUnreadStudies
+         * @description Iterates through the studies array and returns the number of unread studies.
+         * @returns {Number} Returns number of unread studies
+         **/
+         function getNumberUnreadStudies() {
+            let number = 0;
+            for (let i = 0; i < studies.length; i++) {
+                if (studies[i].ReadStatus === '0') number++;
+            }
+            return number;
         }
     }
 })();

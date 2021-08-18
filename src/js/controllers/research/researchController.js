@@ -4,8 +4,6 @@
  * Created by   :   Kayla O'Sullivan-Steben 
  * Date         :   Jan 2021
  *
- * TODO: once studies are added, replace 'vm.studiesUnreadNumber = 0;' with actual implementation 
- *       (also replace in metadataService.js and personalTabControler.js)
  */
 
 (function () {
@@ -15,9 +13,9 @@
         .module('MUHCApp')
         .controller('ResearchController', ResearchController);
     
-    ResearchController.$inject = ['EducationalMaterial','MetaData','NavigatorParameters','Questionnaires'];
+    ResearchController.$inject = ['EducationalMaterial','MetaData','NavigatorParameters','Questionnaires','Studies'];
 
-    function ResearchController(EducationalMaterial, MetaData, NavigatorParameters, Questionnaires) {
+    function ResearchController(EducationalMaterial, MetaData, NavigatorParameters, Questionnaires, Studies) {
         let vm = this;
 
         vm.openResearchStudies = openResearchStudies;
@@ -59,7 +57,7 @@
         }
 
         function setBadges(){
-            vm.studiesUnreadNumber = 0; //TODO: add implementation
+            vm.studiesUnreadNumber = Studies.getNumberUnreadStudies(); 
             vm.researchQuestionnairesUnreadNumber = Questionnaires.getNumberOfUnreadQuestionnairesByPurpose('research');    
             vm.consentQuestionnairesUnreadNumber = Questionnaires.getNumberOfUnreadQuestionnairesByPurpose('consent'); 
             vm.eduMaterialUnreadNumber = EducationalMaterial.getNumberOfUnreadEducationalMaterialByCategory('research');

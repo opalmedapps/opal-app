@@ -15,8 +15,6 @@
  *
  * TODO: implement background refresh feature
  * 
- * TODO: once studies are added, replace 'researchTabData.studiesUnreadNumber = 0;' with actual implementation 
- *       (also replace in researchController.js and personalTabController.js)
  **/
 
 (function () {
@@ -26,9 +24,9 @@
         .module('MUHCApp')
         .factory('MetaData', MetaData);
 
-    MetaData.$inject = ['Appointments','Documents','TxTeamMessages','Notifications', 'Questionnaires', 'Announcements', 'EducationalMaterial'];
+    MetaData.$inject = ['Appointments','Documents','TxTeamMessages','Notifications', 'Questionnaires', 'Announcements', 'EducationalMaterial','Studies'];
 
-    function MetaData(Appointments, Documents, TxTeamMessages, Notifications, Questionnaires, Announcements, EducationalMaterial) {
+    function MetaData(Appointments, Documents, TxTeamMessages, Notifications, Questionnaires, Announcements, EducationalMaterial, Studies) {
 
         //you only need to use this service the first time entering a tab
         var firstTimeHome = true;
@@ -108,9 +106,7 @@
             eduMaterials = EducationalMaterial.setLanguage(materials);
 
             //load the research tab data
-            researchTabData.studiesUnreadNumber = 0; //TODO: add implementation
             researchTabData.researchEduMaterialsUnreadNumber = EducationalMaterial.getNumberOfUnreadEducationalMaterialByCategory('research');
-
 
             //Request number of unread questionnaires in each category
             Questionnaires.requestQuestionnaireUnreadNumber('clinical')
@@ -128,6 +124,14 @@
                 }).catch(function(error){
                     // Unable to load questionnaires
                 });
+
+            // Load studies to get number unread 
+            Studies.getStudies().then(()=>{
+                    researchTabData.studiesUnreadNumber = Studies.getNumberUnreadStudies(); 
+                }).catch(function(error){
+                    // Unable to load studies
+                });
+
         }
 
         function fetchHomeMeta(){
