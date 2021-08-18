@@ -91,6 +91,7 @@
         }
 
         function openStudy(study) {
+            if (study.ReadStatus === '0') Studies.readStudy(study.patientStudyId)
             NavigatorParameters.setParameters({'Navigator': navigator, 'Post': study});
             navigator.pushPage('views/personal/research/research-studies/individual-study.html');
         }

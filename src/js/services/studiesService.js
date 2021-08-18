@@ -20,6 +20,7 @@
         let service = {
             getStudies:getStudies,
             getStudiesList:getStudiesList,
+            readStudy:readStudy,
             updateConsentStatus:updateConsentStatus
         };
         return service;
@@ -90,6 +91,21 @@
         */
         function getStudiesList(){
             return studies;
+        }
+
+
+        /**
+         *@name readStudy
+         *@desc Updates the ReadStatus of a study in studies array and sends request to backend
+         *@param {int} patientStudyId ID of the study in the patientStudy table to be read
+         **/
+         function readStudy(patientStudyId) {
+            for (var i = 0; i < studies.length; i++) {
+                if (studies[i].patientStudyId == patientStudyId) {
+                    studies[i].ReadStatus = '1';
+                    RequestToServer.sendRequest('Read', {'Id': patientStudyId, 'Field': 'patientStudy'});
+                }
+            }
         }
     }
 })();

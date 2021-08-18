@@ -24,8 +24,11 @@
             </ons-col>
             <ons-col align="center">
                 <div style="padding:4px;line-height:1">
-                    <header>
+                    <header ng-if="study.ReadStatus==='0'">
                         <span class="item-title" ng-class="fontSizeTitle">{{study["title_" + stud.language]}}</span>
+                    </header>
+                    <header ng-if="study.ReadStatus==='1'">
+                        <span class="item-desc" ng-class="fontSizeTitle">{{study["title_" + stud.language]}}</span>
                     </header>
                     <p class="item-desc" ng-class="fontSizeDesc">{{stud.getStatusText(study.consentStatus)}}</p>
                 </div>
