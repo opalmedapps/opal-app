@@ -498,7 +498,8 @@ myApp.service('EducationalMaterial',['$q','$filter','LocalStorage','FileManagerS
                     Logger.logClickedPdfEduMaterial(edumaterial.EducationalMaterialControlSerNum);
 
                     // Use the file manager service to open the material and return -1
-                    FileManagerService.openPDF(edumaterial.Url);
+                    let newFileName = edumaterial.Url.substring(edumaterial.Url.lastIndexOf('/') + 1);
+                    FileManagerService.openPDF(edumaterial.Url, newFileName);
                     return -1;
                 }
                 else if(type == 'php')

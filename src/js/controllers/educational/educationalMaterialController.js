@@ -53,6 +53,9 @@
 
         
 
+        // Function to show data and time header
+        vm.showHeader = showHeader;
+
         activate();
         ///////////////////////////////////
 
@@ -180,7 +183,16 @@
         }
 
 
+            vm.filteredEduMaterials = filtered;//assign to new show list
+
+        function showHeader(index) {
+            if (index === vm.filteredEduMaterials.length - 1) return true;
+            var current = (new Date(vm.filteredEduMaterials[index].DateAdded)).setHours(0, 0, 0, 0);
+            var previous = (new Date(vm.filteredEduMaterials[index + 1].DateAdded)).setHours(0, 0, 0, 0);
+            return current !== previous;
+        }
     }
+    
 })();
 
 

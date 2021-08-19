@@ -23,10 +23,10 @@
         .module('MUHCApp')
         .controller('AppointmentController', AppointmentController);
 
-    AppointmentController.$inject = ['NavigatorParameters', 'UserPreferences', 'Patient', '$timeout', 'Constants'];
+    AppointmentController.$inject = ['NavigatorParameters', 'UserPreferences', 'Patient', '$timeout', 'Browser'];
 
     /* @ngInject */
-    function AppointmentController(NavigatorParameters, UserPreferences, Patient, $timeout, Constants) {
+    function AppointmentController(NavigatorParameters, UserPreferences, Patient, $timeout, Browser) {
 
         let vm = this;
 
@@ -116,11 +116,8 @@
         }
 
         function openMap(){
-            if (Constants.app) {
-                var ref = cordova.InAppBrowser.open(vm.app["MapUrl_"+ vm.language], '_blank', 'EnableViewPortScale=yes');
-            } else {
-                window.open(vm.app["MapUrl_"+ vm.language]);
-            }
+            let url = vm.app["MapUrl_"+ vm.language];
+            Browser.openInternal(url, true);
         }
     }
 })();

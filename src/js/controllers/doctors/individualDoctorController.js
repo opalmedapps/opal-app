@@ -27,7 +27,7 @@
     /* @ngInject */
     function ContactIndividualController(NavigatorParameters, UserPreferences) {
         var vm = this;
-        vm.language;
+        vm.language = '';
         vm.doctor = null;
         vm.header = '';
 
@@ -42,5 +42,4 @@
             vm.language = UserPreferences.getLanguage();
         }
     }
-
 })();

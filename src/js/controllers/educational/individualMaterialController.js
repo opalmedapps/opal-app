@@ -160,7 +160,7 @@
         }
 
         function share(){
-            FileManagerService.shareDocument(vm.edumaterial.Name, vm.edumaterial.ShareURL,vm.edumaterial.Type);
+            FileManagerService.shareDocument(vm.edumaterial.Name, vm.edumaterial.ShareURL);
             $scope.popoverSharing.hide();
         }
 

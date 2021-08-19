@@ -39,4 +39,5 @@ import "./services/hc-chart-labs-configuration.factory.js";
 import "./services/patient-test-results.service";
 import "./services/questionnaireDataService.js";
 import "./services/logOutService.js";
+import "./services/browser.service.js";
 import "./services/studiesService.js";

@@ -12,12 +12,13 @@
             .module('MUHCApp')
             .controller('GeneralTabController', GeneralTabController);
 
-        GeneralTabController.$inject = ['$scope', 'Announcements', 'UpdateUI', 'NavigatorParameters', 'NetworkStatus', 'MetaData', 'UserPreferences', 'Params', 'UserHospitalPreferences'];
+        GeneralTabController.$inject = ['$scope', 'Announcements', 'UpdateUI', 'NavigatorParameters', 'NetworkStatus',
+            'MetaData', 'UserPreferences', 'Params', 'UserHospitalPreferences', 'Browser', 'DynamicContent'];
 
-        function GeneralTabController($scope, Announcements, UpdateUI, NavigatorParameters, NetworkStatus, MetaData, UserPreferences, Params, UserHospitalPreferences) {
+        function GeneralTabController($scope, Announcements, UpdateUI, NavigatorParameters, NetworkStatus, MetaData,
+                                      UserPreferences, Params, UserHospitalPreferences, Browser, DynamicContent) {
             var vm = this;
 
-            vm.goToPatientCharter = goToPatientCharter;
             vm.goToParking = goToParking;
             vm.generalDeviceBackButton = generalDeviceBackButton;
             vm.goToUrl = goToUrl;
@@ -99,11 +100,6 @@
              * PUBLIC FUNCTIONS
              */
 
-            function goToPatientCharter() {
-                NavigatorParameters.setParameters('generalNavigator');
-                generalNavigator.pushPage('./views/general/charter/charter.html');
-            }
-
             function goToParking() {
                 NavigatorParameters.setParameters('generalNavigator');
                 generalNavigator.pushPage('views/general/parking/parking.html');
@@ -113,33 +109,10 @@
                 tabbar.setActiveTab(0);
             }
 
-
-            function goToUrl(openWhat) {
-                let url = '';
-                let app = document.URL.indexOf('http://') === -1 && document.URL.indexOf('https://') === -1;
-
-                switch (openWhat.toLowerCase()) {
-                    case Params.findDoctorCase:
-                        url = (vm.language === "EN") ? Params.findDoctorUrl.findDoctorUrlEn : Params.findDoctorUrl.findDoctorUrlFr ;
-                        break;
-                    case Params.medicalSchedulerCase:
-                        url = (vm.language === "EN") ? Params.medicalSchedulerUrl.medicalSchedulerUrlEn : Params.medicalSchedulerUrl.medicalSchedulerUrlFr ;
-                        break;
-                    case Params.carnetSanteCase:
-                        url =  Params.carnetSanteUrl ;  // English site available after opening the French one
-                        break;
-                    default:
-                        break;
-                }
-
-                if (app) {
-                    cordova.InAppBrowser.open(url, '_blank', 'location=yes');
-                } else {
-                    window.open(url, '_blank');
-                }
-
+            function goToUrl(contentKey) {
+                const url = DynamicContent.getURL(contentKey);
+                Browser.openInternal(url);
             }
-
         }
     }
 )();

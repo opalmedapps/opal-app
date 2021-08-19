@@ -13,11 +13,9 @@
         .module('MUHCApp')
         .controller('PersonalTabController', PersonalTabController);
 
-    PersonalTabController.$inject = ['Appointments','TxTeamMessages','Documents','EducationalMaterial','NavigatorParameters', 'Notifications',
-        'Questionnaires', 'Patient', 'NetworkStatus', 'MetaData', '$timeout', 'UserPreferences', 'Params', 'UserHospitalPreferences','Studies'];
-
     function PersonalTabController( Appointments, TxTeamMessages, Documents, EducationalMaterial, NavigatorParameters, Notifications, Questionnaires,
-                                    Patient, NetworkStatus, MetaData, $timeout, UserPreferences, Params, UserHospitalPreferences, Studies) {
+                                    Patient, NetworkStatus, MetaData, $timeout, UserPreferences, Params,
+                                    UserHospitalPreferences, Studies, Browser, DynamicContent) {
         var vm = this;
 
         // variable to let the user know which hospital they are logged in
@@ -104,16 +102,8 @@
         }
 
         function goToCarnetSante() {
-            let url = '';
-            let app = document.URL.indexOf('http://') === -1 && document.URL.indexOf('https://') === -1;
-
-            url = Params.carnetSanteUrl;  // English site available after opening the French one
-
-            if (app) {
-                cordova.InAppBrowser.open(url, '_blank', 'location=yes');
-            } else {
-                window.open(url, '_blank');
-            }
+            const url = DynamicContent.getURL("carnet_sante");
+            Browser.openInternal(url);
         }
 
         /**

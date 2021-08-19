@@ -12,7 +12,7 @@ export class PatientTestType {
 		this.latestAbnormalFlag = latestAbnormalFlag;
 		this.latestCollectedDateTime = Date.parse(latestCollectedDateTime.replace(/-/g, "/"));
 		this.latestPatientTestResultSerNum = Number(latestPatientTestResultSerNum);
-		this.latestTestValue = Number(latestTestValue);
+		this.latestTestValue = latestTestValue;
 		this.name_EN = name_EN;
 		this.name_FR = name_FR;
 		this.normalRange = normalRange;
@@ -21,6 +21,7 @@ export class PatientTestType {
 		this.readStatus = readStatus === "1";
 		this.testExpressionSerNum = Number(testExpressionSerNum);
 		this.unitDescription = unitDescription;
+		this.unitWithBrackets = unitDescription === "" ? "" : "(" + unitDescription + ")";
 		this.hasNumericValues = hasNumericValues === "true";
 		this.results = results || [];
 		this.results = this.results.map((testResult) => new PatientTestResult(testResult));
