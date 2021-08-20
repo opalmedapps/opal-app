@@ -6,8 +6,8 @@
  */
 
 /**
- * @name SingleDocumentController
- * @description Responsible for displaying, sharing and printing document
+ * @name IndividualDocumentController
+ * @description Responsible for displaying and sharing a document.
  */
 (function () {
     'use strict';

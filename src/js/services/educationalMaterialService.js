@@ -405,13 +405,6 @@ myApp.service('EducationalMaterial',['$q','$filter','LocalStorage','FileManagerS
             return pfpresources;
         },
 
-        getMaterialBinary:function(url){
-            var config = { responseType: 'blob' };
-            return $http.get(url, config)
-
-        },
-
-
         getMaterialPage:function(url){
             return $http.get(url);
         },

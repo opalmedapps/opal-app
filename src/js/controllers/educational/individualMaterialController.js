@@ -37,7 +37,6 @@
 
         vm.goToEducationalMaterial = goToEducationalMaterial;
         vm.share = share;
-        vm.print = print;
 
         // Logging functions
         vm.scrollDown = scrollDown;
@@ -69,11 +68,6 @@
 
             // RStep refers to recursive depth in a package (since packages can contain other packages).
             vm.recursive_step = param.RStep;
-
-            //Determine if material has a ShareURL and is printable
-            if(vm.edumaterial.ShareURL && vm.edumaterial.ShareURL !=="") {
-                vm.isPrintable = FileManagerService.isPDFDocument(vm.edumaterial.ShareURL);
-            }
 
             //Determine if material is a booklet
             var isBooklet = vm.edumaterial.hasOwnProperty('TableContents');
@@ -124,7 +118,7 @@
         function bindEvents(){
             //Instantiating popover controller
             $timeout(function () {
-                ons.createPopover('./views/education/share-print-popover.html',{parentScope: $scope}).then(function (popover) {
+                ons.createPopover('./views/education/share-popover.html', {parentScope: $scope}).then(function (popover) {
                     $scope.popoverSharing = popover;
                 });
             }, 300);
@@ -159,41 +153,6 @@
             FileManagerService.shareDocument(vm.edumaterial.Name, vm.edumaterial.ShareURL);
             $scope.popoverSharing.hide();
         }
-
-        // PrintPDF.print uses the plugin cordova-plugin-print-pdf
-        // 
-        // function print(){
-        //     //If no connection then simply alert the user to connect to the internet
-        //     $scope.popoverSharing.hide();
-        //     if(app && NetworkStatus.isOnline())
-        //     {
-        //         EducationalMaterial.getMaterialBinary(vm.edumaterial.ShareURL)
-        //             .then(function(){
-        //                 var blob = new Blob([this.response], { type: 'application/pdf' });
-        //                 var fileReader = new FileReader();
-        //                 fileReader.readAsDataURL(blob);
-        //                 fileReader.onloadend = function() {
-        //                     var base64data = fileReader.result;
-        //                     base64data = base64data.replace('data:application/pdf;base64,','');
-        //                     window.plugins.PrintPDF.print({
-        //                         data: base64data,
-        //                         type: 'Data',
-        //                         title: $filter('translate')("PRINTDOCUMENT"),
-        //                         success: function(){},
-        //                         error: function(data){
-        //                             ons.notification.alert({'message':$filter('translate')('ERROR_GETTING_EDU_MATERIAL')});
-        //                         }
-        //                     });
-        //                 }
-        //             })
-        //             .catch(function(){
-        //                 ons.notification.alert({'message':$filter('translate')('ERROR_GETTING_EDU_MATERIAL')});
-        //             });
-        //     }else{
-        //         $scope.popoverSharing.hide();
-        //         ons.notification.alert({'message':$filter('translate')("PRINTINGUNAVAILABLE")});
-        //     }
-        // }
 
         function downloadIndividualPage()
         {
