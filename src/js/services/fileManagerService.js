@@ -11,9 +11,9 @@ var myApp = angular.module('MUHCApp');
  *@description Allows the app's controllers or services interact with the file storage of the device. For more information look at {@link https://github.com/apache/cordova-plugin-file Cordova File Plugin}, reference for social sharing plugin {@link https://github.com/EddyVerbruggen/SocialSharing-PhoneGap-Plugin Cordova Sharing Plugin}
  **/
 myApp.service('FileManagerService', ['$q', '$filter', 'NewsBanner', '$injector', 'Params',
-    'Constants', 'Browser',
+    'Constants', 'Browser', 'RequestToServer',
 
-    function ($q, $filter, NewsBanner, $injector, Params, Constants, Browser) {
+function ($q, $filter, NewsBanner, $injector, Params, Constants, Browser, RequestToServer) {
 
     /**
      *@ngdoc property
@@ -28,7 +28,7 @@ myApp.service('FileManagerService', ['$q', '$filter', 'NewsBanner', '$injector',
 
     if (Constants.app) {
         if (ons.platform.isAndroid()) {
-            urlDeviceDocuments = cordova.file.externalRootDirectory + '/Documents/';
+            urlDeviceDocuments = cordova.file.dataDirectory + 'Documents/';
         } else {
             urlDeviceDocuments = cordova.file.documentsDirectory;
         }
@@ -46,80 +46,148 @@ myApp.service('FileManagerService', ['$q', '$filter', 'NewsBanner', '$injector',
      * @ngdoc method
      * @name downloadFileIntoStorage
      * @author Stacey Beard
-     * @date 2021-05-31
+     * @date 2021-08-20
      * @methodOf MUHCApp.service:FileManagerService
-     * @description Downloads the file from the url to the targetPath on the device.
+     * @description Downloads the file from the url (via the listener) to the targetPath on the device.
      *              Checks if the document has been downloaded already; if so, it is not downloaded again.
-     *              Code based on: https://cordova.apache.org/blog/2017/10/18/from-filetransfer-to-xhr2.html
-     *                        and: https://cordova.apache.org/docs/en/10.x/reference/cordova-plugin-file/
+     *              Code for intermediate functions based on: https://cordova.apache.org/blog/2017/10/18/from-filetransfer-to-xhr2.html
+     *                and: https://cordova.apache.org/docs/en/10.x/reference/cordova-plugin-file/
      * @param {String} url The url of the file to download from the web.
      * @param {String} targetPath The path where the downloaded file will be saved on the device
      *                            (does not include its file name).
      * @param {String} fileName The name to give the saved file.
-     * @returns {Promise} Resolves to true if the document has been downloaded before, or if it downloads successfully.
+     * @returns {Promise} Resolves if the document has been downloaded before, or if it downloads successfully.
      *                    Otherwise, rejects with an error.
      **/
-    function downloadFileIntoStorage(url, targetPath, fileName) {
-        let r = $q.defer();
+    async function downloadFileIntoStorage(url, targetPath, fileName) {
         console.log("downloadFileIntoStorage: url = "+url+", targetPath = "+targetPath+", fileName = "+fileName);
 
-        // Check whether the file already exists on the device
-        window.resolveLocalFileSystemURL(targetPath + fileName, () => {
-            // File has already been downloaded
-            console.log("File already exists, skipping download");
-            r.resolve(true);
-        }, () => {
-            // File doesn't exist; download it
-            console.log("Starting file download process");
-            window.resolveLocalFileSystemURL(targetPath, function (dirEntry) {
-                console.log("File system open: " + dirEntry.name);
+        // Check whether the file already exists on the device (if it exists, don't download again)
+        const fileExists = await checkFileExists(targetPath + fileName);
+        if (fileExists) { console.log("File already exists, skipping download"); return; }
 
-                dirEntry.getFile(fileName, { create: true, exclusive: true }, function (fileEntry) {
-                    console.log("Created fileEntry: " + fileEntry.name);
-                    console.log("FileEntry is file? " + fileEntry.isFile.toString());
+        // Get the contents of the file from the listener and decode it from base64
+        console.log("Starting file download process");
+        const fileContents = await getFileContents(url);
+        const fileData = base64toBlob(fileContents.base64Data, fileContents.contentType);
 
-                    var oReq = new XMLHttpRequest();
-                    oReq.open("GET", url, true);
-                    // Define how you want the XHR data to come back
-                    oReq.responseType = "blob";
+        // Open the local file system directory and create an empty file
+        console.log("Creating local file");
+        const dirEntry = await openDirectory(targetPath);
+        const fileEntry = await createNewFile(fileName, dirEntry);
 
-                    oReq.onload = function (oEvent) {
-                        var blob = oReq.response; // Note: not oReq.responseText
-                        if (blob) {
-                            // Create a FileWriter object to write the blob to the local fileEntry
-                            fileEntry.createWriter(function(fileWriter) {
-                                fileWriter.onwriteend = function(e) {
-                                    console.log("Write completed.");
-                                    r.resolve(true);
-                                };
+        // Write the file contents to the new file entry
+        console.log("Writing data to file");
+        await writeBlobToFile(fileData, fileEntry);
 
-                                fileWriter.onerror = function(e) {
-                                    console.log("Write failed: " + e.toString());
-                                    r.reject(e);
-                                };
+        console.log("File download successful");
+    }
 
-                                fileWriter.write(blob);
-                            }, function (err) {
-                                console.error("Error creating file writer: " + JSON.stringify(err));
-                                r.reject(err);
-                            });
-                        } else {
-                            let msg = "Didn't receive an XHR response";
-                            console.error(msg);
-                            r.reject({status: "error", message: msg});
-                        }
-                    };
-                    oReq.send(null);
-                }, function (err) {
-                    console.error("Error getting file: " + JSON.stringify(err));
-                    r.reject(err);
-                });
-            }, function (err) {
-                console.error("Error opening directory at targetPath = " + targetPath +", " + JSON.stringify(err));
-                r.reject(err);
+    /**
+     * @description Converts a base64 string to a Blob object.
+     *              Source: https://stackoverflow.com/questions/16245767/creating-a-blob-from-a-base64-string-in-javascript
+     * @param {string} b64Data The base64 string to convert.
+     * @param {string} contentType The content type for the base64 data (usually found at the beginning of a base64 URL).
+     *                    e.g. "application/pdf", as seen in "data:application/pdf;base64,JVBERi0xLjUK..."
+     * @param {number} sliceSize Slice size used in the conversion process (see source link for details).
+     * @returns {Blob} A blob of data converted from the base64 string.
+     */
+    function base64toBlob(b64Data, contentType='', sliceSize=512) {
+        const byteCharacters = atob(b64Data);
+        const byteArrays = [];
+
+        for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+            const slice = byteCharacters.slice(offset, offset + sliceSize);
+
+            const byteNumbers = new Array(slice.length);
+            for (let i = 0; i < slice.length; i++) {
+                byteNumbers[i] = slice.charCodeAt(i);
+            }
+
+            const byteArray = new Uint8Array(byteNumbers);
+            byteArrays.push(byteArray);
+        }
+
+        return new Blob(byteArrays, {type: contentType});
+    }
+
+    /**
+     * @description Checks whether the given file already exists on the file system at the target path
+     * @param pathToFile The path to check, including the name of the file at the end.
+     * @returns {Promise<boolean>} Resolves to true if the file exists, or false otherwise.
+     */
+    function checkFileExists(pathToFile) {
+        return new Promise(resolve => {
+            window.resolveLocalFileSystemURL(pathToFile, () => {
+                // If the success callback is reached, the file exists
+                resolve(true);
+            }, () => {
+                // If the error callback is reached, the file wasn't found at the specified path
+                resolve(false);
             });
         });
-        return r.promise;
+    }
+
+    /**
+     * @description Fetches the contents of an online file at a given url from the server.
+     * @param url The url of the source file to download.
+     * @returns {Promise<{contentType: string, base64Data: string}>} Resolves to an object containing the base64
+     *          file contents and the file type.
+     */
+    async function getFileContents(url) {
+        const response = await RequestToServer.sendRequestWithResponse("RequestFile", {url: url});
+        return response.data;
+    }
+
+    /**
+     * @description Opens a directory on the local filesystem.
+     * @param targetPath The path to open.
+     * @returns {Promise<unknown>} Resolves to a directory object or rejects with an error.
+     */
+    function openDirectory(targetPath) {
+        return new Promise((resolve, reject) => {
+            window.resolveLocalFileSystemURL(targetPath, resolve, reject);
+        });
+    }
+
+    /**
+     * @description Creates a new file in the given directory.
+     * @param fileName The name of the file to create.
+     * @param directoryEntry The directory object pointing to the directory in which to create the file.
+     * @returns {Promise<unknown>} Resolves to a file object or rejects with an error.
+     */
+    function createNewFile(fileName, directoryEntry) {
+        return new Promise((resolve, reject) => {
+            directoryEntry.getFile(fileName, { create: true, exclusive: true }, resolve, reject);
+        });
+    }
+
+    /**
+     * @description Writes a blob of data to a file.
+     * @param blob The blob object to write.
+     * @param fileEntry The file entry object in which to write the data.
+     * @returns {Promise<unknown>} Resolves if the write is successful, or rejects with an error.
+     */
+    function writeBlobToFile(blob, fileEntry) {
+        return new Promise((resolve, reject) => {
+            fileEntry.createWriter(function(fileWriter) {
+                fileWriter.onwriteend = () => {
+                    console.log("Write completed");
+                    resolve(true);
+                };
+
+                fileWriter.onerror = function(event) {
+                    console.log("Write failed: " + event.toString());
+                    reject(event);
+                };
+
+                fileWriter.write(blob);
+
+            }, function (err) {
+                console.error("Error creating file writer: " + JSON.stringify(err));
+                reject(err);
+            });
+        });
     }
 
     /**
