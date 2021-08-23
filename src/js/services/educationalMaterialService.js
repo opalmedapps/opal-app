@@ -25,7 +25,8 @@ var myApp=angular.module('MUHCApp');
  **/
 myApp.service('EducationalMaterial',['$q','$filter','LocalStorage','FileManagerService', 'UserPreferences',
     'RequestToServer', '$http', 'Logger', 'Params',
-    function ($q, $filter, LocalStorage, FileManagerService, UserPreferences, RequestToServer, $http, Logger, Params) {
+
+function ($q, $filter, LocalStorage, FileManagerService, UserPreferences, RequestToServer, $http, Logger, Params) {
 
     /**
      *@ngdoc property
@@ -39,12 +40,11 @@ myApp.service('EducationalMaterial',['$q','$filter','LocalStorage','FileManagerS
     //Initializing an object for pfpresources.
     var pfpresources={};
 
-    //Types of educational material
     /**
      *@ngdoc property
      *@name  MUHCApp.service.#educationalMaterialType
      *@propertyOf MUHCApp.service:EducationalMaterial
-     *@description Object contains the mapping betweem the type of educational material and the icon and color of the icon for that particular educational material.
+     *@description Object contains the mapping between the type of educational material and the icon and color of the icon for that particular educational material.
      **/
     var educationalMaterialType = Params.educationalMaterial;
 
@@ -84,15 +84,29 @@ myApp.service('EducationalMaterial',['$q','$filter','LocalStorage','FileManagerS
         //console.log(array);
         return array;
     }
-    function getTypeMaterial(edumaterial)
+
+    /**
+     * @description Obtains the type of display to use for a given educational material. For example, a material
+     *              ending in '.php' should be displayed as an embedded HTML page.
+     * @param {Object} edumaterial The material for which to get the display type.
+     * @returns {string} A string representing the type of display to use (such as 'pdf', 'html', 'video', etc.).
+     **/
+    function getDisplayType(edumaterial)
     {
-        if(edumaterial.EducationalMaterialType_EN === 'Video')
-        {
-            return 'url';
-        }else{
-            var index = edumaterial.URL_EN.lastIndexOf('.');
-            return edumaterial.URL_EN.substring(index + 1, edumaterial.URL_EN.length);
+        let type;
+
+        if (edumaterial.hasOwnProperty('TableContents')) type = 'booklet';
+        else if (edumaterial.EducationalMaterialType_EN === 'Video') type = 'video';
+        else if (edumaterial.EducationalMaterialType_EN === 'Package') type = 'package';
+        else {
+            // In the remaining cases, use the material's file extension
+            type = FileManagerService.getFileExtension(edumaterial[`URL_${UserPreferences.getLanguage()}`]);
+
+            if (type === 'php') type = 'html';  // A php extension should be displayed as html
+            else if (type !== 'pdf') type = 'link';  // All other extensions (including no extension, but excluding pdf) should default to a link
         }
+
+        return type;
     }
 
     //When there is an update, find the matching material and delete it, its later added by addEducationalMaterial function
@@ -370,18 +384,8 @@ myApp.service('EducationalMaterial',['$q','$filter','LocalStorage','FileManagerS
             return false;
         },
 
-        /**
-         *@ngdoc method
-         *@name getTypeEducationalMaterial
-         *@methodOf MUHCApp.service:EducationalMaterial
-         *@param {Object} edumaterial EducationalMaterialSerNum
-         *@description Obtains the type for that particular educational material
-         *@returns {String} Returns string containing the appropiate type or link to open the educational material
-         **/
-        getTypeEducationalMaterial:function(edumaterial)
-        {
-            return getTypeMaterial(edumaterial);
-        },
+        getDisplayType: getDisplayType,
+
         /**
          *@ngdoc method
          *@name getEducationalMaterialUrl
@@ -419,36 +423,30 @@ myApp.service('EducationalMaterial',['$q','$filter','LocalStorage','FileManagerS
         openEducationalMaterialDetails:function(edumaterial)
         {
             //Get type of material
-            var type = getTypeMaterial(edumaterial);
-            if (edumaterial.hasOwnProperty('TableContents'))
+            let type = getDisplayType(edumaterial);
+
+            if (type === "booklet") return {Url:'./views/education/education-booklet.html'};
+            else if (type === 'link')
             {
-                //If its a booklet return url to redirect
-                return {Url:'./views/education/education-booklet.html'};
-            }else{
-                if(type == 'url')
-                {
-                    //If its a url, set the language, then open the url in another page
-                    edumaterial = setLanguageEduMaterial(edumaterial);
-                    FileManagerService.openUrl(edumaterial.Url);
-                    return -1;
-                }else if (type == 'pdf')
-                {
-                    // If it's a pdf:
-
-                    // Log the fact that the user clicked on the pdf download button
-                    Logger.logClickedPdfEduMaterial(edumaterial.EducationalMaterialControlSerNum);
-
-                    // Use the file manager service to open the material and return -1
-                    let newFileName = edumaterial.Url.substring(edumaterial.Url.lastIndexOf('/') + 1);
-                    FileManagerService.openPDF(edumaterial.Url, newFileName);
-                    return -1;
-                }
-                else if(type == 'php')
-                {
-                    return {Url:'./views/education/education-individual-page.html'};
-                }
+                // If it's a url, set the language, then open the url in another page
+                edumaterial = setLanguageEduMaterial(edumaterial);
+                FileManagerService.openUrl(edumaterial.Url);
+                return -1;
             }
+            else if (type === 'pdf')
+            {
+                // Log the fact that the user clicked on the pdf download button
+                Logger.logClickedPdfEduMaterial(edumaterial.EducationalMaterialControlSerNum);
+
+                // Use the file manager service to open the material and return -1
+                let newFileName = edumaterial.Url.substring(edumaterial.Url.lastIndexOf('/') + 1);
+                FileManagerService.openPDF(edumaterial.Url, newFileName);
+                return -1;
+            }
+            else if (type === 'html') return {Url:'./views/education/education-individual-page.html'};
+            else return -1;
         },
+
         /**
          * getPackageContents
          * @author Stacey Beard

@@ -214,8 +214,7 @@ function ($q, $filter, NewsBanner, $injector, Params, Constants, Browser, Reques
         let filename = url.split('/').pop();
 
         // Check whether the file name has an extension (this will return the empty string if there is no extension)
-        // Formula: https://stackoverflow.com/questions/190852/how-can-i-get-file-extensions-with-javascript/12900504#12900504
-        let extension = filename.slice((Math.max(0, filename.lastIndexOf(".")) || Infinity) + 1);
+        let extension = getFileExtension(url);
 
         // Check whether the file name contains a French character (would cause the plugin to fail if shared by attachment)
         // This check can be removed if cordova-plugin-x-socialsharing is fixed to handle French characters in file names
@@ -227,7 +226,26 @@ function ($q, $filter, NewsBanner, $injector, Params, Constants, Browser, Reques
         return !hasFrenchChars && attachmentExtensions.includes(extension.toLowerCase());
     }
 
+    /**
+     * @description Extracts the file extension at the end of a url.
+     * @param {string} url The url from which to get the extension.
+     * @returns {string} The file extension found after the last forward slash in the url, or an empty string
+     *                   if the url doesn't end in an extension.
+     */
+    function getFileExtension(url) {
+        // Extract the last part of the url (this will be the file name, if the url points to a file)
+        let filename = url.split('/').pop();
+
+        // Check whether the file name has an extension (this will return the empty string if there is no extension)
+        // Formula: https://stackoverflow.com/questions/190852/how-can-i-get-file-extensions-with-javascript/12900504#12900504
+        let extension = filename.slice((Math.max(0, filename.lastIndexOf(".")) || Infinity) + 1);
+
+        return extension;
+    }
+
     return {
+        getFileExtension: getFileExtension,
+
         /**
          * @ngdoc method
          * @name downloadFileIntoStorage

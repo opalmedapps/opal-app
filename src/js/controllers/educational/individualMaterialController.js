@@ -69,21 +69,20 @@
             // RStep refers to recursive depth in a package (since packages can contain other packages).
             vm.recursive_step = param.RStep;
 
-            //Determine if material is a booklet
-            var isBooklet = vm.edumaterial.hasOwnProperty('TableContents');
+            // Determine the material's display type (pdf, package, html, etc.)
+            vm.displayType = EducationalMaterial.getDisplayType(vm.edumaterial);
 
             //If its a booklet, translate table of contents
-            if (isBooklet) {
+            if (vm.displayType === "booklet") {
                 vm.tableOfContents = vm.edumaterial.TableContents;
                 vm.tableOfContents = EducationalMaterial.setLanguage(vm.tableOfContents);
             }
 
-            //Determining if its an individual php page to show immediately.
-            vm.isIndividualHtmlPage = (FileManagerService.getFileType(vm.edumaterial.URL_EN) === 'php');
-            if(vm.isIndividualHtmlPage) downloadIndividualPage();
+            // If the material is an html page to be shown immediately, download it
+            if(vm.displayType === "html") downloadIndividualPage();
 
             // Determine if it's a package.
-            if(vm.edumaterial.EducationalMaterialType_EN === "Package"){
+            if (vm.displayType === "package") {
 
                 vm.loadingContents = true;
 
@@ -181,7 +180,7 @@
 
                 // This makes sure that scrolling is only checked here for HTML pages (not on Videos, Packages, etc.)
                 // [Scrolling is also checked for booklet sub-materials, handled in bookletMaterialController.]
-                if (vm.isIndividualHtmlPage) {
+                if (vm.displayType === "html") {
 
                     $.onscroll = function () {
                         EducationalMaterial.logScrolledToBottomIfApplicable($, {
