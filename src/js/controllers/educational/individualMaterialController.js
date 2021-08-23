@@ -22,11 +22,11 @@
         .controller('IndividualMaterialController', IndividualMaterialController);
 
     IndividualMaterialController.$inject = ['$scope', '$timeout', 'NavigatorParameters', 'EducationalMaterial',
-        'FileManagerService', '$filter', 'Logger', 'NetworkStatus', 'Patient'];
+        'FileManagerService', '$filter', 'Logger'];
 
     /* @ngInject */
     function IndividualMaterialController($scope, $timeout, NavigatorParameters, EducationalMaterial,
-                                          FileManagerService, $filter, Logger, NetworkStatus, Patient) {
+                                          FileManagerService, $filter, Logger) {
         var vm = this;
 
         var param;

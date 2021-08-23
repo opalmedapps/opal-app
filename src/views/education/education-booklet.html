@@ -51,26 +51,25 @@
     <ons-carousel style="width: 100vw;opacity:1.0;" id="contentMaterial" swipeable overscrollable auto-scroll auto-scroll-ratio="0.3" class="gpu_efficiency">
 
         <ons-carousel-item ng-repeat="section in edu.tableOfContents" ng-init="edu.scrollDown($index,section)">
-            <ons-page >
-                <div ng-show="!section.Content" align="center" style="margin-top:25vh">
-                    <svg class="progress-circular">
-                        <circle class="progress-circular__primary" cx="50%" cy="50%" r="40%" fill="none" stroke-width="10%" stroke-miterlimit="10"/>
-                    </svg>
-                    <p style="margin-top: 30px">{{ "LOADINGMATERIAL" | translate }}</p>
+            <ons-page>
+                <!-- LOADING WHEEL -->
+                <loading-spinning-circle
+                        ng-show="!section.Content && !section.Error"
+                        loading-message="{{'LOADINGMATERIAL'|translate}}">
+                </loading-spinning-circle>
+
+                <!-- ERROR MESSAGE -->
+                <div ng-show="section.Error" align="center" style="width: 95%; margin: 10px auto" ng-class="fontSizeDesc">
+                    <uib-alert type="{{edu.alert.type}}">{{edu.alert.message|translate}}</uib-alert>
                 </div>
 
+                <!-- PAGE CONTENT -->
                 <div ng-attr-id="{{$index + 'sub'}}" style="height: 100%;width: auto;overflow: auto; ">
                     <div class="container" style="background-color:white;"  ng-show="section.Content" >
                         <div ng-bind-html="section.Content | toTrusted" ng-class="fontSizeDesc"></div>
                     </div>
                 </div>
-
             </ons-page>
-
         </ons-carousel-item>
-
     </ons-carousel>
-
 </ons-page>
-
-
