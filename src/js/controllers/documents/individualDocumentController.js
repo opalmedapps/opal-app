@@ -27,14 +27,12 @@
         let parameters;
         let docParams;
 
-        vm.loading = true;
         vm.errorDownload = false;
-        vm.show = false;
-        vm.hide = false;
 
         vm.share = share;
         vm.openPDF = openPDF;
-        
+
+        // Variables used by the info popover
         $scope.about = about;
         $scope.warn = warn;
         $scope.warn2 = warn2;
@@ -79,14 +77,12 @@
             if (!document.Content) Documents.downloadDocumentFromServer(document.DocumentSerNum).catch(function (error) {
                 console.error(error);
                 $timeout(() => {
-                    vm.loading = false;
                     vm.errorDownload = true;
                 });
             });
         }
 
         function openPDF() {
-            vm.loading = false;
             let url = "data:application/pdf;base64," + docParams.Content;
             let newDocName = FileManagerService.generateDocumentName(docParams);
             FileManagerService.openPDF(url, newDocName);
