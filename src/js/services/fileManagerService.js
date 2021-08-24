@@ -66,9 +66,27 @@ function ($q, $filter, NewsBanner, $injector, Params, Constants, Browser, Reques
         const fileExists = await checkFileExists(targetPath + fileName);
         if (fileExists) { console.log("File already exists, skipping download"); return; }
 
-        // Get the contents of the file from the listener and decode it from base64
-        console.log("Starting file download process");
-        const fileContents = await getFileContents(url);
+        // Check whether the file to download is already available in the url as base64 data
+        let base64 = urlIsBase64(url);
+
+        // Depending on the format, get the file contents
+        let fileContents;
+        if (base64) {
+            // If the url is base64, get the file contents from the url
+            console.log("Extracting base64 content from the download url");
+            fileContents = {
+                contentType: extractContentType(url),
+                base64Data: extractBase64(url),
+            };
+        }
+        else {
+            // Otherwise, get the file contents from the listener
+            console.log("Starting file download process from the listener");
+            fileContents = await getFileContents(url);
+        }
+
+        // Decode the data from base64
+        console.log("Decoding base64 data");
         const fileData = base64toBlob(fileContents.base64Data, fileContents.contentType);
 
         // Open the local file system directory and create an empty file
@@ -84,11 +102,44 @@ function ($q, $filter, NewsBanner, $injector, Params, Constants, Browser, Reques
     }
 
     /**
+     * @description Checks whether a url is formatted in such a way that it contains base64 data
+     *              (e.g. data:application/pdf;base64,JVBERi0xLjUK...).
+     * @param {string} url The url to check.
+     * @returns {boolean} True if the url is in the base64 format; false otherwise.
+     */
+    function urlIsBase64(url) {
+        let regex = /^data:[^;]+;base64,.*$/;
+        return url.search(regex) !== -1;
+    }
+
+    /**
+     * @description Extracts the base64 data out of a base64 url
+     *              (e.g. "JVBERi0xLjUK..." from a url "data:application/pdf;base64,JVBERi0xLjUK...").
+     * @param {string} url The url from which to extract the data.
+     * @returns {string} The base64 data from the url, or the url as-is if it isn't in base64 format.
+     */
+    function extractBase64(url) {
+        if (!urlIsBase64(url)) return url;
+        else return url.split(',').pop();
+    }
+
+    /**
+     * @description Extracts the content type out of a base64 url.
+     *              (e.g. "application/pdf" from a url "data:application/pdf;base64,JVBERi0xLjUK...").
+     * @param {string} url The url from which to extract the content type.
+     * @returns {string} The content type from the url, or an empty string if the url isn't in base64 format.
+     */
+    function extractContentType(url) {
+        if (!urlIsBase64(url)) return "";
+        else return url.split(':')[1].split(';')[0];
+    }
+
+    /**
      * @description Converts a base64 string to a Blob object.
      *              Source: https://stackoverflow.com/questions/16245767/creating-a-blob-from-a-base64-string-in-javascript
      * @param {string} b64Data The base64 string to convert.
      * @param {string} contentType The content type for the base64 data (usually found at the beginning of a base64 URL).
-     *                    e.g. "application/pdf", as seen in "data:application/pdf;base64,JVBERi0xLjUK..."
+     *                 e.g. "application/pdf", as seen in "data:application/pdf;base64,JVBERi0xLjUK..."
      * @param {number} sliceSize Slice size used in the conversion process (see source link for details).
      * @returns {Blob} A blob of data converted from the base64 string.
      */

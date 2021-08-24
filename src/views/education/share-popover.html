@@ -2,13 +2,9 @@
     <div style="text-align: center" >
         <ons-list>
             <ons-list-item class="item" modifier="tappable" ng-click="edu.share()">
-                <ons-row style="padding:0;margin:0;height:30px" align="center">
-                    <ons-col width="40px">
-                        <i class="fa fa-share"></i>
-                    </ons-col>
-                    <ons-col>
-                        {{"SHARE"|translate}}
-                    </ons-col>
+                <ons-row ng-class="fontSizeDesc" style="padding:0;margin:0;height:30px" align="center">
+                    <ons-icon icon="ion-android-share-alt" style="color:#444; margin-right:10px"></ons-icon>
+                    <span>{{"SHARE"|translate}}</span>
                 </ons-row>
             </ons-list-item>
         </ons-list>

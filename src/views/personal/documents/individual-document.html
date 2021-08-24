@@ -11,11 +11,6 @@
         </div>
     </ons-toolbar>
 
-    <pdf-viewer pdf-document="docParams"
-                loading-message="{{'LOADINGDOCUMENT'|translate}}"
-                error-message="{{'ERROROBTAININGDOCUMENT'|translate}}"
-    />
-
     <ons-modal var="modal">
         <h3>{{"WARNING"|translate}}</h3>
         <ons-icon icon="ion-alert-circled" size="60px"></ons-icon>
@@ -39,4 +34,8 @@
         </ons-button>
     </ons-modal>
 
+    <pdf-viewer pdf-document="docParams"
+                loading-message="{{'LOADINGDOCUMENT'|translate}}"
+                error-message="{{'ERROROBTAININGDOCUMENT'|translate}}"
+    />
 </ons-page>
