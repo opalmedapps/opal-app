@@ -5,28 +5,34 @@
         .module('MUHCApp')
         .directive('pdfViewer', pdfViewer);
 
-    pdfViewer.$inject = ['$timeout', '$q', 'Browser', 'Constants', 'FileManagerService'];
+    pdfViewer.$inject = ['$timeout', '$q', 'Browser', 'Constants', 'FileManagerService', 'Params'];
 
-    function pdfViewer($timeout, $q, Browser, Constants, FileManagerService) {
+    function pdfViewer($timeout, $q, Browser, Constants, FileManagerService, Params) {
 
         let directive = {
             restrict: 'E',
             scope: {
-                // The pdf document to display. Should eventually load a "Content" attribute (asynchronously) with the pdf contents.
-                "pdfDocument": "=",
+                // The pdf document to display (in base64); should eventually load (asynchronously) with the pdf contents
+                // Expects the raw base64 data, not preceded by "data:application/pdf;base64,"
+                "pdfContent": "=",
+
+                // Variable indicating that an error has occurred and that an error message should be displayed
+                "showError": "=",
+
+                // Translated messages to display while loading and on error
                 "loadingMessage": "@",
                 "errorMessage": "@",
             },
             template: `<div>
                            <!-- LOADING WHEEL -->
                            <loading-spinning-circle
-                                   ng-show="loadingPDF"
+                                   ng-show="loadingPDF && !showError"
                                    loading-message="{{loadingMessage}}">
                            </loading-spinning-circle>
                            
                            <!-- ERROR MESSAGE -->
-                           <div ng-show="errorDownload">
-                               <p class="lucent">{{errorMessage}}</p>
+                           <div ng-show="showError" align="center" style="width: 95%; margin: 10px auto" ng-class="fontSizeDesc">
+                               <uib-alert type="{{errorAlertType}}">{{errorMessage}}</uib-alert>
                            </div>
                            
                            <!-- ZOOM INSTRUCTIONS POPUP -->
@@ -43,23 +49,23 @@
             link: function (scope) {
 
                 scope.loadingPDF = true;
-                scope.errorDownload = false;
                 scope.showZoomPopup = false;
                 scope.hideZoomPopup = false;
+                scope.errorAlertType = Params.alertTypeDanger;
 
                 let uint8pf;
                 let viewerSize = window.innerWidth;
                 let containerEl = document.getElementById('pdf-container');
                 let scale = 3;
 
-                // Watch for changes in the "Content" attribute to initialize the pdf when it's ready
-                scope.$watch('pdfDocument.Content', function() {
+                // Watch for changes in the pdf content attribute to initialize the pdf when it's ready
+                scope.$watch('pdfContent', function() {
                     try {
-                        setUpPDF(scope.pdfDocument);
+                        setUpPDF(scope.pdfContent);
                     }
                     catch(error) {
                         scope.loadingPDF = false;
-                        scope.errorDownload = true;
+                        scope.showError = true;
                         console.log(JSON.stringify(error));
                         console.log(error);
                         console.trace();
@@ -68,10 +74,9 @@
 
                 function setUpPDF() {
                     // If the pdf content isn't ready yet, skip setting up now and wait until it's ready
-                    if (!scope.pdfDocument.hasOwnProperty("Content") || !scope.pdfDocument.Content) return;
+                    if (!scope.pdfContent) return;
 
-                    let document = scope.pdfDocument;
-                    uint8pf = FileManagerService.convertToUint8Array(document.Content);
+                    uint8pf = FileManagerService.convertToUint8Array(scope.pdfContent);
 
                     PDFJS.getDocument(uint8pf).then(function (_pdfDoc) {
                         uint8pf = null;
@@ -93,7 +98,7 @@
                             canvasElements[i].onclick = function (event) {
                                 Constants.app && ons.platform.isAndroid()
                                     ? convertCanvasToImage(event.srcElement)
-                                    : Browser.openInternal("data:application/pdf;base64," + document.Content, true);
+                                    : Browser.openInternal("data:application/pdf;base64," + scope.pdfContent, true);
                             }
                         }
 

@@ -34,7 +34,8 @@
         </ons-button>
     </ons-modal>
 
-    <pdf-viewer pdf-document="docParams"
+    <pdf-viewer pdf-content="docParams.Content"
+                show-error="doc.errorDownload"
                 loading-message="{{'LOADINGDOCUMENT'|translate}}"
                 error-message="{{'ERROROBTAININGDOCUMENT'|translate}}"
     />

@@ -74,18 +74,15 @@
         }
 
         function initializeDocument(document) {
-            if (Documents.getDocumentBySerNum(document.DocumentSerNum).Content) {
-
-            } else {
-                Documents.downloadDocumentFromServer(document.DocumentSerNum).then(function () {
-
-                }).catch(function (error) {
-                    //Unable to get document from server
-                    console.error(error);
+            // Download the document if it hasn't been successfully downloaded already
+            // The pdf viewer directive is bound to the document contents, so it will update automatically on success
+            if (!document.Content) Documents.downloadDocumentFromServer(document.DocumentSerNum).catch(function (error) {
+                console.error(error);
+                $timeout(() => {
                     vm.loading = false;
                     vm.errorDownload = true;
                 });
-            }
+            });
         }
 
         function openPDF() {
