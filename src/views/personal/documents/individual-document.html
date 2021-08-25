@@ -11,6 +11,12 @@
         </div>
     </ons-toolbar>
 
+    <pdf-viewer pdf-content="docParams.Content"
+                show-error="doc.errorDownload"
+                loading-message="{{'LOADINGDOCUMENT'|translate}}"
+                error-message="{{'ERROROBTAININGDOCUMENT'|translate}}"
+    ></pdf-viewer>
+
     <ons-modal var="modal">
         <h3>{{"WARNING"|translate}}</h3>
         <ons-icon icon="ion-alert-circled" size="60px"></ons-icon>
@@ -33,10 +39,4 @@
                     ng-click="modalOpenViewer.hide(); doc.openPDF()">{{"CONTINUE"|translate}}
         </ons-button>
     </ons-modal>
-
-    <pdf-viewer pdf-content="docParams.Content"
-                show-error="doc.errorDownload"
-                loading-message="{{'LOADINGDOCUMENT'|translate}}"
-                error-message="{{'ERROROBTAININGDOCUMENT'|translate}}"
-    />
 </ons-page>

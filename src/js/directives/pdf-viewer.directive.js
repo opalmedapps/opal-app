@@ -22,13 +22,17 @@
                 // Translated messages to display while loading and on error
                 "loadingMessage": "@",
                 "errorMessage": "@",
+
+                // Optional parameter to override the loading circle's top margin
+                "loadingMarginTop": "@",
             },
             template: `<div>
                            <!-- LOADING WHEEL -->
                            <loading-spinning-circle
                                    ng-show="loadingPDF && !showError"
-                                   loading-message="{{loadingMessage}}">
-                           </loading-spinning-circle>
+                                   loading-message="{{loadingMessage}}"
+                                   margintop="{{loadingMarginTop}}"
+                           ></loading-spinning-circle>
                            
                            <!-- ERROR MESSAGE -->
                            <div ng-show="showError" align="center" style="width: 95%; margin: 10px auto" ng-class="fontSizeDesc">
