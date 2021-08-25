@@ -106,7 +106,7 @@ myApp.service('Documents',['UserPreferences', 'UserAuthorizationInfo','$q', '$fi
         for (var i = 0; i < documents.length; i++) {
             documents[i].CreatedTimeStamp = $filter('formatDate')(documents[i].CreatedTimeStamp);
             documents[i].ApprovedTimeStamp = $filter('formatDate')(documents[i].ApprovedTimeStamp);
-            documents[i].DocumentType = FileManagerService.getFileType(documents[i].FinalFileName);
+            documents[i].DocumentType = FileManagerService.getFileExtension(documents[i].FinalFileName);
             documents[i].FirstName = documents[i].FirstName.trim();
             documents[i].LastName = documents[i].LastName.trim();
             documentsArray.push(documents[i]);

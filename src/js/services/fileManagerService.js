@@ -34,14 +34,6 @@ function ($q, $filter, NewsBanner, $injector, Params, Constants, Browser, Reques
         }
     }
 
-    //Tell me whether a url is a pdf link
-    function isPDFDocument(url) {
-        var index = url.lastIndexOf('.');
-        var substring = url.substring(index + 1, url.length);
-
-        return (substring == 'pdf');
-    }
-
     /**
      * @ngdoc method
      * @name downloadFileIntoStorage
@@ -306,33 +298,6 @@ function ($q, $filter, NewsBanner, $injector, Params, Constants, Browser, Reques
          **/
         downloadFileIntoStorage: function (url, targetPath, fileName) {
             return downloadFileIntoStorage(url, targetPath, fileName);
-        },
-
-        //Obtains file type
-        /**
-         *@ngdoc method
-         *@name getFileType
-         *@methodOf MUHCApp.service:FileManagerService
-         *@param {String} url url to check and extract file type
-         *@description Obtains file type
-         *@returns {String} Returns type
-         **/
-        getFileType: function (url) {
-            var index = url.lastIndexOf('.');
-            return url.substring(index + 1, url.length);
-        },
-
-        //Public function to determine whether a link is a PDF file
-        /**
-         *@ngdoc method
-         *@name isPDFDocument
-         *@methodOf MUHCApp.service:FileManagerService
-         *@param {String} url url to check
-         *@description Public function to determine whether the url is a pdf
-         *@returns {Boolean} Value representing whether a given url is a pdf or not
-         **/
-        isPDFDocument: function (url) {
-            return isPDFDocument(url);
         },
 
         /**
