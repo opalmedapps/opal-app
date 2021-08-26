@@ -24,9 +24,10 @@ var myApp=angular.module('MUHCApp');
  *@description Sets the educational material and provides an API to interact with it and the server
  **/
 myApp.service('EducationalMaterial',['$q','$filter','LocalStorage','FileManagerService', 'UserPreferences',
-    'RequestToServer', '$http', 'Logger', 'Params',
+    'RequestToServer', '$http', 'Logger', 'Params', 'NewsBanner',
 
-function ($q, $filter, LocalStorage, FileManagerService, UserPreferences, RequestToServer, $http, Logger, Params) {
+function ($q, $filter, LocalStorage, FileManagerService, UserPreferences, RequestToServer, $http, Logger, Params,
+          NewsBanner) {
 
     /**
      *@ngdoc property
@@ -433,18 +434,27 @@ function ($q, $filter, LocalStorage, FileManagerService, UserPreferences, Reques
                 FileManagerService.openUrl(edumaterial.Url);
                 return -1;
             }
-            else if (type === 'pdf')
-            {
-                // Log the fact that the user clicked on the pdf download button
-                Logger.logClickedPdfEduMaterial(edumaterial.EducationalMaterialControlSerNum);
-
-                // Use the file manager service to open the material and return -1
-                let newFileName = edumaterial.Url.substring(edumaterial.Url.lastIndexOf('/') + 1);
-                FileManagerService.openPDF(edumaterial.Url, newFileName);
-                return -1;
-            }
             else if (type === 'html') return {Url:'./views/education/education-individual-page.html'};
             else return -1;
+        },
+
+        /**
+         * @description Special case of "openEducationalMaterialDetails" for opening pdfs.
+         *              Opens a pdf, and logs the fact that the pdf button was pressed.
+         * @param eduMaterial The educational material representing the pdf to open.
+         * @returns {Promise<void>} Resolves on success or rejects if an error occurs in "openPDF".
+         */
+        openEducationalMaterialPDF: async function (eduMaterial) {
+            // Validate input
+            let type = getDisplayType(eduMaterial);
+            if (type !== 'pdf') throw `openEducationalMaterialPDF should only be used on pdfs; tried to call it on type = ${type}`;
+
+            // Log the fact that the user clicked on the pdf download button
+            Logger.logClickedPdfEduMaterial(eduMaterial.EducationalMaterialControlSerNum);
+
+            // Use the file manager service to open the material
+            let fileName = eduMaterial.Url.substring(eduMaterial.Url.lastIndexOf('/') + 1);
+            await FileManagerService.openPDF(eduMaterial.Url, fileName);
         },
 
         /**

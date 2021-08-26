@@ -56,6 +56,7 @@ myApp.service('NewsBanner',['$cordovaNetwork','$filter','$translatePartialLoader
       callbackValue,
       function(error){});
     }
+    else console.log("Toast message:\n" + messageValue);
   }
 
   //Show connectivity or notification banner

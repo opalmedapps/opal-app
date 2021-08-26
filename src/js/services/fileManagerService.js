@@ -286,6 +286,27 @@ function ($q, $filter, NewsBanner, $injector, Params, Constants, Browser, Reques
         return extension;
     }
 
+    /**
+     * @description Uses the file-opener2 plugin to open the target file.
+     * @param targetPath The path to the file to open.
+     * @param mimeType The file's MIME type (e.g. 'application/pdf').
+     * @returns {Promise<unknown>} Resolves if the write is successful, or rejects with an error.
+     */
+    function openWithFileOpener(targetPath, mimeType) {
+        return new Promise((resolve, reject) => {
+            cordova.plugins.fileOpener2.open(targetPath, mimeType, {
+                error : error => {
+                    console.error(`Failed to open file using fileOpener2; error status = ${e.status}, message = ${e.message}`);
+                    reject(error);
+                },
+                success : () => {
+                    console.log('File opened successfully with fileOpener2');
+                    resolve();
+                }
+            });
+        });
+    }
+
     return {
         getFileExtension: getFileExtension,
 
@@ -350,32 +371,21 @@ function ($q, $filter, NewsBanner, $injector, Params, Constants, Browser, Reques
          *             .doc, .docx, .xls, .xlsx, .rtf, .wav, .gif, .jpg, .jpeg, .png, .txt, .mpg, .mpeg, .mpe, .mp4, .avi, .ods, .odt, .ppt, .pptx, .apk
          *             It opens the file by passing as a parameter a URL of the location of the file (not .html, should be .pdf .doc etc...) OR a file path to the local storage
          *             URL example: https://www.opal.com/myDocument.pdf
-         **/
-        openPDF: function (url, newDocName) {
+         * @returns {Promise<void>} Resolves on success or rejects with an error.
+         */
+        openPDF: async function (url, newDocName) {
             if (Constants.app && ons.platform.isAndroid()) {
                 let path = urlDeviceDocuments;
                 let targetPath = path + newDocName;
 
-                downloadFileIntoStorage(url, path, newDocName).then(function () {
+                await downloadFileIntoStorage(url, path, newDocName);
+                await openWithFileOpener(targetPath, 'application/pdf');
 
-                    cordova.plugins.fileOpener2.open(targetPath, 'application/pdf', {
-                        error : function(e) {
-                            console.log('Error status in (fileOpener2): ' + e.status + ' - Error message: ' + e.message);
-                        },
-                        success : function () {
-                            // file opened successfully by Default PDF Viewer on Android.
-                            // Nothing else to do at this point
-                            console.log('File opened successfully with fileOpener2');
+                console.log('File opened successfully with fileOpener2');
 
-                            var Documents = $injector.get('Documents');
-                            // Now add the filename to an array to be deleted OnExit of the app (CleanUp.Clear())
-                            Documents.addToDocumentsDownloaded(path, newDocName);    // add file info to the array
-                        }
-                    });
-                }).catch(function (error) {
-                    //Unable to download/save document on device
-                    console.log('Error downloading document from Server downloadFileIntoStorage: ' + error.status + ' - Error message: ' + error.message);
-                });
+                // Now add the filename to an array to be deleted OnExit of the app (CleanUp.Clear())
+                let Documents = $injector.get('Documents');
+                Documents.addToDocumentsDownloaded(path, newDocName);    // add file info to the array
             }
             else Browser.openInternal(url);
         },

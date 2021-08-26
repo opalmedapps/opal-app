@@ -1,3 +1,4 @@
+<!-- TODO consolidate duplicate error messages and loading wheels on this page -->
 <ons-page ng-controller="IndividualMaterialController as edu">
     <ons-toolbar fixed-style>
         <div class="left"><ons-back-button ng-click="edu.clickBack()">{{"BACK"|translate}}</ons-back-button></div>
@@ -27,27 +28,36 @@
         </ons-list>
 
         <!-- Click to open pdf -->
-        <ons-list class="settings-list" ng-if="edu.displayType === 'pdf'">
-            <ons-list-item class="item" ng-click="edu.goToEducationalMaterial()" style="background-color: #F9F9F9; border: none !important;">
-                <div align="center">
-                    <div>
-                        <img class="animated swing" style="height:175px; margin-top: 25%;" src="./img/pdf.jpeg">
-                        <h4 style="margin-top: 2%">{{"CLICKTOOPEN" | translate}}</h4>
-                    </div>
-                    <h3 ons-if-platform="android" align="center" ng-class="fontSizeTitle">{{"TAP_DL"|translate}}</h3>
+        <div ng-if="edu.displayType === 'pdf'" style="background-color: #F9F9F9">
+            <!-- Error message if download fails -->
+            <div ng-show="edu.errorLoadingContents" align="center" style="width: 95%; margin: 10px auto" ng-class="fontSizeDesc">
+                <uib-alert type="{{edu.alert.type}}">{{edu.alert.message|translate}}</uib-alert>
+            </div>
+
+            <!-- Loading wheel while the pdf is being downloaded -->
+            <loading-spinning-circle
+                    ng-show="edu.loadingContents"
+                    loading-message="{{'LOADINGMATERIAL'|translate}}"
+                    margintop="15vh"
+            ></loading-spinning-circle>
+
+            <!-- Download image and button -->
+            <div ng-show="!edu.loadingContents" ng-click="edu.openPDF()" align="center">
+                <div>
+                    <img class="animated swing" style="height:175px; margin-top: 25%;" src="./img/pdf.jpeg">
+                    <h4 style="margin-top: 2%">{{"CLICKTOOPEN" | translate}}</h4>
                 </div>
-            </ons-list-item>
-        </ons-list>
+                <h3 ons-if-platform="android" align="center" ng-class="fontSizeTitle">{{"TAP_DL"|translate}}</h3>
+            </div>
+        </div>
 
         <!-- Click to open link -->
-        <ons-list class="settings-list" ng-if="edu.displayType === 'link'">
-            <ons-list-item class="item" ng-click="edu.goToEducationalMaterial()" style="background-color: #F9F9F9; border: none !important;">
-                <div align="center">
-                    <ons-icon class="animated swing" icon="ion-android-open" size="100px" style="color:#4282CC; margin-top:25%;"></ons-icon>
-                    <br><ons-button ng-class="fontSizeDesc" style="margin-top:20px">{{"OPEN_LINK" | translate}}</ons-button>
-                </div>
-            </ons-list-item>
-        </ons-list>
+        <div ng-if="edu.displayType === 'link'" style="background-color: #F9F9F9">
+            <div class="item" ng-click="edu.goToEducationalMaterial()" align="center">
+                <ons-icon class="animated swing" icon="ion-android-open" size="100px" style="color:#4282CC; margin-top:25%;"></ons-icon>
+                <br><ons-button ng-class="fontSizeDesc" style="margin-top:20px">{{"OPEN_LINK" | translate}}</ons-button>
+            </div>
+        </div>
 
         <!-- Package [Added by Tongyou (Eason) Yang] -->
         <ons-list ng-if="edu.displayType === 'package'">

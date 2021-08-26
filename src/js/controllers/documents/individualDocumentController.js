@@ -17,11 +17,12 @@
         .controller('IndividualDocumentController', IndividualDocumentController);
 
     IndividualDocumentController.$inject = ['$rootScope', '$scope', 'NavigatorParameters', 'Documents', '$timeout',
-        'FileManagerService', 'Constants', '$q', 'UserPreferences', 'Browser', '$filter'];
+        'FileManagerService', 'Constants', '$q', 'UserPreferences', 'Browser', '$filter', 'NewsBanner'];
 
     /* @ngInject */
     function IndividualDocumentController($rootScope, $scope, NavigatorParameters, Documents, $timeout,
-                                          FileManagerService, Constants, $q, UserPreferences, Browser, $filter) {
+                                          FileManagerService, Constants, $q, UserPreferences, Browser, $filter,
+                                          NewsBanner) {
         let vm = this;
         let navigator = null;
         let parameters;
@@ -85,7 +86,10 @@
         function openPDF() {
             let url = "data:application/pdf;base64," + docParams.Content;
             let newDocName = FileManagerService.generateDocumentName(docParams);
-            FileManagerService.openPDF(url, newDocName);
+            FileManagerService.openPDF(url, newDocName).catch(error => {
+                console.error(error);
+                NewsBanner.showCustomBanner($filter('translate')('OPEN_PDF_ERROR'), 'black', '#F0F3F4', 13, 'top', null, 2000);
+            })
         }
 
         //Share function

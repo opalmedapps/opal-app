@@ -22,11 +22,11 @@
         .controller('IndividualMaterialController', IndividualMaterialController);
 
     IndividualMaterialController.$inject = ['$scope', '$timeout', 'NavigatorParameters', 'EducationalMaterial',
-        'FileManagerService', '$filter', 'Logger'];
+        'FileManagerService', '$filter', 'Logger', 'Params'];
 
     /* @ngInject */
     function IndividualMaterialController($scope, $timeout, NavigatorParameters, EducationalMaterial,
-                                          FileManagerService, $filter, Logger) {
+                                          FileManagerService, $filter, Logger, Params) {
         var vm = this;
 
         var param;
@@ -35,7 +35,14 @@
         vm.loadingContents = false;
         vm.errorLoadingContents = false;
 
+        // Error message used when a pdf fails to download
+        vm.alert = {
+            type: Params.alertTypeDanger,
+            message: "OPEN_PDF_ERROR",
+        };
+
         vm.goToEducationalMaterial = goToEducationalMaterial;
+        vm.openPDF = openPDF;
         vm.share = share;
 
         // Logging functions
@@ -146,6 +153,27 @@
                     Logger.logSubClickedEduMaterial(vm.tableOfContents[index].EducationalMaterialTOCSerNum);
                 }
             }
+        }
+
+        /**
+         * @description Special case of "goToEducationalMaterial" for opening pdfs.
+         *              Opens a pdf, showing a loading wheel while it downloads.
+         *              If the download/opening process fails, an error is displayed.
+         */
+        function openPDF() {
+            vm.loadingContents = true;
+            vm.errorLoadingContents = false;
+            EducationalMaterial.openEducationalMaterialPDF(vm.edumaterial).then(() => {
+                $timeout(() => {
+                    vm.loadingContents = false;
+                });
+            }).catch(error => {
+                console.error(JSON.stringify(error));
+                $timeout(() => {
+                    vm.loadingContents = false;
+                    vm.errorLoadingContents = true;
+                });
+            })
         }
 
         function share(){
