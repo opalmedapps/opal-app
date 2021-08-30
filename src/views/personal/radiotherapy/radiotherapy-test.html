@@ -102,9 +102,9 @@
                       
                       <div class="content">
                         <p>{{"POSITIONING_1"|translate}}</p>
-                        <img src="./img/radiotherapy/GANTRY.PNG" style="max-width: 65%; height: auto;" class="center">
+                        <img src="./img/radiotherapy/GANTRY.PNG" style="display:block; max-width: 65%; height: auto; margin-left:auto; margin-right:auto;" class="center">
                         <p>{{"POSITIONING_2"|translate}} <b><span style="color:darkgreen">{{"POSITIONING_2_" + rad.RTPlan.patientPosition | translate}}</span></b>.</p>
-                        <br> <p ng-if="rad.cancerType == 'breast' || rad.cancerType == 'prostate'">{{"POSITIONING_3_" + rad.cancerType.toUpperCase() |translate}}</p> <!---->
+                        <br> <p ng-if="rad.plan.CancerType == 'breast' || rad.plan.CancerType == 'prostate'">{{"POSITIONING_3_" + rad.plan.CancerType.toUpperCase() |translate}}</p> <!---->
                     </div>
                       
                       <input type="checkbox" id="title2"  class="dropdown">
@@ -112,7 +112,7 @@
                       
                       <div class="content">
                         <p>{{"BEAMS_1"|translate}}<b><span style="color:darkgreen">{{rad.RTPlan.numBeams}}</span></b> {{"BEAMS_2"|translate}}
-                        <img src="./img/radiotherapy/radiotherapy_delivery.png" style="max-width:100%; height: auto;" class="center">
+                        <br><img src="./img/radiotherapy/radiotherapy_delivery.png" style="max-width:100%; height: auto;" class="center">
                         <br>{{"BEAMS_3"|translate}} <b><span style="color:darkgreen">{{rad.RTPlan.radiationType.toLowerCase()}}</span></b>  {{"BEAMS_3_" + rad.RTPlan.radiationType.toUpperCase()|translate}} 
                         <br><br>
                         <span ng-if="rad.isSingularEnergy">{{"BEAMS_4_SINGULAR"|translate}}</span>
@@ -120,14 +120,14 @@
                         <b><span style="color:darkgreen">{{rad.energyText}}</span></b> {{"BEAMS_4_" + rad.RTPlan.radiationType.toUpperCase()|translate}}{{"BEAMS_5"|translate}}{{"BEAMS_5_" + rad.RTPlan.radiationType.toUpperCase() |translate}}
                         <br><br>
                         {{"BEAMS_6"|translate}} 
-                        <p ng-if="rad.RTPlan.hasMLC">{{"BEAMS_6_MLC"|translate}} </p><!--In your case, the beam is made even smaller with the use of “<b><span style="color:darkgreen">multileaf collimators</span></b>”, small metal bars that block some of radiation to make a conformal beam.<p></p>-->
-                        <img src="./img/radiotherapy/MLC.png" style="max-width: 85%; height: auto;" class="center">              
+                        <span ng-if="rad.RTPlan.hasMLC">{{"BEAMS_6_MLC"|translate}} </span><!--In your case, the beam is made even smaller with the use of “<b><span style="color:darkgreen">multileaf collimators</span></b>”, small metal bars that block some of radiation to make a conformal beam.<p></p>-->
+                        <img src="./img/radiotherapy/MLC.png" style="max-width: 100%; height: auto;" class="center">              
                         </div>
         
                         <!-- TODO: Implement below w/ variables -->
                 
                       <!-- <input type="checkbox" id="title3"  class="dropdown">
-                      &nbsp; &nbsp;  <label for="title3"><img src="./img/radiotherapy/lung.png" style="height:30px; vertical-align:middle;"><span><strong>&nbsp;&nbsp;{{"BREATHING_TITLE"|translate}}</strong></span></label>
+                      &nbsp; &nbsp;  <label class="dropdown" for="title3"><img src="./img/radiotherapy/lung.png" style="height:30px; vertical-align:middle;"><span><strong>&nbsp;&nbsp;{{"BREATHING_TITLE"|translate}}</strong></span></label>
                     
                         <div class="content">
                             Breathing techniques are used for tumours that are close to the heart or likely to move significantly while breathing. During treatment, you will need to <b><span style="color:darkgreen">hold a deep breath</span></b>. 
@@ -146,16 +146,16 @@
                         <br><br>
                         The radiation beam type, energy, angle and shape are all chosen so that the tumour receives this prescribed dose, while the surrounding healthy tissues and organs receive the least amount of radiation possible. Our goal is first to effectively remove the tumour, but also to reduce the side effects you may experience.
                         <br><br>
-                        <b><span style="color:red">change above text -- see google doc</span></b>
+                        <!-- <b><span style="color:red">change above text -- see google doc</span></b> -->
                         </div>
-                       <input type="checkbox" id="title5"  class="dropdown">
+                       <!-- <input type="checkbox" id="title5"  class="dropdown">
                     
                         &nbsp; &nbsp; <label class="dropdown" for="title5"> <img src="./img/radiotherapy/graph.png" style="height:30px; vertical-align:middle;"><span><strong>&nbsp;&nbsp;{{"PROCESS_TITLE"|translate}}</strong></span></label>
                                 
-                        <div class="content">
+                         <div class="content">
                             <span style="color:red">blah blah blah add explanations of ctv etc </span>
                             <p></p>
-                        </div>
+                        </div>  -->
             
 
                     </div>
