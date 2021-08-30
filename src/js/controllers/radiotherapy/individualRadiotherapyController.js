@@ -32,7 +32,6 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
         vm.loading = true;
 
-        vm.cancerType = 'breast';
         vm.energyText = '';
         vm.isSingularEnergy = true;
         vm.showDetails = true;
@@ -54,8 +53,6 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
             parameters = NavigatorParameters.getParameters();
    
             vm.plan = parameters.Post;
-
-            
 
         
         Radiotherapy.requestRTDicomContent(vm.plan.DicomSerNum)
