@@ -135,6 +135,8 @@
   "LOADINGAPPOINTMENTS": "Loading your appointments...",
   "LOADINGDATA": "Retrieving your account",
   "LOADINGDOCUMENT": "Loading your document...",
+  "LOADINGIMAGE": "Loading your medical scan. This may take a moment...",
+  "LOADINGIMAGES": "Loading your images...",
   "LOADINGLABRESULTS": "Loading your lab results...",
   "LOADINGMATERIAL": "Loading your educational material...",
   "LOADINGNOTIFICATIONS": "Loading your notifications...",

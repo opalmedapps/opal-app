@@ -135,6 +135,8 @@
     "LOADINGAPPOINTMENTS": "Chargement de vos rendez-vous...",
     "LOADINGDATA": "Chargement des données",
     "LOADINGDOCUMENT": "Chargement de votre document...",
+    "LOADINGIMAGE": "Chargement de vos images médicales. Ceci peut durer un instant...",
+    "LOADINGIMAGES": "Chargement de vos images...",
     "LOADINGLABRESULTS": "Chargement de vos résultats sanguins...",
     "LOADINGMATERIAL": "Chargement de votre matériel éducatif...",
     "LOADINGNOTIFICATIONS": "Chargement de vos notifications...",

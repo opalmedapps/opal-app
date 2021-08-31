@@ -82,9 +82,8 @@ import { ConvexHull } from 'three/examples/jsm/math/ConvexHull.js';
             return q.promise
         }
 
+        // TODO: combine with above function, can add extra parameter indicating type and if statement
         function requestImgDicomContent(DicomSerNum){
-
-            clearScene()
             var q = $q.defer();
             RequestToServer.sendRequestWithResponse('DicomContent', [DicomSerNum])
             .then(function(response){
