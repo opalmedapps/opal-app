@@ -4,9 +4,12 @@
         <div class="center" ng-class="fontSizeTitle">{{"IMAGING"|translate}}</div>
     </ons-toolbar>
     <network-banner></network-banner>
+
+    <loading-spinning-circle ng-if="img.loading" loading-message="{{'LOADINGIMAGES'|translate}}"></loading-spinning-circle>
+
     <div>
         <ons-list class="settings-list" ng-repeat="image in img.images">
-            <!-- <ons-list-header   class="person-list-header" ng-class="fontSizeTitle" ng-show="diag.showHeader($index)">{{image.CreationDate|date:'fullDate'}}</ons-list-header> -->
+            <ons-list-header   class="person-list-header" ng-class="fontSizeTitle" ng-show="img.showHeader($index)">{{image.DateAdded|date:'fullDate'}}</ons-list-header>
             <ons-list-item class="item" ng-click=img.openImage(image)>
                 <ons-row style="padding:5px;">
                     <ons-col width="50px" align="center" style="text-align: center">
@@ -14,9 +17,7 @@
                     </ons-col>
                     <ons-col align="center">
                         <span class="item-title" ng-class="fontSizeTitle"> {{"IMAGING"|translate}}</span>
-                        <span class="item-desc" ng-class="fontSizeDesc">{{image.name}}</span><br>
-                        <!--<span class="item-title" ng-class="fontSizeTitle"> {{"DATE"|translate}}:</span>
-                        <span class="item-desc" ng-class="fontSizeDesc">{{image.CreationDate|date:'fullDate'}}</span>-->
+                        <span class="item-desc" ng-class="fontSizeDesc">{{image["Name_" + img.language]}}</span><br>
                     </ons-col>
                 </ons-row>
             </ons-list-item>

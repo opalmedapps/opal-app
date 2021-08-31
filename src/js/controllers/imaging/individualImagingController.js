@@ -1,3 +1,10 @@
+/*
+ * Filename     :   individualImagingController.js
+ * Description  :   Manages the individual imaging view.
+ * Created by   :   Kayla O'Sullivan-Steben
+ * Date         :   2021
+ */
+
 (function () {
     'use strict';
 
@@ -11,48 +18,26 @@
 
     function individualImagingController($filter, $scope, $timeout, NavigatorParameters, Radiotherapy, UserPreferences) {
         var vm = this;
-        vm.loading = true
-        vm.images = [];
-        vm.language = '';
-        vm.noImage = false;
-        vm.showHeader = showHeader;
-        vm.getSrc = getSrc
-        // vm.openImage = openImage;
-        vm.slice = 0;
-        // vm.uploadRT = uploadRT;
-        vm.slicePath = '';
-        vm.showDetails = false;
-        // vm.showDetailedInfo = showDetailedInfo;
-        
-        
-        vm.showImage = true;
 
+        vm.date;
+        vm.files; // The list of image(s) 
+        vm.index = 1; // Index of current slice displayed
+        vm.loading = true
+        vm.language = '';
+        vm.modality;
         vm.multiImage = false;
 
-        vm.date
-        vm.modality
-        vm.file;
-        vm.files
-        vm.filePath = '';
-        vm.pixelData = [];
-        vm.url = '';
-        vm.loaded = false;
-        vm.index = 1
+     
+        vm.getSrc = getSrc;
+     
+        // Navigator variables
+        let navigator = null;
+        let navigatorName = '';
+        let parameters;
 
-        vm.tags = [];
 
-        vm.output = [];
-
-        vm.imageType = "";
-
-        vm.sliceIndex = 0;
-      
-        var params = null;
-        
-        var RTLoaded = false;
-        var contourDict = {};
-
-        // Other options: https://dicom.innolitics.com/ciods/ct-image/general-series/00080060
+        // Mapping the DICOM modality code to its name. TODO: this should probably be moved and needs french translations.
+        // This list is non-exhaustive. Other codes: https://dicom.innolitics.com/ciods/ct-image/general-series/00080060
         var modalityMapping = {
             CT: "CT",
             DX: "X-Ray Radiograph",
@@ -60,7 +45,6 @@
             MR: "MRI",
             US: "Ultrasound",
             XA: "X-Ray Angiography"
-
         }
 
         activate();
@@ -69,63 +53,65 @@
 
         function activate() {      
 
-            
-        Radiotherapy.requestImgDicomContent(7)
+            navigator = NavigatorParameters.getNavigator();
+            navigatorName = NavigatorParameters.getNavigatorName();
+            parameters = NavigatorParameters.getParameters();
+
+            vm.image = parameters.Post;
+
+        Radiotherapy.requestImgDicomContent(vm.image.DicomSerNum)
         .then(function (file) {
-            file = JSON.parse(file)
-            vm.files = file.img
-            vm.multiImage = vm.files.length > 1
 
-            vm.modality = modalityMapping[file.modality]
-            vm.date =  $filter('formatDateDicom')(file.date)
+            // Parse data and extract info
+            file = JSON.parse(file);
+            vm.files = file.img; // jpeg encodings
+            vm.multiImage = vm.files.length > 1;
 
-            console.log(file)
-            vm.loaded = true;
-            vm.loading=false
-            // loadSingleDicom(file);
-            
+            vm.modality = modalityMapping[file.modality];
+            vm.date =  $filter('formatDateDicom')(file.date);
 
             vm.loading = false;
         })
         .catch(function(error){
             $timeout(function(){
                 vm.loading = false;
-            //     handleRequestError();
+                // TODO: error handling
+                // handleRequestError();
             })
         });
 
-
-            if(vm.images.length === 0){
-                vm.noImage = true;
-            }
-            
             //grab the language
             vm.language = UserPreferences.getLanguage();
 
-            vm.index = 1
+            // Implementation of the image scrolling feature (for multi-slice)
+            // The images switch to the next/previous slice when the finger is held and dragged down/up on the screen
+            vm.index = 1 // index of displayed slice
 
             var element = document.getElementById("imgs");
-            var startY = 0;
-            var currentY = 0;
+            var startY = 0; // y-value (vertical) when finger touches the screen
+            var currentY = 0; // y-value of current finger position on screen (changes as it is dragging)
 
+            // Listens for finger touch
             element.addEventListener("touchstart", function(e){
                 startY = e.touches[0].clientY;
-                e.preventDefault(); // prevent page from scrolling 
+                e.preventDefault(); // prevent page itself from scrolling 
             })
        
+            // Listens for finger movement (dragging) on screen
             element.addEventListener("touchmove", function(e){
 
-                currentY = e.touches[0].clientY;
+                currentY = e.touches[0].clientY; //update current y value
             
+                // Switches the image when the change in y positions reaches certain value
                 if (Math.abs(currentY-startY)>10){
-                    var change = Math.round((currentY - startY)/10)
+                    var change = Math.round((currentY - startY)/10); // change '10' to modify scroll speed
 
-                    if ((change+vm.index) < 1 ) vm.index = 1
-                    else if ((change+vm.index) > vm.files.length) vm.index = vm.files.length
-                    else vm.index = vm.index + change
+                    if ((change+vm.index) < 1 ) vm.index = 1; // stay on first slice if keeps scrolling up
+                    else if ((change+vm.index) > vm.files.length) vm.index = vm.files.length; // stay on last slice if keeps scrolling down
+                    else vm.index = vm.index + change; // change image slice based on rounded 'change' variable 
 
                     $scope.$apply();
-                    startY = currentY
+                    startY = currentY; // reset starting point to currentY 
                 }
        
                 e.preventDefault(); // prevent page from scrolling 
@@ -133,16 +119,8 @@
             })
         }
 
-        // Determines whether or not to show the date header in the view. Announcements are grouped by day.
-        function showHeader(index)
-        {
-               // if (index === 0) return true;
-               // var current = (new Date(vm.images[index].CreationDate)).setHours(0,0,0,0);
-               // var previous = (new Date(vm.images[index-1].CreationDate)).setHours(0,0,0,0);
-               // return current !== previous;
-        }
-
     
+        // Returns the src value of the current image slice 
         function getSrc(index){
             return "data:image/jpg;base64," + vm.files[index]
         }
