@@ -19,9 +19,11 @@ import { ConvexHull } from 'three/examples/jsm/math/ConvexHull.js';
         var dicomList = [];
         var dicomContent = [];
 
+        // Variables for 3D render
         let scene = new THREE.Scene()
         let group = new THREE.Group();
         let meshes = [];
+
         var vm = this;
         vm.RTPlan;
 
@@ -35,20 +37,22 @@ import { ConvexHull } from 'three/examples/jsm/math/ConvexHull.js';
         };
         return service;
 
-
+        // Returns the 3D scene
         function getScene(){
             return scene;
         }
+
+        // Requests the list of dicoms
         function requestRTDicoms(){
             var q = $q.defer();
             RequestToServer.sendRequestWithResponse('Dicom')
                 .then(function (response) {
-                    console.log(response)
                     dicomList = response.Data;
                     q.resolve(dicomList);             
                     
                     if(typeof dicomList =='undefined') return ;
 
+                    // Format date
                     dicomList.forEach(function(dicom){
                         dicom.DateAdded = $filter('formatDate')(dicom.DateAdded)
                     })
@@ -58,9 +62,9 @@ import { ConvexHull } from 'three/examples/jsm/math/ConvexHull.js';
                 });
 
             return q.promise
-
         }
 
+        // Get contents of specific dicom entry
         function requestRTDicomContent(DicomSerNum){
 
             clearScene()
@@ -69,7 +73,7 @@ import { ConvexHull } from 'three/examples/jsm/math/ConvexHull.js';
             .then(function(response){
                 dicomContent = response.Data
                 vm.RTPlan = response.Data
-                renderElements();
+                renderElements(); // render 3D scene
                 q.resolve(dicomContent)
             })
             
@@ -80,6 +84,7 @@ import { ConvexHull } from 'three/examples/jsm/math/ConvexHull.js';
             return dicomContent;
         }
 
+        // Removes all children from the scene
         function clearScene(){
             meshes = []
             group.position.x = 0;
@@ -95,11 +100,14 @@ import { ConvexHull } from 'three/examples/jsm/math/ConvexHull.js';
 
         }
 
+        // Renders the 3D elements (beams & body)
         function renderElements(){
 
+            // Create scene and set background colour
             scene = new THREE.Scene();
             scene.background = new THREE.Color(0xf1f1f1);
 
+            // Add lights to scene
             const light = new THREE.PointLight(0xffffff, 1);
             light.position.set(2000,0,0);
             scene.add(light);
@@ -116,161 +124,159 @@ import { ConvexHull } from 'three/examples/jsm/math/ConvexHull.js';
             light4.position.set(0,2000,100);
             scene.add(light4);
 
+            
+            // Render beams
+            for (let i = 1; i <= vm.RTPlan.numBeams; i++){
+                renderBeam(vm.RTPlan.beams[i].beamPoints)
+            }
+
+            // Render body from slices
             var slices = vm.RTPlan.struct
             const keys = Object.keys(slices);
             
+            renderBody(slices, keys)
 
-            for (let i = 1; i <= vm.RTPlan.numBeams; i++){
-                renderBeamv2(vm.RTPlan.beams[i].beamPoints)
-            }
-
-            allSlices(slices, keys)
-
+            // Rotate and reposition beams and body to be centered 
             group.rotation.y = Math.PI / 2;
-
             group.position.x -= (parseFloat(vm.RTPlan.firstSlice) + parseFloat(vm.RTPlan.lastSlice))/2 - 130
             scene.add(group)
 
-
         }
 
+     
+        // Renders a 3D beam from the 5 beam outline points calculated in listener
+        function renderBeam(beamPoints){
 
-        
-
-
-        
-
-        function renderBeamv2(beamPoints){
+            // Create THREE JS vectors for each point (beam source and four corners at isocentre)
             let points = [];
             let beamSource = new THREE.Vector3(parseFloat(beamPoints.beamSource[0]),parseFloat(beamPoints.beamSource[1]),parseFloat(beamPoints.beamSource[2]))
             beamPoints.field.forEach(function(pt){
                 points.push(new THREE.Vector3(parseFloat(pt[0]), parseFloat(pt[1]), parseFloat(pt[2])))
             })
-            points.push(beamSource)
+            points.push(beamSource);
 
-
-
+            // Create triangle faces such that a square pyramid shape is formed between teh points
             var indices = [];
-            indices.push(2,1,4)
-            indices.push(3,2,4)
-            indices.push(0,3,4)
-            indices.push(1,0,4)
-            indices.push(2,1,3)
-            indices.push(1,0,3)
-            const lineMaterial = new THREE.LineBasicMaterial( { color: 0x008000} );//0xff0000, linewidth: 4 } );
-            
+            indices.push(2,1,4);
+            indices.push(3,2,4);
+            indices.push(0,3,4);
+            indices.push(1,0,4);
+            indices.push(2,1,3);
+            indices.push(1,0,3);
+
+            // Create line material connecting the points
+            const lineMaterial = new THREE.LineBasicMaterial( { color: 0x008000} );
             const lineGeometry = new THREE.BufferGeometry().setFromPoints( points );
-            lineGeometry.setIndex(indices)
+            lineGeometry.setIndex(indices);
             const lines = new THREE.Line( lineGeometry, lineMaterial );
-            group.add(lines)
+            group.add(lines);
 
+            // Create solid transparent material (fills between the lines)
             lineGeometry.computeVertexNormals();
+            const smoothMaterialx = new THREE.MeshMatcapMaterial({color: 0x90EE90, side: THREE.DoubleSide, transparent: true, opacity: 0.07});
+            let smoothMeshx = new THREE.Mesh( lineGeometry, smoothMaterialx);
+            group.add(smoothMeshx);
 
-
-            const smoothMaterialx = new THREE.MeshMatcapMaterial({color: 0x90EE90, side: THREE.DoubleSide, transparent: true, opacity: 0.07});//0xff0000} );0xff0000, side: THREE.DoubleSide, transparent: true, opacity: 0.2});
-            let smoothMeshx = new THREE.Mesh( lineGeometry, smoothMaterialx)
-            
-            group.add(smoothMeshx)
-
-            meshes.push(new ConvexHull().setFromObject(smoothMeshx))
+            // Create convex shape from beam (used later to determine which points are within the beam and colour them)
+            meshes.push(new ConvexHull().setFromObject(smoothMeshx));
        
         }
 
-        function allSlices(slices, keys){
-            var pts = []
-            var indices = []
-            var curr = 0;
-            var colour = 0x999289//0x9189CA//0xA1AFBF
-            var colours = []
+        // Render 3D body
+        function renderBody(slices, keys){
+            var pts = []; // The 3D points making up the entire body
+            var indices = []; // The indices of those points ordered in such a way that it forms a triangular mesh
+            var curr = 0; // The index of the current point (in the overal pts array, not of the current slice)
+            var colours = []; // The array of colours assigned to each point
 
+            // Sort slice height (z) to be floats and in order
             keys.sort(function(a, b){return parseFloat(a.replace('_','.'))-parseFloat(b.replace('_','.'))})
 
       
+            // Loop through each slice to form triangle faces between current and subsequent slice
+            // For details, refer to Kayla O'Sullivan-Steben's thesis
             for (let i=0; i<keys.length; i++){
-                let z = parseFloat(keys[i].replace('_','.'))
-                let slice2 = []
-                let slice = []
+                let z = parseFloat(keys[i].replace('_','.')); // the z value (height) of the slice
+                let slice = []; // stores the x and y values of each point in the slice (they all have the same z value)
+                let slice2 = [];
 
-      
-                if(JSON.parse(slices[keys[i]]).length > 1) {
-                    slice = JSON.parse(slices[keys[i]])[0]
-                }
-                else slice = JSON.parse(slices[keys[i]])[0]
+                // Parse the slice data
+                slice = JSON.parse(slices[keys[i]])[0];
 
+                // Do not do for last slice since it will have already been connected to the previous slice
                 if (i < keys.length -1){
-                    if(JSON.parse(slices[keys[i+1]]).length > 1) slice2 = JSON.parse(slices[keys[i+1]])[0]
-                    else slice2 = JSON.parse(slices[keys[i+1]])[0]
+                    slice2 = JSON.parse(slices[keys[i+1]])[0];
                 }
 
                 
-
-
+                // Loop through the points in the current slice 
+                // 'index' variable keeps track of the starting index of slice 2
+                // 'j' tracks the iteration on the current slice array (note that the array is [x1,y1,x2,y2...] so j increases by 2)
                 let index = 0;
                 for (let j=0; j<slice.length; j+=2){
-                    pts.push(slice[j], slice[j+1], z)
+                    pts.push(slice[j], slice[j+1], z);
 
+                    // If first iteration, find starting point on second slice (this ensure both slices align)
                     if (j==0){
-                        index = closestIndex(slice[j], slice[j+1], slice2)
+                        index = closestIndex(slice[j], slice[j+1], slice2);
                     }
 
-                   let point = new THREE.Vector3(slice[j], slice[j+1], z)
-                   let isInside = false 
-   
-                   for (let i=0; i<meshes.length; i++){
+
+                    // Check if point is inside one of the beams (stored in meshes array) and sets colour accordingly
+                    // Note: uses the containsPoint() function in the THREE.JS ConvexHull class
+                    let point = new THREE.Vector3(slice[j], slice[j+1], z);
+                    let isInside = false;
+    
+                    for (let i=0; i<meshes.length; i++){
                         if (meshes[i].containsPoint(point)){
-                            isInside = true
+                            isInside = true;
                             break;
                         }
                     }
                     if (isInside){
-                        colours.push(153,153,255)
+                        colours.push(153,153,255); // blue
                     } else {
-                        colours.push(127,127,127)
+                        colours.push(127,127,127); // grey
                     }
 
-                //    const raycaster = new THREE.Raycaster()
-                //    raycaster.set(point, new THREE.Vector3(1,1,1))
-                //    const intersects = raycaster.intersectObjects(meshes)
-                //    console.log("mesh",meshes)
-                //    if (intersects.length%2 ===1){
-                //        console.log(intersects)
-                //     colours.push(153,153,255)
-                //    } else {
-                //     colours.push(127,127,127)
-                //    }
 
+                    // Algorithm to create two triangular faces (between points [c,a,d] and [a,b,d] per point (see thesis)
+                    // Ignores last slice and last point on each slice, since the last point uses a different agorithm
                     if (j != slice.length-2 && i != keys.length-1){
                         let a = curr;
-                        let b = curr -j/2 + slice.length/2 + ((index/2)+j/2) % (slice2.length/2)
-                        let c = curr+1; 
-                        let d = curr -j/2+ slice.length/2 + ((index/2)+j/2 +1) % (slice2.length/2) 
+                        let b = curr - j/2 + slice.length/2 + ((index/2)+j/2) % (slice2.length/2);
+                        let c = curr + 1; 
+                        let d = curr - j/2+ slice.length/2 + ((index/2)+j/2 +1) % (slice2.length/2);
                     
-                        indices.push(c,a,d)
-                        indices.push(a,b,d)        
+                        indices.push(c,a,d);
+                        indices.push(a,b,d);        
                     }
                
-                    if (j == slice.length-2 && i!=keys.length-1 && slice2.length <= slice.length){
+                    // For the final point in the slice, algorithm is such that it links back to first points of each slice
+                        // Note that the initial version allowed for two different slice lengths, but the listener now forces them to be equal lenghts.
+                        // The functionality for two slice lengths is left commented out in case it is ever used again.
+                    if (j == slice.length-2 && i!=keys.length-1){ //&& slice2.length <= slice.length
                             let a = curr;
                             let b = curr  + (((index/2)+ slice2.length/2) )% (slice2.length/2)
                             if (index==0) b += slice2.length/2
                             let c = curr-j/2; 
                             let d = curr+1+((index/2)) % (slice2.length/2)
 
-
-                            indices.push(c,a,d)
-                            indices.push(a,b,d)
+                            indices.push(c,a,d);
+                            indices.push(a,b,d);
                     }
 
-                    // Cap top and bottom
+                    // Algorithm to cap top and bottom slices (creates triangles across the slice instead of to next slice)
                     if ((i == keys.length-1 || i==0) && j==0){
 
                         for (let k = 1; k < slice.length/4; k++){
                             let a = curr + k - 1;
-                            let b = curr + (slice.length/2-k)
+                            let b = curr + (slice.length/2-k);
                             let c = curr + k;
-                            let d = curr + (slice.length/2 - k - 1)
-                            indices.push(c,a,d)
-                            indices.push(a,b,d)
+                            let d = curr + (slice.length/2 - k - 1);
+
+                            indices.push(c,a,d);
+                            indices.push(a,b,d);
                         }
                     }
 
@@ -278,14 +284,13 @@ import { ConvexHull } from 'three/examples/jsm/math/ConvexHull.js';
                    
                 }
 
+                /* // For different slice lengths -- need for this is bypassed by forcing same length slices in listener
                 if (slice.length < slice2.length){
-                    let newCurr = curr+(slice.length/2-1+index/2)%(slice2.length/2); ';/['
+                    let newCurr = curr+(slice.length/2-1+index/2)%(slice2.length/2); 
                  
                     index = closestIndex(slice2[(slice.length/2-1+index/2)%(slice2.length/2)*2], slice2[(slice.length/2-1+index/2)%(slice2.length/2)*2+1], slice)
   
-                    for (let j = slice.length; j < slice2.length; j+=2){
-                                      
-
+                    for (let j = slice.length; j < slice2.length; j+=2){                 
                             let a = curr-slice.length/2+(index/2 + (j)/2)%(slice.length/2) 
                             let b = newCurr
                             let c = curr-slice.length/2+(index/2 + (j)/2 + 1)%(slice.length/2)
@@ -297,8 +302,6 @@ import { ConvexHull } from 'three/examples/jsm/math/ConvexHull.js';
                         newCurr ++
 
                     }
-
-
                             let a = curr-slice.length/2+(index/2 + ( slice2.length-slice.length)/2)%(slice.length/2) //slice.length/2+(index/2 + (j-slice.length)/2)%(slice.length/2)//curr-slice.length/2+(index/2 + (j-slice.length)/2)%(slice.length/2) //newCurr;
                             let b = newCurr
                             let c = curr-slice.length/2+(index/2 + ( slice2.length-slice.length)/2 + 1)%(slice.length/2); 
@@ -307,41 +310,41 @@ import { ConvexHull } from 'three/examples/jsm/math/ConvexHull.js';
                             indices.push(c,a,d)
                             indices.push(a,b,d)
                 }
-
-                
+                */
             }
 
-            var geo = new THREE.BufferGeometry()
-            // var geopts = new THREE.BufferGeometry()
-  
-            geo.setIndex(indices)
+            // Create buffer geometry from points and set index and position attributes
+            var geo = new THREE.BufferGeometry();
+            geo.setIndex(indices);
             geo.setAttribute( 'position', new THREE.Float32BufferAttribute( pts, 3 ) );
-            // geopts.setAttribute('position', new THREE.Float32BufferAttribute(pts,3))
 
-            geo.computeBoundingSphere()
-                                                     
+            geo.computeBoundingSphere();                                    
             geo.computeVertexNormals();
-            colours = new Uint8Array(colours)
-            geo.setAttribute('color',  new THREE.BufferAttribute(colours,3,true))
+
+            // Set colour attribute
+            colours = new Uint8Array(colours);
+            geo.setAttribute('color',  new THREE.BufferAttribute(colours,3,true));
             geo.attributes.color.normalized = true     
        
-            colour =0x767676//0x655A4E// 0x967969//0x5E51B1//0x6A5ACD
-            var mesh = new THREE.Mesh(geo, new THREE.MeshPhongMaterial({vertexColors:THREE.VertexColors, side:THREE.DoubleSide, shininess:0}))//,wireframe:true}))
-            group.add(mesh)
+            // Create final mesh
+            var mesh = new THREE.Mesh(geo, new THREE.MeshPhongMaterial({vertexColors:THREE.VertexColors, side:THREE.DoubleSide, shininess:0}));
+            group.add(mesh);
         }    
 
+        // Calculates the distance between two points
         function distance(x1, y1, x2, y2){
-            return Math.sqrt(Math.pow(x2-x1,2) + Math.pow(y2-y1,2))
+            return Math.sqrt(Math.pow(x2-x1,2) + Math.pow(y2-y1,2));
         }
 
+        // Finds the index of a point in an array closest in distance to a given point (x,y)
         function closestIndex(x, y, array){
             let dist = distance(x, y, array[0], array[1]);
             let index = 0;
             for (let j=2; j<array.length; j+=2){
-                let newdist = distance(x,y, array[j], array[j+1])
+                let newdist = distance(x,y, array[j], array[j+1]);
                 if ( newdist < dist){
-                    dist = newdist
-                    index = j
+                    dist = newdist;
+                    index = j;
                 }
             }
             return index;

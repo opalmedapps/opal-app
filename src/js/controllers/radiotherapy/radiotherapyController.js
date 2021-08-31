@@ -33,7 +33,6 @@
         vm.RTPlans = [];
 
         vm.showHeader = showHeader;
-        // vm.openInfoPage = openInfoPage;
         vm.openRTPlan = openRTPlan;
         
         let navigator = null;
@@ -67,15 +66,15 @@
         function showHeader(index)
         {
             if (index === 0) return true;
-            
             var current = (new Date(vm.RTPlans[index].DateAdded)).setHours(0,0,0,0);
             var previous = (new Date(vm.RTPlans[index-1].DateAdded)).setHours(0,0,0,0);
             return current !== previous;
         }
 
+        // Opens the individual radiotherapy page
         function openRTPlan(plan) {
             NavigatorParameters.setParameters({'Navigator': navigator, 'Post': plan});
-            navigator.pushPage('views/personal/radiotherapy/radiotherapy-test.html');
+            navigator.pushPage('views/personal/radiotherapy/individual-radiotherapy.html');
         }
 
     }
