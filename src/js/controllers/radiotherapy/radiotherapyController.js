@@ -46,7 +46,7 @@
             navigator = NavigatorParameters.getNavigator();
             navigatorName = NavigatorParameters.getNavigatorName();   
 
-            Radiotherapy.requestRTDicoms()
+            Radiotherapy.requestRTDicoms(1)
             .then(function(RTPlans){
                 vm.loading  = false;
                 vm.RTPlans = RTPlans;

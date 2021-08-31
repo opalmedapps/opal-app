@@ -43,9 +43,9 @@ import { ConvexHull } from 'three/examples/jsm/math/ConvexHull.js';
         }
 
         // Requests the list of dicoms
-        function requestRTDicoms(){
+        function requestRTDicoms(dicomType){
             var q = $q.defer();
-            RequestToServer.sendRequestWithResponse('Dicom')
+            RequestToServer.sendRequestWithResponse('Dicom', [dicomType])
                 .then(function (response) {
                     dicomList = response.Data;
                     q.resolve(dicomList);             
