@@ -2,6 +2,11 @@
     <ons-toolbar fixed-style>
         <div class="left"><ons-back-button>{{"BACK"|translate}}</ons-back-button></div>
         <div class="center" ng-class="fontSizeTitle">{{"IMAGING"|translate}}</div>
+        <div class="right">
+            <ons-toolbar-button> <!-- TODO: ng-click -->
+                <ons-icon icon="fa-info-circle"></ons-icon>
+            </ons-toolbar-button>
+        </div>
     </ons-toolbar>
     <network-banner></network-banner>
 
@@ -10,14 +15,15 @@
     <div>
         <ons-list class="settings-list" ng-repeat="image in img.images">
             <ons-list-header   class="person-list-header" ng-class="fontSizeTitle" ng-show="img.showHeader($index)">{{image.DateAdded|date:'fullDate'}}</ons-list-header>
-            <ons-list-item class="item" ng-click=img.openImage(image)>
+            <ons-list-item class="item" modifier="chevron" ng-click=img.openImage(image)>
                 <ons-row style="padding:5px;">
                     <ons-col width="50px" align="center" style="text-align: center">
                         <img style="width:35px;" src="./img/xray.png">
                     </ons-col>
                     <ons-col align="center">
-                        <span class="item-title" ng-class="fontSizeTitle"> {{"IMAGING"|translate}}</span>
-                        <span class="item-desc" ng-class="fontSizeDesc">{{image["Name_" + img.language]}}</span><br>
+                        <!-- <span class="item-title" ng-class="fontSizeTitle"> {{"IMAGING"|translate}}</span> -->
+                        <!-- <span class="item-desc" ng-class="fontSizeDesc">{{image["Name_" + img.language]}}</span><br> -->
+                        <span class="item-title" ng-class="fontSizeTitle">{{image["Name_" + img.language]}}</span>
                     </ons-col>
                 </ons-row>
             </ons-list-item>
