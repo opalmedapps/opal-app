@@ -347,8 +347,9 @@ function ($q, $filter, NewsBanner, $injector, Params, Constants, Browser, Reques
 
                 let onError = function (err) {
                     //Show alert banner with error
-                    NewsBanner.showCustomBanner($filter('translate')("UNABLETOSHAREMATERIAL"), '#333333', '#F0F3F4',
-                         13, 'top', null, 2000);
+                    NewsBanner.showToast({
+                        message: $filter('translate')("UNABLETOSHAREMATERIAL"),
+                    });
                     console.error(`Failed to share "${name}" via ${url}: ${JSON.stringify(err)}`);
                 };
 

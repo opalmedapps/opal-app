@@ -17,7 +17,6 @@
      *@requires $filter
      *@requires $translatePartialLoader
      *@description Provides an API though which to display toast messages on the screen.
-     *             For more information on the plugin, {@link https://github.com/EddyVerbruggen/Toast-PhoneGap-Plugin Cordova Toast Plugin}
      **/
     function NewsBanner($filter, $timeout, $translatePartialLoader, Constants, Params, UserPreferences) {
 
@@ -36,7 +35,7 @@
             textColor: '#FFFFFF', // make sure you use #RRGGBB
         };
 
-        // Font sizes used for toasts (in pixels); doesn't necessarily match the numeric values in app.css
+        // Font sizes used for toasts (in pixels); don't necessarily match the numeric values in app.css
         const automaticFontSizes = {
             loggedOut: 14,
             medium: 12,
@@ -48,7 +47,6 @@
         const toastQueue = [];
 
         let service = {
-            showCustomBanner: showCustomBanner,
             showToast: showToast,
         };
 
@@ -110,41 +108,9 @@
             }
         }
 
-        /**
-         *@ngdoc method
-         *@name showCustomBanner
-         *@methodOf MUHCApp.service:NewsBanner
-         *@param {String} message Message for the alert
-         *@param {String}  Background Color for the alert
-         *@param {String}  Text Color for the alert
-         *@param {String}  Position for the alert
-         *@param {Function} callback Callback function for the alert
-         *@param {Number} duration Duration in milliseconds
-         *@description Displays alert based on the parameters
-         **/
-        function showCustomBanner(messageValue,backgroundColorValue, textColorValue, textSizeValue, positionValue, callbackValue, durationValue){
-            if(Constants.app)
-            {
-                showCustomBannerPrivate(messageValue,backgroundColorValue, textColorValue, textSizeValue, positionValue, callbackValue, durationValue);
-            }
-            else console.log("Toast message:\n" + messageValue);
-            //else showCustomToast(messageValue, durationValue);
-        }
-
         /*********************************/
         /******* PRIVATE FUNCTIONS *******/
         /*********************************/
-
-        /**
-         * @author Stacey Beard
-         * @date 2021-08-12
-         * @desc Determines whether the current platform is able to display toast messages.
-         * @returns {boolean} True if toasts can be used; false otherwise.
-         */
-        function platformSupportsToast() {
-            // TODO this function will be removed in a later commit; for now, block all native toasts.
-            return false;
-        }
 
         // Adapted from source: https://www.w3schools.com/howto/howto_js_snackbar.asp
         async function showCustomToast(toast) {
@@ -192,32 +158,6 @@
 
                 }, toast.duration);
             });
-        }
-
-        //Helper method to show banner
-        function showCustomBannerPrivate(messageValue,backgroundColorValue, textColorValue, textSizeValue,
-                                  positionValue, callbackValue, durationValue)
-        {
-            // TODO add support for Android 11+; display toasts in a different way
-            if(platformSupportsToast())
-            {
-                window.plugins.toast.showWithOptions(
-                    {
-                        message: messageValue,
-                        duration:durationValue,
-                        position: positionValue,
-                        addPixelsY: 100,
-                        styling: {
-                            opacity:0.8,
-                            backgroundColor: backgroundColorValue, // make sure you use #RRGGBB. Default #333333
-                            textColor: textColorValue, // Ditto. Default #FFFFFF
-                            textSize: textSizeValue, // Default 13
-                        }
-                    },
-                    callbackValue,
-                    function(error){});
-            }
-            else console.log("Toast message:\n" + messageValue);
         }
 
         // Replaces all missing options in the provided object with the defaults, and fills in "automatic" options

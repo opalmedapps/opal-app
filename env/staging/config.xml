@@ -132,5 +132,4 @@
         <variable name="PHOTO_LIBRARY_ADD_USAGE_DESCRIPTION" value="Cette application doit accéder à la bibliothèque de photos pour partager des documents / This app requires photo library access to share documents"/>
         <variable name="PHOTO_LIBRARY_USAGE_DESCRIPTION" value="Cette application doit accéder à la bibliothèque de photos pour partager des documents / This app requires photo library access to share documents"/>
     </plugin>
-    <plugin name="cordova-plugin-x-toast" spec="^2.7.2"/>
 </widget>

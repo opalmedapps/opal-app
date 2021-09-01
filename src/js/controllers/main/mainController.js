@@ -129,8 +129,9 @@
                 localStorage.setItem('locked', 1);
 
                 // Display a warning message to the users after being disconnected
-                NewsBanner.showCustomBanner($filter('translate')("INACTIVE"), '#333333', '#F0F3F4',
-                    13, 'top', null, 5000);
+                NewsBanner.showToast({
+                    message: $filter('translate')("INACTIVE"),
+                });
             }
         }
 
@@ -169,8 +170,9 @@
                 push.on('notification', function (data) {
                     if (ons.platform.isIOS() && data.additionalData.foreground) {
                         // on iOS, it will allow push notification to appear when app is running
-                        NewsBanner.showCustomBanner(data.title + "\n" + data.message, '#333333', '#F0F3F4', 13,
-                            'top', null, 9000);
+                        NewsBanner.showToast({
+                            message: data.title + "\n" + data.message,
+                        });
                         navigator.vibrate(3000);
                     }
                 });
@@ -216,8 +218,9 @@
                     CleanUp.clear();
 
                     // Show message "You have logged in on another device."
-                    NewsBanner.showCustomBanner($filter('translate')("KICKEDOUT"), '#333333', '#F0F3F4',
-                        13, 'top', null, 5000);
+                    NewsBanner.showToast({
+                        message: $filter('translate')("KICKEDOUT"),
+                    });
                     refCurrentUser.off();
                     $state.go('init');
                 }

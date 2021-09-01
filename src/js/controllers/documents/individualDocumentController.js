@@ -88,7 +88,9 @@
             let newDocName = FileManagerService.generateDocumentName(docParams);
             FileManagerService.openPDF(url, newDocName).catch(error => {
                 console.error(error);
-                NewsBanner.showCustomBanner($filter('translate')('OPEN_PDF_ERROR'), 'black', '#F0F3F4', 13, 'top', null, 2000);
+                NewsBanner.showToast({
+                    message: $filter('translate')('OPEN_PDF_ERROR'),
+                });
             })
         }
 
