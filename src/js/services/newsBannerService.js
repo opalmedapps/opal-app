@@ -80,8 +80,7 @@
          * @param {string} [options.backgroundColor] - (optional; default = "#333333", i.e. dark grey) A color in
          *                 #RRGGBB format representing the color of the toast background.
          * @param {string} [options.position] - (optional; default = "top") The location at which to display the toast.
-         *                 Options are: 'top', 'center', 'bottom' (note: when running a platform that does not support
-         *                 native toasts, 'center' is not supported and will default to 'top').
+         *                 Options are: 'top', 'bottom'.
          */
         function showToast(options) {
             // TODO validate input options
@@ -133,17 +132,8 @@
          * @returns {boolean} True if toasts can be used; false otherwise.
          */
         function platformSupportsToast() {
-            // Non-apps don't support toasts
-            if (!Constants.app) return false;
-
-            // Check the version number of the OS. If using Android, toasts are not supported on Android 11+.
-            // Use a regular expression to extract the first number of the version; e.g. 11.0 --> 11
-            const versionRegEx = /^\d*/;
-            const versionStr = device ? device.version.match(versionRegEx)[0] : "0";
-            const versionNum = parseInt(versionStr);
-
-            // To support toasts, the app must not be running on Android 11+.
-            return !(device.platform === "Android" && versionNum >= 11);
+            // TODO this function will be removed in a later commit; for now, block all native toasts.
+            return false;
         }
 
         // Adapted from source: https://www.w3schools.com/howto/howto_js_snackbar.asp
@@ -156,8 +146,8 @@
                 let toastElement = document.getElementById("custom-toast");
 
                 // TODO add param to shift this by y pixels
-                // Move the toast container to the correct position (note: center is not supported here and defaults to top)
-                if (toast.position === "top" || toast.position === "center") {
+                // Move the toast container to the correct position
+                if (toast.position === "top") {
                     toastContainer.style.top = "30px";
                     toastContainer.style.removeProperty('bottom');
                 }
@@ -191,37 +181,6 @@
                     resolve();
 
                 }, toast.duration);
-            });
-        }
-
-        function showNativeToast(toast) {
-            return new Promise((resolve, reject) => {
-                console.log(`Showing toast [${toast.duration}] [${toast.message}]`);
-                window.plugins.toast.showWithOptions(
-                    {
-                        message: toast.message,
-                        duration: toast.duration,
-                        position: toast.position,
-                        addPixelsY: 0,
-                        styling: {
-                            opacity: 0.8,
-                            backgroundColor: toast.backgroundColor,
-                            textColor: toast.textColor,
-                            textSize: toast.fontSize,
-                        }
-                    },
-                    function() {
-                        // Wait for the toast to be done showing
-                        $timeout(() => {
-                            console.log(`Toast is done [${toast.message}]`);
-                            // If a callback was provided, call it now
-                            if (toast.callback) toast.callback();
-                            resolve();
-                        }, toast.duration);
-                    },
-                    // Provide reject as the error handling function
-                    reject
-                );
             });
         }
 
@@ -264,14 +223,14 @@
             // If there are no toasts to show, return
             if (toastQueue.length === 0) return;
 
-            // Get the next toast in the queue to show (but don't remove it until it's done displaying)
+            // Get the next toast in the queue to show (but don't remove it from the queue until it's done displaying)
             let toast = toastQueue[0];
 
             // Fill in any missing options for the toast message
             toast = addDefaultOptions(toast);
 
-            // Show the toast using the appropriate message
-            showToastOnPlatform(toast).then(() => {
+            // Show the toast
+            showCustomToast(toast).then(() => {
                 // Force a delay between toasts to ensure correct display, then show the next one
                 $timeout(() => {
                     toastQueue.splice(0, 1); // Remove the finished toast from the queue
@@ -286,12 +245,6 @@
                     showNextToast();
                 }, 500);
             });
-        }
-
-        // Shows a toast using the best method available on the current platform
-        async function showToastOnPlatform(toast) {
-            if (platformSupportsToast()) await showNativeToast(toast);
-            else await showCustomToast(toast);
         }
 
         // Computes a duration for which to show a toast message based on its length
