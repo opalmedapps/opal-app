@@ -136,7 +136,7 @@
                 toastElement.style.color = toast.textColor;
                 toastElement.style["background-color"] = toast.backgroundColor;
                 toastElement.style["font-size"] = toast.fontSize + "px";
-                toastElement.innerHTML = toast.message;
+                toastElement.innerHTML = formatMessage(toast.message);
                 toastElement.style.visibility = "visible";
 
                 // Start fading in the toast. Wait for the duration in seconds (minus the fade-out time) before starting to fade out.
@@ -213,6 +213,11 @@
             let sizeName = UserPreferences.getFontSize();
             if (sizeName === "") sizeName = "loggedOut";
             return automaticFontSizes[sizeName];
+        }
+
+        // Formats a message to be shown as innerHTML in a toast
+        function formatMessage(message) {
+            return message.split("\n").join("<br>"); // Replace all line breaks with HTML breaks
         }
     }
 })();
