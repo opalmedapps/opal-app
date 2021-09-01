@@ -25,13 +25,15 @@
         $translatePartialLoader.addPart('top-view');
 
         const defaultOptions = {
-            duration: "automatic",
-            message: "", // Should be provided by the caller
-            position: 'top',
+            backgroundColor: '#555555', // make sure you use #RRGGBB
             callback: null,
-            backgroundColor: '#333333', // make sure you use #RRGGBB
+            duration: "automatic",
+            durationWordsPerMinute: 100, // Average reading speed (lowered because toasts are typically short)
+            fontSize: "automatic",
+            message: "", // Required; should be provided by the caller
+            position: "top",
+            positionOffset: 30,
             textColor: '#FFFFFF', // make sure you use #RRGGBB
-            fontSize: "automatic"
         };
 
         // Font sizes used for toasts (in pixels); doesn't necessarily match the numeric values in app.css
@@ -64,23 +66,31 @@
          * @date 2021-09-01
          * @param {Object} options - An object containing configuration options for the toast message.
          * @param {string} options.message - (required) The message to be shown. Should already be translated.
-         * @param {number|string} [options.duration] - (optional; default = "automatic") Either a number representing
-         *                        the number of milliseconds to display the toast message (including 0.5 seconds each of
-         *                        fade-in and fade-out time), or the string "automatic", indicating that the duration
-         *                        should be calculated automatically based on the message length.
+         * @param {string} [options.backgroundColor] - (optional; default = "#555555", i.e. dark grey) A color in
+         *                 #RRGGBB format representing the color of the toast background.
+         * @param {function} [options.callback] - (optional; default = null) A function to call after the toast has
+         *                   finished displaying.
+         * @param {number|string} [options.duration] - (optional; default = "automatic") Either a number (>= 1000)
+         *                        representing the number of milliseconds to display the toast message
+         *                        (includes 0.5 seconds each of fade-in and fade-out time), or the string "automatic",
+         *                        indicating that the duration should be calculated automatically based on the message length.
          *                        Using "automatic" is recommended.
-         * @param {string} [options.textColor] - (optional; default = "#FFFFFF", i.e. white) A color in #RRGGBB format
-         *                 representing the color of the toast text.
+         * @param {number} [options.durationWordsPerMinute] - (optional; default = 100) Only used if duration =
+         *                 "automatic". Number of words per minute (reading speed) used to calculate an automatic
+         *                 message duration. A lower value slows down the message. Useful to slow down a message
+         *                 that has variable length without picking an arbitrary fixed duration in number of seconds.
          * @param {number|string} [options.fontSize] - (optional; default = "automatic") Either a number representing
          *                        the toast's font size in pixels, or the string "automatic", indicating that the value
          *                        should scale according to the user's preferred font size.
          *                        Using "automatic" is recommended.
-         * @param {function} [options.callback] - (optional; default = null) A function to call after the toast has
-         *                   finished displaying.
-         * @param {string} [options.backgroundColor] - (optional; default = "#333333", i.e. dark grey) A color in
-         *                 #RRGGBB format representing the color of the toast background.
          * @param {string} [options.position] - (optional; default = "top") The location at which to display the toast.
          *                 Options are: 'top', 'bottom'.
+         * @param {number} [options.positionOffset] - (optional; default = 30) Value must be positive.
+         *                 The number of pixels away from the screen edge at which to display the toast.
+         *                 For example, a value of 15 with position="bottom" will display the toast 15 pixels from the
+         *                 bottom edge of the screen.
+         * @param {string} [options.textColor] - (optional; default = "#FFFFFF", i.e. white) A color in #RRGGBB format
+         *                 representing the color of the toast text.
          */
         function showToast(options) {
             // TODO validate input options
@@ -148,11 +158,11 @@
                 // TODO add param to shift this by y pixels
                 // Move the toast container to the correct position
                 if (toast.position === "top") {
-                    toastContainer.style.top = "30px";
+                    toastContainer.style.top = toast.positionOffset + "px";
                     toastContainer.style.removeProperty('bottom');
                 }
                 else if (toast.position === "bottom") {
-                    toastContainer.style.bottom = "30px";
+                    toastContainer.style.bottom = toast.positionOffset + "px";
                     toastContainer.style.removeProperty('top');
                 }
 
@@ -214,7 +224,7 @@
         function addDefaultOptions(options) {
             // Options in the right-most object take precedence over defaults on the left
             let newOptions = {...defaultOptions, ...options};
-            if (newOptions.duration === "automatic") newOptions.duration = calculateDuration(newOptions.message);
+            if (newOptions.duration === "automatic") newOptions.duration = calculateDuration(newOptions.message, newOptions.durationWordsPerMinute);
             if (newOptions.fontSize === "automatic") newOptions.fontSize = getFontSize();
             return newOptions;
         }
@@ -248,9 +258,8 @@
         }
 
         // Computes a duration for which to show a toast message based on its length
-        function calculateDuration(message) {
+        function calculateDuration(message, wordsPerMin) {
             // TODO - accessibility: add a setting (in UserPreferences) to slow down all time-based messages shown to the user
-            const wordsPerMin = 100; // Average reading speed (lowered because toasts are typically short)
             const wordsPerSec = wordsPerMin / 60;
             const minDuration = 5000; // Show messages at least 5 seconds
             const wordCount = message.split(" ").length;
