@@ -122,6 +122,7 @@
 						message: vm.globalMessage + "\n" + vm.globalMessageDescription,
 						fontSize: 22,
 						durationWordsPerMinute: 80, // Slow down the message of the day
+						positionOffset: 30,
 					});
 				}
 			}

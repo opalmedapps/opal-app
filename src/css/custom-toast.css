@@ -9,6 +9,7 @@
 #custom-toast-container {
     position: fixed; /* Floats above the rest of the page */
     z-index: 99; /* Floats above the rest of the page */
+    pointer-events: none; /* Can click on things under it; does not block navigation bar */
     width: 100%; /* Fills the screen width */
 }
 

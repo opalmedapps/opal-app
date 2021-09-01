@@ -31,16 +31,16 @@
             fontSize: "automatic",
             message: "", // Required; should be provided by the caller
             position: "top",
-            positionOffset: 30,
+            positionOffset: 50,
             textColor: '#FFFFFF', // make sure you use #RRGGBB
         };
 
         // Font sizes used for toasts (in pixels); don't necessarily match the numeric values in app.css
         const automaticFontSizes = {
-            loggedOut: 14,
-            medium: 12,
-            large: 14,
-            xlarge: 18,
+            loggedOut: 16,
+            medium: 14,
+            large: 16,
+            xlarge: 20,
         };
 
         // The queue of messages to be shown
@@ -83,7 +83,7 @@
          *                        Using "automatic" is recommended.
          * @param {string} [options.position] - (optional; default = "top") The location at which to display the toast.
          *                 Options are: 'top', 'bottom'.
-         * @param {number} [options.positionOffset] - (optional; default = 30) Value must be positive.
+         * @param {number} [options.positionOffset] - (optional; default = 50) Value must be positive.
          *                 The number of pixels away from the screen edge at which to display the toast.
          *                 For example, a value of 15 with position="bottom" will display the toast 15 pixels from the
          *                 bottom edge of the screen.
@@ -103,7 +103,6 @@
 
             // If the toast is the only one in the queue, display it (if not, it will display after the others)
             if (toastQueue.length === 1) {
-                console.log("Start queue");
                 showNextToast();
             }
         }
@@ -115,7 +114,6 @@
         // Adapted from source: https://www.w3schools.com/howto/howto_js_snackbar.asp
         async function showCustomToast(toast) {
             return new Promise(resolve => {
-                console.log(`TIME [${toast.duration}] for [${toast.message}]`);
 
                 // Get the toast divs
                 let toastContainer = document.getElementById("custom-toast-container");
