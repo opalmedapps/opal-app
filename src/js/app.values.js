@@ -177,27 +177,6 @@
                     },
                 },
 
-                /** newsBanner Service constants **/
-                newsAlertTypes: {
-                    'notifications': {
-                        Type: 'notifications',
-                        Color: '#5bc0de',
-                        Message: "NEWNOTIFICATIONS",
-                        Duration: 'short'
-                    },
-                    'nointernet': {
-                        Type: 'nointernet',
-                        Message: "NOINTERNETCONNECTION",
-                        Duration: 10000
-                    },
-                    'connected': {
-                        Type: 'connected',
-                        Color: '#5cb85c',
-                        Message: "CONNECTED",
-                        Duration: 'short'
-                    }
-                },
-
                 /** UpdateUi Service constants **/
                 lastUpdateTimestamp: {
                     'All': 0,

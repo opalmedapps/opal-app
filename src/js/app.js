@@ -123,6 +123,7 @@ import "bootstrap/dist/css/bootstrap.css";
 import "animate.css";
 import "font-awesome/css/font-awesome.css";
 import "../css/app.css";
+import "../css/custom-toast.css";
 import "../Languages/angular-locales/angular-locale_en.js"
 
 // Load angular module bootstrap script

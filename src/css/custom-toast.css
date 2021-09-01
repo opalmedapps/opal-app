@@ -1,0 +1,46 @@
+/**
+ * @description Custom toast message, used on platforms where toasts aren't supported.
+ *              Adapted from source: https://www.w3schools.com/howto/howto_js_snackbar.asp
+ * @author Stacey Beard
+ * @date 2021-08-27
+ */
+
+/* Invisible outer container that provides the right location in which to fit the contents */
+#custom-toast-container {
+    position: fixed; /* Floats above the rest of the page */
+    z-index: 99; /* Floats above the rest of the page */
+    width: 100%; /* Fills the screen width */
+}
+
+/* Toast message and background */
+#custom-toast {
+    visibility: hidden; /* Hidden by default */
+    opacity: 0.8; /* Background transparency */
+    text-align: center; /* Centered text */
+    border-radius: 25px; /* Rounded borders */
+    padding: 16px; /* Padding */
+    margin-left: auto; /* Centered horizontally */
+    margin-right: auto; /* Centered horizontally */
+    max-width: min(80%, 400px); /* Fills 80% of the screen width, up to 400 px */
+}
+
+/* Animations to fade the toast in and out */
+@-webkit-keyframes fadein {
+    from {opacity: 0;}
+    to {opacity: 0.8;}
+}
+
+@keyframes fadein {
+    from {opacity: 0;}
+    to {opacity: 0.8;}
+}
+
+@-webkit-keyframes fadeout {
+    from {opacity: 0.8;}
+    to {opacity: 0;}
+}
+
+@keyframes fadeout {
+    from {opacity: 0.8;}
+    to {opacity: 0;}
+}
