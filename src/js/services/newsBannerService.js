@@ -24,7 +24,7 @@
         $translatePartialLoader.addPart('top-view');
 
         const defaultOptions = {
-            backgroundColor: '#555555', // make sure you use #RRGGBB
+            backgroundColor: '#555555', // Required format is #RRGGBB
             callback: null,
             duration: "automatic",
             durationWordsPerMinute: 100, // Average reading speed (lowered because toasts are typically short)
@@ -32,7 +32,7 @@
             message: "", // Required; should be provided by the caller
             position: "top",
             positionOffset: 50,
-            textColor: '#FFFFFF', // make sure you use #RRGGBB
+            textColor: '#FFFFFF', // Required format is #RRGGBB
         };
 
         // Font sizes used for toasts (in pixels); don't necessarily match the numeric values in app.css
@@ -147,12 +147,12 @@
         // Adapted from source: https://www.w3schools.com/howto/howto_js_snackbar.asp
         async function showCustomToast(toast) {
             return new Promise(resolve => {
+                const fadeTime = 500; // The amount of time to allow for each of the fade-in and fade-out animations
 
                 // Get the toast divs
                 let toastContainer = document.getElementById("custom-toast-container");
                 let toastElement = document.getElementById("custom-toast");
 
-                // TODO add param to shift this by y pixels
                 // Move the toast container to the correct position
                 if (toast.position === "top") {
                     toastContainer.style.top = toast.positionOffset + "px";
@@ -163,31 +163,25 @@
                     toastContainer.style.removeProperty('top');
                 }
 
-                // Set the toast's colours and text, then show it
+                // Set the toast's colours and text
                 toastElement.style.color = toast.textColor;
                 toastElement.style["background-color"] = toast.backgroundColor;
                 toastElement.style["font-size"] = toast.fontSize + "px";
                 toastElement.innerHTML = formatMessage(toast.message);
-                toastElement.style.visibility = "visible";
 
-                // Start fading in the toast. Wait for the duration in seconds (minus the fade-out time) before starting to fade out.
-                let fadeInstructions = `fadein 0.5s, fadeout 0.5s ${toast.duration / 1000 - 0.5}s`;
-                toastElement.style.webkitAnimation = fadeInstructions;
-                toastElement.style.animation = fadeInstructions;
+                // Display the toast by fading in, waiting, then fading out
+                $("#custom-toast").fadeIn(fadeTime, undefined, () => {
+                    $timeout(() => {
+                        $("#custom-toast").fadeOut(fadeTime, undefined, () => {
+                            // Clear the toast contents
+                            toastElement.innerHTML = "";
 
-                // After the duration (once the toast is done fading out), hide it (or else it will re-appear)
-                setTimeout(() => {
-                    toastElement.style.visibility = "";
-                    toastElement.style.webkitAnimation = "";
-                    toastElement.style.animation = "";
-                    toastElement.innerHTML = "";
-
-                    // If a callback was provided, call it now
-                    if (toast.callback) toast.callback();
-
-                    resolve();
-
-                }, toast.duration);
+                            // If a callback was provided, call it now
+                            if (toast.callback) toast.callback();
+                            resolve();
+                        });
+                    }, toast.duration - fadeTime * 2);
+                });
             });
         }
 

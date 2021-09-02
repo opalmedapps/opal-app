@@ -1,6 +1,7 @@
 /**
- * @description Custom toast message, used on platforms where toasts aren't supported.
+ * @description Custom toast message, used to display short pieces of information to the user.
  *              Adapted from source: https://www.w3schools.com/howto/howto_js_snackbar.asp
+ *              Animations were replaced with jQuery calls.
  * @author Stacey Beard
  * @date 2021-08-27
  */
@@ -15,7 +16,7 @@
 
 /* Toast message and background */
 #custom-toast {
-    visibility: hidden; /* Hidden by default */
+    display: none; /* Hidden by default; necessary for jQuery fadeIn */
     opacity: 0.9; /* Background transparency */
     text-align: center; /* Centered text */
     border-radius: 25px; /* Rounded borders */
@@ -23,25 +24,4 @@
     margin-left: auto; /* Centered horizontally */
     margin-right: auto; /* Centered horizontally */
     max-width: min(80%, 400px); /* Fills 80% of the screen width, up to 400 px */
-}
-
-/* Animations to fade the toast in and out */
-@-webkit-keyframes fadein {
-    from {opacity: 0;}
-    to {opacity: 0.9;}
-}
-
-@keyframes fadein {
-    from {opacity: 0;}
-    to {opacity: 0.9;}
-}
-
-@-webkit-keyframes fadeout {
-    from {opacity: 0.9;}
-    to {opacity: 0;}
-}
-
-@keyframes fadeout {
-    from {opacity: 0.9;}
-    to {opacity: 0;}
 }
