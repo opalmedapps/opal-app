@@ -17,12 +17,12 @@
         .controller('IndividualDocumentController', IndividualDocumentController);
 
     IndividualDocumentController.$inject = ['$rootScope', '$scope', 'NavigatorParameters', 'Documents', '$timeout',
-        'FileManagerService', 'Constants', '$q', 'UserPreferences', 'Browser', '$filter', 'NewsBanner'];
+        'FileManagerService', 'Constants', '$q', 'UserPreferences', 'Browser', '$filter', 'Toast'];
 
     /* @ngInject */
     function IndividualDocumentController($rootScope, $scope, NavigatorParameters, Documents, $timeout,
                                           FileManagerService, Constants, $q, UserPreferences, Browser, $filter,
-                                          NewsBanner) {
+                                          Toast) {
         let vm = this;
         let navigator = null;
         let parameters;
@@ -88,7 +88,7 @@
             let newDocName = FileManagerService.generateDocumentName(docParams);
             FileManagerService.openPDF(url, newDocName).catch(error => {
                 console.error(error);
-                NewsBanner.showToast({
+                Toast.showToast({
                     message: $filter('translate')('OPEN_PDF_ERROR'),
                 });
             })

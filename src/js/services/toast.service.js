@@ -7,18 +7,18 @@
 
     angular
         .module('MUHCApp')
-        .service('NewsBanner', NewsBanner);
+        .service('Toast', Toast);
 
-    NewsBanner.$inject = ['$filter', '$timeout', '$translatePartialLoader', 'Constants', 'Params', 'UserPreferences'];
+    Toast.$inject = ['$filter', '$timeout', '$translatePartialLoader', 'Constants', 'Params', 'UserPreferences'];
 
     /**
      *@ngdoc service
-     *@name MUHCApp.service:NewsBanner
+     *@name MUHCApp.service:Toast
      *@requires $filter
      *@requires $translatePartialLoader
      *@description Provides an API though which to display toast messages on the screen.
      **/
-    function NewsBanner($filter, $timeout, $translatePartialLoader, Constants, Params, UserPreferences) {
+    function Toast($filter, $timeout, $translatePartialLoader, Constants, Params, UserPreferences) {
 
         // Adds the top-view translation tables in order to always display the alert banners correctly.
         $translatePartialLoader.addPart('top-view');
@@ -64,7 +64,7 @@
         /**
          * @description Shows a toast message using the platform's supported option (either via a cordova plugin or
          *              a custom HTML/CSS object).
-         *              Messages are added to a queue to prevent overlap and to be shown in order.
+         *              Messages are first added to a queue to prevent overlap and to be shown in order.
          * @author Stacey Beard
          * @date 2021-09-01
          * @param {Object} options - An object containing configuration options for the toast message.

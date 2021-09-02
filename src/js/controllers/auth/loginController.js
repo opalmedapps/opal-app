@@ -22,10 +22,10 @@
         .controller('LoginController', LoginController);
 
     LoginController.$inject = ['$timeout', '$state', 'UserAuthorizationInfo', '$filter','DeviceIdentifiers',
-        'UserPreferences', 'Patient', 'NewsBanner', 'UUID', 'Constants', 'EncryptionService', 'CleanUp', '$window', 'FirebaseService', '$rootScope', 'Params', 'UserHospitalPreferences'];
+        'UserPreferences', 'Patient', 'Toast', 'UUID', 'Constants', 'EncryptionService', 'CleanUp', '$window', 'FirebaseService', '$rootScope', 'Params', 'UserHospitalPreferences'];
 
     /* @ngInject */
-    function LoginController($timeout, $state, UserAuthorizationInfo, $filter, DeviceIdentifiers, UserPreferences, Patient, NewsBanner, UUID, Constants, EncryptionService, CleanUp, $window, FirebaseService, $rootScope, Params, UserHospitalPreferences) {
+    function LoginController($timeout, $state, UserAuthorizationInfo, $filter, DeviceIdentifiers, UserPreferences, Patient, Toast, UUID, Constants, EncryptionService, CleanUp, $window, FirebaseService, $rootScope, Params, UserHospitalPreferences) {
 
         var vm = this;
 
@@ -113,7 +113,7 @@
             patientSerNum = Patient.getUserSerNum();
 
             //Locked out alert
-            if (patientSerNum) NewsBanner.showToast({
+            if (patientSerNum) Toast.showToast({
                 message: $filter('translate')('LOCKEDOUT'),
             });
 

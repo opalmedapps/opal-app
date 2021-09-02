@@ -19,7 +19,7 @@
         'CheckInService',
         'NavigatorParameters',
         'UserPreferences',
-        'NewsBanner',
+        'Toast',
         '$filter',
         'Params'
     ];
@@ -29,7 +29,7 @@
         CheckInService,
         NavigatorParameters,
         UserPreferences,
-        NewsBanner,
+        Toast,
         $filter,
         Params
     ) {
@@ -60,7 +60,7 @@
                 .then(function(response){
 
                     if(response === "NOT_ALLOWED"){
-                        NewsBanner.showToast({
+                        Toast.showToast({
                             message: $filter('translate')("NOT_ALLOWED"),
                         });
                         vm.alert.type = Params.alertTypeWarning;

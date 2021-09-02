@@ -23,7 +23,7 @@
 		'Constants',
 		'Permissions',
 		'DynamicContent',
-		'NewsBanner',
+		'Toast',
 		'Params',
 		'UserHospitalPreferences',
 		'Browser',
@@ -39,7 +39,7 @@
 		Constants,
 		Permissions,
 		DynamicContent,
-		NewsBanner,
+		Toast,
 		Params,
 		UserHospitalPreferences,
 		Browser,
@@ -83,7 +83,7 @@
 					}
 				}
 			}).catch(err => {
-				if (err.code === "INIT_ERROR") NewsBanner.showToast({
+				if (err.code === "INIT_ERROR") Toast.showToast({
 					message: $filter('translate')("ERROR_INIT_LINKS"),
 				});
 
@@ -118,7 +118,7 @@
 			if (vm.globalMessageDescription !== '') {
 				if (vm.firstTime) {
 					vm.firstTime = false;
-					NewsBanner.showToast({
+					Toast.showToast({
 						message: vm.globalMessage + "\n" + vm.globalMessageDescription,
 						fontSize: 22,
 						durationWordsPerMinute: 80, // Slow down the message of the day

@@ -13,12 +13,12 @@
 
     MainController.$inject = ["$window", "$state", '$rootScope','FirebaseService','DeviceIdentifiers',
         '$translatePartialLoader', "LocalStorage", 'Constants', 'CleanUp', 'NavigatorParameters', 'NetworkStatus',
-        'RequestToServer', 'NewsBanner', 'Security', '$filter', 'Params', 'LogOutService'];
+        'RequestToServer', 'Toast', 'Security', '$filter', 'Params', 'LogOutService'];
 
     /* @ngInject */
     function MainController($window, $state, $rootScope, FirebaseService, DeviceIdentifiers,
                             $translatePartialLoader, LocalStorage, Constants, CleanUp, NavigatorParameters, NetworkStatus,
-                            RequestToServer, NewsBanner, Security, $filter, Params, LogOutService) {
+                            RequestToServer, Toast, Security, $filter, Params, LogOutService) {
 
         var timeoutLockout;
 
@@ -115,7 +115,7 @@
                 localStorage.setItem('locked', 1);
 
                 // Display a warning message to the users after being disconnected
-                NewsBanner.showToast({
+                Toast.showToast({
                     message: $filter('translate')("INACTIVE"),
                     positionOffset: 30,
                 });
@@ -153,7 +153,7 @@
                 push.on('notification', function (data) {
                     if (ons.platform.isIOS() && data.additionalData.foreground) {
                         // on iOS, it will allow push notification to appear when app is running
-                        NewsBanner.showToast({
+                        Toast.showToast({
                             message: data.title + "\n" + data.message,
                         });
                         navigator.vibrate(3000);
@@ -201,7 +201,7 @@
                     CleanUp.clear();
 
                     // Show message "You have logged in on another device."
-                    NewsBanner.showToast({
+                    Toast.showToast({
                         message: $filter('translate')("KICKEDOUT"),
                     });
                     refCurrentUser.off();

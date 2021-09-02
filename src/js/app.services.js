@@ -20,7 +20,7 @@ import "./services/txTeamMessagesService.js";
 import "./services/announcementsService.js";
 import "./services/navigatorParametersService.js";
 import "./services/educationalMaterialService.js";
-import "./services/newsBannerService.js";
+import "./services/toast.service";
 import "./services/deviceIdentifiersService.js";
 import "./services/tasksService.js";
 import "./services/planningStepsService.js";

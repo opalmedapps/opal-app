@@ -38,25 +38,25 @@ class PatientTestResultsController {
 	#$filter;
 	#$timeout;
 	#language;
-	#newsBanner;
+	#toast;
 	navigator;
 
 	/**
 	 * Constructor for the PatientTestResultsController
 	 * @param {PatientTestResults} patientTestResults  PatientTestResult service instance in angular
 	 * @param {UserPreferences} userPreferences  UserPreferences service instance in angular
-	 * @param {NewsBanner} newsBanner NewsBannerClass service instance in angular
+	 * @param {Toast} toast Toast service instance in angular
 	 * @param {NavigatorParameters} navigatorParameters NavigatorParameters service
 	 * @param {$filter} $filter Angular $filter factory
 	 * @param {$timeout} $timeout Angular $timeout factory
 	 */
 	constructor(patientTestResults, userPreferences,
-		newsBanner, navigatorParameters,
+		toast, navigatorParameters,
 		$filter, $timeout) {
 		this.#patientTestResults = patientTestResults;
 		this.#language = userPreferences.getLanguage();
 		this.navigator = navigatorParameters.getNavigator();
-		this.#newsBanner = newsBanner;
+		this.#toast = toast;
 		this.#$filter = $filter;
 		this.#$timeout = $timeout;
 		this.#getTestResultsMetadata(this.#shouldFetchTestResultsFromServer())
@@ -76,7 +76,7 @@ class PatientTestResultsController {
 			this.#getTestResultsMetadata(true)
 				.then(this.#updateView)
 				.catch(this.#handlerServerError);
-		} else this.#newsBanner.showToast({
+		} else this.#toast.showToast({
 			message: this.#$filter('translate')("REFRESH_WAIT"),
 		});
 	}
@@ -208,5 +208,5 @@ angular
 	.module('MUHCApp')
 	.controller('PatientTestResultsController', PatientTestResultsController);
 
-PatientTestResultsController.$inject = ['PatientTestResults', 'UserPreferences', 'NewsBanner',
+PatientTestResultsController.$inject = ['PatientTestResults', 'UserPreferences', 'Toast',
 	'NavigatorParameters', '$filter', '$timeout'];

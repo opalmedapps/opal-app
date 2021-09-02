@@ -24,10 +24,10 @@ var myApp=angular.module('MUHCApp');
  *@description Sets the educational material and provides an API to interact with it and the server
  **/
 myApp.service('EducationalMaterial',['$q','$filter','LocalStorage','FileManagerService', 'UserPreferences',
-    'RequestToServer', '$http', 'Logger', 'Params', 'NewsBanner',
+    'RequestToServer', '$http', 'Logger', 'Params', 'Toast',
 
 function ($q, $filter, LocalStorage, FileManagerService, UserPreferences, RequestToServer, $http, Logger, Params,
-          NewsBanner) {
+          Toast) {
 
     /**
      *@ngdoc property

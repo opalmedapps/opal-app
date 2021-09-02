@@ -6,14 +6,12 @@
         .controller('HomeController', HomeController);
 
     HomeController.$inject = [
-        'Appointments', 'CheckInService', 'Patient', 'UpdateUI','$scope', '$timeout','$filter', 'Notifications',
-        'NavigatorParameters', 'NewsBanner', 'Permissions', 'UserPreferences', 'NetworkStatus',
-        'MetaData', 'UserHospitalPreferences'];
+        'Appointments', 'CheckInService', 'Patient', '$scope', '$filter', 'Notifications', 'NavigatorParameters',
+        'Permissions', 'UserPreferences', 'NetworkStatus', 'MetaData', 'UserHospitalPreferences'];
 
     /* @ngInject */
-    function HomeController(Appointments, CheckInService, Patient, UpdateUI, $scope, $timeout, $filter, Notifications,
-                            NavigatorParameters, NewsBanner, Permissions, UserPreferences, NetworkStatus,
-                            MetaData, UserHospitalPreferences)
+    function HomeController(Appointments, CheckInService, Patient, $scope, $filter, Notifications, NavigatorParameters,
+                            Permissions, UserPreferences, NetworkStatus, MetaData, UserHospitalPreferences)
     {
         var vm = this;
 
