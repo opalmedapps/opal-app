@@ -16,7 +16,7 @@
 
         let appConstants =
             {
-                maxIdleTimeAllowed: 300000,
+                maxIdleTimeAllowed: 300000, // 300 000 ms = 5 min. If changed, also edit the "INACTIVE" string
                 tenMinutesMilliSeconds: 600000,
 
                 appointmentType: {

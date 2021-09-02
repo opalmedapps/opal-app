@@ -46,6 +46,11 @@
         // The queue of messages to be shown
         const toastQueue = [];
 
+        // Keeps track of whether the app is minimized to delay showing toasts until the app is brought back
+        let isMinimized = false;
+
+        bindEvents();
+
         let service = {
             showToast: showToast,
         };
@@ -98,18 +103,46 @@
                 return;
             }
 
+            // Mark down that the toast isn't being shown yet
+            options.showing = false;
+
             // Add the toast to the queue to be shown after any others that are already displaying
             toastQueue.push(options);
 
             // If the toast is the only one in the queue, display it (if not, it will display after the others)
             if (toastQueue.length === 1) {
-                showNextToast();
+                showNextToastIfPossible();
             }
         }
 
         /*********************************/
         /******* PRIVATE FUNCTIONS *******/
         /*********************************/
+
+        // Sets a watch to avoid showing toasts while the app is minimized, and resume when it becomes active again
+        function bindEvents() {
+            if (Constants.app) {
+                // iOS
+                document.addEventListener('active', () => {
+                    isMinimized = false;
+                    showNextToastIfPossible();
+                });
+                document.addEventListener('resign', () => {
+                    isMinimized = true;
+                });
+
+                // Android
+                document.addEventListener('resume', () => {
+                    if (ons.platform.isAndroid()) {
+                        isMinimized = false;
+                        showNextToastIfPossible();
+                    }
+                });
+                document.addEventListener('pause', () => {
+                    if(ons.platform.isAndroid()) isMinimized = true;
+                });
+            }
+        }
 
         // Adapted from source: https://www.w3schools.com/howto/howto_js_snackbar.asp
         async function showCustomToast(toast) {
@@ -167,12 +200,18 @@
             return newOptions;
         }
 
+        // Test whether the next toast message should be shown, and if so, shows it
+        function showNextToastIfPossible() {
+            if (toastQueue.length > 0 && toastQueue[0].showing === false && isMinimized === false) showNextToast();
+        }
+
         function showNextToast() {
             // If there are no toasts to show, return
             if (toastQueue.length === 0) return;
 
             // Get the next toast in the queue to show (but don't remove it from the queue until it's done displaying)
             let toast = toastQueue[0];
+            toast.showing = true;
 
             // Fill in any missing options for the toast message
             toast = addDefaultOptions(toast);
@@ -182,7 +221,7 @@
                 // Force a delay between toasts to ensure correct display, then show the next one
                 $timeout(() => {
                     toastQueue.splice(0, 1); // Remove the finished toast from the queue
-                    showNextToast(); // Recurse to show toasts until the queue is empty
+                    showNextToastIfPossible(); // Recurse to show toasts until the queue is empty
                 }, 500);
             }).catch(error => {
                 console.error("An error occurred while showing a toast message: ", error, toast);
@@ -190,7 +229,7 @@
                 // If an error occurred, still clear the current toast and continue showing the next ones
                 $timeout(() => {
                     toastQueue.splice(0, 1);
-                    showNextToast();
+                    showNextToastIfPossible();
                 }, 500);
             });
         }

@@ -21,8 +21,6 @@
                             RequestToServer, NewsBanner, Security, $filter, Params, LogOutService) {
 
         var timeoutLockout;
-        var currentTime;
-        // var maxIdleTimeAllowed = 300000;    // 1000 = 1 second;   300000 = 300 seconds = 5 minutes
 
         activate();
 
@@ -32,13 +30,10 @@
             $rootScope.firstTime = true;
             $rootScope.online = navigator.onLine;
 
-            currentTime = Date.now();
-
             bindEvents();
             setPushPermissions();
 
             DeviceIdentifiers.setDeviceIdentifiers();
-
         }
 
         function bindEvents() {
@@ -96,30 +91,21 @@
         /*****************************************
          * Lockout
          *****************************************/
-        //TimeoutID for locking user out
+
+        // Launches a timer and event checks to log out automatically after a period of inactivity
         function setupInactivityChecks() {
             addEventListener('touchstart', resetTimer, false);
             addEventListener("mousedown", resetTimer, false);
-
             startTimer();
         }
-
-
+        
         function startTimer() {
             timeoutLockout = window.setTimeout(goInactive, Params.maxIdleTimeAllowed);
         }
 
         function resetTimer() {
-
-            if (Date.now() - currentTime > Params.maxIdleTimeAllowed) {
-                currentTime = Date.now();
-                goInactive();
-                return;
-            }
-
-            currentTime = Date.now();
             window.clearTimeout(timeoutLockout);
-            goActive();
+            startTimer();
         }
 
         function goInactive() {
@@ -131,12 +117,9 @@
                 // Display a warning message to the users after being disconnected
                 NewsBanner.showToast({
                     message: $filter('translate')("INACTIVE"),
+                    positionOffset: 30,
                 });
             }
-        }
-
-        function goActive() {
-            startTimer();
         }
 
         /*****************************************
