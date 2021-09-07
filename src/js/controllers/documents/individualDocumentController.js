@@ -112,6 +112,9 @@
                 }).catch(function (error) {
                     //Unable to download document on device
                     console.log('Error downloading document onto device: ' + error.status + ' - Error message: ' + error.message);
+                    Toast.showToast({
+                        message: $filter('translate')("UNABLE_TO_SHARE_DOCUMENT"),
+                    });
                 });
             } else {
                 ons.notification.alert({message: $filter('translate')('AVAILABLEDEVICES')});

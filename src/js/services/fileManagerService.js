@@ -348,7 +348,7 @@ function ($q, $filter, Toast, $injector, Params, Constants, Browser, RequestToSe
                 let onError = function (err) {
                     //Show alert banner with error
                     Toast.showToast({
-                        message: $filter('translate')("UNABLETOSHAREMATERIAL"),
+                        message: $filter('translate')("UNABLE_TO_SHARE_DOCUMENT"),
                     });
                     console.error(`Failed to share "${name}" via ${url}: ${JSON.stringify(err)}`);
                 };
