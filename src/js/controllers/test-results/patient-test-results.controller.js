@@ -33,6 +33,12 @@ class PatientTestResultsController {
 	 * @type {boolean}
 	 */
 	#justRefreshedByType = false;
+	/**
+	 * @description Tracks whether the user is currently being shown a warning that the labs can't be refreshed this soon.
+	 *              Prevents the user from enqueuing a lot of duplicate messages in the Toast service.
+	 * @type {boolean}
+	 */
+	#refreshWarningIsShowing = false;
 
 	#patientTestResults;
 	#$filter;
@@ -76,9 +82,18 @@ class PatientTestResultsController {
 			this.#getTestResultsMetadata(true)
 				.then(this.#updateView)
 				.catch(this.#handlerServerError);
-		} else this.#toast.showToast({
-			message: this.#$filter('translate')("REFRESH_WAIT"),
-		});
+		}
+		// Use a variable to prevent new refresh warnings from being added to the toast queue if one is already showing
+		else if (!this.#refreshWarningIsShowing) {
+			this.#refreshWarningIsShowing = true;
+			this.#toast.showToast({
+				message: this.#$filter('translate')("REFRESH_WAIT"),
+				position: "bottom",
+				callback: () => {
+					this.#refreshWarningIsShowing = false;
+				}
+			});
+		}
 	}
 
 	/**
