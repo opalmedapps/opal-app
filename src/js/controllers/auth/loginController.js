@@ -279,7 +279,7 @@
          */
         function handleError(error)
         {
-
+            console.error(error);
             var code = (error.code)? error.code : error.Code;
 
             switch (code) {

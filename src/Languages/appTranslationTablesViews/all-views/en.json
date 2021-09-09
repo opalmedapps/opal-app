@@ -99,7 +99,6 @@
   "INVALID_EMAIL": "Invalid e-mail",
   "INVALID_EMAIL_OR_PWD": "Email or password is incorrect.",
   "INVALID_PASSWORD": "Invalid password.",
-  "KICKEDOUT": "You have logged in on another device.",
   "LABELS": "Labels",
   "LAB_BYDATE": "By Date",
   "LAB_BYTYPE": "By Type",

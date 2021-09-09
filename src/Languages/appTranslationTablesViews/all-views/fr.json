@@ -99,7 +99,6 @@
     "INVALID_EMAIL": "Courriel invalide",
     "INVALID_EMAIL_OR_PWD": "Addresse courriel ou mot de passe invalide",
     "INVALID_PASSWORD": "Mot de passe invalide.",
-    "KICKEDOUT": "Votre compte a été ouvert sur un autre appareil.",
     "LABELS": "Étiquettes",
     "LAB_BYDATE": "Date",
     "LAB_BYTYPE": "Type",

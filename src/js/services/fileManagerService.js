@@ -5,34 +5,27 @@ var myApp = angular.module('MUHCApp');
 /**
  *@ngdoc service
  *@name MUHCApp.service:FileManagerService
- *@requires MUHCApp.service:Toast
- *@requires $q
  *@requires $filter
  *@description Allows the app's controllers or services interact with the file storage of the device. For more information look at {@link https://github.com/apache/cordova-plugin-file Cordova File Plugin}, reference for social sharing plugin {@link https://github.com/EddyVerbruggen/SocialSharing-PhoneGap-Plugin Cordova Sharing Plugin}
  **/
-myApp.service('FileManagerService', ['$q', '$filter', 'Toast', '$injector', 'Params',
-    'Constants', 'Browser', 'RequestToServer',
-
-function ($q, $filter, Toast, $injector, Params, Constants, Browser, RequestToServer) {
+myApp.service('FileManagerService', ['$filter', '$injector', 'Constants', 'Browser', 'RequestToServer',
+function ($filter, $injector, Constants, Browser, RequestToServer) {
 
     /**
      *@ngdoc property
      *@name MUHCApp.service.#urlDeviceDocuments
      *@propertyOf MUHCApp.service:FileManagerService
-     *@description String representing the path for documents in the device.
-     *             For Android, the path used is cordova.file.externalRootDirectory, which is outside the sandbox for
-     *             the app, and for IOS we use cordova.file.documentsDirectory which is inside the sandbox for the app.
+     *@description String representing the path to which documents are downloaded on the device.
+     *             Documents containing medical data should not be stored permanently (see Documents.deleteDocumentsDownloaded).
      *             For more information refer to {@link https://github.com/apache/cordova-plugin-file Cordova File Plugin}.
      **/
     let urlDeviceDocuments = '';
 
-    if (Constants.app) {
-        if (ons.platform.isAndroid()) {
-            urlDeviceDocuments = cordova.file.dataDirectory + 'Documents/';
-        } else {
-            urlDeviceDocuments = cordova.file.documentsDirectory;
-        }
-    }
+    /*
+     * The dataDirectory path can be used for both iOS and Android.
+     * Important: on iOS, dataDirectory is NOT synced to the cloud; a no-sync folder must be used to prevent cloud sync of medical data.
+     */
+    if (Constants.app) urlDeviceDocuments = cordova.file.dataDirectory + 'Documents/';
 
     /**
      * @ngdoc method
@@ -105,6 +98,25 @@ function ($q, $filter, Toast, $injector, Params, Constants, Browser, RequestToSe
     }
 
     /**
+     * @description Checks whether the base64 content in a URL is valid.
+     * @param url The url to check.
+     * @returns {boolean} False if the url isn't in base64 format, if its base64 data is blank, or if it fails atob
+     *                    decoding; true otherwise.
+     */
+    function base64IsValid(url) {
+        try {
+            if (!urlIsBase64(url)) return false;
+            const b64Data = extractBase64(url);
+            if (!b64Data || b64Data === "") return false;
+            atob(b64Data);
+            return true;
+        }
+        catch(error) {
+            return false; // Data isn't valid if it fails atob decoding
+        }
+    }
+
+    /**
      * @description Extracts the base64 data out of a base64 url
      *              (e.g. "JVBERi0xLjUK..." from a url "data:application/pdf;base64,JVBERi0xLjUK...").
      * @param {string} url The url from which to extract the data.
@@ -112,6 +124,7 @@ function ($q, $filter, Toast, $injector, Params, Constants, Browser, RequestToSe
      */
     function extractBase64(url) {
         if (!urlIsBase64(url)) return url;
+        else if (url.slice(-1) === ',') return ""; // If the url ends in a comma, the data is empty
         else return url.split(',').pop();
     }
 
@@ -287,6 +300,17 @@ function ($q, $filter, Toast, $injector, Params, Constants, Browser, RequestToSe
     }
 
     /**
+     * @description Adds a file to a list of files which will be deleted regularly, such as when the user logs out.
+     * @param {string} path - The path to the folder containing the file on the device, not including the name of the file.
+     * @param {string} name - The name of the file.
+     */
+    function markFileForDeletion(path, name) {
+        // Adds the filename to an array to be deleted on exit of the app (by CleanUp.Clear())
+        let Documents = $injector.get('Documents');
+        Documents.addToDocumentsDownloaded(path, name);
+    }
+
+    /**
      * @description Uses the file-opener2 plugin to open the target file.
      * @param targetPath The path to the file to open.
      * @param mimeType The file's MIME type (e.g. 'application/pdf').
@@ -307,58 +331,107 @@ function ($q, $filter, Toast, $injector, Params, Constants, Browser, RequestToSe
         });
     }
 
+    /**
+     * @description Promise wrapper for the shareWithOptions() function of cordova's social sharing plugin.
+     * @param {Object} options - The options to pass to the plugin's share function.
+     * @returns {Promise<unknown>}
+     */
+    function shareWithPlugin(options) {
+        return new Promise((resolve, reject) => {
+            window.plugins.socialsharing.shareWithOptions(options, resolve, reject);
+        });
+    }
+
+    /**
+     * @description Shares a file using cordova's social sharing plugin.
+     *              If the url to the file is in base64 format, the file will first be saved to the device.
+     * @param {string} name - The name of the file to share.
+     * @param {string} url - The url to the file, either in base64 format or on the web.
+     * @returns {Promise<void>} Resolves when the plugin success callback is triggered, or rejects with an error.
+     */
+    async function shareDocument(name, url) {
+        if (!Constants.app) throw "Sharing is only available on mobile devices.";
+
+        // If the url is in base64, download it first
+        let fileWasDownloaded = false;
+        if (urlIsBase64(url)) {
+            if (!base64IsValid(url)) throw "Document to share is in base64 format but its content is invalid.";
+            let path = urlDeviceDocuments;
+            await downloadFileIntoStorage(url, path, name);
+            markFileForDeletion(path, name);
+            url = joinPathName(path, name);
+            fileWasDownloaded = true; // This will enforce that the file should be shared by attachment
+        }
+
+        // Set the plugin options
+        let options = {
+            subject: name,
+            message: name,
+        };
+
+        // Determine whether to share the file by link or by attachment
+        fileWasDownloaded || toShareByAttachment(url)
+            ? options.files = [url] // Share by attachment (the file itself is shared)
+            : options.url = url;    // Share by link (a link to the file is shared)
+
+        // Share the file using a cordova plugin
+        let shareResult = await shareWithPlugin(options);
+
+        console.log(`Share plugin result: ${JSON.stringify(shareResult)}`);
+    }
+
+    /**
+     * @description Shares a document by calling shareDocument(). This function handles sensitive data by deleting the
+     *              file immediately after sharing, if it needed to be saved to the device first.
+     * @param {string} name - The name of the file to share.
+     * @param {string} url - The url to the file in base64 format.
+     *                       Note: if the url points instead to a web file, this function behaves no differently than
+     *                       shareDocument(), since the file doesn't need to be downloaded first.
+     * @returns {Promise<void>} Resolves when the plugin success callback is triggered, or rejects with an error.
+     */
+    async function shareSensitiveDocument(name, url) {
+        await shareDocument(name, url);
+
+        // If the document is in base64 and had to be downloaded, delete it now
+        if (urlIsBase64(url)) {
+            let path = urlDeviceDocuments;
+            let Documents = $injector.get('Documents');
+
+            Documents.deleteDocumentDownloaded(joinPathName(path, name));
+        }
+    }
+
+    /**
+     * @description Appends a document name at the end of a path, making sure the path and name are separated by a single forward slash.
+     * @param {string} path - A path that does not end in a file name.
+     * @param {string} fileName - The name of the file to append to the path.
+     * @returns {string} The combined path to the file.
+     */
+    function joinPathName(path, fileName) {
+        let formattedPath = path.replace(/\/+$/, ''); // Remove trailing forward slashes
+        let formattedFileName = fileName.replace(/^\/+/, ''); // Remove leading forward slashes
+        return formattedPath + '/' + formattedFileName;
+    }
+
+    /**
+     * @description Takes a path to a file and separates in into two parts: the path to the folder containing the file,
+     *              and the file name.
+     *              Note: the first returned element (path to the folder containing the file) will not end in a trailing slash.
+     * @param {string} fullPath - The full path to split into path and file name.
+     * @returns {string[]} An array of two elements: [path to the folder containing the file, file name].
+     */
+    function separatePathName(fullPath) {
+        let pieces = fullPath.split('/');
+        let fileName = pieces.length === 1 ? "" : pieces.pop();
+        return [pieces.join('/'), fileName];
+    }
+
     return {
         getFileExtension: getFileExtension,
 
-        /**
-         * @ngdoc method
-         * @name downloadFileIntoStorage
-         * @author Stacey Beard
-         * @date 2021-05-31
-         * @methodOf MUHCApp.service:FileManagerService
-         **/
-        downloadFileIntoStorage: function (url, targetPath, fileName) {
-            return downloadFileIntoStorage(url, targetPath, fileName);
-        },
+        shareDocument: shareDocument,
 
-        /**
-         *@ngdoc method
-         *@name shareDocument
-         *@methodOf MUHCApp.service:FileManagerService
-         *@param {String} name Name of document to be shared
-         *@param {String} url url to check
-         *@description Opens the native shared functionality and allows the user to share the url through different mediums, giving it the name specified in the parameters. Reference {@link https://github.com/EddyVerbruggen/SocialSharing-PhoneGap-Plugin Cordova Sharing Plugin}
-         **/
-        shareDocument: function (name, url) {
-            if (Constants.app) {
-
-                // Set the plugin options
-                let options = {
-                    subject: name,
-                    message: name,
-                };
-                toShareByAttachment(url)    // Check how to share the document
-                    ? options.files = [url] // Share by attachment (the file itself is shared)
-                    : options.url = url;    // Share by link (a link to the file is shared)
-
-                let onSuccess = function (result) {
-                    console.log(`Successfully shared "${name}" via ${url}: ${JSON.stringify(result)}`);
-                };
-
-                let onError = function (err) {
-                    //Show alert banner with error
-                    Toast.showToast({
-                        message: $filter('translate')("UNABLE_TO_SHARE_DOCUMENT"),
-                    });
-                    console.error(`Failed to share "${name}" via ${url}: ${JSON.stringify(err)}`);
-                };
-
-                window.plugins.socialsharing.shareWithOptions(options, onSuccess, onError);
-            }
-            else {
-                ons.notification.alert({message: $filter('translate')('AVAILABLEDEVICES')});
-            }
-        },
+        shareSensitiveDocument: shareSensitiveDocument,
 
         /**
          *@ngdoc method
@@ -377,31 +450,26 @@ function ($q, $filter, Toast, $injector, Params, Constants, Browser, RequestToSe
         openPDF: async function (url, newDocName) {
             if (Constants.app && ons.platform.isAndroid()) {
                 let path = urlDeviceDocuments;
-                let targetPath = path + newDocName;
+                let targetPath = joinPathName(path, newDocName);
 
                 await downloadFileIntoStorage(url, path, newDocName);
                 await openWithFileOpener(targetPath, 'application/pdf');
+                markFileForDeletion(path, newDocName);
 
                 console.log('File opened successfully with fileOpener2');
-
-                // Now add the filename to an array to be deleted OnExit of the app (CleanUp.Clear())
-                let Documents = $injector.get('Documents');
-                Documents.addToDocumentsDownloaded(path, newDocName);    // add file info to the array
             }
             else Browser.openInternal(url);
         },
 
-        generatePath: function (document) {
-            var documentName = document.Title.replace(/ /g, "_") + "_" + document.ApprovedTimeStamp.toDateString().replace(/ /g, "-") + "." + document.DocumentType;
-            return urlDeviceDocuments + documentName;
-        },
         generateDocumentName: function (document) {
-            var documentName = document.Title.replace(/ /g, "_") + "_" + document.ApprovedTimeStamp.toDateString().replace(/ /g, "-") + "." + document.DocumentType;
-            return documentName;
+            const title = document.Title.replace(/ /g, "_");
+            const date =  document.ApprovedTimeStamp.toDateString().replace(/ /g, "-");
+            return `${title}_${date}.${document.DocumentType}`;
         },
-        getPathToDocuments: function () {
-            return urlDeviceDocuments;
-        },
+
+        joinPathName: joinPathName,
+
+        separatePathName: separatePathName,
 
         /**
          *@ngdoc method

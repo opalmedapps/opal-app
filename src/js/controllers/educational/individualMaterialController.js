@@ -176,8 +176,25 @@
             })
         }
 
-        function share(){
-            FileManagerService.shareDocument(vm.edumaterial.Name, vm.edumaterial.ShareURL);
+        /**
+         * @description Shares a document using Cordova's social sharing plugin.
+         *              The document must first be saved to the device's internal memory.
+         *              Note: document sharing is not supported on a browser (a warning will be shown).
+         */
+        function share() {
+            // Sharing is only available on mobile devices
+            if (!Constants.app) {
+                ons.notification.alert({message: $filter('translate')('AVAILABLEDEVICES')});
+                return;
+            }
+
+            FileManagerService.shareDocument(vm.edumaterial.Name, vm.edumaterial.ShareURL).catch(error => {
+                console.error(`Error sharing document: ${JSON.stringify(error)}`);
+                Toast.showToast({
+                    message: $filter('translate')("UNABLE_TO_SHARE_DOCUMENT"),
+                });
+            });
+
             $scope.popoverSharing.hide();
         }
 

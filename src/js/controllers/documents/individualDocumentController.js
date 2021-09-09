@@ -94,31 +94,30 @@
             })
         }
 
-        //Share function
+        /**
+         * @description Shares a document using cordova's social sharing plugin.
+         *              The document must first be saved to the device's internal memory.
+         *              Since clinical documents may contain sensitive medical data, the shareSensitiveDocument function
+         *              is used to ensure that the document is deleted immediately after sharing.
+         *              Note: document sharing is not supported on a browser (a warning will be shown).
+         */
         function share() {
-
-            if (Constants.app) {
-                var targetPath = FileManagerService.generatePath(docParams);
-
-                var path = FileManagerService.getPathToDocuments();
-                var docName = FileManagerService.generateDocumentName(docParams);
-
-                FileManagerService.downloadFileIntoStorage("data:application/pdf;base64," + docParams.Content, path, docName).then(function () {
-                    FileManagerService.shareDocument(docName, targetPath);
-
-                    // Now add the filename to an array to be deleted OnExit of the app (CleanUp.Clear())
-                    Documents.addToDocumentsDownloaded(path, docName);    // add file info to the array
-
-                }).catch(function (error) {
-                    //Unable to download document on device
-                    console.log('Error downloading document onto device: ' + error.status + ' - Error message: ' + error.message);
-                    Toast.showToast({
-                        message: $filter('translate')("UNABLE_TO_SHARE_DOCUMENT"),
-                    });
-                });
-            } else {
+            // Sharing is only available on mobile devices
+            if (!Constants.app) {
                 ons.notification.alert({message: $filter('translate')('AVAILABLEDEVICES')});
+                return;
             }
+
+            let docName = FileManagerService.generateDocumentName(docParams);
+            let base64URL = `data:application/pdf;base64,${docParams.Content}`;
+
+            // Sensitive documents are deleted from local storage after being shared
+            FileManagerService.shareSensitiveDocument(docName, base64URL).catch(error => {
+                console.error(`Error sharing document: ${JSON.stringify(error)}`);
+                Toast.showToast({
+                    message: $filter('translate')("UNABLE_TO_SHARE_DOCUMENT"),
+                });
+            });
         }
 
         function warn() {

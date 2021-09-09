@@ -198,14 +198,14 @@
                     // If it is detected that a user has concurrently logged on with a different device.
                     // Then force the "first" user to log out and clear the observer
                     //
-                    CleanUp.clear();
+
+                    refCurrentUser.off();
+                    LogOutService.logOut();
 
                     // Show message "You have logged in on another device."
                     Toast.showToast({
                         message: $filter('translate')("KICKEDOUT"),
                     });
-                    refCurrentUser.off();
-                    $state.go('init');
                 }
                 else {
                     $rootScope.firstTime = false;
