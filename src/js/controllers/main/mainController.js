@@ -13,12 +13,12 @@
 
     MainController.$inject = ["$window", "$state", '$rootScope','FirebaseService','DeviceIdentifiers',
         '$translatePartialLoader', "LocalStorage", 'Constants', 'CleanUp', 'NavigatorParameters', 'NetworkStatus',
-        'RequestToServer', 'Toast', 'Security', '$filter', 'Params', 'LogOutService'];
+        'RequestToServer', 'Toast', 'Security', '$filter', 'Params', 'LogOutService', 'AppState'];
 
     /* @ngInject */
     function MainController($window, $state, $rootScope, FirebaseService, DeviceIdentifiers,
                             $translatePartialLoader, LocalStorage, Constants, CleanUp, NavigatorParameters, NetworkStatus,
-                            RequestToServer, Toast, Security, $filter, Params, LogOutService) {
+                            RequestToServer, Toast, Security, $filter, Params, LogOutService, AppState) {
 
         var timeoutLockout;
 
@@ -256,31 +256,10 @@
          * Function takes care of displaying the splash screen when app is placed in the background. Note that this
          * works with the plugin: cordova-plugin-privacyscreen which offers a black screen. This is not so pretty
          * so this code below is an attempt to mitigate that slightly.
-         * For iOS the right events to use is active, resign; these are iOS only events
-         * In Android we can use pause and resume but since these fire for iOS as well we have to make sure to only
-         * run in Android.
          */
-        function addAppInBackgroundScreen(){
-            // Events only affects iOS: https://cordova.apache.org/docs/en/latest/cordova/events/events.html#resume
-            document.addEventListener('active', () => {
-                setTimeout(navigator.splashscreen.hide, 0);
-            });
-            // Events only affects iOS: https://cordova.apache.org/docs/en/latest/cordova/events/events.html#pause
-            document.addEventListener('resign', () => {
-                setTimeout(navigator.splashscreen.show, 0);
-            });
-            // Same as above but we are only interested in running it for Android
-            document.addEventListener('resume', () => {
-                setTimeout(()=>{
-                    if(ons.platform.isAndroid())
-                        navigator.splashscreen.hide();
-                },0);
-            });
-            document.addEventListener('pause', () => {
-                setTimeout(()=>{
-                    if(ons.platform.isAndroid()) navigator.splashscreen.show();
-                },0);
-            });
+        function addAppInBackgroundScreen() {
+            AppState.addInactiveEvent(navigator.splashscreen.show);
+            AppState.addActiveEvent(navigator.splashscreen.hide);
         }
     }
 })();

@@ -9,14 +9,14 @@
         .module('MUHCApp')
         .service('Toast', Toast);
 
-    Toast.$inject = ['$timeout', 'Constants', 'UserPreferences'];
+    Toast.$inject = ['$timeout', 'AppState', 'Constants', 'UserPreferences'];
 
     /**
      * @description Provides an API though which to display toast messages on the screen.
      * @author Stacey Beard
      * @date 2021-09-01
      */
-    function Toast($timeout, Constants, UserPreferences) {
+    function Toast($timeout, AppState, Constants, UserPreferences) {
 
         /**
          * @description Functions used to validate the toast parameters
@@ -194,27 +194,13 @@
          */
         function bindEvents() {
             // Sets a watch to avoid showing toasts while the app is minimized, and resume when it becomes active again
-            if (Constants.app) {
-                // iOS
-                document.addEventListener('active', () => {
-                    isMinimized = false;
-                    showNextToastIfPossible();
-                });
-                document.addEventListener('resign', () => {
-                    isMinimized = true;
-                });
-
-                // Android
-                document.addEventListener('resume', () => {
-                    if (ons.platform.isAndroid()) {
-                        isMinimized = false;
-                        showNextToastIfPossible();
-                    }
-                });
-                document.addEventListener('pause', () => {
-                    if(ons.platform.isAndroid()) isMinimized = true;
-                });
-            }
+            AppState.addInactiveEvent(() => {
+                isMinimized = true;
+            });
+            AppState.addActiveEvent(() => {
+                isMinimized = false;
+                showNextToastIfPossible();
+            });
         }
 
         /**
