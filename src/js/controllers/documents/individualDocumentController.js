@@ -87,7 +87,7 @@
             let url = "data:application/pdf;base64," + docParams.Content;
             let newDocName = FileManagerService.generateDocumentName(docParams);
             FileManagerService.openPDF(url, newDocName).catch(error => {
-                console.error(error);
+                console.error(`Error opening PDF: ${JSON.stringify(error)}`);
                 Toast.showToast({
                     message: $filter('translate')('OPEN_PDF_ERROR'),
                 });

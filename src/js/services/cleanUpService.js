@@ -56,7 +56,6 @@
 
         function clearSensitive() {
             PatientTestResults.clear();
-            Documents.clearDocumentContent();
         }
     }
 })();

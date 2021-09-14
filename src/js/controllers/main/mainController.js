@@ -78,7 +78,7 @@
 
             addUpdateRequiredDetection();
 
-            document.addEventListener("pause", onPause, false);
+            AppState.addInactiveEvent(clearSensitiveData);
 
             $rootScope.$on("MonitorLoggedInUsers", function (event, uid) {
                 $rootScope.firstTime = true;
@@ -168,19 +168,18 @@
         }
 
         /*****************************************
-         * Data wipe  - onPause event is triggered when the app goes in the background (switch apps on a device)
+         * Clear sensitive data
          *****************************************/
-        function onPause() {
+        function clearSensitiveData() {
             var currentPage = NavigatorParameters.getNavigator().getCurrentPage().name;
             // Check that the current location is either documents or lab
             if (currentPage.indexOf('my-chart') !== -1 || currentPage.indexOf('lab') !== -1) {
                 NavigatorParameters.getNavigator().resetToPage('./views/personal/personal.html');
             }
 
-            // Wipe documents and lab-results
+            // Wipe lab results
             CleanUp.clearSensitive();
         }
-
 
         /*****************************************
          * Manage concurrent users
@@ -258,6 +257,7 @@
          * so this code below is an attempt to mitigate that slightly.
          */
         function addAppInBackgroundScreen() {
+            if (!Constants.app) return;
             AppState.addInactiveEvent(navigator.splashscreen.show);
             AppState.addActiveEvent(navigator.splashscreen.hide);
         }

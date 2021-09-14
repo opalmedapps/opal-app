@@ -5,11 +5,10 @@ var myApp = angular.module('MUHCApp');
 /**
  *@ngdoc service
  *@name MUHCApp.service:FileManagerService
- *@requires $filter
  *@description Allows the app's controllers or services interact with the file storage of the device. For more information look at {@link https://github.com/apache/cordova-plugin-file Cordova File Plugin}, reference for social sharing plugin {@link https://github.com/EddyVerbruggen/SocialSharing-PhoneGap-Plugin Cordova Sharing Plugin}
  **/
-myApp.service('FileManagerService', ['$filter', '$injector', 'Constants', 'Browser', 'RequestToServer',
-function ($filter, $injector, Constants, Browser, RequestToServer) {
+myApp.service('FileManagerService', ['$injector', 'Constants', 'Browser', 'RequestToServer',
+function ($injector, Constants, Browser, RequestToServer) {
 
     /**
      *@ngdoc property
@@ -37,7 +36,7 @@ function ($filter, $injector, Constants, Browser, RequestToServer) {
      *              Checks if the document has been downloaded already; if so, it is not downloaded again.
      *              Code for intermediate functions based on: https://cordova.apache.org/blog/2017/10/18/from-filetransfer-to-xhr2.html
      *                and: https://cordova.apache.org/docs/en/10.x/reference/cordova-plugin-file/
-     * @param {String} url The url of the file to download from the web.
+     * @param {String} url The url of the file to download from the web, or in base64 format.
      * @param {String} targetPath The path where the downloaded file will be saved on the device
      *                            (does not include its file name).
      * @param {String} fileName The name to give the saved file.
@@ -53,6 +52,7 @@ function ($filter, $injector, Constants, Browser, RequestToServer) {
 
         // Check whether the file to download is already available in the url as base64 data
         let base64 = urlIsBase64(url);
+        if (base64 && !base64IsValid(url)) throw "Document to download is in base64 format but its content is invalid.";
 
         // Depending on the format, get the file contents
         let fileContents;
@@ -319,14 +319,8 @@ function ($filter, $injector, Constants, Browser, RequestToServer) {
     function openWithFileOpener(targetPath, mimeType) {
         return new Promise((resolve, reject) => {
             cordova.plugins.fileOpener2.open(targetPath, mimeType, {
-                error : error => {
-                    console.error(`Failed to open file using fileOpener2; error status = ${e.status}, message = ${e.message}`);
-                    reject(error);
-                },
-                success : () => {
-                    console.log('File opened successfully with fileOpener2');
-                    resolve();
-                }
+                error : reject,
+                success : resolve,
             });
         });
     }
@@ -355,7 +349,6 @@ function ($filter, $injector, Constants, Browser, RequestToServer) {
         // If the url is in base64, download it first
         let fileWasDownloaded = false;
         if (urlIsBase64(url)) {
-            if (!base64IsValid(url)) throw "Document to share is in base64 format but its content is invalid.";
             let path = urlDeviceDocuments;
             await downloadFileIntoStorage(url, path, name);
             markFileForDeletion(path, name);
@@ -394,11 +387,39 @@ function ($filter, $injector, Constants, Browser, RequestToServer) {
 
         // If the document is in base64 and had to be downloaded, delete it now
         if (urlIsBase64(url)) {
-            let path = urlDeviceDocuments;
             let Documents = $injector.get('Documents');
-
-            Documents.deleteDocumentDownloaded(joinPathName(path, name));
+            Documents.deleteDocumentDownloaded(joinPathName(urlDeviceDocuments, name));
         }
+    }
+
+    /**
+     *@ngdoc method
+     *@name openPDF
+     *@methodOf MUHCApp.service:FileManagerService
+     *@param {String} url The URL of the file to open from the web, or in base64 format.
+     *@param {String} newDocName New name to give the file if it needs to be downloaded.
+     *@description If on an Android device, it opens the pdf using a third party software.
+     *             If on an iOS device or a browser, it simply opens it in a new browser window.
+     *             In fact, this function should be named openFile() because it could open not only pdf, but many different file types with the following extensions:
+     *             .doc, .docx, .xls, .xlsx, .rtf, .wav, .gif, .jpg, .jpeg, .png, .txt, .mpg, .mpeg, .mpe, .mp4, .avi, .ods, .odt, .ppt, .pptx, .apk
+     *             (note: to support the above file types, this function should detect the right MIME type instead of assuming 'application/pdf').
+     *
+     *             It opens the file by passing as a parameter a URL of the location of the file (not .html, should be .pdf .doc etc...) OR a file path to the local storage
+     *             URL example: https://www.opal.com/myDocument.pdf
+     * @returns {Promise<void>} Resolves on success or rejects with an error.
+     */
+    async function openPDF(url, newDocName) {
+        if (Constants.app && ons.platform.isAndroid()) {
+            let path = urlDeviceDocuments;
+            let targetPath = joinPathName(path, newDocName);
+
+            await downloadFileIntoStorage(url, path, newDocName);
+            markFileForDeletion(path, newDocName);
+            await openWithFileOpener(targetPath, 'application/pdf');
+
+            console.log('File opened successfully with file opener');
+        }
+        else Browser.openInternal(url);
     }
 
     /**
@@ -433,33 +454,7 @@ function ($filter, $injector, Constants, Browser, RequestToServer) {
 
         shareSensitiveDocument: shareSensitiveDocument,
 
-        /**
-         *@ngdoc method
-         *@name openPDF
-         *@methodOf MUHCApp.service:FileManagerService
-         *@param {String} url URL of the file to open from the web.
-         *@param {String} newDocName New name to give the file if it needs to be downloaded.
-         *@description If its an android phone, it opens the pdf using a third party software.
-         *             If its an iOS device or a browser, it simply opens it in a new browser window.
-         *             In fact, this function should be named openFile() because it opens not only pdf, but many different file types with the following extensions:
-         *             .doc, .docx, .xls, .xlsx, .rtf, .wav, .gif, .jpg, .jpeg, .png, .txt, .mpg, .mpeg, .mpe, .mp4, .avi, .ods, .odt, .ppt, .pptx, .apk
-         *             It opens the file by passing as a parameter a URL of the location of the file (not .html, should be .pdf .doc etc...) OR a file path to the local storage
-         *             URL example: https://www.opal.com/myDocument.pdf
-         * @returns {Promise<void>} Resolves on success or rejects with an error.
-         */
-        openPDF: async function (url, newDocName) {
-            if (Constants.app && ons.platform.isAndroid()) {
-                let path = urlDeviceDocuments;
-                let targetPath = joinPathName(path, newDocName);
-
-                await downloadFileIntoStorage(url, path, newDocName);
-                await openWithFileOpener(targetPath, 'application/pdf');
-                markFileForDeletion(path, newDocName);
-
-                console.log('File opened successfully with fileOpener2');
-            }
-            else Browser.openInternal(url);
-        },
+        openPDF: openPDF,
 
         generateDocumentName: function (document) {
             const title = document.Title.replace(/ /g, "_");

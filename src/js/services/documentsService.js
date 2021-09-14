@@ -23,8 +23,8 @@ var myApp=angular.module('MUHCApp');
  *@requires $filter
  *@description Sets the documents and provides an API to interact with them and the server
  **/
-myApp.service('Documents',['UserPreferences', 'UserAuthorizationInfo','$q', '$filter','FileManagerService','RequestToServer','LocalStorage',
-function(UserPreferences,UserAuthorizationInfo,$q,$filter,FileManagerService,RequestToServer,LocalStorage){
+myApp.service('Documents',['UserPreferences', 'UserAuthorizationInfo','$q', '$filter','FileManagerService','RequestToServer','LocalStorage','Constants',
+function(UserPreferences,UserAuthorizationInfo,$q,$filter,FileManagerService,RequestToServer,LocalStorage,Constants){
     //Array documentsArray contains all the documents for the patient
     /**
      *@ngdoc property
@@ -258,7 +258,8 @@ function(UserPreferences,UserAuthorizationInfo,$q,$filter,FileManagerService,Req
         addToDocumentsDownloaded: function(filePath, documentName)
         {
             let documentsDownloaded = getDocumentsDownloaded();
-            documentsDownloaded.push(FileManagerService.joinPathName(filePath, documentName)); // Save the full path to the file
+            let fullPath = FileManagerService.joinPathName(filePath, documentName);
+            if (!documentsDownloaded.includes(fullPath)) documentsDownloaded.push(fullPath); // Don't add duplicates
             setDocumentsDownloaded(documentsDownloaded);
         },
 
@@ -270,7 +271,7 @@ function(UserPreferences,UserAuthorizationInfo,$q,$filter,FileManagerService,Req
             let documentsDownloaded = getDocumentsDownloaded();
             let remainingDocuments = []; // Keeps track of any documents that have failed to be deleted
 
-            console.log("Deleting all documents downloaded to internal storage");
+            if (Constants.app) console.log("Deleting all documents downloaded to internal storage");
             for (let i = 0; i < documentsDownloaded.length; i++) {
                 let document = documentsDownloaded[i];
                 console.log(`+ + + + + + + + + + + + documentsDownloaded: ${document}`);
