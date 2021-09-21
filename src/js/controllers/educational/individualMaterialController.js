@@ -22,11 +22,11 @@
         .controller('IndividualMaterialController', IndividualMaterialController);
 
     IndividualMaterialController.$inject = ['$scope', '$timeout', 'NavigatorParameters', 'EducationalMaterial',
-        'FileManagerService', '$filter', 'Logger', 'Params'];
+        'FileManagerService', '$filter', 'Logger', 'Params', 'Toast'];
 
     /* @ngInject */
     function IndividualMaterialController($scope, $timeout, NavigatorParameters, EducationalMaterial,
-                                          FileManagerService, $filter, Logger, Params) {
+                                          FileManagerService, $filter, Logger, Params, Toast) {
         var vm = this;
 
         var param;
@@ -136,22 +136,29 @@
         }
 
         function goToEducationalMaterial(index){
+            try {
+                let nextStatus = EducationalMaterial.openEducationalMaterialDetails(vm.edumaterial);
+                if (nextStatus !== -1) {
+                    NavigatorParameters.setParameters({ 'Navigator': navigatorPage, 'Index': index, 'Booklet': vm.edumaterial, 'TableOfContents': vm.tableOfContents });
+                    window[navigatorPage].pushPage(nextStatus.Url);
 
-            var nextStatus = EducationalMaterial.openEducationalMaterialDetails(vm.edumaterial);
-            if (nextStatus !== -1) {
-                NavigatorParameters.setParameters({ 'Navigator': navigatorPage, 'Index': index, 'Booklet': vm.edumaterial, 'TableOfContents': vm.tableOfContents });
-                window[navigatorPage].pushPage(nextStatus.Url);
+                    /* Most calls to logSubClickedEduMaterial() are handled by the function handlePostChangeEventCarousel()
+                     * in bookletMaterialController.js. However, the one special case (clicking on the first material in
+                     * a table of contents) is handled here. That's why logSubClickedEduMaterial() is only called if
+                     * index == 0.
+                     * -SB */
 
-                /* Most calls to logSubClickedEduMaterial() are handled by the function handlePostChangeEventCarousel()
-                 * in bookletMaterialController.js. However, the one special case (clicking on the first material in
-                 * a table of contents) is handled here. That's why logSubClickedEduMaterial() is only called if
-                 * index == 0.
-                 * -SB */
-
-                // Logs the sub material as clicked, if it is the first sub-material in the table of contents.
-                if (index == 0) {
-                    Logger.logSubClickedEduMaterial(vm.tableOfContents[index].EducationalMaterialTOCSerNum);
+                    // Logs the sub material as clicked, if it is the first sub-material in the table of contents.
+                    if (index == 0) {
+                        Logger.logSubClickedEduMaterial(vm.tableOfContents[index].EducationalMaterialTOCSerNum);
+                    }
                 }
+            }
+            catch (error) {
+                console.error(error);
+                Toast.showToast({
+                    message: $filter('translate')('EDU_OPEN_ERROR'),
+                });
             }
         }
 
