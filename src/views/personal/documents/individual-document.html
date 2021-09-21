@@ -18,26 +18,30 @@
     ></pdf-viewer>
 
     <ons-modal var="modal">
-        <h3>{{"WARNING"|translate}}</h3>
-        <ons-icon icon="ion-alert-circled" size="60px"></ons-icon>
-        <p style="margin-top: 5%" class="secure-message">{{"LEAVING_APP"|translate}}</p>
-        <p class="unattended-message">{{"CONFIRM_DOWNLOAD"|translate}}</p>
-        <ons-button style="margin-top: 5%; font-size: 22px;" ng-click="modal.hide()">{{"CANCEL"|translate}}</ons-button>
-        <ons-button style="margin-top: 5%; margin-left: 50px; font-size: 22px; background-color: #F44336"
-                    ng-click="modal.hide(); doc.share()">{{"CONTINUE"|translate}}
-        </ons-button>
+        <div style="margin-left: 5px; margin-right: 5px">
+            <h3>{{"WARNING"|translate}}</h3>
+            <ons-icon icon="ion-alert-circled" size="60px"></ons-icon>
+            <p style="margin-top: 5%" class="secure-message">{{"LEAVING_APP"|translate}}</p>
+            <p class="unattended-message">{{"CONFIRM_DOWNLOAD"|translate}}</p>
+            <ons-button style="margin-top: 5%; font-size: 22px;" ng-click="modal.hide()">{{"CANCEL"|translate}}</ons-button>
+            <ons-button style="margin-top: 5%; margin-left: 50px; font-size: 22px; background-color: #F44336"
+                        ng-click="modal.hide(); doc.share()">{{"CONTINUE"|translate}}
+            </ons-button>
+        </div>
     </ons-modal>
 
     <!-- TODO remove redundancy -->
     <ons-modal var="modalOpenViewer">
-        <h3>{{"WARNING"|translate}}</h3>
-        <ons-icon icon="ion-alert-circled" size="60px"></ons-icon>
-        <p style="margin-top: 5%" class="secure-message">{{"LEAVING_APP"|translate}}</p>
-        <p class="unattended-message">{{"CONFIRM_DOWNLOAD"|translate}}</p>
-        <ons-button style="margin-top: 5%; font-size: 22px;" ng-click="modalOpenViewer.hide()">{{"CANCEL"|translate}}
-        </ons-button>
-        <ons-button style="margin-top: 5%; margin-left: 50px; font-size: 22px; background-color: #F44336"
-                    ng-click="modalOpenViewer.hide(); doc.openPDF()">{{"CONTINUE"|translate}}
-        </ons-button>
+        <div style="margin-left: 5px; margin-right: 5px">
+            <h3>{{"WARNING"|translate}}</h3>
+            <ons-icon icon="ion-alert-circled" size="60px"></ons-icon>
+            <p style="margin-top: 5%" class="secure-message">{{"LEAVING_APP"|translate}}</p>
+            <p class="unattended-message">{{"CONFIRM_DOWNLOAD"|translate}}</p>
+            <ons-button style="margin-top: 5%; font-size: 22px;" ng-click="modalOpenViewer.hide()">{{"CANCEL"|translate}}
+            </ons-button>
+            <ons-button style="margin-top: 5%; margin-left: 50px; font-size: 22px; background-color: #F44336"
+                        ng-click="modalOpenViewer.hide(); doc.openPDF()">{{"CONTINUE"|translate}}
+            </ons-button>
+        </div>
     </ons-modal>
 </ons-page>
