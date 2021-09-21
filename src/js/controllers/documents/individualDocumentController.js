@@ -51,6 +51,7 @@
 
             //PDF params
             docParams = Documents.setDocumentsLanguage(parameters.Post);
+            docParams.fileName = FileManagerService.generateDocumentName(docParams);
             $scope.docParams = docParams;
 
             vm.doc_title = docParams.Title;
@@ -61,15 +62,37 @@
                 $scope.popoverDocsInfo = popover;
             });
 
-            $scope.$on('$destroy', function () {
-                $scope.popoverDocsInfo.off('posthide');
-                $scope.popoverDocsInfo.destroy();
-            });
+            bindEvents();
 
             if ($rootScope.DocAlreadyInitialized === undefined || $rootScope.DocAlreadyInitialized === false) {
                 initializeDocument(docParams);
             }
             $rootScope.DocAlreadyInitialized = false;
+        }
+
+        /**
+         * @description Sets up event bindings for this controller.
+         */
+        function bindEvents() {
+            $scope.$on('$destroy', function () {
+                $scope.popoverDocsInfo.off('posthide');
+                $scope.popoverDocsInfo.destroy();
+
+                // After a delay, check if this destroy event corresponds to leaving the clinical notes section
+                $timeout(() => {
+                    try {
+                        let nav = NavigatorParameters.getNavigator();
+
+                        // If the destroy event is tied to leaving the page, clear the document info
+                        let viewingDocument = nav.pages.some((e) => { return e.page.includes("individual-document.html") });
+                        if (!viewingDocument) Documents.clearDocumentContent(docParams);
+                    }
+                    catch (error) {
+                        console.warn(`Unable to delete data for document: ${docParams.fileName}`);
+                        console.warn(error);
+                    }
+                }, 200);
+            });
         }
 
         function initializeDocument(document) {
@@ -84,9 +107,8 @@
         }
 
         function openPDF() {
-            let url = "data:application/pdf;base64," + docParams.Content;
-            let newDocName = FileManagerService.generateDocumentName(docParams);
-            FileManagerService.openPDF(url, newDocName).catch(error => {
+            let base64URL = `data:application/pdf;base64,${docParams.Content}`;
+            FileManagerService.openPDF(base64URL, docParams.fileName).catch(error => {
                 console.error(`Error opening PDF: ${JSON.stringify(error)}`);
                 Toast.showToast({
                     message: $filter('translate')('OPEN_PDF_ERROR'),
@@ -108,11 +130,8 @@
                 return;
             }
 
-            let docName = FileManagerService.generateDocumentName(docParams);
             let base64URL = `data:application/pdf;base64,${docParams.Content}`;
-
-            // Sensitive documents are deleted from local storage after being shared
-            FileManagerService.shareSensitiveDocument(docName, base64URL).catch(error => {
+            FileManagerService.shareDocument(docParams.fileName, base64URL).catch(error => {
                 console.error(`Error sharing document: ${JSON.stringify(error)}`);
                 Toast.showToast({
                     message: $filter('translate')("UNABLE_TO_SHARE_DOCUMENT"),

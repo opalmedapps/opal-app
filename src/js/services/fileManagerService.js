@@ -37,17 +37,15 @@ function ($injector, Constants, Browser, RequestToServer) {
      *              Code for intermediate functions based on: https://cordova.apache.org/blog/2017/10/18/from-filetransfer-to-xhr2.html
      *                and: https://cordova.apache.org/docs/en/10.x/reference/cordova-plugin-file/
      * @param {String} url The url of the file to download from the web, or in base64 format.
-     * @param {String} targetPath The path where the downloaded file will be saved on the device
-     *                            (does not include its file name).
      * @param {String} fileName The name to give the saved file.
      * @returns {Promise} Resolves if the document has been downloaded before, or if it downloads successfully.
      *                    Otherwise, rejects with an error.
      **/
-    async function downloadFileIntoStorage(url, targetPath, fileName) {
-        console.log("downloadFileIntoStorage: url = "+url+", targetPath = "+targetPath+", fileName = "+fileName);
+    async function downloadFileIntoStorage(url, fileName) {
+        console.log("downloadFileIntoStorage: url = "+url+", targetPath = "+urlDeviceDocuments+", fileName = "+fileName);
 
         // Check whether the file already exists on the device (if it exists, don't download again)
-        const fileExists = await checkFileExists(targetPath + fileName);
+        const fileExists = await checkFileExists(joinPathName(urlDeviceDocuments, fileName));
         if (fileExists) { console.log("File already exists, skipping download"); return; }
 
         // Check whether the file to download is already available in the url as base64 data
@@ -76,7 +74,7 @@ function ($injector, Constants, Browser, RequestToServer) {
 
         // Open the local file system directory and create an empty file
         console.log("Creating local file");
-        const dirEntry = await openDirectory(targetPath);
+        const dirEntry = await openDirectory(urlDeviceDocuments);
         const fileEntry = await createNewFile(fileName, dirEntry);
 
         // Write the file contents to the new file entry
@@ -84,6 +82,28 @@ function ($injector, Constants, Browser, RequestToServer) {
         await writeBlobToFile(fileData, fileEntry);
 
         console.log("File download successful");
+    }
+
+    /**
+     * @description Deletes a file from local device storage.
+     * @param {String} fileName The name of the file to delete.
+     */
+    function deleteFileFromStorage(fileName) {
+        window.resolveLocalFileSystemURL(urlDeviceDocuments, function (dir) {
+            dir.getFile(fileName, {create: false}, function (fileEntry) {
+                fileEntry.remove(function () {
+                    // The file has been removed successfully
+                    console.log(`> > > > > > > > [${fileName}] The file has been removed successfully`);
+                }, function (error) {
+                    // TODO throw error?
+                    // Error deleting the file
+                    console.log(`> > > > > > > > [${fileName}] Error deleting the file: ${JSON.stringify(error)}`);
+                }, function () {
+                    // The file doesn't exist
+                    console.log(`> > > > > > > > [${fileName}] The file does not exist`);
+                });
+            });
+        });
     }
 
     /**
@@ -301,13 +321,12 @@ function ($injector, Constants, Browser, RequestToServer) {
 
     /**
      * @description Adds a file to a list of files which will be deleted regularly, such as when the user logs out.
-     * @param {string} path - The path to the folder containing the file on the device, not including the name of the file.
      * @param {string} name - The name of the file.
      */
-    function markFileForDeletion(path, name) {
+    function markFileForDeletion(name) {
         // Adds the filename to an array to be deleted on exit of the app (by CleanUp.Clear())
         let Documents = $injector.get('Documents');
-        Documents.addToDocumentsDownloaded(path, name);
+        Documents.addToDocumentsDownloaded(name);
     }
 
     /**
@@ -349,10 +368,9 @@ function ($injector, Constants, Browser, RequestToServer) {
         // If the url is in base64, download it first
         let fileWasDownloaded = false;
         if (urlIsBase64(url)) {
-            let path = urlDeviceDocuments;
-            await downloadFileIntoStorage(url, path, name);
-            markFileForDeletion(path, name);
-            url = joinPathName(path, name);
+            await downloadFileIntoStorage(url, name);
+            markFileForDeletion(name);
+            url = joinPathName(urlDeviceDocuments, name);
             fileWasDownloaded = true; // This will enforce that the file should be shared by attachment
         }
 
@@ -374,25 +392,6 @@ function ($injector, Constants, Browser, RequestToServer) {
     }
 
     /**
-     * @description Shares a document by calling shareDocument(). This function handles sensitive data by deleting the
-     *              file immediately after sharing, if it needed to be saved to the device first.
-     * @param {string} name - The name of the file to share.
-     * @param {string} url - The url to the file in base64 format.
-     *                       Note: if the url points instead to a web file, this function behaves no differently than
-     *                       shareDocument(), since the file doesn't need to be downloaded first.
-     * @returns {Promise<void>} Resolves when the plugin success callback is triggered, or rejects with an error.
-     */
-    async function shareSensitiveDocument(name, url) {
-        await shareDocument(name, url);
-
-        // If the document is in base64 and had to be downloaded, delete it now
-        if (urlIsBase64(url)) {
-            let Documents = $injector.get('Documents');
-            Documents.deleteDocumentDownloaded(joinPathName(urlDeviceDocuments, name));
-        }
-    }
-
-    /**
      *@ngdoc method
      *@name openPDF
      *@methodOf MUHCApp.service:FileManagerService
@@ -410,11 +409,10 @@ function ($injector, Constants, Browser, RequestToServer) {
      */
     async function openPDF(url, newDocName) {
         if (Constants.app && ons.platform.isAndroid()) {
-            let path = urlDeviceDocuments;
-            let targetPath = joinPathName(path, newDocName);
+            let targetPath = joinPathName(urlDeviceDocuments, newDocName);
 
-            await downloadFileIntoStorage(url, path, newDocName);
-            markFileForDeletion(path, newDocName);
+            await downloadFileIntoStorage(url, newDocName);
+            markFileForDeletion(newDocName);
             await openWithFileOpener(targetPath, 'application/pdf');
 
             console.log('File opened successfully with file opener');
@@ -452,8 +450,6 @@ function ($injector, Constants, Browser, RequestToServer) {
 
         shareDocument: shareDocument,
 
-        shareSensitiveDocument: shareSensitiveDocument,
-
         openPDF: openPDF,
 
         generateDocumentName: function (document) {
@@ -462,9 +458,7 @@ function ($injector, Constants, Browser, RequestToServer) {
             return `${title}_${date}.${document.DocumentType}`;
         },
 
-        joinPathName: joinPathName,
-
-        separatePathName: separatePathName,
+        deleteFileFromStorage: deleteFileFromStorage,
 
         /**
          *@ngdoc method

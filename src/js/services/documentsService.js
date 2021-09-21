@@ -42,28 +42,6 @@ function(UserPreferences,UserAuthorizationInfo,$q,$filter,FileManagerService,Req
      **/
 	var lastUpdated=0;
 
-    /**
-     * @description Deletes a file from local device storage.
-     * @param fullPath The path to the file, including the file name at the end.
-     */
-	function deleteFileFromLocalStorage(fullPath) {
-	    let [path, docName] = FileManagerService.separatePathName(fullPath);
-        window.resolveLocalFileSystemURL(path, function (dir) {
-            dir.getFile(docName, {create: false}, function (fileEntry) {
-                fileEntry.remove(function () {
-                    // The file has been removed successfully
-                    console.log(`> > > > > > > > [${docName}] The file has been removed successfully`);
-                }, function (error) {
-                    // Error deleting the file
-                    console.log(`> > > > > > > > [${docName}] Error deleting the file: ${JSON.stringify(error)}`);
-                }, function () {
-                    // The file doesn't exist
-                    console.log(`> > > > > > > > [${docName}] The file does not exist`);
-                });
-            });
-        });
-    }
-
     //Check document, if its an update delete it from documentsArray
     function searchDocumentsAndDelete(documents)
     {
@@ -110,12 +88,26 @@ function(UserPreferences,UserAuthorizationInfo,$q,$filter,FileManagerService,Req
     }
 
     /**
+     * @description Deletes a single file from the device storage and removes it from the list on local storage if it's found there.
+     * @param fileName - The name of the file to delete.
+     */
+    function deleteDocumentDownloaded(fileName) {
+        FileManagerService.deleteFileFromStorage(fileName);
+
+        // Remove the document from the storage list
+        let docs = getDocumentsDownloaded();
+        let index = docs.indexOf(fileName);
+        if (index !== -1) docs.splice(index, 1);
+        setDocumentsDownloaded(docs);
+    }
+
+    /**
      * @description Gets a list of downloaded documents from local storage and returns it as an array.
-     *              This list represents paths to all downloaded documents that should be deleted on exit of the app.
+     *              This list represents names of all downloaded documents that should be deleted on exit of the app.
      *              Note: in local storage, document are saved in one string, each separated by a vertical bar '|'.
      * @author Stacey Beard
      * @date 2021-09-09
-     * @returns {string[]} An array of paths to documents on the device.
+     * @returns {string[]} An array of names of documents on the device.
      */
     function getDocumentsDownloaded() {
 	    let storedString = window.localStorage.getItem('DocumentsDownloaded');
@@ -124,11 +116,11 @@ function(UserPreferences,UserAuthorizationInfo,$q,$filter,FileManagerService,Req
 
     /**
      * @description Saves a list of downloaded documents to local storage.
-     *              This list represents paths to all downloaded documents that should be deleted on exit of the app.
+     *              This list represents names of all downloaded documents that should be deleted on exit of the app.
      *              Note: in local storage, document are saved in one string, each separated by a vertical bar '|'.
      * @author Stacey Beard
      * @date 2021-09-09
-     * @param {string[]} docArray - An array of paths to documents on the device.
+     * @param {string[]} docArray - An array of names of documents on the device.
      */
     function setDocumentsDownloaded(docArray) {
         window.localStorage.setItem('DocumentsDownloaded', docArray.join('|'));
@@ -251,15 +243,13 @@ function(UserPreferences,UserAuthorizationInfo,$q,$filter,FileManagerService,Req
         },
 
         /**
-         * @description Saves a path to a downloaded file in order to delete it later.
-         * @param {string} filePath - The path to the folder containing the downloaded file. Should not include the file name.
+         * @description Saves the name of a downloaded file in order to delete it later.
          * @param {string} documentName - The name of the file.
          */
-        addToDocumentsDownloaded: function(filePath, documentName)
+        addToDocumentsDownloaded: function(documentName)
         {
             let documentsDownloaded = getDocumentsDownloaded();
-            let fullPath = FileManagerService.joinPathName(filePath, documentName);
-            if (!documentsDownloaded.includes(fullPath)) documentsDownloaded.push(fullPath); // Don't add duplicates
+            if (!documentsDownloaded.includes(documentName)) documentsDownloaded.push(documentName); // Don't add duplicates
             setDocumentsDownloaded(documentsDownloaded);
         },
 
@@ -278,7 +268,7 @@ function(UserPreferences,UserAuthorizationInfo,$q,$filter,FileManagerService,Req
 
                 // Delete file from local device storage; deletion is wrapped in a try block to prevent an error from crashing the whole function
                 try {
-                    deleteFileFromLocalStorage(document);
+                    FileManagerService.deleteFileFromStorage(document);
                 }
                 catch (error) {
                     console.error(`An error occurred while trying to delete file [${document}]: ${JSON.stringify(error)}`);
@@ -287,20 +277,6 @@ function(UserPreferences,UserAuthorizationInfo,$q,$filter,FileManagerService,Req
             }
             // Update the document array to reflect those that have been deleted
             setDocumentsDownloaded(remainingDocuments);
-        },
-
-        /**
-         * @description Deletes a single file from the device storage and removes it from the list on local storage if it's found there.
-         * @param documentPath The full path to the file, including the file name at the end.
-         */
-        deleteDocumentDownloaded: (documentPath) => {
-            deleteFileFromLocalStorage(documentPath);
-
-            // Remove the document from the storage list
-            let docs = getDocumentsDownloaded();
-            let index = docs.indexOf(documentPath);
-            if (index !== -1) docs.splice(index, 1);
-            setDocumentsDownloaded(docs);
         },
 
         /**
@@ -383,15 +359,14 @@ function(UserPreferences,UserAuthorizationInfo,$q,$filter,FileManagerService,Req
         },
 
         /**
-         *@ngdoc method
-         *@name clearDocumentContent
-         *@methodOf MUHCApp.service:Documents
-         *@description Clears the document content leaving the meta data.
+         * @description Deletes the downloaded content (base64, file download) from a document, leaving its meta data.
          */
-        clearDocumentContent: function () {
-            for (var doc in documentsArray){
-                documentsArray[doc].Content = '';
-            }
+        clearDocumentContent: function (document) {
+            // Delete the document's base64 content
+            document.Content = '';
+
+            // Delete the document if it was downloaded
+            if (Constants.app) deleteDocumentDownloaded(document.fileName);
         },
 
 		getLastUpdated : function () {
