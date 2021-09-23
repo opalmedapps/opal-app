@@ -209,29 +209,37 @@
          * If a user has been deemed as trusted, then this allows them to skip the security question process and go straight to loading screen
          */
         function loginAsTrustedUser(deviceID){
+            console.log("Login as trusted");
+            const warnTrustedError = (error) => { console.warn("An error occurred while logging in as trusted; now attempting to log in as untrusted.", error) };
 
             try {
                 var ans = EncryptionService.decryptDataWithKey($window.localStorage.getItem(UserAuthorizationInfo.getUsername()+"/securityAns"), UserAuthorizationInfo.getPassword());
-            }
-            catch(err) {
-                handleError({code: "WRONG_SAVED_HASH"})
-            }
+                EncryptionService.setSecurityAns(ans);
 
-            EncryptionService.setSecurityAns(ans);
-
-            //Now that we know that both the password and security answer are hashed, we can create our encryption hash
-            EncryptionService.generateEncryptionHash();
+                // Now that we know that both the password and security answer are hashed, we can create our encryption hash
+                EncryptionService.generateEncryptionHash();
+            }
+            catch(error) {
+                // If there's something wrong with the stored trusted info, log in as untrusted instead
+                warnTrustedError(error);
+                loginAsUntrustedUser(deviceID);
+                return;
+            }
 
             UUID.setUUID(deviceID);
-            DeviceIdentifiers.sendIdentifiersToServer()
-                .then(function () {
-                    $state.go('loading');
-                })
-                .catch(function (error) {
-                    //TODO: handle this error better... need to know the error object that is returned
-                    firebase.auth().signOut();
+            DeviceIdentifiers.sendIdentifiersToServer().then(function () {
+                $state.go('loading');
+            })
+            .catch(function (error) {
+                if (error.Code === 1 || error.code === "PERMISSION_DENIED" ) {
+                    warnTrustedError(error);
+                    loginAsUntrustedUser(deviceID);
+                }
+                else {
+                    if (firebase.auth().currentUser) firebase.auth().signOut();
                     handleError(error);
-                });
+                }
+            });
         }
 
         /**
@@ -243,6 +251,7 @@
          * If a user has been deemed as untrusted, then this takes the user to the security question process
          */
         function loginAsUntrustedUser(deviceID){
+            console.log("Login as untrusted");
             //if using a web browers (via demo or testing)
             if (!Constants.app) UUID.setUUID(UUID.generate());
 
@@ -278,8 +287,9 @@
          */
         function handleError(error)
         {
-
-            var code = (error.code)? error.code : error.Code;
+            console.error(error);
+            let code = error.code ? error.code : error.Code;
+            vm.loading = false;
 
             switch (code) {
                 case Params.invalidEmail:
@@ -288,51 +298,39 @@
                     $timeout(function(){
                         vm.alert.type = Params.alertTypeDanger;
                         vm.alert.message= "INVALID_EMAIL_OR_PWD";
-                        vm.loading = false;
                     });
                     break;
                 case Params.largeNumberOfRequests:
                     $timeout(function (){
                         vm.alert.type = Params.alertTypeDanger;
                         vm.alert.message = "TOO_MANY_REQUESTS";
-                        vm.loading = false;
                     });
                     break;
                 case Params.userDisabled:
                     $timeout(function (){
                         vm.alert.type = Params.alertTypeDanger;
                         vm.alert.message = "USER_DISABLED";
-                        vm.loading = false;
                     });
                     break;
                 case Params.networkRequestFailure:
                     $timeout(function(){
                         vm.alert.type = Params.alertTypeDanger;
                         vm.alert.message = "ERROR_NETWORK";
-                        vm.loading = false;
                     });
                     break;
-                case '1': // Encryption error
+                case 1: // Encryption error
                     $timeout(function(){
-                        vm.loading = false;
-                        loginerrormodal.show();
-                    });
-                    break;
-                case "WRONG_SAVED_HASH":
-                    $timeout(function(){
-                        vm.loading = false;
-                        wronghashmodal.show();
+                        vm.alert.type = Params.alertTypeDanger;
+                        vm.alert.message = "PASSWORD_SERVER_ERROR";
                     });
                     break;
                 default:
                     $timeout(function(){
                         vm.alert.type = Params.alertTypeDanger;
                         vm.alert.message = "ERROR_GENERIC";
-                        vm.loading = false;
                     });
             }
         }
-
 
         /*************************
          *  PUBLIC METHODS
@@ -412,7 +410,6 @@
          * Brings user to init screen
          */
         function goToInit(){
-            loginerrormodal.hide();
             initNavigator.popPage();
         }
 
@@ -424,7 +421,6 @@
          * Brings user to password reset screen
          */
         function goToReset(){
-            loginerrormodal.hide();
             initNavigator.pushPage('./views/login/forgot-password.html',{})
         }
 

@@ -68,7 +68,6 @@
     "ENTERVALIDPASSWORD": "Entrer un mot de passe valide",
     "ENTERYOURALIAS": "Entrez votre nouveau pseudonyme",
     "ERRORANSWERNOTMATCH": "Votre réponse ne correspond pas à celle dans nos dossiers.",
-    "ERRORCONTACTINGHOSPITAL": "Erreur en contact avec l'hôpital , le système pourrait être en raison de maintainance . Réessayez plus tard",
     "ERROROBTAININGDOCUMENT": "Erreur lors de l'obtention du document à partir du serveur",
     "ERROR_GETTING_EDU_MATERIAL": "Erreur. Le contenu de ce matériel éducatif n'a pas pu être téléchargé du serveur.",
     "EXIT_APP": "Voulez-vous vraiment quitter Opal?",

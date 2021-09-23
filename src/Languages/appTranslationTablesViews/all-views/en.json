@@ -68,7 +68,6 @@
   "ENTERVALIDPASSWORD": "Enter a valid password",
   "ENTERYOURALIAS": "Enter your new nickname",
   "ERRORANSWERNOTMATCH": "Answer does not match our records",
-  "ERRORCONTACTINGHOSPITAL": "Error contacting the hospital. Try again later",
   "ERROROBTAININGDOCUMENT": "Error obtaining document from server",
   "ERROR_GETTING_EDU_MATERIAL": "Error getting educational material contents from server.",
   "EXIT_APP": "Are you sure you wish to exit Opal?",

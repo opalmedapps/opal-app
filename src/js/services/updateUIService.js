@@ -27,29 +27,17 @@ var myApp=angular.module('MUHCApp');
 myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors','Appointments',
     'Documents','EducationalMaterial', 'UserAuthorizationInfo', '$q', 'Notifications',
     '$cordovaNetwork', 'LocalStorage','RequestToServer','$filter','Diagnoses',
-    'NativeNotification', 'Tasks', 'Params',
+    'NativeNotification', 'Tasks', 'Params', '$injector',
 
     function (Announcements, TxTeamMessages, Patient,Doctors, Appointments, Documents,
               EducationalMaterial, UserAuthorizationInfo, $q, Notifications,
               $cordovaNetwork,LocalStorage,RequestToServer,$filter,Diagnoses,
-              NativeNotification, Tasks, Params ) {
+              NativeNotification, Tasks, Params, $injector) {
         /**
          *@ngdoc property
          *@name  MUHCApp.service.#lastUpdateTimestamp
          *@propertyOf MUHCApp.service:UpdateUI
          *@description Initiatiates object with all the timestamps
-         <pre> var lastUpdateTimestamp={
-        'All':0,
-        'Appointments':0,
-        //'Messages':0,
-        'Documents':0,
-        'Tasks':0,
-        'Doctors':0,
-        //'LabTests':0,
-        'Patient':0,
-        'Notifications':0,
-        'EducationalMaterial':0,
-  };</pre>
          **/
         var lastUpdateTimestamp = Params.lastUpdateTimestamp;
         /**
@@ -202,7 +190,7 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors',
                 console.error(error);
                 if(error.Code !== '3')
                 {
-                    NativeNotification.showNotificationAlert($filter('translate')("ERRORCONTACTINGHOSPITAL"));
+                    showContactHospitalError(true);
                 }
                 r.reject(false);
             });
@@ -242,11 +230,8 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors',
                     }
                 }).catch(function(error)
             {
-                if(typeof error =='object'&&error.Response=='timeout')
-                {
-                    NativeNotification.showNotificationAlert($filter('translate')("ERRORCONTACTINGHOSPITAL"));
-                }else{
-                    if(error.Code !== '3') NativeNotification.showNotificationAlert($filter('translate')("ERRORCONTACTINGHOSPITAL"));
+                if(typeof error =='object' && (error.Response === 'timeout' || error.Code !== '3')) {
+                    showContactHospitalError();
                 }
                 r.reject(error);
             });
@@ -291,7 +276,7 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors',
                     }
                 }).catch(function(error)
             {
-                if(error.Code !== '3' || error.Response === 'timeout') NativeNotification.showNotificationAlert($filter('translate')("ERRORCONTACTINGHOSPITAL"));
+                if(error.Code !== '3' || error.Response === 'timeout') showContactHospitalError();
                 r.reject(error);
             });
             return r.promise;
@@ -317,6 +302,16 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors',
             }else{
                 return lastUpdateTimestamp[content];
             }
+        }
+
+        /**
+         * @description Shows an error popup that takes the user back to the init screen.
+         */
+        function showContactHospitalError(logout=false) {
+            const LogOutService = $injector.get('LogOutService');
+            let callback = undefined;
+            if (logout) callback = LogOutService.logOut;
+            NativeNotification.showNotificationAlert($filter('translate')("ERROR_CONTACTING_HOSPITAL"), callback);
         }
 
         return {
@@ -377,5 +372,5 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors',
                 lastUpdateTimestamp = Params.lastUpdateTimestamp;
             }
         };
-
-    }]);
+    }
+]);

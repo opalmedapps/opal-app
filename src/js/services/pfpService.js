@@ -51,7 +51,7 @@
                     {
                         if(error.Code !== '3')
                         {
-                            NativeNotification.showNotificationAlert($filter('translate')("ERRORCONTACTINGHOSPITAL"));
+                            NativeNotification.showNotificationAlert($filter('translate')("ERROR_CONTACTING_HOSPITAL"));
                         }
 	                    q.resolve([]);
                     });
