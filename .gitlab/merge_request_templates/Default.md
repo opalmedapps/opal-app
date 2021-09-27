@@ -1,4 +1,4 @@
-<!-- Example title: OPAL-123: Change the layout of test values in the lab results -->
+<!-- Example title: OPAL-1234: Change the layout of test values in the lab results -->
 
 ### Changes
 
@@ -21,3 +21,6 @@ Short summary of the changes in this PR.
 
 ### Screenshots
 <!-- Include if relevant. If not, remove this header. -->
+
+/title OPAL-0000: Short and clear description
+/assign me
