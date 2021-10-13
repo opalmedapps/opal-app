@@ -26,7 +26,7 @@ import "./controllers/init/initScreenController.js";
 import "./controllers/init/initSettingsController.js";
 import "./controllers/loading/loadingController.js";
 import "./controllers/main/mainController.js";
-import "./controllers/maps/mapsController.js";
+import "./controllers/maps/mapController.js";
 import "./controllers/notifications/notificationsController.js";
 import "./controllers/parking/parkingController.js";
 import "./controllers/pfp/pfpController.js";

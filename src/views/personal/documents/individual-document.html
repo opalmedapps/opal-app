@@ -3,7 +3,7 @@
         <div class="left">
             <ons-back-button ng-hide="doc.loading">{{"BACK"|translate}}</ons-back-button>
         </div>
-        <div class="center">{{doc.doc_title|limitTo:25}}{{doc.doc_title.length > 25 ? '...' : ''}}</div>
+        <div class="center" ng-class="fontSizeTitle">{{"DOCUMENT"|translate}}</div>
         <div class="right">
             <ons-toolbar-button ng-click="popoverDocsInfo.show('#buttonDocInfo')" id="buttonDocInfo">
                 <ons-icon icon="fa-ellipsis-v" fixed-width="true"></ons-icon>
