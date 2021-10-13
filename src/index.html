@@ -101,6 +101,24 @@
     <ons-modal var="browserModal" style="background-color: #7C7C7C"></ons-modal>
 
     <!--
+     Tour Modal
+     =================================-->
+    <ons-modal var="firstLoginTourModal">
+        <div id="rcorners">
+            <h3>{{"TOUR_WELCOME"|translate}}</h3>
+            <p style="margin-top: 10%; margin-bottom:10%;" class="secure-message">{{"TOUR_MODAL_INTRODUCTION"|translate}}</p>
+            <ons-button ng-class="fontSizeTitle" style="background-color: #6a6261; margin: 2px"
+                        ng-click="firstLoginTourModal.hide()">
+                {{"TOUR_MODAL_LATER_BUTTON"|translate}}
+            </ons-button>
+            <ons-button ng-class="fontSizeTitle" style="margin: 2px"
+                        ng-click="firstLoginTourModal.hide(); homeNavigator.pushPage('views/home/tour/tour.html');">
+                {{"TOUR_MODAL_TAKE_TOUR_BUTTON"|translate}}
+            </ons-button>
+        </div>
+    </ons-modal>
+
+    <!--
     App
     =================================-->
     <div ng-controller="MainController">

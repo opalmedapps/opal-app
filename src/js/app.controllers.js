@@ -53,3 +53,4 @@ import "./controllers/test-results/patient-test-results-by-datetime.controller.j
 import "./controllers/txTeamMessages/txTeamMessagesController.js";
 import "./controllers/txTeamMessages/individualMessageController.js";
 import "./controllers/auth/setHospitalController.js";
+import "./controllers/tour/tourController.js";
