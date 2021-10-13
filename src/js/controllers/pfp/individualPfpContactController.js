@@ -41,7 +41,7 @@
             {
                 vm.carousel = e.component;
                 vm.carousel.setActiveCarouselItemIndex(vm.currentIndex);
-                vm.carousel.on('postchange',postChangeCarouseIndex);
+                vm.carousel.on('postchange',postChangeCarouselIndex);
             });
 
 
@@ -62,7 +62,7 @@
             }
 
         }
-        function postChangeCarouseIndex(event)
+        function postChangeCarouselIndex(event)
         {
             $timeout(function()
             {

@@ -1,6 +1,5 @@
 {
     "ABOUT": "À propos",
-    "ACCOUNT": "Réglages",
     "ADDED": "Reçu à",
     "ALIAS": "Surnom",
     "ANSWER": "Réponse",
@@ -93,7 +92,6 @@
     "HOME": "Accueil",
     "HOME_DESCRIPTION": "Dans l'onglet Accueil, vous pourrez accéder aux nouvelles concernant votre statut médical, vos documents, les annonces de l'hôpital et vos rendez-vous.",
     "HOSPITALPARKING": "Stationnement",
-    "INFO": "Information",
     "INPROGRESS": "En cours",
     "INTERNETERROR": "Erreur de serveur, vérifiez votre connexion Internet.",
     "INTERNETERROR2": "Erreur de connexion au réseau Opal. Si vous avez donné plusieurs réponses erronées à une question de sécurité, l’accès à votre compte sera bloqué pour un moment. Sinon, il se peut que l’erreur soit causée par une panne de réseau. Veuillez réessayer plus tard.",
@@ -171,7 +169,6 @@
     "ONCOLOGY_PARKING": "Stationnement du Centre de cancer",
     "OPALPROBLEMSUBJECT": "Trouvé un bogue / problème en utilisant Opal",
     "OPAL_DEV": "Équipe de développement d'Opal",
-    "OPAL_TOUR": "Revoir le guide d'Opal",
     "OPAL_WEBSITE": "Site Web d'Opal",
     "OPENEXTERNALVIEWER": "Ouvrir dans une nouvelle fenêtre.",
     "OPTIONS": "Légende",
