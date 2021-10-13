@@ -10,7 +10,7 @@
             <ons-list-item class="item">
                 <div style="line-height:1" align="left">
                     <p class="item-desc" ng-class="fontSizeDesc"
-                       ng-bind-html="vm.DocumentDescription">
+                       ng-bind-html="vm.DocumentDescription | trustHTML">
                     </p>
                 </div>
             </ons-list-item>
