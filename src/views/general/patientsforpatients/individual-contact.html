@@ -1,7 +1,15 @@
 <ons-page ng-controller="IndividualContactsController as cont" ng-cloak>
     <ons-toolbar fixed-style>
         <div class="left"><ons-back-button>{{"BACK"|translate}}</ons-back-button></div>
-        <div class="center"  ><ons-toolbar-button ng-click="cont.goBack()" ng-disabled="cont.currentIndex==0" ><i class="ion-chevron-left"></i></ons-toolbar-button><span>{{cont.currentIndex+1}} / {{cont.contacts.length}}</span><ons-toolbar-button  ng-disabled="cont.currentIndex==(cont.contacts.length-1)" ng-click="cont.goNext()" ><i class="ion-chevron-right"></i></ons-toolbar-button></div>
+        <div class="center" ng-class="fontSizeTitle">
+            <ons-toolbar-button ng-click="cont.goBack()" ng-disabled="cont.currentIndex==0">
+                <i class="ion-chevron-left"></i>
+            </ons-toolbar-button>
+            <span>{{cont.currentIndex+1}} / {{cont.contacts.length}}</span>
+            <ons-toolbar-button  ng-disabled="cont.currentIndex==(cont.contacts.length-1)" ng-click="cont.goNext()" >
+                <i class="ion-chevron-right"></i>
+            </ons-toolbar-button>
+        </div>
     </ons-toolbar>
     <ons-carousel  var="carouselContacts" swipeable overscrollable auto-scroll fullscreen>
         <ons-carousel-item ng-repeat="contact in cont.contacts">
