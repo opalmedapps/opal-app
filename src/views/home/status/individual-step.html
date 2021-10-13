@@ -13,7 +13,7 @@
                         <span class="item-title" ng-class="fontSizeTitle">{{step.name | translate}}</span>
                     </header>
                     <p class="item-desc" ng-class="fontSizeDesc"
-                       ng-bind-html="step.stage.appointmentDescription || step.stage.taskDescription"></p>
+                       ng-bind-html="(step.stage.appointmentDescription || step.stage.taskDescription) | trustHTML"></p>
                 </div>
             </ons-list-item>
             

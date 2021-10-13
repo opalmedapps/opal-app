@@ -128,14 +128,10 @@
 
             <!-- Contents -->
             <ons-list-item class="item">
-                <div class="container" style="background-color:white;overflow-y:scroll" ng-style="{height:edu.heightSection}"   ng-show="edu.edumaterial.Content">
-                    <div ng-bind-html="edu.edumaterial.Content" ng-class="fontSizeDesc"></div>
+                <div class="container" style="background-color:white; overflow-y:scroll" ng-style="{height:edu.heightSection}" ng-show="edu.edumaterial.Content">
+                    <div ng-bind-html="edu.edumaterial.Content | trustHTML" ng-class="fontSizeDesc"></div>
                 </div>
             </ons-list-item>
-
         </ons-list>
-
     </div>
-
 </ons-page>
-

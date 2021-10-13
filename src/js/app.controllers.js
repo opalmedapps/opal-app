@@ -16,7 +16,6 @@ import "./controllers/documents/documentsController.js";
 import "./controllers/documents/individualDocumentController.js";
 import "./controllers/educational/educationalMaterialController.js";
 import "./controllers/educational/bookletMaterialController.js";
-import "./controllers/educational/HTMLMaterialController.js";
 import "./controllers/educational/individualMaterialController.js";
 import "./controllers/educational/educationalMaterialController.js";
 import "./controllers/feedback/feedbackController.js";

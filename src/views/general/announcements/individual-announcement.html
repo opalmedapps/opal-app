@@ -16,7 +16,7 @@
     </ons-list>
     <ons-list class="settings-list">
       <ons-list-item class="item">
-        <div ng-bind-html="ind.announcement.Body" style =" word-wrap: break-word;" ng-class="fontSizeDesc" ></div>
+        <div ng-bind-html="ind.announcement.Body | trustHTML" style="word-wrap: break-word;" ng-class="fontSizeDesc"></div>
       </ons-list-item>
     </ons-list>
   </div>

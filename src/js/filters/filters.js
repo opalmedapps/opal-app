@@ -255,11 +255,12 @@ myApp.filter('FormatEditPhoneNumber',function(){
     };
 });
 
-myApp.filter('toTrusted', function ($sce) {
+myApp.filter('trustHTML', function ($sce) {
     return function (value) {
         return $sce.trustAsHtml(value);
     };
 });
+
 myApp.filter('capitalize', function () {
     /**
      * Capitalizes the string
