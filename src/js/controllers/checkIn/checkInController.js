@@ -19,7 +19,7 @@
         'CheckInService',
         'NavigatorParameters',
         'UserPreferences',
-        'NewsBanner',
+        'Toast',
         '$filter',
         'Params'
     ];
@@ -29,7 +29,7 @@
         CheckInService,
         NavigatorParameters,
         UserPreferences,
-        NewsBanner,
+        Toast,
         $filter,
         Params
     ) {
@@ -60,8 +60,9 @@
                 .then(function(response){
 
                     if(response === "NOT_ALLOWED"){
-                        NewsBanner.showCustomBanner($filter('translate')("NOT_ALLOWED"), '#333333', '#F0F3F4', 
-                            13, 'top', function(){}, 3000);
+                        Toast.showToast({
+                            message: $filter('translate')("NOT_ALLOWED"),
+                        });
                         vm.alert.type = Params.alertTypeWarning;
                         vm.checkInMessage = "CHECKIN_IN_HOSPITAL_ONLY";
                     } else if (response === "SUCCESS") {

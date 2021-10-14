@@ -23,8 +23,8 @@ var myApp=angular.module('MUHCApp');
  *@requires $filter
  *@description Sets the documents and provides an API to interact with them and the server
  **/
-myApp.service('Documents',['UserPreferences', 'UserAuthorizationInfo','$q', '$filter','FileManagerService','RequestToServer','LocalStorage',
-                   function(UserPreferences,UserAuthorizationInfo,$q,$filter,FileManagerService,RequestToServer,LocalStorage){
+myApp.service('Documents',['UserPreferences', 'UserAuthorizationInfo','$q', '$filter','FileManagerService','RequestToServer','LocalStorage','Constants',
+function(UserPreferences,UserAuthorizationInfo,$q,$filter,FileManagerService,RequestToServer,LocalStorage,Constants){
     //Array documentsArray contains all the documents for the patient
     /**
      *@ngdoc property
@@ -41,35 +41,6 @@ myApp.service('Documents',['UserPreferences', 'UserAuthorizationInfo','$q', '$fi
      *@description Timestamp to check for updates
      **/
 	var lastUpdated=0;
-
-    /**
-     * This array will hold all document names downloaded to be viewed using FileOpener (filename and path on Android)
-     * It will be used to Delete all files on Exit/Logout
-     * @type {Array}
-     */
-	var documentsDownloaded = [];
-
-
-	/**
-	 * Delete file from local device storage, mainly Android
-	 */
-	function deleteFileFromLocalStorage (path, docName) {
-        window.resolveLocalFileSystemURL(path, function (dir) {
-            dir.getFile(docName, {create: false}, function (fileEntry) {
-                fileEntry.remove(function () {
-                    // The file has been removed successfully
-                    console.log('> > > > > > > > The file has been removed successfully.');
-                }, function (error) {
-                    // Error deleting the file
-                    console.log('> > > > > > > > Error deleting the file. ');
-                }, function () {
-                    // The file doesn't exist
-                    console.log('> > > > > > > > The file does not exist. ');
-                });
-            });
-        });
-    }
-
 
     //Check document, if its an update delete it from documentsArray
     function searchDocumentsAndDelete(documents)
@@ -106,7 +77,7 @@ myApp.service('Documents',['UserPreferences', 'UserAuthorizationInfo','$q', '$fi
         for (var i = 0; i < documents.length; i++) {
             documents[i].CreatedTimeStamp = $filter('formatDate')(documents[i].CreatedTimeStamp);
             documents[i].ApprovedTimeStamp = $filter('formatDate')(documents[i].ApprovedTimeStamp);
-            documents[i].DocumentType = FileManagerService.getFileType(documents[i].FinalFileName);
+            documents[i].DocumentType = FileManagerService.getFileExtension(documents[i].FinalFileName);
             documents[i].FirstName = documents[i].FirstName.trim();
             documents[i].LastName = documents[i].LastName.trim();
             documentsArray.push(documents[i]);
@@ -115,6 +86,46 @@ myApp.service('Documents',['UserPreferences', 'UserAuthorizationInfo','$q', '$fi
         LocalStorage.WriteToLocalStorage('Documents',documentsArray);
         return documents;
     }
+
+    /**
+     * @description Deletes a single file from the device storage and removes it from the list on local storage if it's found there.
+     * @param fileName - The name of the file to delete.
+     */
+    function deleteDocumentDownloaded(fileName) {
+        FileManagerService.deleteFileFromStorage(fileName);
+
+        // Remove the document from the storage list
+        let docs = getDocumentsDownloaded();
+        let index = docs.indexOf(fileName);
+        if (index !== -1) docs.splice(index, 1);
+        setDocumentsDownloaded(docs);
+    }
+
+    /**
+     * @description Gets a list of downloaded documents from local storage and returns it as an array.
+     *              This list represents names of all downloaded documents that should be deleted on exit of the app.
+     *              Note: in local storage, document are saved in one string, each separated by a vertical bar '|'.
+     * @author Stacey Beard
+     * @date 2021-09-09
+     * @returns {string[]} An array of names of documents on the device.
+     */
+    function getDocumentsDownloaded() {
+	    let storedString = window.localStorage.getItem('DocumentsDownloaded');
+	    return !storedString ? [] : storedString.split('|');
+    }
+
+    /**
+     * @description Saves a list of downloaded documents to local storage.
+     *              This list represents names of all downloaded documents that should be deleted on exit of the app.
+     *              Note: in local storage, document are saved in one string, each separated by a vertical bar '|'.
+     * @author Stacey Beard
+     * @date 2021-09-09
+     * @param {string[]} docArray - An array of names of documents on the device.
+     */
+    function setDocumentsDownloaded(docArray) {
+        window.localStorage.setItem('DocumentsDownloaded', docArray.join('|'));
+    }
+
     return{
         /**
          *@ngdoc method
@@ -231,20 +242,43 @@ myApp.service('Documents',['UserPreferences', 'UserAuthorizationInfo','$q', '$fi
             }
         },
 
-        addToDocumentsDownloaded: function(filePath, documentName)
+        /**
+         * @description Saves the name of a downloaded file in order to delete it later.
+         * @param {string} documentName - The name of the file.
+         */
+        addToDocumentsDownloaded: function(documentName)
         {
-            documentsDownloaded.push({path: filePath, docName: documentName});   // array of objects of 2 values each: {path, docName}
+            let documentsDownloaded = getDocumentsDownloaded();
+            if (!documentsDownloaded.includes(documentName)) documentsDownloaded.push(documentName); // Don't add duplicates
+            setDocumentsDownloaded(documentsDownloaded);
         },
 
+        /**
+         * @description Deletes all files marked for deletion in local storage (those returned by the function getDocumentsDownloaded()).
+         */
         deleteDocumentsDownloaded: function()
         {
-            for (var i = 0; i < documentsDownloaded.length; i++) {
-                console.log('+ + + + + + + + + + + + documentsDownloaded: ' + documentsDownloaded[i].path + ' ==> ' + documentsDownloaded[i].docName);
+            let documentsDownloaded = getDocumentsDownloaded();
+            let remainingDocuments = []; // Keeps track of any documents that have failed to be deleted
 
-                // Delete file from local device storage
-                deleteFileFromLocalStorage(documentsDownloaded[i].path, documentsDownloaded[i].docName);
+            if (Constants.app) console.log("Deleting all documents downloaded to internal storage");
+            for (let i = 0; i < documentsDownloaded.length; i++) {
+                let document = documentsDownloaded[i];
+                console.log(`+ + + + + + + + + + + + documentsDownloaded: ${document}`);
+
+                // Delete file from local device storage; deletion is wrapped in a try block to prevent an error from crashing the whole function
+                try {
+                    FileManagerService.deleteFileFromStorage(document);
+                }
+                catch (error) {
+                    console.error(`An error occurred while trying to delete file [${document}]: ${JSON.stringify(error)}`);
+                    remainingDocuments.push(document);
+                }
             }
+            // Update the document array to reflect those that have been deleted
+            setDocumentsDownloaded(remainingDocuments);
         },
+
         /**
          *@ngdoc method
          *@name getDocumentUrl
@@ -325,22 +359,18 @@ myApp.service('Documents',['UserPreferences', 'UserAuthorizationInfo','$q', '$fi
         },
 
         /**
-         *@ngdoc method
-         *@name clearDocumentContent
-         *@methodOf MUHCApp.service:Documents
-         *@description Clears the document content leaving the meta data.
+         * @description Deletes the downloaded content (base64, file download) from a document, leaving its meta data.
          */
-        clearDocumentContent: function () {
-            for (var doc in documentsArray){
-                documentsArray[doc].Content = '';
-            }
+        clearDocumentContent: function (document) {
+            // Delete the document's base64 content
+            document.Content = '';
+
+            // Delete the document if it was downloaded
+            if (Constants.app) deleteDocumentDownloaded(document.fileName);
         },
 
 		getLastUpdated : function () {
 			return lastUpdated;
         }
-
     };
-
-
 }]);

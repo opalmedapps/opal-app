@@ -10,9 +10,9 @@
         .module('MUHCApp')
         .factory('Browser', Browser);
 
-    Browser.$inject = ['$filter', 'Constants', 'NewsBanner'];
+    Browser.$inject = ['$filter', 'Constants', 'Toast'];
 
-    function Browser($filter, Constants, NewsBanner) {
+    function Browser($filter, Constants, Toast) {
 
         return {
             openInternal: openInternal,
@@ -125,9 +125,9 @@
         function validateURL(url) {
             const valid = (typeof url === "string" && url !== "");
 
-            if (!valid) NewsBanner.showCustomBanner($filter('translate')("BROWSER_OPEN_FAILED"), '#333333', '#F0F3F4',
-                13, 'top', null, 5000);
-
+            if (!valid) Toast.showToast({
+                message: $filter('translate')("BROWSER_OPEN_FAILED"),
+            });
             return valid;
         }
     }

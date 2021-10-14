@@ -40,9 +40,6 @@
             // wipe all data
             CleanUp.clear();
 
-            // sign out on FireBase
-            FirebaseService.signOut();
-
             if (!safeDevice || !UserAuthorizationInfo.getTrusted()) {
                 // device becomes untrusted
                 localStorage.removeItem("deviceID");
@@ -64,9 +61,10 @@
             }
 
             // take user to init page
-            $state.go('init');
+            $state.go('init').then(() => {
+                // Firebase sign out must be done after going to the init state to prevent onAuthStateChanged from re-triggering logout
+                FirebaseService.signOut();
+            })
         }
     }
-
 })();
-

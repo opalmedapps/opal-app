@@ -2,13 +2,19 @@
 // Author David Herrera on Summer 2016, Email:davidfherrerar@gmail.com
 //
 //Defines the authorization parameters for the user serssion
-var myApp=angular.module('MUHCApp');
+
 /**
 *@ngdoc service
 *@name MUHCApp.service:UserAuthorizationInfo
 *@description Contains all the authorization data for the user
 **/
-myApp.service('UserAuthorizationInfo', function () {
+angular
+    .module('MUHCApp')
+    .service('UserAuthorizationInfo', UserAuthorizationInfo);
+
+UserAuthorizationInfo.$inject = ['Constants'];
+
+function UserAuthorizationInfo(Constants) {
     /**
      *@ngdoc property
     *@name  MUHCApp.service.#username
@@ -124,12 +130,7 @@ myApp.service('UserAuthorizationInfo', function () {
         */
         getDeviceIdentifier:function()
         {
-            var app = document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'https://' ) === -1;
-            if(app){
-                identifier=device.uuid;
-            }else{
-                identifier='browser';
-            }
+            identifier = Constants.app ? device.uuid : 'browser';
             return identifier;
         },
         /**
@@ -204,6 +205,5 @@ myApp.service('UserAuthorizationInfo', function () {
         getTrusted: function () {
             return trusted;
         }
-};
-
-});
+    }
+}

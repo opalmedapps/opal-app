@@ -25,10 +25,6 @@
         ////////////////
 
         function activate() {
-
-            // Check for document permission
-            Permissions.enablePermission('WRITE_EXTERNAL_STORAGE').catch(console.error);
-
             Logger.sendLog('Documents', 'all');
 
             var documents = Documents.getDocuments();
