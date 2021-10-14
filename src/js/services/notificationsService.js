@@ -236,6 +236,7 @@
             clearNotifications: clearNotifications,
             requestNewNotifications: requestNewNotifications,
             getLastUpdated: getLastUpdated,
+            markAllRead: markAllRead,
         };
 
         return service;
@@ -375,6 +376,15 @@
                     }
                 }
             }
+        }
+
+        /**
+         * @description Marks all unread notifications as read.
+         */
+        function markAllRead() {
+            Notifications.forEach((notification, index) => {
+                if (notification.ReadStatus === "0") readNotification(index, notification);
+            });
         }
 
         /**

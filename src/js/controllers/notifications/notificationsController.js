@@ -10,15 +10,20 @@
         .module('MUHCApp')
         .controller('NotificationsController', NotificationsController);
 
-    NotificationsController.$inject = ['RequestToServer','Notifications', 'NavigatorParameters', 'Permissions', '$filter', '$timeout'];
+    NotificationsController.$inject = ['RequestToServer','Notifications', 'NavigatorParameters', 'Permissions',
+        '$filter', '$timeout', '$scope'];
 
     /* @ngInject */
-    function NotificationsController(RequestToServer, Notifications, NavigatorParameters, Permissions, $filter, $timeout) {
-
+    function NotificationsController(RequestToServer, Notifications, NavigatorParameters, Permissions, $filter,
+                                     $timeout, $scope) {
         var vm = this;
 
         vm.showHeader = showHeader;
         vm.goToNotification = goToNotification;
+
+        // Popover variables
+        $scope.notificationsPopover = undefined;
+        $scope.markAllRead = markAllRead;
 
 
         activate();
@@ -27,6 +32,14 @@
 
         function activate(){
             vm.isLoading = true;
+
+            // Create the popover menu
+            ons.createPopover('./views/personal/notifications/notifications-popover.html', {parentScope: $scope}).then(function (popover) {
+                $scope.notificationsPopover = popover;
+            });
+
+            bindEvents();
+
             // TODO: OPTIMIZE THIS... THIS SHOULD BE A BACKGROUND UPDATE THAT SILENTLY UPDATES THE LIST INSTEAD OF DOING A COMPLETE REFRESH
             Notifications.requestNewNotifications()
                 .then(function () {
@@ -40,6 +53,12 @@
                         displayNotifications()
                     }
                 })
+        }
+
+        function bindEvents() {
+            $scope.$on('$destroy', function () {
+                $scope.notificationsPopover.destroy();
+            });
         }
 
         function displayNotifications(){
@@ -91,6 +110,15 @@
                     homeNavigator.pushPage(result.Url);
                 }
             }
+        }
+
+        /**
+         * @description Marks all unread notifications as read.
+         */
+        function markAllRead() {
+            Notifications.markAllRead();
+            $scope.notificationsPopover.hide();
+            displayNotifications();
         }
     }
 })();
