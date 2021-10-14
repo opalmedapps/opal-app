@@ -33,30 +33,36 @@ class PatientTestResultsController {
 	 * @type {boolean}
 	 */
 	#justRefreshedByType = false;
+	/**
+	 * @description Tracks whether the user is currently being shown a warning that the labs can't be refreshed this soon.
+	 *              Prevents the user from enqueuing a lot of duplicate messages in the Toast service.
+	 * @type {boolean}
+	 */
+	#refreshWarningIsShowing = false;
 
 	#patientTestResults;
 	#$filter;
 	#$timeout;
 	#language;
-	#newsBanner;
+	#toast;
 	navigator;
 
 	/**
 	 * Constructor for the PatientTestResultsController
 	 * @param {PatientTestResults} patientTestResults  PatientTestResult service instance in angular
 	 * @param {UserPreferences} userPreferences  UserPreferences service instance in angular
-	 * @param {NewsBanner} newsBanner NewsBannerClass service instance in angular
+	 * @param {Toast} toast Toast service instance in angular
 	 * @param {NavigatorParameters} navigatorParameters NavigatorParameters service
 	 * @param {$filter} $filter Angular $filter factory
 	 * @param {$timeout} $timeout Angular $timeout factory
 	 */
 	constructor(patientTestResults, userPreferences,
-		newsBanner, navigatorParameters,
+		toast, navigatorParameters,
 		$filter, $timeout) {
 		this.#patientTestResults = patientTestResults;
 		this.#language = userPreferences.getLanguage();
 		this.navigator = navigatorParameters.getNavigator();
-		this.#newsBanner = newsBanner;
+		this.#toast = toast;
 		this.#$filter = $filter;
 		this.#$timeout = $timeout;
 		this.#getTestResultsMetadata(this.#shouldFetchTestResultsFromServer())
@@ -76,8 +82,18 @@ class PatientTestResultsController {
 			this.#getTestResultsMetadata(true)
 				.then(this.#updateView)
 				.catch(this.#handlerServerError);
-		} else this.#newsBanner.showCustomBanner(this.#$filter('translate')("REFRESH_WAIT"), '#333333', 
-			'#F0F3F4', 13, 'top', null, 3000);
+		}
+		// Use a variable to prevent new refresh warnings from being added to the toast queue if one is already showing
+		else if (!this.#refreshWarningIsShowing) {
+			this.#refreshWarningIsShowing = true;
+			this.#toast.showToast({
+				message: this.#$filter('translate')("REFRESH_WAIT"),
+				position: "bottom",
+				callback: () => {
+					this.#refreshWarningIsShowing = false;
+				}
+			});
+		}
 	}
 
 	/**
@@ -207,5 +223,5 @@ angular
 	.module('MUHCApp')
 	.controller('PatientTestResultsController', PatientTestResultsController);
 
-PatientTestResultsController.$inject = ['PatientTestResults', 'UserPreferences', 'NewsBanner',
+PatientTestResultsController.$inject = ['PatientTestResults', 'UserPreferences', 'Toast',
 	'NavigatorParameters', '$filter', '$timeout'];

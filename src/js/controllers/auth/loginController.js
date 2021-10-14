@@ -22,10 +22,10 @@
         .controller('LoginController', LoginController);
 
     LoginController.$inject = ['$timeout', '$state', 'UserAuthorizationInfo', '$filter','DeviceIdentifiers',
-        'UserPreferences', 'Patient', 'NewsBanner', 'UUID', 'Constants', 'EncryptionService', 'CleanUp', '$window', 'FirebaseService', '$rootScope', 'Params', 'UserHospitalPreferences'];
+        'UserPreferences', 'Patient', 'Toast', 'UUID', 'Constants', 'EncryptionService', 'CleanUp', '$window', 'FirebaseService', '$rootScope', 'Params', 'UserHospitalPreferences'];
 
     /* @ngInject */
-    function LoginController($timeout, $state, UserAuthorizationInfo, $filter, DeviceIdentifiers, UserPreferences, Patient, NewsBanner, UUID, Constants, EncryptionService, CleanUp, $window, FirebaseService, $rootScope, Params, UserHospitalPreferences) {
+    function LoginController($timeout, $state, UserAuthorizationInfo, $filter, DeviceIdentifiers, UserPreferences, Patient, Toast, UUID, Constants, EncryptionService, CleanUp, $window, FirebaseService, $rootScope, Params, UserHospitalPreferences) {
 
         var vm = this;
 
@@ -113,8 +113,9 @@
             patientSerNum = Patient.getUserSerNum();
 
             //Locked out alert
-            if(patientSerNum) NewsBanner.showCustomBanner($filter('translate')('LOCKEDOUT'), 'black', '#F0F3F4', 13, 'top', null, 2000);
-
+            if (patientSerNum) Toast.showToast({
+                message: $filter('translate')('LOCKEDOUT'),
+            });
 
             // Switch for trusting device
             $timeout(function(){
@@ -278,7 +279,7 @@
          */
         function handleError(error)
         {
-
+            console.error(error);
             var code = (error.code)? error.code : error.Code;
 
             switch (code) {

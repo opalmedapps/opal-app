@@ -16,7 +16,7 @@ Bootstraping the application
  */
 (()=>{
     "use strict";
-	const app = document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'https://' ) === -1;
+	const app = window.hasOwnProperty("cordova");
 	if (app){
 		document.addEventListener("deviceready", function() {
 			angular.bootstrap(document, ["MUHCApp"]);
