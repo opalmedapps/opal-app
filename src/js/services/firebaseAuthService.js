@@ -64,12 +64,9 @@ myApp.factory("FirebaseService", ['$firebaseAuth',
 			},
 
 			signOut: function () {
-
-				this.getAuthentication().$signOut()
-					.then(function (response) {
-						"use strict";
-						console.log('Firebase sign out response: ', JSON.stringify(response));
-					})
+				this.getAuthentication().$signOut().then(() => {
+					console.log("Signed out of Firebase");
+				});
 			},
 
 			updateFirebaseUrl: function (extension) {
@@ -77,4 +74,5 @@ myApp.factory("FirebaseService", ['$firebaseAuth',
 				firebaseDBRef = firebase.database().ref(firebaseUrl);
 			}
 		};
-	}]);
+	}]
+);
