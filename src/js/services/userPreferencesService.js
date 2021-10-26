@@ -9,12 +9,11 @@ var myApp=angular.module('MUHCApp');
  *@requires $rootScope
  *@requires tmhDynamicLocale
  *@requires $translate
- *@requires $q
  *@requires MUHCApp.service:UserAuthorizationInfo
  *@description Service stores and manages user preferences
  **/
-myApp.service('UserPreferences', ['UserAuthorizationInfo','$rootScope','tmhDynamicLocale','$translate','$q', function(UserAuthorizationInfo,$rootScope,tmhDynamicLocale,$translate,$q){
-    var app = document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'https://' ) === -1;
+myApp.service('UserPreferences', ['UserAuthorizationInfo','$rootScope','tmhDynamicLocale','$translate','Constants',
+    function (UserAuthorizationInfo, $rootScope, tmhDynamicLocale, $translate, Constants) {
 
     //Fields for user preference and authentication
     /**
@@ -50,12 +49,12 @@ myApp.service('UserPreferences', ['UserAuthorizationInfo','$rootScope','tmhDynam
      *@ngdoc method
      *@name setLanguage
      *@methodOf MUHCApp.service:UserPreferences
-     *@param {String} lan Either 'EN' or 'FR'
+     *@param {String} lang Either 'EN' or 'FR'
      *@param isAuthenticated
      *@description Setter method for patient language of preference
      **/
-    function setLang(lan, isAuthenticated = false){
-        if (lan == 'EN') {
+    function setLang(lang, isAuthenticated = false) {
+        if (lang == 'EN') {
             tmhDynamicLocale.set('en-ca');
             $translate.use('en');
             language = 'EN';
@@ -140,15 +139,15 @@ myApp.service('UserPreferences', ['UserAuthorizationInfo','$rootScope','tmhDynam
          **/
         initializeLanguage: function() {
             return new Promise((resolve) => {
-                var lan = window.localStorage.getItem('Language') || navigator.language || navigator.userLanguage;
-                lan = lan.substring(0, 2).toLowerCase();
+                var lang = window.localStorage.getItem('Language') || navigator.language || navigator.userLanguage;
+                lang = lang.substring(0, 2).toLowerCase();
                 //If language is not defined and its a device
-                if (!lan && app) {
+                if (!lang && Constants.app) {
                     //Finds out the language of the default storage
                     navigator.globalization.getPreferredLanguage(function (success) {
-                        var lan = success.value;
+                        var lang = success.value;
                         //Extract only the prefix for language
-                        setLang(lan.substring(0, 2).toUpperCase());
+                        setLang(lang.substring(0, 2).toUpperCase());
                         resolve(language);
                     }, function (error) {
                         // TODO log error.
@@ -156,7 +155,7 @@ myApp.service('UserPreferences', ['UserAuthorizationInfo','$rootScope','tmhDynam
                         resolve(language);
                     });
                 } else {
-                    setLang(lan.toUpperCase());
+                    setLang(lang.toUpperCase());
                     resolve(language);
                 }
             });

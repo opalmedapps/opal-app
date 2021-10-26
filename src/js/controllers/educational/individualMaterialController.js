@@ -22,23 +22,28 @@
         .controller('IndividualMaterialController', IndividualMaterialController);
 
     IndividualMaterialController.$inject = ['$scope', '$timeout', 'NavigatorParameters', 'EducationalMaterial',
-        'FileManagerService', '$filter', 'Logger', 'NetworkStatus', 'Patient'];
+        'FileManagerService', '$filter', 'Logger', 'Params', 'Toast', 'Constants'];
 
     /* @ngInject */
     function IndividualMaterialController($scope, $timeout, NavigatorParameters, EducationalMaterial,
-                                          FileManagerService, $filter, Logger, NetworkStatus, Patient) {
+                                          FileManagerService, $filter, Logger, Params, Toast, Constants) {
         var vm = this;
 
         var param;
         var navigatorPage;
-        var app;
 
         vm.loadingContents = false;
         vm.errorLoadingContents = false;
 
+        // Error message used when a pdf fails to download
+        vm.alert = {
+            type: Params.alertTypeDanger,
+            message: "OPEN_PDF_ERROR",
+        };
+
         vm.goToEducationalMaterial = goToEducationalMaterial;
-        vm.share = share;
-        vm.print = print;
+        vm.openPDF = openPDF;
+        vm.isShareable = isShareable;
 
         // Logging functions
         vm.scrollDown = scrollDown;
@@ -46,6 +51,10 @@
 
         // Function used to open a material contained in a package
         vm.goInPackage = goInPackage;
+
+        // Used by the share popover
+        $scope.popoverSharing = undefined;
+        $scope.share = share;
 
         activate();
         /////////////////////////////
@@ -71,29 +80,20 @@
             // RStep refers to recursive depth in a package (since packages can contain other packages).
             vm.recursive_step = param.RStep;
 
-            //Determine if material has a ShareURL and is printable
-            if(vm.edumaterial.ShareURL && vm.edumaterial.ShareURL !=="") {
-                vm.isPrintable = FileManagerService.isPDFDocument(vm.edumaterial.ShareURL);
-            }
-
-            //Determine if material is a booklet
-            var isBooklet = vm.edumaterial.hasOwnProperty('TableContents');
-
-            //Determine if material is an app
-            app = document.URL.indexOf('http://') === -1 && document.URL.indexOf('https://') === -1;
+            // Determine the material's display type (pdf, package, html, etc.)
+            vm.displayType = EducationalMaterial.getDisplayType(vm.edumaterial);
 
             //If its a booklet, translate table of contents
-            if (isBooklet) {
+            if (vm.displayType === "booklet") {
                 vm.tableOfContents = vm.edumaterial.TableContents;
                 vm.tableOfContents = EducationalMaterial.setLanguage(vm.tableOfContents);
             }
 
-            //Determining if its an individual php page to show immediately.
-            vm.isIndividualHtmlPage = (FileManagerService.getFileType(vm.edumaterial.URL_EN) === 'php');
-            if(vm.isIndividualHtmlPage) downloadIndividualPage();
+            // If the material is an html page to be shown immediately, download it
+            if(vm.displayType === "html") downloadIndividualPage();
 
             // Determine if it's a package.
-            if(vm.edumaterial.EducationalMaterialType_EN === "Package"){
+            if (vm.displayType === "package") {
 
                 vm.loadingContents = true;
 
@@ -128,7 +128,7 @@
         function bindEvents(){
             //Instantiating popover controller
             $timeout(function () {
-                ons.createPopover('./views/education/share-print-popover.html',{parentScope: $scope}).then(function (popover) {
+                ons.createPopover('./views/education/share-popover.html', {parentScope: $scope}).then(function (popover) {
                     $scope.popoverSharing = popover;
                 });
             }, 300);
@@ -140,64 +140,87 @@
         }
 
         function goToEducationalMaterial(index){
+            try {
+                let nextStatus = EducationalMaterial.openEducationalMaterialDetails(vm.edumaterial);
+                if (nextStatus !== -1) {
+                    NavigatorParameters.setParameters({ 'Navigator': navigatorPage, 'Index': index, 'Booklet': vm.edumaterial, 'TableOfContents': vm.tableOfContents });
+                    window[navigatorPage].pushPage(nextStatus.Url);
 
-            var nextStatus = EducationalMaterial.openEducationalMaterialDetails(vm.edumaterial);
-            if (nextStatus !== -1) {
-                NavigatorParameters.setParameters({ 'Navigator': navigatorPage, 'Index': index, 'Booklet': vm.edumaterial, 'TableOfContents': vm.tableOfContents });
-                window[navigatorPage].pushPage(nextStatus.Url);
+                    /* Most calls to logSubClickedEduMaterial() are handled by the function handlePostChangeEventCarousel()
+                     * in bookletMaterialController.js. However, the one special case (clicking on the first material in
+                     * a table of contents) is handled here. That's why logSubClickedEduMaterial() is only called if
+                     * index == 0.
+                     * -SB */
 
-                /* Most calls to logSubClickedEduMaterial() are handled by the function handlePostChangeEventCarousel()
-                 * in bookletMaterialController.js. However, the one special case (clicking on the first material in
-                 * a table of contents) is handled here. That's why logSubClickedEduMaterial() is only called if
-                 * index == 0.
-                 * -SB */
-
-                // Logs the sub material as clicked, if it is the first sub-material in the table of contents.
-                if (index == 0) {
-                    Logger.logSubClickedEduMaterial(vm.tableOfContents[index].EducationalMaterialTOCSerNum);
+                    // Logs the sub material as clicked, if it is the first sub-material in the table of contents.
+                    if (index == 0) {
+                        Logger.logSubClickedEduMaterial(vm.tableOfContents[index].EducationalMaterialTOCSerNum);
+                    }
                 }
+            }
+            catch (error) {
+                console.error(error);
+                Toast.showToast({
+                    message: $filter('translate')('EDU_OPEN_ERROR'),
+                });
             }
         }
 
-        function share(){
-            FileManagerService.shareDocument(vm.edumaterial.Name, vm.edumaterial.ShareURL);
-            $scope.popoverSharing.hide();
+        /**
+         * @description Special case of "goToEducationalMaterial" for opening pdfs.
+         *              Opens a pdf, showing a loading wheel while it downloads.
+         *              If the download/opening process fails, an error is displayed.
+         */
+        function openPDF() {
+            vm.loadingContents = true;
+            vm.errorLoadingContents = false;
+            EducationalMaterial.openEducationalMaterialPDF(vm.edumaterial).then(() => {
+                $timeout(() => {
+                    vm.loadingContents = false;
+                });
+            }).catch(error => {
+                console.error(JSON.stringify(error));
+                $timeout(() => {
+                    vm.loadingContents = false;
+                    vm.errorLoadingContents = true;
+                });
+            })
         }
 
-        // PrintPDF.print uses the plugin cordova-plugin-print-pdf
-        // 
-        // function print(){
-        //     //If no connection then simply alert the user to connect to the internet
-        //     $scope.popoverSharing.hide();
-        //     if(app && NetworkStatus.isOnline())
-        //     {
-        //         EducationalMaterial.getMaterialBinary(vm.edumaterial.ShareURL)
-        //             .then(function(){
-        //                 var blob = new Blob([this.response], { type: 'application/pdf' });
-        //                 var fileReader = new FileReader();
-        //                 fileReader.readAsDataURL(blob);
-        //                 fileReader.onloadend = function() {
-        //                     var base64data = fileReader.result;
-        //                     base64data = base64data.replace('data:application/pdf;base64,','');
-        //                     window.plugins.PrintPDF.print({
-        //                         data: base64data,
-        //                         type: 'Data',
-        //                         title: $filter('translate')("PRINTDOCUMENT"),
-        //                         success: function(){},
-        //                         error: function(data){
-        //                             ons.notification.alert({'message':$filter('translate')('ERROR_GETTING_EDU_MATERIAL')});
-        //                         }
-        //                     });
-        //                 }
-        //             })
-        //             .catch(function(){
-        //                 ons.notification.alert({'message':$filter('translate')('ERROR_GETTING_EDU_MATERIAL')});
-        //             });
-        //     }else{
-        //         $scope.popoverSharing.hide();
-        //         ons.notification.alert({'message':$filter('translate')("PRINTINGUNAVAILABLE")});
-        //     }
-        // }
+        /**
+         * @description Determines whether the material can be shared, based on whether it has a URL for this.
+         * @returns {boolean} True if the material can be shared; false otherwise.
+         */
+        function isShareable() {
+            return getURLToShare() !== "";
+        }
+
+        /**
+         * @description Returns the URL to use when sharing the material: if a ShareURL is provided, it is used.
+         *              Otherwise, it defaults to using the regular material URL, if one exists.
+         *              Note: materials without either URL (e.g. a booklet for which no ShareURL was provided)
+         *                    are not shareable.
+         * @author Stacey Beard
+         * @date 2021-10-08
+         * @returns {string} The URL to use to share the material if possible, or otherwise an empty string.
+         */
+        function getURLToShare() {
+            let shareURL = vm.edumaterial.ShareURL;
+            let regularURL = vm.edumaterial.Url;
+
+            if (shareURL && shareURL !== "") return shareURL;
+            else if (regularURL && regularURL !== "") return regularURL;
+            else return "";
+        }
+
+        /**
+         * @description Shares a document using cordova's social sharing plugin.
+         *              The document must first be saved to the device's internal memory.
+         *              Note: document sharing is not supported on a browser (a warning will be shown).
+         */
+        function share() {
+            FileManagerService.share(vm.edumaterial.Name, getURLToShare());
+        }
 
         function downloadIndividualPage()
         {
@@ -226,7 +249,7 @@
 
                 // This makes sure that scrolling is only checked here for HTML pages (not on Videos, Packages, etc.)
                 // [Scrolling is also checked for booklet sub-materials, handled in bookletMaterialController.]
-                if (vm.isIndividualHtmlPage) {
+                if (vm.displayType === "html") {
 
                     $.onscroll = function () {
                         EducationalMaterial.logScrolledToBottomIfApplicable($, {

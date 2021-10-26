@@ -16,7 +16,7 @@
 
         let appConstants =
             {
-                maxIdleTimeAllowed: 300000,
+                maxIdleTimeAllowed: 300000, // 300 000 ms = 5 min. If changed, also edit the "INACTIVE" string
                 tenMinutesMilliSeconds: 600000,
 
                 appointmentType: {
@@ -175,27 +175,6 @@
                         icon: 'fa fa-book',
                         color: '#FF7043'
                     },
-                },
-
-                /** newsBanner Service constants **/
-                newsAlertTypes: {
-                    'notifications': {
-                        Type: 'notifications',
-                        Color: '#5bc0de',
-                        Message: "NEWNOTIFICATIONS",
-                        Duration: 'short'
-                    },
-                    'nointernet': {
-                        Type: 'nointernet',
-                        Message: "NOINTERNETCONNECTION",
-                        Duration: 10000
-                    },
-                    'connected': {
-                        Type: 'connected',
-                        Color: '#5cb85c',
-                        Message: "CONNECTED",
-                        Duration: 'short'
-                    }
                 },
 
                 /** UpdateUi Service constants **/
