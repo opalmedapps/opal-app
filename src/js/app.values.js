@@ -177,21 +177,6 @@
                     },
                 },
 
-                /** UpdateUi Service constants **/
-                lastUpdateTimestamp: {
-                    'All': 0,
-                    'Appointments': 0,
-                    'Messages': 0,
-                    'Documents': 0,
-                    'Tasks': 0,
-                    'Doctors': 0,
-                    'LabTests': 0,
-                    'Patient': 0,
-                    'Notifications': 0,
-                    'EducationalMaterial': 0,
-                    'Questionnaires': 0
-                },
-
                 /** Multi-institutional hospital modules and codes **/
                 allowedModulesBeforeLogin: {
                     "DIA": 0,

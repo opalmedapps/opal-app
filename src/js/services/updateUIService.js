@@ -27,31 +27,13 @@ var myApp=angular.module('MUHCApp');
 myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors','Appointments',
     'Documents','EducationalMaterial', 'UserAuthorizationInfo', '$q', 'Notifications',
     '$cordovaNetwork', 'LocalStorage','RequestToServer','$filter','Diagnoses',
-    'NativeNotification', 'Tasks', 'Params',
+    'NativeNotification', 'Tasks',
 
     function (Announcements, TxTeamMessages, Patient,Doctors, Appointments, Documents,
               EducationalMaterial, UserAuthorizationInfo, $q, Notifications,
               $cordovaNetwork,LocalStorage,RequestToServer,$filter,Diagnoses,
-              NativeNotification, Tasks, Params ) {
-        /**
-         *@ngdoc property
-         *@name  MUHCApp.service.#lastUpdateTimestamp
-         *@propertyOf MUHCApp.service:UpdateUI
-         *@description Initiatiates object with all the timestamps
-         <pre> var lastUpdateTimestamp={
-        'All':0,
-        'Appointments':0,
-        //'Messages':0,
-        'Documents':0,
-        'Tasks':0,
-        'Doctors':0,
-        //'LabTests':0,
-        'Patient':0,
-        'Notifications':0,
-        'EducationalMaterial':0,
-  };</pre>
-         **/
-        var lastUpdateTimestamp = Params.lastUpdateTimestamp;
+              NativeNotification, Tasks) {
+
         /**
          *@ngdoc property
          *@name  MUHCApp.service.#promiseFields
@@ -74,7 +56,8 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors',
          var sectionServiceMappings={
               'Patient':{
                   setOnline:Patient.setUserFieldsOnline,
-                  update:Patient.setUserFieldsOnline
+                  update:Patient.setUserFieldsOnline,
+                  lastUpdated: 0,
               },
               ...
          **/
@@ -82,55 +65,67 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors',
             'All':
             {
                 init:setServices,
-                update:updateServices
+                update:updateServices,
+                lastUpdated: 0,
             },
             'Documents':
             {
                 init:Documents.setDocuments,
-                update:Documents.updateDocuments
+                update:Documents.updateDocuments,
+                lastUpdated: 0,
             },
             'Patient':{
                 setOnline:Patient.setUserFieldsOnline,
-                update:Patient.setUserFieldsOnline
+                update:Patient.setUserFieldsOnline,
+                lastUpdated: 0,
             },
             'Doctors':{
                 setOnline:Doctors.setUserContactsOnline,
-                update:Doctors.updateUserContacts
+                update:Doctors.updateUserContacts,
+                lastUpdated: 0,
             },
             'Appointments':{
                 init:Appointments.setUserAppointments,
-                update:Appointments.updateUserAppointments
+                update:Appointments.updateUserAppointments,
+                lastUpdated: 0,
             },
             'Tasks':{
                 init: Tasks.setPlanningTasks,
-                update:Tasks.setPlanningTasks
+                update:Tasks.setPlanningTasks,
+                lastUpdated: 0,
             },
             'Diagnosis':
             {
                 init:Diagnoses.setDiagnoses,
-                update:Diagnoses.updateDiagnoses
+                update:Diagnoses.updateDiagnoses,
+                lastUpdated: 0,
             },
             'TxTeamMessages':
             {
                 init:TxTeamMessages.setTxTeamMessages,
-                update:TxTeamMessages.updateTxTeamMessages
+                update:TxTeamMessages.updateTxTeamMessages,
+                lastUpdated: 0,
             },
             'Announcements':
             {
                 init:Announcements.setAnnouncements,
-                update:Announcements.updateAnnouncements
+                update:Announcements.updateAnnouncements,
+                lastUpdated: 0,
             },
             'EducationalMaterial':
             {
                 init:EducationalMaterial.setEducationalMaterial,
-                update:EducationalMaterial.updateEducationalMaterial
+                update:EducationalMaterial.updateEducationalMaterial,
+                lastUpdated: 0,
             },
             'Notifications':
             {
                 init:Notifications.initNotifications,
-                update:Notifications.updateUserNotifications
+                update:Notifications.updateUserNotifications,
+                lastUpdated: 0,
             }
         };
+
         function setPromises(type, dataUserObject)
         {
             var promises = [];
@@ -209,16 +204,10 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors',
             return r.promise;
         }
 
-
         function initTimestamps(time)
         {
-            for(var field in lastUpdateTimestamp)
-            {
-                lastUpdateTimestamp[field] = time;
-            }
-            window.localStorage.setItem(UserAuthorizationInfo.getUsername()+'/Timestamps',JSON.stringify(lastUpdateTimestamp));
+            for (let section in sectionServiceMappings) sectionServiceMappings[section].lastUpdated = time;
         }
-
 
         /**
          * Update sections
@@ -226,7 +215,12 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors',
         function updateSection(parameters)
         {
             var r = $q.defer();
-            RequestToServer.sendRequestWithResponse('Refresh',{Fields:parameters}).then(
+
+            let refreshParams = {
+                Fields: parameters,
+                Timestamp: findSmallestTimestamp(parameters),
+            };
+            RequestToServer.sendRequestWithResponse('Refresh', refreshParams).then(
                 function(data)
                 {
                     if(data.Data =="Empty")
@@ -255,19 +249,9 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors',
 
         function updateTimestamps(content,time)
         {
-            if(content=='All')
-            {
-                lastUpdateTimestamp.All = time;
-            }else if(angular.isArray(content))
-            {
-                var min=Infinity;
-                for (var i = 0; i < content.length; i++) {
-                    lastUpdateTimestamp[content[i]] = time;
-                }
-            }else{
-                lastUpdateTimestamp[content] = time;
-            }
-            window.localStorage.setItem(UserAuthorizationInfo.getUsername()+'/Timestamps',JSON.stringify(lastUpdateTimestamp));
+            if(content === 'All') for (let section of sectionServiceMappings) section.lastUpdated = time;
+            else if(angular.isArray(content)) for (let section of content) sectionServiceMappings[section].lastUpdated = time;
+            else sectionServiceMappings[content].lastUpdated = time;
         }
         /**
          * Reset sections
@@ -301,22 +285,15 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors',
          */
         function findSmallestTimestamp(content)
         {
-            if(content=='All')
-            {
-                return lastUpdateTimestamp.All;
-            }else if(angular.isArray(content))
-            {
-                var min=Infinity;
-                for (var i = 0; i < content.length; i++) {
-                    if(min>lastUpdateTimestamp[content[i]])
-                    {
-                        min=lastUpdateTimestamp[content[i]];
-                    }
-                }
-                return min;
-            }else{
-                return lastUpdateTimestamp[content];
+            if (content === 'All') return findSmallestTimestamp(sectionServiceMappings.keys);
+            else if(angular.isArray(content)) {
+                content.reduce((min, section) => {
+                    let lastUpdated = sectionServiceMappings[section].lastUpdated;
+                    if (lastUpdated < min) return lastUpdated;
+                    else return min;
+                }, Infinity);
             }
+            else return sectionServiceMappings[content].lastUpdated;
         }
 
         return {
@@ -343,6 +320,7 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors',
              **/
             set:function(parameters)
             {
+                // TODO validate input (should be categories that exists)
                 return setSection(parameters);
             },
             /**
@@ -374,7 +352,7 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors',
              **/
             clearUpdateUI:function()
             {
-                lastUpdateTimestamp = Params.lastUpdateTimestamp;
+                initTimestamps(0);
             }
         };
 

@@ -34,34 +34,30 @@
         vm.language = '';
         vm.noDiagnosis = false;
         vm.showHeader = showHeader;
+
+        // Used by patient-data-initializer
+        vm.loading = false;
+        vm.setDiagnosesView = setDiagnosesView;
+
         activate();
 
         ////////////////
 
         function activate() {
-
-            //load the diagnoses array into view
-            vm.diagnoses = Diagnoses.getDiagnoses();
-            setDiagnosesView(vm.diagnoses);
-
-            if(vm.diagnoses.length === 0){
-                vm.noDiagnosis = true;
-            }
-
-            //grab the language
             vm.language = UserPreferences.getLanguage();
+            setDiagnosesView();
         }
 
-        // Function to remove the diagnoses from the list if the diagnoses name has N/A or n/a
-        function setDiagnosesView(diagnoses) {
-            let filterDiagnoses = [];
-            for (var i = 0, j = 0; i < diagnoses.length; i++) {
-                if ((diagnoses[i].Description_EN).toUpperCase() !== 'N/A' || (diagnoses[i].Description_FR).toUpperCase() !== 'N/A') {
-                    filterDiagnoses[j] = diagnoses[i];
-                    j++;
-                }
-            }
-            vm.diagnoses = filterDiagnoses;
+        /**
+         * @description Filters and displays the diagnoses from the Diagnoses service. N/A diagnoses are not shown.
+         */
+        function setDiagnosesView() {
+            // Filter out "N/A" diagnoses
+            vm.diagnoses = Diagnoses.getDiagnoses().filter(e => {
+                return e[`Description_${vm.language}`].toUpperCase() !== 'N/A';
+            });
+
+            vm.noDiagnosis = vm.diagnoses.length === 0;
         }
         
         // Determines whether or not to show the date header in the view. Announcements are grouped by day.
@@ -73,7 +69,4 @@
             return current !== previous;
         }
     }
-
 })();
-
-

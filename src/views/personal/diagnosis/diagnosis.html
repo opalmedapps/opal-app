@@ -4,7 +4,20 @@
         <div class="center" ng-class="fontSizeTitle">{{"DIAGNOSIS"|translate}}</div>
     </ons-toolbar>
     <network-banner></network-banner>
-    <div>
+
+    <ons-pull-hook ng-action="diag.pullHookRefresh($done)">
+        <patient-data-refresher category="Diagnosis"
+                                display-function="diag.setDiagnosesView"
+                                refresh="diag.pullHookRefresh"
+        ></patient-data-refresher>
+    </ons-pull-hook>
+
+    <patient-data-initializer category="Diagnosis"
+                              loading="diag.loading"
+                              display-function="diag.setDiagnosesView"
+    ></patient-data-initializer>
+
+    <div ng-show="!diag.loading">
         <ons-list class="settings-list" ng-repeat="diagnosis in diag.diagnoses | orderBy: '-CreationDate' ">
             <ons-list-header   class="person-list-header" ng-class="fontSizeTitle" ng-show="diag.showHeader($index)">{{diagnosis.CreationDate|date:'fullDate'}}</ons-list-header>
             <ons-list-item class="item">
@@ -21,7 +34,6 @@
                 </ons-row>
             </ons-list-item>
         </ons-list>
-
     </div>
 
     <div style="color:grey;margin-top:25vh" ng-show="diag.noDiagnosis" align="center" ng-class="fontSizeTitle">
