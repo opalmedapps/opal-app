@@ -45,7 +45,6 @@
 
         function activate() {
             vm.language = UserPreferences.getLanguage();
-            setDiagnosesView();
         }
 
         /**

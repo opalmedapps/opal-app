@@ -18,13 +18,14 @@
         let directive = {
             restrict: 'E',
             scope: {
-                // The data category to initialize from UpdateUI
+                // The category of data to initialize from UpdateUI
                 "category": "@",
 
                 // Function called when the data is done loading, to display it in the parent view
                 "displayFunction": "=",
 
-                // Indicates that the data is loading. Can be used by the controller to hide content while this directive fetches data.
+                // Variable provided by the directive. Indicates that the data is loading.
+                // Can be used by the controller to hide content while this directive fetches data.
                 "loading": "=",
 
                 // Optional parameter to override the loading wheel's top margin

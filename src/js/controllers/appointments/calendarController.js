@@ -83,6 +83,10 @@
         vm.onDateChange = onDateChange;
         vm.scrollToAnchor = scrollToAnchor;
 
+        // Used by patient-data-initializer
+        vm.loading = false;
+        vm.setAppointmentsView = setAppointmentsView;
+
         activate();
 
         //////////////////////////////////////////////////////
@@ -109,16 +113,21 @@
 
             // Get the name of the current navigator
             navigatorName = NavigatorParameters.getParameters().Navigator;
+        }
 
+        /**
+         * @description Updates and displays the visible list of appointments and calendar.
+         */
+        function setAppointmentsView() {
             vm.appointments=Appointments.getUserAppointments();
             vm.noAppointments = (vm.appointments.length === 0);
             if(vm.appointments.length>0) {
-                
+
                 //Setting time in milliseconds for last appointment
                 dateLast=(new Date(vm.appointments[vm.appointments.length-1].ScheduledStartTime.getTime()));
                 dateLast.setHours(0,0,0,0);
                 dateLast = dateLast.getTime();
-                
+
                 //Setting time in milliseconds for first appointment
                 dateFirst=(new Date(vm.appointments[0].ScheduledStartTime.getTime()));
                 dateFirst.setHours(0,0,0,0);
