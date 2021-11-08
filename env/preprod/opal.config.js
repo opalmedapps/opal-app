@@ -3,7 +3,7 @@ const config = {
     name: "Opal Pre Prod",
     env: "preprod",
     dev: true,
-    firebase:{
+    firebase: {
         apiKey: "AIzaSyAGBV2Zwr0SYKy_J92jceof-OFeeFmm0Gw",
         authDomain: "opal-prod.firebaseapp.com",
         databaseURL: "https://opal-prod.firebaseio.com",

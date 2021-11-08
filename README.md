@@ -129,7 +129,7 @@ For more information about versioning, please read [Versioning](https://github.c
 
 6. Test the installation on your localhost.
     ```
-    npm run start
+    npm run start --env=staging
     ```
    This command will open a browser at the address `http://localhost:9000`, and once the app compiles, it will launch the app. 
    A few notes:
@@ -143,7 +143,7 @@ For more information about versioning, please read [Versioning](https://github.c
       This means that the code will not be compiled to the `www` folder which Cordova uses to build the app. 
       If that's the desired outcome, use the following command to build and compile the app into the `www` folder instead:
       ```
-      npm run build:web:staging
+      npm run build:web --env=staging
       ```
     For more information on `webpack-dev-server`, go to: https://webpack.js.org/guides/development/ under the `webpack-dev-server` section.
 
@@ -169,11 +169,11 @@ Install http-server
    This globally installs a simple, zero-configuration command line server that may be used to host the Opal app locally when developing in the browser.
    Sometimes it is useful to quickly have a server in order to
    test a particular page or app. For this http-server is a great package.
-   For instance, an alternative to `npm run start:web:staging` which uses the _webpack-dev-server_,
-   is to build the web app using `npm run build:web:staging -- --watch`, change directory to
+   For instance, an alternative to `npm run start:web --env=staging` which uses the _webpack-dev-server_,
+   is to build the web app using `npm run build:web --env=staging -- --watch`, change directory to
    the `www` folder and run `http-server` inside this directory. In one command:
    ```
-   $npm run build:web:staging && cd www && http-server --port 9000 --open # Build the app, and serve it in port 9000
+   $npm run build:web --env=staging -- --watch && cd www && http-server --port 9000 --open # Build the app, and serve it in port 9000
    ```
    This will watch the app code for changes, update the distribution folder (www) when a change is made which the 
    http-server would then pickup upon refreshing the page.
@@ -189,14 +189,12 @@ This is the end of the section on installing the frontend Opal app. If you are a
     
     Create an empty `www` folder in your project. Otherwise, you may get the following error from Cordova: `Current working directory is not a Cordova-based project.` This folder may be deleted and re-created if needed.
     
-3. To build the app run:
+3. To build the app, run the following commands (if needed, replace `staging` with one of the folder names in `./env`
+    to use a different environment). These commands make sure the Cordova plugins and platforms are up-to-date,
+    build the web app and then run the `cordova build` command for Android or iOS, resulting in the compiled `platforms` folder.
     ```
-    npm run build:app:staging
-    ```
-    The command above makes sure the Cordova plugins and platforms are *up-to-date*, builds the web app and then runs the `cordova build` command for both Android and iOS resulting in the compiled `platforms` folder. To build platform specific code run:
-    ```
-    npm run build:app:staging:ios
-    npm run build:app:staging:android
+    npm run build:app:ios --env=staging
+    npm run build:app:android --env=staging
     ```
 
 4. Finally, to run the app in an emulator run:
@@ -219,9 +217,9 @@ Take some time to understand what they do, to help you manipulate the project be
 Note that these commands are explicitly related in terms of dependent steps, so once you understand the structure, 
 you may choose to run them differently. For instance, the command:
 ```
-  npm run start:app:staging:ios # Build and run in iOS
+  npm run start:app:ios --env=staging # Build and run in iOS
 ```
-Calls in sequence `npm run build:app:staging:ios && cordova run ios`. 
+Calls in sequence `npm run prepare:app && npm run build:web && cordova run ios`, carrying along the `--env=staging` variable as it goes.
 You may choose to simply run `cordova run ios`, if you know there is a current valid Cordova build.
 
 ## Troubleshooting

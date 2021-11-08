@@ -82,7 +82,7 @@
 
             $rootScope.$on("MonitorLoggedInUsers", function (event, uid) {
                 $rootScope.firstTime = true;
-                if (OPAL_CONFIG.env !== "staging") {
+                if (["prod", "preprod"].includes(OPAL_CONFIG.env)) {
                     addUserListener(uid);
                 }
             });

@@ -86,7 +86,7 @@
 				if (err.code === "INIT_ERROR") Toast.showToast({
 					message: $filter('translate')("ERROR_INIT_LINKS"),
 				});
-
+				else if (err.code === "NO_PAGE_CONTENT") console.warn(`No message of the day set up for environment "${vm.OPAL_ENV}"`);
 				else console.error("Error initializing the message of the day using DynamicContent:", err);
 			});
 

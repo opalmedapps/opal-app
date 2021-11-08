@@ -1,29 +1,31 @@
 const fs = require("fs");
 const shelljs = require("shelljs");
-const path = require("path");
 const semver = require("semver");
 const xmlJs = require("xml-js");
 
 class OpalEnv {
 	/**
 	 * Function verifies the Opal environment directory exists, throws error if it does not find it.
-	 * @param {string} env string value for the environment normally one of ['staging', 'preprod', 'prod']
+	 * @param {string} env string value for the environment, normally one of ['local', 'dev', 'staging', 'preprod', 'prod'].
 	 */
 	static verifyOpalEnvironmentExists(env = null) {
 		if (env) {
 			const environments = this.getDirectories("./env");
 			// Check if environment exists in folder
 			if (environments.indexOf(env) === -1) {
-				throw new Error(`Unable to find environment "${env}" in ./env folder, please choose one of the following: ${environments.join(", ")}`);
+				let error = env.includes("npm_config_env")
+					? `Use --env=___ at the end of your npm command to specify an environment to use; available choices: ${environments.join(", ")}`
+					: `Unable to find environment "${env}" in ./env folder, please choose one of the following: ${environments.join(", ")}`;
+				throw new Error(error);
 			}
 		}
 	}
 
 	/**
-	 * Function takes the environment string, normally one of ['preprod', 'prod', 'staging'] and copies the files over
-	 * to the root directory, if no environment is set, the default is to do nothing, this assumes the files in the root
-	 * directory are present already.
-	 * @param {string} env string value for the environment normally one of ['staging', 'preprod', 'prod']
+	 * Function takes the environment string and copies the files over to the root directory.
+	 * If no environment is set, the default is to do nothing.
+	 * This assumes the files in the root directory are present already.
+	 * @param {string} env string value for the environment, normally one of ['local', 'dev', 'staging', 'preprod', 'prod'].
 	 */
 	static copyEnvironmentFiles(env = null) {
 		if (env) {
@@ -40,18 +42,34 @@ class OpalEnv {
      * @description Updates the file web-version.json with the app's web version, taken from config.xml of the
      *              specified environment. The web version is made available throughout the app as WEB_VERSION.version
      *              and WEB_VERSION.build via webpack's ProvidePlugin.
+	 *              If the config.xml file is not found, generic default version numbers are used.
      *              Note: since the build number in config.xml is repeated twice, the Android one is used here.
-     * @param {string} env Environment from which to get the version, normally one of ['staging', 'preprod', 'prod'].
+     * @param {string} env Environment from which to get the version, normally one of ['local', 'dev', 'staging', 'preprod', 'prod'].
      */
 	static updateWebVersion(env) {
 
         const initialDirectory = shelljs.pwd().toString();
         this.setDirectory(env);
 
-        const versionNumber = this.getVersion();
-        const buildNumber = this.getBuildNumbers()[1];
+        let versionNumber, buildNumber;
 
-        /* Write the version number to ./web-version.json, which is made accessible everywhere in the app using
+        // Try to set the build and version numbers, or use defaults upon failure
+        try {
+        	versionNumber = this.getVersion();
+        }
+        catch (error) {
+        	versionNumber = "100.100.100";
+        	console.warn(`No version number found; using ${versionNumber}`);
+		}
+		try {
+        	buildNumber = this.getBuildNumbers()[1];
+        }
+		catch (error) {
+			buildNumber = "1";
+			console.warn(`No build number found; using ${buildNumber}`);
+		}
+
+        /* Write the numbers to ./web-version.json, which is made accessible everywhere in the app using
          * the webpack ProvidePlugin (as WEB_VERSION). The values in this file are used as the app's web version number.
          */
         fs.writeFileSync("../../web-version.json", `{\n`
