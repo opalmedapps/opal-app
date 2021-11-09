@@ -57,7 +57,6 @@
             NavigatorParameters.setNavigator(educationNavigator);
 
             bindEvents();
-            configureState();
             configureSelectedHospital();
         }
 
