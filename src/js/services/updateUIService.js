@@ -287,7 +287,8 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors',
         {
             if (content === 'All') return findSmallestTimestamp(sectionServiceMappings.keys);
             else if(angular.isArray(content)) {
-                content.reduce((min, section) => {
+                if (content.length === 0) return undefined;
+                return content.reduce((min, section) => {
                     let lastUpdated = sectionServiceMappings[section].lastUpdated;
                     if (lastUpdated < min) return lastUpdated;
                     else return min;
