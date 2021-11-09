@@ -23,6 +23,7 @@
         .controller('AnnouncementsController', AnnouncementsController);
 
     AnnouncementsController.$inject = [
+        '$filter',
         'Announcements',
         'NavigatorParameters',
         '$scope'
@@ -30,6 +31,7 @@
 
     /* @ngInject */
     function AnnouncementsController(
+        $filter,
         Announcements,
         NavigatorParameters,
         $scope
@@ -57,22 +59,27 @@
         vm.goToAnnouncement = goToAnnouncement;
         vm.showHeader = showHeader;
 
+        // Used by patient-data-initializer
+        vm.loading = false;
+        vm.setAnnouncementsView = setAnnouncementsView;
+
         activate();
 
         ////////////////
 
         function activate() {
+
+        }
+
+        /**
+         * @description Filters and displays the announcements from the Announcements service.
+         */
+        function setAnnouncementsView() {
             var announcements = Announcements.getAnnouncements();
             announcements = Announcements.setLanguage(announcements);
             if (announcements.length>0) {
                 vm.noAnnouncements = false;
-                announcements.sort(function(a, b) {
-
-                    // TODO: USE EXTERNAL HELPER WHEN CALLING SORT FUNCTION
-
-                    return new Date(b.DateAdded) - new Date(a.DateAdded);
-                });
-                vm.announcements=announcements;
+                vm.announcements = $filter('orderBy')(announcements, '-DateAdded');
             }
         }
 

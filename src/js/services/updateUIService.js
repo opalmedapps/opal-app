@@ -336,7 +336,6 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors',
                     'Patient',
                     'Tasks',
                     'Notifications',
-                    'Announcements'
                 ]);
 
             },
