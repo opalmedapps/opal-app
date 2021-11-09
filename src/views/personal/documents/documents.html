@@ -6,7 +6,20 @@
         <div class="center" ng-class="fontSizeTitle">{{"CLINICAL_NOTES"|translate}}</div>
     </ons-toolbar>
     <network-banner></network-banner>
-    <div>
+
+    <ons-pull-hook ng-action="docs.pullHookRefresh($done)">
+        <patient-data-refresher category="Documents"
+                                display-function="docs.setDocumentsView"
+                                refresh="docs.pullHookRefresh"
+        ></patient-data-refresher>
+    </ons-pull-hook>
+
+    <patient-data-initializer category="Documents"
+                              loading="docs.loading"
+                              display-function="docs.setDocumentsView"
+    ></patient-data-initializer>
+
+    <div ng-show="!docs.loading">
         <div style="color:grey;margin-top:25vh" ng-show="docs.noDocuments" align="center" ng-class="fontSizeTitle">
             {{"NOPATIENTDOCUMENTSAVAILABLE"|translate}}
         </div>

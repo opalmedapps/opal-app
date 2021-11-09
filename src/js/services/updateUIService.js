@@ -337,7 +337,6 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors',
                     'Tasks',
                     'TxTeamMessages',
                     'EducationalMaterial',
-                    'Documents',
                     'Notifications',
                     'Announcements'
                 ]);

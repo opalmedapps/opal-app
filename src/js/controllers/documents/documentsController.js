@@ -20,13 +20,22 @@
         vm.goToDocument = goToDocument;
         vm.showHeader = showHeader;
 
+        // Used by patient-data-initializer
+        vm.loading = false;
+        vm.setDocumentsView = setDocumentsView;
+
         activate();
 
         ////////////////
 
         function activate() {
             Logger.sendLog('Documents', 'all');
+        }
 
+        /**
+         * @description Filters and displays the documents from the Documents service.
+         */
+        function setDocumentsView() {
             var documents = Documents.getDocuments();
             documents = Documents.setDocumentsLanguage(documents);
 
@@ -35,7 +44,6 @@
             $timeout(function(){
                 vm.documents = $filter('orderBy')(documents,'documents.CreatedTimeStamp');
             })
-
         }
 
         //Go to document function, if not read, read it, then set parameters for navigation
@@ -62,8 +70,5 @@
                 return (current !== previous);
             }
         }
-
     }
-
 })();
-
