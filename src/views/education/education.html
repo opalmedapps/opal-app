@@ -12,22 +12,36 @@
     <!-- NETWORK BANNER -->
     <network-banner></network-banner>
 
+    <!-- DATA REFRESHER -->
+    <ons-pull-hook ng-action="edu.pullHookRefresh($done)">
+        <patient-data-refresher category="EducationalMaterial"
+                                display-function="edu.configureState"
+                                refresh="edu.pullHookRefresh"
+        ></patient-data-refresher>
+    </ons-pull-hook>
+
+    <!-- DATA INITIALIZER AND LOADING WHEEL -->
+    <patient-data-initializer category="EducationalMaterial"
+                              loading="edu.loading"
+                              display-function="edu.configureState"
+    ></patient-data-initializer>
+
     <!-- SEARCH BAR -->
-    <div class="navigation-bar" style="position:sticky; top:3rem">
+    <div ng-hide="edu.loading || edu.noMaterials" class="navigation-bar" style="position:sticky; top:3rem">
         <div class="navigation-bar__center" style="display:block">
-            <input ng-hide="edu.noMaterials" ng-model="edu.searchString" ng-change="edu.filterMaterial()"
+            <input ng-model="edu.searchString" ng-change="edu.filterMaterial()"
                    type="search" class="search-input" style="width: 96%; margin: 6px auto 6px auto;"
                    placeholder="{{'SEARCH_EDU'|translate}}" ng-class="fontSizeDesc">
         </div>
     </div>
 
     <!-- NO MATERIAL TEXT -->
-    <div style="color:grey;margin-top:25vh" ng-show="edu.noMaterials" align="center" ng-class="fontSizeTitle" style="margin-left: 10px; margin-right: 10px">
+    <div style="color:grey;margin-top:25vh" ng-show="edu.noMaterials && !edu.loading" align="center" ng-class="fontSizeTitle" style="margin-left: 10px; margin-right: 10px">
         {{"NOEDUCATIONALMATERIAL"|translate}}
     </div>
 
     <!-- LIST OF EDUCATIONAL MATERIALS -->
-    <ons-scroller-height offset-height="78">
+    <ons-scroller-height ng-hide="edu.loading" offset-height="78">
         <ons-list ng-repeat="edumaterial in edu.filteredEduMaterials | orderBy: '-DateAdded'" ng-click="edu.goToEducationalMaterial(edumaterial)">
             <ons-list-header class="person-list-header" ng-class="fontSizeTitle" ng-show="edu.showHeader($index)">{{edumaterial.DateAdded|date:'fullDate'}}</ons-list-header>
             <ons-list-item modifier="chevron" class="item">
