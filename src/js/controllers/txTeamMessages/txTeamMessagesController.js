@@ -20,11 +20,22 @@
         vm.goToTeamMessage = goToTeamMessage;
         vm.showHeader = showHeader;
 
+        // Used by patient-data-initializer
+        vm.loading = false;
+        vm.setTxTeamMessagesView = setTxTeamMessagesView;
+
         activate();
 
         //////////////////////////////
 
         function activate(){
+
+        }
+
+        /**
+         * @description Filters and displays the treating team messages from the TxTeamMessages service.
+         */
+        function setTxTeamMessagesView() {
             vm.noMessages = true;
             var messages = TxTeamMessages.setLanguageTxTeamMessages(TxTeamMessages.getTxTeamMessages());
             if (messages.length > 0) vm.noMessages = false;
@@ -32,7 +43,6 @@
             $timeout(function(){
                 vm.txTeamMessages = messages
             });
-
         }
 
         function goToTeamMessage(message){
@@ -53,5 +63,3 @@
         }
     }
 })();
-
-

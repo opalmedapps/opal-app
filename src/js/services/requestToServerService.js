@@ -25,7 +25,7 @@ myApp.service('RequestToServer',['UserAuthorizationInfo', 'EncryptionService',
             let requestParameters;
 
             // TODO: this makes a copy of the parameters to avoid encrypting the originals. Do this in the encryption function instead.
-            parameters = JSON.parse(JSON.stringify(parameters));
+            if (parameters) parameters = JSON.parse(JSON.stringify(parameters));
 
             if (encryptionKey) {
                 requestType = typeOfRequest;

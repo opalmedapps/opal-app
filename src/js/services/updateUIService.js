@@ -335,7 +335,6 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors',
                 return initServicesFromServer([
                     'Patient',
                     'Tasks',
-                    'TxTeamMessages',
                     'EducationalMaterial',
                     'Notifications',
                     'Announcements'
