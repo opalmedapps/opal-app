@@ -13,3 +13,13 @@
 /GoogleService-Info.plist
 /web-version.json
 /www
+
+# Environments
+# 1- dev: no official build
+env/dev/config.xml
+env/dev/google-services.json
+
+# 2- local: completely untracked (user-specific)
+env/local/config.xml
+env/local/google-services.json
+env/local/opal.config.js
