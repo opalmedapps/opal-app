@@ -125,6 +125,7 @@
     "LEAVING_APP4": "Notez que vous quittez l'application pour ouvrir un navigateur externe.",
     "LEAVING_APP_LABS": "Veuillez noter que vous quittez l'application pour ouvrir un site Web externe. Ce site est offert à titre informatif seulement; ne fournissez aucune de vos données personnelles.",
     "LOADING": "Chargement",
+    "LOADING_ERROR": "Une erreur est survenue lors du chargement de vos données. Veuillez réessayer plus tard.",
     "LOADINGAPPOINTMENTS": "Chargement de vos rendez-vous...",
     "LOADINGDATA": "Chargement des données",
     "LOADINGDOCUMENT": "Chargement de votre document...",

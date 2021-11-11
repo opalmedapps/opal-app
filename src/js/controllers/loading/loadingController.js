@@ -34,10 +34,12 @@
                     RequestToServer.sendRequestWithResponse('AccountChange', {NewValue: UserPreferences.getLanguage(), FieldToChange: 'Language'});
 
                     //fetch all the tab metadata TODO: add the fetching of all the other data
-                    UpdateUI.set([
+                    UpdateUI.getData([
                         'Doctors',
                     ]).then(function(){
                         MetaData.init();
+                    }).catch(error => {
+                        console.error("Failed to fetch Doctors data from server:", error);
                     });
 
                     PlanningSteps.initializePlanningSequence();

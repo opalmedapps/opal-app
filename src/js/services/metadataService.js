@@ -88,7 +88,7 @@
             generalTabData.announcementsUnreadNumber = Announcements.getNumberUnreadAnnouncements();
 
            //load the educational tab data
-            noMaterials = !EducationalMaterial.isThereEducationalMaterial();
+            noMaterials = !EducationalMaterial.materialExists();
             var materials = EducationalMaterial.getEducationalMaterial();
             //Setting the language for view
             eduMaterials = EducationalMaterial.setLanguage(materials);

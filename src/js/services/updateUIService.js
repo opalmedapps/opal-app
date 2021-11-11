@@ -156,6 +156,7 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors',
             });
             return r.promise;
         }
+
         function updateServices(dataUserObject){
             var r = $q.defer();
             $q.all(setPromises('update', dataUserObject)).then(function(result)
@@ -205,43 +206,43 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors',
         }
 
         /**
-         * Update sections
+         * @description Queries the backend for newly updated data in the given categories, receiving only data that has
+         *              been changed since the last update. Updates the corresponding services with this new data.
+         * @param {Array<string>} parameters - The categories of data to update.
+         * @returns {Promise<void>} Resolves if all data was successfully updated, or rejects with an error.
          */
-        function updateSection(parameters)
+        async function updateSection(parameters)
         {
             console.log(`Updating ${parameters}`);
-            var r = $q.defer();
 
             let refreshParams = {
                 Fields: parameters,
                 Timestamp: findSmallestTimestamp(parameters),
             };
-            RequestToServer.sendRequestWithResponse('Refresh', refreshParams).then(
-                function(data)
-                {
-                    if(data.Data =="Empty")
-                    {
-                        updateTimestamps(parameters, data.Timestamp);
-                        r.resolve(true);
-                    }else{
-                        updateServices(data.Data).then(function()
-                        {
-                            updateTimestamps(parameters, data.Timestamp);
-                            r.resolve(true);
-                        });
-                    }
-                }).catch(function(error)
-            {
-                if(typeof error =='object'&&error.Response=='timeout')
-                {
-                    NativeNotification.showNotificationAlert($filter('translate')("ERRORCONTACTINGHOSPITAL"));
-                }else{
-                    if(error.Code !== '3') NativeNotification.showNotificationAlert($filter('translate')("ERRORCONTACTINGHOSPITAL"));
-                }
-                r.reject(error);
-            });
-            return r.promise;
+
+            let response = await RequestToServer.sendRequestWithResponse('Refresh', refreshParams);
+            if (response.Data && response.Data !== "empty") await updateServices(response.Data);
+            updateTimestamps(parameters, response.Timestamp);
         }
+
+        /**
+         * @description Queries the backend for all data in each of the given categories. Initializes the corresponding
+         *              services with this data (clearing any existing data).
+         * @param {Array<string>} parameters - The categories of data to initialize.
+         * @returns {Promise<void>} Resolves if all data was successfully initialized, or rejects with an error.
+         */
+        async function setSection(parameters)
+        {
+            console.log(`Initializing ${parameters}`);
+
+            let response = await RequestToServer.sendRequestWithResponse('Refresh', {Fields: parameters});
+            if (response.Data && response.Data !== "empty") await setServices(response.Data, 'setOnline');
+            updateTimestamps(parameters, response.Timestamp);
+        }
+
+        /**
+         * Helper functions
+         */
 
         function updateTimestamps(content,time)
         {
@@ -250,37 +251,7 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors',
             else if(angular.isArray(content)) for (let section of content) sectionServiceMappings[section].lastUpdated = time;
             else sectionServiceMappings[content].lastUpdated = time;
         }
-        /**
-         * Reset sections
-         */
-        function setSection(parameters)
-        {
-            console.log(`Initializing ${parameters}`);
-            var r = $q.defer();
-            RequestToServer.sendRequestWithResponse('Refresh',{Fields:parameters}).then(
-                function(data)
-                {
-                    if(data.Data === "Empty")
-                    {
-                        updateTimestamps(parameters, data.Timestamp);
-                        r.resolve(true);
-                    }else{
-                        setServices(data.Data,'setOnline').then(function()
-                        {
-                            updateTimestamps(parameters, data.Timestamp);
-                            r.resolve(true);
-                        });
-                    }
-                }).catch(function(error)
-            {
-                if(error.Code !== '3' || error.Response === 'timeout') NativeNotification.showNotificationAlert($filter('translate')("ERRORCONTACTINGHOSPITAL"));
-                r.reject(error);
-            });
-            return r.promise;
-        }
-        /**
-         * Helper functions
-         */
+
         function findSmallestTimestamp(content)
         {
             if (content === 'All') return findSmallestTimestamp(Object.keys(sectionServiceMappings));
@@ -324,32 +295,6 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors',
         }
 
         return {
-            //Function to update fields in the app, it does not initialize them, it only updates the new fields.
-            //Parameter only defined when its a particular array of values.
-            /**
-             *@ngdoc method
-             *@name update
-             *@methodOf MUHCApp.service:UpdateUI
-             *@param {String||Array} parameters Could be a string or an array, parameter signifying the sections to update, i.e. 'All', or ['Appointments','Documents'].
-             *@description  asks the backend for the most recent data in the parameters
-             object, gets the data and updates the corresponding services with this new data.
-             **/
-            update:function(parameters)
-            {
-                return updateSection(parameters);
-            },
-            /**
-             *@ngdoc method
-             *@name reset
-             *@methodOf MUHCApp.service:UpdateUI
-             *@param {String,Array} parameters Could be a string or an array, parameter signifying the sections to update, i.e. 'All', or ['Appointments','Documents'].
-             *@description Completely reinstantiates services specified by the parameter by obtaining all the data from the Hospital and re-setting them.
-             **/
-            set:function(parameters)
-            {
-                // TODO validate input (should be categories that exists)
-                return setSection(parameters);
-            },
 
             getData: getData,
 
@@ -380,5 +325,5 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors',
                 updateTimestamps(Object.keys(sectionServiceMappings), 0)
             }
         };
-
-    }]);
+    }
+]);

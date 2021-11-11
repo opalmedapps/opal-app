@@ -86,6 +86,8 @@
                             if (scope.displayFunction) scope.displayFunction();
                             if ($done) $done();
                         });
+                    }).catch(error => {
+                        console.error(error);
                     });
                 }
             },

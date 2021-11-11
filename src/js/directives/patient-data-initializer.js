@@ -5,7 +5,7 @@
         .module("MUHCApp")
         .directive("patientDataInitializer", PatientDataInitializer);
 
-    PatientDataInitializer.$inject = ["$timeout", "UpdateUI"];
+    PatientDataInitializer.$inject = ["$timeout", "Params", "UpdateUI"];
 
     /**
      * @name PatientDataInitializer
@@ -14,7 +14,7 @@
      * @description Directive used to initialize patient data in one of the categories supported by UpdateUI.
      *              Includes a loading wheel.
      */
-    function PatientDataInitializer($timeout, UpdateUI) {
+    function PatientDataInitializer($timeout, Params, UpdateUI) {
         let directive = {
             restrict: 'E',
             scope: {
@@ -31,19 +31,35 @@
                 // Optional parameter to override the loading wheel's top margin
                 "marginTop": "@",
             },
-            template: `<loading-spinning-circle ng-show="loading"
+            template: `<!-- Loading wheel -->
+                       <loading-spinning-circle ng-show="loading"
                                                 loading-message="{{'LOADING'|translate}}"
                                                 margintop="{{loadingMarginTop}}"
                        ></loading-spinning-circle>
+                       
+                       <!-- Error message -->
+                       <div ng-show="loadingError" align="center" style="width: 95%; margin: 10px auto" ng-class="fontSizeDesc">
+                           <uib-alert type="{{alertType}}">{{"LOADING_ERROR"|translate}}</uib-alert>
+                       </div>
             `,
             link: scope => {
+                scope.alertType = Params.alertTypeDanger;
                 scope.loading = true;
+                scope.loadingError = false;
 
                 // Initialize data in the given category
                 UpdateUI.getData(scope.category).then(() => {
                     $timeout(() => {
-                        scope.loading = false;
                         if (scope.displayFunction) scope.displayFunction();
+                    });
+                }).catch(error => {
+                    $timeout(() => {
+                        console.error(`Error loading data:`, scope.category, error);
+                        scope.loadingError = true;
+                    });
+                }).finally(() => {
+                    $timeout(() => {
+                        scope.loading = false;
                     });
                 });
             },

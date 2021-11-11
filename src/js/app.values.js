@@ -18,6 +18,7 @@
             {
                 maxIdleTimeAllowed: 300000, // 300 000 ms = 5 min. If changed, also edit the "INACTIVE" string
                 tenMinutesMilliSeconds: 600000,
+                requestTimeout: 30000,
 
                 appointmentType: {
                     appointmentTypeEn: 'appointment',

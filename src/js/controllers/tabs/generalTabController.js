@@ -83,10 +83,12 @@
                 else if (Announcements.getLastUpdated() < Date.now() - 300000) {
                     // TODO: MAKE THIS INTO A BACKGROUND REFRESH
 
-                    UpdateUI.set([
+                    UpdateUI.getData([
                         'Doctors',
                         'Announcements'
-                    ])
+                    ]).catch(error => {
+                        console.error("Failed to fetch Doctors and Announcements data from server:", error);
+                    });
                 }
                 setBadges();
             }
