@@ -40,7 +40,7 @@
                 scope.loading = true;
 
                 // Initialize data in the given category
-                UpdateUI.set([scope.category]).then(() => {
+                UpdateUI.getData(scope.category).then(() => {
                     $timeout(() => {
                         scope.loading = false;
                         if (scope.displayFunction) scope.displayFunction();

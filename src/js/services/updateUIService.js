@@ -190,7 +190,7 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors',
             {
                 setServices(response.Data, 'setOnline').then(function()
                 {
-                    initTimestamps(response.Timestamp);
+                    updateTimestamps(parameters, response.Timestamp);
                     r.resolve(true);
                 });
             }).catch(function(error) {
@@ -204,16 +204,12 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors',
             return r.promise;
         }
 
-        function initTimestamps(time)
-        {
-            for (let section in sectionServiceMappings) sectionServiceMappings[section].lastUpdated = time;
-        }
-
         /**
          * Update sections
          */
         function updateSection(parameters)
         {
+            console.log(`Updating ${parameters}`);
             var r = $q.defer();
 
             let refreshParams = {
@@ -249,6 +245,7 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors',
 
         function updateTimestamps(content,time)
         {
+            console.log("Init timestamps", time, content);
             if(content === 'All') for (let section of sectionServiceMappings) section.lastUpdated = time;
             else if(angular.isArray(content)) for (let section of content) sectionServiceMappings[section].lastUpdated = time;
             else sectionServiceMappings[content].lastUpdated = time;
@@ -258,6 +255,7 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors',
          */
         function setSection(parameters)
         {
+            console.log(`Initializing ${parameters}`);
             var r = $q.defer();
             RequestToServer.sendRequestWithResponse('Refresh',{Fields:parameters}).then(
                 function(data)
@@ -285,7 +283,7 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors',
          */
         function findSmallestTimestamp(content)
         {
-            if (content === 'All') return findSmallestTimestamp(sectionServiceMappings.keys);
+            if (content === 'All') return findSmallestTimestamp(Object.keys(sectionServiceMappings));
             else if(angular.isArray(content)) {
                 if (content.length === 0) return undefined;
                 return content.reduce((min, section) => {
@@ -295,6 +293,34 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors',
                 }, Infinity);
             }
             else return sectionServiceMappings[content].lastUpdated;
+        }
+
+        /**
+         * @description Initializes or updates data in the requested categories. If data in a category has not been
+         *              requested yet, or an error has prevented it from being requested successfully, it will
+         *              be initialized; otherwise, it will be updated.
+         * @param {string | Array<string>} categories - The categories of data to initialize or update.
+         * @returns {Promise<void>} Resolves if all data was successfully initialized / updated, or rejects with an error.
+         */
+        async function getData(categories) {
+            // Validate input
+            if (typeof categories === "string") return getData([categories]);
+            else if (!Array.isArray(categories)) throw `GetData requires a string or array as input; received instead: ${categories} (${typeof categories})`;
+
+            // Iterate through all categories to initialize or update them
+            let toSet = [], toUpdate = [];
+            for (let category of categories) {
+                if (!sectionServiceMappings.hasOwnProperty(category)) throw `UpdateUI category not supported: ${category}`;
+
+                // Depending on its status, dispatch the category to be initialized or updated
+                if (sectionServiceMappings[category].lastUpdated === 0) toSet.push(category);
+                else toUpdate.push(category);
+            }
+
+            // Execute all initializations or updates simultaneously
+            let setPromise = toSet.length === 0 ? undefined : setSection(toSet);
+            let updatePromise = toUpdate.length === 0 ? undefined : updateSection(toUpdate);
+            await Promise.all([setPromise, updatePromise]);
         }
 
         return {
@@ -324,6 +350,9 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors',
                 // TODO validate input (should be categories that exists)
                 return setSection(parameters);
             },
+
+            getData: getData,
+
             /**
              *@ngdoc method
              *@name init
@@ -348,7 +377,7 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors',
              **/
             clearUpdateUI:function()
             {
-                initTimestamps(0);
+                updateTimestamps(Object.keys(sectionServiceMappings), 0)
             }
         };
 

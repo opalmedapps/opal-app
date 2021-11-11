@@ -5,7 +5,7 @@
         .module("MUHCApp")
         .directive("patientDataRefresher", PatientDataRefresher);
 
-    PatientDataRefresher.$inject = ["UpdateUI"];
+    PatientDataRefresher.$inject = ["$timeout", "UpdateUI"];
 
     /**
      * @name PatientDataRefresher
@@ -22,7 +22,7 @@
      *              2- If not wrapped in an ons-pull-hook, the 'loading' variable can be used (and if desired, can be
      *              shared with patient-data-initializer) to display a loading wheel while the contents refreshes.
      */
-    function PatientDataRefresher(UpdateUI) {
+    function PatientDataRefresher($timeout, UpdateUI) {
         let directive = {
             restrict: 'E',
             scope: {
@@ -80,10 +80,12 @@
                     scope.loading = true;
 
                     // Refresh data in the given category
-                    UpdateUI.update([scope.category]).then(() => {
-                        scope.loading = false;
-                        if (scope.displayFunction) scope.displayFunction();
-                        if ($done) $done();
+                    UpdateUI.getData(scope.category).then(() => {
+                        $timeout(() => {
+                            scope.loading = false;
+                            if (scope.displayFunction) scope.displayFunction();
+                            if ($done) $done();
+                        });
                     });
                 }
             },
