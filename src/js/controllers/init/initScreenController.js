@@ -49,9 +49,8 @@
 		vm.globalMessage = '';
 		vm.globalMessageDescription = '';
 		vm.firstTime = true;
-		vm.APP_NAME = OPAL_CONFIG.name;
+		vm.OPAL_CONFIG = OPAL_CONFIG;
 		vm.APP_VERSION = Constants.version();
-		vm.OPAL_ENV = OPAL_CONFIG.env;
 		vm.APP_BUILD_NUMBER = Constants.build();
 
 		vm.gotoLearnAboutOpal = gotoLearnAboutOpal;
@@ -69,7 +68,7 @@
 
 			DynamicContent.ensureInitialized().then(() => {
 				// Read the Message Of The Day from [staging|preprod|prod]_serviceStatus_[EN|FR].php on depDocs
-				return DynamicContent.getPageContent(`${vm.OPAL_ENV}_service`);
+				return DynamicContent.getPageContent(OPAL_CONFIG.settings.messageOfTheDayKey);
 
 			}).then(response => {
 				// Save the Message Of The Day
@@ -86,7 +85,7 @@
 				if (err.code === "INIT_ERROR") Toast.showToast({
 					message: $filter('translate')("ERROR_INIT_LINKS"),
 				});
-
+				else if (err.code === "NO_PAGE_CONTENT") console.warn(`No message of the day set up for environment "${OPAL_CONFIG.env}"`);
 				else console.error("Error initializing the message of the day using DynamicContent:", err);
 			});
 

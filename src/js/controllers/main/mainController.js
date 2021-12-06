@@ -82,9 +82,7 @@
 
             $rootScope.$on("MonitorLoggedInUsers", function (event, uid) {
                 $rootScope.firstTime = true;
-                if (OPAL_CONFIG.env !== "staging") {
-                    addUserListener(uid);
-                }
+                if(OPAL_CONFIG.settings.kickOutConcurrentUsers) addUserListener(uid);
             });
         }
 
