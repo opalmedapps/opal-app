@@ -138,10 +138,9 @@
 
             firebaseUser.getToken(true).then(function(sessionToken){
 
-                /**************************************************************************************************************************************
-                 * SINCE PREPROD/DEV IS HEAVILY TESTED, I AM DISABLING TO LOCKING OUT OF CONCURRENT USERS, THIS SHOULDN'T BE THE CASE FOR PROD!!!!!!!!!
-                 **************************************************************************************************************************************/
-
+                /******************************************************************************************************
+                 * LOCKING OUT OF CONCURRENT USERS
+                 ******************************************************************************************************/
                 // Save the current session token to the users "logged in users" node.
                 // This is used to make sure that the user is only logged in for one session at a time.
                 let refCurrentUser = FirebaseService.getDBRef(FirebaseService.getFirebaseChild('logged_in_users') + firebaseUser.uid);
