@@ -534,7 +534,7 @@
 
         /**
          * @name verifyQuestionnaireProperty
-         * @desc This private function verify the format and the property of the outer layer of the questionnaire object. Also format html.
+         * @desc This private function verify the format and the property of the outer layer of the questionnaire object.
          * @param {object} questionnaire the object to be verified
          * @returns {boolean} false if the questionnaire did not pass the check, true otherwise
          */
@@ -553,10 +553,6 @@
             // set the questionnaire status to an integer for easier comparison
             questionnaire.status = parseInt(questionnaire.status);
 
-            // convert html string
-            questionnaire.instruction = $sce.trustAsHtml(questionnaire.instruction);
-            questionnaire.description = $sce.trustAsHtml(questionnaire.description);
-
             if (isNaN(questionnaire.status)){
                 return false;
             }
@@ -570,7 +566,7 @@
 
         /**
          * @name verifySectionProperty
-         * @desc verify properties that the section should have. Also convert html string.
+         * @desc verify properties that the section should have.
          * @param {object} section a section of a questionnaire
          * @returns {boolean} if the section matches the format then return true, else false
          */
@@ -584,8 +580,6 @@
                 return false;
             }
 
-            section.section_instruction = $sce.trustAsHtml(section.section_instruction);
-
             if (!Array.isArray(section.questions)){
                 return false;
             }
@@ -595,7 +589,7 @@
 
         /**
          * @name verifyQuestionProperty
-         * @desc verify the properties of questions, as well as the options and answers for it. Also sort the options according to their orders and convert html string
+         * @desc verify the properties of questions, as well as the options and answers for it. Also sort the options according to their orders.
          * @param {object} question
          * @returns {boolean} true if pass all checks, false otherwise
          */
@@ -617,9 +611,6 @@
 
                 return false;
             }
-
-            // convert html string
-            question.question_text = $sce.trustAsHtml(question.question_text);
 
             if (isNaN(parseInt(question.type_id))){
                 console.error("ERROR: the question's type_id is not valid");
