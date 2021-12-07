@@ -36,7 +36,6 @@
         vm.showHeader = showHeader;
 
         // Used by patient-data-initializer
-        vm.loading = false;
         vm.setDiagnosesView = setDiagnosesView;
 
         activate();

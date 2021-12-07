@@ -84,7 +84,6 @@
         vm.scrollToAnchor = scrollToAnchor;
 
         // Used by patient-data-initializer
-        vm.loading = false;
         vm.setAppointmentsView = setAppointmentsView;
 
         activate();

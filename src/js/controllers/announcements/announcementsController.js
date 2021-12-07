@@ -60,7 +60,6 @@
         vm.showHeader = showHeader;
 
         // Used by patient-data-initializer
-        vm.loading = false;
         vm.setAnnouncementsView = setAnnouncementsView;
 
         activate();

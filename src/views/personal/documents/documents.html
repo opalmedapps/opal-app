@@ -7,19 +7,19 @@
     </ons-toolbar>
     <network-banner></network-banner>
 
+    <!-- DATA REFRESHER -->
     <ons-pull-hook ng-action="docs.pullHookRefresh($done)">
-        <patient-data-refresher category="Documents"
-                                display-function="docs.setDocumentsView"
-                                refresh="docs.pullHookRefresh"
-        ></patient-data-refresher>
+        <ons-pull-hook-content></ons-pull-hook-content>
     </ons-pull-hook>
 
+    <!-- DATA INITIALIZER AND LOADING WHEEL -->
     <patient-data-initializer category="Documents"
-                              loading="docs.loading"
                               display-function="docs.setDocumentsView"
+                              refresh="docs.pullHookRefresh"
+                              hide-content="docs.hideContent"
     ></patient-data-initializer>
 
-    <div ng-show="!docs.loading">
+    <div ng-hide="docs.hideContent">
         <div style="color:grey;margin-top:25vh" ng-show="docs.noDocuments" align="center" ng-class="fontSizeTitle">
             {{"NOPATIENTDOCUMENTSAVAILABLE"|translate}}
         </div>

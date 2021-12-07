@@ -17,11 +17,6 @@
             <!-- REFRESH BUTTON -->
             <ons-toolbar-button ng-click="calendar.executeRefresh()">
                 <ons-icon icon="ion-ios-refresh-empty" size="2x" style="color: #4F81BB">
-                    <patient-data-refresher category="Appointments"
-                                            display-function="calendar.setAppointmentsView"
-                                            refresh="calendar.executeRefresh"
-                                            loading="calendar.loading"
-                    ></patient-data-refresher>
                 </ons-icon>
             </ons-toolbar-button>
         </div>
@@ -32,18 +27,17 @@
     =============================-->
     <network-banner></network-banner>
 
-    <!--
-    DATA INITIALIZER AND LOADING WHEEL
-    =============================-->
+    <!-- DATA INITIALIZER AND LOADING WHEEL -->
     <patient-data-initializer category="Appointments"
-                              loading="calendar.loading"
                               display-function="calendar.setAppointmentsView"
+                              refresh="calendar.executeRefresh"
+                              hide-content="calendar.hideContent"
     ></patient-data-initializer>
 
     <!--
     CALENDAR DIRECTIVE
     =============================-->
-    <div ng-show="!calendar.loading" align="center" class="appointment-calendar" style="position:relative;z-index:1" height-element>
+    <div ng-hide="calendar.hideContent" align="center" class="appointment-calendar" style="position:relative;z-index:1" height-element>
         <div class="calendar-list">
             <uib-datepicker id="scrollTo"
                             ng-change="calendar.onDateChange()"
@@ -61,9 +55,9 @@
     <!--
     APPOINTMENT LIST
     =============================-->
-    <div ng-show="!calendar.loading" id="topListAnchor" style="height:5px; background-color:lightgrey; position:relative; z-index:1"></div>
+    <div ng-hide="calendar.hideContent" id="topListAnchor" style="height:5px; background-color:lightgrey; position:relative; z-index:1"></div>
     <!-- THE ONLY REASON FOR THIS DELAY IS A SMOOTHER LOADING OF THE LIST OF APPOINTMENTS -->
-    <ons-scroller-height ng-show="!calendar.loading" timer="500" callback="calendar.scrollToAnchor()">
+    <ons-scroller-height ng-hide="calendar.hideContent" timer="500" callback="calendar.scrollToAnchor()">
             <div id="firstAnchor"></div>
             <div style="color:grey;margin-top:10vh" ng-show="calendar.noAppointments" align="center" 
                 ng-class="fontSizeTitle">{{"NOAPPOINTMENTS"|translate}}</div>

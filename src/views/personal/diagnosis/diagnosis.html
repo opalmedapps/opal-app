@@ -5,19 +5,19 @@
     </ons-toolbar>
     <network-banner></network-banner>
 
+    <!-- DATA REFRESHER -->
     <ons-pull-hook ng-action="diag.pullHookRefresh($done)">
-        <patient-data-refresher category="Diagnosis"
-                                display-function="diag.setDiagnosesView"
-                                refresh="diag.pullHookRefresh"
-        ></patient-data-refresher>
+        <ons-pull-hook-content></ons-pull-hook-content>
     </ons-pull-hook>
 
+    <!-- DATA INITIALIZER AND LOADING WHEEL -->
     <patient-data-initializer category="Diagnosis"
-                              loading="diag.loading"
                               display-function="diag.setDiagnosesView"
+                              refresh="diag.pullHookRefresh"
+                              hide-content="diag.hideContent"
     ></patient-data-initializer>
 
-    <div ng-show="!diag.loading">
+    <div ng-hide="diag.hideContent">
         <ons-list class="settings-list" ng-repeat="diagnosis in diag.diagnoses | orderBy: '-CreationDate' ">
             <ons-list-header   class="person-list-header" ng-class="fontSizeTitle" ng-show="diag.showHeader($index)">{{diagnosis.CreationDate|date:'fullDate'}}</ons-list-header>
             <ons-list-item class="item">
@@ -36,7 +36,7 @@
         </ons-list>
     </div>
 
-    <div style="color:grey;margin-top:25vh" ng-show="diag.noDiagnosis" align="center" ng-class="fontSizeTitle">
+    <div style="color:grey;margin-top:25vh" ng-show="!diag.hideContent && diag.noDiagnosis" align="center" ng-class="fontSizeTitle">
         {{"NODIAGNOSIS"|translate}}
     </div>
 </ons-page>

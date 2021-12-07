@@ -21,7 +21,6 @@
         vm.showHeader = showHeader;
 
         // Used by patient-data-initializer
-        vm.loading = false;
         vm.setTxTeamMessagesView = setTxTeamMessagesView;
 
         activate();
