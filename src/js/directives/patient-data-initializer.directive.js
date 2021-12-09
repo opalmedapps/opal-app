@@ -62,8 +62,9 @@
                 const setInitLoadingError = (value) => { console.log("InitError "+value); scope.initLoadingError = value; setHideContent() };
                 const setHideContent = () => { console.log("Hide "+(scope.loading || scope.initLoadingError)); scope.hideContent = scope.loading || scope.initLoadingError };
 
-                // TODO on re-entry, run refresh instead of init
-                initialize();
+                // Initialize data
+                if (UpdateUI.hasBeenInitialized(scope.category)) refresh(undefined, false);
+                else initialize();
 
                 /**
                  * @description Initializes the data for this directive's category, then displays the data using the
@@ -78,7 +79,6 @@
                     }).catch(error => {
                         $timeout(() => {
                             console.error(`Error loading data:`, scope.category, error);
-                            // TODO: don't fail if this was just an update, not an init
                             setInitLoadingError(true);
                         });
                     }).finally(() => {
@@ -96,8 +96,12 @@
                  * @param {function} [$done] - Optional callback function to execute after the display function.
                  *                             Typically used with the $done function of ons-pull-hook, representing
                  *                             a function that terminates ons-pull-hook's loading animation.
+                 * @param {boolean} [visibleError] - Optional flag to indicate whether loading errors should be shown
+                 *                                   to the user. Default = true. Note: errors should typically be
+                 *                                   shown only if the user intentionally triggered the refresh (and is
+                 *                                   waiting for the result).
                  */
-                function refresh($done) {
+                function refresh($done, visibleError=true) {
                     // Refresh data in the given category
                     UpdateUI.getData(scope.category).then(() => {
                         $timeout(() => {
@@ -108,7 +112,7 @@
                         $timeout(() => {
                             console.error(`Error refreshing data:`, scope.category, error);
                             // TODO limit to one toast
-                            Toast.showToast({
+                            if (visibleError) Toast.showToast({
                                 message: $filter('translate')("REFRESH_ERROR"),
                             });
                         });

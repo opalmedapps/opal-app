@@ -267,6 +267,17 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors',
         }
 
         /**
+         * @description Determines whether a category has been successfully initialized.
+         *              Note: if an error occurred during its initialization process, the category is not considered initialized.
+         * @param {string} category - The category to check.
+         * @returns {boolean} True if the category has been successfully initialized; false otherwise.
+         */
+        function hasBeenInitialized(category) {
+            if (!category) throw new Error("Category required");
+            return sectionServiceMappings[category].lastUpdated !== 0;
+        }
+
+        /**
          * @description Initializes or updates data in the requested categories. If data in a category has not been
          *              requested yet, or an error has prevented it from being requested successfully, it will
          *              be initialized; otherwise, it will be updated.
@@ -284,8 +295,8 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors',
                 if (!sectionServiceMappings.hasOwnProperty(category)) throw `UpdateUI category not supported: ${category}`;
 
                 // Depending on its status, dispatch the category to be initialized or updated
-                if (sectionServiceMappings[category].lastUpdated === 0) toSet.push(category);
-                else toUpdate.push(category);
+                if (hasBeenInitialized(category)) toUpdate.push(category);
+                else toSet.push(category);
             }
 
             // Execute all initializations or updates simultaneously
@@ -296,6 +307,7 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors',
 
         return {
 
+            hasBeenInitialized: hasBeenInitialized,
             getData: getData,
 
             /**
