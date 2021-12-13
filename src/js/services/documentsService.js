@@ -304,7 +304,7 @@ function(UserPreferences,UserAuthorizationInfo,$q,$filter,FileManagerService,Req
             var r = $q.defer();
             RequestToServer.sendRequestWithResponse('DocumentContent',[serNum]).then(function(response)
             {
-                if(response.Code == '3' && response.Data !== 'DocumentNotFound')
+                if(response.Data && response.Data !== 'DocumentNotFound')
                 {
                     var doc = _this.getDocumentBySerNum(serNum);
                     doc.Content = response.Data.Content;

@@ -132,72 +132,66 @@
          * Receives an authenticated FireBase User Object and handles the next step of the logging process
          * which involves determining whether or not the user is handed off to the security question process.
          */
-        function authHandler(firebaseUser) {
-
+        async function authHandler(firebaseUser) {
             CleanUp.clear();
 
-            firebaseUser.getToken(true).then(function(sessionToken){
+            let sessionToken = await firebaseUser.getToken(true);
 
-                /******************************************************************************************************
-                 * LOCKING OUT OF CONCURRENT USERS
-                 ******************************************************************************************************/
-                // Save the current session token to the users "logged in users" node.
-                // This is used to make sure that the user is only logged in for one session at a time.
-                let refCurrentUser = FirebaseService.getDBRef(FirebaseService.getFirebaseChild('logged_in_users') + firebaseUser.uid);
+            /******************************************************************************************************
+             * LOCKING OUT OF CONCURRENT USERS
+             ******************************************************************************************************/
+            // Save the current session token to the users "logged in users" node.
+            // This is used to make sure that the user is only logged in for one session at a time.
+            let refCurrentUser = FirebaseService.getDBRef(FirebaseService.getFirebaseChild('logged_in_users') + firebaseUser.uid);
 
-                refCurrentUser.set({ 'Token' : sessionToken });
+            refCurrentUser.set({ 'Token' : sessionToken });
 
-                // Evoke an observer function in mainController
-                $rootScope.$emit("MonitorLoggedInUsers", firebaseUser.uid);
-                /**************************************************************************************************** */
-
-
-                //Set the authorized user once we get confirmation from FireBase that the inputted credentials are valid
-                UserAuthorizationInfo.setUserAuthData(firebaseUser.uid, EncryptionService.hash(vm.password), undefined, sessionToken, vm.email, vm.trusted);
+            // Evoke an observer function in mainController
+            $rootScope.$emit("MonitorLoggedInUsers", firebaseUser.uid);
+            /**************************************************************************************************** */
 
 
-                //This is for the user case where a user gets logged out automatically by the app after 5 minutes of inactivity.
-                //Ideally the Patient info should stay dormant on the phone for a pre-determined period of time, not indefinitely.
-                //So the time of last activity is stored in local storage here and when the user is timed out, so that once 10 minute goes by
-                //The patient info is cleared from the phone.
-                var lastActive = new Date();
-                lastActive = lastActive.getTime();
-
-                var authenticationToLocalStorage={
-                    UserName:firebaseUser.uid,
-                    Email: vm.email,
-                //    Password: vm.password,
-                    Token:sessionToken,
-                    LastActive: lastActive
-                };
+            //Set the authorized user once we get confirmation from FireBase that the inputted credentials are valid
+            UserAuthorizationInfo.setUserAuthData(firebaseUser.uid, EncryptionService.hash(vm.password), undefined, sessionToken, vm.email, vm.trusted);
 
 
-                $window.sessionStorage.setItem('UserAuthorizationInfo', JSON.stringify(authenticationToLocalStorage));
-                $window.localStorage.setItem('Email', vm.email);
-                if (ons.platform.isAndroid() || ons.platform.isIOS()) {
-                    $window.localStorage.setItem('Password', vm.password);
-                }
+            //This is for the user case where a user gets logged out automatically by the app after 5 minutes of inactivity.
+            //Ideally the Patient info should stay dormant on the phone for a pre-determined period of time, not indefinitely.
+            //So the time of last activity is stored in local storage here and when the user is timed out, so that once 10 minute goes by
+            //The patient info is cleared from the phone.
+            var lastActive = new Date();
+            lastActive = lastActive.getTime();
 
-                $window.localStorage.setItem("Language", UserPreferences.getLanguage());
-                // If user sets not trusted remove the local storage as to not continue to the next part which skips the security question
-                if (!vm.trusted) {
-                    $window.localStorage.removeItem('Email');
-                    $window.localStorage.removeItem('Password');
-                    $window.localStorage.removeItem("deviceID");
-                    $window.localStorage.removeItem(UserAuthorizationInfo.getUsername()+"/securityAns");
-                    $window.localStorage.removeItem('hospital');
-                }
+            var authenticationToLocalStorage={
+                UserName:firebaseUser.uid,
+                Email: vm.email,
+            //    Password: vm.password,
+                Token:sessionToken,
+                LastActive: lastActive
+            };
 
-                var deviceID = localStorage.getItem("deviceID");
 
-                //if the device was a previously trusted device, and is still set to trusted...
-                if (deviceID && sameUser){
-                    loginAsTrustedUser(deviceID)
+            $window.sessionStorage.setItem('UserAuthorizationInfo', JSON.stringify(authenticationToLocalStorage));
+            $window.localStorage.setItem('Email', vm.email);
+            if (ons.platform.isAndroid() || ons.platform.isIOS()) {
+                $window.localStorage.setItem('Password', vm.password);
+            }
 
-                } else {
-                    loginAsUntrustedUser()
-                }
-            });
+            $window.localStorage.setItem("Language", UserPreferences.getLanguage());
+            // If user sets not trusted remove the local storage as to not continue to the next part which skips the security question
+            if (!vm.trusted) {
+                $window.localStorage.removeItem('Email');
+                $window.localStorage.removeItem('Password');
+                $window.localStorage.removeItem("deviceID");
+                $window.localStorage.removeItem(UserAuthorizationInfo.getUsername()+"/securityAns");
+                $window.localStorage.removeItem('hospital');
+            }
+
+            var deviceID = localStorage.getItem("deviceID");
+
+            //if the device was a previously trusted device, and is still set to trusted...
+            if (deviceID && sameUser) loginAsTrustedUser(deviceID);
+            else loginAsUntrustedUser();
         }
 
         /**
@@ -209,29 +203,36 @@
          * If a user has been deemed as trusted, then this allows them to skip the security question process and go straight to loading screen
          */
         function loginAsTrustedUser(deviceID){
+            const warnTrustedError = (error) => { console.warn("An error occurred while logging in as trusted; now attempting to log in as untrusted.", error) };
 
             try {
                 var ans = EncryptionService.decryptDataWithKey($window.localStorage.getItem(UserAuthorizationInfo.getUsername()+"/securityAns"), UserAuthorizationInfo.getPassword());
-            }
-            catch(err) {
-                handleError({code: "WRONG_SAVED_HASH"})
-            }
+                EncryptionService.setSecurityAns(ans);
 
-            EncryptionService.setSecurityAns(ans);
-
-            //Now that we know that both the password and security answer are hashed, we can create our encryption hash
-            EncryptionService.generateEncryptionHash();
+                // Now that we know that both the password and security answer are hashed, we can create our encryption hash
+                EncryptionService.generateEncryptionHash();
+            }
+            catch(error) {
+                // If there's something wrong with the stored trusted info, log in as untrusted instead
+                warnTrustedError(error);
+                loginAsUntrustedUser(deviceID);
+                return;
+            }
 
             UUID.setUUID(deviceID);
-            DeviceIdentifiers.sendIdentifiersToServer()
-                .then(function () {
-                    $state.go('loading');
-                })
-                .catch(function (error) {
-                    //TODO: handle this error better... need to know the error object that is returned
-                    firebase.auth().signOut();
+            DeviceIdentifiers.sendIdentifiersToServer().then(function () {
+                $state.go('loading');
+            })
+            .catch(function (error) {
+                if (error.Code === Params.REQUEST.ENCRYPTION_ERROR || error.code === "PERMISSION_DENIED" ) {
+                    warnTrustedError(error);
+                    loginAsUntrustedUser(deviceID);
+                }
+                else {
+                    if (firebase.auth().currentUser) firebase.auth().signOut();
                     handleError(error);
-                });
+                }
+            });
         }
 
         /**
@@ -270,7 +271,7 @@
 
         /**
          * @ngdoc function
-         * @name loginAsUntrustedUser
+         * @name handleError
          * @methodOf MUHCApp.controllers.LoginController
          * @param error an error object
          * @description
@@ -279,7 +280,8 @@
         function handleError(error)
         {
             console.error(error);
-            var code = (error.code)? error.code : error.Code;
+            let code = error.code ? error.code : error.Code;
+            vm.loading = false;
 
             switch (code) {
                 case Params.invalidEmail:
@@ -288,51 +290,39 @@
                     $timeout(function(){
                         vm.alert.type = Params.alertTypeDanger;
                         vm.alert.message= "INVALID_EMAIL_OR_PWD";
-                        vm.loading = false;
                     });
                     break;
                 case Params.largeNumberOfRequests:
                     $timeout(function (){
                         vm.alert.type = Params.alertTypeDanger;
                         vm.alert.message = "TOO_MANY_REQUESTS";
-                        vm.loading = false;
                     });
                     break;
                 case Params.userDisabled:
                     $timeout(function (){
                         vm.alert.type = Params.alertTypeDanger;
                         vm.alert.message = "USER_DISABLED";
-                        vm.loading = false;
                     });
                     break;
                 case Params.networkRequestFailure:
                     $timeout(function(){
                         vm.alert.type = Params.alertTypeDanger;
                         vm.alert.message = "ERROR_NETWORK";
-                        vm.loading = false;
                     });
                     break;
-                case '1': // Encryption error
+                case Params.REQUEST.ENCRYPTION_ERROR:
                     $timeout(function(){
-                        vm.loading = false;
-                        loginerrormodal.show();
-                    });
-                    break;
-                case "WRONG_SAVED_HASH":
-                    $timeout(function(){
-                        vm.loading = false;
-                        wronghashmodal.show();
+                        vm.alert.type = Params.alertTypeDanger;
+                        vm.alert.message = "PASSWORD_SERVER_ERROR";
                     });
                     break;
                 default:
                     $timeout(function(){
                         vm.alert.type = Params.alertTypeDanger;
                         vm.alert.message = "ERROR_GENERIC";
-                        vm.loading = false;
                     });
             }
         }
-
 
         /*************************
          *  PUBLIC METHODS
@@ -412,7 +402,6 @@
          * Brings user to init screen
          */
         function goToInit(){
-            loginerrormodal.hide();
             initNavigator.popPage();
         }
 
@@ -424,7 +413,6 @@
          * Brings user to password reset screen
          */
         function goToReset(){
-            loginerrormodal.hide();
             initNavigator.pushPage('./views/login/forgot-password.html',{})
         }
 
