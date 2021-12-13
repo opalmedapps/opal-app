@@ -14,25 +14,10 @@
         .module('MUHCApp')
         .factory('ResponseValidator', ResponseValidator);
 
-    ResponseValidator.$inject = ['FirebaseService', '$state', '$window', 'Security', 'EncryptionService'];
+    ResponseValidator.$inject = ['FirebaseService', '$state', '$window', 'Security', 'EncryptionService', 'Params'];
 
     /* @ngInject */
-    function ResponseValidator(FirebaseService, $state, $window, Security, EncryptionService) {
-
-        /**
-         * ERROR CODES
-         */
-        const ENCRYPTION_ERROR = 1;
-        const SERVER_RESPONSE_ERROR = 2;
-        const CLIENT_ERROR = 400;
-        const TOO_MANY_ATTEMPTS_ERROR = 4;
-        const INVALID_VERSION_ERROR = 5;
-
-        /**
-         * SUCCESS CODE
-         */
-        const SUCCESS = 3;
-
+    function ResponseValidator(FirebaseService, $state, $window, Security, EncryptionService, Params) {
 
         /**
          * Expose API to consumers
@@ -53,7 +38,7 @@
         function validate(response, encryptionKey, timeOut) {
             let timestamp = response.Timestamp;
 
-            if (response.Code === ENCRYPTION_ERROR) {
+            if (response.Code === Params.REQUEST.ENCRYPTION_ERROR) {
                 return {error: response}
             } else {
                 response.Timestamp = timestamp;
@@ -61,7 +46,7 @@
 
                 if (!encryptionKey) response = EncryptionService.decryptData(response);
 
-                if (response.Code === SUCCESS) {
+                if (response.Code === Params.REQUEST.SUCCESS) {
                     return {success: response};
                 } else {
                     return handleResponseError(response)
@@ -76,13 +61,11 @@
          */
         function handleResponseError(response){
             switch (response.Code) {
-                case SERVER_RESPONSE_ERROR:
+                case Params.REQUEST.SERVER_ERROR:
+                case Params.REQUEST.TOO_MANY_ATTEMPTS:
+                case Params.REQUEST.CLIENT_ERROR:
                     return {error: response};
-                case TOO_MANY_ATTEMPTS_ERROR:
-                    return {error: response};
-                case CLIENT_ERROR:
-                    return {error: response};
-                case INVALID_VERSION_ERROR:
+                case Params.REQUEST.INVALID_VERSION:
                     handleInvalidVersionError();
                     return {error: {Code: 'INVALID_VERSION_ERROR'}}
             }
