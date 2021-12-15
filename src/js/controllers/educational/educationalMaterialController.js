@@ -45,7 +45,7 @@
         // Function to show data and time header
         vm.showHeader = showHeader;
 
-        // Used by patient-data-initializer
+        // Used by patient-data-handler
         vm.configureState = configureState;
 
         activate();

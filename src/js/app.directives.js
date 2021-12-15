@@ -15,5 +15,5 @@ import "./directives/hospitalSelectorDirective";
 import "./directives/labs-disclaimer.directive";
 import "./directives/labs-info-button.directive";
 import "./directives/pdf-viewer.directive";
-import "./directives/patient-data-initializer.directive";
+import "./directives/patient-data-handler.directive";
 import "./directives/ons-pull-hook-content.directive";

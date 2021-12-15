@@ -20,7 +20,7 @@
         vm.goToTeamMessage = goToTeamMessage;
         vm.showHeader = showHeader;
 
-        // Used by patient-data-initializer
+        // Used by patient-data-handler
         vm.setTxTeamMessagesView = setTxTeamMessagesView;
 
         activate();

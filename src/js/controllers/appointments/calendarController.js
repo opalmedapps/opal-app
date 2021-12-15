@@ -83,7 +83,7 @@
         vm.onDateChange = onDateChange;
         vm.scrollToAnchor = scrollToAnchor;
 
-        // Used by patient-data-initializer
+        // Used by patient-data-handler
         vm.setAppointmentsView = setAppointmentsView;
 
         activate();

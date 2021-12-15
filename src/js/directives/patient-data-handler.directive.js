@@ -3,18 +3,18 @@
 
     angular
         .module("MUHCApp")
-        .directive("patientDataInitializer", patientDataInitializer);
+        .directive("patientDataHandler", patientDataHandler);
 
-    patientDataInitializer.$inject = ["$filter", "$timeout", "Params", "Toast", "UpdateUI"];
+    patientDataHandler.$inject = ["$filter", "$timeout", "Params", "Toast", "UpdateUI"];
 
     /**
-     * @name patientDataInitializer
+     * @name patientDataHandler
      * @author Stacey Beard
      * @date 2021-10-29
      * @description Directive used to initialize or refresh patient data in one of the categories supported by UpdateUI.
      *              Includes a loading wheel and error box shown during data initialization.
      */
-    function patientDataInitializer($filter, $timeout, Params, Toast, UpdateUI) {
+    function patientDataHandler($filter, $timeout, Params, Toast, UpdateUI) {
         let directive = {
             restrict: 'E',
             scope: {

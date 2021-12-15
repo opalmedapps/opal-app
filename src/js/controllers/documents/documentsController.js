@@ -20,7 +20,7 @@
         vm.goToDocument = goToDocument;
         vm.showHeader = showHeader;
 
-        // Used by patient-data-initializer
+        // Used by patient-data-handler
         vm.setDocumentsView = setDocumentsView;
 
         activate();

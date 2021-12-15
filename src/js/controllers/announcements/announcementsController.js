@@ -59,7 +59,7 @@
         vm.goToAnnouncement = goToAnnouncement;
         vm.showHeader = showHeader;
 
-        // Used by patient-data-initializer
+        // Used by patient-data-handler
         vm.setAnnouncementsView = setAnnouncementsView;
 
         activate();
