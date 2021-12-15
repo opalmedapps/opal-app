@@ -63,7 +63,13 @@
                 const setHideContent = () => { console.log("Hide "+(scope.loading || scope.initLoadingError)); scope.hideContent = scope.loading || scope.initLoadingError };
 
                 // Initialize data
-                if (UpdateUI.hasBeenInitialized(scope.category)) refresh(undefined, false);
+                if (UpdateUI.hasBeenInitialized(scope.category)) {
+                    $timeout(() => {
+                        // Display previously loaded data first
+                        if (scope.displayFunction) scope.displayFunction();
+                    });
+                    refresh(undefined, false);
+                }
                 else initialize();
 
                 /**
