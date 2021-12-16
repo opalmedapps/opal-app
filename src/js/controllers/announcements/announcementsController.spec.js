@@ -91,13 +91,4 @@ describe('AnnouncementsController', function() {
 
         no_announcements = false
     });
-
-    it('should display headers appropriately', function() {
-        expect(controller.showHeader(0)).toBeTruthy();
-        expect(controller.showHeader(1)).toBeFalsy();
-        expect(controller.showHeader(2)).toBeFalsy();
-        expect(controller.showHeader(3)).toBeFalsy();
-        expect(controller.showHeader(4)).toBeFalsy();
-
-    });
 });
