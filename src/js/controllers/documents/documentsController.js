@@ -18,7 +18,6 @@
         vm.documents = [];
 
         vm.goToDocument = goToDocument;
-        vm.showHeader = showHeader;
 
         activate();
 
@@ -49,20 +48,6 @@
             NavigatorParameters.setParameters({'navigatorName':'personalNavigator', 'Post':doc});
             personalNavigator.pushPage('./views/personal/documents/individual-document.html');
         }
-
-        // Determines whether or not to show the date header.
-        function showHeader(index)
-        {
-            if (index === 0){
-                return true;
-            }
-            else {
-                var previous = (new Date(vm.documents[index-1].CreatedTimeStamp)).setHours(0,0,0,0);
-                var current = (new Date(vm.documents[index].CreatedTimeStamp)).setHours(0,0,0,0);
-                return (current !== previous);
-            }
-        }
-
     }
 
 })();

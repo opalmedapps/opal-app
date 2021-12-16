@@ -11,7 +11,7 @@
             {{"NOPATIENTDOCUMENTSAVAILABLE"|translate}}
         </div>
         <ons-list ng-repeat="doc in docs.documents" ng-click="docs.goToDocument(doc)">
-            <ons-list-header class="person-list-header" ng-class="fontSizeTitle" ng-show="docs.showHeader($index)">
+            <ons-list-header class="person-list-header" ng-class="fontSizeTitle" ng-show="{{docs.documents | showHeader : $index : 'CreatedTimeStamp' }}">
                 {{doc.CreatedTimeStamp|date:'longDate'}}
             </ons-list-header>
             <ons-list-item modifier="chevron">
