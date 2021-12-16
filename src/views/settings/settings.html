@@ -1,8 +1,5 @@
 <ons-page ng-controller="accountSettingController as asc" ng-device-backbutton="asc.accountDeviceBackButton()">
-
-    <ons-toolbar fixed-style>
-        <div class="center" ng-class="fontSizeTitle">{{"ACCOUNT"|translate}}</div>
-    </ons-toolbar>
+    <generic-toolbar title="{{'ACCOUNT'}}" back-button="false" style-class="fontSizeTitle"></generic-toolbar>
 
     <!-- HOSPITAL NAME BAR -->
     <top-page-banner title="asc.selectedHospitalToDisplay"></top-page-banner>

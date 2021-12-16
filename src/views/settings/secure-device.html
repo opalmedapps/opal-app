@@ -1,8 +1,5 @@
 <ons-page ng-controller="SecureDeviceController as vm">
-    <ons-toolbar fixed-style>
-        <div class="left"><ons-back-button>{{"BACK"|translate}}</ons-back-button></div>
-        <div class="center" ng-class="fontSizeTitle">{{"SECUREYOURDEVICE"|translate}}</div>
-    </ons-toolbar>
+    <generic-toolbar title="{{'SECUREYOURDEVICE'}}" back-button="true" style-class="fontSizeTitle"></generic-toolbar>
     <!--TODO-->
     <div>
         {{"COMINGSOON"|translate}}

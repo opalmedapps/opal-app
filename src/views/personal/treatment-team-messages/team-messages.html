@@ -1,8 +1,5 @@
 <ons-page ng-controller="TxTeamMessagesController as txTeam">
-    <ons-toolbar fixed-style>
-        <div class="left"><ons-back-button>{{"BACK"|translate}}</ons-back-button></div>
-        <div class="center" ng-class="fontSizeTitle">{{"TEAMMESSAGES"|translate}}</div>
-    </ons-toolbar>
+    <generic-toolbar title="{{'TEAMMESSAGES'}}" back-button="true" style-class="fontSizeTitle"></generic-toolbar>
     <network-banner></network-banner>
     <div ng-hide="txTeam.noMessages">
         <ons-list  ng-repeat="message in txTeam.txTeamMessages | orderBy:'-DateAdded'" ng-click="txTeam.goToTeamMessage(message)">

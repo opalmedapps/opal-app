@@ -1,10 +1,6 @@
 <ons-page ng-controller="InfoTabController as info">
-    <ons-toolbar fixed-style>
-      <div class="left">
-          <ons-back-button>{{"BACK"|translate}}</ons-back-button>
-      </div>
-        <div class="center" ng-class="fontSizeTitle">{{"INFO"|translate}}</div>
-    </ons-toolbar>
+    <generic-toolbar title="{{'INFO'}}" back-button="true" style-class="fontSizeTitle"></generic-toolbar>
+
     <div style="margin-top:10vh;padding: 0 20px 0 20px" class="text-center">
       <div >
         <ons-icon icon="{{info.view.icon}}" style="font-size:80px; color: #2196F3"></ons-icon>

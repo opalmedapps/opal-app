@@ -1,10 +1,5 @@
 <ons-page style="background-color:white;width:100vw;height:100vh" ng-controller="LoginController as login">
-    <ons-toolbar fixed-style>
-        <div class="left">
-            <ons-back-button>{{"BACK"|translate}}</ons-back-button>
-        </div>
-        <div class="center">{{"LOGIN"|translate}}</div>
-    </ons-toolbar>
+    <generic-toolbar title="{{'LOGIN'}}" back-button="true" style-class="fontSizeTitle"></generic-toolbar>
     <network-banner></network-banner>
     <div ng-include="'./views/login/popover-security.html'"></div>
     <ons-row align="center" style="height:70vh;margin:0;top:0">

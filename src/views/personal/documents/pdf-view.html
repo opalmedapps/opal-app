@@ -1,7 +1,5 @@
 <ons-page ng-controller="pdfViewController">
-    <ons-toolbar fixed-style>
-        <div class="left"><ons-back-button>{{"BACK"|translate}}</ons-back-button></div>
-    </ons-toolbar>
+    <generic-toolbar back-button="true" style-class="fontSizeTitle"></generic-toolbar>
     <div style="height: 95%">
         <iframe id="pdfViewer" src="{{viewerPath}}" style="width: 100%; height: 100%"></iframe>
     </div>

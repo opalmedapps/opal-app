@@ -1,11 +1,6 @@
 <ons-page ng-controller="AnsweredQuestionnaireController as vm">
 <!-- Note: this file is extremely hard coded to obey the desired inconsistent functionality-->
-    <ons-toolbar fixed-style>
-        <div class="left">
-            <ons-back-button>{{"BACK"|translate}}</ons-back-button>
-        </div>
-        <div class="center" ng-class="fontSizeTitle">{{"SUMMARY"|translate}}</div>
-    </ons-toolbar>
+    <generic-toolbar title="{{'SUMMARY'}}" back-button="true" style-class="fontSizeTitle"></generic-toolbar>
 
     <!-- LOADING CIRCLE FOR SUBMITTING QUESTIONNAIRE -->
     <loading-spinning-circle

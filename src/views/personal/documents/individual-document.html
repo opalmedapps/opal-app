@@ -1,15 +1,10 @@
 <ons-page ng-controller="IndividualDocumentController as doc">
-    <ons-toolbar fixed-style>
-        <div class="left">
-            <ons-back-button>{{"BACK"|translate}}</ons-back-button>
-        </div>
-        <div class="center" ng-class="fontSizeTitle">{{"DOCUMENT"|translate}}</div>
-        <div class="right">
-            <ons-toolbar-button ng-click="popoverDocsInfo.show('#buttonDocInfo')" id="buttonDocInfo">
-                <ons-icon icon="fa-ellipsis-v" fixed-width="true"></ons-icon>
-            </ons-toolbar-button>
-        </div>
-    </ons-toolbar>
+    <generic-toolbar title="{{'DOCUMENT'|translate}}" back-button="true" style-class="fontSizeTitle">
+        <ons-toolbar-button ng-click="popoverDocsInfo.show('#buttonDocInfo')" id="buttonDocInfo">
+            <ons-icon icon="fa-ellipsis-v" fixed-width="true"></ons-icon>
+        </ons-toolbar-button>
+    </generic-toolbar>
+
 
     <pdf-viewer pdf-content="docParams.Content"
                 show-error="doc.errorDownload"

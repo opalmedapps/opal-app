@@ -1,10 +1,5 @@
 <ons-page ng-controller="MapController as map">
-    <ons-toolbar fixed-style>
-        <div class="left">
-            <ons-back-button>Back</ons-back-button>
-        </div>
-        <div class="center" ng-class="fontSizeTitle">{{"MAPS"|translate}}</div>
-    </ons-toolbar>
+    <generic-toolbar title="{{'MAPS'}}" back-button="true" style-class="fontSizeTitle"></generic-toolbar>
     <news-banner type="alertBanner"></news-banner>
     <div>
         <ons-list class="settings-list">

@@ -1,16 +1,12 @@
 <ons-page ng-controller="PatientTestResultsController as tests">
-    <ons-toolbar fixed-style>
-        <div class="left">
-            <ons-back-button>{{"BACK"|translate}}</ons-back-button>
-        </div>
-        <div class="center" ng-class="fontSizeTitle"><p class="overflow-text-ellipsis">{{"LAB_RESULTS"|translate}}</p></div>
-        <div class="right">
-            <labs-info-button style="margin-right: -10px"></labs-info-button>
-            <ons-toolbar-button ng-click="tests.refresh()">
-                <ons-icon icon="ion-ios-refresh-empty" size="2x" style="color: #4F81BB"></ons-icon>
-            </ons-toolbar-button>
-        </div>
-    </ons-toolbar>
+    <generic-toolbar title="{{'LAB_RESULTS'}}" back-button="true" style-class="fontSizeTitle">
+        <labs-info-button style="margin-right: -10px"></labs-info-button>
+        <ons-toolbar-button ng-click="tests.refresh()">
+            <ons-icon icon="ion-ios-refresh-empty" size="2x" style="color: #4F81BB"></ons-icon>
+        </ons-toolbar-button>
+    </generic-toolbar>
+
+
     <loading-spinning-circle ng-if="tests.loading" loading-message="{{'LOADINGLABRESULTS'|translate}}">
     </loading-spinning-circle>
     <div class="navigation-bar" ng-if="!tests.loading">

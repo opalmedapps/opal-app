@@ -2576,6 +2576,8 @@ input:focus {
 
 .list__item, .navigation-bar{
     border-bottom: 1px solid #ddd !important;
+    display: flex;
+    align-items: center;
 }
 
 .tab-bar{

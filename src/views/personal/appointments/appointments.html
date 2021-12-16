@@ -4,15 +4,9 @@
     PAGE HEADER TOOLBAR
     =============================-->
 
-    <ons-toolbar fixed-style>
-        <div class="left">
-            <ons-back-button>{{"BACK"|translate}}</ons-back-button>
-        </div>
-        <div class="center" ng-class="fontSizeTitle">{{"APPOINTMENTS"|translate}}</div>
-        <div class="right">
-            <ons-toolbar-button ng-click="calendar.goToCalendarOptions()">{{"OPTIONS"|translate}}</ons-toolbar-button>
-        </div>
-    </ons-toolbar>
+    <generic-toolbar title="{{'APPOINTMENTS'}}" back-button="true" style-class="fontSizeTitle">
+        <ons-toolbar-button ng-click="calendar.goToCalendarOptions()">{{"OPTIONS"|translate}}</ons-toolbar-button>
+    </generic-toolbar>
 
     <!--
     CONDITIONAL NETWORK BANNER

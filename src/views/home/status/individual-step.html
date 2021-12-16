@@ -1,10 +1,5 @@
 <ons-page ng-controller="IndividualStepController as step">
-    <ons-toolbar fixed-style>
-        <div class="left">
-            <ons-back-button>{{"BACK"|translate}}</ons-back-button>
-        </div>
-        <div class="center" ng-class="fontSizeTitle">{{"TREATMENTSTAGE"|translate}}</div>
-    </ons-toolbar>
+    <generic-toolbar title="{{'TREATMENTSTAGE'}}" back-button="true" style-class="fontSizeTitle"></generic-toolbar>
     <div>
         <ons-list class="settings-list">
             <ons-list-item class="item">

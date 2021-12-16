@@ -1,14 +1,11 @@
 <!-- TODO consolidate duplicate error messages and loading wheels on this page -->
 <ons-page ng-controller="IndividualMaterialController as edu">
-    <ons-toolbar fixed-style>
-        <div class="left"><ons-back-button ng-click="edu.clickBack()">{{"BACK"|translate}}</ons-back-button></div>
-        <div class="center" ng-class="fontSizeTitle">{{edu.edumaterial.Type}}</div>
-        <div class="right" ng-if="edu.isShareable()">
-            <ons-toolbar-button ng-click="popoverSharing.show('#buttonShareMaterial');" id="buttonShareMaterial">
-                <ons-icon icon="ion-android-share-alt" fixed-width="true"></ons-icon>
-            </ons-toolbar-button>
-        </div>
-    </ons-toolbar>
+
+    <generic-toolbar title="{{edu.edumaterial.Type|translate}}" back-button="true" style-class="fontSizeTitle">
+        <ons-toolbar-button ng-click="popoverSharing.show('#buttonShareMaterial');" id="buttonShareMaterial" ng-if="edu.isShareable()">
+            <ons-icon icon="ion-android-share-alt" fixed-width="true"></ons-icon>
+        </ons-toolbar-button>
+    </generic-toolbar>
 
     <div id="{{edu.recursive_step}}" ng-init="edu.scrollDown()" style="height: 100%; width: auto; overflow: auto;">
 

@@ -1,8 +1,5 @@
 <ons-page ng-controller="AnnouncementsController">
-  <ons-toolbar fixed-style>
-    <div class="left"><ons-back-button>{{"BACK"|translate}}</ons-back-button></div>
-    <div class="center" ng-class="fontSizeTitle">{{"PFP_ANNOUNCEMENTS"|translate}}</div>
-  </ons-toolbar>
+  <generic-toolbar title="{{'PFP_ANNOUNCEMENTS'}}" back-button="true" style-class="fontSizeTitle"></generic-toolbar>
 <div class="container" align="center">
   <p style="margin-top:25vh;color:grey" ng-show="noAnnouncements">{{"NOGENERALANNOUNCEMENTS"|translate}}</p>
 </div>
