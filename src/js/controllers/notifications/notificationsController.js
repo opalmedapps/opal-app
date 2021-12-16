@@ -18,7 +18,6 @@
                                      $timeout, $scope) {
         var vm = this;
 
-        vm.showHeader = showHeader;
         vm.goToNotification = goToNotification;
 
         // Popover variables
@@ -78,17 +77,6 @@
                 vm.isLoading = false;
                 vm.notifications = $filter('orderBy')(notifications,'notifications.DateAdded', true);
             });
-        }
-
-        function showHeader(index){
-            if (index === 0){
-                return true;
-            }
-            else {
-                var previous = (new Date(vm.notifications[index-1].DateAdded)).setHours(0,0,0,0);
-                var current = (new Date(vm.notifications[index].DateAdded)).setHours(0,0,0,0);
-                return (current !== previous);
-            }
         }
 
         function goToNotification(index,notification){

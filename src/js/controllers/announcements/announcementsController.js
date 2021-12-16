@@ -25,14 +25,16 @@
     AnnouncementsController.$inject = [
         'Announcements',
         'NavigatorParameters',
-        '$scope'
+        '$scope',
+        '$filter'
     ];
 
     /* @ngInject */
     function AnnouncementsController(
         Announcements,
         NavigatorParameters,
-        $scope
+        $scope,
+        $filter
     ) {
         var vm = this;
 
@@ -55,7 +57,6 @@
         vm.announcements = [];
 
         vm.goToAnnouncement = goToAnnouncement;
-        vm.showHeader = showHeader;
 
         activate();
 
@@ -64,15 +65,9 @@
         function activate() {
             var announcements = Announcements.getAnnouncements();
             announcements = Announcements.setLanguage(announcements);
-            if (announcements.length>0) {
+            if (announcements.length > 0) {
                 vm.noAnnouncements = false;
-                announcements.sort(function(a, b) {
-
-                    // TODO: USE EXTERNAL HELPER WHEN CALLING SORT FUNCTION
-
-                    return new Date(b.DateAdded) - new Date(a.DateAdded);
-                });
-                vm.announcements=announcements;
+                vm.announcements = $filter('orderBy')(announcements, '-DateAdded');
             }
         }
 
@@ -92,24 +87,6 @@
             }
             NavigatorParameters.setParameters({Navigator:'generalNavigator', Post: announcement});
             $scope.generalNavigator.pushPage('./views/general/announcements/individual-announcement.html');
-        }
-
-        /**
-         * @ngdoc method
-         * @name showHeader
-         * @methodOf MUHCApp.controllers.AboutController
-         * @param index integer representing the index of the announcement in vm.announcements
-         * @return boolean
-         * @description
-         * Determines whether or not to show the date header in the view. Announcements are grouped by day.
-         */
-        function showHeader(index) {
-            if (index === 0) return true;
-
-            var current = (new Date(vm.announcements[index].DateAdded)).setHours(0,0,0,0);
-            var previous =(new Date(vm.announcements[index-1].DateAdded)).setHours(0,0,0,0);
-
-            return current !== previous;
         }
     }
 })();

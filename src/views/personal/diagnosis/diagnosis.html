@@ -6,7 +6,7 @@
     <network-banner></network-banner>
     <div>
         <ons-list class="settings-list" ng-repeat="diagnosis in diag.diagnoses | orderBy: '-CreationDate' ">
-            <ons-list-header   class="person-list-header" ng-class="fontSizeTitle" ng-show="diag.showHeader($index)">{{diagnosis.CreationDate|date:'fullDate'}}</ons-list-header>
+            <ons-list-header   class="person-list-header" ng-class="fontSizeTitle" ng-show="{{diag.diagnoses | showHeader : $index : 'CreationDate' }}">{{diagnosis.CreationDate|date:'fullDate'}}</ons-list-header>
             <ons-list-item class="item">
                 <ons-row style="padding:5px;">
                     <ons-col width="50px" align="center">
