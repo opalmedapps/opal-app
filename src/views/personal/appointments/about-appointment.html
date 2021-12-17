@@ -3,7 +3,7 @@
         <div class="left">
             <ons-back-button>{{"BACK"|translate}}</ons-back-button>
         </div>
-        <div class="center">{{"INFO"|translate}}</div>
+        <div class="center" ng-class="fontSizeTitle">{{"INFO"|translate}}</div>
     </ons-toolbar>
     <div>
         <ons-list class="settings-list">
@@ -14,7 +14,7 @@
                               ng-class="fontSizeTitle">{{vm.app["AppointmentType_" + vm.language]}}</span>
                     </header>
                     <p class="item-desc" ng-class="fontSizeDesc"
-                       ng-bind-html="vm.app['AppointmentDescription_' + vm.language]">
+                       ng-bind-html="vm.app['AppointmentDescription_' + vm.language] | trustHTML">
                     </p>
                 </div>
             </ons-list-item>

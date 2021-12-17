@@ -22,11 +22,12 @@
 		'$filter',
 		'Constants',
 		'Permissions',
-		'DynamicContentService',
-		'NewsBanner',
+		'DynamicContent',
+		'Toast',
 		'Params',
 		'UserHospitalPreferences',
-		'Browser'
+		'Browser',
+		'$timeout'
 	];
 
 	/* @ngInject */
@@ -37,19 +38,19 @@
 		$filter,
 		Constants,
 		Permissions,
-		DynamicContentService,
-		NewsBanner,
+		DynamicContent,
+		Toast,
 		Params,
 		UserHospitalPreferences,
-		Browser
+		Browser,
+		$timeout
 	) {
 		var vm = this;
 		vm.globalMessage = '';
 		vm.globalMessageDescription = '';
 		vm.firstTime = true;
-		vm.APP_NAME = OPAL_CONFIG.name;
+		vm.OPAL_CONFIG = OPAL_CONFIG;
 		vm.APP_VERSION = Constants.version();
-		vm.OPAL_ENV = OPAL_CONFIG.env;
 		vm.APP_BUILD_NUMBER = Constants.build();
 
 		vm.gotoLearnAboutOpal = gotoLearnAboutOpal;
@@ -65,30 +66,28 @@
 
 		function activate() {
 
-			// Initialize the service message to all users (links.php)
-			DynamicContentService.initializeLinks()
-				.then(function (response) {
-					if (!response.exists) {
-						DynamicContentService.setContentData(response.data);
-					}
+			DynamicContent.ensureInitialized().then(() => {
+				// Read the Message Of The Day from [staging|preprod|prod]_serviceStatus_[EN|FR].php on depDocs
+				return DynamicContent.getPageContent(OPAL_CONFIG.settings.messageOfTheDayKey);
 
-					// This line reads the Message Of The Day from [staging|preprod|prod]_serviceStatus_[EN|FR].php on depDocs
-					// '[staging|preprod|prod]_service' in links.php will grab the url (location) of
-					// [staging|preprod|prod]_serviceStatus_[EN|FR].php
-					return DynamicContentService.getPageContent(`${vm.OPAL_ENV}_service`);
-				})
-				.then(function successCallback(response) {
-					for (var key in response.data) {
-						if (response.data[key] !== "") {
+			}).then(response => {
+				// Save the Message Of The Day
+				if (typeof response.data === "object") for (let key in response.data) {
+					if (response.data[key] !== "") {
+						$timeout(() => {
 							vm.globalMessage = key;
 							vm.globalMessageDescription = response.data[key];
-							break;
-						}
+						});
+						break;
 					}
-				})
-				.catch(function errorCallback(error) {
-					console.log("Error initializing links using the DynamicContentService.", error);
+				}
+			}).catch(err => {
+				if (err.code === "INIT_ERROR") Toast.showToast({
+					message: $filter('translate')("ERROR_INIT_LINKS"),
 				});
+				else if (err.code === "NO_PAGE_CONTENT") console.warn(`No message of the day set up for environment "${OPAL_CONFIG.env}"`);
+				else console.error("Error initializing the message of the day using DynamicContent:", err);
+			});
 
 			//Add the login translation
 			$translatePartialLoader.addPart('login');
@@ -118,8 +117,12 @@
 			if (vm.globalMessageDescription !== '') {
 				if (vm.firstTime) {
 					vm.firstTime = false;
-					NewsBanner.showCustomBanner(vm.globalMessage + "\n" + vm.globalMessageDescription,'#333333', 
-						'#F0F3F4', 25, 'top', function(){}, 'long');
+					Toast.showToast({
+						message: vm.globalMessage + "\n" + vm.globalMessageDescription,
+						fontSize: 18,
+						durationWordsPerMinute: 80, // Slow down the message of the day
+						positionOffset: 30,
+					});
 				}
 			}
 		}
@@ -136,7 +139,8 @@
 		 * Go to registration page
 		 */
 		function goToRegister() {
-			Browser.openInternal(Params.registrationPage);
+			const url = DynamicContent.getURL("registration");
+			Browser.openInternal(url);
 		}
 
 		/**

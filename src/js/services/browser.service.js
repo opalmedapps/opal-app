@@ -10,9 +10,9 @@
         .module('MUHCApp')
         .factory('Browser', Browser);
 
-    Browser.$inject = ['$filter', 'Constants'];
+    Browser.$inject = ['$filter', 'Constants', 'Toast'];
 
-    function Browser($filter, Constants) {
+    function Browser($filter, Constants, Toast) {
 
         return {
             openInternal: openInternal,
@@ -24,6 +24,7 @@
         /**
          * @description Opens a link internally, using the in-app browser. If the device type is not a mobile app,
          *              opens the link in a new tab instead.
+         *              Shows an error message if the url parameter is missing.
          * @author Stacey Beard
          * @date 2021-06-23
          * @param {string} url - The link to open.
@@ -40,6 +41,7 @@
         function openInternal(url, hideURL = false, additionalOptions = "")
         {
             let browser = null;
+            if (!validateURL(url)) return null;
             if (Constants.app)
             {
                 // '_blank' opens the in-app browser (internal)
@@ -53,12 +55,14 @@
         /**
          * @description Opens a link externally, using the device's external browser(s). If the device type is not a
          *              mobile app, opens the link in a new tab instead.
+         *              Shows an error message if the url parameter is missing.
          * @author Stacey Beard
          * @date 2021-06-23
          * @param {string} url - The link to open.
          */
         function openExternal(url)
         {
+            if (!validateURL(url)) return null;
             if (Constants.app)
             {
                 // '_system' opens the system's web browser (external)
@@ -108,6 +112,23 @@
                 browser.addEventListener('loadstart', () => { browserModal.show(); });
                 browser.addEventListener('exit', () => { browserModal.hide(); });
             }
+        }
+
+        /**
+         * @description Checks whether the provided URL is valid (is a non-empty string).
+         *              If it's invalid, shows a news banner message to tell the user that the browser can't be opened.
+         * @author Stacey Beard
+         * @date 2021-07-21
+         * @param url The URL to check.
+         * @returns {boolean} True if the url is valid (is a non-empty string); false otherwise.
+         */
+        function validateURL(url) {
+            const valid = (typeof url === "string" && url !== "");
+
+            if (!valid) Toast.showToast({
+                message: $filter('translate')("BROWSER_OPEN_FAILED"),
+            });
+            return valid;
         }
     }
 })();

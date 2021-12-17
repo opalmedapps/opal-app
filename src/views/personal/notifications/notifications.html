@@ -4,6 +4,11 @@
             <ons-back-button>{{"BACK"|translate}}</ons-back-button>
         </div>
         <div class="center" ng-class="fontSizeTitle">{{"NOTIFICATIONS"|translate}}</div>
+        <div class="right">
+            <ons-toolbar-button id="notificationsMenu" ng-click="notificationsPopover.show('#notificationsMenu')">
+                <ons-icon icon="fa-ellipsis-v" fixed-width="true"></ons-icon>
+            </ons-toolbar-button>
+        </div>
     </ons-toolbar>
 
     <network-banner></network-banner>
@@ -44,7 +49,7 @@
                             <span class="item-desc" ng-class="fontSizeTitle">{{notification.Title}}</span>
                         </header>
 
-                        <p class="item-desc" ng-class="fontSizeDesc">{{notification.Desc|ellipsis:30}}</p>
+                        <p class="item-desc" ng-class="fontSizeDesc">{{notification.Desc}}</p>
                     </ons-col>
                 </ons-row>
             </ons-list-item>

@@ -236,6 +236,7 @@
             clearNotifications: clearNotifications,
             requestNewNotifications: requestNewNotifications,
             getLastUpdated: getLastUpdated,
+            markAllRead: markAllRead,
         };
 
         return service;
@@ -378,6 +379,15 @@
         }
 
         /**
+         * @description Marks all unread notifications as read.
+         */
+        function markAllRead() {
+            Notifications.forEach((notification, index) => {
+                if (notification.ReadStatus === "0") readNotification(index, notification);
+            });
+        }
+
+        /**
          * @ngdoc method
          * @name getNumberUnreadNotifications
          * @methodOf MUHCApp.service:Notifications
@@ -495,7 +505,7 @@
                     if (notifications[i].NotificationType === 'Questionnaire' || notifications[i].NotificationType === 'LegacyQuestionnaire') {
                         notifications[i].Desc = (language === 'EN') ? notifications[i].RefTableRowTitle_EN : notifications[i].RefTableRowTitle_FR;
                     }
-                    else {
+                    else if (typeof notifications[i].Content !== 'undefined') {
                         notifications[i].Desc = (language === 'EN') ? notifications[i].Content.NameEN : notifications[i].Content.NameFR;
                     }
                 } catch (e) {

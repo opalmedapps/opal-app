@@ -18,14 +18,13 @@
     CleanUp.$inject = ['UserAuthorizationInfo', 'LocalStorage', 'Documents', 'Diagnoses',
         'Appointments', 'Patient', 'Doctors', 'TxTeamMessages', 'Questionnaires',
         'Announcements', 'EducationalMaterial', 'Notifications', 'UserPreferences',
-        'UpdateUI', 'Tasks', 'PlanningSteps', 'PatientTestResults', 'CheckInService', 
-        'Constants'];
+        'UpdateUI', 'Tasks', 'PlanningSteps', 'PatientTestResults', 'CheckInService'];
 
     function CleanUp(UserAuthorizationInfo, LocalStorage, Documents, Diagnoses,
                      Appointments, Patient, Doctors, TxTeamMessages, Questionnaires,
                      Announcements, EducationalMaterial, Notifications, UserPreferences,
-                     UpdateUI, Tasks, PlanningSteps, PatientTestResults, CheckInService, Constants) {
-        var service = {
+                     UpdateUI, Tasks, PlanningSteps, PatientTestResults, CheckInService) {
+        let service = {
             clear: clear,
             clearSensitive: clearSensitive
         };
@@ -33,13 +32,13 @@
         
         ////////////////
         
-        function clear() {    
+        function clear() {
             PatientTestResults.clear();
             LocalStorage.resetUserLocalStorage();
             Tasks.destroy();
             PlanningSteps.destroy();
             Documents.clearDocuments();
-            Documents.deleteDocumentsDownloaded();  // delete documents downloaded to be viewed on Android (view in external viewer option)
+            Documents.deleteDocumentsDownloaded(); // delete documents downloaded to be shared or viewed on Android (open in external viewer option)
             Diagnoses.clearDiagnoses();
             Appointments.clearAppointments();
             Patient.clearPatient();
@@ -53,28 +52,10 @@
             UserAuthorizationInfo.clearUserAuthorizationInfo();
             UpdateUI.clearUpdateUI();
             CheckInService.clear();
-
-            /**
-             * Delete All Cookies
-             */
-            if (Constants.app) {
-                window.cookieMaster.clear(
-                    function () {
-                        console.log('Cookies have been cleared');
-                    },
-                    function () {
-                        console.log('Cookies could not be cleared');
-                    });
-            }
         }
 
         function clearSensitive() {
             PatientTestResults.clear();
-            Documents.clearDocumentContent();
         }
-
-
     }
-
 })();
-

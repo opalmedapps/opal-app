@@ -1,20 +1,14 @@
+<!-- TODO consolidate duplicate error messages and loading wheels on this page -->
 <ons-page ng-controller="IndividualMaterialController as edu">
     <ons-toolbar fixed-style>
         <div class="left"><ons-back-button ng-click="edu.clickBack()">{{"BACK"|translate}}</ons-back-button></div>
-        <div class="center">{{edu.edumaterial.Type}}</div>
-        <div class="right" ng-show="edu.edumaterial.ShareURL_EN && edu.edumaterial.ShareURL_EN!==''"><ons-toolbar-button ng-click="popoverSharing.show('#buttonShareMaterial');" id="buttonShareMaterial"><ons-icon icon="fa-share"></ons-icon></ons-toolbar-button></div>
-
+        <div class="center" ng-class="fontSizeTitle">{{edu.edumaterial.Type}}</div>
+        <div class="right" ng-if="edu.isShareable()">
+            <ons-toolbar-button ng-click="popoverSharing.show('#buttonShareMaterial');" id="buttonShareMaterial">
+                <ons-icon icon="ion-android-share-alt" fixed-width="true"></ons-icon>
+            </ons-toolbar-button>
+        </div>
     </ons-toolbar>
-
-    <!--<style>-->
-    <!--#scroll_content {-->
-    <!--height: 100%;-->
-    <!--width: auto;-->
-    <!--overflow: auto;-->
-    <!--border-style: solid;-->
-    <!--}-->
-
-    <!--</style>-->
 
     <div id="{{edu.recursive_step}}" ng-init="edu.scrollDown()" style="height: 100%; width: auto; overflow: auto;">
 
@@ -33,21 +27,40 @@
             </ons-list-item>
         </ons-list>
 
-        <!-- Booklet: click to open pdf -->
-        <ons-list class="settings-list" ng-hide="edu.tableOfContents||edu.edumaterial.Type === 'Video'||edu.edumaterial.Type === 'Vidéo'||edu.isIndividualHtmlPage || edu.edumaterial.EducationalMaterialType_EN === 'Package'">
-            <ons-list-item class="item" ng-click="edu.goToEducationalMaterial()" style="background-color: #F9F9F9; border: none !important;">
-                <div align="center">
-                    <div>
-                        <img class="animated swing" style="height:175px; margin-top: 25%;" src="./img/pdf.jpeg">
-                        <h4 style="margin-top: 2%">{{"CLICKTOOPEN" | translate}}</h4>
-                    </div>
-                    <h3 ons-if-platform="android" align="center" ng-class="fontSizeTitle">{{"TAP_DL"|translate}}</h3>
+        <!-- Click to open pdf -->
+        <div ng-if="edu.displayType === 'pdf'" style="background-color: #F9F9F9">
+            <!-- Error message if download fails -->
+            <div ng-show="edu.errorLoadingContents" align="center" style="width: 95%; margin: 10px auto" ng-class="fontSizeDesc">
+                <uib-alert type="{{edu.alert.type}}">{{edu.alert.message|translate}}</uib-alert>
+            </div>
+
+            <!-- Loading wheel while the pdf is being downloaded -->
+            <loading-spinning-circle
+                    ng-show="edu.loadingContents"
+                    loading-message="{{'LOADINGMATERIAL'|translate}}"
+                    margintop="15vh"
+            ></loading-spinning-circle>
+
+            <!-- Download image and button -->
+            <div ng-show="!edu.loadingContents" ng-click="edu.openPDF()" align="center">
+                <div>
+                    <img class="animated swing" style="height:175px; margin-top: 25%;" src="./img/pdf.jpeg">
+                    <h4 style="margin-top: 2%">{{"CLICKTOOPEN" | translate}}</h4>
                 </div>
-            </ons-list-item>
-        </ons-list>
+                <h3 ons-if-platform="android" align="center" ng-class="fontSizeTitle">{{"TAP_DL"|translate}}</h3>
+            </div>
+        </div>
+
+        <!-- Click to open link -->
+        <div ng-if="edu.displayType === 'link'" style="background-color: #F9F9F9">
+            <div class="item" ng-click="edu.goToEducationalMaterial()" align="center">
+                <ons-icon class="animated swing" icon="ion-android-open" size="100px" style="color:#4282CC; margin-top:25%;"></ons-icon>
+                <br><ons-button ng-class="fontSizeDesc" style="margin-top:20px">{{"OPEN_LINK" | translate}}</ons-button>
+            </div>
+        </div>
 
         <!-- Package [Added by Tongyou (Eason) Yang] -->
-        <ons-list ng-if="edu.edumaterial.EducationalMaterialType_EN === 'Package'">
+        <ons-list ng-if="edu.displayType === 'package'">
 
             <!-- Loading wheel while the package contents is being fetched. -->
             <div  align="center" style="margin-top:10vh" ng-show="edu.loadingContents">
@@ -81,12 +94,11 @@
 
                 </ons-row>
             </ons-list-item >
-
         </ons-list>
 
         <!-- Booklet: table of contents -->
-        <ons-list style="margin: 10px 0 0 0" ng-hide="!edu.tableOfContents">
-            <ons-list-header class="person-list-header" ng-class="fontSizeTitle"  >{{"TABLEOFCONTENTS"|translate}}</ons-list-header>
+        <ons-list style="margin: 10px 0 0 0" ng-if="edu.displayType === 'booklet'">
+            <ons-list-header class="person-list-header" ng-class="fontSizeTitle">{{"TABLEOFCONTENTS"|translate}}</ons-list-header>
 
             <ons-list-item modifier="chevron" ng-repeat= "edumaterial in edu.tableOfContents" class="item" ng-click="edu.goToEducationalMaterial($index)">
                 <ons-row align="center">
@@ -106,7 +118,7 @@
         </ons-list>
 
         <!-- Video -->
-        <ons-list class="settings-list" ng-if="edu.edumaterial.Type === 'Video' || edu.edumaterial.Type === 'Vidéo'">
+        <ons-list class="settings-list" ng-if="edu.displayType === 'video'">
             <ons-list-item class="item">
                 <div align="center" class="embed-responsive embed-responsive-16by9">
                     <iframe class="embed-responsive-item" ng-src="{{edu.edumaterial.Url|trustThisUrl}}" allowfullscreen="allowfullscreen" mozallowfullscreen="mozallowfullscreen" msallowfullscreen="msallowfullscreen" oallowfullscreen="oallowfullscreen" webkitallowfullscreen="webkitallowfullscreen">
@@ -115,16 +127,14 @@
             </ons-list-item>
         </ons-list>
 
-
         <!-- HTML page (Booklet, Factsheet, etc.) -->
-        <ons-list class="settings-list" ng-if="edu.isIndividualHtmlPage" >
+        <ons-list class="settings-list" ng-if="edu.displayType === 'html'">
 
             <!-- Loading wheel while the material contents is being fetched. -->
-            <div  align="center" style="margin-top:10vh" ng-show="edu.loadingContents">
-                <svg class="progress-circular">
-                    <circle class="progress-circular__primary" cx="50%" cy="50%" r="40%" fill="none" stroke-width="10%" stroke-miterlimit="10"/>
-                </svg>
-            </div>
+            <loading-spinning-circle
+                    ng-show="edu.loadingContents"
+                    loading-message="{{'LOADINGMATERIAL'|translate}}">
+            </loading-spinning-circle>
 
             <!-- Message if the material contents could not be loaded. -->
             <div class="ons-row" align="center" ng-show="edu.errorLoadingContents" style="margin-top: 50px">
@@ -135,14 +145,10 @@
 
             <!-- Contents -->
             <ons-list-item class="item">
-                <div class="container" style="background-color:white;overflow-y:scroll" ng-style="{height:edu.heightSection}"   ng-show="edu.edumaterial.Content">
-                    <div ng-bind-html="edu.edumaterial.Content" ng-class="fontSizeDesc"></div>
+                <div class="container" style="background-color:white; overflow-y:scroll" ng-style="{height:edu.heightSection}" ng-show="edu.edumaterial.Content">
+                    <div ng-bind-html="edu.edumaterial.Content | trustHTML" ng-class="fontSizeDesc"></div>
                 </div>
             </ons-list-item>
-
         </ons-list>
-
     </div>
-
 </ons-page>
-
