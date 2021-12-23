@@ -42,7 +42,8 @@
             formatYear: 'yyyy',
             startingDay: 0,
             formatDay:'d',
-            showWeeks:false
+            showWeeks:false,
+            shortcutPropagation: true
         };
 
         vm.HasMeaningfulAlias = HasMeaningfulAlias;
@@ -110,9 +111,9 @@
             // Get the name of the current navigator
             navigatorName = NavigatorParameters.getParameters().Navigator;
 
-            vm.appointments=Appointments.getUserAppointments();
+            vm.appointments = Appointments.getUserAppointments();
             vm.noAppointments = (vm.appointments.length === 0);
-            if(vm.appointments.length>0) {
+            if(vm.appointments.length > 0) {
                 
                 //Setting time in milliseconds for last appointment
                 dateLast=(new Date(vm.appointments[vm.appointments.length-1].ScheduledStartTime.getTime()));

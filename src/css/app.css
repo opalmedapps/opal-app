@@ -1726,6 +1726,10 @@ Button appointments
   background-color: blue;
 }
 
+.uib-daypicker .btn-default:hover {
+  background-color: #ffffff;
+}
+
 .appointment-calendar .uib-monthpicker .uib-months .uib-month .btn-sm{
   border:0;
   width:60vw;
