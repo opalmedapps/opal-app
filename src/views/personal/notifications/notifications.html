@@ -41,11 +41,8 @@
                         <!-- Bold if Unread, Normal font if already read -->
                         <!-- Bold is when class="item-title" -->
                         <!-- Non-Bold is when class="item-desc" -->
-                        <header ng-if="notification.ReadStatus==='0'">
-                            <span class="item-title" ng-class="fontSizeTitle">{{notification.Title}}</span>
-                        </header>
-                        <header ng-if="notification.ReadStatus==='1'">
-                            <span class="item-desc" ng-class="fontSizeTitle">{{notification.Title}}</span>
+                        <header>
+                            <span ng-class="[fontSizeTitle, {'item-title': notification.ReadStatus==='0'}, {'item-desc': notification.ReadStatus!=='0'}]">{{notification.Title}}</span>
                         </header>
 
                         <p class="item-desc" ng-class="fontSizeDesc">{{notification.Desc}}</p>

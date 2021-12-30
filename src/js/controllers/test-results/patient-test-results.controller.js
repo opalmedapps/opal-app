@@ -166,16 +166,14 @@ class PatientTestResultsController {
 	 * @returns {boolean} whether or not to fetch test results from server
 	 */
 	#shouldFetchTestResultsFromServer = () => {
-		return Date.now() - this.#patientTestResults.getLastUpdated()
-			> PatientTestResultsController.#SERVER_REFRESH_TIME;
+		return Date.now() - this.#patientTestResults.getLastUpdated() > PatientTestResultsController.#SERVER_REFRESH_TIME;
 	};
 
 	/**
 	 * Polls the {@link PatientTestResults} service for the testDates, and testTypes of the patient
 	 */
 	#getTestResultsMetadata = async (useServer) => {
-		return [await this.#patientTestResults.getTestDates(useServer),
-		await this.#patientTestResults.getTestTypes(useServer)];
+		return [await this.#patientTestResults.getTestDates(useServer), await this.#patientTestResults.getTestTypes(useServer)];
 	};
 
 	/**
@@ -183,6 +181,10 @@ class PatientTestResultsController {
 	 * @param {[Dates[], TestType[]]} param0 testDates and testTypes for the view
 	 */
 	#updateView = ([testDates, testTypes]) => {
+
+		console.log('testDates ==>', testDates)
+		console.log('testTypes ==>', testTypes)
+
 		this.#$timeout(() => {
 			this.loading = false;
 			this.testDates = testDates;
