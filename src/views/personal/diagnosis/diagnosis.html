@@ -1,8 +1,5 @@
 <ons-page ng-controller="DiagnosesController as diag">
-    <ons-toolbar fixed-style>
-        <div class="left"><ons-back-button>{{"BACK"|translate}}</ons-back-button></div>
-        <div class="center" ng-class="fontSizeTitle">{{"DIAGNOSIS"|translate}}</div>
-    </ons-toolbar>
+    <generic-toolbar title="{{'DIAGNOSIS'|translate}}" style-class="fontSizeTitle"></generic-toolbar>
     <network-banner></network-banner>
     <div>
         <ons-list class="settings-list" ng-repeat="diagnosis in diag.diagnoses | orderBy: '-CreationDate' ">

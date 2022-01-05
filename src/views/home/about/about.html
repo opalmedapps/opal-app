@@ -1,12 +1,7 @@
 <ons-page ng-controller="AboutController as about">
-    <ons-toolbar fixed-style>
-        <div class="left">
-            <ons-back-button ng-class="fontSizeDesc">{{"BACK"|translate}}</ons-back-button>
-        </div>
-        <div class="center" ng-class="fontSizeTitle">Opal</div>
-    </ons-toolbar>
+    <generic-toolbar title="Opal" style-class="fontSizeTitle"></generic-toolbar>
+    
     <network-banner></network-banner>
-
     <ons-list>
         <ons-list-item class="item" modifier="tappable chevron" ng-click="about.openTour()">
             <ons-row align="center">

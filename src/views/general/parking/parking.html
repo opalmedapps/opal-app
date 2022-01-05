@@ -1,10 +1,5 @@
 <ons-page ng-controller="ParkingController as parking">
-    <ons-toolbar fixed-style>
-        <div class="left">
-            <span><ons-back-button>{{"BACK"|translate}}</ons-back-button></span>
-        </div>
-        <div class="center" ng-class="fontSizeTitle">{{"PARKING"|translate}}</div>
-    </ons-toolbar>
+    <generic-toolbar title="{{'PARKING'|translate}}" style-class="fontSizeTitle"></generic-toolbar>
 
     <network-banner></network-banner>
 
