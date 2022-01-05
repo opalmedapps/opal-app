@@ -1,15 +1,10 @@
 <ons-page ng-controller="PatientTestResultsByTypeController as testTypeCtrl">
-    <ons-toolbar fixed-style>
-        <div class="left">
-            <ons-back-button>{{"BACK"|translate}}</ons-back-button>
-        </div>
-        <div class="center" ng-class="fontSizeTitle">
-            <p class="overflow-text-ellipsis">{{testTypeCtrl.getTestName(testTypeCtrl.test)}}</p>
-        </div>
-        <div class="right">
+    <generic-toolbar title="{{testTypeCtrl.getTestName(testTypeCtrl.test)}}" style-class="fontSizeTitle">
+        <right-content>
             <labs-info-button></labs-info-button>
-        </div>
-    </ons-toolbar>
+        </right-content>
+    </generic-toolbar>
+
     <loading-spinning-circle ng-show="testTypeCtrl.loading"
                              loading-message="{{'LOADINGLABRESULTS'|translate}}">
     </loading-spinning-circle>
