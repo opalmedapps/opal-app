@@ -18,10 +18,11 @@
 
 		// variables seen from view
 		vm.loading = true;  // This is for loading the list of questionnaires
-		vm.parkingInfo = [];
+		vm.sites = [];
 
 		// functions that can be used from view
 		vm.goToParkingLink = goToParkingLink;
+		vm.goToPrototypeParkingLink = goToPrototypeParkingLink;
 
 		activate();
 
@@ -33,14 +34,14 @@
 
 			navigator = NavigatorParameters.getNavigator();
 
-			Hospital.requestParkingInfo(UserHospitalPreferences.getHospital())
+			Hospital.requestParkingInfo(UserHospitalPreferences.getHospital(), UserPreferences.getLanguage())
 				.then(function(parkingInfo) {
 					$timeout(function(){
-						vm.parkingInfo = parkingInfo;
+						vm.sites = parkingInfo.results[0].sites;
 
 						vm.loading = false;
 
-						console.log(JSON.stringify(vm.parkingInfo));
+						console.log(JSON.stringify(vm.sites));
 					});
 				})
 				.catch(function(error){
@@ -49,6 +50,10 @@
 						handleRequestError();
 					})
 			});
+		}
+
+		function goToPrototypeParkingLink(url) {
+				Browser.openInternal(url);
 		}
 
 		function goToParkingLink(type) {

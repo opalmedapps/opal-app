@@ -31,13 +31,15 @@
         /**
          * @name requestParkingInfo
          * @desc this function gets parking info for a particular hospital
-         * @param {string} hospitalKey ID of that particular questionnaire
+         * @param {string} hospitalKey ID of a particular hospital (institution)
+         * @param {string} language
          * @returns {Promise} resolves to the parking's data if success
          */
-        function requestParkingInfo(hospitalKey){
+        function requestParkingInfo(hospitalKey, language){
             // Parameters
             let params = {
                 'hospitalKey': hospitalKey,
+                'language': language,
             };
 
             return RequestToServer.sendRequestWithResponse(api, params)
