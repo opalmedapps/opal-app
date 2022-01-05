@@ -89,7 +89,6 @@
   "OUTOFTRIES": "Too many failed attempts - Please try again later.",
   "PAGE_ACCESS_ERROR": "Error accessing this page. Please try again later.",
   "PARKING": "Parking & Transport",
-  "PARKINGINFORMATION": "Parking Information",
   "PASSWORD": "Password",
   "PASSWORDRESETSERVERERROR": "There seems to be an issue on our end regarding resetting your password. Please try resetting your password again. We apologize for any inconvenience.",
   "PASSWORD_SERVER_ERROR": "An issue occurred with your password, possibly due to a password reset error. Please use the button below to reset it again.",
