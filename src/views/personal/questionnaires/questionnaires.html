@@ -1,40 +1,26 @@
 <ons-page ng-controller="QuestionnaireMainController as vm">
-    <ons-toolbar fixed-style>
-        <div class="left">
-            <ons-back-button>{{"BACK"|translate}}</ons-back-button>
-        </div>
-        <div class="center" ng-class="fontSizeTitle" >
-            <!--if is the start of a questionnaire: display questionnaire home on the top bar-->
-            <span ng-if="vm.questionnaireStart" ng-class="fontSizeDesc">
-              {{"QUESTIONNAIRE_HOME"|translate}}
-            </span>
-            <!--this is in the middle of a questionnaire: display the title of that section-->
-            <!-- note: uncomment the following when sections are implemented in OpalAdmin -->
-<!--            <span ng-class="fontSizeDesc" ng-if="!vm.questionnaireStart">-->
-<!--                &lt;!&ndash; if the title is too long, limit it&ndash;&gt;-->
-<!--                {{vm.questionnaire.sections[vm.sectionIndex].section_title | limitTo:25}}{{vm.questionnaire.sections[vm.sectionIndex].section_title.length > 25 ? '...': ''}}-->
-<!--            </span>-->
-        </div>
-        <div class="right" >
+    <generic-toolbar title="{{'QUESTIONNAIRE_HOME'|translate}}" style-class="fontSizeTitle">
+        <right-content>
             <!--the words leading to begin / resume questionnaire depending on the status of the questionnaire-->
             <span ng-if="!vm.isQuestion && vm.questionnaireStart && vm.questionnaire.status == vm.allowedStatus.NEW_QUESTIONNAIRE_STATUS && !vm.loadingQuestionnaire"
-                  class="toolbar-button--quiet navigation-bar__line-height"
-                  ng-click="vm.beginQuestionnaire(false);">
-            {{"BEGIN"|translate}}
+                class="toolbar-button--quiet navigation-bar__line-height"
+                ng-click="vm.beginQuestionnaire(false);">
+                {{"BEGIN"|translate}}
             </span>
             <span ng-if="!vm.isQuestion && vm.questionnaireStart && vm.questionnaire.status == vm.allowedStatus.IN_PROGRESS_QUESTIONNAIRE_STATUS && !vm.loadingQuestionnaire"
-                  class="toolbar-button--quiet navigation-bar__line-height"
-                  ng-click="vm.resumeQuestionnaire(vm.startIndex);">
-            {{"RESUME"|translate}}
+            class="toolbar-button--quiet navigation-bar__line-height"
+            ng-click="vm.resumeQuestionnaire(vm.startIndex);">
+                {{"RESUME"|translate}}
             </span>
             <!--this is for the last question going into the summary page-->
             <span ng-if="vm.isQuestion && (carousel.getActiveCarouselItemIndex() == vm.carouselItems.length) && !vm.loadingQuestionnaire"
-                  style="padding-left:0px" class="toolbar-button--quiet navigation-bar__line-height"
-                  ng-click="vm.finishQuestionnaireFromQuestion();">
-            {{"DONE"|translate}}
+            style="padding-left:0px" class="toolbar-button--quiet navigation-bar__line-height"
+            ng-click="vm.finishQuestionnaireFromQuestion();">
+                {{"DONE"|translate}}
             </span>
-        </div>
-    </ons-toolbar>
+        </right-content>
+    </generic-toolbar>
+
 
     <!--LOADING CIRCLE FOR QUESTIONNAIRE -->
     <loading-spinning-circle

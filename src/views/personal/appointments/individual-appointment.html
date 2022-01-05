@@ -1,8 +1,5 @@
 <ons-page ng-controller="AppointmentController as vm">
-    <ons-toolbar fixed-style>
-        <div class="left"><ons-back-button>{{"BACK"|translate}}</ons-back-button></div>
-        <div class="center" ng-class="fontSizeTitle">{{"APPOINTMENT"|translate}}</div>
-    </ons-toolbar>
+    <generic-toolbar title="{{'APPOINTMENT'|translate}}" style-class="fontSizeTitle"></generic-toolbar>
     <div style="border-top: 1px solid lightsteelblue">
         <ons-list ng-hide="vm.corrupted_appointment">
 

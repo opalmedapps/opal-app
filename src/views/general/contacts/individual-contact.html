@@ -1,7 +1,5 @@
 <ons-page ng-controller="ContactIndividualController as cont" ng-cloak>
-    <ons-toolbar fixed-style>
-        <div class="left"><ons-back-button>{{"BACK"|translate}}</ons-back-button></div>
-    </ons-toolbar>
+    <generic-toolbar style-class="fontSizeTitle"></generic-toolbar>
     <div class="profile-cardContact">
         <img ng-if="!cont.doctor.ProfileImage" src="./img/doctor.png" class="profile-image">
         <img ng-if="cont.doctor.ProfileImage" ng-src="{{cont.doctor.ProfileImage}}" class="profile-image">

@@ -1,10 +1,11 @@
 <ons-page ng-controller="EducationalMaterialController as edu" ng-device-backbutton="edu.educationDeviceBackButton()">
 
     <!-- TOOLBAR -->
-    <ons-toolbar fixed-style>
-        <div class="center" ng-class="fontSizeTitle">{{"EDUCATION"|translate}}</div>
-        <div class="right"><ons-toolbar-button ng-click="educationNavigator.pushPage('./views/tabs/info-page-tabs.html')"><ons-icon icon="fa-info-circle"></ons-icon></ons-toolbar-button></div>
-    </ons-toolbar>
+    <generic-toolbar title="{{'EDUCATION'|translate}}" back-button="false" style-class="fontSizeTitle">
+        <right-content>
+            <ons-toolbar-button ng-click="educationNavigator.pushPage('./views/tabs/info-page-tabs.html')"><ons-icon icon="fa-info-circle"></ons-icon></ons-toolbar-button>
+        </right-content>
+    </generic-toolbar>
 
     <!-- HOSPITAL NAME BAR -->
     <top-page-banner title="edu.selectedHospitalToDisplay"></top-page-banner>
