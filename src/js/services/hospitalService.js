@@ -1,25 +1,28 @@
+
+/**
+ *@ngdoc service
+ *@name MUHCApp.service:Hospital
+ * @requires MUHCApp.service:RequestToServer
+ * @requires MUHCApp.service:Patient
+ * @requires MUHCApp.service:Params
+ *@description Service used to manage patient's hospital settings (e.g., parking info)
+ **/
+
 (function() {
     'use strict';
-
-    /**
-     * hospitalService
-     */
 
     angular
         .module('MUHCApp')
         .factory('Hospital', Hospital);
 
     Hospital.$inject = [
-        'RequestToServer',
-        'Params'
+        'RequestToServer', 'Patient', 'Params'
     ];
 
     /* @ngInject */
-    function Hospital(RequestToServer, Params) {
-        //TODO: fix - add to app values (Params.API_PARKING_INFO)
-        const api = 'ParkingInfo';
+    function Hospital(RequestToServer, Patient, Params) {
+        const endpoint = Params.HOSPITAL_SETTINGS.PARKING_INFO;
 
-        // this is redundant, but written for clarity, ordered alphabetically
         let requestHospitalService = {
             requestParkingInfo: requestParkingInfo,
         };
@@ -31,18 +34,19 @@
         /**
          * @name requestParkingInfo
          * @desc this function gets parking info for a particular hospital
-         * @param {string} hospitalKey ID of a particular hospital (institution)
-         * @param {string} language
+         * @param {string} hospitalKey - an ID of a particular hospital (institution)
+         * @param {string} language - patient's language
          * @returns {Promise} resolves to the parking's data if success
          */
         function requestParkingInfo(hospitalKey, language){
-            // Parameters
+            // request parameters
             let params = {
-                'hospitalKey': hospitalKey,
+                'patientSerNum': Patient.getUserSerNum(),
+                'institutionCode': hospitalKey,
                 'language': language,
             };
 
-            return RequestToServer.sendRequestWithResponse(api, params)
+            return RequestToServer.sendRequestWithResponse(endpoint, params)
                 .then(function (response) {
                     // this is in case firebase delete the property when it is empty
                     if (response.hasOwnProperty('data')) {

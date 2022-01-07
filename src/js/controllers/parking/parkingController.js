@@ -7,10 +7,16 @@
 	angular.module("MUHCApp")
 		.controller("ParkingController", ParkingController);
 
-	ParkingController.$inject = ['$filter', '$timeout', 'NativeNotification', 'NavigatorParameters', 'UserPreferences', 'UserHospitalPreferences', 'Hospital', 'Params', 'Browser', 'DynamicContent'];
+	ParkingController.$inject = [
+		'$filter', '$timeout', 'NativeNotification', 'NavigatorParameters', 'UserPreferences', 'UserHospitalPreferences',
+		'Hospital', 'Params', 'Browser', 'DynamicContent'
+	];
 
 	/* @ngInject */
-	function ParkingController($filter, $timeout, NativeNotification, NavigatorParameters, UserPreferences, UserHospitalPreferences, Hospital, Params, Browser, DynamicContent) {
+	function ParkingController(
+		$filter, $timeout, NativeNotification, NavigatorParameters, UserPreferences, UserHospitalPreferences,
+		Hospital, Params, Browser, DynamicContent
+	) {
 		const vm = this;
 
 		// variables for controller
@@ -37,12 +43,10 @@
 			Hospital.requestParkingInfo(UserHospitalPreferences.getHospital(), UserPreferences.getLanguage())
 				.then(function(parkingInfo) {
 					$timeout(function(){
-						vm.sites = parkingInfo.results[0].sites;
-
-						vm.loading = false;
-
-						console.log(JSON.stringify(vm.sites));
+						vm.sites = parkingInfo.results;
 					});
+
+					vm.loading = false;
 				})
 				.catch(function(error){
 					$timeout(function(){
@@ -52,6 +56,11 @@
 			});
 		}
 
+		/**
+		 * @name goToPrototypeParkingLink
+		 * @desc This function redirects user to the given parking site url
+		 * @param {string} url Parking url
+		 */
 		function goToPrototypeParkingLink(url) {
 				Browser.openInternal(url);
 		}
