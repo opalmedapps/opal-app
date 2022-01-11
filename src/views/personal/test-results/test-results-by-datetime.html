@@ -1,15 +1,9 @@
 <ons-page ng-controller="PatientTestResultsByDatetimeController as testsByDate">
-
-    <!-- TOOLBAR -->
-    <ons-toolbar fixed-style>
-        <div class="left">
-            <ons-back-button>{{"BACK"|translate}}</ons-back-button>
-        </div>
-        <div class="center" ng-class="fontSizeTitle">{{testsByDate.testDate|date:'medium'}}</div>
-        <div class="right">
+    <generic-toolbar title="{{testsByDate.testDate|date:'medium'}}" style-class="fontSizeTitle">
+        <right-content>
             <labs-info-button></labs-info-button>
-        </div>
-    </ons-toolbar>
+        </right-content>
+    </generic-toolbar>
     <loading-spinning-circle ng-if="testsByDate.loading" loading-message="{{'LOADINGLABRESULTS'|translate}}">
     </loading-spinning-circle>
 
@@ -18,7 +12,7 @@
         <div style="position:sticky; top:0; z-index:9999;">
             <!-- SEARCH BAR -->
             <search-bar search-text="testsByDate.searchText" placeholder="{{'SEARCH'|translate}}"
-                style-class="fontSizeDesc">
+               style-class="fontSizeDesc">
             </search-bar>
 
             <!-- DISCLAIMER -->

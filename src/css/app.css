@@ -2582,6 +2582,11 @@ input:focus {
     border-bottom: 1px solid #ddd !important;
 }
 
+.navigation-bar {
+  display: flex;
+  align-items: center;
+}
+
 .tab-bar{
     border-top: 1px solid #ddd !important;
 }
