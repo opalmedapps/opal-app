@@ -94,11 +94,34 @@
 
     <!--
     In-App Browser Modal
-    Note: This modal is used as a temporary fix to hid the gap in the in-app browser on iOS (remove if the issue is fixed).
+    Note: This modal is used as a temporary fix to hide the gap in the in-app browser on iOS (remove if the issue is fixed).
           https://github.com/apache/cordova-plugin-inappbrowser/issues/870
           https://github.com/apache/cordova-plugin-inappbrowser/issues/801
     =================================-->
     <ons-modal var="browserModal" style="background-color: #7C7C7C"></ons-modal>
+
+    <!--
+     Tour Modal
+     =================================-->
+    <ons-modal var="firstLoginTourModal">
+        <div id="rcorners">
+            <h3>{{"TOUR_WELCOME"|translate}}</h3>
+            <p style="margin-top: 10%; margin-bottom:10%;" class="secure-message">{{"TOUR_MODAL_INTRODUCTION"|translate}}</p>
+            <ons-button ng-class="fontSizeTitle" style="background-color: #6a6261; margin: 2px"
+                        ng-click="firstLoginTourModal.hide()">
+                {{"TOUR_MODAL_LATER_BUTTON"|translate}}
+            </ons-button>
+            <ons-button ng-class="fontSizeTitle" style="margin: 2px"
+                        ng-click="firstLoginTourModal.hide(); homeNavigator.pushPage('views/home/tour/tour.html');">
+                {{"TOUR_MODAL_TAKE_TOUR_BUTTON"|translate}}
+            </ons-button>
+        </div>
+    </ons-modal>
+
+    <!--
+    Custom Toast Message
+    =================================-->
+    <div id="custom-toast-container"><div id="custom-toast"></div></div>
 
     <!--
     App

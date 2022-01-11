@@ -15,10 +15,10 @@
         .module('MUHCApp')
         .controller('ContentController', ContentController);
 
-    ContentController.$inject = ['DynamicContentService', 'NavigatorParameters', 'Logger', 'Params'];
+    ContentController.$inject = ['DynamicContent', 'NavigatorParameters', 'Logger', 'Params', '$timeout'];
 
     /* @ngInject */
-    function ContentController(DynamicContentService, NavigatorParameters, Logger, Params) {
+    function ContentController(DynamicContent, NavigatorParameters, Logger, Params, $timeout) {
         var vm = this;
         vm.pageContent = {};
         vm.loading = true;
@@ -36,49 +36,57 @@
             let link = nav.getCurrentPage().options.contentLink;
             let contentType = nav.getCurrentPage().options.contentType;
 
-            vm.pageContent.title = contentType;
+            vm.pageContent.title = "";
+
             link ? loadFromURL(link, contentType) : loadPageContent(contentType);
         }
 
         function loadPageContent(contentType) {
-            var pageContent = DynamicContentService.getContentData(contentType);
-
-            // get the content from depdocs
-            DynamicContentService.getPageContent(contentType)
-                .then(function (response) {
-                    vm.pageContent.title = pageContent.title;
+            // Get the content from DepDocs
+            DynamicContent.getPageContent(contentType).then(response => {
+                $timeout(() => {
+                    vm.pageContent.title = response.title;
                     vm.pageContent.content = response.data;
                     vm.loading = false;
-                }).catch(handleError);
+                });
+            }).catch(handleError);
         }
 
         function loadFromURL(url, contentType) {
-            DynamicContentService.loadFromURL(url)
-                .then(function (response) {
+            DynamicContent.loadFromURL(url).then(response => {
+                $timeout(() => {
                     Logger.sendLog('About', contentType);
                     vm.pageContent.title = contentType;
                     vm.pageContent.content = response.data;
                     vm.loading = false;
-                })
-                .catch(handleError);
+                });
+            }).catch(handleError);
         }
 
         function handleError(response) {
-            vm.loading = false;
-            switch (response.code) {
-                case "NO_PAGE":
-                    vm.alert = {
-                        type: Params.alertTypeInfo,
-                        content: "NO_CONTENT"
-                    };
-                    break;
-                default:
-                    vm.alert = {
-                        type: Params.alertTypeDanger,
-                        content: "INTERNETERROR"
-                    };
-            }
+            $timeout(() => {
+                vm.loading = false;
+                console.error(response);
+                switch (response.code) {
+                    case "NO_PAGE_CONTENT":
+                        vm.alert = {
+                            type: Params.alertTypeInfo,
+                            content: "NO_PAGE_CONTENT"
+                        };
+                        break;
+                    case "PAGE_ACCESS_ERROR":
+                        vm.alert = {
+                            type: Params.alertTypeDanger,
+                            content: "PAGE_ACCESS_ERROR"
+                        };
+                        break;
+                    default:
+                        vm.alert = {
+                            type: Params.alertTypeDanger,
+                            content: "ERROR_GENERIC"
+                        };
+                }
+            });
         }
     }
 })();
-

@@ -50,6 +50,7 @@
 
         function activate(){
             NavigatorParameters.setParameters({'Navigator':'educationNavigator'});
+            NavigatorParameters.setNavigator(educationNavigator);
 
             bindEvents();
             configureState();

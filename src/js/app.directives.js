@@ -14,3 +14,4 @@ import "./directives/ons-scroller-height.directive";
 import "./directives/hospitalSelectorDirective";
 import "./directives/labs-disclaimer.directive";
 import "./directives/labs-info-button.directive";
+import "./directives/pdf-viewer.directive";

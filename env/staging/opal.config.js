@@ -2,8 +2,12 @@
 const config = {
     name: "Opal Staging",
     env: "staging",
-    dev: true,
-    firebase:{
+    settings: {
+        kickOutConcurrentUsers: false,
+        messageOfTheDayKey: "staging_service",
+        showVersionOnInit: true,
+    },
+    firebase: {
         apiKey: "AIzaSyAMIDdcQR8EiY9gjj4cgxp6Vu3xwa78Ww8",
         authDomain: "opal-dev.firebaseapp.com",
         databaseURL: "https://opal-dev.firebaseio.com",
@@ -12,7 +16,7 @@ const config = {
         messagingSenderId: "652464215237",
         appId: "1:652464215237:web:0254157de7cc10f8f94cac",
     },
-    opalProtocolURI: "opal://"
+    opalProtocolURI: "opal://",
 };
 
 module.exports = config;

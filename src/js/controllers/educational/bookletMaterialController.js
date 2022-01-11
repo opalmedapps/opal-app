@@ -28,13 +28,13 @@
         .module('MUHCApp')
         .controller('BookletMaterialController', BookletMaterialController);
 
-    BookletMaterialController.$inject = ['$scope', '$timeout', 'NavigatorParameters', '$rootScope', '$filter',
-        'EducationalMaterial', 'Patient', 'Logger'];
+    BookletMaterialController.$inject = ['$http', '$scope', '$timeout', 'NavigatorParameters', '$rootScope', '$filter',
+        'EducationalMaterial', 'Patient', 'Logger', 'Params'];
 
 
     /* @ngInject */
-    function BookletMaterialController($scope, $timeout, NavigatorParameters, $rootScope, $filter,
-                                       EducationalMaterial, Patient, Logger) {
+    function BookletMaterialController($http, $scope, $timeout, NavigatorParameters, $rootScope, $filter,
+                                       EducationalMaterial, Patient, Logger, Params) {
 
         var vm = this;
 
@@ -47,6 +47,12 @@
         // Logging functions
         vm.scrollDown = scrollDown;
         vm.subClickBack = subClickBack;
+
+        // Error message shown when a booklet page fails to load
+        vm.alert = {
+            type: Params.alertTypeDanger,
+            message: "PAGE_ACCESS_ERROR",
+        };
 
         activate();
         /////////////////////////////
@@ -168,27 +174,25 @@
 
         //This method is in charge of "lazy loading". It only loads the material if it has not been loaded yet and only for the current, previous and next slides.
         function lazilyLoadSlides(index) {
-            if (index - 1 >= 0 && !vm.tableOfContents[index - 1].hasOwnProperty("Content")) {
-                $.get(vm.tableOfContents[index - 1].Url, function (res) {
-                    $timeout(function () {
-                        vm.tableOfContents[index - 1].Content = $filter('removeTitleEducationalMaterial')(res);
+            let slidesToLoad = [index - 1, index, index + 1];
+
+            slidesToLoad.forEach(i => {
+                if (i >= 0 && i < vm.tableOfContents.length && !vm.tableOfContents[i].hasOwnProperty("Content")) {
+                    $http({
+                        method: 'GET',
+                        url: vm.tableOfContents[i].Url,
+                    }).then(res => {
+                        $timeout(() => {
+                            vm.tableOfContents[i].Content = $filter('removeTitleEducationalMaterial')(res.data);
+                        });
+                    }).catch(error => {
+                        console.error(error);
+                        $timeout(() => {
+                            vm.tableOfContents[i].Error = true;
+                        });
                     });
-                });
-            }
-            if (!vm.tableOfContents[index].hasOwnProperty("Content")) {
-                $.get(vm.tableOfContents[index].Url, function (res) {
-                    $timeout(function () {
-                        vm.tableOfContents[index].Content = $filter('removeTitleEducationalMaterial')(res);
-                    });
-                });
-            }
-            if (index + 1 < vm.tableOfContents.length && !vm.tableOfContents[index + 1].hasOwnProperty("Content")) {
-                $.get(vm.tableOfContents[index + 1].Url, function (res) {
-                    $timeout(function () {
-                        vm.tableOfContents[index + 1].Content = $filter('removeTitleEducationalMaterial')(res);
-                    });
-                });
-            }
+                }
+            });
         }
 
         //Function that handles the initialization of the carousel. Basically deals with instantiation of carousel, loading the first slides, settings initial height, and then instaitiating a listener to watch the

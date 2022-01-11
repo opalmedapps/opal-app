@@ -18,14 +18,25 @@ let entry = [
 	"./src/js/app.values.js"];
 
 const config = env => {
+	console.log("Webpack variables:");
+	console.log(env);
 
-	const isProduction = env && env.production;
-	// opal environment e.g. `$webpack --env.opal_environment=preprod`
+	// Parse the Opal environment to use, specified via e.g. `webpack --env.opal_environment=preprod`
 	const OPAL_ENV = (env) ? env.opal_environment : null;
+	const isProduction = OPAL_ENV === "prod";
 	console.log(`OPAL ENVIRONMENT: ${OPAL_ENV || "default (root directory)"}`);
+
 	// Throws error if the defined folder for environment does not exist.
 	OpalEnv.verifyOpalEnvironmentExists(OPAL_ENV);
 	const OPAL_ENV_FOLDER = path.join(__dirname, (OPAL_ENV) ? `./env/${OPAL_ENV}` : './');
+
+	// Check whether to minimize the output (default = true)
+	let minimize;
+	if (!env || typeof env.minimize === "undefined") minimize = true; // Default
+	else if (env.minimize === "true") minimize = true;
+	else if (env.minimize === "false") minimize = false;
+	else throw `Incorrect value provided for minimize variable: --env.minimize=${env.minimize}. Please use a boolean (true or false).`;
+
 	return {
 		entry: entry,
 		devtool: (isProduction) ? 'source-map' : 'eval-cheap-source-map',
@@ -157,7 +168,7 @@ const config = env => {
 			new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /en|fr/)
 		],
 		optimization: {
-			minimize: true,
+			minimize: minimize,
 			minimizer: [
 				new TerserPlugin({
 					terserOptions: {
