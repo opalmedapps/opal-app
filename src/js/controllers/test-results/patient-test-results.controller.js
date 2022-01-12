@@ -181,10 +181,6 @@ class PatientTestResultsController {
 	 * @param {[Dates[], TestType[]]} param0 testDates and testTypes for the view
 	 */
 	#updateView = ([testDates, testTypes]) => {
-
-		console.log('testDates ==>', testDates)
-		console.log('testTypes ==>', testTypes)
-
 		this.#$timeout(() => {
 			this.loading = false;
 			this.testDates = testDates;
