@@ -42,8 +42,7 @@
             formatYear: 'yyyy',
             startingDay: 0,
             formatDay:'d',
-            showWeeks:false,
-            shortcutPropagation: true
+            showWeeks:false
         };
 
         vm.HasMeaningfulAlias = HasMeaningfulAlias;
@@ -175,6 +174,8 @@
             let style = getComputedStyle(elem);
             fontSize = style.fontSize;
             createClass('.uib-datepicker table thead tr th button div', "font-size: " +  fontSize + "!important;");
+
+            if (ons.platform.isIOS()) createClass('.uib-daypicker .btn-default:hover', "pointer-events: none; background-color: #ffffff; color: #333333;")
         }
 
         /**
