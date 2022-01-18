@@ -26,11 +26,14 @@
             },
             template: `
                 <ons-toolbar fixed-style>
-                    <div class="left" ng-transclude="leftContentSlot"><ons-back-button ng-hide="backButton === false">{{"BACK"|translate}}</ons-back-button></div>
-                    <div class="center overflow-text-ellipsis" ng-class="styleClass">{{title}}</div>
-                    <div class="right" ng-transclude="rightContentSlot"></div>
+                    <div class="left" ng-transclude="leftContentSlot" ng-style="iosStyleFix"><ons-back-button ng-hide="backButton === false">{{"BACK"|translate}}</ons-back-button></div>
+                    <div class="center overflow-text-ellipsis" ng-class="styleClass" ng-style="iosStyleFix">{{title}}</div>
+                    <div class="right" ng-transclude="rightContentSlot" ng-style="iosStyleFix"></div>
                 </ons-toolbar>
-            `
+            `,
+            link: function (scope) {
+                scope.iosStyleFix = ons.platform.isIOS() ? {'padding-top': '0px'} : {};
+            }
         };
     }
 })();
