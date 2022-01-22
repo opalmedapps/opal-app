@@ -1,4 +1,10 @@
 <ons-page id="popoverLanguage" ng-controller="InitScreenController as init">
+    <!-- Show Message Of The Day (MOTD), if there is any. -->
+    <!-- MOTD comes from serviceStatus_EN.php -->
+    <!-- if there is a Message, then show it -->
+    <div aria-live="assertive" ng-show="init.globalMessageDescription !== ''">
+        {{init.showMessageOfTheDay()}}
+    </div>
 
      <!-- IMAGE HEADER -->
      <div style="position: relative; height: 40%">
@@ -16,7 +22,6 @@
 
     <!-- LIST OF BUTTONS -->
     <div id="listInitApp" class="animated fadeIn ng-cloak listInitApp">
-
         <!-- ACKNOWLEDGEMENTS -->
         <div class="initScreenButtonDiv">
             <ons-button role="button" class="shadow-2 initScreenWhiteButton" modifier="large"
@@ -78,11 +83,6 @@
            {{init.OPAL_CONFIG.name}}-v{{init.APP_VERSION}}-{{init.APP_BUILD_NUMBER}}
         </div>
 
-        <!-- Show Message Of The Day (MOTD), if there is any. -->
-        <!-- MOTD comes from serviceStatus_EN.php -->
-        <!-- if there is a Message, then show it -->
-        <div aria-live="assertive" ng-show="init.globalMessageDescription !== ''">
-             {{init.showMessageOfTheDay()}}
-        </div>
+       
     </div>
 </ons-page>
