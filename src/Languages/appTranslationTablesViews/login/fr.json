@@ -52,6 +52,7 @@
   "HMR_FULL": "Hôpital Maisonneuve Rosemont",
   "HOME": "Accueil",
   "HOSPITAL": "Hôpital",
+  "HOSPITAL_SELECTOR": "Sélection du centre hospitalier",
   "HOSPITALPARKING": "Stationnement de l'hôpital",
   "INACTIVE": "Par mesure de sécurité, votre session a pris fin automatiquement après 5 minutes d'inactivité. Veuillez vous connecter de nouveau.",
   "INFO": "Information",

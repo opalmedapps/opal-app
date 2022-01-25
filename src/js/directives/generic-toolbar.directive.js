@@ -29,7 +29,7 @@
                     <div class="left" ng-transclude="leftContentSlot" ng-style="iosStyleFix">
                         <ons-back-button role="button" ng-hide="backButton === false" aria-label="{{'BACK_TO_PREVIOUS'|translate}}">{{"BACK"|translate}}</ons-back-button>
                     </div>
-                    <h1 class="center overflow-text-ellipsis" ng-class="styleClass" ng-style="iosStyleFix">{{title}}</h1>
+                    <h1 class="center overflow-text-ellipsis" ng-class="styleClass" ng-style="iosStyleFix" aria-hidden="true">{{title}}</h1>
                     <div class="right" ng-transclude="rightContentSlot" ng-style="iosStyleFix"></div>
                 </ons-toolbar>
             `,

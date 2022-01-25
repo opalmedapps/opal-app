@@ -1,14 +1,11 @@
 <ons-page style="background-color:white;width:100vw;height:100vh" ng-controller="SecurityQuestionController as security">
-    <ons-toolbar fixed-style>
-        <div class="left">
-            <ons-back-button ng-if="!security.passwordReset">{{"BACK"|translate}}</ons-back-button>
-            <ons-back-button ng-if="security.passwordReset" ng-click="initNavigator.resetToPage('./views/init/init-screen.html',{animation:'none'});">{{"HOME"|translate}}</ons-back-button>
-        </div>
-        <div class="center">
-            <div ng-if="!security.passwordReset">{{"SECURITYQUESTION"|translate}}</div>
-            <div ng-if="security.passwordReset">{{"FORGOTPASSWORD_NOQUESTION"|translate}}</div>
-        </div>
-    </ons-toolbar>
+    <generic-toolbar title="{{(security.passwordReset) ? 'FORGOTPASSWORD_NOQUESTION' : 'SECURITYQUESTION' | translate}}" style-class="fontSizeTitle">
+        <left-content>
+            <ons-back-button role="button" aria-label="{{'BACK_TO_PREVIOUS'|translate}}" ng-if="!security.passwordReset">{{"BACK"|translate}}</ons-back-button>
+            <ons-back-button role="button" aria-label="{{'BACK_TO_PREVIOUS'|translate}}" ng-if="security.passwordReset" ng-click="initNavigator.resetToPage('./views/init/init-screen.html',{animation:'none'});">{{"HOME"|translate}}</ons-back-button>
+        </left-content>
+    </generic-toolbar>
+
     <network-banner></network-banner>
 
     <ons-row align="center" style="height:70vh;margin:0;top:0">
@@ -16,7 +13,7 @@
 
             <!-- OPAL LOGO -->
             <div align="center">
-                <img src="./img/Opal_Name_Logo_Green_Transparent.png" style="max-width:300px;width:70vw;height:auto">
+                <img aria-hidden="true" src="./img/Opal_Name_Logo_Green_Transparent.png" style="max-width:300px;width:70vw;height:auto">
             </div>
 
             <!-- HOSPITAL SELECTOR -->

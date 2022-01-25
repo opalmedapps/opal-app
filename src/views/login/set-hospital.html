@@ -7,9 +7,15 @@
             </li>
             <li class="list__item list__item--tappable" ng-repeat="(hospitalKey, hospitalValue) in vm.hospitalObj track by hospitalKey">
                 <label class="radio-button radio-button--list-item">
-                    <input type="radio" value="{{hospitalKey}}" ng-change="vm.saveSelectedHospital();" ng-model="vm.selectedHospitalKey">
+                    <input 
+                        type="radio"
+                        aria-label="{{hospitalValue.fullName|translate}} ({{hospitalValue.acronym|translate}})"
+                        value="{{hospitalKey}}"
+                        ng-change="vm.saveSelectedHospital();"
+                        aria-selected="{{vm.selectedHospitalKey === hospitalKey}}"
+                        ng-model="vm.selectedHospitalKey">
                     <div class="radio-button__checkmark radio-button--list-item__checkmark"></div>
-                    {{hospitalValue.fullName|translate}} ({{hospitalValue.acronym|translate}})
+                    <span aria-hidden="true">{{hospitalValue.fullName|translate}} ({{hospitalValue.acronym|translate}})</span>
                 </label>
             </li>
         </ul>

@@ -2,7 +2,7 @@
     <!-- Show Message Of The Day (MOTD), if there is any. -->
     <!-- MOTD comes from serviceStatus_EN.php -->
     <!-- if there is a Message, then show it -->
-    <div aria-live="assertive" ng-show="init.globalMessageDescription !== ''">
+    <div role="alert" aria-live="assertive" ng-show="init.globalMessageDescription !== ''">
         {{init.showMessageOfTheDay()}}
     </div>
 
@@ -24,10 +24,13 @@
     <div id="listInitApp" class="animated fadeIn ng-cloak listInitApp">
         <!-- ACKNOWLEDGEMENTS -->
         <div class="initScreenButtonDiv">
-            <ons-button role="button" class="shadow-2 initScreenWhiteButton" modifier="large"
-                        ng-click="init.goToAcknowledgements()" var="initButton">
-                <ons-icon icon="fa-star fa-lg pull-left"
-                          style="color:#FFEB3B; display: inline-block"></ons-icon>
+            <ons-button 
+                role="button"
+                class="shadow-2 initScreenWhiteButton"
+                modifier="large"
+                ng-click="init.goToAcknowledgements()"
+                var="initButton">
+                <ons-icon icon="fa-star fa-lg pull-left" style="color:#FFEB3B; display: inline-block"></ons-icon>
                 <div class="initScreenButtonText" align="center">
                     {{"OPAL_ACKNOWLEDGEMENTS"|translate}}
                 </div>
@@ -36,8 +39,12 @@
 
         <!-- LEARN ABOUT OPAL -->
         <div class="initScreenButtonDiv">
-            <ons-button role="button" class="shadow-2 initScreenWhiteButton" modifier="large"
-                        ng-click="init.gotoLearnAboutOpal()" var="initButton">
+            <ons-button 
+                role="button"
+                class="shadow-2 initScreenWhiteButton"
+                modifier="large"
+                ng-click="init.gotoLearnAboutOpal()"
+                var="initButton">
                 <ons-row align="center">
                     <ons-col width="60px" align="center">
                         <img style="width: 50px;" src="img/Opal_Logo_Transparent_Inverse.png">
@@ -51,8 +58,12 @@
 
         <!-- LEGAL INFO -->
         <div class="initScreenButtonDiv">
-            <ons-button role="button" class="shadow-2 initScreenWhiteButton" modifier="large"
-                        ng-click="init.goToGeneralSettings()" var="initButton">
+            <ons-button
+                role="button"  
+                class="shadow-2 initScreenWhiteButton"
+                modifier="large"
+                ng-click="init.goToGeneralSettings()"
+                var="initButton">
                 <i class="fa fa-info-circle fa-lg pull-left"
                           style="color:grey; display: inline-block"></i>
                 <div class="initScreenButtonText" align="center">
@@ -63,8 +74,12 @@
 
         <!-- REGISTER OPAL -->
         <div class="initScreenButtonDiv">
-            <ons-button role="button" class="shadow-2 initScreenWhiteButton" modifier="large"
-                        ng-click="init.goToRegister()" var="initButton">
+            <ons-button 
+                role="button"
+                class="shadow-2 initScreenWhiteButton"
+                modifier="large"
+                ng-click="init.goToRegister()"
+                var="initButton">
                 <i class="fa fa-user-circle fa-lg pull-left"
                    style="color:#4CAF50; display: inline-block"></i>
                 <div class="initScreenButtonText" align="center">
@@ -75,8 +90,13 @@
 
         <!-- SIGN IN -->
         <div class="initScreenButtonDiv">
-            <ons-button role="button" class="animated pulse ng-cloak shadow-2 initScreenGreenButton" modifier="large"
-                        ng-click="init.goToLogin()" var="initButton">{{"HEADER_MESSAGE_LOGIN"|translate}}
+            <ons-button 
+                role="button"
+                class="animated pulse ng-cloak shadow-2 initScreenGreenButton"
+                modifier="large"
+                ng-click="init.goToLogin()"
+                var="initButton">
+                {{"HEADER_MESSAGE_LOGIN"|translate}}
             </ons-button>
         </div>
         <div style="text-align: center;" class="item-desc" ng-if="init.OPAL_CONFIG.settings.showVersionOnInit" aria-hidden="true">
