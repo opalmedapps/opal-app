@@ -106,10 +106,9 @@ class PatientTestResultsByDatetimeController {
 	#initialize = ({testDate = null}) => {
 		if (testDate === null) this.#handleServerFetchError("Error: testDate parameter necessary for page");
 		this.testDate = testDate;
-		this.#patientTestResults.getTestResultsByDate(testDate)
-			.then((testResults) => {
-				this.#updateView(testResults.results);
-			}).catch(this.#handleServerFetchError);
+		this.#patientTestResults.getTestResultsByDate(testDate).then((testResults) => {
+			this.#updateView(testResults.results);
+		}).catch(this.#handleServerFetchError);
 	};
 	/**
 	 * Handles a response error from the server. Displays server error alert

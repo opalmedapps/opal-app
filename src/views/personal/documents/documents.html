@@ -14,12 +14,14 @@
                 <ons-row align="center" >
                     <ons-col width="60px" align="center">
                         <div style="margin-left:10px">
-                            <i class="ion-android-document iconHomeView" style="color:{{doc.ColorTag}}"></i><span class="notification" ng-if="doc.ReadStatus==='0'">&nbsp;</span>
+                            <i class="ion-android-document iconHomeView" style="color:{{doc.ColorTag}}"></i>
                         </div>
                     </ons-col>
                     <ons-col style="word-wrap: break-word;">
                         <div style="line-height:1;padding:5px;" >
-                            <span ng-class="fontSizeTitle"> <strong>{{doc.Title}}</strong></span> <br>
+                            <span ng-class="[fontSizeTitle, 'item-desc', {'item-unread': doc.ReadStatus==='0'}]">
+                                {{doc.Title}}<br>
+                            </span>
                             <span class="item-desc" ng-class="fontSizeDesc">{{"ADDED"|translate}} {{doc.CreatedTimeStamp|date:'shortTime'}}</span>
                         </div>
                     </ons-col>
