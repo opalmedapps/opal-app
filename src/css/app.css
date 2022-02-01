@@ -1640,7 +1640,10 @@ Button appointments
      margin: 4px 0 0 0;
      padding: 0 0px 0 0;
  }
-
+ .item-unread {
+     font-weight: 700;
+     color: #1f1f21;
+ }
  .item-label {
      font-size: 12px;
      color: #999;
