@@ -111,8 +111,7 @@ class PatientTestResults {
 		if (this.#testResultByDateIsCached(dateString)) {
 			return this.testResultsByDate[dateString];
 		} else {
-			let results = await this.#requestToServer.sendRequestWithResponse("PatientTestDateResults",
-				{ date: dateString });
+			let results = await this.#requestToServer.sendRequestWithResponse("PatientTestDateResults", { date: dateString });
 			let testResults = results.data || { results: [] };
 			testResults.results = testResults.results.map((result) => new PatientTestResultDetailed(result));
 			this.testResultsByDate[dateString] = testResults;

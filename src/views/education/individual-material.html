@@ -1,6 +1,5 @@
 <!-- TODO consolidate duplicate error messages and loading wheels on this page -->
 <ons-page ng-controller="IndividualMaterialController as edu">
-
     <generic-toolbar title="{{edu.edumaterial.Type}}" style-class="fontSizeTitle">
         <left-content>
             <div class="left"><ons-back-button ng-click="edu.clickBack()">{{"BACK"|translate}}</ons-back-button></div>
@@ -11,16 +10,13 @@
             </ons-toolbar-button>
         </right-content>
     </generic-toolbar>
-
     <div id="{{edu.recursive_step}}" ng-init="edu.scrollDown()" style="height: 100%; width: auto; overflow: auto;">
-
         <!-- Rating bar-->
         <ons-list >
             <ons-list-item class="item">
                 <div style="line-height:1" align="center">
                     <header>
-                        <span class="item-title" ng-class="fontSizeTitle" style="font-size:20px" ng-if="edu.edumaterial.ReadStatus==0">{{edu.edumaterial.Name}}</span>
-                        <span class="item-desc" ng-class="fontSizeTitle" style="font-size:20px" ng-if="edu.edumaterial.ReadStatus==1">{{edu.edumaterial.Name}}</span>
+                        <span ng-class="[fontSizeTitle, 'item-desc']">{{edu.edumaterial.Name}}</span>
                     </header>
                     <div style="text-align: center;margin-top:10px">
                         <rate-material ser-num="edu.edumaterial.EducationalMaterialControlSerNum"></rate-material>
@@ -35,14 +31,12 @@
             <div ng-show="edu.errorLoadingContents" align="center" style="width: 95%; margin: 10px auto" ng-class="fontSizeDesc">
                 <uib-alert type="{{edu.alert.type}}">{{edu.alert.message|translate}}</uib-alert>
             </div>
-
             <!-- Loading wheel while the pdf is being downloaded -->
             <loading-spinning-circle
                     ng-show="edu.loadingContents"
                     loading-message="{{'LOADINGMATERIAL'|translate}}"
-                    margintop="15vh"
-            ></loading-spinning-circle>
-
+                    margintop="15vh">
+            </loading-spinning-circle>
             <!-- Download image and button -->
             <div ng-show="!edu.loadingContents" ng-click="edu.openPDF()" align="center">
                 <div>
@@ -86,14 +80,12 @@
                             <i ng-class="e.Icon" ng-style="{color: e.Color}" style="font-size: 26px; margin-left: 15px;"></i>
                         </div>
                     </ons-col>
-
                     <ons-col>
                         <header>
                             <span class="item-desc" ng-class="fontSizeTitle">{{e.Name}}</span>
                         </header>
                         <p class="item-desc" ng-class="fontSizeDesc" >{{e.Type}}</p>
                     </ons-col>
-
                 </ons-row>
             </ons-list-item >
         </ons-list>
@@ -101,7 +93,6 @@
         <!-- Booklet: table of contents -->
         <ons-list style="margin: 10px 0 0 0" ng-if="edu.displayType === 'booklet'">
             <ons-list-header class="person-list-header" ng-class="fontSizeTitle">{{"TABLEOFCONTENTS"|translate}}</ons-list-header>
-
             <ons-list-item modifier="chevron" ng-repeat= "edumaterial in edu.tableOfContents" class="item" ng-click="edu.goToEducationalMaterial($index)">
                 <ons-row align="center">
                     <ons-col width="60px" align="center">
@@ -116,7 +107,6 @@
                     </ons-col>
                 </ons-row>
             </ons-list-item >
-
         </ons-list>
 
         <!-- Video -->
@@ -131,20 +121,17 @@
 
         <!-- HTML page (Booklet, Factsheet, etc.) -->
         <ons-list class="settings-list" ng-if="edu.displayType === 'html'">
-
             <!-- Loading wheel while the material contents is being fetched. -->
             <loading-spinning-circle
                     ng-show="edu.loadingContents"
                     loading-message="{{'LOADINGMATERIAL'|translate}}">
             </loading-spinning-circle>
-
             <!-- Message if the material contents could not be loaded. -->
             <div class="ons-row" align="center" ng-show="edu.errorLoadingContents" style="margin-top: 50px">
                 <div class="ons-col" align="center">
                     <p ng-class="fontSizeTitle" style="color: grey; margin-top: 5vh;">{{"ERROR_GETTING_EDU_MATERIAL"|translate}}</p>
                 </div>
             </div>
-
             <!-- Contents -->
             <ons-list-item class="item">
                 <div class="container" style="background-color:white; overflow-y:scroll" ng-style="{height:edu.heightSection}" ng-show="edu.edumaterial.Content">
