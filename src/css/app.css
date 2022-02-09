@@ -17,6 +17,9 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+
+ @import url('./animations.css');
+
 [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
     display: none !important;
 }
@@ -63,45 +66,6 @@ body {
     width:100%;
 }
 
-#listInitApp div ons-button span {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%) translateX(-50%);
-    width: 100%;
-}
-
-.listInitApp {
-    display: none;
-    height: 56%;
-}
-
-.initScreenButtonDiv {
-    height: 15%;
-    margin: 3% auto;
-    text-align: center;
-    width: 90%;
-}
-
-.initScreenWhiteButton {
-    background-color: #F5F5F5;
-    font-size: x-large;
-    height: 100%;
-    position: relative;
-}
-
-.initScreenGreenButton {
-    background-color: #4CAF50;
-    font-size: xx-large;
-    font-weight: bolder;
-    height: 100%;
-}
-
-.initScreenButtonText {
-    color: #757575;
-    display: inline-block;
-    margin-left: -10%;
-}
-
 /* Portrait layout (default) */
 .app {
     background: no-repeat center top; /* 170px x 200px */
@@ -145,30 +109,17 @@ body {
     display:none;
 }
 
-@keyframes fade {
-    from { opacity: 1.0; }
-    50% { opacity: 0.4; }
-    to { opacity: 1.0; }
-}
-
-@-webkit-keyframes fade {
-    from { opacity: 1.0; }
-    50% { opacity: 0.4; }
-    to { opacity: 1.0; }
-}
 /*
 Password view
-
 */
 .blink {
     animation:fade 3000ms infinite;
     -webkit-animation:fade 3000ms infinite;
 }
-.forgotPassword:hover{
+.forgotPassword:hover {
     text-decoration: underline;
-
-
 }
+
 /*Loading view */
 .glyphicon-refresh-animate {
     -animation: spin .7s infinite linear;
@@ -177,122 +128,14 @@ Password view
     -moz-animation: spinm .7s infinite linear;
 }
 
-@keyframes spin {
-    from { transform: scale(1) rotate(0deg);}
-    to { transform: scale(1) rotate(360deg);}
-}
-
-@-webkit-keyframes spinw {
-    from { -webkit-transform: rotate(0deg);}
-    to { -webkit-transform: rotate(360deg);}
-}
-
-@-moz-keyframes spinm {
-    from { -moz-transform: rotate(0deg);}
-    to { -moz-transform: rotate(360deg);}
-}
 /*Images*/
 img
 {
     max-width: 100%;
     height: auto;
 }
-
 /*
-  Main menu css
-*/
-.page--menu-page__background {
-  background-color: #EBEBEA;
-}
-
-.page--menu-page__content {
-  color: white;
-}
-
-.menu-close,
-.menu-close > .toolbar-button {
-  color: #999;
-}
-
-.menu-list,
-.menu-item:first-child,
-.menu-item:last-child,
-.menu-item {
-  background-color: transparent;
-  background-image: none !important;
-  border-color: transparent;
-  color: #2B6197;
-}
-.popover__content{
-  background-color: #fff;
-  -webkit-border-radius: 8px;
-  border-radius: 8px;
-  -webkit-box-shadow: 0 2px 16px rgba(0,0,0,0.1);
-  box-shadow: 0 2px 16px rgba(0,0,0,0.1);
-  color: #1f1f21;
-  overflow: hidden;
-  min-height: 20px;
-  height: 100%;
-}
-
-.popover {
-    display: inline;
-}
-
-.menu-item {
-  color:#2B6197;
-  padding: 0 0 0 20px;
-  line-height: 52px;
-  height: 52px;
-  /*text-shadow: rgba(0, 0, 0, 0.4) 0px 1px 0px;*/
-}
-
-.menu-item:active {
-  background-color: rgba(255, 255, 255, 0.1);
-}
-
-.menu-notification {
-  display: inline-block;
-  margin-top: 12px;
-
-  height: 16px;
-  line-height: 16px;
-  min-width: 16px;
-  font-weight: 600;
-}
-
-.bottom-menu-list,
-.bottom-menu-item:first-child,
-.bottom-menu-item:last-child,
-.bottom-menu-item {
-  background-color: transparent;
-  background-image: none !important;
-  color: #626262;
-}
-
-.bottom-menu-item:active {
-  background-color: rgba(255, 255, 255, 0.1);
-}
-.editFirstNameIcon:hover{
-    display:none;
-}
-.hoverFirstNameEdit:hover+.editFirstNameIcon{
-    display:block;
-}
-
-.hbtn {
-  height: 44px;
-  line-height: 44px;
-  vertical-align: 0;
-  background: #eee;
-  display:inline-block;
-}
-
-
-/*
-
 *Checkin button
-
 */
 .btn-circle.btn-xl {
   width: 100px;
@@ -302,7 +145,7 @@ img
   line-height: 1.00;
   border-radius: 50px;
 }
-.checkin-button{
+.checkin-button {
   width:150px;
   height:150px;
   border-radius: 50%;
@@ -311,23 +154,8 @@ img
 /* Onsen's carousel */
 .nav, .pagination, .carousel, .panel-title a { cursor: pointer; }
 
-.list-item-container {
-  line-height: 1.3;
-  font-size: 14px;
-  padding: 15px 0px 15px 15px;
-}
 
-.list-item-container-narrow {
-  line-height: 1.3;
-  padding: 10px 0px 10px 10px;
-}
-
-.thumbnail2 {
-  width: 80px;
-  height: 80px;
-  border-radius: 4px;
-  -webkit-border-radius: 4px;
-}
+@import url('./views/test-result.view.css');
 
 .name {
   font-weight: 500;
@@ -346,39 +174,11 @@ img
   line-height: 1.2;
   font-size: 13px;
 }
-/*Onsen's css for Home page*/
-.profile-card {
-  width: 100%;
-  text-align: center;
-  color: black;
-  padding: 30px 0;
-  line-height: 1.4;
-  background-color: #E6E6E6;
-  /*text-shadow: rgba(0, 0, 0, 0.4) 0px 1px 0px;*/
-}
+
+@import url('./views/individual-contact.view.css');
 
 a.muhcapp-home-account:link, a.muhcapp-home-account:hover{
   text-decoration: none;
-}
-
-.profile-name {
-  margin: -3px 0 0 0;
-  font-weight: 600;
-  font-size: 17px;
-}
-
-.profile-id {
-  margin: 0 0 5px 0;
-  font-size: 14px;
-  opacity: 0.6;
-}
-
-.profile-desc {
-  font-size: 15px;
-  opacity: 0.6;
-  width: 90%;
-  text-align: center;
-  margin: 0 auto;
 }
 
 .info-col {
@@ -425,22 +225,6 @@ a.muhcapp-home-account:link, a.muhcapp-home-account:hover{
 .prop-desc {
   font-size: 14px;
   opacity: 0.7;
-}
-.profile-cardContact {
-  width: 100%;
-  text-align: center;
-  color: white;
-  padding: 30px 0;
-  line-height: 1.4;
-  background-color: #33393c;
-  text-shadow: rgba(0, 0, 0, 0.4) 0px 1px 0px;
-
-
-}
-.prop-desc ons-icon {
-  font-size: 14px;
-  vertical-align: -0px;
-  opacity: 0.5;
 }
 
 @media all and (min-width: 800px) {
