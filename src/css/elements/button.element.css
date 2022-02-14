@@ -1,0 +1,13 @@
+.btn-circle.btn-xl {
+    width: 100px;
+    height: 100px;
+    padding: 5px 16px;
+    font-size: 18px;
+    line-height: 1.00;
+    border-radius: 50px;
+  }
+  .checkin-button {
+    width:150px;
+    height:150px;
+    border-radius: 50%;
+  }
