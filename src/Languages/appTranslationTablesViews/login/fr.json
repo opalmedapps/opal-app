@@ -94,6 +94,7 @@
   "PASSWORD_SERVER_ERROR": "Un problème est survenu avec votre mot de passe, probablement en raison d'une erreur de réinitialisation. Veuillez utiliser le bouton ci-dessous pour le réinitialiser à nouveau.",
   "PASSWORDUPDATED": "Le mot de passe a été mis à jour",
   "PASSWORD_MISMATCH_ERROR": "Les mots de passe ne correspondent pas.",
+  "SHOW_PASSWORD": "Afficher le mot de passe",
   "PP": "Politique de confidentialité",
   "RATETHISAPP": "Évaluer l'application",
   "RECONNECTING": "En cours de reconnexion...",
