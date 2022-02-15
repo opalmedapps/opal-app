@@ -156,9 +156,26 @@ body {
     50% { opacity: 0.4; }
     to { opacity: 1.0; }
 }
+
+/*
+Password input
+*/
+.password-input--wraper {
+    display: flex;
+    align-items:center;
+    width: 100%
+}
+.password-input--wraper .input-slot {
+    width: 100%
+}
+.password-input--wraper .icon {
+    margin-left: -1.2em;
+    cursor: pointer;
+    color: #666
+}
+
 /*
 Password view
-
 */
 .blink {
     animation:fade 3000ms infinite;
@@ -166,8 +183,6 @@ Password view
 }
 .forgotPassword:hover{
     text-decoration: underline;
-
-
 }
 /*Loading view */
 .glyphicon-refresh-animate {
