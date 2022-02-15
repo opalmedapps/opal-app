@@ -11,12 +11,13 @@
                 <form style="text-align: center" novalidate>
                     <div>
                         <div style="width: 100%" class="style-4">
-                            <input placeholder='{{"EMAIL"|translate}}' name="email" ng-model="login.email" type="email" required ng-change=login.clearErrors()></div>
+                            <input placeholder='{{"EMAIL"|translate}}' name="email" ng-model="login.email" type="email" required ng-change=login.clearErrors()>
+                        </div>
                         <br/>
-                        <div style="width: 100%" class="style-4">
-                            <input name="password" ng-model="login.password" placeholder='{{"PASSWORD"|translate}}' type="password" required ng-change="login.clearErrors()"></div>
+                        <password-input>
+                            <input name="password" ng-model="login.password" placeholder='{{"PASSWORD"|translate}}' type="password" required ng-change="login.clearErrors()">
+                        </password-input>
                         <br/>
-
                         <!-- HOSPITAL SELECTOR -->
                         <hospital-selector></hospital-selector>
 

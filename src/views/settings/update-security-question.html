@@ -19,10 +19,15 @@
 
         <!-- PASSWORD VERIFICATION -->
         <div class="style-4" style="width: 100%;">
-            <input minlength="1" type="password" ng-class="fontSizeDesc"
-                   placeholder="{{'PASSWORD'|translate}}"
-                   ng-model="sqc.password"
-                   ng-change="sqc.passwordChanged = true; sqc.evaluateSubmission();">
+            <password-input>
+                <input 
+                minlength="1"
+                type="password"
+                ng-class="fontSizeDesc"
+                placeholder="{{'PASSWORD'|translate}}"
+                ng-model="sqc.password"
+                ng-change="sqc.passwordChanged = true; sqc.evaluateSubmission();">
+            </password-input>
         </div>
         <br>
 
