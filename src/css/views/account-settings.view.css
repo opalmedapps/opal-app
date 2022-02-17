@@ -86,3 +86,11 @@
     color: #a94442;
     padding:1vh;
 }
+
+.settings-header {
+    font-weight: 500;
+    font-size: 14px;
+    opacity: 0.4;
+    padding: 10px 0 0px 10px;
+    margin-bottom: -4px;
+}

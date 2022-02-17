@@ -44,6 +44,30 @@
     animation: none;
     stroke: #2196F3;
   }
+
+  .progress.vertical {
+    float: left;
+    height: 100%;
+    margin-right: 20px;
+    margin-left: 30%;
+    width: 30px;
+  }
+  
+  .vertprogress-bar {
+    float: left;
+    width: 0;
+    height: 100%;
+    font-size: 12px;
+    line-height: 20px;
+    color: black;
+    text-align: center;
+    background-color: #337ab7;
+    -webkit-box-shadow: inset 0 -1px 0 rgba(0,0,0,.15);
+    box-shadow: inset 0 -1px 0 rgba(0,0,0,.15);
+    -webkit-transition: width .6s ease;
+    -o-transition: width .6s ease;
+    transition: width .6s ease;
+  } 
   @-moz-keyframes progress__rotate {
     100% {
       -moz-transform: rotate(360deg);

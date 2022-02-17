@@ -1,9 +1,6 @@
- @import url('./animations.css');
-
 [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
     display: none !important;
 }
-
 
 html, .page {
     font-family: font, cursive, sans-serif;
@@ -12,6 +9,7 @@ html, .page {
 * {
     -webkit-tap-highlight-color: rgba(0,0,0,0); /* make transparent link selection, adjust last value opacity 0 to 1.0 */
 }
+
 a:hover {
     text-decoration: none;
 }
@@ -67,523 +65,47 @@ body {
     }
 }
 
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+.nav, .pagination, .carousel, .panel-title a { 
+  cursor: pointer; 
+}
+
+p {
+  word-wrap: break-word;
+}
+
+@import url('./animations.css');
 @import url('./elements/event.element.css');
-
-/*
-Password view
-*/
-.blink {
-    animation:fade 3000ms infinite;
-    -webkit-animation:fade 3000ms infinite;
-}
-.forgotPassword:hover {
-    text-decoration: underline;
-}
-
-/*Loading view */
-.glyphicon-refresh-animate {
-    -animation: spin .7s infinite linear;
-    -ms-animation: spin .7s infinite linear;
-    -webkit-animation: spinw .7s infinite linear;
-    -moz-animation: spinm .7s infinite linear;
-}
-
-/*Images*/
-img
-{
-    max-width: 100%;
-    height: auto;
-}
-/*
-*Checkin button
-*/
-
-@import url('./elements/button.element.css');
-
-/* Onsen's carousel */
-.nav, .pagination, .carousel, .panel-title a { cursor: pointer; }
-
-
-@import url('./views/test-result.view.css');
-
-.name {
-  font-weight: 500;
-  line-height: 16px;
-  font-size: 15px;
-  margin-bottom: 6px;
-}
-
-.location {
-  font-size: 14px;
-  opacity: 0.4;
-  margin-bottom: 6px;
-}
-
-.desc {
-  line-height: 1.2;
-  font-size: 13px;
-}
-
-@import url('./views/individual-contact.view.css');
-
-a.muhcapp-home-account:link, a.muhcapp-home-account:hover{
-  text-decoration: none;
-}
-
-.info-col {
-  height: 60px;
-  line-height: 1;
-  padding: 12px 0 12px 4px;
-}
-
-.info-num {
-  font-size: 16px;
-  font-weight: 500;
-  opacity: 0.8;
-}
-
-.info-unit {
-  margin-top: 6px;
-  font-size: 14px;
-  opacity: 0.4;
-}
-
-
 @import url('./elements/contact.element.css');
 @import url('./elements/checkout.element.css');
 @import url('./views/treatment-plan.view.css');
 @import url('./elements/triangle.element.css');
 @import url('./elements/timeline.element.css');
-.desc {
-  line-height: 20px;
-}
-
-.lucent {
-  opacity: 0.4;
-}
-
-.lucent-subtle {
-  opacity: 0.7;
-}
-
-/*
-*Messages bottom div
-*/
-
-#bottomMessage {
-  margin-top: 30vh;
-  padding: 0;
-}
-
-/*
-* Message list, highlighting and unread
-*/
-.unreadMessage{
-  border-radius: 50%;
-  display: inline-block;
-  width: 10px;
-  height:10px;
-  background: #3399ff;
-}
-.my-class{
-  padding: 10px 0px 10px 0px;
-  background-color: #C8C8C8;
-  font-size:10%;
-}
-
-
-
-/*
-*Feedback page
-*
-*/
-.to-wrapper {
-  line-height: 1;
-  height: 62px;
-  padding: 10px;
-}
-
-.to-image {
-  width: 42px;
-  height: 42px;
-  border-radius: 4px;
-  margin-left:5px;
-  -webkit-border-radius: 4px;
-}
-.to-email {
-  font-size: 14px;
-  opacity: 0.4;
-}
-
-.textarea-feedback {
-  margin-top: 4px;
-}
+@import url('./views/test-result.view.css');
+@import url('./elements/button.element.css');
+@import url('./views/individual-contact.view.css');
 @import url('./views/account-settings.view.css');
 @import url('./elements/tab-bar.element.css');
-
-
-p{
-  word-wrap: break-word;
-}
-/*
-*Home screen profile view
-*/
-.profile-wrapper {
-  padding: 12px 10px 12px 10px;
-  text-align: left;
-  margin-left:10px;
-}
-
-.profile-image-home {
-  margin-right:20px;
-	width: 60px;
-	height: 60px;
-  border-radius: 4px;
-  -webkit-border-radius: 4px;
-  border: inset 1px rgba(0, 0, 0, 0.3);
-}
-
-.profile-email {
-  font-size: 15px;
-  opacity: 0.4;
-}
-.my-home-profile{
-  width:100%;
-  padding:10px;
-  border-bottom:1px solid rgba(0, 0, 0, 0.1);
-  border-radius:4px;
-  background-color:white;
-  color:black;
-  margin:2px 2px 2px 2px;
-}
-.my-message-container{
-  width:100vw;
-  padding:10px;
-  border:1px solid rgba(0, 0, 0, 0.1);
-  border-radius:4px;
-  background-color:white;
-  color:black;
-  margin-left:1px;
-}
-
-.iconHomeView{
-  margin-left: 10px;
-  font-size:28px;
-  font-weight: 300;
-  color: #2B6197;
-  text-align: center;
-}
-.themeCardTitle{
-  line-height: 1.2;
-}
-
-
 @import url('./views/status.view.css');
-
-/*
-*Text class
-*/
-.overflow {
-  /**
-   * Required properties to achieve text-overflow
-   */
-      white-space: nowrap;
-    overflow: hidden;
-}
-.ellipsis {
-  text-overflow: ellipsis;
-
-  /* Required for text-overflow to do anything */
-  white-space: nowrap;
-  overflow: hidden;
-}
-
-/*
-*Utility classes
-*/
-.marginTop10
-{
-  margin-top: 10px;
-}
-.marginLeft10
-{
-  margin-left:10px;
-}
-.marginBottom10
-{
-  margin-bottom: 10px;
-}
-.marginRight10
-{
-  margin-right:10px;
-}
-.padding10{
-  padding:10px;
-}
-
-
 @import url('./elements/card.element.css');
 @import url('./views/tab.view.css');
-
- .switch--list-item {
-     margin-right: 0px;
- }
-
- .settings-header {
-     font-weight: 500;
-     font-size: 14px;
-     opacity: 0.4;
-     padding: 10px 0 0px 10px;
-     margin-bottom: -4px;
- }
 @import url('./elements/profile.element.css');
 @import url('./elements/list.element.css');
 @import url('./views/calendar.view.css');
 @import url('./font.css');
 @import url('./elements/action.element.css');
-@import url('./elements/progress-circular.element.css');
+@import url('./elements/progress.element.css');
 @import url('./elements/fab-button.element.css');
 @import url('./elements/banner.element.css');
-
-/*
-* GPU efficiency
-*/
-
-.gpu_efficiency{
-  -ms-transform: translate(0px,0px);
-  transform: translateZ(0);
-  -webkit-transform: translateZ(0);
-}
 @import url('./elements/radio-button.element.css');
-
-.progress.vertical {
-  float: left;
-  height: 100%;
-  margin-right: 20px;
-  margin-left: 30%;
-  width: 30px;
-}
-
 @import url('./views/questionnaires.view.css');
-
-.vertprogress-bar {
-  float: left;
-  width: 0;
-  height: 100%;
-  font-size: 12px;
-  line-height: 20px;
-  color: black;
-  text-align: center;
-  background-color: #337ab7;
-  -webkit-box-shadow: inset 0 -1px 0 rgba(0,0,0,.15);
-  box-shadow: inset 0 -1px 0 rgba(0,0,0,.15);
-  -webkit-transition: width .6s ease;
-  -o-transition: width .6s ease;
-  transition: width .6s ease;
-}
-
-#rcorners {
-    border-radius: 25px;
-    background: rgba(0,0,0,0.8);
-    padding: 20px;
-    width: 90%;
-    margin: auto;
-    position: relative;
-}
-
 @import url('./elements/input.element.css');
-
-
-#holder{
-    margin-top: 5px;
-    position: relative;
-    overflow: scroll !important;
-    touch-action: manipulation !important;
-    -webkit-user-drag: element !important;
-}
-
-
-@media all and (orientation:landscape) {
-    .appointment-calendar, #drag-notify{
-        display: none;
-    }
-    #scrollerAppointments {
-        height: 100% !important;
-    }
-}
-
-.calendar-marker
-{
-  font-size:20px;
-  opacity:0.5;
-}
-.opal_btn_small{
-    height: 7vh;
-    width: 14vw;
-    max-width: 70px;
-    padding: 0;
-}
-
-.active_btn_calendar{
-    background-color: red;
-}
-
-.list__item, .navigation-bar{
-    border-bottom: 1px solid #ddd !important;
-}
-
-.navigation-bar {
-  display: flex;
-  align-items: center;
-}
-
-.tab-bar{
-    border-top: 1px solid #ddd !important;
-}
-
-
-
 @import url('./directives/pdf-view.directive.css');
-
 @import url('./elements/checkmark.element.css');
-
-@media only screen
-and (max-device-width : 321px)
-{
-    .secure-message, .unattended-message{
-        font-size: 14px;
-    }
-
-    #lock-logo {
-        display: none;
-    }
-
-}
-
-
-/* MATERIAL DESIGN */
-.shadow-2 {
-    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
-    transition: all 0.3s cubic-bezier(.25,.8,.25,1);
-}
-
-#starting-dot {
-  margin-top: -8px;
-  background-color: #59D45D;
-  height: 20px;
-  width: 20px;
-  border-radius: 10px;
-  border: white 1px solid;
-  position: absolute;
-  z-index: 2;
-}
-
-#past-line {
-  position: absolute;
-  background-color: #59D45D;
-  width: 0%;
-  float: left;
-  height: 5px;
-}
-
-#current-time-indicator {
-  position: relative;
-  z-index: 3;
-  color: #59D45D;
-  animation: pulsate 1s 2s alternate infinite;
-  text-align: left;
-  float: left;
-  margin-top: -11px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-radius: 30px;
-  border: 2px solid;
-  background-color: white;
-}
-
-.sthethoscope {
-  margin-top: -13px;
-  color: black;
-  background-color: white;
-  padding-top: 2px;
-  padding-bottom: 2px;
-  padding-left: 7px;
-  padding-right: 7px;
-  border-radius: 30px;
-  border: 2px solid;
-  position: absolute;
-  right: 0;
-}
-
-#time-outline {
-  position: absolute;
-  width: 100%;
-  text-align: center;
-  top: 237px;
-  font-size: small;
-}
-
-.dividing-horizontal-line {
-  height: 2px;
-  background-color: lightgrey;
-  position: relative;
-  z-index: 1;
-  margin-top: 20px;
-  margin-bottom: 10px;
-}
-
-.dividing-vertical-line {
-  height: 70px;
-  width: 2px;
-  background-color: lightgrey;
-  position: relative;
-  z-index: 1;
-  float: left;
-  margin-left: 10px;
-  margin-right: 10px;
-}
-
-#more-info-button-outer {
-  text-align: center;
-  width: 90%;
-  margin-left: 5%;
-}
-
-#more-info-button {
-  width: 100%;
-  height: 50px;
-  font-size: x-large;
-  background-color: #F5F5F5;
-}
-
-#more-info-button:hover {
-  background-color: #59D45D;
-}
-
-.notification {
-    position: absolute;
-    margin-left: -10px;
-}
-
-.overflow-text-ellipsis {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  word-break: break-word;
-}
-
 @import url('./views/questionnaires-list.view.css');
-
-.about-link {
-    background-color: #E3F2FD;
-    font-weight: bold;
-    color:#666;
-}
-
-.hyphens {
-    hyphens:auto;
-}
-
-.break-words {
-    word-break: break-all;
-}
+@import url('./views/feedback.view.css');
+@import url('./utilities.css');

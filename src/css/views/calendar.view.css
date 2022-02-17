@@ -120,9 +120,28 @@
   opacity: 0.8;
   font-weight: 500;
 }
+.calendar-marker
+{
+  font-size:20px;
+  opacity:0.5;
+}
+
+.active_btn_calendar{
+    background-color: red;
+}
+
 .display-none{
   display:none;
 }
 .display-block{
   display:block;
+}
+
+@media all and (orientation:landscape) {
+  .appointment-calendar, #drag-notify{
+      display: none;
+  }
+  #scrollerAppointments {
+      height: 100% !important;
+  }
 }
