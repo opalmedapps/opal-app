@@ -1,0 +1,49 @@
+.profile-wrapper {
+    padding: 16px 10px 0 10px;
+}
+
+.profile-image {
+    width: 150px;
+    height: 150px;
+    border-radius: 100%;
+    -webkit-border-radius: 100%;
+    background-color: #ccc;
+}
+
+.profile-name {
+    font-size: 18px;
+    padding: 4px 0 2px 0;
+}
+
+.profile-email {
+    font-size: 15px;
+    opacity: 0.4;
+}
+.profile-id {
+    font-size: 13px;
+    color: grey;
+}
+.image-profile-wrapper-home {
+    height: 150px;
+    width:150px;
+    border-radius: 50%;
+    border:1px dashed darkgreen;
+}
+.image-profile-home {
+    margin:5px 5px 5px 5px;
+    height: 150px;
+    width:150px;
+    border-radius: 50%;
+}
+.image-profile-wrapper {
+    height: 80px;
+    width:80px;
+    border-radius: 50%;
+    border:1px dashed darkgreen;
+}
+.image-profile {
+    margin:5px 5px 5px 5px;
+    height: 69px;
+    width:69px;
+    border-radius: 50%;
+}
