@@ -1,15 +1,12 @@
 <ons-page ng-controller="NotificationsController as notif">
-    <ons-toolbar fixed-style>
-        <div class="left">
-            <ons-back-button>{{"BACK"|translate}}</ons-back-button>
-        </div>
-        <div class="center" ng-class="fontSizeTitle">{{"NOTIFICATIONS"|translate}}</div>
-        <div class="right">
+    <!-- TOOLBAR -->
+    <generic-toolbar title="{{'NOTIFICATIONS'|translate}}" style-class="fontSizeTitle">
+        <right-content>
             <ons-toolbar-button id="notificationsMenu" ng-click="notificationsPopover.show('#notificationsMenu')">
                 <ons-icon icon="fa-ellipsis-v" fixed-width="true"></ons-icon>
             </ons-toolbar-button>
-        </div>
-    </ons-toolbar>
+        </right-content>
+    </generic-toolbar>
 
     <network-banner></network-banner>
     <div ng-show="notif.isLoading" align="center" style="margin-top:25vh">
