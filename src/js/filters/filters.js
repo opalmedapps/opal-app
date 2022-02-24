@@ -48,7 +48,7 @@ myApp.filter('trustThisUrl',['$sce',function($sce){
     }
 }]);
 
-myApp.filter('formatDateAppointmentTask',function($filter){
+myApp.filter('formatDateAppointmentTask', ['$filter', function($filter) {
     return function(dateApp)
     {
         var today=new Date();
@@ -63,7 +63,7 @@ myApp.filter('formatDateAppointmentTask',function($filter){
             return '';
         }
     };
-});
+}]);
 
 myApp.filter('formatDateToFirebaseString',function(){
     return function(date){
@@ -86,7 +86,7 @@ myApp.filter('formatDate',function(){
     };
 });
 
-myApp.filter('dateEmail',function($filter){
+myApp.filter('dateEmail', ['$filter', function($filter) {
     return function(date){
         if(Object.prototype.toString.call(date) === '[object Date]')
         {
@@ -111,9 +111,9 @@ myApp.filter('dateEmail',function($filter){
             return date;
         }
     };
-});
+}]);
 
-myApp.filter('limitLetters',function($filter){
+myApp.filter('limitLetters', ['$filter', function($filter) {
     return function(string,num)
     {
         if(string&&typeof string!=='undefined'&&string.length>num)
@@ -123,7 +123,7 @@ myApp.filter('limitLetters',function($filter){
         }
         return string;
     };
-});
+}]);
 
 myApp.filter('propsFilter', function() {
     return function(items, props) {
@@ -199,11 +199,11 @@ myApp.filter('FormatPhoneNumber',function(){
     };
 });
 
-myApp.filter('standardDate', function($filter){
+myApp.filter('standardDate', ['$filter', function($filter) {
     return function (date) {
         return $filter('date')(date, 'EEE MMM dd yyyy')
     }
-});
+}]);
 
 myApp.filter('capitalizeFirstLetter', function () {
     return function (name) {
@@ -244,11 +244,11 @@ myApp.filter('FormatEditPhoneNumber',function(){
     };
 });
 
-myApp.filter('trustHTML', function ($sce) {
+myApp.filter('trustHTML', ['$sce', function ($sce) {
     return function (value) {
         return $sce.trustAsHtml(value);
     };
-});
+}]);
 
 myApp.filter('capitalize', function () {
     /**

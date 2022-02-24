@@ -39,9 +39,7 @@ const config = env => {
 
 	return {
 		entry: entry,
-		// TODO: 'source-map' causes errors when running `build:web --env=prod` (prereq. for building the prod app)
-		// devtool: (isProduction) ? 'source-map' : 'eval-cheap-source-map',
-		devtool: 'eval-cheap-source-map',
+		devtool: (isProduction) ? undefined : 'eval-cheap-source-map',
 		mode: (isProduction) ? 'production' : 'development',
 		devServer: {
 			contentBase: './www',

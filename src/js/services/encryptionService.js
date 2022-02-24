@@ -12,7 +12,7 @@ var myApp = angular.module('MUHCApp');
  *@requires MUHCApp.service:UserAuthorizationInfo
  *@description Provides an API to encrypt and decrypt objects, arrays, or strings.
  **/
-myApp.service('EncryptionService', function (UserAuthorizationInfo) {
+myApp.service('EncryptionService', ['UserAuthorizationInfo', function (UserAuthorizationInfo) {
 
     var securityAnswerHash = '';
     var encryptionHash = '';
@@ -260,4 +260,4 @@ myApp.service('EncryptionService', function (UserAuthorizationInfo) {
             return tempEncryptionHash;
         }
     };
-});
+}]);
