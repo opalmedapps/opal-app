@@ -5,7 +5,7 @@
  * Time: 11:00 PM
  */
 
-import "../../../css/tour.view.css";
+import "../../../css/views/tour.view.css";
 
 (function () {
     'use strict';
