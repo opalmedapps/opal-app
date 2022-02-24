@@ -1,0 +1,25 @@
+@font-face {
+    font-family: font;
+    src: url("../fonts/Roboto-Regular.ttf");
+}
+/*
+*Font size app
+*/
+.fontDescMedium{
+    font-size: 16px;
+}
+.fontTitleMedium{
+    font-size:17px;
+}
+.fontDescLarge{
+    font-size: 19px;
+}
+.fontTitleLarge{
+    font-size: 22px;
+}
+.fontDescXlarge{
+    font-size: 24px;
+}
+.fontTitleXlarge{
+    font-size: 25px;
+}

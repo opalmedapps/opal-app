@@ -1,4 +1,4 @@
-import "../../css/top-page-banner.directive.css";
+import "../../css/directives/top-page-banner.directive.css";
 (function () {
     'use strict';
 

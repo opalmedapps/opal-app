@@ -1,3 +1,4 @@
+import '../../css/directives/password-input.directive.css';
 (function () {
     'use strict';
 
