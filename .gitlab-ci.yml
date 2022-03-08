@@ -1,0 +1,35 @@
+.macos_runners:
+  tags:
+    - macos
+
+stages:
+  - build
+
+# build_android:
+#   image: androidsdk/android-30
+#   stage: build
+#   script:
+#     - uname -a
+#     - java --version
+#     - sdk install gradle 7.4
+#     - gradle -v
+
+build_ios:
+  extends:
+    - .macos_runners
+  stage: build
+  script:
+    - uname -a
+    - npm -v
+    # fix Bus Error when cordova invokes pod install
+    # see: https://stackoverflow.com/a/70581304
+    - gem install --user-install ffi -- --enable-libffi-alloc
+    # - xcode-select --switch /Applications/Xcode.app
+    # install cordova locally
+    - npm install cordova
+    - npm install
+    - npm run build:app:ios:device --env=staging
+  artifacts:
+    expire_in: 1 day
+    paths:
+      - foo.txt
