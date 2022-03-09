@@ -29,7 +29,8 @@ build_ios:
     - npm install cordova
     - npm install
     - npm run build:app:ios:device --env=staging
+    - cp "./platforms/ios/build/device/Opal Staging.ipa" "Opal Staging.ipa"
   artifacts:
     expire_in: 1 day
     paths:
-      - ./platforms/ios/build/device/Opal Staging.ipa
+      - Opal Staging.ipa
