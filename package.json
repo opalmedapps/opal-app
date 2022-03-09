@@ -18,7 +18,7 @@
     "build:web:nix": "npm run prepare:web && webpack --env.opal_environment=$npm_config_env",
     "build:app:ios": "npm run prepare:app && npm run build:web && cordova build ios --verbose",
     "build:app:android": "npm run prepare:app && npm run build:web && cordova build android --verbose",
-    "build:app:ios:device": "npm run prepare:app && npm run build:web && cordova build ios --device --verbose",
+    "build:app:ios:device": "npm run prepare:app && npm run build:web && cordova build ios --device --verbose --developmentTeam=44X439DN8M",
     "build:app:android:device": "npm run prepare:app && npm run build:web && cordova build android --device --verbose",
     "build:app:ios:device:release": "npm run prepare:app && npm run build:web && cordova build ios --device --release --verbose",
     "build:app:android:device:release": "npm run prepare:app && npm run build:web && cordova build android --device --release --verbose",
