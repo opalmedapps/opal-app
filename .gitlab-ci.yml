@@ -32,4 +32,4 @@ build_ios:
   artifacts:
     expire_in: 1 day
     paths:
-      - foo.txt
+      - ./platforms/ios/build/device/Opal Staging.ipa
