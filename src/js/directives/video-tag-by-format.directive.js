@@ -29,7 +29,7 @@
                         </iframe>
 
                         <!-- video format for 'mp4', 'ogv' and 'webm' -->
-                        <video controls ng-show="vidwoTag">
+                        <video controls ng-show="videoTag" autoplay preload="metadata">
                             <source ng-src="{{edumaterialUrl|trustThisUrl}}" type="video/{{fileExt}}">
                         </video>
 
@@ -48,7 +48,7 @@
           */
         function checkVideoFormat(scope, element, attrs) {
             scope.iframeTag = false;
-            scope.vidwoTag = false;
+            scope.videoTag = false;
             scope.showError = false;
             console.log('----1-----'+scope.edumaterialUrl);
             scope.$watch('edumaterialUrl', function () {
@@ -63,8 +63,8 @@
                         console.log('----3-----'+scope.iframeTag);
                     }
                     else if (['mp4', 'ogv', 'webm'].indexOf(scope.fileExt) !== -1) {
-                        scope.vidwoTag = true;
-                        console.log('----4-----'+scope.vidwoTag);
+                        scope.videoTag = true;
+                        console.log('----4-----'+scope.videoTag);
                     }
                     else {
                         scope.showError = true;
