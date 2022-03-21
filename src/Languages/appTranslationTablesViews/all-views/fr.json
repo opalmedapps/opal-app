@@ -68,6 +68,7 @@
     "ERRORANSWERNOTMATCH": "Votre réponse ne correspond pas à celle dans nos dossiers.",
     "ERROROBTAININGDOCUMENT": "Erreur lors de l'obtention du document à partir du serveur",
     "ERROR_GETTING_EDU_MATERIAL": "Erreur. Le contenu de ce matériel éducatif n'a pas pu être téléchargé du serveur.",
+    "ERROR_IN_VIDEO_URL_OR_FORMAT": "Erreur dans l'URL ou le format de la vidéo",
     "EXIT_APP": "Voulez-vous vraiment quitter Opal?",
     "Electrolytes": "Électrolytes",
     "FEEDBACK": "Commentaires",

@@ -112,10 +112,12 @@
         <!-- Video -->
         <ons-list class="settings-list" ng-if="edu.displayType === 'video'">
             <ons-list-item class="item">
-                <div align="center" class="embed-responsive embed-responsive-16by9">
-                    <iframe class="embed-responsive-item" ng-src="{{edu.edumaterial.Url|trustThisUrl}}" allowfullscreen="allowfullscreen" mozallowfullscreen="mozallowfullscreen" msallowfullscreen="msallowfullscreen" oallowfullscreen="oallowfullscreen" webkitallowfullscreen="webkitallowfullscreen">
-                    </iframe>
-                </div>
+                <!-- Video tag based on different video url or file format -->
+                <video-tag-by-format 
+                    edumaterial-url="{{edu.edumaterial.Url}}"
+                    error-message="{{'ERROR_IN_VIDEO_URL_OR_FORMAT'|translate}}">   
+                </video-tag-by-format>
+
             </ons-list-item>
         </ons-list>
 
