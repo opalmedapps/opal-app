@@ -11,7 +11,6 @@ import "./controllers/checkIn/checkInController.js";
 import "./controllers/content/contentController.js";
 import "./controllers/diagnoses/diagnosesController.js";
 import "./controllers/doctors/doctorsController.js";
-import "./controllers/doctors/individualDoctorController.js";
 import "./controllers/documents/documentsController.js";
 import "./controllers/documents/individualDocumentController.js";
 import "./controllers/educational/educationalMaterialController.js";
