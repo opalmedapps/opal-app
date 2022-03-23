@@ -96,23 +96,6 @@
                 </ons-row>
             </ons-list-item>
             <ons-list-item modifier="chevron" class="item"
-                           ng-if="tab.allowedModules.hasOwnProperty('TRT') && tab.allowedModules['TRT']"
-                           ng-click="personalNavigator.pushPage('views/general/contacts/contacts.html')">
-                <ons-row align="center">
-                    <ons-col width="60px" style="text-align: center">
-                        <div>
-                            <ons-icon icon="fa-address-book" size="2x" style="color:#2196F3"></ons-icon>
-                        </div>
-                    </ons-col>
-                    <ons-col>
-                        <header>
-                            <span class="item-title" ng-class="fontSizeTitle">{{"CONTACTS"|translate}}</span>
-                        </header>
-                        <p class="item-desc"></p>
-                    </ons-col>
-                </ons-row>
-            </ons-list-item>
-            <ons-list-item modifier="chevron" class="item"
                            ng-if="tab.allowedModules.hasOwnProperty('TTM') && tab.allowedModules['TTM']"
                            ng-click="personalNavigator.pushPage('views/personal/treatment-team-messages/team-messages.html')">
                 <ons-row align="center" >
