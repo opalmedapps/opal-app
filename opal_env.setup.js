@@ -103,6 +103,18 @@ class OpalEnv {
 		return [Number(configFile.elements[0].attributes["ios-CFBundleVersion"]), Number(configFile.elements[0].attributes["android-versionCode"])];
 	}
 
+	static getEnvSetting(settingName) {
+		const settings = this.getEnvSettings();
+		if (!settings || typeof settings[settingName] === "undefined") throw new Error(`opal.config.js is missing the setting: "${settingName}".`);
+		return settings[settingName];
+	}
+
+	static getEnvSettings() {
+		const config = this.getOpalConfigJSON();
+		if (!config || !config.settings) throw new Error('opal.config.js is not correctly formatted with a "settings" property.');
+		return config.settings;
+	}
+
 	/**
 	 * Sets the name of the application in the config.xml, useful when changing environment and name of the app
 	 * @param {string} newName New name for the application
@@ -241,6 +253,18 @@ class OpalEnv {
 			return xmlJs.xml2js(fs.readFileSync("./config.xml").toString());
 		}
 		throw new Error("config.xml file not found");
+	}
+
+	static getOpalConfigJSON() {
+		const path = "./opal.config.js";
+		if (!fs.existsSync(path)) throw new Error("opal.config.js file not found");
+		return require(path);
+		// try {
+		// 	return JSON.parse(fs.readFileSync(path).toString());
+		// }
+		// catch (error) {
+		// 	throw new Error(`Error reading opal.config.js; make sure the file is formatted correctly: ${error}`);
+		// }
 	}
 
 	static writeToConfigXML(configFile) {

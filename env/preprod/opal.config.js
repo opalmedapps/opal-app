@@ -3,9 +3,11 @@ const config = {
     name: "Opal Pre Prod",
     env: "preprod",
     settings: {
+        useSourceMap: true,
         kickOutConcurrentUsers: true,
         messageOfTheDayKey: "preprod_service",
         showVersionOnInit: true,
+        webpackMode: 'production',
     },
     firebase: {
         apiKey: "AIzaSyAGBV2Zwr0SYKy_J92jceof-OFeeFmm0Gw",
@@ -16,7 +18,6 @@ const config = {
         messagingSenderId: "476395494069",
         appId: "1:476395494069:web:fe7854c0038a34663afcfc",
     },
-    opalProtocolURI: "opal://",
 };
 
 module.exports = config;

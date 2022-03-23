@@ -21,8 +21,12 @@ const config = env => {
 	console.log("Webpack variables:");
 	console.log(env);
 
+	console.log(OpalEnv.getEnvSettings());
+	console.log(OpalEnv.getEnvSetting("messageOfTheDayKey"));
+
 	// Parse the Opal environment to use, specified via e.g. `webpack --env.opal_environment=preprod`
 	const OPAL_ENV = (env) ? env.opal_environment : null;
+	// TODO convert to external variable
 	const isProduction = OPAL_ENV === "prod";
 	console.log(`OPAL ENVIRONMENT: ${OPAL_ENV || "default (root directory)"}`);
 
@@ -39,7 +43,7 @@ const config = env => {
 
 	return {
 		entry: entry,
-		devtool: (isProduction) ? undefined : 'eval-cheap-source-map',
+		devtool: OpalEnv.getEnvSetting("useSourceMap") ? 'eval-cheap-source-map' : undefined,
 		mode: (isProduction) ? 'production' : 'development',
 		devServer: {
 			contentBase: './www',
@@ -176,7 +180,7 @@ const config = env => {
 							comments: false, // Do not include
 						},
 					},
-					extractComments: true,
+					extractComments: true, // Extracts certain comments (@preserve, @license, etc.) to a .LICENSE.txt file
 				}),
 			],
 		}
