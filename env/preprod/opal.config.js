@@ -3,7 +3,7 @@ const config = {
     name: "Opal Pre Prod",
     env: "preprod",
     settings: {
-        useSourceMap: true,
+        useSourceMap: false,
         kickOutConcurrentUsers: true,
         messageOfTheDayKey: "preprod_service",
         showVersionOnInit: true,

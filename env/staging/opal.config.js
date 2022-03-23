@@ -3,7 +3,7 @@ const config = {
     name: "Opal Staging",
     env: "staging",
     settings: {
-        useSourceMap: false,
+        useSourceMap: true,
         kickOutConcurrentUsers: false,
         messageOfTheDayKey: "staging_service",
         showVersionOnInit: true,

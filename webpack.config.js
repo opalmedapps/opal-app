@@ -18,16 +18,16 @@ let entry = [
 	"./src/js/app.values.js"];
 
 const config = env => {
-	console.log("Webpack variables:");
-	console.log(env);
+	console.log("Webpack variables:", env);
 
-	console.log(OpalEnv.getEnvSettings());
-	console.log(OpalEnv.getEnvSetting("messageOfTheDayKey"));
+	// Read environment settings from opal.config.js
+	let requiredSettingNames = ["useSourceMap", "webpackMode"];
+	let settings = {};
+	requiredSettingNames.forEach(name => settings[name] = OpalEnv.getEnvSetting(name));
+	console.log("Environment settings:", settings);
 
 	// Parse the Opal environment to use, specified via e.g. `webpack --env.opal_environment=preprod`
 	const OPAL_ENV = (env) ? env.opal_environment : null;
-	// TODO convert to external variable
-	const isProduction = OPAL_ENV === "prod";
 	console.log(`OPAL ENVIRONMENT: ${OPAL_ENV || "default (root directory)"}`);
 
 	// Throws error if the defined folder for environment does not exist.
@@ -43,8 +43,8 @@ const config = env => {
 
 	return {
 		entry: entry,
-		devtool: OpalEnv.getEnvSetting("useSourceMap") ? 'eval-cheap-source-map' : undefined,
-		mode: (isProduction) ? 'production' : 'development',
+		devtool: settings.useSourceMap ? 'eval-cheap-source-map' : undefined,
+		mode: settings.webpackMode,
 		devServer: {
 			contentBase: './www',
 			compress: true,
@@ -55,7 +55,7 @@ const config = env => {
 		},
 		output: {
 			path: path.resolve(__dirname, 'www'),
-			filename: (isProduction) ? '[name].[chunkhash].js' : '[name].[hash].js',
+			filename: '[name].[chunkhash].js',
 		},
 		module: {
 			noParse: /jquery|lodash/,
@@ -72,7 +72,7 @@ const config = env => {
 						options: {
 							presets: ['@babel/preset-env'],
 							plugins: ['@babel/plugin-proposal-private-methods',
-								'@babel/plugin-proposal-class-properties', 
+								'@babel/plugin-proposal-class-properties',
 								["@babel/plugin-transform-runtime", {
 									regenerator: true
 								}]]

@@ -103,12 +103,25 @@ class OpalEnv {
 		return [Number(configFile.elements[0].attributes["ios-CFBundleVersion"]), Number(configFile.elements[0].attributes["android-versionCode"])];
 	}
 
+	/**
+	 * @description Reads and returns a specific environment setting from opal.config.js.
+	 * @author Stacey Beard
+	 * @date 2022-03-23
+	 * @param {string} settingName - The name of the setting to read from the file.
+	 * @returns {*} The setting provided in the file.
+	 */
 	static getEnvSetting(settingName) {
 		const settings = this.getEnvSettings();
-		if (!settings || typeof settings[settingName] === "undefined") throw new Error(`opal.config.js is missing the setting: "${settingName}".`);
+		if (!settings || typeof settings[settingName] === "undefined") throw new Error(`opal.config.js is missing the setting: "${settingName}". See env/opal.config.sample.js for details.`);
 		return settings[settingName];
 	}
 
+	/**
+	 * @description Reads and returns the environment settings from opal.config.js.
+	 * @author Stacey Beard
+	 * @date 2022-03-23
+	 * @returns {object} The settings object provided in the file.
+	 */
 	static getEnvSettings() {
 		const config = this.getOpalConfigJSON();
 		if (!config || !config.settings) throw new Error('opal.config.js is not correctly formatted with a "settings" property.');
@@ -255,16 +268,17 @@ class OpalEnv {
 		throw new Error("config.xml file not found");
 	}
 
+	/**
+	 * @description Reads and returns the contents of opal.config.js (a JSON object).
+	 *              Contract: Assumes the file exists in the current directory.
+	 * @author Stacey Beard
+	 * @date 2022-03-23
+	 * @returns {object} The JSON object provided in the file.
+	 */
 	static getOpalConfigJSON() {
 		const path = "./opal.config.js";
 		if (!fs.existsSync(path)) throw new Error("opal.config.js file not found");
 		return require(path);
-		// try {
-		// 	return JSON.parse(fs.readFileSync(path).toString());
-		// }
-		// catch (error) {
-		// 	throw new Error(`Error reading opal.config.js; make sure the file is formatted correctly: ${error}`);
-		// }
 	}
 
 	static writeToConfigXML(configFile) {
