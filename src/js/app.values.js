@@ -174,7 +174,6 @@
                     'Appointments': 0,
                     'Messages': 0,
                     'Documents': 0,
-                    'Tasks': 0,
                     'Doctors': 0,
                     'LabTests': 0,
                     'Patient': 0,

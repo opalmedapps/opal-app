@@ -27,12 +27,12 @@ var myApp=angular.module('MUHCApp');
 myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors','Appointments',
     'Documents','EducationalMaterial', 'UserAuthorizationInfo', '$q', 'Notifications',
     '$cordovaNetwork', 'LocalStorage','RequestToServer','$filter','Diagnoses',
-    'NativeNotification', 'Tasks', 'Params', '$injector',
+    'NativeNotification', 'Params', '$injector',
 
     function (Announcements, TxTeamMessages, Patient,Doctors, Appointments, Documents,
               EducationalMaterial, UserAuthorizationInfo, $q, Notifications,
               $cordovaNetwork,LocalStorage,RequestToServer,$filter,Diagnoses,
-              NativeNotification, Tasks, Params, $injector) {
+              NativeNotification, Params, $injector) {
         /**
          *@ngdoc property
          *@name  MUHCApp.service.#lastUpdateTimestamp
@@ -88,10 +88,6 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors',
             'Appointments':{
                 init:Appointments.setUserAppointments,
                 update:Appointments.updateUserAppointments
-            },
-            'Tasks':{
-                init: Tasks.setPlanningTasks,
-                update:Tasks.setPlanningTasks
             },
             'Diagnosis':
             {
@@ -338,7 +334,6 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors',
                 return initServicesFromServer([
                     'Patient',
                     'Appointments',
-                    'Tasks',
                     'TxTeamMessages',
                     'EducationalMaterial',
                     'Documents',

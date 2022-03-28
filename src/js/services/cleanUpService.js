@@ -18,12 +18,12 @@
     CleanUp.$inject = ['UserAuthorizationInfo', 'LocalStorage', 'Documents', 'Diagnoses',
         'Appointments', 'Patient', 'Doctors', 'TxTeamMessages', 'Questionnaires',
         'Announcements', 'EducationalMaterial', 'Notifications', 'UserPreferences',
-        'UpdateUI', 'Tasks', 'PatientTestResults', 'CheckInService'];
+        'UpdateUI', 'PatientTestResults', 'CheckInService'];
 
     function CleanUp(UserAuthorizationInfo, LocalStorage, Documents, Diagnoses,
                      Appointments, Patient, Doctors, TxTeamMessages, Questionnaires,
                      Announcements, EducationalMaterial, Notifications, UserPreferences,
-                     UpdateUI, Tasks, PatientTestResults, CheckInService) {
+                     UpdateUI, PatientTestResults, CheckInService) {
         let service = {
             clear: clear,
             clearSensitive: clearSensitive
@@ -35,7 +35,6 @@
         function clear() {
             PatientTestResults.clear();
             LocalStorage.resetUserLocalStorage();
-            Tasks.destroy();
             Documents.clearDocuments();
             Documents.deleteDocumentsDownloaded(); // delete documents downloaded to be shared or viewed on Android (open in external viewer option)
             Diagnoses.clearDiagnoses();
