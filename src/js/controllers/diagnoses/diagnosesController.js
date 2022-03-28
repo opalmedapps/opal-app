@@ -46,7 +46,7 @@
         }
 
         /**
-         * @description Filters and displays the diagnoses from the Diagnoses service. N/A diagnoses are not shown.
+         * @description Filters and displays the diagnoses from the Diagnoses service. N/A diagnoses are not shown (case-insensitive).
          */
         function setDiagnosesView() {
             // Filter out "N/A" diagnoses
