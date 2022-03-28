@@ -1,7 +1,7 @@
 /*
  * Filename     :   diagnosesController.js
  * Description  :   Manages the diagnosis view.
- * Created by   :   David Herrera, Robert Maglieri 
+ * Created by   :   David Herrera, Robert Maglieri
  * Date         :   27 Apr 2017
  * Copyright    :   Copyright 2016, HIG, All rights reserved.
  * Licence      :   This file is subject to the terms and conditions defined in
@@ -33,7 +33,6 @@
         vm.diagnoses = [];
         vm.language = '';
         vm.noDiagnosis = false;
-        vm.showHeader = showHeader;
 
         // Used by patient-data-handler
         vm.setDiagnosesView = setDiagnosesView;
@@ -56,15 +55,6 @@
             });
 
             vm.noDiagnosis = vm.diagnoses.length === 0;
-        }
-        
-        // Determines whether or not to show the date header in the view. Announcements are grouped by day.
-        function showHeader(index)
-        {
-            if (index === 0) return true;
-            var current = (new Date(vm.diagnoses[index].CreationDate)).setHours(0,0,0,0);
-            var previous = (new Date(vm.diagnoses[index-1].CreationDate)).setHours(0,0,0,0);
-            return current !== previous;
         }
     }
 })();

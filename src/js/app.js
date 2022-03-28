@@ -123,7 +123,7 @@ import "bootstrap/dist/css/bootstrap.css";
 import "animate.css";
 import "font-awesome/css/font-awesome.css";
 import "../css/app.css";
-import "../css/custom-toast.css";
+import "../css/elements/custom-toast.element.css";
 import "../Languages/angular-locales/angular-locale_en.js"
 
 // Load angular module bootstrap script
@@ -166,28 +166,5 @@ app.run(function ($state, $stateParams,$q, $rootScope,$translate, Patient,$locat
     });
     $rootScope.$state = $state;
     $rootScope.$stateParams = $stateParams;
-    $rootScope.$on("$stateChangeError", function(event, toState, toParams, fromState, fromParams, error) {
-        // We can catch the error thrown when the $requireSignIn() promise is rejected
-        // and redirect the user back to the home page
-        $state.go('init');
-        //console.log('listening');
-        if (error === "AUTH_REQUIRED") {
-            /**
-             *@ngdoc method
-             *@name redirectPage
-             *@methodOf MUHCApp.run
-             *@returns {void} Returns a promise to perform an synch refresh page right after redirecting to the login state.
-             *@description Using the angularfire, $firebaseAuth, service, it checks whether is authorized, if its not
-             *it redirects the user to the logIn page, by using the login state and reloads the page.
-             */
-            function redirectPage(){
-                const r=$q.defer();
-                $state.go('init');
-                r.resolve('Went Init');
-                return r.promise;
-            }
-            redirectPage().then(setTimeout(function(){location.reload()},100));
-        }
-    });
 });
 

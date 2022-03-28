@@ -8,12 +8,12 @@
         .module('MUHCApp')
         .controller('LoadingController', LoadingController);
 
-    LoadingController.$inject = ['$state', '$filter','UpdateUI', 'UserAuthorizationInfo','UserPreferences', 'Patient',
-        'RequestToServer', 'PlanningSteps', 'MetaData', 'LogOutService'];
+    LoadingController.$inject = ['$state', '$filter', 'UpdateUI', 'UserAuthorizationInfo','UserPreferences', 'Patient',
+        'RequestToServer', 'PlanningSteps', 'MetaData', 'LogOutService', 'NativeNotification'];
 
     /* @ngInject */
     function LoadingController($state, $filter, UpdateUI, UserAuthorizationInfo, UserPreferences, Patient,
-                               RequestToServer, PlanningSteps, MetaData, LogOutService) {
+                               RequestToServer, PlanningSteps, MetaData, LogOutService, NativeNotification) {
 
         activate();
         ///////////////////////////
@@ -51,38 +51,13 @@
 
         //Timeout to show, alerting user of server problems.
         var timeOut = setTimeout(function(){
-            var mod;
+            loadingmodal.hide();
             if(typeof Patient.getFirstName()==='undefined'||Patient.getFirstName()===''){
-
-                if(ons.platform.isAndroid())
-                {
-                    mod='material';
-                }
-                loadingmodal.hide();
-                ons.notification.alert({
-                    //message: 'Server problem: could not fetch data, try again later',
-                    message: $filter('translate')("SERVERERRORALERT"),
-                    modifier: mod,
-                    callback: function(idx) {
-                        LogOutService.logOut();
-                    }
-                });
+                NativeNotification.showNotificationAlert($filter('translate')("SERVERERRORALERT"), LogOutService.logOut);
             }
             //This means server is working, but being slow
             else{
-                if(ons.platform.isAndroid())
-                {
-                    mod='material';
-                }
-                ons.notification.alert({
-
-                    //message: 'Request is taking longer than usual...please try again later.',
-                    message: $filter('translate')("LONGERTIMEALERT"),
-                    modifier: mod,
-                    callback: function(idx) {
-                        LogOutService.logOut();
-                    }
-                });
+                NativeNotification.showNotificationAlert($filter('translate')("LONGERTIMEALERT"), LogOutService.logOut);
             }
         }, 90000);
     }

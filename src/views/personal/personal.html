@@ -1,11 +1,12 @@
 <ons-page ng-controller="PersonalTabController as tab" ng-device-backbutton="tab.personalDeviceBackButton()">
-    <ons-toolbar fixed-style>
-        <div class="left">
-            <ons-back-button>{{"BACK"|translate}}</ons-back-button>
-        </div>
-        <div class="center" ng-class="fontSizeTitle">{{"MYCHART"|translate}}</div>
-        <div class="right"><ons-toolbar-button ng-click="personalNavigator.pushPage('views/tabs/info-page-tabs.html',{param:home})"><ons-icon icon="fa-info-circle"></ons-icon></ons-toolbar-button></div>
-    </ons-toolbar>
+    <generic-toolbar title="{{'MYCHART'|translate}}" style-class="fontSizeTitle">
+        <right-content>   
+            <ons-toolbar-button ng-click="personalNavigator.pushPage('views/tabs/info-page-tabs.html',{param:home})">
+                <ons-icon icon="fa-info-circle"></ons-icon>
+            </ons-toolbar-button>
+        </right-content> 
+    </generic-toolbar>
+
     <!-- HOSPITAL NAME BAR -->
     <top-page-banner title="tab.selectedHospitalToDisplay"></top-page-banner>
 

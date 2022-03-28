@@ -1,5 +1,5 @@
 /**
- * @description Service that handles behavior related to the state of the app running on a device (active, inactive).
+ * @description Service that handles behavior related to the state of the app running on a device (active, inactive, reloaded).
  * @author Stacey Beard
  * @date 2021-09-09
  */
@@ -20,9 +20,18 @@
          * run on Android. The pause and resume events may not work as well on iOS (e.g. if the Lock button is used).
          */
 
+        /**
+         * @description Keeps track of whether the app has been initialized, and is used to detect when the app
+         *              has been reloaded to redirect it to the init screen (see RoutesConfiguration for details).
+         * @type {boolean}
+         */
+        let appInitialized = false;
+
         let service = {
             addActiveEvent: addActiveEvent,
             addInactiveEvent: addInactiveEvent,
+            isInitialized: () => appInitialized,
+            setInitialized: value => appInitialized = value,
         };
 
         return service;

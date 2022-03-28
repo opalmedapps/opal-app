@@ -1,8 +1,5 @@
 <ons-page ng-controller="AnnouncementsController as vm">
-    <ons-toolbar fixed-style>
-        <div class="left"><ons-back-button>{{"BACK"|translate}}</ons-back-button></div>
-        <div class="center" ng-class="fontSizeTitle">{{"GENERALANNOUNCEMENTSHEADER"|translate}}</div>
-    </ons-toolbar>
+    <generic-toolbar title="{{'GENERALANNOUNCEMENTSHEADER'|translate}}" style-class="fontSizeTitle"></generic-toolbar>
 
     <network-banner></network-banner>
 
@@ -20,17 +17,17 @@
 
     <div ng-hide="vm.hideContent || vm.noAnnouncements">
         <ons-list  ng-repeat="announcement in vm.announcements" ng-click="vm.goToAnnouncement(announcement)">
-            <ons-list-header class="person-list-header" ng-class="fontSizeTitle" ng-show="vm.showHeader($index)">{{announcement.DateAdded|date:'fullDate'}}</ons-list-header>
+            <ons-list-header class="person-list-header" ng-class="fontSizeTitle" ng-show="{{vm.announcements | showHeader : $index : 'DateAdded' }}">{{announcement.DateAdded|date:'fullDate'}}</ons-list-header>
             <ons-list-item modifier="chevron" class="item">
                 <ons-row align="center" >
                     <ons-col width="70px" align="center">
                         <div style="margin-left:10px">
-                            <i class="fa fa-bullhorn iconHomeView" style="color:#FFC107"></i><span class="notification" ng-if="announcement.ReadStatus==='0'">&nbsp;</span>
+                            <i class="fa fa-bullhorn iconHomeView" style="color:#FFC107"></i>
                         </div>
                     </ons-col>
                     <ons-col>
                         <header>
-                            <span class="item-title" ng-class="fontSizeTitle">{{announcement.Title}}</span>
+                            <span ng-class="[fontSizeTitle, 'item-desc', {'item-unread': announcement.ReadStatus==='0'}]">{{announcement.Title}}</span>
                         </header>
                     </ons-col>
                 </ons-row>

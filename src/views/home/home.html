@@ -1,12 +1,9 @@
 <ons-page ng-controller="HomeController as h" ng-device-backbutton="h.homeDeviceBackButton()">
-    <ons-toolbar fixed-style>
-        <div class="center" ng-class="fontSizeTitle">{{"HEADER_MESSAGE_HOME"|translate}}</div>
-        <div class="right">
-            <ons-toolbar-button ng-click="homeNavigator.pushPage('views/tabs/info-page-tabs.html',{param:home})">
-                <ons-icon icon="fa-info-circle"></ons-icon>
-            </ons-toolbar-button>
-        </div>
-    </ons-toolbar>
+    <generic-toolbar title="{{'HEADER_MESSAGE_HOME'|translate}}" back-button="false" style-class="fontSizeTitle">
+        <right-content>
+            <ons-toolbar-button ng-click="homeNavigator.pushPage('views/tabs/info-page-tabs.html',{param:home})"><ons-icon icon="fa-info-circle"></ons-icon></ons-toolbar-button>
+        </right-content>
+    </generic-toolbar>
 
     <!-- HOSPITAL NAME BAR -->
     <top-page-banner title="h.selectedHospitalToDisplay"></top-page-banner>

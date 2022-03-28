@@ -8,6 +8,8 @@
  *                  file 'LICENSE.txt', which is part of this source code package.
  */
 
+import '../../../css/views/init-page.view.css';
+
 (function () {
 	'use strict';
 
@@ -16,6 +18,7 @@
 		.controller('InitScreenController', InitScreenController);
 
 	InitScreenController.$inject = [
+		'AppState',
 		'NavigatorParameters',
 		'$translatePartialLoader',
 		'UserPreferences',
@@ -32,6 +35,7 @@
 
 	/* @ngInject */
 	function InitScreenController(
+		AppState,
 		NavigatorParameters,
 		$translatePartialLoader,
 		UserPreferences,
@@ -111,6 +115,8 @@
 
 			// Get location permission
 			Permissions.enablePermission('ACCESS_FINE_LOCATION').catch(console.error);
+
+			AppState.setInitialized(true);
 		}
 
 		function showMessageOfTheDay() {

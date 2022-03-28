@@ -1,10 +1,5 @@
 <ons-page ng-controller="DocumentsController as docs">
-    <ons-toolbar fixed-style>
-        <div class="left">
-            <ons-back-button>{{"BACK"|translate}}</ons-back-button>
-        </div>
-        <div class="center" ng-class="fontSizeTitle">{{"CLINICAL_NOTES"|translate}}</div>
-    </ons-toolbar>
+    <generic-toolbar title="{{'CLINICAL_NOTES'|translate}}" style-class="fontSizeTitle"></generic-toolbar>
     <network-banner></network-banner>
 
     <!-- DATA REFRESHER -->
@@ -24,7 +19,7 @@
             {{"NOPATIENTDOCUMENTSAVAILABLE"|translate}}
         </div>
         <ons-list ng-repeat="doc in docs.documents" ng-click="docs.goToDocument(doc)">
-            <ons-list-header class="person-list-header" ng-class="fontSizeTitle" ng-show="docs.showHeader($index)">
+            <ons-list-header class="person-list-header" ng-class="fontSizeTitle" ng-show="{{docs.documents | showHeader : $index : 'CreatedTimeStamp' }}">
                 {{doc.CreatedTimeStamp|date:'longDate'}}
             </ons-list-header>
             <ons-list-item modifier="chevron">
@@ -32,12 +27,14 @@
                 <ons-row align="center" >
                     <ons-col width="60px" align="center">
                         <div style="margin-left:10px">
-                            <i class="ion-android-document iconHomeView" style="color:{{doc.ColorTag}}"></i><span class="notification" ng-if="doc.ReadStatus==='0'">&nbsp;</span>
+                            <i class="ion-android-document iconHomeView" style="color:{{doc.ColorTag}}"></i>
                         </div>
                     </ons-col>
                     <ons-col style="word-wrap: break-word;">
                         <div style="line-height:1;padding:5px;" >
-                            <span ng-class="fontSizeTitle"> <strong>{{doc.Title}}</strong></span> <br>
+                            <span ng-class="[fontSizeTitle, 'item-desc', {'item-unread': doc.ReadStatus==='0'}]">
+                                {{doc.Title}}<br>
+                            </span>
                             <span class="item-desc" ng-class="fontSizeDesc">{{"ADDED"|translate}} {{doc.CreatedTimeStamp|date:'shortTime'}}</span>
                         </div>
                     </ons-col>

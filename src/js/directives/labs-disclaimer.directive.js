@@ -1,4 +1,4 @@
-import "../../css/labs-disclaimer.directive.css";
+import "../../css/directives/labs-disclaimer.directive.css";
 
 (function () {
     'use strict';

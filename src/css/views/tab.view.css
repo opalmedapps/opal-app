@@ -1,0 +1,17 @@
+.tab {
+    line-height: 1;
+}
+
+.tab-icon {
+    font-size: 30px;
+    padding: 0;
+    margin: 0;
+    vertical-align: top;
+    line-height: 28px;
+}
+
+.tab-label {
+    line-height: 11px;
+    vertical-align: top;
+    font-size: 11px;
+}

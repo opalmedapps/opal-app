@@ -27,12 +27,12 @@ var myApp=angular.module('MUHCApp');
 myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors','Appointments',
     'Documents','EducationalMaterial', 'UserAuthorizationInfo', '$q', 'Notifications',
     '$cordovaNetwork', 'LocalStorage','RequestToServer','$filter','Diagnoses',
-    'NativeNotification', 'Tasks',
+    'NativeNotification', 'Tasks', '$injector',
 
     function (Announcements, TxTeamMessages, Patient,Doctors, Appointments, Documents,
               EducationalMaterial, UserAuthorizationInfo, $q, Notifications,
               $cordovaNetwork,LocalStorage,RequestToServer,$filter,Diagnoses,
-              NativeNotification, Tasks) {
+              NativeNotification, Tasks, $injector) {
 
         /**
          *@ngdoc property
@@ -196,10 +196,8 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors',
                 });
             }).catch(function(error) {
                 console.error(error);
-                if(error.Code !== '3')
-                {
-                    NativeNotification.showNotificationAlert($filter('translate')("ERRORCONTACTINGHOSPITAL"));
-                }
+                const LogOutService = $injector.get('LogOutService');
+                NativeNotification.showNotificationAlert($filter('translate')("ERROR_CONTACTING_HOSPITAL"), LogOutService.logOut);
                 r.reject(false);
             });
             return r.promise;

@@ -19,11 +19,11 @@
         .controller('EducationalMaterialController', EducationalMaterialController);
 
     EducationalMaterialController.$inject = ['NavigatorParameters', '$scope', 'EducationalMaterial','NetworkStatus',
-        'Patient', 'Logger', 'UserHospitalPreferences'];
+        'Patient', 'Logger', 'UserHospitalPreferences', '$filter'];
 
     /* @ngInject */
     function EducationalMaterialController(NavigatorParameters, $scope, EducationalMaterial, NetworkStatus,
-                                           Patient, Logger, UserHospitalPreferences) {
+                                           Patient, Logger, UserHospitalPreferences, $filter) {
         var vm = this;
         var backButtonPressed = 0;
 
@@ -35,15 +35,12 @@
 
         // variable to let the user know which hospital they are logged in
         vm.selectedHospitalToDisplay = "";
-        
+
         vm.goToEducationalMaterial = goToEducationalMaterial;
         vm.educationDeviceBackButton = educationDeviceBackButton;
 
         // Function used to filter the materials shown based on the search string
         vm.filterMaterial = filterMaterial;
-
-        // Function to show data and time header
-        vm.showHeader = showHeader;
 
         // Used by patient-data-handler
         vm.configureState = configureState;
@@ -64,7 +61,7 @@
             // Full list of educational materials in the right language.
             vm.edumaterials = EducationalMaterial.setLanguage(EducationalMaterial.getEducationalMaterial());
             // Educational materials filtered based on the search string.
-            vm.filteredEduMaterials = vm.edumaterials;
+            vm.filteredEduMaterials = $filter('orderBy')(vm.edumaterials, '-DateAdded');
         }
 
         function educationDeviceBackButton(){
@@ -106,7 +103,7 @@
                 educationNavigator.off('prepop');
             });
         }
-        
+
         /**
          * @method goToEducationalMaterial
          * @description If not read reads material, then it opens the material into its individual controller
@@ -152,14 +149,6 @@
             });
 
             vm.filteredEduMaterials = filtered;//assign to new show list
-        }
-
-
-        function showHeader(index) {
-            if (index === vm.filteredEduMaterials.length - 1) return true;
-            var current = (new Date(vm.filteredEduMaterials[index].DateAdded)).setHours(0, 0, 0, 0);
-            var previous = (new Date(vm.filteredEduMaterials[index + 1].DateAdded)).setHours(0, 0, 0, 0);
-            return current !== previous;
         }
     }
 })();

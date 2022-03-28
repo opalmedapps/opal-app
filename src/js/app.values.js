@@ -9,10 +9,10 @@
     This factory keeps track of all constants across the app.
      */
 
-    Params.$inject = ['QuestionnaireConstants'];
+    Params.$inject = ['QuestionnaireConstants', 'RequestConstants'];
 
     /* @ngInject */
-    function Params (QuestionnaireConstants) {
+    function Params (QuestionnaireConstants, RequestConstants) {
 
         let appConstants =
             {
@@ -107,26 +107,17 @@
                 },
 
                 /** ChangeSettingsController Constants **/
-                setAliasParam: 'ALIAS',
-                setAliasLowerCaseParam: 'Alias',
-                setPhoneNumbersParam: 'PHONENUMBER',
-                setEmailParam: 'EMAIL',
-                setEmailType: 'email',
-                setEmailField: 'Email',
-                setPasswordType: 'password',
                 setPasswordField: 'Password',
                 setPasswordParam: 'PASSWORD',
                 setLanguageParam: 'LANGUAGE',
                 setLanguageParamProperCase: 'Language',
-                setFirstLanguageInstruction: 'EN',
-                setSecondLanguageInstruction: 'FR',
+                settingsLanguageOptions: ['EN', 'FR'],
                 setFontSizeParam: 'FONTSIZE',
-                setFontOptionMedium: 'medium',
-                setFontOptionLarge: 'large',
-                setFontOptionExtraLarge: 'xlarge',
-                setNicknameAlias: 'NICKNAME',
-                setTelephoneNumberParam: 'TelNum',
-
+                settingFontOptions: [
+                    {size: 'medium', style: 'fontDescMedium', text: 'SMALL'},
+                    {size: 'large', style: 'fontDescLarge', text: 'MEDIUM'},
+                    {size: 'xlarge', style: 'fontDescXlarge', text: 'LARGE'}
+                ],
                 /** Status Controller **/
                 setMap: {
                     'CT for Radiotherapy Planning': 1,
@@ -268,10 +259,13 @@
                 }
             };
 
-        let allConstants = Object.assign(appConstants, QuestionnaireConstants);
-
-        return allConstants;
+        // Return an assembled object containing all constants
+        return {
+            ...appConstants,
+            ...QuestionnaireConstants,
+            REQUEST: {
+                ...RequestConstants
+            },
+        };
     }
 }) ();
-
-

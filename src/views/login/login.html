@@ -1,10 +1,5 @@
 <ons-page style="background-color:white;width:100vw;height:100vh" ng-controller="LoginController as login">
-    <ons-toolbar fixed-style>
-        <div class="left">
-            <ons-back-button>{{"BACK"|translate}}</ons-back-button>
-        </div>
-        <div class="center">{{"LOGIN"|translate}}</div>
-    </ons-toolbar>
+    <generic-toolbar title="{{'LOGIN'|translate}}" style-class="fontSizeTitle"></generic-toolbar>
     <network-banner></network-banner>
     <div ng-include="'./views/login/popover-security.html'"></div>
     <ons-row align="center" style="height:70vh;margin:0;top:0">
@@ -16,12 +11,13 @@
                 <form style="text-align: center" novalidate>
                     <div>
                         <div style="width: 100%" class="style-4">
-                            <input placeholder='{{"EMAIL"|translate}}' name="email" ng-model="login.email" type="email" required ng-change=login.clearErrors()></div>
+                            <input placeholder='{{"EMAIL"|translate}}' name="email" ng-model="login.email" type="email" required ng-change=login.clearErrors()>
+                        </div>
                         <br/>
-                        <div style="width: 100%" class="style-4">
-                            <input name="password" ng-model="login.password" placeholder='{{"PASSWORD"|translate}}' type="password" required ng-change="login.clearErrors()"></div>
+                        <password-input>
+                            <input name="password" ng-model="login.password" placeholder='{{"PASSWORD"|translate}}' type="password" required ng-change="login.clearErrors()">
+                        </password-input>
                         <br/>
-
                         <!-- HOSPITAL SELECTOR -->
                         <hospital-selector></hospital-selector>
 
@@ -47,21 +43,4 @@
             </div>
         </ons-col>
     </ons-row>
-
-    <ons-modal var="loginerrormodal">
-        <h4>{{"SERVERERROR"|translate}}</h4>
-        <ons-icon icon="ion-alert-circled" size="60px"></ons-icon>
-        <p style="margin-top: 5%" class="unattended-message">{{"PASSWORDSERVERERROR"|translate}}</p>
-        <ons-button style="margin-top: 5%; font-size: 22px; background-color: #4caf50" ng-click="login.goToReset()">{{"RETRYRESET"|translate}}</ons-button>
-        <br>
-        <ons-button style="margin-top: 5%; font-size: 22px;" ng-click="login.goToInit()">{{"GOTOHOME"|translate}}</ons-button>
-    </ons-modal>
-
-    <ons-modal var="wronghashmodal">
-        <h4>{{"ERROR"|translate}}</h4>
-        <ons-icon icon="ion-alert-circled" size="60px"></ons-icon>
-        <p style="margin-top: 5%" class="unattended-message">{{"RESETTRUSTEDMESSAGE"|translate}}</p>
-        <br>
-        <ons-button style="margin-top: 5%; font-size: 22px;" ng-click="wronghashmodal.hide()">{{"OK"|translate}}</ons-button>
-    </ons-modal>
 </ons-page>
