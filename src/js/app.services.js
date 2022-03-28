@@ -23,7 +23,6 @@ import "./services/educationalMaterialService.js";
 import "./services/toast.service";
 import "./services/deviceIdentifiersService.js";
 import "./services/tasksService.js";
-import "./services/planningStepsService.js";
 import "./services/permissionService.js";
 import "./services/dynamicContentService.js";
 import "./services/uuidService.js";
