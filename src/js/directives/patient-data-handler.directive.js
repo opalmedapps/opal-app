@@ -50,14 +50,14 @@
                 scope.alertType = Params.alertTypeDanger;
                 scope.refresh = refresh;
 
-                // Variables that should only be changed via the setters below
+                // Variables that should only be changed via the setters further below
                 scope.loading = false;
                 scope.initLoadingError = false;
 
                 // Variable that is a function of other variables: hideContent = scope.loading || scope.initLoadingError
                 scope.hideContent = false;
 
-                // Helper functions
+                // Setters
                 const setLoading = (value) => { console.log("Loading "+value); scope.loading = value; setHideContent() };
                 const setInitLoadingError = (value) => { console.log("InitError "+value); scope.initLoadingError = value; setHideContent() };
                 const setHideContent = () => { console.log("Hide "+(scope.loading || scope.initLoadingError)); scope.hideContent = scope.loading || scope.initLoadingError };
