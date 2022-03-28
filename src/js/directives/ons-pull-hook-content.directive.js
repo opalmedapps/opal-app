@@ -13,6 +13,8 @@
      * @date 2021-11-05
      * @description Fills out the contents of an ons-pull-hook (the icons shown at each stage of the refresh process).
      *              This directive should be used as the direct child of an <ons-pull-hook>.
+     *              Note: <ons-pull-hook> itself cannot be added to this directive, as it must be the direct child
+     *                    of the page to work (not the child of a directive).
      */
     function onsPullHookContent() {
         let directive = {
