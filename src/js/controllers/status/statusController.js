@@ -14,9 +14,9 @@ import ProgressBar from "progressbar.js";
         .module('MUHCApp')
         .controller('StatusController', StatusController);
 
-    StatusController.$inject = ['$anchorScroll','$location', 'NavigatorParameters', '$filter', 'PlanningSteps', 'UserPreferences', 'Logger', 'Params'];
+    StatusController.$inject = ['$anchorScroll','$location', 'NavigatorParameters', '$filter', 'UserPreferences', 'Logger', 'Params'];
 
-    function StatusController($anchorScroll, $location, NavigatorParameters, $filter, PlanningSteps, UserPreferences, Logger, Params)
+    function StatusController($anchorScroll, $location, NavigatorParameters, $filter, UserPreferences, Logger, Params)
     {
         var statusVm = this;
 
