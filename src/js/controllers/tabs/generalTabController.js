@@ -36,9 +36,7 @@
              */
 
             function activate() {
-                if (NetworkStatus.isOnline()) {
-                    initGeneralTab();
-                }
+                setBadges();
 
                 NavigatorParameters.setParameters({'Navigator': 'generalNavigator'});
                 NavigatorParameters.setNavigator(generalNavigator);
@@ -76,27 +74,9 @@
                 });
             }
 
-            function initGeneralTab() {
-                if (MetaData.isFirstTimeGeneral()) {
-                    $scope.announcementsUnreadNumber = Announcements.getNumberUnreadAnnouncements();
-                }
-                else if (Announcements.getLastUpdated() < Date.now() - 300000) {
-                    // TODO: MAKE THIS INTO A BACKGROUND REFRESH
-
-                    UpdateUI.getData([
-                        'Doctors',
-                        'Announcements'
-                    ]).catch(error => {
-                        console.error("Failed to fetch Doctors and Announcements data from server:", error);
-                    });
-                }
-                setBadges();
-            }
-
             function setBadges() {
                 vm.announcementsUnreadNumber = Announcements.getNumberUnreadAnnouncements();
             }
-
 
             /**
              * PUBLIC FUNCTIONS
