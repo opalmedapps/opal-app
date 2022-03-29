@@ -84,7 +84,6 @@
                     // TODO: MAKE THIS INTO A BACKGROUND REFRESH
 
                     UpdateUI.set([
-                        'Doctors',
                         'Announcements'
                     ])
                 }
