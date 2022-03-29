@@ -18,7 +18,8 @@
         let directive = {
             restrict: 'E',
             scope: {
-                // The category (string) or categories (array<string>) of data to initialize from UpdateUI
+                // The category (string) or categories (comma-separated string) of data to initialize from UpdateUI
+                // Example value for multiple categories: "Appointments,Announcements"
                 "categories": "@",
 
                 // Function called when the data is done loading, to display it in the parent view
@@ -62,8 +63,11 @@
                 const setInitLoadingError = (value) => { console.log("InitError "+value); scope.initLoadingError = value; setHideContent() };
                 const setHideContent = () => { console.log("Hide "+(scope.loading || scope.initLoadingError)); scope.hideContent = scope.loading || scope.initLoadingError };
 
+                // Read the value(s) provided in the categories string
+                const categories = scope.categories.includes(',') ? scope.categories.split(',') : scope.categories;
+
                 // Initialize data
-                if (UpdateUI.haveBeenInitialized(scope.categories)) {
+                if (UpdateUI.haveBeenInitialized(categories)) {
                     $timeout(() => {
                         // Display previously loaded data first
                         if (scope.displayFunction) scope.displayFunction();
@@ -78,13 +82,13 @@
                  */
                 function initialize() {
                     setLoading(true);
-                    UpdateUI.getData(scope.categories).then(() => {
+                    UpdateUI.getData(categories).then(() => {
                         $timeout(() => {
                             if (scope.displayFunction) scope.displayFunction();
                         });
                     }).catch(error => {
                         $timeout(() => {
-                            console.error(`Error loading data:`, scope.categories, error);
+                            console.error(`Error loading data:`, categories, error);
                             setInitLoadingError(true);
                         });
                     }).finally(() => {
@@ -108,14 +112,14 @@
                  *                                   waiting for the result).
                  */
                 function refresh($done, visibleError=true) {
-                    UpdateUI.getData(scope.categories).then(() => {
+                    UpdateUI.getData(categories).then(() => {
                         $timeout(() => {
                             setInitLoadingError(false); // In case the refresh has recovered from an earlier failure
                             if (scope.displayFunction) scope.displayFunction();
                         });
                     }).catch(error => {
                         $timeout(() => {
-                            console.error(`Error refreshing data:`, scope.categories, error);
+                            console.error(`Error refreshing data:`, categories, error);
                             // TODO limit to one toast
                             if (visibleError) Toast.showToast({
                                 message: $filter('translate')("REFRESH_ERROR"),
