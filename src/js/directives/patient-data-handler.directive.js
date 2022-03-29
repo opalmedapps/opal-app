@@ -18,8 +18,8 @@
         let directive = {
             restrict: 'E',
             scope: {
-                // The category of data to initialize from UpdateUI
-                "category": "@",
+                // The category (string) or categories (array<string>) of data to initialize from UpdateUI
+                "categories": "@",
 
                 // Function called when the data is done loading, to display it in the parent view
                 "displayFunction": "=",
@@ -63,7 +63,7 @@
                 const setHideContent = () => { console.log("Hide "+(scope.loading || scope.initLoadingError)); scope.hideContent = scope.loading || scope.initLoadingError };
 
                 // Initialize data
-                if (UpdateUI.hasBeenInitialized(scope.category)) {
+                if (UpdateUI.haveBeenInitialized(scope.categories)) {
                     $timeout(() => {
                         // Display previously loaded data first
                         if (scope.displayFunction) scope.displayFunction();
@@ -73,18 +73,18 @@
                 else initialize();
 
                 /**
-                 * @description Initializes the data for this directive's category, then displays the data using the
+                 * @description Initializes the data for this directive's categories, then displays the data using the
                  *              provided display function.
                  */
                 function initialize() {
                     setLoading(true);
-                    UpdateUI.getData(scope.category).then(() => {
+                    UpdateUI.getData(scope.categories).then(() => {
                         $timeout(() => {
                             if (scope.displayFunction) scope.displayFunction();
                         });
                     }).catch(error => {
                         $timeout(() => {
-                            console.error(`Error loading data:`, scope.category, error);
+                            console.error(`Error loading data:`, scope.categories, error);
                             setInitLoadingError(true);
                         });
                     }).finally(() => {
@@ -96,7 +96,7 @@
 
                 /**
                  * @description Function to be called manually or by an ons-pull-hook's ng-action.
-                 *              Refreshes the data for this directive's category, then displays the data using the
+                 *              Refreshes the data for this directive's categories, then displays the data using the
                  *              provided display function. Closes ons-pull-hook if the $done function was provided by
                  *              ons-pull-hook.
                  * @param {function} [$done] - Optional callback function to execute after the display function.
@@ -108,15 +108,14 @@
                  *                                   waiting for the result).
                  */
                 function refresh($done, visibleError=true) {
-                    // Refresh data in the given category
-                    UpdateUI.getData(scope.category).then(() => {
+                    UpdateUI.getData(scope.categories).then(() => {
                         $timeout(() => {
-                            setInitLoadingError(false); // Recovered from an earlier failure
+                            setInitLoadingError(false); // In case the refresh has recovered from an earlier failure
                             if (scope.displayFunction) scope.displayFunction();
                         });
                     }).catch(error => {
                         $timeout(() => {
-                            console.error(`Error refreshing data:`, scope.category, error);
+                            console.error(`Error refreshing data:`, scope.categories, error);
                             // TODO limit to one toast
                             if (visibleError) Toast.showToast({
                                 message: $filter('translate')("REFRESH_ERROR"),

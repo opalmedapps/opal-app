@@ -265,14 +265,28 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors',
         }
 
         /**
-         * @description Determines whether a category has been successfully initialized.
-         *              Note: if an error occurred during its initialization process, the category is not considered initialized.
-         * @param {string} category - The category to check.
+         * @description Determines whether all provided category have been successfully initialized.
+         *              Note: if an error occurred during its initialization process, a category is not considered initialized.
+         * @param {string| Array<string>} categories - The category or categories to check.
          * @returns {boolean} True if the category has been successfully initialized; false otherwise.
+         *                    If an array is provided, this function will return false if at least one category has not been initialized.
          */
-        function hasBeenInitialized(category) {
-            if (!category) throw new Error("Category required");
-            return sectionServiceMappings[category].lastUpdated !== 0;
+        function haveBeenInitialized(categories) {
+            validateCategories(categories);
+            if (!Array.isArray(categories)) return haveBeenInitialized([categories]);
+            return categories.every(category => sectionServiceMappings[category].lastUpdated !== 0);
+        }
+
+        /**
+         * @description Validates a category or array of categories by checking whether it's in sectionServiceMappings.
+         * @param {string | Array<string>} categories - The category or categories to check.
+         * @throws {string} An error if a category is invalid.
+         */
+        function validateCategories(categories) {
+            if (!Array.isArray(categories)) return validateCategories([categories]);
+            categories.forEach(category => {
+                if (!sectionServiceMappings.hasOwnProperty(category)) throw `Invalid UpdateUI category: ${category}`;
+            });
         }
 
         /**
@@ -284,16 +298,14 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors',
          */
         async function getData(categories) {
             // Validate input
+            validateCategories(categories);
             if (typeof categories === "string") return getData([categories]);
-            else if (!Array.isArray(categories)) throw `GetData requires a string or array as input; received instead: ${categories} (${typeof categories})`;
 
             // Iterate through all categories to initialize or update them
             let toSet = [], toUpdate = [];
             for (let category of categories) {
-                if (!sectionServiceMappings.hasOwnProperty(category)) throw `UpdateUI category not supported: ${category}`;
-
                 // Depending on its status, dispatch the category to be initialized or updated
-                if (hasBeenInitialized(category)) toUpdate.push(category);
+                if (haveBeenInitialized(category)) toUpdate.push(category);
                 else toSet.push(category);
             }
 
@@ -305,7 +317,7 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors',
 
         return {
 
-            hasBeenInitialized: hasBeenInitialized,
+            haveBeenInitialized: haveBeenInitialized,
             getData: getData,
 
             /**
