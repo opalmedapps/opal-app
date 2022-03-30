@@ -28,7 +28,6 @@
 
 		// functions that can be used from view
 		vm.goToParkingLink = goToParkingLink;
-		vm.goToPrototypeParkingLink = goToPrototypeParkingLink;
 
 		activate();
 
@@ -57,22 +56,12 @@
 		}
 
 		/**
-		 * @name goToPrototypeParkingLink
-		 * @desc This function redirects user to the given parking site url
+		 * @name goToParkingLink
+		 * @desc This function redirects user to a given parking site url
 		 * @param {string} url Parking url
 		 */
-		function goToPrototypeParkingLink(url) {
+		function goToParkingLink(url) {
 				Browser.openInternal(url);
-		}
-
-		function goToParkingLink(type) {
-			if (type === "parking_general" || type === "parking_gettingtohospital") {
-				const url = DynamicContent.getURL(type);
-				Browser.openInternal(url);
-			}
-			else if (type ==="parking_oncology") {
-				navigator.pushPage('./views/templates/content.html', {contentType: type});
-			}
 		}
 
 		/**
