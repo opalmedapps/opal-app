@@ -13,16 +13,16 @@
             .controller('GeneralTabController', GeneralTabController);
 
         GeneralTabController.$inject = ['$scope', 'Announcements', 'UpdateUI', 'NavigatorParameters', 'NetworkStatus',
-            'MetaData', 'UserPreferences', 'Params', 'UserHospitalPreferences', 'Browser', 'DynamicContent'];
+            'MetaData', 'UserPreferences', 'UserHospitalPreferences', 'Browser', 'DynamicContent'];
 
         function GeneralTabController($scope, Announcements, UpdateUI, NavigatorParameters, NetworkStatus, MetaData,
-                                      UserPreferences, Params, UserHospitalPreferences, Browser, DynamicContent) {
+                                      UserPreferences, UserHospitalPreferences, Browser, DynamicContent) {
             var vm = this;
 
             vm.goToParking = goToParking;
             vm.generalDeviceBackButton = generalDeviceBackButton;
             vm.goToUrl = goToUrl;
-
+            vm.goToCarnetSante = goToCarnetSante;
             // variable to let the user know which hospital they are logged in
             vm.selectedHospitalToDisplay = "";
             vm.allowedModules = {};
@@ -94,7 +94,6 @@
                 vm.announcementsUnreadNumber = Announcements.getNumberUnreadAnnouncements();
             }
 
-
             /**
              * PUBLIC FUNCTIONS
              */
@@ -110,6 +109,11 @@
 
             function goToUrl(contentKey) {
                 const url = DynamicContent.getURL(contentKey);
+                Browser.openInternal(url);
+            }
+
+            function goToCarnetSante() {
+                const url = DynamicContent.getURL("carnet_sante");
                 Browser.openInternal(url);
             }
         }
