@@ -42,7 +42,6 @@
                         <header>
                             <span class="item-title" ng-class="fontSizeTitle">{{"TREATMENTPLANNING"|translate}}</span>
                         </header>
-                        <!--<p class="item-desc" ng-class="fontSizeDesc">{{ 'STAGEOF' | translate:outOf}}</p>-->
                     </ons-col>
                 </ons-row>
             </ons-list-item>
@@ -57,7 +56,6 @@
                         <header>
                             <span class="item-title" ng-class="fontSizeTitle">{{"APPOINTMENTS"|translate}}</span>
                         </header>
-                        <!--<p class="item-desc" ng-class="fontSizeDesc" ng-show="appointmentTitle!=='undefined'"><span translate= "{{appointmentTitle}}"></span> {{appointment.ScheduledStartTime|formatDateAppointmentTask}}</p>-->
                     </ons-col>
                 </ons-row>
             </ons-list-item>
@@ -109,27 +107,6 @@
                             <span class="item-title" ng-class="fontSizeTitle">{{"TREATINGTEAMNOTIFICATIONS"|translate}}</span>
                         </header>
                         <p class="item-desc" ng-class="fontSizeDesc"></p>
-                    </ons-col>
-                </ons-row>
-            </ons-list-item>
-            <ons-list-item class="item"
-                           ng-if="tab.allowedModules.hasOwnProperty('CSQ') && tab.allowedModules['CSQ']"
-                           ng-click="tab.goToCarnetSante()">
-                <ons-row align="center">
-                    <ons-col width="60px" style="text-align: center">
-                        <div>
-                            <img style="width: 35px;" src="./img/quebec.png">
-                        </div>
-                    </ons-col>
-                    <ons-col>
-                        <header>
-                            <span class="item-title"
-                                  ng-class="fontSizeTitle">{{"CARNET_SANTE"|translate}}</span>
-                            <ons-icon icon="ion-android-open" style="color:#ddd; margin-top: 1%; margin-right: -10px" class="pull-right"
-                                      size="1.2em">
-                            </ons-icon>
-                        </header>
-                        <p class="item-desc"></p>
                     </ons-col>
                 </ons-row>
             </ons-list-item>
