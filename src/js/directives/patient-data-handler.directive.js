@@ -25,15 +25,15 @@
                 // Function called when the data is done loading, to display it in the parent view
                 "displayFunction": "=",
 
-                // Function provided by the directive, to be called manually or by ons-pull-hook's ng-action to execute a refresh.
+                // [Provided by the directive] Function to be called manually or by ons-pull-hook's ng-action to execute a refresh.
                 // See function below for details.
                 "refresh": "=?",
 
-                // Variable provided by the directive. Indicates that the main page content (where data is shown) should be hidden,
-                // usually because the data is loading or has completely failed to load.
+                // [Provided by the directive] Variable (boolean) that indicates that the main page content (where data is shown)
+                // should be hidden, usually because the data is loading or has completely failed to load.
                 "hideContent": "=?",
 
-                // Optional parameter to override the loading wheel's top margin
+                // Optional parameter to override the loading wheel's top margin (see loading-spinning-circle for details)
                 "marginTop": "@",
             },
             template: `<!-- Loading wheel -->
@@ -120,7 +120,6 @@
                     }).catch(error => {
                         $timeout(() => {
                             console.error(`Error refreshing data:`, categories, error);
-                            // TODO limit to one toast
                             if (visibleError) Toast.showToast({
                                 message: $filter('translate')("REFRESH_ERROR"),
                             });
