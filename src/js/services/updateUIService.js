@@ -62,12 +62,6 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors',
               ...
          **/
         var sectionServiceMappings={
-            'All':
-            {
-                init:setServices,
-                update:updateServices,
-                lastUpdated: 0,
-            },
             'Documents':
             {
                 init:Documents.setDocuments,
@@ -209,10 +203,7 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors',
          * @param {Array<string>} parameters - The categories of data to update.
          * @returns {Promise<void>} Resolves if all data was successfully updated, or rejects with an error.
          */
-        async function updateSection(parameters)
-        {
-            console.log(`Updating ${parameters}`);
-
+        async function updateSection(parameters) {
             let refreshParams = {
                 Fields: parameters,
                 Timestamp: findSmallestTimestamp(parameters),
@@ -229,10 +220,7 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors',
          * @param {Array<string>} parameters - The categories of data to initialize.
          * @returns {Promise<void>} Resolves if all data was successfully initialized, or rejects with an error.
          */
-        async function setSection(parameters)
-        {
-            console.log(`Initializing ${parameters}`);
-
+        async function setSection(parameters) {
             let response = await RequestToServer.sendRequestWithResponse('Refresh', {Fields: parameters});
             if (response.Data && response.Data !== "empty") await setServices(response.Data, 'setOnline');
             updateTimestamps(parameters, response.Timestamp);
@@ -242,26 +230,32 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors',
          * Helper functions
          */
 
-        function updateTimestamps(content,time)
-        {
-            console.log("Init timestamps", time, content);
-            if(content === 'All') for (let section of sectionServiceMappings) section.lastUpdated = time;
-            else if(angular.isArray(content)) for (let section of content) sectionServiceMappings[section].lastUpdated = time;
-            else sectionServiceMappings[content].lastUpdated = time;
+        /**
+         * @description Iterates through the 'lastUpdated' timestamps in the given categories in sectionServiceMappings
+         *              and sets them to a certain value.
+         * @param {string| Array<string>} categories - The category or categories to update.
+         * @param {number} time - The new value to which to set lastUpdated.
+         */
+        function updateTimestamps(categories, time) {
+            if(angular.isArray(categories)) for (let section of categories) sectionServiceMappings[section].lastUpdated = time;
+            else sectionServiceMappings[categories].lastUpdated = time;
         }
 
-        function findSmallestTimestamp(content)
-        {
-            if (content === 'All') return findSmallestTimestamp(Object.keys(sectionServiceMappings));
-            else if(angular.isArray(content)) {
-                if (content.length === 0) return undefined;
-                return content.reduce((min, section) => {
-                    let lastUpdated = sectionServiceMappings[section].lastUpdated;
+        /**
+         * @description Finds and returns the smallest 'lastUpdated' timestamp among the given categories.
+         * @param {string| Array<string>} categories - The category or categories to check.
+         * @returns {number|undefined} The smallest lastUpdated value for the given categories.
+         */
+        function findSmallestTimestamp(categories) {
+            if (Array.isArray(categories)) {
+                if (categories.length === 0) return undefined;
+                return categories.reduce((min, category) => {
+                    let lastUpdated = sectionServiceMappings[category].lastUpdated;
                     if (lastUpdated < min) return lastUpdated;
                     else return min;
                 }, Infinity);
             }
-            else return sectionServiceMappings[content].lastUpdated;
+            else return sectionServiceMappings[categories].lastUpdated;
         }
 
         /**
