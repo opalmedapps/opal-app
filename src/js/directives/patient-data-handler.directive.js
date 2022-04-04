@@ -59,9 +59,9 @@
                 scope.hideContent = false;
 
                 // Setters
-                const setLoading = (value) => { console.log("Loading "+value); scope.loading = value; setHideContent() };
-                const setInitLoadingError = (value) => { console.log("InitError "+value); scope.initLoadingError = value; setHideContent() };
-                const setHideContent = () => { console.log("Hide "+(scope.loading || scope.initLoadingError)); scope.hideContent = scope.loading || scope.initLoadingError };
+                const setLoading = (value) => { scope.loading = value; setHideContent() };
+                const setInitLoadingError = (value) => { scope.initLoadingError = value; setHideContent() };
+                const setHideContent = () => { scope.hideContent = scope.loading || scope.initLoadingError };
 
                 // Read the value(s) provided in the categories string
                 const categories = scope.categories.includes(',') ? scope.categories.split(',') : scope.categories;
