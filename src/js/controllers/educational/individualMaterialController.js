@@ -128,7 +128,7 @@
         function bindEvents(){
             //Instantiating popover controller
             $timeout(function () {
-                ons.createPopover('./views/education/share-popover.html', {parentScope: $scope}).then(function (popover) {
+                ons.createPopover('./views/personal/education/share-popover.html', {parentScope: $scope}).then(function (popover) {
                     $scope.popoverSharing = popover;
                 });
             }, 300);
@@ -282,7 +282,7 @@
             // RStep refers to recursive depth in a package (since packages can contain other packages).
             var rstep = vm.recursive_step + 1;
             NavigatorParameters.setParameters({ 'Navigator': navigatorPage,'Post': material, 'RStep':rstep });
-            window[navigatorPage].pushPage('./views/education/individual-material.html');
+            window[navigatorPage].pushPage('./views/personal/education/individual-material.html');
 
         }
     }
