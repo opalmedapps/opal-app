@@ -67,6 +67,7 @@
   "ERRORANSWERNOTMATCH": "Answer does not match our records",
   "ERROROBTAININGDOCUMENT": "Error obtaining document from server",
   "ERROR_GETTING_EDU_MATERIAL": "Error getting educational material contents from server.",
+  "ERROR_IN_VIDEO_URL_OR_FORMAT": "Error in video url or format",
   "EXIT_APP": "Are you sure you wish to exit Opal?",
   "Electrolytes": "Electrolytes",
   "FEEDBACK": "Feedback",
