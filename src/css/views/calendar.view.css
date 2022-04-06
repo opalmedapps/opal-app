@@ -106,14 +106,7 @@
 	border-bottom-right-radius:5px;
 	color: white;
 }
-.plan-name-calendar {
-	font-size: 17px;
-}
-.plan-date-calendar {
-	font-size: 14px;
-	opacity: 0.8;
-	font-weight: 500;
-}
+
 .calendar-marker {
 	font-size:20px;
 	opacity:0.5;

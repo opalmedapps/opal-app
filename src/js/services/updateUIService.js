@@ -8,7 +8,6 @@ var myApp=angular.module('MUHCApp');
  *@requires MUHCApp.service:Announcements
  *@requires MUHCApp.service:TxTeamMessages
  *@requires MUHCApp.service:Patient
- *@requires MUHCApp.service:Doctors
  *@requires MUHCApp.service:Appointments
  *@requires MUHCApp.service:Messages
  *@requires MUHCApp.service:Documents
@@ -24,15 +23,15 @@ var myApp=angular.module('MUHCApp');
  *@requires $filter
  *@description API service used to update the whole application. The UpdateUI service is in charge of timestamps for updates of sections, set up or any update to the user fields.
  **/
-myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors','Appointments',
+myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Appointments',
     'Documents','EducationalMaterial', 'UserAuthorizationInfo', '$q', 'Notifications',
     '$cordovaNetwork', 'LocalStorage','RequestToServer','$filter','Diagnoses',
-    'NativeNotification', 'Tasks', 'Params', '$injector',
+    'NativeNotification', 'Params', '$injector',
 
-    function (Announcements, TxTeamMessages, Patient,Doctors, Appointments, Documents,
+    function (Announcements, TxTeamMessages, Patient,Appointments, Documents,
               EducationalMaterial, UserAuthorizationInfo, $q, Notifications,
               $cordovaNetwork,LocalStorage,RequestToServer,$filter,Diagnoses,
-              NativeNotification, Tasks, Params, $injector) {
+              NativeNotification, Params, $injector) {
         /**
          *@ngdoc property
          *@name  MUHCApp.service.#lastUpdateTimestamp
@@ -49,9 +48,9 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors',
          * In the current case we have to wait for the fields to download the images into the device storage
          <pre>
          //Contents so far:
-         var promiseFields =  ['Doctors', 'Patient'];
+         var promiseFields =  ['Patient'];
          **/
-        var promiseFields = ['Doctors', 'Patient'];
+        var promiseFields = ['Patient'];
         /**
          *@ngdoc property
          *@name  MUHCApp.service.#sectionServiceMappings
@@ -81,17 +80,9 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors',
                 setOnline:Patient.setUserFieldsOnline,
                 update:Patient.setUserFieldsOnline
             },
-            'Doctors':{
-                setOnline:Doctors.setUserContactsOnline,
-                update:Doctors.updateUserContacts
-            },
             'Appointments':{
                 init:Appointments.setUserAppointments,
                 update:Appointments.updateUserAppointments
-            },
-            'Tasks':{
-                init: Tasks.setPlanningTasks,
-                update:Tasks.setPlanningTasks
             },
             'Diagnosis':
             {
@@ -338,7 +329,6 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors',
                 return initServicesFromServer([
                     'Patient',
                     'Appointments',
-                    'Tasks',
                     'TxTeamMessages',
                     'EducationalMaterial',
                     'Documents',

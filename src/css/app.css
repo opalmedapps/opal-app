@@ -83,15 +83,12 @@ p {
 @import url('./elements/event.element.css');
 @import url('./elements/contact.element.css');
 @import url('./elements/checkout.element.css');
-@import url('./views/treatment-plan.view.css');
 @import url('./elements/triangle.element.css');
 @import url('./elements/timeline.element.css');
 @import url('./views/test-result.view.css');
 @import url('./elements/button.element.css');
-@import url('./views/individual-contact.view.css');
 @import url('./views/account-settings.view.css');
 @import url('./elements/tab-bar.element.css');
-@import url('./views/status.view.css');
 @import url('./elements/card.element.css');
 @import url('./views/tab.view.css');
 @import url('./elements/profile.element.css');

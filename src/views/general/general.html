@@ -6,10 +6,8 @@
             </ons-toolbar-button>
         </right-content>
     </generic-toolbar>
-
     <!-- HOSPITAL NAME BAR -->
     <top-page-banner title="tab.selectedHospitalToDisplay"></top-page-banner>
-
     <div>
         <network-banner></network-banner>
         <ons-list style="margin: 0px 0">
@@ -90,9 +88,6 @@
                     <ons-col width="60px" style="text-align: center">
                         <div>
                             <img style="width: 35px;" src="./img/stethoscope.png">
-                            <!--
-                            <ons-icon icon="fa-stethoscope" size="2x" style="color:#f44336"></ons-icon>
-                            -->
                         </div>
                     </ons-col>
                     <ons-col>
@@ -113,9 +108,6 @@
                     <ons-col width="60px" style="text-align: center">
                         <div>
                             <img style="width: 35px;" src="./img/calendar.png">
-                            <!--
-                            <ons-icon icon="fa-calendar" size="2x" style="color:#2196F3"></ons-icon>
-                            -->
                         </div>
                     </ons-col>
                     <ons-col>
@@ -124,6 +116,27 @@
                                   ng-class="fontSizeTitle">{{"QUEBEC_MEDICAL_SCHEDULER"|translate}}</span>
                             <ons-icon icon="ion-android-open" style="color:#ddd; margin-top: 1%; margin-right: -10px" class="pull-right"
                                       size="1.2em">
+                            </ons-icon>
+                        </header>
+                        <p class="item-desc"></p>
+                    </ons-col>
+                </ons-row>
+            </ons-list-item>
+            <ons-list-item class="item"
+            ng-if="tab.allowedModules.hasOwnProperty('CSQ') && tab.allowedModules['CSQ']"
+            ng-click="tab.goToCarnetSante()">
+                <ons-row align="center">
+                    <ons-col width="60px" style="text-align: center">
+                        <div>
+                            <img style="width: 35px;" src="./img/quebec.png">
+                        </div>
+                    </ons-col>
+                    <ons-col>
+                        <header>
+                            <span class="item-title"
+                                ng-class="fontSizeTitle">{{"CARNET_SANTE"|translate}}</span>
+                            <ons-icon icon="ion-android-open" style="color:#ddd; margin-top: 1%; margin-right: -10px" class="pull-right"
+                                    size="1.2em">
                             </ons-icon>
                         </header>
                         <p class="item-desc"></p>

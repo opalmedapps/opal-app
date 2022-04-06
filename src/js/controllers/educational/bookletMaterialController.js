@@ -82,7 +82,7 @@
 
             //Instantiation the popover for table of contents, delayed is to prevent the transition animation from lagging.
             $timeout(function () {
-                ons.createPopover('./views/education/table-contents-popover.html').then(function (popover) {
+                ons.createPopover('./views/personal/education/table-contents-popover.html').then(function (popover) {
                     $scope.popover = popover;
                     $rootScope.popoverEducation = popover;
                     $scope.popover.on('posthide', function () {

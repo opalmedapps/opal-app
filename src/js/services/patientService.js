@@ -100,7 +100,6 @@ myApp.service('Patient',['$q','$cordovaDevice','FileManagerService','LocalStorag
             var r=$q.defer();
 
             patientFields=patientFields[0];
-            UserPreferences.setEnableSMS(patientFields.EnableSMS);
             var font = window.localStorage.getItem(UserAuthorizationInfo.getUsername() + 'fontSize');
             UserPreferences.setFontSize(font||'large');
             if(typeof patientFields=='undefined') return;
