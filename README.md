@@ -204,6 +204,7 @@ If you want an alternative to using webpack-dev-server for serving the Opal web 
    http-server would then pickup upon refreshing the page.
 
 ### Installing, building, and serving the mobile app code
+#### Locally
 1. Make sure you have followed the steps on [Installing, building, and serving the mobile web code](#installing-building-and-serving-the-web-code).
 
 2. Install and set up Cordova for the desired target platforms by following the steps in the Android and iOS cordova environments: **Note: iOS may only be built by a machine with macOS as the operating system**
@@ -232,6 +233,23 @@ A few notes on this:
  The development apps allow debugging, among other security risks such as self-signed certificates. 
  To disable them, use the release mode: `cordova build --release --verbose`. 
  In particular, prod settings (`prod/config.xml`) and release mode should be used for builds that are sent in for penetration or security testing, to ensure that common security vulnerabilities such as debugging being enabled are not flagged.
+
+#### Using CI/CD
+As an alternative to setting up your computer to build the app locally, GitLab can be used to build the app for you.
+A pipeline will run to build the app, and will provide you with the resulting output files directly in GitLab.
+
+1. Identify the commit that you'd like to use for the build.
+2. Using git, add a tag to the commit, using the following naming convention (regex below). If the name does not match
+   this pattern, a build job will not be triggered.
+   - `/^build-(?:dev|local|preprod|prod|staging)-(?:all|android|ios).*$/`
+   - **[Coming soon]** The first part of the tag name must be "build". The second part identifies the environment to use.
+     The third part identifies the build targets (Android, iOS, or all). Anything that comes after is ignored and can
+     be used to ensure that the tag is unique.
+   - Example: `build-dev-all-1`
+3. Push the tag; this will trigger the build pipeline. You can view the pipeline status on 
+   the [Pipelines page](https://gitlab.com/opalmedapps/qplus/-/pipelines).
+4. To download the output files, click on your pipeline, select a job (e.g. `build:android`) and use the buttons on the
+   `Job artifacts` menu on the right.
 
 ### Opal App Scripts
 Commands for developer convenience can be found in the [package.json](./package.json) file (in the `"scripts"` section). 
