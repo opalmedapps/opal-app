@@ -2,6 +2,13 @@ default:
   tags:
     - macos
 
+workflow:
+  rules:
+    - if: $CI_COMMIT_TAG ~= /^build-(?:dev|local|preprod|prod|staging)-(?:all|android|ios).*$/
+      variables:
+        # TODO extract variables from the tag regex above
+        MY_VARIABLE: "value"
+
 stages:
   - build
 
@@ -14,8 +21,6 @@ before_script:
 
 build:android:
   stage: build
-  only:
-    - tags
   script:
     - java -version
     - gradle -v
@@ -28,10 +33,8 @@ build:android:
 
 build:ios:
   stage: build
-  only:
-    - tags
   script:
-    # fix Bus Error when cordova invokes pod install
+    # fixes Bus Error when cordova invokes pod install
     # see: https://stackoverflow.com/a/70581304
     - gem install --user-install ffi -- --enable-libffi-alloc
     - npm run build:app:ios:device --env=staging
