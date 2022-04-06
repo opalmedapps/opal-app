@@ -25,7 +25,6 @@
         vm.selectedHospitalToDisplay = "";
         vm.allowedModules = {};
 
-        vm.goToStatus = goToStatus;
         vm.personalDeviceBackButton = personalDeviceBackButton;
 
         activate();
@@ -48,7 +47,6 @@
                 vm.censor = Patient.getAccessLevel() == 3;
             });
 
-            //Sets appointments and treatment plan stage tab
             if(NetworkStatus.isOnline()){
                 setBadges();
             }
@@ -87,11 +85,6 @@
             vm.notificationsUnreadNumber = Notifications.getNumberUnreadNotifications();
             vm.questionnairesUnreadNumber = Questionnaires.getNumberOfUnreadQuestionnaires();
             vm.educationalMaterialsNumber = EducationalMaterial.getNumberOfUnreadEducationalMaterials();
-        }
-
-        function goToStatus(){
-            NavigatorParameters.setParameters({'Navigator':'personalNavigator'});
-            personalNavigator.pushPage('views/home/status/status_new.html');
         }
 
         function personalDeviceBackButton(){
