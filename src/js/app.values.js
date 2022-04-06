@@ -117,23 +117,6 @@
                     {size: 'large', style: 'fontDescLarge', text: 'MEDIUM'},
                     {size: 'xlarge', style: 'fontDescXlarge', text: 'LARGE'}
                 ],
-                /** Status Controller **/
-                setMap: {
-                    'CT for Radiotherapy Planning': 1,
-                    'Physician Plan Preparation': 2,
-                    'Calculation of Dose': 3,
-                    'Physics Quality Control': 4,
-                    'Scheduling Treatments': 5
-                },
-
-                /** PlanningStep Service **/
-                setSequence: {
-                    'CT for Radiotherapy Planning': [],
-                    'Physician Plan Preparation': [],
-                    'Calculation of Dose': [],
-                    'Physics Quality Control': [],
-                    'Scheduling Treatments': []
-                },
 
                 /** CheckIn Service Constants **/
                 hospitalSite: {
@@ -174,7 +157,6 @@
                     'Appointments': 0,
                     'Messages': 0,
                     'Documents': 0,
-                    'Tasks': 0,
                     'LabTests': 0,
                     'Patient': 0,
                     'Notifications': 0,
@@ -185,11 +167,9 @@
                 /** Multi-institutional hospital modules and codes **/
                 allowedModulesBeforeLogin: {
                     "DIA": 0,
-                    "TRP": 0,
                     "APT": 0,
                     "LAB": 0,
                     "DOC": 0,
-                    "TRT": 0,
                     "TTM": 0,
                     "QUE": 0,
                     "CSQ": 0,
@@ -216,11 +196,9 @@
                         modules: {
                             "_comment": "LIST OF MODULES ENABLED IN THIS HOSPITAL. MODULE_CODE: 0 = DISABLED; 1 = ENABLED; NO QUOTATION MARKS; SEE EXAMPLES BELOW",
                             "DIA": 1,
-                            "TRP": 1,
                             "APT": 1,
                             "LAB": 1,
                             "DOC": 1,
-                            "TRT": 1,
                             "TTM": 1,
                             "QUE": 1,
                             "CSQ": 1,
@@ -246,11 +224,9 @@
                         modules: {
                             "_comment": "LIST OF MODULES ENABLED IN THIS HOSPITAL. MODULE_CODE: 0 = DISABLED; 1 = ENABLED; NO QUOTATION MARKS; SEE EXAMPLES BELOW",
                             "DIA": 1,
-                            "TRP": 0,
                             "APT": 1,
                             "LAB": 0,
                             "DOC": 0,
-                            "TRT": 0,
                             "TTM": 1,
                             "QUE": 1,
                             "CSQ": 1,

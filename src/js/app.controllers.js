@@ -39,8 +39,6 @@ import "./controllers/settings/accountSettingsController.js";
 import "./controllers/settings/changeSettingController.js";
 import "./controllers/settings/secureDeviceController.js";
 import "./controllers/settings/updateSecurityQuestionController.js";
-import "./controllers/status/statusController.js";
-import "./controllers/status/individualStepController.js";
 import "./controllers/tabs/tabsController.js";
 import "./controllers/tabs/generalTabController.js";
 import "./controllers/tabs/personalTabController.js";

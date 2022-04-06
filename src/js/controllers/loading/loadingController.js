@@ -9,11 +9,11 @@
         .controller('LoadingController', LoadingController);
 
     LoadingController.$inject = ['$state', '$filter', 'UpdateUI', 'UserAuthorizationInfo','UserPreferences', 'Patient',
-        'RequestToServer', 'PlanningSteps', 'MetaData', 'LogOutService', 'NativeNotification'];
+        'RequestToServer', 'MetaData', 'LogOutService', 'NativeNotification'];
 
     /* @ngInject */
     function LoadingController($state, $filter, UpdateUI, UserAuthorizationInfo, UserPreferences, Patient,
-                               RequestToServer, PlanningSteps, MetaData, LogOutService, NativeNotification) {
+                               RequestToServer, MetaData, LogOutService, NativeNotification) {
 
         activate();
         ///////////////////////////
@@ -39,8 +39,6 @@
                     ]).then(function(){
                         MetaData.init();
                     });
-
-                    PlanningSteps.initializePlanningSequence();
 
                     loadingmodal.hide();
                     clearTimeout(timeOut);
