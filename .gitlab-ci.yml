@@ -24,12 +24,12 @@ build:android:
   script:
     - java -version
     - gradle -v
-    - npm run build:app:android:device --env=staging
-    - mv "./platforms/android/app/build/outputs/apk/debug/app-debug.apk" "opal-staging.apk"
+    - npm run build:app:android:device --env=dev
+    - mv "./platforms/android/app/build/outputs/apk/debug/app-debug.apk" "opal-dev.apk"
   artifacts:
     expire_in: 1 day
     paths:
-      - opal-staging.apk
+      - opal-dev.apk
 
 build:ios:
   stage: build
@@ -37,9 +37,9 @@ build:ios:
     # fixes Bus Error when cordova invokes pod install
     # see: https://stackoverflow.com/a/70581304
     - gem install --user-install ffi -- --enable-libffi-alloc
-    - npm run build:app:ios:device --env=staging
-    - mv "./platforms/ios/build/device/Opal Staging.ipa" "opal-staging.ipa"
+    - npm run build:app:ios:device --env=dev
+    - mv "./platforms/ios/build/device/Opal Dev.ipa" "opal-dev.ipa"
   artifacts:
     expire_in: 1 day
     paths:
-      - opal-staging.ipa
+      - opal-dev.ipa
