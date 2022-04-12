@@ -224,7 +224,7 @@ function ($q, $filter, LocalStorage, FileManagerService, UserPreferences, Reques
         },
         /**
          *@ngdoc method
-         *@name isThereEducationalMaterial
+         *@name materialExists
          *@methodOf MUHCApp.service:EducationalMaterial
          *@description Setter method for educational material
          *@return {Boolean} Returns whether the patient has any educational material available.

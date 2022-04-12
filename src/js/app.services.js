@@ -1,4 +1,5 @@
 import "./services/firebaseAuthService.js";
+import "./services/utility.service";
 import "./services/appointmentsService.js";
 import "./services/notificationsService.js";
 import "./services/patientService.js";
