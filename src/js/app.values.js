@@ -18,6 +18,7 @@
             {
                 maxIdleTimeAllowed: 300000, // 300 000 ms = 5 min. If changed, also edit the "INACTIVE" string
                 tenMinutesMilliSeconds: 600000,
+                requestTimeout: 30000,
 
                 appointmentType: {
                     appointmentTypeEn: 'appointment',
@@ -149,19 +150,6 @@
                         icon: 'fa fa-book',
                         color: '#FF7043'
                     },
-                },
-
-                /** UpdateUi Service constants **/
-                lastUpdateTimestamp: {
-                    'All': 0,
-                    'Appointments': 0,
-                    'Messages': 0,
-                    'Documents': 0,
-                    'LabTests': 0,
-                    'Patient': 0,
-                    'Notifications': 0,
-                    'EducationalMaterial': 0,
-                    'Questionnaires': 0
                 },
 
                 /** Multi-institutional hospital modules and codes **/

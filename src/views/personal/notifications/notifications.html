@@ -9,15 +9,20 @@
     </generic-toolbar>
 
     <network-banner></network-banner>
-    <div ng-show="notif.isLoading" align="center" style="margin-top:25vh">
-        <svg class="progress-circular">
-            <circle class="progress-circular__primary" cx="50%" cy="50%" r="40%" fill="none" stroke-width="10%"
-                    stroke-miterlimit="10"/>
-        </svg>
-        <p style="margin-top: 30px">{{ "LOADINGNOTIFICATIONS" | translate }}</p>
-    </div>
 
-    <div ng-hide="notif.noNotifications">
+    <!--
+      -- Temporary multi-category data handler to allow notifications to work until they are refactored.
+      -- This temporary fix downloads ALL data which may be referenced by a notification.
+      -- Notifications should be refactored instead to deal with patient data no longer being available at login,
+      -- and this handler should be removed.
+      -- See QSCCD-122 (especially subtask QSCCD-123), and QSCCD-43.
+      -->
+    <patient-data-handler categories="Announcements,Appointments,Documents,EducationalMaterial,TxTeamMessages"
+                          display-function="notif.displayNotifications"
+                          hide-content="notif.hideContent"
+    ></patient-data-handler>
+
+    <div ng-hide="notif.hideContent || notif.isLoading">
         <ons-list ng-repeat="notification in notif.notifications"
                   ng-click="notif.goToNotification($index,notification)">
             <ons-list-header class="person-list-header" ng-show="{{notif.notifications | showHeader : $index : 'DateAdded' }}" ng-class="fontSizeTitle">
@@ -42,7 +47,7 @@
             </ons-list-item>
         </ons-list>
     </div>
-    <div class="container" align="center">
-        <p style="margin-top:25vh;color:grey" ng-show="notif.noNotifications">{{"NONOTIFICATIONS"|translate}}</p>
+    <div ng-show="notif.noNotifications" class="container" align="center">
+        <p style="margin-top:25vh;color:grey">{{"NONOTIFICATIONS"|translate}}</p>
     </div>
 </ons-page>

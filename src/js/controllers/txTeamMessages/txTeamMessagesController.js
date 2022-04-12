@@ -18,11 +18,21 @@
         var vm = this;
         vm.goToTeamMessage = goToTeamMessage;
 
+        // Used by patient-data-handler
+        vm.setTxTeamMessagesView = setTxTeamMessagesView;
+
         activate();
 
         //////////////////////////////
 
         function activate(){
+
+        }
+
+        /**
+         * @description Filters and displays the treating team messages from the TxTeamMessages service.
+         */
+        function setTxTeamMessagesView() {
             vm.noMessages = true;
             var messages = TxTeamMessages.setLanguageTxTeamMessages(TxTeamMessages.getTxTeamMessages());
             if (messages.length > 0) vm.noMessages = false;
@@ -30,7 +40,6 @@
             $timeout(function(){
                 vm.txTeamMessages = $filter('orderBy')(messages, '-DateAdded');
             });
-
         }
 
         function goToTeamMessage(message){
@@ -44,5 +53,3 @@
         }
     }
 })();
-
-

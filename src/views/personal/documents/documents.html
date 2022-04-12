@@ -1,7 +1,20 @@
 <ons-page ng-controller="DocumentsController as docs">
     <generic-toolbar title="{{'CLINICAL_NOTES'|translate}}" style-class="fontSizeTitle"></generic-toolbar>
     <network-banner></network-banner>
-    <div>
+
+    <!-- DATA REFRESHER -->
+    <ons-pull-hook ng-action="docs.pullHookRefresh($done)">
+        <ons-pull-hook-content></ons-pull-hook-content>
+    </ons-pull-hook>
+
+    <!-- DATA HANDLER AND LOADING WHEEL -->
+    <patient-data-handler categories="Documents"
+                          display-function="docs.setDocumentsView"
+                          refresh="docs.pullHookRefresh"
+                          hide-content="docs.hideContent"
+    ></patient-data-handler>
+
+    <div ng-hide="docs.hideContent">
         <div style="color:grey;margin-top:25vh" ng-show="docs.noDocuments" align="center" ng-class="fontSizeTitle">
             {{"NOPATIENTDOCUMENTSAVAILABLE"|translate}}
         </div>
