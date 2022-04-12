@@ -34,11 +34,7 @@
                     RequestToServer.sendRequestWithResponse('AccountChange', {NewValue: UserPreferences.getLanguage(), FieldToChange: 'Language'});
 
                     //fetch all the tab metadata TODO: add the fetching of all the other data
-                    UpdateUI.set([
-                        'Diagnosis'
-                    ]).then(function(){
-                        MetaData.init();
-                    });
+                    MetaData.init();
 
                     loadingmodal.hide();
                     clearTimeout(timeOut);

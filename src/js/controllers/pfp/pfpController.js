@@ -26,12 +26,14 @@
 
                 //Setting the language for view
                 vm.materials = EducationalMaterial.setLanguage(vm.materials);
+            }).catch(error => {
+                console.error("Failed to fetch EducationalMaterial data from server (Patients for Patients):", error);
             });
         }
 
         function initEdu() {
             if (EducationalMaterial.getEducationalMaterial().length !== 0 ) return $q.resolve({});
-            return UpdateUI.set(['EducationalMaterial']);
+            return UpdateUI.getData('EducationalMaterial');
         }
 
         function goToResources() {

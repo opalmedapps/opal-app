@@ -9,9 +9,9 @@ var myApp = angular.module('MUHCApp');
 
 
 myApp.service('RequestToServer',['UserAuthorizationInfo', 'EncryptionService',
-    'FirebaseService', 'Constants', 'UUID', 'ResponseValidator',
+    'FirebaseService', 'Constants', 'UUID', 'ResponseValidator', 'Params',
     function( UserAuthorizationInfo, EncryptionService, FirebaseService,
-              Constants, UUID, ResponseValidator){
+              Constants, UUID, ResponseValidator, Params){
 
         let firebase_url = FirebaseService.getDBRef();
         let response_url = FirebaseService.getDBRef(FirebaseService.getFirebaseChild('users'));
@@ -23,6 +23,9 @@ myApp.service('RequestToServer',['UserAuthorizationInfo', 'EncryptionService',
 
             let requestType;
             let requestParameters;
+
+            // TODO: this makes a copy of the parameters to avoid encrypting the originals. Do this in the encryption function instead.
+            if (parameters) parameters = JSON.parse(JSON.stringify(parameters));
 
             if (encryptionKey) {
                 requestType = typeOfRequest;
@@ -83,7 +86,7 @@ myApp.service('RequestToServer',['UserAuthorizationInfo', 'EncryptionService',
                     const timeOut = setTimeout(function() {
                         refRequestResponse.off();
                         reject({Response:'timeout'});
-                    }, 90000);
+                    }, Params.requestTimeout);
 
                 });
             },

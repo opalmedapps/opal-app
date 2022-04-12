@@ -3,7 +3,19 @@
 
     <network-banner></network-banner>
 
-    <div ng-hide="vm.noAnnouncements">
+    <!-- DATA REFRESHER -->
+    <ons-pull-hook ng-action="vm.pullHookRefresh($done)">
+        <ons-pull-hook-content></ons-pull-hook-content>
+    </ons-pull-hook>
+
+    <!-- DATA HANDLER AND LOADING WHEEL -->
+    <patient-data-handler categories="Announcements"
+                          display-function="vm.setAnnouncementsView"
+                          refresh="vm.pullHookRefresh"
+                          hide-content="vm.hideContent"
+    ></patient-data-handler>
+
+    <div ng-hide="vm.hideContent || vm.noAnnouncements">
         <ons-list  ng-repeat="announcement in vm.announcements" ng-click="vm.goToAnnouncement(announcement)">
             <ons-list-header class="person-list-header" ng-class="fontSizeTitle" ng-show="{{vm.announcements | showHeader : $index : 'DateAdded' }}">{{announcement.DateAdded|date:'fullDate'}}</ons-list-header>
             <ons-list-item modifier="chevron" class="item">
@@ -22,8 +34,8 @@
             </ons-list-item>
         </ons-list>
     </div>
-    
-    <div class="container" align="center">
+
+    <div ng-hide="vm.hideContent" class="container" align="center">
         <p style="margin-top:25vh;color:grey" ng-show="vm.noAnnouncements">{{"NOGENERALANNOUNCEMENTS"|translate}}</p>
     </div>
 </ons-page>

@@ -1,7 +1,20 @@
 <ons-page ng-controller="DiagnosesController as diag">
     <generic-toolbar title="{{'DIAGNOSIS'|translate}}" style-class="fontSizeTitle"></generic-toolbar>
     <network-banner></network-banner>
-    <div>
+
+    <!-- DATA REFRESHER -->
+    <ons-pull-hook ng-action="diag.pullHookRefresh($done)">
+        <ons-pull-hook-content></ons-pull-hook-content>
+    </ons-pull-hook>
+
+    <!-- DATA HANDLER AND LOADING WHEEL -->
+    <patient-data-handler categories="Diagnosis"
+                          display-function="diag.setDiagnosesView"
+                          refresh="diag.pullHookRefresh"
+                          hide-content="diag.hideContent"
+    ></patient-data-handler>
+
+    <div ng-hide="diag.hideContent">
         <ons-list class="settings-list" ng-repeat="diagnosis in diag.diagnoses | orderBy: '-CreationDate' ">
             <ons-list-header   class="person-list-header" ng-class="fontSizeTitle" ng-show="{{diag.diagnoses | showHeader : $index : 'CreationDate' }}">{{diagnosis.CreationDate|date:'fullDate'}}</ons-list-header>
             <ons-list-item class="item">
@@ -18,10 +31,9 @@
                 </ons-row>
             </ons-list-item>
         </ons-list>
-
     </div>
 
-    <div style="color:grey;margin-top:25vh" ng-show="diag.noDiagnosis" align="center" ng-class="fontSizeTitle">
+    <div style="color:grey;margin-top:25vh" ng-show="!diag.hideContent && diag.noDiagnosis" align="center" ng-class="fontSizeTitle">
         {{"NODIAGNOSIS"|translate}}
     </div>
 </ons-page>
