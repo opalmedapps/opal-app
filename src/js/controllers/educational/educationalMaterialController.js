@@ -36,12 +36,15 @@
 
         // variable to let the user know which hospital they are logged in
         vm.selectedHospitalToDisplay = "";
-        
+
         vm.goToEducationalMaterial = goToEducationalMaterial;
         vm.educationDeviceBackButton = educationDeviceBackButton;
 
         // Function used to filter the materials shown based on the search string
         vm.filterMaterial = filterMaterial;
+
+        // Used by patient-data-handler
+        vm.configureState = configureState;
 
         activate();
         ///////////////////////////////////
@@ -50,7 +53,6 @@
             navigator = NavigatorParameters.getNavigator();
 
             bindEvents();
-            configureState();
             configureSelectedHospital();
         }
 
@@ -101,7 +103,7 @@
                 navigator.off('prepop');
             });
         }
-        
+
         /**
          * @method goToEducationalMaterial
          * @description If not read reads material, then it opens the material into its individual controller

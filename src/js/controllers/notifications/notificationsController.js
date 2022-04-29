@@ -24,6 +24,8 @@
         $scope.notificationsPopover = undefined;
         $scope.markAllRead = markAllRead;
 
+        // Used by patient-data-handler
+        vm.displayNotifications = displayNotifications;
 
         activate();
 

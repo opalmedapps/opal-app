@@ -58,11 +58,21 @@
 
         vm.goToAnnouncement = goToAnnouncement;
 
+        // Used by patient-data-handler
+        vm.setAnnouncementsView = setAnnouncementsView;
+
         activate();
 
         ////////////////
 
         function activate() {
+
+        }
+
+        /**
+         * @description Filters and displays the announcements from the Announcements service.
+         */
+        function setAnnouncementsView() {
             var announcements = Announcements.getAnnouncements();
             announcements = Announcements.setLanguage(announcements);
             if (announcements.length > 0) {

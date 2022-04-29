@@ -36,9 +36,7 @@
              */
 
             function activate() {
-                if (NetworkStatus.isOnline()) {
-                    initGeneralTab();
-                }
+                setBadges();
 
                 NavigatorParameters.setParameters({'Navigator': 'generalNavigator'});
                 NavigatorParameters.setNavigator(generalNavigator);
@@ -74,20 +72,6 @@
                     generalNavigator.off('prepush');
                     generalNavigator.off('prepop');
                 });
-            }
-
-            function initGeneralTab() {
-                if (MetaData.isFirstTimeGeneral()) {
-                    $scope.announcementsUnreadNumber = Announcements.getNumberUnreadAnnouncements();
-                }
-                else if (Announcements.getLastUpdated() < Date.now() - 300000) {
-                    // TODO: MAKE THIS INTO A BACKGROUND REFRESH
-
-                    UpdateUI.set([
-                        'Announcements'
-                    ])
-                }
-                setBadges();
             }
 
             function setBadges() {

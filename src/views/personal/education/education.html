@@ -9,12 +9,23 @@
     <!-- NETWORK BANNER -->
     <network-banner></network-banner>
 
+    <!-- DATA REFRESHER -->
+    <ons-pull-hook ng-action="edu.pullHookRefresh($done)">
+        <ons-pull-hook-content></ons-pull-hook-content>
+    </ons-pull-hook>
+
+    <!-- DATA HANDLER AND LOADING WHEEL -->
+    <patient-data-handler categories="EducationalMaterial"
+                          display-function="edu.configureState"
+                          refresh="edu.pullHookRefresh"
+                          hide-content="edu.hideContent"
+    ></patient-data-handler>
+
     <!-- SEARCH BAR -->
-    <div class="navigation-bar" style="position:sticky; top:3rem">
+    <div ng-hide="edu.hideContent || edu.noMaterials" class="navigation-bar" style="position:sticky; top:3rem">
         <div class="navigation-bar__center" style="display:block">
-            <input 
-                ng-hide="edu.noMaterials" 
-                ng-model="edu.searchString" 
+            <input
+                ng-model="edu.searchString"
                 ng-change="edu.filterMaterial()"
                 type="search" 
                 class="search-input" 
@@ -25,12 +36,12 @@
     </div>
 
     <!-- NO MATERIAL TEXT -->
-    <div style="color:grey;margin-top:25vh" ng-show="edu.noMaterials" align="center" ng-class="fontSizeTitle" style="margin-left: 10px; margin-right: 10px">
+    <div style="color:grey;margin-top:25vh" ng-show="edu.noMaterials && !edu.hideContent" align="center" ng-class="fontSizeTitle" style="margin-left: 10px; margin-right: 10px">
         {{"NOEDUCATIONALMATERIAL"|translate}}
     </div>
 
     <!-- LIST OF EDUCATIONAL MATERIALS -->
-    <ons-scroller-height offset-height="78">
+    <ons-scroller-height ng-hide="edu.hideContent" offset-height="78">
         <ons-list ng-repeat="edumaterial in edu.filteredEduMaterials | orderBy: '-DateAdded'" ng-click="edu.goToEducationalMaterial(edumaterial)">
             <ons-list-header class="person-list-header" ng-class="fontSizeTitle" ng-show="{{edu.filteredEduMaterials | showHeader : $index : 'DateAdded' }}">{{edumaterial.DateAdded|date:'fullDate'}}</ons-list-header>
             <ons-list-item modifier="chevron" class="item">

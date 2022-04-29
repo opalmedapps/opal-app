@@ -18,6 +18,7 @@
             {
                 maxIdleTimeAllowed: 300000, // 300 000 ms = 5 min. If changed, also edit the "INACTIVE" string
                 tenMinutesMilliSeconds: 600000,
+                requestTimeout: 30000,
 
                 appointmentType: {
                     appointmentTypeEn: 'appointment',
@@ -151,19 +152,6 @@
                     },
                 },
 
-                /** UpdateUi Service constants **/
-                lastUpdateTimestamp: {
-                    'All': 0,
-                    'Appointments': 0,
-                    'Messages': 0,
-                    'Documents': 0,
-                    'LabTests': 0,
-                    'Patient': 0,
-                    'Notifications': 0,
-                    'EducationalMaterial': 0,
-                    'Questionnaires': 0
-                },
-
                 /** Multi-institutional hospital modules and codes **/
                 allowedModulesBeforeLogin: {
                     "DIA": 0,
@@ -235,6 +223,34 @@
                             "NTF": 1,
                             "ANN": 1,
                             "PAT": 0,
+                            "PFP": 0,
+                            "FEE": 1,
+                            "FFD": 1,
+                            "MAS": 1,
+                            "EDU": 1,
+                            "SUP": 1,
+                            "CED": 0,
+                            "HOS": 0,
+                        },
+                    },
+                    'CHU_SJ': {
+                        acronym: 'CHU_SJ_ACRONYM',
+                        fullName: 'CHU_SJ_FULL',
+                        uniqueHospitalCode: 'A4',
+                        modules: {
+                            "_comment": "LIST OF MODULES ENABLED IN THIS HOSPITAL. MODULE_CODE: 0 = DISABLED; 1 = ENABLED; NO QUOTATION MARKS; SEE EXAMPLES BELOW",
+                            "DIA": 1,
+                            "APT": 1,
+                            "LAB": 1,
+                            "DOC": 0,
+                            "TTM": 1,
+                            "QUE": 1,
+                            "CSQ": 1,
+                            "CHK": 1,
+                            "LAO": 1,
+                            "NTF": 1,
+                            "ANN": 1,
+                            "PAT": 1,
                             "PFP": 0,
                             "FEE": 1,
                             "FFD": 1,
