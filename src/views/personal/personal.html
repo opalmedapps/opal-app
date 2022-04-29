@@ -96,7 +96,9 @@
                     </ons-col>
                 </ons-row>
             </ons-list-item>
-            <ons-list-item modifier="chevron" class="item" ng-click="personalNavigator.pushPage('views/personal/education/education.html')">
+            <ons-list-item modifier="chevron" class="item" 
+                ng-if="tab.allowedModules.hasOwnProperty('EDU') && tab.allowedModules['EDU']"    
+                ng-click="personalNavigator.pushPage('views/personal/education/education.html')">
                 <ons-row align="center" >
                     <ons-col width="60px" style="text-align: center">
                         <div>
