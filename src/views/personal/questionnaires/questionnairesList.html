@@ -1,13 +1,19 @@
 <ons-page ng-controller="QuestionnairesListController as questionnaireListVm">
     <generic-toolbar title="{{'QUESTIONNAIRES'|translate}}" style-class="fontSizeTitle"></generic-toolbar>
 
-    <!--LOADING CIRCLE FOR LIST OF QUESTIONNAIRES-->
-    <loading-spinning-circle
-            ng-show="questionnaireListVm.loading"
-            loading-message="{{'LOADINGQUESTIONNAIRES'|translate}}">
-    </loading-spinning-circle>
+    <!-- DATA REFRESHER -->
+    <ons-pull-hook ng-action="questionnaireListVm.pullHookRefresh($done)">
+        <ons-pull-hook-content></ons-pull-hook-content>
+    </ons-pull-hook>
 
-    <div ng-hide="questionnaireListVm.loading">
+    <!-- DATA HANDLER AND LOADING WHEEL -->
+    <patient-data-handler categories="QuestionnaireList"
+                          display-function="questionnaireListVm.loadQuestionnaireList"
+                          refresh="questionnaireListVm.pullHookRefresh"
+                          hide-content="questionnaireListVm.hideContent">
+    </patient-data-handler>
+
+    <div ng-hide="questionnaireListVm.hideContent">
         <!--TABBAR-->
         <div class="navigation-bar">
             <div class="navigation-bar__center">
@@ -122,6 +128,5 @@
                 </div>
             </div>
         </ons-scroller-height>
-
     </div>
 </ons-page>

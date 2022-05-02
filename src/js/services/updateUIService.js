@@ -11,11 +11,11 @@
 
     UpdateUI.$inject = ['$filter','$injector','$q','Announcements','Appointments','Diagnoses','Documents',
         'EducationalMaterial','NativeNotification','Notifications','Patient','PatientTestResults',
-        'RequestToServer','TxTeamMessages'];
+        'Questionnaires','RequestToServer','TxTeamMessages'];
 
     function UpdateUI($filter, $injector, $q, Announcements, Appointments, Diagnoses, Documents,
                       EducationalMaterial, NativeNotification, Notifications, Patient, PatientTestResults,
-                      RequestToServer, TxTeamMessages) {
+                      Questionnaires, RequestToServer, TxTeamMessages) {
 
         /**
          *@ngdoc property
@@ -93,6 +93,11 @@
             'PatientTestTypes': {
                 init: PatientTestResults.setTestTypes,
                 update: PatientTestResults.updateTestTypes,
+                lastUpdated: 0,
+            },
+            'QuestionnaireList': {
+                init: Questionnaires.setQuestionnaireList,
+                update: () => console.log("QuestionnaireList update: not implemented yet"),
                 lastUpdated: 0,
             },
         };

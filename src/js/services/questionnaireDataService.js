@@ -30,7 +30,6 @@
             updateQuestionnaireStatus: updateQuestionnaireStatus,
             requestOpalQuestionnaireFromSerNum: requestOpalQuestionnaireFromSerNum,
             requestQuestionnaire: requestQuestionnaire,
-            requestQuestionnaireList: requestQuestionnaireList,
             saveQuestionnaireAnswer: saveQuestionnaireAnswer
         };
 
@@ -164,22 +163,6 @@
                         reject({Success: false, Location: '', Error: error});
                     });
             })
-        }
-
-        /**
-         * @name requestQuestionnaireList
-         * @desc Asks the listener for the list of questionnaires this user has
-         * @returns {Promise} resolves to the list of questionnaires if success
-         */
-        function requestQuestionnaireList() {
-            return RequestToServer.sendRequestWithResponse(api.GET_LIST)
-                .then(function (response) {
-                    // this is in case firebase delete the property when it is empty
-                    if (response.hasOwnProperty('Data')) {
-                        return response.Data;
-                    }
-                    return [];
-                });
         }
 
         /**

@@ -58,8 +58,8 @@
             updateQuestionnaireStatus: updateQuestionnaireStatus,
             requestOpalQuestionnaireFromSerNum: requestOpalQuestionnaireFromSerNum,
             requestQuestionnaire: requestQuestionnaire,
-            requestQuestionnaireList: requestQuestionnaireList,
-            saveQuestionnaireAnswer: saveQuestionnaireAnswer
+            saveQuestionnaireAnswer: saveQuestionnaireAnswer,
+            setQuestionnaireList: setQuestionnaireList,
         };
 
         return service;
@@ -133,22 +133,6 @@
                 'sectionIndex': sectionIndex,
                 'questionIndex': questionIndex
             };
-        }
-
-        /**
-         * @name requestQuestionnaireList
-         * @desc this function is requesting the list of questionnaires from questionnaireDataService and process this list to set the questionnaire list variables
-         * @returns {Promise}
-         */
-        function requestQuestionnaireList() {
-            // re-initiate all the questionnaire related variables
-            clearAllQuestionnaire();
-
-            return QuestionnaireDataService.requestQuestionnaireList()
-                .then(function(responseQuestionnaireList){
-                    setQuestionnaireList(responseQuestionnaireList);
-                    return {Success: true, Location: 'Server'};
-                });
         }
 
         /**
