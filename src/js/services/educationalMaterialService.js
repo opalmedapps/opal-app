@@ -38,9 +38,6 @@ function ($q, $filter, LocalStorage, FileManagerService, UserPreferences, Reques
      **/
     var educationalMaterialArray=[];
 
-    //Initializing an object for pfpresources.
-    var pfpresources={};
-
     /**
      *@ngdoc property
      *@name  MUHCApp.service.#educationalMaterialType
@@ -156,17 +153,10 @@ function ($q, $filter, LocalStorage, FileManagerService, UserPreferences, Reques
             //Add to my annoucements array
             educationalMaterialArray.push(edumaterial[i]);
         }
-        
-        //Get pfpresources
-        pfpresources=getEducationalMaterialByControlSerNum(310);
-        //Exclude the pfp resources
-        findAndDeleteEducationalMaterialByControlSerNum(educationalMaterialArray, 310);
-
 
 
         //Update local storage section
         LocalStorage.WriteToLocalStorage('EducationalMaterial',educationalMaterialArray);
-        LocalStorage.WriteToLocalStorage('PfpResources',pfpresources);
     }
 
     //call this function to delete the certain educational material by indicate its control sernum
@@ -406,17 +396,6 @@ function ($q, $filter, LocalStorage, FileManagerService, UserPreferences, Reques
         getEducationalMaterialUrl:function()
         {
             return {Url:'./views/personal/education/individual-material.html'};
-        },
-        /**
-         *@ngdoc method
-         *@name getPfpResources
-         *@methodOf MUHCApp.service:EducationalMaterial
-         *@description Returns the resources booklet for 'Patients for Patients'
-         *@returns {String} Returns Url for individual educational materials
-         **/
-        getPfpResources:function()
-        {
-            return pfpresources;
         },
 
         getMaterialPage:function(url){
