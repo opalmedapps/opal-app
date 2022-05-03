@@ -29,7 +29,6 @@ import "./services/cleanUpService.js";
 import "./services/loggerService.js";
 import "./services/networkStatusService.js";
 import "./services/metadataService.js";
-import "./services/pfpService.js";
 import "./services/responseValidationService.js";
 import "./services/securityService.js";
 import "./services/UserHospitalPreferencesService.js";
