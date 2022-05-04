@@ -1,25 +1,33 @@
 <ons-page ng-controller="PatientTestResultsController as tests">
     <generic-toolbar title="{{'LAB_RESULTS'|translate}}" style-class="fontSizeTitle">
         <right-content>
+            <!-- INFO BUTTON -->
             <labs-info-button style="margin-right: -10px"></labs-info-button>
-            <ons-toolbar-button ng-click="tests.refresh()">
-                <ons-icon icon="ion-ios-refresh-empty" size="2x" style="color: #4F81BB"></ons-icon>
-            </ons-toolbar-button>
+
+            <!-- REFRESH BUTTON -->
+            <loading-spinning-button
+                click-function="tests.executeRefresh"
+                disable="tests.hideContent">
+            </loading-spinning-button>
         </right-content>
     </generic-toolbar>
 
+    <!-- DATA HANDLER AND LOADING WHEEL -->
+    <patient-data-handler categories="PatientTestDates,PatientTestTypes"
+                          display-function="tests.setTestsView"
+                          refresh="tests.executeRefresh"
+                          hide-content="tests.hideContent"
+    ></patient-data-handler>
 
-    <loading-spinning-circle ng-if="tests.loading" loading-message="{{'LOADINGLABRESULTS'|translate}}">
-    </loading-spinning-circle>
-    <div class="navigation-bar" ng-if="!tests.loading">
+    <div class="navigation-bar" ng-if="!tests.hideContent">
         <div class="navigation-bar__center">
             <div class="button-bar" style="margin-top:10px;width:70%;left:15%;" >
-                <div class="button-bar__item" ng-click="tests.checkForRefresh()">
+                <div class="button-bar__item">
                     <input type="radio" name="navi-segment-a" checked ng-model="tests.showByDate" ng-value="true">
                     <div class="button-bar__button">{{'LAB_BYDATE'|translate}}</div>
                 </div>
 
-                <div class="button-bar__item" ng-click="tests.checkForRefresh()">
+                <div class="button-bar__item">
                     <input type="radio" name="navi-segment-a" ng-model="tests.showByDate" ng-value="false">
                     <div class="button-bar__button">{{'LAB_BYTYPE'|translate}}</div>
                 </div>
@@ -27,7 +35,7 @@
         </div>
     </div>
 
-    <div ng-if="!tests.loading && tests.showContent">
+    <div ng-if="!tests.hideContent">
 
         <!-- DISCLAIMER -->
         <labs-disclaimer></labs-disclaimer>
@@ -42,7 +50,7 @@
                 <div ng-if="tests.testDates.length > 0">
                     <ons-list>
                         <div ng-repeat="testDate in tests.testDates">
-                            <ons-list-header ng-if="tests.showDateHeader($index)"
+                            <ons-list-header ng-if="tests.testDates | showHeader : $index"
                                              ng-class="fontSizeTitle">{{testDate|date:'longDate'}}
                             </ons-list-header>
                             <ons-list-item
@@ -117,7 +125,7 @@
                 </div>
                 <ons-scroller-height>
                     <ons-list>
-                        <ons-list-item 
+                        <ons-list-item
                         modifier="tappable chevron"
                         ng-repeat="testResult in tests.testTypes | filter: tests.searchTestTypeText"
                         ng-click="tests.goToTestTypeResults(testResult.testExpressionSerNum)"
