@@ -3,10 +3,10 @@ const config = {
     name: "Opal Staging",
     env: "staging",
     settings: {
-        useSourceMap: true,
         kickOutConcurrentUsers: false,
         messageOfTheDayKey: "staging_service",
         showVersionOnInit: true,
+        useSourceMap: true,
         webpackMode: 'development',
     },
     firebase: {

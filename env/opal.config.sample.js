@@ -6,14 +6,14 @@ const config = {
     env: "sample",
     // Environment-specific settings
     settings: {
-        // Boolean: whether to use a sourcemap when building the web code. Should be false in production.
-        useSourceMap: true,
         // Boolean: whether to kick out a user when another person logs into the same user account on another device.
         kickOutConcurrentUsers: false,
         // String: the key in the links file on DepDocs which contains a 'message of the day' URL for this environment. Leave empty if no message of the day URL has been set on DepDocs.
         messageOfTheDayKey: "",
         // Boolean: whether to show the app's version and build number on the front page.
         showVersionOnInit: true,
+        // Boolean: whether to use a sourcemap when building the web code. Should be false in production.
+        useSourceMap: true,
         // String: the mode to use when building with WebPack: [production, development].
         webpackMode: 'development',
     },

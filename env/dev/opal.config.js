@@ -3,10 +3,10 @@ const config = {
     name: "Opal Dev",
     env: "dev",
     settings: {
-        useSourceMap: true,
         kickOutConcurrentUsers: false,
         messageOfTheDayKey: "",
         showVersionOnInit: true,
+        useSourceMap: true,
         webpackMode: 'development',
     },
     firebase: {
