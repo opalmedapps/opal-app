@@ -1,37 +1,21 @@
-//
-// Author David Herrera on Summer 2016, Email:davidfherrerar@gmail.com
-//
-var myApp=angular.module('MUHCApp');
 /**
- *@ngdoc service
- *@name MUHCApp.service:UpdateUI
- *@requires MUHCApp.service:Announcements
- *@requires MUHCApp.service:TxTeamMessages
- *@requires MUHCApp.service:Patient
- *@requires MUHCApp.service:Appointments
- *@requires MUHCApp.service:Messages
- *@requires MUHCApp.service:Documents
- *@requires MUHCApp.service:EducationalMaterial
- *@requires MUHCApp.service:Notifications
- *@requires MUHCApp.service:UserPlanWorkflow
- *@requires MUHCApp.service:LocalStorage
- *@requires MUHCApp.service:RequestToServer
- *@requires MUHCApp.service:Diagnoses
- *@requires MUHCApp.service:NativeNotification
- *@requires $q
- *@requires $cordovaNetwork
- *@requires $filter
- *@description API service used to update the whole application. The UpdateUI service is in charge of timestamps for updates of sections, set up or any update to the user fields.
- **/
-myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Appointments',
-    'Documents','EducationalMaterial', 'UserAuthorizationInfo', '$q', 'Notifications',
-    '$cordovaNetwork', 'LocalStorage','RequestToServer','$filter','Diagnoses',
-    'NativeNotification', '$injector',
+ * @file Service that handles downloading, updating and setting other services with patient data for the whole application.
+ * @author David Herrera, Stacey Beard
+ */
+(function () {
+    'use strict';
 
-    function (Announcements, TxTeamMessages, Patient,Appointments, Documents,
-              EducationalMaterial, UserAuthorizationInfo, $q, Notifications,
-              $cordovaNetwork,LocalStorage,RequestToServer,$filter,Diagnoses,
-              NativeNotification, $injector) {
+    angular
+        .module('MUHCApp')
+        .factory('UpdateUI', UpdateUI);
+
+    UpdateUI.$inject = ['$filter','$injector','$q','Announcements','Appointments','Diagnoses','Documents',
+        'EducationalMaterial','NativeNotification','Notifications','Patient','PatientTestResults',
+        'RequestToServer','TxTeamMessages'];
+
+    function UpdateUI($filter, $injector, $q, Announcements, Appointments, Diagnoses, Documents,
+                      EducationalMaterial, NativeNotification, Notifications, Patient, PatientTestResults,
+                      RequestToServer, TxTeamMessages) {
 
         /**
          *@ngdoc property
@@ -60,54 +44,69 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Appointme
               },
               ...
          **/
-        var sectionServiceMappings={
-            'Documents':
-            {
-                init:Documents.setDocuments,
-                update:Documents.updateDocuments,
+        let sectionServiceMappings = {
+            'Documents': {
+                init: Documents.setDocuments,
+                update: Documents.updateDocuments,
                 lastUpdated: 0,
             },
-            'Patient':{
-                setOnline:Patient.setUserFieldsOnline,
-                update:Patient.setUserFieldsOnline,
+            'Patient': {
+                setOnline: Patient.setUserFieldsOnline,
+                update: Patient.setUserFieldsOnline,
                 lastUpdated: 0,
             },
-            'Appointments':{
-                init:Appointments.setUserAppointments,
-                update:Appointments.updateUserAppointments,
+            'Appointments': {
+                init: Appointments.setUserAppointments,
+                update: Appointments.updateUserAppointments,
                 lastUpdated: 0,
             },
-            'Diagnosis':
-            {
-                init:Diagnoses.setDiagnoses,
-                update:Diagnoses.updateDiagnoses,
+            'Diagnosis': {
+                init: Diagnoses.setDiagnoses,
+                update: Diagnoses.updateDiagnoses,
                 lastUpdated: 0,
             },
-            'TxTeamMessages':
-            {
-                init:TxTeamMessages.setTxTeamMessages,
-                update:TxTeamMessages.updateTxTeamMessages,
+            'TxTeamMessages': {
+                init: TxTeamMessages.setTxTeamMessages,
+                update: TxTeamMessages.updateTxTeamMessages,
                 lastUpdated: 0,
             },
-            'Announcements':
-            {
-                init:Announcements.setAnnouncements,
-                update:Announcements.updateAnnouncements,
+            'Announcements': {
+                init: Announcements.setAnnouncements,
+                update: Announcements.updateAnnouncements,
                 lastUpdated: 0,
             },
-            'EducationalMaterial':
-            {
-                init:EducationalMaterial.setEducationalMaterial,
-                update:EducationalMaterial.updateEducationalMaterial,
+            'EducationalMaterial': {
+                init: EducationalMaterial.setEducationalMaterial,
+                update: EducationalMaterial.updateEducationalMaterial,
                 lastUpdated: 0,
             },
-            'Notifications':
-            {
-                init:Notifications.initNotifications,
-                update:Notifications.updateUserNotifications,
+            'Notifications': {
+                init: Notifications.initNotifications,
+                update: Notifications.updateUserNotifications,
                 lastUpdated: 0,
-            }
+            },
+            'PatientTestDates': {
+                init: PatientTestResults.setTestDates,
+                update: PatientTestResults.updateTestDates,
+                lastUpdated: 0,
+            },
+            'PatientTestTypes': {
+                init: PatientTestResults.setTestTypes,
+                update: PatientTestResults.updateTestTypes,
+                lastUpdated: 0,
+            },
         };
+
+        let service = {
+            haveBeenInitialized: haveBeenInitialized,
+            getData: getData,
+            init: () => initServicesFromServer(['Patient', 'Notifications']),
+            clearUpdateUI: () => updateTimestamps(Object.keys(sectionServiceMappings), 0),
+        };
+
+        return service;
+
+        ////////////////
 
         function setPromises(type, dataUserObject)
         {
@@ -297,37 +296,5 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Appointme
             let updatePromise = toUpdate.length === 0 ? undefined : updateSection(toUpdate);
             await Promise.all([setPromise, updatePromise]);
         }
-
-        return {
-
-            haveBeenInitialized: haveBeenInitialized,
-            getData: getData,
-
-            /**
-             *@ngdoc method
-             *@name init
-             *@methodOf MUHCApp.service:UpdateUI
-             *@param {String} type Online or Offline init
-             *@description Initializes app by querying the hospital for all the data and setting the services.
-             **/
-            init:function()
-            {
-                return initServicesFromServer([
-                    'Patient',
-                    'Notifications',
-                ]);
-
-            },
-            /**
-             *@ngdoc method
-             *@name clearUpdateUI
-             *@methodOf MUHCApp.service:UpdateUI
-             *@description Clears all the timestamps.
-             **/
-            clearUpdateUI:function()
-            {
-                updateTimestamps(Object.keys(sectionServiceMappings), 0)
-            }
-        };
     }
-]);
+})();
