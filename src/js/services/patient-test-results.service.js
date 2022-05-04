@@ -1,171 +1,240 @@
-import { PatientTestType } from "./../models/personal/test-results/PatientTestType";
+import { PatientTestType } from "../models/personal/test-results/PatientTestType";
 import { PatientTestResultDetailed } from "../models/personal/test-results/PatientTestResultDetailed";
+
 /**
- * PatienTest class serves as a model for the PatientTest module of the app.
+ * @description Service that manages and stores patient test result data.
+ * @author David Herrera, Stacey Beard
  */
-class PatientTestResults {
-	/**
-	 * @type {number} Timestamp for the last update on types
-	 */
-	#testTypesLastUpdated = 0;
-	/**
-	 * @type {number} Timestamp for the last update on dates
-	 */
-	#testDatesLastUpdated = 0;
-	/**
-	 * Cache of test types for the patient
-	 * @type {PatientTestType[]}
-	 */
-	testTypes = [];
-	/**
-	 * Cache of test dates for the patient
-	 * @type {Date[]}
-	 */
-	testDates = [];
-	/**
-	 * Cache of test results by date, it contains test results up to the {@link #lastUpdated}
-	 * @type {Record<string,*>} testResultsByDate contains map from string date to list of group types in that date
-	 */
-	testResultsByDate = {};
-	/**
-	 * Cache of test results by type, it contains test results up to the {@link #lastUpdated}
-	 * @type {Record<string, PatientTestType>} testResultsByDate contains map from string date to list of type test results
-	 *                            in that date
-	 */
-	testResultsByType = {};
-	/**
-	 * RequestToServer instance
-	 */
-	#requestToServer;
+(function () {
+	'use strict';
 
-	/**
-	 * Constructor for the PatientTestResults service
-	 * @param {RequestToServer} requestToServer factory to perform request to server
-	 */
-	constructor(requestToServer) {
-		this.#requestToServer = requestToServer;
-	}
+	angular
+		.module('MUHCApp')
+		.factory('PatientTestResults', PatientTestResults);
 
-	/**
-	 * Returns list of test types for the patient
-	 * @param {Boolean} useServer Decides whether the testTypes should be fetched from the server
-	 * @returns {Promise<PatientTestType[]>} Upon full-filling promise it returns list of test types for the patient
-	 */
-	async getTestTypes(useServer = true) {
-		if (useServer) {
-			let results = await this.#requestToServer.sendRequestWithResponse("PatientTestTypes");
-			this.#testTypesLastUpdated = Date.now();
-			this.testTypes = results.data.testTypes || [];
-			this.testTypes = this.testTypes.map((testType) => new PatientTestType(testType));
-			this.testResultsByType = {};
-			return this.testTypes;
+	PatientTestResults.$inject = ["RequestToServer"];
+
+	function PatientTestResults(RequestToServer) {
+
+		/**
+		 * @description Cache of test dates for the patient.
+		 * @type {Date[]}
+		 */
+		let testDates = [];
+
+		/**
+		 * @description Cache of test types for the patient.
+		 * @type {PatientTestType[]}
+		 */
+		let testTypes = [];
+
+		/**
+		 * @description Cache of test results by date.
+		 * @type {Record<string, Object>} Map from each string date to an object containing results for that date.
+		 */
+		let testResultsByDate = {};
+
+		/**
+		 * @description Cache of test results by type.
+		 * @type {Record<number, PatientTestType>} Map from each test's SerNum (testExpressionSerNum) to a
+		 *                                         PatientTestType object containing results for that test.
+		 */
+		let testResultsByType = {};
+
+		let service = {
+			setTestDates: setTestDates,
+			setTestTypes: setTestTypes,
+			updateTestDates: updateTestDates,
+			updateTestTypes: updateTestTypes,
+			getTestDates: () => testDates,
+			getTestTypes: () => testTypes,
+			getTestResultsByDate: getTestResultsByDate,
+			getTestResultsByType: getTestResultsByType,
+			getTestClass: getTestClass,
+			clear: clear,
+
+			// Exported for testing
+			testResultByDateIsCached: testResultByDateIsCached,
+			testResultByTypeIsCached: testResultByTypeIsCached,
+		};
+
+		return service;
+
+		////////////////
+
+		/**
+		 * @description Processes dates from the format sent by the listener to the format used in this service.
+		 * @param {String[]} newDates - An array of dates, as provided by the listener.
+		 * @returns {Date[]} A new processed array of Date objects.
+		 */
+		function processDates(newDates) {
+			newDates = newDates || [];
+			return newDates.map(date => new Date(date.replace(/-/g, "/")));
 		}
-		return this.testTypes;
-	}
 
-	/**
-	 * Returns test dates for the patient
-	 * @param {Boolean} useServer Decides whether the testDates should be fetched from the server
-	 * @returns {Promise<Date[]>} Promise fulfills with patient dates
-	 */
-	async getTestDates(useServer = true) {
-		if (useServer) {
-			let results = await this.#requestToServer.sendRequestWithResponse("PatientTestDates");
-			this.#testDatesLastUpdated = Date.now();
-			this.testDates = results.data.collectedDates || [];
-			this.testDates = this.testDates.map((testDate) => new Date(testDate.replace(/-/g, "/")));
-			this.testResultsByDate = {};
-			return this.testDates;
+		/**
+		 * @description Processes types from the format sent by the listener to the format used in this service.
+		 * @param {Object[]} newTypes - An array of type objects, as provided by the listener.
+		 * @returns {PatientTestType[]} A new processed array of PatientTestType objects.
+		 */
+		function processTypes(newTypes) {
+			newTypes = newTypes || [];
+			return newTypes.map(type => new PatientTestType(type));
 		}
-		return this.testDates;
-	}
 
-	/**
-	 * Returns test type results for the patient
-	 * @param typeSerNum ExpressionSerNum
-	 * @returns {Promise<PatientTestType>} Returns results for the given test type
-	 */
-	async getTestResultsByType(typeSerNum) {
-		if (this.#testResultByTypeIsCached(typeSerNum)) {
-			return this.testResultsByType[typeSerNum];
-		} else {
-			let results = await this.#requestToServer.sendRequestWithResponse("PatientTestTypeResults",
-				{ testTypeSerNum: typeSerNum });
-			results = results.data || [];
-			this.testResultsByType[typeSerNum] = new PatientTestType(results);
-			return this.testResultsByType[typeSerNum];
+		/**
+		 * @description Processes an array of dates from the listener and saves it in this service.
+		 *              Any previously added values are overwritten.
+		 * @param {String[]} newDates - An array of dates, as provided by the listener.
+		 */
+		function setTestDates(newDates) {
+			testDates = processDates(newDates);
+			testResultsByDate = {};
+		}
+
+		/**
+		 * @description Processes an array of types from the listener and saves it in this service.
+		 *              Any previously added values are overwritten.
+		 * @param {Object[]} newTypes - An array of type objects, as provided by the listener.
+		 */
+		function setTestTypes(newTypes) {
+			testTypes = processTypes(newTypes);
+			testResultsByType = {};
+		}
+
+		/**
+		 * @description Processes an array of updated dates from the listener and uses it to update this service.
+		 *              New dates are added; the rest are left untouched.
+		 * @param {String[]} newTestDates - An array of new or updated dates, as provided by the listener.
+		 */
+		function updateTestDates(newTestDates) {
+			let processedNewTestDates = processDates(newTestDates);
+
+			// Dates are simple objects with only one relevant value; simply add the new ones that are missing from the array
+			let testDatesAsTime = testDates.map(testDate => testDate.getTime());
+			processedNewTestDates.forEach(newDate => { if (!testDatesAsTime.includes(newDate.getTime())) testDates.push(newDate) });
+
+			// Delete cached data by date for all the updated items
+			processedNewTestDates.forEach(e => testResultByDateDeleteCached(e));
+		}
+
+		/**
+		 * @description Processes an array of updated types from the listener and uses it to update this service.
+		 *              Values with the same testExpressionSerNum are overwritten; the rest are left untouched.
+		 * @param {Object[]} newTestTypes - An array of new or updated type objects, as provided by the listener.
+		 */
+		function updateTestTypes(newTestTypes) {
+			let processedNewTestTypes = processTypes(newTestTypes);
+
+			// Apply the new types over the old types (overwriting any matching types that are already present, by SerNum)
+			processedNewTestTypes.forEach(newType => {
+				// If applicable, find and delete an element with the same SerNum as the new one
+				const newSerNum = newType.testExpressionSerNum;
+				const existingTypeIndex = testTypes.findIndex(type => type.testExpressionSerNum === newSerNum);
+				if (existingTypeIndex !== -1) testTypes.splice(existingTypeIndex, 1); // Delete it
+
+				// Add the new element
+				testTypes.push(newType);
+
+				// Delete cached data by type for the new element
+				testResultByTypeDeleteCached(newType.testExpressionSerNum);
+			});
+		}
+
+		/**
+		 * Returns results from the given test date, checks cache for the results.
+		 * @param {Date} date date to get results for
+		 * @returns {Promise<Object[]>} Returns results from the given test date, checks cache for the results.
+		 */
+		async function getTestResultsByDate(date) {
+			let dateString = date.toString();
+			if (testResultByDateIsCached(dateString)) {
+				return testResultsByDate[dateString];
+			} else {
+				let results = await RequestToServer.sendRequestWithResponse("PatientTestDateResults", { date: dateString });
+				let testResults = results.data || { results: [] };
+				testResults.results = testResults.results.map((result) => new PatientTestResultDetailed(result));
+				testResultsByDate[dateString] = testResults;
+				return testResultsByDate[dateString];
+			}
+		}
+
+		/**
+		 * Returns test type results for the patient
+		 * @param typeSerNum ExpressionSerNum
+		 * @returns {Promise<PatientTestType>} Returns results for the given test type
+		 */
+		async function getTestResultsByType(typeSerNum) {
+			if (testResultByTypeIsCached(typeSerNum)) {
+				return testResultsByType[typeSerNum];
+			} else {
+				let results = await RequestToServer.sendRequestWithResponse("PatientTestTypeResults",
+					{ testTypeSerNum: typeSerNum });
+				results = results.data || [];
+				testResultsByType[typeSerNum] = new PatientTestType(results);
+				return testResultsByType[typeSerNum];
+			}
+		}
+
+		/**
+		 * @description Checks whether a given date has results cached in this service.
+		 * @param {Date} date - The date to check.
+		 * @returns {boolean} True if the given date has cached results; false otherwise.
+		 */
+		function testResultByDateIsCached(date) {
+			return testResultsByDate.hasOwnProperty(date.toString());
+		}
+
+		/**
+		 * @description Checks whether a given type has results cached in this service.
+		 * @param {number} typeSerNum - The SerNum of the type to check (testExpressionSerNum).
+		 * @returns {boolean} True if the given type has cached results; false otherwise.
+		 */
+		function testResultByTypeIsCached(typeSerNum) {
+			return testResultsByType.hasOwnProperty(typeSerNum);
+		}
+
+		/**
+		 * If a cache exists for this date, deletes it.
+		 * @param date
+		 */
+		function testResultByDateDeleteCached(date) {
+			if (testResultByDateIsCached(date)) delete testResultsByDate[date.toString()];
+		}
+
+		/**
+		 * If a cache exists for this type, deletes it.
+		 * @param typeSerNum
+		 */
+		function testResultByTypeDeleteCached(typeSerNum) {
+			if (testResultByTypeIsCached(typeSerNum)) delete testResultsByType[typeSerNum];
+		}
+
+		/**
+		 * Returns the class for a given test based on its criticality (within normal range, outside normal range,
+		 * critically outside normal range). The resulting class will be used to change the colour of test results
+		 * outside the normal range.
+		 * @param {*} test Test for which to get the class.
+		 * @returns {string} Name of the class to use with this test.
+		 */
+		function getTestClass(test) {
+			let flag;
+			if (test.abnormalFlag) flag = test.abnormalFlag;
+			else if (test.latestAbnormalFlag) flag = test.latestAbnormalFlag;
+			else return "";
+			flag = flag.toLowerCase();
+			return (flag === "h" || flag === "l") ? "lab-results-test-in5" :
+				(flag === "c") ? "lab-results-test-out5" : "";
+		}
+
+		/**
+		 * Upon signing out, clear test results
+		 */
+		function clear() {
+			testDates = [];
+			testTypes = [];
+			testResultsByDate = {};
+			testResultsByType = {};
 		}
 	}
-
-	#testResultByTypeIsCached = (type) => {
-		return this.testResultsByType.hasOwnProperty(type);
-	};
-
-	/**
-	 * Returns results from the given test date, checks cache for the results.
-	 * @param {Date} date date to get results for
-	 * @returns {Promise<Object[]>} Returns results from the given test date, checks cache for the results.
-	 */
-	async getTestResultsByDate(date) {
-		let dateString = date.toString();
-		if (this.#testResultByDateIsCached(dateString)) {
-			return this.testResultsByDate[dateString];
-		} else {
-			let results = await this.#requestToServer.sendRequestWithResponse("PatientTestDateResults", { date: dateString });
-			let testResults = results.data || { results: [] };
-			testResults.results = testResults.results.map((result) => new PatientTestResultDetailed(result));
-			this.testResultsByDate[dateString] = testResults;
-			return this.testResultsByDate[dateString];
-		}
-	}
-
-	/**
-	 * Get last updated time for the patient test metadata
-	 * @returns {number} returns time in milliseconds since the test metadata was last updated
-	 */
-	getLastUpdated() {
-		return Math.min(this.#testDatesLastUpdated, this.#testTypesLastUpdated);
-	}
-
-	/**
-	 * Checks whether date is cached appropriately
-	 * @param date
-	 * @returns {boolean}
-	 */
-	#testResultByDateIsCached = (date) => {
-		return this.testResultsByDate.hasOwnProperty(date.toString());
-	};
-
-	/**
-	 * Returns the class for a given test based on its criticality (within normal range, outside normal range,
-	 * critically outside normal range). The resulting class will be used to change the colour of test results
-	 * outside the normal range.
-	 * @param {*} test Test for which to get the class.
-	 * @returns {string} Name of the class to use with this test.
-	 */
-	getTestClass(test) {
-		let flag;
-		if (test.abnormalFlag) flag = test.abnormalFlag;
-		else if (test.latestAbnormalFlag) flag = test.latestAbnormalFlag;
-		else return "";
-		flag = flag.toLowerCase();
-		return (flag === "h" || flag === "l") ? "lab-results-test-in5" :
-			(flag === "c") ? "lab-results-test-out5" : "";
-	}
-
-	/**
-	 * Upon signing out, clear test results
-	 */
-	clear() {
-		this.testResultsByDate = {};
-		this.testResultsByType = {};
-		this.testDates = [];
-		this.testTypes = [];
-		this.#testDatesLastUpdated = 0;
-		this.#testTypesLastUpdated = 0;
-	}
-}
-
-angular.module("MUHCApp").service("PatientTestResults", PatientTestResults);
-
-PatientTestResults.$inject = ["RequestToServer"];
+})();
