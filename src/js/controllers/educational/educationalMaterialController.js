@@ -26,6 +26,7 @@
                                            Patient, Logger, UserHospitalPreferences, $filter) {
         var vm = this;
         var backButtonPressed = 0;
+        let navigator;
 
         // Variable containing the search string entered into the search bar
         vm.searchString = "";
@@ -35,22 +36,23 @@
 
         // variable to let the user know which hospital they are logged in
         vm.selectedHospitalToDisplay = "";
-        
+
         vm.goToEducationalMaterial = goToEducationalMaterial;
         vm.educationDeviceBackButton = educationDeviceBackButton;
 
         // Function used to filter the materials shown based on the search string
         vm.filterMaterial = filterMaterial;
 
+        // Used by patient-data-handler
+        vm.configureState = configureState;
+
         activate();
         ///////////////////////////////////
 
         function activate(){
-            NavigatorParameters.setParameters({'Navigator':'educationNavigator'});
-            NavigatorParameters.setNavigator(educationNavigator);
+            navigator = NavigatorParameters.getNavigator();
 
             bindEvents();
-            configureState();
             configureSelectedHospital();
         }
 
@@ -83,14 +85,14 @@
         }
 
         function bindEvents() {
-            educationNavigator.on('prepop',function()
+            navigator.on('prepop',function()
             {
                 backButtonPressed = 0;
                 configureState();
             });
 
-            educationNavigator.on('prepush', function(event) {
-                if (educationNavigator._doorLock.isLocked()) {
+            navigator.on('prepush', function(event) {
+                if (navigator._doorLock.isLocked()) {
                     event.cancel();
                 }
             });
@@ -98,10 +100,10 @@
             //Cleaning up
             $scope.$on('$destroy',function()
             {
-                educationNavigator.off('prepop');
+                navigator.off('prepop');
             });
         }
-        
+
         /**
          * @method goToEducationalMaterial
          * @description If not read reads material, then it opens the material into its individual controller
@@ -119,8 +121,8 @@
             }
 
             // RStep refers to recursive depth in a package (since packages can contain other packages).
-            NavigatorParameters.setParameters({ 'Navigator': 'educationNavigator', 'Post': edumaterial, 'RStep':1 });
-            educationNavigator.pushPage('./views/education/individual-material.html');
+            NavigatorParameters.setParameters({ 'Navigator': 'personalNavigator', 'Post': edumaterial, 'RStep':1 });
+            navigator.pushPage('./views/personal/education/individual-material.html');
         }
 
         // Function used to filter the materials shown based on the search string.

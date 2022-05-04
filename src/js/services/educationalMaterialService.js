@@ -223,7 +223,7 @@ function ($q, $filter, LocalStorage, FileManagerService, UserPreferences, Reques
         },
         /**
          *@ngdoc method
-         *@name isThereEducationalMaterial
+         *@name materialExists
          *@methodOf MUHCApp.service:EducationalMaterial
          *@description Setter method for educational material
          *@return {Boolean} Returns whether the patient has any educational material available.
@@ -277,6 +277,17 @@ function ($q, $filter, LocalStorage, FileManagerService, UserPreferences, Reques
             }
             return array;
         },
+
+        /**
+         *@ngdoc method
+         *@name getNumberOfUnreadEducationalMaterials
+         *@methodOf MUHCApp.service:EducationalMaterial
+         *@returns {Object} Returns the number of unread educational material
+         **/
+        getNumberOfUnreadEducationalMaterials:function() 
+        {
+            return this.getUnreadEducationalMaterials().length;
+        },
         /**
          *@ngdoc method
          *@name getEducationaMaterialBySerNum
@@ -286,8 +297,6 @@ function ($q, $filter, LocalStorage, FileManagerService, UserPreferences, Reques
          **/
         getEducationaMaterialBySerNum:function(serNum)
         {
-
-
             for (var i = 0; i < educationalMaterialArray.length; i++) {
                 if(educationalMaterialArray[i].EducationalMaterialSerNum==serNum)
                 {
@@ -395,7 +404,7 @@ function ($q, $filter, LocalStorage, FileManagerService, UserPreferences, Reques
          **/
         getEducationalMaterialUrl:function()
         {
-            return {Url:'./views/education/individual-material.html'};
+            return {Url:'./views/personal/education/individual-material.html'};
         },
         /**
          *@ngdoc method
@@ -425,7 +434,7 @@ function ($q, $filter, LocalStorage, FileManagerService, UserPreferences, Reques
             //Get type of material
             let type = getDisplayType(edumaterial);
 
-            if (type === "booklet") return {Url:'./views/education/education-booklet.html'};
+            if (type === "booklet") return {Url:'./views/personal/education/education-booklet.html'};
             else if (type === 'link')
             {
                 // If it's a url, set the language, then open the url in another page
@@ -433,7 +442,7 @@ function ($q, $filter, LocalStorage, FileManagerService, UserPreferences, Reques
                 FileManagerService.openUrl(edumaterial.Url);
                 return -1;
             }
-            else if (type === 'html') return {Url:'./views/education/education-individual-page.html'};
+            else if (type === 'html') return {Url:'./views/personal/education/education-individual-page.html'};
             else return -1;
         },
 

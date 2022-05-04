@@ -1,7 +1,20 @@
 <ons-page ng-controller="TxTeamMessagesController as txTeam">
     <generic-toolbar title="{{'TEAMMESSAGES'|translate}}" style-class="fontSizeTitle"></generic-toolbar>
     <network-banner></network-banner>
-    <div ng-hide="txTeam.noMessages">
+
+    <!-- DATA REFRESHER -->
+    <ons-pull-hook ng-action="txTeam.pullHookRefresh($done)">
+        <ons-pull-hook-content></ons-pull-hook-content>
+    </ons-pull-hook>
+
+    <!-- DATA HANDLER AND LOADING WHEEL -->
+    <patient-data-handler categories="TxTeamMessages"
+                          display-function="txTeam.setTxTeamMessagesView"
+                          refresh="txTeam.pullHookRefresh"
+                          hide-content="txTeam.hideContent"
+    ></patient-data-handler>
+
+    <div ng-hide="txTeam.hideContent || txTeam.noMessages">
         <ons-list  ng-repeat="message in txTeam.txTeamMessages | orderBy:'-DateAdded'" ng-click="txTeam.goToTeamMessage(message)">
             <ons-list-header class="person-list-header" ng-class="fontSizeTitle" ng-show="{{txTeam.txTeamMessages | showHeader : $index : 'DateAdded' }}">{{message.DateAdded|date:'fullDate'}}</ons-list-header>
             <ons-list-item modifier="chevron" class="item">
@@ -20,7 +33,7 @@
             </ons-list-item>
         </ons-list>
     </div>
-    <div class="container" align="center">
+    <div ng-hide="txTeam.hideContent" class="container" align="center">
       <p style="margin-top:25vh;color:grey" ng-show="txTeam.noMessages">{{"NOTEAMMESSAGES"|translate}}</p>
     </div>
 </ons-page>

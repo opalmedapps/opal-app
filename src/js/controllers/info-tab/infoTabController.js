@@ -41,12 +41,6 @@
                 color:'darkblue',
                 name: "GENERAL",
                 description:"GENERAL_DESCRIPTION"
-            },
-            {
-                icon:'fa-book',
-                color:'Chocolate',
-                name:"EDUCATION",
-                description:"EDUCATION_DESCRIPTION"
             }
         ];
 
@@ -55,7 +49,7 @@
         ////////////////
 
         function activate() {
-            var tab=tabbar.getActiveTabIndex();
+            var tab = tabbar.getActiveTabIndex();
             vm.view = views[tab];
             vm.view.description = $filter('translate')(vm.view.description );
         }

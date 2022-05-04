@@ -7,7 +7,7 @@ import "../../css/directives/top-page-banner.directive.css";
      * It is used in
      *      www/views/settings/settings.html
      *      www/views/home/home.html
-     *      www/views/education/education.html
+     *      www/views/personal/education/education.html
      *      www/views/personal/personal.html
      *      www/views/general/general.html
      */

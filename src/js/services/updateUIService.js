@@ -1,45 +1,22 @@
-//
-// Author David Herrera on Summer 2016, Email:davidfherrerar@gmail.com
-//
-var myApp=angular.module('MUHCApp');
 /**
- *@ngdoc service
- *@name MUHCApp.service:UpdateUI
- *@requires MUHCApp.service:Announcements
- *@requires MUHCApp.service:TxTeamMessages
- *@requires MUHCApp.service:Patient
- *@requires MUHCApp.service:Doctors
- *@requires MUHCApp.service:Appointments
- *@requires MUHCApp.service:Messages
- *@requires MUHCApp.service:Documents
- *@requires MUHCApp.service:EducationalMaterial
- *@requires MUHCApp.service:Notifications
- *@requires MUHCApp.service:UserPlanWorkflow
- *@requires MUHCApp.service:LocalStorage
- *@requires MUHCApp.service:RequestToServer
- *@requires MUHCApp.service:Diagnoses
- *@requires MUHCApp.service:NativeNotification
- *@requires $q
- *@requires $cordovaNetwork
- *@requires $filter
- *@description API service used to update the whole application. The UpdateUI service is in charge of timestamps for updates of sections, set up or any update to the user fields.
- **/
-myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors','Appointments',
-    'Documents','EducationalMaterial', 'UserAuthorizationInfo', '$q', 'Notifications',
-    '$cordovaNetwork', 'LocalStorage','RequestToServer','$filter','Diagnoses',
-    'NativeNotification', 'Tasks', 'Params', '$injector',
+ * @file Service that handles downloading, updating and setting other services with patient data for the whole application.
+ * @author David Herrera, Stacey Beard
+ */
+(function () {
+    'use strict';
 
-    function (Announcements, TxTeamMessages, Patient,Doctors, Appointments, Documents,
-              EducationalMaterial, UserAuthorizationInfo, $q, Notifications,
-              $cordovaNetwork,LocalStorage,RequestToServer,$filter,Diagnoses,
-              NativeNotification, Tasks, Params, $injector) {
-        /**
-         *@ngdoc property
-         *@name  MUHCApp.service.#lastUpdateTimestamp
-         *@propertyOf MUHCApp.service:UpdateUI
-         *@description Initiatiates object with all the timestamps
-         **/
-        var lastUpdateTimestamp = Params.lastUpdateTimestamp;
+    angular
+        .module('MUHCApp')
+        .factory('UpdateUI', UpdateUI);
+
+    UpdateUI.$inject = ['$filter','$injector','$q','Announcements','Appointments','Diagnoses','Documents',
+        'EducationalMaterial','NativeNotification','Notifications','Patient','PatientTestResults',
+        'RequestToServer','TxTeamMessages'];
+
+    function UpdateUI($filter, $injector, $q, Announcements, Appointments, Diagnoses, Documents,
+                      EducationalMaterial, NativeNotification, Notifications, Patient, PatientTestResults,
+                      RequestToServer, TxTeamMessages) {
+
         /**
          *@ngdoc property
          *@name  MUHCApp.service.#promiseFields
@@ -49,9 +26,9 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors',
          * In the current case we have to wait for the fields to download the images into the device storage
          <pre>
          //Contents so far:
-         var promiseFields =  ['Doctors', 'Patient'];
+         var promiseFields =  ['Patient'];
          **/
-        var promiseFields = ['Doctors', 'Patient'];
+        var promiseFields = ['Patient'];
         /**
          *@ngdoc property
          *@name  MUHCApp.service.#sectionServiceMappings
@@ -62,63 +39,75 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors',
          var sectionServiceMappings={
               'Patient':{
                   setOnline:Patient.setUserFieldsOnline,
-                  update:Patient.setUserFieldsOnline
+                  update:Patient.setUserFieldsOnline,
+                  lastUpdated: 0,
               },
               ...
          **/
-        var sectionServiceMappings={
-            'All':
-            {
-                init:setServices,
-                update:updateServices
+        let sectionServiceMappings = {
+            'Documents': {
+                init: Documents.setDocuments,
+                update: Documents.updateDocuments,
+                lastUpdated: 0,
             },
-            'Documents':
-            {
-                init:Documents.setDocuments,
-                update:Documents.updateDocuments
+            'Patient': {
+                setOnline: Patient.setUserFieldsOnline,
+                update: Patient.setUserFieldsOnline,
+                lastUpdated: 0,
             },
-            'Patient':{
-                setOnline:Patient.setUserFieldsOnline,
-                update:Patient.setUserFieldsOnline
+            'Appointments': {
+                init: Appointments.setUserAppointments,
+                update: Appointments.updateUserAppointments,
+                lastUpdated: 0,
             },
-            'Doctors':{
-                setOnline:Doctors.setUserContactsOnline,
-                update:Doctors.updateUserContacts
+            'Diagnosis': {
+                init: Diagnoses.setDiagnoses,
+                update: Diagnoses.updateDiagnoses,
+                lastUpdated: 0,
             },
-            'Appointments':{
-                init:Appointments.setUserAppointments,
-                update:Appointments.updateUserAppointments
+            'TxTeamMessages': {
+                init: TxTeamMessages.setTxTeamMessages,
+                update: TxTeamMessages.updateTxTeamMessages,
+                lastUpdated: 0,
             },
-            'Tasks':{
-                init: Tasks.setPlanningTasks,
-                update:Tasks.setPlanningTasks
+            'Announcements': {
+                init: Announcements.setAnnouncements,
+                update: Announcements.updateAnnouncements,
+                lastUpdated: 0,
             },
-            'Diagnosis':
-            {
-                init:Diagnoses.setDiagnoses,
-                update:Diagnoses.updateDiagnoses
+            'EducationalMaterial': {
+                init: EducationalMaterial.setEducationalMaterial,
+                update: EducationalMaterial.updateEducationalMaterial,
+                lastUpdated: 0,
             },
-            'TxTeamMessages':
-            {
-                init:TxTeamMessages.setTxTeamMessages,
-                update:TxTeamMessages.updateTxTeamMessages
+            'Notifications': {
+                init: Notifications.initNotifications,
+                update: Notifications.updateUserNotifications,
+                lastUpdated: 0,
             },
-            'Announcements':
-            {
-                init:Announcements.setAnnouncements,
-                update:Announcements.updateAnnouncements
+            'PatientTestDates': {
+                init: PatientTestResults.setTestDates,
+                update: PatientTestResults.updateTestDates,
+                lastUpdated: 0,
             },
-            'EducationalMaterial':
-            {
-                init:EducationalMaterial.setEducationalMaterial,
-                update:EducationalMaterial.updateEducationalMaterial
+            'PatientTestTypes': {
+                init: PatientTestResults.setTestTypes,
+                update: PatientTestResults.updateTestTypes,
+                lastUpdated: 0,
             },
-            'Notifications':
-            {
-                init:Notifications.initNotifications,
-                update:Notifications.updateUserNotifications
-            }
         };
+
+        let service = {
+            haveBeenInitialized: haveBeenInitialized,
+            getData: getData,
+            init: () => initServicesFromServer(['Patient', 'Notifications']),
+            clearUpdateUI: () => updateTimestamps(Object.keys(sectionServiceMappings), 0),
+        };
+
+        return service;
+
+        ////////////////
+
         function setPromises(type, dataUserObject)
         {
             var promises = [];
@@ -149,6 +138,7 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors',
             });
             return r.promise;
         }
+
         function updateServices(dataUserObject){
             var r = $q.defer();
             $q.all(setPromises('update', dataUserObject)).then(function(result)
@@ -183,7 +173,7 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors',
             {
                 setServices(response.Data, 'setOnline').then(function()
                 {
-                    initTimestamps(response.Timestamp);
+                    updateTimestamps(parameters, response.Timestamp);
                     r.resolve(true);
                 });
             }).catch(function(error) {
@@ -195,168 +185,116 @@ myApp.service('UpdateUI', ['Announcements','TxTeamMessages','Patient','Doctors',
             return r.promise;
         }
 
+        /**
+         * @description Queries the backend for newly updated data in the given categories, receiving only data that has
+         *              been changed since the last update. Updates the corresponding services with this new data.
+         * @param {Array<string>} parameters - The categories of data to update.
+         * @returns {Promise<void>} Resolves if all data was successfully updated, or rejects with an error.
+         */
+        async function updateSection(parameters) {
+            let refreshParams = {
+                Fields: parameters,
+                Timestamp: findSmallestTimestamp(parameters),
+            };
 
-        function initTimestamps(time)
-        {
-            for(var field in lastUpdateTimestamp)
-            {
-                lastUpdateTimestamp[field] = time;
-            }
-            window.localStorage.setItem(UserAuthorizationInfo.getUsername()+'/Timestamps',JSON.stringify(lastUpdateTimestamp));
+            let response = await RequestToServer.sendRequestWithResponse('Refresh', refreshParams);
+            if (response.Data && response.Data !== "empty") await updateServices(response.Data);
+            updateTimestamps(parameters, response.Timestamp);
         }
-
 
         /**
-         * Update sections
+         * @description Queries the backend for all data in each of the given categories. Initializes the corresponding
+         *              services with this data (clearing any existing data).
+         * @param {Array<string>} parameters - The categories of data to initialize.
+         * @returns {Promise<void>} Resolves if all data was successfully initialized, or rejects with an error.
          */
-        function updateSection(parameters)
-        {
-            var r = $q.defer();
-            RequestToServer.sendRequestWithResponse('Refresh',{Fields:parameters}).then(
-                function(data)
-                {
-                    if(data.Data =="Empty")
-                    {
-                        updateTimestamps(parameters, data.Timestamp);
-                        r.resolve(true);
-                    }else{
-                        updateServices(data.Data).then(function()
-                        {
-                            updateTimestamps(parameters, data.Timestamp);
-                            r.resolve(true);
-                        });
-                    }
-                }).catch(function(error)
-                {
-                    NativeNotification.showNotificationAlert($filter('translate')("ERROR_CONTACTING_HOSPITAL"));
-                    r.reject(error);
-                });
-            return r.promise;
+        async function setSection(parameters) {
+            let response = await RequestToServer.sendRequestWithResponse('Refresh', {Fields: parameters});
+            if (response.Data && response.Data !== "empty") await setServices(response.Data, 'setOnline');
+            updateTimestamps(parameters, response.Timestamp);
         }
 
-        function updateTimestamps(content,time)
-        {
-            if(content=='All')
-            {
-                lastUpdateTimestamp.All = time;
-            }else if(angular.isArray(content))
-            {
-                var min=Infinity;
-                for (var i = 0; i < content.length; i++) {
-                    lastUpdateTimestamp[content[i]] = time;
-                }
-            }else{
-                lastUpdateTimestamp[content] = time;
-            }
-            window.localStorage.setItem(UserAuthorizationInfo.getUsername()+'/Timestamps',JSON.stringify(lastUpdateTimestamp));
-        }
-        /**
-         * Reset sections
-         */
-        function setSection(parameters)
-        {
-            var r = $q.defer();
-            RequestToServer.sendRequestWithResponse('Refresh',{Fields:parameters}).then(
-                function(data)
-                {
-                    if(data.Data === "Empty")
-                    {
-                        updateTimestamps(parameters, data.Timestamp);
-                        r.resolve(true);
-                    }else{
-                        setServices(data.Data,'setOnline').then(function()
-                        {
-                            updateTimestamps(parameters, data.Timestamp);
-                            r.resolve(true);
-                        });
-                    }
-                }).catch(function(error)
-                {
-                    NativeNotification.showNotificationAlert($filter('translate')("ERROR_CONTACTING_HOSPITAL"));
-                    r.reject(error);
-                });
-            return r.promise;
-        }
         /**
          * Helper functions
          */
-        function findSmallestTimestamp(content)
-        {
-            if(content=='All')
-            {
-                return lastUpdateTimestamp.All;
-            }else if(angular.isArray(content))
-            {
-                var min=Infinity;
-                for (var i = 0; i < content.length; i++) {
-                    if(min>lastUpdateTimestamp[content[i]])
-                    {
-                        min=lastUpdateTimestamp[content[i]];
-                    }
-                }
-                return min;
-            }else{
-                return lastUpdateTimestamp[content];
-            }
+
+        /**
+         * @description Iterates through the 'lastUpdated' timestamps in the given categories in sectionServiceMappings
+         *              and sets them to a certain value.
+         * @param {string| Array<string>} categories - The category or categories to update.
+         * @param {number} time - The new value to which to set lastUpdated.
+         */
+        function updateTimestamps(categories, time) {
+            if(angular.isArray(categories)) for (let section of categories) sectionServiceMappings[section].lastUpdated = time;
+            else sectionServiceMappings[categories].lastUpdated = time;
         }
 
-        return {
-            //Function to update fields in the app, it does not initialize them, it only updates the new fields.
-            //Parameter only defined when its a particular array of values.
-            /**
-             *@ngdoc method
-             *@name update
-             *@methodOf MUHCApp.service:UpdateUI
-             *@param {String||Array} parameters Could be a string or an array, parameter signifying the sections to update, i.e. 'All', or ['Appointments','Documents'].
-             *@description  asks the backend for the most recent data in the parameters
-             object, gets the data and updates the corresponding services with this new data.
-             **/
-            update:function(parameters)
-            {
-                return updateSection(parameters);
-            },
-            /**
-             *@ngdoc method
-             *@name reset
-             *@methodOf MUHCApp.service:UpdateUI
-             *@param {String,Array} parameters Could be a string or an array, parameter signifying the sections to update, i.e. 'All', or ['Appointments','Documents'].
-             *@description Completely reinstantiates services specified by the parameter by obtaining all the data from the Hospital and re-setting them.
-             **/
-            set:function(parameters)
-            {
-                return setSection(parameters);
-            },
-            /**
-             *@ngdoc method
-             *@name init
-             *@methodOf MUHCApp.service:UpdateUI
-             *@param {String} type Online or Offline init
-             *@description Initializes app by querying the hospital for all the data and setting the services.
-             **/
-            init:function()
-            {
-                return initServicesFromServer([
-                    'Patient',
-                    'Appointments',
-                    'Tasks',
-                    'TxTeamMessages',
-                    'EducationalMaterial',
-                    'Documents',
-                    'Notifications',
-                    'Announcements'
-                ]);
-
-            },
-            /**
-             *@ngdoc method
-             *@name clearUpdateUI
-             *@methodOf MUHCApp.service:UpdateUI
-             *@description Clears all the timestamps.
-             **/
-            clearUpdateUI:function()
-            {
-                lastUpdateTimestamp = Params.lastUpdateTimestamp;
+        /**
+         * @description Finds and returns the smallest 'lastUpdated' timestamp among the given categories.
+         * @param {string| Array<string>} categories - The category or categories to check.
+         * @returns {number|undefined} The smallest lastUpdated value for the given categories.
+         */
+        function findSmallestTimestamp(categories) {
+            if (Array.isArray(categories)) {
+                if (categories.length === 0) return undefined;
+                return categories.reduce((min, category) => {
+                    let lastUpdated = sectionServiceMappings[category].lastUpdated;
+                    if (lastUpdated < min) return lastUpdated;
+                    else return min;
+                }, Infinity);
             }
-        };
+            else return sectionServiceMappings[categories].lastUpdated;
+        }
+
+        /**
+         * @description Determines whether all provided category have been successfully initialized.
+         *              Note: if an error occurred during its initialization process, a category is not considered initialized.
+         * @param {string| Array<string>} categories - The category or categories to check.
+         * @returns {boolean} True if the category has been successfully initialized; false otherwise.
+         *                    If an array is provided, this function will return false if at least one category has not been initialized.
+         */
+        function haveBeenInitialized(categories) {
+            validateCategories(categories);
+            if (!Array.isArray(categories)) return haveBeenInitialized([categories]);
+            return categories.every(category => sectionServiceMappings[category].lastUpdated !== 0);
+        }
+
+        /**
+         * @description Validates a category or array of categories by checking whether it's in sectionServiceMappings.
+         * @param {string | Array<string>} categories - The category or categories to check.
+         * @throws {string} An error if a category is invalid.
+         */
+        function validateCategories(categories) {
+            if (!Array.isArray(categories)) return validateCategories([categories]);
+            categories.forEach(category => {
+                if (!sectionServiceMappings.hasOwnProperty(category)) throw `Invalid UpdateUI category: ${category}`;
+            });
+        }
+
+        /**
+         * @description Initializes or updates data in the requested categories. If data in a category has not been
+         *              requested yet, or an error has prevented it from being requested successfully, it will
+         *              be initialized; otherwise, it will be updated.
+         * @param {string | Array<string>} categories - The categories of data to initialize or update.
+         * @returns {Promise<void>} Resolves if all data was successfully initialized / updated, or rejects with an error.
+         */
+        async function getData(categories) {
+            // Validate input
+            validateCategories(categories);
+            if (typeof categories === "string") return getData([categories]);
+
+            // Iterate through all categories to initialize or update them
+            let toSet = [], toUpdate = [];
+            for (let category of categories) {
+                // Depending on its status, dispatch the category to be initialized or updated
+                if (haveBeenInitialized(category)) toUpdate.push(category);
+                else toSet.push(category);
+            }
+
+            // Execute all initializations or updates simultaneously
+            let setPromise = toSet.length === 0 ? undefined : setSection(toSet);
+            let updatePromise = toUpdate.length === 0 ? undefined : updateSection(toUpdate);
+            await Promise.all([setPromise, updatePromise]);
+        }
     }
-]);
+})();
