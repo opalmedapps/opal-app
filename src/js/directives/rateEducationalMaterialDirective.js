@@ -4,7 +4,7 @@
 *Email:davidfherrerar@gmail.com
 */
 angular.module('MUHCApp')
-.directive('rateMaterial', function(Patient, RequestToServer) {
+.directive('rateMaterial', ['Patient', 'RequestToServer', function(Patient, RequestToServer) {
   return {
     restrict: 'E',
     transclude: true,
@@ -50,4 +50,4 @@ angular.module('MUHCApp')
       
     }
   };
-});
+}]);
