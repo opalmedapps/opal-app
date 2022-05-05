@@ -10,7 +10,7 @@
  */
 
 angular.module('MUHCApp')
-    .directive('networkBanner', function($timeout, NetworkStatus, $filter) {
+    .directive('networkBanner', ['$timeout', 'NetworkStatus', function($timeout, NetworkStatus) {
 
     return {
         restrict: 'E',
@@ -48,4 +48,4 @@ angular.module('MUHCApp')
         }
     };
 
-});
+}]);

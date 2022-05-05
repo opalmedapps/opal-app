@@ -130,10 +130,13 @@ import "../Languages/angular-locales/angular-locale_en.js"
 import "./app.bootstrap";
 
 //Routes for angular views
-const app = angular
+angular
     .module('MUHCApp', ['tmh.dynamicLocale','pascalprecht.translate','luegg.directives',
-        'ngSanitize','ui.router', 'onsen', 'ngTouch','firebase','ui.bootstrap',//'MUHCApp.filters',
-        'ngCordova','monospaced.elastic','Tek.progressBar']);
+        'ngSanitize','ui.router','onsen','ngTouch','firebase','ui.bootstrap',
+        'ngCordova','monospaced.elastic','Tek.progressBar'])
+    .run(initialization);
+
+initialization.$inject = ['$state', '$stateParams', '$q', '$rootScope' ,'$translate', 'Patient', '$location', 'NetworkStatus'];
 
 /**
  *@ngdoc service
@@ -141,7 +144,7 @@ const app = angular
  *@description Service is in charge of checking that the user is authorized at every state change by checking the parameters stored
  in the Firebase localstorage,  Check run service on angular {{link}}
  **/
-app.run(function ($state, $stateParams,$q, $rootScope,$translate, Patient,$location, NetworkStatus) {
+function initialization($state, $stateParams, $q, $rootScope, $translate, Patient, $location, NetworkStatus) {
 
     var isOffline = 'onLine' in navigator && !navigator.onLine;
 
@@ -166,5 +169,4 @@ app.run(function ($state, $stateParams,$q, $rootScope,$translate, Patient,$locat
     });
     $rootScope.$state = $state;
     $rootScope.$stateParams = $stateParams;
-});
-
+}
