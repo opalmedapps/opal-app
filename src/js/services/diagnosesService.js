@@ -18,7 +18,7 @@ var myApp=angular.module('MUHCApp');
 *@requires MUHCApp.service:Diagnoses
 *@description Service stores and manages patient diagnoses
 **/
-myApp.service('Diagnoses',function($filter,LocalStorage){
+myApp.service('Diagnoses', ['$filter', 'LocalStorage', function($filter, LocalStorage) {
   /**
      *@ngdoc property
     *@name  MUHCApp.service.#diagnoses
@@ -107,7 +107,4 @@ myApp.service('Diagnoses',function($filter,LocalStorage){
           diagnosesToLocalStorage=[];
       }
     };
-
-
-
-  });
+}]);

@@ -1,11 +1,12 @@
-
 /*
 *Code by David Herrera May 20, 2015
 *Github: dherre3
 *Email:davidfherrerar@gmail.com
 */
+
 var myApp = angular.module('MUHCApp');
-myApp.directive('phoneInput', function($filter, $browser) {
+
+myApp.directive('phoneInput', ['$filter', '$browser', function($filter, $browser) {
     return {
         require: 'ngModel',
         link: function($scope, $element, $attrs, ngModelCtrl) {
@@ -41,7 +42,8 @@ myApp.directive('phoneInput', function($filter, $browser) {
         }
 
     };
-});
+}]);
+
 myApp.filter('tel', function () {
     return function (tel) {
         if (!tel) { return ''; }
