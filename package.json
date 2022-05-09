@@ -25,8 +25,8 @@
     "build:app:android:device:release:apk": "npm run prepare:app && npm run build:web && cordova build android --device --release --verbose -- --packageType=apk",
     "start": "npm run start:web",
     "start:web": "run-script-os",
-    "start:web:windows": "npm run prepare:version && webpack-dev-server --open --env.opal_environment=%npm_config_env% --env.minimize=false --watch --progress --colors",
-    "start:web:nix": "npm run prepare:version && webpack-dev-server --open --env.opal_environment=$npm_config_env --env.minimize=false --watch --progress --colors",
+    "start:web:windows": "npm run prepare:web && webpack-dev-server --open --env.opal_environment=%npm_config_env% --env.minimize=false --watch --progress --colors",
+    "start:web:nix": "npm run prepare:web && webpack-dev-server --open --env.opal_environment=$npm_config_env --env.minimize=false --watch --progress --colors",
     "start:app:ios": "npm run prepare:app && npm run build:web && cordova run ios",
     "start:app:android": "npm run prepare:app && npm run build:web && cordova run android",
     "test": "echo \"Error: no test specified\" && exit 1"
