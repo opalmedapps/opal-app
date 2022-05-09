@@ -20,19 +20,19 @@ let entry = [
 const config = env => {
 	console.log("Webpack variables:", env);
 
-	// Read environment settings from opal.config.js
-	let requiredSettingNames = ["useSourceMap", "webpackMode"];
-	let settings = {};
-	requiredSettingNames.forEach(name => settings[name] = OpalEnv.getEnvSetting(name));
-	console.log("Environment settings:", settings);
-
 	// Parse the Opal environment to use, specified via e.g. `webpack --env.opal_environment=preprod`
-	const OPAL_ENV = (env) ? env.opal_environment : null;
+	const OPAL_ENV = env ? env.opal_environment : null;
 	console.log(`OPAL ENVIRONMENT: ${OPAL_ENV || "default (root directory)"}`);
 
 	// Throws error if the defined folder for environment does not exist.
 	OpalEnv.verifyOpalEnvironmentExists(OPAL_ENV);
 	const OPAL_ENV_FOLDER = path.join(__dirname, (OPAL_ENV) ? `./env/${OPAL_ENV}` : './');
+
+	// Read environment settings from opal.config.js
+	let requiredSettingNames = ["useSourceMap", "webpackMode"];
+	let settings = {};
+	requiredSettingNames.forEach(name => settings[name] = OpalEnv.getEnvSetting(name, OPAL_ENV));
+	console.log("Environment settings:", settings);
 
 	// Check whether to minimize the output (default = true)
 	let minimize;
