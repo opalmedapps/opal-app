@@ -97,7 +97,7 @@
             },
             'QuestionnaireList': {
                 init: Questionnaires.setQuestionnaireList,
-                update: () => console.log("QuestionnaireList update: not implemented yet"),
+                update: Questionnaires.updateQuestionnaireList,
                 lastUpdated: 0,
             },
         };
