@@ -878,19 +878,19 @@
             currentQuestionnaire = {};
         }
 
-
-
         /**
          * @name setQuestionnaireList
          * @desc Processes an array of questionnaires from the listener and saves it in this service.
-         *       Any previously added questionnaires are overwritten.
+         *       By default, any previously added questionnaires are overwritten.
          * @param {Object[]} questionnaireList - An array of questionnaires, as provided by the listener.
+         * @param {boolean} [clearExisting] - Optional, defaults to true; indicates whether to clear away all previously
+         *                                    added questionnaires.
          */
-        function setQuestionnaireList(questionnaireList) {
+        function setQuestionnaireList(questionnaireList, clearExisting=true) {
             // Validate input
-            if (!Array.isArray(questionnaireList)) throw new Error('Failed setting questionnaire list; did not get an array from the listener');
+            if (!Array.isArray(questionnaireList)) throw new Error('Failed setting or updating questionnaire list; did not get an array from the listener.');
 
-            clearAllQuestionnaire();
+            if (clearExisting) clearAllQuestionnaire();
 
             questionnaireList.forEach(questionnaire => {
                 try {
@@ -899,7 +899,7 @@
                     getQuestionnaireMap(questionnaire.status)[questionnaire.qp_ser_num] = questionnaire;
                 }
                 catch (err) {
-                    console.error('Questionnaire stub failed validation; excluding it from the questionnaire list.', err, questionnaire);
+                    console.error('Questionnaire stub failed validation; not using it.', err, questionnaire);
                 }
             });
         }
@@ -907,12 +907,11 @@
         /**
          * @name updateQuestionnaireList
          * @desc Processes an array of updated questionnaires from the listener and uses it to update this service.
-         *             Values with the same ????? are overwritten; the rest are left untouched.
+         *             Values with the same qp_ser_num are overwritten; the rest are left untouched.
          * @param {Object[]} updatedQuestionnaireList - An array of new or updated questionnaires, as provided by the listener.
          */
         function updateQuestionnaireList(updatedQuestionnaireList) {
-            console.log("updateQuestionnaireList: not implemented yet");
-            console.trace();
+            setQuestionnaireList(updatedQuestionnaireList, false);
         }
 
         /**
