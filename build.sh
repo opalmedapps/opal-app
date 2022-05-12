@@ -94,7 +94,7 @@ if [ -f .gitlab-ci.yml ]; then
   echo ""
 
   # Create and push a build tag. This tag will automatically be picked up by the regex in the .gitlab-ci.yml workflow rules.
-  TAG_NAME="build-$INPUT_ENV-$INPUT_PLATFORM-test2"
+  TAG_NAME="build-$INPUT_ENV-$INPUT_PLATFORM-test"
   git tag -a "$TAG_NAME" -m "Created by build.sh for GitLab CI/CD"
   git push origin "$TAG_NAME"
 

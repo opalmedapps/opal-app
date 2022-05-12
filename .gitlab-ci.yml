@@ -26,7 +26,7 @@ prepare:
     reports:
       dotenv: build.env
 
-build android:
+.build android:
   stage: build
   rules:
     # Launches only for platforms "android" or "all"
@@ -48,7 +48,14 @@ build android:
   dependencies:
     - prepare
 
-build ios:
+debug build ios:
+  stage: build
+  script:
+    - id -un
+    - echo "Trying to find and unlock the Opal keychain"
+    - ls "$HOME/Library/Keychains/"
+
+.build ios:
   stage: build
   rules:
     # Launches only for platforms "ios" or "all"
