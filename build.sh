@@ -99,7 +99,7 @@ if [ -f .gitlab-ci.yml ]; then
   git push origin "$TAG_NAME"
 
   echo ""
-  echo "In a few minutes, the build status should appear on the following page: https://gitlab.com/opalmedapps/qplus/-/pipelines"
+  echo "In a few minutes, the build status will appear on the following page: https://gitlab.com/opalmedapps/qplus/-/pipelines"
 
   exit 0
 
