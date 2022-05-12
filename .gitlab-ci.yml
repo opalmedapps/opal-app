@@ -23,7 +23,7 @@ build:prepare:
     - echo $CI_COMMIT_TAG
     - TAG_PARAMS=$(echo "$CI_COMMIT_TAG" | sed -r 's/-/ /g')
     - echo "$TAG_PARAMS"
-    - set -- "$TAG_PARAMS"
+    - set -- $TAG_PARAMS
     - echo "$1"
     - echo "$2"
     - echo "$3"
