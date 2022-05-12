@@ -4,33 +4,37 @@ default:
 
 workflow:
   rules:
+    # Launches a build only for commits that have been tagged with the correct syntax (e.g. build-staging-ios-optionaldetails)
+    # See build.sh for details
     - if: $CI_COMMIT_TAG =~ /^build-(?:[a-zA-Z]+)-(?:all|android|ios)(?:-.*)?$/
 
 stages:
   - build
-    
+
+# Parses the environment and platform from the tag and assigns them to a .env file to be used in the next jobs
 build:prepare:
   stage: build
-  variables:
-    FLAGS: '-al'
-    LS_CMD: 'ls "$FLAGS"'
-    HELLO: 'Hello world!'
   script:
-    - echo "$HELLO"
-    - 'eval "$LS_CMD"'
-    - eval "$LS_CMD"
     - echo "$CI_COMMIT_TAG"
-    - echo $CI_COMMIT_TAG
     - TAG_PARAMS=$(echo "$CI_COMMIT_TAG" | sed -r 's/-/ /g')
     - echo "$TAG_PARAMS"
     - set -- $TAG_PARAMS
-    - echo "$1"
-    - echo "$2"
-    - echo "$3"
     - ENV="$2"
     - PLATFORM="$3"
-    - echo "ENV=$ENV"
-    - echo "PLATFORM=$PLATFORM"
+    - echo "ENV=$ENV" >> build.env
+    - echo "PLATFORM=$PLATFORM" >> build.env
+    - cat build.env
+  artifacts:
+    reports:
+      dotenv: build.env
+
+build:testvariables:
+  stage: build
+  script:
+    - echo "$ENV"
+    - echo "$PLATFORM"
+  dependencies:
+    - build:prepare
 
 .build:android:
   stage: build
