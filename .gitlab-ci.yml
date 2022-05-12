@@ -6,7 +6,7 @@ workflow:
   rules:
     # Launches a build only for commits that have been tagged with the correct syntax (e.g. build-staging-ios-optionaldetails)
     # See build.sh for details
-    - if: $CI_COMMIT_TAG =~ /^build-(?:[a-zA-Z]+)-(?:all|android|ios)(?:-.*)?$/
+    - if: $CI_COMMIT_TAG =~ /^build-([a-zA-Z]+)-(all|android|ios)(-.*)?$/
 
 stages:
   - build
@@ -30,7 +30,7 @@ build:android:
   stage: build
   rules:
     # Launches only for platforms "android" or "all"
-    - if: $CI_COMMIT_TAG =~ /^build-(?:[a-zA-Z]+)-(?:all|android)(?:-.*)?$/
+    - if: $CI_COMMIT_TAG =~ /^build-([a-zA-Z]+)-(all|android)(-.*)?$/
   before_script:
     - uname -a
     - npm -v
@@ -52,7 +52,7 @@ build:android:
   stage: build
   rules:
     # Launches only for platforms "ios" or "all"
-    - if: $CI_COMMIT_TAG =~ /^build-(?:[a-zA-Z]+)-(?:all|ios)(?:-.*)?$/
+    - if: $CI_COMMIT_TAG =~ /^build-([a-zA-Z]+)-(all|ios)(-.*)?$/
   before_script:
     - uname -a
     - npm -v
