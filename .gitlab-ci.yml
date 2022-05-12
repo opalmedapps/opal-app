@@ -8,26 +8,35 @@ workflow:
 
 stages:
   - build
+    
+build:prepare:
+  variables:
+    FLAGS: '-al'
+    LS_CMD: 'ls "$FLAGS"'
+    HELLO: 'Hello world!'
+  script:
+    - echo "$HELLO"
+    - 'eval "$LS_CMD"'
+    - eval "$LS_CMD"
+    - echo "$CI_COMMIT_TAG"
+    - echo $CI_COMMIT_TAG
+    - TAG_PARAMS=$(echo "$CI_COMMIT_TAG" | sed -r 's/-/ /g')
+    - echo $parsed
+    - set -- $parsed
+    - echo $1
+    - echo $2
+    - echo $3
+    - ENV=$2
+    - PLATFORM=echo $3
+    - echo "ENV=$ENV"
+    - echo "PLATFORM=$PLATFORM"
 
-before_script:
-  - uname -a
-  - npm -v
-  - TAG_PARAMS=$(echo "$CI_COMMIT_TAG" | sed -r 's/-/ /g')
-  - echo $parsed
-  - set -- $parsed
-  - echo $1
-  - echo $2
-  - echo $3
-  - ENV=$2
-  - PLATFORM=echo $3
-  - echo "ENV=$ENV"
-  - echo "PLATFORM=$PLATFORM"
-  # install cordova locally
-  - npm install cordova
-  - npm install
-
-build:android:
+.build:android:
   stage: build
+  before_script:
+    - uname -a
+    - npm -v
+    - npm install
   script:
     - java -version
     - gradle -v
@@ -38,8 +47,12 @@ build:android:
     paths:
       - opal-dev.apk
 
-build:ios:
+.build:ios:
   stage: build
+  before_script:
+    - uname -a
+    - npm -v
+    - npm install
   script:
     # fixes Bus Error when cordova invokes pod install
     # see: https://stackoverflow.com/a/70581304
