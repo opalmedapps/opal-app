@@ -26,7 +26,7 @@ prepare:
     reports:
       dotenv: build.env
 
-build:android:
+build android:
   stage: build
   rules:
     # Launches only for platforms "android" or "all"
@@ -48,7 +48,7 @@ build:android:
   dependencies:
     - prepare
 
-.build:ios:
+build ios:
   stage: build
   rules:
     # Launches only for platforms "ios" or "all"
@@ -63,10 +63,10 @@ build:android:
     - gem install --user-install ffi -- --enable-libffi-alloc
     - echo "$ENV"
     - npm run build:app:ios:device --env=dev
-    - mv "./platforms/ios/build/device/Opal Dev.ipa" "opal-dev.ipa"
+    - mv "./platforms/ios/build/device/*.ipa" "opal-$ENV.ipa"
   artifacts:
     expire_in: 1 day
     paths:
-      - opal-dev.ipa
+      - opal-$ENV.ipa
   dependencies:
     - prepare
