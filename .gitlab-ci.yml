@@ -11,7 +11,7 @@ workflow:
 stages:
   - build
 
-# Parses the environment and platform from the tag and assigns them to a .env file to be used in the next jobs
+# Parses the environment from the tag and assigns it to a .env file to be used in the next jobs
 prepare:
   stage: .pre
   script:
@@ -20,24 +20,17 @@ prepare:
     - echo "$TAG_PARAMS"
     - set -- $TAG_PARAMS
     - ENV="$2"
-    - PLATFORM="$3"
     - echo "ENV=$ENV" >> build.env
-    - echo "PLATFORM=$PLATFORM" >> build.env
     - cat build.env
   artifacts:
     reports:
       dotenv: build.env
 
-build:testvariables:
+build:android:
   stage: build
-  script:
-    - echo "$ENV"
-    - echo "$PLATFORM"
-  dependencies:
-    - prepare
-
-.build:android:
-  stage: build
+  rules:
+    # Launches only for platforms "android" or "all"
+    - if: $CI_COMMIT_TAG =~ /^build-(?:[a-zA-Z]+)-(?:all|android)(?:-.*)?$/
   before_script:
     - uname -a
     - npm -v
@@ -45,15 +38,21 @@ build:testvariables:
   script:
     - java -version
     - gradle -v
-    - npm run build:app:android:device --env=dev
-    - mv "./platforms/android/app/build/outputs/apk/debug/app-debug.apk" "opal-dev.apk"
+    - echo "$ENV"
+    - npm run build:app:android:device --env=$ENV
+    - mv "./platforms/android/app/build/outputs/apk/debug/app-debug.apk" "opal-$ENV.apk"
   artifacts:
     expire_in: 1 day
     paths:
-      - opal-dev.apk
+      - opal-$ENV.apk
+  dependencies:
+    - prepare
 
 .build:ios:
   stage: build
+  rules:
+    # Launches only for platforms "ios" or "all"
+    - if: $CI_COMMIT_TAG =~ /^build-(?:[a-zA-Z]+)-(?:all|ios)(?:-.*)?$/
   before_script:
     - uname -a
     - npm -v
@@ -62,9 +61,12 @@ build:testvariables:
     # fixes Bus Error when cordova invokes pod install
     # see: https://stackoverflow.com/a/70581304
     - gem install --user-install ffi -- --enable-libffi-alloc
+    - echo "$ENV"
     - npm run build:app:ios:device --env=dev
     - mv "./platforms/ios/build/device/Opal Dev.ipa" "opal-dev.ipa"
   artifacts:
     expire_in: 1 day
     paths:
       - opal-dev.ipa
+  dependencies:
+    - prepare
