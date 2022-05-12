@@ -22,13 +22,13 @@ build:prepare:
     - echo "$CI_COMMIT_TAG"
     - echo $CI_COMMIT_TAG
     - TAG_PARAMS=$(echo "$CI_COMMIT_TAG" | sed -r 's/-/ /g')
-    - echo $parsed
-    - set -- $parsed
-    - echo $1
-    - echo $2
-    - echo $3
-    - ENV=$2
-    - PLATFORM=echo $3
+    - echo "$TAG_PARAMS"
+    - set -- "$TAG_PARAMS"
+    - echo "$1"
+    - echo "$2"
+    - echo "$3"
+    - ENV="$2"
+    - PLATFORM="$3"
     - echo "ENV=$ENV"
     - echo "PLATFORM=$PLATFORM"
 
