@@ -1,0 +1,11 @@
+/* The label asking the user whether to set the app as trusted */
+#trusted-text {
+    padding-left: 10px;
+    text-align: left;
+}
+
+/* The toggle switch used to set the app as trusted or untrusted */
+#trusted-toggle {
+    float: right;
+    margin-left: 10px;
+}
