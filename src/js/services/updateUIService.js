@@ -11,11 +11,11 @@
 
     UpdateUI.$inject = ['$filter','$injector','$q','Announcements','Appointments','Diagnoses','Documents',
         'EducationalMaterial','NativeNotification','Notifications','Patient','PatientTestResults',
-        'Questionnaires','RequestToServer','TxTeamMessages'];
+        'Questionnaires','RequestToServer','TxTeamMessages','UserPreferences'];
 
     function UpdateUI($filter, $injector, $q, Announcements, Appointments, Diagnoses, Documents,
                       EducationalMaterial, NativeNotification, Notifications, Patient, PatientTestResults,
-                      Questionnaires, RequestToServer, TxTeamMessages) {
+                      Questionnaires, RequestToServer, TxTeamMessages, UserPreferences) {
 
         /**
          *@ngdoc property
@@ -105,13 +105,23 @@
         let service = {
             haveBeenInitialized: haveBeenInitialized,
             getData: getData,
-            init: () => initServicesFromServer(['Patient', 'Notifications']),
+            init: init,
             clearUpdateUI: () => updateTimestamps(Object.keys(sectionServiceMappings), 0),
         };
 
         return service;
 
         ////////////////
+
+        function init() {
+            // When the language changes, force questionnaires to be cleared (since they're saved only for one language)
+            UserPreferences.observeLanguage(() => {
+                Questionnaires.clearAllQuestionnaire();
+                updateTimestamps('QuestionnaireList', 0);
+            });
+
+            return initServicesFromServer(['Patient', 'Notifications']);
+        }
 
         function setPromises(type, dataUserObject)
         {
