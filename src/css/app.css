@@ -106,4 +106,5 @@ p {
 @import url('./elements/checkmark.element.css');
 @import url('./views/questionnaires-list.view.css');
 @import url('./views/feedback.view.css');
+@import url('./views/login.view.css');
 @import url('./utilities.css');

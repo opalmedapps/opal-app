@@ -5,7 +5,7 @@
     <ons-row align="center" style="height:70vh;margin:0;top:0">
         <ons-col align="center">
             <div align="center">
-                <img src="./img/Opal_Name_Logo_Green_Transparent.png" style="margin-top: 1%; width:auto;max-width:70%;height:auto">
+                <img src="./img/Opal_Name_Logo_Green_Transparent.png" style="margin-top: 1%; width:70%; max-width:400px; height:auto">
             </div>
             <div class="container" style="margin-top: 1%">
                 <form style="text-align: center" novalidate>
@@ -27,19 +27,28 @@
                         </div>
                     </div>
 
-                    <div>{{"TRUST_DEVICE"|translate}}
-                        <span><ons-switch var="login.trustSwitch" ng-model="login.trusted"></ons-switch></span>
+                    <!-- TRUSTED / UNTRUSTED -->
+                    <div id="trusted-flex-container">
+                        <p id="trusted-text">{{"TRUST_DEVICE"|translate}}</p>
+                        <span id="trusted-toggle">
+                             <ons-switch var="login.trustSwitch" ng-model="login.trusted"></ons-switch>
+                        </span>
                     </div>
-                        <button class="shadow-2 button button--large " style="max-width:400px;background-color: #4CAF50; font-weight: bolder;margin: auto"
-                                ng-click="login.submit()" ng-disabled="!login.isThereSelectedHospital() || login.loading" >
-                            <span ng-if = "!login.loading" > {{"LOGIN"|translate}} </span>
-                            <span ng-if = "login.loading" > {{"LOGGINGIN"|translate}} <ons-icon icon="ion-load-d" spin="true"></ons-icon></span>
-                        </button>
+                    <br>
+
+                    <!-- LOGIN BUTTON -->
+                    <button class="shadow-2 button button--large" style="max-width:400px; background-color:#4CAF50; font-weight:bolder; margin:auto"
+                            ng-click="login.submit()" ng-disabled="!login.isThereSelectedHospital() || login.loading">
+                        <span ng-if="!login.loading">{{"LOGIN"|translate}}</span>
+                        <span ng-if="login.loading">{{"LOGGINGIN"|translate}}<ons-icon icon="ion-load-d" spin="true"></ons-icon></span>
+                    </button>
                     <br>
                 </form>
-                    <button class="button button--large--quiet" ng-click="initNavigator.pushPage('./views/login/forgot-password.html',{})" >
-                        {{"FORGOTPASSWORD"|translate}}
-                    </button>
+
+                <!-- FORGOT PASSWORD -->
+                <button class="button button--large--quiet" ng-click="initNavigator.pushPage('./views/login/forgot-password.html',{})">
+                    {{"FORGOTPASSWORD"|translate}}
+                </button>
             </div>
         </ons-col>
     </ons-row>
