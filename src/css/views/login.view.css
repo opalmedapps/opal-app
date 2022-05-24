@@ -1,0 +1,17 @@
+/* Flex container for all content related to the trusted toggle */
+#trusted-flex-container {
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+}
+
+/* The label asking the user whether to set the app as trusted */
+#trusted-text {
+    padding-left: 10px;
+    text-align: left;
+}
+
+/* The toggle switch used to set the app as trusted or untrusted */
+#trusted-toggle {
+    margin-left: 10px;
+}
