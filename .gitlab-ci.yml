@@ -55,7 +55,7 @@ debug build ios:
     - echo "Trying to find and unlock the Opal keychain"
     - ls "$HOME/Library/Keychains/"
 
-.build ios:
+build ios:
   stage: build
   rules:
     # Launches only for platforms "ios" or "all"
