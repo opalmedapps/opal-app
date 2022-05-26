@@ -70,6 +70,8 @@ build ios:
     - gem install --user-install ffi -- --enable-libffi-alloc
     - echo "$ENV"
     - npm run build:app:ios:device --env=dev
+    - pwd
+    - ls -la ./platforms/ios/build/device/
     - mv "./platforms/ios/build/device/*.ipa" "opal-$ENV.ipa"
   artifacts:
     expire_in: 1 day
