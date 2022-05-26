@@ -72,7 +72,7 @@ build ios:
     - npm run build:app:ios:device --env=dev
     - pwd
     - ls -la ./platforms/ios/build/device/
-    - mv "./platforms/ios/build/device/*.ipa" "opal-$ENV.ipa"
+    - mv ./platforms/ios/build/device/*.ipa "opal-$ENV.ipa"
   artifacts:
     expire_in: 1 day
     paths:
