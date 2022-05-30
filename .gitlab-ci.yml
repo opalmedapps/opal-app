@@ -70,3 +70,10 @@ build ios:
       - opal-$ENV.ipa
   dependencies:
     - prepare
+
+# Deletes the build tag after the build is done to avoid cluttering the tag list
+cleanup:
+  stage: .post
+  script:
+    - echo "Deleting tag; $CI_COMMIT_TAG"
+    - git push --delete origin "$CI_COMMIT_TAG"

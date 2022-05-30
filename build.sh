@@ -108,6 +108,9 @@ if [ -f .gitlab-ci.yml ]; then
   git tag -a "$TAG_NAME" -m "Created by build.sh for GitLab CI/CD"
   git push origin "$TAG_NAME"
 
+  # Delete the local tag to avoid clutter. The remote tag will be deleted by the pipeline.
+  git tag -d "$TAG_NAME"
+
   echo ""
   echo "The build status will appear shortly on the following page: https://gitlab.com/opalmedapps/qplus/-/pipelines"
 
