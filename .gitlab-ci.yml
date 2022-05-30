@@ -74,8 +74,6 @@ build ios:
 # Deletes the build tag after the build is done to avoid cluttering the tag list
 cleanup:
   stage: .post
-  before_script:
-    - git remote set-url origin "https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.com/opalmedapps/qplus.git/"
   script:
     - echo "Deleting tag; $CI_COMMIT_TAG"
-    - git push --delete origin "$CI_COMMIT_TAG"
+    - git push --delete https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.com/opalmedapps/qplus.git/ $CI_COMMIT_TAG
