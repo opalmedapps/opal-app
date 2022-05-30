@@ -99,7 +99,7 @@ if [ -f .gitlab-ci.yml ]; then
 
   # Prompt the user to continue
   echo ""
-  read -p "Press any key to proceed with a $INPUT_ENV build for $INPUT_PLATFORM (tag name: $TAG_NAME)"
+  read -p "Press enter to proceed with a $INPUT_ENV build for $INPUT_PLATFORM (tag name: $TAG_NAME)"
 
   echo "Launching build..."
   echo ""
