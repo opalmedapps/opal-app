@@ -45,12 +45,18 @@ spacesToCommas () {
 
 # ---- MAIN SCRIPT ----
 if [ -f .gitlab-ci.yml ]; then
+
+  # ---- CONTEXTUAL INFORMATION ----
   echo ""
   echo "Welcome to the GitLab CI/CD build script."
   echo ""
   echo "The current commit will be used to trigger a build on GitLab (excluding any local uncommitted changes):"
   echo ""
   git log -1 --format=short
+  echo ""
+
+  CURRENT_USER=$(git config user.name)
+  echo "Your git username (git config user.name) will be used to identify the build job: $CURRENT_USER"
   echo ""
 
   # ---- ENVIRONMENT SELECTION ----
@@ -87,14 +93,18 @@ if [ -f .gitlab-ci.yml ]; then
   fi
 
   # ---- EXECUTE BUILD ----
+  # Assemble the tag name to use to launch the build
+  CURRENT_USER_SANITIZED=$(echo "$CURRENT_USER" | sed 's/[^0-9A-Za-z]//g'); # Only keep characters allowed in tags
+  TAG_NAME="build-$INPUT_ENV-$INPUT_PLATFORM-$CURRENT_USER_SANITIZED"
+
+  # Prompt the user to continue
   echo ""
-  read -p "Press any key to proceed with a $INPUT_ENV build for $INPUT_PLATFORM "
+  read -p "Press any key to proceed with a $INPUT_ENV build for $INPUT_PLATFORM (tag name: $TAG_NAME)"
 
   echo "Launching build..."
   echo ""
 
   # Create and push a build tag. This tag will automatically be picked up by the regex in the .gitlab-ci.yml workflow rules.
-  TAG_NAME="build-$INPUT_ENV-$INPUT_PLATFORM-test"
   git tag -a "$TAG_NAME" -m "Created by build.sh for GitLab CI/CD"
   git push origin "$TAG_NAME"
 
