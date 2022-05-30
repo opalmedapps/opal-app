@@ -26,7 +26,7 @@ prepare:
     reports:
       dotenv: build.env
 
-.build android:
+build android:
   stage: build
   rules:
     # Launch only for platforms "android" or "all"
@@ -48,7 +48,7 @@ prepare:
   dependencies:
     - prepare
 
-.build ios:
+build ios:
   stage: build
   rules:
     # Launch only for platforms "ios" or "all"
