@@ -1,6 +1,8 @@
 //
 // Author David Herrera on Summer 2016, Email:davidfherrerar@gmail.com
 //
+import {Observer} from "../models/utility/observer";
+
 var myApp=angular.module('MUHCApp');
 //This service will have the user preferences for language. To be used in account settings.
 /**
@@ -39,6 +41,12 @@ myApp.service('UserPreferences', ['UserAuthorizationInfo','$rootScope','tmhDynam
     var language = '';
 
     /**
+     * @desc Observer object that notifies other parts of the app when the language changes.
+     * @type {Observer}
+     */
+    const languageObserver = new Observer();
+
+    /**
      *@ngdoc method
      *@name setLanguage
      *@methodOf MUHCApp.service:UserPreferences
@@ -57,6 +65,7 @@ myApp.service('UserPreferences', ['UserAuthorizationInfo','$rootScope','tmhDynam
             language = 'FR';
         }
         if (isAuthenticated)  window.localStorage.setItem('Language', language);
+        languageObserver.notify();
     }
 
 
@@ -78,6 +87,7 @@ myApp.service('UserPreferences', ['UserAuthorizationInfo','$rootScope','tmhDynam
             }
         },
         setLanguage: setLang,
+        observeLanguage: fun => languageObserver.attach(fun),
         /**
          *@ngdoc method
          *@name getFontSize
@@ -156,18 +166,6 @@ myApp.service('UserPreferences', ['UserAuthorizationInfo','$rootScope','tmhDynam
         getLanguage: function() {
             return language;
 
-        },
-        /**
-         *@ngdoc method
-         *@name setUserPreferences
-         *@methodOf MUHCApp.service:UserPreferences
-         *@param {Object} preferences Object containing the user preferences
-
-         *@description Setter method for patient preferences, format
-         *<pre>preferences = {Language:'EN'}</pre>
-         **/
-        setUserPreferences: function(preferences) {
-            language = preferences.Language;
         },
         /**
          *@ngdoc method
