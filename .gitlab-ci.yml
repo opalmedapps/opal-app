@@ -74,10 +74,12 @@ build ios:
   dependencies:
     - parse environment
 
+# Deployment implicitly uses a CI token ($FIREBASE_TOKEN) defined in the GitLab project settings
 .deploy to firebase:
   stage: deploy
   before_script:
-    # Implicitly uses a CI token ($FIREBASE_TOKEN) defined in the GitLab project settings
+    - npm install firebase-tools
+    # TODO check if line is necessary
     - firebase use dev
     - RELEASE_NOTES="Build created and deployed by GitLab CI/CD via tag '$CI_COMMIT_TAG' on $(git log --format=short -n 1)"
     - echo "$RELEASE_NOTES"
