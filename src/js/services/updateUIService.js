@@ -11,11 +11,11 @@
 
     UpdateUI.$inject = ['$filter','$injector','$q','Announcements','Appointments','Diagnoses','Documents',
         'EducationalMaterial','NativeNotification','Notifications','Patient','PatientTestResults',
-        'RequestToServer','TxTeamMessages'];
+        'Questionnaires','RequestToServer','TxTeamMessages','UserPreferences'];
 
     function UpdateUI($filter, $injector, $q, Announcements, Appointments, Diagnoses, Documents,
                       EducationalMaterial, NativeNotification, Notifications, Patient, PatientTestResults,
-                      RequestToServer, TxTeamMessages) {
+                      Questionnaires, RequestToServer, TxTeamMessages, UserPreferences) {
 
         /**
          *@ngdoc property
@@ -95,18 +95,37 @@
                 update: PatientTestResults.updateTestTypes,
                 lastUpdated: 0,
             },
+            'QuestionnaireList': {
+                init: Questionnaires.setQuestionnaireList,
+                update: Questionnaires.updateQuestionnaireList,
+                lastUpdated: 0,
+            },
         };
 
         let service = {
             haveBeenInitialized: haveBeenInitialized,
             getData: getData,
-            init: () => initServicesFromServer(['Patient', 'Notifications']),
+            init: init,
             clearUpdateUI: () => updateTimestamps(Object.keys(sectionServiceMappings), 0),
         };
 
         return service;
 
         ////////////////
+
+        /**
+         * @desc Initializes the data necessary for login, and sets observers to watch for changes.
+         * @returns {Promise} Resolves when initial data is done downloading.
+         */
+        function init() {
+            // When the language changes, force questionnaires to be cleared (since they're saved only for one language)
+            UserPreferences.observeLanguage(() => {
+                Questionnaires.clearAllQuestionnaire();
+                updateTimestamps('QuestionnaireList', 0);
+            });
+
+            return initServicesFromServer(['Patient', 'Notifications']);
+        }
 
         function setPromises(type, dataUserObject)
         {
