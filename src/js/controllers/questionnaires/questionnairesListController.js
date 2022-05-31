@@ -34,7 +34,6 @@
         let navigatorName = '';
 
         // variables seen from view
-        vm.loading = true;  // This is for loading the list of questionnaires
         vm.newQuestionnaireList = [];
         vm.inProgressQuestionnaireList = [];
         vm.completedQuestionnaireList = [];
@@ -47,29 +46,16 @@
         vm.goToQuestionnaireSummary = goToQuestionnaireSummary;
         vm.newQuestionnaireExist = newQuestionnaireExist;
 
+        // Used by patient-data-handler
+        vm.loadQuestionnaireList = loadQuestionnaireList;
+
         activate();
 
         // //////////////
 
         function activate() {
-
-            vm.loading = true;
-
             navigator = NavigatorParameters.getNavigator();
             navigatorName = NavigatorParameters.getNavigatorName();
-
-            Questionnaires.requestQuestionnaireList()
-                .then(function () {
-                    loadQuestionnaireList();
-
-                    vm.loading = false;
-                })
-                .catch(function(error){
-                    $timeout(function(){
-                        vm.loading = false;
-                        handleRequestError();
-                    })
-                });
 
             // this is for when the back button is pressed for a questionnaire, reload the questionnaire list to keep the list up to date
             navigator.on('postpop', function(){
@@ -153,15 +139,6 @@
         }
 
         /**
-         * @name handleRequestError
-         * @desc show a notification to the user in case a request to server fails
-         */
-        function handleRequestError (){
-            //message: 'Server problem: could not fetch data, try again later',
-            NativeNotification.showNotificationAlert($filter('translate')("SERVERERRORALERT"));
-        }
-
-        /**
          * @name removeListener
          * @desc This private function serves to remove any listener for this controller
          */
@@ -169,7 +146,4 @@
             navigator.off('postpop');
         }
     }
-
 })();
-
-
