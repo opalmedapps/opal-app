@@ -10,9 +10,10 @@ workflow:
 
 stages:
   - build
+  - deploy
 
 # Parses the environment from the tag and assigns it to a .env file to be used in the next jobs
-prepare:
+parse environment:
   stage: .pre
   script:
     - echo "$CI_COMMIT_TAG"
@@ -30,6 +31,7 @@ build android:
   stage: build
   rules:
     # Launch only for platforms "android" or "all"
+    # TODO use anchors to reduce duplication?
     - if: $CI_COMMIT_TAG =~ /^build-([a-zA-Z]+)-(all|android)(-.*)?$/
   before_script:
     - uname -a
@@ -71,9 +73,36 @@ build ios:
   dependencies:
     - prepare
 
+.deploy to firebase:
+  stage: deploy
+  before_script:
+    # Implicitly uses a CI token ($FIREBASE_TOKEN) defined in the GitLab project settings
+    - firebase use dev
+    - RELEASE_NOTES="Build created and deployed by GitLab CI/CD via tag '$CI_COMMIT_TAG' on $(git log --format=short -n 1)"
+    - echo "$RELEASE_NOTES"
+
+deploy android to firebase:
+  extends: deploy to firebase
+  rules:
+    # Launch only for platforms "android" or "all"
+    - if: $CI_COMMIT_TAG =~ /^build-([a-zA-Z]+)-(all|android)(-.*)?$/
+  script:
+    # Uses the app ID $FIREBASE_APP_DEV_ANDROID defined in the GitLab project settings
+    - firebase appdistribution:distribute opal-$ENV.apk --app $FIREBASE_APP_DEV_ANDROID --release-notes "$RELEASE_NOTES" --groups "test-ci"
+
+deploy ios to firebase:
+  extends: deploy to firebase
+  rules:
+    # Launch only for platforms "ios" or "all"
+    - if: $CI_COMMIT_TAG =~ /^build-([a-zA-Z]+)-(all|ios)(-.*)?$/
+  script:
+    # Uses the app ID $FIREBASE_APP_DEV_IOS defined in the GitLab project settings
+    - firebase appdistribution:distribute opal-$ENV.ipa --app $FIREBASE_APP_DEV_IOS --release-notes "$RELEASE_NOTES" --groups "test-ci"
+
 # Deletes the build tag after the build is done to avoid cluttering the tag list
-cleanup:
+.cleanup:
   stage: .post
   script:
     - echo "Deleting tag; $CI_COMMIT_TAG"
+    # TODO does not have the required permissions to execute successfully
     - git push --delete https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.com/opalmedapps/qplus.git/ $CI_COMMIT_TAG
