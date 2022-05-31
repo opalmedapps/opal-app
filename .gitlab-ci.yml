@@ -47,8 +47,9 @@ build android:
     expire_in: 1 day
     paths:
       - opal-$ENV.apk
+  # TODO check if dependency is necessary
   dependencies:
-    - prepare
+    - parse environment
 
 build ios:
   stage: build
@@ -71,7 +72,7 @@ build ios:
     paths:
       - opal-$ENV.ipa
   dependencies:
-    - prepare
+    - parse environment
 
 .deploy to firebase:
   stage: deploy
