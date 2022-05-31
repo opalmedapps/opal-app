@@ -109,6 +109,7 @@ if [ -f .gitlab-ci.yml ]; then
   git push origin "$TAG_NAME"
 
   # Delete the local tag to avoid clutter. The remote tag will be deleted by the pipeline.
+  echo "Cleaning up local tag"
   git tag -d "$TAG_NAME"
 
   echo ""
