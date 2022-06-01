@@ -74,7 +74,7 @@ build ios:
   dependencies:
     - parse environment
 
-# Deployment implicitly uses a CI token ($FIREBASE_TOKEN) defined in the GitLab project settings
+# Deployment uses a CI token ($FIREBASE_TOKEN) defined in the GitLab project settings
 .deploy to firebase:
   stage: deploy
   before_script:
@@ -89,7 +89,7 @@ deploy android to firebase:
     - if: $CI_COMMIT_TAG =~ /^build-([a-zA-Z]+)-(all|android)(-.*)?$/
   script:
     # Uses the app ID $FIREBASE_APP_DEV_ANDROID defined in the GitLab project settings
-    - firebase appdistribution:distribute opal-$ENV.apk --app $FIREBASE_APP_DEV_ANDROID --release-notes "$RELEASE_NOTES" --groups "test-ci"
+    - firebase appdistribution:distribute opal-$ENV.apk --app $FIREBASE_APP_DEV_ANDROID --release-notes "$RELEASE_NOTES" --groups "test-ci" --token "$FIREBASE_TOKEN"
 
 deploy ios to firebase:
   extends: .deploy to firebase
@@ -98,7 +98,7 @@ deploy ios to firebase:
     - if: $CI_COMMIT_TAG =~ /^build-([a-zA-Z]+)-(all|ios)(-.*)?$/
   script:
     # Uses the app ID $FIREBASE_APP_DEV_IOS defined in the GitLab project settings
-    - firebase appdistribution:distribute opal-$ENV.ipa --app $FIREBASE_APP_DEV_IOS --release-notes "$RELEASE_NOTES" --groups "test-ci"
+    - firebase appdistribution:distribute opal-$ENV.ipa --app $FIREBASE_APP_DEV_IOS --release-notes "$RELEASE_NOTES" --groups "test-ci" --token "$FIREBASE_TOKEN"
 
 # Deletes the build tag after the build is done to avoid cluttering the tag list
 .cleanup:
