@@ -83,6 +83,7 @@ build ios:
     - npm install -g firebase-tools
     - RELEASE_NOTES="Build created and deployed by GitLab CI/CD via tag '$CI_COMMIT_TAG' on $(git log --format=short -n 1)"
     - echo "$RELEASE_NOTES"
+    - export GOOGLE_APPLICATION_CREDENTIALS=$GOOGLE_APPLICATION_CREDENTIALS
 
 deploy android to firebase:
   extends: .deploy to firebase
