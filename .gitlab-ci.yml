@@ -84,6 +84,12 @@ build ios:
     - RELEASE_NOTES="CI CD test of CLI upload"
     - echo "$RELEASE_NOTES"
     - export GOOGLE_APPLICATION_CREDENTIALS=$GOOGLE_APPLICATION_CREDENTIALS
+    - echo $ENV
+    - echo $FIREBASE_APP_DEV_ANDROID
+    - echo $FIREBASE_APP_DEV_IOS
+    - echo $GOOGLE_APPLICATION_CREDENTIALS
+    - head -3 $GOOGLE_APPLICATION_CREDENTIALS
+    - tail -3 $GOOGLE_APPLICATION_CREDENTIALS
 
 deploy android to firebase:
   extends: .deploy to firebase
