@@ -80,8 +80,7 @@ build ios:
 .deploy to firebase:
   stage: deploy
   before_script:
-    # RELEASE_NOTES="Build created and deployed by GitLab CI/CD via tag '$CI_COMMIT_TAG' on $(git log --format=short -n 1)"
-    - RELEASE_NOTES="CI CD test of CLI upload"
+    - RELEASE_NOTES="Build created and deployed by GitLab CI/CD via tag '$CI_COMMIT_TAG' on $(git log --format=short -n 1)"
     - echo "$RELEASE_NOTES"
     - export GOOGLE_APPLICATION_CREDENTIALS=$GOOGLE_APPLICATION_CREDENTIALS
     - echo $ENV
