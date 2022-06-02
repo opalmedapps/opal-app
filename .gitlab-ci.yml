@@ -80,7 +80,6 @@ build ios:
 .deploy to firebase:
   stage: deploy
   before_script:
-    - npm install -g firebase-tools
     # RELEASE_NOTES="Build created and deployed by GitLab CI/CD via tag '$CI_COMMIT_TAG' on $(git log --format=short -n 1)"
     - RELEASE_NOTES="CI CD test of CLI upload"
     - echo "$RELEASE_NOTES"
