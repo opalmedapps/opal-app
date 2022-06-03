@@ -41,10 +41,6 @@
          */
         let Notifications = [];
 
-        let lastUpdated = new Date();
-
-        let hasFetchedAll = false;
-
         /**
          * @ngdoc property
          * @name MUHCApp.service.#notificationTypes
@@ -69,6 +65,7 @@
          *                      refreshType: 'Documents'
          *                    } ...
          */
+        // TODO UpdateFunction (not currently used) assigns a new item to the right service (e.g. new document to Documents)
         let notificationTypes = {
             'Document': {
                 icon: 'ion-android-document',
@@ -234,8 +231,6 @@
             goToPost: goToPost,
             setNotificationsLanguage: setNotificationsLanguage,
             clearNotifications: clearNotifications,
-            requestNewNotifications: requestNewNotifications,
-            getLastUpdated: getLastUpdated,
             markAllRead: markAllRead,
         };
 
@@ -297,7 +292,6 @@
         function setUserNotifications(notifications) {
             Notifications = [];
             addUserNotifications(notifications);
-            hasFetchedAll = true;
         }
 
         /******************************
@@ -305,9 +299,6 @@
          ******************************/
 
         function initNotifications(notifications) {
-            lastUpdated = new Date();
-            lastUpdated.setSeconds(lastUpdated.getSeconds() - 10);    // Initialize time to 10 seconds "before" now
-
             setUserNotifications(notifications);
 
             /* SetNotificationsLanguage removes all broken notifications from the list.
@@ -523,56 +514,6 @@
          **/
         function clearNotifications() {
             Notifications = [];
-            lastUpdated = new Date();
-            lastUpdated.setSeconds(lastUpdated.getSeconds() - 10);    // Initialize time to 10 seconds "before" now to force requestNewNotifications to run the very first time
-        }
-
-        /**
-         * @ngdoc method
-         * @name requestNewNotifications
-         * @methodOf MUHCApp.service:Notifications
-         * @description Grabs all the notifications from the server.
-         **/
-        function requestNewNotifications() {
-            let r = $q.defer();
-
-            if ((lastUpdated.getTime() > Date.now() - 10000) && (!CheckInService.checkinNotificationsExist()))
-                r.resolve({});
-            else {
-                RequestToServer.sendRequestWithResponse('NotificationsNew', {LastUpdated: lastUpdated.getTime()})
-                    .then(function (response) {
-                        lastUpdated = new Date();
-                        if (response.Data && response.Data.length > 0) {
-                            response.Data.forEach(function (notif) {
-
-                                // If notification content exists.. update the notification content
-                                if (notif[1] !== "undefined" && notif[1] !== undefined
-                                    && notificationTypes[notif[0].NotificationType].hasOwnProperty('updateFunction')) {
-                                    notificationTypes[notif[0].NotificationType].updateFunction([notif[1]]);
-                                }
-
-                                let notification = (!!notif[0]) ? notif[0] : notif;
-                                updateUserNotifications([notification]);
-                            })
-                        }
-
-                        // If have just checked in.. then update boolean saying that we have received notification
-                        if (CheckInService.checkinNotificationsExist()) {
-                            CheckInService.retrievedCheckinNotifications();
-                        }
-
-                        r.resolve({});
-                    })
-                    .catch(function (error) {
-                        console.log('Error in requestNewNotifications: ', error);
-                        r.reject(error);
-                    });
-            }
-            return r.promise;
-        }
-
-        function getLastUpdated() {
-            return lastUpdated;
         }
     }
 })();

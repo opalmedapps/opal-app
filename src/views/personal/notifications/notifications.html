@@ -10,6 +10,11 @@
 
     <network-banner></network-banner>
 
+    <!-- DATA REFRESHER -->
+    <ons-pull-hook ng-action="notif.pullHookRefresh($done)">
+        <ons-pull-hook-content></ons-pull-hook-content>
+    </ons-pull-hook>
+
     <!--
       -- Temporary multi-category data handler to allow notifications to work until they are refactored.
       -- This temporary fix downloads ALL data which may be referenced by a notification.
@@ -17,10 +22,11 @@
       -- and this handler should be removed.
       -- See QSCCD-122 (especially subtask QSCCD-123), and QSCCD-43.
       -->
-    <patient-data-handler categories="Announcements,Appointments,Documents,EducationalMaterial,TxTeamMessages"
+    <patient-data-handler categories="Announcements,Appointments,Documents,EducationalMaterial,Notifications,TxTeamMessages"
                           display-function="notif.displayNotifications"
-                          hide-content="notif.hideContent"
-    ></patient-data-handler>
+                          refresh="notif.pullHookRefresh"
+                          hide-content="notif.hideContent">
+    </patient-data-handler>
 
     <div ng-hide="notif.hideContent || notif.isLoading">
         <ons-list ng-repeat="notification in notif.notifications"

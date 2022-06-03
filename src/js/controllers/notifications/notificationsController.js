@@ -40,20 +40,6 @@
             });
 
             bindEvents();
-
-            // TODO: OPTIMIZE THIS... THIS SHOULD BE A BACKGROUND UPDATE THAT SILENTLY UPDATES THE LIST INSTEAD OF DOING A COMPLETE REFRESH
-            Notifications.requestNewNotifications()
-                .then(function () {
-                   displayNotifications();
-                })
-                .catch(function (error) {
-                    console.log(error);
-                    if(Notifications.getUserNotifications().length === 0){
-                        // Display error message
-                    } else {
-                        displayNotifications()
-                    }
-                })
         }
 
         function bindEvents() {

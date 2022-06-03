@@ -24,7 +24,6 @@
         vm.calledApp = null;
         vm.RoomLocation = '';
         vm.showHomeScreenUpdate = null;
-        vm.loading = true;
 
         vm.checkinState = {
             noAppointments: true,
@@ -109,9 +108,6 @@
             //display next appointment
             setNextAppointment();
 
-            // display new notifications, if any
-            checkForNewNotifications();
-
             // Display current check in status
             evaluateCheckIn();
 
@@ -120,7 +116,6 @@
             // Display notifications badge (unread number)
             setBadges();
         }
-
 
         function setMetaData() {
             if(MetaData.isFirstTimeHome()){
@@ -158,25 +153,6 @@
             vm.ProfileImage=Patient.getProfileImage();
             vm.language = UserPreferences.getLanguage();
             vm.noUpcomingAppointments=false;
-        }
-
-        function checkForNewNotifications(){
-            Notifications.requestNewNotifications()
-                .then(function(){
-                    vm.loading = false;
-
-                    // Display notifications badge (unread number)
-                    setBadges();
-                })
-                .catch(function(error){
-                    vm.loading = false;
-
-                    // TODO: Notify user about error
-                    console.log(error);
-
-                    // Display notifications badge (unread number)
-                    setBadges();
-                });
         }
 
         /**
