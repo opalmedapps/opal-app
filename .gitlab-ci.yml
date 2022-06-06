@@ -4,23 +4,18 @@ default:
 
 workflow:
   rules:
-    # Launch a build only for commits that have been tagged with the correct syntax (e.g. build-staging-ios-optionaldetails)
-    # See build.sh for details
-    - if: $CI_COMMIT_TAG =~ /^build-([a-zA-Z]+)-(all|android|ios)(-.*)?$/
+    - when: always
 
 stages:
   - build
   - deploy
 
-# Parses the environment from the tag and assigns it to a .env file to be used in the next jobs
-parse environment:
+# Selects the environment to use and assigns it to a .env file to be used in the next jobs
+# This job can be modified in the future to select between different environments
+select environment:
   stage: .pre
   script:
-    - echo "$CI_COMMIT_TAG"
-    - TAG_PARAMS=$(echo "$CI_COMMIT_TAG" | sed -r 's/-/ /g')
-    - echo "$TAG_PARAMS"
-    - set -- $TAG_PARAMS
-    - ENV="$2"
+    - ENV="dev"
     - echo "ENV=$ENV" >> build.env
     - cat build.env
   artifacts:
@@ -30,11 +25,12 @@ parse environment:
 build android:
   stage: build
   rules:
-    # Launch only for platforms "android" or "all"
-    # TODO use anchors to reduce duplication?
-    - if: $CI_COMMIT_TAG =~ /^build-([a-zA-Z]+)-(all|android)(-.*)?$/
+    - if: $CI_COMMIT_BRANCH == "default-test"
+      when: always
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+      when: always
+    - when: manual
   before_script:
-    - uname -a
     - npm -v
     - npm install
   script:
@@ -47,22 +43,21 @@ build android:
     expire_in: 1 day
     paths:
       - opal-$ENV.apk
-  # TODO check if dependency is necessary
-  dependencies:
-    - parse environment
 
 build ios:
   stage: build
   rules:
-    # Launch only for platforms "ios" or "all"
-    - if: $CI_COMMIT_TAG =~ /^build-([a-zA-Z]+)-(all|ios)(-.*)?$/
+    - if: $CI_COMMIT_BRANCH == "default-test"
+      when: always
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+      when: always
+    - when: manual
   before_script:
-    - uname -a
     - npm -v
     - npm install
   script:
-    # fixes Bus Error when cordova invokes pod install
-    # see: https://stackoverflow.com/a/70581304
+    # Fixes Bus Error when cordova invokes pod install
+    # See: https://stackoverflow.com/a/70581304
     - gem install --user-install ffi -- --enable-libffi-alloc
     - echo "$ENV"
     - npm run build:app:ios:device --env=dev
@@ -71,8 +66,6 @@ build ios:
     expire_in: 1 day
     paths:
       - opal-$ENV.ipa
-  dependencies:
-    - parse environment
 
 # Deployment implicitly uses a service account ($GOOGLE_APPLICATION_CREDENTIALS) defined in the GitLab project settings
 # This service account provides permissions for uploading to Firebase App Distribution
@@ -82,36 +75,19 @@ build ios:
   before_script:
     - RELEASE_NOTES="Build created and deployed by GitLab CI/CD via tag '$CI_COMMIT_TAG' on $(git log --format=short -n 1)"
     - echo "$RELEASE_NOTES"
-    - export GOOGLE_APPLICATION_CREDENTIALS=$GOOGLE_APPLICATION_CREDENTIALS
-    - echo $ENV
-    - echo $FIREBASE_APP_DEV_ANDROID
-    - echo $FIREBASE_APP_DEV_IOS
-    - echo $GOOGLE_APPLICATION_CREDENTIALS
-    - head -3 $GOOGLE_APPLICATION_CREDENTIALS
-    - tail -3 $GOOGLE_APPLICATION_CREDENTIALS
 
 deploy android to firebase:
   extends: .deploy to firebase
-  rules:
-    # Launch only for platforms "android" or "all"
-    - if: $CI_COMMIT_TAG =~ /^build-([a-zA-Z]+)-(all|android)(-.*)?$/
   script:
     # Uses the app ID $FIREBASE_APP_DEV_ANDROID defined in the GitLab project settings
     - firebase appdistribution:distribute opal-$ENV.apk --app $FIREBASE_APP_DEV_ANDROID --release-notes "$RELEASE_NOTES" --groups "test-ci"
+  needs:
+    - job: build android
 
 deploy ios to firebase:
   extends: .deploy to firebase
-  rules:
-    # Launch only for platforms "ios" or "all"
-    - if: $CI_COMMIT_TAG =~ /^build-([a-zA-Z]+)-(all|ios)(-.*)?$/
   script:
     # Uses the app ID $FIREBASE_APP_DEV_IOS defined in the GitLab project settings
     - firebase appdistribution:distribute opal-$ENV.ipa --app $FIREBASE_APP_DEV_IOS --release-notes "$RELEASE_NOTES" --groups "test-ci"
-
-# Deletes the build tag after the build is done to avoid cluttering the tag list
-.cleanup:
-  stage: .post
-  script:
-    - echo "Deleting tag; $CI_COMMIT_TAG"
-    # TODO does not have the required permissions to execute successfully
-    - git push --delete https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.com/opalmedapps/qplus.git/ $CI_COMMIT_TAG
+  needs:
+    - job: build ios
