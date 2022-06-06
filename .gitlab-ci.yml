@@ -73,21 +73,33 @@ build ios:
 .deploy to firebase:
   stage: deploy
   before_script:
-    - RELEASE_NOTES="Build created and deployed by GitLab CI/CD via tag '$CI_COMMIT_TAG' on $(git log --format=short -n 1)"
+    - RELEASE_NOTES="Build created and deployed by GitLab CI/CD on $(git log --format=short -n 1)"
     - echo "$RELEASE_NOTES"
 
 deploy android to firebase:
   extends: .deploy to firebase
+  rules:
+    - if: $CI_COMMIT_BRANCH == "default-test"
+      when: always
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+      when: always
   script:
     # Uses the app ID $FIREBASE_APP_DEV_ANDROID defined in the GitLab project settings
     - firebase appdistribution:distribute opal-$ENV.apk --app $FIREBASE_APP_DEV_ANDROID --release-notes "$RELEASE_NOTES" --groups "test-ci"
   needs:
+    - job: select environment
     - job: build android
 
 deploy ios to firebase:
   extends: .deploy to firebase
+  rules:
+    - if: $CI_COMMIT_BRANCH == "default-test"
+      when: always
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+      when: always
   script:
     # Uses the app ID $FIREBASE_APP_DEV_IOS defined in the GitLab project settings
     - firebase appdistribution:distribute opal-$ENV.ipa --app $FIREBASE_APP_DEV_IOS --release-notes "$RELEASE_NOTES" --groups "test-ci"
   needs:
+    - job: select environment
     - job: build ios
