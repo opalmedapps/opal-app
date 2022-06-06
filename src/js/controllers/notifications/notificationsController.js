@@ -32,8 +32,6 @@
         ///////////////////////////
 
         function activate(){
-            vm.isLoading = true;
-
             // Create the popover menu
             ons.createPopover('./views/personal/notifications/notifications-popover.html', {parentScope: $scope}).then(function (popover) {
                 $scope.notificationsPopover = popover;
@@ -54,7 +52,6 @@
             if (notifications.length === 0)  {
                 $timeout(function() {
                     vm.noNotifications = true;
-                    vm.isLoading = false;
                 });
                 return
             }
@@ -62,7 +59,6 @@
 
             $timeout(function() {
                 vm.noNotifications = false;
-                vm.isLoading = false;
                 vm.notifications = $filter('orderBy')(notifications,'notifications.DateAdded', true);
             });
         }

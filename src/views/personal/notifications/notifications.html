@@ -28,7 +28,7 @@
                           hide-content="notif.hideContent">
     </patient-data-handler>
 
-    <div ng-hide="notif.hideContent || notif.isLoading">
+    <div ng-hide="notif.hideContent">
         <ons-list ng-repeat="notification in notif.notifications"
                   ng-click="notif.goToNotification($index,notification)">
             <ons-list-header class="person-list-header" ng-show="{{notif.notifications | showHeader : $index : 'DateAdded' }}" ng-class="fontSizeTitle">
