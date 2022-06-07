@@ -28,17 +28,21 @@
 
             loadingmodal.show();
 
-            UpdateUI.init()
-                .then(function() {
-                    $state.go('Home');
-                    RequestToServer.sendRequestWithResponse('AccountChange', {NewValue: UserPreferences.getLanguage(), FieldToChange: 'Language'});
+            UpdateUI.init().then(function() {
+                $state.go('Home');
+                RequestToServer.sendRequestWithResponse('AccountChange', {NewValue: UserPreferences.getLanguage(), FieldToChange: 'Language'});
 
-                    //fetch all the tab metadata TODO: add the fetching of all the other data
-                    MetaData.init();
+                //fetch all the tab metadata TODO: add the fetching of all the other data
+                MetaData.init();
 
-                    loadingmodal.hide();
-                    clearTimeout(timeOut);
-                });
+                loadingmodal.hide();
+                clearTimeout(timeOut);
+
+            }).catch(error => {
+                console.error(error);
+                // If UpdateUI initialization fails, then the user cannot log in
+                NativeNotification.showNotificationAlert($filter('translate')("ERROR_CONTACTING_HOSPITAL"), LogOutService.logOut);
+            });
         }
 
         //Timeout to show, alerting user of server problems.
