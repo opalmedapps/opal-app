@@ -16,96 +16,84 @@
     function UpdateUI($filter, $injector, $q, Announcements, Appointments, Diagnoses, Documents,
                       EducationalMaterial, NativeNotification, Notifications, Patient, PatientTestResults,
                       Questionnaires, RequestToServer, TxTeamMessages, UserPreferences) {
+        /**
+         * @desc The categories of data that are initialized first in this service (see init()), to be available immediately after login.
+         * @type {string[]}
+         */
+        let categoriesDownloadedAtLogin = ['Patient', 'Notifications'];
 
         /**
-         *@ngdoc property
-         *@name  MUHCApp.service.#promiseFields
-         *@propertyOf MUHCApp.service:UpdateUI
-         *@description Array contains the fields for the patient that perform asynchronous operations.
-         * This is done so that we have a generic way to make sure we wait for them whenever we are setting or updating patient information.
-         * In the current case we have to wait for the fields to download the images into the device storage
-         <pre>
-         //Contents so far:
-         var promiseFields =  ['Patient'];
-         **/
-        var promiseFields = ['Patient'];
-        /**
-         *@ngdoc property
-         *@name  MUHCApp.service.#sectionServiceMappings
-         *@propertyOf MUHCApp.service:UpdateUI
-         *@description Array contains all the details concerning setting or update for patient fields, or patient modules
-         <pre>
-         //Example:
-         var sectionServiceMappings={
-              'Patient':{
-                  setOnline:Patient.setUserFieldsOnline,
-                  update:Patient.setUserFieldsOnline,
-                  lastUpdated: 0,
-              },
-              ...
-         **/
+         * @desc Mapping of all request types made by this service to the listener. Each key is the name of a
+         *       request, and each value contains a last updated timestamp and functions used to save response
+         *       data into the service corresponding to the category of data received.
+         *
+         *       - set: Saves the data into the service by first clearing away all existing data.
+         *       - update: Saves the data by overwriting duplicate data (according to SerNum) and leaving the rest alone.
+         *       - lastUpdated: Timestamp at which data was last requested from the listener.
+         * @type {{'Category': {set: function, lastUpdated: number, update: function}}}
+         */
         let sectionServiceMappings = {
-            'Documents': {
-                init: Documents.setDocuments,
-                update: Documents.updateDocuments,
-                lastUpdated: 0,
-            },
-            'Patient': {
-                setOnline: Patient.setUserFieldsOnline,
-                update: Patient.setUserFieldsOnline,
+            'Announcements': {
+                set: Announcements.setAnnouncements,
+                update: Announcements.updateAnnouncements,
                 lastUpdated: 0,
             },
             'Appointments': {
-                init: Appointments.setUserAppointments,
+                set: Appointments.setUserAppointments,
                 update: Appointments.updateUserAppointments,
                 lastUpdated: 0,
             },
             'Diagnosis': {
-                init: Diagnoses.setDiagnoses,
+                set: Diagnoses.setDiagnoses,
                 update: Diagnoses.updateDiagnoses,
                 lastUpdated: 0,
             },
-            'TxTeamMessages': {
-                init: TxTeamMessages.setTxTeamMessages,
-                update: TxTeamMessages.updateTxTeamMessages,
-                lastUpdated: 0,
-            },
-            'Announcements': {
-                init: Announcements.setAnnouncements,
-                update: Announcements.updateAnnouncements,
+            'Documents': {
+                set: Documents.setDocuments,
+                update: Documents.updateDocuments,
                 lastUpdated: 0,
             },
             'EducationalMaterial': {
-                init: EducationalMaterial.setEducationalMaterial,
+                set: EducationalMaterial.setEducationalMaterial,
                 update: EducationalMaterial.updateEducationalMaterial,
                 lastUpdated: 0,
             },
             'Notifications': {
-                init: Notifications.initNotifications,
+                set: Notifications.initNotifications,
                 update: Notifications.updateUserNotifications,
                 lastUpdated: 0,
             },
+            'Patient': {
+                set: Patient.setUserFieldsOnline,
+                update: Patient.setUserFieldsOnline,
+                lastUpdated: 0,
+            },
             'PatientTestDates': {
-                init: PatientTestResults.setTestDates,
+                set: PatientTestResults.setTestDates,
                 update: PatientTestResults.updateTestDates,
                 lastUpdated: 0,
             },
             'PatientTestTypes': {
-                init: PatientTestResults.setTestTypes,
+                set: PatientTestResults.setTestTypes,
                 update: PatientTestResults.updateTestTypes,
                 lastUpdated: 0,
             },
             'QuestionnaireList': {
-                init: Questionnaires.setQuestionnaireList,
+                set: Questionnaires.setQuestionnaireList,
                 update: Questionnaires.updateQuestionnaireList,
+                lastUpdated: 0,
+            },
+            'TxTeamMessages': {
+                set: TxTeamMessages.setTxTeamMessages,
+                update: TxTeamMessages.updateTxTeamMessages,
                 lastUpdated: 0,
             },
         };
 
         let service = {
+            init: init,
             haveBeenInitialized: haveBeenInitialized,
             getData: getData,
-            init: init,
             clearUpdateUI: () => updateTimestamps(Object.keys(sectionServiceMappings), 0),
         };
 
@@ -115,93 +103,44 @@
 
         /**
          * @desc Initializes the data necessary for login, and sets observers to watch for changes.
-         * @returns {Promise} Resolves when initial data is done downloading.
+         * @returns {Promise<void>} Resolves when initial data is done downloading.
          */
-        function init() {
+        async function init() {
+            // Download the data that is required immediately at login
+            let response = await RequestToServer.sendRequestWithResponse('Login', { Fields: categoriesDownloadedAtLogin });
+            validateResponse(response);
+            await setServices(response.Data);
+            updateTimestamps(categoriesDownloadedAtLogin, response.Timestamp);
+
             // When the language changes, force questionnaires to be cleared (since they're saved only for one language)
             UserPreferences.observeLanguage(() => {
                 Questionnaires.clearAllQuestionnaire();
                 updateTimestamps('QuestionnaireList', 0);
             });
-
-            return initServicesFromServer(['Patient', 'Notifications']);
-        }
-
-        function setPromises(type, dataUserObject)
-        {
-            var promises = [];
-            for(var i = 0;i<promiseFields.length;i++)
-            {
-                if(dataUserObject.hasOwnProperty(promiseFields[i])) promises.push(sectionServiceMappings[promiseFields[i]][type](dataUserObject[promiseFields[i]]));
-            }
-            return promises;
-        }
-
-        function setServices(dataUserObject,mode)
-        {
-            var r = $q.defer();
-            var promises = setPromises(mode,dataUserObject);
-            $q.all(promises).then(function(){
-                for(var key in dataUserObject)
-                {
-                    if(sectionServiceMappings.hasOwnProperty(key)&&promiseFields.indexOf(key)==-1)
-                    {
-                        sectionServiceMappings[key].init(dataUserObject[key]);
-                    }
-                }
-                r.resolve(true);
-            }).catch(function(error)
-            {
-                console.log(error);
-                r.reject(error);
-            });
-            return r.promise;
-        }
-
-        function updateServices(dataUserObject){
-            var r = $q.defer();
-            $q.all(setPromises('update', dataUserObject)).then(function(result)
-            {
-                for(var key in dataUserObject)
-                {
-                    if(sectionServiceMappings.hasOwnProperty(key)&&promiseFields.indexOf(key)==-1)
-                    {
-                        sectionServiceMappings[key].update(dataUserObject[key]);
-                    }
-                }
-                r.resolve(true);
-            }).catch(function(error)
-            {
-                console.log(error);
-                r.reject(error);
-            });
-            return r.promise;
         }
 
         /**
-         * Initialize sections
+         * @desc Takes the data from a listener response and assigns it the right services for each category
+         *       using the 'set' functions in sectionServiceMappings.
+         * @param responseData A response from the listener containing data in one or many categories.
          */
-        //Initializes all the services online at either login, or simple entering the app once
-        //patient is already register
-        function initServicesFromServer(parameters)
-        {
-            //Sets the path for data fetching
-            var r=$q.defer();
-            //Initializing all the services
-            RequestToServer.sendRequestWithResponse('Login', {Fields:parameters}).then(function(response)
-            {
-                setServices(response.Data, 'setOnline').then(function()
-                {
-                    updateTimestamps(parameters, response.Timestamp);
-                    r.resolve(true);
-                });
-            }).catch(function(error) {
-                console.error(error);
-                const LogOutService = $injector.get('LogOutService');
-                NativeNotification.showNotificationAlert($filter('translate')("ERROR_CONTACTING_HOSPITAL"), LogOutService.logOut);
-                r.reject(false);
-            });
-            return r.promise;
+        function setServices(responseData) {
+            if (responseData === 'empty') return;
+            Object.entries(responseData).forEach(([category, data]) => {
+                if(sectionServiceMappings.hasOwnProperty(category)) sectionServiceMappings[category].set(data);
+            })
+        }
+
+        /**
+         * @desc Takes the data from a listener response and assigns it the right services for each category
+         *       using the 'update' functions in sectionServiceMappings.
+         * @param responseData A response from the listener containing data in one or many categories.
+         */
+        function updateServices(responseData) {
+            if (responseData === 'empty') return;
+            Object.entries(responseData).forEach(([category, data]) => {
+                if(sectionServiceMappings.hasOwnProperty(category)) sectionServiceMappings[category].update(data);
+            })
         }
 
         /**
@@ -217,7 +156,8 @@
             };
 
             let response = await RequestToServer.sendRequestWithResponse('Refresh', refreshParams);
-            if (response.Data && response.Data !== "empty") await updateServices(response.Data);
+            validateResponse(response);
+            await updateServices(response.Data);
             updateTimestamps(parameters, response.Timestamp);
         }
 
@@ -229,7 +169,8 @@
          */
         async function setSection(parameters) {
             let response = await RequestToServer.sendRequestWithResponse('Refresh', {Fields: parameters});
-            if (response.Data && response.Data !== "empty") await setServices(response.Data, 'setOnline');
+            validateResponse(response);
+            await setServices(response.Data);
             updateTimestamps(parameters, response.Timestamp);
         }
 
@@ -244,7 +185,7 @@
          * @param {number} time - The new value to which to set lastUpdated.
          */
         function updateTimestamps(categories, time) {
-            if(angular.isArray(categories)) for (let section of categories) sectionServiceMappings[section].lastUpdated = time;
+            if (angular.isArray(categories)) for (let section of categories) sectionServiceMappings[section].lastUpdated = time;
             else sectionServiceMappings[categories].lastUpdated = time;
         }
 
@@ -314,6 +255,30 @@
             let setPromise = toSet.length === 0 ? undefined : setSection(toSet);
             let updatePromise = toUpdate.length === 0 ? undefined : updateSection(toUpdate);
             await Promise.all([setPromise, updatePromise]);
+        }
+
+        /**
+         * @desc Validates that a response object (of type 'Login' or 'Refresh') has the expected properties.
+         * @param response The response to check.
+         * @throws Throws an error if a required property is missing.
+         */
+        function validateResponse(response) {
+            let printInvalidResponse = () => console.error(response);
+
+            // Check for required properties
+            let requiredProperties = ['Data', 'Timestamp'];
+            requiredProperties.forEach(property => {
+                if (!response.hasOwnProperty(property)) {
+                    printInvalidResponse();
+                    throw new Error(`Invalid response object received in UpdateUI service; '${property}' property is missing`);
+                }
+            });
+
+            // Check the format of the Data property
+            if (typeof response.Data !== 'object' && response.Data !== 'empty') {
+                printInvalidResponse();
+                throw new Error(`Malformed Data property in response object from UpdateUI service: type = ${typeof response.Data}`);
+            }
         }
     }
 })();
