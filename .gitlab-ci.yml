@@ -6,21 +6,12 @@ workflow:
   rules:
     - when: always
 
+variables:
+  ENV: "dev"
+
 stages:
   - build
   - deploy
-
-# Selects the environment to use and assigns it to a .env file to be used in the next jobs
-# This job can be modified in the future to select between different environments
-select environment:
-  stage: .pre
-  script:
-    - ENV="dev"
-    - echo "ENV=$ENV" >> build.env
-    - cat build.env
-  artifacts:
-    reports:
-      dotenv: build.env
 
 build android:
   stage: build
