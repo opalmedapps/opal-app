@@ -26,7 +26,6 @@ build android:
     - when: manual
   before_script:
     - npm -v
-    - npm cache clean --force
     - npm install
   script:
     - java -version
@@ -49,7 +48,6 @@ build ios:
     - when: manual
   before_script:
     - npm -v
-    - npm cache clean --force
     - npm install
   script:
     # Fixes Bus Error when cordova invokes pod install
