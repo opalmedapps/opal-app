@@ -54,7 +54,7 @@ The following is the top level anatomy of the folders and their description. As 
 ├── CHANGES # Description of changes per version
 ├── README.md
 ├── .gitlab # Contains templates used in GitLab
-├── deploy.sh # CI set of instructions for given a commit
+├── .gitlab-ci.yml # GitLab CI/CD pipeline description file
 ├── env # Folder where the environment specific files live
     ├── preprod
     ├── prod
