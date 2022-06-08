@@ -106,3 +106,4 @@ deploy ios to firebase:
     - firebase appdistribution:distribute opal-$ENV.ipa --app $FIREBASE_APP_IOS --release-notes "$RELEASE_NOTES" --groups $FIREBASE_GROUP
   needs:
     - job: build ios
+#
