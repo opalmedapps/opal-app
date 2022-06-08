@@ -19,8 +19,6 @@ stages:
 build android:
   stage: build
   rules:
-    - if: $CI_COMMIT_BRANCH == "default-test"
-      when: always
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
       when: always
     - when: manual
@@ -41,8 +39,6 @@ build android:
 build ios:
   stage: build
   rules:
-    - if: $CI_COMMIT_BRANCH == "default-test"
-      when: always
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
       when: always
     - when: manual
@@ -73,8 +69,6 @@ build ios:
 deploy android to firebase:
   extends: .deploy to firebase
   rules:
-    - if: $CI_COMMIT_BRANCH == "default-test"
-      when: always
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
       when: always
   script:
@@ -86,8 +80,6 @@ deploy android to firebase:
 deploy ios to firebase:
   extends: .deploy to firebase
   rules:
-    - if: $CI_COMMIT_BRANCH == "default-test"
-      when: always
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
       when: always
   script:
