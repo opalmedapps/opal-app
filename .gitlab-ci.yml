@@ -16,6 +16,15 @@ stages:
   - build
   - deploy
 
+# Cache npm dependencies
+# See: https://docs.gitlab.com/ee/ci/caching/#cache-nodejs-dependencies
+cache:
+  key:
+    files:
+      - package-lock.json
+  paths:
+    - .npm/
+
 build android:
   stage: build
   rules:
@@ -26,7 +35,8 @@ build android:
     - when: manual
   before_script:
     - npm -v
-    - npm install
+    # Preferred over npm install for CI jobs
+    - npm ci --cache .npm --prefer-offline
   script:
     - java -version
     - gradle -v
@@ -48,7 +58,8 @@ build ios:
     - when: manual
   before_script:
     - npm -v
-    - npm install
+    # Preferred over npm install for CI jobs
+    - npm ci --cache .npm --prefer-offline
   script:
     # Fixes Bus Error when cordova invokes pod install
     # See: https://stackoverflow.com/a/70581304
