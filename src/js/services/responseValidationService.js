@@ -37,7 +37,6 @@
 
         function validate(response, encryptionKey, timeOut) {
             let timestamp = response.Timestamp;
-
             // TODO improve error handling flow, taking into account which response types are encrypted and which ones aren't
             if (response.Code === Params.REQUEST.ENCRYPTION_ERROR) {
                 return {error: response}
@@ -49,7 +48,7 @@
 
                 if (!encryptionKey) response = EncryptionService.decryptData(response);
 
-                if (response.Code === Params.REQUEST.SUCCESS) {
+                if (response.Code === Params.REQUEST.SUCCESS || response.status_code === Params.API.SUCCESS) {
                     return {success: response};
                 } else {
                     return handleResponseError(response)

@@ -7,11 +7,11 @@
 
     HomeController.$inject = [
         'Appointments', 'CheckInService', 'Patient', '$scope', '$filter', 'Notifications', 'NavigatorParameters',
-        'Permissions', 'UserPreferences', 'NetworkStatus', 'MetaData', 'UserHospitalPreferences'];
+        'Permissions', 'UserPreferences', 'NetworkStatus', 'MetaData', 'UserHospitalPreferences', 'RequestToServer', 'Params'];
 
     /* @ngInject */
     function HomeController(Appointments, CheckInService, Patient, $scope, $filter, Notifications, NavigatorParameters,
-                            Permissions, UserPreferences, NetworkStatus, MetaData, UserHospitalPreferences)
+                            Permissions, UserPreferences, NetworkStatus, MetaData, UserHospitalPreferences, RequestToServer, Params)
     {
         var vm = this;
 
@@ -57,7 +57,6 @@
          */
 
         function activate() {
-
             // Initialize the navigator for push and pop of pages.
             NavigatorParameters.setParameters({'Navigator':'homeNavigator'});
             NavigatorParameters.setNavigator(homeNavigator);
@@ -100,6 +99,9 @@
          * Initializes the home page view by calling a bunch of helper functiosn
          */
         function homePageInit() {
+            // Get Data from the new backend api
+            getDisplayData();
+
             //Initialize modal size based on font size
             initModalSize();
 
@@ -119,6 +121,19 @@
 
             // Display notifications badge (unread number)
             setBadges();
+            
+        }
+
+        async function getDisplayData() {
+            let requestParameters = {
+                method: 'get',
+                url: '/api/app/home',
+                headers: Params.API.REQUEST_HEADERS,
+            }
+            const result = await RequestToServer.sendRequestWithResponse('api', requestParameters);
+            const homePageData = result.data;
+            vm.notificationsUnreadNumber = homePageData.unread_notification_count;
+            console.log('==>', homePageData)
         }
 
 
