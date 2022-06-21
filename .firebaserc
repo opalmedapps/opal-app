@@ -1,7 +1,9 @@
 {
   "projects": {
-    "default": "firebase-brilliant-inferno-767",
+    "default": "opal-registration-beta",
+    "dev": "opal-registration-beta",
     "preprod": "opal-prod",
+    "prod": "firebase-brilliant-inferno-767",
     "staging": "opal-dev"
   }
 }
