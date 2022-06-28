@@ -10,19 +10,27 @@
 
     <network-banner></network-banner>
 
-    <!--
-      -- Temporary multi-category data handler to allow notifications to work until they are refactored.
-      -- This temporary fix downloads ALL data which may be referenced by a notification.
-      -- Notifications should be refactored instead to deal with patient data no longer being available at login,
-      -- and this handler should be removed.
-      -- See QSCCD-122 (especially subtask QSCCD-123), and QSCCD-43.
-      -->
-    <patient-data-handler categories="Announcements,Appointments,Documents,EducationalMaterial,TxTeamMessages"
-                          display-function="notif.displayNotifications"
-                          hide-content="notif.hideContent"
-    ></patient-data-handler>
+    <!-- DATA REFRESHER -->
+    <ons-pull-hook ng-action="notif.pullHookRefresh($done)">
+        <ons-pull-hook-content></ons-pull-hook-content>
+    </ons-pull-hook>
 
-    <div ng-hide="notif.hideContent || notif.isLoading">
+    <!-- DATA HANDLER AND INITIAL LOADING WHEEL -->
+    <patient-data-handler categories="Notifications"
+                          display-function="notif.displayNotifications"
+                          refresh="notif.pullHookRefresh"
+                          hide-content="notif.hideContent">
+    </patient-data-handler>
+
+    <!-- LOADING WHEEL SHOWN AFTER CLICKING ON AN ITEM THAT NEEDS DOWNLOADING -->
+    <!-- margintop = usual height + height of the tab bar -->
+    <loading-spinning-circle ng-show="notif.loading"
+                             loading-message="{{'LOADING'|translate}}"
+                             margintop="calc(25vh + 43px)"
+                             mask-page="true">
+    </loading-spinning-circle>
+
+    <div ng-hide="notif.hideContent">
         <ons-list ng-repeat="notification in notif.notifications"
                   ng-click="notif.goToNotification($index,notification)">
             <ons-list-header class="person-list-header" ng-show="{{notif.notifications | showHeader : $index : 'DateAdded' }}" ng-class="fontSizeTitle">
@@ -41,7 +49,7 @@
                         <header>
                             <span ng-class="[fontSizeTitle, 'item-desc', {'item-unread': notification.ReadStatus==='0'}]">{{notification.Title}}</span>
                         </header>
-                        <p ng-class="[fontSizeDesc, 'item-desc', {'item-unread': notification.ReadStatus==='0'}]">{{notification.Desc}}</p>
+                        <p ng-class="[fontSizeDesc, 'item-desc', {'item-unread': notification.ReadStatus==='0'}]">{{notification.RefTableRowTitle}}</p>
                     </ons-col>
                 </ons-row>
             </ons-list-item>

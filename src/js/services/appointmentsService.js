@@ -583,25 +583,7 @@ myApp.service('Appointments', ['$q', 'RequestToServer','$cordovaCalendar','UserA
             }
 
         },
-        /**
-         *@ngdoc method
-         *@name getAppointmentName
-         *@methodOf MUHCApp.service:Appointments
-         *@param {Object} serNum AppointmentSerNum
-         *@returns {Boolean} Returns an object with the labels for the appointments.
-         **/
-        getAppointmentName:function(serNum)
-        {
-            //
-            //
-            for (var i = 0; i < userAppointmentsArray.length; i++) {
-                if(userAppointmentsArray[i].AppointmentSerNum == serNum)
-                {
 
-                    return {NameEN:userAppointmentsArray[i].AppointmentType_EN, NameFR: userAppointmentsArray[i].AppointmentType_FR };
-                }
-            }
-        },
         /**
          *@ngdoc method
          *@name readAppointmentBySerNum

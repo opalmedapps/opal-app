@@ -101,11 +101,6 @@
          */
         var errorsExist = false;
 
-        /**
-         *
-         */
-        var notificationsExist = false;
-
 
         ///////////////////////////////////////////
 
@@ -114,8 +109,6 @@
             evaluateCheckinState: evaluateCheckinState,
             getCheckInApps: getCheckInApps,
             clear: clear,
-            checkinNotificationsExist: checkinNotificationsExist,
-            retrievedCheckinNotifications: retrievedCheckinNotifications
         };
 
         ////////////////////////////////////////////
@@ -134,7 +127,6 @@
                             checkinToAllAppointments()
                                 .then(function (res) {
                                     attemptedCheckin = true;
-                                    notificationsExist = true;
                                     updateCheckinState(res.appts);
                                     r.resolve(res.status);
                                 })
@@ -438,14 +430,6 @@
                 .catch(function () { r.reject({status: 'ERROR', appts: null}); });
 
             return r.promise;
-        }
-
-        function checkinNotificationsExist(){
-            return notificationsExist;
-        }
-
-        function retrievedCheckinNotifications(){
-            notificationsExist = false;
         }
 
         function updateCheckedInAppointments(checkedinApps) {

@@ -30,6 +30,16 @@ myApp.service('NavigatorParameters',function(){
             parameters=param;
         },
         /**
+         * @desc Updates some values of the saved parameters. Parameters that are not given a new value are left as-is.
+         * @param {Object} newParams Object containing the parameters to update (keys and new values).
+         */
+        updateParameters: newParams => {
+            parameters = {
+                ...parameters,
+                ...newParams,
+            }
+        },
+        /**
          *@ngdoc method
          *@name setParameters
          *@methodOf MUHCApp.service:NavigatorParameters

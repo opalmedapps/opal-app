@@ -155,6 +155,7 @@
     "NOPATIENTDOCUMENTSAVAILABLE": "Vous n'avez aucun document de patient disponible",
     "NORMAL_RANGE": "Plage normale",
     "NOTEAMMESSAGES": "Pas de messages de l'équipe de traitement",
+    "NOTIFICATION_OPEN_ERROR": "Une erreur s'est produite lors du chargement de cette notification.",
     "NOTIFICATIONS": "Notifications",
     "NOT_ALLOWED": "L'enregistrement sera disponible dès l'arrivée à l'hôpital.",
     "OF": "de",
