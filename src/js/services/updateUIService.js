@@ -20,7 +20,7 @@
          * @desc The categories of data that are initialized first in this service (see init()), to be available immediately after login.
          * @type {string[]}
          */
-        let categoriesDownloadedAtLogin = ['Patient', 'Notifications'];
+        let categoriesDownloadedAtLogin = ['Patient'];
 
         /**
          * @desc Mapping of all request types made by this service to the listener. Each key is the name of a
@@ -94,6 +94,7 @@
             init: init,
             haveBeenInitialized: haveBeenInitialized,
             getData: getData,
+            getSingleItem: getSingleItem,
             clearUpdateUI: () => updateTimestamps(Object.keys(sectionServiceMappings), 0),
         };
 
@@ -255,6 +256,21 @@
             let setPromise = toSet.length === 0 ? undefined : setSection(toSet);
             let updatePromise = toUpdate.length === 0 ? undefined : updateSection(toUpdate);
             await Promise.all([setPromise, updatePromise]);
+        }
+
+        /**
+         * @desc Requests a single item in a category by SerNum, and saves it in the right service using the update function.
+         * @param {string} category The category of data item to download.
+         * @param {number|string} serNum The SerNum of the item in its category (e.g. DocumentSerNum, AppointmentSerNum, etc.)
+         * @returns {Promise<void>} Resolves once the item has been successfully downloaded and saved.
+         */
+        async function getSingleItem(category, serNum) {
+            validateCategories(category);
+
+            // Request and save the single item by SerNum
+            let response = await RequestToServer.sendRequestWithResponse('GetOneItem', {category: category, serNum: serNum});
+            validateResponse(response);
+            await updateServices(response.Data);
         }
 
         /**

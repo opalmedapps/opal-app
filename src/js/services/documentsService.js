@@ -209,22 +209,7 @@ function(UserPreferences,UserAuthorizationInfo,$q,$filter,FileManagerService,Req
                 }
             }
         },
-        /**
-         *@ngdoc method
-         *@name getDocumentNames
-         *@methodOf MUHCApp.service:Documents
-         *@param {String} serNum DocumentSerNum to be read
-         *@description Gets the AliasName_EN, and AliasName_FR for the notifications
-         *@returns {Object} Returns object containing only the names for a particular document, used by the {@link MUHCApp.service:Notifications Notifications Service}
-         **/
-        getDocumentNames:function(serNum)
-        {
-            for (var i = 0; i < documentsArray.length; i++) {
-                if(documentsArray[i].DocumentSerNum==serNum){
-                    return {NameEN: documentsArray[i].AliasName_EN, NameFR:documentsArray[i].AliasName_FR};
-                }
-            }
-        },
+
         /**
          *@ngdoc method
          *@name getDocumentBySerNum

@@ -193,26 +193,7 @@ myApp.service('TxTeamMessages', ['$filter','RequestToServer','LocalStorage', 'Us
                 }
             }
         },
-        /**
-         *@ngdoc method
-         *@name getTxTeamMessageName
-         *@methodOf MUHCApp.service:TxTeamMessages
-         *@param {String} serNum TxTeamMessageSerNum to be read
-         *@description Gets the PostName_EN, and PostName_FR for the notifications
-         *@returns {Object} Returns object containing only the names for a particular TxTeamMessage, used by the {@link MUHCApp.service:Notifications Notifications Service}
-         **/
-        getTxTeamMessageName:function(serNum)
-        {
 
-
-            for (var i = 0; i < txTeamMessagesArray.length; i++) {
-                if(txTeamMessagesArray[i].TxTeamMessageSerNum === serNum)
-                {
-
-                    return { NameEN: txTeamMessagesArray[i].PostName_EN, NameFR:txTeamMessagesArray[i].PostName_FR};
-                }
-            }
-        },
         /**
          *@ngdoc method
          *@name getTxTeamMessageUrl
