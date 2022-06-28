@@ -1,20 +1,6 @@
 .profile-wrapper {
     padding: 16px 10px 0 10px;
 }
-
-.profile-image {
-    width: 150px;
-    height: 150px;
-    border-radius: 100%;
-    -webkit-border-radius: 100%;
-    background-color: #ccc;
-}
-
-.profile-name {
-    font-size: 18px;
-    padding: 4px 0 2px 0;
-}
-
 .profile-email {
     font-size: 15px;
     opacity: 0.4;
