@@ -304,23 +304,6 @@ function ($q, $filter, LocalStorage, FileManagerService, UserPreferences, Reques
                 }
             }
         },
-        /**
-         *@ngdoc method
-         *@name getEducationalMaterialName
-         *@methodOf MUHCApp.service:EducationalMaterial
-         *@param {String} serNum EducationalMaterialSerNum to be read
-         *@description Gets the Name_EN, and Name_FR for the notifications
-         *@returns {Object} Returns object containing only the names for a particular educational material, used by the {@link MUHCApp.service:Notifications Notifications Service}
-         **/
-        getEducationalMaterialName:function(serNum)
-        {
-            for (var i = 0; i < educationalMaterialArray.length; i++) {
-                if(educationalMaterialArray[i].EducationalMaterialSerNum === serNum )
-                {
-                    return {NameEN: educationalMaterialArray[i].Name_EN, NameFR: educationalMaterialArray[i].Name_FR};
-                }
-            }
-        },
 
         /**
          *@ngdoc method
@@ -404,7 +387,7 @@ function ($q, $filter, LocalStorage, FileManagerService, UserPreferences, Reques
          **/
         getEducationalMaterialUrl:function()
         {
-            return {Url:'./views/personal/education/individual-material.html'};
+            return './views/personal/education/individual-material.html';
         },
         /**
          *@ngdoc method

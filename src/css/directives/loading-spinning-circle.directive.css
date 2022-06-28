@@ -1,0 +1,10 @@
+/* If the directive's maskPage = true, this class is used to make the directive hide the page contents */
+.loading-wheel-float {
+    background-color: #F9F9F9;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+}

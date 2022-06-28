@@ -155,6 +155,7 @@
   "NOPATIENTDOCUMENTSAVAILABLE": "You have no patient documents available",
   "NORMAL_RANGE": "Normal Range",
   "NOTEAMMESSAGES": "You have no treatment team messages",
+  "NOTIFICATION_OPEN_ERROR": "An error occurred while loading this notification.",
   "NOTIFICATIONS": "Notifications",
   "NOT_ALLOWED": "Check-in will be available on arrival at the hospital.",
   "OF": "of",

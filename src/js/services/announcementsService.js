@@ -54,7 +54,6 @@
             getAnnouncementBySerNum: getAnnouncementBySerNum,
             readAnnouncementBySerNum: readAnnouncementBySerNum,
             readAnnouncement: readAnnouncement,
-            getAnnouncementName: getAnnouncementName,
             setLanguage: setLanguage,
             getAnnouncementUrl: getAnnouncementUrl,
             clearAnnouncements: clearAnnouncements,
@@ -235,24 +234,6 @@
         {
             announcements[index].ReadStatus = '1';
             RequestToServer.sendRequest('Read',{'Id':serNum, 'Field':'Announcements'});
-        }
-
-        /**
-         *@ngdoc method
-         *@name getAnnouncementName
-         *@methodOf MUHCApp.service:Announcements
-         *@param {String} serNum AnnouncementSerNum to be read
-         *@description Gets the PostName_EN, and PostName_FR for the notifications
-         *@returns {Object} Returns object containing only the names for a particular announcement, used by the {@link MUHCApp.service:Notifications Notifications Service}
-         **/
-        function getAnnouncementName(serNum)
-        {
-            for (var i = 0; i < announcements.length; i++) {
-                if(announcements[i].AnnouncementSerNum === serNum)
-                {
-                    return { NameEN: announcements[i].PostName_EN, NameFR:announcements[i].PostName_FR};
-                }
-            }
         }
 
         /**
