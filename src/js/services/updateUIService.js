@@ -17,12 +17,6 @@
                       EducationalMaterial, NativeNotification, Notifications, Patient, PatientTestResults,
                       Questionnaires, RequestToServer, TxTeamMessages, UserPreferences) {
         /**
-         * @desc The categories of data that are initialized first in this service (see init()), to be available immediately after login.
-         * @type {string[]}
-         */
-        let categoriesDownloadedAtLogin = ['Patient'];
-
-        /**
          * @desc Mapping of all request types made by this service to the listener. Each key is the name of a
          *       request, and each value contains a last updated timestamp and functions used to save response
          *       data into the service corresponding to the category of data received.
@@ -61,11 +55,6 @@
             'Notifications': {
                 set: Notifications.initNotifications,
                 update: Notifications.updateUserNotifications,
-                lastUpdated: 0,
-            },
-            'Patient': {
-                set: Patient.setUserFieldsOnline,
-                update: Patient.setUserFieldsOnline,
                 lastUpdated: 0,
             },
             'PatientTestDates': {
@@ -107,12 +96,6 @@
          * @returns {Promise<void>} Resolves when initial data is done downloading.
          */
         async function init() {
-            // Download the data that is required immediately at login
-            let response = await RequestToServer.sendRequestWithResponse('Login', { Fields: categoriesDownloadedAtLogin });
-            validateResponse(response);
-            await setServices(response.Data);
-            updateTimestamps(categoriesDownloadedAtLogin, response.Timestamp);
-
             // When the language changes, force questionnaires to be cleared (since they're saved only for one language)
             UserPreferences.observeLanguage(() => {
                 Questionnaires.clearAllQuestionnaire();

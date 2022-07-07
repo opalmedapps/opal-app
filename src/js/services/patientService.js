@@ -5,16 +5,12 @@ var myApp=angular.module('MUHCApp');
 /**
  *@ngdoc service
  *@name MUHCApp.service:Patient
- *@requires $q
- *@requires $cordovaDevice
- *@requires MUHCApp.service:FileManagerService
+ *@requires MUHCApp.service:UserAuthorizationInfo
  *@requires MUHCApp.service:UserPreferences
- *@requires MUHCApp.service:LocalStorage
  *@description API service used to access the patient fields.
  **/
-myApp.service('Patient',['$q','$cordovaDevice','FileManagerService','LocalStorage',
-    'UserPreferences', 'UserAuthorizationInfo',
-    function($q, $cordovaDevice,FileManagerService,LocalStorage,UserPreferences, UserAuthorizationInfo) {
+myApp.service('Patient',['$injector','UserAuthorizationInfo','UserPreferences',
+    function($injector, UserAuthorizationInfo, UserPreferences) {
 
     /**
      *@ngdoc property
@@ -82,42 +78,50 @@ myApp.service('Patient',['$q','$cordovaDevice','FileManagerService','LocalStorag
 
     /**
      *@ngdoc property
-     *@name  MUHCApp.service.#UserSerNum
+     *@name  MUHCApp.service.#PatientSerNum
      *@propertyOf MUHCApp.service:Patient
      *@description Property containing PatientSerNum of the patient
      **/
-    var UserSerNum='';
+    var PatientSerNum = '';
 
-    return{
+    /**
+     *@ngdoc method
+     *@name setPatient
+     *@methodOf MUHCApp.service:Patient
+     *@param {Object} patientFields Contains patient fields
+     *@description Setter method for the patient service.
+     **/
+    function setPatient(patientFields) {
+        if (!patientFields) throw new Error("Failed to set empty patientFields");
+
+        var font = window.localStorage.getItem(UserAuthorizationInfo.getUsername() + 'fontSize');
+        UserPreferences.setFontSize(font||'large');
+        FirstName = patientFields.FirstName;
+        LastName = patientFields.LastName;
+        accessLevel = patientFields.AccessLevel;
+        Alias = patientFields.Alias;
+        TelNum = patientFields.TelNum;
+        Email = patientFields.Email;
+        TestUser = patientFields.TestUser;
+        PatientSerNum = patientFields.PatientSerNum;
+        ProfileImage = (patientFields.ProfileImage && patientFields.ProfileImage !== '')
+            ? `data:image/${patientFields.DocumentType};base64,${patientFields.ProfileImage}`
+            : '';
+        patientFields.ProfileImage = ProfileImage;
+
+        return patientFields;
+    }
+
+    return {
         /**
-         *@ngdoc method
-         *@name setUserFieldsOnline
-         *@methodOf MUHCApp.service:Patient
-         *@param {Object} patientFields Contains patient fields
-         *@description Setter method for the patient service, saves image profile image into device storage
-         **/
-        setUserFieldsOnline:function(patientFields){
-            var r=$q.defer();
-
-            patientFields=patientFields[0];
-            var font = window.localStorage.getItem(UserAuthorizationInfo.getUsername() + 'fontSize');
-            UserPreferences.setFontSize(font||'large');
-            if(typeof patientFields=='undefined') return;
-            FirstName=patientFields.FirstName;
-            LastName=patientFields.LastName;
-            accessLevel=patientFields.AccessLevel;
-            Alias=patientFields.Alias;
-            TelNum=patientFields.TelNum;
-            Email=patientFields.Email;
-            TestUser=patientFields.TestUser;
-            UserSerNum=patientFields.PatientSerNum;
-            ProfileImage = (patientFields.ProfileImage && typeof patientFields.ProfileImage !== 'undefined' && patientFields.ProfileImage !== '')
-                ? 'data:image/'+patientFields.DocumentType+';base64,'+patientFields.ProfileImage
-                : "";
-            patientFields.ProfileImage = ProfileImage;
-
-            r.resolve(patientFields);
-            return r.promise;
+         * @desc Requests the Patient entry for the current user and saves it in this service.
+         * @returns {Promise<Object>} Resolves with the processed Patient information once downloaded and saved.
+         */
+        initPatient: async () => {
+            let RequestToServer = $injector.get('RequestToServer');
+            let result = await RequestToServer.sendRequestWithResponse('UserPatient');
+            if (!result.Data || result.Data === "empty") throw new Error("Failed to download the user's patient information; no data was returned");
+            return setPatient(result.Data);
         },
         /**
          *@ngdoc method
@@ -209,12 +213,12 @@ myApp.service('Patient',['$q','$cordovaDevice','FileManagerService','LocalStorag
         },
         /**
          *@ngdoc method
-         *@name getUserSerNum
+         *@name getPatientSerNum
          *@methodOf MUHCApp.service:Patient
          *@returns {String} Returns PatientSerNum
          **/
-        getUserSerNum:function(){
-            return UserSerNum;
+        getPatientSerNum:function(){
+            return PatientSerNum;
         },
         /**
          *@ngdoc method
@@ -248,7 +252,7 @@ myApp.service('Patient',['$q','$cordovaDevice','FileManagerService','LocalStorag
             Alias='';
             TelNum='';
             Email='';
-            UserSerNum='';
+            PatientSerNum='';
         }
     };
 }]);

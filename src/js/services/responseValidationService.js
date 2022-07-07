@@ -39,17 +39,17 @@
             let timestamp = response.Timestamp;
 
             // TODO improve error handling flow, taking into account which response types are encrypted and which ones aren't
-            if (response.Code === Params.REQUEST.ENCRYPTION_ERROR) {
+            if (response.Code === Params.REQUEST.CODE.ENCRYPTION_ERROR) {
                 return {error: response}
             }
-            else if (response.Code === Params.REQUEST.INVALID_VERSION) return handleResponseError(response);
+            else if (response.Code === Params.REQUEST.CODE.INVALID_VERSION) return handleResponseError(response);
             else {
                 response.Timestamp = timestamp;
                 clearTimeout(timeOut);
 
                 if (!encryptionKey) response = EncryptionService.decryptData(response);
 
-                if (response.Code === Params.REQUEST.SUCCESS) {
+                if (response.Code === Params.REQUEST.CODE.SUCCESS) {
                     return {success: response};
                 } else {
                     return handleResponseError(response)
@@ -64,11 +64,11 @@
          */
         function handleResponseError(response){
             switch (response.Code) {
-                case Params.REQUEST.SERVER_ERROR:
-                case Params.REQUEST.TOO_MANY_ATTEMPTS:
-                case Params.REQUEST.CLIENT_ERROR:
+                case Params.REQUEST.CODE.SERVER_ERROR:
+                case Params.REQUEST.CODE.TOO_MANY_ATTEMPTS:
+                case Params.REQUEST.CODE.CLIENT_ERROR:
                     return {error: response};
-                case Params.REQUEST.INVALID_VERSION:
+                case Params.REQUEST.CODE.INVALID_VERSION:
                     handleInvalidVersionError();
                     return {error: {Code: 'INVALID_VERSION_ERROR'}}
             }

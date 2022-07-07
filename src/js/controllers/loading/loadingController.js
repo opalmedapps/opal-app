@@ -28,7 +28,7 @@
 
             loadingmodal.show();
 
-            UpdateUI.init().then(function() {
+            Patient.initPatient().then(UpdateUI.init).then(function() {
                 $state.go('Home');
                 RequestToServer.sendRequestWithResponse('AccountChange', {NewValue: UserPreferences.getLanguage(), FieldToChange: 'Language'});
 
