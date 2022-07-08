@@ -14,16 +14,17 @@
         .module('MUHCApp')
         .factory('ResponseValidator', ResponseValidator);
 
-    ResponseValidator.$inject = ['FirebaseService', '$state', '$window', 'Security', 'EncryptionService', 'Params'];
+    ResponseValidator.$inject = ['$filter', 'FirebaseService', '$state', '$window', 'Security', 'EncryptionService', 'Params', 'Toast'];
 
     /* @ngInject */
-    function ResponseValidator(FirebaseService, $state, $window, Security, EncryptionService, Params) {
+    function ResponseValidator($filter, FirebaseService, $state, $window, Security, EncryptionService, Params, Toast) {
 
         /**
          * Expose API to consumers
          */
         return {
-            validate: validate
+            validate: validate,
+            validateApiResponse: validateApiResponse
         };
 
         //////////////////////////////////
@@ -37,7 +38,6 @@
 
         function validate(response, encryptionKey, timeOut) {
             let timestamp = response.Timestamp;
-
             // TODO improve error handling flow, taking into account which response types are encrypted and which ones aren't
             if (response.Code === Params.REQUEST.CODE.ENCRYPTION_ERROR) {
                 return {error: response}
@@ -56,6 +56,21 @@
                 }
             }
         }
+
+        /**
+         * @description Validate response incoming from the new listener's section. On error show the toast with the error message.
+         * @param {object} response Object fetch from firebase 
+         * @returns {object} A decrypted response object on success, an error data object on error
+         */
+        function validateApiResponse(response) {
+            let decryptedresponse = (typeof response.status_code === 'number') ? response : EncryptionService.decryptData(response);
+            if (response.status_code !== Params.API.SUCCESS) {
+                return new Error(`API ERROR: ${response.status_code}: ${response.data.errorMessage}`);
+            }
+            return decryptedresponse;
+        }
+
+
 
         /**
          * Handles responses that have an error code

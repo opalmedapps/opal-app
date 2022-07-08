@@ -75,8 +75,14 @@
                 <ons-list-item modifier="chevron" class="item" ng-if="h.allowedModules.hasOwnProperty('NTF') && h.allowedModules['NTF']" ng-click="homeNavigator.pushPage('views/personal/notifications/notifications.html')">
                     <ons-row align="center">
                         <ons-col width="60px" style="text-align: center">
-                            <ons-icon icon="ion-android-notifications" size="2x" style="color:#FFC107"></ons-icon><span class="notification"
-                                      ng-show="h.notificationsUnreadNumber>0">{{h.notificationsUnreadNumber}}</span>
+                            <ons-icon 
+                                icon="ion-android-notifications"
+                                size="2x"
+                                style="color:#FFC107">
+                            </ons-icon>
+                            <span class="notification" ng-show="h.notificationsUnreadNumber > 0">
+                                {{h.notificationsUnreadNumber}}
+                            </span>
                         </ons-col>
                         <ons-col>
                             <header>
