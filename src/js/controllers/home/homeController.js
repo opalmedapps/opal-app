@@ -7,11 +7,11 @@
 
     HomeController.$inject = [
         '$timeout', 'Appointments', 'CheckInService', 'Patient', '$scope', '$filter', 'NavigatorParameters',
-        'UserPreferences', 'NetworkStatus', 'UserHospitalPreferences', 'RequestToServer', 'Params'];
+        'UserPreferences', 'NetworkStatus', 'UserHospitalPreferences', 'RequestToServer', 'Params', 'Version'];
 
     /* @ngInject */
     function HomeController($timeout, Appointments, CheckInService, Patient, $scope, $filter, NavigatorParameters,
-                            UserPreferences, NetworkStatus, UserHospitalPreferences, RequestToServer, Params)
+                            UserPreferences, NetworkStatus, UserHospitalPreferences, RequestToServer, Params, Version)
     {
         var vm = this;
 
@@ -24,6 +24,8 @@
         vm.calledApp = null;
         vm.RoomLocation = '';
         vm.showHomeScreenUpdate = null;
+        vm.loading = true;
+        $scope.infoModalData = [];
 
         vm.checkinState = {
             noAppointments: true,
@@ -92,6 +94,13 @@
             setPatientInfo();
             //display next appointment
             setNextAppointment();
+
+            // display new notifications, if any
+            checkForNewNotifications();
+
+            // display version updates info, if any
+            checkForVersionUpdates();
+
             // Display current check in status
             evaluateCheckIn();
         }
@@ -130,6 +139,52 @@
             vm.ProfileImage=Patient.getProfileImage();
             vm.language = UserPreferences.getLanguage();
             vm.noUpcomingAppointments=false;
+        }
+        
+        /**
+         * @name checkForVersionUpdates
+         * @desc get latest version info according to the current version
+         */
+        function checkForVersionUpdates() {
+            $scope.infoModalTitle = 'Current Version: ' + Version.currentVersion();
+            Version.requestVersionUpdates()
+                .then(function(response){
+                    vm.loading = false;
+                    response.forEach(function(value, index) {
+                        let infoData = {};
+                        let description = vm.language == 'EN' ? value.description_en : value.description_fr;
+                        description = formatVersionDescription(description);
+                        infoData.title = value.version;
+                        infoData.content = description;
+                        $scope.infoModalData.push(infoData);
+                    });
+                    $timeout(function () {
+                        infoModal.show();
+                    },200);
+                })
+                .catch(function(error){
+                    vm.loading = false;
+
+                    // TODO: Notify user about error
+                    console.log(error);
+
+                    // Display notifications badge (unread number)
+                });
+        }
+
+        /**
+         * @name formatVersionDescription
+         * @desc parse the description from string to array
+         */
+        function formatVersionDescription(description) {
+            let descriptions = '';
+            if (typeof description == 'string' && description.length > 0) {
+                const descriptionArray = JSON.parse(description);
+                descriptionArray.forEach(function(value, index) {
+                    descriptions += '\u2022 ' + value + '\n\n';
+                });
+            }
+            return descriptions;
         }
 
         /**
@@ -213,6 +268,10 @@
          */
         function goToAcknowledgements() {
             homeNavigator.pushPage('./views/templates/content.html', {contentType: 'acknowledgements'});
+        }
+
+        function test() {
+            console.log('test');
         }
     }
 })();
