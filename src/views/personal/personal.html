@@ -1,7 +1,7 @@
 <ons-page ng-controller="PersonalTabController as tab" ng-device-backbutton="tab.personalDeviceBackButton()">
     <generic-toolbar title="{{'MYCHART'|translate}}" style-class="fontSizeTitle">
         <right-content>   
-            <ons-toolbar-button ng-click="personalNavigator.pushPage('views/tabs/info-page-tabs.html',{param:home})">
+            <ons-toolbar-button ng-click="personalNavigator.pushPage('views/tabs/info-page-tabs.html',{id:'general'})">
                 <ons-icon icon="fa-info-circle"></ons-icon>
             </ons-toolbar-button>
         </right-content> 
