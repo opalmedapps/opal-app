@@ -111,6 +111,7 @@
 .notification {
 	position: absolute;
 	margin-left: -10px;
+	font-size: 12px;
 }
 .about-link {
 	background-color: #E3F2FD;
