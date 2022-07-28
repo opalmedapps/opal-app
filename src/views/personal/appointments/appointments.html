@@ -76,10 +76,10 @@
                         <ons-col>
                             <div style="line-height:1;padding:2px">
                                 <header>
-                                    <span ng-if="calendar.HasMeaningfulAlias(app['AppointmentType_' + calendar.language])" class="item-title" ng-class="fontSizeTitle">
+                                    <span ng-if="calendar.HasMeaningfulAlias(app['AppointmentType_' + calendar.language])" class="item-title" ng-class="[fontSizeTitle, {'item-unread': app.ReadStatus==='0'}]">
                                         {{app["AppointmentType_" + calendar.language]}}
                                     </span>
-                                    <span ng-if="!calendar.HasMeaningfulAlias(app['AppointmentType_' + calendar.language])" class="item-title" ng-class="fontSizeTitle">
+                                    <span ng-if="!calendar.HasMeaningfulAlias(app['AppointmentType_' + calendar.language])" class="item-title" ng-class="[fontSizeTitle, {'item-unread': app.ReadStatus==='0'}]">
                                         {{app["ResourceDescription"]}}
                                     </span>
                                 </header>

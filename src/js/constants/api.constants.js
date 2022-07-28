@@ -21,6 +21,10 @@
                 HOME: {
                     method: 'get',
                     url: '/api/app/home',
+                },
+                CHART: {
+                    method: 'get',
+                    url: '/api/app/chart',
                 }
             }
         });

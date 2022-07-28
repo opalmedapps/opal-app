@@ -37,6 +37,7 @@
                 <ons-row align="center">
                     <ons-col width="60px" style="text-align: center">
                         <ons-icon style="color: #FFC107" size="2x" icon="fa-calendar"></ons-icon>
+                        <span class="notification" ng-show="tab.appointmentsUnreadNumber > 0">{{tab.appointmentsUnreadNumber}}</span>
                     </ons-col>
                     <ons-col>
                         <header>
@@ -67,9 +68,8 @@
                            ng-click="personalNavigator.pushPage('views/personal/documents/documents.html')">
                 <ons-row align="center" >
                     <ons-col width="60px" style="text-align: center">
-                        <div>
-                            <ons-icon icon="fa-folder" size="2x" style="color:#ffdf80"></ons-icon><span class="notification" ng-show="tab.documentsUnreadNumber>0">{{tab.documentsUnreadNumber}}</span>
-                        </div>
+                        <ons-icon icon="fa-folder" size="2x" style="color:#ffdf80"></ons-icon>
+                        <span class="notification" ng-show="tab.documentsUnreadNumber > 0">{{tab.documentsUnreadNumber}}</span>
                     </ons-col>
                     <ons-col>
                         <header>
@@ -84,9 +84,8 @@
                            ng-click="personalNavigator.pushPage('views/personal/treatment-team-messages/team-messages.html')">
                 <ons-row align="center" >
                     <ons-col width="60px" style="text-align: center">
-                        <div>
-                            <ons-icon icon="fa-user-md" size="2x" style="color:#2196F3"></ons-icon><span class="notification" ng-show="tab.txTeamMessagesUnreadNumber>0">{{tab.txTeamMessagesUnreadNumber}}</span>
-                        </div>
+                        <ons-icon icon="fa-user-md" size="2x" style="color:#2196F3"></ons-icon>
+                        <span class="notification" ng-show="tab.txTeamMessagesUnreadNumber > 0">{{tab.txTeamMessagesUnreadNumber}}</span>
                     </ons-col>
                     <ons-col>
                         <header>
@@ -101,10 +100,8 @@
                 ng-click="personalNavigator.pushPage('views/personal/education/education.html')">
                 <ons-row align="center" >
                     <ons-col width="60px" style="text-align: center">
-                        <div>
-                            <i class="fa fa-solid fa-book fa-2x" style="color: #9575CD"></i>
-                            <span class="notification" ng-show="tab.educationalMaterialsNumber > 0">{{tab.educationalMaterialsNumber}}</span>
-                        </div>
+                        <i class="fa fa-solid fa-book fa-2x" style="color: #9575CD"></i>
+                        <span class="notification" ng-show="tab.educationalMaterialsNumber > 0">{{tab.educationalMaterialsNumber}}</span>
                     </ons-col>
                     <ons-col>
                         <header>
