@@ -4,8 +4,8 @@
 
 angular
     .module('MUHCApp')
-    .service('RequestToServer',['UserAuthorizationInfo', 'EncryptionService', 'FirebaseService', 'Constants', 'UUID', 'ResponseValidator', 'Params', 'UserPreferences',
-    function( UserAuthorizationInfo, EncryptionService, FirebaseService, Constants, UUID, ResponseValidator, Params, UserPreferences){
+    .service('RequestToServer',['UserAuthorizationInfo', 'EncryptionService', 'FirebaseService', 'Constants', 'UUID', 'ResponseValidator', 'Params', 'UserPreferences', 'Patient',
+    function( UserAuthorizationInfo, EncryptionService, FirebaseService, Constants, UUID, ResponseValidator, Params, UserPreferences, Patient){
 
         let firebase_url;
         let response_url;
@@ -30,7 +30,7 @@ angular
             if (parameters) parameters = JSON.parse(JSON.stringify(parameters));
             let requestType = encryptionKey ? typeOfRequest : EncryptionService.encryptData(typeOfRequest);
             let requestParameters = encryptionKey ? EncryptionService.encryptWithKey(parameters, encryptionKey) : EncryptionService.encryptData(parameters);
-            let request_object = getRequestObject(requestType, requestParameters);
+            let request_object = getRequestObject(requestType, requestParameters, typeOfRequest);
             let reference = getReferenceField(typeOfRequest, referenceField)
             let pushID =  firebase_url.child(reference).push(request_object);
 
@@ -119,8 +119,8 @@ angular
          * @param {object} requestParameters Params for the request
          * @returns {object} Formated request parameters
          */
-        function getRequestObject(requestType, requestParameters) {
-            return {
+        function getRequestObject(requestType, requestParameters, typeOfRequest) {
+            let params = {
                 Request : requestType,
                 DeviceId: UUID.getUUID(),
                 Token: UserAuthorizationInfo.getToken(),
@@ -130,5 +130,9 @@ angular
                 AppVersion: Constants.version(),
                 Timestamp: firebase.database.ServerValue.TIMESTAMP
             };
+            // Add a target patient if the request type is for patient data
+            // TODO Fetch from a dedicated service once the profile selector is added
+            if (Params.REQUEST.PATIENT_TARGETED_REQUESTS.includes(typeOfRequest)) params.TargetPatientID = Patient.getPatientSerNum();
+            return params;
         }
 }]);
