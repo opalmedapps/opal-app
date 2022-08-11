@@ -38,3 +38,4 @@ import "./services/questionnaireDataService.js";
 import "./services/logOutService.js";
 import "./services/browser.service.js";
 import "./services/app-state.service";
+import "./services/profile-selector.service"

@@ -25,6 +25,10 @@
                 CHART: {
                     method: 'get',
                     url: '/api/app/chart',
+                },
+                PATIENTS: {
+                    method: 'get',
+                    url: '/api/caregivers/patients/'
                 }
             }
         });

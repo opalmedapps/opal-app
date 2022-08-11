@@ -15,7 +15,7 @@ angular
             sendRequest: sendRequest,
             apiRequest: apiRequest
         };
-        
+
         /**
          * @description Encrypt and send data to firebase
          * @param {string} typeOfRequest Type of request being process 
@@ -131,8 +131,16 @@ angular
                 Timestamp: firebase.database.ServerValue.TIMESTAMP
             };
             // Add a target patient if the request type is for patient data
-            // TODO Fetch from a dedicated service once the profile selector is added
-            if (Params.REQUEST.PATIENT_TARGETED_REQUESTS.includes(typeOfRequest)) params.TargetPatientID = Patient.getPatientSerNum();
+            if (Params.REQUEST.PATIENT_TARGETED_REQUESTS.includes(typeOfRequest)) params.TargetPatientID = getPatientId();
             return params;
+        }
+
+        /**
+         * @description Get the patientSerNum from the currently selected profile or fallback to the old patient service patientSernum
+         * @returns {number} The patientSerNum id required to make the request
+         */
+        function getPatientId() {
+            const selectedProfile = Patient.getSelectedProfile();
+            return selectedProfile?.patient_legacy_id || Patient.getPatientSerNum();
         }
 }]);
