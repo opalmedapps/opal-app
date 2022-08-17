@@ -24,7 +24,7 @@
                 },
                 CHART: {
                     method: 'get',
-                    url: '/api/app/chart',
+                    url: '/api/app/chart/',
                 },
                 PATIENTS: {
                     method: 'get',
