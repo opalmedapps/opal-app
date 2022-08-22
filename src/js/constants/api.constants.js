@@ -20,15 +20,15 @@
             ROUTES: {
                 HOME: {
                     method: 'get',
-                    url: '/api/app/home',
+                    url: '/api/app/home/',
                 },
                 CHART: {
                     method: 'get',
-                    url: '/api/app/chart',
+                    url: '/api/app/chart/',
                 },
                 GENERAL: {
                     method: 'get',
-                    url: '/api/app/general'
+                    url: '/api/app/general/'
                 },
                 HOSPITAL_SETTINGS: {
                     SITES: {
@@ -40,6 +40,10 @@
                         url: '/api/institutions/',
                     }
                 },
+                PATIENTS: {
+                    method: 'get',
+                    url: '/api/caregivers/patients/'
+                }
             }
         });
 })();
