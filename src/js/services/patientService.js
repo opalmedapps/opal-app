@@ -85,6 +85,11 @@ myApp.service('Patient',['$injector','UserAuthorizationInfo','UserPreferences',
     var PatientSerNum = '';
 
     /**
+     * @Description Currently selected profile info
+     */
+    var selectedProfile = {};
+
+    /**
      *@ngdoc method
      *@name setPatient
      *@methodOf MUHCApp.service:Patient
@@ -93,7 +98,6 @@ myApp.service('Patient',['$injector','UserAuthorizationInfo','UserPreferences',
      **/
     function setPatient(patientFields) {
         if (!patientFields) throw new Error("Failed to set empty patientFields");
-
         var font = window.localStorage.getItem(UserAuthorizationInfo.getUsername() + 'fontSize');
         UserPreferences.setFontSize(font||'large');
         FirstName = patientFields.FirstName;
@@ -113,6 +117,19 @@ myApp.service('Patient',['$injector','UserAuthorizationInfo','UserPreferences',
     }
 
     return {
+        /**
+         * @desc Set the informations for the current patient profile selected
+         * @param {object} profile  Single profile from the list of patient return by the new backend 
+         */
+        setSelectedProfile: (profile) => {
+            selectedProfile = profile;
+        },
+        /**
+         * @returns {object} The currently selected profile
+         */
+        getSelectedProfile: () => {
+            return selectedProfile;
+        },
         /**
          * @desc Requests the Patient entry for the current user and saves it in this service.
          * @returns {Promise<Object>} Resolves with the processed Patient information once downloaded and saved.
