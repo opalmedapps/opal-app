@@ -1,11 +1,11 @@
 <ons-page ng-controller="PersonalTabController as tab" ng-device-backbutton="tab.personalDeviceBackButton()">
-    <generic-toolbar title="{{'MYCHART'|translate}}" style-class="fontSizeTitle">
+    <profile-selector refresh-function="tab.getDisplayData">
         <right-content>   
             <ons-toolbar-button ng-click="personalNavigator.pushPage('views/tabs/info-page-tabs.html',{param:home})">
                 <ons-icon icon="fa-info-circle"></ons-icon>
             </ons-toolbar-button>
         </right-content> 
-    </generic-toolbar>
+    </profile-selector>
 
     <!-- HOSPITAL NAME BAR -->
     <top-page-banner title="tab.selectedHospitalToDisplay"></top-page-banner>

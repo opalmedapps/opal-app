@@ -16,6 +16,12 @@
 
         return {
             init: init,
+            getPatientList: getPatientList,
+            loadPatientProfile: loadPatientProfile,
+        }
+
+        function getPatientList() {
+            return patientList
         }
 
         /**
