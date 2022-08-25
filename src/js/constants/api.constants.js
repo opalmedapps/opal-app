@@ -25,7 +25,17 @@
                 CHART: {
                     method: 'get',
                     url: '/api/app/chart',
-                }
+                },
+                HOSPITAL_SETTINGS: {
+                    SITES: {
+                        method: 'get',
+                        url: '/api/sites/'
+                    },
+                    INSTITUTIONS: {
+                        method: 'get',
+                        url: '/api/institutions/',
+                    }
+                },
             }
         });
 })();

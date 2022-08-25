@@ -62,7 +62,9 @@ angular
         }
 
         function formatParams(parameters, data){
-            if (data) parameters.data = data;
+            if (parameters.method === 'get' && data) parameters.params = data;
+            if (parameters.method === 'post' && data) parameters.data = data;
+
             return {
                 ...parameters,
                 headers: {...Params.API.REQUEST_HEADERS, 'Accept-Language': UserPreferences.getLanguage()},
