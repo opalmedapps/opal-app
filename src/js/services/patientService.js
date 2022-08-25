@@ -235,7 +235,7 @@ myApp.service('Patient',['$injector','UserAuthorizationInfo','UserPreferences',
          *@returns {String} Returns PatientSerNum
          **/
         getPatientSerNum:function(){
-            return PatientSerNum;
+            return selectedProfile?.patient_legacy_id || PatientSerNum;
         },
         /**
          *@ngdoc method

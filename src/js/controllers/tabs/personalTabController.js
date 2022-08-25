@@ -63,9 +63,14 @@
         /**
          * @description Function to get view specific data from Django API
          */
-         async function getDisplayData() {
+        async function getDisplayData() {
             try {
-                const result = await RequestToServer.apiRequest(Params.API.ROUTES.CHART);
+                const patientSernum = Patient.getPatientSerNum();
+                const requestConfig = Params.API.ROUTES.CHART
+                const result = await RequestToServer.apiRequest({
+                    ...requestConfig,
+                    url: `${requestConfig.url}${patientSernum}/`
+                });
                 $timeout(() => {
                     vm.appointmentsUnreadNumber = result.data.unread_appointment_count;
                     vm.documentsUnreadNumber = result.data.unread_document_count;
