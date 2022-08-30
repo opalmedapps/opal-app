@@ -56,7 +56,6 @@
   "INACTIVE": "For security purposes, you have been disconnected after 5 minutes of inactivity. Please log in again.",
   "INFO": "Information",
   "INTERNETERROR": "Server error, please check your internet connection",
-  "INTERNETERROR2": "Error connecting to the Opal network. If you are trying to enter your security answer and have made many mistakes, you will be locked out for a short time. Otherwise, the network may be temporarily not working. Please try again later.",
   "INVALID_EMAIL": "Invalid e-mail",
   "INVALID_EMAIL_OR_PWD": "Email or password is incorrect.",
   "INVALID_PASSWORD": "Invalid password.",

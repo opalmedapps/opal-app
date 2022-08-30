@@ -290,7 +290,7 @@
                         vm.alert.content = "ENTERANANSWER";
                         break;
                     default:
-                        vm.alert.content = "INTERNETERROR2";
+                        vm.alert.content = "ERROR_GENERIC";
                         break;
                 }
             })

@@ -88,7 +88,6 @@
     "HOSPITALPARKING": "Stationnement",
     "INDIVIDUAL_ANNOUNCEMENT_HEADER": "Annonce",
     "INTERNETERROR": "Erreur de serveur, vérifiez votre connexion Internet.",
-    "INTERNETERROR2": "Erreur de connexion au réseau Opal. Si vous avez donné plusieurs réponses erronées à une question de sécurité, l’accès à votre compte sera bloqué pour un moment. Sinon, il se peut que l’erreur soit causée par une panne de réseau. Veuillez réessayer plus tard.",
     "INVALID_EMAIL": "Courriel invalide",
     "INVALID_EMAIL_OR_PWD": "Addresse courriel ou mot de passe invalide",
     "INVALID_PASSWORD": "Mot de passe invalide.",
