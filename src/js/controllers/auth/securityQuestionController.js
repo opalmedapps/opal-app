@@ -226,21 +226,20 @@
          * @ngdoc function
          * @name handleSuccess
          * @methodOf MUHCApp.controllers.SecurityQuestionController
-         * @param key encryption hash
+         * @param {string} securityAnswerHash Hash of the user's security answer
          * @description
          * Handles verified security question answer that returns in success. Brings user to the loading page.
          */
-        function handleSuccess(key){
+        function handleSuccess(securityAnswerHash){
             if (trusted){
                 $window.localStorage.setItem("deviceID",deviceID);
-                $window.localStorage.setItem(UserAuthorizationInfo.getUsername()+"/securityAns", EncryptionService.encryptWithKey(key, UserAuthorizationInfo.getPassword()).toString());
+                $window.localStorage.setItem(UserAuthorizationInfo.getUsername()+"/securityAns", EncryptionService.encryptWithKey(securityAnswerHash, UserAuthorizationInfo.getPassword()).toString());
             }
 
-            EncryptionService.setSecurityAns(key);
+            EncryptionService.setSecurityAns(securityAnswerHash);
             EncryptionService.generateEncryptionHash();
 
             if(passwordReset){
-                EncryptionService.generateTempEncryptionHash(EncryptionService.hash(vm.ssn.toUpperCase()), key);
                 $scope.initNavigator.pushPage('./views/login/new-password.html', {data: {oobCode: ResetPassword.getParameter("oobCode", parameters.url)}});
             }
             else {
@@ -257,6 +256,7 @@
          * Handles errors in order to display the proper message to the user.
          */
         function handleError(error) {
+            console.error(error);
             $timeout(function() {
 
                 // This check prevents from handling old request timeouts that were followed by a successful re-attempt
