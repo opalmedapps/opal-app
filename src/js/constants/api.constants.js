@@ -26,6 +26,10 @@
                     method: 'get',
                     url: '/api/app/chart',
                 },
+                GENERAL: {
+                    method: 'get',
+                    url: '/api/app/general'
+                },
                 HOSPITAL_SETTINGS: {
                     SITES: {
                         method: 'get',
