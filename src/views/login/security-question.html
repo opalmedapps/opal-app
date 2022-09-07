@@ -31,13 +31,6 @@
             <div ng-if="!security.loading && !security.invalidCode && security.isThereSelectedHospital()" class="container" align="center" style="margin-top:20px">
                 <form name="formPassword" novalidate>
                     <div class="form-group" align="center" style="margin-top: 20px">
-
-                        <div ng-show="security.passwordReset" style="width: 100%; margin-top: 15px; margin-bottom: 20px;" class="style-4">
-                            <!-- RAMQ is using ssn field -->
-                            <label>{{'ENTERRAMQ'|translate}}</label><br />
-                            <input autocapitalize="none" autocorrect="off" autocomplete="off" class="text-input" name="text" ng-model="security.ssn" placeholder="{{'ENTERRAMQPLACEHOLDER'|translate}}" />
-                        </div>
-
                         <label name="text">{{ security.Question }} </label><br />
                         <div style="width: 100%; margin-top: 15px" class="style-4">
                             <password-input>

@@ -114,15 +114,6 @@
 	     */
 	    vm.alertShow = true;
 
-        /**
-         * @ngdoc property
-         * @name ssn
-         * @propertyOf SecurityQuestionController
-         * @returns string
-         * @description RAMQ value (called "ssn" here) bound to user input in the view.
-         */
-        vm.ssn = "";
-	    
         vm.submitAnswer = submitAnswer;
         vm.clearErrors = clearErrors;
         vm.goToInit = goToInit;
@@ -339,9 +330,8 @@
         function submitAnswer (answer) {
             clearErrors();
 
-            if (!answer || (!vm.ssn && passwordReset)) {
+            if (!answer) {
                 handleError({code: "no-answer"});
-
             } else {
                 vm.alertShow = false;
                 vm.submitting = true;
@@ -356,7 +346,6 @@
                 var parameterObject = {
                     Question: vm.Question,
                     Answer: hash,
-                    SSN: vm.ssn,
                     Trusted: trusted
                 };
 
