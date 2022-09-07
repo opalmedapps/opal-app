@@ -12,11 +12,11 @@
             .module('MUHCApp')
             .controller('GeneralTabController', GeneralTabController);
 
-        GeneralTabController.$inject = ['$scope', 'Announcements', 'UpdateUI', 'NavigatorParameters', 'NetworkStatus',
-            'MetaData', 'UserPreferences', 'UserHospitalPreferences', 'Browser', 'DynamicContent'];
+        GeneralTabController.$inject = ['$scope', 'NavigatorParameters', 'NetworkStatus', '$timeout',
+            'UserPreferences', 'UserHospitalPreferences', 'Browser', 'DynamicContent', 'RequestToServer', 'Params'];
 
-        function GeneralTabController($scope, Announcements, UpdateUI, NavigatorParameters, NetworkStatus, MetaData,
-                                      UserPreferences, UserHospitalPreferences, Browser, DynamicContent) {
+        function GeneralTabController($scope, NavigatorParameters, NetworkStatus, $timeout,
+                                      UserPreferences, UserHospitalPreferences, Browser, DynamicContent, RequestToServer, Params) {
             var vm = this;
 
             vm.goToParking = goToParking;
@@ -36,8 +36,6 @@
              */
 
             function activate() {
-                setBadges();
-
                 NavigatorParameters.setParameters({'Navigator': 'generalNavigator'});
                 NavigatorParameters.setNavigator(generalNavigator);
 
@@ -45,6 +43,8 @@
 
                 vm.language = UserPreferences.getLanguage();
                 configureSelectedHospital();
+
+                if(NetworkStatus.isOnline()) getDisplayData();
             }
 
             /**
@@ -57,10 +57,11 @@
             }
 
             function bindEvents() {
+                // Refresh the page on coming back from other pages
                 generalNavigator.on('prepop', function () {
-                    setBadges();
+                    if(NetworkStatus.isOnline()) getDisplayData();
                 });
-
+                //This avoids constant repushing which causes bugs
                 generalNavigator.on('prepush', function (event) {
                     if (generalNavigator._doorLock.isLocked()) {
                         event.cancel();
@@ -74,8 +75,19 @@
                 });
             }
 
-            function setBadges() {
-                vm.announcementsUnreadNumber = Announcements.getNumberUnreadAnnouncements();
+            /**
+             * @description Function to get view specific data from Django API
+             */
+            async function getDisplayData() {
+                try {
+                    const result = await RequestToServer.apiRequest(Params.API.ROUTES.GENERAL);
+                    $timeout(() => {
+                        vm.announcementsUnreadNumber = result.data.unread_announcement_count;
+                    });
+                } catch (error) {
+                    // TODO: Error handling improvements: https://o-hig.atlassian.net/browse/QSCCD-463
+                    console.error(error);
+                }
             }
 
             /**
