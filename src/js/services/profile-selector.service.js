@@ -16,6 +16,8 @@
 
         return {
             init: init,
+            getPatientList: () => patientList,
+            loadPatientProfile: loadPatientProfile,
         }
 
         /**
@@ -33,8 +35,9 @@
          * @returns {number} The patient sernum that needs to be used for initialization.
          */
         function getLocalStoragePatientSernum(currentPatientSerNum) {
-            let savedPatientSernum = $window.localStorage.getItem('lastUsedPatient') || null;
-            return (savedPatientSernum && (currentPatientSerNum !== savedPatientSernum)) ? savedPatientSernum : currentPatientSerNum;
+            let savedPatientSernum = $window.localStorage.getItem('profileId') || null;
+            let savedPatientStatus = patientList.find(item => item.patient_legacy_id === savedPatientSernum).status;
+            return (savedPatientSernum && savedPatientStatus === 'CON' && (currentPatientSerNum !== savedPatientSernum)) ? savedPatientSernum : currentPatientSerNum;
         }
 
         /**
@@ -49,7 +52,7 @@
             if (result) {
                 currentSelectedProfile = result;
                 Patient.setSelectedProfile(currentSelectedProfile);
-                $window.localStorage.setItem('lastUsedPatient', currentSelectedProfile.patient_legacy_id);
+                $window.localStorage.setItem('profileId', currentSelectedProfile.patient_legacy_id);
             } else {
                 // TODO: Display error in the view (QSCCD-77)
                 console.error('Error selecting patient', requestedPatientSernum)

@@ -22,6 +22,7 @@
         // variable to let the user know which hospital they are logged in
         vm.selectedHospitalToDisplay = "";
         vm.allowedModules = {};
+        vm.getDisplayData = getDisplayData;
 
         vm.personalDeviceBackButton = personalDeviceBackButton;
 

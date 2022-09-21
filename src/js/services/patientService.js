@@ -87,7 +87,7 @@ myApp.service('Patient',['$injector','UserAuthorizationInfo','UserPreferences',
     /**
      * @Description Currently selected profile info
      */
-    var selectedProfile = {};
+    var SelectedProfile = {};
 
     /**
      *@ngdoc method
@@ -122,13 +122,13 @@ myApp.service('Patient',['$injector','UserAuthorizationInfo','UserPreferences',
          * @param {object} profile  Single profile from the list of patient return by the new backend 
          */
         setSelectedProfile: (profile) => {
-            selectedProfile = profile;
+            SelectedProfile = profile;
         },
         /**
          * @returns {object} The currently selected profile
          */
         getSelectedProfile: () => {
-            return selectedProfile;
+            return SelectedProfile;
         },
         /**
          * @desc Requests the Patient entry for the current user and saves it in this service.
@@ -235,7 +235,7 @@ myApp.service('Patient',['$injector','UserAuthorizationInfo','UserPreferences',
          *@returns {String} Returns PatientSerNum
          **/
         getPatientSerNum:function(){
-            return selectedProfile?.patient_legacy_id || PatientSerNum;
+            return SelectedProfile?.patient_legacy_id || PatientSerNum;
         },
         /**
          *@ngdoc method
@@ -270,6 +270,7 @@ myApp.service('Patient',['$injector','UserAuthorizationInfo','UserPreferences',
             TelNum='';
             Email='';
             PatientSerNum='';
+            SelectedProfile={};
         }
     };
 }]);

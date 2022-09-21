@@ -105,11 +105,6 @@
 
             patientSerNum = Patient.getPatientSerNum();
 
-            //Locked out alert
-            if (patientSerNum) Toast.showToast({
-                message: $filter('translate')('LOCKEDOUT'),
-            });
-
             // Switch for trusting device
             $timeout(function(){
                 vm.trusted = !!($window.localStorage.getItem("deviceID"));
