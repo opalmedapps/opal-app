@@ -7,7 +7,7 @@ import "../../css/directives/profile-selector.directive.css"
         .module("MUHCApp")
         .directive("profileSelector", ProfileSelector);
 
-    ProfileSelector.$inject = ['$window', '$timeout', 'ProfileSelector', 'Patient'];
+    ProfileSelector.$inject = ['$filter', '$timeout', 'ProfileSelector', 'Patient'];
 
     /**
      * @name ProfileSelector
@@ -15,7 +15,7 @@ import "../../css/directives/profile-selector.directive.css"
      * @date 2022-08-18
      * @desc Directive to display the profile selector and scope it's business logic.
      */
-    function ProfileSelector($window, $timeout, ProfileSelector, Patient)
+    function ProfileSelector($filter, $timeout, ProfileSelector, Patient)
     {
         return {
             restrict: 'E',
@@ -33,7 +33,7 @@ import "../../css/directives/profile-selector.directive.css"
                     </div>
                     <div class="center" ng-style="iosStyleFix">
                         <div class="profile-selector--title" ng-click="toggleList()">
-                            <div>{{title}}</div>
+                            <div class="profile-selector--title--text">{{title}}</div>
                             <div><ons-icon class="profile-selector--title--icon" icon="fa-solid fa-caret-down"></ons-icon></div>
                         </div>
                         <ul ng-show="listVisible" class="profile-selector--list">
@@ -64,7 +64,7 @@ import "../../css/directives/profile-selector.directive.css"
 
                 const updateDisplayInfo = () => {
                     scope.currentProfile = Patient.getSelectedProfile();
-                    scope.title = `${scope.currentProfile.first_name} ${scope.currentProfile.last_name}`;
+                    scope.title = (scope.profileList.length) ? `${scope.currentProfile.first_name} ${scope.currentProfile.last_name}` : $filter('translate')('RELATIONSHIPS_PATIENTS_NOT_AVAILABLE');
                 }
 
                 const assignScrollEffect = () => {
