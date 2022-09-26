@@ -7,7 +7,7 @@ import "../../css/directives/profile-selector.directive.css"
         .module("MUHCApp")
         .directive("profileSelector", ProfileSelector);
 
-    ProfileSelector.$inject = ['$filter', '$timeout', 'ProfileSelector', 'Patient'];
+    ProfileSelector.$inject = ['$window', '$timeout', 'ProfileSelector', 'Patient', 'UpdateUI'];
 
     /**
      * @name ProfileSelector
@@ -15,7 +15,7 @@ import "../../css/directives/profile-selector.directive.css"
      * @date 2022-08-18
      * @desc Directive to display the profile selector and scope it's business logic.
      */
-    function ProfileSelector($filter, $timeout, ProfileSelector, Patient)
+    function ProfileSelector($window, $timeout, ProfileSelector, Patient, UpdateUI)
     {
         return {
             restrict: 'E',
@@ -83,6 +83,7 @@ import "../../css/directives/profile-selector.directive.css"
 
                 scope.selectProfile = (lecagyId, relStatus) => {
                     if (relStatus !== 'CON') return;
+                    UpdateUI.clearUpdateUI();
                     ProfileSelector.loadPatientProfile(lecagyId);
                     updateDisplayInfo();
                     if (scope.refreshFunction) scope.refreshFunction();
