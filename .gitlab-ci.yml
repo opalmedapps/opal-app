@@ -1,6 +1,6 @@
 default:
-  tags: shared-macos-amd64 
-  image: macos-12-xcode-13
+  tags:
+    - macos
 
 # Prevent duplicate pipelines when a commit is pushed to an open merge request
 # See: https://docs.gitlab.com/ee/ci/yaml/workflow.html#switch-between-branch-pipelines-and-merge-request-pipelines
