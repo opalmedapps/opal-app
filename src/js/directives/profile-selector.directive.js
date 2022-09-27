@@ -53,7 +53,7 @@ import "../../css/directives/profile-selector.directive.css"
                             </li>
                         </ul>
                     </div>
-                    <div class="right" ng-transclude="rightContentSlot" ng-style="iosStyleFix" ng-click="toggleList()"></div>
+                    <div class="right" ng-transclude="rightContentSlot" ng-style="iosStyleFix" ng-click="toggleList(false)"></div>
                 </ons-toolbar>
             `,
             link: function (scope, element) {
@@ -76,8 +76,8 @@ import "../../css/directives/profile-selector.directive.css"
                     });
                 }
 
-                scope.toggleList = () => {
-                    scope.listVisible = !scope.listVisible;
+                scope.toggleList = (isOpen = null) => {
+                    scope.listVisible = isOpen !== null ? isOpen : !scope.listVisible;
                     if (scope.listVisible) assignScrollEffect();
                 }
 
