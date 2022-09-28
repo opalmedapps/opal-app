@@ -4,8 +4,8 @@
 
 angular
     .module('MUHCApp')
-    .service('RequestToServer',['UserAuthorizationInfo', 'EncryptionService', 'FirebaseService', 'Constants', 'UUID', 'ResponseValidator', 'Params', 'UserPreferences', 'Patient',
-    function( UserAuthorizationInfo, EncryptionService, FirebaseService, Constants, UUID, ResponseValidator, Params, UserPreferences, Patient){
+    .service('RequestToServer',['$injector', 'UserAuthorizationInfo', 'EncryptionService', 'FirebaseService', 'Constants', 'UUID', 'ResponseValidator', 'Params', 'UserPreferences', 'Patient',
+    function($injector, UserAuthorizationInfo, EncryptionService, FirebaseService, Constants, UUID, ResponseValidator, Params, UserPreferences, Patient){
 
         let firebase_url;
         let response_url;
@@ -138,11 +138,12 @@ angular
         }
 
         /**
-         * @description Get the patientSerNum from the currently selected profile or fallback to the old patient service patientSernum
+         * @description Get the patientSerNum from the currently selected profile or fallback to the old patient/user service patientSernum
          * @returns {number} The patientSerNum id required to make the request
          */
         function getPatientId() {
-            const selectedProfile = Patient.getSelectedProfile();
+            const ProfileSelectorService = $injector.get('ProfileSelector');
+            const selectedProfile = ProfileSelectorService.getActiveProfile();
             return selectedProfile?.patient_legacy_id || Patient.getPatientSerNum();
         }
 }]);

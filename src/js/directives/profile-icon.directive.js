@@ -6,7 +6,7 @@
         .module("MUHCApp")
         .directive("profileIcon", ProfileSelector);
 
-    ProfileSelector.$inject = ['$timeout', 'Patient', 'ProfileSelector'];
+    ProfileSelector.$inject = ['$timeout', 'ProfileSelector'];
 
     /**
      * @name ProfileIcon
@@ -14,7 +14,7 @@
      * @date 2022-09-23
      * @desc Display the rounf icon with active profile intials
      */
-    function ProfileSelector($timeout, Patient, ProfileSelector)
+    function ProfileSelector($timeout, ProfileSelector)
     {
         return {
             restrict: 'E',
@@ -26,9 +26,7 @@
                 /**
                  * @description Observe profile selection and trigger UI update.
                  */
-                ProfileSelector.observeProfile(() => {
-                    setIcon(Patient.getSelectedProfile());
-                });
+                ProfileSelector.observeProfile(() => setIcon(ProfileSelector.getActiveProfile()));
                 /**
                  * @description Set icon color and active profile initials.
                  * @param {object} activeProfile Currently selected profile.

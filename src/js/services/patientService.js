@@ -14,17 +14,14 @@ angular
         var ProfileImage='';
         var FirstName='';
         var LastName='';
-        var Alias='';
         var accessLevel='';
         var TelNum='';
         var Email='';
-        var TestUser ='';
         var PatientSerNum = '';
         var SelectedProfile = {};
 
         return {
             setSelectedProfile: setSelectedProfile,
-            getSelectedProfile: getSelectedProfile,
             initPatient: initPatient,
             getFirstName: getFirstName,
             getLastName: getLastName,
@@ -50,31 +47,23 @@ angular
             FirstName = patientFields.FirstName;
             LastName = patientFields.LastName;
             accessLevel = patientFields.AccessLevel;
-            Alias = patientFields.Alias;
             TelNum = patientFields.TelNum;
             Email = patientFields.Email;
-            TestUser = patientFields.TestUser;
             PatientSerNum = patientFields.PatientSerNum;
             ProfileImage = (patientFields.ProfileImage && patientFields.ProfileImage !== '')
                 ? `data:image/${patientFields.DocumentType};base64,${patientFields.ProfileImage}`
                 : '';
             patientFields.ProfileImage = ProfileImage;
-
+            console.log('==>', patientFields);
             return patientFields;
         }
+
         /**
          * @desc Set the informations for the current patient profile selected
          * @param {object} profile  Single profile from the list of patient return by the new backend 
          */
         function setSelectedProfile(profile) {
             return SelectedProfile = profile;
-        };
-
-        /**
-         * @returns {object} The currently selected profile
-         */
-        function getSelectedProfile() {
-            return SelectedProfile;
         };
 
         /**
@@ -90,69 +79,69 @@ angular
 
         /**
          *@ngdoc method
-        *@name getFirstName
-        *@methodOf MUHCApp.service:Patient
-        *@returns {String} Returns first name
-        **/
+         *@name getFirstName
+         *@methodOf MUHCApp.service:Patient
+         *@returns {String} Returns first name
+         **/
         function getFirstName() {
             return FirstName;
         };
 
         /**
          *@ngdoc method
-        *@name getLastName
-        *@methodOf MUHCApp.service:Patient
-        *@returns {String} Returns last name
-        **/
+         *@name getLastName
+         *@methodOf MUHCApp.service:Patient
+         *@returns {String} Returns last name
+         **/
         function getLastName() {
             return LastName;
         };
 
         /**
          *@ngdoc method
-        *@name getTelNum
-        *@methodOf MUHCApp.service:Patient
-        *@returns {String} Returns Tel. Number
-        **/
+         *@name getTelNum
+         *@methodOf MUHCApp.service:Patient
+         *@returns {String} Returns Tel. Number
+         **/
         function getTelNum() {
             return TelNum;
         };
 
         /**
          *@ngdoc method
-        *@name getTelNum
-        *@methodOf MUHCApp.service:Patient
-        *@returns {String} Returns Tel. Number
-        **/
+         *@name getTelNum
+         *@methodOf MUHCApp.service:Patient
+         *@returns {String} Returns Tel. Number
+         **/
         function getTelNum() {
             return TelNum;
         };
 
         /**
          *@ngdoc method
-        *@name getEmail
-        *@methodOf MUHCApp.service:Patient
-        *@returns {String} Returns Email
-        **/
+         *@name getEmail
+         *@methodOf MUHCApp.service:Patient
+         *@returns {String} Returns Email
+         **/
         function getEmail() {
             return Email;
         };
     
         /**
          *@ngdoc method
-        *@name getPatientSerNum
-        *@methodOf MUHCApp.service:Patient
-        *@returns {String} Returns PatientSerNum
-        **/
+         *@name getPatientSerNum
+         *@methodOf MUHCApp.service:Patient
+         *@returns {String} Returns PatientSerNum
+         **/
         function getPatientSerNum() {
             return SelectedProfile?.patient_legacy_id || PatientSerNum;
         };
 
         /**
          *@ngdoc method
-        *@name getProfileImage
-        *@methodOf MUHCApp.service:Patient
-        *@returns {String} Returns patient image
+         *@name getProfileImage
+         *@methodOf MUHCApp.service:Patient
+         *@returns {String} Returns patient image
         **/
         function getProfileImage() {
             return ProfileImage;
@@ -160,25 +149,24 @@ angular
 
         /**
          *@ngdoc method
-        *@name getAccessLevel
-        *@methodOf MUHCApp.service:Patient
-        *@returns {String} Returns patient access level
-        **/
+         *@name getAccessLevel
+         *@methodOf MUHCApp.service:Patient
+         *@returns {String} Returns patient access level
+         **/
         function getAccessLevel() {
             return accessLevel;
         };
 
         /**
          *@ngdoc method
-        *@name clearPatient
-        *@methodOf MUHCApp.service:Patient
-        *@description Cleans the patient service
-        **/
+         *@name clearPatient
+         *@methodOf MUHCApp.service:Patient
+         *@description Cleans the patient service
+         **/
         function clearPatient() {
             ProfileImage='';
             FirstName='';
             LastName='';
-            Alias='';
             TelNum='';
             Email='';
             PatientSerNum='';
