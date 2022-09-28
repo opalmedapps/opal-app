@@ -254,6 +254,20 @@
 	outline: 0;
 }
 
+.button--large-green {
+	background-color: #4CAF50;
+	font-weight: bolder;
+	margin: auto;
+	max-width: 400px;
+}
+
+.button--large-blue {
+	background-color: #2196F3;
+	font-weight: bolder;
+	margin: auto;
+	max-width: 400px;
+}
+
 #more-info-button-outer {
 	text-align: center;
 	width: 90%;
@@ -277,4 +291,3 @@
 	max-width: 70px;
 	padding: 0;
 }
-
