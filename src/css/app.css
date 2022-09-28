@@ -101,12 +101,16 @@ p {
 @import url('./elements/progress.element.css');
 @import url('./elements/fab-button.element.css');
 @import url('./elements/banner.element.css');
+@import url('./elements/opal-logo.element.css');
 @import url('./elements/radio-button.element.css');
 @import url('./views/questionnaires.view.css');
 @import url('./elements/input.element.css');
 @import url('./directives/pdf-view.directive.css');
 @import url('./elements/checkmark.element.css');
 @import url('./views/questionnaires-list.view.css');
+@import url('./views/security-question.view.css');
 @import url('./views/feedback.view.css');
+@import url('./views/forgot-password.view.css');
 @import url('./views/login.view.css');
+@import url('./views/new-password.view.css');
 @import url('./utilities.css');
