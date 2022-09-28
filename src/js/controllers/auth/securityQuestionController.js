@@ -114,15 +114,6 @@
 	     */
 	    vm.alertShow = true;
 
-        /**
-         * @ngdoc property
-         * @name ssn
-         * @propertyOf SecurityQuestionController
-         * @returns string
-         * @description RAMQ value (called "ssn" here) bound to user input in the view.
-         */
-        vm.ssn = "";
-	    
         vm.submitAnswer = submitAnswer;
         vm.clearErrors = clearErrors;
         vm.goToInit = goToInit;
@@ -226,21 +217,20 @@
          * @ngdoc function
          * @name handleSuccess
          * @methodOf MUHCApp.controllers.SecurityQuestionController
-         * @param key encryption hash
+         * @param {string} securityAnswerHash Hash of the user's security answer
          * @description
          * Handles verified security question answer that returns in success. Brings user to the loading page.
          */
-        function handleSuccess(key){
+        function handleSuccess(securityAnswerHash){
             if (trusted){
                 $window.localStorage.setItem("deviceID",deviceID);
-                $window.localStorage.setItem(UserAuthorizationInfo.getUsername()+"/securityAns", EncryptionService.encryptWithKey(key, UserAuthorizationInfo.getPassword()).toString());
+                $window.localStorage.setItem(UserAuthorizationInfo.getUsername()+"/securityAns", EncryptionService.encryptWithKey(securityAnswerHash, UserAuthorizationInfo.getPassword()).toString());
             }
 
-            EncryptionService.setSecurityAns(key);
+            EncryptionService.setSecurityAns(securityAnswerHash);
             EncryptionService.generateEncryptionHash();
 
             if(passwordReset){
-                EncryptionService.generateTempEncryptionHash(EncryptionService.hash(vm.ssn.toUpperCase()), key);
                 $scope.initNavigator.pushPage('./views/login/new-password.html', {data: {oobCode: ResetPassword.getParameter("oobCode", parameters.url)}});
             }
             else {
@@ -257,6 +247,7 @@
          * Handles errors in order to display the proper message to the user.
          */
         function handleError(error) {
+            console.error(error);
             $timeout(function() {
 
                 // This check prevents from handling old request timeouts that were followed by a successful re-attempt
@@ -290,7 +281,7 @@
                         vm.alert.content = "ENTERANANSWER";
                         break;
                     default:
-                        vm.alert.content = "INTERNETERROR2";
+                        vm.alert.content = "ERROR_GENERIC";
                         break;
                 }
             })
@@ -339,9 +330,8 @@
         function submitAnswer (answer) {
             clearErrors();
 
-            if (!answer || (!vm.ssn && passwordReset)) {
+            if (!answer) {
                 handleError({code: "no-answer"});
-
             } else {
                 vm.alertShow = false;
                 vm.submitting = true;
@@ -356,7 +346,6 @@
                 var parameterObject = {
                     Question: vm.Question,
                     Answer: hash,
-                    SSN: vm.ssn,
                     Trusted: trusted
                 };
 
