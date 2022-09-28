@@ -38,11 +38,11 @@ angular
 
         /**
          *@ngdoc method
-        *@name setPatient
-        *@methodOf MUHCApp.service:Patient
-        *@param {Object} patientFields Contains patient fields
-        *@description Setter method for the patient service.
-        **/
+         *@name setPatient
+         *@methodOf MUHCApp.service:Patient
+         *@param {Object} patientFields Contains patient fields
+         *@description Setter method for the patient service.
+         **/
         function setPatient(patientFields) {
             if (!patientFields) throw new Error("Failed to set empty patientFields");
             var font = window.localStorage.getItem(UserAuthorizationInfo.getUsername() + 'fontSize');
