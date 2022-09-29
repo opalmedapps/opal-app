@@ -7,7 +7,7 @@ import "../../css/directives/profile-selector.directive.css"
         .module("MUHCApp")
         .directive("profileSelector", ProfileSelector);
 
-    ProfileSelector.$inject = ['$window', '$timeout', 'ProfileSelector', 'Patient', 'UpdateUI'];
+    ProfileSelector.$inject = ['$filter', '$timeout', 'ProfileSelector', 'Patient', 'UpdateUI'];
 
     /**
      * @name ProfileSelector
@@ -15,7 +15,7 @@ import "../../css/directives/profile-selector.directive.css"
      * @date 2022-08-18
      * @desc Directive to display the profile selector and scope it's business logic.
      */
-    function ProfileSelector($window, $timeout, ProfileSelector, Patient, UpdateUI)
+    function ProfileSelector($filter, $timeout, ProfileSelector, Patient, UpdateUI)
     {
         return {
             restrict: 'E',
@@ -33,7 +33,7 @@ import "../../css/directives/profile-selector.directive.css"
                     </div>
                     <div class="center" ng-style="iosStyleFix">
                         <div class="profile-selector--title" ng-click="toggleList()">
-                            <div>{{title}}</div>
+                            <div class="profile-selector--title--text">{{title}}</div>
                             <div><ons-icon class="profile-selector--title--icon" icon="fa-solid fa-caret-down"></ons-icon></div>
                         </div>
                         <ul ng-show="listVisible" class="profile-selector--list">
@@ -53,10 +53,10 @@ import "../../css/directives/profile-selector.directive.css"
                             </li>
                         </ul>
                     </div>
-                    <div class="right" ng-transclude="rightContentSlot" ng-style="iosStyleFix" ng-click="toggleList()"></div>
+                    <div class="right" ng-transclude="rightContentSlot" ng-style="iosStyleFix" ng-click="toggleList(false)"></div>
                 </ons-toolbar>
             `,
-            link: function (scope, element) {
+            link: function (scope) {
                 
                 scope.iosStyleFix = ons.platform.isIOS() ? {'padding-top': '0px'} : {};
                 scope.profileList = ProfileSelector.getPatientList();
@@ -64,7 +64,7 @@ import "../../css/directives/profile-selector.directive.css"
 
                 const updateDisplayInfo = () => {
                     scope.currentProfile = Patient.getSelectedProfile();
-                    scope.title = `${scope.currentProfile.first_name} ${scope.currentProfile.last_name}`;
+                    scope.title = (scope.profileList.length) ? `${scope.currentProfile.first_name} ${scope.currentProfile.last_name}` : $filter('translate')('RELATIONSHIPS_PATIENTS_NOT_AVAILABLE');
                 }
 
                 const assignScrollEffect = () => {
@@ -76,8 +76,8 @@ import "../../css/directives/profile-selector.directive.css"
                     });
                 }
 
-                scope.toggleList = () => {
-                    scope.listVisible = !scope.listVisible;
+                scope.toggleList = (isOpen = null) => {
+                    scope.listVisible = isOpen !== null ? isOpen : !scope.listVisible;
                     if (scope.listVisible) assignScrollEffect();
                 }
 

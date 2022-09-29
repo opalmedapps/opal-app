@@ -13,6 +13,10 @@
     justify-content: center;
 }
 
+.profile-selector--title--text {
+    overflow: hidden;
+}
+
 .profile-selector--title--icon {
     background-color: #F7F6F6;
     width: 15px;

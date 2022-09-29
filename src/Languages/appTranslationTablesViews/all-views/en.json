@@ -251,6 +251,7 @@
   "RELATIONSHIPS_PATIENTS_ACCESS": "Access",
   "RELATIONSHIPS_PATIENTS_STATUS_PEN": "Access pending",
   "RELATIONSHIPS_PATIENTS_AVAILABLE": "Available profile(s)",
+  "RELATIONSHIPS_PATIENTS_NOT_AVAILABLE": "No available profile",
   "TABLEOFCONTENTS": "Table of Contents",
   "TABLE_VIEW": "Table View",
   "TAPTOZOOM": "Tap screen to zoom",

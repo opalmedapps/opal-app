@@ -1,3 +1,5 @@
+import {Observer} from "../models/utility/observer";
+ 
  (function () {
     'use strict';
 
@@ -5,12 +7,13 @@
         .module('MUHCApp')
         .service('ProfileSelector', ProfileSelector);
 
-    ProfileSelector.$inject = ['$window', 'Params', 'RequestToServer', 'Patient'];
+    ProfileSelector.$inject = ['$timeout', '$window', 'Params', 'RequestToServer', 'Patient'];
 
     /**
      * @description Service that handle loading of a patient list for a given caregiver and selection of the profile.
      */
-    function ProfileSelector($window, Params, RequestToServer, Patient) {
+    function ProfileSelector($timeout, $window, Params, RequestToServer, Patient) {
+        const profileObserver = new Observer();
         let patientList;
         let currentSelectedProfile;
 
@@ -18,6 +21,8 @@
             init: init,
             getPatientList: () => patientList,
             loadPatientProfile: loadPatientProfile,
+            getActiveProfile: () => currentSelectedProfile,
+            observeProfile: fun => profileObserver.attach(fun),
         }
 
         /**
@@ -53,6 +58,9 @@
                 currentSelectedProfile = result;
                 Patient.setSelectedProfile(currentSelectedProfile);
                 $window.localStorage.setItem('profileId', currentSelectedProfile.patient_legacy_id);
+                $timeout(() => {
+                    profileObserver.notify();
+                });
             } else {
                 // TODO: Display error in the view (QSCCD-77)
                 console.error('Error selecting patient', requestedPatientSernum)
@@ -67,11 +75,30 @@
             try {
                 const requestParams = Params.API.ROUTES.PATIENTS;
                 const result = await RequestToServer.apiRequest(requestParams);
-                return result.data || [];
+                const formatedResult = assignColor(result.data) ? result.data : [];
+                return formatedResult
             } catch (error) {
                 // TODO: Display error in the view (QSCCD-77)
                 console.error(error);
             }
+        }
+
+        function assignColor(profiles) {
+            const colorList = [
+                '#53BB96',
+                '#037AFF',
+                '#FF8351',
+                '#FEC63D',
+                '#B38DF7',
+                '#C9BB1C',
+                '#1CC925',
+                '#1C59C9',
+                '#871CC9'
+            ];
+            profiles.forEach((item, index) => {
+                profiles[index].color = (index >= colorList.length) ? `#${Math.floor(Math.random()*16777215).toString(16)}` : colorList[index];
+            });
+            return profiles;
         }
     }
 })();
