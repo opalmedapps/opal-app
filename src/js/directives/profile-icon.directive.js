@@ -12,7 +12,7 @@
      * @name ProfileIcon
      * @author David Gagne
      * @date 2022-09-23
-     * @desc Display the rounf icon with active profile intials
+     * @desc Display the rounf icon with active profile initials
      */
     function ProfileSelector($timeout, ProfileSelector)
     {
