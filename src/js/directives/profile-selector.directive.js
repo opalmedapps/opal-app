@@ -7,7 +7,7 @@ import "../../css/directives/profile-selector.directive.css"
         .module("MUHCApp")
         .directive("profileSelector", ProfileSelector);
 
-    ProfileSelector.$inject = ['$filter', '$timeout', 'ProfileSelector', 'Patient', 'UpdateUI'];
+    ProfileSelector.$inject = ['$filter', '$timeout', 'ProfileSelector', 'UpdateUI'];
 
     /**
      * @name ProfileSelector
@@ -15,7 +15,7 @@ import "../../css/directives/profile-selector.directive.css"
      * @date 2022-08-18
      * @desc Directive to display the profile selector and scope it's business logic.
      */
-    function ProfileSelector($filter, $timeout, ProfileSelector, Patient, UpdateUI)
+    function ProfileSelector($filter, $timeout, ProfileSelector, UpdateUI)
     {
         return {
             restrict: 'E',
@@ -63,7 +63,7 @@ import "../../css/directives/profile-selector.directive.css"
                 scope.listVisible = false;
 
                 const updateDisplayInfo = () => {
-                    scope.currentProfile = Patient.getSelectedProfile();
+                    scope.currentProfile = ProfileSelector.getActiveProfile();
                     scope.title = (scope.profileList.length) ? `${scope.currentProfile.first_name} ${scope.currentProfile.last_name}` : $filter('translate')('RELATIONSHIPS_PATIENTS_NOT_AVAILABLE');
                 }
 
