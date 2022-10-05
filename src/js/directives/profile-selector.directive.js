@@ -7,7 +7,7 @@ import "../../css/directives/profile-selector.directive.css"
         .module("MUHCApp")
         .directive("profileSelector", ProfileSelector);
 
-    ProfileSelector.$inject = ['$filter', '$timeout', 'ProfileSelector', 'UpdateUI'];
+    ProfileSelector.$inject = ['$filter', '$timeout', 'ProfileSelector', 'UpdateUI', 'Params'];
 
     /**
      * @name ProfileSelector
@@ -15,7 +15,7 @@ import "../../css/directives/profile-selector.directive.css"
      * @date 2022-08-18
      * @desc Directive to display the profile selector and scope it's business logic.
      */
-    function ProfileSelector($filter, $timeout, ProfileSelector, UpdateUI)
+    function ProfileSelector($filter, $timeout, ProfileSelector, UpdateUI, Params)
     {
         return {
             restrict: 'E',
@@ -43,12 +43,12 @@ import "../../css/directives/profile-selector.directive.css"
                             ng-if="canDisplayProfile(profile)"
                             ng-class="{
                                 selected: profile.patient_legacy_id == currentProfile.patient_legacy_id,
-                                disabled: profile.status == 'PEN'
+                                disabled: profile.status == relationshipStatus.pending
                             }"
                             ng-click="selectProfile(profile.patient_legacy_id, profile.status)">
                                 <div class="profile-selector--text">
                                     {{profile.first_name}} {{profile.last_name}}
-                                    <span ng-show="profile.status == 'PEN'">({{'RELATIONSHIPS_PATIENTS_STATUS_PEN' | translate | lowercase}})</span>
+                                    <span ng-show="profile.status == relationshipStatus.pending">({{'RELATIONSHIPS_PATIENTS_STATUS_PEN' | translate | lowercase}})</span>
                                 </div>
                             </li>
                         </ul>
@@ -61,6 +61,7 @@ import "../../css/directives/profile-selector.directive.css"
                 scope.iosStyleFix = ons.platform.isIOS() ? {'padding-top': '0px'} : {};
                 scope.profileList = ProfileSelector.getPatientList();
                 scope.listVisible = false;
+                scope.relationshipStatus = Params.relationshipStatus;
 
                 const updateDisplayInfo = () => {
                     scope.currentProfile = ProfileSelector.getActiveProfile();
@@ -82,7 +83,7 @@ import "../../css/directives/profile-selector.directive.css"
                 }
 
                 scope.selectProfile = (lecagyId, relStatus) => {
-                    if (relStatus !== 'CON') return;
+                    if (relStatus !== scope.relationshipStatus.confirmed) return;
                     UpdateUI.clearUpdateUI();
                     ProfileSelector.loadPatientProfile(lecagyId);
                     updateDisplayInfo();
@@ -91,7 +92,7 @@ import "../../css/directives/profile-selector.directive.css"
                 };
 
                 scope.canDisplayProfile = (profile) => {
-                    return profile.patient_legacy_id && (profile.status === 'PEN' || profile.status === 'CON');
+                    return profile.patient_legacy_id && (profile.status === scope.relationshipStatus.pending || profile.status === scope.relationshipStatus.confirmed);
                 }
 
                 updateDisplayInfo();
