@@ -42,7 +42,7 @@ import {Observer} from "../models/utility/observer";
         function getLocalStoragePatientSernum(currentPatientSerNum) {
             let savedPatientSernum = $window.localStorage.getItem('profileId') || null;
             let savedPatientStatus = patientList.find(item => item.patient_legacy_id === savedPatientSernum).status;
-            return (savedPatientSernum && savedPatientStatus === 'CON' && (currentPatientSerNum !== savedPatientSernum)) ? savedPatientSernum : currentPatientSerNum;
+            return (savedPatientSernum && savedPatientStatus === Params.relationshipStatus.confirmed && (currentPatientSerNum !== savedPatientSernum)) ? savedPatientSernum : currentPatientSerNum;
         }
 
         /**
