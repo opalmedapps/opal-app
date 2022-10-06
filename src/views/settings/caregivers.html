@@ -1,0 +1,28 @@
+<ons-page style="background-color: white" ng-controller="CaregiversController as Ctrl" ng-cloak>
+    <generic-toolbar title="{{'RELATIONSHIPS_CAREGIVERS'|translate}}" style-class="fontSizeTitle">
+        <right-content>   
+            <ons-toolbar-button ng-click="settingsNavigator.pushPage('views/tabs/info-page-tabs.html',{id:'caregivers'})">
+                <ons-icon icon="fa-info-circle"></ons-icon>
+            </ons-toolbar-button>
+        </right-content> 
+    </generic-toolbar>
+    
+    <div ng-if="Ctrl.message" class="container" align="center">
+        <p style="margin-top:25vh;color:grey">{{Ctrl.message|translate}}</p>
+    </div>
+
+    <ons-list ng-if="!Ctrl.message">
+        <ons-list-item ng-repeat="caregivers in Ctrl.caregivers" class="item">
+            <ons-row align="center" >
+                <ons-col width="60px" align="center">
+                    <div style="margin-left:10px">
+                        <i class="fa fa-user  iconHomeView" style="color:#2196F3"></i>
+                    </div>
+                </ons-col>
+                <ons-col style="word-wrap: break-word;">
+                    <span ng-class="fontSizeTitle">{{caregivers.firstName}} {{caregivers.lastName}}</span>
+                </ons-col>
+            </ons-row>
+        </ons-list-item>
+    </ons-list>
+</ons-page>

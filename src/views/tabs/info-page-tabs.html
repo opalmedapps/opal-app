@@ -1,13 +1,13 @@
 <ons-page ng-controller="InfoTabController as info">
-    <generic-toolbar title="{{'INFO'|translate}}" style-class="fontSizeTitle"></generic-toolbar>
+  <generic-toolbar title="{{'INFO'|translate}}" style-class="fontSizeTitle"></generic-toolbar>
 
-    <div style="margin-top:10vh;padding: 0 20px 0 20px" class="text-center">
-      <div >
-        <ons-icon icon="{{info.view.icon}}" style="font-size:80px; color: #2196F3"></ons-icon>
-      </div>
-      <p class="item-title" ng-class="fontSizeTitle" ng-style="{color:view.color}" style="font-weight: bold;" translate= "{{info.view.name}}"></p>
-      <div class="container" style="text-align:center;" ng-class="fontSizeDesc">
-          {{info.view.description}}
-      </div>
+  <div style="margin-top:10vh;padding: 0 20px 0 20px" class="text-center">
+    <div >
+      <ons-icon icon="{{info.view.icon}}" style="font-size:80px; color: #2196F3"></ons-icon>
     </div>
- </ons-page>
+    <p class="item-title" ng-class="fontSizeTitle" ng-style="{color:view.color}" style="font-weight: bold;" translate="{{info.view.name}}"></p>
+    <div class="container" style="text-align:center;" ng-class="fontSizeDesc">
+        {{info.view.description|translate}}
+    </div>
+  </div>
+</ons-page>
