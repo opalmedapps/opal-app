@@ -9,11 +9,11 @@
         .controller('LoadingController', LoadingController);
 
     LoadingController.$inject = ['$state', '$filter', 'UpdateUI', 'UserAuthorizationInfo','UserPreferences', 'Patient',
-        'RequestToServer', 'MetaData', 'LogOutService', 'NativeNotification'];
+        'RequestToServer', 'MetaData', 'LogOutService', 'NativeNotification', 'ProfileSelector'];
 
     /* @ngInject */
     function LoadingController($state, $filter, UpdateUI, UserAuthorizationInfo, UserPreferences, Patient,
-                               RequestToServer, MetaData, LogOutService, NativeNotification) {
+                               RequestToServer, MetaData, LogOutService, NativeNotification, ProfileSelector) {
 
         activate();
         ///////////////////////////
@@ -34,6 +34,9 @@
 
                 //fetch all the tab metadata TODO: add the fetching of all the other data
                 MetaData.init();
+
+                // Init the profile selector and load the patient list.
+                ProfileSelector.init();
 
                 loadingmodal.hide();
                 clearTimeout(timeOut);

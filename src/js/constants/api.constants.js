@@ -16,19 +16,19 @@
                 'Content-Type': 'application/json',
                 'Accept-Language': 'fr',
             },
-            /** Django backend available routes. */
+            /** Django backend available routes. Note: Trailing slashes are required */
             ROUTES: {
                 HOME: {
                     method: 'get',
-                    url: '/api/app/home',
+                    url: '/api/app/home/',
                 },
                 CHART: {
                     method: 'get',
-                    url: '/api/app/chart',
+                    url: '/api/app/chart/',
                 },
                 GENERAL: {
                     method: 'get',
-                    url: '/api/app/general'
+                    url: '/api/app/general/'
                 },
                 HOSPITAL_SETTINGS: {
                     SITES: {
@@ -40,6 +40,10 @@
                         url: '/api/institutions/',
                     }
                 },
+                PATIENTS: {
+                    method: 'get',
+                    url: '/api/caregivers/patients/'
+                }
             }
         });
 })();

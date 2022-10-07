@@ -257,6 +257,13 @@
                             "HOS": 0,
                         },
                     }
+                },
+                relationshipStatus: {
+                    pending: 'PEN',
+                    confirmed: 'CON',
+                    denied: 'DEN',
+                    expired: 'EXP',
+                    revoked: 'REV',
                 }
             };
 
