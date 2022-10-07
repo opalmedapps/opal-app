@@ -29,7 +29,6 @@
         vm.FirstName = Patient.getFirstName();
         vm.LastName = Patient.getLastName();
         vm.Email = Patient.getEmail();
-        vm.TelNum = Patient.getTelNum();
         vm.Language = UserPreferences.getLanguage();
         vm.ProfilePicture = Patient.getProfileImage();
         vm.passwordLength = 6;
@@ -92,7 +91,6 @@
             vm.FirstName = Patient.getFirstName();
             vm.LastName = Patient.getLastName();
             vm.Email = Patient.getEmail();
-            vm.TelNum = Patient.getTelNum();
             vm.Language = UserPreferences.getLanguage();
             vm.ProfilePicture = Patient.getProfileImage();
             vm.selectedHospitalToDisplay = UserHospitalPreferences.getHospitalFullName();
