@@ -16,12 +16,14 @@ import {Observer} from "../models/utility/observer";
         const profileObserver = new Observer();
         let patientList;
         let currentSelectedProfile;
+        let loggedInUserPatientId;
 
         return {
             init: init,
             getPatientList: () => patientList,
             loadPatientProfile: loadPatientProfile,
             getActiveProfile: () => currentSelectedProfile,
+            getLoggedInUserPatientId: () => loggedInUserPatientId,
             observeProfile: fun => profileObserver.attach(fun),
         }
 
@@ -30,7 +32,8 @@ import {Observer} from "../models/utility/observer";
          */
         async function init() {
             patientList = await requestPatientList();
-            const patientSernum = getLocalStoragePatientSernum(Patient.getPatientSerNum());
+            loggedInUserPatientId = Patient.getPatientSerNum();
+            const patientSernum = getLocalStoragePatientSernum(loggedInUserPatientId);
             loadPatientProfile(patientSernum);
         }
 

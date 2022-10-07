@@ -5,10 +5,10 @@
         .module('MUHCApp')
         .controller('CaregiversController', CaregiversController);
 
-        CaregiversController.$inject = ['$timeout', 'RequestToServer', 'Params', 'Patient', 'NavigatorParameters'];
+    CaregiversController.$inject = ['$timeout', 'RequestToServer', 'Params', 'ProfileSelector'];
 
     /* @ngInject */
-    function CaregiversController($timeout, RequestToServer, Params, Patient, NavigatorParameters) {
+    function CaregiversController($timeout, RequestToServer, Params, ProfileSelector) {
         var vm = this;
         vm.error = null;
         vm.notFound = null;
@@ -16,34 +16,18 @@
         vm.apiData;
         vm.caregivers;
 
-        activate();
-
-        function activate() {
-            // NavigatorParameters.getNavigator();
-            getCaregiversList();
-        }
+        getCaregiversList();
 
         async function getCaregiversList() {
             try {
-                const patientSerNum = Patient.getPatientSerNum();
+                const patientSerNum = ProfileSelector.getLoggedInUserPatientId();
                 const requestParams = Params.API.ROUTES.CAREGIVERS;
                 const formatedParams = {
                     ...requestParams,
                     url: requestParams.url.replace('<PATIENT_ID>', patientSerNum),
                 }
-                // Request return 404 at the moment. The endpoint in the django backend is not implemented. (QSCCD-132)
-                // The URL format need to be validated (QSCCD-132)
-                // Temporary mock data. Values should come from result
-                // Responsefor mat need to be validated
-                // const result = await RequestToServer.apiRequest(formatedParams);
-                const result = {
-                    data: [
-                        {id: 1, lastName: 'Bouvier', firstName: 'Marge'},
-                        {id: 2, lastName: 'Bouvier', firstName: 'Selma'},
-                    ]
-                };
-                // const result = {data: []};
-                (result.data.length <= 0) ? vm.notFound = true : vm.apiData = result.data;
+                const result = await RequestToServer.apiRequest(formatedParams);
+                (result.data?.length <= 0) ? vm.notFound = true : vm.apiData = result.data;
             } catch (error) {
                 vm.error = true;
                 console.error(error);
