@@ -21,3 +21,5 @@ import "./directives/password-input.directive.js";
 import "./directives/video-tag-by-format.directive.js";
 import "./directives/patient-data-handler.directive";
 import "./directives/ons-pull-hook-content.directive";
+import "./directives/profile-selector.directive";
+import "./directives/profile-icon.directive";
