@@ -15,6 +15,7 @@
         vm.message = null;
         vm.apiData;
         vm.caregivers;
+        vm.getRelationshipStatusText = (status) => `RELATIONSHIPS_PATIENTS_STATUS_${status}`;
 
         getCaregiversList();
 

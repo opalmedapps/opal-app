@@ -12,7 +12,7 @@
     </div>
 
     <ons-list ng-if="!Ctrl.message">
-        <ons-list-item ng-repeat="caregivers in Ctrl.caregivers" ng-if="caregivers.status == 'CON'"class="item">
+        <ons-list-item ng-repeat="caregivers in Ctrl.caregivers" class="item">
             <ons-row align="center" >
                 <ons-col width="60px" align="center">
                     <div style="margin-left:10px">
@@ -20,7 +20,8 @@
                     </div>
                 </ons-col>
                 <ons-col style="word-wrap: break-word;">
-                    <span ng-class="fontSizeTitle">{{caregivers.first_name}} {{caregivers.last_name}}</span>
+                    <div ng-class="fontSizeTitle">{{caregivers.first_name}} {{caregivers.last_name}}</div>
+                    <div class="relationship-list--status" ng-class="fontSizeDesc">{{'RELATIONSHIPS_PATIENTS_ACCESS' | translate }} {{Ctrl.getRelationshipStatusText(caregivers.status) | translate | lowercase}}</div>
                 </ons-col>
             </ons-row>
         </ons-list-item>
