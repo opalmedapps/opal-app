@@ -33,3 +33,16 @@
 .image-profile--text {
     font-size: 2rem;
 }
+
+.profile-icon {
+    font-size: 1.1rem;
+    border-radius: 100%;
+    color: #ffffff;
+    letter-spacing: 1px;
+    display: inline-block;
+    padding: 0;
+    line-height: 30px;
+    width: 30px;
+    height: 30px;
+    text-align: center;
+}

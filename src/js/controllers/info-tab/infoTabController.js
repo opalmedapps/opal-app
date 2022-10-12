@@ -42,7 +42,13 @@
                 icon:'fa-user',
                 name: "RELATIONSHIPS_CAREGIVERS",
                 description:"RELATIONSHIPS_CAREGIVERS_DESCRIPTION"
-            }
+            },
+            patients: {
+                icon:'fa-user',
+                color:'darkblue',
+                name: "RELATIONSHIPS_PATIENTS",
+                description:"RELATIONSHIPS_PATIENTS_DESCRIPTION"
+            },
         };
 
         activate();

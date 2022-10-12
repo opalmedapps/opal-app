@@ -20,7 +20,7 @@
             restrict: 'E',
             scope: true,
             template: `
-                <span class="tab-icon tab-icon--profile" ng-style="profileColor">{{patientInitials}}</span>
+                <span class="tab-icon profile-icon" ng-style="profileColor">{{patientInitials}}</span>
             `,
             link: function (scope) {
                 /**
