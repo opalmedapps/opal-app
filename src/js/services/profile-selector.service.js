@@ -7,23 +7,21 @@ import {Observer} from "../models/utility/observer";
         .module('MUHCApp')
         .service('ProfileSelector', ProfileSelector);
 
-    ProfileSelector.$inject = ['$timeout', '$window', 'Params', 'RequestToServer', 'Patient'];
+    ProfileSelector.$inject = ['$timeout', '$window', 'Params', 'RequestToServer', 'Patient', 'User'];
 
     /**
      * @description Service that handle loading of a patient list for a given caregiver and selection of the profile.
      */
-    function ProfileSelector($timeout, $window, Params, RequestToServer, Patient) {
+    function ProfileSelector($timeout, $window, Params, RequestToServer, Patient, User) {
         const profileObserver = new Observer();
         let patientList;
         let currentSelectedProfile;
-        let loggedInUserPatientId;
 
         return {
             init: init,
             getPatientList: () => patientList,
             loadPatientProfile: loadPatientProfile,
             getActiveProfile: () => currentSelectedProfile,
-            getLoggedInUserPatientId: () => loggedInUserPatientId,
             observeProfile: fun => profileObserver.attach(fun),
         }
 
@@ -32,7 +30,8 @@ import {Observer} from "../models/utility/observer";
          */
         async function init() {
             patientList = await requestPatientList();
-            loggedInUserPatientId = Patient.getPatientSerNum();
+            let loggedInUserPatientId = Patient.getPatientSerNum();
+            User.setUserProfile(patientList, loggedInUserPatientId)
             const patientSernum = getLocalStoragePatientSernum(loggedInUserPatientId);
             loadPatientProfile(patientSernum);
         }
