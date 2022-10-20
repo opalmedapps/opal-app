@@ -104,6 +104,27 @@
             }
         }
 
+        /**
+         * @description Filter out duplicate announcements using 'PostControlSerNum' to only display announcement one time for multiple patients
+         * @param {object} originalArray - Array containing duplicate values
+         * @returns 
+         */
+        function filterOutDuplicateValue(originalArray) {
+            let filteredArray = [];
+            originalArray.forEach((originalItem) => {
+                if (filteredArray.length === 0) {
+                    filteredArray.push(originalItem);
+                } else {
+                    let exist = filteredArray.find((filteredItem) => {
+                        return originalItem.PostControlSerNum === filteredItem.PostControlSerNum;
+                    });
+                    if (!exist) filteredArray.push(originalItem);
+                }
+            });
+
+            return filteredArray;
+        }
+
 
         /******************************
          *  PUBLIC FUNCTIONS
@@ -120,7 +141,8 @@
         {
             announcements=[];
             lastUpdated = Date.now();
-            addAnnouncements(array);
+            let filteredDuplicate = filterOutDuplicateValue(array);
+            addAnnouncements(filteredDuplicate);
         }
 
         /**
@@ -133,9 +155,8 @@
          **/
         function updateAnnouncements(array)
         {
-            // console.log('updating announcements');
-            findAndDeleteAnnouncements(array);
-            addAnnouncements(array);
+            let filteredDuplicate = filterOutDuplicateValue(array);
+            addAnnouncements(findAndDeleteAnnouncements(filteredDuplicate));
         }
 
         /**

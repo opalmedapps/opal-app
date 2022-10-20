@@ -9,11 +9,13 @@ angular
 
         let firebase_url;
         let response_url;
+        let currentRequestPatientId = null;
 
         return {
             sendRequestWithResponse: sendRequestWithResponse,
             sendRequest: sendRequest,
-            apiRequest: apiRequest
+            apiRequest: apiRequest,
+            cueRequests: cueRequests
         };
 
         /**
@@ -70,6 +72,46 @@ angular
                 headers: {...Params.API.REQUEST_HEADERS, 'Accept-Language': UserPreferences.getLanguage()},
             }
         }
+
+        /**
+         * @description - Cue request between multiple patient requests for announcements or normal single request to server.
+         * @param {string} typeOfRequest - Type of request send to the listener
+         * @param {object} parameters - Extra parameters to identify data to be query
+         * @returns Requested data from the listener.
+         */
+        async function cueRequests(typeOfRequest, parameters) {
+            return parameters.Fields[0] === 'Announcements' ? handleMultiplePatientAnnouncements(typeOfRequest, parameters) : sendRequestWithResponse(typeOfRequest, parameters);
+        }
+
+        /**
+         * @descrition - Execute multiple requests to get an announcement per patient then merge the data together.
+         * @param {string} typeOfRequest - Type of request send to the listener
+         * @param {object} parameters - Extra parameters to identify data to be query
+         * @returns Response with merge data
+         */
+        async function handleMultiplePatientAnnouncements(typeOfRequest, parameters) {
+            const ProfileSelectorService = $injector.get('ProfileSelector');
+            const patientList = ProfileSelectorService.getConfirmedProfiles();
+            let combinedArrays = [];
+            let results = [];
+            await Promise.all(patientList.map(async (patient) => {
+                if (!patient.patient_legacy_id) return;
+                currentRequestPatientId = patient.patient_legacy_id;
+                let response = await sendRequestWithResponse(typeOfRequest, parameters);
+                results.push(response);
+            }));
+            
+            results.forEach((result) => {
+                if (result.Data !== 'empty') combinedArrays = [...combinedArrays, ...result.Data.Announcements]
+            });
+            return {
+                ...results[0],
+                Data: {
+                    'Announcements': combinedArrays,
+                }
+            }
+        }
+
 
         function sendRequestWithResponse(typeOfRequest, parameters, encryptionKey, referenceField, responseField) {
             return new Promise((resolve, reject) => {
@@ -138,12 +180,13 @@ angular
         }
 
         /**
-         * @description Get the patientSerNum from the currently selected profile or fallback to the old patient/user service patientSernum
+         * @description Get the patientSerNum from the currently selected profile, curently selected profile for multiple patient data loading
+         *  or fallback to the old patient/user service patientSernum
          * @returns {number} The patientSerNum id required to make the request
          */
         function getPatientId() {
             const ProfileSelectorService = $injector.get('ProfileSelector');
             const selectedProfile = ProfileSelectorService.getActiveProfile();
-            return selectedProfile?.patient_legacy_id || Patient.getPatientSerNum();
+            return currentRequestPatientId || selectedProfile?.patient_legacy_id || Patient.getPatientSerNum();
         }
 }]);

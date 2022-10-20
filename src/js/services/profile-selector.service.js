@@ -23,6 +23,7 @@ import {Observer} from "../models/utility/observer";
             loadPatientProfile: loadPatientProfile,
             getActiveProfile: () => currentSelectedProfile,
             observeProfile: fun => profileObserver.attach(fun),
+            getConfirmedProfiles: getConfirmedProfiles,
         }
 
         /**
@@ -34,6 +35,13 @@ import {Observer} from "../models/utility/observer";
             User.setUserProfile(patientList, loggedInUserPatientId)
             const patientSernum = getLocalStoragePatientSernum(loggedInUserPatientId);
             loadPatientProfile(patientSernum);
+        }
+
+        /**
+         * @returns The list of confirmed relationship only.
+         */
+        function getConfirmedProfiles() {
+            return patientList.filter(patient => patient.status === Params.relationshipStatus.confirmed);
         }
 
         /**
@@ -85,6 +93,11 @@ import {Observer} from "../models/utility/observer";
             }
         }
 
+        /**
+         * Add color to the the passed profile.
+         * @param {object} profiles - The profile we need to assign a color too. 
+         * @returns {object} Profiles data with it's color added.
+         */
         function assignColor(profiles) {
             const colorList = [
                 '#53BB96',
