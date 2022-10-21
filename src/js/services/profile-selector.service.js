@@ -7,12 +7,12 @@ import {Observer} from "../models/utility/observer";
         .module('MUHCApp')
         .service('ProfileSelector', ProfileSelector);
 
-    ProfileSelector.$inject = ['$timeout', '$window', 'Params', 'RequestToServer', 'Patient'];
+    ProfileSelector.$inject = ['$timeout', '$window', 'Params', 'RequestToServer', 'Patient', 'User'];
 
     /**
      * @description Service that handle loading of a patient list for a given caregiver and selection of the profile.
      */
-    function ProfileSelector($timeout, $window, Params, RequestToServer, Patient) {
+    function ProfileSelector($timeout, $window, Params, RequestToServer, Patient, User) {
         const profileObserver = new Observer();
         let patientList;
         let currentSelectedProfile;
@@ -30,7 +30,9 @@ import {Observer} from "../models/utility/observer";
          */
         async function init() {
             patientList = await requestPatientList();
-            const patientSernum = getLocalStoragePatientSernum(Patient.getPatientSerNum());
+            let loggedInUserPatientId = Patient.getPatientSerNum();
+            User.setUserProfile(patientList, loggedInUserPatientId)
+            const patientSernum = getLocalStoragePatientSernum(loggedInUserPatientId);
             loadPatientProfile(patientSernum);
         }
 
@@ -41,7 +43,7 @@ import {Observer} from "../models/utility/observer";
          */
         function getLocalStoragePatientSernum(currentPatientSerNum) {
             let savedPatientSernum = $window.localStorage.getItem('profileId') || null;
-            let savedPatientStatus = patientList.find(item => item.patient_legacy_id === savedPatientSernum).status;
+            let savedPatientStatus = patientList.find(item => item.patient_legacy_id === savedPatientSernum)?.status;
             return (savedPatientSernum && savedPatientStatus === Params.relationshipStatus.confirmed && (currentPatientSerNum !== savedPatientSernum)) ? savedPatientSernum : currentPatientSerNum;
         }
 
