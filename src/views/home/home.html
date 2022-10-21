@@ -1,7 +1,7 @@
 <ons-page ng-controller="HomeController as h" ng-device-backbutton="h.homeDeviceBackButton()">
     <generic-toolbar title="{{'HEADER_MESSAGE_HOME'|translate}}" back-button="false" style-class="fontSizeTitle">
         <right-content>
-            <ons-toolbar-button ng-click="homeNavigator.pushPage('views/tabs/info-page-tabs.html',{param:home})"><ons-icon icon="fa-info-circle"></ons-icon></ons-toolbar-button>
+            <ons-toolbar-button ng-click="homeNavigator.pushPage('views/tabs/info-page-tabs.html', {id:'home'})"><ons-icon icon="fa-info-circle"></ons-icon></ons-toolbar-button>
         </right-content>
     </generic-toolbar>
 
