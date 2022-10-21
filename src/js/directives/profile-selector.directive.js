@@ -48,7 +48,7 @@ import "../../css/directives/profile-selector.directive.css"
                             ng-click="selectProfile(profile.patient_legacy_id, profile.status)">
                                 <div class="profile-selector--text">
                                     {{profile.first_name}} {{profile.last_name}}
-                                    <span ng-show="profile.status == relationshipStatus.pending">({{'RELATIONSHIPS_PATIENTS_STATUS_PEN' | translate | lowercase}})</span>
+                                    <span ng-show="profile.status == relationshipStatus.pending">({{'RELATIONSHIPS_PATIENTS_ACCESS' | translate}} {{'RELATIONSHIPS_PATIENTS_STATUS_PEN' | translate | lowercase}})</span>
                                 </div>
                             </li>
                         </ul>

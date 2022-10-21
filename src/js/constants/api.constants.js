@@ -43,6 +43,10 @@
                 PATIENTS: {
                     method: 'get',
                     url: '/api/caregivers/patients/'
+                },
+                CAREGIVERS: {
+                    method: 'get',
+                    url: '/api/patients/legacy/<PATIENT_ID>/caregivers/' 
                 }
             }
         });
