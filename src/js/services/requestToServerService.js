@@ -100,7 +100,7 @@ angular
                 let response = await sendRequestWithResponse(typeOfRequest, parameters);
                 results.push(response);
             }));
-            
+            currentRequestPatientId = null;
             results.forEach((result) => {
                 if (result.Data !== 'empty') combinedArrays = [...combinedArrays, ...result.Data.Announcements]
             });

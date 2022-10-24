@@ -151,7 +151,6 @@
                 Timestamp: findSmallestTimestamp(parameters),
             };
             let response = await RequestToServer.cueRequests('Refresh', refreshParams); 
-            // let response = await RequestToServer.sendRequestWithResponse('Refresh', refreshParams);
             validateResponse(response);
             await updateServices(response.Data);
             updateTimestamps(parameters, response.Timestamp);
@@ -164,7 +163,7 @@
          * @returns {Promise<void>} Resolves if all data was successfully initialized, or rejects with an error.
          */
         async function setSection(parameters) {
-            let response = await RequestToServer.cueRequests('Refresh', {Fields: parameters}); 
+            let response = await RequestToServer.cueRequests('Refresh', {Fields: parameters});
             validateResponse(response);
             await setServices(response.Data, parameters);
             updateTimestamps(parameters, response.Timestamp);
