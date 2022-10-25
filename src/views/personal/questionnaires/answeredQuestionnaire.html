@@ -15,10 +15,6 @@
     </loading-spinning-circle>
 
     <div ng-if="vm.questionnaire.status !== vm.allowedStatus.COMPLETED_QUESTIONNAIRE_STATUS" ng-hide="vm.loadingSubmitQuestionnaire || vm.loadingQuestionnaire">
-        <!-- Display title if consent form -->
-        <div class="col-xs-12" align="center" ng-if="vm.isConsent">
-            <h3><b><span style="color: darkmagenta" ng-class="fontSizeTitle">{{vm.questionnaire.nickname}}</span></b></h3> <br>
-        </div>
         <!-- Instruction to submit -->
         <div ng-if="vm.submitAllowed" ng-class="fontSizeDesc" align="center" style="color: gray; padding-left: 10px; padding-right: 10px;">
             {{"QUESTIONNAIRE_SUBMIT_INSTRUCTION"|translate}}
@@ -30,7 +26,7 @@
         <!-- Submit button -->
         <div align="center" style="margin-top:10px;margin-bottom:10px">
             <button class="button--large--cta" style="width:80%" ng-click="vm.submitQuestionnaire()" ng-class="fontSizeDesc"
-                ng-disabled="!vm.submitAllowed">{{"SUBMITANSWERS"|translate}}
+                    ng-disabled="!vm.submitAllowed">{{"SUBMITANSWERS"|translate}}
             </button>
         </div>
 
