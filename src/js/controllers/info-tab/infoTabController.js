@@ -15,43 +15,42 @@
         .module('MUHCApp')
         .controller('InfoTabController', InfoTabController);
 
-    InfoTabController.$inject = ['$timeout','$filter','$sce'];
+    InfoTabController.$inject = ['$timeout','$filter','$sce', 'NavigatorParameters'];
 
   /* @ngInject */
-    function InfoTabController($timeout,$filter,$sce) {
+    function InfoTabController($timeout, $filter, $sce, NavigatorParameters) {
         var vm = this;
         vm.title = 'InfoTabController';
         vm.view = {};
 
-        var views=[
-            {
+        const views= {
+            home: {
                 icon:'fa-home',
-                color:'SteelBlue',
                 name:"HOME",
                 description:"HOME_DESCRIPTION"
             },
-            {
+            chart: {
                 icon:'fa-user',
-                color:'maroon',
                 name:"MYCHART" ,
                 description:"MYCHART_DESCRIPTION"
             },
-            {
+            general: {
                 icon:'fa-th',
-                color:'darkblue',
                 name: "GENERAL",
                 description:"GENERAL_DESCRIPTION"
+            },
+            caregivers: {
+                icon:'fa-user',
+                name: "RELATIONSHIPS_CAREGIVERS",
+                description:"RELATIONSHIPS_CAREGIVERS_DESCRIPTION"
             }
-        ];
+        };
 
         activate();
 
-        ////////////////
-
-        function activate() {
-            var tab = tabbar.getActiveTabIndex();
-            vm.view = views[tab];
-            vm.view.description = $filter('translate')(vm.view.description );
+        function activate() { 
+            let params = NavigatorParameters.getNavigator().getCurrentPage().options;
+            vm.view = views[params.id];
         }
     }
 
