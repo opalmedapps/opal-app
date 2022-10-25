@@ -113,7 +113,7 @@
             </ons-list-item>
             <ons-list-item modifier="chevron" class="item"
                            ng-if="tab.allowedModules.hasOwnProperty('QUE') && tab.allowedModules['QUE']"
-                           ng-click="personalNavigator.pushPage('views/personal/questionnaires/questionnairesList.html')">
+                           ng-click="tab.goToClinicalQuestionnaire()">
                 <ons-row align="center">
                     <ons-col width="60px" style="text-align: center">
                         <div>
@@ -122,12 +122,29 @@
                     </ons-col>
                     <ons-col>
                         <header>
-                            <span class="item-title" ng-class="fontSizeTitle">{{"QUESTIONNAIRES"|translate}}</span>
+                            <span class="item-title" ng-class="fontSizeTitle">{{"CLINICAL_QUESTIONNAIRES"|translate}}</span>
                         </header>
                         <p class="item-desc" ng-class="fontSizeDesc"></p>
                     </ons-col>
                 </ons-row>
             </ons-list-item>
-        </ons-list>
+            <ons-list-item modifier="chevron" class="item"
+                           ng-if="tab.allowedModules.hasOwnProperty('RES') && tab.allowedModules['RES']" 
+                           ng-click="personalNavigator.pushPage('views/personal/research/research.html')"> 
+                <ons-row align="center">
+                    <ons-col width="60px" style="text-align: center">
+                        <div>
+                            <img style="width: 35px;" src="./img/microscope.png"><span class="notification" ng-show="tab.researchUnreadNumber>0">{{tab.researchUnreadNumber}}</span>
+                        </div>
+                    </ons-col>
+                    <ons-col>
+                        <header>
+                            <span class="item-title" ng-class="fontSizeTitle">{{"RESEARCH"|translate}}</span>
+                        </header>
+                        <p class="item-desc" ng-class="fontSizeDesc"></p>
+                    </ons-col>
+                </ons-row>
+            </ons-list-item>
+            </ons-list>
     </div>
 </ons-page>

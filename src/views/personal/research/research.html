@@ -1,0 +1,85 @@
+<ons-page ng-controller="ResearchController as tab">   
+    <ons-toolbar fixed-style>
+        <div class="left">
+            <ons-back-button>{{"BACK"|translate}}</ons-back-button>
+        </div>
+        <div class="center" ng-class="fontSizeTitle">
+            {{"RESEARCH"|translate}}
+        </div>
+        <div class="right">
+            <ons-toolbar-button ng-click="tab.openInfoPage()">
+                <ons-icon icon="fa-info-circle"></ons-icon>
+            </ons-toolbar-button>
+        </div>
+    </ons-toolbar>
+
+    <network-banner></network-banner>
+
+    <ons-list style="margin: 0px 0">
+        <ons-list-item modifier="chevron" class="item"
+                       ng-click="tab.openResearchStudies()"> 
+            <ons-row align="center">
+                <ons-col width="60px" style="text-align: center">
+                    <div>
+                        <img style="width: 35px;" src="./img/dna.png"><span class="notification" ng-show="tab.studiesUnreadNumber>0">{{tab.studiesUnreadNumber}}</span>  
+                    </div>
+                </ons-col>
+                <ons-col>
+                    <header>
+                        <span class="item-title" ng-class="fontSizeTitle">{{"STUDIES"|translate}}</span> 
+                    </header>
+                    <p class="item-desc"></p>
+                </ons-col>
+            </ons-row>
+        </ons-list-item>
+        <ons-list-item modifier="chevron" class="item"
+                       ng-click="tab.openReferenceMaterial()">  
+            <ons-row align="center">
+                
+                <ons-col width="60px" style="text-align: center">
+                    <div>
+                        <ons-icon icon="fa-book" size="2x" style="color:rgb(0, 192, 166)"></ons-icon><span class="notification" ng-show="tab.eduMaterialUnreadNumber>0">{{tab.eduMaterialUnreadNumber}}</span>
+                    </div>
+                </ons-col>
+                <ons-col>
+                    <header>
+                        <span class="item-title" ng-class="fontSizeTitle">{{"REFERENCE_MATERIAL"|translate}}</span> 
+                    </header>
+                    <p class="item-desc"></p>
+                </ons-col>
+            </ons-row>
+        </ons-list-item>
+        <ons-list-item modifier="chevron" class="item"
+                        ng-click="tab.openResearchQuestionnaires()">  
+            <ons-row align="center">
+                <ons-col width="60px" style="text-align: center">
+                    <div>
+                        <ons-icon icon="ion-clipboard" size="2x" style="color:darkslateblue"></ons-icon><span class="notification" ng-show="tab.researchQuestionnairesUnreadNumber>0">{{tab.researchQuestionnairesUnreadNumber}}</span>
+                    </div>
+                </ons-col>
+                <ons-col>
+                    <header>
+                        <span class="item-title" ng-class="fontSizeTitle">{{"RESEARCH_QUESTIONNAIRES"|translate}}</span> 
+                    </header>
+                    <p class="item-desc"></p>
+                </ons-col>
+            </ons-row>
+        </ons-list-item>
+        <ons-list-item modifier="chevron" class="item"
+                        ng-click="tab.openConsentForms()"> 
+            <ons-row align="center">
+                <ons-col width="60px" style="text-align: center">
+                    <div>
+                        <img style="width: 35px;" src="./img/file-signature.png"><span class="notification" ng-show="tab.consentQuestionnairesUnreadNumber>0">{{tab.consentQuestionnairesUnreadNumber}}</span>  
+                    </div>
+                </ons-col>
+                <ons-col>
+                    <header>
+                        <span class="item-title" ng-class="fontSizeTitle">{{"CONSENT_FORMS"|translate}}</span>
+                    </header>
+                    <p class="item-desc"></p>
+                </ons-col>
+            </ons-row>
+        </ons-list-item>
+    </ons-list>
+</ons-page>
