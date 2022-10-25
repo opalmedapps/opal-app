@@ -20,53 +20,17 @@
             <h3><b><span style="color: darkmagenta" ng-class="fontSizeTitle">{{vm.questionnaire.nickname}}</span></b></h3> <br>
         </div>
         <!-- Instruction to submit -->
-        <div ng-if="vm.submitAllowed" ng-class="fontSizeDesc" align="center" style="padding-left: 10px; padding-right: 10px;">
-            {{vm.submitInstructions}}
+        <div ng-if="vm.submitAllowed" ng-class="fontSizeDesc" align="center" style="color: gray; padding-left: 10px; padding-right: 10px;">
+            {{"QUESTIONNAIRE_SUBMIT_INSTRUCTION"|translate}}
         </div>
-        <div ng-if="!vm.submitAllowed" ng-class="fontSizeDesc" align="center" style="padding-left: 10px; padding-right: 10px;">
+        <div ng-if="!vm.submitAllowed" ng-class="fontSizeDesc" align="center" style="color: gray; padding-left: 10px; padding-right: 10px;">
             {{"QUESTIONNAIRE_INSTRUCTIONS"|translate}}
-        </div>
-
-        <div ng-if="vm.isConsent && vm.submitAllowed">
-            <br>
-            <div ng-class="fontSizeDesc" align="justify" style="padding-left: 30px; padding-right: 30px;">
-                <i>{{"CONSENT_FORM_ACKNOWLEDGEMENT"|translate}}</i>
-            </div>
-            <div style="padding-left:40px; padding-right:40px;"> 
-                <li class="list__item list__item--tappable" style="background-color:chartreuse"  >
-                <label ng-class="fontSizeDesc" class="radio-button radio-button--list-item" style="margin:2px; text-align:center">
-                    <input type="radio" name="navi-segment-a" ng-model="vm.consentStatus" ng-value="true" ng-change="vm.updateRequirePassword()">
-                    <div class="radio-button__checkmark radio-button--list-item__checkmark"></div> 
-                    {{"CONSENT"|translate}}
-                </label>
-                </li>
-                <li class="list__item list__item--tappable" style="background-color:rgb(255, 75, 75)"  >
-                    <label ng-class="fontSizeDesc" class="radio-button radio-button--list-item" style="margin:2px; text-align:center">
-                        <input type="radio" name="navi-segment-a" ng-model="vm.consentStatus" ng-value="false" ng-change="vm.updateRequirePassword()">
-                        <div  class="radio-button__checkmark radio-button--list-item__checkmark"></div> 
-                        &nbsp;{{"DECLINE"|translate}}
-                    </label>
-                </li>
-                <br>
-            </div>
-        </div> 
-
-        <!-- Password verification -->
-        <div ng-if="vm.requirePassword && vm.submitAllowed" class="style-4" style="padding: 10px;">
-            <div ng-class="fontSizeDesc" align="center" style="padding-left: 10px; padding-right: 10px;">
-                {{"CONSENT_FORM_PASSWORD_INSTRUCTION"|translate}}
-            </div>
-            <br>
-            <input type="password" ng-class="fontSizeDesc"
-                   placeholder="{{'PASSWORD'|translate}}"
-                   ng-model="vm.password">
-            <br>
         </div>
 
         <!-- Submit button -->
         <div align="center" style="margin-top:10px;margin-bottom:10px">
             <button class="button--large--cta" style="width:80%" ng-click="vm.submitQuestionnaire()" ng-class="fontSizeDesc"
-                    ng-disabled="!vm.submitAllowed || (vm.password == '' && vm.requirePassword) || (vm.isConsent && vm.consentStatus == null)">{{vm.submitButtonText}}
+            ng-disabled="!vm.submitAllowed">{{"SUBMITANSWERS"|translate}}
             </button>
         </div>
 
@@ -74,13 +38,6 @@
     </div>
 
     <ons-row align="center" style="margin-left: 0.12vw;" ng-hide="vm.loadingSubmitQuestionnaire || vm.loadingQuestionnaire">
-        <!-- Display questionnaire title and description on completed questionnaire view -->
-        <div class="col-xs-12" align="center" ng-if="vm.questionnaire.status === vm.allowedStatus.COMPLETED_QUESTIONNAIRE_STATUS">
-            <p style="margin-top:2vh; margin-bottom:2vh" ng-class="fontSizeDesc">
-                <h3><b><span style="color: darkmagenta" ng-class="fontSizeTitle">{{vm.questionnaire.nickname}}</span></b></h3>
-                <span ng-if="vm.hasDescription" align="justify" ng-bind-html="vm.questionnaire.description"></span>
-            </p>
-        </div>
         <ons-col align="center">
             <!-- Section -->
             <!-- this will not be displayed until multi-section questionnaire is implemented in OpalAdmin -->
