@@ -6,7 +6,7 @@
         .module("MUHCApp")
         .directive("profileIcon", ProfileIcon);
 
-    ProfileIcon.$inject = ['Patient', 'ProfileSelector'];
+    ProfileIcon.$inject = ['$filter', 'ProfileSelector'];
 
     /**
      * @name ProfileIcon
@@ -14,13 +14,13 @@
      * @date 2022-09-23
      * @desc Display the round icon with active profile initials
      */
-    function ProfileIcon(Patient, ProfileSelector)
+    function ProfileIcon($filter, ProfileSelector)
     {
         return {
             restrict: 'E',
             scope: true,
             template: `
-                <span class="tab-icon tab-icon--profile" ng-style="profileColor">{{patientInitials}}</span>
+                <span class="tab-icon profile-icon" ng-style="profileColor">{{patientInitials}}</span>
             `,
             link: function (scope) {
                 /**
@@ -32,7 +32,7 @@
                  * @param {object} activeProfile Currently selected profile.
                  */
                 function setIcon(activeProfile) {
-                    scope.patientInitials = `${activeProfile.first_name.substr(0, 1)}${activeProfile.last_name.substr(0, 1)}`;
+                    scope.patientInitials = $filter('profileInitials')(activeProfile);
                     scope.profileColor = {'background-color': activeProfile.color};
                 }
             }
