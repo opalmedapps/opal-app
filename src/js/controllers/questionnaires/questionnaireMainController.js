@@ -176,22 +176,23 @@
          * @desc This function is used to update the questionnaire status when beginning a questionnaire and, in case that the user uses the button "begin" instead of swiping, move the carousel
          */
         function beginQuestionnaire(bySwipe){
+            let inProgress = vm.allowedStatus.IN_PROGRESS_QUESTIONNAIRE_STATUS;
+            let oldStatus = vm.questionnaire.status;
 
             // if the questionnaire was not started yet, start it
             if (vm.questionnaireStart){
-                // we are no longer at the home page
-                vm.questionnaireStart = false;
-
-                // update status for the questionnaire of controller
-                let oldStatus = vm.questionnaire.status;
-                vm.questionnaire.status = vm.allowedStatus.IN_PROGRESS_QUESTIONNAIRE_STATUS;
-
                 vm.loadingQuestionnaire = true;
 
                 // update status for the questionnaire of service and listener / database
-                Questionnaires.updateQuestionnaireStatus(vm.questionnaire.qp_ser_num, vm.questionnaire.status, oldStatus)
+                // send the request before setting the status locally, because the request can fail if the questionnaire was locked by another user
+                Questionnaires.updateQuestionnaireStatus(vm.questionnaire.qp_ser_num, inProgress, oldStatus)
                     .then(function(){
                         $timeout(function(){
+                            vm.questionnaire.status = inProgress;
+
+                            // we are no longer at the home page
+                            vm.questionnaireStart = false;
+
                             // set the indices (mere formality)
                             vm.startIndex = 1;  // skip questionnaire home page
                             vm.sectionIndex = 0;
