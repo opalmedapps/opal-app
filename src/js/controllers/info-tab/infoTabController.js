@@ -15,46 +15,81 @@
         .module('MUHCApp')
         .controller('InfoTabController', InfoTabController);
 
-    InfoTabController.$inject = ['$timeout','$filter','$sce', 'NavigatorParameters'];
+    InfoTabController.$inject = ['$filter', '$scope', 'NavigatorParameters'];
 
-  /* @ngInject */
-    function InfoTabController($timeout, $filter, $sce, NavigatorParameters) {
+    /* @ngInject */
+    function InfoTabController($filter, $scope, NavigatorParameters) {
         var vm = this;
         vm.view = {};
 
-        const views= {
+        const views = {
             home: {
-                icon:'fa-home',
-                name:"HOME",
-                description:"HOME_DESCRIPTION"
+                icon: 'fa-home',
+                name: "HOME",
+                description: "HOME_DESCRIPTION"
             },
             chart: {
-                icon:'fa-user',
-                name:"MYCHART" ,
-                description:"MYCHART_DESCRIPTION"
+                icon: 'fa-user',
+                name: "MYCHART",
+                description: "MYCHART_DESCRIPTION"
             },
             general: {
-                icon:'fa-th',
+                icon: 'fa-th',
                 name: "GENERAL",
-                description:"GENERAL_DESCRIPTION"
+                description: "GENERAL_DESCRIPTION"
             },
             caregivers: {
-                icon:'fa-user',
+                icon: 'fa-user',
                 name: "RELATIONSHIPS_CAREGIVERS",
-                description:"RELATIONSHIPS_CAREGIVERS_DESCRIPTION"
+                description: "RELATIONSHIPS_CAREGIVERS_DESCRIPTION"
             },
             patients: {
-                icon:'fa-user',
+                icon: 'fa-user',
                 name: "RELATIONSHIPS_PATIENTS",
-                description:"RELATIONSHIPS_PATIENTS_DESCRIPTION"
+                description: "RELATIONSHIPS_PATIENTS_DESCRIPTION"
             },
+            research: {
+                icon: './img/microscope.png',
+                name: "RESEARCH",
+                description: "RESEARCH_DESCRIPTION"
+            },
+            studies: {
+                icon: './img/dna.png',
+                name: "STUDIES",
+                description: "STUDIES_DESCRIPTION"
+            }
         };
+
+        vm.isIcon = isIcon;
 
         activate();
 
-        function activate() { 
+        function activate() {
             let params = NavigatorParameters.getNavigator().getCurrentPage().options;
-            vm.view = views[params.id];
+            let navigatorName = NavigatorParameters.getNavigatorName();
+
+            // Check if requesting info on subView of tab or tab itself
+            if (params.hasOwnProperty('subView') && subViews.hasOwnProperty(params.subView)) {
+                vm.view = subViews[params.subView];
+            } else {
+                vm.view = views[params.id];
+            }
+
+            vm.view.description = $filter('translate')(vm.view.description);
+
+            // Remove subView
+            $scope.$on('$destroy', function () {
+                NavigatorParameters.setParameters({ Navigator: navigatorName });
+            });
+        }
+
+        /**
+         * @name isIcon
+         * @desc Check if icon is an uploaded image (in img/ directory) or is otherwise a regular ons-icon
+         * @returns true if the icon is a proper icon, false if it is an image stored in the ./img/ folder 
+         */
+        function isIcon() {
+            return !vm.view.icon.includes("img/");
         }
     }
 
