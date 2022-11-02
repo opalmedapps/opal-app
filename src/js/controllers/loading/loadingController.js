@@ -28,7 +28,7 @@
 
             loadingmodal.show();
 
-            Patient.initPatient().then(UpdateUI.init).then(function() {
+            Patient.initPatient().then(UpdateUI.init).then(() => {
                 $state.go('Home');
                 RequestToServer.sendRequestWithResponse('AccountChange', {NewValue: UserPreferences.getLanguage(), FieldToChange: 'Language'});
 
@@ -37,7 +37,6 @@
 
                 // Init the profile selector and load the patient list.
                 ProfileSelector.init();
-
                 loadingmodal.hide();
                 clearTimeout(timeOut);
 

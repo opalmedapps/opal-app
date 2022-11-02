@@ -7,11 +7,11 @@
 
     HomeController.$inject = [
         '$timeout', 'Appointments', 'CheckInService', 'Patient', '$scope', '$filter', 'NavigatorParameters',
-        'UserPreferences', 'NetworkStatus', 'UserHospitalPreferences', 'RequestToServer', 'Params', 'Version'];
+        'UserPreferences', 'NetworkStatus', 'UserHospitalPreferences', 'RequestToServer', 'Params', 'Version', 'User', 'ProfileSelector'];
 
     /* @ngInject */
     function HomeController($timeout, Appointments, CheckInService, Patient, $scope, $filter, NavigatorParameters,
-                            UserPreferences, NetworkStatus, UserHospitalPreferences, RequestToServer, Params, Version)
+                            UserPreferences, NetworkStatus, UserHospitalPreferences, RequestToServer, Params, Version, User, ProfileSelector)
     {
         var vm = this;
 
@@ -68,7 +68,7 @@
                 if (event.currentPage.name === "views/personal/notifications/notifications.html" && NetworkStatus.isOnline()) getDisplayData();
             });
             //This avoids constant repushing which causes bugs
-            homeNavigator.on('prepush', (event) => {
+            homeNavigator.on('prepush', event => {
                 if (homeNavigator._doorLock.isLocked()) event.cancel();
             });
             //release the watchers
@@ -131,9 +131,15 @@
         function setPatientInfo(){
             vm.FirstName = Patient.getFirstName();
             vm.LastName = Patient.getLastName();
-            vm.ProfileImage=Patient.getProfileImage();
+            vm.ProfileImage = Patient.getProfileImage();
+            
+            ProfileSelector.observeProfile(() => vm.user = User.getLoggedinUserProfile());
+            vm.user = User.getLoggedinUserProfile()
+            console.log('==>', vm.user);
+            
+
             vm.language = UserPreferences.getLanguage();
-            vm.noUpcomingAppointments=false;
+            vm.noUpcomingAppointments = false;
         }
         
         /**
