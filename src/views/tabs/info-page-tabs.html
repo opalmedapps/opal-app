@@ -1,5 +1,9 @@
 <ons-page ng-controller="InfoTabController as info">
-  <generic-toolbar title="{{'INFO'|translate}}" style-class="fontSizeTitle"></generic-toolbar>
+  <generic-toolbar title="{{'INFO'|translate}}" style-class="fontSizeTitle">
+    <left-content>
+      <ons-back-button>{{"BACK"|translate}}</ons-back-button>
+    </left-content>
+  </generic-toolbar>
 
   <div style="margin-top:10vh;padding: 0 20px 0 20px" class="text-center">
     <div ng-if="info.isIcon()">
