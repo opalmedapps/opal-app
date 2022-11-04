@@ -47,17 +47,16 @@
 
         return {
             setAnnouncements: setAnnouncements,
-            updateAnnouncements: updateAnnouncements,
-            getAnnouncements: getAnnouncements,
-            getUnreadAnnouncements: getUnreadAnnouncements,
+            updateAnnouncements: (array) => addAnnouncements(array),
+            getAnnouncements: () => announcements,
             getNumberUnreadAnnouncements: getNumberUnreadAnnouncements,
             getAnnouncementBySerNum: getAnnouncementBySerNum,
             readAnnouncementBySerNum: readAnnouncementBySerNum,
             readAnnouncement: readAnnouncement,
             setLanguage: setLanguage,
-            getAnnouncementUrl: getAnnouncementUrl,
+            getAnnouncementUrl: () => './views/general/announcements/individual-announcement.html',
             clearAnnouncements: clearAnnouncements,
-            getLastUpdated: getLastUpdated
+            getLastUpdated: () => lastUpdated,
         };
 
         ////////////////////////////////////////////////////////////////////
@@ -67,43 +66,22 @@
 
         /**
          *@ngdoc function
-         *@name  MUHCApp.service.#findAndDeleteAnnouncements
-         *@methodOf MUHCApp.service:Announcements
-         *@description When there is an update, find the matching message and delete it to avoid repeated announcements
-         **/
-        function findAndDeleteAnnouncements(array)
-        {
-            for (var i = 0; i <array.length; i++) {
-                for (var j = 0; j < announcements.length; j++) {
-                    if (array.length > 0) {    // array.length shrinks everytime it is "spliced" in the line below.
-                        if (announcements[j].AnnouncementSerNum === array[i].AnnouncementSerNum) {
-                            array.splice(i, 1);
-                        }
-                    }
-                }
-            }
-        }
-
-        /**
-         *@ngdoc function
          *@name  MUHCApp.service.#addAnnouncements
          *@methodOf MUHCApp.service:Announcements
-         *@description Push new announcements to currently existing announcements array
+         *@description Push new announcements to currently existing announcements array filter out duplicate for multiple patient.
          **/
-        function addAnnouncements(array)
-        {
-            if(!array) return;
-            if (array[0] === "undefined") {
-                // console.log ('array undefined');
-                return;
-            }
+        function addAnnouncements(newAnnouncements) {
+            if(!newAnnouncements || newAnnouncements[0] === "undefined") return;
 
-            for (var i = 0; i < array.length; i++) {
-                array[i].DateAdded=$filter('formatDate')(array[i].DateAdded);
-                announcements.push(array[i]);
-            }
+            newAnnouncements.forEach(annoucementToInsert => {
+                let existingElementIndex = announcements.findIndex(item => {
+                    return item.PostControlSerNum === annoucementToInsert.PostControlSerNum
+                        && new Date(item.DateAdded).toISOString().split('T')[0] === new Date(annoucementToInsert.DateAdded).toISOString().split('T')[0]
+                });
+                annoucementToInsert.DateAdded=$filter('formatDate')(annoucementToInsert.DateAdded);
+                existingElementIndex === -1 ? announcements.push(annoucementToInsert) : announcements[existingElementIndex] = annoucementToInsert;
+            });
         }
-
 
         /******************************
          *  PUBLIC FUNCTIONS
@@ -116,57 +94,10 @@
          *@param {Array} array announcements array that containts the new announcements
          *@description Setter method for announcements
          **/
-        function setAnnouncements(array)
-        {
+        function setAnnouncements(array) {
             announcements=[];
             lastUpdated = Date.now();
             addAnnouncements(array);
-        }
-
-        /**
-         *@ngdoc method
-         *@name updateAnnouncements
-         *@methodOf MUHCApp.service:Announcements
-         *@param {Array} array new announcements array
-         *@description Updates the announcementsArray with the new information contained in the announcement parameter.
-         * Will replace out-of-date announcements.
-         **/
-        function updateAnnouncements(array)
-        {
-            // console.log('updating announcements');
-            findAndDeleteAnnouncements(array);
-            addAnnouncements(array);
-        }
-
-        /**
-         *@ngdoc method
-         *@name getAnnouncements
-         *@methodOf MUHCApp.service:Announcements
-         *@description Getter for the announcementsArray
-         *@returns {Array} announcementsArray
-         **/
-        function getAnnouncements()
-        {
-            return announcements;
-        }
-
-        /**
-         *@ngdoc method
-         *@name getUnreadAnnouncements
-         *@methodOf MUHCApp.service:Announcements
-         *@description Gets unread announcements
-         *@returns {Array} Returns all the unread annoucements
-         **/
-        function getUnreadAnnouncements()
-        {
-            var array=[];
-            for (var i = 0; i < announcements.length; i++) {
-                if(announcements[i].ReadStatus === '0')
-                {
-                    array.push(announcements[i]);
-                }
-            }
-            return array;
         }
 
         /**
@@ -176,11 +107,10 @@
          *@description Iterates through array object and returns the number of unread announcements
          *@returns {Number} Returns number of unread news
          **/
-        function getNumberUnreadAnnouncements()
-        {
+        function getNumberUnreadAnnouncements() {
             var number = 0;
             for (var i = 0; i < announcements.length; i++) {
-                if(announcements[i].ReadStatus === '0') number++;
+                if (announcements[i].ReadStatus === '0') number++;
             }
             return number;
         }
@@ -194,12 +124,8 @@
          *@returns {Object} Returns object containing annoucement
          **/
         function getAnnouncementBySerNum(serNum) {
-            // console.log(announcements);
-
             for (var i = 0; i < announcements.length; i++) {
-                if(announcements[i].AnnouncementSerNum===serNum) {
-                    return angular.copy(announcements[i]);
-                }
+                if (announcements[i].AnnouncementSerNum===serNum) return angular.copy(announcements[i]);
             }
         }
 
@@ -210,11 +136,9 @@
          *@param {String} serNum AnnouncementSerNum to be read
          *@description Sets ReadStatus in announcement to 1, sends request to backend
          **/
-        function readAnnouncementBySerNum(serNum)
-        {
+        function readAnnouncementBySerNum(serNum) {
             for (var i = 0; i < announcements.length; i++) {
-                if(announcements[i].AnnouncementSerNum===serNum)
-                {
+                if (announcements[i].AnnouncementSerNum === serNum) {
                     announcements[i].ReadStatus = '1';
                     RequestToServer.sendRequest('Read',{'Id':serNum, 'Field':'Announcements'});
                     break;
@@ -230,8 +154,7 @@
          *@param {String} serNum AnnouncementSerNum to be read
          *@description Faster method to read an announcement, no iteration required.
          **/
-        function readAnnouncement(index, serNum)
-        {
+        function readAnnouncement(index, serNum) {
             announcements[index].ReadStatus = '1';
             RequestToServer.sendRequest('Read',{'Id':serNum, 'Field':'Announcements'});
         }
@@ -244,8 +167,7 @@
          *@description Translates the array parameter containing announcements to appropiate preferred language specified in {@link MUHCApp.service:UserPreferences UserPreferences}.
          *@returns {Array} Returns array with translated values
          **/
-        function setLanguage(item)
-        {
+        function setLanguage(item) {
             var language = UserPreferences.getLanguage();
             if (Array.isArray( item )) {
                 for (var i = 0; i < item.length; i++) {
@@ -264,18 +186,6 @@
 
         /**
          *@ngdoc method
-         *@name getAnnouncementUrl
-         *@methodOf MUHCApp.service:Announcements
-         *@description Returns announcements url to be used by the {@link MUHCApp.service:Notifications Notifications Service}.
-         *@returns {String} Returns Url for individual annoucements
-         **/
-        function getAnnouncementUrl()
-        {
-            return './views/general/announcements/individual-announcement.html';
-        }
-
-        /**
-         *@ngdoc method
          *@name clearAnnouncements
          *@methodOf MUHCApp.service:Announcements
          *@description Clears the service of any saved state, function used by the {@link MUHCApp.controller:LogoutController LogoutController}
@@ -284,16 +194,6 @@
         {
             announcements=[];
             lastUpdated = 0;
-        }
-
-        /**
-         *@ngdoc method
-         *@name getLastUpdated
-         *@methodOf MUHCApp.service:Announcements
-         *@description Returns the date of when the announcements array was last updated
-         **/
-        function getLastUpdated() {
-            return lastUpdated;
         }
     }
 })();
