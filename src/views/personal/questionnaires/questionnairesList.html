@@ -1,5 +1,6 @@
 <ons-page ng-controller="QuestionnairesListController as questionnaireListVm">
-    <generic-toolbar title="{{'QUESTIONNAIRES'|translate}}" style-class="fontSizeTitle"></generic-toolbar>
+    <generic-toolbar title="{{questionnaireListVm.pageTitle}}" style-class="fontSizeTitle">
+    </generic-toolbar>
 
     <!-- DATA REFRESHER -->
     <ons-pull-hook ng-action="questionnaireListVm.pullHookRefresh($done)">
@@ -44,7 +45,7 @@
                             <!--no new questionnaires-->
                             <p ng-if="!questionnaireListVm.newQuestionnaireExist()" ng-class="fontSizeTitle"
                                style="color: grey; margin-top: 25vh;">
-                                {{"QUESTIONNAIRE_NONE_NEW"|translate}}
+                                {{"questionnaireListVm.noNewQuestionnaireText}}
                             </p>
 
                             <!--if there are questionnaires, list them-->
@@ -74,7 +75,7 @@
 
                             <!--no in progress questionnaires-->
                             <p ng-show="!questionnaireListVm.inProgressQuestionnaireExist()" ng-class="fontSizeTitle"
-                               style="color: grey; margin-top: 25vh;">{{"QUESTIONNAIRE_NONE_PROGRESS"|translate}}</p>
+                               style="color: grey; margin-top: 25vh;">{{questionnaireListVm.noProgressQuestionnaireText}}</p>
 
                             <!--if there are in progress questionnaires: list them-->
                             <ons-list ng-repeat="questionnaire in questionnaireListVm.inProgressQuestionnaireList | orderBy:'-last_updated' track by $index"
@@ -103,7 +104,7 @@
 
                             <!--no completed questionnaires-->
                             <p ng-show="!questionnaireListVm.completedQuestionnaireExist()" ng-class="fontSizeTitle"
-                               style="color: grey; margin-top: 25vh;">{{"QUESTIONNAIRE_NONE_COMPLETED"|translate}}</p>
+                               style="color: grey; margin-top: 25vh;">{{questionnaireListVm.noCompletedQuestionnaireText}}</p>
 
                             <!--if there are completed questionnaires: list them-->
                             <ons-list ng-repeat="questionnaire in questionnaireListVm.completedQuestionnaireList | orderBy:'-last_updated' track by $index"
