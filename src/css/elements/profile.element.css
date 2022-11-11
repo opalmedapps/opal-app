@@ -20,6 +20,11 @@
     margin: 1rem auto;
 }
 
+.image-profile--wrapper--home {
+    height: 6em;
+    width: 6em;
+}
+
 .image-profile--icon {
     width: 100%;
     height: 100%;
@@ -28,6 +33,10 @@
     justify-content: center;
     color: #ffffff;
     font-size: 2.5rem;
+}
+
+.image-profile--icon--home {
+    font-size: 2.0em;
 }
 
 .image-profile--text {
