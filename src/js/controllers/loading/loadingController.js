@@ -22,22 +22,19 @@
 
             var userAuthorizationInfo = UserAuthorizationInfo.getUserAuthData();
 
-            if(!userAuthorizationInfo) {
-                $state.go('init');
-            }
+            if (!userAuthorizationInfo) $state.go('init');
 
             loadingmodal.show();
 
-            Patient.initPatient().then(UpdateUI.init).then(function() {
+            Patient.initPatient().then(UpdateUI.init).then(async () => {
                 $state.go('Home');
                 RequestToServer.sendRequestWithResponse('AccountChange', {NewValue: UserPreferences.getLanguage(), FieldToChange: 'Language'});
 
                 //fetch all the tab metadata TODO: add the fetching of all the other data
                 MetaData.init();
 
-                // Init the profile selector and load the patient list.
-                ProfileSelector.init();
-
+                // Init the profile selector and load the patient list. Needs to be await to prevent profile icon from flickering at login.
+                await ProfileSelector.init();
                 loadingmodal.hide();
                 clearTimeout(timeOut);
 
