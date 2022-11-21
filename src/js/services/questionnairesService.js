@@ -295,7 +295,8 @@
                             toggleIsDefinedFlag(question, answerSavedInDBValidStatus.ANSWER_SAVING_ERROR);
                         }
 
-                        reject({Success: false, Location: '', Error: error});
+                        let errorToReject = error.hasOwnProperty('Location') ? error : {Success: false, Location: '', Error: error};
+                        reject(errorToReject);
                     });
 
                 // timeout for saving answer so we do not wait forever

@@ -210,10 +210,12 @@
                             vm.carousel.refresh();
                         });
                     })
-                    .catch(function(){
-                        vm.loadingQuestionnaire = false;
-
-                        handleLoadQuestionnaireErr();
+                    .catch(error => {
+                        $timeout(() => {
+                            console.error(error);
+                            vm.loadingQuestionnaire = false;
+                            handleLoadQuestionnaireErr(error);
+                        });
                     });
             }
         }
@@ -299,12 +301,11 @@
                             summaryPage();
                         });
 
-                    }).catch(function(err){
-
-                        $timeout(function(){
-                            console.error(err);
+                    }).catch(error => {
+                        $timeout(() => {
+                            console.error(error);
                             loadingSaveAnswerModal.hide();
-                            handleSaveAnswerErr();
+                            handleSaveAnswerErr(error);
                         });
                 });
             }
@@ -728,10 +729,11 @@
                         loadingSaveAnswerModal.hide();
                     });
                 })
-                .catch(function(){
-                    $timeout(function(){
+                .catch(error => {
+                    $timeout(() => {
+                        console.error(error);
                         loadingSaveAnswerModal.hide();
-                        handleSaveAnswerErr();
+                        handleSaveAnswerErr(error);
                     });
                 })
         }
@@ -864,25 +866,33 @@
          * @name handleSaveAnswerErr
          * @desc shows a notification to the user in case a request to server fails to save the answer
          *      and move the user back to the previous page
+         * @param {Object} error The original error object being handled.
          */
-        function handleSaveAnswerErr (){
+        function handleSaveAnswerErr(error) {
             NavigatorParameters.setParameters({Navigator: navigatorName});
             navigator.popPage();
 
-            NativeNotification.showNotificationAlert($filter('translate')("SERVER_ERROR_SUBMIT_ANSWER"));
+            if (error?.Error?.Details === Params.BACKEND_ERROR_CODES.LOCKING_ERROR) {
+                NativeNotification.showNotificationAlert($filter('translate')("QUESTIONNAIRE_LOCKING_ERROR"));
+            }
+            else NativeNotification.showNotificationAlert($filter('translate')("SERVER_ERROR_SUBMIT_ANSWER"));
         }
 
         /**
          * @name handleLoadQuestionnaireErr
          * @desc shows a notification to the user in case a request to server fails to load the questionnaire
          *      and move the user back to the previous page
+         * @param {Object} error The original error object being handled.
          */
-        function handleLoadQuestionnaireErr (){
+        function handleLoadQuestionnaireErr(error) {
             // go to the questionnaire list page if there is an error
             NavigatorParameters.setParameters({Navigator: navigatorName});
             navigator.popPage();
 
-            NativeNotification.showNotificationAlert($filter('translate')("SERVERERRORALERT"));
+            if (error?.Error?.Details === Params.BACKEND_ERROR_CODES.LOCKING_ERROR) {
+                NativeNotification.showNotificationAlert($filter('translate')("QUESTIONNAIRE_LOCKING_ERROR"));
+            }
+            else NativeNotification.showNotificationAlert($filter('translate')("SERVERERRORALERT"));
         }
 
         /**
