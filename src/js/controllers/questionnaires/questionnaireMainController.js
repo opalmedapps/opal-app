@@ -107,7 +107,6 @@
 
             if (!params.hasOwnProperty('answerQuestionnaireId')){
                 vm.loadingQuestionnaire = false;
-
                 handleLoadQuestionnaireErr();
             }
 

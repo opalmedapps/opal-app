@@ -27,17 +27,12 @@
         const api = Params.QUESTIONNAIRE_API;
 
         // this is redundant, but written for clarity, ordered alphabetically
-        let requestQuestionnaireDataService = {
+        return {
             updateQuestionnaireStatus: updateQuestionnaireStatus,
             requestOpalQuestionnaireFromSerNum: requestOpalQuestionnaireFromSerNum,
             requestQuestionnaire: requestQuestionnaire,
             saveQuestionnaireAnswer: saveQuestionnaireAnswer
         };
-
-        return requestQuestionnaireDataService;
-
-        // //////////////
-
 
         /**
          * @name requestOpalQuestionnaireFromSerNum
@@ -45,20 +40,9 @@
          * @param {string|int} questionnaireSerNum
          * @returns {Promise}
          */
-        function requestOpalQuestionnaireFromSerNum(questionnaireSerNum) {
-            // sends to listener
-            let params = {
-                'questionnaireSerNum': questionnaireSerNum
-            };
-
-            return RequestToServer.sendRequestWithResponse(api.GET_OPAL_QUESTIONNAIRE_FROM_SERNUM, params)
-                .then(function (response) {
-                    // this is in case firebase delete the property when it is empty
-                    if (response.hasOwnProperty('Data')) {
-                        return response.Data;
-                    }
-                    return {};
-                });
+        async function requestOpalQuestionnaireFromSerNum(questionnaireSerNum) {
+            const response = await RequestToServer.sendRequestWithResponse(api.GET_OPAL_QUESTIONNAIRE_FROM_SERNUM, {questionnaireSerNum});
+            return response.hasOwnProperty('Data') ? response.Data : {};
         }
 
         /**
@@ -68,39 +52,37 @@
          * @param {int} newStatus the new status to be updated in
          * @return {Promise}
          */
-        function updateQuestionnaireStatus(answerQuestionnaireId, newStatus){
+        async function updateQuestionnaireStatus(answerQuestionnaireId, newStatus, userProfile){
+            // flag for property check
+            let isStatusCorrect = false;
 
-            return new Promise(function(resolve, reject){
-                // flag for property check
-                let isStatusCorrect = false;
-
-                // verify property
-                for (let status in allowedStatus){
-                    if (allowedStatus[status] === newStatus){
-                        isStatusCorrect = true;
-                        break;
-                    }
+            // verify property
+            for (let status in allowedStatus){
+                if (allowedStatus[status] === newStatus){
+                    isStatusCorrect = true;
+                    break;
                 }
+            }
 
-                if (!isStatusCorrect){
-                    let error = "ERROR: error in updating the questionnaire status, it does not have a valid new status";
-                    return reject({Success: false, Location: '', Error: error});
-                }
+            if (!isStatusCorrect){
+                let error = "ERROR: error in updating the questionnaire status, it does not have a valid new status";
+                throw {Success: false, Location: '', Error: error};
+            }
 
-                // send to the database
-                let params = {
-                    'answerQuestionnaire_id': answerQuestionnaireId,
-                    'new_status': newStatus,
-                };
+            
+            // send to the database
+            let params = {
+                'answerQuestionnaire_id': answerQuestionnaireId,
+                'new_status': newStatus,
+                'user_display_name': `${userProfile.first_name} ${userProfile.last_name}`,
+            };
 
-                return RequestToServer.sendRequestWithResponse(api.UPDATE_STATUS, params)
-                    .then(function(response){
-                        resolve({Success: true, Location: 'Server'});
-                    })
-                    .catch(function(err){
-                        reject({Success: false, Location: '', Error: err});
-                    });
-            });
+            try {
+                await RequestToServer.sendRequestWithResponse(api.UPDATE_STATUS, params);
+                return {Success: true, Location: 'Server'}
+            } catch (error) {
+                throw {Success: false, Location: '', Error: error}
+            }
         }
 
         /**
@@ -115,34 +97,26 @@
          * @param {int} isSkipped is this question skipped or not
          * @returns {Promise}
          */
-        function saveQuestionnaireAnswer(answerQuestionnaireId, sectionId, questionId, questionSectionId, answerArray, questionTypeId, isSkipped){
+        async function saveQuestionnaireAnswer(answerQuestionnaireId, sectionId, questionId, questionSectionId, answerArray, questionTypeId, isSkipped){
+            // flag for property check
+            let isTypeCorrect = false;
 
-            return new Promise (function(resolve, reject){
-                // flag for property check
-                let isTypeCorrect = false;
+            // array to prevent the encryption of the answerArray since it is passing by reference
+            let answerToSave = [];
+            if (!Array.isArray(answerArray)) throw new Error('ERROR: error in saving the questionnaire answer, it does not have a valid answerArray');
 
-                // array to prevent the encryption of the answerArray since it is passing by reference
-                let answerToSave = [];
-
-                // verify property
-                if (!Array.isArray(answerArray)){
-                    reject("ERROR: error in saving the questionnaire answer, it does not have a valid answerArray");
+            for (let type in validType){
+                if (validType[type] === questionTypeId){
+                    isTypeCorrect = true;
+                    break;
                 }
+            }
+            if (!isTypeCorrect) throw new Error('ERROR: error in saving the questionnaire answer, it does not have a valid typeID');
 
-                for (let type in validType){
-                    if (validType[type] === questionTypeId){
-                        isTypeCorrect = true;
-                        break;
-                    }
-                }
-                if (!isTypeCorrect){
-                    reject("ERROR: error in saving the questionnaire answer, it does not have a valid typeID");
-                }
-
-                // this is to prevent the encryption of the answerArray since it is passing by reference
-                answerArray.forEach(function (ans) {
-                    answerToSave.push(Object.assign({}, ans));
-                });
+            // this is to prevent the encryption of the answerArray since it is passing by reference
+            answerArray.forEach(function (ans) {
+                answerToSave.push(Object.assign({}, ans));
+            });
 
                 // sends to listener
                 let params = {
@@ -156,15 +130,12 @@
                     'language': UserPreferences.getLanguage(),
                 };
 
-                return RequestToServer.sendRequestWithResponse(api.SAVE_ANSWER, params)
-                // this is for sendRequestWithResponse, but now the response is only success or failure
-                    .then(function (response) {
-                        resolve({Success: true, Location: 'Server'});
-                    })
-                    .catch(function (error) {
-                        reject({Success: false, Location: '', Error: error});
-                    });
-            })
+            try {
+                await RequestToServer.sendRequestWithResponse(api.SAVE_ANSWER, params);
+                return {Success: true, Location: 'Server'};
+            } catch (error) {
+                throw {Success: false, Location: '', Error: error};
+            }
         }
 
         /**
@@ -173,21 +144,14 @@
          * @param {int} answerQuestionnaireID ID of that particular questionnaire
          * @returns {Promise} resolves to the questionnaire's data if success
          */
-        function requestQuestionnaire(answerQuestionnaireID){
-            // Parameters
+        async function requestQuestionnaire(answerQuestionnaireID){
             let params = {
                 'qp_ser_num': answerQuestionnaireID,
                 'language': UserPreferences.getLanguage(),
             };
 
-            return RequestToServer.sendRequestWithResponse(api.GET_QUESTIONNAIRE, params)
-                .then(function (response) {
-                    // this is in case firebase delete the property when it is empty
-                    if (response.hasOwnProperty('Data')) {
-                        return response.Data;
-                    }
-                    return {};
-                });
+            let response = await RequestToServer.sendRequestWithResponse(api.GET_QUESTIONNAIRE, params);
+            return response.hasOwnProperty('Data') ? response.Data : {};
         }
     }
 })();

@@ -185,6 +185,7 @@
     "QUESTIONNAIRE_DATE_ADDED": "Ajouté le:",
     "QUESTIONNAIRE_DATE_ANSWERED": "Complété le:",
     "QUESTIONNAIRE_DATE_LAST_UPDATED": "Dernière mise à jour:",
+    "QUESTIONNAIRE_ANSWERED_BY": "Complété par",
     "QUESTIONNAIRE_DESCRIPTION": "Description: ",
     "QUESTIONNAIRE_END": "Fin",
     "QUESTIONNAIRE_GO_BACK_TO_LIST": "Retourner à la liste",
