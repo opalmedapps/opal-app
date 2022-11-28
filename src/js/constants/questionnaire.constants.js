@@ -46,5 +46,8 @@
                 'ANSWER_CHANGED': '2',
                 'ANSWER_SAVING_WAITING_TIME': 30000
             },
+            BACKEND_ERROR_CODES: {
+                'LOCKING_ERROR': '-8',
+            }
         });
 })();
