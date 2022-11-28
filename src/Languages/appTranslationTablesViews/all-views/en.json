@@ -185,6 +185,7 @@
   "QUESTIONNAIRE_DATE_ADDED": "Date Added:",
   "QUESTIONNAIRE_DATE_ANSWERED": "Date Answered:",
   "QUESTIONNAIRE_DATE_LAST_UPDATED": "Last Updated:",
+  "QUESTIONNAIRE_ANSWERED_BY": "Answered By",
   "QUESTIONNAIRE_DESCRIPTION": "Description: ",
   "QUESTIONNAIRE_END": "End",
   "QUESTIONNAIRE_GO_BACK_TO_LIST": "Go back to questionnaire list",
