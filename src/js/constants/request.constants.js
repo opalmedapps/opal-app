@@ -19,9 +19,9 @@
                 CLIENT_ERROR: 400,
             },
             /**
-             * The requests in the list below can be targeted to any patient to which the current user has access,
-             * using the request attribute 'TargetPatientID' (managed by RequestToServer).
-             * TODO Add checkin and questionnaire requests, and adapt them to use TargetPatientID
+             * The requests in the list below are targeted to a patient to which the current user has access,
+             * using the request attribute 'TargetPatientID' (added by RequestToServer).
+             * TODO Add checkin requests, and adapt them to use TargetPatientID
              */
             PATIENT_TARGETED_REQUESTS: [
                 'DocumentContent',
@@ -30,6 +30,10 @@
                 'PatientTestDates',
                 'PatientTestTypeResults',
                 'PatientTestTypes',
+                'Questionnaire',
+                'QuestionnaireInOpalDBFromSerNum',
+                'QuestionnaireSaveAnswer',
+                'QuestionnaireUpdateStatus',
                 'Refresh',
             ],
         });

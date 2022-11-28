@@ -160,8 +160,9 @@
             let refreshParams = {
                 Fields: parameters,
                 Timestamp: findSmallestTimestamp(parameters),
+                Language: UserPreferences.getLanguage(),
             };
-            let response = await cueRequests('Refresh', refreshParams); 
+            let response = await cueRequests('Refresh', refreshParams);
             validateResponse(response);
             await updateServices(response.Data);
             updateTimestamps(parameters, response.Timestamp);
@@ -174,7 +175,12 @@
          * @returns {Promise<void>} Resolves if all data was successfully initialized, or rejects with an error.
          */
         async function setSection(parameters) {
-            let response = await cueRequests('Refresh', {Fields: parameters});
+            let refreshParams = {
+                Fields: parameters,
+                Language: UserPreferences.getLanguage(),
+            };
+
+            let response = await cueRequests('Refresh', refreshParams);
             validateResponse(response);
             await setServices(response.Data, parameters);
             updateTimestamps(parameters, response.Timestamp);
@@ -258,7 +264,7 @@
          */
         async function getData(categories) {
             // Validate input
-            
+
             validateCategories(categories);
             if (typeof categories === "string") return getData([categories]);
             // Iterate through all categories to initialize or update them
