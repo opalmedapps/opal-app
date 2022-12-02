@@ -19,11 +19,12 @@
         '$sce',
         'Params',
         'QuestionnaireDataService',
-        'User'
+        'User',
+        'UserAuthorizationInfo',
     ];
 
     /* @ngInject */
-    function Questionnaires($sce, Params, QuestionnaireDataService, User) {
+    function Questionnaires($sce, Params, QuestionnaireDataService, User, UserAuthorizationInfo) {
         // constants for DB conventions
         const questionnaireValidStatus = Params.QUESTIONNAIRE_DB_STATUS_CONVENTIONS;
         const questionnaireValidType = Params.QUESTIONNAIRE_DB_TYPE_CONVENTIONS;
@@ -50,6 +51,7 @@
         return {
             clearAllQuestionnaire: clearAllQuestionnaire,
             findInProgressQuestionIndex: findInProgressQuestionIndex,
+            getQuestionnaireBySerNum: getQuestionnaireBySerNum,
             getCarouselItems: () => carouselItems,
             getCurrentQuestionnaire: () => currentQuestionnaire,
             getNumberOfUnreadQuestionnaires: getNumberOfUnreadQuestionnaires,
@@ -129,6 +131,17 @@
                 'sectionIndex': sectionIndex,
                 'questionIndex': questionIndex
             };
+        }
+
+        /**
+         * @desc Finds and returns a questionnaire from one of the three questionnaire lists.
+         * @param qpSerNum The qp_ser_num of the questionnaire to find.
+         * @returns {object|undefined} The questionnaire, or undefined if it wasn't found.
+         */
+        function getQuestionnaireBySerNum(qpSerNum) {
+            for (let status of Object.values(questionnaireValidStatus)) {
+                if (getQuestionnaireMap(status).hasOwnProperty(qpSerNum)) return getQuestionnaireMap(status)[qpSerNum];
+            }
         }
 
         /**
@@ -340,6 +353,21 @@
          */
         function getNumberOfUnreadQuestionnaires(){
             return getQuestionnaireCount(questionnaireValidStatus.NEW_QUESTIONNAIRE_STATUS) + getQuestionnaireCount(questionnaireValidStatus.IN_PROGRESS_QUESTIONNAIRE_STATUS);
+        }
+
+        /**
+         * @desc Deletes all "in progress" questionnaires that are locked by another user.
+         *       "New" questionnaires are not checked because they are all unlocked by definition.
+         *       "Completed" questionnaires are not checked because users are allowed to see questionnaires completed
+         *       by other users, as long as they have access to the right patient.
+         */
+        function deleteQuestionnairesLockedByOthers() {
+            for (const [qp_ser_num, questionnaire] of Object.entries(inProgressQuestionnaires)) {
+                const respondent = questionnaire.respondent_username;
+                if (respondent && respondent !== '' && respondent !== UserAuthorizationInfo.getUsername()) {
+                    delete inProgressQuestionnaires[qp_ser_num];
+                }
+            }
         }
 
         /**
@@ -836,6 +864,13 @@
             questionnaireList.forEach(questionnaire => {
                 try {
                     formatQuestionnaireStub(questionnaire);
+
+                    // Delete any existing old copies of the same questionnaire
+                    // This ensures that if a questionnaire changes status, the old copy in the other status list is removed
+                    for (let status of Object.values(questionnaireValidStatus)) {
+                        delete getQuestionnaireMap(status)[questionnaire.qp_ser_num];
+                    }
+
                     // Save the questionnaire in the appropriate map according to its status
                     getQuestionnaireMap(questionnaire.status)[questionnaire.qp_ser_num] = questionnaire;
                 }
@@ -843,6 +878,7 @@
                     console.error('Questionnaire stub failed validation; not including it.', err, questionnaire);
                 }
             });
+            deleteQuestionnairesLockedByOthers();
         }
 
         /**
