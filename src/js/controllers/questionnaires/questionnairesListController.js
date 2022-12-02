@@ -58,7 +58,9 @@
             navigatorName = NavigatorParameters.getNavigatorName();
 
             // this is for when the back button is pressed for a questionnaire, reload the questionnaire list to keep the list up to date
-            navigator.on('postpop', function(){
+            navigator.on('postpop', function() {
+                // Refresh the questionnaires from the listener to find out if other users have locked any of them
+                if(vm.refreshQuestionnaires) vm.refreshQuestionnaires();
                 loadQuestionnaireList();
             });
 
@@ -73,7 +75,17 @@
          * @desc This function request the questionnaire selected from back-end and push it to the carousel
          * @param {object} selectedQuestionnaire The questionnaire selected in the list
          */
-        function goToQuestionnaire(selectedQuestionnaire) {
+        async function goToQuestionnaire(selectedQuestionnaire) {
+            // Refresh the questionnaires from the listener to find out if another user has locked this one before opening it
+            if (vm.refreshQuestionnaires) {
+                await vm.refreshQuestionnaires();
+                // If the questionnaire was removed from the service, it's because it was locked, and cannot be opened
+                if (!Questionnaires.getQuestionnaireBySerNum(selectedQuestionnaire.qp_ser_num)) {
+                    NativeNotification.showNotificationAlert($filter('translate')("QUESTIONNAIRE_LOCKING_ERROR"));
+                    return;
+                }
+            }
+
             // putting editQuestion false to claim that we are not coming from a summary page
             NavigatorParameters.setParameters({
                 Navigator: navigatorName,
