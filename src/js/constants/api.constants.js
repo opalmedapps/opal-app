@@ -11,6 +11,7 @@
         .constant("ApiConstants", {
             /** Response codes **/
             SUCCESS: '200',
+            CREATED: '201',
             /** Headers for new api request */
             REQUEST_HEADERS: {
                 'Content-Type': 'application/json',
@@ -47,7 +48,11 @@
                 CAREGIVERS: {
                     method: 'get',
                     url: '/api/patients/legacy/<PATIENT_ID>/caregivers/' 
-                }
+                },
+                QUANTITY_SAMPLES: {
+                    method: 'post',
+                    url: '/api/patients/<PATIENT_ID>/smart-data/quantity-samples/'
+                },
             }
         });
 })();

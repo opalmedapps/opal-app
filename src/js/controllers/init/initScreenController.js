@@ -63,6 +63,7 @@ import '../../../css/views/init-page.view.css';
 		vm.goToAcknowledgements = goToAcknowledgements;
 		vm.goToLogin = goToLogin;
 		vm.showMessageOfTheDay = showMessageOfTheDay;
+		vm.goToSmartDevices = goToSmartDevices;
 
 		activate();
 
@@ -169,6 +170,14 @@ import '../../../css/views/init-page.view.css';
 		 */
 		function goToLogin() {
 			initNavigator.pushPage('./views/login/login.html', {animation: 'lift'});
+		}
+
+		/**
+		 * Go to smart devices page
+		 */
+		 function goToSmartDevices() {
+			// NavigatorParameters.setParameters({'Navigator': 'initNavigator'});
+			initNavigator.pushPage('./views/smartdevices/smartdevices.html');
 		}
 	}
 })();
