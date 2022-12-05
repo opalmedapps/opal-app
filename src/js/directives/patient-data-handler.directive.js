@@ -35,6 +35,9 @@
 
                 // Optional parameter to override the loading wheel's top margin (see loading-spinning-circle for details)
                 "marginTop": "@",
+
+                // Optional parameter to be passed to the back end (e.g., purpose parameter for the Questionnaires or Educational materials)
+                "useParameters": "@",
             },
             template: `<!-- Loading wheel -->
                        <loading-spinning-circle ng-show="loading"
@@ -83,7 +86,7 @@
                 async function initialize() {
                     try {
                         setLoading(true);
-                        await UpdateUI.getData(categories);
+                        await UpdateUI.getData(categories, scope.useParameters);
                         $timeout(() => {
                             if (scope.displayFunction) scope.displayFunction();
                         });
@@ -117,7 +120,7 @@
                 async function refresh($done, visibleError=true) {
                     try {
                         // Enforce a minimum delay to ensure that refresh animations have enough time to be fully visible
-                        await Utility.promiseMinDelay(UpdateUI.getData(categories), 700);
+                        await Utility.promiseMinDelay(UpdateUI.getData(categories, scope.useParameters), 700);
                         $timeout(() => {
                             setInitLoadingError(false); // In case the refresh has recovered from an earlier failure
                             if (scope.displayFunction) scope.displayFunction();

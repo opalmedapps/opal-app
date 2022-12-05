@@ -31,6 +31,8 @@
             updateQuestionnaireStatus: updateQuestionnaireStatus,
             requestOpalQuestionnaireFromSerNum: requestOpalQuestionnaireFromSerNum,
             requestQuestionnaire: requestQuestionnaire,
+            requestQuestionnairePurpose: requestQuestionnairePurpose,
+            requestQuestionnaireUnreadNumber: requestQuestionnaireUnreadNumber,
             saveQuestionnaireAnswer: saveQuestionnaireAnswer
         };
 
@@ -149,9 +151,70 @@
                 'qp_ser_num': answerQuestionnaireID,
                 'language': UserPreferences.getLanguage(),
             };
+            try {
+                let response = await RequestToServer.sendRequestWithResponse(api.GET_QUESTIONNAIRE, params);
 
-            let response = await RequestToServer.sendRequestWithResponse(api.GET_QUESTIONNAIRE, params);
-            return response.hasOwnProperty('Data') ? response.Data : {};
+                // this is in case firebase deletes the property when it is empty
+                return response?.Data ? response.Data : {};
+            } catch (error) {
+                console.log('Error in requestQuestionnaire: ', error);
+
+                return {};
+            }
+        }
+
+        /**
+         * @name function requestQuestionnairePurpose
+         * @desc Asks the listener for the purpose of the given questionnaire
+         * @param {string} qp_ser_num the qp_ser_num or answerQuestionnaireId of the questionnaire
+         * @returns {Promise} resolves to the questionnaire purpose data
+         */
+        async function requestQuestionnairePurpose(qp_ser_num) {
+            let params = {
+                qp_ser_num: qp_ser_num
+            };
+
+            try {
+                let response = await RequestToServer.sendRequestWithResponse(api.GET_PURPOSE, params);
+
+                // this is in case firebase deletes the property when it is empty
+                if (response?.Data) {
+                    return response.Data;
+                }
+
+                return {};
+            } catch (error) {
+                console.log('Error in requestQuestionnairePurpose: ', error);
+
+                return {};
+            }
+        }
+
+        /**
+       * @name requestQuestionnaireUnreadNumber
+       * @desc Asks the listener for the number of unread (e.g. 'New') questoinnaires under a specific purpose for this user
+       * @param {string} questionnairePurpose the purpose of questionnaires requested
+       * @returns {Promise} resolves to the number of unread questionnaires data
+       */
+        async function requestQuestionnaireUnreadNumber(questionnairePurpose) {
+            let params = {
+                purpose: questionnairePurpose
+            };
+
+            try {
+                let response = await RequestToServer.sendRequestWithResponse(api.GET_NUMBER_UNREAD, params);
+
+                // this is in case firebase deletes the property when it is empty
+                if (response.hasOwnProperty('Data')) {
+                    return response.Data;
+                }
+
+                return { numberUnread: "0" };
+            } catch (error) {
+                console.log('Error in requestQuestionnaireUnreadNumber: ', error);
+
+                return { numberUnread: "0" };
+            }
         }
     }
 })();
