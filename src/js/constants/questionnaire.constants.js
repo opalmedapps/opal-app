@@ -30,6 +30,8 @@
                 'SAVE_ANSWER': 'QuestionnaireSaveAnswer',
                 'GET_QUESTIONNAIRE': 'Questionnaire',
                 'GET_OPAL_QUESTIONNAIRE_FROM_SERNUM': 'QuestionnaireInOpalDBFromSerNum',
+                'GET_NUMBER_UNREAD': 'QuestionnaireNumberUnread',
+                'GET_PURPOSE': 'QuestionnairePurpose'
             },
             QUESTIONNAIRE_NOTIFICATION_CONSTANTS: {
                 'QUESTIONNAIRE_URL': './views/personal/questionnaires/questionnaireNotifRedirect.html',
@@ -46,6 +48,7 @@
                 'ANSWER_CHANGED': '2',
                 'ANSWER_SAVING_WAITING_TIME': 30000
             },
+            QUESTIONNAIRE_PURPOSES: ['clinical', 'research', 'quality', 'consent', 'clerical', 'opal'],
             BACKEND_ERROR_CODES: {
                 'LOCKING_ERROR': '-8',
             }

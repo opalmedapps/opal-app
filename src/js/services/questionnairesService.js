@@ -29,6 +29,78 @@
         const questionnaireValidStatus = Params.QUESTIONNAIRE_DB_STATUS_CONVENTIONS;
         const questionnaireValidType = Params.QUESTIONNAIRE_DB_TYPE_CONVENTIONS;
         const answerSavedInDBValidStatus = Params.ANSWER_SAVED_IN_DB_STATUS;
+        const allowedPurpose = Params.QUESTIONNAIRE_PURPOSES;
+
+         // the following are not in the constants file since they concern translation
+         const PURPOSE_TITLE_MAP = {
+            clinical: 'CLINICAL_QUESTIONNAIRES',
+            research: 'RESEARCH_QUESTIONNAIRES',
+            consent: 'CONSENT_FORMS',
+            default: 'QUESTIONNAIRES',
+        };
+
+        const PURPOSE_EMPTY_LIST_MAP = {
+            new: {
+                clinical: 'QUESTIONNAIRE_NONE_NEW',
+                research: 'QUESTIONNAIRE_NONE_NEW',
+                consent: 'CONSENT_FORMS_NONE_NEW',
+                default: 'QUESTIONNAIRE_NONE_NEW',
+            },
+            progress: {
+                clinical: 'QUESTIONNAIRE_NONE_PROGRESS',
+                research: 'QUESTIONNAIRE_NONE_PROGRESS',
+                consent: 'CONSENT_FORMS_NONE_PROGRESS',
+                default: 'QUESTIONNAIRE_NONE_PROGRESS',
+            },
+            completed: {
+                clinical: 'QUESTIONNAIRE_NONE_COMPLETED',
+                research: 'QUESTIONNAIRE_NONE_COMPLETED',
+                consent: 'CONSENT_FORMS_NONE_COMPLETED',
+                default: 'QUESTIONNAIRE_NONE_COMPLETED',
+            }
+        };
+
+        const PURPOSE_THANKS_MAP = {
+            clinical: 'QUESTIONNAIRE_THANKS',
+            research: 'QUESTIONNAIRE_THANKS',
+            consent: 'CONSENT_FORM_THANKS',
+            default: 'QUESTIONNAIRE_THANKS',
+        };
+
+        const PURPOSE_LIST_MAP = {
+            clinical: 'QUESTIONNAIRE_GO_BACK_TO_LIST',
+            research: 'QUESTIONNAIRE_GO_BACK_TO_LIST',
+            consent: 'CONSENT_FORM_GO_BACK_TO_LIST',
+            default: 'QUESTIONNAIRE_GO_BACK_TO_LIST',
+        }
+
+        const PURPOSE_BEGIN_MAP = {
+            clinical: 'QUESTIONNAIRE_BEGIN_INSTRUCTION',
+            research: 'QUESTIONNAIRE_BEGIN_INSTRUCTION',
+            consent: 'CONSENT_FORM_BEGIN_INSTRUCTION',
+            default: 'QUESTIONNAIRE_BEGIN_INSTRUCTION',
+        };
+
+        const PURPOSE_RESUME_MAP = {
+            clinical: 'QUESTIONNAIRE_RESUME_INSTRUCTION',
+            research: 'QUESTIONNAIRE_RESUME_INSTRUCTION',
+            consent: 'CONSENT_FORM_RESUME_INSTRUCTION',
+            default: 'QUESTIONNAIRE_RESUME_INSTRUCTION',
+        };
+        
+        const PURPOSE_SUBMIT_BUTTON_MAP = {
+            clinical: 'SUBMITANSWERS',
+            research: 'SUBMITANSWERS',
+            consent: 'SUBMITCONSENT',
+            default: 'SUBMITANSWERS',
+        };
+
+        const PURPOSE_SUBMIT_INSTRUCTION_MAP = {
+            clinical: 'QUESTIONNAIRE_SUBMIT_INSTRUCTION',
+            research: 'QUESTIONNAIRE_SUBMIT_INSTRUCTION',
+            consent: 'CONSENT_FORM_SUBMIT_INSTRUCTION',
+            default: 'QUESTIONNAIRE_SUBMIT_INSTRUCTION',
+        };
 
         // constants for the app notifications
         const notifConstants = Params.QUESTIONNAIRE_NOTIFICATION_CONSTANTS;
@@ -47,22 +119,42 @@
         // true if still waiting for an answer to be saved, false otherwise
         let waitingForSavingAnswer = false;
 
+        // Variables for questionnaire notifications
+        let currentPurpose = 'default';
+        let numberOfUnreadQuestionnaires = {
+            clinical: 0,
+            research: 0,
+            consent: 0,
+            default: 0,
+        }
+
         // this is redundant but written for clarity, ordered alphabetically
         return {
             clearAllQuestionnaire: clearAllQuestionnaire,
             findInProgressQuestionIndex: findInProgressQuestionIndex,
             getQuestionnaireBySerNum: getQuestionnaireBySerNum,
             getCarouselItems: () => carouselItems,
-            getCurrentQuestionnaire: () => currentQuestionnaire,
-            getNumberOfUnreadQuestionnaires: getNumberOfUnreadQuestionnaires,
+            getCurrentQuestionnaire: () => currentQuestionnaire, // getter for the current questionnaire
+            getNumberOfUnreadQuestionnairesByPurpose: (questionnairePurpose = 'default') => numberOfUnreadQuestionnaires[questionnairePurpose], // is used for showing the badge by the personalTabController.js and researchController.js for the appropriate purpose
+            getQuestionnaireBackToListByPurpose: (questionnairePurpose = 'default') => PURPOSE_LIST_MAP[questionnairePurpose], //  gets the correct translation key for the questionnaire back to list message. It assumes that the purpose has been validated.
+            getQuestionnaireBeginByPurpose: (questionnairePurpose = 'default') => PURPOSE_BEGIN_MAP[questionnairePurpose], // gets the correct translation key for the begin questionnaire instruction. It assumes that the purpose has been validated.
             getQuestionnaireCount: getQuestionnaireCount,
             getQuestionnaireList: getQuestionnaireList,
+            getQuestionnaireNoListMessageByPurpose: getQuestionnaireNoListMessageByPurpose,
+            getQuestionnaireResumeByPurpose: (questionnairePurpose = 'default') => PURPOSE_RESUME_MAP[questionnairePurpose], // gets the correct translation key for the resume questionnaire instruction. It assumes that the purpose has been validated.
             getQuestionnaireStartUrl: () => notifConstants.QUESTIONNAIRE_URL, // Used by notifications to direct the user to questionnaires
+            getQuestionnaireSubmitButtonByPurpose: (questionnairePurpose = 'default') => PURPOSE_SUBMIT_BUTTON_MAP[questionnairePurpose], // gets the correct translation key for the questionnaire submit button. It assumes that the purpose has been validated.
+            getQuestionnaireSubmitInstructionByPurpose: (questionnairePurpose = 'default') => PURPOSE_SUBMIT_INSTRUCTION_MAP[questionnairePurpose], // gets the correct translation key for the submit questionnaire instruction. It assumes that the purpose has been validated.
+            getQuestionnaireTitleByPurpose: (questionnairePurpose = 'default') => PURPOSE_TITLE_MAP[questionnairePurpose], // gets the correct translation key for the questionnaire title. It assumes that the purpose has been validated.
+            getQuestionnaireThankByPurpose: (questionnairePurpose = 'default') => PURPOSE_THANKS_MAP[questionnairePurpose], // gets the correct translation key for the questionnaire thank you message. It assumes that the purpose has been validated.
             isWaitingForSavingAnswer: () => waitingForSavingAnswer,
             updateQuestionnaireStatus: updateQuestionnaireStatus,
             requestOpalQuestionnaireFromSerNum: requestOpalQuestionnaireFromSerNum,
             requestQuestionnaire: requestQuestionnaire,
+            requestQuestionnairePurpose: (qp_ser_num) => QuestionnaireDataService.requestQuestionnairePurpose(qp_ser_num), // gets the purpose of a given questionnaire from its qp_ser_num or answerQuestionnaireId
+            requestQuestionnaireUnreadNumber: requestQuestionnaireUnreadNumber,
             saveQuestionnaireAnswer: saveQuestionnaireAnswer,
+            validateQuestionnairePurpose: (questionnairePurpose) => allowedPurpose.includes(questionnairePurpose.toLowerCase()), // check whether the questionnaire purpose is valid (true if it is valid, false otherwise)
             setQuestionnaireList: setQuestionnaireList,
             updateQuestionnaireList: updateQuestionnaireList,
         };
@@ -173,6 +265,28 @@
             setQuestionnaire(responseQuestionnaire);
             return {Success: true, Location: 'Server'};
         }
+
+        /**
+         * @name requestQuestionnaireUnreadNumber
+         * @desc this function is requesting the number of unread (e.g. 'New') questionnaires from questionnaireDataService and
+         *       processes this response to set the number of unread questionnaires variable for notifications 
+         * @param {string} questionnairePurpose the purpose of questionnaires requested
+         * @returns {Promise}
+         */
+        async function requestQuestionnaireUnreadNumber(questionnairePurpose) {
+            try {
+                let responseUnreadNumber = await QuestionnaireDataService.requestQuestionnaireUnreadNumber(questionnairePurpose);
+
+                numberOfUnreadQuestionnaires[questionnairePurpose] = parseInt(responseUnreadNumber.numberUnread);
+
+                return { Success: true, Location: 'Server' };
+            } catch (error) {
+                console.log('Error in requestQuestionnaireUnreadNumber: ', error);
+
+                return { Success: false, Location: 'Server' };
+            }
+        }
+
         /**
          * @name updateQuestionnaireStatus
          * @desc this function updates the status of a given questionnaire in the app and also in the database.
@@ -183,12 +297,26 @@
          * @return {Promise}
          *
          */
-        async function updateQuestionnaireStatus(answerQuestionnaireId, newStatus, oldStatus){
-            let userProfile = User.getLoggedinUserProfile(); 
-            await QuestionnaireDataService.updateQuestionnaireStatus(answerQuestionnaireId, newStatus, userProfile);
-            let isFailure = updateAppQuestionnaireStatus(answerQuestionnaireId, newStatus, oldStatus, userProfile);
-            if (!isFailure) throw new Error("Error updating status internal to app");
-            return {Success: true, Location: 'Server'};
+        async function updateQuestionnaireStatus(answerQuestionnaireId, newStatus, oldStatus) {
+            try {
+                let userProfile = User.getLoggedinUserProfile();
+
+                let response = await QuestionnaireDataService.updateQuestionnaireStatus(answerQuestionnaireId, newStatus, userProfile);
+
+                let isFailure = updateAppQuestionnaireStatus(answerQuestionnaireId, newStatus, oldStatus, userProfile);
+
+                if (!isFailure) {
+                    throw new Error("Error updating status internal to app");
+                }
+
+                if (newStatus === 1) {
+                    numberOfUnreadQuestionnaires[currentPurpose] -= 1;
+                }
+
+                return { Success: true, Location: 'Server' };
+            } catch (error) {
+                throw new Error("Error updating questionnaire status internal to app", { cause: error });
+            }
         }
 
         /**
@@ -299,6 +427,30 @@
         }
 
         /**
+         * @name getQuestionnaireNoListMessageByPurpose
+         * @desc gets the correct translation key for the message when there is no questionnaires in the list.
+         *       It assumes that the purpose has been validated.
+         * @param {int} status
+         * @param {string} questionnairePurpose
+         * @returns {string}
+         */
+        function getQuestionnaireNoListMessageByPurpose(status, questionnairePurpose = 'default') {
+            switch (status) {
+                case questionnaireValidStatus.NEW_QUESTIONNAIRE_STATUS:
+                    return PURPOSE_EMPTY_LIST_MAP.new[questionnairePurpose];
+
+                case questionnaireValidStatus.IN_PROGRESS_QUESTIONNAIRE_STATUS:
+                    return PURPOSE_EMPTY_LIST_MAP.progress[questionnairePurpose];
+
+                case questionnaireValidStatus.COMPLETED_QUESTIONNAIRE_STATUS:
+                    return PURPOSE_EMPTY_LIST_MAP.completed[questionnairePurpose];
+
+                default:
+                    return PURPOSE_EMPTY_LIST_MAP.new['default'];
+            }
+        }
+
+        /**
          * @name getQuestionnaireMap
          * @desc Returns the map of questionnaires according to the given status.
          *       For example, for the "in progress" status, returns the map of in progress questionnaires.
@@ -344,15 +496,6 @@
                 console.error(err);
                 return 0;
             }
-        }
-
-        /**
-         * @name getNumberOfUnreadQuestionnaires
-         * @desc This public function is used for showing the badge (count how many questionnaires non completed by patient) by the personalTabController.js
-         * @returns {Number} returns the number of new and in progress questionnaires
-         */
-        function getNumberOfUnreadQuestionnaires(){
-            return getQuestionnaireCount(questionnaireValidStatus.NEW_QUESTIONNAIRE_STATUS) + getQuestionnaireCount(questionnaireValidStatus.IN_PROGRESS_QUESTIONNAIRE_STATUS);
         }
 
         /**
