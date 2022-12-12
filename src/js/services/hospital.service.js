@@ -24,7 +24,7 @@
         const endpoint = Params.API.ROUTES.HOSPITAL_SETTINGS.SITES;
 
         let requestHospitalService = {
-            requestParkingInfo: requestParkingInfo,
+            requestSiteInfo: requestSiteInfo,
         };
 
         return requestHospitalService;
@@ -32,12 +32,12 @@
         ////////////////
 
         /**
-         * @name requestParkingInfo
+         * @name requestSiteInfo
          * @desc this function gets parking info for a particular hospital
          * @param {string} hospitalKey - an ID of a particular hospital (institution)
          * @returns {Promise} resolves to the parking's data if success
          */
-        async function requestParkingInfo(hospitalKey){
+        async function requestSiteInfo(hospitalKey){
             // request parameters
             let params = {
                 'institution__code': hospitalKey,
