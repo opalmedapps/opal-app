@@ -46,7 +46,8 @@
                 current = (await getCurrentPosition(geolocationOptions)).coords;
             }
             catch (error) {
-                throw new Error("Failed to get the device's current position via geolocation", {cause: error});
+                console.error(error);
+                throw new Error("Failed to get the device's current position via geolocation");
             }
 
             let distanceMeters = 1000 * getDistanceFromLatLonInKm(current.latitude, current.longitude, targetLatitude, targetLongitude);

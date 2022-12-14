@@ -24,10 +24,10 @@
         .module('MUHCApp')
         .factory('CheckInService', CheckInService);
 
-    CheckInService.$inject = ['$q', 'Appointments', 'Hospital', 'Params', 'Patient', 'RequestToServer', 'UserHospitalPreferences'];
+    CheckInService.$inject = ['$q', 'Appointments', 'Hospital', 'Location', 'Params', 'Patient', 'RequestToServer', 'UserHospitalPreferences'];
 
     /* @ngInject */
-    function CheckInService($q, Appointments, Hospital, Params, Patient, RequestToServer, UserHospitalPreferences) {
+    function CheckInService($q, Appointments, Hospital, Location, Params, Patient, RequestToServer, UserHospitalPreferences) {
 
         /**
          *@ngdoc property
@@ -287,23 +287,30 @@
         // TODO - test - if the user declines GPS, do they get prompted once per site? (bad)
 
         /**
-         *@ngdoc method
-         *@name isWithinCheckinRange
-         *@methodOf MUHCApp.service:CheckinService
-         *@description Uses device GPS functionality to determine whether the user is in range to check in.
-         *@returns {Promise} Returns a promise that resolves to success if the user is allowed to checkin
+         * @desc Uses device GPS functionality to determine whether the user is in range to check in.
+         *       The user is in range if their device is within a maximum radius of any of the sites linked to
+         *       the current institution.
+         * @author Stacey Beard
+         * @date 2022-12-08
+         * @returns {Promise<boolean>} Resolves to true if the user is in range, false if they aren't,
+         *                             or throws an error if there is no site information or if the device can't be
+         *                             geolocated.
          */
         async function isWithinCheckinRange() {
-            const sites = await Hospital.requestSiteInfo(UserHospitalPreferences.getHospital());
+            // Get the list of sites and their coordinates from the backend
+            const response = await Hospital.requestSiteInfo(UserHospitalPreferences.getHospital());
+            if (response.count === '0') throw new Error("No sites are defined for this institution");
+            const sites = response.results;
 
             // To be in range, the user must be close enough to at least one of the available hospital sites
             let results = await Promise.allSettled(
                 sites.map(site => Location.isInRange(site.latitude, site.longitude, Params.checkinRadiusMeters))
             );
 
-            // If a promise rejected, throw a new error, otherwise, return true if at least one site is in range
-            if (results.some(result => result.status = 'rejected')) {
-                throw new Error("Failed to get geolocation information for check-in", {cause: results});
+            // If any promise rejected, throw a new error, otherwise, return true if at least one site is in range
+            if (results.some(result => result.status === 'rejected')) {
+                console.error('Geolocation error', results);
+                throw new Error("Failed to get geolocation information for check-in");
             }
             return results.some(result => result.value === true);
         }
