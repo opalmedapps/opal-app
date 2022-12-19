@@ -30,7 +30,7 @@
         vm.checkinState = {
             noAppointments: true,
             allCheckedIn: false,
-            message: 'DETECTING_LOCATION',
+            message: 'CHECKIN_NONE',
             canNavigate: false,
             checkinError: false,
             inRange: true
@@ -64,8 +64,9 @@
             if (localStorage.getItem('locked')) localStorage.removeItem('locked');
             // Refresh the page on coming back from other pages
             homeNavigator.on('prepop', function(event) {
-                if (event.currentPage.name === "./views/home/checkin/checkin-list.html" && NetworkStatus.isOnline()) evaluateCheckIn();
-                if (event.currentPage.name === "views/personal/notifications/notifications.html" && NetworkStatus.isOnline()) getDisplayData();
+                if ((event.currentPage.name === "./views/home/checkin/checkin-list.html"
+                    || event.currentPage.name === "views/personal/notifications/notifications.html")
+                    && NetworkStatus.isOnline()) getDisplayData();
             });
             //This avoids constant repushing which causes bugs
             homeNavigator.on('prepush', event => {
@@ -96,8 +97,6 @@
             setNextAppointment();
             // display version updates info, if any
             checkForVersionUpdates();
-            // Display current check in status
-            evaluateCheckIn();
         }
 
         /**
@@ -106,13 +105,43 @@
         async function getDisplayData() {
             try {
                 const result = await RequestToServer.apiRequest(Params.API.ROUTES.HOME);
-                $timeout(() => {
+                $timeout(async () => {
                     vm.notificationsUnreadNumber = result.data.unread_notification_count;
+                    evaluateCheckinStatus(result.data.daily_appointments);
                 });
             } catch (error) {
                 // TODO: Error handling improvements: https://o-hig.atlassian.net/browse/QSCCD-463
                 console.error(error);
             }
+        }
+
+        /**
+         * @description Evaluate and set to correct display for the checkin checkbox
+         * @param {object} dailyAppointments Caregiver and related patient(s) daily appointment(s). 
+         */
+        function evaluateCheckinStatus(dailyAppointments) {
+            if (!dailyAppointments) return {...vm.checkinState, message: selectMessage(vm.checkinState)};
+            let appointmentWithCheckinAvailable = dailyAppointments.filter(appt => appt.checkinpossible === '1');
+            vm.checkinState.noAppointments = appointmentWithCheckinAvailable?.length === 0;
+            vm.checkinState.allCheckedIn = !vm.checkinState.noAppointments && appointmentWithCheckinAvailable.filter(appt => appt.checkin === '1').length === appointmentWithCheckinAvailable.length;
+            vm.checkinState.canNavigate = !vm.checkinState.noAppointments && !vm.checkinState.checkinError;
+            vm.checkinState.numberOfAppts = appointmentWithCheckinAvailable?.length || 0;
+            selectMessage(vm.checkinState);
+        }
+
+        /**
+         * @description Assign the correct checkin status message to the user.
+         * @param {object} checkinState Current checking state to which assign the message.
+         */
+        function selectMessage(checkinState) {   
+            if (!checkinState.allCheckedIn && !checkinState.noAppointments) {
+                return vm.checkinState.message = (checkinState.numberOfAppts <= 1) ? 'CHECKIN_MESSAGE_BEFORE' : 'CHECKIN_MESSAGE_BEFORE_PLURAL';
+            }
+
+            if (checkinState.allCheckedIn) {
+                return vm.checkinState.message = (checkinState.numberOfAppts <= 1) ? 'CHECKIN_MESSAGE_AFTER' : 'CHECKIN_MESSAGE_AFTER_PLURAL';
+            }
+            vm.checkinState.message = 'CHECKIN_NONE'
         }
 
         /**
@@ -163,14 +192,6 @@
                     }
                 }).catch(console.error);
             }
-        }
-
-        /**
-         * @name evaluateCheckIn
-         * @desc checks with listener to see if the current user has checked in or not
-         */
-        function evaluateCheckIn(){
-            CheckInService.evaluateCheckinState().then(state => vm.checkinState = state);
         }
 
         /**
