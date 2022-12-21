@@ -24,26 +24,10 @@
         .module('MUHCApp')
         .factory('CheckInService', CheckInService);
 
-    CheckInService.$inject = ['$q', 'RequestToServer', 'Appointments', 'Patient', 'Params'];
+    CheckInService.$inject = ['$q', 'Appointments', 'Hospital', 'Location', 'Params', 'Patient', 'RequestToServer', 'UserHospitalPreferences'];
 
     /* @ngInject */
-    function CheckInService($q, RequestToServer, Appointments, Patient, Params) {
-
-        /**
-         *@ngdoc property
-         *@name  MUHCApp.service.#positionCheckinAppointment
-         *@propertyOf MUHCApp.service:CheckinService
-         *@description Object contains the last GPS position used when the patient tried to checkin to an appointment
-         */
-        var positionCheckinAppointment = {};
-
-        /**
-         *@ngdoc property
-         *@name  MUHCApp.service.#checkinApps
-         *@propertyOf MUHCApp.service:CheckinService
-         *@description Array contains the appointments to check in to.
-         */
-        var checkinApps = [];
+    function CheckInService($q, Appointments, Hospital, Location, Params, Patient, RequestToServer, UserHospitalPreferences) {
 
         /**
          *@ngdoc property
@@ -113,62 +97,17 @@
 
         ////////////////////////////////////////////
 
-        function attemptCheckin(){
-            var r = $q.defer();
-            if(attemptedCheckin && allCheckedIn){
-                r.resolve('SUCCESS');
-            } else if (attemptedCheckin && errorsExist){
-                r.resolve('ERROR');
-            } else {
-                //This should only return true if all current appointments.checkin === 0 and there has been an attempted checkin. this implies an error has occurred
-                isAllowedToCheckin()
-                    .then(function (isAllowed) {
-                        if (isAllowed) {
-                            checkinToAllAppointments()
-                                .then(function (res) {
-                                    attemptedCheckin = true;
-                                    updateCheckinState(res.appts);
-                                    r.resolve(res.status);
-                                })
-                        } else r.resolve('NOT_ALLOWED');
-                    });
-            }
-            return r.promise;
-        }
+        async function attemptCheckin(){
+            if (attemptedCheckin && allCheckedIn) return 'SUCCESS';
+            if (attemptedCheckin && errorsExist) return 'ERROR';
 
-        function isAllowedToCheckin(){
-            var r = $q.defer();
+            const isAllowed = await isWithinCheckinRange();
+            if (!isAllowed) return 'NOT_ALLOWED';
 
-            // hasAttemptedCheckin()
-            //     .then(function(attempted) {
-            //         if (attempted === 'false') {
-
-                        isWithinCheckinRange()
-                            .then(function (isInRange) {
-
-                                // console.log('is allowed to checkin ... is in range: ' + isInRange);
-
-                                r.resolve(isInRange)
-                            });
-
-                //     } else r.resolve(false);
-                // });
-
-
-            // hasAttemptedCheckin()
-            //     .then(function(attempted) {
-            //         if (attempted === 'false') {
-            //             isWithinCheckinRange()
-            //                 .then(function (isInRange) {
-            //
-            //                     console.log('is allowed to checkin ... is in range: ' + isInRange);
-            //
-            //                     r.resolve(isInRange)
-            //                 })
-            //         } else r.resolve(false);
-            //     });
-
-            return r.promise
+            const checkinResult = await checkinToAllAppointments();
+            attemptedCheckin = true;
+            updateCheckinState(checkinResult.appts);
+            return checkinResult.status;
         }
 
         function evaluateCheckinState(){
@@ -219,7 +158,8 @@
                         }
                         r.resolve()
                     })
-                    .catch(function() {
+                    .catch(function(error) {
+                        console.error(error);
                         setCheckinState("NOT_ALLOWED", appts.length);
                         r.reject()
                     })
@@ -346,67 +286,32 @@
         }
 
         /**
-         *@ngdoc method
-         *@name isAllowedToCheckin
-         *@methodOf MUHCApp.service:CheckinService
-         *@description Function determines geographically whether user is allow to check-in. Works under the assumption
-         * that all the checks to see if an appointment is today and open have already been done! It also updates
-         * the positionCheckinAppointment property of the CheckinService. Note: The patient must be within 500m of
-         * hospital to be able to checkin.
-         *@returns {Promise} Returns a promise that resolves to success if the user is allowed to checkin
+         * @desc Uses device GPS functionality to determine whether the user is in range to check in.
+         *       The user is in range if their device is within a maximum radius of any of the sites linked to
+         *       the current institution.
+         * @author Stacey Beard
+         * @date 2022-12-08
+         * @returns {Promise<boolean>} Resolves to true if the user is in range, false if they aren't,
+         *                             or throws an error if there is no site information or if the device can't be
+         *                             geolocated.
          */
-        function isWithinCheckinRange() {
-            var r=$q.defer();
-            navigator.geolocation.getCurrentPosition(function(position){
-                var distanceMeters = 1000 * getDistanceFromLatLonInKm(position.coords.latitude, position.coords.longitude, Params.hospitalSite.hospitalCoordinates[0], Params.hospitalSite.hospitalCoordinates[1]);
+        async function isWithinCheckinRange() {
+            // Get the list of sites and their coordinates from the backend
+            const response = await Hospital.requestSiteInfo(UserHospitalPreferences.getHospital());
+            if (!response?.count || response?.count === '0') throw new Error("No sites are defined for this institution");
+            const sites = response?.results;
 
-                // console.log(distanceMeters);
+            // To be in range, the user must be close enough to at least one of the available hospital sites
+            let results = await Promise.allSettled(
+                sites.map(site => Location.isInRange(site.latitude, site.longitude, Params.checkinRadiusMeters))
+            );
 
-                if (distanceMeters <= 500) {
-                    positionCheckinAppointment = {
-                        'Latitude':position.coords.latitude,
-                        'Longitude':position.coords.longitude,
-                        'Accuracy':position.coords.accuracy
-                    };
-                    r.resolve(true);
-                } else {
-
-                    // console.log('not within range!');
-
-                    r.resolve(false);
-                }
-            }, function(err) {
-                console.error("Error getting current position via geolocation: ", err);
-                r.reject(false);
-            }, {
-                maximumAge: 10000,
-                timeout: 15000,
-                enableHighAccuracy: true
-            });
-
-            return r.promise;
-        }
-
-        /**
-         *@ngdoc method
-         *@name hasAttemptedCheckin
-         *@methodOf MUHCApp.service:CheckinService
-         *@description Verifies if the user is already checked in for their appointment in the waiting room. Note: This
-         * should only be called if none of today's appointment have their checkin flag set to 1.. because then
-         * intuitively they have attempted checking in.
-         *@returns {Promise} Returns a promise containing the CheckedIn boolean and the AppointmentSerNum.
-         **/
-        function hasAttemptedCheckin() {
-            var r = $q.defer();
-
-            RequestToServer.sendRequestWithResponse('CheckCheckin', {PatientSerNum: Patient.getPatientSerNum()})
-                .then(function(response) {
-                    r.resolve(response.Data.AttemptedCheckin);
-                })
-                .catch(function() {
-                    r.reject(false);
-                });
-            return r.promise;
+            // If any promise rejected, throw a new error, otherwise, return true if at least one site is in range
+            if (results.some(result => result?.status === 'rejected')) {
+                console.error('Geolocation error', results);
+                throw new Error("Failed to get geolocation information for check-in");
+            }
+            return results.some(result => result?.value === true);
         }
 
         /**
@@ -431,33 +336,10 @@
             return r.promise;
         }
 
-        function updateCheckedInAppointments(checkedinApps) {
-            checkinApps = checkinApps.map(function(app){
-                if(checkedinApps.includes(app.AppointmentSerNum)) app.Checkin = '1';
-                return app;
-            });
-        }
-
         function clear() {
-            checkinApps = [];
             allCheckedIn= false;
             attemptedCheckin = false;
             checkinStateSet = false;
         }
-
-        function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
-            var R = 6371; // Radius of the earth in km
-            var dLat = deg2rad(lat2 - lat1); // deg2rad below
-            var dLon = deg2rad(lon2 - lon1);
-            var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
-            var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-            var d = R * c; // Distance in km
-            return d;
-        }
-
-        function deg2rad(deg) {
-            return deg * (Math.PI / 180);
-        }
     }
 })();
-

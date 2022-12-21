@@ -16,6 +16,7 @@
         .controller('CheckInController', CheckInController);
 
     CheckInController.$inject = [
+        '$timeout',
         'CheckInService',
         'NavigatorParameters',
         'UserPreferences',
@@ -26,6 +27,7 @@
 
     /* @ngInject */
     function CheckInController(
+        $timeout,
         CheckInService,
         NavigatorParameters,
         UserPreferences,
@@ -70,13 +72,24 @@
                         vm.checkInMessage = "CHECKED_IN";
                         vm.apps = CheckInService.getCheckInApps();
                     } else {
-                        vm.alert.type = Params.alertTypeDanger;
-                        vm.checkInMessage = "CHECKIN_ERROR";
-                        vm.apps = CheckInService.getCheckInApps();
-                        vm.error = "ERROR";
+                        displayError();
                     }
+                }).catch(error => {
+                    console.log(error);
+                    displayError();
                 });
+        }
 
+        /**
+         * @desc Displays an error state in the view, when check-in fails.
+         */
+        function displayError() {
+            $timeout(() => {
+                vm.alert.type = Params.alertTypeDanger;
+                vm.checkInMessage = "CHECKIN_ERROR";
+                vm.apps = CheckInService.getCheckInApps();
+                if (vm.apps.length === 0) vm.error = "ERROR";
+            });
         }
 
         // View appointment details
