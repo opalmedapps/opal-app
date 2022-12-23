@@ -48,6 +48,11 @@
                 name: "RELATIONSHIPS_PATIENTS",
                 description:"RELATIONSHIPS_PATIENTS_DESCRIPTION"
             },
+            smartdevices: {
+                icon: 'fa-heartbeat',
+                name: 'SMARTDEVICES',
+                description: 'This page allows you to connect to smart devices and send their data to the hospital. The current supported devices are: Etekcity Weight Scale. Model number: ESF24',
+            },
         };
 
         activate();

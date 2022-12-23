@@ -9,70 +9,61 @@
     <network-banner></network-banner>
 
     <div ng-if="!ctrl.bluetoothEnabled" class="container" align="center">
-        <p style="margin-top:25vh;color:grey">{{'Bluetooth is disabled, please enable it.'|translate}}</p>
+        <p style="margin-top:25vh;color:grey">{{'Bluetooth is disabled, please enable it and then press the refresh button below.'|translate}}</p>
     </div>
     
     <div ng-if="ctrl.bluetoothEnabled" class="container" style="margin: 3% auto; width: 95%;">
-        <div class="container" align="center">
+        <div class="container" style="text-align: justify; margin-left: 0; padding-left: 0;">
+            <p>To synchronize data with the smart scale, begin by stepping on the scale and weighing yourself. Once the weight is measured, scan for devices, press "Sync" for the found scale and confirm whether to send it to the hospital when asked.</p>
+        </div>
+
+        <div class="container" align="left" style="margin-left: 0; padding-left: 0; margin-bottom: 1rem;">
             <button class="shadow-2 button"
                     ng-click="ctrl.scan()" ng-disabled="ctrl.scanning">
                 <span ng-if="!ctrl.scanning">{{"Scan for devices"|translate}}</span>
                 <span ng-if="ctrl.scanning">{{"Scanning "|translate}}&nbsp;<ons-icon icon="ion-load-d" spin="true" style="width: 25px; vertical-align: -3px;"></ons-icon></span>
             </button>
         </div>
-        <!-- <div ng-if="!ctrl.devices" class="container" align="center">
-            <p style="margin-top:1vh;color:grey">{{'No devices'|translate}}</p>
-        </div> -->
         
-        <p ng-class="fontSizeTitle">Devices:</p>
-        
-        <ons-list>
-            <ons-list-item ng-if="ctrl.devices.length == 0" class="item" style="border-left: 1px solid #ddd !important; border-right: 1px solid #ddd !important;">
-                <ons-row align="center">
-                    <div class="patient-content" style="padding-left: 1vh;">
-                        <div class="patient-content--text">
-                            <p ng-class="fontSizeTitle">{{'No devices' | translate}}</p>
-                        </div>
-                    </div>
-                </ons-row>
-            </ons-list-item>
-            <ons-list-item ng-repeat="device in ctrl.devices" class="item">
-                <ons-row align="center">
-                    <div class="patient-content">
-                        <div class="patient-content--icon">
-                            <i class="fa fa-heartbeat fa-lg pull-left"
-                          style="color:grey; display: inline-block"></i>
-                        </div>
-                        <div class="patient-content--text">
-                            <p ng-class="fontSizeTitle">{{device.name}}</p>
-                            <p class="relationship-list--status" ng-class="fontSizeDesc">{{device.id}}</p>
-                        </div>
-                        <div class"patient-content--right" style="margin-left: 5vh;">
-                            <button class="shadow-2 button" ng-click="ctrl.connect(device)" ng-disabled="device.connecting">
-                                <span ng-if="!device.connecting">Sync</span>
-                                <span ng-if="device.connecting">Syncing... <ons-icon icon="ion-load-d" spin="true" style="width: 25px; vertical-align: -3px;"></ons-icon></span>
-                            </button>
-                        </div>
-                    </div>
-                </ons-row>
-            </ons-list-item>
-        </ons-list>
+        <div ng-if="ctrl.devices.length >= 0">
+            <p ng-class="fontSizeTitle">Devices:</p>
 
-        <div>
-            <label ng-class="fontSizeDesc"
-                    class="lee-checkbox lee-checkbox--list-item"
-                    ng-style="{'background-color':'#f9f9f9', 'margin':'0px', 'padding':'10px'}">
-            <input type="checkbox"
-                    style="-webkit-appearance: checkbox !important; width:20px; height:20px; display:inline"
-                    ng-checked="ctrl.debug"
-                    ng-click="ctrl.toggleDebug()">
-                    <div class="lee-checkbox__checkmark lee-checkbox--list-item__checkmark"></div>
-                    <span ng-class="fontSizeDesc">Debug</span>
-        </div>
+            <ons-list>
+                <ons-list-item ng-if="ctrl.devices.length == 0" class="item" style="border-left: 1px solid #ddd !important; border-right: 1px solid #ddd !important;">
+                    <ons-row align="center">
+                        <div class="patient-content" style="padding-left: 1vh;">
+                            <div class="patient-content--text">
+                                <p ng-class="fontSizeTitle">{{'No devices found' | translate}}</p>
+                            </div>
+                        </div>
+                    </ons-row>
+                </ons-list-item>
+                <ons-list-item ng-repeat="device in ctrl.devices" class="item">
+                    <ons-row align="center">
+                        <div class="patient-content">
+                            <div class="patient-content--icon">
+                                <i class="fa fa-heartbeat fa-lg pull-left"
+                              style="color:grey; display: inline-block"></i>
+                            </div>
+                            <div class="patient-content--text">
+                                <p ng-class="fontSizeTitle">{{device.name}}</p>
+                                <p class="relationship-list--status" ng-class="fontSizeDesc">{{device.id}}</p>
+                            </div>
+                            <div class"patient-content--right" style="margin-left: 5vh;">
+                                <button class="shadow-2 button" ng-click="ctrl.connect(device)" ng-disabled="device.connecting">
+                                    <span ng-if="!device.connecting">Sync</span>
+                                    <span ng-if="device.connecting">Syncing... <ons-icon icon="ion-load-d" spin="true" style="width: 25px; vertical-align: -3px;"></ons-icon></span>
+                                </button>
+                            </div>
+                        </div>
+                    </ons-row>
+                </ons-list-item>
+            </ons-list>
 
-        <p ng-class="fontSizeTitle" style="margin-top: 1vh;">Status: </p>
-        <div class="container">
-            <p ng-repeat="message in ctrl.messages">{{message}}</p>
+            <p ng-class="fontSizeTitle" style="margin-top: 1vh;">Status: </p>
+            <div>
+                <p ng-repeat="message in ctrl.messages">{{message}}</p>
+            </div>
         </div>
     </div>
         
