@@ -42,3 +42,4 @@ import "./services/versionService.js";
 import "./services/hospital.service.js";
 import "./services/profile-selector.service";
 import "./services/user.service";
+import "./services/studiesService.js";
