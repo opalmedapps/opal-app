@@ -110,61 +110,37 @@
             return checkinResult.status;
         }
 
-        function evaluateCheckinState(){
-            var r = $q.defer();
-
-            if(attemptedCheckin || checkinStateSet && !stateUpdated){
-                r.resolve(state);
-            } else {
-                initCheckinState()
-                    .then(function(){
-                        checkinStateSet = true;
-                        r.resolve(state);
-                    })
-                    .catch(function(err){
-                        r.resolve(err);
-                    })
+        async function evaluateCheckinState(dailyAppointments = []){
+            if (attemptedCheckin || checkinStateSet && !stateUpdated) return state;
+            try {
+                await initCheckinState(dailyAppointments);
+                checkinStateSet = true;
+                return state;
+            } catch (error) {
+                return error;
             }
-            return r.promise;
         }
 
-        function initCheckinState(){
-            var r = $q.defer();
-
-            var appts = Appointments.getTodaysAppointments();
-
+        async function initCheckinState(appts){
+            // Remove appointments that are not available for checkin such as telemedecine appointments.
+            appts = appts.filter(appt => appt.checkinpossible === '1');
             //First evaluate the current state of existing appointments, see if they were already checked in and if so what the state is (all success or some errors)
-            if(appts.length === 0){
+            if (appts.length === 0){
                 setCheckinState("CHECKIN_NONE");
-                r.resolve()
-            } else if(alreadyCheckedIn(appts)){
+            } else if (alreadyCheckedIn(appts)){
                 setCheckinState("CHECKIN_MESSAGE_AFTER" + setPlural(appts));
-                r.resolve()
             } else if (checkinErrorsExist(appts)) {
                 setCheckinState("CHECKIN_ERROR");
-                r.resolve()
             } else {
-                //This means at this point there exists appointments today and none of them have been checked in
-                isWithinCheckinRange()
-                    .then(function(canCheckin){
-
-                        // console.log("can checkin : " + canCheckin);
-
-                        if(!canCheckin) {
-                            setCheckinState("NOT_ALLOWED", appts.length);
-                        }
-                        else {
-                            setCheckinState("CHECKIN_MESSAGE_BEFORE" + setPlural(appts), appts.length);
-                        }
-                        r.resolve()
-                    })
-                    .catch(function(error) {
-                        console.error(error);
-                        setCheckinState("NOT_ALLOWED", appts.length);
-                        r.reject()
-                    })
+                try {
+                    const canCheckin = await isWithinCheckinRange();
+                    canCheckin ? setCheckinState("CHECKIN_MESSAGE_BEFORE" + setPlural(appts), appts.length) : setCheckinState("NOT_ALLOWED", appts.length);
+                } catch (error) {
+                    console.error(error);
+                    setCheckinState("NOT_ALLOWED", appts.length);
+                }
             }
-            return r.promise
+            return
         }
 
         function updateCheckinState(checkedInAppts){
@@ -183,22 +159,15 @@
         }
 
         function alreadyCheckedIn(appts){
-
             allCheckedIn = true;
-            // Appointment.Checkin === '1'  means Checked-in
-            // Appointment.Checkin === '0'  means NOT Checked-in
-            // Appointment.Checkin === '-1' means ERROR
 
             appts.map(function(app){
-                if(app.Checkin === '0') allCheckedIn = false;
+                if(app.checkin === '0') allCheckedIn = false;
             });
 
             return allCheckedIn;
         }
 
-        // Appointment.Checkin === '1'  means Checked-in
-        // Appointment.Checkin === '0'  means NOT Checked-in
-        // Appointment.Checkin === '-1' means ERROR
         function checkinErrorsExist(appts){
             var checkinExists = false;
 
@@ -227,7 +196,6 @@
         function setCheckinState(status, numAppts){
 
             state.message = status;
-
             switch(status){
                 case "CHECKIN_ERROR":
                     attemptedCheckin = true;

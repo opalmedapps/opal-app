@@ -26,7 +26,7 @@
     "CHECKIN_MESSAGE_AFTER_PLURAL": "Vous êtes enregistré pour vos rendez-vous.",
     "CHECKIN_MESSAGE_BEFORE": "Enregistrer votre rendez-vous.",
     "CHECKIN_MESSAGE_BEFORE_PLURAL": "Enregistrer vos rendez-vous.",
-    "CHECKIN_NONE": "Aucun rendez-vous aujourd'hui",
+    "CHECKIN_NONE": "Aucun rendez-vous de disponible pour enregistrement aujourd'hui",
     "CHECKIN_PROCESSING": "Veuillez patienter. Nous traitons votre enregistrement.",
     "CLICKTOOPEN": "Cliquez pour ouvrir",
     "CLINICAL_NOTES": "Notes médicales",
