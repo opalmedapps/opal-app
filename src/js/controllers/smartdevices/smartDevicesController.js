@@ -6,28 +6,58 @@
         .controller('SmartDevicesController', SmartDevicesController);
 
     SmartDevicesController.$inject = [
-        '$scope', '$timeout', '$filter', 'NavigatorParameters', 'RequestToServer', 'Params', 'User'
+        '$scope', '$timeout', '$filter', 'NativeNotification', 'NavigatorParameters', 'RequestToServer', 'Params', 'User'
     ];
 
     /* @ngInject */
-    function SmartDevicesController($scope, $timeout, $filter, NavigatorParameters, RequestToServer, Params, User)
+    function SmartDevicesController($scope, $timeout, $filter, NativeNotification, NavigatorParameters, RequestToServer, Params, User)
     {
+        // UUIDs for smart scale
+        const SERVICE_UUID = 'FFE0';
+        const BATTERY_SERVICE_UUID = '180F';
+        const BATTERY_CHARACTERISTIC_UUID = '2A19';
+        const NOTIFICATION_SERVICE_UUID = 'FFF0';
+        const NOTIFICATION_CHARACTERISTIC_UUID = 'FFF1';
+
         let vm = this;
         
         vm.showInfo = () => NavigatorParameters.getNavigator().pushPage('./views/smartdevices/smartdevices-info.html');
+        // TODO: switch back to false
         vm.bluetoothEnabled = true;
         vm.scanning = false;
         vm.devices = [];
-        vm.toggleDebug = toggleDebug;
+        vm.messages = [];
+        vm.dataRetrieved = false;
+
         vm.scan = scan;
         vm.connect = connect;
-        vm.messages = [];
+        vm.refresh = isBluetoothEnabled;
 
-        // bluetoothle.initialize(onBluetoothStatusChanged);
-        activate();
+        initializeBluetooth();
+        // if it is checked right after it might report that bluetooth is disabled even though it is enabled
+        // delay it a little bit
+        $timeout(() => isBluetoothEnabled(), 50);
 
-        async function activate() {
+        async function initializeBluetooth() {
+            console.log('initializing bluetooth...')
+            // initialize Bluetooth stack by calling a function once
+            // otherwise it can error out occasionally when scanning
             await ble.withPromises.isEnabled();
+        }
+
+        function isBluetoothEnabled() {
+            // need to use non-promisified API since the promisified one does not return anything
+            console.log('checking whether BLE is enabled');
+            ble.isEnabled(
+                () => {
+                    console.log('BLE enabled');
+                    $timeout(() => vm.bluetoothEnabled = true);
+                },
+                (error) => {
+                    console.log('BLE enabled error', error);
+                    $timeout(() => vm.bluetoothEnabled = false);
+                }
+            )
         }
 
         async function scan() {
@@ -35,12 +65,11 @@
             vm.messages = [];
             vm.devices = [];
 
-            // bluetoothle.startScan(onStartScanSuccess, onScanFailed, {services: ['FFE0']});
-            await ble.withPromises.startScan(['FFE0'], onDiscovered, onScanFailed);
+            await ble.withPromises.startScan([SERVICE_UUID], onDiscovered, onScanFailed);
 
+            // stop scanning after 3 seconds
             $timeout(async () => {
                 vm.scanning = false;
-                // bluetoothle.stopScan(onStopScanSuccess, onStopScanFailed);
                 await ble.withPromises.stopScan();
             }, 3000);
         }
@@ -48,9 +77,7 @@
         function onScanFailed(error) {
             console.log(error);
 
-            $timeout(() => {
-                vm.scanning = false;
-            });
+            $timeout(() => vm.scanning = false);
 
             addMessage(`Error scanning: ${error}`);
         }
@@ -59,12 +86,17 @@
             console.log('on discovered');
             console.log(peripheralData);
             $timeout(() => {
-                vm.devices.push(peripheralData);
+                console.log(vm.devices.indexOf(peripheralData));
+                // sometimes, not always, the device shows up twice, prevent this from happening
+                if (vm.devices.indexOf(peripheralData) === -1) {
+                    vm.devices.push(peripheralData);
+                }
             })
         }
 
         async function connect(device) {
             device.connecting = true;
+            vm.dataRetrieved = false;
             vm.messages = [];
 
             addMessage(`Connecting to ${device.name} (${device.id}) ...`);
@@ -93,20 +125,25 @@
 
             addMessage(`Connected to device`);
 
-            let batteryBuffer = await ble.withPromises.read(result.id, '180F', '2A19');
+            let batteryBuffer = await ble.withPromises.read(result.id, BATTERY_SERVICE_UUID, BATTERY_CHARACTERISTIC_UUID);
             let bytes = new Uint8Array(batteryBuffer);
             addMessage(`Battery level: ${bytes}%`);   
             
             addDebugMessage('Subscribing to receive notifications');
-            await ble.withPromises.startNotification(result.id, 'FFF0', 'FFF1', (data) => {
+            await ble.withPromises.startNotification(result.id, NOTIFICATION_SERVICE_UUID, NOTIFICATION_CHARACTERISTIC_UUID, (data) => {
                 onSubscribeSuccess(result.id, data);
             }, onSubscribeError);
 
             $timeout(async () => {
+                if (!vm.dataRetrieved) {
+                    addMessage('No data retrieved from device, please redo the measurement.')
+                }
+
                 addDebugMessage('Unsubscribing from notifications');
-                await ble.withPromises.stopNotification(result.id, 'FFF0', 'FFF1');
+                await ble.withPromises.stopNotification(result.id, NOTIFICATION_SERVICE_UUID, NOTIFICATION_CHARACTERISTIC_UUID);
                 addMessage('Disconnecting from device');
                 await ble.withPromises.disconnect(result.id);
+
                 $timeout(() => {
                     device.connecting = false;
                 });
@@ -132,29 +169,21 @@
                 let response = new Uint8Array([0x13, 9, 21, unit, 16, 170, 22, 0, 2]);
                 console.log('response: ', response);
                 addDebugMessage(`Sending response: ${toHexString(response)}`);
-                // let responseEncoded = bluetoothle.stringToBytes(response);
-                // console.log(responseEncoded);
-                // let responseEncoded = bluetoothle.bytesToEncodedString(response);
-                // console.log(responseEncoded);
-                // console.log('sending ', responseEncoded);
-                // for some reason sending with "noResponse" does not work
-                // let params = {address: result.address, service: result.service, characteristic: 'FFF2', value: responseEncoded, type: 'withResponse'};
-                // console.log(params);
-                // bluetoothle.write(onWriteSuccess, onWriteError, {...params, ...{value: responseEncoded}});
+
                 await ble.withPromises.write(device_id, service_uuid, characteristic_uuid, response.buffer);
                 console.log('successfully sent');
             } else if (packetType === 0x14) {
                 console.log('received unknown packet')
                 addDebugMessage('Device responded with unknown packet type')
-                // send response with timestamp
+                // send response with timestamp with current time instead of hard-coded timestamp
                 // in seconds
                 const Y2K_START = 946684800;
                 // time is returned in milliseconds
                 let timestamp = (Date.now() / 1000) - Y2K_START
+                // TODO: use timestamp
                 let response = new Uint8Array([0x20, 8, 0x15, 65, 239, 255, 42, 150]);
                 addDebugMessage(`Sending response: ${toHexString(response)}`);
-                // let responseEncoded = bluetoothle.bytesToEncodedString(response);
-                // bluetoothle.write(onWriteSuccess, onWriteError, {...params, ...{value: responseEncoded}});
+
                 await ble.withPromises.write(device_id, service_uuid, characteristic_uuid, response.buffer);
             } else if (packetType == 0x21) {
                 console.log('received another unknown packet');
@@ -181,40 +210,44 @@
                     let weight = parseInt(weightHexString, 16) / 100;
 
                     addMessage(`Weight: ${weight} kg`);
+                    vm.dataRetrieved = true;
 
                     let response = new Uint8Array([0x1f, 0x5, 0x15, 0x10, 0x49]);
-                    // let responseEncoded = bluetoothle.bytesToEncodedString(response);
+
                     console.log('sending stop spam message ', response); 
-                    // bluetoothle.write(onWriteSuccess, onWriteError, {...params, ...{value: responseEncoded}});
+
                     await ble.withPromises.write(device_id, service_uuid, characteristic_uuid, response.buffer);
                     addDebugMessage('Told the device to stop spamming me');
 
-                    if (!vm.debug) {
-                        addDebugMessage('Sending weight to backend');
-
-                        let data = {
-                            value: weight,
-                            type: 'BM',
-                            start_date: new Date().toISOString(),
-                            source: 'QN-Scale',
+                    NativeNotification.showConfirmation(`Do you want to send the weight (${weight} kg) to the hospital?`, async () => {
+                        if (!vm.debug) {
+                            addDebugMessage('Sending weight to backend');
+    
+                            let data = {
+                                value: weight,
+                                type: 'BM',
+                                start_date: new Date().toISOString(),
+                                source: 'QN-Scale',
+                            }
+    
+                            const patient_id = User.getLoggedinUserProfile().patient_id;
+                            const requestParams = Params.API.ROUTES.QUANTITY_SAMPLES;
+                            const formatedParams = {
+                                ...requestParams,
+                                url: requestParams.url.replace('<PATIENT_ID>', patient_id),
+                            }
+                
+                            console.log(formatedParams);
+                
+                
+                            let result = await RequestToServer.apiRequest(formatedParams, JSON.stringify(data));
+                            console.log(result);
+                            addMessage('Weight successfully sent to backend');
+                        } else {
+                            addDebugMessage('Debug mode: Weight not sent to backend');
                         }
+                    });
 
-                        const patient_id = User.getLoggedinUserProfile().patient_id;
-                        const requestParams = Params.API.ROUTES.QUANTITY_SAMPLES;
-                        const formatedParams = {
-                            ...requestParams,
-                            url: requestParams.url.replace('<PATIENT_ID>', patient_id),
-                        }
-            
-                        console.log(formatedParams);
-            
-            
-                        let result = await RequestToServer.apiRequest(formatedParams, JSON.stringify(data));
-                        console.log(result);
-                        addMessage('Weight successfully sent to backend');
-                    } else {
-                        addDebugMessage('Debug mode: Weight not sent to backend');
-                    }
                 }
             }
         }
@@ -225,18 +258,15 @@
         }
 
         function addMessage(message) {
-            $timeout(() => {
-                vm.messages.push(message);
-            });
+            $timeout(() => vm.messages.push(message))
         }
 
-        function toggleDebug() {
-            vm.debug = !vm.debug;
-        }
-
-        function addDebugMessage(message) {
+        function addDebugMessage(message, data = undefined) {
             if (vm.debug) {
                 addMessage(message);
+            }
+            if (data) {
+                console.log(`${message}: `, data);
             }
         }
 

@@ -9,7 +9,13 @@
     <network-banner></network-banner>
 
     <div ng-if="!ctrl.bluetoothEnabled" class="container" align="center">
-        <p style="margin-top:25vh;color:grey">{{'Bluetooth is disabled, please enable it and then press the refresh button below.'|translate}}</p>
+        <ons-icon icon="fa-bluetooth" style="font-size:80px; color: #0082fc; margin: 5vh 0;"></ons-icon>
+        <h3>Bluetooth is disabled</h3>
+        <p style="color:grey">{{'Please enable it and then press the refresh button below.'|translate}}</p>
+        <button class="button--large--cta"
+                ng-click="ctrl.refresh()">
+            <span>{{"Refresh"|translate}}</span>
+        </button>
     </div>
     
     <div ng-if="ctrl.bluetoothEnabled" class="container" style="margin: 3% auto; width: 95%;">
@@ -17,7 +23,7 @@
             <p>To synchronize data with the smart scale, begin by stepping on the scale and weighing yourself. Once the weight is measured, scan for devices, press "Sync" for the found scale and confirm whether to send it to the hospital when asked.</p>
         </div>
 
-        <div class="container" align="left" style="margin-left: 0; padding-left: 0; margin-bottom: 1rem;">
+        <div class="container" align="center" style="margin-left: 0; padding-left: 0; margin-bottom: 1rem;">
             <button class="shadow-2 button"
                     ng-click="ctrl.scan()" ng-disabled="ctrl.scanning">
                 <span ng-if="!ctrl.scanning">{{"Scan for devices"|translate}}</span>
