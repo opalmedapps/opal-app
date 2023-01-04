@@ -1,7 +1,7 @@
 <ons-page ng-controller="SmartDevicesController as ctrl">
     <generic-toolbar title="{{'Smart Devices'|translate}}" style-class="fontSizeTitle">
         <right-content>   
-            <ons-toolbar-button ng-click="initNavigator.pushPage('views/tabs/info-page-tabs.html',{id:'smartdevices'})">
+            <ons-toolbar-button ng-click="ctrl.showInfo()">
                 <ons-icon icon="fa-info-circle"></ons-icon>
             </ons-toolbar-button>
         </right-content>

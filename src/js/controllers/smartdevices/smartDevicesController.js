@@ -12,8 +12,9 @@
     /* @ngInject */
     function SmartDevicesController($scope, $timeout, $filter, NavigatorParameters, RequestToServer, Params, User)
     {
-        var vm = this;
-        vm.debug = false;
+        let vm = this;
+        
+        vm.showInfo = () => NavigatorParameters.getNavigator().pushPage('./views/smartdevices/smartdevices-info.html');
         vm.bluetoothEnabled = true;
         vm.scanning = false;
         vm.devices = [];
