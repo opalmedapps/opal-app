@@ -19,7 +19,7 @@
                 <ons-row align="center">
                     <ons-col width="60px" style="text-align: center">
                         <div>
-                            <ons-icon icon="fa-stethoscope" size="2x" style="color:#f44336"></ons-icon>
+                            <ons-icon icon="fa-stethoscope" size="2x" style="color:#6a2722"></ons-icon>
                         </div>
                     </ons-col>
                     <ons-col>
@@ -148,6 +148,23 @@
                     <ons-col>
                         <header>
                             <span class="item-title" ng-class="fontSizeTitle">{{"RESEARCH"|translate}}</span>
+                        </header>
+                        <p class="item-desc" ng-class="fontSizeDesc"></p>
+                    </ons-col>
+                </ons-row>
+            </ons-list-item>
+            <ons-list-item modifier="chevron" class="item"
+                ng-if="tab.allowedModules.hasOwnProperty('SMD') && tab.allowedModules['SMD']"
+                ng-click="personalNavigator.pushPage('views/smartdevices/smartdevices.html')">
+                <ons-row align="center">
+                    <ons-col width="60px" style="text-align: center">
+                        <div>
+                            <ons-icon icon="fa-heartbeat" size="2x" style="color:#f44336"></ons-icon>
+                        </div>
+                    </ons-col>
+                    <ons-col>
+                        <header>
+                            <span class="item-title" ng-class="fontSizeTitle">{{"Smart Devices"|translate}}</span>
                         </header>
                         <p class="item-desc" ng-class="fontSizeDesc"></p>
                     </ons-col>
