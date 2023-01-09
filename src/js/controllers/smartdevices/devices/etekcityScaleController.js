@@ -19,27 +19,44 @@
         const NOTIFICATION_SERVICE_UUID = 'FFF0';
         const NOTIFICATION_CHARACTERISTIC_UUID = 'FFF1';
 
-        let vm = this;
-        
-        // vm.showInfo = () => NavigatorParameters.getNavigator().pushPage('./views/smartdevices/smartdevices-info.html');
+        // Error messages
+        const ERROR_NO_DEVICE = 'No device found. Please redo the measurement and try again.';
+        const ERROR_BACKEND = 'Error sending weight to hospital: ';
 
+        let vm = this;
+
+        // TODO: switch back to false
         vm.scanning = false;
         // TODO: switch back to null
         vm.weight = null;
-        vm.dataSubmitted = false;
+        vm.weight = 13.45;
+        vm.dataSubmitted = true;
         // TODO: switch back to false
         vm.debug = false;
         // TODO: switch back to null
-        // vm.selectedDevice = {name: 'QN-Scale', id: '1234-5678-aaaa-bbbb', battery: 91};
-        vm.selectedDevice = null;
+        // vm.selectedDevice = null;
+        vm.selectedDevice = {name: 'QN-Scale', id: '1234-5678-aaaa-bbbb', battery: 91};
+        // TODO: switch back to null
         vm.errorMessage = null;
+        // vm.errorMessage = `${ERROR_BACKEND}Patient not found`;
         
         vm.devices = [];
+        vm.devices.push({
+            name: 'QN-Scale',
+            id: 'XXXX',
+        })
+        vm.devices.push({
+            name: 'QN-Scale',
+            id: 'YYYY',
+        })
         vm.messages = [];
 
         vm.scanAndConnect = scanAndConnect;
         vm.selectDevice = selectDevice;
         vm.submitData = submitData;
+        vm.shouldShowInstructions = () => !vm.scanning && vm.selectedDevice == null && vm.devices.length == 0;
+        vm.isLoading = () => vm.scanning && vm.selectedDevice == null;
+        vm.done = () => NavigatorParameters.getNavigator().pushPage('./views/smartdevices/smartdevices.html');
 
         async function submitData() {
             addDebugMessage('Sending weight to backend');
@@ -59,19 +76,20 @@
                 url: requestParams.url.replace('<PATIENT_ID>', patient_id),
             }
 
-            console.log(formattedParams);
-
             try {
                 let result = await RequestToServer.apiRequest(formattedParams, JSON.stringify(data));
                 console.log(result);
                 addMessage('Weight successfully sent to backend');
-                NativeNotification.showNotificationAlert(
-                    `Weight successfully sent to backend`, 
-                    () => NavigatorParameters.getNavigator().pushPage('./views/smartdevices/smartdevices.html')
-                )
+                // NativeNotification.showNotificationAlert(
+                //     `Weight successfully sent to backend`, 
+                //     () => NavigatorParameters.getNavigator().pushPage('./views/smartdevices/smartdevices.html')
+                // )
+                vm.dataSubmitted = true;
+
             } catch (error) {
                 console.log('error while sending weight to backend: ', error);
-                NativeNotification.showNotificationAlert(`Error sending weight to hospital: ${error}`)
+                // NativeNotification.showNotificationAlert(`Error sending weight to hospital: ${error}`)
+                vm.errorMessage = `Error sending weight to hospital: ${error}`;
             }
         }
 
@@ -89,8 +107,6 @@
             $timeout(async () => {
                 vm.scanning = false;
                 await ble.withPromises.stopScan();
-
-                console.log(vm.devices)
 
                 // not sure why but without this the error message does not show
                 $timeout(async () => {
@@ -126,7 +142,6 @@
 
         async function selectDevice(device) {
             console.log('selectDevice')
-            vm.scanning = true;
             device.connecting = true;
             vm.selectedDevice = device;
 
@@ -148,7 +163,6 @@
             $timeout(async () => {
                 console.log('disconnect...');
                 device.connecting = false;
-                vm.scanning = false;
 
                 await ble.withPromises.disconnect(device.id);
             }, 10000);
