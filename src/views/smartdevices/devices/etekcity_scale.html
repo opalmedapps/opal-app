@@ -8,60 +8,74 @@
     </generic-toolbar>
     <network-banner></network-banner>
     
-    <div style="width: 90%; margin: 3% 5%;">
-        <div style="margin-bottom: 2vh;">
+    <div class="smartdevices-page">
+        <div align="center" class="smartdevices-fa-logo">
+            <i class="fa fa-tachometer fa-lg" style="color: #25a6d9"></i>
+        </div>
+
+        <div ng-if="ctrl.errorMessage" align="center">
+            <p class="error">{{ctrl.errorMessage}}</p>
+        </div>
+
+        <div ng-if="ctrl.shouldShowInstructions()">
             <div style="text-align: justify;">
                 <p>To synchronize data with the smart scale, begin by stepping on the scale and weighing yourself. Once the weight is measured, scan for devices, press "Sync" for the found scale and confirm whether to send it to the hospital when asked.</p>
             </div>
             
             <div align="center">
                 <button class="button--large--cta"
-                        ng-click="ctrl.scanAndConnect()" ng-disabled="ctrl.scanning || ctrl.weight">
-                        <span ng-if="!ctrl.scanning">{{"Read Weight"|translate}}</span>
-                        <span ng-if="ctrl.scanning">
-                            {{"Searching for device"|translate}}&nbsp;
-                            <ons-icon icon="ion-load-d" spin="true" style="width: 25px; vertical-align: -3px;"></ons-icon>
-                        </span>
+                        ng-click="ctrl.scanAndConnect()">
+                        <span>{{"Read Weight"|translate}}</span>
                 </button>
             </div>
         </div>
 
-        <!-- <div ng-if="ctrl.errorMessage" style="margin-bottom: 2vh;">
-            <p style="color: red; margin: 1vh; padding: 1vh; border: 1px solid #ddd; font-weight: bold;">{{ctrl.errorMessage}}</p>
-        </div> -->
+        <div ng-if="ctrl.isLoading()">
+            <loading-spinning-circle loading-message="{{'Connecting to device...'|translate}}">
+            </loading-spinning-circle>
+        </div>
 
-        <div ng-if="ctrl.weight" style="margin-bottom: 2vh;">
-            <p>The following data was read:</p>
-            <p><strong>Weight:</strong> {{ctrl.weight}}kg</p>
+        <div ng-if="ctrl.weight && !ctrl.dataSubmitted" align="center">
+            <p><strong>Weight</strong></p>
+            <p class="data">
+                <span>{{ctrl.weight}}</span>kg
+            </p>
+            <!-- 
+            Currently hidden but might be helpful to show to users
             <p><strong>Scale:</strong> {{ctrl.selectedDevice.name}} ({{ctrl.selectedDevice.id}})</p>
             <p><strong>Battery level:</strong> {{ctrl.selectedDevice.battery}}%</p>
+            -->
             <button class="button--large--cta"
-                    ng-disabled="ctrl.dataSubmitted"
                     ng-click="ctrl.submitData()">
                 {{"Submit Weight to Hospital"|translate}}
             </button>
         </div>
 
-        <div ng-if="ctrl.dataSubmitted" style="margin-bottom: 2vh;">
-            <p>Thank you for submitting your weight. If you have any questions or concerns, please let your clinical team know.</p>
+        <div ng-if="ctrl.dataSubmitted" align="center">
+            <p>Thank you for submitting your weight.</p>
+            <p>If you have any questions or concerns, please let your clinical team know.</p>
+            <button class="button--large--cta"
+                    ng-click="ctrl.done()">
+                {{"Go back to smart devices"|translate}}
+            </button>
         </div>
         
-        <div ng-if="ctrl.selectedDevice == null && ctrl.devices.length > 1" style="margin-bottom: 2vh;">
-            <p ng-class="fontSizeTitle"><strong>{{ 'Specify the device to read from:' | translate }}</strong></p>
+        <div ng-if="ctrl.selectedDevice == null && ctrl.devices.length > 1">
+            <p ng-class="fontSizeTitle"><strong>{{ 'Multiple devices detected. Please specify the device to read from:' | translate }}</strong></p>
 
-            <ons-list style="border-left: 1px solid #ddd !important; border-right: 1px solid #ddd !important;">
+            <ons-list>
                 <ons-list-item ng-repeat="device in ctrl.devices" class="item">
                     <ons-row align="center">
-                        <div class="patient-content">
-                            <div class="patient-content--icon">
-                                <i class="fa fa-heartbeat fa-lg pull-left"
-                              style="color:grey; display: inline-block"></i>
+                        <div class="smartdevices-content">
+                            <div class="smartdevices-content--icon">
+                                <i class="fa fa-heartbeat fa-lg"
+                              style="color:red; display: inline-block"></i>
                             </div>
-                            <div class="patient-content--text">
+                            <div class="smartdevices-content--text">
                                 <p ng-class="fontSizeTitle">{{ device.name }}</p>
                                 <p class="relationship-list--status" ng-class="fontSizeDesc">{{ device.id }}</p>
                             </div>
-                            <div class"patient-content--right" style="margin-left: 5vh;">
+                            <div class="smartdevices-content--right" style="margin-left: 5vh;">
                                 <button class="shadow-2 button--large--cta" ng-click="ctrl.selectDevice(device)">
                                     <span>{{ 'Select' | translate }}</span>
                                 </button>
