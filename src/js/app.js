@@ -84,11 +84,6 @@
  *Link to external reference {@link https://github.com/angular-ui/bootstrap}.
  */
 
-/**
- *@ngdoc object
- *@name ProjectDependencies.ngCordova
- *@description Dependency provides native device plugins from Cordova as modules that can be used within the Angular framework. Link to external reference {@link https://github.com/driftyco/ng-cordova}.
- */
 import "jquery";
 import angular from "angular";
 import "angular-animate";
@@ -106,7 +101,6 @@ import firebase from "firebase";
 import "angularjs-scroll-glue";
 import "angular-sanitize";
 import "onsenui/js/onsenui";
-import "ngCordova";
 import "angular-tek-progress-bar";
 import "angular-elastic";
 import "moment";
@@ -132,8 +126,7 @@ import "./app.bootstrap";
 //Routes for angular views
 angular
     .module('MUHCApp', ['tmh.dynamicLocale','pascalprecht.translate','luegg.directives',
-        'ngSanitize','ui.router','onsen','ngTouch','firebase','ui.bootstrap',
-        'ngCordova','monospaced.elastic','Tek.progressBar'])
+        'ngSanitize','ui.router','onsen','ngTouch','firebase','ui.bootstrap','monospaced.elastic','Tek.progressBar'])
     .run(initialization);
 
 initialization.$inject = ['$state', '$stateParams', '$q', '$rootScope' ,'$translate', 'Patient', '$location', 'NetworkStatus'];
