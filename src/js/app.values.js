@@ -174,6 +174,7 @@
                     "SUP": 1,
                     "CED": 0,
                     "HOS": 0,
+                    "SMD": 0,
                 },
                 localStorageHospitalKey: 'hospital',
                 hospitalList: {
@@ -203,6 +204,7 @@
                             "SUP": 1,
                             "CED": 1,
                             "HOS": 1,
+                            "SMD": 1,
                         },
                     },
                     'RI-MUHC': {
@@ -231,6 +233,7 @@
                             "SUP": 1,
                             "CED": 0,
                             "HOS": 0,
+                            "SMD": 0,
                         },
                     },
                     'CHU_SJ': {
@@ -259,6 +262,7 @@
                             "SUP": 1,
                             "CED": 0,
                             "HOS": 0,
+                            "SMD": 0,
                         },
                     }
                 },
