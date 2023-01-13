@@ -1,0 +1,28 @@
+.smartdevices-info {
+    margin-top: 10vh;
+    padding: 0 20px;
+}
+
+.smartdevices-content {
+    display: flex;
+    align-items: center;
+}
+
+.smartdevices-content--icon {
+    border-radius: 100%;
+    font-size: 12px;
+    margin: 1em 1.5em
+}
+
+.smartdevices-content--text p {
+    margin-bottom: 3px;
+}
+
+.smartdevices-content--text p:first-child {
+    font-weight: 500;
+}
+
+.smartdevices-fa-logo {
+    font-size: 80px; 
+    margin: 5vh 0;
+}
