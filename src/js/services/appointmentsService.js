@@ -195,8 +195,7 @@ myApp.service('Appointments', ['$filter','LocalStorage','RequestToServer','UserP
         //     appointments[i].LastUpdated =  $filter('formatDate')(appointments[i].LastUpdated);
         //     userAppointmentsArray.push(appointments[i]);
         // }
-
-        console.log(appointments);
+        
         appointments.forEach(appointment => {
             appointment.ScheduledStartTime = $filter('formatDate')(appointment.ScheduledStartTime);
             appointment.ScheduledEndTime =  $filter('formatDate')(appointment.ScheduledEndTime);
