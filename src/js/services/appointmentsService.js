@@ -187,14 +187,6 @@ myApp.service('Appointments', ['$filter','LocalStorage','RequestToServer','UserP
 
         //Format date to javascript date
         numberOfSessions=0;
-
-        // for (var i = 0; i < appointments.length; i++) {
-        //     //appointments[i].ResourceName = (appointments[i].Resource.hasOwnProperty('Machine')) ? '':appointments[i].Resource.Doctor;
-        //     appointments[i].ScheduledStartTime = $filter('formatDate')(appointments[i].ScheduledStartTime);
-        //     appointments[i].ScheduledEndTime =  $filter('formatDate')(appointments[i].ScheduledEndTime);
-        //     appointments[i].LastUpdated =  $filter('formatDate')(appointments[i].LastUpdated);
-        //     userAppointmentsArray.push(appointments[i]);
-        // }
         
         appointments.forEach(appointment => {
             appointment.ScheduledStartTime = $filter('formatDate')(appointment.ScheduledStartTime);

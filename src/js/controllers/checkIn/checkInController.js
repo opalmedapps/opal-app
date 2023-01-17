@@ -65,7 +65,6 @@
 
             CheckInService.attemptCheckin()
                 .then(function(response){
-                    console.log(response);
                     if(response === "NOT_ALLOWED"){
                         Toast.showToast({
                             message: $filter('translate')("NOT_ALLOWED"),

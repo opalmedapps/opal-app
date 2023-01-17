@@ -104,7 +104,6 @@
         async function getDisplayData() {
             try {
                 const result = await RequestToServer.apiRequest(Params.API.ROUTES.HOME);
-                console.log(result);
                 $timeout(() => {
                     vm.notificationsUnreadNumber = result.data.unread_notification_count;
                     Appointments.setUserAppointments(result.data.daily_appointments);
