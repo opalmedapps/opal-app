@@ -16,8 +16,8 @@ var myApp=angular.module('MUHCApp');
  *@requires MUHCApp.service:RequestToServer
  *@description Sets the appointments and provides an API to access them
  **/
-myApp.service('Appointments', ['$filter','LocalStorage','RequestToServer','UserPreferences',
-    function ($filter, LocalStorage, RequestToServer, UserPreferences) {
+myApp.service('Appointments', ['$filter','LocalStorage','RequestToServer','UserPreferences', 'UserAuthorizationInfo',
+    function ($filter, LocalStorage, RequestToServer, UserPreferences, UserAuthorizationInfo) {
 
     /**
      *@ngdoc property
@@ -73,9 +73,9 @@ myApp.service('Appointments', ['$filter','LocalStorage','RequestToServer','UserP
         for (var i = 0; i < appointments.length; i++) {
 
             //Gets year, month and day for appointment
-            var tmpYear = (appointments[i].ScheduledStartTime).getFullYear();
-            var tmpMonth = (appointments[i].ScheduledStartTime).getMonth() + 1;
-            var tmpDay = (appointments[i].ScheduledStartTime).getDate();
+            var tmpYear = appointments[i].ScheduledStartTime?.getFullYear();
+            var tmpMonth = appointments[i].ScheduledStartTime?.getMonth() + 1;
+            var tmpDay = appointments[i].ScheduledStartTime?.getDate();
 
             //if month has changed, since appointments in order, add the resulting appointments to for that month to the correspongding
             //calendar year.
@@ -146,29 +146,28 @@ myApp.service('Appointments', ['$filter','LocalStorage','RequestToServer','UserP
     function getAppointmentsInPeriod(period)
     {
         //Variables for comparing dates
-        //
-        //
-        var today=new Date();
-        var day=today.getDate();
-        var month=today.getMonth();
-        var year=today.getFullYear();
-        var time=today.getTime();
-        var sorting=false;
+        const today = new Date();
+        const day = today.getDate();
+        const month = today.getMonth();
+        const year = today.getFullYear();
+        const time = today.getTime();
+        let sorting = false;
         //If sorting=false then latest appointment will be last, else it will be first
-        if(period=='Past') sorting=true;
-        var array=[];
+        if (period == 'Past') sorting=true;
+        let array=[];
+        console.log(userAppointmentsArray);
         for (var i = 0; i < userAppointmentsArray.length; i++) {
-            var date=userAppointmentsArray[i].ScheduledStartTime;
+            var date = userAppointmentsArray[i].ScheduledStartTime;
             //If appointment is the same date add it to the array
-            if(period=='Today'&&date.getDate() == day && date.getFullYear() == year && date.getMonth() == month)
+            if(period == 'Today' && date.getDate() == day && date.getFullYear() == year && date.getMonth() == month)
             {
                 array.push(userAppointmentsArray[i]);
                 //If appointment is in the future add it to the array
-            }else if(period=='Future'&&time<date.getTime())
+            }else if (period == 'Future' && time < date.getTime())
             {
                 array.push(userAppointmentsArray[i]);
                 //ditto
-            }else if(period=='Past'&&date.getTime()<=time){
+            }else if( period == 'Past' && date.getTime() <= time){
                 array.push(userAppointmentsArray[i]);
             }
         }
@@ -187,16 +186,23 @@ myApp.service('Appointments', ['$filter','LocalStorage','RequestToServer','UserP
         var min=Infinity;
 
         //Format date to javascript date
-        var index=-1;
         numberOfSessions=0;
 
-        for (var i = 0; i < appointments.length; i++) {
-            appointments[i].ResourceName = (appointments[i].Resource.hasOwnProperty('Machine')) ? '':appointments[i].Resource.Doctor;
-            appointments[i].ScheduledStartTime = $filter('formatDate')(appointments[i].ScheduledStartTime);
-            appointments[i].ScheduledEndTime =  $filter('formatDate')(appointments[i].ScheduledEndTime);
-            appointments[i].LastUpdated =  $filter('formatDate')(appointments[i].LastUpdated);
-            userAppointmentsArray.push(appointments[i]);
-        }
+        // for (var i = 0; i < appointments.length; i++) {
+        //     //appointments[i].ResourceName = (appointments[i].Resource.hasOwnProperty('Machine')) ? '':appointments[i].Resource.Doctor;
+        //     appointments[i].ScheduledStartTime = $filter('formatDate')(appointments[i].ScheduledStartTime);
+        //     appointments[i].ScheduledEndTime =  $filter('formatDate')(appointments[i].ScheduledEndTime);
+        //     appointments[i].LastUpdated =  $filter('formatDate')(appointments[i].LastUpdated);
+        //     userAppointmentsArray.push(appointments[i]);
+        // }
+
+        console.log(appointments);
+        appointments.forEach(appointment => {
+            appointment.ScheduledStartTime = $filter('formatDate')(appointment.ScheduledStartTime);
+            appointment.ScheduledEndTime =  $filter('formatDate')(appointment.ScheduledEndTime);
+            appointment.LastUpdated =  $filter('formatDate')(appointment.LastUpdated);
+            userAppointmentsArray.push(appointment);
+        });
 
         LocalStorage.WriteToLocalStorage('Appointments',userAppointmentsArray);
 
@@ -262,7 +268,33 @@ myApp.service('Appointments', ['$filter','LocalStorage','RequestToServer','UserP
             //Initializing Variables
             userAppointmentsArray = [];
             calendar={};
-            addAppointmentsToService(appointments);
+            let localAppointments = [];
+
+            appointments.forEach(appointment => {
+                /* there are some hard code here for testing will be removed
+                after review, thanks
+                 */
+                let patientName = `Patient_${appointment.patientsernum}`;
+                if (appointment.patientsernum == 51) {
+                    patientName = 'Your appointments';
+                }
+                const localAppointment = {
+                    AppointmentSerNum: appointment.appointmentsernum,
+                    Checkin: appointment.checkin,
+                    CheckinPossible: appointment.checkinpossible,
+                    PatientSerNum: appointment.patientsernum,
+                    ScheduledStartTime: appointment.scheduledstarttime,
+                    ScheduledEndTime: appointment.scheduledendtime,
+                    LastUpdated: appointment.lastupdated,
+                    State: appointment.state,
+                    RoomLocation_EN: `Room ${appointment.appointmentsernum}`,
+                    AppointmentType_EN: 'Appointment',
+                    ResourceDescription: 'Electrocardiogram (EKG)',
+                    patientName: patientName,
+                }
+                localAppointments.push(localAppointment);
+            });
+            addAppointmentsToService(localAppointments);
         },
         /**
          *@ngdoc method
@@ -286,6 +318,7 @@ myApp.service('Appointments', ['$filter','LocalStorage','RequestToServer','UserP
          **/
         getUserAppointments: function () {
 
+            console.log(userAppointmentsArray);
             return userAppointmentsArray;
         },
         /**

@@ -96,8 +96,6 @@
             setNextAppointment();
             // display version updates info, if any
             checkForVersionUpdates();
-            // Display current check in status
-            evaluateCheckIn();
         }
 
         /**
@@ -106,8 +104,12 @@
         async function getDisplayData() {
             try {
                 const result = await RequestToServer.apiRequest(Params.API.ROUTES.HOME);
+                console.log(result);
                 $timeout(() => {
                     vm.notificationsUnreadNumber = result.data.unread_notification_count;
+                    Appointments.setUserAppointments(result.data.daily_appointments);
+                    // Display current check in status
+                    evaluateCheckIn();
                 });
             } catch (error) {
                 // TODO: Error handling improvements: https://o-hig.atlassian.net/browse/QSCCD-463

@@ -36,6 +36,7 @@
 
         var vm = this;
         vm.apps = [];
+        vm.displayApps = {};
         vm.language = '';
         vm.response = '';
         vm.error = '';
@@ -52,13 +53,19 @@
 
         function activate() {
             vm.apps = CheckInService.getCheckInApps();
+            vm.apps.forEach(app => {
+                if (!vm.displayApps[app.patientName]) {
+                    vm.displayApps[app.patientName] = [];
+                }
+                vm.displayApps[app.patientName].push(app);
+            });
             vm.language = UserPreferences.getLanguage();
 
             vm.HasNonCheckinableAppt = HasNonCheckinableAppointment(vm.apps);
 
             CheckInService.attemptCheckin()
                 .then(function(response){
-
+                    console.log(response);
                     if(response === "NOT_ALLOWED"){
                         Toast.showToast({
                             message: $filter('translate')("NOT_ALLOWED"),
@@ -90,7 +97,8 @@
          * @returns {boolean}
          */
         function HasMeaningfulAlias(appointmentType) {
-            return (appointmentType.toLowerCase() !== Params.appointmentType.appointmentTypeEn && appointmentType.toLowerCase() !== Params.appointmentType.appointmentTypeFr);
+            return (appointmentType?.toLowerCase() !== Params.appointmentType.appointmentTypeEn &&
+                appointmentType?.toLowerCase() !== Params.appointmentType.appointmentTypeFr);
         }
 
         /**
