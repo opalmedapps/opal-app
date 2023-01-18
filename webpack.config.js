@@ -46,11 +46,21 @@ const config = env => {
 		devtool: settings.useSourceMap ? 'eval-cheap-source-map' : undefined,
 		mode: settings.webpackMode,
 		devServer: {
-			contentBase: './www',
+			static: {
+				directory: './www',
+				watch: true,
+			},
+			client: {
+				overlay: {
+					errors: true,
+					warnings: false,
+				},
+				progress: true,
+			},
 			compress: true,
 			hot: false,
-			watchContentBase: true,
 			liveReload: true,
+			host: 'localhost',
 			port: 9000
 		},
 		output: {
