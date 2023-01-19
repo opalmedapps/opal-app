@@ -302,8 +302,6 @@ myApp.service('Appointments', ['$filter','LocalStorage','RequestToServer','UserP
          *@returns {Boolean} Returns the userAppointmentsArray
          **/
         getUserAppointments: function () {
-
-            console.log(userAppointmentsArray);
             return userAppointmentsArray;
         },
         /**
