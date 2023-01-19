@@ -138,8 +138,6 @@
         }
 
         async function evaluateCheckinState(){
-            var r = $q.defer();
-
             if(attemptedCheckin || checkinStateSet && !stateUpdated){
                 return state;
             } else {
