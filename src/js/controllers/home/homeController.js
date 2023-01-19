@@ -171,7 +171,10 @@
          * @desc checks with listener to see if the current user has checked in or not
          */
         async function evaluateCheckIn(){
-            vm.checkinState = await CheckInService.evaluateCheckinState();
+            const state = await CheckInService.evaluateCheckinState();
+            $timeout(() => {
+                vm.checkinState = state;
+            });
         }
 
         /**
