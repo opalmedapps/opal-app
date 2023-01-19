@@ -357,8 +357,6 @@
          */
         function isWithinCheckinRange() {
             var r=$q.defer();
-            r.resolve(true);
-            return r.promise;
             navigator.geolocation.getCurrentPosition(function(position){
                 var distanceMeters = 1000 * getDistanceFromLatLonInKm(position.coords.latitude, position.coords.longitude, Params.hospitalSite.hospitalCoordinates[0], Params.hospitalSite.hospitalCoordinates[1]);
 

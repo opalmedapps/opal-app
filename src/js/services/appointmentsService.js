@@ -263,13 +263,6 @@ myApp.service('Appointments', ['$filter','LocalStorage','RequestToServer','UserP
             let localAppointments = [];
 
             appointments.forEach(appointment => {
-                /* there are some hard code here for testing will be removed
-                after review, thanks
-                 */
-                let patientName = `Patient_${appointment.patientsernum}`;
-                if (appointment.patientsernum == 51) {
-                    patientName = 'Your appointments';
-                }
                 const localAppointment = {
                     AppointmentSerNum: appointment.appointmentsernum,
                     Checkin: appointment.checkin,
@@ -279,10 +272,10 @@ myApp.service('Appointments', ['$filter','LocalStorage','RequestToServer','UserP
                     ScheduledEndTime: appointment.scheduledendtime,
                     LastUpdated: appointment.lastupdated,
                     State: appointment.state,
-                    RoomLocation_EN: `Room ${appointment.appointmentsernum}`,
-                    AppointmentType_EN: 'Appointment',
-                    ResourceDescription: 'Electrocardiogram (EKG)',
-                    patientName: patientName,
+                    RoomLocation_EN: appointment.roomLocation_EN,
+                    AppointmentType_EN: appointment.appointmentType_EN,
+                    ResourceDescription:  appointment.resourceDescription,
+                    patientName: appointment.patientName,
                 }
                 localAppointments.push(localAppointment);
             });
