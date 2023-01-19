@@ -113,118 +113,69 @@
 
         ////////////////////////////////////////////
 
-        function attemptCheckin(){
-            var r = $q.defer();
+        async function attemptCheckin(){
             if(attemptedCheckin && allCheckedIn){
-                r.resolve('SUCCESS');
+                return 'SUCCESS';
             } else if (attemptedCheckin && errorsExist){
-                r.resolve('ERROR');
+                return 'ERROR';
             } else {
                 //This should only return true if all current appointments.checkin === 0 and there has been an attempted checkin. this implies an error has occurred
-                isAllowedToCheckin()
-                    .then(function (isAllowed) {
-                        if (isAllowed) {
-                            checkinToAllAppointments()
-                                .then(function (res) {
-                                    attemptedCheckin = true;
-                                    updateCheckinState(res.appts);
-                                    r.resolve(res.status);
-                                })
-                        } else r.resolve('NOT_ALLOWED');
-                    });
+                const isAllowed = await isAllowedToCheckin()
+                if (isAllowed) {
+                    const res = await checkinToAllAppointments();
+                    attemptedCheckin = true;
+                    updateCheckinState(res.appts);
+                    return res.status;
+
+                } else {
+                    return 'NOT_ALLOWED';
+                }
             }
-            return r.promise;
         }
 
-        function isAllowedToCheckin(){
-            var r = $q.defer();
-
-            // hasAttemptedCheckin()
-            //     .then(function(attempted) {
-            //         if (attempted === 'false') {
-
-                        isWithinCheckinRange()
-                            .then(function (isInRange) {
-
-                                // console.log('is allowed to checkin ... is in range: ' + isInRange);
-
-                                r.resolve(isInRange)
-                            });
-
-                //     } else r.resolve(false);
-                // });
-
-
-            // hasAttemptedCheckin()
-            //     .then(function(attempted) {
-            //         if (attempted === 'false') {
-            //             isWithinCheckinRange()
-            //                 .then(function (isInRange) {
-            //
-            //                     console.log('is allowed to checkin ... is in range: ' + isInRange);
-            //
-            //                     r.resolve(isInRange)
-            //                 })
-            //         } else r.resolve(false);
-            //     });
-
-            return r.promise
+        async function isAllowedToCheckin(){
+            return await isWithinCheckinRange();
         }
 
-        function evaluateCheckinState(){
+        async function evaluateCheckinState(){
             var r = $q.defer();
 
             if(attemptedCheckin || checkinStateSet && !stateUpdated){
-                r.resolve(state);
+                return state;
             } else {
-                initCheckinState()
-                    .then(function(){
-                        checkinStateSet = true;
-                        r.resolve(state);
-                    })
-                    .catch(function(err){
-                        r.resolve(err);
-                    })
+                try {
+                    await initCheckinState();
+                    checkinStateSet = true;
+                    return state;
+                } catch(error) {
+                    return error;
+                }
             }
-            return r.promise;
         }
 
-        function initCheckinState(){
-            var r = $q.defer();
-
-            var appts = Appointments.getTodaysAppointments();
-
+        async function initCheckinState(){
+            const appts = Appointments.getTodaysAppointments();
             //First evaluate the current state of existing appointments, see if they were already checked in and if so what the state is (all success or some errors)
             if(appts.length === 0){
                 setCheckinState("CHECKIN_NONE");
-                r.resolve()
             } else if(alreadyCheckedIn(appts)){
                 setCheckinState("CHECKIN_MESSAGE_AFTER" + setPlural(appts));
-                r.resolve()
             } else if (checkinErrorsExist(appts)) {
                 setCheckinState("CHECKIN_ERROR");
-                r.resolve()
             } else {
                 //This means at this point there exists appointments today and none of them have been checked in
-                isWithinCheckinRange()
-                    .then(function(canCheckin){
-
-                        // console.log("can checkin : " + canCheckin);
-
-                        if(!canCheckin) {
-                            setCheckinState("NOT_ALLOWED", appts.length);
-                        }
-                        else {
-                            setCheckinState("CHECKIN_MESSAGE_BEFORE" + setPlural(appts), appts.length);
-                        }
-                        r.resolve()
-                    })
-                    .catch(function() {
+                try {
+                    const canCheckin = await isWithinCheckinRange();
+                    if(!canCheckin) {
                         setCheckinState("NOT_ALLOWED", appts.length);
-                        r.reject()
-                    })
+                    }
+                    else {
+                        setCheckinState("CHECKIN_MESSAGE_BEFORE" + setPlural(appts), appts.length);
+                    }
+                } catch(error) {
+                    setCheckinState("NOT_ALLOWED", appts.length);
+                }
             }
-            return r.promise
         }
 
         function updateCheckinState(checkedInAppts){
@@ -355,10 +306,9 @@
          * hospital to be able to checkin.
          *@returns {Promise} Returns a promise that resolves to success if the user is allowed to checkin
          */
-        function isWithinCheckinRange() {
-            var r=$q.defer();
-            r.resolve(true);
-            return r.promise;
+        async function isWithinCheckinRange() {
+            // This code is for testing will be removed after review
+            return true;
             navigator.geolocation.getCurrentPosition(function(position){
                 var distanceMeters = 1000 * getDistanceFromLatLonInKm(position.coords.latitude, position.coords.longitude, Params.hospitalSite.hospitalCoordinates[0], Params.hospitalSite.hospitalCoordinates[1]);
 
@@ -370,23 +320,19 @@
                         'Longitude':position.coords.longitude,
                         'Accuracy':position.coords.accuracy
                     };
-                    r.resolve(true);
+                    return true;
                 } else {
-
                     // console.log('not within range!');
-
-                    r.resolve(false);
+                    return false;
                 }
             }, function(err) {
                 console.error("Error getting current position via geolocation: ", err);
-                r.reject(false);
+                return false;
             }, {
                 maximumAge: 10000,
                 timeout: 15000,
                 enableHighAccuracy: true
             });
-
-            return r.promise;
         }
 
         /**

@@ -155,7 +155,6 @@ myApp.service('Appointments', ['$filter','LocalStorage','RequestToServer','UserP
         //If sorting=false then latest appointment will be last, else it will be first
         if (period == 'Past') sorting=true;
         let array=[];
-        console.log(userAppointmentsArray);
         for (var i = 0; i < userAppointmentsArray.length; i++) {
             var date = userAppointmentsArray[i].ScheduledStartTime;
             //If appointment is the same date add it to the array

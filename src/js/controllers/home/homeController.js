@@ -170,8 +170,8 @@
          * @name evaluateCheckIn
          * @desc checks with listener to see if the current user has checked in or not
          */
-        function evaluateCheckIn(){
-            CheckInService.evaluateCheckinState().then(state => vm.checkinState = state);
+        async function evaluateCheckIn(){
+            vm.checkinState = await CheckInService.evaluateCheckinState();
         }
 
         /**
