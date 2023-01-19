@@ -46,12 +46,13 @@
 
         vm.goToAppointment = goToAppointment;
         vm.HasMeaningfulAlias = HasMeaningfulAlias;
+        vm.CheckInAppointments = CheckInAppointments;
 
         activate();
 
         ////////////////
 
-        async function activate() {
+        function activate() {
             vm.apps = CheckInService.getCheckInApps();
             vm.apps.forEach(app => {
                 if (!vm.displayApps[app.patientName]) {
@@ -62,24 +63,6 @@
             vm.language = UserPreferences.getLanguage();
 
             vm.HasNonCheckinableAppt = HasNonCheckinableAppointment(vm.apps);
-
-            const response = await CheckInService.attemptCheckin();
-            if(response === "NOT_ALLOWED"){
-                Toast.showToast({
-                    message: $filter('translate')("NOT_ALLOWED"),
-                });
-                vm.alert.type = Params.alertTypeWarning;
-                vm.checkInMessage = "CHECKIN_IN_HOSPITAL_ONLY";
-            } else if (response === "SUCCESS") {
-                vm.alert.type = Params.alertTypeSuccess;
-                vm.checkInMessage = "CHECKED_IN";
-                vm.apps = CheckInService.getCheckInApps();
-            } else {
-                vm.alert.type = Params.alertTypeDanger;
-                vm.checkInMessage = "CHECKIN_ERROR";
-                vm.apps = CheckInService.getCheckInApps();
-                vm.error = "ERROR";
-            }
         }
 
         // View appointment details
@@ -111,6 +94,28 @@
             });
 
             return HasNonCheckinable;
+        }
+
+        async function CheckInAppointments() {
+            console.log('test');
+            return;
+            const response = await CheckInService.attemptCheckin();
+            if(response === "NOT_ALLOWED"){
+                Toast.showToast({
+                    message: $filter('translate')("NOT_ALLOWED"),
+                });
+                vm.alert.type = Params.alertTypeWarning;
+                vm.checkInMessage = "CHECKIN_IN_HOSPITAL_ONLY";
+            } else if (response === "SUCCESS") {
+                vm.alert.type = Params.alertTypeSuccess;
+                vm.checkInMessage = "CHECKED_IN";
+                vm.apps = CheckInService.getCheckInApps();
+            } else {
+                vm.alert.type = Params.alertTypeDanger;
+                vm.checkInMessage = "CHECKIN_ERROR";
+                vm.apps = CheckInService.getCheckInApps();
+                vm.error = "ERROR";
+            }
         }
 
     }
