@@ -151,28 +151,29 @@ myApp.service('Appointments', ['$filter','LocalStorage','RequestToServer','UserP
         const month = today.getMonth();
         const year = today.getFullYear();
         const time = today.getTime();
-        let sorting = false;
+
         //If sorting=false then latest appointment will be last, else it will be first
-        if (period == 'Past') sorting=true;
+        const sorting = period == 'Past';
         let array=[];
-        console.log(userAppointmentsArray);
-        for (var i = 0; i < userAppointmentsArray.length; i++) {
-            var date = userAppointmentsArray[i].ScheduledStartTime;
+
+        userAppointmentsArray.forEach(appointment => {
+            const date = appointment.ScheduledStartTime;
             //If appointment is the same date add it to the array
             if(period == 'Today' && date.getDate() == day && date.getFullYear() == year && date.getMonth() == month)
             {
-                array.push(userAppointmentsArray[i]);
+                array.push(appointment);
                 //If appointment is in the future add it to the array
             }else if (period == 'Future' && time < date.getTime())
             {
-                array.push(userAppointmentsArray[i]);
+                array.push(appointment);
                 //ditto
             }else if( period == 'Past' && date.getTime() <= time){
-                array.push(userAppointmentsArray[i]);
+                array.push(appointment);
             }
-        }
+        });
+
         //Sort it correctly for each case
-        array=$filter('orderBy')(array, 'ScheduledStartTime',sorting);
+        array = $filter('orderBy')(array, 'ScheduledStartTime',sorting);
         return array;
     }
 
