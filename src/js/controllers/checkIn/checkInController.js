@@ -51,7 +51,7 @@
 
         ////////////////
 
-        function activate() {
+        async function activate() {
             vm.apps = CheckInService.getCheckInApps();
             vm.apps.forEach(app => {
                 if (!vm.displayApps[app.patientName]) {
