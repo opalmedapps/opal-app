@@ -97,8 +97,6 @@
         }
 
         async function CheckInAppointments() {
-            console.log('test');
-            return;
             const response = await CheckInService.attemptCheckin();
             if(response === "NOT_ALLOWED"){
                 Toast.showToast({
