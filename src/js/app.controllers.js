@@ -52,3 +52,4 @@ import "./controllers/txTeamMessages/individualMessageController.js";
 import "./controllers/auth/setHospitalController.js";
 import "./controllers/tour/tourController.js";
 import "./controllers/smartdevices/smartDevicesController.js";
+import "./controllers/smartdevices/devices/etekcityScaleController.js";

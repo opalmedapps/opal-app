@@ -15,6 +15,8 @@
         let vm = this;
         
         vm.showInfo = () => NavigatorParameters.getNavigator().pushPage('./views/smartdevices/smartdevices-info.html');
+        vm.goToDevice = (deviceView) => NavigatorParameters.getNavigator().pushPage(`./views/smartdevices/devices/${deviceView}`);
+
         vm.bluetoothAvailable = window.hasOwnProperty('ble');
         vm.bluetoothEnabled = false;
         vm.refresh = isBluetoothEnabled;
