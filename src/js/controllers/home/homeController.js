@@ -6,11 +6,11 @@
         .controller('HomeController', HomeController);
 
     HomeController.$inject = [
-        '$timeout', 'Appointments', 'CheckInService', 'Patient', '$scope', '$filter', 'NavigatorParameters',
+        '$timeout', 'Appointments', 'CheckInService', '$scope', '$filter', 'NavigatorParameters',
         'UserPreferences', 'NetworkStatus', 'UserHospitalPreferences', 'RequestToServer', 'Params', 'Version', 'User', 'ProfileSelector'];
 
     /* @ngInject */
-    function HomeController($timeout, Appointments, CheckInService, Patient, $scope, $filter, NavigatorParameters,
+    function HomeController($timeout, Appointments, CheckInService, $scope, $filter, NavigatorParameters,
                             UserPreferences, NetworkStatus, UserHospitalPreferences, RequestToServer, Params, Version, User, ProfileSelector)
     {
         var vm = this;
@@ -64,8 +64,8 @@
             if (localStorage.getItem('locked')) localStorage.removeItem('locked');
             // Refresh the page on coming back from other pages
             homeNavigator.on('prepop', function(event) {
-                if (event.currentPage.name === "./views/home/checkin/checkin-list.html" && NetworkStatus.isOnline()) evaluateCheckIn();
-                if (event.currentPage.name === "views/personal/notifications/notifications.html" && NetworkStatus.isOnline()) getDisplayData();
+                const prepopPages = ['./views/home/checkin/checkin-list.html', 'views/personal/notifications/notifications.html'];
+                if (prepopPages.includes(event.currentPage.name) && NetworkStatus.isOnline()) getDisplayData();
             });
             //This avoids constant repushing which causes bugs
             homeNavigator.on('prepush', event => {
@@ -104,11 +104,10 @@
         async function getDisplayData() {
             try {
                 const result = await RequestToServer.apiRequest(Params.API.ROUTES.HOME);
+                const checkinState = await CheckInService.evaluateCheckinState(result.data.daily_appointments);
                 $timeout(() => {
                     vm.notificationsUnreadNumber = result.data.unread_notification_count;
-                    Appointments.setUserAppointments(result.data.daily_appointments);
-                    // Display current check in status
-                    evaluateCheckIn();
+                    vm.checkinState = checkinState;
                 });
             } catch (error) {
                 // TODO: Error handling improvements: https://o-hig.atlassian.net/browse/QSCCD-463
@@ -164,14 +163,6 @@
                     }
                 }).catch(console.error);
             }
-        }
-
-        /**
-         * @name evaluateCheckIn
-         * @desc checks with listener to see if the current user has checked in or not
-         */
-        function evaluateCheckIn(){
-            CheckInService.evaluateCheckinState().then(state => vm.checkinState = state);
         }
 
         /**
@@ -237,7 +228,7 @@
          * Takes the user to the checkin view
          */
         function goToCheckinAppointments() {
-            if (vm.checkinState.noAppointments) return;
+            if (vm.checkinState.noAppointments || !vm.checkinState.canNavigate) return;
             NavigatorParameters.setParameters({'Navigator':'homeNavigator'});
             homeNavigator.pushPage('./views/home/checkin/checkin-list.html');
         }

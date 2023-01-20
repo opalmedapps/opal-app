@@ -1,4 +1,3 @@
-
 /**
  *@ngdoc service
  *@name MUHCApp.service:Hospital
@@ -24,7 +23,7 @@
         const endpoint = Params.API.ROUTES.HOSPITAL_SETTINGS.SITES;
 
         let requestHospitalService = {
-            requestParkingInfo: requestParkingInfo,
+            requestSiteInfo: requestSiteInfo,
         };
 
         return requestHospitalService;
@@ -32,12 +31,12 @@
         ////////////////
 
         /**
-         * @name requestParkingInfo
-         * @desc this function gets parking info for a particular hospital
+         * @name requestSiteInfo
+         * @desc this function gets site info for the sites linked to a particular hospital
          * @param {string} hospitalKey - an ID of a particular hospital (institution)
-         * @returns {Promise} resolves to the parking's data if success
+         * @returns {Promise} resolves to the sites' data if success
          */
-        async function requestParkingInfo(hospitalKey){
+        async function requestSiteInfo(hospitalKey){
             // request parameters
             let params = {
                 'institution__code': hospitalKey,
@@ -48,4 +47,3 @@
         }
     }
 })();
-
