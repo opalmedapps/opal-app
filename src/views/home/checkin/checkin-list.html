@@ -2,7 +2,7 @@
     <generic-toolbar title="{{'CHECKIN'|translate}}" style-class="fontSizeTitle"></generic-toolbar>
     <network-banner></network-banner>
     <ons-list ng-repeat="(patientName, apps) in checkIn.displayApps">
-        <ons-list-header class="person-list-header" ng-class="fontSizeTitle" style="padding:10px;"">
+        <ons-list-header class="person-list-header" ng-class="fontSizeTitle" style="padding:10px;">
             {{patientName}}
         </ons-list-header>
         <ons-list-item modifier="tappable" ng-repeat="app in apps">
@@ -20,7 +20,7 @@
                 </ons-col>
                 <ons-col width="1%" > <div style="background-color: rgba(38,100,171,0.81); height: 100%;"></div></ons-col>
                 <ons-col align="center">
-                    <div style="line-height:1;padding-left:10px;">
+                    <div style="line-height:1;padding-left:10px;padding-top:10px;">
                         <span ng-class="fontSizeTitle">
                             <p ng-if="checkIn.HasMeaningfulAlias(app['AppointmentType_' + checkIn.language])">
                                 {{app["AppointmentType_" + checkIn.language]}}
