@@ -140,7 +140,7 @@
                     setCheckinState("NOT_ALLOWED", appts.length);
                 }
             }
-            return
+            return;
         }
 
         function updateCheckinState(checkedInAppts){
@@ -169,7 +169,7 @@
         }
 
         function checkinErrorsExist(appts){
-            var checkinExists = false;
+            let checkinExists = false;
 
             appts.map(function(app){
                 if(app.Checkin === '1') checkinExists = true;
@@ -177,7 +177,7 @@
 
             if(!checkinExists) return false;
 
-            var errors = false;
+            let errors = false;
 
             appts.map(function(app){
                 if(app.Checkin === '-1') errors = true;
