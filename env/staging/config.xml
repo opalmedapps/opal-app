@@ -79,6 +79,11 @@
         <splash density="port-xxxhdpi" src="res/screen/android/splash-port-xxxhdpi.png"/>
         <access origin="cdvfile://*"/>
         <allow-intent href="market:*"/>
+        <!-- 
+            Fix duplicate permissions for android.permission.ACCESS_COARSE_LOCATION
+            See: https://github.com/don/cordova-plugin-ble-central/issues/925
+        -->
+        <hook src="plugins/cordova-plugin-ble-central/stripDuplicatePermissions.js" type="after_prepare" />
     </platform>
     <platform name="ios">
         <!-- Required to access location data since iOS 10 -->
