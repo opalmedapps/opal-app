@@ -266,7 +266,7 @@ myApp.service('Appointments', ['$filter','LocalStorage','RequestToServer','UserP
                 /* there are some hard code here for testing will be removed
                 after review, thanks
                  */
-                let patientName = `Patient_${appointment.patientsernum}`;
+                let patientName = `Alice`;
                 if (appointment.patientsernum == 51) {
                     patientName = 'Your appointments';
                 }

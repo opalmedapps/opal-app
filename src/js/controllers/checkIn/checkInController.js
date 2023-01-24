@@ -37,12 +37,14 @@
         var vm = this;
         vm.apps = [];
         vm.displayApps = {};
+        vm.checkedInApps = {};
         vm.language = '';
         vm.response = '';
         vm.error = '';
         vm.checkInMessage = "";
         vm.alert = {};
         vm.HasNonCheckinableAppt = false;
+        vm.emptyApps = false;
 
         vm.goToAppointment = goToAppointment;
         vm.HasMeaningfulAlias = HasMeaningfulAlias;
@@ -63,6 +65,11 @@
             vm.language = UserPreferences.getLanguage();
 
             vm.HasNonCheckinableAppt =  HasNonCheckinableAppointment(vm.apps);
+
+            const parameters = NavigatorParameters.getParameters();
+            if (parameters.hasOwnProperty('apps')) {
+                vm.checkedInApps[parameters.apps.key] = parameters.apps.apps;
+            }
         }
 
         // View appointment details
@@ -100,7 +107,7 @@
          * @return void
          * @description Check-in all the appointments and update appointment array
          */
-        async function CheckInAppointments() {
+        async function CheckInAppointments(patientName) {
             // const response = await CheckInService.attemptCheckin();
             // if(response === "NOT_ALLOWED"){
             //     Toast.showToast({
@@ -118,8 +125,19 @@
             //     vm.apps = CheckInService.getCheckInApps();
             //     vm.error = "ERROR";
             // }
-            // console.log('test');
-            NavigatorParameters.setParameters({'Navigator':'homeNavigator'});
+            // vm.checkedInApps = vm.displayApps;
+            // console.log(vm.checkedInApps);
+            let patientApps = {
+                key: patientName,
+                apps: vm.displayApps[patientName],
+            };
+            delete vm.displayApps[patientName];
+
+            if (Object.keys(vm.displayApps).length == 0) {
+                vm.emptyApps = true;
+            }
+
+            NavigatorParameters.setParameters({'Navigator':'homeNavigator', 'apps': patientApps});
             homeNavigator.pushPage('./views/home/checkin/checked-in-list.html');
         }
     }

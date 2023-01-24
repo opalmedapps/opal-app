@@ -69,12 +69,16 @@
                 </ons-col>
             </ons-row>
         </ons-list-item>
+        <ons-list-item class="btn-primary" align="center" style="background-color:rgba(0,0,0,0);">
+            <ons-button ng-class="fontSizeTitle" style="background-color: rgba(38,100,171,0.81); width: 100%; text-align: center;"
+                        ng-click="checkIn.CheckInAppointments(patientName)">{{"CHECKINALLTODAY"|translate}}</ons-button>
+        </ons-list-item>
     </ons-list>
-
-    <ons-row style="width: 90%; margin: 5% 5% 0% 5%">
-        <ons-button class="shadow-2 btn-primary" ng-class="fontSizeTitle" style="width: 100%; text-align: center;"
-                    ng-click="checkIn.CheckInAppointments()">{{"CHECKINALLTODAY"|translate}}</ons-button>
-    </ons-row>
+    <ons-list ng-show="checkIn.emptyApps">
+        <ons-list-header class="person-list-header" ng-class="fontSizeTitle" style="padding:10px;">
+            No appointments today
+        </ons-list-header>
+    </ons-list>
 
 
     <!-- If there is an ERROR, the following will show an error message. -->

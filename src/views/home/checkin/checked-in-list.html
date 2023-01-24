@@ -1,7 +1,7 @@
 <ons-page ng-controller="CheckInController as checkIn">
     <generic-toolbar title="{{'CHECKEDIN'|translate}}" style-class="fontSizeTitle"></generic-toolbar>
     <network-banner></network-banner>
-    <ons-list ng-repeat="(patientName, apps) in checkIn.displayApps">
+    <ons-list ng-repeat="(patientName, apps) in checkIn.checkedInApps">
         <ons-list-header class="person-list-header" ng-class="fontSizeTitle" style="padding:10px;">
             {{patientName}}
         </ons-list-header>
@@ -41,7 +41,7 @@
                         <p></p>
 
                         <!-- Successful Checkin -->
-                        <div ng-show="checkIn.alert.type" ng-if="app.Checkin == 1 && app.CheckinPossible == 1">
+                        <div>
                             <span class="item-desc" ng-class="fontSizeDesc">
                                 {{"CHECKED_IN"|translate}}
                             </span>
