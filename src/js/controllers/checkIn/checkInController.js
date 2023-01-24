@@ -122,6 +122,26 @@
             return HasNonCheckinable;
         }
 
+        /**
+         *
+         * @param patientName
+         * @return {void}
+         * @description Checks if in the list of Appointments,for the target patient
+         */
+        async function CheckInAppointments(patientName) {
+            let patientApps = {
+                key: patientName,
+                apps: vm.displayApps[patientName],
+            };
+            delete vm.displayApps[patientName];
+
+            if (Object.keys(vm.displayApps).length == 0) {
+                vm.emptyApps = true;
+            }
+
+            NavigatorParameters.setParameters({'Navigator': 'homeNavigator', 'apps': patientApps});
+            homeNavigator.pushPage('./views/home/checkin/checked-in-list.html');
+        }
     }
 })();
 
