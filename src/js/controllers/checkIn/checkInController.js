@@ -38,6 +38,7 @@
 
         var vm = this;
         vm.apps = [];
+        vm.checkedInApps = {};
         vm.language = '';
         vm.response = '';
         vm.error = '';
@@ -58,26 +59,10 @@
 
             vm.HasNonCheckinableAppt = HasNonCheckinableAppointment(vm.apps);
 
-            CheckInService.attemptCheckin()
-                .then(function(response){
-
-                    if(response === "NOT_ALLOWED"){
-                        Toast.showToast({
-                            message: $filter('translate')("NOT_ALLOWED"),
-                        });
-                        vm.alert.type = Params.alertTypeWarning;
-                        vm.checkInMessage = "CHECKIN_IN_HOSPITAL_ONLY";
-                    } else if (response === "SUCCESS") {
-                        vm.alert.type = Params.alertTypeSuccess;
-                        vm.checkInMessage = "CHECKED_IN";
-                        vm.apps = CheckInService.getCheckInApps();
-                    } else {
-                        displayError();
-                    }
-                }).catch(error => {
-                    console.log(error);
-                    displayError();
-                });
+            const parameters = NavigatorParameters.getParameters();
+            if (parameters.hasOwnProperty('apps')) {
+                vm.checkedInApps[parameters.apps.key] = parameters.apps.apps;
+            }
         }
 
         /**
@@ -129,15 +114,14 @@
          * @description Checks if in the list of Appointments,for the target patient
          */
         async function CheckInAppointments(patientName) {
+
+            //TODO check-in apps for the target patient
+            const res = await CheckInService.CheckInPatientApps(patientName);
+
             let patientApps = {
                 key: patientName,
-                apps: vm.displayApps[patientName],
+                apps: res.apps,
             };
-            delete vm.displayApps[patientName];
-
-            if (Object.keys(vm.displayApps).length == 0) {
-                vm.emptyApps = true;
-            }
 
             NavigatorParameters.setParameters({'Navigator': 'homeNavigator', 'apps': patientApps});
             homeNavigator.pushPage('./views/home/checkin/checked-in-list.html');
