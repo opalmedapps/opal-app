@@ -1,0 +1,99 @@
+<ons-page ng-controller="CheckInController as checkIn">
+    <generic-toolbar title="{{'CHECKEDIN'|translate}}" style-class="fontSizeTitle"></generic-toolbar>
+    <network-banner></network-banner>
+    <ons-list ng-repeat="(patientName, apps) in checkIn.checkedInApps">
+        <ons-list-header class="person-list-header" ng-class="fontSizeTitle" style="padding:10px;">
+            {{patientName}}
+        </ons-list-header>
+        <ons-list-item modifier="tappable" ng-repeat="app in apps">
+
+            <!-----------------------------------------------------------------
+            There is an ERROR when:
+                checkIn.alert.type contains a value, regardless of the value
+                  AND
+                app.Checkin == 0  (i.e. Checkin failed)
+            ------------------------------------------------------------------->
+
+            <ons-row>
+                <ons-col width="25%" align="center" style="text-align: center;">
+                    {{app.ScheduledStartTime | date:'shortTime'}}
+                </ons-col>
+                <ons-col width="1%" > <div style="background-color: #4caf50; height: 100%;"></div></ons-col>
+                <ons-col align="center">
+                    <div style="line-height:1;padding-left:10px;padding-top:10px;">
+                        <span ng-class="fontSizeTitle">
+                            <p ng-if="checkIn.HasMeaningfulAlias(app['AppointmentType_' + checkIn.language])">
+                                {{app["AppointmentType_" + checkIn.language]}}
+                            </p>
+                            <p ng-if="!checkIn.HasMeaningfulAlias(app['AppointmentType_' + checkIn.language])">
+                                {{app["ResourceDescription"]}}
+                            </p>
+
+                        </span>
+                        <p ng-show="app.RoomLocation_EN" class="item-desc" ng-class="fontSizeDesc" >
+                            {{app["RoomLocation_" + checkIn.language]}}
+                        </p>
+
+                        <p ng-if="app.CheckinPossible == 0" class="item-desc" ng-class="fontSizeDesc" style="color:#FF803E;"
+                           ng-bind-html="app['CheckinInstruction_' + checkIn.language] | trustHTML">
+                        </p>
+
+                        <p></p>
+
+                        <!-- Successful Checkin -->
+                        <div>
+                            <span class="item-desc" ng-class="fontSizeDesc">
+                                {{"CHECKED_IN"|translate}}
+                            </span>
+
+                            <span class="item-desc" ng-class="fontSizeDesc"
+                                  ng-bind-html="app['CheckinInstruction_' + checkIn.language] | trustHTML">
+                            </span>
+                        </div>
+
+                        <!-- Show the waiting Room when: Non-Checkinable appointment OR Successful Checked-in Appointment -->
+                        <div ng-if="app.CheckinPossible == 0 || (checkIn.alert.type && app.Checkin == 1 && app.CheckinPossible == 1)">
+                            <p></p>
+                            <p class="item-desc" ng-class="fontSizeDesc" ng-show="app.MapName_EN">
+                                {{"WAITING_ROOM"|translate}} {{app["MapName_" + checkIn.language]}}
+                            </p>
+                        </div>
+
+                        <!-- An Error Occurred - Unsuccessful Checkin -->
+                        <div ng-show="checkIn.alert.type" ng-if="app.Checkin == 0 && app.CheckinPossible == 1">
+                            <span class="item-desc" ng-class="fontSizeDesc" style="color: red;">
+                                {{"CHECKIN_ERROR"|translate}}
+                            </span>
+                        </div>
+                    </div>
+                </ons-col>
+            </ons-row>
+        </ons-list-item>
+    </ons-list>
+
+
+    <!-- If there is an ERROR, the following will show an error message. -->
+    <!-- This Code may never be executed because checkIn.error may never return ERROR because of changes to the Listener
+         that do not return an ERROR anymore.
+         We assume there is an error when:
+                checkIn.alert.type contains a value, regardless of the value
+                  AND
+                app.Checkin == 0  (i.e. Checkin failed)
+         -->
+
+    <ons-list ng-if="checkIn.error">
+        <ons-list-item>
+            <ons-row>
+                <ons-col width="50px" align="center" style="text-align: center;">
+                    <i ng-if="checkIn.error" class="fa fa-times-circle fa-2x" style="color:red;"></i>
+                </ons-col>
+
+                <ons-col>
+                    <p ng-if="checkIn.error" style="color: red;" class="item-desc" ng-class="fontSizeDesc">
+                        {{"CHECKIN_ERROR"|translate}}
+                    </p>
+                </ons-col>
+            </ons-row>
+        </ons-list-item>
+    </ons-list>
+</ons-page>
