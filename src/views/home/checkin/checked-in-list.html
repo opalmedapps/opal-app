@@ -1,5 +1,5 @@
 <ons-page ng-controller="CheckInController as checkIn">
-    <generic-toolbar title="{{'CHECKIN'|translate}}" style-class="fontSizeTitle"></generic-toolbar>
+    <generic-toolbar title="{{'CHECKEDIN'|translate}}" style-class="fontSizeTitle"></generic-toolbar>
     <network-banner></network-banner>
     <ons-list ng-repeat="(patientName, apps) in checkIn.displayApps">
         <ons-list-header class="person-list-header" ng-class="fontSizeTitle" style="padding:10px;">
@@ -18,7 +18,7 @@
                 <ons-col width="25%" align="center" style="text-align: center;">
                     {{app.ScheduledStartTime | date:'shortTime'}}
                 </ons-col>
-                <ons-col width="1%" > <div style="background-color: rgba(38,100,171,0.81); height: 100%;"></div></ons-col>
+                <ons-col width="1%" > <div style="background-color: #4caf50; height: 100%;"></div></ons-col>
                 <ons-col align="center">
                     <div style="line-height:1;padding-left:10px;padding-top:10px;">
                         <span ng-class="fontSizeTitle">
@@ -70,11 +70,6 @@
             </ons-row>
         </ons-list-item>
     </ons-list>
-
-    <ons-row style="width: 90%; margin: 5% 5% 0% 5%">
-        <ons-button class="shadow-2 btn-primary" ng-class="fontSizeTitle" style="width: 100%; text-align: center;"
-                    ng-click="checkIn.CheckInAppointments()">{{"CHECKINALLTODAY"|translate}}</ons-button>
-    </ons-row>
 
 
     <!-- If there is an ERROR, the following will show an error message. -->
