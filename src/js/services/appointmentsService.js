@@ -267,8 +267,10 @@ myApp.service('Appointments', ['$filter','LocalStorage','RequestToServer','UserP
                 after review, thanks
                  */
                 let patientName = `Alice`;
+                let description = 'Electrocardiogram (EKG)'
                 if (appointment.patientsernum == 51) {
                     patientName = 'Your appointments';
+                    description = 'CT Scan';
                 }
                 const localAppointment = {
                     AppointmentSerNum: appointment.appointmentsernum,
@@ -281,7 +283,7 @@ myApp.service('Appointments', ['$filter','LocalStorage','RequestToServer','UserP
                     State: appointment.state,
                     RoomLocation_EN: `Room ${appointment.appointmentsernum}`,
                     AppointmentType_EN: 'Appointment',
-                    ResourceDescription: 'Electrocardiogram (EKG)',
+                    ResourceDescription: description,
                     patientName: patientName,
                 }
                 localAppointments.push(localAppointment);
