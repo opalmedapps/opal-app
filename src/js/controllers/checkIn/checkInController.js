@@ -45,11 +45,11 @@
         vm.alert = {};
         vm.HasNonCheckinableAppt = false;
         vm.emptyApps = false;
-        vm.statusColor = {
-            'success': 'rgba(38,100,171,0.81)',
-            'warning': 'rgba(38,100,171,0.81)',
-            'danger': 'rgba(38,100,171,0.81)',
-        };
+        vm.statusColor = []
+        vm.statusColor[Params.alertTypeSuccess] = 'green';
+        vm.statusColor[Params.alertTypeInfo] = 'rgba(38,100,171,0.81)';
+        vm.statusColor[Params.alertTypeDanger] = 'red';
+
 
         vm.goToAppointment = goToAppointment;
         vm.HasMeaningfulAlias = HasMeaningfulAlias;
@@ -71,6 +71,10 @@
 
             vm.HasNonCheckinableAppt =  HasNonCheckinableAppointment(vm.apps);
 
+            const parameters = NavigatorParameters.getParameters();
+            if (parameters.hasOwnProperty('apps')) {
+                vm.checkedInApps[parameters.apps.key] = parameters.apps.apps;
+            }
         }
 
         // View appointment details
@@ -109,27 +113,36 @@
          * @description Check-in all the appointments and update appointment array
          */
         async function CheckInAppointments(patientName) {
-             const response = await CheckInService.attemptCheckin();
-            if(response === "NOT_ALLOWED"){
-                Toast.showToast({
-                    message: $filter('translate')("NOT_ALLOWED"),
-                });
-                vm.alert.type = Params.alertTypeWarning;
-                vm.checkInMessage = "CHECKIN_IN_HOSPITAL_ONLY";
-            } else if (response === "SUCCESS") {
-                vm.alert.type = Params.alertTypeSuccess;
-                vm.checkInMessage = "CHECKED_IN";
-                vm.displayApps = CheckInService.getCheckInApps();
-            } else {
-                vm.alert.type = Params.alertTypeDanger;
-                vm.checkInMessage = "CHECKIN_ERROR";
-                vm.displayApps = CheckInService.getCheckInApps();
-                vm.error = "ERROR";
-            }
+            //  const response = await CheckInService.attemptCheckin();
+            // if(response === "NOT_ALLOWED"){
+            //     Toast.showToast({
+            //         message: $filter('translate')("NOT_ALLOWED"),
+            //     });
+            //     vm.alert.type = Params.alertTypeWarning;
+            //     vm.checkInMessage = "CHECKIN_IN_HOSPITAL_ONLY";
+            // } else if (response === "SUCCESS") {
+            //     vm.alert.type = Params.alertTypeSuccess;
+            //     vm.checkInMessage = "CHECKED_IN";
+            //     vm.displayApps = CheckInService.getCheckInApps();
+            // } else {
+            //     vm.alert.type = Params.alertTypeDanger;
+            //     vm.checkInMessage = "CHECKIN_ERROR";
+            //     vm.displayApps = CheckInService.getCheckInApps();
+            //     vm.error = "ERROR";
+            // }
             let patientApps = {
                 key: patientName,
                 apps: vm.displayApps[patientName],
             };
+            delete vm.displayApps[patientName];
+
+            if (Object.keys(vm.displayApps).length == 0) {
+                vm.emptyApps = true;
+            }
+
+            NavigatorParameters.setParameters({'Navigator':'homeNavigator', 'apps': patientApps});
+            homeNavigator.pushPage('./views/home/checkin/checked-in-list.html');
+
         }
     }
 })();
