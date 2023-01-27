@@ -18,7 +18,7 @@
                 <ons-col width="25%" align="center" style="text-align: center;">
                     {{app.ScheduledStartTime | date:'shortTime'}}
                 </ons-col>
-                <ons-col width="1%" > <div style="background-color: rgba(38,100,171,0.81); height: 100%;"></div></ons-col>
+                <ons-col width="1%" > <div style="background-color: {{checkIn.statusColor[checkIn.alert.type]}}; height: 100%;"></div></ons-col>
                 <ons-col align="center">
                     <div style="line-height:1;padding-left:10px;padding-top:10px;">
                         <span ng-class="fontSizeTitle">
