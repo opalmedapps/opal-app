@@ -285,6 +285,7 @@ myApp.service('Appointments', ['$filter','LocalStorage','RequestToServer','UserP
                     AppointmentType_EN: 'Appointment',
                     ResourceDescription: description,
                     patientName: patientName,
+                    CheckInStatus: appointment.checkin == 1 ? 'success' : 'info',
                 }
                 localAppointments.push(localAppointment);
             });
