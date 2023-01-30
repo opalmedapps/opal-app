@@ -275,7 +275,7 @@ myApp.service('Appointments', ['$filter','LocalStorage','RequestToServer','UserP
                 const localAppointment = {
                     AppointmentSerNum: appointment.appointmentsernum,
                     Checkin: appointment.checkin,
-                    CheckinPossible: appointment.checkinpossible,
+                    CheckinPossible: '1',//appointment.checkinpossible,
                     PatientSerNum: appointment.patientsernum,
                     ScheduledStartTime: appointment.scheduledstarttime,
                     ScheduledEndTime: appointment.scheduledendtime,

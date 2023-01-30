@@ -16,6 +16,7 @@
         .controller('CheckInController', CheckInController);
 
     CheckInController.$inject = [
+        '$timeout',
         'CheckInService',
         'NavigatorParameters',
         'UserPreferences',
@@ -26,6 +27,7 @@
 
     /* @ngInject */
     function CheckInController(
+        $timeout,
         CheckInService,
         NavigatorParameters,
         UserPreferences,
@@ -130,19 +132,33 @@
             //     vm.displayApps = CheckInService.getCheckInApps();
             //     vm.error = "ERROR";
             // }
-            let patientApps = {
-                key: patientName,
-                apps: vm.displayApps[patientName],
-            };
-            delete vm.displayApps[patientName];
 
-            if (Object.keys(vm.displayApps).length == 0) {
-                vm.emptyApps = true;
-            }
 
-            NavigatorParameters.setParameters({'Navigator':'homeNavigator', 'apps': patientApps});
-            homeNavigator.pushPage('./views/home/checkin/checked-in-list.html');
+            // let patientApps = {
+            //     key: patientName,
+            //     apps: vm.displayApps[patientName],
+            // };
+            // delete vm.displayApps[patientName];
+            //
+            // if (Object.keys(vm.displayApps).length == 0) {
+            //     vm.emptyApps = true;
+            // }
+            //
+            // NavigatorParameters.setParameters({'Navigator':'homeNavigator', 'apps': patientApps});
+            // homeNavigator.pushPage('./views/home/checkin/checked-in-list.html');
+            $timeout(() => {
+                vm.displayApps[patientName].forEach(app => {
+                    app.loading = true;
+                })
+            });
 
+            $timeout(() => {
+                vm.displayApps[patientName].forEach(app => {
+                    app.Checkin = '1';
+                    app.loading = false;
+                    app.CheckInStatus = 'success';
+                })
+            }, 3000);
         }
     }
 })();

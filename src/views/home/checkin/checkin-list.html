@@ -17,6 +17,13 @@
             <ons-row>
                 <ons-col width="25%" align="center" style="text-align: center;">
                     {{app.ScheduledStartTime | date:'shortTime'}}
+                    <svg ng-if="app.loading" class="progress-circular-sm">
+                        <circle class="progress-circular__primary" cx="50%" cy="50%" r="40%" fill="none"
+                                stroke-width="10%"
+                                stroke-miterlimit="10"/>
+                    </svg>
+                    <i ng-if="app.Checkin == 1 && app.CheckinPossible == 1" class="fa fa-check-square-o fa-2x"
+                       style="color:#4CAF50;"></i>
                 </ons-col>
                 <ons-col width="1%" > <div style="background-color: {{checkIn.statusColor[app.CheckInStatus]}}; height: 100%;"></div></ons-col>
                 <ons-col align="center">
