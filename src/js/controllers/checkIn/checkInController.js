@@ -61,6 +61,12 @@
 
         function activate() {
             vm.apps = CheckInService.getCheckInApps();
+            vm.apps.forEach(app => {
+                if (!vm.displayApps[app.patientName]) {
+                    vm.displayApps[app.patientName] = [];
+                }
+                vm.displayApps[app.patientName].push(app);
+            });
             vm.language = UserPreferences.getLanguage();
 
             vm.HasNonCheckinableAppt = HasNonCheckinableAppointment(vm.apps);
