@@ -125,14 +125,17 @@
             })
 
             //TODO check-in apps for the target patient
-            const response = await CheckInService.attemptCheckin();
+            const response = await CheckInService.attemptCheckin(patientName);
 
             $timeout(() => {
-                vm.displayApps = response.appts;
                 let allCheckedIn = true;
                 vm.displayApps[patientName].forEach(app => {
-                    app.loading = false;
-                    allCheckedIn =  app.CheckInStatus == 'success';
+                    const appt = response.appts.find(appt => appt.AppointmentSerNum == app.AppointmentSerNum);
+                    if (appt) {
+                        app.Checkin = appt.Checkin;
+                        app.loading = false;
+                        allCheckedIn =  allCheckedIn && app.CheckInStatus == 'success';
+                    }
                 })
                 vm.displayApps[patientName].allCheckedIn = allCheckedIn;
             }, 3000);
