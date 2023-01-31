@@ -38,6 +38,7 @@
 
         var vm = this;
         vm.apps = [];
+        vm.displayApps = {};
         vm.checkedInApps = {};
         vm.language = '';
         vm.response = '';
