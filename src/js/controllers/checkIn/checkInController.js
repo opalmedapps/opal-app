@@ -120,25 +120,22 @@
          * @description Checks if in the list of Appointments,for the target patient
          */
         async function CheckInAppointments(patientName) {
+            vm.displayApps[patientName].forEach(app => {
+                app.loading = true;
+            })
 
             //TODO check-in apps for the target patient
             const response = await CheckInService.attemptCheckin();
-            if(response === "NOT_ALLOWED"){
-                Toast.showToast({
-                    message: $filter('translate')("NOT_ALLOWED"),
-                });
-                vm.alert.type = Params.alertTypeWarning;
-                vm.checkInMessage = "CHECKIN_IN_HOSPITAL_ONLY";
-            } else if (response === "SUCCESS") {
-                vm.alert.type = Params.alertTypeSuccess;
-                vm.checkInMessage = "CHECKED_IN";
-                vm.displayApps = CheckInService.getCheckInApps();
-            } else {
-                vm.alert.type = Params.alertTypeDanger;
-                vm.checkInMessage = "CHECKIN_ERROR";
-                vm.displayApps = CheckInService.getCheckInApps();
-                vm.error = "ERROR";
-            }
+
+            $timeout(() => {
+                vm.displayApps = response.apps;
+                let allCheckedIn = true;
+                vm.displayApps[patientName].forEach(app => {
+                    app.loading = false;
+                    allCheckedIn =  app.CheckInStatus == 'success';
+                })
+                vm.displayApps[patientName].allCheckedIn = allCheckedIn;
+            }, 3000);
         }
     }
 })();
