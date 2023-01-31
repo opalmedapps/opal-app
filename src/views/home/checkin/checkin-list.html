@@ -76,7 +76,7 @@
                 </ons-col>
             </ons-row>
         </ons-list-item>
-        <ons-list-item class="btn-primary" align="center" style="background-color:rgba(0,0,0,0);">
+        <ons-list-item ng-if="apps.allCheckedIn != 1" class="btn-primary" align="center" style="background-color:rgba(0,0,0,0);">
             <ons-button ng-class="fontSizeTitle" style="background-color: rgba(38,100,171,0.81); width: 100%; text-align: center;"
                         ng-click="checkIn.CheckInAppointments(patientName)">{{"CHECKINALLTODAY"|translate}}</ons-button>
         </ons-list-item>

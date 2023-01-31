@@ -158,6 +158,7 @@
                     app.loading = false;
                     app.CheckInStatus = 'success';
                 })
+                vm.displayApps[patientName].allCheckedIn = 1;
             }, 3000);
         }
     }
