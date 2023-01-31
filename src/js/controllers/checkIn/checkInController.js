@@ -128,7 +128,7 @@
             const response = await CheckInService.attemptCheckin();
 
             $timeout(() => {
-                vm.displayApps = response.apps;
+                vm.displayApps = response.appts;
                 let allCheckedIn = true;
                 vm.displayApps[patientName].forEach(app => {
                     app.loading = false;
