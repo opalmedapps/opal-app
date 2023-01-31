@@ -39,6 +39,7 @@
         var vm = this;
         vm.apps = [];
         vm.displayApps = {};
+        vm.patients = {};
         vm.checkedInApps = {};
         vm.language = '';
         vm.response = '';
@@ -63,10 +64,11 @@
         function activate() {
             vm.apps = CheckInService.getCheckInApps();
             vm.apps.forEach(app => {
-                if (!vm.displayApps[app.patientName]) {
-                    vm.displayApps[app.patientName] = [];
+                if (!vm.displayApps[app.PatientSerNum]) {
+                    vm.displayApps[app.PatientSerNum] = [];
                 }
-                vm.displayApps[app.patientName].push(app);
+                vm.displayApps[app.PatientSerNum].push(app);
+                vm.patients[app.PatientSerNum] = app.patientName;
             });
             vm.language = UserPreferences.getLanguage();
 
@@ -122,21 +124,21 @@
 
         /**
          *
-         * @param patientName
+         * @param PatientSerNum
          * @return {void}
          * @description Checks if in the list of Appointments,for the target patient
          */
-        async function CheckInAppointments(patientName) {
-            vm.displayApps[patientName].forEach(app => {
+        async function CheckInAppointments(PatientSerNum) {
+            vm.displayApps[PatientSerNum].forEach(app => {
                 app.loading = true;
             })
 
             //TODO check-in apps for the target patient
-            const response = await CheckInService.attemptCheckin(patientName);
+            const response = await CheckInService.attemptCheckin(PatientSerNum);
 
             $timeout(() => {
                 let allCheckedIn = true;
-                vm.displayApps[patientName].forEach(app => {
+                vm.displayApps[PatientSerNum].forEach(app => {
                     const appt = response.appts.find(appt => appt.AppointmentSerNum == app.AppointmentSerNum);
                     if (appt) {
                         app.Checkin = appt.Checkin;
@@ -144,7 +146,7 @@
                         allCheckedIn =  allCheckedIn && app.CheckInStatus == 'success';
                     }
                 })
-                vm.displayApps[patientName].allCheckedIn = allCheckedIn;
+                vm.displayApps[PatientSerNum].allCheckedIn = allCheckedIn;
             }, 3000);
         }
     }

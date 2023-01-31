@@ -1,9 +1,9 @@
 <ons-page ng-controller="CheckInController as checkIn">
     <generic-toolbar title="{{'CHECKIN'|translate}}" style-class="fontSizeTitle"></generic-toolbar>
     <network-banner></network-banner>
-    <ons-list ng-repeat="(patientName, apps) in checkIn.displayApps">
+    <ons-list ng-repeat="(patientSerNum, apps) in checkIn.displayApps">
         <ons-list-header class="person-list-header" ng-class="fontSizeTitle" style="padding:10px;">
-            {{patientName}}
+            {{checkIn.patients[patientSerNum]}}
         </ons-list-header>
         <ons-list-item modifier="tappable" ng-repeat="app in apps">
 
