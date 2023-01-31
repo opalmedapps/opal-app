@@ -1,11 +1,11 @@
 <ons-page ng-controller="CheckInController as checkIn">
     <generic-toolbar title="{{'CHECKIN'|translate}}" style-class="fontSizeTitle"></generic-toolbar>
     <network-banner></network-banner>
-    <ons-list>
-        <ons-list-header class="person-list-header" ng-class="fontSizeTitle">
-            {{"APPOINTMENTS"|translate}}
+    <ons-list ng-repeat="(patientName, apps) in checkIn.displayApps">
+        <ons-list-header class="person-list-header" ng-class="fontSizeTitle" style="padding:10px;">
+            {{patientName}}
         </ons-list-header>
-        <ons-list-item modifier="tappable chevron" ng-repeat="app in checkIn.apps" ng-click="checkIn.goToAppointment(app)">
+        <ons-list-item modifier="tappable" ng-repeat="app in apps">
 
             <!-----------------------------------------------------------------
             There is an ERROR when:
@@ -17,8 +17,15 @@
             <ons-row>
                 <ons-col width="25%" align="center" style="text-align: center;">
                     {{app.ScheduledStartTime | date:'shortTime'}}
+                    <svg ng-if="app.loading" class="progress-circular-sm">
+                        <circle class="progress-circular__primary" cx="50%" cy="50%" r="40%" fill="none"
+                                stroke-width="10%"
+                                stroke-miterlimit="10"/>
+                    </svg>
+                    <i ng-if="app.Checkin == 1 && app.CheckinPossible == 1" class="fa fa-check-square-o fa-2x"
+                       style="color:#4CAF50;"></i>
                 </ons-col>
-                <ons-col width="1%" > <div style="background-color: {{checkIn.statusColor[checkIn.alert.type]}}; height: 100%;"></div></ons-col>
+                <ons-col width="1%" > <div style="background-color: {{checkIn.statusColor[app.CheckInStatus]}}; height: 100%;"></div></ons-col>
                 <ons-col align="center">
                     <div style="line-height:1;padding-left:10px;padding-top:10px;">
                         <span ng-class="fontSizeTitle">
@@ -41,7 +48,7 @@
                         <p></p>
 
                         <!-- Successful Checkin -->
-                        <div ng-show="checkIn.alert.type" ng-if="app.Checkin == 1 && app.CheckinPossible == 1">
+                        <div ng-if="app.Checkin == 1 && app.CheckinPossible == 1">
                             <span class="item-desc" ng-class="fontSizeDesc">
                                 {{"CHECKED_IN"|translate}}
                             </span>
@@ -69,7 +76,7 @@
                 </ons-col>
             </ons-row>
         </ons-list-item>
-        <ons-list-item class="btn-primary" align="center" style="background-color:rgba(0,0,0,0);">
+        <ons-list-item ng-if="apps.allCheckedIn != 1" class="btn-primary" align="center" style="background-color:rgba(0,0,0,0);">
             <ons-button ng-class="fontSizeTitle" style="background-color: rgba(38,100,171,0.81); width: 100%; text-align: center;"
                         ng-click="checkIn.CheckInAppointments(patientName)">{{"CHECKINALLTODAY"|translate}}</ons-button>
         </ons-list-item>
