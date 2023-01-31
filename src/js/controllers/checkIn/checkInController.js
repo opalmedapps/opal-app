@@ -39,6 +39,7 @@
         var vm = this;
         vm.apps = [];
         vm.displayApps = {};
+        vm.patients = {};
         vm.checkedInApps = {};
         vm.language = '';
         vm.response = '';
@@ -64,10 +65,11 @@
         function activate() {
             vm.apps = CheckInService.getCheckInApps();
             vm.apps.forEach(app => {
-                if (!vm.displayApps[app.patientName]) {
-                    vm.displayApps[app.patientName] = [];
+                if (!vm.displayApps[app.PatientSerNum]) {
+                    vm.displayApps[app.PatientSerNum] = [];
                 }
-                vm.displayApps[app.patientName].push(app);
+                vm.displayApps[app.PatientSerNum].push(app);
+                vm.patients[app.PatientSerNum] = app.patientName;
             });
             vm.language = UserPreferences.getLanguage();
 
@@ -114,7 +116,7 @@
          * @return void
          * @description Check-in all the appointments and update appointment array
          */
-        async function CheckInAppointments(patientName) {
+        async function CheckInAppointments(PatientSerNum) {
             //  const response = await CheckInService.attemptCheckin();
             // if(response === "NOT_ALLOWED"){
             //     Toast.showToast({
@@ -147,18 +149,18 @@
             // NavigatorParameters.setParameters({'Navigator':'homeNavigator', 'apps': patientApps});
             // homeNavigator.pushPage('./views/home/checkin/checked-in-list.html');
             $timeout(() => {
-                vm.displayApps[patientName].forEach(app => {
+                vm.displayApps[PatientSerNum].forEach(app => {
                     app.loading = true;
                 })
             });
 
             $timeout(() => {
-                vm.displayApps[patientName].forEach(app => {
+                vm.displayApps[PatientSerNum].forEach(app => {
                     app.Checkin = '1';
                     app.loading = false;
                     app.CheckInStatus = 'success';
                 })
-                vm.displayApps[patientName].allCheckedIn = 1;
+                vm.displayApps[PatientSerNum].allCheckedIn = 1;
             }, 3000);
         }
     }
