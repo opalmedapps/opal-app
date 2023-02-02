@@ -22,8 +22,9 @@
                                 stroke-width="10%"
                                 stroke-miterlimit="10"/>
                     </svg>
-                    <i ng-if="app.Checkin == 1 && app.CheckinPossible == 1" class="fa fa-check-square-o fa-2x"
+                    <i ng-if="app.CheckInStatus == 'success'" class="fa fa-check-square-o fa-2x"
                        style="color:#4CAF50;"></i>
+                    <i ng-if="app.CheckInStatus == 'danger'" class="fa fa-times-circle fa-2x" style="color:red;"></i>
                 </ons-col>
                 <ons-col width="1%" > <div style="background-color: {{checkIn.statusColor[app.CheckInStatus]}}; height: 100%;"></div></ons-col>
                 <ons-col align="center">
@@ -48,7 +49,7 @@
                         <p></p>
 
                         <!-- Successful Checkin -->
-                        <div ng-if="app.Checkin == 1 && app.CheckinPossible == 1">
+                        <div ng-if="app.CheckInStatus == 'success'">
                             <span class="item-desc" ng-class="fontSizeDesc">
                                 {{"CHECKED_IN"|translate}}
                             </span>
@@ -67,7 +68,7 @@
                         </div>
 
                         <!-- An Error Occurred - Unsuccessful Checkin -->
-                        <div ng-show="checkIn.alert.type" ng-if="app.Checkin == 0 && app.CheckinPossible == 1">
+                        <div ng-if="app.CheckInStatus == 'danger'">
                             <span class="item-desc" ng-class="fontSizeDesc" style="color: red;">
                                 {{"CHECKIN_ERROR"|translate}}
                             </span>

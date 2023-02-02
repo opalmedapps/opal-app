@@ -147,7 +147,7 @@
                     }
                 })
                 vm.displayApps[PatientSerNum].allCheckedIn = allCheckedIn;
-            }, 3000);
+            });
         }
     }
 })();
