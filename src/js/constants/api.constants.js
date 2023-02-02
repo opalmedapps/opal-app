@@ -51,7 +51,7 @@
                 },
                 QUANTITY_SAMPLES: {
                     method: 'post',
-                    url: '/api/patients/<PATIENT_ID>/smart-data/quantity-samples/'
+                    url: '/api/patients/<PATIENT_ID>/health-data/quantity-samples/'
                 },
             }
         });
