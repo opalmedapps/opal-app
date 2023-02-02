@@ -22,8 +22,9 @@
                                 stroke-width="10%"
                                 stroke-miterlimit="10"/>
                     </svg>
-                    <i ng-if="app.Checkin == 1 && app.CheckinPossible == 1" class="fa fa-check-square-o fa-2x"
+                    <i ng-if="app.CheckInStatus == 'success'" class="fa fa-check-square-o fa-2x"
                        style="color:#4CAF50;"></i>
+                    <i ng-if="app.CheckInStatus == 'danger'" class="fa fa-times-circle fa-2x" style="color:red;"></i>
                 </ons-col>
                 <ons-col width="1%" > <div style="background-color: {{checkIn.statusColor[app.CheckInStatus]}}; height: 100%;"></div></ons-col>
                 <ons-col align="center">
