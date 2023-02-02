@@ -39,7 +39,6 @@
         var vm = this;
         vm.apps = [];
         vm.displayApps = {};
-        vm.patients = {};
         vm.checkedInApps = {};
         vm.language = '';
         vm.response = '';
@@ -66,10 +65,12 @@
             vm.apps = CheckInService.getCheckInApps();
             vm.apps.forEach(app => {
                 if (!vm.displayApps[app.PatientSerNum]) {
-                    vm.displayApps[app.PatientSerNum] = [];
+                    vm.displayApps[app.PatientSerNum] = {};
+                    vm.displayApps[app.PatientSerNum].apps = [];
+                    vm.displayApps[app.PatientSerNum].patientName = app.patientName;
                 }
-                vm.displayApps[app.PatientSerNum].push(app);
-                vm.patients[app.PatientSerNum] = app.patientName;
+                vm.displayApps[app.PatientSerNum].apps.push(app);
+                vm.displayApps[app.PatientSerNum].patientName = app.patientName;
             });
             vm.language = UserPreferences.getLanguage();
 
@@ -116,7 +117,7 @@
          * @return void
          * @description Check-in all the appointments and update appointment array
          */
-        async function CheckInAppointments(PatientSerNum) {
+        async function CheckInAppointments(patientSerNum) {
             //  const response = await CheckInService.attemptCheckin();
             // if(response === "NOT_ALLOWED"){
             //     Toast.showToast({
@@ -148,19 +149,20 @@
             //
             // NavigatorParameters.setParameters({'Navigator':'homeNavigator', 'apps': patientApps});
             // homeNavigator.pushPage('./views/home/checkin/checked-in-list.html');
+            console.log(patientSerNum);
             $timeout(() => {
-                vm.displayApps[PatientSerNum].forEach(app => {
+                vm.displayApps[patientSerNum].apps.forEach(app => {
                     app.loading = true;
                 })
             });
 
             $timeout(() => {
-                vm.displayApps[PatientSerNum].forEach(app => {
+                vm.displayApps[patientSerNum].apps.forEach(app => {
                     app.Checkin = '1';
                     app.loading = false;
                     app.CheckInStatus = 'success';
                 })
-                vm.displayApps[PatientSerNum].allCheckedIn = 1;
+                vm.displayApps[patientSerNum].allCheckedIn = 1;
             }, 3000);
 
             // vm.displayApps[PatientSerNum].forEach(app => {

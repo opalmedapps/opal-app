@@ -268,7 +268,7 @@ myApp.service('Appointments', ['$filter','LocalStorage','RequestToServer','UserP
                  */
                 let patientName = `Alice`;
                 let description = 'Electrocardiogram (EKG)'
-                if (appointment.patientsernum == 51) {
+                if (appointment.patient.patientsernum == 51) {
                     patientName = 'Your appointments';
                     description = 'CT Scan';
                 }
@@ -276,7 +276,7 @@ myApp.service('Appointments', ['$filter','LocalStorage','RequestToServer','UserP
                     AppointmentSerNum: appointment.appointmentsernum,
                     Checkin: appointment.checkin,
                     CheckinPossible: '1',//appointment.checkinpossible,
-                    PatientSerNum: appointment.patientsernum,
+                    PatientSerNum: appointment.patient.patientsernum,
                     ScheduledStartTime: appointment.scheduledstarttime,
                     ScheduledEndTime: appointment.scheduledendtime,
                     LastUpdated: appointment.lastupdated,
