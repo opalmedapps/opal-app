@@ -162,6 +162,26 @@
                 })
                 vm.displayApps[PatientSerNum].allCheckedIn = 1;
             }, 3000);
+
+            // vm.displayApps[PatientSerNum].forEach(app => {
+            //     app.loading = true;
+            // })
+            //
+            // //TODO check-in apps for the target patient
+            // const response = await CheckInService.attemptCheckin(PatientSerNum);
+            //
+            // $timeout(() => {
+            //     let allCheckedIn = true;
+            //     vm.displayApps[PatientSerNum].forEach(app => {
+            //         const appt = response.appts.find(appt => appt.AppointmentSerNum == app.AppointmentSerNum);
+            //         if (appt) {
+            //             app.Checkin = appt.Checkin;
+            //             app.loading = false;
+            //             allCheckedIn =  allCheckedIn && app.CheckInStatus == 'success';
+            //         }
+            //     })
+            //     vm.displayApps[PatientSerNum].allCheckedIn = allCheckedIn;
+            // }, 3000);
         }
     }
 })();
