@@ -55,11 +55,11 @@
             </button>
         </div>
         
-        <div ng-if="!ctrl.scanning && ctrl.selectedDevice == null && ctrl.devices.length > 1">
+        <div ng-if="!ctrl.scanning && ctrl.selectedDevice == null && ctrl.getDeviceList().length > 1">
             <p ng-class="fontSizeTitle"><strong>{{ "SMARTDEVICES_MULTIPLE" | translate }}</strong></p>
 
             <ons-list>
-                <ons-list-item ng-repeat="device in ctrl.devices" class="item">
+                <ons-list-item ng-repeat="device in ctrl.getDeviceList()" class="item">
                     <ons-row align="center">
                         <div class="smartdevices-content">
                             <div class="smartdevices-content--icon">
@@ -71,7 +71,7 @@
                                 <p class="relationship-list--status" ng-class="fontSizeDesc">{{ device.id }}</p>
                             </div>
                             <div class="smartdevices-content--right" style="margin-left: 5vh;">
-                                <button class="shadow-2 button--large--cta" ng-click="ctrl.selectDevice(device)">
+                                <button class="shadow-2 button--large--cta" ng-click="ctrl.doSelectDevice(device)">
                                     <span>{{ "SMARTDEVICES_SELECT" | translate }}</span>
                                 </button>
                             </div>
