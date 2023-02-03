@@ -157,10 +157,11 @@
             });
 
             $timeout(() => {
+                let allCheckIn = 0;
                 vm.displayApps[patientSerNum].apps.forEach(app => {
                     app.Checkin = '1';
                     app.loading = false;
-                    app.CheckInStatus = 'success';
+                    app.CheckInStatus = patientSerNum == '51' ? 'success':'danger';
                 })
                 vm.displayApps[patientSerNum].allCheckedIn = 1;
             }, 3000);

@@ -276,7 +276,7 @@ myApp.service('Appointments', ['$filter','LocalStorage','RequestToServer','UserP
                     RoomLocation_FR: appointment.roomlocation_fr,
                     AppointmentType_EN: appointment.alias.aliastype,
                     ResourceDescription: appointment.alias.aliasname_en,
-                    patientName: `${appointment.patient.firstname} ${appointment.patient.lastname}`,
+                    patientName: `${appointment.patient.firstname} ${appointment.patient.lastname}'s appointments`,
                     CheckInStatus: appointment.checkin == 1 ? 'success' : 'info',
                 }
                 localAppointments.push(localAppointment);
